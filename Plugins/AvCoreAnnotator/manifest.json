@@ -1,0 +1,139 @@
+{
+  "title": "Core Annotator",
+  "description": "Provides basic hyperlink support for text based content",
+  "version": "1.0",
+  "credits": "Somebody",
+  "guid": "ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31",
+  "url": "https://www.monkeypaste.com",
+  "iconUri": "icon.png",
+  "ioType": {
+    "isDll": true
+  },
+  "analyzer": {
+    "inputType": {
+      "text": true
+    },
+    "outputType": {
+      "textAnnotation": true
+    },
+    "parameters": [
+      {
+        "label": "Content to Annotate",
+        "description": "This assumes content is already internally preprocessed rich html format",
+        "controlType": "TextBox",
+        "unitType": "RawDataContentQuery",
+        "isVisible": false,
+        "paramId": 1,
+        "values": [
+          {
+            "value": "{ItemData}"
+          }
+        ]
+      },
+      {
+        "label": "Content Reference",
+        "controlType": "TextBox",
+        "unitType": "PlainTextContentQuery",
+        "isVisible": false,
+        "paramId": 2,
+        "values": [
+          {
+            "value": "{ItemRefUrl}"
+          }
+        ]
+      },
+      {
+        "label": "File Or Folder",
+        "controlType": "CheckBox",
+        "unitType": "Bool",
+        "isVisible": true,
+        "paramId": 3,
+        "values": [
+          {
+            "value": "true",
+            "isDefault": true
+          }
+        ]
+      },
+      {
+        "label": "Url",
+        "controlType": "CheckBox",
+        "unitType": "Bool",
+        "isVisible": true,
+        "paramId": 4,
+        "values": [
+          {
+            "value": "true",
+            "isDefault": true
+          }
+        ]
+      },
+      {
+        "label": "Email",
+        "controlType": "CheckBox",
+        "unitType": "Bool",
+        "isVisible": true,
+        "paramId": 5,
+        "values": [
+          {
+            "value": "true",
+            "isDefault": true
+          }
+        ]
+      },
+      {
+        "label": "Phone Number",
+        "controlType": "CheckBox",
+        "unitType": "Bool",
+        "isVisible": true,
+        "paramId": 6,
+        "values": [
+          {
+            "value": "true",
+            "isDefault": true
+          }
+        ]
+      },
+      {
+        "label": "Currency",
+        "controlType": "CheckBox",
+        "unitType": "Bool",
+        "isVisible": true,
+        "paramId": 7,
+        "values": [
+          {
+            "value": "true",
+            "isDefault": true
+          }
+        ]
+      },
+      {
+        "label": "HexColor",
+        "controlType": "CheckBox",
+        "unitType": "Bool",
+        "isVisible": true,
+        "paramId": 8,
+        "values": [
+          {
+            "value": "true",
+            "isDefault": true
+          }
+        ]
+      },
+      {
+        "label": "Street Address",
+        "description": "Attempts to be general use but may not always be accurate depending on locale.",
+        "controlType": "CheckBox",
+        "unitType": "Bool",
+        "isVisible": true,
+        "paramId": 9,
+        "values": [
+          {
+            "value": "true",
+            "isDefault": true
+          }
+        ]
+      }
+    ]
+  }
+}

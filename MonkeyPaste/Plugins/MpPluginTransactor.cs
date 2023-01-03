@@ -35,7 +35,7 @@ namespace MonkeyPaste {
             // 5. Converts the response to new content and/or updates source content (since from another, potentially 3rd party module)
             // 6. Returns new or updated content
 
-            if(pluginComponent is MpIAnalyzeAsyncComponent || pluginComponent is MpIAnalyzerComponent) {
+            if(pluginComponent is MpIAnalyzeAsyncComponent || pluginComponent is MpIAnalyzeComponent) {
                 MpAnalyzerTransaction at = new MpAnalyzerTransaction() {
                     RequestTime = DateTime.Now,
                 };
@@ -65,7 +65,7 @@ namespace MonkeyPaste {
                 try {
                     if(pluginComponent is MpIAnalyzeAsyncComponent analyzeAsyncComponent) {
                         at.Response = await analyzeAsyncComponent.AnalyzeAsync(at.Request as MpAnalyzerPluginRequestFormat);
-                    } else if(pluginComponent is MpIAnalyzerComponent analyzeComponent) {
+                    } else if(pluginComponent is MpIAnalyzeComponent analyzeComponent) {
                         at.Response = analyzeComponent.Analyze(at.Request as MpAnalyzerPluginRequestFormat);
                     }
                     at.ResponseTime = DateTime.Now;

@@ -2,11 +2,105 @@
 
 const RequiredNavigateUriModKeys = [];
 
+const LinkTypes = [
+    'fileorfolder',
+    'uri',
+    'email',
+    'phonenumber',
+    'currency',
+    'hexcolor',
+    'streetaddress'
+];
+
+var LinkTypeAttrb = null;
+
 // #endregion Globals
 
 // #region Life Cycle
 function initLinks() {
+    initLinkClassAttributes();
+    initLinkMatcher();
     addClickOrKeyClickEventListener(getLinkEditorToolbarItemElement(), onLinkToolbarItemClick);
+}
+
+function initLinkClassAttributes() {
+    const Parchment = Quill.imports.parchment;
+    let suppressWarning = false;
+    let config = {
+        scope: Parchment.Scope.INLINE,
+    };
+    LinkTypeAttrb = new Parchment.ClassAttributor('linkType', 'link-type', config);
+
+    Quill.register(LinkTypeAttrb, suppressWarning);
+}
+
+function initLinkMatcher() {
+    // NOTE! quill renders all li's with data-list attr (bullet|ordered|checked|unchecked)
+    // delta-html converter clears ordered and bullet li's attrs and encloses in ol|ul respectively
+    // delta-html converter substitutes li's w/ data-list attr (checked|unchecked) w/ data-checked attr (true|false)
+
+    if (Quill === undefined) {
+        /// host load error case
+        debugger;
+    }
+    let Delta = Quill.imports.delta;
+
+    quill.clipboard.addMatcher('A', function (node, delta) {
+        if (node.hasAttribute('style')) {
+            let bg = getElementComputedStyleProp(node, 'background-color');
+            if (bg) {
+                bg = cleanHexColor(bg);
+            }
+            let fg = getElementComputedStyleProp(node, 'color');
+            if (fg) {
+                fg = cleanHexColor(fg);
+            }
+
+            log('link text: ' + node.innerText + ' bg: ' + bg + ' fg: ' + fg);
+            if (delta && delta.ops !== undefined && delta.ops.length > 0) {
+                for (var i = 0; i < delta.ops.length; i++) {
+                    if (delta.ops[i].insert === undefined) {
+                        continue;
+                    }
+                    if (delta.ops[i].attributes === undefined) {
+                        delta.ops[i].attributes = {};
+                    }
+                    if (bg) {
+                        delta.ops[i].attributes.color = bg;
+                    }
+
+                    if (fg) {
+                        delta.ops[i].attributes.color = fg;
+                    }
+
+                }
+            }
+        }
+        let link_type = Array.from(node.classList).find(x => LinkTypes.includes(x));
+        if (link_type) {
+            log('link class type: ' + link_type);
+
+            if (delta && delta.ops !== undefined && delta.ops.length > 0) {
+                for (var i = 0; i < delta.ops.length; i++) {
+                    if (delta.ops[i].insert === undefined) {
+                        continue;
+                    }
+                    if (delta.ops[i].attributes === undefined) {
+                        delta.ops[i].attributes = {};
+                    }
+                    delta.ops[i].attributes.linkType = link_type;
+                    if (link_type == 'hexcolor') {
+                        delta.ops[i].attributes.background = node.innerText;
+                        delta.ops[i].attributes.color = isBright(node.innerText) ? 'black' : 'white';
+                    }
+                }
+            }
+            //LinkTypeAttrb.add(node, link_type);
+        } else {
+            log('no type class for link, classes: ' + node.getAttribute('class'));
+        }
+        return delta;
+    });
 }
 
 function loadLinkHandlers() {

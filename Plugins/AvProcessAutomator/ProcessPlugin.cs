@@ -8,7 +8,7 @@ using MonkeyPaste.Common;
 using System.Diagnostics;
 
 namespace ProcessAutomation {
-    public class ProcessPlugin : MpIAnalyzerComponent {
+    public class ProcessPlugin : MpIAnalyzeComponent {
         private const int _WAIT_FOR_INPUT_IDLE_MS = 30000;
 
         private static Dictionary<string, IntPtr> _lastRanNonExeProcessLookup = new Dictionary<string, IntPtr>();

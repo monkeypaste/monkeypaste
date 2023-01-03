@@ -3,6 +3,7 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,29 +16,29 @@ namespace MonkeyPaste {
             bool suppressWrite) {
             MpCopyItem target_ci;
 
-            if (trans.Response is MpPluginResponseFormatBase prf) {
-                target_ci = await ProcessNewContentItemAsync(prf, sourceCopyItem, citid, suppressWrite);
-            } else {
-                target_ci = sourceCopyItem;
-            }
-            await ProcessAnnotationsAsync(trans, target_ci, citid, suppressWrite);
+            //if (trans.Response is MpPluginResponseFormatBase prf) {
+            //    target_ci = await ProcessNewContentItemAsync(prf, sourceCopyItem, citid, suppressWrite);
+            //} else {
+            //    target_ci = sourceCopyItem;
+            //}
+            //await ProcessAnnotationsAsync(trans, target_ci, citid, suppressWrite);
 
-            await ProcessDataObjectAsync(trans, target_ci, citid, suppressWrite);
+            target_ci = await ProcessDataObjectAsync(trans, sourceCopyItem, citid, suppressWrite);
 
-            if (suppressWrite == false && target_ci != null) {
-                // NOTE when target is in tray it will get notified from db update and re-initialize
-                await target_ci.WriteToDatabaseAsync();
+            //if (suppressWrite == false && target_ci != null) {
+            //    // NOTE when target is in tray it will get notified from db update and re-initialize
+            //    await target_ci.WriteToDatabaseAsync();
 
-                if(sourceCopyItem.Id != target_ci.Id) {
-                    //MpAvQueryInfoViewModel.Current.NotifyQueryChanged(false);
-                    MpPlatformWrapper.Services.QueryInfo.NotifyQueryChanged();
-                }
-            }
+            //    if(sourceCopyItem.Id != target_ci.Id) {
+            //        //MpAvQueryInfoViewModel.Current.NotifyQueryChanged(false);
+            //        MpPlatformWrapper.Services.QueryInfo.NotifyQueryChanged();
+            //    }
+            //}
 
-            if (target_ci == null) {
-                //this should only occur during an action sequece
-                target_ci = sourceCopyItem;
-            }
+            //if (target_ci == null) {
+            //    //this should only occur during an action sequece
+            //    target_ci = sourceCopyItem;
+            //}
 
             return target_ci;
         }
@@ -167,17 +168,71 @@ namespace MonkeyPaste {
             }
         }
 
-        private static async Task ProcessDataObjectAsync(MpAnalyzerTransaction trans, MpCopyItem sourceCopyItem, int citid, bool suppressWrite = false) {
-            if (trans == null || trans.Response == null) {
-                return;
+        private static async Task<MpCopyItem> ProcessDataObjectAsync(MpAnalyzerTransaction trans, MpCopyItem sourceCopyItem, int citid, bool suppressWrite = false) {
+            if (trans == null || 
+                trans.Response == null || 
+                trans.Response.dataObject == null || 
+                trans.Response.dataObject.DataFormatLookup.Count == 0) {
+                return null;
+            }
+            var mpdo = trans.Response.dataObject;
+            string source_url_ref = MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(sourceCopyItem);
+
+            List<MpISourceRef> target_source_refs = new List<MpISourceRef>();
+            if (citid > 0) {
+                var cit_ref = await MpDataModelProvider.GetSourceRefByCopyItemTransactionIdAsync(citid);
+                if (cit_ref != null) {
+                    target_source_refs.Add(cit_ref);
+                }
+            }
+            target_source_refs.Add(sourceCopyItem);
+            bool isNewContentResult = true;
+
+            if (mpdo.ContainsData(MpPortableDataFormats.LinuxUriList) &&
+                mpdo.GetData(MpPortableDataFormats.LinuxUriList) is IEnumerable<string> urls) {
+                var urlList = urls.ToList();
+                if(urlList.Any(x=>x == source_url_ref)) {
+                    // data references source item so any content formats should replace source item content
+                    //target_ci = sourceCopyItem;
+                    isNewContentResult = false;
+                    // remove self reference
+                    urlList.Remove(source_url_ref);
+                }
+
+                foreach (var url in urls) {
+                   var url_ref = await MpPlatformWrapper.Services.SourceRefBuilder.FetchOrCreateSourceAsync(url);
+                    if(url_ref == null) {
+                        // whats the url format?
+                        Debugger.Break();
+                        continue;
+                    }
+                    target_source_refs.Add(url_ref);
+                }
             }
 
-            if (trans.Response is MpPluginResponseFormatBase prf && prf.dataObject != null) {
-                //var pdo_ci = await MpPlatformWrapper.Services.CopyItemBuilder.Create(prf.dataObject,suppressWrite);
-                //sourceCopyItem.ItemData = pdo_ci.ItemData;
+            if(isNewContentResult) {
+                // new content item     
+                MpCopyItem target_ci = null;
+                if (target_source_refs.All(x=> MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(x) != source_url_ref)) {
+                    // ensure source content is ref'd in new item (and not duplicated)
+                    target_source_refs.Add(sourceCopyItem);
+                }
+                var new_contnet_source_urls = target_source_refs.Select(x => MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(x));
+                // substitute any provided urls so they have internal formatting
+                mpdo.SetData(MpPortableDataFormats.LinuxUriList, new_contnet_source_urls);
 
-                await MpPlatformWrapper.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(prf.dataObject, false);
+                // create new item
+                target_ci = await MpPlatformWrapper.Services.CopyItemBuilder.CreateAsync(mpdo);
+                return target_ci;
+            }  
+
+            if (mpdo.ContainsData(MpPortableDataFormats.CefHtml) &&
+                mpdo.GetData(MpPortableDataFormats.CefHtml) is string updatedItemData) {
+                sourceCopyItem.ItemData = updatedItemData;
+                await sourceCopyItem.WriteToDatabaseAsync();
             }
+
+            return null;
         }
     }
 }

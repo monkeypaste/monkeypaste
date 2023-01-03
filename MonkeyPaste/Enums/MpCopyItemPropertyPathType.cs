@@ -15,7 +15,8 @@
         PasteCount,
         SourceDeviceName,
         SourceDeviceType,
-        LastOutput
+        LastOutput,
+        ItemRefUrl
     }
 
 }

@@ -9,7 +9,7 @@ using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common;
 namespace MonkeyPaste {
 
-    public class MpCommandLinePlugin : MpIAnalyzerComponent {
+    public class MpCommandLinePlugin : MpIAnalyzeComponent {
         public string Endpoint { get; set; }
 
         public MpAnalyzerPluginResponseFormat Analyze(MpAnalyzerPluginRequestFormat request) {

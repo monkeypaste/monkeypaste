@@ -313,7 +313,7 @@ namespace MonkeyPaste.Avalonia {
                 if (AnalyzerPluginFormat.outputType.file) {
                     flags |= MpAnalyzerOutputFormatFlags.File;
                 }
-                if (AnalyzerPluginFormat.outputType.imageToken) {
+                if (AnalyzerPluginFormat.outputType.imageAnnotation) {
                     flags |= MpAnalyzerOutputFormatFlags.BoundingBox;
                 }
 
@@ -407,7 +407,7 @@ namespace MonkeyPaste.Avalonia {
                 base.Items.Add(naipvm);
             }
 
-            base.OnPropertyChanged(nameof(MpAvSelectorViewModelBase<MpAvAnalyticItemCollectionViewModel, MpAvAnalyticItemPresetViewModel>.Items));
+            base.OnPropertyChanged(nameof(Items));
 
             while (base.Items.Any(x => x.IsBusy)) {
                 await Task.Delay(100);

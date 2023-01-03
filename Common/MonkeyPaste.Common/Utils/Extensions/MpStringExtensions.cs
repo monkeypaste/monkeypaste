@@ -462,7 +462,9 @@ namespace MonkeyPaste.Common {
             new Dictionary<char, string>() {
                 {' ',"&nbsp;" },
                 {'&',"&amp;" },
-                {'\"',"&quot;" }, {'\'',"&apos;" }, {'>',"&gt;" },
+                {'\"',"&quot;" }, 
+                {'\'',"&apos;" }, 
+                {'>',"&gt;" },
                 {'¢',"&cent;" },
                 {'£',"&pound;" },
                 {'¥',"&yen;" },
@@ -501,7 +503,7 @@ namespace MonkeyPaste.Common {
                     sb.Append(str[i]);
                 }
             }
-            return sb.ToString();
+            return HttpUtility.HtmlDecode(sb.ToString());
         }
 
         public static bool ContainsSpecialHtmlEntities(this string str) {

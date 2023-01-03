@@ -800,6 +800,7 @@ namespace MonkeyPaste.Avalonia {
                 false,
                 BindingMode.TwoWay);
 
+
         #endregion 
 
         private void OnContentIdChanged() {

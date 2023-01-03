@@ -37,7 +37,6 @@ namespace MonkeyPaste.Avalonia {
         string MpILabelText.LabelText => Label;
         #endregion
 
-
         #region View Models
 
         public Dictionary<object, MpAvPluginParameterViewModelBase> ParamLookup => Items.ToDictionary(x => x.ParamId,x => x); //{

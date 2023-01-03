@@ -27,6 +27,12 @@ namespace MonkeyPaste.Common.Wpf {
         private static HtmlDocument _htmlDoc;
         #endregion
 
+        #region Constants
+
+        public const string HTML_SPECIAL_ENTITY_CLASS = "rtf-html-entity";
+
+        #endregion
+
         #region Public Methods
 
         public static string ConvertFormatToHtml(
@@ -177,10 +183,12 @@ namespace MonkeyPaste.Common.Wpf {
                 // wrap encoded special entity in code tag
                 HtmlNode match_text_node = _htmlDoc.CreateTextNode(m.Value);
                 HtmlNode code_node = _htmlDoc.CreateElement("code");
+
+                //
                 code_node.AppendChild(match_text_node);
                 span_node.AppendChild(code_node);
 
-                cur_idx = match_idx + m.Value.Length;
+                cur_idx += match_idx + m.Value.Length;
                 string test = r.Text.Substring(cur_idx);
                 m = MpRegEx.RegExLookup[MpRegExType.EncodedHtmlEntity].Match(r.Text.Substring(cur_idx));
             }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Text;
 
 namespace MonkeyPaste.Common {
@@ -40,9 +41,12 @@ namespace MonkeyPaste.Common {
             Channels = new byte[] { a, r, g, b };
         }
 
-        public string ToHex() {
+        public string ToHex(bool removeAlpha = false) {
             if (Channels == null) {
                 return string.Empty;
+            }
+            if(removeAlpha) {
+                return Channels.Skip(1).ToArray().ToHex();
             }
             return Channels.ToHex();
         }

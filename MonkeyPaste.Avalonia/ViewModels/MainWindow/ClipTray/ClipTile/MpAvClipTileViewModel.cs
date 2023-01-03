@@ -1457,6 +1457,9 @@ namespace MonkeyPaste.Avalonia {
                         await InitializeAsync(ci);
                         //wait for model to propagate then trigger view to reload
                         //IsViewLoaded = false;
+                        if(GetDragSource() is MpAvCefNetWebView wv) {
+                            wv.PerformLoadContentRequestAsync().FireAndForgetSafeAsync();
+                        }
                     });
                 }
             }

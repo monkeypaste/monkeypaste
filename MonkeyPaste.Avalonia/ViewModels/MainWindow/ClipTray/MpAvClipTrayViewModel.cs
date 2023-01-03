@@ -3114,6 +3114,7 @@ namespace MonkeyPaste.Avalonia {
             async(presetIdObj) => {
                 var preset = await MpDataModelProvider.GetItemAsync<MpPluginPreset>((int)presetIdObj);
                 var analyticItemVm = MpAvAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.PluginGuid == preset.PluginGuid);
+                int selected_ciid = SelectedItem.CopyItemId;
 
                 EventHandler<MpCopyItem> analysisCompleteHandler = null;
                 analysisCompleteHandler = (s, e) => {

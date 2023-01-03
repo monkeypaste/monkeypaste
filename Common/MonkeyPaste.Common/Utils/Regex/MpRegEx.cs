@@ -37,6 +37,9 @@ namespace MonkeyPaste.Common {
                 return strTheseAreInvalidFileNameChars;
             }
         }
+
+        public static int MAX_ANNOTATION_REGEX_TYPE => (int)MpRegExType.StreetAddress;
+
         private static List<string> _regExStrings = new List<string>{
             
             //none

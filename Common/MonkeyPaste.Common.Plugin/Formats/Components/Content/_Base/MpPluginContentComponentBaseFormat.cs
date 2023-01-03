@@ -11,8 +11,8 @@
         public bool text { get; set; } = false;
         public bool image { get; set; } = false;
         public bool file { get; set; } = false;
-        public bool imageToken { get; set; } = false;
-        public bool textToken { get; set; } = false;
+        public bool imageAnnotation { get; set; } = false;
+        public bool textAnnotation { get; set; } = false;
     }
     public abstract class MpPluginContentComponentBaseFormat : MpPluginComponentBaseFormat {
         public MpHttpTransactionFormatBase http { get; set; }

@@ -72,7 +72,7 @@ function showColorPaletteMenu(
     pal_elm.style.left = `${origin.x}px`;
     pal_elm.style.top = `${origin.y}px`;
 
-    window.addEventListener('mousedown', onWindowClickWithColorPaletteOpen);
+    window.addEventListener('click', onWindowClickWithColorPaletteOpen);
 }
 
 function hideColorPaletteMenu() {

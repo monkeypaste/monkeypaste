@@ -59,6 +59,7 @@ namespace MonkeyPaste {
                 case MpCopyItemPropertyPathType.None:
                 case MpCopyItemPropertyPathType.LastOutput:
                     return null;
+                case MpCopyItemPropertyPathType.ItemRefUrl:
                 case MpCopyItemPropertyPathType.ItemData:
                 case MpCopyItemPropertyPathType.ItemType:
                 case MpCopyItemPropertyPathType.Title:
@@ -177,6 +178,9 @@ namespace MonkeyPaste {
                 ItemTypeName = value.ToString();
             }
         }
+
+        [Ignore]
+        public string ItemRefUrl => MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(this);
 
         #endregion
 

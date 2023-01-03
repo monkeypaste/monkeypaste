@@ -59,7 +59,7 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public void MapAllPseudoFormats() {
-            if(ContainsData(MpPortableDataFormats.AvHtml_bytes) &&
+            if (ContainsData(MpPortableDataFormats.AvHtml_bytes) &&
                 !ContainsData(MpPortableDataFormats.CefHtml) &&
                 GetData(MpPortableDataFormats.AvHtml_bytes) is byte[] html_bytes) {
                 // convert html bytes to string and map to cef html

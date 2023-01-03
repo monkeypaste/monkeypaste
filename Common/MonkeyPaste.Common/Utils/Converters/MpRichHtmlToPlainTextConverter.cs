@@ -8,7 +8,7 @@ using System.Web;
 namespace MonkeyPaste.Common {
     public static class MpRichHtmlToPlainTextConverter {
         public static string Convert(string html, string envNewLine = null) {
-            string pt = HttpUtility.HtmlDecode(FormatLineBreaks(html, envNewLine)).DecodeSpecialHtmlEntities();
+            string pt = FormatLineBreaks(html, envNewLine).DecodeSpecialHtmlEntities();
             return pt;
         }
 
@@ -27,10 +27,10 @@ namespace MonkeyPaste.Common {
             }
 
             //now remove all "meaningless" inline elements like "span"
-            foreach (HtmlNode node in doc.DocumentNode.SafeSelectNodes("//span | //label")) //add "b", "i" if required
-            {
-                node.ParentNode.ReplaceChild(HtmlNode.CreateNode(node.InnerHtml), node);
-            }
+            //foreach (HtmlNode node in doc.DocumentNode.SafeSelectNodes("//span | //label")) //add "b", "i" if required
+            //{
+            //    node.ParentNode.ReplaceChild(HtmlNode.CreateNode(node.InnerHtml), node);
+            //}
 
             //block-elements - convert to line-breaks
             foreach (HtmlNode node in doc.DocumentNode.SafeSelectNodes("//p | //div")) //you could add more tags here
