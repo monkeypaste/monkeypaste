@@ -202,12 +202,12 @@ namespace MonkeyPaste {
             }
 
             if(deepClone) {
-                var presetValues = await MpDataModelProvider.GetPluginPresetValuesByPresetIdAsync(Id);
+                var presetValues = await MpDataModelProvider.GetPluginPresetValuesByPresetIdAsync(MpParameterHostType.Preset, Id);
                 foreach (var ppv in presetValues) {
                     var cppv = await ppv.CloneDbModelAsync(
                             deepClone: deepClone,
                             suppressWrite: suppressWrite);
-                    cppv.PluginPresetId = caip.Id;
+                    cppv.ParameterHostId = caip.Id;
                     await cppv.WriteToDatabaseAsync();
                 }
             }
@@ -224,7 +224,7 @@ namespace MonkeyPaste {
                 return;
             }
             List<Task> delete_tasks = new List<Task>();
-            var pppvl = await MpDataModelProvider.GetPluginPresetValuesByPresetIdAsync(Id);
+            var pppvl = await MpDataModelProvider.GetPluginPresetValuesByPresetIdAsync(MpParameterHostType.Preset, Id);
             if(pppvl != null && pppvl.Count > 0) {
                 delete_tasks.AddRange(pppvl.Select(x => x.DeleteFromDatabaseAsync()));
             }

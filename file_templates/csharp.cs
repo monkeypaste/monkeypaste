@@ -7,6 +7,9 @@
 #region Statics
 #endregion
 
+#region Interfaces
+#endregion
+
 #region Properties
 #endregion
 

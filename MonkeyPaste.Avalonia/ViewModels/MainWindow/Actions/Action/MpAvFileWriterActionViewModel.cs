@@ -14,14 +14,49 @@ using System.Windows;
 using System.Windows.Input;
 using Avalonia.Controls;
 using Avalonia.Threading;
+using MonkeyPaste.Common.Plugin;
 
 namespace MonkeyPaste.Avalonia {
 
-    public class MpAvFileWriterActionViewModel : MpAvActionViewModelBase, MpITooltipInfoViewModel {
+    public class MpAvFileWriterActionViewModel : 
+        MpAvActionViewModelBase, MpITooltipInfoViewModel {
+
+        #region MpIPluginHost Overrides
+
+        private MpActionPluginFormat _actionComponentFormat;
+        public override MpActionPluginFormat ActionComponentFormat {
+            get {
+                if(_actionComponentFormat == null) {
+                    _actionComponentFormat = new MpActionPluginFormat() {
+                        parameters = new List<MpPluginParameterFormat>() {
+                            new MpPluginParameterFormat() {
+                                label = "Directory",
+                                controlType = MpPluginParameterControlType.DirectoryChooser,
+                                unitType = MpPluginParameterValueUnitType.FileSystemPath,
+                                isRequired = true,
+                                paramId = "1",
+                                description = "The directory where input content will be written."
+                            },
+                            new MpPluginParameterFormat() {
+                                label = "Custom Name",
+                                controlType = MpPluginParameterControlType.TextBox,
+                                unitType = MpPluginParameterValueUnitType.PlainTextContentQuery,
+                                isRequired = false,
+                                paramId = "2",
+                                description = "When left blank, the content will use its title as the file name."
+                            },
+                        }
+                    };
+                }
+                return _actionComponentFormat;
+            }
+        }
+
+        #endregion
+
         #region Properties
 
         #region View Models
-
 
         #endregion
 

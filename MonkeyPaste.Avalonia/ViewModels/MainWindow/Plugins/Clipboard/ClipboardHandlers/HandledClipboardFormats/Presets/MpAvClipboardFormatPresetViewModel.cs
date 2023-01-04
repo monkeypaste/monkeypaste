@@ -37,7 +37,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
         #region MpITreeItemViewModel Implementation
 
         public bool IsExpanded { get; set; }
@@ -288,7 +287,9 @@ namespace MonkeyPaste.Avalonia {
 
             Preset = aip;
 
-            var presetValues = await PrepareParameterValueModelsAsync();
+            //var presetValues = await PrepareParameterValueModelsAsync();
+
+            var presetValues = await MpAvPluginParameterValueLocator.LocateValuesAsync(MpParameterHostType.Preset, PresetId, Parent);
 
             foreach (var paramVal in presetValues) {
                 var naipvm = await CreateParameterViewModelAsync(paramVal);
@@ -307,37 +308,39 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
         public async Task<MpAvPluginParameterViewModelBase> CreateParameterViewModelAsync(MpPluginPresetParameterValue aipv) {
-            MpPluginParameterControlType controlType = ClipboardFormat.parameters.FirstOrDefault(x => x.paramId == aipv.ParamId).controlType;
-            MpAvPluginParameterViewModelBase naipvm = null;
+            //MpPluginParameterControlType controlType = ClipboardFormat.parameters.FirstOrDefault(x => x.paramId == aipv.ParamId).controlType;
+            //MpAvPluginParameterViewModelBase naipvm = null;
 
-            switch (controlType) {
-                case MpPluginParameterControlType.List:
-                case MpPluginParameterControlType.MultiSelectList:
-                case MpPluginParameterControlType.EditableList:
-                case MpPluginParameterControlType.ComboBox:
-                    naipvm = new MpAvEnumerableParameterViewModel(this);
-                    break;
-                case MpPluginParameterControlType.PasswordBox:
-                case MpPluginParameterControlType.TextBox:
-                    naipvm = new MpAvTextBoxParameterViewModel(this);
-                    break;
-                case MpPluginParameterControlType.CheckBox:
-                    naipvm = new MpAvCheckBoxParameterViewModel(this);
-                    break;
-                case MpPluginParameterControlType.Slider:
-                    naipvm = new MpAvSliderParameterViewModel(this);
-                    break;
-                case MpPluginParameterControlType.DirectoryChooser:
-                case MpPluginParameterControlType.FileChooser:
-                    naipvm = new MpAvFileChooserParameterViewModel(this);
-                    break;
-                default:
-                    throw new Exception(@"Unsupported Paramter type: " + Enum.GetName(typeof(MpPluginParameterControlType), controlType));
-            }
+            //switch (controlType) {
+            //    case MpPluginParameterControlType.List:
+            //    case MpPluginParameterControlType.MultiSelectList:
+            //    case MpPluginParameterControlType.EditableList:
+            //    case MpPluginParameterControlType.ComboBox:
+            //        naipvm = new MpAvEnumerableParameterViewModel(this);
+            //        break;
+            //    case MpPluginParameterControlType.PasswordBox:
+            //    case MpPluginParameterControlType.TextBox:
+            //        naipvm = new MpAvTextBoxParameterViewModel(this);
+            //        break;
+            //    case MpPluginParameterControlType.CheckBox:
+            //        naipvm = new MpAvCheckBoxParameterViewModel(this);
+            //        break;
+            //    case MpPluginParameterControlType.Slider:
+            //        naipvm = new MpAvSliderParameterViewModel(this);
+            //        break;
+            //    case MpPluginParameterControlType.DirectoryChooser:
+            //    case MpPluginParameterControlType.FileChooser:
+            //        naipvm = new MpAvFileChooserParameterViewModel(this);
+            //        break;
+            //    default:
+            //        throw new Exception(@"Unsupported Paramter type: " + Enum.GetName(typeof(MpPluginParameterControlType), controlType));
+            //}
+            //naipvm.OnValidate += ParameterViewModel_OnValidate;
+
+
+            //await naipvm.InitializeAsync(aipv);
+            var naipvm = await MpAvPluginParameterBuilder.CreateParameterViewModelAsync(aipv, Parent, this);
             naipvm.OnValidate += ParameterViewModel_OnValidate;
-
-
-            await naipvm.InitializeAsync(aipv);
 
             return naipvm;
         }
@@ -403,53 +406,53 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private async Task<IEnumerable<MpPluginPresetParameterValue>> PrepareParameterValueModelsAsync() {
-            // get all preset values from db
-            var presetValues = await MpDataModelProvider.GetPluginPresetValuesByPresetIdAsync(PresetId);
+        //private async Task<IEnumerable<MpPluginPresetParameterValue>> PrepareParameterValueModelsAsync() {
+        //    // get all preset values from db
+        //    var presetValues = await MpDataModelProvider.GetPluginPresetValuesByPresetIdAsync(PresetId);
 
-            //var cbh = Parent.Parent.PluginFormat.clipboardHandler;
-            //int base_param_idx = 0;
-            //if(IsReader) {
-            //    int handler_idx = cbh.readers.IndexOf(Parent.ClipboardPluginFormat);
-            //    base_param_idx = cbh.readers.Where(x => cbh.readers.IndexOf(x) < handler_idx).SelectMany(x => x.parameters).Count();
-            //} else {
-            //    base_param_idx = cbh.readers.Count;
-            //    int handler_idx = cbh.writers.IndexOf(Parent.ClipboardPluginFormat);                
-            //    base_param_idx += cbh.writers.Where(x => cbh.writers.IndexOf(x) < handler_idx).SelectMany(x => x.parameters).Count();
-            //}
-            // loop through plugin formats parameters and add or replace (if found in db) to the preset values
-            foreach (var paramFormat in ClipboardFormat.parameters) {
-                if (!presetValues.Any(x => x.ParamId == paramFormat.paramId)) {
-                    // if no value is found in db for a parameter defined in manifest...
+        //    //var cbh = Parent.Parent.PluginFormat.clipboardHandler;
+        //    //int base_param_idx = 0;
+        //    //if(IsReader) {
+        //    //    int handler_idx = cbh.readers.IndexOf(Parent.ClipboardPluginFormat);
+        //    //    base_param_idx = cbh.readers.Where(x => cbh.readers.IndexOf(x) < handler_idx).SelectMany(x => x.parameters).Count();
+        //    //} else {
+        //    //    base_param_idx = cbh.readers.Count;
+        //    //    int handler_idx = cbh.writers.IndexOf(Parent.ClipboardPluginFormat);                
+        //    //    base_param_idx += cbh.writers.Where(x => cbh.writers.IndexOf(x) < handler_idx).SelectMany(x => x.parameters).Count();
+        //    //}
+        //    // loop through plugin formats parameters and add or replace (if found in db) to the preset values
+        //    foreach (var paramFormat in ClipboardFormat.parameters) {
+        //        if (!presetValues.Any(x => x.ParamId == paramFormat.paramId)) {
+        //            // if no value is found in db for a parameter defined in manifest...
 
-                    string paramVal = string.Empty;
-                    if (paramFormat.values != null && paramFormat.values.Count > 0) { 
-                        // if parameter has a predefined value (a case when not would be a text box that needs input so its value is empty)
+        //            string paramVal = string.Empty;
+        //            if (paramFormat.values != null && paramFormat.values.Count > 0) { 
+        //                // if parameter has a predefined value (a case when not would be a text box that needs input so its value is empty)
 
-                        if (paramFormat.values.Any(x => x.isDefault)) {
-                            // when manifest identifies a value as default choose that for value
+        //                if (paramFormat.values.Any(x => x.isDefault)) {
+        //                    // when manifest identifies a value as default choose that for value
 
-                            paramVal = paramFormat.values.Where(x => x.isDefault).Select(x => x.value).ToList().ToCsv();
-                        } else {
-                            // if no default is defined use first available value
-                            paramVal = paramFormat.values[0].value;
-                        }
-                    }
+        //                    paramVal = paramFormat.values.Where(x => x.isDefault).Select(x => x.value).ToList().ToCsv();
+        //                } else {
+        //                    // if no default is defined use first available value
+        //                    paramVal = paramFormat.values[0].value;
+        //                }
+        //            }
 
-                    var newPresetVal = await MpPluginPresetParameterValue.CreateAsync(
-                        presetId: Preset.Id,
-                        paramId: paramFormat.paramId,
-                        value: paramVal
-                        //format: paramFormat
-                        );
+        //            var newPresetVal = await MpPluginPresetParameterValue.CreateAsync(
+        //                presetId: Preset.Id,
+        //                paramId: paramFormat.paramId,
+        //                value: paramVal
+        //                //format: paramFormat
+        //                );
 
-                    presetValues.Add(newPresetVal);
-                }
-            }
-            //presetValues.ForEach(x => x.ParameterFormat = ClipboardFormat.parameters.FirstOrDefault(y => y.paramName == x.ParamName));
+        //            presetValues.Add(newPresetVal);
+        //        }
+        //    }
+        //    //presetValues.ForEach(x => x.ParameterFormat = ClipboardFormat.parameters.FirstOrDefault(y => y.paramName == x.ParamName));
 
-            return presetValues;
-        }
+        //    return presetValues;
+        //}
 
         #endregion
 

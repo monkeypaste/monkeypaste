@@ -3119,7 +3119,9 @@ namespace MonkeyPaste.Avalonia {
                 EventHandler<MpCopyItem> analysisCompleteHandler = null;
                 analysisCompleteHandler = (s, e) => {
                     analyticItemVm.OnAnalysisCompleted -= analysisCompleteHandler;
-                    if(e == null) {
+                    AllItems.FirstOrDefault(x => x.CopyItemId == selected_ciid).IsBusy = false;
+
+                    if (e == null) {
                         return;
                     }
                     AddUpdateOrAppendCopyItemAsync(e).FireAndForgetSafeAsync();
@@ -3129,6 +3131,7 @@ namespace MonkeyPaste.Avalonia {
 
                 analyticItemVm.SelectPresetCommand.Execute(presetVm);
                 if(analyticItemVm.ExecuteAnalysisCommand.CanExecute(null)) {
+                    AllItems.FirstOrDefault(x => x.CopyItemId == selected_ciid).IsBusy = true;
                     analyticItemVm.OnAnalysisCompleted += analysisCompleteHandler;
                     analyticItemVm.ExecuteAnalysisCommand.Execute(null);
                 }

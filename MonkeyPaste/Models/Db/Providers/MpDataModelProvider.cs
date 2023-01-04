@@ -787,16 +787,16 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public static async Task<List<MpPluginPresetParameterValue>> GetPluginPresetValuesByPresetIdAsync(int presetId) {
-            string query = $"select * from MpPluginPresetParameterValue where fk_MpPluginPresetId=?";
-            var result = await MpDb.QueryAsync<MpPluginPresetParameterValue>(query, presetId);
+        public static async Task<List<MpPluginPresetParameterValue>> GetPluginPresetValuesByPresetIdAsync(MpParameterHostType hostType,int paramHostId) {
+            string query = $"select * from MpPluginPresetParameterValue where e_MpParameterHostType=? and fk_ParameterHostId=?";
+            var result = await MpDb.QueryAsync<MpPluginPresetParameterValue>(query,hostType.ToString(), paramHostId);
             return result;
         }
 
 
-        public static async Task<MpPluginPresetParameterValue> GetPluginPresetValueAsync(int presetId, string paramId) {
-            string query = $"select * from MpPluginPresetParameterValue where fk_MpPluginPresetId=? and ParamId=?";
-            var result = await MpDb.QueryAsync<MpPluginPresetParameterValue>(query, presetId, paramId);
+        public static async Task<MpPluginPresetParameterValue> GetPluginPresetValueAsync(MpParameterHostType hostType, int paramHostId, string paramId) {
+            string query = $"select * from MpPluginPresetParameterValue where e_MpParameterHostType=? and fk_ParameterHostId=? and ParamId=?";
+            var result = await MpDb.QueryAsync<MpPluginPresetParameterValue>(query,hostType.ToString(), paramHostId, paramId);
             if (result == null || result.Count == 0) {
                 return null;
             }

@@ -40,8 +40,46 @@ namespace MonkeyPaste.Avalonia {
         MpISelectableViewModel,
         MpIHoverableViewModel,
         MpIAsyncComboBoxItemViewModel,
-        MpIMenuItemViewModel {
+        MpIMenuItemViewModel,
+        MpIPluginHost {
         #region Private Variables
+        #endregion
+
+        #region Interfaces
+
+        #region MpIPluginHost Implementation
+
+        int MpIPluginHost.IconId => PluginIconId;
+        public string PluginGuid =>
+            PluginFormat == null ? string.Empty : PluginFormat.guid;
+
+        public MpPluginFormat PluginFormat { get; set; }
+
+        MpPluginComponentBaseFormat MpIPluginHost.ComponentFormat => AnalyzerComponentFormat;
+        public MpAnalyzerPluginFormat AnalyzerComponentFormat =>
+            PluginFormat == null ? null : PluginFormat.analyzer;
+
+        public MpIPluginComponentBase PluginComponent =>
+            PluginFormat == null ? null : PluginFormat.Component as MpIPluginComponentBase;
+
+        #endregion
+
+        #region MpISelectableViewModel Implementation
+
+        public bool IsSelected { get; set; } = false;
+
+        public DateTime LastSelectedDateTime { get; set; }
+
+        #endregion
+
+        #region MpIAsyncComboBoxItemViewModel Implementation
+
+
+        int MpIComboBoxItemViewModel.IconId => PluginIconId;
+        string MpIComboBoxItemViewModel.Label => Title;
+
+        #endregion
+
         #endregion
 
         #region Properties
@@ -81,21 +119,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpISelectableViewModel Implementation
-
-        public bool IsSelected { get; set; } = false;
-
-        public DateTime LastSelectedDateTime { get; set; }
-
-        #endregion
-
-        #region MpIAsyncComboBoxItemViewModel Implementation
-
-
-        int MpIComboBoxItemViewModel.IconId => PluginIconId;
-        string MpIComboBoxItemViewModel.Label => Title;
-
-        #endregion
+        
 
         #region Appearance
 
@@ -281,16 +305,16 @@ namespace MonkeyPaste.Avalonia {
         public MpAnalyzerInputFormatFlags InputFormatFlags { 
             get {
                 MpAnalyzerInputFormatFlags flags = MpAnalyzerInputFormatFlags.None;
-                if(AnalyzerPluginFormat == null || AnalyzerPluginFormat.inputType == null) {
+                if(AnalyzerComponentFormat == null || AnalyzerComponentFormat.inputType == null) {
                     return flags;
                 }
-                if(AnalyzerPluginFormat.inputType.text) {
+                if(AnalyzerComponentFormat.inputType.text) {
                     flags |= MpAnalyzerInputFormatFlags.Text;
                 }
-                if(AnalyzerPluginFormat.inputType.image) {
+                if(AnalyzerComponentFormat.inputType.image) {
                     flags |= MpAnalyzerInputFormatFlags.Image;
                 }
-                if(AnalyzerPluginFormat.inputType.file) {
+                if(AnalyzerComponentFormat.inputType.file) {
                     flags |= MpAnalyzerInputFormatFlags.File;
                 }
 
@@ -301,19 +325,19 @@ namespace MonkeyPaste.Avalonia {
         public MpAnalyzerOutputFormatFlags OutputFormatFlags {
             get {
                 MpAnalyzerOutputFormatFlags flags = MpAnalyzerOutputFormatFlags.None;
-                if (AnalyzerPluginFormat == null || AnalyzerPluginFormat.outputType == null) {
+                if (AnalyzerComponentFormat == null || AnalyzerComponentFormat.outputType == null) {
                     return flags;
                 }
-                if (AnalyzerPluginFormat.outputType.text) {
+                if (AnalyzerComponentFormat.outputType.text) {
                     flags |= MpAnalyzerOutputFormatFlags.Text;
                 }
-                if (AnalyzerPluginFormat.outputType.image) {
+                if (AnalyzerComponentFormat.outputType.image) {
                     flags |= MpAnalyzerOutputFormatFlags.Image;
                 }
-                if (AnalyzerPluginFormat.outputType.file) {
+                if (AnalyzerComponentFormat.outputType.file) {
                     flags |= MpAnalyzerOutputFormatFlags.File;
                 }
-                if (AnalyzerPluginFormat.outputType.imageAnnotation) {
+                if (AnalyzerComponentFormat.outputType.imageAnnotation) {
                     flags |= MpAnalyzerOutputFormatFlags.BoundingBox;
                 }
 
@@ -342,16 +366,6 @@ namespace MonkeyPaste.Avalonia {
         
         public MpBillableItem BillableItem { get; set; }
 
-        #region Plugin
-        public string PluginGuid => PluginFormat == null ? string.Empty : PluginFormat.guid;
-
-        public MpPluginFormat PluginFormat { get; set; }
-
-        public MpAnalyzerPluginFormat AnalyzerPluginFormat => PluginFormat == null ? null : PluginFormat.analyzer;
-
-        public MpIPluginComponentBase AnalyzerPluginComponent => PluginFormat == null ? null : PluginFormat.Component as MpIPluginComponentBase;
-        
-        #endregion
 
         #endregion
 
@@ -389,19 +403,19 @@ namespace MonkeyPaste.Avalonia {
 
             PluginFormat = analyzerPlugin;
 
-            if (AnalyzerPluginComponent == null) {
+            if (PluginComponent == null) {
                 throw new Exception("Cannot find component");
             }
 
-            PluginIconId = await GetOrCreateIconIdAsync();
+            PluginIconId = await MpAvPluginIconLocator.LocatePluginIconIdAsync(this);
 
-            while(MpAvIconCollectionViewModel.Instance.IsAnyBusy) {
+            while (MpAvIconCollectionViewModel.Instance.IsAnyBusy) {
                 await Task.Delay(100);
             }
                        
             base.Items.Clear();
 
-            var presets = await PreparePresetModelsAsync();
+            var presets = await MpAvPluginPresetLocator.LocatePresetsAsync(this,Items.Select(x=>x.Preset));
             foreach (var preset in presets) {
                 var naipvm = await CreatePresetViewModelAsync(preset);
                 base.Items.Add(naipvm);
@@ -422,9 +436,7 @@ namespace MonkeyPaste.Avalonia {
             MpAvAnalyticItemPresetViewModel naipvm = new MpAvAnalyticItemPresetViewModel(this);
             await naipvm.InitializeAsync(aip);
             return naipvm;
-        }
-
-        
+        }       
 
         public string GetUniquePresetName() {
             int uniqueIdx = 1;
@@ -518,24 +530,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private async Task<MpPluginPreset> CreateDefaultPresetModelAsync(int existingDefaultPresetId = 0) {
-            if(AnalyzerPluginFormat.parameters == null) {
-                throw new Exception($"Parameters for '{Title}' not found");
-            }
-
-            var aip = await MpPluginPreset.CreateAsync(
-                                pluginGuid: PluginFormat.guid,
-                                isDefault: true,
-                                label: $"{Title} - Default",
-                                iconId: PluginIconId,
-                                sortOrderIdx: existingDefaultPresetId == 0 ? 0 : base.Items.FirstOrDefault(x => x.IsDefault).SortOrderIdx,
-                                description: $"Auto-generated default preset for '{Title}'",
-                                //format: AnalyzerPluginFormat,
-                                manifestLastModifiedDateTime: PluginFormat.manifestLastModifiedDateTime,
-                                existingDefaultPresetId: existingDefaultPresetId);
-
-            return aip;
-        }
 
         private void ReceivedClipTrayMessage(MpMessageType msg) {
             switch(msg) {
@@ -590,87 +584,106 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private async Task<int> GetOrCreateIconIdAsync() {
-            var bytes = await MpFileIo.ReadBytesFromUriAsync(PluginFormat.iconUri, PluginFormat.RootDirectory); ;
-            var icon = await MpPlatformWrapper.Services.IconBuilder.CreateAsync(
-                iconBase64: bytes.ToBase64String(),
-                createBorder: false);
+        //private async Task<int> GetOrCreateIconIdAsync() {
+        //    var bytes = await MpFileIo.ReadBytesFromUriAsync(PluginFormat.iconUri, PluginFormat.RootDirectory); ;
+        //    var icon = await MpPlatformWrapper.Services.IconBuilder.CreateAsync(
+        //        iconBase64: bytes.ToBase64String(),
+        //        createBorder: false);
 
-            return icon.Id;
-        }
+        //    return icon.Id;
+        //}
 
-        private async Task<IEnumerable<MpPluginPreset>> PreparePresetModelsAsync() {
-            var presets = await MpDataModelProvider.GetPluginPresetsByPluginGuidAsync(PluginFormat.guid);
+        //private async Task<IEnumerable<MpPluginPreset>> PreparePresetModelsAsync() {
+        //    var presets = await MpDataModelProvider.GetPluginPresetsByPluginGuidAsync(PluginFormat.guid);
 
-            bool isNew = presets.Count == 0;
-            bool isManifestModified = presets.Any(x => x.ManifestLastModifiedDateTime < PluginFormat.manifestLastModifiedDateTime);
-            bool needsReset = isNew || isManifestModified;
-            if (needsReset) {
-                var ivm = MpAvIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == PluginIconId);
+        //    bool isNew = presets.Count == 0;
+        //    bool isManifestModified = presets.Any(x => x.ManifestLastModifiedDateTime < PluginFormat.manifestLastModifiedDateTime);
+        //    bool needsReset = isNew || isManifestModified;
+        //    if (needsReset) {
+        //        var ivm = MpAvIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == PluginIconId);
 
-                MpNotificationBuilder.ShowMessageAsync(
-                    msgType: MpNotificationType.PluginUpdated,
-                    title: $"Analyzer '{Title}' Updated",
-                    iconSourceObj: ivm.IconBase64,
-                    body: "Reseting presets to default...")
-                    .FireAndForgetSafeAsync(this);
+        //        MpNotificationBuilder.ShowMessageAsync(
+        //            msgType: MpNotificationType.PluginUpdated,
+        //            title: $"Analyzer '{Title}' Updated",
+        //            iconSourceObj: ivm.IconBase64,
+        //            body: "Reseting presets to default...")
+        //            .FireAndForgetSafeAsync(this);
 
-                presets = await ResetPresetsAsync(presets);
-                isNew = true;
-            }
+        //        presets = await ResetPresetsAsync(presets);
+        //        isNew = true;
+        //    }
 
-            //presets.ForEach(x => x.ComponentFormat = AnalyzerPluginFormat);
-            return presets.OrderBy(x=>x.SortOrderIdx);
-        }
+        //    //presets.ForEach(x => x.ComponentFormat = AnalyzerPluginFormat);
+        //    return presets.OrderBy(x=>x.SortOrderIdx);
+        //}
 
-        private async Task<List<MpPluginPreset>> ResetPresetsAsync(List<MpPluginPreset> presets = null) {
-            //if manifest has been modified
-            //(for now clear all presets and either load predefined presets or create from parameter default values)
+        //private async Task<List<MpPluginPreset>> ResetPresetsAsync(List<MpPluginPreset> presets = null) {
+        //    //if manifest has been modified
+        //    //(for now clear all presets and either load predefined presets or create from parameter default values)
 
-            // TODO maybe less forceably handle add/remove/update of presets when manifest changes
-            presets = presets == null ? await MpDataModelProvider.GetPluginPresetsByPluginGuidAsync(PluginFormat.guid) : presets;
-            foreach (var preset in presets) {
-                var vals = await MpDataModelProvider.GetPluginPresetValuesByPresetIdAsync(preset.Id);
-                await Task.WhenAll(vals.Select(x => x.DeleteFromDatabaseAsync()));
-            }
-            await Task.WhenAll(presets.Select(x => x.DeleteFromDatabaseAsync()));
+        //    // TODO maybe less forceably handle add/remove/update of presets when manifest changes
+        //    presets = presets == null ? await MpDataModelProvider.GetPluginPresetsByPluginGuidAsync(PluginFormat.guid) : presets;
+        //    foreach (var preset in presets) {
+        //        var vals = await MpDataModelProvider.GetPluginPresetValuesByPresetIdAsync(MpParameterHostType.Preset, preset.Id);
+        //        await Task.WhenAll(vals.Select(x => x.DeleteFromDatabaseAsync()));
+        //    }
+        //    await Task.WhenAll(presets.Select(x => x.DeleteFromDatabaseAsync()));
 
-            presets.Clear();
-            if(AnalyzerPluginFormat.presets.IsNullOrEmpty()) {
-                //only generate default preset if no presets defined in manifest
-                var defualtPreset = await CreateDefaultPresetModelAsync();
-                presets.Add(defualtPreset);
-            } else {
-                //when presets are defined in manifest create the preset and its values in the db
-                foreach (var presetFormat in AnalyzerPluginFormat.presets) {
-                    var presetModel = await MpPluginPreset.CreateAsync(
-                        pluginGuid: PluginFormat.guid,
-                        isDefault: presetFormat.isDefault,
-                        label: presetFormat.label,
-                        iconId: PluginIconId,
-                        sortOrderIdx: AnalyzerPluginFormat.presets.IndexOf(presetFormat),
-                        description: presetFormat.description,
-                        //format: AnalyzerPluginFormat,
-                        manifestLastModifiedDateTime: PluginFormat.manifestLastModifiedDateTime);
+        //    presets.Clear();
+        //    if(AnalyzerComponentFormat.presets.IsNullOrEmpty()) {
+        //        //only generate default preset if no presets defined in manifest
+        //        var defualtPreset = await CreateDefaultPresetModelAsync();
+        //        presets.Add(defualtPreset);
+        //    } else {
+        //        //when presets are defined in manifest create the preset and its values in the db
+        //        foreach (var presetFormat in AnalyzerComponentFormat.presets) {
+        //            var presetModel = await MpPluginPreset.CreateAsync(
+        //                pluginGuid: PluginFormat.guid,
+        //                isDefault: presetFormat.isDefault,
+        //                label: presetFormat.label,
+        //                iconId: PluginIconId,
+        //                sortOrderIdx: AnalyzerComponentFormat.presets.IndexOf(presetFormat),
+        //                description: presetFormat.description,
+        //                //format: AnalyzerPluginFormat,
+        //                manifestLastModifiedDateTime: PluginFormat.manifestLastModifiedDateTime);
 
-                    foreach(var presetValueModel in presetFormat.values) {
-                        // only creat preset values in db, they will then be picked up when the preset vm is initialized
-                        var aipv = await MpPluginPresetParameterValue.CreateAsync(
-                            presetId: presetModel.Id, 
-                            paramId: presetValueModel.paramId,
-                            value: presetValueModel.value
-                            //format: AnalyzerPluginFormat.parameters.FirstOrDefault(x => x.paramName == presetValueModel.paramName)
-                            );                        
-                    }
+        //            foreach(var presetValueModel in presetFormat.values) {
+        //                // only creat preset values in db, they will then be picked up when the preset vm is initialized
+        //                var aipv = await MpPluginPresetParameterValue.CreateAsync(
+        //                    presetId: presetModel.Id, 
+        //                    paramId: presetValueModel.paramId,
+        //                    value: presetValueModel.value
+        //                    //format: AnalyzerPluginFormat.parameters.FirstOrDefault(x => x.paramName == presetValueModel.paramName)
+        //                    );                        
+        //            }
 
-                    presets.Add(presetModel);
-                }
-                if(presets.All(x=>x.IsDefault == false) && presets.Count > 0) {
-                    presets[0].IsDefault = true;
-                }
-            }
-            return presets;
-        }
+        //            presets.Add(presetModel);
+        //        }
+        //        if(presets.All(x=>x.IsDefault == false) && presets.Count > 0) {
+        //            presets[0].IsDefault = true;
+        //        }
+        //    }
+        //    return presets;
+        //}
+
+        //private async Task<MpPluginPreset> CreateDefaultPresetModelAsync(int existingDefaultPresetId = 0) {
+        //    if (AnalyzerComponentFormat.parameters == null) {
+        //        throw new Exception($"Parameters for '{Title}' not found");
+        //    }
+
+        //    var aip = await MpPluginPreset.CreateAsync(
+        //                        pluginGuid: PluginFormat.guid,
+        //                        isDefault: true,
+        //                        label: $"{Title} - Default",
+        //                        iconId: PluginIconId,
+        //                        sortOrderIdx: existingDefaultPresetId == 0 ? 0 : base.Items.FirstOrDefault(x => x.IsDefault).SortOrderIdx,
+        //                        description: $"Auto-generated default preset for '{Title}'",
+        //                        //format: AnalyzerPluginFormat,
+        //                        manifestLastModifiedDateTime: PluginFormat.manifestLastModifiedDateTime,
+        //                        existingDefaultPresetId: existingDefaultPresetId);
+
+        //    return aip;
+        //}
 
         private bool ValidateAnalyzer(MpPluginFormat pf) {
             if (pf == null) {
@@ -729,7 +742,7 @@ namespace MonkeyPaste.Avalonia {
 
                 MpPluginTransactionBase result = await MpPluginTransactor.PerformTransaction(
                                            PluginFormat,
-                                           AnalyzerPluginComponent,
+                                           PluginComponent,
                                            SelectedItem.ParamLookup
                                                .ToDictionary(k => k.Key, v => v.Value.CurrentValue),
                                            sourceCopyItem,
@@ -865,9 +878,10 @@ namespace MonkeyPaste.Avalonia {
                 if(defvm == null) {
                     throw new Exception("Analyzer is supposed to have a default preset");
                 }
-                                
+
                 // recreate default preset record (name, icon, etc.)
-                var defaultPresetModel = await CreateDefaultPresetModelAsync(defvm.AnalyticItemPresetId);
+                //var defaultPresetModel = await CreateDefaultPresetModelAsync(defvm.AnalyticItemPresetId);
+                var defaultPresetModel = await MpAvPluginPresetLocator.CreateDefaultPresetModelAsync(this, defvm.AnalyticItemPresetId, Items.IndexOf(defvm));
 
                 // before initializing preset remove current values from db or it won't reset values
                 await Task.WhenAll(defvm.Items.Select(x => x.PresetValueModel.DeleteFromDatabaseAsync()));

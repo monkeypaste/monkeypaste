@@ -193,7 +193,6 @@ namespace MonkeyPaste {
                 var urlList = urls.ToList();
                 if(urlList.Any(x=>x == source_url_ref)) {
                     // data references source item so any content formats should replace source item content
-                    //target_ci = sourceCopyItem;
                     isNewContentResult = false;
                     // remove self reference
                     urlList.Remove(source_url_ref);
@@ -228,6 +227,13 @@ namespace MonkeyPaste {
 
             if (mpdo.ContainsData(MpPortableDataFormats.CefHtml) &&
                 mpdo.GetData(MpPortableDataFormats.CefHtml) is string updatedItemData) {
+                await Task.WhenAll(
+                    target_source_refs.Select(x =>
+                        MpCopyItemSource.CreateAsync(
+                        copyItemId: sourceCopyItem.Id,
+                        sourceObjId: x.SourceObjId,
+                        sourceType: x.SourceType)));
+
                 sourceCopyItem.ItemData = updatedItemData;
                 await sourceCopyItem.WriteToDatabaseAsync();
             }

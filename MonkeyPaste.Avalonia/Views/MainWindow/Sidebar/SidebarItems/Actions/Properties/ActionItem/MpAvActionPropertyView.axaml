@@ -37,75 +37,9 @@
                     CornerRadius="0"
                     Background="Transparent"
                     Margin="0,0,0,5">
-                <ContentControl x:Name="RootActionPropertyContentControl"
-                                Content="{Binding}">
-                    <ContentControl.DataTemplates>
-                        <local:MpAvActionItemPropertiesTemplateSelector>
-                            <!--  Triggers  -->
-
-                            <!--  Content Add  -->
-                            <DataTemplate x:Key="ContentAddedPropertiesTemplate"
-                                          DataType="{x:Type local:MpAvContentAddTriggerViewModel}">
-                                <local:MpAvContentAddTriggerPropertyView DataContext="{Binding}" />
-                            </DataTemplate>
-
-                            <!--  Content Tagged  -->
-                            <DataTemplate x:Key="ContentTaggedPropertiesTemplate"
-                                          DataType="{x:Type local:MpAvContentTaggedTriggerViewModel}">
-                                <local:MpAvContentTaggedTriggerPropertyView DataContext="{Binding}" />
-                            </DataTemplate>
-
-                            <!--  File System Changed  -->
-                            <DataTemplate x:Key="FileSystemChangePropertiesTemplate"
-                                          DataType="{x:Type local:MpAvFolderWatcherTriggerViewModel}">
-                                <local:MpAvFileSystemTriggerPropertyView DataContext="{Binding}" />
-                            </DataTemplate>
-
-                            <!--  Shortcut  -->
-                            <DataTemplate x:Key="ShortcutPropertiesTemplate"
-                                          DataType="{x:Type local:MpAvShortcutTriggerViewModel}">
-                                <local:MpAvShortcutTriggerPropertyView DataContext="{Binding}" />
-                            </DataTemplate>
-
-                            <!--  Triggers END  -->
-
-                            <!--  Compare  -->
-                            <DataTemplate x:Key="ComparePropertiesTemplate"
-                                          DataType="{x:Type local:MpAvCompareActionViewModelBase}">
-                                <local:MpAvCompareActionPropertyView DataContext="{Binding}" />
-                            </DataTemplate>
-                            <!--  Analyze  -->
-                            <DataTemplate x:Key="AnalyzePropertiesTemplate"
-                                          DataType="{x:Type local:MpAvAnalyzeActionViewModel}">
-                                <local:MpAvAnalyzeActionPropertyView DataContext="{Binding}" />
-                            </DataTemplate>
-                            <!--  Classify  -->
-                            <DataTemplate x:Key="ClassifyPropertiesTemplate"
-                                          DataType="{x:Type local:MpAvClassifyActionViewModel}">
-                                <local:MpAvClassifyActionPropertyView DataContext="{Binding}" />
-                            </DataTemplate>
-
-                            <!--  File Writer  -->
-                            <DataTemplate x:Key="FileWriterPropertiesTemplate"
-                                          DataType="{x:Type local:MpAvFileWriterActionViewModel}">
-                                <local:MpAvFileWriterActionPropertyView DataContext="{Binding}" />
-                            </DataTemplate>
-
-                            <!--  Macro  -->
-                            <DataTemplate x:Key="MacroPropertiesTemplate"
-                                          DataType="{x:Type local:MpAvMacroActionViewModel}">
-                                <local:MpAvMacroActionPropertyView DataContext="{Binding}" />
-                            </DataTemplate>
-
-                            <!--  Timer  -->
-                            <DataTemplate x:Key="TimerPropertiesTemplate"
-                                          DataType="{x:Type local:MpAvRepeaterActionViewModel}">
-                                <local:MpAvTimerActionPropertyView DataContext="{Binding}" />
-                            </DataTemplate>
-                        </local:MpAvActionItemPropertiesTemplateSelector>
-                    </ContentControl.DataTemplates>
-                </ContentControl>
-                <!--</DockPanel>-->
+                <local:MpAvPluginParameterListBoxView HorizontalAlignment="Stretch"
+                                                      VerticalAlignment="Stretch"
+                                                      DataContext="{Binding}" />
             </Border>
         </Grid>
     </Expander>

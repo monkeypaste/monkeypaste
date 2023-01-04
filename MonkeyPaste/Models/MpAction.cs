@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using MonkeyPaste.Common;
+using System.Linq;
 
 namespace MonkeyPaste {
     public enum MpMacroActionType {
@@ -168,6 +169,13 @@ namespace MonkeyPaste {
                 await mr.WriteToDatabaseAsync();
             }
             return mr;
+        }
+
+        public override async Task DeleteFromDatabaseAsync() {
+            var apvl = await MpDataModelProvider.GetPluginPresetValuesByPresetIdAsync(MpParameterHostType.Action, Id);
+            await Task.WhenAll(apvl.Select(x => x.DeleteFromDatabaseAsync()));
+
+            await base.DeleteFromDatabaseAsync();
         }
 
         public MpAction() { }

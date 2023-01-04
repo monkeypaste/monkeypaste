@@ -7,6 +7,7 @@ using Avalonia.Threading;
 using MonkeyPaste;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -20,16 +21,19 @@ using static System.Net.Mime.MediaTypeNames;
 namespace MonkeyPaste.Avalonia {
 
     public abstract class MpAvActionViewModelBase :
-        //MpAvTreeSelectorViewModelBase<MpAvTriggerCollectionViewModel, MpAvActionViewModelBase>,
         MpViewModelBase<MpAvTriggerCollectionViewModel>,
         MpIHoverableViewModel,
-        //MpISelectableViewModel,
         MpIPopupMenuViewModel,
         MpIContextMenuViewModel,
         MpITooltipInfoViewModel,
+        MpILabelText,
         MpIBoxViewModel,
         MpIMovableViewModel,
-        MpIInvokableAction {
+        MpIInvokableAction,
+        MpIPluginHost,
+        MpAvIPluginParameterCollectionViewModel,
+        MpIPluginComponentViewModel,
+        MpIActionPluginComponent {
 
         #region Private Variables
 
@@ -77,6 +81,56 @@ namespace MonkeyPaste.Avalonia {
             Debugger.Break();
             return "QuestiongMarkImage";
         }
+        #endregion
+
+
+        #region Interfaces
+
+
+        #region MpILabelText Implementation
+
+        string MpILabelText.LabelText => Label;
+
+        #endregion
+
+        #region MpIPluginHost Implementation
+
+        IEnumerable<MpAvPluginParameterViewModelBase> MpAvIPluginParameterCollectionViewModel.Items => ActionArgs;
+        MpAvPluginParameterViewModelBase MpAvIPluginParameterCollectionViewModel.SelectedItem { get; set; }
+
+        #endregion
+
+        #region MpIPluginHost Implementation
+
+        int MpIPluginHost.IconId => 0;
+        public string PluginGuid =>
+            PluginFormat == null ? string.Empty : PluginFormat.guid;
+
+        public MpPluginFormat PluginFormat { get; set; }
+
+        public MpPluginComponentBaseFormat ComponentFormat => ActionComponentFormat;
+        public virtual MpActionPluginFormat ActionComponentFormat { get; protected set; }
+
+        public MpIPluginComponentBase PluginComponent =>
+            PluginFormat == null ? null : PluginFormat.Component as MpIPluginComponentBase;
+
+        public Dictionary<object, MpAvPluginParameterViewModelBase> ArgLookup =>
+           ActionArgs.ToDictionary(x => x.ParamId, x => x);
+        public virtual ObservableCollection<MpAvPluginParameterViewModelBase> ActionArgs { get; protected set; } = new ObservableCollection<MpAvPluginParameterViewModelBase>();
+
+        #endregion
+
+        #region MpIActionPluginComponent Implementation
+
+        ICommand MpIActionPluginComponent.PerformActionCommand =>
+            new MpAsyncCommand<object>(
+                async (args) => {
+                    await PerformActionAsync(args); 
+                },
+                (args) => {
+                    return CanPerformAction(args);
+                });
+
         #endregion
 
         #region MpIActionComponentHandler Implementation
@@ -134,7 +188,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #endregion
-
 
         #region MpIHoverableViewModel Implementation
 
@@ -202,9 +255,12 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #endregion
+
         #region Properties
 
-        #region View Models               
+        #region View Models       
+        
         private MpAvActionViewModelBase _parentActionViewModel;
         public MpAvActionViewModelBase ParentActionViewModel {
             get {
@@ -260,6 +316,22 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+
+        //private Dictionary<int, MpAvPluginParameterViewModelBase> _argLookup;
+        //public virtual Dictionary<int,MpAvPluginParameterViewModelBase> ArgLookup {
+        //    get {
+        //        if(_argLookup == null) {
+        //            _argLookup = new Dictionary<int, MpAvPluginParameterViewModelBase>() {
+        //                {1, new MpAvPluginParameterViewModelBase(this)},
+        //                {2, new MpAvPluginParameterViewModelBase(this)},
+        //                {3, new MpAvPluginParameterViewModelBase(this)},
+        //                {4, new MpAvPluginParameterViewModelBase(this)},
+        //                {5, new MpAvPluginParameterViewModelBase(this)},
+        //            };
+        //        }
+        //        return _argLookup;
+        //    }
+        //}
         #endregion
 
         #region Appearance
@@ -401,6 +473,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Args
         public string Arg1 {
             get {
                 if (Action == null) {
@@ -480,6 +553,8 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
+
+        #endregion
 
         public bool IsReadOnly {
             get {
@@ -632,6 +707,20 @@ namespace MonkeyPaste.Avalonia {
 
             Action = a;
 
+            ActionArgs.Clear();
+            if(ComponentFormat != null &&
+                ComponentFormat.parameters != null) {
+                var param_values = await MpAvPluginParameterValueLocator.LocateValuesAsync(
+                    MpParameterHostType.Action, ActionId, this);
+                foreach(var param_format in param_values) {
+                    var param_vm =
+                        await CreateActionParameterViewModel(param_format);
+                    ActionArgs.Add(param_vm);
+                }
+                ActionArgs.CollectionChanged += ActionArgs_CollectionChanged;
+                OnPropertyChanged(nameof(ActionArgs));
+            }
+
             if (Parent.Items.All(x => x.ActionId != ActionId)) {
                 // only add if new
                 Parent.Items.Add(this);
@@ -645,6 +734,8 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(Children));
             OnPropertyChanged(nameof(Tooltip));
 
+            OnPropertyChanged(nameof(ActionArgs));
+
             while (Children.Any(x => x.IsAnyBusy)) {
                 await Task.Delay(100);
             }
@@ -652,6 +743,7 @@ namespace MonkeyPaste.Avalonia {
 
             IsBusy = false;
         }
+
 
         public async Task<MpAvActionViewModelBase> CreateActionViewModel(MpAction a) {
             a = a == null ? new MpAction() : a;
@@ -685,6 +777,14 @@ namespace MonkeyPaste.Avalonia {
 
             return avm;
         }
+
+        public async Task<MpAvPluginParameterViewModelBase> CreateActionParameterViewModel(MpPluginPresetParameterValue pppv) {
+            var naipvm = await MpAvPluginParameterBuilder.CreateParameterViewModelAsync(pppv, this, this);
+            naipvm.OnValidate += ActionParam_OnValidate;
+
+            return naipvm;
+        }
+
 
         //public async Task<MpEmptyActionViewModel> CreateEmptyActionViewModel() {
         //    MpEmptyActionViewModel eavm = new MpEmptyActionViewModel(Parent);
@@ -863,7 +963,11 @@ namespace MonkeyPaste.Avalonia {
                     if (IsSelected) {
                         Parent.SelectActionCommand.Execute(this);
                     }
-                    OnPropertyChanged(nameof(IsTrigger));
+                    OnPropertyChanged(nameof(IsTrigger)); 
+                    
+                    //if (this is MpAvIPluginParameterCollectionViewModel ppcvm) {
+                    //    ppcvm.OnPropertyChanged(nameof(ppcvm.Items));
+                    //}
                     break;
                 case nameof(HasArgsChanged):
                     if(HasArgsChanged) {
@@ -911,7 +1015,23 @@ namespace MonkeyPaste.Avalonia {
                         });
                     }
                     break;
+                case nameof(ActionArgs):
+                    if(this is MpAvIPluginParameterCollectionViewModel ppcvm) {
+                        ppcvm.OnPropertyChanged(nameof(ppcvm.Items));
+                    }
+                    break;
             }
+        }
+
+        private void ActionArgs_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            if (this is MpAvIPluginParameterCollectionViewModel ppcvm) {
+                ppcvm.OnPropertyChanged(nameof(ppcvm.Items));
+            }
+        }
+        private void ActionParam_OnValidate(object sender, EventArgs e) {
+            Dispatcher.UIThread.Post(() => {
+                ValidateActionAsync().FireAndForgetSafeAsync(this);
+            });
         }
 
         #region DesignerItem Placement Methods
@@ -1080,6 +1200,9 @@ namespace MonkeyPaste.Avalonia {
                 await PerformActionAsync(ao);
                 IsPerformingActionFromCommand = false;
             });
+
+
+
         #endregion
     }
 }

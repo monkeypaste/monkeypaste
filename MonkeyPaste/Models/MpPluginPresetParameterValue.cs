@@ -5,6 +5,11 @@ using System;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
+    public enum MpParameterHostType {
+        None = 0,
+        Preset,
+        Action
+    }
     public class MpPluginPresetParameterValue : 
         MpDbModelBase, 
         MpIClonableDbModel<MpPluginPresetParameterValue> {
@@ -17,8 +22,11 @@ namespace MonkeyPaste {
         [Column("MpPluginPresetParameterValueGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
-        [Column("fk_MpPluginPresetId")]
-        public int PluginPresetId { get; set; }
+        [Column("e_MpParameterHostType")]
+        public string ParameterHostTypeName { get; set; } = MpParameterHostType.None.ToString();
+
+        [Column("fk_ParameterHostId")]
+        public int ParameterHostId { get; set; }
 
         public string ParamId { get; set; }
 
@@ -41,14 +49,28 @@ namespace MonkeyPaste {
             }
         }
 
+        [Ignore]
+        public MpParameterHostType ParameterHostType {
+            get {
+                return ParameterHostTypeName.ToEnum<MpParameterHostType>();
+            }
+            set {
+                ParameterHostTypeName = value.ToString();
+            }
+        }
+
         #endregion
 
         public static async Task<MpPluginPresetParameterValue> CreateAsync(
+            MpParameterHostType hostType = MpParameterHostType.None,
             int presetId = 0, 
             object paramId = null,
             string value = ""
             //MpPluginParameterFormat format = null
             ) {
+            if (hostType == MpParameterHostType.None) {
+                throw new Exception("Parameter Value must have a host type");
+            }
             if (presetId == 0) {
                 throw new Exception("Preset Value must be associated with a preset and parameter");
             }
@@ -56,12 +78,13 @@ namespace MonkeyPaste {
                 throw new Exception("ParamId must cannot be null or empty");
             }
 
-            var dupItem = await MpDataModelProvider.GetPluginPresetValueAsync(presetId, paramId.ToString());
+            var dupItem = await MpDataModelProvider.GetPluginPresetValueAsync(hostType, presetId, paramId.ToString());
             if (dupItem != null) {
                 MpConsole.WriteLine($"Updating preset Id{presetId} for {paramId}");
 
                 dupItem = await MpDataModelProvider.GetItemAsync<MpPluginPresetParameterValue>(dupItem.Id);
-                dupItem.PluginPresetId = presetId;
+                dupItem.ParameterHostId = presetId;
+                dupItem.ParameterHostType = hostType;
                 dupItem.ParamId = paramId.ToString();
                 dupItem.Value = value;
                 //dupItem.ParameterFormat = format;
@@ -71,8 +94,8 @@ namespace MonkeyPaste {
 
             var newPluginPresetParameterValue = new MpPluginPresetParameterValue() {
                 PluginPresetParameterValueGuid = System.Guid.NewGuid(),
-                //ParameterFormat = format,
-                PluginPresetId = presetId,
+                ParameterHostType = hostType,
+                ParameterHostId = presetId,
                 ParamId = paramId.ToString(),
                 Value = value
             };
@@ -89,7 +112,8 @@ namespace MonkeyPaste {
 
             var cppv = new MpPluginPresetParameterValue() {
                 PluginPresetParameterValueGuid = System.Guid.NewGuid(),
-                PluginPresetId = this.PluginPresetId,
+                ParameterHostId = this.ParameterHostId,
+                ParameterHostType = this.ParameterHostType,
                 ParamId = this.ParamId,
                 Value = this.Value,
                 //ParameterFormat = this.ParameterFormat

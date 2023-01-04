@@ -17,8 +17,75 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvHandledClipboardFormatViewModel :
         MpAvTreeSelectorViewModelBase<MpAvClipboardHandlerItemViewModel,MpAvClipboardFormatPresetViewModel>,
         MpISelectableViewModel,
+        MpIPluginHost,
         MpIHoverableViewModel {
         #region Private Variables
+        #endregion
+
+
+        #region Interfaces
+
+        #region MpISelectableViewModel Implementation
+
+        public bool IsSelected { get; set; }
+
+        public DateTime LastSelectedDateTime { get; set; }
+
+
+        #endregion
+
+        #region MpIPluginHost Implementation
+
+        int MpIPluginHost.IconId => HandledFormatIconId;
+        public string PluginGuid => ClipboardHandlerGuid;
+
+        //public MpPluginFormat PluginFormat { get; set; }
+
+        MpPluginComponentBaseFormat MpIPluginHost.ComponentFormat => ClipboardPluginFormat;
+
+        public MpIPluginComponentBase PluginComponent => ClipboardPluginComponent;
+
+        public string ClipboardHandlerGuid { get; private set; }
+
+        //public MpClipboardHandlerFormat ClipboardPluginFormat { get; private set; }
+        public MpClipboardHandlerFormat ClipboardPluginFormat {
+            get {
+                if (PluginFormat == null) {
+                    return null;
+                }
+                if (IsReader) {
+                    return Parent.ClipboardPluginFormat.readers.FirstOrDefault(x => x.handlerGuid == ClipboardHandlerGuid);
+                }
+                if (IsWriter) {
+                    return Parent.ClipboardPluginFormat.writers.FirstOrDefault(x => x.handlerGuid == ClipboardHandlerGuid);
+                }
+                MpConsole.WriteTraceLine($"Error finding ClipboardHandler format for handlerGuid: '{ClipboardHandlerGuid}'");
+                return null;
+            }
+        }
+
+        public MpIClipboardPluginComponent ClipboardPluginComponent =>
+            PluginFormat == null ? null : PluginFormat.Component as MpIClipboardPluginComponent;
+
+        public bool IsReader => PluginFormat == null ?
+                                    false :
+                                    PluginFormat.clipboardHandler.readers.Any(x => x.handlerGuid == ClipboardHandlerGuid); //ClipboardPluginComponent is MpIClipboardReaderComponent;
+
+        public bool IsWriter => PluginFormat == null ?
+                                    false :
+                                    PluginFormat.clipboardHandler.writers.Any(x => x.handlerGuid == ClipboardHandlerGuid); //ClipboardPluginComponent is MpIClipboardReaderComponent;
+
+
+        public MpPluginFormat PluginFormat {
+            get {
+                if (Parent == null) {
+                    return null;
+                }
+                return Parent.PluginFormat;
+            }
+        }
+        #endregion
+
         #endregion
 
         #region Properties
@@ -38,14 +105,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpISelectableViewModel Implementation
-
-        public bool IsSelected { get; set; }
-
-        public DateTime LastSelectedDateTime { get; set; }
-
-
-        #endregion
 
         #region Appearance
 
@@ -150,45 +209,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public string ClipboardHandlerGuid { get; private set; }
-
-        //public MpClipboardHandlerFormat ClipboardPluginFormat { get; private set; }
-        public MpClipboardHandlerFormat ClipboardPluginFormat {
-            get {
-                if(PluginFormat == null) {
-                    return null;
-                }
-                if(IsReader) {
-                    return Parent.ClipboardPluginFormat.readers.FirstOrDefault(x => x.handlerGuid == ClipboardHandlerGuid);
-                }
-                if (IsWriter) {
-                    return Parent.ClipboardPluginFormat.writers.FirstOrDefault(x => x.handlerGuid == ClipboardHandlerGuid);
-                }
-                MpConsole.WriteTraceLine($"Error finding ClipboardHandler format for handlerGuid: '{ClipboardHandlerGuid}'");
-                return null;
-            }
-        }
-
-        public MpIClipboardPluginComponent ClipboardPluginComponent => 
-            PluginFormat == null ? null : PluginFormat.Component as MpIClipboardPluginComponent;
-
-        public bool IsReader => PluginFormat == null ? 
-                                    false :
-                                    PluginFormat.clipboardHandler.readers.Any(x=>x.handlerGuid == ClipboardHandlerGuid); //ClipboardPluginComponent is MpIClipboardReaderComponent;
-
-        public bool IsWriter => PluginFormat == null ?
-                                    false :
-                                    PluginFormat.clipboardHandler.writers.Any(x => x.handlerGuid == ClipboardHandlerGuid); //ClipboardPluginComponent is MpIClipboardReaderComponent;
-
-
-        public MpPluginFormat PluginFormat {
-            get {
-                if (Parent == null) {
-                    return null;
-                }
-                return Parent.PluginFormat;
-            }
-        }
+        
         #endregion
 
         #endregion
@@ -232,10 +253,15 @@ namespace MonkeyPaste.Avalonia {
                 throw new Exception("Cannot find component");
             }
 
-            HandledFormatIconId = await GetOrCreateIconIdAsync();
+            HandledFormatIconId = await MpAvPluginIconLocator.LocatePluginIconIdAsync(this, ClipboardPluginFormat.iconUri);
 
 
-            var presets = await PreparePresetModelsAsync();
+
+            //var presets = await PreparePresetModelsAsync();
+
+            var presets = await MpAvPluginPresetLocator.LocatePresetsAsync(
+                this, Items.Select(x => x.Preset), IsCoreHandler);
+
 
             Items.Clear();
 
@@ -346,24 +372,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private async Task<MpPluginPreset> CreateDefaultPresetModelAsync(int existingDefaultPresetId = 0) {
-            if (ClipboardPluginFormat.parameters == null) {
-                throw new Exception($"Parameters for '{Title}' not found");
-            }
-
-            var aip = await MpPluginPreset.CreateAsync(
-                                pluginGuid: ClipboardHandlerGuid,
-                                isDefault: true,
-                                label: $"{Title} - Default [{(IsReader ? "Reader":"Writer")}]",
-                                iconId: HandledFormatIconId,
-                                sortOrderIdx: existingDefaultPresetId == 0 ? 0 : Items.FirstOrDefault(x => x.IsDefault).SortOrderIdx,
-                                description: $"Auto-generated default preset for '{Title}'",
-                                //format: ClipboardPluginFormat,
-                                manifestLastModifiedDateTime: PluginFormat.manifestLastModifiedDateTime,
-                                existingDefaultPresetId: existingDefaultPresetId);
-            return aip;
-        }
-
 
         private void PresetViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             UpdatePresetSortOrderAsync().FireAndForgetSafeAsync(this);
@@ -420,98 +428,116 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private async Task<int> GetOrCreateIconIdAsync() {
-            var bytes = await MpFileIo.ReadBytesFromUriAsync(ClipboardPluginFormat.iconUri, PluginFormat.RootDirectory);
-            var icon = await MpIcon.CreateAsync(
-                iconImgBase64: bytes.ToBase64String(),
-                createBorder: false);
-            return icon.Id;
-        }
+        //private async Task<int> GetOrCreateIconIdAsync() {
+        //    var bytes = await MpFileIo.ReadBytesFromUriAsync(ClipboardPluginFormat.iconUri, PluginFormat.RootDirectory);
+        //    var icon = await MpIcon.CreateAsync(
+        //        iconImgBase64: bytes.ToBase64String(),
+        //        createBorder: false);
+        //    return icon.Id;
+        //}
 
-        private async Task<IEnumerable<MpPluginPreset>> PreparePresetModelsAsync() {
-            var presets = await MpDataModelProvider.GetPluginPresetsByPluginGuidAsync(ClipboardHandlerGuid);                        
+        //private async Task<IEnumerable<MpPluginPreset>> PreparePresetModelsAsync() {
+        //    var presets = await MpDataModelProvider.GetPluginPresetsByPluginGuidAsync(ClipboardHandlerGuid);                        
 
-            bool isNew = presets.Count == 0;
-            bool isManifestModified = presets.Any(x => x.ManifestLastModifiedDateTime < PluginFormat.manifestLastModifiedDateTime);
-            bool needsReset = isNew || isManifestModified;
-            if (needsReset) {
-                while (MpAvIconCollectionViewModel.Instance.IsAnyBusy) {
-                    // if this is first load of the plugin the icon may not be added to icon collection yet so wait for it
-                    await Task.Delay(100);
-                }
-                var ivm = MpAvIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == HandledFormatIconId);
-                //if(ivm == null) {
-                //    Debugger.Break();
-                //}
-                MpNotificationBuilder.ShowMessageAsync(
-                    msgType: MpNotificationType.PluginUpdated,
-                    title: $"Clipboard Handler '{Title}' Updated",
-                    iconSourceObj: ivm == null ? null : ivm.IconBase64,                    
-                    body: "Reseting presets to default...")
-                    .FireAndForgetSafeAsync(this);
+        //    bool isNew = presets.Count == 0;
+        //    bool isManifestModified = presets.Any(x => x.ManifestLastModifiedDateTime < PluginFormat.manifestLastModifiedDateTime);
+        //    bool needsReset = isNew || isManifestModified;
+        //    if (needsReset) {
+        //        while (MpAvIconCollectionViewModel.Instance.IsAnyBusy) {
+        //            // if this is first load of the plugin the icon may not be added to icon collection yet so wait for it
+        //            await Task.Delay(100);
+        //        }
+        //        var ivm = MpAvIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == HandledFormatIconId);
+        //        //if(ivm == null) {
+        //        //    Debugger.Break();
+        //        //}
+        //        MpNotificationBuilder.ShowMessageAsync(
+        //            msgType: MpNotificationType.PluginUpdated,
+        //            title: $"Clipboard Handler '{Title}' Updated",
+        //            iconSourceObj: ivm == null ? null : ivm.IconBase64,                    
+        //            body: "Reseting presets to default...")
+        //            .FireAndForgetSafeAsync(this);
 
-                presets = await ResetPresetsAsync(presets);
-            }
+        //        presets = await ResetPresetsAsync(presets);
+        //    }
 
-            //presets.ForEach(x => x.ComponentFormat = ClipboardPluginFormat);
+        //    //presets.ForEach(x => x.ComponentFormat = ClipboardPluginFormat);
 
-            if(needsReset && IsCoreHandler) {
-                // this is supposed to handle initial startup for CoreClipboard handler when no formats are enabled 
-                // but there's many cases that this may not be initial startup so:
-                // TODO instead of doing should notify clipboard collection that default was reset and only enable formats
-                // that don't have another handler with that format enabled
-                presets.ForEach(x => x.IsEnabled = true);
+        //    if(needsReset && IsCoreHandler) {
+        //        // this is supposed to handle initial startup for CoreClipboard handler when no formats are enabled 
+        //        // but there's many cases that this may not be initial startup so:
+        //        // TODO instead of doing should notify clipboard collection that default was reset and only enable formats
+        //        // that don't have another handler with that format enabled
+        //        presets.ForEach(x => x.IsEnabled = true);
 
-                await Task.WhenAll(presets.Select(x => x.WriteToDatabaseAsync()));
+        //        await Task.WhenAll(presets.Select(x => x.WriteToDatabaseAsync()));
 
-                //MessageBox.Show("All CoreClipboard formats have been set to enabled");
-            }
+        //        //MessageBox.Show("All CoreClipboard formats have been set to enabled");
+        //    }
 
-            return presets.OrderBy(x=>x.SortOrderIdx);
-        }
+        //    return presets.OrderBy(x=>x.SortOrderIdx);
+        //}
 
-        private async Task<List<MpPluginPreset>> ResetPresetsAsync(List<MpPluginPreset> presets = null) {
-            // NOTE Reseting may not be necessary in release, honestly don't remember why I do in the first place
-            // I think its for debugging parameter lifecycle so keep for now..
-            // avoiding changing paramName to string but I think it may aid plugin scaling and this reseting thing so just
-            // am just trying to make what sense I can of it when re-encounter
+        //private async Task<List<MpPluginPreset>> ResetPresetsAsync(List<MpPluginPreset> presets = null) {
+        //    // NOTE Reseting may not be necessary in release, honestly don't remember why I do in the first place
+        //    // I think its for debugging parameter lifecycle so keep for now..
+        //    // avoiding changing paramName to string but I think it may aid plugin scaling and this reseting thing so just
+        //    // am just trying to make what sense I can of it when re-encounter
 
-            //if manifest has been modified
-            //(for now clear all presets and either load predefined presets or create from parameter default values)
+        //    //if manifest has been modified
+        //    //(for now clear all presets and either load predefined presets or create from parameter default values)
 
-            // TODO maybe less forceably handle add/remove/update of presets when manifest changes
-            presets = presets == null ? await MpDataModelProvider.GetPluginPresetsByPluginGuidAsync(ClipboardHandlerGuid) : presets;
-            foreach (var preset in presets) {
-                var vals = await MpDataModelProvider.GetPluginPresetValuesByPresetIdAsync(preset.Id);
-                await Task.WhenAll(vals.Select(x => x.DeleteFromDatabaseAsync()));
-            }
-            await Task.WhenAll(presets.Select(x => x.DeleteFromDatabaseAsync()));
+        //    // TODO maybe less forceably handle add/remove/update of presets when manifest changes
+        //    presets = presets == null ? await MpDataModelProvider.GetPluginPresetsByPluginGuidAsync(ClipboardHandlerGuid) : presets;
+        //    foreach (var preset in presets) {
+        //        var vals = await MpDataModelProvider.GetPluginPresetValuesByPresetIdAsync(MpParameterHostType.Preset, preset.Id);
+        //        await Task.WhenAll(vals.Select(x => x.DeleteFromDatabaseAsync()));
+        //    }
+        //    await Task.WhenAll(presets.Select(x => x.DeleteFromDatabaseAsync()));
 
-            presets.Clear();
-            if (ClipboardPluginFormat.presets.IsNullOrEmpty()) {
-                //only generate default preset if no presets defined in manifest
-                var defualtPreset = await CreateDefaultPresetModelAsync();
-                presets.Add(defualtPreset);
-            } else {
-                foreach (var preset in ClipboardPluginFormat.presets) {
-                    var aip = await MpPluginPreset.CreateAsync(
-                        pluginGuid: ClipboardHandlerGuid,
-                        isDefault: preset.isDefault,
-                        label: preset.label,
-                        iconId: HandledFormatIconId,
-                        sortOrderIdx: ClipboardPluginFormat.presets.IndexOf(preset),
-                        description: preset.description,
-                        //format: ClipboardPluginFormat,
-                        manifestLastModifiedDateTime: PluginFormat.manifestLastModifiedDateTime);
-                    presets.Add(aip);
-                }
-                if (presets.All(x => x.IsDefault == false) && presets.Count > 0) {
-                    presets[0].IsDefault = true;
-                }
-            }
-            return presets;
-        }
+        //    presets.Clear();
+        //    if (ClipboardPluginFormat.presets.IsNullOrEmpty()) {
+        //        //only generate default preset if no presets defined in manifest
+        //        var defualtPreset = await CreateDefaultPresetModelAsync();
+        //        presets.Add(defualtPreset);
+        //    } else {
+        //        foreach (var preset in ClipboardPluginFormat.presets) {
+        //            var aip = await MpPluginPreset.CreateAsync(
+        //                pluginGuid: ClipboardHandlerGuid,
+        //                isDefault: preset.isDefault,
+        //                label: preset.label,
+        //                iconId: HandledFormatIconId,
+        //                sortOrderIdx: ClipboardPluginFormat.presets.IndexOf(preset),
+        //                description: preset.description,
+        //                //format: ClipboardPluginFormat,
+        //                manifestLastModifiedDateTime: PluginFormat.manifestLastModifiedDateTime);
+        //            presets.Add(aip);
+        //        }
+        //        if (presets.All(x => x.IsDefault == false) && presets.Count > 0) {
+        //            presets[0].IsDefault = true;
+        //        }
+        //    }
+        //    return presets;
+        //}
 
+
+        //private async Task<MpPluginPreset> CreateDefaultPresetModelAsync(int existingDefaultPresetId = 0) {
+        //    if (ClipboardPluginFormat.parameters == null) {
+        //        throw new Exception($"Parameters for '{Title}' not found");
+        //    }
+
+        //    var aip = await MpPluginPreset.CreateAsync(
+        //                        pluginGuid: ClipboardHandlerGuid,
+        //                        isDefault: true,
+        //                        label: $"{Title} - Default [{(IsReader ? "Reader" : "Writer")}]",
+        //                        iconId: HandledFormatIconId,
+        //                        sortOrderIdx: existingDefaultPresetId == 0 ? 0 : Items.FirstOrDefault(x => x.IsDefault).SortOrderIdx,
+        //                        description: $"Auto-generated default preset for '{Title}'",
+        //                        //format: ClipboardPluginFormat,
+        //                        manifestLastModifiedDateTime: PluginFormat.manifestLastModifiedDateTime,
+        //                        existingDefaultPresetId: existingDefaultPresetId);
+        //    return aip;
+        //}
         private bool ValidateClipboardHandlerFormat(MpClipboardHandlerFormat chf) {
             bool isValid = true;
             var sb = new StringBuilder();
@@ -580,7 +606,8 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 // recreate default preset record (name, icon, etc.)
-                var defaultPresetModel = await CreateDefaultPresetModelAsync(defvm.PresetId);
+                var defaultPresetModel = await MpAvPluginPresetLocator.CreateDefaultPresetModelAsync(
+                    this,defvm.PresetId,Items.IndexOf(defvm));
 
                 // store IsEnabled to current state
                 bool wasEnabled = defvm.IsEnabled;

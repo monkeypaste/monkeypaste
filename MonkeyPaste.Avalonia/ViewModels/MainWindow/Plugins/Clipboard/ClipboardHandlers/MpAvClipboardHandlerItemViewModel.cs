@@ -28,14 +28,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region Properties
-
-        #region View Models
-
-        public IEnumerable<MpAvHandledClipboardFormatViewModel> Writers => Items.Where(x => x.IsWriter);
-        public IEnumerable<MpAvHandledClipboardFormatViewModel> Readers => Items.Where(x => !x.IsWriter);
-
-        #endregion
+        #region Interfaces
 
         #region MpIBoxViewModel Implementation
         public double X { get; set; }
@@ -45,16 +38,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
-        #region MpAvTreeSelectorViewModelBase Overrides
-
-        public override MpAvClipboardHandlerCollectionViewModel ParentTreeItem => Parent;
-
-        #endregion
-
         #region MpIAsyncComboBoxItemViewModel Implementation
-
-
         int MpIComboBoxItemViewModel.IconId => PluginIconId;
         string MpIComboBoxItemViewModel.Label => HandlerName;
 
@@ -80,6 +64,26 @@ namespace MonkeyPaste.Avalonia {
         public MpMenuItemViewModel ContextMenuItemViewModel { get; }
 
         #endregion
+
+        #endregion
+
+        #region Properties
+
+        #region View Models
+
+        public IEnumerable<MpAvHandledClipboardFormatViewModel> Writers => Items.Where(x => x.IsWriter);
+        public IEnumerable<MpAvHandledClipboardFormatViewModel> Readers => Items.Where(x => !x.IsWriter);
+
+        #endregion
+
+
+        #region MpAvTreeSelectorViewModelBase Overrides
+
+        public override MpAvClipboardHandlerCollectionViewModel ParentTreeItem => Parent;
+
+        #endregion
+
+        
 
         #region State
 

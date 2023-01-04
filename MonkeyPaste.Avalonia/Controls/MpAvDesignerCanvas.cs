@@ -154,7 +154,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private IBrush GetArrowFillBrush(MpAvActionViewModelBase pavm, MpAvActionViewModelBase avm, MpPoint pp, MpPoint p) {
-
             Color enabled_color = ((SolidColorBrush)TransitionLineEnabledFillBrush).Color;
             Color disabled_color = ((SolidColorBrush)TransitionLineDisabledFillBrush).Color;
             Color warning_color1 = ((SolidColorBrush)WarningBrush1).Color;
@@ -173,43 +172,42 @@ namespace MonkeyPaste.Avalonia {
                 fillBrush.GradientStops.Add(new GradientStop(parent_color, 0));
                 fillBrush.GradientStops.Add(new GradientStop(parent_color, 0.45d));
             } else {
-                fillBrush.GradientStops.Add(new GradientStop(warning_color1, 0));
-                fillBrush.GradientStops.Add(new GradientStop(warning_color2, 0.1d));
+                fillBrush.GradientStops.AddRange(GetGradientStripes(warning_color1, warning_color2, 0, 0.5, 7));
+                //fillBrush.GradientStops.Add(new GradientStop(warning_color1, 0));
+                //fillBrush.GradientStops.Add(new GradientStop(warning_color2, 0.1d));
                 
-                fillBrush.GradientStops.Add(new GradientStop(warning_color1, 0.1d));
-                fillBrush.GradientStops.Add(new GradientStop(warning_color2, 0.2d));
+                //fillBrush.GradientStops.Add(new GradientStop(warning_color1, 0.1d));
+                //fillBrush.GradientStops.Add(new GradientStop(warning_color2, 0.2d));
 
-                fillBrush.GradientStops.Add(new GradientStop(warning_color1, 0.2d));
-                fillBrush.GradientStops.Add(new GradientStop(warning_color2, 0.3d));
+                //fillBrush.GradientStops.Add(new GradientStop(warning_color1, 0.2d));
+                //fillBrush.GradientStops.Add(new GradientStop(warning_color2, 0.3d));
 
-                fillBrush.GradientStops.Add(new GradientStop(warning_color1, 0.3d));
-                fillBrush.GradientStops.Add(new GradientStop(warning_color2, 0.4d));
+                //fillBrush.GradientStops.Add(new GradientStop(warning_color1, 0.3d));
+                //fillBrush.GradientStops.Add(new GradientStop(warning_color2, 0.4d));
 
-                fillBrush.GradientStops.Add(new GradientStop(warning_color1, 0.4d));
-                fillBrush.GradientStops.Add(new GradientStop(warning_color1, 0.5d));
+                //fillBrush.GradientStops.Add(new GradientStop(warning_color1, 0.4d));
+                //fillBrush.GradientStops.Add(new GradientStop(warning_color1, 0.5d));
             }
 
             if (avm.IsValid) {
                 fillBrush.GradientStops.Add(new GradientStop(cur_color, 0.55d));
                 fillBrush.GradientStops.Add(new GradientStop(cur_color, 1.0d));
             } else {
-                fillBrush.GradientStops.Add(new GradientStop(warning_color1, 0.5));
-                fillBrush.GradientStops.Add(new GradientStop(warning_color2, 0.6d));
-
-                fillBrush.GradientStops.Add(new GradientStop(warning_color1, 0.6d));
-                fillBrush.GradientStops.Add(new GradientStop(warning_color2, 0.7d));
-
-                fillBrush.GradientStops.Add(new GradientStop(warning_color1, 0.7d));
-                fillBrush.GradientStops.Add(new GradientStop(warning_color2, 0.8d));
-
-                fillBrush.GradientStops.Add(new GradientStop(warning_color1, 0.8d));
-                fillBrush.GradientStops.Add(new GradientStop(warning_color2, 0.9d));
-                
-                fillBrush.GradientStops.Add(new GradientStop(warning_color1, 0.9d));
-                fillBrush.GradientStops.Add(new GradientStop(warning_color2, 1.0d));
+                fillBrush.GradientStops.AddRange(GetGradientStripes(warning_color1, warning_color2, 0.5, 1, 7));
             }
 
             return fillBrush;
+        }
+
+        private IEnumerable<GradientStop> GetGradientStripes(
+            Color color1, Color color2, double start_offset, double end_offset, int count) {
+            int altVal = 0;
+            double offset_step = (end_offset - start_offset) / count;
+            for (double cur_offset = start_offset; cur_offset < end_offset; cur_offset += offset_step) {
+                Color cur_color = (altVal++ % 2) == 0 ? color1 : color2;
+                yield return new GradientStop(cur_color, cur_offset);
+                yield return new GradientStop(cur_color, cur_offset + offset_step);
+            }
         }
 
         private void _timer_Tick(object sender, EventArgs e) {
