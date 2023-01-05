@@ -45,9 +45,10 @@
 
                                 <local:MpAvClipBorder BorderThickness="0"
                                                       Padding="3"
-                                                      CornerRadius="5">
+                                                      CornerRadius="0">
                                     <Button x:Name="PresetIcon"
                                             BorderThickness="0"
+                                            CornerRadius="0"
                                             Cursor="Hand"
                                             Background="Transparent"
                                             IsEnabled="{Binding !IsDefault}"
@@ -112,6 +113,7 @@
                                     </Grid.Styles>
                                     <ToggleButton Background="Transparent"
                                                   BorderThickness="0"
+                                                  HorizontalAlignment="Center"
                                                   Cursor="Hand"
                                                   IsChecked="{Binding !IsLabelReadOnly, Mode=TwoWay}">
 

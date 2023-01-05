@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public interface MpAvIKeyGestureViewModel {
+    public interface MpAvIKeyGestureViewModel : MpIViewModel {
         ObservableCollection<MpAvShortcutKeyGroupViewModel> KeyGroups { get; }
     }
 
-    public interface MpAvIShortcutCommand {
+    public interface MpAvIShortcutCommandViewModel : MpIViewModel {
         ICommand AssignCommand { get; }
         MpShortcutType ShortcutType { get; }
         MpAvShortcutViewModel ShortcutViewModel { get; }
@@ -30,6 +30,6 @@ namespace MonkeyPaste.Avalonia {
     }
 
     public interface MpIShortcutCommandCollectionViewModel : MpIViewModel {
-        IEnumerable<MpAvIShortcutCommand> ShortcutCommands { get; }
+        IEnumerable<MpAvIShortcutCommandViewModel> ShortcutCommands { get; }
     }
 }

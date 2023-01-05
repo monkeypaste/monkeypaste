@@ -33,7 +33,8 @@ namespace MonkeyPaste.Avalonia {
         MpIPluginHost,
         MpAvIPluginParameterCollectionViewModel,
         MpIPluginComponentViewModel,
-        MpIActionPluginComponent {
+        MpIActionPluginComponent,
+        MpIPopupMenuPicker {
 
         #region Private Variables
 
@@ -67,14 +68,10 @@ namespace MonkeyPaste.Avalonia {
                         return "PinToCollectionImage";
                     case MpActionType.Compare:
                         return "ScalesImage";
-                    case MpActionType.Macro:
-                        return "HotkeyImage";
-                    case MpActionType.Timer:
+                    case MpActionType.Repeater:
                         return "AlarmClockImage";
                     case MpActionType.FileWriter:
                         return "FolderEventImage";
-                    case MpActionType.Annotater:
-                        return "HighlighterImage";
                 }
             }
             // whats params?
@@ -86,6 +83,21 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
+
+        #region MpILabelText Implementation
+
+        public MpMenuItemViewModel GetMenu(ICommand cmd, IEnumerable<int> selectedActionIds, bool recursive) {
+            return new MpMenuItemViewModel() {
+                MenuItemId = ActionId,
+                Header = Label,
+                IconSourceObj = IconResourceObj,
+                IsChecked = selectedActionIds.Contains(ActionId),
+                Command = cmd,
+                CommandParameter = ActionId,
+                SubItems = recursive ? Children.Cast<MpIPopupMenuPicker>().Select(x => x.GetMenu(cmd, selectedActionIds, recursive)).ToList() : null
+            };
+        }
+        #endregion
 
         #region MpILabelText Implementation
 
@@ -171,8 +183,6 @@ namespace MonkeyPaste.Avalonia {
                     toolTipStr = "Comparer - Parses content or previous action output for text. When text is found, the output is ranges where those conditions were met. When comparision fails, no subsequent actions will be evaluated.";
                 } else if (this is MpAvFileWriterActionViewModel) {
                     toolTipStr = "File Writer - Saves content to the selected folder.";
-                } else if (this is MpAvMacroActionViewModel) {
-                    toolTipStr = "Macro - When used after a compare action, embeds a selected local or remote command for onto the text of each match";
                 } else if (this is MpAvContentAddTriggerViewModel) {
                     toolTipStr = "Content Added - Triggered when content of the selected type is added";
                 } else if (this is MpAvContentTaggedTriggerViewModel) {
@@ -316,22 +326,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-
-        //private Dictionary<int, MpAvPluginParameterViewModelBase> _argLookup;
-        //public virtual Dictionary<int,MpAvPluginParameterViewModelBase> ArgLookup {
-        //    get {
-        //        if(_argLookup == null) {
-        //            _argLookup = new Dictionary<int, MpAvPluginParameterViewModelBase>() {
-        //                {1, new MpAvPluginParameterViewModelBase(this)},
-        //                {2, new MpAvPluginParameterViewModelBase(this)},
-        //                {3, new MpAvPluginParameterViewModelBase(this)},
-        //                {4, new MpAvPluginParameterViewModelBase(this)},
-        //                {5, new MpAvPluginParameterViewModelBase(this)},
-        //            };
-        //        }
-        //        return _argLookup;
-        //    }
-        //}
         #endregion
 
         #region Appearance
@@ -760,10 +754,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpActionType.Compare:
                     avm = new MpAvCompareActionViewModelBase(Parent);
                     break;
-                case MpActionType.Macro:
-                    avm = new MpAvMacroActionViewModel(Parent);
-                    break;
-                case MpActionType.Timer:
+                case MpActionType.Repeater:
                     avm = new MpAvRepeaterActionViewModel(Parent);
                     break;
                 case MpActionType.FileWriter:
@@ -828,17 +819,6 @@ namespace MonkeyPaste.Avalonia {
             OnActionComplete?.Invoke(this, arg);
         }
 
-        public MpMenuItemViewModel GetActionMenu(ICommand cmd, IEnumerable<int> selectedActionIds, bool recursive) {
-            return new MpMenuItemViewModel() {
-                MenuItemId = ActionId,
-                Header = Label,
-                IconSourceObj = IconResourceObj,
-                IsChecked = selectedActionIds.Contains(ActionId),
-                Command = cmd,
-                CommandParameter = ActionId,
-                SubItems = recursive ? Children.Select(x => x.GetActionMenu(cmd, selectedActionIds, recursive)).ToList() : null
-            };
-        }
 
         public async Task UpdateSortOrderAsync() {
             Children.ForEach(x => x.SortOrderIdx = Children.IndexOf(x));

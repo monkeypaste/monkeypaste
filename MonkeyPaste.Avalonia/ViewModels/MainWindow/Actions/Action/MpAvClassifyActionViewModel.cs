@@ -12,42 +12,40 @@ using Avalonia.Controls;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvClassifyActionViewModel : 
-        MpAvActionViewModelBase,  
-        MpIPopupSelectorMenu {
+        MpAvActionViewModelBase {
         #region Private Variables
 
         #endregion
 
-        #region MpIPopupSelectorMenu Implementation
+        #region Constants
 
+        public const string SELECTED_TAG_PARAM_ID = "SelectedTagId";
 
-        public bool IsOpen { get; set; }
-        public MpMenuItemViewModel PopupMenu {
+        #endregion
+
+        #region MpIPluginHost Overrides
+
+        private MpActionPluginFormat _actionComponentFormat;
+        public override MpActionPluginFormat ActionComponentFormat {
             get {
-                return new MpMenuItemViewModel() {
-                    SubItems = new List<MpMenuItemViewModel>() {
-                        MpAvTagTrayViewModel.Instance.AllTagViewModel.GetTagMenu(SelectTagCommand,new int[] { TagId}, true)
-                    }
-                };
+                if (_actionComponentFormat == null) {
+                    _actionComponentFormat = new MpActionPluginFormat() {
+                        parameters = new List<MpPluginParameterFormat>() {
+                            new MpPluginParameterFormat() {
+                                label = "Collection",
+                                controlType = MpPluginParameterControlType.ComponentPicker,
+                                unitType = MpPluginParameterValueUnitType.CollectionComponentId,
+                                isRequired = true,
+                                paramId = SELECTED_TAG_PARAM_ID,
+                                description = "Triggered when content is added to the selected collection"
+                            }
+                        }
+                    };
+                }
+                return _actionComponentFormat;
             }
         }
-        //public MpMenuItemViewModel SelectedMenuItem =>
-        //    SelectedTag == null ? null : SelectedTag.GetTagMenu(null, new int[] { TagId }, false);
-        //public string EmptyText => "Select Tag...";
-        //public object EmptyIconResourceObj => MpAvActionViewModelBase.GetDefaultActionIconResourceKey(MpActionType.Classify, null);
 
-        public object SelectedIconResourceObj =>
-            TagId == 0 ?
-                GetDefaultActionIconResourceKey(ActionType) :
-                SelectedTag == null ?
-                    "WarningImage" :
-                    SelectedTag.GetTagMenu(null, new int[] { TagId }, false).IconSourceObj;
-        public string SelectedLabel =>
-            TagId == 0 ?
-                "Select Collection..." :
-                SelectedTag == null ?
-                    "Not found..." :
-                    SelectedTag.GetTagMenu(null, new int[] { TagId }, false).Header;
         #endregion
 
         #region Properties
@@ -63,14 +61,15 @@ namespace MonkeyPaste.Avalonia {
 
         public int TagId {
             get {
-                if (Action == null || string.IsNullOrEmpty(Arg1)) {
-                    return 0;
+                if (ArgLookup.TryGetValue(SELECTED_TAG_PARAM_ID, out var param_vm) &&
+                    param_vm.IntValue is int curVal) {
+                    return curVal;
                 }
-                return int.Parse(Arg1);
+                return 0;
             }
             set {
                 if (TagId != value) {
-                    Arg1 = value.ToString();
+                    ArgLookup[SELECTED_TAG_PARAM_ID].IntValue = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(TagId));
                 }
@@ -138,23 +137,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
-
-        public ICommand SelectTagCommand => new MpCommand<object>(
-            (args) => {
-                if(args is int tagId) {
-                    if(TagId == tagId) {
-                        TagId = 0;
-                    } else {
-                        TagId = tagId;
-                    }
-                    
-                    OnPropertyChanged(nameof(SelectedTag));
-                    OnPropertyChanged(nameof(SelectedLabel));
-                    OnPropertyChanged(nameof(SelectedIconResourceObj));
-                }
-            });
-
-
         #endregion
     }
 }

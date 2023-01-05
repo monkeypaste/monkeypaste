@@ -11,36 +11,18 @@
                        x:TypeArguments="local:MpAvActionViewModelBase"
                        x:DataType="local:MpAvActionViewModelBase"
                        mc:Ignorable="d">
-    <local:MpAvUserControl.Styles>
-        <Style Selector="Expander /template/ ToggleButton">
-            <!--<Setter Property="IsEnabled"
-                    Value="False" />-->
-        </Style>
-    </local:MpAvUserControl.Styles>
-    <Expander x:Name="ActionExpander"
-              CornerRadius="10"
-              BorderBrush="Khaki"
-              Padding="5,0"
-              HorizontalAlignment="Stretch"
-              IsExpanded="True">
-        <Expander.Header>
-            <local:MpAvActionPropertyHeaderView Grid.Column="0"
+    <Border VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch">
+        <StackPanel Orientation="Vertical">
+            <local:MpAvActionPropertyHeaderView CornerRadius="10"
+                                                BorderBrush="Khaki"
+                                                Background="{Binding ActionBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                                                Padding="5,0"
                                                 HorizontalAlignment="Stretch"
                                                 DataContext="{Binding}" />
-        </Expander.Header>
-        <Grid>
-            <Border Grid.Row="2"
-                    VerticalAlignment="Stretch"
-                    HorizontalAlignment="Stretch"
-                    BorderBrush="Black"
-                    BorderThickness="1"
-                    CornerRadius="0"
-                    Background="Transparent"
-                    Margin="0,0,0,5">
-                <local:MpAvPluginParameterListBoxView HorizontalAlignment="Stretch"
-                                                      VerticalAlignment="Stretch"
-                                                      DataContext="{Binding}" />
-            </Border>
-        </Grid>
-    </Expander>
+            <local:MpAvPluginParameterListBoxView HorizontalAlignment="Stretch"
+                                                  VerticalAlignment="Stretch"
+                                                  DataContext="{Binding}" />
+        </StackPanel>
+    </Border>
 </local:MpAvUserControl>

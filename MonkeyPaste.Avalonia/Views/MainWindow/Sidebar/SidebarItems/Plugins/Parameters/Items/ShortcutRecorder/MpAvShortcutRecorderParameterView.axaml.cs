@@ -1,5 +1,4 @@
-﻿using Avalonia.Markup.Xaml;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,19 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Xamarin.Essentials;
 
 namespace MonkeyPaste.Avalonia {
-/// <summary>
-/// Interaction logic for MpFileSystemTriggerPropertyListBoxItemView.xaml
-/// </summary>
-    public partial class MpAvMacroActionPropertyView : MpAvUserControl<MpAvMacroActionViewModel> {
-        public MpAvMacroActionPropertyView() {
+    /// <summary>
+    /// Interaction logic for MpListBoxParameterView.xaml
+    /// </summary>
+    public partial class MpAvShortcutRecorderParameterView : MpAvUserControl<MpAvShortcutRecorderParameterViewModel> {
+        public MpAvShortcutRecorderParameterView() {
             InitializeComponent();
-        }
-
-        private void InitializeComponent() {
-            AvaloniaXamlLoader.Load(this);
         }
     }
 }

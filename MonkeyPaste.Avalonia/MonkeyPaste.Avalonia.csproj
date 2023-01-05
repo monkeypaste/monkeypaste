@@ -92,6 +92,7 @@
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\Plugins\_Base\**" />
     <AvaloniaXaml Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
+    <AvaloniaXaml Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
     <Compile Remove="AttachedProperties\DragDrop\**" />
     <Compile Remove="Behaviors\**" />
     <Compile Remove="cef\**" />
@@ -104,6 +105,7 @@
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
     <Compile Remove="ViewModels\MainWindow\Plugins\_Base\**" />
     <Compile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
+    <Compile Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
     <EmbeddedResource Remove="AttachedProperties\DragDrop\**" />
     <EmbeddedResource Remove="Behaviors\**" />
     <EmbeddedResource Remove="cef\**" />
@@ -116,6 +118,7 @@
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\Plugins\_Base\**" />
     <EmbeddedResource Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
+    <EmbeddedResource Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
     <None Remove="AttachedProperties\DragDrop\**" />
     <None Remove="Behaviors\**" />
     <None Remove="cef\**" />
@@ -128,6 +131,7 @@
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
     <None Remove="ViewModels\MainWindow\Plugins\_Base\**" />
     <None Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
+    <None Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
     <Page Remove="AttachedProperties\DragDrop\**" />
     <Page Remove="cef_old\**" />
     <Page Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
@@ -138,6 +142,7 @@
     <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
     <Page Remove="ViewModels\MainWindow\Plugins\_Base\**" />
     <Page Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
+    <Page Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
     <AvaloniaXaml Remove="Themes\Default\Accents\Base.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Accents\BaseLight.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Button.axaml" />
@@ -386,6 +391,7 @@
     <Compile Remove="AttachedProperties\MpAvTextSelectionExtension.cs" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\MpAvWin32ProcessWatcher2.cs" />
     <Compile Remove="Utils\Input\Mouse\MpAvMouseHook_Win32.cs" />
+    <Compile Remove="ViewModels\MainWindow\Actions\Action\Triggers\MpAvTimerTriggerViewModel.cs" />
     <Compile Remove="ViewModels\Reusable\Source\MpAvSourceCollectionViewModel.cs" />
     <Compile Remove="ViewModels\Reusable\Source\MpAvSourceViewModel.cs" />
     <Compile Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\MpAvActionPropertyListBoxView.axaml.cs" />
@@ -1083,36 +1089,6 @@
     <Compile Update="Views\MainWindow\Sidebar\MpAvSidebarContainerView.axaml.cs">
       <DependentUpon>MpAvSidebarContainerView.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\Analyze\MpAvAnalyzeActionPropertyView.axaml.cs">
-      <DependentUpon>MpAvAnalyzeActionPropertyView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\Classify\MpAvClassifyActionPropertyView.axaml.cs">
-      <DependentUpon>MpAvClassifyActionPropertyView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\Compare\MpAvCompareActionPropertyView.axaml.cs">
-      <DependentUpon>MpAvCompareActionPropertyView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\FileWriter\MpAvFileWriterActionPropertyView.axaml.cs">
-      <DependentUpon>MpAvFileWriterActionPropertyView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\Macro\MpAvMacroActionPropertyView.axaml.cs">
-      <DependentUpon>MpAvMacroActionPropertyView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\Timer\MpAvTimerActionPropertyView.axaml.cs">
-      <DependentUpon>MpAvTimerActionPropertyView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\Triggers\MpAvContentAddTriggerPropertView.axaml.cs">
-      <DependentUpon>MpAvContentAddTriggerPropertView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\Triggers\MpAvContentTaggedTriggerPropertyView.axaml.cs">
-      <DependentUpon>MpAvContentTaggedTriggerPropertyView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\Triggers\MpAvFileSystemTriggerPropertyView.axaml.cs">
-      <DependentUpon>MpAvFileSystemTriggerPropertyView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\Triggers\MpAvShortcutTriggerPropertyView.axaml.cs">
-      <DependentUpon>MpAvShortcutTriggerPropertyView.axaml</DependentUpon>
-    </Compile>
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\MpAvActionPropertyView.axaml.cs">
       <DependentUpon>MpAvActionPropertyView.axaml</DependentUpon>
     </Compile>
@@ -1130,6 +1106,12 @@
     </Compile>
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Analytics\Presets\MpAvAnalyticItemPresetDataGridView.axaml.cs">
       <DependentUpon>MpAvAnalyticItemPresetDataGridView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\Items\ShortcutRecorder\MpAvShortcutRecorderParameterView.axaml.cs">
+      <DependentUpon>MpAvShortcutRecorderParameterView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\Items\ComponentPicker\MpAvComponentPickerParameterView.axaml.cs">
+      <DependentUpon>MpAvComponentPickerParameterView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\Items\MpAvPluginParameterItemView.axaml.cs">
       <DependentUpon>MpAvPluginParameterItemView.axaml</DependentUpon>
@@ -1166,6 +1148,9 @@
     </Compile>
     <Compile Update="Views\Reusable\ShortcutWindow\MpAvAssignShortcutDialog.axaml.cs">
       <DependentUpon>MpAvAssignShortcutDialog.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Reusable\ShortcutWindow\ShortcutPanel\AssignableShortcut\MpAvAssignableShortcutView.axaml.cs">
+      <DependentUpon>MpAvAssignableShortcutView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Reusable\ShortcutWindow\ShortcutPanel\KeyGroup\Key\MpAvShortcutKeyView.axaml.cs">
       <DependentUpon>MpAvShortcutKeyView.axaml</DependentUpon>

@@ -46,10 +46,8 @@ namespace MonkeyPaste {
         Analyze,   //analyticItemPresetId
         Compare,   //MatcherTypeEnumId
         Trigger,    //TriggerTypeEnumId 
-        Macro,
-        Timer,
+        Repeater,
         FileWriter,
-        Annotater
     }
 
     public class MpAction : MpDbModelBase {

@@ -36,6 +36,12 @@ namespace MonkeyPaste.Avalonia {
                 case MpPluginParameterControlType.FileChooser:
                     naipvm = new MpAvFileChooserParameterViewModel(componentViewModel);
                     break;
+                case MpPluginParameterControlType.ComponentPicker:
+                    naipvm = new MpAvComponentPickerParameterViewModel(componentViewModel);
+                    break;
+                case MpPluginParameterControlType.ShortcutRecorder:
+                    naipvm = new MpAvShortcutRecorderParameterViewModel(componentViewModel);
+                    break;
                 default:
                     throw new Exception(@"Unsupported Paramter type: " + Enum.GetName(typeof(MpPluginParameterControlType), controlType));
             }

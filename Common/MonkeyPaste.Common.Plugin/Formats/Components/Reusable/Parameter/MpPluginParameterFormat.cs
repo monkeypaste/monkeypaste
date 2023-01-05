@@ -16,7 +16,9 @@ namespace MonkeyPaste.Common.Plugin {
         FileChooser,
         DirectoryChooser,
         PasswordBox,
-        Radio
+        Radio,
+        ComponentPicker,
+        ShortcutRecorder
     }
 
     public enum MpPluginParameterValueUnitType {
@@ -32,7 +34,10 @@ namespace MonkeyPaste.Common.Plugin {
         FileSystemPath,
         PlainTextContentQuery,
         RawDataContentQuery,
-        DelimitedPlainText
+        DelimitedPlainText,
+        CollectionComponentId,
+        ActionComponentId,
+        AnalyzerComponentId
     }
     
     public class MpPluginParameterFormat : MpJsonObject {

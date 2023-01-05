@@ -417,7 +417,7 @@ namespace MonkeyPaste.Avalonia {
             //    if(tr != null) {
             //        int offset = fd.ContentStart.GetOffsetToPosition(tr.Start);
             //        int length = fd.ContentStart.GetOffsetToPosition(tr.End) - offset;
-            //        return new MpComparisionMatch(compareData, offset, length);
+            //        return new MpAvComparisionMatch(compareData, offset, length);
             //    }
 
             //}

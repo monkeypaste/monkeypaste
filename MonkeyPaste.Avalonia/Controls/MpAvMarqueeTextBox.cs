@@ -443,12 +443,12 @@ namespace MonkeyPaste.Avalonia {
 
             MpRect rect1 = bmp_rect;
             rect1.X = _offsetX1;
-            ctx.DrawImage(_marqueeBitmap, rect1.ToAvRect(),rect1.ToAvRect(), BitmapInterpolationMode.HighQuality);
+            ctx.DrawImage(_marqueeBitmap, new Rect(rect1.Size.ToAvSize()), rect1.ToAvRect(), BitmapInterpolationMode.HighQuality);
             
             if(CanMarquee()) {
                 MpRect rect2 = bmp_rect;
                 rect2.X = _offsetX2;
-                ctx.DrawImage(_marqueeBitmap, rect2.ToAvRect(), rect2.ToAvRect(), BitmapInterpolationMode.HighQuality);
+                ctx.DrawImage(_marqueeBitmap, new Rect(rect2.Size.ToAvSize()), rect2.ToAvRect(), BitmapInterpolationMode.HighQuality);
             }
         }
 

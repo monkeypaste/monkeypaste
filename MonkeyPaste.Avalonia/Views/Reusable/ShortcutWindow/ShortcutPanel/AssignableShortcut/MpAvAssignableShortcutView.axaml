@@ -1,0 +1,27 @@
+﻿<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvAssignableShortcutView"
+                       xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       x:CompileBindings="True"
+                       xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
+                       x:TypeArguments="local:MpAvIShortcutCommandViewModel"
+                       x:DataType="local:MpAvIShortcutCommandViewModel"
+                       mc:Ignorable="d"
+                       d:DesignHeight="450"
+                       d:DesignWidth="800">
+    <Button Grid.Row="0"
+            Grid.Column="1"
+            Classes="arg1"
+            Command="{Binding AssignCommand}">
+        <Grid>
+            <local:MpAvShortcutView Background="Transparent"
+                                    IsVisible="{Binding ShortcutViewModel, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                    DataContext="{Binding ShortcutViewModel}" />
+            <TextBlock Text="Click to record..."
+                       IsVisible="{Binding ShortcutViewModel, Converter={x:Static ObjectConverters.IsNull}}" />
+        </Grid>
+    </Button>
+</local:MpAvUserControl>

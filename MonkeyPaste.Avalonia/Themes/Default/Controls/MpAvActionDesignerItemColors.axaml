@@ -31,11 +31,4 @@
         <Setter Property="Fill"
                 Value="{Binding ActionBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}" />
     </Style>
-
-    <!--  PROPERTY EXPANDER  -->
-    <Style Selector="local|MpAvActionPropertyView Expander"
-           x:DataType="local:MpAvActionViewModelBase">
-        <Setter Property="Background"
-                Value="{Binding ActionBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}" />
-    </Style>
 </Styles>

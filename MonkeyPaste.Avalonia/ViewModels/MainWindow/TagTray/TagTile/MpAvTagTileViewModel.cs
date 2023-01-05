@@ -19,10 +19,11 @@ namespace MonkeyPaste.Avalonia {
         MpAvTreeSelectorViewModelBase<MpAvTagTrayViewModel, MpAvTagTileViewModel>, 
         MpIHoverableViewModel,
         MpISelectableViewModel,
-        MpAvIShortcutCommand, 
+        MpAvIShortcutCommandViewModel, 
         MpIUserColorViewModel,
         MpIActionComponent,
-        MpIContextMenuViewModel {
+        MpIContextMenuViewModel,
+        MpIPopupMenuPicker {
 
         #region Private Variables
         private object _notifierLock = new object();
@@ -43,6 +44,21 @@ namespace MonkeyPaste.Avalonia {
 
         public override MpAvTagTileViewModel ParentTreeItem => Parent.Items.FirstOrDefault(x => x.TagId == ParentTagId);
         public override IEnumerable<MpAvTagTileViewModel> Children => SortedItems;
+
+        #endregion
+
+        #region MpIPopupMenuPicker Implementation
+
+        public MpMenuItemViewModel GetMenu(ICommand cmd, IEnumerable<int> selectedTagIds, bool recursive) {
+            return new MpMenuItemViewModel() {
+                Header = TagName,
+                Command = cmd,
+                CommandParameter = TagId,
+                IsChecked = selectedTagIds.Contains(TagId),
+                IconHexStr = TagHexColor,
+                SubItems = recursive ? Items.Cast<MpIPopupMenuPicker>().Select(x => x.GetMenu(cmd, selectedTagIds, recursive)).ToList() : null
+            };
+        }
 
         #endregion
 
@@ -159,7 +175,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpAvIShortcutCommand Implementation
+        #region MpAvIShortcutCommandViewModel Implementation
 
         public MpShortcutType ShortcutType => MpShortcutType.SelectTag;
 
@@ -473,7 +489,6 @@ namespace MonkeyPaste.Avalonia {
             CopyItemIdsNeedingView.CollectionChanged += CopyItemIdsNeedingView_CollectionChanged;
         }
 
-
         public virtual async Task InitializeAsync(MpTag tag) {
             IsBusy = true;
 
@@ -521,16 +536,6 @@ namespace MonkeyPaste.Avalonia {
 
         //    return isLinked;
         //}
-        public MpMenuItemViewModel GetTagMenu(ICommand cmd, IEnumerable<int> selectedTagIds, bool recursive) {
-            return new MpMenuItemViewModel() {
-                Header = TagName,
-                Command = cmd,
-                CommandParameter = TagId,
-                IsChecked = selectedTagIds.Contains(TagId),
-                IconHexStr = TagHexColor,
-                SubItems = recursive ? Items.Select(x => x.GetTagMenu(cmd,selectedTagIds,recursive)).ToList() : null
-            };
-        }
 
         public async Task<bool> IsCopyItemLinkedAsync(int ciid) {
             if (ciid == 0 || Tag == null ||  Tag.Id == 0) {

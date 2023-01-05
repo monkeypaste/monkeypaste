@@ -1,6 +1,7 @@
 ﻿using Avalonia.Threading;
 using MonkeyPaste;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,14 +11,8 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public enum MpRepeatType {
-        None = 0,
-        Time,
-        Count
-    }
     public class MpAvRepeaterActionViewModel : 
         MpAvActionViewModelBase,
-        MpIPopupSelectorMenu,
         MpISliderViewModel {
 
         #region Private Variables
@@ -27,12 +22,19 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Constants
+
+        public const string REPEAT_DELAY_MS_PARAM_ID = "RepeatDelayMs";
+        public const string REPEAT_COUNT_PARAM_ID = "RepeatCount";
+
+        #endregion
+
         #region MpISliderViewModel Implementation
         public double SliderValue {
-            get => (double)IntervalMs;
+            get => (double)RepeatCount;
             set {
-                if((int)value != IntervalMs) {
-                    IntervalMs = (int)value;
+                if((int)value != RepeatCount) {
+                    RepeatCount = (int)value;
                     OnPropertyChanged(nameof(SliderValue));
                 }
             }
@@ -43,73 +45,92 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpIPopupSelectorMenu Implementation
-        public bool IsOpen { get; set; }
-        public MpMenuItemViewModel PopupMenu =>
-            RootTriggerActionViewModel == null ? null : 
-            RootTriggerActionViewModel.GetActionMenu(SelectTickActionCommand, new List<int> { TickActionId }, true);
-        //public MpMenuItemViewModel SelectedMenuItem =>
-        //    SelectedTickActionViewModel == null ?
-        //        null :
-        //    SelectedTickActionViewModel.GetActionMenu(null, new int[] { TickActionId }, false);
+        #region MpIPluginHost Overrides
 
-        //public string EmptyText => "Select Action...";
-        //public object EmptyIconResourceObj => GetDefaultActionIconResourceKey(MpActionType.Analyze, null);
-        public object SelectedIconResourceObj =>
-            TickActionId == 0 ?
-                GetDefaultActionIconResourceKey(ActionType) :
-                SelectedTickActionViewModel == null ?
-                    "WarningImage" :
-                    SelectedTickActionViewModel.GetActionMenu(null, new int[] { TickActionId }, false).IconSourceObj;
-        public string SelectedLabel =>
-            TickActionId == 0 ?
-                "Select Action..." :
-                SelectedTickActionViewModel == null ?
-                    "Not found..." :
-                    SelectedTickActionViewModel.GetActionMenu(null, new int[] { TickActionId }, false).Header;
+        private MpActionPluginFormat _actionComponentFormat;
+        public override MpActionPluginFormat ActionComponentFormat {
+            get {
+                if (_actionComponentFormat == null) {
+                    _actionComponentFormat = new MpActionPluginFormat() {
+                        parameters = new List<MpPluginParameterFormat>() {
+                            new MpPluginParameterFormat() {
+                                label = "Repeat Count",
+                                controlType = MpPluginParameterControlType.Slider,
+                                unitType = MpPluginParameterValueUnitType.Integer,
+                                minimum = 0,
+                                maximum = int.MaxValue,
+                                isRequired = true,
+                                paramId = REPEAT_COUNT_PARAM_ID,
+                                description = "A value of 0 will repeat parent action indefinitely",
+                                values = new List<MpPluginParameterValueFormat>() {
+                                    new MpPluginParameterValueFormat() {
+                                        isDefault = true,
+                                        value ="0"
+                                    }
+                                }
+                            },
+                             new MpPluginParameterFormat() {
+                                label = "Repeat Delay",
+                                controlType = MpPluginParameterControlType.Slider,
+                                unitType = MpPluginParameterValueUnitType.Integer,
+                                minimum = 0,
+                                maximum = int.MaxValue,
+                                isRequired = true,
+                                paramId = REPEAT_DELAY_MS_PARAM_ID,
+                                description = "The amount of time in milliseconds waited once parent action completes",
+                                values = new List<MpPluginParameterValueFormat>() {
+                                    new MpPluginParameterValueFormat() {
+                                        isDefault = true,
+                                        value ="0"
+                                    }
+                                }
+                            }
+                        }
+                    };
+                }
+                return _actionComponentFormat;
+            }
+        }
 
         #endregion
+
 
         #region Properties
 
-        #region View Models
-
-        public MpAvActionViewModelBase SelectedTickActionViewModel =>
-            Parent.Items.FirstOrDefault(x => x.ActionId == TickActionId);
-
-        #endregion
 
         #region Model
 
         // Arg1
-        public int IntervalMs {
+        public int RepeatCount {
             get {
-                if(Action == null || string.IsNullOrEmpty(Arg1)) {
-                    return 0;
+                if (ArgLookup.TryGetValue(REPEAT_COUNT_PARAM_ID, out var param_vm) &&
+                    param_vm.IntValue is int curVal) {
+                    return curVal;
                 }
-                return int.Parse(Arg1);
+                return 0;
             }
             set {
-                if(IntervalMs != value) {
-                    Arg1 = value.ToString();
+                if (RepeatCount != value) {
+                    ArgLookup[REPEAT_COUNT_PARAM_ID].IntValue = value;
                     HasModelChanged = true;
-                    OnPropertyChanged(nameof(IntervalMs));
+                    OnPropertyChanged(nameof(RepeatCount));
                 }
             }
         }
 
-        public int TickActionId {
+        public int RepeatDelayMs {
             get {
-                if (Action == null || string.IsNullOrEmpty(Arg2)) {
-                    return 0;
+                if (ArgLookup.TryGetValue(REPEAT_DELAY_MS_PARAM_ID, out var param_vm) &&
+                    param_vm.IntValue is int curVal) {
+                    return curVal;
                 }
-                return int.Parse(Arg2);
+                return 0;
             }
             set {
-                if (TickActionId != value) {
-                    Arg2 = value.ToString();
+                if (RepeatDelayMs != value) {
+                    ArgLookup[REPEAT_DELAY_MS_PARAM_ID].IntValue = value;
                     HasModelChanged = true;
-                    OnPropertyChanged(nameof(TickActionId));
+                    OnPropertyChanged(nameof(RepeatDelayMs));
                 }
             }
         }
@@ -138,16 +159,16 @@ namespace MonkeyPaste.Avalonia {
             bool isInitialRun = _actionTickTimer == null || !_actionTickTimer.IsEnabled;
             var actionInput = GetInput(arg);
 
-            object[] args = new object[] { SelectedTickActionViewModel, actionInput.CopyItem };
-            if (SelectedTickActionViewModel != null) {
-                SelectedTickActionViewModel.PerformActionAsync(args).FireAndForgetSafeAsync(this);
+            object[] args = new object[] { ParentActionViewModel, actionInput.CopyItem };
+            if (ParentActionViewModel != null) {
+                ParentActionViewModel.PerformActionAsync(args).FireAndForgetSafeAsync(this);
 
                 if(_actionTickTimer == null) {
                     _actionTickTimer = new DispatcherTimer();
                     _actionTickTimer.Tick += _actionTickTimer_Tick;
-                    SelectedTickActionViewModel.OnActionComplete += SelectedTickActionViewModel_OnActionComplete;
+                    ParentActionViewModel.OnActionComplete += SelectedTickActionViewModel_OnActionComplete;
                 }
-                _actionTickTimer.Interval = TimeSpan.FromMilliseconds(IntervalMs);
+                _actionTickTimer.Interval = TimeSpan.FromMilliseconds(RepeatCount);
                 if(!_actionTickTimer.IsEnabled) {
                     _actionTickTimer.Start();
                 }
@@ -163,13 +184,12 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            if (e is MpAction action && action.Id == TickActionId) {
+            if (e is MpAction action && action.Id == RepeatDelayMs) {
                 Task.Run(ValidateActionAsync);
             }
         }
 
         protected override async Task ValidateActionAsync() {
-
             //if (!IsValid) {
             //    return IsValid;
             //}
@@ -230,22 +250,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
-
-        public ICommand SelectTickActionCommand => new MpCommand<object>(
-            (args) => {
-                if (args is int tickActionId) {
-                    if (TickActionId == tickActionId) {
-                        TickActionId = 0;
-                    } else {
-                        TickActionId = tickActionId;
-                    }
-                    OnPropertyChanged(nameof(SelectedTickActionViewModel));
-                    OnPropertyChanged(nameof(SelectedLabel));
-                    OnPropertyChanged(nameof(SelectedIconResourceObj));
-                }
-            });
-
-
         #endregion
     }
 }

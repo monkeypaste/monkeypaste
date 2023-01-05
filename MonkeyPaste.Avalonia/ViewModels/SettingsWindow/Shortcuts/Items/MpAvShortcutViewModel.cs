@@ -19,12 +19,12 @@ namespace MonkeyPaste.Avalonia {
 
     public class MpAvShortcutViewModel : MpViewModelBase<MpAvShortcutCollectionViewModel>, 
         MpIActionComponent,
-        MpAvIShortcutCommand,
+        MpAvIShortcutCommandViewModel,
         MpAvIKeyGestureViewModel,
         MpISelectableViewModel {
         #region Properties        
 
-        #region MpAvIShortcutCommand Implementation
+        #region MpAvIShortcutCommandViewModel Implementation
 
         public ICommand AssignCommand => new MpCommand(() => {
             Parent.SelectedItem = this;

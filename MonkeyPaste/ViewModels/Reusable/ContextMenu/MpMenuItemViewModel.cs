@@ -23,7 +23,9 @@ namespace MonkeyPaste {
         MpMenuItemViewModel PopupMenuViewModel { get; }
     }
 
-
+    public interface MpIPopupMenuPicker {
+        MpMenuItemViewModel GetMenu(ICommand cmd, IEnumerable<int> selectedIds, bool recursive);
+    }
 
 
     //public class MpSetColorArguments {

@@ -1,51 +1,78 @@
-﻿using Gtk;
+﻿using MonkeyPaste.Common.Plugin;
 using MonkeyPaste;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Collections.Generic;
 
 namespace MonkeyPaste.Avalonia {
+
     public class MpAvShortcutTriggerViewModel : 
         MpAvTriggerActionViewModelBase,
-        MpAvIShortcutCommand {
-        #region Properties
+        MpIApplicationCommandCollectionViewModel{
 
-        #region MpAvIShortcutCommand Implementation
+        #region Constants
 
-        public ICommand AssignCommand => AssignHotkeyCommand;
-        public MpShortcutType ShortcutType => MpShortcutType.InvokeAction;
-        public MpAvShortcutViewModel ShortcutViewModel =>
-            MpAvShortcutCollectionViewModel.Instance.Items
-            .FirstOrDefault(x => x.CommandParameter == ActionId.ToString() && x.ShortcutType == MpShortcutType.InvokeAction);
-        public string ShortcutKeyString => ShortcutViewModel == null ? string.Empty : ShortcutViewModel.KeyString;
+        public const string CURRENT_SHORTCUT_PARAM_ID = "SelectedTagId";
 
         #endregion
 
-        #region Model
+        #region Interfaces
 
-        public override string Description { 
-            get => base.Description; 
-            set => base.Description = value; 
+
+        #region MpAvIApplicationCommandViewModel Implementation
+
+        public IEnumerable<MpApplicationCommand> Commands =>
+            new MpApplicationCommand[] {
+                new MpApplicationCommand() {
+                    Command = MpAvTriggerCollectionViewModel.Instance.InvokeActionCommand,
+                    CommandParameter = ActionId,
+                    Tag = CURRENT_SHORTCUT_PARAM_ID
+                }
+            };
+
+        #endregion
+
+        #endregion
+
+        #region MpIPluginHost Overrides
+
+        private MpActionPluginFormat _actionComponentFormat;
+        public override MpActionPluginFormat ActionComponentFormat {
+            get {
+                if (_actionComponentFormat == null) {
+                    _actionComponentFormat = new MpActionPluginFormat() {
+                        parameters = new List<MpPluginParameterFormat>() {
+                            new MpPluginParameterFormat() {
+                                label = "Shortcut",
+                                controlType = MpPluginParameterControlType.ShortcutRecorder,
+                                unitType = MpPluginParameterValueUnitType.PlainText,
+                                isRequired = true,
+                                paramId = CURRENT_SHORTCUT_PARAM_ID,
+                                description = "Triggered when the recorded shortcut is pressed at anytime with the current clipboard"
+                            }
+                        }
+                    };
+                }
+                return _actionComponentFormat;
+            }
         }
 
-        // Arg1
+        #endregion
 
-        //public int ShortcutId {
-        //    get {
-        //        if (Action == null || string.IsNullOrEmpty(Arg4)) {
-        //            return 0;
-        //        }
-        //        return int.Parse(Arg4);
-        //    }
-        //    set {
-        //        if (ShortcutId != value) {
-        //            Arg4 = value.ToString();
-        //            HasModelChanged = true;
-        //            OnPropertyChanged(nameof(ShortcutId));
-        //        }
-        //    }
-        //}
+        #region Properties
 
+        #region View Models
+
+        public MpAvShortcutViewModel ShortcutViewModel {
+            get {
+                if(ArgLookup.TryGetValue(CURRENT_SHORTCUT_PARAM_ID, out var param_vm) && 
+                    param_vm is MpAvShortcutRecorderParameterViewModel scpvm) {
+                    return scpvm.ShortcutViewModel;
+                }
+                return null;
+            }
+        }
         #endregion
 
         #endregion
@@ -103,9 +130,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvShortcutTriggerViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
-                case nameof(ShortcutViewModel):
-                    //ShortcutId = ShortcutViewModel == null ? 
-                    break;
+
             }
         }
 
@@ -113,27 +138,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public ICommand AssignHotkeyCommand => new MpAsyncCommand(
-            async () => {
-                await MpAvShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
-                    shortcutType: MpShortcutType.InvokeAction,
-                    title: $"Trigger {Label} Action",
-                    command: InvokeThisActionCommand,
-                    commandParameter: ActionId.ToString(),
-                    keys: ShortcutKeyString);
-
-                OnPropertyChanged(nameof(ShortcutViewModel));
-
-                OnPropertyChanged(nameof(ShortcutKeyString));
-
-
-                if (ShortcutViewModel != null) {
-                    ShortcutViewModel.OnPropertyChanged(nameof(ShortcutViewModel.KeyItems));
-                }
-            });
-
-
         
+
+
 
         #endregion
     }

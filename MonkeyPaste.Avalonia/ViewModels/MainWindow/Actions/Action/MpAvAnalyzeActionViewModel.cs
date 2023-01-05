@@ -11,38 +11,36 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvAnalyzeActionViewModel : 
-        MpAvActionViewModelBase,
-        MpIPopupSelectorMenu 
-        {
-        #region MpIPopupSelectorMenu Implementation
-        public bool IsOpen { get; set; }
-        public MpMenuItemViewModel PopupMenu =>
-            MpAvAnalyticItemCollectionViewModel.Instance.GetAnalyzerMenu(SelectAnalyzerCommand);
-        //public MpMenuItemViewModel SelectedMenuItem =>
-        //    SelectedPreset == null ?
-        //        null :
-        //    (this as MpIPopupSelectorMenu).PopupMenu.SubItems
-        //    .SelectMany(x => x.SubItems)
-        //    .FirstOrDefault(x => x.MenuItemId == AnalyticItemPresetId);
-        //public string EmptyText => "Select Analyzer...";
-        //public object EmptyIconResourceObj => MpAvActionViewModelBase.GetDefaultActionIconResourceKey(MpActionType.Analyze, null);
+        MpAvActionViewModelBase {
+        #region Constants
 
-
-        public object SelectedIconResourceObj =>
-            AnalyticItemPresetId == 0 ?
-                GetDefaultActionIconResourceKey(ActionType) :
-                SelectedPreset == null ?
-                    "WarningImage" :
-                    SelectedPreset.GetMenu(null).IconSourceObj;
-        public string SelectedLabel =>
-            AnalyticItemPresetId == 0 ?
-                "Select Analyzer..." :
-                SelectedPreset == null ?
-                    "Not found..." :
-                    SelectedPreset.GetMenu(null).Header;
+        public const string SELECTED_ANALYZER_PARAM_ID = "SelectedAnalyzerId";
 
         #endregion
 
+        #region MpIPluginHost Overrides
+
+        private MpActionPluginFormat _actionComponentFormat;
+        public override MpActionPluginFormat ActionComponentFormat {
+            get {
+                if (_actionComponentFormat == null) {
+                    _actionComponentFormat = new MpActionPluginFormat() {
+                        parameters = new List<MpPluginParameterFormat>() {
+                            new MpPluginParameterFormat() {
+                                label = "Analyzer",
+                                controlType = MpPluginParameterControlType.ComponentPicker,
+                                unitType = MpPluginParameterValueUnitType.AnalyzerComponentId,
+                                isRequired = true,
+                                paramId = SELECTED_ANALYZER_PARAM_ID
+                            }
+                        }
+                    };
+                }
+                return _actionComponentFormat;
+            }
+        }
+
+        #endregion
         #region Properties
 
         #region View Models
@@ -62,14 +60,15 @@ namespace MonkeyPaste.Avalonia {
 
         public int AnalyticItemPresetId {
             get {
-                if (Action == null || string.IsNullOrEmpty(Arg1)) {
-                    return 0;
+                if (ArgLookup.TryGetValue(SELECTED_ANALYZER_PARAM_ID, out var param_vm) &&
+                    param_vm.IntValue is int curVal) {
+                    return curVal;
                 }
-                return int.Parse(Arg1);
+                return 0;
             }
             set {
                 if (AnalyticItemPresetId != value) {
-                    Arg1 = value.ToString();
+                    ArgLookup[SELECTED_ANALYZER_PARAM_ID].IntValue = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(AnalyticItemPresetId));
                 }
@@ -174,19 +173,6 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ToggleShowParametersCommand => new MpCommand(
             () => {
                 IsShowingParameters = !IsShowingParameters;
-            });
-        public ICommand SelectAnalyzerCommand => new MpCommand<object>(
-            (args) => {
-                if (args is int presetId) {
-                    if (AnalyticItemPresetId == presetId) {
-                        AnalyticItemPresetId = 0;
-                    } else {
-                        AnalyticItemPresetId = presetId;
-                    }
-                    OnPropertyChanged(nameof(SelectedPreset));
-                    OnPropertyChanged(nameof(SelectedLabel));
-                    OnPropertyChanged(nameof(SelectedIconResourceObj));
-                }
             });
 
 

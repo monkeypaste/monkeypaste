@@ -9,6 +9,7 @@ using System.Windows.Input;
 using MonkeyPaste;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using Avalonia.Controls.Selection;
+using Avalonia.Controls;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvEnumerableParameterViewModel : MpAvPluginParameterViewModelBase {
@@ -38,9 +39,10 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        //public virtual ObservableCollection<MpAvEnumerableParameterValueViewModel> SelectedItems { get; } = new ObservableCollection<MpAvEnumerableParameterValueViewModel>();
         public virtual IList<MpAvEnumerableParameterValueViewModel> SelectedItems {
-            get {  
-                if(ParameterFormat.controlType == MpPluginParameterControlType.EditableList) {
+            get {
+                if (ControlType == MpPluginParameterControlType.EditableList) {
                     return Items;
                 }
                 return Items.Where(x => x.IsSelected).ToList();
@@ -61,7 +63,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        //public SelectionModel<MpAvEnumerableParameterValueViewModel> Selection { get; private set; }
+        public SelectionModel<MpAvEnumerableParameterValueViewModel> Selection { get; private set; }
         #endregion
 
         #region State
@@ -81,8 +83,11 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvEnumerableParameterViewModel(MpIPluginComponentViewModel parent) : base(parent) {
             PropertyChanged += MpEnumerableParameterViewModel_PropertyChanged;
-            //Selection = new SelectionModel<MpAvEnumerableParameterValueViewModel>();
-            //Selection.SelectionChanged += Selection_SelectionChanged;
+            Selection = new SelectionModel<MpAvEnumerableParameterValueViewModel>() {
+                SingleSelect = ControlType == MpPluginParameterControlType.List ? true : false,
+                //Source = SelectedItems
+            };
+            Selection.SelectionChanged += Selection_SelectionChanged;
         }
 
 
@@ -128,6 +133,15 @@ namespace MonkeyPaste.Avalonia {
                 Items[0].IsSelected = true;
             }
 
+            using (Selection.BatchUpdate()) {
+                Selection.Clear();
+                if(SelectedItems.Count > 0) {
+                    SelectedItems.ForEach((x, idx) => Selection.Select(idx));
+                }
+                
+                //Items.Where(x => x.IsSelected).ForEach((x, idx) => Selection.Select(idx));
+            }
+
             OnPropertyChanged(nameof(Items));
             CurrentValue = SelectedItems.Select(x => x.Value).ToList().ToCsv();
 
@@ -164,6 +178,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void Selection_SelectionChanged(object sender, SelectionModelSelectionChangedEventArgs<MpAvEnumerableParameterValueViewModel> e) {
+            return;
             Items.ForEach(x => x.IsSelected = e.SelectedItems.Contains(x));
             OnPropertyChanged(nameof(Items));
             OnPropertyChanged(nameof(SelectedItems));

@@ -9,6 +9,12 @@ using MonkeyPaste.Common.Plugin;
 namespace MonkeyPaste.Avalonia {
     public class MpAvContentAddTriggerViewModel : 
         MpAvTriggerActionViewModelBase {
+        #region Constants
+
+        public const string CONTENT_TYPE_PARAM_ID = "SelectedContentType";
+
+        #endregion
+
         #region MpIPluginHost Overrides
 
         private MpActionPluginFormat _actionComponentFormat;
@@ -22,7 +28,7 @@ namespace MonkeyPaste.Avalonia {
                                 controlType = MpPluginParameterControlType.ComboBox,
                                 unitType = MpPluginParameterValueUnitType.PlainText,
                                 isRequired = true,
-                                paramId = "4",
+                                paramId = CONTENT_TYPE_PARAM_ID,
                                 description = "Content (not meeting rejection criteria) of this type will trigger this action.",
                                 values = new List<MpPluginParameterValueFormat>() {
                                     new MpPluginParameterValueFormat() {
@@ -59,22 +65,15 @@ namespace MonkeyPaste.Avalonia {
 
         public MpCopyItemType AddedContentType {
             get {
-                //if (Action == null || string.IsNullOrEmpty(Arg4)) {
-                //    return MpCopyItemType.None;
-                //}
-                //return Arg4.ToEnum<MpCopyItemType>();
-                if(ArgLookup.ContainsKey("4") && ArgLookup["4"].CurrentValue is string curVal) {
+                if(ArgLookup.TryGetValue(CONTENT_TYPE_PARAM_ID, out var param_vm) &&
+                    param_vm.CurrentValue is string curVal) {
                     return curVal.ToEnum<MpCopyItemType>();
                 }
                 return MpCopyItemType.None;
             }
             set {
                 if (AddedContentType != value) {
-                    if (!ArgLookup.ContainsKey("4")) {
-                        Debugger.Break();
-                        return;
-                    }
-                    ArgLookup["4"].CurrentValue =   value.ToString();
+                    ArgLookup[CONTENT_TYPE_PARAM_ID].CurrentValue = value.ToString();
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(AddedContentType));
                 }

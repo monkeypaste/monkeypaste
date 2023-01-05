@@ -30,13 +30,6 @@ namespace MonkeyPaste.Avalonia {
                pvmb.ControlType == MpPluginParameterControlType.DirectoryChooser) {
                 keyStr = "FileChooserParameterTemplate";
             }
-
-            //var g = (container as FrameworkElement).GetVisualAncestor<Grid>();
-            //if (g == null || !g.Resources.Contains(keyStr)) {
-            //    return null;
-            //}
-            //var result = g.Resources[keyStr] as DataTemplate;
-            //return result;
             return AvailableTemplates[keyStr].Build(param);
         }
 

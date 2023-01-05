@@ -13,20 +13,13 @@ using MonkeyPaste.Common;
 
 
 namespace MonkeyPaste.Avalonia {
-    public enum MpAnalyzerType {
-        None = 0,
-        LanguageTranslator,
-        OpenAi,
-        Yolo,
-        AzureImageAnalysis
-    }
-
     public class MpAvAnalyticItemCollectionViewModel : 
         MpAvTreeSelectorViewModelBase<object,MpAvAnalyticItemViewModel>,
         MpIMenuItemViewModel,
         MpIAsyncSingletonViewModel<MpAvAnalyticItemCollectionViewModel>, 
         MpIAsyncComboBoxViewModel,
-        MpISidebarItemViewModel {
+        MpISidebarItemViewModel,
+        MpIPopupMenuPicker {
         #region Private Variables
 
         private string _processAutomationGuid = "e7e25c85-1c8f-4e79-be8f-2ebfcb5bb94e";
@@ -34,13 +27,64 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region Properties
+        #region Interfaces
 
-        #region MpAvTreeSelectorViewModelBase Overrides
+        #region MpIPopupMenuPicker Implementation
 
-        public override MpITreeItemViewModel ParentTreeItem => null;
+        public MpMenuItemViewModel GetMenu(ICommand cmd, IEnumerable<int> selectedAnalyticItemPresetIds, bool recursive) {
+            return new MpMenuItemViewModel() {
+                SubItems = Items.Select(x =>
+                new MpMenuItemViewModel() {
+                    Header = x.Title,
+                    IconId = x.PluginIconId,
+                    SubItems = x.Items.Select(y => y.GetMenu(cmd,selectedAnalyticItemPresetIds,recursive)).ToList()
+                }).ToList()
+            };
+        }
 
         #endregion
+
+        #region MpISidebarItemViewModel Implementation
+        private double _defaultSelectorColumnVarDimLength = 350;
+        private double _defaultParameterColumnVarDimLength = 450;
+        public double DefaultSidebarWidth {
+            get {
+                if (MpAvMainWindowViewModel.Instance.IsVerticalOrientation) {
+                    return MpAvMainWindowViewModel.Instance.MainWindowWidth;
+                }
+                double w = _defaultSelectorColumnVarDimLength;
+                if (SelectedPresetViewModel != null) {
+                    w += _defaultParameterColumnVarDimLength;
+                }
+                return w;
+            }
+        }
+        public double DefaultSidebarHeight {
+            get {
+                if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+                    return MpAvClipTrayViewModel.Instance.ClipTrayScreenHeight;
+                }
+                double h = _defaultSelectorColumnVarDimLength;
+                //if (SelectedPresetViewModel != null) {
+                //    h += _defaultParameterColumnVarDimLength;
+                //}
+                return h;
+            }
+        }
+        public double SidebarWidth { get; set; } = 0;
+        public double SidebarHeight { get; set; } = 0;
+
+        #endregion
+
+        #region MpISelectableViewModel Implementation
+
+        public bool IsSelected { get; set; }
+
+        public DateTime LastSelectedDateTime { get; set; }
+
+
+        #endregion
+
 
         #region MpIAsyncComboBoxViewModel Implementation
 
@@ -55,6 +99,16 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #endregion
+        #endregion
+
+        #region Properties
+
+        #region MpAvTreeSelectorViewModelBase Overrides
+
+        public override MpITreeItemViewModel ParentTreeItem => null;
+
+        #endregion
+
 
         #region View Models
 
@@ -94,45 +148,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpISidebarItemViewModel Implementation
-        private double _defaultSelectorColumnVarDimLength = 350;
-        private double _defaultParameterColumnVarDimLength = 450;
-        public double DefaultSidebarWidth {
-            get {
-                if(MpAvMainWindowViewModel.Instance.IsVerticalOrientation) {
-                    return MpAvMainWindowViewModel.Instance.MainWindowWidth;
-                }
-                double w = _defaultSelectorColumnVarDimLength;
-                if (SelectedPresetViewModel != null) {
-                    w += _defaultParameterColumnVarDimLength;
-                }
-                return w;
-            }
-        }
-        public double DefaultSidebarHeight {
-            get {
-                if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                    return MpAvClipTrayViewModel.Instance.ClipTrayScreenHeight;
-                }
-                double h = _defaultSelectorColumnVarDimLength;
-                //if (SelectedPresetViewModel != null) {
-                //    h += _defaultParameterColumnVarDimLength;
-                //}
-                return h;
-            }
-        }
-        public double SidebarWidth { get; set; } = 0;
-        public double SidebarHeight { get; set; } = 0;
-
-        #endregion
-        #region MpISelectableViewModel Implementation
-
-        public bool IsSelected { get; set; }
-
-        public DateTime LastSelectedDateTime { get; set; }
-
-
-        #endregion
 
         #region Layout
 
@@ -214,16 +229,6 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
-        public MpMenuItemViewModel GetAnalyzerMenu(ICommand cmd) {
-            return new MpMenuItemViewModel() {
-                SubItems = Items.Select(x =>
-                new MpMenuItemViewModel() {                    
-                    Header = x.Title,
-                    IconId = x.PluginIconId,
-                    SubItems = x.Items.Select(y => y.GetMenu(cmd)).ToList()
-                }).ToList()
-            };
-        }
         #endregion
 
         #region Private Methods

@@ -21,44 +21,40 @@ namespace MonkeyPaste.Avalonia {
         MpIActionComponent, 
         MpIUserIconViewModel,
         //MpIUserColorViewModel,
-        MpAvIShortcutCommand, 
-        MpIPluginComponentViewModel,
+        MpAvIShortcutCommandViewModel, 
+        MpIPluginComponentViewModel, 
+        MpIPopupMenuPicker,
         MpAvIPluginParameterCollectionViewModel {
-        #region Properties
 
-        #region MpAvTreeSelectorViewModelBase Overrides
+        #region Interfaces
 
-        public override MpAvAnalyticItemViewModel ParentTreeItem => Parent;
+        #region MpIPopupMenuPicker Implementation
 
-        #endregion
-
-        #region MpILabelTextViewModel Implementation
-
-        string MpILabelText.LabelText => Label;
-        #endregion
-
-        #region View Models
-
-        public Dictionary<object, MpAvPluginParameterViewModelBase> ParamLookup => 
-            Items.ToDictionary(x => x.ParamId,x => x); 
-        public MpMenuItemViewModel ContextMenuItemViewModel {
-            get {
-                return new MpMenuItemViewModel() {
-                    Header = Label,
-                    Command = MpAvClipTrayViewModel.Instance.AnalyzeSelectedItemCommand,
-                    CommandParameter = AnalyticItemPresetId,
-                    IconId = IconId,
-                    //ShortcutType = MpShortcutType.AnalyzeCopyItemWithPreset,
-                    //ShortcutObjId = AnalyticItemPresetId,
-                    ShortcutArgs = new object[] {
-                        MpShortcutType.AnalyzeCopyItemWithPreset,
-                        AnalyticItemPresetId}
-                };
-            }
+        public MpMenuItemViewModel GetMenu(ICommand cmd, IEnumerable<int> selectedAnalyticItemPresetIds, bool recursive) {
+            return new MpMenuItemViewModel() {
+                MenuItemId = AnalyticItemPresetId,
+                Header = Label,
+                IconId = IconId,
+                Command = cmd,
+                CommandParameter = AnalyticItemPresetId,
+                IsChecked = selectedAnalyticItemPresetIds.Contains(AnalyticItemPresetId)
+            };
         }
 
-        public IEnumerable<MpAvPluginParameterViewModelBase> VisibleItems => Items.Where(x => x.IsVisible);
+        #endregion
 
+        #region MpIActionComponent Implementation
+
+        void MpIActionComponent.RegisterActionComponent(MpIInvokableAction mvm) {
+            Parent.OnAnalysisCompleted += mvm.OnActionInvoked;
+            MpConsole.WriteLine($"Analyzer {Parent.Title}-{Label} Registered {mvm.Label} matcher");
+        }
+
+
+        void MpIActionComponent.UnregisterActionComponent(MpIInvokableAction mvm) {
+            Parent.OnAnalysisCompleted -= mvm.OnActionInvoked;
+            MpConsole.WriteLine($"Analyzer {Parent.Title}-{Label} unregistered {mvm.Label} matcher");
+        }
         #endregion
 
         #region MpISelectableViewModel Implementation
@@ -94,6 +90,13 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+
+        #region MpILabelTextViewModel Implementation
+
+        string MpILabelText.LabelText => Label;
+        #endregion
+
+
         #region MpAvIPluginParameterCollectionViewModel Implementation
 
         IEnumerable<MpAvPluginParameterViewModelBase>
@@ -105,6 +108,39 @@ namespace MonkeyPaste.Avalonia {
             set => SelectedItem = value;
         }
 
+
+        #endregion
+        #endregion
+
+        #region Properties
+
+        #region MpAvTreeSelectorViewModelBase Overrides
+
+        public override MpAvAnalyticItemViewModel ParentTreeItem => Parent;
+
+        #endregion
+
+        #region View Models
+
+        public Dictionary<object, MpAvPluginParameterViewModelBase> ParamLookup => 
+            Items.ToDictionary(x => x.ParamId,x => x); 
+        public MpMenuItemViewModel ContextMenuItemViewModel {
+            get {
+                return new MpMenuItemViewModel() {
+                    Header = Label,
+                    Command = MpAvClipTrayViewModel.Instance.AnalyzeSelectedItemCommand,
+                    CommandParameter = AnalyticItemPresetId,
+                    IconId = IconId,
+                    //ShortcutType = MpShortcutType.AnalyzeCopyItemWithPreset,
+                    //ShortcutObjId = AnalyticItemPresetId,
+                    ShortcutArgs = new object[] {
+                        MpShortcutType.AnalyzeCopyItemWithPreset,
+                        AnalyticItemPresetId}
+                };
+            }
+        }
+
+        public IEnumerable<MpAvPluginParameterViewModelBase> VisibleItems => Items.Where(x => x.IsVisible);
 
         #endregion
 
@@ -294,7 +330,7 @@ namespace MonkeyPaste.Avalonia {
         
         #endregion
 
-        #region MpAvIShortcutCommand Implementation
+        #region MpAvIShortcutCommandViewModel Implementation
 
         public MpShortcutType ShortcutType => MpShortcutType.AnalyzeCopyItemWithPreset;
 
@@ -368,65 +404,13 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public async Task<MpAvPluginParameterViewModelBase> CreateParameterViewModel(MpPluginPresetParameterValue aipv) {
-            //MpPluginParameterControlType controlType = AnalyzerFormat.parameters.FirstOrDefault(x => x.paramId == aipv.ParamId).controlType;
-
-            //MpAvPluginParameterViewModelBase naipvm = null;
-
-            //switch (controlType) {
-            //    case MpPluginParameterControlType.List:
-            //    case MpPluginParameterControlType.MultiSelectList:
-            //    case MpPluginParameterControlType.EditableList:
-            //    case MpPluginParameterControlType.ComboBox:
-            //        naipvm = new MpAvEnumerableParameterViewModel(this);
-            //        break;
-            //    case MpPluginParameterControlType.PasswordBox:
-            //    case MpPluginParameterControlType.TextBox:
-            //        naipvm = new MpAvTextBoxParameterViewModel(this);
-            //        break;
-            //    case MpPluginParameterControlType.CheckBox:
-            //        naipvm = new MpAvCheckBoxParameterViewModel(this);
-            //        break;
-            //    case MpPluginParameterControlType.Slider:
-            //        naipvm = new MpAvSliderParameterViewModel(this);
-            //        break;
-            //    case MpPluginParameterControlType.DirectoryChooser:
-            //    case MpPluginParameterControlType.FileChooser:
-            //        naipvm = new MpAvFileChooserParameterViewModel(this);
-            //        break;
-            //    default:
-            //        throw new Exception(@"Unsupported Paramter type: " + Enum.GetName(typeof(MpPluginParameterControlType), controlType));
-            //}
-            //naipvm.OnValidate += ParameterViewModel_OnValidate;
-
-
-            //await naipvm.InitializeAsync(aipv);
-
             var naipvm = await MpAvPluginParameterBuilder.CreateParameterViewModelAsync(aipv, Parent, this);
             naipvm.OnValidate += ParameterViewModel_OnValidate;
 
             return naipvm;
         }
 
-        public void RegisterActionComponent(MpIInvokableAction mvm) {
-            Parent.OnAnalysisCompleted += mvm.OnActionInvoked;
-            MpConsole.WriteLine($"Analyzer {Parent.Title}-{Label} Registered {mvm.Label} matcher");
-        }
 
-
-        public void UnregisterActionComponent(MpIInvokableAction mvm) {
-            Parent.OnAnalysisCompleted -= mvm.OnActionInvoked;
-            MpConsole.WriteLine($"Analyzer {Parent.Title}-{Label} unregistered {mvm.Label} matcher");
-        }
-
-        public MpMenuItemViewModel GetMenu(ICommand cmd) {
-            return new MpMenuItemViewModel() {
-                MenuItemId = AnalyticItemPresetId,
-                Header = Label,
-                IconId = IconId,
-                Command = cmd,
-                CommandParameter = AnalyticItemPresetId
-            };
-        }
 
         #endregion
 
@@ -477,9 +461,7 @@ namespace MonkeyPaste.Avalonia {
             switch(e.PropertyName) {
                 case nameof(IsSelected):
                     if(IsSelected) {
-                        //if (Parent.IsSidebarVisible) {
-                            LastSelectedDateTime = DateTime.Now;
-                        //}
+                        LastSelectedDateTime = DateTime.Now;
 
                         Parent.OnPropertyChanged(nameof(Parent.IsSelected));
                         if(Parent.SelectedItem != this) {
@@ -507,39 +489,6 @@ namespace MonkeyPaste.Avalonia {
             } 
         }
 
-        //private async Task<IEnumerable<MpPluginPresetParameterValue>> PrepareParameterValueModelsAsync() {
-        //    // get all preset values from db
-        //    var presetValues = await MpDataModelProvider.GetPluginPresetValuesByPresetIdAsync(AnalyticItemPresetId);
-
-        //    // loop through plugin formats parameters and add or replace (if found in db) to the preset values
-        //    foreach (var paramFormat in AnalyzerFormat.parameters) {
-        //        if (!presetValues.Any(x => paramFormat.paramId.Equals(x.ParamId))) {
-        //            // if no value is found in db for a parameter defined in manifest...
-
-        //            string paramVal = string.Empty;
-        //            if (paramFormat.values != null && paramFormat.values.Count > 0) {
-        //                // if parameter has a predefined value (a case when not would be a text box that needs input so its value is empty)
-        //                if (paramFormat.values.Any(x => x.isDefault)) {
-        //                    // when manifest identifies a value as default choose that for value
-        //                    paramVal = paramFormat.values.Where(x => x.isDefault).Select(x => x.value).ToList().ToCsv();
-        //                } else {
-        //                    // if no default is defined use first available value
-        //                    paramVal = paramFormat.values[0].value;
-        //                }
-        //            }
-        //            var newPresetVal = await MpPluginPresetParameterValue.CreateAsync(
-        //                presetId: Preset.Id,
-        //                paramId: paramFormat.paramId,
-        //                value: paramVal
-        //                //format: paramFormat
-        //                );
-
-        //            presetValues.Add(newPresetVal);
-        //        }
-        //    }
-        //    //presetValues.ForEach(x => x.ParameterFormat = AnalyzerFormat.parameters.FirstOrDefault(y => y.paramName == x.ParamName));
-        //    return presetValues;
-        //}
         #endregion
 
         #region Commands

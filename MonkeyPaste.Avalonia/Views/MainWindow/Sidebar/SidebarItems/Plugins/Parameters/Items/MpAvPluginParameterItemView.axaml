@@ -16,8 +16,11 @@
             Background="{DynamicResource PluginParameterItemBgBrush}"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
-        <Grid ShowGridLines="False"
-              ColumnDefinitions="150,150">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition MinWidth="150" />
+            </Grid.ColumnDefinitions>
             <DockPanel Grid.Column="0"
                        LastChildFill="False"
                        HorizontalAlignment="Stretch"
@@ -125,6 +128,20 @@
                         <DataTemplate x:Key="FileChooserParameterTemplate"
                                       DataType="local:MpAvFileChooserParameterViewModel">
                             <local:MpAvFileChooserParameterView DataContext="{Binding}" />
+                        </DataTemplate>
+
+                        <!--  Component Picker Parameter  -->
+
+                        <DataTemplate x:Key="ComponentPickerParameterTemplate"
+                                      DataType="local:MpAvComponentPickerParameterViewModel">
+                            <local:MpAvComponentPickerParameterView DataContext="{Binding}" />
+                        </DataTemplate>
+
+                        <!--  Shortcut Recorder Parameter  -->
+
+                        <DataTemplate x:Key="ShortcutRecorderParameterTemplate"
+                                      DataType="local:MpAvShortcutRecorderParameterViewModel">
+                            <local:MpAvShortcutRecorderParameterView DataContext="{Binding}" />
                         </DataTemplate>
                     </local:MpAvPluginParameterTemplateSelector>
                 </ContentControl.DataTemplates>

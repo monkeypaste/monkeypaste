@@ -19,6 +19,7 @@ namespace MonkeyPaste.Avalonia {
         public MpICursor Cursor { get; set; }
         public MpIDbInfo DbInfo { get; set; }
 
+        public MpIApplicationCommandManager AppCommandManager { get; set; }
         public MpIQueryInfo QueryInfo { get; set; }
         public MpIIconBuilder IconBuilder { get; set; }
         public MpIUrlBuilder UrlBuilder { get; set; }
@@ -76,6 +77,8 @@ namespace MonkeyPaste.Avalonia {
             UrlBuilder = new MpUrlBuilder();
             AppBuilder = new MpAvAppBuilder();
             SourceRefBuilder = new MpAvSourceRefBuilder();
+
+            AppCommandManager = new MpAvApplicationCommandManager();
 
             CustomColorChooserMenu = new MpAvCustomColorChooser();
             CustomColorChooserMenuAsync = CustomColorChooserMenu as MpICustomColorChooserMenuAsync;

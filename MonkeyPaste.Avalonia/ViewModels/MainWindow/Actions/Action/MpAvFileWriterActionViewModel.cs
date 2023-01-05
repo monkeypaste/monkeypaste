@@ -20,7 +20,12 @@ namespace MonkeyPaste.Avalonia {
 
     public class MpAvFileWriterActionViewModel : 
         MpAvActionViewModelBase, MpITooltipInfoViewModel {
+        #region Constants
 
+        public const string SELECTED_DIR_PARAM_ID = "SelectedDirectory";
+        public const string CUSTOM_FILE_NAME_PARAM_ID = "CustomName";
+
+        #endregion
         #region MpIPluginHost Overrides
 
         private MpActionPluginFormat _actionComponentFormat;
@@ -34,7 +39,7 @@ namespace MonkeyPaste.Avalonia {
                                 controlType = MpPluginParameterControlType.DirectoryChooser,
                                 unitType = MpPluginParameterValueUnitType.FileSystemPath,
                                 isRequired = true,
-                                paramId = "1",
+                                paramId = SELECTED_DIR_PARAM_ID,
                                 description = "The directory where input content will be written."
                             },
                             new MpPluginParameterFormat() {
@@ -42,7 +47,7 @@ namespace MonkeyPaste.Avalonia {
                                 controlType = MpPluginParameterControlType.TextBox,
                                 unitType = MpPluginParameterValueUnitType.PlainTextContentQuery,
                                 isRequired = false,
-                                paramId = "2",
+                                paramId = CUSTOM_FILE_NAME_PARAM_ID,
                                 description = "When left blank, the content will use its title as the file name."
                             },
                         }
@@ -80,17 +85,17 @@ namespace MonkeyPaste.Avalonia {
 
         #region Model
 
-        // Arg1
         public string FileSystemPath {
             get {
-                if (Arg1 == null) {
-                    return null;
+                if (ArgLookup.TryGetValue(SELECTED_DIR_PARAM_ID, out var param_vm) &&
+                    param_vm.CurrentValue is string curVal) {
+                    return curVal;
                 }
-                return Arg1;
+                return string.Empty;
             }
             set {
                 if (FileSystemPath != value) {
-                    Arg1 = value;
+                    ArgLookup[SELECTED_DIR_PARAM_ID].CurrentValue = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(FileSystemPath));
                 }
@@ -101,14 +106,15 @@ namespace MonkeyPaste.Avalonia {
 
         public string NamePrefix {
             get {
-                if(Arg2 == null) {
-                    return null;
+                if (ArgLookup.TryGetValue(CUSTOM_FILE_NAME_PARAM_ID, out var param_vm) &&
+                    param_vm.CurrentValue is string curVal) {
+                    return curVal;
                 }
-                return Arg2;
+                return string.Empty;
             }
             set {
-                if(NamePrefix != value) {
-                    Arg2 = value;
+                if (NamePrefix != value) {
+                    ArgLookup[CUSTOM_FILE_NAME_PARAM_ID].CurrentValue = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(NamePrefix));
                 }
