@@ -53,14 +53,14 @@ namespace MonkeyPaste.Common.Wpf {
             return Regex.Replace(str, "[^a-zA-Z0-9_.]+", string.Empty, RegexOptions.Compiled);
         }
 
-        public static string ToCsv(this string str) {
+        public static string RtfTableToCsv(this string str) {
             if (string.IsNullOrWhiteSpace(str)) {
                 return str == null ? string.Empty : str;
             }
             return MpCsvToRtfTableConverter.GetCsv(str);
         }
 
-        public static string ToPlainText(this string str) {
+        public static string RtfToPlainText(this string str) {
             if (str == null) {
                 return string.Empty;
             }

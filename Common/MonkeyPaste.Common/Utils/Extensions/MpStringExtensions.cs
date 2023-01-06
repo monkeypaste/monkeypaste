@@ -66,15 +66,6 @@ namespace MonkeyPaste.Common {
 
         #region Converters
 
-        public static string ToRichHtmlTable(this string csvStr, MpCsvFormatProperties csvProps = null) {
-            return MpCsvToRichHtmlTableConverter.CreateRichHtmlTableFromCsv(csvStr, csvProps);
-        }
-
-        public static string ToCsv(this string str) {
-            // (currently) this assumes csvStr is html table and down converting 
-            string csvStr = MpCsvToRichHtmlTableConverter.RichHtmlTableToCsv(str);
-            return csvStr;
-        }
         public static string ToPlainText(this string text, string sourceFormat = "") {
             sourceFormat = sourceFormat.ToLower();
             if (sourceFormat == "text") {
@@ -352,44 +343,7 @@ namespace MonkeyPaste.Common {
             return fallbackBase64Str;
         }
 
-        public static string ToCsv(this List<string> strList) {
-            if(strList == null || strList.Count == 0) {
-                return string.Empty;
-            }
-            return string.Join(",", strList);
-
-            //using (var mem = new MemoryStream())
-            //using (var writer = new StreamWriter(mem))
-            //using (var csvWriter = new CsvWriter(writer, new CsvConfiguration(CultureInfo.InvariantCulture) {
-            //    Delimiter = ",",
-            //})) {
-            //    foreach (var str in strList) {
-            //        csvWriter.WriteField(str);
-            //        csvWriter.NextRecord();
-            //    }
-            //    writer.Flush();
-            //    return Encoding.UTF8.GetString(mem.ToArray());
-            //}
-        }
-        public static List<string> ToListFromCsv(this string csvStr) {
-            return csvStr.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
-            //List<string> result = new List<string>();
-            //string value;
-            //using (var strStream = new StreamReader(csvStr.ToStream(), Encoding.Default)) {
-            //    using (var csv = new CsvReader(
-            //        strStream,
-            //        new CsvConfiguration(CultureInfo.InvariantCulture) {
-            //            MissingFieldFound = null, Delimiter=","
-            //        })) {
-            //        while (csv.Read()) {
-            //            for (int i = 0; csv.TryGetField<string>(i, out value); i++) {
-            //                result.Add(value);
-            //            }
-            //        }
-            //    }
-            //}
-            //return result;
-        }
+       
 
 
         public static TEnum ToEnum<TEnum>(this object obj, bool ignoreCase = true, TEnum notFoundValue = default) where TEnum: struct {
@@ -544,6 +498,14 @@ namespace MonkeyPaste.Common {
             return null;
         }
 
+        public static bool IsKnownImageFile(this string str) {
+            if(!str.IsFile()) {
+                return false;
+            }
+            string[] image_exts = new string[] { "png", "gif", "jpg", "jpeg", "bmp" };
+            return image_exts.Any(x => x == Path.GetExtension(str).ToLower());
+        }
+
         public static bool IsFile(this string str) {
             return File.Exists(str);
         }
@@ -674,7 +636,7 @@ namespace MonkeyPaste.Common {
             if (string.IsNullOrEmpty(str)) {
                 return false;
             }
-            if (str.Length % 4 != 0 || str.Length < 100) {
+            if (str.Length % 4 != 0) {
                 return false;
             }
             return !MpRegEx.RegExLookup[MpRegExType.Is_NOT_Base64Str].IsMatch(str);

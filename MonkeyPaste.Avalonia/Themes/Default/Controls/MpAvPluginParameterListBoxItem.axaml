@@ -13,6 +13,21 @@
                 Value="Stretch" />
     </Style>
 
+    <Style Selector="ListBox#PluginParameterListBox ListBoxItem:nth-child(odd) Border#OuterParameterItemBorder">
+        <Setter Property="Background"
+                Value="{DynamicResource PluginParameterItemBgBrush1}" />
+    </Style>
+
+    <Style Selector="ListBox#PluginParameterListBox ListBoxItem:nth-child(even) Border#OuterParameterItemBorder">
+        <Setter Property="Background"
+                Value="{DynamicResource PluginParameterItemBgBrush2}" />
+    </Style>
+
+    <Style Selector="ListBox#PluginParameterListBox ListBoxItem:pointerover Border#OuterParameterItemBorder">
+        <Setter Property="Background"
+                Value="{DynamicResource PluginParameterItemHoverBgBrush}" />
+    </Style>
+
     <Style Selector="Border.paramBorder">
         <Setter Property="Margin"
                 Value="10,2" />

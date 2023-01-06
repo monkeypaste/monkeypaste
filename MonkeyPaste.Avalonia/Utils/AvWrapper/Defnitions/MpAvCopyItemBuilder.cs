@@ -237,7 +237,7 @@ namespace MonkeyPaste.Avalonia {
                 inputTextFormat = "html";
                 itemType = MpCopyItemType.Text;
                 //itemData = csvStr.ToRichText();
-                itemData = csvStr.ToRichHtmlTable();
+                itemData = csvStr.CsvStrToRichHtmlTable();
 
                 //if (mpdo.ContainsData(MpPortableDataFormats.AvRtf_bytes) && 
                 //    mpdo.GetData(MpPortableDataFormats.AvRtf_bytes) is byte[] rtfCsvBytes) {

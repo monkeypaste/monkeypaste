@@ -2869,7 +2869,7 @@ namespace MonkeyPaste.Avalonia {
             (args) => {
                 string pt = string.Join(
                             Environment.NewLine,
-                            MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Select(x => x.ItemData.ToPlainText()));
+                            MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Select(x => x.ItemData.RtfToPlainText()));
 
                 //MpHelpers.OpenUrl(args.ToString() + Uri.EscapeDataString(pt));
             }, (args) => args != null && args is string);

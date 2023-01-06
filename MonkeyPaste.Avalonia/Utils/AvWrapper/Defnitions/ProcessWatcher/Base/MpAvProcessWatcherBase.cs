@@ -177,7 +177,10 @@ namespace MonkeyPaste.Avalonia {
         public abstract IntPtr GetParentHandleAtPoint(MpPoint poIntPtr);
 
         public abstract IntPtr SetActiveProcess(IntPtr handle);
+        public abstract IntPtr SetActiveProcess(IntPtr handle, ProcessWindowStyle windowStyle);
 
+        public abstract bool IsAdmin(object handleIdOrTitle);
+        public abstract ProcessWindowStyle GetWindowStyle(object handleIdOrTitle);
 
         public virtual string GetProcessApplicationName(IntPtr hWnd) {
             string mwTitle = GetProcessTitle(hWnd);
@@ -211,6 +214,21 @@ namespace MonkeyPaste.Avalonia {
             }
             return RunningProcessLookup.Any(x => x.Value.Contains(handle));
         }
+
+
+        public virtual Process GetProcess(object handleIdOrTitle) {
+            if(handleIdOrTitle is IntPtr handle) {
+                return FindProcess(handle);
+            }
+            if(handleIdOrTitle is int id) {
+                return FindProcess(id);
+            }
+            if(handleIdOrTitle is string title) {
+                return FindProcess(title);
+            }
+            return null;
+        }
+
         #endregion
 
         #region Protected Methods
@@ -266,6 +284,18 @@ namespace MonkeyPaste.Avalonia {
             };
         }
 
+
+        private Process FindProcess(IntPtr handle) => FindProcess(p => p.Handle == handle);
+        private Process FindProcess(int id) => FindProcess(p => p.Id == id);
+        private Process FindProcess(string title) => FindProcess(p => p.MainWindowTitle == title);
+        private Process FindProcess(Func<Process, bool> comparer) {
+            foreach (Process p in Process.GetProcesses()) {
+                if (comparer(p)) {
+                    return p;
+                }
+            }
+            return null;
+        }
 
         #endregion
     }

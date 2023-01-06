@@ -77,7 +77,15 @@
             OldLace
         </Color>
 
-        <Color x:Key="PluginParameterItemBgColor">
+        <Color x:Key="PluginParameterItemBgColor1">
+            DarkMagenta
+        </Color>
+
+        <Color x:Key="PluginParameterItemBgColor2">
+            DarkMagenta
+        </Color>
+
+        <Color x:Key="PluginParameterItemHoverBgColor">
             DarkViolet
         </Color>
 
@@ -211,8 +219,16 @@
 
         <!--  PARAMETERS  -->
 
-        <SolidColorBrush x:Key="PluginParameterItemBgBrush"
-                         Color="{DynamicResource PluginParameterItemBgColor}"
+        <SolidColorBrush x:Key="PluginParameterItemBgBrush1"
+                         Color="{DynamicResource PluginParameterItemBgColor1}"
+                         Opacity="{DynamicResource GlobalInteractiveBgOpacity}" />
+
+        <SolidColorBrush x:Key="PluginParameterItemBgBrush2"
+                         Color="{DynamicResource PluginParameterItemBgColor2}"
+                         Opacity="{DynamicResource GlobalInteractiveBgOpacity}" />
+
+        <SolidColorBrush x:Key="PluginParameterItemHoverBgBrush"
+                         Color="{DynamicResource PluginParameterItemHoverBgColor}"
                          Opacity="{DynamicResource GlobalInteractiveBgOpacity}" />
         <!--  TAG TREE  -->
         <SolidColorBrush x:Key="TagTreeBgBrush"

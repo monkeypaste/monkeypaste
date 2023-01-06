@@ -13,7 +13,6 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvPluginParameterItemView">
     <Border x:Name="OuterParameterItemBorder"
-            Background="{DynamicResource PluginParameterItemBgBrush}"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
         <Grid>

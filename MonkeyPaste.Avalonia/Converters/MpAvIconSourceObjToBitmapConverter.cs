@@ -22,7 +22,8 @@ namespace MonkeyPaste.Avalonia {
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
             double scale = 1.0d;
             List<string> paramParts = parameter == null ? new List<string>() : parameter.ToString().Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries).ToList();
-            
+            bool isFilePathIcon = paramParts.Any(x => x.ToLower() == "pathicon");
+
             if(paramParts.FirstOrDefault(x=>x.StartsWith("scale_")) is string paramStr) {
                 try {
                     scale = double.Parse(paramStr.ToLower().Replace("scale_", String.Empty));
@@ -73,15 +74,19 @@ namespace MonkeyPaste.Avalonia {
                     return new MpAvStringBase64ToBitmapConverter().Convert(valStr, null, null, CultureInfo.CurrentCulture);
                 }
                 if(valStr.IsFile()) {
-                    try {
-                        using (var fs = new FileStream(valStr, FileMode.Open)) {
-                            return new Bitmap(fs);
+                    if(valStr.IsKnownImageFile() && !isFilePathIcon) {
+                        try {
+                            using (var fs = new FileStream(valStr, FileMode.Open)) {
+                                return new Bitmap(fs);
+                            }
                         }
-                    }catch(Exception ex) {
-                        MpConsole.WriteTraceLine($"Error convert img path to bitmap. Path: '{valStr}'", ex);
-                        return null;
+                        catch (Exception ex) {
+                            MpConsole.WriteTraceLine($"Error convert img path to bitmap. Path: '{valStr}'", ex);
+                            return null;
+                        }
                     }
-                    
+                    string appIconBase64 = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(valStr);
+                    return new MpAvStringBase64ToBitmapConverter().Convert(appIconBase64, null, null, CultureInfo.CurrentCulture);
                 }
             } 
             return null;

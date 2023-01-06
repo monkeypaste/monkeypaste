@@ -157,7 +157,7 @@
                                                   IsChecked="{Binding IsQuickAction, Mode=TwoWay}">
 
                                         <ToolTip.Tip>
-                                            <local:MpAvToolTipView ToolTipText="Favorite" />
+                                            <local:MpAvToolTipView ToolTipText="Quick Action" />
                                         </ToolTip.Tip>
                                         <Grid>
                                             <Image x:Name="StarOutline"

@@ -50,7 +50,15 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIProcessWatcher Overrides
-
+        public override bool IsAdmin(object handleIdOrTitle) {
+            throw new NotImplementedException();
+        }
+        public override ProcessWindowStyle GetWindowStyle(object handleIdOrTitle) {
+            throw new NotImplementedException();
+        }
+        public override IntPtr SetActiveProcess(IntPtr handle, ProcessWindowStyle windowStyle) {
+            throw new NotImplementedException();
+        }
         public override IntPtr GetParentHandleAtPoint(MpPoint poIntPtr) {
             return IntPtr.Zero;
         }

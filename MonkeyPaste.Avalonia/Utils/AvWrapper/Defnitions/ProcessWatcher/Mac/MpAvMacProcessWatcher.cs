@@ -21,13 +21,21 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
+        public override ProcessWindowStyle GetWindowStyle(object handleIdOrTitle) {
+            throw new NotImplementedException();
+        }
+        public override bool IsAdmin(object handleIdOrTitle) {
+            throw new NotImplementedException();
+        }
         public override IntPtr SetActiveProcess(IntPtr handle) {
             throw new NotImplementedException();
         }
         public override IntPtr GetParentHandleAtPoint(MpPoint poIntPtr) {
             throw new NotImplementedException();
         }
-
+        public override IntPtr SetActiveProcess(IntPtr handle, ProcessWindowStyle windowStyle) {
+            throw new NotImplementedException();
+        }
         //public override string getprocessapplicationname(intptr handle) {
         //    var runningapps = nsworkspace.sharedworkspace.runningapplications;
         //    var matchapp = runningapps.firstordefault(x => x.handle == handle);

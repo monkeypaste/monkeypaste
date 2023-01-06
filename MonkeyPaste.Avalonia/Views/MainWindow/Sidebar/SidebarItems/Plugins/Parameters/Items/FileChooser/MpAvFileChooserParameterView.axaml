@@ -12,28 +12,43 @@
                        d:DesignHeight="450"
                        d:DesignWidth="800">
     <Border Classes="paramBorder">
+        <Border.Styles>
+            <Style Selector="Button:not(.empty) TextBlock"
+                   x:DataType="local:MpAvFileChooserParameterViewModel">
+                <Setter Property="Text"
+                        Value="{Binding CurrentValue, Converter={StaticResource AbsoluteToRelativePathStringConverter}}" />
+            </Style>
+            <Style Selector="Button.empty TextBlock"
+                   x:DataType="local:MpAvFileChooserParameterViewModel">
+                <Setter Property="Text"
+                        Value="Select..." />
+            </Style>
+            <Style Selector="Button:not(.empty) Image"
+                   x:DataType="local:MpAvFileChooserParameterViewModel">
+                <Setter Property="Source"
+                        Value="{Binding CurrentValue, ConverterParameter=pathIcon, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
+            </Style>
+            <Style Selector="Button.empty Image"
+                   x:DataType="local:MpAvFileChooserParameterViewModel">
+                <Setter Property="Source"
+                        Value="{Binding Source={StaticResource QuestionMarkImage}, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
+            </Style>
+        </Border.Styles>
         <ToolTip.Tip>
             <local:MpAvToolTipView ToolTipText="{Binding CurrentValue}" />
         </ToolTip.Tip>
         <Button MaxWidth="150"
                 MinWidth="100"
+                Classes.defaultButton="True"
+                Classes.iconTextButton="True"
+                Classes.empty="{Binding CurrentValue, ConverterParameter=flip, Converter={StaticResource IsNotNullZeroOrEmptyToBoolConverter}}"
                 HorizontalAlignment="Center"
                 HorizontalContentAlignment="Center"
-                Classes="defaultButton textOnlyButton"
                 Command="{Binding SelectFileSystemPathCommand}">
-            <Button.Styles>
-                <Style Selector="TextBlock:not(.empty)"
-                       x:DataType="local:MpAvFileChooserParameterViewModel">
-                    <Setter Property="Text"
-                            Value="{Binding CurrentValue, Converter={StaticResource AbsoluteToRelativePathStringConverter}}" />
-                </Style>
-                <Style Selector="TextBlock.empty"
-                       x:DataType="local:MpAvFileChooserParameterViewModel">
-                    <Setter Property="Text"
-                            Value="Select..." />
-                </Style>
-            </Button.Styles>
-            <TextBlock Classes.empty="{Binding CurrentValue, ConverterParameter=flip, Converter={StaticResource IsNotNullZeroOrEmptyToBoolConverter}}" />
+            <DockPanel LastChildFill="False">
+                <Image DockPanel.Dock="Left" />
+                <TextBlock DockPanel.Dock="Right" />
+            </DockPanel>
         </Button>
     </Border>
 </local:MpAvUserControl>

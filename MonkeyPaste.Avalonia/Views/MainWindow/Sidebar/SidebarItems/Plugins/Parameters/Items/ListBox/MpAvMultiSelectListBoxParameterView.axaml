@@ -20,7 +20,6 @@
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Stretch"
                  Items="{Binding Items}"
-                 Selection="{Binding Selection}"
                  SelectionMode="Multiple,Toggle"
                  Margin="0"
                  Padding="0"
@@ -37,8 +36,8 @@
                             Value="1" />
                     <Setter Property="HorizontalAlignment"
                             Value="Stretch" />
-                    <Setter Property="IsSelected"
-                            Value="{Binding IsSelected, Mode=TwoWay}" />
+                    <!--<Setter Property="IsSelected"
+                            Value="{Binding IsSelected, Mode=TwoWay}" />-->
                     <Setter Property="Cursor"
                             Value="Hand" />
                 </Style>

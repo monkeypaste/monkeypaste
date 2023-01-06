@@ -376,17 +376,25 @@ namespace MonkeyPaste.Avalonia {
 
             Preset = aip;
 
-            if(AnalyzerFormat == null) {
-                Debugger.Break();
-            }
+            //if (AnalyticItemPresetId == 774) {
+            //    Debugger.Break();
+            //}
 
             // get all preset values from db
             //var presetValues = await PrepareParameterValueModelsAsync();
             var presetValues = await MpAvPluginParameterValueLocator.LocateValuesAsync(
                 MpParameterHostType.Preset, AnalyticItemPresetId, Parent);
+            var paramLookup = new Dictionary<string, List<MpPluginPresetParameterValue>>();
+            foreach(var pv in presetValues) {
+                if(!paramLookup.ContainsKey(pv.ParamId)) {
+                    paramLookup.Add(pv.ParamId, new List<MpPluginPresetParameterValue>());
+                }
+                paramLookup[pv.ParamId].Add(pv);
+            }
 
-            foreach (var paramVal in presetValues) {                                
-                var naipvm = await CreateParameterViewModel(paramVal);
+           // var valLookup = presetValues.ToDictionary<string, List<MpPluginPresetParameterValue>>(x => x.ParamId, x=>x.Sele)
+            foreach (var paramValGroup in presetValues) {                                
+                var naipvm = await CreateParameterViewModel(paramValGroup);
                 Items.Add(naipvm);
             }
 
@@ -467,6 +475,12 @@ namespace MonkeyPaste.Avalonia {
                         if(Parent.SelectedItem != this) {
                             Parent.SelectedItem = this;
                         }
+
+                        Items.Where(x => x is MpAvEnumerableParameterViewModel)
+                            .Cast<MpAvEnumerableParameterViewModel>()
+                           .SelectMany(x => x.Items)
+                           .ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
+
                     } else {
                         IsLabelReadOnly = true;
                     }

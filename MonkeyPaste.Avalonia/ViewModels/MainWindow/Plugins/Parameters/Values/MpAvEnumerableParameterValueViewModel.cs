@@ -129,6 +129,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public MpCsvFormatProperties CsvProperties =>
+            Parent == null ? MpCsvFormatProperties.Default : Parent.CsvProperties;
+
         public bool IsHovering { get; set; } = false;
 
         public bool IsSelected { get; set; } = false;
@@ -158,7 +161,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvEnumerableParameterValueViewModel() : base(null) { }
+        public MpAvEnumerableParameterValueViewModel() : this(null) { }
 
         public MpAvEnumerableParameterValueViewModel(MpAvEnumerableParameterViewModel parent) : base(parent) {
             PropertyChanged += MpAnalyticItemParameterValueViewModel_PropertyChanged;
@@ -200,10 +203,10 @@ namespace MonkeyPaste.Avalonia {
                     Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
                     Parent.OnPropertyChanged(nameof(Parent.SelectedItems));
                     Parent.OnPropertyChanged(nameof(Parent.CurrentValue));
-                    Parent.CurrentValue = Parent.SelectedItems.Select(x => x.Value).ToList().ToCsv();
+                    Parent.CurrentValue = Parent.SelectedItems.Select(x => x.Value).ToList().ToCsv(CsvProperties);
                     break;
                 case nameof(Value):
-                    Parent.CurrentValue = Parent.SelectedItems.Select(x => x.Value).ToList().ToCsv();
+                    Parent.CurrentValue = Parent.SelectedItems.Select(x => x.Value).ToList().ToCsv(CsvProperties);
                     dynamic pp = Parent.Parent;
                     Parent.Parent.OnPropertyChanged(nameof(pp.IsAllValid));
                     break;

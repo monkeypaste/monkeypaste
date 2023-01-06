@@ -63,15 +63,47 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public SelectionModel<MpAvEnumerableParameterValueViewModel> Selection { get; private set; }
         #endregion
 
         #region State
 
         public bool IsParameterDropDownOpen { get; set; }
+
+        public MpCsvFormatProperties CsvProperties {
+            get {
+                // NOTE since enumerable param's are stored as single csv string
+                // to avoid any escape/encoding issues (esp with json!) when multiple values maybe present
+                // all values are stored base64 encoded and decoded at runtime
+
+                // NOTE2 since values maybe predefined MpCsvFormatProperties detects base64 when decoding
+                // so a caveat here is 
+                return ControlType == MpPluginParameterControlType.List ?
+                    MpCsvFormatProperties.Default : MpCsvFormatProperties.DefaultBase64Value;
+            }
+        }
         #endregion
 
         #region Model
+
+        #region Db
+
+        //public override string CurrentValue {
+        //    get {
+        //        if (PresetValueModel == null) {
+        //            return string.Empty;
+        //        }
+
+        //        return CsvProperties.DecodeValue(PresetValueModel.Value);
+        //    }
+        //    set {
+        //        if (CurrentValue != value) {
+        //            PresetValueModel.Value = CsvProperties.EncodeValue(value);
+        //            HasModelChanged = true;
+        //            OnPropertyChanged(nameof(CurrentValue));
+        //        }
+        //    }
+        //}
+        #endregion
 
         #endregion
 
@@ -79,15 +111,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvEnumerableParameterViewModel() : base() { }
+        public MpAvEnumerableParameterViewModel() : this(null) { }
 
         public MpAvEnumerableParameterViewModel(MpIPluginComponentViewModel parent) : base(parent) {
             PropertyChanged += MpEnumerableParameterViewModel_PropertyChanged;
-            Selection = new SelectionModel<MpAvEnumerableParameterValueViewModel>() {
-                SingleSelect = ControlType == MpPluginParameterControlType.List ? true : false,
-                //Source = SelectedItems
-            };
-            Selection.SelectionChanged += Selection_SelectionChanged;
         }
 
 
@@ -106,11 +133,10 @@ namespace MonkeyPaste.Avalonia {
             List<string> selectedValues = new List<string>();
 
             if(!string.IsNullOrEmpty(PresetValueModel.Value)) {
-                selectedValues = PresetValueModel.Value.ToListFromCsv();                
+                selectedValues = PresetValueModel.Value.ToListFromCsv(CsvProperties);                
             } else {
                 selectedValues = DefaultValues;
             }
-
 
             foreach (var paramVal in ParameterFormat.values) {
                 int selectedIdx = selectedValues.IndexOf(paramVal.value);
@@ -133,20 +159,9 @@ namespace MonkeyPaste.Avalonia {
                 Items[0].IsSelected = true;
             }
 
-            using (Selection.BatchUpdate()) {
-                Selection.Clear();
-                if(SelectedItems.Count > 0) {
-                    SelectedItems.ForEach((x, idx) => Selection.Select(idx));
-                }
-                
-                //Items.Where(x => x.IsSelected).ForEach((x, idx) => Selection.Select(idx));
-            }
 
             OnPropertyChanged(nameof(Items));
-            CurrentValue = SelectedItems.Select(x => x.Value).ToList().ToCsv();
-
-
-            //Items.CollectionChanged += Items_CollectionChanged;
+            CurrentValue = SelectedItems.Select(x => x.Value).ToList().ToCsv(CsvProperties);
 
             while (Items.Any(x => x.IsBusy)) {
                 await Task.Delay(100);
@@ -154,6 +169,8 @@ namespace MonkeyPaste.Avalonia {
 
             OnPropertyChanged(nameof(SelectedItem));
             OnPropertyChanged(nameof(SelectedItems));
+
+            Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
             
             //Selection.Source = SelectedItems;
 
@@ -175,13 +192,6 @@ namespace MonkeyPaste.Avalonia {
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             //OnPropertyChanged(nameof(CurrentValue));
             //HasModelChanged = true;
-        }
-
-        private void Selection_SelectionChanged(object sender, SelectionModelSelectionChangedEventArgs<MpAvEnumerableParameterValueViewModel> e) {
-            return;
-            Items.ForEach(x => x.IsSelected = e.SelectedItems.Contains(x));
-            OnPropertyChanged(nameof(Items));
-            OnPropertyChanged(nameof(SelectedItems));
         }
         private void MpEnumerableParameterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {

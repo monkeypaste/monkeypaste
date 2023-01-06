@@ -3,6 +3,8 @@ using MonkeyPaste.Common;
 using SQLite;
 using System;
 using System.Threading.Tasks;
+using System.Linq;
+using System.Diagnostics;
 
 namespace MonkeyPaste {
     public enum MpParameterHostType {
@@ -31,6 +33,8 @@ namespace MonkeyPaste {
         public string ParamId { get; set; }
 
         public string Value { get; set; } = string.Empty;
+
+        public int SortOrderIdx { get; set; } = 0;
 
         #endregion
 
@@ -65,6 +69,7 @@ namespace MonkeyPaste {
             MpParameterHostType hostType = MpParameterHostType.None,
             int presetId = 0, 
             object paramId = null,
+            int sortOrderIdx = -1,
             string value = ""
             //MpPluginParameterFormat format = null
             ) {
@@ -77,19 +82,26 @@ namespace MonkeyPaste {
             if(string.IsNullOrEmpty(paramId.ToString())) {
                 throw new Exception("ParamId must cannot be null or empty");
             }
+            var cur_vals = await MpDataModelProvider.GetPluginPresetValuesAsync(hostType, presetId, paramId.ToString());
 
-            var dupItem = await MpDataModelProvider.GetPluginPresetValueAsync(hostType, presetId, paramId.ToString());
-            if (dupItem != null) {
+            if (sortOrderIdx < 0) {
+                sortOrderIdx = cur_vals.Count;
+            }
+            var dup_check = cur_vals.FirstOrDefault(x => x.SortOrderIdx == sortOrderIdx && x.Value == value);
+
+            if (dup_check != null) {
                 MpConsole.WriteLine($"Updating preset Id{presetId} for {paramId}");
+                // when does this happen?
+                Debugger.Break();
 
-                dupItem = await MpDataModelProvider.GetItemAsync<MpPluginPresetParameterValue>(dupItem.Id);
-                dupItem.ParameterHostId = presetId;
-                dupItem.ParameterHostType = hostType;
-                dupItem.ParamId = paramId.ToString();
-                dupItem.Value = value;
+                dup_check = await MpDataModelProvider.GetItemAsync<MpPluginPresetParameterValue>(dup_check.Id);
+                dup_check.ParameterHostId = presetId;
+                dup_check.ParameterHostType = hostType;
+                dup_check.ParamId = paramId.ToString();
+                dup_check.Value = value;
                 //dupItem.ParameterFormat = format;
-                await dupItem.WriteToDatabaseAsync();
-                return dupItem;
+                await dup_check.WriteToDatabaseAsync();
+                return dup_check;
             }
 
             var newPluginPresetParameterValue = new MpPluginPresetParameterValue() {
@@ -97,7 +109,8 @@ namespace MonkeyPaste {
                 ParameterHostType = hostType,
                 ParameterHostId = presetId,
                 ParamId = paramId.ToString(),
-                Value = value
+                Value = value,
+                SortOrderIdx = sortOrderIdx
             };
 
             await newPluginPresetParameterValue.WriteToDatabaseAsync();

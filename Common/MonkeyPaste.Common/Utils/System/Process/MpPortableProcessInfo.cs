@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace MonkeyPaste.Common {
@@ -15,10 +16,11 @@ namespace MonkeyPaste.Common {
 
         public List<string> ArgumentList { get; set; } = new List<string>();
 
-        public string WindowState { get; set; }
+        public ProcessWindowStyle WindowState { get; set; }
 
         public override string ToString() {
             return string.Format(@"Title '{0}' Handle '{1}' Path '{2}' ", MainWindowTitle, Handle, ProcessPath);
         }
     }
+
 }

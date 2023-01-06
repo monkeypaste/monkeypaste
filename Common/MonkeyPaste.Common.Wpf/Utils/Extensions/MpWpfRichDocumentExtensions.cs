@@ -642,7 +642,7 @@ namespace MonkeyPaste.Common.Wpf {
                 catch (Exception ex) {
                     MpConsole.WriteLine("Exception converting richtext to flowdocument, attempting to fall back to plaintext...");
                     MpConsole.WriteLine("Exception Details: " + ex);
-                    return str.ToPlainText().ToFlowDocument();
+                    return str.RtfToPlainText().ToFlowDocument();
                 }
             }
         }

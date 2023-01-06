@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
-    public interface MpIPlatformWrapper {
+    public interface MpIPlatformWrapper : MpICommonTools {
         MpIPlatformCompatibility PlatformCompatibility { get; set; }
         MpIStartupState StartupState { get; set; }
         MpIPlatformShorcuts PlatformShorcuts { get; set; }
@@ -56,6 +56,7 @@ namespace MonkeyPaste {
             //MpPrefViewModel.Instance.MainWindowOrientation = "Bottom";
             await Task.Delay(1);
             Services = niw;
+            MpCommonTools.Init(niw);
         }
 
 

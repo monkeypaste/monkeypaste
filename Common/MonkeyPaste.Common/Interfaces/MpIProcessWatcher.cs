@@ -3,8 +3,9 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
-namespace MonkeyPaste {
+namespace MonkeyPaste.Common {
     public interface MpIProcessWatcher {
         IntPtr ThisAppHandle { get;}
         
@@ -20,10 +21,14 @@ namespace MonkeyPaste {
         IntPtr GetLastActiveInstance(string path);
         bool IsHandleRunningProcess(IntPtr handle);
         string GetProcessPath(IntPtr handle);
+        Process GetProcess(object handleIdOrTitle);
+        bool IsAdmin(object handleIdOrTitle);
+        ProcessWindowStyle GetWindowStyle(object handleIdOrTitle);
         string ParseTitleForApplicationName(string windowTitle);
         string GetProcessApplicationName(IntPtr handle);
         string GetProcessTitle(IntPtr handle);
         IntPtr SetActiveProcess(IntPtr handle);
+        IntPtr SetActiveProcess(IntPtr handle, ProcessWindowStyle windowStyle);
 
         event EventHandler<MpPortableProcessInfo> OnAppActivated;
 

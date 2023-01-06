@@ -794,13 +794,10 @@ namespace MonkeyPaste {
         }
 
 
-        public static async Task<MpPluginPresetParameterValue> GetPluginPresetValueAsync(MpParameterHostType hostType, int paramHostId, string paramId) {
+        public static async Task<List<MpPluginPresetParameterValue>> GetPluginPresetValuesAsync(MpParameterHostType hostType, int paramHostId, string paramId) {
             string query = $"select * from MpPluginPresetParameterValue where e_MpParameterHostType=? and fk_ParameterHostId=? and ParamId=?";
             var result = await MpDb.QueryAsync<MpPluginPresetParameterValue>(query,hostType.ToString(), paramHostId, paramId);
-            if (result == null || result.Count == 0) {
-                return null;
-            }
-            return result[0];
+            return result;
         }
 
         #endregion 

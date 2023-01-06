@@ -88,7 +88,7 @@ namespace MonkeyPaste.Avalonia {
                 htmlDataStr = htmlDataStr.ToRichHtmlText(MpPortableDataFormats.AvRtf_bytes);
                 inputFormatType = "html";
             } else if (inputFormatType == "csv") {
-                htmlDataStr = htmlDataStr.ToRichHtmlTable(csvProps);
+                htmlDataStr = htmlDataStr.CsvStrToRichHtmlTable(csvProps);
                 inputFormatType = "html";
             } else if (inputFormatType == "text") {
                 htmlDataStr = htmlDataStr.Replace(Environment.NewLine, "\n");

@@ -73,8 +73,29 @@ namespace MonkeyPaste.Avalonia {
             MpConsole.WriteLine($"SetForegroundWindow to '{handle}' from '{lastActive}' was {(success ? "SUCCESSFUL" : "FAILED")}");
             return lastActive;
         }
+        public override IntPtr SetActiveProcess(IntPtr handle, ProcessWindowStyle windowStyle) {
+            if(!WinApi.ShowWindowAsync(handle, GetShowWindowState(windowStyle))) {
+                MpConsole.WriteLine($"ShowWindowAsync failed for handle '{handle}' with window state '{windowStyle}'");
+            }
+            return SetActiveProcess(handle);
+        }
 
-        
+        public override bool IsAdmin(object handleIdOrTitle) {
+            if(handleIdOrTitle is IntPtr handle) {
+                return IsProcessAdmin(handle);
+            }
+            throw new NotImplementedException();
+        }
+        public override ProcessWindowStyle GetWindowStyle(object handleIdOrTitle) {
+            IntPtr handle = IntPtr.Zero;
+            if(handleIdOrTitle is IntPtr) {
+                handle = (IntPtr)handleIdOrTitle;
+            } else {
+                throw new NotImplementedException();
+            }
+            ShowWindowCommands swc = (ShowWindowCommands)GetWindowLong(handle, GWL_STYLE);
+            return GetWindowStyle(swc);
+        }
         public override MpPortableProcessInfo GetActiveProcessInfo() {
             IntPtr active_handle = WinApi.GetForegroundWindow();
             var active_info = new MpPortableProcessInfo() {
@@ -169,7 +190,13 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-
+        public override Process GetProcess(object handleIdOrTitle) {
+            if(handleIdOrTitle is IntPtr handle) {
+                GetWindowThreadProcessId(handle, out uint pid);
+                return base.GetProcess((int)pid);
+            }
+            return base.GetProcess(handleIdOrTitle);
+        }
         public override string GetProcessPath(IntPtr hWnd) {
             string fallback = _FallbackProcessPath;
             try {
@@ -248,6 +275,37 @@ namespace MonkeyPaste.Avalonia {
 
         #region Helpers
 
+        private int GetShowWindowState(ProcessWindowStyle pws) {
+            switch(pws) {
+                case ProcessWindowStyle.Hidden:
+                    return (int)WinApi.ShowWindowCommands.Hide;
+
+                case ProcessWindowStyle.Minimized:
+                    return (int)WinApi.ShowWindowCommands.Minimized;
+
+                case ProcessWindowStyle.Maximized:
+                    return (int)WinApi.ShowWindowCommands.Maximized;
+
+                default:
+                    return (int)WinApi.ShowWindowCommands.Normal;
+            }
+        }
+
+        private ProcessWindowStyle GetWindowStyle(ShowWindowCommands swc) {
+            switch (swc) {
+                case ShowWindowCommands.Hide:
+                    return ProcessWindowStyle.Hidden;
+
+                case ShowWindowCommands.Minimized:
+                    return ProcessWindowStyle.Minimized;
+
+                case ShowWindowCommands.Maximized:
+                    return ProcessWindowStyle.Maximized;
+
+                default:
+                    return ProcessWindowStyle.Normal;
+            }
+        }
         private IDictionary<string, IntPtr> GetOpenWindows() {
             IntPtr shellWindow = WinApi.GetShellWindow();
             Dictionary<string, IntPtr> windows = new Dictionary<string, IntPtr>();

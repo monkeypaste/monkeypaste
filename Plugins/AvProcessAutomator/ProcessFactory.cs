@@ -36,7 +36,7 @@ namespace ProcessAutomation {
 
         #region Public Methods
 
-        public static MpProcessInfo StartProcess(MpProcessInfo pi, int waitForInputIdleTimeout = 30000) {
+        public static MpPortableStartProcessInfo StartProcess(MpPortableStartProcessInfo pi, int waitForInputIdleTimeout = 30000) {
             var result = StartProcess(
                                 processPath: pi.ProcessPath,
                                 argList: pi.ArgumentList,
@@ -54,7 +54,7 @@ namespace ProcessAutomation {
             return result;
         }
 
-        public static MpProcessInfo StartProcess(
+        public static MpPortableStartProcessInfo StartProcess(
             string processPath = null,
             List<string> argList = null,
             bool asAdministrator = false,
@@ -62,7 +62,7 @@ namespace ProcessAutomation {
             bool useShellExecute = true,
             string workingDirectory = null,
             bool showError = true,
-            ShowWindowCommands windowState = ShowWindowCommands.Normal,
+            ProcessWindowStyle windowState = ProcessWindowStyle.Normal,
             bool closeOnComplete = false,
             bool createNoWindow = false,
             string domain = null,
@@ -74,6 +74,8 @@ namespace ProcessAutomation {
 
             string stdOut = string.Empty;
             string stdErr = string.Empty;
+
+            MpPortableStartProcessInfo out_psi = null;
 
             argList = argList == null ? new List<string>() : argList;
             int argsLength = string.Join(string.Empty, argList).Length;
@@ -115,10 +117,13 @@ namespace ProcessAutomation {
                 p.StartInfo.Verb = asAdministrator ? "runas" : string.Empty;
                 p.StartInfo.ErrorDialog = showError;
 
-                p.StartInfo.LoadUserProfile = loadUserProfile;
-                p.StartInfo.Domain = domain;
                 p.StartInfo.UserName = userName;
-                p.StartInfo.PasswordInClearText = password;
+                if(OperatingSystem.IsWindows()) {
+                    p.StartInfo.LoadUserProfile = loadUserProfile;
+                    p.StartInfo.Domain = domain;
+                    p.StartInfo.PasswordInClearText = password;
+                }
+                
 
                 if (showError) {
                     p.StartInfo.ErrorDialogParentHandle = ProcessPlugin.ThisAppHandle;
@@ -137,14 +142,7 @@ namespace ProcessAutomation {
 
                     p.StartInfo.CreateNoWindow = createNoWindow;
                     if (!isSilent) {
-                        ProcessWindowStyle windowStyle = ProcessWindowStyle.Normal;
-                        if (windowState == ShowWindowCommands.Hide) {
-                            windowStyle = ProcessWindowStyle.Hidden;
-                        } else if (windowState == ShowWindowCommands.Minimized) {
-                            windowStyle = ProcessWindowStyle.Minimized;
-                        } else if (windowState == ShowWindowCommands.Maximized) {
-                            windowStyle = ProcessWindowStyle.Maximized;
-                        }
+                        ProcessWindowStyle windowStyle = windowState.ToEnum<ProcessWindowStyle>();
                         p.StartInfo.WindowStyle = windowStyle;
                     }
                     p.StartInfo.RedirectStandardOutput = true;
@@ -163,10 +161,29 @@ namespace ProcessAutomation {
                 p.Start();
 
                 SetPath(originalPath);
-                ShowWindowAsync(p.Handle, (int)windowState);
+                //ShowWindowAsync(p.Handle, (int)windowState);
 
-                SetForegroundWindow(p.Handle);
-                SetActiveWindow(p.Handle);
+                //SetForegroundWindow(p.Handle);
+                //SetActiveWindow(p.Handle);
+                out_psi = new MpPortableStartProcessInfo() {
+                    Handle = outHandle,
+                    ProcessPath = processPath,
+                    ArgumentList = argList,
+                    IsAdmin = asAdministrator,
+                    IsSilent = isSilent,
+                    UseShellExecute = useShellExecute,
+                    WorkingDirectory = workingDirectory,
+                    ShowError = showError,
+                    WindowState = windowState,
+                    CloseOnComplete = closeOnComplete,
+                    CreateNoWindow = createNoWindow,
+                    Domain = domain,
+                    UserName = userName,
+                    Password = password,
+                    StandardOutput = stdOut,
+                    StandardError = stdErr
+                };
+                out_psi = SetActiveProcess(out_psi,waitForInputIdleTimeout);
 
                 if (!useShellExecute) {
                     // To avoid deadlocks, use an asynchronous read operation on at least one of the streams.  
@@ -185,98 +202,87 @@ namespace ProcessAutomation {
                 MpConsole.WriteLine("Start Process error (Admin to Normal mode): " + ex);
                 SetPath(originalPath);
             }
-
-            return new MpProcessInfo() {
-                Handle = outHandle,
-                ProcessPath = processPath,
-                ArgumentList = argList,
-                IsAdmin = asAdministrator,
-                IsSilent = isSilent,
-                UseShellExecute = useShellExecute,
-                WorkingDirectory = workingDirectory,
-                ShowError = showError,
-                WindowState = windowState,
-                CloseOnComplete = closeOnComplete,
-                CreateNoWindow = createNoWindow,
-                Domain = domain,
-                UserName = userName,
-                Password = password,
-                StandardOutput = stdOut,
-                StandardError = stdErr
-            };
+            if(out_psi == null) {
+                out_psi = new MpPortableStartProcessInfo() {
+                    Handle = outHandle,
+                    ProcessPath = processPath,
+                    ArgumentList = argList,
+                    IsAdmin = asAdministrator,
+                    IsSilent = isSilent,
+                    UseShellExecute = useShellExecute,
+                    WorkingDirectory = workingDirectory,
+                    ShowError = showError,
+                    WindowState = windowState,
+                    CloseOnComplete = closeOnComplete,
+                    CreateNoWindow = createNoWindow,
+                    Domain = domain,
+                    UserName = userName,
+                    Password = password,
+                    StandardOutput = stdOut,
+                    StandardError = stdErr
+                };
+            }
+            return out_psi;
         }
 
-        private static void P_OutputDataReceived(object sender, DataReceivedEventArgs e) {
-            throw new NotImplementedException();
+
+        public static MpPortableStartProcessInfo SetActiveProcess(MpPortableStartProcessInfo pi, int waitForInputIdleTimeout = 30000) {
+            if (pi == null) {
+                return null;
+            }
+            try {
+                //enforce that process won't be closed
+                pi.CloseOnComplete = false;
+
+                if (string.IsNullOrEmpty(pi.ProcessPath)) {
+                    if (pi.Handle == null || pi.Handle == IntPtr.Zero) {
+                        return pi;
+                    }
+                    pi.ProcessPath = MpCommonTools.Services.ProcessWatcher.GetProcessPath((IntPtr)pi.Handle);
+                }
+
+                //pi.Handle is only passed when its a running application
+
+                if (!MpCommonTools.Services.ProcessWatcher.IsHandleRunningProcess(pi.Handle) && 
+                    !MpCommonTools.Services.ProcessWatcher.RunningProcessLookup.ContainsKey(pi.ProcessPath)) {
+                    //if process is not running anymore or needs to be started (custom pastetoapppath)
+                    pi = StartProcess(pi);
+                } else {
+                    //ensure the process has a handle matching isAdmin, if not it needs to be created
+                    bool wasMatched = false;
+                    if (MpCommonTools.Services.ProcessWatcher.RunningProcessLookup.ContainsKey(pi.ProcessPath)) {
+                        var handleList = MpCommonTools.Services.ProcessWatcher.RunningProcessLookup[pi.ProcessPath];
+                        foreach (var h in handleList) {
+                            if (pi.IsAdmin == MpCommonTools.Services.ProcessWatcher.IsAdmin(h)) {
+                                pi.Handle = h;
+                                if (MpCommonTools.Services.ProcessWatcher.RunningProcessLookup.Any(x=>x.Value.Contains(h))) {
+                                    pi.WindowState = MpCommonTools.Services.ProcessWatcher.GetWindowStyle(h);
+                                }
+                                wasMatched = true;
+                                break;
+                                //if (CurrentWindowStateHandleDictionary.ContainsKey(handle)) {
+                                //    pi.WindowState = CurrentWindowStateHandleDictionary[handle];
+                                //}
+                                //break;
+                            }
+                        }
+                    }
+                    if (!wasMatched) {
+                        //
+                        pi = StartProcess(pi);
+                    } else {
+                        //show running window with last known window state
+                        MpCommonTools.Services.ProcessWatcher.SetActiveProcess(pi.Handle, pi.WindowState);
+                    }
+                }
+
+                return pi;
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine("SetActiveApplication error: " + ex);
+                return null;
+            }
         }
-
-        public static void ActivateThisApp() {
-            SetActiveProcess(ProcessPlugin.ThisAppHandle);
-        }
-
-        public static void SetActiveProcess(IntPtr handle) {
-            SetForegroundWindow(handle);
-            SetActiveWindow(handle);
-        }
-
-        //public static MpProcessInfo SetActiveProcess(MpProcessInfo pi, int waitForInputIdleTimeout = 30000) {
-        //    if (pi == null) {
-        //        return null;
-        //    }
-        //    try {
-        //        //enforce that process won't be closed
-        //        pi.CloseOnComplete = false;
-
-        //        if (string.IsNullOrEmpty(pi.ProcessPath)) {
-        //            if (pi.Handle == null || pi.Handle == IntPtr.Zero) {
-        //                return pi;
-        //            }
-        //            pi.ProcessPath = GetProcessPath((IntPtr)pi.Handle);
-        //        }
-
-        //        //pi.Handle is only passed when its a running application
-
-        //        if (!IsHandleRunningProcess(pi.Handle) && !IsProcessRunning(pi.ProcessPath)) {
-        //            //if process is not running anymore or needs to be started (custom pastetoapppath)
-        //            pi = StartProcess(pi);
-        //        } else {
-        //            //ensure the process has a handle matching isAdmin, if not it needs to be created
-        //            bool wasMatched = false;
-        //            if (CurrentProcessWindowHandleStackDictionary.ContainsKey(pi.ProcessPath)) {
-        //                var handleList = CurrentProcessWindowHandleStackDictionary[pi.ProcessPath];
-        //                foreach (var h in handleList) {
-        //                    if (pi.IsAdmin == IsProcessAdmin(h)) {
-        //                        pi.Handle = h;
-        //                        if (CurrentWindowStateHandleDictionary.ContainsKey(h)) {
-        //                            pi.WindowState = CurrentWindowStateHandleDictionary[h];
-        //                        }
-        //                        wasMatched = true;
-        //                        break;
-        //                        //if (CurrentWindowStateHandleDictionary.ContainsKey(handle)) {
-        //                        //    pi.WindowState = CurrentWindowStateHandleDictionary[handle];
-        //                        //}
-        //                        //break;
-        //                    }
-        //                }
-        //            }
-        //            if (!wasMatched) {
-        //                //
-        //                pi = StartProcess(pi);
-        //            } else {
-        //                //show running window with last known window state
-        //                WinApi.ShowWindowAsync(pi.Handle, GetShowWindowValue(pi.WindowState));
-        //                WinApi.SetForegroundWindow(pi.Handle);
-        //                WinApi.SetActiveWindow(pi.Handle);
-        //            }
-        //        }
-
-        //        return pi;
-        //    }
-        //    catch (Exception ex) {
-        //        MpConsole.WriteTraceLine("SetActiveApplication error: " + ex);
-        //        return null;
-        //    }
-        //}
 
 
         public static string GetArgumentStr(List<string> argList) {
