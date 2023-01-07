@@ -247,6 +247,7 @@ namespace MonkeyPaste {
                 if(icon != null) {
                     delete_tasks.Add(icon.DeleteFromDatabaseAsync());
                 }
+                IconId = 0;
             }
 
             delete_tasks.Add(base.DeleteFromDatabaseAsync());

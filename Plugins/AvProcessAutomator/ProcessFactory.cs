@@ -147,8 +147,13 @@ namespace ProcessAutomation {
                     }
                     p.StartInfo.RedirectStandardOutput = true;
                     p.StartInfo.RedirectStandardError = true;
-                    p.OutputDataReceived += new DataReceivedEventHandler((sender, e) => { stdOut += e.Data; });
-                    p.ErrorDataReceived += new DataReceivedEventHandler((sender, e) => { stdErr += e.Data; });
+
+                    p.OutputDataReceived += (s, e) => {
+                        stdOut += e.Data;
+                    };
+                    p.ErrorDataReceived += (s, e) => {
+                        stdErr += e.Data;
+                    };
                 } else {
                     p.StartInfo.WorkingDirectory = processDir;
                 }
@@ -157,7 +162,8 @@ namespace ProcessAutomation {
                 if (closeOnComplete) {
                     argList.Insert(0, "/c");
                 }
-                //p.StartInfo.Arguments = GetArgumentStr(argList);
+                argList.ForEach(x => p.StartInfo.ArgumentList.Add(x));
+
                 p.Start();
 
                 SetPath(originalPath);
@@ -374,7 +380,12 @@ namespace ProcessAutomation {
             var scope = EnvironmentVariableTarget.Machine; // or User
             string oldValue = Environment.GetEnvironmentVariable(name, scope);
             var newValue = oldValue + string.Format(@";{0}", dir);
-            Environment.SetEnvironmentVariable(name, newValue, scope);
+            try {
+                Environment.SetEnvironmentVariable(name, newValue, scope);
+            } catch(SecurityException sex) {
+                MpConsole.WriteTraceLine("MpProcessAutomation.SetPath exception (likely this app is not running as admin and therefore cannot set env var): ", sex);
+            }
+            
         }
 
         private static void SetPath(string newPath) {

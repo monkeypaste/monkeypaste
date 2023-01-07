@@ -18,66 +18,6 @@ namespace MonkeyPaste {
         MpILabelText {
         #region Statics
 
-        public static string[] PhysicalComparePropertyPaths {
-            get {
-                var paths = new List<string>();
-                for (int i = 0; i < Enum.GetNames(typeof(MpCopyItemPropertyPathType)).Length; i++) {
-                    string path = string.Empty;
-                    MpCopyItemPropertyPathType cppt = (MpCopyItemPropertyPathType)i;
-                    switch (cppt) {
-                        case MpCopyItemPropertyPathType.ItemData:
-                        case MpCopyItemPropertyPathType.ItemType:
-                        case MpCopyItemPropertyPathType.Title:
-                        case MpCopyItemPropertyPathType.CopyDateTime:
-                        case MpCopyItemPropertyPathType.CopyCount:
-                        case MpCopyItemPropertyPathType.PasteCount:
-                            path = cppt.ToString();
-                            break;
-                        case MpCopyItemPropertyPathType.AppName:
-                        case MpCopyItemPropertyPathType.AppPath:
-                            path = string.Format(@"Source.App.{0}", cppt.ToString());
-                            break;
-                        case MpCopyItemPropertyPathType.UrlPath:
-                        case MpCopyItemPropertyPathType.UrlTitle:
-                        case MpCopyItemPropertyPathType.UrlDomainPath:
-                            path = string.Format(@"Source.App.{0}", cppt.ToString());
-                            break;
-                        default:
-                            break;
-                    }
-                    paths.Add(path);
-                }
-                return paths.ToArray();
-            }
-        }
-
-        public static async Task<object> QueryProperty(MpCopyItem ci, MpCopyItemPropertyPathType queryPathType) {
-            if(ci == null) {
-                return null;
-            }
-            switch (queryPathType) {
-                case MpCopyItemPropertyPathType.None:
-                case MpCopyItemPropertyPathType.LastOutput:
-                    return null;
-                case MpCopyItemPropertyPathType.ItemRefUrl:
-                case MpCopyItemPropertyPathType.ItemData:
-                case MpCopyItemPropertyPathType.ItemType:
-                case MpCopyItemPropertyPathType.Title:
-                case MpCopyItemPropertyPathType.CopyDateTime:
-                case MpCopyItemPropertyPathType.CopyCount:
-                case MpCopyItemPropertyPathType.PasteCount:
-                    return ci.GetPropertyValue(queryPathType.ToString());
-                case MpCopyItemPropertyPathType.SourceDeviceType:
-                    var deviceTypeInt = await MpDataModelProvider.GetSortableCopyItemViewPropertyAsync<int>(ci.Id, queryPathType.ToString());
-                    return (MpUserDeviceType)deviceTypeInt;
-                default:
-                    //UrlPath,UrlTitle,UrlDomainPath,AppPath,AppName,SourceDeviceName,SourceDeviceType
-                    var resultStr = await MpDataModelProvider.GetSortableCopyItemViewPropertyAsync<string>(ci.Id, queryPathType.ToString());
-                    return resultStr;
-
-            }
-        }
-
         public static string FileItemSplitter {
             get {
                 // TODO when from another device get source device to know env new line (add new line string to OsInfo)

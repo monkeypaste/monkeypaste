@@ -157,24 +157,25 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task SetUserIconToCurrentHexColorAsync(string hexColor, MpIUserIconViewModel uivm) {
-            //var bmpSrc = (Bitmap)new BitmapImage(new Uri(MpPrefViewModel.Instance.AbsoluteResourcesPath + @"/Images/texture.png"));
-            //bmpSrc = bmpSrc.Tint(hexColor.ToWinMediaColor());
             var bmpSrc = MpAvIconSourceObjToBitmapConverter.Instance.Convert("TextureImage", null, null, null) as Bitmap;
             bmpSrc = bmpSrc.Tint(hexColor);
-            MpIcon icon;
-            if (uivm.IconId == 0) {
+            await SetUserIconImageAsync(uivm, bmpSrc, hexColor);
+        }
+
+        private async Task SetUserIconImageAsync(MpIUserIconViewModel uivm, Bitmap bmpSrc, string hexColor) {
+            MpIcon icon = await MpDataModelProvider.GetItemAsync<MpIcon>(uivm.IconId);
+            if (icon == null) {
                 // likely means its current icon is a default reference to a parent
                 icon = await MpIcon.CreateAsync(
                     iconImgBase64: bmpSrc.ToBase64String(),
                     createBorder: false);
                 uivm.IconId = icon.Id;
             } else {
-                icon = await MpDataModelProvider.GetItemAsync<MpIcon>(uivm.IconId);
                 var img = await MpDataModelProvider.GetItemAsync<MpDbImage>(icon.IconImageId);
                 img.ImageBase64 = bmpSrc.ToBase64String();
                 await img.WriteToDatabaseAsync();
-                await icon.CreateOrUpdateBorderAsync(forceHexColor: hexColor);
             }
+            await icon.CreateOrUpdateBorderAsync(forceHexColor: hexColor);
             uivm.OnPropertyChanged(nameof(uivm.IconId));
         }
 
@@ -188,12 +189,6 @@ namespace MonkeyPaste.Avalonia {
                 if (uivm == null) {
                     throw new Exception("SelectImagePathCommand require MpIUserIconViewModel argument");
                 }
-
-                //var openFileDialog = new OpenFileDialog() {
-                //    Filter = "Image|*.png;*.gif;*.jpg;*.jpeg;*.bmp",
-                //    Title = "Select Image for Icon",
-                //    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
-                //};
 
                 MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
 
@@ -211,25 +206,10 @@ namespace MonkeyPaste.Avalonia {
                 
                 if (selectedImagePath != null && selectedImagePath.Length == 1 && string.IsNullOrEmpty(selectedImagePath[0])) {
                     string imagePath = selectedImagePath[0];
-                    var bmpSrc = new Bitmap(imagePath); 
+                    var bmpSrc = new Bitmap(imagePath);
 
-                    MpIcon icon = null;
-                    if (uivm.IconId == 0) {
-                        // likely means its current icon is a default reference to a parent
-                        icon = await MpIcon.CreateAsync(
-                            iconImgBase64: bmpSrc.ToBase64String(),
-                            createBorder: false);
-                        uivm.IconId = icon.Id;
-                    } else {
-                        var img = await MpDataModelProvider.GetItemAsync<MpDbImage>(icon.IconImageId);
-                        img.ImageBase64 = bmpSrc.ToBase64String();
-                        await img.WriteToDatabaseAsync();
-
-                        await icon.CreateOrUpdateBorderAsync();
-                    }
-                    uivm.OnPropertyChanged(nameof(uivm.IconId));
-
-                    //uivm.SetIconCommand.Execute(icon);
+                    await SetUserIconImageAsync(uivm, bmpSrc, null);
+                   
                 }
                 MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
             });
@@ -292,6 +272,9 @@ namespace MonkeyPaste.Avalonia {
                      }
                      if (dc is MpIUserIconViewModel uivm) {
                          var icon = MpDataModelProvider.GetItem<MpIcon>(uivm.IconId);
+                         if(icon == null) {
+                             return true;
+                         }
                          return !icon.IsModelReadOnly;
                      }
                      if (dc is MpIUserColorViewModel ucvm) {

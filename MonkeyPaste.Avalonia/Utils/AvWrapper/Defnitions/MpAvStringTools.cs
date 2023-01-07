@@ -7,7 +7,13 @@ using MonkeyPaste.Common.Wpf;
 namespace MonkeyPaste.Avalonia {
     public class MpAvStringTools : MpIStringTools {
         public string ToPlainText(string text) {
-            return text.RtfToPlainText();
+            if(text.IsStringRichText()) {
+                return text.RtfToPlainText();
+            }
+            if(text.IsStringRichHtml()) {
+                return MpRichHtmlToPlainTextConverter.Convert(text);
+            }
+            return text;
         }
 
         public string ToRichText(string text) {

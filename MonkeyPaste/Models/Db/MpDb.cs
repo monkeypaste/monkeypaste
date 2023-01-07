@@ -35,7 +35,7 @@ namespace MonkeyPaste {
         public static string AccessToken { get; set; }
         public static bool IsLoaded { get; set; } = false;
 
-        public static bool IgnoreLogging { get; set; } = true;
+        public static bool IgnoreLogging { get; set; } = false;
 
         #endregion
 

@@ -1,5 +1,5 @@
 ﻿namespace MonkeyPaste {
-    public enum MpCopyItemPropertyPathType {
+    public enum MpContentQueryPropertyPathType {
         None = 0,
         ItemData,
         ItemType,
@@ -15,8 +15,10 @@
         PasteCount,
         SourceDeviceName,
         SourceDeviceType,
+        ItemRefUrl,
+        MAX_COPY_ITEM_TYPE,
         LastOutput,
-        ItemRefUrl
+        AnalyzerLabel
     }
 
 }

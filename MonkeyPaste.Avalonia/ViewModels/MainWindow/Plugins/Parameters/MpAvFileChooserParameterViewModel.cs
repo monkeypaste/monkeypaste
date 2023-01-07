@@ -87,7 +87,7 @@ namespace MonkeyPaste.Avalonia {
                         Title = "Select " + Label,
                         Directory = initDir
                     }.ShowAsync(MpAvMainWindow.Instance);
-                    if (selectedFile != null && selectedFile.Length == 1 && string.IsNullOrEmpty(selectedFile[0])) {
+                    if (selectedFile != null && selectedFile.Length == 1 && !string.IsNullOrEmpty(selectedFile[0])) {
                         CurrentValue = selectedFile[0];
                     }
                 }

@@ -37,8 +37,8 @@ namespace MonkeyPaste.Avalonia {
                 if (args == null) {
                     return;
                 }
-                var cppt = (MpCopyItemPropertyPathType)args;
-                if (cppt == MpCopyItemPropertyPathType.None) {
+                var cppt = (MpContentQueryPropertyPathType)args;
+                if (cppt == MpContentQueryPropertyPathType.None) {
                     return;
                 }
 
@@ -82,15 +82,15 @@ namespace MonkeyPaste.Avalonia {
         public MpMenuItemViewModel PopupMenuViewModel {
             get {
                 var tmivml = new List<MpMenuItemViewModel>();
-                var propertyPathLabels = typeof(MpCopyItemPropertyPathType).EnumToLabels();
+                var propertyPathLabels = typeof(MpContentQueryPropertyPathType).EnumToLabels();
                 for (int i = 0; i < propertyPathLabels.Length; i++) {
-                    var ppt = (MpCopyItemPropertyPathType)i;
+                    var ppt = (MpContentQueryPropertyPathType)i;
                     var mivm = new MpMenuItemViewModel() {
                         Header = propertyPathLabels[i],
                         Command = AddContentPropertyPathCommand,
                         CommandParameter = ppt
                     };
-                    if (ppt == MpCopyItemPropertyPathType.None || (ppt == MpCopyItemPropertyPathType.LastOutput && !IsActionParameter)) {
+                    if (ppt == MpContentQueryPropertyPathType.None || (ppt == MpContentQueryPropertyPathType.LastOutput && !IsActionParameter)) {
                         mivm.IsVisible = false;
                     }
                     tmivml.Add(mivm);

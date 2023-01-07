@@ -7,6 +7,7 @@ using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common;
 using System.Diagnostics;
 using System.Collections.ObjectModel;
+using MonkeyPaste.Common.Avalonia;
 
 namespace ProcessAutomation {
     public class ProcessPlugin : MpIAnalyzeAsyncComponent {
@@ -16,6 +17,85 @@ namespace ProcessAutomation {
 
         public static IntPtr ThisAppHandle;
         public async Task<MpAnalyzerPluginResponseFormat> AnalyzeAsync(MpAnalyzerPluginRequestFormat req) {
+            await Task.Delay(1);
+
+            string processPath = req.GetRequestParamStringValue(1);
+            var processArgs = req.GetRequestParamStringListValue(2);
+            bool asAdmin = req.GetRequestParamBoolValue(3);
+            bool isSilent = req.GetRequestParamBoolValue(4);
+            bool useShellExecute = req.GetRequestParamBoolValue(5);
+            string workingDir = req.GetRequestParamStringValue(6);
+            ProcessWindowStyle windowState = req.GetRequestParamStringValue(7).ToEnum<ProcessWindowStyle>();
+            bool suppressErrors = req.GetRequestParamBoolValue(8);
+            bool preferRunningApp = req.GetRequestParamBoolValue(9);
+            bool closeOnComplete = req.GetRequestParamBoolValue(10);
+            string username = req.GetRequestParamStringValue(11);
+            string password = req.GetRequestParamStringValue(12);
+            bool createNoWindow = req.GetRequestParamBoolValue(13);
+            string domain = req.GetRequestParamStringValue(14);
+
+            var sb_out = new StringBuilder();
+            var sb_err = new StringBuilder();
+            using(var p = new Process()) {
+                try {
+                    p.StartInfo.FileName = processPath;
+                    processArgs.ForEach(x => p.StartInfo.ArgumentList.Add(x));
+                    p.StartInfo.UseShellExecute = useShellExecute;
+                    p.StartInfo.WorkingDirectory = string.IsNullOrEmpty(workingDir) ? string.Empty : workingDir;
+                    p.StartInfo.RedirectStandardOutput = true;
+                    p.StartInfo.RedirectStandardError = true;
+                    p.StartInfo.WindowStyle = windowState;
+                    p.StartInfo.CreateNoWindow = createNoWindow;
+                    p.EnableRaisingEvents = false;
+                    p.OutputDataReceived += (s, e) => {
+                        if (string.IsNullOrEmpty(e.Data)) {
+                            return;
+                        }
+                        sb_out.AppendLine(e.Data);
+                    };
+                    p.ErrorDataReceived += (s, e) => {
+                        if(string.IsNullOrEmpty(e.Data)) {
+                            return;
+                        }
+                        sb_err.AppendLine(e.Data);
+                    };
+
+                    p.Start();
+                    p.BeginOutputReadLine();
+                    p.BeginErrorReadLine();
+
+                    var processExited = p.WaitForExit(_WAIT_FOR_INPUT_IDLE_MS);
+
+                    if (processExited == false) {
+                        // we timed out...
+                        p.Kill();
+                        sb_err.AppendLine($"Process timed out after {_WAIT_FOR_INPUT_IDLE_MS}ms");
+
+                    } else if (p.ExitCode != 0) {
+                        sb_err.AppendLine("Process exited with non-zero exit code of: " + p.ExitCode + Environment.NewLine +
+                        "Output from process: " + sb_out.ToString());
+                    }
+                }
+                catch(Exception ex) {
+                    sb_err.AppendLine(ex.Message);
+                }
+                finally {
+                    if(closeOnComplete) {
+                        p.Close();
+                    }
+                }
+            }
+
+            var resp = new MpAnalyzerPluginResponseFormat() {
+                dataObject = new MpPortableDataObject(MpPortableDataFormats.Text, sb_out.ToString()),
+                errorMessage = string.IsNullOrEmpty(sb_err.ToString()) ? null : sb_err.ToString()
+            };
+            //resp.dataObject.SetData(MpPortableDataFormats.INTERNAL_CLIP_TILE_TITLE_FORMAT, $"{req.GetRequestParamStringValue(2)} - Qr Code");
+
+            return resp;
+        }
+        
+        public async Task<MpAnalyzerPluginResponseFormat> AnalyzeAsync_old(MpAnalyzerPluginRequestFormat req) {
             
 
             string processPath = req.GetRequestParamStringValue(1);
@@ -165,14 +245,6 @@ namespace ProcessAutomation {
             };
 
             return response;
-        }
-
-        private void P_ErrorDataReceived(object sender, System.Diagnostics.DataReceivedEventArgs e) {
-            throw new NotImplementedException();
-        }
-
-        private void P_OutputDataReceived(object sender, System.Diagnostics.DataReceivedEventArgs e) {
-            throw new NotImplementedException();
         }
     }
 }

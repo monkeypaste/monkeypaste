@@ -66,19 +66,19 @@ namespace MonkeyPaste.Avalonia {
         public string PhysicalPropertyPath {
             get {
                 switch (ComparePropertyPathType) {
-                    case MpCopyItemPropertyPathType.ItemData:
-                    case MpCopyItemPropertyPathType.ItemType:
-                    case MpCopyItemPropertyPathType.Title:
-                    case MpCopyItemPropertyPathType.CopyDateTime:
-                    case MpCopyItemPropertyPathType.CopyCount:
-                    case MpCopyItemPropertyPathType.PasteCount:
+                    case MpContentQueryPropertyPathType.ItemData:
+                    case MpContentQueryPropertyPathType.ItemType:
+                    case MpContentQueryPropertyPathType.Title:
+                    case MpContentQueryPropertyPathType.CopyDateTime:
+                    case MpContentQueryPropertyPathType.CopyCount:
+                    case MpContentQueryPropertyPathType.PasteCount:
                         return ComparePropertyPathType.ToString();
-                    case MpCopyItemPropertyPathType.AppName:
-                    case MpCopyItemPropertyPathType.AppPath:
+                    case MpContentQueryPropertyPathType.AppName:
+                    case MpContentQueryPropertyPathType.AppPath:
                         return string.Format(@"Source.App.{0}", ComparePropertyPathType.ToString());
-                    case MpCopyItemPropertyPathType.UrlPath:
-                    case MpCopyItemPropertyPathType.UrlTitle:
-                    case MpCopyItemPropertyPathType.UrlDomainPath:
+                    case MpContentQueryPropertyPathType.UrlPath:
+                    case MpContentQueryPropertyPathType.UrlTitle:
+                    case MpContentQueryPropertyPathType.UrlDomainPath:
                         return string.Format(@"Source.App.{0}", ComparePropertyPathType.ToString());
                 }
                 return string.Empty;
@@ -94,9 +94,9 @@ namespace MonkeyPaste.Avalonia {
             set => CompareDataJsonPath = value ? string.Empty : null;
         }
 
-        public bool IsItemTypeCompare => ComparePropertyPathType == MpCopyItemPropertyPathType.ItemType;
+        public bool IsItemTypeCompare => ComparePropertyPathType == MpContentQueryPropertyPathType.ItemType;
 
-        public bool IsLastOutputCompare => ComparePropertyPathType == MpCopyItemPropertyPathType.LastOutput;
+        public bool IsLastOutputCompare => ComparePropertyPathType == MpContentQueryPropertyPathType.LastOutput;
 
         public bool IsContentPropertyCompare => !IsItemTypeCompare && !IsLastOutputCompare;
 
@@ -148,7 +148,7 @@ namespace MonkeyPaste.Avalonia {
                 if (Action == null) {
                     return 0;
                 }
-                if (ComparePropertyPathType != MpCopyItemPropertyPathType.ItemType) {
+                if (ComparePropertyPathType != MpContentQueryPropertyPathType.ItemType) {
                     return 0;
                 }
                 if (string.IsNullOrWhiteSpace(Arg2)) {
@@ -185,16 +185,16 @@ namespace MonkeyPaste.Avalonia {
         }
 
         // Arg1
-        public MpCopyItemPropertyPathType ComparePropertyPathType {
+        public MpContentQueryPropertyPathType ComparePropertyPathType {
             get {
                 if (Action == null) {
-                    return MpCopyItemPropertyPathType.None;
+                    return MpContentQueryPropertyPathType.None;
                 }
                 if (string.IsNullOrWhiteSpace(Arg1)) {
-                    return MpCopyItemPropertyPathType.None;
+                    return MpContentQueryPropertyPathType.None;
                 }
 
-                return Arg1.ToEnum<MpCopyItemPropertyPathType>();
+                return Arg1.ToEnum<MpContentQueryPropertyPathType>();
             }
             set {
                 if (ComparePropertyPathType != value) {
@@ -291,7 +291,7 @@ namespace MonkeyPaste.Avalonia {
             if(ao == null) {
                 return null;
             }
-            if (ComparePropertyPathType == MpCopyItemPropertyPathType.LastOutput) {
+            if (ComparePropertyPathType == MpContentQueryPropertyPathType.LastOutput) {
                 if (ao != null) {
                     if (ao.OutputData is MpPluginResponseFormatBase prf && IsJsonQuery) {
                         try {
@@ -312,7 +312,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
             } else {
-                var copyItemPropObj =  await MpCopyItem.QueryProperty(ao.CopyItem, ComparePropertyPathType);
+                var copyItemPropObj =  await MpPluginParameterValueEvaluator.QueryPropertyAsync(ao.CopyItem, ComparePropertyPathType);
                 if (copyItemPropObj != null) {
                     return copyItemPropObj.ToString();
                 }

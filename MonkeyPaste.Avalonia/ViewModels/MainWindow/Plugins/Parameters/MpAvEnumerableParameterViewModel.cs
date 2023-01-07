@@ -38,8 +38,6 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-
-        //public virtual ObservableCollection<MpAvEnumerableParameterValueViewModel> SelectedItems { get; } = new ObservableCollection<MpAvEnumerableParameterValueViewModel>();
         public virtual IList<MpAvEnumerableParameterValueViewModel> SelectedItems {
             get {
                 if (ControlType == MpPluginParameterControlType.EditableList) {
@@ -47,8 +45,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 return Items.Where(x => x.IsSelected).ToList();
             }
-            set //=> Items.ForEach(x => x.IsSelected = value.Contains(x));
-                {
+            set {
                 if (SelectedItems != value) {
                     if (value == null) {
                         Items.ForEach(x => x.IsSelected = false);
@@ -128,7 +125,9 @@ namespace MonkeyPaste.Avalonia {
             await base.InitializeAsync(aipv);
 
             Items.Clear();
-
+            //if (PresetValueModel.Id == 979) {
+            //    Debugger.Break();
+            //}
 
             List<string> selectedValues = new List<string>();
 
@@ -147,6 +146,8 @@ namespace MonkeyPaste.Avalonia {
                 Items.Add(naipvvm);
             }
 
+            // reverse selected values to retain order (valueIdx increment maybe unnecessary, don't remember why its necessary but this retains order)
+            selectedValues.Reverse();
             foreach(var selectValueStr in selectedValues) {
                 // for new values add them to front of Items
                 Items.ForEach(x => x.ValueIdx++);

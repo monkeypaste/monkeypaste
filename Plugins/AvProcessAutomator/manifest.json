@@ -100,7 +100,7 @@
         "unitType": "Bool",
         "values": [
           {
-            "value": "true",
+            "value": "false",
             "isDefault": true
           }
         ],
@@ -112,8 +112,8 @@
         "unitType": "Bool",
         "values": [
           {
-            "value": "true",
-            "isDefault": false
+            "value": "false",
+            "isDefault": true
           }
         ],
         "paramId": 13
@@ -181,6 +181,19 @@
           }
         ],
         "paramId": 8
+      },
+      {
+        "label": "AnalyzerLabel",
+        "controlType": "TextBox",
+        "unitType": "PlainTextContentQuery",
+        "paramId": 15,
+        "isVisible": false,
+        "isRequired": true,
+        "values": [
+          {
+            "value": "{AnalyzerLabel}"
+          }
+        ]
       }
     ]
   }

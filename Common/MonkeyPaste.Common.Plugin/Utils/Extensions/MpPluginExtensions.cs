@@ -49,6 +49,11 @@ namespace MonkeyPaste.Common.Plugin {
             var kvp = ValidateGet(req, paramId);
             return kvp.value;
         }
+        
+        public static List<string> GetRequestParamStringListValue(this MpPluginRequestFormatBase req, object paramId) {
+            var kvp = ValidateGet(req, paramId);
+            return kvp.value.ToListFromCsv(MpCsvFormatProperties.DefaultBase64Value);
+        }
 
         public static bool HasParam(this MpPluginRequestFormatBase req, object paramId) {
             if(req == null || req.items == null || req.items.All(x=>!x.paramId.Equals(paramId))) {

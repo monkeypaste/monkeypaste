@@ -12,7 +12,7 @@ namespace MonkeyPaste.Avalonia {
         }
     }
     public abstract class MpAvUserControl<T> : MpAvUserControl where T: class {
-        public T? BindingContext {
+        public T BindingContext {
             get {
                 if (Design.IsDesignMode ||
                     GetValue(DataContextProperty) == null) {
