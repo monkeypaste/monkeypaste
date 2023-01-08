@@ -460,43 +460,16 @@ namespace MonkeyPaste {
         }
         #endregion
 
-        #region MpTextAnnotation
+        #region MpCopyItemAnnotation
 
-        public static async Task<List<MpTextAnnotation>> GetTextAnnotationsAsync(int ciid) {
-            string query = @"select * from MpTextAnnotation where fk_MpCopyItemId=?";
-            var result = await MpDb.QueryAsync<MpTextAnnotation>(query);
+        public static async Task<List<MpCopyItemAnnotation>> GetCopyItemAnnotationsAsync(int ciid) {
+            string query = @"select * from MpCopyItemAnnotation where fk_MpCopyItemId=?";
+            var result = await MpDb.QueryAsync<MpCopyItemAnnotation>(query,ciid);
             return result;
-        }
-
-        public static async Task<MpTextAnnotation> GetTextAnnotationByDataAsync(int ciid, int citid, string label, string matchValue, string description) {
-            string query = @"select * from MpTextAnnotation where fk_MpCopyItemId=? and fk_MpCopyItemTransactionId=? and Label=? and MatchValue=? and Description=?";
-            var result = await MpDb.QueryAsync<MpTextAnnotation>(query, ciid, citid,label,matchValue, description);
-            if (result == null || result.Count == 0) {
-                return null;
-            }
-            return result[0];
         }
 
         #endregion
 
-        #region MpImageAnnotation
-
-        public static async Task<List<MpImageAnnotation>> GetImageAnnotationsByCopyItemIdAsync(int ciid) {
-            string query = string.Format(@"select * from MpImageAnnotation where fk_MpCopyItemId=?");
-            var result = await MpDb.QueryAsync<MpImageAnnotation>(query,ciid);
-            return result;
-        }
-
-        public static async Task<MpImageAnnotation> GetImageAnnotationByDataAsync(int ciid,double x,double y,double w,double h,double s,string label,string description,string c) {
-            string query = string.Format(@"select * from MpImageAnnotation where fk_MpCopyItemId=? and X=? and Y=? and Width=? and Height=? and Score=? and Label=? and Description=? and HexColor=?");
-            var result = await MpDb.QueryAsync<MpImageAnnotation>(query, ciid,x,y,w,h,s,label,description,c);
-            if (result == null || result.Count == 0) {
-                return null;
-            }
-            return result[0];
-        }
-
-        #endregion
 
         #region MpCopyItemTransaction
 
@@ -510,7 +483,7 @@ namespace MonkeyPaste {
             if (trans_lookup == null || trans_lookup.Count() == 0) {
                 return new List<MpCopyItemTransaction>();
             }
-            string whereStr = string.Join(" or ", trans_lookup.Select(x => $"(e_MpCopyItemTransactionType='{x.Key}' AND fk_CopyItemTransactionObjectId={x.Value}"));
+            string whereStr = string.Join(" or ", trans_lookup.Select(x => $"(e_MpCopyItemTransactionType='{x.Key}' AND fk_CopyItemTransactionObjectId={x.Value})"));
             string query = $"select * from MpCopyItemTransaction where {whereStr}";
             var result = await MpDb.QueryAsync<MpCopyItemTransaction>(query, whereStr);
             return result;

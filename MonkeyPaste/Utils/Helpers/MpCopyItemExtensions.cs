@@ -25,7 +25,7 @@ namespace MonkeyPaste {
                 pdo.SetData(MpPortableDataFormats.CefAsciiUrl, MpPlatformWrapper.Services.SourceRefBuilder.ToUrlAsciiBytes(ci));
             }
             if(includeTitle) {
-                pdo.SetData(MpPortableDataFormats.INTERNAL_CLIP_TILE_TITLE_FORMAT, ci.Title);
+                pdo.SetData(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT, ci.Title);
             }
             return pdo;
         }

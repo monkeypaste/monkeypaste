@@ -129,7 +129,7 @@ namespace MonkeyPaste.Avalonia {
             bool is_internal =  avdo.ContainsInternalContentItem();
             if(!is_copy && is_internal) {
                 // invalidate tile drag if tag is already linked to copy item and its not a copy operation
-                string drop_ctvm_pub_handle = avdo.Get(MpPortableDataFormats.INTERNAL_CLIP_TILE_REF_FORMAT) as string;
+                string drop_ctvm_pub_handle = avdo.Get(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT) as string;
                 var ctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle == drop_ctvm_pub_handle);
                 if(ctvm != null) {
                     bool is_already_linked = await BindingContext.IsCopyItemLinkedAsync(ctvm.CopyItemId);
@@ -147,7 +147,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task PerformTileDropAsync(IDataObject avdo, bool isCopy) {
-            string drop_ctvm_pub_handle = avdo.Get(MpPortableDataFormats.INTERNAL_CLIP_TILE_REF_FORMAT) as string;
+            string drop_ctvm_pub_handle = avdo.Get(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT) as string;
             var drop_ctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle == drop_ctvm_pub_handle);
             if (drop_ctvm == null) {
                 Debugger.Break();
@@ -173,7 +173,7 @@ namespace MonkeyPaste.Avalonia {
             MpPortableDataObject mpdo = await MpPlatformWrapper.Services.DataObjectHelperAsync.ReadDragDropDataObject(avdo) as MpPortableDataObject ;
 
             //int drag_ciid = -1;
-            string drag_ctvm_pub_handle = mpdo.GetData(MpPortableDataFormats.INTERNAL_CLIP_TILE_REF_FORMAT) as string;
+            string drag_ctvm_pub_handle = mpdo.GetData(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT) as string;
             if (!string.IsNullOrEmpty(drag_ctvm_pub_handle)) {
                 var drag_ctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle == drag_ctvm_pub_handle);
                 if(drag_ctvm != null) {

@@ -43,6 +43,8 @@
     <Content Include="src\components\append\append-style.css" />
     <Content Include="src\components\append\toolbar\append-toolbar-item-style.css" />
     <Content Include="src\components\append\toolbar\append-toolbar-items.js" />
+    <Content Include="src\components\content\annotations\content-annotations.js" />
+    <Content Include="src\components\content\annotations\content-annotations-style.css" />
     <Content Include="src\components\dragdrop\debouncer\dragover-debouncer.js" />
     <Content Include="src\components\paste-toolbar\popup\paste-button-popup.js" />
     <Content Include="src\components\datatransfer\datatransfer.js">
@@ -184,6 +186,7 @@
     <Folder Include="src\components\experiments\" />
     <Folder Include="src\components\append\" />
     <Folder Include="src\components\align\" />
+    <Folder Include="src\components\content\annotations\" />
     <Folder Include="src\components\scroll\" />
     <Folder Include="src\components\paste-toolbar\" />
     <Folder Include="src\components\paste-toolbar\popup\" />

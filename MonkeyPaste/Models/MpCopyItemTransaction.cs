@@ -27,6 +27,7 @@ namespace MonkeyPaste {
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
         [Column("fk_MpCopyItemId")]
+        [Indexed]
         public int CopyItemId { get; set; }
 
         [Column("fk_CopyItemTransactionObjectId")]

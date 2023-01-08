@@ -96,3 +96,4 @@ function cleanRect(rect) {
         height: rect ? rect.bottom - rect.top : 0
     };
 }
+

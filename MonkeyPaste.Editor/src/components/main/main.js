@@ -200,6 +200,7 @@ function updateAllSizeAndPositions() {
 	updateTemplateToolbarSizesAndPositions();
 	updateEditorSizesAndPositions();
 	updateFindReplaceToolbarSizesAndPositions();
+	updateAnnotationSizesAndPositions();
 
 	if (EnvName == "android") {
 		//var viewportBottom = window.scrollY + window.innerHeight;

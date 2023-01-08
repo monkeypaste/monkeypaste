@@ -13,12 +13,21 @@ const AllDocumentTags = [...InlineTags, ...BlockTags];
 
 // #region Life Cycle
 
-function loadContent(contentHandle, contentType, contentData, isPasteRequest, searchStateObj) {
+function loadContent(
+	contentHandle,
+	contentType,
+	contentData,
+	isPasteRequest,
+	searchStateObj,
+	isAppendLineMode,
+	isAppendMode,
+	annotationsJsonStr) {
 	let is_reload = contentHandle == ContentHandle;
 	if (!is_reload) {
 		// when actually a new item and not reload
 		quill.history.clear();
 	}
+
 	quill.enable(true);
 
 	ContentHandle = contentHandle;
@@ -40,7 +49,7 @@ function loadContent(contentHandle, contentType, contentData, isPasteRequest, se
 	//let contentBg_rgba = getContentBg(contentData);
 
 	loadContentData(contentData);
-
+	loadAnnotations(annotationsJsonStr);
 	//getEditorElement().style.backgroundColor = rgbaToCssColor(contentBg_rgba);
 	
 	quill.update();

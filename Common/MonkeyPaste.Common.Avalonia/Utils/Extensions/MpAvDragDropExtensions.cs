@@ -117,7 +117,7 @@ namespace MonkeyPaste.Common {
             if(ido == null) {
                 return false;
             }
-            return ido.GetDataFormats().Contains(MpPortableDataFormats.INTERNAL_CLIP_TILE_REF_FORMAT);
+            return ido.GetDataFormats().Contains(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT);
         }
 
         public static void DragCheckAndStart(

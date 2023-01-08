@@ -221,6 +221,32 @@ function caretBlinkTick() {
     drawOverlay();
 }
 
+function drawAnnotations(ctx) {
+    if (!hasAnnotations(ctx)) {
+        return;
+    }
+    for (var i = 0; i < Annotations.length; i++) {
+        drawAnnotation(ctx, Annotations[i]);
+	}
+}
+
+function drawAnnotation(ctx, annotation) {
+    let annotation_rect = getAnnotationRect(annotation);
+    if (annotation_rect) {
+        let content_rect = getContentImageElement().getBoundingClientRect();
+        annotation_rect.left += content_rect.x;
+        annotation_rect.top += content_rect.y;
+
+        drawRect(ctx, annotation_rect, 'pink','blue', 1.5, 125 / 255);
+    }
+    if (annotation.children !== undefined &&
+        Array.isArray(annotation.children)) {
+        for (var i = 0; i < annotation.children.length; i++) {
+            drawAnnotation(ctx, annotation.children[i]);
+        }
+    }
+}
+
 
 function drawOverlay() {
     let overlayCanvas = document.getElementById('overlayCanvas');
@@ -234,6 +260,10 @@ function drawOverlay() {
     ctx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
     drawTextSelection(ctx);
+
+    if (hasAnnotations()) {
+        drawAnnotations(ctx);
+    }
 
     if (IsHighlightingVisible) {
         drawHighlighting(ctx);

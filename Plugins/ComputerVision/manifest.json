@@ -1,0 +1,147 @@
+﻿{
+  "title": "Computer Vision",
+  "description": "Provides descriptive information about a given image",
+  "version": "1.0",
+  "credits": "Microsoft",
+  "guid": "56024047-fe88-412d-aa65-1878ff088879",
+  "iconUri": "logo.png",
+  "ioType": {
+    "isDll": true
+  },
+  "analyzer": {
+    "inputType": {
+      "image": true
+    },
+    "outputType": {
+      "imageAnnotation": true
+    },
+    "parameters": [
+      {
+        "label": "Language",
+        "controlType": "ComboBox",
+        "unitType": "PlainText",
+        "isVisible": false,
+        "paramId": 1,
+        "values": [
+          {
+            "label": "English",
+            "value": "en",
+            "isDefault": true
+          },
+          {
+            "label": "Spanish",
+            "value": "es",
+            "isDefault": false
+          },
+          {
+            "label": "Japanese",
+            "value": "ja",
+            "isDefault": false
+          },
+          {
+            "label": "Portuguese",
+            "value": "pt",
+            "isDefault": false
+          },
+          {
+            "label": "Simplified Chinese",
+            "value": "zh",
+            "isDefault": false
+          }
+        ]
+      },
+      {
+        "label": "Visual Features",
+        "controlType": "MultiSelectList",
+        "unitType": "PlainText",
+        "paramId": 2,
+        "values": [
+          {
+            "label": "Adult",
+            "value": "adult",
+            "isDefault": true
+          },
+          {
+            "label": "Brands",
+            "value": "brands",
+            "isDefault": true
+          },
+          {
+            "label": "Categories",
+            "value": "categories",
+            "isDefault": true
+          },
+          {
+            "label": "Color Scheme",
+            "value": "color",
+            "isDefault": true
+          },
+          {
+            "label": "Description",
+            "value": "description",
+            "isDefault": true
+          },
+          {
+            "label": "Faces",
+            "value": "faces",
+            "isDefault": true
+          },
+          {
+            "label": "Objects",
+            "value": "objects",
+            "isDefault": true
+          },
+          {
+            "label": "Tags",
+            "value": "tags",
+            "isDefault": true
+          }
+        ]
+      },
+      {
+        "label": "Details",
+        "controlType": "MultiSelectList",
+        "unitType": "PlainText",
+        "paramId": 3,
+        "values": [
+          {
+            "label": "Celebrities",
+            "value": "celebrities",
+            "isDefault": true
+          },
+          {
+            "label": "Landmarks",
+            "value": "landmarks",
+            "isDefault": true
+          }
+        ]
+      },
+      {
+        "label": "Source Content",
+        "description": "The image to describe",
+        "controlType": "TextBox",
+        "unitType": "PlainTextContentQuery",
+        "isRequired": true,
+        "isVisible": false,
+        "paramId": 4,
+        "values": [
+          {
+            "value": "{ItemData}"
+          }
+        ]
+      },
+      {
+        "label": "Content Reference",
+        "controlType": "TextBox",
+        "unitType": "PlainTextContentQuery",
+        "isVisible": false,
+        "paramId": 5,
+        "values": [
+          {
+            "value": "{ItemRefUrl}"
+          }
+        ]
+      }
+    ]
+  }
+}

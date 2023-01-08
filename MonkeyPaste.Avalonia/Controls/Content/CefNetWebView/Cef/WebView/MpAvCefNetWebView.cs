@@ -286,7 +286,7 @@ namespace MonkeyPaste.Avalonia {
 
                 bool add_tile_data = ctvm.ItemType != MpCopyItemType.Text || contentDataResp.isAllContent;
                 if (add_tile_data) {
-                    avdo.SetData(MpPortableDataFormats.INTERNAL_CLIP_TILE_REF_FORMAT, ctvm.PublicHandle);
+                    avdo.SetData(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT, ctvm.PublicHandle);
                 }
                 avdo.SetData(MpPortableDataFormats.CefAsciiUrl, MpPlatformWrapper.Services.SourceRefBuilder.ToUrlAsciiBytes(ctvm.CopyItem));
             }
@@ -841,7 +841,8 @@ namespace MonkeyPaste.Avalonia {
                 contentHandle = BindingContext.PublicHandle,
                 contentType = BindingContext.ItemType.ToString(),
                 itemData = BindingContext.EditorFormattedItemData,
-                isPasteRequest = BindingContext.IsPasting
+                isPasteRequest = BindingContext.IsPasting,
+                annotationsJsonStr = BindingContext.AnnotationsJsonStr
             };
 
             if (!string.IsNullOrEmpty(MpAvSearchBoxViewModel.Instance.SearchText)) {

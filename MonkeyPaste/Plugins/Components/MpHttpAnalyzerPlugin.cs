@@ -684,7 +684,8 @@ namespace MonkeyPaste {
                             string paramVal = GetParamValueStr(c.Value);
                             string escapedParamVal = HttpUtility.JavaScriptStringEncode(paramVal);
 
-                            raw = raw.Replace(c.Value, escapedParamVal);// JsonConvert.SerializeObject(raw.Replace(c.Value, paramEnum.value));
+                            raw = raw.Replace(c.Value, escapedParamVal);
+                            // JsonConvert.SerializeObject(raw.Replace(c.Value, paramEnum.value));
                             //raw = JsonConvert.SerializeObject(raw);
                             
                             //System.Object[] body = new System.Object[] { new { Text = paramVal } };

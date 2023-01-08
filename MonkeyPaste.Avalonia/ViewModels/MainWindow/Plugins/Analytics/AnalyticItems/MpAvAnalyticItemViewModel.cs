@@ -17,6 +17,7 @@ using MonkeyPaste.Common;
 using Avalonia.Media;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
     [Flags]
@@ -402,6 +403,7 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = true;
 
             PluginFormat = analyzerPlugin;
+
 
             if (PluginComponent == null) {
                 throw new Exception("Cannot find component");

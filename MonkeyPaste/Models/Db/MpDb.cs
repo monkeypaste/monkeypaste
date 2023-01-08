@@ -475,6 +475,7 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpBillableItem>();
             await _connectionAsync.CreateTableAsync<MpCliTransaction>();
             await _connectionAsync.CreateTableAsync<MpCopyItem>();
+            await _connectionAsync.CreateTableAsync<MpCopyItemAnnotation>();
             await _connectionAsync.CreateTableAsync<MpCopyItemTag>();
             await _connectionAsync.CreateTableAsync<MpCopyItemSource>();
             await _connectionAsync.CreateTableAsync<MpCopyItemTransaction>();
@@ -482,7 +483,6 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpDataObjectItem>();
             await _connectionAsync.CreateTableAsync<MpDbImage>();
             await _connectionAsync.CreateTableAsync<MpDbLog>();
-            await _connectionAsync.CreateTableAsync<MpImageAnnotation>();
             await _connectionAsync.CreateTableAsync<MpDllTransaction>();
             await _connectionAsync.CreateTableAsync<MpHttpTransaction>();
             await _connectionAsync.CreateTableAsync<MpIcon>();
@@ -494,7 +494,6 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpSource>();
             await _connectionAsync.CreateTableAsync<MpSyncHistory>();
             await _connectionAsync.CreateTableAsync<MpTag>();
-            await _connectionAsync.CreateTableAsync<MpTextAnnotation>();
             await _connectionAsync.CreateTableAsync<MpTextTemplate>();
             await _connectionAsync.CreateTableAsync<MpContentToken>();
             await _connectionAsync.CreateTableAsync<MpUrl>();

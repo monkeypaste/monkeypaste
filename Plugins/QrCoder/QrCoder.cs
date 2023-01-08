@@ -22,7 +22,7 @@ namespace QrCoder {
                 var resp = new MpAnalyzerPluginResponseFormat() {
                     dataObject = new MpPortableDataObject(MpPortableDataFormats.AvPNG, imageBytes)
                 };
-                resp.dataObject.SetData(MpPortableDataFormats.INTERNAL_CLIP_TILE_TITLE_FORMAT, $"{req.GetRequestParamStringValue(2)} - Qr Code");
+                resp.dataObject.SetData(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT, $"{req.GetRequestParamStringValue(2)} - Qr Code");
                 return resp;
             }
         }

@@ -28,7 +28,15 @@ function loadContent_ext(loadContentMsgStr_base64) {
 			useRegEx: req.useRegex
 		};
 	}
-	loadContent(req.contentHandle, req.contentType, req.itemData, req.isPasteRequest, searchStateObj, req.isAppendLineMode, req.isAppendMode);
+	loadContent(
+		req.contentHandle,
+		req.contentType,
+		req.itemData,
+		req.isPasteRequest,
+		searchStateObj,
+		req.isAppendLineMode,
+		req.isAppendMode,
+		req.annotationsJsonStr);
 }
 
 function contentChanged_ext(contentChangedMsgStr_base64) {

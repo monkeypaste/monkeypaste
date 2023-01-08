@@ -207,7 +207,7 @@ namespace MonkeyPaste.Avalonia {
                 var sbbg_cd = new ColumnDefinition(
                     new GridLength(sbicvm.ButtonGroupFixedDimensionLength, GridUnitType.Pixel));
 
-                var ssbcb_cd = new ColumnDefinition(sbicvm.BoundWidth, GridUnitType.Pixel);
+                var ssbcb_cd = new ColumnDefinition(Math.Max(0,sbicvm.BoundWidth), GridUnitType.Pixel);
                 ssbcb_cd.Bind(
                     ColumnDefinition.WidthProperty,
                     new Binding() {
@@ -217,7 +217,7 @@ namespace MonkeyPaste.Avalonia {
                         Converter = MpAvDoubleToGridLengthConverter.Instance
                     });
 
-                var ctrcb_cd = new ColumnDefinition(ctrvm.BoundWidth, GridUnitType.Pixel);
+                var ctrcb_cd = new ColumnDefinition(Math.Max(0,ctrvm.BoundWidth), GridUnitType.Pixel);
                 ctrcb_cd.Bind(
                     ColumnDefinition.WidthProperty,
                     new Binding() {
@@ -317,7 +317,7 @@ namespace MonkeyPaste.Avalonia {
                 mwtg.RowDefinitions.Clear();
                 mwtg.ColumnDefinitions.Clear();
 
-                var ctrcb_rd = new RowDefinition(ctrvm.BoundHeight, GridUnitType.Pixel);
+                var ctrcb_rd = new RowDefinition(Math.Max(0,ctrvm.BoundHeight), GridUnitType.Pixel);
                 ctrcb_rd.Bind(
                     RowDefinition.HeightProperty,
                     new Binding() {
@@ -327,7 +327,7 @@ namespace MonkeyPaste.Avalonia {
                         Converter = MpAvDoubleToGridLengthConverter.Instance
                     });
 
-                var ssbcb_rd = new RowDefinition(sbicvm.BoundHeight, GridUnitType.Pixel);
+                var ssbcb_rd = new RowDefinition(Math.Max(0,sbicvm.BoundHeight), GridUnitType.Pixel);
                 ssbcb_rd.Bind(
                     RowDefinition.HeightProperty,
                     new Binding() {

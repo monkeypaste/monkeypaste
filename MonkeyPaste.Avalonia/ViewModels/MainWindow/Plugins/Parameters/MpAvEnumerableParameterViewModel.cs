@@ -125,9 +125,9 @@ namespace MonkeyPaste.Avalonia {
             await base.InitializeAsync(aipv);
 
             Items.Clear();
-            //if (PresetValueModel.Id == 979) {
-            //    Debugger.Break();
-            //}
+            if (PresetValueModel.Id == 979) {
+                Debugger.Break();
+            }
 
             List<string> selectedValues = new List<string>();
 

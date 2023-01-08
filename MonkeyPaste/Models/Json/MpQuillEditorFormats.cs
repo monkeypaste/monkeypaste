@@ -26,6 +26,8 @@ namespace MonkeyPaste {
 
         public bool isAppendLineMode { get; set; }
         public bool isAppendMode { get; set; }
+
+        public string annotationsJsonStr { get; set; }
     }
 
     public class MpQuillContentDataRequestMessage : MpJsonObject {

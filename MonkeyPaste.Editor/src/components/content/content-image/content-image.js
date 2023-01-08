@@ -1,5 +1,8 @@
 // #region Globals
 
+var ContentImageWidth = -1;
+var ContentImageHeight = -1;
+
 // #endregion Globals
 
 // #region Life Cycle
@@ -9,10 +12,13 @@ function loadImageContent(itemDataStr) {
 	enableReadOnly();
 	disableSubSelection();
 
+
 	let img_html = '<p class="ql-align-center"><img class="content-image" src="data:image/png;base64,' + itemDataStr + '"></p>';
 	setRootHtml(img_html);
 	updateImageContentSizeAndPosition();
+
 }
+
 // #endregion Life Cycle
 
 // #region Getters
@@ -30,6 +36,25 @@ function getImageContentWidth() {
 	return getContentWidth();
 }
 function getImageContentHeight() {
+	return getContentHeight();
+}
+
+function getContentImageDataSize() {
+	if (ContentImageWidth <= 0 ||
+		ContentImageHeight <= 0) {
+
+		let tmp = document.createElement('img');
+		tmp.setAttribute('src', 'data:image/png;base64,' + getContentData());
+		ContentImageWidth = parseFloat(tmp.width);
+		ContentImageHeight = parseFloat(tmp.height);
+	}
+	// avoid divide by zero
+	return {
+		width: Math.max(1,ContentImageWidth),
+		height: Math.max(1,ContentImageHeight)
+	};
+}
+function getImageDataHeight() {
 	return getContentHeight();
 }
 

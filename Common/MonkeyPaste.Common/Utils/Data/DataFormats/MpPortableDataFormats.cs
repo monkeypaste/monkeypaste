@@ -28,7 +28,7 @@ namespace MonkeyPaste.Common {
 
             LinuxSourceUrl,
             LinuxGnomeFiles,
-            LinuxUriList, //not adding this one cause i don't like it
+            LinuxUriList, 
 
             // avalonia
 
@@ -46,10 +46,12 @@ namespace MonkeyPaste.Common {
             //CefUnicodeUrl,
 
             // internal
-
-            INTERNAL_CLIP_TILE_REF_FORMAT,
-            INTERNAL_CLIP_TILE_TITLE_FORMAT
+            INTERNAL_SOURCE_URI_LIST_FORMAT, // maps to LinuxUriList
             
+            INTERNAL_CONTENT_HANDLE_FORMAT,
+            INTERNAL_CONTENT_TITLE_FORMAT,
+            INTERNAL_CONTENT_ROI_FORMAT,
+            INTERNAL_CONTENT_ANNOTATION_FORMAT            
         };
 
         private static Dictionary<int, MpPortableDataFormat> _formatLookup;
@@ -97,8 +99,14 @@ namespace MonkeyPaste.Common {
         public const string CefText = "text/plain";
         public const string CefJson = "application/json";
 
-        public const string INTERNAL_CLIP_TILE_REF_FORMAT = "Mp Internal Content";
-        public const string INTERNAL_CLIP_TILE_TITLE_FORMAT = "Mp Internal Content Title";
+        public const string INTERNAL_SOURCE_URI_LIST_FORMAT = LinuxUriList;
+
+        public const string INTERNAL_CONTENT_HANDLE_FORMAT = "Mp Internal Content";
+        public const string INTERNAL_CONTENT_TITLE_FORMAT = "Mp Internal Content Title";
+
+        public const string INTERNAL_CONTENT_ROI_FORMAT = "Mp Internal Content Roi";
+        public const string INTERNAL_CONTENT_ANNOTATION_FORMAT = "Mp Internal Content Annotation";
+
         #endregion
 
         #region Properties

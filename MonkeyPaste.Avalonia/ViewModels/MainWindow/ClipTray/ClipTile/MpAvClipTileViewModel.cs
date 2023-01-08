@@ -8,6 +8,7 @@ using Avalonia.Threading;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -85,36 +86,6 @@ namespace MonkeyPaste.Avalonia {
         public MpAvClipTileDetailCollectionViewModel DetailCollectionViewModel { get; private set; }
 
         public MpAvClipTileSourceCollectionViewModel SourceCollectionViewModel { get; private set; }
-        //private MpAvSourceViewModel _sourceViewModel;
-        //public MpAvSourceViewModel SourceViewModel {
-        //    get {
-        //        if(_sourceViewModel == null) {
-        //            _sourceViewModel = MpAvSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == SourceId);
-        //            if (_sourceViewModel == null) {
-        //                _sourceViewModel= MpAvSourceCollectionViewModel.Instance.Items.FirstOrDefault(x => x.SourceId == MpPrefViewModel.Instance.ThisAppSourceId);
-        //            }
-        //        }
-        //        return _sourceViewModel;
-        //    }
-        //}
-
-        //public MpAvAppViewModel AppViewModel {
-        //    get {
-        //        if (SourceViewModel == null) {
-        //            return null;
-        //        }
-        //        return SourceViewModel.AppViewModel;
-        //    }
-        //}
-
-        //public MpAvUrlViewModel UrlViewModel {
-        //    get {
-        //        if (SourceViewModel == null) {
-        //            return null;
-        //        }
-        //        return SourceViewModel.UrlViewModel;
-        //    }
-        //}
 
         public MpAvClipTileViewModel Next {
             get {
@@ -491,6 +462,8 @@ namespace MonkeyPaste.Avalonia {
 
 
         #endregion
+
+        public string AnnotationsJsonStr { get; set; }
 
         public bool CanShowContextMenu { get; set; } = true;
 
@@ -1113,6 +1086,13 @@ namespace MonkeyPaste.Avalonia {
 
             await SourceCollectionViewModel.InitializeAsync(CopyItemId);
 
+            var cial = await MpDataModelProvider.GetCopyItemAnnotationsAsync(CopyItemId);
+            if(cial == null || cial.Count == 0) {
+                AnnotationsJsonStr = string.Empty;
+            } else {
+                AnnotationsJsonStr = JsonConvert.SerializeObject(cial.Select(x => x.AnnotationJsonStr).ToList());
+            }
+
             if (isRestoringSelection) {
                 Parent.RestoreSelectionState(this);
             }
@@ -1429,18 +1409,14 @@ namespace MonkeyPaste.Avalonia {
                 if (sc.CommandParameter == CopyItemId.ToString() && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(SelfBindingRef));
                 }
-            } else if (e is MpImageAnnotation dio) {
-                // NOTE DetectedImage stuff is excluded if ref is needed
-
-                //if (dio.CopyItemId == CopyItemId) {
-                //    Dispatcher.UIThread.Post(async () => {
-                //        if (DetectedImageObjectCollectionViewModel == null) {
-                //            DetectedImageObjectCollectionViewModel = new MpImageAnnotationCollectionViewModel(this);
-                //        }
-                //        await DetectedImageObjectCollectionViewModel.InitializeAsync(CopyItem);
-                //        OnPropertyChanged(nameof(HasDetectedObjects));
-                //    });
-                //}
+            } else if (e is MpCopyItemAnnotation cia && cia.CopyItemId == CopyItemId) {
+                Dispatcher.UIThread.Post(async () => {
+                    await InitializeAsync(CopyItem);
+                    //wait for model to propagate then trigger view to reload
+                    if (GetDragSource() is MpAvCefNetWebView wv) {
+                        wv.PerformLoadContentRequestAsync().FireAndForgetSafeAsync();
+                    }
+                });
             }
         }
 
@@ -1456,13 +1432,12 @@ namespace MonkeyPaste.Avalonia {
                     Dispatcher.UIThread.Post(async () => {
                         await InitializeAsync(ci);
                         //wait for model to propagate then trigger view to reload
-                        //IsViewLoaded = false;
                         if(GetDragSource() is MpAvCefNetWebView wv) {
                             wv.PerformLoadContentRequestAsync().FireAndForgetSafeAsync();
                         }
                     });
                 }
-            }
+            } 
         }
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {

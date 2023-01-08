@@ -22,14 +22,19 @@ namespace MonkeyPaste.Avalonia {
 
                     string paramVal = string.Empty;
                     if (paramFormat.values != null && paramFormat.values.Count > 0) {
+                        // ensure value encoding is correct for control type
+                        MpCsvFormatProperties csvProps =
+                            paramFormat.controlType == MpPluginParameterControlType.MultiSelectList ||
+                            paramFormat.controlType == MpPluginParameterControlType.EditableList ?
+                                MpCsvFormatProperties.DefaultBase64Value : MpCsvFormatProperties.Default;
+
                         // if parameter has a predefined value (a case when not would be a text box that needs input so its value is empty)
-                        if (paramFormat.values.Any(x => x.isDefault)) {
-                            // when manifest identifies a value as default choose that for value
-                            paramVal = paramFormat.values.Where(x => x.isDefault).Select(x => x.value).ToList().ToCsv();
-                        } else {
+                        var def_param_vals = paramFormat.values.Where(x => x.isDefault).ToList();
+                        if (def_param_vals.Count == 0) {
                             // if no default is defined use first available value
-                            paramVal = paramFormat.values[0].value;
+                            def_param_vals.Add(paramFormat.values[0]);
                         }
+                        paramVal = def_param_vals.Select(x => x.value).ToList().ToCsv(csvProps);
                     }
                     var newPresetVal = await MpPluginPresetParameterValue.CreateAsync(
                         hostType: hostType,
