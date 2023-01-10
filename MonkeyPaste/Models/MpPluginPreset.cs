@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace MonkeyPaste {
     public class MpPluginPreset : 
@@ -123,12 +124,13 @@ namespace MonkeyPaste {
         //public MpClipboardHandlerFormat ClipboardFormat { get; set; }
 
         //[Ignore]
-        //public MpPluginComponentBaseFormat ComponentFormat { get; set; }
+        //public MpParameterHostBaseFormat ComponentFormat { get; set; }
 
         #endregion
 
-        public static async Task<MpPluginPreset> CreateAsync(
+        public static async Task<MpPluginPreset> CreateOrUpdateAsync(
             string pluginGuid = "", 
+            string guid = "",
             string label = "",
             string description = "",
             int iconId = 0, 
@@ -136,12 +138,8 @@ namespace MonkeyPaste {
             bool isQuickAction = false, 
             bool isActionPreset = false,
             int sortOrderIdx = -1, 
-            DateTime? manifestLastModifiedDateTime = null,
-            //MpPluginComponentBaseFormat format = null,
-            int existingDefaultPresetId = 0) {
-            //if(format == null) {
-            //    throw new Exception("must have format");
-            //}
+            DateTime? manifestLastModifiedDateTime = null) {
+
             if(iconId == 0) {
                 throw new Exception("needs icon");
             }
@@ -152,9 +150,19 @@ namespace MonkeyPaste {
                 sortOrderIdx = await MpDataModelProvider.GetPluginPresetCountByPluginGuidAsync(pluginGuid);
             }
 
+            var dup_check = await MpDataModelProvider.GetPluginPresetByPresetGuidAsync(guid);
+            if(dup_check != null) {
+                dup_check.Label = label;
+                dup_check.IconId = iconId;
+                dup_check.SortOrderIdx = sortOrderIdx;
+                dup_check.Description = description;
+                dup_check.ManifestLastModifiedDateTime = manifestLastModifiedDateTime.HasValue ? manifestLastModifiedDateTime.Value : DateTime.Now;
+                await dup_check.WriteToDatabaseAsync();
+                return dup_check;
+            }
+
             var newPluginPreset = new MpPluginPreset() {
-                Id = existingDefaultPresetId,   // only not 0 when reseting default preset
-                AnalyticItemPresetGuid = System.Guid.NewGuid(),
+                AnalyticItemPresetGuid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid() : System.Guid.Parse(guid),
                 PluginGuid = pluginGuid,
                 Label = label,
                 Description = description,
@@ -202,7 +210,7 @@ namespace MonkeyPaste {
             }
 
             if(deepClone) {
-                var presetValues = await MpDataModelProvider.GetPluginPresetValuesByPresetIdAsync(MpParameterHostType.Preset, Id);
+                var presetValues = await MpDataModelProvider.GetAllParameterHostValuesAsync(MpParameterHostType.Preset, Id);
                 foreach (var ppv in presetValues) {
                     var cppv = await ppv.CloneDbModelAsync(
                             deepClone: deepClone,
@@ -224,7 +232,7 @@ namespace MonkeyPaste {
                 return;
             }
             List<Task> delete_tasks = new List<Task>();
-            var pppvl = await MpDataModelProvider.GetPluginPresetValuesByPresetIdAsync(MpParameterHostType.Preset, Id);
+            var pppvl = await MpDataModelProvider.GetAllParameterHostValuesAsync(MpParameterHostType.Preset, Id);
             if(pppvl != null && pppvl.Count > 0) {
                 delete_tasks.AddRange(pppvl.Select(x => x.DeleteFromDatabaseAsync()));
             }

@@ -10,7 +10,7 @@ using System.Linq;
 namespace MonkeyPaste {
     public static class MpPluginRequestBuilder {
         public static async Task<MpAnalyzerPluginRequestFormat> BuildRequest(
-            List<MpPluginParameterFormat> paramFormats,
+            List<MpParameterFormat> paramFormats,
             Dictionary<object,string> paramValues,
             MpCopyItem sourceContent) {
             
@@ -30,7 +30,7 @@ namespace MonkeyPaste {
         }
 
         private static async Task<MpPluginRequestItemFormat> BuildRequestItem(
-            MpPluginParameterFormat paramFormat, 
+            MpParameterFormat paramFormat, 
             string paramValue,
             MpCopyItem sourceContent) {
             return new MpPluginRequestItemFormat() { 

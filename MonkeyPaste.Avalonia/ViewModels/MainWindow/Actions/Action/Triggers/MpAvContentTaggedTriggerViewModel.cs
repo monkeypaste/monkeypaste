@@ -16,18 +16,18 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpIPluginHost Overrides
+        #region MpIParameterHost Overrides
 
         private MpActionPluginFormat _actionComponentFormat;
         public override MpActionPluginFormat ActionComponentFormat {
             get {
                 if (_actionComponentFormat == null) {
                     _actionComponentFormat = new MpActionPluginFormat() {
-                        parameters = new List<MpPluginParameterFormat>() {
-                            new MpPluginParameterFormat() {
+                        parameters = new List<MpParameterFormat>() {
+                            new MpParameterFormat() {
                                 label = "Collection",
-                                controlType = MpPluginParameterControlType.ComponentPicker,
-                                unitType = MpPluginParameterValueUnitType.CollectionComponentId,
+                                controlType = MpParameterControlType.ComponentPicker,
+                                unitType = MpParameterValueUnitType.CollectionComponentId,
                                 isRequired = true,
                                 paramId = SELECTED_TAG_PARAM_ID,
                                 description = "Triggered when content is added to the selected collection"

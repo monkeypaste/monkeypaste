@@ -34,8 +34,6 @@ namespace MonkeyPaste {
 
         public string Value { get; set; } = string.Empty;
 
-        public int SortOrderIdx { get; set; } = 0;
-
         #endregion
 
         #region Properties
@@ -69,7 +67,6 @@ namespace MonkeyPaste {
             MpParameterHostType hostType = MpParameterHostType.None,
             int presetId = 0, 
             object paramId = null,
-            int sortOrderIdx = -1,
             string value = ""
             //MpPluginParameterFormat format = null
             ) {
@@ -82,12 +79,8 @@ namespace MonkeyPaste {
             if(string.IsNullOrEmpty(paramId.ToString())) {
                 throw new Exception("ParamId must cannot be null or empty");
             }
-            var cur_vals = await MpDataModelProvider.GetPluginPresetValuesAsync(hostType, presetId, paramId.ToString());
+            var dup_check = await MpDataModelProvider.GetParameterValueAsync(hostType, presetId, paramId.ToString());
 
-            if (sortOrderIdx < 0) {
-                sortOrderIdx = cur_vals.Count;
-            }
-            var dup_check = cur_vals.FirstOrDefault(x => x.SortOrderIdx == sortOrderIdx && x.Value == value);
 
             if (dup_check != null) {
                 MpConsole.WriteLine($"Updating preset Id{presetId} for {paramId}");
@@ -109,8 +102,7 @@ namespace MonkeyPaste {
                 ParameterHostType = hostType,
                 ParameterHostId = presetId,
                 ParamId = paramId.ToString(),
-                Value = value,
-                SortOrderIdx = sortOrderIdx
+                Value = value
             };
 
             await newPluginPresetParameterValue.WriteToDatabaseAsync();

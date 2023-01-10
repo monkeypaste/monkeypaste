@@ -6,6 +6,7 @@ namespace MonkeyPaste.Common.Plugin {
         public string guid { get; set; }
 
         public bool isDefault { get; set; } = false;
+        public string iconUri { get; set; }
 
         public string label { get; set; } = string.Empty;
         public string description { get; set; } = string.Empty;
@@ -14,7 +15,7 @@ namespace MonkeyPaste.Common.Plugin {
     }
 
     public class MpPluginPresetValueFormat : MpJsonObject {
-        public object paramId { get; set; } = string.Empty;
+        public string paramId { get; set; } = string.Empty;
         public string value { get; set; } = string.Empty;
     }
 }

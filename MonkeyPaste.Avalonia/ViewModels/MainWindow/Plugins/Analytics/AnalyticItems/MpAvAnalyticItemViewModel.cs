@@ -42,21 +42,26 @@ namespace MonkeyPaste.Avalonia {
         MpIHoverableViewModel,
         MpIAsyncComboBoxItemViewModel,
         MpIMenuItemViewModel,
-        MpIPluginHost {
+        MpIParameterHostViewModel {
         #region Private Variables
         #endregion
 
         #region Interfaces
 
-        #region MpIPluginHost Implementation
+        #region MpIParameterHost Implementation
 
-        int MpIPluginHost.IconId => PluginIconId;
+        int MpIParameterHostViewModel.IconId => PluginIconId;
         public string PluginGuid =>
             PluginFormat == null ? string.Empty : PluginFormat.guid;
 
         public MpPluginFormat PluginFormat { get; set; }
 
-        MpPluginComponentBaseFormat MpIPluginHost.ComponentFormat => AnalyzerComponentFormat;
+        MpParameterHostBaseFormat MpIParameterHostViewModel.ComponentFormat => AnalyzerComponentFormat;
+
+        MpParameterHostBaseFormat MpIParameterHostViewModel.BackupComponentFormat =>
+            PluginFormat == null || PluginFormat.backupCheckPluginFormat == null || PluginFormat.backupCheckPluginFormat.analyzer == null ?
+                null : PluginFormat.backupCheckPluginFormat.analyzer;
+
         public MpAnalyzerPluginFormat AnalyzerComponentFormat =>
             PluginFormat == null ? null : PluginFormat.analyzer;
 
@@ -93,8 +98,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public MpAvAnalyticItemPresetViewModel DefaultPresetViewModel => base.Items.FirstOrDefault(x => x.IsDefault);
-
         public MpMenuItemViewModel ContextMenuItemViewModel {
             get { 
                 var subItems = Items.Where(x=>!x.IsActionPreset).Select(x => x.ContextMenuItemViewModel).ToList();
@@ -118,9 +121,7 @@ namespace MonkeyPaste.Avalonia {
 
         public IEnumerable<MpMenuItemViewModel> QuickActionPresetMenuItems => Items.Where(x => x.IsQuickAction).Select(x => x.ContextMenuItemViewModel);
 
-        #endregion
-
-        
+        #endregion        
 
         #region Appearance
 
@@ -159,7 +160,6 @@ namespace MonkeyPaste.Avalonia {
         //public bool IsAnyEditingParameters => Items.Any(x => x.IsEditingParameters);
 
         public bool IsHovering { get; set; } = false;
-
 
         public MpAnalyzerTransaction LastTransaction { get; private set; } = null;
 
@@ -416,8 +416,11 @@ namespace MonkeyPaste.Avalonia {
             }
                        
             base.Items.Clear();
+            //if(Title == "Yolo") {
+            //    Debugger.Break();
+            //}
 
-            var presets = await MpAvPluginPresetLocator.LocatePresetsAsync(this,Items.Select(x=>x.Preset));
+            var presets = await MpAvPluginPresetLocator.LocatePresetsAsync(this);
             foreach (var preset in presets) {
                 var naipvm = await CreatePresetViewModelAsync(preset);
                 base.Items.Add(naipvm);
@@ -442,7 +445,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string GetUniquePresetName() {
             int uniqueIdx = 1;
-            string uniqueName = $"Preset";
+            string uniqueName = $"{Title} Preset";
             string testName = string.Format(
                                         @"{0}{1}",
                                         uniqueName.ToLower(),
@@ -458,7 +461,7 @@ namespace MonkeyPaste.Avalonia {
             return uniqueName + uniqueIdx;
         }
 
-        public virtual async Task<MpPluginParameterFormat> DeferredCreateParameterModel(MpPluginParameterFormat aip) {
+        public virtual async Task<MpParameterFormat> DeferredCreateParameterModel(MpParameterFormat aip) {
             //used to load remote content and called from CreateParameterViewModel in preset
             await Task.Delay(1);
             return aip;
@@ -857,45 +860,63 @@ namespace MonkeyPaste.Avalonia {
 
              });
 
-        public ICommand DeletePresetCommand => new MpAsyncCommand<MpAvAnalyticItemPresetViewModel>(
-            async (presetVm) => {
-                if(presetVm.IsDefault) {
-                    return;
-                }
+        public ICommand DeletePresetCommand => new MpAsyncCommand<object>(
+            async (presetVmArg) => {
                 IsBusy = true;
 
+                var presetVm = presetVmArg as MpAvAnalyticItemPresetViewModel;
                 foreach(var presetVal in presetVm.Items) {
                     await presetVal.PresetValueModel.DeleteFromDatabaseAsync();
                 }
                 await presetVm.Preset.DeleteFromDatabaseAsync();
 
                 IsBusy = false;
+            },
+            (presetVmArg) => {
+                if (presetVmArg is MpAvAnalyticItemPresetViewModel aipvm &&
+                     !aipvm.IsManifestPreset) {
+                    return true;
+                }
+                return false;
             });
 
-        public ICommand ResetDefaultPresetCommand => new MpAsyncCommand(
-            async () => {
+        public ICommand ResetPresetCommand => new MpAsyncCommand<object>(
+            async (presetVmArg) => {
                 IsBusy = true;
-
-                var defvm = base.Items.FirstOrDefault(x => x.IsDefault);
-                if(defvm == null) {
-                    throw new Exception("Analyzer is supposed to have a default preset");
-                }
+                var aipvm = presetVmArg as MpAvAnalyticItemPresetViewModel;
 
                 // recreate default preset record (name, icon, etc.)
                 //var defaultPresetModel = await CreateDefaultPresetModelAsync(defvm.AnalyticItemPresetId);
-                var defaultPresetModel = await MpAvPluginPresetLocator.CreateDefaultPresetModelAsync(this, defvm.AnalyticItemPresetId, Items.IndexOf(defvm));
+                var defaultPresetModel = await MpAvPluginPresetLocator.CreateOrResetManifestPresetModelAsync(
+                    this, aipvm.PresetGuid, Items.IndexOf(aipvm));
 
                 // before initializing preset remove current values from db or it won't reset values
-                await Task.WhenAll(defvm.Items.Select(x => x.PresetValueModel.DeleteFromDatabaseAsync()));
+                await Task.WhenAll(aipvm.Items.Select(x => x.PresetValueModel.DeleteFromDatabaseAsync()));
 
-                await defvm.InitializeAsync(defaultPresetModel);
+                await aipvm.InitializeAsync(defaultPresetModel);
 
-                base.Items.ForEach(x => x.IsSelected = x.AnalyticItemPresetId == defvm.AnalyticItemPresetId);
+                Items.ForEach(x => x.IsSelected = x.AnalyticItemPresetId == aipvm.AnalyticItemPresetId);
                 OnPropertyChanged(nameof(SelectedItem));
 
                 IsBusy = false;
+            },
+            (presetVmArg) => { 
+               if(presetVmArg is MpAvAnalyticItemPresetViewModel aipvm &&
+                    aipvm.IsManifestPreset) {
+                    return true;
+                }
+                return false;
             });
-
+        public ICommand ResetOrDeletePresetCommand => new MpCommand<object>(
+            (presetVmArg) => {
+                if (ResetPresetCommand.CanExecute(presetVmArg)) {
+                    ResetPresetCommand.Execute(presetVmArg);
+                } else {
+                    DeletePresetCommand.Execute(presetVmArg);
+                }
+            },(presetVmArg) => {
+                return presetVmArg is MpAvAnalyticItemPresetViewModel;
+            });
         public ICommand ShiftPresetCommand => new MpCommand<object>(
             // [0] = new_idx [1] = presetvm
             (args) => {
@@ -926,7 +947,7 @@ namespace MonkeyPaste.Avalonia {
 
                 var np_icon = await def_icon.CloneDbModelAsync();
 
-                MpPluginPreset newPreset = await MpPluginPreset.CreateAsync(
+                MpPluginPreset newPreset = await MpPluginPreset.CreateOrUpdateAsync(
                         pluginGuid: PluginGuid,
                         isActionPreset: isActionPreset,
                         sortOrderIdx: base.Items.Count,

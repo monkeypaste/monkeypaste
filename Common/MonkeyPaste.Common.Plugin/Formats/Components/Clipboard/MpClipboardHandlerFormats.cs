@@ -10,7 +10,7 @@ namespace MonkeyPaste.Common.Plugin {
         public List<MpClipboardHandlerFormat> writers{ get; set; }
     }
 
-    public class MpClipboardHandlerFormat : MpPluginComponentBaseFormat {
+    public class MpClipboardHandlerFormat : MpParameterHostBaseFormat {
         
         public string iconUri { get; set; }
         public string handlerGuid { get; set; }

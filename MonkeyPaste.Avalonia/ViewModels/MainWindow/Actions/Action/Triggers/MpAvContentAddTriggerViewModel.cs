@@ -15,18 +15,18 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpIPluginHost Overrides
+        #region MpIParameterHost Overrides
 
         private MpActionPluginFormat _actionComponentFormat;
         public override MpActionPluginFormat ActionComponentFormat {
             get {
                 if (_actionComponentFormat == null) {
                     _actionComponentFormat = new MpActionPluginFormat() {
-                        parameters = new List<MpPluginParameterFormat>() {
-                            new MpPluginParameterFormat() {
+                        parameters = new List<MpParameterFormat>() {
+                            new MpParameterFormat() {
                                 label = "Trigger",
-                                controlType = MpPluginParameterControlType.ComboBox,
-                                unitType = MpPluginParameterValueUnitType.PlainText,
+                                controlType = MpParameterControlType.ComboBox,
+                                unitType = MpParameterValueUnitType.PlainText,
                                 isRequired = true,
                                 paramId = CONTENT_TYPE_PARAM_ID,
                                 description = "Content (not meeting rejection criteria) of this type will trigger this action.",

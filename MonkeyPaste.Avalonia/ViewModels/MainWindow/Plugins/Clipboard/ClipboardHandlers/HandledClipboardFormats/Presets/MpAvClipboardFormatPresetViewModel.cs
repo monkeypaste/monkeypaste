@@ -12,12 +12,11 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvClipboardFormatPresetViewModel : 
-        MpAvSelectorViewModelBase<MpAvHandledClipboardFormatViewModel,MpAvPluginParameterViewModelBase>,
+        MpAvSelectorViewModelBase<MpAvHandledClipboardFormatViewModel,MpAvParameterViewModelBase>,
         MpISelectableViewModel,
         MpIHoverableViewModel,
         MpIUserIconViewModel,
-        MpITreeItemViewModel,
-        MpIPluginComponentViewModel {
+        MpITreeItemViewModel{
 
         #region Properties
 
@@ -46,7 +45,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIPluginComponentViewModel Implementation
-        public MpPluginComponentBaseFormat ComponentFormat => ClipboardFormat;
+        public MpParameterHostBaseFormat ComponentFormat => ClipboardFormat;
 
         #endregion
 
@@ -222,7 +221,14 @@ namespace MonkeyPaste.Avalonia {
                 return Preset.PluginGuid;
             }
         }
-
+        public string PresetGuid {
+            get {
+                if (Preset == null) {
+                    return string.Empty;
+                }
+                return Preset.Guid;
+            }
+        }
         public int PresetId {
             get {
                 if (Preset == null) {
@@ -307,39 +313,39 @@ namespace MonkeyPaste.Avalonia {
 
             IsBusy = false;
         }
-        public async Task<MpAvPluginParameterViewModelBase> CreateParameterViewModelAsync(MpPluginPresetParameterValue aipv) {
-            //MpPluginParameterControlType controlType = ClipboardFormat.parameters.FirstOrDefault(x => x.paramId == aipv.ParamId).controlType;
-            //MpAvPluginParameterViewModelBase naipvm = null;
+        public async Task<MpAvParameterViewModelBase> CreateParameterViewModelAsync(MpPluginPresetParameterValue aipv) {
+            //MpParameterControlType controlType = ClipboardFormat.parameters.FirstOrDefault(x => x.paramId == aipv.ParamId).controlType;
+            //MpAvParameterViewModelBase naipvm = null;
 
             //switch (controlType) {
-            //    case MpPluginParameterControlType.List:
-            //    case MpPluginParameterControlType.MultiSelectList:
-            //    case MpPluginParameterControlType.EditableList:
-            //    case MpPluginParameterControlType.ComboBox:
+            //    case MpParameterControlType.List:
+            //    case MpParameterControlType.MultiSelectList:
+            //    case MpParameterControlType.EditableList:
+            //    case MpParameterControlType.ComboBox:
             //        naipvm = new MpAvEnumerableParameterViewModel(this);
             //        break;
-            //    case MpPluginParameterControlType.PasswordBox:
-            //    case MpPluginParameterControlType.TextBox:
+            //    case MpParameterControlType.PasswordBox:
+            //    case MpParameterControlType.TextBox:
             //        naipvm = new MpAvTextBoxParameterViewModel(this);
             //        break;
-            //    case MpPluginParameterControlType.CheckBox:
+            //    case MpParameterControlType.CheckBox:
             //        naipvm = new MpAvCheckBoxParameterViewModel(this);
             //        break;
-            //    case MpPluginParameterControlType.Slider:
+            //    case MpParameterControlType.Slider:
             //        naipvm = new MpAvSliderParameterViewModel(this);
             //        break;
-            //    case MpPluginParameterControlType.DirectoryChooser:
-            //    case MpPluginParameterControlType.FileChooser:
+            //    case MpParameterControlType.DirectoryChooser:
+            //    case MpParameterControlType.FileChooser:
             //        naipvm = new MpAvFileChooserParameterViewModel(this);
             //        break;
             //    default:
-            //        throw new Exception(@"Unsupported Paramter type: " + Enum.GetName(typeof(MpPluginParameterControlType), controlType));
+            //        throw new Exception(@"Unsupported Paramter type: " + Enum.GetName(typeof(MpParameterControlType), controlType));
             //}
             //naipvm.OnValidate += ParameterViewModel_OnValidate;
 
 
             //await naipvm.InitializeAsync(aipv);
-            var naipvm = await MpAvPluginParameterBuilder.CreateParameterViewModelAsync(aipv, Parent, this);
+            var naipvm = await MpAvPluginParameterBuilder.CreateParameterViewModelAsync(aipv, Parent);
             naipvm.OnValidate += ParameterViewModel_OnValidate;
 
             return naipvm;
@@ -353,7 +359,7 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
 
         protected virtual void ParameterViewModel_OnValidate(object sender, EventArgs e) {
-            var aipvm = sender as MpAvPluginParameterViewModelBase;
+            var aipvm = sender as MpAvParameterViewModelBase;
             if (aipvm.IsRequired && string.IsNullOrWhiteSpace(aipvm.CurrentValue)) {
                 aipvm.ValidationMessage = $"{aipvm.Label} is required";
             } else {

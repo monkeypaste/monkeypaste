@@ -45,18 +45,18 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpIPluginHost Overrides
+        #region MpIParameterHost Overrides
 
         private MpActionPluginFormat _actionComponentFormat;
         public override MpActionPluginFormat ActionComponentFormat {
             get {
                 if (_actionComponentFormat == null) {
                     _actionComponentFormat = new MpActionPluginFormat() {
-                        parameters = new List<MpPluginParameterFormat>() {
-                            new MpPluginParameterFormat() {
+                        parameters = new List<MpParameterFormat>() {
+                            new MpParameterFormat() {
                                 label = "Repeat Count",
-                                controlType = MpPluginParameterControlType.Slider,
-                                unitType = MpPluginParameterValueUnitType.Integer,
+                                controlType = MpParameterControlType.Slider,
+                                unitType = MpParameterValueUnitType.Integer,
                                 minimum = 0,
                                 maximum = int.MaxValue,
                                 isRequired = true,
@@ -69,10 +69,10 @@ namespace MonkeyPaste.Avalonia {
                                     }
                                 }
                             },
-                             new MpPluginParameterFormat() {
+                             new MpParameterFormat() {
                                 label = "Repeat Delay",
-                                controlType = MpPluginParameterControlType.Slider,
-                                unitType = MpPluginParameterValueUnitType.Integer,
+                                controlType = MpParameterControlType.Slider,
+                                unitType = MpParameterValueUnitType.Integer,
                                 minimum = 0,
                                 maximum = int.MaxValue,
                                 isRequired = true,

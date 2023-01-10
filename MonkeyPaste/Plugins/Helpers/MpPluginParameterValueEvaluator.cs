@@ -60,21 +60,21 @@ namespace MonkeyPaste {
         #region Public Methods
 
         public static async Task<string> GetParameterRequestValueAsync(
-            MpPluginParameterControlType controlType,
-            MpPluginParameterValueUnitType valueType,
+            MpParameterControlType controlType,
+            MpParameterValueUnitType valueType,
             string curVal,
             MpCopyItem ci) {
             switch (valueType) {
-                case MpPluginParameterValueUnitType.PlainTextContentQuery:
+                case MpParameterValueUnitType.PlainTextContentQuery:
                     curVal = await GetParameterQueryResultAsync(controlType, curVal, ci, false);
                     break;
-                case MpPluginParameterValueUnitType.RawDataContentQuery:
+                case MpParameterValueUnitType.RawDataContentQuery:
                     curVal = await GetParameterQueryResultAsync(controlType,curVal, ci, true);
                     break;
-                case MpPluginParameterValueUnitType.Base64Text:
+                case MpParameterValueUnitType.Base64Text:
                     curVal = curVal.ToBytesFromBase64String().ToBase64String();
                     break;
-                case MpPluginParameterValueUnitType.FileSystemPath:
+                case MpParameterValueUnitType.FileSystemPath:
                     if (string.IsNullOrWhiteSpace(curVal)) {
                         break;
                     }
@@ -118,17 +118,17 @@ namespace MonkeyPaste {
         #endregion
 
         #region Private Methods
-        private static async Task<string> GetParameterQueryResultAsync(MpPluginParameterControlType controlType, string curVal, MpCopyItem ci, bool asRawData) {
-            if(controlType == MpPluginParameterControlType.EditableList ||
-                controlType == MpPluginParameterControlType.MultiSelectList) {
+        private static async Task<string> GetParameterQueryResultAsync(MpParameterControlType controlType, string curVal, MpCopyItem ci, bool asRawData) {
+            if(MpParameterFormat.IsControlCsvValue(controlType)) {
                 // for csv values, split decode actual text to get query result then return re-encoded csv
-                var decoded_vals = curVal.ToListFromCsv(MpCsvFormatProperties.DefaultBase64Value);
+                var csvProps = MpParameterFormat.GetControlCsvProps(controlType);
+                var decoded_vals = curVal.ToListFromCsv(csvProps);
                 var decoded_val_results = new List<string>();
                 foreach (var decoded_val in decoded_vals) {
-                    string decoded_val_result = await GetParameterQueryResultAsync(MpPluginParameterControlType.TextBox, decoded_val, ci, asRawData);
+                    string decoded_val_result = await GetParameterQueryResultAsync(MpParameterControlType.TextBox, decoded_val, ci, asRawData);
                     decoded_val_results.Add(decoded_val_result);
                 }
-                return decoded_val_results.ToCsv(MpCsvFormatProperties.DefaultBase64Value);
+                return decoded_val_results.ToCsv(csvProps);
             }
 
             for (int i = 1; i < Enum.GetNames(typeof(MpContentQueryPropertyPathType)).Length; i++) {
@@ -144,7 +144,7 @@ namespace MonkeyPaste {
                     }
 
                     if (!asRawData) {
-                        contentValue = await GetParameterRequestValueAsync(controlType,MpPluginParameterValueUnitType.PlainText, contentValue, ci);
+                        contentValue = await GetParameterRequestValueAsync(controlType,MpParameterValueUnitType.PlainText, contentValue, ci);
                     }
                     string pptTokenBackup = "{@" + ppt.ToString() + "@}";
                     if (curVal.Contains(pptTokenBackup)) {

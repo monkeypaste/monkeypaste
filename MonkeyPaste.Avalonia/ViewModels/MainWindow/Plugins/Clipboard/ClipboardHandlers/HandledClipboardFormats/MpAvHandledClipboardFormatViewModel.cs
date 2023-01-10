@@ -17,7 +17,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvHandledClipboardFormatViewModel :
         MpAvTreeSelectorViewModelBase<MpAvClipboardHandlerItemViewModel,MpAvClipboardFormatPresetViewModel>,
         MpISelectableViewModel,
-        MpIPluginHost,
+        MpIParameterHostViewModel,
         MpIHoverableViewModel {
         #region Private Variables
         #endregion
@@ -34,20 +34,20 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpIPluginHost Implementation
+        #region MpIParameterHost Implementation
 
-        int MpIPluginHost.IconId => HandledFormatIconId;
+        int MpIParameterHostViewModel.IconId => HandledFormatIconId;
         public string PluginGuid => ClipboardHandlerGuid;
 
-        //public MpPluginFormat PluginFormat { get; set; }
+        MpParameterHostBaseFormat MpIParameterHostViewModel.ComponentFormat => ClipboardPluginFormat;
 
-        MpPluginComponentBaseFormat MpIPluginHost.ComponentFormat => ClipboardPluginFormat;
-
+        MpParameterHostBaseFormat MpIParameterHostViewModel.BackupComponentFormat =>
+            PluginFormat == null || PluginFormat.backupCheckPluginFormat == null || PluginFormat.backupCheckPluginFormat.analyzer == null ?
+                null : PluginFormat.backupCheckPluginFormat.analyzer;
         public MpIPluginComponentBase PluginComponent => ClipboardPluginComponent;
 
         public string ClipboardHandlerGuid { get; private set; }
 
-        //public MpClipboardHandlerFormat ClipboardPluginFormat { get; private set; }
         public MpClipboardHandlerFormat ClipboardPluginFormat {
             get {
                 if (PluginFormat == null) {
@@ -259,8 +259,7 @@ namespace MonkeyPaste.Avalonia {
 
             //var presets = await PreparePresetModelsAsync();
 
-            var presets = await MpAvPluginPresetLocator.LocatePresetsAsync(
-                this, Items.Select(x => x.Preset), IsCoreHandler);
+            var presets = await MpAvPluginPresetLocator.LocatePresetsAsync(this, IsCoreHandler);
 
 
             Items.Clear();
@@ -303,7 +302,7 @@ namespace MonkeyPaste.Avalonia {
             return uniqueName + uniqueIdx;
         }
 
-        public virtual async Task<MpPluginParameterFormat> DeferredCreateParameterModel(MpPluginParameterFormat aip) {
+        public virtual async Task<MpParameterFormat> DeferredCreateParameterModel(MpParameterFormat aip) {
             //used to load remote content and called from CreateParameterViewModel in preset
             await Task.Delay(1);
             return aip;
@@ -606,8 +605,8 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 // recreate default preset record (name, icon, etc.)
-                var defaultPresetModel = await MpAvPluginPresetLocator.CreateDefaultPresetModelAsync(
-                    this,defvm.PresetId,Items.IndexOf(defvm));
+                var defaultPresetModel = await MpAvPluginPresetLocator.CreateOrResetManifestPresetModelAsync(
+                    this,defvm.PresetGuid,Items.IndexOf(defvm));
 
                 // store IsEnabled to current state
                 bool wasEnabled = defvm.IsEnabled;
@@ -650,7 +649,7 @@ namespace MonkeyPaste.Avalonia {
             async () => {
                 IsBusy = true;
 
-                MpPluginPreset newPreset = await MpPluginPreset.CreateAsync(
+                MpPluginPreset newPreset = await MpPluginPreset.CreateOrUpdateAsync(
                         pluginGuid: ClipboardHandlerGuid,
                         //format: ClipboardPluginFormat,
                         iconId: HandledFormatIconId,

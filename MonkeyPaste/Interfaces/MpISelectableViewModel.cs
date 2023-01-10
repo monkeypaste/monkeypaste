@@ -28,8 +28,8 @@ namespace MonkeyPaste {
         ObservableCollection<T> Items { get; set; }
     }
 
-    public interface MpIPluginComponentViewModel : MpIViewModel {
-        public MpPluginComponentBaseFormat ComponentFormat { get; }
-    }
+    //public interface MpIPluginComponentViewModel : MpIViewModel {
+    //    public MpParameterHostBaseFormat ComponentFormat { get; }
+    //}
 
 }

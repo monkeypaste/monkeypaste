@@ -35,18 +35,18 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpIPluginHost Overrides
+        #region MpIParameterHost Overrides
 
         private MpActionPluginFormat _actionComponentFormat;
         public override MpActionPluginFormat ActionComponentFormat {
             get {
                 if (_actionComponentFormat == null) {
                     _actionComponentFormat = new MpActionPluginFormat() {
-                        parameters = new List<MpPluginParameterFormat>() {
-                            new MpPluginParameterFormat() {
+                        parameters = new List<MpParameterFormat>() {
+                            new MpParameterFormat() {
                                 label = "Shortcut",
-                                controlType = MpPluginParameterControlType.ShortcutRecorder,
-                                unitType = MpPluginParameterValueUnitType.PlainText,
+                                controlType = MpParameterControlType.ShortcutRecorder,
+                                unitType = MpParameterValueUnitType.PlainText,
                                 isRequired = true,
                                 paramId = CURRENT_SHORTCUT_PARAM_ID,
                                 description = "Triggered when the recorded shortcut is pressed at anytime with the current clipboard"

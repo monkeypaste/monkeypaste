@@ -9,7 +9,7 @@ using System;
 using Avalonia.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public partial class MpAvPluginParameterListBoxView : MpAvUserControl<MpAvIPluginParameterCollectionViewModel> {
+    public partial class MpAvPluginParameterListBoxView : MpAvUserControl<MpAvIParameterCollectionViewModel> {
 
         public MpAvPluginParameterListBoxView() {
             InitializeComponent();

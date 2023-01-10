@@ -187,7 +187,7 @@ namespace ComputerVision {
             if(fr == null) {
                 return null;
             }
-            return new ImageAnnotationNodeFormat() {
+            return new MpImageAnnotationNodeFormat() {
                 type = "FaceRectangle",
                 x = fr.left,
                 y = fr.top,
@@ -200,7 +200,7 @@ namespace ComputerVision {
             if(rect == null) {
                 return null;
             }
-            return new ImageAnnotationNodeFormat() {
+            return new MpImageAnnotationNodeFormat() {
                 type = rectType,
                 x = rect.x,
                 y = rect.y,

@@ -7,43 +7,42 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvPluginParameterBuilder {
-        public static async Task<MpAvPluginParameterViewModelBase> CreateParameterViewModelAsync(
+        public static async Task<MpAvParameterViewModelBase> CreateParameterViewModelAsync(
             MpPluginPresetParameterValue aipv, 
-            MpIPluginHost pluginHost,
-            MpIPluginComponentViewModel componentViewModel) {
-            MpPluginParameterControlType controlType = pluginHost.ComponentFormat.parameters.FirstOrDefault(x => x.paramId == aipv.ParamId).controlType;
+            MpIParameterHostViewModel pluginHost) {
+            MpParameterControlType controlType = pluginHost.ComponentFormat.parameters.FirstOrDefault(x => x.paramId == aipv.ParamId).controlType;
 
-            MpAvPluginParameterViewModelBase naipvm = null;
+            MpAvParameterViewModelBase naipvm = null;
 
             switch (controlType) {
-                case MpPluginParameterControlType.List:
-                case MpPluginParameterControlType.MultiSelectList:
-                case MpPluginParameterControlType.EditableList:
-                case MpPluginParameterControlType.ComboBox:
-                    naipvm = new MpAvEnumerableParameterViewModel(componentViewModel);
+                case MpParameterControlType.List:
+                case MpParameterControlType.MultiSelectList:
+                case MpParameterControlType.EditableList:
+                case MpParameterControlType.ComboBox:
+                    naipvm = new MpAvEnumerableParameterViewModel(pluginHost);
                     break;
-                case MpPluginParameterControlType.PasswordBox:
-                case MpPluginParameterControlType.TextBox:
-                    naipvm = new MpAvTextBoxParameterViewModel(componentViewModel);
+                case MpParameterControlType.PasswordBox:
+                case MpParameterControlType.TextBox:
+                    naipvm = new MpAvTextBoxParameterViewModel(pluginHost);
                     break;
-                case MpPluginParameterControlType.CheckBox:
-                    naipvm = new MpAvCheckBoxParameterViewModel(componentViewModel);
+                case MpParameterControlType.CheckBox:
+                    naipvm = new MpAvCheckBoxParameterViewModel(pluginHost);
                     break;
-                case MpPluginParameterControlType.Slider:
-                    naipvm = new MpAvSliderParameterViewModel(componentViewModel);
+                case MpParameterControlType.Slider:
+                    naipvm = new MpAvSliderParameterViewModel(pluginHost);
                     break;
-                case MpPluginParameterControlType.DirectoryChooser:
-                case MpPluginParameterControlType.FileChooser:
-                    naipvm = new MpAvFileChooserParameterViewModel(componentViewModel);
+                case MpParameterControlType.DirectoryChooser:
+                case MpParameterControlType.FileChooser:
+                    naipvm = new MpAvFileChooserParameterViewModel(pluginHost);
                     break;
-                case MpPluginParameterControlType.ComponentPicker:
-                    naipvm = new MpAvComponentPickerParameterViewModel(componentViewModel);
+                case MpParameterControlType.ComponentPicker:
+                    naipvm = new MpAvComponentPickerParameterViewModel(pluginHost);
                     break;
-                case MpPluginParameterControlType.ShortcutRecorder:
-                    naipvm = new MpAvShortcutRecorderParameterViewModel(componentViewModel);
+                case MpParameterControlType.ShortcutRecorder:
+                    naipvm = new MpAvShortcutRecorderParameterViewModel(pluginHost);
                     break;
                 default:
-                    throw new Exception(@"Unsupported Paramter type: " + Enum.GetName(typeof(MpPluginParameterControlType), controlType));
+                    throw new Exception(@"Unsupported Paramter type: " + Enum.GetName(typeof(MpParameterControlType), controlType));
             }
 
             await naipvm.InitializeAsync(aipv);

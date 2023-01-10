@@ -1,0 +1,94 @@
+{
+  "title": "Yolo",
+  "description": "local image analysis",
+  "version": "1.0",
+  "credits": "Somebody",
+  "guid": "f0988931-c39a-4ea4-b39a-32346c23094b",
+  "iconUri": "icon.png",
+  "ioType": {
+    "isDll": true
+  },
+  "dependencies": [
+    {
+      "name": "Windows",
+      "minVersion": "1903"
+    }
+  ],
+  "analyzer": {
+    "inputType": {
+      "image": true
+    },
+    "outputType": {
+      "imageToken": true
+    },
+    "parameters": [
+      {
+        "label": "Confidence",
+        "description": "A value between 0 and 1 of the estimated accuracy of the analysis",
+        "controlType": "Slider",
+        "unitType": "Decimal",
+        "minimum": 0,
+        "maximum": 1,
+        "isRequired": true,
+        "paramId": 1,
+        "values": [
+          {
+            "value": "0.1",
+            "isDefault": true
+          }
+        ]
+      },
+      {
+        "label": "Source Content",
+        "description": "The base64-encoded image to analyze",
+        "controlType": "TextBox",
+        "unitType": "PlainTextContentQuery",
+        "isRequired": true,
+        "isVisible": false,
+        "paramId": 2,
+        "values": [
+          {
+            "value": "{ItemData}"
+          }
+        ]
+      },
+      {
+        "label": "Content Reference",
+        "controlType": "TextBox",
+        "unitType": "PlainTextContentQuery",
+        "isVisible": false,
+        "paramId": 3,
+        "values": [
+          {
+            "value": "{ItemRefUrl}"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "guid": "65a73110-e5bd-4eeb-9749-778301913b25",
+        "label": "Basic",
+        "description": "A reliable but loosely accurate analysis of detected image objects",
+        "values": [
+          {
+            "paramId": 1,
+            "value": "0.3"
+          }
+        ]
+      },
+      {
+        "guid": "f967c53e-fcd5-4117-ac12-e88f68c52a17",
+        "iconUri": "extreme_icon.jpg",
+        "label": "EXTREME !!",
+        "description": "Only very confident detections to avoid false positives",
+        "values": [
+          {
+            "paramId": 1,
+            "value": "0.9"
+          }
+        ]
+      }
+    ]
+  }
+}

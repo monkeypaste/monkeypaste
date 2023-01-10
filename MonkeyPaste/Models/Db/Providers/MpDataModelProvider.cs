@@ -754,23 +754,36 @@ namespace MonkeyPaste {
             var result = await MpDb.QueryScalarAsync<int>(query, aguid);
             return result;
         }
+
+        public static async Task<MpPluginPreset> GetPluginPresetByPresetGuidAsync(string preset_guid) {
+            string query = $"select * from MpPluginPreset where MpPluginPresetGuid=?";
+            var result = await MpDb.QueryAsync<MpPluginPreset>(query, preset_guid);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
+        }
         public static async Task<List<MpPluginPreset>> GetPluginPresetsByPluginGuidAsync(string aguid) {
             string query = $"select * from MpPluginPreset where PluginGuid=?";
             var result = await MpDb.QueryAsync<MpPluginPreset>(query, aguid);
             return result;
         }
 
-        public static async Task<List<MpPluginPresetParameterValue>> GetPluginPresetValuesByPresetIdAsync(MpParameterHostType hostType,int paramHostId) {
+        public static async Task<List<MpPluginPresetParameterValue>> GetAllParameterHostValuesAsync(MpParameterHostType hostType,int paramHostId) {
             string query = $"select * from MpPluginPresetParameterValue where e_MpParameterHostType=? and fk_ParameterHostId=?";
             var result = await MpDb.QueryAsync<MpPluginPresetParameterValue>(query,hostType.ToString(), paramHostId);
             return result;
         }
 
 
-        public static async Task<List<MpPluginPresetParameterValue>> GetPluginPresetValuesAsync(MpParameterHostType hostType, int paramHostId, string paramId) {
+        public static async Task<MpPluginPresetParameterValue> GetParameterValueAsync(MpParameterHostType hostType, int paramHostId, string paramId) {
             string query = $"select * from MpPluginPresetParameterValue where e_MpParameterHostType=? and fk_ParameterHostId=? and ParamId=?";
             var result = await MpDb.QueryAsync<MpPluginPresetParameterValue>(query,hostType.ToString(), paramHostId, paramId);
-            return result;
+
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
         }
 
         #endregion 

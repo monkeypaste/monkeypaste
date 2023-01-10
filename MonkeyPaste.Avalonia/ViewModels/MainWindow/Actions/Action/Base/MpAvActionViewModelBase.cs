@@ -30,10 +30,8 @@ namespace MonkeyPaste.Avalonia {
         MpIBoxViewModel,
         MpIMovableViewModel,
         MpIInvokableAction,
-        MpIPluginHost,
-        MpAvIPluginParameterCollectionViewModel,
-        MpIPluginComponentViewModel,
-        MpIActionPluginComponent,
+        MpIParameterHostViewModel,
+        MpAvIParameterCollectionViewModel,
         MpIPopupMenuPicker {
 
         #region Private Variables
@@ -105,43 +103,34 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpIPluginHost Implementation
+        #region MpAvIParameterCollectionViewModel Implementation
 
-        IEnumerable<MpAvPluginParameterViewModelBase> MpAvIPluginParameterCollectionViewModel.Items => ActionArgs;
-        MpAvPluginParameterViewModelBase MpAvIPluginParameterCollectionViewModel.SelectedItem { get; set; }
+        IEnumerable<MpAvParameterViewModelBase> MpAvIParameterCollectionViewModel.Items => ActionArgs;
+        MpAvParameterViewModelBase MpAvIParameterCollectionViewModel.SelectedItem { get; set; }
 
         #endregion
 
-        #region MpIPluginHost Implementation
+        #region MpIParameterHost Implementation
 
-        int MpIPluginHost.IconId => 0;
+        int MpIParameterHostViewModel.IconId => 0;
         public string PluginGuid =>
             PluginFormat == null ? string.Empty : PluginFormat.guid;
 
         public MpPluginFormat PluginFormat { get; set; }
 
-        public MpPluginComponentBaseFormat ComponentFormat => ActionComponentFormat;
+        public MpParameterHostBaseFormat ComponentFormat => ActionComponentFormat;
+        MpParameterHostBaseFormat MpIParameterHostViewModel.BackupComponentFormat =>
+            PluginFormat == null || PluginFormat.backupCheckPluginFormat == null || PluginFormat.backupCheckPluginFormat.action == null ?
+                null : PluginFormat.backupCheckPluginFormat.action;
+
         public virtual MpActionPluginFormat ActionComponentFormat { get; protected set; }
 
         public MpIPluginComponentBase PluginComponent =>
             PluginFormat == null ? null : PluginFormat.Component as MpIPluginComponentBase;
 
-        public Dictionary<object, MpAvPluginParameterViewModelBase> ArgLookup =>
+        public Dictionary<object, MpAvParameterViewModelBase> ArgLookup =>
            ActionArgs.ToDictionary(x => x.ParamId, x => x);
-        public virtual ObservableCollection<MpAvPluginParameterViewModelBase> ActionArgs { get; protected set; } = new ObservableCollection<MpAvPluginParameterViewModelBase>();
-
-        #endregion
-
-        #region MpIActionPluginComponent Implementation
-
-        ICommand MpIActionPluginComponent.PerformActionCommand =>
-            new MpAsyncCommand<object>(
-                async (args) => {
-                    await PerformActionAsync(args); 
-                },
-                (args) => {
-                    return CanPerformAction(args);
-                });
+        public virtual ObservableCollection<MpAvParameterViewModelBase> ActionArgs { get; protected set; } = new ObservableCollection<MpAvParameterViewModelBase>();
 
         #endregion
 
@@ -769,8 +758,8 @@ namespace MonkeyPaste.Avalonia {
             return avm;
         }
 
-        public async Task<MpAvPluginParameterViewModelBase> CreateActionParameterViewModel(MpPluginPresetParameterValue pppv) {
-            var naipvm = await MpAvPluginParameterBuilder.CreateParameterViewModelAsync(pppv, this, this);
+        public async Task<MpAvParameterViewModelBase> CreateActionParameterViewModel(MpPluginPresetParameterValue pppv) {
+            var naipvm = await MpAvPluginParameterBuilder.CreateParameterViewModelAsync(pppv, this);
             naipvm.OnValidate += ActionParam_OnValidate;
 
             return naipvm;
@@ -945,7 +934,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     OnPropertyChanged(nameof(IsTrigger)); 
                     
-                    //if (this is MpAvIPluginParameterCollectionViewModel ppcvm) {
+                    //if (this is MpAvIParameterCollectionViewModel ppcvm) {
                     //    ppcvm.OnPropertyChanged(nameof(ppcvm.Items));
                     //}
                     break;
@@ -996,7 +985,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
                 case nameof(ActionArgs):
-                    if(this is MpAvIPluginParameterCollectionViewModel ppcvm) {
+                    if(this is MpAvIParameterCollectionViewModel ppcvm) {
                         ppcvm.OnPropertyChanged(nameof(ppcvm.Items));
                     }
                     break;
@@ -1004,7 +993,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void ActionArgs_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            if (this is MpAvIPluginParameterCollectionViewModel ppcvm) {
+            if (this is MpAvIParameterCollectionViewModel ppcvm) {
                 ppcvm.OnPropertyChanged(nameof(ppcvm.Items));
             }
         }

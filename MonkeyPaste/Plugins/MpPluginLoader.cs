@@ -23,6 +23,7 @@ namespace MonkeyPaste {
         #region Constants
 
         public const string PLUG_FOLDER_NAME = "Plugins";
+        public const string MANIFEST_BACKUP_FOLDER_NAME = "Cache";
 
         #endregion
 
@@ -30,6 +31,7 @@ namespace MonkeyPaste {
         public static Dictionary<string, MpPluginFormat> Plugins { get; set; } = new Dictionary<string, MpPluginFormat>();
 
         public static string PluginRootFolderPath => Path.Combine(MpCommonHelpers.GetExecutingDir(), PLUG_FOLDER_NAME);
+        public static string PluginManifestBackupFolderPath => Path.Combine(MpCommonHelpers.GetExecutingDir(), MANIFEST_BACKUP_FOLDER_NAME);
         #endregion
 
         #region Public Methods
@@ -110,6 +112,7 @@ namespace MonkeyPaste {
             if(!needsFixing) {
                 try {
                     plugin = JsonConvert.DeserializeObject<MpPluginFormat>(manifestStr);
+
                     bool isValid = ValidatePluginManifest(plugin, manifestPath);
                 }
                 catch (Exception ex) {
@@ -148,6 +151,13 @@ namespace MonkeyPaste {
                     await Task.Delay(100);
                 }
                 return await LoadPluginAsync(manifestPath);
+            }
+
+            // only once manifest is validated get manifest backup
+            plugin.backupCheckPluginFormat = GetLastLoadedBackupPluginFormat(plugin);
+            if(plugin.backupCheckPluginFormat == null) {
+                // initial backup create
+                plugin.backupCheckPluginFormat = CreateLastLoadedBackupPluginFormat(plugin);
             }
             return plugin;
         }
@@ -227,6 +237,49 @@ namespace MonkeyPaste {
                 throw new MpUserNotifiedException(sb.ToString());
             }
             return true;
+        }
+
+        public static MpPluginFormat GetLastLoadedBackupPluginFormat(MpPluginFormat plugin) {
+            if(!PluginManifestBackupFolderPath.IsDirectory()) {
+                return null;
+            }
+            string backup_manifest_fn = $"{plugin.guid}.json";
+            string backup_manifest_path = Path.Combine(PluginManifestBackupFolderPath, backup_manifest_fn);
+            if(!backup_manifest_path.IsFile()) {
+                return null;
+            }
+
+            string backup_manifest_data = MpFileIo.ReadTextFromFile(backup_manifest_path);
+            if (!string.IsNullOrWhiteSpace(backup_manifest_data)) {
+                try {
+                    return MpJsonObject.DeserializeObject<MpPluginFormat>(backup_manifest_data);
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Error deserializing backup manifest at path: '{backup_manifest_path}' with data: '{backup_manifest_data}' ex: ", ex);
+                }
+            }
+
+            // no backup or it is corrupt
+            string plugin_json_str = plugin.SerializeJsonObject();
+            MpFileIo.WriteTextToFile(backup_manifest_path, plugin_json_str, false);
+
+            return MpJsonObject.DeserializeObject<MpPluginFormat>(plugin_json_str);
+        }
+        public static MpPluginFormat CreateLastLoadedBackupPluginFormat(MpPluginFormat plugin) {
+            if(!PluginManifestBackupFolderPath.IsDirectory()) {
+                try {
+                    Directory.CreateDirectory(PluginManifestBackupFolderPath);
+                } catch(Exception ex) {
+                    throw new MpUserNotifiedException(ex.Message);
+                }
+            }
+            string backup_manifest_fn = $"{plugin.guid}.json";
+            string backup_manifest_path = Path.Combine(PluginManifestBackupFolderPath, backup_manifest_fn);
+            // no backup or it is corrupt
+            string plugin_json_str = plugin.SerializeJsonObject();
+            MpFileIo.WriteTextToFile(backup_manifest_path, plugin_json_str, false);
+
+            return MpJsonObject.DeserializeObject<MpPluginFormat>(plugin_json_str);
         }
         #endregion
     }

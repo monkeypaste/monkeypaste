@@ -20,33 +20,35 @@ using Avalonia.Media;
 
 namespace MonkeyPaste.Avalonia {
 
-    public abstract class MpAvTriggerActionViewModelBase : MpAvActionViewModelBase {
+    public abstract class MpAvTriggerActionViewModelBase : 
+        MpAvActionViewModelBase,
+        MpITriggerPluginComponent {
         #region Private Variables
 
         private bool _isShowEnabledChangedNotification = false;
 
         #endregion
 
-        #region MpIPluginHost Overrides
+        #region MpIParameterHost Overrides
 
         private MpActionPluginFormat _actionComponentFormat;
         public override MpActionPluginFormat ActionComponentFormat {
             get {
                 if (_actionComponentFormat == null) {
                     _actionComponentFormat = new MpActionPluginFormat() {
-                        parameters = new List<MpPluginParameterFormat>() {
-                            new MpPluginParameterFormat() {
+                        parameters = new List<MpParameterFormat>() {
+                            new MpParameterFormat() {
                                 label = "Directory",
-                                controlType = MpPluginParameterControlType.DirectoryChooser,
-                                unitType = MpPluginParameterValueUnitType.FileSystemPath,
+                                controlType = MpParameterControlType.DirectoryChooser,
+                                unitType = MpParameterValueUnitType.FileSystemPath,
                                 isRequired = true,
                                 paramId = "1",
                                 description = "The directory where input content will be written."
                             },
-                            new MpPluginParameterFormat() {
+                            new MpParameterFormat() {
                                 label = "Custom Name",
-                                controlType = MpPluginParameterControlType.TextBox,
-                                unitType = MpPluginParameterValueUnitType.PlainTextContentQuery,
+                                controlType = MpParameterControlType.TextBox,
+                                unitType = MpParameterValueUnitType.PlainTextContentQuery,
                                 isRequired = false,
                                 paramId = "2",
                                 description = "When left blank, the content will use its title as the file name."
@@ -57,6 +59,20 @@ namespace MonkeyPaste.Avalonia {
                 return _actionComponentFormat;
             }
         }
+
+        #endregion
+
+
+        #region MpITriggerPluginComponent Implementation
+
+        ICommand MpITriggerPluginComponent.PerformActionCommand =>
+            new MpAsyncCommand<object>(
+                async (args) => {
+                    await PerformActionAsync(args);
+                },
+                (args) => {
+                    return CanPerformAction(args);
+                });
 
         #endregion
 

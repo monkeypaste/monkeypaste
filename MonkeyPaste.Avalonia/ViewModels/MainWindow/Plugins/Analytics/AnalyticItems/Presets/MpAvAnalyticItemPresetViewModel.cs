@@ -13,18 +13,16 @@ using Avalonia.Controls;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvAnalyticItemPresetViewModel : 
-        MpAvTreeSelectorViewModelBase<MpAvAnalyticItemViewModel, MpAvPluginParameterViewModelBase>,
+        MpAvTreeSelectorViewModelBase<MpAvAnalyticItemViewModel, MpAvParameterViewModelBase>,
         MpISelectableViewModel,
         MpILabelTextViewModel,
         MpIHoverableViewModel, 
         MpIMenuItemViewModel,
         MpIActionComponent, 
         MpIUserIconViewModel,
-        //MpIUserColorViewModel,
         MpAvIShortcutCommandViewModel, 
-        MpIPluginComponentViewModel, 
         MpIPopupMenuPicker,
-        MpAvIPluginParameterCollectionViewModel {
+        MpAvIParameterCollectionViewModel {
 
         #region Interfaces
 
@@ -86,7 +84,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIPluginComponentViewModel Implementation
-        public MpPluginComponentBaseFormat ComponentFormat => AnalyzerFormat;
+        public MpParameterHostBaseFormat ComponentFormat => AnalyzerFormat;
 
         #endregion
 
@@ -97,13 +95,13 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
 
-        #region MpAvIPluginParameterCollectionViewModel Implementation
+        #region MpAvIParameterCollectionViewModel Implementation
 
-        IEnumerable<MpAvPluginParameterViewModelBase>
-            MpAvIPluginParameterCollectionViewModel.Items => VisibleItems;
+        IEnumerable<MpAvParameterViewModelBase>
+            MpAvIParameterCollectionViewModel.Items => VisibleItems;
 
-        MpAvPluginParameterViewModelBase
-            MpAvIPluginParameterCollectionViewModel.SelectedItem {
+        MpAvParameterViewModelBase
+            MpAvIParameterCollectionViewModel.SelectedItem {
             get => SelectedItem;
             set => SelectedItem = value;
         }
@@ -122,7 +120,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public Dictionary<object, MpAvPluginParameterViewModelBase> ParamLookup => 
+        public Dictionary<object, MpAvParameterViewModelBase> ParamLookup => 
             Items.ToDictionary(x => x.ParamId,x => x); 
         public MpMenuItemViewModel ContextMenuItemViewModel {
             get {
@@ -140,18 +138,13 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public IEnumerable<MpAvPluginParameterViewModelBase> VisibleItems => Items.Where(x => x.IsVisible);
+        public IEnumerable<MpAvParameterViewModelBase> VisibleItems => Items.Where(x => x.IsVisible);
 
         #endregion
 
         #region Appearance
 
-        public MpCursorType DeleteCursor => IsDefault ? MpCursorType.Invalid : MpCursorType.Default;
-
-        public string ResetLabel => $"Reset {Label}";
-
-        public string DeleteLabel => $"Delete {Label}";
-
+        public string ResetOrDeleteLabel => $"{(IsManifestPreset ? "Reset":"Delete")} '{Label}'";
         #endregion
 
         #region State
@@ -163,7 +156,12 @@ namespace MonkeyPaste.Avalonia {
         public bool IsAllValid => Items.All(x => x.IsValid);
 
 
-        public bool IsReadOnly => IsDefault;
+        public bool IsManifestPreset =>
+            Parent == null ? 
+                false : 
+                Parent.AnalyzerComponentFormat.presets != null &&
+                    Parent.AnalyzerComponentFormat.presets.Any(x => x.guid == PresetGuid);
+
 
         #endregion
 
@@ -191,15 +189,6 @@ namespace MonkeyPaste.Avalonia {
                     return string.Empty;
                 }
                 return $"{Parent.Title}/{Label}";
-            }
-        }
-
-        public bool IsDefault {
-            get {
-                if(Preset == null) {
-                    return false;
-                }
-                return Preset.IsDefault;
             }
         }
 
@@ -411,8 +400,8 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
-        public async Task<MpAvPluginParameterViewModelBase> CreateParameterViewModel(MpPluginPresetParameterValue aipv) {
-            var naipvm = await MpAvPluginParameterBuilder.CreateParameterViewModelAsync(aipv, Parent, this);
+        public async Task<MpAvParameterViewModelBase> CreateParameterViewModel(MpPluginPresetParameterValue aipv) {
+            var naipvm = await MpAvPluginParameterBuilder.CreateParameterViewModelAsync(aipv, Parent);
             naipvm.OnValidate += ParameterViewModel_OnValidate;
 
             return naipvm;
@@ -425,7 +414,7 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
 
         protected virtual void ParameterViewModel_OnValidate(object sender, EventArgs e) {
-            var aipvm = sender as MpAvPluginParameterViewModelBase;
+            var aipvm = sender as MpAvParameterViewModelBase;
             if (aipvm.IsRequired && string.IsNullOrWhiteSpace(aipvm.CurrentValue)) {
                 aipvm.ValidationMessage = $"{aipvm.Label} is required";
             } else {
@@ -537,6 +526,7 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 IsLabelReadOnly = !IsLabelReadOnly;
             });
+
 
         #endregion
     }

@@ -51,7 +51,6 @@
                                             CornerRadius="0"
                                             Cursor="Hand"
                                             Background="Transparent"
-                                            IsEnabled="{Binding !IsDefault}"
                                             DataContext="{Binding}"
                                             Command="{Binding ChangeIconCommand, Source={x:Static local:MpAvIconCollectionViewModel.Instance}}"
                                             CommandParameter="{Binding $self}">
@@ -304,34 +303,29 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
                                 <Grid>
-                                    <Grid IsVisible="{Binding !Parent.IsBusy}">
-                                        <!--  RESET BUTTON  -->
-                                        <Button Background="Transparent"
-                                                BorderThickness="0"
-                                                IsVisible="{Binding IsDefault}"
-                                                Command="{Binding Parent.ResetDefaultPresetCommand}"
-                                                CommandParameter="{Binding}">
-                                            <ToolTip.Tip>
-                                                <local:MpAvToolTipView ToolTipText="Reset" />
-                                            </ToolTip.Tip>
-                                            <Image Width="20"
-                                                   Height="20"
-                                                   Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource ResetImage}}" />
-                                        </Button>
-                                        <!--  DELETE BUTTON  -->
-                                        <Button Background="Transparent"
-                                                BorderThickness="0"
-                                                IsVisible="{Binding !IsDefault}"
-                                                Command="{Binding Parent.DeletePresetCommand}"
-                                                CommandParameter="{Binding}">
-                                            <ToolTip.Tip>
-                                                <local:MpAvToolTipView ToolTipText="Delete" />
-                                            </ToolTip.Tip>
-                                            <Image Width="20"
-                                                   Height="20"
-                                                   Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource TrashCanImage}}" />
-                                        </Button>
-                                    </Grid>
+                                    <Grid.Styles>
+                                        <Style Selector="Button.canReset Image"
+                                               x:DataType="local:MpAvAnalyticItemPresetViewModel">
+                                            <Setter Property="Source"
+                                                    Value="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource ResetImage}}" />
+                                        </Style>
+                                        <Style Selector="Button:not(.canReset) Image">
+                                            <Setter Property="Source"
+                                                    Value="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource TrashCanImage}}" />
+                                        </Style>
+                                    </Grid.Styles>
+                                    <Button Background="Transparent"
+                                            IsVisible="{Binding !Parent.IsBusy}"
+                                            BorderThickness="0"
+                                            Classes.canReset="{Binding IsManifestPreset}"
+                                            Command="{Binding Parent.ResetOrDeletePresetCommand}"
+                                            CommandParameter="{Binding}">
+                                        <ToolTip.Tip>
+                                            <local:MpAvToolTipView ToolTipText="{Binding ResetOrDeleteLabel}" />
+                                        </ToolTip.Tip>
+                                        <Image Width="20"
+                                               Height="20" />
+                                    </Button>
                                     <Border IsVisible="{Binding IsBusy, FallbackValue=True, TargetNullValue=True}">
 
                                         <local:MpAvBusySpinnerView HorizontalAlignment="Center"

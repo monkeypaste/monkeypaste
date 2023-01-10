@@ -20,21 +20,21 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
 
-            var pvmb = param as MpAvPluginParameterViewModelBase;
+            var pvmb = param as MpAvParameterViewModelBase;
             if (pvmb == null) {
                 return null;
             }
             string keyStr = pvmb.ControlType.ToString() + "ParameterTemplate";
 
-            if (pvmb.ControlType == MpPluginParameterControlType.FileChooser ||
-               pvmb.ControlType == MpPluginParameterControlType.DirectoryChooser) {
+            if (pvmb.ControlType == MpParameterControlType.FileChooser ||
+               pvmb.ControlType == MpParameterControlType.DirectoryChooser) {
                 keyStr = "FileChooserParameterTemplate";
             }
             return AvailableTemplates[keyStr].Build(param);
         }
 
         public bool Match(object data) {
-            return data is MpAvPluginParameterViewModelBase;
+            return data is MpAvParameterViewModelBase;
         }
     }
 }

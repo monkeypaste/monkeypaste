@@ -39,6 +39,9 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(aipvm.IconId):
                     RefreshDataGrid();
                     break;
+                case nameof(aipvm.IsSelected):
+                    RefreshDataGrid();
+                    break;
                 case nameof(aipvm.HasModelChanged):
                     if (!aipvm.HasModelChanged) {
                         RefreshDataGrid();
@@ -49,6 +52,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void BindingContext_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
+                case nameof(BindingContext.SelectedItem):
                 case nameof(BindingContext.IsSelected):
                     RefreshDataGrid();
                     break;

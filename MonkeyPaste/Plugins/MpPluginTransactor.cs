@@ -51,8 +51,8 @@ namespace MonkeyPaste {
                 }
 
                 // FIND CONTENT
-                MpPluginParameterFormat contentParam = pluginFormat.analyzer.parameters
-                    .FirstOrDefault(x => x.unitType == MpPluginParameterValueUnitType.PlainTextContentQuery);
+                MpParameterFormat contentParam = pluginFormat.analyzer.parameters
+                    .FirstOrDefault(x => x.unitType == MpParameterValueUnitType.PlainTextContentQuery);
                                 
                 at.RequestContent = contentParam == null ? 
                     null :

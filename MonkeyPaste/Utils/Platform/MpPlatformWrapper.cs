@@ -11,7 +11,7 @@ namespace MonkeyPaste {
         MpIStartupState StartupState { get; set; }
         MpIPlatformShorcuts PlatformShorcuts { get; set; }
         MpINotificationManager NotificationManager { get; set; }
-        MpIProcessWatcher ProcessWatcher { get; set; }
+        //MpIProcessWatcher ProcessWatcher { get; set; }
         MpICursor Cursor { get; set; }
         MpIDbInfo DbInfo { get; set; }
         MpIQueryInfo QueryInfo { get; set; }
@@ -40,7 +40,7 @@ namespace MonkeyPaste {
 
         MpIClipboardFormatDataHandlers ClipboardData { get; set; }
 
-        MpIExternalPasteHandler ExternalPasteHandler { get; set; }
+        //MpIExternalPasteHandler ExternalPasteHandler { get; set; }
 
         MpIPlatformDataObjectRegistrar DataObjectRegistrar { get; set; }
 

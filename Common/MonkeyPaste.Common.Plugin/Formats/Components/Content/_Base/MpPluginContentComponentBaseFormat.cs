@@ -14,7 +14,7 @@
         public bool imageAnnotation { get; set; } = false;
         public bool textAnnotation { get; set; } = false;
     }
-    public abstract class MpPluginContentComponentBaseFormat : MpPluginComponentBaseFormat {
+    public abstract class MpPluginContentComponentBaseFormat : MpParameterHostBaseFormat {
         public MpHttpTransactionFormatBase http { get; set; }
         public MpPluginInputFormat inputType { get; set; } = null;
         public MpPluginOutputFormat outputType { get; set; } = null;

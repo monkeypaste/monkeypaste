@@ -18,18 +18,18 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpIPluginHost Overrides
+        #region MpIParameterHost Overrides
 
         private MpActionPluginFormat _actionComponentFormat;
         public override MpActionPluginFormat ActionComponentFormat {
             get {
                 if (_actionComponentFormat == null) {
                     _actionComponentFormat = new MpActionPluginFormat() {
-                        parameters = new List<MpPluginParameterFormat>() {
-                            new MpPluginParameterFormat() {
+                        parameters = new List<MpParameterFormat>() {
+                            new MpParameterFormat() {
                                 label = "Analyzer",
-                                controlType = MpPluginParameterControlType.ComponentPicker,
-                                unitType = MpPluginParameterValueUnitType.AnalyzerComponentId,
+                                controlType = MpParameterControlType.ComponentPicker,
+                                unitType = MpParameterValueUnitType.AnalyzerComponentId,
                                 isRequired = true,
                                 paramId = SELECTED_ANALYZER_PARAM_ID
                             }
