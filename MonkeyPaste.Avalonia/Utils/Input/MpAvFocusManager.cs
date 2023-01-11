@@ -18,23 +18,38 @@ namespace MonkeyPaste.Avalonia {
         MpIFocusableViewModel FirstChild { get; }
     }
 
-    public class MpAvFocusManager : FocusManager {
-        private static Type[] _inputControlTypes { get; set; } = new Type[] {
+    public class MpAvFocusManager : MpIFocusMonitor {
+        private Type[] _inputControlTypes { get; set; } = new Type[] {
             typeof(TextBox),
             typeof(AutoCompleteBox),
             typeof(ComboBoxItem),
             typeof(WebView)
         };
-        public static bool IsInputControlFocused {
+
+        private static MpAvFocusManager _instance;
+        public static MpAvFocusManager Instance => _instance ?? (_instance = new MpAvFocusManager());
+
+        private MpAvFocusManager() { }
+        public bool IsInputControlFocused {
             get {
                 IInputElement cur_focus = FocusManager.Instance.Current;
-                if(cur_focus == null) {
+                if(cur_focus == null) { 
                     return false;
                 }
                 bool is_input_control = _inputControlTypes.Any(x => cur_focus.GetType() == x || cur_focus.GetType().IsSubclassOf(x));
                 MpConsole.WriteLine($"Current Focus Control Type: {cur_focus.GetType()} Is Input Control: {is_input_control.ToString().ToUpper()}");
-                return is_input_control;
+                return is_input_control || IsSelfManagedHistoryControlFocused;
 
+            }
+        }
+
+        public bool IsSelfManagedHistoryControlFocused {
+            get {
+                if(FocusManager.Instance.Current is MpAvCefNetWebView wv &&
+                    wv.DataContext is MpAvClipTileViewModel ctvm) {
+                    return ctvm.IsSubSelectionEnabled;
+                }
+                return false;
             }
         }
     }

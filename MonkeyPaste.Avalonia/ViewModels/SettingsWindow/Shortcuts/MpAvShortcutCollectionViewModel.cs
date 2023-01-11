@@ -400,10 +400,10 @@ namespace MonkeyPaste.Avalonia {
                             shortcutCommand = MpAvClipTrayViewModel.Instance.ChangeSelectedClipsColorCommand;
                             break;
                         case MpShortcutType.Undo:
-                            shortcutCommand = MpAvMainWindowViewModel.Instance.UndoCommand;
+                            shortcutCommand = MpAvUndoManagerViewModel.Instance.UndoCommand;
                             break;
                         case MpShortcutType.Redo:
-                            shortcutCommand = MpAvMainWindowViewModel.Instance.RedoCommand;
+                            shortcutCommand = MpAvUndoManagerViewModel.Instance.RedoCommand;
                             break;
                         case MpShortcutType.EditContent:
                             shortcutCommand = MpAvClipTrayViewModel.Instance.EditSelectedContentCommand;

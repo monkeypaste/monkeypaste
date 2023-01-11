@@ -27,7 +27,6 @@ namespace MonkeyPaste {
         new T SelectedItem { get; set; }
         ObservableCollection<T> Items { get; set; }
     }
-
     //public interface MpIPluginComponentViewModel : MpIViewModel {
     //    public MpParameterHostBaseFormat ComponentFormat { get; }
     //}

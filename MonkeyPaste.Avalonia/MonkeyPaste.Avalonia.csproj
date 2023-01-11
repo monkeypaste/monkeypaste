@@ -81,7 +81,10 @@
   </PropertyGroup>
   <ItemGroup>
     <AvaloniaXaml Remove="AttachedProperties\DragDrop\**" />
-    <AvaloniaXaml Remove="Behaviors\**" />
+    <AvaloniaXaml Remove="Behaviors\DragDrop\**" />
+    <AvaloniaXaml Remove="Behaviors\Highlighting\**" />
+    <AvaloniaXaml Remove="Behaviors\_Base\**" />
+    <AvaloniaXaml Remove="Behaviors\__Factory\**" />
     <AvaloniaXaml Remove="cef\**" />
     <AvaloniaXaml Remove="cef_old\**" />
     <AvaloniaXaml Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
@@ -94,7 +97,10 @@
     <AvaloniaXaml Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <AvaloniaXaml Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
     <Compile Remove="AttachedProperties\DragDrop\**" />
-    <Compile Remove="Behaviors\**" />
+    <Compile Remove="Behaviors\DragDrop\**" />
+    <Compile Remove="Behaviors\Highlighting\**" />
+    <Compile Remove="Behaviors\_Base\**" />
+    <Compile Remove="Behaviors\__Factory\**" />
     <Compile Remove="cef\**" />
     <Compile Remove="cef_old\**" />
     <Compile Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
@@ -107,7 +113,10 @@
     <Compile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <Compile Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
     <EmbeddedResource Remove="AttachedProperties\DragDrop\**" />
-    <EmbeddedResource Remove="Behaviors\**" />
+    <EmbeddedResource Remove="Behaviors\DragDrop\**" />
+    <EmbeddedResource Remove="Behaviors\Highlighting\**" />
+    <EmbeddedResource Remove="Behaviors\_Base\**" />
+    <EmbeddedResource Remove="Behaviors\__Factory\**" />
     <EmbeddedResource Remove="cef\**" />
     <EmbeddedResource Remove="cef_old\**" />
     <EmbeddedResource Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
@@ -120,7 +129,10 @@
     <EmbeddedResource Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <EmbeddedResource Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
     <None Remove="AttachedProperties\DragDrop\**" />
-    <None Remove="Behaviors\**" />
+    <None Remove="Behaviors\DragDrop\**" />
+    <None Remove="Behaviors\Highlighting\**" />
+    <None Remove="Behaviors\_Base\**" />
+    <None Remove="Behaviors\__Factory\**" />
     <None Remove="cef\**" />
     <None Remove="cef_old\**" />
     <None Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
@@ -133,6 +145,10 @@
     <None Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <None Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
     <Page Remove="AttachedProperties\DragDrop\**" />
+    <Page Remove="Behaviors\DragDrop\**" />
+    <Page Remove="Behaviors\Highlighting\**" />
+    <Page Remove="Behaviors\_Base\**" />
+    <Page Remove="Behaviors\__Factory\**" />
     <Page Remove="cef_old\**" />
     <Page Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
     <Page Remove="Controls\Content\TextElement\**" />
@@ -389,6 +405,7 @@
     <Compile Remove="AttachedProperties\MpAvCefNetWebViewExtension.cs" />
     <Compile Remove="AttachedProperties\MpAvCefWebViewExtension.cs" />
     <Compile Remove="AttachedProperties\MpAvTextSelectionExtension.cs" />
+    <Compile Remove="Behaviors\MpAvMoveBehavior.cs" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\MpAvWin32ProcessWatcher2.cs" />
     <Compile Remove="Utils\Input\Mouse\MpAvMouseHook_Win32.cs" />
     <Compile Remove="ViewModels\MainWindow\Actions\Action\Triggers\MpAvTimerTriggerViewModel.cs" />
@@ -1067,6 +1084,9 @@
     </Compile>
     <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\Items\MpAvClipTileDetailItemView.axaml.cs">
       <DependentUpon>MpAvClipTileDetailItemView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Transactions\MpAvClipTileTransactionPaneView.axaml.cs">
+      <DependentUpon>MpAvClipTileTransactionPaneView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\MpAvClipTrayContainerView.axaml.cs">
       <DependentUpon>MpAvClipTrayContainerView.axaml</DependentUpon>

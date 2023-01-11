@@ -12,9 +12,105 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvPluginParameterListBoxView">
-    <Grid HorizontalAlignment="Stretch"
-          VerticalAlignment="Stretch">
+    <local:MpAvUserControl.Resources>
+        <sys:TimeSpan x:Key="FadeTimeSpan">
+            0:0:0.2
+        </sys:TimeSpan>
+    </local:MpAvUserControl.Resources>
+    <local:MpAvUserControl.Styles>
+        <Style Selector="Grid#ParameterContainerGrid.canSave ListBox#PluginParameterListBox">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <ThicknessTransition Property="Margin"
+                                         Duration="{StaticResource FadeTimeSpan}" />
+                </Transitions>
+            </Setter>
+            <Setter Property="Margin"
+                    Value="0,45,0,0" />
+        </Style>
+        <Style Selector="Grid#ParameterContainerGrid:not(.canSave) ListBox#PluginParameterListBox">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <ThicknessTransition Property="Margin"
+                                         Delay="{StaticResource FadeTimeSpan}"
+                                         Duration="{StaticResource FadeTimeSpan}" />
+                </Transitions>
+            </Setter>
+            <Setter Property="Margin"
+                    Value="0,5,0,0" />
+        </Style>
+
+        <Style Selector="Grid#ParameterContainerGrid.canSave Button.saveOrCancelButton">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="Opacity"
+                                      Delay="{StaticResource FadeTimeSpan}"
+                                      Duration="{StaticResource FadeTimeSpan}" />
+                </Transitions>
+            </Setter>
+            <Setter Property="Opacity"
+                    Value="1" />
+        </Style>
+        <Style Selector="Grid#ParameterContainerGrid:not(.canSave) Button.saveOrCancelButton">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="Opacity"
+                                      Duration="{StaticResource FadeTimeSpan}" />
+                </Transitions>
+            </Setter>
+            <Setter Property="Opacity"
+                    Value="0" />
+        </Style>
+    </local:MpAvUserControl.Styles>
+    <Grid x:Name="ParameterContainerGrid"
+          HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch"
+          Classes.canSave="{Binding CanSaveOrCancel}">
+        <Button x:Name="CancelButon"
+                Width="{Binding $self.Bounds.Height}"
+                Command="{Binding CancelCommand}"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Classes="defaultButton saveOrCancelButton">
+            <Grid RowDefinitions="25,15"
+                  HorizontalAlignment="Stretch">
+                <Image Grid.Row="0"
+                       Source="{Binding ., Source={StaticResource TrashCanImage}, Converter={StaticResource IconSourceObjToBitmapConverter}}"
+                       Width="20"
+                       Height="20"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center" />
+                <TextBlock Grid.Row="1"
+                           ClipToBounds="False"
+                           HorizontalAlignment="Stretch"
+                           TextAlignment="Center"
+                           Text="Cancel" />
+            </Grid>
+        </Button>
+        <Button x:Name="SaveButon"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Width="{Binding $self.Bounds.Height}"
+                Command="{Binding SaveCommand}"
+                Classes="defaultButton saveOrCancelButton">
+            <Grid RowDefinitions="25,15"
+                  HorizontalAlignment="Stretch">
+                <Image Grid.Row="0"
+                       Source="{Binding ., Source={StaticResource SaveImage}, Converter={StaticResource IconSourceObjToBitmapConverter}}"
+                       Width="20"
+                       Height="20"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center" />
+                <TextBlock Grid.Row="1"
+                           HorizontalAlignment="Stretch"
+                           TextAlignment="Center"
+                           Text="Save" />
+            </Grid>
+        </Button>
         <ListBox x:Name="PluginParameterListBox"
+                 Grid.Row="1"
+                 HorizontalAlignment="Stretch"
+                 VerticalAlignment="Top"
                  IsVisible="{Binding Items, Converter={StaticResource CollectionIsNotEmptyToBoolConverter}, FallbackValue=True, TargetNullValue=True}"
                  Items="{Binding Items}"
                  SelectedItem="{Binding SelectedItem, Mode=TwoWay}">

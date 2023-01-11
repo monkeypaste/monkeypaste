@@ -21,12 +21,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region Properties
-
-        #region View Models
-
-
-        #endregion
+        #region Interfaces
 
         #region MpIPopupMenuViewModel Implementation
         public MpMenuItemViewModel PopupMenuViewModel {
@@ -86,6 +81,28 @@ namespace MonkeyPaste.Avalonia {
         public int SelectionLength => SelectionEnd - SelectionStart;
 
         public string Text { get; set; }
+
+        #endregion
+
+        #endregion
+
+        #region Properties
+
+        #region View Models
+
+
+        #endregion
+
+        #region Appearance
+
+        public string Placeholder {
+            get {
+                if(ParameterFormat == null) {
+                    return string.Empty;
+                }
+                return ParameterFormat.placeholder;
+            }
+        }
 
         #endregion
 

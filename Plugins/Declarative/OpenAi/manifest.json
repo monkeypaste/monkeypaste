@@ -73,6 +73,7 @@
     "parameters": [
       {
         "label": "Prompt",
+        "placeholder": "Enter prompt...",
         "controlType": "TextBox",
         "unitType": "PlainTextContentQuery",
         "description": "Prefixed to your request to openai.",

@@ -6,12 +6,13 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using MonkeyPaste;
 using MonkeyPaste.Common.Plugin; 
-using MonkeyPaste.Common; 
+using MonkeyPaste.Common;
+using System.Windows.Input;
 //using Newtonsoft.Json;
 //using SQLite;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvParameterViewModelBase : 
+    public class MpAvParameterViewModelBase :
         MpViewModelBase<MpIParameterHostViewModel>,
         MpITreeItemViewModel,
         MpISelectableViewModel,
@@ -19,10 +20,10 @@ namespace MonkeyPaste.Avalonia {
         MpITooltipInfoViewModel,
         MpIParameterKeyValuePair {
         #region Private Variables
-
+        private string _lastValue;
         #endregion
 
-        #region Properties
+        #region Interfaces
 
         #region MpITreeItemViewModel Implementation
 
@@ -30,9 +31,6 @@ namespace MonkeyPaste.Avalonia {
 
         public MpITreeItemViewModel ParentTreeItem => Parent as MpITreeItemViewModel;
         public bool IsExpanded { get; set; }
-        #endregion
-
-        #region View Models
 
         #endregion
 
@@ -47,10 +45,9 @@ namespace MonkeyPaste.Avalonia {
 
         object MpIParameterKeyValuePair.paramId => ParamId;
         string MpIParameterKeyValuePair.value => CurrentValue;
-        
+
 
         #endregion
-
 
         #region MpITooltipInfoViewModel Implementation
 
@@ -68,6 +65,13 @@ namespace MonkeyPaste.Avalonia {
         public bool IsSelected { get; set; } = false;
 
         public DateTime LastSelectedDateTime { get; set; }
+
+        #endregion
+        #endregion
+
+        #region Properties
+
+        #region View Models
 
         #endregion
 
@@ -96,16 +100,78 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        public bool HasDescription => !string.IsNullOrEmpty(Description);
+        public override bool HasModelChanged => CurrentValue != _lastValue;
 
+        public bool HasDescription => !string.IsNullOrEmpty(Description);
 
         public bool IsValid => string.IsNullOrEmpty(ValidationMessage);
 
-
-        // TODO I forget why this is needed but was used to hide trigger stuff from query path selector popup
         public bool IsActionParameter { get; set; } = false;
-        #endregion
 
+        public double DoubleValue {
+            get {
+                if (string.IsNullOrWhiteSpace(CurrentValue)) {
+                    return 0;
+                }
+                try {
+                    return Convert.ToDouble(CurrentValue);
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine("Cannot convert " + CurrentValue + " to double ", ex);
+                    return 0;
+                }
+            }
+            set {
+                if (DoubleValue != value) {
+                    CurrentValue = value.ToString();
+                    OnPropertyChanged(nameof(DoubleValue));
+                    OnPropertyChanged(nameof(CurrentValue));
+                }
+            }
+        }
+
+        public int IntValue {
+            get {
+                if (string.IsNullOrWhiteSpace(CurrentValue)) {
+                    return 0;
+                }
+                try {
+                    return Convert.ToInt32(DoubleValue);
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine("Cannot convert " + CurrentValue + " to int ", ex);
+                    return 0;
+                }
+            }
+            set {
+                if (IntValue != value) {
+                    CurrentValue = value.ToString();
+                    OnPropertyChanged(nameof(IntValue));
+                    OnPropertyChanged(nameof(CurrentValue));
+                }
+            }
+        }
+
+        public bool BoolValue {
+            get {
+                if (string.IsNullOrWhiteSpace(CurrentValue)) {
+                    return false;
+                }
+                //if (CurrentValue.ToLower() != "false" && CurrentValue.ToLower() != "true") {
+                //    throw new Exception("Cannot convert value " + CurrentValue + " to boolean");
+                //}
+                return CurrentValue.ToLower() == "true" || CurrentValue.ToLower() == "1";
+            }
+            set {
+                if (BoolValue != value) {
+                    CurrentValue = value ? "True" : "False";
+                    OnPropertyChanged(nameof(BoolValue));
+                    OnPropertyChanged(nameof(CurrentValue));
+                }
+            }
+        }
+
+        #endregion
 
         #region Model
 
@@ -198,8 +264,8 @@ namespace MonkeyPaste.Avalonia {
                 if (ParameterFormat == null) {
                     return MpParameterValueUnitType.None;
                 }
-                if(ParameterFormat.unitType == MpParameterValueUnitType.None) {
-                    switch(ParameterFormat.controlType) {
+                if (ParameterFormat.unitType == MpParameterValueUnitType.None) {
+                    switch (ParameterFormat.controlType) {
                         case MpParameterControlType.CheckBox:
                             return MpParameterValueUnitType.Bool;
                         case MpParameterControlType.Slider:
@@ -224,7 +290,7 @@ namespace MonkeyPaste.Avalonia {
 
         public List<string> DefaultValues {
             get {
-                if(ParameterFormat == null || ParameterFormat.values == null) {
+                if (ParameterFormat == null || ParameterFormat.values == null) {
                     return new List<string>();
                 }
                 return ParameterFormat.values.Where(x => x.isDefault).Select(x => x.value).ToList();
@@ -238,83 +304,21 @@ namespace MonkeyPaste.Avalonia {
 
         public virtual string CurrentValue {
             get {
-                if(PresetValueModel == null) {
+                if (PresetValueModel == null) {
                     return string.Empty;
                 }
 
-                return PresetValueModel.Value.TrimTrailingLineEnding();
+                return PresetValueModel.Value;//.TrimTrailingLineEnding();
             }
             set {
-                if(CurrentValue != value) {
-                    PresetValueModel.Value = value; 
-                    HasModelChanged = true;      
+                if (CurrentValue != value) {
+                    AddUndo(CurrentValue, value, $"{Label} Changed");
+                    PresetValueModel.Value = value;
+                    //HasModelChanged = true;
                     OnPropertyChanged(nameof(CurrentValue));
                 }
             }
-        }
-
-        public double DoubleValue {
-            get {
-                if (string.IsNullOrWhiteSpace(CurrentValue)) {
-                    return 0;
-                }
-                try {
-                    return Convert.ToDouble(CurrentValue);
-                }
-                catch (Exception ex) {
-                    MpConsole.WriteTraceLine("Cannot convert "+CurrentValue+" to double ",ex);
-                    return 0;
-                }
-            }
-            set {
-                if (DoubleValue != value) {
-                    CurrentValue = value.ToString();
-                    OnPropertyChanged(nameof(DoubleValue));
-                    OnPropertyChanged(nameof(CurrentValue));
-                }
-            }
-        }
-
-        public int IntValue {
-            get {
-                if (string.IsNullOrWhiteSpace(CurrentValue)) {
-                    return 0;
-                }
-                try {
-                    return Convert.ToInt32(DoubleValue);
-                }
-                catch (Exception ex) {
-                    MpConsole.WriteTraceLine("Cannot convert " + CurrentValue + " to int ", ex);
-                    return 0;
-                }
-            }
-            set {
-                if (IntValue != value) {
-                    CurrentValue = value.ToString();
-                    OnPropertyChanged(nameof(IntValue));
-                    OnPropertyChanged(nameof(CurrentValue));
-                }
-            }
-        }
-
-        public bool BoolValue {
-            get {
-                if (string.IsNullOrWhiteSpace(CurrentValue)) {
-                    return false;
-                }
-                //if (CurrentValue.ToLower() != "false" && CurrentValue.ToLower() != "true") {
-                //    throw new Exception("Cannot convert value " + CurrentValue + " to boolean");
-                //}
-                return CurrentValue.ToLower() == "true" || CurrentValue.ToLower() == "1";
-            }
-            set {
-                if (BoolValue != value) {
-                    CurrentValue = value ? "True" : "False";
-                    OnPropertyChanged(nameof(BoolValue));
-                    OnPropertyChanged(nameof(CurrentValue));
-                }
-            }
-        }
+        }      
 
 
         public int ParameterValueId {
@@ -349,7 +353,7 @@ namespace MonkeyPaste.Avalonia {
                 if (ParameterFormat == null) {
                     return string.Empty;
                 }
-                if(string.IsNullOrEmpty(ParameterFormat.label)) {
+                if (string.IsNullOrEmpty(ParameterFormat.label)) {
                     return ParameterFormat.label;
                 }
                 return ParameterFormat.label;
@@ -358,7 +362,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpParameterControlType ControlType {
             get {
-                if(ParameterFormat == null) {
+                if (ParameterFormat == null) {
                     return MpParameterControlType.None;
                 }
                 return ParameterFormat.controlType;
@@ -367,7 +371,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string Description {
             get {
-                if(ParameterFormat == null) {
+                if (ParameterFormat == null) {
                     return string.Empty;
                 }
                 return ParameterFormat.description;
@@ -381,7 +385,7 @@ namespace MonkeyPaste.Avalonia {
                     return null;
                 }
                 //AnalyzerFormat.parameters.FirstOrDefault(y => y.paramName == x.ParamName)
-                return Parent.ComponentFormat.parameters.FirstOrDefault(x=>x.paramId == PresetValueModel.ParamId);
+                return Parent.ComponentFormat.parameters.FirstOrDefault(x => x.paramId == PresetValueModel.ParamId);
             }
         }
         #endregion
@@ -398,7 +402,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvParameterViewModelBase() : base(null) { }
+        public MpAvParameterViewModelBase() : this(null) { }
 
         public MpAvParameterViewModelBase(MpIParameterHostViewModel parent) : base(parent) {
             PropertyChanged += MpAnalyticItemParameterViewModel_PropertyChanged;
@@ -414,13 +418,15 @@ namespace MonkeyPaste.Avalonia {
 
             PresetValueModel = aipv;
 
-            OnPropertyChanged(nameof(CurrentValue));            
+            SetLastValue(CurrentValue);
+
+            OnPropertyChanged(nameof(CurrentValue));
 
             await Task.Delay(1);
 
             IsBusy = wasBusy;
         }
-        
+
         public bool Validate() {
             OnValidate?.Invoke(this, new EventArgs());
             return IsValid;
@@ -429,33 +435,37 @@ namespace MonkeyPaste.Avalonia {
 
         #region Protected Methods
 
+        protected virtual void SetLastValue(object value) {
+            _lastValue = value == null ? null : value.ToString();
+        }
+        
+        protected virtual void RestoreLastValue() {
+            CurrentValue = _lastValue;
+        }
+
         #endregion
 
         #region Private Methods
 
         private void MpAnalyticItemParameterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
+                //case nameof(CurrentValue):
+                //case nameof(LastValue):
                 case nameof(HasModelChanged):
-                    if(HasModelChanged) {
-                        Task.Run(async () => {
-                            await PresetValueModel.WriteToDatabaseAsync();
-                            HasModelChanged = false;
-                            //if(this is MpComboBoxParameterViewModel cbpvm) {
-                            //    cbpvm.Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
-                            //    cbpvm.Items.ForEach(x => x.HasModelChanged = false);
-                            //}
-                        });
+                case nameof(CurrentValue):
+                    if(Parent is MpISaveOrCancelableViewModel socvm) {
+                        socvm.OnPropertyChanged(nameof(socvm.CanSaveOrCancel));
                     }
                     break;
                 case nameof(ValidationMessage):
-                    if(!string.IsNullOrEmpty(ValidationMessage)) {
-                        
+                    if (!string.IsNullOrEmpty(ValidationMessage)) {
+
                         MpConsole.WriteLine($"Validation Msg Changed to '{ValidationMessage}'");
                     }
                     OnPropertyChanged(nameof(IsValid));
                     break;
                 case nameof(IsSelected):
-                    if(IsSelected) {
+                    if (IsSelected) {
                         LastSelectedDateTime = DateTime.Now;
                     }
                     break;
@@ -464,11 +474,35 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected virtual void MpAnalyticItemParameterValueViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            if(!MpBootstrapperViewModelBase.IsCoreLoaded) {
+            if (!MpBootstrapperViewModelBase.IsCoreLoaded) {
                 return;
             }
             OnValidate?.Invoke(this, new EventArgs());
         }
+
+        #endregion
+
+        #region Commands
+
+        public ICommand RestoreLastValueCommand => new MpCommand(
+            () => {
+                RestoreLastValue();
+            },
+            () => {
+                return HasModelChanged;
+            });
+        
+        public ICommand SaveCurrentValueCommand => new MpCommand(
+            () => {
+                SetLastValue(CurrentValue);
+                OnPropertyChanged(nameof(HasModelChanged));
+                Task.Run(async () => {
+                    await PresetValueModel.WriteToDatabaseAsync();
+                });
+            },
+            () => {
+                return HasModelChanged;
+            });
 
         #endregion
     }

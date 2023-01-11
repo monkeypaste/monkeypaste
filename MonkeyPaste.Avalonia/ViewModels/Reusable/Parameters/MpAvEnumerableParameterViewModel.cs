@@ -14,7 +14,7 @@ using Avalonia.Controls;
 namespace MonkeyPaste.Avalonia {
     public class MpAvEnumerableParameterViewModel : MpAvParameterViewModelBase {
         #region Private Variables
-
+        private List<MpAvEnumerableParameterValueViewModel> _lastSelectedValues;
         #endregion
 
         #region Properties
@@ -64,6 +64,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public override bool HasModelChanged => 
+            SelectedItems.Difference(_lastSelectedValues).Count() > 0;
         public bool IsParameterDropDownOpen { get; set; }
 
         public MpCsvFormatProperties CsvProperties {
@@ -83,23 +85,6 @@ namespace MonkeyPaste.Avalonia {
         #region Model
 
         #region Db
-
-        //public override string CurrentValue {
-        //    get {
-        //        if (PresetValueModel == null) {
-        //            return string.Empty;
-        //        }
-
-        //        return CsvProperties.DecodeValue(PresetValueModel.Value);
-        //    }
-        //    set {
-        //        if (CurrentValue != value) {
-        //            PresetValueModel.Value = CsvProperties.EncodeValue(value);
-        //            HasModelChanged = true;
-        //            OnPropertyChanged(nameof(CurrentValue));
-        //        }
-        //    }
-        //}
         #endregion
 
         #endregion
@@ -125,9 +110,7 @@ namespace MonkeyPaste.Avalonia {
             await base.InitializeAsync(aipv);
 
             Items.Clear();
-            if (PresetValueModel.Id == 979) {
-                Debugger.Break();
-            }
+
 
             List<string> selectedValues = new List<string>();
 
@@ -160,13 +143,13 @@ namespace MonkeyPaste.Avalonia {
                 Items[0].IsSelected = true;
             }
 
-
             OnPropertyChanged(nameof(Items));
             CurrentValue = SelectedItems.Select(x => x.Value).ToList().ToCsv(CsvProperties);
 
             while (Items.Any(x => x.IsBusy)) {
                 await Task.Delay(100);
             }
+            SetLastValue(SelectedItems);
 
             OnPropertyChanged(nameof(SelectedItem));
             OnPropertyChanged(nameof(SelectedItems));
@@ -189,6 +172,26 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Protected Methods
+
+        protected override void SetLastValue(object value) {
+            if(value is IEnumerable<MpAvEnumerableParameterValueViewModel> val_vml) {
+                _lastSelectedValues = val_vml.ToList();
+            } else {
+                _lastSelectedValues = new List<MpAvEnumerableParameterValueViewModel>();
+            }
+        }
+
+        protected override void RestoreLastValue() {
+            if (_lastSelectedValues is IEnumerable<MpAvEnumerableParameterValueViewModel> val_vml) {
+                SelectedItems = val_vml.ToList();
+            } else {
+                SelectedItems.Clear();
+            }
+        }
+
+        #endregion
+
         #region Private Methods
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             //OnPropertyChanged(nameof(CurrentValue));
@@ -196,12 +199,17 @@ namespace MonkeyPaste.Avalonia {
         }
         private void MpEnumerableParameterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                //case nameof(SelectedItem):
-                //case nameof(SelectedItems):
-                //case nameof(Items):
-                //    OnPropertyChanged(nameof(CurrentValue));
-                //    HasModelChanged = true;
-                //    break;
+                case nameof(CurrentValue):
+                    //SelectValueCommand.Execute(CurrentValue);
+                    break;
+                case nameof(HasModelChanged):
+                case nameof(SelectedItem):
+                case nameof(SelectedItems):
+                case nameof(Items):
+                    if (Parent is MpISaveOrCancelableViewModel socvm) {
+                        socvm.OnPropertyChanged(nameof(socvm.CanSaveOrCancel));
+                    }
+                    break;
                 case nameof(IsParameterDropDownOpen):
                     MpAvMainWindowViewModel.Instance.IsAnyDropDownOpen = IsParameterDropDownOpen;
                     break;

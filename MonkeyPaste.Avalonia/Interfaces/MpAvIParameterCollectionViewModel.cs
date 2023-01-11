@@ -2,7 +2,7 @@
 
 namespace MonkeyPaste.Avalonia { 
 
-    public interface MpAvIParameterCollectionViewModel : MpIViewModel {
+    public interface MpAvIParameterCollectionViewModel : MpISaveOrCancelableViewModel {
        IEnumerable<MpAvParameterViewModelBase> Items { get; }
         MpAvParameterViewModelBase SelectedItem { get; set; }
     }

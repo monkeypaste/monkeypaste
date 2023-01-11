@@ -6,7 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public class MpDllTransaction : MpDbModelBase, MpITransactionError, MpIPluginPresetTransaction {
+    public class MpDllTransaction : 
+        MpDbModelBase, MpITransactionError, MpIPluginPresetTransaction,
+        MpISourceRef {
         #region Protected variables 
         //uses manifest iconUrl for MpISourceItem interface
         protected int iconId { get; set; } = 0;
@@ -41,6 +43,12 @@ namespace MonkeyPaste {
 
         #endregion
 
+        #region MpISourceRef Implementation
+
+        public int Priority => 1;
+        public int SourceObjId => PresetId;
+        public MpCopyItemSourceType SourceType => MpCopyItemSourceType.Analyzer;
+        #endregion
         #region MpIPluginPresetTransaction Implementation
 
         [Ignore]
@@ -101,6 +109,7 @@ namespace MonkeyPaste {
         }
 
         public MpDllTransaction() { }
+
 
         //#region MpISourceItem Implementation
 

@@ -71,6 +71,9 @@ namespace MonkeyPaste.Avalonia {
                 case MpCopyItemSourceType.Url:
                     var url = await MpDataModelProvider.GetItemAsync<MpUrl>(source_id);
                     return url;
+                case MpCopyItemSourceType.Analyzer:
+                    var dll_trans = await MpDataModelProvider.GetItemAsync<MpDllTransaction>(source_id);
+                    return dll_trans;
                 case MpCopyItemSourceType.CopyItem:
                     if(string.IsNullOrEmpty(ci_public_handle)) {
                         var ci = await MpDataModelProvider.GetItemAsync<MpCopyItem>(source_id);

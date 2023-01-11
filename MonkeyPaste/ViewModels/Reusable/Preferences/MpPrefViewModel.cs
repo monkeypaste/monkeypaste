@@ -294,6 +294,8 @@ namespace MonkeyPaste {
 
         #region User Properties          
 
+        public int MaxUndoLimit { get; set; } = 100;
+
         public string RecentFindTexts { get; set; } = string.Empty;
 
         public string RecentReplaceTexts { get; set; } = string.Empty;

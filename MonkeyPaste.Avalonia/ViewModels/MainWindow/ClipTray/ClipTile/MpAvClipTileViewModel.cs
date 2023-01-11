@@ -85,7 +85,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvFileItemCollectionViewModel FileItemCollectionViewModel { get; private set; }
         public MpAvClipTileDetailCollectionViewModel DetailCollectionViewModel { get; private set; }
 
-        public MpAvClipTileSourceCollectionViewModel SourceCollectionViewModel { get; private set; }
+        public MpAvClipTileTransactionCollectionViewModel SourceCollectionViewModel { get; private set; }
 
         public MpAvClipTileViewModel Next {
             get {
@@ -279,6 +279,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Layout
 
+        public double DefaultTransactionPanelLength => 150;
         public MpSize UnconstrainedContentSize { get; set; } = MpSize.Empty;
         public double TileTitleHeight => IsTitleVisible ? 100 : 0;
         public double TileDetailHeight => 25;// MpMeasurements.Instance.ClipTileDetailHeight;
@@ -463,6 +464,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        public bool IsTransactionPaneOpen { get; set; } = false;
         public string AnnotationsJsonStr { get; set; }
 
         public bool CanShowContextMenu { get; set; } = true;
@@ -715,7 +717,7 @@ namespace MonkeyPaste.Avalonia {
         private bool _isTitleVisible = true;
         public bool IsTitleVisible { 
             get {
-                if(IsAppendNotifier || !IsContentReadOnly) {
+                if(IsAppendNotifier || !IsContentReadOnly || IsTransactionPaneOpen) {
                     return false;
                 }
                 return _isTitleVisible;
@@ -991,9 +993,10 @@ namespace MonkeyPaste.Avalonia {
         //        }
         //    }
         //}
-        public int IconId => SourceCollectionViewModel.PrimaryItem == null ?
+
+        public object IconResourceObj => SourceCollectionViewModel.PrimaryItem == null ?
             MpDefaultDataModelTools.ThisAppIconId :
-            SourceCollectionViewModel.PrimaryItem.SourceIconId;
+            SourceCollectionViewModel.PrimaryItem.IconSourceObj;
 
         private string _curItemRandomHexColor;
         public string CopyItemHexColor {
@@ -1055,7 +1058,7 @@ namespace MonkeyPaste.Avalonia {
             //MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
             FileItemCollectionViewModel = new MpAvFileItemCollectionViewModel(this);
             DetailCollectionViewModel = new MpAvClipTileDetailCollectionViewModel(this);
-            SourceCollectionViewModel = new MpAvClipTileSourceCollectionViewModel(this);
+            SourceCollectionViewModel = new MpAvClipTileTransactionCollectionViewModel(this);
             IsBusy = true;
         }
 
@@ -1097,7 +1100,7 @@ namespace MonkeyPaste.Avalonia {
                 Parent.RestoreSelectionState(this);
             }
 
-            OnPropertyChanged(nameof(IconId));
+            OnPropertyChanged(nameof(IconResourceObj));
             OnPropertyChanged(nameof(IsPlaceholder));
             OnPropertyChanged(nameof(TrayX));
             OnPropertyChanged(nameof(TileBorderHexColor));
@@ -1138,10 +1141,10 @@ namespace MonkeyPaste.Avalonia {
 
             List<string> hexColors = new List<string>();
 
-            if (IconId > 0 && !HasUserDefinedColor) {
-                var ivm = MpAvIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == IconId);
+            if (IconResourceObj is int iconId && !HasUserDefinedColor) {
+                var ivm = MpAvIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == iconId);
                 if (ivm == null) {
-                    var icon = await MpDataModelProvider.GetItemAsync<MpIcon>(IconId);
+                    var icon = await MpDataModelProvider.GetItemAsync<MpIcon>(iconId);
                     hexColors = icon.HexColors;
                 } else {
                     hexColors = ivm.PrimaryIconColorList.ToList();
@@ -1619,7 +1622,7 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(CopyItemHexColor):
                     InitTitleLayers().FireAndForgetSafeAsync(this);
                     break;
-                case nameof(IconId):
+                case nameof(IconResourceObj):
                     InitTitleLayers().FireAndForgetSafeAsync(this);
                     break;
                 case nameof(CopyItemData):
@@ -1855,6 +1858,38 @@ namespace MonkeyPaste.Avalonia {
                 IsBusy = false;
             });
 
+        public ICommand OpenTransactionPaneCommand => new MpCommand(
+            () => {
+                IsTransactionPaneOpen = true;
+                Dispatcher.UIThread.Post(() => {
+                    MpAvResizeExtension.ResizeAnimated(
+                        GetDragSource() as MpAvCefNetWebView, BoundWidth + DefaultTransactionPanelLength, BoundHeight);
+                });
+            }, () => {
+                return !IsTransactionPaneOpen;
+            });
+        
+        public ICommand CloseTransactionPaneCommand => new MpCommand(
+            () => {
+                IsTransactionPaneOpen = false;
+
+                Dispatcher.UIThread.Post(() => {
+                    MpAvResizeExtension.ResizeAnimated(
+                        GetDragSource() as MpAvCefNetWebView, BoundWidth - DefaultTransactionPanelLength, BoundHeight);
+                });
+            }, () => {
+                return IsTransactionPaneOpen;
+            });
+        
+        public ICommand ToggleTransactionPaneOpenCommand => new MpCommand(
+            () => {
+                if(IsTransactionPaneOpen) {
+                    CloseTransactionPaneCommand.Execute(null);
+                } else {
+                    OpenTransactionPaneCommand.Execute(null);
+                }
+                OnPropertyChanged(nameof(IsTitleVisible));
+            });
         #endregion
     }
 }

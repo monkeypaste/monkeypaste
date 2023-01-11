@@ -66,6 +66,8 @@ namespace MonkeyPaste.Common.Plugin {
         }
 
         public string label { get; set; } = string.Empty;
+        public string placeholder { get; set; } = string.Empty;
+
         public string description { get; set; } = string.Empty;
 
         public MpParameterControlType controlType { get; set; } = MpParameterControlType.None;

@@ -3,24 +3,24 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
 
-    <Style Selector="TreeViewItem:selected /template/ Border#PART_LayoutRoot">
+    <Style Selector="TreeView#TagTreeView TreeViewItem:selected /template/ Border#PART_LayoutRoot">
         <Setter Property="Background"
                 Value="Transparent" />
     </Style>
-    <Style Selector="TreeViewItem /template/ Border#PART_LayoutRoot:pointerover">
+    <Style Selector="TreeView#TagTreeView TreeViewItem /template/ Border#PART_LayoutRoot:pointerover">
         <Setter Property="Background"
                 Value="Transparent" />
     </Style>
 
-    <Style Selector="TreeViewItem /template/ Border#SelectionBorder:pointerover">
+    <Style Selector="TreeView#TagTreeView TreeView#TagTreeViewTreeViewItem /template/ Border#SelectionBorder:pointerover">
         <Setter Property="Background"
                 Value="Transparent" />
     </Style>
-    <Style Selector="TreeViewItem /template/ Border#SelectionBorder">
+    <Style Selector="TreeView#TagTreeView TreeViewItem /template/ Border#SelectionBorder">
         <Setter Property="Background"
                 Value="Transparent" />
     </Style>
-    <Style Selector="TreeViewItem:selected /template/ Border#SelectionBorder">
+    <Style Selector="TreeView#TagTreeView TreeViewItem:selected /template/ Border#SelectionBorder">
         <Setter Property="Background"
                 Value="Transparent" />
     </Style>

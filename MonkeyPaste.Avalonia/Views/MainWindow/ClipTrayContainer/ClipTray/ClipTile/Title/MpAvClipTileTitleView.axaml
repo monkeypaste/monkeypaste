@@ -327,10 +327,7 @@
                      Margin="0,3,13,0" />-->
             <Button x:Name="ClipTileAppIconImageButton"
                     Classes="noBg noHoverBg"
-                    local:MpAvPointerPressCommandExtension.IsEnabled="True"
-                    local:MpAvPointerPressCommandExtension.RightPressCommand="{Binding SourceCollectionViewModel.FilterByPrimarySourceCommand}"
-                    local:MpAvIsHoveringExtension.IsEnabled="True"
-                    local:MpAvIsHoveringExtension.IsHovering="{Binding IsHoveringOverSourceIcon, Mode=TwoWay}"
+                    Command="{Binding ToggleTransactionPaneOpenCommand}"
                     ClipToBounds="False"
                     BorderThickness="0"
                     HorizontalAlignment="Stretch"
@@ -346,7 +343,7 @@
                 <Grid>
                     <Image x:Name="ClipTileAppIconBorderImage"
                            IsHitTestVisible="False"
-                           Source="{Binding IconId, Converter={StaticResource IconSourceObjToBitmapConverter}, ConverterParameter=border}"
+                           Source="{Binding IconResourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}, ConverterParameter=border}"
                            Stretch="UniformToFill"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch">
@@ -356,7 +353,7 @@
                     </Image>
                     <Image x:Name="ClipTileAppIconImage"
                            IsHitTestVisible="False"
-                           Source="{Binding IconId, Converter={StaticResource IconSourceObjToBitmapConverter}}"
+                           Source="{Binding IconResourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}"
                            Stretch="UniformToFill"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch">

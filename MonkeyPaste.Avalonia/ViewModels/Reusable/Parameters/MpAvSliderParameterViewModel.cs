@@ -4,7 +4,6 @@ using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Atk;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvSliderParameterViewModel : MpAvParameterViewModelBase, MpISliderViewModel {
@@ -23,25 +22,16 @@ namespace MonkeyPaste.Avalonia {
 
         public double SliderValue { 
             get {
-                if (CurrentValue == null || ParameterFormat == null) {
+                object val = GetClampedValue(CurrentValue);
+                if(val == null) {
                     return 0;
                 }
 
-                switch (UnitType) {
-                    case MpParameterValueUnitType.Integer:
-                        return IntValue;
-                    case MpParameterValueUnitType.Decimal:
-                        return Math.Round(DoubleValue, Precision);
-                    default:
-                        return DoubleValue;
-                }
-            }
-            set {
-                if(this is MpISliderViewModel svm &&
-                    svm.SliderValue != value) {
-                    CurrentValue = value.ToString();
-                    HasModelChanged = true;
-                    svm.OnPropertyChanged(nameof(svm.SliderValue));
+                try {
+                    return double.Parse(CurrentValue);
+                } catch(Exception ex) {
+                    MpConsole.WriteTraceLine($"Error converting slider current value '{CurrentValue}' ex: ", ex);
+                    return 0;
                 }
             }
         }
@@ -60,7 +50,9 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvSliderParameterViewModel() : base(null) { }
 
-        public MpAvSliderParameterViewModel(MpIParameterHostViewModel parent) : base(parent) { }
+        public MpAvSliderParameterViewModel(MpIParameterHostViewModel parent) : base(parent) {
+        }
+
 
         #endregion
 
@@ -71,21 +63,35 @@ namespace MonkeyPaste.Avalonia {
 
             await base.InitializeAsync(aipv);
 
-            OnPropertyChanged(nameof(CurrentValue));     
-            if(this is MpISliderViewModel svm) {
-                svm.OnPropertyChanged(nameof(svm.MinValue));
-                svm.OnPropertyChanged(nameof(svm.MaxValue));
-                svm.OnPropertyChanged(nameof(svm.SliderValue));
+            OnPropertyChanged(nameof(CurrentValue));
+            OnPropertyChanged(nameof(MinValue));
+            OnPropertyChanged(nameof(MaxValue));
+            OnPropertyChanged(nameof(SliderValue));
 
-            }
-            
             await Task.Delay(1);
 
             IsBusy = false;
         }
 
+        #endregion
 
+        #region Private Methods
 
+        private object GetClampedValue(string value) {
+            try {
+                switch (UnitType) {
+                    case MpParameterValueUnitType.Integer:
+                        return int.Parse(value);
+                    case MpParameterValueUnitType.Decimal:
+                        return Math.Round(double.Parse(value), Precision);
+                    default:
+                        return double.Parse(value);
+                }
+            } catch(Exception ex) {
+                MpConsole.WriteTraceLine($"Error converting slider value '{value}' ex: ", ex);
+                return null;
+            }
+        }
         #endregion
     }
 }

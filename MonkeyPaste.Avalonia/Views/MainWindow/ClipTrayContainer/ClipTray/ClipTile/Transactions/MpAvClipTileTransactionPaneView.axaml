@@ -1,0 +1,45 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:DataType="local:MpAvClipTileTransactionCollectionViewModel"
+                       x:TypeArguments="local:MpAvClipTileTransactionCollectionViewModel"
+                       x:CompileBindings="True"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Class="MonkeyPaste.Avalonia.MpAvClipTileTransactionPaneView">
+    <Grid RowDefinitions="*,Auto">
+        <TreeView Grid.Row="0"
+                  Items="{Binding Items}"
+                  SelectionMode="Multiple,Toggle"
+                  SelectedItems="{Binding SelectedItems}"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch">
+            <TreeView.ItemTemplate>
+                <TreeDataTemplate x:DataType="local:MpITransactionNodeViewModel"
+                                  ItemsSource="{Binding Children}">
+                    <TextBlock Text="{Binding LabelText}" />
+                </TreeDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+
+        <GridSplitter x:Name="TransactionTreeBodySplitter"
+                      Grid.Row="1"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Top"
+                      Classes="horizontal" />
+        <ListBox Grid.Row="1"
+                 HorizontalAlignment="Stretch"
+                 VerticalAlignment="Stretch"
+                 Items="{Binding SelectedItems}">
+            <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="local:MpITransactionNodeViewModel">
+                    <TextBlock Text="{Binding LabelText}" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</local:MpAvUserControl>

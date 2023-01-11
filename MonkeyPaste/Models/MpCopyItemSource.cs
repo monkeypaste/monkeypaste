@@ -12,7 +12,8 @@ namespace MonkeyPaste {
         None = 0,
         App,
         Url,
-        CopyItem
+        CopyItem,
+        Analyzer
     };
 
     public class MpCopyItemSource : MpDbModelBase {

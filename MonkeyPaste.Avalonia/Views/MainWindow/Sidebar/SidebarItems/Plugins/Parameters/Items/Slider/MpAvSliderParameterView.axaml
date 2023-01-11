@@ -6,8 +6,8 @@
                        xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:pcl="using:MonkeyPaste"
-                       x:TypeArguments="pcl:MpISliderViewModel"
-                       x:DataType="pcl:MpISliderViewModel"
+                       x:TypeArguments="local:MpAvSliderParameterViewModel"
+                       x:DataType="local:MpAvSliderParameterViewModel"
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800">
@@ -28,6 +28,23 @@
                     <SolidColorBrush Color="Black"
                                      Opacity="0.6" />
                 </Rectangle.Fill>
+                <Rectangle.Width>
+                    <MultiBinding Converter="{x:Static local:MpAvMultiSliderValueToLengthConverter.Instance}">
+                        <Binding Path="MinValue"
+                                 FallbackValue="0"
+                                 TargetNullValue="0" />
+                        <Binding Path="MaxValue"
+                                 FallbackValue="0"
+                                 TargetNullValue="0" />
+                        <Binding Path="SliderValue"
+                                 FallbackValue="0"
+                                 TargetNullValue="0" />
+                        <Binding ElementName="SliderValueRectangle"
+                                 Path="MaxWidth"
+                                 FallbackValue="0"
+                                 TargetNullValue="0" />
+                    </MultiBinding>
+                </Rectangle.Width>
             </Rectangle>
             <TextBox x:Name="SliderValueTextBox"
                      Cursor="Ibeam"
@@ -37,9 +54,10 @@
                      IsReadOnly="False"
                      HorizontalAlignment="Center"
                      VerticalAlignment="Center"
-                     MinWidth="0"
-                     Text="{Binding SliderValue, Mode=TwoWay}">
-
+                     MinWidth="0">
+                <Interaction.Behaviors>
+                    <local:MpAvLostFocusUpdateBindingBehavior Text="{Binding CurrentValue, Mode=TwoWay}" />
+                </Interaction.Behaviors>
             </TextBox>
         </Grid>
     </Border>

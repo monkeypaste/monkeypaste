@@ -108,6 +108,26 @@ namespace MonkeyPaste.Avalonia {
         IEnumerable<MpAvParameterViewModelBase> MpAvIParameterCollectionViewModel.Items => ActionArgs;
         MpAvParameterViewModelBase MpAvIParameterCollectionViewModel.SelectedItem { get; set; }
 
+        #region MpISaveOrCancelableViewModel Implementation
+
+        public ICommand SaveCommand => new MpCommand(
+            () => {
+                ActionArgs.ForEach(x => x.SaveCurrentValueCommand.Execute(null));
+            },
+            () => {
+                return CanSaveOrCancel;
+            });
+        public ICommand CancelCommand => new MpCommand(
+            () => {
+                ActionArgs.ForEach(x => x.RestoreLastValueCommand.Execute(null));
+            },
+            () => {
+                return CanSaveOrCancel;
+            });
+        public bool CanSaveOrCancel => ActionArgs.Any(x => x.HasModelChanged);
+
+        #endregion
+
         #endregion
 
         #region MpIParameterHost Implementation

@@ -103,6 +103,7 @@
     <Compile Include="ViewModels\Reusable\Notifications\Items\MpMessageNotificationViewModel.cs" />
     <Compile Include="ViewModels\Reusable\Notifications\Items\MpUserActionNotificationViewModel.cs" />
     <Compile Include="ViewModels\Reusable\Preferences\MpPrefViewModel.cs" />
+    <Compile Include="ViewModels\Reusable\Undo\MpAvUndoManagerViewModel.cs" />
   </ItemGroup>
 
   <ItemGroup>

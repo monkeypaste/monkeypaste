@@ -15,7 +15,7 @@ using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Wpf;
 namespace MonkeyPaste.Avalonia {
 
-    public partial class MpAvSliderParameterView : MpAvUserControl<MpISliderViewModel> {
+    public partial class MpAvSliderParameterView : MpAvUserControl<MpAvSliderParameterViewModel> {
         private MpPoint _lastMousePosition;
         private bool _isSliding = false;
         private double _oldVal = 0;
@@ -33,8 +33,12 @@ namespace MonkeyPaste.Avalonia {
             svtb.GotFocus += Svtb_GotFocus;
             svtb.LostFocus += Svtb_LostFocus;
             svtb.KeyDown += Svtb_KeyDown;
+            svtb.GetObservable(TextBox.TextProperty).Subscribe(value => OnSliderTextChanged());
         }
 
+        private void OnSliderTextChanged() {
+            UpdateRectWidth();
+        }
 
         private void Sb_EffectiveViewportChanged(object sender, global::Avalonia.Layout.EffectiveViewportChangedEventArgs e) {
             UpdateRectWidth();
@@ -67,7 +71,7 @@ namespace MonkeyPaste.Avalonia {
                     double newWidth = mp.X;
                     double widthPercent = newWidth / sb.Bounds.Width;
                     double newValue = ((BindingContext.MaxValue - BindingContext.MinValue) * widthPercent) + BindingContext.MinValue;
-                    BindingContext.SliderValue = Math.Round(newValue, BindingContext.Precision);
+                    BindingContext.CurrentValue = Math.Round(newValue, BindingContext.Precision).ToString();
                 }
                 UpdateRectWidth();
             }
@@ -100,7 +104,7 @@ namespace MonkeyPaste.Avalonia {
 
             double widthPercent = newWidth / sb.Bounds.Width;
             double newValue = ((BindingContext.MaxValue - BindingContext.MinValue) * widthPercent) + BindingContext.MinValue;
-            BindingContext.SliderValue = Math.Round(newValue, BindingContext.Precision);
+            BindingContext.CurrentValue = Math.Round(newValue, BindingContext.Precision).ToString();
 
             _lastMousePosition = mp.ToPortablePoint(); 
             UpdateRectWidth();
@@ -154,7 +158,7 @@ namespace MonkeyPaste.Avalonia {
             }
             var svtb = this.FindControl<TextBox>("SliderValueTextBox");
             if(double.TryParse(svtb.Text, out var dblVal)) {
-                BindingContext.SliderValue = dblVal;
+                BindingContext.CurrentValue = dblVal.ToString();
                 _oldVal = dblVal;
                 UpdateRectWidth();
             } else {

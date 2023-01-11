@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Collections.ObjectModel;
 
 namespace MonkeyPaste {    
     public interface MpIViewModel {
@@ -28,14 +29,28 @@ namespace MonkeyPaste {
 
     public abstract class MpViewModelBase : 
         INotifyPropertyChanged, 
-        MpIErrorHandler, 
-        MpIViewModel,
+        MpIErrorHandler,
         MpIAsyncObject {
 
-        //[JsonIgnore]
-        //private static Dictionary<string, int> _instanceCountLookup;
+        #region Private Variables
+
+        private List<MpUndoableProperty> _undoables;
+
+        #endregion
 
         #region Properties
+        protected List<MpUndoableProperty> Undoable {
+            get {
+                if (_undoables == null) {
+                    _undoables = new List<MpUndoableProperty>();
+                }
+                return _undoables;
+            }
+        }
+
+        public virtual MpDbModelBase Model { get; set; }
+
+        public virtual ObservableCollection<MpDbModelBase> ModelHistory { get; set; }
 
         public virtual object ParentObj { get; protected set; }
 
@@ -110,12 +125,6 @@ namespace MonkeyPaste {
 
         #endregion
 
-        //public static void PrintInstanceCount() {
-        //    foreach (var kvp in _instanceCountLookup) {
-        //        MpConsole.WriteLine($"'{kvp.Key}': {kvp.Value}");
-        //    }
-        //}
-
         #region MpIErrorHandler Implementation
 
         public void HandleError(Exception ex) {
@@ -156,10 +165,6 @@ namespace MonkeyPaste {
 
         #region Protected Methods
 
-        protected void WriteModel(MpDbModelBase dbo) {
-            WriteModelHelper(dbo).FireAndForgetSafeAsync(this);
-        }
-
         protected void NotifyModelChanged(object model, string changedPropName, object newVal) {
             object oldVal = model.GetPropertyValue(changedPropName);
             if(oldVal == newVal) {
@@ -170,6 +175,33 @@ namespace MonkeyPaste {
             HasModelChanged = true;
             MpConsole.WriteLine($"View Model '{this}' Model has changed (writing to db). Property: '{changedPropName}' OldVal: '{oldVal}' NewVal: '{newVal}'");
         }
+
+        #region Undo/Redo
+        /// <summary>
+        /// Add an item to the undoable list.
+        /// </summary>
+        /// <param name="instance">The instance to add the undoable item against.</param>
+        /// <param name="property">The property change.</param>
+        /// <param name="oldValue">The original value.</param>
+        /// <param name="newValue">The updated value.</param>
+        protected void AddUndo(object oldValue, object newValue, string name = "", [CallerMemberName] string property = "") {
+            AddUndo(this, property, oldValue, newValue, string.IsNullOrEmpty(name) ? property : name);
+        }
+
+        /// <summary>
+        /// Add an item to the undoable list.
+        /// </summary>
+        /// <param name="instance">The instance to add the undoable item against.</param>
+        /// <param name="property">The property change.</param>
+        /// <param name="oldValue">The original value.</param>
+        /// <param name="newValue">The updated value.</param>
+        /// <param name="name">The name of the undo operation.</param>
+        protected void AddUndo(object instance, string property, object oldValue, object newValue, string name) {
+            Undoable.Add(new MpUndoableProperty(instance, property, oldValue, newValue, name));
+        }
+
+        #endregion
+
         #region Db Events
 
         protected virtual void Instance_SyncDelete(object sender, MpDbSyncEventArgs e) { }
@@ -190,11 +222,6 @@ namespace MonkeyPaste {
 
         #region Private methods
 
-        private async Task WriteModelHelper(MpDbModelBase dbo) {
-            await dbo.WriteToDatabaseAsync();
-            HasModelChanged = false;
-        }
-
         #endregion
 
         #region INotifyPropertyChanged 
@@ -213,15 +240,6 @@ namespace MonkeyPaste {
                 }
             }
         }
-
-        // SetProperty example below
-        //private int unitsInStock;
-        //public int UnitsInStock {
-        //    get { return unitsInStock; }
-        //    set {
-        //        SetProperty(ref unitsInStock, value);
-        //    }
-        //}
 
         public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null, [CallerFilePath] string path = null, [CallerMemberName] string memName = null,[CallerLineNumber] int line = 0) {
             if(SupressPropertyChangedNotification) {

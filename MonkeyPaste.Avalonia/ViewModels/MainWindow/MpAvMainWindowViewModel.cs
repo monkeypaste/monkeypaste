@@ -381,7 +381,7 @@ namespace MonkeyPaste.Avalonia {
         private bool _isAnyMainWindowTextBoxFocused;
         public bool IsAnyMainWindowTextBoxFocused { 
             get {
-                if(MpAvFocusManager.IsInputControlFocused) {
+                if(MpAvFocusManager.Instance.IsInputControlFocused) {
                     return true;
                 }
                 return _isAnyMainWindowTextBoxFocused;
@@ -1128,26 +1128,6 @@ namespace MonkeyPaste.Avalonia {
 
                 IsResizing = false;
             });
-
-
-        private MpCommand _undoCommand;
-        public ICommand UndoCommand {
-            get {
-                if (_undoCommand == null) {
-                    _undoCommand = new MpCommand(() => UndoManager.Undo(), () => UndoManager.CanUndo);
-                }
-                return _undoCommand;
-            }
-        }
-
-        private ICommand _redoCommand;
-        public ICommand RedoCommand {
-            get {
-                if (_redoCommand == null)
-                    _redoCommand = new MpCommand(() => UndoManager.Redo(), () => UndoManager.CanRedo);
-                return _redoCommand;
-            }
-        }
 
         public ICommand ToggleShowMainWindowCommand => new MpCommand(() => {
             if(IsMainWindowOpen) {

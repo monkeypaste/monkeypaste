@@ -11,6 +11,8 @@ namespace MonkeyPaste {
         MpIStartupState StartupState { get; set; }
         MpIPlatformShorcuts PlatformShorcuts { get; set; }
         MpINotificationManager NotificationManager { get; set; }
+
+        MpIFocusMonitor FocusMonitor { get; set; }
         //MpIProcessWatcher ProcessWatcher { get; set; }
         MpICursor Cursor { get; set; }
         MpIDbInfo DbInfo { get; set; }

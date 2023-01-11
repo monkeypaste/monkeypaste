@@ -10,6 +10,8 @@ using MonkeyPaste;
 using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; 
 using Newtonsoft.Json;
 using Avalonia.Controls;
+using Avalonia.Animation;
+using Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvAnalyticItemPresetViewModel : 
@@ -22,9 +24,32 @@ namespace MonkeyPaste.Avalonia {
         MpIUserIconViewModel,
         MpAvIShortcutCommandViewModel, 
         MpIPopupMenuPicker,
+        MpIParameterHostViewModel,
         MpAvIParameterCollectionViewModel {
 
         #region Interfaces
+
+        #region MpIParameterHost Implementation
+
+        int MpIParameterHostViewModel.IconId => IconId;
+        string MpIParameterHostViewModel.PluginGuid =>
+            PluginFormat == null ? string.Empty : PluginFormat.guid;
+
+        public MpPluginFormat PluginFormat => Parent == null ? null : Parent.PluginFormat;
+
+        MpParameterHostBaseFormat MpIParameterHostViewModel.ComponentFormat => AnalyzerComponentFormat;
+
+        MpParameterHostBaseFormat MpIParameterHostViewModel.BackupComponentFormat =>
+            PluginFormat == null || PluginFormat.backupCheckPluginFormat == null || PluginFormat.backupCheckPluginFormat.analyzer == null ?
+                null : PluginFormat.backupCheckPluginFormat.analyzer;
+
+        public MpAnalyzerPluginFormat AnalyzerComponentFormat =>
+            PluginFormat == null ? null : PluginFormat.analyzer;
+
+        public MpIPluginComponentBase PluginComponent =>
+            PluginFormat == null ? null : PluginFormat.Component as MpIPluginComponentBase;
+
+        #endregion
 
         #region MpIPopupMenuPicker Implementation
 
@@ -106,8 +131,39 @@ namespace MonkeyPaste.Avalonia {
             set => SelectedItem = value;
         }
 
+        #region MpISaveOrCancelableViewModel Implementation
+
+        public ICommand SaveCommand => new MpCommand(
+            () => {
+                Items.ForEach(x => x.SaveCurrentValueCommand.Execute(null));
+            },
+            () => {
+                return CanSaveOrCancel;
+            }, new[] { this });
+        public ICommand CancelCommand => new MpCommand(
+            () => {
+                Items.ForEach(x => x.RestoreLastValueCommand.Execute(null));
+            },
+            () => {
+                return CanSaveOrCancel;
+            }, new[] {this});
+
+        private bool _canSaveOrCancel = false;
+        public bool CanSaveOrCancel {
+            get {
+                bool result = Items.Any(x => x.HasModelChanged);
+                if(result != _canSaveOrCancel) {
+                    _canSaveOrCancel = result;
+                    OnPropertyChanged(nameof(CanSaveOrCancel));
+                }
+                return _canSaveOrCancel;
+            }
+        }
 
         #endregion
+
+        #endregion
+
         #endregion
 
         #region Properties
@@ -149,6 +205,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public ObservableCollection<MpDllTransaction> Transactions { get; set; } = new ObservableCollection<MpDllTransaction>();
+        public bool HasAnyParameterValueChange => Items.Any(x => x.HasModelChanged);
         public bool IsLabelTextBoxFocused { get; set; } = false;
         public bool IsLabelReadOnly { get; set; } = true;
 
@@ -365,6 +423,10 @@ namespace MonkeyPaste.Avalonia {
 
             Preset = aip;
 
+            var tl = await MpDataModelProvider.GetDllTransactionsByPresetIdAsync(AnalyticItemPresetId);
+            Transactions.Clear();
+            tl.ForEach(x => Transactions.Add(x));
+
             //if (AnalyticItemPresetId == 774) {
             //    Debugger.Break();
             //}
@@ -401,9 +463,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public async Task<MpAvParameterViewModelBase> CreateParameterViewModel(MpPluginPresetParameterValue aipv) {
-            var naipvm = await MpAvPluginParameterBuilder.CreateParameterViewModelAsync(aipv, Parent);
+            var naipvm = await MpAvPluginParameterBuilder.CreateParameterViewModelAsync(aipv, this);
             naipvm.OnValidate += ParameterViewModel_OnValidate;
-
             return naipvm;
         }
 
@@ -430,6 +491,8 @@ namespace MonkeyPaste.Avalonia {
                 if (sc.CommandParameter == AnalyticItemPresetId.ToString() && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
+            } else if(e is MpDllTransaction dt && dt.PresetId == AnalyticItemPresetId) {
+                Transactions.Add(dt);
             }
         }
 
@@ -446,6 +509,9 @@ namespace MonkeyPaste.Avalonia {
                 if (sc.CommandParameter == AnalyticItemPresetId.ToString() && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
+            } else if (e is MpDllTransaction dt && Transactions.FirstOrDefault(x=>x.Id == dt.Id) is MpDllTransaction dt_toRemove) {
+                Transactions.Remove(dt_toRemove);
+
             }
         }
         #endregion
@@ -526,6 +592,7 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 IsLabelReadOnly = !IsLabelReadOnly;
             });
+
 
 
         #endregion

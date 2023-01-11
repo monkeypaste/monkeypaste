@@ -77,6 +77,10 @@
             OldLace
         </Color>
 
+        <Color x:Key="ClipTileTransactionPaneBackgroundColor">
+            GhostWhite
+        </Color>
+
         <Color x:Key="PluginParameterItemBgColor1">
             DarkMagenta
         </Color>
@@ -298,6 +302,12 @@
                          Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  CLIP TILE  -->
+
+        <!--  TRANSACTION PANE  -->
+
+        <SolidColorBrush x:Key="ClipTileTransactionPaneBackgroundBrush"
+                         Color="{DynamicResource ClipTileTransactionPaneBackgroundColor}"
+                         Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  CONTENT  -->
         <SolidColorBrush x:Key="ClipTileContentBackgroundBrush"

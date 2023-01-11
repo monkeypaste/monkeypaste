@@ -15,16 +15,6 @@ namespace MonkeyPaste {
 
         IEnumerable<MpITreeItemViewModel> Children { get; }
     }
-    public interface MpITreeItemViewModel<P,C> : MpITreeItemViewModel {
-        //bool IsExpanded { get; set; }
-
-        //new P ParentTreeItem { get; }
-        IEnumerable<P> AllAncestors { get; }
-        IEnumerable<C> AllDescendants { get; }
-        IEnumerable SelfAndAllDescendants { get; }
-        IEnumerable SelfAndAllAncestors { get; }
-    }
-
 
     public static class MpITreeItemViewModelExtensions {
         #region Anon Version

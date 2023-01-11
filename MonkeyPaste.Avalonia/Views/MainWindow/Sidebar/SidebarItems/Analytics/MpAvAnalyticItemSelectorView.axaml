@@ -32,14 +32,6 @@
                         <Label Classes="h1"
                                Content="Analyzer" />
                         <Border Classes="labelUnderline" />
-                        <!--<local:MpAvPluginSelectorView x:Name="AnalyzerPluginSelectorView"
-                                                      Height="50"
-                                                      Margin="20,0"
-                                                      HorizontalContentAlignment="Stretch"
-                                                      HorizontalAlignment="Stretch"
-                                                      VerticalAlignment="Stretch"
-                                                      VerticalContentAlignment="Stretch"
-                                                      DataContext="{Binding}" />-->
                         <Border Classes="iconLabelComboBox"
                                 Grid.Row="2"
                                 Grid.Column="0">
@@ -69,6 +61,7 @@
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch"
                                 DataContext="{Binding SelectedItem}">
+
                             <local:MpAvAnalyticItemPresetDataGridView HorizontalAlignment="Stretch"
                                                                       VerticalAlignment="Stretch"
                                                                       DataContext="{Binding}" />
@@ -79,15 +72,27 @@
                 <Border x:Name="AnalyzerPluginParameterListBoxContainerBorder"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
+                        Margin="10,0,0,0"
                         Width="350"
                         DataContext="{Binding SelectedPresetViewModel}">
                     <StackPanel Orientation="Vertical">
                         <Label Classes="h1"
                                Content="Settings" />
                         <Border Classes="labelUnderline" />
-                        <local:MpAvPluginParameterListBoxView HorizontalAlignment="Stretch"
-                                                              VerticalAlignment="Stretch"
-                                                              DataContext="{Binding}" />
+
+                        <TransitioningContentControl Content="{Binding}">
+                            <TransitioningContentControl.PageTransition>
+                                <CrossFade FadeInEasing="ExponentialEaseOut"
+                                           Duration="0:00:00.250" />
+                            </TransitioningContentControl.PageTransition>
+                            <TransitioningContentControl.ContentTemplate>
+                                <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
+                                    <local:MpAvPluginParameterListBoxView HorizontalAlignment="Stretch"
+                                                                          VerticalAlignment="Stretch"
+                                                                          DataContext="{Binding}" />
+                                </DataTemplate>
+                            </TransitioningContentControl.ContentTemplate>
+                        </TransitioningContentControl>
                     </StackPanel>
 
                 </Border>

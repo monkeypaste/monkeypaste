@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using MonkeyPaste.Common;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MonkeyPaste {
@@ -19,6 +20,9 @@ namespace MonkeyPaste {
 
         public virtual C PrimaryItem { get; }
 
-        public virtual IList<C> SelectedItems => Items.Where(x => x.IsSelected).ToList();
+        public virtual IList<C> SelectedItems {
+            get => Items.Where(x => x.IsSelected).ToList();
+            set => Items.ForEach(x => x.IsSelected = value == null ? false : value.Contains(x));
+        }
     }
 }
