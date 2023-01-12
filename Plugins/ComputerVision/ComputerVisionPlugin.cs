@@ -71,7 +71,7 @@ namespace ComputerVision {
 
         MpAnalyzerPluginResponseFormat CreateAnnotations(MpAnalyzerPluginResponseFormat resp, string respJsonStr) {
             Root root = JsonConvert.DeserializeObject<Root>(respJsonStr);
-            List<MpIAnnotation> annotations = new List<MpIAnnotation>();
+            List<MpIAnnotationNode> annotations = new List<MpIAnnotationNode>();
 
             if(root.categories != null && root.categories.Count > 0) {
                 root.categories.Select(x => ProcessCategory(x)).Where(x => x != null).ForEach(x => annotations.Add(x));
@@ -85,7 +85,7 @@ namespace ComputerVision {
 
             if(annotations.Count > 0) {
                 var root_annotation = new MpAnnotationNodeFormat() {
-                    children = annotations
+                    Children = annotations
                 };
                 resp.dataObject =
                     new MpPortableDataObject(
@@ -99,7 +99,7 @@ namespace ComputerVision {
         }
 
 
-        MpIAnnotation ProcessObject(VisionObject vObject) {
+        MpIAnnotationNode ProcessObject(VisionObject vObject) {
             if(vObject == null) {
                 return null;
             }
@@ -107,10 +107,10 @@ namespace ComputerVision {
                 type = "Object",
                 label = vObject.@object,
                 score = vObject.confidence,
-                children = ProcessRectangle(vObject.rectangle,"Object") is MpIAnnotation da ? new List<MpIAnnotation>() { da } : null
+                Children = ProcessRectangle(vObject.rectangle,"Object") is MpIAnnotationNode da ? new List<MpIAnnotationNode>() { da } : null
             };
         }
-        MpIAnnotation ProcessTag(Tag tag) {
+        MpIAnnotationNode ProcessTag(Tag tag) {
             if(tag == null) {
                 return null;
             }
@@ -120,7 +120,7 @@ namespace ComputerVision {
                 score = tag.confidence
             };
         }
-        MpIAnnotation ProcessCategory(Category category) {
+        MpIAnnotationNode ProcessCategory(Category category) {
             if(category == null) {
                 return null;
             }
@@ -128,24 +128,24 @@ namespace ComputerVision {
                 type = "Category",
                 label = category.name,
                 score = category.score,
-                children = ProcessDetail(category.detail) is MpIAnnotation da ? new List<MpIAnnotation>() { da} : null
+                Children = ProcessDetail(category.detail) is MpIAnnotationNode da ? new List<MpIAnnotationNode>() { da} : null
             };
         }
-        MpIAnnotation ProcessDetail(Detail detail) {
+        MpIAnnotationNode ProcessDetail(Detail detail) {
             if(detail == null) {
                 return null;
             }
-            List<MpIAnnotation> children = new List<MpIAnnotation>();
+            List<MpIAnnotationNode> children = new List<MpIAnnotationNode>();
             if(detail.celebrities != null && 
                 detail.celebrities.Count > 0) {
-                if(detail.celebrities.Select(x=>ProcessCelebrity(x)) is IEnumerable<MpIAnnotation> al &&
+                if(detail.celebrities.Select(x=>ProcessCelebrity(x)) is IEnumerable<MpIAnnotationNode> al &&
                     al.Where(x=>x != null).Count() > 0) {
                     children.AddRange(al.Where(x=>x != null));
                 }
             }
             if (detail.landmarks != null &&
                 detail.landmarks.Count > 0) {
-                if (detail.landmarks.Select(x => ProcessLandmark(x)) is IEnumerable<MpIAnnotation> al &&
+                if (detail.landmarks.Select(x => ProcessLandmark(x)) is IEnumerable<MpIAnnotationNode> al &&
                     al.Where(x => x != null).Count() > 0) {
                     children.AddRange(al.Where(x => x != null));
                 }
@@ -156,11 +156,11 @@ namespace ComputerVision {
 
             return new MpAnnotationNodeFormat() {
                 type = "Detail",
-                children = children
+                Children = children
             };
         }
 
-        MpIAnnotation ProcessCelebrity(Celebrity celeb) {
+        MpIAnnotationNode ProcessCelebrity(Celebrity celeb) {
             if(celeb == null) {
                 return null;
             }
@@ -168,11 +168,11 @@ namespace ComputerVision {
                 type = "Celebrity",
                 label = celeb.name,
                 score = celeb.confidence,
-                children = celeb.faceRectangle == null ? null : new List<MpIAnnotation>() { ProcessFaceRectangle(celeb.faceRectangle) }
+                Children = celeb.faceRectangle == null ? null : new List<MpIAnnotationNode>() { ProcessFaceRectangle(celeb.faceRectangle) }
             };
         }
         
-        MpIAnnotation ProcessLandmark(Landmark landmark) {
+        MpIAnnotationNode ProcessLandmark(Landmark landmark) {
             if(landmark == null) {
                 return null;
             }
@@ -183,7 +183,7 @@ namespace ComputerVision {
             };
         }
 
-        MpIAnnotation ProcessFaceRectangle(FaceRectangle fr) {
+        MpIAnnotationNode ProcessFaceRectangle(FaceRectangle fr) {
             if(fr == null) {
                 return null;
             }
@@ -196,7 +196,7 @@ namespace ComputerVision {
             };
         }
         
-        MpIAnnotation ProcessRectangle(Rectangle rect, string rectType) {
+        MpIAnnotationNode ProcessRectangle(Rectangle rect, string rectType) {
             if(rect == null) {
                 return null;
             }

@@ -14,7 +14,27 @@ using System.Diagnostics;
 namespace MonkeyPaste {
     public class MpPluginPreset : 
         MpDbModelBase, 
+        MpISourceRef,
+        MpIDbIconId,
+        MpILabelText,
         MpIClonableDbModel<MpPluginPreset> {
+
+        #region MpILabelText Implementation
+        string MpILabelText.LabelText => Label;
+
+        #endregion
+
+        #region MpISourceRef Implementation
+
+        [Ignore]
+        int MpISourceRef.Priority => 2;
+        [Ignore]
+        int MpISourceRef.SourceObjId => Id;
+
+        [Ignore]
+        MpCopyItemSourceType MpISourceRef.SourceType => MpCopyItemSourceType.Plugin;
+
+        #endregion
 
         #region Columns
         [Column("pk_MpPluginPresetId")]

@@ -7,10 +7,11 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvClipTileSourceViewModel  : 
+    public class MpAvClipTileTransactionItemViewModel  : 
         MpViewModelBase<MpAvClipTileTransactionCollectionViewModel>,
         MpITransactionNodeViewModel {
 
@@ -18,20 +19,21 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpITransactionNodeViewModel Implementation
 
+        public object Body { get; }
         public bool IsExpanded { get; set; }
         public MpITreeItemViewModel ParentTreeItem => null;
         public IEnumerable<MpITreeItemViewModel> Children => Items;
         public string LabelText => SourceLabel;
-        public object ComparableSortValue => SourceCreatedDateTime;
+        public object ComparableSortValue => TransactionDateTimeUtc;
         public object IconSourceObj => SourceIconId;
 
-        object MpITransactionNodeViewModel.TransactionModel => SourceRef;
+        object MpITransactionNodeViewModel.TransactionModel => Transaction;
 
         #region MpIMenuItemViewModel Implementation
 
         public MpMenuItemViewModel ContextMenuItemViewModel {
             get {
-                if (SourceRef == null) {
+                if (Transaction == null) {
                     return new MpMenuItemViewModel();
                 }
                 return new MpMenuItemViewModel() {
@@ -71,8 +73,22 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region View Models
+        
+        public IEnumerable<MpAvClipTileTransactionItemMessageViewModelBase> Items {
+            get {
+                var items = new List<MpAvClipTileTransactionItemMessageViewModelBase>();
+                if(Request != null) {
+                    items.Add(Request);
+                }
+                if(Response != null) {
+                    items.Add(Response);
+                }
+                return items;
+            }
+        }
 
-        public ObservableCollection<MpITransactionNodeViewModel> Items { get; set; }
+        public MpAvClipTileTransactionItemMessageViewModelBase Request { get; set; }
+        public MpAvClipTileTransactionItemMessageViewModelBase Response { get; set; }
 
         #endregion
 
@@ -95,6 +111,39 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Model
+
+        public MpJsonMessageFormatType RequestMessageType {
+            get {
+                if(Transaction == null) {
+                    return MpJsonMessageFormatType.None;
+                }
+                return Transaction.RequestMessageType;
+            }
+        }
+        public string RequestJson {
+            get {
+                if(Transaction == null) {
+                    return string.Empty;
+                }
+                return Transaction.RequestMessageJson;
+            }
+        }
+        public MpJsonMessageFormatType ResponseMessageType {
+            get {
+                if (Transaction == null) {
+                    return MpJsonMessageFormatType.None;
+                }
+                return Transaction.ResponseMessageType;
+            }
+        }
+        public string ResponseJson {
+            get {
+                if(Transaction == null) {
+                    return string.Empty;
+                }
+                return Transaction.ResponseMessageJson;
+            }
+        }
         
         public int SourceIconId {
             get {
@@ -125,14 +174,7 @@ namespace MonkeyPaste.Avalonia {
                 return string.Empty;
             }
         }
-        public int SourcePriority {
-            get {
-                if(SourceRef == null) {
-                    return 0;
-                }
-                return SourceRef.Priority;
-            }
-        }
+
         public int SourceObjId {
             get {
                 if (SourceRef == null) {
@@ -143,16 +185,16 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public MpCopyItemSourceType SourceObjType {
+        public MpCopyItemTransactionType TransactionType {
             get {
-                if(SourceRef == null) {
-                    return MpCopyItemSourceType.None;
+                if(Transaction == null) {
+                    return MpCopyItemTransactionType.None;
                 }
-                return SourceRef.SourceType;
+                return Transaction.TransactionType;
             }
         }
 
-        public DateTime SourceCreatedDateTime {
+        public DateTime TransactionDateTimeUtc {
             get {
                 if (SourceRef == null) {
                     return DateTime.MaxValue;
@@ -161,121 +203,44 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public int SourceId {
+        public int TransactionId {
             get {
-                if(SourceRef is MpDbModelBase dbmb) {
-                    return dbmb.Id;
+                if(Transaction == null) {
+                    return 0;
                 }
-                return 0;
+                return Transaction.Id;
             }
         }
 
-        //private MpISourceRef _sourceRef;
-        //public MpISourceRef SourceRef { 
-        //    get {
-        //        if(_sourceRef == null) {
-        //            switch (SourceObjType) {
-        //                case MpCopyItemSourceType.App:
-        //                    var avm = MpAvAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppId == SourceObjId);
-        //                    if (avm == null) {
-        //                        // where/what is it?
-        //                        Debugger.Break();
-        //                        break;
-        //                    }
-        //                    _sourceRef = avm.App;
-        //                    break;
-        //                case MpCopyItemSourceType.Url:
-        //                    var uvm = MpAvUrlCollectionViewModel.Instance.Items.FirstOrDefault(x => x.UrlId == SourceObjId);
-        //                    if (uvm == null) {
-        //                        // where/what is it?
-        //                        Debugger.Break();
-        //                        break;
-        //                    }
-        //                    _sourceRef = uvm.Url;
-        //                    break;
-        //                case MpCopyItemSourceType.Analyzer:
-        //                    var aipvm = MpAvAnalyticItemCollectionViewModel.Instance.AllPresets.FirstOrDefault(x => x.AnalyticItemPresetId == SourceObjId);
-        //                    if (aipvm == null) {
-        //                        // where/what is it?
-        //                        Debugger.Break();
-        //                        break;
-        //                    }
-        //                    _sourceRef = aipvm.Transactions.FirstOrDefault(x=>x.Co;
-        //                    break;
-        //                case MpCopyItemSourceType.CopyItem:
-        //                    var civm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.CopyItemId == SourceObjId);
-        //                    if (civm != null) {
-        //                        _sourceRef = civm.CopyItem;
-        //                    }
-        //                    break;
-        //            }
-        //        }
-        //        return _sourceRef;
-        //    }
-        //}
         public MpISourceRef SourceRef { get; set; }
-        //public MpCopyItemSource CopyItemSource { get; private set; }
 
+        public MpCopyItemTransaction Transaction { get; set; }
         #endregion
 
         #endregion
 
         #region Constructors
 
-        public MpAvClipTileSourceViewModel (MpAvClipTileTransactionCollectionViewModel parent) : base(parent) { }
+        public MpAvClipTileTransactionItemViewModel (MpAvClipTileTransactionCollectionViewModel parent) : base(parent) { }
 
         #endregion
 
         #region Public Methods
-        public async Task InitializeAsync(MpISourceRef sourceRef, MpCopyItemTransaction cit = null) {
+        public async Task InitializeAsync(MpCopyItemTransaction cit, MpISourceRef sourceRef = null) {
             IsBusy = true;
 
             //_sourceRef = null;
             //CopyItemSource = cis;
+            Transaction = cit;
+            
+            if(sourceRef == null) {
+                sourceRef = await MpDataModelProvider.GetSourceRefByCopyItemTransactionIdAsync(TransactionId);
+            }
             SourceRef = sourceRef;
 
-            if(Items != null) {
-                Items.Clear();
-            }
-            if(SourceRef == null && SourceObjType == MpCopyItemSourceType.CopyItem) {
-                // ci not in tray so query (to avoid sync query)
-                SourceRef = await MpDataModelProvider.GetItemAsync<MpCopyItem>(SourceObjId);
-            }
-            if(SourceRef is MpDllTransaction dllt) {
-                MpAnalyzerPluginRequestFormat req_params = null;
-                try {
-                    req_params = MpJsonObject.DeserializeObject<MpAnalyzerPluginRequestFormat>(dllt.Args);
-                }catch(Exception ex) {
-                    MpConsole.WriteTraceLine($"Error converting params: {dllt.Args}", ex);
-                }
-                MpAnnotationNodeFormat root_annotation = null;
-                if(cit != null) {
-                    try {
-                        root_annotation = MpJsonObject.DeserializeObject<MpAnnotationNodeFormat>(cit.ResponseJson);
-                    }
-                    catch (Exception ex) {
-                        MpConsole.WriteTraceLine($"Error converting params: {dllt.Args}", ex);
-                    }
-                }
-
-                if(root_annotation != null) {
-                    var root_avm = await CreateAnnotationViewModel(root_annotation, null);
-                    if(root_avm != null) {
-                        if(Items == null) {
-                            Items = new ObservableCollection<MpITransactionNodeViewModel>();
-                        }
-                        Items.Add(root_avm);
-
-                    }
-                }
-            }
-
-            if (Items != null) {
-
-                while (Items.Any(x => x.IsAnyBusy)) {
-                    await Task.Delay(100);
-                }
-            }
+            Request = await CreateMessageViewModel(RequestMessageType, RequestJson, this);
+            Response = await CreateMessageViewModel(ResponseMessageType, ResponseJson, this);
+            
 
             OnPropertyChanged(nameof(Children));
             OnPropertyChanged(nameof(Items));
@@ -288,10 +253,20 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        public async Task<MpAvClipTileAnnotationViewModel> CreateAnnotationViewModel(MpAnnotationNodeFormat anf, MpITreeItemViewModel pti) {
-            var anvm = new MpAvClipTileAnnotationViewModel(this);
-            await anvm.InitializeAsync(anf, pti);
-            return anvm;
+        public async Task<MpAvClipTileTransactionItemMessageViewModelBase> CreateMessageViewModel(MpJsonMessageFormatType jsonFormat, string json, MpITransactionNodeViewModel parentAnnotation) {
+            if(string.IsNullOrEmpty(json)) {
+                return null;
+            }
+            MpAvClipTileTransactionItemMessageViewModelBase cttimvmb = null;
+            switch (jsonFormat) {
+                case MpJsonMessageFormatType.DataObject:
+                    cttimvmb = new MpAvDataObjectMessageViewModel(this);
+                    break;
+                default:
+                    return null;
+            }
+            await cttimvmb.InitializeAsync(json, parentAnnotation);
+            return cttimvmb;
 
         }
         #endregion
@@ -336,6 +311,7 @@ namespace MonkeyPaste.Avalonia {
                 // open uri here]
                 MpAvUriNavigator.NavigateToUri(new Uri(SourceUri));
             },()=>Uri.IsWellFormedUriString(SourceUri, UriKind.Absolute));
+
 
         #endregion
     }

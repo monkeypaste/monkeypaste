@@ -54,6 +54,12 @@ body {
     position: fixed;
     left: 0px;
 }
+.no-hit-test {
+    pointer-events: none;
+}
+.hit-testable {
+    pointer-events: all;
+}
 
 textarea {
     font-size: 14px;

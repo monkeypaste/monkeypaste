@@ -99,6 +99,7 @@ function convertPlainHtml_ext(convertPlainHtmlReqMsgBase64Str) {
 	let url = '';
 	let plainHtml = '';
 	let qhtml = '';
+	let delta = '';
 
 	if (req.isBase64) {
 		plainHtml = b64_to_utf8(req.data);
@@ -113,10 +114,11 @@ function convertPlainHtml_ext(convertPlainHtmlReqMsgBase64Str) {
 		plainHtml = cbData.html;
 		url = cbData.sourceUrl;
 	}
-	qhtml = convertPlainHtml(plainHtml, req.dataFormatType);
+	let convert_result = convertPlainHtml(plainHtml, req.dataFormatType);
 
 	let respObj = {
-		quillHtml: qhtml,
+		quillHtml: toBase64FromJsonObj(convert_result.html),
+			quillDelta: toBase64FromJsonObj(convert_result.delta),
 		sourceUrl: url
 	};
 	let resp = toBase64FromJsonObj(respObj);

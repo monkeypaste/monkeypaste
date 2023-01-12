@@ -2,12 +2,22 @@
 
 namespace MonkeyPaste.Common.Plugin {
     public interface MpIAnnotation {
-        double score { get; set; }
-        string label { get; set; }
+        
         string type { get; set; }
-        string body { get; set; }
+        //double score { get; set; }
+        //string label { get; set; }
+        //string body { get; set; }
     }
-    public interface MpIAnnotationNode : MpIAnnotation {
-        IEnumerable<MpIAnnotation> children { get; }
+    public interface MpIContentElement : MpIStyleProperties {
+        string type { get; set; }
+        string content { get; set; }
+    }
+    public interface MpIDocumentElement { 
+        MpIContentElement header { get; }
+        MpIContentElement body { get; }
+        MpIContentElement footer { get; }
+
+    }
+    public interface MpIAnnotationNode : MpITreeNode, MpIAnnotation {
     }
 }

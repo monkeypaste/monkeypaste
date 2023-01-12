@@ -28,6 +28,8 @@ function initEditor() {
 	initEditTemplateToolbar();
 	initPasteToolbar();
 
+	initContentClassAttributes();
+
 	initScroll();
 	initTemplates();
 	//initExtContentSourceBlot();

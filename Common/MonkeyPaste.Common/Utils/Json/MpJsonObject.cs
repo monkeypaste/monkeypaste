@@ -6,6 +6,8 @@ using System.Text;
 
 namespace MonkeyPaste.Common {
     public abstract class MpJsonObject : MpIJsonObject, MpIJsonBase64Object {
+        #region Statics
+
         public static T DeserializeObject<T>(object obj) where T: new(){
             if(obj is string objStr) {
                 try {
@@ -55,8 +57,9 @@ namespace MonkeyPaste.Common {
             //return json_bytes.ToBase64String();
             return base64Str;
         }
+        #endregion
 
-        public string SerializeJsonObject() {
+        public virtual string SerializeJsonObject() {
             return SerializeObject(this);
         }
 
@@ -68,7 +71,7 @@ namespace MonkeyPaste.Common {
             return SerializeObjectToBase64JsonStr(this, enc);
         }
 
-        public object Deserialize(string jsonMsgStr) {
+        public virtual object Deserialize(string jsonMsgStr) {
             var JSONCovert = typeof(JsonConvert);
             var parameterTypes = new[] { typeof(string) };
             var deserializer = JSONCovert.GetMethods(BindingFlags.Public | BindingFlags.Static)

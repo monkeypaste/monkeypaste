@@ -44,16 +44,16 @@ function isDragging() {
 // #region Actions
 
 function enableDragOverlay() {
-    getDragOverlayElement().classList.remove('drag-overlay-disabled');
-    getDragOverlayElement().classList.add('drag-overlay-enabled');
+    getDragOverlayElement().classList.remove('no-hit-test');
+    getDragOverlayElement().classList.add('hit-testable');
     getDragOverlayElement().setAttribute('draggable', true);
 
     getEditorContainerElement().setAttribute('draggable', false);
 }
 
 function disableDragOverlay() {
-    getDragOverlayElement().classList.add('drag-overlay-disabled');
-    getDragOverlayElement().classList.remove('drag-overlay-enabled');
+    getDragOverlayElement().classList.add('no-hit-test');
+    getDragOverlayElement().classList.remove('hit-testable');
     getDragOverlayElement().setAttribute('draggable', false);
 
     getEditorContainerElement().setAttribute('draggable', true);

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MonkeyPaste {
+namespace MonkeyPaste.Common {
     public interface MpIActionComponent {
         void RegisterActionComponent(MpIInvokableAction mvm);
         void UnregisterActionComponent(MpIInvokableAction mvm);

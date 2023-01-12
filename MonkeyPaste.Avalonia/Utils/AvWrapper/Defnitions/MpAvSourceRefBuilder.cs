@@ -55,7 +55,7 @@ namespace MonkeyPaste.Avalonia {
                 Debugger.Break();
                 return null;
             }
-            MpCopyItemSourceType source_type = param_lookup["type"].ToEnum<MpCopyItemSourceType>();
+            MpCopyItemTransactionType source_type = param_lookup["type"].ToEnum<MpCopyItemTransactionType>();
             int source_id = param_lookup.ContainsKey("id") ? int.Parse(param_lookup["id"]) : 0;
             string ci_public_handle = param_lookup.ContainsKey("handle") ? param_lookup["handle"] : null;
 
@@ -64,31 +64,19 @@ namespace MonkeyPaste.Avalonia {
                 Debugger.Break();
                 return null;
             }
-            switch(source_type) {
-                case MpCopyItemSourceType.App:
-                    var app = await MpDataModelProvider.GetItemAsync<MpApp>(source_id);
-                    return app;
-                case MpCopyItemSourceType.Url:
-                    var url = await MpDataModelProvider.GetItemAsync<MpUrl>(source_id);
-                    return url;
-                case MpCopyItemSourceType.Analyzer:
-                    var dll_trans = await MpDataModelProvider.GetItemAsync<MpDllTransaction>(source_id);
-                    return dll_trans;
-                case MpCopyItemSourceType.CopyItem:
-                    if(string.IsNullOrEmpty(ci_public_handle)) {
-                        var ci = await MpDataModelProvider.GetItemAsync<MpCopyItem>(source_id);
-                        return ci;
-                    }
-                    var ctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle.ToLower() == ci_public_handle.ToLower());
-                    if(ctvm == null) {
-                        // how did it get the ref?
-                        Debugger.Break();
-                        return null;
-                    }
-                    return ctvm.CopyItem;
-                default:
-                    throw new UnauthorizedAccessException($"Unknown source type: '{source_type}'");
+            if(source_type == MpCopyItemTransactionType.CopyItem &&
+                !string.IsNullOrWhiteSpace(ci_public_handle)) {
+                var ctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle.ToLower() == ci_public_handle.ToLower());
+                if (ctvm == null) {
+                    // how did it get the ref?
+                    Debugger.Break();
+                    return null;
+                }
+                source_id = ctvm.CopyItemId;
             }
+
+            var result = await MpDataModelProvider.GetSourceRefByTransactionTypeAndSourceIdAsync(source_type, source_id);
+            return result;
         }
 
         public string ConvertToRefUrl(MpISourceRef sr) {

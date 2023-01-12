@@ -16,6 +16,7 @@ namespace MonkeyPaste.Avalonia {
         MpIMenuItemViewModel,
         MpIAsyncCollectionObject {
         object TransactionModel { get; }
+        object Body { get; }
     }
 
     public class MpAvClipTileTransactionCollectionViewModel : 
@@ -60,6 +61,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsTransactionPaneOpen { get; set; } = false;
         public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsBusy);
 
         #endregion
@@ -85,17 +87,17 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = true;
 
             Items.Clear();
-            var ci_sources = await MpDataModelProvider.GetCopyItemSources(copyItemId);
-            foreach(var cis in ci_sources) {
-                var source_ref = await GetSourceRefAsync(cis);
-                var cisvm = await CreateClipTileSourceViewModel(source_ref);
-                Items.Add(cisvm);
-            }
+            //var ci_sources = await MpDataModelProvider.GetCopyItemSources(copyItemId);
+            //foreach(var cis in ci_sources) {
+            //    var source_ref = await GetSourceRefAsync(cis);
+            //    var cisvm = await CreateClipTileSourceViewModel(source_ref);
+            //    Items.Add(cisvm);
+            //}
 
             var ci_transactions = await MpDataModelProvider.GetCopyItemTransactionsByCopyItemIdAsync(copyItemId);
             foreach (var cit in ci_transactions) {
-                var source_ref = await GetSourceRefAsync(cit);
-                var cisvm = await CreateClipTileSourceViewModel(source_ref, cit);
+                //var source_ref = await GetSourceRefAsync(cit);
+                var cisvm = await CreateClipTileSourceViewModel(cit);
                 Items.Add(cisvm);
             }
 
@@ -111,46 +113,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private async Task<MpAvClipTileSourceViewModel> CreateClipTileSourceViewModel(MpISourceRef sourceRef, MpCopyItemTransaction cit = null) {
-            var cisvm = new MpAvClipTileSourceViewModel(this);
-            await cisvm.InitializeAsync(sourceRef,cit);
+        private async Task<MpAvClipTileTransactionItemViewModel> CreateClipTileSourceViewModel(MpCopyItemTransaction cit) {
+            var cisvm = new MpAvClipTileTransactionItemViewModel(this);
+            await cisvm.InitializeAsync(cit);
             return cisvm;
         }
-        
-        private async Task<MpISourceRef> GetSourceRefAsync(MpDbModelBase dbmb) {
-            if(dbmb is MpCopyItemSource cis) {
-                switch (cis.CopyItemSourceType) {
-                    case MpCopyItemSourceType.App:
-                        var avm = MpAvAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppId == cis.SourceObjId);
-                        if (avm == null) {
-                            // where/what is it?
-                            Debugger.Break();
-                            break;
-                        }
-                        return avm.App;
-                    case MpCopyItemSourceType.Url:
-                        var uvm = MpAvUrlCollectionViewModel.Instance.Items.FirstOrDefault(x => x.UrlId == cis.SourceObjId);
-                        if (uvm == null) {
-                            // where/what is it?
-                            Debugger.Break();
-                            break;
-                        }
-                        return uvm.Url;
-                    case MpCopyItemSourceType.CopyItem:
-                        var civm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.CopyItemId == cis.SourceObjId);
-                        if (civm != null) {
-                            return civm.CopyItem;
-                        }
-                        break;
-                }
-            }
-            if(dbmb is MpCopyItemTransaction cit) {
-                var source_ref = await MpDataModelProvider.GetSourceRefByCopyItemTransactionIdAsync(cit.Id);
-                return source_ref;
-            }
-            return null;
-        }
-
 
 
         private void MpAvClipTileSourceCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
@@ -161,6 +128,12 @@ namespace MonkeyPaste.Avalonia {
                     }
                     OnPropertyChanged(nameof(IsAnyBusy));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyBusy));
+                    break;
+                case nameof(IsTransactionPaneOpen):
+                    if(Parent == null) {
+                        break;
+                    }
+                    Parent.OnPropertyChanged(nameof(Parent.IsTitleVisible));
                     break;
             }
         }

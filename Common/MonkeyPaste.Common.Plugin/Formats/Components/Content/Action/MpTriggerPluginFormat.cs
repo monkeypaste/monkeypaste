@@ -7,6 +7,6 @@ using MonkeyPaste.Common;
 
 
 namespace MonkeyPaste.Common.Plugin {
-    public class MpActionPluginFormat : MpPluginContentComponentBaseFormat {
+    public class MpTriggerPluginFormat : MpPluginContentComponentBaseFormat {
     }
 }

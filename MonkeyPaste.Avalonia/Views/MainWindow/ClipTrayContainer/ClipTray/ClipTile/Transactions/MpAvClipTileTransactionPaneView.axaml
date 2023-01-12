@@ -11,8 +11,11 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileTransactionPaneView">
-    <Grid RowDefinitions="*,Auto">
-        <TreeView Grid.Row="0"
+    <Grid RowDefinitions="30,*,Auto">
+        <Button Grid.Row="0"
+                Content="Back"
+                Command="{Binding Parent.ToggleTransactionPaneOpenCommand}" />
+        <TreeView Grid.Row="1"
                   Items="{Binding Items}"
                   SelectionMode="Multiple,Toggle"
                   SelectedItems="{Binding SelectedItems}"
@@ -21,17 +24,29 @@
             <TreeView.ItemTemplate>
                 <TreeDataTemplate x:DataType="local:MpITransactionNodeViewModel"
                                   ItemsSource="{Binding Children}">
-                    <TextBlock Text="{Binding LabelText}" />
+                    <StackPanel Orientation="Horizontal">
+                        <Image VerticalAlignment="Stretch"
+                               Margin="2"
+                               Width="{Binding $self.Bounds.Height}"
+                               Source="{Binding IconSourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}}" />
+                        <TextBlock Foreground="Black"
+                                   Margin="5,0,0,0"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Left"
+                                   TextAlignment="Left"
+                                   Text="{Binding LabelText}" />
+                    </StackPanel>
+
                 </TreeDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
 
         <GridSplitter x:Name="TransactionTreeBodySplitter"
-                      Grid.Row="1"
+                      Grid.Row="2"
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Top"
                       Classes="horizontal" />
-        <ListBox Grid.Row="1"
+        <ListBox Grid.Row="2"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Stretch"
                  Items="{Binding SelectedItems}">

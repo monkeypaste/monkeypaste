@@ -22,6 +22,7 @@ namespace MonkeyPaste.Avalonia {
 
     public abstract class MpAvActionViewModelBase :
         MpViewModelBase<MpAvTriggerCollectionViewModel>,
+        MpIActionPluginComponent,
         MpIHoverableViewModel,
         MpIPopupMenuViewModel,
         MpIContextMenuViewModel,
@@ -78,9 +79,18 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
-
         #region Interfaces
 
+
+        #region MpIActionPluginComponent Implementation
+        Task MpIActionPluginComponent.PerformActionAsync(object arg) => PerformActionAsync(arg);
+
+        bool MpIActionPluginComponent.CanPerformAction(object arg) => CanPerformAction(arg);
+
+        Task MpIActionPluginComponent.ValidateActionAsync() => ValidateActionAsync();
+
+        string MpIActionPluginComponent.ValidationText => ValidationText;
+        #endregion
 
         #region MpILabelText Implementation
 
@@ -143,7 +153,7 @@ namespace MonkeyPaste.Avalonia {
             PluginFormat == null || PluginFormat.backupCheckPluginFormat == null || PluginFormat.backupCheckPluginFormat.action == null ?
                 null : PluginFormat.backupCheckPluginFormat.action;
 
-        public virtual MpActionPluginFormat ActionComponentFormat { get; protected set; }
+        public virtual MpTriggerPluginFormat ActionComponentFormat { get; protected set; }
 
         public MpIPluginComponentBase PluginComponent =>
             PluginFormat == null ? null : PluginFormat.Component as MpIPluginComponentBase;
@@ -825,9 +835,14 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine("");
             }
             await Task.Delay(1);
-            OnActionComplete?.Invoke(this, arg);
+
+            NotifyActionComplete(arg);
         }
 
+        protected virtual void NotifyActionComplete(object outputArg) {
+            OnActionComplete?.Invoke(this, outputArg);
+
+        }
 
         public async Task UpdateSortOrderAsync() {
             Children.ForEach(x => x.SortOrderIdx = Children.IndexOf(x));
@@ -891,7 +906,10 @@ namespace MonkeyPaste.Avalonia {
             throw new Exception("Unknown action input: " + arg.ToString());
         }
 
-        protected abstract Task ValidateActionAsync();
+        protected virtual async Task ValidateActionAsync() {
+            // is always valid
+            await Task.Delay(1);
+        }
 
 
         protected virtual bool CanPerformAction(object arg) {
@@ -1189,6 +1207,8 @@ namespace MonkeyPaste.Avalonia {
                 await PerformActionAsync(ao);
                 IsPerformingActionFromCommand = false;
             });
+
+        
 
 
 

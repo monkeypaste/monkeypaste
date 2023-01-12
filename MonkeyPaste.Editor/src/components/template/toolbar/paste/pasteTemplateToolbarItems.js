@@ -135,7 +135,12 @@ function setTemplatePasteValue(tguid, val) {
         if (!show_name) {
             // show value
             if (isNullOrEmpty(paste_val)) {
-                cur_val = EmptyPasteValText;
+                if (isTemplateAnInputType(t)) {
+                    cur_val = t.templateName;
+                } else {
+
+                    cur_val = EmptyPasteValText;
+                }
             } else {
                 cur_val = paste_val;
             }

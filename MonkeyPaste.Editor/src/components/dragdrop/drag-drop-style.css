@@ -7,13 +7,7 @@
     opacity: 0;
 }
 
-.drag-overlay-enabled {
-    pointer-events: all;
-}
 
-.drag-overlay-disabled {
-    pointer-events: none;
-}
 
 .drop {
     white-space: nowrap !important;

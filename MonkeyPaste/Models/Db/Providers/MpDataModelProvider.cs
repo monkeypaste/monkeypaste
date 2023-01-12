@@ -483,7 +483,7 @@ namespace MonkeyPaste {
             if (trans_lookup == null || trans_lookup.Count() == 0) {
                 return new List<MpCopyItemTransaction>();
             }
-            string whereStr = string.Join(" or ", trans_lookup.Select(x => $"(e_MpCopyItemTransactionType='{x.Key}' AND fk_CopyItemTransactionObjectId={x.Value})"));
+            string whereStr = string.Join(" or ", trans_lookup.Select(x => $"(e_MpCopyItemTransactionType='{x.Key}' AND fk_TransactionObjId={x.Value})"));
             string query = $"select * from MpCopyItemTransaction where {whereStr}";
             var result = await MpDb.QueryAsync<MpCopyItemTransaction>(query, whereStr);
             return result;
@@ -498,15 +498,15 @@ namespace MonkeyPaste {
             var citl = await GetCopyItemTransactionsByCopyItemIdAsync(ciid);
             foreach(var cit in citl) {
                 MpIPluginPresetTransaction ppt = null;
-                switch (cit.CopyItemTransactionType) {
+                switch (cit.TransactionType) {
                     case MpCopyItemTransactionType.Http:
-                        ppt = await GetItemAsync<MpHttpTransaction>(cit.CopyItemTransactionObjId);
+                        ppt = await GetItemAsync<MpHttpTransaction>(cit.TransactionObjId);
                         break;
                     case MpCopyItemTransactionType.Dll:
-                        ppt = await GetItemAsync<MpDllTransaction>(cit.CopyItemTransactionObjId);
+                        ppt = await GetItemAsync<MpDllTransaction>(cit.TransactionObjId);
                         break;
                     case MpCopyItemTransactionType.Cli:
-                        ppt = await GetItemAsync<MpCliTransaction>(cit.CopyItemTransactionObjId);
+                        ppt = await GetItemAsync<MpCliTransaction>(cit.TransactionObjId);
                         break;
                 }
                 if(ppt == null) {
@@ -566,34 +566,50 @@ namespace MonkeyPaste {
 
         #region MpISourceRef
 
+        public static async Task<MpISourceRef> GetSourceRefByTransactionTypeAndSourceIdAsync(
+            MpCopyItemTransactionType transType, int sourceId) {
+            MpISourceRef source_ref = null;
+            switch (transType) {
+                case MpCopyItemTransactionType.Http:
+                    var http_tran = await GetItemAsync<MpHttpTransaction>(sourceId);
+                    if (http_tran != null) {
+                        source_ref = await GetItemAsync<MpUrl>(http_tran.UrlId);
+                    }
+                    break;
+                case MpCopyItemTransactionType.Cli:
+                    var cli_tran = await GetItemAsync<MpCliTransaction>(sourceId);
+                    if (cli_tran != null) {
+                        source_ref = await GetItemAsync<MpApp>(cli_tran.AppId);
+                    }
+                    break;
+                case MpCopyItemTransactionType.Dll:
+                    var dll_tran = await GetItemAsync<MpDllTransaction>(sourceId);
+                    if (dll_tran != null) {
+                        source_ref = await GetItemAsync<MpApp>(MpDefaultDataModelTools.ThisAppId);
+                    }
+                    break;
+                case MpCopyItemTransactionType.App:
+                    source_ref = await MpDataModelProvider.GetItemAsync<MpApp>(sourceId);
+                    break;
+                case MpCopyItemTransactionType.Url:
+                    source_ref = await MpDataModelProvider.GetItemAsync<MpUrl>(sourceId);
+                    break;
+                case MpCopyItemTransactionType.Preset:
+                    source_ref = await MpDataModelProvider.GetItemAsync<MpPluginPreset>(sourceId);
+                    break;
+                case MpCopyItemTransactionType.CopyItem:
+                    source_ref = await MpDataModelProvider.GetItemAsync<MpCopyItem>(sourceId);
+                    break;
+                default:
+                    throw new Exception($"Unknown source type: '{transType}'");
+            }
+            return source_ref;
+        }
         public static async Task<MpISourceRef> GetSourceRefByCopyItemTransactionIdAsync(int citid) {
             var ci_trans = await GetItemAsync<MpCopyItemTransaction>(citid);
             if (ci_trans != null) {
-
-                switch (ci_trans.CopyItemTransactionType) {
-                    case MpCopyItemTransactionType.Http:
-                        var http_tran = await GetItemAsync<MpHttpTransaction>(ci_trans.CopyItemTransactionObjId);
-                        if (http_tran != null) {
-                            var url = await GetItemAsync<MpUrl>(http_tran.UrlId);
-                            return url;
-                        }
-                        break;
-                    case MpCopyItemTransactionType.Cli:
-                        var cli_tran = await GetItemAsync<MpCliTransaction>(ci_trans.CopyItemTransactionObjId);
-                        if (cli_tran != null) {
-                            var app = await GetItemAsync<MpApp>(cli_tran.AppId);
-                            return app;
-                        }
-                        break;
-                    case MpCopyItemTransactionType.Dll:
-                        var dll_tran = await GetItemAsync<MpDllTransaction>(ci_trans.CopyItemTransactionObjId);
-                        if (dll_tran != null) {
-                            var app = await GetItemAsync<MpApp>(MpDefaultDataModelTools.ThisAppId);
-                            return app;
-                        }
-                        break;
-                }
-
+                var result = await GetSourceRefByTransactionTypeAndSourceIdAsync(ci_trans.TransactionType, ci_trans.TransactionObjId);
+                return result;
             }
             return null;
         }

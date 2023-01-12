@@ -208,9 +208,9 @@ function onCreateTableToolbarButtonClick(e) {
 }
 
 function onWindowClickWithCreateTableOpen(e) {
-    //if (isChildOfElement(e.target, getCreateTableToolbarOptionsElement())) {
-
-    //}
+    if (isChildOfElement(e.target, getCreateTableToolbarOptionsElement())) {
+        return;
+    }
     hideCreateTableContextMenu();
 }
 

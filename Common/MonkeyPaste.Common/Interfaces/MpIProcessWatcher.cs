@@ -6,8 +6,10 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 
 namespace MonkeyPaste.Common {
-    public interface MpIProcessWatcher {
+    public interface MpIProcessWatcher : MpIActionComponent {
+        int PollIntervalMs { get; }
         IntPtr ThisAppHandle { get;}
+        bool IsWatching { get; }
         
         bool IsThisAppActive { get; }
         MpPortableProcessInfo GetActiveProcessInfo();

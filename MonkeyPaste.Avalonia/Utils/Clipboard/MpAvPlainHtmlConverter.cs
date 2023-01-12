@@ -74,9 +74,12 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
             MpConsole.WriteLine("Html converter initialized");
+
+
             IsBusy = false;
         }
-        public async Task<MpAvHtmlClipboardData> ParseAsync(string htmlDataStr, string inputFormatType, MpCsvFormatProperties csvProps = null) {
+        public async Task<MpAvHtmlClipboardData> ParseAsync(string inputStr, string inputFormatType, MpCsvFormatProperties csvProps = null) {
+            string htmlDataStr = inputStr;
             if (htmlDataStr == null) {
                 return null;
             }
@@ -92,7 +95,7 @@ namespace MonkeyPaste.Avalonia {
                 inputFormatType = "html";
             } else if (inputFormatType == "text") {
                 htmlDataStr = htmlDataStr.Replace(Environment.NewLine, "\n");
-            }
+            } 
             htmlDataStr = htmlDataStr.ToString().ToBase64String();
 
             if (string.IsNullOrWhiteSpace(htmlDataStr)) {
@@ -109,7 +112,8 @@ namespace MonkeyPaste.Avalonia {
             string respStr = await ConverterWebView.EvaluateJavascriptAsync($"convertPlainHtml_ext('{req.SerializeJsonObjectToBase64()}')");
             var resp = MpJsonObject.DeserializeBase64Object<MpQuillConvertPlainHtmlToQuillHtmlResponseMessage>(respStr);
             return new MpAvHtmlClipboardData() {
-                Html = resp.quillHtml,
+                Html = resp.quillHtml.ToStringFromBase64(),
+                Delta = resp.quillDelta.ToStringFromBase64(),
                 SourceUrl = resp.sourceUrl
             };
         }

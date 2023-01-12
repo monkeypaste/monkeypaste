@@ -31,11 +31,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIParameterHost Overrides
 
-        private MpActionPluginFormat _actionComponentFormat;
-        public override MpActionPluginFormat ActionComponentFormat {
+        private MpTriggerPluginFormat _actionComponentFormat;
+        public override MpTriggerPluginFormat ActionComponentFormat {
             get {
                 if (_actionComponentFormat == null) {
-                    _actionComponentFormat = new MpActionPluginFormat() {
+                    _actionComponentFormat = new MpTriggerPluginFormat() {
                         parameters = new List<MpParameterFormat>() {
                             new MpParameterFormat() {
                                 label = "Directory",
@@ -65,14 +65,20 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpITriggerPluginComponent Implementation
 
-        ICommand MpITriggerPluginComponent.PerformActionCommand =>
-            new MpAsyncCommand<object>(
-                async (args) => {
-                    await PerformActionAsync(args);
-                },
-                (args) => {
-                    return CanPerformAction(args);
-                });
+        //ICommand MpITriggerPluginComponent.InvokeActionCommand =>
+        //    new MpAsyncCommand<object>(
+        //        async (args) => {
+        //            await PerformActionAsync(args);
+        //        },
+        //        (args) => {
+        //            return CanPerformAction(args);
+        //        });
+
+        void MpITriggerPluginComponent.EnableTrigger() => EnableTrigger();
+
+        void MpITriggerPluginComponent.DisableTrigger() => DisableTrigger();
+
+        bool? MpITriggerPluginComponent.IsEnabled => IsEnabled;
 
         #endregion
 
@@ -325,6 +331,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 return false;
             });
+
 
         #endregion
     }

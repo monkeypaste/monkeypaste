@@ -12,9 +12,9 @@ using System.Diagnostics;
 namespace MonkeyPaste {
     public class MpApp : 
         MpDbModelBase, 
-        MpISyncableDbObject, 
-        MpIDbIconId,
+        MpISyncableDbObject,
         MpISourceRef,
+        MpIDbIconId,
         MpILabelText,
         MpIUriSource {        
         #region Columns

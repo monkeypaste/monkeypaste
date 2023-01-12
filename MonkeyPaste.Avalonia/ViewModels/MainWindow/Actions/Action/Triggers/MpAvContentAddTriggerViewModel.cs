@@ -17,11 +17,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIParameterHost Overrides
 
-        private MpActionPluginFormat _actionComponentFormat;
-        public override MpActionPluginFormat ActionComponentFormat {
+        private MpTriggerPluginFormat _actionComponentFormat;
+        public override MpTriggerPluginFormat ActionComponentFormat {
             get {
                 if (_actionComponentFormat == null) {
-                    _actionComponentFormat = new MpActionPluginFormat() {
+                    _actionComponentFormat = new MpTriggerPluginFormat() {
                         parameters = new List<MpParameterFormat>() {
                             new MpParameterFormat() {
                                 label = "Trigger",
@@ -93,10 +93,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Protected Methods
 
-        protected override async Task ValidateActionAsync() {
-            // is always valid
-            await Task.Delay(1);
-        }
         protected override void EnableTrigger() {
             MpAvClipTrayViewModel.Instance.RegisterActionComponent(this);
         }

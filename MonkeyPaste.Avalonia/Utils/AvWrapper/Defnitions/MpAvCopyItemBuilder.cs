@@ -33,7 +33,7 @@ namespace MonkeyPaste.Avalonia {
             if (IsAnySourceRejected(refs)) {
                 return null;
             }
-            Tuple<MpCopyItemType, string> data_tuple = await DecodeContentDataAsync(mpdo);
+            Tuple<MpCopyItemType, string, string> data_tuple = await DecodeContentDataAsync(mpdo);
 
             if (data_tuple == null ||
                 data_tuple.Item1 == MpCopyItemType.None ||
@@ -64,6 +64,7 @@ namespace MonkeyPaste.Avalonia {
 
             MpCopyItemType itemType = data_tuple.Item1;
             string itemData = data_tuple.Item2;
+            string itemDelta = data_tuple.Item3;
             string default_title = GetDefaultItemTitle(itemType, mpdo);
             string data_format = GetPreferredContentType(itemType);
             var ci = await MpCopyItem.CreateAsync(
@@ -79,10 +80,19 @@ namespace MonkeyPaste.Avalonia {
                 // create base of item's source tree
                 var ref_models = await Task.WhenAll(
                     refs.Select(x =>
-                    MpCopyItemSource.CreateAsync(
+                    //MpCopyItemSource.CreateAsync(
+                    //    copyItemId: ci.Id,
+                    //    sourceObjId: x.SourceObjId,
+                    //    sourceType: x.SourceType)
+                    MpCopyItemTransaction.CreateAsync(
                         copyItemId: ci.Id,
-                        sourceObjId: x.SourceObjId,
-                        sourceType: x.SourceType)));
+                        transType: x.SourceType.ToString().ToEnum<MpCopyItemTransactionType>(),
+                        transObjId: x.SourceObjId,
+                        reqMsgType: MpJsonMessageFormatType.DataObject,
+                        reqMsgJsonStr: mpdo.Serialize(),
+                        respMsgType: MpJsonMessageFormatType.Delta,
+                        respMsgJsonStr: itemDelta)
+                    ));
             }
             return ci;
         }
@@ -97,11 +107,7 @@ namespace MonkeyPaste.Avalonia {
             // TODO should probably try to limit usage of CefAsciiUrl to giving Editor dataTransfer and pass UriList data as param here
 
             List<MpISourceRef> refs = new List<MpISourceRef>();
-            //if (internalSourceCopyItemId == 0) {
-            //    throw new Exception("Invalid internalSourceCopyItemId, if not -1 needs to be greater than zero. Value was " + internalSourceCopyItemId);
-            //}
-            if (//internalSourceCopyItemId < 0 &&
-                mpdo.ContainsData(MpPortableDataFormats.CefAsciiUrl) &&
+            if (mpdo.ContainsData(MpPortableDataFormats.CefAsciiUrl) &&
                 mpdo.GetData(MpPortableDataFormats.CefAsciiUrl) is byte[] urlBytes &&
                 urlBytes.ToDecodedString() is string urlRef) {
                 MpISourceRef sr = await MpPlatformWrapper.Services.SourceRefBuilder.FetchOrCreateSourceAsync(urlRef);
@@ -200,7 +206,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Content Helpers
 
-        private async Task<Tuple<MpCopyItemType,string>> DecodeContentDataAsync(MpPortableDataObject mpdo) {
+        private async Task<Tuple<MpCopyItemType,string,string>> DecodeContentDataAsync(MpPortableDataObject mpdo) {
             string inputTextFormat = null;
             string itemData = null;
             MpCopyItemType itemType = MpCopyItemType.None;
@@ -307,6 +313,7 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteTraceLine("clipboard data is not known format");
             }
 
+            string delta = null;
 
             // POST-PROCESS (TEXT ONLY)
 
@@ -322,9 +329,34 @@ namespace MonkeyPaste.Avalonia {
                     itemData = null;
                 } else {
                     itemData = htmlClipboardData.Html;
+                    delta = htmlClipboardData.Delta;
                 }                
             }
-            return new Tuple<MpCopyItemType, string>(itemType, itemData);
+            if(string.IsNullOrEmpty(delta)) {
+                MpQuillDeltaDocument deltaObj = new MpQuillDeltaDocument() {
+                    ops = new List<Op>()
+                };
+
+                switch(itemType) {
+                    case MpCopyItemType.Text:
+                        deltaObj.ops.Add(new Op() { insert = itemData });
+                        break;
+                    case MpCopyItemType.Image:
+                        deltaObj.ops.Add(new Op() {
+                            insert = new ImageInsert() { image = $"data:image/png;base64,{itemData}" },
+                            attributes = new Attributes() { align = "center" }
+                        });
+                        break;
+                    case MpCopyItemType.FileList:
+                        deltaObj.ops.Add(new Op() {
+                            insert = itemData
+                        });
+
+                        break;
+                }
+                delta = deltaObj.SerializeJsonObject();
+            }
+            return new Tuple<MpCopyItemType, string,string>(itemType, itemData,delta);
         }
 
         private string GetPreferredContentType(MpCopyItemType itemType) {

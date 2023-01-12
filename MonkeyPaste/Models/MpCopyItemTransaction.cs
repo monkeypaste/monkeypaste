@@ -12,7 +12,18 @@ namespace MonkeyPaste {
         None = 0,
         Dll,
         Cli,
-        Http
+        Http,
+        App,
+        Url,
+        CopyItem,
+        Preset
+    }
+
+    public enum MpJsonMessageFormatType {
+        None = 0,
+        DataObject,
+        Annotation,
+        Delta,
     }
 
     public class MpCopyItemTransaction : MpDbModelBase {
@@ -30,15 +41,28 @@ namespace MonkeyPaste {
         [Indexed]
         public int CopyItemId { get; set; }
 
-        [Column("fk_CopyItemTransactionObjectId")]
-        public int CopyItemTransactionObjId { get; set; }
+        [Column("fk_TransactionObjId")]
+        public int TransactionObjId { get; set; }
 
 
         [Column("e_MpCopyItemTransactionType")]
         public string CopyItemTransactionTypeName { get; set; } = MpCopyItemTransactionType.None.ToString();
 
-        public string ResponseJson { get; set; }
 
+        [Column("e_MpJsonMessageFormatType_request")]
+        public string RequestMessageFormatTypeName { get; set; }
+
+        public string RequestMessageJson { get; set; }
+
+        [Column("e_MpJsonMessageFormatType_response")]
+        public string ResponseMessageFormatTypeName { get; set; }
+
+        public string ResponseMessageJson { get; set; }
+
+        [Column("fk_MpUserDeviceId")]
+        public int TransactionUserDeviceId { get; set; }
+
+        public DateTime TransactionDateTimeUtc { get; set; }
 
         #endregion
 
@@ -58,27 +82,59 @@ namespace MonkeyPaste {
         }
 
         [Ignore]
-        public MpCopyItemTransactionType CopyItemTransactionType {
+        public MpCopyItemTransactionType TransactionType {
             get => CopyItemTransactionTypeName.ToEnum<MpCopyItemTransactionType>();
             set => CopyItemTransactionTypeName = value.ToString();
+        }
+        
+        [Ignore]
+        public MpJsonMessageFormatType RequestMessageType {
+            get => RequestMessageFormatTypeName.ToEnum<MpJsonMessageFormatType>();
+            set => RequestMessageFormatTypeName = value.ToString();
+        }
+        
+        [Ignore]
+        public MpJsonMessageFormatType ResponseMessageType {
+            get => ResponseMessageFormatTypeName.ToEnum<MpJsonMessageFormatType>();
+            set => ResponseMessageFormatTypeName = value.ToString();
         }
 
         #endregion
 
 
-        public static async Task<MpCopyItemTransaction> Create(
+        public static async Task<MpCopyItemTransaction> CreateAsync(
+            int copyItemId = 0,
             MpCopyItemTransactionType transType = MpCopyItemTransactionType.None,
             int transObjId = 0,
-            int copyItemId = 0,
-            string responseJson = "",
+            MpJsonMessageFormatType reqMsgType = MpJsonMessageFormatType.None,
+            string reqMsgJsonStr = "",
+            MpJsonMessageFormatType respMsgType = MpJsonMessageFormatType.None,
+            string respMsgJsonStr = "",
+            int transUserDeviceId = 0,
+            DateTime? transDateTime = null,
             bool suppressWrite = false) {
+
+            if(copyItemId == 0 && !suppressWrite) {
+                throw new Exception("Must have CopyItemId if to be written");
+            }
 
             var ndio = new MpCopyItemTransaction() {
                 CopyItemTransactionGuid = System.Guid.NewGuid(),
-                CopyItemTransactionType = transType,
-                CopyItemTransactionObjId = transObjId,
+
                 CopyItemId = copyItemId,
-                ResponseJson = responseJson
+
+                TransactionType = transType,
+                TransactionObjId = transObjId,
+
+                RequestMessageType = reqMsgType,
+                RequestMessageJson = reqMsgJsonStr,
+
+                ResponseMessageType = respMsgType,
+                ResponseMessageJson = respMsgJsonStr,
+
+                TransactionUserDeviceId = transUserDeviceId == 0 ? MpDefaultDataModelTools.ThisUserDeviceId : transUserDeviceId,
+
+                TransactionDateTimeUtc = transDateTime.HasValue ? transDateTime.Value : DateTime.Now
             };
 
             if(!suppressWrite) {

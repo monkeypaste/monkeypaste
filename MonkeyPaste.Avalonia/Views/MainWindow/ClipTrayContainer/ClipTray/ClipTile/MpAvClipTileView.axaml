@@ -53,136 +53,144 @@
                           BorderThickness="{StaticResource TileBorderThickness}"
                           Background="{DynamicResource ClipTileContentBackgroundBrush}">
 
-        <!--  SPLIT VIEW  -->
 
-        <SplitView x:Name="ClipTileSplitView"
-                   PanePlacement="Right"
-                   PaneBackground="{DynamicResource ClipTileTransactionPaneBackgroundBrush}"
-                   OpenPaneLength="{Binding DefaultTransactionPanelLength, FallbackValue=0, TargetNullValue=0}"
-                   DisplayMode="Inline"
-                   IsPaneOpen="{Binding IsTransactionPaneOpen}">
+        <!--  SPLIT VIEW CONTENT  -->
 
-            <!--  SPLIT VIEW PANE  -->
+        <Grid x:Name="TileGrid"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch"
+              ColumnDefinitions="*,Auto"
+              RowDefinitions="0.25*,*,20">
 
-            <SplitView.Pane>
-                <local:MpAvClipTileTransactionPaneView DataContext="{Binding SourceCollectionViewModel}"
-                                                       HorizontalAlignment="Stretch"
-                                                       VerticalAlignment="Stretch" />
-            </SplitView.Pane>
+            <!--  TRANSACTION SPLITTER  -->
 
-            <!--  SPLIT VIEW CONTENT  -->
+            <GridSplitter x:Name="TransactionContentSplitter"
+                          Grid.Column="1"
+                          Grid.Row="0"
+                          Grid.RowSpan="3"
+                          IsVisible="{Binding SourceCollectionViewModel.IsTransactionPaneOpen, FallbackValue=False, TargetNullValue=False}"
+                          HorizontalAlignment="Left"
+                          VerticalAlignment="Stretch"
+                          Classes="vertical" />
+            <!--  TRANSACTION COLUMN  -->
 
-            <Grid x:Name="TileGrid"
+
+            <local:MpAvClipTileTransactionPaneView DataContext="{Binding SourceCollectionViewModel}"
+                                                   Grid.Column="1"
+                                                   Grid.Row="0"
+                                                   Grid.RowSpan="3"
+                                                   Background="{DynamicResource ClipTileTransactionPaneBackgroundBrush}"
+                                                   IsVisible="{Binding IsTransactionPaneOpen}"
+                                                   MinWidth="{Binding Parent.DefaultTransactionPanelLength, FallbackValue=0, TargetNullValue=0}"
+                                                   HorizontalAlignment="Stretch"
+                                                   VerticalAlignment="Stretch" />
+            <!--  Title  -->
+
+            <local:MpAvClipTileTitleView x:Name="TileTitleView"
+                                         Grid.Row="0"
+                                         MaxHeight="40"
+                                         DataContext="{Binding}"
+                                         HorizontalAlignment="Stretch"
+                                         VerticalAlignment="Top"
+                                         IsVisible="{Binding IsTitleVisible}" />
+
+            <!--  Content  -->
+            <local:MpAvClipTileContentView x:Name="ClipTileContentView"
+                                           Grid.Row="1"
+                                           HorizontalAlignment="Stretch"
+                                           VerticalAlignment="Stretch"
+                                           DataContext="{Binding}" />
+
+            <!--
+                IsBusy Overlay
+            -->
+            <Border Grid.Row="1"
+                    IsVisible="{Binding IsAnyBusy, FallbackValue=True, TargetNullValue=True}"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
+
+                <local:MpAvBusySpinnerView HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Width="70"
+                                           Height="70" />
+            </Border>
+
+            <!--  Detail  -->
+            <Grid Grid.Row="2"
                   HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch"
-                  RowDefinitions="0.25*,*,20">
-
-                <!--  Title  -->
-
-                <local:MpAvClipTileTitleView x:Name="TileTitleView"
-                                             Grid.Row="0"
-                                             MaxHeight="40"
-                                             DataContext="{Binding}"
-                                             HorizontalAlignment="Stretch"
-                                             VerticalAlignment="Top"
-                                             IsVisible="{Binding IsTitleVisible}" />
-
-                <!--  Content  -->
-                <local:MpAvClipTileContentView x:Name="ClipTileContentView"
-                                               Grid.Row="1"
-                                               HorizontalAlignment="Stretch"
-                                               VerticalAlignment="Stretch"
-                                               DataContext="{Binding}" />
-
-                <!--
-                    IsBusy Overlay
-                -->
-                <Border Grid.Row="1"
-                        IsVisible="{Binding IsAnyBusy, FallbackValue=True, TargetNullValue=True}"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch">
-
-                    <local:MpAvBusySpinnerView HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"
-                                               Width="70"
-                                               Height="70" />
-                </Border>
-
-                <!--  Detail  -->
-                <Grid Grid.Row="2"
-                      HorizontalAlignment="Stretch"
-                      VerticalAlignment="Bottom">
-                    <Grid.IsVisible>
-                        <MultiBinding Converter="{StaticResource MultiBoolConverter}"
-                                      ConverterParameter="OR">
-                            <Binding Path="IsHovering" />
-                            <Binding Path="!IsContentReadOnly" />
-                        </MultiBinding>
-                    </Grid.IsVisible>
-                    <local:MpAvClipTileDetailView DataContext="{Binding DetailCollectionViewModel}"
-                                                  VerticalAlignment="Stretch"
-                                                  HorizontalAlignment="Stretch" />
-                </Grid>
-
-                <!--  Corner Button Overlay  -->
-                <local:MpAvClipTileCornerButtonsView Grid.Row="0"
-                                                     Grid.RowSpan="3"
-                                                     IsVisible="{Binding IsOverlayButtonsVisible}"
-                                                     HorizontalAlignment="Stretch"
-                                                     VerticalAlignment="Stretch"
-                                                     DataContext="{Binding}" />
-
-                <Border x:Name="ClipTileResizeBorder"
-                        Grid.Row="0"
-                        Grid.RowSpan="3"
-                        local:MpAvResizeExtension.MinHeight="{Binding MinHeight}"
-                        local:MpAvResizeExtension.MaxHeight="{Binding MaxHeight}"
-                        local:MpAvResizeExtension.MinWidth="{Binding MinWidth}"
-                        local:MpAvResizeExtension.MaxWidth="{Binding MaxWidth}"
-                        local:MpAvResizeExtension.BoundWidth="{Binding BoundWidth, Mode=TwoWay}"
-                        local:MpAvResizeExtension.BoundHeight="{Binding BoundHeight, Mode=TwoWay}"
-                        local:MpAvResizeExtension.DefaultWidth="{Binding MinWidth}"
-                        local:MpAvResizeExtension.DefaultHeight="{Binding MinHeight}"
-                        local:MpAvResizeExtension.IsResizable="{Binding IsResizable}"
-                        local:MpAvResizeExtension.CanResize="{Binding CanResize, Mode=TwoWay}"
-                        local:MpAvResizeExtension.IsResizing="{Binding IsResizing, Mode=TwoWay}"
-                        local:MpAvResizeExtension.XFactor="-1"
-                        local:MpAvResizeExtension.YFactor="0"
-                        local:MpAvResizeExtension.GlobalResizeMessage="None"
-                        local:MpAvResizeExtension.IsEnabled="True"
-                        local:MpAvPointerPressCommandExtension.IsEnabled="True"
-                        local:MpAvPointerPressCommandExtension.DoubleLeftPressCommand="{Binding ResetTileSizeToDefaultCommand}"
-                        local:MpAvIsHoveringExtension.IsEnabled="True"
-                        Cursor="SizeWestEast"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Stretch"
-                        Width="10"
-                        Background="Transparent">
-                    <Border.RenderTransform>
-                        <TranslateTransform X="5" />
-                    </Border.RenderTransform>
-                </Border>
-                <!--  Trial Expired Overlay  -->
-                <Border HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        IsVisible="{Binding IsTrialOverlayVisibile}">
-                    <Border.Background>
-                        <SolidColorBrush Color="Black"
-                                         Opacity="0.2" />
-                    </Border.Background>
-
-                    <Viewbox Stretch="Uniform"
-                             HorizontalAlignment="Center"
-                             VerticalAlignment="Center"
-                             Width="50"
-                             Height="50"
-                             IsVisible="{Binding IsPinned}">
-                        <Path Fill="Wheat"
-                              Data="{StaticResource LockSvg}" />
-                    </Viewbox>
-                </Border>
+                  VerticalAlignment="Bottom">
+                <Grid.IsVisible>
+                    <MultiBinding Converter="{StaticResource MultiBoolConverter}"
+                                  ConverterParameter="OR">
+                        <Binding Path="IsHovering" />
+                        <Binding Path="!IsContentReadOnly" />
+                    </MultiBinding>
+                </Grid.IsVisible>
+                <local:MpAvClipTileDetailView DataContext="{Binding DetailCollectionViewModel}"
+                                              VerticalAlignment="Stretch"
+                                              HorizontalAlignment="Stretch" />
             </Grid>
-        </SplitView>
+
+            <!--  Corner Button Overlay  -->
+            <local:MpAvClipTileCornerButtonsView Grid.Row="0"
+                                                 Grid.RowSpan="3"
+                                                 IsVisible="{Binding IsOverlayButtonsVisible}"
+                                                 HorizontalAlignment="Stretch"
+                                                 VerticalAlignment="Stretch"
+                                                 DataContext="{Binding}" />
+
+            <Border x:Name="ClipTileResizeBorder"
+                    Grid.Row="0"
+                    Grid.RowSpan="3"
+                    Grid.ColumnSpan="2"
+                    local:MpAvResizeExtension.MinHeight="{Binding MinHeight}"
+                    local:MpAvResizeExtension.MaxHeight="{Binding MaxHeight}"
+                    local:MpAvResizeExtension.MinWidth="{Binding MinWidth}"
+                    local:MpAvResizeExtension.MaxWidth="{Binding MaxWidth}"
+                    local:MpAvResizeExtension.BoundWidth="{Binding BoundWidth, Mode=TwoWay}"
+                    local:MpAvResizeExtension.BoundHeight="{Binding BoundHeight, Mode=TwoWay}"
+                    local:MpAvResizeExtension.DefaultWidth="{Binding MinWidth}"
+                    local:MpAvResizeExtension.DefaultHeight="{Binding MinHeight}"
+                    local:MpAvResizeExtension.IsResizable="{Binding IsResizable}"
+                    local:MpAvResizeExtension.CanResize="{Binding CanResize, Mode=TwoWay}"
+                    local:MpAvResizeExtension.IsResizing="{Binding IsResizing, Mode=TwoWay}"
+                    local:MpAvResizeExtension.XFactor="-1"
+                    local:MpAvResizeExtension.YFactor="0"
+                    local:MpAvResizeExtension.GlobalResizeMessage="None"
+                    local:MpAvResizeExtension.IsEnabled="True"
+                    local:MpAvPointerPressCommandExtension.IsEnabled="True"
+                    local:MpAvPointerPressCommandExtension.DoubleLeftPressCommand="{Binding ResetTileSizeToDefaultCommand}"
+                    local:MpAvIsHoveringExtension.IsEnabled="True"
+                    Cursor="SizeWestEast"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Stretch"
+                    Width="10"
+                    Background="Transparent">
+                <Border.RenderTransform>
+                    <TranslateTransform X="5" />
+                </Border.RenderTransform>
+            </Border>
+            <!--  Trial Expired Overlay  -->
+            <Border HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    IsVisible="{Binding IsTrialOverlayVisibile}">
+                <Border.Background>
+                    <SolidColorBrush Color="Black"
+                                     Opacity="0.2" />
+                </Border.Background>
+
+                <Viewbox Stretch="Uniform"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"
+                         Width="50"
+                         Height="50"
+                         IsVisible="{Binding IsPinned}">
+                    <Path Fill="Wheat"
+                          Data="{StaticResource LockSvg}" />
+                </Viewbox>
+            </Border>
+        </Grid>
+
 
 
     </local:MpAvClipBorder>

@@ -10,5 +10,6 @@
 }
 
 #createTableToolbarButtonOptionsContainer {
-    max-width: 160px;
+    max-width: 170px;
+    max-height: 170px !important;
 }

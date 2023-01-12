@@ -68,7 +68,7 @@ namespace Yolo {
 
                         if (score >= confidence) {
                             var boxAnnotation = new MpImageAnnotationNodeFormat() {
-                                score = (double)item.Score,
+                                value = (double)item.Score,
                                 label = item.Label.Name,
                                 x = item.Rectangle.X,
                                 y = item.Rectangle.Y,
@@ -91,7 +91,7 @@ namespace Yolo {
                 dataObject = new MpPortableDataObject(
                     MpPortableDataFormats.INTERNAL_CONTENT_ANNOTATION_FORMAT,
                     new MpAnnotationNodeFormat() {
-                        children = boxList
+                        Children = boxList
                     }.SerializeJsonObject())
             };
             resp.dataObject.SetData(

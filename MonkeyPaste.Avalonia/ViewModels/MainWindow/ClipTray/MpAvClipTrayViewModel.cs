@@ -1336,7 +1336,7 @@ namespace MonkeyPaste.Avalonia {
             ForceScrollOffset(anchor_offset);
         }
 
-        #region MpIMatchTrigger Implementation
+        #region MpIActionComponent Implementation
 
         public void RegisterActionComponent(MpIInvokableAction mvm) {
             OnCopyItemAdd += mvm.OnActionInvoked;

@@ -348,6 +348,9 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public MpCsvFormatProperties CsvProps =>
+            ParameterFormat == null ? null : ParameterFormat.CsvProps;
+
         public string Label {
             get {
                 if (ParameterFormat == null) {

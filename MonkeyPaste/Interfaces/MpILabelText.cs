@@ -1,6 +1,5 @@
-﻿namespace MonkeyPaste {
-    public interface MpILabelText {
-        string LabelText { get; }
-    }
+﻿using MonkeyPaste.Common.Plugin;
+
+namespace MonkeyPaste {
     public interface MpILabelTextViewModel : MpILabelText, MpIViewModel { }
 }

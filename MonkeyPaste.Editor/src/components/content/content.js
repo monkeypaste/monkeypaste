@@ -1,4 +1,6 @@
 // #region Globals
+const CONTENT_CLASS_PREFIX = 'content';
+var ContentClassAttrb = null;
 
 var ContentHandle = null;
 var ContentItemType = 'Text';
@@ -85,6 +87,17 @@ function loadContent(
 	log('Editor loaded');
 }
 
+function initContentClassAttributes() {
+	const Parchment = Quill.imports.parchment;
+	let suppressWarning = false;
+	let config = {
+		scope: Parchment.Scope.ANY,
+	};
+	ContentClassAttrb = new Parchment.ClassAttributor('contentType',CONTENT_CLASS_PREFIX, config);
+
+	Quill.register(LinkTypeAttrb, suppressWarning);
+
+}
 // #endregion Life Cycle
 
 // #region Getters

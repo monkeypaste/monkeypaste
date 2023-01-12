@@ -21,6 +21,7 @@ namespace MonkeyPaste.Avalonia {
         public string Version { get; private set; }
         public string SourceUrl { get; set; }
         public string Html { get; set; }
+        public string Delta { get; set; }
 
 
         public static MpAvHtmlClipboardData Parse(string htmlClipboardData) {

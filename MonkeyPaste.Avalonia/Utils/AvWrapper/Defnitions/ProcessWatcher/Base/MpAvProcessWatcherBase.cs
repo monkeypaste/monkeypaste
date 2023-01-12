@@ -21,8 +21,32 @@ namespace MonkeyPaste.Avalonia {
         private List<IntPtr> _otherThisAppHandles = new List<IntPtr>();
         #endregion
 
-        #region Properties
+        #region MpIActionComponent Implementation
 
+        public void RegisterActionComponent(MpIInvokableAction mvm) {
+            OnAppActivated += mvm.OnActionInvoked;
+            MpConsole.WriteLine($"ProcessWatcher Registered {mvm.Label} trigger");
+        }
+
+        public void UnregisterActionComponent(MpIInvokableAction mvm) {
+            OnAppActivated -= mvm.OnActionInvoked;
+            MpConsole.WriteLine($"Trigger {mvm.Label} Unregistered from ProcessWatcher");
+        }
+        #endregion
+
+        #region Properties
+        public bool IsWatching {
+            get {
+                if(IsProcessTreePolled) {
+                    if(_timer == null || 
+                        !_timer.IsEnabled) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+        public int PollIntervalMs { get; set; } = 300;
         public bool IsProcessTreePolled {
             get {
                 if(OperatingSystem.IsWindows()) {
@@ -129,7 +153,7 @@ namespace MonkeyPaste.Avalonia {
                 CreateRunningProcessLookup();
                 if (_timer == null) {
                     _timer = new DispatcherTimer(DispatcherPriority.Background) {
-                        Interval = TimeSpan.FromMilliseconds(300)
+                        Interval = TimeSpan.FromMilliseconds(PollIntervalMs)
                     };
                     _timer.Tick += ProcessWatcherTimer_tick;
                 } else {
@@ -296,6 +320,8 @@ namespace MonkeyPaste.Avalonia {
             }
             return null;
         }
+
+
 
         #endregion
     }

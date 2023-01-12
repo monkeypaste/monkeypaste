@@ -1,5 +1,6 @@
 // #region Globals
 
+const CONTENT_IMAGE_CLASS = 'content-image';
 var ContentImageWidth = -1;
 var ContentImageHeight = -1;
 
@@ -13,12 +14,13 @@ function loadImageContent(itemDataStr) {
 	disableSubSelection();
 
 
-	let img_html = '<p class="ql-align-center"><img class="content-image" src="data:image/png;base64,' + itemDataStr + '"></p>';
+	let img_html = `<p class="ql-align-center"><img src="data:image/png;base64,${itemDataStr}"></p>`;
 	setRootHtml(img_html);
+
+	ContentClassAttrb.add(getEditorElement().firstChild.firstChild, 'image');
 	updateImageContentSizeAndPosition();
 
 }
-
 // #endregion Life Cycle
 
 // #region Getters

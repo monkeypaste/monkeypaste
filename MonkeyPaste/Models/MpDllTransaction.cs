@@ -47,7 +47,7 @@ namespace MonkeyPaste {
 
         public int Priority => 1;
         public int SourceObjId => PresetId;
-        public MpCopyItemSourceType SourceType => MpCopyItemSourceType.Analyzer;
+        public MpCopyItemSourceType SourceType => MpCopyItemSourceType.Plugin;
         #endregion
         #region MpIPluginPresetTransaction Implementation
 

@@ -464,7 +464,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        public bool IsTransactionPaneOpen { get; set; } = false;
         public string AnnotationsJsonStr { get; set; }
 
         public bool CanShowContextMenu { get; set; } = true;
@@ -717,7 +716,9 @@ namespace MonkeyPaste.Avalonia {
         private bool _isTitleVisible = true;
         public bool IsTitleVisible { 
             get {
-                if(IsAppendNotifier || !IsContentReadOnly || IsTransactionPaneOpen) {
+                if(IsAppendNotifier || 
+                    !IsContentReadOnly || 
+                    (SourceCollectionViewModel != null && SourceCollectionViewModel.IsTransactionPaneOpen)) {
                     return false;
                 }
                 return _isTitleVisible;
@@ -1860,35 +1861,37 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand OpenTransactionPaneCommand => new MpCommand(
             () => {
-                IsTransactionPaneOpen = true;
+                SourceCollectionViewModel.IsTransactionPaneOpen = true;
                 Dispatcher.UIThread.Post(() => {
                     MpAvResizeExtension.ResizeAnimated(
                         GetDragSource() as MpAvCefNetWebView, BoundWidth + DefaultTransactionPanelLength, BoundHeight);
                 });
             }, () => {
-                return !IsTransactionPaneOpen;
+                return SourceCollectionViewModel != null && !SourceCollectionViewModel.IsTransactionPaneOpen;
             });
         
         public ICommand CloseTransactionPaneCommand => new MpCommand(
             () => {
-                IsTransactionPaneOpen = false;
+                SourceCollectionViewModel.IsTransactionPaneOpen = false;
 
                 Dispatcher.UIThread.Post(() => {
                     MpAvResizeExtension.ResizeAnimated(
                         GetDragSource() as MpAvCefNetWebView, BoundWidth - DefaultTransactionPanelLength, BoundHeight);
                 });
             }, () => {
-                return IsTransactionPaneOpen;
+                return SourceCollectionViewModel != null && SourceCollectionViewModel.IsTransactionPaneOpen;
             });
         
         public ICommand ToggleTransactionPaneOpenCommand => new MpCommand(
             () => {
-                if(IsTransactionPaneOpen) {
+                if(SourceCollectionViewModel.IsTransactionPaneOpen) {
                     CloseTransactionPaneCommand.Execute(null);
                 } else {
                     OpenTransactionPaneCommand.Execute(null);
                 }
                 OnPropertyChanged(nameof(IsTitleVisible));
+            }, () => {
+                return SourceCollectionViewModel != null;
             });
         #endregion
     }

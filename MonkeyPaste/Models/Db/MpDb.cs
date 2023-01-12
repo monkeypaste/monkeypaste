@@ -386,36 +386,7 @@ namespace MonkeyPaste {
                 OnInitDefaultNativeData?.Invoke(nameof(MpDb), null);
             }
 
-            //var sources = await MpDataModelProvider.GetItemsAsync<MpSource>();
-            //var cisl = await MpDataModelProvider.GetItemsAsync<MpCopyItemSource>();
-            //var cil = await MpDataModelProvider.GetItemsAsync<MpCopyItem>();
-
-            //var ci_without_cisl = cil.Where(x => cisl.All(y => y.CopyItemId != x.Id));
-            //foreach (var ci_without_cis in ci_without_cisl) {
-            //    var ci_source = sources.FirstOrDefault(x => x.Id == ci_without_cis.SourceId);
-            //    if (ci_source == null) {
-            //        await MpCopyItemSource.CreateAsync(
-            //            copyItemId: ci_without_cis.Id,
-            //            sourceObjId: MpDefaultDataModelTools.ThisAppId,
-            //            sourceType: MpCopyItemSourceType.App);
-            //    } else {
-            //        if(ci_source.UrlId > 0) {
-            //            await MpCopyItemSource.CreateAsync(
-            //                copyItemId: ci_without_cis.Id,
-            //                sourceObjId: ci_source.UrlId,
-            //                sourceType: MpCopyItemSourceType.Url);
-            //        }
-            //        if (ci_source.AppId > 0) {
-            //            await MpCopyItemSource.CreateAsync(
-            //                copyItemId: ci_without_cis.Id,
-            //                sourceObjId: ci_source.AppId,
-            //                sourceType: MpCopyItemSourceType.App);
-            //        }
-            //    }
-            //}
-
-            //var ppl = await MpDataModelProvider.GetItemsAsync<MpPluginPreset>();
-            //await Task.WhenAll(ppl.Select(x => x.DeleteFromDatabaseAsync()));
+            
 
             MpConsole.WriteLine(@"Db file located: " + MpPlatformWrapper.Services.DbInfo.DbPath);
             MpConsole.WriteLine(@"This Client Guid: " + MpPrefViewModel.Instance.ThisDeviceGuid);

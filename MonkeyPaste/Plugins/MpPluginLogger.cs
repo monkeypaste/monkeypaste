@@ -124,11 +124,11 @@ namespace MonkeyPaste {
                 }
 
                 if (string.IsNullOrEmpty(trans.TransactionErrorMessage)) {
-                    var cit = await MpCopyItemTransaction.Create(
+                    var cit = await MpCopyItemTransaction.CreateAsync(
                     transType: transType,
                     transObjId: transId,
                     copyItemId: sourceContent.Id,
-                    responseJson: JsonConvert.SerializeObject(trans.Response),
+                    respMsgJsonStr: JsonConvert.SerializeObject(trans.Response),
                     suppressWrite: suppressWrite);
 
                     //var source = await MpSource.Create(

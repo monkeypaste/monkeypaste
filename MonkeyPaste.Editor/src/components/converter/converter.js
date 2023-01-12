@@ -68,8 +68,8 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 
 		//const delta = quill.clipboard.convert(dataStr);
 		//quill.setContents(delta, 'silent')
-		const delta = convertHtmlToDelta(dataStr);
-		setContents(delta);
+		const raw_delta = convertHtmlToDelta(dataStr);
+		setContents(raw_delta);
 	}
 
 	quill.update();
@@ -80,12 +80,16 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 	//qhtml = fixUnicode(qhtml);
 	qhtml = forceBgOpacity(qhtml, bgOpacity);
 
+	let formatted_delta = convertHtmlToDelta(qhtml);
 	setRootHtml(qhtml);
 
 	log('');
 	log('RichHtml: ');
 	log(qhtml);
-	return qhtml;
+	return {
+		html: qhtml,
+		delta: formatted_delta
+	};
 }
 
 function forceBgOpacity(htmlStr, opacity) {

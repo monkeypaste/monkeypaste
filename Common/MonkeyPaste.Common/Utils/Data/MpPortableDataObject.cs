@@ -8,7 +8,7 @@ using System.Text;
 
 namespace MonkeyPaste.Common {
 
-    public class MpPortableDataObject : MpIPortableDataObject {
+    public class MpPortableDataObject : MpJsonObject, MpIPortableDataObject {
         #region Statics
 
         public static bool IsDataNotEqual(MpPortableDataObject dbo1, MpPortableDataObject dbo2) {
@@ -54,6 +54,10 @@ namespace MonkeyPaste.Common {
         }
         #endregion
 
+        #region MpJsonObject Overrides
+
+        #endregion
+
         #region Properties
 
         public virtual Dictionary<MpPortableDataFormat, object> DataFormatLookup { get; private set; } = new Dictionary<MpPortableDataFormat, object>();
@@ -73,6 +77,27 @@ namespace MonkeyPaste.Common {
             return data;
         }
         
+        public bool TryGetData(string format, out object data) {
+            data = null;
+            var pdf = MpPortableDataFormats.GetDataFormat(format);
+            if (pdf == null) {
+                return false;
+            }
+            if(DataFormatLookup.TryGetValue(pdf, out object tmp)) {
+                data = tmp;
+                return true;
+            }
+            return false;
+        }
+        public bool TryGetData<T>(string format, out T data) where T:new() {
+            if(TryGetData(format, out object dataObj)) {
+                data = (T)dataObj;
+                return true;
+            }
+            data = default;
+            return false;
+        }
+        
         public virtual void SetData(string format, object data) {
             var pdf = MpPortableDataFormats.GetDataFormat(format);
             if (pdf == null) {
@@ -86,6 +111,15 @@ namespace MonkeyPaste.Common {
         }
         public MpPortableDataObject(string format, object data) : this() {
             SetData(format, data);
+        }
+        public MpPortableDataObject(Dictionary<string,object> formatDataLookup) : this() {
+            if(formatDataLookup != null) {
+                formatDataLookup.ForEach(x => SetData(x.Key, x.Value));
+            }
+        }
+
+        public string Serialize() {
+            return MpJsonObject.SerializeObject(DataFormatLookup.ToDictionary(x => x.Key.Name, x => (object)x.Value));
         }
 
         public override string ToString() {
