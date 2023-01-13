@@ -85,7 +85,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvFileItemCollectionViewModel FileItemCollectionViewModel { get; private set; }
         public MpAvClipTileDetailCollectionViewModel DetailCollectionViewModel { get; private set; }
 
-        public MpAvClipTileTransactionCollectionViewModel SourceCollectionViewModel { get; private set; }
+        public MpAvClipTileTransactionCollectionViewModel TransactionCollectionViewModel { get; private set; }
 
         public MpAvClipTileViewModel Next {
             get {
@@ -617,7 +617,7 @@ namespace MonkeyPaste.Avalonia {
                     return true;
                 }
 
-                if(SourceCollectionViewModel.IsAnyBusy) {
+                if(TransactionCollectionViewModel.IsAnyBusy) {
                     return true;
                 }
                 if(IsAppendNotifier) {
@@ -718,7 +718,7 @@ namespace MonkeyPaste.Avalonia {
             get {
                 if(IsAppendNotifier || 
                     !IsContentReadOnly || 
-                    (SourceCollectionViewModel != null && SourceCollectionViewModel.IsTransactionPaneOpen)) {
+                    (TransactionCollectionViewModel != null && TransactionCollectionViewModel.IsTransactionPaneOpen)) {
                     return false;
                 }
                 return _isTitleVisible;
@@ -995,9 +995,9 @@ namespace MonkeyPaste.Avalonia {
         //    }
         //}
 
-        public object IconResourceObj => SourceCollectionViewModel.PrimaryItem == null ?
+        public object IconResourceObj => TransactionCollectionViewModel.PrimaryItem == null ?
             MpDefaultDataModelTools.ThisAppIconId :
-            SourceCollectionViewModel.PrimaryItem.IconSourceObj;
+            TransactionCollectionViewModel.PrimaryItem.IconSourceObj;
 
         private string _curItemRandomHexColor;
         public string CopyItemHexColor {
@@ -1059,7 +1059,7 @@ namespace MonkeyPaste.Avalonia {
             //MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
             FileItemCollectionViewModel = new MpAvFileItemCollectionViewModel(this);
             DetailCollectionViewModel = new MpAvClipTileDetailCollectionViewModel(this);
-            SourceCollectionViewModel = new MpAvClipTileTransactionCollectionViewModel(this);
+            TransactionCollectionViewModel = new MpAvClipTileTransactionCollectionViewModel(this);
             IsBusy = true;
         }
 
@@ -1088,7 +1088,7 @@ namespace MonkeyPaste.Avalonia {
             CopyItem = ci;
             QueryOffsetIdx = queryOffset < 0 && ci != null ? QueryOffsetIdx : queryOffset;
 
-            await SourceCollectionViewModel.InitializeAsync(CopyItemId);
+            await TransactionCollectionViewModel.InitializeAsync(CopyItemId);
 
             var cial = await MpDataModelProvider.GetCopyItemAnnotationsAsync(CopyItemId);
             if(cial == null || cial.Count == 0) {
@@ -1377,15 +1377,6 @@ namespace MonkeyPaste.Avalonia {
             //(Parent.CreateQrCodeFromSelectedClipsCommand as MpCommand).NotifyCanExecuteChanged();
         }
 
-        public async Task AddSourceRefAsync(MpISourceRef sourceRef) {
-            if(sourceRef == null) {
-                return;
-            }
-            await MpCopyItemSource.CreateAsync(
-                copyItemId: CopyItemId,
-                sourceObjId: sourceRef.SourceObjId,
-                sourceType: sourceRef.SourceType);
-        }
 
         #region IDisposable
 
@@ -1861,37 +1852,37 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand OpenTransactionPaneCommand => new MpCommand(
             () => {
-                SourceCollectionViewModel.IsTransactionPaneOpen = true;
+                TransactionCollectionViewModel.IsTransactionPaneOpen = true;
                 Dispatcher.UIThread.Post(() => {
                     MpAvResizeExtension.ResizeAnimated(
                         GetDragSource() as MpAvCefNetWebView, BoundWidth + DefaultTransactionPanelLength, BoundHeight);
                 });
             }, () => {
-                return SourceCollectionViewModel != null && !SourceCollectionViewModel.IsTransactionPaneOpen;
+                return TransactionCollectionViewModel != null && !TransactionCollectionViewModel.IsTransactionPaneOpen;
             });
         
         public ICommand CloseTransactionPaneCommand => new MpCommand(
             () => {
-                SourceCollectionViewModel.IsTransactionPaneOpen = false;
+                TransactionCollectionViewModel.IsTransactionPaneOpen = false;
 
                 Dispatcher.UIThread.Post(() => {
                     MpAvResizeExtension.ResizeAnimated(
                         GetDragSource() as MpAvCefNetWebView, BoundWidth - DefaultTransactionPanelLength, BoundHeight);
                 });
             }, () => {
-                return SourceCollectionViewModel != null && SourceCollectionViewModel.IsTransactionPaneOpen;
+                return TransactionCollectionViewModel != null && TransactionCollectionViewModel.IsTransactionPaneOpen;
             });
         
         public ICommand ToggleTransactionPaneOpenCommand => new MpCommand(
             () => {
-                if(SourceCollectionViewModel.IsTransactionPaneOpen) {
+                if(TransactionCollectionViewModel.IsTransactionPaneOpen) {
                     CloseTransactionPaneCommand.Execute(null);
                 } else {
                     OpenTransactionPaneCommand.Execute(null);
                 }
                 OnPropertyChanged(nameof(IsTitleVisible));
             }, () => {
-                return SourceCollectionViewModel != null;
+                return TransactionCollectionViewModel != null;
             });
         #endregion
     }

@@ -184,7 +184,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
-            MpCopyItem drop_ci = await MpPlatformWrapper.Services.CopyItemBuilder.CreateAsync(mpdo);//, drag_ciid);
+            MpCopyItem drop_ci = await MpPlatformWrapper.Services.CopyItemBuilder.BuildAsync(mpdo);//, drag_ciid);
 
             if (drop_ci == null) {
                 return;

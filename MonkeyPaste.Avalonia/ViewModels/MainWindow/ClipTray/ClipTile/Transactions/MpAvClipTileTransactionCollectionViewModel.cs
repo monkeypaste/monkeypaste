@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Avalonia.Threading;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace MonkeyPaste.Avalonia {
     public interface MpITransactionNodeViewModel : 
         MpITreeItemViewModel, 
         MpISelectableViewModel, 
+        MpIHoverableViewModel,
         MpILabelTextViewModel, 
         MpISortableViewModel, 
         MpIHasIconSourceObjViewModel,
@@ -33,13 +35,17 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
+        public IEnumerable<MpAvTransactionItemViewModelBase> Transactions =>
+            Items.Where(x => x is MpAvTransactionItemViewModelBase).Cast<MpAvTransactionItemViewModelBase>();
+
         public IEnumerable<MpITransactionNodeViewModel> SortedItems =>
             Items
             .OrderByDescending(x => x.ComparableSortValue);
-            //.OrderByDescending(x => x.SourcePriority)
-            //.ThenByDescending(x=>x.SourceCreatedDateTime);
+        //.OrderByDescending(x => x.SourcePriority)
+        //.ThenByDescending(x=>x.SourceCreatedDateTime);
 
-        public override MpITransactionNodeViewModel PrimaryItem => SortedItems.FirstOrDefault();
+        public override MpITransactionNodeViewModel PrimaryItem => 
+            Transactions.OrderBy(x => x.TransactionDateTimeUtc).FirstOrDefault();
 
         #region MpIContextMenuItemViewModel Implementation
 
@@ -66,6 +72,18 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Model
+
+        public int CopyItemId {
+            get {
+                if(Parent == null) {
+                    return 0;
+                }
+                return Parent.CopyItemId;
+            }
+        }
+        #endregion
+
         #endregion
 
         #endregion
@@ -87,34 +105,45 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = true;
 
             Items.Clear();
-            //var ci_sources = await MpDataModelProvider.GetCopyItemSources(copyItemId);
-            //foreach(var cis in ci_sources) {
-            //    var source_ref = await GetSourceRefAsync(cis);
-            //    var cisvm = await CreateClipTileSourceViewModel(source_ref);
-            //    Items.Add(cisvm);
-            //}
 
             var ci_transactions = await MpDataModelProvider.GetCopyItemTransactionsByCopyItemIdAsync(copyItemId);
             foreach (var cit in ci_transactions) {
-                //var source_ref = await GetSourceRefAsync(cit);
                 var cisvm = await CreateClipTileSourceViewModel(cit);
                 Items.Add(cisvm);
             }
 
-            while (Items.Any(x=>x.IsBusy)) {
+            while (Items.Any(x=>x.IsAnyBusy)) {
                 await Task.Delay(100);
             }
             OnPropertyChanged(nameof(Items));
             OnPropertyChanged(nameof(PrimaryItem));
+            OnPropertyChanged(nameof(SortedItems));
 
             IsBusy = false;
         }
         #endregion
 
+        #region Protected Methods
+
+        #region Db Op Overrides
+
+        protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
+            if(e is MpCopyItemTransaction cit && cit.CopyItemId == CopyItemId) {
+                Dispatcher.UIThread.Post(async () => {
+                    var cisvm = await CreateClipTileSourceViewModel(cit);
+                    Items.Add(cisvm);
+                    OnPropertyChanged(nameof(SortedItems));
+                });
+            }
+        }
+        #endregion
+
+        #endregion
+
         #region Private Methods
 
-        private async Task<MpAvClipTileTransactionItemViewModel> CreateClipTileSourceViewModel(MpCopyItemTransaction cit) {
-            var cisvm = new MpAvClipTileTransactionItemViewModel(this);
+        private async Task<MpAvTransactionItemViewModelBase> CreateClipTileSourceViewModel(MpCopyItemTransaction cit) {
+            var cisvm = new MpAvTransactionItemViewModelBase(this);
             await cisvm.InitializeAsync(cit);
             return cisvm;
         }

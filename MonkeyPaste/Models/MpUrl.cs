@@ -98,6 +98,7 @@ namespace MonkeyPaste {
         [Ignore]
         MpCopyItemSourceType MpISourceRef.SourceType => MpCopyItemSourceType.Url;
 
+        public object IconResourceObj => IconId;
         #endregion
 
         public static async Task<MpUrl> CreateAsync(

@@ -138,23 +138,28 @@ namespace MonkeyPaste {
         [Ignore]
         MpCopyItemSourceType MpISourceRef.SourceType => MpCopyItemSourceType.CopyItem;
 
+
+        public object IconResourceObj => IconId;
+        public string Uri => MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(this);
         #endregion
 
         #region Static Methods
         public static async Task<MpCopyItem> CreateAsync(
-            //int sourceId = 0,
             string data = "", 
             string dataFormat = MpPortableDataFormats.Text,
             MpCopyItemType itemType = MpCopyItemType.Text,
             string title = "",
             int dataObjectId = 0,
             bool suppressWrite = false) {
-            var dupCheck = await MpDataModelProvider.GetCopyItemByDataAsync(data);
-            if (MpPrefViewModel.Instance.IgnoreNewDuplicates && 
-                dupCheck != null && !suppressWrite) {
-                dupCheck.WasDupOnCreate = true;
-                return dupCheck;
-            }
+            MpCopyItem dupCheck = null;
+            if(MpPrefViewModel.Instance.IgnoreNewDuplicates && !suppressWrite) {
+                dupCheck = await MpDataModelProvider.GetCopyItemByDataAsync(data);
+                if (dupCheck != null) {
+                    dupCheck.WasDupOnCreate = true;
+                    return dupCheck;
+                }
+            } 
+            
 
             if(MpPrefViewModel.Instance.UniqueContentItemIdx == 0 && !suppressWrite) {
                 MpPrefViewModel.Instance.UniqueContentItemIdx = await MpDataModelProvider.GetTotalCopyItemCountAsync();
@@ -164,13 +169,11 @@ namespace MonkeyPaste {
             var newCopyItem = new MpCopyItem() {
                 CopyItemGuid = System.Guid.NewGuid(),
                 CopyDateTime = DateTime.Now,
-                Title = title, //string.IsNullOrEmpty(title) ? "Untitled" + (++MpPrefViewModel.Instance.UniqueContentItemIdx) : title,
+                Title = title, 
                 ItemData = data,
                 ItemType = itemType,
-                DataFormat = dataFormat,                                        
-                //SourceId = sourceId,
+                DataFormat = dataFormat,                     
                 CopyCount = 1,
-                //CopyItemSourceGuid = copyItemSourceGuid,
                 DataObjectId = dataObjectId
             };
             if (!suppressWrite) {
@@ -277,11 +280,6 @@ namespace MonkeyPaste {
                 delete_tasks.AddRange(citrl.Select(x=>x.DeleteFromDatabaseAsync()));
             }
 
-            var ci_pptl = await MpDataModelProvider.GetPluginPresetTransactionsByCopyItemId(Id);
-            if(ci_pptl != null && ci_pptl.Count > 0) {
-                delete_tasks.AddRange(ci_pptl.Cast<MpDbModelBase>().Select(x => x.DeleteFromDatabaseAsync()));
-            }
-
             if(IconId > 0) {
                 var ci_icon = await MpDataModelProvider.GetItemAsync<MpIcon>(IconId);
                 if(ci_icon != null) {
@@ -298,8 +296,6 @@ namespace MonkeyPaste {
         public async Task<object> DeserializeDbObjectAsync(string objStr) {
             var objParts = objStr.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);
             await Task.Delay(0);
-
-            var source = await MpDb.GetDbObjectByTableGuidAsync("MpSource", objParts[7]) as MpSource;
 
             var ci = new MpCopyItem() {
                 CopyItemGuid = System.Guid.Parse(objParts[0]),

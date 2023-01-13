@@ -79,9 +79,9 @@ function init_test() {
 	} else {
 		let load_req = {
 			contentHandle: '<TEST-CONTENT-HANDLE>',
-			contentType: 'FileList',
+			contentType: 'Text',
 			isPasteRequest: false,
-			itemData: sample_file_list,
+			itemData: sample1,
 			//searchText: 'instalment in the following sequence of articles:'
 		};
 

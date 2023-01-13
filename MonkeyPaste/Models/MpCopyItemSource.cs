@@ -13,7 +13,7 @@ namespace MonkeyPaste {
         App,
         Url,
         CopyItem,
-        Plugin
+        AnalyzerPreset
     };
 
     public class MpCopyItemSource : MpDbModelBase {
@@ -26,15 +26,19 @@ namespace MonkeyPaste {
         [Column("MpCopyItemSourceGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
-        [Column("fk_MpCopyItemId")]
-        [Indexed]
-        public int CopyItemId { get; set; }
+        //[Column("fk_MpCopyItemId")]
+        ////[Indexed]
+        //public int CopyItemId { get; set; }
+
+        
+        [Column("fk_MpCopyItemTransactionId")]
+        public int TransactionId { get; set; }
+
+        [Column("e_MpCopyItemSourceType")]
+        public string SourceTypeStr { get; set; }
 
         [Column("fk_SourceObjId")]
         public int SourceObjId { get; set; }
-
-        [Column("e_MpCopyItemSourceType")]
-        public string CopyItemSourceTypeStr { get; set; }
 
         public DateTime CreatedDateTime { get; set; }
         #endregion
@@ -56,21 +60,21 @@ namespace MonkeyPaste {
 
         [Ignore]
         public MpCopyItemSourceType CopyItemSourceType {
-            get => CopyItemSourceTypeStr.ToEnum<MpCopyItemSourceType>();
-            set => CopyItemSourceTypeStr = value.ToString();
+            get => SourceTypeStr.ToEnum<MpCopyItemSourceType>();
+            set => SourceTypeStr = value.ToString();
         }
 
         #endregion
 
 
         public static async Task<MpCopyItemSource> CreateAsync(
-            int copyItemId = 0,
+            int transactionId = 0,
             int sourceObjId = 0,
             MpCopyItemSourceType sourceType = MpCopyItemSourceType.None,
             DateTime? createdDateTime = null,
             bool suppressWrite = false) {
-            if(copyItemId <= 0) {
-                throw new Exception("Must have valid copyitem id, id is " + copyItemId);
+            if(transactionId <= 0) {
+                throw new Exception("Must have valid transaction id, id is " + transactionId);
             }
             if (sourceObjId <= 0) {
                 throw new Exception("Must have valid sourceObjId, id is " + sourceObjId);
@@ -79,31 +83,33 @@ namespace MonkeyPaste {
                 throw new Exception("Must have valid sourceType, sourceType is " + sourceType);
             }
 
-            MpCopyItemSource dupCheck = await MpDataModelProvider.GetCopyItemSourceByMembersAsync(copyItemId, sourceType, sourceObjId);
+            MpCopyItemSource dupCheck = await MpDataModelProvider.GetCopyItemSourceByMembersAsync(transactionId, sourceType, sourceObjId);
             if (dupCheck != null) {
                 dupCheck.WasDupOnCreate = true;
                 return dupCheck;
             }
 
             if (sourceType == MpCopyItemSourceType.CopyItem) {
-                if (copyItemId == sourceObjId) {
+                var selfRef_check = await MpDataModelProvider.GetItemAsync<MpCopyItemTransaction>(transactionId);
+
+                if (selfRef_check != null && selfRef_check.CopyItemId == sourceObjId) {
                     // self reference (ole within item), ignore
-                    MpConsole.WriteLine($"Self reference detected. Ignoring MpCopyItemSource create for ciid: " + copyItemId);
+                    MpConsole.WriteLine($"Self reference detected. Ignoring MpCopyItemSource create for ciid: " + sourceObjId);
                     return null;
                 } else {
                     // in case source item is deleted (or generally just to make it easier to query)
                     // recursively replicate source item's sources for this link
-                    ReplicateCopyItemSourceTreeAsync(copyItemId, sourceObjId).FireAndForgetSafeAsync();
+                    ReplicateCopyItemSourceTreeAsync(transactionId, sourceObjId).FireAndForgetSafeAsync();
                 }
             }
-            
-            if(!createdDateTime.HasValue) {
+
+            if (!createdDateTime.HasValue) {
                 createdDateTime = DateTime.UtcNow;
             }
 
             var ndio = new MpCopyItemSource() {
                 CopyItemSourceGuid = System.Guid.NewGuid(),
-                CopyItemId = copyItemId,
+                TransactionId = transactionId,
                 SourceObjId = sourceObjId,
                 CopyItemSourceType = sourceType,
                 CreatedDateTime = createdDateTime.Value
@@ -136,7 +142,7 @@ namespace MonkeyPaste {
         public MpCopyItemSource() { }
 
         public override string ToString() {
-            return $"[SourceType: {CopyItemSourceType} SourceObjId: {SourceObjId} CopyItemId: {CopyItemId} Created: {CreatedDateTime}]";
+            return $"[SourceType: {CopyItemSourceType} SourceObjId: {SourceObjId} CopyItemTransactionId: {TransactionId} Created: {CreatedDateTime}]";
         }
     }
 }

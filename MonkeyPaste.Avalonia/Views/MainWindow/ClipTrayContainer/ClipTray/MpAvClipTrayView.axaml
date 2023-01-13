@@ -33,7 +33,6 @@
                          HorizontalAlignment="Left"
                          VerticalAlignment="Top"
                          BorderThickness="0"
-                         Focusable="True"
                          TabIndex="2"
                          IsTabStop="True"
                          AutoScrollToSelectedItem="False"

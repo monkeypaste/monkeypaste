@@ -61,11 +61,6 @@ namespace ComputerVision {
                     
                 }
             }
-            if(string.IsNullOrEmpty(resp.errorMessage)) {
-                string content_ref_url = req.GetRequestParamStringValue(5);
-
-                resp.dataObject.SetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, new List<string> { content_ref_url });
-            }
             return resp;
         }
 

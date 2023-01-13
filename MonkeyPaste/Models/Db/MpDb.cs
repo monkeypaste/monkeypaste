@@ -386,8 +386,6 @@ namespace MonkeyPaste {
                 OnInitDefaultNativeData?.Invoke(nameof(MpDb), null);
             }
 
-            
-
             MpConsole.WriteLine(@"Db file located: " + MpPlatformWrapper.Services.DbInfo.DbPath);
             MpConsole.WriteLine(@"This Client Guid: " + MpPrefViewModel.Instance.ThisDeviceGuid);
             MpConsole.WriteLine("Write ahead logging: " + (UseWAL ? "ENABLED" : "DISABLED"));
@@ -444,7 +442,6 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpAppClipboardFormatInfo>();
             await _connectionAsync.CreateTableAsync<MpAppPasteShortcut>();
             await _connectionAsync.CreateTableAsync<MpBillableItem>();
-            await _connectionAsync.CreateTableAsync<MpCliTransaction>();
             await _connectionAsync.CreateTableAsync<MpCopyItem>();
             await _connectionAsync.CreateTableAsync<MpCopyItemAnnotation>();
             await _connectionAsync.CreateTableAsync<MpCopyItemTag>();
@@ -454,15 +451,12 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpDataObjectItem>();
             await _connectionAsync.CreateTableAsync<MpDbImage>();
             await _connectionAsync.CreateTableAsync<MpDbLog>();
-            await _connectionAsync.CreateTableAsync<MpDllTransaction>();
-            await _connectionAsync.CreateTableAsync<MpHttpTransaction>();
             await _connectionAsync.CreateTableAsync<MpIcon>();
             await _connectionAsync.CreateTableAsync<MpPasteHistory>();
             await _connectionAsync.CreateTableAsync<MpPasteToAppPath>();
             await _connectionAsync.CreateTableAsync<MpPluginPreset>();
             await _connectionAsync.CreateTableAsync<MpSearchCriteriaItem>();
             await _connectionAsync.CreateTableAsync<MpShortcut>();
-            await _connectionAsync.CreateTableAsync<MpSource>();
             await _connectionAsync.CreateTableAsync<MpSyncHistory>();
             await _connectionAsync.CreateTableAsync<MpTag>();
             await _connectionAsync.CreateTableAsync<MpTextTemplate>();
@@ -549,7 +543,8 @@ SELECT
 	CopyCount + PasteCount as UsageScore
 FROM
 	MpCopyItem
-INNER JOIN MpCopyItemSource ON MpCopyItemSource.fk_MpCopyItemId = MpCopyItem.pk_MpCopyItemId");
+INNER JOIN MpCopyItemTransaction ON MpCopyItemTransaction.fk_MpCopyItemId = MpCopyItem.pk_MpCopyItemId
+INNER JOIN MpCopyItemSource ON MpCopyItemSource.fk_MpCopyItemTransactionId = MpCopyItemTransaction.pk_MpCopyItemTransactionId");
 
         }
 
@@ -564,7 +559,8 @@ INNER JOIN MpCopyItemSource ON MpCopyItemSource.fk_MpCopyItemId = MpCopyItem.pk_
                 TagGuid = Guid.Parse("df388ecd-f717-4905-a35c-a8491da9c0e3"),
                 TagName = "All",
                 HexColor = Color.Blue.ToHex(),
-                TagSortIdx = 1
+                TagSortIdx = 1,
+                IsPinned = true
             }, "", true, true);
 
             await AddItemAsync<MpTag>(new MpTag() {
@@ -572,14 +568,16 @@ INNER JOIN MpCopyItemSource ON MpCopyItemSource.fk_MpCopyItemId = MpCopyItem.pk_
                 ParentTagId = 1,
                 TagName = "Favorites",
                 HexColor = Color.Yellow.ToHex(),
-                TagSortIdx = 2
+                TagSortIdx = 2,
+                IsPinned = true
             }, "", true, true);
 
             var helpTag = new MpTag() {
                 TagGuid = Guid.Parse("a0567976-dba6-48fc-9a7d-cbd306a4eaf3"),
                 TagName = "Help",
                 HexColor = Color.Orange.ToHex(),
-                TagSortIdx = 3
+                TagSortIdx = 3,
+                IsPinned = true
             };
             await AddItemAsync<MpTag>(helpTag, "", true, true);
 

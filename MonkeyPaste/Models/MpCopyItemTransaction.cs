@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using SQLite;
 
 
@@ -8,23 +9,18 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public enum MpCopyItemTransactionType {
-        None = 0,
-        Dll,
-        Cli,
-        Http,
-        App,
-        Url,
-        CopyItem,
-        Preset
-    }
+    //public enum MpCopyItemSourceType {
+    //    None = 0,
+    //    Dll,
+    //    Cli,
+    //    Http,
+    //    App,
+    //    Url,
+    //    CopyItem,
+    //    Preset
+    //}
 
-    public enum MpJsonMessageFormatType {
-        None = 0,
-        DataObject,
-        Annotation,
-        Delta,
-    }
+    
 
     public class MpCopyItemTransaction : MpDbModelBase {
         #region Columns
@@ -41,12 +37,12 @@ namespace MonkeyPaste {
         [Indexed]
         public int CopyItemId { get; set; }
 
-        [Column("fk_TransactionObjId")]
-        public int TransactionObjId { get; set; }
+        //[Column("fk_TransactionObjId")]
+        //public int TransactionObjId { get; set; }
 
 
-        [Column("e_MpCopyItemTransactionType")]
-        public string CopyItemTransactionTypeName { get; set; } = MpCopyItemTransactionType.None.ToString();
+        //[Column("e_MpCopyItemTransactionType")]
+        //public string CopyItemTransactionTypeName { get; set; }// = MpCopyItemTransactionType.None.ToString();
 
 
         [Column("e_MpJsonMessageFormatType_request")]
@@ -81,11 +77,11 @@ namespace MonkeyPaste {
             }
         }
 
-        [Ignore]
-        public MpCopyItemTransactionType TransactionType {
-            get => CopyItemTransactionTypeName.ToEnum<MpCopyItemTransactionType>();
-            set => CopyItemTransactionTypeName = value.ToString();
-        }
+        //[Ignore]
+        //public MpCopyItemTransactionType TransactionType {
+        //    get => CopyItemTransactionTypeName.ToEnum<MpCopyItemTransactionType>();
+        //    set => CopyItemTransactionTypeName = value.ToString();
+        //}
         
         [Ignore]
         public MpJsonMessageFormatType RequestMessageType {
@@ -104,8 +100,6 @@ namespace MonkeyPaste {
 
         public static async Task<MpCopyItemTransaction> CreateAsync(
             int copyItemId = 0,
-            MpCopyItemTransactionType transType = MpCopyItemTransactionType.None,
-            int transObjId = 0,
             MpJsonMessageFormatType reqMsgType = MpJsonMessageFormatType.None,
             string reqMsgJsonStr = "",
             MpJsonMessageFormatType respMsgType = MpJsonMessageFormatType.None,
@@ -118,13 +112,15 @@ namespace MonkeyPaste {
                 throw new Exception("Must have CopyItemId if to be written");
             }
 
+            
+
             var ndio = new MpCopyItemTransaction() {
                 CopyItemTransactionGuid = System.Guid.NewGuid(),
 
                 CopyItemId = copyItemId,
 
-                TransactionType = transType,
-                TransactionObjId = transObjId,
+                //TransactionType = transType,
+                //TransactionObjId = transObjId,
 
                 RequestMessageType = reqMsgType,
                 RequestMessageJson = reqMsgJsonStr,

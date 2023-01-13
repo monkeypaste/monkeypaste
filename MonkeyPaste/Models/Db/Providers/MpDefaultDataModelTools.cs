@@ -28,7 +28,6 @@ namespace MonkeyPaste {
         public static int ThisAppIconId { get; private set; }
         public static int ThisAppIconDbImageId { get; private set; }
         public static int ThisAppId { get; private set; }
-        public static int ThisSourceId { get; private set; }
         public static int ThisOsFileManagerAppId { get; private set; }
 
 
@@ -65,20 +64,12 @@ namespace MonkeyPaste {
 
             using var process = Process.GetCurrentProcess();
             string thisAppPath = process.MainModule.FileName;
-            //string thisAppArgs = process.StartInfo == null ? string.Empty : process.StartInfo.Arguments;
-            //var thisApp = await MpDataModelProvider.GetAppByPathAsync(thisAppPath, thisAppArgs, this_device.Id);
-            //string thisAppPath = Assembly.GetEntryAssembly().Location;
             var this_app = await MpDataModelProvider.GetAppByPathAsync(thisAppPath, null, this_device.Id);
             if (this_app == null) {
                 // reset error
                 Debugger.Break();
             }
             ThisAppId = this_app.Id;
-
-            //MpDataModelProvider.GetUrlByPathAsync()
-            //await _connectionAsync.CreateTableAsync<MpSource>();
-            //var thisAppSource = await MpSource.Create(appId: thisApp.Id, urlId: 0);
-            //MpPrefViewModel.Instance.ThisAppSourceId = thisAppSource.Id;
 
 
             var this_os_file_manager = await MpDataModelProvider.GetAppByPathAsync(osInfo.OsFileManagerPath, null, this_device.Id);
@@ -110,11 +101,13 @@ namespace MonkeyPaste {
 
             await thisDevice.WriteToDatabaseAsync();
 
+            ThisUserDeviceId = thisDevice.Id;
 
             // Icon
 
             var thisAppIcon = await MpIcon.CreateAsync(MpBase64Images.AppIcon);
 
+            ThisAppIconId = thisAppIcon.Id;
 
             // This App
 
@@ -126,14 +119,13 @@ namespace MonkeyPaste {
                 appName: thisAppName,
                 iconId: thisAppIcon.Id);
 
-            // This source
-
-            var thisSource = await MpSource.CreateAsync(appId: thisApp.Id);           
+            ThisAppId = thisApp.Id;
 
             // OS App
             var osApp = await MpApp.CreateAsync(
                 appPath: MpPlatformWrapper.Services.OsInfo.OsFileManagerPath,
                 appName: MpPlatformWrapper.Services.OsInfo.OsFileManagerName);
+            ThisOsFileManagerAppId = osApp.Id;
 
         }
 
@@ -141,13 +133,6 @@ namespace MonkeyPaste {
             string userDeviceGuid,
             MpUserDeviceType osType,
             string osFileManagerPath) {
-            //if (Environment.CurrentDirectory.Contains("MpWpfApp")) {
-            //    MpTag.AllTagId = 2;
-            //    MpTag.FavoritesTagId = 3;
-            //    MpPrefViewModel.Instance.ThisAppSourceId = 5;
-            //    MpPrefViewModel.Instance.ThisOsFileManagerAppId = 4;
-            //    MpPrefViewModel.Instance.ThisDeviceGuid = "f64b221e-806a-4e28-966a-f9c5ff0d9370";
-            //}
 
             // USER DEVICE
 
@@ -170,14 +155,6 @@ namespace MonkeyPaste {
                 Debugger.Break();
             }
             ThisAppId = this_app.Id;
-
-            // THIS SOURCE
-            var this_source = await MpDataModelProvider.GetSourceByMembersAsync(ThisAppId, 0, 0);
-            if(this_source == null) {
-                // error
-                Debugger.Break();
-            }
-            ThisSourceId = this_source.Id;
 
             // OS APP
             

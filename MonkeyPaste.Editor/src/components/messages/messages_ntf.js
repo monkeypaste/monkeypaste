@@ -228,11 +228,13 @@ function onSetClipboardRequested_ntf() {
 	}
 }
 
-function onDataTransferCompleted_ntf(sourceUrl) {
+function onDataTransferCompleted_ntf(sourceUrl,changeDelta, input_dataObj) {
 	// output 'MpQuillDataTransferCompletedNotification'
 	if (typeof notifyDataTransferCompleted === 'function') {
 		let msg = {
-			dataTransferSourceUrl: sourceUrl
+			dataTransferSourceUrl: sourceUrl,
+			changeDeltaJsonStr: changeDelta ? toBase64FromJsonObj(changeDelta) : null,
+			sourceDataItemsJsonStr: input_dataObj ? toBase64FromJsonObj(input_dataObj) : null
 		};
 		let msgStr = toBase64FromJsonObj(msg);
 		notifyDataTransferCompleted(msgStr);

@@ -306,10 +306,7 @@ namespace MonkeyPaste.Avalonia {
                     } else {
 
                         if (HasText) {
-                            MpAvThemeViewModel.Instance.GlobalBgOpacity = double.Parse(SearchText);
-                        }
-                        if (!HasText) {
-                            //SearchText = PlaceholderText;
+                            //MpAvThemeViewModel.Instance.GlobalBgOpacity = double.Parse(SearchText);
                         }
                     }
                     OnPropertyChanged(nameof(TextBoxFontStyle));

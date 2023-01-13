@@ -10,7 +10,11 @@ namespace MonkeyPaste.Avalonia {
         public static async Task<MpAvParameterViewModelBase> CreateParameterViewModelAsync(
             MpPluginPresetParameterValue aipv, 
             MpIParameterHostViewModel pluginHost) {
-            MpParameterControlType controlType = pluginHost.ComponentFormat.parameters.FirstOrDefault(x => x.paramId == aipv.ParamId).controlType;
+            var param = pluginHost.ComponentFormat.parameters.FirstOrDefault(x => x.paramId == aipv.ParamId);
+            if(param == null) {
+                return null;
+            }
+            MpParameterControlType controlType = param.controlType;
 
             MpAvParameterViewModelBase naipvm = null;
 

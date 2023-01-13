@@ -205,7 +205,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        public ObservableCollection<MpDllTransaction> Transactions { get; set; } = new ObservableCollection<MpDllTransaction>();
         public bool HasAnyParameterValueChange => Items.Any(x => x.HasModelChanged);
         public bool IsLabelTextBoxFocused { get; set; } = false;
         public bool IsLabelReadOnly { get; set; } = true;
@@ -422,11 +421,6 @@ namespace MonkeyPaste.Avalonia {
             Items.Clear();
 
             Preset = aip;
-
-            var tl = await MpDataModelProvider.GetDllTransactionsByPresetIdAsync(AnalyticItemPresetId);
-            Transactions.Clear();
-            tl.ForEach(x => Transactions.Add(x));
-
             //if (AnalyticItemPresetId == 774) {
             //    Debugger.Break();
             //}
@@ -491,8 +485,6 @@ namespace MonkeyPaste.Avalonia {
                 if (sc.CommandParameter == AnalyticItemPresetId.ToString() && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
-            } else if(e is MpDllTransaction dt && dt.PresetId == AnalyticItemPresetId) {
-                Transactions.Add(dt);
             }
         }
 
@@ -509,10 +501,7 @@ namespace MonkeyPaste.Avalonia {
                 if (sc.CommandParameter == AnalyticItemPresetId.ToString() && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
-            } else if (e is MpDllTransaction dt && Transactions.FirstOrDefault(x=>x.Id == dt.Id) is MpDllTransaction dt_toRemove) {
-                Transactions.Remove(dt_toRemove);
-
-            }
+            } 
         }
         #endregion
 

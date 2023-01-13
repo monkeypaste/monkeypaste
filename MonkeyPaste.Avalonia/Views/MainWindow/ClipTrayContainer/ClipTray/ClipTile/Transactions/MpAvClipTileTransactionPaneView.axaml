@@ -24,7 +24,9 @@
             <TreeView.ItemTemplate>
                 <TreeDataTemplate x:DataType="local:MpITransactionNodeViewModel"
                                   ItemsSource="{Binding Children}">
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal"
+                                local:MpAvIsHoveringExtension.IsEnabled="True"
+                                local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering}">
                         <Image VerticalAlignment="Stretch"
                                Margin="2"
                                Width="{Binding $self.Bounds.Height}"
@@ -52,7 +54,15 @@
                  Items="{Binding SelectedItems}">
             <ListBox.ItemTemplate>
                 <DataTemplate x:DataType="local:MpITransactionNodeViewModel">
-                    <TextBlock Text="{Binding LabelText}" />
+                    <ContentControl Content="{Binding}">
+                        <ContentControl.DataTemplates>
+                            <local:MpAvTransactionMessageBodyTemplateSelector>
+                                <DataTemplate x:Key="ClipboardTemplate">
+                                    <TextBlock Text="Clipboard Table Here?" />
+                                </DataTemplate>
+                            </local:MpAvTransactionMessageBodyTemplateSelector>
+                        </ContentControl.DataTemplates>
+                    </ContentControl>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

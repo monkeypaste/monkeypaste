@@ -10,15 +10,22 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     public static class MpPluginResponseConverter {
         public static async Task<MpCopyItem> ConvertAsync(
+            MpPluginFormat pluginFormat,
             MpAnalyzerTransaction trans,
             MpCopyItem sourceCopyItem,
             int citid,
+            object sourceHandler,
             bool suppressWrite) {
-            MpCopyItem target_ci = await ProcessDataObjectAsync(trans, sourceCopyItem, citid, suppressWrite);
+            MpCopyItem target_ci = await ProcessDataObjectAsync(pluginFormat, trans, sourceCopyItem, citid, sourceHandler, suppressWrite);
             return target_ci;
         }
 
-        private static async Task<MpCopyItem> ProcessDataObjectAsync(MpAnalyzerTransaction trans, MpCopyItem sourceCopyItem, int citid, bool suppressWrite = false) {
+        private static async Task<MpCopyItem> ProcessDataObjectAsync(
+            MpPluginFormat pluginFormat,
+            MpAnalyzerTransaction trans, 
+            MpCopyItem sourceCopyItem, 
+            int citid,
+            object sourceHandler, bool suppressWrite = false) {
             if (trans == null || 
                 trans.Response == null || 
                 trans.Response.dataObject == null || 
@@ -26,75 +33,51 @@ namespace MonkeyPaste {
                 return null;
             }
             var mpdo = trans.Response.dataObject;
-            string source_url_ref = MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(sourceCopyItem);
-
-            List<MpISourceRef> target_source_refs = new List<MpISourceRef>();
-            if (citid > 0) {
-                var cit_ref = await MpDataModelProvider.GetSourceRefByCopyItemTransactionIdAsync(citid);
-                if (cit_ref != null) {
-                    target_source_refs.Add(cit_ref);
-                }
-            }
-            target_source_refs.Add(sourceCopyItem);
-            bool isNewContentResult = true;
-
-            if (mpdo.ContainsData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT) &&
-                mpdo.GetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT) is IEnumerable<string> urls) {
-                var urlList = urls.ToList();
-                if(urlList.Any(x=>x == source_url_ref)) {
-                    // data references source item so any content formats should replace source item content
-                    isNewContentResult = false;
-                    // remove self reference
-                    urlList.Remove(source_url_ref);
-                }
-
-                foreach (var url in urls) {
-                   var url_ref = await MpPlatformWrapper.Services.SourceRefBuilder.FetchOrCreateSourceAsync(url);
-                    if(url_ref == null) {
-                        // whats the url format?
-                        Debugger.Break();
-                        continue;
-                    }
-                    target_source_refs.Add(url_ref);
-                }
+            var outputType = pluginFormat.analyzer.outputType;
+            List<string> ref_urls = new List<string>();
+            if(mpdo.TryGetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, out IEnumerable<string> mpdo_urls)) {
+                // retain any references response may have included
+                ref_urls = mpdo_urls.ToList();
             }
 
-            if(isNewContentResult) {
-                // new content item     
-                MpCopyItem target_ci = null;
-                if (target_source_refs.All(x=> MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(x) != source_url_ref)) {
-                    // ensure source content is ref'd in new item (and not duplicated)
-                    target_source_refs.Add(sourceCopyItem);
+            if(sourceHandler is MpPluginPreset pp) {
+                // add reference to plugin
+                var plugin_source_ref = await MpDataModelProvider.GetSourceRefByTransactionTypeAndSourceIdAsync(
+                    MpCopyItemSourceType.AnalyzerPreset, pp.Id);
+                if(plugin_source_ref == null) {
+                    Debugger.Break();
                 }
-                var new_contnet_source_urls = target_source_refs.Select(x => MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(x));
-                // substitute any provided urls so they have internal formatting
-                mpdo.SetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, new_contnet_source_urls);
+                string plugin_ref_url = MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(plugin_source_ref);
+                if (!ref_urls.All(x => x.ToLower() != plugin_ref_url.ToLower())) {
+                    ref_urls.Add(plugin_ref_url);
+                }
+
+            }
+
+            MpCopyItem target_ci = null;
+            if(outputType.IsOutputNewContent() &&
+                sourceCopyItem != null) {
+                // when new content is created reference source content
+                // (I think by design sourceItem will never be null but maybe that should be ok?)
+                string source_url_ref = MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(sourceCopyItem);
+                if(!ref_urls.All(x=>x.ToLower() != source_url_ref.ToLower())) {
+                    ref_urls.Add(source_url_ref);
+                }
+
+                mpdo.SetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, ref_urls);
 
                 // create new item
-                target_ci = await MpPlatformWrapper.Services.CopyItemBuilder.CreateAsync(mpdo);
-                return target_ci;
+                target_ci = await MpPlatformWrapper.Services.CopyItemBuilder.BuildAsync(mpdo);
             }  else {
-                // update to host content and/or annotations
-                if (mpdo.ContainsData(MpPortableDataFormats.CefHtml) &&
-                    mpdo.GetData(MpPortableDataFormats.CefHtml) is string updatedItemData) {
+                var ref_sources = 
                     await Task.WhenAll(
-                        target_source_refs.Select(x =>
-                            MpCopyItemSource.CreateAsync(
-                            copyItemId: sourceCopyItem.Id,
-                            sourceObjId: x.SourceObjId,
-                            sourceType: x.SourceType)));
+                        ref_urls.Select(x => 
+                        MpPlatformWrapper.Services.SourceRefBuilder.FetchOrCreateSourceAsync(x)));
 
-                    sourceCopyItem.ItemData = updatedItemData;
-                    await sourceCopyItem.WriteToDatabaseAsync();
-                }
-                if(mpdo.ContainsData(MpPortableDataFormats.INTERNAL_CONTENT_ANNOTATION_FORMAT) &&
-                    mpdo.GetData(MpPortableDataFormats.INTERNAL_CONTENT_ANNOTATION_FORMAT) is string 
-                    annotation_node_json_str) {
-                    await MpCopyItemAnnotation.CreateAsync(
-                        copyItemId: sourceCopyItem.Id,
-                        jsonStr: annotation_node_json_str);
-
-                }
+                // ClipTileTransaction VM will pickup transaction/sources to update view
+                await MpPlatformWrapper.Services.SourceRefBuilder.AddTransactionSourcesAsync(
+                    copyItemTransactionId: citid,
+                    transactionSources: ref_sources);
             }
 
             

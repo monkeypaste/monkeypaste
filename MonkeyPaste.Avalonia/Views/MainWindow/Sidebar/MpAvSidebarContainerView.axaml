@@ -15,7 +15,6 @@
     <Grid x:Name="SidebarContainerGrid"
           IsTabStop="True"
           TabIndex="0"
-          Focusable="True"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch"
           ColumnDefinitions="40,*">

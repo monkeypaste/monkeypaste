@@ -69,7 +69,7 @@ namespace MonkeyPaste.Avalonia {
                 if (args is int) {
                     TabIdx = (int)args;
                 } else if (args is MpAvClipTileViewModel) {
-                    args = (args as MpAvClipTileViewModel).SourceCollectionViewModel.PrimaryItem;
+                    args = (args as MpAvClipTileViewModel).TransactionCollectionViewModel.PrimaryItem;
                     TabIdx = 1;
                 }
                 IsVisible = true;

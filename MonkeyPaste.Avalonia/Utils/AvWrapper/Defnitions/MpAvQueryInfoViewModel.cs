@@ -37,19 +37,17 @@ namespace MonkeyPaste.Avalonia {
         public static MpAvQueryInfoViewModel Current => _current;
         #endregion
 
-        #region Properties      
-        
-
+        #region Properties     
 
         #region MpIQueryInfo Implementation
 
         public int TotalAvailableItemsInQuery => _allQueryCopyItemIds.Count;
         public bool IsDescending { get; set; } = true;
         public MpContentSortType SortType { get; set; } = MpContentSortType.CopyDateTime;
-        public int TagId { get; set; } = 0;
+        public int TagId { get; set; } = MpTag.HelpTagId;
         public string SearchText { get; set; } = string.Empty;
 
-        public MpContentFilterType FilterFlags { get; set; } = MpContentFilterType.None;
+        public MpContentFilterType FilterFlags { get; set; } = MpContentFilterType.Content | MpContentFilterType.TextType | MpContentFilterType.ImageType | MpContentFilterType.FileType;
         public MpTextFilterFlagType TextFlags { get; set; } = MpTextFilterFlagType.None;
         public MpTimeFilterFlagType TimeFlags { get; set; } = MpTimeFilterFlagType.None;
         public MpLogicalFilterFlagType NextJoinType { get; set; }
@@ -59,7 +57,6 @@ namespace MonkeyPaste.Avalonia {
         public int SortOrderIdx { get; set; } = 0;
 
         #endregion
-
 
         #region MpIJsonObject Implementation
 

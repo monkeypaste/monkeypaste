@@ -8,6 +8,7 @@ using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common;
 using Google.Apis.PeopleService.v1.Data;
 using System.Diagnostics;
+using Org.BouncyCastle.Utilities;
 
 namespace MonkeyPaste {
 
@@ -145,6 +146,10 @@ namespace MonkeyPaste {
                     if(string.IsNullOrEmpty(base64FavIcon)) {
                         base64FavIcon = await GetDomainFavIcon2(url);
                     }
+                    if(string.IsNullOrEmpty(base64FavIcon) ||
+                        base64FavIcon.Equals(MpBase64Images.UnknownFavIcon)) {
+                        base64FavIcon = MpBase64Images.AppIcon;
+                    }
                 }
                 return base64FavIcon;
             }
@@ -170,11 +175,10 @@ namespace MonkeyPaste {
                 }
                 Uri favicon = new Uri(favicon_uri_str, UriKind.Absolute);
                 var bytes = await MpFileIo.ReadBytesFromUriAsync(favicon.AbsoluteUri);
-                string base64FavIcon = bytes == null || bytes.Length == 0 ? MpBase64Images.UnknownFavIcon : Convert.ToBase64String(bytes);
-                if (base64FavIcon.Equals(MpBase64Images.UnknownFavIcon)) {
-                    base64FavIcon = MpBase64Images.AppIcon;
+                if(bytes == null || bytes.Length == 0) {
+                    return null;
                 }
-                return base64FavIcon;
+                return Convert.ToBase64String(bytes);
             }
             catch (Exception ex) {
                 Console.WriteLine("MpHelpers.GetUrlFavicon error for url: " + domain + " with exception: " + ex);
@@ -184,17 +188,13 @@ namespace MonkeyPaste {
 
         private static async Task<string> GetDomainFavIcon2(string url) {
              try {
-
                 string urlDomain = GetUrlDomain(url);
-
                 Uri favicon = new Uri(@"https://www.google.com/s2/favicons?sz=128&domain_url=" + urlDomain, UriKind.Absolute);
                 var bytes = await MpFileIo.ReadBytesFromUriAsync(favicon.AbsoluteUri);
-                string base64FavIcon = bytes == null || bytes.Length == 0 ? MpBase64Images.UnknownFavIcon : Convert.ToBase64String(bytes);
-                if (base64FavIcon.Equals(MpBase64Images.UnknownFavIcon)) {
-                    base64FavIcon = MpBase64Images.AppIcon;
+                if (bytes == null || bytes.Length == 0) {
+                    return null;
                 }
-                return base64FavIcon;
-
+                return Convert.ToBase64String(bytes);
             }
             catch (Exception ex) {
                 Console.WriteLine("MpHelpers.GetUrlFavicon error for url: " + url + " with exception: " + ex);

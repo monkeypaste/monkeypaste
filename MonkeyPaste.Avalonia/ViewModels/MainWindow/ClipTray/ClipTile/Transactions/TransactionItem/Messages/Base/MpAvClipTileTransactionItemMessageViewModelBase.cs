@@ -11,7 +11,7 @@ using Xamarin.Forms.Internals;
 
 namespace MonkeyPaste.Avalonia {
     public abstract class MpAvClipTileTransactionItemMessageViewModelBase  : 
-        MpViewModelBase<MpAvClipTileTransactionItemViewModel>,
+        MpViewModelBase<MpAvTransactionItemViewModelBase>,
         MpITransactionNodeViewModel {
 
         #region Interfaces
@@ -68,7 +68,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvClipTileTransactionItemMessageViewModelBase(MpAvClipTileTransactionItemViewModel parent) : base(parent) { }
+        public MpAvClipTileTransactionItemMessageViewModelBase(MpAvTransactionItemViewModelBase parent) : base(parent) { }
 
         #endregion
 

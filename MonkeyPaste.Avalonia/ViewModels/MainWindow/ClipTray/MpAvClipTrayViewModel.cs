@@ -99,7 +99,7 @@ namespace MonkeyPaste.Avalonia {
                 //    return SelectedItem.TableViewModel.ContextMenuViewModel;
                 //}
                 if (SelectedItem.IsHoveringOverSourceIcon) {
-                    return SelectedItem.SourceCollectionViewModel.ContextMenuViewModel;
+                    return SelectedItem.TransactionCollectionViewModel.ContextMenuViewModel;
                 }
                 if (MpAvTagTrayViewModel.Instance.IsAnyBusy) {
                     Debugger.Break();
@@ -227,7 +227,7 @@ namespace MonkeyPaste.Avalonia {
                                 }
                             }
                         },
-                        SelectedItem.SourceCollectionViewModel.ContextMenuViewModel,
+                        SelectedItem.TransactionCollectionViewModel.ContextMenuViewModel,
                         MpAvAnalyticItemCollectionViewModel.Instance.ContextMenuItemViewModel,
                         new MpMenuItemViewModel() {IsSeparator = true},
                         MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(SelectedItem),
@@ -249,7 +249,7 @@ namespace MonkeyPaste.Avalonia {
                     return false;
                 }
                 if(SelectedItem.IsContextMenuOpen || 
-                    SelectedItem.SourceCollectionViewModel.IsContextMenuOpen) {
+                    SelectedItem.TransactionCollectionViewModel.IsContextMenuOpen) {
                     return true;
                 }
                 return false;
@@ -260,14 +260,14 @@ namespace MonkeyPaste.Avalonia {
                 }
                 if(value) {
                     if(SelectedItem.IsHoveringOverSourceIcon) {
-                        SelectedItem.SourceCollectionViewModel.IsContextMenuOpen = true;
+                        SelectedItem.TransactionCollectionViewModel.IsContextMenuOpen = true;
                         SelectedItem.IsContextMenuOpen = false;
                     } else {
-                        SelectedItem.SourceCollectionViewModel.IsContextMenuOpen = false;
+                        SelectedItem.TransactionCollectionViewModel.IsContextMenuOpen = false;
                         SelectedItem.IsContextMenuOpen = true;
                     }
                 } else {
-                    SelectedItem.SourceCollectionViewModel.IsContextMenuOpen = false;
+                    SelectedItem.TransactionCollectionViewModel.IsContextMenuOpen = false;
                     SelectedItem.IsContextMenuOpen = false;
                 }
             }
@@ -2221,7 +2221,7 @@ namespace MonkeyPaste.Avalonia {
 
             IsAddingClipboardItem = true;
 
-            var newCopyItem = await MpPlatformWrapper.Services.CopyItemBuilder.CreateAsync(cd);
+            var newCopyItem = await MpPlatformWrapper.Services.CopyItemBuilder.BuildAsync(cd);
 
             if (newCopyItem == null || newCopyItem.Id < 1) {
                 //this occurs if the copy item is not a known format or app init
@@ -2509,7 +2509,7 @@ namespace MonkeyPaste.Avalonia {
                      SelectedItem = unpinned_ctvm;
                  } else if (IsPinTrayEmpty) {
                      // select left most visible tile if pin tray empty
-                     SelectedItem = VisibleItems.Aggregate((a, b) => a.QueryOffsetIdx < b.QueryOffsetIdx ? a : b);
+                     SelectedItem = VisibleItems.AggregateOrDefault((a, b) => a.QueryOffsetIdx < b.QueryOffsetIdx ? a : b);
                  } else {
                      // prefer select neighbor pin tile 
                      int sel_idx = Math.Min(PinnedItems.Count - 1, Math.Max(0, unpinned_ctvm_idx));

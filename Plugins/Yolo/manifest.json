@@ -51,18 +51,6 @@
             "value": "{ItemData}"
           }
         ]
-      },
-      {
-        "label": "Content Reference",
-        "controlType": "TextBox",
-        "unitType": "PlainTextContentQuery",
-        "isVisible": false,
-        "paramId": 3,
-        "values": [
-          {
-            "value": "{ItemRefUrl}"
-          }
-        ]
       }
     ],
     "presets": [

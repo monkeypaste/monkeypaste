@@ -10,6 +10,7 @@ var IsReadOnly = false;
 
 var EditorTheme = 'light';
 
+var LastTextChangedDelta = null;
 
 // #endregion Globals
 
@@ -358,6 +359,7 @@ function onEditorSelChanged(range, oldRange, source) {
 }
 function onEditorTextChanged(delta, oldDelta, source) {
 	log('editor text changed');
+	LastTextChangedDelta = delta;
 	
 	updateAllElements();
 

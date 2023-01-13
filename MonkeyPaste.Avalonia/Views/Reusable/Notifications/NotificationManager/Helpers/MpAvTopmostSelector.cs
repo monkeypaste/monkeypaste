@@ -124,6 +124,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     
                     break;
+                case MpMessageType.MainWindowHid:
                 case MpMessageType.MainWindowClosing:
                     if (MpAvMainWindowViewModel.Instance.AnimateHideWindow) {
                         UnsetTopmost(MpAvMainWindow.Instance);

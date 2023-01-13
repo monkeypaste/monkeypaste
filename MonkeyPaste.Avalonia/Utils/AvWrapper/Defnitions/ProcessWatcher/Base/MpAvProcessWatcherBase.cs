@@ -207,6 +207,12 @@ namespace MonkeyPaste.Avalonia {
         public abstract ProcessWindowStyle GetWindowStyle(object handleIdOrTitle);
 
         public virtual string GetProcessApplicationName(IntPtr hWnd) {
+            string process_path = GetProcessPath(hWnd);
+            if(process_path.IsFile()) {
+                string app_name = FileVersionInfo.GetVersionInfo(process_path).FileDescription;
+                return app_name;
+            }
+
             string mwTitle = GetProcessTitle(hWnd);
             string appName = ParseTitleForApplicationName(mwTitle);
 

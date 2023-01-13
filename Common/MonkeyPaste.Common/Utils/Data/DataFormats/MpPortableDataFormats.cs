@@ -51,7 +51,8 @@ namespace MonkeyPaste.Common {
             INTERNAL_CONTENT_HANDLE_FORMAT,
             INTERNAL_CONTENT_TITLE_FORMAT,
             INTERNAL_CONTENT_ROI_FORMAT,
-            INTERNAL_CONTENT_ANNOTATION_FORMAT            
+            INTERNAL_CONTENT_ANNOTATION_FORMAT,
+            INTERNAL_CONTENT_DELTA_FORMAT
         };
 
         private static Dictionary<int, MpPortableDataFormat> _formatLookup;
@@ -106,6 +107,7 @@ namespace MonkeyPaste.Common {
 
         public const string INTERNAL_CONTENT_ROI_FORMAT = "Mp Internal Content Roi";
         public const string INTERNAL_CONTENT_ANNOTATION_FORMAT = "Mp Internal Content Annotation";
+        public const string INTERNAL_CONTENT_DELTA_FORMAT = "Mp Internal Quill Delta Json";
 
         #endregion
 

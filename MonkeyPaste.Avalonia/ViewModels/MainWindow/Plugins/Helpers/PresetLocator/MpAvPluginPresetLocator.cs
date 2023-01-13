@@ -66,11 +66,19 @@ namespace MonkeyPaste.Avalonia {
             // 2. Add/Remove preset parameter values based on parameter format differences since last successful load
 
             if (db_presets.Count == 0) {
-                // when no presets exist create empty default preset
-                foreach (var preset_guid in pluginHost.ComponentFormat.presets.Select(x => x.guid)) {
-                    var presetModel = await CreateOrResetManifestPresetModelAsync(pluginHost, preset_guid);
+                if(pluginHost.ComponentFormat.presets == null ||
+                    pluginHost.ComponentFormat.presets.Count == 0) {
+                    // when no presets exist in db or manifest, derive default from values
+                    var presetModel = await CreateOrResetManifestPresetModelAsync(pluginHost, string.Empty);
                     db_presets.Add(presetModel);
+                } else {
+                    // load predefined presets into db w/ there static preset guids parsed from manifest 
+                    foreach (var preset_guid in pluginHost.ComponentFormat.presets.Select(x => x.guid)) {
+                        var presetModel = await CreateOrResetManifestPresetModelAsync(pluginHost, preset_guid);
+                        db_presets.Add(presetModel);
+                    }
                 }
+                
             }
 
             var last_successful_loaded_parameters =
@@ -104,6 +112,10 @@ namespace MonkeyPaste.Avalonia {
                             value: param_value_to_add.value);
                     }                    
                 }
+
+                // update preset manifest timestamp to sync with current document
+                db_preset.ManifestLastModifiedDateTime = pluginHost.PluginFormat.manifestLastModifiedDateTime;
+                await db_preset.WriteToDatabaseAsync();
             }
             return db_presets;
         }
@@ -147,12 +159,24 @@ namespace MonkeyPaste.Avalonia {
         public static async Task<MpPluginPreset> CreateOrResetManifestPresetModelAsync(
             MpIParameterHostViewModel pluginHost, string presetGuid, int sortOrderIdx = 0) {
 
-            var preset_format = pluginHost.ComponentFormat.presets.FirstOrDefault(x => x.guid == presetGuid);
+            MpPluginPresetFormat preset_format = null;
+            if(pluginHost.ComponentFormat.presets != null) {
+                preset_format =  pluginHost.ComponentFormat.presets.FirstOrDefault(x => x.guid == presetGuid);
+            } 
+            
             if(preset_format == null) {
-                // why isn't the preset in the format? it should be deleted if not
-                Debugger.Break();
-                return null;
+                // create empty preset..all properties fallback onto host
+                preset_format = new MpPluginPresetFormat() {
+                    guid = presetGuid
+                };
+                if (pluginHost.ComponentFormat.presets != null && pluginHost.ComponentFormat.presets.Count > 0) {
+                    pluginHost.ComponentFormat.presets.Add(preset_format);
+                } else {
+                    pluginHost.ComponentFormat.presets = new List<MpPluginPresetFormat>() { preset_format };
+                }
+                
             }
+            
             int preset_icon_id = pluginHost.IconId;
             if(!string.IsNullOrEmpty(preset_format.iconUri)) {
                 preset_icon_id = await MpAvPluginIconLocator.LocatePluginIconIdAsync(pluginHost, preset_format.iconUri);

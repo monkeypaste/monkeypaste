@@ -35,7 +35,6 @@ namespace MonkeyPaste {
             nameof(MpUserDevice),
             nameof(MpUrl),
             nameof(MpApp),
-            nameof(MpSource),
             nameof(MpCopyItem),
             nameof(MpTag),
             nameof(MpTextTemplate),

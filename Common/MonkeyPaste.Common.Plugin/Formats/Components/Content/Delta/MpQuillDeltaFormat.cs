@@ -6,7 +6,7 @@ using System.Text;
 namespace MonkeyPaste.Common.Plugin {
     // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
 
-    public class MpQuillDeltaDocument : MpJsonObject {
+    public class MpQuillDelta : MpJsonObject {
         public List<Op> ops { get; set; }
     }
 
@@ -30,6 +30,7 @@ namespace MonkeyPaste.Common.Plugin {
         public string background { get; set; }
         public string list { get; set; }
         public string link { get; set; }
+        public string linkType { get; set; }
 
         [JsonProperty("table-col")]
         public TableCol tablecol { get; set; }
@@ -41,9 +42,17 @@ namespace MonkeyPaste.Common.Plugin {
         public string colspan { get; set; }
     }
 
+    public class DeltaRange {
+        public int index { get; set; }
+        public int length { get; set; }
+    }
+
     public class Op {
         public object insert { get; set; }
         public Attributes attributes { get; set; }
+
+        public DeltaRange format { get; set; }
+        public DeltaRange delete { get; set; }
     }
 
     public class ImageInsert {

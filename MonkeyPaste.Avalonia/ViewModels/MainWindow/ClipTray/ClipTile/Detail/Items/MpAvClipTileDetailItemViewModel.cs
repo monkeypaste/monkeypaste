@@ -181,8 +181,8 @@ namespace MonkeyPaste.Avalonia {
                         DetailText = $"{ctvm.CopyCount} copies | {ctvm.PasteCount} pastes";
                         break;
                     case MpCopyItemDetailType.UrlInfo:
-                        if(ctvm.SourceCollectionViewModel.PrimaryItem != null &&
-                            ctvm.SourceCollectionViewModel.PrimaryItem.TransactionModel is MpUrl url) {
+                        if(ctvm.TransactionCollectionViewModel.PrimaryItem != null &&
+                            ctvm.TransactionCollectionViewModel.PrimaryItem.TransactionModel is MpUrl url) {
 
                             DetailText = $"Goto url '{url.UrlTitle}'";
                             DetailUri = url.UrlPath;
@@ -190,8 +190,8 @@ namespace MonkeyPaste.Avalonia {
                         }
                         break;
                     case MpCopyItemDetailType.AppInfo:
-                        if (ctvm.SourceCollectionViewModel.PrimaryItem != null &&
-                            ctvm.SourceCollectionViewModel.PrimaryItem.TransactionModel is MpApp app) {
+                        if (ctvm.TransactionCollectionViewModel.PrimaryItem != null &&
+                            ctvm.TransactionCollectionViewModel.PrimaryItem.TransactionModel is MpApp app) {
                             DetailText = $"Open folder for '{app.AppName}'";
                             IsUriEnabled = app.UserDeviceId == MpDefaultDataModelTools.ThisUserDeviceId;
                             if (IsUriEnabled) {

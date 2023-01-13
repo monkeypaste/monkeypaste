@@ -89,9 +89,9 @@ namespace MonkeyPaste.Common {
             }
             return false;
         }
-        public bool TryGetData<T>(string format, out T data) where T:new() {
+        public bool TryGetData<T>(string format, out T data) where T:class {
             if(TryGetData(format, out object dataObj)) {
-                data = (T)dataObj;
+                data = dataObj as T;
                 return true;
             }
             data = default;

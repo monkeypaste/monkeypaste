@@ -26,12 +26,12 @@ namespace MonkeyPaste.Avalonia {
                     // if no value is found in db for a parameter defined in manifest...
 
                     string paramVal = string.Empty;
-                    if(host_db_preset != null) {
+                    if(host_db_preset != null && pluginHost.ComponentFormat.presets != null) {
                         // when param is part of a preset prefer manifest preset value
                         var host_format_preset = pluginHost.ComponentFormat.presets.FirstOrDefault(x => x.guid == host_db_preset.Guid);
                         if(host_format_preset == null) {
                             // manifest presets should hardset preset guid from manifest file, is this an old analyzer?
-                            Debugger.Break();
+                            //Debugger.Break();
                         } else if(host_format_preset.values != null) {
                             var host_format_preset_val = host_format_preset.values.FirstOrDefault(x => x.paramId.Equals(paramFormat.paramId));
                             if(host_format_preset_val != null) {

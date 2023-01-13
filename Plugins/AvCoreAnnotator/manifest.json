@@ -18,7 +18,7 @@
     },
     "parameters": [
       {
-        "label": "Content to Annotate",
+        "label": "Content to Annotate (HTML)",
         "description": "This assumes content is already internally preprocessed rich html format",
         "controlType": "TextBox",
         "unitType": "RawDataContentQuery",
@@ -29,16 +29,16 @@
             "value": "{ItemData}"
           }
         ]
-      },
-      {
-        "label": "Content Reference",
+      },{
+        "label": "Content to Annotate (Plain Text)",
+        "description": "This assumes content is already internally preprocessed rich html format",
         "controlType": "TextBox",
         "unitType": "PlainTextContentQuery",
         "isVisible": false,
         "paramId": 2,
         "values": [
           {
-            "value": "{ItemRefUrl}"
+            "value": "{ItemData}"
           }
         ]
       },

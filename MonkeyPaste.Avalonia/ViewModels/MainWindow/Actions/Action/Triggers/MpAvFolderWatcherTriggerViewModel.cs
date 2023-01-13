@@ -113,10 +113,10 @@ namespace MonkeyPaste.Avalonia {
                             suppressWrite: true);
                         if (!ci.WasDupOnCreate) {
                             // new item, create source ref
-                            await MpCopyItemSource.CreateAsync(
-                                copyItemId: ci.Id,
-                                sourceObjId: MpDefaultDataModelTools.ThisOsFileManagerAppId,
-                                sourceType: MpCopyItemSourceType.App);
+                            //await MpCopyItemSource.CreateAsync(
+                            //    copyItemId: ci.Id,
+                            //    sourceObjId: MpDefaultDataModelTools.ThisOsFileManagerAppId,
+                            //    sourceType: MpCopyItemSourceType.App);
                         }
                         break;
                     case WatcherChangeTypes.Renamed:

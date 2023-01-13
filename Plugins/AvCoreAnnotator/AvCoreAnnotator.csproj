@@ -5,6 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="AvCoreAnnotatorPlugin_html.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="AvCoreAnnotatorPlugin_html.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\Common\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
     <ProjectReference Include="..\..\Common\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
   </ItemGroup>

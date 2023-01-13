@@ -1,6 +1,7 @@
 ﻿using Google.Apis.PeopleService.v1.Data;
 using MonkeyPaste.Common;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -55,7 +56,7 @@ namespace MonkeyPaste.Avalonia {
                 Debugger.Break();
                 return null;
             }
-            MpCopyItemTransactionType source_type = param_lookup["type"].ToEnum<MpCopyItemTransactionType>();
+            MpCopyItemSourceType source_type = param_lookup["type"].ToEnum<MpCopyItemSourceType>();
             int source_id = param_lookup.ContainsKey("id") ? int.Parse(param_lookup["id"]) : 0;
             string ci_public_handle = param_lookup.ContainsKey("handle") ? param_lookup["handle"] : null;
 
@@ -64,7 +65,7 @@ namespace MonkeyPaste.Avalonia {
                 Debugger.Break();
                 return null;
             }
-            if(source_type == MpCopyItemTransactionType.CopyItem &&
+            if(source_type == MpCopyItemSourceType.CopyItem &&
                 !string.IsNullOrWhiteSpace(ci_public_handle)) {
                 var ctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle.ToLower() == ci_public_handle.ToLower());
                 if (ctvm == null) {
@@ -77,6 +78,121 @@ namespace MonkeyPaste.Avalonia {
 
             var result = await MpDataModelProvider.GetSourceRefByTransactionTypeAndSourceIdAsync(source_type, source_id);
             return result;
+        }
+
+        public async Task<List<MpCopyItemSource>> AddTransactionSourcesAsync(
+            int copyItemTransactionId, IEnumerable<MpISourceRef> transactionSources) {
+            if(transactionSources == null) {
+                return null;
+            }
+            var sources = new List<MpCopyItemSource>();
+            foreach(var source_ref in transactionSources) {
+                var cis = await MpCopyItemSource.CreateAsync(
+                    transactionId: copyItemTransactionId,
+                    sourceObjId: source_ref.SourceObjId,
+                    sourceType: source_ref.SourceType);
+                sources.Add(cis);
+            }
+            return sources;
+        }
+
+        public async Task<IEnumerable<MpISourceRef>> GatherSourceRefsAsync(MpPortableDataObject mpdo) {
+            // TODO should probably try to limit usage of CefAsciiUrl to giving Editor dataTransfer and pass UriList data as param here
+
+            List<MpISourceRef> refs = new List<MpISourceRef>();
+            if (mpdo.ContainsData(MpPortableDataFormats.CefAsciiUrl) &&
+                mpdo.GetData(MpPortableDataFormats.CefAsciiUrl) is byte[] urlBytes &&
+                urlBytes.ToDecodedString() is string urlRef) {
+                MpISourceRef sr = await MpPlatformWrapper.Services.SourceRefBuilder.FetchOrCreateSourceAsync(urlRef);
+                if (sr != null) {
+                    // occurs on sub-selection drop onto pintray or tag
+                    refs.Add(sr);
+                }
+            }
+            if (mpdo.ContainsData(MpPortableDataFormats.LinuxUriList) &&
+                mpdo.GetData(MpPortableDataFormats.LinuxUriList) is IEnumerable<string> uril) {
+                var list_refs = await
+                    Task.WhenAll(uril.Select(x => MpPlatformWrapper.Services.SourceRefBuilder.FetchOrCreateSourceAsync(x)));
+                refs.AddRange(list_refs);
+            }
+
+            //if (refs.FirstOrDefault(x => x.SourceType == MpCopyItemSourceType.CopyItem) is MpCopyItem source_ci) {
+            //    // when creating an item from an internal source
+            //    // get source item type and remove higher priority formats that aren't of source type
+            //    // (so partial drop of text isn't inferred as files for example)
+
+            //    if (source_ci != null) {
+            //        if (source_ci.ItemType != MpCopyItemType.FileList) {
+            //            mpdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvFileNames));
+            //        }
+            //        if (source_ci.ItemType != MpCopyItemType.Image) {
+            //            mpdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvPNG));
+            //        }
+            //        mpdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvRtf_bytes));
+            //        mpdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvCsv));
+            //    }
+            //}
+            if (refs == null || refs.Count == 0) {
+                // external ole create
+                var ext_refs = await GatherExternalSourceRefsAsync(mpdo);
+                if (ext_refs != null && ext_refs.Count() > 0) {
+                    refs = ext_refs.ToList();
+                }
+            }
+            if (refs == null || refs.Count == 0) {
+                // fallback
+                var this_app = await MpDataModelProvider.GetItemAsync<MpApp>(MpDefaultDataModelTools.ThisAppId);
+                refs = new List<MpISourceRef>() { this_app };
+            }
+            return refs;
+        }
+
+        private async Task<IEnumerable<MpISourceRef>> GatherExternalSourceRefsAsync(MpPortableDataObject mpdo) {
+            var last_pinfo = MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo;
+
+            //if(OperatingSystem.IsLinux()) {
+            //    // this maybe temporary but linux not following process watching convention because its SLOW
+            //    string exe_path = MpX11ShellHelpers.GetExeWithArgsToExePath(MpPlatformWrapper.Services.ProcessWatcher.LastProcessPath);
+            //    app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(exe_path);
+            //} else {
+            //    app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(MpPlatformWrapper.Services.ProcessWatcher.LastHandle);
+            //}
+            if (last_pinfo == null) {
+                Debugger.Break();
+                return null;
+            }
+            var app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(last_pinfo);
+
+            MpUrl url = null;
+            string source_url = MpAvHtmlClipboardData.FindSourceUrl(mpdo);
+            if (!string.IsNullOrWhiteSpace(source_url)) {
+                url = await MpUrlBuilder.CreateUrlAsync(source_url);
+            }
+
+            List<MpISourceRef> ext_refs = new List<MpISourceRef>();
+            if (url != null) {
+                // NOTE url added first
+                ext_refs.Add(url);
+            }
+            if (app != null) {
+                ext_refs.Add(app);
+            }
+            return ext_refs;
+        }
+
+        public bool IsAnySourceRejected(IEnumerable<MpISourceRef> refs) {
+            foreach (var source_ref in refs) {
+                if (source_ref is MpUrl url &&
+                    (url.IsDomainRejected || url.IsDomainRejected)) {
+                    MpConsole.WriteLine($"Rejected url detected. Url: '{url}'");
+                    return true;
+                } else if (source_ref is MpApp app &&
+                    app.IsAppRejected) {
+                    MpConsole.WriteLine($"Rejected app detected. App: '{app}'");
+                    return true;
+                }
+            }
+            return false;
         }
 
         public string ConvertToRefUrl(MpISourceRef sr) {

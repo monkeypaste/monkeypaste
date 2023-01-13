@@ -72,6 +72,9 @@ namespace MonkeyPaste {
             get {
                 return (MpUserDeviceType)UserDeviceId;
             }
+            set {
+                UserDeviceId = (int)value;
+            }
         }
 
         [Ignore]
@@ -102,6 +105,8 @@ namespace MonkeyPaste {
         #region MpISourceRef Implementation
 
         [Ignore]
+        public object IconResourceObj => IconId;
+        [Ignore]
         int MpISourceRef.Priority => 2;
         [Ignore]
         int MpISourceRef.SourceObjId => Id;
@@ -116,6 +121,7 @@ namespace MonkeyPaste {
             string appName = "", 
             string arguments = null,
             int iconId = 0,
+            MpUserDeviceType deviceType = MpUserDeviceType.None,
             string guid = "",
             bool suppressWrite = false) {
             if(appPath.IsNullOrEmpty()) {
@@ -141,16 +147,16 @@ namespace MonkeyPaste {
             }
             //if app doesn't exist create image,icon,app and source
 
-            var thisDevice = await MpDataModelProvider.GetUserDeviceByGuidAsync(MpPrefViewModel.Instance.ThisDeviceGuid);
+            //var thisDevice = await MpDataModelProvider.GetUserDeviceByGuidAsync(MpPrefViewModel.Instance.ThisDeviceGuid);
 
-            if(thisDevice == null) {
-                //not sure why this happens but duplicating MpDb.InitDefaultData...
-                thisDevice = new MpUserDevice() {
-                    UserDeviceGuid = System.Guid.Parse(MpPrefViewModel.Instance.ThisDeviceGuid),
-                    PlatformType = MpDefaultDataModelTools.ThisUserDeviceType
-                };
-                await thisDevice.WriteToDatabaseAsync();
-            }
+            //if(thisDevice == null) {
+            //    //not sure why this happens but duplicating MpDb.InitDefaultData...
+            //    thisDevice = new MpUserDevice() {
+            //        UserDeviceGuid = System.Guid.Parse(MpPrefViewModel.Instance.ThisDeviceGuid),
+            //        PlatformType = MpDefaultDataModelTools.ThisUserDeviceType
+            //    };
+            //    await thisDevice.WriteToDatabaseAsync();
+            //}
 
             if(iconId == 0) {
                 string iconImgBase64 = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(appPath);
@@ -167,7 +173,7 @@ namespace MonkeyPaste {
                 AppName = appName,
                 Arguments = arguments,
                 IconId = iconId,
-                UserDeviceId = thisDevice.Id
+                DeviceType = deviceType == MpUserDeviceType.None ? (MpUserDeviceType)MpDefaultDataModelTools.ThisUserDeviceId : deviceType
             };
 
             await newApp.WriteToDatabaseAsync();
@@ -303,5 +309,6 @@ namespace MonkeyPaste {
                 IsAppRejected ? "1" : "0");
             return diffLookup;
         }
+
     }
 }

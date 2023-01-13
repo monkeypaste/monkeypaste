@@ -37,8 +37,8 @@ namespace MonkeyPaste {
         FileSystemChange,
         ContentTagged,
         Shortcut,
-        ActiveAppChanged,
-        ClipboardChanged
+        //ActiveAppChanged,
+        //ClipboardChanged
     }
 
     public enum MpActionType {

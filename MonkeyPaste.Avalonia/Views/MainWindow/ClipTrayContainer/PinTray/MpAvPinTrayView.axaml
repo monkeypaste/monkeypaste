@@ -20,7 +20,6 @@
         <Grid HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
             <ListBox x:Name="PinTrayListBox"
-                     Focusable="True"
                      Background="Transparent"
                      TabIndex="1"
                      IsTabStop="True"

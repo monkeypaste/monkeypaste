@@ -62,7 +62,10 @@
     <Compile Remove="Enums\MpTextContentFormat.cs" />
     <Compile Remove="Models\MpAnalyticItemParameter.cs" />
     <Compile Remove="Models\MpAnalyticItemParameterValue.cs" />
+    <Compile Remove="Models\MpCliTransaction.cs" />
     <Compile Remove="Models\MpColor.cs" />
+    <Compile Remove="Models\MpDllTransaction.cs" />
+    <Compile Remove="Models\MpHttpTransaction.cs" />
     <Compile Remove="MpResolver.cs" />
     <Compile Remove="Utils\MpJsMessageListener.cs" />
     <Compile Remove="Utils\MpSingleton.cs" />

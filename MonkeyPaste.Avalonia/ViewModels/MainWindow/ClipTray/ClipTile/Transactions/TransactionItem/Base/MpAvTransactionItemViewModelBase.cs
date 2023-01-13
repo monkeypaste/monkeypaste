@@ -11,7 +11,7 @@ using System.Transactions;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvClipTileTransactionItemViewModel  : 
+    public class MpAvTransactionItemViewModelBase  : 
         MpViewModelBase<MpAvClipTileTransactionCollectionViewModel>,
         MpITransactionNodeViewModel {
 
@@ -25,7 +25,7 @@ namespace MonkeyPaste.Avalonia {
         public IEnumerable<MpITreeItemViewModel> Children => Items;
         public string LabelText => SourceLabel;
         public object ComparableSortValue => TransactionDateTimeUtc;
-        public object IconSourceObj => SourceIconId;
+        public object IconSourceObj => SourceIconObj;
 
         object MpITransactionNodeViewModel.TransactionModel => Transaction;
 
@@ -37,7 +37,7 @@ namespace MonkeyPaste.Avalonia {
                     return new MpMenuItemViewModel();
                 }
                 return new MpMenuItemViewModel() {
-                    IconId = SourceIconId,
+                    IconSourceObj = SourceIconObj,
                     Header = SourceLabel,
                     SubItems = new List<MpMenuItemViewModel>() {
                         new MpMenuItemViewModel() {
@@ -145,10 +145,10 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         
-        public int SourceIconId {
+        public object SourceIconObj {
             get {
-                if(SourceRef is MpIDbIconId dbi && dbi.IconId > 0) {
-                    return dbi.IconId;
+                if(SourceRef is MpIIconResource dbi && dbi.IconResourceObj != null) {
+                    return dbi.IconResourceObj;
                 }
                 return MpDefaultDataModelTools.ThisAppIconId;
             }
@@ -185,12 +185,12 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public MpCopyItemTransactionType TransactionType {
+        public MpCopyItemSourceType TransactionType {
             get {
-                if(Transaction == null) {
-                    return MpCopyItemTransactionType.None;
+                if(SourceRef == null) {
+                    return MpCopyItemSourceType.None;
                 }
-                return Transaction.TransactionType;
+                return SourceRef.SourceType;
             }
         }
 
@@ -221,22 +221,20 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvClipTileTransactionItemViewModel (MpAvClipTileTransactionCollectionViewModel parent) : base(parent) { }
+        public MpAvTransactionItemViewModelBase (MpAvClipTileTransactionCollectionViewModel parent) : base(parent) { }
 
         #endregion
 
         #region Public Methods
-        public async Task InitializeAsync(MpCopyItemTransaction cit, MpISourceRef sourceRef = null) {
+        public async Task InitializeAsync(MpCopyItemTransaction cit) {
             IsBusy = true;
 
             //_sourceRef = null;
             //CopyItemSource = cis;
             Transaction = cit;
             
-            if(sourceRef == null) {
-                sourceRef = await MpDataModelProvider.GetSourceRefByCopyItemTransactionIdAsync(TransactionId);
-            }
-            SourceRef = sourceRef;
+            var refs = await MpDataModelProvider.GetSourceRefsByCopyItemTransactionIdAsync(TransactionId);
+            SourceRef = refs.FirstOrDefault();
 
             Request = await CreateMessageViewModel(RequestMessageType, RequestJson, this);
             Response = await CreateMessageViewModel(ResponseMessageType, ResponseJson, this);

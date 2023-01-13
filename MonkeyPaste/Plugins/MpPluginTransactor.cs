@@ -82,7 +82,7 @@ namespace MonkeyPaste {
 
                 // PROCESS RESPONSE
                 try {
-                    at.ResponseContent = await MpPluginResponseConverter.ConvertAsync(at, sourceCopyItem, ci_trans_id, suppressWrite);
+                    at.ResponseContent = await MpPluginResponseConverter.ConvertAsync(pluginFormat, at, sourceCopyItem, ci_trans_id, sourceHandler, suppressWrite);
                     return at;
                 }
                 catch (Exception ex) {

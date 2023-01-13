@@ -12,6 +12,7 @@ using CefNet.Avalonia;
 using CefNet.Internal;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Plugin;
 using PropertyChanged;
 using System;
 using System.Collections.Generic;
@@ -460,9 +461,42 @@ namespace MonkeyPaste.Avalonia {
                             await MpPlatformWrapper.Services.SourceRefBuilder
                             .FetchOrCreateSourceAsync(dataTransferCompleted_ntf.dataTransferSourceUrl);
                         if(sourceRef == null) {
+                            // this should always happen right?
+                            Debugger.Break();
                             return;
                         }
-                        ctvm.AddSourceRefAsync(sourceRef).FireAndForgetSafeAsync(ctvm);
+                        string req_json = null;
+                        var dtobj = MpJsonObject.DeserializeBase64Object<MpQuillHostDataItemsMessageFragment>(dataTransferCompleted_ntf.sourceDataItemsJsonStr);
+                        MpPortableDataObject req_mpdo = null;
+                        if (dtobj != null) {
+                            req_mpdo = new MpPortableDataObject(dtobj.dataItems.ToDictionary(x => x.format, x => (object)x.data));
+                            req_json = req_mpdo.Serialize();
+                        }
+
+                        string resp_json = null;
+                        if (!string.IsNullOrEmpty(dataTransferCompleted_ntf.changeDeltaJsonStr)) {
+                            resp_json = dataTransferCompleted_ntf.changeDeltaJsonStr.ToStringFromBase64();
+                        }
+                        var cit = await MpCopyItemTransaction.CreateAsync(
+                            copyItemId: ctvm.CopyItemId,
+                            reqMsgType: MpJsonMessageFormatType.DataObject,
+                            reqMsgJsonStr: req_json,
+                            respMsgType: MpJsonMessageFormatType.Delta,
+                            respMsgJsonStr: resp_json);
+
+                        if (sourceRef != null) {
+                            // NOTE adding whatever provided source is first so its sorted as primary if req dataobject has others
+                            await MpPlatformWrapper.Services.SourceRefBuilder.AddTransactionSourcesAsync(
+                                cit.Id,
+                                new[] { sourceRef });
+                        }
+
+                        if (req_mpdo != null) {
+                            var other_refs = await MpPlatformWrapper.Services.SourceRefBuilder.GatherSourceRefsAsync(req_mpdo);
+                            await MpPlatformWrapper.Services.SourceRefBuilder.AddTransactionSourcesAsync(
+                                cit.Id,
+                                other_refs);
+                        }
                     }
                     break;
 

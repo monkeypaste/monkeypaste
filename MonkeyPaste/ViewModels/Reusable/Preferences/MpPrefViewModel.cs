@@ -667,21 +667,24 @@ namespace MonkeyPaste {
                 }
             } else {
                 // TODO remove this later only to automate restoring test db and preferences
-                string execute_path = Assembly.GetExecutingAssembly().Location;
-                string execute_dir = Path.GetDirectoryName(execute_path);
-                string backup_path = Path.Combine(MpCommonHelpers.GetSolutionDir(), "db", "backup");
-                if(_osInfo.OsType == MpUserDeviceType.Windows) {
-                    backup_path = Path.Combine(backup_path, "win");
-                    File.Copy(Path.Combine(backup_path, "mp_win.db"), Path.Combine(execute_dir, "mp_win.db"));
-                    File.Copy(Path.Combine(backup_path, "pref_win.json"), Path.Combine(execute_dir, "pref_win.json"));
-                } else if (_osInfo.OsType == MpUserDeviceType.Linux) {
-                    backup_path = Path.Combine(backup_path, "x11");
-                    File.Copy(Path.Combine(backup_path, "mp_x11.db"), Path.Combine(execute_dir, "mp_x11.db"));
-                    File.Copy(Path.Combine(backup_path, "pref_x11.json"), Path.Combine(execute_dir, "pref_x11.json"));
-                }
-                MpConsole.WriteLine("Debug Settings restored from " + backup_path + " reinitializing...");
-                await InitAsync(_prefPath, _dbInfo, _osInfo);
-                return;
+
+                //string db_ext = _dbInfo.DbExtension;
+                //string execute_path = Assembly.GetExecutingAssembly().Location;
+                //string execute_dir = Path.GetDirectoryName(execute_path);
+                //string backup_path = Path.Combine(MpCommonHelpers.GetSolutionDir(), "db", "backup");
+                //if(_osInfo.OsType == MpUserDeviceType.Windows) {
+                //    backup_path = Path.Combine(backup_path, "win");
+                //    File.Copy(Path.Combine(backup_path, $"mp_win.{db_ext}"), Path.Combine(execute_dir, $"mp_win.{db_ext}"));
+                //    File.Copy(Path.Combine(backup_path, "pref_win.json"), Path.Combine(execute_dir, "pref_win.json"));
+                //} else if (_osInfo.OsType == MpUserDeviceType.Linux) {
+                //    backup_path = Path.Combine(backup_path, "x11");
+                //    File.Copy(Path.Combine(backup_path, $"mp_x11.{db_ext}"), Path.Combine(execute_dir, $"mp_x11.{db_ext}"));
+                //    File.Copy(Path.Combine(backup_path, "pref_x11.json"), Path.Combine(execute_dir, "pref_x11.json"));
+                //}
+                //MpConsole.WriteLine("Debug Settings restored from " + backup_path + " reinitializing...");
+                //await InitAsync(_prefPath, _dbInfo, _osInfo);
+                //return;
+                Instance = new MpPrefViewModel();
             }
 
             IsLoading = true;

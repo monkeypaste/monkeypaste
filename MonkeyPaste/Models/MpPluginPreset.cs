@@ -32,8 +32,10 @@ namespace MonkeyPaste {
         int MpISourceRef.SourceObjId => Id;
 
         [Ignore]
-        MpCopyItemSourceType MpISourceRef.SourceType => MpCopyItemSourceType.Plugin;
+        MpCopyItemSourceType MpISourceRef.SourceType => MpCopyItemSourceType.AnalyzerPreset;
 
+        [Ignore]
+        public object IconResourceObj => IconId;
         #endregion
 
         #region Columns
@@ -257,18 +259,6 @@ namespace MonkeyPaste {
                 delete_tasks.AddRange(pppvl.Select(x => x.DeleteFromDatabaseAsync()));
             }
 
-            
-            var pptl = await MpDataModelProvider.GetPluginPresetTransactionsByPresetId(Id);
-            if (pptl != null && pptl.Count > 0) {
-                delete_tasks.AddRange(pptl.Cast<MpDbModelBase>().Select(x => x.DeleteFromDatabaseAsync()));
-
-                var citl = await 
-                    MpDataModelProvider.GetCopyItemTransactionsByTransactionTypeIdPairAsync(
-                        pptl.Select(x=>new KeyValuePair<MpCopyItemTransactionType, int>(x.TransactionType,x.PresetId)));
-                if (citl != null && citl.Count > 0) {
-                    delete_tasks.AddRange(citl.Select(x => x.DeleteFromDatabaseAsync()));
-                }
-            }
 
             if (IconId > 0) {
                 var icon = await MpDataModelProvider.GetItemAsync<MpIcon>(IconId);

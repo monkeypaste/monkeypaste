@@ -55,7 +55,7 @@ namespace MonkeyPaste {
         #region MpIPluginPresetTransaction Implementation
 
         [Ignore]
-        MpCopyItemTransactionType MpIPluginPresetTransaction.TransactionType => MpCopyItemTransactionType.Cli;
+        MpCopyItemSourceType MpIPluginPresetTransaction.TransactionType => MpCopyItemSourceType.Cli;
 
         #endregion
 
