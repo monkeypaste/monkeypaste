@@ -52,10 +52,12 @@ namespace MonkeyPaste.Avalonia {
                     //var kmf = MpAvShortcutCollectionViewModel.Instance.GlobalKeyModifierFlags;
                     //var pe = MpAvPointerInputHelpers.SimulatePointerEventArgs(ds as Control, gmp, kmf);
                     await MpAvDocumentDragHelper.PerformDragAsync(ds, ds.LastPointerPressedEventArgs, allowedOps.ToDragDropEffects());
-                    
+
+                    browser.Host.DragSourceEndedAt(0, 0, CefDragOperationsMask.None);
+                    browser.Host.DragSourceSystemDragEnded();
                 });
             }
-            return false;            
+            return true;            
         }
         protected override void OnBeforeContextMenu(CefBrowser browser, CefFrame frame, CefContextMenuParams menuParams, CefMenuModel model) {
             // ensure default cefnet context menu is empty

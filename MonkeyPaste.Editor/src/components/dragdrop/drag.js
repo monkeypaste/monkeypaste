@@ -16,6 +16,7 @@ function initDrag() {
     for (var i = 0; i < DragItemElms.length; i++) {
         let item = DragItemElms[i];
         item.addEventListener('dragstart', onDragStart, true);
+        item.addEventListener('drag', onDrag, true);
         item.addEventListener('dragend', onDragEnd);
     }
 }
@@ -105,7 +106,9 @@ function onDragStart(e) {
     }
     return true;
 }
+function onDrag(e) {
 
+}
 function onDragEnd(e) {
     log('drag end');
     updateWindowMouseState(e);

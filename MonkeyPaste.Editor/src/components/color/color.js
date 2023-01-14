@@ -197,19 +197,24 @@ function cleanHexColor(rgb_Or_rgba_Or_colorName_Or_hex_Str, forceOpacity, ignore
     return rgbaToHex(rgba, ignoreAlpha);
 }
 
-function cleanColor(rgb_Or_rgba_Or_colorName_Or_hex_Str, forceOpacity) {
+function cleanColor(rgb_Or_rgba_Or_colorName_Or_hex_Str, forceOpacity, outputType = 'rgbaObj') {
     if (!rgb_Or_rgba_Or_colorName_Or_hex_Str) {
         return { r: 0, g: 0, b: 0, a: 0 };
     }
     let color = parseRgba(rgb_Or_rgba_Or_colorName_Or_hex_Str);
-    if (forceOpacity) {
+    if (forceOpacity !== undefined && forceOpacity != null) {
         color.a = forceOpacity;
     }
+    if (outputType == 'rgbaObj') {
+        return color;
+    }
+    if (outputType == 'rgbaStyle') {
+        return rgbaToRgbaStyle(color);
+    }
+    if (outputType == 'hex') {
+        return rgbaToHex()
+    }
     return color;
-}
-function cleanColorStyle(rgb_Or_rgba_Or_colorName_Hex_Str, forceOpacity) {
-    let color = cleanColor(rgb_Or_rgba_Or_colorName_Hex_Str, forceOpacity);
-    return rgbaToRgbaStyle(color);
 }
 
 function rgbaToCssColor(rgba) {

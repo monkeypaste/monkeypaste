@@ -91,8 +91,10 @@ namespace MonkeyPaste.Common {
         }
         public bool TryGetData<T>(string format, out T data) where T:class {
             if(TryGetData(format, out object dataObj)) {
-                data = dataObj as T;
-                return true;
+                if(dataObj is T) {
+                    data = dataObj as T;
+                    return true;
+                }
             }
             data = default;
             return false;

@@ -10,7 +10,7 @@ using System.Windows.Input;
 using Xamarin.Forms.Internals;
 
 namespace MonkeyPaste.Avalonia {
-    public abstract class MpAvClipTileTransactionItemMessageViewModelBase  : 
+    public abstract class MpAvTransactionMessageViewModelBase  : 
         MpViewModelBase<MpAvTransactionItemViewModelBase>,
         MpITransactionNodeViewModel {
 
@@ -21,7 +21,7 @@ namespace MonkeyPaste.Avalonia {
         object MpITransactionNodeViewModel.TransactionModel => Parent.Transaction;
         public bool IsExpanded { get; set; }
         public MpITreeItemViewModel ParentTreeItem { get; protected set; }
-        public IEnumerable<MpITreeItemViewModel> Children => Items;
+        public IEnumerable<MpITreeItemViewModel> Children => Sources;
         public abstract string LabelText { get; }
         public object ComparableSortValue => ParentTreeItem == null ? 0 : ParentTreeItem.Children.IndexOf(this);
         public object IconSourceObj => null;
@@ -43,13 +43,13 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region View Models
-        public ObservableCollection<MpITransactionNodeViewModel> Items { get; set; }
+        public ObservableCollection<MpAvSourceViewModelBase> Sources { get; set; } = new ObservableCollection<MpAvSourceViewModelBase>();
 
 
         #endregion
 
         #region State
-        public bool IsAnyBusy => IsBusy || (Items != null && Items.Cast<MpAvClipTileTransactionItemMessageViewModelBase>().Any(x => x.IsAnyBusy));
+        public bool IsAnyBusy => IsBusy || (Sources != null && Sources.Cast<MpAvTransactionMessageViewModelBase>().Any(x => x.IsAnyBusy));
         public bool IsHovering { get; set; }
 
         public bool IsSelected { get; set; }
@@ -68,7 +68,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvClipTileTransactionItemMessageViewModelBase(MpAvTransactionItemViewModelBase parent) : base(parent) { }
+        public MpAvTransactionMessageViewModelBase(MpAvTransactionItemViewModelBase parent) : base(parent) { }
 
         #endregion
 

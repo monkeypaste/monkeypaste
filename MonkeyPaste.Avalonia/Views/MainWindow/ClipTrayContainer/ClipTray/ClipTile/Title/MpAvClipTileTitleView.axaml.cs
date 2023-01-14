@@ -25,14 +25,12 @@ namespace MonkeyPaste.Avalonia {
         public MpAvClipTileTitleView() {
             InitializeComponent();
             var sb = this.FindControl<Button>("ClipTileAppIconImageButton");
-            sb.AddHandler(Button.PointerPressedEvent, Sb_PointerPressed);
+            sb.AddHandler(Button.PointerPressedEvent, Sb_PointerPressed, RoutingStrategies.Tunnel);
         }
 
         private void Sb_PointerPressed(object sender, PointerPressedEventArgs e) {
-            if(!e.IsRightPress(e.Source as Control)) {
-                return;
-            }
-            if (this.GetVisualAncestor<MpAvClipTileView>() is MpAvClipTileView ctv &&
+            if (e.KeyModifiers.HasFlag(KeyModifiers.Control) &&
+                this.GetVisualAncestor<MpAvClipTileView>() is MpAvClipTileView ctv &&
                 ctv.GetVisualDescendant<MpAvCefNetWebView>() is MpAvCefNetWebView wv) {
                 wv.ShowDevTools();
             }

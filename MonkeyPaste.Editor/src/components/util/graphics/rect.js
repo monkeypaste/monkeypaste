@@ -1,7 +1,7 @@
 function drawRect(ctx, rect, fill = 'black', stroke = 'black', lineWidth = 0, opacity = 1.0) {
-    let strokStyleStr = cleanColorStyle(stroke, opacity != 1.0 ? opacity : null);
+    let strokStyleStr = cleanColor(stroke, opacity != 1.0 ? opacity : null,'rgbaStyle');
     ctx.strokeStyle = strokStyleStr;
-    let fillStyleStr = cleanColorStyle(fill, opacity != 1.0 ? opacity : null);
+    let fillStyleStr = cleanColor(fill, opacity != 1.0 ? opacity : null,'rgbaStyle');
     ctx.fillStyle = fillStyleStr;
     ctx.lineWidth = lineWidth;
 

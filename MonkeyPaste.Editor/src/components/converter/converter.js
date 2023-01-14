@@ -11,6 +11,7 @@ function initPlainHtmlConverter() {
 	getEditorContainerElement().firstChild.setAttribute('id', 'quill-editor');
 
 	getEditorElement().classList.add('ql-editor-converter');
+	//initConverterMatchers();
 
 	IsConverterLoaded = true;
 	IsLoaded = true;
@@ -18,6 +19,15 @@ function initPlainHtmlConverter() {
 	onInitComplete_ntf();
 }
 
+function initConverterMatchers() {
+	let Delta = Quill.imports.delta;
+	quill.clipboard.addMatcher(Node.ELEMENT_NODE, function (node, delta) {
+		if (node.tagName == 'TABLE') {
+			debugger;
+		}
+		return new Delta().insert(node.data);
+	});
+}
 // #endregion Life Cycle
 
 // #region Getters
@@ -49,39 +59,37 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 	setRootHtml('');
 	quill.update();
 
-	if (formatType == 'text') {
-		//dataStr = unescapeHtml(dataStr);
-		//insertHtml(0, dataStr, 'api');
-		//setRootHtml(encodeHtmlSpecialEntities(dataStr));
-		//insertText(0, dataStr);
-		insertText(0, encodeHtmlSpecialEntities(dataStr), 'silent');
-		//setRootText(encodeHtmlSpecialEntities(dataStr));
-	} else if (formatType == 'html') {
-		//if (dataStr.toLowerCase().indexOf('<p>') < 0) {
-		//	dataStr = '<p>' + dataStr + '</p>';
-		//}
-		//dataStr = unescapeHtml(dataStr);
-		//dataStr = decodeURIComponent(unescapeHtml(encodeURIComponent(dataStr)));
-		// NOTE insertHtml will remove spaces between spans...
-		//insertHtml(0, dataStr, 'api', false);
-		//setRootHtml(dataStr);
+	let qhtml = '';
+	let formatted_delta = '';
 
-		//const delta = quill.clipboard.convert(dataStr);
-		//quill.setContents(delta, 'silent')
+	if (formatType == 'text') {
+		insertText(0, encodeHtmlSpecialEntities(dataStr), 'silent');
+	} else if (formatType == 'rtf2html') {
 		const raw_delta = convertHtmlToDelta(dataStr);
 		setContents(raw_delta);
+
+		quill.update();
+		qhtml = getHtml();
+		// NOTE this maybe only necessary on windows
+		//qhtml = fixHtmlBug1(qhtml);
+		//qhtml = removeUnicode(qhtml);
+		//qhtml = fixUnicode(qhtml);
+		qhtml = forceHtmlBgOpacity(qhtml, bgOpacity);
+
+		formatted_delta = convertHtmlToDelta(qhtml);
+		setRootHtml(qhtml);
+	}else if (formatType == 'html') {
+		insertHtml(0, dataStr, 'user', false);
+		formatted_delta = forceDeltaBgOpacity(getDelta(), bgOpacity);
+		setContents(formatted_delta);
+		qhtml = getHtml();
 	}
 
-	quill.update();
-	let qhtml = getHtml();
-	// NOTE this maybe only necessary on windows
-	//qhtml = fixHtmlBug1(qhtml);
-	//qhtml = removeUnicode(qhtml);
-	//qhtml = fixUnicode(qhtml);
-	qhtml = forceBgOpacity(qhtml, bgOpacity);
-
-	let formatted_delta = convertHtmlToDelta(qhtml);
-	setRootHtml(qhtml);
+	if (isTableInDocument()) {
+		// delta-to-html doesn't convert tables 
+		qhtml = getHtml2();
+	}
+	
 
 	log('');
 	log('RichHtml: ');
@@ -92,7 +100,7 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 	};
 }
 
-function forceBgOpacity(htmlStr, opacity) {
+function forceHtmlBgOpacity(htmlStr, opacity) {
 	let html_doc = DomParser.parseFromString(htmlStr, 'text/html');
 	let elms = html_doc.querySelectorAll(InlineTags.join(", ") + ',' + BlockTags.join(','));
 	for (var i = 0; i < elms.length; i++) {
@@ -106,6 +114,21 @@ function forceBgOpacity(htmlStr, opacity) {
 		continue;
 	}
 	return html_doc.body.innerHTML;
+}
+
+function forceDeltaBgOpacity(delta, opacity) {
+	if (!delta || delta.ops === undefined || delta.ops.length == 0) {
+		return delta;
+	}
+	delta.ops
+		.filter(x => x.attributes !== undefined && x.attributes.background !== undefined)
+		.forEach(x => x.attributes.background = cleanColor(x.attributes.background, 0, 'rgbaStyle'));
+
+	delta.ops
+		.filter(x => x.attributes !== undefined && x.attributes.background !== undefined)
+		.forEach(x => log(x.attributes.background));
+
+	return delta;
 }
 
 function fixHtmlBug1(htmlStr) {

@@ -74,9 +74,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
         
-        public IEnumerable<MpAvClipTileTransactionItemMessageViewModelBase> Items {
+        public IEnumerable<MpAvTransactionMessageViewModelBase> Items {
             get {
-                var items = new List<MpAvClipTileTransactionItemMessageViewModelBase>();
+                var items = new List<MpAvTransactionMessageViewModelBase>();
                 if(Request != null) {
                     items.Add(Request);
                 }
@@ -87,8 +87,8 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public MpAvClipTileTransactionItemMessageViewModelBase Request { get; set; }
-        public MpAvClipTileTransactionItemMessageViewModelBase Response { get; set; }
+        public MpAvTransactionMessageViewModelBase Request { get; set; }
+        public MpAvTransactionMessageViewModelBase Response { get; set; }
 
         #endregion
 
@@ -251,11 +251,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        public async Task<MpAvClipTileTransactionItemMessageViewModelBase> CreateMessageViewModel(MpJsonMessageFormatType jsonFormat, string json, MpITransactionNodeViewModel parentAnnotation) {
+        public async Task<MpAvTransactionMessageViewModelBase> CreateMessageViewModel(MpJsonMessageFormatType jsonFormat, string json, MpITransactionNodeViewModel parentAnnotation) {
             if(string.IsNullOrEmpty(json)) {
                 return null;
             }
-            MpAvClipTileTransactionItemMessageViewModelBase cttimvmb = null;
+            MpAvTransactionMessageViewModelBase cttimvmb = null;
             switch (jsonFormat) {
                 case MpJsonMessageFormatType.DataObject:
                     cttimvmb = new MpAvDataObjectMessageViewModel(this);

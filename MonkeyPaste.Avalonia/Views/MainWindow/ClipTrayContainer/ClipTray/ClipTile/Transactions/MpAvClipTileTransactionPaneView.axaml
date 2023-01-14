@@ -12,11 +12,27 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileTransactionPaneView">
     <Grid RowDefinitions="30,*,Auto">
+        <Grid.Styles>
+            <Style Selector="TreeViewItem /template/ Panel#PART_ExpandCollapseChevronContainer">
+                <Setter Property="Margin"
+                        Value="0" />
+            </Style>
+            <Style Selector="TreeViewItem">
+                <Setter Property="BorderThickness"
+                        Value="1" />
+                <Setter Property="BorderBrush"
+                        Value="Black" />
+                <Setter Property="CornerRadius"
+                        Value="3" />
+                <Setter Property="Padding"
+                        Value="3,1" />
+            </Style>
+        </Grid.Styles>
         <Button Grid.Row="0"
                 Content="Back"
                 Command="{Binding Parent.ToggleTransactionPaneOpenCommand}" />
         <TreeView Grid.Row="1"
-                  Items="{Binding Items}"
+                  Items="{Binding Transactions}"
                   SelectionMode="Multiple,Toggle"
                   SelectedItems="{Binding SelectedItems}"
                   HorizontalAlignment="Stretch"
@@ -24,21 +40,25 @@
             <TreeView.ItemTemplate>
                 <TreeDataTemplate x:DataType="local:MpITransactionNodeViewModel"
                                   ItemsSource="{Binding Children}">
-                    <StackPanel Orientation="Horizontal"
-                                local:MpAvIsHoveringExtension.IsEnabled="True"
-                                local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering}">
-                        <Image VerticalAlignment="Stretch"
+                    <Grid ColumnDefinitions="15,*"
+                          local:MpAvIsHoveringExtension.IsEnabled="True"
+                          local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering}">
+
+                        <Image Grid.Column="0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Stretch"
                                Margin="2"
-                               Width="{Binding $self.Bounds.Height}"
+                               Width="15"
+                               Height="15"
                                Source="{Binding IconSourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}}" />
-                        <TextBlock Foreground="Black"
+                        <TextBlock Grid.Column="1"
+                                   Foreground="Black"
                                    Margin="5,0,0,0"
                                    VerticalAlignment="Center"
-                                   HorizontalAlignment="Left"
+                                   HorizontalAlignment="Stretch"
                                    TextAlignment="Left"
                                    Text="{Binding LabelText}" />
-                    </StackPanel>
-
+                    </Grid>
                 </TreeDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>

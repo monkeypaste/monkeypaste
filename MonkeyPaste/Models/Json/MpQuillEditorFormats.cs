@@ -163,7 +163,6 @@ namespace MonkeyPaste {
         
     }
     public class MpQuillDataTransferCompletedNotification : MpJsonObject {
-        public string dataTransferSourceUrl { get; set; }
         public string changeDeltaJsonStr { get; set; }
         public string sourceDataItemsJsonStr { get; set; }
     }

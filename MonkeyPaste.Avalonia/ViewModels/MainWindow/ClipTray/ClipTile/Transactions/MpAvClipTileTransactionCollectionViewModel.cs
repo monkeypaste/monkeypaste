@@ -1,6 +1,7 @@
 ﻿using Avalonia.Threading;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -22,29 +23,34 @@ namespace MonkeyPaste.Avalonia {
     }
 
     public class MpAvClipTileTransactionCollectionViewModel : 
-        MpAvMultiSelectorViewModelBase<MpAvClipTileViewModel, MpITransactionNodeViewModel> {
+        MpViewModelBase<MpAvClipTileViewModel> {
         #region Private Variables
 
         #endregion
 
         #region Statics
-
         #endregion
 
         #region Properties
 
         #region View Models
 
-        public IEnumerable<MpAvTransactionItemViewModelBase> Transactions =>
-            Items.Where(x => x is MpAvTransactionItemViewModelBase).Cast<MpAvTransactionItemViewModelBase>();
+        public ObservableCollection<MpAvTransactionItemViewModelBase> Transactions { get; set; } = new ObservableCollection<MpAvTransactionItemViewModelBase>();
 
-        public IEnumerable<MpITransactionNodeViewModel> SortedItems =>
-            Items
+        public ObservableCollection<MpITransactionNodeViewModel> SelectedItems { get; set; } = new ObservableCollection<MpITransactionNodeViewModel>();
+        public IEnumerable<MpAvTransactionMessageViewModelBase> Messages =>
+            Transactions.SelectMany(x => x.Items);
+            
+        //public IEnumerable<MpAvTransactionItemViewModelBase> Transactions =>
+        //    Transactions.Where(x => x is MpAvTransactionItemViewModelBase).Cast<MpAvTransactionItemViewModelBase>();
+
+        public IEnumerable<MpAvTransactionMessageViewModelBase> SortedMessages =>
+            Messages
             .OrderByDescending(x => x.ComparableSortValue);
         //.OrderByDescending(x => x.SourcePriority)
         //.ThenByDescending(x=>x.SourceCreatedDateTime);
 
-        public override MpITransactionNodeViewModel PrimaryItem => 
+        public MpITransactionNodeViewModel PrimaryItem => 
             Transactions.OrderBy(x => x.TransactionDateTimeUtc).FirstOrDefault();
 
         #region MpIContextMenuItemViewModel Implementation
@@ -57,7 +63,7 @@ namespace MonkeyPaste.Avalonia {
                 return new MpMenuItemViewModel() {
                     Header = "Transactions",
                     IconResourceKey = "EggImage",
-                    SubItems = SortedItems.Select(x => x.ContextMenuItemViewModel).ToList()
+                    SubItems = SortedMessages.Select(x => x.ContextMenuItemViewModel).ToList()
                 };
             }
         }
@@ -68,7 +74,7 @@ namespace MonkeyPaste.Avalonia {
         #region State
 
         public bool IsTransactionPaneOpen { get; set; } = false;
-        public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsBusy);
+        public bool IsAnyBusy => IsBusy || Transactions.Any(x => x.IsBusy);
 
         #endregion
 
@@ -104,20 +110,20 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitializeAsync(int copyItemId) {
             IsBusy = true;
 
-            Items.Clear();
+            Transactions.Clear();
 
             var ci_transactions = await MpDataModelProvider.GetCopyItemTransactionsByCopyItemIdAsync(copyItemId);
             foreach (var cit in ci_transactions) {
                 var cisvm = await CreateClipTileSourceViewModel(cit);
-                Items.Add(cisvm);
+                Transactions.Add(cisvm);
             }
 
-            while (Items.Any(x=>x.IsAnyBusy)) {
+            while (Transactions.Any(x=>x.IsAnyBusy)) {
                 await Task.Delay(100);
             }
-            OnPropertyChanged(nameof(Items));
+            OnPropertyChanged(nameof(Transactions));
             OnPropertyChanged(nameof(PrimaryItem));
-            OnPropertyChanged(nameof(SortedItems));
+            OnPropertyChanged(nameof(SortedMessages));
 
             IsBusy = false;
         }
@@ -131,8 +137,8 @@ namespace MonkeyPaste.Avalonia {
             if(e is MpCopyItemTransaction cit && cit.CopyItemId == CopyItemId) {
                 Dispatcher.UIThread.Post(async () => {
                     var cisvm = await CreateClipTileSourceViewModel(cit);
-                    Items.Add(cisvm);
-                    OnPropertyChanged(nameof(SortedItems));
+                    Transactions.Add(cisvm);
+                    OnPropertyChanged(nameof(SortedMessages));
                 });
             }
         }

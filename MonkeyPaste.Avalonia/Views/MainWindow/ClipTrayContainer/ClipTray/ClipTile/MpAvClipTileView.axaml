@@ -65,10 +65,13 @@
             <!--  TRANSACTION SPLITTER  -->
 
             <GridSplitter x:Name="TransactionContentSplitter"
+                          DataContext="{Binding TransactionCollectionViewModel}"
                           Grid.Column="1"
                           Grid.Row="0"
                           Grid.RowSpan="3"
-                          IsVisible="{Binding TransactionCollectionViewModel.IsTransactionPaneOpen, FallbackValue=False, TargetNullValue=False}"
+                          Width="2"
+                          Cursor="SizeWestEast"
+                          IsVisible="{Binding IsTransactionPaneOpen, FallbackValue=False, TargetNullValue=False}"
                           HorizontalAlignment="Left"
                           VerticalAlignment="Stretch"
                           Classes="vertical" />

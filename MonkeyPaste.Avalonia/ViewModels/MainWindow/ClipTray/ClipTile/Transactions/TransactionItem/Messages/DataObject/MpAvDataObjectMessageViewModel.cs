@@ -1,6 +1,7 @@
 ﻿using MonkeyPaste;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvDataObjectMessageViewModel  : MpAvClipTileTransactionItemMessageViewModelBase, MpITransactionNodeViewModel {
+    public class MpAvDataObjectMessageViewModel  : MpAvTransactionMessageViewModelBase, MpITransactionNodeViewModel {
 
         #region Interfaces
         #endregion
@@ -19,6 +20,8 @@ namespace MonkeyPaste.Avalonia {
         public object Body { get; }
         public override string LabelText => "Clipboard";
         #region View Models
+
+        public ObservableCollection<MpAvDataObjectItemViewModel> Items { get; set; } = new ObservableCollection<MpAvDataObjectItemViewModel>();
         #endregion
 
         #region State

@@ -341,26 +341,6 @@ namespace MonkeyPaste.Avalonia {
             return new MpAvCefNetWebViewGlue(this);
         }
 
-        protected override void OnGotFocus(GotFocusEventArgs e) {
-            base.OnGotFocus(e);
-            if(BindingContext == null) {
-                return;
-            }
-            if(!BindingContext.IsContentReadOnly) {
-                MpAvMainWindowViewModel.Instance.IsAnyMainWindowTextBoxFocused = true;
-            }
-        }
-
-        protected override void OnLostFocus(RoutedEventArgs e) {
-            base.OnLostFocus(e);
-            if (BindingContext == null) {
-                return;
-            }
-            if (!BindingContext.IsContentReadOnly) {
-                MpAvMainWindowViewModel.Instance.IsAnyMainWindowTextBoxFocused = false;
-            }
-        }
-
         protected override void OnPointerPressed(PointerPressedEventArgs e) {
             base.OnPointerPressed(e);
             LastPointerPressedEventArgs = e;
@@ -456,15 +436,15 @@ namespace MonkeyPaste.Avalonia {
                 case MpAvEditorBindingFunctionType.notifyDataTransferCompleted:
                     ntf = MpJsonObject.DeserializeBase64Object<MpQuillDataTransferCompletedNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillDataTransferCompletedNotification dataTransferCompleted_ntf) {
-                        //MpISourceRef sourceRef = await FindSourceRefFromUrl(dataTransferCompleted_ntf.dataTransferSourceUrl);
-                        MpISourceRef sourceRef = 
-                            await MpPlatformWrapper.Services.SourceRefBuilder
-                            .FetchOrCreateSourceAsync(dataTransferCompleted_ntf.dataTransferSourceUrl);
-                        if(sourceRef == null) {
-                            // this should always happen right?
-                            Debugger.Break();
-                            return;
-                        }
+                        //MpISourceRef sourceRef = 
+                        //    await MpPlatformWrapper.Services.SourceRefBuilder
+                        //    .FetchOrCreateSourceAsync(dataTransferCompleted_ntf.dataTransferSourceUrl);
+
+                        //if(sourceRef == null) {
+                        //    // this should always happen right?
+                        //    Debugger.Break();
+                        //    return;
+                        //}
                         string req_json = null;
                         var dtobj = MpJsonObject.DeserializeBase64Object<MpQuillHostDataItemsMessageFragment>(dataTransferCompleted_ntf.sourceDataItemsJsonStr);
                         MpPortableDataObject req_mpdo = null;
@@ -483,13 +463,6 @@ namespace MonkeyPaste.Avalonia {
                             reqMsgJsonStr: req_json,
                             respMsgType: MpJsonMessageFormatType.Delta,
                             respMsgJsonStr: resp_json);
-
-                        if (sourceRef != null) {
-                            // NOTE adding whatever provided source is first so its sorted as primary if req dataobject has others
-                            await MpPlatformWrapper.Services.SourceRefBuilder.AddTransactionSourcesAsync(
-                                cit.Id,
-                                new[] { sourceRef });
-                        }
 
                         if (req_mpdo != null) {
                             var other_refs = await MpPlatformWrapper.Services.SourceRefBuilder.GatherSourceRefsAsync(req_mpdo);

@@ -97,11 +97,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public async Task<IEnumerable<MpISourceRef>> GatherSourceRefsAsync(MpPortableDataObject mpdo) {
-            // TODO should probably try to limit usage of CefAsciiUrl to giving Editor dataTransfer and pass UriList data as param here
-
+            
             List<MpISourceRef> refs = new List<MpISourceRef>();
-            if (mpdo.ContainsData(MpPortableDataFormats.CefAsciiUrl) &&
-                mpdo.GetData(MpPortableDataFormats.CefAsciiUrl) is byte[] urlBytes &&
+            if (mpdo.TryGetData(MpPortableDataFormats.CefAsciiUrl, out byte[] urlBytes) &&
                 urlBytes.ToDecodedString() is string urlRef) {
                 MpISourceRef sr = await MpPlatformWrapper.Services.SourceRefBuilder.FetchOrCreateSourceAsync(urlRef);
                 if (sr != null) {
@@ -109,10 +107,15 @@ namespace MonkeyPaste.Avalonia {
                     refs.Add(sr);
                 }
             }
-            if (mpdo.ContainsData(MpPortableDataFormats.LinuxUriList) &&
-                mpdo.GetData(MpPortableDataFormats.LinuxUriList) is IEnumerable<string> uril) {
-                var list_refs = await
-                    Task.WhenAll(uril.Select(x => MpPlatformWrapper.Services.SourceRefBuilder.FetchOrCreateSourceAsync(x)));
+            IEnumerable<string> uri_strings = null;
+            if (mpdo.TryGetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, out IEnumerable<string> uril)) {
+                uri_strings = uril;
+            } else if (mpdo.TryGetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, out string uril_str)) {
+                uri_strings = uril_str.SplitNoEmpty("\r\n");
+            }
+            if(uri_strings != null) {
+                var list_refs = await Task.WhenAll(
+                uri_strings.Select(x => MpPlatformWrapper.Services.SourceRefBuilder.FetchOrCreateSourceAsync(x)));
                 refs.AddRange(list_refs);
             }
 

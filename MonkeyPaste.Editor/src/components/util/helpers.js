@@ -21,6 +21,13 @@
     return os;
 }
 
+function splitByNewLine(str) {
+    if (isNullOrEmpty(str)) {
+        return [];
+    }
+    return str.split(/\r?\n/);
+}
+
 function indexOfAll(pt, search_text, case_sensitive = true) {
     let indexes = [];
 

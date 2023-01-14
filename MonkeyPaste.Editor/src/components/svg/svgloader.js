@@ -48,6 +48,6 @@ function setSvgElmColor(svgElm, chex) {
 	//svgElm.style.stroke = chex;
 
 	Array.from(svgElm.querySelectorAll('path, g')).forEach(x => {
-		setElementComputedStyleProp(x, 'fill', cleanColorStyle(chex));
+		setElementComputedStyleProp(x, 'fill', cleanColor(chex, null, 'rgbaStyle'));
 	});
 }

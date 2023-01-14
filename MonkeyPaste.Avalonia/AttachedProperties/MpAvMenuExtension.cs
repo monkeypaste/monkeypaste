@@ -420,7 +420,7 @@ namespace MonkeyPaste.Avalonia {
                         InputGesture = inputGesture,
                         DataContext = mivm,
                         Icon = CreateIcon(mivm),
-                        Items = mivm.SubItems == null ? null : mivm.SubItems.Select(x=>CreateMenuItem(x))
+                        Items = mivm.SubItems == null ? null : mivm.SubItems.Where(x=>x != null && x.IsVisible).Select(x=>CreateMenuItem(x))
                     };
                     mi.PointerEnterItem += MenuItem_PointerEnter;
                     mi.DetachedFromVisualTree += MenuItem_DetachedFromVisualTree;
@@ -580,7 +580,11 @@ namespace MonkeyPaste.Avalonia {
                 }
             };
 
-            _cmInstance.Items = mivm.SubItems.Where(x => x.IsVisible).Select(x => CreateMenuItem(x));
+            if(mivm.SubItems == null || mivm.SubItems.Count == 0) {
+                _cmInstance.Items = new[] { mivm };
+            } else {
+                _cmInstance.Items = mivm.SubItems.Where(x => x != null && x.IsVisible).Select(x => CreateMenuItem(x));
+            }
 
             _cmInstance.DataContext = mivm;
             _cmInstance.PlacementTarget = control;

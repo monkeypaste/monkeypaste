@@ -88,29 +88,6 @@ function getHtml(range) {
 	delta = encodeHtmlEntitiesInDeltaInserts(delta);
 	let htmlStr = convertDeltaToHtml(delta);
 	return htmlStr;
-	//let result = '';
-
-	//let range_content = getDelta(range);
-	//let tempContainer = document.createElement('div');
-	//tempContainer.setAttribute('id', 'tempContainer');
-	//try {
-	//	//let tempToolbar = document.createElement('div');
-	//	//tempToolbar.setAttribute('id', 'tempToolbar');
-	//	let tempQuill = new Quill(tempContainer); //initQuill(tempContainer, tempToolbar);
-
-	//	tempQuill.setContents(range_content);
-	//	let result = tempContainer.querySelector(".ql-editor").innerHTML;
-	//	tempContainer.remove();
-	//	//tempToolbar.remove();
-
-	//	let htmlStr = result;
-	//	let htmlStr_unescaped = unescapeHtml(htmlStr);
-
-	//	result = htmlStr_unescaped;
-	//} catch (ex) {
-	//	debugger;
-	//}
-	//return result;
 }
 
 function getSelectedHtml() {
@@ -120,6 +97,7 @@ function getSelectedHtml() {
 }
 
 function getHtml2(sel) {
+	sel = !sel ? { index: 0, length: getDocLength() } : sel;
 	let dom_range = convertDocRangeToDomRange(sel);
 	if (dom_range) {
 		let div = document.createElement('div');
@@ -208,11 +186,19 @@ function setContents(delta, source = 'api') {
 // #endregion State
 
 // #region Actions
+const TableDeltaAttrbs = [
+	'table-col',
+	'table-cell-line',
+	'row',
+	'rowspan',
+	'colspan'
+];
 
 function convertDeltaToHtml(delta) {
 	function onCustomTagAttributes(op) {
 		//debugger;
 		if (op && op.attributes !== undefined && op.attributes.list !== undefined) {
+			// LIST TYPE
 			let li_type = op.attributes.list;
 			let li_val = '';
 
@@ -222,6 +208,14 @@ function convertDeltaToHtml(delta) {
 				debugger;
 			}
 			return `<li data-list="${li_type}">${li_val}</li>`;
+		}
+
+		if (op && op.attributes !== undefined && TableDeltaAttrbs.some(x=>op.attributes[x] !== undefined)) {
+			// TABLES
+
+			if (op.attributes['table-col'] !== undefined) {
+
+			}
 		}
 	}
 	let cfg = {
@@ -323,6 +317,10 @@ function deleteText(range, source = 'api') {
 }
 
 function insertHtml(docIdx, htmlStr, source = 'api', decodeTemplates = true) {
+	if (!docIdx) {
+		docIdx = 0;
+		setRootHtml('');
+	}
 	quill.clipboard.dangerouslyPasteHTML(docIdx, htmlStr, source);
 	if (decodeTemplates) {
 		// default is true unlike text, since blot's need to be bound to events not sure if thats always right

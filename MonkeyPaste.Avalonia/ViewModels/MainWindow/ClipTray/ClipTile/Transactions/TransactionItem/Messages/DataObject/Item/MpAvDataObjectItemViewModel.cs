@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvDataObjectItemViewModel : MpAvClipTileTransactionItemMessageViewModelBase, MpITransactionNodeViewModel {
+    public class MpAvDataObjectItemViewModel : MpAvTransactionMessageViewModelBase, MpITransactionNodeViewModel {
 
         public override string LabelText => Format;
         public string Format { get; private set; }

@@ -4,6 +4,8 @@ const LOCAL_HOST_URL = 'https://localhost';
 
 const URL_DATA_FORMAT = "uniformresourcelocator";
 
+const URI_LIST_FORMAT = 'text/uri-list';
+
 // #endregion Globals
 
 // #region Life Cycle
@@ -57,8 +59,13 @@ function convertDataTransferToHostDataItems(dt) {
         if (typeof dt.getData(dt.types[i]) !== 'string' && !(dt.getData(dt.types[i]) instanceof String)) {
             dataStr = JSON.stringify(dataStr);
         }
+        let hostFormat = dt.types[i];
+        if (hostFormat.toLowerCase() == 'files') {
+            //debugger;
+            hostFormat = 'FileNames';
+        }
         let di = {
-            format: dt.types[i],
+            format: hostFormat,
             data: dataStr
         };
         host_dimobj.dataItems.push(di);
@@ -84,10 +91,20 @@ function performDataTransferOnContent(
         wasTextChangeSuppressed = true;
     }
 
+    // COLLECT URI SOURCES  (IF AVAILABLE)    
+    let source_urls = [];
+    if (dt.types.includes(URI_LIST_FORMAT)) {
+        let uri_data = dt.getData(URI_LIST_FORMAT);
+        if (typeof uri_data === 'string' || uri_data instanceof String) {
+            source_urls = splitByNewLine(uri_data);
+        } else {
+            // what is uri_data type?
+            debugger;
+        }
+    } 
 
-    // DECODE HTML & URL FRAGMENT SOURCE (IF AVAILABLE)
+    // DECODE HTML & URL FRAGMENT SOURCE (IF AVAILABLE)    
 
-    let source_url = null;
     let dt_html_str = null;
     if (dt.types.includes('html format')) {
         // prefer system html format to get source_url (on windows)
@@ -99,14 +116,21 @@ function performDataTransferOnContent(
     if (dt_html_str != null && isHtmlClipboardFragment(dt_html_str)) {
         let cb_frag = parseHtmlFromHtmlClipboardFragment(dt_html_str);
         dt_html_str = cb_frag.html;
-        source_url = cb_frag.sourceUrl;
+        if (!isNullOrEmpty(cb_frag.sourceUrl)) {
+            source_urls.push(cb_frag.sourceUrl)
+        }
+        //source_url = cb_frag.sourceUrl;
     }
-    // CHECK FOR INTERNAL URL SOURCE
+
+    // CHECK FOR INTERNAL URL SOURCE (internally deprecated but needed on linux (maybe mac too))
 
     if (!source_url && dt.types.includes(URL_DATA_FORMAT)) {
         // TODO (on linux at least) check for moz uri here for source url
         let url_base64 = dt.getData(URL_DATA_FORMAT);
-        source_url = b64_to_utf8(url_base64);
+        let nx_source_url = b64_to_utf8(url_base64);
+        if (!isNullOrEmpty(nx_source_url)) {
+            source_urls.push(nx_source_url);
+        }        
     }
 
     // PERFORM TRANSFER
@@ -176,11 +200,14 @@ function performDataTransferOnContent(
             } else if (transfer_deltas.length == 1) {
                 result_delta = transfer_deltas[0];
             }            
-        } 
+        }
+        if (source_urls.length > 0) {
+            dt.setData(URI_LIST_FORMAT, source_urls.join('\r\n'));
+        }
+        let host_dt_obj = convertDataTransferToHostDataItems(dt);
         onDataTransferCompleted_ntf(
-            source_url,
             result_delta,
-            convertDataTransferToHostDataItems(dt));
+            host_dt_obj);
     }    
 
     if (wasTextChangeSuppressed) {
