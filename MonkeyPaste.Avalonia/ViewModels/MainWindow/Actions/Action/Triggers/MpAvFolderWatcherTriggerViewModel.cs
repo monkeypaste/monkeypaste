@@ -113,7 +113,7 @@ namespace MonkeyPaste.Avalonia {
                             suppressWrite: true);
                         if (!ci.WasDupOnCreate) {
                             // new item, create source ref
-                            //await MpCopyItemSource.CreateAsync(
+                            //await MpTransactionSource.CreateAsync(
                             //    copyItemId: ci.Id,
                             //    sourceObjId: MpDefaultDataModelTools.ThisOsFileManagerAppId,
                             //    sourceType: MpCopyItemSourceType.App);

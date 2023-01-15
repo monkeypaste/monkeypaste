@@ -107,7 +107,7 @@ function performDataTransferOnContent(
 
     let dt_html_str = null;
     if (dt.types.includes('html format')) {
-        // prefer system html format to get source_url (on windows)
+        // prefer system html format to get sourceurl (on windows)
         dt_html_str = b64_to_utf8(dt.getData('html format'));
     } else if (dt.types.includes('text/html')) {
         dt_html_str = dt.getData('text/html');
@@ -119,12 +119,11 @@ function performDataTransferOnContent(
         if (!isNullOrEmpty(cb_frag.sourceUrl)) {
             source_urls.push(cb_frag.sourceUrl)
         }
-        //source_url = cb_frag.sourceUrl;
     }
 
     // CHECK FOR INTERNAL URL SOURCE (internally deprecated but needed on linux (maybe mac too))
 
-    if (!source_url && dt.types.includes(URL_DATA_FORMAT)) {
+    if (dt.types.includes(URL_DATA_FORMAT)) {
         // TODO (on linux at least) check for moz uri here for source url
         let url_base64 = dt.getData(URL_DATA_FORMAT);
         let nx_source_url = b64_to_utf8(url_base64);

@@ -16,14 +16,6 @@
                        VerticalContentAlignment="Stretch"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileView">
     <local:MpAvUserControl.Styles>
-        <Style Selector="PathIcon">
-            <Setter Property="Width"
-                    Value="8" />
-            <Setter Property="Height"
-                    Value="8" />
-            <Setter Property="Foreground"
-                    Value="Black" />
-        </Style>
         <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.IsAnyBusy">
             <Setter Property="Cursor"
                     Value="Wait" />

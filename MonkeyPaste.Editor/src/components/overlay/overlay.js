@@ -134,7 +134,7 @@ function drawTextSelection(ctx) {
         !BlurredSelectionRects &&
         !CurFindReplaceDocRangesRects &&
         !isAppendNotifier()) {
-        return;
+        //return;
 	}
 
 
@@ -160,8 +160,7 @@ function drawTextSelection(ctx) {
                 sel_bg_color = 'salmon';
             }
         }
-    }
-    else if (isSubSelectionEnabled()) {
+    } else if (isSubSelectionEnabled()) {
         if (isEditorToolbarVisible()) {
             if (isSelAtFocusTemplateInsert()) {
                 // hide cursor within focus template

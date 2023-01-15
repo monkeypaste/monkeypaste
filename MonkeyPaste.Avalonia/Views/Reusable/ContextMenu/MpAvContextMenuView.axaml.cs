@@ -14,12 +14,12 @@ using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvContextMenuView : ContextMenu, IStyleable, MpIContextMenuCloser {
-        private static MpAvContextMenuView _instance;
-        public static MpAvContextMenuView Instance => _instance ?? (_instance = new MpAvContextMenuView());
+    public partial class MpAvContextMenuView : ContextMenu, IStyleable {
         Type IStyleable.StyleKey => typeof(ContextMenu);
 
-        public bool IsShowingChildDialog { get; set; } = false;
+        private static MpAvContextMenuView _instance;
+        public static MpAvContextMenuView Instance => _instance ?? (_instance = new MpAvContextMenuView());
+        
 
         public MpAvContextMenuView() {
             InitializeComponent();
@@ -30,51 +30,18 @@ namespace MonkeyPaste.Avalonia {
             (this.VisualRoot as PopupRoot).AttachDevTools();
         }
 
-
-        private void MpAvContextMenuView_ContextMenuOpening(object sender, System.ComponentModel.CancelEventArgs e) {
-            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
-            return;
-        }
-
-        private void MpAvContextMenuView_ContextMenuClosing(object sender, System.ComponentModel.CancelEventArgs e) {
-            //e.Cancel = true;            
-            if (IsShowingChildDialog) {
-                e.Cancel = true;
-                return;
-            }
-            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
-        }
-
-
-        private void ContextMenu_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
-            var mivm = (sender as StyledElement).DataContext as MpMenuItemViewModel;
-            mivm.Command.Execute(mivm.CommandParameter);
-
-            if (mivm.Command != MpPlatformWrapper.Services.CustomColorChooserMenu.SelectCustomColorCommand) {
-                CloseMenu();
-            }
-        }
-
-        public void CloseMenu() {
-            if(IsInitialized && !IsShowingChildDialog) {
-                IsOpen = false;
-            }
-        }
-
-        private void ColorButton_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
-            if(sender is Control control && control.DataContext is MpMenuItemViewModel mivm) {
-                if (!mivm.IsCustomColorButton) {
-                    CloseMenu();
-                }
-            }
-        }
+        //public void CloseMenu() {
+        //    if(IsInitialized && !IsShowingChildDialog) {
+        //        IsOpen = false;
+        //    }
+        //}
 
         private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);
         }
     }
-    [DoNotNotify]
-    public class MpAvMenuItem : MenuItem, IStyleable {
-        //Type IStyleable.StyleKey => typeof(MenuItem);
-    }
+    //[DoNotNotify]
+    //public class MpAvMenuItem : MenuItem, IStyleable {
+    //    //Type IStyleable.StyleKey => typeof(MenuItem);
+    //}
 }

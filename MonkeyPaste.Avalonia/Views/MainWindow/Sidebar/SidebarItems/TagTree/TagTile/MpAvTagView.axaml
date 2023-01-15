@@ -10,13 +10,50 @@
                        x:CompileBindings="True"
                        mc:Ignorable="d"
                        x:Class="MonkeyPaste.Avalonia.MpAvTagView">
-    <Grid x:Name="TagViewContainerDockPanel"
+    <local:MpAvUserControl.Styles>
+        <Style Selector="local|MpAvClipBorder#TagNameBorder">
+            <Setter Property="Background"
+                    Value="{DynamicResource TagTileBgColor}" />
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource TagTileBorderColor}" />
+            <Setter Property="BorderDashArray"
+                    Value="{x:Null}" />
+            <Setter Property="BorderDashOffset"
+                    Value="0" />
+        </Style>
+        <Style Selector="local|MpAvClipBorder#TagNameBorder.isselected">
+            <Setter Property="Background"
+                    Value="{DynamicResource TagTileSelectedBgColor}" />
+        </Style>
+        <Style Selector="local|MpAvClipBorder#TagNameBorder:pointerover:not(.isselected)">
+            <Setter Property="Background"
+                    Value="{DynamicResource TagTileHoverBgColor}" />
+        </Style>
+        <Style Selector="local|MpAvClipBorder#TagNameBorder.contextfocus">
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource TagTileContextFocusBorderColor}" />
+        </Style>
+        <Style Selector="local|MpAvClipBorder#TagNameBorder.dragover">
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource TagTileDragOverBorderColor}" />
+            <Setter Property="BorderDashArray"
+                    Value="2,2" />
+            <Setter Property="BorderDashOffset"
+                    Value="2" />
+        </Style>
+        <Style Selector="local|MpAvClipBorder#TagNameBorder.dragover.dragover_invalid">
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource TagTileDragOverInvalidBorderColor}" />
+        </Style>
+    </local:MpAvUserControl.Styles>
+    <Grid x:Name="TagViewContainerGrid"
           ClipToBounds="False"
           local:MpAvIsHoveringExtension.IsEnabled="True"
           local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
           local:MpAvIsHoveringExtension.HoverCursor="Hand"
           local:MpAvMenuExtension.IsEnabled="True"
           local:MpAvMenuExtension.SelectOnRightClick="False"
+          local:MpAvMenuExtension.IsOpen="{Binding IsContextMenuOpen, Mode=TwoWay}"
           local:MpAvPointerPressCommandExtension.IsEnabled="True"
           local:MpAvPointerPressCommandExtension.RoutingStrategy="Tunnel"
           local:MpAvPointerPressCommandExtension.LeftPressCommand="{Binding SelectTagCommand}"
@@ -24,13 +61,15 @@
           Cursor="Hand"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch"
+          MinWidth="100"
+          MaxWidth="130"
           Height="30">
         <local:MpAvClipBorder x:Name="TagNameBorder"
                               CornerRadius="7"
                               Margin="5,0,0,0"
                               Padding="1"
                               VerticalAlignment="Stretch"
-                              HorizontalAlignment="Left"
+                              HorizontalAlignment="Stretch"
                               MinHeight="20"
                               Classes.islinked="{Binding IsLinkedToSelectedClipTile}"
                               Classes.isselected="{Binding IsSelected}"
@@ -61,25 +100,6 @@
 
                     </local:MpAvClipBorder>
                     <!--  Tag Name TextBox/ Marquee  -->
-                    <!--<Grid Grid.Column="1"
-                          HorizontalAlignment="Left"
-                          Margin="5,0,0,0"
-                          MaxWidth="100">
-                        <local:MpAvMarqueeTextBox x:Name="TagNameTextBox"
-                                                  local:MpAvIsFocusedExtension.IsEnabled="True"
-                                                  local:MpAvIsFocusedExtension.SelectViewModelOnFocus="False"
-                                                  local:MpAvIsFocusedExtension.IsFocused="{Binding IsTagNameTextBoxFocused, Mode=TwoWay}"
-                                                  EditOnFocus="False"
-                                                  CancelEditCommand="{Binding CancelRenameTagCommand}"
-                                                  EndEditCommand="{Binding FinishRenameTagCommand}"
-                                                  IsReadOnly="{Binding IsTagNameReadOnly, Mode=TwoWay}"
-                                                  ReadOnlyForeground="{Binding TagTextHexColor}"
-                                                  Margin="0"
-                                                  Padding="0"
-                                                  BorderThickness="0"
-                                                  FontSize="16"
-                                                  Text="{Binding TagName, Mode=TwoWay}" />
-                    </Grid>-->
                     <Grid Grid.Column="1"
                           HorizontalAlignment="Left"
                           Margin="5,0,0,0"
@@ -94,7 +114,7 @@
                                  local:MpAvMarqueeTextBoxExtension.FinishEditCommand="{Binding FinishRenameTagCommand}"
                                  local:MpAvMarqueeTextBoxExtension.IsReadOnly="{Binding IsTagNameReadOnly, Mode=TwoWay}"
                                  local:MpAvMarqueeTextBoxExtension.ForegroundBrush="{Binding TagTextHexColor}"
-                                 local:MpAvMarqueeTextBoxExtension.Margin="0,2.5,0,0"
+                                 local:MpAvMarqueeTextBoxExtension.Margin="0,0,0,0"
                                  Background="White"
                                  Foreground="Black"
                                  MinHeight="0"

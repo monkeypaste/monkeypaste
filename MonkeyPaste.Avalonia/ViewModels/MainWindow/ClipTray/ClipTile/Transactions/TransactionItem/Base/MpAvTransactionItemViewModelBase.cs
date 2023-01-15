@@ -185,10 +185,10 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public MpCopyItemSourceType TransactionType {
+        public MpTransactionSourceType TransactionType {
             get {
                 if(SourceRef == null) {
-                    return MpCopyItemSourceType.None;
+                    return MpTransactionSourceType.None;
                 }
                 return SourceRef.SourceType;
             }

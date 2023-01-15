@@ -25,19 +25,20 @@ namespace MonkeyPaste {
         #endregion
 
         #region Constants
+
+        [JsonIgnore]
+        public const string STRING_ARRAY_SPLIT_TOKEN = "<&>SPLIT</&>";
+
+        [JsonIgnore]
+        public const string PREF_BACKUP_PATH_EXT = "backup";
+        #endregion
+        #region Statics
         //[JsonIgnore]
         //public const string PREFERENCES_FILE_NAME = "Pref.json";
-        [JsonIgnore]
-        public static string STRING_ARRAY_SPLIT_TOKEN = "<&>SPLIT</&>";
 
         [JsonIgnore]
         public static bool UseEncryption = false;
 
-        #endregion
-
-        #region Statics
-        //[JsonIgnore]
-        //private static MpJsonPreferenceIO _instance;
         [JsonIgnore]
         public static MpPrefViewModel Instance { get; private set; } //=> _instance ?? (new MpJsonPreferenceIO());
 
@@ -45,7 +46,7 @@ namespace MonkeyPaste {
         public static string PreferencesPath => _prefPath;
 
         [JsonIgnore]
-        public static string PreferencesPathBackup => $"{PreferencesPath}.backup";
+        public static string PreferencesPathBackup => $"{PreferencesPath}.{PREF_BACKUP_PATH_EXT}";
 
         #endregion
 

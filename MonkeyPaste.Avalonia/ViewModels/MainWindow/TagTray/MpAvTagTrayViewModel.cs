@@ -19,7 +19,6 @@ namespace MonkeyPaste.Avalonia {
         MpIQueryInfoValueProvider {
         #region Private Variables
         
-        private bool _isSelecting = false;
 
         #endregion
 
@@ -35,17 +34,51 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        //public ObservableCollection<MpAvTagTileViewModel> PinnedItems { get; set; } = new ObservableCollection<MpAvTagTileViewModel>();
-        public IEnumerable<MpAvTagTileViewModel> PinnedItems => Items.Where(x => x.IsModelPinned).OrderBy(x=>x.TagTraySortIdx);
+
+        //public override MpAvTagTileViewModel SelectedItem {
+        //    get {
+        //        if (base.SelectedItem == null && !_isSelecting) {
+        //            // when adding new tag, selection is cleared when new tag is
+        //            // created (doesn't affect query though because SelectTagCommand isn't called,
+        //            // I think its from TreeViewItem.IsSelected binding)
+        //            base.SelectedItem = LastSelectedItem;
+        //        }
+        //        if (Items.Count != 0 && base.SelectedItem == null) {
+        //            // tag should always be set, is _isSelecting not flagging correctly?
+        //            Debugger.Break();
+        //        }
+        //        return base.SelectedItem;
+        //    }
+        //    set {
+        //        if (SelectedItem != value) {
+        //            if (value == null) {
+        //                return;
+        //            }
+        //            base.SelectedItem = value;
+        //        }
+        //    }
+        //}
+        public override MpAvTagTileViewModel SelectedItem {
+            get {
+                return Items.FirstOrDefault(x => x.TagId == SelectedItemId);
+
+            }
+            set {
+                if (value == null) {
+                    // reject no selection
+                    return;
+                }
+                _selectedItemId = value.TagId;
+                Items.ForEach(x => x.IsSelected = x.TagId == _selectedItemId);
+            }
+        }
+
+        public IEnumerable<MpAvTagTileViewModel> PinnedItems => Items.Where(x => x.IsModelPinned).OrderBy(x=>x.PinSortIdx);
 
         public MpAvTagTileViewModel SelectedPinnedItem {
             get => PinnedItems.FirstOrDefault(x => x.IsSelected);
             set {
                 if (value != SelectedPinnedItem) {
-                    //Items.ForEach(x => x.IsSelected = false);
-                    //if (value != null) {
-                    //    value.IsSelected = true;
-                    //}
                     PinnedItems.ForEach(x => x.IsSelected = x == value);
                 }
 }
@@ -112,13 +145,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        private int _selectedItemId;
         public int SelectedItemId {
             // NOTE only used w/ QueryInfo
             get {
-                if(SelectedItem == null) {
-                    return 0;
-                }
-                return SelectedItem.TagId;
+                return _selectedItemId;
             }
             set {
                 //if(SelectedItemId != value) {
@@ -129,6 +160,8 @@ namespace MonkeyPaste.Avalonia {
                 SelectTagCommand.Execute(value);
             }
         }
+
+        public bool IsSelecting { get; private set; } = false;
         //public bool IsNavButtonsVisible => MpAvMainWindowViewModel.Instance.IsHorizontalOrientation && 
         //                                    TagTrayTotalWidth > TagTrayScreenWidth;
         public bool IsNavButtonsVisible { get; private set; } = false;
@@ -232,13 +265,6 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
-            //foreach (var ttvm in Items.Where(x => x.Tag.IsPinned).OrderBy(x => x.TagTraySortIdx)) {
-            //    var pttvm = new MpAvTagTileViewModel(this);
-            //    await pttvm.InitializeAsync(ttvm.Tag);
-            //    pttvm.ParentTreeItem = ttvm.ParentTreeItem;
-            //    PinnedItems.Add(pttvm);
-            //}
-
             Items.CollectionChanged += TagTileViewModels_CollectionChanged;
             //PinnedItems.CollectionChanged += PinnedItems_CollectionChanged;
             //UpdateSortOrder(true);
@@ -246,10 +272,6 @@ namespace MonkeyPaste.Avalonia {
             //Items.FirstOrDefault(x => x.TagId == DefaultTagId).IsSelected = true;
 
             AllTagViewModel.IsExpanded = true;
-
-            //SelectTagCommand.Execute(DefaultTagId);
-
-
             OnPropertyChanged(nameof(Items));
             OnPropertyChanged(nameof(PinnedItems));
             OnPropertyChanged(nameof(RootItems));
@@ -272,7 +294,7 @@ namespace MonkeyPaste.Avalonia {
                 //Items.Sort(x => x.TagSortIdx);
             } else {
                 foreach (var ttvm in Items) {
-                    ttvm.TagSortIdx = Items.IndexOf(ttvm);
+                    ttvm.TreeSortIdx = Items.IndexOf(ttvm);
                 }
             }
         }
@@ -281,7 +303,7 @@ namespace MonkeyPaste.Avalonia {
                 //Items.Sort(x => x.TagSortIdx);
             } else {
                 foreach (var ttvm in PinnedItems) {
-                    ttvm.TagTraySortIdx = PinnedItems.IndexOf(ttvm);
+                    ttvm.PinSortIdx = PinnedItems.IndexOf(ttvm);
                 }
             }
         }
@@ -442,12 +464,15 @@ namespace MonkeyPaste.Avalonia {
                 if(ttvm == null) {
                     return;
                 }
-                ttvm.IsModelPinned = !ttvm.IsModelPinned;
                 if(ttvm.IsModelPinned) {
-                    ttvm.TagTraySortIdx = PinnedItems.Count() - 1;
+                    // unpin
+                    ttvm.PinSortIdx = -1;
                 } else {
-                    ttvm.TagTraySortIdx = -1;
+                    // pin
+                    ttvm.PinSortIdx = PinnedItems.Count() - 1;
                 }
+                OnPropertyChanged(nameof(ttvm.IsModelPinned));
+
                 OnPropertyChanged(nameof(PinnedItems));
                 OnPropertyChanged(nameof(IsNavButtonsVisible));
                 OnPropertyChanged(nameof(TagTrayScreenWidth));
@@ -455,7 +480,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand SelectTagCommand => new MpCommand<object>(
             (args) => {
-                _isSelecting = true;
+                IsSelecting = true;
 
                 int tagId;
                 if (args == null) {
@@ -475,11 +500,9 @@ namespace MonkeyPaste.Avalonia {
                 }
                 ClearTagSelection();
 
-                Items.ForEach(x => x.IsSelected = x.TagId == tagId);
-                //PinnedItems.ForEach(x => x.IsSelected = x.TagId == tagId);
+                _selectedItemId = tagId;
+                Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
 
-                //OnPropertyChanged(nameof(Items));
-                //OnPropertyChanged(nameof(PinnedItems));
                 OnPropertyChanged(nameof(SelectedItem));
                 OnPropertyChanged(nameof(SelectedPinnedItem));
 
@@ -490,14 +513,14 @@ namespace MonkeyPaste.Avalonia {
                 if(MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
                     // last loaded tag is selected in ClipTray OnPostMainWindowLoaded 
                     // which notifies query changed so don't notify
-                    _isSelecting = false;
+                    IsSelecting = false;
                     return;
                 }
-                _isSelecting = false;
+                IsSelecting = false;
 
                 MpAvQueryInfoViewModel.Current.NotifyQueryChanged(true);
             },
-            (args)=>args != null && !_isSelecting);
+            (args)=>args != null && !IsSelecting);
 
 
         #endregion

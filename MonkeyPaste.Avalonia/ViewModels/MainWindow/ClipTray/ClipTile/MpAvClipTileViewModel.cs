@@ -1564,7 +1564,6 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(IsContextMenuOpen):
                     OnPropertyChanged(nameof(TileBorderHexColor));
-                    OnPropertyChanged(nameof(IsContextMenuOpen));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyTileContextMenuOpened));
                     break;
                 case nameof(IsPasting):

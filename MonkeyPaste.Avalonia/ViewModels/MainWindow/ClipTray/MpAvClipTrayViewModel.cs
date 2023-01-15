@@ -1089,21 +1089,9 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IgnoreSelectionReset { get; set; } = false;
 
+        public bool IsFilteringByApp { get; set; } = false;
 
-
-        private bool _isFilteringByApp = false;
-        public bool IsFilteringByApp {
-            get {
-                return _isFilteringByApp;
-            }
-            set {
-                if (_isFilteringByApp != value) {
-                    _isFilteringByApp = value;
-                    OnPropertyChanged(nameof(IsFilteringByApp));
-                }
-            }
-        }
-        public bool IsEmpty => TotalTilesInQuery == 0;
+        public bool IsQueryTrayEmpty => TotalTilesInQuery == 0;
 
         public bool IsPinTrayEmpty => PinnedItems.Count == 0;
 
@@ -1287,7 +1275,7 @@ namespace MonkeyPaste.Avalonia {
             // this keeps track of the first screen visible tile 
             // so when orientation or zoom is changed relative offset is retained
             // in conjunction w/ drop scroll anchor
-            if (IsEmpty) {
+            if (IsQueryTrayEmpty) {
                 _anchor_query_idx = -1;
                 return;
             }
@@ -2414,7 +2402,7 @@ namespace MonkeyPaste.Avalonia {
                  int pin_idx = 0;
                  MpAvClipTileViewModel ctvm_to_pin = null;
                  if (args is MpAvClipTileViewModel) {
-                     // pinning query tray tile from overlay button
+                     // pinning new or query tray tile from overlay button
                      ctvm_to_pin = args as MpAvClipTileViewModel;
                  } else if (args is object[] argParts) {
                      // dnd pin tray drop 
@@ -2818,7 +2806,7 @@ namespace MonkeyPaste.Avalonia {
                     IsBusy = false;
                     IsRequery = false;
                     OnPropertyChanged(nameof(IsAnyBusy));
-                    OnPropertyChanged(nameof(IsEmpty));
+                    OnPropertyChanged(nameof(IsQueryTrayEmpty));
 
 
                     sw.Stop();
@@ -3341,14 +3329,14 @@ namespace MonkeyPaste.Avalonia {
             //    // clone items sources into append item
             //    var aci_sources = await MpDataModelProvider.GetCopyItemSources(aci.Id);
             //    foreach (var aci_source in aci_sources) {
-            //        await MpCopyItemSource.CreateAsync(
+            //        await MpTransactionSource.CreateAsync(
             //               copyItemId: AppendNotifierViewModel.CopyItemId,
             //               sourceObjId: aci_source.SourceObjId,
             //               sourceType: aci_source.CopyItemSourceType);
             //    }
             //    if (aci.WasDupOnCreate) {
             //        // also ref if exisiting item
-            //        await MpCopyItemSource.CreateAsync(
+            //        await MpTransactionSource.CreateAsync(
             //                copyItemId: AppendNotifierViewModel.CopyItemId,
             //                sourceObjId: aci.Id,
             //                sourceType: MpCopyItemSourceType.CopyItem);

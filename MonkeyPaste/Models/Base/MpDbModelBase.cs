@@ -93,6 +93,13 @@ namespace MonkeyPaste {
                 await WriteToDatabaseAsync(MpPrefViewModel.Instance.ThisDeviceGuid);
             }
         }
+        public virtual async Task WriteToDatabaseAsync(bool ignoreTracking = false, bool ignoreSyncing = false) {
+            if (IsSyncing) {
+                await WriteToDatabaseAsync(SyncingWithDeviceGuid, ignoreTracking, ignoreSyncing);
+            } else {
+                await WriteToDatabaseAsync(MpPrefViewModel.Instance.ThisDeviceGuid, ignoreTracking, ignoreSyncing);
+            }
+        }
 
         public virtual async Task DeleteFromDatabaseAsync(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
             if (IsModelReadOnly) {

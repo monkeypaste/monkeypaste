@@ -27,7 +27,6 @@ namespace MonkeyPaste.Avalonia {
             string newColor = String.Empty;
 
             MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
-            MpAvMenuExtension.IsChildDialogOpen = true;
 
             var cpw = new ColorPickerWindow(selectedColor.ToAvColor()) {
                 IsPaletteVisible = true,
@@ -43,7 +42,6 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
             MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
-            MpAvMenuExtension.IsChildDialogOpen = false;
             MpPlatformWrapper.Services.ContextMenuCloser.CloseMenu();
 
             return newColor;

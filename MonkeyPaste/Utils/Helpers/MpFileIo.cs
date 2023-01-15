@@ -301,28 +301,6 @@ namespace MonkeyPaste {
             }
         }
 
-        public static bool DeleteFileOrDirectory(string path, bool recursive = true) {
-            if(File.Exists(path)) {
-                try {
-                    File.Delete(path);
-                } catch(Exception ex) {
-                    MpConsole.WriteTraceLine($"Error deleting '{path}'",ex);
-                    return false;
-                }
-                return true;
-            }
-            if(Directory.Exists(path)) {                
-                try {
-                    Directory.Delete(path, recursive);
-                }
-                catch (Exception ex) {
-                    MpConsole.WriteTraceLine($"Error deleting '{path}'", ex);
-                    return false;
-                }
-                return true;
-            }
-            return false;
-        }
 
         public static bool IsUnderTemporaryFolder(this string path) { 
             if(string.IsNullOrWhiteSpace(path) || !path.IsFileOrDirectory()) {
@@ -496,16 +474,38 @@ namespace MonkeyPaste {
         }
 
         public static bool DeleteFile(string filePath) {
-            if (File.Exists(filePath)) {
+            if (filePath.IsFile()) {
                 try {
                     File.Delete(filePath);
                 }
                 catch (Exception ex) {
-                    MpConsole.WriteTraceLine("MpHelpers.ReadTextFromFile error for filePath: " + filePath + ex.ToString());
+                    MpConsole.WriteTraceLine("DeleteFile error for filePath: " + filePath + ex.ToString());
                     return false;
                 }
             }
             return true;
+        }
+        public static bool DeleteDirectory(string path, bool recursive = true) {
+            if (path.IsDirectory()) {
+                try {
+                    Directory.Delete(path, recursive);
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Error deleting Directory '{path}'", ex);
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+        public static bool DeleteFileOrDirectory(string path, bool recursive = true) {
+            if (path.IsFile()) {
+                return DeleteFile(path);
+            }
+            if(path.IsDirectory()) {
+                return DeleteDirectory(path, recursive);
+            }
+            return false;
         }
 
         public static string WriteTextToFile(string filePath, string text, bool isTemporary) {

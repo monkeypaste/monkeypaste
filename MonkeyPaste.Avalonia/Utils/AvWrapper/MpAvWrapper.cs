@@ -26,7 +26,6 @@ namespace MonkeyPaste.Avalonia {
         public MpIUrlBuilder UrlBuilder { get; set; }
         public MpIAppBuilder AppBuilder { get; set; }
         public MpISourceRefBuilder SourceRefBuilder { get; set; }
-        public MpICustomColorChooserMenu CustomColorChooserMenu { get; set; }
         public MpICustomColorChooserMenuAsync CustomColorChooserMenuAsync { get; set; }
         public MpIKeyboardInteractionService KeyboardInteractionService { get; set; }
         public MpIGlobalTouch GlobalTouch { get; set; }
@@ -69,6 +68,24 @@ namespace MonkeyPaste.Avalonia {
 
             DbInfo = new MpAvDbInfo();
             OsInfo = new MpAvOsInfo();
+
+            if(Program.Args != null) {
+                if (Program.Args.Any(x => x.ToLower() == Program.BACKUP_DATA_ARG)) {
+                    // TODO move reset stuff to that backup folder
+                }
+                if (Program.Args.Any(x => x.ToLower() == Program.RESET_DATA_ARG)) {
+
+                    // delete db, plugin cache, pref and pref.backup
+                    MpFileIo.DeleteFile(DbInfo.DbPath);
+
+                    MpFileIo.DeleteFileOrDirectory(MpPluginLoader.PluginManifestBackupFolderPath);
+                    MpFileIo.DeleteFile(prefPath);
+                    MpFileIo.DeleteFile($"{prefPath}.{MpPrefViewModel.PREF_BACKUP_PATH_EXT}");
+
+                    MpConsole.WriteLine("All data successfully deleted.");
+                }
+            }
+            
             await MpPrefViewModel.InitAsync(prefPath, DbInfo, OsInfo);
 
             MpAvQueryInfoViewModel.Init(MpPrefViewModel.Instance.LastQueryInfoJson);
@@ -83,8 +100,7 @@ namespace MonkeyPaste.Avalonia {
 
             AppCommandManager = new MpAvApplicationCommandManager();
 
-            CustomColorChooserMenu = new MpAvCustomColorChooser();
-            CustomColorChooserMenuAsync = CustomColorChooserMenu as MpICustomColorChooserMenuAsync;
+            CustomColorChooserMenuAsync = new MpAvCustomColorChooser();
 
             PlatformCompatibility = new MpAvPlatformCompatibility();
             PlatformResource = new MpAvPlatformResource();

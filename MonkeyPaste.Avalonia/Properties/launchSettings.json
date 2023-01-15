@@ -11,6 +11,10 @@
         "DISPLAY": "192.168.43.33:0.0"
       },
       "distributionName": ""
+    },
+    "ResetDb": {
+      "commandName": "Project",
+      "commandLineArgs": "resetdata"
     }
   }
 }

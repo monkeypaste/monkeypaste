@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public interface MpISourceRefBuilder {
-        Task<List<MpCopyItemSource>> AddTransactionSourcesAsync(int copyItemTransactionId, IEnumerable<MpISourceRef> transactionSources);
+        Task<List<MpTransactionSource>> AddTransactionSourcesAsync(int copyItemTransactionId, IEnumerable<MpISourceRef> transactionSources);
         Task<MpISourceRef> FetchOrCreateSourceAsync(string uri);
         Task<IEnumerable<MpISourceRef>> GatherSourceRefsAsync(MpPortableDataObject mpdo);
         bool IsAnySourceRejected(IEnumerable<MpISourceRef> refs);

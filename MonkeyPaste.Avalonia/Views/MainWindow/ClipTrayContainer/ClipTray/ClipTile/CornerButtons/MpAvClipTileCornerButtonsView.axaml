@@ -2,6 +2,7 @@
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:pcl="using:MonkeyPaste"
                        x:DataType="local:MpAvClipTileViewModel"
@@ -11,28 +12,80 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileCornerButtonsView">
-    <Grid HorizontalAlignment="Stretch"
+    <local:MpAvUserControl.Resources>
+        <SolidColorBrush x:Key="CornerButtonBgBrush"
+                         Color="Black"
+                         Opacity="0.5" />
+    </local:MpAvUserControl.Resources>
+    <local:MpAvUserControl.Styles>
+        <Style Selector=":is(Button)">
+            <Setter Property="BorderThickness"
+                    Value="0" />
+        </Style>
+        <Style Selector=":is(Button) /template/ ContentPresenter, ToggleButton:checked /template/ ContentPresenter">
+            <Setter Property="Background"
+                    Value="{StaticResource CornerButtonBgBrush}" />
+        </Style>
+
+        <Style Selector=":is(Button) /template/ ContentPresenter">
+            <Setter Property="Background"
+                    Value="Transparent" />
+            <Setter Property="ClipToBounds"
+                    Value="False" />
+            <Setter Property="Width"
+                    Value="20" />
+            <Setter Property="Height"
+                    Value="20" />
+        </Style>
+
+        <Style Selector=":is(Button):pointerover PathIcon">
+            <Setter Property="Foreground"
+                    Value="Gold" />
+        </Style>
+
+        <Style Selector="ToggleButton#HideTitleButton:not(:checked) PathIcon">
+            <Setter Property="Data"
+                    Value="{StaticResource HideSvg}" />
+        </Style>
+        <Style Selector="ToggleButton#HideTitleButton:checked PathIcon">
+            <Setter Property="Data"
+                    Value="{StaticResource ShowSvg}" />
+        </Style>
+
+        <Style Selector="PathIcon">
+            <Setter Property="Width"
+                    Value="10" />
+            <Setter Property="Height"
+                    Value="10" />
+            <Setter Property="Foreground"
+                    Value="AntiqueWhite" />
+        </Style>
+        <Style Selector="ToggleButton:checked PathIcon">
+            <Setter Property="Foreground"
+                    Value="SeaGreen" />
+        </Style>
+    </local:MpAvUserControl.Styles>
+    <Grid Classes.tileHover="{Binding IsHovering}"
+          HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch"
           Margin="2">
-        <!--  Hide Title Button  -->
+        <!--  TL Hide Title Button  -->
 
         <ToggleButton x:Name="HideTitleButton"
                       Classes="noBg noHoverBg"
                       IsChecked="{Binding !IsHeaderAndFooterVisible, Mode=TwoWay}"
                       HorizontalAlignment="Left"
                       VerticalAlignment="Top"
-                      BorderThickness="0"
-                      Background="Transparent">
-            <Grid>
-                <PathIcon IsVisible="{Binding IsHeaderAndFooterVisible}"
-                          Data="{StaticResource HideSvg}" />
-
-                <PathIcon IsVisible="{Binding !IsHeaderAndFooterVisible}"
-                          Data="{StaticResource ShowSvg}" />
-            </Grid>
+                      CornerRadius="0,0,3,0">
+            <ToggleButton.RenderTransform>
+                <TranslateTransform X="-9"
+                                    Y="-9" />
+            </ToggleButton.RenderTransform>
+            <PathIcon HorizontalAlignment="Right"
+                      VerticalAlignment="Bottom" />
         </ToggleButton>
 
-        <!--  Pin Tile Button  -->
+        <!--  TR Pin Tile Button  -->
 
         <ToggleButton x:Name="PinTileButton"
                       Classes="noBg noHoverBg"
@@ -41,56 +94,47 @@
                       IsChecked="{Binding IsPinned}"
                       HorizontalAlignment="Right"
                       VerticalAlignment="Top"
-                      HorizontalContentAlignment="Center"
-                      VerticalContentAlignment="Center"
-                      BorderThickness="0"
-                      Background="Transparent">
-            <ToggleButton.Styles>
-                <Style Selector="ToggleButton:checked /template/ ContentPresenter">
-                    <Setter Property="Background"
-                            Value="Transparent" />
-                </Style>
-                <Style Selector="ToggleButton:checked PathIcon">
-                    <Setter Property="Foreground"
-                            Value="Lime" />
-                </Style>
-            </ToggleButton.Styles>
-            <Grid>
-                <PathIcon Data="{StaticResource PinSvg}" />
-            </Grid>
+                      CornerRadius="0,0,0,3">
+            <ToggleButton.RenderTransform>
+                <TranslateTransform X="9"
+                                    Y="-9" />
+            </ToggleButton.RenderTransform>
+            <PathIcon HorizontalAlignment="Left"
+                      VerticalAlignment="Bottom"
+                      Data="{StaticResource PinSvg}" />
         </ToggleButton>
 
-        <!--  Hotkey Button  -->
+        <!--  BL Hotkey Button  -->
         <Button x:Name="ClipTileHotkeyButton"
                 Classes="noBg noHoverBg"
-                Width="16"
-                Height="16"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
                 Command="{Binding ShowAssignShortcutDialogCommand, Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}"
-                CommandParameter="{Binding}">
-            <PathIcon Data="{StaticResource ControllerOutlineSvg}" />
+                CommandParameter="{Binding}"
+                CornerRadius="0,3,0,0">
+            <Button.RenderTransform>
+                <TranslateTransform X="-9"
+                                    Y="9" />
+            </Button.RenderTransform>
+            <PathIcon HorizontalAlignment="Right"
+                      VerticalAlignment="Top"
+                      Data="{StaticResource ControllerOutlineSvg}" />
         </Button>
 
-        <!--  Edit Toggle Button  -->
+        <!--  BR Edit Toggle Button  -->
         <ToggleButton x:Name="ClipTileToggleEditButton"
                       Classes="noBg noHoverBg"
-                      Width="16"
-                      Height="16"
                       HorizontalAlignment="Right"
                       VerticalAlignment="Bottom"
-                      IsChecked="{Binding !IsContentReadOnly, Mode=TwoWay}">
-            <ToggleButton.Styles>
-                <Style Selector="ToggleButton:checked /template/ ContentPresenter">
-                    <Setter Property="Background"
-                            Value="Transparent" />
-                </Style>
-                <Style Selector="ToggleButton:checked PathIcon">
-                    <Setter Property="Foreground"
-                            Value="Lime" />
-                </Style>
-            </ToggleButton.Styles>
-            <PathIcon Data="{StaticResource PencilOutlineSvg}" />
+                      IsChecked="{Binding !IsContentReadOnly, Mode=TwoWay}"
+                      CornerRadius="3,0,0,0">
+            <ToggleButton.RenderTransform>
+                <TranslateTransform X="9"
+                                    Y="9" />
+            </ToggleButton.RenderTransform>
+            <PathIcon HorizontalAlignment="Left"
+                      VerticalAlignment="Top"
+                      Data="{StaticResource PencilOutlineSvg}" />
         </ToggleButton>
     </Grid>
 </local:MpAvUserControl>

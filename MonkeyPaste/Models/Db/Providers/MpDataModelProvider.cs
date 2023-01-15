@@ -249,25 +249,25 @@ namespace MonkeyPaste {
 
         #endregion MpUrl
 
-        #region MpCopyItemSource
-        public static async Task<MpCopyItemSource> GetCopyItemSourceByMembersAsync(int citid, MpCopyItemSourceType sourceType, int sourceObjId) {
-            string query = $"select * from MpCopyItemSource where fk_MpCopyItemTransactionId=? and e_MpCopyItemSourceType=? and fk_SourceObjId=?";
-            var result = await MpDb.QueryAsync<MpCopyItemSource>(query, citid, sourceType.ToString(), sourceObjId);
+        #region MpTransactionSource
+        public static async Task<MpTransactionSource> GetCopyItemSourceByMembersAsync(int citid, MpTransactionSourceType sourceType, int sourceObjId) {
+            string query = $"select * from MpTransactionSource where fk_MpCopyItemTransactionId=? and e_MpTransactionSourceType=? and fk_SourceObjId=?";
+            var result = await MpDb.QueryAsync<MpTransactionSource>(query, citid, sourceType.ToString(), sourceObjId);
             if (result == null || result.Count == 0) {
                 return null;
             }
             return result[0];
         }
 
-        public static async Task<List<MpCopyItemSource>> GetCopyItemSources(int ciid) {
-            string query = $"select * from MpCopyItemSource where fk_MpCopyItemTransactionId in (select pk_MpCopyItemTransactionId from MpCopyItemTransaction where fk_MpCopyItemId=?)";
-            var result = await MpDb.QueryAsync<MpCopyItemSource>(query,ciid);
+        public static async Task<List<MpTransactionSource>> GetCopyItemSources(int ciid) {
+            string query = $"select * from MpTransactionSource where fk_MpCopyItemTransactionId in (select pk_MpCopyItemTransactionId from MpCopyItemTransaction where fk_MpCopyItemId=?)";
+            var result = await MpDb.QueryAsync<MpTransactionSource>(query,ciid);
             return result;
         }
         
-        public static async Task<List<MpCopyItemSource>> GetCopyItemTransactionSources(int citid) {
-            string query = $"select * from MpCopyItemSource where fk_MpCopyItemTransactionId=?";
-            var result = await MpDb.QueryAsync<MpCopyItemSource>(query,citid);
+        public static async Task<List<MpTransactionSource>> GetCopyItemTransactionSources(int citid) {
+            string query = $"select * from MpTransactionSource where fk_MpCopyItemTransactionId=?";
+            var result = await MpDb.QueryAsync<MpTransactionSource>(query,citid);
             return result;
         }
         #endregion
@@ -275,10 +275,10 @@ namespace MonkeyPaste {
         #region MpCopyItem
 
         public static async Task<List<MpCopyItem>> GetCopyItemsBySourceTypeAndIdAsync(
-            MpCopyItemSourceType sourceType, 
+            MpTransactionSourceType sourceType, 
             int sourceObjId) {
             string query = 
-                $"select fk_MpCopyItemId from MpCopyItemSource where e_MpCopyItemSourceType=='{sourceType.ToString()}' and fk_SourceObjId = ?";
+                $"select fk_MpCopyItemId from MpTransactionSource where e_MpTransactionSourceType=='{sourceType.ToString()}' and fk_SourceObjId = ?";
             var result = await MpDb.QueryAsync<MpCopyItem>(query, sourceObjId);
             return result;
         }
@@ -451,7 +451,7 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public static async Task<List<MpCopyItemTransaction>> GetCopyItemTransactionsByTransactionTypeIdPairAsync(IEnumerable<KeyValuePair<MpCopyItemSourceType,int>> trans_lookup) {
+        public static async Task<List<MpCopyItemTransaction>> GetCopyItemTransactionsByTransactionTypeIdPairAsync(IEnumerable<KeyValuePair<MpTransactionSourceType,int>> trans_lookup) {
             if (trans_lookup == null || trans_lookup.Count() == 0) {
                 return new List<MpCopyItemTransaction>();
             }
@@ -467,19 +467,19 @@ namespace MonkeyPaste {
         #region MpISourceRef
 
         public static async Task<MpISourceRef> GetSourceRefByTransactionTypeAndSourceIdAsync(
-            MpCopyItemSourceType sourceType, int sourceId) {
+            MpTransactionSourceType sourceType, int sourceId) {
             MpISourceRef source_ref;
             switch (sourceType) {
-                case MpCopyItemSourceType.App:
+                case MpTransactionSourceType.App:
                     source_ref = await MpDataModelProvider.GetItemAsync<MpApp>(sourceId);
                     break;
-                case MpCopyItemSourceType.Url:
+                case MpTransactionSourceType.Url:
                     source_ref = await MpDataModelProvider.GetItemAsync<MpUrl>(sourceId);
                     break;
-                case MpCopyItemSourceType.AnalyzerPreset:
+                case MpTransactionSourceType.AnalyzerPreset:
                     source_ref = await MpDataModelProvider.GetItemAsync<MpPluginPreset>(sourceId);
                     break;
-                case MpCopyItemSourceType.CopyItem:
+                case MpTransactionSourceType.CopyItem:
                     source_ref = await MpDataModelProvider.GetItemAsync<MpCopyItem>(sourceId);
                     break;
                 default:

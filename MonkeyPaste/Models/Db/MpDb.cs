@@ -445,7 +445,7 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpCopyItem>();
             await _connectionAsync.CreateTableAsync<MpCopyItemAnnotation>();
             await _connectionAsync.CreateTableAsync<MpCopyItemTag>();
-            await _connectionAsync.CreateTableAsync<MpCopyItemSource>();
+            await _connectionAsync.CreateTableAsync<MpTransactionSource>();
             await _connectionAsync.CreateTableAsync<MpCopyItemTransaction>();
             await _connectionAsync.CreateTableAsync<MpDataObject>();
             await _connectionAsync.CreateTableAsync<MpDataObjectItem>();
@@ -471,60 +471,60 @@ namespace MonkeyPaste {
 CREATE VIEW MpSortableCopyItem_View as
 SELECT 
 	pk_MpCopyItemId as RootId,
-	MpCopyItemSource.fk_SourceObjId as SourceObjId,
-	MpCopyItemSource.e_MpCopyItemSourceType as SourceType,	
+	MpTransactionSource.fk_SourceObjId as SourceObjId,
+	MpTransactionSource.e_MpTransactionSourceType as SourceType,	
 	case 
-		when MpCopyItemSource.e_MpCopyItemSourceType == 'App' 
+		when MpTransactionSource.e_MpTransactionSourceType == 'App' 
 			then 
-				(select AppPath from MpApp where pk_MpAppId == MpCopyItemSource.fk_SourceObjId limit 1)
-		when MpCopyItemSource.e_MpCopyItemSourceType == 'Url' 
+				(select AppPath from MpApp where pk_MpAppId == MpTransactionSource.fk_SourceObjId limit 1)
+		when MpTransactionSource.e_MpTransactionSourceType == 'Url' 
 			then 
-				(select UrlPath from MpUrl where pk_MpUrlId == MpCopyItemSource.fk_SourceObjId limit 1)
-		when MpCopyItemSource.e_MpCopyItemSourceType == 'CopyItem' 
+				(select UrlPath from MpUrl where pk_MpUrlId == MpTransactionSource.fk_SourceObjId limit 1)
+		when MpTransactionSource.e_MpTransactionSourceType == 'CopyItem' 
 			then 
-				'https://localhost?type=copyItem&id=' || MpCopyItemSource.fk_SourceObjId
+				'https://localhost?type=copyItem&id=' || MpTransactionSource.fk_SourceObjId
 		else NULL
 	end as SourcePath,
 	case 
-		when MpCopyItemSource.e_MpCopyItemSourceType == 'App' 
+		when MpTransactionSource.e_MpTransactionSourceType == 'App' 
 			then 
-				(select AppPath from MpApp where pk_MpAppId == MpCopyItemSource.fk_SourceObjId limit 1)
-		when MpCopyItemSource.e_MpCopyItemSourceType == 'Url' 
+				(select AppPath from MpApp where pk_MpAppId == MpTransactionSource.fk_SourceObjId limit 1)
+		when MpTransactionSource.e_MpTransactionSourceType == 'Url' 
 			then 
-				(select UrlTitle from MpUrl where pk_MpUrlId == MpCopyItemSource.fk_SourceObjId limit 1)
-		when MpCopyItemSource.e_MpCopyItemSourceType == 'CopyItem' 
+				(select UrlTitle from MpUrl where pk_MpUrlId == MpTransactionSource.fk_SourceObjId limit 1)
+		when MpTransactionSource.e_MpTransactionSourceType == 'CopyItem' 
 			then 
-				(select Title from MpCopyItem where pk_MpCopyItemId == MpCopyItemSource.fk_SourceObjId limit 1)
+				(select Title from MpCopyItem where pk_MpCopyItemId == MpTransactionSource.fk_SourceObjId limit 1)
 		else NULL
 	end as AppPath,
 	case
-		when MpCopyItemSource.e_MpCopyItemSourceType == 'App' 
+		when MpTransactionSource.e_MpTransactionSourceType == 'App' 
 				then 
-					(select AppName from MpApp where pk_MpAppId == MpCopyItemSource.fk_SourceObjId limit 1)
+					(select AppName from MpApp where pk_MpAppId == MpTransactionSource.fk_SourceObjId limit 1)
 		else NULL
 	end as AppName,
 	case
-		when MpCopyItemSource.e_MpCopyItemSourceType == 'Url' 
+		when MpTransactionSource.e_MpTransactionSourceType == 'Url' 
 				then 
-					(select UrlPath from MpUrl where pk_MpUrlId == MpCopyItemSource.fk_SourceObjId limit 1)
+					(select UrlPath from MpUrl where pk_MpUrlId == MpTransactionSource.fk_SourceObjId limit 1)
 		else NULL
 	end as UrlPath,
 	case
-		when MpCopyItemSource.e_MpCopyItemSourceType == 'Url' 
+		when MpTransactionSource.e_MpTransactionSourceType == 'Url' 
 				then 
-					(select UrlTitle from MpUrl where pk_MpUrlId == MpCopyItemSource.fk_SourceObjId limit 1)
+					(select UrlTitle from MpUrl where pk_MpUrlId == MpTransactionSource.fk_SourceObjId limit 1)
 		else NULL
 	end as UrlTitle,
 	case 
-		when MpCopyItemSource.e_MpCopyItemSourceType == 'App' 
+		when MpTransactionSource.e_MpTransactionSourceType == 'App' 
 			then 
-				(select MachineName from MpUserDevice where pk_MpUserDeviceId in (select fk_MpUserDeviceId from MpApp where pk_MpAppId == MpCopyItemSource.fk_SourceObjId limit 1))
+				(select MachineName from MpUserDevice where pk_MpUserDeviceId in (select fk_MpUserDeviceId from MpApp where pk_MpAppId == MpTransactionSource.fk_SourceObjId limit 1))
 		else NULL
 	end as DeviceName,
 	case 
-		when MpCopyItemSource.e_MpCopyItemSourceType == 'App' 
+		when MpTransactionSource.e_MpTransactionSourceType == 'App' 
 			then 
-				(select e_MpUserDeviceType from MpUserDevice where pk_MpUserDeviceId in (select fk_MpUserDeviceId from MpApp where pk_MpAppId == MpCopyItemSource.fk_SourceObjId limit 1))
+				(select e_MpUserDeviceType from MpUserDevice where pk_MpUserDeviceId in (select fk_MpUserDeviceId from MpApp where pk_MpAppId == MpTransactionSource.fk_SourceObjId limit 1))
 		else NULL
 	end as DeviceType,
 	e_MpCopyItemType,
@@ -544,7 +544,7 @@ SELECT
 FROM
 	MpCopyItem
 INNER JOIN MpCopyItemTransaction ON MpCopyItemTransaction.fk_MpCopyItemId = MpCopyItem.pk_MpCopyItemId
-INNER JOIN MpCopyItemSource ON MpCopyItemSource.fk_MpCopyItemTransactionId = MpCopyItemTransaction.pk_MpCopyItemTransactionId");
+INNER JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId = MpCopyItemTransaction.pk_MpCopyItemTransactionId");
 
         }
 
@@ -553,33 +553,27 @@ INNER JOIN MpCopyItemSource ON MpCopyItemSource.fk_MpCopyItemTransactionId = MpC
 
             await MpDefaultDataModelTools.CreateAsync();
 
+            bool is_ignore_default_tracking = true;
+            bool is_ignore_default_syncing = true;
+
             #region Tags
-
-            await AddItemAsync<MpTag>(new MpTag() {
-                TagGuid = Guid.Parse("df388ecd-f717-4905-a35c-a8491da9c0e3"),
-                TagName = "All",
-                HexColor = Color.Blue.ToHex(),
-                TagSortIdx = 1,
-                IsPinned = true
-            }, "", true, true);
-
-            await AddItemAsync<MpTag>(new MpTag() {
-                TagGuid = Guid.Parse("54b61353-b031-4029-9bda-07f7ca55c123"),
-                ParentTagId = 1,
-                TagName = "Favorites",
-                HexColor = Color.Yellow.ToHex(),
-                TagSortIdx = 2,
-                IsPinned = true
-            }, "", true, true);
-
-            var helpTag = new MpTag() {
-                TagGuid = Guid.Parse("a0567976-dba6-48fc-9a7d-cbd306a4eaf3"),
-                TagName = "Help",
-                HexColor = Color.Orange.ToHex(),
-                TagSortIdx = 3,
-                IsPinned = true
+            var default_tags = new object[] {
+                new object[] { "df388ecd-f717-4905-a35c-a8491da9c0e3", "All", Color.Blue.ToHex(), 0,0, is_ignore_default_tracking,is_ignore_default_syncing, 0},
+                new object[] { "54b61353-b031-4029-9bda-07f7ca55c123", "Favorites", Color.Yellow.ToHex(),0,1,is_ignore_default_tracking,is_ignore_default_syncing, MpTag.AllTagId},
+                new object[] { "a0567976-dba6-48fc-9a7d-cbd306a4eaf3", "Help", Color.Orange.ToHex(),1,2,is_ignore_default_tracking,is_ignore_default_syncing, 0},
             };
-            await AddItemAsync<MpTag>(helpTag, "", true, true);
+            for (int i = 0; i < default_tags.Length; i++) {
+                var t = (object[])default_tags[i];
+                await MpTag.CreateAsync(
+                    guid: t[0].ToString(),
+                    tagName: t[1].ToString(),
+                    hexColor: t[2].ToString(),
+                    treeSortIdx: (int)t[3],
+                    pinSortIdx: (int)t[4],
+                    ignoreTracking: (bool)t[5],
+                    ignoreSyncing: (bool)t[6],
+                    parentTagId: (int)t[7]);
+            }
 
             #endregion
 

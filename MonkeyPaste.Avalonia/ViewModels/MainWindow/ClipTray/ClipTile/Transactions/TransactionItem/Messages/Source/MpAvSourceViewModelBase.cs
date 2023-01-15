@@ -59,7 +59,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Model
         
-        public MpCopyItemSource Source { get; set; }
+        public MpTransactionSource Source { get; set; }
 
         #endregion
 

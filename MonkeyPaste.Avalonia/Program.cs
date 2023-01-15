@@ -8,6 +8,8 @@ namespace MonkeyPaste.Avalonia
 {
     internal class Program
     {
+        public const string RESET_DATA_ARG = "resetdata";
+        public const string BACKUP_DATA_ARG = "backupdata";
         public static string[] Args { get; private set; }
         // Initialization code. Don't use any Avalonia, third-party APIs or any
         // SynchronizationContext-reliant code before AppMain is called: things aren't initialized

@@ -30,11 +30,11 @@ namespace MonkeyPaste {
 
        
 
-        [Column("SortIdx")]
-        public int TagSortIdx { get; set; } = -1;
+        [Column("TreeSortIdx")]
+        public int TreeSortIdx { get; set; } = -1;
 
         [Column("TraySortIdx")]
-        public int TagTraySortIdx { get; set; } = -1;
+        public int PinSortIdx { get; set; } = -1;
 
 
         [Column("HexColor")]
@@ -42,17 +42,6 @@ namespace MonkeyPaste {
 
         public string TagName { get; set; } = string.Empty;
 
-        public int Pinned { get; set; } = 0;
-
-        #endregion
-
-        #region Fk Models
-        //[ManyToMany(typeof(MpCopyItemTag))]
-        [Ignore]
-        public List<MpCopyItem> CopyItems { get; set; } = new List<MpCopyItem>();
-
-        //[OneToMany]
-        //public List<MpShortcut> Shortcuts { get; set; }
         #endregion
 
         #region Properties
@@ -70,36 +59,38 @@ namespace MonkeyPaste {
             }
         }
 
-        [Ignore]
-        public bool IsPinned {
-            get => Pinned == 1;
-            set => Pinned = value == true ? 1:0;
-        }
-
         #endregion
 
         #region Statics
 
-        public static async Task<MpTag> Create(
+        public static async Task<MpTag> CreateAsync(
+            int id = 0,
+            string guid = "",
             string tagName = "Untitled", 
-            int sortIdx = -1,
+            int treeSortIdx = -1,
+            int pinSortIdx = -1,
             int parentTagId = 0, 
-            string hexColor = "") {
+            string hexColor = "",
+            bool ignoreTracking = false,
+            bool ignoreSyncing = false) { 
             hexColor = string.IsNullOrEmpty(hexColor) ? MpHelpers.GetRandomColor().ToHex() : hexColor;
-            if(sortIdx < 0) {
+            if(treeSortIdx < 0) {
                 if(parentTagId <= 0) {
-                    sortIdx = 0;
+                    treeSortIdx = 0;
                 } else {
-                    sortIdx = await MpDataModelProvider.GetChildTagCountAsync(parentTagId);
+                    treeSortIdx = await MpDataModelProvider.GetChildTagCountAsync(parentTagId);
                 }
             }
             MpTag newTag = new MpTag() {
+                Id = id,
+                TagGuid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid() : System.Guid.Parse(guid),
                 TagName = tagName,
                 HexColor = hexColor,
-                TagSortIdx = sortIdx,
+                TreeSortIdx = treeSortIdx,
+                PinSortIdx = pinSortIdx,
                 ParentTagId = parentTagId
             };
-            await newTag.WriteToDatabaseAsync();
+            await newTag.WriteToDatabaseAsync(ignoreTracking,ignoreSyncing);
             return newTag;
         }
 

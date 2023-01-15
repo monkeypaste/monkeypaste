@@ -28,15 +28,12 @@ namespace MonkeyPaste.Avalonia {
 
         private static List<MenuItem> openSubMenuItems = new List<MenuItem>();
 
-        public static bool IsChildDialogOpen { get; set; } = false;
 
-        public static bool IsOpen => _cmInstance != null && _cmInstance.IsOpen;
         public static void CloseMenu() {
             if (_cmInstance == null) {
                 return;
             }
             _cmInstance.Close();
-            //_cmInstance = null;
         }
 
         static MpAvMenuExtension() {
@@ -211,6 +208,9 @@ namespace MonkeyPaste.Avalonia {
             if (e.NewValue is bool isEnabledVal && isEnabledVal) {
                 if (_cmInstance == null) {
                     _cmInstance = new MpAvContextMenuView();
+                    //_cmInstance.GetObservable(MpAvContextMenuView.IsOpenProperty).Subscribe(value => OnIsOpenChanged());
+                    _cmInstance.MenuOpened += (s, e) => OnIsOpenChanged();
+                    _cmInstance.MenuClosed += (s, e) => OnIsOpenChanged();
                 }
                 if (element is Control control) {
                     if (control.IsInitialized) {
@@ -224,6 +224,27 @@ namespace MonkeyPaste.Avalonia {
                 HostControl_DetachedToVisualHandler(element, null);
             }
 
+
+        }
+
+        private static void OnIsOpenChanged() {
+            var control = _cmInstance.PlacementTarget;
+            if(control == null) {
+                Debugger.Break();
+            }
+            bool is_open = _cmInstance.IsOpen;
+            if (control.DataContext is MpIContextMenuViewModel cmvm) {
+                cmvm.IsContextMenuOpen = is_open;
+            }
+            if (control.DataContext is MpIPopupMenuViewModel pumvm) {
+                pumvm.IsPopupMenuOpen = is_open;
+            }
+            SetIsOpen(control, is_open);
+            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = is_open;
+            if(!is_open) {
+                control.ContextMenu = null;
+                openSubMenuItems.Clear();
+            }
 
         }
 
@@ -316,11 +337,9 @@ namespace MonkeyPaste.Avalonia {
             MenuItem mi = null;
             if (e.Source is IVisual sourceVisual &&
                 sourceVisual.GetVisualAncestor<MenuItem>() is MenuItem smi) {
-                //MpConsole.WriteLine("Released (source): " + mi);
                 mi = smi;
             } else if (sender is MenuItem sender_mi) {
                 mi = sender_mi;
-                //MpConsole.WriteLine("Released (sender): " + mi);
             }
             if (mi == null) {
                 return;
@@ -329,7 +348,6 @@ namespace MonkeyPaste.Avalonia {
             if (mivm == null) {
                 return;
             }
-
 
             bool hide_on_click = GetHideOnClick(_cmInstance.PlacementTarget);
             if (mivm.ContentTemplateName == MpMenuItemViewModel.CHECKABLE_TEMPLATE_NAME) {
@@ -546,39 +564,6 @@ namespace MonkeyPaste.Avalonia {
             PlacementMode placement = 
             PlacementMode.AnchorAndGravity) {
             offset = offset == null ? MpPoint.Zero : offset;
-            CancelEventHandler onOpenHandler = null;
-            CancelEventHandler onCloseHandler = null;
-
-            onCloseHandler = (s, e1) => {
-                if(IsChildDialogOpen) {
-                    e1.Cancel = true;
-                    return;
-                }
-                if (control.DataContext is MpIContextMenuViewModel cmvm) {
-                    cmvm.IsContextMenuOpen = false;
-                }
-                if (control.DataContext is MpIPopupMenuViewModel pumvm) {
-                    pumvm.IsPopupMenuOpen = false;
-                }
-                SetIsOpen(control, false);
-                MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
-                _cmInstance.ContextMenuClosing -= onCloseHandler;
-                _cmInstance.ContextMenuOpening -= onOpenHandler;
-                control.ContextMenu = null;
-                openSubMenuItems.Clear();
-            };
-
-            onOpenHandler = (s, e1) => {
-                e1.Cancel = false;
-                SetIsOpen(control, true);
-                MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
-                if (control.DataContext is MpIContextMenuViewModel cmvm) {
-                    cmvm.IsContextMenuOpen = true;
-                }
-                if (control.DataContext is MpIPopupMenuViewModel pumvm) {
-                    pumvm.IsPopupMenuOpen = true;
-                }
-            };
 
             if(mivm.SubItems == null || mivm.SubItems.Count == 0) {
                 _cmInstance.Items = new[] { mivm };
@@ -595,15 +580,11 @@ namespace MonkeyPaste.Avalonia {
                 _cmInstance.VerticalOffset = offset.Y;
             }
 
-            _cmInstance.ContextMenuOpening += onOpenHandler;
-            _cmInstance.ContextMenuClosing += onCloseHandler;
-
             var w = control.GetVisualAncestor<Window>();
             if (w == null) {
                 Debugger.Break();
             }
             _cmInstance.Open(w);
-            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
         }
 
         // unused

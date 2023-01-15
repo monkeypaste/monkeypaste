@@ -60,13 +60,6 @@
                     0,0,0,0
                 </Thickness>
             </ListBox.Resources>
-            <ListBox.Styles>
-                <Style Selector="ListBoxItem"
-                       x:DataType="local:MpAvTagTileViewModel">
-                    <!--<Setter Property="IsSelected"
-                            Value="{Binding IsSelected, Mode=TwoWay}" />-->
-                </Style>
-            </ListBox.Styles>
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel Orientation="Horizontal"

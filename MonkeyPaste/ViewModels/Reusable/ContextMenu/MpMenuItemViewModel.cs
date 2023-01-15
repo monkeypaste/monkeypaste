@@ -343,7 +343,7 @@ namespace MonkeyPaste {
                         // if selected color is custom make background of custom icon that color (default white)
                         header = selectedHexStr;
                     }
-                    command = MpPlatformWrapper.Services.CustomColorChooserMenu.SelectCustomColorCommand;
+                    command = MpPlatformWrapper.Services.CustomColorChooserMenuAsync.SelectCustomColorCommand;
                     commandArg = ucvm;
                 } else {
                     command = SetColorCommand;

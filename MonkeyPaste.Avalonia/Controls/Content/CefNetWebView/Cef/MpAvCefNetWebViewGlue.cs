@@ -22,13 +22,25 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvCefNetWebViewGlue(WebView view) : base(view) {
         }
-
+        //
+        // Summary:
+        //     Called when the browser component is requesting focus. Return false to allow
+        //     the focus to be set or true to cancel setting the focus.
+        //
+        // Parameters:
+        //   browser:
+        //
+        //   source:
+        //     Indicates where the focus request is originating from.
+        //
+        // Returns:
+        //     Return false to allow the focus to be set or true to cancel setting the focus.
         protected override bool OnSetFocus(CefBrowser browser, CefFocusSource source) {
             if (source == CefFocusSource.Navigation) {
-                return true;
+                return false;
             }
             
-            return false;
+            return true;
         }
 
         /// <summary>

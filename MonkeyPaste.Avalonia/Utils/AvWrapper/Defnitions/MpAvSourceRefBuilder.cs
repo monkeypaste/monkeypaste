@@ -1,4 +1,5 @@
-﻿using Google.Apis.PeopleService.v1.Data;
+﻿using Avalonia.Controls;
+using Google.Apis.PeopleService.v1.Data;
 using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
@@ -56,7 +57,7 @@ namespace MonkeyPaste.Avalonia {
                 Debugger.Break();
                 return null;
             }
-            MpCopyItemSourceType source_type = param_lookup["type"].ToEnum<MpCopyItemSourceType>();
+            MpTransactionSourceType source_type = param_lookup["type"].ToEnum<MpTransactionSourceType>();
             int source_id = param_lookup.ContainsKey("id") ? int.Parse(param_lookup["id"]) : 0;
             string ci_public_handle = param_lookup.ContainsKey("handle") ? param_lookup["handle"] : null;
 
@@ -65,7 +66,7 @@ namespace MonkeyPaste.Avalonia {
                 Debugger.Break();
                 return null;
             }
-            if(source_type == MpCopyItemSourceType.CopyItem &&
+            if(source_type == MpTransactionSourceType.CopyItem &&
                 !string.IsNullOrWhiteSpace(ci_public_handle)) {
                 var ctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle.ToLower() == ci_public_handle.ToLower());
                 if (ctvm == null) {
@@ -80,14 +81,14 @@ namespace MonkeyPaste.Avalonia {
             return result;
         }
 
-        public async Task<List<MpCopyItemSource>> AddTransactionSourcesAsync(
+        public async Task<List<MpTransactionSource>> AddTransactionSourcesAsync(
             int copyItemTransactionId, IEnumerable<MpISourceRef> transactionSources) {
             if(transactionSources == null) {
                 return null;
             }
-            var sources = new List<MpCopyItemSource>();
+            var sources = new List<MpTransactionSource>();
             foreach(var source_ref in transactionSources) {
-                var cis = await MpCopyItemSource.CreateAsync(
+                var cis = await MpTransactionSource.CreateAsync(
                     transactionId: copyItemTransactionId,
                     sourceObjId: source_ref.SourceObjId,
                     sourceType: source_ref.SourceType);

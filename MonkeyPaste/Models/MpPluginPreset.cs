@@ -32,7 +32,7 @@ namespace MonkeyPaste {
         int MpISourceRef.SourceObjId => Id;
 
         [Ignore]
-        MpCopyItemSourceType MpISourceRef.SourceType => MpCopyItemSourceType.AnalyzerPreset;
+        MpTransactionSourceType MpISourceRef.SourceType => MpTransactionSourceType.AnalyzerPreset;
 
         [Ignore]
         public object IconResourceObj => IconId;

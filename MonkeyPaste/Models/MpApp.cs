@@ -112,7 +112,7 @@ namespace MonkeyPaste {
         int MpISourceRef.SourceObjId => Id;
 
         [Ignore]
-        MpCopyItemSourceType MpISourceRef.SourceType => MpCopyItemSourceType.App;
+        MpTransactionSourceType MpISourceRef.SourceType => MpTransactionSourceType.App;
 
         #endregion
 

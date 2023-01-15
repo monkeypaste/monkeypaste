@@ -36,7 +36,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public IEnumerable<MpAvTagTileViewModel> SortedItems => Items.OrderBy(x => x.TagSortIdx);
+        public IEnumerable<MpAvTagTileViewModel> SortedItems => Items.OrderBy(x => x.TreeSortIdx);
 
         #endregion
 
@@ -64,16 +64,25 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpISelectableViewModel Implementation
 
-        private bool _isSelected = false;
+        //private bool _isSelected = false;
         public bool IsSelected {
-            get => _isSelected;
+            get {
+                if(Parent == null) {
+                    return false;
+                }
+                return Parent.SelectedItemId == TagId;
+            }
             set {
-                if(IsSelected != value) {
-                    if(!IsSelected && !IsTagNameReadOnly) {
+                if(Parent == null) {
+                    return;
+                }
+                if(value) {
+                    if(Parent.IsSelecting) {
+                        // break here or stack overflows
                         return;
                     }
-                    _isSelected = value;
-                    OnPropertyChanged(nameof(IsSelected));
+                    // setter calls SelectTagCommand
+                    Parent.SelectedItemId = TagId;   
                 }
             }
         }
@@ -245,7 +254,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsHelpTag => TagId == MpTag.HelpTagId;
         public bool IsTagNameReadOnly { get; set; } = true;
         public bool IsTagNameTextBoxFocused { get; set; } = false;
-        public bool? IsLinkedToSelectedClipTile { get; set; }
+        public bool? IsLinkedToSelectedClipTile { get; set; } = false;
 
 
         #endregion
@@ -348,16 +357,16 @@ namespace MonkeyPaste.Avalonia {
                 if(Tag == null) {
                     return false;
                 }
-                return Tag.IsPinned;
+                return Tag.PinSortIdx >= 0;
             }
-            set {
-                if(IsModelPinned != value) {
-                    Tag.IsPinned = value;
-                    HasModelChanged = true;
-                    OnPropertyChanged(nameof(IsModelPinned));
-                    Parent.OnPropertyChanged(nameof(Parent.PinnedItems));
-                }
-            }
+            //set {
+            //    if(IsModelPinned != value) {
+            //        Tag.IsPinned = value;
+            //        HasModelChanged = true;
+            //        OnPropertyChanged(nameof(IsModelPinned));
+            //        Parent.OnPropertyChanged(nameof(Parent.PinnedItems));
+            //    }
+            //}
         }
 
         public int ParentTagId {
@@ -391,34 +400,34 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public int TagSortIdx {
+        public int TreeSortIdx {
             get {
                 if (Tag == null) {
                     return 0;
                 }
-                return Tag.TagSortIdx;
+                return Tag.TreeSortIdx;
             }
             set {
-                if (Tag.TagSortIdx != value) {
-                    Tag.TagSortIdx = value;
+                if (Tag.TreeSortIdx != value) {
+                    Tag.TreeSortIdx = value;
                     HasModelChanged = true;
-                    OnPropertyChanged(nameof(TagSortIdx));
+                    OnPropertyChanged(nameof(TreeSortIdx));
                 }
             }
         }
 
-        public int TagTraySortIdx {
+        public int PinSortIdx {
             get {
                 if (Tag == null) {
                     return 0;
                 }
-                return Tag.TagTraySortIdx;
+                return Tag.PinSortIdx;
             }
             set {
-                if (Tag.TagTraySortIdx != value) {
-                    Tag.TagTraySortIdx = value;
+                if (Tag.PinSortIdx != value) {
+                    Tag.PinSortIdx = value;
                     HasModelChanged = true;
-                    OnPropertyChanged(nameof(TagTraySortIdx));
+                    OnPropertyChanged(nameof(PinSortIdx));
                 }
             }
         }
@@ -497,7 +506,7 @@ namespace MonkeyPaste.Avalonia {
 
             var ctl = await MpDataModelProvider.GetChildTagsAsync(TagId);
 
-            foreach (var ct in ctl.OrderBy(x => x.TagSortIdx)) {
+            foreach (var ct in ctl.OrderBy(x => x.TreeSortIdx)) {
                 var ttvm = await CreateChildTagTileViewModel(ct);
                 Items.Add(ttvm);
             }
@@ -647,10 +656,6 @@ namespace MonkeyPaste.Avalonia {
                     } else {
                         IsTagNameReadOnly = true;
                     }
-                    //Parent.OnPropertyChanged(nameof(Parent.SelectedPinnedItem));
-
-                    //OnPropertyChanged(nameof(TagBorderBackgroundHexColor));
-                    //MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.ClipTrayBackgroundBrush));
                     break;
                 case nameof(IsTagNameTextBoxFocused):
 
@@ -695,13 +700,13 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(Items):
                     OnPropertyChanged(nameof(SortedItems));
                     break;
-                case nameof(TagSortIdx):
+                case nameof(TreeSortIdx):
                     if(ParentTreeItem == null) {
                         break;
                     }
                     ParentTreeItem.OnPropertyChanged(nameof(ParentTreeItem.SortedItems));
                     break;
-                case nameof(TagTraySortIdx):
+                case nameof(PinSortIdx):
                     if (Parent == null) {
                         break;
                     }
@@ -735,7 +740,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task UpdateTreeSortOrder() {
-            Items.ForEach(x => x.TagSortIdx = Items.IndexOf(x));
+            Items.ForEach(x => x.TreeSortIdx = Items.IndexOf(x));
             await Task.WhenAll(Items.Select(x => x.Tag.WriteToDatabaseAsync()));
         }
 
@@ -789,14 +794,12 @@ namespace MonkeyPaste.Avalonia {
 
         private async Task LinkOrUnlinkCopyItemAsync(int ciid, bool isLink) {
             IsBusy = true;
-            bool affectedDb = false;
             
             if(isLink) {
                 // try to create link, if it was created (and didn't already exist) notify any triggers
                 var cit = await MpCopyItemTag.Create(TagId, ciid, LinkedCopyItemIds.Count());
 
                 if (!cit.WasDupOnCreate) {
-                    affectedDb = true;
                     CopyItemIdsNeedingView.Add(ciid);
                 }
                 
@@ -805,28 +808,24 @@ namespace MonkeyPaste.Avalonia {
 
                 if (cit != null) {
                     // only delete link/notify if exists
-                    await MpDb.DeleteItemAsync(cit);
-                    affectedDb = true;
+                    await cit.DeleteFromDatabaseAsync();
                 }
                 CopyItemIdsNeedingView.Remove(ciid);
             }
-            
-            if(affectedDb) {                
-                Dispatcher.UIThread.VerifyAccess();
-                //TagClipCount += isLink ? 1 : -1;
 
-                foreach(MpAvTagTileViewModel this_or_ancestor_ttvm in SelfAndAllAncestors) {
-                    await this_or_ancestor_ttvm.UpdateClipCountAsync();
-                    
-                }
+            Dispatcher.UIThread.VerifyAccess();
 
-                // await notify so IsBusy doesn't trip
-                await NotifyTriggersAsync(ciid, isLink);
+            foreach (MpAvTagTileViewModel this_or_ancestor_ttvm in SelfAndAllAncestors) {
+                await this_or_ancestor_ttvm.UpdateClipCountAsync();
 
-                if(MpAvClipTrayViewModel.Instance.PersistantSelectedItemId == ciid) {
-                    // trigger selection changed message to notify tag association change
-                    MpMessenger.SendGlobal(MpMessageType.TraySelectionChanged);
-                }
+            }
+
+            // await notify so IsBusy doesn't trip
+            await NotifyTriggersAsync(ciid, isLink);
+
+            if (MpAvClipTrayViewModel.Instance.PersistantSelectedItemId == ciid) {
+                // trigger selection changed message to notify tag association change
+                MpMessenger.SendGlobal(MpMessageType.TraySelectionChanged);
             }
             IsBusy = false;
         }
@@ -920,15 +919,14 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand AddNewChildTagCommand => new MpAsyncCommand(
              async () => {
-                 MpTag t = await MpTag.Create(
+                 if(!IsExpanded) {
+                     IsExpanded = true;
+                 }
+                 MpTag t = await MpTag.CreateAsync(
                      parentTagId: Parent.SelectedItem.TagId,
-                     sortIdx: Parent.SelectedItem.Items.Count);
+                     treeSortIdx: Parent.SelectedItem.Items.Count);
 
                  MpAvTagTileViewModel ttvm = await CreateChildTagTileViewModel(t);
-
-                 //Parent.SelectedItem.Items.Add(ttvm);
-                 //Parent.SelectedItem.SelectedItem = ttvm;
-                 //Parent.SelectedItem.OnPropertyChanged(nameof(Parent.SelectedItem.Items)); 
                  
                  Items.Add(ttvm);
                  //SelectedItem = ttvm;

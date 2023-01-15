@@ -43,7 +43,7 @@ namespace MonkeyPaste {
             if(sourceHandler is MpPluginPreset pp) {
                 // add reference to plugin
                 var plugin_source_ref = await MpDataModelProvider.GetSourceRefByTransactionTypeAndSourceIdAsync(
-                    MpCopyItemSourceType.AnalyzerPreset, pp.Id);
+                    MpTransactionSourceType.AnalyzerPreset, pp.Id);
                 if(plugin_source_ref == null) {
                     Debugger.Break();
                 }

@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public enum MpCopyItemSourceType {
+    public enum MpTransactionSourceType {
         None = 0,
         App,
         Url,
@@ -16,14 +16,14 @@ namespace MonkeyPaste {
         AnalyzerPreset
     };
 
-    public class MpCopyItemSource : MpDbModelBase {
+    public class MpTransactionSource : MpDbModelBase {
         #region Columns
 
-        [Column("pk_MpCopyItemSourceId")]
+        [Column("pk_MpTransactionSourceId")]
         [PrimaryKey, AutoIncrement]
         public override int Id { get; set; } = 0;
 
-        [Column("MpCopyItemSourceGuid")]
+        [Column("MpTransactionSourceGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
         //[Column("fk_MpCopyItemId")]
@@ -34,13 +34,13 @@ namespace MonkeyPaste {
         [Column("fk_MpCopyItemTransactionId")]
         public int TransactionId { get; set; }
 
-        [Column("e_MpCopyItemSourceType")]
+        [Column("e_MpTransactionSourceType")]
         public string SourceTypeStr { get; set; }
 
         [Column("fk_SourceObjId")]
         public int SourceObjId { get; set; }
 
-        public DateTime CreatedDateTime { get; set; }
+        public DateTime TransactionDateTime { get; set; }
         #endregion
 
         #region Properties 
@@ -59,18 +59,18 @@ namespace MonkeyPaste {
         }
 
         [Ignore]
-        public MpCopyItemSourceType CopyItemSourceType {
-            get => SourceTypeStr.ToEnum<MpCopyItemSourceType>();
+        public MpTransactionSourceType CopyItemSourceType {
+            get => SourceTypeStr.ToEnum<MpTransactionSourceType>();
             set => SourceTypeStr = value.ToString();
         }
 
         #endregion
 
 
-        public static async Task<MpCopyItemSource> CreateAsync(
+        public static async Task<MpTransactionSource> CreateAsync(
             int transactionId = 0,
             int sourceObjId = 0,
-            MpCopyItemSourceType sourceType = MpCopyItemSourceType.None,
+            MpTransactionSourceType sourceType = MpTransactionSourceType.None,
             DateTime? createdDateTime = null,
             bool suppressWrite = false) {
             if(transactionId <= 0) {
@@ -79,22 +79,22 @@ namespace MonkeyPaste {
             if (sourceObjId <= 0) {
                 throw new Exception("Must have valid sourceObjId, id is " + sourceObjId);
             }
-            if (sourceType == MpCopyItemSourceType.None) {
+            if (sourceType == MpTransactionSourceType.None) {
                 throw new Exception("Must have valid sourceType, sourceType is " + sourceType);
             }
 
-            MpCopyItemSource dupCheck = await MpDataModelProvider.GetCopyItemSourceByMembersAsync(transactionId, sourceType, sourceObjId);
+            MpTransactionSource dupCheck = await MpDataModelProvider.GetCopyItemSourceByMembersAsync(transactionId, sourceType, sourceObjId);
             if (dupCheck != null) {
                 dupCheck.WasDupOnCreate = true;
                 return dupCheck;
             }
 
-            if (sourceType == MpCopyItemSourceType.CopyItem) {
+            if (sourceType == MpTransactionSourceType.CopyItem) {
                 var selfRef_check = await MpDataModelProvider.GetItemAsync<MpCopyItemTransaction>(transactionId);
 
                 if (selfRef_check != null && selfRef_check.CopyItemId == sourceObjId) {
                     // self reference (ole within item), ignore
-                    MpConsole.WriteLine($"Self reference detected. Ignoring MpCopyItemSource create for ciid: " + sourceObjId);
+                    MpConsole.WriteLine($"Self reference detected. Ignoring MpTransactionSource create for ciid: " + sourceObjId);
                     return null;
                 } else {
                     // in case source item is deleted (or generally just to make it easier to query)
@@ -107,12 +107,12 @@ namespace MonkeyPaste {
                 createdDateTime = DateTime.UtcNow;
             }
 
-            var ndio = new MpCopyItemSource() {
+            var ndio = new MpTransactionSource() {
                 CopyItemSourceGuid = System.Guid.NewGuid(),
                 TransactionId = transactionId,
                 SourceObjId = sourceObjId,
                 CopyItemSourceType = sourceType,
-                CreatedDateTime = createdDateTime.Value
+                TransactionDateTime = createdDateTime.Value
             };
 
             if(!suppressWrite) {
@@ -128,7 +128,7 @@ namespace MonkeyPaste {
             // get recursive tasks (NOTE trying to avoid infinite loop by also filtering out ref's to target, not sure if thats needed)
             var traverse_tasks = 
                 source_cisl
-                .Where(x => x.CopyItemSourceType == MpCopyItemSourceType.CopyItem && x.SourceObjId != targetCopyItemId)
+                .Where(x => x.CopyItemSourceType == MpTransactionSourceType.CopyItem && x.SourceObjId != targetCopyItemId)
                 .Select(x => ReplicateCopyItemSourceTreeAsync(targetCopyItemId, x.SourceObjId));
             
             // get source source's write tasks
@@ -139,10 +139,10 @@ namespace MonkeyPaste {
             Task.WhenAll(write_tasks).FireAndForgetSafeAsync();
         }
 
-        public MpCopyItemSource() { }
+        public MpTransactionSource() { }
 
         public override string ToString() {
-            return $"[SourceType: {CopyItemSourceType} SourceObjId: {SourceObjId} CopyItemTransactionId: {TransactionId} Created: {CreatedDateTime}]";
+            return $"[SourceType: {CopyItemSourceType} SourceObjId: {SourceObjId} CopyItemTransactionId: {TransactionId} Created: {TransactionDateTime}]";
         }
     }
 }

@@ -39,6 +39,8 @@ namespace MonkeyPaste.Avalonia {
                 desktop.Startup += Startup;
                 desktop.Exit += Exit;
 
+                ReportCommandLineArgs(Program.Args);
+
                 if (MpAvCefNetApplication.UseCefNet) {
                     MpAvCefNetApplication.InitCefNet();
                 }
@@ -65,6 +67,11 @@ namespace MonkeyPaste.Avalonia {
         private void RootIcon_Clicked(object sender, EventArgs e) {
             MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = DateTime.Now - MpAvShortcutCollectionViewModel.Instance.LastRightClickDateTime < TimeSpan.FromMilliseconds(1000);
 
+        }
+
+        private void ReportCommandLineArgs(string[] args) {
+            Console.WriteLine("Program args: ");
+            Console.Write(string.Join(Environment.NewLine, args));
         }
     }
 }

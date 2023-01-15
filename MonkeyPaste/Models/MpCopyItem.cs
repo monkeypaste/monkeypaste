@@ -136,7 +136,7 @@ namespace MonkeyPaste {
         int MpISourceRef.SourceObjId => Id;
 
         [Ignore]
-        MpCopyItemSourceType MpISourceRef.SourceType => MpCopyItemSourceType.CopyItem;
+        MpTransactionSourceType MpISourceRef.SourceType => MpTransactionSourceType.CopyItem;
 
 
         public object IconResourceObj => IconId;

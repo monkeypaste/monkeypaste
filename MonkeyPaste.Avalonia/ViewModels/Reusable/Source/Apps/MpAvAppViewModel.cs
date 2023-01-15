@@ -154,7 +154,7 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = true;
             bool wasCanceled = false;
 
-            var clipsFromApp = await MpDataModelProvider.GetCopyItemsBySourceTypeAndIdAsync(MpCopyItemSourceType.App, AppId);
+            var clipsFromApp = await MpDataModelProvider.GetCopyItemsBySourceTypeAndIdAsync(MpTransactionSourceType.App, AppId);
 
             if (clipsFromApp != null && clipsFromApp.Count > 0) {
                 //MessageBoxResult confirmExclusionResult = MessageBox.Show("Would you also like to remove all clips from '" + AppName + "'", "Remove associated clips?", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);

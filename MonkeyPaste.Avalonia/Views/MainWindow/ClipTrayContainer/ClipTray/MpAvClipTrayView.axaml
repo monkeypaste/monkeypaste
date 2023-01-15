@@ -103,7 +103,7 @@
             <Border.IsVisible>
                 <MultiBinding Converter="{StaticResource MultiBoolConverter}"
                               ConverterParameter="AND">
-                    <Binding Path="IsEmpty" />
+                    <Binding Path="IsQueryTrayEmpty" />
                     <Binding Path="!IsAnyBusy" />
                     <Binding Path="!IsMainWindowInitiallyOpening"
                              Source="{x:Static local:MpAvMainWindowViewModel.Instance}" />

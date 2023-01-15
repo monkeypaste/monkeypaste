@@ -57,7 +57,6 @@
             <DataTemplate>
                 <Button local:MpAvIsHoveringExtension.IsEnabled="True"
                         local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
-                        Click="ColorButton_Click"
                         Background="Transparent"
                         BorderThickness="0"
                         Command="{Binding Command}"
@@ -72,7 +71,8 @@
                             BorderThickness="1"
                             CornerRadius="2">
                         <ToolTip.Tip>
-                            <local:MpAvToolTipView ToolTipText="{Binding Header}" />
+                            <local:MpAvToolTipView IsVisible="{Binding IsCustomColorButton}"
+                                                   ToolTipText="Custom" />
                         </ToolTip.Tip>
                         <Image HorizontalAlignment="Stretch"
                                VerticalAlignment="Stretch"
