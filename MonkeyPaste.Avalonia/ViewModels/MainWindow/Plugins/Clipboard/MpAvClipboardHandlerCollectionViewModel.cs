@@ -412,6 +412,8 @@ namespace MonkeyPaste.Avalonia {
                 .Where(x => EnabledWriters.All(y => y.ClipboardFormat.clipboardName != x))
                 .Select(x => x);
 
+            MpConsole.WriteLine($"Unrecognized clipboard formats found writing to clipboard: {string.Join(",", formatsToRemove)}");
+
             formatsToRemove.ForEach(x => ido.TryRemove(x));
 
 

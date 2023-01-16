@@ -98,6 +98,22 @@ function scrollDocRangeIntoView(docRange, extraX = 0, extraY = 0) {
     //getEditorContainerElement().scrollTop = new_scroll_y;
 }
 
+function showElementScrollbars(elm) {
+    if (!elm) {
+        return;
+    }
+    elm.classList.add('show-scrollbars');
+    elm.classList.remove('hide-scrollbars');
+}
+
+function hideElementScrollbars(elm) {
+    if (!elm) {
+        return;
+    }
+
+    elm.classList.remove('show-scrollbars');
+    elm.classList.add('hide-scrollbars');
+}
 
 function setEditorScroll(new_scroll) {
     getEditorContainerElement().scrollLeft = new_scroll.left;
@@ -105,14 +121,14 @@ function setEditorScroll(new_scroll) {
 }
 
 
-function hideScrollbars() {
-    getEditorContainerElement().classList.remove('show-scrollbars');
-    getEditorContainerElement().classList.add('hide-scrollbars');
+function hideAllScrollbars() {
+    hideEditorScrollbars();
+    hideTableScrollbars();
 }
 
-function showScrollbars() {
-    getEditorContainerElement().classList.add('show-scrollbars');
-    getEditorContainerElement().classList.remove('hide-scrollbars');
+function showAllScrollbars() {
+    showEditorScrollbars();
+    showTableScrollbars();
 }
 
 

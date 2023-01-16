@@ -1,23 +1,18 @@
-﻿using MonkeyPaste;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvDataObjectMessageViewModel  : MpAvTransactionMessageViewModelBase, MpITransactionNodeViewModel {
+    public class MpAvDeltaMessageViewModel  : MpAvTransactionMessageViewModelBase, MpITransactionNodeViewModel {
 
         #region Interfaces
         #endregion
 
         #region Properties
 
-        public override string LabelText => "DataObject";
+        public object Body { get; }
+        public override string LabelText => "Delta";
         #region View Models
 
         public ObservableCollection<MpAvDataObjectItemViewModel> Items { get; set; } = new ObservableCollection<MpAvDataObjectItemViewModel>();
@@ -29,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Model
 
-        public MpPortableDataObject DataObject { get; private set; }
+        public MpQuillDelta QuillDelta { get; set; }
 
 
         #endregion
@@ -38,26 +33,23 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvDataObjectMessageViewModel(MpAvTransactionItemViewModelBase parent) : base(parent) { }
+        public MpAvDeltaMessageViewModel(MpAvTransactionItemViewModelBase parent) : base(parent) { }
 
         #endregion
 
         #region Public Methods
         public override async Task InitializeAsync(object jsonOrParsedFragment, MpITransactionNodeViewModel parentAnnotation) {
             IsBusy = true;
+            await Task.Delay(1);
 
             Json = jsonOrParsedFragment is string ? jsonOrParsedFragment.ToString() : string.Empty;
             if(Items != null) {
                 Items.Clear();
             }
             ParentTreeItem = parentAnnotation;
-            DataObject = MpJsonObject.DeserializeObject<MpPortableDataObject>(jsonOrParsedFragment);
-            if(DataObject != null) {
-                foreach(var kvp in DataObject.DataFormatLookup) {
-                    MpAvDataObjectItemViewModel doivm = new MpAvDataObjectItemViewModel(Parent);
-                    await doivm.InitializeAsync(kvp,this);
-                    Items.Add(doivm);
-                }
+            QuillDelta = MpJsonObject.DeserializeObject<MpQuillDelta>(jsonOrParsedFragment);
+            if(QuillDelta != null) {
+                
             }
             OnPropertyChanged(nameof(Children));
             OnPropertyChanged(nameof(Items));

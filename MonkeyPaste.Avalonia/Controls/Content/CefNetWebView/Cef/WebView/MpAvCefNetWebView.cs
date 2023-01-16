@@ -290,6 +290,13 @@ namespace MonkeyPaste.Avalonia {
                     avdo.SetData(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT, ctvm.PublicHandle);
                 }
                 avdo.SetData(MpPortableDataFormats.CefAsciiUrl, MpPlatformWrapper.Services.SourceRefBuilder.ToUrlAsciiBytes(ctvm.CopyItem));
+
+                List<string> uri_list = new List<string>();
+                if(avdo.TryGetData<IEnumerable<string>>(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT,out var uris)) {
+                    uri_list = uris.ToList();
+                }
+                uri_list.Add(MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(ctvm.CopyItem));
+                avdo.SetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, uri_list);
             }
 
             
@@ -457,6 +464,7 @@ namespace MonkeyPaste.Avalonia {
                         if (!string.IsNullOrEmpty(dataTransferCompleted_ntf.changeDeltaJsonStr)) {
                             resp_json = dataTransferCompleted_ntf.changeDeltaJsonStr.ToStringFromBase64();
                         }
+
                         var cit = await MpCopyItemTransaction.CreateAsync(
                             copyItemId: ctvm.CopyItemId,
                             reqMsgType: MpJsonMessageFormatType.DataObject,
@@ -886,6 +894,10 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (contentChanged_ntf.itemData != null) {
+                if(contentChanged_ntf.itemData.IsEmptyRichHtmlString()) {
+                    // data's getting reset again
+                    Debugger.Break();
+                }
                 BindingContext.CopyItemData = contentChanged_ntf.itemData;
             }
             if (contentChanged_ntf.editorHeight > 0 && contentChanged_ntf.editorHeight > 0) {

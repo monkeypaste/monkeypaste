@@ -525,31 +525,36 @@ namespace MonkeyPaste.Avalonia {
 
                 bool canPerformShortcut = true;
 
-                if(IsGlobalShortcut && !mwvm.IsMainWindowActive) {
-                    // should be fine and up to commands when its gloabl and app isn't active
-                } else {
-                    // when mw is active treat global shortcuts like any other
-                    if(mwvm.IsMainWindowActive) {
-                        if (mwvm.IsAnyDialogOpen ||
-                            mwvm.IsAnyItemDragging ||
-                            mwvm.IsAnyMainWindowTextBoxFocused ||
-                            !mwvm.IsMainWindowActive) {
-                            canPerformShortcut = false;
-                        }
-                    } else {
+                //if(IsGlobalShortcut && !mwvm.IsMainWindowActive) {
+                //    // should be fine and up to commands when its gloabl and app isn't active
+                //} else {
+                //    // when mw is active treat global shortcuts like any other
+                //    if(mwvm.IsMainWindowActive) {
+                //        if (mwvm.IsAnyDialogOpen ||
+                //            mwvm.IsAnyItemDragging ||
+                //            mwvm.IsAnyMainWindowTextBoxFocused ||
+                //            !mwvm.IsMainWindowActive) {
+                //            canPerformShortcut = false;
+                //        }
+                //    } else {
+                //        canPerformShortcut = false;
+                //    }
+                //}
+
+                if(!IsGlobalShortcut) {
+                    if(!mwvm.IsMainWindowActive) {
                         canPerformShortcut = false;
-                    }
+                    }                    
                 }
 
-                MpConsole.WriteLine($"CanPerformShortcut '{ShortcutType}': {canPerformShortcut.ToString().ToUpper()}");
+                MpConsole.WriteLine($"CanPerformShortcut '{ShortcutType}': {canPerformShortcut.ToString().ToUpper()}",true);
 
                 if(!canPerformShortcut) {
                     MpConsole.WriteLine($"IsGlobalShortcut: "+IsGlobalShortcut);
                     MpConsole.WriteLine($"IsMainWindowActive: "+mwvm.IsMainWindowActive);
                     MpConsole.WriteLine($"IsShowingDialog: "+mwvm.IsAnyDialogOpen);
                     MpConsole.WriteLine($"IsAnyItemDragging: "+mwvm.IsAnyItemDragging);
-                    MpConsole.WriteLine($"IsAnyTextBoxFocused: "+mwvm.IsAnyMainWindowTextBoxFocused);
-                    MpConsole.WriteLine($"IsMainWindowActive: "+mwvm.IsMainWindowActive);
+                    MpConsole.WriteLine($"IsAnyTextBoxFocused: "+mwvm.IsAnyMainWindowTextBoxFocused,false,true);
                 }
                 return canPerformShortcut;
             });

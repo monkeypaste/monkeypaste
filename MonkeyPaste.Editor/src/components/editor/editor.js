@@ -33,6 +33,7 @@ function initEditor() {
 
 	initScroll();
 	initTemplates();
+	initOverlay();
 	//initExtContentSourceBlot();
 
 	quill.on("selection-change", onEditorSelChanged);
@@ -90,7 +91,6 @@ function getEditorVisibleHeight() {
 // #endregion Getters
 
 // #region Setters
-
 
 // #endregion Setters
 
@@ -151,6 +151,16 @@ function isSubSelectionEnabled() {
 // #endregion State
 
 // #region Actions
+
+function hideEditorScrollbars() {
+	getEditorContainerElement().classList.remove('show-scrollbars');
+	getEditorContainerElement().classList.add('hide-scrollbars');
+
+}
+
+function showEditorScrollbars() {
+	showElementScrollbars(getEditorContainerElement());
+}
 
 function hideAllToolbars() {
 	hideEditorToolbar();
@@ -280,7 +290,7 @@ function enableSubSelection(fromHost = false) {
 	getEditorContainerElement().classList.add('sub-select');
 	getEditorContainerElement().classList.add('underline-content');
 
-	showScrollbars();
+	showAllScrollbars();
 	disableDragOverlay();
 	enableTemplateSubSelection();
 	showPasteToolbar();
@@ -315,7 +325,7 @@ function disableSubSelection(fromHost = false) {
 	getEditorContainerElement().classList.remove('underline-content');
 
 	scrollToHome();
-	hideScrollbars();
+	hideAllScrollbars();
 	enableDragOverlay();
 
 	hidePasteToolbar();

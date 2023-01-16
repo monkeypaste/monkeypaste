@@ -17,14 +17,24 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpITransactionNodeViewModel Implementation
-        public object Body { get; }
+        public object Body => Json;
         object MpITransactionNodeViewModel.TransactionModel => Parent.Transaction;
         public bool IsExpanded { get; set; }
         public MpITreeItemViewModel ParentTreeItem { get; protected set; }
         public IEnumerable<MpITreeItemViewModel> Children => Sources;
         public abstract string LabelText { get; }
         public object ComparableSortValue => ParentTreeItem == null ? 0 : ParentTreeItem.Children.IndexOf(this);
-        public object IconSourceObj => null;
+        public object IconSourceObj {
+            get {
+                if(IconResourceObj == null) {
+                    if(Parent == null) {
+                        return null;
+                    }
+                    return Parent.IconSourceObj;
+                }
+                return IconResourceObj;
+            }
+        }
 
         #region MpIMenuItemViewModel Implementation
 
@@ -48,6 +58,10 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Appearance
+
+        public object IconResourceObj { get; set; }
+        #endregion
         #region State
         public bool IsAnyBusy => IsBusy || (Sources != null && Sources.Cast<MpAvTransactionMessageViewModelBase>().Any(x => x.IsAnyBusy));
         public bool IsHovering { get; set; }
@@ -60,7 +74,7 @@ namespace MonkeyPaste.Avalonia {
         #region Model
         
         public MpJsonMessageFormatType JsonFormat { get; private set; }
-        public string Json { get; private set; }
+        public string Json { get; protected set; }
 
         #endregion
 

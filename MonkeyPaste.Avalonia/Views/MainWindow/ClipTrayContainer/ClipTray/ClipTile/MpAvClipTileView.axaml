@@ -54,19 +54,6 @@
               ColumnDefinitions="*,Auto"
               RowDefinitions="0.25*,*,20">
 
-            <!--  TRANSACTION SPLITTER  -->
-
-            <GridSplitter x:Name="TransactionContentSplitter"
-                          DataContext="{Binding TransactionCollectionViewModel}"
-                          Grid.Column="1"
-                          Grid.Row="0"
-                          Grid.RowSpan="3"
-                          Width="2"
-                          Cursor="SizeWestEast"
-                          IsVisible="{Binding IsTransactionPaneOpen, FallbackValue=False, TargetNullValue=False}"
-                          HorizontalAlignment="Left"
-                          VerticalAlignment="Stretch"
-                          Classes="vertical" />
             <!--  TRANSACTION COLUMN  -->
 
 
@@ -76,7 +63,9 @@
                                                    Grid.RowSpan="3"
                                                    Background="{DynamicResource ClipTileTransactionPaneBackgroundBrush}"
                                                    IsVisible="{Binding IsTransactionPaneOpen}"
-                                                   MinWidth="{Binding Parent.DefaultTransactionPanelLength, FallbackValue=0, TargetNullValue=0}"
+                                                   local:MpAvSizeObserverExtension.IsEnabled="True"
+                                                   local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedWidth,Mode=TwoWay}"
+                                                   local:MpAvSizeObserverExtension.ObservedHeight="{Binding ObservedHeight,Mode=TwoWay}"
                                                    HorizontalAlignment="Stretch"
                                                    VerticalAlignment="Stretch" />
             <!--  Title  -->
@@ -126,13 +115,15 @@
                                               HorizontalAlignment="Stretch" />
             </Grid>
 
-            <!--  Corner Button Overlay  -->
+            <!--  CORNER BUTTONS  -->
+
             <local:MpAvClipTileCornerButtonsView Grid.Row="0"
                                                  Grid.RowSpan="3"
                                                  IsVisible="{Binding IsOverlayButtonsVisible}"
                                                  HorizontalAlignment="Stretch"
                                                  VerticalAlignment="Stretch"
                                                  DataContext="{Binding}" />
+            <!--  RESIZER  -->
 
             <Border x:Name="ClipTileResizeBorder"
                     Grid.Row="0"
@@ -165,6 +156,19 @@
                     <TranslateTransform X="5" />
                 </Border.RenderTransform>
             </Border>
+
+            <!--  TRANSACTION SPLITTER  -->
+
+            <GridSplitter x:Name="TransactionContentSplitter"
+                          DataContext="{Binding TransactionCollectionViewModel}"
+                          Grid.Column="0"
+                          Grid.Row="0"
+                          Grid.RowSpan="3"
+                          Classes="vertical"
+                          IsVisible="{Binding IsTransactionPaneOpen, FallbackValue=False, TargetNullValue=False}"
+                          HorizontalAlignment="Right"
+                          VerticalAlignment="Stretch" />
+
             <!--  Trial Expired Overlay  -->
             <Border HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
@@ -185,8 +189,5 @@
                 </Viewbox>
             </Border>
         </Grid>
-
-
-
     </local:MpAvClipBorder>
 </local:MpAvUserControl>

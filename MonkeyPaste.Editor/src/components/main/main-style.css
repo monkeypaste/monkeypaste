@@ -3,17 +3,12 @@ html {
 }
 
 body {
-    margin: 0px;
-    padding: 0px;
-    font-family: Arial;
-    overflow: hidden;
-    cursor: default;
-    background-color: transparent;
     --subselecteditorbgcolor: rgb(189, 188, 188,var(--editableopacity));
     --editableeditorbgcolor: rgba(255, 248, 220,var(--editableopacity));
     --editableeditorbgcolor_opaque: rgb(255, 248, 220);
     --selbgcolor: lightblue;
     --selfgcolor: black;
+    --caretcolor: black;
     --hovercolor: yellow;
     --opthovercolor: lightblue;
     --optselectcolor: lightgreen;
@@ -22,7 +17,14 @@ body {
     --insertselectcolor: darkorange;
     --editableopacity: 0.5;
     --defaultopacity: 0.0;
-    --defaultFontFamily: consolas;
+    --defaultFontFamily: system-ui;
+    caret-color: transparent;
+    margin: 0px;
+    padding: 0px;
+    font-family: var(--defaultFontFamily);
+    overflow: hidden;
+    cursor: default;
+    background-color: transparent;
     /*white-space: pre-wrap;*/
 }
 

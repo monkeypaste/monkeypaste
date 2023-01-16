@@ -114,7 +114,7 @@ namespace MonkeyPaste.Common {
         public MpPortableDataObject(string format, object data) : this() {
             SetData(format, data);
         }
-        public MpPortableDataObject(Dictionary<string,object> formatDataLookup) : this() {
+        public MpPortableDataObject(Dictionary<string,object> formatDataLookup, bool caseSensitive = true) : this() {
             if(formatDataLookup != null) {
                 formatDataLookup.ForEach(x => SetData(x.Key, x.Value));
             }

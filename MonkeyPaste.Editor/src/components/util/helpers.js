@@ -21,6 +21,13 @@
     return os;
 }
 
+function isString(obj) {
+    if (!obj || typeof obj !== 'string' || !(obj instanceof String)) {
+        return false;
+    }
+    return true;
+}
+
 function splitByNewLine(str) {
     if (isNullOrEmpty(str)) {
         return [];

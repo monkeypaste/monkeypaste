@@ -85,7 +85,15 @@ namespace MonkeyPaste.Avalonia {
         public MpAvFileItemCollectionViewModel FileItemCollectionViewModel { get; private set; }
         public MpAvClipTileDetailCollectionViewModel DetailCollectionViewModel { get; private set; }
 
-        public MpAvClipTileTransactionCollectionViewModel TransactionCollectionViewModel { get; private set; }
+        private MpAvClipTileTransactionCollectionViewModel _transactionCollectionViewModel;
+        public MpAvClipTileTransactionCollectionViewModel TransactionCollectionViewModel {
+            get {
+                if(_transactionCollectionViewModel == null) {
+                    _transactionCollectionViewModel = new MpAvClipTileTransactionCollectionViewModel(this);
+                }
+                return _transactionCollectionViewModel;
+            }
+        }
 
         public MpAvClipTileViewModel Next {
             get {
@@ -279,7 +287,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Layout
 
-        public double DefaultTransactionPanelLength => 150;
         public MpSize UnconstrainedContentSize { get; set; } = MpSize.Empty;
         public double TileTitleHeight => IsTitleVisible ? 100 : 0;
         public double TileDetailHeight => 25;// MpMeasurements.Instance.ClipTileDetailHeight;
@@ -702,7 +709,8 @@ namespace MonkeyPaste.Avalonia {
                                                 EditableContentSize.Height > TileContentHeight :
                                                 UnconstrainedContentSize.Height > TileContentHeight;
 
-        public bool IsOverlayButtonsVisible => IsHovering && !IsAppendNotifier && !Parent.IsAnyDropOverTrays;
+        public bool IsOverlayButtonsVisible =>
+            false;//IsHovering && !IsAppendNotifier && !Parent.IsAnyDropOverTrays;
         public bool IsResizable => !IsAppendNotifier;
         public bool CanResize { get; set; } = false;
 
@@ -1059,7 +1067,6 @@ namespace MonkeyPaste.Avalonia {
             //MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
             FileItemCollectionViewModel = new MpAvFileItemCollectionViewModel(this);
             DetailCollectionViewModel = new MpAvClipTileDetailCollectionViewModel(this);
-            TransactionCollectionViewModel = new MpAvClipTileTransactionCollectionViewModel(this);
             IsBusy = true;
         }
 
@@ -1582,7 +1589,7 @@ namespace MonkeyPaste.Avalonia {
                     if (HasModelChanged) {
                         //HasModelChanged = false;
                         //return;
-                        if (CopyItemData == "<p><br></p>" || CopyItemData == null) {
+                        if (CopyItemData.IsEmptyRichHtmlString()) {
                             // what IS this nasty shit??
                             Debugger.Break();
                             
@@ -1849,40 +1856,7 @@ namespace MonkeyPaste.Avalonia {
                 IsBusy = false;
             });
 
-        public ICommand OpenTransactionPaneCommand => new MpCommand(
-            () => {
-                TransactionCollectionViewModel.IsTransactionPaneOpen = true;
-                Dispatcher.UIThread.Post(() => {
-                    MpAvResizeExtension.ResizeAnimated(
-                        GetDragSource() as MpAvCefNetWebView, BoundWidth + DefaultTransactionPanelLength, BoundHeight);
-                });
-            }, () => {
-                return TransactionCollectionViewModel != null && !TransactionCollectionViewModel.IsTransactionPaneOpen;
-            });
         
-        public ICommand CloseTransactionPaneCommand => new MpCommand(
-            () => {
-                TransactionCollectionViewModel.IsTransactionPaneOpen = false;
-
-                Dispatcher.UIThread.Post(() => {
-                    MpAvResizeExtension.ResizeAnimated(
-                        GetDragSource() as MpAvCefNetWebView, BoundWidth - DefaultTransactionPanelLength, BoundHeight);
-                });
-            }, () => {
-                return TransactionCollectionViewModel != null && TransactionCollectionViewModel.IsTransactionPaneOpen;
-            });
-        
-        public ICommand ToggleTransactionPaneOpenCommand => new MpCommand(
-            () => {
-                if(TransactionCollectionViewModel.IsTransactionPaneOpen) {
-                    CloseTransactionPaneCommand.Execute(null);
-                } else {
-                    OpenTransactionPaneCommand.Execute(null);
-                }
-                OnPropertyChanged(nameof(IsTitleVisible));
-            }, () => {
-                return TransactionCollectionViewModel != null;
-            });
         #endregion
     }
 }

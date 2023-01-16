@@ -19,11 +19,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpITransactionNodeViewModel Implementation
 
-        public object Body { get; }
+        public object Body => SourceLabel;
         public bool IsExpanded { get; set; }
         public MpITreeItemViewModel ParentTreeItem => null;
         public IEnumerable<MpITreeItemViewModel> Children => Items;
-        public string LabelText => SourceLabel;
+        public string LabelText => TransactionIdx.ToString();
         public object ComparableSortValue => TransactionDateTimeUtc;
         public object IconSourceObj => SourceIconObj;
 
@@ -93,6 +93,15 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
+        public int TransactionIdx {
+            get {
+                if(Parent == null) {
+                    return -1;
+                }
+                return Parent.Transactions.OrderBy(x => x.TransactionDateTimeUtc).IndexOf(this);
+            }
+        }
 
         public bool IsAnyBusy => IsBusy || (Items != null && Items.Any(x => x.IsAnyBusy));
         public bool IsHovering { get; set; }

@@ -1,7 +1,7 @@
 // #region Globals
 
 
-const EditorPlaceHolderText = 'Feed me banana...';
+const EditorPlaceHolderText = 'Empty Content...';
 var quill;
 // #endregion Globals
 

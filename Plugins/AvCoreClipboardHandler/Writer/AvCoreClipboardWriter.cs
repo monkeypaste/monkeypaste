@@ -10,6 +10,7 @@ using MonkeyPaste.Common.Wpf;
 
 namespace AvCoreClipboardHandler {
     public static class AvCoreClipboardWriter {
+        // manifest writer formats (NOTE not used but to keep track of references)
         public static string[] AvWriterFormats = new string[]{
             MpPortableDataFormats.Text,
             MpPortableDataFormats.CefText,
@@ -20,7 +21,8 @@ namespace AvCoreClipboardHandler {
             MpPortableDataFormats.AvPNG,
             MpPortableDataFormats.AvFileNames,
             MpPortableDataFormats.LinuxGnomeFiles, // only needed for write
-            MpPortableDataFormats.AvCsv
+            MpPortableDataFormats.AvCsv,
+            MpPortableDataFormats.LinuxUriList
         };
 
         public static async Task<MpClipboardWriterResponse> PerformWriteRequestAsync(MpClipboardWriterRequest request) {

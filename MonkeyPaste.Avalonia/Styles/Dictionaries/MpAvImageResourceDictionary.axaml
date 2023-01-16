@@ -181,7 +181,7 @@
     <sys:String x:Key="AscendingImage">
         avares://MonkeyPaste.Avalonia/Assets/Images/asc_black.png
     </sys:String>
-    <sys:String x:Key="DecendingImage">
+    <sys:String x:Key="DescendingImage">
         avares://MonkeyPaste.Avalonia/Assets/Images/desc_black.png
     </sys:String>
     <sys:String x:Key="AscendingImage_Disabled">

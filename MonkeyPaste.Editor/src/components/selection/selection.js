@@ -39,12 +39,10 @@ function getTextSelectionBgColor() {
 	return getElementComputedStyleProp(document.body, '--selbgcolor');
 }
 
-function setCaretColor(caretColor) {
-	getEditorElement().style.caretColor = caretColor;
-}
 
 function getCaretColor() {
-	return getEditorElement().style.caretColor;
+	//return getEditorElement().style.caretColor;
+	return getElementComputedStyleProp(document.body, '--caretcolor');
 }
 
 function getDocSelection(isForPaste = false) {
@@ -202,14 +200,18 @@ function setDocSelectionRanges(docRanges, retainFocus = true) {
 }
 
 function setTextSelectionFgColor(fgColor) {
-	//document.body.style.setProperty('--selfgcolor', fgColor);
 	setElementComputedStyleProp(document.body, '--selfgcolor', fgColor);
 }
 
 function setTextSelectionBgColor(bgColor) {
-	//document.body.style.setProperty('--selbgcolor', bgColor);
 	setElementComputedStyleProp(document.body, '--selbgcolor', bgColor);
 }
+
+
+function setCaretColor(caretColor) {
+	setElementComputedStyleProp(document.body, '--caretcolor', caretColor);
+}
+
 // #endregion Setters
 
 // #region State
@@ -275,6 +277,52 @@ function isNavRight() {
 // #endregion State
 
 // #region Actions
+
+function updateSelectionColors() {
+	let sel = getDocSelection();
+	let sel_bg_color = DefaultSelectionBgColor;
+	let sel_fg_color = DefaultSelectionFgColor;
+	let caret_color = DefaultCaretColor;
+
+	if (isDropping() || isDragging()) {
+		if (isDragging()) {
+			// ignoring invalidity if external drop
+			let is_drop_valid = DropIdx >= 0 || !isDropping();
+			if (is_drop_valid) {
+				if (isDragCopy()) {
+					sel_bg_color = 'lime';
+					log('copy recognized in sel draw');
+				}
+
+				if (isDropHtml()) {
+					sel_fg_color = 'orange';
+				}
+			} else {
+				sel_bg_color = 'salmon';
+			}
+		}
+	} else if (isSubSelectionEnabled()) {
+		if (isEditorToolbarVisible()) {
+			if (isSelAtFocusTemplateInsert()) {
+				// hide cursor within focus template
+				caret_color = 'transparent';
+			}
+		} else {
+			caret_color = 'red';
+		}
+	} else {
+		// in no select hide cursor
+		caret_color = 'transparent';
+	}
+
+	setTextSelectionBgColor(sel_bg_color);
+	setTextSelectionFgColor(sel_fg_color);
+
+	setCaretColor(caret_color);
+
+	// return sel for performance
+	return sel;
+}
 
 function resetSelection() {
 	LastSelRange = null;

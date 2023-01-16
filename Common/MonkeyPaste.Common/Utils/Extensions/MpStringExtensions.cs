@@ -80,6 +80,13 @@ namespace MonkeyPaste.Common {
 
         #endregion
 
+        public static bool IsEmptyRichHtmlString(this string htmlStr) {
+            return
+                string.IsNullOrWhiteSpace(htmlStr) ||
+                htmlStr.ToLower() == "<p><br></p>" ||
+                htmlStr.ToLower() == "<p><br/></p>";
+        }
+
         public static bool IsStringImageResourcePathOrKey(this string str) {
             if(string.IsNullOrWhiteSpace(str)) {
                 return false;

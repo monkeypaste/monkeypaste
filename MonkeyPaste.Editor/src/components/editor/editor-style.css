@@ -84,7 +84,6 @@ body:has(.editable) {
 .info-tooltip {
     display:block;
     position: absolute;
-    font-family: consolas;
     font-size: 10px;
     opacity: 0;
     z-index: 1;

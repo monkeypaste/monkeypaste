@@ -327,7 +327,7 @@
                      Margin="0,3,13,0" />-->
             <Button x:Name="ClipTileAppIconImageButton"
                     Classes="noBg noHoverBg"
-                    Command="{Binding ToggleTransactionPaneOpenCommand}"
+                    Command="{Binding TransactionCollectionViewModel.ToggleTransactionPaneOpenCommand}"
                     ClipToBounds="False"
                     BorderThickness="0"
                     HorizontalAlignment="Stretch"

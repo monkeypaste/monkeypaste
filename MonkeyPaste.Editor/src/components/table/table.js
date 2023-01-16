@@ -89,7 +89,7 @@ function getTableCsv(format, csvProps, encodeTemplates = false) {
 }
 
 function getBetterTableElements() {
-    return document.getElementsByClassName(TABLE_WRAPPER_CLASS_NAME);
+    return Array.from(document.getElementsByClassName(TABLE_WRAPPER_CLASS_NAME));
 }
 
 function getBetterTableModule() {    
@@ -179,6 +179,22 @@ function isBetterTableContextMenuVisible() {
 // #endregion State
 
 // #region Actions
+
+function hideTableScrollbars() {
+    let table_elms = getBetterTableElements();
+    for (var i = 0; i < table_elms.length; i++) {
+        let table_elm = table_elms[i];
+        hideElementScrollbars(table_elm);
+	}
+}
+
+function showTableScrollbars() {
+    let table_elms = getBetterTableElements();
+    for (var i = 0; i < table_elms.length; i++) {
+        let table_elm = table_elms[i];
+        showElementScrollbars(table_elm);
+	}
+}
 
 function rejectTableMouseEvent(e) {
     if (!isTableInDocument()) {

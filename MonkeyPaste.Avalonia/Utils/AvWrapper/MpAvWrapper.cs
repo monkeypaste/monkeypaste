@@ -26,6 +26,7 @@ namespace MonkeyPaste.Avalonia {
         public MpIUrlBuilder UrlBuilder { get; set; }
         public MpIAppBuilder AppBuilder { get; set; }
         public MpISourceRefBuilder SourceRefBuilder { get; set; }
+        public MpITransactionBuilder TransactionBuilder { get; set; }
         public MpICustomColorChooserMenuAsync CustomColorChooserMenuAsync { get; set; }
         public MpIKeyboardInteractionService KeyboardInteractionService { get; set; }
         public MpIGlobalTouch GlobalTouch { get; set; }
@@ -91,10 +92,12 @@ namespace MonkeyPaste.Avalonia {
             MpAvQueryInfoViewModel.Init(MpPrefViewModel.Instance.LastQueryInfoJson);
             QueryInfo = MpAvQueryInfoViewModel.Current;
             ProcessWatcher = new MpAvProcessWatcherSelector().Watcher;
+
             IconBuilder = new MpAvIconBuilder().IconBuilder;
             UrlBuilder = new MpUrlBuilder();
             AppBuilder = new MpAvAppBuilder();
             SourceRefBuilder = new MpAvSourceRefBuilder();
+            TransactionBuilder = new MpAvTransactionBuilder();
 
             FocusMonitor = MpAvFocusManager.Instance as MpIFocusMonitor;
 

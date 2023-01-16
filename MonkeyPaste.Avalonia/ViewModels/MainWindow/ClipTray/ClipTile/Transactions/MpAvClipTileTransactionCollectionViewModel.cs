@@ -71,6 +71,16 @@ namespace MonkeyPaste.Avalonia {
         public bool IsContextMenuOpen { get; set; }
         #endregion
 
+        #region Layout
+
+        public double DefaultTransactionPanelLength => 150;
+        public double BoundWidth { get; set; }
+        public double BoundHeight { get; set; }
+        
+        public double ObservedWidth { get; set; }
+        public double ObservedHeight { get; set; }
+        #endregion
+
         #region State
 
         public bool IsTransactionPaneOpen { get; set; } = false;
@@ -181,7 +191,49 @@ namespace MonkeyPaste.Avalonia {
             () => {
 
             });
+        public ICommand OpenTransactionPaneCommand => new MpCommand(
+            () => {
+                IsTransactionPaneOpen = true;
+                BoundWidth = DefaultTransactionPanelLength;
+                BoundHeight = Parent.BoundHeight;
 
+                //double nw = Parent.BoundWidth + DefaultTransactionPanelLength;
+                //double nh = Parent.BoundHeight;
+                //Dispatcher.UIThread.Post(() => {
+                //    MpAvResizeExtension.ResizeAnimated(
+                //        Parent.GetDragSource() as MpAvCefNetWebView, nw, nh);
+                //});
+            }, () => {
+                return Parent != null && !IsTransactionPaneOpen;
+            });
+
+        public ICommand CloseTransactionPaneCommand => new MpCommand(
+            () => {
+                
+                IsTransactionPaneOpen = false;
+                Parent.BoundWidth -= ObservedWidth;
+                BoundWidth = 0;
+                //double nw = Parent.BoundWidth - BoundWidth;
+                //double nh = Parent.BoundHeight;
+                //Dispatcher.UIThread.Post(() => {
+                //    MpAvResizeExtension.ResizeAnimated(
+                //        Parent.GetDragSource() as MpAvCefNetWebView, nw, nh);
+                //});
+            }, () => {
+                return Parent != null && IsTransactionPaneOpen;
+            });
+
+        public ICommand ToggleTransactionPaneOpenCommand => new MpCommand(
+            () => {
+                if (IsTransactionPaneOpen) {
+                    CloseTransactionPaneCommand.Execute(null);
+                } else {
+                    OpenTransactionPaneCommand.Execute(null);
+                }
+                OnPropertyChanged(nameof(Parent.IsTitleVisible));
+            }, () => {
+                return Parent != null;
+            });
         #endregion
     }
 }

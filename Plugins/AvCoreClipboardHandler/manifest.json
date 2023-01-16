@@ -314,6 +314,27 @@
             ]
           }
         ]
+      },
+      {
+        "handlerGuid": "8e7b2cb2-da79-4239-baa9-097f6ef5b880",
+        "displayName": "Uri List",
+        "iconUri": "html.png",
+        "clipboardName": "text/uri-list",
+        "parameters": [
+          {
+            "label": "Ignore",
+            "description": "When checked Url-list format will be ignored",
+            "controlType": "CheckBox",
+            "unitType": "Bool",
+            "paramId": "38",
+            "values": [
+              {
+                "value": "false",
+                "isDefault": true
+              }
+            ]
+          }
+        ]
       }
     ],
     "writers": [
@@ -658,6 +679,27 @@
             "controlType": "CheckBox",
             "unitType": "Bool",
             "paramId": "35",
+            "values": [
+              {
+                "value": "false",
+                "isDefault": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "handlerGuid": "8341287f-c987-4ec0-98f3-66e381a3fa56",
+        "displayName": "Uri List",
+        "iconUri": "html.png",
+        "clipboardName": "text/uri-list",
+        "parameters": [
+          {
+            "label": "Ignore",
+            "description": "When checked Url-list format will be ignored",
+            "controlType": "CheckBox",
+            "unitType": "Bool",
+            "paramId": "37",
             "values": [
               {
                 "value": "false",

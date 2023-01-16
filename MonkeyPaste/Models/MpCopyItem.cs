@@ -237,7 +237,7 @@ namespace MonkeyPaste {
                 return;
             }
 
-            if(ItemData == "<p><br></p>") {
+            if(ItemData.IsEmptyRichHtmlString()) {
                 // what IS this nasty shit??
                 Debugger.Break();
             }

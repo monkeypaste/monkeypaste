@@ -1,5 +1,6 @@
 ﻿
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace MonkeyPaste.Common {
@@ -170,12 +171,20 @@ namespace MonkeyPaste.Common {
         }
 
         public static int GetDataFormatId(string format) {
-            foreach(var kvp in _formatLookup) {
-                if(kvp.Value.Name == format) {
-                    return kvp.Key;
+            var kvpl = _formatLookup.Where(x => x.Value.Name.ToLower() == format.ToLower());
+            if(kvpl.Count() == 0) {
+                return -1;
+            }
+            if(kvpl.Count() > 1) {
+                // multiple formats w/ same name but different case detected
+                Debugger.Break();
+                var match_kvp = kvpl.FirstOrDefault(x => x.Value.Name == format);
+                if(!match_kvp.Equals(default(KeyValuePair<int,MpPortableDataFormat>))) {
+                    // when exact match found return that one...
+                    return match_kvp.Key;
                 }
             }
-            return -1;
+            return kvpl.First().Key;
         }
 
         #endregion

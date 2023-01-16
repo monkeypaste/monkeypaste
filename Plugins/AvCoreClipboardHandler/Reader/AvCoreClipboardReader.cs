@@ -11,6 +11,7 @@ using MonkeyPaste.Common.Wpf;
 namespace AvCoreClipboardHandler {
     public static class AvCoreClipboardReader {
 
+        // manifest reader formats (NOTE not used but to keep track of references)
         public static string[] _AvReaderFormats = new string[]{
             MpPortableDataFormats.Text,
             MpPortableDataFormats.CefText,
@@ -20,7 +21,8 @@ namespace AvCoreClipboardHandler {
             MpPortableDataFormats.LinuxSourceUrl,
             MpPortableDataFormats.AvPNG,
             MpPortableDataFormats.AvFileNames,
-            MpPortableDataFormats.AvCsv
+            MpPortableDataFormats.AvCsv,
+            MpPortableDataFormats.LinuxUriList
         };
         public static async Task<MpClipboardReaderResponse> ProcessReadRequestAsync(MpClipboardReaderRequest request) {
             IDataObject avdo = null;

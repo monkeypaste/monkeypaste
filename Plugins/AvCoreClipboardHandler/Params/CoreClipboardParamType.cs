@@ -56,6 +56,9 @@
         W_Ignore_Csv, // 34
 
         W_Ignore_Url, // 35
-        R_Ignore_Url // 36
+        R_Ignore_Url, // 36
+
+        W_UriList, // 37
+        R_UriList // 38
     }
 }

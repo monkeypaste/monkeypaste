@@ -1,31 +1,39 @@
-﻿var IsHighlightingVisible = false;
+﻿// #region Globals
+
+var IsHighlightingVisible = false;
 
 var HighlightRects = [];
 var SelectedHighlightRectIdx = -1;
 
+var CaretBlinkTickMs = 500;
 var IsCaretBlinkOn = false;
 var CaretBlinkOffColor = null;
+var CaretBlinkTimerInterval = null;
 
-function updateOverlayBounds(overlayCanvas) {
-    let editorRect = getEditorContainerRect();
-    let window_rect = getWindowRect();
+// #endregion Globals
 
-    overlayCanvas.style.left = window_rect.left;
-	overlayCanvas.style.top = editorRect.top;
-    overlayCanvas.width = window_rect.width;
-    overlayCanvas.height = window_rect.height;
+// #region Life Cycle
+
+function initOverlay() {
+    if (CaretBlinkTimerInterval == null) {
+        CaretBlinkTimerInterval = setInterval(onCaretBlinkTick, CaretBlinkTickMs, getOverlayElement());
+    }
+}
+// #endregion Life Cycle
+
+// #region Getters
+
+function getOverlayContext() {
+    let overlayCanvas = getOverlayElement();
+    if (!overlayCanvas || !overlayCanvas.getContext) {
+        return null;
+    }
+    return overlayCanvas.getContext('2d');
 }
 
-function drawHighlighting(ctx, forceColor) {
-    if (HighlightRects) {
-        for (var i = 0; i < HighlightRects.length; i++) {
-            let hl_color = forceColor ? forceColor : i == SelectedHighlightRectIdx ? 'rgba(255,0,0,50)' : 'rgba(0,255,255,50';
-            drawRect(ctx, HighlightRects[i], hl_color);
-		}
-	}
+function getOverlayElement() {
+    return document.getElementById('overlayCanvas');
 }
-
-// #region Ole Previews
 
 function getPreviewLines(drop_idx, block_state) {
     if (drop_idx < 0) {
@@ -80,6 +88,40 @@ function getPreviewLines(drop_idx, block_state) {
     return render_lines;
 }
 
+// #endregion Getters
+
+// #region Setters
+
+// #endregion Setters
+
+// #region State
+
+// #endregion State
+
+// #region Actions
+
+function updateOverlayBounds() {
+    let editorRect = getEditorContainerRect();
+    let window_rect = getWindowRect();
+
+    let overlayCanvas = getOverlayElement();
+    overlayCanvas.style.left = window_rect.left;
+    overlayCanvas.style.top = editorRect.top;
+    overlayCanvas.width = window_rect.width;
+    overlayCanvas.height = window_rect.height;
+}
+
+// #region Draws
+
+function drawHighlighting(ctx, forceColor) {
+    if (HighlightRects) {
+        for (var i = 0; i < HighlightRects.length; i++) {
+            let hl_color = forceColor ? forceColor : i == SelectedHighlightRectIdx ? 'rgba(255,0,0,50)' : 'rgba(0,255,255,50';
+            drawRect(ctx, HighlightRects[i], hl_color);
+        }
+    }
+}
+
 function drawDropPreview(ctx, color = 'red', thickness = 1.0, line_style = [5, 5]) {
     if (isDragCopy()) {
         color = 'lime';
@@ -105,11 +147,9 @@ function drawAppendNotifierPreview(ctx, color = 'red', thickness = 1.0, line_sty
     }
 }
 
-// #endregion Ole preview
-
 function drawFancyTextSelection(ctx) {
     let sel_rects = getRangeRects(getDocSelection());
-    sel_rects.forEach((srect) => drawRect(ctx, srect, 'purple', 'goldenrod', 1.5, 100/255));
+    sel_rects.forEach((srect) => drawRect(ctx, srect, 'purple', 'goldenrod', 1.5, 100 / 255));
     //let r = FancyTextSelectionRoundedCornerRadius;
     //let def_corner_radius = { tl: r, tr: r, br: r, bl: r };
     //let max_snap_dist = 5;
@@ -135,49 +175,13 @@ function drawTextSelection(ctx) {
         !CurFindReplaceDocRangesRects &&
         !isAppendNotifier()) {
         //return;
-	}
+    }
 
+    let sel = updateSelectionColors();
 
-    let sel = getDocSelection();
-    let sel_bg_color = DefaultSelectionBgColor;
-    let sel_fg_color = DefaultSelectionFgColor;
-    let caret_color = DefaultCaretColor;
+    let sel_bg_color = getTextSelectionBgColor();
+    let sel_fg_color = getTextSelectionFgColor();
 
-    if (isDropping() || isDragging()) {
-        if (isDragging()) {
-            // ignoring invalidity if external drop
-            let is_drop_valid = DropIdx >= 0 || !isDropping();
-            if (is_drop_valid) {
-                if (isDragCopy()) {
-                    sel_bg_color = 'lime';
-                    log('copy recognized in sel draw');
-                }
-
-                if (isDropHtml()) {
-                    sel_fg_color = 'orange';
-                }
-            } else {
-                sel_bg_color = 'salmon';
-            }
-        }
-    } else if (isSubSelectionEnabled()) {
-        if (isEditorToolbarVisible()) {
-            if (isSelAtFocusTemplateInsert()) {
-                // hide cursor within focus template
-                caret_color = 'transparent';
-            }
-        } else {
-            caret_color = 'red';
-        }
-    } else {
-        // in no select hide cursor
-        caret_color = 'transparent';
-	}
-
-    setTextSelectionBgColor(sel_bg_color);
-    setTextSelectionFgColor(sel_fg_color);
-
-    setCaretColor(caret_color);
 
     if (CurFindReplaceDocRangesRects) {
         let scroll_y = getEditorContainerElement().scrollTop;
@@ -204,20 +208,35 @@ function drawTextSelection(ctx) {
             sel_rect.bottom -= scroll_y;
             drawRect(ctx, sel_rect, sel_bg_color, sel_fg_color, 0.5, 125 / 255);
         });
-	}
+    }
+
+    drawCaret(ctx, sel);
 }
 
-function caretBlinkTick() {
-    if (CaretBlinkOffColor) {
-        CaretBlinkOffColor = null;
-    } else {
-        CaretBlinkOffColor = 'transparent'
-    }
-    if (WindowMouseDownLoc != null) {
-        // don't blink if sel changing
+function drawCaret(ctx, sel, caret_width = 1.0, caret_opacity = 1) {
+    sel = !sel || sel == null ? updateSelectionColors() : sel;
+
+    if (!sel || sel == null || sel.length > 0) {
         return;
-	}
-    drawOverlay();
+    }
+    if (isDropping()) {
+        // drawn w/ drop preview lines so ignore
+        return;
+    }
+
+    let caret_line = getCaretLine(sel.index);
+    caret_line.ignoreLineStyle = true;
+    //let caret_rect = getCharacterRect(sel.index, true, false);
+    //let caret_line = { x1: caret_rect.left, y1: caret_rect.top, x2: caret_rect.left, y2: caret_rect.bottom };
+
+    let caret_color = CaretBlinkOffColor == null ? getCaretColor() : CaretBlinkOffColor;
+    //drawRect(ctx, caret_rect, caret_color, caret_color, 0, caret_opacity);
+    drawLine(ctx, caret_line, caret_color, caret_width);
+}
+
+function drawTest() {
+    let test_rect = getEditorContainerRect();
+    drawRect(getOverlayContext(), test_rect, 'black', 'black', 0, 1);
 }
 
 function drawAnnotations(ctx) {
@@ -226,7 +245,7 @@ function drawAnnotations(ctx) {
     }
     for (var i = 0; i < Annotations.length; i++) {
         drawAnnotation(ctx, Annotations[i]);
-	}
+    }
 }
 
 function drawAnnotation(ctx, annotation) {
@@ -236,7 +255,7 @@ function drawAnnotation(ctx, annotation) {
         annotation_rect.left += content_rect.x;
         annotation_rect.top += content_rect.y;
 
-        drawRect(ctx, annotation_rect, 'pink','blue', 1.5, 125 / 255);
+        drawRect(ctx, annotation_rect, 'pink', 'blue', 1.5, 125 / 255);
     }
     if (annotation.children !== undefined &&
         Array.isArray(annotation.children)) {
@@ -246,17 +265,15 @@ function drawAnnotation(ctx, annotation) {
     }
 }
 
+function clearOverlay(ctx) {
+    let overlayCanvas = getOverlayElement();
 
-function drawOverlay() {
-    let overlayCanvas = document.getElementById('overlayCanvas');
-    updateOverlayBounds(overlayCanvas);
-
-    if (!overlayCanvas.getContext) {
-        return;
-    }
-
-    let ctx = overlayCanvas.getContext('2d');
     ctx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+}
+function drawOverlay() {
+    updateOverlayBounds();
+
+    let ctx = getOverlayContext();
 
     drawTextSelection(ctx);
 
@@ -266,12 +283,33 @@ function drawOverlay() {
 
     if (IsHighlightingVisible) {
         drawHighlighting(ctx);
-    } 
+    }
 
     if (isDropping()) {
-       drawDropPreview(ctx);
+        drawDropPreview(ctx);
     } else if (isAnyAppendEnabled()) {
         // MOTE don't draw append if dropping
         drawAppendNotifierPreview(ctx);
     }
 }
+
+// #endregion Draws
+
+// #endregion Actions
+
+// #region Event Handlers
+
+function onCaretBlinkTick() {
+    if (CaretBlinkOffColor) {
+        CaretBlinkOffColor = null;
+    } else {
+        CaretBlinkOffColor = 'transparent'
+    }
+    if (WindowMouseDownLoc != null) {
+        // don't blink if sel changing
+        return;
+    }
+    drawOverlay();
+}
+
+// #endregion Event Handlers

@@ -65,11 +65,11 @@ function loadContent(
 			hideFindReplaceToolbar();
 		}
 		if (CurFindReplaceDocRanges) {
-			hideScrollbars();
+			hideAllScrollbars();
 			resetFindReplaceResults();
 		}
 	} else {
-		showScrollbars();
+		showAllScrollbars();
 		setFindReplaceInputState(searchStateObj);
 		populateFindReplaceResults();
 		onQuerySearchRangesChanged_ntf(CurFindReplaceDocRanges.length);

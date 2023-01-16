@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-
     public class MpAvSourceRefBuilder : MpISourceRefBuilder {
         public const string INTERNAL_SOURCE_DOMAIN = "https://localhost";
 
