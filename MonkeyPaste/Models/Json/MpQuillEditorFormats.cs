@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Org.BouncyCastle.Bcpg.OpenPgp;
 
 namespace MonkeyPaste {
     public class MpQuillInitMainRequestMessage : MpJsonObject {
@@ -16,8 +17,6 @@ namespace MonkeyPaste {
         public string contentType { get; set; }
 
         public string itemData { get; set; }
-
-        public bool isPasteRequest { get; set; } = false; //request should ONLY happen if encoded w/ templates
 
         public string searchText { get; set; } = null;
         public bool isCaseSensitive { get; set; } = false;
@@ -165,6 +164,7 @@ namespace MonkeyPaste {
     public class MpQuillDataTransferCompletedNotification : MpJsonObject {
         public string changeDeltaJsonStr { get; set; }
         public string sourceDataItemsJsonStr { get; set; }
+        public string transferLabel { get; set; }
     }
 
     public class MpQuillAppendStateChangedMessage : MpJsonObject {
@@ -204,6 +204,7 @@ namespace MonkeyPaste {
     public class MpQuillContentDataResponseMessage : MpJsonObject {
         public List<MpQuillHostDataItemFragment> dataItems { get; set; }
         public bool isAllContent { get; set; }
+        public bool isNoneSelected { get; set; }
     }
 
     public class MpQuillHostDataItemsMessageFragment : MpJsonObject {

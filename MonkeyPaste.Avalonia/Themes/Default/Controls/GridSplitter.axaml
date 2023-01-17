@@ -6,38 +6,24 @@
         <sys:Double x:Key="DefaultGridSplitterFixedDimensionLength">
             5
         </sys:Double>
-
-
-
     </Styles.Resources>
     <Style Selector="GridSplitter.horizontal">
         <Setter Property="Cursor"
                 Value="SizeNorthSouth" />
-        <!--<Setter Property="Width"
-                Value="{x:Static sys:Double.NaN}" />
         <Setter Property="Height"
-                Value="{DynamicResource DefaultGridSplitterFixedDimensionLength}" />
-        <Setter Property="HorizontalAlignment"
-                Value="Stretch" />
-        <Setter Property="VerticalAlignment"
-                Value="Bottom" />
+                Value="{StaticResource DefaultGridSplitterFixedDimensionLength}" />
         <Setter Property="ResizeDirection"
-                Value="Rows" />-->
+                Value="Rows" />
     </Style>
     <Style Selector="GridSplitter.vertical">
         <Setter Property="Cursor"
                 Value="SizeWestEast" />
-        <!--<Setter Property="Width"
-                Value="{DynamicResource DefaultGridSplitterFixedDimensionLength}" />
-        <Setter Property="Height"
-                Value="{x:Static sys:Double.NaN}" />
-        <Setter Property="HorizontalAlignment"
-                Value="Right" />
-        <Setter Property="VerticalAlignment"
-                Value="Stretch" />
+        <Setter Property="Width"
+                Value="{StaticResource DefaultGridSplitterFixedDimensionLength}" />
         <Setter Property="ResizeDirection"
-                Value="Columns" />-->
+                Value="Columns" />
     </Style>
+
     <Style Selector="GridSplitter">
         <Setter Property="Background"
                 Value="{DynamicResource DefaultGridSplitterBrush}" />

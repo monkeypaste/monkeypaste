@@ -78,17 +78,17 @@ function performDataTransferOnContent(
     dest_doc_range,
     source_doc_range,
     source = 'api',
-    suppressMsg = false) {
+    transferLabel = '') {
+    // called on paste, drop and append
 	if (!dt || !dest_doc_range) {
         log('data transfer error  no data transfer or destination range');
         return;
     }
 
-    let wasTextChangeSuppressed = false;
-    if (!SuppressTextChangedNtf && suppressMsg) {
+    let wasTextChangeSuppressed = SuppressTextChangedNtf;
+    if (!SuppressTextChangedNtf) {
         // NOTE don't unflag textchange ntf if currently set (should be wrapped somewhere) only flag if needed
         SuppressTextChangedNtf = true;
-        wasTextChangeSuppressed = true;
     }
 
     // COLLECT URI SOURCES  (IF AVAILABLE)    
@@ -117,7 +117,7 @@ function performDataTransferOnContent(
         let cb_frag = parseHtmlFromHtmlClipboardFragment(dt_html_str);
         dt_html_str = cb_frag.html;
         if (!isNullOrEmpty(cb_frag.sourceUrl)) {
-            source_urls.push(cb_frag.sourceUrl)
+            source_urls.push(cb_frag.sourceUrl);
         }
     }
 
@@ -140,7 +140,10 @@ function performDataTransferOnContent(
 
     if (!isNullOrEmpty(dt_html_str)) {
         transfer_deltas = [];
-        setHtmlInRange(dest_doc_range, dt_html_str, source, true);
+        let dt_html_delta = convertHtmlToDelta(dt_html_str);
+        dt_html_delta = decodeHtmlEntitiesInDeltaInserts(dt_html_delta);
+        insertDelta(dest_doc_range, dt_html_delta, source);
+        //setHtmlInRange(dest_doc_range, dt_html_str, source, true);
     } else if (dt.types.includes('text/plain')) {
         transfer_deltas = [];
         let dt_pt_str = dt.getData('text/plain');
@@ -187,27 +190,26 @@ function performDataTransferOnContent(
     setDocSelection(dt_range.index, dt_range.length);
     scrollDocRangeIntoView(dt_range);    
 
-    if (!suppressMsg) {
-        let result_delta = null;
-        if (transfer_deltas) {
-            if (transfer_deltas.length > 1) {
-                if (transfer_deltas.length > 2) {
-                    // should only be max of 2 
-                    debugger;
-                }
-                result_delta = transfer_deltas[0].compose(transfer_deltas[1]);
-            } else if (transfer_deltas.length == 1) {
-                result_delta = transfer_deltas[0];
-            }            
+    let result_delta = null;
+    if (transfer_deltas) {
+        if (transfer_deltas.length > 1) {
+            if (transfer_deltas.length > 2) {
+                // should only be max of 2 
+                debugger;
+            }
+            result_delta = transfer_deltas[0].compose(transfer_deltas[1]);
+        } else if (transfer_deltas.length == 1) {
+            result_delta = transfer_deltas[0];
         }
-        if (source_urls.length > 0) {
-            dt.setData(URI_LIST_FORMAT, source_urls.join('\r\n'));
-        }
-        let host_dt_obj = convertDataTransferToHostDataItems(dt);
-        onDataTransferCompleted_ntf(
-            result_delta,
-            host_dt_obj);
-    }    
+    }
+    if (source_urls.length > 0) {
+        dt.setData(URI_LIST_FORMAT, source_urls.join('\r\n'));
+    }
+    let host_dt_obj = convertDataTransferToHostDataItems(dt);
+    onDataTransferCompleted_ntf(
+        result_delta,
+        host_dt_obj,
+        transferLabel);   
 
     if (wasTextChangeSuppressed) {
         SuppressTextChangedNtf = false;

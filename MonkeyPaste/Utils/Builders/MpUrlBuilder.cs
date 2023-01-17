@@ -19,22 +19,30 @@ namespace MonkeyPaste {
         #endregion
 
         #region Public Methods
-        public static async Task<MpUrl> CreateUrlAsync(string sourceUrl, string title = "") {
-            if(string.IsNullOrWhiteSpace(sourceUrl)) {
+        public async Task<MpUrl> CreateAsync(string url, int appId = 0, bool suppressWrite = false) {
+            if (string.IsNullOrWhiteSpace(url)) {
                 return null;
             }
-            string sourceUrlTitle = title;
-            if (string.IsNullOrEmpty(sourceUrlTitle)) {
-                sourceUrlTitle = await MpUrlHelpers.GetUrlTitleAsync(sourceUrl);
+
+            var urlProps = await MpUrlHelpers.DiscoverUrlProperties(url);
+            if(urlProps == null) {
+                return null;
             }
 
-            var result = await MpUrl.CreateAsync(sourceUrl, sourceUrlTitle);
-            return result;
-        }
+            MpIcon icon = await MpPlatformWrapper.Services.IconBuilder.CreateAsync(
+                    iconBase64: urlProps.IconBase64,
+                    suppressWrite: suppressWrite);
 
-        public async Task<MpUrl> CreateAsync(string uri, string title = "") {
-            var url = await MpUrlBuilder.CreateUrlAsync(uri, title);
-            return url;
+
+            var result = await MpUrl.CreateAsync(
+                urlPath: urlProps.FullyFormattedUriStr,
+                title: urlProps.Title,
+                domain: urlProps.DomainStr,
+                iconId: icon.Id,
+                appId: appId,
+                suppressWrite: suppressWrite);
+
+            return result;
         }
         #endregion
 

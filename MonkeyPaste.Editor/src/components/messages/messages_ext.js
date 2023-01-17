@@ -32,7 +32,6 @@ function loadContent_ext(loadContentMsgStr_base64) {
 		req.contentHandle,
 		req.contentType,
 		req.itemData,
-		req.isPasteRequest,
 		searchStateObj,
 		req.isAppendLineMode,
 		req.isAppendMode,
@@ -75,15 +74,11 @@ function contentRequest_ext(contentReqMsgStr_base64) {
 
 	log('contentRequest_ext: ' + contentReqMsgStr_base64);
 	let req = toJsonObjFromBase64Str(contentReqMsgStr_base64);
-	//if (req.forPaste && hasTemplates()) {
-	//	onWaitTillPasteIsReady_ntf(req);
-	//	return;
-	//}
-
 	let items = convertContentToFormats(req.forOle, req.formats);
 	let respObj = {
 		dataItems: items,
-		isAllContent: isAllSelected()
+		isAllContent: isAllSelected(),
+		isNoneSelected: isNoneSelected() 
 	};
 	let resp = toBase64FromJsonObj(respObj);
 	return resp;

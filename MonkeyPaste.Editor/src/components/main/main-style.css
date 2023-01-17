@@ -17,7 +17,7 @@ body {
     --insertselectcolor: darkorange;
     --editableopacity: 0.5;
     --defaultopacity: 0.0;
-    --defaultFontFamily: system-ui;
+    --defaultFontFamily: Helvetica;
     caret-color: transparent;
     margin: 0px;
     padding: 0px;

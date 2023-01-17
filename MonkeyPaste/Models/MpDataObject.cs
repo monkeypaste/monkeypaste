@@ -67,8 +67,7 @@ namespace MonkeyPaste {
                     // file list
 
                     if (kvp.Key.Name != MpPortableDataFormats.AvFileNames) {
-                        // why is this a string list?
-                        //Debugger.Break();
+                        // this table is only used for searching so no other enumerable types are currently needed
                         continue;
                     }
                     // store file/path icon with path
@@ -100,6 +99,10 @@ namespace MonkeyPaste {
 
                     itemDataStr = kvp.Value.ToString();
                 } else {
+                    if(kvp.Key.Name == MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT) {
+                        // don't need to worry about storing this (value type is list)
+                        continue;
+                    }
                     // what type is it?
                     Debugger.Break();
                     itemDataStr = kvp.Value.ToString();

@@ -710,7 +710,8 @@ namespace MonkeyPaste.Avalonia {
                                                 UnconstrainedContentSize.Height > TileContentHeight;
 
         public bool IsOverlayButtonsVisible =>
-            false;//IsHovering && !IsAppendNotifier && !Parent.IsAnyDropOverTrays;
+            IsHovering && !IsAppendNotifier && !Parent.IsAnyDropOverTrays;
+
         public bool IsResizable => !IsAppendNotifier;
         public bool CanResize { get; set; } = false;
 
@@ -1641,6 +1642,9 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(MinWidth));
                     OnPropertyChanged(nameof(MinHeight));
                     BoundSize = new MpSize(IsCustomWidth ? BoundWidth : MinSize.Width, MinSize.Height);
+
+                    TransactionCollectionViewModel.OnPropertyChanged(nameof(TransactionCollectionViewModel.DefaultTransactionPanelWidth));
+                    TransactionCollectionViewModel.OnPropertyChanged(nameof(TransactionCollectionViewModel.DefaultTransactionPanelHeight));
                     break;
                 case nameof(ObservedWidth):
                     BoundWidth = ObservedWidth;
@@ -1660,6 +1664,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(BoundHeight));
                     OnPropertyChanged(nameof(MaxWidth));
                     OnPropertyChanged(nameof(MaxHeight));
+                    TransactionCollectionViewModel.OnPropertyChanged(nameof(TransactionCollectionViewModel.MaxWidth));
                     Parent.UpdateTileRectCommand.Execute(new object[] { Next, TrayRect });
                     break;
                 case nameof(TrayLocation):
@@ -1849,6 +1854,12 @@ namespace MonkeyPaste.Avalonia {
             async() => {
                 IsBusy = true;
                 var mpdo = await GetDragSource().GetDataObjectAsync(true);
+                if(mpdo == null) {
+                    // is none selected?
+                    Debugger.Break();
+                    IsBusy = false;
+                    return;
+                }
                 await MpPlatformWrapper.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(mpdo, true);
 
                 // wait extra for cb watcher to know about data

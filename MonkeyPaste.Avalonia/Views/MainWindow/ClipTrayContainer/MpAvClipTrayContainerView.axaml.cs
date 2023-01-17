@@ -37,6 +37,22 @@ namespace MonkeyPaste.Avalonia {
             }                  
         }
 
+        public void UpdatePinTrayVarDimension(GridLength gl) {
+            var ctrcv_container_grid = this.FindControl<Grid>("ClipTrayContainerGrid");
+
+            if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+                if (ctrcv_container_grid.ColumnDefinitions.Count == 0) {
+                    return;
+                }
+                ctrcv_container_grid.ColumnDefinitions[0].Width = gl;
+            } else {
+                if (ctrcv_container_grid.RowDefinitions.Count == 0) {
+                    return;
+                }
+                ctrcv_container_grid.RowDefinitions[0].Height = gl;
+            }
+        }
+
         private void MpAvClipTrayContainerView_DataContextChanged(object sender, EventArgs e) {
             if(BindingContext == null) {
                 return;

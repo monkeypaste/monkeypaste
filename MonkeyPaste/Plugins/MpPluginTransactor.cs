@@ -76,13 +76,13 @@ namespace MonkeyPaste {
 
                 // LOG TRANSACTION (create record of params, ref to plugin source(local/remote))
 
-                int ci_trans_id = await MpPluginLogger.LogTransactionAsync(pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite);
+                //int ci_trans_id = await MpPluginLogger.LogTransactionAsync(pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite);
 
                 // TODO (for http) phone home w/ response to finish transaction record and await return
 
                 // PROCESS RESPONSE
                 try {
-                    at.ResponseContent = await MpPluginResponseConverter.ConvertAsync(pluginFormat, at, sourceCopyItem, ci_trans_id, sourceHandler, suppressWrite);
+                    at.ResponseContent = await MpPluginResponseConverter.ConvertAsync(pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite);
                     return at;
                 }
                 catch (Exception ex) {

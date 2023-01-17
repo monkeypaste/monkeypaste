@@ -1,4 +1,7 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Controls;
+using Avalonia.Threading;
+using MonkeyPaste.Common.Avalonia;
+using MonoMac.OpenGL;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -73,12 +76,34 @@ namespace MonkeyPaste.Avalonia {
 
         #region Layout
 
-        public double DefaultTransactionPanelLength => 150;
+        public double DefaultTransactionPanelWidth {
+            get {
+                return MpAvClipTrayViewModel.Instance.DefaultItemWidth * 0.5;
+            }
+        }
+        public double DefaultTransactionPanelHeight {
+            get {
+                return MpAvClipTrayViewModel.Instance.DefaultItemHeight * 0.5;
+            }
+        }
         public double BoundWidth { get; set; }
         public double BoundHeight { get; set; }
         
         public double ObservedWidth { get; set; }
         public double ObservedHeight { get; set; }
+
+        public double MaxWidth {
+            get {
+                if(Parent == null) {
+                    return 0;
+                }
+                if(!IsTransactionPaneOpen) {
+                    return 0;
+                }
+                return Parent.BoundWidth * 0.5;
+            }
+        }
+
         #endregion
 
         #region State
@@ -183,6 +208,18 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private void SetTransactionViewGridLength(GridLength gl) {
+            if (Parent.GetDragSource() is MpAvCefNetWebView wv &&
+                    wv.GetVisualAncestor<MpAvClipTileView>() is MpAvClipTileView ctv &&
+                    ctv.FindControl<Grid>("TileGrid") is Grid tileGrid) {
+                // setting all column 1 view to IsVisible=false doesn't decrease 
+                // the column's grid length so all other tileGrid views (column 0) 
+                // are <transaction width> less than total width, so this reset column 1 width
+                var trans_gl = tileGrid.ColumnDefinitions[1];
+                trans_gl.Width = gl;// new GridLength(0, GridUnitType.Auto);
+            }
+        }
+
         #endregion
 
         #region Commands
@@ -194,31 +231,47 @@ namespace MonkeyPaste.Avalonia {
         public ICommand OpenTransactionPaneCommand => new MpCommand(
             () => {
                 IsTransactionPaneOpen = true;
-                BoundWidth = DefaultTransactionPanelLength;
-                BoundHeight = Parent.BoundHeight;
+                OnPropertyChanged(nameof(MaxWidth));
+                //BoundWidth = DefaultTransactionPanelLength;
+                //BoundHeight = Parent.BoundHeight;
+                SetTransactionViewGridLength(new GridLength(DefaultTransactionPanelWidth, GridUnitType.Auto));
 
-                //double nw = Parent.BoundWidth + DefaultTransactionPanelLength;
-                //double nh = Parent.BoundHeight;
-                //Dispatcher.UIThread.Post(() => {
-                //    MpAvResizeExtension.ResizeAnimated(
-                //        Parent.GetDragSource() as MpAvCefNetWebView, nw, nh);
-                //});
+                double nw = Parent.BoundWidth + DefaultTransactionPanelWidth;
+                double nh = Parent.BoundHeight;
+                Dispatcher.UIThread.Post(() => {
+                    MpAvResizeExtension.ResizeAnimated(
+                        Parent.GetDragSource() as MpAvCefNetWebView, 
+                        nw, nh, 
+                        () => {
+                            if(Parent.IsPinned) {
+                                return;
+                            }
+                            Parent.Parent.RefreshQueryTrayLayout();
+                        });
+                });
             }, () => {
                 return Parent != null && !IsTransactionPaneOpen;
             });
 
         public ICommand CloseTransactionPaneCommand => new MpCommand(
             () => {
-                
                 IsTransactionPaneOpen = false;
-                Parent.BoundWidth -= ObservedWidth;
-                BoundWidth = 0;
-                //double nw = Parent.BoundWidth - BoundWidth;
-                //double nh = Parent.BoundHeight;
-                //Dispatcher.UIThread.Post(() => {
-                //    MpAvResizeExtension.ResizeAnimated(
-                //        Parent.GetDragSource() as MpAvCefNetWebView, nw, nh);
-                //});
+
+                SetTransactionViewGridLength(new GridLength(0, GridUnitType.Auto));
+
+                double nw = Parent.Parent.DefaultItemWidth;
+                double nh = Parent.Parent.DefaultItemHeight;
+                Dispatcher.UIThread.Post(() => {
+                    MpAvResizeExtension.ResizeAnimated(
+                        Parent.GetDragSource() as MpAvCefNetWebView, 
+                        nw, nh,
+                        () => {
+                            if (Parent.IsPinned) {
+                                return;
+                            }
+                            Parent.Parent.RefreshQueryTrayLayout();
+                        });
+                });
             }, () => {
                 return Parent != null && IsTransactionPaneOpen;
             });

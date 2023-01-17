@@ -23,7 +23,8 @@ namespace MonkeyPaste.Avalonia {
         public bool IsExpanded { get; set; }
         public MpITreeItemViewModel ParentTreeItem => null;
         public IEnumerable<MpITreeItemViewModel> Children => Items;
-        public string LabelText => TransactionIdx.ToString();
+        public string LabelText => 
+            Transaction == null ? TransactionIdx.ToString() : Transaction.TransactionLabel;
         public object ComparableSortValue => TransactionDateTimeUtc;
         public object IconSourceObj => SourceIconObj;
 
@@ -73,7 +74,8 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region View Models
-        
+
+        public ObservableCollection<MpAvTransactionSourceViewModelBase> Sources { get; set; } = new ObservableCollection<MpAvTransactionSourceViewModelBase>();
         public IEnumerable<MpAvTransactionMessageViewModelBase> Items {
             get {
                 var items = new List<MpAvTransactionMessageViewModelBase>();
@@ -241,6 +243,8 @@ namespace MonkeyPaste.Avalonia {
             //_sourceRef = null;
             //CopyItemSource = cis;
             Transaction = cit;
+
+            var sources = await MpDataModelProvider.GetCopyItemTransactionSourcesAsync(TransactionId);
             
             var refs = await MpDataModelProvider.GetSourceRefsByCopyItemTransactionIdAsync(TransactionId);
             SourceRef = refs.FirstOrDefault();
@@ -260,6 +264,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
+        public async Task<MpAvTransactionSourceViewModelBase> CreateSourceViewModel(MpTransactionSource ts) {
+            return null;
+
+        }
+        
         public async Task<MpAvTransactionMessageViewModelBase> CreateMessageViewModel(MpJsonMessageFormatType jsonFormat, string json, MpITransactionNodeViewModel parentAnnotation) {
             if(string.IsNullOrEmpty(json)) {
                 return null;
@@ -268,6 +277,12 @@ namespace MonkeyPaste.Avalonia {
             switch (jsonFormat) {
                 case MpJsonMessageFormatType.DataObject:
                     cttimvmb = new MpAvDataObjectMessageViewModel(this);
+                    break;
+                case MpJsonMessageFormatType.Delta:
+                    cttimvmb = new MpAvDeltaMessageViewModel(this);
+                    break;
+                case MpJsonMessageFormatType.ParameterRequest:
+                    cttimvmb = new MpAvParameterRequestMessageViewModel(this);
                     break;
                 default:
                     return null;

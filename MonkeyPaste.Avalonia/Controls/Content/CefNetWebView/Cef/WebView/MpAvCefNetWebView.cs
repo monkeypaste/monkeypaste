@@ -52,7 +52,6 @@ namespace MonkeyPaste.Avalonia {
         notifyShowCustomColorPicker,
         notifyNavigateUriRequested,
         notifySetClipboardRequested,
-        notifyPasteIsReady,
         notifyDataTransferCompleted,
         notifySelectionChanged,
         notifyScrollChanged,
@@ -71,7 +70,6 @@ namespace MonkeyPaste.Avalonia {
         MpAvIWebViewBindingResponseHandler {
         #region Private Variables
         private const int _APPEND_TIMEOUT_MS = 5000;
-        private string _pastableContent_ntf { get; set; }
         private string _contentScreenShotBase64_ntf { get; set; }
 
         private string _lastLoadedContentHandle = null;
@@ -224,31 +222,15 @@ namespace MonkeyPaste.Avalonia {
                 contentDataReq.formats.Remove(MpPortableDataFormats.WinBitmap);
                 contentDataReq.formats.Remove(MpPortableDataFormats.WinDib);
             }
-            MpQuillContentDataResponseMessage contentDataResp = null;
 
-            //if (false) {//contentDataReq.forPaste && ctvm.HasTemplates) {
-            //    if (ctvm.IsContentReadOnly) {
-            //        //var ctv = this.GetVisualAncestor<MpAvClipTileView>();
-            //        //if (ctv != null) {
-            //        //    var resizeControl = ctv.FindControl<Control>("ClipTileResizeBorder");
-            //        //    MpAvResizeExtension.ResizeAnimated(resizeControl, ctvm.EditableWidth, ctvm.EditableHeight);
-            //        //}
-            //        MpAvResizeExtension.ResizeAnimated(this, ctvm.EditableWidth, ctvm.EditableHeight);
-            //    }
-            //    _pastableContent_ntf = null;
-            //    this.ExecuteJavascript($"contentRequest_ext('{contentDataReq.SerializeJsonObjectToBase64()}')");
-            //    while (_pastableContent_ntf == null) {
-            //        await Task.Delay(100);
-            //    }
-            //    contentDataResp = MpJsonObject.DeserializeBase64Object<MpQuillContentDataResponseMessage>(_pastableContent_ntf);
-            //    _pastableContent_ntf = null;
-            //} else {
-                var contentDataRespStr = await this.EvaluateJavascriptAsync($"contentRequest_ext('{contentDataReq.SerializeJsonObjectToBase64()}')");
-                contentDataResp = MpJsonObject.DeserializeBase64Object<MpQuillContentDataResponseMessage>(contentDataRespStr);
-            //}
+            var contentDataRespStr = 
+                await this.EvaluateJavascriptAsync($"contentRequest_ext('{contentDataReq.SerializeJsonObjectToBase64()}')");
+            MpQuillContentDataResponseMessage contentDataResp = 
+                MpJsonObject.DeserializeBase64Object<MpQuillContentDataResponseMessage>(contentDataRespStr);
 
 
-            if (contentDataResp.dataItems == null) {
+            if (contentDataResp.dataItems == null ||
+                contentDataResp.isNoneSelected) {
                 return null;
             }
             var avdo = new MpAvDataObject();
@@ -289,7 +271,7 @@ namespace MonkeyPaste.Avalonia {
                 if (add_tile_data) {
                     avdo.SetData(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT, ctvm.PublicHandle);
                 }
-                avdo.SetData(MpPortableDataFormats.CefAsciiUrl, MpPlatformWrapper.Services.SourceRefBuilder.ToUrlAsciiBytes(ctvm.CopyItem));
+                //avdo.SetData(MpPortableDataFormats.CefAsciiUrl, MpPlatformWrapper.Services.SourceRefBuilder.ToUrlAsciiBytes(ctvm.CopyItem));
 
                 List<string> uri_list = new List<string>();
                 if(avdo.TryGetData<IEnumerable<string>>(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT,out var uris)) {
@@ -465,19 +447,20 @@ namespace MonkeyPaste.Avalonia {
                             resp_json = dataTransferCompleted_ntf.changeDeltaJsonStr.ToStringFromBase64();
                         }
 
-                        var cit = await MpCopyItemTransaction.CreateAsync(
-                            copyItemId: ctvm.CopyItemId,
-                            reqMsgType: MpJsonMessageFormatType.DataObject,
-                            reqMsgJsonStr: req_json,
-                            respMsgType: MpJsonMessageFormatType.Delta,
-                            respMsgJsonStr: resp_json);
-
+                        IEnumerable<string> refs = null;
                         if (req_mpdo != null) {
                             var other_refs = await MpPlatformWrapper.Services.SourceRefBuilder.GatherSourceRefsAsync(req_mpdo);
-                            await MpPlatformWrapper.Services.SourceRefBuilder.AddTransactionSourcesAsync(
-                                cit.Id,
-                                other_refs);
+                            refs = other_refs.Select(x => MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(x));
                         }
+
+                        await MpPlatformWrapper.Services.TransactionBuilder.PerformTransactionAsync(
+                            copyItemId: ctvm.CopyItemId,
+                            reqType: MpJsonMessageFormatType.DataObject,
+                            req: req_json,
+                            respType: MpJsonMessageFormatType.Delta,
+                            resp: resp_json,
+                            ref_urls: refs,
+                            label: dataTransferCompleted_ntf.transferLabel);                        
                     }
                     break;
 
@@ -528,10 +511,6 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case MpAvEditorBindingFunctionType.notifyPasteRequest:
                     MpAvClipTrayViewModel.Instance.PasteFromClipTilePasteButtonCommand.Execute(BindingContext);
-                    break;
-                case MpAvEditorBindingFunctionType.notifyPasteIsReady:
-                    // NOTE picked up in Document.GetDataObject
-                    _pastableContent_ntf = msgJsonBase64Str;
                     break;
 
                 // DND
@@ -856,7 +835,6 @@ namespace MonkeyPaste.Avalonia {
                 contentHandle = BindingContext.PublicHandle,
                 contentType = BindingContext.ItemType.ToString(),
                 itemData = BindingContext.EditorFormattedItemData,
-                isPasteRequest = BindingContext.IsPasting,
                 annotationsJsonStr = BindingContext.AnnotationsJsonStr
             };
 

@@ -27,6 +27,10 @@ namespace MonkeyPaste.Avalonia {
                 return app;
             }
             if(!sourceUrl.StartsWith(INTERNAL_SOURCE_DOMAIN.ToLower())) {
+                // should appId be a default arg to this method? 
+                // should this check last process for appId instead?
+                // does THIS app need to be ref'd instead of last?
+                Debugger.Break();
                 // add or fetch external url
                 var url = await MpPlatformWrapper.Services.UrlBuilder.CreateAsync(sourceUrl);
                 return url;
@@ -81,22 +85,25 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public async Task<List<MpTransactionSource>> AddTransactionSourcesAsync(
-            int copyItemTransactionId, IEnumerable<MpISourceRef> transactionSources) {
+            int copyItemTransactionId, 
+            IEnumerable<Tuple<MpISourceRef,string>> transactionSources) {
             if(transactionSources == null) {
                 return null;
             }
             var sources = new List<MpTransactionSource>();
             foreach(var source_ref in transactionSources) {
+
                 var cis = await MpTransactionSource.CreateAsync(
                     transactionId: copyItemTransactionId,
-                    sourceObjId: source_ref.SourceObjId,
-                    sourceType: source_ref.SourceType);
+                    sourceObjId: source_ref.Item1.SourceObjId,
+                    sourceType: source_ref.Item1.SourceType,
+                    sourceArgs: source_ref.Item2);
                 sources.Add(cis);
             }
             return sources;
         }
 
-        public async Task<IEnumerable<MpISourceRef>> GatherSourceRefsAsync(MpPortableDataObject mpdo) {
+        public async Task<IEnumerable<MpISourceRef>> GatherSourceRefsAsync(MpPortableDataObject mpdo, bool forceExtSources = false) {
             
             List<MpISourceRef> refs = new List<MpISourceRef>();
             if (mpdo.TryGetData(MpPortableDataFormats.CefAsciiUrl, out byte[] urlBytes) &&
@@ -115,37 +122,21 @@ namespace MonkeyPaste.Avalonia {
             }
             if(uri_strings != null) {
                 var list_refs = await Task.WhenAll(
-                uri_strings.Select(x => MpPlatformWrapper.Services.SourceRefBuilder.FetchOrCreateSourceAsync(x)));
+                    uri_strings.Select(x => MpPlatformWrapper.Services.SourceRefBuilder.FetchOrCreateSourceAsync(x)));
                 refs.AddRange(list_refs);
             }
 
-            //if (refs.FirstOrDefault(x => x.SourceType == MpCopyItemSourceType.CopyItem) is MpCopyItem source_ci) {
-            //    // when creating an item from an internal source
-            //    // get source item type and remove higher priority formats that aren't of source type
-            //    // (so partial drop of text isn't inferred as files for example)
-
-            //    if (source_ci != null) {
-            //        if (source_ci.ItemType != MpCopyItemType.FileList) {
-            //            mpdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvFileNames));
-            //        }
-            //        if (source_ci.ItemType != MpCopyItemType.Image) {
-            //            mpdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvPNG));
-            //        }
-            //        mpdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvRtf_bytes));
-            //        mpdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvCsv));
-            //    }
-            //}
-            if (refs == null || refs.Count == 0) {
+            if (refs.Count == 0 || forceExtSources) {
                 // external ole create
                 var ext_refs = await GatherExternalSourceRefsAsync(mpdo);
                 if (ext_refs != null && ext_refs.Count() > 0) {
-                    refs = ext_refs.ToList();
+                    refs.AddRange(ext_refs);
                 }
             }
-            if (refs == null || refs.Count == 0) {
+            if (refs.Count == 0) {
                 // fallback
                 var this_app = await MpDataModelProvider.GetItemAsync<MpApp>(MpDefaultDataModelTools.ThisAppId);
-                refs = new List<MpISourceRef>() { this_app };
+                refs.Add(this_app);
             }
             return refs;
         }
@@ -169,7 +160,9 @@ namespace MonkeyPaste.Avalonia {
             MpUrl url = null;
             string source_url = MpAvHtmlClipboardData.FindSourceUrl(mpdo);
             if (!string.IsNullOrWhiteSpace(source_url)) {
-                url = await MpUrlBuilder.CreateUrlAsync(source_url);
+                url = await MpPlatformWrapper.Services.UrlBuilder.CreateAsync(
+                    url: source_url,
+                    appId: app == null ? 0 : app.Id);
             }
 
             List<MpISourceRef> ext_refs = new List<MpISourceRef>();
@@ -198,10 +191,23 @@ namespace MonkeyPaste.Avalonia {
             return false;
         }
 
-        public string ConvertToRefUrl(MpISourceRef sr) {
-            return $"{INTERNAL_SOURCE_DOMAIN}?type={sr.SourceType.ToString()}&id={sr.SourceObjId}";
+        public string ConvertToRefUrl(MpISourceRef sr, string base64Args = null) {
+            string queryParam = base64Args == null ? string.Empty : $"&args={base64Args}";
+            return $"{INTERNAL_SOURCE_DOMAIN}?type={sr.SourceType.ToString()}&id={sr.SourceObjId}{queryParam}";
         }
 
+        public string ParseRefArgs(string ref_url) {
+            if(string.IsNullOrEmpty(ref_url)) {
+                return null;
+            }
+            if(ref_url.SplitNoEmpty("&").FirstOrDefault(x=>x.StartsWith("args")) is string queryArg
+                && !string.IsNullOrEmpty(queryArg) &&
+                string.Join("=",queryArg.Split("=").Skip(1)) is string base64ArgStr &&
+                !string.IsNullOrEmpty(base64ArgStr)) {
+                return base64ArgStr.ToStringFromBase64();
+            }
+            return null;
+        }
         public byte[] ToUrlAsciiBytes(MpISourceRef sr) {
             // for clipboard storage as CefAsciiBytes format
             return ConvertToRefUrl(sr).ToBytesFromString(Encoding.ASCII);

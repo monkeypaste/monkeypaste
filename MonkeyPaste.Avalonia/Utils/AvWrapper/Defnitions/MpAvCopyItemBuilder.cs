@@ -28,7 +28,7 @@ namespace MonkeyPaste.Avalonia {
             }
             await NormalizePlatformFormatsAsync(mpdo);
 
-            var refs = await MpPlatformWrapper.Services.SourceRefBuilder.GatherSourceRefsAsync(mpdo);
+            var refs = await MpPlatformWrapper.Services.SourceRefBuilder.GatherSourceRefsAsync(mpdo, true);
 
             if (MpPlatformWrapper.Services.SourceRefBuilder.IsAnySourceRejected(refs)) {
                 return null;
@@ -58,16 +58,32 @@ namespace MonkeyPaste.Avalonia {
                 itemType: itemType,
                 suppressWrite: suppressWrite);
 
-            var cit = await MpCopyItemTransaction.CreateAsync(
-                        copyItemId: ci.Id,
-                        reqMsgType: MpJsonMessageFormatType.DataObject,
-                        reqMsgJsonStr: mpdo.Serialize(),
-                        respMsgType: MpJsonMessageFormatType.Delta,
-                        respMsgJsonStr: itemDelta);
+            List<string> ref_urls = refs.Select(x=>MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(x)).ToList();
+            if (mpdo.TryGetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, out IEnumerable<string> urls)) { 
+                var urlList = urls.ToList();
+                for (int i = 0; i < ref_urls.Count; i++) {
+                    var provided_url = urlList.FirstOrDefault(x => x.ToLower().StartsWith(ref_urls[i].ToLower()));
+                    if(provided_url != null) {
+                        // prefer provided url in case it has args and remove so not added later
+                        ref_urls[i] = provided_url;
+                        urlList.Remove(provided_url);
+                    }
+                }
+                // add remaining urls for transaction
+                if(urlList.Count > 0) {
+                    ref_urls.AddRange(urlList);
+                }
+            }
 
-            await MpPlatformWrapper.Services.SourceRefBuilder.AddTransactionSourcesAsync(
-                copyItemTransactionId: cit.Id,
-                transactionSources: refs);
+            await MpPlatformWrapper.Services.TransactionBuilder.PerformTransactionAsync(
+                            copyItemId: ci.Id,
+                            reqType: MpJsonMessageFormatType.DataObject,
+                            req: mpdo.Serialize(),
+                            respType: MpJsonMessageFormatType.Delta,
+                            resp: itemDelta,
+                            ref_urls: ref_urls,
+                                //refs.Select(x => MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(x)),
+                            label: "Created");
 
             return ci;
         }

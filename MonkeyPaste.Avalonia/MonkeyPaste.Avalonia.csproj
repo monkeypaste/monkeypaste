@@ -306,6 +306,7 @@
     <None Remove="Assets\Images\qr.png" />
     <None Remove="Assets\Images\question.png" />
     <None Remove="Assets\Images\questionmark.png" />
+    <None Remove="Assets\Images\quilldelta.png" />
     <None Remove="Assets\Images\Remove.png" />
     <None Remove="Assets\Images\rename.png" />
     <None Remove="Assets\Images\replace.png" />
@@ -1013,6 +1014,11 @@
       
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Default\DefaultLight.axaml">
+    </AvaloniaResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\Images\quilldelta.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
   </ItemGroup>
   <ItemGroup>

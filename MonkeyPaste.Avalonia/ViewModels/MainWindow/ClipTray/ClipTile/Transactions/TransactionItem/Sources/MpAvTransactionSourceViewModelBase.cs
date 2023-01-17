@@ -10,7 +10,7 @@ using System.Windows.Input;
 using Xamarin.Forms.Internals;
 
 namespace MonkeyPaste.Avalonia {
-    public abstract class MpAvSourceViewModelBase  : 
+    public abstract class MpAvTransactionSourceViewModelBase  : 
         MpViewModelBase<MpAvTransactionMessageViewModelBase>,
         MpITransactionNodeViewModel {
 
@@ -49,7 +49,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-        public bool IsAnyBusy => IsBusy || (Items != null && Items.Cast<MpAvSourceViewModelBase>().Any(x => x.IsAnyBusy));
+        public bool IsAnyBusy => IsBusy || (Items != null && Items.Cast<MpAvTransactionSourceViewModelBase>().Any(x => x.IsAnyBusy));
         public bool IsHovering { get; set; }
 
         public bool IsSelected { get; set; }
@@ -67,7 +67,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvSourceViewModelBase(MpAvTransactionMessageViewModelBase parent) : base(parent) { }
+        public MpAvTransactionSourceViewModelBase(MpAvTransactionMessageViewModelBase parent) : base(parent) { }
 
         #endregion
 

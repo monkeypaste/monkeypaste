@@ -51,23 +51,9 @@
         <Grid x:Name="TileGrid"
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch"
-              ColumnDefinitions="*,Auto"
-              RowDefinitions="0.25*,*,20">
+              RowDefinitions="0.25*,*,20"
+              ColumnDefinitions="*,Auto">
 
-            <!--  TRANSACTION COLUMN  -->
-
-
-            <local:MpAvClipTileTransactionPaneView DataContext="{Binding TransactionCollectionViewModel}"
-                                                   Grid.Column="1"
-                                                   Grid.Row="0"
-                                                   Grid.RowSpan="3"
-                                                   Background="{DynamicResource ClipTileTransactionPaneBackgroundBrush}"
-                                                   IsVisible="{Binding IsTransactionPaneOpen}"
-                                                   local:MpAvSizeObserverExtension.IsEnabled="True"
-                                                   local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedWidth,Mode=TwoWay}"
-                                                   local:MpAvSizeObserverExtension.ObservedHeight="{Binding ObservedHeight,Mode=TwoWay}"
-                                                   HorizontalAlignment="Stretch"
-                                                   VerticalAlignment="Stretch" />
             <!--  Title  -->
 
             <local:MpAvClipTileTitleView x:Name="TileTitleView"
@@ -123,6 +109,18 @@
                                                  HorizontalAlignment="Stretch"
                                                  VerticalAlignment="Stretch"
                                                  DataContext="{Binding}" />
+
+            <!--  TRANSACTION COLUMN  -->
+
+
+            <local:MpAvClipTileTransactionPaneView DataContext="{Binding TransactionCollectionViewModel}"
+                                                   Grid.Column="1"
+                                                   Grid.Row="0"
+                                                   Grid.RowSpan="3"
+                                                   Background="{DynamicResource ClipTileTransactionPaneBackgroundBrush}"
+                                                   IsVisible="{Binding IsTransactionPaneOpen}"
+                                                   HorizontalAlignment="Stretch"
+                                                   VerticalAlignment="Stretch" />
             <!--  RESIZER  -->
 
             <Border x:Name="ClipTileResizeBorder"
@@ -161,12 +159,13 @@
 
             <GridSplitter x:Name="TransactionContentSplitter"
                           DataContext="{Binding TransactionCollectionViewModel}"
-                          Grid.Column="0"
+                          Grid.Column="1"
                           Grid.Row="0"
                           Grid.RowSpan="3"
+                          Width="5"
                           Classes="vertical"
                           IsVisible="{Binding IsTransactionPaneOpen, FallbackValue=False, TargetNullValue=False}"
-                          HorizontalAlignment="Right"
+                          HorizontalAlignment="Left"
                           VerticalAlignment="Stretch" />
 
             <!--  Trial Expired Overlay  -->

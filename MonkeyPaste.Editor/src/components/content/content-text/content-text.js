@@ -747,7 +747,8 @@ function appendTextContentData(data) {
 	// NOTE since data is result of ci builder it will always be html
 	dt.setData('text/html', data);
 
-	performDataTransferOnContent(dt, getAppendDocRange(),null, 'api', true);
+	// TODO append needs to be refactored (i think) to rely on dataTransferComplete_ntf
+	performDataTransferOnContent(dt, getAppendDocRange(),null, 'api', 'Append');
 }
 
 // #endregion Actions

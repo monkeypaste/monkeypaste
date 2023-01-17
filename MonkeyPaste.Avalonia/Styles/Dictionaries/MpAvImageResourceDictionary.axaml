@@ -232,6 +232,9 @@
     <sys:String x:Key="ChainImage">
         avares://MonkeyPaste.Avalonia/Assets/Images/chain.png
     </sys:String>
+    <sys:String x:Key="QuillDeltaImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/quilldelta.png
+    </sys:String>
     <sys:String x:Key="CheckImage">
         avares://MonkeyPaste.Avalonia/Assets/Images/check.png
     </sys:String>

@@ -45,7 +45,7 @@ namespace MonkeyPaste.Avalonia {
             SourceDataObject = await dragSource.GetDataObjectAsync(true);
 
             if (SourceDataObject == null) {
-                // this seems to happen due to data conversion errors somewhere
+                // is none selected?
                 Debugger.Break();
                 FinishDrag(null);
                 return;
@@ -120,13 +120,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void FinishDrag(DragDropEffects? dropEffect) {
-            //if(_dragSource != null) {
-            //    bool wasCopy = MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown;
-            //    bool wasSuccess = dropEffect.HasValue;
-
-            //    DragDropEffects actualDropEffect = wasSuccess ? wasCopy ? DragDropEffects.Copy : DragDropEffects.Move : DragDropEffects.None;
-            //    _dragSource.NotifyDropComplete(actualDropEffect);
-            //}
             ResetDragState();
             MpMessenger.SendGlobal(MpMessageType.ItemDragEnd);
 

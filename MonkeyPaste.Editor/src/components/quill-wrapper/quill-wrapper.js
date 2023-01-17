@@ -317,10 +317,6 @@ function deleteText(range, source = 'api') {
 }
 
 function insertHtml(docIdx, htmlStr, source = 'api', decodeTemplates = true) {
-	if (!docIdx) {
-		docIdx = 0;
-		setRootHtml('');
-	}
 	quill.clipboard.dangerouslyPasteHTML(docIdx, htmlStr, source);
 	if (decodeTemplates) {
 		// default is true unlike text, since blot's need to be bound to events not sure if thats always right
@@ -339,15 +335,21 @@ function insertContent(docIdx, data, forcePlainText = false) {
 	insertHtml(docIdx, data);
 }
 
-function insertDelta(range, deltaOrDeltaJsonStr) {
+function insertDelta(range, deltaOrDeltaJsonStr, source = 'api') {
 	let deltaObj = deltaOrDeltaJsonStr;
 	if (typeof deltaObj === 'string' || deltaObj instanceof String) {
 		deltaObj = JSON.parse(deltaOrDeltaJsonStr);
 		//deltaObj = Object.assign(new Delta, plainObj);
 	}
+	if (!range || range == null) {
+		range = { index: 0, length: getDocLength() };
+	}
 
-	setTextInRange(range, '');
-	deltaObj.ops = [{ retain: range.index }, ...deltaObj.ops];
+	setTextInRange(range, '', source);
+	const Delta = Quill.imports.delta;
+	let to_range_delta = new Delta().retain(range.index).delete(range.length);
+	let update_delta = to_range_delta.compose(deltaObj);
+	//deltaObj.ops = [{ retain: range.index }, ...deltaObj.ops];
 	quill.updateContents(deltaObj);
 }
 

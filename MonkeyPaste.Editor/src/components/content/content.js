@@ -19,7 +19,6 @@ function loadContent(
 	contentHandle,
 	contentType,
 	contentData,
-	isPasteRequest,
 	searchStateObj,
 	isAppendLineMode,
 	isAppendMode,
@@ -74,8 +73,6 @@ function loadContent(
 		populateFindReplaceResults();
 		onQuerySearchRangesChanged_ntf(CurFindReplaceDocRanges.length);
 	}
-
-	IsReadyToPaste = !hasAnyInputRequredTemplate();
 
 	if (sel_to_restore != null) {
 		sel_to_restore = cleanDocRange(sel_to_restore);

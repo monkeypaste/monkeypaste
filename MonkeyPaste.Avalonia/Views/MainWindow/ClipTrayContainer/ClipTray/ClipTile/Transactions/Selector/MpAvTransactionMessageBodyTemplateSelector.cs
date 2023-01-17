@@ -13,10 +13,12 @@ namespace MonkeyPaste.Avalonia {
         public Dictionary<string, IDataTemplate> AvailableTemplates { get; } = new Dictionary<string, IDataTemplate>();
 
         public IControl Build(object param) {
-            //string key = null;
-            //if(param is )
-            //return AvailableTemplates[key].Build(param);
-            return null;
+            string key = "PlainTextMessageTemplate";
+            if (param is MpAvParameterRequestMessageViewModel prmvm) {
+                key = "ParameterRequestMessageTemplate";
+            }
+
+            return AvailableTemplates[key].Build(param);
         }
 
         public bool Match(object data) {

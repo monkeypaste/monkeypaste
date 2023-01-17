@@ -10,8 +10,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
-
-        public object Body { get; }
+        public override object IconResourceObj => "QuillDeltaImage";
+        //public override object Body { get; }
         public override string LabelText => "Delta";
         #region View Models
 

@@ -24,6 +24,9 @@ namespace MonkeyPaste {
         [Column("MpUrlGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
+        [Column("fk_MpAppId")]
+        public int AppId { get; set; }
+
         [Indexed]
         public string UrlPath { get; set; }
 
@@ -79,7 +82,7 @@ namespace MonkeyPaste {
         #endregion
 
         #region MpILabelText Implementation
-        string MpILabelText.LabelText => UrlDomainPath;
+        string MpILabelText.LabelText => UrlTitle;
 
         #endregion
 
@@ -103,7 +106,10 @@ namespace MonkeyPaste {
 
         public static async Task<MpUrl> CreateAsync(
             string urlPath = "",
-            string urlTitle = "",
+            string title = "",
+            string domain = "",
+            int iconId = 0,
+            int appId = 0,
             bool suppressWrite = false) {
             var dupCheck = await MpDataModelProvider.GetUrlByPathAsync(urlPath);
             if(dupCheck != null) {
@@ -111,20 +117,15 @@ namespace MonkeyPaste {
                 dupCheck.WasDupOnCreate = true;
                 return dupCheck;
             }
-
-            urlTitle = string.IsNullOrEmpty(urlTitle) ? await MpUrlHelpers.GetUrlTitleAsync(urlPath) : urlTitle;
-
-            var domainStr = MpUrlHelpers.GetUrlDomain(urlPath);
+            
             var newUrl = new MpUrl() {
                 UrlGuid = System.Guid.NewGuid(),
+                AppId = appId,
                 UrlPath = urlPath,
-                UrlTitle = urlTitle,
-                UrlDomainPath = domainStr
+                UrlTitle = title,
+                UrlDomainPath = domain
             };
-            if(string.IsNullOrEmpty(domainStr)) {
-                MpConsole.WriteTraceLine("Ignoring mproperly formatted source url: " + urlPath);
-                return null;
-            }
+
             string favIconImg64 = await MpUrlHelpers.GetUrlFavIconAsync(urlPath);
             MpIcon icon = await MpPlatformWrapper.Services.IconBuilder.CreateAsync(
                     iconBase64: favIconImg64,

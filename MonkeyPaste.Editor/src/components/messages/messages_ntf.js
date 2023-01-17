@@ -143,28 +143,6 @@ async function onCreateContentScreenShot_ntf(sel) {
 	}	
 }
 
-async function onWaitTillPasteIsReady_ntf(req) {
-	// output 'MpQuillContentDataResponseMessage' (with 'MpQuillHostDataItemFragment' items)
-	if (typeof notifyPasteIsReady === 'function') {
-		showPasteToolbar(true);
-
-		while (!IsReadyToPaste) {
-			await delay(100);
-		}
-
-		let items = convertContentToFormats(true, req.formats);
-		let respObj = {
-			dataItems: items
-		};
-		let resp = toBase64FromJsonObj(respObj);
-
-		// reset IsReadyToPaste so pasteButtonClick doesn't make extra paste request on subsequent click
-		IsReadyToPaste = !hasAnyInputRequredTemplate();
-
-		notifyPasteIsReady(resp);
-	}
-}
-
 function onFindReplaceVisibleChange_ntf(isVisible) {
 	// output 'MpQuillContentFindReplaceVisibleChanedNotificationMessage'
 	if (typeof notifyFindReplaceVisibleChange === 'function') {
@@ -228,12 +206,13 @@ function onSetClipboardRequested_ntf() {
 	}
 }
 
-function onDataTransferCompleted_ntf(changeDelta, input_dataObj) {
+function onDataTransferCompleted_ntf(changeDelta, input_dataOb, transfer_label) {
 	// output 'MpQuillDataTransferCompletedNotification'
 	if (typeof notifyDataTransferCompleted === 'function') {
 		let msg = {
 			changeDeltaJsonStr: changeDelta ? toBase64FromJsonObj(changeDelta) : null,
-			sourceDataItemsJsonStr: input_dataObj ? toBase64FromJsonObj(input_dataObj) : null
+			sourceDataItemsJsonStr: input_dataObj ? toBase64FromJsonObj(input_dataObj) : null,
+			transferLabel: transfer_label
 		};
 		let msgStr = toBase64FromJsonObj(msg);
 		notifyDataTransferCompleted(msgStr);

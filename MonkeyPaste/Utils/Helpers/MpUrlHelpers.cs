@@ -9,10 +9,81 @@ using MonkeyPaste.Common;
 using Google.Apis.PeopleService.v1.Data;
 using System.Diagnostics;
 using Org.BouncyCastle.Utilities;
+using HtmlAgilityPack;
+using System.Web;
 
 namespace MonkeyPaste {
 
+    public class MpUrlProperties {
+        public string Title { get; set; }
+        public string IconBase64 { get; set; }
+
+        public string DomainStr { get; set; }
+        public string FullyFormattedUriStr { get; set; }
+
+        public string Source { get; set; }
+    }
+
     public static class MpUrlHelpers {
+        public static async Task<MpUrlProperties> DiscoverUrlProperties(string url = "") {
+            if(string.IsNullOrWhiteSpace(url)) {
+                return null;
+            }
+            MpUrlProperties url_props = new MpUrlProperties() {
+                FullyFormattedUriStr = GetFullyFormattedUrl(url)
+            };
+            url_props.Source = await ReadUrlAsString(url_props.FullyFormattedUriStr);
+
+            var url_doc = new HtmlDocument();
+            try {
+                url_doc.LoadHtml(url_props.Source);
+            } catch(Exception ex) {
+                MpConsole.WriteTraceLine($"Error loading source. Url: '{url_props.FullyFormattedUriStr}' w/ Source: '{url_props.Source}'", ex);
+                url_doc = null;
+            }
+            
+            if(url_doc != null &&
+                url_doc.DocumentNode.SelectSingleNode("//head") is HtmlNode headNode) {
+                if(headNode.ChildNodes.FirstOrDefault(x=>x.Name.ToLower() == "title") is HtmlNode titleNode) {
+                    url_props.Title = HttpUtility.HtmlDecode(titleNode.InnerText);
+                }
+
+                // icon based on https://www.how7o.com/t/how-to-get-a-websites-favicon-url-with-javascript/57/2
+                var icon_link_nodes =
+                    headNode.ChildNodes
+                    .Where(x =>
+                        x.Name.ToLower() == "link" &&
+                        (x.GetAttributeValue("rel", string.Empty).Trim().ToLower() == "icon" ||
+                        x.GetAttributeValue("rel", string.Empty).Trim().ToLower() == "shortcut icon"));
+                
+                string icon_uri = null;
+                if(icon_link_nodes.Count() > 0) {
+                    var icon_node = icon_link_nodes.FirstOrDefault(x => x.GetAttributeValue("rel", string.Empty).Trim().ToLower() == "icon");
+                    if(icon_node != null) {
+                        // prefer 'icon' over 'shortcut icon' (i guess)
+                        icon_uri = icon_node.GetAttributeValue("href", null);
+                    } else {
+                        icon_uri = icon_link_nodes.First().GetAttributeValue("href", null);
+                    }
+                }
+
+                if(!string.IsNullOrEmpty(icon_uri)) {
+                    var bytes = await MpFileIo.ReadBytesFromUriAsync(icon_uri);
+                    if (bytes != null && bytes.Length > 0) {
+                        url_props.IconBase64 = Convert.ToBase64String(bytes);
+                    }                     
+                }
+            }
+
+            if(string.IsNullOrEmpty(url_props.IconBase64)) {
+                // use fallbacks to find favicon
+                url_props.IconBase64 = await GetUrlFavIconAsync(url_props.FullyFormattedUriStr);
+            }
+
+            url_props.DomainStr = GetUrlDomain(url_props.FullyFormattedUriStr);
+
+            return url_props;
+        }
         public static string GetFullyFormattedUrl(string str) {
             // reading linux moz url source pads every character of url w/ empty character
             // but trying to trim it doesn't work this manually parses string for actual characters

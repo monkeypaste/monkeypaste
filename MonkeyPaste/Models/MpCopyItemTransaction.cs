@@ -37,6 +37,8 @@ namespace MonkeyPaste {
         [Indexed]
         public int CopyItemId { get; set; }
 
+        public string TransactionLabel { get; set; }
+
         //[Column("fk_TransactionObjId")]
         //public int TransactionObjId { get; set; }
 
@@ -106,6 +108,7 @@ namespace MonkeyPaste {
             string respMsgJsonStr = "",
             int transUserDeviceId = 0,
             DateTime? transDateTime = null,
+            string label = "",
             bool suppressWrite = false) {
 
             if(copyItemId == 0 && !suppressWrite) {
@@ -127,6 +130,8 @@ namespace MonkeyPaste {
 
                 ResponseMessageType = respMsgType,
                 ResponseMessageJson = respMsgJsonStr,
+
+                TransactionLabel = label,
 
                 TransactionUserDeviceId = transUserDeviceId == 0 ? MpDefaultDataModelTools.ThisUserDeviceId : transUserDeviceId,
 

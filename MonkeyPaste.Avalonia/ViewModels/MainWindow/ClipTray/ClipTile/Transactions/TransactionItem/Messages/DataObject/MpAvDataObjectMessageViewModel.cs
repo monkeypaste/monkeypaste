@@ -17,6 +17,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
+        public override object IconResourceObj => "ClipboardImage";
+
         public override string LabelText => "DataObject";
         #region View Models
 

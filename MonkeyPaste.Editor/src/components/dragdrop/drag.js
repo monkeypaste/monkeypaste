@@ -89,7 +89,7 @@ function onDragStart(e) {
         e.stopPropagation();
         return false;
     }
-    DragDomRange = convertDocRangeToDomRange(sel);
+    //DragDomRange = convertDocRangeToDomRange(sel);
     //BlurredSelectionRects = getRangeRects(sel);
 
     CurDragTargetElm = e.target;

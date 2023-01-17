@@ -1890,6 +1890,11 @@ namespace MonkeyPaste.Avalonia {
                         }
                     }
                     break;
+                case nameof(DefaultItemSize):
+                case nameof(DefaultItemWidth):
+                case nameof(DefaultItemHeight):
+                    AllItems.ForEach(x => x.OnPropertyChanged(nameof(x.MinSize)));
+                    break;
                
                 case nameof(IsAnyTilePinned):
                     MpMessenger.SendGlobal(MpMessageType.PinTrayEmptyOrHasTile);
@@ -2274,8 +2279,13 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             MpAvDataObject mpdo = await ds.GetDataObjectAsync(true);
-            var pi = MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo;
-            await MpPlatformWrapper.Services.ExternalPasteHandler.PasteDataObject(mpdo, pi);
+            if(mpdo == null) {
+                // is none selected?
+                Debugger.Break();
+            } else {
+                var pi = MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo;
+                await MpPlatformWrapper.Services.ExternalPasteHandler.PasteDataObject(mpdo, pi);
+            }            
 
             CleanupAfterPaste(ctvm);
         }

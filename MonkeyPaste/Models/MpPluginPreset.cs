@@ -82,7 +82,6 @@ namespace MonkeyPaste {
 
         #endregion
 
-
         #region Properties
         [Ignore]
         public bool IsActionPreset {

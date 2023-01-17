@@ -40,6 +40,8 @@ namespace MonkeyPaste {
         [Column("fk_SourceObjId")]
         public int SourceObjId { get; set; }
 
+        public string SourceArgs { get; set; }
+
         public DateTime TransactionDateTime { get; set; }
         #endregion
 
@@ -70,6 +72,7 @@ namespace MonkeyPaste {
         public static async Task<MpTransactionSource> CreateAsync(
             int transactionId = 0,
             int sourceObjId = 0,
+            string sourceArgs = "",
             MpTransactionSourceType sourceType = MpTransactionSourceType.None,
             DateTime? createdDateTime = null,
             bool suppressWrite = false) {
@@ -96,11 +99,7 @@ namespace MonkeyPaste {
                     // self reference (ole within item), ignore
                     MpConsole.WriteLine($"Self reference detected. Ignoring MpTransactionSource create for ciid: " + sourceObjId);
                     return null;
-                } else {
-                    // in case source item is deleted (or generally just to make it easier to query)
-                    // recursively replicate source item's sources for this link
-                    ReplicateCopyItemSourceTreeAsync(transactionId, sourceObjId).FireAndForgetSafeAsync();
-                }
+                } 
             }
 
             if (!createdDateTime.HasValue) {
@@ -111,6 +110,7 @@ namespace MonkeyPaste {
                 CopyItemSourceGuid = System.Guid.NewGuid(),
                 TransactionId = transactionId,
                 SourceObjId = sourceObjId,
+                SourceArgs = sourceArgs,
                 CopyItemSourceType = sourceType,
                 TransactionDateTime = createdDateTime.Value
             };
@@ -121,23 +121,6 @@ namespace MonkeyPaste {
             return ndio;
         }
 
-        private static async Task ReplicateCopyItemSourceTreeAsync(int targetCopyItemId, int sourceCopyItemId) {
-            // get source source's
-            var source_cisl = await MpDataModelProvider.GetCopyItemSources(sourceCopyItemId);
-
-            // get recursive tasks (NOTE trying to avoid infinite loop by also filtering out ref's to target, not sure if thats needed)
-            var traverse_tasks = 
-                source_cisl
-                .Where(x => x.CopyItemSourceType == MpTransactionSourceType.CopyItem && x.SourceObjId != targetCopyItemId)
-                .Select(x => ReplicateCopyItemSourceTreeAsync(targetCopyItemId, x.SourceObjId));
-            
-            // get source source's write tasks
-            var write_tasks = source_cisl.Select(x => CreateAsync(targetCopyItemId, x.SourceObjId, x.CopyItemSourceType));
-
-            // fire at will
-            Task.WhenAll(traverse_tasks).FireAndForgetSafeAsync();
-            Task.WhenAll(write_tasks).FireAndForgetSafeAsync();
-        }
 
         public MpTransactionSource() { }
 

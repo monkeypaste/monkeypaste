@@ -119,6 +119,7 @@ const winFonts = [
     'Goudy Stout',
     'Harlow Solid',
     'Harrington',
+    'Helvetica',
     'Haettenschweiler',
     'High Tower Text',
     'Imprint MT Shadow',

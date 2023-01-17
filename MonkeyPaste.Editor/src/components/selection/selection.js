@@ -88,14 +88,12 @@ function getDomFocusRange(forceToEditor = true) {
 }
 
 function getDocumentSelectionHtml(docSel) {
-	//if (docSel.rangeCount > 0) {
 	range = docSel.getRangeAt(0);
 	var clonedSelection = range.cloneContents();
 	var div = document.createElement('div');
 	div.appendChild(clonedSelection);
 	let htmlStr = div.innerHTML;
 	return htmlStr;
-	//}
 }
 
 function getCaretLine(forceDocIdx = -1) {

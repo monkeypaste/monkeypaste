@@ -1,7 +1,5 @@
 // #region Globals
 
-var IsReadyToPaste = false;
-
 // #endregion Globals
 
 // #region Life Cycle
@@ -102,16 +100,6 @@ function onPasteButtonClickOrKeyDown(e) {
     if (!isRunningInHost()) {
         alert(getText(getDocSelection(true), true));
     }
-    //if (canPaste()) {
-    //    if (IsReadyToPaste) {
-    //        onPasteRequest_ntf();
-    //    } else {
-    //        // this state implies there are templates and contentRequest is blocking until IsReadyToPaste=true
-
-    //        // stop blocking and paste w/ current sel/value state
-    //        IsReadyToPaste = true;
-    //    }
-    //}
     onPasteRequest_ntf();
 }
 // #endregion Event Handlers

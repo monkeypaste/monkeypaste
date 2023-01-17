@@ -112,9 +112,8 @@ function resetDrop(fromHost, wasLeave) {
     if (wasLeave && !isDragging() && WasNoSelectBeforeDragStart) {
         disableSubSelection();
     } else {
-        if (wasLeave && isDragging() && DragDomRange) {
-            //setDocSelection(DragDomRange.index, DragDomRange.length, 'api');
-            setDomSelection(DragDomRange);
+        if (wasLeave && isDragging()) {// && DragDomRange) {
+            //setDomSelection(DragDomRange);
             // NOTE dragend isn't called on drag cancel (from escape key)
             onDragEnd();
         }
@@ -253,9 +252,9 @@ function onDragOver(e) {
         let is_drop_over_drag_sel = isDocIdxInRange(DropIdx, getDocSelection());
         let is_drop_over_template = getAllTemplateDocIdxs().includes(DropIdx);
         if (is_drop_over_drag_sel || is_drop_over_template) {
-            //log('invalidating self drop. over drag sel: ' + is_drop_over_drag_sel + ' over template: ' + is_drop_over_template);
             DropIdx = -1;
             e.dataTransfer.dropEffect = "none";
+            log('invalidating self drop. DROP EFFECT SHOULD BE NONE IS: ' + e.dataTransfer.dropEffect + ' over drag sel: ' + is_drop_over_drag_sel + ' over template: ' + is_drop_over_template);
         }
     }
     drawOverlay();
@@ -300,18 +299,22 @@ function onDrop(e) {
 
     if (!isDropping()) {
         log('onDrop called but not dropping, ignoring and returning false');
+        resetDrop(e.fromHost, true);
         return false;
     }
 
     let dropEffect = processEffectAllowed(e);
     if (dropEffect == 'none') {
+        resetDrop(e.fromHost, true);
         return false;
-    }  
+    }
+
 
 
     log('drop');
 
     // DROP DATA
+    let drop_insert_source = 'silent';
     let drop_range = { index: DropIdx, length: 0 };
     let source_range = null;
     if (isDragging() &&
@@ -321,19 +324,19 @@ function onDrop(e) {
     let block_state = getDropBlockState(DropIdx, WindowMouseLoc, IsShiftDown);
     switch (block_state) {
         case 'split':
-            insertText(drop_range.index, '\n');
-            insertText(drop_range.index, '\n');
+            insertText(drop_range.index, '\n', drop_insert_source);
+            insertText(drop_range.index, '\n', drop_insert_source);
             drop_range.index += 1;
             break;
         case 'pre':
             drop_range.index = 0;
-            insertText(drop_range.index, '\n');
+            insertText(drop_range.index, '\n', drop_insert_source);
             break;
         case 'post':
             drop_range.index = getLineEndDocIdx(drop_range.index);
             if (drop_range.index < getDocLength() - 1) {
                 // ignore new line for last line since it already is a new line
-                insertText(drop_range.index, '\n');
+                insertText(drop_range.index, '\n', drop_insert_source);
                 drop_range.index += 1;
             }
             break;
@@ -342,7 +345,7 @@ function onDrop(e) {
             break;
     }
 
-    performDataTransferOnContent(e.dataTransfer, drop_range, source_range, 'api');
+    performDataTransferOnContent(e.dataTransfer, drop_range, source_range, drop_insert_source,'Drop');
 
     // RESET
 
@@ -351,6 +354,6 @@ function onDrop(e) {
     onDropCompleted_ntf();
     drawOverlay();
     return false;
-    }
+}
 
 // #endregion Event Handlers
