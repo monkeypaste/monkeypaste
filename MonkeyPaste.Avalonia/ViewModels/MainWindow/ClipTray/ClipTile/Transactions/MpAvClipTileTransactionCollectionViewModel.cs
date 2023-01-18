@@ -40,7 +40,9 @@ namespace MonkeyPaste.Avalonia {
 
         public ObservableCollection<MpAvTransactionItemViewModelBase> Transactions { get; set; } = new ObservableCollection<MpAvTransactionItemViewModelBase>();
 
-        public ObservableCollection<MpITransactionNodeViewModel> SelectedItems { get; set; } = new ObservableCollection<MpITransactionNodeViewModel>();
+        public MpAvTransactionItemViewModelBase SelectedTransaction { get; set; }
+
+        //public ObservableCollection<MpITransactionNodeViewModel> SelectedItems { get; set; } = new ObservableCollection<MpITransactionNodeViewModel>();
         public IEnumerable<MpAvTransactionMessageViewModelBase> Messages =>
             Transactions.SelectMany(x => x.Items);
             
@@ -204,6 +206,12 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     }
                     Parent.OnPropertyChanged(nameof(Parent.IsTitleVisible));
+                    break;
+                case nameof(PrimaryItem):
+                    if(Parent == null) {
+                        break;
+                    }
+                    Parent.OnPropertyChanged(nameof(Parent.IconResourceObj));
                     break;
             }
         }

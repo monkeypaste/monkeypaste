@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace MonkeyPaste {
     public static class MpPluginRequestBuilder {
-        public static async Task<MpAnalyzerPluginRequestFormat> BuildRequest(
+        public static async Task<MpAnalyzerPluginRequestFormat> BuildRequestAsync(
             List<MpParameterFormat> paramFormats,
             Dictionary<object,string> paramValues,
             MpCopyItem sourceContent) {

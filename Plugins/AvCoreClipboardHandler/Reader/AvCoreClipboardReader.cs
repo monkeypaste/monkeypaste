@@ -24,7 +24,7 @@ namespace AvCoreClipboardHandler {
             MpPortableDataFormats.AvCsv,
             MpPortableDataFormats.LinuxUriList
         };
-        public static async Task<MpClipboardReaderResponse> ProcessReadRequestAsync(MpClipboardReaderRequest request) {
+        public static async Task<MpClipboardReaderResponse> ProcessReadRequestAsync(MpClipboardReaderRequest request, int retryCount = 10) {
             IDataObject avdo = null;
             IEnumerable<string> availableFormats = null;
             // only actually read formats found for data
@@ -36,7 +36,21 @@ namespace AvCoreClipboardHandler {
             } else if(request.forcedClipboardDataObject is IDataObject) {
                 avdo = request.forcedClipboardDataObject as IDataObject;
 
-                availableFormats = avdo.GetDataFormats().Where(x=>avdo.Get(x) != null).ToArray();
+                try {
+
+                    availableFormats = avdo.GetDataFormats();//.Where(x => avdo.Get(x) != null).ToArray();
+                }catch(Exception ex) {
+                    MpConsole.WriteTraceLine($"Error reading dnd formats retrying (attempt {10-retryCount+1})", ex);
+                    await Task.Delay(100);
+
+                    if(retryCount == 0) {
+                        MpConsole.WriteLine("Retry attempts reached, failed");
+                        return null;
+                    }
+                    var retry_result = await ProcessReadRequestAsync(request, retryCount--);
+                    return retry_result;
+                }               
+
             }
 
             List<MpPluginUserNotificationFormat> nfl = new List<MpPluginUserNotificationFormat>();

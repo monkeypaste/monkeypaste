@@ -19,7 +19,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpITransactionNodeViewModel Implementation
 
-        public object Body => SourceLabel;
+        public object Body => "Empty TransactionItem Body";
         public bool IsExpanded { get; set; }
         public MpITreeItemViewModel ParentTreeItem => null;
         public IEnumerable<MpITreeItemViewModel> Children => Items;
@@ -39,28 +39,28 @@ namespace MonkeyPaste.Avalonia {
                 }
                 return new MpMenuItemViewModel() {
                     IconSourceObj = SourceIconObj,
-                    Header = SourceLabel,
-                    SubItems = new List<MpMenuItemViewModel>() {
-                        new MpMenuItemViewModel() {
-                                    Header = $"Filter by '{SourceLabel}'",
-                                    AltNavIdx = 0,
-                                    IconResourceKey = "FilterImage",
-                                    Command = EnableFilterByAppCommand
-                                },
-                        new MpMenuItemViewModel() {
-                                    Header = $"Exclude '{SourceLabel}'",
-                                    AltNavIdx = 0,
-                                    IconResourceKey = "NoEntryImage",
-                                    Command = ExcludeSourceCommand
-                                },
-                        new MpMenuItemViewModel() {IsSeparator = true},
-                        new MpMenuItemViewModel() {
-                            Header = $"Goto '{SourceUri}'",
-                            AltNavIdx = 5,
-                            IconResourceKey = "Execute",
-                            Command = GotoSourceCommand
-                        }
-                    }
+                    Header = TransactionLabel,
+                    //SubItems = new List<MpMenuItemViewModel>() {
+                    //    new MpMenuItemViewModel() {
+                    //                Header = $"Filter by '{TransactionLabel}'",
+                    //                AltNavIdx = 0,
+                    //                IconResourceKey = "FilterImage",
+                    //                Command = EnableFilterByAppCommand
+                    //            },
+                    //    new MpMenuItemViewModel() {
+                    //                Header = $"Exclude '{TransactionLabel}'",
+                    //                AltNavIdx = 0,
+                    //                IconResourceKey = "NoEntryImage",
+                    //                Command = ExcludeSourceCommand
+                    //            },
+                    //    new MpMenuItemViewModel() {IsSeparator = true},
+                    //    new MpMenuItemViewModel() {
+                    //        Header = $"Goto '{SourceUri}'",
+                    //        AltNavIdx = 5,
+                    //        IconResourceKey = "Execute",
+                    //        Command = GotoSourceCommand
+                    //    }
+                    //}
                 };
             }
         }
@@ -105,7 +105,11 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public bool IsAnyBusy => IsBusy || (Items != null && Items.Any(x => x.IsAnyBusy));
+        public bool IsAnyBusy => 
+            IsBusy || 
+            Sources.Any(x=>x.IsAnyBusy) ||
+            (Items != null && Items.Any(x => x.IsAnyBusy));
+
         public bool IsHovering { get; set; }
 
         public bool IsSelected { get; set; }
@@ -158,59 +162,29 @@ namespace MonkeyPaste.Avalonia {
         
         public object SourceIconObj {
             get {
-                if(SourceRef is MpIIconResource dbi && dbi.IconResourceObj != null) {
-                    return dbi.IconResourceObj;
+                if(Sources.Count > 0) {
+                    return Sources.OrderBy(x => x.SourcedDateTimeUtc).FirstOrDefault().IconSourceObj;
                 }
                 return MpDefaultDataModelTools.ThisAppIconId;
             }
         }
 
-        public string SourceLabel {
+        public string TransactionLabel {
             get {
-                if (SourceRef is MpILabelText lbt) {
-                    return lbt.LabelText;
+                if (Transaction == null || string.IsNullOrEmpty(Transaction.TransactionLabel)) {
+                    return TransactionIdx.ToString();
                 }
-                return string.Empty;
+                return Transaction.TransactionLabel;
             }
         }
 
-        public string SourceUri {
-            get {
-                if (SourceRef is MpIUriSource uris) {
-                    return uris.Uri;
-                } else if(SourceRef != null) {
-                    // for copyitem's use localhost handle
-                    return MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(SourceRef);
-                }
-                return string.Empty;
-            }
-        }
-
-        public int SourceObjId {
-            get {
-                if (SourceRef == null) {
-                    return 0;
-                }
-
-                return SourceRef.SourceObjId;
-            }
-        }
-
-        public MpTransactionSourceType TransactionType {
-            get {
-                if(SourceRef == null) {
-                    return MpTransactionSourceType.None;
-                }
-                return SourceRef.SourceType;
-            }
-        }
 
         public DateTime TransactionDateTimeUtc {
             get {
-                if (SourceRef == null) {
+                if (Transaction == null) {
                     return DateTime.MaxValue;
                 }
-                return DateTime.MaxValue;
+                return Transaction.TransactionDateTimeUtc;
             }
         }
 
@@ -223,7 +197,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public MpISourceRef SourceRef { get; set; }
 
         public MpCopyItemTransaction Transaction { get; set; }
         #endregion
@@ -240,22 +213,20 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitializeAsync(MpCopyItemTransaction cit) {
             IsBusy = true;
 
-            //_sourceRef = null;
-            //CopyItemSource = cis;
-            Transaction = cit;
+            Transaction = cit;                       
+
+            Request = await CreateMessageViewModelAsync(RequestMessageType, RequestJson, this);
+            Response = await CreateMessageViewModelAsync(ResponseMessageType, ResponseJson, this);
 
             var sources = await MpDataModelProvider.GetCopyItemTransactionSourcesAsync(TransactionId);
-            
-            var refs = await MpDataModelProvider.GetSourceRefsByCopyItemTransactionIdAsync(TransactionId);
-            SourceRef = refs.FirstOrDefault();
-
-            Request = await CreateMessageViewModel(RequestMessageType, RequestJson, this);
-            Response = await CreateMessageViewModel(ResponseMessageType, ResponseJson, this);
-            
+            foreach(var source in sources) {
+                var tsvm = await CreateSourceViewModelAsync(source);
+                Sources.Add(tsvm);
+            }
 
             OnPropertyChanged(nameof(Children));
+            OnPropertyChanged(nameof(Sources));
             OnPropertyChanged(nameof(Items));
-            OnPropertyChanged(nameof(SourceRef));
 
             IsBusy = false;
         }
@@ -264,12 +235,32 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        public async Task<MpAvTransactionSourceViewModelBase> CreateSourceViewModel(MpTransactionSource ts) {
-            return null;
-
+        public async Task<MpAvTransactionSourceViewModelBase> CreateSourceViewModelAsync(MpTransactionSource ts) {
+            MpAvTransactionSourceViewModelBase tsvm = null;
+            switch(ts.CopyItemSourceType) {
+                case MpTransactionSourceType.AnalyzerPreset:
+                    tsvm = new MpAvAnalyzerSourceViewModel(this);
+                    break;
+                case MpTransactionSourceType.App:
+                    tsvm = new MpAvAppSourceViewModel(this);
+                    break;
+                case MpTransactionSourceType.Url:
+                    tsvm = new MpAvUrlSourceViewModel(this);
+                    break;
+                case MpTransactionSourceType.CopyItem:
+                    tsvm = new MpAvCopyItemSourceViewModel(this);
+                    break;
+                case MpTransactionSourceType.UserDevice:
+                    tsvm = new MpAvUserDeviceSourceViewModel(this);
+                    break;
+                default:
+                    throw new Exception("Source Type must be defined");
+            }
+            await tsvm.InitializeAsync(ts);
+            return tsvm;
         }
         
-        public async Task<MpAvTransactionMessageViewModelBase> CreateMessageViewModel(MpJsonMessageFormatType jsonFormat, string json, MpITransactionNodeViewModel parentAnnotation) {
+        public async Task<MpAvTransactionMessageViewModelBase> CreateMessageViewModelAsync(MpJsonMessageFormatType jsonFormat, string json, MpITransactionNodeViewModel parentAnnotation) {
             if(string.IsNullOrEmpty(json)) {
                 return null;
             }
@@ -294,45 +285,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
-        public ICommand EnableFilterByAppCommand => new MpCommand<object>(
-            (ctvmSourceItemVm) => {
-                // TODO add query filter stuff here from source
-                //var targetCtvm = ctvmSourceItemVm as MpAvClipTileViewModel;
-                //if (targetCtvm == null) {
-                //    return;
-                //}
+        
 
-                //MpHelpers.OpenUrl(CopyItem.Source.App.AppPath);
-                //ClearClipSelection();
-                //targetCtvm.IsSelected = true;
-                //this triggers clip tray to swap out the app icons for the filtered app
-                //MpClipTrayViewModel.Instance.FilterByAppIcon = ctvm.CopyItem.Source.PrimarySource.SourceIcon.IconImage.ImageBase64.ToBitmapSource();
-                //IsFilteringByApp = true;
-            });
-        public ICommand ExcludeSourceCommand => new MpCommand(
-             () => {
-                //var avm = MpAvAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppId == SelectedItem.AppViewModel.AppId);
-                //if (avm == null) {
-                //    return;
-                //}
-                //await avm.RejectApp();
-            });
-
-        public ICommand ExcludeSubSelectedItemUrlDomainCommand => new MpCommand(
-            () => {
-                //var uvm = MpAvUrlCollectionViewModel.Instance.Items.FirstOrDefault(x => x.UrlId == SelectedItem.UrlViewModel.UrlId);
-                //if (uvm == null) {
-                //    MpConsole.WriteTraceLine("Error cannot find url id: " + SelectedItem.UrlViewModel.UrlId);
-                //    return;
-                //}
-                //await uvm.RejectUrlOrDomain(true);
-            });
-
-        public ICommand GotoSourceCommand => new MpCommand(
-            () => {
-                // open uri here]
-                MpAvUriNavigator.NavigateToUri(new Uri(SourceUri));
-            },()=>Uri.IsWellFormedUriString(SourceUri, UriKind.Absolute));
 
 
         #endregion

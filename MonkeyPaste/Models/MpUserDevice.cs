@@ -5,13 +5,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SQLite;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin; 
+using MonkeyPaste.Common;
 using CsvHelper;
 
 namespace MonkeyPaste {
     
 
-    public class MpUserDevice : MpDbModelBase, MpISyncableDbObject {
+    public class MpUserDevice : MpDbModelBase, MpISyncableDbObject, MpISourceRef {
+        #region MpISourceRef Implementation
+
+        public int Priority => 1;
+        public int SourceObjId => Id;
+        public MpTransactionSourceType SourceType => MpTransactionSourceType.UserDevice;
+        public object IconResourceObj => "BrainImage";
+        public string LabelText => "<UserName>-<DeviceName> here";
+
+        #endregion
+
         #region Columns
 
         [PrimaryKey,AutoIncrement]
@@ -142,5 +153,6 @@ namespace MonkeyPaste {
 
             return diffLookup;
         }
+
     }
 }

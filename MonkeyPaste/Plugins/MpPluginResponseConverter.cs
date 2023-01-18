@@ -39,7 +39,7 @@ namespace MonkeyPaste {
 
             string source_url_ref = MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(sourceCopyItem);
 
-            var plugin_source_ref = await MpDataModelProvider.GetSourceRefByTransactionTypeAndSourceIdAsync(
+            var plugin_source_ref = await MpDataModelProvider.GetSourceRefBySourceypeAndSourceIdAsync(
                 MpTransactionSourceType.AnalyzerPreset, pp.Id);
             string plugin_ref_url = MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(
                 plugin_source_ref, trans.Request.SerializeJsonObjectToBase64());

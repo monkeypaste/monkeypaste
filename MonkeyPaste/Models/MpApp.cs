@@ -14,6 +14,7 @@ namespace MonkeyPaste {
         MpDbModelBase, 
         MpISyncableDbObject,
         MpISourceRef,
+        MpIIconResource,
         MpIDbIconId,
         MpILabelText,
         MpIUriSource {        
@@ -91,6 +92,8 @@ namespace MonkeyPaste {
         }
 
         #endregion
+
+     
 
         #region MpILabelText Implementation
         string MpILabelText.LabelText => AppName;

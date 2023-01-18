@@ -1,6 +1,5 @@
 // #region Globals
 
-
 const EditorPlaceHolderText = 'Empty Content...';
 var quill;
 // #endregion Globals
@@ -67,6 +66,7 @@ function getText(range, for_ole = false) {
 
 	return text;
 }
+
 function getAllText() {
 	if (!quill) {
 		return '';
@@ -135,17 +135,6 @@ function getSelectedHtml3() {
 	return documentFragment;
 }
 
-function getDelta(rangeObj) {
-	// NOTE if quill is not enabled it return empty contents
-	let wasEnabled = quill.isEnabled();
-	quill.enable(true);
-	rangeObj = rangeObj == null ? { index: 0, length: getDocLength() } : rangeObj;
-
-	let delta = quill.getContents(rangeObj.index, rangeObj.length);
-	quill.enable(wasEnabled);
-
-	return delta;
-}
 function getFormatAtDocIdx(docIdx) {
 	return quill.getFormat(docIdx, 0);
 }
@@ -186,92 +175,7 @@ function setContents(delta, source = 'api') {
 // #endregion State
 
 // #region Actions
-const TableDeltaAttrbs = [
-	'table-col',
-	'table-cell-line',
-	'row',
-	'rowspan',
-	'colspan'
-];
 
-function convertDeltaToHtml(delta) {
-	function onCustomTagAttributes(op) {
-		//debugger;
-		if (op && op.attributes !== undefined && op.attributes.list !== undefined) {
-			// LIST TYPE
-			let li_type = op.attributes.list;
-			let li_val = '';
-
-			if (op.insert.type === 'text') {
-				li_val = op.insert.value;
-			} else {
-				debugger;
-			}
-			return `<li data-list="${li_type}">${li_val}</li>`;
-		}
-
-		if (op && op.attributes !== undefined && TableDeltaAttrbs.some(x=>op.attributes[x] !== undefined)) {
-			// TABLES
-
-			if (op.attributes['table-col'] !== undefined) {
-
-			}
-		}
-	}
-	let cfg = {
-		inlineStyles: true,
-		//customTagAttributes: onCustomTagAttributes,
-		encodeHtml: true
-	};
-	let qdc = new window.QuillDeltaToHtmlConverter(delta.ops, cfg);
-	qdc.renderCustomWith(function (customOp, contextOp) {
-		//if (customOp.insert.type === 'my-blot') {
-		//	let val = customOp.insert.value;
-		//	return `<span id="${val.id}">${val.text}</span>`;
-		//} else {
-		//	return 'Unmanaged custom blot!';
-		//}
-		if (customOp.attributes !== undefined) {
-			if (customOp.attributes.templateGuid !== undefined) {
-				let temp_span = document.createElement('span');
-				return applyTemplateToDomNode(temp_span, getTemplateDefByGuid(customOp.attributes.templateGuid)).outerHTML;
-			} else {
-				debugger;
-			}
-
-		}
-	});
-	let htmlStr = qdc.convert();
-	//html = fixDelta2HtmlCheckables(html);
-	//
-	//log(html);
-	return htmlStr;
-}
-
-function convertHtmlToDelta(htmlStr) {
-	// create temp dom of htmlStr and escape special chars in text nodes	
-	let html_doc = DomParser.parseFromString(htmlStr, 'text/html');
-	let text_elms = getAllTextElementsInElement(html_doc.body);
-	for (var i = 0; i < text_elms.length; i++) {
-		let text_elm = text_elms[i];
-
-		text_elm.nodeValue = encodeHtmlSpecialEntities(text_elm.nodeValue);
-	}
-	htmlStr = html_doc.body.innerHTML;
-
-	let htmlObj = htmlStr;
-	if (UseQuill2) {
-		// NOTE quill2 expects {html,text} not just html
-		htmlObj = { html: htmlStr };
-	}
-	let delta = quill.clipboard.convert(htmlObj);
-	if (isPlainHtmlConverter()) {
-		return delta;
-	}
-
-	delta = encodeHtmlEntitiesInDeltaInserts(delta);
-	return delta;
-}
 
 function quillFindBlot(elm, bubble = false) {
 	if (Quill === undefined) {
@@ -293,6 +197,7 @@ function quillFindBlotOffset(elm, bubble = false) {
 	}
 	return blot.offset(quill.scroll);
 }
+
 function formatDocRange(range, format, source = 'api') {
 	quill.formatText(range.index, range.length, format, source);
 }
@@ -335,23 +240,6 @@ function insertContent(docIdx, data, forcePlainText = false) {
 	insertHtml(docIdx, data);
 }
 
-function insertDelta(range, deltaOrDeltaJsonStr, source = 'api') {
-	let deltaObj = deltaOrDeltaJsonStr;
-	if (typeof deltaObj === 'string' || deltaObj instanceof String) {
-		deltaObj = JSON.parse(deltaOrDeltaJsonStr);
-		//deltaObj = Object.assign(new Delta, plainObj);
-	}
-	if (!range || range == null) {
-		range = { index: 0, length: getDocLength() };
-	}
-
-	setTextInRange(range, '', source);
-	const Delta = Quill.imports.delta;
-	let to_range_delta = new Delta().retain(range.index).delete(range.length);
-	let update_delta = to_range_delta.compose(deltaObj);
-	//deltaObj.ops = [{ retain: range.index }, ...deltaObj.ops];
-	quill.updateContents(deltaObj);
-}
 
 function trimQuillTrailingLineEndFromText(textStr) {
 	if (textStr == null) {
@@ -362,37 +250,6 @@ function trimQuillTrailingLineEndFromText(textStr) {
 		return substringByLength(textStr, 0, textStr.length - 1);
 	}
 	return textStr;
-}
-
-function encodeHtmlEntitiesInDeltaInserts(delta) {
-	if (delta && delta.ops !== undefined) {
-		// unescape html special entities only if they were just escaped
-		for (var i = 0; i < delta.ops.length; i++) {
-			if (delta.ops[i].insert === undefined) {
-				continue;
-			}
-			delta.ops[i].insert = encodeHtmlSpecialEntities(delta.ops[i].insert);
-		}
-	}
-	return delta;
-}
-
-function decodeHtmlEntitiesInDeltaInserts(delta) {
-	if (delta && delta.ops !== undefined) {
-		// unescape html special entities only if they were just escaped
-		for (var i = 0; i < delta.ops.length; i++) {
-			if (delta.ops[i].insert === undefined) {
-				continue;
-			}
-			if (delta.ops[i].attributes !== undefined &&
-				delta.ops[i].attributes.code !== undefined) {
-				// insert has code attribute so don't decode
-				continue;
-			}
-			delta.ops[i].insert = decodeHtmlSpecialEntities(delta.ops[i].insert);
-		}
-	}
-	return delta;
 }
 // #endregion Actions
 

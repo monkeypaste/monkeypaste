@@ -13,7 +13,8 @@ namespace MonkeyPaste {
         App,
         Url,
         CopyItem,
-        AnalyzerPreset
+        AnalyzerPreset,
+        UserDevice
     };
 
     public class MpTransactionSource : MpDbModelBase {

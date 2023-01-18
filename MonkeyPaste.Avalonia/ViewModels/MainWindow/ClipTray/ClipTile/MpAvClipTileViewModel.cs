@@ -1141,8 +1141,8 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            bool wasBusy = IsBusy;
-            IsBusy = true;
+            //bool wasBusy = IsBusy;
+            //IsBusy = true;
 
             int layerCount = 4;
 
@@ -1173,7 +1173,7 @@ namespace MonkeyPaste.Avalonia {
             TitleLayerHexColors = hexColors.Select((x, i) => x.AdjustAlpha((double)MpRandom.Rand.Next(40, 120) / 255)).ToArray();
             TitleLayerZIndexes = new List<int> { 1, 2, 3 }.Randomize().ToArray();
 
-            IsBusy = wasBusy;
+            //IsBusy = wasBusy;
         }
 
         public void TriggerUnloadedNotification() {

@@ -69,6 +69,8 @@ namespace MonkeyPaste {
         public int lines { get; set; }
 
         public bool hasTemplates { get; set; }
+
+        public string dataTransferCompletedRespFragment { get; set; }
     }
     public class MpQuillUserDeletedTemplateNotification : MpJsonObject {
         public string userDeletedTemplateGuid { get; set; }

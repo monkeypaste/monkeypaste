@@ -121,12 +121,34 @@ function convertPlainHtml_ext(convertPlainHtmlReqMsgBase64Str) {
 }
 
 function enableReadOnly_ext() {
-	// output 'MpQuillResponseMessage'  updated master collection of templates
+	// output 'MpQuillEditorContentChangedMessage'
 
 	enableReadOnly(true);
 
+	let edit_dt_msg_str = null;
+	if (LastTextChangedDelta != null) {
+		let dti_msg = {
+			dataItems: [
+				{
+					format: URI_LIST_FORMAT,
+					data: JSON.stringify([`${LOCAL_HOST_URL}/?type=UserDevice&id=-1`])
+				}
+			]
+		};
+		let edit_dt_msg = {
+			changeDeltaJsonStr: toBase64FromJsonObj(JSON.stringify(LastTextChangedDelta)),
+			sourceDataItemsJsonStr: toBase64FromJsonObj(dti_msg),
+			transferLabel: 'Edit'
+		};
+		edit_dt_msg_str = toBase64FromJsonObj(edit_dt_msg);
+
+		// clear delta log
+		clearLastDelta();
+	}
+
 	let qrmObj = {
-		itemData: getContentData()
+		itemData: getContentData(),
+		dataTransferCompletedRespFragment: edit_dt_msg_str
 	};
 	let resp = toBase64FromJsonObj(qrmObj);
 
@@ -139,6 +161,7 @@ function disableReadOnly_ext(disableReadOnlyReqStrOrObj) {
 	//let disableReadOnlyMsg = toJsonObjFromBase64Str(disableReadOnlyReqStrOrObj);
 	//availableTemplates = disableReadOnlyMsg.allAvailableTextTemplates;
 	disableReadOnly(true);
+	clearLastDelta();
 
 	// output MpQuillDisableReadOnlyResponseMessage
 

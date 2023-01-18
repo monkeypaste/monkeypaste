@@ -10,7 +10,6 @@ var IsReadOnly = false;
 
 var EditorTheme = 'light';
 
-var LastTextChangedDelta = null;
 
 // #endregion Globals
 
@@ -151,6 +150,12 @@ function isSubSelectionEnabled() {
 // #endregion State
 
 // #region Actions
+
+function clearLastDelta() {
+	log('Delta log cleared. It was: ');
+	log(LastTextChangedDelta);
+	LastTextChangedDelta = null;
+}
 
 function hideEditorScrollbars() {
 	getEditorContainerElement().classList.remove('show-scrollbars');
@@ -369,7 +374,7 @@ function onEditorSelChanged(range, oldRange, source) {
 }
 function onEditorTextChanged(delta, oldDelta, source) {
 	log('editor text changed');
-	LastTextChangedDelta = delta;
+	LastTextChangedDelta = mergeDeltas(LastTextChangedDelta, delta);
 	
 	updateAllElements();
 

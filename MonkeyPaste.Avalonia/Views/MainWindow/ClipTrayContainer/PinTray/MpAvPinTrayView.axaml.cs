@@ -188,7 +188,7 @@ namespace MonkeyPaste.Avalonia {
                     mpdo.SetData(MpPortableDataFormats.LinuxUriList, new string[] { MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(drag_ctvm.CopyItem) });
                 }
             }
-            var avdo_ci = await MpPlatformWrapper.Services.CopyItemBuilder.BuildAsync(mpdo);//,drag_ciid);
+            var avdo_ci = await MpPlatformWrapper.Services.CopyItemBuilder.BuildAsync(mpdo,false,"Drop");
 
             var drop_ctvm = await BindingContext.CreateClipTileViewModel(avdo_ci, -1);
             BindingContext.PinTileCommand.Execute(new object[] { drop_ctvm, drop_idx });

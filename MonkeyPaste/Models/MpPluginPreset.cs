@@ -16,6 +16,7 @@ namespace MonkeyPaste {
         MpDbModelBase, 
         MpISourceRef,
         MpIDbIconId,
+        MpIIconResource,
         MpILabelText,
         MpIClonableDbModel<MpPluginPreset> {
 

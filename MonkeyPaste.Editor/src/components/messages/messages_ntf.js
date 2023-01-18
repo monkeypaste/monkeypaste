@@ -206,7 +206,7 @@ function onSetClipboardRequested_ntf() {
 	}
 }
 
-function onDataTransferCompleted_ntf(changeDelta, input_dataOb, transfer_label) {
+function onDataTransferCompleted_ntf(changeDelta, input_dataObj, transfer_label) {
 	// output 'MpQuillDataTransferCompletedNotification'
 	if (typeof notifyDataTransferCompleted === 'function') {
 		let msg = {

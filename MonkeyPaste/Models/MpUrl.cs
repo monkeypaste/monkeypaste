@@ -13,6 +13,7 @@ namespace MonkeyPaste {
         MpDbModelBase, 
         MpISourceRef,
         MpIDbIconId,
+        MpIIconResource,
         MpILabelText,
         MpIUriSource {
         #region Columns

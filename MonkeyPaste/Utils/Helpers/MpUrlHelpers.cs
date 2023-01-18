@@ -40,44 +40,43 @@ namespace MonkeyPaste {
             } catch(Exception ex) {
                 MpConsole.WriteTraceLine($"Error loading source. Url: '{url_props.FullyFormattedUriStr}' w/ Source: '{url_props.Source}'", ex);
                 url_doc = null;
-            }
-            
-            if(url_doc != null &&
-                url_doc.DocumentNode.SelectSingleNode("//head") is HtmlNode headNode) {
-                if(headNode.ChildNodes.FirstOrDefault(x=>x.Name.ToLower() == "title") is HtmlNode titleNode) {
-                    url_props.Title = HttpUtility.HtmlDecode(titleNode.InnerText);
-                }
+            }                       
 
-                // icon based on https://www.how7o.com/t/how-to-get-a-websites-favicon-url-with-javascript/57/2
-                var icon_link_nodes =
-                    headNode.ChildNodes
-                    .Where(x =>
-                        x.Name.ToLower() == "link" &&
-                        (x.GetAttributeValue("rel", string.Empty).Trim().ToLower() == "icon" ||
-                        x.GetAttributeValue("rel", string.Empty).Trim().ToLower() == "shortcut icon"));
-                
-                string icon_uri = null;
-                if(icon_link_nodes.Count() > 0) {
-                    var icon_node = icon_link_nodes.FirstOrDefault(x => x.GetAttributeValue("rel", string.Empty).Trim().ToLower() == "icon");
-                    if(icon_node != null) {
-                        // prefer 'icon' over 'shortcut icon' (i guess)
-                        icon_uri = icon_node.GetAttributeValue("href", null);
-                    } else {
-                        icon_uri = icon_link_nodes.First().GetAttributeValue("href", null);
+            url_props.IconBase64 = await GetUrlFavIconAsync(url_props.FullyFormattedUriStr);
+            if (string.IsNullOrEmpty(url_props.IconBase64)) {
+                // use EXTREME fallback to find favicon
+                if (url_doc != null &&
+                url_doc.DocumentNode.SelectSingleNode("//head") is HtmlNode headNode) {
+                    if (headNode.ChildNodes.FirstOrDefault(x => x.Name.ToLower() == "title") is HtmlNode titleNode) {
+                        url_props.Title = HttpUtility.HtmlDecode(titleNode.InnerText);
+                    }
+
+                    // icon based on https://www.how7o.com/t/how-to-get-a-websites-favicon-url-with-javascript/57/2
+                    var icon_link_nodes =
+                        headNode.ChildNodes
+                        .Where(x =>
+                            x.Name.ToLower() == "link" &&
+                            (x.GetAttributeValue("rel", string.Empty).Trim().ToLower() == "icon" ||
+                            x.GetAttributeValue("rel", string.Empty).Trim().ToLower() == "shortcut icon"));
+
+                    string icon_uri = null;
+                    if (icon_link_nodes.Count() > 0) {
+                        var icon_node = icon_link_nodes.FirstOrDefault(x => x.GetAttributeValue("rel", string.Empty).Trim().ToLower() == "icon");
+                        if (icon_node != null) {
+                            // prefer 'icon' over 'shortcut icon' (i guess)
+                            icon_uri = icon_node.GetAttributeValue("href", null);
+                        } else {
+                            icon_uri = icon_link_nodes.First().GetAttributeValue("href", null);
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(icon_uri)) {
+                        var bytes = await MpFileIo.ReadBytesFromUriAsync(icon_uri);
+                        if (bytes != null && bytes.Length > 0) {
+                            url_props.IconBase64 = Convert.ToBase64String(bytes);
+                        }
                     }
                 }
-
-                if(!string.IsNullOrEmpty(icon_uri)) {
-                    var bytes = await MpFileIo.ReadBytesFromUriAsync(icon_uri);
-                    if (bytes != null && bytes.Length > 0) {
-                        url_props.IconBase64 = Convert.ToBase64String(bytes);
-                    }                     
-                }
-            }
-
-            if(string.IsNullOrEmpty(url_props.IconBase64)) {
-                // use fallbacks to find favicon
-                url_props.IconBase64 = await GetUrlFavIconAsync(url_props.FullyFormattedUriStr);
             }
 
             url_props.DomainStr = GetUrlDomain(url_props.FullyFormattedUriStr);

@@ -466,7 +466,7 @@ namespace MonkeyPaste {
 
         #region MpISourceRef
 
-        public static async Task<MpISourceRef> GetSourceRefByTransactionTypeAndSourceIdAsync(
+        public static async Task<MpISourceRef> GetSourceRefBySourceypeAndSourceIdAsync(
             MpTransactionSourceType sourceType, int sourceId) {
             MpISourceRef source_ref;
             switch (sourceType) {
@@ -482,6 +482,9 @@ namespace MonkeyPaste {
                 case MpTransactionSourceType.CopyItem:
                     source_ref = await MpDataModelProvider.GetItemAsync<MpCopyItem>(sourceId);
                     break;
+                case MpTransactionSourceType.UserDevice:
+                    source_ref = await MpDataModelProvider.GetItemAsync<MpUserDevice>(sourceId);
+                    break;
                 default:
                     throw new Exception($"Unknown source type: '{sourceType}'");
             }
@@ -491,11 +494,12 @@ namespace MonkeyPaste {
             var cit_sources = await GetCopyItemTransactionSourcesAsync(citid);
             List<MpISourceRef> result = new List<MpISourceRef>();
             foreach(var cit_source in cit_sources) {
-                var source_ref = await GetSourceRefByTransactionTypeAndSourceIdAsync(cit_source.CopyItemSourceType, cit_source.SourceObjId);
+                var source_ref = await GetSourceRefBySourceypeAndSourceIdAsync(cit_source.CopyItemSourceType, cit_source.SourceObjId);
                 result.Add(source_ref);
             }
             return result;
         }
+
         #endregion
 
         #region MpCopyItemTag

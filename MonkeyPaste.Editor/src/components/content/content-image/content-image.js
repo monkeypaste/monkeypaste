@@ -1,6 +1,7 @@
 // #region Globals
 
 const CONTENT_IMAGE_CLASS = 'content-image';
+
 var ContentImageWidth = -1;
 var ContentImageHeight = -1;
 

@@ -22,10 +22,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public async Task<MpCopyItem> BuildAsync(MpPortableDataObject mpdo, bool suppressWrite = false) {
+        public async Task<MpCopyItem> BuildAsync(MpPortableDataObject mpdo, bool suppressWrite = false, string createLabel = "") {
             if (mpdo == null || mpdo.DataFormatLookup.Count == 0) {
                 return null;
             }
+            createLabel = string.IsNullOrEmpty(createLabel) ? "Created" : createLabel;
+
             await NormalizePlatformFormatsAsync(mpdo);
 
             var refs = await MpPlatformWrapper.Services.SourceRefBuilder.GatherSourceRefsAsync(mpdo, true);
@@ -83,7 +85,7 @@ namespace MonkeyPaste.Avalonia {
                             resp: itemDelta,
                             ref_urls: ref_urls,
                                 //refs.Select(x => MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(x)),
-                            label: "Created");
+                            label: createLabel);
 
             return ci;
         }

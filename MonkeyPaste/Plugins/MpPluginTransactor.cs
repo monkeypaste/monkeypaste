@@ -42,7 +42,7 @@ namespace MonkeyPaste {
 
                 // CREATE REQUEST
                 try {
-                    at.Request = await MpPluginRequestBuilder.BuildRequest(
+                    at.Request = await MpPluginRequestBuilder.BuildRequestAsync(
                                         pluginFormat.analyzer.parameters,
                                         paramValues,
                                         sourceCopyItem);

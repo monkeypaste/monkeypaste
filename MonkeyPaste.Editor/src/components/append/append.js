@@ -32,7 +32,8 @@ function getAppendDocRange() {
 	}
 	return {
 		index: append_idx,
-		length: 1
+		length: 1,
+		mode: IsAppendLineMode ? 'block':'inline'
 	};
 }
 // #endregion Getters

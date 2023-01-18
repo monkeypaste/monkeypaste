@@ -65,12 +65,19 @@ namespace MonkeyPaste.Avalonia {
             string ci_public_handle = param_lookup.ContainsKey("handle") ? param_lookup["handle"] : null;
 
             if(source_id < 1 && string.IsNullOrWhiteSpace(ci_public_handle)) {
-                // missing locator
-                Debugger.Break();
-                return null;
+                if(source_type == MpTransactionSourceType.UserDevice) {
+                    // editor->read-only, use current userDeviceId
+                    source_id = MpDefaultDataModelTools.ThisUserDeviceId;
+                } else {
+                    // missing locator
+                    Debugger.Break();
+                    return null;
+                }                
             }
             if(source_type == MpTransactionSourceType.CopyItem &&
                 !string.IsNullOrWhiteSpace(ci_public_handle)) {
+                // resolve publicHandle to ciid
+
                 var ctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle.ToLower() == ci_public_handle.ToLower());
                 if (ctvm == null) {
                     // how did it get the ref?
@@ -80,7 +87,7 @@ namespace MonkeyPaste.Avalonia {
                 source_id = ctvm.CopyItemId;
             }
 
-            var result = await MpDataModelProvider.GetSourceRefByTransactionTypeAndSourceIdAsync(source_type, source_id);
+            var result = await MpDataModelProvider.GetSourceRefBySourceypeAndSourceIdAsync(source_type, source_id);
             return result;
         }
 
@@ -118,6 +125,9 @@ namespace MonkeyPaste.Avalonia {
             if (mpdo.TryGetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, out IEnumerable<string> uril)) {
                 uri_strings = uril;
             } else if (mpdo.TryGetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, out string uril_str)) {
+                if(uril_str.StartsWith("[") && MpJsonObject.DeserializeObject<List<string>>(uril_str) is List<string> urilist) {
+                    uril_str = string.Join("\r\n", urilist);
+                }
                 uri_strings = uril_str.SplitNoEmpty("\r\n");
             }
             if(uri_strings != null) {

@@ -208,11 +208,7 @@ namespace MonkeyPaste.Avalonia {
         public bool HasAnyParameterValueChange => Items.Any(x => x.HasModelChanged);
         public bool IsLabelTextBoxFocused { get; set; } = false;
         public bool IsLabelReadOnly { get; set; } = true;
-
-
         public bool IsAllValid => Items.All(x => x.IsValid);
-
-
         public bool IsManifestPreset =>
             Parent == null ? 
                 false : 

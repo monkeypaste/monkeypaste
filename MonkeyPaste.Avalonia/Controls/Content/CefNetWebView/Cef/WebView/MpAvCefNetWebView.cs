@@ -425,42 +425,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpAvEditorBindingFunctionType.notifyDataTransferCompleted:
                     ntf = MpJsonObject.DeserializeBase64Object<MpQuillDataTransferCompletedNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillDataTransferCompletedNotification dataTransferCompleted_ntf) {
-                        //MpISourceRef sourceRef = 
-                        //    await MpPlatformWrapper.Services.SourceRefBuilder
-                        //    .FetchOrCreateSourceAsync(dataTransferCompleted_ntf.dataTransferSourceUrl);
-
-                        //if(sourceRef == null) {
-                        //    // this should always happen right?
-                        //    Debugger.Break();
-                        //    return;
-                        //}
-                        string req_json = null;
-                        var dtobj = MpJsonObject.DeserializeBase64Object<MpQuillHostDataItemsMessageFragment>(dataTransferCompleted_ntf.sourceDataItemsJsonStr);
-                        MpPortableDataObject req_mpdo = null;
-                        if (dtobj != null) {
-                            req_mpdo = new MpPortableDataObject(dtobj.dataItems.ToDictionary(x => x.format, x => (object)x.data));
-                            req_json = req_mpdo.Serialize();
-                        }
-
-                        string resp_json = null;
-                        if (!string.IsNullOrEmpty(dataTransferCompleted_ntf.changeDeltaJsonStr)) {
-                            resp_json = dataTransferCompleted_ntf.changeDeltaJsonStr.ToStringFromBase64();
-                        }
-
-                        IEnumerable<string> refs = null;
-                        if (req_mpdo != null) {
-                            var other_refs = await MpPlatformWrapper.Services.SourceRefBuilder.GatherSourceRefsAsync(req_mpdo);
-                            refs = other_refs.Select(x => MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(x));
-                        }
-
-                        await MpPlatformWrapper.Services.TransactionBuilder.PerformTransactionAsync(
-                            copyItemId: ctvm.CopyItemId,
-                            reqType: MpJsonMessageFormatType.DataObject,
-                            req: req_json,
-                            respType: MpJsonMessageFormatType.Delta,
-                            resp: resp_json,
-                            ref_urls: refs,
-                            label: dataTransferCompleted_ntf.transferLabel);                        
+                        ProcessDataTransferCompleteResponse(dataTransferCompleted_ntf).FireAndForgetSafeAsync(BindingContext);                      
                     }
                     break;
 
@@ -864,6 +829,12 @@ namespace MonkeyPaste.Avalonia {
                 Debugger.Break();
                 return;
             }
+            if(!string.IsNullOrWhiteSpace(contentChanged_ntf.dataTransferCompletedRespFragment) &&
+                MpJsonObject.DeserializeBase64Object<MpQuillDataTransferCompletedNotification>(contentChanged_ntf.dataTransferCompletedRespFragment) is 
+                MpQuillDataTransferCompletedNotification dtcn) {
+                ProcessDataTransferCompleteResponse(dtcn).FireAndForgetSafeAsync(BindingContext);
+            }
+
             if (contentChanged_ntf.length > 0) {
                 BindingContext.CharCount = contentChanged_ntf.length;
             }
@@ -891,11 +862,39 @@ namespace MonkeyPaste.Avalonia {
                 //if(BindingContext.IsAppendTrayItem) {
                 //    // when new item is appender  
                 //}
-            }
-            
+            }           
 
             IsContentLoaded = true;
+        }
 
+        private async Task ProcessDataTransferCompleteResponse(MpQuillDataTransferCompletedNotification dataTransferCompleted_ntf) {
+            string req_json = null;
+            var dtobj = MpJsonObject.DeserializeBase64Object<MpQuillHostDataItemsMessageFragment>(dataTransferCompleted_ntf.sourceDataItemsJsonStr);
+            MpPortableDataObject req_mpdo = null;
+            if (dtobj != null) {
+                req_mpdo = new MpPortableDataObject(dtobj.dataItems.ToDictionary(x => x.format, x => (object)x.data));
+                req_json = req_mpdo.Serialize();
+            }
+
+            string resp_json = null;
+            if (!string.IsNullOrEmpty(dataTransferCompleted_ntf.changeDeltaJsonStr)) {
+                resp_json = dataTransferCompleted_ntf.changeDeltaJsonStr.ToStringFromBase64();
+            }
+
+            IEnumerable<string> refs = null;
+            if (req_mpdo != null) {
+                var other_refs = await MpPlatformWrapper.Services.SourceRefBuilder.GatherSourceRefsAsync(req_mpdo);
+                refs = other_refs.Select(x => MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(x));
+            }
+
+            await MpPlatformWrapper.Services.TransactionBuilder.PerformTransactionAsync(
+                copyItemId: BindingContext.CopyItemId,
+                reqType: MpJsonMessageFormatType.DataObject,
+                req: req_json,
+                respType: MpJsonMessageFormatType.Delta,
+                resp: resp_json,
+                ref_urls: refs,
+                label: dataTransferCompleted_ntf.transferLabel);
         }
 
         #endregion
