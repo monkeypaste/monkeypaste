@@ -40,35 +40,35 @@ namespace MonkeyPaste.Common {
         }
 
 
-        public static string SerializeObject(object obj) {
+        public static string SerializeObject(object obj, JsonSerializerSettings settings = null) {
             if(obj == null) {
                 return string.Empty;
             }
-            return JsonConvert.SerializeObject(obj);
+            return JsonConvert.SerializeObject(obj, settings);
         }
 
-        public static string SerializeObjectToBase64JsonStr(object obj, Encoding enc = null) {
+        public static string SerializeObjectToBase64JsonStr(object obj, JsonSerializerSettings settings = null, Encoding enc = null) {
             if (obj == null) {
                 return string.Empty;
             }
-            string jsonStr = SerializeObject(obj);
+            string jsonStr = SerializeObject(obj,settings);
             string base64Str = jsonStr.ToBase64String(enc);
-            //var json_bytes = base64Str.ToBytesFromString(enc);
-            //return json_bytes.ToBase64String();
             return base64Str;
         }
         #endregion
 
         public virtual string SerializeJsonObject() {
-            return SerializeObject(this);
+            return this.SerializeJsonObject(null);
+        }
+        public virtual string SerializeJsonObject(JsonSerializerSettings settings) {
+            return SerializeObject(this,settings);
         }
 
-        public string SerializeJsonObjectToBase64(Encoding enc = null) {
-            //string jsonStr = SerializeJsonObject();
-            //byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonStr);
-            //string jsonBase64 = Convert.ToBase64String(jsonBytes);
-            //return jsonBase64;
-            return SerializeObjectToBase64JsonStr(this, enc);
+        public virtual string SerializeJsonObjectToBase64(Encoding enc = null) {
+            return this.SerializeJsonObjectToBase64(null, enc);
+        }
+        public virtual string SerializeJsonObjectToBase64(JsonSerializerSettings settings, Encoding enc = null) {
+            return SerializeObjectToBase64JsonStr(this, settings, enc);
         }
 
         public virtual object Deserialize(string jsonMsgStr) {
@@ -88,6 +88,11 @@ namespace MonkeyPaste.Common {
         }
         public string ToPrettyPrintJsonString() {
             return SerializeJsonObject().ToPrettyPrintJson();
+        }
+
+        public virtual object Clone() {
+            string this_json = this.SerializeJsonObject();
+            return JsonConvert.DeserializeObject(this_json);
         }
     }
 

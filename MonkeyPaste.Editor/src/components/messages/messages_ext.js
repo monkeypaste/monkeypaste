@@ -68,6 +68,16 @@ function hostIsFocusedChanged_ext(hostIsFocusedMsgStr_base64) {
 	setInputFocusable(msg.isHostFocused);
 }
 
+function updateContents_ext(updateContentsReqStr_base64) {
+	// input 'MpQuillUpdateContentRequestMessage'
+	let req = toJsonObjFromBase64Str(updateContentsReqStr_base64);
+	let delta = toJsonObjFromBase64Str(req.deltaFragmentStr);
+	const Delta = Quill.imports.delta;
+	delta = new Delta(delta);
+	//debugger;
+	applyDelta(delta);
+}
+
 function contentRequest_ext(contentReqMsgStr_base64) {
 	// input 'MpQuillContentDataRequestMessage'
 	// output 'MpQuillContentDataResponseMessage' (with 'MpQuillHostDataItemFragment' items)

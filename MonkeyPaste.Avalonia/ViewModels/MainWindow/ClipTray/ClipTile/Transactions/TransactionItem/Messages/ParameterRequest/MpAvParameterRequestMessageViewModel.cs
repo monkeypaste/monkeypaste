@@ -44,7 +44,7 @@ namespace MonkeyPaste.Avalonia {
 
             Json = jsonOrParsedFragment is string ? jsonOrParsedFragment.ToString() : string.Empty;
             if(!string.IsNullOrEmpty(Json)) {
-                ParameterReqFormat = MpJsonObject.DeserializeObject<MpPluginRequestFormatBase>(Json);
+                ParameterReqFormat = MpPluginRequestFormatBase.Parse(Json);
             }
 
             var tsl = await MpDataModelProvider.GetCopyItemTransactionSourcesAsync(TransactionId);

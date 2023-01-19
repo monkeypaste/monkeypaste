@@ -14,7 +14,7 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileTransactionPaneView">
     <Grid x:Name="TransactionContainerGrid"
           RowDefinitions="30,*,Auto"
-          Margin="1"
+          Margin="1"          
           HorizontalAlignment="Stretch">
         <Grid.Styles>
             <Style Selector="TreeViewItem /template/ Panel#PART_ExpandCollapseChevronContainer">
@@ -87,7 +87,7 @@
                     VerticalAlignment="Stretch"
                     Command="{Binding ToggleTransactionPaneOpenCommand}">
                 <Image VerticalAlignment="Stretch"
-                       Margin="2"
+                       Margin="5,2"
                        Width="20"
                        Height="20">
                     <Image.RenderTransform>
@@ -95,12 +95,12 @@
                     </Image.RenderTransform>
                 </Image>
             </Button>
-            <TextBlock Text="Transactions" />
+            <TextBlock Text="Transactions" VerticalAlignment="Center" />
         </DockPanel>
 
         <ListBox x:Name="TransactionListBox"
                  Grid.Row="1"
-                 Items="{Binding Transactions}"
+                 Items="{Binding SortedTransactions}"
                  SelectionMode="Single"
                  SelectedItem="{Binding SelectedTransaction, Mode=TwoWay}"
                  HorizontalAlignment="Stretch"
@@ -114,7 +114,7 @@
                         <Image Grid.Column="0"
                                HorizontalAlignment="Left"
                                VerticalAlignment="Stretch"
-                               Margin="2"
+                               Margin="5,2"
                                Width="15"
                                Height="15"
                                Source="{Binding IconSourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}}" />
@@ -132,6 +132,7 @@
 
         <TabControl Grid.Row="2"
                     DataContext="{Binding SelectedTransaction}"
+                    IsVisible="{Binding ., Converter={x:Static ObjectConverters.IsNotNull}}"
                     MaxWidth="{Binding Bounds.Width, ElementName=TransactionListBox}"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Top"

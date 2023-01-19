@@ -53,7 +53,7 @@ namespace MonkeyPaste.Avalonia {
                 Items.Clear();
             }
             ParentTreeItem = parentAnnotation;
-            DataObject = MpJsonObject.DeserializeObject<MpPortableDataObject>(jsonOrParsedFragment);
+            DataObject = MpPortableDataObject.Parse(Json);
             if(DataObject != null) {
                 foreach(var kvp in DataObject.DataFormatLookup) {
                     MpAvDataObjectItemViewModel doivm = new MpAvDataObjectItemViewModel(Parent);

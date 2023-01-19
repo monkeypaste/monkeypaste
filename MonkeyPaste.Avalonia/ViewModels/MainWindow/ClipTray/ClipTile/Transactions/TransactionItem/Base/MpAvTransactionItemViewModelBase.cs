@@ -25,7 +25,7 @@ namespace MonkeyPaste.Avalonia {
         public IEnumerable<MpITreeItemViewModel> Children => Items;
         public string LabelText => 
             Transaction == null ? TransactionIdx.ToString() : Transaction.TransactionLabel;
-        public object ComparableSortValue => TransactionDateTimeUtc;
+        public object ComparableSortValue => TransactionDateTime;
         public object IconSourceObj => SourceIconObj;
 
         object MpITransactionNodeViewModel.TransactionModel => Transaction;
@@ -101,7 +101,7 @@ namespace MonkeyPaste.Avalonia {
                 if(Parent == null) {
                     return -1;
                 }
-                return Parent.Transactions.OrderBy(x => x.TransactionDateTimeUtc).IndexOf(this);
+                return Parent.Transactions.OrderBy(x => x.TransactionDateTime).IndexOf(this);
             }
         }
 
@@ -179,12 +179,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public DateTime TransactionDateTimeUtc {
+        public DateTime TransactionDateTime {
             get {
                 if (Transaction == null) {
                     return DateTime.MaxValue;
                 }
-                return Transaction.TransactionDateTimeUtc;
+                return Transaction.TransactionDateTime;
             }
         }
 
@@ -229,6 +229,23 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(Items));
 
             IsBusy = false;
+        }
+
+        public MpQuillDelta GetTransactionDelta() {
+            if(Response == null) {
+                return null;
+            }
+            MpQuillDelta delta = null;
+            if(Response is MpAvDataObjectMessageViewModel domvm &&
+                domvm.DataObject.TryGetData<string>(MpPortableDataFormats.INTERNAL_CONTENT_DELTA_FORMAT, out string deltaJson) &&
+                MpJsonObject.DeserializeObject<MpQuillDelta>(deltaJson) is MpQuillDelta resp_delta) {
+                delta = resp_delta;
+            }
+            if(delta == null && 
+                Response is MpAvDeltaMessageViewModel dmvm) {
+                delta = dmvm.QuillDelta;
+            }
+            return delta;
         }
 
         #endregion

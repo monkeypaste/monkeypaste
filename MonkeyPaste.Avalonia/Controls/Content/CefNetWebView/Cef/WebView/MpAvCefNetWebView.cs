@@ -56,7 +56,8 @@ namespace MonkeyPaste.Avalonia {
         notifySelectionChanged,
         notifyScrollChanged,
         notifyAppendStateChanged,
-        notifyInternalContextMenuIsVisibleChanged
+        notifyInternalContextMenuIsVisibleChanged,
+        notifyLastTransactionUndone
     }
     [DoNotNotify]
     public class MpAvCefNetWebView : 
@@ -229,8 +230,7 @@ namespace MonkeyPaste.Avalonia {
                 MpJsonObject.DeserializeBase64Object<MpQuillContentDataResponseMessage>(contentDataRespStr);
 
 
-            if (contentDataResp.dataItems == null ||
-                contentDataResp.isNoneSelected) {
+            if (contentDataResp.dataItems == null) {
                 return null;
             }
             var avdo = new MpAvDataObject();
@@ -426,6 +426,14 @@ namespace MonkeyPaste.Avalonia {
                     ntf = MpJsonObject.DeserializeBase64Object<MpQuillDataTransferCompletedNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillDataTransferCompletedNotification dataTransferCompleted_ntf) {
                         ProcessDataTransferCompleteResponse(dataTransferCompleted_ntf).FireAndForgetSafeAsync(BindingContext);                      
+                    }
+                    break;
+                case MpAvEditorBindingFunctionType.notifyLastTransactionUndone:
+                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillLastTransactionUndoneNotification>(msgJsonBase64Str);
+                    if (ntf is MpQuillLastTransactionUndoneNotification lastTransUndone_ntf) {
+                        BindingContext
+                            .TransactionCollectionViewModel
+                            .RemoveMostRecentTransactionCommand.Execute(null);
                     }
                     break;
 
@@ -769,6 +777,23 @@ namespace MonkeyPaste.Avalonia {
             }
 
             PerformLoadContentRequestAsync().FireAndForgetSafeAsync();
+        }
+
+        public async Task PerformUpdateContentRequestAsync(MpQuillDelta updateDelta) {
+            Dispatcher.UIThread.VerifyAccess();
+            await Task.Delay(1);
+            if (updateDelta == null || updateDelta.ops == null || updateDelta.ops.Count == 0) {
+                return;
+            }
+            if(!IsEditorInitialized || !IsContentLoaded) {
+                // which is it? what's the state of tile?
+                Debugger.Break();
+                return;
+            }
+            var req = new MpQuillUpdateContentRequestMessage() {
+                deltaFragmentStr = updateDelta.SerializeJsonObjectToBase64()
+            };
+            this.ExecuteJavascript($"updateContents_ext('{req.SerializeJsonObjectToBase64()}')");
         }
 
         public async Task PerformLoadContentRequestAsync() {

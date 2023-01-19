@@ -78,7 +78,7 @@
                               Classes.contextfocus="{Binding IsContextMenuOpen}"
                               BorderThickness="1.5">
             <StackPanel Orientation="Horizontal">
-                <Grid>
+                <Grid VerticalAlignment="Center">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition Width="Auto" />

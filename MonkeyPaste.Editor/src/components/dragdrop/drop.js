@@ -305,6 +305,13 @@ function onDrop(e) {
 
     let dropEffect = processEffectAllowed(e);
     if (dropEffect == 'none') {
+        log('onDrop called but dropEffect was none, ignoring and returning false');
+        resetDrop(e.fromHost, true);
+        return false;
+    }
+
+    if (isDragging() && dist(WindowMouseLoc, WindowMouseDownLoc) < MIN_DRAG_DIST) {
+        log('onDrop called but drag dist less than ' + MIN_DRAG_DIST + ', ignoring and returning false');
         resetDrop(e.fromHost, true);
         return false;
     }

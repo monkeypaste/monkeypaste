@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using MonkeyPaste.Common;
+using Newtonsoft.Json;
 
 namespace MonkeyPaste.Common.Plugin {
     public enum MpPluginComponentType {
@@ -46,9 +47,11 @@ namespace MonkeyPaste.Common.Plugin {
         public MpContactFetcherFormat contactFetcher { get; set; }
 
         public string RootDirectory { get; set; }
-        
+
+        [JsonIgnore]
         public object Component { get; set; } = null;
 
+        [JsonIgnore]
         public MpPluginFormat backupCheckPluginFormat { get; set; }
         
     }

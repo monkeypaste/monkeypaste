@@ -1004,9 +1004,18 @@ namespace MonkeyPaste.Avalonia {
         //    }
         //}
 
-        public object IconResourceObj => TransactionCollectionViewModel.PrimaryItem == null ?
-            MpDefaultDataModelTools.ThisAppIconId :
-            TransactionCollectionViewModel.PrimaryItem.IconSourceObj;
+        public object IconResourceObj {
+            get {
+                if(ItemType == MpCopyItemType.FileList &&
+                    FileItemCollectionViewModel != null &&
+                    FileItemCollectionViewModel.Items.Count > 0) {
+                    return FileItemCollectionViewModel.Items.FirstOrDefault().IconBase64;
+                }
+                return TransactionCollectionViewModel.PrimaryItem == null ?
+                            MpDefaultDataModelTools.ThisAppIconId :
+                            TransactionCollectionViewModel.PrimaryItem.IconSourceObj;
+            }
+        }
 
         private string _curItemRandomHexColor;
         public string CopyItemHexColor {
@@ -1140,17 +1149,22 @@ namespace MonkeyPaste.Avalonia {
             if (IsPlaceholder) {
                 return;
             }
-
+            while(TransactionCollectionViewModel.IsAnyBusy) {
+                await Task.Delay(100);
+            }
             //bool wasBusy = IsBusy;
             //IsBusy = true;
 
             int layerCount = 4;
 
-            bool HasUserDefinedColor = !string.IsNullOrEmpty(CopyItem.ItemColor);
+            bool hasUserDefinedColor = !string.IsNullOrEmpty(CopyItem.ItemColor);
 
             List<string> hexColors = new List<string>();
 
-            if (IconResourceObj is int iconId && !HasUserDefinedColor) {
+            if (IconResourceObj is int iconId && iconId > 0 && !hasUserDefinedColor) {
+                while(MpAvIconCollectionViewModel.Instance.IsAnyBusy) {
+                    await Task.Delay(100);
+                }
                 var ivm = MpAvIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == iconId);
                 if (ivm == null) {
                     var icon = await MpDataModelProvider.GetItemAsync<MpIcon>(iconId);
@@ -1158,7 +1172,7 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     hexColors = ivm.PrimaryIconColorList.ToList();
                 }
-            } else if (HasUserDefinedColor) {
+            } else if (hasUserDefinedColor) {
                 hexColors = Enumerable.Repeat(CopyItemHexColor, layerCount).ToList();
             } else {
                 var tagColors = await MpDataModelProvider.GetTagColorsForCopyItemAsync(CopyItemId);

@@ -22,7 +22,7 @@ function initCheckableListMatcher() {
 	}
 	let Delta = Quill.imports.delta;
 
-	quill.clipboard.addMatcher('LI', function (node, delta) {
+	quill.clipboard.addMatcher('li', function (node, delta) {
 		if (node.hasAttribute('data-checked')) {
 			let is_checked = parseBool(node.getAttribute('data-checked'));
 			if (delta && delta.ops !== undefined && delta.ops.length > 0) {

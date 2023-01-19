@@ -33,6 +33,7 @@ function initEditor() {
 	initScroll();
 	initTemplates();
 	initOverlay();
+	//initHistory();
 	//initExtContentSourceBlot();
 
 	quill.on("selection-change", onEditorSelChanged);
@@ -151,11 +152,6 @@ function isSubSelectionEnabled() {
 
 // #region Actions
 
-function clearLastDelta() {
-	log('Delta log cleared. It was: ');
-	log(LastTextChangedDelta);
-	LastTextChangedDelta = null;
-}
 
 function hideEditorScrollbars() {
 	getEditorContainerElement().classList.remove('show-scrollbars');
@@ -374,13 +370,13 @@ function onEditorSelChanged(range, oldRange, source) {
 }
 function onEditorTextChanged(delta, oldDelta, source) {
 	log('editor text changed');
-	LastTextChangedDelta = mergeDeltas(LastTextChangedDelta, delta);
 	
 	updateAllElements();
 
 	if (!IsLoaded) {
 		return;
 	}
+	LastTextChangedDelta = mergeDeltas(LastTextChangedDelta, delta);
 
 	if (!IsTemplatePaddingAfterTextChange) {
 		updateTemplatesAfterTextChanged();

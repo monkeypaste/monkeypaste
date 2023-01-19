@@ -24,8 +24,16 @@ namespace MonkeyPaste {
             MpAnalyzerTransaction trans,
             MpCopyItem sourceCopyItem,
             object sourceHandler, bool suppressWrite = false) {
-            var pp = sourceHandler as MpPluginPreset;
-            if (pp == null ||
+
+
+            if (trans != null && 
+                trans.Response != null && 
+                !string.IsNullOrEmpty(trans.Response.errorMessage)) {
+                // on error throw exception to error handler
+                throw new MpUserNotifiedException(trans.Response.errorMessage);
+            }
+
+            if (sourceHandler == null ||
                 trans == null || 
                 trans.Response == null || 
                 trans.Response.dataObject == null || 
@@ -39,9 +47,8 @@ namespace MonkeyPaste {
 
             string source_url_ref = MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(sourceCopyItem);
 
-            var plugin_source_ref = await MpDataModelProvider.GetSourceRefBySourceypeAndSourceIdAsync(
-                MpTransactionSourceType.AnalyzerPreset, pp.Id);
-            string plugin_ref_url = MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(
+            var plugin_source_ref = sourceHandler as MpISourceRef;
+            string plugin_param_req_ref_url = MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(
                 plugin_source_ref, trans.Request.SerializeJsonObjectToBase64());
 
 
@@ -54,11 +61,11 @@ namespace MonkeyPaste {
             if (mpdo.TryGetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, out IEnumerable<string> mpdo_urls)) {
                 // retain any references response may have included (remove cur plugin and source item since it will be added, probably shouldn't be there)
                 ref_urls = mpdo_urls
-                    .Where(x => x != source_url_ref && x != plugin_ref_url).ToList();
+                    .Where(x => x != source_url_ref && x != plugin_param_req_ref_url).ToList();
             }
 
             // add reference to preset with args ie 'https://<preset endpoint>/<preset request>'
-            ref_urls.Add(plugin_ref_url);
+            ref_urls.Add(plugin_param_req_ref_url);
 
             if (outputType.IsOutputNewContent() &&
                 sourceCopyItem != null) {

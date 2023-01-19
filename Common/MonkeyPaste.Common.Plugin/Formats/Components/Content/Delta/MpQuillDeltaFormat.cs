@@ -6,13 +6,40 @@ using System.Text;
 namespace MonkeyPaste.Common.Plugin {
     // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
 
-    public class MpQuillDelta : MpJsonObject {
+    public abstract class MpOmitNullJsonObject : MpJsonObject {
+        public override string SerializeJsonObject() {
+
+            return base.SerializeJsonObject(new JsonSerializerSettings() {
+                NullValueHandling = NullValueHandling.Ignore
+            });
+        }
+        public override string SerializeJsonObjectToBase64(Encoding enc = null) {
+            return base.SerializeJsonObjectToBase64(new JsonSerializerSettings() {
+                NullValueHandling = NullValueHandling.Ignore
+            },enc);
+        }
+    }
+    public class MpQuillDelta : MpOmitNullJsonObject {
         public List<Op> ops { get; set; }
     }
 
-    public class Attributes {
+    public class Op : MpOmitNullJsonObject {
+        public object insert { get; set; }
+        public Attributes attributes { get; set; }
+
+        public DeltaRange format { get; set; }
+        public int? delete { get; set; }
+        public int? retain { get; set; }
+
+    }
+
+    public class DeltaRange : MpOmitNullJsonObject {
+        public int index { get; set; }
+        public int length { get; set; }
+    }
+    public class Attributes : MpOmitNullJsonObject {
         public string align { get; set; }
-        public int indent { get; set; }
+        public int? indent { get; set; }
         public string templateGuid { get; set; }
         public bool? isFocus { get; set; }
         public string templateName { get; set; }
@@ -42,32 +69,21 @@ namespace MonkeyPaste.Common.Plugin {
         public string colspan { get; set; }
     }
 
-    public class DeltaRange {
-        public int index { get; set; }
-        public int length { get; set; }
-    }
 
-    public class Op {
-        public object insert { get; set; }
-        public Attributes attributes { get; set; }
 
-        public DeltaRange format { get; set; }
-        public DeltaRange delete { get; set; }
-    }
-
-    public class ImageInsert {
+    public class ImageInsert : MpOmitNullJsonObject {
         public string image { get; set; }
     }
 
 
-    public class TableCellLine {
+    public class TableCellLine : MpOmitNullJsonObject {
         public string rowspan { get; set; }
         public string colspan { get; set; }
         public string row { get; set; }
         public string cell { get; set; }
     }
 
-    public class TableCol {
+    public class TableCol : MpOmitNullJsonObject {
         public string width { get; set; }
     }
 

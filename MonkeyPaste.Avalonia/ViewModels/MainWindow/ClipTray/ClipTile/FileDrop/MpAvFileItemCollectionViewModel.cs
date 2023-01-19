@@ -48,7 +48,11 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvFileItemCollectionViewModel() :base (null) { }
 
-        public MpAvFileItemCollectionViewModel(MpAvClipTileViewModel parent) : base(parent) { }
+        public MpAvFileItemCollectionViewModel(MpAvClipTileViewModel parent) : base(parent) {
+            Items.CollectionChanged += Items_CollectionChanged;
+        }
+
+
 
         #endregion
 
@@ -84,6 +88,14 @@ namespace MonkeyPaste.Avalonia {
             var fivm = new MpAvFileDataObjectItemViewModel(this);
             await fivm.InitializeAsync(dobjItem);
             return fivm;
+        }
+
+
+        private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            if(Parent == null) {
+                return;
+            }
+            Parent.OnPropertyChanged(nameof(Parent.IconResourceObj));
         }
         #endregion
     }

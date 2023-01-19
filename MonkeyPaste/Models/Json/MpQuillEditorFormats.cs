@@ -76,6 +76,13 @@ namespace MonkeyPaste {
         public string userDeletedTemplateGuid { get; set; }
     }
 
+    public class MpQuillUpdateContentRequestMessage : MpJsonObject {
+        public string deltaFragmentStr { get; set; }
+    }
+    
+    public class MpQuillLastTransactionUndoneNotification : MpJsonObject {
+    }
+
     public class MpQuillTemplateAddOrUpdateNotification : MpJsonObject {
         public string addedOrUpdatedTextTemplateBase64JsonStr { get; set; }
     }

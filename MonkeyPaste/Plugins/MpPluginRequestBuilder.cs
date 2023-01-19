@@ -14,10 +14,10 @@ namespace MonkeyPaste {
             Dictionary<object,string> paramValues,
             MpCopyItem sourceContent) {
             
-            List<MpPluginRequestItemFormat> requestItems = new List<MpPluginRequestItemFormat>();
+            List<MpParameterRequestItemFormat> requestItems = new List<MpParameterRequestItemFormat>();
 
             foreach(var paramFormat in paramFormats) {
-                MpPluginRequestItemFormat requestItem = await BuildRequestItem(
+                MpParameterRequestItemFormat requestItem = await BuildRequestItem(
                     paramFormat,
                     paramValues[paramFormat.paramId],
                     sourceContent);
@@ -25,15 +25,15 @@ namespace MonkeyPaste {
             }
 
             return new MpAnalyzerPluginRequestFormat() {
-                items = requestItems.Cast<MpIParameterKeyValuePair>().ToList()
+                items = requestItems
             };
         }
 
-        private static async Task<MpPluginRequestItemFormat> BuildRequestItem(
+        private static async Task<MpParameterRequestItemFormat> BuildRequestItem(
             MpParameterFormat paramFormat, 
             string paramValue,
             MpCopyItem sourceContent) {
-            return new MpPluginRequestItemFormat() { 
+            return new MpParameterRequestItemFormat() { 
                 paramId = paramFormat.paramId, 
                 value = await MpPluginParameterValueEvaluator.GetParameterRequestValueAsync(
                     paramFormat.controlType,

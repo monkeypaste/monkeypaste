@@ -34,101 +34,122 @@ namespace AvCoreAnnotator {
             }
 
             foreach(MpRegExType ft in formats) {
-                var annotation_type_results = DeltaAnnotator.AnnotateType(plain_text, ft);
+                var annotation_type_results = AnnotateType(plain_text, ft);
                 delta.ops.AddRange(annotation_type_results.ops);
             }
-            List<Tuple<Op,Op>> collisions = new List<Tuple<Op, Op>>();
-            foreach(var op in delta.ops) {
-                foreach(var other_op in delta.ops) {
-                    if(op == other_op) {
-                        continue;
-                    }
-                    bool start_collision =
-                        op.format.index >= other_op.format.index &&
-                        op.format.index <= other_op.format.index + other_op.format.length;
-                    
-                    bool end_collision =
-                        op.format.index + op.format.length >= other_op.format.index &&
-                        op.format.index + op.format.length <= other_op.format.index + other_op.format.length;
-
-                    if (start_collision || end_collision) {
-                        if(collisions.All(x=>(x.Item1 != op && x.Item2 != other_op) || (x.Item1 != other_op && x.Item2 != op))) {
-                            // ignore duplicates
-                            collisions.Add(new Tuple<Op, Op>(op, other_op));
-                        }
-                    }
-                }
-            }
-
-            if(collisions.Count > 0) {
-                // TODO should sort regex's by priority to remove collisions
-                Debugger.Break();
-            }
+            delta = ProcessCollisions(delta);
 
             // order ops by index see (https://quilljs.com/guides/designing-the-delta-format/#pitfalls)
             delta.ops = delta.ops.OrderBy(x => x.format.index).ThenBy(x => x.format.length).ToList();
-
+            delta.ops.ForEach(x => x.retain = 0);
             return delta;
         }
-        public static MpQuillDelta AnnotateType(string pt, MpRegExType annotationRegExType) {
+        private static MpQuillDelta AnnotateType(string pt, MpRegExType annotationRegExType) {
             MpQuillDelta delta = new MpQuillDelta() { ops = new List<Op>() };
 
             if(annotationRegExType == MpRegExType.None ||
                 (int)annotationRegExType > MpRegEx.MAX_ANNOTATION_REGEX_TYPE) {
                 return delta;
             }
-            // this text node continues 1 or more current pattern
-            // ex 'Hey have you seen https://youtube.mw/blahblah yet? Its just like https://gumbo.com/clippers_fanatics
+           
+            Regex regex = MpRegEx.RegExLookup[annotationRegExType];
+            MatchCollection mc = regex.Matches(pt);
+            foreach (Match m in mc) {
+                foreach (Group mg in m.Groups) {
+                    foreach (Capture c in mg.Captures) {
+                        MpConsole.WriteLine($"Annotation match: Type: {annotationRegExType} Value: {c.Value}");
 
+                        Op op = new Op() {
+                            format = new DeltaRange() { index = c.Index, length = c.Length },
+                            attributes = GetLinkAttributes(annotationRegExType,c.Value)
+                        };
 
-            int cur_idx = 0;
-            Match m = MpRegEx.RegExLookup[annotationRegExType].Match(pt); 
-            while (m.Success) {
-                MpConsole.WriteLine($"Annotation match: Type: {annotationRegExType} Value: {m.Value}");
-                // create annotation
-                Op op = new Op() {
-                    format = new DeltaRange() { index = m.Index, length = m.Length },
-                    attributes = new Attributes() {
-                        linkType = annotationRegExType.ToString().ToLower()
+                        delta.ops.Add(op);
                     }
-                };
-
-                // set href to match value
-                string href_value;
-                switch (annotationRegExType) {
-                    case MpRegExType.HexColor:
-                        // add bg color to regex
-                        var c = new MpColor(m.Value);
-                        href_value = $"https://www.htmlcsscolor.com/hex/{c.ToHex(true).ToUpper().Replace("#", string.Empty)}";
-                        break;
-                    case MpRegExType.Email:
-                        href_value = $"mailto:{m.Value}";
-                        break;
-                    case MpRegExType.FileOrFolder:
-                        if (Uri.IsWellFormedUriString(m.Value, UriKind.Absolute)) {
-                            href_value = new Uri(m.Value).AbsoluteUri;
-                        } else {
-                            href_value = string.Empty;
-                        }
-                        break;
-                    case MpRegExType.PhoneNumber:
-                    case MpRegExType.StreetAddress:
-                    case MpRegExType.Currency:
-                        href_value = $"https://www.google.com/search?q={m.Value}";
-                        break;
-                    default:
-                        href_value = m.Value;
-                        break;
-
                 }
-                op.attributes.link = href_value;
-
-
-                int match_idx = m.Value.Substring(cur_idx).IndexOf(m.Value);
-                cur_idx += match_idx + m.Value.Length;
-                m = MpRegEx.RegExLookup[annotationRegExType].Match(pt.Substring(cur_idx));
             }
             return delta;
+        }
+
+        private static Attributes GetLinkAttributes(MpRegExType annotationRegExType, string match) {
+            var attr = new Attributes() {
+                linkType = annotationRegExType.ToString().ToLower(),
+                link = GetLinkHref(annotationRegExType, match)
+            }; 
+            if(annotationRegExType == MpRegExType.HexColor) {
+                var color = new MpColor(match);
+                attr.background = color.ToHex(true);
+                attr.color = attr.background.IsHexStringBright() ? MpSystemColors.Black : MpSystemColors.White;
+            }
+            return attr;
+        }
+        private static string GetLinkHref(MpRegExType annotationRegExType, string match) {
+            string href_value;
+            switch (annotationRegExType) {
+                case MpRegExType.HexColor:
+                    var c = new MpColor(match);
+                    href_value = $"https://www.htmlcsscolor.com/hex/{c.ToHex(true).ToUpper().Replace("#", string.Empty)}";
+                    break;
+                case MpRegExType.Email:
+                    href_value = $"mailto:{match}";
+                    break;
+                case MpRegExType.FileOrFolder:
+                    if (Uri.IsWellFormedUriString(match, UriKind.Absolute)) {
+                        href_value = new Uri(match).AbsoluteUri;
+                    } else {
+                        href_value = string.Empty;
+                    }
+                    break;
+                case MpRegExType.PhoneNumber:
+                case MpRegExType.StreetAddress:
+                case MpRegExType.Currency:
+                    href_value = $"https://www.google.com/search?q={match}";
+                    break;
+                default:
+                    href_value = match;
+                    break;
+
+            }
+            return href_value;
+        }
+
+        private static MpQuillDelta ProcessCollisions(MpQuillDelta delta) {
+            List<Op> ops_to_remove = new List<Op>();
+            // order ops by desc length, then remove any op that collides with it (so longest match in any collision remains)
+            foreach (var op in delta.ops.OrderByDescending(x=>x.format.length)) {
+                if(ops_to_remove.Contains(op)) {
+                    continue;
+                }
+                foreach (var other_op in delta.ops.Where(x=>x != op)) {
+                    if (ops_to_remove.Contains(op)) {
+                        continue;
+                    }
+
+                    if (IsCollision(op,other_op)) {
+                        ops_to_remove.Add(other_op);
+                    }
+                }
+            }
+
+            ops_to_remove.ForEach(x => delta.ops.Remove(x));
+            MpConsole.WriteLine($"{ops_to_remove.Count} colliding annotations removed.");
+            return delta;
+        }
+
+        private static bool IsCollision(Op op,Op other_op) {
+            int op_start_idx = op.format.index;
+            int op_end_idx = op.format.index + op.format.length;
+            
+            int other_op_start_idx = other_op.format.index;
+            int other_op_end_idx = other_op.format.index + other_op.format.length;
+
+            if(other_op_start_idx >= op_start_idx && other_op_start_idx <= op_end_idx) {
+                return true;
+            }
+            if(other_op_end_idx >= op_start_idx && other_op_end_idx <= op_end_idx) {
+                return true;
+            }
+            return false;
         }
         #endregion
 

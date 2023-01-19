@@ -36,27 +36,27 @@ namespace MonkeyPaste {
             // 6. Returns new or updated content
 
             if(pluginComponent is MpIAnalyzeAsyncComponent || pluginComponent is MpIAnalyzeComponent) {
-                MpAnalyzerTransaction at = new MpAnalyzerTransaction() {
+                MpAnalyzerTransaction trans = new MpAnalyzerTransaction() {
                     RequestTime = DateTime.Now,
                 };
 
                 // CREATE REQUEST
                 try {
-                    at.Request = await MpPluginRequestBuilder.BuildRequestAsync(
+                    trans.Request = await MpPluginRequestBuilder.BuildRequestAsync(
                                         pluginFormat.analyzer.parameters,
                                         paramValues,
                                         sourceCopyItem);
                 } catch(Exception ex) {
-                    return await HandleErrorAsync(ex, pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite);
+                    return await HandleErrorAsync(ex, pluginFormat, trans, sourceCopyItem, sourceHandler, suppressWrite);
                 }
 
                 // FIND CONTENT
                 MpParameterFormat contentParam = pluginFormat.analyzer.parameters
                     .FirstOrDefault(x => x.unitType == MpParameterValueUnitType.PlainTextContentQuery);
                                 
-                at.RequestContent = contentParam == null ? 
+                trans.RequestContent = contentParam == null ? 
                     null :
-                    (at.Request as MpAnalyzerPluginRequestFormat).items
+                    (trans.Request as MpAnalyzerPluginRequestFormat).items
                     .FirstOrDefault(x => x.paramId.Equals(contentParam.paramId)).value;
 
                 // TODO (for http) phone home w/ request half of transaction and await return
@@ -64,14 +64,14 @@ namespace MonkeyPaste {
                 // GET RESPONSE
                 try {
                     if(pluginComponent is MpIAnalyzeAsyncComponent analyzeAsyncComponent) {
-                        at.Response = await analyzeAsyncComponent.AnalyzeAsync(at.Request as MpAnalyzerPluginRequestFormat);
+                        trans.Response = await analyzeAsyncComponent.AnalyzeAsync(trans.Request as MpAnalyzerPluginRequestFormat);
                     } else if(pluginComponent is MpIAnalyzeComponent analyzeComponent) {
-                        at.Response = analyzeComponent.Analyze(at.Request as MpAnalyzerPluginRequestFormat);
+                        trans.Response = analyzeComponent.Analyze(trans.Request as MpAnalyzerPluginRequestFormat);
                     }
-                    at.ResponseTime = DateTime.Now;
+                    trans.ResponseTime = DateTime.Now;
                 }
                 catch (Exception ex) {
-                    return await HandleErrorAsync(ex, pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite);
+                    return await HandleErrorAsync(ex, pluginFormat, trans, sourceCopyItem, sourceHandler, suppressWrite);
                 }
 
                 // LOG TRANSACTION (create record of params, ref to plugin source(local/remote))
@@ -82,11 +82,12 @@ namespace MonkeyPaste {
 
                 // PROCESS RESPONSE
                 try {
-                    at.ResponseContent = await MpPluginResponseConverter.ConvertAsync(pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite);
-                    return at;
+                    trans.ResponseContent = await MpPluginResponseConverter.ConvertAsync(pluginFormat, trans, sourceCopyItem, sourceHandler, suppressWrite);
+                    return trans;
                 }
                 catch (Exception ex) {
-                    return await HandleErrorAsync(ex, pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite);
+                    var error_response = await HandleErrorAsync(ex, pluginFormat, trans, sourceCopyItem, sourceHandler, suppressWrite);
+                    return error_response;
                 }
             }
 
@@ -151,28 +152,39 @@ namespace MonkeyPaste {
         private static async Task<MpPluginTransactionBase> HandleErrorAsync(
             Exception ex, 
             MpPluginFormat pluginFormat, 
-            MpPluginTransactionBase at, MpCopyItem sourceCopyItem, object sourceHandler, bool suppressWrite = false) {
+            MpPluginTransactionBase trans, 
+            MpCopyItem sourceCopyItem, object sourceHandler, bool suppressWrite = false) {
             MpConsole.WriteTraceLine(ex);
-            at.TransactionErrorMessage = ex.ToString();
-            await MpPluginLogger.LogTransactionAsync(pluginFormat, at, sourceCopyItem, sourceHandler, suppressWrite)
-                                    .TimeoutAfter(TimeSpan.FromMilliseconds(_PROCESS_TIMEOUT_MS));
+
+            var pp = sourceHandler as MpPluginPreset;
+
+            MpPlatformWrapper.Services.TransactionBuilder.PerformTransactionAsync(
+                        copyItemId: sourceCopyItem.Id,
+                        reqType: MpJsonMessageFormatType.ParameterRequest,
+                        req: trans.Request.SerializeJsonObject(),
+                        respType: MpJsonMessageFormatType.Error,
+                        resp: ex.Message,
+                        ref_urls: new[] { 
+                            MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(pp, trans.Request.SerializeJsonObjectToBase64()) 
+                        },
+                        label: "Error").FireAndForgetSafeAsync();
 
             var userAction = await MpNotificationBuilder.ShowNotificationAsync(
                 notificationType: MpNotificationType.InvalidRequest,
                 body: ex.Message,
                 maxShowTimeMs: 5000);
             
-            if (at.Response == null) {
-                at.Response = new MpPluginResponseFormatBase();
+            if (trans.Response == null) {
+                trans.Response = new MpPluginResponseFormatBase();
             }
             if (userAction == MpNotificationDialogResultType.Retry) {
                 
-                at.Response.retryMessage = "Retry";
+                trans.Response.retryMessage = "Retry";
             } else {
-                at.Response.errorMessage = "Transaction Error";
+                trans.Response.errorMessage = "Error";
             }
 
-            return at;
+            return trans;
         }
 
         #endregion

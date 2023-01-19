@@ -129,7 +129,7 @@ namespace AvCoreClipboardHandler {
         }
 
 
-        private static object ProcessReaderParam(MpIParameterKeyValuePair pkvp, string format, object data, out Exception ex, out List<MpPluginUserNotificationFormat> nfl) {
+        private static object ProcessReaderParam(MpParameterRequestItemFormat pkvp, string format, object data, out Exception ex, out List<MpPluginUserNotificationFormat> nfl) {
             ex = null;
             nfl = null;
             if (data == null) {

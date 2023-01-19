@@ -234,7 +234,7 @@ function performDataTransferOnContent(
     // PRE TRANSFER DEFS
 
     //let transfer_deltas = null;
-    let pre_delta = LastTextChangedDelta;
+    //let pre_delta = LastTextChangedDelta;
     let pre_doc_length = getDocLength();
 
     // PERFORM TRANSFER
@@ -272,6 +272,7 @@ function performDataTransferOnContent(
     let dt_length_diff = getDocLength() - pre_doc_length;
 
     // REMOVE SOURCE
+
     if (source_doc_range) {
         if (dest_doc_range.index < source_doc_range.index) {
             // when drop is before drag sel adjust drag range from added drop length
@@ -293,7 +294,7 @@ function performDataTransferOnContent(
         //}
     }
 
-    // SELECT TRANSFER
+    // SELECT DEST
 
     var dt_range = dest_doc_range;
     dt_range.length += dt_length_diff;

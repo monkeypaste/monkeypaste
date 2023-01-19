@@ -96,7 +96,7 @@ namespace MonkeyPaste.Common {
         public virtual void SetValue(string text) {
             value = text;
         }
-        public virtual void SetValue(JToken curToken, IEnumerable<MpIParameterKeyValuePair> reqParams, int idx = 0) {
+        public virtual void SetValue(JToken curToken, IEnumerable<MpParameterRequestItemFormat> reqParams, int idx = 0) {
             value = FindValuePathResult(curToken, reqParams, idx);
         }
 
@@ -107,7 +107,7 @@ namespace MonkeyPaste.Common {
         #endregion
 
         #region Protected Methods
-        protected string FindValuePathResult(JToken curToken, IEnumerable<MpIParameterKeyValuePair> reqParams, int idx = 0) {
+        protected string FindValuePathResult(JToken curToken, IEnumerable<MpParameterRequestItemFormat> reqParams, int idx = 0) {
             string result = string.Empty;
             if (pathExpression.Trim().StartsWith(REQUEST_PARAM_VALUE_REF_START_TOKEN)) {
                 result = GetParamValue(pathExpression, reqParams);
@@ -166,9 +166,9 @@ namespace MonkeyPaste.Common {
         #endregion
 
         #region Private Methods
-        private string GetParamValue(string queryParamValueStr, IEnumerable<MpIParameterKeyValuePair> reqParams) {
+        private string GetParamValue(string queryParamValueStr, IEnumerable<MpParameterRequestItemFormat> reqParams) {
             string paramId = GetParamId(queryParamValueStr);
-            MpIParameterKeyValuePair param_kvp = reqParams.FirstOrDefault(x => paramId.Equals(x.paramId));
+            MpParameterRequestItemFormat param_kvp = reqParams.FirstOrDefault(x => paramId.Equals(x.paramId));
             if (param_kvp == null) {
                 MpConsole.WriteLine($"Error parsing dynamic query item, enumId: '{paramId}' does not exist");
                 MpConsole.WriteLine($"In request with params: ");
@@ -213,7 +213,7 @@ namespace MonkeyPaste.Common {
             value = val;
         }
 
-        public override void SetValue(JToken curToken, IEnumerable<MpIParameterKeyValuePair> reqParams, int idx = 0) {
+        public override void SetValue(JToken curToken, IEnumerable<MpParameterRequestItemFormat> reqParams, int idx = 0) {
             string result = base.FindValuePathResult(curToken, reqParams, idx);
             if (string.IsNullOrEmpty(result)) {
                 value = default;

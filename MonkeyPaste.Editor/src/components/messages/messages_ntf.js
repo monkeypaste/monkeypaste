@@ -219,7 +219,12 @@ function onDataTransferCompleted_ntf(changeDelta, input_dataObj, transfer_label)
 	}
 }
 
-
+function onLastTransactionUndone_ntf() {
+	// output 'MpQuillLastTransactionUndoneNotification' (empty)
+	if (typeof notifyLastTransactionUndone === 'function') {
+		notifyLastTransactionUndone('');
+	}
+}
 
 function onInternalContextMenuIsVisibleChanged_ntf(isVisible) {
 	// output 'MpQuillInternalContextIsVisibleChangedNotification'

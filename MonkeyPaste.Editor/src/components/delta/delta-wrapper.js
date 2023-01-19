@@ -8,7 +8,6 @@ const TableDeltaAttrbs = [
 	'colspan'
 ];
 
-var LastTextChangedDelta = null;
 // #endregion Globals
 
 // #region Life Cycle
@@ -145,7 +144,7 @@ function cleanDelta(delta1) {
 function mergeDeltas(delta1, delta2) {
 	delta1 = cleanDelta(delta1);
 	delta2 = cleanDelta(delta2);
-	return delta2.compose(delta1);
+	return delta1.concat(delta2);
 }
 
 function insertDelta(range, deltaOrDeltaJsonStr, source = 'api') {
@@ -165,7 +164,7 @@ function insertDelta(range, deltaOrDeltaJsonStr, source = 'api') {
 	//	{ delete: range.length },
 	//	...deltaObj.ops
 	//]);
-	return quill.updateContents(deltaObj, source);
+	return quill.updateContents(update_delta, source);
 }
 
 function encodeHtmlEntitiesInDeltaInserts(delta) {
@@ -197,6 +196,19 @@ function decodeHtmlEntitiesInDeltaInserts(delta) {
 		}
 	}
 	return delta;
+}
+
+function applyDelta(delta, source = 'api') {
+	let format_ops = delta.filter((op) => op.format !== undefined);
+	let other_ops = delta.filter((op) => op.format === undefined);
+	quill.updateContents(other_ops, source);
+	quill.update();
+
+	for (var i = 0; i < format_ops.length; i++) {
+		const fop = format_ops[i];
+		quill.formatText(fop.format.index, fop.format.length, fop.attributes, source);
+	}
+	quill.update();
 }
 // #endregion Actions
 

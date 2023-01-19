@@ -84,7 +84,6 @@ namespace MonkeyPaste.Avalonia {
                             respType: MpJsonMessageFormatType.Delta,
                             resp: itemDelta,
                             ref_urls: ref_urls,
-                                //refs.Select(x => MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(x)),
                             label: createLabel);
 
             return ci;
@@ -192,14 +191,14 @@ namespace MonkeyPaste.Avalonia {
                 itemType = MpCopyItemType.Text;
                 itemData = textStr;
             } else if (mpdo.ContainsData(MpPortableDataFormats.Unicode) &&
-                        mpdo.GetData(MpPortableDataFormats.Text) is string unicodeStr) {
+                        mpdo.GetData(MpPortableDataFormats.Unicode) is string unicodeStr) {
 
                 // UNICODE
                 inputTextFormat = "text";
                 itemType = MpCopyItemType.Text;
                 itemData = unicodeStr;
             } else if (mpdo.ContainsData(MpPortableDataFormats.OemText) &&
-                        mpdo.GetData(MpPortableDataFormats.Text) is string oemStr) {
+                        mpdo.GetData(MpPortableDataFormats.OemText) is string oemStr) {
 
                 // OEM TEXT
                 inputTextFormat = "text";

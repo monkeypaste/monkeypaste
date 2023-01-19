@@ -803,7 +803,13 @@ namespace MonkeyPaste.Avalonia {
         }
         private static void AdjustThumbTransform(Track track, MpPoint track_mp, bool isThumbPress) {
             var attached_control = track.Tag as AvaloniaObject;
-
+            if(attached_control == null) {
+                // BUG this happened when clicking an editor link, 
+                // which opened an cef browser window for the link, 
+                // then after closing the window, attached_control was null
+                // when mw finished hiding in vertical orientation on the right
+                return;
+            }
             var thumb = track.GetVisualDescendant<Thumb>();
             if (track.Orientation == Orientation.Horizontal) {
                 SetIsThumbDraggingX(attached_control, true);

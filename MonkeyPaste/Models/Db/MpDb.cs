@@ -30,7 +30,8 @@ namespace MonkeyPaste {
 
         #region Properties
 
-        public static bool UseWAL { get; set; } = false;
+        public static bool IsDateTimeTicks { get; set; } = false;
+        public static bool UseWAL { get; set; } = true;
         public static string IdentityToken { get; set; }
         public static string AccessToken { get; set; }
         public static bool IsLoaded { get; set; } = false;
@@ -365,8 +366,7 @@ namespace MonkeyPaste {
         }
 
         private static async Task InitDbAsync() {
-            bool isNewDb = await InitDbConnectionAsync(MpPlatformWrapper.Services.DbInfo, true);
-            
+            bool isNewDb = await InitDbConnectionAsync(MpPlatformWrapper.Services.DbInfo, true);            
 
             await InitTablesAsync();
             
@@ -401,7 +401,7 @@ namespace MonkeyPaste {
             
             var _connStr = new SQLiteConnectionString(
                             databasePath: dbPath,
-                            storeDateTimeAsTicks: true,
+                            storeDateTimeAsTicks: IsDateTimeTicks,
                             openFlags: SQLiteOpenFlags.ReadWrite |
                                        SQLiteOpenFlags.Create |
                                        SQLiteOpenFlags.SharedCache |

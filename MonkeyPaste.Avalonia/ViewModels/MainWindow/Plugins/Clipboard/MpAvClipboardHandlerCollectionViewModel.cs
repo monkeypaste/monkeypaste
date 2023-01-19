@@ -371,8 +371,18 @@ namespace MonkeyPaste.Avalonia {
                     isAvalonia = true,
                     mainWindowImplicitHandle = MpPlatformWrapper.Services.ProcessWatcher.ThisAppHandle.ToInt32(),
                     platform = MpPlatformWrapper.Services.OsInfo.OsType.ToString(),
-                    readFormats = EnabledReaders.Where(x => x.Parent.ClipboardPluginComponent == read_component).Select(x => x.Parent.HandledFormat).Distinct().ToList(),
-                    items = EnabledReaders.Where(x => x.Parent.ClipboardPluginComponent == read_component).SelectMany(x => x.Items.Cast<MpIParameterKeyValuePair>()).ToList(),
+                    readFormats = 
+                        EnabledReaders
+                        .Where(x => x.Parent.ClipboardPluginComponent == read_component)
+                        .Select(x => x.Parent.HandledFormat)
+                        .Distinct()
+                        .ToList(),
+                    items = 
+                        EnabledReaders
+                        .Where(x => x.Parent.ClipboardPluginComponent == read_component)
+                        .SelectMany(x => x.Items
+                            .Select(y=>new MpParameterRequestItemFormat(y.ParamId,y.CurrentValue)))
+                        .ToList(),
                     forcedClipboardDataObject = forced_ido
                 };
 
@@ -423,8 +433,18 @@ namespace MonkeyPaste.Avalonia {
                 var write_request = new MpClipboardWriterRequest() {
                     data = ido,
                     writeToClipboard = writeToClipboard,
-                    writeFormats = EnabledWriters.Where(x => x.Parent.ClipboardPluginComponent == write_component).Select(x => x.Parent.HandledFormat).Distinct().ToList(),
-                    items = EnabledWriters.Where(x => x.Parent.ClipboardPluginComponent == write_component).SelectMany(x => x.Items.Cast<MpIParameterKeyValuePair>()).ToList(),
+                    writeFormats = 
+                        EnabledWriters
+                            .Where(x => x.Parent.ClipboardPluginComponent == write_component)
+                            .Select(x => x.Parent.HandledFormat)
+                            .Distinct()
+                            .ToList(),
+                    items = 
+                        EnabledWriters
+                            .Where(x => x.Parent.ClipboardPluginComponent == write_component)
+                            .SelectMany(x => x.Items
+                                .Select(y => new MpParameterRequestItemFormat(y.ParamId, y.CurrentValue)))
+                            .ToList(),
                 };
 
                 Func<Task<MpClipboardWriterResponse>> retryHandlerWriteFunc = async () => {

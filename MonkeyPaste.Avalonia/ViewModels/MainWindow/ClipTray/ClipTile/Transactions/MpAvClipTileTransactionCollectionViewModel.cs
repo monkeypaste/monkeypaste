@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Threading;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonoMac.OpenGL;
 using System;
@@ -39,15 +40,17 @@ namespace MonkeyPaste.Avalonia {
         #region View Models
 
         public ObservableCollection<MpAvTransactionItemViewModelBase> Transactions { get; set; } = new ObservableCollection<MpAvTransactionItemViewModelBase>();
-
+        public IEnumerable<MpAvTransactionItemViewModelBase> SortedTransactions =>
+            IsSortDescending ?
+                Transactions.OrderByDescending(x => x.TransactionDateTime) :
+                Transactions.OrderBy(x => x.TransactionDateTime);
         public MpAvTransactionItemViewModelBase SelectedTransaction { get; set; }
 
-        //public ObservableCollection<MpITransactionNodeViewModel> SelectedItems { get; set; } = new ObservableCollection<MpITransactionNodeViewModel>();
+        public MpAvTransactionItemViewModelBase MostRecentTransaction =>
+            Transactions.OrderByDescending(x => x.TransactionDateTime).FirstOrDefault();
+
         public IEnumerable<MpAvTransactionMessageViewModelBase> Messages =>
             Transactions.SelectMany(x => x.Items);
-            
-        //public IEnumerable<MpAvTransactionItemViewModelBase> Transactions =>
-        //    Transactions.Where(x => x is MpAvTransactionItemViewModelBase).Cast<MpAvTransactionItemViewModelBase>();
 
         public IEnumerable<MpAvTransactionMessageViewModelBase> SortedMessages =>
             Messages
@@ -56,7 +59,9 @@ namespace MonkeyPaste.Avalonia {
         //.ThenByDescending(x=>x.SourceCreatedDateTime);
 
         public MpITransactionNodeViewModel PrimaryItem => 
-            Transactions.OrderBy(x => x.TransactionDateTimeUtc).FirstOrDefault();
+            Transactions.OrderBy(x => x.TransactionDateTime).FirstOrDefault();
+
+        #endregion
 
         #region MpIContextMenuItemViewModel Implementation
 
@@ -110,6 +115,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsViewByTransaction { get; set; } = false;
+        public bool IsSortDescending { get; set; } = true;
         public bool IsTransactionPaneOpen { get; set; } = false;
         public bool IsAnyBusy => IsBusy || Transactions.Any(x => x.IsBusy);
 
@@ -129,15 +136,15 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #endregion
-
         #region Constructors
 
         public MpAvClipTileTransactionCollectionViewModel() : this(null) { }
 
         public MpAvClipTileTransactionCollectionViewModel(MpAvClipTileViewModel parent) : base(parent) {
             PropertyChanged += MpAvClipTileSourceCollectionViewModel_PropertyChanged;
+            Transactions.CollectionChanged += Transactions_CollectionChanged;
         }
+
 
 
         #endregion
@@ -150,7 +157,7 @@ namespace MonkeyPaste.Avalonia {
             Transactions.Clear();
 
             var ci_transactions = await MpDataModelProvider.GetCopyItemTransactionsByCopyItemIdAsync(copyItemId);
-            foreach (var cit in ci_transactions) {
+            foreach (var cit in ci_transactions.OrderByDescending(x=>x.TransactionDateTime)) {
                 var cisvm = await CreateClipTileSourceViewModel(cit);
                 Transactions.Add(cisvm);
             }
@@ -175,7 +182,13 @@ namespace MonkeyPaste.Avalonia {
                 Dispatcher.UIThread.Post(async () => {
                     var cisvm = await CreateClipTileSourceViewModel(cit);
                     Transactions.Add(cisvm);
-                    OnPropertyChanged(nameof(SortedMessages));
+                    while(cisvm.IsAnyBusy) {
+                        await Task.Delay(100);
+                    }
+                    if(Parent.GetDragSource() is MpAvCefNetWebView wv) {
+                        var update_delta = cisvm.GetTransactionDelta();
+                        wv.PerformUpdateContentRequestAsync(update_delta).FireAndForgetSafeAsync(this);
+                    }
                 });
             }
         }
@@ -216,6 +229,10 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private void Transactions_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            OnPropertyChanged(nameof(Transactions));
+            OnPropertyChanged(nameof(SortedTransactions));
+        }
         private void SetTransactionViewGridLength(GridLength gl) {
             if (Parent.GetDragSource() is MpAvCefNetWebView wv &&
                     wv.GetVisualAncestor<MpAvClipTileView>() is MpAvClipTileView ctv &&
@@ -294,6 +311,32 @@ namespace MonkeyPaste.Avalonia {
                 OnPropertyChanged(nameof(Parent.IsTitleVisible));
             }, () => {
                 return Parent != null;
+            });
+
+        public ICommand RemoveTransactionCommand => new MpCommand<object>(
+            (args) => {
+                MpAvTransactionItemViewModelBase tivm = null;
+                if(args is MpAvTransactionItemViewModelBase) {
+                    tivm = args as MpAvTransactionItemViewModelBase;
+                }
+
+                if(tivm == null) {
+                    return;
+                }
+                int tivm_to_select_idx = -1;
+                if(tivm == SelectedTransaction) {
+                    tivm_to_select_idx = SortedTransactions.IndexOf(tivm);
+                }
+                Transactions.Remove(tivm);
+                tivm.Transaction.DeleteFromDatabaseAsync().FireAndForgetSafeAsync(this);
+                if(tivm_to_select_idx >= 0 && tivm_to_select_idx < Transactions.Count) {
+                    SelectedTransaction = SortedTransactions.ElementAt(tivm_to_select_idx);
+                }
+            });
+
+        public ICommand RemoveMostRecentTransactionCommand => new MpCommand(
+            () => {
+                RemoveTransactionCommand.Execute(MostRecentTransaction);
             });
         #endregion
     }

@@ -45,7 +45,7 @@ function initLinkMatcher() {
     }
     let Delta = Quill.imports.delta;
 
-    quill.clipboard.addMatcher('A', function (node, delta) {
+    quill.clipboard.addMatcher('a', function (node, delta) {
         if (node.hasAttribute('style')) {
             let bg = getElementComputedStyleProp(node, 'background-color');
             if (bg) {

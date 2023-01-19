@@ -90,7 +90,7 @@ namespace MonkeyPaste {
         #region MpIJsonBase64Object Implementation
 
         public string SerializeJsonObjectToBase64(Encoding enc = null) {
-            return MpJsonObject.SerializeObjectToBase64JsonStr(this, enc);
+            return MpJsonObject.SerializeObjectToBase64JsonStr(this,null, enc);
         }
 
         #endregion

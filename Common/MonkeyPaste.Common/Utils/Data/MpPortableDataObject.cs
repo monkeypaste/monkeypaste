@@ -1,5 +1,6 @@
 ﻿
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,6 +12,14 @@ namespace MonkeyPaste.Common {
     public class MpPortableDataObject : MpJsonObject, MpIPortableDataObject {
         #region Statics
 
+        public static MpPortableDataObject Parse(string json) {
+            var mpdo = new MpPortableDataObject();
+            var req_lookup = DeserializeObject<Dictionary<string, object>>(json);
+            foreach(var kvp in req_lookup) {
+                mpdo.SetData(kvp.Key, kvp.Value);
+            }
+            return mpdo;
+        }
         public static bool IsDataNotEqual(MpPortableDataObject dbo1, MpPortableDataObject dbo2) {
             if (dbo1 == null && dbo2 != null) {
                 return true;

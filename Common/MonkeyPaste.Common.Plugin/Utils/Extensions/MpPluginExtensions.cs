@@ -6,7 +6,7 @@ using System.Text;
 namespace MonkeyPaste.Common.Plugin {
     public static class MpPluginExtensions {
 
-        private static MpIParameterKeyValuePair ValidateGet(MpPluginRequestFormatBase req, object paramId) {
+        private static MpParameterRequestItemFormat ValidateGet(MpPluginRequestFormatBase req, object paramId) {
             if (paramId == null) {
                 throw new NullReferenceException("paramId is null, must have value");
             }

@@ -5,6 +5,7 @@ using SQLite;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -60,7 +61,7 @@ namespace MonkeyPaste {
         [Column("fk_MpUserDeviceId")]
         public int TransactionUserDeviceId { get; set; }
 
-        public DateTime TransactionDateTimeUtc { get; set; }
+        public DateTime TransactionDateTime { get; set; }
 
         #endregion
 
@@ -78,12 +79,6 @@ namespace MonkeyPaste {
                 Guid = value.ToString();
             }
         }
-
-        //[Ignore]
-        //public MpCopyItemTransactionType TransactionType {
-        //    get => CopyItemTransactionTypeName.ToEnum<MpCopyItemTransactionType>();
-        //    set => CopyItemTransactionTypeName = value.ToString();
-        //}
         
         [Ignore]
         public MpJsonMessageFormatType RequestMessageType {
@@ -113,9 +108,7 @@ namespace MonkeyPaste {
 
             if(copyItemId == 0 && !suppressWrite) {
                 throw new Exception("Must have CopyItemId if to be written");
-            }
-
-            
+            }            
 
             var ndio = new MpCopyItemTransaction() {
                 CopyItemTransactionGuid = System.Guid.NewGuid(),
@@ -135,7 +128,7 @@ namespace MonkeyPaste {
 
                 TransactionUserDeviceId = transUserDeviceId == 0 ? MpDefaultDataModelTools.ThisUserDeviceId : transUserDeviceId,
 
-                TransactionDateTimeUtc = transDateTime.HasValue ? transDateTime.Value : DateTime.Now
+                TransactionDateTime = transDateTime.HasValue ? transDateTime.Value : DateTime.Now
             };
 
             if(!suppressWrite) {
@@ -144,6 +137,15 @@ namespace MonkeyPaste {
             return ndio;
         }
 
+        public override async Task DeleteFromDatabaseAsync() {
+            List<Task> delete_tasks = new List<Task>();
+
+            var cisl = await MpDataModelProvider.GetCopyItemTransactionSourcesAsync(Id);
+            delete_tasks.AddRange(cisl.Select(x => x.DeleteFromDatabaseAsync()));
+            delete_tasks.Add(base.DeleteFromDatabaseAsync());
+
+            await Task.WhenAll(delete_tasks);
+        }
         public MpCopyItemTransaction() { }
 
     }

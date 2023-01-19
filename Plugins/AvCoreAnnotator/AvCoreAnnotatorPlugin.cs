@@ -28,19 +28,20 @@ namespace AvCoreAnnotator {
             if (string.IsNullOrWhiteSpace(content_pt)) {
                 return null;
             }
-            
+            content_pt = content_pt.Replace(Environment.NewLine, "\n");
             var formats = new List<MpRegExType>();
             for (int i = 3; i < Enum.GetValues(typeof(AvAnnnotaterParameterType)).Length; i++) {
                 if(req.GetRequestParamBoolValue(i)) {
                     formats.Add((MpRegExType)i - 2);
                 }
             }
-            var delta = DeltaAnnotator.Annotate(content_pt, formats);
+            MpQuillDelta delta = DeltaAnnotator.Annotate(content_pt, formats);
             MpConsole.WriteLine($"annotation Count: {delta.ops.Count} types: {string.Join(",",delta.ops.Select(x=>x.attributes.linkType))}");
 
             if (delta.ops.Count > 0) {
                 // content was annotated, return it as dataobjectitem
-                resp.dataObject = new MpPortableDataObject(MpPortableDataFormats.INTERNAL_CONTENT_DELTA_FORMAT, delta.SerializeJsonObject());
+                resp.dataObject = new MpPortableDataObject(
+                    MpPortableDataFormats.INTERNAL_CONTENT_DELTA_FORMAT, delta.SerializeJsonObject());
                 return resp;
             }
 

@@ -17,8 +17,7 @@ namespace MonkeyPaste.Avalonia {
         MpITreeItemViewModel,
         MpISelectableViewModel,
         MpIHoverableViewModel,
-        MpITooltipInfoViewModel,
-        MpIParameterKeyValuePair {
+        MpITooltipInfoViewModel {
         #region Private Variables
         private string _lastValue;
         #endregion
@@ -34,17 +33,10 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpIParameterKeyValuePair Implementation
+        #region MpPluginRequestItemFormat Implementation
 
-        #region MpIJsonObject Implementation
-
-        string MpIJsonObject.SerializeJsonObject() {
-            return MpJsonObject.SerializeObject(this);
-        }
-        #endregion
-
-        object MpIParameterKeyValuePair.paramId => ParamId;
-        string MpIParameterKeyValuePair.value => CurrentValue;
+        //object MpIParameterKeyValuePair.paramId => ParamId;
+        //string MpIParameterKeyValuePair.value => CurrentValue;
 
 
         #endregion

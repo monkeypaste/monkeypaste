@@ -64,23 +64,28 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 	let iconBase64 = '';
 
 	if (formatType == 'text') {
-		insertText(0, encodeHtmlSpecialEntities(dataStr), 'silent');
+		let encoded_pt = encodeHtmlSpecialEntities(dataStr);
+		insertText(0, encoded_pt, 'silent');
+		quill.update();
+		qhtml = getHtml();
 	} else if (formatType == 'rtf2html') {
 		const raw_delta = convertHtmlToDelta(dataStr);
 		setContents(raw_delta);
 
 		quill.update();
 		qhtml = getHtml();
-		// NOTE this maybe only necessary on windows
-		//qhtml = fixHtmlBug1(qhtml);
-		//qhtml = removeUnicode(qhtml);
-		//qhtml = fixUnicode(qhtml);
 		qhtml = forceHtmlBgOpacity(qhtml, bgOpacity);
 
 		formatted_delta = convertHtmlToDelta(qhtml);
 		setRootHtml(qhtml);
 	} else if (formatType == 'html') {
 		//iconBase64 = locateFaviconBase64(dataStr);
+
+		// NOTE this maybe only necessary on windows
+		//qhtml = fixHtmlBug1(qhtml);
+		//qhtml = removeUnicode(qhtml);
+		//qhtml = fixUnicode(qhtml);
+
 
 		insertHtml(0, dataStr, 'user', false);
 		formatted_delta = forceDeltaBgOpacity(getDelta(), bgOpacity);
