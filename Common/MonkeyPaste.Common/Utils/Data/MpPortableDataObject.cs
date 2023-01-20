@@ -129,7 +129,7 @@ namespace MonkeyPaste.Common {
             }
         }
 
-        public string Serialize() {
+        public string SerializeData() {
             return MpJsonObject.SerializeObject(DataFormatLookup.ToDictionary(x => x.Key.Name, x => (object)x.Value));
         }
 

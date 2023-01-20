@@ -29,6 +29,7 @@ namespace MonkeyPaste.Avalonia {
         getDragData,
         getAllNonInputTemplatesFromDb, 
         getClipboardDataTransferObject,
+        getDragDataTransferObject,
 
         // one-way *_ntf notifications
         notifyDocSelectionChanged,
@@ -612,6 +613,7 @@ namespace MonkeyPaste.Avalonia {
 
                 // GET CALLBACKS
 
+                case MpAvEditorBindingFunctionType.getDragDataTransferObject:
                 case MpAvEditorBindingFunctionType.getClipboardDataTransferObject:
                 case MpAvEditorBindingFunctionType.getAllNonInputTemplatesFromDb:
                     HandleBindingGetRequest(notificationType, msgJsonBase64Str).FireAndForgetSafeAsync(ctvm);
@@ -633,10 +635,21 @@ namespace MonkeyPaste.Avalonia {
                     getResp.responseFragmentJsonStr = MpJsonObject.SerializeObject(tl);
                     break;
                 case MpAvEditorBindingFunctionType.getClipboardDataTransferObject:
-                    var dtObjReq = MpJsonObject.DeserializeObject<MpQuillEditorDataTransferObjectRequestNotification>(getReq.reqMsgFragmentJsonStr);
-                    var avdo = await MpPlatformWrapper.Services.DataObjectHelperAsync.GetPlatformClipboardDataObjectAsync(false) as IDataObject;
-                    var dtObjResp = avdo.ToDataItemFragment();
-                    getResp.responseFragmentJsonStr = MpJsonObject.SerializeObject(dtObjResp);
+                    var cb_dtObjReq = MpJsonObject.DeserializeObject<MpQuillEditorClipboardDataObjectRequestNotification>(getReq.reqMsgFragmentJsonStr);
+                    var cb_ido = await MpPlatformWrapper.Services.DataObjectHelperAsync.GetPlatformClipboardDataObjectAsync(false) as IDataObject;
+                    var cb_dtObjResp = cb_ido.ToQuillDataItemsMessage();
+                    getResp.responseFragmentJsonStr = MpJsonObject.SerializeObject(cb_dtObjResp);
+                    break;
+                case MpAvEditorBindingFunctionType.getDragDataTransferObject:
+                    var drag_dtObjReq = MpJsonObject.DeserializeObject<MpQuillEditorDragDataObjectRequestNotification>(getReq.reqMsgFragmentJsonStr);
+                    var drag_hdo = MpJsonObject.DeserializeBase64Object<MpQuillHostDataItemsMessage>(drag_dtObjReq.unprocessedDataItemsJsonStr);
+                    var unprocessed_drag_avdo = drag_hdo.ToAvDataObject();
+
+                    var processed_drag_avdo = await MpPlatformWrapper.Services
+                        .DataObjectHelperAsync.ReadDragDropDataObjectAsync(unprocessed_drag_avdo) as IDataObject;
+
+                    var processed_drag_hdo = processed_drag_avdo.ToQuillDataItemsMessage();
+                    getResp.responseFragmentJsonStr = MpJsonObject.SerializeObject(processed_drag_hdo);
                     break;
             }
 
@@ -893,13 +906,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task ProcessDataTransferCompleteResponse(MpQuillDataTransferCompletedNotification dataTransferCompleted_ntf) {
-            string req_json = null;
-            var dtobj = MpJsonObject.DeserializeBase64Object<MpQuillHostDataItemsMessageFragment>(dataTransferCompleted_ntf.sourceDataItemsJsonStr);
-            MpPortableDataObject req_mpdo = null;
-            if (dtobj != null) {
-                req_mpdo = new MpPortableDataObject(dtobj.dataItems.ToDictionary(x => x.format, x => (object)x.data));
-                req_json = req_mpdo.Serialize();
-            }
+            var dtobj = MpJsonObject.DeserializeBase64Object<MpQuillHostDataItemsMessage>(dataTransferCompleted_ntf.sourceDataItemsJsonStr);
+            MpPortableDataObject req_mpdo = dtobj.ToAvDataObject();
 
             string resp_json = null;
             if (!string.IsNullOrEmpty(dataTransferCompleted_ntf.changeDeltaJsonStr)) {
@@ -915,7 +923,7 @@ namespace MonkeyPaste.Avalonia {
             await MpPlatformWrapper.Services.TransactionBuilder.PerformTransactionAsync(
                 copyItemId: BindingContext.CopyItemId,
                 reqType: MpJsonMessageFormatType.DataObject,
-                req: req_json,
+                req: req_mpdo.SerializeData(),
                 respType: MpJsonMessageFormatType.Delta,
                 resp: resp_json,
                 ref_urls: refs,

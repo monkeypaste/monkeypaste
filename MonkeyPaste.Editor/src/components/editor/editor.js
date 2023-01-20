@@ -376,7 +376,7 @@ function onEditorTextChanged(delta, oldDelta, source) {
 	if (!IsLoaded) {
 		return;
 	}
-	LastTextChangedDelta = mergeDeltas(LastTextChangedDelta, delta);
+	addHistoryItem(delta);
 
 	if (!IsTemplatePaddingAfterTextChange) {
 		updateTemplatesAfterTextChanged();

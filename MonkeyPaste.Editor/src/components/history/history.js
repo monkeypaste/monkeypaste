@@ -25,6 +25,13 @@ function initHistory() {
 
 // #region Actions
 
+function addHistoryItem(delta) {
+	if (LastTextChangedDelta == null) {
+		LastTextChangedDelta = delta;
+	} else {
+		LastTextChangedDelta = LastTextChangedDelta.compose(delta);
+	}
+}
 function clearLastDelta() {
 	log('Delta log cleared. It was: ');
 	log(LastTextChangedDelta);

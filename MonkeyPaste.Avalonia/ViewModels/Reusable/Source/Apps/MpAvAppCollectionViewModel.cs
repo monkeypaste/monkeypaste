@@ -118,6 +118,11 @@ namespace MonkeyPaste.Avalonia {
             return aivm.ClipboardFormatInfos;
         }
 
+        public MpAvAppViewModel GetAppByProcessInfo(MpPortableProcessInfo ppi) {
+            // NOTE this assumes ppi is a running process and device is on this system
+            return Items.FirstOrDefault(x => x.AppPath.ToLower() == ppi.ProcessPath.ToLower() && x.UserDeviceId == MpDefaultDataModelTools.ThisUserDeviceId);
+        }
+
         public MpAvAppViewModel GetAppViewModelFromScreenPoint(MpPoint gmp, double pixelDensity) {
             IntPtr handle = IntPtr.Zero;
             if (MpAvMainWindowViewModel.Instance.MainWindowScreenRect.Contains(gmp)) {

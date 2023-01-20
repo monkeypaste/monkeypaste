@@ -170,7 +170,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task PerformExternalOrPartialDropAsync(IDataObject avdo) {
-            MpPortableDataObject mpdo = await MpPlatformWrapper.Services.DataObjectHelperAsync.ReadDragDropDataObject(avdo) as MpPortableDataObject ;
+            MpPortableDataObject mpdo = await MpPlatformWrapper.Services.DataObjectHelperAsync.ReadDragDropDataObjectAsync(avdo) as MpPortableDataObject ;
 
             //int drag_ciid = -1;
             string drag_ctvm_pub_handle = mpdo.GetData(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT) as string;

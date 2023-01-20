@@ -27,7 +27,7 @@ async function getAllNonInputTemplatesFromDbAsync_get() {
 }
 
 async function getClipboardDataTransferObjectAsync_get() {
-    // output 'MpQuillEditorDataTransferObjectRequestNotification'
+    // output 'MpQuillEditorClipboardDataObjectRequestNotification'
     let clipboard_dt = new DataTransfer();
     if (typeof getClipboardDataTransferObject === 'function') {
         let req = {
@@ -37,6 +37,20 @@ async function getClipboardDataTransferObjectAsync_get() {
         clipboard_dt = convertHostDataItemsToDataTransfer(dt_json_obj);
     } 
     return clipboard_dt;
+}
+
+async function getDragDataTransferObjectAsync_get(unprocessed_dt) {
+    // output 'MpQuillEditorDragDataObjectRequestNotification'
+    let processed_drag_dt = null;
+    if (typeof getDragDataTransferObject === 'function') {
+        let unprocessed_hdo = convertDataTransferToHostDataItems(unprocessed_dt);
+        let req = {
+            unprocessedDataItemsJsonStr: toBase64FromJsonObj(unprocessed_hdo)
+        };
+        let processed_hdo = await processGetRequestAsync(getDragDataTransferObject, JSON.stringify(req));
+        processed_drag_dt = convertHostDataItemsToDataTransfer(processed_hdo);
+    } 
+    return processed_drag_dt;
 }
 
 function getContacts_get(filterField) {

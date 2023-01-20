@@ -19,7 +19,7 @@ namespace MonkeyPaste.Avalonia {
         public MpICursor Cursor { get; set; }
         public MpIDbInfo DbInfo { get; set; }
         public MpIFocusMonitor FocusMonitor { get; set; }
-
+        public MpIDragProcessWatcher DragProcessWatcher { get; set; }
         public MpIApplicationCommandManager AppCommandManager { get; set; }
         public MpIQueryInfo QueryInfo { get; set; }
         public MpIIconBuilder IconBuilder { get; set; }
@@ -100,6 +100,8 @@ namespace MonkeyPaste.Avalonia {
             TransactionBuilder = new MpAvTransactionBuilder();
 
             FocusMonitor = MpAvFocusManager.Instance as MpIFocusMonitor;
+
+            DragProcessWatcher = new MpAvDragProcessWatcher();
 
             AppCommandManager = new MpAvApplicationCommandManager();
 

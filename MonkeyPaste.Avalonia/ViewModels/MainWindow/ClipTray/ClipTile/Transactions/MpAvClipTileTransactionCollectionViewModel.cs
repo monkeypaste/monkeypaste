@@ -55,8 +55,6 @@ namespace MonkeyPaste.Avalonia {
         public IEnumerable<MpAvTransactionMessageViewModelBase> SortedMessages =>
             Messages
             .OrderByDescending(x => x.ComparableSortValue);
-        //.OrderByDescending(x => x.SourcePriority)
-        //.ThenByDescending(x=>x.SourceCreatedDateTime);
 
         public MpITransactionNodeViewModel PrimaryItem => 
             Transactions.OrderBy(x => x.TransactionDateTime).FirstOrDefault();
@@ -174,7 +172,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Protected Methods
-
         #region Db Op Overrides
 
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
@@ -182,6 +179,12 @@ namespace MonkeyPaste.Avalonia {
                 Dispatcher.UIThread.Post(async () => {
                     var cisvm = await CreateClipTileSourceViewModel(cit);
                     Transactions.Add(cisvm);
+                    if(cit.TransactionLabel == "Edit") {
+                        // since source is editor content doesn't need up 
+                        // TODO this should only be temporary, need a better way to 
+                        // react/interpret transactions
+                        return;
+                    }
                     while(cisvm.IsAnyBusy) {
                         await Task.Delay(100);
                     }

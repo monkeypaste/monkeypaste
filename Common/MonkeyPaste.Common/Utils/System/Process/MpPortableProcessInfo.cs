@@ -15,6 +15,7 @@ namespace MonkeyPaste.Common {
         public DateTime LastActiveDateTime { get; set; }
 
         public List<string> ArgumentList { get; set; } = new List<string>();
+        public string Arguments { get; set; }
 
         public ProcessWindowStyle WindowState { get; set; }
 

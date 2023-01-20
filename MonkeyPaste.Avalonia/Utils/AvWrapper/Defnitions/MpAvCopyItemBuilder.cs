@@ -80,7 +80,7 @@ namespace MonkeyPaste.Avalonia {
             await MpPlatformWrapper.Services.TransactionBuilder.PerformTransactionAsync(
                             copyItemId: ci.Id,
                             reqType: MpJsonMessageFormatType.DataObject,
-                            req: mpdo.Serialize(),
+                            req: mpdo.SerializeData(),
                             respType: MpJsonMessageFormatType.Delta,
                             resp: itemDelta,
                             ref_urls: ref_urls,

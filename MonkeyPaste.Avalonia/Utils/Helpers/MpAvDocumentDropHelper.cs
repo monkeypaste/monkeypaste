@@ -16,7 +16,7 @@ using System.Linq;
 namespace MonkeyPaste.Avalonia {
     public static class MpAvDocumentDropHelper {
 
-        public static MpQuillHostDataItemsMessageFragment ToDataItemFragment(this IDataObject avdo, DragDropEffects dde = DragDropEffects.None) {
+        public static MpQuillHostDataItemsMessage ToQuillDataItemsMessage(this IDataObject avdo, DragDropEffects dde = DragDropEffects.None) {
             if (avdo == null) {
                 avdo = new MpAvDataObject();
             }
@@ -38,10 +38,18 @@ namespace MonkeyPaste.Avalonia {
                 dil.Add(new MpQuillHostDataItemFragment() { format = format, data = data });
             }
 
-            return new MpQuillHostDataItemsMessageFragment() {
+            return new MpQuillHostDataItemsMessage() {
                 dataItems = dil,
                 effectAllowed = dde.ToJsDropEffects()
             };
+        }
+
+        public static MpAvDataObject ToAvDataObject(this MpQuillHostDataItemsMessage hdim) {
+            MpAvDataObject req_mpdo = null;
+            if (hdim != null) {
+                req_mpdo = new MpAvDataObject(hdim.dataItems.ToDictionary(x => x.format, x => (object)x.data));
+            }
+            return req_mpdo;
         }
 
         public static string ToJsDropEffects(this DragDropEffects dde) {

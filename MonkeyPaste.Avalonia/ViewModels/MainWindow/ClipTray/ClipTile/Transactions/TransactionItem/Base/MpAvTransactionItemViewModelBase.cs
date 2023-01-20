@@ -94,6 +94,10 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Appearance
+
+        #endregion
+
         #region State
 
         public int TransactionIdx {

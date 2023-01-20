@@ -1,10 +1,11 @@
 // #region Globals
 
 const LOCAL_HOST_URL = 'https://localhost';
-
 const URL_DATA_FORMAT = "uniformresourcelocator";
-
 const URI_LIST_FORMAT = 'text/uri-list';
+const HTML_FORMAT = 'text/html'
+const HTML_FRAGMENT_FORMAT = 'html format'
+const TEXT_FORMAT = 'text/plain'
 
 // #endregion Globals
 
@@ -13,47 +14,6 @@ const URI_LIST_FORMAT = 'text/uri-list';
 // #endregion Life Cycle
 
 // #region Getters
-
-function getDataTransferDeltaAndAdjRange(dest_doc_range, dt_delta) {
-    const Delta = Quill.imports.delta;
-
-    // PROCESS DEST RANGE MODE (if any)
-    dest_doc_range.mode = dest_doc_range.mode === undefined ? 'inline' : dest_doc_range.mode;
-    let mode_delta = null;
-    if (dest_doc_range.mode == 'block') {
-        if (dest_doc_range.index == 0) {
-            // pre transfer
-            mode_delta = new Delta().insert('\n');
-        } else {
-            // post transfer
-            let eol_idx = getLineEndDocIdx(dest_doc_range.index);
-            if (eol_idx < getDocLength() - 1) {
-                // ignore new line for last line since it already is a new line
-                mode_delta = new Delta().retain(eol_idx).insert('\n');
-                dest_doc_range.index = 1;
-            }
-        }
-    } else if (dest_doc_range.mode == 'split') {
-        // split transfer
-        mode_delta = new Delta().retain(dest_doc_range.index).insert('\n\n');
-        dest_doc_range.index = 1;
-    }
-    if (mode_delta == null) {
-        // inline/default transfer
-        mode_delta = new Delta().retain(dest_doc_range.index).delete(dest_doc_range.length);
-        //dest_doc_range.index = 0;
-    }
-
-
-    let adj_dt_delta = new Delta().retain(dest_doc_range.index).compose(dt_delta);
-    let out_delta = mode_delta.compose(adj_dt_delta);
-
-    return {
-        delta: out_delta,
-        dest_range: dest_doc_range
-    };
-}
-
 // #endregion Getters
 
 // #region Setters
@@ -62,20 +22,12 @@ function getDataTransferDeltaAndAdjRange(dest_doc_range, dt_delta) {
 
 // #region State
 
-function isHtmlClipboardFragment(dataStr) {
-    // TODO need to check common browser html clipboard formats this is only for Chrome on Windows
-    if (!dataStr.startsWith("Version:") || !dataStr.includes("StartHTML:") || !dataStr.includes("EndHTML:")) {
-        return false;
-    }
-    return true;
-}
-
 // #endregion State
 
 // #region Actions
 
 function convertHostDataItemsToDataTransfer(dataItemsMsgObj) {
-    // input 'MpQuillHostDataItemsMessageFragment'
+    // input 'MpQuillHostDataItemsMessage'
 
     let dt = new DataTransfer();
     if (!dataItemsMsgObj || !dataItemsMsgObj.dataItems || dataItemsMsgObj.dataItems.length == 0) {
@@ -89,14 +41,15 @@ function convertHostDataItemsToDataTransfer(dataItemsMsgObj) {
 }
 
 function convertDataTransferToHostDataItems(dt) {
-    // output 'MpQuillHostDataItemsMessageFragment'
+    // output 'MpQuillHostDataItemsMessage'
 
     let host_dimobj = {
-        dataItems: []
+        dataItems: [],
+        effectAllowed: dt.effectAllowed
     };
     for (var i = 0; i < dt.types.length; i++) {
         let dataStr = dt.getData(dt.types[i]);
-        if (typeof dt.getData(dt.types[i]) !== 'string' && !(dt.getData(dt.types[i]) instanceof String)) {
+        if (!isString(dt.types[i])) {
             dataStr = JSON.stringify(dataStr);
         }
         let hostFormat = dt.types[i];
@@ -227,47 +180,24 @@ function performDataTransferOnContent(
         }        
     }
 
-    // PREPARE DROPRANGE
+    // PREPARE DROP RANGE
 
     dest_doc_range = prepareDestDocRangeForDataTransfer(dest_doc_range, source);
 
     // PRE TRANSFER DEFS
 
-    //let transfer_deltas = null;
-    //let pre_delta = LastTextChangedDelta;
     let pre_doc_length = getDocLength();
 
     // PERFORM TRANSFER
 
-    //let dt_delta_obj = null;
     if (!isNullOrEmpty(dt_html_str)) {
-        //transfer_deltas = [];
         let dt_html_delta = convertHtmlToDelta(dt_html_str);
         dt_html_delta = decodeHtmlEntitiesInDeltaInserts(dt_html_delta);
-        //dt_delta_obj = getDataTransferDeltaAndAdjRange(dest_doc_range, dt_html_delta);
         insertDelta(dest_doc_range, dt_html_delta, source);
-        //setHtmlInRange(dest_doc_range, dt_html_str, source, true);
     } else if (dt.types.includes('text/plain')) {
-        //transfer_deltas = [];
         let dt_pt_str = dt.getData('text/plain');
-        //const Delta = Quill.imports.delta;
-        //dt_delta_obj = getDataTransferDeltaAndAdjRange(dest_doc_range, new Delta().insert(dt_pt_str));
-
         setTextInRange(dest_doc_range, dt_pt_str, source, true);
     }
-    //if (transfer_deltas &&
-    //    JSON.stringify(pre_delta) == JSON.stringify(LastTextChangedDelta)) {
-    //    log('warning no data tranfser delta recorded!');
-    //    transfer_deltas = null;
-    //}
-    //if (transfer_deltas) {
-    //    transfer_deltas.push(LastTextChangedDelta);
-    //}
-
-    //if (dt_delta_obj != null) {
-    //    quill.updateContents(dt_delta_obj, source);
-    //    dest_doc_range = dt_delta_obj.dest_range;
-    //}
 
     let dt_length_diff = getDocLength() - pre_doc_length;
 
@@ -281,17 +211,7 @@ function performDataTransferOnContent(
             // adjust doc diff for removed source for removed drag length
             dest_doc_range.index -= source_doc_range.length;
         }
-        //let pre_cut_delta = LastTextChangedDelta;
         setTextInRange(source_doc_range, '', source);
-
-        //if (JSON.stringify(pre_cut_delta) == JSON.stringify(LastTextChangedDelta)) {
-        //    log('warning no data tranfser delta recorded during cut');
-        //} else {
-        //    if (!transfer_deltas) {
-        //        transfer_deltas = [];
-        //    }
-        //    transfer_deltas.push(LastTextChangedDelta);
-        //}
     }
 
     // SELECT DEST
@@ -301,18 +221,6 @@ function performDataTransferOnContent(
     setDocSelection(dt_range.index, dt_range.length);
     scrollDocRangeIntoView(dt_range);    
 
-    //let result_delta = null;
-    //if (transfer_deltas) {
-    //    if (transfer_deltas.length > 1) {
-    //        if (transfer_deltas.length > 2) {
-    //            // should only be max of 2 
-    //            debugger;
-    //        }
-    //        result_delta = mergeDeltas(transfer_deltas[0], transfer_deltas[1]);
-    //    } else if (transfer_deltas.length == 1) {
-    //        result_delta = transfer_deltas[0];
-    //    }
-    //}
     if (source_urls.length > 0) {
         dt.setData(URI_LIST_FORMAT, source_urls.join('\r\n'));
     }
@@ -331,6 +239,35 @@ function performDataTransferOnContent(
 }
 
 
+function logDataTransfer(dt, title) {
+    log('------------------------------------------------');
+    if (title) {
+        log(title);
+    }
+    if (isNullOrUndefined(dt)) {
+        log('null dataTransfer');
+        return;
+    }
+    for (var i = 0; i < dt.types.length; i++) {
+        log(`Format: '${dt.types[i]}'`);
+        log(dt.getData(dt.types[i]));
+    }
+}
+
+function logHostDataObject(hdo, title) {
+    log('------------------------------------------------');
+    if (title) {
+        log(title);
+    }
+    if (isNullOrUndefined(hdo) || isNullOrUndefined(hdo.dataItems)) {
+        log('no host data object to log');
+        return;
+    }
+    for (var i = 0; i < hdo.dataItems.length; i++) {
+        log(`Format: '${hdo.dataItems[i].format}'`);
+        log(hdo.dataItems[i].data);
+    }
+}
 
 // #endregion Actions
 

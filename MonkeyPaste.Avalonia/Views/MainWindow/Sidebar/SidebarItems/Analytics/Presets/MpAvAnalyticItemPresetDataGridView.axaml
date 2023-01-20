@@ -19,8 +19,8 @@
         <Grid RowDefinitions="*,40">
             <DataGrid x:Name="PresetDataGrid"
                       Grid.Row="0"
-                      RowBackground="Silver"
                       Focusable="True"
+                      RowBackground="Silver"
                       AlternatingRowBackground="LightGray"
                       Items="{Binding Items}"
                       SelectedItem="{Binding SelectedItem}"

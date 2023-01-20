@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvSourceRefBuilder : MpISourceRefBuilder {
@@ -27,10 +28,6 @@ namespace MonkeyPaste.Avalonia {
                 return app;
             }
             if(!sourceUrl.StartsWith(INTERNAL_SOURCE_DOMAIN.ToLower())) {
-                // should appId be a default arg to this method? 
-                // should this check last process for appId instead?
-                // does THIS app need to be ref'd instead of last?
-                Debugger.Break();
                 // add or fetch external url
                 var url = await MpPlatformWrapper.Services.UrlBuilder.CreateAsync(sourceUrl);
                 return url;
@@ -114,22 +111,18 @@ namespace MonkeyPaste.Avalonia {
             
             List<MpISourceRef> refs = new List<MpISourceRef>();
             if (mpdo.TryGetData(MpPortableDataFormats.CefAsciiUrl, out byte[] urlBytes) &&
-                urlBytes.ToDecodedString() is string urlRef) {
+                urlBytes.ToDecodedString(Encoding.ASCII, true) is string urlRef) {
+                string test = HttpUtility.UrlDecode(urlBytes, Encoding.ASCII);
+                string test2 = HttpUtility.UrlDecode(urlBytes, Encoding.UTF8);
+
                 MpISourceRef sr = await MpPlatformWrapper.Services.SourceRefBuilder.FetchOrCreateSourceAsync(urlRef);
                 if (sr != null) {
                     // occurs on sub-selection drop onto pintray or tag
                     refs.Add(sr);
                 }
             }
-            IEnumerable<string> uri_strings = null;
-            if (mpdo.TryGetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, out IEnumerable<string> uril)) {
-                uri_strings = uril;
-            } else if (mpdo.TryGetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, out string uril_str)) {
-                if(uril_str.StartsWith("[") && MpJsonObject.DeserializeObject<List<string>>(uril_str) is List<string> urilist) {
-                    uril_str = string.Join("\r\n", urilist);
-                }
-                uri_strings = uril_str.SplitNoEmpty("\r\n");
-            }
+            IEnumerable<string> uri_strings = mpdo.GetUriList();
+
             if(uri_strings != null) {
                 var list_refs = await Task.WhenAll(
                     uri_strings.Select(x => MpPlatformWrapper.Services.SourceRefBuilder.FetchOrCreateSourceAsync(x)));

@@ -64,7 +64,7 @@ namespace MonkeyPaste {
 
             using var process = Process.GetCurrentProcess();
             string thisAppPath = process.MainModule.FileName;
-            var this_app = await MpDataModelProvider.GetAppByPathAsync(thisAppPath, null, this_device.Id);
+            var this_app = await MpDataModelProvider.GetAppByMembersAsync(thisAppPath, null, this_device.Id);
             if (this_app == null) {
                 // reset error
                 Debugger.Break();
@@ -72,7 +72,7 @@ namespace MonkeyPaste {
             ThisAppId = this_app.Id;
 
 
-            var this_os_file_manager = await MpDataModelProvider.GetAppByPathAsync(osInfo.OsFileManagerPath, null, this_device.Id);
+            var this_os_file_manager = await MpDataModelProvider.GetAppByMembersAsync(osInfo.OsFileManagerPath, null, this_device.Id);
             if (this_os_file_manager == null) {
                 // reset error
                 Debugger.Break();
@@ -149,7 +149,7 @@ namespace MonkeyPaste {
 
             using var process = Process.GetCurrentProcess();
             string thisAppPath = process.MainModule.FileName;
-            var this_app = await MpDataModelProvider.GetAppByPathAsync(thisAppPath, null, ThisUserDeviceId);
+            var this_app = await MpDataModelProvider.GetAppByMembersAsync(thisAppPath, null, ThisUserDeviceId);
             if (this_app == null) {
                 // reset error
                 Debugger.Break();
@@ -158,7 +158,7 @@ namespace MonkeyPaste {
 
             // OS APP
             
-            var osApp = await MpDataModelProvider.GetAppByPathAsync(
+            var osApp = await MpDataModelProvider.GetAppByMembersAsync(
                 osFileManagerPath, 
                 null, 
                 ThisUserDeviceId);

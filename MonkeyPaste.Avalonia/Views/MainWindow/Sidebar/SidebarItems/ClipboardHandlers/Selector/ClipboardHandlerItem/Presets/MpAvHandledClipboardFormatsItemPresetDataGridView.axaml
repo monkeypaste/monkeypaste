@@ -1,0 +1,261 @@
+﻿<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvHandledClipboardFormatsItemPresetDataGridView"
+                       xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       x:TypeArguments="local:MpAvClipboardHandlerItemViewModel"
+                       x:DataType="local:MpAvClipboardHandlerItemViewModel"
+                       x:CompileBindings="True"
+                       mc:Ignorable="d"
+                       d:DesignHeight="450"
+                       d:DesignWidth="800">
+    <Border CornerRadius="3"
+            Margin="10,0"
+            BorderThickness="1"
+            BorderBrush="Black"
+            Background="Transparent">
+        <StackPanel Orientation="Vertical"
+                    HorizontalAlignment="Stretch"
+                    Margin="5">
+            <StackPanel x:Name="ClipboardFormatPresetDatagridContainer"
+                        Orientation="Vertical"
+                        DataContext="{Binding SelectedItem}">
+                <DataGrid x:Name="ClipboardFormatPresetDatagrid"
+                          IsVisible="{Binding ., Converter={x:Static ObjectConverters.IsNotNull}}"
+                          Focusable="True"
+                          RowBackground="Silver"
+                          AlternatingRowBackground="LightGray"
+                          Items="{Binding Items}"
+                          SelectedItem="{Binding SelectedItem}"
+                          SelectionMode="Single"
+                          HeadersVisibility="None"
+                          RowHeight="40"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Stretch"
+                          VerticalScrollBarVisibility="Hidden"
+                          HorizontalScrollBarVisibility="Hidden"
+                          ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                          CanUserResizeColumns="False"
+                          CanUserReorderColumns="False"
+                          CanUserSortColumns="True">
+                    <DataGrid.Columns>
+                        <!--  ICON COLUMN  -->
+                        <DataGridTemplateColumn Width="30"
+                                                Header="Icon">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate DataType="local:MpAvClipboardFormatPresetViewModel">
+
+                                    <local:MpAvClipBorder BorderThickness="0"
+                                                          Padding="3"
+                                                          CornerRadius="0">
+                                        <Button x:Name="PresetIcon"
+                                                BorderThickness="0"
+                                                CornerRadius="0"
+                                                Cursor="Hand"
+                                                Background="Transparent"
+                                                DataContext="{Binding}"
+                                                Command="{Binding ChangeIconCommand, Source={x:Static local:MpAvIconCollectionViewModel.Instance}}"
+                                                CommandParameter="{Binding $self}">
+                                            <Image Width="20"
+                                                   Height="20"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   Source="{Binding IconId, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
+                                        </Button>
+                                    </local:MpAvClipBorder>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+
+                        </DataGridTemplateColumn>
+
+                        <!--  LABEL COLUMN  -->
+                        <DataGridTemplateColumn Width="120"
+                                                Header="Label">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate DataType="local:MpAvClipboardFormatPresetViewModel">
+
+                                    <Grid ClipToBounds="True"
+                                          HorizontalAlignment="Stretch"
+                                          VerticalAlignment="Stretch">
+                                        <local:MpAvMarqueeTextBox local:MpAvIsFocusedExtension.IsEnabled="True"
+                                                                  local:MpAvIsFocusedExtension.IsFocused="{Binding IsLabelTextBoxFocused, Mode=TwoWay}"
+                                                                  MinHeight="20"
+                                                                  FontSize="14"
+                                                                  EditOnFocus="False"
+                                                                  DropShadowBrush="Transparent"
+                                                                  ReadOnlyForeground="Black"
+                                                                  IsReadOnly="{Binding IsLabelReadOnly, Mode=TwoWay}"
+                                                                  VerticalAlignment="Center"
+                                                                  HorizontalAlignment="Stretch"
+                                                                  HorizontalContentAlignment="Left"
+                                                                  VerticalContentAlignment="Center"
+                                                                  FontFamily="Segue UI"
+                                                                  Text="{Binding Label, Mode=TwoWay}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!--  TOGGLE EDIT COLUMN  -->
+                        <DataGridTemplateColumn Width="30"
+                                                Header="Edit">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate DataType="local:MpAvClipboardFormatPresetViewModel">
+                                    <Grid>
+                                        <Grid.Styles>
+                                            <Style Selector="ToggleButton /template/ ContentPresenter">
+                                                <Setter Property="Background"
+                                                        Value="Transparent" />
+                                            </Style>
+                                            <Style Selector="ToggleButton:checked /template/ ContentPresenter">
+                                                <Setter Property="Background"
+                                                        Value="DarkTurquoise" />
+                                            </Style>
+                                        </Grid.Styles>
+                                        <ToggleButton Background="Transparent"
+                                                      BorderThickness="0"
+                                                      HorizontalAlignment="Center"
+                                                      Cursor="Hand"
+                                                      IsChecked="{Binding !IsLabelReadOnly, Mode=TwoWay}">
+
+                                            <ToolTip.Tip>
+                                                <local:MpAvToolTipView ToolTipText="Edit Label" />
+                                            </ToolTip.Tip>
+                                            <Image Width="20"
+                                                   Height="20"
+                                                   Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource EditImage}}" />
+
+
+                                        </ToggleButton>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!--  IS ENABLED CHECKBOX  -->
+
+                        <DataGridTemplateColumn Header="Enabled?"
+                                                Width="Auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate DataType="local:MpAvClipboardFormatPresetViewModel">
+                                    <CheckBox HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              IsChecked="{Binding IsEnabled, Mode=TwoWay}">
+                                        <ToolTip.Tip>
+                                            <local:MpAvToolTipView ToolTipText="Enabled?" />
+                                        </ToolTip.Tip>
+                                    </CheckBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!--  DUPLICATE COLUMN  -->
+                        <DataGridTemplateColumn Width="30"
+                                                Header="Clone">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate DataType="local:MpAvClipboardFormatPresetViewModel">
+                                    <Grid>
+                                        <Button Background="Transparent"
+                                                BorderThickness="0"
+                                                IsVisible="{Binding !Parent.IsBusy}"
+                                                Command="{Binding Parent.DuplicatePresetCommand}"
+                                                CommandParameter="{Binding}">
+                                            <ToolTip.Tip>
+                                                <local:MpAvToolTipView ToolTipText="Clone" />
+                                            </ToolTip.Tip>
+                                            <Image Width="20"
+                                                   Height="20"
+                                                   Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource SheepImage}}" />
+                                        </Button>
+                                        <Border IsVisible="{Binding Parent.IsBusy, FallbackValue=True, TargetNullValue=True}">
+
+                                            <local:MpAvBusySpinnerView HorizontalAlignment="Center"
+                                                                       VerticalAlignment="Center"
+                                                                       Width="20"
+                                                                       Height="20" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+
+                        <!--  DELETE/RESET ANALYSIS  -->
+                        <DataGridTemplateColumn Header="Bin"
+                                                Width="30">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate DataType="local:MpAvClipboardFormatPresetViewModel">
+                                    <Grid>
+                                        <Grid.Styles>
+                                            <Style Selector="Button.canReset Image"
+                                                   x:DataType="local:MpAvClipboardFormatPresetViewModel">
+                                                <Setter Property="Source"
+                                                        Value="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource ResetImage}}" />
+                                            </Style>
+                                            <Style Selector="Button:not(.canReset) Image">
+                                                <Setter Property="Source"
+                                                        Value="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource TrashCanImage}}" />
+                                            </Style>
+                                        </Grid.Styles>
+                                        <Button Background="Transparent"
+                                                IsVisible="{Binding !Parent.IsBusy}"
+                                                BorderThickness="0"
+                                                Classes.canReset="{Binding IsManifestPreset}"
+                                                Command="{Binding Parent.ResetOrDeletePresetCommand}"
+                                                CommandParameter="{Binding}">
+                                            <ToolTip.Tip>
+                                                <local:MpAvToolTipView ToolTipText="{Binding ResetOrDeleteLabel}" />
+                                            </ToolTip.Tip>
+                                            <Image Width="20"
+                                                   Height="20" />
+                                        </Button>
+                                        <Border IsVisible="{Binding IsBusy, FallbackValue=True, TargetNullValue=True}">
+
+                                            <local:MpAvBusySpinnerView HorizontalAlignment="Center"
+                                                                       VerticalAlignment="Center"
+                                                                       Width="20"
+                                                                       Height="20" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <!--  ADD PRESET BUTTON  -->
+                <Button Grid.Row="1"
+                        Margin="0,5,0,0"
+                        Width="150"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        HorizontalAlignment="Center"
+                        Command="{Binding CreateNewPresetCommand}">
+                    <Button.Styles>
+                        <Style Selector="Border">
+                            <Setter Property="Background"
+                                    Value="Beige" />
+                        </Style>
+                        <Style Selector="Border:pointerover">
+                            <Setter Property="Background"
+                                    Value="AntiqueWhite" />
+                        </Style>
+                    </Button.Styles>
+                    <Border CornerRadius="5"
+                            HorizontalAlignment="Stretch"
+                            Padding="5">
+                        <DockPanel>
+                            <Image Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource AddImage}}"
+                                   DockPanel.Dock="Left"
+                                   Width="15"
+                                   Height="15" />
+                            <Label DockPanel.Dock="Right"
+                                   Foreground="Black"
+                                   Content="Add Preset" />
+                        </DockPanel>
+                    </Border>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</local:MpAvUserControl>

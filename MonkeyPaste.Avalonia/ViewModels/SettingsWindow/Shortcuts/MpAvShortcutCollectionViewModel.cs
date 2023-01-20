@@ -138,7 +138,9 @@ namespace MonkeyPaste.Avalonia {
         #region Events
 
         #region Mouse Events
+
         public event EventHandler OnGlobalDragBegin;
+        public event EventHandler<MpPoint> OnGlobalDrag;
         public event EventHandler OnGlobalDragEnd;
 
         public event EventHandler<MpPoint> OnGlobalMouseWheelScroll;
@@ -663,8 +665,10 @@ namespace MonkeyPaste.Avalonia {
 
             if (GlobalIsMouseLeftButtonDown) {
                 // NOTE only flag drag when left button is down, any other is poop
-                GlobalIsPointerDragging = true;
-                OnGlobalDragBegin?.Invoke(this, null);
+                if(!GlobalIsPointerDragging) {
+                    GlobalIsPointerDragging = true;
+                    OnGlobalDragBegin?.Invoke(this, null);
+                }
             }
             
             var gmp = GetScaledScreenPoint(e.Data);
@@ -799,6 +803,10 @@ namespace MonkeyPaste.Avalonia {
         private void HandlePointerMove(MpPoint gmp) {
             GlobalMouseLocation = gmp;
             OnGlobalMouseMove?.Invoke(typeof(MpAvShortcutCollectionViewModel).ToString(), GlobalMouseLocation);
+
+            if(GlobalIsPointerDragging) {
+                OnGlobalDrag?.Invoke(typeof(MpAvShortcutCollectionViewModel).ToString(), GlobalMouseLocation);
+            }
         }
 
 

@@ -167,8 +167,11 @@ namespace MonkeyPaste {
     public class MpQuillEditorSetClipboardRequestNotification : MpJsonObject {
         
     }
-    public class MpQuillEditorDataTransferObjectRequestNotification : MpJsonObject {
+    public class MpQuillEditorClipboardDataObjectRequestNotification : MpJsonObject {
         
+    }
+    public class MpQuillEditorDragDataObjectRequestNotification : MpJsonObject {
+        public string unprocessedDataItemsJsonStr { get; set; }
     }
     public class MpQuillDataTransferCompletedNotification : MpJsonObject {
         public string changeDeltaJsonStr { get; set; }
@@ -216,7 +219,7 @@ namespace MonkeyPaste {
         public bool isNoneSelected { get; set; }
     }
 
-    public class MpQuillHostDataItemsMessageFragment : MpJsonObject {
+    public class MpQuillHostDataItemsMessage : MpJsonObject {
         public List<MpQuillHostDataItemFragment> dataItems { get; set; }
         public string effectAllowed { get; set; }
         public string enc { get; set; } = "utf8";
@@ -230,7 +233,7 @@ namespace MonkeyPaste {
         public string eventType { get; set; }
         public double screenX { get; set; }
         public double screenY { get; set; }
-        public MpQuillHostDataItemsMessageFragment dataItemsFragment { get; set; }
+        public MpQuillHostDataItemsMessage dataItemsFragment { get; set; }
     }
 
 

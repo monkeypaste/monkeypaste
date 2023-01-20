@@ -57,10 +57,10 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             MpPoint wv_mp;
-            MpQuillHostDataItemsMessageFragment dt_frag = null;
+            MpQuillHostDataItemsMessage dt_frag = null;
             DragEventArgs drag_e = args as DragEventArgs;
             if (drag_e != null) {
-                dt_frag = drag_e.Data.ToDataItemFragment(drag_e.DragEffects);
+                dt_frag = drag_e.Data.ToQuillDataItemsMessage(drag_e.DragEffects);
                 wv_mp = drag_e.GetPosition(wv).ToPortablePoint();
                 _last_wv_mp = wv_mp;
             } else {

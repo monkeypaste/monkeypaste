@@ -16,16 +16,13 @@ using MonkeyPaste.Common.Wpf;
 #endif
 
 namespace MonkeyPaste.Common.Avalonia {
-    public class MpAvDataFormat : MpPortableDataFormat {
-        public MpAvDataFormat(string name, int id, string portable) : base(name,id) { }
-    }
 
     public class MpAvDataObject : MpPortableDataObject, IDataObject {
-        #region Statics
-
-        
+        #region Statics       
 
         #endregion
+        public MpAvDataObject() : base() { }
+        public MpAvDataObject(Dictionary<string,object> items, bool caseSensitive = false) : base(items,caseSensitive) { }
 
         public override void SetData(string format, object data) {
             // NOTE this wrapper just ensures formats are saved properly 

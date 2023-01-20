@@ -16,6 +16,14 @@
 
 // #region State
 
+function isHtmlClipboardFragment(dataStr) {
+    // TODO need to check common browser html clipboard formats this is only for Chrome on Windows
+    if (!dataStr.startsWith("Version:") || !dataStr.includes("StartHTML:") || !dataStr.includes("EndHTML:")) {
+        return false;
+    }
+    return true;
+}
+
 // #endregion State
 
 // #region Actions

@@ -33,7 +33,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
+        #region Interfaces
 
         #region MpITreeItemViewModel Implementation
 
@@ -112,15 +112,17 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        async Task<object> MpIPlatformDataObjectHelperAsync.ReadDragDropDataObject(object idoObj, int retryCount) {
+        async Task<object> MpIPlatformDataObjectHelperAsync.ReadDragDropDataObjectAsync(object idoObj, int retryCount = 5) {
             if (idoObj is IDataObject ido) {
-                var mpdo = await ReadClipboardOrDropObjectAsync(ido);
+                var drag_pi = MpPlatformWrapper.Services.DragProcessWatcher.DragProcess;
+                MpPlatformWrapper.Services.DragProcessWatcher.Reset();
+                var mpdo = await ReadClipboardOrDropObjectAsync(ido, drag_pi);
                 return mpdo;
             }
             return null;
         }
         async Task<object> MpIPlatformDataObjectHelperAsync.GetPlatformClipboardDataObjectAsync(bool ignorePlugins) {
-            var pdo = await ReadClipboardOrDropObjectAsync(null, ignorePlugins);
+            var pdo = await ReadClipboardOrDropObjectAsync(null, null, ignorePlugins);
             return pdo;
         }
 
@@ -142,6 +144,8 @@ namespace MonkeyPaste.Avalonia {
             }
 
         }
+        #endregion
+
         #endregion
 
         #region Properties       
@@ -359,7 +363,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private async Task<MpAvDataObject> ReadClipboardOrDropObjectAsync(IDataObject forced_ido = null, bool ignorePlugins = false) {
+        private async Task<MpAvDataObject> ReadClipboardOrDropObjectAsync(IDataObject forced_ido = null, MpPortableProcessInfo source_process = null, bool ignorePlugins = false) {
             // NOTE forcedDataObject is used to read drag/drop, when null clipboard is read
             await WaitForBusyAsync();
 
@@ -406,6 +410,13 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
             mpdo.MapAllPseudoFormats();
+            if(source_process != null) {
+                var avm = MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(source_process);
+                if(avm != null) {
+                    MpConsole.WriteLine($"Drag Source ref '{avm.App}' added to drag dataobject");
+                    mpdo.AddOrCreateUri(avm.App.ToSourceUri());
+                }
+            }
             IsBusy = false;
             return mpdo;
         }

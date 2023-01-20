@@ -17,8 +17,6 @@
             VerticalAlignment="Stretch"
             Padding="10"
             Background="{DynamicResource AnalyzerSidebarBgBrush}">
-        <Border.Styles>
-        </Border.Styles>
         <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                       VerticalScrollBarVisibility="Auto">
             <WrapPanel Orientation="Horizontal"

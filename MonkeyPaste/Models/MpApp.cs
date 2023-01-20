@@ -58,25 +58,6 @@ namespace MonkeyPaste {
                 }
             }
         }
-        [Ignore]
-        public IEnumerable<string> ArgumentList {
-            get {
-                if(string.IsNullOrWhiteSpace(Arguments)) {
-                    return null;
-                }
-                return Arguments.SplitNoEmpty(MpCommonHelpers.NewLineByEnv(DeviceType));
-            }
-        }
-
-        [Ignore]
-        public MpUserDeviceType DeviceType {
-            get {
-                return (MpUserDeviceType)UserDeviceId;
-            }
-            set {
-                UserDeviceId = (int)value;
-            }
-        }
 
         [Ignore]
         public Guid AppGuid {
@@ -124,7 +105,7 @@ namespace MonkeyPaste {
             string appName = "", 
             string arguments = null,
             int iconId = 0,
-            MpUserDeviceType deviceType = MpUserDeviceType.None,
+            int appUserDeviceId = 0,
             string guid = "",
             bool suppressWrite = false) {
             if(appPath.IsNullOrEmpty()) {
@@ -138,7 +119,7 @@ namespace MonkeyPaste {
             }
             // NOTE checking app by path and arguments and device here
             // NOTE when args are differnt should be treated as unique app since it could be significantly different
-            var dupApp = await MpDataModelProvider.GetAppByPathAsync(appPath, arguments, MpDefaultDataModelTools.ThisUserDeviceId);
+            var dupApp = await MpDataModelProvider.GetAppByMembersAsync(appPath, arguments, MpDefaultDataModelTools.ThisUserDeviceId);
             if (dupApp != null) {
                 if(dupApp.IconId != iconId && iconId > 0) {
                     // this means app icon has changed (probably from an update)
@@ -148,18 +129,6 @@ namespace MonkeyPaste {
                 dupApp.WasDupOnCreate = true;
                 return dupApp;
             }
-            //if app doesn't exist create image,icon,app and source
-
-            //var thisDevice = await MpDataModelProvider.GetUserDeviceByGuidAsync(MpPrefViewModel.Instance.ThisDeviceGuid);
-
-            //if(thisDevice == null) {
-            //    //not sure why this happens but duplicating MpDb.InitDefaultData...
-            //    thisDevice = new MpUserDevice() {
-            //        UserDeviceGuid = System.Guid.Parse(MpPrefViewModel.Instance.ThisDeviceGuid),
-            //        PlatformType = MpDefaultDataModelTools.ThisUserDeviceType
-            //    };
-            //    await thisDevice.WriteToDatabaseAsync();
-            //}
 
             if(iconId == 0) {
                 string iconImgBase64 = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(appPath);
@@ -176,7 +145,7 @@ namespace MonkeyPaste {
                 AppName = appName,
                 Arguments = arguments,
                 IconId = iconId,
-                DeviceType = deviceType == MpUserDeviceType.None ? (MpUserDeviceType)MpDefaultDataModelTools.ThisUserDeviceId : deviceType
+                UserDeviceId = appUserDeviceId == 0 ? MpDefaultDataModelTools.ThisUserDeviceId : appUserDeviceId
             };
 
             await newApp.WriteToDatabaseAsync();
@@ -187,7 +156,7 @@ namespace MonkeyPaste {
         public MpApp() { }
 
         public override string ToString() {
-            return $"Id: '{Id}' | Name: '{AppName}' | Path: '{AppPath}' | Args: '{Arguments}' Device: '{DeviceType}'";
+            return $"Id: '{Id}' | Name: '{AppName}' | Path: '{AppPath}' | Args: '{Arguments}' DeviceId: '{UserDeviceId}'";
         }
         public async Task<object> CreateFromLogsAsync(string appGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
             var adr = await MpDb.GetDbObjectByTableGuidAsync("MpApp", appGuid);

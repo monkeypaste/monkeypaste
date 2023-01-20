@@ -1,7 +1,7 @@
 ﻿<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvActionDesignerItemView"
                        xmlns="https://github.com/avaloniaui"
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                       xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                       
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:sys="clr-namespace:System;assembly=mscorlib"

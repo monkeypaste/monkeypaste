@@ -24,11 +24,15 @@ namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvImageExtensions {
         #region Converters        
 
-        public static Bitmap? ToAvBitmap(this string base64Str, double scale=1.0) {
+        public static Bitmap? ToAvBitmap(this string base64Str, double scale = 1.0) {
             if(!base64Str.IsStringBase64()) {
                 return null;
             }
-            var bmp = Convert.FromBase64String(base64Str).ToAvBitmap();
+            var bytes = Convert.FromBase64String(base64Str);
+            var bmp = bytes.ToAvBitmap();
+            if(bmp == null) {
+                return null;
+            }
             if(scale == 1.0) {
                 return bmp;
             }
@@ -37,7 +41,12 @@ namespace MonkeyPaste.Common.Avalonia {
 
         public static Bitmap ToAvBitmap(this byte[] bytes) {
             using (var stream = new MemoryStream(bytes)) {
-                return new Bitmap(stream);
+                try {
+                    return new Bitmap(stream);
+                } catch(Exception ex) {
+                    MpConsole.WriteTraceLine("Error creating bitmap from bytes ", ex);
+                    return null;
+                }                
             }
         }
         public static byte[] ToByteArray(this Bitmap bmp) {

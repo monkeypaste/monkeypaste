@@ -16,17 +16,20 @@ namespace MonkeyPaste.Avalonia {
         MpISelectableViewModel,
         MpIHoverableViewModel,
         MpIUserIconViewModel,
-        MpITreeItemViewModel{
+        MpILabelText,
+        MpITreeItemViewModel, 
+        MpISaveOrCancelableViewModel,
+        MpAvIParameterCollectionViewModel {
 
-        #region Properties
-
-        #region View Models
-                
-
-        #endregion
+        #region Interfaces
 
         #region MpISelectableViewModel Implementation
         public bool IsSelected { get; set; }
+
+        #endregion
+
+        #region MpILabelText Implementation
+        string MpILabelText.LabelText => Label;
 
         #endregion
 
@@ -49,9 +52,63 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region MpAvIParameterCollectionViewModel Implementation
+
+        IEnumerable<MpAvParameterViewModelBase>
+            MpAvIParameterCollectionViewModel.Items => VisibleItems;
+
+        MpAvParameterViewModelBase
+            MpAvIParameterCollectionViewModel.SelectedItem {
+            get => SelectedItem;
+            set => SelectedItem = value;
+        }
+
+        #region MpISaveOrCancelableViewModel Implementation
+
+        public ICommand SaveCommand => new MpCommand(
+            () => {
+                Items.ForEach(x => x.SaveCurrentValueCommand.Execute(null));
+            },
+            () => {
+                return CanSaveOrCancel;
+            }, new[] { this });
+        public ICommand CancelCommand => new MpCommand(
+            () => {
+                Items.ForEach(x => x.RestoreLastValueCommand.Execute(null));
+            },
+            () => {
+                return CanSaveOrCancel;
+            }, new[] { this });
+
+        private bool _canSaveOrCancel = false;
+        public bool CanSaveOrCancel {
+            get {
+                bool result = Items.Any(x => x.HasModelChanged);
+                if (result != _canSaveOrCancel) {
+                    _canSaveOrCancel = result;
+                    OnPropertyChanged(nameof(CanSaveOrCancel));
+                }
+                return _canSaveOrCancel;
+            }
+        }
+
+        #endregion
+        #endregion
+
+        #endregion
+
+        #region Properties
+
+        #region View Models
+
+        public IEnumerable<MpAvParameterViewModelBase> VisibleItems => Items.Where(x => x.IsVisible);
+        #endregion
+
+        
+
         #region Appearance
 
-
+        public string ResetOrDeleteLabel => $"{(IsManifestPreset ? "Reset" : "Delete")} '{Label}'";
         public string DropItemTitleHexColor {
             get {
                 if (!IsEnabled) {
@@ -73,7 +130,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-
+        public bool IsManifestPreset =>
+            Parent == null ?
+                false :
+                Parent.ClipboardPluginFormat.presets != null &&
+                    Parent.ClipboardPluginFormat.presets.Any(x => x.guid == PresetGuid);
         public bool IsDropItemHovering { get; set; } = false;
         public bool IsLabelTextBoxFocused { get; set; } = false;
         public bool IsLabelReadOnly { get; set; } = true;

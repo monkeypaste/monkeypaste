@@ -177,7 +177,7 @@ namespace MonkeyPaste {
 
         #region MpApp
 
-        public static async Task<MpApp> GetAppByPathAsync(string path, string args, int deviceId) {
+        public static async Task<MpApp> GetAppByMembersAsync(string path, string args, int deviceId) {
             List<MpApp> result;
             if(args == null) {
                 string query = $"select * from MpApp where LOWER(AppPath)=? and Arguments is NULL and fk_MpUserDeviceId=?";

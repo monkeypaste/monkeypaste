@@ -310,35 +310,48 @@ function onDrop(e) {
         return false;
     }
 
-    if (isDragging() && dist(WindowMouseLoc, WindowMouseDownLoc) < MIN_DRAG_DIST) {
-        log('onDrop called but drag dist less than ' + MIN_DRAG_DIST + ', ignoring and returning false');
+    if (isDragging() && isDocIdxInRange(DropIdx, getDocSelection())) {
+        log('onDrop called but drop within drag range, ignoring and returning false');
         resetDrop(e.fromHost, true);
         return false;
     }
 
     log('drop');
 
+
     // PREPARE SOURCE/DEST DOC RANGES
 
-    let drop_insert_source = 'api';
-    let drop_range = { index: DropIdx, length: 0 };
-    let source_range = null;
+    var drop_insert_source = 'api';
+    var source_range = null;
     if (isDragging() &&
         dropEffect.toLowerCase().includes('move')) {
         source_range = getDocSelection();
     }
-    drop_range.mode = getDropBlockState(DropIdx, WindowMouseLoc, IsShiftDown);
+    var drop_range = {
+        index: DropIdx,
+        length: 0,
+        mode: getDropBlockState(DropIdx, WindowMouseLoc, IsShiftDown)
+    };
 
-    // PERFORM DROP TRANSACTION    
+    logDataTransfer(e.dataTransfer, 'Drop DataTransfer (unprocessed):');
+    // REQUEST DT PROCESSING FROM HOST
+    getDragDataTransferObjectAsync_get(e.dataTransfer)
+        .then((processed_dt) => {
+            logDataTransfer(processed_dt, 'Drop DataTransfer (processed):');
 
-    performDataTransferOnContent(e.dataTransfer, drop_range, source_range, drop_insert_source,'Drop');
+            // PERFORM DROP TRANSACTION    
 
-    // RESET
+            performDataTransferOnContent(processed_dt, drop_range, source_range, drop_insert_source, 'Drop');
 
-    resetDrop(e.fromHost, false);
+            // RESET
 
-    onDropCompleted_ntf();
-    drawOverlay();
+            resetDrop(e.fromHost, false);
+
+            onDropCompleted_ntf();
+            drawOverlay();
+        });
+
+
     return false;
 }
 

@@ -7,6 +7,11 @@ Object.defineProperty(this, "log", {
         let log_str = '';
 
         for (var i = 0; i < args.length; i++) {
+            if (i == 0 && args[i] == 'table') {
+                const table_data = args.length == 1 ? null : args[i + 1]; 
+                return IsDebug ? console.table.bind(window.console, table_data)
+                    : function () { };
+            }
             if (typeof args[i] === 'string' || args[i] instanceof String) {
                 log_str += args[i];
             } else {
@@ -15,43 +20,17 @@ Object.defineProperty(this, "log", {
         }
         log_str = '[' + dateTimeStr.trim() + '] [DEBUG]  ' + log_str;
 
-        return IsDebug ? console.log.bind(window.console, log_str) //'[' + dateTimeStr.trim() + ']', '[DEBUG]')
+        return IsDebug ? console.log.bind(window.console, log_str) 
             : function () { };
     }
 });
 
 function initDebug() {
-    //console.log.bind(log);
-
-    
 }
 
-//function log(...args) {
-//    let log_str = '';
-//    if (!args) {
-//        console.log
-//	}
-
-//    for (var i = 0; i < args.length; i++) {
-//        if (typeof args[i] === 'string' || args[i] instanceof String) {
-//            log_str += args[i];
-//        } else {
-//            log_str += JSON.stringify(args[i]);
-//		}
-//    }
-//    //log_internal(log_str);
-//    const d = new Date();
-//    let dateTimeStr = d.toLocaleTimeString().replace('AM', '').replace('PM', '').trim() + `.${d.getMilliseconds()}`;
-//    log_str = '[' + dateTimeStr.trim() + '] [DEBUG]  ' + log_str;
-//    console.log(log_str);
-//}
-
-//function log_internal(logStr) {
-//    if (!IsDebug) {
-//        return;
-//    }
-//    const d = new Date();
-//    let dateTimeStr = d.toLocaleTimeString().replace('AM', '').replace('PM', '').trim() + `.${d.getMilliseconds()}`;
-//    logStr = '[' + dateTimeStr.trim() + '] [DEBUG]  ' + logStr;
-//    console.log(logStr);
-//}
+function logtable(table_obj) {
+    if (!IsDebug) {
+        return;
+    }
+    console.table(table_obj);
+}

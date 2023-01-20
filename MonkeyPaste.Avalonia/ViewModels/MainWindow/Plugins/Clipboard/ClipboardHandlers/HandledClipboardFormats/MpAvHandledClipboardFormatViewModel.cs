@@ -626,6 +626,18 @@ namespace MonkeyPaste.Avalonia {
                 IsBusy = false;
             });
 
+
+        public ICommand ResetOrDeletePresetCommand => new MpCommand<object>(
+            (presetVmArg) => {
+                //if (ResetPresetCommand.CanExecute(presetVmArg)) {
+                //    ResetPresetCommand.Execute(presetVmArg);
+                //} else {
+                //    DeletePresetCommand.Execute(presetVmArg);
+                //}
+            }, (presetVmArg) => {
+                return presetVmArg is MpAvClipboardFormatPresetViewModel;
+            });
+
         public ICommand ShiftPresetCommand => new MpCommand<object>(
             // [0] = shift dir [1] = presetvm
             (args) => {

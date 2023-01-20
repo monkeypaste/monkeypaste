@@ -14,7 +14,7 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileTransactionPaneView">
     <Grid x:Name="TransactionContainerGrid"
           RowDefinitions="30,*,Auto"
-          Margin="1"          
+          Margin="1"
           HorizontalAlignment="Stretch">
         <Grid.Styles>
             <Style Selector="TreeViewItem /template/ Panel#PART_ExpandCollapseChevronContainer">
@@ -76,6 +76,27 @@
                 <Setter Property="MinHeight"
                         Value="20" />
             </Style>
+            <!--<Style Selector="ListBox#TransactionListBox ListBoxItem:not(:selected) Grid#TransactionItemGrid_right">
+                <Setter Property="IsVisible"
+                        Value="False" />
+            </Style>
+
+            <Style Selector="ListBox#TransactionListBox ListBoxItem:selected Grid#TransactionItemGrid_right">
+                <Setter Property="IsVisible"
+                        Value="True" />
+            </Style>
+
+            <Style Selector="TextBlock#TransactionTimeTextBlock"
+                   x:DataType="local:MpAvTransactionItemViewModelBase">
+                <Setter Property="Text"
+                        Value="{Binding TransactionDateTime, Converter={x:Static local:MpAvDateTimeToReadableTimeSpanStringConverter.Instance}}" />
+            </Style>
+
+            <Style Selector="TextBlock#TransactionTimeTextBlock:pointerover"
+                   x:DataType="local:MpAvTransactionItemViewModelBase">
+                <Setter Property="Text"
+                        Value="{Binding TransactionDateTime, Converter={x:Static local:MpAvDateTimeToStringConverter.Instance}}" />
+            </Style>-->
         </Grid.Styles>
         <DockPanel Grid.Row="0"
                    LastChildFill="True"
@@ -95,7 +116,8 @@
                     </Image.RenderTransform>
                 </Image>
             </Button>
-            <TextBlock Text="Transactions" VerticalAlignment="Center" />
+            <TextBlock Text="Transactions"
+                       VerticalAlignment="Center" />
         </DockPanel>
 
         <ListBox x:Name="TransactionListBox"
@@ -107,25 +129,36 @@
                  VerticalAlignment="Top">
             <ListBox.ItemTemplate>
                 <DataTemplate x:DataType="local:MpAvTransactionItemViewModelBase">
-                    <Grid ColumnDefinitions="15,*"
-                          local:MpAvIsHoveringExtension.IsEnabled="True"
-                          local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering}">
+                    <DockPanel x:Name="TransactionContainerDockPanel"
+                               Classes.over="{Binding IsHovering}"
+                               local:MpAvIsHoveringExtension.IsEnabled="True"
+                               local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering}">
+                        <ToolTip.Tip>
+                            <local:MpAvToolTipView ToolTipText="{Binding TransactionDateTime, Converter={x:Static local:MpAvDateTimeToStringConverter.Instance}}" />
+                        </ToolTip.Tip>
+                        <Grid DockPanel.Dock="Left"
+                              ColumnDefinitions="15,*">
 
-                        <Image Grid.Column="0"
-                               HorizontalAlignment="Left"
-                               VerticalAlignment="Stretch"
-                               Margin="5,2"
-                               Width="15"
-                               Height="15"
-                               Source="{Binding IconSourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}}" />
-                        <TextBlock Grid.Column="1"
-                                   Foreground="Black"
-                                   Margin="5,0,5,0"
-                                   VerticalAlignment="Center"
+                            <Image Grid.Column="0"
                                    HorizontalAlignment="Left"
-                                   TextAlignment="Left"
-                                   Text="{Binding LabelText}" />
-                    </Grid>
+                                   VerticalAlignment="Stretch"
+                                   Margin="5,2"
+                                   Width="15"
+                                   Height="15"
+                                   Source="{Binding IconSourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}}" />
+                            <TextBlock Grid.Column="1"
+                                       Foreground="Black"
+                                       Margin="5,0,5,0"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Left"
+                                       TextAlignment="Left"
+                                       Text="{Binding LabelText}" />
+                        </Grid>
+                        <Grid x:Name="TransactionItemGrid_right"
+                              DockPanel.Dock="Right">
+                            <!--  TODO Add TransactionView Toggle button here (or options context button)  -->
+                        </Grid>
+                    </DockPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

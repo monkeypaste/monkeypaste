@@ -27,13 +27,26 @@ namespace MonkeyPaste.Common {
         #endregion
 
         #region Encoding Extensions
-        public static string ToDecodedString(this byte[] bytes, Encoding enc = null) {
+        public static string ToDecodedString(this byte[] bytes, Encoding enc = null, bool stripNulls = false) {
             // TODO should use local encoding here
-            if(enc == null) {
+            string out_str;
+            if (enc == null) {
                 bytes.DetectTextEncoding(out string decodedStr);
-                return decodedStr;
+                out_str = decodedStr;
+            } else {
+                out_str = enc.GetString(bytes);
             }
-            return enc.GetString(bytes);
+            if(stripNulls) {
+                // some cases the string has '\0' chars, which will invalidate URI as a prob
+                // i think its when the byte count is longer than the actual string or 
+                // some kind of padding isn't right so '\0' is added to the byte[]
+                // code from https://stackoverflow.com/a/35182252/105028
+
+                // s == "heresastring\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0(etc)"    
+                out_str = out_str.Split(new[] { '\0' }, 2)[0];
+                // s == "heresastring"
+            }
+            return out_str;
         }
 
         public static byte[] ToBytesFromString(this string str, Encoding enc = null) {
@@ -160,6 +173,16 @@ namespace MonkeyPaste.Common {
 
         public static string[] SplitNoEmpty(this string str, string separator) {
             return str.Split(new string[] { separator }, StringSplitOptions.RemoveEmptyEntries);
+        }
+
+        public static string[] SplitByLineBreak(this string str) {
+            string[] split_types = new string[] { "\r\n", "\n" };
+            foreach(var st in split_types) {
+                if(str.Contains(st)) {
+                    return str.SplitNoEmpty(st);
+                }
+            }
+            return new[] { str };
         }
 
         public static string TrimTrailingLineEnding(this string str) {
