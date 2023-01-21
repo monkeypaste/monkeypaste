@@ -18,6 +18,7 @@ using System;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using MonoMac.CoreText;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -107,6 +108,8 @@ namespace MonkeyPaste.Avalonia {
             double resizer_long_side = mwvm.IsHorizontalOrientation ? mwvm.MainWindowWidth : mwvm.MainWindowHeight;
             double resizer_short_side = mwvm.ResizerLength;
 
+            resizerTransform.X = 0;
+            resizerTransform.Y = 0;
             switch (mwvm.MainWindowOrientationType) {
                 case MpMainWindowOrientationType.Bottom:
                     resizerHandle.Width = resizer_long_side;
@@ -119,9 +122,7 @@ namespace MonkeyPaste.Avalonia {
                     resizerView.HorizontalAlignment = HorizontalAlignment.Stretch;
                     resizerView.VerticalAlignment = VerticalAlignment.Top;
 
-                    resizerTransform.Y = 0;
-
-                    resizerView.Background = Brushes.Transparent;
+                    //resizerView.Background = Brushes.Transparent;
                     break;
                 case MpMainWindowOrientationType.Top:
                     resizerHandle.Width = resizer_long_side;
@@ -136,10 +137,10 @@ namespace MonkeyPaste.Avalonia {
 
                     resizerTransform.Y = mwvm.MainWindowHeight - resizerView.Height;
 
-                    resizerView.Background = new SolidColorBrush() {
-                        Color = Colors.White,
-                        Opacity = 0.5
-                    };
+                    //resizerView.Background = new SolidColorBrush() {
+                    //    Color = Colors.White,
+                    //    Opacity = 0.5
+                    //};
                     break;
                 case MpMainWindowOrientationType.Left:
                     resizerHandle.Width = resizer_short_side;
@@ -152,12 +153,11 @@ namespace MonkeyPaste.Avalonia {
                     resizerView.HorizontalAlignment = HorizontalAlignment.Right;
                     resizerView.VerticalAlignment = VerticalAlignment.Top;
 
-                    resizerTransform.Y = 0;
-
-                    resizerView.Background = new SolidColorBrush() {
-                        Color = Colors.White,
-                        Opacity = 0.5
-                    };
+                    resizerTransform.X = MpAvMainWindowTitleMenuViewModel.Instance.TitleMenuWidth;
+                    //resizerView.Background = new SolidColorBrush() {
+                    //    Color = Colors.White,
+                    //    Opacity = 0.5
+                    //};
                     break;
                 case MpMainWindowOrientationType.Right:
                     resizerHandle.Width = resizer_short_side;
@@ -170,15 +170,163 @@ namespace MonkeyPaste.Avalonia {
                     resizerView.HorizontalAlignment = HorizontalAlignment.Left;
                     resizerView.VerticalAlignment = VerticalAlignment.Top;
 
-                    resizerTransform.Y = 0;
 
-                    resizerView.Background = new SolidColorBrush() {
-                        Color = Colors.White,
-                        Opacity = 0.5
-                    };
+                    //resizerView.Background = new SolidColorBrush() {
+                    //    Color = Colors.White,
+                    //    Opacity = 0.5
+                    //};
                     break;
             }
         }
+        public void UpdateTitleLayout() {
+            var mwvm = MpAvMainWindowViewModel.Instance;
+            var tmvm = MpAvMainWindowTitleMenuViewModel.Instance;
+            var fmvm = MpAvFilterMenuViewModel.Instance;
+
+            var mwcg = this.FindControl<Grid>("MainWindowContainerGrid");
+            var tmv = this.FindControl<MpAvMainWindowTitleMenuView>("MainWindowTitleView");
+            var fmv = this.FindControl<MpAvFilterMenuView>("FilterMenuView");
+            var ccg = this.FindControl<Grid>("MainWindowTrayGrid");
+
+            var tmv_cg = tmv.FindControl<Grid>("TitlePanel");
+            var tmv_lsp = tmv.FindControl<StackPanel>("LeftStackPanel");
+            var tmv_wohb = tmv.FindControl<Border>("WindowOrientationHandleBorder");
+            var tmv_rsp = tmv.FindControl<StackPanel>("RightStackPanel");
+            var tmv_zoom_slider_cg = tmv.FindControl<Grid>("ZoomSliderContainerGrid");
+            var tmv_zoom_slider = tmv.FindControl<Slider>("ZoomFactorSlider");
+
+            double resizer_short_side = 0;// mwvm.ResizerLength;
+
+            mwcg.ColumnDefinitions.Clear();
+            mwcg.RowDefinitions.Clear();
+            if (mwvm.IsHorizontalOrientation) {
+                // HORIZONTAL
+                tmvm.TitleMenuWidth = mwvm.MainWindowWidth;
+                tmvm.TitleMenuHeight = tmvm.DefaultTitleMenuFixedLength;
+                var tv_rd = new RowDefinition(Math.Max(0, tmvm.TitleMenuHeight), GridUnitType.Pixel);
+
+                fmvm.FilterMenuWidth = mwvm.MainWindowWidth;
+                fmvm.FilterMenuHeight = fmvm.DefaultFilterMenuFixedSize;
+                var fv_rd = new RowDefinition(Math.Max(0, fmvm.FilterMenuHeight), GridUnitType.Pixel);
+
+                if(mwvm.MainWindowOrientationType == MpMainWindowOrientationType.Top) {
+                    // TOP
+                    mwcg.RowDefinitions.Add(fv_rd);
+                    mwcg.RowDefinitions.Add(new RowDefinition(new GridLength(1, GridUnitType.Star)));
+                    mwcg.RowDefinitions.Add(tv_rd);
+
+                    Grid.SetRow(fmv, 0);
+                    Grid.SetRow(ccg, 1);
+                    Grid.SetRow(tmv, 2);
+
+                    tmv.Margin = new Thickness(0, 0, 0, resizer_short_side);
+                } else {
+                    // BOTTOM
+                    mwcg.RowDefinitions.Add(tv_rd);
+                    mwcg.RowDefinitions.Add(fv_rd);
+                    mwcg.RowDefinitions.Add(new RowDefinition(new GridLength(1, GridUnitType.Star)));
+
+                    Grid.SetRow(tmv, 0);
+                    Grid.SetRow(fmv, 1);
+                    Grid.SetRow(ccg, 2);
+
+                    tmv.Margin = new Thickness(0, resizer_short_side, 0, 0);
+                }
+                Grid.SetColumn(fmv, 0);
+                Grid.SetColumn(ccg, 0);
+                Grid.SetColumn(tmv, 0);
+                Grid.SetRowSpan(tmv, 1);
+
+                tmv_lsp.Orientation = Orientation.Horizontal;
+                tmv_lsp.HorizontalAlignment = HorizontalAlignment.Left;
+                tmv_lsp.VerticalAlignment = VerticalAlignment.Stretch;
+
+                tmv_wohb.Width = tmvm.TitleDragHandleLongLength;
+                tmv_wohb.Height = tmvm.TitleDragHandleShortLength;
+
+                tmv_rsp.Orientation = Orientation.Horizontal;
+                tmv_rsp.HorizontalAlignment = HorizontalAlignment.Right;
+                tmv_rsp.VerticalAlignment = VerticalAlignment.Stretch;
+
+                tmv_zoom_slider_cg.Width = 125;
+                tmv_zoom_slider_cg.Height = tmv.Height;
+                tmv_zoom_slider_cg.Margin = new Thickness(0, 0, 10, 0);
+                
+                tmv_zoom_slider.Width = 250;
+                tmv_zoom_slider.Height = 40;
+                tmv_zoom_slider.Margin = new Thickness(0, 0, 5, 14);
+                tmv_zoom_slider.HorizontalAlignment = HorizontalAlignment.Right;
+                tmv_zoom_slider.VerticalAlignment = VerticalAlignment.Top;
+                tmv_zoom_slider.Orientation = Orientation.Horizontal;
+            } else {
+                // VERTICAL
+
+                tmvm.TitleMenuWidth = tmvm.DefaultTitleMenuFixedLength;
+                tmvm.TitleMenuHeight = mwvm.MainWindowHeight;
+                var tv_cd = new ColumnDefinition(Math.Max(0, tmvm.TitleMenuWidth), GridUnitType.Pixel);
+
+                fmvm.FilterMenuWidth = mwvm.MainWindowWidth - tmvm.TitleMenuWidth;
+                fmvm.FilterMenuHeight = fmvm.DefaultFilterMenuFixedSize;
+                var fv_rd = new RowDefinition(Math.Max(0, fmvm.FilterMenuHeight), GridUnitType.Pixel);
+
+                mwcg.RowDefinitions.Add(fv_rd);
+                mwcg.RowDefinitions.Add(new RowDefinition(1, GridUnitType.Star));
+
+                if (mwvm.MainWindowOrientationType == MpMainWindowOrientationType.Left) {
+                    // LEFT
+                    mwcg.ColumnDefinitions.Add(new ColumnDefinition(new GridLength(1, GridUnitType.Star)));
+                    mwcg.ColumnDefinitions.Add(tv_cd);
+
+                    Grid.SetRow(fmv, 0);
+                    Grid.SetColumn(fmv, 0);
+                    Grid.SetRow(ccg, 1);
+                    Grid.SetColumn(ccg, 0);
+
+                    Grid.SetRow(tmv, 0);
+                    Grid.SetColumn(tmv, 1);
+                    Grid.SetRowSpan(tmv, 2);
+
+                    tmv.Margin = new Thickness(0, 0, resizer_short_side, 0);
+                } else {
+                    // RIGHT
+                    mwcg.ColumnDefinitions.Add(tv_cd);
+                    mwcg.ColumnDefinitions.Add(new ColumnDefinition(new GridLength(1, GridUnitType.Star)));
+
+                    Grid.SetRow(fmv, 0);
+                    Grid.SetColumn(fmv, 1);
+                    Grid.SetRow(ccg, 1);
+                    Grid.SetColumn(ccg, 1);
+
+                    Grid.SetRow(tmv, 0);
+                    Grid.SetColumn(tmv, 0);
+                    Grid.SetRowSpan(tmv, 2);
+
+                    tmv.Margin = new Thickness(resizer_short_side, 0, 0, 0);
+                }
+
+                tmv_lsp.Orientation = Orientation.Vertical;
+                tmv_lsp.HorizontalAlignment = HorizontalAlignment.Stretch;
+                tmv_lsp.VerticalAlignment = VerticalAlignment.Top;
+
+                tmv_wohb.Width = tmvm.TitleDragHandleShortLength;
+                tmv_wohb.Height = tmvm.TitleDragHandleLongLength;
+
+                tmv_rsp.Orientation = Orientation.Vertical;
+                tmv_rsp.HorizontalAlignment = HorizontalAlignment.Stretch;
+                tmv_rsp.VerticalAlignment = VerticalAlignment.Bottom;
+
+                tmv_zoom_slider_cg.Width = tmv.Width;
+                tmv_zoom_slider_cg.Height = 125;
+                tmv_zoom_slider_cg.Margin = new Thickness(0, 0, 0, 10);
+
+                tmv_zoom_slider.Width = 40;
+                tmv_zoom_slider.Height = 250;
+                tmv_zoom_slider.Margin = new Thickness(0, 0, 5, 14);
+                tmv_zoom_slider.HorizontalAlignment = HorizontalAlignment.Center;
+                tmv_zoom_slider.VerticalAlignment = VerticalAlignment.Top;
+                tmv_zoom_slider.Orientation = Orientation.Vertical;            }
+        }
+
         public void UpdateContentLayout() {
             var mwvm = MpAvMainWindowViewModel.Instance;
             var ctrvm = MpAvClipTrayViewModel.Instance;
@@ -426,9 +574,9 @@ namespace MonkeyPaste.Avalonia {
                 Grid.SetColumn(ctrcv_ctrv, 0);
             }
 
-            UpdateResizerLayout();
             UpdateSidebarGridsplitter();
-
+            UpdateTitleLayout();
+            UpdateResizerLayout();
             mwtg.InvalidateMeasure();
         }
 
@@ -496,13 +644,13 @@ namespace MonkeyPaste.Avalonia {
                 nctrcb_h = mwtg.Bounds.Height;
             } else {
                 avail_w = mwtg.Bounds.Width; 
-                avail_h = mw_h - sbicvm.ButtonGroupFixedDimensionLength - mwtmvm.TitleMenuHeight - fmvm.FilterMenuHeight;
+                avail_h = mw_h - sbicvm.ButtonGroupFixedDimensionLength  - fmvm.FilterMenuHeight;
 
                 nsbi_w = mwtg.Bounds.Width;
                 nsbi_h = is_opening ? ssbivm.DefaultSidebarHeight : 0;
 
                 nctrcb_w = mwtg.Bounds.Width;
-                nctrcb_h = mw_h - sbicvm.ButtonGroupFixedDimensionLength - nsbi_h - mwtmvm.TitleMenuHeight - fmvm.FilterMenuHeight;
+                nctrcb_h = mw_h - sbicvm.ButtonGroupFixedDimensionLength - nsbi_h - fmvm.FilterMenuHeight;
             }
             nsbi_w = Math.Max(0, nsbi_w);
             nsbi_h = Math.Max(0, nsbi_h);
@@ -545,7 +693,7 @@ namespace MonkeyPaste.Avalonia {
             if (BindingContext.IsHorizontalOrientation) {
                 ctrvm.BoundWidth = Math.Max(0, mw_w - sbicvm.ButtonGroupFixedDimensionLength - sbicvm.BoundWidth);
             } else {
-                ctrvm.BoundHeight = Math.Max(0, mw_h - sbicvm.ButtonGroupFixedDimensionLength - sbicvm.BoundHeight - mwtmvm.TitleMenuHeight - fmvm.FilterMenuHeight);
+                ctrvm.BoundHeight = Math.Max(0, mw_h - sbicvm.ButtonGroupFixedDimensionLength - sbicvm.BoundHeight - fmvm.FilterMenuHeight);
             }
             ClampContentSizes();
         }

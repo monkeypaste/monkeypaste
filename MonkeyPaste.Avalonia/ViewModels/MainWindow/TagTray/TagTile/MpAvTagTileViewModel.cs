@@ -590,10 +590,9 @@ namespace MonkeyPaste.Avalonia {
                 if (sc.CommandParameter == TagId.ToString() && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
-            } 
-            //else if(e is MpCopyItem ci && IsAllTag) { // && !IsThisThePinnedViewModel
-            //    LinkCopyItemCommand.Execute(ci.Id);
-            //} 
+            } else if (e is MpCopyItem ci && IsAllTag) { 
+                LinkCopyItemCommand.Execute(ci.Id);
+            }
         }
 
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
@@ -827,6 +826,7 @@ namespace MonkeyPaste.Avalonia {
                 // trigger selection changed message to notify tag association change
                 MpMessenger.SendGlobal(MpMessageType.TraySelectionChanged);
             }
+            MpAvClipTrayViewModel.Instance.UpdateEmptyPropertiesAsync().FireAndForgetSafeAsync();
             IsBusy = false;
         }
 

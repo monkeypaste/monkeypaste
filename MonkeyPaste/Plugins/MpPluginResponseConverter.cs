@@ -77,7 +77,7 @@ namespace MonkeyPaste {
                 mpdo.SetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, ref_urls);
 
                 // create new item
-                var target_ci = await MpPlatformWrapper.Services.CopyItemBuilder.BuildAsync(mpdo);
+                var target_ci = await MpPlatformWrapper.Services.CopyItemBuilder.BuildAsync(mpdo,false,"Generated",true);
                 return target_ci;
             }
 

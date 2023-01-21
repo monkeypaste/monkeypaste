@@ -22,7 +22,7 @@
             </Style>
             <Style Selector="PathIcon /template/ Path">
                 <Setter Property="Margin"
-                        Value="0,3,0,3" />
+                        Value="3" />
             </Style>
             <Style Selector="ToggleButton:checked /template/ ContentPresenter">
                 <Setter Property="Background"
@@ -36,15 +36,17 @@
                 <Setter Property="Foreground"
                         Value="Cornsilk" />
             </Style>
+            
         </Grid.Styles>
         <!--  Left Side  -->
 
-        <StackPanel Orientation="Horizontal"
+        <StackPanel x:Name="LeftStackPanel"
+                    Orientation="Horizontal"
                     HorizontalAlignment="Left">
             <!--  Settings Toggle Button  -->
 
             <ToggleButton x:Name="SettingsToggleButton"
-                Classes="noBg noHoverBg"
+                          Classes="noBg noHoverBg"
                           IsChecked="{Binding IsVisible, Source={x:Static local:MpAvSettingsWindowViewModel.Instance}}"
                           ToolTip.ShowDelay="500">
                 <ToolTip.Tip>
@@ -56,7 +58,7 @@
             <!--  Lock Toggle Button  -->
 
             <ToggleButton x:Name="LockToggleButton"
-                Classes="noBg noHoverBg"
+                          Classes="noBg noHoverBg"
                           IsChecked="{Binding IsMainWindowLocked, Source={x:Static local:MpAvMainWindowViewModel.Instance}, Mode=TwoWay}"
                           ToolTip.ShowDelay="500">
                 <ToolTip.Tip>
@@ -67,9 +69,8 @@
         </StackPanel>
 
         <Border x:Name="WindowOrientationHandleBorder"
-                Width="103"
-                Height="7"
                 BorderThickness="0"
+                HorizontalAlignment="Center"
                 VerticalAlignment="Center">
             <Border.Styles>
                 <Style Selector="Border">
@@ -104,10 +105,13 @@
         </Border>
 
 
-        <StackPanel Orientation="Horizontal"
+        <StackPanel x:Name="RightStackPanel"
+                    Orientation="Horizontal"
                     HorizontalAlignment="Right">
             <!--  Zoom Factor Slider  -->
-            <Grid Width="125"
+            <Grid x:Name="ZoomSliderContainerGrid"
+                  IsVisible="False"
+                  Width="125"
                   Opacity="0.5"
                   local:MpAvIsHoveringExtension.IsEnabled="True"
                   local:MpAvIsHoveringExtension.IsHovering="{Binding IsZoomSliderHovering, Mode=TwoWay}"
@@ -252,11 +256,10 @@
             <Button x:Name="MainWindowCycleOrientationCcwButton"
                     Command="{Binding CycleOrientationCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                     CommandParameter="CCW"
-                Classes="noBg noHoverBg"
+                    Classes="noBg noHoverBg"
                     local:MpAvPointerPressCommandExtension.IsEnabled="True"
                     local:MpAvPointerPressCommandExtension.RightPressCommand="{Binding CycleOrientationCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
-                    local:MpAvPointerPressCommandExtension.RightPressCommandParameter="CW"
-                    ToolTip.ShowDelay="0">
+                    local:MpAvPointerPressCommandExtension.RightPressCommandParameter="CW">
                 <ToolTip.Tip>
                     <local:MpAvToolTipView ToolTipText="Cycle Orientation CCW" />
                 </ToolTip.Tip>

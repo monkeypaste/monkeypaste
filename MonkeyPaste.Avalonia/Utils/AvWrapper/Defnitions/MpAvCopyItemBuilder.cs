@@ -22,7 +22,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public async Task<MpCopyItem> BuildAsync(MpPortableDataObject mpdo, bool suppressWrite = false, string createLabel = "") {
+        public async Task<MpCopyItem> BuildAsync(MpPortableDataObject mpdo, bool suppressWrite = false, string createLabel = "", bool force_ext_sources = true) {
             if (mpdo == null || mpdo.DataFormatLookup.Count == 0) {
                 return null;
             }
@@ -30,7 +30,7 @@ namespace MonkeyPaste.Avalonia {
 
             await NormalizePlatformFormatsAsync(mpdo);
 
-            var refs = await MpPlatformWrapper.Services.SourceRefBuilder.GatherSourceRefsAsync(mpdo, true);
+            var refs = await MpPlatformWrapper.Services.SourceRefBuilder.GatherSourceRefsAsync(mpdo, force_ext_sources);
 
             if (MpPlatformWrapper.Services.SourceRefBuilder.IsAnySourceRejected(refs)) {
                 return null;
@@ -52,7 +52,6 @@ namespace MonkeyPaste.Avalonia {
             string default_title = GetDefaultItemTitle(itemType, mpdo);
             string data_format = GetPreferredContentType(itemType);
             var ci = await MpCopyItem.CreateAsync(
-                //sourceId: original_source == null ? MpDefaultDataModelTools.ThisSourceId : original_source.Id,
                 dataObjectId: dobj.Id,
                 title: default_title,
                 dataFormat: data_format,
@@ -223,8 +222,33 @@ namespace MonkeyPaste.Avalonia {
                 if (htmlClipboardData == null) {
                     itemData = null;
                 } else {
-                    itemData = htmlClipboardData.Html;
+                    itemData = htmlClipboardData.RichHtml;
                     delta = htmlClipboardData.Delta;
+                    if(!string.IsNullOrEmpty(htmlClipboardData.Html) &&
+                        htmlClipboardData.Html.StartsWith("<img")) {
+                        try {
+                            var img_parts = htmlClipboardData.Html.Split("src=\"");
+                            if (img_parts.Length > 1) {
+                                var img_parts2 = img_parts[1].Split("\"");
+                                if (img_parts2.Length > 0) {
+                                    string img_src_uri = img_parts2[0];
+                                    var img_bytes = await MpFileIo.ReadBytesFromUriAsync(img_src_uri);
+                                    if (img_bytes != null && img_bytes.Length > 0 &&
+                                        Convert.ToBase64String(img_bytes) is string img_base64) {
+                                        // update item type to image and clear delta (it references img uri not bytes)
+                                        itemType = MpCopyItemType.Image;
+                                        itemData = img_base64;
+                                        delta = null;
+                                    }
+                                }
+                            }
+                        }
+                        catch(Exception ex) {
+                            MpConsole.WriteTraceLine($"Error converting img html to img content. Img html: '{htmlClipboardData.Html}'", ex);
+                        }
+                        // handle special case that item is an image drop from browser (tested on chrome in windows)
+                        
+                    }
                 }                
             }
             if(string.IsNullOrEmpty(delta)) {

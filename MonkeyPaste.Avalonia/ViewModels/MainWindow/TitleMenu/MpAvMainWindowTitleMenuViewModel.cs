@@ -31,9 +31,11 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Layout
-
+        public double TitleDragHandleShortLength => 7;
+        public double TitleDragHandleLongLength => 103;
+        public double DefaultTitleMenuFixedLength => 20;
         public double TitleMenuWidth { get; set; }
-        public double TitleMenuHeight => 20;
+        public double TitleMenuHeight { get; set; }
 
         public double SettingsButtonWidth { get; set; }
         public double LockButtonWidth { get; set; }

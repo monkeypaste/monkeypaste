@@ -13,6 +13,9 @@
     <sys:String x:Key="BrainImage">
         avares://MonkeyPaste.Avalonia/Assets/Images/brain.png
     </sys:String>
+    <sys:String x:Key="ClearGridImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/cleargrid.png
+    </sys:String>
     <sys:String x:Key="BrainWhiteImage">
         avares://MonkeyPaste.Avalonia/Assets/Images/brainwhite.png
     </sys:String>

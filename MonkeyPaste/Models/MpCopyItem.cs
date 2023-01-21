@@ -241,6 +241,7 @@ namespace MonkeyPaste {
             if(ItemData.IsEmptyRichHtmlString()) {
                 // what IS this nasty shit??
                 Debugger.Break();
+                return;
             }
             await base.WriteToDatabaseAsync();
 

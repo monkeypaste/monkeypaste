@@ -48,7 +48,8 @@ namespace MonkeyPaste.Avalonia {
         public double AvailableContentAndSidebarWidth {
             get {
                 if(IsVerticalOrientation) {
-                    return MainWindowWidth;
+                    return MainWindowWidth -
+                        MpAvMainWindowTitleMenuViewModel.Instance.TitleMenuWidth;
                 }
                 return MainWindowWidth -
                         MpAvSidebarItemCollectionViewModel.Instance.ButtonGroupFixedDimensionLength;
@@ -59,7 +60,7 @@ namespace MonkeyPaste.Avalonia {
             get {
                 if (IsVerticalOrientation) {
                     return MainWindowHeight -
-                        MpAvMainWindowTitleMenuViewModel.Instance.TitleMenuHeight -
+                        //MpAvMainWindowTitleMenuViewModel.Instance.TitleMenuHeight -
                         MpAvFilterMenuViewModel.Instance.FilterMenuHeight -
                         MpAvSidebarItemCollectionViewModel.Instance.ButtonGroupFixedDimensionLength;
                 }

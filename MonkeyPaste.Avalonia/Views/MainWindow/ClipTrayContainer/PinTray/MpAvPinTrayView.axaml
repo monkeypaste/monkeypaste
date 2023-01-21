@@ -14,7 +14,18 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvPinTrayView">
+    <local:MpAvUserControl.Styles>
+        <Style Selector="Border#PinTrayContainerBorder.empty Button#UnpinAllButton">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+        <Style Selector="Border#PinTrayContainerBorder:pointerover:not(.empty) Button#UnpinAllButton">
+            <Setter Property="IsVisible"
+                    Value="True" />
+        </Style>
+    </local:MpAvUserControl.Styles>
     <Border x:Name="PinTrayContainerBorder"
+            Classes.empty="{Binding IsPinTrayEmpty}"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
         <Grid HorizontalAlignment="Stretch"
@@ -57,6 +68,35 @@
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
             </ListBox>
+
+            <!--  IsBusy Overlay  -->
+            <Border HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Cursor="Wait"
+                    IsVisible="{Binding IsPinTrayBusy}">
+                <local:MpAvBusySpinnerView HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Width="70"
+                                           Height="70" />
+            </Border>
+            <!--  UNPIN All  -->
+
+            <Button x:Name="UnpinAllButton"
+                    Classes="defaultButton"
+                    IsVisible="{Binding !IsPinTrayEmpty}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Margin="0,5,10,0"
+                    CornerRadius="10"
+                    BorderThickness="1"
+                    BorderBrush="DimGray"
+                    Background="Silver"
+                    Padding="5,2"
+                    Command="{Binding UnpinAllCommand}">
+                <Image DockPanel.Dock="Left"
+                       Source="{Binding ., Source={StaticResource ClearGridImage}, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
+            </Button>
+
         </Grid>
     </Border>
 </local:MpAvUserControl>

@@ -18,7 +18,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region Layout
 
-        public double FilterMenuHeight => 40;
+        public double DefaultFilterMenuFixedSize => 40;
+
+        public double FilterMenuWidth { get; set; }
+        public double FilterMenuHeight { get; set; }
         public double SearchBoxObservedWidth { get; set; }
         public double ClipTileSortViewWidth { get; set; }
         public double PlayPauseButtonWidth { get; set; }

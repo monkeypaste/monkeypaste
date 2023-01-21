@@ -112,7 +112,8 @@ namespace MonkeyPaste.Avalonia {
             string respStr = await ConverterWebView.EvaluateJavascriptAsync($"convertPlainHtml_ext('{req.SerializeJsonObjectToBase64()}')");
             var resp = MpJsonObject.DeserializeBase64Object<MpQuillConvertPlainHtmlToQuillHtmlResponseMessage>(respStr);
             return new MpAvHtmlClipboardData() {
-                Html = resp.quillHtml.ToStringFromBase64(),
+                Html = resp.html.ToStringFromBase64(),
+                RichHtml = resp.quillHtml.ToStringFromBase64(),
                 Delta = resp.quillDelta.ToStringFromBase64(),
                 SourceUrl = resp.sourceUrl
             };

@@ -122,8 +122,9 @@ function convertPlainHtml_ext(convertPlainHtmlReqMsgBase64Str) {
 	let convert_result = convertPlainHtml(plainHtml, req.dataFormatType);
 
 	let respObj = {
+		html: toBase64FromJsonObj(plainHtml),
 		quillHtml: toBase64FromJsonObj(convert_result.html),
-			quillDelta: toBase64FromJsonObj(convert_result.delta),
+		quillDelta: toBase64FromJsonObj(convert_result.delta),
 		sourceUrl: url
 	};
 	let resp = toBase64FromJsonObj(respObj);

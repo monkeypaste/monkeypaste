@@ -1,0 +1,51 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="using:MonkeyPaste.Avalonia">
+    <Style Selector=":is(Button):pointerover.shakeOver">
+        <Style.Animations>
+            <Animation Duration="0:0:0.4"
+                       FillMode="Forward">
+                <KeyFrame Cue="0%">
+                    <Setter Property="RotateTransform.Angle"
+                            Value="0" />
+                </KeyFrame>
+                <KeyFrame Cue="33%">
+                    <Setter Property="RotateTransform.Angle"
+                            Value="15" />
+                </KeyFrame>
+                <KeyFrame Cue="66%">
+                    <Setter Property="RotateTransform.Angle"
+                            Value="-15" />
+                </KeyFrame>
+                <KeyFrame Cue="100%">
+                    <Setter Property="RotateTransform.Angle"
+                            Value="0" />
+                </KeyFrame>
+            </Animation>
+        </Style.Animations>
+    </Style>
+    <Style Selector=":is(Button):not(:pointerover).shakeOver">
+        <Style.Animations>
+            <Animation Duration="0:0:0.4"
+                       FillMode="Forward">
+                <KeyFrame Cue="0%">
+                    <Setter Property="RotateTransform.Angle"
+                            Value="0" />
+                </KeyFrame>
+                <KeyFrame Cue="33%">
+                    <Setter Property="RotateTransform.Angle"
+                            Value="-15" />
+                </KeyFrame>
+                <KeyFrame Cue="66%">
+                    <Setter Property="RotateTransform.Angle"
+                            Value="15" />
+                </KeyFrame>
+                <KeyFrame Cue="100%">
+                    <Setter Property="RotateTransform.Angle"
+                            Value="0" />
+                </KeyFrame>
+            </Animation>
+        </Style.Animations>
+    </Style>
+</Styles>

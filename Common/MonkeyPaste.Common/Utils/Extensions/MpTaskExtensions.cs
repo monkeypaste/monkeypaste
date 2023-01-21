@@ -19,27 +19,33 @@ namespace MonkeyPaste.Common {
             }
         }
 
-
-        public static async Task TimeoutAfter(this Task task, TimeSpan timeout) {
+        public static async Task TimeoutAfter(this Task task, TimeSpan timeout, Func<bool> timeout_callback = null) {
             using (var timeoutCancellationTokenSource = new CancellationTokenSource()) {
                 var completedTask = await Task.WhenAny(task, Task.Delay(timeout, timeoutCancellationTokenSource.Token));
                 if (completedTask == task) {
                     timeoutCancellationTokenSource.Cancel();
                     return;  // Very important in order to propagate exceptions
                 } else {
-                    throw new TimeoutException("The operation has timed out.");
+                    timeout_callback?.Invoke();
+                    if (timeout_callback == null) {
+                        throw new TimeoutException("The operation has timed out.");
+                    }
                 }
             }
         }
 
-        public static async Task<TResult> TimeoutAfter<TResult>(this Task<TResult> task, TimeSpan timeout) {
+        public static async Task<TResult> TimeoutAfter<TResult>(this Task<TResult> task, TimeSpan timeout, Func<TResult> timeout_callback = null) {
             using (var timeoutCancellationTokenSource = new CancellationTokenSource()) {
                 var completedTask = await Task.WhenAny(task, Task.Delay(timeout, timeoutCancellationTokenSource.Token));
                 if (completedTask == task) {
                     timeoutCancellationTokenSource.Cancel();
                     return await task;  // Very important in order to propagate exceptions
                 } else {
-                    throw new TimeoutException("The operation has timed out.");
+                    if (timeout_callback == null) {
+                        throw new TimeoutException("The operation has timed out.");
+                    } else {
+                        return timeout_callback.Invoke();
+                    }
                 }
             }
         }

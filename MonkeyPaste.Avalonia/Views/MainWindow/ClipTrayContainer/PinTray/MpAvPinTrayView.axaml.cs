@@ -72,6 +72,8 @@ namespace MonkeyPaste.Avalonia {
 
             e.DragEffects = DragDropEffects.None;
             if (is_drop_valid) {
+                BindingContext.IsPinTrayBusy = true;
+
                 e.DragEffects = is_copy ? DragDropEffects.Copy : DragDropEffects.Move;
                 bool is_internal = e.Data.ContainsInternalContentItem();
                 if (is_internal) {
@@ -81,6 +83,13 @@ namespace MonkeyPaste.Avalonia {
                     // External Drop
                     await PerformExternalOrPartialDropAsync(drop_idx, e.Data);
                 }
+
+                Dispatcher.UIThread.Post(async () => {
+                    while(BindingContext.IsAnyBusy) {
+                        await Task.Delay(100);
+                    }
+                    BindingContext.IsPinTrayBusy = false;
+                });
             }
 
             ResetDrop();
@@ -179,16 +188,16 @@ namespace MonkeyPaste.Avalonia {
         private async Task PerformExternalOrPartialDropAsync(int drop_idx, IDataObject avdo) {
             MpPortableDataObject mpdo = await MpPlatformWrapper.Services.DataObjectHelperAsync.ReadDragDropDataObjectAsync(avdo) as MpPortableDataObject;
             //int drag_ciid = -1;
-            string drag_ctvm_pub_handle = mpdo.GetData(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT) as string;
-            if (!string.IsNullOrEmpty(drag_ctvm_pub_handle)) {
-                var drag_ctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle == drag_ctvm_pub_handle);
-                if (drag_ctvm != null) {
-                    // tile sub-selection drop
-                    //drag_ciid = drag_ctvm.CopyItemId;
-                    mpdo.SetData(MpPortableDataFormats.LinuxUriList, new string[] { MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(drag_ctvm.CopyItem) });
-                }
-            }
-            var avdo_ci = await MpPlatformWrapper.Services.CopyItemBuilder.BuildAsync(mpdo,false,"Drop");
+            //string drag_ctvm_pub_handle = mpdo.GetData(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT) as string;
+            //if (!string.IsNullOrEmpty(drag_ctvm_pub_handle)) {
+            //    var drag_ctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle == drag_ctvm_pub_handle);
+            //    if (drag_ctvm != null) {
+            //        // tile sub-selection drop
+            //        //drag_ciid = drag_ctvm.CopyItemId;
+            //        mpdo.SetData(MpPortableDataFormats.LinuxUriList, new string[] { MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(drag_ctvm.CopyItem) });
+            //    }
+            //}
+            var avdo_ci = await MpPlatformWrapper.Services.CopyItemBuilder.BuildAsync(mpdo,false,"Drop",false);
 
             var drop_ctvm = await BindingContext.CreateClipTileViewModel(avdo_ci, -1);
             BindingContext.PinTileCommand.Execute(new object[] { drop_ctvm, drop_idx });

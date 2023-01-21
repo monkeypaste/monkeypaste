@@ -9,7 +9,6 @@ namespace MonkeyPaste.Common.Plugin {
         MpIAnnotationNode {
         public string type { get; set; }
 
-
         #region MpIIconResource Implementation
         public object IconResourceObj { get; set; }
         #endregion
@@ -18,7 +17,6 @@ namespace MonkeyPaste.Common.Plugin {
         public string label { get; set; }
         string MpILabelText.LabelText => label;
         #endregion
-
 
         #region MpIClampedValue Implementation
         double MpIClampedValue.min => minScore;

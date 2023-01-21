@@ -35,7 +35,6 @@
         </Grid.ColumnDefinitions>
         <local:MpAvPinTrayView x:Name="PinTrayView"
                                Grid.Column="0"
-                               Margin="0,0,5,0"
                                DataContext="{Binding}"
                                Classes.dragover="{Binding IsDragOverPinTray}"
                                MinWidth="{Binding MinPinTrayScreenWidth}"

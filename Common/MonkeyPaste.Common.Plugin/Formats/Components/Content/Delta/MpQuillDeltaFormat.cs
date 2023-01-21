@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace MonkeyPaste.Common.Plugin {
@@ -20,6 +22,24 @@ namespace MonkeyPaste.Common.Plugin {
         }
     }
     public class MpQuillDelta : MpOmitNullJsonObject {
+        public static MpQuillDelta Parse(string json) {
+            var req_lookup = MpJsonObject.DeserializeObject<Dictionary<string, object>>(json);
+            if (req_lookup != null &&
+                req_lookup.TryGetValue("ops", out var itemsObj) && itemsObj is JArray items_jarray) {
+                Dictionary<object, string> param_lookup = new Dictionary<object, string>();
+                foreach (var kvp_jtoken in items_jarray) {
+                    if (kvp_jtoken.SelectToken("paramId", false) is JToken param_token &&
+                        kvp_jtoken.SelectToken("value", false) is JToken val_token) {
+
+                        param_lookup.Add(param_token.Value<string>(), val_token.Value<string>());
+                    }
+                }
+                return new MpQuillDelta() {
+                    ops = null
+                };
+            }
+            return null;
+        }
         public List<Op> ops { get; set; }
     }
 

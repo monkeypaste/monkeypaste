@@ -20,7 +20,9 @@ namespace MonkeyPaste.Avalonia {
 
         public string Version { get; private set; }
         public string SourceUrl { get; set; }
+
         public string Html { get; set; }
+        public string RichHtml { get; set; }
         public string Delta { get; set; }
 
 
@@ -47,7 +49,7 @@ namespace MonkeyPaste.Avalonia {
                     // BUG if plain html is set and quill is later loaded setHtml won't parse it correctly
                     // (theres escape issues once in js and it just doesn't follow same conversion flow and its annoying, pointless to change) without using dangerouslyPaste
                     // which makes problems w/ templates and since this is plain text mode there's no need to keep html anyways so downsample to plain text
-                    hcd.Html = MpAvContentDataConverter.Instance.Convert(plainHtml, null, "plaintext", null) as string;
+                    hcd.RichHtml = MpAvContentDataConverter.Instance.Convert(plainHtml, null, "plaintext", null) as string;
                 }
             }
             hcd.SourceUrl = ParseHtmlFragmentForSourceUrl(htmlClipboardData);

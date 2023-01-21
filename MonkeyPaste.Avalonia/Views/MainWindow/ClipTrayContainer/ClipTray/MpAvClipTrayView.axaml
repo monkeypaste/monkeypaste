@@ -124,10 +124,10 @@
                                  Source="{x:Static local:MpAvTagTrayViewModel.Instance}" />
                         <Binding>
                             <Binding.Source>
-                                <sys:String>' Is Empty</sys:String>
+                                <sys:String>' Is</sys:String>
                             </Binding.Source>
                         </Binding>
-
+                        <Binding Path="EmptyQueryTrayText" />
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>

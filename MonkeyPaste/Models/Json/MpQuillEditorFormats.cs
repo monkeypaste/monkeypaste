@@ -94,6 +94,7 @@ namespace MonkeyPaste {
     }
 
     public class MpQuillConvertPlainHtmlToQuillHtmlResponseMessage : MpJsonObject {
+        public string html { get; set; }
         public string quillHtml { get; set; }
         public string quillDelta { get; set; }
         public string sourceUrl { get; set; }

@@ -27,11 +27,11 @@
           Background="Transparent"
           Width="{Binding MainWindowWidth}"
           Height="{Binding MainWindowHeight}">
-        <Grid.RowDefinitions>
+        <!--<Grid.RowDefinitions>
             <RowDefinition Height="{Binding TitleMenuHeight, Source={x:Static local:MpAvMainWindowTitleMenuViewModel.Instance}, Converter={StaticResource DoubleToGridLengthConverter}}" />
             <RowDefinition Height="{Binding FilterMenuHeight, Source={x:Static local:MpAvFilterMenuViewModel.Instance}, Converter={StaticResource DoubleToGridLengthConverter}}" />
             <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+        </Grid.RowDefinitions>-->
 
         <!--  Title Menu  -->
         <local:MpAvMainWindowTitleMenuView x:Name="MainWindowTitleView"
@@ -50,8 +50,7 @@
               Grid.Row="2"
               x:CompileBindings="False"
               HorizontalAlignment="Stretch"
-              VerticalAlignment="Stretch"
-              ColumnDefinitions="0,0,0">
+              VerticalAlignment="Stretch">
             <!--<Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{Binding ButtonGroupFixedDimensionLength, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={StaticResource DoubleToGridLengthConverter}}" />
                 <ColumnDefinition Width="{Binding BoundWidth, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={StaticResource DoubleToGridLengthConverter}, Mode=TwoWay}" />
@@ -151,7 +150,7 @@
         <!--  Resize Handle  -->
         <local:MpAvMainWindowResizerView x:Name="MainWindowResizerView"
                                          ZIndex="1000"
-                                         IsVisible="True"
+                                         Background="Transparent"
                                          RenderTransformOrigin="0,0"
                                          DataContext="{Binding}">
             <local:MpAvMainWindowResizerView.RenderTransform>

@@ -15,7 +15,7 @@
     <Grid x:Name="TitleContainerGrid"
           ColumnDefinitions="0.7*,0.3*">
         <Grid.Styles>
-            <Style Selector="Grid#SourceIconContainerGrid:pointerover">
+            <!--<Style Selector="Grid#SourceIconContainerGrid:pointerover">
                 <Style.Animations>
                     <Animation Duration="0:0:0.4"
                                FillMode="Forward">
@@ -60,7 +60,7 @@
                         </KeyFrame>
                     </Animation>
                 </Style.Animations>
-            </Style>
+            </Style>-->
             <Style Selector="Grid#SourceIconContainerGrid:pointerover Image#ClipTileAppIconBorderImage">
                 <Style.Animations>
                     <Animation Duration="0:0:0.3"
@@ -326,7 +326,7 @@
                      VerticalAlignment="Stretch"
                      Margin="0,3,13,0" />-->
             <Button x:Name="ClipTileAppIconImageButton"
-                    Classes="noBg noHoverBg"
+                    Classes="noBg noHoverBg shakeOver"
                     Command="{Binding TransactionCollectionViewModel.ToggleTransactionPaneOpenCommand}"
                     ClipToBounds="False"
                     BorderThickness="0"
@@ -357,13 +357,6 @@
                            Stretch="UniformToFill"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch">
-                        <!--<Image.RenderTransform>
-                            <TransformGroup>
-                                <TranslateTransform X="0"
-                                                    Y="0" />
-                                <RotateTransform Angle="0" />
-                            </TransformGroup>
-                        </Image.RenderTransform>-->
                     </Image>
                 </Grid>
             </Button>

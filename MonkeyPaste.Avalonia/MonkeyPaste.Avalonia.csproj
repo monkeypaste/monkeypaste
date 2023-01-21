@@ -161,6 +161,7 @@
     <Page Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
     <AvaloniaXaml Remove="Themes\Default\Accents\Base.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Accents\BaseLight.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\Animations\Shake.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Button.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ButtonBase.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ComboBox.axaml" />
@@ -232,6 +233,7 @@
     <None Remove="Assets\Images\check.png" />
     <None Remove="Assets\Images\checkgray.png" />
     <None Remove="Assets\Images\check_partial.png" />
+    <None Remove="Assets\Images\cleargrid.png" />
     <None Remove="Assets\Images\clipboard.png" />
     <None Remove="Assets\Images\Close.png" />
     <None Remove="Assets\Images\close1.png" />
@@ -529,6 +531,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\check_partial.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\cleargrid.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\clipboard.png">
@@ -969,6 +974,7 @@
     <AvaloniaResource Include="Themes\Default\Accents\Base.axaml">
       
     </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Default\Controls\Animations\Shake.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\TemplatedControl.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ComboBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\GridSplitter.axaml" />
