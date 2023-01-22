@@ -14,7 +14,7 @@ namespace MonkeyPaste.Common {
 
         public static MpPortableDataObject Parse(string json) {
             var mpdo = new MpPortableDataObject();
-            var req_lookup = DeserializeObject<Dictionary<string, object>>(json);
+            var req_lookup = MpJsonConverter.DeserializeObject<Dictionary<string, object>>(json);
             foreach(var kvp in req_lookup) {
                 mpdo.SetData(kvp.Key, kvp.Value);
             }
@@ -130,7 +130,7 @@ namespace MonkeyPaste.Common {
         }
 
         public string SerializeData() {
-            return MpJsonObject.SerializeObject(DataFormatLookup.ToDictionary(x => x.Key.Name, x => (object)x.Value));
+            return MpJsonConverter.SerializeObject(DataFormatLookup.ToDictionary(x => x.Key.Name, x => (object)x.Value));
         }
 
         public override string ToString() {

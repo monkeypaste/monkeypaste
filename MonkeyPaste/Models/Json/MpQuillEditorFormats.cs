@@ -78,6 +78,7 @@ namespace MonkeyPaste {
 
     public class MpQuillUpdateContentRequestMessage : MpJsonObject {
         public string deltaFragmentStr { get; set; }
+        public string annotationFragmentStr { get; set; }
     }
     
     public class MpQuillLastTransactionUndoneNotification : MpJsonObject {

@@ -86,6 +86,32 @@ function moveRectLocation(rect, loc) {
     });
 }
 
+function parseRect(rectStr) {
+    if (isNullOrEmpty(rectStr)) {
+        return null;
+    }
+    let rect_obj = JSON.parse(rectStr);
+    if (rect_obj.left === undefined ||
+        rect_obj.top === undefined ||
+        rect_obj.right === undefined ||
+        rect_obj.bottom === undefined) {
+        return null;
+    }
+    rect.left = parseFloat(rect.left);
+    rect.top = parseFloat(rect.top);
+    rect.right = parseFloat(rect.right);
+    rect.bottom = parseFloat(rect.bottom);
+    return cleanRect(rect);
+}
+
+function getRectSize(rect) {
+    if (!rect || rect === undefined) {
+        return { width: 0, height: 0 };
+    }
+    rect = cleanRect(rect);
+    return { width: rect.width, height: rect.height };
+}
+
 function cleanRect(rect) {
     return {
         left: rect ? rect.left : 0,
@@ -96,4 +122,3 @@ function cleanRect(rect) {
         height: rect ? rect.bottom - rect.top : 0
     };
 }
-

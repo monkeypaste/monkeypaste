@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MonkeyPaste.Avalonia {
-    public abstract class MpAvImageAnnotationViewModelBase : MpAvTransactionItemViewModelBase {
+﻿namespace MonkeyPaste.Avalonia {
+    public class MpAvImageAnnotationItemViewModel : MpViewModelBase<MpAvImageAnnotationMessageViewModelBase> {
 
         #region Private Variable
         #endregion
@@ -23,7 +17,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constructors
-        public MpAvImageAnnotationViewModelBase(MpAvClipTileTransactionCollectionViewModel parent) : base(parent) {
+        public MpAvImageAnnotationItemViewModel(MpAvImageAnnotationMessageViewModelBase parent) : base(parent) {
         }
         #endregion
 

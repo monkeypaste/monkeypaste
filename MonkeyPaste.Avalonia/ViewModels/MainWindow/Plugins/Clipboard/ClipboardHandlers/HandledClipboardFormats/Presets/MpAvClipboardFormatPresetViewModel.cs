@@ -413,7 +413,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public string GetPresetParamJson() {
-            return MpJsonObject.SerializeObject(Items.Select(x => new[] { x.ParamId, x.CurrentValue }).ToList());
+            return MpJsonConverter.SerializeObject(Items.Select(x => new[] { x.ParamId, x.CurrentValue }).ToList());
         }
         #endregion
 

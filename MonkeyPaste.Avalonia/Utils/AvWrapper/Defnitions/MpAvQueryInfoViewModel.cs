@@ -61,7 +61,7 @@ namespace MonkeyPaste.Avalonia {
         #region MpIJsonObject Implementation
 
         public string SerializeJsonObject() {
-            return MpJsonObject.SerializeObject(this);
+            return MpJsonConverter.SerializeObject(this);
         }
 
         #endregion

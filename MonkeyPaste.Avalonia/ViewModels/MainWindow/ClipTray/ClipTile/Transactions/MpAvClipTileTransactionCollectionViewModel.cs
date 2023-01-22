@@ -172,6 +172,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Protected Methods
+
         #region Db Op Overrides
 
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
@@ -188,10 +189,8 @@ namespace MonkeyPaste.Avalonia {
                     while(cisvm.IsAnyBusy) {
                         await Task.Delay(100);
                     }
-                    if(Parent.GetDragSource() is MpAvCefNetWebView wv) {
-                        var update_delta = cisvm.GetTransactionDelta();
-                        wv.PerformUpdateContentRequestAsync(update_delta).FireAndForgetSafeAsync(this);
-                    }
+                    OpenTransactionPaneCommand.Execute(null);
+                    SelectedTransaction = cisvm;
                 });
             }
         }
@@ -229,6 +228,27 @@ namespace MonkeyPaste.Avalonia {
                     }
                     Parent.OnPropertyChanged(nameof(Parent.IconResourceObj));
                     break;
+                case nameof(SelectedTransaction):
+                    ApplyTransactionAsync(SelectedTransaction).FireAndForgetSafeAsync(this);
+                    break;
+            }
+        }
+
+        private async Task ApplyTransactionAsync(MpAvTransactionItemViewModelBase tivm) {
+            if(tivm == null || tivm.TransactionLabel == "Edit" || tivm.TransactionLabel == "Drop") {
+                return;
+            }
+
+            if (Parent.GetDragSource() is MpAvCefNetWebView wv) {
+                MpJsonObject updateObj = null;
+                updateObj = tivm.GetTransactionDelta();
+                if(updateObj == null) {
+                    updateObj = tivm.GetTransactionAnnotation();
+                }
+                if(updateObj == null) {
+                    return;
+                }
+                await wv.PerformUpdateContentRequestAsync(updateObj);
             }
         }
 

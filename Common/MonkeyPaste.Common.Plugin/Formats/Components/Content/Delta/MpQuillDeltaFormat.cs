@@ -23,7 +23,7 @@ namespace MonkeyPaste.Common.Plugin {
     }
     public class MpQuillDelta : MpOmitNullJsonObject {
         public static MpQuillDelta Parse(string json) {
-            var req_lookup = MpJsonObject.DeserializeObject<Dictionary<string, object>>(json);
+            var req_lookup = MpJsonConverter.DeserializeObject<Dictionary<string, object>>(json);
             if (req_lookup != null &&
                 req_lookup.TryGetValue("ops", out var itemsObj) && itemsObj is JArray items_jarray) {
                 Dictionary<object, string> param_lookup = new Dictionary<object, string>();
@@ -87,6 +87,11 @@ namespace MonkeyPaste.Common.Plugin {
         public string row { get; set; }
         public string rowspan { get; set; }
         public string colspan { get; set; }
+
+        // non-quill attributes
+
+        public string rect { get; set; }
+        public string tag { get; set; }
     }
 
 

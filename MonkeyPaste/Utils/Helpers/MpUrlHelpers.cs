@@ -25,6 +25,8 @@ namespace MonkeyPaste {
     }
 
     public static class MpUrlHelpers {
+        public const int MAX_DOT_NET_URL_LENGTH = 65519;
+
         public static async Task<MpUrlProperties> DiscoverUrlProperties(string url = "") {
             if(string.IsNullOrWhiteSpace(url)) {
                 return null;

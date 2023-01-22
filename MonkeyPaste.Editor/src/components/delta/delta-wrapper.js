@@ -199,15 +199,19 @@ function decodeHtmlEntitiesInDeltaInserts(delta) {
 }
 
 function applyDelta(delta, source = 'api') {
-	let format_ops = delta.filter((op) => op.format !== undefined);
-	let other_ops = delta.filter((op) => op.format === undefined);
-	quill.updateContents(other_ops, source);
-	quill.update();
+	let format_ops = delta.filter((op) => op.format !== undefined);	
+	let other_ops = delta.filter((op) => !format_ops.includes(op));
+
+	if (other_ops.length > 0) {
+		quill.updateContents(other_ops, source);
+		quill.update();
+}
 
 	for (var i = 0; i < format_ops.length; i++) {
 		const fop = format_ops[i];
 		quill.formatText(fop.format.index, fop.format.length, fop.attributes, source);
 	}
+
 	quill.update();
 }
 // #endregion Actions

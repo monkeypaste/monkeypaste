@@ -38,7 +38,7 @@ namespace MonkeyPaste.Common {
                 if (uri_list_obj is IEnumerable<string> uri_coll) {
                     return uri_coll.ToList();
                 } else if (uri_list_obj is string uril_str) {
-                    if (uril_str.StartsWith("[") && MpJsonObject.DeserializeObject<List<string>>(uril_str) is List<string> urilist) {
+                    if (uril_str.StartsWith("[") && MpJsonConverter.DeserializeObject<List<string>>(uril_str) is List<string> urilist) {
                         uril_str = string.Join("\r\n", urilist);
                     }
                     return uril_str.SplitByLineBreak().ToList();

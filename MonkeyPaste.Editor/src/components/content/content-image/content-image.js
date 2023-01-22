@@ -14,9 +14,18 @@ function loadImageContent(itemDataStr) {
 	enableReadOnly();
 	disableSubSelection();
 
+	let img = document.createElement('img');
+	img.classList.add('content-image');
+	img.setAttribute('src', `data:image/png;base64,${itemDataStr}`);	
 
-	let img_html = `<p class="ql-align-center"><img src="data:image/png;base64,${itemDataStr}"></p>`;
-	setRootHtml(img_html);
+	let p = document.createElement('p');
+	p.classList.add('ql-align-center');
+	p.appendChild(img);
+
+	//let img_html = `<p class="ql-align-center"><img src="data:image/png;base64,${itemDataStr}"></p>`;
+	//setRootHtml(img_html);
+	setRootHtml('');
+	getEditorElement().appendChild(p);
 
 	ContentClassAttrb.add(getEditorElement().firstChild.firstChild, 'image');
 	updateImageContentSizeAndPosition();
@@ -43,13 +52,20 @@ function getImageContentHeight() {
 }
 
 function getContentImageDataSize() {
-	if (ContentImageWidth <= 0 ||
-		ContentImageHeight <= 0) {
+	if (ContentImageWidth == -1 &&
+		ContentImageHeight == -1) {
+		ContentImageWidth = 0;
+		ContentImageHeight = 0;
 
 		let tmp = document.createElement('img');
+		tmp.onload = function (e) {
+			ContentImageWidth = tmp.width;
+			ContentImageHeight = tmp.height;
+			//document.body.removeChild(tmp);
+			log('img size w: ' + ContentImageWidth + ' h: ' + ContentImageHeight);
+		}
 		tmp.setAttribute('src', 'data:image/png;base64,' + getContentData());
-		ContentImageWidth = parseFloat(tmp.width);
-		ContentImageHeight = parseFloat(tmp.height);
+		//document.body.appendChild(tmp);
 	}
 	// avoid divide by zero
 	return {
@@ -85,9 +101,15 @@ function getDecodedImageContentText(encoded_text) {
 
 // #region State
 
+function resetContentImage() {
+	ContentImageWidth = -1;
+	ContentImageHeight = -1;
+}
+
 // #endregion State
 
 // #region Actions
+
 function convertImageContentToFormats(isForOle, formats) {
 	// NOTE (at least currently) selection is ignored for file items
 	let items = [];
@@ -118,11 +140,13 @@ function convertImageContentToFormats(isForOle, formats) {
 	}
 	return items;
 }
+
 function appendImageContentData(data) {
 	return;
 }
 
 function updateImageContentSizeAndPosition() {
+	return;
 	let img_elm = getContentImageElement();
 	if (!img_elm) {
 		return;

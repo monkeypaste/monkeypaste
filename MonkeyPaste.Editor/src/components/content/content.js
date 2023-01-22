@@ -45,6 +45,7 @@ function loadContent(
 
 		enableReadOnly();
 		disableSubSelection();	
+		resetContent();
 	}
 
 	//let contentBg_rgba = getContentBg(contentData);
@@ -235,6 +236,10 @@ function getContentHeightByType() {
 // #endregion Setters
 
 // #region State
+
+function resetContent() {
+	resetContentImage();
+}
 
 function isContentEmpty() {
 	let pt = getText();

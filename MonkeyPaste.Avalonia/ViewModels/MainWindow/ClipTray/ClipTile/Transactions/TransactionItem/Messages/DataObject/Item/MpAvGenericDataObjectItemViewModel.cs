@@ -5,12 +5,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvDataObjectItemViewModel : MpAvTransactionMessageViewModelBase, MpITransactionNodeViewModel {
+    public class MpAvGenericDataObjectItemViewModel : MpAvTransactionMessageViewModelBase, MpITransactionNodeViewModel {
 
         public override string LabelText => Format;
         public string Format { get; private set; }
         public object Data { get; private set; }
-        public MpAvDataObjectItemViewModel(MpAvTransactionItemViewModelBase parent) : base(parent) { }
+        public MpAvGenericDataObjectItemViewModel(MpAvTransactionItemViewModelBase parent) : base(parent) { }
 
         public override async Task InitializeAsync(object jsonOrParsedFragment, MpITransactionNodeViewModel parentAnnotation) {
             IsBusy = true;

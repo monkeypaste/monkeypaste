@@ -30,7 +30,7 @@ namespace MonkeyPaste {
 
         #region Properties
 
-        public static bool IsDateTimeTicks { get; set; } = false;
+        public static bool IsDateTimeTicks { get; set; } = true;
         public static bool UseWAL { get; set; } = true;
         public static string IdentityToken { get; set; }
         public static string AccessToken { get; set; }

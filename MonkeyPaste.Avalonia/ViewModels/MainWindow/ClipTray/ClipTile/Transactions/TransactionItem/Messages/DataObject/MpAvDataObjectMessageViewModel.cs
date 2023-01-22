@@ -22,7 +22,7 @@ namespace MonkeyPaste.Avalonia {
         public override string LabelText => "DataObject";
         #region View Models
 
-        public ObservableCollection<MpAvDataObjectItemViewModel> Items { get; set; } = new ObservableCollection<MpAvDataObjectItemViewModel>();
+        public ObservableCollection<MpAvTransactionMessageViewModelBase> Items { get; set; } = new ObservableCollection<MpAvTransactionMessageViewModelBase>();
         #endregion
 
         #region State
@@ -56,8 +56,7 @@ namespace MonkeyPaste.Avalonia {
             DataObject = MpPortableDataObject.Parse(Json);
             if(DataObject != null) {
                 foreach(var kvp in DataObject.DataFormatLookup) {
-                    MpAvDataObjectItemViewModel doivm = new MpAvDataObjectItemViewModel(Parent);
-                    await doivm.InitializeAsync(kvp,this);
+                    var doivm = await CreateDataObjectItemViewModel(kvp.Key.Name, kvp.Value);
                     Items.Add(doivm);
                 }
             }
@@ -68,6 +67,23 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
+        #endregion
+
+        #region Private Methods
+
+        private async Task<MpAvTransactionMessageViewModelBase> CreateDataObjectItemViewModel(string format, object data) {
+            MpAvTransactionMessageViewModelBase doivm;
+            switch(format) {
+                case MpPortableDataFormats.INTERNAL_CONTENT_ANNOTATION_FORMAT:
+                    doivm = new MpAvImageAnnotationMessageViewModelBase(Parent);
+                    break;
+                default:
+                    doivm = new MpAvGenericDataObjectItemViewModel(Parent);
+                    break;
+            }
+            await doivm.InitializeAsync(data, this);
+            return doivm;
+        }
         #endregion
 
         #region Commands

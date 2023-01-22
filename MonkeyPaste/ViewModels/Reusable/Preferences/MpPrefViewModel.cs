@@ -510,7 +510,7 @@ namespace MonkeyPaste {
 
         #region MpIJsonObject Implementation
         public string SerializeJsonObject() {
-            return MpJsonObject.SerializeObject(this);
+            return MpJsonConverter.SerializeObject(this);
         }
 
         #endregion
@@ -608,7 +608,7 @@ namespace MonkeyPaste {
             MpPrefViewModel prefVm = null;
             if (ValidatePrefData(prefsStr)) {
                 try {
-                    prefVm = MpJsonObject.DeserializeObject<MpPrefViewModel>(prefsStr);
+                    prefVm = MpJsonConverter.DeserializeObject<MpPrefViewModel>(prefsStr);
                 }
                 catch(Exception ex) {
                     MpConsole.WriteTraceLine($"Error loading pref file from '{PreferencesPath}' ", ex);

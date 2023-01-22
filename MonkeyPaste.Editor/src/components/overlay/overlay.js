@@ -251,9 +251,9 @@ function drawAnnotations(ctx) {
 function drawAnnotation(ctx, annotation) {
     let annotation_rect = getAnnotationRect(annotation);
     if (annotation_rect) {
-        let content_rect = getContentImageElement().getBoundingClientRect();
-        annotation_rect.left += content_rect.x;
-        annotation_rect.top += content_rect.y;
+        //let content_rect = getContentImageElement().getBoundingClientRect();
+        //annotation_rect.left += content_rect.x;
+        //annotation_rect.top += content_rect.y;
 
         drawRect(ctx, annotation_rect, 'pink', 'blue', 1.5, 125 / 255);
     }

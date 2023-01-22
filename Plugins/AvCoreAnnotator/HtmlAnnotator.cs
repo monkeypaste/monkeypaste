@@ -86,7 +86,7 @@ namespace AvCoreAnnotator {
                         match_span_wrapper_node = htmlDoc.CreateElement("span");
                     }
                     // create annotation
-                    var annotation = new MpTextAnnotationFormat(m.Index, m.Length) { annotationType = annotationRegExType.ToString().ToLower() };
+                    var annotation = new MpTextAnnotationFormat(m.Index, m.Length) { type = annotationRegExType.ToString().ToLower() };
                     annotations.Add(annotation);
 
                     int match_idx = tn_decoded_text.Substring(cur_idx).IndexOf(m.Value);

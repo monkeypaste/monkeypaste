@@ -24,7 +24,7 @@ namespace MonkeyPaste {
     }
 
     public interface MpIPopupMenuPicker {
-        MpMenuItemViewModel GetMenu(ICommand cmd, IEnumerable<int> selectedIds, bool recursive);
+        MpMenuItemViewModel GetMenu(ICommand cmd, object cmdArg, IEnumerable<int> selectedIds, bool recursive);
     }
 
 

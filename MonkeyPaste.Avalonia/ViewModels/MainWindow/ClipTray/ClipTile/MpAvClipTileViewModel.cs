@@ -471,7 +471,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        public string AnnotationsJsonStr { get; set; }
+        //public string AnnotationsJsonStr { get; set; }
 
         public bool CanShowContextMenu { get; set; } = true;
 
@@ -1107,12 +1107,12 @@ namespace MonkeyPaste.Avalonia {
 
             await TransactionCollectionViewModel.InitializeAsync(CopyItemId);
 
-            var cial = await MpDataModelProvider.GetCopyItemAnnotationsAsync(CopyItemId);
-            if(cial == null || cial.Count == 0) {
-                AnnotationsJsonStr = string.Empty;
-            } else {
-                AnnotationsJsonStr = JsonConvert.SerializeObject(cial.Select(x => x.AnnotationJsonStr).ToList());
-            }
+            //var cial = await MpDataModelProvider.GetCopyItemAnnotationsAsync(CopyItemId);
+            //if(cial == null || cial.Count == 0) {
+            //    AnnotationsJsonStr = string.Empty;
+            //} else {
+            //    AnnotationsJsonStr = JsonConvert.SerializeObject(cial.Select(x => x.AnnotationJsonStr).ToList());
+            //}
 
             if (isRestoringSelection) {
                 Parent.RestoreSelectionState(this);

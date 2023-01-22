@@ -1,5 +1,5 @@
 ﻿namespace MonkeyPaste.Common.Plugin {
-    public class MpTextAnnotationFormat : MpAnnotationBaseFormat {
+    public class MpTextAnnotationFormat : MpAnnotationNodeFormat {
         public MpJsonPathProperty<int> rangeStart { get; set; }
         public MpJsonPathProperty<int> rangeLength { get; set; }
 

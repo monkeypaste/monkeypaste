@@ -14,19 +14,25 @@ namespace MonkeyPaste.Avalonia {
         public const string INTERNAL_SOURCE_DOMAIN = "https://localhost";
 
         public async Task<MpISourceRef> FetchOrCreateSourceAsync(string sourceUrl) {
-            if(!Uri.IsWellFormedUriString(sourceUrl, UriKind.Absolute)) {
+            if (Uri.IsWellFormedUriString(sourceUrl, UriKind.Absolute)) {
+                if (Uri.TryCreate(sourceUrl, UriKind.Absolute, out Uri uri) && uri.IsFile) {
+                    // this SHOULD be an executable file path but not checking 
+                    // to stay portable
+                    var app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(
+                        new MpPortableProcessInfo() {
+                            ProcessPath = uri.LocalPath
+                        });
+                    return app;
+                }
+            } else if (sourceUrl.Length > MpUrlHelpers.MAX_DOT_NET_URL_LENGTH) {
+                // allow since these are internal url's (will occur for large data esp. images)
+            } else {
+
                 // whats the url?
                 Debugger.Break();
                 return null;
             }
-            if(Uri.TryCreate(sourceUrl,UriKind.Absolute, out Uri uri) && uri.IsFile) {
-                // this SHOULD be an executable file path but not checking 
-                // to stay portable
-                var app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(
-                    new MpPortableProcessInfo() { 
-                        ProcessPath = uri.LocalPath });
-                return app;
-            }
+            
             if(!sourceUrl.StartsWith(INTERNAL_SOURCE_DOMAIN.ToLower())) {
                 // add or fetch external url
                 var url = await MpPlatformWrapper.Services.UrlBuilder.CreateAsync(sourceUrl);

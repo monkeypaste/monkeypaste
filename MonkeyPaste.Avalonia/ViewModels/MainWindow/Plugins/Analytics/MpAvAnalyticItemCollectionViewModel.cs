@@ -31,13 +31,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIPopupMenuPicker Implementation
 
-        public MpMenuItemViewModel GetMenu(ICommand cmd, IEnumerable<int> selectedAnalyticItemPresetIds, bool recursive) {
+        public MpMenuItemViewModel GetMenu(ICommand cmd, object cmdArg, IEnumerable<int> selectedAnalyticItemPresetIds, bool recursive) {
             return new MpMenuItemViewModel() {
                 SubItems = Items.Select(x =>
                 new MpMenuItemViewModel() {
                     Header = x.Title,
                     IconId = x.PluginIconId,
-                    SubItems = x.Items.Select(y => y.GetMenu(cmd,selectedAnalyticItemPresetIds,recursive)).ToList()
+                    SubItems = x.Items.Select(y => y.GetMenu(cmd,cmdArg, selectedAnalyticItemPresetIds,recursive)).ToList()
                 }).ToList()
             };
         }
@@ -118,22 +118,11 @@ namespace MonkeyPaste.Avalonia {
 
         public MpMenuItemViewModel ContextMenuItemViewModel {
             get {
-                List<MpMenuItemViewModel> subItems = Items.SelectMany(x => x.QuickActionPresetMenuItems).ToList();
-                if(subItems.Count > 0) {
-                    subItems.Add(new MpMenuItemViewModel() { IsSeparator = true });
-                }
-                subItems.AddRange(Items.Select(x => x.ContextMenuItemViewModel));
-
-                return new MpMenuItemViewModel() {
-                    Header = @"Analyze",
-                    AltNavIdx = 0,
-                    IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("BrainImage") as string,
-                    SubItems = subItems
-                };
+                MpCopyItemType contentType = MpAvClipTrayViewModel.Instance.SelectedItem == null ?
+                    MpCopyItemType.None : MpAvClipTrayViewModel.Instance.SelectedItem.ItemType;
+                return GetContentContextMenuItem(contentType);
             }
-        }
-
-        
+        }        
 
         public IEnumerable<MpAvAnalyticItemPresetViewModel> AllPresets => Items.OrderBy(x => x.Title).SelectMany(x => x.Items);
 
@@ -229,6 +218,24 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
+        public MpMenuItemViewModel GetContentContextMenuItem(MpCopyItemType contentType) {
+            var availItems = Items.Where(x => x.IsContentTypeValid(contentType));
+            List<MpMenuItemViewModel> sub_items = availItems.SelectMany(x => x.QuickActionPresetMenuItems).ToList();
+            if (sub_items.Count > 0) {
+                sub_items.Add(new MpMenuItemViewModel() { IsSeparator = true });
+            }
+            if(availItems.Count() > 0) {
+
+                sub_items.AddRange(availItems.Select(x => x.ContextMenuItemViewModel));
+            }
+
+            return new MpMenuItemViewModel() {
+                Header = @"Analyze",
+                AltNavIdx = 0,
+                IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("BrainImage") as string,
+                SubItems = sub_items
+            };
+        }
         #endregion
 
         #region Private Methods
@@ -239,6 +246,7 @@ namespace MonkeyPaste.Avalonia {
             await aivm.InitializeAsync(plugin);
             return aivm;
         }
+
 
         private void MpAnalyticItemCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {

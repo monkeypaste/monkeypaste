@@ -94,7 +94,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpILabelText Implementation
 
-        public MpMenuItemViewModel GetMenu(ICommand cmd, IEnumerable<int> selectedActionIds, bool recursive) {
+        public MpMenuItemViewModel GetMenu(ICommand cmd, object cmdArg, IEnumerable<int> selectedActionIds, bool recursive) {
             return new MpMenuItemViewModel() {
                 MenuItemId = ActionId,
                 Header = Label,
@@ -102,7 +102,7 @@ namespace MonkeyPaste.Avalonia {
                 IsChecked = selectedActionIds.Contains(ActionId),
                 Command = cmd,
                 CommandParameter = ActionId,
-                SubItems = recursive ? Children.Cast<MpIPopupMenuPicker>().Select(x => x.GetMenu(cmd, selectedActionIds, recursive)).ToList() : null
+                SubItems = recursive ? Children.Cast<MpIPopupMenuPicker>().Select(x => x.GetMenu(cmd, cmdArg, selectedActionIds, recursive)).ToList() : null
             };
         }
         #endregion

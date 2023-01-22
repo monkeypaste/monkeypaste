@@ -53,7 +53,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIPopupMenuPicker Implementation
 
-        public MpMenuItemViewModel GetMenu(ICommand cmd, IEnumerable<int> selectedAnalyticItemPresetIds, bool recursive) {
+        public MpMenuItemViewModel GetMenu(ICommand cmd, object cmdArg, IEnumerable<int> selectedAnalyticItemPresetIds, bool recursive) {
             return new MpMenuItemViewModel() {
                 MenuItemId = AnalyticItemPresetId,
                 Header = Label,

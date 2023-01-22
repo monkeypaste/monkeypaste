@@ -228,8 +228,8 @@ namespace MonkeyPaste.Avalonia {
                                 }
                             }
                         },
-                        SelectedItem.TransactionCollectionViewModel.ContextMenuViewModel,
-                        MpAvAnalyticItemCollectionViewModel.Instance.ContextMenuItemViewModel,
+                        //SelectedItem.TransactionCollectionViewModel.ContextMenuViewModel,
+                        MpAvAnalyticItemCollectionViewModel.Instance.GetContentContextMenuItem(SelectedItem.ItemType),
                         new MpMenuItemViewModel() {IsSeparator = true},
                         MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(SelectedItem),
                         new MpMenuItemViewModel() {IsSeparator = true},
@@ -2859,18 +2859,8 @@ namespace MonkeyPaste.Avalonia {
                     #endregion
 
                     #region Initialize Items
-                    //if(LayoutType == MpAvClipTrayLayoutType.Stack) {
-                    //    await Task.WhenAll(initTasks.ToArray());
-                    //} else {
-                    //foreach (var initTask in initTasks) {
-                    //    initTask.FireAndForgetSafeAsync(this);
-                    //}
-                    //}
-                    Task.WhenAll(initTasks).FireAndForgetSafeAsync();
 
-                    //while (Items.Any(x => x.IsBusy)) {
-                    //    await Task.Delay(100);
-                    //}
+                    Task.WhenAll(initTasks).FireAndForgetSafeAsync();
 
                     #endregion
 
@@ -3189,7 +3179,24 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand AnalyzeSelectedItemCommand => new MpAsyncCommand<object>(
             async(presetIdObj) => {
-                var preset = await MpDataModelProvider.GetItemAsync<MpPluginPreset>((int)presetIdObj);
+                int presetId = 0;
+                if(presetIdObj is int) {
+                    presetId = (int)presetIdObj;
+                } else if(presetIdObj is string presetIdStr) {
+                    try {
+                        presetId = int.Parse(presetIdStr);
+                    } catch(Exception ex) {
+                        MpConsole.WriteTraceLine($"Error converting '{(presetIdObj == null ? "NULL" : presetIdObj.ToString())}' to presetId", ex);
+                        return;
+                    }
+                } 
+
+                if(presetId <= 0) {
+                    MpConsole.WriteLine($"Error presetId not provided");
+                    return;
+                }
+
+                var preset = await MpDataModelProvider.GetItemAsync<MpPluginPreset>(presetId);
                 var analyticItemVm = MpAvAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.PluginGuid == preset.PluginGuid);
                 int selected_ciid = SelectedItem.CopyItemId;
 

@@ -228,7 +228,7 @@ namespace MonkeyPaste.Avalonia {
             var contentDataRespStr = 
                 await this.EvaluateJavascriptAsync($"contentRequest_ext('{contentDataReq.SerializeJsonObjectToBase64()}')");
             MpQuillContentDataResponseMessage contentDataResp = 
-                MpJsonObject.DeserializeBase64Object<MpQuillContentDataResponseMessage>(contentDataRespStr);
+                MpJsonConverter.DeserializeBase64Object<MpQuillContentDataResponseMessage>(contentDataRespStr);
 
 
             if (contentDataResp.dataItems == null) {
@@ -390,7 +390,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
 
                 case MpAvEditorBindingFunctionType.notifyLoadComplete:
-                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillEditorContentChangedMessage>(msgJsonBase64Str);
+                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillEditorContentChangedMessage>(msgJsonBase64Str);
                     if (ntf is MpQuillEditorContentChangedMessage loadComplete_ntf) {
                         IsContentLoaded = true;
                         ProcessContentChangedMessage(loadComplete_ntf);
@@ -402,14 +402,14 @@ namespace MonkeyPaste.Avalonia {
                 // CONTENT CHANGED
 
                 case MpAvEditorBindingFunctionType.notifyReadOnlyDisabled:
-                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillDisableReadOnlyResponseMessage>(msgJsonBase64Str);
+                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillDisableReadOnlyResponseMessage>(msgJsonBase64Str);
                     if (ntf is MpQuillDisableReadOnlyResponseMessage disableReadOnlyMsg) {
                         ctvm.IsContentReadOnly = false;
                         ctvm.UnconstrainedContentSize = new MpSize(disableReadOnlyMsg.editorWidth, disableReadOnlyMsg.editorHeight);
                     }
                     break;
                 case MpAvEditorBindingFunctionType.notifyReadOnlyEnabled:
-                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillEditorContentChangedMessage>(msgJsonBase64Str);
+                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillEditorContentChangedMessage>(msgJsonBase64Str);
                     if (ntf is MpQuillEditorContentChangedMessage enableReadOnlyMsg) {
                         // NOTE only difference from contentChanged is no dimension info and this needs to enable readonly
                         ctvm.IsContentReadOnly = true;
@@ -417,20 +417,20 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
                 case MpAvEditorBindingFunctionType.notifyContentChanged:
-                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillEditorContentChangedMessage>(msgJsonBase64Str);
+                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillEditorContentChangedMessage>(msgJsonBase64Str);
                     if (ntf is MpQuillEditorContentChangedMessage contentChanged_ntf) {
                         ProcessContentChangedMessage(contentChanged_ntf);
                         //RelayMsg($"contentChanged_ext('{msgJsonBase64Str}')");
                     }
                     break;
                 case MpAvEditorBindingFunctionType.notifyDataTransferCompleted:
-                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillDataTransferCompletedNotification>(msgJsonBase64Str);
+                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillDataTransferCompletedNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillDataTransferCompletedNotification dataTransferCompleted_ntf) {
                         ProcessDataTransferCompleteResponse(dataTransferCompleted_ntf).FireAndForgetSafeAsync(BindingContext);                      
                     }
                     break;
                 case MpAvEditorBindingFunctionType.notifyLastTransactionUndone:
-                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillLastTransactionUndoneNotification>(msgJsonBase64Str);
+                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillLastTransactionUndoneNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillLastTransactionUndoneNotification lastTransUndone_ntf) {
                         BindingContext
                             .TransactionCollectionViewModel
@@ -441,7 +441,7 @@ namespace MonkeyPaste.Avalonia {
                 // SELECTION
 
                 case MpAvEditorBindingFunctionType.notifySubSelectionEnabledChanged:
-                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillSubSelectionChangedNotification>(msgJsonBase64Str);
+                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillSubSelectionChangedNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillSubSelectionChangedNotification subSelChangedNtf) {
                         ctvm.IsSubSelectionEnabled = subSelChangedNtf.isSubSelectionEnabled;
                     }
@@ -453,7 +453,7 @@ namespace MonkeyPaste.Avalonia {
                 //    if(!ctvm.IsAppendNotifier && !ctvm.IsAppendTrayItem) {
                 //        break;
                 //    }
-                //    ntf = MpJsonObject.DeserializeBase64Object<MpQuillSelectionChangedMessage>(msgJsonBase64Str);
+                //    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillSelectionChangedMessage>(msgJsonBase64Str);
                 //    if (ntf is MpQuillSelectionChangedMessage selChangedMsg) {
                 //        RelayMsg($"setSelection_ext('{msgJsonBase64Str}')");
                 //    }
@@ -462,13 +462,13 @@ namespace MonkeyPaste.Avalonia {
                 //    if (!ctvm.IsAppendNotifier && !ctvm.IsAppendTrayItem) {
                 //        break;
                 //    }
-                //    ntf = MpJsonObject.DeserializeBase64Object<MpQuillScrollChangedMessage>(msgJsonBase64Str);
+                //    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillScrollChangedMessage>(msgJsonBase64Str);
                 //    if (ntf is MpQuillScrollChangedMessage scrollChangedMsg) {
                 //        //RelayMsg($"setScroll_ext('{msgJsonBase64Str}')");
                 //    }
                 //    break;
                 case MpAvEditorBindingFunctionType.notifyAppendStateChanged:
-                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillAppendStateChangedMessage>(msgJsonBase64Str);
+                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillAppendStateChangedMessage>(msgJsonBase64Str);
                     if (ntf is MpQuillAppendStateChangedMessage appendStateChangedMsg) {
                         ProcessAppendStateChangedMessage(appendStateChangedMsg,"editor");
                     }
@@ -478,7 +478,7 @@ namespace MonkeyPaste.Avalonia {
                 // CLIPBOARD
 
                 case MpAvEditorBindingFunctionType.notifySetClipboardRequested:
-                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillEditorSetClipboardRequestNotification>(msgJsonBase64Str);
+                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillEditorSetClipboardRequestNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillEditorSetClipboardRequestNotification setClipboardReq) {
                         ctvm.CopyToClipboardCommand.Execute(null);
                     }
@@ -504,13 +504,13 @@ namespace MonkeyPaste.Avalonia {
                 // HIGHLIGHTING
 
                 case MpAvEditorBindingFunctionType.notifyFindReplaceVisibleChange:
-                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillContentFindReplaceVisibleChanedNotificationMessage>(msgJsonBase64Str);
+                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillContentFindReplaceVisibleChanedNotificationMessage>(msgJsonBase64Str);
                     if (ntf is MpQuillContentFindReplaceVisibleChanedNotificationMessage findReplaceMsgObj) {
                         ctvm.IsFindAndReplaceVisible = findReplaceMsgObj.isFindReplaceVisible;
                     }
                     break;
                 case MpAvEditorBindingFunctionType.notifyQuerySearchRangesChanged:
-                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillContentQuerySearchRangesChangedNotificationMessage>(msgJsonBase64Str);
+                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillContentQuerySearchRangesChangedNotificationMessage>(msgJsonBase64Str);
                     if (ntf is MpQuillContentQuerySearchRangesChangedNotificationMessage searchRangeCountMsg) {
                         if (searchRangeCountMsg.rangeCount > 1) {
                             MpAvSearchBoxViewModel.Instance.NotifyHasMultipleMatches();
@@ -519,7 +519,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
 
                 case MpAvEditorBindingFunctionType.notifyContentScreenShot:
-                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillContentScreenShotNotificationMessage>(msgJsonBase64Str);
+                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillContentScreenShotNotificationMessage>(msgJsonBase64Str);
                     if (ntf is MpQuillContentScreenShotNotificationMessage ssMsg) {
                         _contentScreenShotBase64_ntf = ssMsg.contentScreenShotBase64;
                     }
@@ -528,9 +528,9 @@ namespace MonkeyPaste.Avalonia {
                 // TEMPLATES
 
                 case MpAvEditorBindingFunctionType.notifyAddOrUpdateTemplate:
-                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillTemplateAddOrUpdateNotification>(msgJsonBase64Str);
+                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillTemplateAddOrUpdateNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillTemplateAddOrUpdateNotification addOrUpdateTemplateMsg) {
-                        var t = MpJsonObject.DeserializeBase64Object<MpTextTemplate>(addOrUpdateTemplateMsg.addedOrUpdatedTextTemplateBase64JsonStr);
+                        var t = MpJsonConverter.DeserializeBase64Object<MpTextTemplate>(addOrUpdateTemplateMsg.addedOrUpdatedTextTemplateBase64JsonStr);
                         if (t.IsInputTypeTemplate()) {
                             // ignore, no point persisting input templates since they're only relevant during a paste 
                             MpConsole.WriteLine($"Ignoring addOrUpdate INPUT template: '{t}'");
@@ -546,7 +546,7 @@ namespace MonkeyPaste.Avalonia {
 
                     break;
                 case MpAvEditorBindingFunctionType.notifyUserDeletedTemplate:
-                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillUserDeletedTemplateNotification>(msgJsonBase64Str);
+                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillUserDeletedTemplateNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillUserDeletedTemplateNotification deleteTemplateMsg) {
                         Task.Run(async () => {
                             var t = await MpDataModelProvider.GetTextTemplateByGuidAsync(deleteTemplateMsg.userDeletedTemplateGuid);
@@ -567,7 +567,7 @@ namespace MonkeyPaste.Avalonia {
                 // WINDOW ACTIONS
 
                 case MpAvEditorBindingFunctionType.notifyShowCustomColorPicker:
-                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillShowCustomColorPickerNotification>(msgJsonBase64Str);
+                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillShowCustomColorPickerNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillShowCustomColorPickerNotification showCustomColorPickerMsg) {
                         Dispatcher.UIThread.Post(async () => {
 
@@ -588,14 +588,14 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
                 case MpAvEditorBindingFunctionType.notifyNavigateUriRequested:
-                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillNavigateUriRequestNotification>(msgJsonBase64Str);
+                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillNavigateUriRequestNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillNavigateUriRequestNotification navUriReq) {
                         var uri = new Uri(HttpUtility.HtmlDecode(navUriReq.uri), UriKind.Absolute);
                         MpAvUriNavigator.NavigateToUri(uri);
                     }
                     break;
                 case MpAvEditorBindingFunctionType.notifyInternalContextMenuIsVisibleChanged:
-                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillInternalContextIsVisibleChangedNotification>(msgJsonBase64Str);
+                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillInternalContextIsVisibleChangedNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillInternalContextIsVisibleChangedNotification ctxMenuChangedMsg) {
                         ctvm.CanShowContextMenu = !ctxMenuChangedMsg.isInternalContextMenuVisible;
                     }
@@ -604,7 +604,7 @@ namespace MonkeyPaste.Avalonia {
                 // OTHER
 
                 case MpAvEditorBindingFunctionType.notifyException:
-                    ntf = MpJsonObject.DeserializeBase64Object<MpQuillExceptionMessage>(msgJsonBase64Str);
+                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillExceptionMessage>(msgJsonBase64Str);
                     if (ntf is MpQuillExceptionMessage exceptionMsgObj) {
                         MpConsole.WriteLine($"[{ctvm}] {exceptionMsgObj}");
                         //Debugger.Break();
@@ -625,31 +625,31 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task HandleBindingGetRequest(MpAvEditorBindingFunctionType getReqType, string msgJsonBase64) {
-            var getReq = MpJsonObject.DeserializeBase64Object<MpQuillGetRequestNotification>(msgJsonBase64);
+            var getReq = MpJsonConverter.DeserializeBase64Object<MpQuillGetRequestNotification>(msgJsonBase64);
             var getResp = new MpQuillGetResponseNotification() { requestGuid = getReq.requestGuid };
             switch (getReqType) {
                 case MpAvEditorBindingFunctionType.getAllNonInputTemplatesFromDb:
-                    var templateReq = MpJsonObject.DeserializeObject<MpQuillTemplateDbQueryRequestMessage>(getReq.reqMsgFragmentJsonStr);
+                    var templateReq = MpJsonConverter.DeserializeObject<MpQuillTemplateDbQueryRequestMessage>(getReq.reqMsgFragmentJsonStr);
                     var tl = await MpDataModelProvider.GetTextTemplatesByType(templateReq.templateTypes.Select(x => x.ToEnum<MpTextTemplateType>()));
 
-                    getResp.responseFragmentJsonStr = MpJsonObject.SerializeObject(tl);
+                    getResp.responseFragmentJsonStr = MpJsonConverter.SerializeObject(tl);
                     break;
                 case MpAvEditorBindingFunctionType.getClipboardDataTransferObject:
-                    var cb_dtObjReq = MpJsonObject.DeserializeObject<MpQuillEditorClipboardDataObjectRequestNotification>(getReq.reqMsgFragmentJsonStr);
+                    var cb_dtObjReq = MpJsonConverter.DeserializeObject<MpQuillEditorClipboardDataObjectRequestNotification>(getReq.reqMsgFragmentJsonStr);
                     var cb_ido = await MpPlatformWrapper.Services.DataObjectHelperAsync.GetPlatformClipboardDataObjectAsync(false) as IDataObject;
                     var cb_dtObjResp = cb_ido.ToQuillDataItemsMessage();
-                    getResp.responseFragmentJsonStr = MpJsonObject.SerializeObject(cb_dtObjResp);
+                    getResp.responseFragmentJsonStr = MpJsonConverter.SerializeObject(cb_dtObjResp);
                     break;
                 case MpAvEditorBindingFunctionType.getDragDataTransferObject:
-                    var drag_dtObjReq = MpJsonObject.DeserializeObject<MpQuillEditorDragDataObjectRequestNotification>(getReq.reqMsgFragmentJsonStr);
-                    var drag_hdo = MpJsonObject.DeserializeBase64Object<MpQuillHostDataItemsMessage>(drag_dtObjReq.unprocessedDataItemsJsonStr);
+                    var drag_dtObjReq = MpJsonConverter.DeserializeObject<MpQuillEditorDragDataObjectRequestNotification>(getReq.reqMsgFragmentJsonStr);
+                    var drag_hdo = MpJsonConverter.DeserializeBase64Object<MpQuillHostDataItemsMessage>(drag_dtObjReq.unprocessedDataItemsJsonStr);
                     var unprocessed_drag_avdo = drag_hdo.ToAvDataObject();
 
                     var processed_drag_avdo = await MpPlatformWrapper.Services
                         .DataObjectHelperAsync.ReadDragDropDataObjectAsync(unprocessed_drag_avdo) as IDataObject;
 
                     var processed_drag_hdo = processed_drag_avdo.ToQuillDataItemsMessage();
-                    getResp.responseFragmentJsonStr = MpJsonObject.SerializeObject(processed_drag_hdo);
+                    getResp.responseFragmentJsonStr = MpJsonConverter.SerializeObject(processed_drag_hdo);
                     break;
             }
 
@@ -792,20 +792,22 @@ namespace MonkeyPaste.Avalonia {
             PerformLoadContentRequestAsync().FireAndForgetSafeAsync();
         }
 
-        public async Task PerformUpdateContentRequestAsync(MpQuillDelta updateDelta) {
+        public async Task PerformUpdateContentRequestAsync(MpJsonObject jsonObj) {
             Dispatcher.UIThread.VerifyAccess();
             await Task.Delay(1);
-            if (updateDelta == null || updateDelta.ops == null || updateDelta.ops.Count == 0) {
-                return;
-            }
             if(!IsEditorInitialized || !IsContentLoaded) {
                 // which is it? what's the state of tile?
                 Debugger.Break();
                 return;
             }
-            var req = new MpQuillUpdateContentRequestMessage() {
-                deltaFragmentStr = updateDelta.SerializeJsonObjectToBase64()
-            };
+            var req = new MpQuillUpdateContentRequestMessage();
+            if(jsonObj is MpQuillDelta) {
+                req.deltaFragmentStr = jsonObj.SerializeJsonObjectToBase64();
+            } else if(jsonObj is MpAnnotationNodeFormat) {
+                req.annotationFragmentStr = jsonObj.SerializeJsonObjectToBase64();
+            } else {
+                return;
+            }
             this.ExecuteJavascript($"updateContents_ext('{req.SerializeJsonObjectToBase64()}')");
         }
 
@@ -838,7 +840,7 @@ namespace MonkeyPaste.Avalonia {
                 contentHandle = BindingContext.PublicHandle,
                 contentType = BindingContext.ItemType.ToString(),
                 itemData = BindingContext.EditorFormattedItemData,
-                annotationsJsonStr = BindingContext.AnnotationsJsonStr
+                //annotationsJsonStr = BindingContext.AnnotationsJsonStr
             };
 
             if (!string.IsNullOrEmpty(MpAvSearchBoxViewModel.Instance.SearchText)) {
@@ -868,7 +870,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             if(!string.IsNullOrWhiteSpace(contentChanged_ntf.dataTransferCompletedRespFragment) &&
-                MpJsonObject.DeserializeBase64Object<MpQuillDataTransferCompletedNotification>(contentChanged_ntf.dataTransferCompletedRespFragment) is 
+                MpJsonConverter.DeserializeBase64Object<MpQuillDataTransferCompletedNotification>(contentChanged_ntf.dataTransferCompletedRespFragment) is 
                 MpQuillDataTransferCompletedNotification dtcn) {
                 ProcessDataTransferCompleteResponse(dtcn).FireAndForgetSafeAsync(BindingContext);
             }
@@ -906,7 +908,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task ProcessDataTransferCompleteResponse(MpQuillDataTransferCompletedNotification dataTransferCompleted_ntf) {
-            var dtobj = MpJsonObject.DeserializeBase64Object<MpQuillHostDataItemsMessage>(dataTransferCompleted_ntf.sourceDataItemsJsonStr);
+            var dtobj = MpJsonConverter.DeserializeBase64Object<MpQuillHostDataItemsMessage>(dataTransferCompleted_ntf.sourceDataItemsJsonStr);
             MpPortableDataObject req_mpdo = dtobj.ToAvDataObject();
 
             string resp_json = null;
@@ -1016,7 +1018,7 @@ namespace MonkeyPaste.Avalonia {
 
                     MpAvResizeExtension.ResizeAnimated(this, BindingContext.ReadOnlyWidth, BindingContext.ReadOnlyHeight);
                     string enableReadOnlyRespStr = await this.EvaluateJavascriptAsync("enableReadOnly_ext()");
-                    var qrm = MpJsonObject.DeserializeBase64Object<MpQuillEditorContentChangedMessage>(enableReadOnlyRespStr);
+                    var qrm = MpJsonConverter.DeserializeBase64Object<MpQuillEditorContentChangedMessage>(enableReadOnlyRespStr);
                     ProcessContentChangedMessage(qrm);
                 } else {
                     MpAvResizeExtension.ResizeAnimated(this, BindingContext.EditableWidth, BindingContext.EditableHeight);

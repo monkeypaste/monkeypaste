@@ -66,7 +66,7 @@ namespace ComputerVision {
 
         MpAnalyzerPluginResponseFormat CreateAnnotations(MpAnalyzerPluginResponseFormat resp, string respJsonStr) {
             Root root = JsonConvert.DeserializeObject<Root>(respJsonStr);
-            List<MpIAnnotationNode> annotations = new List<MpIAnnotationNode>();
+            List<MpAnnotationNodeFormat> annotations = new List<MpAnnotationNodeFormat>();
 
             if(root.categories != null && root.categories.Count > 0) {
                 root.categories.Select(x => ProcessCategory(x)).Where(x => x != null).ForEach(x => annotations.Add(x));
@@ -80,7 +80,7 @@ namespace ComputerVision {
 
             if(annotations.Count > 0) {
                 var root_annotation = new MpAnnotationNodeFormat() {
-                    Children = annotations
+                    children = annotations
                 };
                 resp.dataObject =
                     new MpPortableDataObject(
@@ -94,7 +94,7 @@ namespace ComputerVision {
         }
 
 
-        MpIAnnotationNode ProcessObject(VisionObject vObject) {
+        MpAnnotationNodeFormat ProcessObject(VisionObject vObject) {
             if(vObject == null) {
                 return null;
             }
@@ -102,10 +102,10 @@ namespace ComputerVision {
                 type = "Object",
                 label = vObject.@object,
                 score = vObject.confidence,
-                Children = ProcessRectangle(vObject.rectangle,"Object") is MpIAnnotationNode da ? new List<MpIAnnotationNode>() { da } : null
+                children = ProcessRectangle(vObject.rectangle,"Object") is MpAnnotationNodeFormat da ? new List<MpAnnotationNodeFormat>() { da } : null
             };
         }
-        MpIAnnotationNode ProcessTag(Tag tag) {
+        MpAnnotationNodeFormat ProcessTag(Tag tag) {
             if(tag == null) {
                 return null;
             }
@@ -115,7 +115,7 @@ namespace ComputerVision {
                 score = tag.confidence
             };
         }
-        MpIAnnotationNode ProcessCategory(Category category) {
+        MpAnnotationNodeFormat ProcessCategory(Category category) {
             if(category == null) {
                 return null;
             }
@@ -123,24 +123,24 @@ namespace ComputerVision {
                 type = "Category",
                 label = category.name,
                 score = category.score,
-                Children = ProcessDetail(category.detail) is MpIAnnotationNode da ? new List<MpIAnnotationNode>() { da} : null
+                children = ProcessDetail(category.detail) is MpAnnotationNodeFormat da ? new List<MpAnnotationNodeFormat>() { da} : null
             };
         }
-        MpIAnnotationNode ProcessDetail(Detail detail) {
+        MpAnnotationNodeFormat ProcessDetail(Detail detail) {
             if(detail == null) {
                 return null;
             }
-            List<MpIAnnotationNode> children = new List<MpIAnnotationNode>();
+            List<MpAnnotationNodeFormat> children = new List<MpAnnotationNodeFormat>();
             if(detail.celebrities != null && 
                 detail.celebrities.Count > 0) {
-                if(detail.celebrities.Select(x=>ProcessCelebrity(x)) is IEnumerable<MpIAnnotationNode> al &&
+                if(detail.celebrities.Select(x=>ProcessCelebrity(x)) is IEnumerable<MpAnnotationNodeFormat> al &&
                     al.Where(x=>x != null).Count() > 0) {
                     children.AddRange(al.Where(x=>x != null));
                 }
             }
             if (detail.landmarks != null &&
                 detail.landmarks.Count > 0) {
-                if (detail.landmarks.Select(x => ProcessLandmark(x)) is IEnumerable<MpIAnnotationNode> al &&
+                if (detail.landmarks.Select(x => ProcessLandmark(x)) is IEnumerable<MpAnnotationNodeFormat> al &&
                     al.Where(x => x != null).Count() > 0) {
                     children.AddRange(al.Where(x => x != null));
                 }
@@ -151,11 +151,11 @@ namespace ComputerVision {
 
             return new MpAnnotationNodeFormat() {
                 type = "Detail",
-                Children = children
+                children = children
             };
         }
 
-        MpIAnnotationNode ProcessCelebrity(Celebrity celeb) {
+        MpAnnotationNodeFormat ProcessCelebrity(Celebrity celeb) {
             if(celeb == null) {
                 return null;
             }
@@ -163,11 +163,11 @@ namespace ComputerVision {
                 type = "Celebrity",
                 label = celeb.name,
                 score = celeb.confidence,
-                Children = celeb.faceRectangle == null ? null : new List<MpIAnnotationNode>() { ProcessFaceRectangle(celeb.faceRectangle) }
+                children = celeb.faceRectangle == null ? null : new List<MpAnnotationNodeFormat>() { ProcessFaceRectangle(celeb.faceRectangle) }
             };
         }
         
-        MpIAnnotationNode ProcessLandmark(Landmark landmark) {
+        MpAnnotationNodeFormat ProcessLandmark(Landmark landmark) {
             if(landmark == null) {
                 return null;
             }
@@ -178,29 +178,29 @@ namespace ComputerVision {
             };
         }
 
-        MpIAnnotationNode ProcessFaceRectangle(FaceRectangle fr) {
+        MpAnnotationNodeFormat ProcessFaceRectangle(FaceRectangle fr) {
             if(fr == null) {
                 return null;
             }
             return new MpImageAnnotationNodeFormat() {
                 type = "FaceRectangle",
-                x = fr.left,
-                y = fr.top,
-                width = fr.width,
-                height = fr.height
+                left = fr.left,
+                top = fr.top,
+                right = fr.width,
+                bottom = fr.height
             };
         }
         
-        MpIAnnotationNode ProcessRectangle(Rectangle rect, string rectType) {
+        MpAnnotationNodeFormat ProcessRectangle(Rectangle rect, string rectType) {
             if(rect == null) {
                 return null;
             }
             return new MpImageAnnotationNodeFormat() {
                 type = rectType,
-                x = rect.x,
-                y = rect.y,
-                width = rect.w,
-                height = rect.h
+                left = rect.x,
+                top = rect.y,
+                right = rect.w,
+                bottom = rect.h
             };
         }
     }

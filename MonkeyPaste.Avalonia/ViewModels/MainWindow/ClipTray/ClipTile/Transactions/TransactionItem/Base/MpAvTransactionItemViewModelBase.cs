@@ -240,11 +240,14 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
             MpQuillDelta delta = null;
-            if(Response is MpAvDataObjectMessageViewModel domvm &&
-                domvm.DataObject.TryGetData<string>(MpPortableDataFormats.INTERNAL_CONTENT_DELTA_FORMAT, out string deltaJson) &&
-                MpJsonObject.DeserializeObject<MpQuillDelta>(deltaJson) is MpQuillDelta resp_delta) {
-                delta = resp_delta;
+            if(Response is MpAvDataObjectMessageViewModel domvm) {
+                if(domvm.DataObject.TryGetData<string>(MpPortableDataFormats.INTERNAL_CONTENT_DELTA_FORMAT, out string deltaJson) &&
+                    MpJsonConverter.DeserializeObject<MpQuillDelta>(deltaJson) is MpQuillDelta resp_delta) {
+                    delta = resp_delta;
+                } 
             }
+            
+            
             if(delta == null && 
                 Response is MpAvDeltaMessageViewModel dmvm) {
                 delta = dmvm.QuillDelta;
@@ -252,9 +255,17 @@ namespace MonkeyPaste.Avalonia {
             return delta;
         }
 
+        public MpAnnotationNodeFormat GetTransactionAnnotation() {
+            if (Response is MpAvDataObjectMessageViewModel domvm && 
+                domvm.DataObject.TryGetData<string>(MpPortableDataFormats.INTERNAL_CONTENT_ANNOTATION_FORMAT, out string annotationJson)) {
+                return MpAnnotationNodeFormat.Parse(annotationJson);
+            }
+            return null;
+        }
         #endregion
 
         #region Private Methods
+
 
         public async Task<MpAvTransactionSourceViewModelBase> CreateSourceViewModelAsync(MpTransactionSource ts) {
             MpAvTransactionSourceViewModelBase tsvm = null;
@@ -295,6 +306,9 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case MpJsonMessageFormatType.ParameterRequest:
                     cttimvmb = new MpAvParameterRequestMessageViewModel(this);
+                    break;
+                case MpJsonMessageFormatType.Annotation:
+                    cttimvmb = new MpAvImageAnnotationMessageViewModelBase(this);
                     break;
                 default:
                     return null;

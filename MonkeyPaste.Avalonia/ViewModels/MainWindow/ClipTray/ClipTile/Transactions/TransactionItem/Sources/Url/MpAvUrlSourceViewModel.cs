@@ -46,7 +46,7 @@ namespace MonkeyPaste.Avalonia {
             if(string.IsNullOrEmpty(SourceArg)) {
                 ParameterReqFormat = null;
             } else {
-                ParameterReqFormat = MpJsonObject.DeserializeObject<MpPluginRequestFormatBase>(SourceArg);
+                ParameterReqFormat = MpJsonConverter.DeserializeObject<MpPluginRequestFormatBase>(SourceArg);
             }
             PresetViewModel = 
                 MpAvAnalyticItemCollectionViewModel.Instance.AllPresets.FirstOrDefault(x => x.AnalyticItemPresetId == SourceObjId);

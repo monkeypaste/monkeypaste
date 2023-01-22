@@ -15,7 +15,7 @@ namespace MonkeyPaste.Avalonia {
         public override string LabelText => "Delta";
         #region View Models
 
-        public ObservableCollection<MpAvDataObjectItemViewModel> Items { get; set; } = new ObservableCollection<MpAvDataObjectItemViewModel>();
+        public ObservableCollection<MpAvGenericDataObjectItemViewModel> Items { get; set; } = new ObservableCollection<MpAvGenericDataObjectItemViewModel>();
         #endregion
 
         #region State
@@ -47,7 +47,7 @@ namespace MonkeyPaste.Avalonia {
                 Items.Clear();
             }
             ParentTreeItem = parentAnnotation;
-            QuillDelta = MpJsonObject.DeserializeObject<MpQuillDelta>(jsonOrParsedFragment);
+            QuillDelta = MpJsonConverter.DeserializeObject<MpQuillDelta>(jsonOrParsedFragment);
             if(QuillDelta != null) {
                 
             }

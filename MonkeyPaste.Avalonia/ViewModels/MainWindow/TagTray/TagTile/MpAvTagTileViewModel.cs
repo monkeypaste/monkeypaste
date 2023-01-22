@@ -49,14 +49,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIPopupMenuPicker Implementation
 
-        public MpMenuItemViewModel GetMenu(ICommand cmd, IEnumerable<int> selectedTagIds, bool recursive) {
+        public MpMenuItemViewModel GetMenu(ICommand cmd, object cmdArg, IEnumerable<int> selectedTagIds, bool recursive) {
             return new MpMenuItemViewModel() {
                 Header = TagName,
                 Command = cmd,
                 CommandParameter = TagId,
                 IsChecked = selectedTagIds.Contains(TagId),
                 IconHexStr = TagHexColor,
-                SubItems = recursive ? Items.Cast<MpIPopupMenuPicker>().Select(x => x.GetMenu(cmd, selectedTagIds, recursive)).ToList() : null
+                SubItems = recursive ? Items.Cast<MpIPopupMenuPicker>().Select(x => x.GetMenu(cmd, cmdArg, selectedTagIds, recursive)).ToList() : null
             };
         }
 

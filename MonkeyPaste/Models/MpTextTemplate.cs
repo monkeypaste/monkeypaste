@@ -83,14 +83,14 @@ namespace MonkeyPaste {
         #region MpIJsonObject Implementation
 
         public string SerializeJsonObject() {
-            return MpJsonObject.SerializeObject(this);
+            return MpJsonConverter.SerializeObject(this);
         }
         #endregion
 
         #region MpIJsonBase64Object Implementation
 
         public string SerializeJsonObjectToBase64(Encoding enc = null) {
-            return MpJsonObject.SerializeObjectToBase64JsonStr(this,null, enc);
+            return MpJsonConverter.SerializeObjectToBase64JsonStr(this,null, enc);
         }
 
         #endregion

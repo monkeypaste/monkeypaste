@@ -28,7 +28,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsOpen { get; set; }
         public MpMenuItemViewModel PopupMenu =>
-            ComponentPicker == null ? null : ComponentPicker.GetMenu(SelectComponentCommand, new int[] { ComponentId }, true);
+            ComponentPicker == null ? null : ComponentPicker.GetMenu(SelectComponentCommand, null,new int[] { ComponentId }, true);
 
         public object SelectedIconResourceObj =>
             ComponentId == 0 ?
@@ -49,7 +49,7 @@ namespace MonkeyPaste.Avalonia {
         #region View Models
 
         public MpMenuItemViewModel SelectedComponentMenuItemViewModel =>
-            SelectedComponentPicker == null ? null : SelectedComponentPicker.GetMenu(null, new List<int>() { }, false);
+            SelectedComponentPicker == null ? null : SelectedComponentPicker.GetMenu(null, null, new List<int>() { }, false);
 
         #endregion
 

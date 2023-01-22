@@ -1,5 +1,5 @@
 ﻿namespace MonkeyPaste.Common.Plugin {
-    public class MpAnalyzerPluginImageTokenResponseValueFormat : MpAnnotationBaseFormat {
+    public class MpAnalyzerPluginImageTokenResponseValueFormat : MpAnnotationNodeFormat {
         public MpJsonPathProperty<double> x { get; set; } = new MpJsonPathProperty<double>(0);
         public MpJsonPathProperty<double> y { get; set; } = new MpJsonPathProperty<double>(0);
         public MpJsonPathProperty<double> width { get; set; } = new MpJsonPathProperty<double>(0);

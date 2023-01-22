@@ -36,12 +36,6 @@ namespace MonkeyPaste.Common {
             return new MpRect(x1, y1, x2 - x1, y2 - y1);
         }
 
-        public static MpRect ParseJson(string jsonStr) {
-            ///quill json '{ left: Number, top: Number, height: Number, width: Number }'
-            var qr = MpJsonObject.DeserializeObject<MpJsonRect>(jsonStr);
-            var r = new MpRect(qr.left, qr.top, qr.width, qr.height);
-            return r;
-        }
         #endregion
 
         #region Properties
@@ -153,8 +147,6 @@ namespace MonkeyPaste.Common {
         public override string ToString() {
             return $"X:{X} Y:{Y} Width: {Width} Height: {Height}";
         }
-
-        
 
         #endregion
 

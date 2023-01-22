@@ -252,7 +252,7 @@ namespace MonkeyPaste {
             string backup_manifest_data = MpFileIo.ReadTextFromFile(backup_manifest_path);
             if (!string.IsNullOrWhiteSpace(backup_manifest_data)) {
                 try {
-                    return MpJsonObject.DeserializeObject<MpPluginFormat>(backup_manifest_data);
+                    return MpJsonConverter.DeserializeObject<MpPluginFormat>(backup_manifest_data);
                 }
                 catch (Exception ex) {
                     MpConsole.WriteTraceLine($"Error deserializing backup manifest at path: '{backup_manifest_path}' with data: '{backup_manifest_data}' ex: ", ex);
@@ -263,7 +263,7 @@ namespace MonkeyPaste {
             string plugin_json_str = plugin.SerializeJsonObject();
             MpFileIo.WriteTextToFile(backup_manifest_path, plugin_json_str, false);
 
-            return MpJsonObject.DeserializeObject<MpPluginFormat>(plugin_json_str);
+            return MpJsonConverter.DeserializeObject<MpPluginFormat>(plugin_json_str);
         }
         public static MpPluginFormat CreateLastLoadedBackupPluginFormat(MpPluginFormat plugin) {
             if(!PluginManifestBackupFolderPath.IsDirectory()) {
@@ -279,7 +279,7 @@ namespace MonkeyPaste {
             string plugin_json_str = plugin.SerializeJsonObject();
             MpFileIo.WriteTextToFile(backup_manifest_path, plugin_json_str, false);
 
-            return MpJsonObject.DeserializeObject<MpPluginFormat>(plugin_json_str);
+            return MpJsonConverter.DeserializeObject<MpPluginFormat>(plugin_json_str);
         }
         #endregion
     }
