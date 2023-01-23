@@ -649,6 +649,12 @@ namespace MonkeyPaste.Common {
             }
             return MpRegEx.RegExLookup[MpRegExType.HexColor].IsMatch(str);
         }
+        public static bool IsStringGuid(this string str) {
+            if(string.IsNullOrWhiteSpace(str)) {
+                return false;
+            }
+            return MpRegEx.RegExLookup[MpRegExType.Guid].IsMatch(str);
+        }
 
         public static bool IsStringNamedColor(this string str) {
             if (string.IsNullOrWhiteSpace(str)) {

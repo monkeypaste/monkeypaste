@@ -1,28 +1,97 @@
-function drawRect(ctx, rect, fill = 'black', stroke = 'black', lineWidth = 0, opacity = 1.0) {
-    let strokStyleStr = cleanColor(stroke, opacity != 1.0 ? opacity : null,'rgbaStyle');
-    ctx.strokeStyle = strokStyleStr;
-    let fillStyleStr = cleanColor(fill, opacity != 1.0 ? opacity : null,'rgbaStyle');
-    ctx.fillStyle = fillStyleStr;
-    ctx.lineWidth = lineWidth;
+// #region Globals
 
-    ctx.fillRect(rect.left, rect.top, rect.width, rect.height);
-    if (lineWidth > 0) {
-        ctx.strokeRect(rect.left, rect.top, rect.width, rect.height);
+// #endregion Globals
+
+// #region Life Cycle
+
+// #endregion Life Cycle
+
+// #region Getters
+
+function getRectSize(rect) {
+    if (!isRect(rect)) {
+        return { width: 0, height: 0 };
     }
+    rect = cleanRect(rect);
+    return { width: rect.width, height: rect.height };
+}
+
+function getRectArea(rect) {
+    let rect_size = getRectSize(rect);
+    return rect_size.width * rect_size.height;
+}
+
+// #endregion Getters
+
+// #region Setters
+
+// #endregion Setters
+
+// #region State
+
+function isRect(obj) {
+    if (isNullOrUndefined(obj)) {
+        return false;
+    }
+    return obj.left !== undefined && obj.top !== undefined && obj.right !== undefined && obj.bottom !== undefined;
 }
 
 function isPointInRect(rect, p) {
-    if (!rect || !p) {
+    if (!isRect(rect) || !isPoint(p)) {
         return false;
-	}
+    }
     return p.x >= rect.left && p.x <= rect.right && p.y >= rect.top && p.y <= rect.bottom;
 }
 
-function rectContainsRect(rect, other_rect) {
+function isRectContainOtherRect(rect, other_rect) {
     if (!rect || !other_rect) {
         return false;
     }
     return isPointInRect(rect, { x: other_rect.left, y: other_rect.top }) && isPointInRect(rect, { x: other_rect.right, y: other_rect.bottom });
+}
+// #endregion State
+
+// #region Actions
+
+// #endregion Actions
+
+function drawRect(ctx, rect, fill = 'black', stroke = 'black', strokeWidth = 0, fillOpacity = 1.0, strokeOpacity = 1.0) {
+    fill = rect.fill === undefined ? fill : rect.fill;
+    stroke = rect.stroke === undefined ? stroke : rect.stroke;
+    strokeWidth = rect.strokeWidth === undefined ? strokeWidth : rect.strokeWidth;
+    fillOpacity = rect.fillOpacity === undefined ? fillOpacity : rect.fillOpacity;
+    strokeOpacity = rect.strokeOpacity === undefined ? strokeOpacity : rect.strokeOpacity;
+
+    let strokStyleStr = cleanColor(stroke, strokeOpacity != 1.0 ? strokeOpacity : null, 'rgbaStyle');
+    ctx.strokeStyle = strokStyleStr;
+
+    let fillStyleStr = cleanColor(fill, fillOpacity != 1.0 ? fillOpacity : null, 'rgbaStyle');
+    ctx.fillStyle = fillStyleStr;
+
+    ctx.strokeWidth = strokeWidth;
+
+    ctx.fillRect(rect.left, rect.top, rect.width, rect.height);
+    if (strokeWidth > 0) {
+        ctx.strokeRect(rect.left, rect.top, rect.width, rect.height);
+    }
+}
+
+
+function editorToScreenRect(er) {
+    let s_origin = editorToScreenPoint({ x: er.left, y: er.top });
+
+    let sr = {};
+    sr.left = s_origin.x;
+    sr.top = s_origin.y;
+    sr.right = sr.left + er.width;
+    sr.bottom = sr.top + er.height;
+    sr = cleanRect(sr);
+    return sr;
+}
+
+function screenToEditorRect(sp) {
+    let editor_rect = getEditorContainerRect();
+    return { x: sp.x - editor_rect.left, y: sp.y - editor_rect.top };
 }
 
 function rectUnion(rect_a, rect_b) {
@@ -104,13 +173,6 @@ function parseRect(rectStr) {
     return cleanRect(rect);
 }
 
-function getRectSize(rect) {
-    if (!rect || rect === undefined) {
-        return { width: 0, height: 0 };
-    }
-    rect = cleanRect(rect);
-    return { width: rect.width, height: rect.height };
-}
 
 function cleanRect(rect) {
     return {
@@ -122,3 +184,6 @@ function cleanRect(rect) {
         height: rect ? rect.bottom - rect.top : 0
     };
 }
+// #region Event Handlers
+
+// #endregion Event Handlers

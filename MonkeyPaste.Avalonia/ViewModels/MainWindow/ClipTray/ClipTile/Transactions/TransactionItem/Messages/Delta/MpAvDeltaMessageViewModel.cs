@@ -33,7 +33,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvDeltaMessageViewModel(MpAvTransactionItemViewModelBase parent) : base(parent) { }
+        public MpAvDeltaMessageViewModel(MpAvTransactionItemViewModel parent) : base(parent) { }
 
         #endregion
 

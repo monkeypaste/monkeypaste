@@ -62,7 +62,7 @@ function showColorPaletteMenu(
     paletteMenuRect = moveRectLocation(paletteMenuRect, origin);
 
     let win_rect = getWindowRect();
-    if (!rectContainsRect(win_rect, paletteMenuRect)) {
+    if (!isRectContainOtherRect(win_rect, paletteMenuRect)) {
         if (anchor_sides.includes('top')) {
 
         }

@@ -16,6 +16,8 @@ namespace MonkeyPaste.Avalonia {
             string key = "PlainTextMessageTemplate";
             if (param is MpAvParameterRequestMessageViewModel prmvm) {
                 key = "ParameterRequestMessageTemplate";
+            } else if(param is MpAvAnnotationMessageViewModel) {
+                key = "AnnotationMessageTemplate";
             }
 
             return AvailableTemplates[key].Build(param);

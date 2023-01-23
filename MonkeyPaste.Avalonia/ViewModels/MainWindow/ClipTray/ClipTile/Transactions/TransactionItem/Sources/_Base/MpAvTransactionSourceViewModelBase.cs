@@ -12,7 +12,7 @@ using Xamarin.Forms.Internals;
 
 namespace MonkeyPaste.Avalonia {
     public abstract class MpAvTransactionSourceViewModelBase  : 
-        MpViewModelBase<MpAvTransactionItemViewModelBase>,
+        MpViewModelBase<MpAvTransactionItemViewModel>,
         MpITransactionNodeViewModel {
 
         #region Interfaces
@@ -180,7 +180,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvTransactionSourceViewModelBase(MpAvTransactionItemViewModelBase parent) : base(parent) { }
+        public MpAvTransactionSourceViewModelBase(MpAvTransactionItemViewModel parent) : base(parent) { }
 
         #endregion
 

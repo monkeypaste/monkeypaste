@@ -87,13 +87,13 @@
             </Style>
 
             <Style Selector="TextBlock#TransactionTimeTextBlock"
-                   x:DataType="local:MpAvTransactionItemViewModelBase">
+                   x:DataType="local:MpAvTransactionItemViewModel">
                 <Setter Property="Text"
                         Value="{Binding TransactionDateTime, Converter={x:Static local:MpAvDateTimeToReadableTimeSpanStringConverter.Instance}}" />
             </Style>
 
             <Style Selector="TextBlock#TransactionTimeTextBlock:pointerover"
-                   x:DataType="local:MpAvTransactionItemViewModelBase">
+                   x:DataType="local:MpAvTransactionItemViewModel">
                 <Setter Property="Text"
                         Value="{Binding TransactionDateTime, Converter={x:Static local:MpAvDateTimeToStringConverter.Instance}}" />
             </Style>-->
@@ -128,7 +128,7 @@
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Top">
             <ListBox.ItemTemplate>
-                <DataTemplate x:DataType="local:MpAvTransactionItemViewModelBase">
+                <DataTemplate x:DataType="local:MpAvTransactionItemViewModel">
                     <DockPanel x:Name="TransactionContainerDockPanel"
                                Classes.over="{Binding IsHovering}"
                                local:MpAvIsHoveringExtension.IsEnabled="True"
@@ -226,16 +226,67 @@
                 </ListBox>
             </TabItem>
             <TabItem Header="Input">
-                <TextBlock DataContext="{Binding Request}"
+
+                <TextBlock DataContext="{Binding Response}"
                            MinHeight="15"
                            TextWrapping="Wrap"
                            Text="{Binding Body}" />
             </TabItem>
             <TabItem Header="Output">
-                <TextBlock DataContext="{Binding Response}"
-                           MinHeight="15"
-                           TextWrapping="Wrap"
-                           Text="{Binding Body}" />
+                <ContentControl Content="{Binding}">
+                    <ContentControl.DataTemplates>
+                        <local:MpAvTransactionMessageBodyTemplateSelector>
+                            <DataTemplate x:Key="PlainTextMessageTemplate"
+                                          x:DataType="local:MpAvTransactionMessageViewModelBase">
+                                <TextBlock MinHeight="15"
+                                           TextWrapping="Wrap"
+                                           Text="{Binding Body}" />
+                            </DataTemplate>
+                            <DataTemplate x:Key="ParameterRequestMessageTemplate"
+                                          x:DataType="local:MpAvParameterRequestMessageViewModel">
+                                <local:MpAvPluginParameterListBoxView HorizontalAlignment="Stretch"
+                                                                      VerticalAlignment="Stretch"
+                                                                      DataContext="{Binding PresetViewModel}" />
+                            </DataTemplate>
+
+                            <DataTemplate x:Key="AnnotationMessageTemplate"
+                                          x:DataType="local:MpAvAnnotationMessageViewModel">
+                                <Grid RowDefinitions="*,Auto">
+                                    <TreeView Grid.Row="0"
+                                              Items="{Binding RootItems}"
+                                              SelectionMode="Single"
+                                              SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                                              HorizontalAlignment="Stretch"
+                                              VerticalAlignment="Stretch">
+                                        <TreeView.ItemTemplate>
+                                            <TreeDataTemplate x:DataType="local:MpITransactionNodeViewModel"
+                                                              ItemsSource="{Binding Children}">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image VerticalAlignment="Stretch"
+                                                           Margin="2"
+                                                           Width="{Binding $self.Bounds.Height}"
+                                                           Source="{Binding IconSourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}}" />
+                                                    <TextBlock Foreground="Black"
+                                                               Margin="5,0,0,0"
+                                                               VerticalAlignment="Center"
+                                                               HorizontalAlignment="Left"
+                                                               TextAlignment="Left"
+                                                               Text="{Binding LabelText}" />
+                                                </StackPanel>
+
+                                            </TreeDataTemplate>
+                                        </TreeView.ItemTemplate>
+                                    </TreeView>
+
+                                    <TextBlock Grid.Row="1"
+                                               x:DataType="local:MpAvAnnotationItemViewModel"
+                                               DataContext="{Binding SelectedItem}"
+                                               Text="{Binding AnnotationScore}" />
+                                </Grid>
+                            </DataTemplate>
+                        </local:MpAvTransactionMessageBodyTemplateSelector>
+                    </ContentControl.DataTemplates>
+                </ContentControl>
             </TabItem>
         </TabControl>
 

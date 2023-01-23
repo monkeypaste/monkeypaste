@@ -282,6 +282,12 @@ function appendStateChanged_ext(reqMsgBase64Str) {
 		true);	
 }
 
+function annotationSelected_ext(reqMsgBase64Str) {
+	// output 'MpQuillAnnotationSelectedMessage'
+	let req = toJsonObjFromBase64Str(reqMsgBase64Str);
+	selectAnnotation(req.annotationGuid, true);
+}
+
 function dragEventFromHost_ext(dragEnterMsgBase64Str) {
 	// input 'MpQuillDragDropEventMessage'
 	let req = toJsonObjFromBase64Str(dragEnterMsgBase64Str);

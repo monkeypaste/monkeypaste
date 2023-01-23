@@ -40,7 +40,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvDataObjectMessageViewModel(MpAvTransactionItemViewModelBase parent) : base(parent) { }
+        public MpAvDataObjectMessageViewModel(MpAvTransactionItemViewModel parent) : base(parent) { }
 
         #endregion
 
@@ -75,7 +75,7 @@ namespace MonkeyPaste.Avalonia {
             MpAvTransactionMessageViewModelBase doivm;
             switch(format) {
                 case MpPortableDataFormats.INTERNAL_CONTENT_ANNOTATION_FORMAT:
-                    doivm = new MpAvImageAnnotationMessageViewModelBase(Parent);
+                    doivm = new MpAvAnnotationMessageViewModel(Parent);
                     break;
                 default:
                     doivm = new MpAvGenericDataObjectItemViewModel(Parent);

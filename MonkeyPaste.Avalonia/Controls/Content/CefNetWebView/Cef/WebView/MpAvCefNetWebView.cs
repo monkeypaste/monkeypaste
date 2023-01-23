@@ -58,7 +58,8 @@ namespace MonkeyPaste.Avalonia {
         notifyScrollChanged,
         notifyAppendStateChanged,
         notifyInternalContextMenuIsVisibleChanged,
-        notifyLastTransactionUndone
+        notifyLastTransactionUndone,
+        notifyAnnotationSelected
     }
     [DoNotNotify]
     public class MpAvCefNetWebView : 
@@ -444,6 +445,16 @@ namespace MonkeyPaste.Avalonia {
                     ntf = MpJsonConverter.DeserializeBase64Object<MpQuillSubSelectionChangedNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillSubSelectionChangedNotification subSelChangedNtf) {
                         ctvm.IsSubSelectionEnabled = subSelChangedNtf.isSubSelectionEnabled;
+                    }
+                    break;
+                
+                case MpAvEditorBindingFunctionType.notifyAnnotationSelected:
+                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillAnnotationSelectedMessage>(msgJsonBase64Str);
+                    if (ntf is MpQuillAnnotationSelectedMessage annSelectedMsg) {
+                        BindingContext
+                            .TransactionCollectionViewModel
+                            .SelectedTransaction
+                            .SelectChildCommand.Execute(annSelectedMsg.annotationGuid);
                     }
                     break;
 

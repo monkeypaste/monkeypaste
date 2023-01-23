@@ -53,7 +53,8 @@ namespace MonkeyPaste.Common {
             INTERNAL_CONTENT_TITLE_FORMAT,
             INTERNAL_CONTENT_ROI_FORMAT,
             INTERNAL_CONTENT_ANNOTATION_FORMAT,
-            INTERNAL_CONTENT_DELTA_FORMAT
+            INTERNAL_CONTENT_DELTA_FORMAT,
+            INTERNAL_PARAMETER_REQUEST_FORMAT
         };
 
         private static Dictionary<int, MpPortableDataFormat> _formatLookup;
@@ -109,7 +110,10 @@ namespace MonkeyPaste.Common {
         public const string INTERNAL_CONTENT_ROI_FORMAT = "Mp Internal Content Roi";
         public const string INTERNAL_CONTENT_ANNOTATION_FORMAT = "Mp Internal Content Annotation";
         public const string INTERNAL_CONTENT_DELTA_FORMAT = "Mp Internal Quill Delta Json";
+        public const string INTERNAL_PARAMETER_REQUEST_FORMAT = "Mp Internal Parameter Request Format";
 
+        // NOTE data object is not registered and only used to merge data objects
+        public const string INTERNAL_DATA_OBJECT_FORMAT = "Mp Internal Data Object Format";
         #endregion
 
         #region Properties

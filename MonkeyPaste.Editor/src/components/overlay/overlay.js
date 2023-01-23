@@ -243,24 +243,23 @@ function drawAnnotations(ctx) {
     if (!hasAnnotations(ctx)) {
         return;
     }
-    for (var i = 0; i < Annotations.length; i++) {
-        drawAnnotation(ctx, Annotations[i]);
+    for (var i = 0; i < RootAnnotations.length; i++) {
+        drawAnnotation(ctx, RootAnnotations[i]);
     }
 }
 
-function drawAnnotation(ctx, annotation) {
-    let annotation_rect = getAnnotationRect(annotation);
+function drawAnnotation(ctx, ann) {
+    let annotation_rect = getAnnotationRect(ann);
     if (annotation_rect) {
         //let content_rect = getContentImageElement().getBoundingClientRect();
         //annotation_rect.left += content_rect.x;
         //annotation_rect.top += content_rect.y;
 
-        drawRect(ctx, annotation_rect, 'pink', 'blue', 1.5, 125 / 255);
+        drawRect(ctx, annotation_rect);
     }
-    if (annotation.children !== undefined &&
-        Array.isArray(annotation.children)) {
-        for (var i = 0; i < annotation.children.length; i++) {
-            drawAnnotation(ctx, annotation.children[i]);
+    if (isParentAnnotation(ann)) {
+        for (var i = 0; i < ann.children.length; i++) {
+            drawAnnotation(ctx, ann.children[i]);
         }
     }
 }

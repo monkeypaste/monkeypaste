@@ -13,6 +13,22 @@ namespace MonkeyPaste.Common {
         Paste = 4,
     }
     public static class MpOleExtensions {
+
+        public static string ToDataFormat(this MpJsonMessageFormatType jmft) {
+            switch(jmft) {
+                case MpJsonMessageFormatType.Annotation:
+                    return MpPortableDataFormats.INTERNAL_CONTENT_ANNOTATION_FORMAT;
+                case MpJsonMessageFormatType.ParameterRequest:
+                    return MpPortableDataFormats.INTERNAL_PARAMETER_REQUEST_FORMAT;
+                case MpJsonMessageFormatType.Delta:
+                    return MpPortableDataFormats.INTERNAL_CONTENT_DELTA_FORMAT;
+                case MpJsonMessageFormatType.DataObject:
+                    return MpPortableDataFormats.INTERNAL_DATA_OBJECT_FORMAT;
+                case MpJsonMessageFormatType.Error:
+                default:
+                    return MpPortableDataFormats.Text;
+            }
+        }
         public static void AddOrCreateUri(this MpPortableDataObject mpdo, string uri) {
             if(string.IsNullOrWhiteSpace(uri)) {
                 throw new Exception("Uri must be non-whitespace");

@@ -35,7 +35,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvAppSourceViewModel(MpAvTransactionItemViewModelBase parent) : base(parent) { }
+        public MpAvAppSourceViewModel(MpAvTransactionItemViewModel parent) : base(parent) { }
 
         #endregion
 

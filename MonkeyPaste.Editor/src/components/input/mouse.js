@@ -128,6 +128,8 @@ function onWindowClick(e) {
 			hideAllTemplateContextMenus();
 		}
 	}
+
+	onAnnotationWindowPointerClick(e);
 	return;
 }
 
@@ -168,8 +170,9 @@ function onWindowMouseDown(e) {
 }
 
 function onWindowMouseMove(e) {
-	//WindowMouseLoc = { x: e.clientX, y: e.clientY };
 	updateWindowMouseState(e);
+
+	onAnnotationWindowPointerMove(e);
 }
 
 function onWindowMouseUp(e) {

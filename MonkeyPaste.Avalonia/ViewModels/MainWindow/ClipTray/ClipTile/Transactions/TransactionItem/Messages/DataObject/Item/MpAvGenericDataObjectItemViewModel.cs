@@ -10,7 +10,7 @@ namespace MonkeyPaste.Avalonia {
         public override string LabelText => Format;
         public string Format { get; private set; }
         public object Data { get; private set; }
-        public MpAvGenericDataObjectItemViewModel(MpAvTransactionItemViewModelBase parent) : base(parent) { }
+        public MpAvGenericDataObjectItemViewModel(MpAvTransactionItemViewModel parent) : base(parent) { }
 
         public override async Task InitializeAsync(object jsonOrParsedFragment, MpITransactionNodeViewModel parentAnnotation) {
             IsBusy = true;

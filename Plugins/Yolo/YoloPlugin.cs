@@ -32,6 +32,26 @@ namespace Yolo {
             }
         }
 
+        private void Test(Image image) {
+            List<YoloPrediction> predictions = YoloWrapper.Predict(image);
+            using (var graphics = Graphics.FromImage(image)) {
+                foreach (var prediction in predictions) {
+                    double score = Math.Round(prediction.Score, 2);
+
+                    graphics.DrawRectangles(new Pen(prediction.Label.Color, 1),
+                        new[] { prediction.Rectangle });
+
+                    var (x, y) = (prediction.Rectangle.X - 3, prediction.Rectangle.Y - 23);
+
+                    graphics.DrawString($"{prediction.Label.Name} ({score})",
+                        new Font("Arial", 16, GraphicsUnit.Pixel), new SolidBrush(prediction.Label.Color),
+                    new PointF(x, y));
+                }
+
+                image.Save(@"C:\Users\tkefauver\Source\Repos\MonkeyPaste\Plugins\Yolo\Assets\result.jpg");
+
+            }
+        }
         public MpAnalyzerPluginResponseFormat Analyze(MpAnalyzerPluginRequestFormat req) {
             double confidence = req.GetRequestParamDoubleValue(1);
             string imgBase64 = req.GetRequestParamStringValue(2);
@@ -39,88 +59,63 @@ namespace Yolo {
             if(string.IsNullOrEmpty(imgBase64)) {
                 return null;
             }
-            var bytes = Convert.FromBase64String(imgBase64);
-            Image bmp;
             try {
-                using( var ms = new MemoryStream(bytes)) {
-                    bmp = Image.FromStream(ms);
+                var bytes = Convert.FromBase64String(imgBase64);
+                using ( var ms = new MemoryStream(bytes)) {
+                    var img = Image.FromStream(ms);
+
+                    var rootNode = new MpAnnotationNodeFormat() {
+                        label = $"Yolo Analysis"
+                    };
+
+                    List<YoloPrediction> predictions = null;
+                    try {
+                        predictions = YoloWrapper.Predict(img);
+                    }
+                    catch (Exception ex) {
+                        return new MpAnalyzerPluginResponseFormat() {
+                            errorMessage = ex.Message
+                        };
+                    }
+
+                    using (var graphics = System.Drawing.Graphics.FromImage(img)) {
+                        foreach (var prediction in predictions) {
+                            double score = Math.Round(prediction.Score, 2);
+
+                            if (score >= confidence) {
+                                var boxAnnotation = new MpImageAnnotationNodeFormat() {
+                                    score = prediction.Score,
+                                    label = prediction.Label.Name,
+                                    left = prediction.Rectangle.X,
+                                    top = prediction.Rectangle.Y,
+                                    right = prediction.Rectangle.X + prediction.Rectangle.Width,
+                                    bottom = prediction.Rectangle.Y + prediction.Rectangle.Height
+                                };
+                                MpConsole.WriteLine($"Yolo detected label '{prediction.Label.Name}' score '{prediction.Score}' box: '{boxAnnotation}'");
+                                if (rootNode.children == null) {
+                                    rootNode.children = new List<MpAnnotationNodeFormat>();
+                                }
+                                rootNode.children.Add(boxAnnotation);
+                            }
+                        }
+                        rootNode.body = $"{rootNode.children.Count} objects detected with {Math.Round(rootNode.children.Average(x => x.score), 2)} avg confidence";
+
+                        string ann_json = rootNode.SerializeJsonObject();
+
+                        var resp = new MpAnalyzerPluginResponseFormat() {
+                            dataObject = new MpPortableDataObject(
+                                MpPortableDataFormats.INTERNAL_CONTENT_ANNOTATION_FORMAT,
+                                ann_json)
+                        };
+
+                        return resp;
+                    }
                 }
             } catch(Exception ex) {
                 return new MpAnalyzerPluginResponseFormat() {
                     errorMessage = ex.Message
                 };
             }
-
-            MpImageAnnotationNodeFormat rootNode = new MpImageAnnotationNodeFormat() {
-                label = $"Yolo Analysis",
-                type = "RootAnnotation",
-                left = 0,
-                top = 0,
-                right = bmp.Width,
-                bottom = bmp.Height
-            };
-
-            try {
-                List<YoloPrediction> predictions = null;
-                try {
-                    predictions = YoloWrapper.Predict(bmp);
-                } catch(Exception ex) {
-                    return new MpAnalyzerPluginResponseFormat() {
-                        errorMessage = ex.Message
-                    };
-                }
-                
-                using (var graphics = System.Drawing.Graphics.FromImage(bmp)) {
-                    double scale_x = 96.0d/(double)graphics.DpiX;
-                    double scale_y = 96.0d/(double)graphics.DpiY;
-                    MpConsole.WriteLine($"Scale x {scale_x} y {scale_y}");
-                    foreach (var prediction in predictions) {
-                        double score = Math.Round(prediction.Score, 2);
-
-                        if (score >= confidence) {
-                            var boxAnnotation = new MpImageAnnotationNodeFormat() {
-                                score = (double)prediction.Score,
-                                label = prediction.Label.Name,
-                                left = prediction.Rectangle.X * scale_x,
-                                top = prediction.Rectangle.Y * scale_y,
-                                right = prediction.Rectangle.Width * scale_x,
-                                bottom = prediction.Rectangle.Height * scale_y
-                            };
-                            MpConsole.WriteLine($"Yolo detected label '{prediction.Label.Name}' score '{prediction.Score}'");
-                            if(rootNode.children == null) {
-                                rootNode.children = new List<MpAnnotationNodeFormat>();
-                            }
-                            rootNode.children.Add(boxAnnotation);
-                        }
-
-                        graphics.DrawRectangles(new Pen(prediction.Label.Color, 1), new[] { prediction.Rectangle });
-
-                        var (x, y) = (prediction.Rectangle.X - 3, prediction.Rectangle.Y - 23);
-
-                        graphics.DrawString($"{prediction.Label.Name} ({score})",
-                            new Font("Arial", 16, GraphicsUnit.Pixel), new SolidBrush(prediction.Label.Color),
-                            new PointF(x, y));
-                    }
-                    var out_bmp = new Bitmap(bmp.Width, bmp.Height, graphics);
-                    out_bmp.Save(@"C:\Users\tkefauver\Desktop\test.png");
-                }
-            } catch (Exception ex) {
-                return new MpAnalyzerPluginResponseFormat() {
-                    errorMessage = ex.Message
-                };
-            }
-
-            rootNode.body = $"{rootNode.children.Count} objects detected with {Math.Round(rootNode.children.Average(x => x.score), 2)} avg confidence";
-
-            string ann_json = rootNode.SerializeJsonObject();
-
-            var resp = new MpAnalyzerPluginResponseFormat() {
-                dataObject = new MpPortableDataObject(
-                    MpPortableDataFormats.INTERNAL_CONTENT_ANNOTATION_FORMAT,
-                    ann_json)
-            };
-
-            return resp;
         }
 
     }

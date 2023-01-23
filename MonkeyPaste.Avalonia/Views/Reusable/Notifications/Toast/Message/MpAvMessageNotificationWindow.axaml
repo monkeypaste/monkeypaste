@@ -38,6 +38,7 @@
             <Image x:Name="NotificationIconImage"
                    Grid.Row="0"
                    Grid.Column="0"
+                   Margin="0,10,0,0"
                    Width="{Binding Bounds.Height, ElementName=NotificationIconImage}"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Stretch"

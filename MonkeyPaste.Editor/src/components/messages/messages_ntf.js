@@ -7,6 +7,17 @@ function onContentLoaded_ntf(conentMsg) {
 	}
 }
 
+function onAnnotationSelected_ntf(ann_guid) {
+	// output 'MpQuillAnnotationSelectedMessage'
+	if (typeof notifyAnnotationSelected === 'function') {
+		let msg = {
+			annotationGuid: ann_guid
+		};
+		let msgStr = toBase64FromJsonObj(msg);
+		notifyAnnotationSelected(msgStr);
+	}
+}
+
 function onReadOnlyChanged_ntf(isReadOnly) {
 	// output (true) MpQuillEditorContentChangedMessage
 	// output (false) MpQuillDisableReadOnlyResponseMessage

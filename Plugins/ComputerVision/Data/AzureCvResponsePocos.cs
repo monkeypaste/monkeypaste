@@ -6,8 +6,11 @@ namespace ComputerVision {
     // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
     public class Root {
         public List<Category> categories { get; set; }
-        public Adult adult { get; set; }
         public List<Tag> tags { get; set; }
+        public List<VisionObject> objects { get; set; }
+
+        // TODO implement these:
+        public Adult adult { get; set; }
         public Description description { get; set; }
         public string requestId { get; set; }
         public Metadata metadata { get; set; }
@@ -15,7 +18,6 @@ namespace ComputerVision {
         public List<Face> faces { get; set; }
         public Color color { get; set; }
         public ImageType imageType { get; set; }
-        public List<VisionObject> objects { get; set; }
     }
     public class Adult {
         public bool isAdultContent { get; set; }

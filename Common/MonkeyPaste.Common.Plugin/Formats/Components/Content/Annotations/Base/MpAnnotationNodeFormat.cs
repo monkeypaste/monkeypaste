@@ -14,9 +14,10 @@ namespace MonkeyPaste.Common.Plugin {
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) {
             JObject jo = JObject.Load(reader);
             if(jo.ContainsKey("left")) {
-                return jo.ToObject<MpImageAnnotationNodeFormat>(serializer);
+               // return jo.ToObject<MpImageAnnotationNodeFormat>(serializer);
+                return JsonConvert.DeserializeObject<MpImageAnnotationNodeFormat>(jo.ToString());
             }
-            return jo.ToObject<MpAnnotationNodeFormat>(serializer);
+            return JsonConvert.DeserializeObject<MpAnnotationNodeFormat>(jo.ToString());
         }
 
         public override bool CanWrite {
@@ -28,7 +29,7 @@ namespace MonkeyPaste.Common.Plugin {
         }
     }
     public class MpAnnotationNodeFormat : 
-        MpJsonObject, 
+        MpOmitNullJsonObject, 
         MpILabelText,
         MpIIconResource, 
         MpIClampedValue,
@@ -36,13 +37,37 @@ namespace MonkeyPaste.Common.Plugin {
         #region Statics
 
         public static MpAnnotationNodeFormat Parse(string json) {
-            MpAnnotationNodeFormat root = JsonConvert.DeserializeObject<MpAnnotationNodeFormat>(
-                json, 
-                new JsonSerializerSettings() {
-                Converters = { 
-                        new MpAnnotationJsonConverter() 
-                    }});
-            return root;
+            //MpAnnotationNodeFormat root = JsonConvert.DeserializeObject<MpAnnotationNodeFormat>(
+            //    json, 
+            //    new JsonSerializerSettings() {
+            //    Converters = { 
+            //            new MpAnnotationJsonConverter() 
+            //        }});
+            //return root;
+
+            var anf = JsonConvert.DeserializeObject(json);
+
+            if(anf is JObject jobj) {
+                return ToNode(jobj);
+            }
+            return null;
+        }
+
+        private static MpAnnotationNodeFormat ToNode(JObject jobj) {
+            MpAnnotationNodeFormat anf = null;
+            if(jobj.SelectToken("left") == null) {
+                anf = JsonConvert.DeserializeObject<MpAnnotationNodeFormat>(jobj.ToString());
+            } else {
+                anf = JsonConvert.DeserializeObject<MpImageAnnotationNodeFormat>(jobj.ToString());
+            }
+            if(jobj.SelectToken("children") is JToken jtoken) {
+                JArray children = JArray.Parse(jtoken.ToString());
+
+                anf.children = children.Select(x => Parse(x.ToString())).ToList();
+            } else {
+                anf.children = null;
+            }
+            return anf;
         }
 
         #endregion
@@ -80,6 +105,7 @@ namespace MonkeyPaste.Common.Plugin {
         #endregion
 
         #region Properties
+        public virtual string guid { get; set; } = System.Guid.NewGuid().ToString();
 
         public virtual string type { get; set; }
         public virtual string label { get; set; }
@@ -93,6 +119,7 @@ namespace MonkeyPaste.Common.Plugin {
         public virtual bool isVisible { get; set; } = true;
         public virtual List<MpAnnotationNodeFormat> children { get; set; }
 
+        public MpContentElementFormat style { get; set; }
         #endregion
     }
 
@@ -107,6 +134,17 @@ namespace MonkeyPaste.Common.Plugin {
         public double bottom { get; set; }
         #endregion
 
+        public MpImageAnnotationNodeFormat() : base() { }
+        public MpImageAnnotationNodeFormat(MpRect rect) {
+            left = rect.Left;
+            top = rect.Top;
+            right = rect.Right;
+            bottom = rect.Bottom;
+        }
+
+        public override string ToString() {
+            return $"left: {left} top: {top} right: {right} bottom: {bottom}";
+        }
         //public new List<MpImageAnnotationNodeFormat> children { get; set; }
 
     }

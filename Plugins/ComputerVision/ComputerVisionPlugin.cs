@@ -186,8 +186,8 @@ namespace ComputerVision {
                 type = "FaceRectangle",
                 left = fr.left,
                 top = fr.top,
-                right = fr.width,
-                bottom = fr.height
+                right = fr.left + fr.width,
+                bottom = fr.top + fr.height
             };
         }
         
@@ -199,8 +199,8 @@ namespace ComputerVision {
                 type = rectType,
                 left = rect.x,
                 top = rect.y,
-                right = rect.w,
-                bottom = rect.h
+                right = rect.x + rect.w,
+                bottom = rect.y + rect.h
             };
         }
     }

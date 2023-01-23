@@ -39,14 +39,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public ObservableCollection<MpAvTransactionItemViewModelBase> Transactions { get; set; } = new ObservableCollection<MpAvTransactionItemViewModelBase>();
-        public IEnumerable<MpAvTransactionItemViewModelBase> SortedTransactions =>
+        public ObservableCollection<MpAvTransactionItemViewModel> Transactions { get; set; } = new ObservableCollection<MpAvTransactionItemViewModel>();
+        public IEnumerable<MpAvTransactionItemViewModel> SortedTransactions =>
             IsSortDescending ?
                 Transactions.OrderByDescending(x => x.TransactionDateTime) :
                 Transactions.OrderBy(x => x.TransactionDateTime);
-        public MpAvTransactionItemViewModelBase SelectedTransaction { get; set; }
+        public MpAvTransactionItemViewModel SelectedTransaction { get; set; }
 
-        public MpAvTransactionItemViewModelBase MostRecentTransaction =>
+        public MpAvTransactionItemViewModel MostRecentTransaction =>
             Transactions.OrderByDescending(x => x.TransactionDateTime).FirstOrDefault();
 
         public IEnumerable<MpAvTransactionMessageViewModelBase> Messages =>
@@ -200,8 +200,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private async Task<MpAvTransactionItemViewModelBase> CreateClipTileSourceViewModel(MpCopyItemTransaction cit) {
-            var cisvm = new MpAvTransactionItemViewModelBase(this);
+        private async Task<MpAvTransactionItemViewModel> CreateClipTileSourceViewModel(MpCopyItemTransaction cit) {
+            var cisvm = new MpAvTransactionItemViewModel(this);
             await cisvm.InitializeAsync(cit);
             return cisvm;
         }
@@ -234,7 +234,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private async Task ApplyTransactionAsync(MpAvTransactionItemViewModelBase tivm) {
+        private async Task ApplyTransactionAsync(MpAvTransactionItemViewModel tivm) {
             if(tivm == null || tivm.TransactionLabel == "Edit" || tivm.TransactionLabel == "Drop") {
                 return;
             }
@@ -338,9 +338,9 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand RemoveTransactionCommand => new MpCommand<object>(
             (args) => {
-                MpAvTransactionItemViewModelBase tivm = null;
-                if(args is MpAvTransactionItemViewModelBase) {
-                    tivm = args as MpAvTransactionItemViewModelBase;
+                MpAvTransactionItemViewModel tivm = null;
+                if(args is MpAvTransactionItemViewModel) {
+                    tivm = args as MpAvTransactionItemViewModel;
                 }
 
                 if(tivm == null) {

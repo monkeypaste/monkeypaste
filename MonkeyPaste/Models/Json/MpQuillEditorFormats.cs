@@ -238,6 +238,9 @@ namespace MonkeyPaste {
         public MpQuillHostDataItemsMessage dataItemsFragment { get; set; }
     }
 
+    public class MpQuillAnnotationSelectedMessage : MpJsonObject { 
+        public string annotationGuid { get; set; }
+    }
 
     //public class MpQuillDragEndMessage : MpJsonObject {
     //    public bool fromHost { get; set; } = true;

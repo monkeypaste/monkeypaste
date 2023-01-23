@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvClipboardTransactionItemViewModel : MpAvTransactionItemViewModelBase {
+    public class MpAvClipboardTransactionItemViewModel : MpAvTransactionItemViewModel {
         public MpAvClipboardTransactionItemViewModel(MpAvClipTileTransactionCollectionViewModel parent) : base(parent) {
         }
     }
