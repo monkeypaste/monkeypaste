@@ -12,13 +12,13 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     public abstract class MpAvTransactionMessageViewModelBase  : 
         MpViewModelBase<MpAvTransactionItemViewModel>,
-        MpITransactionNodeViewModel {
+        MpAvITransactionNodeViewModel {
 
         #region Interfaces
 
-        #region MpITransactionNodeViewModel Implementation
+        #region MpAvITransactionNodeViewModel Implementation
         public virtual object Body => Json;
-        object MpITransactionNodeViewModel.TransactionModel => Parent.Transaction;
+        object MpAvITransactionNodeViewModel.TransactionModel => Parent.Transaction;
         public bool IsExpanded { get; set; }
         public MpITreeItemViewModel ParentTreeItem { get; protected set; }
         public IEnumerable<MpITreeItemViewModel> Children => Sources;
@@ -95,7 +95,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
-        public abstract Task InitializeAsync(object jsonOrParsedFragment, MpITransactionNodeViewModel parentAnnotation);
+        public abstract Task InitializeAsync(object jsonOrParsedFragment, MpAvITransactionNodeViewModel parentAnnotation);
 
         #endregion
 

@@ -103,7 +103,7 @@
                             <Image Margin="3"
                                    HorizontalAlignment="Stretch"
                                    VerticalAlignment="Stretch"
-                                   Stretch="UniformToFill">
+                                   Stretch="Uniform">
                                 <Image.Source>
                                 </Image.Source>
                             </Image>
@@ -113,7 +113,7 @@
                                   x:DataType="local:MpAvActionViewModelBase">
                         <Image HorizontalAlignment="Stretch"
                                VerticalAlignment="Stretch"
-                               Stretch="UniformToFill"
+                               Stretch="Uniform"
                                Width="{StaticResource IconSize}"
                                Height="{StaticResource IconSize}"
                                Source="{Binding IconResourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
@@ -122,7 +122,7 @@
                                   x:DataType="local:MpAvActionViewModelBase">
                         <Image HorizontalAlignment="Stretch"
                                VerticalAlignment="Stretch"
-                               Stretch="UniformToFill"
+                               Stretch="Uniform"
                                Width="{StaticResource IconSize}"
                                Height="{StaticResource IconSize}"
                                Source="{Binding Source={StaticResource WarningImage}, Converter={StaticResource IconSourceObjToBitmapConverter}}" />

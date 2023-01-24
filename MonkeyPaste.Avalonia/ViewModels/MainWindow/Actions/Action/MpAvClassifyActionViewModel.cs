@@ -25,11 +25,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIParameterHost Overrides
 
-        private MpTriggerPluginFormat _actionComponentFormat;
-        public override MpTriggerPluginFormat ActionComponentFormat {
+        private MpActionPluginFormat _actionComponentFormat;
+        public override MpActionPluginFormat ActionComponentFormat {
             get {
                 if (_actionComponentFormat == null) {
-                    _actionComponentFormat = new MpTriggerPluginFormat() {
+                    _actionComponentFormat = new MpActionPluginFormat() {
                         parameters = new List<MpParameterFormat>() {
                             new MpParameterFormat() {
                                 label = "Collection",
@@ -57,6 +57,10 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Appearance
+        public override object IconResourceObj => SelectedTag == null ?
+            base.IconResourceObj : SelectedTag.TagHexColor;
+        #endregion
         #region Model
 
         public int TagId {
@@ -83,7 +87,9 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
         public MpAvClassifyActionViewModel(MpAvTriggerCollectionViewModel parent) : base(parent) {
+            PropertyChanged += MpAvClassifyActionViewModel_PropertyChanged;
         }
+
 
         #endregion
 
@@ -134,6 +140,21 @@ namespace MonkeyPaste.Avalonia {
             });
         }
 
+        #endregion
+
+        #region Private Methods
+
+
+        private void MpAvClassifyActionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(ActionArgs):
+                    OnPropertyChanged(nameof(SelectedTag));
+                    break;
+                case nameof(SelectedTag):
+                    OnPropertyChanged(nameof(IconResourceObj));
+                    break;
+            }
+        }
         #endregion
 
         #region Commands

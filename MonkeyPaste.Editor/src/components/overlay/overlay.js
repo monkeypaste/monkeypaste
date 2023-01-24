@@ -243,25 +243,19 @@ function drawAnnotations(ctx) {
     if (!hasAnnotations(ctx)) {
         return;
     }
-    for (var i = 0; i < RootAnnotations.length; i++) {
-        drawAnnotation(ctx, RootAnnotations[i]);
+    let v_anns = getVisibleAnnotations();
+
+    for (var i = 0; i < v_anns.length; i++) {
+        drawAnnotation(ctx, v_anns[i]);
     }
 }
 
 function drawAnnotation(ctx, ann) {
     let annotation_rect = getAnnotationRect(ann);
-    if (annotation_rect) {
-        //let content_rect = getContentImageElement().getBoundingClientRect();
-        //annotation_rect.left += content_rect.x;
-        //annotation_rect.top += content_rect.y;
-
-        drawRect(ctx, annotation_rect);
+    if (!annotation_rect) {
+        return;
     }
-    if (isParentAnnotation(ann)) {
-        for (var i = 0; i < ann.children.length; i++) {
-            drawAnnotation(ctx, ann.children[i]);
-        }
-    }
+    drawRect(ctx, annotation_rect);
 }
 
 function clearOverlay(ctx) {
@@ -299,6 +293,9 @@ function drawOverlay() {
 // #region Event Handlers
 
 function onCaretBlinkTick() {
+    if (!isSubSelectionEnabled()) {
+        return;
+    }
     if (CaretBlinkOffColor) {
         CaretBlinkOffColor = null;
     } else {

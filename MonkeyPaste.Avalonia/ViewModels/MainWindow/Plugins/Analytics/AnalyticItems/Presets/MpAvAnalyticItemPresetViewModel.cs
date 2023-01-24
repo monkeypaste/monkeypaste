@@ -21,13 +21,25 @@ namespace MonkeyPaste.Avalonia {
         MpIHoverableViewModel, 
         MpIMenuItemViewModel,
         MpIActionComponent, 
-        MpIUserIconViewModel,
+        MpIUserIconViewModel, 
+        MpIContentTypeDependant,
         MpAvIShortcutCommandViewModel, 
         MpIPopupMenuPicker,
         MpIParameterHostViewModel,
         MpAvIParameterCollectionViewModel {
 
         #region Interfaces
+
+        #region MpIContentTypeDependant Implementation
+
+        bool MpIContentTypeDependant.IsContentTypeValid(MpCopyItemType cit) {
+            if (Parent == null) {
+                return false;
+            }
+            return Parent.IsContentTypeValid(cit);
+        }
+
+        #endregion
 
         #region MpIParameterHost Implementation
 

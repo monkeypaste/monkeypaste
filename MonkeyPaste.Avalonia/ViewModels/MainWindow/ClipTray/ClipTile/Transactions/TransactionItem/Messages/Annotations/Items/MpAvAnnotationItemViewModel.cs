@@ -9,7 +9,7 @@ using System.Linq;
 namespace MonkeyPaste.Avalonia {
     public class MpAvAnnotationItemViewModel : 
         MpViewModelBase<MpAvTransactionMessageViewModelBase>,
-        MpITransactionNodeViewModel,
+        MpAvITransactionNodeViewModel,
         MpIClampedValue {
 
         #region Private Variable
@@ -23,7 +23,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
-        #region MpITransactionNodeViewModel Implementation
+        #region MpAvITransactionNodeViewModel Implementation
 
         double MpIClampedValue.min => AnnotationMinScore;
         double MpIClampedValue.max => AnnotationMaxScore;
@@ -31,7 +31,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpITransactionNodeViewModel Implementation
+        #region MpAvITransactionNodeViewModel Implementation
         public object TransactionModel { get; }
         public object Body { get; }
         public bool IsExpanded { get; set; }
@@ -129,8 +129,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         public MpAvAnnotationItemViewModel(MpAvTransactionMessageViewModelBase parent) : base(parent) {
+            PropertyChanged += MpAvAnnotationItemViewModel_PropertyChanged;
             Items.CollectionChanged += Items_CollectionChanged;
         }
+
 
 
         #endregion
@@ -176,6 +178,15 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
+        private void MpAvAnnotationItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch(e.PropertyName) {
+                case nameof(IsSelected):
+                    if(IsSelected) {
+                        IsExpanded = true;
+                    }
+                    break;
+            }
+        }
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             //OnPropertyChanged(nameof(Items));
             //OnPropertyChanged(nameof(Children));

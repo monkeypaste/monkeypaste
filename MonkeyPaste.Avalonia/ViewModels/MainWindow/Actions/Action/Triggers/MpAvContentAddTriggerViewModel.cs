@@ -7,8 +7,11 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 
 namespace MonkeyPaste.Avalonia {
+    public interface MpIContentTypeDependant {
+        bool IsContentTypeValid(MpCopyItemType cit);
+    }
     public class MpAvContentAddTriggerViewModel : 
-        MpAvTriggerActionViewModelBase {
+        MpAvTriggerActionViewModelBase, MpIContentTypeDependant {
         #region Constants
 
         public const string CONTENT_TYPE_PARAM_ID = "SelectedContentType";
@@ -17,11 +20,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIParameterHost Overrides
 
-        private MpTriggerPluginFormat _actionComponentFormat;
-        public override MpTriggerPluginFormat ActionComponentFormat {
+        private MpActionPluginFormat _actionComponentFormat;
+        public override MpActionPluginFormat ActionComponentFormat {
             get {
                 if (_actionComponentFormat == null) {
-                    _actionComponentFormat = new MpTriggerPluginFormat() {
+                    _actionComponentFormat = new MpActionPluginFormat() {
                         parameters = new List<MpParameterFormat>() {
                             new MpParameterFormat() {
                                 label = "Trigger",
@@ -56,6 +59,21 @@ namespace MonkeyPaste.Avalonia {
                 return _actionComponentFormat;
             }
         }
+
+        #endregion
+
+        #region Interfaces
+
+        #region MpIContentTypeDependant Implementation
+
+        bool MpIContentTypeDependant.IsContentTypeValid(MpCopyItemType cit) {
+            if(AddedContentType == MpCopyItemType.None) {
+                return true;
+            }
+            return AddedContentType == cit;
+        }
+
+        #endregion
 
         #endregion
 

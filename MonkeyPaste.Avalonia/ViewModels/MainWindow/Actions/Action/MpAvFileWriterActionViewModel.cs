@@ -28,11 +28,11 @@ namespace MonkeyPaste.Avalonia {
         #endregion
         #region MpIParameterHost Overrides
 
-        private MpTriggerPluginFormat _actionComponentFormat;
-        public override MpTriggerPluginFormat ActionComponentFormat {
+        private MpActionPluginFormat _actionComponentFormat;
+        public override MpActionPluginFormat ActionComponentFormat {
             get {
                 if(_actionComponentFormat == null) {
-                    _actionComponentFormat = new MpTriggerPluginFormat() {
+                    _actionComponentFormat = new MpActionPluginFormat() {
                         parameters = new List<MpParameterFormat>() {
                             new MpParameterFormat() {
                                 label = "Directory",

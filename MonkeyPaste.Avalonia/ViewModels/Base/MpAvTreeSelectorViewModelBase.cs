@@ -19,50 +19,21 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region View Models
-        public virtual IEnumerable<MpITreeItemViewModel> AllAncestors {
-            get {
-                var aal = new List<MpITreeItemViewModel>();
-                var cur = (MpITreeItemViewModel)this;
-                while (cur != null) {
-                    if (cur.ParentTreeItem != null) {
-                        aal.Add(cur.ParentTreeItem);
-                    }
-                    cur = cur.ParentTreeItem;
-                }
-                return aal;
-            }
-        }
+        public virtual IEnumerable<MpITreeItemViewModel> AllAncestors =>
+            this.AllAncestors();
 
-        public virtual IEnumerable<MpITreeItemViewModel> AllDescendants {
-            get {
-                var adl = new List<MpITreeItemViewModel>();
-                foreach (var cttvm in Items) {
-                    adl.Add(cttvm);
-                    if(cttvm is MpAvTreeSelectorViewModelBase<P,C> tree_cttvm) {
-                        adl.AddRange(tree_cttvm.AllDescendants);
-                    }
-                }
-                return adl;
-            }
-        }
+        public virtual IEnumerable<MpITreeItemViewModel> AllDescendants =>
+            this.AllDescendants();
 
-        public virtual IEnumerable<MpITreeItemViewModel> SelfAndAllDescendants {
-            get {
-                var saldttvml = AllDescendants.ToList();
-                saldttvml.Insert(0, this);
-                return saldttvml;
-            }
-        }
+        public virtual IEnumerable<MpITreeItemViewModel> SelfAndAllDescendants =>
+            this.SelfAndAllDescendants();
 
-        public virtual IEnumerable<MpITreeItemViewModel> SelfAndAllAncestors {
-            get {
-                var salattvml = AllAncestors.ToList();
-                salattvml.Insert(0, this);
-                return salattvml;
-            }
-        }
+        public virtual IEnumerable<MpITreeItemViewModel> SelfAndAllAncestors =>
+            this.SelfAndAllAncestors();
 
-        public virtual MpITreeItemViewModel RootItem => this.FindRootParent();
+
+        public virtual MpITreeItemViewModel RootItem => 
+            this.RootParent();
 
         #endregion
 

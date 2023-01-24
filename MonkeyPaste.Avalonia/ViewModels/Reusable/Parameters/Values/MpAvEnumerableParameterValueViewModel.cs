@@ -206,6 +206,9 @@ namespace MonkeyPaste.Avalonia {
                     Parent.CurrentValue = Parent.SelectedItems.Select(x => x.Value).ToList().ToCsv(CsvProperties);
                     break;
                 case nameof(Value):
+                    if(Parent == null) {
+                        break;
+                    }
                     Parent.CurrentValue = Parent.SelectedItems.Select(x => x.Value).ToList().ToCsv(CsvProperties);
                     dynamic pp = Parent.Parent;
                     Parent.Parent.OnPropertyChanged(nameof(pp.IsAllValid));

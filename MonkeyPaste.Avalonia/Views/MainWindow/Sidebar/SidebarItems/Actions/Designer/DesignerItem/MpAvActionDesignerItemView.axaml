@@ -90,7 +90,7 @@
                                 <Polygon Points="25,0 50,50 0,50" />
                                 <Image>
                                     <Image.RenderTransform>
-                                        <TranslateTransform X="-2"
+                                        <TranslateTransform X="0"
                                                             Y="10" />
                                     </Image.RenderTransform>
                                 </Image>

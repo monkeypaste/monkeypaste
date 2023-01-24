@@ -95,27 +95,29 @@ function getAnnotationRectStyle(ann) {
 	if (!isRoiAnnotation(ann)) {
 		return {};
 	}
-	var fill = 'pink';
-	var stroke = 'orange';
+	let _fill = 'pink';
+	let _stroke = 'orange';
+	let _strokeOpacity = 1.0;
+	let _fillOpacity = 0.25;
+	let _strokeWidth = 2;
+
 	if (ann.guid == HoverAnnotationGuid) {
 		if (ann.guid == SelectedAnnotationGuid) {
-			stroke = 'lime';
+			_stroke = 'lime';
 		} else {
-			stroke = 'yellow';
+			_stroke = 'yellow';
 		}
+		_fillOpacity = 0.5;
 	} else if (ann.guid == SelectedAnnotationGuid) {
-		stroke = 'red'
+		_stroke = 'red'
 	}
-	var strokeOpacity = 1.0;
-	var fillOpacity = 0.5;
-	var strokeWidth = 2;
 
 	return {
-		fill: this.fill,
-		stroke: this.stroke,
-		strokeWidth: this.strokeWidth,
-		fillOpacity: this.fillOpacity,
-		strokeOpacity: this.strokeOpacity
+		fill: _fill,
+		stroke: _stroke,
+		strokeWidth: _strokeWidth,
+		fillOpacity: _fillOpacity,
+		strokeOpacity: _strokeOpacity
 	};
 }
 
@@ -124,6 +126,19 @@ function getSelectedAnnotation() {
 		return null;
 	}
 	return findAnnotationByGuid(SelectedAnnotationGuid);
+}
+
+function getVisibleAnnotations() {
+	if (!hasAnnotations() || SelectedAnnotationGuid == null) {
+		return [];
+	}
+	let sel_ann = getSelectedAnnotation();
+	if (!sel_ann) {
+		return [];
+	}
+	let root_ann = getRootAnnotation(sel_ann);
+	let result = getAnnotationAndAllDescendants(root_ann);
+	return result;
 }
 
 function getAllAnnotations() {
@@ -136,6 +151,28 @@ function getAllAnnotations() {
 		result.push(...cur_result);
 	}
 	return result;
+}
+
+function getRootAnnotation(ann) {
+	let cur_ann = ann;
+	let parent_ann = getParentAnnotation(cur_ann);
+	while (parent_ann != null) {
+		cur_ann = parent_ann;
+		parent_ann = getParentAnnotation(cur_ann);
+	}
+	return cur_ann;
+}
+
+function getParentAnnotation(ann) {
+	if (isNullOrUndefined(ann)) {
+		return null;
+	}
+	let parent_ann =
+		getAllAnnotations()
+			.filter(x => isParentAnnotation(x))
+			.find(x => x.children.some(y => y.guid == ann.guid));
+
+	return parent_ann;
 }
 
 function getAnnotationAndAllDescendants(cur_ann) {
@@ -154,7 +191,7 @@ function getAnnotationDescendants(cur_ann) {
 		return result;
 	}
 	for (var i = 0; i < cur_ann.children.length; i++) {
-		let cur_result = getAnnotationDescendants(cur_ann.children[i]);
+		let cur_result = getAnnotationAndAllDescendants(cur_ann.children[i]);
 		result.push(...cur_result);
 	}
 	return result;
@@ -174,6 +211,7 @@ function hasAnnotations() {
 function resetAnnotations() {
 	SelectedAnnotationGuid = null;
 	RootAnnotations = [];
+	resetForcedCursor();
 
 	removeAllChildren(getAnnotationRoiContainerElement());
 }
@@ -182,9 +220,10 @@ function isParentAnnotation(ann) {
 	if (isNullOrUndefined(ann)) {
 		return false;
 	}
-	return
+	let result =
 		ann.children !== undefined &&
 		Array.isArray(ann.children);
+	return result;
 }
 
 function isRoiAnnotation(ann) {
@@ -268,19 +307,17 @@ function findAnnotationByGuid(ann_guid, cur_ann) {
 	return null;
 }
 
-function findAnnotationUnderWindowPoint(wp,ann) {
-	let ann_and_desc = null;
-	if (isNullOrUndefined(ann)) {
-		ann_and_desc = getAllAnnotations();
-	} else {
-		ann_and_desc = getAnnotationAndAllDescendants(ann);
+function findAnnotationUnderWindowPoint(wp) {
+	if (!isPoint(wp) || !hasAnnotations()) {
+		return null;
 	}
+	let visible_anns = getVisibleAnnotations();
 
 	// NOTE since annotations can overlap and/or be
 	// within another this selects hit by smallest area under pointer
 	let hits_by_area =
-		ann_and_desc
-			.filter(x => isPointInRect(cleanRect(x), wp))
+		visible_anns
+			.filter(x => isPointInRect(getAnnotationRect(x), wp))
 			.sort((a, b) => { return getRectArea(a) - getRectArea(b) });
 	if (hits_by_area.length == 0) {
 		return null;
@@ -288,7 +325,13 @@ function findAnnotationUnderWindowPoint(wp,ann) {
 	return hits_by_area[0];
 }
 
-function selectAnnotation(ann_guid, fromHost = false) {
+function selectAnnotation(ann_or_annGuid, fromHost = false) {
+	let ann_guid = null;
+	if (isString(ann_or_annGuid)) {
+		ann_guid = ann_or_annGuid;
+	} else if (!isNullOrUndefined(ann_or_annGuid)) {
+		ann_guid = ann_or_annGuid.guid;
+	}
 	log('selected annotation: ' + ann_guid + ' fromHost: ' + fromHost);
 
 	SelectedAnnotationGuid = ann_guid;
@@ -299,8 +342,14 @@ function selectAnnotation(ann_guid, fromHost = false) {
 	onAnnotationSelected_ntf(SelectedAnnotationGuid);
 }
 
-function hoverAnnotation(ann_guid, fromHost = false) {
-	log('hover annotation: ' + ann_guid + ' fromHost: ' + fromHost);
+function hoverAnnotation(ann_or_annGuid, fromHost = false) {
+	let ann_guid = null;
+	if (isString(ann_or_annGuid)) {
+		ann_guid = ann_or_annGuid;
+	} else if (!isNullOrUndefined(ann_or_annGuid)) {
+		ann_guid = ann_or_annGuid.guid;
+	}
+	//log('hover annotation: ' + ann_guid + ' fromHost: ' + fromHost);
 	HoverAnnotationGuid = ann_guid;
 	drawOverlay();
 	if (fromHost) {
@@ -327,34 +376,16 @@ function onAnnotationWindowPointerClick(e) {
 	if (!hasAnnotations()) {
 		return;
 	}
-	let sel_ann = getSelectedAnnotation();
-	if (isNullOrUndefined(sel_ann)) {
-		return;
-	}
-	let hit_ann = findAnnotationUnderWindowPoint(WindowMouseLoc, sel_ann);
-	if (isNullOrUndefined(hit_ann)) {
-		return;
-	}
-	selectAnnotation(hit_ann.guid);
+	let hit_ann = findAnnotationUnderWindowPoint(WindowMouseLoc);
+	selectAnnotation(hit_ann);
 }
 
 function onAnnotationWindowPointerMove(e) {
-	if (!hasAnnotations()) {
-		return;
-	}
-	let sel_ann = getSelectedAnnotation();
-	if (isNullOrUndefined(sel_ann)) {
-		document.body.style.cursor = 'default';
-		return;
-	}
-	let hit_ann = findAnnotationUnderWindowPoint(WindowMouseLoc, sel_ann);
-	if (isNullOrUndefined(hit_ann)) {
-		hoverAnnotation(null);
-		document.body.style.cursor = 'default';
-		return;
-	}
-	hoverAnnotation(hit_ann.guid);
-	document.body.style.cursor = 'pointer';
+	let hover_ann = findAnnotationUnderWindowPoint(WindowMouseLoc);
+	hoverAnnotation(hover_ann);
+
+	let forced_cursor = hover_ann ? 'pointer' : 'default';
+	forceCursor(forced_cursor);
 }
 
 // #endregion Event Handlers

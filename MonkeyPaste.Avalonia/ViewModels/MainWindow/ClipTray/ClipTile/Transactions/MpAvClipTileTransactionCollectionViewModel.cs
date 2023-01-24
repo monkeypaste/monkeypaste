@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public interface MpITransactionNodeViewModel : 
+    public interface MpAvITransactionNodeViewModel : 
         MpITreeItemViewModel, 
         MpISelectableViewModel, 
         MpIHoverableViewModel,
@@ -56,7 +56,7 @@ namespace MonkeyPaste.Avalonia {
             Messages
             .OrderByDescending(x => x.ComparableSortValue);
 
-        public MpITransactionNodeViewModel PrimaryItem => 
+        public MpAvITransactionNodeViewModel PrimaryItem => 
             Transactions.OrderBy(x => x.TransactionDateTime).FirstOrDefault();
 
         #endregion
@@ -229,13 +229,16 @@ namespace MonkeyPaste.Avalonia {
                     Parent.OnPropertyChanged(nameof(Parent.IconResourceObj));
                     break;
                 case nameof(SelectedTransaction):
-                    ApplyTransactionAsync(SelectedTransaction).FireAndForgetSafeAsync(this);
+                    ApplyTransaction(SelectedTransaction);
                     break;
             }
         }
 
-        private async Task ApplyTransactionAsync(MpAvTransactionItemViewModel tivm) {
-            if(tivm == null || tivm.TransactionLabel == "Edit" || tivm.TransactionLabel == "Drop") {
+        private void ApplyTransaction(MpAvTransactionItemViewModel tivm) {
+            if(tivm == null || 
+                tivm.TransactionLabel == "Edit" || 
+                tivm.TransactionLabel == "Drop" || 
+                tivm.TransactionLabel == "Created") {
                 return;
             }
 
@@ -248,7 +251,7 @@ namespace MonkeyPaste.Avalonia {
                 if(updateObj == null) {
                     return;
                 }
-                await wv.PerformUpdateContentRequestAsync(updateObj);
+                wv.PerformUpdateContentRequestAsync(updateObj).FireAndForgetSafeAsync(this);
             }
         }
 

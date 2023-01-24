@@ -12,7 +12,7 @@
                        d:DesignHeight="450"
                        d:DesignWidth="800">
     <Border Classes="paramBorder">
-        <CheckBox HorizontalAlignment="Right"
+        <CheckBox HorizontalAlignment="Left"
                   VerticalAlignment="Center"
                   IsChecked="{Binding BoolValue, Mode=TwoWay}" />
     </Border>

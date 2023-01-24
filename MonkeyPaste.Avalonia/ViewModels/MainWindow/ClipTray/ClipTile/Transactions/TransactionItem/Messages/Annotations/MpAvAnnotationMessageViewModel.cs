@@ -66,7 +66,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public override async Task InitializeAsync(object jsonOrParsedFragment, MpITransactionNodeViewModel parentAnnotation) {
+        public override async Task InitializeAsync(object jsonOrParsedFragment, MpAvITransactionNodeViewModel parentAnnotation) {
             IsBusy = true;
 
             ParentTreeItem = parentAnnotation;
@@ -99,6 +99,14 @@ namespace MonkeyPaste.Avalonia {
         private void MpAvAnnotationMessageViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(SelectedItem):
+                    if(RootAnnotationViewModel != null) {
+                        var all_anns = RootAnnotationViewModel
+                            .SelfAndAllDescendants();
+                        all_anns
+                            .Cast<MpAvAnnotationItemViewModel>()
+                            .ForEach(x => x.IsSelected = x.AnnotationGuid == SelectedItemGuid);
+                    }
+
                     if(Parent == null || 
                         Parent.Parent == null ||
                         Parent.Parent.Parent == null) {

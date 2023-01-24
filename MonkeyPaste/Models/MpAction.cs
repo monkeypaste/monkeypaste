@@ -20,8 +20,7 @@ namespace MonkeyPaste {
     }
 
     public enum MpComparisonOperatorType {
-        None = 0,
-        Contains,
+        Contains = 0,
         Exact,
         BeginsWith,
         EndsWith,

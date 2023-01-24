@@ -31,10 +31,13 @@ function removeAllChildren(elm) {
 }
 
 function isString(obj) {
-    if (isNullOrUndefined(obj) || typeof obj !== 'string' || !(obj instanceof String)) {
+    if (isNullOrUndefined(obj)) {
         return false;
     }
-    return true;
+    if (typeof obj === 'string' || obj instanceof String) {
+        return true;
+    }
+    return false;
 }
 
 function isNullOrUndefined(obj) {

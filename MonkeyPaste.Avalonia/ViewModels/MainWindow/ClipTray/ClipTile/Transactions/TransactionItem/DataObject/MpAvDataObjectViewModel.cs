@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public Dictionary<string,MpITransactionNodeViewModel> DataLookup { get; private set; }
+        public Dictionary<string,MpAvITransactionNodeViewModel> DataLookup { get; private set; }
         #endregion
 
         #region Model

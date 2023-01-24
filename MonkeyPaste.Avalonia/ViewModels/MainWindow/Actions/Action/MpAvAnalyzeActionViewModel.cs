@@ -11,7 +11,8 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvAnalyzeActionViewModel : 
-        MpAvActionViewModelBase {
+        MpAvActionViewModelBase,
+        MpIContentTypeDependant {
         #region Constants
 
         public const string SELECTED_ANALYZER_PARAM_ID = "SelectedAnalyzerId";
@@ -20,11 +21,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIParameterHost Overrides
 
-        private MpTriggerPluginFormat _actionComponentFormat;
-        public override MpTriggerPluginFormat ActionComponentFormat {
+        private MpActionPluginFormat _actionComponentFormat;
+        public override MpActionPluginFormat ActionComponentFormat {
             get {
                 if (_actionComponentFormat == null) {
-                    _actionComponentFormat = new MpTriggerPluginFormat() {
+                    _actionComponentFormat = new MpActionPluginFormat() {
                         parameters = new List<MpParameterFormat>() {
                             new MpParameterFormat() {
                                 label = "Analyzer",
@@ -41,6 +42,22 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #endregion
+
+        #region Interfaces
+
+        #region MpIContentTypeDependant Implementation
+
+        bool MpIContentTypeDependant.IsContentTypeValid(MpCopyItemType cit) {
+            if (SelectedPreset is MpIContentTypeDependant ctd) {
+                return ctd.IsContentTypeValid(cit);
+            }
+            return false;
+        }
+
+        #endregion
+
+        #endregion
+
         #region Properties
 
         #region View Models
@@ -48,6 +65,12 @@ namespace MonkeyPaste.Avalonia {
         public MpAvAnalyticItemPresetViewModel SelectedPreset =>
             MpAvAnalyticItemCollectionViewModel.Instance.AllPresets.FirstOrDefault(x => x.AnalyticItemPresetId == AnalyticItemPresetId);
 
+        #endregion
+
+        #region Appearance
+
+        public override object IconResourceObj =>
+            SelectedPreset == null ? base.IconResourceObj : SelectedPreset.IconId;
         #endregion
 
         #region State
@@ -81,7 +104,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvAnalyzeActionViewModel(MpAvTriggerCollectionViewModel parent) : base(parent) { }
+        public MpAvAnalyzeActionViewModel(MpAvTriggerCollectionViewModel parent) : base(parent) {
+            PropertyChanged += MpAvAnalyzeActionViewModel_PropertyChanged;
+        }
+
 
         #endregion
 
@@ -145,23 +171,45 @@ namespace MonkeyPaste.Avalonia {
             } else if (SelectedPreset == null) {
                 ValidationText = $"Analyzer for Action '{FullName}' not found";
             } else {
-                // check ancestors to ensure analyzer supports content type as input
-                var pavm = ParentActionViewModel;
-                while(pavm != null) {
-                    if(pavm is MpAvCompareActionViewModelBase cavm) {
-                        if(cavm.IsItemTypeCompare) {
-                            if(!SelectedPreset.Parent.IsContentTypeValid(cavm.ContentItemType)) {
-                                ValidationText = $"Parent Comparer '{pavm.Label}' filters only for '{cavm.ContentItemType.ToString()}' type content and analyzer '{SelectedPreset.FullName}' will never execute because it does not support '{cavm.ContentItemType.ToString()}' type of input ";
-                                break;
-                            }
-                        }
-                    }
-                    pavm = pavm.ParentActionViewModel;
-                }
                 ValidationText = string.Empty;
+                // check ancestors to ensure analyzer supports content type as input
+
+                MpAvActionViewModelBase closest_type_dep_ancestor = ParentActionViewModel;
+                while(closest_type_dep_ancestor != null) {
+                    // walk up action chain, to last analyzer or content add trigger to validate
+                    if(closest_type_dep_ancestor is MpAvContentAddTriggerViewModel cavm &&
+                        cavm.AddedContentType != MpCopyItemType.None &&
+                         !SelectedPreset.Parent.IsContentTypeValid(cavm.AddedContentType)) {
+                        ValidationText = $"Parent '{closest_type_dep_ancestor.Label}' filters only for '{cavm.AddedContentType}' type content and analyzer '{SelectedPreset.FullName}' will never execute because it does not support '{cavm.AddedContentType}' type of input ";
+                        break;
+                    }
+                    if(closest_type_dep_ancestor is MpAvAnalyzeActionViewModel aavm &&
+                        aavm.SelectedPreset != null) {
+                        // TODO need to have an analyzer.IsInputValid using analyzerOutputformat flags here but 
+                        // still not clear how handling previous output is it just LastOutput?
+                        // if any previous how would user specify or query?
+
+                    }
+                    closest_type_dep_ancestor = closest_type_dep_ancestor.ParentActionViewModel;
+                }
             }
             if(!IsValid) {
                 ShowValidationNotification();
+            }
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private void MpAvAnalyzeActionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch(e.PropertyName) {
+                case nameof(ActionArgs):
+                    OnPropertyChanged(nameof(SelectedPreset));
+                    break;
+                case nameof(SelectedPreset):
+                    OnPropertyChanged(nameof(IconResourceObj));
+                    break;
             }
         }
 

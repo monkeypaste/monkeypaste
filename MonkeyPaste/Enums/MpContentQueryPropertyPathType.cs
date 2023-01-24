@@ -16,9 +16,7 @@
         SourceDeviceName,
         SourceDeviceType,
         ItemRefUrl,
-        MAX_COPY_ITEM_TYPE,
         LastOutput,
-        AnalyzerLabel
     }
 
 }

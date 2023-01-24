@@ -449,7 +449,11 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(HasModelChanged):
                 case nameof(CurrentValue):
                     if(Parent is MpISaveOrCancelableViewModel socvm) {
+                        // analyzers
                         socvm.OnPropertyChanged(nameof(socvm.CanSaveOrCancel));
+                    } else {
+                        // for action parameters
+                        //SaveCurrentValueCommand.Execute(null);
                     }
                     break;
                 case nameof(ValidationMessage):
@@ -492,7 +496,9 @@ namespace MonkeyPaste.Avalonia {
                 SetLastValue(CurrentValue);
                 OnPropertyChanged(nameof(HasModelChanged));
                 Task.Run(async () => {
+                    //IsBusy = true;
                     await PresetValueModel.WriteToDatabaseAsync();
+                    //IsBusy = false;
                 });
             },
             () => {

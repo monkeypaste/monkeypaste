@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvParameterRequestMessageViewModel  : MpAvTransactionMessageViewModelBase, MpITransactionNodeViewModel {
+    public class MpAvParameterRequestMessageViewModel  : MpAvTransactionMessageViewModelBase, MpAvITransactionNodeViewModel {
 
         #region Interfaces
         #endregion
@@ -39,7 +39,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
-        public override async Task InitializeAsync(object jsonOrParsedFragment, MpITransactionNodeViewModel parentAnnotation) {
+        public override async Task InitializeAsync(object jsonOrParsedFragment, MpAvITransactionNodeViewModel parentAnnotation) {
             IsBusy = true;
 
             Json = jsonOrParsedFragment is string ? jsonOrParsedFragment.ToString() : string.Empty;

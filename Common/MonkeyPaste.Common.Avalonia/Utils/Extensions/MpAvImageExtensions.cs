@@ -85,7 +85,10 @@ namespace MonkeyPaste.Common.Avalonia {
         public static unsafe Bitmap? Tint(this Bitmap bmp, string hexColor, bool retainAlpha = true) {
             var tint = hexColor.ToAvColor();
             var tintPixelColor = new PixelColor { Alpha = tint.A, Red = tint.R, Green = tint.G, Blue = tint.B };
-
+            if(tintPixelColor.Alpha == 0) {
+                // don't change image if tint is transparent
+                return bmp;
+            }
             var pixels = GetPixels(bmp);
             using (var memoryStream = new MemoryStream()) {
                 bmp.Save(memoryStream);

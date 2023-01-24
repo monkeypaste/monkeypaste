@@ -49,6 +49,12 @@ namespace MonkeyPaste.Common {
         public static bool IsHexStringBright(this string hexStr, int brightThreshold = 150) {
             return IsBright(hexStr, brightThreshold);
         }
+        public static bool IsHexStringTransparent(this string hexStr) {
+            if(hexStr.IsStringHexColor()) {
+                return new MpColor(hexStr).A == 0;
+            }
+            return false;
+        }
 
         public static string HexColorToContrastingFgHexColor(
             this string hexStr, 

@@ -85,6 +85,7 @@ namespace Yolo {
                             if (score >= confidence) {
                                 var boxAnnotation = new MpImageAnnotationNodeFormat() {
                                     score = prediction.Score,
+                                    type = "Object",
                                     label = prediction.Label.Name,
                                     left = prediction.Rectangle.X,
                                     top = prediction.Rectangle.Y,

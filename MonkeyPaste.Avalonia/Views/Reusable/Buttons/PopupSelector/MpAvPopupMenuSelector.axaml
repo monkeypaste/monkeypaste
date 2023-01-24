@@ -3,6 +3,7 @@
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:pcl="using:MonkeyPaste"
                        x:DataType="pcl:MpIPopupSelectorMenu"
@@ -43,6 +44,8 @@
     </local:MpAvUserControl.Styles>
     <Button x:Name="ContainerButton"
             Cursor="Hand"
+            Margin="0,2"
+            CornerRadius="10"
             BorderThickness="1"
             BorderBrush="DimGray"
             local:MpAvMenuExtension.IsEnabled="True"
@@ -52,41 +55,17 @@
             local:MpAvMenuExtension.ForcedMenuItemViewModel="{Binding PopupMenu}"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
-        <Grid ColumnDefinitions="*, 25"
-              Margin="5"
-              MinHeight="20">
-            <Border x:Name="SelectionBorder"
-                    Grid.Column="0"
-                    Padding="5,3"
-                    Cursor="Arrow"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    BorderThickness="1"
-                    CornerRadius="3"
-                    Background="Transparent">
-                <DockPanel LastChildFill="True">
-                    <Image Margin="5,0,5,0"
-                           Height="25"
-                           Width="25"
-                           Source="{Binding SelectedIconResourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
-                    <TextBlock Margin="5,0,5,0"
-                               Padding="3"
-                               VerticalAlignment="Stretch"
-                               HorizontalAlignment="Left"
-                               FontFamily="Segue UI"
-                               FontSize="14"
-                               Foreground="Black"
-                               Background="Transparent"
-                               Text="{Binding SelectedLabel}" />
-                </DockPanel>
-            </Border>
-            <!--    -->
+        <DockPanel LastChildFill="True"
+                   Margin="0,5"
+                   MinHeight="20">
+            <!--  POPUP ARROW  -->
             <Border x:Name="PopupCaretBorder"
-                    Grid.Column="1"
+                    DockPanel.Dock="Right"
                     Classes="popupCaret iconButton"
                     BorderThickness="1"
                     VerticalAlignment="Center"
-                    Margin="7,0,0,0"
+                    CornerRadius="7"
+                    Margin="0,0,5,0"
                     Cursor="Hand"
                     Height="25"
                     Width="25">
@@ -98,7 +77,32 @@
                           Classes.open="{Binding IsOpen}"
                           Data="{StaticResource MenuDownArrowSvg}" />
             </Border>
-        </Grid>
+            <Border x:Name="SelectionBorder"
+                    Padding="5,3"
+                    Cursor="Arrow"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    BorderThickness="1"
+                    CornerRadius="3"
+                    Background="Transparent">
+                <DockPanel LastChildFill="True">
+                    <Image Height="25"
+                           Width="25"
+                           Source="{Binding SelectedIconResourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
+                    <local:MpAvMarqueeTextBox Padding="3"
+                                              Margin="7,3,0,0"
+                                              MinWidth="100"
+                                              IsReadOnly="True"
+                                              ReadOnlyForeground="White"
+                                              DropShadowBrush="Black"
+                                              VerticalAlignment="Stretch"
+                                              HorizontalAlignment="Left"
+                                              FontFamily="Segue UI"
+                                              FontSize="14"
+                                              Text="{Binding SelectedLabel}" />
+                </DockPanel>
+            </Border>
+        </DockPanel>
     </Button>
 
 </local:MpAvUserControl>

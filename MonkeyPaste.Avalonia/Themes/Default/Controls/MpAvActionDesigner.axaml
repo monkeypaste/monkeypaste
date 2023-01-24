@@ -111,10 +111,12 @@
     </Style>
     <Style Selector="ContentControl#DesignerItemContentControl.valid Image"
            x:DataType="local:MpAvActionViewModelBase">
+        <Setter Property="Stretch"
+                Value="Uniform" />
         <Setter Property="Source">
             <Setter.Value>
                 <MultiBinding Converter="{x:Static local:MpAvMultiObjToContrastTintedBitmapConverter.Instance}">
-                    <Binding Path="ActionBackgroundHexColor" />
+                    <Binding Path="IconBackgroundHexColor" />
                     <Binding Path="IconResourceObj" />
                 </MultiBinding>
             </Setter.Value>

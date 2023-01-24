@@ -24,6 +24,15 @@ namespace MonkeyPaste.Common {
             return enumerable.Aggregate(func);
         }
         public static IEnumerable<T> Difference<T>(this IEnumerable<T> enumerable, IEnumerable<T> other) {
+            if(enumerable == null && other == null) {
+                return new List<T>();
+            }
+            if(enumerable == null) {
+                return other;
+            }
+            if(other == null) {
+                return enumerable;
+            }
             return enumerable.Union(other).Except(enumerable.Intersect(other)); ;
         }
 

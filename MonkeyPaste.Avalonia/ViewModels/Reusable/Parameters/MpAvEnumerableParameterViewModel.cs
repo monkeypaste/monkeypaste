@@ -64,9 +64,15 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        public override bool HasModelChanged => 
-            SelectedItems.Difference(_lastSelectedValues).Count() > 0;
-        public bool IsParameterDropDownOpen { get; set; }
+        public override bool HasModelChanged //=>
+            //SelectedItems.Difference(_lastSelectedValues).Count() > 0; //{
+          {  get {
+                var selected_vals = SelectedItems.Select(x => x.Value);
+                var last_vals = _lastSelectedValues.Select(x => x.Value);
+                return selected_vals.Difference(last_vals).Count() > 0;
+            }
+}
+public bool IsParameterDropDownOpen { get; set; }
 
         public MpCsvFormatProperties CsvProperties {
             get {
@@ -76,8 +82,12 @@ namespace MonkeyPaste.Avalonia {
 
                 // NOTE2 since values maybe predefined MpCsvFormatProperties detects base64 when decoding
                 // so a caveat here is 
-                return ControlType == MpParameterControlType.List ?
-                    MpCsvFormatProperties.Default : MpCsvFormatProperties.DefaultBase64Value;
+                //return ControlType == MpParameterControlType.List ?
+                //    MpCsvFormatProperties.Default : MpCsvFormatProperties.DefaultBase64Value;
+                if(ParameterFormat == null) {
+                    return MpCsvFormatProperties.Default;
+                }
+                return ParameterFormat.CsvProps;
             }
         }
         #endregion
@@ -175,7 +185,13 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
 
         protected override void SetLastValue(object value) {
-            if(value is IEnumerable<MpAvEnumerableParameterValueViewModel> val_vml) {
+            if (value is string val_str) {
+                // for single selectables
+                var epvvm = new MpAvEnumerableParameterValueViewModel() {
+                    Value = val_str
+                };
+                SetLastValue(new[] {epvvm});
+            } else if (value is IEnumerable<MpAvEnumerableParameterValueViewModel> val_vml) {
                 _lastSelectedValues = val_vml.ToList();
             } else {
                 _lastSelectedValues = new List<MpAvEnumerableParameterValueViewModel>();

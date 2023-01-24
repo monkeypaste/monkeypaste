@@ -23,6 +23,7 @@ namespace MonkeyPaste.Avalonia {
     public abstract class MpAvActionViewModelBase :
         MpViewModelBase<MpAvTriggerCollectionViewModel>,
         MpIActionPluginComponent,
+        MpITreeItemViewModel,
         MpIHoverableViewModel,
         MpIPopupMenuViewModel,
         MpIContextMenuViewModel,
@@ -47,6 +48,13 @@ namespace MonkeyPaste.Avalonia {
         #region Statics
 
         public static string GetDefaultActionIconResourceKey(object actionOrTriggerType) {
+            if(actionOrTriggerType is MpAvActionViewModelBase avmb) {
+                if(avmb is MpAvTriggerActionViewModelBase tvmb) {
+                    actionOrTriggerType = tvmb.TriggerType;
+                } else {
+                    actionOrTriggerType = avmb.ActionType;
+                }
+            }
             if(actionOrTriggerType is MpTriggerType tt) {
                 switch (tt) {
                     case MpTriggerType.ContentAdded:
@@ -81,6 +89,20 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
+
+        #region MpITreeItemViewModel Implementation
+
+        IEnumerable<MpITreeItemViewModel> MpITreeItemViewModel.Children =>
+            RootTriggerActionViewModel == null ? null :
+            RootTriggerActionViewModel.SelfAndAllDescendants.Where(x => x.ParentActionId == ActionId);
+
+        MpITreeItemViewModel MpITreeItemViewModel.ParentTreeItem =>
+            RootTriggerActionViewModel == null ? null :
+            RootTriggerActionViewModel.SelfAndAllDescendants.FirstOrDefault(x => x.ActionId == ParentActionId);
+
+        bool MpITreeItemViewModel.IsExpanded { get => false; set => _ = value; }
+
+        #endregion
 
         #region MpIActionPluginComponent Implementation
         Task MpIActionPluginComponent.PerformActionAsync(object arg) => PerformActionAsync(arg);
@@ -126,15 +148,47 @@ namespace MonkeyPaste.Avalonia {
             },
             () => {
                 return CanSaveOrCancel;
-            });
+            }, new[] { this });
         public ICommand CancelCommand => new MpCommand(
             () => {
                 ActionArgs.ForEach(x => x.RestoreLastValueCommand.Execute(null));
             },
             () => {
                 return CanSaveOrCancel;
-            });
-        public bool CanSaveOrCancel => ActionArgs.Any(x => x.HasModelChanged);
+            }, new[] { this });
+
+        //private bool _canSaveOrCancel = false;
+        //public bool CanSaveOrCancel {
+        //    get {
+        //        bool hasChanged = ActionArgs.Any(x => x.HasModelChanged);
+        //        if (hasChanged) {
+        //            SaveCommand.Execute(null);
+        //            //Task.Run(async () => {
+
+        //            //});
+        //            // this should notify action parameter property changes
+        //            //OnPropertyChanged(nameof(ArgLookup));
+        //            // save args on any change
+        //        }
+        //        // NOTE disabling cancelable on actions, only used for analyzers
+        //        return false;
+        //    }
+        //}
+        private bool _canSaveOrCancel = false;
+        public bool CanSaveOrCancel {
+            get {
+                bool result = ActionArgs.Any(x => x.HasModelChanged);
+                if (result != _canSaveOrCancel) {
+                    _canSaveOrCancel = result;
+                    OnPropertyChanged(nameof(CanSaveOrCancel));
+                    if(!_canSaveOrCancel) {
+                        // leaf actions need to use ActionArgs property change to update parameter properties
+                        OnPropertyChanged(nameof(ActionArgs));
+                    }
+                }
+                return _canSaveOrCancel;
+            }
+        }
 
         #endregion
 
@@ -153,7 +207,7 @@ namespace MonkeyPaste.Avalonia {
             PluginFormat == null || PluginFormat.backupCheckPluginFormat == null || PluginFormat.backupCheckPluginFormat.action == null ?
                 null : PluginFormat.backupCheckPluginFormat.action;
 
-        public virtual MpTriggerPluginFormat ActionComponentFormat { get; protected set; }
+        public virtual MpActionPluginFormat ActionComponentFormat { get; protected set; }
 
         public MpIPluginComponentBase PluginComponent =>
             PluginFormat == null ? null : PluginFormat.Component as MpIPluginComponentBase;
@@ -360,6 +414,16 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public string IconBackgroundHexColor {
+            get {
+                if(IconResourceObj is string &&
+                    GetDefaultActionIconResourceKey(this) == IconResourceObj.ToString()) {
+                    return ActionBackgroundHexColor;
+                }
+                // icon is overriden by action, avoid tinting
+                return MpSystemColors.Transparent;
+            }
+        }
 
         public virtual object IconResourceObj {
             get {
@@ -753,6 +817,8 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
+            OnPropertyChanged(nameof(IconResourceObj));
+
 
             IsBusy = false;
         }
@@ -1001,6 +1067,12 @@ namespace MonkeyPaste.Avalonia {
                         });
                     }
                     break;
+                //case nameof(CanSaveOrCancel):
+                //    if(CanSaveOrCancel) {
+                //        SaveCommand.Execute(null);
+
+                //    }
+                //    break;
                 case nameof(IsBusy):
                     OnPropertyChanged(nameof(IsAnyBusy));
                     if (ParentActionViewModel != null) {
@@ -1026,6 +1098,9 @@ namespace MonkeyPaste.Avalonia {
                     if(this is MpAvIParameterCollectionViewModel ppcvm) {
                         ppcvm.OnPropertyChanged(nameof(ppcvm.Items));
                     }
+                    break;
+                case nameof(IconResourceObj):
+                    OnPropertyChanged(nameof(IconBackgroundHexColor));
                     break;
             }
         }

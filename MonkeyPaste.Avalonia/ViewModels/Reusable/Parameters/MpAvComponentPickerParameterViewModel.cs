@@ -142,7 +142,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
         #region Commands
 
         public ICommand SelectComponentCommand => new MpCommand<object>(
@@ -157,6 +156,8 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(SelectedComponentPicker));
                     OnPropertyChanged(nameof(SelectedLabel));
                     OnPropertyChanged(nameof(SelectedIconResourceObj));
+
+                    MpPlatformWrapper.Services.ContextMenuCloser.CloseMenu();
                 }
             });
 

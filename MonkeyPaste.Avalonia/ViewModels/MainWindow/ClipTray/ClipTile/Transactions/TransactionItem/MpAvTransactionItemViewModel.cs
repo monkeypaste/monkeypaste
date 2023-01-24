@@ -13,11 +13,11 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     public class MpAvTransactionItemViewModel  : 
         MpViewModelBase<MpAvClipTileTransactionCollectionViewModel>,
-        MpITransactionNodeViewModel {
+        MpAvITransactionNodeViewModel {
 
         #region Interfaces
 
-        #region MpITransactionNodeViewModel Implementation
+        #region MpAvITransactionNodeViewModel Implementation
 
         public object Body => "Empty TransactionItem Body";
         public bool IsExpanded { get; set; }
@@ -28,7 +28,7 @@ namespace MonkeyPaste.Avalonia {
         public object ComparableSortValue => TransactionDateTime;
         public object IconSourceObj => SourceIconObj;
 
-        object MpITransactionNodeViewModel.TransactionModel => Transaction;
+        object MpAvITransactionNodeViewModel.TransactionModel => Transaction;
 
         #region MpIMenuItemViewModel Implementation
 
@@ -261,9 +261,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public MpAnnotationNodeFormat GetTransactionAnnotation() {
-            if (Response is MpAvDataObjectMessageViewModel domvm && 
-                domvm.DataObject.TryGetData<string>(MpPortableDataFormats.INTERNAL_CONTENT_ANNOTATION_FORMAT, out string annotationJson)) {
-                return MpAnnotationNodeFormat.Parse(annotationJson);
+            if (Response is MpAvAnnotationMessageViewModel amvm &&
+                amvm.RootAnnotationViewModel != null) {
+                return amvm.RootAnnotationViewModel.Annotation;
             }
             return null;
         }
@@ -297,14 +297,24 @@ namespace MonkeyPaste.Avalonia {
             return tsvm;
         }
         
-        public async Task<MpAvTransactionMessageViewModelBase> CreateMessageViewModelAsync(MpJsonMessageFormatType jsonFormat, string json, MpITransactionNodeViewModel parentAnnotation) {
+        public async Task<MpAvTransactionMessageViewModelBase> CreateMessageViewModelAsync(MpJsonMessageFormatType jsonFormat, string json, MpAvITransactionNodeViewModel parentAnnotation) {
             if(string.IsNullOrEmpty(json)) {
                 return null;
             }
             MpAvTransactionMessageViewModelBase cttimvmb = null;
             switch (jsonFormat) {
                 case MpJsonMessageFormatType.DataObject:
-                    cttimvmb = new MpAvDataObjectMessageViewModel(this);
+                    var mpdo = MpPortableDataObject.Parse(json);
+                    if(mpdo.TryGetData(MpPortableDataFormats.INTERNAL_CONTENT_ANNOTATION_FORMAT, out string ann_json)) {
+                        cttimvmb = await CreateMessageViewModelAsync(MpJsonMessageFormatType.Annotation, ann_json,this);
+                        return cttimvmb;
+                    } else if(mpdo.TryGetData(MpPortableDataFormats.INTERNAL_CONTENT_DELTA_FORMAT, out string delta_json)) {
+                        cttimvmb = await CreateMessageViewModelAsync(MpJsonMessageFormatType.Delta, delta_json, this);
+                        return cttimvmb;
+                    } else {
+                        cttimvmb = new MpAvDataObjectMessageViewModel(this);
+                    }
+                    
                     break;
                 case MpJsonMessageFormatType.Delta:
                     cttimvmb = new MpAvDeltaMessageViewModel(this);
@@ -334,7 +344,7 @@ namespace MonkeyPaste.Avalonia {
                         if(Response is MpAvAnnotationMessageViewModel iamvm) {
                             // this only comes from editor
                             var to_select =
-                                iamvm.SelectedItem.FindAllChildren()
+                                iamvm.SelectedItem.AllDescendants()
                                 .Cast<MpAvAnnotationItemViewModel>().FirstOrDefault(x => x.AnnotationGuid == argStr);
 
                             iamvm.SelectedItem = to_select;

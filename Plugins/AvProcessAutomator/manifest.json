@@ -181,19 +181,6 @@
           }
         ],
         "paramId": 8
-      },
-      {
-        "label": "AnalyzerLabel",
-        "controlType": "TextBox",
-        "unitType": "PlainTextContentQuery",
-        "paramId": 15,
-        "isVisible": false,
-        "isRequired": true,
-        "values": [
-          {
-            "value": "{AnalyzerLabel}"
-          }
-        ]
       }
     ]
   }

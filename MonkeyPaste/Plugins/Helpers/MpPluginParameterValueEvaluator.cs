@@ -133,15 +133,16 @@ namespace MonkeyPaste {
 
             for (int i = 1; i < Enum.GetNames(typeof(MpContentQueryPropertyPathType)).Length; i++) {
                 // example content query: '{Title} is a story about {ItemData}'
-                var ppt = (MpContentQueryPropertyPathType)i;
+                MpContentQueryPropertyPathType ppt = (MpContentQueryPropertyPathType)i;
+                if(ppt == MpContentQueryPropertyPathType.LastOutput) {
+                    continue;
+                }
+
                 string pptPathEnumName = ppt.ToString();
                 string pptToken = "{" + pptPathEnumName + "}";
 
                 if (curVal.Contains(pptToken)) {
-                    string contentValue = null;
-                    if (ppt < MpContentQueryPropertyPathType.MAX_COPY_ITEM_TYPE) {
-                        contentValue = await QueryPropertyAsync(ci, ppt) as string;
-                    }
+                    string contentValue = await QueryPropertyAsync(ci, ppt) as string;
 
                     if (!asRawData) {
                         contentValue = await GetParameterRequestValueAsync(controlType,MpParameterValueUnitType.PlainText, contentValue, ci);

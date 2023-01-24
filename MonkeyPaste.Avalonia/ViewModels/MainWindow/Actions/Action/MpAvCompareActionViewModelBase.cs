@@ -43,6 +43,87 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
         #endregion
 
+        #region Constants
+
+        public const string SELECTED_COMPARE_PATH_PARAM_ID = "SelectedComparePath";
+        public const string COMPARE_FILTER_TEXT_PARAM_ID = "CompareFilterText";
+        public const string SELECTED_COMPARE_OP_PARAM_ID = "SelectedCompareOp";
+        public const string IS_CASE_SENSITIVE_PARAM_ID = "IsCaseSensitive";
+        public const string COMPARE_TEXT_PARAM_ID = "CompareText";
+
+        #endregion
+
+        #region MpIParameterHost Overrides
+
+        private MpActionPluginFormat _actionComponentFormat;
+        public override MpActionPluginFormat ActionComponentFormat {
+            get {
+                if (_actionComponentFormat == null) {
+                    _actionComponentFormat = new MpActionPluginFormat() {
+                        parameters = new List<MpParameterFormat>() {
+                            new MpParameterFormat() {
+                                label = "Property",
+                                controlType = MpParameterControlType.ComboBox,
+                                unitType = MpParameterValueUnitType.PlainText,
+                                isRequired = true,
+                                paramId = SELECTED_COMPARE_PATH_PARAM_ID,
+                                description = "",
+                                values = 
+                                    typeof(MpContentQueryPropertyPathType)
+                                    .GetEnumNames()
+                                    .Select(x=>
+                                        new MpPluginParameterValueFormat() {
+                                            label = x.ToLabel(),
+                                            value = x
+                                        }
+                                    ).ToList()
+                            },new MpParameterFormat() {
+                                label = "Filter",
+                                controlType = MpParameterControlType.TextBox,
+                                unitType = MpParameterValueUnitType.PlainTextContentQuery,
+                                isRequired = false,
+                                paramId = COMPARE_FILTER_TEXT_PARAM_ID,
+                                description = ""
+                            },new MpParameterFormat() {
+                                label = "Operation",
+                                controlType = MpParameterControlType.ComboBox,
+                                unitType = MpParameterValueUnitType.PlainText,
+                                isRequired = true,
+                                paramId = SELECTED_COMPARE_OP_PARAM_ID,
+                                description = "",
+                                values = 
+                                    typeof(MpComparisonOperatorType)
+                                    .GetEnumNames()
+                                    .Select(x=>
+                                        new MpPluginParameterValueFormat() {
+                                            label = x.ToLabel(),
+                                            value = x
+                                        }
+                                    ).ToList()
+                            },new MpParameterFormat() {
+                                label = "Case Sensitive?",
+                                controlType = MpParameterControlType.CheckBox,
+                                unitType = MpParameterValueUnitType.Bool,
+                                isRequired = false,
+                                paramId = IS_CASE_SENSITIVE_PARAM_ID,
+                                description = ""
+                            },new MpParameterFormat() {
+                                label = "Data",
+                                controlType = MpParameterControlType.TextBox,
+                                unitType = MpParameterValueUnitType.PlainTextContentQuery,
+                                isRequired = false,
+                                paramId = COMPARE_TEXT_PARAM_ID,
+                                description = ""
+                            }
+                        }
+                    };
+                }
+                return _actionComponentFormat;
+            }
+        }
+
+        #endregion
+
         #region Properties
 
         #region Statics
@@ -89,16 +170,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        public bool IsJsonQuery {
-            get => CompareDataJsonPath != null;
-            set => CompareDataJsonPath = value ? string.Empty : null;
-        }
+        public bool HasInputFilter => !string.IsNullOrWhiteSpace(CompareFilterText);
 
         public bool IsItemTypeCompare => ComparePropertyPathType == MpContentQueryPropertyPathType.ItemType;
 
         public bool IsLastOutputCompare => ComparePropertyPathType == MpContentQueryPropertyPathType.LastOutput;
 
-        public bool IsContentPropertyCompare => !IsItemTypeCompare && !IsLastOutputCompare;
 
         public bool IsCompareTypeRegex => ComparisonOperatorType == MpComparisonOperatorType.Regex;
 
@@ -106,18 +183,19 @@ namespace MonkeyPaste.Avalonia {
 
         #region Model
         //Arg4
-        public string CompareDataJsonPath {
+        public string CompareFilterText {
             get {
-                if (Action == null) {
-                    return null;
+                if (ArgLookup.TryGetValue(COMPARE_FILTER_TEXT_PARAM_ID, out var param_vm) &&
+                    param_vm.CurrentValue is string curVal) {
+                    return curVal;
                 }
-                return Arg4;
+                return string.Empty;
             }
             set {
-                if (CompareDataJsonPath != value) {
-                    Arg4 = value;
+                if (CompareFilterText != value) {
+                    ArgLookup[COMPARE_FILTER_TEXT_PARAM_ID].CurrentValue = value.ToString();
                     HasModelChanged = true;
-                    OnPropertyChanged(nameof(CompareDataJsonPath));
+                    OnPropertyChanged(nameof(CompareFilterText));
                 }
             }
         }
@@ -125,17 +203,15 @@ namespace MonkeyPaste.Avalonia {
         //Arg3
         public bool IsCaseSensitive {
             get {
-                if(Action == null) {
-                    return false;
+                if (ArgLookup.TryGetValue(IS_CASE_SENSITIVE_PARAM_ID, out var param_vm) &&
+                    param_vm.BoolValue is bool boolVal) {
+                    return boolVal;
                 }
-                if(IsCompareTypeRegex) {
-                    return false;
-                }
-                return Arg3 == "1";
+                return false;
             }
             set {
-                if(IsCaseSensitive != value && !IsCompareTypeRegex) {
-                    Arg3 = value ? "1" : "0";
+                if (IsCaseSensitive != value) {
+                    ArgLookup[IS_CASE_SENSITIVE_PARAM_ID].CurrentValue = value.ToString();
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(IsCaseSensitive));
                 }
@@ -143,41 +219,39 @@ namespace MonkeyPaste.Avalonia {
         }
 
         //Arg2
-        public MpCopyItemType ContentItemType {
-            get {
-                if (Action == null) {
-                    return 0;
-                }
-                if (ComparePropertyPathType != MpContentQueryPropertyPathType.ItemType) {
-                    return 0;
-                }
-                if (string.IsNullOrWhiteSpace(Arg2)) {
-                    return MpCopyItemType.None;
-                }
-                return Arg2.ToEnum<MpCopyItemType>();
-            }
-            set {
-                if (ContentItemType != value) {
-                    Arg2 = value.ToString();
-                    HasModelChanged = true;
-                    OnPropertyChanged(nameof(ContentItemType));
-                }
-            }
-        }
+        //public MpCopyItemType ContentItemType {
+        //    get {
+        //        if (Action == null) {
+        //            return 0;
+        //        }
+        //        if (ComparePropertyPathType != MpContentQueryPropertyPathType.ItemType) {
+        //            return 0;
+        //        }
+        //        if (string.IsNullOrWhiteSpace(Arg2)) {
+        //            return MpCopyItemType.None;
+        //        }
+        //        return Arg2.ToEnum<MpCopyItemType>();
+        //    }
+        //    set {
+        //        if (ContentItemType != value) {
+        //            Arg2 = value.ToString();
+        //            HasModelChanged = true;
+        //            OnPropertyChanged(nameof(ContentItemType));
+        //        }
+        //    }
+        //}
 
         public string CompareData {
             get {
-                if (Action == null) {
-                    return null;
+                if (ArgLookup.TryGetValue(COMPARE_TEXT_PARAM_ID, out var param_vm) &&
+                    param_vm.CurrentValue is string curVal) {
+                    return curVal;
                 }
-                if(IsItemTypeCompare) {
-                    return ContentItemType.ToString();
-                }
-                return Arg2;
+                return string.Empty;
             }
             set {
                 if (CompareData != value) {
-                    Arg2 = value;
+                    ArgLookup[COMPARE_TEXT_PARAM_ID].CurrentValue = value.ToString();
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(CompareData));
                 }
@@ -187,18 +261,16 @@ namespace MonkeyPaste.Avalonia {
         // Arg1
         public MpContentQueryPropertyPathType ComparePropertyPathType {
             get {
-                if (Action == null) {
-                    return MpContentQueryPropertyPathType.None;
+                if (ArgLookup.TryGetValue(SELECTED_COMPARE_PATH_PARAM_ID, out var param_vm) &&
+                    param_vm.CurrentValue is string curVal &&
+                    curVal.ToEnum<MpContentQueryPropertyPathType>() is MpContentQueryPropertyPathType pathType) {
+                    return pathType;
                 }
-                if (string.IsNullOrWhiteSpace(Arg1)) {
-                    return MpContentQueryPropertyPathType.None;
-                }
-
-                return Arg1.ToEnum<MpContentQueryPropertyPathType>();
+                return MpContentQueryPropertyPathType.None;
             }
             set {
                 if (ComparePropertyPathType != value) {
-                    Arg1 = value.ToString();
+                    ArgLookup[SELECTED_COMPARE_PATH_PARAM_ID].CurrentValue = value.ToString();
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(ComparePropertyPathType));
                 }
@@ -208,16 +280,16 @@ namespace MonkeyPaste.Avalonia {
         // Arg
         public MpComparisonOperatorType ComparisonOperatorType {
             get {
-                var cot = Arg5.ToEnum<MpComparisonOperatorType>(notFoundValue: MpComparisonOperatorType.Contains);
-                if(cot == MpComparisonOperatorType.None) {
-                    cot = MpComparisonOperatorType.Contains;
-                    Action.Arg5 = cot.ToString();
+                if (ArgLookup.TryGetValue(SELECTED_COMPARE_OP_PARAM_ID, out var param_vm) &&
+                    param_vm.CurrentValue is string curVal &&
+                    curVal.ToEnum<MpComparisonOperatorType>() is MpComparisonOperatorType opType) {
+                    return opType;
                 }
-                return cot;
+                return MpComparisonOperatorType.Contains;
             }
             set {
                 if (ComparisonOperatorType != value) {
-                    Action.Arg5 = value.ToString();
+                    ArgLookup[SELECTED_COMPARE_OP_PARAM_ID].CurrentValue = value.ToString();
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(ComparisonOperatorType));
                 }
@@ -248,12 +320,18 @@ namespace MonkeyPaste.Avalonia {
             if(compareStr == null) {
                 return;
             }
+            MpConsole.WriteLine($"Comprarer '{Label}' match result:");
+            MpConsole.WriteLine($"Op: '{ComparisonOperatorType}'");
+            MpConsole.WriteLine($"compare string: '{CompareData}'");
+
             var compareOutput = new MpAvCompareOutput() {
                 Previous = ao,
                 CopyItem = ao.CopyItem
             };
 
             compareOutput.Matches = GetMatches(compareStr);
+            MpConsole.WriteLine($"matches with: '{compareStr}' ");
+            MpConsole.WriteLine($"Total: '{compareOutput.Matches.Count}' ");            
 
             if (compareOutput.Matches != null && compareOutput.Matches.Count > 0) {
                 base.PerformActionAsync(compareOutput).FireAndForgetSafeAsync(this);
@@ -292,24 +370,22 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
             if (ComparePropertyPathType == MpContentQueryPropertyPathType.LastOutput) {
-                if (ao != null) {
-                    if (ao.OutputData is MpPluginResponseFormatBase prf && IsJsonQuery) {
-                        try {
-                            return MpJsonPathProperty.Query(prf, CompareDataJsonPath);
-                        }
-                        catch (Exception ex) {
-                            MpConsole.WriteLine(@"Error parsing/querying json response:");
-                            MpConsole.WriteLine(ao.OutputData.ToString().ToPrettyPrintJson());
-                            MpConsole.WriteLine(@"For JSONPath: ");
-                            MpConsole.WriteLine(CompareData);
-                            MpConsole.WriteTraceLine(ex);
-
-                            ValidationText = $"Error performing action '{RootTriggerActionViewModel.Label}/{Label}': {ex}";
-                            ShowValidationNotification();
-                        }
-                    } else if(ao.OutputData != null) {
-                        return ao.OutputData.ToString();
+                if (ao.OutputData is MpPluginResponseFormatBase prf && HasInputFilter) {
+                    try {
+                        return MpJsonPathProperty.Query(prf, CompareFilterText);
                     }
+                    catch (Exception ex) {
+                        MpConsole.WriteLine(@"Error parsing/querying json response:");
+                        MpConsole.WriteLine(ao.OutputData.ToString().ToPrettyPrintJson());
+                        MpConsole.WriteLine(@"For JSONPath: ");
+                        MpConsole.WriteLine(CompareData);
+                        MpConsole.WriteTraceLine(ex);
+
+                        ValidationText = $"Error performing action '{RootTriggerActionViewModel.Label}/{Label}': {ex}";
+                        ShowValidationNotification();
+                    }
+                } else if (ao.OutputData != null) {
+                    return ao.OutputData.ToString();
                 }
             } else {
                 var copyItemPropObj =  await MpPluginParameterValueEvaluator.QueryPropertyAsync(ao.CopyItem, ComparePropertyPathType);

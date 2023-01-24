@@ -38,7 +38,7 @@ namespace MonkeyPaste.Avalonia {
             });
         }
 
-        #region ToolTipText Direct Avalonia Property
+        #region ToolTipText Property
 
         private string _ToolTipText = default;
 
