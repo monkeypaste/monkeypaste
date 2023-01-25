@@ -12,6 +12,7 @@ using System;
 using System.Linq;
 using Avalonia.Input;
 using Avalonia.Styling;
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -20,6 +21,48 @@ namespace MonkeyPaste.Avalonia {
         #region Overrides
 
         #endregion
+
+        #region Command Property
+
+        private ICommand _Command = default;
+
+        public static readonly DirectProperty<MpAvOptionsButton, ICommand> CommandProperty =
+            AvaloniaProperty.RegisterDirect<MpAvOptionsButton, ICommand>
+            (
+                nameof(Command),
+                o => o.Command,
+                (o, v) => o.Command = v
+            );
+
+        public ICommand Command {
+            get => _Command;
+            set {
+                SetAndRaise(CommandProperty, ref _Command, value);
+            }
+        }
+
+        #endregion 
+        
+        #region CommandParameter Property
+
+        private object _CommandParameter = default;
+
+        public static readonly DirectProperty<MpAvOptionsButton, object> CommandParameterProperty =
+            AvaloniaProperty.RegisterDirect<MpAvOptionsButton, object>
+            (
+                nameof(CommandParameter),
+                o => o.CommandParameter,
+                (o, v) => o.CommandParameter = v
+            );
+
+        public object CommandParameter {
+            get => _CommandParameter;
+            set {
+                SetAndRaise(CommandParameterProperty, ref _CommandParameter, value);
+            }
+        }
+
+        #endregion 
 
         #region Properties
 

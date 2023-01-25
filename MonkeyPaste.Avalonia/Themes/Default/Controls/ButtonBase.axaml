@@ -19,9 +19,21 @@
         <Setter Property="Padding"
                 Value="5,3" />
     </Style>
-    <Style Selector=":is(Button).defaultButton">
+    <Style Selector=":is(Button).defaultButton /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="Beige" />
+        <Setter Property="CornerRadius"
+                Value="5" />
+        <Setter Property="BorderThickness"
+                Value="1" />
+        <Setter Property="BorderBrush"
+                Value="DimGray" />
         <Setter Property="Padding"
                 Value="5,3" />
+    </Style>
+    <Style Selector=":is(Button).textOnlyButton /template/ ContentPresenter">
+        <Setter Property="Padding"
+                Value="10,3" />
     </Style>
     <Style Selector=":is(Button):pointerover.defaultButton /template/ ContentPresenter">
         <Setter Property="BorderBrush"
@@ -36,6 +48,8 @@
                 Value="Center" />
         <Setter Property="VerticalAlignment"
                 Value="Center" />
+        <Setter Property="FontWeight"
+                Value="SemiBold" />
     </Style>
     <Style Selector=":is(Button).iconTextButton TextBlock">
         <Setter Property="Margin"

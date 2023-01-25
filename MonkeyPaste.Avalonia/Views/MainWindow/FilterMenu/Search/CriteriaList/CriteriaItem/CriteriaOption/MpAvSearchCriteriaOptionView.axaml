@@ -1,0 +1,116 @@
+﻿<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvSearchCriteriaOptionView"
+                       xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       x:TypeArguments="local:MpAvSearchCriteriaOptionViewModel"
+                       mc:Ignorable="d"
+                       d:DesignHeight="450"
+                       d:DesignWidth="800">
+    <Grid Margin="0,3">
+        <local:MpAvClipBorder BorderThickness="0"
+                              Background="Transparent"
+                              Padding="0"
+                              CornerRadius="0">
+            <ContentControl x:Name="CriteriaOptionContentControl"
+                            Content="{Binding}">
+                <ContentControl.DataTemplates>
+                    <local:MpAvSearchCriteriaOptionViewSelector>
+                        <DataTemplate x:Key="EnumerableOptionTemplate"
+                                      DataType="local:MpAvSearchCriteriaOptionViewModel">
+                            <local:MpAvClipBorder CornerRadius="10"
+                                                  BorderThickness="1"
+                                                  BorderBrush="Black"
+                                                  Margin="5,5">
+                                <ComboBox MinWidth="85"
+                                          FontSize="16"
+                                          BorderThickness="0"
+                                          Background="White"
+                                          HorizontalContentAlignment="Left"
+                                          VerticalContentAlignment="Center"
+                                          Items="{Binding Items}"
+                                          SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Label}" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </local:MpAvClipBorder>
+                        </DataTemplate>
+                        <DataTemplate x:Key="TextOptionTemplate"
+                                      DataType="local:MpAvSearchCriteriaOptionViewModel">
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel Orientation="Horizontal"
+                                            IsVisible="{Binding IsCheckable}">
+                                    <Label Content="Case-Sensitive?" />
+                                    <CheckBox VerticalAlignment="Center"
+                                              Margin="0,0,5,0"
+                                              IsChecked="{Binding IsChecked, Mode=TwoWay}" />
+                                </StackPanel>
+                                <local:MpAvClipBorder Margin="5"
+                                                      CornerRadius="10"
+                                                      Background="White"
+                                                      BorderBrush="White">
+                                    <TextBox MinWidth="900"
+                                             Margin="3,0,0,0"
+                                             Height="23"
+                                             VerticalContentAlignment="Center"
+                                             BorderThickness="0"
+                                             BorderBrush="Black"
+                                             Text="{Binding Value, Mode=TwoWay}" />
+                                </local:MpAvClipBorder>
+                            </StackPanel>
+                        </DataTemplate>
+                        <DataTemplate x:Key="RGBAOptionTemplate"
+                                      DataType="local:MpAvSearchCriteriaOptionViewModel">
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="R" />
+                                    <TextBox MinWidth="20"
+                                             VerticalContentAlignment="Center"
+                                             BorderThickness="0"
+                                             BorderBrush="Black"
+                                             Text="{Binding Value1, Mode=TwoWay}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="G" />
+                                    <TextBox MinWidth="20"
+                                             VerticalContentAlignment="Center"
+                                             BorderThickness="0"
+                                             BorderBrush="Black"
+                                             Text="{Binding Value2, Mode=TwoWay}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="B" />
+                                    <TextBox MinWidth="20"
+                                             VerticalContentAlignment="Center"
+                                             BorderThickness="0"
+                                             BorderBrush="Black"
+                                             Text="{Binding Value3, Mode=TwoWay}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="A" />
+                                    <TextBox MinWidth="20"
+                                             VerticalContentAlignment="Center"
+                                             BorderThickness="0"
+                                             BorderBrush="Black"
+                                             Text="{Binding Value4, Mode=TwoWay}" />
+                                </StackPanel>
+                            </StackPanel>
+                        </DataTemplate>
+                        <DataTemplate x:Key="DateOptionTemplate"
+                                      DataType="local:MpAvSearchCriteriaOptionViewModel">
+                            <DatePicker Width="300"
+                                        Height="23"
+                                        SelectedDate="{Binding Value, Converter={x:Static local:MpAvStringToDateTimeConverter.Instance}, Mode=TwoWay}" />
+                        </DataTemplate>
+                        <DataTemplate x:Key="EmptyOption"
+                                      DataType="local:MpAvSearchCriteriaOptionViewModel" />
+                    </local:MpAvSearchCriteriaOptionViewSelector>
+                </ContentControl.DataTemplates>
+            </ContentControl>
+        </local:MpAvClipBorder>
+    </Grid>
+</local:MpAvUserControl>

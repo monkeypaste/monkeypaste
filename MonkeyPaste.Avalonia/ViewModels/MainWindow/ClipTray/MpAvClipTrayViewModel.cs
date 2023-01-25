@@ -277,7 +277,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIBoundSizeViewModel Implementation
-
+        // NOTE this are NOT bound in xaml, bound in mw.UpdateContentLayout
         public double BoundWidth { get; set; }
         public double BoundHeight { get; set; }
 
@@ -1595,7 +1595,7 @@ namespace MonkeyPaste.Avalonia {
 
             SelectedItem = HeadItem;
             //Items[0].IsSelected = true;
-            //if (!MpSearchBoxViewModel.Instance.IsTextBoxFocused) {
+            //if (!MpAvSearchBoxViewModel.Instance.IsTextBoxFocused) {
             //    RequestFocus(SelectedItems[0]);
             //}
 
@@ -2675,7 +2675,7 @@ namespace MonkeyPaste.Avalonia {
                 if (_newModels.Count == 0) {
                     return false;
                 }
-                //if(!string.IsNullOrEmpty(MpSearchBoxViewModel.Instance.LastSearchText)) {
+                //if(!string.IsNullOrEmpty(MpAvSearchBoxViewModel.Instance.LastSearchText)) {
                 //    return false;
                 //}
                 //if (CurrentQuery.SortType == MpContentSortType.Manual) {

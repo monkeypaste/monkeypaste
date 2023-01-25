@@ -12,6 +12,15 @@
             <GradientStop Offset="0.75"
                           Color="Transparent" />
         </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="UnderlineFadeOutBrush_long"
+                             StartPoint="0%,0%"
+                             EndPoint="100%,0%">
+            <GradientStop Offset="0"
+                          Color="White" />
+            <GradientStop Offset="0.9"
+                          Color="Transparent" />
+        </LinearGradientBrush>
     </Styles.Resources>
 
     <Style Selector="Label.h1">
@@ -20,6 +29,7 @@
         <Setter Property="FontFamily"
                 Value="Segue UI" />
     </Style>
+
     <Style Selector="Border.labelUnderline">
         <Setter Property="Background"
                 Value="{StaticResource UnderlineFadeOutBrush}" />
@@ -31,5 +41,11 @@
                 Value="3" />
         <Setter Property="Margin"
                 Value="0,0,20,10" />
+    </Style>
+    <Style Selector="Border.labelUnderline_long">
+        <Setter Property="Background"
+                Value="{StaticResource UnderlineFadeOutBrush_long}" />
+        <Setter Property="Margin"
+                Value="0" />
     </Style>
 </Styles>

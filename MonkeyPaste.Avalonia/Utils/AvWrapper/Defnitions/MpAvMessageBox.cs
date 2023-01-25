@@ -30,15 +30,6 @@ namespace MonkeyPaste.Avalonia {
                 Debugger.Break();
             }
             return false;
-            //            if(OperatingSystem.IsWindows()) {
-            //#if WINDOWS
-            //                System.Windows.MessageBox.Show(message, title);
-            //#endif
-            //            } else {
-            //                // add others
-            //                Debugger.Break();
-            //            }
-            //            return false;
         }
 
         public async Task<bool?> ShowYesNoCancelMessageBoxAsync(string title, string message, object anchor = null, object iconResourceObj = null) {
@@ -61,23 +52,17 @@ namespace MonkeyPaste.Avalonia {
                 Debugger.Break();
             }
             return null;
+        }
 
-//            if (OperatingSystem.IsWindows()) {
-//#if WINDOWS
-//                var result = System.Windows.MessageBox.Show(message, title, System.Windows.MessageBoxButton.YesNoCancel);
-//                if(result == System.Windows.MessageBoxResult.Yes) {
-//                    return true;
-//                }
-//                if(result == System.Windows.MessageBoxResult.No) {
-//                    return false;
-//                }
-//#endif
-//                return null;
-//            } else {
-//                // fill in others
-//                Debugger.Break();
-//            }
-//            return null;
+        public async Task<string> ShowTextBoxMessageBoxAsync(string title, string message, string currentText = null, string placeholderText = null, object anchor = null, object iconResourceObj = null) {
+            var result = await MpNotificationBuilder.ShowInputResultNotificationAsync(
+                                    title: title,
+                                    body: message,
+                                    currentInput: currentText,
+                                    placeholderText: placeholderText,
+                                    iconResourceObj: iconResourceObj,
+                                    anchor: anchor);
+            return result;
         }
 
         private Window CreateSampleWindow(string title, string message) {

@@ -217,8 +217,14 @@
     <sys:String x:Key="PlusImage">
         avares://MonkeyPaste.Avalonia/Assets/Images/add2.png
     </sys:String>
+    <sys:String x:Key="PlusSolidImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/add1.png
+    </sys:String>
     <sys:String x:Key="MinusImage">
         avares://MonkeyPaste.Avalonia/Assets/Images/minus2.png
+    </sys:String>
+    <sys:String x:Key="MinusSolidImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/minus.png
     </sys:String>
     <sys:String x:Key="BoltImage">
         avares://MonkeyPaste.Avalonia/Assets/Images/bolt.png
@@ -336,5 +342,11 @@
     </sys:String>
     <sys:String x:Key="TextureImage">
         avares://MonkeyPaste.Avalonia/Assets/Images/texture.png
+    </sys:String>
+    <sys:String x:Key="RoundedTextureImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/RoundedTexture.png
+    </sys:String>
+    <sys:String x:Key="CircleTextureImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/CircleTexture.png
     </sys:String>
 </ResourceDictionary>

@@ -19,6 +19,11 @@ namespace MonkeyPaste.Avalonia {
             double nw = new_size.Width;
             double nh = new_size.Height;
 
+            if (!nw.IsNumber()) {
+
+            }
+            if (!nh.IsNumber()) {
+            }
             if (!bsvm.BoundWidth.IsNumber()) {
                 bsvm.BoundWidth = cw;
             }

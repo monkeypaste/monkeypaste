@@ -26,7 +26,7 @@ namespace MonkeyPaste.Avalonia {
         #region Properties     
 
         #region View Models
-        public ObservableCollection<MpSearchCriteriaItemViewModel> CriteriaItems { get; set; } = new ObservableCollection<MpSearchCriteriaItemViewModel>();
+        public ObservableCollection<MpAvSearchCriteriaItemViewModel> CriteriaItems { get; set; } = new ObservableCollection<MpAvSearchCriteriaItemViewModel>();
 
         private MpAvSearchFilterCollectionViewModel _searchFilterCollectionViewModel;
         public MpAvSearchFilterCollectionViewModel SearchFilterCollectionViewModel => _searchFilterCollectionViewModel ?? (_searchFilterCollectionViewModel = new MpAvSearchFilterCollectionViewModel(this));
@@ -65,6 +65,7 @@ namespace MonkeyPaste.Avalonia {
 
         public double SearchCriteriaListBoxItemHeight => 50;
 
+        public double LastSearchCriteriaListBoxHeight { get; private set; }
         public double SearchCriteriaListBoxHeight {
             get {
                 //return ((MpMeasurements.Instance.SearchDetailRowHeight * CriteriaItems.Count) +
@@ -122,31 +123,10 @@ namespace MonkeyPaste.Avalonia {
 
         public bool HasText => SearchText.Length > 0;
 
-        public bool IsOverSaveSearchButton { get; set; }
-
-        public bool IsOverDeleteSearchButton { get; set; }
-
         #endregion
 
         #region Appearance
 
-        public string SaveSearchButtonBorderHexColor {
-            get {
-                if(IsOverSaveSearchButton) {
-                    return MpSystemColors.LightGray;
-                }
-                return MpSystemColors.dimgray;
-            }
-        }
-
-        public string DeleteSearchButtonBorderHexColor {
-            get {
-                if (IsOverDeleteSearchButton) {
-                    return MpSystemColors.Red;
-                }
-                return MpSystemColors.LightGray;
-            }
-        }
 
         public FontStyle TextBoxFontStyle {
             get {
@@ -154,17 +134,6 @@ namespace MonkeyPaste.Avalonia {
                     return FontStyle.Normal; //FontStyles.Normal;
                 }
                 return FontStyle.Italic; //FontStyles.Italic;
-            }
-        }
-
-
-        public string AddOrClearSearchCriteriaImagePath {
-            get {
-                if (HasCriteriaItems) {
-                    return @"/Resources/Images/minus2.png";
-                } else {
-                    return @"/Resources/Images/add2.png";
-                }
             }
         }
 
@@ -208,19 +177,19 @@ namespace MonkeyPaste.Avalonia {
 
 
         public MpAvSearchBoxViewModel() : base(null) {
-            PropertyChanged += MpSearchBoxViewModel_PropertyChanged;
+            PropertyChanged += MpAvSearchBoxViewModel_PropertyChanged;
         }
 
         public async Task InitAsync() {
-            await Dispatcher.UIThread.InvokeAsync(() => {
-                MpAvQueryInfoViewModel.Current.RegisterProvider(this);
-                CriteriaItems.CollectionChanged += CriteriaItems_CollectionChanged;
+            await Task.Delay(1);
 
-                SearchFilterCollectionViewModel.Init();
+            MpAvQueryInfoViewModel.Current.RegisterProvider(this);
+            CriteriaItems.CollectionChanged += CriteriaItems_CollectionChanged;
+
+            SearchFilterCollectionViewModel.Init();
 
 
-                MpMessenger.RegisterGlobal(ReceiveGlobalMessage);
-            });
+            MpMessenger.RegisterGlobal(ReceiveGlobalMessage);
         }
 
         #endregion
@@ -270,8 +239,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private async Task<MpSearchCriteriaItemViewModel> CreateCriteriaItemViewModel(MpSearchCriteriaItem sci) {
-            MpSearchCriteriaItemViewModel nscivm = new MpSearchCriteriaItemViewModel(this);
+        private async Task<MpAvSearchCriteriaItemViewModel> CreateCriteriaItemViewModel(MpSearchCriteriaItem sci) {
+            MpAvSearchCriteriaItemViewModel nscivm = new MpAvSearchCriteriaItemViewModel(this);
             await nscivm.InitializeAsync(sci);
             return nscivm;
         }
@@ -286,7 +255,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private void MpSearchBoxViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+        private void MpAvSearchBoxViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                
                 case nameof(SearchText):
@@ -312,7 +281,6 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(TextBoxFontStyle));
                     break;
                 case nameof(HasCriteriaItems):
-                    OnPropertyChanged(nameof(AddOrClearSearchCriteriaImagePath));
                     break;
             }
         }
@@ -322,12 +290,18 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            OnPropertyChanged(nameof(AddOrClearSearchCriteriaImagePath));
             OnPropertyChanged(nameof(HasCriteriaItems));
 
             OnPropertyChanged(nameof(SearchCriteriaListBoxHeight));
 
             await UpdateCriteriaSortOrder();
+
+            double delta_height = SearchCriteriaListBoxHeight - LastSearchCriteriaListBoxHeight;
+            if(Math.Abs(delta_height) > 0.1) {
+                MpAvMainWindowViewModel.Instance.WindowResizeCommand.Execute(new MpPoint(0, delta_height));
+            }
+
+            LastSearchCriteriaListBoxHeight = SearchCriteriaListBoxHeight;
         }
 
         private async Task UpdateCriteriaSortOrder(bool fromModel = false) {
@@ -420,20 +394,25 @@ namespace MonkeyPaste.Avalonia {
                 MpMessenger.SendGlobal<MpMessageType>(MpMessageType.SearchCriteriaItemsChanged);
             });
 
-        public ICommand AddSearchCriteriaItemCommand => new MpCommand(
-            async () => {
+        public ICommand AddSearchCriteriaItemCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                int add_idx = CriteriaItems.Count;
+                if(args is MpAvSearchCriteriaItemViewModel scivm) {
+                    add_idx = scivm.SortOrderIdx + 1;
+                }
                 MpSearchCriteriaItem nsci = new MpSearchCriteriaItem() {
                     SortOrderIdx = CriteriaItems.Count
                 };
-                MpSearchCriteriaItemViewModel nscivm = await CreateCriteriaItemViewModel(nsci);
-                CriteriaItems.Add(nscivm);
+                MpAvSearchCriteriaItemViewModel nscivm = await CreateCriteriaItemViewModel(nsci);
+                CriteriaItems.Insert(add_idx,nscivm);
                 OnPropertyChanged(nameof(CriteriaItems));
                 OnPropertyChanged(nameof(HasCriteriaItems));
                 MpMessenger.SendGlobal<MpMessageType>(MpMessageType.SearchCriteriaItemsChanged);
-            },()=>CanAddCriteriaItem);
+            },(args)=>CanAddCriteriaItem);
 
-        public ICommand RemoveSearchCriteriaItemCommand => new MpCommand<MpSearchCriteriaItemViewModel>(
-            async (scivm) => {
+        public ICommand RemoveSearchCriteriaItemCommand => new MpCommand<object>(
+            async (args) => {
+                var scivm = args as MpAvSearchCriteriaItemViewModel;
                 int scivmIdx = CriteriaItems.IndexOf(scivm);
                 CriteriaItems.RemoveAt(scivmIdx);
                 if (scivm.SearchCriteriaItem.Id > 0) {
@@ -441,12 +420,20 @@ namespace MonkeyPaste.Avalonia {
                 }
                 await UpdateCriteriaSortOrder();
                 MpMessenger.SendGlobal<MpMessageType>(MpMessageType.SearchCriteriaItemsChanged);
-            });
+            },
+            (args)=>args is MpAvSearchCriteriaItemViewModel);
 
         public ICommand SaveSearchCommand => new MpCommand(
             async () => {
-                string searchName = UserSearch == null ? string.Empty : UserSearch.Name;
-                //searchName = MpTextBoxMessageBox.ShowCustomMessageBox(searchName);
+                string searchName = UserSearch == null ? "Custom Search" : UserSearch.Name;
+                searchName = await MpPlatformWrapper.Services.NativeMessageBox
+                .ShowTextBoxMessageBoxAsync(
+                    title: "Save Search",
+                    message: "Enter a name for this custom search",
+                    currentText: searchName,
+                    placeholderText: "Enter name...",
+                    iconResourceObj: "FindReplaceImage");
+
                 if(!string.IsNullOrEmpty(searchName)) {
                     if(UserSearch == null) {
                         UserSearch = await MpUserSearch.Create(searchName, DateTime.Now);

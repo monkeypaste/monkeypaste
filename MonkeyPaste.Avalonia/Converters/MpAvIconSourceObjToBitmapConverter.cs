@@ -24,14 +24,6 @@ namespace MonkeyPaste.Avalonia {
             List<string> paramParts = parameter == null ? new List<string>() : parameter.ToString().Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries).ToList();
             bool isFilePathIcon = paramParts.Any(x => x.ToLower() == "pathicon");
 
-            if(paramParts.FirstOrDefault(x=>x.StartsWith("scale_")) is string paramStr) {
-                try {
-                    scale = double.Parse(paramStr.ToLower().Replace("scale_", String.Empty));
-                }catch {
-                    scale = 1.0d;
-                }
-            }
-
             if (value is int iconId) {
                 var ivm = MpAvIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == iconId);
 
@@ -42,13 +34,33 @@ namespace MonkeyPaste.Avalonia {
                     return new MpAvStringBase64ToBitmapConverter().Convert(ivm.IconBorderBase64, null, scale.ToString(), CultureInfo.CurrentCulture);
                 }
                 return new MpAvStringBase64ToBitmapConverter().Convert(ivm.IconBase64, null, scale.ToString(), CultureInfo.CurrentCulture);
-            } else if(value is string valStr) {
-                //types: resource key, hex color, base64, file system path
-                if(valStr.StartsWith("#")) {
+            } 
+            
+            if(value is string valStr) {
+                //types: resource key, hex color, base64, file system path, shape name
+                var valParts = valStr.SplitNoEmpty(",");
+
+                string hex_color = valParts.FirstOrDefault(x=>x.IsStringHexColor());
+                if(string.IsNullOrEmpty(hex_color)) {
+                    string named_color = valParts.FirstOrDefault(x => x.IsStringNamedColor());
+                    if(!string.IsNullOrEmpty(named_color)) {
+                        hex_color = MpSystemColors.ConvertFromString(named_color);
+                    }
+                }
+                if (!string.IsNullOrEmpty(hex_color)) {
+                    string color_img_key = "TextureImage";
+                    if(valParts.Length > 1) {
+                        color_img_key = valParts.FirstOrDefault(x => x.Contains("Image"));
+                    }
                     var blank_bmp = MpAvStringResourceConverter.Instance.Convert(
-                        MpPlatformWrapper.Services.PlatformResource.GetResource("TextureImage"), null, null, null) as Bitmap;
+                        MpPlatformWrapper.Services.PlatformResource.GetResource(color_img_key), null, null, null) as Bitmap;
                     blank_bmp = blank_bmp.Tint(valStr);
                     return blank_bmp;
+                }
+
+                if(valParts.Length > 1) {
+                    // should only have parts for color resource
+                    Debugger.Break();
                 }
                 if (valStr.EndsWith("Icon")) {
                     return new WindowIcon(

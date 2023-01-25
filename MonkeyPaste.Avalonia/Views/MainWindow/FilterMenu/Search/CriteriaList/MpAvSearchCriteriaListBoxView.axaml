@@ -1,0 +1,73 @@
+﻿<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvSearchCriteriaListBoxView"
+                       xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:DataType="local:MpAvSearchBoxViewModel"
+                       x:TypeArguments="local:MpAvSearchBoxViewModel"
+                       x:CompileBindings="True"
+                       mc:Ignorable="d"
+                       d:DesignHeight="450"
+                       d:DesignWidth="800">
+    <local:MpAvUserControl.Resources>
+        <Thickness x:Key="ListBoxItemPadding">
+            0
+        </Thickness>
+    </local:MpAvUserControl.Resources>
+    <local:MpAvUserControl.Styles>
+        <Style Selector="ListBoxItem">
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Left" />
+            <Setter Property="VerticalContentAlignment"
+                    Value="Stretch" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Stretch" />
+            <Setter Property="VerticalAlignment"
+                    Value="Stretch" />
+        </Style>
+        <Style Selector="local|MpAvSearchCriteriaItemView">
+            <Setter Property="BorderBrush"
+                    Value="DimGray" />
+            <Setter Property="Width"
+                    Value="{Binding MainWindowWidth, Source={x:Static local:MpAvMainWindowViewModel.Instance}}" />
+        </Style>
+        <Style Selector="ListBoxItem:nth-child(odd) local|MpAvSearchCriteriaItemView">
+            <Setter Property="Background"
+                    Value="{DynamicResource PluginParameterItemBgBrush1}" />
+        </Style>
+        <Style Selector="ListBoxItem:nth-child(even) local|MpAvSearchCriteriaItemView">
+            <Setter Property="Background"
+                    Value="{DynamicResource PluginParameterItemBgBrush2}" />
+        </Style>
+        <Style Selector="ListBoxItem:pointerover local|MpAvSearchCriteriaItemView">
+            <Setter Property="Background"
+                    Value="{DynamicResource PluginParameterItemHoverBgBrush}" />
+        </Style>
+        <Style Selector="ListBoxItem:selected local|MpAvSearchCriteriaItemView">
+            <Setter Property="BorderBrush"
+                    Value="Red" />
+        </Style>
+    </local:MpAvUserControl.Styles>
+    <ListBox x:Name="SearchCriteriaListBox"
+             Height="{Binding SearchCriteriaListBoxHeight}"
+             Background="{StaticResource FilterMenuBgBrush}"
+             BorderThickness="0"
+             BorderBrush="Black"
+             Items="{Binding CriteriaItems}"
+             SelectionMode="Single"
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch"
+             ScrollViewer.VerticalScrollBarVisibility="Hidden"
+             ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+        <ListBox.ItemTemplate>
+            <DataTemplate>
+                <local:MpAvSearchCriteriaItemView BorderThickness="0"
+                                                  Height="{Binding Parent.SearchCriteriaListBoxItemHeight}"
+                                                  DataContext="{Binding}" />
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+    </ListBox>
+</local:MpAvUserControl>

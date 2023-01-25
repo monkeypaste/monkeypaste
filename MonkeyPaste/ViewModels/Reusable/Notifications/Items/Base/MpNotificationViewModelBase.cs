@@ -31,7 +31,8 @@ namespace MonkeyPaste {
         Fix,
         Shutdown,
         DoNotShow,
-        Loading
+        Loading,
+        Text
     }
 
     public enum MpNotificationButtonsType {
@@ -39,6 +40,7 @@ namespace MonkeyPaste {
         YesNoCancel,
         Ok,
         OkCancel,
+        TextBoxOkCancel,
         IgnoreRetryFix,
         IgnoreRetryShutdown,
         ProgressBar
@@ -73,6 +75,7 @@ namespace MonkeyPaste {
         ModalContentFormatDegradation,
         ModalYesNoCancelMessageBox,
         ModalOkCancelMessageBox,
+        ModalTextBoxOkCancelMessageBox,
 
         // Append Tile
 
@@ -113,6 +116,7 @@ namespace MonkeyPaste {
                 case MpNotificationType.ModalOkCancelMessageBox:
                 case MpNotificationType.ModalYesNoCancelMessageBox:
                 case MpNotificationType.ModalContentFormatDegradation:
+                case MpNotificationType.ModalTextBoxOkCancelMessageBox:
                 case MpNotificationType.InvalidPlugin:
                 case MpNotificationType.InvalidAction:
                 case MpNotificationType.FileIoError:
@@ -139,6 +143,8 @@ namespace MonkeyPaste {
             switch (ndt) {
                 case MpNotificationType.ModalYesNoCancelMessageBox:
                     return MpNotificationButtonsType.YesNoCancel;
+                case MpNotificationType.ModalTextBoxOkCancelMessageBox:
+                    return MpNotificationButtonsType.TextBoxOkCancel;
                 case MpNotificationType.ModalOkCancelMessageBox:
                 case MpNotificationType.ModalContentFormatDegradation:
                     return MpNotificationButtonsType.OkCancel;
@@ -163,6 +169,7 @@ namespace MonkeyPaste {
                 case MpNotificationType.ModalYesNoCancelMessageBox:
                 case MpNotificationType.ModalOkCancelMessageBox:
                 case MpNotificationType.ModalContentFormatDegradation:
+                case MpNotificationType.ModalTextBoxOkCancelMessageBox:
                     return MpNotificationPlacementType.ModalAnchor;
                 default:
                     return MpNotificationPlacementType.SystemTray;
@@ -174,6 +181,7 @@ namespace MonkeyPaste {
                 case MpNotificationType.ModalYesNoCancelMessageBox:
                 case MpNotificationType.ModalOkCancelMessageBox:
                 case MpNotificationType.ModalContentFormatDegradation:
+                case MpNotificationType.ModalTextBoxOkCancelMessageBox:
                     return true;
                 default:
                     return false;
@@ -281,6 +289,7 @@ namespace MonkeyPaste {
 
         #region State
 
+        public virtual bool ShowOptionsButton => true;
         public virtual bool CanPin => false;
         public bool IsPinned { get; set; } = false;
 
@@ -325,15 +334,21 @@ namespace MonkeyPaste {
 
         #region Model
 
-        //public MpTextContentFormat BodyFormat {
-        //    get {
-        //        if(NotificationFormat == null) {
-        //            return MpTextContentFormat.PlainText;
-        //        }
-        //        return NotificationFormat.BodyFormat;
-        //    }
-        //}
-
+        public object OtherArgs {
+            get {
+                if (NotificationFormat == null) {
+                    return null;
+                }
+                // when null default is center of active screen
+                return NotificationFormat.OtherArgs;
+            }
+            set {
+                if(OtherArgs != value) {
+                    NotificationFormat.OtherArgs = value;
+                    OnPropertyChanged(nameof(OtherArgs));
+                }
+            }
+        }
         public object AnchorTarget {
             get {
                 if (NotificationFormat == null ||
@@ -418,7 +433,6 @@ namespace MonkeyPaste {
         }
 
         public virtual async Task<MpNotificationDialogResultType> ShowNotificationAsync() {
-
             bool isDoNotShowType = MpPrefViewModel.Instance.DoNotShowAgainNotificationIdCsvStr
                     .Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries)
                     .Select(x => Convert.ToInt32(x)).Any(x => x == (int)NotificationType);

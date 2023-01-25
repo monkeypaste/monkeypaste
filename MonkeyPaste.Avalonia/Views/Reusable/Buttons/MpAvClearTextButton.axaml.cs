@@ -12,15 +12,32 @@ using System;
 using System.Linq;
 using Avalonia.Input;
 using Avalonia.Styling;
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
+    public partial class MpAvClearTextButton : MpAvUserControl {
 
-    [DoNotNotify]
-    public partial class MpAvClearTextButton : Button, IStyleable {
-        #region Overrides
-        Type IStyleable.StyleKey => typeof(Button);
+        #region Command Property
 
-        #endregion
+        private ICommand _Command = default;
+
+        public static readonly DirectProperty<MpAvClearTextButton, ICommand> CommandProperty =
+            AvaloniaProperty.RegisterDirect<MpAvClearTextButton, ICommand>
+            (
+                nameof(Command),
+                o => o.Command,
+                (o, v) => o.Command = v
+            );
+
+        public ICommand Command {
+            get => _Command;
+            set {
+                SetAndRaise(CommandProperty, ref _Command, value);
+            }
+        }
+
+        #endregion 
+
         public MpAvClearTextButton() {
             InitializeComponent();
         }

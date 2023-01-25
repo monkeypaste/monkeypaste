@@ -9,7 +9,7 @@ using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
 
-    public class MpSearchCriteriaOptionViewModel : MpViewModelBase<MpSearchCriteriaOptionViewModel> {
+    public class MpAvSearchCriteriaOptionViewModel : MpViewModelBase<MpAvSearchCriteriaOptionViewModel> {
         #region Private Variables
 
         #endregion
@@ -18,11 +18,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public MpSearchCriteriaItemViewModel HostCriteriaItem { get; set; }
+        public MpAvSearchCriteriaItemViewModel HostCriteriaItem { get; set; }
 
-        public ObservableCollection<MpSearchCriteriaOptionViewModel> Items { get; set; } = new ObservableCollection<MpSearchCriteriaOptionViewModel>();
+        public ObservableCollection<MpAvSearchCriteriaOptionViewModel> Items { get; set; } = new ObservableCollection<MpAvSearchCriteriaOptionViewModel>();
 
-        public MpSearchCriteriaOptionViewModel SelectedItem {
+        public MpAvSearchCriteriaOptionViewModel SelectedItem {
             get => Items.FirstOrDefault(x => x.IsSelected);
             set {
                 Items.ForEach(x => x.IsSelected = false);
@@ -51,7 +51,6 @@ namespace MonkeyPaste.Avalonia {
         #region Model
 
         public string Value { get; set; }
-
         public string Value1 { get; set; }
         public string Value2 { get; set; }
         public string Value3 { get; set; }
@@ -73,9 +72,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpSearchCriteriaOptionViewModel() : base(null) { }
+        public MpAvSearchCriteriaOptionViewModel() : base(null) { }
 
-        public MpSearchCriteriaOptionViewModel(MpSearchCriteriaItemViewModel host,MpSearchCriteriaOptionViewModel parent) : base(parent) {            
+        public MpAvSearchCriteriaOptionViewModel(MpAvSearchCriteriaItemViewModel host,MpAvSearchCriteriaOptionViewModel parent) : base(parent) {            
             PropertyChanged += MpSearchParameterViewModel_PropertyChanged;
             Items.CollectionChanged += Items_CollectionChanged;
             HostCriteriaItem = host;

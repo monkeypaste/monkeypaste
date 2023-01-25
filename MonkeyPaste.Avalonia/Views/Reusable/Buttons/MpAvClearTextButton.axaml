@@ -1,51 +1,69 @@
-<Button x:Name="ClearTextButton"
-        xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="using:MonkeyPaste.Avalonia"
-        mc:Ignorable="d"
-        d:DesignWidth="800"
-        d:DesignHeight="450"
-        Cursor="Hand"
-        x:Class="MonkeyPaste.Avalonia.MpAvClearTextButton">
-    <Grid x:Name="ClearTextContainerGrid"
-          HorizontalAlignment="Stretch"
-          VerticalAlignment="Stretch">
-        <Image x:Name="X_NotOverImage"
-               IsVisible="{Binding !IsVisible, ElementName=X_OverImage}">
-            <Image.Resources>
-                <SolidColorBrush x:Key="Brush0"
-                                 Color="#FF000000" />
-            </Image.Resources>
-            <DrawingImage>
-                <DrawingGroup>
+<local:MpAvUserControl x:Name="ClearTextButton"
+                       xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       Cursor="Hand"
+                       x:Class="MonkeyPaste.Avalonia.MpAvClearTextButton">
+    <local:MpAvUserControl.Styles>
+        <Style Selector="Image#X_OverImage">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+        <Style Selector="Button:pointerover Image#X_OverImage">
+            <Setter Property="IsVisible"
+                    Value="True" />
+        </Style>
+        <Style Selector="Button:pointerover Image#X_NotOverImage">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+    </local:MpAvUserControl.Styles>
+    <Button Classes="noBg noHoverBg shakeOver"
+            Command="{Binding Command, ElementName=ClearTextButton}">
+        <Button.RenderTransform>
+            <RotateTransform />
+        </Button.RenderTransform>
+        <Grid x:Name="ClearTextContainerGrid"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch">
+            <Image x:Name="X_OverImage">
+                <Image.Resources>
+                    <SolidColorBrush x:Key="Brush0"
+                                     Color="#FF000000" />
+                </Image.Resources>
+                <DrawingImage>
                     <DrawingGroup>
-                        <DrawingGroup.Transform>
-                            <MatrixTransform Matrix="-1,-8.742278E-08,8.742278E-08,-1,23.999998,24.000002" />
-                        </DrawingGroup.Transform>
-                        <DrawingGroup Opacity="0">
-                            <GeometryDrawing Brush="{DynamicResource Brush0}"
-                                             Geometry="F1 M0 0L24 0L24 24L0 24L0 0Z" />
+                        <DrawingGroup>
+                            <DrawingGroup.Transform>
+                                <MatrixTransform Matrix="-1,-8.742278E-08,8.742278E-08,-1,23.999998,24.000002" />
+                            </DrawingGroup.Transform>
+                            <DrawingGroup Opacity="0">
+                                <GeometryDrawing Brush="{DynamicResource Brush0}"
+                                                 Geometry="F1 M0 0L24 0L24 24L0 24L0 0Z" />
+                            </DrawingGroup>
                         </DrawingGroup>
+                        <GeometryDrawing Brush="{DynamicResource Brush0}"
+                                         Geometry="F1 M13.41 12L17.71 7.71Q17.7799 7.64007 17.8349 7.55784Q17.8898 7.47562 17.9277 7.38425Q17.9655 7.29288 17.9848 7.19589Q18.0041 7.09889 18.0041 7Q18.0041 6.9011 17.9848 6.80411Q17.9655 6.70712 17.9277 6.61575Q17.8898 6.52438 17.8349 6.44216Q17.7799 6.35993 17.71 6.29Q17.6401 6.22007 17.5578 6.16513Q17.4756 6.11019 17.3842 6.07234Q17.2929 6.03449 17.1959 6.0152Q17.0989 5.99591 17 5.99591Q16.9011 5.99591 16.8041 6.0152Q16.7071 6.03449 16.6157 6.07234Q16.5244 6.11018 16.4422 6.16513Q16.3599 6.22007 16.29 6.29L12 10.59L7.71 6.29Q7.64007 6.22007 7.55784 6.16513Q7.47562 6.11019 7.38425 6.07234Q7.29288 6.03449 7.19589 6.0152Q7.09889 5.99591 7 5.99591Q6.90111 5.99591 6.80411 6.0152Q6.70712 6.03449 6.61575 6.07234Q6.52438 6.11019 6.44216 6.16513Q6.35993 6.22007 6.29 6.29Q6.22007 6.35993 6.16513 6.44216Q6.11019 6.52438 6.07234 6.61575Q6.03449 6.70712 6.0152 6.80411Q5.99591 6.90111 5.99591 7Q5.99591 7.09889 6.0152 7.19589Q6.03449 7.29288 6.07234 7.38425Q6.11018 7.47562 6.16513 7.55784Q6.22007 7.64007 6.29 7.71L10.59 12L6.29 16.29Q6.2197 16.3597 6.16444 16.4419Q6.10918 16.524 6.07111 16.6154Q6.03303 16.7068 6.01362 16.8039Q5.9942 16.901 5.9942 17Q5.9942 17.099 6.01362 17.1961Q6.03303 17.2932 6.07111 17.3846Q6.10918 17.476 6.16444 17.5581Q6.2197 17.6403 6.29 17.71Q6.35972 17.7803 6.44187 17.8356Q6.52403 17.8908 6.61542 17.9289Q6.70682 17.967 6.8039 17.9864Q6.90099 18.0058 7 18.0058Q7.09901 18.0058 7.19609 17.9864Q7.29318 17.967 7.38458 17.9289Q7.47597 17.8908 7.55812 17.8356Q7.64028 17.7803 7.71 17.71L12 13.41L16.29 17.71Q16.3597 17.7803 16.4419 17.8356Q16.524 17.8908 16.6154 17.9289Q16.7068 17.967 16.8039 17.9864Q16.901 18.0058 17 18.0058Q17.099 18.0058 17.1961 17.9864Q17.2932 17.967 17.3846 17.9289Q17.476 17.8908 17.5581 17.8356Q17.6403 17.7803 17.71 17.71Q17.7803 17.6403 17.8356 17.5581Q17.8908 17.476 17.9289 17.3846Q17.967 17.2932 17.9864 17.1961Q18.0058 17.099 18.0058 17Q18.0058 16.901 17.9864 16.8039Q17.967 16.7068 17.9289 16.6154Q17.8908 16.524 17.8356 16.4419Q17.7803 16.3597 17.71 16.29L13.41 12Z" />
                     </DrawingGroup>
-                    <GeometryDrawing Brush="{DynamicResource Brush0}"
-                                     Geometry="F1 M13.41 12L17.71 7.71Q17.7799 7.64007 17.8349 7.55784Q17.8898 7.47562 17.9277 7.38425Q17.9655 7.29288 17.9848 7.19589Q18.0041 7.09889 18.0041 7Q18.0041 6.9011 17.9848 6.80411Q17.9655 6.70712 17.9277 6.61575Q17.8898 6.52438 17.8349 6.44216Q17.7799 6.35993 17.71 6.29Q17.6401 6.22007 17.5578 6.16513Q17.4756 6.11019 17.3842 6.07234Q17.2929 6.03449 17.1959 6.0152Q17.0989 5.99591 17 5.99591Q16.9011 5.99591 16.8041 6.0152Q16.7071 6.03449 16.6157 6.07234Q16.5244 6.11018 16.4422 6.16513Q16.3599 6.22007 16.29 6.29L12 10.59L7.71 6.29Q7.64007 6.22007 7.55784 6.16513Q7.47562 6.11019 7.38425 6.07234Q7.29288 6.03449 7.19589 6.0152Q7.09889 5.99591 7 5.99591Q6.90111 5.99591 6.80411 6.0152Q6.70712 6.03449 6.61575 6.07234Q6.52438 6.11019 6.44216 6.16513Q6.35993 6.22007 6.29 6.29Q6.22007 6.35993 6.16513 6.44216Q6.11019 6.52438 6.07234 6.61575Q6.03449 6.70712 6.0152 6.80411Q5.99591 6.90111 5.99591 7Q5.99591 7.09889 6.0152 7.19589Q6.03449 7.29288 6.07234 7.38425Q6.11018 7.47562 6.16513 7.55784Q6.22007 7.64007 6.29 7.71L10.59 12L6.29 16.29Q6.2197 16.3597 6.16444 16.4419Q6.10918 16.524 6.07111 16.6154Q6.03303 16.7068 6.01362 16.8039Q5.9942 16.901 5.9942 17Q5.9942 17.099 6.01362 17.1961Q6.03303 17.2932 6.07111 17.3846Q6.10918 17.476 6.16444 17.5581Q6.2197 17.6403 6.29 17.71Q6.35972 17.7803 6.44187 17.8356Q6.52403 17.8908 6.61542 17.9289Q6.70682 17.967 6.8039 17.9864Q6.90099 18.0058 7 18.0058Q7.09901 18.0058 7.19609 17.9864Q7.29318 17.967 7.38458 17.9289Q7.47597 17.8908 7.55812 17.8356Q7.64028 17.7803 7.71 17.71L12 13.41L16.29 17.71Q16.3597 17.7803 16.4419 17.8356Q16.524 17.8908 16.6154 17.9289Q16.7068 17.967 16.8039 17.9864Q16.901 18.0058 17 18.0058Q17.099 18.0058 17.1961 17.9864Q17.2932 17.967 17.3846 17.9289Q17.476 17.8908 17.5581 17.8356Q17.6403 17.7803 17.71 17.71Q17.7803 17.6403 17.8356 17.5581Q17.8908 17.476 17.9289 17.3846Q17.967 17.2932 17.9864 17.1961Q18.0058 17.099 18.0058 17Q18.0058 16.901 17.9864 16.8039Q17.967 16.7068 17.9289 16.6154Q17.8908 16.524 17.8356 16.4419Q17.7803 16.3597 17.71 16.29L13.41 12Z" />
-                </DrawingGroup>
-            </DrawingImage>
-        </Image>
-        <Image x:Name="X_OverImage"
-               IsVisible="{Binding IsPointerOver, ElementName=ClearTextButton}">
-            <Image.Resources>
-                <SolidColorBrush x:Key="Brush0"
-                                 Color="#FF000000" />
-            </Image.Resources>
-            <DrawingImage>
-                <DrawingGroup>
-                    <GeometryDrawing Brush="{DynamicResource Brush0}"
-                                     Geometry="F1 M165 0C120.926 0 79.492 17.163 48.328 48.327C-16.006 112.66 -16.006 217.338 48.326 281.672C79.49 312.837 120.926 330 165 330C209.072 330 250.508 312.837 281.672 281.672C346.006 217.338 346.006 112.66 281.672 48.327C250.508 17.163 209.072 0 165 0ZM239.246 239.245C236.316 242.174 232.478 243.639 228.639 243.639C224.801 243.639 220.961 242.174 218.034 239.245L165 186.213L111.967 239.246C109.037 242.175 105.199 243.64 101.36 243.64C97.522 243.64 93.682 242.175 90.755 239.246C84.896 233.389 84.896 223.891 90.755 218.033L143.787 165L90.754 111.967C84.895 106.11 84.895 96.612 90.754 90.754C96.611 84.897 106.109 84.897 111.967 90.754L165 143.787L218.031 90.754C223.888 84.897 233.386 84.897 239.244 90.754C245.103 96.611 245.103 106.109 239.244 111.967L186.213 165L239.246 218.032C245.104 223.89 245.104 233.388 239.246 239.245Z" />
-                </DrawingGroup>
-            </DrawingImage>
-        </Image>
-    </Grid>
-</Button>
+                </DrawingImage>
+            </Image>
+            <Image x:Name="X_NotOverImage">
+                <Image.Resources>
+                    <SolidColorBrush x:Key="Brush0"
+                                     Color="#FF000000" />
+                </Image.Resources>
+                <DrawingImage>
+                    <DrawingGroup>
+                        <GeometryDrawing Brush="{DynamicResource Brush0}"
+                                         Geometry="F1 M165 0C120.926 0 79.492 17.163 48.328 48.327C-16.006 112.66 -16.006 217.338 48.326 281.672C79.49 312.837 120.926 330 165 330C209.072 330 250.508 312.837 281.672 281.672C346.006 217.338 346.006 112.66 281.672 48.327C250.508 17.163 209.072 0 165 0ZM239.246 239.245C236.316 242.174 232.478 243.639 228.639 243.639C224.801 243.639 220.961 242.174 218.034 239.245L165 186.213L111.967 239.246C109.037 242.175 105.199 243.64 101.36 243.64C97.522 243.64 93.682 242.175 90.755 239.246C84.896 233.389 84.896 223.891 90.755 218.033L143.787 165L90.754 111.967C84.895 106.11 84.895 96.612 90.754 90.754C96.611 84.897 106.109 84.897 111.967 90.754L165 143.787L218.031 90.754C223.888 84.897 233.386 84.897 239.244 90.754C245.103 96.611 245.103 106.109 239.244 111.967L186.213 165L239.246 218.032C245.104 223.89 245.104 233.388 239.246 239.245Z" />
+                    </DrawingGroup>
+                </DrawingImage>
+            </Image>
+        </Grid>
+    </Button>
+</local:MpAvUserControl>

@@ -18,6 +18,9 @@ namespace MonkeyPaste {
 
         #region State
 
+        public override bool ShowOptionsButton =>
+            ButtonsType != MpNotificationButtonsType.TextBoxOkCancel;
+
         public bool IsFixing { get; set; } = false;
 
         public bool CanFix => FixCommand != null && FixCommand.CanExecute(FixCommandArgs);
@@ -33,7 +36,14 @@ namespace MonkeyPaste {
         public bool ShowNoButton { get; set; } = false;
         public bool ShowCancelButton { get; set; } = false;
         public bool ShowOkButton { get; set; } = false;
+        public bool ShowTextBox { get; set; } = false;
         public MpNotificationDialogResultType DialogResult { get; private set; }
+        public string InputResult { get; private set; }
+        public string BoundInputText { get; set; }
+
+        public string ValidationText { get; set; }
+
+        public bool IsInputValid => string.IsNullOrEmpty(ValidationText);
 
         #endregion
 
@@ -79,7 +89,10 @@ namespace MonkeyPaste {
 
         #region Constructors
 
-        public MpUserActionNotificationViewModel() : base() { }
+        public MpUserActionNotificationViewModel() : base() {
+            PropertyChanged += MpUserActionNotificationViewModel_PropertyChanged;
+        }
+
 
         #endregion
 
@@ -107,6 +120,16 @@ namespace MonkeyPaste {
                     ShowOkButton = true;
                     break;
                 case MpNotificationButtonsType.OkCancel:
+                    ShowOkButton = true;
+                    ShowCancelButton = true;
+                    break;
+                case MpNotificationButtonsType.TextBoxOkCancel:
+                    if(OtherArgs is string curText) {
+                        BoundInputText = curText;
+                    } else {
+                        BoundInputText = string.Empty;
+                    }
+                    ShowTextBox = true;
                     ShowOkButton = true;
                     ShowCancelButton = true;
                     break;
@@ -156,6 +179,41 @@ namespace MonkeyPaste {
             return DialogResult;
         }
 
+        public async Task<string> ShowInputResultNotificationAsync() {
+            _ = await base.ShowNotificationAsync();
+
+            while (DialogResult == MpNotificationDialogResultType.None) {
+                await Task.Delay(100);
+            }
+            HideNotification();
+
+            return InputResult;
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private void MpUserActionNotificationViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch(e.PropertyName) {
+                case nameof(BoundInputText):
+                    if(IsInputValid) {
+                        return;
+                    }
+                    // NOTE trigger validate here when already flagged invalid (via OkCommand)
+                    Validate();
+                    break;
+            }
+        }
+        private bool Validate() {
+            ValidationText = string.Empty;
+            if(ShowTextBox && string.IsNullOrEmpty(BoundInputText)) {
+                ValidationText = $"Value required";
+            }
+            OnPropertyChanged(nameof(IsInputValid));
+            return IsInputValid;
+        }
+
         #endregion
 
         #region Commands
@@ -196,11 +254,16 @@ namespace MonkeyPaste {
             });
         public ICommand CancelCommand => new MpCommand(
             () => {
+                InputResult = null;
                 DialogResult = MpNotificationDialogResultType.Cancel;
             });
 
         public ICommand OkCommand => new MpCommand(
             () => {
+                InputResult = BoundInputText;
+                if (!Validate()) {
+                    return;
+                }
                 DialogResult = MpNotificationDialogResultType.Ok;
             });
 

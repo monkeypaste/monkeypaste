@@ -12,64 +12,53 @@
                        x:CompileBindings="True"
                        DataContext="{x:Static local:MpAvSearchBoxViewModel.Instance}"
                        x:Class="MonkeyPaste.Avalonia.MpAvSearchBoxView">
+    <local:MpAvUserControl.Styles>
+        <Style Selector="Button#DeleteSearchButton:pointerover  /template/ ContentPresenter">
+            <Setter Property="BorderBrush"
+                    Value="Red" />
+        </Style>
 
+        <!--  SEARCH BOX  -->
+        <Style Selector="local|MpAvClipBorder#SearchTextBoxBorder.valid">
+            <Setter Property="BorderBrush"
+                    Value="White" />
+        </Style>
+        <Style Selector="local|MpAvClipBorder#SearchTextBoxBorder:not(.valid)">
+            <Setter Property="BorderBrush"
+                    Value="Red" />
+        </Style>
+      
+    </local:MpAvUserControl.Styles>
     <StackPanel x:Name="SearchViewContainerStackPanel"
                 Orientation="Horizontal">
         <!--  Delete Advanced Search Button  -->
         <Button x:Name="DeleteSearchButton"
-                local:MpAvIsHoveringExtension.IsEnabled="True"
-                local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverDeleteSearchButton}"
-                Background="Transparent"
-                BorderThickness="0"
+                Classes="defaultButton textOnlyButton"
                 Command="{Binding DeleteSearchCommand}"
-                Foreground="Transparent"
+                Margin="0,0,10,0"
                 IsVisible="{Binding CanDeleteSearch}">
-            <Border Padding="12,5"
-                    Background="LightGray"
-                    BorderBrush="{Binding DeleteSearchButtonBorderHexColor, Converter={StaticResource StringHexToBrushConverter}}"
-                    BorderThickness="3"
-                    CornerRadius="5">
-                <TextBlock Background="Transparent"
-                           FontWeight="Bold"
-                           Foreground="DimGray"
-                           Text="DELETE" />
-            </Border>
+            <TextBlock Text="DELETE" />
         </Button>
 
         <!--  Save Advanced Search Button  -->
         <Button x:Name="SaveSearchButton"
-                local:MpAvIsHoveringExtension.IsEnabled="True"
-                local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverSaveSearchButton, Mode=TwoWay}"
-                Background="Transparent"
-                BorderThickness="0"
+                Classes="defaultButton textOnlyButton"
                 Command="{Binding SaveSearchCommand}"
-                Foreground="Transparent"
-                IsVisible="{Binding HasCriteriaItems}">
-            <Border Padding="12,5"
-                    Background="LightGray"
-                    BorderBrush="{Binding SaveSearchButtonBorderHexColor, Converter={StaticResource StringHexToBrushConverter}}"
-                    BorderThickness="3"
-                    CornerRadius="5">
-                <TextBlock Background="Transparent"
-                           FontWeight="Bold"
-                           Foreground="DimGray"
-                           Text="SAVE" />
-            </Border>
+                Margin="0,0,5,0"
+                IsVisible="{Binding CanSaveSearch}">
+            <TextBlock Text="SAVE" />
         </Button>
 
         <!--  Search Border  -->
         <local:MpAvClipBorder x:Name="SearchTextBoxBorder"
                               Grid.Column="0"
+                              Classes.valid="{Binding IsSearchValid}"
                               Width="280"
                               Margin="5"
                               Background="White"
-                              BorderBrush="{Binding IsSearchValid, Converter={StaticResource BoolToBrushConverter}, ConverterParameter='#FFFFFFFF|#FFFF0000', FallbackValue=True, TargetNullValue=True}"
                               BorderThickness="2"
                               CornerRadius="10">
             <Grid>
-                <Grid.Styles>
-
-                </Grid.Styles>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.15*" />
                     <ColumnDefinition Width="*" />
@@ -216,16 +205,17 @@
 
             </Grid>
         </local:MpAvClipBorder>
+
         <!--  Add Or Clear Search Criteria Button  -->
         <Button x:Name="AddSearchCriteriaButton"
                 Margin="5,10"
                 BorderThickness="0"
                 Width="20"
                 Height="20"
-                Classes="noBg noHoverBg"
+                Classes="defaultButton"
                 Command="{Binding AddSearchCriteriaItemCommand}"
-                IsVisible="{Binding HasCriteriaItems}">
-            <PathIcon Data="{StaticResource PlusSvg}" />
+                IsVisible="{Binding HasText}">
+            <PathIcon Data="{StaticResource PlusBoxSvg}" />
         </Button>
         <Button x:Name="ClearSearchCriteriaButton"
                 Margin="5"

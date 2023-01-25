@@ -61,11 +61,13 @@ namespace MonkeyPaste.Avalonia {
                 if (IsVerticalOrientation) {
                     return MainWindowHeight -
                         //MpAvMainWindowTitleMenuViewModel.Instance.TitleMenuHeight -
+                        MpAvSearchBoxViewModel.Instance.SearchCriteriaListBoxHeight -
                         MpAvFilterMenuViewModel.Instance.FilterMenuHeight -
                         MpAvSidebarItemCollectionViewModel.Instance.ButtonGroupFixedDimensionLength;
                 }
                 return MainWindowHeight -
                         MpAvMainWindowTitleMenuViewModel.Instance.TitleMenuHeight -
+                        MpAvSearchBoxViewModel.Instance.SearchCriteriaListBoxHeight -
                         MpAvFilterMenuViewModel.Instance.FilterMenuHeight;
             }
         }
@@ -315,7 +317,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-
+        
         public string ShowOrHideLabel => IsMainWindowOpen ? "Hide" : "Show";
         public string ShowOrHideIconResourceKey => IsMainWindowOpen ? "ClosedEyeImage" : "OpenEyeImage";
         public bool AnimateShowWindow { get; set; } = true;
@@ -1017,6 +1019,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand CycleOrientationCommand => new MpAsyncCommand<object>(
             async(dirStrOrEnumArg) => {
+
                 int nextOr = (int)MainWindowOrientationType;
 
                 if (dirStrOrEnumArg is string dirStr) {
@@ -1033,7 +1036,6 @@ namespace MonkeyPaste.Avalonia {
                     nextOr = (int)dirEnum;
                     //isDiscreteChange = false;
                 }
-
 
                 MpMessenger.SendGlobal(MpMessageType.MainWindowOrientationChangeBegin);
 
@@ -1065,16 +1067,16 @@ namespace MonkeyPaste.Avalonia {
                 IsFilterMenuVisible = !IsFilterMenuVisible;
             });
 
-        public ICommand WindowResizeCommand => new MpCommand<MpSize>(
-            (sizeArg) => {
+        public ICommand WindowResizeCommand => new MpCommand<object>(
+            (deltaSizeArg) => {
                 Dispatcher.UIThread.Post(() => {
-                    //var rc = MpAvMainWindow.Instance.GetResizerControl();
-                    //if (rc == null) {
-                    //    return;
-                    //}
+                    var deltaSize = deltaSizeArg as MpPoint;
+                    if(deltaSize == null) {
+                        return;
+                    }
                     IsResizing = true;
 
-                    MpAvResizeExtension.ResizeByDelta(MpAvMainWindow.Instance, sizeArg.Width, sizeArg.Height);
+                    MpAvResizeExtension.ResizeByDelta(MpAvMainWindow.Instance, deltaSize.X, deltaSize.Y);
 
                     IsResizing = false;
                 });
@@ -1086,7 +1088,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand WindowSizeUpCommand => new MpCommand(
              () => {
                  double dir = MainWindowOrientationType == MpMainWindowOrientationType.Bottom ? 1 : -1;
-                 WindowResizeCommand.Execute(new MpSize(0, _resize_shortcut_nudge_amount * dir));
+                 WindowResizeCommand.Execute(new MpPoint(0, _resize_shortcut_nudge_amount * dir));
              },
              () => {
                  return IsHorizontalOrientation;
@@ -1095,7 +1097,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand WindowSizeDownCommand => new MpCommand(
              () => {
                  double dir = MainWindowOrientationType == MpMainWindowOrientationType.Bottom ? -1 : 1;
-                 WindowResizeCommand.Execute(new MpSize(0, _resize_shortcut_nudge_amount * dir));
+                 WindowResizeCommand.Execute(new MpPoint(0, _resize_shortcut_nudge_amount * dir));
              }, 
              () => {
                  return IsHorizontalOrientation;
@@ -1104,7 +1106,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand WindowSizeRightCommand => new MpCommand(
              () => {
                  double dir = MainWindowOrientationType == MpMainWindowOrientationType.Right ? -1 : 1;
-                 WindowResizeCommand.Execute(new MpSize(_resize_shortcut_nudge_amount * dir,0));
+                 WindowResizeCommand.Execute(new MpPoint(_resize_shortcut_nudge_amount * dir,0));
              }, () => {
                  return IsVerticalOrientation;
              });
@@ -1112,7 +1114,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand WindowSizeLeftCommand => new MpCommand(
              () => {
                  double dir = MainWindowOrientationType == MpMainWindowOrientationType.Right ? 1 : -1;
-                 WindowResizeCommand.Execute(new MpSize(_resize_shortcut_nudge_amount * dir, 0));
+                 WindowResizeCommand.Execute(new MpPoint(_resize_shortcut_nudge_amount * dir, 0));
              }, () => {
                  return IsVerticalOrientation;
              });

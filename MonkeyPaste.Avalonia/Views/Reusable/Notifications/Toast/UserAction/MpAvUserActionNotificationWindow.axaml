@@ -24,100 +24,143 @@
         TransparencyLevelHint="Transparent"
         Background="Transparent"
         Title="">
-    <Border HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            MinHeight="130"
-            BorderThickness="7"
-            BorderBrush="{Binding BorderHexColor, Converter={StaticResource StringHexToBrushConverter}}"
-            Background="{Binding BackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
-            local:MpAvIsHoveringExtension.IsEnabled="True"
-            local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
+    <local:MpAvClipBorder HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch"
+                          MinHeight="130"
+                          BorderThickness="7"
+                          Padding="10"
+                          BorderBrush="{Binding BorderHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                          Background="{Binding BackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                          local:MpAvIsHoveringExtension.IsEnabled="True"
+                          local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
         <Grid x:Name="NotificationWindowContainerGrid"
-              ColumnDefinitions="0.35*,0.75*">
+              ColumnDefinitions="0.35*,0.75*"
+              RowDefinitions="Auto,Auto,*,Auto,0.6*">
+            <!--  ICON  -->
             <Image Grid.Row="0"
                    Grid.Column="0"
-                   Width="72"
-                   Height="72"
+                   Width="64"
+                   Height="64"
                    IsVisible="{Binding IconSourceObj, Converter={StaticResource IsNotNullZeroOrEmptyToBoolConverter}}"
                    Source="{Binding IconSourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}"
                    Stretch="Fill"
                    HorizontalAlignment="Left"
                    VerticalAlignment="Top"
-                   Margin="10,5,0,0" />
+                   Margin="10,5,10,0" />
+
+            <!--  TITLE/UNDERLINE  -->
+            <StackPanel Grid.Row="0"
+                        Grid.Column="1"
+                        Orientation="Vertical"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Top">
+                <TextBlock Grid.Row="0"
+                           Grid.Column="1"
+                           VerticalAlignment="Top"
+                           HorizontalAlignment="Stretch"
+                           TextAlignment="Left"
+                           FontSize="32"
+                           Foreground="White"
+                           FontWeight="SemiBold"
+                           TextWrapping="WrapWithOverflow"
+                           Text="{Binding Title}" />
+
+                <!--  TITLE UNDERLINE  -->
+
+                <Border Grid.Row="0"
+                        Grid.Column="1"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Stretch"
+                        Classes="labelUnderline labelUnderline_long"
+                        BorderThickness="0" />
+            </StackPanel>
+
+
+
+            <!--  MESSAGE BODY  -->
+            <TextBlock Grid.Row="1"
+                       Grid.Column="1"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Top"
+                       ScrollViewer.VerticalScrollBarVisibility="Auto"
+                       Margin="5,5,5,10"
+                       TextWrapping="Wrap"
+                       MaxWidth="300"
+                       FontSize="14"
+                       FontWeight="SemiBold"
+                       Background="Transparent"
+                       Focusable="True"
+                       Foreground="{Binding NotificationTextForegroundColor, Converter={StaticResource StringHexToBrushConverter}}"
+                       Text="{Binding Body}" />
+
+            <!--  TEXTBOX (Optional)  -->
+
+            <Border Grid.Row="2"
+                    Grid.Column="1"
+                    IsVisible="{Binding ShowTextBox}"
+                    BorderThickness="2"
+                    BorderBrush="White"
+                    Background="White"
+                    Margin="5,0,10,10"
+                    CornerRadius="7"
+                    Padding="3"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center">
+                <TextBox Watermark="{Binding Detail}"
+                         TextAlignment="Left"
+                         FontSize="14"
+                         Padding="3"
+                         BorderThickness="0"
+                         Text="{Binding BoundInputText, Mode=TwoWay}" />
+            </Border>
+
+            <!--  BUTTONS ROW  -->
+
+            <StackPanel Grid.Row="3"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <!--  Ignore, Retry, Fix, Shutdown states  -->
+                <Button Content="IGNORE"
+                        IsVisible="{Binding ShowIgnoreButton}"
+                        Command="{Binding IgnoreCommand}" />
+                <Button x:Name="RetryButton"
+                        Content="RETRY"
+                        IsVisible="{Binding ShowRetryButton}"
+                        Command="{Binding RetryCommand}" />
+                <Button x:Name="FixButton"
+                        Content="FIX"
+                        IsVisible="{Binding ShowFixButton}"
+                        VerticalAlignment="Top"
+                        Command="{Binding FixWrapperCommand}" />
+                <Button Content="SHUTDOWN"
+                        IsVisible="{Binding ShowShutdownButton}"
+                        Command="{Binding ShutdownCommand}" />
+                <!--  Yes, No, Cancel or Ok, Cancel States  -->
+                <Button Content="YES"
+                        Command="{Binding YesCommand}"
+                        IsVisible="{Binding ShowYesButton}" />
+                <Button Content="NO"
+                        Command="{Binding NoCommand}"
+                        IsVisible="{Binding ShowNoButton}" />
+                <Button Content="OK"
+                        Command="{Binding OkCommand}"
+                        IsVisible="{Binding ShowOkButton}" />
+                <Button Content="CANCEL"
+                        Command="{Binding CancelCommand}"
+                        IsVisible="{Binding ShowCancelButton}" />
+            </StackPanel>
+
+            <!--  OPTIONS POPUP (Optional)  -->
+
             <local:MpAvOptionsButton Grid.Row="0"
                                      Grid.Column="1"
+                                     HorizontalAlignment="Right"
+                                     IsVisible="{Binding ShowOptionsButton}"
                                      local:MpAvIsHoveringExtension.IsEnabled="True"
                                      local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverOptionsButton, Mode=TwoWay}"
                                      local:MpAvMenuExtension.PlacementMode="Left" />
-            <Grid Grid.Column="1"
-                  HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch"
-                  RowDefinitions="Auto,*,0.6*">
-                <StackPanel Grid.Row="0"
-                            Orientation="Vertical">
-
-                    <TextBlock VerticalAlignment="Bottom"
-                               HorizontalAlignment="Left"
-                               Margin="10,10,0,1"
-                               FontSize="20"
-                               Foreground="White"
-                               FontWeight="SemiBold"
-                               TextWrapping="NoWrap"
-                               Text="{Binding Title}" />
-                    <Border Classes="labelUnderline"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Bottom"
-                            BorderThickness="0" />
-                </StackPanel>
-
-                <TextBlock Grid.Row="1"
-                           HorizontalAlignment="Left"
-                           VerticalAlignment="Top"
-                           ScrollViewer.VerticalScrollBarVisibility="Auto"
-                           Margin="5,5,5,10"
-                           TextWrapping="Wrap"
-                           MaxWidth="300"
-                           FontSize="14"
-                           FontWeight="SemiBold"
-                           Background="Transparent"
-                           Focusable="True"
-                           Foreground="{Binding NotificationTextForegroundColor, Converter={StaticResource StringHexToBrushConverter}}"
-                           Text="{Binding Body}" />
-                <StackPanel Grid.Row="2"
-                            Orientation="Horizontal"
-                            HorizontalAlignment="Center">
-                    <!--  Ignore, Retry, Fix, Shutdown states  -->
-                    <Button Content="IGNORE"
-                            IsVisible="{Binding ShowIgnoreButton}"
-                            Command="{Binding IgnoreCommand}" />
-                    <Button x:Name="RetryButton"
-                            Content="RETRY"
-                            IsVisible="{Binding ShowRetryButton}"
-                            Command="{Binding RetryCommand}" />
-                    <Button x:Name="FixButton"
-                            Content="FIX"
-                            IsVisible="{Binding ShowFixButton}"
-                            VerticalAlignment="Top"
-                            Command="{Binding FixWrapperCommand}" />
-                    <Button Content="SHUTDOWN"
-                            IsVisible="{Binding ShowShutdownButton}"
-                            Command="{Binding ShutdownCommand}" />
-                    <!--  Yes, No, Cancel or Ok, Cancel States  -->
-                    <Button Content="YES"
-                            Command="{Binding YesCommand}"
-                            IsVisible="{Binding ShowYesButton}" />
-                    <Button Content="NO"
-                            Command="{Binding NoCommand}"
-                            IsVisible="{Binding ShowNoButton}" />
-                    <Button Content="OK"
-                            Command="{Binding OkCommand}"
-                            IsVisible="{Binding ShowOkButton}" />
-                    <Button Content="CANCEL"
-                            Command="{Binding CancelCommand}"
-                            IsVisible="{Binding ShowCancelButton}" />
-                </StackPanel>
-
-            </Grid>
         </Grid>
-    </Border>
+    </local:MpAvClipBorder>
 </Window>

@@ -180,9 +180,9 @@ namespace MonkeyPaste.Avalonia {
 
                 //var qi = MpDataModelProvider.QueryInfo;
 
-                //qi.FilterFlags = FilterFlags;//MpSearchBoxViewModel.Instance.FilterType;
+                //qi.FilterFlags = FilterFlags;//MpAvSearchBoxViewModel.Instance.FilterType;
                 //MpDataModelProvider.QueryInfos.Add(this);
-                // MpSearchBoxViewModel.Instance.CriteriaItems.OrderBy(x => x.SortOrderIdx).ForEach(x => MpDataModelProvider.QueryInfos.Add(x.ToQueryInfo()));
+                // MpAvSearchBoxViewModel.Instance.CriteriaItems.OrderBy(x => x.SortOrderIdx).ForEach(x => MpDataModelProvider.QueryInfos.Add(x.ToQueryInfo()));
             });
         }
 

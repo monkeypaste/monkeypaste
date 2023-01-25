@@ -122,6 +122,29 @@ namespace MonkeyPaste {
             return result;            
         }
 
+        public static async Task<string> ShowInputResultNotificationAsync(
+            string title, 
+            string body,
+            string currentInput = null,
+            string placeholderText = null,
+            object anchor = null, 
+            object iconResourceObj = null) {
+            MpNotificationFormat nf = new MpNotificationFormat() {
+                Title = title,
+                Body = body,
+                OtherArgs = currentInput,
+                Detail = placeholderText,
+                AnchorTarget = anchor,
+                NotificationType = MpNotificationType.ModalTextBoxOkCancelMessageBox,
+                IconSourceObj = iconResourceObj
+            };
+            var nvm = await CreateNotifcationViewModelAsync(nf);
+            if(nvm is MpUserActionNotificationViewModel uanvm) {
+                string result = await uanvm.ShowInputResultNotificationAsync();
+                return result;
+            }
+            return null;
+        }
         public static async Task<MpNotificationDialogResultType> ShowNotificationAsync(MpINotificationFormat inf) {
             var nf = inf as MpNotificationFormat;
             if(nf == null && inf is MpPluginUserNotificationFormat pnf) {

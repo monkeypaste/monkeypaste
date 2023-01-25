@@ -60,8 +60,7 @@
 
         <local:MpAvSearchBoxView HorizontalAlignment="Right"
                                  Tag="Search"
-                                 DockPanel.Dock="Right"
-                                 MaxWidth="300" />
+                                 DockPanel.Dock="Right" />
 
         <!--  Tag Tray View  -->
         <local:MpAvTagTrayView IsVisible="{Binding IsHorizontalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}" />

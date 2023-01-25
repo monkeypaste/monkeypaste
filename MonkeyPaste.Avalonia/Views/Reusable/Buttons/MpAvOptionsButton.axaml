@@ -44,7 +44,9 @@
     </UserControl.Styles>
     <Button HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            Classes="optionsButton">
+            Classes="optionsButton"
+            Command="{Binding Command, ElementName=OptionsButton}"
+            CommandParameter="{Binding CommandParameter, ElementName=OptionsButton}">
 
         <Grid>
             <Border x:Name="DefaultBorder"
