@@ -132,7 +132,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvComponentPickerParameterViewModel(MpIParameterHostViewModel parent) : base(parent) { }
 
-        public override async Task InitializeAsync(MpPluginPresetParameterValue aipv) {
+        public override async Task InitializeAsync(MpParameterValue aipv) {
             IsBusy = true;
 
             await base.InitializeAsync(aipv);
@@ -157,7 +157,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(SelectedLabel));
                     OnPropertyChanged(nameof(SelectedIconResourceObj));
 
-                    MpPlatformWrapper.Services.ContextMenuCloser.CloseMenu();
+                    MpPlatform.Services.ContextMenuCloser.CloseMenu();
                 }
             });
 

@@ -7,7 +7,7 @@ using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
 
-    public static class MpPlatformWrapper {
+    public static class MpPlatform {
         public static MpIPlatformWrapper Services { get; private set; }
 
         public static async Task InitAsync(MpIPlatformWrapper niw) {

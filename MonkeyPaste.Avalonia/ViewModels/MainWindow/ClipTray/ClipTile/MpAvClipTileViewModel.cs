@@ -259,7 +259,7 @@ namespace MonkeyPaste.Avalonia {
                         path = "PinOverImage";
                     }
                 }
-                return MpPlatformWrapper.Services.PlatformResource.GetResource(path) as string;
+                return MpPlatform.Services.PlatformResource.GetResource(path) as string;
             }
         }
 
@@ -279,7 +279,7 @@ namespace MonkeyPaste.Avalonia {
                         path = "ClosedEyeImage";
                     }
                 }
-                return MpPlatformWrapper.Services.PlatformResource.GetResource(path) as string;
+                return MpPlatform.Services.PlatformResource.GetResource(path) as string;
             }
         }
 
@@ -1874,7 +1874,7 @@ namespace MonkeyPaste.Avalonia {
                     IsBusy = false;
                     return;
                 }
-                await MpPlatformWrapper.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(mpdo, true);
+                await MpPlatform.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(mpdo, true);
 
                 // wait extra for cb watcher to know about data
                 await Task.Delay(300);

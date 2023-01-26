@@ -6,103 +6,38 @@ using SQLite;
 using System.Threading.Tasks;
 using System.Linq;
 
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
+using MonkeyPaste.Common;
+using System.Diagnostics;
 
 namespace MonkeyPaste {
-    public class MpTag : MpDbModelBase,
-        MpIIconResource, MpISyncableDbObject {
-        //public const int RecentTagId = 1;
-        public static int AllTagId = 1;
-        public static int FavoritesTagId = 2;
-        public static int HelpTagId = 3;
-        //public const int RootTagId = 5;
+    public enum MpTagType {
+        None,
+        Link,
+        Query,
+        Group
+    }
+    public class MpTag : 
+        MpDbModelBase,
+        MpIIconResource, 
+        MpISyncableDbObject {
+        #region Constants
+
+        public const int AllTagId = 1;
+        public const int FavoritesTagId = 2;
+        public const int HelpTagId = 3;
+        public const int RootGroupTagId = 7;
+
+        #endregion
+
+        #region Interfaces
+
         #region MpIIconResource Implementation
         object MpIIconResource.IconResourceObj => HexColor;
 
         #endregion
-        #region Columns
-        [PrimaryKey, AutoIncrement]
-        [Column("pk_MpTagId")]
-        public override int Id { get; set; }
 
-        [Column("fk_ParentTagId")]
-        //[ForeignKey(typeof(MpTag))]
-        public int ParentTagId { get; set; } = 0;
-
-        [Column("MpTagGuid")]
-        public new string Guid { get => base.Guid; set => base.Guid = value; }
-
-       
-
-        [Column("TreeSortIdx")]
-        public int TreeSortIdx { get; set; } = -1;
-
-        [Column("TraySortIdx")]
-        public int PinSortIdx { get; set; } = -1;
-
-
-        [Column("HexColor")]
-        public string HexColor { get; set; }
-
-        public string TagName { get; set; } = string.Empty;
-
-        #endregion
-
-        #region Properties
-
-        [Ignore]
-        public Guid TagGuid {
-            get {
-                if (string.IsNullOrEmpty(Guid)) {
-                    return System.Guid.Empty;
-                }
-                return System.Guid.Parse(Guid);
-            }
-            set {
-                Guid = value.ToString();
-            }
-        }
-
-        #endregion
-
-        #region Statics
-
-        public static async Task<MpTag> CreateAsync(
-            int id = 0,
-            string guid = "",
-            string tagName = "Untitled", 
-            int treeSortIdx = -1,
-            int pinSortIdx = -1,
-            int parentTagId = 0, 
-            string hexColor = "",
-            bool ignoreTracking = false,
-            bool ignoreSyncing = false) { 
-            hexColor = string.IsNullOrEmpty(hexColor) ? MpHelpers.GetRandomColor().ToHex() : hexColor;
-            if(treeSortIdx < 0) {
-                if(parentTagId <= 0) {
-                    treeSortIdx = 0;
-                } else {
-                    treeSortIdx = await MpDataModelProvider.GetChildTagCountAsync(parentTagId);
-                }
-            }
-            MpTag newTag = new MpTag() {
-                Id = id,
-                TagGuid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid() : System.Guid.Parse(guid),
-                TagName = tagName,
-                HexColor = hexColor,
-                TreeSortIdx = treeSortIdx,
-                PinSortIdx = pinSortIdx,
-                ParentTagId = parentTagId
-            };
-            await newTag.WriteToDatabaseAsync(ignoreTracking,ignoreSyncing);
-            return newTag;
-        }
-
-        #endregion
-
-        public MpTag() {            
-        }
-
+        #region MpISyncableDbObject Implementation
 
         public async Task<object> CreateFromLogsAsync(string tagGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
             //await Task.Delay(1);
@@ -171,7 +106,7 @@ namespace MonkeyPaste {
             await Task.Delay(1);
 
             MpTag other = null;
-            if(drOrModel == null) {
+            if (drOrModel == null) {
                 other = new MpTag();
             } else if (drOrModel is MpTag) {
                 other = drOrModel as MpTag;
@@ -202,5 +137,132 @@ namespace MonkeyPaste {
 
             return diffLookup;
         }
+
+        #endregion
+
+        #endregion
+
+        #region Columns
+        [PrimaryKey, AutoIncrement]
+        [Column("pk_MpTagId")]
+        public override int Id { get; set; }
+
+        [Column("fk_ParentTagId")]
+        //[ForeignKey(typeof(MpTag))]
+        public int ParentTagId { get; set; } = 0;
+
+        [Column("MpTagGuid")]
+        public new string Guid { get => base.Guid; set => base.Guid = value; }
+
+       
+
+        [Column("TreeSortIdx")]
+        public int TreeSortIdx { get; set; } = -1;
+
+        [Column("TraySortIdx")]
+        public int PinSortIdx { get; set; } = -1;
+
+        [Column("e_MpTagType")]
+        public string TagTypeName { get; set; }
+
+        [Column("HexColor")]
+        public string HexColor { get; set; }
+
+        public string TagName { get; set; } = string.Empty;
+
+        #endregion
+
+        #region Properties
+
+        [Ignore]
+        public Guid TagGuid {
+            get {
+                if (string.IsNullOrEmpty(Guid)) {
+                    return System.Guid.Empty;
+                }
+                return System.Guid.Parse(Guid);
+            }
+            set {
+                Guid = value.ToString();
+            }
+        }
+
+        [Ignore]
+        public MpTagType TagType {
+            get => TagTypeName.ToEnum<MpTagType>();
+            set => TagTypeName = value.ToString();
+        }
+
+        [Ignore]
+        public bool CanDelete {
+            get {
+                if(Id == AllTagId || Id == HelpTagId || Id == RootGroupTagId) {
+                    return false;
+                }
+                return true;
+            }
+        }
+
+
+        #endregion
+
+        #region Statics
+
+        public static async Task<MpTag> CreateAsync(
+            int id = 0,
+            string guid = "",
+            string tagName = "Untitled", 
+            int treeSortIdx = -1,
+            int pinSortIdx = -1,
+            int parentTagId = 0, 
+            string hexColor = "",
+            MpTagType tagType = MpTagType.None,
+            bool ignoreTracking = false,
+            bool ignoreSyncing = false) { 
+            if(tagType == MpTagType.None) {
+                throw new Exception("TagType must be specified");
+            }
+            hexColor = string.IsNullOrEmpty(hexColor) ? MpHelpers.GetRandomColor().ToHex() : hexColor;
+            if(treeSortIdx < 0) {
+                if(parentTagId <= 0) {
+                    treeSortIdx = 0;
+                } else {
+                    treeSortIdx = await MpDataModelProvider.GetChildTagCountAsync(parentTagId);
+                }
+            }
+            MpTag newTag = new MpTag() {
+                Id = id,
+                TagGuid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid() : System.Guid.Parse(guid),
+                TagName = tagName,
+                HexColor = hexColor,
+                TreeSortIdx = treeSortIdx,
+                PinSortIdx = pinSortIdx,
+                ParentTagId = parentTagId,
+                TagType = tagType
+            };
+            await newTag.WriteToDatabaseAsync(ignoreTracking,ignoreSyncing);
+            return newTag;
+        }
+
+        #endregion
+
+        public MpTag() { }
+
+        public override async Task DeleteFromDatabaseAsync() {
+            if(!CanDelete) {
+                // this should be caught in view model
+                Debugger.Break();
+                return;
+            }
+            List<Task> deleteTasks = new List<Task>();
+            if(TagType == MpTagType.Query) {
+                var scil = await MpDataModelProvider.GetCriteriaItemsByTagId(Id);
+                deleteTasks.AddRange(scil.Select(x => x.DeleteFromDatabaseAsync()));
+            }
+            deleteTasks.Add(base.DeleteFromDatabaseAsync());
+            await Task.WhenAll(deleteTasks);
+        }
+
+        
     }
 }

@@ -85,17 +85,17 @@ namespace MonkeyPaste.Avalonia {
 
             // SET CLIPBOARD
 
-            await MpPlatformWrapper.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(mpdo, true);
+            await MpPlatform.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(mpdo, true);
 
             // ACTIVATE TARGET
             if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
-                IntPtr lastActive = MpPlatformWrapper.Services.ProcessWatcher.SetActiveProcess(pasteToHandle);
+                IntPtr lastActive = MpPlatform.Services.ProcessWatcher.SetActiveProcess(pasteToHandle);
                 if (!MpAvMainWindowViewModel.Instance.IsMainWindowLocked) {
                     MpAvMainWindowViewModel.Instance.FinishMainWindowHide(null);
                 }
 
             } else if (MpAvAppendNotificationWindow.Instance.IsActive) {
-                IntPtr lastActive = MpPlatformWrapper.Services.ProcessWatcher.SetActiveProcess(pasteToHandle);
+                IntPtr lastActive = MpPlatform.Services.ProcessWatcher.SetActiveProcess(pasteToHandle);
                 //MpAvNotificationWindowManager.Instance.HideNotification(MpAppendNotificationViewModel.Instance);
             } else {
                 // assume target is active (if was start process info needs to be activated earlier)

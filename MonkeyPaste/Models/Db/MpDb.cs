@@ -72,7 +72,7 @@ namespace MonkeyPaste {
 
 
         public static string GetDbFileAsBase64() {
-            var bytes = File.ReadAllBytes(MpPlatformWrapper.Services.DbInfo.DbPath);
+            var bytes = File.ReadAllBytes(MpPlatform.Services.DbInfo.DbPath);
             return Convert.ToBase64String(bytes);
         }
         #region Queries
@@ -293,7 +293,7 @@ namespace MonkeyPaste {
         #endregion
 
         public static byte[] GetDbFileBytes() {
-            return File.ReadAllBytes(MpPlatformWrapper.Services.DbInfo.DbPath);
+            return File.ReadAllBytes(MpPlatform.Services.DbInfo.DbPath);
         }
 
         #endregion
@@ -366,7 +366,7 @@ namespace MonkeyPaste {
         }
 
         private static async Task InitDbAsync() {
-            bool isNewDb = await InitDbConnectionAsync(MpPlatformWrapper.Services.DbInfo, true);            
+            bool isNewDb = await InitDbConnectionAsync(MpPlatform.Services.DbInfo, true);            
 
             await InitTablesAsync();
             
@@ -379,21 +379,21 @@ namespace MonkeyPaste {
 
             await MpDefaultDataModelTools.InitializeAsync(
                 MpPrefViewModel.Instance.ThisDeviceGuid,
-                MpPlatformWrapper.Services.OsInfo.OsType,
-                MpPlatformWrapper.Services.OsInfo.OsFileManagerPath);
+                MpPlatform.Services.OsInfo.OsType,
+                MpPlatform.Services.OsInfo.OsFileManagerPath);
 
             if(isNewDb) {
                 OnInitDefaultNativeData?.Invoke(nameof(MpDb), null);
             }
 
-            MpConsole.WriteLine(@"Db file located: " + MpPlatformWrapper.Services.DbInfo.DbPath);
+            MpConsole.WriteLine(@"Db file located: " + MpPlatform.Services.DbInfo.DbPath);
             MpConsole.WriteLine(@"This Client Guid: " + MpPrefViewModel.Instance.ThisDeviceGuid);
             MpConsole.WriteLine("Write ahead logging: " + (UseWAL ? "ENABLED" : "DISABLED"));
         }
 
         private static void CreateConnection(string dbPath = "") {
             if (string.IsNullOrEmpty(dbPath)) {
-                dbPath = MpPlatformWrapper.Services.DbInfo.DbPath;
+                dbPath = MpPlatform.Services.DbInfo.DbPath;
             }
             if(_connection != null && _connectionAsync != null) {
                 return;
@@ -437,7 +437,7 @@ namespace MonkeyPaste {
 
         private static async Task InitTablesAsync() {
             await _connectionAsync.CreateTableAsync<MpAction>();
-            await _connectionAsync.CreateTableAsync<MpPluginPresetParameterValue>();
+            await _connectionAsync.CreateTableAsync<MpParameterValue>();
             await _connectionAsync.CreateTableAsync<MpApp>();
             await _connectionAsync.CreateTableAsync<MpAppClipboardFormatInfo>();
             await _connectionAsync.CreateTableAsync<MpAppPasteShortcut>();
@@ -463,7 +463,6 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpContentToken>();
             await _connectionAsync.CreateTableAsync<MpUrl>();
             await _connectionAsync.CreateTableAsync<MpUserDevice>();
-            await _connectionAsync.CreateTableAsync<MpUserSearch>();
         }
 
         private static async Task CreateViewsAsync() {
@@ -553,14 +552,15 @@ INNER JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId
 
             await MpDefaultDataModelTools.CreateAsync();
 
-            bool is_ignore_default_tracking = true;
-            bool is_ignore_default_syncing = true;
+            bool tracked = true;
+            bool synced = true;
 
             #region Tags
             var default_tags = new object[] {
-                new object[] { "df388ecd-f717-4905-a35c-a8491da9c0e3", "All", Color.Blue.ToHex(), 0,0, is_ignore_default_tracking,is_ignore_default_syncing, 0},
-                new object[] { "54b61353-b031-4029-9bda-07f7ca55c123", "Favorites", Color.Yellow.ToHex(),0,1,is_ignore_default_tracking,is_ignore_default_syncing, MpTag.AllTagId},
-                new object[] { "a0567976-dba6-48fc-9a7d-cbd306a4eaf3", "Help", Color.Orange.ToHex(),1,2,is_ignore_default_tracking,is_ignore_default_syncing, 0},
+                new object[] { "df388ecd-f717-4905-a35c-a8491da9c0e3", "All", Color.Blue.ToHex(), 0,0, tracked,synced, 0, MpTagType.Link},
+                new object[] { "54b61353-b031-4029-9bda-07f7ca55c123", "Favorites", Color.Yellow.ToHex(),0,1,tracked,synced, MpTag.AllTagId, MpTagType.Link},
+                new object[] { "e62b8e5d-52a6-46f1-ac51-8f446916dd85", "Searches", Color.ForestGreen.ToHex(),1,2,tracked,synced, 0, MpTagType.Group},
+                new object[] { "a0567976-dba6-48fc-9a7d-cbd306a4eaf3", "Help", Color.Orange.ToHex(),2,2,tracked,synced, 0, MpTagType.Link},
             };
             for (int i = 0; i < default_tags.Length; i++) {
                 var t = (object[])default_tags[i];
@@ -572,7 +572,8 @@ INNER JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId
                     pinSortIdx: (int)t[4],
                     ignoreTracking: (bool)t[5],
                     ignoreSyncing: (bool)t[6],
-                    parentTagId: (int)t[7]);
+                    parentTagId: (int)t[7],
+                    tagType: (MpTagType)t[8]);
             }
 
             #endregion
@@ -596,7 +597,7 @@ INNER JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId
         }
 
         private static async Task InitDefaultShortcutsAsync() {
-            var ps = MpPlatformWrapper.Services.PlatformShorcuts;
+            var ps = MpPlatform.Services.PlatformShorcuts;
             List<string[]> defaultShortcutDefinitions = new List<string[]>() {
                 // ORDER:
                 // guid,keyString,shortcutType,routeType, readOnly = false

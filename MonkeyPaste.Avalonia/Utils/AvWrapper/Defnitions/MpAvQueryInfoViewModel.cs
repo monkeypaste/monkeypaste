@@ -12,7 +12,8 @@ using MonkeyPaste.Common;
 using Newtonsoft.Json;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvQueryInfoViewModel : MpViewModelBase, MpIQueryInfo, MpIJsonObject {
+    public class MpAvQueryInfoViewModel : 
+        MpViewModelBase, MpIQueryInfo, MpIJsonObject {
         #region Private Variables
         [JsonIgnore]
         private ObservableCollection<MpIQueryInfoValueProvider> _valueProviders = new ObservableCollection<MpIQueryInfoValueProvider>();
@@ -28,19 +29,21 @@ namespace MonkeyPaste.Avalonia {
 
         #region Statics
 
-        public static void Init(string lastQueryInfoStr) {
-            _current = JsonConvert.DeserializeObject<MpAvQueryInfoViewModel>(lastQueryInfoStr);
+        public static MpAvQueryInfoViewModel Parse(string lastQueryInfoStr) {
+            var result = JsonConvert.DeserializeObject<MpAvQueryInfoViewModel>(lastQueryInfoStr);
+            return result;
         }
 
-        [JsonIgnore]
-        private static MpAvQueryInfoViewModel _current;
-        public static MpAvQueryInfoViewModel Current => _current;
+        //[JsonIgnore]
+        //private static MpAvQueryInfoViewModel _current;
+        //public static MpAvQueryInfoViewModel Current => _current;
         #endregion
 
         #region Properties     
 
         #region MpIQueryInfo Implementation
 
+        IEnumerable<MpIQueryInfoValueProvider> MpIQueryInfo.Providers => _valueProviders;
         public int TotalAvailableItemsInQuery => _allQueryCopyItemIds.Count;
         public bool IsDescending { get; set; } = true;
         public MpContentSortType SortType { get; set; } = MpContentSortType.CopyDateTime;
@@ -94,7 +97,7 @@ namespace MonkeyPaste.Avalonia {
             _allQueryCopyItemIds.AddRange(result);
         }
 
-        public async Task<List<MpCopyItem>> FetchCopyItemsByQueryIdxListAsync(List<int> copyItemQueryIdxList) {
+        public async Task<List<MpCopyItem>> FetchIdsByQueryIdxListAsync(List<int> copyItemQueryIdxList) {
             var fetchRootIds = _allQueryCopyItemIds
                                 .Select((val, idx) => (val, idx))
                                 .Where(x => copyItemQueryIdxList.Contains(x.idx))
@@ -105,9 +108,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Result Interaction
-        
+
         public int GetItemId(int queryIdx) {
-            if(queryIdx < 0 || queryIdx >= _allQueryCopyItemIds.Count) {
+            if (queryIdx < 0 || queryIdx >= _allQueryCopyItemIds.Count) {
                 return -1;
             }
             return _allQueryCopyItemIds[queryIdx];
@@ -118,12 +121,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void InsertId(int idx, int id) {
-            if(idx < 0 || idx > _allQueryCopyItemIds.Count) {
+            if (idx < 0 || idx > _allQueryCopyItemIds.Count) {
                 // bad idx
                 Debugger.Break();
                 return;
             }
-            if(idx == _allQueryCopyItemIds.Count) {
+            if (idx == _allQueryCopyItemIds.Count) {
                 _allQueryCopyItemIds.Add(id);
             } else {
                 _allQueryCopyItemIds.Insert(idx, id);
@@ -145,13 +148,13 @@ namespace MonkeyPaste.Avalonia {
         #region Value Provider Interaction
 
         public void RestoreProviderValues() {
-            foreach(var vp in _valueProviders) {
+            foreach (var vp in _valueProviders) {
                 vp.Source.SetPropertyValue(vp.SourcePropertyName, this.GetPropertyValue(vp.QueryValueName));
             }
         }
 
         public void RegisterProvider(MpIQueryInfoValueProvider qip) {
-            if(!qip.Source.GetType().GetProperty(qip.SourcePropertyName).CanWrite) {
+            if (!qip.Source.GetType().GetProperty(qip.SourcePropertyName).CanWrite) {
                 // needs to allow reset
                 Debugger.Break();
             }
@@ -193,15 +196,15 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private void MpAvQueryInfoViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            if(SupressPropertyChangedNotification) {
+            if (SupressPropertyChangedNotification) {
                 MpConsole.WriteLine("Hey! QueryInfo still receives suppressed property changes");
                 return;
             }
 
-            if(this == Current) {
+            //if (this == Current) {
                 // persist current query to pref json
                 //MpPrefViewModel.Instance.LastQueryInfoJson = SerializeJsonObject();
-            }
+            //}
         }
 
 
@@ -210,7 +213,7 @@ namespace MonkeyPaste.Avalonia {
             foreach (var vp in _valueProviders) {
                 object provided_value = vp.Source.GetPropertyValue(vp.SourcePropertyName);
                 object cur_value = this.GetPropertyValue(vp.QueryValueName);
-                if(!cur_value.Equals(provided_value)) {
+                if (!cur_value.Equals(provided_value)) {
                     hasChanged = true;
                 }
                 this.SetPropertyValue(vp.QueryValueName, provided_value);

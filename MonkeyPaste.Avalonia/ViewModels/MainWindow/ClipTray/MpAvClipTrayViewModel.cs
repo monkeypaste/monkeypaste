@@ -110,21 +110,21 @@ namespace MonkeyPaste.Avalonia {
                     SubItems = new List<MpMenuItemViewModel>() {
                         new MpMenuItemViewModel() {
                             Header = @"Cut",
-                            IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("ScissorsImage") as string,
+                            IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("ScissorsImage") as string,
                             Command = MpAvShortcutCollectionViewModel.Instance.SimulateKeyStrokeCommand,
-                            CommandParameter = MpPlatformWrapper.Services.PlatformShorcuts.CutKeys,
+                            CommandParameter = MpPlatform.Services.PlatformShorcuts.CutKeys,
                             ShortcutArgs = new object[] { MpShortcutType.PasteHere },
                         },
                         new MpMenuItemViewModel() {
                             Header = @"Copy",
-                            IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("CopyImage") as string,
+                            IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("CopyImage") as string,
                             Command = CutSelectionFromContextMenuCommand,
                             ShortcutArgs = new object[] { MpShortcutType.CopySelection },
                         },
                         new MpMenuItemViewModel() {
                             Header = @"Paste Here",
                             AltNavIdx = 6,
-                            IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("PasteImage") as string,
+                            IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("PasteImage") as string,
                             Command = PasteHereFromContextMenuCommand,
                             ShortcutArgs = new object[] { MpShortcutType.PasteHere },
                         },
@@ -144,7 +144,7 @@ namespace MonkeyPaste.Avalonia {
                         new MpMenuItemViewModel() {
                             Header = @"Delete",
                             AltNavIdx = 0,
-                            IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("DeleteImage") as string,
+                            IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("DeleteImage") as string,
                             Command = DeleteSelectedClipsCommand,
                             ShortcutArgs = new object[] { MpShortcutType.DeleteSelectedItems },
                         },
@@ -154,14 +154,14 @@ namespace MonkeyPaste.Avalonia {
                         new MpMenuItemViewModel() {
                             Header = @"Rename",
                             AltNavIdx = 0,
-                            IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("RenameImage") as string,
+                            IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("RenameImage") as string,
                             Command = EditSelectedTitleCommand,
                             ShortcutArgs = new object[] { MpShortcutType.EditTitle },
                         },
                         new MpMenuItemViewModel() {
                             Header = @"Edit",
                             AltNavIdx = 0,
-                            IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("EditContentImage") as string,
+                            IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("EditContentImage") as string,
                             Command = EditSelectedContentCommand,
                             ShortcutArgs = new object[] { MpShortcutType.EditContent },
                         },
@@ -170,51 +170,51 @@ namespace MonkeyPaste.Avalonia {
                         },
                         new MpMenuItemViewModel() {
                             Header = @"Transform",
-                            IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("ToolsImage") as string,
+                            IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("ToolsImage") as string,
                             SubItems = new List<MpMenuItemViewModel>() {
                                 new MpMenuItemViewModel() {
                                     Header = @"Find and Replace",
                                     AltNavIdx = 0,
-                                    IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("SearchImage") as string,
+                                    IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("SearchImage") as string,
                                     Command = EnableFindAndReplaceForSelectedItem,
                                     ShortcutArgs = new object[] { MpShortcutType.FindAndReplaceSelectedItem },
                                 },
                                 new MpMenuItemViewModel() {
                                     Header = "Duplicate",
                                     AltNavIdx = 0,
-                                    IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("DuplicateImage") as string,
+                                    IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("DuplicateImage") as string,
                                     Command = DuplicateSelectedClipsCommand,
                                     ShortcutArgs = new object[] { MpShortcutType.Duplicate },
                                 },
                                 new MpMenuItemViewModel() {
                                     Header = "To Web Search",
-                                    IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("WebImage") as string,
+                                    IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("WebImage") as string,
                                     SubItems = new List<MpMenuItemViewModel>() {
                                         new MpMenuItemViewModel() {
                                             Header = "Google",
                                             AltNavIdx = 0,
-                                            IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("GoogleImage") as string,
+                                            IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("GoogleImage") as string,
                                             Command = SearchWebCommand,
                                             CommandParameter=@"https://www.google.com/search?q="
                                         },
                                         new MpMenuItemViewModel() {
                                             Header = "Bing",
                                             AltNavIdx = 0,
-                                            IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("BingImage") as string,
+                                            IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("BingImage") as string,
                                             Command = SearchWebCommand,
                                             CommandParameter=@"https://www.bing.com/search?q="
                                         },
                                         new MpMenuItemViewModel() {
                                             Header = "DuckDuckGo",
                                             AltNavIdx = 0,
-                                            IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("DuckImage") as string,
+                                            IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("DuckImage") as string,
                                             Command = SearchWebCommand,
                                             CommandParameter=@"https://duckduckgo.com/?q="
                                         },
                                         new MpMenuItemViewModel() {
                                             Header = "Yandex",
                                             AltNavIdx = 0,
-                                            IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("YandexImage") as string,
+                                            IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("YandexImage") as string,
                                             Command = SearchWebCommand,
                                             CommandParameter=@"https://yandex.com/search/?text="
                                         },
@@ -222,7 +222,7 @@ namespace MonkeyPaste.Avalonia {
                                         new MpMenuItemViewModel() {
                                             Header = "Manage...",
                                             AltNavIdx = 0,
-                                            IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("CogImage") as string
+                                            IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("CogImage") as string
                                         },
                                     }
                                 }
@@ -236,7 +236,7 @@ namespace MonkeyPaste.Avalonia {
                         new MpMenuItemViewModel() {
                             Header = @"Collections",
                             AltNavIdx = 0,
-                            IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("PinToCollectionImage") as string,
+                            IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("PinToCollectionImage") as string,
                             SubItems = tagItems
                         }
                     },
@@ -291,7 +291,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvClipTileViewModel AppendClipTileViewModel => AllItems.FirstOrDefault(x => x.IsAppendNotifier);
 
 
-        public MpAvQueryInfoViewModel CurrentQuery => MpAvQueryInfoViewModel.Current;
+        public MpIQueryInfo CurrentQuery => MpPlatform.Services.QueryInfo; //MpPlatform.Services.QueryInfo;
         public IEnumerable<MpAvClipTileViewModel> SortOrderedItems => Items.Where(x => x.QueryOffsetIdx >= 0).OrderBy(x => x.QueryOffsetIdx);
 
         public ObservableCollection<MpAvClipTileViewModel> PinnedItems { get; set; } = new ObservableCollection<MpAvClipTileViewModel>();
@@ -1014,7 +1014,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public int TotalTilesInQuery => MpAvQueryInfoViewModel.Current.TotalAvailableItemsInQuery;
+        public int TotalTilesInQuery => CurrentQuery.TotalAvailableItemsInQuery;
 
         public int DefaultLoadCount {
             get {
@@ -1085,15 +1085,15 @@ namespace MonkeyPaste.Avalonia {
         public string MouseModeImageSourcePath {
             get {
                 if (IsRightClickPasteMode && IsAutoCopyMode) {
-                    return MpPlatformWrapper.Services.PlatformResource.GetResource("BothClickImage") as string;
+                    return MpPlatform.Services.PlatformResource.GetResource("BothClickImage") as string;
                 }
                 if (IsRightClickPasteMode) {
-                    return MpPlatformWrapper.Services.PlatformResource.GetResource("RightClickImage") as string;
+                    return MpPlatform.Services.PlatformResource.GetResource("RightClickImage") as string;
                 }
                 if (IsAutoCopyMode) {
-                    return MpPlatformWrapper.Services.PlatformResource.GetResource("LeftClickImage") as string;
+                    return MpPlatform.Services.PlatformResource.GetResource("LeftClickImage") as string;
                 }
-                return MpPlatformWrapper.Services.PlatformResource.GetResource("NoneClickImage") as string;
+                return MpPlatform.Services.PlatformResource.GetResource("NoneClickImage") as string;
             }
         }
 
@@ -1233,7 +1233,7 @@ namespace MonkeyPaste.Avalonia {
             MpDb.SyncUpdate += MpDbObject_SyncUpdate;
             MpDb.SyncDelete += MpDbObject_SyncDelete;
 
-            MpPlatformWrapper.Services.ClipboardMonitor.OnClipboardChanged += ClipboardChanged;
+            MpPlatform.Services.ClipboardMonitor.OnClipboardChanged += ClipboardChanged;
 
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
 
@@ -1609,12 +1609,12 @@ namespace MonkeyPaste.Avalonia {
         public void ClipboardChanged(object sender, MpPortableDataObject mpdo) {
             bool is_change_ignored = MpAvMainWindowViewModel.Instance.IsMainWindowLoading ||
                                         IsAppPaused ||
-                                        (MpPrefViewModel.Instance.IgnoreInternalClipboardChanges && MpPlatformWrapper.Services.ProcessWatcher.IsThisAppActive);
+                                        (MpPrefViewModel.Instance.IgnoreInternalClipboardChanges && MpPlatform.Services.ProcessWatcher.IsThisAppActive);
             if (is_change_ignored) {
                 MpConsole.WriteLine("Clipboard Change Ignored by tray");
                 MpConsole.WriteLine($"IsMainWindowLoading: {MpAvMainWindowViewModel.Instance.IsMainWindowLoading}");
                 MpConsole.WriteLine($"IsAppPaused: {IsAppPaused}");
-                MpConsole.WriteLine($"IgnoreInternalClipboardChanges: {MpPrefViewModel.Instance.IgnoreInternalClipboardChanges} IsThisAppActive: {MpPlatformWrapper.Services.ProcessWatcher.IsThisAppActive}");
+                MpConsole.WriteLine($"IgnoreInternalClipboardChanges: {MpPrefViewModel.Instance.IgnoreInternalClipboardChanges} IsThisAppActive: {MpPlatform.Services.ProcessWatcher.IsThisAppActive}");
                 return;
             }
 
@@ -1920,7 +1920,7 @@ namespace MonkeyPaste.Avalonia {
                     //MpPlatformWrapper.Services.Cursor.IsCursorFrozen = HasScrollVelocity;
 
                     if(HasScrollVelocity) {
-                        MpPlatformWrapper.Services.Cursor.UnsetCursor(null);
+                        MpPlatform.Services.Cursor.UnsetCursor(null);
                     } else { 
                         var hctvm = Items.FirstOrDefault(x => x.IsHovering);
                         if (hctvm != null) {
@@ -2287,7 +2287,7 @@ namespace MonkeyPaste.Avalonia {
 
             IsAddingClipboardItem = true;
 
-            var newCopyItem = await MpPlatformWrapper.Services.CopyItemBuilder.BuildAsync(cd);
+            var newCopyItem = await MpPlatform.Services.CopyItemBuilder.BuildAsync(cd);
 
             if (newCopyItem == null || newCopyItem.Id < 1) {
                 //this occurs if the copy item is not a known format or app init
@@ -2356,8 +2356,8 @@ namespace MonkeyPaste.Avalonia {
                 // is none selected?
                 Debugger.Break();
             } else {
-                var pi = MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo;
-                await MpPlatformWrapper.Services.ExternalPasteHandler.PasteDataObject(mpdo, pi);
+                var pi = MpPlatform.Services.ProcessWatcher.LastProcessInfo;
+                await MpPlatform.Services.ExternalPasteHandler.PasteDataObject(mpdo, pi);
             }            
 
             CleanupAfterPaste(ctvm);
@@ -2766,7 +2766,7 @@ namespace MonkeyPaste.Avalonia {
                     }
 
                     if(isRequery || isInPlaceRequery) {
-                        await MpAvQueryInfoViewModel.Current.QueryForTotalCountAsync(
+                        await CurrentQuery.QueryForTotalCountAsync(
                             PinnedItems.Select(x => x.CopyItemId),
                             MpAvTagTrayViewModel.Instance.SelectedItem
                             .SelfAndAllDescendants
@@ -2822,7 +2822,7 @@ namespace MonkeyPaste.Avalonia {
 
                     #region Fetch Data & Create Init Tasks
 
-                    var cil = await MpAvQueryInfoViewModel.Current.FetchCopyItemsByQueryIdxListAsync(fetchQueryIdxList);
+                    var cil = await CurrentQuery.FetchIdsByQueryIdxListAsync(fetchQueryIdxList);
 
                     int recycle_base_query_idx = isLoadMoreTail ? HeadQueryIdx : TailQueryIdx;
                     int dir = isLoadMoreTail ? 1 : -1;
@@ -2972,7 +2972,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand CutSelectionFromContextMenuCommand => new MpCommand<object>(
             (args) => {
                 MpAvShortcutCollectionViewModel.Instance.SimulateKeyStrokeCommand
-                    .Execute(MpPlatformWrapper.Services.PlatformShorcuts.CutKeys);
+                    .Execute(MpPlatform.Services.PlatformShorcuts.CutKeys);
             },
             (args) => {
                 return SelectedItem != null && SelectedItem.IsSubSelectionEnabled;
@@ -3011,7 +3011,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand PasteHereFromContextMenuCommand => new MpCommand<object>(
             (args) => {
                 MpAvShortcutCollectionViewModel.Instance.SimulateKeyStrokeCommand
-                    .Execute(MpPlatformWrapper.Services.PlatformShorcuts.PasteKeys);            },
+                    .Execute(MpPlatform.Services.PlatformShorcuts.PasteKeys);            },
             (args) => {
                 return SelectedItem != null && SelectedItem.IsSubSelectionEnabled;
             });
@@ -3036,7 +3036,7 @@ namespace MonkeyPaste.Avalonia {
 
                 // NOTE even though re-creating paste object here the copy item
                 // builder should recognize it as a duplicate and use original (just created)
-                var mpdo = await MpPlatformWrapper.Services.DataObjectHelperAsync.GetPlatformClipboardDataObjectAsync(false);
+                var mpdo = await MpPlatform.Services.DataObjectHelperAsync.GetPlatformClipboardDataObjectAsync(false);
 
                 SelectedItem.RequestPastePortableDataObject(mpdo);
             }, () => SelectedItem != null && !SelectedItem.IsPlaceholder);

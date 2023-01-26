@@ -7,7 +7,7 @@ namespace MonkeyPaste.Avalonia {
     /// <summary>
     /// Interaction logic for MpSearchDetailView.xaml
     /// </summary>
-    public partial class MpAvSearchCriteriaListBoxView : MpAvUserControl<MpAvSearchBoxViewModel> {
+    public partial class MpAvSearchCriteriaListBoxView : MpAvUserControl<MpAvSearchCriteriaItemCollectionViewModel> {
         public MpAvSearchCriteriaListBoxView() {
             InitializeComponent();
             var sclb = this.FindControl<ListBox>("SearchCriteriaListBox");

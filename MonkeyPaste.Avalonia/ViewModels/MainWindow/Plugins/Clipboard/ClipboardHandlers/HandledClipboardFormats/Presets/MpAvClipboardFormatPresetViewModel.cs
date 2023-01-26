@@ -374,7 +374,7 @@ namespace MonkeyPaste.Avalonia {
 
             IsBusy = false;
         }
-        public async Task<MpAvParameterViewModelBase> CreateParameterViewModelAsync(MpPluginPresetParameterValue aipv) {
+        public async Task<MpAvParameterViewModelBase> CreateParameterViewModelAsync(MpParameterValue aipv) {
             //MpParameterControlType controlType = ClipboardFormat.parameters.FirstOrDefault(x => x.paramId == aipv.ParamId).controlType;
             //MpAvParameterViewModelBase naipvm = null;
 
@@ -473,7 +473,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        //private async Task<IEnumerable<MpPluginPresetParameterValue>> PrepareParameterValueModelsAsync() {
+        //private async Task<IEnumerable<MpParameterValue>> PrepareParameterValueModelsAsync() {
         //    // get all preset values from db
         //    var presetValues = await MpDataModelProvider.GetPluginPresetValuesByPresetIdAsync(PresetId);
 
@@ -506,7 +506,7 @@ namespace MonkeyPaste.Avalonia {
         //                }
         //            }
 
-        //            var newPresetVal = await MpPluginPresetParameterValue.CreateAsync(
+        //            var newPresetVal = await MpParameterValue.CreateAsync(
         //                presetId: Preset.Id,
         //                paramId: paramFormat.paramId,
         //                value: paramVal

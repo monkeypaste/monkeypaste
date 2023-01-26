@@ -672,16 +672,16 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public static async Task<List<MpPluginPresetParameterValue>> GetAllParameterHostValuesAsync(MpParameterHostType hostType,int paramHostId) {
-            string query = $"select * from MpPluginPresetParameterValue where e_MpParameterHostType=? and fk_ParameterHostId=?";
-            var result = await MpDb.QueryAsync<MpPluginPresetParameterValue>(query,hostType.ToString(), paramHostId);
+        public static async Task<List<MpParameterValue>> GetAllParameterHostValuesAsync(MpParameterHostType hostType,int paramHostId) {
+            string query = $"select * from MpParameterValue where e_MpParameterHostType=? and fk_ParameterHostId=?";
+            var result = await MpDb.QueryAsync<MpParameterValue>(query,hostType.ToString(), paramHostId);
             return result;
         }
 
 
-        public static async Task<MpPluginPresetParameterValue> GetParameterValueAsync(MpParameterHostType hostType, int paramHostId, string paramId) {
-            string query = $"select * from MpPluginPresetParameterValue where e_MpParameterHostType=? and fk_ParameterHostId=? and ParamId=?";
-            var result = await MpDb.QueryAsync<MpPluginPresetParameterValue>(query,hostType.ToString(), paramHostId, paramId);
+        public static async Task<MpParameterValue> GetParameterValueAsync(MpParameterHostType hostType, int paramHostId, string paramId) {
+            string query = $"select * from MpParameterValue where e_MpParameterHostType=? and fk_ParameterHostId=? and ParamId=?";
+            var result = await MpDb.QueryAsync<MpParameterValue>(query,hostType.ToString(), paramHostId, paramId);
 
             if (result == null || result.Count == 0) {
                 return null;
@@ -808,9 +808,9 @@ namespace MonkeyPaste {
         #region MpUserSearch
 
 
-        public static async Task<List<MpSearchCriteriaItem>> GetCriteriaItemsByUserSearchId(int usid) {
-            string query = "select * from MpSearchCriteriaItem where fk_MpUserSearchId=?";
-            var result = await MpDb.QueryAsync<MpSearchCriteriaItem>(query, usid);
+        public static async Task<List<MpSearchCriteriaItem>> GetCriteriaItemsByTagId(int tid) {
+            string query = "select * from MpSearchCriteriaItem where fk_MpTagId=?";
+            var result = await MpDb.QueryAsync<MpSearchCriteriaItem>(query, tid);
             return result;
         }
 

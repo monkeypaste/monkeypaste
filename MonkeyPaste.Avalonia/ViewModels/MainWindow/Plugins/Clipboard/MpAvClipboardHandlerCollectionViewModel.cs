@@ -114,8 +114,8 @@ namespace MonkeyPaste.Avalonia {
 
         async Task<object> MpIPlatformDataObjectHelperAsync.ReadDragDropDataObjectAsync(object idoObj, int retryCount = 5) {
             if (idoObj is IDataObject ido) {
-                var drag_pi = MpPlatformWrapper.Services.DragProcessWatcher.DragProcess;
-                MpPlatformWrapper.Services.DragProcessWatcher.Reset();
+                var drag_pi = MpPlatform.Services.DragProcessWatcher.DragProcess;
+                MpPlatform.Services.DragProcessWatcher.Reset();
                 var mpdo = await ReadClipboardOrDropObjectAsync(ido, drag_pi);
                 return mpdo;
             }
@@ -156,7 +156,7 @@ namespace MonkeyPaste.Avalonia {
             get {
                 return new MpMenuItemViewModel() {
                     Header = @"_Transform",
-                    IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("ButterflyImage") as string,
+                    IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("ButterflyImage") as string,
                     SubItems = Items.Select(x => x.ContextMenuItemViewModel).ToList()
                 };
             }
@@ -373,8 +373,8 @@ namespace MonkeyPaste.Avalonia {
                 var reader_request = new MpClipboardReaderRequest() {
                     ignoreParams = ignorePlugins,
                     isAvalonia = true,
-                    mainWindowImplicitHandle = MpPlatformWrapper.Services.ProcessWatcher.ThisAppHandle.ToInt32(),
-                    platform = MpPlatformWrapper.Services.OsInfo.OsType.ToString(),
+                    mainWindowImplicitHandle = MpPlatform.Services.ProcessWatcher.ThisAppHandle.ToInt32(),
+                    platform = MpPlatform.Services.OsInfo.OsType.ToString(),
                     readFormats = 
                         EnabledReaders
                         .Where(x => x.Parent.ClipboardPluginComponent == read_component)
@@ -425,7 +425,7 @@ namespace MonkeyPaste.Avalonia {
             await WaitForBusyAsync();
 
             if (ignoreClipboardChange) {
-                MpPlatformWrapper.Services.ClipboardMonitor.StopMonitor();
+                MpPlatform.Services.ClipboardMonitor.StopMonitor();
             }
             // pre-pass data object and remove disabled formats
             var formatsToRemove =
@@ -479,7 +479,7 @@ namespace MonkeyPaste.Avalonia {
             dobj.GetAllDataFormats().ForEach(x => MpConsole.WriteLine("Format: " + x));
 
             if (ignoreClipboardChange) {
-                MpPlatformWrapper.Services.ClipboardMonitor.StartMonitor();
+                MpPlatform.Services.ClipboardMonitor.StartMonitor();
             }
             IsBusy = false;
             return dobj;

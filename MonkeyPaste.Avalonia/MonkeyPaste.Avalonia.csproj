@@ -1073,8 +1073,8 @@
     <Folder Include="Controls\ProgressRing\" />
     <Folder Include="Utils\Input\Mouse\" />
     <Folder Include="Utils\Notifications\" />
+    <Folder Include="ViewModels\MainWindow\SearchBox\Criteria\Items\Options\" />
     <Folder Include="ViewModels\MainWindow\SearchBox\Filter\Items\" />
-    <Folder Include="ViewModels\MainWindow\TagTray\TagTile\" />
     <Folder Include="Views\HtmlConverterWindow\" />
     <Folder Include="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Transactions\Items\" />
     <Folder Include="Views\MainWindow\ClipTrayContainer\PinTray\" />

@@ -127,15 +127,15 @@ namespace MonkeyPaste.Avalonia {
             IntPtr handle = IntPtr.Zero;
             if (MpAvMainWindowViewModel.Instance.MainWindowScreenRect.Contains(gmp)) {
                 // at least on windows (i think since its a tool window) the p/invoke doesn't return mw handle
-                handle = MpPlatformWrapper.Services.ProcessWatcher.ThisAppHandle;
+                handle = MpPlatform.Services.ProcessWatcher.ThisAppHandle;
             }
             if(handle == IntPtr.Zero) {
-                handle = MpPlatformWrapper.Services.ProcessWatcher.GetParentHandleAtPoint(gmp);
+                handle = MpPlatform.Services.ProcessWatcher.GetParentHandleAtPoint(gmp);
             }
             if(handle == IntPtr.Zero) {
                 return null;
             }
-            string handle_path = MpPlatformWrapper.Services.ProcessWatcher.GetProcessPath(handle);
+            string handle_path = MpPlatform.Services.ProcessWatcher.GetProcessPath(handle);
             MpConsole.WriteLine("Drop Path: " + handle_path,true,true);
             // TODO need to filter by current device here
             return Items.FirstOrDefault(x => x.AppPath.ToLower() == handle_path.ToLower());
@@ -180,10 +180,10 @@ namespace MonkeyPaste.Avalonia {
         private async Task InitLastAppViewModel() {
             // wait for running processes to get created
             await Task.Delay(0);
-            var la_pi = MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo;
+            var la_pi = MpPlatform.Services.ProcessWatcher.LastProcessInfo;
             if (la_pi == null) {
                 // since application is being started from file system init LastActive to file system app
-                la_pi = MpPlatformWrapper.Services.ProcessWatcher.FileSystemProcessInfo;
+                la_pi = MpPlatform.Services.ProcessWatcher.FileSystemProcessInfo;
                 if (la_pi == null) {
                     // need to get this set on init in process watcher
                     //Debugger.Break();
@@ -202,7 +202,7 @@ namespace MonkeyPaste.Avalonia {
             // This is only called during init to keep app storage in sync so any running apps are added if unknown
             //PlatformWrapper.Services.ProcessWatcher.StartWatcher();
 
-            var unknownApps = MpPlatformWrapper.Services.ProcessWatcher.RunningProcessLookup.Keys
+            var unknownApps = MpPlatform.Services.ProcessWatcher.RunningProcessLookup.Keys
                                     .Where(x => !Items.Any(y => y.AppPath.ToLower() == x.ToLower()))
                                     .Select(x => new MpPortableProcessInfo() { ProcessPath = x }).ToList();
 
@@ -218,7 +218,7 @@ namespace MonkeyPaste.Avalonia {
                 //    appName: appName, 
                 //    iconId: icon.Id);
                 //al.Add(app);
-                var app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(uap);
+                var app = await MpPlatform.Services.AppBuilder.CreateAsync(uap);
                 // wait for db add callback to pickup db add event
                 await Task.Delay(100);
                 while(IsBusy) {
@@ -230,7 +230,7 @@ namespace MonkeyPaste.Avalonia {
             await InitLastAppViewModel();
 
             // wait to add activated handler until all apps at startup are syncd
-            MpPlatformWrapper.Services.ProcessWatcher.OnAppActivated += MpProcessManager_OnAppActivated;
+            MpPlatform.Services.ProcessWatcher.OnAppActivated += MpProcessManager_OnAppActivated;
         }
 
         private async void MpProcessManager_OnAppActivated(object sender, MpPortableProcessInfo e) {
@@ -245,7 +245,7 @@ namespace MonkeyPaste.Avalonia {
                 if (avm == null) {
                     // unknown app activated add like in registration
                     var new_app =
-                    await MpPlatformWrapper.Services.AppBuilder.CreateAsync(e);
+                    await MpPlatform.Services.AppBuilder.CreateAsync(e);
                     // wait for db add to pick up model
                     await Task.Delay(100);
                     while(IsBusy) {

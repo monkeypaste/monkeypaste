@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using MonkeyPaste.Common;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -40,8 +41,32 @@ namespace MonkeyPaste.Common.Plugin {
         ActionComponentId,
         AnalyzerComponentId
     }
-    
-    public class MpParameterFormat : MpJsonObject {
+
+    public interface MpIParamterValueProvider {
+        string ParamId { get; }
+        string Value { get; }
+    }
+    public class MpParameterFormat : MpJsonObject, MpIParamterValueProvider {
+        #region Interfaces
+
+        #region MpIParameterValueProvider Implementation
+        [JsonIgnore]
+        string MpIParamterValueProvider.ParamId => paramId;
+        [JsonIgnore]
+        string MpIParamterValueProvider.Value {
+            get {
+                if(values == null || values.Count == 0) {
+                    return string.Empty;
+                }
+                if(values.Where(x => x.isDefault).Count() > 0) {
+                    return values.Select(x => x.value).ToCsv(CsvProps);
+                }
+                return values.First().value;
+            }
+        }
+        #endregion
+
+        #endregion
         // NOTE paramId can be empty in manifest and will fall back to index of parameter in manifest
         // internally this doesn't matter but plugin needs to either name them or be aware of the order
         // or request args will be mismatched

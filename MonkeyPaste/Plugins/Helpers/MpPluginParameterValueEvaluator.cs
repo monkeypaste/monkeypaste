@@ -81,7 +81,7 @@ namespace MonkeyPaste {
                     curVal = await curVal.ToFileAsync();
                     break;
                 default:
-                    curVal = MpPlatformWrapper.Services.StringTools.ToPlainText(curVal);
+                    curVal = MpPlatform.Services.StringTools.ToPlainText(curVal);
                     break;
             }
             return curVal;

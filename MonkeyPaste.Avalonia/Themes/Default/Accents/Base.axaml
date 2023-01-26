@@ -10,6 +10,9 @@
         <sys:Double x:Key="GlobalInteractiveBgOpacity">
             0.85
         </sys:Double>
+        <sys:Double x:Key="GlobalDisabledOverlayOpacity">
+            0.75
+        </sys:Double>
         <sys:Double x:Key="GlobalInteractiveOpacity">
             1.0
         </sys:Double>

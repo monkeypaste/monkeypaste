@@ -405,7 +405,7 @@ namespace MonkeyPaste.Avalonia {
         public string ActionBackgroundHexColor {
             get {
                 string keyStr = $"{ActionType}ActionBrush";
-                var brush = MpPlatformWrapper.Services.PlatformResource.GetResource(keyStr) as IBrush;
+                var brush = MpPlatform.Services.PlatformResource.GetResource(keyStr) as IBrush;
                 if (brush == null) {
                     Debugger.Break();
                     return MpSystemColors.Black;
@@ -854,7 +854,7 @@ namespace MonkeyPaste.Avalonia {
             return avm;
         }
 
-        public async Task<MpAvParameterViewModelBase> CreateActionParameterViewModel(MpPluginPresetParameterValue pppv) {
+        public async Task<MpAvParameterViewModelBase> CreateActionParameterViewModel(MpParameterValue pppv) {
             var naipvm = await MpAvPluginParameterBuilder.CreateParameterViewModelAsync(pppv, this);
             naipvm.OnValidate += ActionParam_OnValidate;
 

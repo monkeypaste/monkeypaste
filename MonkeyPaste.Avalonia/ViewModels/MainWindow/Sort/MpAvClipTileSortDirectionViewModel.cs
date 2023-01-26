@@ -1,4 +1,5 @@
 ﻿using Cairo;
+using MonoMac.AppKit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,11 +22,13 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIQueryInfoProvider Implementation
-
+        async Task<IEnumerable<MpSearchCriteriaItem>> MpIQueryInfoValueProvider.SaveAsCriteriaItemsAsync(int tagId, int sortIdx) {
+            return null;
+        }
         object MpIQueryInfoValueProvider.Source => this;
         string MpIQueryInfoValueProvider.SourcePropertyName => nameof(IsSortDescending);
 
-        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpAvQueryInfoViewModel.Current.IsDescending);
+        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpPlatform.Services.QueryInfo.IsDescending);
 
         #endregion
         #region Properties
@@ -45,7 +48,7 @@ namespace MonkeyPaste.Avalonia {
         private void MpAvClipTileSortDirectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(IsSortDescending):
-                    MpAvQueryInfoViewModel.Current.NotifyQueryChanged();
+                    MpPlatform.Services.QueryInfo.NotifyQueryChanged();
                     break;
             }
         }
@@ -54,7 +57,7 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
         public void Init() {
             //await Task.Delay(1);
-            MpAvQueryInfoViewModel.Current.RegisterProvider(this);
+            MpPlatform.Services.QueryInfo.RegisterProvider(this);
 
             //ResetToDefault(true);
         }

@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
                     return null;
                 }
                 // likely running application when no process path, find the path from the handle and use handle to query for mw title (if not already set)
-                processPath = MpPlatformWrapper.Services.ProcessWatcher.GetProcessPath(pi.Handle);
+                processPath = MpPlatform.Services.ProcessWatcher.GetProcessPath(pi.Handle);
             } else {
                 processPath = pi.ProcessPath;
             }
@@ -34,16 +34,16 @@ namespace MonkeyPaste.Avalonia {
                 if(pi.Handle == IntPtr.Zero) {
                     appName = Path.GetFileNameWithoutExtension(pi.ProcessPath);
                 } else {
-                    appName = MpPlatformWrapper.Services.ProcessWatcher.GetProcessApplicationName(pi.Handle);
+                    appName = MpPlatform.Services.ProcessWatcher.GetProcessApplicationName(pi.Handle);
                 }
             } else {
-                appName = MpPlatformWrapper.Services.ProcessWatcher.ParseTitleForApplicationName(pi.MainWindowTitle);
+                appName = MpPlatform.Services.ProcessWatcher.ParseTitleForApplicationName(pi.MainWindowTitle);
             }
 
             // GET APP ICON
-            iconBase64 = String.IsNullOrEmpty(pi.MainWindowIconBase64) ? MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(processPath) : pi.MainWindowIconBase64;
+            iconBase64 = String.IsNullOrEmpty(pi.MainWindowIconBase64) ? MpPlatform.Services.IconBuilder.GetApplicationIconBase64(processPath) : pi.MainWindowIconBase64;
 
-            var icon = await MpPlatformWrapper.Services.IconBuilder.CreateAsync(iconBase64);
+            var icon = await MpPlatform.Services.IconBuilder.CreateAsync(iconBase64);
 
             string args = pi.ArgumentList == null || pi.ArgumentList.Count == 0 ?
                 null : string.Join(Environment.NewLine, pi.ArgumentList);

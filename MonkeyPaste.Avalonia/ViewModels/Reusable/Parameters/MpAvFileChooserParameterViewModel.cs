@@ -38,7 +38,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvFileChooserParameterViewModel(MpIParameterHostViewModel parent) : base(parent) { }
 
-        public override async Task InitializeAsync(MpPluginPresetParameterValue aipv) {
+        public override async Task InitializeAsync(MpParameterValue aipv) {
             IsBusy = true;
 
             await base.InitializeAsync(aipv);

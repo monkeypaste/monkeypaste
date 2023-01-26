@@ -9,6 +9,8 @@ using MonkeyPaste;
 using System.Threading.Tasks;
 using Avalonia;
 using MonkeyPaste.Common;
+using MonoMac.AppKit;
+using System.Collections.Generic;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvClipTileSortFieldViewModel : 
@@ -22,11 +24,13 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIQueryInfoProvider Implementation
-
+        async Task<IEnumerable<MpSearchCriteriaItem>> MpIQueryInfoValueProvider.SaveAsCriteriaItemsAsync(int tagId, int sortIdx) {
+            return null;
+        }
         object MpIQueryInfoValueProvider.Source => this;
         string MpIQueryInfoValueProvider.SourcePropertyName => nameof(SelectedSortType);
 
-        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpAvQueryInfoViewModel.Current.SortType);
+        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpPlatform.Services.QueryInfo.SortType);
 
         #endregion
 
@@ -34,14 +38,14 @@ namespace MonkeyPaste.Avalonia {
 
         //#region MpIQueryInfoProvider Implementation
         //public void RestoreQueryInfo() {
-        //    SelectedSortTypeIdx = (int)MpAvQueryInfoViewModel.Current.SortType;
-        //    IsSortDescending = MpAvQueryInfoViewModel.Current.IsDescending;
+        //    SelectedSortTypeIdx = (int)MpPlatform.Services.QueryInfo.SortType;
+        //    IsSortDescending = MpPlatform.Services.QueryInfo.IsDescending;
         //}
 
         //public void SetQueryInfo() {
-        //    MpAvQueryInfoViewModel.Current.SortType = (MpContentSortType)SelectedSortTypeIdx;
-        //    MpAvQueryInfoViewModel.Current.IsDescending = IsSortDescending;
-        //    MpAvQueryInfoViewModel.Current.NotifyQueryChanged();
+        //    MpPlatform.Services.QueryInfo.SortType = (MpContentSortType)SelectedSortTypeIdx;
+        //    MpPlatform.Services.QueryInfo.IsDescending = IsSortDescending;
+        //    MpPlatform.Services.QueryInfo.NotifyQueryChanged();
         //}
 
         //#endregion
@@ -78,7 +82,7 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
         public void Init() {
             //await Task.Delay(1);
-            MpAvQueryInfoViewModel.Current.RegisterProvider(this);
+            MpPlatform.Services.QueryInfo.RegisterProvider(this);
 
             //ResetToDefault(true);
         }
@@ -89,7 +93,7 @@ namespace MonkeyPaste.Avalonia {
         private void MpClipTileSortViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e) {
             switch (e.PropertyName) {                
                 case nameof(SelectedSortType):
-                    MpAvQueryInfoViewModel.Current.NotifyQueryChanged();
+                    MpPlatform.Services.QueryInfo.NotifyQueryChanged();
                     break;
             }
             

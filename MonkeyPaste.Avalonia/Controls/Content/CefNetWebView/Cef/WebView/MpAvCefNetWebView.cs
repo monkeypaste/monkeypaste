@@ -279,7 +279,7 @@ namespace MonkeyPaste.Avalonia {
                 if(avdo.TryGetData<IEnumerable<string>>(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT,out var uris)) {
                     uri_list = uris.ToList();
                 }
-                uri_list.Add(MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(ctvm.CopyItem));
+                uri_list.Add(MpPlatform.Services.SourceRefBuilder.ConvertToRefUrl(ctvm.CopyItem));
                 avdo.SetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, uri_list);
             }
 
@@ -586,7 +586,7 @@ namespace MonkeyPaste.Avalonia {
                                 // editor should provide title for templates but for content set to title here if ya want (may
                                 showCustomColorPickerMsg.pickerTitle = $"Pick a color, any color for '{ctvm.CopyItemTitle}'";
                             }
-                            string pickerResult = await MpPlatformWrapper.Services.CustomColorChooserMenuAsync.ShowCustomColorMenuAsync(
+                            string pickerResult = await MpPlatform.Services.CustomColorChooserMenuAsync.ShowCustomColorMenuAsync(
                                 showCustomColorPickerMsg.currentHexColor,
                                 showCustomColorPickerMsg.pickerTitle,
                                 null);
@@ -647,7 +647,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case MpAvEditorBindingFunctionType.getClipboardDataTransferObject:
                     var cb_dtObjReq = MpJsonConverter.DeserializeObject<MpQuillEditorClipboardDataObjectRequestNotification>(getReq.reqMsgFragmentJsonStr);
-                    var cb_ido = await MpPlatformWrapper.Services.DataObjectHelperAsync.GetPlatformClipboardDataObjectAsync(false) as IDataObject;
+                    var cb_ido = await MpPlatform.Services.DataObjectHelperAsync.GetPlatformClipboardDataObjectAsync(false) as IDataObject;
                     var cb_dtObjResp = cb_ido.ToQuillDataItemsMessage();
                     getResp.responseFragmentJsonStr = MpJsonConverter.SerializeObject(cb_dtObjResp);
                     break;
@@ -656,7 +656,7 @@ namespace MonkeyPaste.Avalonia {
                     var drag_hdo = MpJsonConverter.DeserializeBase64Object<MpQuillHostDataItemsMessage>(drag_dtObjReq.unprocessedDataItemsJsonStr);
                     var unprocessed_drag_avdo = drag_hdo.ToAvDataObject();
 
-                    var processed_drag_avdo = await MpPlatformWrapper.Services
+                    var processed_drag_avdo = await MpPlatform.Services
                         .DataObjectHelperAsync.ReadDragDropDataObjectAsync(unprocessed_drag_avdo) as IDataObject;
 
                     var processed_drag_hdo = processed_drag_avdo.ToQuillDataItemsMessage();
@@ -748,7 +748,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             var req = new MpQuillInitMainRequestMessage() {
-                envName = MpPlatformWrapper.Services.OsInfo.OsType.ToString()
+                envName = MpPlatform.Services.OsInfo.OsType.ToString()
             };
             this.ExecuteJavascript($"initMain_ext('{req.SerializeJsonObjectToBase64()}')");
         }
@@ -929,11 +929,11 @@ namespace MonkeyPaste.Avalonia {
 
             IEnumerable<string> refs = null;
             if (req_mpdo != null) {
-                var other_refs = await MpPlatformWrapper.Services.SourceRefBuilder.GatherSourceRefsAsync(req_mpdo);
-                refs = other_refs.Select(x => MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(x));
+                var other_refs = await MpPlatform.Services.SourceRefBuilder.GatherSourceRefsAsync(req_mpdo);
+                refs = other_refs.Select(x => MpPlatform.Services.SourceRefBuilder.ConvertToRefUrl(x));
             }
 
-            await MpPlatformWrapper.Services.TransactionBuilder.PerformTransactionAsync(
+            await MpPlatform.Services.TransactionBuilder.PerformTransactionAsync(
                 copyItemId: BindingContext.CopyItemId,
                 reqType: MpJsonMessageFormatType.DataObject,
                 req: req_mpdo.SerializeData(),

@@ -5,8 +5,8 @@ using System.Text;
 
 namespace MonkeyPaste.Common {
     public static class MpCsvExtensions {
-        public static string ToCsv(this List<string> strList, MpCsvFormatProperties csvProps = null) {
-            if (strList == null || strList.Count == 0) {
+        public static string ToCsv(this IEnumerable<string> strList, MpCsvFormatProperties csvProps = null) {
+            if (strList == null || strList.Count() == 0) {
                 return string.Empty;
             }
             csvProps = csvProps == null ? MpCsvFormatProperties.Default : csvProps;

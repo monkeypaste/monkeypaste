@@ -23,6 +23,8 @@
                     Value="Transparent" />
             <Setter Property="IsExpanded"
                     Value="{Binding IsExpanded, Mode=TwoWay}" />
+            <Setter Property="IsEnabled"
+                    Value="{Binding CanSelect}" />
         </Style>
         <Style Selector="TreeView#TagTreeView TreeViewItem:selected /template/ Border#PART_LayoutRoot">
             <Setter Property="Background"

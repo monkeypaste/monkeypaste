@@ -20,7 +20,7 @@
       "file": true
     },
     "parameters": [
-      {
+      { 
         "label": "Process Path",
         "description": "The process can be a standard application or batch script",
         "controlType": "FileChooser",

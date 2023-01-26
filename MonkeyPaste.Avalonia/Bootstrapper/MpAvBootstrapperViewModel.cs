@@ -23,12 +23,11 @@ namespace MonkeyPaste.Avalonia {
             } else if (OperatingSystem.IsMacOS()) {
                 MpAvMacHelpers.EnsureInitialized();
             }
-            //MpAvNotificationWindowManager.Instance.Init();
 
             var pw = new MpAvWrapper();
             pw.StartupState = this;
             await pw.InitializeAsync();
-            await MpPlatformWrapper.InitAsync(pw);
+            await MpPlatform.InitAsync(pw);
 
             CreateLoaderItems();
             await MpNotificationBuilder.ShowLoaderNotificationAsync(this);           
@@ -69,7 +68,7 @@ namespace MonkeyPaste.Avalonia {
                     new MpBootstrappedItemViewModel(this,typeof(MpDb)),
                     new MpBootstrappedItemViewModel(this,typeof(MpMasterTemplateModelCollectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpPluginLoader)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpPortableDataFormats),MpPlatformWrapper.Services.DataObjectRegistrar),
+                    new MpBootstrappedItemViewModel(this,typeof(MpPortableDataFormats),MpPlatform.Services.DataObjectRegistrar),
                     new MpBootstrappedItemViewModel(this,typeof(MpMasterTemplateModelCollectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvIconCollectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvAppCollectionViewModel)),

@@ -16,12 +16,12 @@ namespace MonkeyPaste {
     public static class MpFileIo {
         public static void OpenFileBrowser(string path, string browserFileName = null) {
             if(!path.IsFileOrDirectory()) {
-                MpPlatformWrapper.Services.NativeMessageBox.ShowOkCancelMessageBoxAsync($"Error", $"{path} not found");
+                MpPlatform.Services.NativeMessageBox.ShowOkCancelMessageBoxAsync($"Error", $"{path} not found");
                 path = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
             }
 
             if(string.IsNullOrEmpty(browserFileName)) {
-                if(MpPlatformWrapper.Services.OsInfo.OsType == MpUserDeviceType.Windows) {
+                if(MpPlatform.Services.OsInfo.OsType == MpUserDeviceType.Windows) {
                     browserFileName = "explorer.exe";
                 } else {
                     throw new Exception("need file browser paths for non-windows os here");
@@ -137,11 +137,11 @@ namespace MonkeyPaste {
                 }
             } else {
                 if (forceExt.ToLower().Equals("rtf")) {
-                    fileData = MpPlatformWrapper.Services.StringTools.ToRichText(fileData);
+                    fileData = MpPlatform.Services.StringTools.ToRichText(fileData);
                 } else if (forceExt.ToLower().Equals("txt")) {
-                    fileData = MpPlatformWrapper.Services.StringTools.ToPlainText(fileData);
+                    fileData = MpPlatform.Services.StringTools.ToPlainText(fileData);
                 } else if (forceExt.ToLower().Equals("csv")) {
-                    fileData = MpPlatformWrapper.Services.StringTools.ToCsv(fileData);
+                    fileData = MpPlatform.Services.StringTools.ToCsv(fileData);
                 } else if (forceExt.ToLower().Equals("html")) {
                     // add to string tools
                     Debugger.Break();
@@ -242,7 +242,7 @@ namespace MonkeyPaste {
         public static async Task<string> CopyFileOrDirectoryAsync(string sourcePath, string targetPath, bool recursive = true, bool isTemporary = false, bool forceOverwrite = false) {
             bool overwrite = forceOverwrite;
             if(!overwrite && targetPath.IsFileOrDirectory()) {
-                var result = await MpPlatformWrapper.Services.NativeMessageBox.ShowYesNoCancelMessageBoxAsync("Overwrite?", $"Destination '{targetPath}' already exists, would you like to overwrite it?");
+                var result = await MpPlatform.Services.NativeMessageBox.ShowYesNoCancelMessageBoxAsync("Overwrite?", $"Destination '{targetPath}' already exists, would you like to overwrite it?");
                 if(result.HasValue) {
                     if(result.Value) {
                         overwrite = true;

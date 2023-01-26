@@ -437,15 +437,15 @@ namespace MonkeyPaste.Avalonia {
             //var presetValues = await PrepareParameterValueModelsAsync();
             var presetValues = await MpAvPluginParameterValueLocator.LocateValuesAsync(
                 MpParameterHostType.Preset, AnalyticItemPresetId, Parent);
-            var paramLookup = new Dictionary<string, List<MpPluginPresetParameterValue>>();
+            var paramLookup = new Dictionary<string, List<MpParameterValue>>();
             foreach(var pv in presetValues) {
                 if(!paramLookup.ContainsKey(pv.ParamId)) {
-                    paramLookup.Add(pv.ParamId, new List<MpPluginPresetParameterValue>());
+                    paramLookup.Add(pv.ParamId, new List<MpParameterValue>());
                 }
                 paramLookup[pv.ParamId].Add(pv);
             }
 
-           // var valLookup = presetValues.ToDictionary<string, List<MpPluginPresetParameterValue>>(x => x.ParamId, x=>x.Sele)
+           // var valLookup = presetValues.ToDictionary<string, List<MpParameterValue>>(x => x.ParamId, x=>x.Sele)
             foreach (var paramValGroup in presetValues) {                                
                 var naipvm = await CreateParameterViewModel(paramValGroup);
                 Items.Add(naipvm);
@@ -464,7 +464,7 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
-        public async Task<MpAvParameterViewModelBase> CreateParameterViewModel(MpPluginPresetParameterValue aipv) {
+        public async Task<MpAvParameterViewModelBase> CreateParameterViewModel(MpParameterValue aipv) {
             var naipvm = await MpAvPluginParameterBuilder.CreateParameterViewModelAsync(aipv, this);
             naipvm.OnValidate += ParameterViewModel_OnValidate;
             return naipvm;

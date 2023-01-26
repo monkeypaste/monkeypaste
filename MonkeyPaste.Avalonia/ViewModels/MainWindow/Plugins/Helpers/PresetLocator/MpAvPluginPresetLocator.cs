@@ -13,6 +13,7 @@ namespace MonkeyPaste.Avalonia {
         public static async Task<IEnumerable<MpPluginPreset>> LocatePresetsAsync(
             MpIParameterHostViewModel presetHost, 
             bool enableOnReset = false) {
+
             var db_presets = await MpDataModelProvider.GetPluginPresetsByPluginGuidAsync(presetHost.PluginGuid);
 
             bool isNew = db_presets.Count == 0;
@@ -97,17 +98,17 @@ namespace MonkeyPaste.Avalonia {
                 var db_vals = await MpDataModelProvider.GetAllParameterHostValuesAsync(MpParameterHostType.Preset, db_preset.Id);
 
                 // remove any no longer existing stored parameter values
-                var db_vals_to_remove = db_vals.Where(x => params_to_remove.Any(y => y.paramId.Equals(x.ParamId)));
+                var db_vals_to_remove = db_vals.Where(x => params_to_remove.Any(y => y.ParamId.Equals(x.ParamId)));
                 await Task.WhenAll(db_vals_to_remove.Select(x => x.DeleteFromDatabaseAsync()));
 
                 // add new parameter value to preset
-                foreach (var param_to_add in params_to_add) {
+                foreach (MpParameterFormat param_to_add in params_to_add) {
                     foreach(var param_value_to_add in param_to_add.values) {
                         // add new param values to each preset
 
-                        _ = await MpPluginPresetParameterValue.CreateAsync(
+                        _ = await MpParameterValue.CreateAsync(
                             hostType: MpParameterHostType.Preset,
-                            presetId: db_preset.Id,
+                            hostId: db_preset.Id,
                             paramId: param_to_add.paramId,
                             value: param_value_to_add.value);
                     }                    
@@ -120,39 +121,29 @@ namespace MonkeyPaste.Avalonia {
             return db_presets;
         }
 
-        private static IEnumerable<Tuple<MpParameterFormat, MpParameterFormat>> GetNewOrChangedParameters(
-            IEnumerable<MpParameterFormat> manifest_parameters,
-            IEnumerable<MpParameterFormat> backup_parameters) {
+        private static IEnumerable<Tuple<MpIParamterValueProvider, MpIParamterValueProvider>> GetNewOrChangedParameters(
+            IEnumerable<MpIParamterValueProvider> manifest_parameters,
+            IEnumerable<MpIParamterValueProvider> backup_parameters) {
+
             // this somewhat crudely decides if parameters were change by:
             // 1. if current parameter enumId did not previously exist
             // 2. if backup parameter enumId does not now exist
 
-            // NOTE current db values are not checked and by design will fallback on parameter viewmodels validation for alterations
-            foreach(var manifest_param in manifest_parameters) {
-                MpParameterFormat matched_backup_param = null;
-                if(backup_parameters != null) {
-                    matched_backup_param = backup_parameters.FirstOrDefault(x => !x.paramId.Equals(manifest_param.paramId));
-                }                
-                if (matched_backup_param == null) {
-                    // case 1
-                    yield return new Tuple<MpParameterFormat, MpParameterFormat>(manifest_param, null);
-                }
-            }
-            
-            if(backup_parameters == null) {
-                yield break;
-            }
 
-            foreach(var backup_param in backup_parameters) {
-                MpParameterFormat matched_manifest_param = null;
-                if (manifest_parameters != null) {
-                    matched_manifest_param = manifest_parameters.FirstOrDefault(x => !x.paramId.Equals(backup_param.paramId));
-                }
-                if (matched_manifest_param == null) {
-                    // case 2
-                    yield return new Tuple<MpParameterFormat, MpParameterFormat>(null,backup_param);
-                }
-            }
+            manifest_parameters = manifest_parameters == null ? new List<MpIParamterValueProvider>() : manifest_parameters;
+            backup_parameters = backup_parameters == null ? new List<MpIParamterValueProvider>() : backup_parameters;
+            var result = new List<Tuple<MpIParamterValueProvider, MpIParamterValueProvider>>();
+
+            // NOTE current db values are not checked and by design will fallback on parameter viewmodels validation for alterations
+            // case 1
+            var added_params = manifest_parameters.Where(x => backup_parameters.All(y => y.ParamId != x.ParamId));
+            result.AddRange(added_params.Select(x => new Tuple<MpIParamterValueProvider, MpIParamterValueProvider>(x, null)));
+
+            // case 2
+            var removed_params = backup_parameters.Where(x => manifest_parameters.All(y => y.ParamId != x.ParamId));            
+            result.AddRange(removed_params.Select(x => new Tuple<MpIParamterValueProvider, MpIParamterValueProvider>(null,x)));
+
+            return result;
         }
 
 

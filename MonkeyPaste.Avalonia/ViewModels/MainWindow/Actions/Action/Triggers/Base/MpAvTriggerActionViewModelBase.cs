@@ -129,8 +129,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Appearance
-        public string EnabledHexColor => (MpPlatformWrapper.Services.PlatformResource.GetResource("EnabledHighlightBrush") as SolidColorBrush).Color.ToPortableColor().ToHex();
-        public string DisabledHexColor => (MpPlatformWrapper.Services.PlatformResource.GetResource("DisabledHighlightBrush") as SolidColorBrush).Color.ToPortableColor().ToHex();
+        public string EnabledHexColor => (MpPlatform.Services.PlatformResource.GetResource("EnabledHighlightBrush") as SolidColorBrush).Color.ToPortableColor().ToHex();
+        public string DisabledHexColor => (MpPlatform.Services.PlatformResource.GetResource("DisabledHighlightBrush") as SolidColorBrush).Color.ToPortableColor().ToHex();
 
         public string CurEnableOrDisableHexColor => IsEnabled.HasValue ? IsEnabled.IsTrue() ? EnabledHexColor : DisabledHexColor : MpSystemColors.Transparent;
         public string ToggleEnableOrDisableResourceKey => IsEnabled.HasValue ? IsEnabled.IsTrue() ? DisabledHexColor : EnabledHexColor : "WarningImage";
@@ -146,7 +146,7 @@ namespace MonkeyPaste.Avalonia {
                     resourceKey = "WarningImage";
                 }
 
-                return MpPlatformWrapper.Services.PlatformResource.GetResource(resourceKey) as string;
+                return MpPlatform.Services.PlatformResource.GetResource(resourceKey) as string;
             }
         }
 

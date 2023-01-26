@@ -124,7 +124,7 @@ namespace MonkeyPaste.Avalonia {
                 var uvm = Items.FirstOrDefault(x => x.UrlPath.ToLower() == UrlPath.ToLower());
                 if (uvm == null) {
                     //var url = await MpUrl.CreateAsync(UrlPath);
-                    var url = await MpPlatformWrapper.Services.UrlBuilder.CreateAsync(UrlPath);
+                    var url = await MpPlatform.Services.UrlBuilder.CreateAsync(UrlPath);
                     uvm = await CreateUrlViewModel(url);
                 }
                 SelectedItem = uvm;

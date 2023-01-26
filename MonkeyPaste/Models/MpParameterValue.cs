@@ -10,18 +10,19 @@ namespace MonkeyPaste {
     public enum MpParameterHostType {
         None = 0,
         Preset,
-        Action
+        Action,
+        Query
     }
-    public class MpPluginPresetParameterValue : 
-        MpDbModelBase, 
-        MpIClonableDbModel<MpPluginPresetParameterValue> {
+    public class MpParameterValue : 
+        MpDbModelBase, MpIParamterValueProvider,
+        MpIClonableDbModel<MpParameterValue> {
 
         #region Columns
-        [Column("pk_MpPluginPresetParameterValueId")]
+        [Column("pk_MpParameterValueId")]
         [PrimaryKey, AutoIncrement]
         public override int Id { get; set; }
 
-        [Column("MpPluginPresetParameterValueGuid")]
+        [Column("MpParameterValueGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
         [Column("e_MpParameterHostType")]
@@ -63,9 +64,9 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public static async Task<MpPluginPresetParameterValue> CreateAsync(
+        public static async Task<MpParameterValue> CreateAsync(
             MpParameterHostType hostType = MpParameterHostType.None,
-            int presetId = 0, 
+            int hostId = 0, 
             object paramId = null,
             string value = ""
             //MpPluginParameterFormat format = null
@@ -73,22 +74,22 @@ namespace MonkeyPaste {
             if (hostType == MpParameterHostType.None) {
                 throw new Exception("Parameter Value must have a host type");
             }
-            if (presetId == 0) {
+            if (hostId == 0) {
                 throw new Exception("Preset Value must be associated with a preset and parameter");
             }
             if(string.IsNullOrEmpty(paramId.ToString())) {
                 throw new Exception("ParamId must cannot be null or empty");
             }
-            var dup_check = await MpDataModelProvider.GetParameterValueAsync(hostType, presetId, paramId.ToString());
+            var dup_check = await MpDataModelProvider.GetParameterValueAsync(hostType, hostId, paramId.ToString());
 
 
             if (dup_check != null) {
-                MpConsole.WriteLine($"Updating preset Id{presetId} for {paramId}");
+                MpConsole.WriteLine($"Updating preset Id{hostId} for {paramId}");
                 // when does this happen?
                 //Debugger.Break();
 
-                dup_check = await MpDataModelProvider.GetItemAsync<MpPluginPresetParameterValue>(dup_check.Id);
-                dup_check.ParameterHostId = presetId;
+                dup_check = await MpDataModelProvider.GetItemAsync<MpParameterValue>(dup_check.Id);
+                dup_check.ParameterHostId = hostId;
                 dup_check.ParameterHostType = hostType;
                 dup_check.ParamId = paramId.ToString();
                 dup_check.Value = value;
@@ -97,10 +98,10 @@ namespace MonkeyPaste {
                 return dup_check;
             }
 
-            var newPluginPresetParameterValue = new MpPluginPresetParameterValue() {
+            var newPluginPresetParameterValue = new MpParameterValue() {
                 PluginPresetParameterValueGuid = System.Guid.NewGuid(),
                 ParameterHostType = hostType,
-                ParameterHostId = presetId,
+                ParameterHostId = hostId,
                 ParamId = paramId.ToString(),
                 Value = value
             };
@@ -112,10 +113,10 @@ namespace MonkeyPaste {
 
         #region MpIClonableDbModel Implementation
 
-        public async Task<MpPluginPresetParameterValue> CloneDbModelAsync(bool deepClone = true, bool suppressWrite = false) {
+        public async Task<MpParameterValue> CloneDbModelAsync(bool deepClone = true, bool suppressWrite = false) {
             // NOTE if recreating preset must set PresetId after this method
 
-            var cppv = new MpPluginPresetParameterValue() {
+            var cppv = new MpParameterValue() {
                 PluginPresetParameterValueGuid = System.Guid.NewGuid(),
                 ParameterHostId = this.ParameterHostId,
                 ParameterHostType = this.ParameterHostType,
@@ -129,7 +130,7 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public MpPluginPresetParameterValue() : base() { }
+        public MpParameterValue() : base() { }
 
     }
 }

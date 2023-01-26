@@ -519,7 +519,7 @@ namespace MonkeyPaste.Avalonia {
                     remove_descendants = true;
                 } else if (child_to_delete_avm.Children.Count() > 0) {
                     MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
-                    var remove_descendants_result = await MpPlatformWrapper.Services.NativeMessageBox.ShowYesNoCancelMessageBoxAsync(
+                    var remove_descendants_result = await MpPlatform.Services.NativeMessageBox.ShowYesNoCancelMessageBoxAsync(
                         title: $"Remove Options",
                         message: $"Would you like to remove all the sub-actions for '{child_to_delete_avm.Label}'? (Otherwise they will be re-parented to '{child_to_delete_avm.ParentActionViewModel.Label}')",
                         iconResourceObj: "ChainImage",

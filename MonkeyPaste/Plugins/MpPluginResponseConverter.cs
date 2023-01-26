@@ -45,10 +45,10 @@ namespace MonkeyPaste {
             var outputType = pluginFormat.analyzer.outputType;
             List<string> ref_urls = new List<string>();
 
-            string source_url_ref = MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(sourceCopyItem);
+            string source_url_ref = MpPlatform.Services.SourceRefBuilder.ConvertToRefUrl(sourceCopyItem);
 
             var plugin_source_ref = sourceHandler as MpISourceRef;
-            string plugin_param_req_ref_url = MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(
+            string plugin_param_req_ref_url = MpPlatform.Services.SourceRefBuilder.ConvertToRefUrl(
                 plugin_source_ref, trans.Request.SerializeJsonObjectToBase64());
 
 
@@ -77,13 +77,13 @@ namespace MonkeyPaste {
                 mpdo.SetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, ref_urls);
 
                 // create new item
-                var target_ci = await MpPlatformWrapper.Services.CopyItemBuilder.BuildAsync(mpdo,false,"Generated",true);
+                var target_ci = await MpPlatform.Services.CopyItemBuilder.BuildAsync(mpdo,false,"Generated",true);
                 return target_ci;
             }
 
             // NOTE for existing content, plugins should by convention always return a dataobject
             // NOTE 2 after transaction tile picks up db event, reloads, finds transaction and applies deltas (at least thats the plan)
-            await MpPlatformWrapper.Services.TransactionBuilder.PerformTransactionAsync(
+            await MpPlatform.Services.TransactionBuilder.PerformTransactionAsync(
                         copyItemId: sourceCopyItem.Id,
                         reqType: MpJsonMessageFormatType.ParameterRequest,
                         req: trans.Request.SerializeJsonObject(),

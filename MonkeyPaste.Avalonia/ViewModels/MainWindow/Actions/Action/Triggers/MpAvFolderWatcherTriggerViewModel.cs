@@ -140,7 +140,8 @@ namespace MonkeyPaste.Avalonia {
                         bool isVisible = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.CopyItemId == ci.Id) != null;
                         await ci.DeleteFromDatabaseAsync();
                         if(isVisible) {
-                            MpAvQueryInfoViewModel.Current.NotifyQueryChanged();
+                            MpPlatform.Services.QueryInfo.NotifyQueryChanged();
+                            
                         }
                         break;
                 }

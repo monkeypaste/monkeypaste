@@ -601,7 +601,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private MpPoint GetScaledScreenPoint(MouseEventData med) {
-            double scale = MpPlatformWrapper.Services.ScreenInfoCollection.PixelScaling;
+            double scale = MpPlatform.Services.ScreenInfoCollection.PixelScaling;
             var unscaled_p = new MpPoint((double)med.X, (double)med.Y);
             var scaled_p = new MpPoint(Math.Max(0, (double)med.X / scale), Math.Max(0, (double)med.Y / scale));
 

@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -16,7 +18,6 @@ using MonkeyPaste;
 using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
-
     public class MpAvSearchBoxViewModel : MpViewModelBase, 
         MpIAsyncSingletonViewModel<MpAvSearchBoxViewModel>,
         MpIQueryInfoValueProvider {
@@ -26,18 +27,36 @@ namespace MonkeyPaste.Avalonia {
         #region Properties     
 
         #region View Models
-        public ObservableCollection<MpAvSearchCriteriaItemViewModel> CriteriaItems { get; set; } = new ObservableCollection<MpAvSearchCriteriaItemViewModel>();
+
+        //public ObservableCollection<MpAvSearchCriteriaItemViewModel> CriteriaItems { get; set; } = new ObservableCollection<MpAvSearchCriteriaItemViewModel>();
 
         private MpAvSearchFilterCollectionViewModel _searchFilterCollectionViewModel;
         public MpAvSearchFilterCollectionViewModel SearchFilterCollectionViewModel => _searchFilterCollectionViewModel ?? (_searchFilterCollectionViewModel = new MpAvSearchFilterCollectionViewModel(this));
         #endregion
 
         #region MpIQueryInfoProvider Implementation
+        async Task<IEnumerable<MpSearchCriteriaItem>> MpIQueryInfoValueProvider.SaveAsCriteriaItemsAsync(int tagId, int sortIdx) {
+            if(!HasText) {
+                return null;
+            }
+            var sci = await MpSearchCriteriaItem.CreateAsync(
+                    tagId: tagId,
+                    sortOrderIdx: sortIdx,
+                    unitFlags: MpSearchCriteriaUnitFlags.Text,
+                    criteriaType: MpContentFilterType.MatchValue);
 
+            // all filters are bool values
+            MpParameterValue pv = await MpParameterValue.CreateAsync(
+                hostType: MpParameterHostType.Query,
+                hostId: sci.Id,
+                paramId: 0,
+                value: SearchText);
+            return new[] { sci };
+        }
         object MpIQueryInfoValueProvider.Source => this;
         string MpIQueryInfoValueProvider.SourcePropertyName => nameof(SearchText);
 
-        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpAvQueryInfoViewModel.Current.SearchText);
+        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpPlatform.Services.QueryInfo.SearchText);
 
         #endregion
 
@@ -63,16 +82,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public double SearchCriteriaListBoxItemHeight => 50;
-
-        public double LastSearchCriteriaListBoxHeight { get; private set; }
-        public double SearchCriteriaListBoxHeight {
-            get {
-                //return ((MpMeasurements.Instance.SearchDetailRowHeight * CriteriaItems.Count) +
-                //       ((MpMeasurements.Instance.SearchDetailBorderThickness * 2) * CriteriaItems.Count));
-                return SearchCriteriaListBoxItemHeight * CriteriaItems.Count;
-            }
-        }
+        
 
         #endregion
 
@@ -83,15 +93,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public bool CanDeleteSearch => UserSearch != null && UserSearch.Id > 0;
-
-        public bool CanSaveSearch => HasCriteriaItems || HasText;
-
         public bool IsMultipleMatches { get; private set; } = false;
 
-        public bool HasCriteriaItems => CriteriaItems.Count > 0;
-
-        public bool IsSaved => UserSearch != null && UserSearch.Id > 0;
 
         public bool CanAddCriteriaItem => true;//!string.IsNullOrEmpty(LastSearchText) && !IsSearching;
 
@@ -157,8 +160,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public MpUserSearch UserSearch { get; set; }
-
 
         #endregion
 
@@ -183,8 +184,7 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitAsync() {
             await Task.Delay(1);
 
-            MpAvQueryInfoViewModel.Current.RegisterProvider(this);
-            CriteriaItems.CollectionChanged += CriteriaItems_CollectionChanged;
+            MpPlatform.Services.QueryInfo.RegisterProvider(this);
 
             SearchFilterCollectionViewModel.Init();
 
@@ -196,25 +196,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public async Task InitializeAsync(MpUserSearch us) {
-            IsBusy = true;
-
-            if (us == null) {
-                UserSearch = null;
-            } else {
-                var cil = await MpDataModelProvider.GetCriteriaItemsByUserSearchId(us.Id);
-                UserSearch = us;
-                CriteriaItems.Clear();
-                foreach (var ci in cil) {
-                    var civm = await CreateCriteriaItemViewModel(ci);
-                    CriteriaItems.Add(civm);
-                }
-            }
-
-            OnPropertyChanged(nameof(CriteriaItems));
-            OnPropertyChanged(nameof(HasCriteriaItems));
-
-            IsBusy = false;
+        public async Task InitializeAsync(int currentQueryTagId) {
+            
         }
 
         
@@ -239,17 +222,15 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private async Task<MpAvSearchCriteriaItemViewModel> CreateCriteriaItemViewModel(MpSearchCriteriaItem sci) {
-            MpAvSearchCriteriaItemViewModel nscivm = new MpAvSearchCriteriaItemViewModel(this);
-            await nscivm.InitializeAsync(sci);
-            return nscivm;
-        }
 
         private void ReceiveGlobalMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.RequeryCompleted:
                     IsSearching = false;
                     OnPropertyChanged(nameof(IsSearchValid));
+                    if(MpAvTagTrayViewModel.Instance.SelectedItem.TagType == MpTagType.Query) {
+
+                    }
                     break;
 
             }
@@ -280,47 +261,6 @@ namespace MonkeyPaste.Avalonia {
                     }
                     OnPropertyChanged(nameof(TextBoxFontStyle));
                     break;
-                case nameof(HasCriteriaItems):
-                    break;
-            }
-        }
-
-        private async void CriteriaItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            if (IsBusy) {
-                return;
-            }
-
-            OnPropertyChanged(nameof(HasCriteriaItems));
-
-            OnPropertyChanged(nameof(SearchCriteriaListBoxHeight));
-
-            await UpdateCriteriaSortOrder();
-
-            double delta_height = SearchCriteriaListBoxHeight - LastSearchCriteriaListBoxHeight;
-            if(Math.Abs(delta_height) > 0.1) {
-                MpAvMainWindowViewModel.Instance.WindowResizeCommand.Execute(new MpPoint(0, delta_height));
-            }
-
-            LastSearchCriteriaListBoxHeight = SearchCriteriaListBoxHeight;
-        }
-
-        private async Task UpdateCriteriaSortOrder(bool fromModel = false) {
-            if (fromModel) {
-                CriteriaItems.Sort(x => x.SortOrderIdx);
-            } else {
-                foreach (var scivm in CriteriaItems) {
-                    scivm.SortOrderIdx = CriteriaItems.IndexOf(scivm);
-                }
-                if (!MpAvMainWindowViewModel.Instance.IsMainWindowLoading &&
-                    IsSaved) {
-                    IsBusy = true;
-
-                    foreach (var scivm in CriteriaItems) {
-                        await scivm.SearchCriteriaItem.WriteToDatabaseAsync();
-                    }
-
-                    IsBusy = false;
-                }
             }
         }
 
@@ -342,18 +282,19 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public ICommand ClearTextCommand => new MpCommand(
-            () => {
+        public ICommand ClearTextCommand => new MpCommand<object>(
+            (args) => {
+                bool suppressNotify = args != null;
                 IsMultipleMatches = false;
                 SearchText = string.Empty;
-                if(!string.IsNullOrWhiteSpace(LastSearchText)) {
-                    //MpAvQueryInfoViewModel.Current.NotifyQueryChanged();
+                if(!string.IsNullOrWhiteSpace(LastSearchText) && !suppressNotify) {
+                    //MpPlatform.Services.QueryInfo.NotifyQueryChanged();
                     //SetQueryInfo();
-                    MpAvQueryInfoViewModel.Current.NotifyQueryChanged();
+                    MpPlatform.Services.QueryInfo.NotifyQueryChanged();
                 }
                 LastSearchText = string.Empty;
             },
-            () => {
+            (args) => {
                 return SearchText.Length > 0;
             });
 
@@ -372,7 +313,7 @@ namespace MonkeyPaste.Avalonia {
                 OnPropertyChanged(nameof(IsSearchValid));
 
                 //SetQueryInfo(); 
-                MpAvQueryInfoViewModel.Current.NotifyQueryChanged();
+                MpPlatform.Services.QueryInfo.NotifyQueryChanged();
                 UpdateRecentSearchTexts();
             },()=>!MpAvMainWindowViewModel.Instance.IsMainWindowLoading);
 
@@ -386,69 +327,7 @@ namespace MonkeyPaste.Avalonia {
                 MpMessenger.SendGlobal(MpMessageType.SelectPreviousMatch);
             });
 
-        public ICommand ClearSearchCriteriaItemsCommand => new MpCommand(
-            () => {
-                CriteriaItems.Clear();
-                OnPropertyChanged(nameof(CriteriaItems));
-                OnPropertyChanged(nameof(HasCriteriaItems));
-                MpMessenger.SendGlobal<MpMessageType>(MpMessageType.SearchCriteriaItemsChanged);
-            });
 
-        public ICommand AddSearchCriteriaItemCommand => new MpAsyncCommand<object>(
-            async (args) => {
-                int add_idx = CriteriaItems.Count;
-                if(args is MpAvSearchCriteriaItemViewModel scivm) {
-                    add_idx = scivm.SortOrderIdx + 1;
-                }
-                MpSearchCriteriaItem nsci = new MpSearchCriteriaItem() {
-                    SortOrderIdx = CriteriaItems.Count
-                };
-                MpAvSearchCriteriaItemViewModel nscivm = await CreateCriteriaItemViewModel(nsci);
-                CriteriaItems.Insert(add_idx,nscivm);
-                OnPropertyChanged(nameof(CriteriaItems));
-                OnPropertyChanged(nameof(HasCriteriaItems));
-                MpMessenger.SendGlobal<MpMessageType>(MpMessageType.SearchCriteriaItemsChanged);
-            },(args)=>CanAddCriteriaItem);
-
-        public ICommand RemoveSearchCriteriaItemCommand => new MpCommand<object>(
-            async (args) => {
-                var scivm = args as MpAvSearchCriteriaItemViewModel;
-                int scivmIdx = CriteriaItems.IndexOf(scivm);
-                CriteriaItems.RemoveAt(scivmIdx);
-                if (scivm.SearchCriteriaItem.Id > 0) {
-                    await scivm.SearchCriteriaItem.DeleteFromDatabaseAsync();
-                }
-                await UpdateCriteriaSortOrder();
-                MpMessenger.SendGlobal<MpMessageType>(MpMessageType.SearchCriteriaItemsChanged);
-            },
-            (args)=>args is MpAvSearchCriteriaItemViewModel);
-
-        public ICommand SaveSearchCommand => new MpCommand(
-            async () => {
-                string searchName = UserSearch == null ? "Custom Search" : UserSearch.Name;
-                searchName = await MpPlatformWrapper.Services.NativeMessageBox
-                .ShowTextBoxMessageBoxAsync(
-                    title: "Save Search",
-                    message: "Enter a name for this custom search",
-                    currentText: searchName,
-                    placeholderText: "Enter name...",
-                    iconResourceObj: "FindReplaceImage");
-
-                if(!string.IsNullOrEmpty(searchName)) {
-                    if(UserSearch == null) {
-                        UserSearch = await MpUserSearch.Create(searchName, DateTime.Now);
-                    } else {
-                        UserSearch.Name = searchName;
-                        await UserSearch.WriteToDatabaseAsync();
-                    }
-                    OnPropertyChanged(nameof(CanDeleteSearch));
-                }
-            });
-
-        public ICommand DeleteSearchCommand => new MpCommand(
-            async () => {
-                await UserSearch.DeleteFromDatabaseAsync();
-            },()=>UserSearch != null);
 
         #endregion
     }

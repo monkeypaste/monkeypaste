@@ -30,9 +30,9 @@ namespace MonkeyPaste.Avalonia {
 
             await NormalizePlatformFormatsAsync(mpdo);
 
-            var refs = await MpPlatformWrapper.Services.SourceRefBuilder.GatherSourceRefsAsync(mpdo, force_ext_sources);
+            var refs = await MpPlatform.Services.SourceRefBuilder.GatherSourceRefsAsync(mpdo, force_ext_sources);
 
-            if (MpPlatformWrapper.Services.SourceRefBuilder.IsAnySourceRejected(refs)) {
+            if (MpPlatform.Services.SourceRefBuilder.IsAnySourceRejected(refs)) {
                 return null;
             }
             Tuple<MpCopyItemType, string, string> data_tuple = await DecodeContentDataAsync(mpdo);
@@ -59,7 +59,7 @@ namespace MonkeyPaste.Avalonia {
                 itemType: itemType,
                 suppressWrite: suppressWrite);
 
-            List<string> ref_urls = refs.Select(x=>MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(x)).ToList();
+            List<string> ref_urls = refs.Select(x=>MpPlatform.Services.SourceRefBuilder.ConvertToRefUrl(x)).ToList();
             if (mpdo.TryGetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, out IEnumerable<string> urls)) { 
                 var urlList = urls.ToList();
                 for (int i = 0; i < ref_urls.Count; i++) {
@@ -76,7 +76,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
-            await MpPlatformWrapper.Services.TransactionBuilder.PerformTransactionAsync(
+            await MpPlatform.Services.TransactionBuilder.PerformTransactionAsync(
                             copyItemId: ci.Id,
                             reqType: MpJsonMessageFormatType.DataObject,
                             req: mpdo.SerializeData(),

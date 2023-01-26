@@ -8,6 +8,7 @@ using MonkeyPaste;
 using MonkeyPaste.Common;
 using System.Diagnostics;
 using Avalonia.Threading;
+using MonoMac.AppKit;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvTagTrayViewModel : 
@@ -33,31 +34,6 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region View Models
-
-
-        //public override MpAvTagTileViewModel SelectedItem {
-        //    get {
-        //        if (base.SelectedItem == null && !_isSelecting) {
-        //            // when adding new tag, selection is cleared when new tag is
-        //            // created (doesn't affect query though because SelectTagCommand isn't called,
-        //            // I think its from TreeViewItem.IsSelected binding)
-        //            base.SelectedItem = LastSelectedItem;
-        //        }
-        //        if (Items.Count != 0 && base.SelectedItem == null) {
-        //            // tag should always be set, is _isSelecting not flagging correctly?
-        //            Debugger.Break();
-        //        }
-        //        return base.SelectedItem;
-        //    }
-        //    set {
-        //        if (SelectedItem != value) {
-        //            if (value == null) {
-        //                return;
-        //            }
-        //            base.SelectedItem = value;
-        //        }
-        //    }
-        //}
         public override MpAvTagTileViewModel SelectedItem {
             get {
                 return Items.FirstOrDefault(x => x.TagId == SelectedItemId);
@@ -87,6 +63,7 @@ namespace MonkeyPaste.Avalonia {
         public IEnumerable<MpAvTagTileViewModel> RootItems => Items.Where(x => x.ParentTagId == 0);
 
         public MpAvTagTileViewModel AllTagViewModel { get; set; }
+        public MpAvTagTileViewModel RootGroupTagViewModel { get; set; }
         public MpAvTagTileViewModel HelpTagViewModel { get; set; }
 
         public IList<MpMenuItemViewModel> ContentMenuItemViewModels => AllTagViewModel.ContextMenuViewModel.SubItems;
@@ -94,11 +71,28 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIQueryInfoProvider Implementation
+        async Task<IEnumerable<MpSearchCriteriaItem>> MpIQueryInfoValueProvider.SaveAsCriteriaItemsAsync(int tagId, int sortIdx) {
+            if (SelectedItemId == 0) {
+                return null;
+            }
+            var sci = await MpSearchCriteriaItem.CreateAsync(
+                    tagId: tagId,
+                    sortOrderIdx: sortIdx,
+                    unitFlags: MpSearchCriteriaUnitFlags.Integer,
+                    criteriaType: MpContentFilterType.Tag);
 
+            // all filters are bool values
+            MpParameterValue pv = await MpParameterValue.CreateAsync(
+                hostType: MpParameterHostType.Query,
+                hostId: sci.Id,
+                paramId: 0,
+                value: SelectedItemId.ToString());
+            return new[] { sci };
+        }
         object MpIQueryInfoValueProvider.Source => this;
         string MpIQueryInfoValueProvider.SourcePropertyName => nameof(SelectedItemId);
 
-        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpAvQueryInfoViewModel.Current.TagId);
+        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpPlatform.Services.QueryInfo.TagId);
 
         #endregion
 
@@ -161,6 +155,14 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public bool IsSelectionEnabled {
+            get {
+                if(MpAvSearchCriteriaItemCollectionViewModel.Instance.HasCriteriaItems) {
+                    return false;
+                }
+                return true;
+            }
+        }
         public bool IsSelecting { get; private set; } = false;
         //public bool IsNavButtonsVisible => MpAvMainWindowViewModel.Instance.IsHorizontalOrientation && 
         //                                    TagTrayTotalWidth > TagTrayScreenWidth;
@@ -243,7 +245,7 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitAsync() {
             IsBusy = true;
 
-            MpAvQueryInfoViewModel.Current.RegisterProvider(this);
+            MpPlatform.Services.QueryInfo.RegisterProvider(this);
 
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
 
@@ -260,16 +262,17 @@ namespace MonkeyPaste.Avalonia {
 
             HelpTagViewModel = new MpAvTagTileViewModel(this);
             await HelpTagViewModel.InitializeAsync(helpTag);
+            
+            MpTag rootGroupTag = await MpDataModelProvider.GetItemAsync<MpTag>(MpTag.RootGroupTagId);
 
-            while (AllTagViewModel.IsBusy || HelpTagViewModel.IsBusy) {
+            RootGroupTagViewModel = new MpAvTagTileViewModel(this);
+            await RootGroupTagViewModel.InitializeAsync(rootGroupTag);
+
+            while (AllTagViewModel.IsBusy || HelpTagViewModel.IsBusy || RootGroupTagViewModel.IsBusy) {
                 await Task.Delay(100);
             }
 
             Items.CollectionChanged += TagTileViewModels_CollectionChanged;
-            //PinnedItems.CollectionChanged += PinnedItems_CollectionChanged;
-            //UpdateSortOrder(true);
-
-            //Items.FirstOrDefault(x => x.TagId == DefaultTagId).IsSelected = true;
 
             AllTagViewModel.IsExpanded = true;
             OnPropertyChanged(nameof(Items));
@@ -358,6 +361,9 @@ namespace MonkeyPaste.Avalonia {
                         SelectedItem = AllTagViewModel;
                     }
                     break;
+                case nameof(IsSelectionEnabled):
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.CanSelect)));
+                    break;
             }
         }
 
@@ -376,6 +382,9 @@ namespace MonkeyPaste.Avalonia {
 
                 case MpMessageType.TraySelectionChanged:
                     HandleClipTraySelectionChange();//.FireAndForgetSafeAsync(this);
+                    break;
+                case MpMessageType.SearchCriteriaItemsChanged:
+                    OnPropertyChanged(nameof(IsSelectionEnabled));
                     break;
             }
         }
@@ -518,9 +527,9 @@ namespace MonkeyPaste.Avalonia {
                 }
                 IsSelecting = false;
 
-                MpAvQueryInfoViewModel.Current.NotifyQueryChanged(true);
+                MpPlatform.Services.QueryInfo.NotifyQueryChanged(true);
             },
-            (args)=>args != null && !IsSelecting);
+            (args)=>args != null && !IsSelecting && IsSelectionEnabled);
 
 
         #endregion

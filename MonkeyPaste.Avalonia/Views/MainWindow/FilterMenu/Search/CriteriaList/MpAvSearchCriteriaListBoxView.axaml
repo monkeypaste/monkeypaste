@@ -6,8 +6,8 @@
                        xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:pcl="using:MonkeyPaste"
-                       x:DataType="local:MpAvSearchBoxViewModel"
-                       x:TypeArguments="local:MpAvSearchBoxViewModel"
+                       x:DataType="local:MpAvSearchCriteriaItemCollectionViewModel"
+                       x:TypeArguments="local:MpAvSearchCriteriaItemCollectionViewModel"
                        x:CompileBindings="True"
                        mc:Ignorable="d"
                        d:DesignHeight="450"
@@ -18,6 +18,10 @@
         </Thickness>
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
+        <Style Selector="TextBlock">
+            <Setter Property="FontFamily"
+                    Value="Calibri" />
+        </Style>
         <Style Selector="ListBoxItem">
             <Setter Property="HorizontalContentAlignment"
                     Value="Left" />
@@ -51,12 +55,14 @@
                     Value="Red" />
         </Style>
     </local:MpAvUserControl.Styles>
+    <!--<ScrollViewer>-->
     <ListBox x:Name="SearchCriteriaListBox"
-             Height="{Binding SearchCriteriaListBoxHeight}"
+             MaxHeight="{Binding MaxSearchCriteriaListBoxHeight}"
+             Height="{Binding BoundCriteriaListBoxScreenHeight, Mode=TwoWay}"
              Background="{StaticResource FilterMenuBgBrush}"
              BorderThickness="0"
              BorderBrush="Black"
-             Items="{Binding CriteriaItems}"
+             Items="{Binding Items}"
              SelectionMode="Single"
              HorizontalAlignment="Stretch"
              VerticalAlignment="Stretch"
@@ -70,4 +76,5 @@
             </DataTemplate>
         </ListBox.ItemTemplate>
     </ListBox>
+    <!--</ScrollViewer>-->
 </local:MpAvUserControl>

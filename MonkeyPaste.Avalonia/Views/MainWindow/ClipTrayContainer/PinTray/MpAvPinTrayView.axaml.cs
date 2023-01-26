@@ -186,7 +186,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task PerformExternalOrPartialDropAsync(int drop_idx, IDataObject avdo) {
-            MpPortableDataObject mpdo = await MpPlatformWrapper.Services.DataObjectHelperAsync.ReadDragDropDataObjectAsync(avdo) as MpPortableDataObject;
+            MpPortableDataObject mpdo = await MpPlatform.Services.DataObjectHelperAsync.ReadDragDropDataObjectAsync(avdo) as MpPortableDataObject;
             //int drag_ciid = -1;
             //string drag_ctvm_pub_handle = mpdo.GetData(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT) as string;
             //if (!string.IsNullOrEmpty(drag_ctvm_pub_handle)) {
@@ -197,7 +197,7 @@ namespace MonkeyPaste.Avalonia {
             //        mpdo.SetData(MpPortableDataFormats.LinuxUriList, new string[] { MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(drag_ctvm.CopyItem) });
             //    }
             //}
-            var avdo_ci = await MpPlatformWrapper.Services.CopyItemBuilder.BuildAsync(mpdo,false,"Drop",false);
+            var avdo_ci = await MpPlatform.Services.CopyItemBuilder.BuildAsync(mpdo,false,"Drop",false);
 
             var drop_ctvm = await BindingContext.CreateClipTileViewModel(avdo_ci, -1);
             BindingContext.PinTileCommand.Execute(new object[] { drop_ctvm, drop_idx });

@@ -23,7 +23,7 @@ namespace MonkeyPaste {
             set {
                 if (SelectedItem != value) {
                     Items.ForEach(x => x.IsSelected = x == value);
-                    if(MpPlatformWrapper.Services.StartupState.LoadedDateTime != null &&
+                    if(MpPlatform.Services.StartupState.LoadedDateTime != null &&
                         SelectedItem != null) {
                         SelectedItem.LastSelectedDateTime = DateTime.Now;
                     }

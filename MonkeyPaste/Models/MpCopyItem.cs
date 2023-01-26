@@ -96,7 +96,7 @@ namespace MonkeyPaste {
         }
 
         [Ignore]
-        public string ItemRefUrl => MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(this);
+        public string ItemRefUrl => MpPlatform.Services.SourceRefBuilder.ConvertToRefUrl(this);
 
         #endregion
 
@@ -116,7 +116,7 @@ namespace MonkeyPaste {
 
 
         public object IconResourceObj => IconId;
-        public string Uri => MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(this);
+        public string Uri => MpPlatform.Services.SourceRefBuilder.ConvertToRefUrl(this);
         #endregion
 
         #region Static Methods

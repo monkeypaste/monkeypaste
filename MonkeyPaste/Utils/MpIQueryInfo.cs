@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿using MonkeyPaste.Avalonia;
+using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -33,7 +34,8 @@ namespace MonkeyPaste {
         Time = 8192,
         WholeWord = 16384,
         DeviceType = 32768,
-        DeviceName = 65536
+        DeviceName = 65536,
+        MatchValue = 131072
     }
 
     // Criteria Item Flags
@@ -66,9 +68,12 @@ namespace MonkeyPaste {
         object Source { get; }
         string SourcePropertyName { get; }
         string QueryValueName { get; }
+
+        Task<IEnumerable<MpSearchCriteriaItem>> SaveAsCriteriaItemsAsync(int tagId, int sortIdx);
     }
 
-    public interface MpIQueryInfo : MpIJsonObject {
+
+    public interface MpIQueryInfo : MpIDbIdCollection, MpIJsonObject {
         public int TotalAvailableItemsInQuery { get; }
 
         public bool IsDescending { get;  set; }
@@ -91,5 +96,14 @@ namespace MonkeyPaste {
         MpIQueryInfo Next { get; }
 
         void NotifyQueryChanged(bool forceRequery = false);
+
+        void RestoreProviderValues();
+
+        void RegisterProvider(MpIQueryInfoValueProvider provider);
+
+        IEnumerable<MpIQueryInfoValueProvider> Providers { get; }
+
+        Task<List<MpCopyItem>> FetchIdsByQueryIdxListAsync(List<int> copyItemQueryIdxList);
+        Task QueryForTotalCountAsync(IEnumerable<int> ci_idsToOmit, IEnumerable<int> tagIds);
     }
 }

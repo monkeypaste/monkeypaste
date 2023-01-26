@@ -365,7 +365,7 @@ namespace MonkeyPaste.Avalonia {
             }
             
             if(hide_on_click) {
-                MpPlatformWrapper.Services.ContextMenuCloser.CloseMenu();
+                MpPlatform.Services.ContextMenuCloser.CloseMenu();
             }
             
         }
@@ -494,7 +494,7 @@ namespace MonkeyPaste.Avalonia {
                 VerticalAlignment = VerticalAlignment.Center,
                 Width = mivm.CheckResourceKey == "CheckSvg" ? 15 : 7,
                 Height = mivm.CheckResourceKey == "CheckSvg" ? 15 : 7,
-                Data = MpPlatformWrapper.Services.PlatformResource.GetResource(mivm.CheckResourceKey) as StreamGeometry,
+                Data = MpPlatform.Services.PlatformResource.GetResource(mivm.CheckResourceKey) as StreamGeometry,
                 Foreground = mivm.IconHexStr.HexColorToContrastingFgHexColor().ToAvBrush()
             };
             var iconBorder = GetIconBorder(mivm);

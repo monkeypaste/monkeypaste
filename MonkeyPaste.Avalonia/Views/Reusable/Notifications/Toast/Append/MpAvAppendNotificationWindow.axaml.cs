@@ -47,7 +47,7 @@ namespace MonkeyPaste.Avalonia {
                 rootControl.AttachedToVisualTree += (s, e) => {
                     Instance.Hide();
 
-                    MpPlatformWrapper.Services.ProcessWatcher.AddOtherThisAppHandle(Instance.PlatformImpl.Handle.Handle);
+                    MpPlatform.Services.ProcessWatcher.AddOtherThisAppHandle(Instance.PlatformImpl.Handle.Handle);
                 };
             }
             Instance.Show();

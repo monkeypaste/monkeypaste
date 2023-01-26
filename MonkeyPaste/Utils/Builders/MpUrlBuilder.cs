@@ -29,7 +29,7 @@ namespace MonkeyPaste {
                 return null;
             }
 
-            MpIcon icon = await MpPlatformWrapper.Services.IconBuilder.CreateAsync(
+            MpIcon icon = await MpPlatform.Services.IconBuilder.CreateAsync(
                     iconBase64: urlProps.IconBase64,
                     suppressWrite: suppressWrite);
 

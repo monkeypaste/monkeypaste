@@ -456,12 +456,12 @@ namespace MonkeyPaste {
         protected void ShowBalloon() {
             //_nbv.ShowWindow(nvmb);
             //IsVisible = true;
-            MpPlatformWrapper.Services.NotificationManager.ShowNotification(this);
+            MpPlatform.Services.NotificationManager.ShowNotification(this);
         }
 
         protected void HideBalloon() {
             //_nbv.HideWindow(nvmb);
-            MpPlatformWrapper.Services.NotificationManager.HideNotification(this);
+            MpPlatform.Services.NotificationManager.HideNotification(this);
             //Parent.RemoveNotificationCommand.Execute(this);
             //Notifications.Remove(nvmb);
             //IsVisible = false;
@@ -508,7 +508,7 @@ namespace MonkeyPaste {
 
         public ICommand CloseNotificationCommand => new MpCommand(
             () => {
-                MpPlatformWrapper.Services.NotificationManager.HideNotification(this);
+                MpPlatform.Services.NotificationManager.HideNotification(this);
             });
 
         public ICommand ToggleIsPinnedCommand => new MpCommand(

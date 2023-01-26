@@ -106,7 +106,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 subItems.Add(
                     new MpMenuItemViewModel() {
-                        IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("CogImage") as string,
+                        IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("CogImage") as string,
                         Header = $"Manage '{Title}'",
                         Command = ManageAnalyticItemCommand,
                         CommandParameter = PluginGuid

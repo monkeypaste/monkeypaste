@@ -56,13 +56,13 @@ namespace MonkeyPaste.Avalonia {
         public string Value3 { get; set; }
         public string Value4 { get; set; }
 
-        public bool IsCheckable => UnitType.HasFlag(MpSearchCriteriaUnitType.Text) && !UnitType.HasFlag(MpSearchCriteriaUnitType.RegEx);
+        public bool IsCheckable => UnitType.HasFlag(MpSearchCriteriaUnitFlags.Text) && !UnitType.HasFlag(MpSearchCriteriaUnitFlags.RegEx);
 
         public bool IsChecked { get; set; }
 
         public bool IsEnabled { get; set; } = true;
 
-        public MpSearchCriteriaUnitType UnitType { get; set; }
+        public MpSearchCriteriaUnitFlags UnitType { get; set; }
 
         public MpContentFilterType FilterValue { get; private set; }
 

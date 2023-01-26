@@ -239,7 +239,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 SetIsHovering(control, true);
                 if (GetHoverCursor(control) is MpCursorType ct) {
-                    MpPlatformWrapper.Services.Cursor.SetCursor(control,ct);
+                    MpPlatform.Services.Cursor.SetCursor(control,ct);
                 }
                 var test = GetHoverBrush(control);
                 if (GetHoverBrush(control) is IBrush hoverBrush && control is Border border) {
@@ -306,7 +306,7 @@ namespace MonkeyPaste.Avalonia {
             if (s is Control control) {
                 SetIsHovering(control, false);
                 if (GetHoverCursor(control) is MpCursorType ct) {
-                    MpPlatformWrapper.Services.Cursor.UnsetCursor(control.DataContext);
+                    MpPlatform.Services.Cursor.UnsetCursor(control.DataContext);
                 }
                 if (GetDefaultBrush(control) is IBrush defaultBrush && control is Border border) {
                     border.Background = defaultBrush;

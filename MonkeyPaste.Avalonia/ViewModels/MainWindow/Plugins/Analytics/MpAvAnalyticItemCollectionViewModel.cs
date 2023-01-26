@@ -232,7 +232,7 @@ namespace MonkeyPaste.Avalonia {
             return new MpMenuItemViewModel() {
                 Header = @"Analyze",
                 AltNavIdx = 0,
-                IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("BrainImage") as string,
+                IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("BrainImage") as string,
                 SubItems = sub_items
             };
         }

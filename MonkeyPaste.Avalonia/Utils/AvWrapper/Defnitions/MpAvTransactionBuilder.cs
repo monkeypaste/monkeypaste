@@ -34,9 +34,9 @@ namespace MonkeyPaste.Avalonia {
 
             List<Tuple<MpISourceRef, string>> source_ref_arg_tuples = new List<Tuple<MpISourceRef, string>>();
             foreach(var url_arg_tuple in ref_url_arg_tuples) {
-                MpISourceRef sr = await MpPlatformWrapper.Services.SourceRefBuilder.FetchOrCreateSourceAsync(url_arg_tuple);
+                MpISourceRef sr = await MpPlatform.Services.SourceRefBuilder.FetchOrCreateSourceAsync(url_arg_tuple);
                 // check provided url to see if query arg is already embedded
-                string url_query_param = MpPlatformWrapper.Services.SourceRefBuilder.ParseRefArgs(url_arg_tuple);
+                string url_query_param = MpPlatform.Services.SourceRefBuilder.ParseRefArgs(url_arg_tuple);
                 source_ref_arg_tuples.Add(new Tuple<MpISourceRef, string>(sr, url_query_param));
             }
 
@@ -44,7 +44,7 @@ namespace MonkeyPaste.Avalonia {
                 throw new Exception($"Error, not all source urls could be stored.");
             }
             
-            await MpPlatformWrapper.Services.SourceRefBuilder.AddTransactionSourcesAsync(
+            await MpPlatform.Services.SourceRefBuilder.AddTransactionSourcesAsync(
                 cit.Id,
                 source_ref_arg_tuples);
 

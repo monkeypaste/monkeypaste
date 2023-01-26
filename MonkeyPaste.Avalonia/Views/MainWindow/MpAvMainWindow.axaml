@@ -45,13 +45,22 @@
                                   HorizontalAlignment="Stretch"
                                   VerticalAlignment="Center" />
 
+
+
         <!--  ADVANCED SEARCH  -->
         <local:MpAvSearchCriteriaListBoxView x:Name="SearchDetailView"
                                              Grid.Row="2"
                                              VerticalAlignment="Top"
                                              VerticalContentAlignment="Stretch"
                                              HorizontalAlignment="Stretch"
-                                             DataContext="{x:Static local:MpAvSearchBoxViewModel.Instance}" />
+                                             IsVisible="{Binding HasCriteriaItems, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
+                                             DataContext="{x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}" />
+        <GridSplitter x:Name="AdvancedSearchSplitter"
+                      Classes="horizontal"
+                      Grid.Row="2"
+                      IsVisible="{Binding IsVisible, ElementName=SearchDetailView}"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Bottom" />
         <!--  CONTENT ROW  -->
         <Grid x:Name="MainWindowTrayGrid"
               Grid.Row="3"

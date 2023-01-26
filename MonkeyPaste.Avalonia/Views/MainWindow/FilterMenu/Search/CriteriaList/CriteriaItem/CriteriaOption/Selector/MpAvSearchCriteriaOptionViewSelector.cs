@@ -16,23 +16,23 @@ namespace MonkeyPaste.Avalonia {
         public IControl Build(object param) {
             string key = null;
             var scovm = param as MpAvSearchCriteriaOptionViewModel;
-            if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitType.EnumerableValue)) {
+            if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.EnumerableValue)) {
                 key = "EmptyOptionTemplate";
             }
-            if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitType.Enumerable)) {
+            if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.Enumerable)) {
                 key = "EnumerableOptionTemplate";
             }
-            if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitType.Hex)) {
+            if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.Hex)) {
                 key = "TextOptionTemplate";
             }
-            if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitType.ByteX4) ||
-                scovm.UnitType.HasFlag(MpSearchCriteriaUnitType.UnitDecimalX4)) {
+            if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.ByteX4) ||
+                scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.UnitDecimalX4)) {
                 key = "RGBAOptionTemplate";
             }
-            if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitType.Text)) {
+            if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.Text)) {
                 key = "TextOptionTemplate";
             }
-            if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitType.DateTime)) {
+            if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.DateTime)) {
                 key = "DateOptionTemplate";
             }
             if(string.IsNullOrEmpty(key)) {

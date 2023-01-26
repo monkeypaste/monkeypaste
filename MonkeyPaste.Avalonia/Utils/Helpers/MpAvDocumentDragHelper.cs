@@ -83,7 +83,7 @@ namespace MonkeyPaste.Avalonia {
         private static async Task ApplyClipboardPresetToDragDataAsync() {
             // seems excessive...but ultimately all ole pref's come
             // from plugins so pass everthing through cb plugin system just like writing to clipboard
-            await MpPlatformWrapper.Services.DataObjectHelperAsync
+            await MpPlatform.Services.DataObjectHelperAsync
                 .UpdateDragDropDataObjectAsync(SourceDataObject,DragDataObject);
            
         }

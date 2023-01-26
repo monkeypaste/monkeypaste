@@ -30,11 +30,11 @@ namespace MonkeyPaste.Avalonia {
         #region Appearance
 
         public double GlobalBgOpacity {
-            get => (double)MpPlatformWrapper.Services.PlatformResource.GetResource(MpThemeResourceKey.GlobalBgOpacity.ToString());
+            get => (double)MpPlatform.Services.PlatformResource.GetResource(MpThemeResourceKey.GlobalBgOpacity.ToString());
             set {
                 if(GlobalBgOpacity != value) {
                     double clamped_value = Math.Max(0, Math.Min(value, 1.0d));
-                    MpPlatformWrapper.Services.PlatformResource.SetResource(MpThemeResourceKey.GlobalBgOpacity.ToString(), clamped_value);
+                    MpPlatform.Services.PlatformResource.SetResource(MpThemeResourceKey.GlobalBgOpacity.ToString(), clamped_value);
                     MpPrefViewModel.Instance.MainWindowOpacity = clamped_value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(GlobalBgOpacity));

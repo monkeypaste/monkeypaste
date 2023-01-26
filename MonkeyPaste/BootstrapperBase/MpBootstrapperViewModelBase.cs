@@ -88,7 +88,7 @@ namespace MonkeyPaste {
 
         protected virtual async Task LoadItemAsync(MpBootstrappedItemViewModel item, int index) {
             IsBusy = true;
-            await MpPlatformWrapper.Services.MainThreadMarshal.RunOnMainThreadAsync(async () => {
+            await MpPlatform.Services.MainThreadMarshal.RunOnMainThreadAsync(async () => {
                 var sw = Stopwatch.StartNew();
 
                 await item.LoadItemAsync();

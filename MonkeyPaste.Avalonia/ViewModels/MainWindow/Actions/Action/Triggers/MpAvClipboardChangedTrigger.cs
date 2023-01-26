@@ -51,13 +51,13 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
 
         protected override void EnableTrigger() {
-            MpPlatformWrapper.Services.ClipboardMonitor.RegisterActionComponent(this);
-            MpPlatformWrapper.Services.ClipboardMonitor.StartMonitor();
+            MpPlatform.Services.ClipboardMonitor.RegisterActionComponent(this);
+            MpPlatform.Services.ClipboardMonitor.StartMonitor();
         }
 
         protected override void DisableTrigger() {
-            MpPlatformWrapper.Services.ClipboardMonitor.UnregisterActionComponent(this); 
-            MpPlatformWrapper.Services.ClipboardMonitor.StopMonitor();
+            MpPlatform.Services.ClipboardMonitor.UnregisterActionComponent(this); 
+            MpPlatform.Services.ClipboardMonitor.StopMonitor();
         }
 
         protected override bool CanPerformAction(object arg) {

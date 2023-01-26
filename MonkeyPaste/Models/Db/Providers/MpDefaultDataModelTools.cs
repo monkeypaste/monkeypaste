@@ -89,7 +89,7 @@ namespace MonkeyPaste {
 
             // User Device
 
-            ThisUserDeviceType = MpPlatformWrapper.Services.OsInfo.OsType;
+            ThisUserDeviceType = MpPlatform.Services.OsInfo.OsType;
 
             ThisUserDeviceGuid = Guid.NewGuid().ToString();
 
@@ -123,8 +123,8 @@ namespace MonkeyPaste {
 
             // OS App
             var osApp = await MpApp.CreateAsync(
-                appPath: MpPlatformWrapper.Services.OsInfo.OsFileManagerPath,
-                appName: MpPlatformWrapper.Services.OsInfo.OsFileManagerName);
+                appPath: MpPlatform.Services.OsInfo.OsFileManagerPath,
+                appName: MpPlatform.Services.OsInfo.OsFileManagerName);
             ThisOsFileManagerAppId = osApp.Id;
 
         }

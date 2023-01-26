@@ -61,13 +61,13 @@ namespace MonkeyPaste.Avalonia {
                 if (IsVerticalOrientation) {
                     return MainWindowHeight -
                         //MpAvMainWindowTitleMenuViewModel.Instance.TitleMenuHeight -
-                        MpAvSearchBoxViewModel.Instance.SearchCriteriaListBoxHeight -
+                        MpAvSearchCriteriaItemCollectionViewModel.Instance.BoundCriteriaListBoxScreenHeight -
                         MpAvFilterMenuViewModel.Instance.FilterMenuHeight -
                         MpAvSidebarItemCollectionViewModel.Instance.ButtonGroupFixedDimensionLength;
                 }
                 return MainWindowHeight -
                         MpAvMainWindowTitleMenuViewModel.Instance.TitleMenuHeight -
-                        MpAvSearchBoxViewModel.Instance.SearchCriteriaListBoxHeight -
+                        MpAvSearchCriteriaItemCollectionViewModel.Instance.BoundCriteriaListBoxScreenHeight -
                         MpAvFilterMenuViewModel.Instance.FilterMenuHeight;
             }
         }
@@ -419,8 +419,8 @@ namespace MonkeyPaste.Avalonia {
                     case MpMainWindowShowBehaviorType.Primary:
                     default:
                         // NOTE will need another monitor to build out non-primary display types
-                        int monitorIdx = MpPlatformWrapper.Services.ScreenInfoCollection.Screens.IndexOf(x => x.IsPrimary);
-                        _mainWindowScreen = monitorIdx < 0 ? null : MpPlatformWrapper.Services.ScreenInfoCollection.Screens.ElementAt(monitorIdx);
+                        int monitorIdx = MpPlatform.Services.ScreenInfoCollection.Screens.IndexOf(x => x.IsPrimary);
+                        _mainWindowScreen = monitorIdx < 0 ? null : MpPlatform.Services.ScreenInfoCollection.Screens.ElementAt(monitorIdx);
                         return monitorIdx;
                 }
             }
@@ -438,7 +438,7 @@ namespace MonkeyPaste.Avalonia {
                 //}
                 //return MpPlatformWrapper.Services.ScreenInfoCollection.Screens.ElementAt(MainWindowMonitorIdx);
                 if (_mainWindowScreen == null) {
-                    _mainWindowScreen = MpPlatformWrapper.Services.ScreenInfoCollection.Screens.ElementAt(MainWindowMonitorIdx);
+                    _mainWindowScreen = MpPlatform.Services.ScreenInfoCollection.Screens.ElementAt(MainWindowMonitorIdx);
                 }
                 return _mainWindowScreen;
             }
@@ -479,7 +479,7 @@ namespace MonkeyPaste.Avalonia {
 
             IsMainWindowLoading = false;
 
-            MpPlatformWrapper.Services.ClipboardMonitor.StartMonitor();
+            MpPlatform.Services.ClipboardMonitor.StartMonitor();
 
             SetupMainWindowSize();
             MainWindowScreenRect = MainWindowClosedScreenRect;
@@ -496,7 +496,7 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
-            MpAvQueryInfoViewModel.Current.RestoreProviderValues();
+            MpPlatform.Services.QueryInfo.RestoreProviderValues();
         }
 
         public void SetupMainWindowSize(bool isOrientationChange = false) {
@@ -702,7 +702,7 @@ namespace MonkeyPaste.Avalonia {
             
             MpConsole.WriteLine("CLOSE WINDOW DONE");
 
-            var active_info = MpPlatformWrapper.Services.ProcessWatcher.LastProcessInfo;
+            var active_info = MpPlatform.Services.ProcessWatcher.LastProcessInfo;
             MpConsole.WriteLine("Active: " + active_info);
         }
         private async Task AnimateMainWindowAsync(MpRect startRect, MpRect endRect) {

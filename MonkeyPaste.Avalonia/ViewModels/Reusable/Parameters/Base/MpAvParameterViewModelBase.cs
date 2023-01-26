@@ -322,7 +322,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public MpPluginPresetParameterValue PresetValueModel { get; set; }
+        public MpParameterValue PresetValueModel { get; set; }
 
         #endregion
 
@@ -407,7 +407,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public virtual async Task InitializeAsync(MpPluginPresetParameterValue aipv) {
+        public virtual async Task InitializeAsync(MpParameterValue aipv) {
             bool wasBusy = IsBusy;
             IsBusy = true;
 

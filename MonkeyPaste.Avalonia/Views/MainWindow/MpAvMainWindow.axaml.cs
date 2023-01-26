@@ -81,7 +81,11 @@ namespace MonkeyPaste.Avalonia {
 
             var sidebarSplitter = this.FindControl<GridSplitter>("SidebarGridSplitter");
             sidebarSplitter.DragDelta += SidebarSplitter_DragDelta;
+            
+            var advSearchSplitter = this.FindControl<GridSplitter>("AdvancedSearchSplitter");
+            advSearchSplitter.DragDelta += AdvSearchSplitter_DragDelta;
         }
+
 
 
         #endregion
@@ -185,11 +189,12 @@ namespace MonkeyPaste.Avalonia {
             var mwvm = MpAvMainWindowViewModel.Instance;
             var tmvm = MpAvMainWindowTitleMenuViewModel.Instance;
             var fmvm = MpAvFilterMenuViewModel.Instance;
-            var sbvm = MpAvSearchBoxViewModel.Instance;
+            var scicvm = MpAvSearchCriteriaItemCollectionViewModel.Instance;
 
             var mwcg = this.FindControl<Grid>("MainWindowContainerGrid");
             var tmv = this.FindControl<MpAvMainWindowTitleMenuView>("MainWindowTitleView");
             var fmv = this.FindControl<MpAvFilterMenuView>("FilterMenuView");
+            var sclbv_gs = this.FindControl<GridSplitter>("AdvancedSearchSplitter");
             var sclbv = this.FindControl<MpAvSearchCriteriaListBoxView>("SearchDetailView");
             var mwtg = this.FindControl<Grid>("MainWindowTrayGrid");
 
@@ -202,13 +207,13 @@ namespace MonkeyPaste.Avalonia {
 
             double resizer_short_side = 0;
 
-            var sclbv_rd = new RowDefinition(Math.Max(0, sbvm.SearchCriteriaListBoxHeight), GridUnitType.Pixel);
+            var sclbv_rd = new RowDefinition(Math.Max(0, scicvm.MaxSearchCriteriaListBoxHeight), GridUnitType.Pixel);
             sclbv_rd.Bind(
                 RowDefinition.HeightProperty,
                 new Binding() {
-                    Source = sbvm,
-                    Path = nameof(sbvm.SearchCriteriaListBoxHeight),
-                    Mode = BindingMode.OneWay,
+                    Source = scicvm,
+                    Path = nameof(scicvm.BoundCriteriaListBoxScreenHeight),
+                    Mode = BindingMode.TwoWay,
                     Converter = MpAvDoubleToGridLengthConverter.Instance
                 });
 
@@ -233,6 +238,7 @@ namespace MonkeyPaste.Avalonia {
                     mwcg.RowDefinitions.Add(tmv_rd);
 
                     Grid.SetRow(fmv, 0);
+                    Grid.SetRow(sclbv_gs, 1);
                     Grid.SetRow(sclbv, 1);
                     Grid.SetRow(mwtg, 2);
                     Grid.SetRow(tmv, 3);
@@ -247,6 +253,7 @@ namespace MonkeyPaste.Avalonia {
 
                     Grid.SetRow(tmv, 0);
                     Grid.SetRow(fmv, 1);
+                    Grid.SetRow(sclbv_gs, 2);
                     Grid.SetRow(sclbv, 2);
                     Grid.SetRow(mwtg, 3);
 
@@ -303,6 +310,8 @@ namespace MonkeyPaste.Avalonia {
 
                     Grid.SetRow(sclbv, 1);
                     Grid.SetColumn(sclbv, 0);
+                    Grid.SetRow(sclbv_gs, 1);
+                    Grid.SetColumn(sclbv_gs, 0);
 
                     Grid.SetRow(mwtg, 2);
                     Grid.SetColumn(mwtg, 0);
@@ -322,6 +331,8 @@ namespace MonkeyPaste.Avalonia {
 
                     Grid.SetRow(sclbv, 1);
                     Grid.SetColumn(sclbv, 1);
+                    Grid.SetRow(sclbv_gs, 1);
+                    Grid.SetColumn(sclbv_gs, 1);
 
                     Grid.SetRow(mwtg, 2);
                     Grid.SetColumn(mwtg, 1);
@@ -776,6 +787,10 @@ namespace MonkeyPaste.Avalonia {
             UpdateClipTrayContainerSize(e.Vector.ToPortablePoint());
         }
 
+        private void AdvSearchSplitter_DragDelta(object sender, VectorEventArgs e) {
+            MpAvSearchCriteriaItemCollectionViewModel.Instance
+                .BoundCriteriaListBoxScreenHeight += e.Vector.ToPortablePoint().Y;
+        }
         private void BoundsChangedHandler(AvaloniaPropertyChangedEventArgs<Rect> e) {
             var oldAndNewVals = e.GetOldAndNewValue<Rect>();
             MpAvMainWindowViewModel.Instance.LastMainWindowRect = oldAndNewVals.oldValue.ToPortableRect();

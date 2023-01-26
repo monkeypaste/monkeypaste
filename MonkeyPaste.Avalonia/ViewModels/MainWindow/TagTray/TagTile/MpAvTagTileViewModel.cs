@@ -124,14 +124,14 @@ namespace MonkeyPaste.Avalonia {
                         new MpMenuItemViewModel() {
                             Header = "Rename",
                             AltNavIdx = 0,
-                            IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("RenameImage") as string, //MpPlatformWrapper.Services.PlatformResource.GetResource("RenameIcon") as string,
+                            IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("RenameImage") as string, //MpPlatformWrapper.Services.PlatformResource.GetResource("RenameIcon") as string,
                             Command = RenameTagCommand,
                             IsVisible = RenameTagCommand.CanExecute(null)
                         },
                         new MpMenuItemViewModel() {
                             Header = "Assign Hotkey",
                             AltNavIdx = 0,
-                            IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("HotkeyImage") as string,
+                            IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("HotkeyImage") as string,
                             Command = AssignHotkeyCommand,
                             //ShortcutObjId = TagId,
                             //ShortcutType = MpShortcutType.SelectTag
@@ -140,7 +140,7 @@ namespace MonkeyPaste.Avalonia {
                         new MpMenuItemViewModel() {
                             Header = IsModelPinned ? "Unpin" : "Pin",
                             AltNavIdx = 0,
-                            IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("PinImage") as string,
+                            IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("PinImage") as string,
                             Command = Parent.ToggleTileIsPinnedCommand,
                             CommandParameter = this
                         },
@@ -152,7 +152,7 @@ namespace MonkeyPaste.Avalonia {
                         },
                         new MpMenuItemViewModel() {
                             Header = "Delete",
-                            IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("DeleteImage") as string,
+                            IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("DeleteImage") as string,
                             Command = DeleteThisTagCommand,
                             IsVisible = !IsTagReadOnly
                         }
@@ -211,18 +211,22 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool CanSelect => Parent != null && Parent.IsSelectionEnabled;
         public IEnumerable<int> LinkedCopyItemIds { get; private set; } = new List<int>();
         public ObservableCollection<int> CopyItemIdsNeedingView { get; set; } = new ObservableCollection<int>();
         public int BadgeCount => CopyItemIdsNeedingView.Count;
 
         public bool CanAddChild {
             get {
-                if(IsHelpTag) {
+                if(IsHelpTag || IsQueryTag) {
                     return false;
                 }
                 return true;
             }
         }
+
+        public bool CanLinkContent => IsLinkTag;
+
         public bool IsNew {
             get {
                 return Tag == null || Tag.Id <= 0;
@@ -252,59 +256,20 @@ namespace MonkeyPaste.Avalonia {
         public bool IsAllTag => TagId == MpTag.AllTagId;
         public bool IsFavoriteTag => TagId == MpTag.FavoritesTagId;
         public bool IsHelpTag => TagId == MpTag.HelpTagId;
+
+        public bool IsLinkTag => !IsQueryTag && !IsGroupTag && !IsHelpTag;
+        public bool IsQueryTag => TagType == MpTagType.Query;
+        public bool IsGroupTag => TagType == MpTagType.Group;
+
         public bool IsTagNameReadOnly { get; set; } = true;
         public bool IsTagNameTextBoxFocused { get; set; } = false;
         public bool? IsLinkedToSelectedClipTile { get; set; } = false;
 
+        public int TagClipCount { get; set; }
 
         #endregion
 
         #region Appearance
-        public double[] TagBorderDashArray {
-            get {
-                if (IsDragOverTag) {
-                    return new double[] { 2,2 };
-                }
-                return null;
-            }
-        }
-        public double TagBorderDashOffset {
-            get {
-                if(IsDragOverTag) {
-                    return 2;
-                }
-                return 0;
-            }
-        }
-
-        public string TagBorderBackgroundHexColor {
-            get { 
-                if (IsSelected) {
-                    return MpSystemColors.dimgray;
-                }
-                if(IsHovering) {
-                    return MpSystemColors.lightgray;
-                }
-                return MpSystemColors.Transparent;
-            }
-        }
-
-        public string TagBorderHexColor {
-            get {
-                if(IsDragOverTag) {
-                    if(IsDragOverTagValid) {
-                        return MpSystemColors.limegreen;
-                    }
-                    return MpSystemColors.red1;
-                }
-
-                if(IsContextMenuOpen) {
-                    return MpSystemColors.red1;
-                }
-                
-                return MpSystemColors.Transparent;
-            }
-        }
 
         public string TagTextHexColor {
             get {
@@ -323,34 +288,20 @@ namespace MonkeyPaste.Avalonia {
                 return MpSystemColors.White;
             }
         }
-
-        public string TagCountTextHexColor {
-            get {
-                return MpColorHelpers.IsBright(TagHexColor) ? MpSystemColors.black : MpSystemColors.White; ;
-            }
-        }
-
-        public int TagClipCount { get; set; }
-
-        public double TagHeight {
-            get {
-                //assumes Tag Margin is 5
-                return 20;// MpMeasurements.Instance.FilterMenuDefaultHeight - (5 * 2);
-            }
-        }
-
-        public double TagFontSize {
-            get {
-                return TagHeight * 0.5;
-            }
-        }
-
-        //public double TagTileTrayWidth { get; set; }
         public MpRect ObservedTagTrayBounds { get; set; }
 
         #endregion
 
         #region Model
+
+        public MpTagType TagType {
+            get {
+                if(Tag == null) {
+                    return MpTagType.None;
+                }
+                return Tag.TagType;
+            }
+        }
 
         public bool IsModelPinned {
             get {
@@ -359,14 +310,6 @@ namespace MonkeyPaste.Avalonia {
                 }
                 return Tag.PinSortIdx >= 0;
             }
-            //set {
-            //    if(IsModelPinned != value) {
-            //        Tag.IsPinned = value;
-            //        HasModelChanged = true;
-            //        OnPropertyChanged(nameof(IsModelPinned));
-            //        Parent.OnPropertyChanged(nameof(Parent.PinnedItems));
-            //    }
-            //}
         }
 
         public int ParentTagId {
@@ -536,15 +479,6 @@ namespace MonkeyPaste.Avalonia {
             await ttvm.InitializeAsync(tag);
             return ttvm;
         }
-
-        //public bool IsCopyItemLinked(int ciid) {
-        //    if (ciid == 0 || Tag == null || Tag.Id == 0) {
-        //        return false;
-        //    }
-        //    bool isLinked = MpDataModelProvider.IsTagLinkedWithCopyItem(Tag.Id, ciid);
-
-        //    return isLinked;
-        //}
 
         public async Task<bool> IsCopyItemLinkedAsync(int ciid) {
             if (ciid == 0 || Tag == null ||  Tag.Id == 0) {
@@ -917,14 +851,35 @@ namespace MonkeyPaste.Avalonia {
                 return !IsTagReadOnly;
             });
 
-        public ICommand AddNewChildTagCommand => new MpAsyncCommand(
-             async () => {
+        public ICommand AddNewChildTagCommand => new MpAsyncCommand<object>(
+             async (args) => {
+                 MpTag t = null;
+
                  if(!IsExpanded) {
                      IsExpanded = true;
                  }
-                 MpTag t = await MpTag.CreateAsync(
+                 MpTagType childTagType = TagType;
+                 if (args is MpTagType) {
+                     childTagType = (MpTagType)args;
+                 } else if (args is int pendingTagId) {
+                     if(pendingTagId <= 0) {
+                         // should be already saved
+                         Debugger.Break();
+                     } else {
+                         // added when pending query is confirmed
+                         t = await MpDataModelProvider.GetItemAsync<MpTag>(pendingTagId);
+                     }
+                 } else if (TagType == MpTagType.Group) {
+                     // need to make sure type is passed cause child type isn't clear
+                     Debugger.Break();
+                 }
+
+                 if(t == null) {
+                     t = await MpTag.CreateAsync(
                      parentTagId: Parent.SelectedItem.TagId,
-                     treeSortIdx: Parent.SelectedItem.Items.Count);
+                     treeSortIdx: Parent.SelectedItem.Items.Count,
+                     tagType: childTagType);
+                 }
 
                  MpAvTagTileViewModel ttvm = await CreateChildTagTileViewModel(t);
                  
@@ -934,7 +889,7 @@ namespace MonkeyPaste.Avalonia {
                  Parent.OnPropertyChanged(nameof(Parent.Items));
                  await Task.Delay(300);
                  ttvm.RenameTagCommand.Execute(null);
-             },() => CanAddChild);
+             },(args) => CanAddChild);
 
         public ICommand DeleteChildTagCommand => new MpAsyncCommand<object>(
             async (args) => {
@@ -963,6 +918,9 @@ namespace MonkeyPaste.Avalonia {
                     await LinkOrUnlinkCopyItemAsync((int)ciidArg, true);
                 });
             }, (ciidArg) => {
+                if(!CanLinkContent) {
+                    return false;
+                }
                 if (ciidArg is not int) {
                     return false;
                 }

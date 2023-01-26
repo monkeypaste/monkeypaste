@@ -32,6 +32,10 @@
             LightGray
         </Color>
 
+        <Color x:Key="DisabledBgColor">
+            Gainsboro
+        </Color>
+
         <Color x:Key="UnselectedBorderColor">
             Transparent
         </Color>
@@ -159,6 +163,10 @@
         <SolidColorBrush x:Key="DisabledTextFgBrush"
                          Color="{DynamicResource DisabledTextFgColor}"
                          Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+
+        <SolidColorBrush x:Key="DisabledBgBrush"
+                         Color="{DynamicResource DisabledBgColor}"
+                         Opacity="{DynamicResource GlobalDisabledOverlayOpacity}" />
 
         <!--  Invalid  -->
         <SolidColorBrush x:Key="DefaultInvalidBrush"

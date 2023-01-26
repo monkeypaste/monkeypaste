@@ -8,6 +8,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using MonkeyPaste.Common;
+using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvWrapper : MpIPlatformWrapper {
@@ -76,6 +77,11 @@ namespace MonkeyPaste.Avalonia {
                 }
                 if (Program.Args.Any(x => x.ToLower() == Program.RESET_DATA_ARG)) {
 
+                    // TODO! Change tagids:
+                    // RootGroudTagId=3
+                    // HelpTagId=4
+                    Debugger.Break();
+
                     // delete db, plugin cache, pref and pref.backup
                     MpFileIo.DeleteFile(DbInfo.DbPath);
 
@@ -89,8 +95,7 @@ namespace MonkeyPaste.Avalonia {
             
             await MpPrefViewModel.InitAsync(prefPath, DbInfo, OsInfo);
 
-            MpAvQueryInfoViewModel.Init(MpPrefViewModel.Instance.LastQueryInfoJson);
-            QueryInfo = MpAvQueryInfoViewModel.Current;
+            QueryInfo = MpAvQueryInfoViewModel.Parse(MpPrefViewModel.Instance.LastQueryInfoJson);
             ProcessWatcher = new MpAvProcessWatcherSelector().Watcher;
 
             IconBuilder = new MpAvIconBuilder().IconBuilder;

@@ -9,7 +9,7 @@ using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvPluginParameterValueLocator {
-        public static async Task<IEnumerable<MpPluginPresetParameterValue>> LocateValuesAsync(
+        public static async Task<IEnumerable<MpParameterValue>> LocateValuesAsync(
             MpParameterHostType hostType,
             int paramHostId,
             MpIParameterHostViewModel pluginHost) {
@@ -56,9 +56,9 @@ namespace MonkeyPaste.Avalonia {
                         paramVal = def_param_vals.Select(x=>x.value).ToList().ToCsv(paramFormat.CsvProps);
                     }
 
-                    var newPresetVal = await MpPluginPresetParameterValue.CreateAsync(
+                    var newPresetVal = await MpParameterValue.CreateAsync(
                         hostType: hostType,
-                        presetId: paramHostId,
+                        hostId: paramHostId,
                         paramId: paramFormat.paramId,
                         value: paramVal
                         //format: paramFormat

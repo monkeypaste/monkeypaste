@@ -32,7 +32,7 @@ namespace MonkeyPaste {
         #region Constructors
 
         public static void Init() {
-            _cursor = MpPlatformWrapper.Services.Cursor;
+            _cursor = MpPlatform.Services.Cursor;
         }
 
         #endregion

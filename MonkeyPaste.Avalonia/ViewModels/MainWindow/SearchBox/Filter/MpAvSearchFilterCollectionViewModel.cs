@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvSearchFilterCollectionViewModel : 
@@ -20,10 +22,32 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIQueryInfoProvider Implementation
 
+        async Task <IEnumerable<MpSearchCriteriaItem>> MpIQueryInfoValueProvider.SaveAsCriteriaItemsAsync(int tagId, int sortIdx) {
+            // NOTE this is called at end of provider create so sortIdx is seed for these
+            List<MpSearchCriteriaItem> items = new List<MpSearchCriteriaItem>();
+            foreach (var sfvm in Filters.Where(x => !x.IsSeperator && x.IsChecked.IsTrue())) {
+                var sci = await MpSearchCriteriaItem.CreateAsync(
+                    tagId: tagId,
+                    sortOrderIdx: sortIdx + items.Count,
+                    unitFlags: MpSearchCriteriaUnitFlags.Bit,
+                    criteriaType: sfvm.FilterType);
+
+                // all filters are bool values
+                string test = sfvm.FilterType.ToString();
+                MpParameterValue pv = await MpParameterValue.CreateAsync(
+                    hostType: MpParameterHostType.Query,
+                    paramId: 0,
+                    hostId: sci.Id,
+                    value: sfvm.IsChecked.IsTrue().ToString());
+
+                items.Add(sci);
+             }
+            return items;
+        }
         object MpIQueryInfoValueProvider.Source => this;
         string MpIQueryInfoValueProvider.SourcePropertyName => nameof(FilterType);
 
-        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpAvQueryInfoViewModel.Current.FilterFlags);
+        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpPlatform.Services.QueryInfo.FilterFlags);
 
         #endregion
 
@@ -164,7 +188,7 @@ namespace MonkeyPaste.Avalonia {
 
         public void Init() {
             OnPropertyChanged(nameof(Filters));
-            MpAvQueryInfoViewModel.Current.RegisterProvider(this);
+            MpPlatform.Services.QueryInfo.RegisterProvider(this);
 
             ValidateFilters();
             foreach (var sfvm in Filters.Where(x => !x.IsSeperator)) {

@@ -115,7 +115,7 @@ namespace MonkeyPaste.Avalonia {
                     return uris.Uri;
                 } else if (SourceRef != null) {
                     // for copyitem's use localhost handle
-                    return MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(SourceRef);
+                    return MpPlatform.Services.SourceRefBuilder.ConvertToRefUrl(SourceRef);
                 }
                 return string.Empty;
             }

@@ -66,6 +66,7 @@
     <Compile Remove="Models\MpColor.cs" />
     <Compile Remove="Models\MpDllTransaction.cs" />
     <Compile Remove="Models\MpHttpTransaction.cs" />
+    <Compile Remove="Models\MpUserSearch.cs" />
     <Compile Remove="MpResolver.cs" />
     <Compile Remove="Utils\MpJsMessageListener.cs" />
     <Compile Remove="Utils\MpSingleton.cs" />

@@ -131,7 +131,7 @@ namespace MonkeyPaste {
             for (int i = cur_idx; i < response.userNotifications.Count; i++) {
                 var nf = response.userNotifications[i];
                 nf.FixCommand = new MpCommand(() => {
-                    MpPlatformWrapper.Services.NativeMessageBox.ShowOkCancelMessageBoxAsync("test", "Fix me");
+                    MpPlatform.Services.NativeMessageBox.ShowOkCancelMessageBoxAsync("test", "Fix me");
                 });
 
                 var result = await MpNotificationBuilder.ShowNotificationAsync(nf);
@@ -158,14 +158,14 @@ namespace MonkeyPaste {
 
             var pp = sourceHandler as MpPluginPreset;
 
-            MpPlatformWrapper.Services.TransactionBuilder.PerformTransactionAsync(
+            MpPlatform.Services.TransactionBuilder.PerformTransactionAsync(
                         copyItemId: sourceCopyItem.Id,
                         reqType: MpJsonMessageFormatType.ParameterRequest,
                         req: trans.Request.SerializeJsonObject(),
                         respType: MpJsonMessageFormatType.Error,
                         resp: ex.Message,
                         ref_urls: new[] { 
-                            MpPlatformWrapper.Services.SourceRefBuilder.ConvertToRefUrl(pp, trans.Request.SerializeJsonObjectToBase64()) 
+                            MpPlatform.Services.SourceRefBuilder.ConvertToRefUrl(pp, trans.Request.SerializeJsonObjectToBase64()) 
                         },
                         label: "Error").FireAndForgetSafeAsync();
 
