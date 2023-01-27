@@ -11,7 +11,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvSearchFilterViewModel : MpViewModelBase<MpAvSearchFilterCollectionViewModel> {
         #region Private Variables
 
-        private MpContentFilterType _filterType = MpContentFilterType.None;
+        private MpContentQueryBitFlags _filterType = MpContentQueryBitFlags.None;
 
         #endregion
 
@@ -50,9 +50,9 @@ namespace MonkeyPaste.Avalonia {
 
         public string PreferenceName { get; set; }
 
-        public MpContentFilterType FilterType => _filterType;
+        public MpContentQueryBitFlags FilterType => _filterType;
 
-        public MpContentFilterType FilterValue => IsChecked.IsTrue() ? _filterType : MpContentFilterType.None;
+        public MpContentQueryBitFlags FilterValue => IsChecked.IsTrue() ? _filterType : MpContentQueryBitFlags.None;
 
         #endregion
 
@@ -66,7 +66,7 @@ namespace MonkeyPaste.Avalonia {
             IsSeperator = isSeperator;
         }
 
-        public MpAvSearchFilterViewModel(MpAvSearchFilterCollectionViewModel parent, string label, string prefName, MpContentFilterType filterType) : base(parent) {
+        public MpAvSearchFilterViewModel(MpAvSearchFilterCollectionViewModel parent, string label, string prefName, MpContentQueryBitFlags filterType) : base(parent) {
             PropertyChanged += MpSearchFilterViewModel_PropertyChanged;
             _filterType = filterType;
             Label = label;

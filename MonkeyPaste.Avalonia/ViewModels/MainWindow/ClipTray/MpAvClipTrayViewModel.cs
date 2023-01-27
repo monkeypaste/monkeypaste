@@ -920,7 +920,22 @@ namespace MonkeyPaste.Avalonia {
 
         public int CurGridFixedCount { get; set; }
 
-        public MpClipTrayLayoutType LayoutType { get; set; } = MpClipTrayLayoutType.Stack;
+        private MpClipTrayLayoutType? _layoutType;
+        public MpClipTrayLayoutType LayoutType { 
+            get {
+                if(_layoutType == null) {
+                    _layoutType = MpPrefViewModel.Instance.ClipTrayLayoutTypeName.ToEnum<MpClipTrayLayoutType>();
+                }
+                return _layoutType.Value;
+            }
+            set {
+                if(LayoutType != value) {
+                    _layoutType = value;
+                    MpPrefViewModel.Instance.ClipTrayLayoutTypeName = value.ToString();
+                    OnPropertyChanged(nameof(LayoutType));
+                }
+            }
+        }
 
         #endregion
 
@@ -1149,7 +1164,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsScrollingIntoView { get; set; }
 
-        public bool IsGridLayout { get; set; }        
+        public bool IsGridLayout { get; set; }
 
         public bool IsRequery { get; set; } = false;
 
@@ -1215,15 +1230,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
-        public async Task InitAsync() {
+        public async Task InitializeAsync() {
             LogPropertyChangedEvents = false;
 
             IsBusy = true;
-
-            //while (MpAvSourceCollectionViewModel.Instance.IsAnyBusy) {
-            //    await Task.Delay(100);
-            //}
-
             PropertyChanged += MpAvClipTrayViewModel_PropertyChanged;
 
             Items.CollectionChanged += Items_CollectionChanged;
@@ -1249,8 +1259,7 @@ namespace MonkeyPaste.Avalonia {
             //    await ci.WriteToDatabaseAsync();
             //}
 
-            //OnPropertyChanged(nameof(Items));
-
+            IsGridLayout = LayoutType == MpClipTrayLayoutType.Grid;
             IsBusy = false;
         }
 
@@ -1975,7 +1984,6 @@ namespace MonkeyPaste.Avalonia {
                         CheckLoadMore();
                     }
                     break;
-
                 // MAIN WINDOW SIZE
                 case MpMessageType.MainWindowSizeChangeBegin:
                     SetScrollAnchor();

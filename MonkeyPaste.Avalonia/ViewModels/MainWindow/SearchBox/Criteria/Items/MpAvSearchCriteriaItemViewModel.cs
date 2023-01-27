@@ -2,162 +2,26 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Gtk;
+using Avalonia.Controls;
+using Avalonia.Threading;
 using MonkeyPaste;
 using MonkeyPaste.Common;
+using MonoMac.Darwin;
+
 namespace MonkeyPaste.Avalonia {
 
-
-    #region Option Enums
-
-    public enum MpRootOptionType {
-        None = 0,
-        Content,
-        ContentType,
-        Collection,
-        Source,
-        DateOrTime
-    }
-
-    public enum MpContentOptionType {
-        None = 0,
-        AnyText,
-        TypeSpecific,
-        Title
-    }
-
-    public enum MpContentTypeOptionType {
-        None = 0,
-        Text,
-        Image,
-        Files
-    }
-
-    public enum MpSourceOptionType {
-        None = 0,
-        Device,
-        App,
-        Website
-    }
-
-    public enum MpAppOptionType {
-        None = 0,
-        ApplicationName,
-        ProcessPath
-    }
-
-    public enum MpWebsiteOptionType {
-        None = 0,
-        Url,
-        Domain,
-        Title
-    }
-
-    public enum MpDateTimeTypeOptionType {
-        None = 0,
-        Created,
-        Modified,
-        Pasted
-    }
-
-    public enum MpDateTimeOptionType {
-        None = 0,
-        WithinLast,
-        Before,
-        After,
-        Exact
-    }
-
-    public enum MpFileContentOptionType {
-        None = 0,
-        Path,
-        Name,
-        Kind
-    }
-
-    public enum MpFileOptionType {
-        None = 0,
-        Document,
-        Image,
-        Video,
-        Spreadsheet,
-        Custom
-    }
-
-    public enum MpTextOptionType {
-        None = 0,
-        Matches,
-        Contains,
-        BeginsWith,
-        EndsWith,
-        RegEx
-    }
-
-    public enum MpImageOptionType {
-        None = 0,
-        Dimensions,
-        Format,
-        Description,
-        Color
-    }
-
-    public enum MpNumberOptionType {
-        None = 0,
-        Equals,
-        GreaterThan,
-        LessThan,
-        IsNot
-    }
-
-    public enum MpDimensionOptionType {
-        None = 0,
-        Width,
-        Height
-    }
-
-    public enum MpColorOptionType {
-        None = 0,
-        Hex,
-        RGBA
-    }
-
-    public enum MpTimeSpanWithinUnitType {
-        None = 0,
-        Hours,
-        Days,
-        Weeks,
-        Months,
-        Years
-    }
-
-    public enum MpDateBeforeUnitType {
-        None = 0,
-        Today,
-        Yesterday,
-        ThisWeek,
-        ThisMonth,
-        ThisYear,
-        Exact
-    }
-
-    public enum MpDateAfterUnitType {
-        None = 0,
-        Yesterday,
-        LastWeek,
-        LastMonth,
-        LastYear,
-        Exact
-    }
-
-    #endregion
-
-    public class MpAvSearchCriteriaItemViewModel : MpViewModelBase<MpAvSearchCriteriaItemCollectionViewModel> {
+    public class MpAvSearchCriteriaItemViewModel : 
+        MpViewModelBase<MpAvSearchCriteriaItemCollectionViewModel>,
+        MpIQueryInfo,
+        MpIQueryInfoValueProvider {
         #region Private Variables
-        private List<string> _deviceNames;
+        
+        private List<int> _allQueryCopyItemIds { get; set; } = new List<int>();
 
         #endregion
 
@@ -166,24 +30,268 @@ namespace MonkeyPaste.Avalonia {
         public const string DEFAULT_OPTION_LABEL = " - Please Select - ";
         #endregion
 
+        #region Statics
+
+        public static IEnumerable<Tuple<Enum, int>> GetContentFilterOptionPath(MpContentQueryBitFlags cft) {
+            // 1: Option Enum
+            // 2: Selected Option Idx
+
+            switch (cft) {
+                case MpContentQueryBitFlags.Content:
+
+                    break;
+            }
+            return null;
+        }
+
+        #endregion
+
         #region Interfaces
+
+        #region MpIQueryInfoValueProvider Implementation
+        public object Source { get; }
+        public string SourcePropertyName { get; }
+        public string QueryValueName { get; }
+
+        #endregion
+
+        #region MpIQueryInfo Implementation
+
+        IEnumerable<MpIQueryInfoValueProvider> MpIQueryInfo.Providers => 
+            new[] { this };
+        int MpIQueryInfo.TotalAvailableItemsInQuery => 
+            _allQueryCopyItemIds.Count;
+        bool MpIQueryInfo.IsDescending =>
+            MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending;
+        MpContentSortType MpIQueryInfo.SortType =>
+            MpAvClipTileSortFieldViewModel.Instance.SelectedSortType;
+        int MpIQueryInfo.TagId {
+            get {
+                int tag_id = MpTag.AllTagId;
+
+                var tag_opts =
+                    RootOptionViewModel
+                    .SelfAndAllDescendants()
+                    .Cast<MpAvSearchCriteriaOptionViewModel>()
+                    .Where(x => x.FilterValue.HasFlag(MpContentQueryBitFlags.Tag))
+                    .ToList();
+                if(tag_opts.Count > 0) {
+                    if(tag_opts.Count > 1) {
+                        // how are there 2?
+                        Debugger.Break();
+                    }
+                    try {
+                        tag_id = int.Parse(tag_opts.FirstOrDefault().Value);
+                    } catch(Exception ex) {
+                        Debugger.Break();
+                        MpConsole.WriteTraceLine("Error parsing tag id", ex);
+                    }
+                }
+                return tag_id;
+            }
+        }
+        string MpIQueryInfo.SearchText {
+            get {
+                string st = string.Empty;
+
+                var match_val_opts =
+                    RootOptionViewModel
+                    .SelfAndAllDescendants()
+                    .Cast<MpAvSearchCriteriaOptionViewModel>()
+                    .Where(x => x.FilterValue.HasFlag(MpContentQueryBitFlags.MatchValue))
+                    .ToList();
+                if (match_val_opts.Count > 0) {
+                    if (match_val_opts.Count > 1) {
+                        // how are there 2?
+                        Debugger.Break();
+                    }
+                    st = match_val_opts.FirstOrDefault().Value;
+                }
+                return st;
+            }
+        }
+
+        MpContentQueryBitFlags MpIQueryInfo.FilterFlags { 
+            get {
+                return
+                    RootOptionViewModel
+                    .SelfAndAllDescendants()
+                    .Cast<MpAvSearchCriteriaOptionViewModel>()
+                    .Select(x=>x.FilterValue)
+                    .Aggregate((a, b) => a | b);
+            }        
+        }
+
+        // TODO need to update contentQuerier to use text flags or probably build off for advanced and use there
+        MpTextQueryType MpIQueryInfo.TextFlags => MpTextQueryType.None;
+        MpDateTimeQueryType MpIQueryInfo.TimeFlags { 
+            get {
+                MpDateTimeQueryType tfft = MpDateTimeQueryType.None;
+
+                var time_opts =
+                    RootOptionViewModel
+                    .SelfAndAllDescendants()
+                    .Cast<MpAvSearchCriteriaOptionViewModel>()
+                    .Where(x => x.FilterValue.HasFlag(MpContentQueryBitFlags.DateTimeRange) ||
+                                x.FilterValue.HasFlag(MpContentQueryBitFlags.DateTime))
+                    .ToList();
+
+                if (time_opts.Count > 0) {
+                    if (time_opts.Count > 1) {
+                        // how are there 2?
+                        Debugger.Break();
+                    }
+                    var time_opt_vm = time_opts.FirstOrDefault();
+                    MpDateTimeOptionType sel_opt = (MpDateTimeOptionType)
+                        time_opt_vm.Parent.Items.IndexOf(time_opt_vm);
+                    switch(sel_opt) {
+                        case MpDateTimeOptionType.Before:
+                            tfft = MpDateTimeQueryType.Before;
+                            break;
+                        case MpDateTimeOptionType.After:
+                            tfft = MpDateTimeQueryType.After;
+                            break;
+                        case MpDateTimeOptionType.WithinLast:
+                            tfft = MpDateTimeQueryType.Between;
+                            break;
+                        case MpDateTimeOptionType.Exact:
+                            tfft = MpDateTimeQueryType.Between;
+                            break;
+
+                    }
+                }
+                return tfft;
+            }
+        }
+                
+
+        MpIQueryInfo MpIQueryInfo.Next { 
+            get {
+                /*
+                Join Notes:
+                    Although it’s not obvious, you can also 
+                    use Boolean search terms to set up a Finder 
+                    search—to exclude criteria or to create an OR search. 
+                    Once you have one condition set up, you can add a Boolean 
+                    term to your next condition by option-clicking on 
+                    the plus sign. The plus sign will turn into an ellipsis (…), 
+                    and you’ll get a new pull-down menu with options for Any (OR), 
+                    All (AND), or None (NOT). (For more details, see Add conditions 
+                    to Finder searches) from https://www.macworld.com/article/189989/spotlight3.html
+                */
+                if (Parent == null) {
+                    return null;
+                }
+                if(SortOrderIdx < Parent.Items.Count - 1) {
+                    return Parent.SortedItems.ElementAt(SortOrderIdx + 1);
+                }
+                return null;
+                
+            }
+        }
+
+        void MpIQueryInfo.RestoreProviderValues() {
+            throw new NotImplementedException();
+        }
+
+        void MpIQueryInfo.RegisterProvider(MpIQueryInfoValueProvider provider) {
+            throw new NotImplementedException();
+        }
+
+        async Task<List<MpCopyItem>> MpIQueryInfo.FetchIdsByQueryIdxListAsync(List<int> copyItemQueryIdxList) {
+            var fetchRootIds = _allQueryCopyItemIds
+                                .Select((val, idx) => (val, idx))
+                                .Where(x => copyItemQueryIdxList.Contains(x.idx))
+                                .Select(x => x.val).ToList();
+            var items = await MpDataModelProvider.GetCopyItemsByIdListAsync(fetchRootIds);
+            return items;
+        }
+
+        async Task MpIQueryInfo.QueryForTotalCountAsync(IEnumerable<int> ci_idsToOmit, IEnumerable<int> tagIds) {
+            var result = await MpContentQuery.QueryAllAsync(this, tagIds, ci_idsToOmit);
+            _allQueryCopyItemIds.Clear();
+            _allQueryCopyItemIds.AddRange(result);
+        }
+
+        public void NotifyQueryChanged(bool forceRequery = false) {
+            Dispatcher.UIThread.Post(async () => {
+                // NOTE unlike query vm this treats forceRequery as required since value providers are internal i dunno
+
+                if(forceRequery) {
+                    _allQueryCopyItemIds.Clear();
+                    MpMessenger.SendGlobal(MpMessageType.QueryChanged);
+                } else {
+                    MpMessenger.SendGlobal(MpMessageType.SubQueryChanged);
+                }
+
+            });
+        }
+
+
+        #region MpIDbIdCollection
+
+        public int GetItemId(int queryIdx) {
+            if (queryIdx < 0 || queryIdx >= _allQueryCopyItemIds.Count) {
+                return -1;
+            }
+            return _allQueryCopyItemIds[queryIdx];
+        }
+
+        public int GetItemOffsetIdx(int itemId) {
+            return _allQueryCopyItemIds.IndexOf(itemId);
+        }
+
+        public void InsertId(int idx, int id) {
+            if (idx < 0 || idx > _allQueryCopyItemIds.Count) {
+                // bad idx
+                Debugger.Break();
+                return;
+            }
+            if (idx == _allQueryCopyItemIds.Count) {
+                _allQueryCopyItemIds.Add(id);
+            } else {
+                _allQueryCopyItemIds.Insert(idx, id);
+            }
+        }
+        public bool RemoveItemId(int itemId) {
+            bool was_removed = _allQueryCopyItemIds.Remove(itemId);
+            return was_removed;
+        }
+        public bool RemoveIdx(int queryIdx) {
+            if (queryIdx < 0 || queryIdx >= _allQueryCopyItemIds.Count) {
+                return false;
+            }
+            _allQueryCopyItemIds.RemoveAt(queryIdx);
+            return true;
+        }
+
+        public string SerializeJsonObject() {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #endregion
+
+
         #endregion
 
         #region Properties
 
         #region ViewModels
 
-        private ObservableCollection<MpAvSearchCriteriaOptionViewModel> _selectedOptions;
-        public ObservableCollection<MpAvSearchCriteriaOptionViewModel> SelectedOptions {
+        public MpAvSearchCriteriaOptionViewModel RootOptionViewModel { get; private set; }
+
+        private ObservableCollection<MpAvSearchCriteriaOptionViewModel> _items;
+        public ObservableCollection<MpAvSearchCriteriaOptionViewModel> Items {
             get {
-                if(_selectedOptions == null) {
-                    _selectedOptions = new ObservableCollection<MpAvSearchCriteriaOptionViewModel>();
+                if(_items == null) {
+                    _items = new ObservableCollection<MpAvSearchCriteriaOptionViewModel>();
                 }
-               // var tsovml = new ObservableCollection<MpAvSearchCriteriaOptionViewModel>();
-                _selectedOptions.Clear();
+                _items.Clear();
                 var node = RootOptionViewModel;
                 while(node != null) {
-                    _selectedOptions.Add(node);
+                    _items.Add(node);
                     int selIdx = node.Items.IndexOf(node.SelectedItem);
                     if(selIdx <= 0 || !node.HasChildren) {
                         break;
@@ -191,9 +299,10 @@ namespace MonkeyPaste.Avalonia {
                     node = node.SelectedItem;
                 }              
                 
-                return _selectedOptions;
+                return _items;
             }
         }
+
 
         #region Options
 
@@ -436,9 +545,12 @@ namespace MonkeyPaste.Avalonia {
         #region Source Options
 
         public ObservableCollection<MpAvSearchCriteriaOptionViewModel> GetDeviceOptionViewModel(MpAvSearchCriteriaOptionViewModel parent) {
+            if (Parent == null) {
+                return null;
+            }
             var iovml = new List<MpAvSearchCriteriaOptionViewModel>();
-            
-            string[] labels = _deviceNames.ToArray();
+
+            string[] labels = Parent.UserDevices.Select(x=>x.MachineName).ToArray();
 
             for (int i = 0; i < labels.Length; i++) {
                 var ovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
@@ -666,7 +778,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        public MpAvSearchCriteriaOptionViewModel RootOptionViewModel { get; set; }
 
         #endregion
 
@@ -682,15 +793,25 @@ namespace MonkeyPaste.Avalonia {
         public bool CanSetCaseSensitive { get; set; } = false;
 
         public bool IsInputVisible => 
-            !SelectedOptions[SelectedOptions.Count - 1].HasChildren && 
-            !SelectedOptions[SelectedOptions.Count - 1].UnitType.HasFlag(MpSearchCriteriaUnitFlags.EnumerableValue);
+            !Items[Items.Count - 1].HasChildren && 
+            !Items[Items.Count - 1].UnitType.HasFlag(MpSearchCriteriaUnitFlags.EnumerableValue);
 
-        public bool IsSelected { get; set; } = false;
+        public bool IsSelected { 
+            get {
+                if(Parent == null) {
+                    return false;
+                }
+                return Parent.SelectedItem == this;
+            }
+        }
 
+        #endregion
+
+        #region Model
 
         public int SortOrderIdx {
             get {
-                if(SearchCriteriaItem == null) {
+                if (SearchCriteriaItem == null) {
                     return 0;
                 }
                 return SearchCriteriaItem.SortOrderIdx;
@@ -704,13 +825,43 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        #endregion
+        public int SearchCriteriaItemId {
+            get {
+                if (SearchCriteriaItem == null) {
+                    return 0;
+                }
+                return SearchCriteriaItem.Id;
+            }
+        }
 
-        #region Model
+        public string SearchOptions {
+            get {
+                if(SearchCriteriaItem == null) {
+                    return null;
+                }
+                return SearchCriteriaItem.Options;
+            }
+        }
 
-        
+
+        public MpLogicalQueryType PrevJoinType { 
+            get {
+                if(SearchCriteriaItem == null) {
+                    return MpLogicalQueryType.None;
+                }
+                return SearchCriteriaItem.PrevJoinType;
+            }
+            set {
+                if(PrevJoinType != value) {
+                    SearchCriteriaItem.PrevJoinType = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(PrevJoinType));
+                }
+            }        
+        } 
 
         public MpSearchCriteriaItem SearchCriteriaItem { get; set; }
+
 
         #endregion
 
@@ -729,18 +880,51 @@ namespace MonkeyPaste.Avalonia {
 
             SearchCriteriaItem = sci;
 
-            var dl = await MpDataModelProvider.GetItemsAsync<MpUserDevice>();
-            _deviceNames = dl.Select(x => x.MachineName).ToList();
+            RootOptionViewModel = await CreateRootOptionViewModelAsync(SearchOptions);
 
-            RootOptionViewModel = GetRootOption();
-            OnPropertyChanged(nameof(SelectedOptions));
+            OnPropertyChanged(nameof(Items));
 
             IsBusy = false;
+        }
+
+        public void NotifyValueChanged() {
+            //MpPlatform.Services.QueryInfo.
+            NotifyQueryChanged(true);
         }
 
         #endregion
 
         #region Private Methods
+
+        private async Task<MpAvSearchCriteriaOptionViewModel> CreateRootOptionViewModelAsync(string options) {
+            var root_opt_vm = GetRootOption();
+            if(string.IsNullOrWhiteSpace(options)) {
+                return root_opt_vm;
+            }
+            var cur_opt = root_opt_vm;
+            var path_parts = options.SplitNoEmpty(",");
+            for (int i = 0; i < path_parts.Length; i++) {
+                if(cur_opt == null) {
+                    // whats the option string? null should only be on last idx
+                    Debugger.Break();
+                    return GetRootOption();
+                }
+                string path_part = path_parts[i];
+                try {
+                    await cur_opt.InitializeAsync(path_part, i);
+                }catch(Exception ex) {
+                    MpConsole.WriteTraceLine($"Criteria item id: {SearchCriteriaItemId} error. ex: ", ex);
+                    return GetRootOption();
+                }
+                cur_opt = cur_opt.SelectedItem;
+            }
+
+            while(root_opt_vm.IsAnyBusy) {
+                await Task.Delay(100);
+            }
+            return root_opt_vm;
+        }
+
         
 
         private void MpAvSearchCriteriaItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
@@ -774,6 +958,9 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 Parent.RemoveSearchCriteriaItemCommand.Execute(this);
             },()=>Parent != null);
+
+
+
 
 
 

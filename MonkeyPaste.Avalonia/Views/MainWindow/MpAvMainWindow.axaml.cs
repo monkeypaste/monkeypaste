@@ -207,7 +207,7 @@ namespace MonkeyPaste.Avalonia {
 
             double resizer_short_side = 0;
 
-            var sclbv_rd = new RowDefinition(Math.Max(0, scicvm.MaxSearchCriteriaListBoxHeight), GridUnitType.Pixel);
+            var sclbv_rd = new RowDefinition(Math.Max(0, scicvm.BoundCriteriaListBoxScreenHeight), GridUnitType.Pixel);
             sclbv_rd.Bind(
                 RowDefinition.HeightProperty,
                 new Binding() {
@@ -215,6 +215,12 @@ namespace MonkeyPaste.Avalonia {
                     Path = nameof(scicvm.BoundCriteriaListBoxScreenHeight),
                     Mode = BindingMode.TwoWay,
                     Converter = MpAvDoubleToGridLengthConverter.Instance
+                });            
+            sclbv_rd.Bind(
+                RowDefinition.MaxHeightProperty,
+                new Binding() {
+                    Source = scicvm,
+                    Path = nameof(scicvm.MaxSearchCriteriaListBoxHeight)
                 });
 
             mwcg.ColumnDefinitions.Clear();

@@ -32,6 +32,7 @@ namespace MonkeyPaste {
         [JsonIgnore]
         public const string PREF_BACKUP_PATH_EXT = "backup";
         #endregion
+
         #region Statics
         //[JsonIgnore]
         //public const string PREFERENCES_FILE_NAME = "Pref.json";
@@ -325,9 +326,9 @@ namespace MonkeyPaste {
 
         
         public bool ShowMainWindowOnDragToScreenTop { get; set; } = true;
-
-
         public bool IgnoreInternalClipboardChanges { get; set; } = true;
+
+        public string ClipTrayLayoutTypeName { get; set; } = MpClipTrayLayoutType.Stack.ToString();
 
         #region Encrytion
 

@@ -379,8 +379,9 @@ namespace MonkeyPaste.Common {
             return fallbackBase64Str;
         }
 
-       
 
+
+        #region Enums
 
         public static TEnum ToEnum<TEnum>(this object obj, bool ignoreCase = true, TEnum notFoundValue = default) where TEnum: struct {
             if(obj != null) {
@@ -403,6 +404,53 @@ namespace MonkeyPaste.Common {
             return notFoundValue;
         }
         
+        public static TEnum ToEnumFlags<TEnum>(this string csvStr, bool ignoreCase = true, MpCsvFormatProperties csvProps = null, TEnum notFoundValue = default) where TEnum: struct {
+            if(string.IsNullOrEmpty(csvStr)) {
+                return notFoundValue;
+            }
+            csvProps = csvProps == null ? MpCsvFormatProperties.Default : csvProps;
+
+            try {
+                if(csvStr.ToListFromCsv(csvProps) is List<string> valueNames) {
+                    long resultVal = default;
+                    foreach(string valueName in valueNames) {
+                        if (Enum.TryParse<TEnum>(valueName, ignoreCase, out TEnum cur_result)) {
+                            if(cur_result is long cur_val) {
+                                resultVal |= cur_val;
+                            }
+                        }
+                    }
+                    return resultVal.ToEnum(ignoreCase, notFoundValue);
+                } 
+                
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine(ex);
+            }
+            return notFoundValue;
+        }
+
+        public static string ToFlagNamesCsvString<TEnum>(this TEnum flagEnum, MpCsvFormatProperties csvProps = null) where TEnum: struct {
+            csvProps = csvProps == null ? MpCsvFormatProperties.Default : csvProps;
+            List<string> flagNames = new List<string>();
+            //var eobj = Enum.ToObject(typeof(TEnum), flagEnum);
+            //if (eobj == null) {
+            //    return string.Empty;
+            //}
+            if (typeof(TEnum).GetCustomAttributes(typeof(FlagsAttribute), false).Length == 0) {
+                flagNames.Add(flagEnum.ToString());
+            } else {
+                foreach(string curName in typeof(TEnum).GetEnumNames()) {
+                    if (Enum.TryParse(curName, false, out TEnum curEnum)) {
+                        flagNames.Add(curName);
+                    }
+                }
+            }
+            return flagNames.ToCsv(csvProps);
+        }
+
+        #endregion
+
 
         public static string RemoveSpecialCharacters(this string str) {
             //return Regex.Replace(str, "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled);

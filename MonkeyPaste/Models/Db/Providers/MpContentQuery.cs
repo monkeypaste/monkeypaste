@@ -38,14 +38,14 @@ namespace MonkeyPaste {
                 if (totalIds == null) {
                     totalIds = qi_result.ToList();
                 } else if (prev_qi != null) {
-                    if(prev_qi.NextJoinType == MpLogicalFilterFlagType.And) {
+                    if(prev_qi.PrevJoinType == MpLogicalQueryType.And) {
                         // only allow results if both this and previous had match
                         totalIds = totalIds.Where(x => qi_result.Contains(x)).ToList();
                     } else {
                         // compound results
                         totalIds.AddRange(qi_result);
-                        totalIds.Distinct();
                     }
+                    totalIds.Distinct();
                 }
             }
             return totalIds.Where(x => !ci_idsToOmit.Contains(x)).ToList();
@@ -79,9 +79,9 @@ namespace MonkeyPaste {
             if (!string.IsNullOrEmpty(qi.SearchText)) {
                 string searchOp = "like";
                 string escapeStr = "";
-                if (qi.FilterFlags.HasFlag(MpContentFilterType.CaseSensitive)) {
+                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.CaseSensitive)) {
                     searchOp = "=";
-                } else if (qi.FilterFlags.HasFlag(MpContentFilterType.Regex)) {
+                } else if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.Regex)) {
                     searchOp = "REGEXP";
                 } else {
                     escapeStr = "%";
@@ -96,38 +96,38 @@ namespace MonkeyPaste {
                 if (searchText.Contains("'")) {
                     searchText = searchText.Replace("'", "''");
                 }
-                if (qi.FilterFlags.HasFlag(MpContentFilterType.Title)) {
+                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.Title)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("Title"), searchOp, escapeStr, searchText, escapeClause));
                 }
-                if (qi.FilterFlags.HasFlag(MpContentFilterType.Content)) {
+                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.Content)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("ItemData"), searchOp, escapeStr, searchText, escapeClause));
                 }
-                if (qi.FilterFlags.HasFlag(MpContentFilterType.Url)) {
+                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.Url)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("UrlPath"), searchOp, escapeStr, searchText, escapeClause));
                 }
-                if (qi.FilterFlags.HasFlag(MpContentFilterType.UrlTitle)) {
+                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.UrlTitle)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("UrlTitle"), searchOp, escapeStr, searchText, escapeClause));
                 }
-                if (qi.FilterFlags.HasFlag(MpContentFilterType.AppName)) {
+                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.AppName)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("AppName"), searchOp, escapeStr, searchText, escapeClause));
                 }
-                if (qi.FilterFlags.HasFlag(MpContentFilterType.AppPath)) {
+                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.AppPath)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("AppPath"), searchOp, escapeStr, searchText, escapeClause));
                 }
-                if (qi.FilterFlags.HasFlag(MpContentFilterType.Meta)) {
+                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.Meta)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("ItemMetaData"), searchOp, escapeStr, searchText, escapeClause));
                 }
-                if (qi.FilterFlags.HasFlag(MpContentFilterType.DeviceName)) {
+                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.DeviceName)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("DeviceName"), searchOp, escapeStr, searchText, escapeClause));
                 }
-                if (qi.FilterFlags.HasFlag(MpContentFilterType.DeviceType)) {
+                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.DeviceType)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("DeviceType"), searchOp, escapeStr, searchText, escapeClause));
                 }
 
-                if (qi.FilterFlags.HasFlag(MpContentFilterType.Time)) {
-                    if (qi.TimeFlags.HasFlag(MpTimeFilterFlagType.After)) {
+                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.Time)) {
+                    if (qi.TimeFlags.HasFlag(MpDateTimeQueryType.After)) {
                         searchOp = ">";
-                    } else if (qi.TimeFlags.HasFlag(MpTimeFilterFlagType.Before)) {
+                    } else if (qi.TimeFlags.HasFlag(MpDateTimeQueryType.Before)) {
                         searchOp = "<";
                     } else {
                         searchOp = "=";
@@ -136,13 +136,13 @@ namespace MonkeyPaste {
                     filters.Add(string.Format(@"{0} {1} {2}", CaseFormat("CopyDateTime"), searchOp, searchText));
                 }
             }
-            if (qi.FilterFlags.HasFlag(MpContentFilterType.TextType)) {
+            if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.TextType)) {
                 types.Add(string.Format(@"e_MpCopyItemType='{0}'", MpCopyItemType.Text.ToString()));
             }
-            if (qi.FilterFlags.HasFlag(MpContentFilterType.FileType)) {
+            if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.FileType)) {
                 types.Add(string.Format(@"e_MpCopyItemType='{0}'", MpCopyItemType.FileList.ToString()));
             }
-            if (qi.FilterFlags.HasFlag(MpContentFilterType.ImageType)) {
+            if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.ImageType)) {
                 types.Add(string.Format(@"e_MpCopyItemType='{0}'", MpCopyItemType.Image.ToString()));
             }
 

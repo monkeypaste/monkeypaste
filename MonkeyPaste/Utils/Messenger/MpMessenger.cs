@@ -76,10 +76,14 @@ namespace MonkeyPaste {
         ContentResized,
         ResizeContentCompleted,
 
+        AdvancedSearchOpened,
+        AdvancedSearchClosed,
+
         SelectNextMatch,
         SelectPreviousMatch,
 
         SearchCriteriaItemsChanged,
+        QuerySortChanged,
 
         TagTileNotificationAdded,
         TagTileNotificationRemoved,

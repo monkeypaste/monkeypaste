@@ -21,11 +21,10 @@ namespace MonkeyPaste {
         [Column("fk_MpTagId")]
         public int QueryTagId { get; set; } = 0;
 
-        [Column("e_MpContentFilterType")]
-        public string SearchCriteriaPropertyTypeName { get; set; }
+        public string Options { get; set; }
 
-        [Column("e_MpSearchCriteriaUnitFlags")]
-        public string SearchCriteriaUnitFlagsCsv { get; set; }
+        [Column("e_MpLogicalQueryType")]
+        public string PrevJoinTypeName { get; set; } = MpLogicalQueryType.And.ToString();
 
         public int SortOrderIdx { get; set; } = 0;
 
@@ -46,30 +45,12 @@ namespace MonkeyPaste {
                 Guid = value.ToString();
             }
         }
-        [Ignore]
-        public MpContentFilterType CriteriaType {
-            get => SearchCriteriaPropertyTypeName.ToEnum<MpContentFilterType>();
-            set => SearchCriteriaPropertyTypeName = value.ToString();
+
+        public MpLogicalQueryType PrevJoinType {
+            get => PrevJoinTypeName.ToEnum<MpLogicalQueryType>();
+            set => PrevJoinTypeName = value.ToString();
         }
 
-        [Ignore]
-        public MpSearchCriteriaUnitFlags UnitFlags {
-            get => string.IsNullOrEmpty(SearchCriteriaUnitFlagsCsv) ?
-                MpSearchCriteriaUnitFlags.None :
-                (MpSearchCriteriaUnitFlags)SearchCriteriaUnitFlagsCsv
-                .SplitNoEmpty(",")
-                .Select(x => x.ToEnum<MpSearchCriteriaUnitFlags>())
-                .Cast<int>()
-                .Aggregate((a, b) => a | b);
-
-            set => 
-                SearchCriteriaPropertyTypeName = 
-                string.Join(
-                    ",", 
-                    typeof(MpSearchCriteriaUnitFlags)
-                    .GetEnumNames()
-                    .Where(x => value.HasFlag(x.ToEnum<MpSearchCriteriaUnitFlags>())));
-        }
         #endregion
 
         #region Statics
@@ -78,8 +59,8 @@ namespace MonkeyPaste {
             string guid="",
             int tagId=0,
             int sortOrderIdx = -1,
-            MpContentFilterType criteriaType = MpContentFilterType.None,
-            MpSearchCriteriaUnitFlags unitFlags = MpSearchCriteriaUnitFlags.None,
+            MpLogicalQueryType prevJoinType = MpLogicalQueryType.And,
+            string options = "",
             bool suppressWrite = false) {
             if(tagId < 0 && !suppressWrite) {
                 throw new Exception("Must provide tag id");
@@ -88,8 +69,8 @@ namespace MonkeyPaste {
                 SearchCriteriaItemGuid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid() : System.Guid.Parse(guid),
                 QueryTagId = tagId,
                 SortOrderIdx = sortOrderIdx,
-                CriteriaType = criteriaType,
-                UnitFlags = unitFlags
+                PrevJoinType = prevJoinType,
+                Options = options
             };
 
             if(!suppressWrite) {

@@ -52,7 +52,7 @@
     <DockPanel LastChildFill="False">
         <ListBox Background="Transparent"
                  BorderThickness="0"
-                 Items="{Binding SelectedOptions}">
+                 Items="{Binding Items}">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel Orientation="Horizontal" />

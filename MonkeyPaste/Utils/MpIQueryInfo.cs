@@ -16,7 +16,7 @@ namespace MonkeyPaste {
     }
 
     [Flags]
-    public enum MpContentFilterType {
+    public enum MpContentQueryBitFlags {
         None = 0,
         CaseSensitive = 1,
         Title = 2,
@@ -35,27 +35,30 @@ namespace MonkeyPaste {
         WholeWord = 16384,
         DeviceType = 32768,
         DeviceName = 65536,
-        MatchValue = 131072
+        MatchValue = 131072,
+        DateTime = 262_144,
+        DateTimeRange = 524_288
     }
 
     // Criteria Item Flags
-    [Flags]
-    public enum MpTimeFilterFlagType {
+    public enum MpDateTimeQueryType {
         None = 0,
         Exactly,
         Before,
-        After
+        After,
+        Between
     }
 
-    [Flags]
-    public enum MpLogicalFilterFlagType {
+    public enum MpLogicalQueryType {
         None = 0,
         And,
-        Or
+        Or,
+        Not
     }
 
-    [Flags]
-    public enum MpTextFilterFlagType {
+
+
+    public enum MpTextQueryType {
         None = 0,
         Matches,
         Contains,
@@ -68,32 +71,31 @@ namespace MonkeyPaste {
         object Source { get; }
         string SourcePropertyName { get; }
         string QueryValueName { get; }
-
-        Task<IEnumerable<MpSearchCriteriaItem>> SaveAsCriteriaItemsAsync(int tagId, int sortIdx);
     }
 
 
     public interface MpIQueryInfo : MpIDbIdCollection, MpIJsonObject {
         public int TotalAvailableItemsInQuery { get; }
 
-        public bool IsDescending { get;  set; }
+        public bool IsDescending { get; }
 
-        public MpContentSortType SortType { get; set; }
+        public MpContentSortType SortType { get; }
 
-        public MpContentFilterType FilterFlags { get; set; }
+        public MpContentQueryBitFlags FilterFlags { get; }
 
-        public MpLogicalFilterFlagType NextJoinType { get; set; }
+        public MpLogicalQueryType PrevJoinType { get; } // advanced
 
-        //public MpTextFilterFlagType TextFlags { get; set; }
+        public MpTextQueryType TextFlags { get; } // advanced
 
-        public MpTimeFilterFlagType TimeFlags { get; set; }
+        public MpDateTimeQueryType TimeFlags { get;  } // advanced
+        MpIQueryInfo Next { get; } // advanced
 
-        public int TagId { get; set; }
+        public int TagId { get;}
 
-        public string SearchText { get;  set; }
+        public string SearchText { get;}
 
-        public int SortOrderIdx { get; set; }
-        MpIQueryInfo Next { get; }
+        public int SortOrderIdx { get; }
+        
 
         void NotifyQueryChanged(bool forceRequery = false);
 

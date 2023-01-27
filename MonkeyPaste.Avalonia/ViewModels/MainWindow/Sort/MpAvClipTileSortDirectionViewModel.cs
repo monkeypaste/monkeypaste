@@ -22,9 +22,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIQueryInfoProvider Implementation
-        async Task<IEnumerable<MpSearchCriteriaItem>> MpIQueryInfoValueProvider.SaveAsCriteriaItemsAsync(int tagId, int sortIdx) {
-            return null;
-        }
         object MpIQueryInfoValueProvider.Source => this;
         string MpIQueryInfoValueProvider.SourcePropertyName => nameof(IsSortDescending);
 
@@ -48,6 +45,7 @@ namespace MonkeyPaste.Avalonia {
         private void MpAvClipTileSortDirectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(IsSortDescending):
+                    MpMessenger.SendGlobal(MpMessageType.QuerySortChanged);
                     MpPlatform.Services.QueryInfo.NotifyQueryChanged();
                     break;
             }

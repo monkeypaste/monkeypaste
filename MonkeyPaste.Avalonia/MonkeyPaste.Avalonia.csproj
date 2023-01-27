@@ -1063,6 +1063,7 @@
     <PackageReference Include="MonoMac.NetStandard" Version="0.0.4" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Enums\" />
     <Folder Include="Themes\Default\Assets\" />
     <Folder Include="Themes\Default\DensityStyles\" />
     <Folder Include="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\" />

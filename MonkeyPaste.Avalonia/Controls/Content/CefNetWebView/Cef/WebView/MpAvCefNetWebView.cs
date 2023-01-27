@@ -857,9 +857,9 @@ namespace MonkeyPaste.Avalonia {
             if (!string.IsNullOrEmpty(MpAvSearchBoxViewModel.Instance.SearchText)) {
                 loadContentMsg.searchText = MpAvSearchBoxViewModel.Instance.SearchText;
                 var sfcvm = MpAvSearchBoxViewModel.Instance.SearchFilterCollectionViewModel;
-                loadContentMsg.isCaseSensitive = sfcvm.Filters.FirstOrDefault(x => x.FilterType == MpContentFilterType.CaseSensitive).IsChecked.IsTrue();
-                loadContentMsg.isWholeWord = sfcvm.Filters.FirstOrDefault(x => x.FilterType == MpContentFilterType.WholeWord).IsChecked.IsTrue();
-                loadContentMsg.useRegex = sfcvm.Filters.FirstOrDefault(x => x.FilterType == MpContentFilterType.Regex).IsChecked.IsTrue();
+                loadContentMsg.isCaseSensitive = sfcvm.Filters.FirstOrDefault(x => x.FilterType == MpContentQueryBitFlags.CaseSensitive).IsChecked.IsTrue();
+                loadContentMsg.isWholeWord = sfcvm.Filters.FirstOrDefault(x => x.FilterType == MpContentQueryBitFlags.WholeWord).IsChecked.IsTrue();
+                loadContentMsg.useRegex = sfcvm.Filters.FirstOrDefault(x => x.FilterType == MpContentQueryBitFlags.Regex).IsChecked.IsTrue();
             }
             string msgStr = loadContentMsg.SerializeJsonObjectToBase64();
 

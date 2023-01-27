@@ -21,29 +21,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIQueryInfoProvider Implementation
-
-        async Task <IEnumerable<MpSearchCriteriaItem>> MpIQueryInfoValueProvider.SaveAsCriteriaItemsAsync(int tagId, int sortIdx) {
-            // NOTE this is called at end of provider create so sortIdx is seed for these
-            List<MpSearchCriteriaItem> items = new List<MpSearchCriteriaItem>();
-            foreach (var sfvm in Filters.Where(x => !x.IsSeperator && x.IsChecked.IsTrue())) {
-                var sci = await MpSearchCriteriaItem.CreateAsync(
-                    tagId: tagId,
-                    sortOrderIdx: sortIdx + items.Count,
-                    unitFlags: MpSearchCriteriaUnitFlags.Bit,
-                    criteriaType: sfvm.FilterType);
-
-                // all filters are bool values
-                string test = sfvm.FilterType.ToString();
-                MpParameterValue pv = await MpParameterValue.CreateAsync(
-                    hostType: MpParameterHostType.Query,
-                    paramId: 0,
-                    hostId: sci.Id,
-                    value: sfvm.IsChecked.IsTrue().ToString());
-
-                items.Add(sci);
-             }
-            return items;
-        }
         object MpIQueryInfoValueProvider.Source => this;
         string MpIQueryInfoValueProvider.SourcePropertyName => nameof(FilterType);
 
@@ -77,32 +54,32 @@ namespace MonkeyPaste.Avalonia {
                             this,
                             "Content",
                             nameof(MpPrefViewModel.Instance.SearchByContent),
-                            MpContentFilterType.Content),
+                            MpContentQueryBitFlags.Content),
                         new MpAvSearchFilterViewModel(
                             this,
                             "Title",
                             nameof(MpPrefViewModel.Instance.SearchByTitle),
-                            MpContentFilterType.Title),
+                            MpContentQueryBitFlags.Title),
                         new MpAvSearchFilterViewModel(
                             this,
                             "Url",
                             nameof(MpPrefViewModel.Instance.SearchBySourceUrl),
-                            MpContentFilterType.Url),
+                            MpContentQueryBitFlags.Url),
                         new MpAvSearchFilterViewModel(
                             this,
                             "Url Title",
                             nameof(MpPrefViewModel.Instance.SearchByUrlTitle),
-                            MpContentFilterType.UrlTitle),
+                            MpContentQueryBitFlags.UrlTitle),
                         new MpAvSearchFilterViewModel(
                             this,
                             "Application Path",
                             nameof(MpPrefViewModel.Instance.SearchByProcessName),
-                            MpContentFilterType.AppPath),
+                            MpContentQueryBitFlags.AppPath),
                         new MpAvSearchFilterViewModel(
                             this,
                             "Application Name",
                             nameof(MpPrefViewModel.Instance.SearchByApplicationName),
-                            MpContentFilterType.AppName),
+                            MpContentQueryBitFlags.AppName),
                         //new MpSearchFilterViewModel(
                         //    this,
                         //    "Collections",
@@ -112,39 +89,39 @@ namespace MonkeyPaste.Avalonia {
                             this,
                             "Description",
                             nameof(MpPrefViewModel.Instance.SearchByDescription),
-                            MpContentFilterType.Meta),
+                            MpContentQueryBitFlags.Meta),
                         new MpAvSearchFilterViewModel(this,true),
                         new MpAvSearchFilterViewModel(
                             this,
                             "Text Type",
                             nameof(MpPrefViewModel.Instance.SearchByTextType),
-                            MpContentFilterType.TextType),
+                            MpContentQueryBitFlags.TextType),
                         new MpAvSearchFilterViewModel(
                             this,
                             "File Type",
                             nameof(MpPrefViewModel.Instance.SearchByFileType),
-                            MpContentFilterType.FileType),
+                            MpContentQueryBitFlags.FileType),
                         new MpAvSearchFilterViewModel(
                             this,
                             "Image Type",
                             nameof(MpPrefViewModel.Instance.SearchByImageType),
-                            MpContentFilterType.ImageType),
+                            MpContentQueryBitFlags.ImageType),
                         new MpAvSearchFilterViewModel(this,true),
                         new MpAvSearchFilterViewModel(
                             this,
                             "Case Sensitive",
                             nameof(MpPrefViewModel.Instance.SearchByIsCaseSensitive),
-                            MpContentFilterType.CaseSensitive),
+                            MpContentQueryBitFlags.CaseSensitive),
                         new MpAvSearchFilterViewModel(
                             this,
                             "Whole Word",
                             nameof(MpPrefViewModel.Instance.SearchByWholeWord),
-                            MpContentFilterType.WholeWord),
+                            MpContentQueryBitFlags.WholeWord),
                         new MpAvSearchFilterViewModel(
                             this,
                             "Regular Expression",
                             nameof(MpPrefViewModel.Instance.SearchByRegex),
-                            MpContentFilterType.Regex)
+                            MpContentQueryBitFlags.Regex)
                     };
                 }
                 return _filters;
@@ -154,9 +131,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        public MpContentFilterType FilterType {
+        public MpContentQueryBitFlags FilterType {
             get {
-                MpContentFilterType ft = MpContentFilterType.None;
+                MpContentQueryBitFlags ft = MpContentQueryBitFlags.None;
                 foreach (var sfvm in Filters) {
                     ft |= sfvm.FilterValue;
                 }

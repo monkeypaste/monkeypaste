@@ -8,6 +8,16 @@
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800">
+    <local:MpAvUserControl.Styles>
+        <Style Selector="CheckBox /template/ Border#NormalRectangle">
+            <Setter Property="BorderBrush"
+                    Value="White" />
+        </Style>
+        <Style Selector="CheckBox:pointerover /template/ Border#NormalRectangle">
+            <Setter Property="BorderBrush"
+                    Value="Yellow" />
+        </Style>
+    </local:MpAvUserControl.Styles>
     <Grid Margin="0,3">
         <local:MpAvClipBorder BorderThickness="0"
                               Background="Transparent"
@@ -17,12 +27,15 @@
                             Content="{Binding}">
                 <ContentControl.DataTemplates>
                     <local:MpAvSearchCriteriaOptionViewSelector>
+                        <!--  ENUMERABLE COMBOBOX  -->
                         <DataTemplate x:Key="EnumerableOptionTemplate"
                                       DataType="local:MpAvSearchCriteriaOptionViewModel">
                             <local:MpAvClipBorder CornerRadius="10"
                                                   BorderThickness="1"
                                                   BorderBrush="Black"
-                                                  Margin="5,5">
+                                                  HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"
+                                                  Margin="5">
                                 <ComboBox MinWidth="85"
                                           FontSize="16"
                                           BorderThickness="0"
@@ -39,28 +52,36 @@
                                 </ComboBox>
                             </local:MpAvClipBorder>
                         </DataTemplate>
+                        <!--  TEXTBOX  -->
                         <DataTemplate x:Key="TextOptionTemplate"
                                       DataType="local:MpAvSearchCriteriaOptionViewModel">
                             <StackPanel Orientation="Horizontal">
-                                <StackPanel Orientation="Horizontal"
-                                            IsVisible="{Binding IsCheckable}">
-                                    <Label Content="Case-Sensitive?" />
-                                    <CheckBox VerticalAlignment="Center"
-                                              Margin="0,0,5,0"
-                                              IsChecked="{Binding IsChecked, Mode=TwoWay}" />
-                                </StackPanel>
-                                <local:MpAvClipBorder Margin="5"
+                                <local:MpAvClipBorder Margin="5,7"
+                                                      
+                                                      VerticalAlignment="Center"
                                                       CornerRadius="10"
                                                       Background="White"
                                                       BorderBrush="White">
                                     <TextBox MinWidth="900"
-                                             Margin="3,0,0,0"
-                                             Height="23"
+                                             Margin="5,0,0,0"
+                                             VerticalAlignment="Center"
                                              VerticalContentAlignment="Center"
                                              BorderThickness="0"
                                              BorderBrush="Black"
                                              Text="{Binding Value, Mode=TwoWay}" />
                                 </local:MpAvClipBorder>
+
+                                <CheckBox VerticalAlignment="Center"
+                                          Margin="0,0,5,0"
+                                          IsChecked="{Binding IsChecked, Mode=TwoWay}">
+                                    <TextBlock VerticalAlignment="Center"
+                                               TextAlignment="Left"
+                                               TextWrapping="Wrap"
+                                               MaxWidth="80"
+                                               Foreground="White"
+                                               IsVisible="{Binding IsCheckable}"
+                                               Text="Case Sensitive?" />
+                                </CheckBox>
                             </StackPanel>
                         </DataTemplate>
                         <DataTemplate x:Key="RGBAOptionTemplate"

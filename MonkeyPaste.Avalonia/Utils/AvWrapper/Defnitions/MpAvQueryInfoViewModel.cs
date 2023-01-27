@@ -34,9 +34,6 @@ namespace MonkeyPaste.Avalonia {
             return result;
         }
 
-        //[JsonIgnore]
-        //private static MpAvQueryInfoViewModel _current;
-        //public static MpAvQueryInfoViewModel Current => _current;
         #endregion
 
         #region Properties     
@@ -50,10 +47,10 @@ namespace MonkeyPaste.Avalonia {
         public int TagId { get; set; } = MpTag.HelpTagId;
         public string SearchText { get; set; } = string.Empty;
 
-        public MpContentFilterType FilterFlags { get; set; } = MpContentFilterType.Content | MpContentFilterType.TextType | MpContentFilterType.ImageType | MpContentFilterType.FileType;
-        public MpTextFilterFlagType TextFlags { get; set; } = MpTextFilterFlagType.None;
-        public MpTimeFilterFlagType TimeFlags { get; set; } = MpTimeFilterFlagType.None;
-        public MpLogicalFilterFlagType NextJoinType { get; set; }
+        public MpContentQueryBitFlags FilterFlags { get; set; } = MpContentQueryBitFlags.Content | MpContentQueryBitFlags.TextType | MpContentQueryBitFlags.ImageType | MpContentQueryBitFlags.FileType;
+        public MpTextQueryType TextFlags { get; set; } = MpTextQueryType.None;
+        public MpDateTimeQueryType TimeFlags { get; set; } = MpDateTimeQueryType.None;
+        public MpLogicalQueryType PrevJoinType { get; set; }
 
         public MpIQueryInfo Next { get; set; }
 
@@ -85,9 +82,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public void JoinWithNext(MpIQueryInfo next, MpLogicalFilterFlagType joinType) {
+        public void JoinWithNext(MpIQueryInfo next, MpLogicalQueryType joinType) {
             Next = next;
-            NextJoinType = joinType;
+            PrevJoinType = joinType;
         }
 
         #region Query Methods
@@ -167,7 +164,6 @@ namespace MonkeyPaste.Avalonia {
 
         public void NotifyQueryChanged(bool forceRequery = false) {
             Dispatcher.UIThread.Post(() => {
-
                 bool has_query_changed = RefreshQuery();
 
                 if (has_query_changed || forceRequery) {
@@ -179,13 +175,6 @@ namespace MonkeyPaste.Avalonia {
                     MpMessenger.SendGlobal(MpMessageType.SubQueryChanged);
 
                 }
-
-
-                //var qi = MpDataModelProvider.QueryInfo;
-
-                //qi.FilterFlags = FilterFlags;//MpAvSearchBoxViewModel.Instance.FilterType;
-                //MpDataModelProvider.QueryInfos.Add(this);
-                // MpAvSearchBoxViewModel.Instance.CriteriaItems.OrderBy(x => x.SortOrderIdx).ForEach(x => MpDataModelProvider.QueryInfos.Add(x.ToQueryInfo()));
             });
         }
 
@@ -200,15 +189,10 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine("Hey! QueryInfo still receives suppressed property changes");
                 return;
             }
-
-            //if (this == Current) {
-                // persist current query to pref json
-                //MpPrefViewModel.Instance.LastQueryInfoJson = SerializeJsonObject();
-            //}
         }
 
-
         private bool RefreshQuery() {
+            // set internal properties to current registered values from bound controls
             bool hasChanged = false;
             foreach (var vp in _valueProviders) {
                 object provided_value = vp.Source.GetPropertyValue(vp.SourcePropertyName);

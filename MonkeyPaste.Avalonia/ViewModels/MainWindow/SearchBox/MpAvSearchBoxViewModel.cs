@@ -35,24 +35,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIQueryInfoProvider Implementation
-        async Task<IEnumerable<MpSearchCriteriaItem>> MpIQueryInfoValueProvider.SaveAsCriteriaItemsAsync(int tagId, int sortIdx) {
-            if(!HasText) {
-                return null;
-            }
-            var sci = await MpSearchCriteriaItem.CreateAsync(
-                    tagId: tagId,
-                    sortOrderIdx: sortIdx,
-                    unitFlags: MpSearchCriteriaUnitFlags.Text,
-                    criteriaType: MpContentFilterType.MatchValue);
-
-            // all filters are bool values
-            MpParameterValue pv = await MpParameterValue.CreateAsync(
-                hostType: MpParameterHostType.Query,
-                hostId: sci.Id,
-                paramId: 0,
-                value: SearchText);
-            return new[] { sci };
-        }
         object MpIQueryInfoValueProvider.Source => this;
         string MpIQueryInfoValueProvider.SourcePropertyName => nameof(SearchText);
 
