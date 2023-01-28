@@ -12,6 +12,15 @@ using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvWrapper : MpIPlatformWrapper {
+
+        #region Bootstrapped Services (incomplete)
+        
+        public MpIContentQueryTools ContentQueryTools { get; set; }
+        public MpITagQueryTools TagQueryTools { get; set; }
+        public MpIStartupObjectLocator StartupObjectLocator { get; set; }
+
+        #endregion
+
         public MpIStartupState StartupState { get; set; }
         public MpIPlatformCompatibility PlatformCompatibility { get; set; }
         public MpIPlatformShorcuts PlatformShorcuts { get; set; }

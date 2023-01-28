@@ -17,7 +17,8 @@ namespace MonkeyPaste.Avalonia {
             string key = null;
             var scovm = param as MpAvSearchCriteriaOptionViewModel;
             if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.EnumerableValue)) {
-                key = "EmptyOptionTemplate";
+                //key = "EmptyOptionTemplate";
+                key = null;
             }
             if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.Enumerable)) {
                 key = "EnumerableOptionTemplate";

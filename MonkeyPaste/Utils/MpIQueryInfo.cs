@@ -106,6 +106,6 @@ namespace MonkeyPaste {
         IEnumerable<MpIQueryInfoValueProvider> Providers { get; }
 
         Task<List<MpCopyItem>> FetchIdsByQueryIdxListAsync(List<int> copyItemQueryIdxList);
-        Task QueryForTotalCountAsync(IEnumerable<int> ci_idsToOmit, IEnumerable<int> tagIds);
+        Task QueryForTotalCountAsync();
     }
 }

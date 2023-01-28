@@ -28,7 +28,8 @@ namespace MonkeyPaste.Avalonia {
         MpIPagingScrollViewerViewModel,
         MpIActionComponent,
         MpIBoundSizeViewModel,
-        MpIContextMenuViewModel {
+        MpIContextMenuViewModel,
+        MpIContentQueryTools {
         #region Private Variables
 
         //private IntPtr _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
@@ -83,7 +84,14 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region Properties
+        #region Interfaces
+
+        #region MpIContentQueryTools Implementation
+
+        IEnumerable<int> MpIContentQueryTools.GetOmittedContentIds() =>
+            PinnedItems.Select(x => x.CopyItemId);
+
+        #endregion
 
         #region MpIBoostrappedItem Implementation
 
@@ -280,141 +288,6 @@ namespace MonkeyPaste.Avalonia {
         // NOTE this are NOT bound in xaml, bound in mw.UpdateContentLayout
         public double BoundWidth { get; set; }
         public double BoundHeight { get; set; }
-
-        #endregion
-
-        #region View Models
-
-        //private MpAvClipTileViewModel _appendClipTileViewModel;
-        public MpAvClipTileViewModel ModalClipTileViewModel { get; private set; }
-
-        public MpAvClipTileViewModel AppendClipTileViewModel => AllItems.FirstOrDefault(x => x.IsAppendNotifier);
-
-
-        public MpIQueryInfo CurrentQuery => MpPlatform.Services.QueryInfo; //MpPlatform.Services.QueryInfo;
-        public IEnumerable<MpAvClipTileViewModel> SortOrderedItems => Items.Where(x => x.QueryOffsetIdx >= 0).OrderBy(x => x.QueryOffsetIdx);
-
-        public ObservableCollection<MpAvClipTileViewModel> PinnedItems { get; set; } = new ObservableCollection<MpAvClipTileViewModel>();
-
-        public IEnumerable<MpAvClipTileViewModel> AllItems {
-            get {
-                foreach (var ctvm in Items) {
-                    yield return ctvm;
-                }
-                foreach (var pctvm in PinnedItems) {
-                    yield return pctvm;
-                }
-                if (ModalClipTileViewModel != null) {
-                    yield return ModalClipTileViewModel;
-                }
-
-            }
-        }
-        public MpAvClipTileViewModel HeadItem => SortOrderedItems.ElementAtOrDefault(0);
-
-        public MpAvClipTileViewModel TailItem => SortOrderedItems.ElementAtOrDefault(Items.Count - 1);
-
-        public int PersistantSelectedItemId {
-            get {
-                if (SelectedItem == null) {
-                    if (MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Count == 0) {
-                        return -1;
-                    }
-                    return MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels[0].Id;
-                }
-                return SelectedItem.CopyItemId;
-            }
-        }
-
-        public override MpAvClipTileViewModel SelectedItem {
-            get {
-                if (MpAvAppendNotificationWindow.Instance != null &&
-                    MpAvAppendNotificationWindow.Instance.IsVisible) {
-                    // only visible if mw is not open
-                    return ModalClipTileViewModel;
-                }
-
-                return AllItems.FirstOrDefault(x => x.IsSelected);
-            }
-            set {
-                if (value == null) {
-                    AllItems.ForEach(x => x.IsSelected = false);
-                } else {
-                    AllItems.ForEach(x => x.IsSelected = x.CopyItemId == value.CopyItemId);
-                }
-                OnPropertyChanged(nameof(SelectedItem));
-                OnPropertyChanged(nameof(SelectedPinTrayItem));
-                OnPropertyChanged(nameof(SelectedClipTrayItem));
-            }
-        }
-        public MpAvClipTileViewModel SelectedPinTrayItem {
-            get {
-                if (SelectedItem == null || !SelectedItem.IsPinned) {
-                    return null;
-                }
-                return SelectedItem;
-            }
-            set {
-                if (value == null || value.IsPlaceholder) {
-                    // BUG trying to stop case when placeholder is being treated like
-                    // init'd tile and selectionState isb being stored but 
-                    // presistentSelectedModel will be null and it trips lots of things up
-                    // 
-                    // NOTE maybe righter to set AllItems to unselected here but not sure.
-                    PinnedItems.ForEach(x => x.IsSelected = false);
-                } else {
-                    SelectedItem = value;
-                }
-                OnPropertyChanged(nameof(SelectedPinTrayItem));
-            }
-        }
-        public MpAvClipTileViewModel SelectedClipTrayItem {
-            get {
-                if (SelectedItem == null || SelectedItem.IsPinned) {
-                    return null;
-                }
-                return SelectedItem;
-            }
-            set {
-                if (value == null || value.IsPlaceholder) {
-                    // see SelectedPinTray comments
-                    Items.ForEach(x => x.IsSelected = false);
-                } else {
-                    SelectedItem = value;
-                }
-                OnPropertyChanged(nameof(SelectedClipTrayItem));
-            }
-        }
-
-        public List<MpCopyItem> SelectedModels {
-            get {
-                if (SelectedItem == null) {
-                    return new List<MpCopyItem>();
-                }
-                return new List<MpCopyItem>() {
-                    SelectedItem.CopyItem
-                };
-            }
-        }
-        //public MpAvClipTileViewModel DragItem => AllItems.FirstOrDefault(x => x.IsTileDragging);
-
-        //public int DragItemId => DragItem == default ? -1 : DragItem.CopyItemId;
-        public IEnumerable<MpAvClipTileViewModel> VisibleItems => Items.Where(x => x.IsAnyCornerVisible && !x.IsPlaceholder);
-
-        public Orientation DefaultScrollOrientation {
-            get {
-                if (ListOrientation == Orientation.Horizontal) {
-                    if (IsGridLayout) {
-                        return Orientation.Vertical;
-                    }
-                    return Orientation.Horizontal;
-                }
-                if (IsGridLayout) {
-                    return Orientation.Horizontal;
-                }
-                return Orientation.Vertical;
-            }
-        }
 
         #endregion
 
@@ -871,6 +744,159 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region MpIActionComponent Implementation
+
+        public void RegisterActionComponent(MpIInvokableAction mvm) {
+            OnCopyItemAdd += mvm.OnActionInvoked;
+            MpConsole.WriteLine($"ClipTray Registered {mvm.Label} matcher");
+        }
+
+        public void UnregisterActionComponent(MpIInvokableAction mvm) {
+            OnCopyItemAdd -= mvm.OnActionInvoked;
+            MpConsole.WriteLine($"Matcher {mvm.Label} Unregistered from OnCopyItemAdded");
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Properties
+
+        #region View Models
+
+        //private MpAvClipTileViewModel _appendClipTileViewModel;
+        public MpAvClipTileViewModel ModalClipTileViewModel { get; private set; }
+
+        public MpAvClipTileViewModel AppendClipTileViewModel => AllItems.FirstOrDefault(x => x.IsAppendNotifier);
+
+
+        public MpIQueryInfo CurrentQuery => MpPlatform.Services.QueryInfo; //MpPlatform.Services.QueryInfo;
+        public IEnumerable<MpAvClipTileViewModel> SortOrderedItems => Items.Where(x => x.QueryOffsetIdx >= 0).OrderBy(x => x.QueryOffsetIdx);
+
+        public ObservableCollection<MpAvClipTileViewModel> PinnedItems { get; set; } = new ObservableCollection<MpAvClipTileViewModel>();
+
+        public IEnumerable<MpAvClipTileViewModel> AllItems {
+            get {
+                foreach (var ctvm in Items) {
+                    yield return ctvm;
+                }
+                foreach (var pctvm in PinnedItems) {
+                    yield return pctvm;
+                }
+                if (ModalClipTileViewModel != null) {
+                    yield return ModalClipTileViewModel;
+                }
+
+            }
+        }
+        public MpAvClipTileViewModel HeadItem => SortOrderedItems.ElementAtOrDefault(0);
+
+        public MpAvClipTileViewModel TailItem => SortOrderedItems.ElementAtOrDefault(Items.Count - 1);
+
+        public int PersistantSelectedItemId {
+            get {
+                if (SelectedItem == null) {
+                    if (MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Count == 0) {
+                        return -1;
+                    }
+                    return MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels[0].Id;
+                }
+                return SelectedItem.CopyItemId;
+            }
+        }
+
+        public override MpAvClipTileViewModel SelectedItem {
+            get {
+                if (MpAvAppendNotificationWindow.Instance != null &&
+                    MpAvAppendNotificationWindow.Instance.IsVisible) {
+                    // only visible if mw is not open
+                    return ModalClipTileViewModel;
+                }
+
+                return AllItems.FirstOrDefault(x => x.IsSelected);
+            }
+            set {
+                if (value == null) {
+                    AllItems.ForEach(x => x.IsSelected = false);
+                } else {
+                    AllItems.ForEach(x => x.IsSelected = x.CopyItemId == value.CopyItemId);
+                }
+                OnPropertyChanged(nameof(SelectedItem));
+                OnPropertyChanged(nameof(SelectedPinTrayItem));
+                OnPropertyChanged(nameof(SelectedClipTrayItem));
+            }
+        }
+        public MpAvClipTileViewModel SelectedPinTrayItem {
+            get {
+                if (SelectedItem == null || !SelectedItem.IsPinned) {
+                    return null;
+                }
+                return SelectedItem;
+            }
+            set {
+                if (value == null || value.IsPlaceholder) {
+                    // BUG trying to stop case when placeholder is being treated like
+                    // init'd tile and selectionState isb being stored but 
+                    // presistentSelectedModel will be null and it trips lots of things up
+                    // 
+                    // NOTE maybe righter to set AllItems to unselected here but not sure.
+                    PinnedItems.ForEach(x => x.IsSelected = false);
+                } else {
+                    SelectedItem = value;
+                }
+                OnPropertyChanged(nameof(SelectedPinTrayItem));
+            }
+        }
+        public MpAvClipTileViewModel SelectedClipTrayItem {
+            get {
+                if (SelectedItem == null || SelectedItem.IsPinned) {
+                    return null;
+                }
+                return SelectedItem;
+            }
+            set {
+                if (value == null || value.IsPlaceholder) {
+                    // see SelectedPinTray comments
+                    Items.ForEach(x => x.IsSelected = false);
+                } else {
+                    SelectedItem = value;
+                }
+                OnPropertyChanged(nameof(SelectedClipTrayItem));
+            }
+        }
+
+        public List<MpCopyItem> SelectedModels {
+            get {
+                if (SelectedItem == null) {
+                    return new List<MpCopyItem>();
+                }
+                return new List<MpCopyItem>() {
+                    SelectedItem.CopyItem
+                };
+            }
+        }
+        //public MpAvClipTileViewModel DragItem => AllItems.FirstOrDefault(x => x.IsTileDragging);
+
+        //public int DragItemId => DragItem == default ? -1 : DragItem.CopyItemId;
+        public IEnumerable<MpAvClipTileViewModel> VisibleItems => Items.Where(x => x.IsAnyCornerVisible && !x.IsPlaceholder);
+
+        public Orientation DefaultScrollOrientation {
+            get {
+                if (ListOrientation == Orientation.Horizontal) {
+                    if (IsGridLayout) {
+                        return Orientation.Vertical;
+                    }
+                    return Orientation.Horizontal;
+                }
+                if (IsGridLayout) {
+                    return Orientation.Horizontal;
+                }
+                return Orientation.Vertical;
+            }
+        }
+
+        #endregion
+
         #region Layout
         public double ObservedContainerScreenWidth { get; set; }
         public double ObservedContainerScreenHeight { get; set; }
@@ -1030,6 +1056,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public int TotalTilesInQuery => CurrentQuery.TotalAvailableItemsInQuery;
+
 
         public int DefaultLoadCount {
             get {
@@ -1243,6 +1270,8 @@ namespace MonkeyPaste.Avalonia {
             MpDb.SyncUpdate += MpDbObject_SyncUpdate;
             MpDb.SyncDelete += MpDbObject_SyncDelete;
 
+            MpPlatform.Services.ContentQueryTools = this;
+
             MpPlatform.Services.ClipboardMonitor.OnClipboardChanged += ClipboardChanged;
 
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
@@ -1258,6 +1287,15 @@ namespace MonkeyPaste.Avalonia {
             //    };
             //    await ci.WriteToDatabaseAsync();
             //}
+            Items.Clear();
+            int idx = 0;
+            for (int i = 0; i < DefaultLoadCount; i++) {
+                var ctvm = await CreateClipTileViewModel(null);
+                Items.Add(ctvm);
+            }
+            while(Items.Any(x=>x.IsAnyBusy)) {
+                await Task.Delay(100);
+            }
 
             IsGridLayout = LayoutType == MpClipTrayLayoutType.Grid;
             IsBusy = false;
@@ -1366,27 +1404,14 @@ namespace MonkeyPaste.Avalonia {
                 //    // what's going on here? is the list empty?
                 //    Debugger.Break();
                 //}
-                Debugger.Break();
+                
+                //Debugger.Break();
             } else {
                 anchor_offset = anchor_ctvm.TrayLocation;
             }
 
             ForceScrollOffset(anchor_offset);
         }
-
-        #region MpIActionComponent Implementation
-
-        public void RegisterActionComponent(MpIInvokableAction mvm) {
-            OnCopyItemAdd += mvm.OnActionInvoked;
-            MpConsole.WriteLine($"ClipTray Registered {mvm.Label} matcher");
-        }
-
-        public void UnregisterActionComponent(MpIInvokableAction mvm) {
-            OnCopyItemAdd -= mvm.OnActionInvoked;
-            MpConsole.WriteLine($"Matcher {mvm.Label} Unregistered from OnCopyItemAdded");
-        }
-
-        #endregion
 
         #region View Invokers
 
@@ -2768,17 +2793,13 @@ namespace MonkeyPaste.Avalonia {
                         ClearClipSelection();                        
 
                         // trigger unload event to wipe js eval's that maybe pending 
-                        Items.ForEach(x => x.TriggerUnloadedNotification());
+                        Items.Where(x=>!x.IsPlaceholder).ForEach(x => x.TriggerUnloadedNotification());
 
                         MpAvPersistentClipTilePropertiesHelper.ClearPersistentWidths();
                     }
 
                     if(isRequery || isInPlaceRequery) {
-                        await CurrentQuery.QueryForTotalCountAsync(
-                            PinnedItems.Select(x => x.CopyItemId),
-                            MpAvTagTrayViewModel.Instance.SelectedItem
-                            .SelfAndAllDescendants
-                            .Cast<MpAvTagTileViewModel>().Select(x => x.TagId));
+                        await CurrentQuery.QueryForTotalCountAsync();
 
                         FindTotalTileSize();
 
@@ -2883,8 +2904,11 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(IsHorizontalScrollBarVisible));
                     OnPropertyChanged(nameof(IsVerticalScrollBarVisible));
 
-                    if (Items.Count == 0) {
-                        ScrollOffsetX = LastScrollOffsetX = ScrollOffsetY = LastScrollOffsetY = 0;
+                    if (Items.Where(x=>!x.IsPlaceholder).Count() == 0) {
+                        ScrollOffsetX = 0;
+                        LastScrollOffsetX = 0;
+                        ScrollOffsetY = 0;
+                        LastScrollOffsetY = 0;
                     }
 
                     IsBusy = false;

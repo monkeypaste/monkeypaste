@@ -9,6 +9,7 @@ using MonkeyPaste.Common;
 using System.Diagnostics;
 using Avalonia.Threading;
 using MonoMac.AppKit;
+using MonoMac.OpenAL;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvTagTrayViewModel : 
@@ -17,7 +18,8 @@ namespace MonkeyPaste.Avalonia {
         MpIHoverableViewModel,
         MpISelectableViewModel,
         MpISidebarItemViewModel,
-        MpIQueryInfoValueProvider {
+        MpIQueryInfoValueProvider,
+        MpITagQueryTools {
         #region Private Variables
         
 
@@ -28,6 +30,84 @@ namespace MonkeyPaste.Avalonia {
 
         private static MpAvTagTrayViewModel _instance;
         public static MpAvTagTrayViewModel Instance => _instance ?? (_instance = new MpAvTagTrayViewModel());
+
+        #endregion
+
+        #region Interfaces
+
+
+        #region MpITagQueryTools Implementation
+
+        IEnumerable<int> MpITagQueryTools.GetSelfAndAllAncestorTagIds(int tagId) {
+            if (Items.FirstOrDefault(x => x.TagId == tagId) is MpAvTagTileViewModel ttvm) {
+                return
+                    ttvm
+                    .SelfAndAllAncestors
+                    .Cast<MpAvTagTileViewModel>()
+                    .Select(x => x.TagId);
+            }
+            return null;
+        }
+        IEnumerable<int> MpITagQueryTools.GetSelfAndAllDescendantsTagIds(int tagId) {
+            if (Items.FirstOrDefault(x => x.TagId == tagId) is MpAvTagTileViewModel ttvm) {
+                return
+                    ttvm
+                    .SelfAndAllDescendants
+                    .Cast<MpAvTagTileViewModel>()
+                    .Select(x => x.TagId);
+            }
+            return null;
+        }
+        #endregion
+
+        #region MpIQueryInfoProvider Implementation
+        object MpIQueryInfoValueProvider.Source => this;
+        string MpIQueryInfoValueProvider.SourcePropertyName => nameof(SelectedItemId);
+
+        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpPlatform.Services.QueryInfo.TagId);
+
+        #endregion
+
+        #region MpISidebarItemViewModel Implementation
+        public double SidebarWidth { get; set; } = 0;// MpMeasurements.Instance.DefaultTagTreePanelWidth;
+        public double SidebarHeight { get; set; }
+
+        public double DefaultSidebarWidth {
+            get {
+                if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+                    return 300;// MpMeasurements.Instance.DefaultTagTreePanelWidth;
+                } else {
+                    return MpAvMainWindowViewModel.Instance.MainWindowWidth;
+                }
+            }
+        }
+        public double DefaultSidebarHeight {
+            get {
+                if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+                    return MpAvClipTrayViewModel.Instance.ClipTrayScreenHeight;
+                } else {
+                    return 300;
+                }
+            }
+        }
+
+
+        #endregion
+
+        #region MpIHoverableViewModel Implementation
+
+        public bool IsHovering { get; set; }
+
+        #endregion
+
+        #region MpISelectableViewModel Implementation
+
+        public bool IsSelected { get; set; }
+
+        public DateTime LastSelectedDateTime { get; set; }
+
+
+        #endregion
 
         #endregion
 
@@ -70,55 +150,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpIQueryInfoProvider Implementation
-        object MpIQueryInfoValueProvider.Source => this;
-        string MpIQueryInfoValueProvider.SourcePropertyName => nameof(SelectedItemId);
-
-        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpPlatform.Services.QueryInfo.TagId);
-
-        #endregion
-
-        #region MpISidebarItemViewModel Implementation
-        public double SidebarWidth { get; set; } = 0;// MpMeasurements.Instance.DefaultTagTreePanelWidth;
-        public double SidebarHeight { get; set; }
-        
-        public double DefaultSidebarWidth {
-            get {
-                if(MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                    return 300;// MpMeasurements.Instance.DefaultTagTreePanelWidth;
-                } else {
-                    return MpAvMainWindowViewModel.Instance.MainWindowWidth;
-                }
-            }
-        }
-        public double DefaultSidebarHeight {
-            get {
-                if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                    return MpAvClipTrayViewModel.Instance.ClipTrayScreenHeight;
-                } else {
-                    return 300;
-                }
-            }
-        }
-
-
-        #endregion
-
-        #region MpIHoverableViewModel Implementation
-
-        public bool IsHovering { get; set; }
-
-        #endregion
-
-        #region MpISelectableViewModel Implementation
-
-        public bool IsSelected { get; set; }
-
-        public DateTime LastSelectedDateTime { get; set; }
-
-
-        #endregion
-
         #region State
 
         private int _selectedItemId;
@@ -136,12 +167,11 @@ namespace MonkeyPaste.Avalonia {
                 SelectTagCommand.Execute(value);
             }
         }
-
         public bool IsSelectionEnabled {
             get {
-                if(MpAvSearchCriteriaItemCollectionViewModel.Instance.HasCriteriaItems) {
-                    return false;
-                }
+                //if(MpAvSearchCriteriaItemCollectionViewModel.Instance.HasCriteriaItems) {
+                //    return false;
+                //}
                 return true;
             }
         }
@@ -227,6 +257,7 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitAsync() {
             IsBusy = true;
 
+            MpPlatform.Services.TagQueryTools = this;
             MpPlatform.Services.QueryInfo.RegisterProvider(this);
 
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);

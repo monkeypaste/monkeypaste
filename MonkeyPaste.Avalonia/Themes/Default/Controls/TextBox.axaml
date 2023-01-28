@@ -6,6 +6,9 @@
         <Thickness x:Key="TextControlThemePadding">
             0,0,0,0
         </Thickness>
+        <Thickness x:Key="TextControlBorderThemeThicknessFocused">
+            0,0,0,0
+        </Thickness>
         <x:Double x:Key="TextControlThemeMinHeight">
             0
         </x:Double>

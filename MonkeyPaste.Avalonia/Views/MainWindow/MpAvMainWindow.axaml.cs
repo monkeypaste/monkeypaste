@@ -83,8 +83,10 @@ namespace MonkeyPaste.Avalonia {
             sidebarSplitter.DragDelta += SidebarSplitter_DragDelta;
             
             var advSearchSplitter = this.FindControl<GridSplitter>("AdvancedSearchSplitter");
-            advSearchSplitter.DragDelta += AdvSearchSplitter_DragDelta;
+            //advSearchSplitter.DragDelta += AdvSearchSplitter_DragDelta;
+            advSearchSplitter.DragCompleted += AdvSearchSplitter_DragCompleted;
         }
+
 
 
 
@@ -200,7 +202,7 @@ namespace MonkeyPaste.Avalonia {
 
             var tmv_cg = tmv.FindControl<Grid>("TitlePanel");
             var tmv_lsp = tmv.FindControl<StackPanel>("LeftStackPanel");
-            var tmv_wohb = tmv.FindControl<Border>("WindowOrientationHandleBorder");
+            var tmv_wohb = tmv.FindControl<Button>("WindowOrientationHandleButton");
             var tmv_rsp = tmv.FindControl<StackPanel>("RightStackPanel");
             var tmv_zoom_slider_cg = tmv.FindControl<Grid>("ZoomSliderContainerGrid");
             var tmv_zoom_slider = tmv.FindControl<Slider>("ZoomFactorSlider");
@@ -274,8 +276,14 @@ namespace MonkeyPaste.Avalonia {
                 tmv_lsp.HorizontalAlignment = HorizontalAlignment.Left;
                 tmv_lsp.VerticalAlignment = VerticalAlignment.Stretch;
 
-                tmv_wohb.Width = tmvm.TitleDragHandleLongLength;
-                tmv_wohb.Height = tmvm.TitleDragHandleShortLength;
+                //tmv_wohb.Width = tmvm.TitleDragHandleLongLength;
+                //tmv_wohb.Height = tmvm.TitleDragHandleShortLength;
+                tmv_wohb.VerticalAlignment = VerticalAlignment.Stretch;
+                tmv_wohb.HorizontalAlignment = HorizontalAlignment.Center;
+                if(tmv_wohb.GetVisualDescendant<Image>() is Image tmv_wohb_img &&
+                    tmv_wohb_img.RenderTransform is RotateTransform rott) {
+                    rott.Angle = 0;
+                }
 
                 tmv_rsp.Orientation = Orientation.Horizontal;
                 tmv_rsp.HorizontalAlignment = HorizontalAlignment.Right;
@@ -354,8 +362,14 @@ namespace MonkeyPaste.Avalonia {
                 tmv_lsp.HorizontalAlignment = HorizontalAlignment.Stretch;
                 tmv_lsp.VerticalAlignment = VerticalAlignment.Top;
 
-                tmv_wohb.Width = tmvm.TitleDragHandleShortLength;
-                tmv_wohb.Height = tmvm.TitleDragHandleLongLength;
+                //tmv_wohb.Width = tmvm.TitleDragHandleShortLength;
+                //tmv_wohb.Height = tmvm.TitleDragHandleLongLength;
+                tmv_wohb.VerticalAlignment = VerticalAlignment.Center;
+                tmv_wohb.HorizontalAlignment = HorizontalAlignment.Stretch;
+                if (tmv_wohb.GetVisualDescendant<Image>() is Image tmv_wohb_img && 
+                    tmv_wohb_img.RenderTransform is RotateTransform rott) {
+                    rott.Angle = 90;
+                }
 
                 tmv_rsp.Orientation = Orientation.Vertical;
                 tmv_rsp.HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -794,6 +808,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void AdvSearchSplitter_DragDelta(object sender, VectorEventArgs e) {
+            MpAvSearchCriteriaItemCollectionViewModel.Instance
+                .BoundCriteriaListBoxScreenHeight += e.Vector.ToPortablePoint().Y;
+        }
+
+        private void AdvSearchSplitter_DragCompleted(object sender, VectorEventArgs e) {
             MpAvSearchCriteriaItemCollectionViewModel.Instance
                 .BoundCriteriaListBoxScreenHeight += e.Vector.ToPortablePoint().Y;
         }

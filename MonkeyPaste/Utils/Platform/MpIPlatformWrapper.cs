@@ -1,17 +1,20 @@
 ﻿using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
+
     public interface MpIPlatformWrapper : MpICommonTools {
+        MpIStartupObjectLocator StartupObjectLocator { get; set; }
         MpIPlatformCompatibility PlatformCompatibility { get; set; }
         MpIStartupState StartupState { get; set; }
         MpIPlatformShorcuts PlatformShorcuts { get; set; }
         MpINotificationManager NotificationManager { get; set; }
-
         MpIFocusMonitor FocusMonitor { get; set; }
         //MpIProcessWatcher ProcessWatcher { get; set; }
         MpICursor Cursor { get; set; }
         MpIDbInfo DbInfo { get; set; }
         MpIQueryInfo QueryInfo { get; set; }
+        MpIContentQueryTools ContentQueryTools { get; set; }
+        MpITagQueryTools TagQueryTools { get; set; }
         MpIApplicationCommandManager AppCommandManager { get; set; }
         MpIIconBuilder IconBuilder { get; set; }
         MpIUrlBuilder UrlBuilder { get; set; }
@@ -42,5 +45,6 @@ namespace MonkeyPaste {
         MpIPlatformDataObjectRegistrar DataObjectRegistrar { get; set; }
 
         MpICopyItemBuilder CopyItemBuilder { get; set; }
+
     }
 }

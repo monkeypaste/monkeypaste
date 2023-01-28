@@ -9,10 +9,12 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     public static class MpContentQuery {
         public static async Task<List<int>> QueryAllAsync(
-            MpIQueryInfo head_qi, 
-            IEnumerable<int> tagIds,
-            IEnumerable<int> ci_idsToOmit) {
-            ci_idsToOmit = ci_idsToOmit == null ? new List<int>() : ci_idsToOmit;
+            MpIQueryInfo head_qi//, 
+            //IEnumerable<int> tagIds,
+            //int tagId,
+            //IEnumerable<int> ci_idsToOmit
+            ) {
+            //ci_idsToOmit = ci_idsToOmit == null ? new List<int>() : ci_idsToOmit;
 
             List<int> totalIds = null;
             string viewQueryStr = string.Empty;
@@ -33,8 +35,11 @@ namespace MonkeyPaste {
                 //        qi.TagId = Convert.ToInt32(qi.SearchText);
                 //    }
                 //}
-                
-                var qi_result = await PerformContentQueryAsync(qi, tagIds);
+                IEnumerable<int> qi_tag_ids =
+                    MpPlatform.Services.TagQueryTools.GetSelfAndAllDescendantsTagIds(qi.TagId);
+
+
+                var qi_result = await PerformContentQueryAsync(qi, qi_tag_ids);
                 if (totalIds == null) {
                     totalIds = qi_result.ToList();
                 } else if (prev_qi != null) {
@@ -48,6 +53,9 @@ namespace MonkeyPaste {
                     totalIds.Distinct();
                 }
             }
+            IEnumerable<int> ci_idsToOmit =
+                MpPlatform.Services.ContentQueryTools.GetOmittedContentIds();
+
             return totalIds.Where(x => !ci_idsToOmit.Contains(x)).ToList();
         } 
 
@@ -66,16 +74,21 @@ namespace MonkeyPaste {
             string sortClause = string.Empty;
             List<string> types = new List<string>();
             List<string> filters = new List<string>();
-
-            if (qi.TagId != MpTag.AllTagId) {
-                // NOTE ignoring tagIds for all is just to optimize since they're all included anyway
-                string tag_where_stmt = string.Join(" or ", tagIds.Select(x => $"fk_MpTagId={x}"));
-                tagClause = string.Format(
-                    @"RootId in 
+            string tag_where_stmt = $"fk_MpTagId in ({string.Join(",", tagIds)})";
+            tagClause =
+                @$"RootId in 
                     (select distinct pk_MpCopyItemId from MpCopyItem where pk_MpCopyItemId in 
-		                (select fk_MpCopyItemId from MpCopyItemTag where {0}))",
-                    tag_where_stmt);
-            }
+		                (select fk_MpCopyItemId from MpCopyItemTag where {tag_where_stmt}))";
+
+            //if (qi.TagId != MpTag.AllTagId) {
+            //    // NOTE ignoring tagIds for all is just to optimize since they're all included anyway
+            //    //string tag_where_stmt = string.Join(" or ", tagIds.Select(x => $"fk_MpTagId={x}"));
+            //    string tag_where_stmt = $"fk_MpTagId in ({string.Join(",", tagIds)})";
+            //    tagClause =
+            //        @$"RootId in 
+            //        (select distinct pk_MpCopyItemId from MpCopyItem where pk_MpCopyItemId in 
+		          //      (select fk_MpCopyItemId from MpCopyItemTag where {tag_where_stmt}))";
+            //}
             if (!string.IsNullOrEmpty(qi.SearchText)) {
                 string searchOp = "like";
                 string escapeStr = "";

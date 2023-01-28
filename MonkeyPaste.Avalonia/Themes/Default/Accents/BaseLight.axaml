@@ -107,6 +107,17 @@
             Gainsboro
         </Color>
 
+        <!--  SEARCH CRITERIA  -->
+        <Color x:Key="SearchCriteriaRowBgColor1">
+            Lavender
+        </Color>
+        <Color x:Key="SearchCriteriaRowBgColor2">
+            LavenderBlush
+        </Color>
+        <Color x:Key="SearchCriteriaRowBgHoverColor">
+            GhostWhite
+        </Color>
+
         <!--  GRID SPLITTERS  -->
 
         <Color x:Key="DefaultGridSplitterColor">
@@ -221,6 +232,17 @@
         <!--  FILTER MENU  -->
         <SolidColorBrush x:Key="FilterMenuBgBrush"
                          Color="{DynamicResource MainWindowBgColor}"
+                         Opacity="{DynamicResource GlobalBgOpacity}" />
+
+        <!--  ADV SEARCH  -->
+        <SolidColorBrush x:Key="SearchCriteriaRowBgBrush1"
+                         Color="{DynamicResource SearchCriteriaRowBgColor1}"
+                         Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="SearchCriteriaRowBgBrush2"
+                         Color="{DynamicResource SearchCriteriaRowBgColor2}"
+                         Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="SearchCriteriaRowBgHoverBrush"
+                         Color="{DynamicResource SearchCriteriaRowBgHoverColor}"
                          Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  SIDE BAR  -->

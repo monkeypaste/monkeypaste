@@ -34,32 +34,103 @@
             <Setter Property="CornerRadius"
                     Value="10" />
         </Style>
-        <Style Selector="Button#ConvertToAdvancedSearchButton PathIcon">
-            <Setter Property="Foreground"
-                    Value="White" />
+        <!--  ADV SEARCH EXPAND TOGGLE BUTTON  -->
+        <!--  States  -->
+        <!--  Expand/Collapse: has criteria && saved  -->
+        <!--  Create Pending: has text && !has criteria  -->
+        <!--  Clear Pending: has criteria && !saved  -->
+        <!--  Visible: search text || has criteria  -->
+
+        <!--  PENDING  -->
+        <!--<Style Selector="ToggleButton#ToggleExpandedAdvancedSearchButton:not(.saved)">
+            <Setter Property="IsChecked"
+                    Value="{x:Null}" />
+        </Style>-->
+        <!--  PENDING (UNCHECKED)  -->
+
+        <!--<Style Selector="ToggleButton#ToggleExpandedAdvancedSearchButton:unchecked:not(.saved)">
+            <Setter Property="Command"
+                    Value="{Binding ConvertQueryToAdvancedSearchCommand, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}" />
+        </Style>-->
+
+        <Style Selector="ToggleButton#ToggleExpandedAdvancedSearchButton:unchecked:not(.saved) Image">
+            <Setter Property="Source"
+                    Value="{Binding ., Source={StaticResource BinocularsImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </Style>
-        <Style Selector="Button#ConvertToAdvancedSearchButton:pointerover PathIcon">
-            <Setter Property="Foreground"
-                    Value="Silver" />
+        <Style Selector="ToggleButton#ToggleExpandedAdvancedSearchButton:unchecked:not(.saved):pointerover Image">
+            <Setter Property="Source"
+                    Value="{Binding ., Source={StaticResource BinocularsTiltedImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </Style>
+
+
+        <!--  PENDING (CHECKED)  -->
+
+        <!--<Style Selector="ToggleButton#ToggleExpandedAdvancedSearchButton:checked:not(.saved)">
+            <Setter Property="Command"
+                    Value="{Binding ClearCriteriaItemsCommand, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}" />
+        </Style>-->
+        <Style Selector="ToggleButton#ToggleExpandedAdvancedSearchButton:checked:not(.saved) Image">
+            <Setter Property="Margin"
+                    Value="5" />
+            <Setter Property="Source"
+                    Value="{Binding ., Source={StaticResource TrashCanImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+        </Style>
+        <Style Selector="ToggleButton#ToggleExpandedAdvancedSearchButton:checked:not(.saved) Image">
+            <Setter Property="Margin"
+                    Value="5" />
+            <Setter Property="Source"
+                    Value="{Binding ., Source={StaticResource TrashCanImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+        </Style>
+        <Style Selector="ToggleButton#ToggleExpandedAdvancedSearchButton:checked:not(.saved):pointerover /template/ ContentPresenter">
+            <Setter Property="Background"
+                    Value="Salmon" />
+        </Style>
+
+        <!--  SAVED  -->
+
+        <!--<Style Selector="ToggleButton#ToggleExpandedAdvancedSearchButton.saved">
+            <Setter Property="Command"
+                    Value="{x:Null}" />
+            <Setter Property="IsChecked"
+                    Value="{Binding IsExpanded, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}, Mode=TwoWay}" />
+        </Style>-->
+        <Style Selector="ToggleButton#ToggleExpandedAdvancedSearchButton.saved Image">
+            <Setter Property="Source"
+                    Value="{Binding ., Source={StaticResource EdgeArrowUpImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+        </Style>
+        <!--  SAVED (UNCHECKED)  -->
+        <Style Selector="ToggleButton#ToggleExpandedAdvancedSearchButton:unchecked.saved Image">
+            <Setter Property="RotateTransform.Angle"
+                    Value="180" />
+        </Style>
+        <!--  SAVED (CHECKED)  -->
+        <Style Selector="ToggleButton#ToggleExpandedAdvancedSearchButton:checked.saved Image">
+            <Setter Property="RotateTransform.Angle"
+                    Value="0" />
+        </Style>
+
     </local:MpAvUserControl.Styles>
     <StackPanel x:Name="SearchViewContainerStackPanel"
                 Orientation="Horizontal">
 
-        <!--  Save Advanced Search Button  -->
+        <!--  SAVE BUTTON  -->
+        <!--
+            IsVisible="{Binding IsPendingQuery, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
+        -->
         <Button x:Name="SaveSearchButton"
                 Classes="defaultButton textOnlyButton"
                 Command="{Binding SavePendingQueryCommand, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
-                IsVisible="{Binding IsPendingQuery, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
                 Margin="0,0,5,0">
-            <!--<Button.IsVisible>
+            <Button.IsVisible>
                 <MultiBinding Converter="{x:Static BoolConverters.And}">
                     <Binding Path="HasCriteriaItems"
                              Source="{x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}" />
-                    <Binding Path="!IsCriteriaSaved"
-                             Source="{x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}" />
+                    <Binding Path="PendingQueryTagId"
+                             Source="{x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}"
+                             Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}"
+                             ConverterParameter="flip" />
                 </MultiBinding>
-            </Button.IsVisible>-->
+            </Button.IsVisible>
             <TextBlock Text="SAVE" />
         </Button>
         <Grid>
@@ -226,30 +297,31 @@
                                   Background="{DynamicResource DisabledBgBrush}"
                                   Classes="searchBorder" />
         </Grid>
-        <!--  Add Or Clear Search Criteria Button  -->
-        <Button x:Name="ConvertToAdvancedSearchButton"
-                Margin="5,10"
-                BorderThickness="0"
-                Width="20"
-                Height="20"
-                Classes="defaultButton noBg noHoverBg"
-                Command="{Binding ConvertQueryToAdvancedSearchCommand, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}">
-            <Button.IsVisible>
-                <MultiBinding Converter="{x:Static BoolConverters.And}">
+
+        <!--  ADVANCED SEARCH TOGGLE BUTTON  -->
+
+        <ToggleButton x:Name="ToggleExpandedAdvancedSearchButton"
+                      Margin="5"
+                      BorderThickness="0"
+                      VerticalAlignment="Stretch"
+                      HorizontalAlignment="Center"
+                      Width="{Binding $self.Bounds.Height}"
+                      Classes="noBg noHoverBg"
+                      Command="{Binding ToggleIsExpandedCommand, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
+                      Classes.saved="{Binding IsSavedQuery, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}">
+            <ToggleButton.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.Or}">
                     <Binding Path="HasText" />
-                    <Binding Path="!HasCriteriaItems"
+                    <Binding Path="HasCriteriaItems"
                              Source="{x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}" />
                 </MultiBinding>
-            </Button.IsVisible>
-            <PathIcon Data="{StaticResource PlusBoxSvg}" />
-        </Button>
-        <Button x:Name="ClearAdvancedSearchButton"
-                Margin="5"
-                BorderThickness="0"
-                Classes="noBg noHoverBg"
-                Command="{Binding ClearCriteriaItemsCommand, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
-                IsVisible="{Binding HasCriteriaItems, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}">
-            <PathIcon Data="{StaticResource MinusBoxSvg}" />
-        </Button>
+            </ToggleButton.IsVisible>
+            <!--<PathIcon Data="{StaticResource PlusBoxSvg}" />-->
+            <Image>
+                <Image.RenderTransform>
+                    <RotateTransform />
+                </Image.RenderTransform>
+            </Image>
+        </ToggleButton>
     </StackPanel>
 </local:MpAvUserControl>

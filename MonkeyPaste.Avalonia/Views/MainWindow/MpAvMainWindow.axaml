@@ -57,6 +57,7 @@
                                              DataContext="{x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}" />
         <GridSplitter x:Name="AdvancedSearchSplitter"
                       Classes="horizontal"
+                      ShowsPreview="True"
                       Grid.Row="2"
                       IsVisible="{Binding IsVisible, ElementName=SearchDetailView}"
                       HorizontalAlignment="Stretch"

@@ -4,6 +4,9 @@
     <sys:String x:Key="AppImage">
         avares://MonkeyPaste.Avalonia/Assets/Images/monkey.png
     </sys:String>
+    <sys:String x:Key="DragImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/drag.png
+    </sys:String>
     <sys:String x:Key="NoEntryImage">
         avares://MonkeyPaste.Avalonia/Assets/Images/noentry.png
     </sys:String>
@@ -15,6 +18,15 @@
     </sys:String>
     <sys:String x:Key="ClearGridImage">
         avares://MonkeyPaste.Avalonia/Assets/Images/cleargrid.png
+    </sys:String>
+    <sys:String x:Key="EdgeArrowUpImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/edgearrowup.png
+    </sys:String>
+    <sys:String x:Key="BinocularsImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/binoculars.png
+    </sys:String>
+    <sys:String x:Key="BinocularsTiltedImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/binocularstilted.png
     </sys:String>
     <sys:String x:Key="BrainWhiteImage">
         avares://MonkeyPaste.Avalonia/Assets/Images/brainwhite.png
@@ -274,8 +286,11 @@
     <sys:String x:Key="EmptyImage">
         avares://MonkeyPaste.Avalonia/Assets/Images/transparent.png
     </sys:String>
-    <sys:String x:Key="DotsImage">
+    <sys:String x:Key="EllipsesImage">
         avares://MonkeyPaste.Avalonia/Assets/Images/ellipses.png
+    </sys:String>
+    <sys:String x:Key="DotsImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/dots.png
     </sys:String>
     <sys:String x:Key="WandImage">
         avares://MonkeyPaste.Avalonia/Assets/Images/wand.png

@@ -317,7 +317,24 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-        
+
+        private IEnumerable<MpIAsyncObject> _busyCheckInstances;
+        public bool IsAnyBusy {
+            get {
+                if (IsBusy) {
+                    return true;
+                }
+                if (_busyCheckInstances == null) {
+                    _busyCheckInstances =
+                        MpPlatform.Services.StartupObjectLocator
+                        .Items
+                        .Where(x => x is MpIAsyncObject)
+                        .Cast<MpIAsyncObject>();
+                }
+                return
+                    _busyCheckInstances.Any(x => x.IsBusy);
+            }
+        }
         public string ShowOrHideLabel => IsMainWindowOpen ? "Hide" : "Show";
         public string ShowOrHideIconResourceKey => IsMainWindowOpen ? "ClosedEyeImage" : "OpenEyeImage";
         public bool AnimateShowWindow { get; set; } = true;
@@ -908,6 +925,12 @@ namespace MonkeyPaste.Avalonia {
 
                     if (AnimateShowWindow) {
                         MpAvMainWindow.Instance.Show();
+                        if (IsMainWindowInitiallyOpening) {
+                            //while (MpAvClipTrayViewModel.Instance.IsInitialQuery || MpAvClipTrayViewModel.Instance.IsAnyBusy) {
+                            //    MpConsole.WriteLine("mw initial open waiting...");
+                            //    await Task.Delay(1000);
+                            //}
+                        }
                         //MpAvMainWindow.Instance.Topmost = false;
                         //UpdateTopmost();
                         //MpAvMainWindow.Instance.Renderer.Start();

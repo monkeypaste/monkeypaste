@@ -12,32 +12,45 @@
                        d:DesignWidth="800"
                        d:DesignHeight="30"
                        x:Class="MonkeyPaste.Avalonia.MpAvMainWindowTitleMenuView">
+    <local:MpAvUserControl.Styles>
+
+        <!--  BUTTONS  -->
+
+        <Style Selector="PathIcon">
+            <Setter Property="Foreground"
+                    Value="Black" />
+        </Style>
+        <Style Selector="PathIcon /template/ Path">
+            <Setter Property="Margin"
+                    Value="3" />
+        </Style>
+        <Style Selector="ToggleButton:checked /template/ ContentPresenter">
+            <Setter Property="Background"
+                    Value="Transparent" />
+        </Style>
+        <Style Selector="ToggleButton:checked PathIcon">
+            <Setter Property="Foreground"
+                    Value="Lime" />
+        </Style>
+        <Style Selector=":is(Button):pointerover PathIcon">
+            <Setter Property="Foreground"
+                    Value="Cornsilk" />
+        </Style>
+
+        <!--  DRAG HANDLE  -->
+
+        <Style Selector="Button#WindowOrientationHandleButton:pointerover Image">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource DotsImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=yellow1}" />
+        </Style>
+        <Style Selector="Button#WindowOrientationHandleButton:pressed Image">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource DotsImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=dimgray}" />
+        </Style>
+    </local:MpAvUserControl.Styles>
     <Grid x:Name="TitlePanel"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch">
-        <Grid.Styles>
-            <Style Selector="PathIcon">
-                <Setter Property="Foreground"
-                        Value="Black" />
-            </Style>
-            <Style Selector="PathIcon /template/ Path">
-                <Setter Property="Margin"
-                        Value="3" />
-            </Style>
-            <Style Selector="ToggleButton:checked /template/ ContentPresenter">
-                <Setter Property="Background"
-                        Value="Transparent" />
-            </Style>
-            <Style Selector="ToggleButton:checked PathIcon">
-                <Setter Property="Foreground"
-                        Value="Lime" />
-            </Style>
-            <Style Selector=":is(Button):pointerover PathIcon">
-                <Setter Property="Foreground"
-                        Value="Cornsilk" />
-            </Style>
-            
-        </Grid.Styles>
         <!--  Left Side  -->
 
         <StackPanel x:Name="LeftStackPanel"
@@ -46,9 +59,12 @@
             <!--  Settings Toggle Button  -->
 
             <ToggleButton x:Name="SettingsToggleButton"
-                          Classes="noBg noHoverBg"
+                          Classes="noBg noHoverBg shakeOver"
                           IsChecked="{Binding IsVisible, Source={x:Static local:MpAvSettingsWindowViewModel.Instance}}"
                           ToolTip.ShowDelay="500">
+                <ToggleButton.RenderTransform>
+                    <RotateTransform />
+                </ToggleButton.RenderTransform>
                 <ToolTip.Tip>
                     <local:MpAvToolTipView ToolTipText="Settings" />
                 </ToolTip.Tip>
@@ -58,9 +74,13 @@
             <!--  Lock Toggle Button  -->
 
             <ToggleButton x:Name="LockToggleButton"
-                          Classes="noBg noHoverBg"
+                          Classes="noBg noHoverBg shakeOver"
                           IsChecked="{Binding IsMainWindowLocked, Source={x:Static local:MpAvMainWindowViewModel.Instance}, Mode=TwoWay}"
                           ToolTip.ShowDelay="500">
+
+                <ToggleButton.RenderTransform>
+                    <RotateTransform />
+                </ToggleButton.RenderTransform>
                 <ToolTip.Tip>
                     <local:MpAvToolTipView ToolTipText="Lock" />
                 </ToolTip.Tip>
@@ -68,41 +88,18 @@
             </ToggleButton>
         </StackPanel>
 
-        <Border x:Name="WindowOrientationHandleBorder"
+        <Button x:Name="WindowOrientationHandleButton"
                 BorderThickness="0"
+                Cursor="SizeAll"
+                Classes="noBg noHoverBg"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center">
-            <Border.Styles>
-                <Style Selector="Border">
-                    <Setter Property="BorderBrush"
-                            Value="Transparent" />
-                    <Setter Property="Background"
-                            Value="Transparent" />
-                </Style>
-                <Style Selector="Border:pointerover">
-                    <Setter Property="BorderBrush"
-                            Value="{DynamicResource HoverDefaultBorderBrush}" />
-                    <Setter Property="Background"
-                            Value="{DynamicResource HoverDefaultBorderBrush}" />
-                    <Setter Property="Cursor"
-                            Value="SizeAll" />
-                </Style>
-                <Style Selector="Border:pressed">
-                    <Setter Property="BorderBrush"
-                            Value="Lime" />
-                    <Setter Property="Background"
-                            Value="Lime" />
-                    <Setter Property="Cursor"
-                            Value="SizeAll" />
-                </Style>
-            </Border.Styles>
-            <Border.Background>
-                <ImageBrush Source="{Binding Source={StaticResource FrameGripTile}, Converter={StaticResource StringResourceConverter}}"
-                            TileMode="Tile"
-                            Stretch="Fill"
-                            DestinationRect="0,0,5,7" />
-            </Border.Background>
-        </Border>
+                VerticalAlignment="Stretch">
+            <Image>
+                <Image.RenderTransform>
+                    <RotateTransform />
+                </Image.RenderTransform>
+            </Image>
+        </Button>
 
 
         <StackPanel x:Name="RightStackPanel"
@@ -215,9 +212,12 @@
             </Grid>
             <!--  Layout Toggle Button  -->
             <ToggleButton x:Name="GridLayoutToggleButton"
-                          Classes="noBg noHoverBg"
+                          Classes="noBg noHoverBg shakeOver"
                           IsChecked="{Binding IsGridLayout, Mode=TwoWay, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                           ToolTip.ShowDelay="0">
+                <ToggleButton.RenderTransform>
+                    <RotateTransform />
+                </ToggleButton.RenderTransform>
                 <Grid>
                     <PathIcon IsVisible="{Binding IsGridLayout, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                               Data="{StaticResource StackLayoutSvg}">
@@ -256,10 +256,14 @@
             <Button x:Name="MainWindowCycleOrientationCcwButton"
                     Command="{Binding CycleOrientationCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                     CommandParameter="CCW"
-                    Classes="noBg noHoverBg"
+                    Classes="noBg noHoverBg shakeOver"
                     local:MpAvPointerPressCommandExtension.IsEnabled="True"
                     local:MpAvPointerPressCommandExtension.RightPressCommand="{Binding CycleOrientationCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                     local:MpAvPointerPressCommandExtension.RightPressCommandParameter="CW">
+
+                <Button.RenderTransform>
+                    <RotateTransform />
+                </Button.RenderTransform>
                 <ToolTip.Tip>
                     <local:MpAvToolTipView ToolTipText="Cycle Orientation CCW" />
                 </ToolTip.Tip>

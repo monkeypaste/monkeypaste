@@ -12,12 +12,19 @@ namespace MonkeyPaste.Avalonia {
 
     public class MpAvSearchCriteriaOptionViewModel : 
         MpViewModelBase<MpAvSearchCriteriaOptionViewModel>,
-        MpITreeItemViewModel{
+        MpITreeItemViewModel, 
+        MpIHoverableViewModel {
         #region Private Variables
 
         #endregion
 
         #region Interfaces
+
+        #region MpIHoverableViewModel Implementation
+
+        public bool IsHovering { get; set; }
+
+        #endregion
 
         #region MpITreeItemViewModel Implementation
 
@@ -52,8 +59,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        public bool IsAnyBusy =>
-            this.SelfAndAllDescendants().Cast<MpAvSearchCriteriaOptionViewModel>().Any(x => x.IsBusy);
+        public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsAnyBusy);
 
         public bool HasChildren => Items.Count > 0;
 
@@ -210,7 +216,7 @@ namespace MonkeyPaste.Avalonia {
 
             SelectedItem = cur_opt_sel_idx >= 0 ? Items[cur_opt_sel_idx] : null;
 
-            while(Items.Any(x=>x.IsBusy)) {
+            while(Items.Any(x=>x.IsAnyBusy)) {
                 await Task.Delay(100);
             }
 
@@ -234,6 +240,10 @@ namespace MonkeyPaste.Avalonia {
                     //    Items.ForEach(x => x.IsSelected = false);
                     //    OnPropertyChanged(nameof(SelectedItem));
                     //}
+                    if(!IsSelected) {
+                        // clear unselected sub-trees
+                        Items.Clear();
+                    }
 
                     HostCriteriaItem.OnPropertyChanged(nameof(HostCriteriaItem.Items));
                     HostCriteriaItem.OnPropertyChanged(nameof(HostCriteriaItem.IsInputVisible));
@@ -247,7 +257,9 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(Values):
                 case nameof(Value):
-                    if(HostCriteriaItem == null) {
+                    if(HostCriteriaItem == null || IsBusy) {
+                        // should only be busy during initial load 
+                        // where collection handles ntf from adv search opened msg
                         break;
                     }
                     HostCriteriaItem.NotifyValueChanged();

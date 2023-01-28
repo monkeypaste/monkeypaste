@@ -88,8 +88,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #region Query Methods
-        public async Task QueryForTotalCountAsync(IEnumerable<int> ci_idsToOmit, IEnumerable<int> tagIds) { // = null) {
-            var result = await MpContentQuery.QueryAllAsync(this, tagIds, ci_idsToOmit);
+        public async Task QueryForTotalCountAsync() { 
+            var result = await MpContentQuery.QueryAllAsync(this);
             _allQueryCopyItemIds.Clear();
             _allQueryCopyItemIds.AddRange(result);
         }

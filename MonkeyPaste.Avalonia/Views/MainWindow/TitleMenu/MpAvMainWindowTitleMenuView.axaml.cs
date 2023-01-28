@@ -39,8 +39,9 @@ namespace MonkeyPaste.Avalonia {
                 }
             });
 
-            var windowDragBorder = this.FindControl<Control>("WindowOrientationHandleBorder");
-            windowDragBorder.AddHandler(Border.PointerPressedEvent, WindowDragBorder_PointerPressed, RoutingStrategies.Tunnel);
+            var windowDragButton = this.FindControl<Control>("WindowOrientationHandleButton");
+            windowDragButton.AddHandler(Control.PointerPressedEvent, WindowDragButton_PointerPressed, RoutingStrategies.Tunnel);
+
             //var ltb = this.FindControl<Button>("MainWindowOrientationButton");
             //ltb.AddHandler(Button.PointerPressedEvent, Ltb_PointerPressed, RoutingStrategies.Tunnel);
 
@@ -49,24 +50,25 @@ namespace MonkeyPaste.Avalonia {
         #region Window Drag
         private MpMainWindowOrientationType _startOrientation;
         private MpMainWindowOrientationType _curOrientation;
-        private void WindowDragBorder_PointerPressed(object sender, PointerPressedEventArgs e) {
-            var windowDragBorder = sender as Control;
-            if(windowDragBorder == null) {
+        private void WindowDragButton_PointerPressed(object sender, PointerPressedEventArgs e) {
+            var windowDragButton = sender as Control;
+            if(windowDragButton == null) {
                 return;
             }
-            windowDragBorder.DragCheckAndStart(
+            e.Handled = true;
+            windowDragButton.DragCheckAndStart(
                 e, 
-                WindowDragBorder_Start, WindowDragBorder_Move, WindowDragBorder_End, 
+                WindowDragButton_Start, WindowDragButton_Move, WindowDragButton_End, 
                 null,
                 MpAvShortcutCollectionViewModel.Instance);
         }
 
-        private void WindowDragBorder_Start(PointerPressedEventArgs e) {
+        private void WindowDragButton_Start(PointerPressedEventArgs e) {
             MpAvMainWindowViewModel.Instance.IsMainWindowOrientationDragging = true;
             _startOrientation = MpAvMainWindowViewModel.Instance.MainWindowOrientationType;
             e.Pointer.Capture(e.Source as Control);
         }
-        private void WindowDragBorder_Move(PointerEventArgs e) {
+        private void WindowDragButton_Move(PointerEventArgs e) {
             MpPoint mw_mp = e.GetClientMousePoint(MpAvMainWindow.Instance);
 
             MpPoint screen_mp = MpAvMainWindow.Instance.PointToScreen(
@@ -99,7 +101,9 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private void WindowDragBorder_End(PointerReleasedEventArgs e) {
+        private void WindowDragButton_End(PointerReleasedEventArgs e) {
+            e.Pointer.Capture(null);
+
             MpAvMainWindowViewModel.Instance.IsMainWindowOrientationDragging = false;
 
             MpMainWindowOrientationType final_or = _curOrientation;

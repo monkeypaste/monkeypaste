@@ -12,6 +12,7 @@
                        d:DesignHeight="50"
                        d:DesignWidth="800">
     <local:MpAvUserControl.Styles>
+        
         <Style Selector="ListBox :is(Control).addRemoveBtn">
             <Setter Property="IsVisible"
                     Value="False" />
@@ -47,23 +48,34 @@
             <Setter Property="Stretch"
                     Value="Fill" />
         </Style>
+        <Style Selector="Button#CriteriaDragButton Image">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource DragImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=white}" />
+        </Style>
+        <Style Selector="Button#CriteriaDragButton:pointerover Image">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource DragImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=yellow}" />
+        </Style>
+        <Style Selector="Button#CriteriaDragButton:pressed Image">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource DragImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=dimgray}" />
+        </Style>
 
     </local:MpAvUserControl.Styles>
-    <DockPanel LastChildFill="False">
-        <ListBox Background="Transparent"
-                 BorderThickness="0"
-                 Items="{Binding Items}">
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <VirtualizingStackPanel Orientation="Horizontal" />
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <local:MpAvSearchCriteriaOptionView DataContext="{Binding}" />
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+    <DockPanel LastChildFill="True">
+        <Button x:Name="CriteriaDragButton"
+                DockPanel.Dock="Left"
+                Classes="noBg noHoverBg"
+                Cursor="SizeAll"
+                Margin="15,0,15,0"
+                Width="25"
+                Height="25">
+            <Image Classes="shakeOver">
+                <Image.RenderTransform>
+                    <RotateTransform />
+                </Image.RenderTransform>
+            </Image>
+        </Button>
         <StackPanel Orientation="Horizontal"
                     DockPanel.Dock="Right">
 
@@ -102,5 +114,23 @@
                                      Command="{Binding AddNextCriteriaItemCommand}"
                                      CommandParameter="Boolean" />
         </StackPanel>
+
+        <ListBox Background="Transparent"
+                 Classes="optionsList"
+                 BorderThickness="0"
+                 Items="{Binding Items}">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="local:MpAvSearchCriteriaOptionViewModel">
+                    <local:MpAvSearchCriteriaOptionView DataContext="{Binding}"
+                                                        local:MpAvIsHoveringExtension.IsEnabled="True"
+                                                        local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </DockPanel>
 </local:MpAvUserControl>

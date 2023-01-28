@@ -173,10 +173,10 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvActionDesigner.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvActionDesignerItemColors.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvActionProperty.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvClipBorder.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvClipTile.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvClipTrayContainer.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMainWindow.axaml" />
-    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMainWindowTitle.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMarqueeTextBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvNotificationWindow.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPinTray.axaml" />
@@ -218,6 +218,8 @@
     <None Remove="Assets\Images\back_black.png" />
     <None Remove="Assets\Images\beaker.png" />
     <None Remove="Assets\Images\bingIcon.png" />
+    <None Remove="Assets\Images\binoculars.png" />
+    <None Remove="Assets\Images\binocularstilted.png" />
     <None Remove="Assets\Images\bitmap.png" />
     <None Remove="Assets\Images\bolt.png" />
     <None Remove="Assets\Images\bothclick.png" />
@@ -249,12 +251,14 @@
     <None Remove="Assets\Images\desc_black.png" />
     <None Remove="Assets\Images\desc_gray.png" />
     <None Remove="Assets\Images\desc_white.png" />
+    <None Remove="Assets\Images\dots.png" />
     <None Remove="Assets\Images\doubleSidedArrow.png" />
     <None Remove="Assets\Images\doubleSidedArrow2.png" />
     <None Remove="Assets\Images\down_black.png" />
     <None Remove="Assets\Images\drag.png" />
     <None Remove="Assets\Images\duckduckgoIcon.png" />
     <None Remove="Assets\Images\duplicate.png" />
+    <None Remove="Assets\Images\edgearrowup.png" />
     <None Remove="Assets\Images\edit.png" />
     <None Remove="Assets\Images\egg.png" />
     <None Remove="Assets\Images\ellipses.png" />
@@ -488,6 +492,12 @@
     <AvaloniaResource Include="Assets\Images\bingIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\binoculars.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\binocularstilted.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\bitmap.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -581,6 +591,9 @@
     <AvaloniaResource Include="Assets\Images\desc_white.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\dots.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\doubleSidedArrow.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -597,6 +610,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\duplicate.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\edgearrowup.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\edit.png">
@@ -975,6 +991,7 @@
       
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Default\Controls\Animations\Shake.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\MpAvClipBorder.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\TemplatedControl.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ComboBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\GridSplitter.axaml" />
@@ -999,7 +1016,6 @@
       
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Default\Controls\MpAvMainWindow.axaml" />
-    <AvaloniaResource Include="Themes\Default\Controls\MpAvMainWindowTitle.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\TextBlock.axaml">
       
     </AvaloniaResource>

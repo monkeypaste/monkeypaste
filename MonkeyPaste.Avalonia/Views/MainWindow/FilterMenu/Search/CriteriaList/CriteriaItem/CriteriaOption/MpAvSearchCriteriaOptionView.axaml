@@ -55,23 +55,9 @@
                         <!--  TEXTBOX  -->
                         <DataTemplate x:Key="TextOptionTemplate"
                                       DataType="local:MpAvSearchCriteriaOptionViewModel">
-                            <StackPanel Orientation="Horizontal">
-                                <local:MpAvClipBorder Margin="5,7"
-                                                      
-                                                      VerticalAlignment="Center"
-                                                      CornerRadius="10"
-                                                      Background="White"
-                                                      BorderBrush="White">
-                                    <TextBox MinWidth="900"
-                                             Margin="5,0,0,0"
-                                             VerticalAlignment="Center"
-                                             VerticalContentAlignment="Center"
-                                             BorderThickness="0"
-                                             BorderBrush="Black"
-                                             Text="{Binding Value, Mode=TwoWay}" />
-                                </local:MpAvClipBorder>
-
+                            <DockPanel>
                                 <CheckBox VerticalAlignment="Center"
+                                          DockPanel.Dock="Right"
                                           Margin="0,0,5,0"
                                           IsChecked="{Binding IsChecked, Mode=TwoWay}">
                                     <TextBlock VerticalAlignment="Center"
@@ -82,7 +68,25 @@
                                                IsVisible="{Binding IsCheckable}"
                                                Text="Case Sensitive?" />
                                 </CheckBox>
-                            </StackPanel>
+
+                                <local:MpAvClipBorder Margin="5"
+                                                      Padding="3"
+                                                      HorizontalAlignment="Stretch"
+                                                      VerticalAlignment="Center"
+                                                      CornerRadius="10"
+                                                      Background="White"
+                                                      BorderBrush="White">
+                                    <TextBox Margin="5,0,0,0"
+                                             MinWidth="500"
+                                             ClipToBounds="False"
+                                             HorizontalAlignment="Stretch"
+                                             HorizontalContentAlignment="Left"
+                                             VerticalAlignment="Center"
+                                             VerticalContentAlignment="Center"
+                                             BorderThickness="0"
+                                             Text="{Binding Value, Mode=TwoWay}" />
+                                </local:MpAvClipBorder>
+                            </DockPanel>
                         </DataTemplate>
                         <DataTemplate x:Key="RGBAOptionTemplate"
                                       DataType="local:MpAvSearchCriteriaOptionViewModel">

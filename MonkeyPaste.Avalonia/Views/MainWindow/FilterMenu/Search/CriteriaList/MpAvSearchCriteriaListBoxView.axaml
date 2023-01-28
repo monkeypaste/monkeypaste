@@ -32,6 +32,17 @@
             <Setter Property="VerticalAlignment"
                     Value="Stretch" />
         </Style>
+        <Style Selector="ListBox:not(.optionsList) ListBoxItem">
+            <Setter Property="BorderThickness"
+                    Value="0,1,0,1" />
+            <Setter Property="BorderBrush"
+                    Value="Gainsboro" />
+        </Style>
+
+        <Style Selector="ListBox:not(.optionsList) ListBoxItem:pointerover">
+            <Setter Property="BorderBrush"
+                    Value="Yellow" />
+        </Style>
         <Style Selector="local|MpAvSearchCriteriaItemView">
             <Setter Property="BorderBrush"
                     Value="DimGray" />
@@ -40,15 +51,15 @@
         </Style>
         <Style Selector="ListBoxItem:nth-child(odd) local|MpAvSearchCriteriaItemView">
             <Setter Property="Background"
-                    Value="{DynamicResource PluginParameterItemBgBrush1}" />
+                    Value="{DynamicResource SearchCriteriaRowBgBrush1}" />
         </Style>
         <Style Selector="ListBoxItem:nth-child(even) local|MpAvSearchCriteriaItemView">
             <Setter Property="Background"
-                    Value="{DynamicResource PluginParameterItemBgBrush2}" />
+                    Value="{DynamicResource SearchCriteriaRowBgBrush2}" />
         </Style>
         <Style Selector="ListBoxItem:pointerover local|MpAvSearchCriteriaItemView">
             <Setter Property="Background"
-                    Value="{DynamicResource PluginParameterItemHoverBgBrush}" />
+                    Value="{DynamicResource SearchCriteriaRowBgHoverBrush}" />
         </Style>
         <Style Selector="ListBoxItem:selected local|MpAvSearchCriteriaItemView">
             <Setter Property="BorderBrush"
@@ -67,7 +78,7 @@
              SelectionMode="Single"
              HorizontalAlignment="Stretch"
              VerticalAlignment="Stretch"
-             ScrollViewer.VerticalScrollBarVisibility="Hidden"
+             ScrollViewer.VerticalScrollBarVisibility="Auto"
              ScrollViewer.HorizontalScrollBarVisibility="Hidden">
         <ListBox.ItemTemplate>
             <DataTemplate>

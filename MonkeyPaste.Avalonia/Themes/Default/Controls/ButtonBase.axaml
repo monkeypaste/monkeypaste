@@ -31,6 +31,7 @@
         <Setter Property="Padding"
                 Value="5,3" />
     </Style>
+
     <Style Selector=":is(Button).textOnlyButton /template/ ContentPresenter">
         <Setter Property="Padding"
                 Value="10,3" />
@@ -40,6 +41,16 @@
                 Value="Yellow" />
         <Setter Property="Background"
                 Value="Silver" />
+    </Style>
+    <Style Selector=":is(Button).outline /template/ ContentPresenter">
+        <Setter Property="BorderThickness"
+                Value="1" />
+        <Setter Property="BorderBrush"
+                Value="Silver" />
+    </Style>
+    <Style Selector=":is(Button):pointerover.outline /template/ ContentPresenter">
+        <Setter Property="BorderBrush"
+                Value="Yellow" />
     </Style>
     <Style Selector=":is(Button).defaultButton TextBlock">
         <Setter Property="Foreground"

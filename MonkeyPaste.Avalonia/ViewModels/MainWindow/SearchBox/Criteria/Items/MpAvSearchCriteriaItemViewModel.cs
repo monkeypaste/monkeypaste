@@ -59,8 +59,19 @@ namespace MonkeyPaste.Avalonia {
 
         IEnumerable<MpIQueryInfoValueProvider> MpIQueryInfo.Providers => 
             new[] { this };
-        int MpIQueryInfo.TotalAvailableItemsInQuery => 
-            _allQueryCopyItemIds.Count;
+        int MpIQueryInfo.TotalAvailableItemsInQuery {
+            get {
+                int sum = _allQueryCopyItemIds.Count;
+                if(this is MpIQueryInfo qi) {
+                    qi = qi.Next;
+                    while(qi != null) {
+                        sum += qi.TotalAvailableItemsInQuery;
+                        qi = qi.Next;
+                    }
+                }
+                return sum;
+            }
+        }
         bool MpIQueryInfo.IsDescending =>
             MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending;
         MpContentSortType MpIQueryInfo.SortType =>
@@ -98,7 +109,7 @@ namespace MonkeyPaste.Avalonia {
                     RootOptionViewModel
                     .SelfAndAllDescendants()
                     .Cast<MpAvSearchCriteriaOptionViewModel>()
-                    .Where(x => x.FilterValue.HasFlag(MpContentQueryBitFlags.MatchValue))
+                    .Where(x => !string.IsNullOrEmpty(x.Value))
                     .ToList();
                 if (match_val_opts.Count > 0) {
                     if (match_val_opts.Count > 1) {
@@ -207,8 +218,8 @@ namespace MonkeyPaste.Avalonia {
             return items;
         }
 
-        async Task MpIQueryInfo.QueryForTotalCountAsync(IEnumerable<int> ci_idsToOmit, IEnumerable<int> tagIds) {
-            var result = await MpContentQuery.QueryAllAsync(this, tagIds, ci_idsToOmit);
+        async Task MpIQueryInfo.QueryForTotalCountAsync() {
+            var result = await MpContentQuery.QueryAllAsync(this);
             _allQueryCopyItemIds.Clear();
             _allQueryCopyItemIds.AddRange(result);
         }
@@ -303,10 +314,44 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-
         #region Options
 
-        #region Default Labels
+
+        #region Root Option
+
+        private MpAvSearchCriteriaOptionViewModel GetRootOption() {
+            var rovm = new MpAvSearchCriteriaOptionViewModel(this, null);
+            rovm.HostCriteriaItem = this;
+            rovm.IsSelected = true;
+            rovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
+            rovm.Items.Clear();
+            string[] labels = typeof(MpRootOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
+
+            for (int i = 0; i < labels.Length; i++) {
+                var tovm = new MpAvSearchCriteriaOptionViewModel(this, rovm);
+                tovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
+                tovm.Label = labels[i];
+                switch ((MpRootOptionType)i) {
+                    case MpRootOptionType.Content:
+                        tovm.Items = GetContentOptionViewModel(tovm);
+                        break;
+                    case MpRootOptionType.Collection:
+                        tovm.Items = GetCollectionOptionViewModel(tovm);
+                        break;
+                    case MpRootOptionType.Source:
+                        tovm.Items = GetSourceOptionViewModel(tovm);
+                        break;
+                    case MpRootOptionType.DateOrTime:
+                        tovm.Items = GetDateTimeTypeOptionViewModel(tovm);
+                        break;
+                    case MpRootOptionType.ContentType:
+                        tovm.Items = GetContentTypeOptionViewModel(tovm);
+                        break;
+                }
+                rovm.Items.Add(tovm);
+            }
+            return rovm;
+        }
 
         #endregion
 
@@ -740,44 +785,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region Root Option
-
-        private MpAvSearchCriteriaOptionViewModel GetRootOption() {
-            var rovm = new MpAvSearchCriteriaOptionViewModel(this, null);
-            rovm.HostCriteriaItem = this;
-            rovm.IsSelected = true;
-            rovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
-            rovm.Items.Clear();
-            string[] labels = typeof(MpRootOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
-
-            for (int i = 0; i < labels.Length; i++) {
-                var tovm = new MpAvSearchCriteriaOptionViewModel(this, rovm);
-                tovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
-                tovm.Label = labels[i];
-                switch ((MpRootOptionType)i) {
-                    case MpRootOptionType.Content:
-                        tovm.Items = GetContentOptionViewModel(tovm);
-                        break;
-                    case MpRootOptionType.Collection:
-                        tovm.Items = GetCollectionOptionViewModel(tovm);
-                        break;
-                    case MpRootOptionType.Source:
-                        tovm.Items = GetSourceOptionViewModel(tovm);
-                        break;
-                    case MpRootOptionType.DateOrTime:
-                        tovm.Items = GetDateTimeTypeOptionViewModel(tovm);
-                        break;
-                    case MpRootOptionType.ContentType:
-                        tovm.Items = GetContentTypeOptionViewModel(tovm);
-                        break;
-                }
-                rovm.Items.Add(tovm);
-            }
-            return rovm;
-        }
-
-        #endregion
-
 
         #endregion
 
@@ -788,6 +795,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsAnyBusy);
         public bool IsCaseSensitive { get; set; } = false;
 
         public bool CanSetCaseSensitive { get; set; } = false;

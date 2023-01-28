@@ -26,6 +26,7 @@ namespace MonkeyPaste.Avalonia {
 
             var pw = new MpAvWrapper();
             pw.StartupState = this;
+            pw.StartupObjectLocator = this;
             await pw.InitializeAsync();
             await MpPlatform.InitAsync(pw);
 

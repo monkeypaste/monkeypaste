@@ -6,10 +6,15 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 
 namespace MonkeyPaste {
+
+    public interface MpIStartupObjectLocator {
+        IEnumerable<object> Items { get; }
+    }
     public abstract class MpBootstrapperViewModelBase : 
         MpViewModelBase,
         MpIStartupState,
-        MpIProgressLoader {
+        MpIProgressLoader,
+        MpIStartupObjectLocator {
         #region Statics
 
         public static bool IsCoreLoaded { get; protected set; } = false;
@@ -17,6 +22,15 @@ namespace MonkeyPaste {
 
         protected static List<MpBootstrappedItemViewModel> _coreItems { get; private set; } = new List<MpBootstrappedItemViewModel>();
         protected static List<MpBootstrappedItemViewModel> _platformItems { get; private set; } = new List<MpBootstrappedItemViewModel>();
+
+        #endregion
+
+        #region Interfaces
+
+        #region MpIStartupObjectLocator Implementation
+
+        IEnumerable<object> MpIStartupObjectLocator.Items => _coreItems.Union(_platformItems);
+        #endregion
 
         #endregion
 
@@ -113,6 +127,7 @@ namespace MonkeyPaste {
 
             IsBusy = false;
         }
+
     }
 }
 
