@@ -42,44 +42,31 @@
         <!--  Visible: search text || has criteria  -->
 
         <!--  PENDING  -->
-        <!--<Style Selector="ToggleButton#ToggleExpandedAdvancedSearchButton:not(.saved)">
-            <Setter Property="IsChecked"
-                    Value="{x:Null}" />
-        </Style>-->
+      
         <!--  PENDING (UNCHECKED)  -->
-
-        <!--<Style Selector="ToggleButton#ToggleExpandedAdvancedSearchButton:unchecked:not(.saved)">
-            <Setter Property="Command"
-                    Value="{Binding ConvertQueryToAdvancedSearchCommand, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}" />
-        </Style>-->
-
         <Style Selector="ToggleButton#ToggleExpandedAdvancedSearchButton:unchecked:not(.saved) Image">
             <Setter Property="Source"
-                    Value="{Binding ., Source={StaticResource BinocularsImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                    Value="{Binding ., Source={StaticResource BinocularsImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=white}" />
         </Style>
         <Style Selector="ToggleButton#ToggleExpandedAdvancedSearchButton:unchecked:not(.saved):pointerover Image">
             <Setter Property="Source"
-                    Value="{Binding ., Source={StaticResource BinocularsTiltedImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                    Value="{Binding ., Source={StaticResource BinocularsTiltedImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=white}" />
         </Style>
 
 
         <!--  PENDING (CHECKED)  -->
 
-        <!--<Style Selector="ToggleButton#ToggleExpandedAdvancedSearchButton:checked:not(.saved)">
-            <Setter Property="Command"
-                    Value="{Binding ClearCriteriaItemsCommand, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}" />
-        </Style>-->
         <Style Selector="ToggleButton#ToggleExpandedAdvancedSearchButton:checked:not(.saved) Image">
             <Setter Property="Margin"
                     Value="5" />
             <Setter Property="Source"
-                    Value="{Binding ., Source={StaticResource TrashCanImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                    Value="{Binding ., Source={StaticResource TrashCanImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=white}" />
         </Style>
         <Style Selector="ToggleButton#ToggleExpandedAdvancedSearchButton:checked:not(.saved) Image">
             <Setter Property="Margin"
                     Value="5" />
             <Setter Property="Source"
-                    Value="{Binding ., Source={StaticResource TrashCanImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                    Value="{Binding ., Source={StaticResource TrashCanImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=white}" />
         </Style>
         <Style Selector="ToggleButton#ToggleExpandedAdvancedSearchButton:checked:not(.saved):pointerover /template/ ContentPresenter">
             <Setter Property="Background"
@@ -87,16 +74,9 @@
         </Style>
 
         <!--  SAVED  -->
-
-        <!--<Style Selector="ToggleButton#ToggleExpandedAdvancedSearchButton.saved">
-            <Setter Property="Command"
-                    Value="{x:Null}" />
-            <Setter Property="IsChecked"
-                    Value="{Binding IsExpanded, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}, Mode=TwoWay}" />
-        </Style>-->
         <Style Selector="ToggleButton#ToggleExpandedAdvancedSearchButton.saved Image">
             <Setter Property="Source"
-                    Value="{Binding ., Source={StaticResource EdgeArrowUpImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                    Value="{Binding ., Source={StaticResource EdgeArrowUpImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=white}" />
         </Style>
         <!--  SAVED (UNCHECKED)  -->
         <Style Selector="ToggleButton#ToggleExpandedAdvancedSearchButton:unchecked.saved Image">
@@ -127,176 +107,163 @@
                              Source="{x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}" />
                     <Binding Path="PendingQueryTagId"
                              Source="{x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}"
-                             Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}"
-                             ConverterParameter="flip" />
+                             Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
                 </MultiBinding>
             </Button.IsVisible>
             <TextBlock Text="SAVE" />
         </Button>
-        <Grid>
+        <local:MpAvClipBorder x:Name="SearchTextBoxBorder"
+                              Classes.searchBorder="True"
+                              Classes.valid="{Binding IsSearchValid}"
+                              IsVisible="{Binding !HasCriteriaItems, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.15*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="{Binding ClearAndBusyColumnWidth}" />
+                    <ColumnDefinition Width="{Binding NavButtonsColumnWidth}" />
+                    <ColumnDefinition Width="{Binding NavButtonsColumnWidth}" />
+                </Grid.ColumnDefinitions>
 
-            <!--  SEARCH BORDER  -->
+                <!--  Search Icon Dropdown Button  -->
+                <Button x:Name="SearchDropDownButton"
+                        Grid.Column="0"
+                        Width="25"
+                        Height="25"
+                        Margin="3,0,0,0"
+                        Padding="0"
+                        Classes="noBg noHoverBg"
+                        DataContext="{Binding SearchFilterCollectionViewModel}"
+                        local:MpAvMenuExtension.IsEnabled="True"
+                        local:MpAvMenuExtension.HideOnClick="False"
+                        local:MpAvMenuExtension.SelectOnRightClick="False"
+                        Background="Transparent"
+                        BorderThickness="1">
+                    <Button.Styles>
+                        <Style Selector=":is(Button)">
+                            <Setter Property="BorderBrush"
+                                    Value="Transparent" />
+                        </Style>
+                        <Style Selector=":is(Button):pointerover">
+                            <Setter Property="BorderBrush"
+                                    Value="Black" />
+                        </Style>
 
-            <local:MpAvClipBorder x:Name="SearchTextBoxBorder"
-                                  Classes.searchBorder="True"
-                                  Classes.valid="{Binding IsSearchValid}"
-                                  IsHitTestVisible="{Binding !HasCriteriaItems, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.15*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="{Binding ClearAndBusyColumnWidth}" />
-                        <ColumnDefinition Width="{Binding NavButtonsColumnWidth}" />
-                        <ColumnDefinition Width="{Binding NavButtonsColumnWidth}" />
-                    </Grid.ColumnDefinitions>
+                    </Button.Styles>
+                    <Grid>
+                        <PathIcon Foreground="DimGray"
+                                  Data="{StaticResource MagnifySvg}" />
+                        <PathIcon Foreground="DimGray"
+                                  Width="8"
+                                  Height="8"
+                                  Margin="3,22,0,0"
+                                  HorizontalAlignment="Left"
+                                  VerticalAlignment="Bottom"
+                                  IsVisible="{Binding IsPointerOver, ElementName=SearchDropDownButton}"
+                                  Data="{StaticResource MenuDownArrowSvg}" />
+                    </Grid>
+                </Button>
+                <AutoCompleteBox x:Name="SearchBox"
+                                 Grid.Column="1"
+                                 local:MpAvIsFocusedExtension.IsEnabled="True"
+                                 local:MpAvIsFocusedExtension.IsFocused="{Binding IsTextBoxFocused, Mode=TwoWay}"
+                                 Watermark="Search..."
+                                 FontSize="14"
+                                 Background="Transparent"
+                                 local:MpAvIsHoveringExtension.IsEnabled="True"
+                                 local:MpAvIsHoveringExtension.HoverCursor="IBeam"
+                                 IsTextCompletionEnabled="True"
+                                 MinimumPrefixLength="1"
+                                 MinimumPopulateDelay="0.25"
+                                 Items="{Binding RecentSearchTexts}"
+                                 FontStyle="{Binding TextBoxFontStyle}"
+                                 BorderThickness="0"
+                                 Padding="0"
+                                 Margin="0,0,0,0"
+                                 HorizontalAlignment="Stretch"
+                                 VerticalAlignment="Center"
+                                 Text="{Binding SearchText, Mode=TwoWay}">
+                    <AutoCompleteBox.Styles>
+                        <Style Selector="AutoCompleteBox /template/ TextBox#PART_TextBox">
+                            <Setter Property="VerticalContentAlignment"
+                                    Value="Center" />
+                        </Style>
+                        <Style Selector="AutoCompleteBox:focus-within /template/ TextBox#PART_TextBox /template/ Border#PART_BorderElement">
+                            <Setter Property="BorderBrush"
+                                    Value="Transparent" />
+                        </Style>
+                    </AutoCompleteBox.Styles>
+                </AutoCompleteBox>
+                <!--  IsSearching Spinner  -->
 
-                    <!--  Search Icon Dropdown Button  -->
-                    <Button x:Name="SearchDropDownButton"
-                            Grid.Column="0"
-                            Width="25"
-                            Height="25"
-                            Margin="3,0,0,0"
-                            Padding="0"
-                            Classes="noBg noHoverBg"
-                            DataContext="{Binding SearchFilterCollectionViewModel}"
-                            local:MpAvMenuExtension.IsEnabled="True"
-                            local:MpAvMenuExtension.HideOnClick="False"
-                            local:MpAvMenuExtension.SelectOnRightClick="False"
-                            Background="Transparent"
-                            BorderThickness="1">
-                        <Button.Styles>
-                            <Style Selector=":is(Button)">
-                                <Setter Property="BorderBrush"
-                                        Value="Transparent" />
-                            </Style>
-                            <Style Selector=":is(Button):pointerover">
-                                <Setter Property="BorderBrush"
-                                        Value="Black" />
-                            </Style>
+                <local:MpAvBusySpinnerView Grid.Column="2"
+                                           Margin="5"
+                                           VerticalAlignment="Stretch"
+                                           Width="{Binding $self.Bounds.Height}">
+                    <local:MpAvBusySpinnerView.IsVisible>
+                        <MultiBinding Converter="{StaticResource MultiBoolConverter}"
+                                      ConverterParameter="AND">
+                            <Binding Path="HasText" />
+                            <Binding Path="IsSearching" />
+                        </MultiBinding>
+                    </local:MpAvBusySpinnerView.IsVisible>
+                </local:MpAvBusySpinnerView>
 
-                        </Button.Styles>
-                        <Grid>
-                            <PathIcon Foreground="DimGray"
-                                      Data="{StaticResource MagnifySvg}" />
-                            <PathIcon Foreground="DimGray"
-                                      Width="8"
-                                      Height="8"
-                                      Margin="3,22,0,0"
-                                      HorizontalAlignment="Left"
-                                      VerticalAlignment="Bottom"
-                                      IsVisible="{Binding IsPointerOver, ElementName=SearchDropDownButton}"
-                                      Data="{StaticResource MenuDownArrowSvg}" />
-                        </Grid>
-                    </Button>
-                    <AutoCompleteBox x:Name="SearchBox"
-                                     Grid.Column="1"
-                                     local:MpAvIsFocusedExtension.IsEnabled="True"
-                                     local:MpAvIsFocusedExtension.IsFocused="{Binding IsTextBoxFocused, Mode=TwoWay}"
-                                     Watermark="Search..."
-                                     FontSize="14"
-                                     Background="Transparent"
-                                     local:MpAvIsHoveringExtension.IsEnabled="True"
-                                     local:MpAvIsHoveringExtension.HoverCursor="IBeam"
-                                     IsTextCompletionEnabled="True"
-                                     MinimumPrefixLength="1"
-                                     MinimumPopulateDelay="0.25"
-                                     Items="{Binding RecentSearchTexts}"
-                                     FontStyle="{Binding TextBoxFontStyle}"
-                                     BorderThickness="0"
-                                     Padding="0"
-                                     Margin="0,0,0,0"
-                                     HorizontalAlignment="Stretch"
-                                     VerticalAlignment="Center"
-                                     Text="{Binding SearchText, Mode=TwoWay}">
-                        <AutoCompleteBox.Styles>
-                            <Style Selector="AutoCompleteBox /template/ TextBox#PART_TextBox">
-                                <Setter Property="VerticalContentAlignment"
-                                        Value="Center" />
-                            </Style>
-                            <Style Selector="AutoCompleteBox:focus-within /template/ TextBox#PART_TextBox /template/ Border#PART_BorderElement">
-                                <Setter Property="BorderBrush"
-                                        Value="Transparent" />
-                            </Style>
-                        </AutoCompleteBox.Styles>
-                    </AutoCompleteBox>
-                    <!--  IsSearching Spinner  -->
+                <!--  Clear SearchText Button  -->
+                <local:MpAvClearTextButton x:Name="ClearSearchTextButton"
+                                           Classes="TextBoxButton"
+                                           Grid.Column="2"
+                                           Margin="5"
+                                           Command="{Binding ClearTextCommand}"
+                                           Width="{Binding $self.Bounds.Height}"
+                                           VerticalAlignment="Stretch">
+                    <local:MpAvClearTextButton.IsVisible>
+                        <MultiBinding Converter="{StaticResource MultiBoolConverter}"
+                                      ConverterParameter="AND">
+                            <Binding Path="HasText" />
+                            <Binding Path="!IsSearching" />
+                        </MultiBinding>
+                    </local:MpAvClearTextButton.IsVisible>
+                </local:MpAvClearTextButton>
 
-                    <local:MpAvBusySpinnerView Grid.Column="2"
-                                               Margin="5"
-                                               VerticalAlignment="Stretch"
-                                               Width="{Binding $self.Bounds.Height}">
-                        <local:MpAvBusySpinnerView.IsVisible>
-                            <MultiBinding Converter="{StaticResource MultiBoolConverter}"
-                                          ConverterParameter="AND">
-                                <Binding Path="HasText" />
-                                <Binding Path="IsSearching" />
-                            </MultiBinding>
-                        </local:MpAvBusySpinnerView.IsVisible>
-                    </local:MpAvBusySpinnerView>
+                <!--  Previous Result Button  -->
 
-                    <!--  Clear SearchText Button  -->
-                    <local:MpAvClearTextButton x:Name="ClearSearchTextButton"
-                                               Classes="TextBoxButton"
-                                               Grid.Column="2"
-                                               Margin="5"
-                                               Command="{Binding ClearTextCommand}"
-                                               Width="{Binding $self.Bounds.Height}"
-                                               VerticalAlignment="Stretch">
-                        <local:MpAvClearTextButton.IsVisible>
-                            <MultiBinding Converter="{StaticResource MultiBoolConverter}"
-                                          ConverterParameter="AND">
-                                <Binding Path="HasText" />
-                                <Binding Path="!IsSearching" />
-                            </MultiBinding>
-                        </local:MpAvClearTextButton.IsVisible>
-                    </local:MpAvClearTextButton>
+                <Button x:Name="PreviousTemplateButton"
+                        Classes="TextBoxButton"
+                        Grid.Column="3"
+                        Margin="0,5"
+                        Width="{Binding $self.Bounds.Height}"
+                        VerticalAlignment="Stretch"
+                        IsVisible="{Binding IsMultipleMatches}"
+                        Command="{Binding PrevMatchCommand}"
+                        TabIndex="2">
+                    <PathIcon Data="{StaticResource MenuDownArrowSvg}">
+                        <PathIcon.RenderTransform>
+                            <RotateTransform Angle="90" />
+                        </PathIcon.RenderTransform>
+                    </PathIcon>
+                </Button>
 
-                    <!--  Previous Result Button  -->
+                <!--  Next Result Button  -->
+                <Button x:Name="NextTemplateButton"
+                        Classes="TextBoxButton"
+                        Grid.Column="4"
+                        Margin="0,5"
+                        Width="{Binding $self.Bounds.Height}"
+                        VerticalAlignment="Stretch"
+                        IsVisible="{Binding IsMultipleMatches}"
+                        Command="{Binding NextMatchCommand}"
+                        TabIndex="3">
+                    <PathIcon Data="{StaticResource MenuDownArrowSvg}">
+                        <PathIcon.RenderTransform>
+                            <RotateTransform Angle="-90" />
+                        </PathIcon.RenderTransform>
+                    </PathIcon>
+                </Button>
 
-                    <Button x:Name="PreviousTemplateButton"
-                            Classes="TextBoxButton"
-                            Grid.Column="3"
-                            Margin="0,5"
-                            Width="{Binding $self.Bounds.Height}"
-                            VerticalAlignment="Stretch"
-                            IsVisible="{Binding IsMultipleMatches}"
-                            Command="{Binding PrevMatchCommand}"
-                            TabIndex="2">
-                        <PathIcon Data="{StaticResource MenuDownArrowSvg}">
-                            <PathIcon.RenderTransform>
-                                <RotateTransform Angle="90" />
-                            </PathIcon.RenderTransform>
-                        </PathIcon>
-                    </Button>
+            </Grid>
+        </local:MpAvClipBorder>
 
-                    <!--  Next Result Button  -->
-                    <Button x:Name="NextTemplateButton"
-                            Classes="TextBoxButton"
-                            Grid.Column="4"
-                            Margin="0,5"
-                            Width="{Binding $self.Bounds.Height}"
-                            VerticalAlignment="Stretch"
-                            IsVisible="{Binding IsMultipleMatches}"
-                            Command="{Binding NextMatchCommand}"
-                            TabIndex="3">
-                        <PathIcon Data="{StaticResource MenuDownArrowSvg}">
-                            <PathIcon.RenderTransform>
-                                <RotateTransform Angle="-90" />
-                            </PathIcon.RenderTransform>
-                        </PathIcon>
-                    </Button>
-
-                </Grid>
-            </local:MpAvClipBorder>
-
-            <!--  DISABLED SEARCH OVERLAY  -->
-            <local:MpAvClipBorder x:Name="DisabledSearchOverlay"
-                                  IsHitTestVisible="False"
-                                  Margin="3"
-                                  IsVisible="{Binding HasCriteriaItems, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
-                                  Background="{DynamicResource DisabledBgBrush}"
-                                  Classes="searchBorder" />
-        </Grid>
 
         <!--  ADVANCED SEARCH TOGGLE BUTTON  -->
 
@@ -317,7 +284,7 @@
                 </MultiBinding>
             </ToggleButton.IsVisible>
             <!--<PathIcon Data="{StaticResource PlusBoxSvg}" />-->
-            <Image>
+            <Image Classes="shakeOver">
                 <Image.RenderTransform>
                     <RotateTransform />
                 </Image.RenderTransform>

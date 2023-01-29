@@ -38,6 +38,8 @@ namespace MonkeyPaste.Avalonia {
         public IEnumerable<MpAvSearchCriteriaItemViewModel> SortedItems =>
             Items.OrderBy(x => x.SortOrderIdx);
 
+        public MpAvSearchCriteriaItemViewModel HeadItem =>
+            SortedItems.FirstOrDefault();
         public MpAvSearchCriteriaItemViewModel SelectedItem { get; set; }
 
         #endregion
@@ -56,16 +58,12 @@ namespace MonkeyPaste.Avalonia {
         #region Layout
 
         public double BoundCriteriaListBoxScreenHeight { get; set; }
-        public double SearchCriteriaListBoxItemHeight => 60;
 
         public double LastSearchCriteriaListBoxHeight { get; private set; }
 
-        public double MaxSearchCriteriaListBoxHeight {
-            get {
-
-                return SearchCriteriaListBoxItemHeight * Items.Count;
-            }
-        }
+        public double MaxSearchCriteriaListBoxHeight =>
+            Items.Sum(x => x.SearchCriteriaListBoxItemHeight) +
+            Items.Sum(x=>x.CriteriaItemBorder.Top + x.CriteriaItemBorder.Bottom);
 
         #endregion
 
@@ -132,7 +130,26 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
+            if (HasCriteriaItems) {
+                if (_simpleSearchRef == null &&
+                    MpPlatform.Services.QueryInfo is not MpAvSearchCriteriaItemViewModel) {
+                    _simpleSearchRef = MpPlatform.Services.QueryInfo;
+                }
+                MpPlatform.Services.QueryInfo = HeadItem;
+            } else {
+                if (_simpleSearchRef != null) {
+                    MpPlatform.Services.QueryInfo = _simpleSearchRef;
+                    _simpleSearchRef = null;
+                }
+            }            
+
             IsBusy = false;
+
+            while (MpAvClipTrayViewModel.Instance.IsAnyBusy) {
+                // wait for tile layouts to update or something that prevents requery
+                await Task.Delay(100);
+            }
+            MpPlatform.Services.QueryInfo.NotifyQueryChanged(true);
         }
         #endregion
 
@@ -149,31 +166,20 @@ namespace MonkeyPaste.Avalonia {
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch(msg) {
                 case MpMessageType.AdvancedSearchOpened:
-                    int default_visible_row_count = 3;
-                    double delta_open_height = Math.Min(Items.Count, default_visible_row_count) * SearchCriteriaListBoxItemHeight;
+                    double default_visible_row_count = 1.5d;
+                    double row_height = Items.Count == 0 ? 0 : Items.First().SearchCriteriaListBoxItemHeight;
+                    double delta_open_height = Math.Min((double)Items.Count, default_visible_row_count) * row_height;
 
                     MpAvResizeExtension.ResizeByDelta(MpAvMainWindow.Instance, 0, delta_open_height,false);
                     BoundCriteriaListBoxScreenHeight = delta_open_height;
 
-                    if(HasCriteriaItems) {
-                        if (_simpleSearchRef == null) {
-                            _simpleSearchRef = MpPlatform.Services.QueryInfo;
-                        }
-                        MpPlatform.Services.QueryInfo = Items.FirstOrDefault();
-                        MpPlatform.Services.QueryInfo.NotifyQueryChanged();
-                    }
 
                     break;
                 case MpMessageType.AdvancedSearchClosed:
                     double delta_close_height = -BoundCriteriaListBoxScreenHeight;
                     BoundCriteriaListBoxScreenHeight = 0;
                     MpAvResizeExtension.ResizeByDelta(MpAvMainWindow.Instance, 0, delta_close_height, false);
-                    if(_simpleSearchRef != null) {
-                        MpPlatform.Services.QueryInfo = _simpleSearchRef;
-                        _simpleSearchRef = null;
-
-                        MpPlatform.Services.QueryInfo.NotifyQueryChanged();
-                    }
+                    
                     break;
 
             }
@@ -193,11 +199,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-
-            //if (IsBusy) {
-            //    return;
-            //}
-
             MpMessenger.SendGlobal<MpMessageType>(MpMessageType.SearchCriteriaItemsChanged);
             OnPropertyChanged(nameof(Items));
             OnPropertyChanged(nameof(SortedItems));
@@ -219,7 +220,17 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private async Task<IEnumerable<MpSearchCriteriaItem>> ConvertCurrentSearchToAdvanced(int queryTagId) {
+        private async Task<int> ConvertCurrentSimpleSearchAsync() {
+            if(QueryTagId > 0) {
+                // not a simple search, check call stack
+                Debugger.Break();
+                return 0;
+            }
+            var pending_tag = await MpTag.CreateAsync(
+                            tagType: MpTagType.Query,
+                            sortType: MpAvClipTileSortFieldViewModel.Instance.SelectedSortType,
+                            isSortDescending: MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending);
+
             // NOTE this is called at end of provider create so sortIdx is seed for these
 
             string st = MpAvSearchBoxViewModel.Instance.SearchText;
@@ -232,7 +243,7 @@ namespace MonkeyPaste.Avalonia {
                 .ToList();
 
             MpContentQueryBitFlags[] typeFilters = new[] { MpContentQueryBitFlags.TextType, MpContentQueryBitFlags.ImageType, MpContentQueryBitFlags.FileType };
-            if(typeFilters.All(x=>true_filters.Contains(x))) {
+            if (typeFilters.All(x => true_filters.Contains(x))) {
                 // TODO should probably account for non content type in query as any
                 // when all types selected not needed in advanced
                 //true_filters.RemoveAll(x=>typeFilters.Contains(x));
@@ -240,19 +251,25 @@ namespace MonkeyPaste.Avalonia {
 
             List<MpSearchCriteriaItem> items = new List<MpSearchCriteriaItem>();
             foreach (var ctf in true_filters) {
-                string opt_path = 
+                string opt_path =
                     GetSimpleSearchOptionString(
-                        ctf, 
-                        all_filters, 
+                        ctf,
+                        all_filters,
                         st);
 
                 var sci = await MpSearchCriteriaItem.CreateAsync(
-                    tagId: queryTagId,
+                    tagId: pending_tag.Id,
                     sortOrderIdx: items.Count,
                     options: opt_path);
                 items.Add(sci);
             }
-            return items;
+
+            MpAvSearchBoxViewModel.Instance.ClearTextCommand.Execute("don't notify, chill");
+            await Task.Delay(50);
+            while (IsAnyBusy) {
+                await Task.Delay(100);
+            }
+            return pending_tag.Id;
         }
         private string GetSimpleSearchOptionString(MpContentQueryBitFlags current_flag, MpContentQueryBitFlags all_flags, string searchText) {
             // format:
@@ -320,6 +337,7 @@ namespace MonkeyPaste.Avalonia {
             string result = string.Join(",", parts);
             return result;
         }
+        
         #endregion
 
         #region Commands
@@ -349,6 +367,7 @@ namespace MonkeyPaste.Avalonia {
                     await scivm.SearchCriteriaItem.DeleteFromDatabaseAsync();
                 }
                 await UpdateCriteriaSortOrder();
+                HeadItem.NotifyQueryChanged(true);
             },
             (args) => args is MpAvSearchCriteriaItemViewModel);
 
@@ -369,8 +388,6 @@ namespace MonkeyPaste.Avalonia {
                 OnPropertyChanged(nameof(QueryTagId));
             }, () => PendingQueryTagId > 0);
 
-
-
         public ICommand RejectPendingCriteriaItemsCommand => new MpAsyncCommand(
             async() => {
                 var t = await MpDataModelProvider.GetItemAsync<MpTag>(PendingQueryTagId);
@@ -378,6 +395,37 @@ namespace MonkeyPaste.Avalonia {
                 PendingQueryTagId = 0;
                 await InitializeAsync(0,false);
             },()=> IsPendingQuery);
+
+        public MpIAsyncCommand ConvertCurrentSearchToAdvancedCommand => new MpAsyncCommand(
+            async () => {
+                bool is_pending = true;
+                int converted_query_tag_id = 0;
+                if(QueryTagId > 0) {
+                    // NOTE since this should only be the case from tag add, its assumed 
+                    // save follows this cmd in add tag
+
+                    is_pending = false;
+
+                    var cur_query_tag = await MpDataModelProvider.GetItemAsync<MpTag>(QueryTagId);
+                    bool is_cur_pending = PendingQueryTagId == QueryTagId;
+
+                    // clone current adv search
+                    var clone_of_cur_query_tag = await cur_query_tag.CloneDbModelAsync();
+
+                    converted_query_tag_id = clone_of_cur_query_tag.Id;
+                    if(is_cur_pending) {
+                        // if current is pending delete it
+                        cur_query_tag.DeleteFromDatabaseAsync().FireAndForgetSafeAsync(this);
+                    }
+                } else {
+                    // clone current simple search
+                    converted_query_tag_id = await ConvertCurrentSimpleSearchAsync();
+                }
+                
+                // convert result to criteria rows
+                await InitializeAsync(converted_query_tag_id, is_pending);
+
+            });
 
         public ICommand ToggleIsExpandedCommand => new MpAsyncCommand(
             async () => {
@@ -397,27 +445,22 @@ namespace MonkeyPaste.Avalonia {
                             // what's going on here?
                             Debugger.Break();
                         }
-
-                        // make temporary
-                        var pending_tag = await MpTag.CreateAsync(
-                            tagType: MpTagType.Query);
-
-                        Items.Clear();
-                        var converted_items = await ConvertCurrentSearchToAdvanced(pending_tag.Id);
-
-                        // clear search
-                        MpAvSearchBoxViewModel.Instance.ClearTextCommand.Execute("don't notify, chill");
-                        await Task.Delay(50);
-                        while(IsAnyBusy) {
-                            await Task.Delay(100);
-                        }
-
-                        // convert result to criteria rows
-                        await InitializeAsync(pending_tag.Id,true);
+                        await ConvertCurrentSearchToAdvancedCommand.ExecuteAsync();
                     } 
                     IsExpanded = true;
                 }
             });
+
+        public ICommand SelectAdvancedSearchCommand => new MpCommand<object>(
+            (args) => {
+                int queryTagId = 0;
+                if(args is int tagId) {
+                    queryTagId = tagId;
+                }
+                IsExpanded = false;
+                InitializeAsync(queryTagId, false).FireAndForgetSafeAsync(this);
+            });
+
         #endregion
     }
 }

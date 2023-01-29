@@ -117,7 +117,6 @@ namespace MonkeyPaste.Avalonia {
         public override MpAvTagTileViewModel SelectedItem {
             get {
                 return Items.FirstOrDefault(x => x.TagId == SelectedItemId);
-
             }
             set {
                 if (value == null) {
@@ -128,6 +127,12 @@ namespace MonkeyPaste.Avalonia {
                 Items.ForEach(x => x.IsSelected = x.TagId == _selectedItemId);
             }
         }
+
+        public MpAvTagTileViewModel LastSelectedActionItem =>
+            Items
+            .Where(x => x.IsActionTag)
+            .OrderByDescending(x => LastSelectedDateTime)
+            .FirstOrDefault();
 
         public IEnumerable<MpAvTagTileViewModel> PinnedItems => Items.Where(x => x.IsModelPinned).OrderBy(x=>x.PinSortIdx);
 
@@ -306,13 +311,14 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void UpdateTreeSortOrder(bool fromModel = false) {
-            if (fromModel) {
-                //Items.Sort(x => x.TagSortIdx);
-            } else {
-                foreach (var ttvm in Items) {
-                    ttvm.TreeSortIdx = Items.IndexOf(ttvm);
-                }
-            }
+            //if (fromModel) {
+            //    //Items.Sort(x => x.TagSortIdx);
+            //} else {
+            //    foreach (var ttvm in Items) {
+            //        //ttvm.TreeSortIdx = Items.IndexOf(ttvm);
+            //    }
+            //}
+            RootItems.ForEach(x => x.UpdateTreeSortOrder());
         }
         public void UpdateTraySortOrder(bool fromModel = false) {
             if (fromModel) {
@@ -398,6 +404,14 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case MpMessageType.SearchCriteriaItemsChanged:
                     OnPropertyChanged(nameof(IsSelectionEnabled));
+                    break;
+                
+                case MpMessageType.QueryChanged:
+                    if(SelectedItem == null || !SelectedItem.IsQueryTag) {
+                        break;
+                    }
+                    SelectedItem.SortType = MpAvClipTileSortFieldViewModel.Instance.SelectedSortType;
+                    SelectedItem.IsSortDescending = MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending;
                     break;
             }
         }
@@ -540,7 +554,14 @@ namespace MonkeyPaste.Avalonia {
                 }
                 IsSelecting = false;
 
-                MpPlatform.Services.QueryInfo.NotifyQueryChanged(true);
+                if(SelectedItem != null && SelectedItem.IsActionTag) {
+                    if(SelectedItem.IsQueryTag) {
+                        MpAvSearchCriteriaItemCollectionViewModel.Instance
+                            .SelectAdvancedSearchCommand.Execute(SelectedItem.TagId);
+                    } else {
+                        MpPlatform.Services.QueryInfo.NotifyQueryChanged(true);
+                    }
+                }
             },
             (args)=>args != null && !IsSelecting && IsSelectionEnabled);
 

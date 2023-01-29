@@ -20,7 +20,9 @@ namespace MonkeyPaste {
     public class MpTag : 
         MpDbModelBase,
         MpIIconResource, 
+        MpIClonableDbModel<MpTag>,
         MpISyncableDbObject {
+
         #region Constants
 
         public const int AllTagId = 1;
@@ -28,9 +30,44 @@ namespace MonkeyPaste {
         public const int HelpTagId = 3;
         public const int RootGroupTagId = 7;
 
+        public const MpContentSortType DEFAULT_QUERY_TAG_SORT_TYPE = MpContentSortType.CopyDateTime;
+        public const bool DEFAULT_QUERY_TAG_IS_SORT_DESCENDING = true;
+
         #endregion
 
         #region Interfaces
+
+        #region MpIClonableDbModel Implementation
+
+
+        public async Task<MpTag> CloneDbModelAsync(bool deepClone = true, bool suppressWrite = false) {
+            // NOTE deepClone is ignored no current need for content links, hotkeys etc.
+
+            var cloned_tag = await MpTag.CreateAsync(
+                tagName: TagName,
+                treeSortIdx: TreeSortIdx,
+                pinSortIdx: PinSortIdx,
+                parentTagId: ParentTagId,
+                hexColor: HexColor,
+                tagType: TagType,
+                sortType: SortType,
+                isSortDescending: IsSortDescending,
+                suppressWrite: suppressWrite);
+
+            if(TagType == MpTagType.Query) {
+                var scil = await MpDataModelProvider.GetCriteriaItemsByTagId(Id);
+                foreach(var sci in scil) {
+                    var cloned_sci = await MpSearchCriteriaItem.CreateAsync(
+                        tagId: cloned_tag.Id,
+                        sortOrderIdx: sci.SortOrderIdx,
+                        nextJoinType: sci.NextJoinType,
+                        options: sci.Options,
+                        suppressWrite: suppressWrite);
+                }
+            }
+            return cloned_tag;
+        }
+        #endregion
 
         #region MpIIconResource Implementation
         object MpIIconResource.IconResourceObj => HexColor;
@@ -148,12 +185,10 @@ namespace MonkeyPaste {
         public override int Id { get; set; }
 
         [Column("fk_ParentTagId")]
-        //[ForeignKey(typeof(MpTag))]
         public int ParentTagId { get; set; } = 0;
 
         [Column("MpTagGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
-
        
 
         [Column("TreeSortIdx")]
@@ -169,6 +204,10 @@ namespace MonkeyPaste {
         public string HexColor { get; set; }
 
         public string TagName { get; set; } = string.Empty;
+
+        public string SortTypeName { get; set; } 
+
+        public string IsSortDescendingName { get; set; } 
 
         #endregion
 
@@ -191,6 +230,18 @@ namespace MonkeyPaste {
         public MpTagType TagType {
             get => TagTypeName.ToEnum<MpTagType>();
             set => TagTypeName = value.ToString();
+        }
+
+        [Ignore]
+        public MpContentSortType? SortType {
+            get => string.IsNullOrEmpty(SortTypeName) ? null : SortTypeName.ToEnum<MpContentSortType>();
+            set => SortTypeName = value == null ? null : value.ToString();
+        }
+
+        [Ignore]
+        public bool? IsSortDescending {
+            get => string.IsNullOrEmpty(IsSortDescendingName) ? null : bool.Parse(IsSortDescendingName);
+            set => IsSortDescendingName = value == null ? null : value.ToString();
         }
 
         [Ignore]
@@ -217,10 +268,16 @@ namespace MonkeyPaste {
             int parentTagId = 0, 
             string hexColor = "",
             MpTagType tagType = MpTagType.None,
+            MpContentSortType? sortType = null,
+            bool? isSortDescending = null,
             bool ignoreTracking = false,
-            bool ignoreSyncing = false) { 
+            bool ignoreSyncing = false,
+            bool suppressWrite = false) { 
             if(tagType == MpTagType.None) {
                 throw new Exception("TagType must be specified");
+            }
+            if(tagType != MpTagType.Query) {
+
             }
             hexColor = string.IsNullOrEmpty(hexColor) ? MpHelpers.GetRandomColor().ToHex() : hexColor;
             if(treeSortIdx < 0) {
@@ -238,9 +295,14 @@ namespace MonkeyPaste {
                 TreeSortIdx = treeSortIdx,
                 PinSortIdx = pinSortIdx,
                 ParentTagId = parentTagId,
-                TagType = tagType
+                TagType = tagType,
+                SortType = sortType,
+                IsSortDescending = isSortDescending
             };
-            await newTag.WriteToDatabaseAsync(ignoreTracking,ignoreSyncing);
+            if(!suppressWrite) {
+
+                await newTag.WriteToDatabaseAsync(ignoreTracking, ignoreSyncing);
+            }
             return newTag;
         }
 
@@ -263,6 +325,5 @@ namespace MonkeyPaste {
             await Task.WhenAll(deleteTasks);
         }
 
-        
     }
 }

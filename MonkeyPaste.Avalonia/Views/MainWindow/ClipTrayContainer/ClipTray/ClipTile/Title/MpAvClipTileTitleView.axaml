@@ -15,52 +15,6 @@
     <Grid x:Name="TitleContainerGrid"
           ColumnDefinitions="0.7*,0.3*">
         <Grid.Styles>
-            <!--<Style Selector="Grid#SourceIconContainerGrid:pointerover">
-                <Style.Animations>
-                    <Animation Duration="0:0:0.4"
-                               FillMode="Forward">
-                        <KeyFrame Cue="0%">
-                            <Setter Property="RotateTransform.Angle"
-                                    Value="0" />
-                        </KeyFrame>
-                        <KeyFrame Cue="33%">
-                            <Setter Property="RotateTransform.Angle"
-                                    Value="15" />
-                        </KeyFrame>
-                        <KeyFrame Cue="66%">
-                            <Setter Property="RotateTransform.Angle"
-                                    Value="-15" />
-                        </KeyFrame>
-                        <KeyFrame Cue="100%">
-                            <Setter Property="RotateTransform.Angle"
-                                    Value="0" />
-                        </KeyFrame>
-                    </Animation>
-                </Style.Animations>
-            </Style>
-            <Style Selector="Grid#SourceIconContainerGrid:not(:pointerover)">
-                <Style.Animations>
-                    <Animation Duration="0:0:0.4"
-                               FillMode="Forward">
-                        <KeyFrame Cue="0%">
-                            <Setter Property="RotateTransform.Angle"
-                                    Value="0" />
-                        </KeyFrame>
-                        <KeyFrame Cue="33%">
-                            <Setter Property="RotateTransform.Angle"
-                                    Value="-15" />
-                        </KeyFrame>
-                        <KeyFrame Cue="66%">
-                            <Setter Property="RotateTransform.Angle"
-                                    Value="15" />
-                        </KeyFrame>
-                        <KeyFrame Cue="100%">
-                            <Setter Property="RotateTransform.Angle"
-                                    Value="0" />
-                        </KeyFrame>
-                    </Animation>
-                </Style.Animations>
-            </Style>-->
             <Style Selector="Grid#SourceIconContainerGrid:pointerover Image#ClipTileAppIconBorderImage">
                 <Style.Animations>
                     <Animation Duration="0:0:0.3"
@@ -348,7 +302,11 @@
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch">
                         <Image.RenderTransform>
-                            <ScaleTransform />
+                            <TransformGroup>
+
+                                <ScaleTransform />
+                                <RotateTransform />
+                            </TransformGroup>
                         </Image.RenderTransform>
                     </Image>
                     <Image x:Name="ClipTileAppIconImage"

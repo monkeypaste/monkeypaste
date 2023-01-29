@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Input;
 using System.Linq;
 using MonkeyPaste.Common;
+using Xamarin.Forms;
 
 namespace MonkeyPaste {
 
@@ -44,11 +45,6 @@ namespace MonkeyPaste {
 
     }
     public class MpMenuItemViewModel : MpViewModelBase {
-        #region Statics
-
-
-        #endregion
-
         #region Constants
 
         public const string DEFAULT_TEMPLATE_NAME = "DefaultMenuItemTemplate";
@@ -60,7 +56,19 @@ namespace MonkeyPaste {
         public const string PASTE_TO_PATH_ITEM_TEMPLATE_NAME = "PasteToPathRuntimeMenuItemTemplate";
         public const string NEW_TABLE_ITEM_TEMPLATE_NAME = "NewTableSelectorMenuItem";
 
+        public const double DEFAULT_ICON_BORDER_THICKNESS_LENGTH = 1.0d;
+        public const double DEFAULT_ICON_CORNER_RADIUS_LENGTH = 2.5d;
+
+        public const double DEFAULT_ICON_SIZE = 20.0d;
+        public const double DEFAULT_ICON_WIDTH = DEFAULT_ICON_SIZE;
+        public const double DEFAULT_ICON_HEIGHT = DEFAULT_ICON_SIZE;
+
         #endregion
+
+        #region Statics
+
+        #endregion
+
 
         #region Properties
 
@@ -219,58 +227,16 @@ namespace MonkeyPaste {
 
         #region Icon
 
-        private string _borderHexColor;
-        public string BorderHexColor {
-            get {
-                if(!IsEnabled) {
-                    return MpSystemColors.dimgray;
-                }
-                if(!string.IsNullOrEmpty(_borderHexColor)) {
-                    return _borderHexColor;
-                }
-                //if (IsChecked.HasValue && IsChecked.Value) {
-                if (IsChecked.IsTrueOrNull()) {
-                    return MpSystemColors.IsSelectedBorderColor;
-                } else if (IsHovering) {
-                    return MpSystemColors.IsHoveringBorderColor;
-                }
-                return MpSystemColors.DarkGray;
-            }
-            set {
-                if(BorderHexColor != value) {
-                    _borderHexColor = value;
-                    OnPropertyChanged(nameof(BorderHexColor));
-                }
-            }
-        }
+        #region Model
 
-        public bool IsIconHidden => IconSourceObj == null;
-
+        public MpShape IconShape { get; set; }
         public int IconId { get; set; } = 0;
 
         public string IconResourceKey { get; set; } = string.Empty;
 
-        public double IconCornerRadius { get; set; } = 2.5;
-
-        private string _iconHexStr;
-        public string IconHexStr { 
-            get {
-                if(IsEnabled) {
-                    return _iconHexStr;
-                }
-                return MpSystemColors.gray;
-            }
-            set {
-                if(_iconHexStr != value) {
-                    _iconHexStr = value;
-                    OnPropertyChanged(nameof(IconHexStr));
-                }
-            } 
-        }
-
         public object IconSourceObj {
             get {
-                if(IconId > 0) {
+                if (IconId > 0) {
                     return IconId;
                 }
                 if (!string.IsNullOrWhiteSpace(IconResourceKey)) {
@@ -282,18 +248,18 @@ namespace MonkeyPaste {
                 return null;
             }
             set {
-                if(value is int iconId) {
+                if (value is int iconId) {
                     IconId = iconId;
-                } else if(value is string valStr) {
-                    if(valStr.IsStringHexColor()) {
+                } else if (value is string valStr) {
+                    if (valStr.IsStringHexColor()) {
                         IconHexStr = valStr;
-                    } else if(valStr.IsStringImageResourcePathOrKey()) {
+                    } else if (valStr.IsStringImageResourcePathOrKey()) {
                         IconResourceKey = valStr;
                     } else {
                         IconId = 0;
                         IconHexStr = null;
                         IconResourceKey = null;
-                    } 
+                    }
                 } else {
                     IconId = 0;
                     IconHexStr = null;
@@ -302,7 +268,82 @@ namespace MonkeyPaste {
                 OnPropertyChanged(nameof(IconSourceObj));
             }
         }
+        #endregion
 
+        #region Appearance
+
+        private string _iconHexStr;
+        public string IconHexStr {
+            get {
+                if (IsEnabled) {
+                    return _iconHexStr;
+                }
+                return MpSystemColors.gray;
+            }
+            set {
+                if (_iconHexStr != value) {
+                    _iconHexStr = value;
+                    OnPropertyChanged(nameof(IconHexStr));
+                }
+            }
+        }
+
+        private string _iconBorderHexColor;
+        public string IconBorderHexColor {
+            get {
+                if (!IsEnabled) {
+                    return MpSystemColors.dimgray;
+                }
+                if (!string.IsNullOrEmpty(_iconBorderHexColor)) {
+                    return _iconBorderHexColor;
+                }
+                //if (IsChecked.HasValue && IsChecked.Value) {
+                if (IsChecked.IsTrueOrNull()) {
+                    return MpSystemColors.IsSelectedBorderColor;
+                } else if (IsHovering) {
+                    return MpSystemColors.IsHoveringBorderColor;
+                }
+                return MpSystemColors.DarkGray;
+            }
+            set {
+                if (IconBorderHexColor != value) {
+                    _iconBorderHexColor = value;
+                    OnPropertyChanged(nameof(IconBorderHexColor));
+                }
+            }
+        }
+        #endregion
+
+        #region Layout
+
+
+        public double IconCornerRadius { get; set; } = DEFAULT_ICON_CORNER_RADIUS_LENGTH;
+        public double IconBorderThickness { get; set; } = DEFAULT_ICON_BORDER_THICKNESS_LENGTH;
+
+        public double IconMinWidth { get; set; } = DEFAULT_ICON_WIDTH;
+        public double IconMinHeight { get; set; } = DEFAULT_ICON_HEIGHT;
+
+        private double[] _iconMargin;
+        public double[] IconMargin { 
+            get {
+                if(_iconMargin == null) {
+                    return new double[] { 5, 0, IconMinWidth + 10, 0 };
+                }
+                return _iconMargin;
+            }
+            set {
+                _iconMargin = value;
+            }
+        }
+        #endregion
+
+        #region State
+
+        public bool IsIconHidden => IconSourceObj == null;
+
+        #endregion
+
+        
         #endregion
 
         #region Tooltip

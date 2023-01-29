@@ -352,7 +352,7 @@
     <sys:String x:Key="BitmapFormatImage">
         avares://MonkeyPaste.Avalonia/Assets/Images/bitmap.png
     </sys:String>
-    <sys:String x:Key="FileDropFormatImage">
+    <sys:String x:Key="FolderImage">
         avares://MonkeyPaste.Avalonia/Assets/Images/folder.png
     </sys:String>
     <sys:String x:Key="TextureImage">

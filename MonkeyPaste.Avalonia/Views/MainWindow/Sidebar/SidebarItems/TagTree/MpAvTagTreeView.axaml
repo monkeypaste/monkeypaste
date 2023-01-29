@@ -12,20 +12,33 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvTagTreeView">
+    <local:MpAvUserControl.Resources>
+        <SolidColorBrush x:Key="TreeViewItemForeground"
+                         Color="White" />
+    </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
         <Style Selector="TreeView#TagTreeView TreeViewItem"
                x:DataType="local:MpAvTagTileViewModel">
             <Setter Property="HorizontalAlignment"
-                    Value="Stretch" />
+                    Value="Left" />
             <Setter Property="VerticalAlignment"
                     Value="Stretch" />
             <Setter Property="Background"
                     Value="Transparent" />
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility"
+                    Value="Disabled" />
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility"
+                    Value="Disabled" />
             <Setter Property="IsExpanded"
                     Value="{Binding IsExpanded, Mode=TwoWay}" />
             <Setter Property="IsEnabled"
                     Value="{Binding CanSelect}" />
         </Style>
+        <!--<Style Selector="TreeView#TagTreeView TreeViewItem /template/ Border#PART_LayoutRoot Grid#PART_Header Panel#PART_ExpandCollapseChevronContainer ToggleButton#PART_ExpandCollapseChevron Border Path#ChevronPath">-->
+        <!--<Style Selector="TreeView#TagTreeView TreeViewItem /template/ ToggleButton#expander /template/ Path#ChevronPath">
+            <Setter Property="Fill"
+                    Value="White" />
+        </Style>-->
         <Style Selector="TreeView#TagTreeView TreeViewItem:selected /template/ Border#PART_LayoutRoot">
             <Setter Property="Background"
                     Value="Transparent" />
@@ -52,14 +65,15 @@
           VerticalAlignment="Stretch"
           Background="{DynamicResource TagTreeBgBrush}">
         <TreeView x:Name="TagTreeView"
-                  Margin="0,10,0,0"
+                  Margin="5,10,20,0"
                   Items="{Binding RootItems}"
                   BorderThickness="0"
                   Background="Transparent"
                   SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                   SelectionMode="Single, AlwaysSelected"
-                  HorizontalAlignment="Left"
-                  VerticalAlignment="Stretch">
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"
+                  Width="{Binding $parent[Grid].Bounds.Width}">
             <TreeView.ItemTemplate>
                 <TreeDataTemplate DataType="{x:Type local:MpAvTagTileViewModel}"
                                   ItemsSource="{Binding SortedItems}">
@@ -73,9 +87,10 @@
                 VerticalAlignment="Top"
                 IsVisible="{Binding SelectedItem.CanAddChild}"
                 CornerRadius="7"
-                Margin="0,10,10,0"
+                Margin="0,10,20,0"
                 BorderThickness="0"
-                Command="{Binding SelectedItem.AddNewChildTagCommand}">
+                Command="{Binding SelectedItem.AddNewChildTagCommand}"
+                CommandParameter="{Binding $self}">
             <Button.Styles>
                 <Style Selector="PathIcon">
                     <Setter Property="Foreground"

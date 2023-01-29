@@ -18,7 +18,7 @@
             <Setter Property="Cursor"
                     Value="Wait" />
         </Style>
-      <Style Selector="Grid#ClipTrayContainerGrid:not(.busy)"
+        <Style Selector="Grid#ClipTrayContainerGrid:not(.busy)"
                x:DataType="local:MpAvClipTrayViewModel">
             <Setter Property="Cursor"
                     Value="Arrow" />

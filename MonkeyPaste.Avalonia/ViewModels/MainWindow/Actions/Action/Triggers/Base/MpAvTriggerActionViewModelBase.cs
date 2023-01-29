@@ -110,7 +110,7 @@ namespace MonkeyPaste.Avalonia {
                         },
                         new MpMenuItemViewModel() {
                             Header = ToggleEnableOrDisableLabel,
-                            BorderHexColor = MpSystemColors.Transparent,
+                            IconBorderHexColor = MpSystemColors.Transparent,
                             IconHexStr = IsAllValid ? ToggleEnableOrDisableResourceKey : null,
                             IconResourceKey = IsAllValid ? null : ToggleEnableOrDisableResourceKey,
                             IconCornerRadius = IsAllValid ? 20 : 0,

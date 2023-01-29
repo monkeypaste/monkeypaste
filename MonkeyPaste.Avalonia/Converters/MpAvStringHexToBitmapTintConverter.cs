@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
 using MonkeyPaste.Common;
@@ -13,7 +14,7 @@ namespace MonkeyPaste.Avalonia {
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
             object imgResourceObj = null;
-            string hex = null;
+            string hex = null; 
             if(parameter is string paramStr) {
                 if(paramStr.Contains("|")) {
                     hex = MpSystemColors.ConvertFromString(paramStr.SplitNoEmpty("|")[0]);

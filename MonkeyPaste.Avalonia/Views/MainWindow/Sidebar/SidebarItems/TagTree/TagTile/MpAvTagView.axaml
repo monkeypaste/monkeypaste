@@ -97,7 +97,6 @@
                                    HorizontalAlignment="Center"
                                    Text="{Binding TagClipCount}"
                                    Foreground="{Binding $parent.Background, Converter={StaticResource BrushToContrastBrushConverter}}" />
-
                     </local:MpAvClipBorder>
                     <!--  Tag Name TextBox/ Marquee  -->
                     <Grid Grid.Column="1"

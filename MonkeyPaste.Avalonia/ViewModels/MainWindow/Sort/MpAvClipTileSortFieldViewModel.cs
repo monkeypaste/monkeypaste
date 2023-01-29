@@ -34,20 +34,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
-        //#region MpIQueryInfoProvider Implementation
-        //public void RestoreQueryInfo() {
-        //    SelectedSortTypeIdx = (int)MpPlatform.Services.QueryInfo.SortType;
-        //    IsSortDescending = MpPlatform.Services.QueryInfo.IsDescending;
-        //}
-
-        //public void SetQueryInfo() {
-        //    MpPlatform.Services.QueryInfo.SortType = (MpContentSortType)SelectedSortTypeIdx;
-        //    MpPlatform.Services.QueryInfo.IsDescending = IsSortDescending;
-        //    MpPlatform.Services.QueryInfo.NotifyQueryChanged();
-        //}
-
-        //#endregion
-
         #region Layout
         #endregion
 

@@ -44,8 +44,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
-
         #region MpAvIResizableControl Implementation
         private Control _resizerControl;
         Control MpAvIResizableControl.ResizerControl {
@@ -387,7 +385,6 @@ namespace MonkeyPaste.Avalonia {
                 tmv_zoom_slider.Orientation = Orientation.Vertical;
             }
         }
-
         public void UpdateContentLayout() {
             var mwvm = MpAvMainWindowViewModel.Instance;
             var ctrvm = MpAvClipTrayViewModel.Instance;
@@ -499,6 +496,8 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     ctrcv_ptr_lb.Padding = new Thickness();
                 }
+                // add margin for grid splitter size so boxshadow is symmetrical
+                ctrcv_ptrv.Margin = new Thickness(0, 0, 5, 0);
 
                 // clip/pin tray grid splitter
                 ctrcv_gs.HorizontalAlignment = HorizontalAlignment.Right;
@@ -609,6 +608,9 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     ctrcv_ptr_lb.Padding = new Thickness();
                 }
+
+                // add margin for grid splitter size so boxshadow is symmetrical
+                ctrcv_ptrv.Margin = new Thickness(0, 0, 0, 5);
 
                 // clip/pin tray grid splitter
                 ctrcv_gs.HorizontalAlignment = HorizontalAlignment.Stretch;

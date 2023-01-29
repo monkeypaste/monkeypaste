@@ -73,6 +73,19 @@ namespace MonkeyPaste.Common.Avalonia {
             descendant = control.GetVisualDescendants<T>();
             return descendant.Count() > 0;
         }
+
+        public static Thickness ToAvThickness(this double[] dblArr) {
+            if(dblArr == null || dblArr.Length == 0) {
+                return new Thickness();
+            }
+            if(dblArr.Length == 1) {
+                return new Thickness(dblArr[0]);
+            }
+            if(dblArr.Length != 4) {
+                throw new Exception("Thickness must be 0, 1 or 4 length");
+            }
+            return new Thickness(dblArr[0], dblArr[1], dblArr[2], dblArr[3]);
+        }
         #endregion
 
         #region Control

@@ -75,20 +75,21 @@ namespace MonkeyPaste {
 
 
     public interface MpIQueryInfo : MpIDbIdCollection, MpIJsonObject {
+
+        public MpTextQueryType TextFlags { get; } // advanced
+
+        public MpDateTimeQueryType TimeFlags { get; } // advanced
+        public MpLogicalQueryType NextJoinType { get; } // advanced
+        MpIQueryInfo Next { get; } // advanced
+
         public int TotalAvailableItemsInQuery { get; }
 
         public bool IsDescending { get; }
 
         public MpContentSortType SortType { get; }
 
-        public MpContentQueryBitFlags FilterFlags { get; }
+        public MpContentQueryBitFlags FilterFlags { get; } 
 
-        public MpLogicalQueryType PrevJoinType { get; } // advanced
-
-        public MpTextQueryType TextFlags { get; } // advanced
-
-        public MpDateTimeQueryType TimeFlags { get;  } // advanced
-        MpIQueryInfo Next { get; } // advanced
 
         public int TagId { get;}
 

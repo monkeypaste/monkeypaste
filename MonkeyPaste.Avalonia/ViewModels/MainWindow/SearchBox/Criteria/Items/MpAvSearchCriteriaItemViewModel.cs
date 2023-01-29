@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Markup.Localizer;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using MonkeyPaste;
@@ -57,9 +59,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIQueryInfo Implementation
 
-        IEnumerable<MpIQueryInfoValueProvider> MpIQueryInfo.Providers => 
+        public IEnumerable<MpIQueryInfoValueProvider> Providers => 
             new[] { this };
-        int MpIQueryInfo.TotalAvailableItemsInQuery {
+        public int TotalAvailableItemsInQuery {
             get {
                 int sum = _allQueryCopyItemIds.Count;
                 if(this is MpIQueryInfo qi) {
@@ -72,11 +74,11 @@ namespace MonkeyPaste.Avalonia {
                 return sum;
             }
         }
-        bool MpIQueryInfo.IsDescending =>
+        public bool IsDescending =>
             MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending;
-        MpContentSortType MpIQueryInfo.SortType =>
+        public MpContentSortType SortType =>
             MpAvClipTileSortFieldViewModel.Instance.SelectedSortType;
-        int MpIQueryInfo.TagId {
+        public int TagId {
             get {
                 int tag_id = MpTag.AllTagId;
 
@@ -101,28 +103,26 @@ namespace MonkeyPaste.Avalonia {
                 return tag_id;
             }
         }
-        string MpIQueryInfo.SearchText {
+        public string SearchText {
             get {
                 string st = string.Empty;
-
-                var match_val_opts =
-                    RootOptionViewModel
-                    .SelfAndAllDescendants()
-                    .Cast<MpAvSearchCriteriaOptionViewModel>()
-                    .Where(x => !string.IsNullOrEmpty(x.Value))
-                    .ToList();
-                if (match_val_opts.Count > 0) {
-                    if (match_val_opts.Count > 1) {
-                        // how are there 2?
-                        Debugger.Break();
-                    }
-                    st = match_val_opts.FirstOrDefault().Value;
+                if(LeafValueOptionViewModel != null) {
+                    st = LeafValueOptionViewModel.Value;
                 }
+
+                
+                //if (match_val_opts.Count > 0) {
+                //    if (match_val_opts.Count > 1) {
+                //        // how are there 2?
+                //        Debugger.Break();
+                //    }
+                //    st = match_val_opts.FirstOrDefault().Value;
+                //}
                 return st;
             }
         }
 
-        MpContentQueryBitFlags MpIQueryInfo.FilterFlags { 
+        public MpContentQueryBitFlags FilterFlags { 
             get {
                 return
                     RootOptionViewModel
@@ -134,8 +134,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         // TODO need to update contentQuerier to use text flags or probably build off for advanced and use there
-        MpTextQueryType MpIQueryInfo.TextFlags => MpTextQueryType.None;
-        MpDateTimeQueryType MpIQueryInfo.TimeFlags { 
+        public MpTextQueryType TextFlags => MpTextQueryType.None;
+        public MpDateTimeQueryType TimeFlags { 
             get {
                 MpDateTimeQueryType tfft = MpDateTimeQueryType.None;
 
@@ -174,9 +174,9 @@ namespace MonkeyPaste.Avalonia {
                 return tfft;
             }
         }
-                
 
-        MpIQueryInfo MpIQueryInfo.Next { 
+
+        public MpIQueryInfo Next { 
             get {
                 /*
                 Join Notes:
@@ -201,15 +201,15 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        void MpIQueryInfo.RestoreProviderValues() {
+        public void RestoreProviderValues() {
             throw new NotImplementedException();
         }
 
-        void MpIQueryInfo.RegisterProvider(MpIQueryInfoValueProvider provider) {
+        public void RegisterProvider(MpIQueryInfoValueProvider provider) {
             throw new NotImplementedException();
         }
 
-        async Task<List<MpCopyItem>> MpIQueryInfo.FetchIdsByQueryIdxListAsync(List<int> copyItemQueryIdxList) {
+        public async Task<List<MpCopyItem>> FetchIdsByQueryIdxListAsync(List<int> copyItemQueryIdxList) {
             var fetchRootIds = _allQueryCopyItemIds
                                 .Select((val, idx) => (val, idx))
                                 .Where(x => copyItemQueryIdxList.Contains(x.idx))
@@ -218,14 +218,14 @@ namespace MonkeyPaste.Avalonia {
             return items;
         }
 
-        async Task MpIQueryInfo.QueryForTotalCountAsync() {
-            var result = await MpContentQuery.QueryAllAsync(this);
+        public async Task QueryForTotalCountAsync() {
+            var result = await MpContentQuery.QueryAllAsync(this,true);
             _allQueryCopyItemIds.Clear();
             _allQueryCopyItemIds.AddRange(result);
         }
 
         public void NotifyQueryChanged(bool forceRequery = false) {
-            Dispatcher.UIThread.Post(async () => {
+            Dispatcher.UIThread.Post(() => {
                 // NOTE unlike query vm this treats forceRequery as required since value providers are internal i dunno
 
                 if(forceRequery) {
@@ -292,6 +292,24 @@ namespace MonkeyPaste.Avalonia {
         #region ViewModels
 
         public MpAvSearchCriteriaOptionViewModel RootOptionViewModel { get; private set; }
+
+        public MpAvSearchCriteriaOptionViewModel LeafValueOptionViewModel {
+            get {
+                var cur_ovm = RootOptionViewModel;
+                while(cur_ovm.SelectedItem != null) {
+                    cur_ovm = cur_ovm.SelectedItem;
+                }
+
+                var match_val_opts =
+                    RootOptionViewModel
+                    .SelfAndAllDescendants()
+                    .Cast<MpAvSearchCriteriaOptionViewModel>()
+                    .Where(x => !string.IsNullOrEmpty(x.Value))
+                    .ToList();
+               
+                return cur_ovm;
+            }
+        }
 
         private ObservableCollection<MpAvSearchCriteriaOptionViewModel> _items;
         public ObservableCollection<MpAvSearchCriteriaOptionViewModel> Items {
@@ -555,6 +573,7 @@ namespace MonkeyPaste.Avalonia {
                 var ovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
                 ovm.UnitType = MpSearchCriteriaUnitFlags.EnumerableValue;
                 ovm.Label = labels[i];
+                ovm.Value = ((MpCopyItemType)i).ToString();
                 iovml.Add(ovm);
             }
             return new ObservableCollection<MpAvSearchCriteriaOptionViewModel>(iovml);
@@ -793,6 +812,13 @@ namespace MonkeyPaste.Avalonia {
         #region Appearance
         #endregion
 
+        #region Layout
+
+        public double SearchCriteriaListBoxItemHeight => 60;
+
+        public Thickness CriteriaItemBorder => new Thickness(0, 1, 0, 1);
+        #endregion
+
         #region State
 
         public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsAnyBusy);
@@ -852,18 +878,18 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public MpLogicalQueryType PrevJoinType { 
+        public MpLogicalQueryType NextJoinType { 
             get {
                 if(SearchCriteriaItem == null) {
                     return MpLogicalQueryType.None;
                 }
-                return SearchCriteriaItem.PrevJoinType;
+                return SearchCriteriaItem.NextJoinType;
             }
             set {
-                if(PrevJoinType != value) {
-                    SearchCriteriaItem.PrevJoinType = value;
+                if(NextJoinType != value) {
+                    SearchCriteriaItem.NextJoinType = value;
                     HasModelChanged = true;
-                    OnPropertyChanged(nameof(PrevJoinType));
+                    OnPropertyChanged(nameof(NextJoinType));
                 }
             }        
         } 
@@ -877,10 +903,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public MpAvSearchCriteriaItemViewModel() : base(null) { }
+        public MpAvSearchCriteriaItemViewModel() : this(null) { }
 
         public MpAvSearchCriteriaItemViewModel(MpAvSearchCriteriaItemCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpAvSearchCriteriaItemViewModel_PropertyChanged;
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }
 
         public async Task InitializeAsync(MpSearchCriteriaItem sci) {
@@ -904,6 +931,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
+        private void ReceivedGlobalMessage(MpMessageType msg) {
+
+        }
         private async Task<MpAvSearchCriteriaOptionViewModel> CreateRootOptionViewModelAsync(string options) {
             var root_opt_vm = GetRootOption();
             if(string.IsNullOrWhiteSpace(options)) {

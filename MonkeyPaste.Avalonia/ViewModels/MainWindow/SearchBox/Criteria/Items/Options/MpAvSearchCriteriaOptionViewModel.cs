@@ -202,7 +202,7 @@ namespace MonkeyPaste.Avalonia {
 
                 filter_name = opt_parts[4];
             } else {
-                Values.ForEach(x => x = null);
+                //Values.ForEach(x => x = null);
                 filter_name = opt_parts[2];
             }
             IsChecked = opt_checked.IsTrue();

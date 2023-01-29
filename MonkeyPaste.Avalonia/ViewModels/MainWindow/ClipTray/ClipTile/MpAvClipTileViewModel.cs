@@ -1152,8 +1152,9 @@ namespace MonkeyPaste.Avalonia {
             while(TransactionCollectionViewModel.IsAnyBusy) {
                 await Task.Delay(100);
             }
-            //bool wasBusy = IsBusy;
-            //IsBusy = true;
+            if (IsPlaceholder) {
+                return;
+            }
 
             int layerCount = 4;
 
@@ -1297,7 +1298,7 @@ namespace MonkeyPaste.Avalonia {
             }
             var neighbor_ctvm = Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == target_idx);
             if (neighbor_ctvm == null) {
-                int neighbor_ciid = Parent.CurrentQuery.GetItemId(target_idx); //MpDataModelProvider.AvailableQueryCopyItemIds[target_idx];
+                int neighbor_ciid = MpPlatform.Services.QueryInfo.GetItemId(target_idx); 
                 Parent.ScrollIntoView(neighbor_ciid);
                 await Task.Delay(100);
                 while (Parent.IsAnyBusy) { await Task.Delay(100); }
@@ -1402,7 +1403,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region IDisposable
 
-        public override void Dispose() {
+        public override void DisposeViewModel() {
             //base.Dispose();
             //PropertyChanged -= MpClipTileViewModel_PropertyChanged;
             //SelectionBgColorPopupViewModel.OnColorChanged -= SelectionBgColorPopupViewModel_OnColorChanged;

@@ -28,7 +28,7 @@ namespace MonkeyPaste.Avalonia {
                     IsChecked = IsChecked,
                     Command = ToggleIsCheckedCommand,
                     Header = Label,
-                    BorderHexColor = MpSystemColors.Black,
+                    IconBorderHexColor = MpSystemColors.Black,
                     IconHexStr = MpSystemColors.White,
                 };
             }

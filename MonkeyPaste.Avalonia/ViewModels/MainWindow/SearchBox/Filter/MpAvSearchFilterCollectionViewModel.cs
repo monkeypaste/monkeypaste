@@ -156,7 +156,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
         public MpAvSearchFilterCollectionViewModel() : this(null) { }
         public MpAvSearchFilterCollectionViewModel(MpAvSearchBoxViewModel parent) : base(parent) {
-            //PropertyChanged += MpAvSearchFilterCollectionViewModel_PropertyChanged;
+            PropertyChanged += MpAvSearchFilterCollectionViewModel_PropertyChanged;
         }
 
         #endregion
@@ -176,10 +176,17 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        //private void MpAvSearchFilterCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-        //    switch(e.PropertyName) {
-        //    }
-        //}
+        private void MpAvSearchFilterCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(IsFilterPopupOpen):
+                    if(IsFilterPopupOpen) {
+                        break;
+                    }
+                    MpPrefViewModel.Instance.LastQueryInfoJson = 
+                        MpPlatform.Services.QueryInfo.SerializeJsonObject();
+                    break;
+            }
+        }
         private void Sfvm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             var sfvm = sender as MpAvSearchFilterViewModel;
             switch (e.PropertyName) {

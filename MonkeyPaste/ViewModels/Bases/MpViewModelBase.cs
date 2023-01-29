@@ -137,12 +137,12 @@ namespace MonkeyPaste {
         // based on http://support.surroundtech.com/thread/memory-management-best-practices-in-wpf/
         // and https://web.archive.org/web/20200720045029/https://docs.microsoft.com/en-us/archive/blogs/jgoldb/finding-memory-leaks-in-wpf-based-applications
 
-        public virtual void Dispose() {
-            Dispose(true);
+        public virtual void DisposeViewModel() {
+            DisposeViewModel(true);
             GC.SuppressFinalize(this);
         }
 
-        protected virtual void Dispose(bool disposing) {
+        protected virtual void DisposeViewModel(bool disposing) {
             // Release unmanaged memory
             if (disposing) {
                 // Release other objects
@@ -158,7 +158,7 @@ namespace MonkeyPaste {
         }
 
         ~MpViewModelBase() {
-            Dispose(false);
+            DisposeViewModel(false);
         }
 
         #endregion

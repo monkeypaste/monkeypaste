@@ -514,7 +514,7 @@ namespace MonkeyPaste.Avalonia {
             bool isFindTileRect = !isFindTileIdx && queryOffsetIdx >= 0;
             bool isFindTotalSize = !isFindTileRect;
 
-            int totalTileCount = CurrentQuery.TotalAvailableItemsInQuery;
+            int totalTileCount = MpPlatform.Services.QueryInfo.TotalAvailableItemsInQuery;
             queryOffsetIdx = isFindTotalSize ? TotalTilesInQuery - 1 : queryOffsetIdx;
             if (queryOffsetIdx >= totalTileCount) {
                 return null;
@@ -528,7 +528,7 @@ namespace MonkeyPaste.Avalonia {
             MpRect last_rect = null;// prevOffsetRect;
 
             for (int i = startIdx; i <= queryOffsetIdx; i++) {
-                int tileId = CurrentQuery.GetItemId(i);
+                int tileId = MpPlatform.Services.QueryInfo.GetItemId(i);
                 MpSize tile_size = DefaultItemSize;
                 if (MpAvPersistentClipTilePropertiesHelper.TryGetByPersistentSize_ById(tileId, out double uniqueSize)) {
                     tile_size.Width = uniqueSize;
@@ -770,7 +770,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvClipTileViewModel AppendClipTileViewModel => AllItems.FirstOrDefault(x => x.IsAppendNotifier);
 
 
-        public MpIQueryInfo CurrentQuery => MpPlatform.Services.QueryInfo; //MpPlatform.Services.QueryInfo;
+        //public MpIQueryInfo MpPlatform.Services.QueryInfo => MpPlatform.Services.QueryInfo; //MpPlatform.Services.QueryInfo;
         public IEnumerable<MpAvClipTileViewModel> SortOrderedItems => Items.Where(x => x.QueryOffsetIdx >= 0).OrderBy(x => x.QueryOffsetIdx);
 
         public ObservableCollection<MpAvClipTileViewModel> PinnedItems { get; set; } = new ObservableCollection<MpAvClipTileViewModel>();
@@ -969,7 +969,10 @@ namespace MonkeyPaste.Avalonia {
 
         public string EmptyQueryTrayText {
             get {
-                return IsQueryAllPinned ? " All Pinned" : " Empty";
+                return 
+                    IsQueryAllPinned ? " All Pinned" : 
+                    MpAvSearchCriteriaItemCollectionViewModel.Instance.PendingQueryTagId > 0 ? $" Has No Results" :
+                    " Empty";
             }
         }
 
@@ -1055,7 +1058,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public int TotalTilesInQuery => CurrentQuery.TotalAvailableItemsInQuery;
+        public int TotalTilesInQuery => MpPlatform.Services.QueryInfo.TotalAvailableItemsInQuery;
 
 
         public int DefaultLoadCount {
@@ -1161,6 +1164,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsPinTrayEmpty => PinnedItems.Count == 0;
 
+
         public bool IsQueryAllPinned {
             get {
                 if(!IsQueryTrayEmpty) {
@@ -1168,6 +1172,12 @@ namespace MonkeyPaste.Avalonia {
                 }
                 if (MpAvTagTrayViewModel.Instance.SelectedItem == null) {
                     return false;
+                }
+                if(MpAvSearchCriteriaItemCollectionViewModel.Instance.HasCriteriaItems) {
+                    if(MpAvSearchCriteriaItemCollectionViewModel.Instance.PendingQueryTagId > 0) {
+                        return false;
+                    }
+
                 }
                 return
                     MpAvTagTrayViewModel.Instance.SelectedItem
@@ -1422,7 +1432,7 @@ namespace MonkeyPaste.Avalonia {
             } else if (obj is int ciid) {
                 ctvm = AllItems.FirstOrDefault(x => x.CopyItemId == ciid);
                 if (ctvm == null) {
-                    int ciid_query_idx = CurrentQuery.GetItemOffsetIdx(ciid);
+                    int ciid_query_idx = MpPlatform.Services.QueryInfo.GetItemOffsetIdx(ciid);
                     if (ciid_query_idx < 0) {
                         if (ciid < 0) {
                             // means nothing is selected
@@ -1508,8 +1518,8 @@ namespace MonkeyPaste.Avalonia {
             if (fromModel) {
                 //ClipTileViewModels.Sort(x => x.CopyItem.CompositeSortOrderIdx);
             } else {
-                bool isDesc = CurrentQuery.IsDescending;
-                int tagId = CurrentQuery.TagId;
+                bool isDesc = MpPlatform.Services.QueryInfo.IsDescending;
+                int tagId = MpPlatform.Services.QueryInfo.TagId;
                 var citl = await MpDataModelProvider.GetCopyItemTagsForTagAsync(tagId);
 
                 if (tagId == MpTag.AllTagId) {
@@ -1748,7 +1758,7 @@ namespace MonkeyPaste.Avalonia {
                 MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Remove(ci);
                 MpAvPersistentClipTilePropertiesHelper.RemovePersistentSize_ById(ci.Id);
 
-                CurrentQuery.RemoveItemId(ci.Id);
+                MpPlatform.Services.QueryInfo.RemoveItemId(ci.Id);
                 //MpDataModelProvider.AvailableQueryCopyItemIds.Remove(ci.Id);
 
                 var removed_ctvm = AllItems.FirstOrDefault(x => x.CopyItemId == ci.Id);
@@ -1798,8 +1808,8 @@ namespace MonkeyPaste.Avalonia {
                 if (is_part_of_query && !sttvm.IsAllTag) {
                     // when unlinked item is part of current query remove its offset and do a reset query
 
-                    if (CurrentQuery.RemoveItemId(cit.CopyItemId)) {
-                        CurrentQuery.NotifyQueryChanged();
+                    if (MpPlatform.Services.QueryInfo.RemoveItemId(cit.CopyItemId)) {
+                        MpPlatform.Services.QueryInfo.NotifyQueryChanged();
                     } else {
                         // where/when was item removed from query?
                         Debugger.Break();
@@ -2165,7 +2175,7 @@ namespace MonkeyPaste.Avalonia {
 
             if(checkHi && checkLo) {
                 MpConsole.WriteLine("LoadMore infinite check detected, calling refresh query to prevent");
-                CurrentQuery.NotifyQueryChanged();
+                MpPlatform.Services.QueryInfo.NotifyQueryChanged();
                 return;
             }
 
@@ -2223,7 +2233,7 @@ namespace MonkeyPaste.Avalonia {
             UpdateEmptyPropertiesAsync().FireAndForgetSafeAsync();
             if (e.OldItems != null) { 
                 foreach (MpAvClipTileViewModel octvm in e.OldItems) {
-                    octvm.Dispose();
+                    octvm.DisposeViewModel();
                 }
             }
         }
@@ -2532,7 +2542,7 @@ namespace MonkeyPaste.Avalonia {
                      return;
                  }
 
-                 if (CurrentQuery.RemoveItemId(ctvm_to_pin.CopyItemId)) {
+                 if (MpPlatform.Services.QueryInfo.RemoveItemId(ctvm_to_pin.CopyItemId)) {
                      // tile was part of query tray
                      if (Items.Contains(ctvm_to_pin)) {
                          int ctvm_to_pin_qidx = ctvm_to_pin.QueryOffsetIdx;
@@ -2711,7 +2721,7 @@ namespace MonkeyPaste.Avalonia {
                 //if(!string.IsNullOrEmpty(MpAvSearchBoxViewModel.Instance.LastSearchText)) {
                 //    return false;
                 //}
-                //if (CurrentQuery.SortType == MpContentSortType.Manual) {
+                //if (MpPlatform.Services.QueryInfo.SortType == MpContentSortType.Manual) {
                 //    return false;
                 //}
                 if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
@@ -2723,7 +2733,8 @@ namespace MonkeyPaste.Avalonia {
         public ICommand QueryCommand => new MpCommand<object>(
             (offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg) => {
                 Dispatcher.UIThread.Post(async () => {
-                    IsBusy = IsRequery = true;
+                    IsBusy = true;
+                    IsRequery = true;
                     var sw = new Stopwatch();
                     sw.Start();
 
@@ -2799,7 +2810,7 @@ namespace MonkeyPaste.Avalonia {
                     }
 
                     if(isRequery || isInPlaceRequery) {
-                        await CurrentQuery.QueryForTotalCountAsync();
+                        await MpPlatform.Services.QueryInfo.QueryForTotalCountAsync();
 
                         FindTotalTileSize();
 
@@ -2851,7 +2862,7 @@ namespace MonkeyPaste.Avalonia {
 
                     #region Fetch Data & Create Init Tasks
 
-                    var cil = await CurrentQuery.FetchIdsByQueryIdxListAsync(fetchQueryIdxList);
+                    var cil = await MpPlatform.Services.QueryInfo.FetchIdsByQueryIdxListAsync(fetchQueryIdxList);
 
                     int recycle_base_query_idx = isLoadMoreTail ? HeadQueryIdx : TailQueryIdx;
                     int dir = isLoadMoreTail ? 1 : -1;

@@ -74,7 +74,6 @@ namespace MonkeyPaste.Avalonia {
             set => MpPrefViewModel.Instance.RecentSearchTexts = string.Join(MpPrefViewModel.STRING_ARRAY_SPLIT_TOKEN, value);
         }
 
-
         public bool IsMultipleMatches { get; private set; } = false;
 
 

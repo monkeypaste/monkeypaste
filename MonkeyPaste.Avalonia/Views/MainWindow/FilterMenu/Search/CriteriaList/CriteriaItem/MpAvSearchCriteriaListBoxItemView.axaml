@@ -117,6 +117,8 @@
 
         <ListBox Background="Transparent"
                  Classes="optionsList"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
                  BorderThickness="0"
                  Items="{Binding Items}">
             <ListBox.ItemsPanel>

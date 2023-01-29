@@ -50,7 +50,7 @@ namespace MonkeyPaste.Avalonia {
         public MpContentQueryBitFlags FilterFlags { get; set; } = MpContentQueryBitFlags.Content | MpContentQueryBitFlags.TextType | MpContentQueryBitFlags.ImageType | MpContentQueryBitFlags.FileType;
         public MpTextQueryType TextFlags { get; set; } = MpTextQueryType.None;
         public MpDateTimeQueryType TimeFlags { get; set; } = MpDateTimeQueryType.None;
-        public MpLogicalQueryType PrevJoinType { get; set; }
+        public MpLogicalQueryType NextJoinType { get; set; }
 
         public MpIQueryInfo Next { get; set; }
 
@@ -84,12 +84,12 @@ namespace MonkeyPaste.Avalonia {
 
         public void JoinWithNext(MpIQueryInfo next, MpLogicalQueryType joinType) {
             Next = next;
-            PrevJoinType = joinType;
+            NextJoinType = joinType;
         }
 
         #region Query Methods
         public async Task QueryForTotalCountAsync() { 
-            var result = await MpContentQuery.QueryAllAsync(this);
+            var result = await MpContentQuery.QueryAllAsync(this,false);
             _allQueryCopyItemIds.Clear();
             _allQueryCopyItemIds.AddRange(result);
         }

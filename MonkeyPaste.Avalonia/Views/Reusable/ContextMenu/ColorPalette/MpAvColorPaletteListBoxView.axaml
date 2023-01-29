@@ -67,7 +67,7 @@
                             Height="15"
                             Padding="0"
                             Background="{Binding Header, Converter={StaticResource StringHexToBrushConverter}}"
-                            BorderBrush="{Binding BorderHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                            BorderBrush="{Binding IconBorderHexColor, Converter={StaticResource StringHexToBrushConverter}}"
                             BorderThickness="1"
                             CornerRadius="2">
                         <ToolTip.Tip>

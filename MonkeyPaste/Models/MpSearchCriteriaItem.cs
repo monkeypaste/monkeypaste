@@ -10,6 +10,15 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     [Table("MpSearchCriteriaItem")]
     public class MpSearchCriteriaItem : MpDbModelBase {
+        #region Constants
+
+        public const MpLogicalQueryType DEFAULT_QUERY_JOIN_TYPE = MpLogicalQueryType.And;
+
+        #endregion
+
+        #region Interfaces
+        #endregion
+
         #region Columns
         [PrimaryKey, AutoIncrement]
         [Column("pk_MpSearchCriteriaItemId")]
@@ -24,7 +33,7 @@ namespace MonkeyPaste {
         public string Options { get; set; }
 
         [Column("e_MpLogicalQueryType")]
-        public string PrevJoinTypeName { get; set; } = MpLogicalQueryType.And.ToString();
+        public string NextJoinTypeName { get; set; } = DEFAULT_QUERY_JOIN_TYPE.ToString();
 
         public int SortOrderIdx { get; set; } = 0;
 
@@ -46,9 +55,9 @@ namespace MonkeyPaste {
             }
         }
 
-        public MpLogicalQueryType PrevJoinType {
-            get => PrevJoinTypeName.ToEnum<MpLogicalQueryType>();
-            set => PrevJoinTypeName = value.ToString();
+        public MpLogicalQueryType NextJoinType {
+            get => NextJoinTypeName.ToEnum<MpLogicalQueryType>();
+            set => NextJoinTypeName = value.ToString();
         }
 
         #endregion
@@ -59,7 +68,7 @@ namespace MonkeyPaste {
             string guid="",
             int tagId=0,
             int sortOrderIdx = -1,
-            MpLogicalQueryType prevJoinType = MpLogicalQueryType.And,
+            MpLogicalQueryType nextJoinType = DEFAULT_QUERY_JOIN_TYPE,
             string options = "",
             bool suppressWrite = false) {
             if(tagId < 0 && !suppressWrite) {
@@ -69,7 +78,7 @@ namespace MonkeyPaste {
                 SearchCriteriaItemGuid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid() : System.Guid.Parse(guid),
                 QueryTagId = tagId,
                 SortOrderIdx = sortOrderIdx,
-                PrevJoinType = prevJoinType,
+                NextJoinType = nextJoinType,
                 Options = options
             };
 
@@ -89,5 +98,6 @@ namespace MonkeyPaste {
             deleteTasks.Add(base.DeleteFromDatabaseAsync());
             await Task.WhenAll(deleteTasks);
         }
+
     }
 }

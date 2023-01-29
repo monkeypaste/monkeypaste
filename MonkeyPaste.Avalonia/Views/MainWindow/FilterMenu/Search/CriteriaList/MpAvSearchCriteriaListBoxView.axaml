@@ -32,11 +32,16 @@
             <Setter Property="VerticalAlignment"
                     Value="Stretch" />
         </Style>
-        <Style Selector="ListBox:not(.optionsList) ListBoxItem">
+        <Style Selector="ListBox:not(.optionsList) > ListBoxItem"
+               x:DataType="local:MpAvSearchCriteriaItemViewModel">
             <Setter Property="BorderThickness"
-                    Value="0,1,0,1" />
+                    Value="{Binding CriteriaItemBorder}" />
             <Setter Property="BorderBrush"
                     Value="Gainsboro" />
+            <!--<Setter Property="local:MpAvSizeObserver.IsEnabled"
+                    Value="True" />
+            <Setter Property="local:MpAvSizeObserver.ObservedHeight"
+                    Value="{Binding ObservedSearchCriteriaListBoxItemHeight, Mode=TwoWay}" />-->
         </Style>
 
         <Style Selector="ListBox:not(.optionsList) ListBoxItem:pointerover">
@@ -83,7 +88,7 @@
         <ListBox.ItemTemplate>
             <DataTemplate>
                 <local:MpAvSearchCriteriaItemView BorderThickness="0"
-                                                  Height="{Binding Parent.SearchCriteriaListBoxItemHeight}"
+                                                  Height="{Binding SearchCriteriaListBoxItemHeight}"
                                                   DataContext="{Binding}" />
             </DataTemplate>
         </ListBox.ItemTemplate>

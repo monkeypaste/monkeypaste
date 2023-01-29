@@ -32,12 +32,42 @@ namespace MonkeyPaste.Avalonia {
         private bool _wasEditingName = false;
         #endregion
 
+        #region Statics
+
+        public static MpShape GROUP_SHAPE = new MpEllipse(MpPoint.Zero, new MpSize(20, 20));
+        public static MpShape QUERY_SHAPE = MpTriangle.CreateEqualateralTriangle(MpPoint.Zero, 20);
+
+        #endregion
+
         #region Properties
 
         #region View Models
 
         public IEnumerable<MpAvTagTileViewModel> SortedItems => Items.OrderBy(x => x.TreeSortIdx);
 
+        public MpMenuItemViewModel AddChildPopupMenuItemViewModel {
+            get {
+                if (!IsGroupTag) {
+                    return null;
+                }
+                return new MpMenuItemViewModel() {
+                    SubItems = new List<MpMenuItemViewModel>() {
+                        new MpMenuItemViewModel() {
+                            IconSourceObj = "FolderImage",
+                            Header = "Group",
+                            Command = AddNewChildTagCommand,
+                            CommandParameter = MpTagType.Group
+                        },
+                        new MpMenuItemViewModel() {
+                            IconSourceObj = "BinocularsTiltedImage",
+                            Header = "Search",
+                            Command = AddNewChildTagCommand,
+                            CommandParameter = MpTagType.Query
+                        },
+                    }
+                };
+            }
+        }
         #endregion
 
         #region MpAvTreeSelectorViewModelBase Implementation
@@ -110,6 +140,7 @@ namespace MonkeyPaste.Avalonia {
                     Command = ToggleLinkToSelectedClipTileCommand,
                     IsChecked = IsLinkedToSelectedClipTile,
                     IconHexStr = TagHexColor,
+                    IconShape = MenuIconShape,
                     ShortcutArgs = new object[] { MpShortcutType.SelectTag, TagId },
                     SubItems = Items.Select(x => x.ContentMenuItemViewModel).ToList()
                 };
@@ -211,6 +242,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsAnyBusy => IsBusy || Children.Any(x => x.IsAnyBusy);
         public bool CanSelect => Parent != null && Parent.IsSelectionEnabled;
         public IEnumerable<int> LinkedCopyItemIds { get; private set; } = new List<int>();
         public ObservableCollection<int> CopyItemIdsNeedingView { get; set; } = new ObservableCollection<int>();
@@ -260,12 +292,34 @@ namespace MonkeyPaste.Avalonia {
         public bool IsLinkTag => !IsQueryTag && !IsGroupTag && !IsHelpTag;
         public bool IsQueryTag => TagType == MpTagType.Query;
         public bool IsGroupTag => TagType == MpTagType.Group;
+        public bool IsActionTag => IsLinkTag || IsQueryTag;
 
         public bool IsTagNameReadOnly { get; set; } = true;
         public bool IsTagNameTextBoxFocused { get; set; } = false;
         public bool? IsLinkedToSelectedClipTile { get; set; } = false;
 
         public int TagClipCount { get; set; }
+        public string TagClipCountText { 
+            get {
+                if(IsAnyBusy) {
+                    return "?";
+                }
+
+                if(IsLinkTag) {
+                    return TagClipCount.ToString();
+                }
+                if(IsGroupTag) {
+                    return string.Empty;
+                }
+                if(IsSelected) {
+                    return TagClipCount.ToString();
+                }
+                return string.Empty;
+            }
+        }
+
+        public MpShape MenuIconShape =>
+            IsLinkTag ? null : IsQueryTag ? QUERY_SHAPE : IsGroupTag ? GROUP_SHAPE : null;
 
         #endregion
 
@@ -300,6 +354,51 @@ namespace MonkeyPaste.Avalonia {
                     return MpTagType.None;
                 }
                 return Tag.TagType;
+            }
+        }
+
+        public MpContentSortType SortType {
+            get {
+                if(Tag == null || !IsQueryTag) {
+                    if(Parent != null && IsGroupTag) {
+                        // group tags pass through last selection
+                        return Parent.LastSelectedActionItem.SortType;
+                    }
+                    return MpAvClipTileSortFieldViewModel.Instance.SelectedSortType;
+                }
+                return Tag.SortType.Value;
+            }
+            set {
+                if(Tag == null || !IsQueryTag) {
+                    return;
+                }
+                if(SortType != value) {
+                    Tag.SortType = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(SortType));
+                }
+            }
+        }
+        public bool IsSortDescending {
+            get {
+                if(Tag == null || !IsQueryTag) {
+                    if(Parent != null && IsGroupTag) {
+                        // group tags pass through last selection
+                        return Parent.LastSelectedActionItem.IsSortDescending;
+                    }
+                    return MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending;
+                }
+                return Tag.IsSortDescending.IsTrue();
+            }
+            set {
+                if(Tag == null || !IsQueryTag) {
+                    return;
+                }
+                if(IsSortDescending != value) {
+                    Tag.IsSortDescending = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(IsSortDescending));
+                }
             }
         }
 
@@ -445,8 +544,6 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = true;
 
             Tag = tag;
-
-
             var ctl = await MpDataModelProvider.GetChildTagsAsync(TagId);
 
             foreach (var ct in ctl.OrderBy(x => x.TreeSortIdx)) {
@@ -457,7 +554,6 @@ namespace MonkeyPaste.Avalonia {
             while (Items.Any(x => x.IsBusy)) {
                 await Task.Delay(100);
             }
-
 
             await UpdateClipCountAsync();
 
@@ -498,9 +594,12 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public void UpdateTreeSortOrder() {
+            SortedItems.ForEach((x,idx) => x.TreeSortIdx = idx);
+        }
 
-        public override void Dispose() {
-            base.Dispose();
+        public override void DisposeViewModel() {
+            base.DisposeViewModel();
             MpDb.SyncAdd -= MpDbObject_SyncAdd;
             MpDb.SyncUpdate -= MpDbObject_SyncUpdate;
             MpDb.SyncDelete -= MpDbObject_SyncDelete;
@@ -649,6 +748,17 @@ namespace MonkeyPaste.Avalonia {
 
                     OnPropertyChanged(nameof(TagTextHexColor));
                     break;
+                case nameof(IsSortDescending):
+                case nameof(SortType):
+                    if(!IsSelected) {
+                        break;
+                    }
+                    if(e.PropertyName == nameof(IsSortDescending)) {
+                        MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending = IsSortDescending;
+                    } else {
+                        MpAvClipTileSortFieldViewModel.Instance.SelectedSortType = SortType;
+                    }
+                    break;
             }
         }
 
@@ -672,10 +782,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private async Task UpdateTreeSortOrder() {
-            Items.ForEach(x => x.TreeSortIdx = Items.IndexOf(x));
-            await Task.WhenAll(Items.Select(x => x.Tag.WriteToDatabaseAsync()));
-        }
 
         private async Task UpdateClipCountAsync() {
             await Dispatcher.UIThread.InvokeAsync(async () => {
@@ -853,16 +959,22 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand AddNewChildTagCommand => new MpAsyncCommand<object>(
              async (args) => {
-                 MpTag t = null;
-
-                 if(!IsExpanded) {
+                 if (!IsExpanded) {
                      IsExpanded = true;
                  }
+                 MpTag t = null;
                  MpTagType childTagType = TagType;
-                 if (args is MpTagType) {
+
+                 if(args is Control control && AddChildPopupMenuItemViewModel != null) {
+                     // show popup menu calling this command w/ tag type as parameter 
+                     MpAvMenuExtension.ShowMenu(control, AddChildPopupMenuItemViewModel, null, PlacementMode.Right);
+                     return;
+                 } else if (args is MpTagType) {
+                     // coming from plus button or plus popup menu
                      childTagType = (MpTagType)args;
                  } else if (args is int pendingTagId) {
-                     if(pendingTagId <= 0) {
+                     // coming from save SavePendingQueryCommand
+                     if (pendingTagId <= 0) {
                          // should be already saved
                          Debugger.Break();
                      } else {
@@ -874,17 +986,29 @@ namespace MonkeyPaste.Avalonia {
                      Debugger.Break();
                  }
 
-                 if(t == null) {
-                     t = await MpTag.CreateAsync(
-                     parentTagId: Parent.SelectedItem.TagId,
-                     treeSortIdx: Parent.SelectedItem.Items.Count,
-                     tagType: childTagType);
+                 if (t == null) {
+                     if(TagType == MpTagType.Query) {
+                         // this should only happen from add button w/ a group tag selected
+                         await MpAvSearchCriteriaItemCollectionViewModel.Instance.
+                            ConvertCurrentSearchToAdvancedCommand.ExecuteAsync();
+
+                         // get ref to newly created adv tag
+                         t = await MpDataModelProvider.GetItemAsync<MpTag>(
+                             MpAvSearchCriteriaItemCollectionViewModel.Instance.QueryTagId);
+                         t.TreeSortIdx = Items.Count;
+                         await t.WriteToDatabaseAsync();
+                     } else {
+                         t = await MpTag.CreateAsync(
+                             parentTagId: TagId,
+                             treeSortIdx: Items.Count,
+                             tagType: childTagType);
+                     }
                  }
 
                  MpAvTagTileViewModel ttvm = await CreateChildTagTileViewModel(t);
                  
                  Items.Add(ttvm);
-                 //SelectedItem = ttvm;
+
                  OnPropertyChanged(nameof(Items));
                  Parent.OnPropertyChanged(nameof(Parent.Items));
                  await Task.Delay(300);
@@ -894,13 +1018,16 @@ namespace MonkeyPaste.Avalonia {
         public ICommand DeleteChildTagCommand => new MpAsyncCommand<object>(
             async (args) => {
                 var child_ttvm_to_remove = args as MpAvTagTileViewModel;
-                var deleteTasks = (child_ttvm_to_remove.SelfAndAllDescendants.Cast<MpAvTagTileViewModel>().Select(x => x.Tag.DeleteFromDatabaseAsync()));
+                var deleteTasks = 
+                    child_ttvm_to_remove.SelfAndAllDescendants
+                    .Cast<MpAvTagTileViewModel>()
+                    .Select(x => x.Tag.DeleteFromDatabaseAsync());
                 await Task.WhenAll(deleteTasks);
 
                 Items.Remove(child_ttvm_to_remove);                
 
-                await UpdateTreeSortOrder();
-                OnPropertyChanged(nameof(Items));
+                UpdateTreeSortOrder();
+                OnPropertyChanged(nameof(SortedItems));
                 Parent.OnPropertyChanged(nameof(Parent.PinnedItems));
 
                 Parent.SelectTagCommand.Execute(this);                

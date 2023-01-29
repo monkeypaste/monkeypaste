@@ -142,7 +142,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region PlacementMode AvaloniaProperty
         public static PlacementMode GetPlacementMode(AvaloniaObject obj) {
-            return obj.GetValue(PlacementModeProperty);
+            return obj.GetValue(PlacementModeProperty); 
         }
 
         public static void SetPlacementMode(AvaloniaObject obj, PlacementMode value) {
@@ -503,17 +503,30 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static Border GetIconBorder(MpMenuItemViewModel mivm) {
-            return new Border() {
+            var ib = new Border() {
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
-                MinWidth = 20,
-                MinHeight = 20,
-                BorderThickness = new Thickness(1),
-                BorderBrush = mivm.BorderHexColor.ToAvBrush(),
+                MinWidth = mivm.IconMinWidth,
+                MinHeight = mivm.IconMinHeight,
+                BorderThickness = new Thickness(mivm.IconBorderThickness),
+                BorderBrush = mivm.IconBorderHexColor.ToAvBrush(),
                 CornerRadius = new CornerRadius(mivm.IconCornerRadius),
-                Margin = new Thickness(5, 0, 30, 0),
+                Margin = mivm.IconMargin.ToAvThickness(),
                 Background = mivm.IconHexStr.ToAvBrush()
             };
+            if(mivm.IconShape.ToAvShape() is Shape icon_shape) {
+                //Stroke="DarkBlue" StrokeThickness="1" Fill="Violet" Canvas.Left="150" Canvas.Top="31"/>
+                icon_shape.Stroke = ib.BorderBrush;
+                icon_shape.StrokeThickness = mivm.IconBorderThickness;
+                icon_shape.Fill = ib.Background;
+
+                ib.BorderBrush = Brushes.Transparent;
+                ib.BorderThickness = new Thickness(0);
+                ib.Background = Brushes.Transparent;
+                ib.Child = icon_shape;
+            }
+
+            return ib;
         }
 
         private static IEnumerable<MenuItem> GetChildMenuItems(MenuItem mi) {

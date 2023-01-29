@@ -238,7 +238,7 @@
             </TabItem>
             <TabItem Header="Output">
                 <StackPanel x:DataType="local:MpAvTransactionMessageViewModelBase"
-                      DataContext="{Binding Response}">
+                            DataContext="{Binding Response}">
                     <ContentControl Content="{Binding}">
                         <ContentControl.DataTemplates>
                             <local:MpAvTransactionMessageBodyTemplateSelector>
