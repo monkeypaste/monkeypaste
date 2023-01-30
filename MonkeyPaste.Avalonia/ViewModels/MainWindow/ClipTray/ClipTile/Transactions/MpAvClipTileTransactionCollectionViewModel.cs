@@ -83,12 +83,12 @@ namespace MonkeyPaste.Avalonia {
 
         public double DefaultTransactionPanelWidth {
             get {
-                return MpAvClipTrayViewModel.Instance.DefaultItemWidth * 0.5;
+                return MpAvClipTrayViewModel.Instance.DefaultQueryItemWidth * 0.5;
             }
         }
         public double DefaultTransactionPanelHeight {
             get {
-                return MpAvClipTrayViewModel.Instance.DefaultItemHeight * 0.5;
+                return MpAvClipTrayViewModel.Instance.DefaultQueryItemHeight * 0.5;
             }
         }
         public double BoundWidth { get; set; }
@@ -310,8 +310,8 @@ namespace MonkeyPaste.Avalonia {
 
                 SetTransactionViewGridLength(new GridLength(0, GridUnitType.Auto));
 
-                double nw = Parent.Parent.DefaultItemWidth;
-                double nh = Parent.Parent.DefaultItemHeight;
+                double nw = Parent.Parent.DefaultQueryItemWidth;
+                double nh = Parent.Parent.DefaultQueryItemHeight;
                 Dispatcher.UIThread.Post(() => {
                     MpAvResizeExtension.ResizeAnimated(
                         Parent.GetDragSource() as MpAvCefNetWebView, 

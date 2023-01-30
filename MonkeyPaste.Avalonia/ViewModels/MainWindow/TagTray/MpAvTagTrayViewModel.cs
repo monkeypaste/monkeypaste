@@ -64,7 +64,7 @@ namespace MonkeyPaste.Avalonia {
         object MpIQueryInfoValueProvider.Source => this;
         string MpIQueryInfoValueProvider.SourcePropertyName => nameof(SelectedItemId);
 
-        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpPlatform.Services.QueryInfo.TagId);
+        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpIQueryInfo.TagId);
 
         #endregion
 
@@ -84,7 +84,7 @@ namespace MonkeyPaste.Avalonia {
         public double DefaultSidebarHeight {
             get {
                 if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                    return MpAvClipTrayViewModel.Instance.ClipTrayScreenHeight;
+                    return MpAvClipTrayViewModel.Instance.QueryTrayScreenHeight;
                 } else {
                     return 300;
                 }
@@ -263,7 +263,7 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = true;
 
             MpPlatform.Services.TagQueryTools = this;
-            MpPlatform.Services.QueryInfo.RegisterProvider(this);
+            MpPlatform.Services.Query.RegisterProvider(this);
 
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
 
@@ -559,7 +559,7 @@ namespace MonkeyPaste.Avalonia {
                         MpAvSearchCriteriaItemCollectionViewModel.Instance
                             .SelectAdvancedSearchCommand.Execute(SelectedItem.TagId);
                     } else {
-                        MpPlatform.Services.QueryInfo.NotifyQueryChanged(true);
+                        MpPlatform.Services.Query.NotifyQueryChanged(true);
                     }
                 }
             },

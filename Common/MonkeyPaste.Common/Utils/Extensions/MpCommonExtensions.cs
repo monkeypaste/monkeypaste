@@ -17,6 +17,13 @@ namespace MonkeyPaste.Common {
 
         #region Collections
 
+        public static void AddRange<T>(this IList<T> list, IEnumerable<T> range) {
+            if(list == null || range == null) {
+                throw new NullReferenceException($"{(list == null ? "Dest must be initialized":string.Empty)} {(range == null ? "range must be non-null" : string.Empty)}");
+            }
+            range.ForEach(x => list.Add(x));
+        }
+
         public static T AggregateOrDefault<T>(this IEnumerable<T> enumerable, Func<T,T,T> func){
             if(enumerable == null || enumerable.Count() == 0) {
                 return default;

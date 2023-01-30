@@ -417,6 +417,8 @@
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\MpAvWin32ProcessWatcher2.cs" />
     <Compile Remove="Utils\Input\Mouse\MpAvMouseHook_Win32.cs" />
     <Compile Remove="ViewModels\MainWindow\Actions\Action\Triggers\MpAvTimerTriggerViewModel.cs" />
+    <Compile Remove="ViewModels\MainWindow\ClipTray\MpAvClipTrayCollectionViewModel.cs" />
+    <Compile Remove="ViewModels\MainWindow\ClipTray\MpAvCopyItemCollectionViewModel.cs" />
     <Compile Remove="ViewModels\Reusable\Source\MpAvSourceCollectionViewModel.cs" />
     <Compile Remove="ViewModels\Reusable\Source\MpAvSourceViewModel.cs" />
     <Compile Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\MpAvActionPropertyListBoxView.axaml.cs" />
@@ -1092,7 +1094,6 @@
     <Folder Include="Controls\ProgressRing\" />
     <Folder Include="Utils\Input\Mouse\" />
     <Folder Include="Utils\Notifications\" />
-    <Folder Include="ViewModels\MainWindow\SearchBox\Criteria\Items\Options\" />
     <Folder Include="ViewModels\MainWindow\SearchBox\Filter\Items\" />
     <Folder Include="Views\HtmlConverterWindow\" />
     <Folder Include="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Transactions\Items\" />
@@ -1122,6 +1123,9 @@
     </Compile>
     <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\MpAvClipTrayContainerView.axaml.cs">
       <DependentUpon>MpAvClipTrayContainerView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\MpAvQueryTrayView.axaml.cs">
+      <DependentUpon>MpAvQueryTrayView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\MpAvPinTrayView.axaml.cs">
       <DependentUpon>MpAvPinTrayView.axaml</DependentUpon>

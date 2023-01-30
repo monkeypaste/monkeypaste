@@ -212,7 +212,7 @@ namespace MonkeyPaste.Avalonia {
         public double DefaultSidebarHeight {
             get {
                 if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                    return MpAvClipTrayViewModel.Instance.ClipTrayScreenHeight;
+                    return MpAvClipTrayViewModel.Instance.QueryTrayScreenHeight;
                 }
                 double h = _defaultSelectorColumnVarDimLength;
                 //if (SelectedItem != null) {

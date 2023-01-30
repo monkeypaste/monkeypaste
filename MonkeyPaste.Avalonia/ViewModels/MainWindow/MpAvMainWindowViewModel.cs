@@ -513,7 +513,7 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
-            MpPlatform.Services.QueryInfo.RestoreProviderValues();
+            MpPlatform.Services.Query.RestoreProviderValues();
         }
 
         public void SetupMainWindowSize(bool isOrientationChange = false) {

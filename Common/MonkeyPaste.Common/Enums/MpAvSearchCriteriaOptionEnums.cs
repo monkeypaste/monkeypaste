@@ -1,5 +1,12 @@
 ﻿
 namespace MonkeyPaste.Common {
+    public enum MpNextJoinOptionType {
+        // NOTE these need to align w/ MpLogicalQueryType
+        None = 0,
+        All,
+        Any,
+        NotOne
+    }
     public enum MpRootOptionType {
         None = 0,
         Content,
@@ -138,4 +145,6 @@ namespace MonkeyPaste.Common {
         LastYear,
         Exact
     }
+
+    
 }

@@ -28,7 +28,7 @@ namespace MonkeyPaste.Avalonia {
         object MpIQueryInfoValueProvider.Source => this;
         string MpIQueryInfoValueProvider.SourcePropertyName => nameof(SelectedSortType);
 
-        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpPlatform.Services.QueryInfo.SortType);
+        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpIQueryInfo.SortType);
 
         #endregion
 
@@ -66,7 +66,7 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
         public void Init() {
             //await Task.Delay(1);
-            MpPlatform.Services.QueryInfo.RegisterProvider(this);
+            MpPlatform.Services.Query.RegisterProvider(this);
 
             //ResetToDefault(true);
         }
@@ -77,7 +77,7 @@ namespace MonkeyPaste.Avalonia {
         private void MpClipTileSortViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e) {
             switch (e.PropertyName) {                
                 case nameof(SelectedSortType):
-                    MpPlatform.Services.QueryInfo.NotifyQueryChanged();
+                    MpPlatform.Services.Query.NotifyQueryChanged();
                     break;
             }
             

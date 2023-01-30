@@ -38,7 +38,7 @@ namespace MonkeyPaste.Avalonia {
         object MpIQueryInfoValueProvider.Source => this;
         string MpIQueryInfoValueProvider.SourcePropertyName => nameof(SearchText);
 
-        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpPlatform.Services.QueryInfo.SearchText);
+        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpIQueryInfo.SearchText);
 
         #endregion
 
@@ -165,7 +165,7 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitAsync() {
             await Task.Delay(1);
 
-            MpPlatform.Services.QueryInfo.RegisterProvider(this);
+            MpPlatform.Services.Query.RegisterProvider(this);
 
             SearchFilterCollectionViewModel.Init();
 
@@ -271,7 +271,7 @@ namespace MonkeyPaste.Avalonia {
                 if(!string.IsNullOrWhiteSpace(LastSearchText) && !suppressNotify) {
                     //MpPlatform.Services.QueryInfo.NotifyQueryChanged();
                     //SetQueryInfo();
-                    MpPlatform.Services.QueryInfo.NotifyQueryChanged();
+                    MpPlatform.Services.Query.NotifyQueryChanged();
                 }
                 LastSearchText = string.Empty;
             },
@@ -294,7 +294,7 @@ namespace MonkeyPaste.Avalonia {
                 OnPropertyChanged(nameof(IsSearchValid));
 
                 //SetQueryInfo(); 
-                MpPlatform.Services.QueryInfo.NotifyQueryChanged();
+                MpPlatform.Services.Query.NotifyQueryChanged();
                 UpdateRecentSearchTexts();
             },()=>!MpAvMainWindowViewModel.Instance.IsMainWindowLoading);
 

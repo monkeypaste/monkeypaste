@@ -73,8 +73,24 @@ namespace MonkeyPaste {
         string QueryValueName { get; }
     }
 
+    public interface MpIQueryResultProvider : MpIJsonObject {
+        
+        public int TotalAvailableItemsInQuery { get; }
+        Task<List<MpCopyItem>> FetchIdsByQueryIdxListAsync(List<int> copyItemQueryIdxList);
+        Task QueryForTotalCountAsync();
 
-    public interface MpIQueryInfo : MpIDbIdCollection, MpIJsonObject {
+        void NotifyQueryChanged(bool forceRequery = false);
+
+        void RestoreProviderValues();
+
+        void RegisterProvider(MpIQueryInfoValueProvider provider);
+
+        IEnumerable<MpIQueryInfoValueProvider> ValueProviders { get; }
+
+        MpIDbIdCollection PageTools { get;}
+    }
+
+    public interface MpIQueryInfo {
 
         public MpTextQueryType TextFlags { get; } // advanced
 
@@ -82,7 +98,6 @@ namespace MonkeyPaste {
         public MpLogicalQueryType NextJoinType { get; } // advanced
         MpIQueryInfo Next { get; } // advanced
 
-        public int TotalAvailableItemsInQuery { get; }
 
         public bool IsDescending { get; }
 
@@ -98,15 +113,5 @@ namespace MonkeyPaste {
         public int SortOrderIdx { get; }
         
 
-        void NotifyQueryChanged(bool forceRequery = false);
-
-        void RestoreProviderValues();
-
-        void RegisterProvider(MpIQueryInfoValueProvider provider);
-
-        IEnumerable<MpIQueryInfoValueProvider> Providers { get; }
-
-        Task<List<MpCopyItem>> FetchIdsByQueryIdxListAsync(List<int> copyItemQueryIdxList);
-        Task QueryForTotalCountAsync();
     }
 }

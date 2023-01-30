@@ -19,11 +19,9 @@ namespace MonkeyPaste.Avalonia {
 
     public class MpAvSearchCriteriaItemViewModel : 
         MpViewModelBase<MpAvSearchCriteriaItemCollectionViewModel>,
-        MpIQueryInfo,
-        MpIQueryInfoValueProvider {
+        MpIQueryInfo {
         #region Private Variables
         
-        private List<int> _allQueryCopyItemIds { get; set; } = new List<int>();
 
         #endregion
 
@@ -50,34 +48,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
-        #region MpIQueryInfoValueProvider Implementation
-        public object Source { get; }
-        public string SourcePropertyName { get; }
-        public string QueryValueName { get; }
-
-        #endregion
-
         #region MpIQueryInfo Implementation
 
-        public IEnumerable<MpIQueryInfoValueProvider> Providers => 
-            new[] { this };
-        public int TotalAvailableItemsInQuery {
-            get {
-                int sum = _allQueryCopyItemIds.Count;
-                if(this is MpIQueryInfo qi) {
-                    qi = qi.Next;
-                    while(qi != null) {
-                        sum += qi.TotalAvailableItemsInQuery;
-                        qi = qi.Next;
-                    }
-                }
-                return sum;
-            }
-        }
         public bool IsDescending =>
             MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending;
         public MpContentSortType SortType =>
             MpAvClipTileSortFieldViewModel.Instance.SelectedSortType;
+
         public int TagId {
             get {
                 int tag_id = MpTag.AllTagId;
@@ -109,15 +86,6 @@ namespace MonkeyPaste.Avalonia {
                 if(LeafValueOptionViewModel != null) {
                     st = LeafValueOptionViewModel.Value;
                 }
-
-                
-                //if (match_val_opts.Count > 0) {
-                //    if (match_val_opts.Count > 1) {
-                //        // how are there 2?
-                //        Debugger.Break();
-                //    }
-                //    st = match_val_opts.FirstOrDefault().Value;
-                //}
                 return st;
             }
         }
@@ -199,88 +167,7 @@ namespace MonkeyPaste.Avalonia {
                 return null;
                 
             }
-        }
-
-        public void RestoreProviderValues() {
-            throw new NotImplementedException();
-        }
-
-        public void RegisterProvider(MpIQueryInfoValueProvider provider) {
-            throw new NotImplementedException();
-        }
-
-        public async Task<List<MpCopyItem>> FetchIdsByQueryIdxListAsync(List<int> copyItemQueryIdxList) {
-            var fetchRootIds = _allQueryCopyItemIds
-                                .Select((val, idx) => (val, idx))
-                                .Where(x => copyItemQueryIdxList.Contains(x.idx))
-                                .Select(x => x.val).ToList();
-            var items = await MpDataModelProvider.GetCopyItemsByIdListAsync(fetchRootIds);
-            return items;
-        }
-
-        public async Task QueryForTotalCountAsync() {
-            var result = await MpContentQuery.QueryAllAsync(this,true);
-            _allQueryCopyItemIds.Clear();
-            _allQueryCopyItemIds.AddRange(result);
-        }
-
-        public void NotifyQueryChanged(bool forceRequery = false) {
-            Dispatcher.UIThread.Post(() => {
-                // NOTE unlike query vm this treats forceRequery as required since value providers are internal i dunno
-
-                if(forceRequery) {
-                    _allQueryCopyItemIds.Clear();
-                    MpMessenger.SendGlobal(MpMessageType.QueryChanged);
-                } else {
-                    MpMessenger.SendGlobal(MpMessageType.SubQueryChanged);
-                }
-
-            });
-        }
-
-
-        #region MpIDbIdCollection
-
-        public int GetItemId(int queryIdx) {
-            if (queryIdx < 0 || queryIdx >= _allQueryCopyItemIds.Count) {
-                return -1;
-            }
-            return _allQueryCopyItemIds[queryIdx];
-        }
-
-        public int GetItemOffsetIdx(int itemId) {
-            return _allQueryCopyItemIds.IndexOf(itemId);
-        }
-
-        public void InsertId(int idx, int id) {
-            if (idx < 0 || idx > _allQueryCopyItemIds.Count) {
-                // bad idx
-                Debugger.Break();
-                return;
-            }
-            if (idx == _allQueryCopyItemIds.Count) {
-                _allQueryCopyItemIds.Add(id);
-            } else {
-                _allQueryCopyItemIds.Insert(idx, id);
-            }
-        }
-        public bool RemoveItemId(int itemId) {
-            bool was_removed = _allQueryCopyItemIds.Remove(itemId);
-            return was_removed;
-        }
-        public bool RemoveIdx(int queryIdx) {
-            if (queryIdx < 0 || queryIdx >= _allQueryCopyItemIds.Count) {
-                return false;
-            }
-            _allQueryCopyItemIds.RemoveAt(queryIdx);
-            return true;
-        }
-
-        public string SerializeJsonObject() {
-            throw new NotImplementedException();
-        }
-
-        #endregion
+        }     
 
         #endregion
 
@@ -329,6 +216,19 @@ namespace MonkeyPaste.Avalonia {
                 }              
                 
                 return _items;
+            }
+        }
+
+        private ObservableCollection<string> _joinTypeLabels;
+        public ObservableCollection<string> JoinTypeLabels {
+            get {
+                if(_joinTypeLabels == null) {
+                    _joinTypeLabels = new ObservableCollection<string>(
+                        typeof(MpNextJoinOptionType)
+                        .EnumToLabels()
+                        .Skip(1));
+                }
+                return _joinTypeLabels;
             }
         }
 
@@ -810,18 +710,54 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Appearance
+
+        public double CriteriaItemHeight =>
+            Parent == null ? 0 :
+                DefaultSearchCriteriaListBoxItemHeight * (IsJoinPanelVisible ? 2 : 1);
+                
         #endregion
 
         #region Layout
 
-        public double SearchCriteriaListBoxItemHeight => 60;
+        public double DefaultSearchCriteriaListBoxItemHeight => 50;
 
         public Thickness CriteriaItemBorder => new Thickness(0, 1, 0, 1);
         #endregion
 
         #region State
 
-        public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsAnyBusy);
+        public int SelectedJoinTypeIdx {
+            get => (int)(NextJoinType - 1);
+            set {
+                if(value < 0) {
+                    // BUG ui randomly setting idx to -1
+                    return;
+                }
+                if(SelectedJoinTypeIdx != value) {
+                    NextJoinType = (MpLogicalQueryType)(value + 1);
+                    OnPropertyChanged(nameof(SelectedJoinTypeIdx));
+                }
+            }
+        }
+
+        public bool IsJoinDropDownOpen { get; set; }
+        public bool CanRemoveThisCriteriaItem {
+            get {
+                if(Parent == null) {
+                    return false;
+                }
+                if(Parent.Items.Count > 1) {
+                    return true;
+                }
+                // reject last item remove
+                return SortOrderIdx > 0;
+            }
+        }
+        public bool IsAnyBusy => 
+            IsBusy || Items.Any(x => x.IsAnyBusy);
+
+        public bool IsJoinPanelVisible => 
+            NextJoinType != MpSearchCriteriaItem.DEFAULT_QUERY_JOIN_TYPE;
         public bool IsCaseSensitive { get; set; } = false;
 
         public bool CanSetCaseSensitive { get; set; } = false;
@@ -889,6 +825,8 @@ namespace MonkeyPaste.Avalonia {
                 if(NextJoinType != value) {
                     SearchCriteriaItem.NextJoinType = value;
                     HasModelChanged = true;
+                    OnPropertyChanged(nameof(IsJoinPanelVisible));
+                    OnPropertyChanged(nameof(CriteriaItemHeight));
                     OnPropertyChanged(nameof(NextJoinType));
                 }
             }        
@@ -918,13 +856,13 @@ namespace MonkeyPaste.Avalonia {
             RootOptionViewModel = await CreateRootOptionViewModelAsync(SearchOptions);
 
             OnPropertyChanged(nameof(Items));
+            OnPropertyChanged(nameof(SelectedJoinTypeIdx));
 
             IsBusy = false;
         }
 
         public void NotifyValueChanged() {
-            //MpPlatform.Services.QueryInfo.
-            NotifyQueryChanged(true);
+            Parent.NotifyQueryChanged(true);
         }
 
         #endregion
@@ -977,6 +915,19 @@ namespace MonkeyPaste.Avalonia {
                         });
                     }
                     break;
+                case nameof(IsJoinDropDownOpen):
+                    OnPropertyChanged(nameof(IsJoinPanelVisible));
+                    OnPropertyChanged(nameof(NextJoinType));
+                    break;
+                case nameof(IsJoinPanelVisible):
+                    OnPropertyChanged(nameof(CriteriaItemHeight));
+                    break;
+                case nameof(CriteriaItemHeight):
+                    if (Parent == null) {
+                        break;
+                    }
+                    Parent.OnPropertyChanged(nameof(Parent.MaxSearchCriteriaListBoxHeight));
+                    break;
             }
         }
 
@@ -985,24 +936,20 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public ICommand AddNextCriteriaItemCommand => new MpCommand<object>(
-            (args) => {
-                bool isBooleanCriteria = args != null;
+        public ICommand SelectCustomNextJoinTypeCommand => new MpCommand(
+            () => {
+                NextJoinType = MpLogicalQueryType.Or;
+            },()=>NextJoinType == MpSearchCriteriaItem.DEFAULT_QUERY_JOIN_TYPE);
 
+        public ICommand AddNextCriteriaItemCommand => new MpCommand(
+            () => {
                 Parent.AddSearchCriteriaItemCommand.Execute(this);
-            },(args)=>Parent != null);
+            },()=>Parent != null);
         
         public ICommand RemoveThisCriteriaItemCommand => new MpCommand(
             () => {
                 Parent.RemoveSearchCriteriaItemCommand.Execute(this);
-            },()=>Parent != null);
-
-
-
-
-
-
-
+            },()=> CanRemoveThisCriteriaItem);
         #endregion
     }
 }

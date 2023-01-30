@@ -80,9 +80,8 @@ namespace MonkeyPaste.Avalonia {
             var sidebarSplitter = this.FindControl<GridSplitter>("SidebarGridSplitter");
             sidebarSplitter.DragDelta += SidebarSplitter_DragDelta;
             
-            var advSearchSplitter = this.FindControl<GridSplitter>("AdvancedSearchSplitter");
-            //advSearchSplitter.DragDelta += AdvSearchSplitter_DragDelta;
-            advSearchSplitter.DragCompleted += AdvSearchSplitter_DragCompleted;
+            //var advSearchSplitter = this.FindControl<GridSplitter>("AdvancedSearchSplitter");
+            //advSearchSplitter.DragCompleted += AdvSearchSplitter_DragCompleted;
         }
 
 
@@ -125,6 +124,7 @@ namespace MonkeyPaste.Avalonia {
                     resizerView.Height = resizer_short_side;
                     resizerView.HorizontalAlignment = HorizontalAlignment.Stretch;
                     resizerView.VerticalAlignment = VerticalAlignment.Top;
+                    resizerTransform.Y -= 3;
 
                     //resizerView.Background = Brushes.Transparent;
                     break;
@@ -183,19 +183,13 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         public void UpdateTitleLayout() {
-
-            var test = this.GetVisualDescendants<Control>().Where(x => x is IDescription).Cast<IDescription>().ToList();
-
             var mwvm = MpAvMainWindowViewModel.Instance;
             var tmvm = MpAvMainWindowTitleMenuViewModel.Instance;
             var fmvm = MpAvFilterMenuViewModel.Instance;
-            var scicvm = MpAvSearchCriteriaItemCollectionViewModel.Instance;
 
             var mwcg = this.FindControl<Grid>("MainWindowContainerGrid");
             var tmv = this.FindControl<MpAvMainWindowTitleMenuView>("MainWindowTitleView");
             var fmv = this.FindControl<MpAvFilterMenuView>("FilterMenuView");
-            var sclbv_gs = this.FindControl<GridSplitter>("AdvancedSearchSplitter");
-            var sclbv = this.FindControl<MpAvSearchCriteriaListBoxView>("SearchDetailView");
             var mwtg = this.FindControl<Grid>("MainWindowTrayGrid");
 
             var tmv_cg = tmv.FindControl<Grid>("TitlePanel");
@@ -206,22 +200,6 @@ namespace MonkeyPaste.Avalonia {
             var tmv_zoom_slider = tmv.FindControl<Slider>("ZoomFactorSlider");
 
             double resizer_short_side = 0;
-
-            var sclbv_rd = new RowDefinition(Math.Max(0, scicvm.BoundCriteriaListBoxScreenHeight), GridUnitType.Pixel);
-            sclbv_rd.Bind(
-                RowDefinition.HeightProperty,
-                new Binding() {
-                    Source = scicvm,
-                    Path = nameof(scicvm.BoundCriteriaListBoxScreenHeight),
-                    Mode = BindingMode.TwoWay,
-                    Converter = MpAvDoubleToGridLengthConverter.Instance
-                });            
-            sclbv_rd.Bind(
-                RowDefinition.MaxHeightProperty,
-                new Binding() {
-                    Source = scicvm,
-                    Path = nameof(scicvm.MaxSearchCriteriaListBoxHeight)
-                });
 
             mwcg.ColumnDefinitions.Clear();
             mwcg.RowDefinitions.Clear();
@@ -239,29 +217,23 @@ namespace MonkeyPaste.Avalonia {
                 if (mwvm.MainWindowOrientationType == MpMainWindowOrientationType.Top) {
                     // TOP
                     mwcg.RowDefinitions.Add(fmv_rd);
-                    mwcg.RowDefinitions.Add(sclbv_rd);
                     mwcg.RowDefinitions.Add(new RowDefinition(new GridLength(1, GridUnitType.Star)));
                     mwcg.RowDefinitions.Add(tmv_rd);
 
                     Grid.SetRow(fmv, 0);
-                    Grid.SetRow(sclbv_gs, 1);
-                    Grid.SetRow(sclbv, 1);
-                    Grid.SetRow(mwtg, 2);
-                    Grid.SetRow(tmv, 3);
+                    Grid.SetRow(mwtg, 1);
+                    Grid.SetRow(tmv, 2);
 
                     tmv.Margin = new Thickness(0, 0, 0, resizer_short_side);
                 } else {
                     // BOTTOM
                     mwcg.RowDefinitions.Add(tmv_rd);
                     mwcg.RowDefinitions.Add(fmv_rd);
-                    mwcg.RowDefinitions.Add(sclbv_rd);
                     mwcg.RowDefinitions.Add(new RowDefinition(new GridLength(1, GridUnitType.Star)));
 
                     Grid.SetRow(tmv, 0);
                     Grid.SetRow(fmv, 1);
-                    Grid.SetRow(sclbv_gs, 2);
-                    Grid.SetRow(sclbv, 2);
-                    Grid.SetRow(mwtg, 3);
+                    Grid.SetRow(mwtg, 2);
 
                     tmv.Margin = new Thickness(0, resizer_short_side, 0, 0);
                 }
@@ -309,7 +281,6 @@ namespace MonkeyPaste.Avalonia {
                 var fv_rd = new RowDefinition(Math.Max(0, fmvm.FilterMenuHeight), GridUnitType.Pixel);
 
                 mwcg.RowDefinitions.Add(fv_rd);
-                mwcg.RowDefinitions.Add(sclbv_rd);
                 mwcg.RowDefinitions.Add(new RowDefinition(1, GridUnitType.Star));
 
                 if (mwvm.MainWindowOrientationType == MpMainWindowOrientationType.Left) {
@@ -320,17 +291,12 @@ namespace MonkeyPaste.Avalonia {
                     Grid.SetRow(fmv, 0);
                     Grid.SetColumn(fmv, 0);
 
-                    Grid.SetRow(sclbv, 1);
-                    Grid.SetColumn(sclbv, 0);
-                    Grid.SetRow(sclbv_gs, 1);
-                    Grid.SetColumn(sclbv_gs, 0);
-
-                    Grid.SetRow(mwtg, 2);
+                    Grid.SetRow(mwtg, 1);
                     Grid.SetColumn(mwtg, 0);
 
                     Grid.SetRow(tmv, 0);
                     Grid.SetColumn(tmv, 1);
-                    Grid.SetRowSpan(tmv, 3);
+                    Grid.SetRowSpan(tmv, 2);
 
                     tmv.Margin = new Thickness(0, 0, resizer_short_side, 0);
                 } else {
@@ -341,17 +307,12 @@ namespace MonkeyPaste.Avalonia {
                     Grid.SetRow(fmv, 0);
                     Grid.SetColumn(fmv, 1);
 
-                    Grid.SetRow(sclbv, 1);
-                    Grid.SetColumn(sclbv, 1);
-                    Grid.SetRow(sclbv_gs, 1);
-                    Grid.SetColumn(sclbv_gs, 1);
-
-                    Grid.SetRow(mwtg, 2);
+                    Grid.SetRow(mwtg, 1);
                     Grid.SetColumn(mwtg, 1);
 
                     Grid.SetRow(tmv, 0);
                     Grid.SetColumn(tmv, 0);
-                    Grid.SetRowSpan(tmv, 3);
+                    Grid.SetRowSpan(tmv, 2);
 
                     tmv.Margin = new Thickness(resizer_short_side, 0, 0, 0);
                 }
@@ -389,6 +350,7 @@ namespace MonkeyPaste.Avalonia {
             var mwvm = MpAvMainWindowViewModel.Instance;
             var ctrvm = MpAvClipTrayViewModel.Instance;
             var sbicvm = MpAvSidebarItemCollectionViewModel.Instance;
+            //var scicvm = MpAvSearchCriteriaItemCollectionViewModel.Instance;
 
             var mwtg = this.FindControl<Grid>("MainWindowTrayGrid");
 
@@ -397,56 +359,65 @@ namespace MonkeyPaste.Avalonia {
             var sbgs = this.FindControl<GridSplitter>("SidebarGridSplitter");
             var ctrcb = this.FindControl<Border>("ClipTrayContainerBorder");
 
+            
+
             var ctrcv = this.FindControl<MpAvClipTrayContainerView>("ClipTrayContainerView");
             var ctrcv_cg = ctrcv.FindControl<Grid>("ClipTrayContainerGrid");
             var ctrcv_ptrv = ctrcv.FindControl<MpAvPinTrayView>("PinTrayView");
             var ctrcv_ptr_lb = ctrcv_ptrv.FindControl<ListBox>("PinTrayListBox");
             var ctrcv_gs = ctrcv.FindControl<GridSplitter>("ClipTraySplitter");
-            var ctrcv_ctrv = ctrcv.FindControl<MpAvClipTrayView>("ClipTrayView");
+            var ctrcv_ctrv = ctrcv.FindControl<MpAvQueryTrayView>("ClipTrayView");
+            var ctrcv_ctrv_cg = ctrcv_ctrv.FindControl<Grid>("QueryTrayContainerGrid");
+            
 
             mwtg.RowDefinitions.Clear();
             mwtg.ColumnDefinitions.Clear();
             if (mwvm.IsHorizontalOrientation) {
                 // HORIZONTAL
 
+                mwtg.RowDefinitions.Add(new RowDefinition(new GridLength(0, GridUnitType.Auto)));
+                mwtg.RowDefinitions.Add(new RowDefinition(new GridLength(1, GridUnitType.Star)));
+
                 var sbbg_cd = new ColumnDefinition(
                     new GridLength(sbicvm.ButtonGroupFixedDimensionLength, GridUnitType.Pixel));
 
-                var ssbcb_cd = new ColumnDefinition(Math.Max(0,sbicvm.BoundWidth), GridUnitType.Pixel);
+                var ssbcb_cd = new ColumnDefinition(Math.Max(0,sbicvm.ContainerBoundWidth), GridUnitType.Pixel);
                 ssbcb_cd.Bind(
                     ColumnDefinition.WidthProperty,
                     new Binding() {
                         Source = sbicvm,
-                        Path = nameof(sbicvm.BoundWidth),
+                        Path = nameof(sbicvm.ContainerBoundWidth),
                         Mode = BindingMode.TwoWay,
                         Converter = MpAvDoubleToGridLengthConverter.Instance
                     });
 
-                var ctrcb_cd = new ColumnDefinition(Math.Max(0,ctrvm.BoundWidth), GridUnitType.Pixel);
+                var ctrcb_cd = new ColumnDefinition(Math.Max(0,ctrvm.ContainerBoundWidth), GridUnitType.Pixel);
                 ctrcb_cd.Bind(
                     ColumnDefinition.WidthProperty,
                     new Binding() {
                         Source = ctrvm,
-                        Path = nameof(ctrvm.BoundWidth),
+                        Path = nameof(ctrvm.ContainerBoundWidth),
                         Mode = BindingMode.TwoWay,
                         Converter = MpAvDoubleToGridLengthConverter.Instance
                     });
 
-                mwtg.ColumnDefinitions = new ColumnDefinitions() {
-                    sbbg_cd,
-                     ssbcb_cd,
-                     ctrcb_cd
-                };
+                mwtg.ColumnDefinitions.Add(sbbg_cd);
+                mwtg.ColumnDefinitions.Add(ssbcb_cd);
+                mwtg.ColumnDefinitions.Add(ctrcb_cd);
 
                 // sidebar buttons
                 Grid.SetRow(sbbg, 0);
+                Grid.SetRowSpan(sbbg, 2);
                 Grid.SetColumn(sbbg, 0);
 
                 // sidebar content
                 Grid.SetRow(ssbcb, 0);
+                Grid.SetRowSpan(ssbcb, 2);
                 Grid.SetColumn(ssbcb, 1);
+
                 // sidebar splitter
                 Grid.SetRow(sbgs, 0);
+                Grid.SetRowSpan(sbgs, 2);
                 Grid.SetColumn(sbgs, 1);
                 sbgs.Height = double.NaN;
                 sbgs.VerticalAlignment = VerticalAlignment.Stretch;
@@ -454,9 +425,18 @@ namespace MonkeyPaste.Avalonia {
                 sbgs.HorizontalAlignment = HorizontalAlignment.Right;
                 sbgs.ResizeDirection = GridResizeDirection.Columns;
 
-                // cliptray container view
-                Grid.SetRow(ctrcb, 0);
+                // adv search and splitter
+                //Grid.SetRow(sclbv, 0);
+                //Grid.SetColumn(sclbv, 2);
+                //Grid.SetColumnSpan(sclbv, 2);
+                //Grid.SetRow(sclbv_gs, 0);
+                //Grid.SetColumn(sclbv_gs, 2);
+                //Grid.SetColumnSpan(sclbv_gs, 2);
+
+                // cliptray container border
+                Grid.SetRow(ctrcb, 1);
                 Grid.SetColumn(ctrcb, 2);
+
 
                 // cliptraycontainer column definitions (horizontal)
                 ctrcv_cg.RowDefinitions.Clear();
@@ -518,22 +498,22 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 // VERTICAL 
 
-                var ctrcb_rd = new RowDefinition(Math.Max(0,ctrvm.BoundHeight), GridUnitType.Pixel);
+                var ctrcb_rd = new RowDefinition(Math.Max(0,ctrvm.ContainerBoundHeight), GridUnitType.Pixel);
                 ctrcb_rd.Bind(
                     RowDefinition.HeightProperty,
                     new Binding() {
                         Source = ctrvm,
-                        Path = nameof(ctrvm.BoundHeight),
+                        Path = nameof(ctrvm.ContainerBoundHeight),
                         Mode = BindingMode.TwoWay,
                         Converter = MpAvDoubleToGridLengthConverter.Instance
                     });
 
-                var ssbcb_rd = new RowDefinition(Math.Max(0,sbicvm.BoundHeight), GridUnitType.Pixel);
+                var ssbcb_rd = new RowDefinition(Math.Max(0,sbicvm.ContainerBoundHeight), GridUnitType.Pixel);
                 ssbcb_rd.Bind(
                     RowDefinition.HeightProperty,
                     new Binding() {
                         Source = sbicvm,
-                        Path = nameof(sbicvm.BoundHeight),
+                        Path = nameof(sbicvm.ContainerBoundHeight),
                         Mode = BindingMode.TwoWay,
                         Converter = MpAvDoubleToGridLengthConverter.Instance
                     });
@@ -541,34 +521,37 @@ namespace MonkeyPaste.Avalonia {
                 var sbbg_rd = new RowDefinition(
                     new GridLength(sbicvm.ButtonGroupFixedDimensionLength, GridUnitType.Pixel));
 
+               // mwtg.RowDefinitions.Add(sclbv_rd);
+                mwtg.RowDefinitions.Add(ctrcb_rd);
+                mwtg.RowDefinitions.Add(ssbcb_rd);
+                mwtg.RowDefinitions.Add(sbbg_rd);
 
-
-                mwtg.RowDefinitions = new RowDefinitions() {
-                     ctrcb_rd,
-                     ssbcb_rd,
-                    sbbg_rd
-                };
-
+                // adv search and splitter
+                //Grid.SetRow(sclbv, 0);
+                //Grid.SetColumn(sclbv, 0);
+                //Grid.SetRow(sclbv_gs, 0);
+                //Grid.SetColumn(sclbv_gs, 0);
+                
                 // cliptray container view
-                Grid.SetRow(ctrcb, 0);
+                Grid.SetRow(ctrcb, 1);
                 Grid.SetColumn(ctrcb, 0);
 
                 // sidebar content
-                Grid.SetRow(ssbcb, 1);
+                Grid.SetRow(ssbcb, 2);
                 Grid.SetColumn(ssbcb, 0);
 
-                // sidebar buttons
-                Grid.SetRow(sbbg, 2);
-                Grid.SetColumn(sbbg, 0);
-
                 // sidebar splitter
-                Grid.SetRow(sbgs, 1);
+                Grid.SetRow(sbgs, 2);
                 Grid.SetColumn(sbgs, 0);
                 sbgs.Height = 5.0d;
                 sbgs.Width = double.NaN;
                 sbgs.VerticalAlignment = VerticalAlignment.Top;
                 sbgs.HorizontalAlignment = HorizontalAlignment.Stretch;
                 sbgs.ResizeDirection = GridResizeDirection.Rows;
+
+                // sidebar buttons
+                Grid.SetRow(sbbg, 3);
+                Grid.SetColumn(sbbg, 0);
 
 
                 // cliptraycontainer column definitions (vertical)
@@ -719,11 +702,11 @@ namespace MonkeyPaste.Avalonia {
             if (mwvm.IsMainWindowOrientationDragging) {
                 // skip animate on orientation change because current values maybe transitioning 
                 // otherwise random flickering or target size is wrong
-                sbicvm.BoundWidth = nsbi_w;
-                sbicvm.BoundHeight = nsbi_h;
+                sbicvm.ContainerBoundWidth = nsbi_w;
+                sbicvm.ContainerBoundHeight = nsbi_h;
 
-                ctrvm.BoundWidth = nctrcb_w;
-                ctrvm.BoundHeight = nctrcb_h;
+                ctrvm.ContainerBoundWidth = nctrcb_w;
+                ctrvm.ContainerBoundHeight = nctrcb_h;
                 return;
             }
 
@@ -751,16 +734,16 @@ namespace MonkeyPaste.Avalonia {
 
             if(mwvm.IsVerticalOrientation && splitter_delta != null) {
                 // BUG grid splitter doesn't drag in vertical automatically, must manually adjust
-                sbicvm.BoundHeight -= splitter_delta.Y;
+                sbicvm.ContainerBoundHeight -= splitter_delta.Y;
             }
 
             double mw_w = mwvm.MainWindowWidth;
             double mw_h = mwvm.MainWindowHeight;
 
             if (BindingContext.IsHorizontalOrientation) {
-                ctrvm.BoundWidth = Math.Max(0, mw_w - sbicvm.ButtonGroupFixedDimensionLength - sbicvm.BoundWidth);
+                ctrvm.ContainerBoundWidth = Math.Max(0, mw_w - sbicvm.ButtonGroupFixedDimensionLength - sbicvm.ContainerBoundWidth);
             } else {
-                ctrvm.BoundHeight = Math.Max(0, mw_h - sbicvm.ButtonGroupFixedDimensionLength - sbicvm.BoundHeight - fmvm.FilterMenuHeight);
+                ctrvm.ContainerBoundHeight = Math.Max(0, mw_h - sbicvm.ButtonGroupFixedDimensionLength - sbicvm.ContainerBoundHeight - fmvm.FilterMenuHeight);
             }
             ClampContentSizes();
         }
@@ -772,34 +755,34 @@ namespace MonkeyPaste.Avalonia {
             var mwtmvm = MpAvMainWindowTitleMenuViewModel.Instance;
             var fmvm = MpAvFilterMenuViewModel.Instance;
 
-            double tw = ctrvm.BoundWidth + sbicvm.BoundWidth;
-            double th = ctrvm.BoundHeight + sbicvm.BoundHeight;
+            double tw = ctrvm.ContainerBoundWidth + sbicvm.ContainerBoundWidth;
+            double th = ctrvm.ContainerBoundHeight + sbicvm.ContainerBoundHeight;
 
             if(tw > mwvm.AvailableContentAndSidebarWidth) {
                 double w_diff = tw - mwvm.AvailableContentAndSidebarWidth;
-                double nctr_w = Math.Max(0,ctrvm.BoundWidth - (w_diff / 2));
-                double nsbic_w = Math.Max(0,sbicvm.BoundWidth - (w_diff / 2));
-                ctrvm.BoundWidth = nctr_w;
-                sbicvm.BoundWidth = nsbic_w;
-                if(ctrvm.BoundWidth <= 0) {
+                double nctr_w = Math.Max(0,ctrvm.ContainerBoundWidth - (w_diff / 2));
+                double nsbic_w = Math.Max(0,sbicvm.ContainerBoundWidth - (w_diff / 2));
+                ctrvm.ContainerBoundWidth = nctr_w;
+                sbicvm.ContainerBoundWidth = nsbic_w;
+                if(ctrvm.ContainerBoundWidth <= 0) {
                     // NOTE this only clamps when it becomes 0, which seems to be in 
                     // orientation change w/ sidebar visible
-                    ctrvm.BoundWidth = MIN_TRAY_VAR_DIM_LENGTH;
-                    sbicvm.BoundWidth = tw - MIN_TRAY_VAR_DIM_LENGTH;
+                    ctrvm.ContainerBoundWidth = MIN_TRAY_VAR_DIM_LENGTH;
+                    sbicvm.ContainerBoundWidth = tw - MIN_TRAY_VAR_DIM_LENGTH;
                 }
             }
             if (th > mwvm.AvailableContentAndSidebarHeight) {
                 double h_diff = th - mwvm.AvailableContentAndSidebarHeight;
-                double nctr_h = Math.Max(0, ctrvm.BoundHeight - (h_diff / 2));
-                double nsbic_h = Math.Max(0, sbicvm.BoundHeight - (h_diff / 2));
-                ctrvm.BoundHeight = nctr_h;
-                sbicvm.BoundHeight = nsbic_h;
+                double nctr_h = Math.Max(0, ctrvm.ContainerBoundHeight - (h_diff / 2));
+                double nsbic_h = Math.Max(0, sbicvm.ContainerBoundHeight - (h_diff / 2));
+                ctrvm.ContainerBoundHeight = nctr_h;
+                sbicvm.ContainerBoundHeight = nsbic_h;
 
-                if (ctrvm.BoundHeight <= 0) {
+                if (ctrvm.ContainerBoundHeight <= 0) {
                     // NOTE this only clamps when it becomes 0, which seems to be in 
                     // orientation change w/ sidebar visible
-                    ctrvm.BoundHeight = MIN_TRAY_VAR_DIM_LENGTH;
-                    sbicvm.BoundHeight = th - MIN_TRAY_VAR_DIM_LENGTH;
+                    ctrvm.ContainerBoundHeight = MIN_TRAY_VAR_DIM_LENGTH;
+                    sbicvm.ContainerBoundHeight = th - MIN_TRAY_VAR_DIM_LENGTH;
                 }
             }
         }

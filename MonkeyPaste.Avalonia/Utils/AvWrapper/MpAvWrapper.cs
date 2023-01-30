@@ -31,7 +31,7 @@ namespace MonkeyPaste.Avalonia {
         public MpIFocusMonitor FocusMonitor { get; set; }
         public MpIDragProcessWatcher DragProcessWatcher { get; set; }
         public MpIApplicationCommandManager AppCommandManager { get; set; }
-        public MpIQueryInfo QueryInfo { get; set; }
+        public MpIQueryResultProvider Query { get; set; }
         public MpIIconBuilder IconBuilder { get; set; }
         public MpIUrlBuilder UrlBuilder { get; set; }
         public MpIAppBuilder AppBuilder { get; set; }
@@ -104,7 +104,7 @@ namespace MonkeyPaste.Avalonia {
             
             await MpPrefViewModel.InitAsync(prefPath, DbInfo, OsInfo);
 
-            QueryInfo = MpAvQueryInfoViewModel.Parse(MpPrefViewModel.Instance.LastQueryInfoJson);
+            Query = MpAvQueryInfoViewModel.Parse(MpPrefViewModel.Instance.LastQueryInfoJson);
             ProcessWatcher = new MpAvProcessWatcherSelector().Watcher;
 
             IconBuilder = new MpAvIconBuilder().IconBuilder;

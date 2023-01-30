@@ -9,7 +9,6 @@ using MonkeyPaste;
 using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
-
     public class MpAvSearchCriteriaOptionViewModel : 
         MpViewModelBase<MpAvSearchCriteriaOptionViewModel>,
         MpITreeItemViewModel, 
@@ -59,6 +58,16 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsDropDownOpen { get; set; }
+        public bool IsVisible {
+            get {
+                if(Parent == null || !Parent.IsDropDownOpen) {
+                    return true;
+                }
+                // hide blank opt from drop down
+                return Label != MpAvSearchCriteriaItemViewModel.DEFAULT_OPTION_LABEL;
+            }
+        }
         public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsAnyBusy);
 
         public bool HasChildren => Items.Count > 0;
@@ -190,9 +199,9 @@ namespace MonkeyPaste.Avalonia {
 
                 // HANDLE LEAF
                 var vals = opt_parts[2].ToListFromCsv(MpCsvFormatProperties.DefaultBase64Value);
-                if(vals.Count > 1) {
+                if (vals.Count > 1) {
                     vals.ForEach((x, idx) => Values[idx] = x);
-                } else if(vals.Count > 0) {
+                } else if (vals.Count > 0) {
                     Value = vals.FirstOrDefault();
                 } else {
                     Value = string.Empty;
@@ -216,7 +225,7 @@ namespace MonkeyPaste.Avalonia {
 
             SelectedItem = cur_opt_sel_idx >= 0 ? Items[cur_opt_sel_idx] : null;
 
-            while(Items.Any(x=>x.IsAnyBusy)) {
+            while (Items.Any(x => x.IsAnyBusy)) {
                 await Task.Delay(100);
             }
 
@@ -269,6 +278,9 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     }
                     Parent.OnPropertyChanged(nameof(IsAnyBusy));
+                    break;
+                case nameof(IsDropDownOpen):
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsVisible)));
                     break;
             }
         }

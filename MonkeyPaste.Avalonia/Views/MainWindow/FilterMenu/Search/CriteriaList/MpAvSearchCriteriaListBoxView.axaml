@@ -52,7 +52,7 @@
             <Setter Property="BorderBrush"
                     Value="DimGray" />
             <Setter Property="Width"
-                    Value="{Binding MainWindowWidth, Source={x:Static local:MpAvMainWindowViewModel.Instance}}" />
+                    Value="{Binding QueryTrayScreenWidth, Source={x:Static local:MpAvClipTrayViewModel.Instance}}" />
         </Style>
         <Style Selector="ListBoxItem:nth-child(odd) local|MpAvSearchCriteriaItemView">
             <Setter Property="Background"
@@ -88,7 +88,7 @@
         <ListBox.ItemTemplate>
             <DataTemplate>
                 <local:MpAvSearchCriteriaItemView BorderThickness="0"
-                                                  Height="{Binding SearchCriteriaListBoxItemHeight}"
+                                                  Height="{Binding CriteriaItemHeight}"
                                                   DataContext="{Binding}" />
             </DataTemplate>
         </ListBox.ItemTemplate>

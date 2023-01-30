@@ -29,8 +29,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIBoundSizeViewModel Implementation
 
-        public double BoundWidth { get; set; }
-        public double BoundHeight { get; set; }
+        public double ContainerBoundWidth { get; set; }
+        public double ContainerBoundHeight { get; set; }
 
         #endregion
 

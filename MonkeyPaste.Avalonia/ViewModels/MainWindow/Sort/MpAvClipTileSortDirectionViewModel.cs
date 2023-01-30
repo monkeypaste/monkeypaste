@@ -25,7 +25,7 @@ namespace MonkeyPaste.Avalonia {
         object MpIQueryInfoValueProvider.Source => this;
         string MpIQueryInfoValueProvider.SourcePropertyName => nameof(IsSortDescending);
 
-        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpPlatform.Services.QueryInfo.IsDescending);
+        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpIQueryInfo.IsDescending);
 
         #endregion
         #region Properties
@@ -46,7 +46,7 @@ namespace MonkeyPaste.Avalonia {
             switch(e.PropertyName) {
                 case nameof(IsSortDescending):
                     MpMessenger.SendGlobal(MpMessageType.QuerySortChanged);
-                    MpPlatform.Services.QueryInfo.NotifyQueryChanged();
+                    MpPlatform.Services.Query.NotifyQueryChanged();
                     break;
             }
         }
@@ -55,7 +55,7 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
         public void Init() {
             //await Task.Delay(1);
-            MpPlatform.Services.QueryInfo.RegisterProvider(this);
+            MpPlatform.Services.Query.RegisterProvider(this);
 
             //ResetToDefault(true);
         }

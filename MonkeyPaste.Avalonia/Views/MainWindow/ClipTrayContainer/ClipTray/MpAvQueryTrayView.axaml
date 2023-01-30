@@ -7,27 +7,56 @@
                        xmlns:pcl="using:MonkeyPaste"
                        x:DataType="local:MpAvClipTrayViewModel"
                        x:TypeArguments="local:MpAvClipTrayViewModel"
-                       x:CompileBindings="True"
+                       x:CompileBindings="False"
                        DataContext="{x:Static local:MpAvClipTrayViewModel.Instance}"
                        mc:Ignorable="d"
                        d:DesignWidth="800"
                        d:DesignHeight="450"
-                       x:Class="MonkeyPaste.Avalonia.MpAvClipTrayView">
-    <Grid Margin="0"
+                       x:Class="MonkeyPaste.Avalonia.MpAvQueryTrayView">
+    <Grid x:Name="QueryTrayContainerGrid"
+          Margin="0"
           AttachedToVisualTree="MpAvClipTrayView_AttachedToVisualTree"
           Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition x:DataType="local:MpAvSearchCriteriaItemCollectionViewModel"
+                           Height="{Binding BoundCriteriaListBoxScreenHeight, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvDoubleToGridLengthConverter.Instance}}"
+                           MaxHeight="{Binding MaxSearchCriteriaListBoxHeight, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!--  ADVANCED SEARCH  -->
+        <Border Grid.Row="0"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Stretch"
+                DataContext="{x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}">
+            <local:MpAvSearchCriteriaListBoxView x:Name="SearchDetailView"
+                                                 HorizontalAlignment="Stretch"
+                                                 VerticalAlignment="Stretch"
+                                                 VerticalContentAlignment="Stretch"
+                                                 IsVisible="{Binding HasCriteriaItems}" />
+        </Border>
+        <GridSplitter x:Name="AdvancedSearchSplitter"
+                      Grid.Row="0"
+                      Classes="horizontal"
+                      ShowsPreview="True"
+                      IsVisible="{Binding IsVisible, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Bottom" />
+
+        <!--  QUERY TRAY  -->
         <Border x:Name="ClipTrayContainerBorder"
+                Grid.Row="1"
                 local:MpAvSizeObserverExtension.IsEnabled="True"
-                local:MpAvSizeObserverExtension.ObservedWidth="{Binding ClipTrayScreenWidth, Mode=OneWayToSource}"
-                local:MpAvSizeObserverExtension.ObservedHeight="{Binding ClipTrayScreenHeight, Mode=OneWayToSource}">
+                local:MpAvSizeObserverExtension.ObservedWidth="{Binding QueryTrayScreenWidth, Mode=OneWayToSource}"
+                local:MpAvSizeObserverExtension.ObservedHeight="{Binding QueryTrayScreenHeight, Mode=OneWayToSource}">
             <ScrollViewer x:Name="ClipTrayScrollViewer"
                           HorizontalScrollBarVisibility="Visible"
                           VerticalScrollBarVisibility="Visible"
                           HorizontalAlignment="Left"
                           VerticalAlignment="Top"
                           AllowAutoHide="True"
-                          Width="{Binding ClipTrayScreenWidth}"
-                          Height="{Binding ClipTrayScreenHeight}">
+                          Width="{Binding QueryTrayScreenWidth}"
+                          Height="{Binding QueryTrayScreenHeight}">
                 <ListBox x:Name="ClipTrayListBox"
                          Background="Transparent"
                          HorizontalAlignment="Left"
@@ -61,8 +90,8 @@
                          local:MpAvPagingListBoxExtension.CanScrollY="{Binding CanScroll}"
                          local:MpAvPagingListBoxExtension.ListOrientation="{Binding ListOrientation}"
                          local:MpAvPagingListBoxExtension.LayoutType="{Binding LayoutType}"
-                         Width="{Binding ClipTrayTotalWidth}"
-                         Height="{Binding ClipTrayTotalHeight}"
+                         Width="{Binding QueryTrayTotalWidth}"
+                         Height="{Binding QueryTrayTotalHeight}"
                          Items="{Binding Items}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -77,8 +106,8 @@
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Canvas x:Name="ClipTrayItemsPanelCanvas"
-                                    Width="{Binding ClipTrayTotalWidth}"
-                                    Height="{Binding ClipTrayTotalHeight}" />
+                                    Width="{Binding QueryTrayTotalWidth}"
+                                    Height="{Binding QueryTrayTotalHeight}" />
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
                 </ListBox>
@@ -88,6 +117,7 @@
         <!--  IsBusy Overlay  -->
         <Border HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
+                Grid.Row="1"
                 IsVisible="{Binding IsBusy}">
             <local:MpAvBusySpinnerView HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
@@ -99,6 +129,7 @@
 
         <Border HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
+                Grid.Row="1"
                 Background="Transparent">
             <Border.IsVisible>
                 <MultiBinding Converter="{StaticResource MultiBoolConverter}"

@@ -102,8 +102,8 @@ namespace MonkeyPaste.Avalonia {
                     }
                     
                     //if(control.Name == "ClipTrayContainerBorder") {
-                    //    MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.ClipTrayScreenWidth));
-                    //    MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.ClipTrayScreenHeight));
+                    //    MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.QueryTrayScreenWidth));
+                    //    MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.QueryTrayScreenHeight));
                     //}
                 }
             }

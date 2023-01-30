@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
         object MpIQueryInfoValueProvider.Source => this;
         string MpIQueryInfoValueProvider.SourcePropertyName => nameof(FilterType);
 
-        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpPlatform.Services.QueryInfo.FilterFlags);
+        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpIQueryInfo.FilterFlags);
 
         #endregion
 
@@ -165,7 +165,7 @@ namespace MonkeyPaste.Avalonia {
 
         public void Init() {
             OnPropertyChanged(nameof(Filters));
-            MpPlatform.Services.QueryInfo.RegisterProvider(this);
+            MpPlatform.Services.Query.RegisterProvider(this);
 
             ValidateFilters();
             foreach (var sfvm in Filters.Where(x => !x.IsSeperator)) {
@@ -183,7 +183,7 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     }
                     MpPrefViewModel.Instance.LastQueryInfoJson = 
-                        MpPlatform.Services.QueryInfo.SerializeJsonObject();
+                        MpPlatform.Services.Query.SerializeJsonObject();
                     break;
             }
         }

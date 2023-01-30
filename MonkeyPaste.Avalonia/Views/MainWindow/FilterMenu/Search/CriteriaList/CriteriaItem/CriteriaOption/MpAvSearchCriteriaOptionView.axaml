@@ -17,6 +17,12 @@
             <Setter Property="BorderBrush"
                     Value="Yellow" />
         </Style>
+        <Style Selector="ComboBoxItem"
+               x:DataType="local:MpAvSearchCriteriaOptionViewModel">
+            <Setter Property="IsVisible"
+                    Value="{Binding IsVisible}" />
+        </Style>
+
     </local:MpAvUserControl.Styles>
     <Grid Margin="0,3">
         <local:MpAvClipBorder BorderThickness="0"
@@ -30,18 +36,8 @@
                         <!--  ENUMERABLE COMBOBOX  -->
                         <DataTemplate x:Key="EnumerableOptionTemplate"
                                       DataType="local:MpAvSearchCriteriaOptionViewModel">
-                            <local:MpAvClipBorder CornerRadius="10"
-                                                  BorderThickness="1"
-                                                  BorderBrush="Black"
-                                                  HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center"
-                                                  Margin="5">
-                                <ComboBox MinWidth="85"
-                                          FontSize="16"
-                                          BorderThickness="0"
-                                          Background="White"
-                                          HorizontalContentAlignment="Left"
-                                          VerticalContentAlignment="Center"
+                            <local:MpAvClipBorder Classes="optComboBoxBorder">
+                                <ComboBox IsDropDownOpen="{Binding IsDropDownOpen, Mode=TwoWay}"
                                           Items="{Binding Items}"
                                           SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
                                     <ComboBox.ItemTemplate>

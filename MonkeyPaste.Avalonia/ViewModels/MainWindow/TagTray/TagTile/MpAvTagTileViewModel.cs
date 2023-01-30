@@ -802,7 +802,7 @@ namespace MonkeyPaste.Avalonia {
                         // only mark item as seen if viewed in its query tray
                         continue;
                     }
-                    if (civm.IsAnyCornerVisible && IsSelected) {
+                    if (civm.IsAnyQueryCornerVisible && IsSelected) {
                         idsSeen.Add(ciid);
                     }
                 }

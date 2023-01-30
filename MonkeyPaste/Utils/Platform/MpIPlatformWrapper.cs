@@ -12,7 +12,8 @@ namespace MonkeyPaste {
         //MpIProcessWatcher ProcessWatcher { get; set; }
         MpICursor Cursor { get; set; }
         MpIDbInfo DbInfo { get; set; }
-        MpIQueryInfo QueryInfo { get; set; }
+        MpIQueryResultProvider Query { get; set; }
+
         MpIContentQueryTools ContentQueryTools { get; set; }
         MpITagQueryTools TagQueryTools { get; set; }
         MpIApplicationCommandManager AppCommandManager { get; set; }

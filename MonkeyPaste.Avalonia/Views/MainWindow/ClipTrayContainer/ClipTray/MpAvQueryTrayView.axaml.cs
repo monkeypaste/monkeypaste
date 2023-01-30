@@ -14,7 +14,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public partial class MpAvClipTrayView : MpAvUserControl<MpAvClipTrayViewModel> {
+    public partial class MpAvQueryTrayView : MpAvUserControl<MpAvClipTrayViewModel> {
         #region Private Variables
         private DispatcherTimer _autoScrollTimer;
         private double[] _autoScrollAccumulators;
@@ -25,11 +25,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region Statics
 
-        public static MpAvClipTrayView Instance { get; private set; }
+        public static MpAvQueryTrayView Instance { get; private set; }
 
         #endregion
 
-        public MpAvClipTrayView() {
+        public MpAvQueryTrayView() {
             if (Instance != null) {
                 // ensure singleton
                 Debugger.Break();
@@ -57,8 +57,14 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
             });
-        }
 
+            var advSearchSplitter = this.FindControl<GridSplitter>("AdvancedSearchSplitter");
+            advSearchSplitter.DragCompleted += AdvSearchSplitter_DragCompleted;
+        }
+        private void AdvSearchSplitter_DragCompleted(object sender, VectorEventArgs e) {
+            MpAvSearchCriteriaItemCollectionViewModel.Instance
+                .BoundCriteriaListBoxScreenHeight += e.Vector.ToPortablePoint().Y;
+        }
 
         private void Lb_GotFocus(object sender, global::Avalonia.Input.GotFocusEventArgs e) {
             if (BindingContext.IsTrayEmpty) {
@@ -78,8 +84,8 @@ namespace MonkeyPaste.Avalonia {
             // NOTE don't delete below its related to orientation/layout change logic where grid loadMore locks up in vertical mode 
             if(sender is Control control && control.GetVisualDescendant<Canvas>() is Canvas items_panel_canvas) {
                 double max_diff = 1.0;
-                double w_diff = Math.Abs(items_panel_canvas.Bounds.Width - BindingContext.ClipTrayTotalWidth);
-                double h_diff = Math.Abs(items_panel_canvas.Bounds.Height - BindingContext.ClipTrayTotalHeight);
+                double w_diff = Math.Abs(items_panel_canvas.Bounds.Width - BindingContext.QueryTrayTotalWidth);
+                double h_diff = Math.Abs(items_panel_canvas.Bounds.Height - BindingContext.QueryTrayTotalHeight);
                 if (w_diff <= max_diff && h_diff <= max_diff) {
                     // NOTE the lb w/h is bound to total dimensions but only reports screen dimensions
                     // the items panel is CLOSE to actual total dimensions but off by some kind of pixel snapping small value

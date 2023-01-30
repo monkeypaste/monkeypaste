@@ -9,31 +9,40 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     public static class MpContentQuery {
         public static async Task<List<int>> QueryAllAsync(MpIQueryInfo head_qi, bool isAdvanced) {
-            List<int> totalIds = null;
-            MpIQueryInfo prev_qi = null;
+            List<int> result_ids = null;
+            MpLogicalQueryType join_type = MpLogicalQueryType.None;
             int idx = 0;
             for (var qi = head_qi; qi != null; qi = qi.Next) {
                 IEnumerable<int> qi_tag_ids =
                     MpPlatform.Services.TagQueryTools.GetSelfAndAllDescendantsTagIds(qi.TagId);
 
                 var qi_result = await PerformContentQueryAsync(qi, qi_tag_ids,isAdvanced,idx++);
-                if (totalIds == null) {
-                    totalIds = qi_result.ToList();
-                } else if (prev_qi != null) {
-                    if(prev_qi.NextJoinType == MpLogicalQueryType.And) {
+                switch(join_type) {
+                    case MpLogicalQueryType.None:
+                        // initial case
+                        result_ids = qi_result.ToList();
+                        break;
+                    case MpLogicalQueryType.And:
                         // only allow results if both this and previous had match
-                        totalIds = totalIds.Where(x => qi_result.Contains(x)).ToList();
-                    } else {
+                        result_ids = result_ids.Where(x => qi_result.Contains(x)).ToList();
+                        break;
+                    case MpLogicalQueryType.Or:
                         // compound results
-                        totalIds.AddRange(qi_result);
-                    }
-                    totalIds.Distinct();
+                        result_ids.AddRange(qi_result);
+                        break;
+                    case MpLogicalQueryType.Not:
+                        // remove current result from total
+                        result_ids = result_ids.Where(x => !qi_result.Contains(x)).ToList();
+                        break;
                 }
+                result_ids.Distinct();
+                join_type = qi.NextJoinType;
             }
+
             IEnumerable<int> ci_idsToOmit =
                 MpPlatform.Services.ContentQueryTools.GetOmittedContentIds();
 
-            return totalIds.Where(x => !ci_idsToOmit.Contains(x)).ToList();
+            return result_ids.Where(x => !ci_idsToOmit.Contains(x)).ToList();
         } 
 
         private static async Task<List<int>> PerformContentQueryAsync(MpIQueryInfo qi, IEnumerable<int> tagIds, bool isAdvanced, int idx) {
@@ -194,12 +203,12 @@ namespace MonkeyPaste {
 
         private static string ConvertAdvancedQueryToSql(MpIQueryInfo qi, IEnumerable<int> tagIds) {
             string query = "select RootId from MpSortableCopyItem_View";
-            string tagClause = string.Empty;
             string sortClause = string.Empty;
             List<string> types = new List<string>();
             List<string> filters = new List<string>();
+
             string tag_where_stmt = $"fk_MpTagId in ({string.Join(",", tagIds)})";
-            tagClause =
+            string tagClause =
                 @$"RootId in 
                     (select distinct pk_MpCopyItemId from MpCopyItem where pk_MpCopyItemId in 
 		                (select fk_MpCopyItemId from MpCopyItemTag where {tag_where_stmt}))";

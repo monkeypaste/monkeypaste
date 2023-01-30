@@ -57,6 +57,16 @@ namespace MonkeyPaste.Avalonia {
         };
         #endregion
 
+        #region Interfaces
+
+        #region MpIContextMenuViewModel Implementation
+
+        public MpMenuItemViewModel ContextMenuViewModel => IsSelected ? Parent.ContextMenuViewModel : null;
+
+        #endregion
+
+        #endregion
+
         #region Properties
 
         #region Property Reflection Referencer
@@ -192,11 +202,11 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpIContextMenuViewModel Implementation
+       //#region MpIContextMenuViewModel Implementation
 
-        public MpMenuItemViewModel ContextMenuViewModel => IsSelected ? Parent.ContextMenuViewModel : null;
+        //public MpMenuItemViewModel ContextMenuViewModel => IsSelected ? Parent.ContextMenuViewModel : null;
 
-        #endregion
+        //#endregion
 
         #region MpIScrollIntoView Implementation
 
@@ -355,14 +365,14 @@ namespace MonkeyPaste.Avalonia {
         public MpRect ObservedBounds { get; set; }
         public double OuterSpacing => 5;
         public double InnerSpacing => 0;
-        public MpSize MinSize => Parent == null ? MpSize.Empty : Parent.DefaultItemSize;
+        public MpSize MinSize => Parent == null ? MpSize.Empty : IsPinned ? Parent.DefaultPinItemSize : Parent.DefaultQueryItemSize;
 
         public double MinWidth => MinSize.Width;
         public double MinHeight => MinSize.Height;
 
 
-        public double MaxWidth => double.PositiveInfinity;// Parent.ClipTrayScreenWidth - 50;
-        public double MaxHeight => double.PositiveInfinity;// Parent.ClipTrayScreenHeight - 50;
+        public double MaxWidth => double.PositiveInfinity;
+        public double MaxHeight => double.PositiveInfinity;
 
         private double _titleHeight = 0;
         public double TitleHeight {
@@ -430,19 +440,7 @@ namespace MonkeyPaste.Avalonia {
                 return Parent.DefaultEditableItemSize.Height;
             }
         }
-        public MpSize EditableSize => new MpSize(EditableWidth, EditableHeight);
 
-        public MpRect ParentScreenRect {
-            get {
-                if(Parent == null || IsPlaceholder) {
-                    return MpRect.Empty;
-                }
-                if(IsPinned) {
-                    return Parent.PinTrayScreenRect;
-                }
-                return Parent.ClipTrayScreenRect;
-            }
-        }
         #endregion
 
         #region State
@@ -480,8 +478,8 @@ namespace MonkeyPaste.Avalonia {
         public bool IsFindAndReplaceVisible { get; set; } = false;
         public string TemplateRichHtml { get; set; }
         
-        public bool IsAnyCornerVisible => Parent == null ? false : ScreenRect.IsAnyPointWithinOtherRect(Parent.ScreenRect);
-        public bool IsAllCornersVisible => Parent == null ? false : ScreenRect.IsAllPointWithinOtherRect(Parent.ScreenRect);
+        public bool IsAnyQueryCornerVisible => Parent == null ? false : ScreenRect.IsAnyPointWithinOtherRect(Parent.QueryTrayScreenRect);
+        public bool IsAllQueryCornersVisible => Parent == null ? false : ScreenRect.IsAllPointWithinOtherRect(Parent.QueryTrayScreenRect);
 
         public bool IsDevToolsVisible { get; set; } = false;
 
@@ -615,7 +613,7 @@ namespace MonkeyPaste.Avalonia {
                 //if(cv == null || !cv.IsViewLoaded) {
                 //    return true;
                 //}
-                if(!IsPlaceholder && !IsViewLoaded) {//IsAnyCornerVisible) {
+                if(!IsPlaceholder && !IsViewLoaded) {//IsAnyQueryCornerVisible) {
                     return true;
                 }
 
@@ -1298,7 +1296,7 @@ namespace MonkeyPaste.Avalonia {
             }
             var neighbor_ctvm = Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == target_idx);
             if (neighbor_ctvm == null) {
-                int neighbor_ciid = MpPlatform.Services.QueryInfo.GetItemId(target_idx); 
+                int neighbor_ciid = MpPlatform.Services.Query.PageTools.GetItemId(target_idx); 
                 Parent.ScrollIntoView(neighbor_ciid);
                 await Task.Delay(100);
                 while (Parent.IsAnyBusy) { await Task.Delay(100); }
@@ -1799,7 +1797,7 @@ namespace MonkeyPaste.Avalonia {
                 IsResizing = true;
 
                 MpAvPersistentClipTilePropertiesHelper.RemovePersistentSize_ById(CopyItemId);
-                BoundSize = Parent.DefaultItemSize;
+                BoundSize = Parent.DefaultQueryItemSize;
 
                 IsResizing = false;
             }, () => {

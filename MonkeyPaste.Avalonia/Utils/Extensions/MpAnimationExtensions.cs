@@ -14,8 +14,8 @@ namespace MonkeyPaste.Avalonia {
             Func<MpSizeChangeEventArgs, bool> onTick = null) {
             double zeta, omega, fps;
 
-            double cw = bsvm.BoundWidth;
-            double ch = bsvm.BoundHeight;
+            double cw = bsvm.ContainerBoundWidth;
+            double ch = bsvm.ContainerBoundHeight;
             double nw = new_size.Width;
             double nh = new_size.Height;
 
@@ -24,11 +24,11 @@ namespace MonkeyPaste.Avalonia {
             }
             if (!nh.IsNumber()) {
             }
-            if (!bsvm.BoundWidth.IsNumber()) {
-                bsvm.BoundWidth = cw;
+            if (!bsvm.ContainerBoundWidth.IsNumber()) {
+                bsvm.ContainerBoundWidth = cw;
             }
-            if (!bsvm.BoundHeight.IsNumber()) {
-                bsvm.BoundHeight = ch;
+            if (!bsvm.ContainerBoundHeight.IsNumber()) {
+                bsvm.ContainerBoundHeight = ch;
             }
 
             if (nw > cw || nh > ch) {
@@ -51,12 +51,12 @@ namespace MonkeyPaste.Avalonia {
             Dispatcher.UIThread.Post(async () => {
                 double lw, lh;
                 while (true) {
-                    lw = bsvm.BoundWidth;
-                    lh = bsvm.BoundHeight;
+                    lw = bsvm.ContainerBoundWidth;
+                    lh = bsvm.ContainerBoundHeight;
                     MpAnimationHelpers.Spring(ref cw, ref vx, nw, delay_ms / 1000.0d, zeta, omega);
                     MpAnimationHelpers.Spring(ref ch, ref vy, nh, delay_ms / 1000.0d, zeta, omega);
-                    bsvm.BoundWidth = cw;
-                    bsvm.BoundHeight = ch;
+                    bsvm.ContainerBoundWidth = cw;
+                    bsvm.ContainerBoundHeight = ch;
                     onTick?.Invoke(new MpSizeChangeEventArgs(new MpSize(lw,lh),new MpSize(cw,ch)));
 
                     await Task.Delay(delay_ms);
@@ -66,10 +66,10 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     }
                 }
-                lw = bsvm.BoundWidth;
-                lh = bsvm.BoundHeight;
-                bsvm.BoundWidth = nw;
-                bsvm.BoundHeight = nh;
+                lw = bsvm.ContainerBoundWidth;
+                lh = bsvm.ContainerBoundHeight;
+                bsvm.ContainerBoundWidth = nw;
+                bsvm.ContainerBoundHeight = nh;
 
                 onTick?.Invoke(new MpSizeChangeEventArgs(new MpSize(lw, lh), new MpSize(cw, ch)));
                 onComplete?.Invoke();
