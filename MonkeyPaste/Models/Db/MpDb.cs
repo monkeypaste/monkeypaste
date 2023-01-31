@@ -386,6 +386,7 @@ namespace MonkeyPaste {
                 OnInitDefaultNativeData?.Invoke(nameof(MpDb), null);
             }
 
+
             MpConsole.WriteLine(@"Db file located: " + MpPlatform.Services.DbInfo.DbPath);
             MpConsole.WriteLine(@"This Client Guid: " + MpPrefViewModel.Instance.ThisDeviceGuid);
             MpConsole.WriteLine("Write ahead logging: " + (UseWAL ? "ENABLED" : "DISABLED"));

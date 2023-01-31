@@ -74,11 +74,23 @@ namespace MonkeyPaste.Common {
 
     public enum MpFileOptionType {
         None = 0,
-        Document,
-        Image,
-        Video,
-        Spreadsheet,
-        Custom
+        Audio, //
+        Compressed,
+        DiscAndMedia,
+        DataAndDatabase,
+        Document, //
+        Email,
+        Executable,
+        Font,
+        Image, //
+        Internet,
+        Presentation,
+        Programming,
+        Spreadsheet, //
+        System,
+        Video, //
+        UserDefined,
+        Custom //
     }
 
     public enum MpTextOptionType {
@@ -93,8 +105,6 @@ namespace MonkeyPaste.Common {
     public enum MpImageOptionType {
         None = 0,
         Dimensions,
-        Format,
-        Description,
         Color
     }
 
@@ -117,34 +127,4 @@ namespace MonkeyPaste.Common {
         Hex,
         RGBA
     }
-
-    public enum MpTimeSpanWithinUnitType {
-        None = 0,
-        Hours,
-        Days,
-        Weeks,
-        Months,
-        Years
-    }
-
-    public enum MpDateBeforeUnitType {
-        None = 0,
-        Today,
-        Yesterday,
-        ThisWeek,
-        ThisMonth,
-        ThisYear,
-        Exact
-    }
-
-    public enum MpDateAfterUnitType {
-        None = 0,
-        Yesterday,
-        LastWeek,
-        LastMonth,
-        LastYear,
-        Exact
-    }
-
-    
 }

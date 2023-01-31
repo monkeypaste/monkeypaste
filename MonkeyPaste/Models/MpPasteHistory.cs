@@ -43,12 +43,15 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public static async Task<MpPasteHistory> Create(
-            int copyItemId,
+        public static async Task<MpPasteHistory> CreateAsync(
+            int copyItemId = 0,
             int appId = 0,
             int urlId = 0,
             int userDeviceId = 0,
             DateTime pasteDateTime = default) {
+            if(copyItemId == 0) {
+                throw new Exception("Must have ciid");
+            }
             var ph = new MpPasteHistory() {
                 PasteHistoryGuid = System.Guid.NewGuid(),
                 CopyItemId = copyItemId,

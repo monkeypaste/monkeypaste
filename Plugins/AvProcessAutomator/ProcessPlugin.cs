@@ -167,7 +167,7 @@ namespace ProcessAutomation {
                     //    textFormat: ".txt",
                     //    formats: new List<MpClipboardFormatType>() { MpClipboardFormatType.Text });
 
-                    await MpCommonTools.Services.ExternalPasteHandler.PasteDataObject(mpdo, pi);
+                    await MpCommonTools.Services.ExternalPasteHandler.PasteDataObjectAsync(mpdo, pi);
 
                 }
             } else {

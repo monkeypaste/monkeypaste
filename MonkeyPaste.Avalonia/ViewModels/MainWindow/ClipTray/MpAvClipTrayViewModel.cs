@@ -237,7 +237,7 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
                         //SelectedItem.TransactionCollectionViewModel.ContextMenuViewModel,
-                        MpAvAnalyticItemCollectionViewModel.Instance.GetContentContextMenuItem(SelectedItem.ItemType),
+                        MpAvAnalyticItemCollectionViewModel.Instance.GetContentContextMenuItem(SelectedItem.CopyItemType),
                         new MpMenuItemViewModel() {IsSeparator = true},
                         MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(SelectedItem),
                         new MpMenuItemViewModel() {IsSeparator = true},
@@ -1659,11 +1659,27 @@ namespace MonkeyPaste.Avalonia {
             IsRestoringSelection = false;
         }
 
-        public void CleanupAfterPaste(MpAvClipTileViewModel sctvm) {
+        public void CleanupAfterPaste(MpAvClipTileViewModel sctvm, MpPortableProcessInfo pasted_pi) {
             IsPasting = false;
             //clean up pasted items state after paste
             sctvm.PasteCount++;
             sctvm.IsPasting = false;
+
+            if(pasted_pi == null) {
+                return;
+            }
+
+            int appId = 0;
+            var avm = MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(pasted_pi);
+            if (avm != null) {
+                appId = avm.AppId;
+            }
+
+            // TODO? transaction should be made here (and PasteHistory table removed) but not sure what the plan is w/ those
+
+            MpPasteHistory.CreateAsync(
+                copyItemId: sctvm.CopyItemId,
+                appId: appId).FireAndForgetSafeAsync(this);
         }
 
         public void NotifyDragOverTrays(bool isOver) {
@@ -2334,23 +2350,31 @@ namespace MonkeyPaste.Avalonia {
 
 
         private async Task PasteClipTileAsync(MpAvClipTileViewModel ctvm) {
+            MpPortableDataObject mpdo = null;
             ctvm.IsPasting = true;
-
             var ds = ctvm.GetDragSource();
             if (ds == null) {
-                Debugger.Break();
-                return;
+                if(ctvm.CopyItem != null) {
+                    mpdo = ctvm.CopyItem.ToPortableDataObject();
+                }
+            }else {
+                mpdo = await ds.GetDataObjectAsync(true);
             }
-            MpAvDataObject mpdo = await ds.GetDataObjectAsync(true);
+            MpPortableProcessInfo pi = null;
             if(mpdo == null) {
                 // is none selected?
                 Debugger.Break();
             } else {
-                var pi = MpPlatform.Services.ProcessWatcher.LastProcessInfo;
-                await MpPlatform.Services.ExternalPasteHandler.PasteDataObject(mpdo, pi);
+                pi = MpPlatform.Services.ProcessWatcher.LastProcessInfo;
+                // NOTE paste success is very crude, false positive is likely
+                bool success = await MpPlatform.Services.ExternalPasteHandler.PasteDataObjectAsync(mpdo, pi);
+                if(!success) {
+                    // clear pi to ignore paste history
+                    pi = null;
+                }
             }            
 
-            CleanupAfterPaste(ctvm);
+            CleanupAfterPaste(ctvm, pi);
         }
 
         
@@ -3033,54 +3057,36 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand PasteCopyItemByIdCommand => new MpAsyncCommand<object>(
             async (args) => {
-                await Task.Delay(1);
-                //if (args is int ciid) {
-                //    IsPasting = true;
-                //    var pi = new MpProcessInfo() {
-                //        Handle = MpProcessManager.LastHandle,
-                //        ProcessPath = MpProcessManager.LastProcessPath
-                //    };
+                int copyItemId = 0;
+                if(args is int ciid) {
+                    copyItemId = ciid;
+                } else if(args is string ciidStr) {
+                    try {
+                        copyItemId = int.Parse(ciidStr);
+                    }catch(Exception ex) {
+                        MpConsole.WriteTraceLine($"Error pasting copyitem by id. cannot parse id from string '{ciidStr}'.", ex);
+                    }
+                }
+                if(copyItemId == 0) {
+                    return;
+                }
 
-                //    MpAvClipTileViewModel ctvm = GetClipTileViewModelById(ciid);
-                //    if (ctvm == null) {
-                //        var ci = await MpDataModelProvider.GetCopyItemByIdAsync(ciid);
-                //        var templates = await MpDataModelProvider.ParseTextTemplatesByCopyItemIdAsync(ci);
-                //        if (templates != null && templates.Count > 0) {
-                //            // this item needs to be loaded into ui in order to paste it
-                //            // trigger query change before showing main window may need to tweak...
-
-                //            MpDataModelProvider.SetManualQuery(new List<int>() { ciid });
-                //            if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen == false) {
-                //                MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
-                //                while (MpAvMainWindowViewModel.Instance.IsMainWindowOpen == false) {
-                //                    await Task.Delay(100);
-                //                }
-                //            }
-                //            await Task.Delay(50); //wait for clip tray to get query changed message
-                //            while (IsAnyBusy) {
-                //                await Task.Delay(100);
-                //            }
-                //            ctvm = GetClipTileViewModelById(ciid);
-                //        } else {
-                //            ctvm = await CreateClipTileViewModel(ci);
-                //        }
-                //    }
-
-                //    if (ctvm == null) {
-                //        Debugger.Break();
-                //    }
-                //    var mpdo = await ctvm.ConvertToPortableDataObject(true);
-                //    if (mpdo == null) {
-                //        // paste was canceled
-                //        return;
-                //    }
-                //    await MpPlatformWrapper.Services.ExternalPasteHandler.PasteDataObject(mpdo, pi);
-
-                //    CleanupAfterPaste(ctvm);
-
-                //}
+                MpAvClipTileViewModel ctvm = AllItems.FirstOrDefault(x => x.CopyItemId == copyItemId);
+                if(ctvm == null) {
+                    var ci = await MpDataModelProvider.GetItemAsync<MpCopyItem>(copyItemId);
+                    if(ci == null) {
+                        // if this is coming from a shortcut, shortcut should have been deleted
+                        // otherwise huh?
+                        Debugger.Break();
+                        return;
+                    }
+                    ctvm = await CreateClipTileViewModel(ci);
+                }
+                PasteClipTileAsync(ctvm).FireAndForgetSafeAsync(this);
             },
-            (args) => args is int);
+            (args) => {
+                return args is int || args is string;
+            });
 
 
         public ICommand DeleteSelectedClipsCommand => new MpAsyncCommand(
@@ -3245,7 +3251,7 @@ namespace MonkeyPaste.Avalonia {
             if (ModalClipTileViewModel.IsPlaceholder) {
                 return true;
             }
-            return ModalClipTileViewModel.ItemType == ci.ItemType;
+            return ModalClipTileViewModel.CopyItemType == ci.ItemType;
         }
         private async Task AssignAppendClipTileAsync() {
             // use cases
@@ -3400,7 +3406,7 @@ namespace MonkeyPaste.Avalonia {
 
             string append_data = aci.ItemData;
 
-            if (ModalClipTileViewModel.ItemType == MpCopyItemType.FileList) {
+            if (ModalClipTileViewModel.CopyItemType == MpCopyItemType.FileList) {
                 append_data = await MpAvFileItemCollectionViewModel.CreateFileListEditorFragment(aci);
             }
             if (isNew && 

@@ -106,8 +106,8 @@ function getContentAsMessage() {
 		editorWidth: getEditorWidth(),
 		editorHeight: getEditorHeight(),
 		itemData: getContentData(),
-		lines: parseInt_safe(getContentHeightByType()),
 		length: parseInt_safe(getContentWidthByType()),
+		lines: parseInt_safe(getContentHeightByType()),
 		hasTemplates: hasTemplates()
 	};
 }

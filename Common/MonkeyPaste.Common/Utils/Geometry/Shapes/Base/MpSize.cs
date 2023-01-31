@@ -59,8 +59,13 @@ namespace MonkeyPaste.Common {
         }
 
         #endregion
+        #region Public Methods
+        public bool IsEmpty(double maxThreshold = 0) {
+            return Width <= maxThreshold && Height <= maxThreshold;
+        }
         public override string ToString() {
             return $"Width: {Width} Height: {Height}";
         }
+        #endregion
     }
 }

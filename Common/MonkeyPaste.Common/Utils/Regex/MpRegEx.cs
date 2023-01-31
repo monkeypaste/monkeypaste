@@ -28,7 +28,8 @@ namespace MonkeyPaste.Common {
     }
 
     public static class MpRegEx {        
-        public static string KnownFileExtensions { get; set; } = @"rtf|txt|jpg|jpeg|png|svg|zip|csv|gif|pdf|doc|docx|xls|xlsx";
+        public static string KnownFileExtensions =>
+            MpFileE
 
         public static string InvalidFileNameChars {
             get {

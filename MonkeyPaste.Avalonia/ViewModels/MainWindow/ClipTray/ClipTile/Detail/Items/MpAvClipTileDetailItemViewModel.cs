@@ -163,9 +163,9 @@ namespace MonkeyPaste.Avalonia {
                         DetailText = "Copied " + ctvm.CopyItemCreatedDateTime.ToReadableTimeSpan();
                         break;
                     case MpCopyItemDetailType.DataSize:
-                        switch(ctvm.ItemType) {
+                        switch(ctvm.CopyItemType) {
                             case MpCopyItemType.Image:
-                                DetailText = $"({(int)ctvm.UnconstrainedContentSize.Width}px) | ({(int)ctvm.UnconstrainedContentSize.Height}px)";
+                                DetailText = $"({(int)ctvm.UnconstrainedContentDimensions.Width}px) | ({(int)ctvm.UnconstrainedContentDimensions.Height}px)";
                                 break;
                             case MpCopyItemType.Text:
                                 DetailText = $"{ctvm.CharCount} chars | {ctvm.LineCount} lines";

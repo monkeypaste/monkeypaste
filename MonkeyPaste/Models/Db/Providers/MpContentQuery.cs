@@ -74,7 +74,7 @@ namespace MonkeyPaste {
                     (select distinct pk_MpCopyItemId from MpCopyItem where pk_MpCopyItemId in 
 		                (select fk_MpCopyItemId from MpCopyItemTag where {tag_where_stmt}))";
 
-            if (!string.IsNullOrEmpty(qi.SearchText)) {
+            if (!string.IsNullOrEmpty(qi.MatchValue)) {
                 string searchOp = "like";
                 string escapeStr = "";
                 if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.CaseSensitive)) {
@@ -84,7 +84,7 @@ namespace MonkeyPaste {
                 } else {
                     escapeStr = "%";
                 }
-                string searchText = qi.SearchText;
+                string searchText = qi.MatchValue;
 
                 string escapeClause = string.Empty;
                 if (searchOp == "like" && searchText.Contains('%')) {
@@ -213,7 +213,7 @@ namespace MonkeyPaste {
                     (select distinct pk_MpCopyItemId from MpCopyItem where pk_MpCopyItemId in 
 		                (select fk_MpCopyItemId from MpCopyItemTag where {tag_where_stmt}))";
 
-            if (!string.IsNullOrEmpty(qi.SearchText)) {
+            if (!string.IsNullOrEmpty(qi.MatchValue)) {
                 string searchOp = "like";
                 string escapeStr = "";
                 if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.CaseSensitive)) {
@@ -223,7 +223,7 @@ namespace MonkeyPaste {
                 } else {
                     escapeStr = "%";
                 }
-                string searchText = qi.SearchText;
+                string searchText = qi.MatchValue;
 
                 string escapeClause = string.Empty;
                 if (searchOp == "like" && searchText.Contains('%')) {

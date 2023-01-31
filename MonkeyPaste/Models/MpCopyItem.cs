@@ -69,6 +69,12 @@ namespace MonkeyPaste {
         public string DataFormat { get; set; } = string.Empty;
 
         public string ItemMetaData { get; set; }
+
+        // Text: 1/2 = chars/lines
+        // Image: 1/2 = width/height
+        // Files: 1/2 = bytes/count
+        public int ItemSize1 { get; set; }
+        public int ItemSize2 { get; set; }
         #endregion
 
         #region Properties

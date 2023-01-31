@@ -119,7 +119,7 @@ namespace MonkeyPaste.Avalonia {
         public MpMenuItemViewModel ContextMenuItemViewModel {
             get {
                 MpCopyItemType contentType = MpAvClipTrayViewModel.Instance.SelectedItem == null ?
-                    MpCopyItemType.None : MpAvClipTrayViewModel.Instance.SelectedItem.ItemType;
+                    MpCopyItemType.None : MpAvClipTrayViewModel.Instance.SelectedItem.CopyItemType;
                 return GetContentContextMenuItem(contentType);
             }
         }        

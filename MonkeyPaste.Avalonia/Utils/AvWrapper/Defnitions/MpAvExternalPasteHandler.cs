@@ -43,12 +43,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIExternalPasteHandler Implementation
 
-        async Task MpIExternalPasteHandler.PasteDataObject(MpPortableDataObject mpdo, MpPortableProcessInfo processInfo) {
+        async Task<bool> MpIExternalPasteHandler.PasteDataObjectAsync(MpPortableDataObject mpdo, MpPortableProcessInfo processInfo) {
             if(processInfo == null) {
                 // shouldn't happen
                 //Debugger.Break();
                 MpConsole.WriteTraceLine("Can't paste, if not lost focus somethings wrong");
-                return;
+                return false;
             }
 
             IntPtr pasteToHandle = processInfo.Handle;
@@ -67,11 +67,12 @@ namespace MonkeyPaste.Avalonia {
                 finishWithEnter = custom_paste_app_vm.PasteShortcutViewModel.EnterAfterPaste;
             }
 
-            await PasteDataObjectAsync_internal(mpdo, pasteToHandle, pasteCmd, finishWithEnter);
+            bool success = await PasteDataObjectAsync_internal_async(mpdo, pasteToHandle, pasteCmd, finishWithEnter);
+            return success;
         }
 
         #endregion
-        private async Task PasteDataObjectAsync_internal(
+        private async Task<bool> PasteDataObjectAsync_internal_async(
             MpPortableDataObject mpdo, 
             IntPtr pasteToHandle,
             string pasteCmdKeyString,
@@ -79,6 +80,7 @@ namespace MonkeyPaste.Avalonia {
             if(pasteToHandle == IntPtr.Zero) {
                 // somethings terribly wrong
                 Debugger.Break();
+                return false;
             }
             MpConsole.WriteLine("Pasting to process: " + pasteToHandle);
 
@@ -111,6 +113,7 @@ namespace MonkeyPaste.Avalonia {
             //await Task.Delay(300);
 
             //MpPlatformWrapper.Services.ClipboardMonitor.IgnoreClipboardChanges = false;
+            return true;
         }
 
         #endregion

@@ -38,14 +38,6 @@ namespace MonkeyPaste.Avalonia {
             IsCoreLoaded = true;
 
             MpConsole.WriteLine("Core Load complete");
-
-            // swap main window then close loader
-
-            // MainWindow is now being created and Av AppLifetime desktop is being swapped to MainWindow
-            // wait for mw instance to exist
-            //while (MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
-            //    await Task.Delay(100);
-            //}
             Window lw = App.Desktop.MainWindow;
 
             await base.FinishLoaderAsync();
@@ -56,6 +48,33 @@ namespace MonkeyPaste.Avalonia {
             App.Desktop.MainWindow.Show();
             IsPlatformLoaded = true;
             MpConsole.WriteLine("Platform Load complete");
+
+
+            //var cil = await MpDataModelProvider.GetItemsAsync<MpCopyItem>();
+            //foreach(var ci in cil) {
+            //    var doil = await MpDataModelProvider.GetDataObjectItemsByDataObjectId(ci.DataObjectId);
+
+            //    switch (ci.ItemType) {
+            //        case MpCopyItemType.Text:
+            //            if(doil.FirstOrDefault(x=>x.ItemFormat == MpPortableDataFormats.Text) is MpDataObjectItem doi) {
+            //                ci.ItemSize1 = doi.ItemData.Length;
+            //                ci.ItemSize2 = doi.ItemData.Split("\n").Length + 1;
+            //            } else {
+            //                Debugger.Break();
+            //            }
+            //            break;
+            //        case MpCopyItemType.Image:
+            //            var bmp = ci.ItemData.ToAvBitmap();
+            //            ci.ItemSize1 = bmp.PixelSize.Width;
+            //            ci.ItemSize2 = bmp.PixelSize.Height;
+            //            break;
+            //        case MpCopyItemType.FileList:
+            //            ci.ItemSize1 = 0;
+            //            ci.ItemSize2 = doil.Where(x => x.ItemFormat == MpPortableDataFormats.AvFileNames).Count();
+            //            break;
+            //    }
+            //    await ci.WriteToDatabaseAsync();
+            //}
 
             MpAvSystemTray.Init();
         }

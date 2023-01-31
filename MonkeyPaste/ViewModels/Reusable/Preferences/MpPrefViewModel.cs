@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 using PropertyChanged;
 
 namespace MonkeyPaste {
-    public class MpPrefViewModel : MpViewModelBase, MpIJsonObject {
+    public class MpPrefViewModel : MpViewModelBase, MpIUserProvidedFileExts, MpIJsonObject {
         #region Private
         [JsonIgnore]
         private object _lock = new object();
@@ -49,6 +49,11 @@ namespace MonkeyPaste {
         [JsonIgnore]
         public static string PreferencesPathBackup => $"{PreferencesPath}.{PREF_BACKUP_PATH_EXT}";
 
+        #endregion
+
+        #region Interfaces
+
+        string MpIUserProvidedFileExts.UserDefineExtPsv => UserDefinedFileExtensionsPsv;
         #endregion
 
         #region Properties
@@ -296,6 +301,8 @@ namespace MonkeyPaste {
 
         #region User Properties          
 
+        public bool TrackExternalPasteHistory { get; set; } = false;
+        public string UserDefinedFileExtensionsPsv { get; set; } 
         public int MaxUndoLimit { get; set; } = 100;
 
         public string RecentFindTexts { get; set; } = string.Empty;
@@ -443,7 +450,6 @@ namespace MonkeyPaste {
         #endregion
 
         #region Preferences
-        public string KnownFileExtensionsPsv { get; set; } = MpRegEx.KnownFileExtensions;
 
         public int MaxRtfCharCount { get; set; } = 250_000;
 

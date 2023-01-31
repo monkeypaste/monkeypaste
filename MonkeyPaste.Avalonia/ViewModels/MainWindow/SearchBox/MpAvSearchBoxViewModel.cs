@@ -38,7 +38,7 @@ namespace MonkeyPaste.Avalonia {
         object MpIQueryInfoValueProvider.Source => this;
         string MpIQueryInfoValueProvider.SourcePropertyName => nameof(SearchText);
 
-        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpIQueryInfo.SearchText);
+        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpIQueryInfo.MatchValue);
 
         #endregion
 

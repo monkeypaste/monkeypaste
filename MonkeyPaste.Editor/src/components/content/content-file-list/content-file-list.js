@@ -64,7 +64,7 @@ function getTotalFileSize() {
 }
 
 function getFileCount() {
-	return FileListItems.length;
+	return FileListItems ? FileListItems.length : 0;
 }
 
 function getPathUri(path) {

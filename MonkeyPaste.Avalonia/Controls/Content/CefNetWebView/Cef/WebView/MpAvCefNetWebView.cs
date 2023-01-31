@@ -77,6 +77,8 @@ namespace MonkeyPaste.Avalonia {
 
         private string _lastLoadedContentHandle = null;
 
+        private DateTime? _locatedDateTime;
+
         #endregion
 
         #region Constants
@@ -101,14 +103,22 @@ namespace MonkeyPaste.Avalonia {
                 .Where(x => 
                     x.DataContext is MpAvClipTileViewModel ctvm && 
                     !ctvm.IsAppendNotifier &&
-                    ctvm.CopyItemId == ciid).ToList();
+                    ctvm.CopyItemId == ciid)
+                .OrderByDescending(x => x._locatedDateTime)
+                .ToList();
 
             if(result.Count == 0) {
                 return null;
             }
             if(result.Count > 1) {
                 // is this during a pin toggle? was this item pinned?
-                Debugger.Break();
+                //Debugger.Break();
+                // remove old refs
+                var stale_wvl = result.Skip(1);
+                // TODO? do these need further processing? besides hiding from locator?
+                _AllWebViews = _AllWebViews.Where(x => stale_wvl.Contains(x)).ToList();
+
+                MpConsole.WriteLine($"{stale_wvl.Count()} stale webviews removed for item '{result[0].DataContext}'");
             }
             return result[0];
         }
@@ -220,7 +230,7 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 contentDataReq.formats = formats.ToList();
             }
-            if (ctvm.ItemType != MpCopyItemType.Image && ignore_ss) {
+            if (ctvm.CopyItemType != MpCopyItemType.Image && ignore_ss) {
                 contentDataReq.formats.Remove(MpPortableDataFormats.AvPNG);
                 contentDataReq.formats.Remove(MpPortableDataFormats.WinBitmap);
                 contentDataReq.formats.Remove(MpPortableDataFormats.WinDib);
@@ -241,7 +251,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (forOle) {
-                if (ctvm.ItemType == MpCopyItemType.Image) {
+                if (ctvm.CopyItemType == MpCopyItemType.Image) {
                     avdo.SetData(MpPortableDataFormats.AvPNG, ctvm.CopyItemData.ToAvBitmap().ToByteArray());
                     //var bmp = ctvm.CopyItemData.ToAvBitmap();
                     //avdo.SetData(MpPortableDataFormats.Text, bmp.ToAsciiImage());
@@ -256,20 +266,20 @@ namespace MonkeyPaste.Avalonia {
                     avdo.SetData(MpPortableDataFormats.AvPNG, _contentScreenShotBase64_ntf);
                 }
 
-                if (ctvm.ItemType == MpCopyItemType.FileList) {
+                if (ctvm.CopyItemType == MpCopyItemType.FileList) {
                     avdo.SetData(MpPortableDataFormats.AvFileNames, ctvm.CopyItemData.SplitNoEmpty(MpCopyItem.FileItemSplitter));
                 } else if (!ignore_pseudo_file) {
                     // js doesn't set file stuff for non-files
                     string ctvm_fp = await ctvm.CopyItemData.ToFileAsync(
                                 forceNamePrefix: ctvm.CopyItemTitle,
-                                forceExt: ctvm.ItemType == MpCopyItemType.Image ? "png" : "txt",
+                                forceExt: ctvm.CopyItemType == MpCopyItemType.Image ? "png" : "txt",
                                 isTemporary: true);
                     avdo.SetData(
                         MpPortableDataFormats.AvFileNames,
                         new List<string>() { ctvm_fp });
                 }
 
-                bool add_tile_data = ctvm.ItemType != MpCopyItemType.Text || contentDataResp.isAllContent;
+                bool add_tile_data = ctvm.CopyItemType != MpCopyItemType.Text || contentDataResp.isAllContent;
                 if (add_tile_data) {
                     avdo.SetData(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT, ctvm.PublicHandle);
                 }
@@ -406,7 +416,7 @@ namespace MonkeyPaste.Avalonia {
                     ntf = MpJsonConverter.DeserializeBase64Object<MpQuillDisableReadOnlyResponseMessage>(msgJsonBase64Str);
                     if (ntf is MpQuillDisableReadOnlyResponseMessage disableReadOnlyMsg) {
                         ctvm.IsContentReadOnly = false;
-                        ctvm.UnconstrainedContentSize = new MpSize(disableReadOnlyMsg.editorWidth, disableReadOnlyMsg.editorHeight);
+                        ctvm.UnconstrainedContentDimensions = new MpSize(disableReadOnlyMsg.editorWidth, disableReadOnlyMsg.editorHeight);
                     }
                     break;
                 case MpAvEditorBindingFunctionType.notifyReadOnlyEnabled:
@@ -685,14 +695,28 @@ namespace MonkeyPaste.Avalonia {
                 Debugger.Break();
                 return;
             }
+            // set locatedDateTime to filter out webviews recyling during
+            // pin/unpin ops (especially unpinall)
+            _locatedDateTime = DateTime.Now;
             _AllWebViews.Add(this);
         }
 
         protected override void OnDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e) {
             base.OnDetachedFromLogicalTree(e);
             _AllWebViews.Remove(this);
+            _locatedDateTime = null;
             _resizerControl = null;
 
+        }
+
+        protected override void OnDataContextEndUpdate() {
+            base.OnDataContextEndUpdate();
+            if(_locatedDateTime == null) {
+                // is this called before attached to logical tree?
+                Debugger.Break();
+            }
+            // update locate time to match this data context
+            _locatedDateTime = DateTime.Now;
         }
         #endregion
 
@@ -849,7 +873,7 @@ namespace MonkeyPaste.Avalonia {
 
             var loadContentMsg = new MpQuillLoadContentRequestMessage() {
                 contentHandle = BindingContext.PublicHandle,
-                contentType = BindingContext.ItemType.ToString(),
+                contentType = BindingContext.CopyItemType.ToString(),
                 itemData = BindingContext.EditorFormattedItemData,
                 //annotationsJsonStr = BindingContext.AnnotationsJsonStr
             };
@@ -886,11 +910,21 @@ namespace MonkeyPaste.Avalonia {
                 ProcessDataTransferCompleteResponse(dtcn).FireAndForgetSafeAsync(BindingContext);
             }
 
+            BindingContext.IgnoreHasModelChanged = true;
+
+            bool hasSizeChanged = false;
             if (contentChanged_ntf.length > 0) {
+                // length = width = size1
+                hasSizeChanged = true;
                 BindingContext.CharCount = contentChanged_ntf.length;
             }
             if (contentChanged_ntf.lines > 0) {
+                // count = height = size2
+                hasSizeChanged = true;
                 BindingContext.LineCount = contentChanged_ntf.lines;
+            }
+            if(hasSizeChanged) {
+                BindingContext.CopyItemSize = new MpSize(BindingContext.CharCount, BindingContext.LineCount);
             }
 
             if (contentChanged_ntf.itemData != null) {
@@ -900,10 +934,13 @@ namespace MonkeyPaste.Avalonia {
                 }
                 BindingContext.CopyItemData = contentChanged_ntf.itemData;
             }
-            if (contentChanged_ntf.editorHeight > 0 && contentChanged_ntf.editorHeight > 0) {
-                BindingContext.UnconstrainedContentSize = new MpSize(contentChanged_ntf.editorWidth, contentChanged_ntf.editorHeight);
+            if (contentChanged_ntf.editorHeight > 0 && 
+                contentChanged_ntf.editorHeight > 0) {
+                BindingContext.UnconstrainedContentDimensions = new MpSize(contentChanged_ntf.editorWidth, contentChanged_ntf.editorHeight);
             }
             BindingContext.HasTemplates = contentChanged_ntf.hasTemplates;
+
+            BindingContext.IgnoreHasModelChanged = false;
 
             if(is_reload) {
                 BindingContext.DetailCollectionViewModel.RefreshAsync().FireAndForgetSafeAsync(BindingContext);

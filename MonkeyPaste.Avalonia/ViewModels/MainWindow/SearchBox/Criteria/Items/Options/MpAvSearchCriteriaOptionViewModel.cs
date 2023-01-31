@@ -93,6 +93,12 @@ namespace MonkeyPaste.Avalonia {
                 }
                 return _values;
             }
+            set {
+                if(_values != value) {
+                    _values = value;
+                    OnPropertyChanged(nameof(Values));
+                }
+            }
         }
         public string Value1 {
             get => Values[0];
@@ -136,7 +142,22 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
-        public string Value { get; set; }
+        private string _value;
+        public string Value { 
+            get {
+                if(FilterValue.IsMultiValue()) {
+                    return Values.ToCsv(MpCsvFormatProperties.DefaultBase64Value);
+                }
+                return _value;
+            }
+            set {
+                if(_value != value) {
+                    _value = value;
+                    OnPropertyChanged(nameof(Value));
+                }
+            }
+        
+        }
 
 
         public bool IsCheckable => UnitType.HasFlag(MpSearchCriteriaUnitFlags.Text) && !UnitType.HasFlag(MpSearchCriteriaUnitFlags.RegEx);
@@ -147,7 +168,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpSearchCriteriaUnitFlags UnitType { get; set; }
 
-        public MpContentQueryBitFlags FilterValue { get; private set; }
+        public MpContentQueryBitFlags FilterValue { get; set; }
 
         #endregion
 

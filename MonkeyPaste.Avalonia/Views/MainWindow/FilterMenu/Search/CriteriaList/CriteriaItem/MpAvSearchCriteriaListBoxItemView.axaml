@@ -141,7 +141,8 @@
                 </Image>
             </Button>
             <StackPanel Orientation="Horizontal"
-                        DockPanel.Dock="Right">
+                        DockPanel.Dock="Right"
+                        Margin="0,0,30,0">
 
                 <!--  REMOVE ITEM BUTTON  -->
 
@@ -174,7 +175,6 @@
                 <local:MpAvOptionsButton VerticalAlignment="Stretch"
                                          Classes="addRemoveBtn outline"
                                          IsVisible="{Binding !IsJoinPanelVisible}"
-                                         Margin="0,0,30,0"
                                          Command="{Binding SelectCustomNextJoinTypeCommand}" />
             </StackPanel>
 

@@ -66,13 +66,13 @@
                                 </CheckBox>
 
                                 <local:MpAvClipBorder Margin="5"
-                                                      Padding="3"
+                                                      Padding="5"
                                                       HorizontalAlignment="Stretch"
                                                       VerticalAlignment="Center"
                                                       CornerRadius="10"
                                                       Background="White"
                                                       BorderBrush="White">
-                                    <TextBox Margin="5,0,0,0"
+                                    <TextBox Padding="5,0,0,0"
                                              MinWidth="500"
                                              ClipToBounds="False"
                                              HorizontalAlignment="Stretch"

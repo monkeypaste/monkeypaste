@@ -10,9 +10,9 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvSearchCriteriaListBoxView : MpAvUserControl<MpAvSearchCriteriaItemCollectionViewModel> {
         public MpAvSearchCriteriaListBoxView() {
             InitializeComponent();
-            var sclb = this.FindControl<ListBox>("SearchCriteriaListBox");
-            sclb.PointerWheelChanged += Sclb_PointerWheelChanged;
-            sclb.AddHandler(PointerWheelChangedEvent, Sclb_PointerWheelChanged, RoutingStrategies.Tunnel);
+            //var sclb = this.FindControl<ListBox>("SearchCriteriaListBox");
+            //sclb.PointerWheelChanged += Sclb_PointerWheelChanged;
+            //sclb.AddHandler(PointerWheelChangedEvent, Sclb_PointerWheelChanged, RoutingStrategies.Tunnel);
         }
 
         private void Sclb_PointerWheelChanged(object sender, global::Avalonia.Input.PointerWheelEventArgs e) {

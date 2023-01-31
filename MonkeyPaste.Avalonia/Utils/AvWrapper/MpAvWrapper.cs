@@ -21,6 +21,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        public MpIUserProvidedFileExts UserProvidedFileExts { get; set; }
         public MpIStartupState StartupState { get; set; }
         public MpIPlatformCompatibility PlatformCompatibility { get; set; }
         public MpIPlatformShorcuts PlatformShorcuts { get; set; }
@@ -104,6 +105,7 @@ namespace MonkeyPaste.Avalonia {
             
             await MpPrefViewModel.InitAsync(prefPath, DbInfo, OsInfo);
 
+            UserProvidedFileExts = MpPrefViewModel.Instance;
             Query = MpAvQueryInfoViewModel.Parse(MpPrefViewModel.Instance.LastQueryInfoJson);
             ProcessWatcher = new MpAvProcessWatcherSelector().Watcher;
 

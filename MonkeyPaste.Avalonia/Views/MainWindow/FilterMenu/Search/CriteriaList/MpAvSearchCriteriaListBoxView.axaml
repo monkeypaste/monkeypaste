@@ -75,7 +75,7 @@
     <ListBox x:Name="SearchCriteriaListBox"
              MaxHeight="{Binding MaxSearchCriteriaListBoxHeight}"
              Height="{Binding BoundCriteriaListBoxScreenHeight, Mode=TwoWay}"
-             Background="{StaticResource FilterMenuBgBrush}"
+             Background="Transparent"
              BorderThickness="0"
              BorderBrush="Black"
              Items="{Binding SortedItems}"

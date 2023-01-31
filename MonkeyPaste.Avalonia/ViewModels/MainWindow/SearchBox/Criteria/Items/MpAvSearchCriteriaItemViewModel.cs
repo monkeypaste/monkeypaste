@@ -13,6 +13,7 @@ using Avalonia.Controls;
 using Avalonia.Threading;
 using MonkeyPaste;
 using MonkeyPaste.Common;
+using MonkeyPaste.Utils;
 using MonoMac.Darwin;
 
 namespace MonkeyPaste.Avalonia {
@@ -80,7 +81,7 @@ namespace MonkeyPaste.Avalonia {
                 return tag_id;
             }
         }
-        public string SearchText {
+        public string MatchValue {
             get {
                 string st = string.Empty;
                 if(LeafValueOptionViewModel != null) {
@@ -186,13 +187,6 @@ namespace MonkeyPaste.Avalonia {
                 while(cur_ovm.SelectedItem != null) {
                     cur_ovm = cur_ovm.SelectedItem;
                 }
-
-                var match_val_opts =
-                    RootOptionViewModel
-                    .SelfAndAllDescendants()
-                    .Cast<MpAvSearchCriteriaOptionViewModel>()
-                    .Where(x => !string.IsNullOrEmpty(x.Value))
-                    .ToList();
                
                 return cur_ovm;
             }
@@ -238,6 +232,7 @@ namespace MonkeyPaste.Avalonia {
         #region Root Option
 
         private MpAvSearchCriteriaOptionViewModel GetRootOption() {
+            // PATH: /Root
             var rovm = new MpAvSearchCriteriaOptionViewModel(this, null);
             rovm.HostCriteriaItem = this;
             rovm.IsSelected = true;
@@ -276,6 +271,10 @@ namespace MonkeyPaste.Avalonia {
         #region Content
 
         public ObservableCollection<MpAvSearchCriteriaOptionViewModel> GetTextOptionViewModel(MpAvSearchCriteriaOptionViewModel parent) {
+            // PATH: /Root/Content/AnyText
+            // PATH: /Root/Content/Title
+            // PATH: /Root/Content/TypeSpecific/Text
+            
             var tovml = new List<MpAvSearchCriteriaOptionViewModel>();
             string[] labels = typeof(MpTextOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
 
@@ -288,12 +287,31 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     tovm.UnitType |= MpSearchCriteriaUnitFlags.CaseSensitivity;
                 }
+                switch((MpTextOptionType)i) {
+                    case MpTextOptionType.Matches:
+                        tovm.FilterValue = MpContentQueryBitFlags.Matches;
+                        break;
+                    case MpTextOptionType.Contains:
+                        tovm.FilterValue = MpContentQueryBitFlags.Contains;
+                        break;
+                    case MpTextOptionType.BeginsWith:
+                        tovm.FilterValue = MpContentQueryBitFlags.BeginsWith;
+                        break;
+                    case MpTextOptionType.EndsWith:
+                        tovm.FilterValue = MpContentQueryBitFlags.EndsWith;
+                        break;
+                    case MpTextOptionType.RegEx:
+                        tovm.FilterValue = MpContentQueryBitFlags.Regex;
+                        break;
+                }
                 tovml.Add(tovm);
             }
             return new ObservableCollection<MpAvSearchCriteriaOptionViewModel>(tovml);
         }
 
         public ObservableCollection<MpAvSearchCriteriaOptionViewModel> GetNumberOptionViewModel(MpAvSearchCriteriaOptionViewModel parent) {
+            // PATH: /Root/DateOrTime/*/WithinLast/*/
+
             var novml = new List<MpAvSearchCriteriaOptionViewModel>();
             string[] labels = typeof(MpNumberOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
 
@@ -307,6 +325,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public ObservableCollection<MpAvSearchCriteriaOptionViewModel> GetColorOptionViewModel(MpAvSearchCriteriaOptionViewModel parent) {
+            // PATH: /Root/Content/TypeSpecific/Image/Color
+
             var novml = new List<MpAvSearchCriteriaOptionViewModel>();
             string[] labels = typeof(MpColorOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
 
@@ -316,9 +336,11 @@ namespace MonkeyPaste.Avalonia {
                 switch ((MpColorOptionType)i) {
                     case MpColorOptionType.Hex:
                         ovm.UnitType = MpSearchCriteriaUnitFlags.Hex;
+                        ovm.FilterValue = MpContentQueryBitFlags.Hex;
                         break;
                     case MpColorOptionType.RGBA:
                         ovm.UnitType = MpSearchCriteriaUnitFlags.ByteX4 | MpSearchCriteriaUnitFlags.UnitDecimalX4;
+                        ovm.FilterValue = MpContentQueryBitFlags.Rgba;
                         break;
                 }
                 novml.Add(ovm);
@@ -327,6 +349,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public ObservableCollection<MpAvSearchCriteriaOptionViewModel> GetDimensionsOptionViewModel(MpAvSearchCriteriaOptionViewModel parent) {
+            // PATH: /Root/Content/TypeSpecific/Image/Dimensions
+
             var novml = new List<MpAvSearchCriteriaOptionViewModel>();
             string[] labels = typeof(MpDimensionOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
 
@@ -334,12 +358,21 @@ namespace MonkeyPaste.Avalonia {
                 var tovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
                 tovm.Label = labels[i];
                 tovm.UnitType = MpSearchCriteriaUnitFlags.Integer;
+                switch((MpDimensionOptionType)i) {
+                    case MpDimensionOptionType.Width:
+                        tovm.FilterValue = MpContentQueryBitFlags.Width;
+                        break;
+                    case MpDimensionOptionType.Height:
+                        tovm.FilterValue = MpContentQueryBitFlags.Height;
+                        break;
+                }
                 novml.Add(tovm);
             }
             return new ObservableCollection<MpAvSearchCriteriaOptionViewModel>(novml);
         }
 
         public ObservableCollection<MpAvSearchCriteriaOptionViewModel> GetImageContentOptionViewModel(MpAvSearchCriteriaOptionViewModel parent) {
+            // PATH: /Root/Content/TypeSpecific/Image
             var iovml = new List<MpAvSearchCriteriaOptionViewModel>();
             string[] labels = typeof(MpImageOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
 
@@ -350,13 +383,6 @@ namespace MonkeyPaste.Avalonia {
                     case MpImageOptionType.Dimensions:
                         ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
                         ovm.Items = GetDimensionsOptionViewModel(ovm);
-                        break;
-                    case MpImageOptionType.Format:
-                        ovm.UnitType = MpSearchCriteriaUnitFlags.Text;
-                        break;
-                    case MpImageOptionType.Description:
-                        ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
-                        ovm.Items = GetTextOptionViewModel(ovm);
                         break;
                     case MpImageOptionType.Color:
                         ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
@@ -369,17 +395,26 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public ObservableCollection<MpAvSearchCriteriaOptionViewModel> GetFileOptionViewModel(MpAvSearchCriteriaOptionViewModel parent) {
+            // PATH: /Root/Content/TypeSpecific/File/Kind
+
             var iovml = new List<MpAvSearchCriteriaOptionViewModel>();
             string[] labels = typeof(MpFileOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
 
             for (int i = 0; i < labels.Length; i++) {
+                MpFileOptionType fot = (MpFileOptionType)i;
                 var ovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
                 ovm.Label = labels[i];
-                if ((MpFileOptionType)i == MpFileOptionType.Custom) {
+                if(fot != MpFileOptionType.None) {
+                    ovm.FilterValue = MpContentQueryBitFlags.FileExt;
+                }
+                if (fot == MpFileOptionType.Custom) {
                     ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
                     ovm.Items = GetTextOptionViewModel(ovm);
                 } else {
                     ovm.UnitType = MpSearchCriteriaUnitFlags.EnumerableValue;
+                    if (MpFileExtensionsHelper.ExtLookup.TryGetValue((MpFileOptionType)i, out var exts)) {
+                        ovm.Values = exts.ToArray();
+                    }
                 }
                 iovml.Add(ovm);
             }
@@ -387,6 +422,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public ObservableCollection<MpAvSearchCriteriaOptionViewModel> GetFileContentOptionViewModel(MpAvSearchCriteriaOptionViewModel parent) {
+            // PATH: /Root/Content/TypeSpecific/File
+
             var iovml = new List<MpAvSearchCriteriaOptionViewModel>();
             string[] labels = typeof(MpFileContentOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
 
@@ -395,13 +432,19 @@ namespace MonkeyPaste.Avalonia {
                 ovm.Label = labels[i];
                 switch ((MpFileContentOptionType)i) {
                     case MpFileContentOptionType.Name:
+                        ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
+                        ovm.Items = GetTextOptionViewModel(ovm);
+                        ovm.FilterValue = MpContentQueryBitFlags.FileName;
+                        break;
                     case MpFileContentOptionType.Path:
                         ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
                         ovm.Items = GetTextOptionViewModel(ovm);
+                        ovm.FilterValue = MpContentQueryBitFlags.FilePath;
                         break;
                     case MpFileContentOptionType.Kind:
                         ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
                         ovm.Items = GetFileOptionViewModel(ovm);
+                        ovm.FilterValue = MpContentQueryBitFlags.FileExt;
                         break;
                 }
                 iovml.Add(ovm);
@@ -410,6 +453,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public ObservableCollection<MpAvSearchCriteriaOptionViewModel> GetContentTypeContentOptionViewModel(MpAvSearchCriteriaOptionViewModel parent) {
+            // PATH: /Root/Content/TypeSpecific
+
             var iovml = new List<MpAvSearchCriteriaOptionViewModel>();
             string[] labels = typeof(MpContentTypeOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
 
@@ -420,14 +465,17 @@ namespace MonkeyPaste.Avalonia {
                     case MpContentTypeOptionType.Text:
                         ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
                         ovm.Items = GetTextOptionViewModel(ovm);
+                        ovm.FilterValue = MpContentQueryBitFlags.TextType;
                         break;
                     case MpContentTypeOptionType.Image:
                         ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
                         ovm.Items = GetImageContentOptionViewModel(ovm);
+                        ovm.FilterValue = MpContentQueryBitFlags.ImageType;
                         break;
                     case MpContentTypeOptionType.Files:
                         ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
                         ovm.Items = GetFileContentOptionViewModel(ovm);
+                        ovm.FilterValue = MpContentQueryBitFlags.FileType;
                         break;
                 }
                 iovml.Add(ovm);
@@ -436,6 +484,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public ObservableCollection<MpAvSearchCriteriaOptionViewModel> GetContentOptionViewModel(MpAvSearchCriteriaOptionViewModel parent) {
+            // PATH: /Root/Content
             var iovml = new List<MpAvSearchCriteriaOptionViewModel>();
             string[] labels = typeof(MpContentOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
 
@@ -445,6 +494,7 @@ namespace MonkeyPaste.Avalonia {
                 switch ((MpContentOptionType)i) {
                     case MpContentOptionType.AnyText:
                         ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
+                        ovm.FilterValue = MpContentQueryBitFlags.Content | MpContentQueryBitFlags.Title;
                         ovm.Items = GetTextOptionViewModel(ovm);
                         break;
                     case MpContentOptionType.TypeSpecific:
@@ -453,6 +503,7 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     case MpContentOptionType.Title:
                         ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
+                        ovm.FilterValue = MpContentQueryBitFlags.Title;
                         ovm.Items = GetTextOptionViewModel(ovm);
                         break;
                 }
@@ -466,6 +517,8 @@ namespace MonkeyPaste.Avalonia {
         #region Content Type Options
 
         public ObservableCollection<MpAvSearchCriteriaOptionViewModel> GetContentTypeOptionViewModel(MpAvSearchCriteriaOptionViewModel parent) {
+            // PATH: /Root/ContentType
+
             var iovml = new List<MpAvSearchCriteriaOptionViewModel>();
             string[] labels = typeof(MpContentTypeOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
 
@@ -474,6 +527,17 @@ namespace MonkeyPaste.Avalonia {
                 ovm.UnitType = MpSearchCriteriaUnitFlags.EnumerableValue;
                 ovm.Label = labels[i];
                 ovm.Value = ((MpCopyItemType)i).ToString();
+                switch((MpContentTypeOptionType)i) {
+                    case MpContentTypeOptionType.Text:
+                        ovm.FilterValue = MpContentQueryBitFlags.TextType;
+                        break;
+                    case MpContentTypeOptionType.Image:
+                        ovm.FilterValue = MpContentQueryBitFlags.ImageType;
+                        break;
+                    case MpContentTypeOptionType.Files:
+                        ovm.FilterValue = MpContentQueryBitFlags.FileType;
+                        break;
+                }
                 iovml.Add(ovm);
             }
             return new ObservableCollection<MpAvSearchCriteriaOptionViewModel>(iovml);
@@ -484,23 +548,24 @@ namespace MonkeyPaste.Avalonia {
         #region Collection Options
 
         public ObservableCollection<MpAvSearchCriteriaOptionViewModel> GetCollectionOptionViewModel(MpAvSearchCriteriaOptionViewModel parent) {
+            // PATH: /Root/Collections
             var iovml = new List<MpAvSearchCriteriaOptionViewModel>();
-            var ovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
-            ovm.Label = "";
-            ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
-            ovm.Items = GetTextOptionViewModel(ovm);
-            iovml.Add(ovm);
-            foreach (var ttvm in MpAvTagTrayViewModel.Instance.Items.OrderBy(x => x.TagName)) {
+
+            // NOTE excluding current tag as filter
+            var ttvml =
+                MpAvTagTrayViewModel.Instance
+                .Items
+                .Where(x=>x.TagId != Parent.QueryTagId) 
+                .OrderBy(x => x.TagName);
+
+            foreach (var ttvm in ttvml) {
                 var tovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
                 tovm.Label = ttvm.TagName;
                 tovm.UnitType = MpSearchCriteriaUnitFlags.EnumerableValue;
+                tovm.Value = ttvm.TagId.ToString();
+                tovm.FilterValue = MpContentQueryBitFlags.Tag;
                 iovml.Add(tovm);
             }
-            var covm = new MpAvSearchCriteriaOptionViewModel(this, parent);
-            covm.Label = " - Custom - ";
-            covm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
-            covm.Items = GetTextOptionViewModel(covm);
-            iovml.Add(covm);
             return new ObservableCollection<MpAvSearchCriteriaOptionViewModel>(iovml);
         }
 
@@ -509,28 +574,25 @@ namespace MonkeyPaste.Avalonia {
         #region Source Options
 
         public ObservableCollection<MpAvSearchCriteriaOptionViewModel> GetDeviceOptionViewModel(MpAvSearchCriteriaOptionViewModel parent) {
-            if (Parent == null) {
-                return null;
-            }
-            var iovml = new List<MpAvSearchCriteriaOptionViewModel>();
+            // PATH: /Root/Source/Device
 
+            var iovml = new List<MpAvSearchCriteriaOptionViewModel>();
             string[] labels = Parent.UserDevices.Select(x=>x.MachineName).ToArray();
 
             for (int i = 0; i < labels.Length; i++) {
                 var ovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
                 ovm.Label = labels[i];
                 ovm.UnitType = MpSearchCriteriaUnitFlags.EnumerableValue;
+                ovm.FilterValue = MpContentQueryBitFlags.DeviceName;
+                ovm.Value = labels[i];
                 iovml.Add(ovm);
             }
-            var ovm1 = new MpAvSearchCriteriaOptionViewModel(this, parent);
-            ovm1.Label = "";
-            ovm1.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
-            ovm1.Items = GetTextOptionViewModel(ovm1);
-            iovml.Insert(0, ovm1);
             return new ObservableCollection<MpAvSearchCriteriaOptionViewModel>(iovml);
         }
 
         public ObservableCollection<MpAvSearchCriteriaOptionViewModel> GetAppOptionViewModel(MpAvSearchCriteriaOptionViewModel parent) {
+            // PATH: /Root/Source/App
+
             var iovml = new List<MpAvSearchCriteriaOptionViewModel>();
             string[] labels = typeof(MpAppOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
 
@@ -539,9 +601,14 @@ namespace MonkeyPaste.Avalonia {
                 ovm.Label = labels[i];
                 switch ((MpAppOptionType)i) {
                     case MpAppOptionType.ProcessPath:
+                        ovm.UnitType = MpSearchCriteriaUnitFlags.Text;
+                        ovm.Items = GetTextOptionViewModel(ovm);
+                        ovm.FilterValue = MpContentQueryBitFlags.AppPath;
+                        break;
                     case MpAppOptionType.ApplicationName:
                         ovm.UnitType = MpSearchCriteriaUnitFlags.Text;
                         ovm.Items = GetTextOptionViewModel(ovm);
+                        ovm.FilterValue = MpContentQueryBitFlags.AppName;
                         break;
                 }
                 iovml.Add(ovm);
@@ -550,6 +617,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public ObservableCollection<MpAvSearchCriteriaOptionViewModel> GetWebsiteOptionViewModel(MpAvSearchCriteriaOptionViewModel parent) {
+            // PATH: /Root/Source/Website
+
             var iovml = new List<MpAvSearchCriteriaOptionViewModel>();
             string[] labels = typeof(MpWebsiteOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
 
@@ -558,10 +627,19 @@ namespace MonkeyPaste.Avalonia {
                 ovm.Label = labels[i];
                 switch ((MpWebsiteOptionType)i) {
                     case MpWebsiteOptionType.Domain:
+                        ovm.UnitType = MpSearchCriteriaUnitFlags.Text;
+                        ovm.Items = GetTextOptionViewModel(ovm);
+                        ovm.FilterValue = MpContentQueryBitFlags.UrlDomain;
+                        break;
                     case MpWebsiteOptionType.Url:
+                        ovm.UnitType = MpSearchCriteriaUnitFlags.Text;
+                        ovm.Items = GetTextOptionViewModel(ovm);
+                        ovm.FilterValue = MpContentQueryBitFlags.Url;
+                        break;
                     case MpWebsiteOptionType.Title:
                         ovm.UnitType = MpSearchCriteriaUnitFlags.Text;
                         ovm.Items = GetTextOptionViewModel(ovm);
+                        ovm.FilterValue = MpContentQueryBitFlags.UrlTitle;
                         break;
                 }
                 iovml.Add(ovm);
@@ -570,6 +648,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public ObservableCollection<MpAvSearchCriteriaOptionViewModel> GetSourceOptionViewModel(MpAvSearchCriteriaOptionViewModel parent) {
+            // PATH: /Root/Source
+
             var iovml = new List<MpAvSearchCriteriaOptionViewModel>();
             string[] labels = typeof(MpSourceOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
 
@@ -600,6 +680,10 @@ namespace MonkeyPaste.Avalonia {
         #region Date Options
 
         public ObservableCollection<MpAvSearchCriteriaOptionViewModel> GetTimeSpanWithinOptionViewModel(MpAvSearchCriteriaOptionViewModel parent) {
+            // PATH: /Root/DateOrTime/Created/WithinLast
+            // PATH: /Root/DateOrTime/Modified/WithinLast
+            // PATH: /Root/DateOrTime/Pasted/WithinLast
+
             var novml = new List<MpAvSearchCriteriaOptionViewModel>();
             string[] labels = typeof(MpTimeSpanWithinUnitType).EnumToLabels(DEFAULT_OPTION_LABEL);
 
@@ -608,12 +692,33 @@ namespace MonkeyPaste.Avalonia {
                 tovm.Label = labels[i];
                 tovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
                 tovm.Items = GetNumberOptionViewModel(tovm);
+                switch((MpTimeSpanWithinUnitType)i) {
+                    case MpTimeSpanWithinUnitType.Hours:
+                        tovm.FilterValue = MpContentQueryBitFlags.Hours;
+                        break;
+                    case MpTimeSpanWithinUnitType.Days:
+                        tovm.FilterValue = MpContentQueryBitFlags.Days;
+                        break;
+                    case MpTimeSpanWithinUnitType.Weeks:
+                        tovm.FilterValue = MpContentQueryBitFlags.Weeks;
+                        break;
+                    case MpTimeSpanWithinUnitType.Months:
+                        tovm.FilterValue = MpContentQueryBitFlags.Months;
+                        break;
+                    case MpTimeSpanWithinUnitType.Years:
+                        tovm.FilterValue = MpContentQueryBitFlags.Years;
+                        break;
+                }
                 novml.Add(tovm);
             }
             return new ObservableCollection<MpAvSearchCriteriaOptionViewModel>(novml);
         }
 
         public ObservableCollection<MpAvSearchCriteriaOptionViewModel> GetDateBeforeOptionViewModel(MpAvSearchCriteriaOptionViewModel parent) {
+            // PATH: /Root/DateOrTime/Created/Before
+            // PATH: /Root/DateOrTime/Modified/Before
+            // PATH: /Root/DateOrTime/Pasted/Before
+
             var novml = new List<MpAvSearchCriteriaOptionViewModel>();
             string[] labels = typeof(MpDateBeforeUnitType).EnumToLabels(DEFAULT_OPTION_LABEL);
 
@@ -621,11 +726,34 @@ namespace MonkeyPaste.Avalonia {
                 var tovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
                 tovm.Label = labels[i];
                 switch ((MpDateBeforeUnitType)i) {
+                    case MpDateBeforeUnitType.Today:
+                        tovm.UnitType = MpSearchCriteriaUnitFlags.EnumerableValue;
+                        tovm.FilterValue = MpContentQueryBitFlags.Days;
+                        tovm.Value = 0.ToString();
+                        break;
+                    case MpDateBeforeUnitType.Yesterday:
+                        tovm.UnitType = MpSearchCriteriaUnitFlags.EnumerableValue;
+                        tovm.FilterValue = MpContentQueryBitFlags.Days;
+                        tovm.Value = 1.ToString();
+                        break;
+                    case MpDateBeforeUnitType.ThisWeek:
+                        tovm.UnitType = MpSearchCriteriaUnitFlags.EnumerableValue;
+                        tovm.FilterValue = MpContentQueryBitFlags.Days;
+                        tovm.Value = (((int)DateTime.Today.DayOfWeek) + 1).ToString();
+                        break;
+                    case MpDateBeforeUnitType.ThisMonth:
+                        tovm.UnitType = MpSearchCriteriaUnitFlags.EnumerableValue;
+                        tovm.FilterValue = MpContentQueryBitFlags.Days;
+                        tovm.Value = DateTime.Today.Day.ToString();
+                        break;
+                    case MpDateBeforeUnitType.ThisYear:
+                        tovm.UnitType = MpSearchCriteriaUnitFlags.EnumerableValue;
+                        tovm.FilterValue = MpContentQueryBitFlags.Days;
+                        tovm.Value = DateTime.Today.DayOfYear.ToString();
+                        break;
                     case MpDateBeforeUnitType.Exact:
                         tovm.UnitType = MpSearchCriteriaUnitFlags.DateTime;
-                        break;
-                    default:
-                        tovm.UnitType = MpSearchCriteriaUnitFlags.EnumerableValue;
+                        tovm.FilterValue = MpContentQueryBitFlags.DateTime;
                         break;
                 }
                 novml.Add(tovm);
@@ -634,6 +762,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public ObservableCollection<MpAvSearchCriteriaOptionViewModel> GetDateAfterOptionViewModel(MpAvSearchCriteriaOptionViewModel parent) {
+            // PATH: /Root/DateOrTime/Created/After
+            // PATH: /Root/DateOrTime/Modified/After
+            // PATH: /Root/DateOrTime/Pasted/After
+
             var novml = new List<MpAvSearchCriteriaOptionViewModel>();
             string[] labels = typeof(MpDateAfterUnitType).EnumToLabels(DEFAULT_OPTION_LABEL);
 
@@ -641,11 +773,29 @@ namespace MonkeyPaste.Avalonia {
                 var tovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
                 tovm.Label = labels[i];
                 switch ((MpDateAfterUnitType)i) {
+                    case MpDateAfterUnitType.Yesterday:
+                        tovm.UnitType = MpSearchCriteriaUnitFlags.EnumerableValue;
+                        tovm.FilterValue = MpContentQueryBitFlags.Days;
+                        tovm.Value = 1.ToString();
+                        break;
+                    case MpDateAfterUnitType.LastWeek:
+                        tovm.UnitType = MpSearchCriteriaUnitFlags.EnumerableValue;
+                        tovm.FilterValue = MpContentQueryBitFlags.Days;
+                        tovm.Value = (((int)DateTime.Today.DayOfWeek) + 1).ToString();
+                        break;
+                    case MpDateAfterUnitType.LastMonth:
+                        tovm.UnitType = MpSearchCriteriaUnitFlags.EnumerableValue;
+                        tovm.FilterValue = MpContentQueryBitFlags.Days;
+                        tovm.Value = DateTime.Today.Day.ToString();
+                        break;
+                    case MpDateAfterUnitType.LastYear:
+                        tovm.UnitType = MpSearchCriteriaUnitFlags.EnumerableValue;
+                        tovm.FilterValue = MpContentQueryBitFlags.Days;
+                        tovm.Value = DateTime.Today.DayOfYear.ToString();
+                        break;
                     case MpDateAfterUnitType.Exact:
                         tovm.UnitType = MpSearchCriteriaUnitFlags.DateTime;
-                        break;
-                    default:
-                        tovm.UnitType = MpSearchCriteriaUnitFlags.EnumerableValue;
+                        tovm.FilterValue = MpContentQueryBitFlags.Exactly;
                         break;
                 }
                 novml.Add(tovm);
@@ -654,6 +804,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public ObservableCollection<MpAvSearchCriteriaOptionViewModel> GetDateTimeOptionViewModel(MpAvSearchCriteriaOptionViewModel parent) {
+            // PATH: /Root/DateOrTime/Created
+            // PATH: /Root/DateOrTime/Modified
+            // PATH: /Root/DateOrTime/Pasted
+
             var novml = new List<MpAvSearchCriteriaOptionViewModel>();
             string[] labels = typeof(MpDateTimeOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
 
@@ -664,17 +818,21 @@ namespace MonkeyPaste.Avalonia {
                     case MpDateTimeOptionType.WithinLast:
                         ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
                         ovm.Items = GetTimeSpanWithinOptionViewModel(ovm);
+                        ovm.FilterValue = MpContentQueryBitFlags.Between;
                         break;
                     case MpDateTimeOptionType.Before:
                         ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
                         ovm.Items = GetDateBeforeOptionViewModel(ovm);
+                        ovm.FilterValue = MpContentQueryBitFlags.Before;
                         break;
                     case MpDateTimeOptionType.After:
                         ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
                         ovm.Items = GetDateAfterOptionViewModel(ovm);
+                        ovm.FilterValue = MpContentQueryBitFlags.After;
                         break;
                     case MpDateTimeOptionType.Exact:
                         ovm.UnitType = MpSearchCriteriaUnitFlags.DateTime;
+                        ovm.FilterValue = MpContentQueryBitFlags.Exactly;
                         break;
                 }
                 novml.Add(ovm);
@@ -683,6 +841,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public ObservableCollection<MpAvSearchCriteriaOptionViewModel> GetDateTimeTypeOptionViewModel(MpAvSearchCriteriaOptionViewModel parent) {
+            // PATH: /Root/DateOrTime
+
             var iovml = new List<MpAvSearchCriteriaOptionViewModel>();
             string[] labels = typeof(MpDateTimeTypeOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
 
@@ -691,10 +851,19 @@ namespace MonkeyPaste.Avalonia {
                 ovm.Label = labels[i];
                 switch ((MpDateTimeTypeOptionType)i) {
                     case MpDateTimeTypeOptionType.Created:
+                        ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
+                        ovm.Items = GetDateTimeOptionViewModel(ovm);
+                        ovm.FilterValue = MpContentQueryBitFlags.Created;
+                        break;
                     case MpDateTimeTypeOptionType.Modified:
+                        ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
+                        ovm.Items = GetDateTimeOptionViewModel(ovm);
+                        ovm.FilterValue = MpContentQueryBitFlags.Modified;
+                        break;
                     case MpDateTimeTypeOptionType.Pasted:
                         ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
                         ovm.Items = GetDateTimeOptionViewModel(ovm);
+                        ovm.FilterValue = MpContentQueryBitFlags.Pasted;
                         break;
                 }
                 iovml.Add(ovm);

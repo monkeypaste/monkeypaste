@@ -124,7 +124,7 @@ namespace MonkeyPaste.Avalonia {
                     resizerView.Height = resizer_short_side;
                     resizerView.HorizontalAlignment = HorizontalAlignment.Stretch;
                     resizerView.VerticalAlignment = VerticalAlignment.Top;
-                    resizerTransform.Y -= 3;
+                    //resizerTransform.Y -= 3;
 
                     //resizerView.Background = Brushes.Transparent;
                     break;
