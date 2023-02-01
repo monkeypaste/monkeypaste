@@ -20,12 +20,13 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Properties
+
+        #endregion
+
         public MpAvTagView() {
             InitializeComponent();
             this.AttachedToVisualTree += MpAvTagView_AttachedToVisualTree;
-
-            //var tagNameBorder = this.FindControl<MpAvClipBorder>("TagNameBorder");
-            //tagNameBorder.PointerPressed += TagNameBorder_PointerPressed;
         }
 
         private void MpAvTagView_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {

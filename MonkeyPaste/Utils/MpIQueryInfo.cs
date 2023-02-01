@@ -33,9 +33,9 @@ namespace MonkeyPaste {
 
     public interface MpIQueryInfo {
 
-        public MpTextQueryType TextFlags { get; } // advanced
+        //public MpTextQueryType TextFlags { get; } // advanced
 
-        public MpDateTimeQueryType TimeFlags { get; } // advanced
+        //public MpDateTimeQueryType TimeFlags { get; } // advanced
         public MpLogicalQueryType NextJoinType { get; } // advanced
         MpIQueryInfo Next { get; } // advanced
 
@@ -43,7 +43,7 @@ namespace MonkeyPaste {
 
         public MpContentSortType SortType { get; }
 
-        public MpContentQueryBitFlags FilterFlags { get; } 
+        public MpContentQueryBitFlags QueryFlags { get; } 
 
 
         public int TagId { get;}

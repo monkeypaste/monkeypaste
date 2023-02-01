@@ -12,7 +12,7 @@ namespace MonkeyPaste.Avalonia {
                     return result;
                 }
             }
-            return null;
+            return DateTime.Now;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {

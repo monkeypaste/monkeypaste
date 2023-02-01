@@ -311,14 +311,14 @@ namespace MonkeyPaste.Common {
             return Enum.GetNames(e).Length;
         }
 
-        public static string[] EnumToLabels(this Type e, string noneText = "", bool hideFirst = false) {
+        public static string[] EnumToLabels(this Type e, string noneText = "", bool hideFirst = false, string spaceStr = " ") {
             if (e == null || !e.IsEnum) {
                 return new string[] { };
             }
 
             var names = Enum.GetNames(e);
             for (int i = hideFirst ? 1 : 0; i < names.Length; i++) {
-                names[i] = names[i].ToLabel(noneText);
+                names[i] = names[i].ToLabel(noneText, spaceStr);
             }
             return names;
         }

@@ -12,51 +12,6 @@
                        d:DesignHeight="50"
                        d:DesignWidth="800">
     <local:MpAvUserControl.Styles>
-        <!--<Style Selector="ListBox :is(Control).addRemoveBtn">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>
-        <Style Selector="ListBox:pointerover :is(Control).addRemoveBtn:not(.removeBtn)">
-            <Setter Property="IsVisible"
-                    Value="True" />
-        </Style>
-        <Style Selector="ListBox.canRemove:pointerover :is(Control).removeBtn">
-            <Setter Property="IsVisible"
-                    Value="True" />
-        </Style>
-        <Style Selector="ListBox:not(.canRemove):pointerover :is(Control).removeBtn">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>-->
-        <Style Selector="Button.addRemoveBtn">
-            <Setter Property="Margin"
-                    Value="3,0" />
-            <Setter Property="Width"
-                    Value="25" />
-            <Setter Property="Height"
-                    Value="25" />
-            <Setter Property="BorderThickness"
-                    Value="2" />
-            <Setter Property="VerticalAlignment"
-                    Value="Center" />
-        </Style>
-
-        <Style Selector="Button.addRemoveBtn Border">
-            <Setter Property="BorderThickness"
-                    Value="2" />
-            <Setter Property="BorderBrush"
-                    Value="DimGray" />
-            <Setter Property="CornerRadius"
-                    Value="2" />
-        </Style>
-        <Style Selector="Button.addRemoveBtn:pointerover Border">
-            <Setter Property="BorderBrush"
-                    Value="LightGray" />
-        </Style>
-        <Style Selector="Button.addRemoveBtn Image">
-            <Setter Property="Stretch"
-                    Value="Fill" />
-        </Style>
         <Style Selector="Button#CriteriaDragButton Image">
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource DragImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=white}" />
@@ -69,7 +24,6 @@
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource DragImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=dimgray}" />
         </Style>
-
 
         <Style Selector="local|MpAvClipBorder.optComboBoxBorder">
             <Setter Property="CornerRadius"
@@ -101,6 +55,9 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <StackPanel Orientation="Vertical">
+
+        <!--  JOIN CRITERIA ITEM HEADER  -->
+
         <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Left"
                     Margin="50,0,0,0"
@@ -127,6 +84,9 @@
                        VerticalAlignment="Center" />
         </StackPanel>
         <DockPanel LastChildFill="True">
+
+            <!--  SORT DRAG BUTTON  -->
+
             <Button x:Name="CriteriaDragButton"
                     DockPanel.Dock="Left"
                     Classes="noBg noHoverBg"
@@ -172,11 +132,14 @@
                 </Button>
 
                 <!--  SPECIAL ADD POPUP  -->
+
                 <local:MpAvOptionsButton VerticalAlignment="Stretch"
                                          Classes="addRemoveBtn outline"
                                          IsVisible="{Binding !IsJoinPanelVisible}"
                                          Command="{Binding SelectCustomNextJoinTypeCommand}" />
             </StackPanel>
+
+            <!--  OPTIONS LISTBOX  -->
 
             <ListBox Background="Transparent"
                      Classes="optionsList"

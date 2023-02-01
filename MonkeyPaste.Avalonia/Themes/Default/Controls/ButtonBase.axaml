@@ -48,7 +48,13 @@
         <Setter Property="BorderBrush"
                 Value="Silver" />
     </Style>
-    <Style Selector=":is(Button):pointerover.outline /template/ ContentPresenter">
+    <Style Selector=":is(Button).outlineOver /template/ ContentPresenter">
+        <Setter Property="BorderThickness"
+                Value="1" />
+        <Setter Property="BorderBrush"
+                Value="Transparent" />
+    </Style>
+    <Style Selector=":is(Button):pointerover.outline /template/ ContentPresenter, :is(Button):pointerover.outlineOver /template/ ContentPresenter">
         <Setter Property="BorderBrush"
                 Value="Yellow" />
     </Style>

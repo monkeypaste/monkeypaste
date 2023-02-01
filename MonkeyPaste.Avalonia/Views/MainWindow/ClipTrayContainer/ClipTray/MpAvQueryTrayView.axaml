@@ -28,18 +28,20 @@
         <Border Grid.Row="0"
                 VerticalAlignment="Top"
                 HorizontalAlignment="Stretch"
+                IsVisible="{Binding IsExpanded, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
                 DataContext="{x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}">
             <local:MpAvSearchCriteriaListBoxView x:Name="SearchDetailView"
                                                  HorizontalAlignment="Stretch"
                                                  VerticalAlignment="Stretch"
                                                  VerticalContentAlignment="Stretch"
+                                                 Height="{Binding BoundCriteriaListBoxScreenHeight, Mode=TwoWay}"
                                                  IsVisible="{Binding HasCriteriaItems}" />
         </Border>
         <GridSplitter x:Name="AdvancedSearchSplitter"
                       Grid.Row="0"
                       Classes="horizontal"
                       ShowsPreview="True"
-                      IsVisible="{Binding IsVisible, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
+                      IsVisible="{Binding IsExpanded, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Bottom" />
 

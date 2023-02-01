@@ -114,9 +114,9 @@ namespace MonkeyPaste.Avalonia {
         public int TagId { get; set; } = MpTag.HelpTagId;
         public string MatchValue { get; set; } = string.Empty;
 
-        public MpContentQueryBitFlags FilterFlags { get; set; } = MpContentQueryBitFlags.Content | MpContentQueryBitFlags.TextType | MpContentQueryBitFlags.ImageType | MpContentQueryBitFlags.FileType;
-        public MpTextQueryType TextFlags { get; set; } = MpTextQueryType.None;
-        public MpDateTimeQueryType TimeFlags { get; set; } = MpDateTimeQueryType.None;
+        public MpContentQueryBitFlags QueryFlags { get; set; } = MpContentQueryBitFlags.Content | MpContentQueryBitFlags.TextType | MpContentQueryBitFlags.ImageType | MpContentQueryBitFlags.FileType;
+        //public MpTextQueryType TextFlags { get; set; } = MpTextQueryType.None;
+        //public MpDateTimeQueryType TimeFlags { get; set; } = MpDateTimeQueryType.None;
         public MpLogicalQueryType NextJoinType { get; set; }
 
         public MpIQueryInfo Next { get; set; }

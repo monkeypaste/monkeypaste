@@ -27,9 +27,9 @@ namespace MonkeyPaste.Common {
        // HtmlTag
     }
 
-    public static class MpRegEx {        
+    public static class MpRegEx {
         public static string KnownFileExtensions =>
-            MpFileE
+            MpFileExtensionsHelper.AllExtPsv;
 
         public static string InvalidFileNameChars {
             get {

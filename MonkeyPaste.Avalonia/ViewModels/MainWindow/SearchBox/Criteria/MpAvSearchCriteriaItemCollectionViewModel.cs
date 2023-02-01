@@ -40,7 +40,7 @@ namespace MonkeyPaste.Avalonia {
             if(PendingQueryTagId > 0) {
                 return (PendingQueryTagId * -1).ToString();
             }
-            if(CurrentQueryTagId > 0) {
+            if(IsSavedQuery) {
                 return CurrentQueryTagId.ToString();
             }
             return "0";
@@ -58,7 +58,7 @@ namespace MonkeyPaste.Avalonia {
                 Debugger.Break();
                 return;
             }
-            InitializeAsync(QueryTagId, PendingQueryTagId > 0).FireAndForgetSafeAsync(this);
+            InitializeAsync(QueryTagId, IsPendingQuery).FireAndForgetSafeAsync(this);
         }
 
         public void RegisterProvider(MpIQueryInfoValueProvider provider) {
@@ -92,6 +92,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void NotifyQueryChanged(bool forceRequery = false) {
+            if(SuppressQueryChangedNotification) {
+                return;
+            }
             Dispatcher.UIThread.Post(() => {
                 // NOTE unlike query vm this treats forceRequery as required since value providers are internal i dunno
 
@@ -126,6 +129,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool SuppressQueryChangedNotification { get; set; } = false;
         public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsAnyBusy);
         public bool IsExpanded { get; set; }
         public bool HasCriteriaItems => Items.Count > 0;
@@ -137,9 +141,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Layout
 
-        public double BoundCriteriaListBoxScreenHeight { get; set; }
 
-        public double LastSearchCriteriaListBoxHeight { get; private set; }
+        public double BoundCriteriaListBoxScreenHeight { get; set; }
 
         public double MaxSearchCriteriaListBoxHeight =>
             Items.Sum(x => x.CriteriaItemHeight) +
@@ -159,8 +162,8 @@ namespace MonkeyPaste.Avalonia {
 
         public int QueryTagId {
             get {
-                if(PendingQueryTagId > 0) {
-                    if(CurrentQueryTagId > 0) {
+                if(IsPendingQuery) {
+                    if(IsSavedQuery) {
                         // should only be 1
                         Debugger.Break();
                     }
@@ -205,11 +208,10 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitializeAsync(int tagId, bool isPending) {
             IsBusy = true;
 
+            SuppressQueryChangedNotification = true;
 
             if (UserDevices == null) {
-                _ = Task.Run(async () => {
-                    UserDevices = await MpDataModelProvider.GetItemsAsync<MpUserDevice>();
-                });
+                UserDevices = await MpDataModelProvider.GetItemsAsync<MpUserDevice>();
             }
 
             CurrentQueryTagId = isPending ? 0 : tagId;
@@ -247,6 +249,8 @@ namespace MonkeyPaste.Avalonia {
                 // wait for tile layouts to update or something that prevents requery
                 await Task.Delay(100);
             }
+
+            SuppressQueryChangedNotification = false;
             MpPlatform.Services.Query.NotifyQueryChanged(true);
         }
         #endregion
@@ -292,6 +296,10 @@ namespace MonkeyPaste.Avalonia {
                         MpMessenger.SendGlobal(MpMessageType.AdvancedSearchClosed);
                     }
                     break;
+                case nameof(IgnoreHasModelChanged):
+                    Items.ForEach(x => x.IgnoreHasModelChanged = IgnoreHasModelChanged);
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(HasModelChanged)));
+                    break;
             }
         }
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
@@ -302,7 +310,6 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(MaxSearchCriteriaListBoxHeight));
 
             UpdateCriteriaSortOrder().FireAndForgetSafeAsync(this);
-            LastSearchCriteriaListBoxHeight = BoundCriteriaListBoxScreenHeight;
         }
 
         private async Task UpdateCriteriaSortOrder(bool fromModel = false) {
@@ -388,13 +395,13 @@ namespace MonkeyPaste.Avalonia {
                     opts.Add(MpRootOptionType.Content);
                     opts.Add(MpContentOptionType.Title);
                     opts.Add(MpTextOptionType.Contains);
-                    opts.Add(new object[] { MpContentQueryBitFlags.MatchValue, searchText, all_flags.HasFlag(MpContentQueryBitFlags.CaseSensitive) });
+                    opts.Add(new object[] { MpContentQueryBitFlags.Title, searchText, all_flags.HasFlag(MpContentQueryBitFlags.CaseSensitive) });
                     break;
                 case MpContentQueryBitFlags.Content:
                     opts.Add(MpRootOptionType.Content);
                     opts.Add(MpContentOptionType.AnyText);
                     opts.Add(MpTextOptionType.Contains);
-                    opts.Add(new object[] { MpContentQueryBitFlags.MatchValue, searchText, all_flags.HasFlag(MpContentQueryBitFlags.CaseSensitive) });
+                    opts.Add(new object[] { MpContentQueryBitFlags.Content, searchText, all_flags.HasFlag(MpContentQueryBitFlags.CaseSensitive) });
                     break;
                 // Root.ContentType
                 case MpContentQueryBitFlags.TextType:
@@ -412,30 +419,7 @@ namespace MonkeyPaste.Avalonia {
                 default:
                     return string.Empty;
             }
-
-            List<string> parts = new List<string>();
-            foreach (var opt in opts) {
-                string opt_str = string.Empty;
-                if (opt is Enum enumOpt) {
-                    opt_str = $"{enumOpt.GetType()}|{enumOpt}";
-                } else if (opt is object[] matchParts) {
-                    // special case for case sensitive
-                    if (matchParts[0] is Enum matchEnum) {
-                        opt_str += $"{matchEnum.GetType()}|{matchEnum}";
-                    }
-                    if (matchParts[1] is string match_text) {
-                        opt_str += $"|{match_text.ToBase64String()}";
-                    }
-                    if (matchParts[2] is bool case_val) {
-                        opt_str += $"|{case_val}";
-                    }
-                }
-                opt_str += $"|{current_flag}";
-
-                parts.Add(opt_str);
-            }
-            string result = string.Join(",", parts);
-            return result;
+            return opts.ToOptionPathString(current_flag);
         }
         
         #endregion
@@ -487,15 +471,33 @@ namespace MonkeyPaste.Avalonia {
                 CurrentQueryTagId = PendingQueryTagId;
                 PendingQueryTagId = 0;
                 OnPropertyChanged(nameof(QueryTagId));
-            }, () => PendingQueryTagId > 0);
+            }, () => IsPendingQuery,this, new[] { this });
 
-        public ICommand RejectPendingCriteriaItemsCommand => new MpAsyncCommand(
-            async() => {
+        public MpIAsyncCommand RejectPendingCriteriaItemsCommand => new MpAsyncCommand(
+            async () => {
                 var t = await MpDataModelProvider.GetItemAsync<MpTag>(PendingQueryTagId);
                 t.DeleteFromDatabaseAsync().FireAndForgetSafeAsync();
                 PendingQueryTagId = 0;
-                await InitializeAsync(0,false);
-            },()=> IsPendingQuery);
+                await InitializeAsync(0, false);
+            }, () => IsPendingQuery, this, new[] { this });
+
+        public ICommand SaveQueryCommand => new MpCommand(
+             () => {
+                 if(IsPendingQuery) {
+                     SavePendingQueryCommand.Execute(null);
+                 } else {
+                     IgnoreHasModelChanged = false;
+                 }
+             },()=>HasCriteriaItems, this, new[] { this });
+        
+        public ICommand CancelPendingOrCollapseSavedQueryCommand => new MpAsyncCommand(
+             async() => {
+                 // NOTE only hooked to adv header minus button
+                 if(IsPendingQuery) {
+                     await RejectPendingCriteriaItemsCommand.ExecuteAsync();
+                 }
+                 ToggleIsExpandedCommand.Execute(null);
+             },()=>HasCriteriaItems, this, new[] { this });
 
         public MpIAsyncCommand ConvertCurrentSearchToAdvancedCommand => new MpAsyncCommand(
             async () => {
@@ -531,21 +533,21 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ToggleIsExpandedCommand => new MpAsyncCommand(
             async () => {
                 if(IsExpanded) {
-                    if(IsPendingQuery) {
-                        RejectPendingCriteriaItemsCommand.Execute(null);
-                        await Task.Delay(50);
-                        while (IsAnyBusy) {
-                            await Task.Delay(100);
-                        }
-                    } 
+                    //if(IsPendingQuery) {
+                    //    RejectPendingCriteriaItemsCommand.Execute(null);
+                    //    await Task.Delay(50);
+                    //    while (IsAnyBusy) {
+                    //        await Task.Delay(100);
+                    //    }
+                    //} 
                     
                     IsExpanded = false;
                 } else {
                     if(!IsPendingQuery && !IsSavedQuery) {
-                        if(HasCriteriaItems) {
-                            // what's going on here?
-                            Debugger.Break();
-                        }
+                        //if(HasCriteriaItems) {
+                        //    // what's going on here?
+                        //    Debugger.Break();
+                        //}
                         await ConvertCurrentSearchToAdvancedCommand.ExecuteAsync();
                     } 
                     IsExpanded = true;

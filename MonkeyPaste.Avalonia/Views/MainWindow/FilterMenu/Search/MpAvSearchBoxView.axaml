@@ -97,29 +97,20 @@
                     Value="0" />
         </Style>
 
+        <Style Selector="Button#ConvertToAdvancedSearchButton Image">
+            <Setter Property="Source"
+                    Value="{Binding ., Source={StaticResource PlusSolidImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=white}" />
+        </Style>
+
+        <!--<Style Selector="Button#ConvertToAdvancedSearchButton:pointerover Image">
+            <Setter Property="Source"
+                    Value="{Binding ., Source={StaticResource PlusImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=white}" />
+        </Style>-->
+
     </local:MpAvUserControl.Styles>
     <StackPanel x:Name="SearchViewContainerStackPanel"
                 Orientation="Horizontal">
 
-        <!--  SAVE BUTTON  -->
-        <!--
-            IsVisible="{Binding IsPendingQuery, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
-        -->
-        <Button x:Name="SaveSearchButton"
-                Classes="defaultButton textOnlyButton"
-                Command="{Binding SavePendingQueryCommand, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
-                Margin="0,0,5,0">
-            <Button.IsVisible>
-                <MultiBinding Converter="{x:Static BoolConverters.And}">
-                    <Binding Path="HasCriteriaItems"
-                             Source="{x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}" />
-                    <Binding Path="PendingQueryTagId"
-                             Source="{x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}"
-                             Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
-                </MultiBinding>
-            </Button.IsVisible>
-            <TextBlock Text="SAVE" />
-        </Button>
         <local:MpAvClipBorder x:Name="SearchTextBoxBorder"
                               Classes.searchBorder="True"
                               Classes.valid="{Binding IsSearchValid}"
@@ -273,30 +264,30 @@
         </local:MpAvClipBorder>
 
 
-        <!--  ADVANCED SEARCH TOGGLE BUTTON  -->
+        <!--  CONVERT SIMPLE TO ADVANCED SEARCH BUTTON  -->
 
-        <ToggleButton x:Name="ToggleExpandedAdvancedSearchButton"
-                      Margin="5"
-                      BorderThickness="0"
-                      VerticalAlignment="Stretch"
-                      HorizontalAlignment="Center"
-                      Width="{Binding $self.Bounds.Height}"
-                      Classes="noBg noHoverBg"
-                      Command="{Binding ToggleIsExpandedCommand, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
-                      Classes.saved="{Binding IsSavedQuery, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}">
-            <ToggleButton.IsVisible>
-                <MultiBinding Converter="{x:Static BoolConverters.Or}">
+        <Button x:Name="ConvertToAdvancedSearchButton"
+                Margin="5"
+                BorderThickness="0"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Center"
+                Width="{Binding $self.Bounds.Height}"
+                Classes="noBg noHoverBg outlineOver"
+                Command="{Binding ToggleIsExpandedCommand, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
+                Classes.saved="{Binding IsSavedQuery, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}">
+            <Button.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
                     <Binding Path="HasText" />
-                    <Binding Path="HasCriteriaItems"
+                    <Binding Path="!HasCriteriaItems"
                              Source="{x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}" />
                 </MultiBinding>
-            </ToggleButton.IsVisible>
+            </Button.IsVisible>
             <!--<PathIcon Data="{StaticResource PlusBoxSvg}" />-->
             <Image Classes="shakeOver">
                 <Image.RenderTransform>
                     <RotateTransform />
                 </Image.RenderTransform>
             </Image>
-        </ToggleButton>
+        </Button>
     </StackPanel>
 </local:MpAvUserControl>

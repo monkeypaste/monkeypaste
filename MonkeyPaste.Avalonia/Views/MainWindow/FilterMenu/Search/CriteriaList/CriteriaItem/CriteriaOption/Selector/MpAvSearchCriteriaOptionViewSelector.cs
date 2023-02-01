@@ -30,7 +30,8 @@ namespace MonkeyPaste.Avalonia {
                 scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.UnitDecimalX4)) {
                 key = "RGBAOptionTemplate";
             }
-            if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.Text)) {
+            if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.Text) || 
+                scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.Decimal)) {
                 key = "TextOptionTemplate";
             }
             if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.DateTime)) {

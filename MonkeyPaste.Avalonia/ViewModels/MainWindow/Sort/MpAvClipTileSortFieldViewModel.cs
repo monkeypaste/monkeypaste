@@ -23,6 +23,8 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Interfaces
+
         #region MpIQueryInfoProvider Implementation
 
         object MpIQueryInfoValueProvider.Source => this;
@@ -32,7 +34,24 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #endregion
+
         #region Properties
+
+        #region View Models
+
+        private ObservableCollection<string> _sortLabels;
+        public ObservableCollection<string> SortLabels {
+            get {
+                if(_sortLabels == null) {
+                    _sortLabels = new ObservableCollection<string>(
+                        typeof(MpContentSortType)
+                        .EnumToLabels());
+                }
+                return _sortLabels;
+            }
+        }
+        #endregion
 
         #region Layout
         #endregion
@@ -65,10 +84,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
         public void Init() {
-            //await Task.Delay(1);
             MpPlatform.Services.Query.RegisterProvider(this);
-
-            //ResetToDefault(true);
         }
 
         #endregion

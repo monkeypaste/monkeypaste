@@ -37,7 +37,7 @@ namespace MonkeyPaste {
                     if (npci == null) {
                         throw new Exception("Command references must implement INotifyPropertyChanged");
                     }
-                    npci.PropertyChanged += (s, e) => { CanExecuteChanged.Invoke(s, e); };
+                    npci.PropertyChanged += (s, e) => { CanExecuteChanged?.Invoke(s, e); };
                 }
             }
         }
@@ -109,7 +109,7 @@ namespace MonkeyPaste {
                     if (npci == null) {
                         throw new Exception("Command references must implement INotifyPropertyChanged");
                     }
-                    npci.PropertyChanged += (s, e) => { CanExecuteChanged.Invoke(s, e); };
+                    npci.PropertyChanged += (s, e) => { CanExecuteChanged?.Invoke(s, e); };
                 }
             }
         }

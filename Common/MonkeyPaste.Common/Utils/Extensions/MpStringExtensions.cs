@@ -178,10 +178,16 @@ namespace MonkeyPaste.Common {
         }
 
         public static string[] SplitNoEmpty(this string str, string separator) {
+            if(str == null) {
+                return new string[] { };
+            }
             return str.Split(new string[] { separator }, StringSplitOptions.RemoveEmptyEntries);
         }
 
         public static string[] SplitByLineBreak(this string str) {
+            if (str == null) {
+                return new string[] { };
+            }
             string[] split_types = new string[] { "\r\n", "\n" };
             foreach(var st in split_types) {
                 if(str.Contains(st)) {
@@ -192,7 +198,10 @@ namespace MonkeyPaste.Common {
         }
 
         public static string TrimTrailingLineEnding(this string str) {
-            if(str.EndsWith(Environment.NewLine)) {
+            if (str == null) {
+                return string.Empty;
+            }
+            if (str.EndsWith(Environment.NewLine)) {
                 return str.Substring(0, str.Length - 1);
             }
             return str;
@@ -215,13 +224,13 @@ namespace MonkeyPaste.Common {
             return _resourceNames.Contains(text.ToLower());
         }
 
-        public static string ToLabel(this string titleCaseStr, string noneText = "") {
+        public static string ToLabel(this string titleCaseStr, string noneText = "", string spaceStr = " ") {
             // TODO when automating UI language need to parameterize low vs up case logic
             //Converts 'ThisIsALabel" to 'This Is A Label'
             string outStr = string.Empty;
             for (int i = 0; i < titleCaseStr.Length; i++) {
                 if (i > 0 && titleCaseStr[i - 1] > 'Z' && titleCaseStr[i] <= 'Z') {
-                    outStr += " ";
+                    outStr += spaceStr;
                 }
                 outStr += titleCaseStr[i];
             }

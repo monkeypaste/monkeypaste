@@ -141,8 +141,7 @@ namespace MonkeyPaste.Avalonia {
             set {
                 if (value != SelectedPinnedItem) {
                     PinnedItems.ForEach(x => x.IsSelected = x == value);
-                }
-}
+                }}
         }
 
         public IEnumerable<MpAvTagTileViewModel> RootItems => Items.Where(x => x.ParentTagId == 0);

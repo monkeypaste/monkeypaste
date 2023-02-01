@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Avalonia.Controls;
 using MonkeyPaste;
 using MonkeyPaste.Common;
 
@@ -74,17 +75,35 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsSelected { get; set; } = false;
 
+        public Type ItemsOptionType { get; set; }
+
+        public bool IsValid => string.IsNullOrEmpty(ValidationText);
+
+        #region Multi Value IsValid
+
+        public bool IsValid1 { get; set; } = true;
+        public bool IsValid2 { get; set; } = true;
+        public bool IsValid3 { get; set; } = true;
+        public bool IsValid4 { get; set; } = true;
+
+        public IEnumerable<bool> IsValids =>
+            new bool[] { IsValid1, IsValid2, IsValid3, IsValid4 };
+        #endregion
+
         #endregion
 
         #region Appearance
 
         public string Label { get; set; }
 
+        public string ValidationText { get; set; }
+
         #endregion
 
         #region Model
 
         #region Multi Values 
+
         private string[] _values;
         public string[] Values {
             get {
@@ -146,6 +165,9 @@ namespace MonkeyPaste.Avalonia {
         public string Value { 
             get {
                 if(FilterValue.IsMultiValue()) {
+                    if(Values.All(x=>string.IsNullOrEmpty(x))) {
+                        return string.Empty;
+                    }
                     return Values.ToCsv(MpCsvFormatProperties.DefaultBase64Value);
                 }
                 return _value;
@@ -165,6 +187,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsChecked { get; set; }
 
         public bool IsEnabled { get; set; } = true;
+
 
         public MpSearchCriteriaUnitFlags UnitType { get; set; }
 
@@ -272,7 +295,7 @@ namespace MonkeyPaste.Avalonia {
                     //}
                     if(!IsSelected) {
                         // clear unselected sub-trees
-                        Items.Clear();
+                        //Items.Clear();
                     }
 
                     HostCriteriaItem.OnPropertyChanged(nameof(HostCriteriaItem.Items));
@@ -292,7 +315,11 @@ namespace MonkeyPaste.Avalonia {
                         // where collection handles ntf from adv search opened msg
                         break;
                     }
-                    HostCriteriaItem.NotifyValueChanged();
+                    if(Validate()) {
+                        // only notify when values are valid
+                        HostCriteriaItem.NotifyValueChanged();
+                    }
+                    
                     break;
                 case nameof(IsBusy):
                     if(Parent == null) {
@@ -303,10 +330,78 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsDropDownOpen):
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsVisible)));
                     break;
+                case nameof(ValidationText):
+                    if(IsValid) {
+                        IsValids.ForEach(x => x = true);
+                    }
+                    break;
             }
         }
 
+        private bool Validate() {
+            ValidationText = string.Empty;
 
+            if(string.IsNullOrEmpty(Value)) {
+                return true;
+            }
+
+            if(UnitType.IsUnsignedNumeric()) {
+                string non_numeric_msg = "Value must contain only numbers or '.-'";
+                var notNumRegEx = MpRegEx.RegExLookup[MpRegExType.Is_NOT_Number];
+
+
+                Tuple<double, double> value_range = UnitType.GetNumericBounds();
+
+                string out_of_range_msg = $"Value must be from {value_range.Item1} to {value_range.Item2}";
+                if (FilterValue.IsMultiValue()) {
+                    // multi-value 
+                    var is_not_number_idxs = Values.Where(x => notNumRegEx.IsMatch(x)).Select(x=>Values.IndexOf(x)).ToList();
+                    if(is_not_number_idxs.Count > 0) {
+                        // non-number characters
+                        IsValids.ForEach((x, idx) => x = is_not_number_idxs.Contains(idx));
+                        ValidationText = non_numeric_msg;
+                    } else {
+                        // out-of-range values
+                        try {
+                            var numeric_vals = Values.Select(x => double.Parse(x)).ToList();
+                            var out_of_range_idxs = numeric_vals.Where(x => x < value_range.Item1 || x > value_range.Item2).Select(x => numeric_vals.IndexOf(x)).ToList();
+                            if(out_of_range_idxs.Count > 0) {
+                                IsValids.ForEach((x, idx) => x = out_of_range_idxs.Contains(idx));
+                                ValidationText = out_of_range_msg;
+                            }
+                        } catch(Exception ex) {
+                            MpConsole.WriteTraceLine($"Error converting values '{Value}'.", ex);
+                            ValidationText = "Unknown error";
+                        }
+                    }
+                } else {
+                    // single value
+                    bool is_not_number = notNumRegEx.IsMatch(Value);
+                    if (is_not_number) {
+                        // non-number characters
+                        ValidationText = non_numeric_msg;
+                    } else {
+                        // out-of-range values
+                        try {
+                            double numeric_val = double.Parse(Value);
+                            if(numeric_val < value_range.Item1 || numeric_val > value_range.Item2) {
+                                ValidationText = out_of_range_msg;
+                            }
+                        } catch (Exception ex) {
+                            MpConsole.WriteTraceLine($"Error converting values '{Value}'.", ex);
+                            ValidationText = "Unknown error";
+                        }
+                    }
+                }
+            } else if(UnitType.HasFlag(MpSearchCriteriaUnitFlags.Hex)) {
+                string invalid_hex_msg = "Must be a hex (6 or 8 value) string starting with '#'";
+                if(!Value.IsStringHexColor()) {
+                    ValidationText = invalid_hex_msg;
+                }
+            }
+
+            return IsValid;
+        }
 
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             //OnPropertyChanged(nameof(Items));

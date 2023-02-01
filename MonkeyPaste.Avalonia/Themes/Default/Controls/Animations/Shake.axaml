@@ -5,7 +5,6 @@
     <Style Selector=":is(Button):pointerover.shakeOver, Image:pointerover.shakeOver">
         <Style.Animations>
             <Animation Duration="0:0:1.0"
-                       Easing="QuarticEaseInOut"
                        FillMode="None"
                        IterationCount="Infinite">
                 <KeyFrame Cue="0%">

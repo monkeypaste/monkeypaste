@@ -22,6 +22,7 @@
             <Setter Property="FontFamily"
                     Value="Calibri" />
         </Style>
+        <!--  CRITIERA ITEM  -->
         <Style Selector="ListBoxItem">
             <Setter Property="HorizontalContentAlignment"
                     Value="Left" />
@@ -38,10 +39,6 @@
                     Value="{Binding CriteriaItemBorder}" />
             <Setter Property="BorderBrush"
                     Value="Gainsboro" />
-            <!--<Setter Property="local:MpAvSizeObserver.IsEnabled"
-                    Value="True" />
-            <Setter Property="local:MpAvSizeObserver.ObservedHeight"
-                    Value="{Binding ObservedSearchCriteriaListBoxItemHeight, Mode=TwoWay}" />-->
         </Style>
 
         <Style Selector="ListBox:not(.optionsList) ListBoxItem:pointerover">
@@ -54,11 +51,11 @@
             <Setter Property="Width"
                     Value="{Binding QueryTrayScreenWidth, Source={x:Static local:MpAvClipTrayViewModel.Instance}}" />
         </Style>
-        <Style Selector="ListBoxItem:nth-child(odd) local|MpAvSearchCriteriaItemView">
+        <Style Selector="ListBoxItem:nth-child(even) local|MpAvSearchCriteriaItemView">
             <Setter Property="Background"
                     Value="{DynamicResource SearchCriteriaRowBgBrush1}" />
         </Style>
-        <Style Selector="ListBoxItem:nth-child(even) local|MpAvSearchCriteriaItemView">
+        <Style Selector="ListBoxItem:nth-child(odd) local|MpAvSearchCriteriaItemView">
             <Setter Property="Background"
                     Value="{DynamicResource SearchCriteriaRowBgBrush2}" />
         </Style>
@@ -70,28 +67,66 @@
             <Setter Property="BorderBrush"
                     Value="Red" />
         </Style>
+
+        <!--  ADD/REMOVE BUTTONS  -->
+
+        <Style Selector="Button.addRemoveBtn">
+            <Setter Property="Margin"
+                    Value="3,0" />
+            <Setter Property="Width"
+                    Value="25" />
+            <Setter Property="Height"
+                    Value="25" />
+            <Setter Property="BorderThickness"
+                    Value="2" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+        </Style>
+
+        <Style Selector="Button.addRemoveBtn Border">
+            <Setter Property="BorderThickness"
+                    Value="1" />
+            <Setter Property="BorderBrush"
+                    Value="DimGray" />
+            <Setter Property="CornerRadius"
+                    Value="2" />
+        </Style>
+        <Style Selector="Button.addRemoveBtn:pointerover Border">
+            <Setter Property="BorderBrush"
+                    Value="LightGray" />
+        </Style>
+        <Style Selector="Button.addRemoveBtn Image">
+            <Setter Property="Stretch"
+                    Value="Fill" />
+        </Style>
     </local:MpAvUserControl.Styles>
-    <!--<ScrollViewer>-->
-    <ListBox x:Name="SearchCriteriaListBox"
-             MaxHeight="{Binding MaxSearchCriteriaListBoxHeight}"
-             Height="{Binding BoundCriteriaListBoxScreenHeight, Mode=TwoWay}"
-             Background="Transparent"
-             BorderThickness="0"
-             BorderBrush="Black"
-             Items="{Binding SortedItems}"
-             SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
-             SelectionMode="Single"
-             HorizontalAlignment="Stretch"
-             VerticalAlignment="Stretch"
-             ScrollViewer.VerticalScrollBarVisibility="Auto"
-             ScrollViewer.HorizontalScrollBarVisibility="Hidden">
-        <ListBox.ItemTemplate>
-            <DataTemplate>
-                <local:MpAvSearchCriteriaItemView BorderThickness="0"
-                                                  Height="{Binding CriteriaItemHeight}"
-                                                  DataContext="{Binding}" />
-            </DataTemplate>
-        </ListBox.ItemTemplate>
-    </ListBox>
-    <!--</ScrollViewer>-->
+    <StackPanel Orientation="Vertical">
+        <local:MpAvSearchCriteriaHeaderView Background="{DynamicResource SearchCriteriaRowBgBrush1}"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Stretch" />
+        <ScrollViewer MaxHeight="{Binding MaxSearchCriteriaListBoxHeight}"
+                      VerticalAlignment="Top"
+                      HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Auto">
+            <ListBox x:Name="SearchCriteriaListBox"
+                     Background="Transparent"
+                     BorderThickness="0"
+                     BorderBrush="Black"
+                     Items="{Binding SortedItems}"
+                     SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                     SelectionMode="Single"
+                     HorizontalAlignment="Stretch"
+                     VerticalAlignment="Top"
+                     ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <local:MpAvSearchCriteriaItemView BorderThickness="0"
+                                                          Height="{Binding CriteriaItemHeight}"
+                                                          DataContext="{Binding}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </ScrollViewer>
+    </StackPanel>
 </local:MpAvUserControl>

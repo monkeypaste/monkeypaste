@@ -77,9 +77,9 @@ namespace MonkeyPaste {
             if (!string.IsNullOrEmpty(qi.MatchValue)) {
                 string searchOp = "like";
                 string escapeStr = "";
-                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.CaseSensitive)) {
+                if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.CaseSensitive)) {
                     searchOp = "=";
-                } else if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.Regex)) {
+                } else if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.Regex)) {
                     searchOp = "REGEXP";
                 } else {
                     escapeStr = "%";
@@ -94,53 +94,53 @@ namespace MonkeyPaste {
                 if (searchText.Contains("'")) {
                     searchText = searchText.Replace("'", "''");
                 }
-                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.Title)) {
+                if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.Title)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("Title"), searchOp, escapeStr, searchText, escapeClause));
                 }
-                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.Content)) {
+                if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.Content)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("ItemData"), searchOp, escapeStr, searchText, escapeClause));
                 }
-                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.Url)) {
+                if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.Url)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("UrlPath"), searchOp, escapeStr, searchText, escapeClause));
                 }
-                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.UrlTitle)) {
+                if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.UrlTitle)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("UrlTitle"), searchOp, escapeStr, searchText, escapeClause));
                 }
-                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.AppName)) {
+                if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.AppName)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("AppName"), searchOp, escapeStr, searchText, escapeClause));
                 }
-                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.AppPath)) {
+                if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.AppPath)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("AppPath"), searchOp, escapeStr, searchText, escapeClause));
                 }
-                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.Meta)) {
+                if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.Meta)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("ItemMetaData"), searchOp, escapeStr, searchText, escapeClause));
                 }
-                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.DeviceName)) {
+                if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.DeviceName)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("DeviceName"), searchOp, escapeStr, searchText, escapeClause));
                 }
-                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.DeviceType)) {
+                if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.DeviceType)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("DeviceType"), searchOp, escapeStr, searchText, escapeClause));
                 }
 
-                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.Time)) {
-                    if (qi.TimeFlags.HasFlag(MpDateTimeQueryType.After)) {
-                        searchOp = ">";
-                    } else if (qi.TimeFlags.HasFlag(MpDateTimeQueryType.Before)) {
-                        searchOp = "<";
-                    } else {
-                        searchOp = "=";
-                    }
-                    searchText = DateTime.Parse(searchText).Ticks.ToString();
-                    filters.Add(string.Format(@"{0} {1} {2}", CaseFormat("CopyDateTime"), searchOp, searchText));
-                }
+                //if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.Time)) {
+                //    if (qi.TimeFlags.HasFlag(MpDateTimeQueryType.After)) {
+                //        searchOp = ">";
+                //    } else if (qi.TimeFlags.HasFlag(MpDateTimeQueryType.Before)) {
+                //        searchOp = "<";
+                //    } else {
+                //        searchOp = "=";
+                //    }
+                //    searchText = DateTime.Parse(searchText).Ticks.ToString();
+                //    filters.Add(string.Format(@"{0} {1} {2}", CaseFormat("CopyDateTime"), searchOp, searchText));
+                //}
             }
-            if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.TextType)) {
+            if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.TextType)) {
                 types.Add(string.Format(@"e_MpCopyItemType='{0}'", MpCopyItemType.Text.ToString()));
             }
-            if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.FileType)) {
+            if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.FileType)) {
                 types.Add(string.Format(@"e_MpCopyItemType='{0}'", MpCopyItemType.FileList.ToString()));
             }
-            if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.ImageType)) {
+            if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.ImageType)) {
                 types.Add(string.Format(@"e_MpCopyItemType='{0}'", MpCopyItemType.Image.ToString()));
             }
 
@@ -216,9 +216,9 @@ namespace MonkeyPaste {
             if (!string.IsNullOrEmpty(qi.MatchValue)) {
                 string searchOp = "like";
                 string escapeStr = "";
-                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.CaseSensitive)) {
+                if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.CaseSensitive)) {
                     searchOp = "=";
-                } else if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.Regex)) {
+                } else if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.Regex)) {
                     searchOp = "REGEXP";
                 } else {
                     escapeStr = "%";
@@ -233,53 +233,53 @@ namespace MonkeyPaste {
                 if (searchText.Contains("'")) {
                     searchText = searchText.Replace("'", "''");
                 }
-                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.Title)) {
+                if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.Title)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("Title"), searchOp, escapeStr, searchText, escapeClause));
                 }
-                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.Content)) {
+                if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.Content)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("ItemData"), searchOp, escapeStr, searchText, escapeClause));
                 }
-                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.Url)) {
+                if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.Url)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("UrlPath"), searchOp, escapeStr, searchText, escapeClause));
                 }
-                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.UrlTitle)) {
+                if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.UrlTitle)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("UrlTitle"), searchOp, escapeStr, searchText, escapeClause));
                 }
-                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.AppName)) {
+                if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.AppName)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("AppName"), searchOp, escapeStr, searchText, escapeClause));
                 }
-                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.AppPath)) {
+                if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.AppPath)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("AppPath"), searchOp, escapeStr, searchText, escapeClause));
                 }
-                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.Meta)) {
+                if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.Meta)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("ItemMetaData"), searchOp, escapeStr, searchText, escapeClause));
                 }
-                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.DeviceName)) {
+                if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.DeviceName)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("DeviceName"), searchOp, escapeStr, searchText, escapeClause));
                 }
-                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.DeviceType)) {
+                if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.DeviceType)) {
                     filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("DeviceType"), searchOp, escapeStr, searchText, escapeClause));
                 }
 
-                if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.Time)) {
-                    if (qi.TimeFlags.HasFlag(MpDateTimeQueryType.After)) {
-                        searchOp = ">";
-                    } else if (qi.TimeFlags.HasFlag(MpDateTimeQueryType.Before)) {
-                        searchOp = "<";
-                    } else {
-                        searchOp = "=";
-                    }
-                    searchText = DateTime.Parse(searchText).Ticks.ToString();
-                    filters.Add(string.Format(@"{0} {1} {2}", CaseFormat("CopyDateTime"), searchOp, searchText));
-                }
+                //if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.Time)) {
+                //    if (qi.TimeFlags.HasFlag(MpDateTimeQueryType.After)) {
+                //        searchOp = ">";
+                //    } else if (qi.TimeFlags.HasFlag(MpDateTimeQueryType.Before)) {
+                //        searchOp = "<";
+                //    } else {
+                //        searchOp = "=";
+                //    }
+                //    searchText = DateTime.Parse(searchText).Ticks.ToString();
+                //    filters.Add(string.Format(@"{0} {1} {2}", CaseFormat("CopyDateTime"), searchOp, searchText));
+                //}
             }
-            if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.TextType)) {
+            if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.TextType)) {
                 types.Add(string.Format(@"e_MpCopyItemType='{0}'", MpCopyItemType.Text.ToString()));
             }
-            if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.FileType)) {
+            if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.FileType)) {
                 types.Add(string.Format(@"e_MpCopyItemType='{0}'", MpCopyItemType.FileList.ToString()));
             }
-            if (qi.FilterFlags.HasFlag(MpContentQueryBitFlags.ImageType)) {
+            if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.ImageType)) {
                 types.Add(string.Format(@"e_MpCopyItemType='{0}'", MpCopyItemType.Image.ToString()));
             }
 

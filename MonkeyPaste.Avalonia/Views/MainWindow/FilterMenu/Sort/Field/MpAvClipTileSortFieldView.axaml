@@ -33,7 +33,7 @@
                       HorizontalContentAlignment="Left"
                       VerticalContentAlignment="Center"
                       SelectedIndex="{Binding SelectedSortTypeIdx, Mode=TwoWay}"
-                      Items="{Binding ., Converter={StaticResource EnumToLabelCollectionConverter}, ConverterParameter=MonkeyPaste.MpContentSortType|omit}" />
+                      Items="{Binding SortLabels}" />
         </local:MpAvClipBorder>
     </StackPanel>
 </local:MpAvUserControl>

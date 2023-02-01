@@ -31,7 +31,7 @@ namespace MonkeyPaste.Common {
         WholeWord = 16384,
         DeviceType = 32768,
         DeviceName = 65536,
-        MatchValue = 131072,
+        //MatchValue = 131072,
         DateTime = 262_144,
         DateTimeRange = 524_288,
 
@@ -65,7 +65,11 @@ namespace MonkeyPaste.Common {
         Days = 1_099_511_627_776,
         Weeks = 2_199_023_255_552,
         Months = 4_398_046_511_104,
-        Years = 8_796_093_022_208, //45
+        Years = 8_796_093_022_208, //45 8796093022208
+
+        And = 17_592_186_044_416,
+        Or = 35_184_372_088_832,
+        Not = 70_368_744_177_664
     }
 
     public static class MpQueryEnumExtensions {
@@ -79,13 +83,13 @@ namespace MonkeyPaste.Common {
     }
 
     // Criteria Item Flags
-    public enum MpDateTimeQueryType {
-        None = 0,
-        Exactly,
-        Before,
-        After,
-        Between
-    }
+    //public enum MpDateTimeQueryType {
+    //    None = 0,
+    //    Exactly,
+    //    Before,
+    //    After,
+    //    Between
+    //}
 
     public enum MpLogicalQueryType {
         None = 0,
@@ -94,13 +98,13 @@ namespace MonkeyPaste.Common {
         Not
     }
 
-    public enum MpTextQueryType {
-        None = 0,
-        Matches,
-        Contains,
-        BeginsWith,
-        EndsWith,
-        RegEx
-    }
+    //public enum MpTextQueryType {
+    //    None = 0,
+    //    Matches,
+    //    Contains,
+    //    BeginsWith,
+    //    EndsWith,
+    //    RegEx
+    //}
 
 }

@@ -15,7 +15,7 @@ namespace MonkeyPaste.Common {
         public static Dictionary<MpFileOptionType, IEnumerable<string>> ExtLookup {
             get {
                 if (_extLookup == null) {
-                    _extLookup = new Dictionary<MpFileOptionType, IEnumerable<string>>() {
+                    var result = new Dictionary<MpFileOptionType, IEnumerable<string>>() {
                         {MpFileOptionType.Audio,new string[]{ "aif", "cda", "mid", "midi", "mp3", "mpa", "ogg", "wav", "wma", "wpl" } },
                         {MpFileOptionType.Compressed,new string[]{ "7z", "arj", "deb", "pkg", "rar", "rpm", "tar", "gz", "z"} },
                         {MpFileOptionType.DiscAndMedia,new string[]{ "7z", "arj", "deb", "pkg", "rar", "rpm", "tar", "gz", "z" } },
@@ -30,9 +30,14 @@ namespace MonkeyPaste.Common {
                         {MpFileOptionType.Programming,new string[]{"c", "cgi", "pl", "class", "cpp", "cs", "h", "java", "php", "py", "sh", "swift", "vb"} },
                         {MpFileOptionType.Spreadsheet,new string[]{ "ods", "xls", "xlsm", "xlsx" } },
                         {MpFileOptionType.System,new string[]{"bak", "cab", "cfg", "cpl", "cur", "dll", "dmp", "drv", "icns", "ico", "ini", "lnk", "msi", "sys", "tmp"} },
-                        {MpFileOptionType.Video,new string[]{"3g2", "3gp", "avi", "flv", "h264", "m4v", "mkv", "mov", "mp4", "mpg", "mpeg", "rm", "swf", "vob", "webm","wmv"} },
-                        {MpFileOptionType.UserDefined,MpCommonTools.Services.UserProvidedFileExts.UserDefineExtPsv.SplitNoEmpty("|") },
+                        {MpFileOptionType.Video,new string[]{"3g2", "3gp", "avi", "flv", "h264", "m4v", "mkv", "mov", "mp4", "mpg", "mpeg", "rm", "swf", "vob", "webm","wmv"} }
                     };
+                    if(MpCommonTools.Services == null ||
+                        MpCommonTools.Services.UserProvidedFileExts == null) {
+                        return result;
+                    }
+                    result.Add( MpFileOptionType.UserDefined,MpCommonTools.Services.UserProvidedFileExts.UserDefineExtPsv.SplitNoEmpty("|") );
+                    _extLookup = result;
                 }
                 return _extLookup;
             }
@@ -40,6 +45,6 @@ namespace MonkeyPaste.Common {
 
         private static string _allExtPst;
         public static string AllExtPsv =>
-            _allExtPst ?? (_allExtPst = string.Join("|", ExtLookup.SelectMany(x => x.Value).Distinct()));
+            _allExtPst == null ? string.Empty : string.Join("|", ExtLookup.SelectMany(x => x.Value).Distinct());
     }
 }

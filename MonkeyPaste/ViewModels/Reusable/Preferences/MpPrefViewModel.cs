@@ -302,7 +302,7 @@ namespace MonkeyPaste {
         #region User Properties          
 
         public bool TrackExternalPasteHistory { get; set; } = false;
-        public string UserDefinedFileExtensionsPsv { get; set; } 
+        public string UserDefinedFileExtensionsPsv { get; set; } = string.Empty;
         public int MaxUndoLimit { get; set; } = 100;
 
         public string RecentFindTexts { get; set; } = string.Empty;

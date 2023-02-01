@@ -168,8 +168,6 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\ComboBoxItem.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\DefaultControls.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\GridSplitter.axaml" />
-    <AvaloniaXaml Remove="Themes\Default\Controls\ListBox.axaml" />
-    <AvaloniaXaml Remove="Themes\Default\Controls\ListBoxItem.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvActionDesigner.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvActionDesignerItemColors.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvActionProperty.axaml" />
@@ -192,7 +190,6 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\TextBlock.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TextBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ToolTip.axaml" />
-    <AvaloniaXaml Remove="Themes\Default\Controls\TreeViewItem.axaml" />
     <AvaloniaXaml Remove="Themes\Default\DefaultLight.axaml" />
     <AvaloniaXaml Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\MpAvActionPropertyListBoxView.axaml" />
     <AvaloniaXaml Remove="Views\MainWindow\Sidebar\SidebarItems\ClipboardHandlers\Selector\MpAvClipboardHandlerItemSelectorView.axaml" />
@@ -1016,14 +1013,8 @@
     <AvaloniaResource Include="Themes\Default\Controls\MpAvPinTray.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\TextBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ToolTip.axaml" />
-    <AvaloniaResource Include="Themes\Default\Controls\ListBoxItem.axaml">
-      
-    </AvaloniaResource>
     <AvaloniaResource Include="Themes\Default\Controls\MpAvMainWindow.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\TextBlock.axaml">
-      
-    </AvaloniaResource>
-    <AvaloniaResource Include="Themes\Default\Controls\TreeViewItem.axaml">
       
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Default\Controls\PathIcon.axaml">
@@ -1036,9 +1027,6 @@
       
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Default\Controls\MpAvClipTile.axaml">
-      
-    </AvaloniaResource>
-    <AvaloniaResource Include="Themes\Default\Controls\ListBox.axaml">
       
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Default\DefaultLight.axaml">
@@ -1132,6 +1120,9 @@
     </Compile>
     <Compile Update="Views\MainWindow\FilterMenu\MpAvFilterMenuView.axaml.cs">
       <DependentUpon>MpAvFilterMenuView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MainWindow\FilterMenu\Search\CriteriaList\Header\MpAvSearchCriteriaHeaderView.axaml.cs">
+      <DependentUpon>MpAvSearchCriteriaHeaderView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\MainWindow\FilterMenu\Sort\Direction\MpAvClipTileSortDirectionView.axaml.cs">
       <DependentUpon>MpAvClipTileSortDirectionView.axaml</DependentUpon>

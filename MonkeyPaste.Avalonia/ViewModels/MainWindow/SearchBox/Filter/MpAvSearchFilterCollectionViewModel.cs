@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
         object MpIQueryInfoValueProvider.Source => this;
         string MpIQueryInfoValueProvider.SourcePropertyName => nameof(FilterType);
 
-        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpIQueryInfo.FilterFlags);
+        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpIQueryInfo.QueryFlags);
 
         #endregion
 
