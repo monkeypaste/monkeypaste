@@ -33,6 +33,7 @@ namespace MonkeyPaste.Avalonia {
         public MpMenuItemViewModel PopupMenuViewModel {
             get {
                 return new MpMenuItemViewModel() {
+                    ParentObj = this,
                     SubItems = Filters.Select(x => x.MenuItemViewModel).ToList()
                 };
             }

@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste {
-    public interface MpITreeItemViewModel : MpIViewModel {
-        bool IsExpanded { get; set; }
+
+    public interface MpITreeItemViewModel : MpIExpandableViewModel {
 
         MpITreeItemViewModel ParentTreeItem { get; }
 

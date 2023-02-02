@@ -128,13 +128,20 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public MpAvTagTileViewModel LastSelectedLinkItem =>
+            Items
+            .Where(x => x.IsLinkTag)
+            .OrderByDescending(x => x.LastSelectedDateTime)
+            .FirstOrDefault();
+        
         public MpAvTagTileViewModel LastSelectedActionItem =>
             Items
-            .Where(x => x.IsActionTag)
-            .OrderByDescending(x => LastSelectedDateTime)
+            .Where(x => x.IsNotGroupTag)
+            .OrderByDescending(x => x.LastSelectedDateTime)
             .FirstOrDefault();
 
-        public IEnumerable<MpAvTagTileViewModel> PinnedItems => Items.Where(x => x.IsModelPinned).OrderBy(x=>x.PinSortIdx);
+        public IEnumerable<MpAvTagTileViewModel> PinnedItems => 
+            Items.Where(x => x.IsModelPinned).OrderBy(x=>x.PinSortIdx);
 
         public MpAvTagTileViewModel SelectedPinnedItem {
             get => PinnedItems.FirstOrDefault(x => x.IsSelected);
@@ -144,13 +151,15 @@ namespace MonkeyPaste.Avalonia {
                 }}
         }
 
-        public IEnumerable<MpAvTagTileViewModel> RootItems => Items.Where(x => x.ParentTagId == 0);
+        public IEnumerable<MpAvTagTileViewModel> RootItems => 
+            Items.Where(x => x.ParentTagId == 0);
 
         public MpAvTagTileViewModel AllTagViewModel { get; set; }
         public MpAvTagTileViewModel RootGroupTagViewModel { get; set; }
         public MpAvTagTileViewModel HelpTagViewModel { get; set; }
 
-        public IList<MpMenuItemViewModel> ContentMenuItemViewModels => AllTagViewModel.ContextMenuViewModel.SubItems;
+        public IList<MpMenuItemViewModel> ContentMenuItemViewModels => 
+            AllTagViewModel.ContextMenuViewModel.SubItems;
 
         #endregion
 
@@ -553,7 +562,9 @@ namespace MonkeyPaste.Avalonia {
                 }
                 IsSelecting = false;
 
-                if(SelectedItem != null && SelectedItem.IsActionTag) {
+                MpMessenger.SendGlobal(MpMessageType.TagSelectionChanged);
+
+                if(SelectedItem != null && SelectedItem.IsNotGroupTag) {
                     if(SelectedItem.IsQueryTag) {
                         MpAvSearchCriteriaItemCollectionViewModel.Instance
                             .SelectAdvancedSearchCommand.Execute(SelectedItem.TagId);

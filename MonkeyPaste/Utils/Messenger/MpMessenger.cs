@@ -79,6 +79,8 @@ namespace MonkeyPaste {
         AdvancedSearchOpened,
         AdvancedSearchClosed,
 
+        TagSelectionChanged,
+
         SelectNextMatch,
         SelectPreviousMatch,
 

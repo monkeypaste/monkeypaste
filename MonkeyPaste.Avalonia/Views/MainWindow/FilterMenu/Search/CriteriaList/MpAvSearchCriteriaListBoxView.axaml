@@ -104,29 +104,30 @@
         <local:MpAvSearchCriteriaHeaderView Background="{DynamicResource SearchCriteriaRowBgBrush1}"
                                             HorizontalAlignment="Stretch"
                                             VerticalAlignment="Stretch" />
-        <ScrollViewer MaxHeight="{Binding MaxSearchCriteriaListBoxHeight}"
+        <!--<ScrollViewer MaxHeight="{Binding MaxSearchCriteriaListBoxHeight}"
                       VerticalAlignment="Top"
                       HorizontalScrollBarVisibility="Disabled"
-                      VerticalScrollBarVisibility="Auto">
-            <ListBox x:Name="SearchCriteriaListBox"
-                     Background="Transparent"
-                     BorderThickness="0"
-                     BorderBrush="Black"
-                     Items="{Binding SortedItems}"
-                     SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
-                     SelectionMode="Single"
-                     HorizontalAlignment="Stretch"
-                     VerticalAlignment="Top"
-                     ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <local:MpAvSearchCriteriaItemView BorderThickness="0"
-                                                          Height="{Binding CriteriaItemHeight}"
-                                                          DataContext="{Binding}" />
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </ScrollViewer>
+                      VerticalScrollBarVisibility="Auto">-->
+        <ListBox x:Name="SearchCriteriaListBox"
+                 MaxHeight="{Binding MaxSearchCriteriaListBoxHeight}"
+                 Background="Transparent"
+                 BorderThickness="0"
+                 BorderBrush="Black"
+                 Items="{Binding SortedItems}"
+                 SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                 SelectionMode="Single"
+                 HorizontalAlignment="Stretch"
+                 VerticalAlignment="Top"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                 ScrollViewer.HorizontalScrollBarVisibility="Auto">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <local:MpAvSearchCriteriaItemView BorderThickness="0"
+                                                      Height="{Binding CriteriaItemHeight}"
+                                                      DataContext="{Binding}" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <!--</ScrollViewer>-->
     </StackPanel>
 </local:MpAvUserControl>

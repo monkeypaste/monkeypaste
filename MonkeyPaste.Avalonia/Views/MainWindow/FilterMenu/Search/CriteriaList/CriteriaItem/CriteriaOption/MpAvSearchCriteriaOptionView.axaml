@@ -78,6 +78,9 @@
                         <DataTemplate x:Key="TextOptionTemplate"
                                       DataType="local:MpAvSearchCriteriaOptionViewModel">
                             <DockPanel>
+                              
+                                <!--  CASE SENSITIVE CHECKBOX  -->
+                              
                                 <CheckBox VerticalAlignment="Center"
                                           DockPanel.Dock="Right"
                                           Margin="0,0,5,0"
@@ -91,6 +94,8 @@
                                                Text="Case Sensitive?" />
                                 </CheckBox>
 
+                                <!--  TEXTBOX BORDER  -->
+
                                 <local:MpAvClipBorder Margin="5"
                                                       Padding="5"
                                                       HorizontalAlignment="Stretch"
@@ -100,6 +105,7 @@
                                                       BorderBrush="White">
                                     <TextBox Padding="5,0,0,0"
                                              MinWidth="500"
+                                             BorderThickness="0"
                                              ClipToBounds="False"
                                              HorizontalAlignment="Stretch"
                                              HorizontalContentAlignment="Left"

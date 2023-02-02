@@ -28,7 +28,6 @@ namespace MonkeyPaste.Avalonia {
 
         private static List<MenuItem> openSubMenuItems = new List<MenuItem>();
 
-
         public static void CloseMenu() {
             if (_cmInstance == null) {
                 return;
@@ -89,6 +88,22 @@ namespace MonkeyPaste.Avalonia {
                 false,
                 false,
                 BindingMode.TwoWay);
+
+        #endregion
+
+        #region SuppressDefaultLeftClick AvaloniaProperty
+        public static bool GetSuppressDefaultLeftClick(AvaloniaObject obj) {
+            return obj.GetValue(SuppressDefaultLeftClickProperty);
+        }
+
+        public static void SetSuppressDefaultLeftClick(AvaloniaObject obj, bool value) {
+            obj.SetValue(SuppressDefaultLeftClickProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> SuppressDefaultLeftClickProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>(
+                "SuppressDefaultLeftClick",
+                true);
 
         #endregion
 
@@ -232,11 +247,12 @@ namespace MonkeyPaste.Avalonia {
             if(control == null) {
                 Debugger.Break();
             }
+            object dc = GetControlDataContext(control);
             bool is_open = _cmInstance.IsOpen;
-            if (control.DataContext is MpIContextMenuViewModel cmvm) {
+            if (dc is MpIContextMenuViewModel cmvm) {
                 cmvm.IsContextMenuOpen = is_open;
             }
-            if (control.DataContext is MpIPopupMenuViewModel pumvm) {
+            if (dc is MpIPopupMenuViewModel pumvm) {
                 pumvm.IsPopupMenuOpen = is_open;
             }
             SetIsOpen(control, is_open);
@@ -254,7 +270,6 @@ namespace MonkeyPaste.Avalonia {
                     control.AttachedToVisualTree += HostControl_AttachedToVisualHandler;
                 }
                 control.DetachedFromVisualTree += HostControl_DetachedToVisualHandler;
-                //mi.ContextMenu.ContextMenuOpening += ContextMenu_ContextMenuOpening;
                 control.AddHandler(Control.PointerPressedEvent, HostControl_PointerPressed, RoutingStrategies.Tunnel);
             }
         }
@@ -278,17 +293,18 @@ namespace MonkeyPaste.Avalonia {
             }
             e.Handled = false;
 
+            object dc = GetControlDataContext(control);
             // HANDLE SELECTION
 
             bool wait_for_selection = false;
-            if (control.DataContext is MpISelectorItemViewModel sivm) {
+            if (dc is MpISelectorItemViewModel sivm) {
                 if (e.IsLeftPress(control) || GetSelectOnRightClick(control)) {
-                    if (sivm.Selector.SelectedItem != control.DataContext) {
+                    if (sivm.Selector.SelectedItem != dc) {
                         wait_for_selection = true;
                     }
-                    sivm.Selector.SelectedItem = control.DataContext;
+                    sivm.Selector.SelectedItem = dc;
                 }
-            } else if (control.DataContext is MpISelectableViewModel svm) {
+            } else if (dc is MpISelectableViewModel svm) {
                 if (e.IsLeftPress(control) || GetSelectOnRightClick(control)) {
                     if (!svm.IsSelected) {
                         wait_for_selection = true;
@@ -307,11 +323,11 @@ namespace MonkeyPaste.Avalonia {
             if (e.IsLeftPress(control) && !GetSuppressMenuLeftClick(control)) {
                 if (e.ClickCount == 2 && GetDoubleClickCommand(control) != null) {
                     GetDoubleClickCommand(control).Execute(null);
-                } else if (control.DataContext is MpIPopupMenuViewModel pumvm) {
+                } else if (dc is MpIPopupMenuViewModel pumvm) {
                     mivm = pumvm.PopupMenuViewModel;
                 }
             } else if (e.IsRightPress(control)) {
-                if (control.DataContext is MpIContextMenuViewModel cmvm) {
+                if (dc is MpIContextMenuViewModel cmvm) {
                     mivm = cmvm.ContextMenuViewModel;
                 }
             }
@@ -321,13 +337,21 @@ namespace MonkeyPaste.Avalonia {
                 mivm = fmivm;
             }
 
+            //e.Handled = 
+            //    (GetSuppressDefaultRightClick(control) && e.IsRightPress(control)) ||
+            //    (GetSuppressDefaultLeftClick(control) && e.IsLeftPress(control));
+
+
+            //if (mivm == null || mivm.SubItems == null) {
+            //    return;
+            //}
+
             if (mivm == null || mivm.SubItems == null) {
                 e.Handled = GetSuppressDefaultRightClick(control) && e.IsRightPress(control);
                 return;
             }
 
             e.Handled = true;
-
             // CREATE & SHOW MENU
 
             ShowMenu(control, mivm, e.GetPosition(control).ToPortablePoint(), GetPlacementMode(control));
@@ -588,6 +612,9 @@ namespace MonkeyPaste.Avalonia {
             _cmInstance.PlacementTarget = control;
             _cmInstance.PlacementMode = placement;
             _cmInstance.PlacementAnchor = PopupAnchor.TopLeft;
+
+            _cmInstance.HorizontalOffset = 0;
+            _cmInstance.VerticalOffset = 0;
             if (_cmInstance.PlacementMode == PlacementMode.Pointer) {
                 _cmInstance.HorizontalOffset = offset.X;
                 _cmInstance.VerticalOffset = offset.Y;
@@ -599,6 +626,21 @@ namespace MonkeyPaste.Avalonia {
             }
             _cmInstance.Open(w);
         }
+
+        #region Helpers
+
+        private static object GetControlDataContext(Control control) {
+            if(GetForcedMenuItemViewModel(control) is MpMenuItemViewModel mivm &&
+                mivm.ParentObj is object forceDc) {
+                return forceDc;
+            }
+            if(control == null) {
+                return null;
+            }
+            return control.DataContext;
+        }
+
+        #endregion
 
         // unused
 

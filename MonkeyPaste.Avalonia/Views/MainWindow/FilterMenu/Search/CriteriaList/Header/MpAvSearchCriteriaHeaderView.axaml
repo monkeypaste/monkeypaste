@@ -8,15 +8,13 @@
                        xmlns:pcl="using:MonkeyPaste"
                        x:DataType="local:MpAvSearchCriteriaItemCollectionViewModel"
                        x:TypeArguments="local:MpAvSearchCriteriaItemCollectionViewModel"
-                       x:CompileBindings="True"
+                       x:CompileBindings="False"
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800">
     <DockPanel LastChildFill="False">
         <StackPanel DockPanel.Dock="Left"
-                    Orientation="Horizontal"
-                    x:DataType="local:MpAvTagTrayViewModel"
-                    DataContext="{x:Static local:MpAvTagTrayViewModel.Instance}">
+                    Orientation="Horizontal">
             <TextBlock FontSize="24"
                        FontWeight="Bold"
                        Foreground="Gainsboro"
@@ -25,21 +23,23 @@
                        HorizontalAlignment="Left"
                        Text="Search:" />
             <!--  ALL TAG TILE  -->
-            <Border x:DataType="local:MpAvTagTileViewModel"
-                    DataContext="{Binding AllTagViewModel}"
+            <Button x:Name="AllTagTileContainer"
                     VerticalAlignment="Center"
+                    Padding="7,3"
                     Margin="0,10,10,10">
-                <local:MpAvTagView />
-            </Border>
+                <Label DataContext="{Binding AllTagId, Converter={x:Static local:MpAvTagIdToTagTileViewModelConverter.Instance}}"
+                       Content="{Binding TagName}" />
+            </Button>
 
             <!--  SELECTED TAG TILE  -->
-            <Border x:DataType="local:MpAvTagTileViewModel"
-                    DataContext="{Binding SelectedItem}"
-                    IsVisible="{Binding !IsAllTag}"
+            <Button x:Name="SelectedTagTileContainer"
+                    Padding="7,3"
+                    IsVisible="{Binding AvailableNotAllTagId, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                     VerticalAlignment="Center"
                     Margin="0,10,10,10">
-                <local:MpAvTagView />
-            </Border>
+                <Label DataContext="{Binding AvailableNotAllTagId, Converter={x:Static local:MpAvTagIdToTagTileViewModelConverter.Instance}}"
+                       Content="{Binding TagName}" />
+            </Button>
 
         </StackPanel>
         <StackPanel DockPanel.Dock="Right"

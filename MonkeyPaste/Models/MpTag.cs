@@ -276,9 +276,7 @@ namespace MonkeyPaste {
             if(tagType == MpTagType.None) {
                 throw new Exception("TagType must be specified");
             }
-            if(tagType != MpTagType.Query) {
 
-            }
             hexColor = string.IsNullOrEmpty(hexColor) ? MpHelpers.GetRandomColor().ToHex() : hexColor;
             if(treeSortIdx < 0) {
                 if(parentTagId <= 0) {

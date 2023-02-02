@@ -2620,7 +2620,9 @@ namespace MonkeyPaste.Avalonia {
                     PinTileCommand.Execute(args);
                 }
             },
-            (args) => args != null);
+            (args) => {
+                return args != null;
+            });
         public ICommand UnpinAllCommand => new MpCommand(() => {
             int pin_count = PinnedItems.Count;
             while (pin_count > 0) {

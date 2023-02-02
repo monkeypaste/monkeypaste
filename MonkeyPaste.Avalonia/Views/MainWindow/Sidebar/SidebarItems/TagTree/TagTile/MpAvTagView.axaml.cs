@@ -21,7 +21,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
-
         #endregion
 
         public MpAvTagView() {

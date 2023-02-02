@@ -16,12 +16,32 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvSearchBoxViewModel : MpViewModelBase, 
         MpIAsyncSingletonViewModel<MpAvSearchBoxViewModel>,
+        MpIExpandableViewModel,
         MpIQueryInfoValueProvider {
         #region Private Variables
+        #endregion
+
+        #region Interfaces
+
+        #region MpIExpandableViewModel Implementation
+
+        public bool IsExpanded { get; set; }
+
+        #endregion
+
+        #region MpIQueryInfoProvider Implementation
+        object MpIQueryInfoValueProvider.Source => this;
+        string MpIQueryInfoValueProvider.SourcePropertyName => nameof(SearchText);
+
+        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpIQueryInfo.MatchValue);
+
+        #endregion
+
         #endregion
 
         #region Properties     
@@ -34,20 +54,30 @@ namespace MonkeyPaste.Avalonia {
         public MpAvSearchFilterCollectionViewModel SearchFilterCollectionViewModel => _searchFilterCollectionViewModel ?? (_searchFilterCollectionViewModel = new MpAvSearchFilterCollectionViewModel(this));
         #endregion
 
-        #region MpIQueryInfoProvider Implementation
-        object MpIQueryInfoValueProvider.Source => this;
-        string MpIQueryInfoValueProvider.SourcePropertyName => nameof(SearchText);
-
-        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpIQueryInfo.MatchValue);
-
-        #endregion
 
         #region Layout
-
+        public GridLength SearchIconColumnWidth {
+            get {
+                if (IsExpandAnimating) {
+                    return new GridLength(0.15, GridUnitType.Star);
+                }
+                return new GridLength(1, GridUnitType.Star);
+            }
+        }
+        public GridLength SearchBoxColumnWidth {
+            get {
+                if (IsExpandAnimating) {
+                    return new GridLength(1, GridUnitType.Star);
+                }
+                return new GridLength(0, GridUnitType.Pixel);
+            }
+        }
         public GridLength ClearAndBusyColumnWidth {
             get {
                 double w = 0;
-                if (string.IsNullOrEmpty(LastSearchText) || IsSearching || HasText) {
+                if(!IsExpandAnimating) {
+                    w = 0;
+                } else if (string.IsNullOrEmpty(LastSearchText) || IsSearching || HasText) {
                     w = 15;
                 }
                 return new GridLength(w, GridUnitType.Pixel);
@@ -57,18 +87,34 @@ namespace MonkeyPaste.Avalonia {
         public GridLength NavButtonsColumnWidth {
             get {
                 double w = 0;
-                if (IsMultipleMatches) {
+                if (!IsExpandAnimating) {
+                    w = 0;
+                } else if (IsMultipleMatches) {
                     w = 20;
                 }
                 return new GridLength(w, GridUnitType.Pixel);
             }
         }
+        
 
         
 
         #endregion
 
         #region State
+        public DateTime IsExpandedChangedDateTime { get; set; }
+        public TimeSpan ExpandAnimationTimeSpan =>
+            TimeSpan.FromMilliseconds(300);
+
+        public bool IsExpandAnimating {
+            get {
+                if(DateTime.Now - IsExpandedChangedDateTime > ExpandAnimationTimeSpan) {
+                    return false;
+                }
+                return true;
+            }
+        }
+
         public ObservableCollection<string> RecentSearchTexts {
             get => new ObservableCollection<string>(MpPrefViewModel.Instance.RecentSearchTexts.Split(new string[] { MpPrefViewModel.STRING_ARRAY_SPLIT_TOKEN }, StringSplitOptions.RemoveEmptyEntries));
             set => MpPrefViewModel.Instance.RecentSearchTexts = string.Join(MpPrefViewModel.STRING_ARRAY_SPLIT_TOKEN, value);
@@ -81,6 +127,8 @@ namespace MonkeyPaste.Avalonia {
 
         public string LastSearchText { get; private set; } = string.Empty;
 
+        public bool IsToAdvancedButtonVisible =>
+            HasText || MpAvSearchCriteriaItemCollectionViewModel.Instance.IsAdvSearchActive;
         public bool IsTextBoxFocused { get; set; }
 
         public bool IsSearchValid { 
@@ -111,7 +159,17 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
+        public string SearchIconToolTipText {
+            get {
+                string tag_name =
+                    MpAvTagTrayViewModel.Instance.SelectedItem == null ? string.Empty : MpAvTagTrayViewModel.Instance.SelectedItem.TagName;
 
+                if(IsExpanded) {
+                    return $"Search Options for '{tag_name}'";
+                }
+                return $"Search '{tag_name}'...";
+            }
+        }
         public FontStyle TextBoxFontStyle {
             get {
                 if (HasText) {
@@ -203,7 +261,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-
         private void ReceiveGlobalMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.RequeryCompleted:
@@ -212,6 +269,13 @@ namespace MonkeyPaste.Avalonia {
                     if(MpAvTagTrayViewModel.Instance.SelectedItem.TagType == MpTagType.Query) {
 
                     }
+                    OnPropertyChanged(nameof(IsToAdvancedButtonVisible));
+                    break;
+                case MpMessageType.AdvancedSearchClosed:
+                case MpMessageType.AdvancedSearchOpened:
+                case MpMessageType.SearchCriteriaItemsChanged:
+                case MpMessageType.TagSelectionChanged:
+                    OnPropertyChanged(nameof(IsToAdvancedButtonVisible));
                     break;
 
             }
@@ -238,9 +302,25 @@ namespace MonkeyPaste.Avalonia {
 
                         if (HasText) {
                             //MpAvThemeViewModel.Instance.GlobalBgOpacity = double.Parse(SearchText);
+                        } else if(!SearchFilterCollectionViewModel.IsPopupMenuOpen) {
+                            IsExpanded = false;
                         }
                     }
                     OnPropertyChanged(nameof(TextBoxFontStyle));
+                    break;
+                case nameof(IsExpanded):
+                    IsExpandedChangedDateTime = DateTime.Now;
+                    OnPropertyChanged(nameof(IsExpandAnimating));
+                    Dispatcher.UIThread.Post(async () => {
+                        while(IsExpandAnimating) {
+                            await Task.Delay(50);
+                        }
+                        OnPropertyChanged(nameof(IsExpandAnimating));
+                        OnPropertyChanged(nameof(SearchIconColumnWidth));
+                        OnPropertyChanged(nameof(SearchBoxColumnWidth));
+                        OnPropertyChanged(nameof(ClearAndBusyColumnWidth));
+                        OnPropertyChanged(nameof(NavButtonsColumnWidth));
+                    });
                     break;
             }
         }
@@ -262,6 +342,11 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
+
+        public ICommand ToggleIsExpandedCommand => new MpCommand(
+            () => {
+                IsExpanded = !IsExpanded;
+            });
 
         public ICommand ClearTextCommand => new MpCommand<object>(
             (args) => {
@@ -307,7 +392,7 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 MpMessenger.SendGlobal(MpMessageType.SelectPreviousMatch);
             });
-
+        
 
 
         #endregion

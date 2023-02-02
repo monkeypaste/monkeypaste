@@ -292,7 +292,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsLinkTag => !IsQueryTag && !IsGroupTag && !IsHelpTag;
         public bool IsQueryTag => TagType == MpTagType.Query;
         public bool IsGroupTag => TagType == MpTagType.Group;
-        public bool IsActionTag => IsLinkTag || IsQueryTag;
+        public bool IsNotGroupTag => IsLinkTag || IsQueryTag;
 
         public bool IsTagNameReadOnly { get; set; } = true;
         public bool IsTagNameTextBoxFocused { get; set; } = false;
@@ -608,7 +608,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public override string ToString() {
-            return TagName;
+            return $"[{TagId}] {TagName}";
         }
 
 
@@ -987,7 +987,7 @@ namespace MonkeyPaste.Avalonia {
                  }
 
                  if (t == null) {
-                     if(TagType == MpTagType.Query) {
+                     if(childTagType == MpTagType.Query) {
                          // this should only happen from add button w/ a group tag selected
                          await MpAvSearchCriteriaItemCollectionViewModel.Instance.
                             ConvertCurrentSearchToAdvancedCommand.ExecuteAsync();
@@ -996,6 +996,7 @@ namespace MonkeyPaste.Avalonia {
                          t = await MpDataModelProvider.GetItemAsync<MpTag>(
                              MpAvSearchCriteriaItemCollectionViewModel.Instance.QueryTagId);
                          t.TreeSortIdx = Items.Count;
+                         t.ParentTagId = TagId;
                          await t.WriteToDatabaseAsync();
                      } else {
                          t = await MpTag.CreateAsync(
@@ -1003,6 +1004,15 @@ namespace MonkeyPaste.Avalonia {
                              treeSortIdx: Items.Count,
                              tagType: childTagType);
                      }
+                 }
+                 if(t != null && 
+                    t.TagType == MpTagType.Query &&
+                    (t.SortType == null || t.IsSortDescending == null)) {
+                     // ensure sort info is defined before creating vm
+
+                     t.SortType = MpAvClipTileSortFieldViewModel.Instance.SelectedSortType;
+                     t.IsSortDescending = MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending;
+                     await t.WriteToDatabaseAsync();
                  }
 
                  MpAvTagTileViewModel ttvm = await CreateChildTagTileViewModel(t);

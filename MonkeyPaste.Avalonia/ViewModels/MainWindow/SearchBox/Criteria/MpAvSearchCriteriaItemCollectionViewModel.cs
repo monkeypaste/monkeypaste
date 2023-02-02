@@ -12,7 +12,9 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvSearchCriteriaItemCollectionViewModel : 
-        MpViewModelBase, MpIQueryResultProvider {
+        MpViewModelBase,
+        MpIExpandableViewModel,
+        MpIQueryResultProvider {
 
         #region Private Variable
 
@@ -31,6 +33,12 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+        #region MpIExpandableViewModel Implementation
+
+        public bool IsExpanded { get; set; }
+
+        #endregion
 
         #region MpIQueryResultProvider Implementation
 
@@ -95,8 +103,16 @@ namespace MonkeyPaste.Avalonia {
             if(SuppressQueryChangedNotification) {
                 return;
             }
+            if(!IsExpanded && MpAvTagTrayViewModel.Instance.SelectedItem != null &&
+                MpAvTagTrayViewModel.Instance.SelectedItem.IsLinkTag) {
+                // treat expanded like is active, so if not active and tag is not query
+                // hand back to simple
+                InitializeAsync(0, false).FireAndForgetSafeAsync(this);
+                return;
+            }
             Dispatcher.UIThread.Post(() => {
-                // NOTE unlike query vm this treats forceRequery as required since value providers are internal i dunno
+                // NOTE unlike query vm this treats forceRequery as
+                // required since value providers are internal i dunno
 
                 if (forceRequery) {
                     _pageTools.AllQueryIds.Clear();
@@ -125,18 +141,43 @@ namespace MonkeyPaste.Avalonia {
             SortedItems.FirstOrDefault();
         public MpAvSearchCriteriaItemViewModel SelectedItem { get; set; }
 
+
+        public MpAvTagTileViewModel AvailableNotAllTagViewModel =>
+            AvailableNotAllTagId == 0 ? null :
+            MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == AvailableNotAllTagId);
+
         #endregion
 
         #region State
 
         public bool SuppressQueryChangedNotification { get; set; } = false;
         public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsAnyBusy);
-        public bool IsExpanded { get; set; }
         public bool HasCriteriaItems => Items.Count > 0;
+
+        public bool IsAdvSearchActive =>
+            MpPlatform.Services.Query == this;
 
         public bool IsSavedQuery => CurrentQueryTagId > 0;
 
         public bool IsPendingQuery => PendingQueryTagId > 0;
+
+        public int AllTagId =>
+            MpTag.AllTagId;
+        public int AvailableNotAllTagId {
+            get {
+                var sttvm = MpAvTagTrayViewModel.Instance.LastSelectedLinkItem;
+                if(sttvm == null ||
+                    sttvm.IsAllTag ||
+                    !sttvm.IsLinkTag) {
+                    return 0;
+                }
+                return sttvm.TagId;
+            }
+        }
+
+
+
+        public int SelectedSearchTagId { get; set; }
         #endregion
 
         #region Layout
@@ -250,6 +291,7 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
+            OnPropertyChanged(nameof(AvailableNotAllTagViewModel));
             SuppressQueryChangedNotification = false;
             MpPlatform.Services.Query.NotifyQueryChanged(true);
         }
@@ -275,11 +317,20 @@ namespace MonkeyPaste.Avalonia {
 
                     MpAvResizeExtension.ResizeByDelta(MpAvMainWindow.Instance, 0, delta_open_height,false);
                     BoundCriteriaListBoxScreenHeight = delta_open_height;
+
+                    if(QueryTagId > 0 && !HasCriteriaItems) {
+                        InitializeAsync(QueryTagId, IsPendingQuery).FireAndForgetSafeAsync(this);
+                    }
                     break;
                 case MpMessageType.AdvancedSearchClosed:
                     double delta_close_height = -BoundCriteriaListBoxScreenHeight;
                     BoundCriteriaListBoxScreenHeight = 0;
                     MpAvResizeExtension.ResizeByDelta(MpAvMainWindow.Instance, 0, delta_close_height, false);                    
+                    break;
+                case MpMessageType.RequeryCompleted:
+                case MpMessageType.TagSelectionChanged:
+                    OnPropertyChanged(nameof(AvailableNotAllTagId));
+                    OnPropertyChanged(nameof(AvailableNotAllTagViewModel));
                     break;
 
             }
@@ -501,6 +552,8 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIAsyncCommand ConvertCurrentSearchToAdvancedCommand => new MpAsyncCommand(
             async () => {
+                SelectedSearchTagId = AvailableNotAllTagId > 0 ? AvailableNotAllTagId : AllTagId;
+
                 bool is_pending = true;
                 int converted_query_tag_id = 0;
                 if(QueryTagId > 0) {
@@ -554,13 +607,42 @@ namespace MonkeyPaste.Avalonia {
                 }
             });
 
+        public ICommand SelectSearchTagCommand => new MpCommand<object>(
+            (args) => {
+                // NOTE only content-linkec tags can be search tag
+                SelectedSearchTagId = (int)args;
+                NotifyQueryChanged(true);
+            }, (args) => {
+                if(MpPlatform.Services.Query != this) {
+                    // shouldn't happend (only called from adv header)
+                    Debugger.Break();
+                    return false;
+                }
+                if(args is int tagId) {
+                    var ttvm = MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == tagId);
+                    if(ttvm == null || ttvm.TagType != MpTagType.Link) {
+                        return false;
+                    }
+                    
+                    return true;
+                }
+                return false;
+            });
+
         public ICommand SelectAdvancedSearchCommand => new MpCommand<object>(
             (args) => {
+                // NOTE only called from tag tray when query tag is selected
+                // instead of query change ntf
                 int queryTagId = 0;
                 if(args is int tagId) {
                     queryTagId = tagId;
                 }
                 IsExpanded = false;
+                
+                // NOTE since query takes have no linked content
+                // but are the selected tag treat search as from
+                // all until selected tag is changed
+                SelectedSearchTagId = AllTagId;
                 InitializeAsync(queryTagId, false).FireAndForgetSafeAsync(this);
             });
 

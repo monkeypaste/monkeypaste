@@ -100,7 +100,10 @@ namespace MonkeyPaste.Avalonia {
             RootTriggerActionViewModel == null ? null :
             RootTriggerActionViewModel.SelfAndAllDescendants.FirstOrDefault(x => x.ActionId == ParentActionId);
 
-        bool MpITreeItemViewModel.IsExpanded { get => false; set => _ = value; }
+        #region MpITreeItemViewModel Implementation
+        bool MpIExpandableViewModel.IsExpanded { get => false; set => _ = value; }
+
+        #endregion
 
         #endregion
 

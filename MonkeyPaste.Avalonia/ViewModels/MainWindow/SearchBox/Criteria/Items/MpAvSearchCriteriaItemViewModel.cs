@@ -17,17 +17,14 @@ using MonoMac.Darwin;
 using SQLite;
 
 namespace MonkeyPaste.Avalonia {
-
     public class MpAvSearchCriteriaItemViewModel : 
         MpViewModelBase<MpAvSearchCriteriaItemCollectionViewModel>,
         MpIQueryInfo {
-        #region Private Variables
-        
+        #region Private Variables       
 
         #endregion
 
         #region Constants
-
         public const string DEFAULT_OPTION_LABEL = " - Please Select - ";
         #endregion
 
@@ -56,31 +53,9 @@ namespace MonkeyPaste.Avalonia {
         public MpContentSortType SortType =>
             MpAvClipTileSortFieldViewModel.Instance.SelectedSortType;
 
-        public int TagId {
-            get {
-                int tag_id = MpTag.AllTagId;
+        public int TagId =>
+            Parent == null ? 0 : Parent.SelectedSearchTagId;
 
-                var tag_opts =
-                    RootOptionViewModel
-                    .SelfAndAllDescendants()
-                    .Cast<MpAvSearchCriteriaOptionViewModel>()
-                    .Where(x => x.FilterValue.HasFlag(MpContentQueryBitFlags.Tag))
-                    .ToList();
-                if(tag_opts.Count > 0) {
-                    if(tag_opts.Count > 1) {
-                        // how are there 2?
-                        Debugger.Break();
-                    }
-                    try {
-                        tag_id = int.Parse(tag_opts.FirstOrDefault().Value);
-                    } catch(Exception ex) {
-                        Debugger.Break();
-                        MpConsole.WriteTraceLine("Error parsing tag id", ex);
-                    }
-                }
-                return tag_id;
-            }
-        }
         public string MatchValue {
             get {
                 string st = string.Empty;

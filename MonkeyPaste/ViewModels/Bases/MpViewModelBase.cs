@@ -52,7 +52,7 @@ namespace MonkeyPaste {
 
         public virtual ObservableCollection<MpDbModelBase> ModelHistory { get; set; }
 
-        public virtual object ParentObj { get; protected set; }
+        public virtual object ParentObj { get; set; }
 
         [JsonIgnore]
         public virtual MpViewModelBase SelfBindingRef => this;

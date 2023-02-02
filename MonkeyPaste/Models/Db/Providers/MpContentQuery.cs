@@ -46,6 +46,10 @@ namespace MonkeyPaste {
         } 
 
         private static async Task<List<int>> PerformContentQueryAsync(MpIQueryInfo qi, IEnumerable<int> tagIds, bool isAdvanced, int idx) {
+            //if(tagIds == null || tagIds.Count() == 0) {
+            //    return new List<int>() { };
+            //}
+
             string qi_root_id_query_str;
             if(isAdvanced) {
                 qi_root_id_query_str = ConvertAdvancedQueryToSql(qi, tagIds);

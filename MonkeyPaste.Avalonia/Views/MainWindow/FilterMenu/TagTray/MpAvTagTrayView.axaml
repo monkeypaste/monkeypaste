@@ -25,7 +25,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <!--  NOTE MinWidth set for drag drop target  -->
-            <ColumnDefinition Width="auto"
+            <ColumnDefinition Width="Auto"
                               MinWidth="200"
                               MaxWidth="{Binding TagTrayScreenWidth}" />
             <ColumnDefinition Width="Auto" />

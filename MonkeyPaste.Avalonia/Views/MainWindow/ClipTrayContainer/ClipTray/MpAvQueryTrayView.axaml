@@ -52,8 +52,8 @@
                 local:MpAvSizeObserverExtension.ObservedWidth="{Binding QueryTrayScreenWidth, Mode=OneWayToSource}"
                 local:MpAvSizeObserverExtension.ObservedHeight="{Binding QueryTrayScreenHeight, Mode=OneWayToSource}">
             <ScrollViewer x:Name="ClipTrayScrollViewer"
-                          HorizontalScrollBarVisibility="Visible"
-                          VerticalScrollBarVisibility="Visible"
+                          HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Auto"
                           HorizontalAlignment="Left"
                           VerticalAlignment="Top"
                           AllowAutoHide="True"
