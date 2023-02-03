@@ -26,21 +26,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constants
         public const string DEFAULT_OPTION_LABEL = " - Please Select - ";
+        public const double DEFAULT_HEIGHT = 50;
         #endregion
 
         #region Statics
-
-        public static IEnumerable<Tuple<Enum, int>> GetContentFilterOptionPath(MpContentQueryBitFlags cft) {
-            // 1: Option Enum
-            // 2: Selected Option Idx
-
-            switch (cft) {
-                case MpContentQueryBitFlags.Content:
-
-                    break;
-            }
-            return null;
-        }
+        // NOTE must match xaml
+        public static Thickness CRITERIA_ITEM_BORDER_THICKNESS =>
+            new Thickness(0, 1, 0, 1);
 
         #endregion
 
@@ -848,18 +840,17 @@ namespace MonkeyPaste.Avalonia {
 
         public double CriteriaItemHeight =>
             Parent == null ? 0 :
-                DefaultSearchCriteriaListBoxItemHeight * (IsJoinPanelVisible ? 2 : 1);
+                DEFAULT_HEIGHT * (IsJoinPanelVisible ? 2 : 1);
                 
         #endregion
 
-        #region Layout
-
-        public double DefaultSearchCriteriaListBoxItemHeight => 50;
-
-        public Thickness CriteriaItemBorder => new Thickness(0, 1, 0, 1);
+        #region Layout        
         #endregion
 
         #region State
+
+        public bool IsDragOverTop { get; set; }
+        public bool IsDragOverBottom { get; set; }
 
         public int SelectedJoinTypeIdx {
             get => (int)(NextJoinType - 1);
@@ -1003,6 +994,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void NotifyValueChanged() {
+            if(Parent == null ||
+                Parent.SuppressQueryChangedNotification) {
+                // don't notify during load
+                return;
+            }
             SearchOptions = GetSelectedOptionsString();
             Parent.NotifyQueryChanged(true);
         }
@@ -1022,11 +1018,6 @@ namespace MonkeyPaste.Avalonia {
             var cur_opt = root_opt_vm;
             var path_parts = options.SplitNoEmpty(",");
             for (int i = 0; i < path_parts.Length; i++) {
-                if(cur_opt == null) {
-                    // whats the option string? null should only be on last idx
-                    Debugger.Break();
-                    return GetRootOption();
-                }
                 string path_part = path_parts[i];
                 try {
                     await cur_opt.InitializeAsync(path_part, i);
@@ -1078,10 +1069,13 @@ namespace MonkeyPaste.Avalonia {
         private string GetSelectedOptionsString() {
             List<object> opts =
                 SelectedOptionPath
-                .Where(x => x.ItemsOptionType != null)
-                .Select(x => x.ItemsOptionType)
-                .Cast<object>()
+                //.Where(x => x.ItemsOptionType != null)
+                //.Select(x => x.ItemsOptionType)
+                .Where(x=>x.SelectedItemPathObj != null)
+                .Select(x=>x.SelectedItemPathObj)
+                //.Cast<object>()
                 .ToList();
+
             if (LeafValueOptionViewModel != null) {
                 opts.Add(new object[] {
                     LeafValueOptionViewModel.FilterValue,

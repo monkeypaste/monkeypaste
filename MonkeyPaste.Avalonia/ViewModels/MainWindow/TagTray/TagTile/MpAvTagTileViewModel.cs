@@ -988,13 +988,12 @@ namespace MonkeyPaste.Avalonia {
 
                  if (t == null) {
                      if(childTagType == MpTagType.Query) {
-                         // this should only happen from add button w/ a group tag selected
-                         await MpAvSearchCriteriaItemCollectionViewModel.Instance.
-                            ConvertCurrentSearchToAdvancedCommand.ExecuteAsync();
+                         // this should only happen from add tag button w/ a group tag selected
+                         int queryTagId = await MpAvSearchCriteriaItemCollectionViewModel.Instance.
+                            ConvertCurrentSearchToAdvSearchAsync(false);
 
                          // get ref to newly created adv tag
-                         t = await MpDataModelProvider.GetItemAsync<MpTag>(
-                             MpAvSearchCriteriaItemCollectionViewModel.Instance.QueryTagId);
+                         t = await MpDataModelProvider.GetItemAsync<MpTag>(queryTagId);
                          t.TreeSortIdx = Items.Count;
                          t.ParentTagId = TagId;
                          await t.WriteToDatabaseAsync();

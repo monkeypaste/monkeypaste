@@ -137,6 +137,11 @@ namespace MonkeyPaste.Common {
             List<string> parts = new List<string>();
             foreach (var opt in opts) {
                 string opt_str = string.Empty;
+                //if(opt is Type optType) {
+                //    if(Enum.GetUnderlyingType(optType) is Type typeEnum) {
+                //        opt = Enum.Parse(typeEnum, "None");
+                //    }
+                //}
                 if (opt is Enum enumOpt) {
                     opt_str = $"{enumOpt.GetType()}|{enumOpt}";
                 } else if (opt is object[] matchParts) {

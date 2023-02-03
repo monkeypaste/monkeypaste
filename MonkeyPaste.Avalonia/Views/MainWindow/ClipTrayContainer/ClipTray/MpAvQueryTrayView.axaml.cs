@@ -62,8 +62,9 @@ namespace MonkeyPaste.Avalonia {
             advSearchSplitter.DragCompleted += AdvSearchSplitter_DragCompleted;
         }
         private void AdvSearchSplitter_DragCompleted(object sender, VectorEventArgs e) {
-            MpAvSearchCriteriaItemCollectionViewModel.Instance
-                .BoundCriteriaListBoxScreenHeight += e.Vector.ToPortablePoint().Y;
+            var scicvm = MpAvSearchCriteriaItemCollectionViewModel.Instance;
+            double nh = scicvm.BoundCriteriaListBoxScreenHeight + e.Vector.ToPortablePoint().Y;
+            scicvm.BoundCriteriaListBoxScreenHeight = Math.Min(nh, scicvm.MaxSearchCriteriaListBoxHeight);
         }
 
         private void Lb_GotFocus(object sender, global::Avalonia.Input.GotFocusEventArgs e) {

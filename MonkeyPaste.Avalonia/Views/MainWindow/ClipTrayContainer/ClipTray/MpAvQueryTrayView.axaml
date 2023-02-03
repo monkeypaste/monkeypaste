@@ -145,25 +145,8 @@
             <TextBlock HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        FontSize="42"
-                       Classes="disabled">
-                <TextBlock.Text>
-                    <MultiBinding Converter="{StaticResource MultiStringAppendConverter}">
-                        <Binding>
-                            <Binding.Source>
-                                <sys:String>Collection '</sys:String>
-                            </Binding.Source>
-                        </Binding>
-                        <Binding Path="SelectedItem.TagName"
-                                 Source="{x:Static local:MpAvTagTrayViewModel.Instance}" />
-                        <Binding>
-                            <Binding.Source>
-                                <sys:String>' Is</sys:String>
-                            </Binding.Source>
-                        </Binding>
-                        <Binding Path="EmptyQueryTrayText" />
-                    </MultiBinding>
-                </TextBlock.Text>
-            </TextBlock>
+                       Text="{Binding EmptyQueryTrayText}"
+                       Classes="disabled" />
         </Border>
     </Grid>
 

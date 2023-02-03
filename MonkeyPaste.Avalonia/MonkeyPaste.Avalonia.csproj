@@ -250,12 +250,17 @@
     <None Remove="Assets\Images\desc_gray.png" />
     <None Remove="Assets\Images\desc_white.png" />
     <None Remove="Assets\Images\dots.png" />
+    <None Remove="Assets\Images\dots_1x3.png" />
+    <None Remove="Assets\Images\dots_2x10.png" />
+    <None Remove="Assets\Images\dots_2x2.png" />
+    <None Remove="Assets\Images\dots_2x5.png" />
     <None Remove="Assets\Images\doubleSidedArrow.png" />
     <None Remove="Assets\Images\doubleSidedArrow2.png" />
     <None Remove="Assets\Images\down_black.png" />
     <None Remove="Assets\Images\drag.png" />
     <None Remove="Assets\Images\duckduckgoIcon.png" />
     <None Remove="Assets\Images\duplicate.png" />
+    <None Remove="Assets\Images\edgearrowdown.png" />
     <None Remove="Assets\Images\edgearrowup.png" />
     <None Remove="Assets\Images\edit.png" />
     <None Remove="Assets\Images\egg.png" />
@@ -292,6 +297,10 @@
     <None Remove="Assets\Images\joystickactive2.png" />
     <None Remove="Assets\Images\keyboard.png" />
     <None Remove="Assets\Images\leftclick.png" />
+    <None Remove="Assets\Images\lines_x2_horiz %282%29.png" />
+    <None Remove="Assets\Images\lines_x2_horiz.png" />
+    <None Remove="Assets\Images\lines_x2_horiz_vert_arrows.png" />
+    <None Remove="Assets\Images\lines_x3_horiz.png" />
     <None Remove="Assets\Images\lock.png" />
     <None Remove="Assets\Images\merge.png" />
     <None Remove="Assets\Images\minus.png" />
@@ -519,9 +528,6 @@
     <AvaloniaResource Include="Assets\Images\bullseye.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\burger.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\butterfly.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -591,7 +597,16 @@
     <AvaloniaResource Include="Assets\Images\desc_white.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\dots.png">
+    <AvaloniaResource Include="Assets\Images\dots_1x3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\dots_2x10.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\dots_2x2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\dots_2x5.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\doubleSidedArrow.png">
@@ -603,13 +618,13 @@
     <AvaloniaResource Include="Assets\Images\down_black.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\drag.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\duckduckgoIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\duplicate.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\edgearrowdown.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\edgearrowup.png">
@@ -619,9 +634,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\egg.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\ellipses.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\email.png">
@@ -718,6 +730,15 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\leftclick.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\lines_x2_horiz.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\lines_x2_horiz_vert_arrows.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\lines_x3_horiz.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\lock.png">

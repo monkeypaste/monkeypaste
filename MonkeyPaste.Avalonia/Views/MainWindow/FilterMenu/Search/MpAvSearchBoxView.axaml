@@ -194,16 +194,12 @@
                     Value="{Binding Source={StaticResource PlusSolidImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=white}" />
         </Style>
         <Style Selector="ToggleButton#ConvertToAdvancedSearchToggleButton:unchecked.saved Image">
-            <Setter Property="RotateTransform.Angle"
-                    Value="180" />
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource EdgeArrowUpImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=white}" />
+                    Value="{Binding Source={StaticResource EdgeArrowDownImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=white}" />
         </Style>
 
         <!--  CHECKED  -->
         <Style Selector="ToggleButton#ConvertToAdvancedSearchToggleButton:checked Image">
-            <Setter Property="RotateTransform.Angle"
-                    Value="0" />
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource EdgeArrowUpImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=white}" />
         </Style>
@@ -236,7 +232,7 @@
                         VerticalAlignment="Stretch"
                         MinWidth="{StaticResource SearchIconSize}"
                         MinHeight="{StaticResource SearchIconSize}"
-                        Command="{Binding ToggleIsExpandedCommand}"
+                        Command="{Binding ToggleIsSearchBoxExpandedCommand}"
                         Classes="noBg noHoverBg shakeOver"
                         local:MpAvMenuExtension.IsEnabled="True"
                         local:MpAvMenuExtension.ForcedMenuItemViewModel="{Binding SearchFilterCollectionViewModel.PopupMenuViewModel}"
@@ -371,8 +367,8 @@
                       Grid.Column="1"
                       VerticalAlignment="Stretch"
                       HorizontalAlignment="Stretch"
+                      IsChecked="{Binding IsExpanded, Mode=TwoWay, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
                       Classes="noBg noHoverBg outlineOver"
-                      Command="{Binding ToggleIsExpandedCommand, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
                       Classes.saved="{Binding IsSavedQuery, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}">
             <!--<Button.IsVisible>
                 <MultiBinding Converter="{x:Static BoolConverters.And}">

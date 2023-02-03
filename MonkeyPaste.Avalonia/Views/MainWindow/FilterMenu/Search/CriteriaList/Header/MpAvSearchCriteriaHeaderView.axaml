@@ -12,6 +12,20 @@
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800">
+    <local:MpAvUserControl.Styles>
+        <Style Selector="Button.searchTagButton">
+            <Setter Property="Padding"
+                    Value="7,3" />
+            <Setter Property="Margin"
+                    Value="0,10,10,10" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+        </Style>
+        <Style Selector="Button.searchTagButton.selectedSearchTag /template/ ContentPresenter">
+            <Setter Property="BorderBrush"
+                    Value="Red" />
+        </Style>
+    </local:MpAvUserControl.Styles>
     <DockPanel LastChildFill="False">
         <StackPanel DockPanel.Dock="Left"
                     Orientation="Horizontal">
@@ -24,21 +38,19 @@
                        Text="Search:" />
             <!--  ALL TAG TILE  -->
             <Button x:Name="AllTagTileContainer"
-                    VerticalAlignment="Center"
-                    Padding="7,3"
-                    Margin="0,10,10,10">
-                <Label DataContext="{Binding AllTagId, Converter={x:Static local:MpAvTagIdToTagTileViewModelConverter.Instance}}"
-                       Content="{Binding TagName}" />
+                    Classes.selectedSearchTag="{Binding IsAllSelectedSearchTagId}"
+                    Classes="defaultButton textOnlyButton searchTagButton">
+                <TextBlock DataContext="{Binding AllTagId, Converter={x:Static local:MpAvTagIdToTagTileViewModelConverter.Instance}}"
+                           Text="{Binding TagName}" />
             </Button>
 
             <!--  SELECTED TAG TILE  -->
             <Button x:Name="SelectedTagTileContainer"
-                    Padding="7,3"
-                    IsVisible="{Binding AvailableNotAllTagId, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                    VerticalAlignment="Center"
-                    Margin="0,10,10,10">
-                <Label DataContext="{Binding AvailableNotAllTagId, Converter={x:Static local:MpAvTagIdToTagTileViewModelConverter.Instance}}"
-                       Content="{Binding TagName}" />
+                    Classes.selectedSearchTag="{Binding !IsAllSelectedSearchTagId}"
+                    Classes="defaultButton textOnlyButton searchTagButton"
+                    IsVisible="{Binding AvailableNotAllTagId, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
+                <TextBlock DataContext="{Binding AvailableNotAllTagId, Converter={x:Static local:MpAvTagIdToTagTileViewModelConverter.Instance}}"
+                           Text="{Binding TagName}" />
             </Button>
 
         </StackPanel>
@@ -63,7 +75,7 @@
             <!--  ADVANCED SEARCH TOGGLE BUTTON  -->
 
             <Button x:Name="DeleteSearchButton"
-                    Margin="5"
+                    Margin="5,5,30,5"
                     BorderThickness="0"
                     VerticalAlignment="Stretch"
                     HorizontalAlignment="Center"

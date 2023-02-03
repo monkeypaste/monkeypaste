@@ -894,10 +894,13 @@ namespace MonkeyPaste.Avalonia {
                 if(CopyItem == null) {
                     return MpSize.Empty;
                 }
-                return new MpSize(CopyItem.ItemSize1, CopyItem.ItemSize2);
+                return new MpSize(
+                    CopyItem.ItemSize1, 
+                    CopyItem.ItemSize2);
             }
             set {
-                if(CopyItemSize != value) {
+                if(CopyItem != null && 
+                   CopyItemSize != value) {
                     MpSize sizeVal = value ?? MpSize.Empty;
                     if(CopyItemSize.Width == sizeVal.Width &&
                         CopyItemSize.Height == sizeVal.Height) {
@@ -919,7 +922,8 @@ namespace MonkeyPaste.Avalonia {
                 return CopyItem.ItemType;
             }
             set {
-                if (CopyItem != null && CopyItem.ItemType != value) {
+                if (CopyItem != null && 
+                    CopyItem.ItemType != value) {
                     CopyItem.ItemType = value;
                     OnPropertyChanged(nameof(CopyItemType));
                 }
@@ -1313,7 +1317,7 @@ namespace MonkeyPaste.Avalonia {
                     return null;
                 }
                 return Parent.PinnedItems[target_idx];
-            } else if (target_idx >= Parent.TotalTilesInQuery) {
+            } else if (target_idx >= MpPlatform.Services.Query.TotalAvailableItemsInQuery) {
                 return null;
             }
             var neighbor_ctvm = Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == target_idx);

@@ -12,16 +12,17 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvSearchCriteriaListBoxView : MpAvUserControl<MpAvSearchCriteriaItemCollectionViewModel> {
         public MpAvSearchCriteriaListBoxView() {
             InitializeComponent();
-            var sclb = this.FindControl<ListBox>("SearchCriteriaListBox");
-            //sclb.AddHandler(PointerWheelChangedEvent, Sclb_PointerWheelChanged, RoutingStrategies.Tunnel);
+            var sv = this.FindControl<ScrollViewer>("SearchCriteriaContainerScrollViewer");
+            sv.AddHandler(PointerWheelChangedEvent, Sclb_PointerWheelChanged, RoutingStrategies.Tunnel);
         }
 
         private void Sclb_PointerWheelChanged(object sender, global::Avalonia.Input.PointerWheelEventArgs e) {
-            var sclb = this.FindControl<ListBox>("SearchCriteriaListBox");
-            var sv = sclb.GetVisualDescendant<ScrollViewer>();
-            double dir = e.Delta.Y > 0 ? 1 : -1;
+            var sv = sender as ScrollViewer;
+
+            double dir = e.Delta.Y < 0 ? 1 : -1;
             double amt = 30;
-            sv.ScrollByPointDelta(new MpPoint(0, amt * dir));
+            sv.ScrollToVerticalOffset(sv.Offset.Y + (amt * dir));
+            //sv.ScrollByPointDelta(new MpPoint(0, amt * dir));
             e.Handled = true;
         }
 

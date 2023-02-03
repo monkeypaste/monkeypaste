@@ -30,7 +30,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
         #region Drop
 
         #region Drop Events

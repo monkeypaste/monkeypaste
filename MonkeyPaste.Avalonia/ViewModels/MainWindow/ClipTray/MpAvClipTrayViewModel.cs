@@ -480,7 +480,7 @@ namespace MonkeyPaste.Avalonia {
             // NOTE this is to avoid making TotalTile Width/Height auto
             // and should only be called on a requery or on content resize (or event better only on resize complete)
             MpSize totalTileSize = MpSize.Empty;
-            if (TotalTilesInQuery > 0) {
+            if (MpPlatform.Services.Query.TotalAvailableItemsInQuery > 0) {
                 var result = FindTileRectOrQueryIdxOrTotalTileSize_internal(
                     queryOffsetIdx: -1,
                     scrollOffsetX: -1,
@@ -496,7 +496,7 @@ namespace MonkeyPaste.Avalonia {
 
         private object FindTileRectOrQueryIdxOrTotalTileSize_internal(int queryOffsetIdx, double scrollOffsetX, double scrollOffsetY, MpRect prevOffsetRect = null) {
             // For TotalTileSize<MpSize>: all params -1
-            // For TileRect<MpRect>:  0 <= queryOffsetIdx < TotalTilesInQuery and scrollOffsets == -1
+            // For TileRect<MpRect>:  0 <= queryOffsetIdx < MpPlatform.Services.Query.TotalAvailableItemsInQuery and scrollOffsets == -1
             // For TileQueryIdx<[]{int,MpRect}>: queryoffsetIdx < 0 and both scrollOffset > 0
 
             bool isGrid = LayoutType == MpClipTrayLayoutType.Grid;
@@ -507,7 +507,7 @@ namespace MonkeyPaste.Avalonia {
             bool isFindTotalSize = !isFindTileRect;
 
             int totalTileCount = MpPlatform.Services.Query.TotalAvailableItemsInQuery;
-            queryOffsetIdx = isFindTotalSize ? TotalTilesInQuery - 1 : queryOffsetIdx;
+            queryOffsetIdx = isFindTotalSize ? MpPlatform.Services.Query.TotalAvailableItemsInQuery - 1 : queryOffsetIdx;
             if (queryOffsetIdx >= totalTileCount) {
                 return null;
             }
@@ -600,7 +600,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (isFindTileIdx) {
                 // if not found presume offset is beyond last tile
-                return TotalTilesInQuery - 1;
+                return MpPlatform.Services.Query.TotalAvailableItemsInQuery - 1;
             }
             if (isFindTileRect) {
                 return last_rect;
@@ -726,7 +726,7 @@ namespace MonkeyPaste.Avalonia {
 
         public int MaxLoadQueryIdx => Math.Max(0, MaxClipTrayQueryIdx - DefaultLoadCount + 1);
 
-        public int MaxClipTrayQueryIdx => TotalTilesInQuery - 1;
+        public int MaxClipTrayQueryIdx => MpPlatform.Services.Query.TotalAvailableItemsInQuery - 1;
         public int MinClipTrayQueryIdx => 0;
 
         public bool CanThumbDragY => QueryTrayScreenHeight < QueryTrayTotalHeight;
@@ -962,10 +962,47 @@ namespace MonkeyPaste.Avalonia {
 
         public string EmptyQueryTrayText {
             get {
-                return 
-                    IsQueryAllPinned ? " All Pinned" : 
-                    MpAvSearchCriteriaItemCollectionViewModel.Instance.PendingQueryTagId > 0 ? $" Has No Results" :
-                    " Empty";
+                string tag_name = string.Empty;
+                if (MpAvTagTrayViewModel.Instance.SelectedItem != null) {
+                    tag_name = MpAvTagTrayViewModel.Instance.SelectedItem.TagName;
+                }
+
+                if (string.IsNullOrEmpty(tag_name)) {
+                    return string.Empty;
+                }
+
+                string tag_type = "Collection";
+
+                bool is_search_in_progress =
+                    MpAvSearchBoxViewModel.Instance.HasText ||
+                    MpAvSearchCriteriaItemCollectionViewModel.Instance.IsAdvSearchActive;
+                if (is_search_in_progress) {
+                    tag_type = "Search";
+
+                    var ttvm = MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == MpAvSearchCriteriaItemCollectionViewModel.Instance.QueryTagId);
+                    if(ttvm == null) {
+                        // pending search
+                        tag_name = "Untitled";
+                    }else {
+                        tag_name = ttvm.TagName;
+                    }
+                }
+
+
+                string empty_msg = null;
+                if (IsQueryAllPinned) {
+                    empty_msg = "is all pinned";
+                } else if (MpAvTagTrayViewModel.Instance.LastSelectedActionItem.TagType == MpTagType.Link &&
+                            MpAvTagTrayViewModel.Instance.LastSelectedActionItem.LinkedCopyItemIds.Count() == 0) {
+                    empty_msg = "is empty";
+                } else if(is_search_in_progress) {
+                    empty_msg = "has no results";
+                } else {
+                    return string.Empty;
+                }
+
+                return string.Format(@"{0} '{1}' {2}", tag_type, tag_name, empty_msg);
+                    
             }
         }
 
@@ -1050,9 +1087,6 @@ namespace MonkeyPaste.Avalonia {
                 return CurGridFixedCount;
             }
         }
-
-        public int TotalTilesInQuery => 
-            MpPlatform.Services.Query.TotalAvailableItemsInQuery;
 
 
         public int DefaultLoadCount {
@@ -1154,7 +1188,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsFilteringByApp { get; set; } = false;
 
-        public bool IsQueryTrayEmpty => TotalTilesInQuery == 0;
+        public bool IsQueryTrayEmpty => MpPlatform.Services.Query.TotalAvailableItemsInQuery == 0;
 
         public bool IsPinTrayEmpty => PinnedItems.Count == 0;
 
@@ -1167,12 +1201,12 @@ namespace MonkeyPaste.Avalonia {
                 if (MpAvTagTrayViewModel.Instance.SelectedItem == null) {
                     return false;
                 }
-                if(MpAvSearchCriteriaItemCollectionViewModel.Instance.HasCriteriaItems) {
-                    if(MpAvSearchCriteriaItemCollectionViewModel.Instance.PendingQueryTagId > 0) {
-                        return false;
-                    }
+                //if(MpAvSearchCriteriaItemCollectionViewModel.Instance.HasCriteriaItems) {
+                //    if(MpAvSearchCriteriaItemCollectionViewModel.Instance.PendingQueryTagId > 0) {
+                //        return false;
+                //    }
 
-                }
+                //}
                 return
                     MpAvTagTrayViewModel.Instance.SelectedItem
                             .LinkedCopyItemIds.Count() > 0;
@@ -1754,7 +1788,7 @@ namespace MonkeyPaste.Avalonia {
                 CheckLoadMore();
                 RefreshQueryTrayLayout();
 
-                OnPropertyChanged(nameof(TotalTilesInQuery));
+                OnPropertyChanged(nameof(IsQueryTrayEmpty));
             } else if (e is MpCopyItemTag cit) {
                 var sttvm = MpAvTagTrayViewModel.Instance.SelectedItem;
                 // check if unlink is part of current query
@@ -2064,6 +2098,7 @@ namespace MonkeyPaste.Avalonia {
                 // QUERY
 
                 case MpMessageType.RequeryCompleted:
+                    OnPropertyChanged(nameof(EmptyQueryTrayText));
                     if(IsInitialQuery) {
                         IsInitialQuery = false;
                         Dispatcher.UIThread.Post(async () => {
@@ -2084,7 +2119,7 @@ namespace MonkeyPaste.Avalonia {
                     QueryCommand.Execute(ScrollOffset);
                     break;
                 case MpMessageType.TotalQueryCountChanged:
-                    OnPropertyChanged(nameof(TotalTilesInQuery));
+                    OnPropertyChanged(nameof(MpPlatform.Services.Query.TotalAvailableItemsInQuery));
                     break;
 
                 // DND
@@ -2787,7 +2822,7 @@ namespace MonkeyPaste.Avalonia {
 
                         FindTotalTileSize();
 
-                        OnPropertyChanged(nameof(TotalTilesInQuery));
+                        OnPropertyChanged(nameof(MpPlatform.Services.Query.TotalAvailableItemsInQuery));
                         OnPropertyChanged(nameof(QueryTrayTotalWidth));
                         OnPropertyChanged(nameof(MaxScrollOffsetX));
                         OnPropertyChanged(nameof(MaxScrollOffsetY));
@@ -2799,7 +2834,7 @@ namespace MonkeyPaste.Avalonia {
 
                     if (loadCount == 0) {
                         // is not an LoadMore Query
-                        loadCount = Math.Min(DefaultLoadCount, TotalTilesInQuery);
+                        loadCount = Math.Min(DefaultLoadCount, MpPlatform.Services.Query.TotalAvailableItemsInQuery);
                     } else if (loadOffsetIdx < 0) {
                         loadCount = 0;
                     }
@@ -2880,7 +2915,7 @@ namespace MonkeyPaste.Avalonia {
                     #region Finalize State & Measurements
 
 
-                    OnPropertyChanged(nameof(TotalTilesInQuery));
+                    OnPropertyChanged(nameof(MpPlatform.Services.Query.TotalAvailableItemsInQuery));
                     OnPropertyChanged(nameof(QueryTrayTotalTileWidth));
                     OnPropertyChanged(nameof(QueryTrayTotalWidth));
                     OnPropertyChanged(nameof(MaxScrollOffsetX));
@@ -2911,7 +2946,7 @@ namespace MonkeyPaste.Avalonia {
 
                         if (SelectedItem == null &&
                             MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Count == 0 &&
-                            TotalTilesInQuery > 0) {
+                            MpPlatform.Services.Query.TotalAvailableItemsInQuery > 0) {
                             Dispatcher.UIThread.Post(async () => {
                                 while(IsAnyBusy) {
                                     await Task.Delay(100);

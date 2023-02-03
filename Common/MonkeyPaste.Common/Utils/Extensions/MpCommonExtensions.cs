@@ -17,6 +17,17 @@ namespace MonkeyPaste.Common {
 
         #region Collections
 
+        public static void Move<T>(this IList<T> list, int oldIdx, int newIdx) {
+            if(oldIdx == newIdx) {
+                return;
+            }
+            T item = list[oldIdx];
+            list.RemoveAt(oldIdx);
+            if(oldIdx < newIdx) {
+                newIdx -= 1;
+            }
+            list.Insert(newIdx, item);
+        }
         public static void AddRange<T>(this IList<T> list, IEnumerable<T> range) {
             if(list == null || range == null) {
                 throw new NullReferenceException($"{(list == null ? "Dest must be initialized":string.Empty)} {(range == null ? "range must be non-null" : string.Empty)}");

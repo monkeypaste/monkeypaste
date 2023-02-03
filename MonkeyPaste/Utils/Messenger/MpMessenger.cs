@@ -76,8 +76,8 @@ namespace MonkeyPaste {
         ContentResized,
         ResizeContentCompleted,
 
-        AdvancedSearchOpened,
-        AdvancedSearchClosed,
+        AdvancedSearchExpanded,
+        AdvancedSearchUnexpanded,
 
         TagSelectionChanged,
 

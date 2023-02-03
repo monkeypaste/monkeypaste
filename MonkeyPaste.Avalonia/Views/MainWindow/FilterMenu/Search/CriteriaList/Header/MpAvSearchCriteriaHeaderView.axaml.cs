@@ -36,7 +36,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             bool is_all_tag = tag_container.Name == "AllTagTileContainer";
-            int tag_id_to_select = is_all_tag ? BindingContext.AllTagId : BindingContext.SelectedSearchTagId;
+            int tag_id_to_select = is_all_tag ? BindingContext.AllTagId : BindingContext.AvailableNotAllTagId;
             BindingContext.SelectSearchTagCommand.Execute(tag_id_to_select);
         }
     }

@@ -16,6 +16,10 @@
         <Thickness x:Key="ListBoxItemPadding">
             0
         </Thickness>
+        <Thickness x:Key="CriteriaItemBorderThickness">
+            <!--  MUST MATCH VM VALUE  -->
+            0,1,0,1
+        </Thickness>
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
         <Style Selector="TextBlock">
@@ -33,15 +37,14 @@
             <Setter Property="VerticalAlignment"
                     Value="Stretch" />
         </Style>
-        <Style Selector="ListBox:not(.optionsList) > ListBoxItem"
-               x:DataType="local:MpAvSearchCriteriaItemViewModel">
+        <Style Selector="ListBox:not(.optionsList) > ListBoxItem, local|MpAvSearchCriteriaHeaderView">
             <Setter Property="BorderThickness"
-                    Value="{Binding CriteriaItemBorder}" />
+                    Value="{StaticResource CriteriaItemBorderThickness}" />
             <Setter Property="BorderBrush"
                     Value="Gainsboro" />
         </Style>
 
-        <Style Selector="ListBox:not(.optionsList) ListBoxItem:pointerover">
+        <Style Selector="ListBox:not(.optionsList) ListBoxItem:pointerover, local|MpAvSearchCriteriaHeaderView">
             <Setter Property="BorderBrush"
                     Value="Yellow" />
         </Style>
@@ -100,34 +103,52 @@
                     Value="Fill" />
         </Style>
     </local:MpAvUserControl.Styles>
-    <StackPanel Orientation="Vertical">
-        <local:MpAvSearchCriteriaHeaderView Background="{DynamicResource SearchCriteriaRowBgBrush1}"
-                                            HorizontalAlignment="Stretch"
-                                            VerticalAlignment="Stretch" />
-        <!--<ScrollViewer MaxHeight="{Binding MaxSearchCriteriaListBoxHeight}"
-                      VerticalAlignment="Top"
-                      HorizontalScrollBarVisibility="Disabled"
-                      VerticalScrollBarVisibility="Auto">-->
-        <ListBox x:Name="SearchCriteriaListBox"
-                 MaxHeight="{Binding MaxSearchCriteriaListBoxHeight}"
-                 Background="Transparent"
-                 BorderThickness="0"
-                 BorderBrush="Black"
-                 Items="{Binding SortedItems}"
-                 SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
-                 SelectionMode="Single"
-                 HorizontalAlignment="Stretch"
-                 VerticalAlignment="Top"
-                 ScrollViewer.VerticalScrollBarVisibility="Auto"
-                 ScrollViewer.HorizontalScrollBarVisibility="Auto">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <local:MpAvSearchCriteriaItemView BorderThickness="0"
-                                                      Height="{Binding CriteriaItemHeight}"
-                                                      DataContext="{Binding}" />
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        <!--</ScrollViewer>-->
-    </StackPanel>
+    <ScrollViewer x:Name="SearchCriteriaContainerScrollViewer"
+                  MaxHeight="{Binding MaxSearchCriteriaListBoxHeight}"
+                  VerticalAlignment="Top"
+                  VerticalContentAlignment="Stretch"
+                  HorizontalAlignment="Stretch"
+                  HorizontalScrollBarVisibility="Auto"
+                  VerticalScrollBarVisibility="Auto">
+        <Grid RowDefinitions="Auto,*">
+            <local:MpAvSearchCriteriaHeaderView Grid.Row="0"
+                                                Height="{Binding BoundHeaderHeight, Mode=TwoWay}"
+                                                Background="{DynamicResource SearchCriteriaRowBgBrush1}"
+                                                HorizontalAlignment="Stretch"
+                                                VerticalAlignment="Stretch" />
+            <ListBox x:Name="SearchCriteriaListBox"
+                     DragDrop.AllowDrop="True"
+                     Grid.Row="1"
+                     Background="Transparent"
+                     BorderThickness="0"
+                     BorderBrush="Black"
+                     Items="{Binding SortedItems}"
+                     SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                     SelectionMode="Single"
+                     HorizontalAlignment="Stretch"
+                     VerticalAlignment="Stretch"
+                     ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                     ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <local:MpAvSearchCriteriaItemView BorderThickness="0"
+                                                              Height="{Binding CriteriaItemHeight}"
+                                                              DataContext="{Binding}" />
+                            <Border IsVisible="{Binding IsDragOverTop}"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Top"
+                                    Background="Red"
+                                    Height="5" />
+                            <Border IsVisible="{Binding IsDragOverBottom}"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Bottom"
+                                    Background="Red"
+                                    Height="5" />
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+    </ScrollViewer>
 </local:MpAvUserControl>

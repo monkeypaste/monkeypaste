@@ -565,15 +565,21 @@ namespace MonkeyPaste.Avalonia {
                 MpMessenger.SendGlobal(MpMessageType.TagSelectionChanged);
 
                 if(SelectedItem != null && SelectedItem.IsNotGroupTag) {
-                    if(SelectedItem.IsQueryTag) {
+                    if (SelectedItem.IsQueryTag) {
                         MpAvSearchCriteriaItemCollectionViewModel.Instance
                             .SelectAdvancedSearchCommand.Execute(SelectedItem.TagId);
+                    } else if (SelectedItem.IsLinkTag &&
+                                MpAvSearchCriteriaItemCollectionViewModel.Instance.IsAdvSearchActive) {
+                        MpAvSearchCriteriaItemCollectionViewModel.Instance
+                            .SelectSearchTagCommand.Execute(SelectedItem.TagId);
                     } else {
                         MpPlatform.Services.Query.NotifyQueryChanged(true);
                     }
                 }
             },
-            (args)=>args != null && !IsSelecting && IsSelectionEnabled);
+            (args) => {
+                return args != null && !IsSelecting && IsSelectionEnabled;
+            });
 
 
         #endregion

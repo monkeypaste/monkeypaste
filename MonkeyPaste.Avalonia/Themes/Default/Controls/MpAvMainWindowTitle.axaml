@@ -15,11 +15,11 @@
     <!--  DRAG HANDLE  -->
     <Style Selector="Window#AvMainWindow local|MpAvMainWindowTitleMenuView Button#WindowOrientationHandleButton Image">
         <Setter Property="Source"
-                Value="{Binding Source={StaticResource DotsImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=white}" />
+                Value="{Binding Source={StaticResource Dots2x10Image}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=white}" />
     </Style>
     <Style Selector="Window#AvMainWindow:focus-within local|MpAvMainWindowTitleMenuView Button#WindowOrientationHandleButton Image">
         <Setter Property="Source"
-                Value="{Binding Source={StaticResource DotsImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=gold}" />
+                Value="{Binding Source={StaticResource Dots2x10Image}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=gold}" />
     </Style>
 
 </Styles>

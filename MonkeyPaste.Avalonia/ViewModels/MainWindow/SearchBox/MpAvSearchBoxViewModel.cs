@@ -146,7 +146,7 @@ namespace MonkeyPaste.Avalonia {
                     return true;
                 } 
                 // when current tag has items but current search criteria produces no result mark as invalid
-                return MpAvClipTrayViewModel.Instance.TotalTilesInQuery > 0;
+                return MpPlatform.Services.Query.TotalAvailableItemsInQuery > 0;
             }
         }
 
@@ -271,8 +271,8 @@ namespace MonkeyPaste.Avalonia {
                     }
                     OnPropertyChanged(nameof(IsToAdvancedButtonVisible));
                     break;
-                case MpMessageType.AdvancedSearchClosed:
-                case MpMessageType.AdvancedSearchOpened:
+                case MpMessageType.AdvancedSearchUnexpanded:
+                case MpMessageType.AdvancedSearchExpanded:
                 case MpMessageType.SearchCriteriaItemsChanged:
                 case MpMessageType.TagSelectionChanged:
                     OnPropertyChanged(nameof(IsToAdvancedButtonVisible));
@@ -343,7 +343,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public ICommand ToggleIsExpandedCommand => new MpCommand(
+        public ICommand ToggleIsSearchBoxExpandedCommand => new MpCommand(
             () => {
                 IsExpanded = !IsExpanded;
             });

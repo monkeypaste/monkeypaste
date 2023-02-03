@@ -59,6 +59,15 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public int SelectedItemIdx {
+            get {
+                if(SelectedItem == null) {
+                    return -1;
+                }
+                return Items.IndexOf(SelectedItem);
+            }
+        }
+
         public bool IsDropDownOpen { get; set; }
         public bool IsVisible {
             get {
@@ -76,6 +85,25 @@ namespace MonkeyPaste.Avalonia {
         public bool IsSelected { get; set; } = false;
 
         public Type ItemsOptionType { get; set; }
+
+        public object SelectedItemPathObj {
+            get {
+                if(ItemsOptionType == null || SelectedItemIdx < 0) {
+                    return null;
+                }
+                try {
+                    string selected_item_name = Enum.GetNames(ItemsOptionType)[SelectedItemIdx];
+                    if (Enum.TryParse(ItemsOptionType, selected_item_name, out var enumObj)) {
+                        return enumObj;
+                    }
+                } catch(Exception ex) {
+                    MpConsole.WriteTraceLine($"Error converting selected item to enum type.", ex);
+                }
+                Debugger.Break();
+                return null;
+                
+            }
+        }
 
         public bool IsValid => string.IsNullOrEmpty(ValidationText);
 
@@ -213,6 +241,7 @@ namespace MonkeyPaste.Avalonia {
             await Task.Delay(1);
             bool? opt_checked = null;
             int cur_opt_sel_idx = 0;
+            Type enumType = null;
 
             var opt_parts = opt_path.Split("|");
             if (opt_parts.Length < 2) {
@@ -229,7 +258,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             try {
-                Type enumType = enumAssembly.GetType(enumFullTypeName);
+                enumType = enumAssembly.GetType(enumFullTypeName);
                 string enum_value = opt_parts[1];
                 cur_opt_sel_idx = Enum.GetNames(enumType).IndexOf(enum_value);
             }
@@ -240,7 +269,6 @@ namespace MonkeyPaste.Avalonia {
             // SET FILTER FLAG
             string filter_name;
             if (opt_parts.Length > 3) {
-
                 // HANDLE LEAF
                 var vals = opt_parts[2].ToListFromCsv(MpCsvFormatProperties.DefaultBase64Value);
                 if (vals.Count > 1) {
@@ -267,6 +295,7 @@ namespace MonkeyPaste.Avalonia {
                 cur_opt_sel_idx = Items.Count > 0 ? 0 : -1;
             }
 
+            ItemsOptionType = enumType;
             SelectedItem = cur_opt_sel_idx >= 0 ? Items[cur_opt_sel_idx] : null;
 
             while (Items.Any(x => x.IsAnyBusy)) {

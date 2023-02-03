@@ -41,11 +41,11 @@
 
         <Style Selector="Button#WindowOrientationHandleButton:pointerover Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource DotsImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=yellow1}" />
+                    Value="{Binding Source={StaticResource Dots2x10Image}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=yellow1}" />
         </Style>
         <Style Selector="Button#WindowOrientationHandleButton:pressed Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource DotsImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=dimgray}" />
+                    Value="{Binding Source={StaticResource Dots2x10Image}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=dimgray}" />
         </Style>
     </local:MpAvUserControl.Styles>
     <Grid x:Name="TitlePanel"

@@ -78,9 +78,9 @@
                         <DataTemplate x:Key="TextOptionTemplate"
                                       DataType="local:MpAvSearchCriteriaOptionViewModel">
                             <DockPanel>
-                              
+
                                 <!--  CASE SENSITIVE CHECKBOX  -->
-                              
+
                                 <CheckBox VerticalAlignment="Center"
                                           DockPanel.Dock="Right"
                                           Margin="0,0,5,0"
@@ -103,7 +103,9 @@
                                                       CornerRadius="10"
                                                       Background="White"
                                                       BorderBrush="White">
-                                    <TextBox Padding="5,0,0,0"
+                                    <TextBox x:Name="MatchValueTextBox"
+                                             Padding="5,0,0,0"
+                                             Watermark="Enter search term..."
                                              MinWidth="500"
                                              BorderThickness="0"
                                              ClipToBounds="False"
@@ -112,7 +114,9 @@
                                              VerticalAlignment="Center"
                                              VerticalContentAlignment="Center"
                                              Classes.valid="{Binding IsValid}"
-                                             Text="{Binding Value, Mode=TwoWay}" />
+                                             local:MpAvDelayedTextChangedExtension.IsEnabled="True"
+                                             local:MpAvDelayedTextChangedExtension.DelayMs="500"
+                                             local:MpAvDelayedTextChangedExtension.Text="{Binding Value, Mode=TwoWay}" />
                                 </local:MpAvClipBorder>
                             </DockPanel>
                         </DataTemplate>
