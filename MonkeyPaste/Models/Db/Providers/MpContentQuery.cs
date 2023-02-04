@@ -206,10 +206,12 @@ namespace MonkeyPaste {
         #region Advanced
 
         private static string ConvertAdvancedQueryToSql(MpIQueryInfo qi, IEnumerable<int> tagIds) {
-            string query = "select RootId from MpSortableCopyItem_View";
+            string query = "select RootId from MpAdvancedSortableCopyItem_View";
             string sortClause = string.Empty;
             List<string> types = new List<string>();
             List<string> filters = new List<string>();
+            MpContentQueryBitFlags qf = qi.QueryFlags;
+            string mv = qi.MatchValue;
 
             string tag_where_stmt = $"fk_MpTagId in ({string.Join(",", tagIds)})";
             string tagClause =
@@ -220,70 +222,101 @@ namespace MonkeyPaste {
             if (!string.IsNullOrEmpty(qi.MatchValue)) {
                 string searchOp = "like";
                 string escapeStr = "";
-                if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.CaseSensitive)) {
+
+                if (qf.HasFlag(MpContentQueryBitFlags.CaseSensitive)) {
                     searchOp = "=";
-                } else if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.Regex)) {
+                } else if (qf.HasFlag(MpContentQueryBitFlags.Regex)) {
                     searchOp = "REGEXP";
                 } else {
                     escapeStr = "%";
                 }
-                string searchText = qi.MatchValue;
 
                 string escapeClause = string.Empty;
-                if (searchOp == "like" && searchText.Contains('%')) {
-                    searchText = searchText.Replace("%", @"\%");
+                if (searchOp == "like" && mv.Contains('%')) {
+                    mv = mv.Replace("%", @"\%");
                     escapeClause = @" ESCAPE '\'";
                 }
-                if (searchText.Contains("'")) {
-                    searchText = searchText.Replace("'", "''");
+                if (mv.Contains("'")) {
+                    mv = mv.Replace("'", "''");
                 }
-                if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.Title)) {
-                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("Title"), searchOp, escapeStr, searchText, escapeClause));
+                if (qf.HasFlag(MpContentQueryBitFlags.Title)) {
+                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("Title"), searchOp, escapeStr, mv, escapeClause));
                 }
-                if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.Content)) {
-                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("ItemData"), searchOp, escapeStr, searchText, escapeClause));
+                if (qf.HasFlag(MpContentQueryBitFlags.Content)) {
+                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("ItemData"), searchOp, escapeStr, mv, escapeClause));
                 }
-                if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.Url)) {
-                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("UrlPath"), searchOp, escapeStr, searchText, escapeClause));
+                if (qf.HasFlag(MpContentQueryBitFlags.Url)) {
+                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("UrlPath"), searchOp, escapeStr, mv, escapeClause));
                 }
-                if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.UrlTitle)) {
-                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("UrlTitle"), searchOp, escapeStr, searchText, escapeClause));
+                if (qf.HasFlag(MpContentQueryBitFlags.UrlTitle)) {
+                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("UrlTitle"), searchOp, escapeStr, mv, escapeClause));
                 }
-                if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.AppName)) {
-                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("AppName"), searchOp, escapeStr, searchText, escapeClause));
+                if (qf.HasFlag(MpContentQueryBitFlags.AppName)) {
+                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("AppName"), searchOp, escapeStr, mv, escapeClause));
                 }
-                if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.AppPath)) {
-                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("AppPath"), searchOp, escapeStr, searchText, escapeClause));
+                if (qf.HasFlag(MpContentQueryBitFlags.AppPath)) {
+                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("AppPath"), searchOp, escapeStr, mv, escapeClause));
                 }
-                if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.Meta)) {
-                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("ItemMetaData"), searchOp, escapeStr, searchText, escapeClause));
+                if (qf.HasFlag(MpContentQueryBitFlags.Meta)) {
+                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("ItemMetaData"), searchOp, escapeStr, mv, escapeClause));
                 }
-                if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.DeviceName)) {
-                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("DeviceName"), searchOp, escapeStr, searchText, escapeClause));
+                if (qf.HasFlag(MpContentQueryBitFlags.DeviceName)) {
+                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("DeviceName"), searchOp, escapeStr, mv, escapeClause));
                 }
-                if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.DeviceType)) {
-                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("DeviceType"), searchOp, escapeStr, searchText, escapeClause));
+                if (qf.HasFlag(MpContentQueryBitFlags.DeviceType)) {
+                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("DeviceType"), searchOp, escapeStr, mv, escapeClause));
                 }
 
-                //if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.Time)) {
-                //    if (qi.TimeFlags.HasFlag(MpDateTimeQueryType.After)) {
-                //        searchOp = ">";
-                //    } else if (qi.TimeFlags.HasFlag(MpDateTimeQueryType.Before)) {
-                //        searchOp = "<";
-                //    } else {
-                //        searchOp = "=";
-                //    }
-                //    searchText = DateTime.Parse(searchText).Ticks.ToString();
-                //    filters.Add(string.Format(@"{0} {1} {2}", CaseFormat("CopyDateTime"), searchOp, searchText));
-                //}
+                if (qf.HasFlag(MpContentQueryBitFlags.Before)) {
+                    searchOp = "<";
+                    string match_ticks = null;
+                    if(qf.HasFlag(MpContentQueryBitFlags.Exactly)) {
+                        try {
+                            var dt = DateTime.Parse(mv);
+                            match_ticks = dt.Ticks.ToString();
+                        }
+                        catch {
+                            searchOp = null;
+                        }
+                    } else {
+                        // all day units
+                        try {
+                            double today_offset = (DateTime.Now - DateTime.Today).TotalDays;
+                            double days = double.Parse(mv);
+                            double total_day_offset = days + today_offset;
+                            var dt = DateTime.Now - TimeSpan.FromDays(total_day_offset);
+                            match_ticks = dt.Ticks.ToString();
+                        }
+                        catch {
+                            searchOp = null;
+                        }
+                    }
+                    if(!string.IsNullOrEmpty(match_ticks)) {
+                        string comp_field = null;
+                        if(qf.HasFlag(MpContentQueryBitFlags.Created)) {
+                            comp_field = "CopyDateTime";
+                        } else if (qf.HasFlag(MpContentQueryBitFlags.Modified)) {
+                            comp_field = "TransactionDateTime";
+                        }else if (qf.HasFlag(MpContentQueryBitFlags.Pasted)) {
+                            comp_field = "PasteDateTime";
+                        }
+
+                        if (!string.IsNullOrEmpty(comp_field)) {
+                            filters.Add(string.Format(@"{0} {1} {2}", CaseFormat(comp_field), searchOp, match_ticks));
+                        }
+                    }
+                }
+                if(qf.HasFlag(MpContentQueryBitFlags.After)) {
+                    searchOp = ">";
+                }
             }
-            if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.TextType)) {
+            if (qf.HasFlag(MpContentQueryBitFlags.TextType)) {
                 types.Add(string.Format(@"e_MpCopyItemType='{0}'", MpCopyItemType.Text.ToString()));
             }
-            if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.FileType)) {
+            if (qf.HasFlag(MpContentQueryBitFlags.FileType)) {
                 types.Add(string.Format(@"e_MpCopyItemType='{0}'", MpCopyItemType.FileList.ToString()));
             }
-            if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.ImageType)) {
+            if (qf.HasFlag(MpContentQueryBitFlags.ImageType)) {
                 types.Add(string.Format(@"e_MpCopyItemType='{0}'", MpCopyItemType.Image.ToString()));
             }
 

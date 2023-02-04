@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -108,7 +109,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void NotifyQueryChanged(bool forceRequery = false) {
-            if(SuppressQueryChangedNotification) {
+            if(IsBusy) {
                 return;
             }
             var ttrvm = MpAvTagTrayViewModel.Instance;
@@ -169,8 +170,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-
-        public bool SuppressQueryChangedNotification { get; set; } = false;
         public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsAnyBusy);
         public bool HasCriteriaItems => Items.Count > 0;
 
@@ -279,8 +278,6 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitializeAsync(int tagId, bool isPending) {
             IsBusy = true;
 
-            SuppressQueryChangedNotification = true;
-
             if (UserDevices == null) {
                 UserDevices = await MpDataModelProvider.GetItemsAsync<MpUserDevice>();
             }
@@ -323,7 +320,6 @@ namespace MonkeyPaste.Avalonia {
             }
 
             OnPropertyChanged(nameof(AvailableNotAllTagViewModel));
-            SuppressQueryChangedNotification = false;
             MpPlatform.Services.Query.NotifyQueryChanged(true);
         }
 
@@ -439,7 +435,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(HasCriteriaItems));
             OnPropertyChanged(nameof(MaxSearchCriteriaListBoxHeight));
 
-            UpdateCriteriaSortOrder().FireAndForgetSafeAsync(this);
+            UpdateCriteriaSortOrderAsync().FireAndForgetSafeAsync(this);
         }
 
         private async Task SetIsExpandedAsync(bool newExpandedValue) {
@@ -455,7 +451,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(IsExpanded));
         }
 
-        private async Task UpdateCriteriaSortOrder(bool fromModel = false) {
+        private async Task UpdateCriteriaSortOrderAsync(bool fromModel = false) {
             if (fromModel) {
                 Items.Sort(x => x.SortOrderIdx);
             } else {
@@ -464,9 +460,7 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(100);
                 }
             }
-        }
-
-        
+        }       
 
         private async Task<int> ConvertCurrentSimpleSearchAsync() {
             if(QueryTagId > 0) {
@@ -573,29 +567,43 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand AddSearchCriteriaItemCommand => new MpAsyncCommand<object>(
             async (args) => {
+                IsBusy = true;
+
                 int add_idx = Items.Count;
                 if (args is MpAvSearchCriteriaItemViewModel scivm) {
                     add_idx = scivm.SortOrderIdx + 1;
                 }
                 MpSearchCriteriaItem nsci = new MpSearchCriteriaItem() {
-                    SortOrderIdx = Items.Count
+                    SortOrderIdx = add_idx
                 };
                 MpAvSearchCriteriaItemViewModel nscivm = await CreateCriteriaItemViewModel(nsci);
-                Items.Insert(add_idx, nscivm);
-                OnPropertyChanged(nameof(Items));
+                Items.Add(nscivm);
+                OnPropertyChanged(nameof(SortedItems));
                 OnPropertyChanged(nameof(HasCriteriaItems));
+                while(Items.Any(x=>x.IsAnyBusy)) {
+                    await Task.Delay(100);
+                }
+                // manually write since was busy during init
+                await nscivm.SearchCriteriaItem.WriteToDatabaseAsync();
+
+                IsBusy = false;
             });
 
         public ICommand RemoveSearchCriteriaItemCommand => new MpCommand<object>(
             async (args) => {
+                IsBusy = true;
                 var scivm = args as MpAvSearchCriteriaItemViewModel;
                 int scivmIdx = Items.IndexOf(scivm);
                 Items.RemoveAt(scivmIdx);
                 if (scivm.SearchCriteriaItem.Id > 0) {
                     await scivm.SearchCriteriaItem.DeleteFromDatabaseAsync();
                 }
-                await UpdateCriteriaSortOrder();
+                await UpdateCriteriaSortOrderAsync();
 
+                while (Items.Any(x => x.IsAnyBusy)) {
+                    await Task.Delay(100);
+                }
+                IsBusy = false;
                 NotifyQueryChanged(true);
             },
             (args) => args is MpAvSearchCriteriaItemViewModel);

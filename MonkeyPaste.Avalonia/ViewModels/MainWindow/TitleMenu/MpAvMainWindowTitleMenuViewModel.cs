@@ -31,15 +31,20 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Layout
-        public double TitleDragHandleShortLength => 7;
-        public double TitleDragHandleLongLength => 103;
+        public double ZoomSliderLength => 125;
+        public double ZoomSliderLineWidth => 1;
+        public double ZoomSliderValueLength => 3;
+        public double ZoomSliderShortMargin => 3;
+        public double ZoomSliderLongMargin => 10;
+
+        public double TitleDragHandleLongLength => 40;
         public double DefaultTitleMenuFixedLength => 20;
         public double TitleMenuWidth { get; set; }
         public double TitleMenuHeight { get; set; }
 
         public double SettingsButtonWidth { get; set; }
         public double LockButtonWidth { get; set; }
-        public double ZoomSliderWidth { get; set; }
+        //public double ZoomSliderWidth { get; set; }
         public double LayoutButtonWidth { get; set; }
         public double OrientationButtonWidth { get; set; }
 

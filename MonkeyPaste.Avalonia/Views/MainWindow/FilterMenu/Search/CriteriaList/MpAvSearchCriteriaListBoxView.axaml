@@ -37,14 +37,14 @@
             <Setter Property="VerticalAlignment"
                     Value="Stretch" />
         </Style>
-        <Style Selector="ListBox:not(.optionsList) > ListBoxItem, local|MpAvSearchCriteriaHeaderView">
+        <Style Selector="ListBox.criteriaList > ListBoxItem, local|MpAvSearchCriteriaHeaderView">
             <Setter Property="BorderThickness"
                     Value="{StaticResource CriteriaItemBorderThickness}" />
             <Setter Property="BorderBrush"
                     Value="Gainsboro" />
         </Style>
 
-        <Style Selector="ListBox:not(.optionsList) ListBoxItem:pointerover, local|MpAvSearchCriteriaHeaderView">
+        <Style Selector="ListBox.criteriaList ListBoxItem:pointerover, local|MpAvSearchCriteriaHeaderView">
             <Setter Property="BorderBrush"
                     Value="Yellow" />
         </Style>
@@ -117,6 +117,7 @@
                                                 HorizontalAlignment="Stretch"
                                                 VerticalAlignment="Stretch" />
             <ListBox x:Name="SearchCriteriaListBox"
+                     Classes="criteriaList"
                      DragDrop.AllowDrop="True"
                      Grid.Row="1"
                      Background="Transparent"

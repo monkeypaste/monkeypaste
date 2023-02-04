@@ -999,35 +999,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-
-        //public int IconId {
-        //    get {
-        //        if (CopyItem == null) {
-        //            return 0;
-        //        }
-        //        if (CopyItem.IconId > 0) {
-        //            return CopyItem.IconId;
-        //        }
-        //        if (SourceViewModel == null || SourceViewModel.PrimarySourceViewModel == null) {
-        //            // BUG currently when plugin creates new content it is not setting source info
-        //            // so return app icon
-
-        //            return MpDefaultDataModelTools.ThisAppIconId;
-        //        }
-
-        //        return SourceViewModel.PrimarySourceViewModel.IconId;
-        //    }
-        //    set {
-        //        if (IconId != value) {
-        //            //CopyItem.IconId = value;
-        //            //HasModelChanged = true;
-
-        //            NotifyModelChanged(CopyItem, nameof(CopyItem.IconId), value);
-        //            OnPropertyChanged(nameof(IconId));
-        //        }
-        //    }
-        //}
-
         public object IconResourceObj {
             get {
                 if(CopyItemType == MpCopyItemType.FileList &&
@@ -1110,9 +1081,6 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitializeAsync(MpCopyItem ci, int queryOffset = -1, bool isRestoringSelection = false) {
             _curItemRandomHexColor = string.Empty;
             _dragSource = null;
-            //IsViewLoaded = false;
-            //_sourceViewModel = null;
-            //GetContentView().IsContentUnloaded = false;
 
             IsBusy = true;
 

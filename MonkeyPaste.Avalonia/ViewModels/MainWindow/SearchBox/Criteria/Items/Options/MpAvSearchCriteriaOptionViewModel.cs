@@ -216,7 +216,8 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsEnabled { get; set; } = true;
 
-
+        public bool IsLeafOption 
+            => Items == null || Items.Count == 0;
         public MpSearchCriteriaUnitFlags UnitType { get; set; }
 
         public MpContentQueryBitFlags FilterValue { get; set; }
@@ -315,27 +316,24 @@ namespace MonkeyPaste.Avalonia {
                     Items.ForEach(x => x.IsSelected = x == SelectedItem);
                     break;
                 case nameof(IsSelected):
-                    //if(Parent != null && IsSelected && Parent.SelectedItem != this) {
-                        
-                    //}
-                    //if(!IsSelected) {
-                    //    Items.ForEach(x => x.IsSelected = false);
-                    //    OnPropertyChanged(nameof(SelectedItem));
-                    //}
-                    if(!IsSelected) {
-                        // clear unselected sub-trees
-                        //Items.Clear();
-                    }
-
                     HostCriteriaItem.OnPropertyChanged(nameof(HostCriteriaItem.Items));
                     HostCriteriaItem.OnPropertyChanged(nameof(HostCriteriaItem.IsInputVisible));
+                    //if((Items == null || Items.Count == 0) && !string.IsNullOrEmpty(Value)) {
+                    //    if(UnitType != MpSearchCriteriaUnitFlags.EnumerableValue) {
+                    //        // what's the unit in this case?
+                    //        Debugger.Break();
+                    //    }
+                    //    OnPropertyChanged(nameof(Value));
+                    //    // leaf enumerable value
+                    //}
+
+                    OnPropertyChanged(nameof(Value));
                     break;
                 case nameof(Value1):
                 case nameof(Value2):
                 case nameof(Value3):
                 case nameof(Value4):
                     OnPropertyChanged(nameof(Values));
-                    //Value = string.Format(@"{0},{1},{2}.{3}", Value1, Value2, Value3, Value4);
                     break;
                 case nameof(Values):
                 case nameof(Value):
@@ -346,7 +344,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     if(Validate()) {
                         // only notify when values are valid
-                        HostCriteriaItem.NotifyValueChanged();
+                        HostCriteriaItem.NotifyValueChanged(this);
                     }
                     
                     break;

@@ -17,17 +17,17 @@
                    VerticalAlignment="Stretch"
                    Background="{StaticResource FilterMenuBgBrush}">
         <RelativePanel.Styles>
-            <Style Selector="ToggleButton#PlayPause Image">
+            <!--<Style Selector="ToggleButton#PlayPause Image">
                 <Setter Property="Source"
                         Value="{Binding PlayOrPauseIconResoureKey, Source={x:Static local:MpAvClipTrayViewModel.Instance}, ConverterParameter=white, Converter={StaticResource StringHexToBitmapTintConverter}}" />
             </Style>
             <Style Selector="ToggleButton#PlayPause:pointerover Image">
                 <Setter Property="Source"
                         Value="{Binding PlayOrPauseIconResoureKey, Source={x:Static local:MpAvClipTrayViewModel.Instance}, ConverterParameter=gray, Converter={StaticResource StringHexToBitmapTintConverter}}" />
-            </Style>
+            </Style>-->
         </RelativePanel.Styles>
         <!--  Pause / Resume Clipboard Listener Toggle Button  -->
-        <ToggleButton x:Name="PlayPause"
+        <!--<ToggleButton x:Name="PlayPause"
                       RelativePanel.AlignLeftWithPanel="True"
                       RelativePanel.AlignVerticalCenterWithPanel="True"
                       VerticalAlignment="Center"
@@ -44,12 +44,12 @@
                    VerticalAlignment="Center"
                    Width="20"
                    Height="20" />
-        </ToggleButton>
+        </ToggleButton>-->
 
 
         <!--  Content Sort View  -->
         <local:MpAvClipTileSortView x:Name="SortView"
-                                    RelativePanel.RightOf="PlayPause"
+                                    RelativePanel.AlignLeftWithPanel="True"
                                     VerticalAlignment="Center"
                                     Tag="Sort"
                                     local:MpAvSizeObserverExtension.IsEnabled="False"

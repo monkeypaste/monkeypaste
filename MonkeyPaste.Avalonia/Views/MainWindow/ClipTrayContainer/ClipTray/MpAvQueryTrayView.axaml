@@ -95,6 +95,26 @@
                          Width="{Binding QueryTrayTotalWidth}"
                          Height="{Binding QueryTrayTotalHeight}"
                          Items="{Binding Items}">
+                    <ListBox.Resources>
+                        <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">
+                            Transparent
+                        </SolidColorBrush>
+                        <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">
+                            Transparent
+                        </SolidColorBrush>
+                        <SolidColorBrush x:Key="SystemControlHighlightListAccentHighBrush">
+                            Transparent
+                        </SolidColorBrush>
+                        <SolidColorBrush x:Key="SystemControlHighlightListLowBrush">
+                            Transparent
+                        </SolidColorBrush>
+                        <SolidColorBrush x:Key="SystemControlHighlightListMediumBrush">
+                            Transparent
+                        </SolidColorBrush>
+                        <SolidColorBrush x:Key="SystemControlHighlightListHighBrush">
+                            Transparent
+                        </SolidColorBrush>
+                    </ListBox.Resources>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <local:MpAvClipTileView DataContext="{Binding .}"
@@ -119,8 +139,14 @@
         <!--  IsBusy Overlay  -->
         <Border HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
-                Grid.Row="1"
-                IsVisible="{Binding IsBusy}">
+                Grid.Row="1">
+            <Border.IsVisible>
+                <MultiBinding Converter="{StaticResource MultiBoolConverter}"
+                              ConverterParameter="AND">
+                    <Binding Path="IsQueryTrayEmpty" />
+                    <Binding Path="IsAnyBusy" />
+                </MultiBinding>
+            </Border.IsVisible>
             <local:MpAvBusySpinnerView HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
                                        Width="70"
@@ -144,6 +170,8 @@
             </Border.IsVisible>
             <TextBlock HorizontalAlignment="Center"
                        VerticalAlignment="Center"
+                       TextAlignment="Center"
+                       TextWrapping="Wrap"
                        FontSize="42"
                        Text="{Binding EmptyQueryTrayText}"
                        Classes="disabled" />

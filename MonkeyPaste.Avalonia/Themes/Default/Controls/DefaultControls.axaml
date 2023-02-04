@@ -5,6 +5,7 @@
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/ComboBox.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/ComboBoxItem.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/GridSplitter.axaml" />
+    <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/ListBox.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/MpAvActionDesigner.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/MpAvActionDesignerItemColors.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/MpAvActionProperty.axaml" />
@@ -23,7 +24,6 @@
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/MpAvSliderParameter.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/MpAvTagTile.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/MpAvTooltip.axaml" />
-    <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/PathIcon.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/TemplatedControl.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/TextBlock.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/TextBox.axaml" />

@@ -82,6 +82,7 @@
                         IsVisible="{Binding IsJoinPanelVisible}">
                 <local:MpAvClipBorder Classes="optComboBoxBorder">
                     <ComboBox MinWidth="85"
+                              Classes="criteriaComboBox"
                               FontSize="16"
                               BorderThickness="0"
                               Background="White"

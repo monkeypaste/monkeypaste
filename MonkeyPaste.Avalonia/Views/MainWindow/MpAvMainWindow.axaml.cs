@@ -196,8 +196,13 @@ namespace MonkeyPaste.Avalonia {
             var tmv_lsp = tmv.FindControl<StackPanel>("LeftStackPanel");
             var tmv_wohb = tmv.FindControl<Button>("WindowOrientationHandleButton");
             var tmv_rsp = tmv.FindControl<StackPanel>("RightStackPanel");
+            var tmv_gltb = tmv.FindControl<Control>("GridLayoutToggleButton");
+
             var tmv_zoom_slider_cg = tmv.FindControl<Grid>("ZoomSliderContainerGrid");
-            var tmv_zoom_slider = tmv.FindControl<Slider>("ZoomFactorSlider");
+            var tmv_zoom_slider_track_b = tmv.FindControl<Border>("ZoomTrackLine");
+            var tmv_zoom_slider_min_b = tmv.FindControl<Border>("ZoomMinLine");
+            var tmv_zoom_slider_max_b = tmv.FindControl<Border>("ZoomMaxLine");
+            var tmv_zoom_slider_val_btn = tmv.FindControl<Button>("CurZoomFactorButton");
 
             double resizer_short_side = 0;
 
@@ -246,29 +251,44 @@ namespace MonkeyPaste.Avalonia {
                 tmv_lsp.HorizontalAlignment = HorizontalAlignment.Left;
                 tmv_lsp.VerticalAlignment = VerticalAlignment.Stretch;
 
-                //tmv_wohb.Width = tmvm.TitleDragHandleLongLength;
-                //tmv_wohb.Height = tmvm.TitleDragHandleShortLength;
                 tmv_wohb.VerticalAlignment = VerticalAlignment.Stretch;
                 tmv_wohb.HorizontalAlignment = HorizontalAlignment.Center;
                 if(tmv_wohb.GetVisualDescendant<Image>() is Image tmv_wohb_img &&
                     tmv_wohb_img.RenderTransform is RotateTransform rott) {
                     rott.Angle = 0;
+
+                    tmv_wohb_img.Width = tmvm.TitleDragHandleLongLength;
+                    tmv_wohb_img.Height = tmvm.DefaultTitleMenuFixedLength; 
                 }
 
                 tmv_rsp.Orientation = Orientation.Horizontal;
                 tmv_rsp.HorizontalAlignment = HorizontalAlignment.Right;
                 tmv_rsp.VerticalAlignment = VerticalAlignment.Stretch;
 
-                tmv_zoom_slider_cg.Width = 125;
-                tmv_zoom_slider_cg.Height = tmv.Height;
-                tmv_zoom_slider_cg.Margin = new Thickness(0, 0, 10, 0);
+                tmv_zoom_slider_cg.Width = tmvm.ZoomSliderLength;
+                tmv_zoom_slider_cg.Height = tmvm.DefaultTitleMenuFixedLength;
 
-                tmv_zoom_slider.Width = 250;
-                tmv_zoom_slider.Height = 40;
-                tmv_zoom_slider.Margin = new Thickness(0, 0, 5, 14);
-                tmv_zoom_slider.HorizontalAlignment = HorizontalAlignment.Right;
-                tmv_zoom_slider.VerticalAlignment = VerticalAlignment.Top;
-                tmv_zoom_slider.Orientation = Orientation.Horizontal;
+                tmv_zoom_slider_track_b.Width = double.NaN;
+                tmv_zoom_slider_track_b.Height = tmvm.ZoomSliderLineWidth;
+                tmv_zoom_slider_track_b.HorizontalAlignment = HorizontalAlignment.Stretch;
+                tmv_zoom_slider_track_b.VerticalAlignment = VerticalAlignment.Center;
+                
+                tmv_zoom_slider_min_b.Width = tmvm.ZoomSliderLineWidth;
+                tmv_zoom_slider_min_b.Height = tmvm.DefaultTitleMenuFixedLength * 0.5;
+                tmv_zoom_slider_min_b.HorizontalAlignment = HorizontalAlignment.Left;
+                tmv_zoom_slider_min_b.VerticalAlignment = VerticalAlignment.Center;
+                
+                tmv_zoom_slider_max_b.Width = tmvm.ZoomSliderLineWidth;
+                tmv_zoom_slider_max_b.Height = tmvm.DefaultTitleMenuFixedLength * 0.5;
+                tmv_zoom_slider_max_b.HorizontalAlignment = HorizontalAlignment.Right;
+                tmv_zoom_slider_max_b.VerticalAlignment = VerticalAlignment.Center;
+                
+                tmv_zoom_slider_val_btn.Width = tmvm.ZoomSliderValueLength;
+                tmv_zoom_slider_val_btn.Height = tmvm.DefaultTitleMenuFixedLength * 0.5;
+
+                tmv_gltb.Margin = new Thickness(10, 0, 0, 0);
+                //tmv_zoom_slider_val_btn.HorizontalAlignment = HorizontalAlignment.Center;
+                //tmv_zoom_slider_val_btn.VerticalAlignment = VerticalAlignment.Stretch;
             } else {
                 // VERTICAL
 
@@ -321,31 +341,45 @@ namespace MonkeyPaste.Avalonia {
                 tmv_lsp.HorizontalAlignment = HorizontalAlignment.Stretch;
                 tmv_lsp.VerticalAlignment = VerticalAlignment.Top;
 
-                //tmv_wohb.Width = tmvm.TitleDragHandleShortLength;
-                //tmv_wohb.Height = tmvm.TitleDragHandleLongLength;
                 tmv_wohb.VerticalAlignment = VerticalAlignment.Center;
                 tmv_wohb.HorizontalAlignment = HorizontalAlignment.Stretch;
                 if (tmv_wohb.GetVisualDescendant<Image>() is Image tmv_wohb_img && 
                     tmv_wohb_img.RenderTransform is RotateTransform rott) {
                     rott.Angle = 90;
+                    tmv_wohb_img.Width = tmvm.TitleDragHandleLongLength; 
+                    tmv_wohb_img.Height = tmvm.DefaultTitleMenuFixedLength;
                 }
 
                 tmv_rsp.Orientation = Orientation.Vertical;
                 tmv_rsp.HorizontalAlignment = HorizontalAlignment.Stretch;
                 tmv_rsp.VerticalAlignment = VerticalAlignment.Bottom;
 
-                tmv_zoom_slider_cg.Width = tmv.Width;
-                tmv_zoom_slider_cg.Height = 125;
-                tmv_zoom_slider_cg.Margin = new Thickness(0, 0, 0, 10);
+                tmv_zoom_slider_cg.Width = tmvm.DefaultTitleMenuFixedLength;
+                tmv_zoom_slider_cg.Height = tmvm.ZoomSliderLength;
 
-                tmv_zoom_slider.Width = 40;
-                tmv_zoom_slider.Height = 250;
-                tmv_zoom_slider.Margin = new Thickness(0, 0, 5, 14);
-                tmv_zoom_slider.HorizontalAlignment = HorizontalAlignment.Center;
-                tmv_zoom_slider.VerticalAlignment = VerticalAlignment.Top;
-                tmv_zoom_slider.Orientation = Orientation.Vertical;
+                tmv_zoom_slider_track_b.Width = tmvm.ZoomSliderLineWidth;
+                tmv_zoom_slider_track_b.Height = double.NaN;
+                tmv_zoom_slider_track_b.HorizontalAlignment = HorizontalAlignment.Center;
+                tmv_zoom_slider_track_b.VerticalAlignment = VerticalAlignment.Stretch;
+
+                tmv_zoom_slider_min_b.Width = tmvm.DefaultTitleMenuFixedLength * 0.5; 
+                tmv_zoom_slider_min_b.Height = tmvm.ZoomSliderLineWidth;
+                tmv_zoom_slider_min_b.HorizontalAlignment = HorizontalAlignment.Center;
+                tmv_zoom_slider_min_b.VerticalAlignment = VerticalAlignment.Top;
+
+                tmv_zoom_slider_max_b.Width = tmvm.DefaultTitleMenuFixedLength * 0.5; ;
+                tmv_zoom_slider_max_b.Height = tmvm.ZoomSliderLineWidth;
+                tmv_zoom_slider_max_b.HorizontalAlignment = HorizontalAlignment.Center;
+                tmv_zoom_slider_max_b.VerticalAlignment = VerticalAlignment.Bottom;
+
+                tmv_zoom_slider_val_btn.Width = tmvm.DefaultTitleMenuFixedLength * 0.5; ; 
+                tmv_zoom_slider_val_btn.Height = tmvm.ZoomSliderValueLength;
+
+                tmv_gltb.Margin = new Thickness(0, 10, 0, 0);
             }
+            tmv.PositionZoomValueButton();
         }
+
         public void UpdateContentLayout() {
             var mwvm = MpAvMainWindowViewModel.Instance;
             var ctrvm = MpAvClipTrayViewModel.Instance;
@@ -357,9 +391,7 @@ namespace MonkeyPaste.Avalonia {
             var sbbg = this.FindControl<MpAvSidebarButtonGroupView>("SidebarButtonGroup");
             var ssbcb = this.FindControl<Border>("SelectedSidebarContainerBorder");
             var sbgs = this.FindControl<GridSplitter>("SidebarGridSplitter");
-            var ctrcb = this.FindControl<Border>("ClipTrayContainerBorder");
-
-            
+            var ctrcb = this.FindControl<Border>("ClipTrayContainerBorder");            
 
             var ctrcv = this.FindControl<MpAvClipTrayContainerView>("ClipTrayContainerView");
             var ctrcv_cg = ctrcv.FindControl<Grid>("ClipTrayContainerGrid");
@@ -425,14 +457,6 @@ namespace MonkeyPaste.Avalonia {
                 sbgs.HorizontalAlignment = HorizontalAlignment.Right;
                 sbgs.ResizeDirection = GridResizeDirection.Columns;
 
-                // adv search and splitter
-                //Grid.SetRow(sclbv, 0);
-                //Grid.SetColumn(sclbv, 2);
-                //Grid.SetColumnSpan(sclbv, 2);
-                //Grid.SetRow(sclbv_gs, 0);
-                //Grid.SetColumn(sclbv_gs, 2);
-                //Grid.SetColumnSpan(sclbv_gs, 2);
-
                 // cliptray container border
                 Grid.SetRow(ctrcb, 1);
                 Grid.SetColumn(ctrcb, 2);
@@ -497,8 +521,7 @@ namespace MonkeyPaste.Avalonia {
                 Grid.SetColumn(ctrcv_ctrv, 1);
             } else {
                 // VERTICAL 
-
-                var ctrcb_rd = new RowDefinition(Math.Max(0,ctrvm.ContainerBoundHeight), GridUnitType.Pixel);
+                var ctrcb_rd = new RowDefinition(1, GridUnitType.Star);
                 ctrcb_rd.Bind(
                     RowDefinition.HeightProperty,
                     new Binding() {
@@ -521,27 +544,22 @@ namespace MonkeyPaste.Avalonia {
                 var sbbg_rd = new RowDefinition(
                     new GridLength(sbicvm.ButtonGroupFixedDimensionLength, GridUnitType.Pixel));
 
-               // mwtg.RowDefinitions.Add(sclbv_rd);
                 mwtg.RowDefinitions.Add(ctrcb_rd);
                 mwtg.RowDefinitions.Add(ssbcb_rd);
                 mwtg.RowDefinitions.Add(sbbg_rd);
 
-                // adv search and splitter
-                //Grid.SetRow(sclbv, 0);
-                //Grid.SetColumn(sclbv, 0);
-                //Grid.SetRow(sclbv_gs, 0);
-                //Grid.SetColumn(sclbv_gs, 0);
-                
                 // cliptray container view
-                Grid.SetRow(ctrcb, 1);
+                Grid.SetRow(ctrcb, 0);
                 Grid.SetColumn(ctrcb, 0);
 
                 // sidebar content
-                Grid.SetRow(ssbcb, 2);
+                Grid.SetRow(ssbcb, 1);
+                Grid.SetRowSpan(ssbcb, 1);
                 Grid.SetColumn(ssbcb, 0);
 
                 // sidebar splitter
-                Grid.SetRow(sbgs, 2);
+                Grid.SetRow(sbgs, 1);
+                Grid.SetRowSpan(sbgs, 1);
                 Grid.SetColumn(sbgs, 0);
                 sbgs.Height = 5.0d;
                 sbgs.Width = double.NaN;
@@ -550,7 +568,8 @@ namespace MonkeyPaste.Avalonia {
                 sbgs.ResizeDirection = GridResizeDirection.Rows;
 
                 // sidebar buttons
-                Grid.SetRow(sbbg, 3);
+                Grid.SetRow(sbbg, 2);
+                Grid.SetRowSpan(sbbg, 1);
                 Grid.SetColumn(sbbg, 0);
 
 
@@ -641,6 +660,9 @@ namespace MonkeyPaste.Avalonia {
                         }
                         break;
                     }
+                case MpMessageType.MainWindowOrientationChangeEnd:
+                    this.FindControl<MpAvMainWindowTitleMenuView>("MainWindowTitleView").PositionZoomValueButton();
+                    break;
             }
         }
 
@@ -682,14 +704,14 @@ namespace MonkeyPaste.Avalonia {
                 nctrcb_w = mw_w - sbicvm.ButtonGroupFixedDimensionLength - nsbi_w;
                 nctrcb_h = mwtg.Bounds.Height;
             } else {
-                avail_w = mwtg.Bounds.Width; 
-                avail_h = mw_h - sbicvm.ButtonGroupFixedDimensionLength  - fmvm.FilterMenuHeight;
+                avail_w = mwtg.Bounds.Width;
+                avail_h = mw_h - sbicvm.ButtonGroupFixedDimensionLength;//  - fmvm.FilterMenuHeight;
 
                 nsbi_w = mwtg.Bounds.Width;
                 nsbi_h = is_opening ? ssbivm.DefaultSidebarHeight : 0;
 
                 nctrcb_w = mwtg.Bounds.Width;
-                nctrcb_h = mw_h - sbicvm.ButtonGroupFixedDimensionLength - nsbi_h - fmvm.FilterMenuHeight;
+                nctrcb_h = mw_h - sbicvm.ButtonGroupFixedDimensionLength;// - nsbi_h - fmvm.FilterMenuHeight;
             }
             nsbi_w = Math.Max(0, nsbi_w);
             nsbi_h = Math.Max(0, nsbi_h);

@@ -13,39 +13,103 @@ using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvMainWindowTitleMenuView : MpAvUserControl<MpAvMainWindowTitleMenuViewModel> {
-        private bool wasPressZoomJump = false;
-
+        private bool _wasZoomDragging = false;
         public MpAvMainWindowTitleMenuView() {
             InitializeComponent();
 
-            var titleGrid = this.FindControl<Grid>("TitlePanel");
-            titleGrid.Children.CollectionChanged += Children_CollectionChanged;
+            var czfb = this.FindControl<Control>("CurZoomFactorButton");
+            czfb.PointerMoved += Czfb_PointerMoved;
+            czfb.DoubleTapped += Czfb_DoubleTapped;
+            //czfb.EffectiveViewportChanged += (s, e) => PositionZoomValueButton();
 
-            var zoomFactorSlider = this.FindControl<Slider>("ZoomFactorSlider");
-            zoomFactorSlider.DoubleTapped += ZoomFactorSlider_DoubleTapped;
-            zoomFactorSlider.AddHandler(Slider.PointerPressedEvent, ZoomFactorSlider_PointerPressed, RoutingStrategies.Tunnel);
-            //zoomFactorSlider.PointerPressed += ZoomFactorSlider_PointerPressed;
-            zoomFactorSlider.PointerReleased += ZoomFactorSlider_PointerReleased;
-            zoomFactorSlider.PointerMoved += ZoomFactorSlider_PointerMoved;
-            Dispatcher.UIThread.Post(async () => {
-                var zoom_thumb = zoomFactorSlider.GetVisualDescendant<Thumb>();
-                while(zoom_thumb == null) {
-                    zoom_thumb = zoomFactorSlider.GetVisualDescendant<Thumb>();
-                    if(zoom_thumb == null) {
-                        await Task.Delay(100);
-                    } else {
-                        zoom_thumb.Cursor = new Cursor(StandardCursorType.Hand);
-                    }
-                }
-            });
+            var czfb_cg = this.FindControl<Control>("ZoomSliderContainerGrid");
+            czfb_cg.PointerReleased += Czfb_cg_PointerReleased;
+            //czfb_cg.EffectiveViewportChanged += (s, e) => PositionZoomValueButton();
 
             var windowDragButton = this.FindControl<Control>("WindowOrientationHandleButton");
             windowDragButton.AddHandler(Control.PointerPressedEvent, WindowDragButton_PointerPressed, RoutingStrategies.Tunnel);
+        }
+        private void InitializeComponent() {
+            AvaloniaXamlLoader.Load(this);
+        }
 
-            //var ltb = this.FindControl<Button>("MainWindowOrientationButton");
-            //ltb.AddHandler(Button.PointerPressedEvent, Ltb_PointerPressed, RoutingStrategies.Tunnel);
+        #region Zoom Slider
+
+        public void SetZoomFactor(double percent, MpPoint p = null) {
+            var ctrvm = MpAvClipTrayViewModel.Instance;
+            ctrvm.ZoomFactor = (ctrvm.MaxZoomFactor - ctrvm.MinZoomFactor) * percent;
+            PositionZoomValueButton(p);
+        }
+
+        public void PositionZoomValueButton(MpPoint p = null) {
+            var ctrvm = MpAvClipTrayViewModel.Instance;
+            double percent = 
+                (ctrvm.ZoomFactor - ctrvm.MinZoomFactor) /
+                (ctrvm.MaxZoomFactor - ctrvm.MinZoomFactor);
+            var czfb_cg = this.FindControl<Control>("ZoomSliderContainerGrid");
+            var czfb = this.FindControl<Control>("CurZoomFactorButton");
+
+            double offsetX = -czfb.Width * 0.5;
+            double offsetY = -czfb.Height * 0.5;
+            if(MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+                if(p == null) {
+                    p = new MpPoint(
+                        czfb_cg.Width * percent, 
+                        (czfb_cg.Height / 2) - (czfb.Height / 2));
+                } else {
+                    p.Y = (czfb_cg.Height / 2) - (czfb.Height / 2);
+                }
+                p.X += offsetX;
+            } else {
+                if (p == null) {
+                    p = new MpPoint(
+                        (czfb_cg.Width / 2) - (czfb.Width / 2),
+                        czfb_cg.Height * percent);
+                } else {
+                    p.X = (czfb_cg.Width / 2) - (czfb.Width / 2);
+                }
+                p.Y += offsetY;
+            }
+            Canvas.SetLeft(czfb, p.X);
+            Canvas.SetTop(czfb, p.Y);
+        }
+        private void Czfb_cg_PointerReleased(object sender, PointerReleasedEventArgs e) {
+            var czfb_cg = this.FindControl<Control>("CurZoomValueCanvas");
+            var cg_mp = e.GetClientMousePoint(czfb_cg);
+
+            double percent =
+                MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
+                    cg_mp.X / czfb_cg.Width :
+                    cg_mp.Y / czfb_cg.Height;
+            SetZoomFactor(percent,cg_mp);
+        }
+
+        private void Czfb_DoubleTapped(object sender, RoutedEventArgs e) {
+            MpAvClipTrayViewModel.Instance.ZoomFactor =
+                MpAvClipTrayViewModel.Instance.DefaultZoomFactor;
+        }
+
+        private void Czfb_PointerMoved(object sender, PointerEventArgs e) {
+            var czfb_cg = this.FindControl<Control>("CurZoomValueCanvas");
+            var cg_mp = e.GetClientMousePoint(czfb_cg);
+
+            if (e.IsLeftDown(sender as Control)) {
+                e.Pointer.Capture(sender as Control);
+                _wasZoomDragging = true;
+                PositionZoomValueButton(cg_mp);
+            } else if(_wasZoomDragging) {
+                _wasZoomDragging = false;
+
+                double percent =
+                    MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
+                        cg_mp.X / czfb_cg.Bounds.Width :
+                        cg_mp.Y / czfb_cg.Bounds.Height;
+                SetZoomFactor(percent, cg_mp);
+            }
 
         }
+
+        #endregion
 
         #region Window Drag
         private MpMainWindowOrientationType _startOrientation;
@@ -118,70 +182,5 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #endregion
-
-        private void Children_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            
-            var titleGrid = this.FindControl<Grid>("TitlePanel");
-            double totalItemWidth = titleGrid.Children.Sum(x => x.Bounds.Width);
-            MpConsole.WriteLine("total items width: " + totalItemWidth);
-        }
-
-        private void ZoomFactorSlider_PointerPressed(object sender, PointerPressedEventArgs e) {
-            MpMessenger.SendGlobal(MpMessageType.TrayZoomFactorChangeBegin);
-
-            bool isThumbPress = (e.Source as Control).GetVisualAncestor<Thumb>() != null;
-            if (!isThumbPress) {
-
-                var zoomFactorSlider = this.FindControl<Slider>("ZoomFactorSlider");
-                var track = zoomFactorSlider.GetVisualDescendant<Track>();
-                if (track == null) {
-                    Debugger.Break();
-                }
-                // is track press
-                var track_mp = e.GetPosition(track);
-                double newValue = track.ValueFromPoint(track_mp);
-                MpAvClipTrayViewModel.Instance.ZoomFactor = newValue;
-                //MpMessenger.SendGlobal(MpMessageType.TrayZoomFactorChangeEnd);
-                //e.Pointer.Capture(slider);
-                wasPressZoomJump = true;
-                e.Handled = true;
-                return;
-            }
-            e.Handled = false;
-        }
-
-
-        private void ZoomFactorSlider_PointerMoved(object sender, PointerEventArgs e) {
-            if(!wasPressZoomJump) {
-                return;
-            }
-            var slider = sender as Slider;
-            var track = slider.GetVisualDescendant<Track>();
-            var track_mp = e.GetPosition(track);
-            double newValue = track.ValueFromPoint(track_mp);
-            MpAvClipTrayViewModel.Instance.ZoomFactor = newValue;
-        }
-
-        private void ZoomFactorSlider_PointerReleased(object sender, PointerReleasedEventArgs e) {
-            wasPressZoomJump = false;
-            MpMessenger.SendGlobal(MpMessageType.TrayZoomFactorChangeEnd);
-        }
-
-
-        //private void Ltb_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
-        //    if(e.IsL.GetCurrentPoint(this).Properties.PointerUpdateKind == PointerUpdateKind.LeftButtonPressed) {
-        //        MpAvMainWindowViewModel.Instance.CycleOrientationCommand.Execute(false);
-        //    } else if (e.GetCurrentPoint(this).Properties.PointerUpdateKind == PointerUpdateKind.RightButtonPressed) {
-        //        MpAvMainWindowViewModel.Instance.CycleOrientationCommand.Execute(true);
-        //    }
-        //}
-
-        private void ZoomFactorSlider_DoubleTapped(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
-            MpAvClipTrayViewModel.Instance.ResetZoomFactorCommand.Execute(null);
-        }
-
-        private void InitializeComponent() {
-            AvaloniaXamlLoader.Load(this);
-        }
     }
 }

@@ -168,6 +168,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\ComboBoxItem.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\DefaultControls.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\GridSplitter.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\ListBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvActionDesigner.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvActionDesignerItemColors.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvActionProperty.axaml" />
@@ -185,7 +186,6 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvSliderParameter.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvTagTile.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvTooltip.axaml" />
-    <AvaloniaXaml Remove="Themes\Default\Controls\PathIcon.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TemplatedControl.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TextBlock.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TextBox.axaml" />
@@ -1012,6 +1012,7 @@
       
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Default\Controls\Animations\Shake.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\ListBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvClipBorder.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvTagTile.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\TemplatedControl.axaml" />
@@ -1036,9 +1037,6 @@
     <AvaloniaResource Include="Themes\Default\Controls\ToolTip.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvMainWindow.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\TextBlock.axaml">
-      
-    </AvaloniaResource>
-    <AvaloniaResource Include="Themes\Default\Controls\PathIcon.axaml">
       
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Default\Controls\DefaultControls.axaml">
@@ -1104,7 +1102,6 @@
     <Folder Include="Utils\Input\Mouse\" />
     <Folder Include="Utils\Notifications\" />
     <Folder Include="ViewModels\MainWindow\SearchBox\Filter\Items\" />
-    <Folder Include="Views\HtmlConverterWindow\" />
     <Folder Include="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Transactions\Items\" />
     <Folder Include="Views\MainWindow\ClipTrayContainer\PinTray\" />
   </ItemGroup>

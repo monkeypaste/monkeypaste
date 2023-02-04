@@ -2,6 +2,7 @@
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:pcl="using:MonkeyPaste"
                        x:TypeArguments="local:MpAvMainWindowTitleMenuViewModel"
@@ -13,7 +14,6 @@
                        d:DesignHeight="30"
                        x:Class="MonkeyPaste.Avalonia.MpAvMainWindowTitleMenuView">
     <local:MpAvUserControl.Styles>
-
         <!--  BUTTONS  -->
 
         <Style Selector="PathIcon">
@@ -47,6 +47,37 @@
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource Dots2x10Image}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=dimgray}" />
         </Style>
+
+        <!--  ZOOM SLIDER  -->
+        <Style Selector="Border.zoomLine">
+            <Setter Property="Background"
+                    Value="Black" />
+        </Style>
+        <Style Selector="Button Border.zoomLine">
+            <Setter Property="Background"
+                    Value="White" />
+        </Style>
+        <Style Selector="Grid#ZoomSliderContainerGrid:pointerover Border.zoomLine">
+            <Setter Property="Background"
+                    Value="Yellow" />
+        </Style>
+        <Style Selector="Button:pointerover Border.zoomLine">
+            <Setter Property="Background"
+                    Value="Orange" />
+        </Style>
+        <Style Selector="Button:pressed Border.zoomLine">
+            <Setter Property="Background"
+                    Value="Red" />
+        </Style>
+        <Style Selector="Button#CurZoomValueCanvas:pressed">
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView ToolTipText="{Binding ZoomFactor, Source={x:Static local:MpAvClipTrayViewModel.Instance}, StringFormat='Scale \{0:f\} x'}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </local:MpAvUserControl.Styles>
     <Grid x:Name="TitlePanel"
           HorizontalAlignment="Stretch"
@@ -75,8 +106,7 @@
 
             <ToggleButton x:Name="LockToggleButton"
                           Classes="noBg noHoverBg shakeOver"
-                          IsChecked="{Binding IsMainWindowLocked, Source={x:Static local:MpAvMainWindowViewModel.Instance}, Mode=TwoWay}"
-                          ToolTip.ShowDelay="500">
+                          IsChecked="{Binding IsMainWindowLocked, Source={x:Static local:MpAvMainWindowViewModel.Instance}, Mode=TwoWay}">
 
                 <ToggleButton.RenderTransform>
                     <RotateTransform />
@@ -101,114 +131,37 @@
             </Image>
         </Button>
 
-
         <StackPanel x:Name="RightStackPanel"
                     Orientation="Horizontal"
                     HorizontalAlignment="Right">
             <!--  Zoom Factor Slider  -->
             <Grid x:Name="ZoomSliderContainerGrid"
-                  IsVisible="False"
-                  Width="125"
-                  Opacity="0.5"
-                  local:MpAvIsHoveringExtension.IsEnabled="True"
-                  local:MpAvIsHoveringExtension.IsHovering="{Binding IsZoomSliderHovering, Mode=TwoWay}"
-                  local:MpAvIsHoveringExtension.HoverCursor="Hand"
-                  Height="{Binding Bounds.Height, ElementName=TitlePanel}"
-                  Margin="0,0,10,0">
-                <Border HorizontalAlignment="Stretch"
-                        VerticalAlignment="Center"
-                        Margin="0,2,0,0"
-                        Height="1"
-                        Background="{Binding ZoomSliderHexColor, Converter={StaticResource StringHexToBrushConverter}}" />
-                <Border HorizontalAlignment="Left"
-                        VerticalAlignment="Stretch"
-                        Margin="0,5"
-                        Width="1"
-                        Background="{Binding ZoomSliderHexColor, Converter={StaticResource StringHexToBrushConverter}}" />
-                <Border HorizontalAlignment="Right"
-                        VerticalAlignment="Stretch"
-                        Margin="0,5"
-                        Width="1"
-                        Background="{Binding ZoomSliderHexColor, Converter={StaticResource StringHexToBrushConverter}}" />
-                <Viewbox Stretch="Fill"
-                         VerticalAlignment="Center"
-                         Margin="0">
-                    <Slider x:Name="ZoomFactorSlider"
-                            Value="{Binding ZoomFactor, Mode=TwoWay, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
-                            Minimum="0.25"
-                            Maximum="3"
-                            TickFrequency="0.1"
-                            Width="250"
-                            Height="40"
-                            HorizontalAlignment="Right"
+                  Background="{StaticResource HitTestableTransparent}"
+                  Cursor="Hand">
+                <!--  TRACK LINE  -->
+                <Border x:Name="ZoomTrackLine"
+                        Classes="zoomLine" />
+                <!--  MIN LINE  -->
+                <Border x:Name="ZoomMinLine"
+                        Classes="zoomLine" />
+                <!--  MAX LINE  -->
+                <Border x:Name="ZoomMaxLine"
+                        Classes="zoomLine" />
+
+                <!--  CUR VAL LINE  -->
+                <Canvas x:Name="CurZoomValueCanvas"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch">
+                    <Button x:Name="CurZoomFactorButton"
+                            HorizontalAlignment="Left"
                             VerticalAlignment="Top"
-                            Orientation="Horizontal"
-                            IsSnapToTickEnabled="False"
-                            Margin="0,0,5,14">
-                        <Slider.Styles>
-                            <Style Selector="Slider /template/ Thumb">
-                                <Setter Property="ToolTip.Tip"
-                                        Value="{Binding $parent[Slider].Value, Mode=OneWay, StringFormat='Value \{0:f\}'}" />
-                                <Setter Property="ToolTip.Placement"
-                                        Value="Top" />
-                                <Setter Property="ToolTip.VerticalOffset"
-                                        Value="-10" />
-                                <Setter Property="ToolTip.HorizontalOffset"
-                                        Value="-30" />
-                                <Setter Property="Cursor"
-                                        Value="SizeWestEast" />
-                            </Style>
-                            <Style Selector="Slider /template/ RepeatButton">
-                                <Setter Property="IsVisible"
-                                        Value="False" />
-                                <!--<Setter Property="Padding"
-                                        Value="0" />-->
-                            </Style>
-                            <Style Selector="Slider /template/ Thumb.SliderThumbStyle">
-                                <Setter Property="Template">
-                                    <ControlTemplate>
-                                        <Grid>
-                                            <Border Width="12"
-                                                    local:MpAvIsHoveringExtension.IsEnabled="True"
-                                                    local:MpAvIsHoveringExtension.HoverCursor="Hand"
-                                                    Height="40"
-                                                    CornerRadius="3"
-                                                    Background="White" />
-                                        </Grid>
-                                    </ControlTemplate>
-                                </Setter>
-                            </Style>
-                            <Style Selector="Slider /template/ Thumb.SliderThumbStyle:pointerover">
-                                <Setter Property="Template">
-                                    <ControlTemplate>
-                                        <Grid>
-                                            <Border Width="12"
-                                                    Height="40"
-                                                    local:MpAvIsHoveringExtension.IsEnabled="True"
-                                                    local:MpAvIsHoveringExtension.HoverCursor="Hand"
-                                                    CornerRadius="3"
-                                                    Background="{DynamicResource HoverDefaultBorderBrush}" />
-                                        </Grid>
-                                    </ControlTemplate>
-                                </Setter>
-                            </Style>
-                            <Style Selector="Slider /template/ Thumb.SliderThumbStyle:pressed">
-                                <Setter Property="Template">
-                                    <ControlTemplate>
-                                        <Grid>
-                                            <Border Width="12"
-                                                    Height="40"
-                                                    local:MpAvIsHoveringExtension.IsEnabled="True"
-                                                    local:MpAvIsHoveringExtension.HoverCursor="Hand"
-                                                    CornerRadius="3"
-                                                    Background="Red" />
-                                        </Grid>
-                                    </ControlTemplate>
-                                </Setter>
-                            </Style>
-                        </Slider.Styles>
-                    </Slider>
-                </Viewbox>
+                            BorderThickness="0"
+                            Classes="noBg noHoverBg">
+                        <Border Classes="zoomLine zoomValueLine"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch" />
+                    </Button>
+                </Canvas>
             </Grid>
             <!--  Layout Toggle Button  -->
             <ToggleButton x:Name="GridLayoutToggleButton"

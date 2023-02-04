@@ -139,4 +139,48 @@
     <sys:String x:Key="DotsSolidSvg">
         avares://MonkeyPaste.Avalonia/Assets/svg/dots-solid.svg
     </sys:String>
+
+    <Image x:Key="PlayOutlineSvgImage">
+        <DrawingImage>
+            <DrawingGroup>
+                <DrawingGroup>
+                    <DrawingGroup.Transform>
+                        <MatrixTransform Matrix="33.333332,0,0,33.333332,0,0" />
+                    </DrawingGroup.Transform>
+                    <GeometryDrawing Geometry="F1 M6 18L6 6L17 12L6 18Z">
+                        <GeometryDrawing.Pen>
+                            <Pen Brush="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ToggleButton}}"
+                                 Thickness="2"
+                                 LineJoin="Round"
+                                 MiterLimit="4" />
+                        </GeometryDrawing.Pen>
+                    </GeometryDrawing>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage>
+    </Image>
+
+    <Image x:Key="PauseSvgImage">
+        <Image.Resources>
+            <Pen x:Key="Pen0"
+                 Brush="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ToggleButton}}"
+                 Thickness="3"
+                 LineCap="Round"
+                 LineJoin="Miter"
+                 MiterLimit="4" />
+        </Image.Resources>
+        <DrawingImage>
+            <DrawingGroup>
+                <DrawingGroup>
+                    <DrawingGroup.Transform>
+                        <MatrixTransform Matrix="33.333332,0,0,33.333332,0,0" />
+                    </DrawingGroup.Transform>
+                    <GeometryDrawing Pen="{DynamicResource Pen0}"
+                                     Geometry="F1 M8.5 7L8.5 18" />
+                    <GeometryDrawing Pen="{DynamicResource Pen0}"
+                                     Geometry="F1 M15.5 7L15.5 12.5L15.5 18" />
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage>
+    </Image>
 </ResourceDictionary>

@@ -13,12 +13,12 @@
              VerticalAlignment="Stretch"
              x:Class="MonkeyPaste.Avalonia.MpAvContextMenuView">
     <ContextMenu.Resources>
-        <SolidColorBrush x:Key="MenuFlyoutItemBackgroundPointerOver">
+        <!--<SolidColorBrush x:Key="MenuFlyoutItemBackgroundPointerOver">
             LightBlue
-        </SolidColorBrush>
+        </SolidColorBrush>-->
     </ContextMenu.Resources>
     <ContextMenu.Styles>
-        <Style Selector="MenuItem">
+        <!--<Style Selector="MenuItem">
             <Setter Property="Background"
                     Value="Transparent" />
         </Style>
@@ -29,6 +29,6 @@
         <Style Selector="MenuItem:pointerover /template/ Border">
             <Setter Property="Background"
                     Value="LightBlue" />
-        </Style>
+        </Style>-->
     </ContextMenu.Styles>
 </ContextMenu>

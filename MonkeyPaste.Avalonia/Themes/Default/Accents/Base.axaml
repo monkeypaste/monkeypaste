@@ -21,7 +21,7 @@
                          Color="Black"
                          Opacity="0.01" />
 
-        <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">
+        <!--<SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">
             Transparent
         </SolidColorBrush>
         <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">
@@ -38,7 +38,7 @@
         </SolidColorBrush>
         <SolidColorBrush x:Key="SystemControlHighlightListHighBrush">
             Transparent
-        </SolidColorBrush>
+        </SolidColorBrush>-->
         <SolidColorBrush x:Key="EnabledHighlightBrush">
             Lime
         </SolidColorBrush>

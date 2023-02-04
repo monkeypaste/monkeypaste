@@ -910,7 +910,7 @@ namespace MonkeyPaste.Avalonia {
                 ProcessDataTransferCompleteResponse(dtcn).FireAndForgetSafeAsync(BindingContext);
             }
 
-            BindingContext.IgnoreHasModelChanged = true;
+            //BindingContext.IgnoreHasModelChanged = true;
 
             bool hasSizeChanged = false;
             if (contentChanged_ntf.length > 0) {
@@ -940,7 +940,7 @@ namespace MonkeyPaste.Avalonia {
             }
             BindingContext.HasTemplates = contentChanged_ntf.hasTemplates;
 
-            BindingContext.IgnoreHasModelChanged = false;
+            //BindingContext.IgnoreHasModelChanged = false;
 
             if(is_reload) {
                 BindingContext.DetailCollectionViewModel.RefreshAsync().FireAndForgetSafeAsync(BindingContext);

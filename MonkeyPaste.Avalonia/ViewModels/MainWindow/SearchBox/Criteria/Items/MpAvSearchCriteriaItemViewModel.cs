@@ -652,13 +652,13 @@ namespace MonkeyPaste.Avalonia {
                         tovm.FilterValue = MpContentQueryBitFlags.Days;
                         break;
                     case MpTimeSpanWithinUnitType.Weeks:
-                        tovm.FilterValue = MpContentQueryBitFlags.Weeks;
+                        tovm.FilterValue = MpContentQueryBitFlags.Days;
                         break;
                     case MpTimeSpanWithinUnitType.Months:
-                        tovm.FilterValue = MpContentQueryBitFlags.Months;
+                        tovm.FilterValue = MpContentQueryBitFlags.Days;
                         break;
                     case MpTimeSpanWithinUnitType.Years:
-                        tovm.FilterValue = MpContentQueryBitFlags.Years;
+                        tovm.FilterValue = MpContentQueryBitFlags.Days;
                         break;
                 }
                 novml.Add(tovm);
@@ -705,7 +705,7 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     case MpDateBeforeUnitType.Exact:
                         tovm.UnitType = MpSearchCriteriaUnitFlags.DateTime;
-                        tovm.FilterValue = MpContentQueryBitFlags.DateTime;
+                        tovm.FilterValue = MpContentQueryBitFlags.Exactly;
                         break;
                 }
                 novml.Add(tovm);
@@ -767,12 +767,6 @@ namespace MonkeyPaste.Avalonia {
                 var ovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
                 ovm.Label = labels[i];
                 switch ((MpDateTimeOptionType)i) {
-                    case MpDateTimeOptionType.WithinLast:
-                        ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
-                        ovm.FilterValue = MpContentQueryBitFlags.Between;
-                        ovm.ItemsOptionType = typeof(MpTimeSpanWithinUnitType);
-                        ovm.Items = GetTimeSpanWithinOptionViewModel(ovm);
-                        break;
                     case MpDateTimeOptionType.Before:
                         ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
                         ovm.FilterValue = MpContentQueryBitFlags.Before;
@@ -784,6 +778,12 @@ namespace MonkeyPaste.Avalonia {
                         ovm.FilterValue = MpContentQueryBitFlags.After;
                         ovm.ItemsOptionType = typeof(MpDateAfterUnitType);
                         ovm.Items = GetDateAfterOptionViewModel(ovm);
+                        break;
+                    case MpDateTimeOptionType.WithinLast:
+                        ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
+                        ovm.FilterValue = MpContentQueryBitFlags.Between;
+                        ovm.ItemsOptionType = typeof(MpTimeSpanWithinUnitType);
+                        ovm.Items = GetTimeSpanWithinOptionViewModel(ovm);
                         break;
                     case MpDateTimeOptionType.Exact:
                         ovm.UnitType = MpSearchCriteriaUnitFlags.DateTime;
@@ -993,14 +993,18 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
-        public void NotifyValueChanged() {
+        public void NotifyValueChanged(MpAvSearchCriteriaOptionViewModel ovm) {
             if(Parent == null ||
-                Parent.SuppressQueryChangedNotification) {
+                IsBusy ||
+                Parent.IsBusy) {
                 // don't notify during load
                 return;
             }
             SearchOptions = GetSelectedOptionsString();
-            Parent.NotifyQueryChanged(true);
+            if(ovm.IsLeafOption) {
+
+                Parent.NotifyQueryChanged(true);
+            }
         }
 
         #endregion

@@ -27,7 +27,23 @@ namespace MonkeyPaste.Avalonia {
                 if(mvtb != null) {
                     mvtb.LostFocus += Mvtb_LostFocus;
                 }
+
+                var test = MpPlatform.Services.PlatformResource.GetResource("DatePickerFlyoutPresenterHighlightHeight");
+                var test2 = MpPlatform.Services.PlatformResource.GetResource("DatePickerFlyoutPresenterSpacerFill");
+                var test3 = MpPlatform.Services.PlatformResource.GetResource("DatePickerFlyoutPresenterHighlightHeight");
+                var test4 = MpPlatform.Services.PlatformResource.GetResource("DatePickerSpacerThemeWidth");
+
+                var mvdt = cocc.GetVisualDescendant<DatePicker>();
+                if(mvdt != null) {
+                    mvdt.PointerEnter += Mvdt_PointerEnter;
+                }
             }
+        }
+
+        private void Mvdt_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e) {
+            var dp = sender as DatePicker;
+            var test = dp.GetVisualDescendants<Control>();
+
         }
 
         private void Mvtb_LostFocus(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {

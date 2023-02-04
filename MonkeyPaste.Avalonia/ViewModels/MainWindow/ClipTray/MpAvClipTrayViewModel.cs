@@ -415,7 +415,9 @@ namespace MonkeyPaste.Avalonia {
 
         public double LastZoomFactor { get; set; }
 
-        private double _zoomFactor = 1;
+        public double DefaultZoomFactor { get; set; } = 1.0;
+
+        private double _zoomFactor = 1.0;
         public double ZoomFactor {
             get => _zoomFactor;
             set {
@@ -426,6 +428,8 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
+        public double MinZoomFactor => 0.25;
+        public double MaxZoomFactor => 3;
         public double ScrollVelocityX { get; set; }
         public double ScrollVelocityY { get; set; }
 
@@ -679,7 +683,7 @@ namespace MonkeyPaste.Avalonia {
         public double DefaultQueryItemWidth {
             get {
                 double defaultWidth;
-                if (LayoutType == MpClipTrayLayoutType.Stack) {
+                if (true) {
                     defaultWidth = ListOrientation == Orientation.Horizontal ?
                                     (QueryTrayScreenHeight * ZoomFactor) :
                                     (QueryTrayScreenWidth * ZoomFactor);
@@ -695,7 +699,7 @@ namespace MonkeyPaste.Avalonia {
         public double DefaultQueryItemHeight {
             get {
                 double defaultHeight;
-                if (LayoutType == MpClipTrayLayoutType.Stack) {
+                if (true) {
                     defaultHeight = ListOrientation == Orientation.Horizontal ?
                                     (QueryTrayScreenHeight * ZoomFactor) :
                                     (QueryTrayScreenWidth * ZoomFactor);
