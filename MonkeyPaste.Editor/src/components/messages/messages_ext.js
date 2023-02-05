@@ -151,7 +151,7 @@ function enableReadOnly_ext() {
 		let edit_dt_msg = {
 			changeDeltaJsonStr: toBase64FromJsonObj(JSON.stringify(LastTextChangedDelta)),
 			sourceDataItemsJsonStr: toBase64FromJsonObj(dti_msg),
-			transferLabel: 'Edit'
+			transferLabel: 'Edited'
 		};
 		edit_dt_msg_str = toBase64FromJsonObj(edit_dt_msg);
 

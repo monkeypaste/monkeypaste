@@ -80,7 +80,7 @@ function prepareDeltaLogForDataTransfer() {
         let edit_dt_msg = {
             changeDeltaJsonStr: JSON.stringify(LastTextChangedDelta),
             sourceDataItemsJsonStr: dti_msg,
-            transferLabel: 'Edit'
+            transferLabel: 'Edited'
         };
         onDataTransferCompleted_ntf(
             edit_dt_msg.changeDeltaJsonStr,

@@ -52,12 +52,43 @@ namespace MonkeyPaste.Avalonia {
             }
             DragDataObject = SourceDataObject.Clone();
             MpMessenger.SendGlobal(MpMessageType.ItemDragBegin);
-            // signals vm to post ItemDragBegin which notifies drop widget to show
-            //_dragSource.IsDragging = true;
 
             ApplyClipboardPresetToDragDataAsync().FireAndForgetSafeAsync();
             var result = await DragDrop.DoDragDrop(pointerEventArgs, DragDataObject, allowedEffects);
 
+            if(result != DragDropEffects.None) {
+                if (DragDataObject is MpPortableDataObject mpdo &&
+                    dragSource is Control control &&
+                    control.DataContext is MpAvClipTileViewModel ctvm) {
+                    string drop_app_url = null;
+                    if(MpPlatform.Services.ProcessWatcher.LastProcessInfo is MpPortableProcessInfo drop_pi &&
+                        MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(drop_pi) is MpAvAppViewModel drop_avm) {
+                        drop_app_url = MpPlatform.Services.SourceRefBuilder.ConvertToRefUrl(drop_avm.App);
+                    } else {
+                        drop_app_url = MpPlatform.Services.SourceRefBuilder.ConvertToRefUrl(
+                            MpAvAppCollectionViewModel.Instance.ThisAppViewModel.App);
+                    }
+                    if(string.IsNullOrEmpty(drop_app_url)) {
+                        // maybe we should lax ref url req in report transaction...
+                        Debugger.Break();
+                    } else {
+
+                        // report drop transaction
+                        MpPlatform.Services.TransactionBuilder.ReportTransactionAsync(
+                                    copyItemId: ctvm.CopyItemId,
+                                    reqType: MpJsonMessageFormatType.DataObject,
+                                    req: mpdo.SerializeData(),
+                                    respType: MpJsonMessageFormatType.None,
+                                    resp: null,
+                                    ref_urls: new[] {drop_app_url},
+                                    transType: MpTransactionType.Dragged).FireAndForgetSafeAsync(ctvm);
+                    }
+
+                } else {
+                    // is DragDataObject an avalonia dataobject? whats wrong?
+                    Debugger.Break();
+                }
+            }
 
             FinishDrag(result);
 

@@ -994,7 +994,7 @@ namespace MonkeyPaste.Avalonia {
 
 
                 string empty_msg = null;
-                if (IsQueryAllPinned) {
+                if (IsQueryAllPinned && !is_search_in_progress) {
                     empty_msg = "is all pinned";
                 } else if (MpAvTagTrayViewModel.Instance.LastSelectedActionItem.TagType == MpTagType.Link &&
                             MpAvTagTrayViewModel.Instance.LastSelectedActionItem.LinkedCopyItemIds.Count() == 0) {
@@ -1697,7 +1697,7 @@ namespace MonkeyPaste.Avalonia {
             IsRestoringSelection = false;
         }
 
-        public void CleanupAfterPaste(MpAvClipTileViewModel sctvm, MpPortableProcessInfo pasted_pi) {
+        public void CleanupAfterPaste(MpAvClipTileViewModel sctvm, MpPortableProcessInfo pasted_pi, MpPortableDataObject mpdo) {
             IsPasting = false;
             //clean up pasted items state after paste
             sctvm.PasteCount++;
@@ -1707,17 +1707,28 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            int appId = 0;
+            string pasted_app_url = null;
             var avm = MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(pasted_pi);
-            if (avm != null) {
-                appId = avm.AppId;
+            if(avm == null) {
+                // we're f'd
+                Debugger.Break();
+            } else {
+                pasted_app_url = MpPlatform.Services.SourceRefBuilder.ConvertToRefUrl(avm.App);
+            }
+            if(string.IsNullOrEmpty(pasted_app_url)) {
+                // f'd
+                Debugger.Break();
+                return;
             }
 
-            // TODO? transaction should be made here (and PasteHistory table removed) but not sure what the plan is w/ those
-
-            MpPasteHistory.CreateAsync(
+            MpPlatform.Services.TransactionBuilder.ReportTransactionAsync(
                 copyItemId: sctvm.CopyItemId,
-                appId: appId).FireAndForgetSafeAsync(this);
+                reqType: MpJsonMessageFormatType.DataObject,
+                req: mpdo.SerializeData(),
+                respType: MpJsonMessageFormatType.None,
+                resp: null,
+                ref_urls: new[] { pasted_app_url },
+                transType: MpTransactionType.Pasted).FireAndForgetSafeAsync(this);
         }
 
         public void NotifyDragOverTrays(bool isOver) {
@@ -2332,7 +2343,9 @@ namespace MonkeyPaste.Avalonia {
 
             IsAddingClipboardItem = true;
 
-            var newCopyItem = await MpPlatform.Services.CopyItemBuilder.BuildAsync(cd);
+            var newCopyItem = await MpPlatform.Services.CopyItemBuilder.BuildAsync(
+                pdo: cd,
+                transType: MpTransactionType.Created);
 
             if (newCopyItem == null || newCopyItem.Id < 1) {
                 //this occurs if the copy item is not a known format or app init
@@ -2413,7 +2426,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }            
 
-            CleanupAfterPaste(ctvm, pi);
+            CleanupAfterPaste(ctvm, pi, mpdo);
         }
 
         

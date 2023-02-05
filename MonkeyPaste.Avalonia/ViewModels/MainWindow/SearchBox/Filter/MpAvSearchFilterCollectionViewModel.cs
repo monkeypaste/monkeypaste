@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Avalonia.Controls;
 using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
@@ -168,7 +169,11 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(Filters));
             MpPlatform.Services.Query.RegisterProvider(this);
 
-            ValidateFilters();
+            // if regex is set on load, disable others
+            //var regex_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByRegex));
+            //if (regex_filter.IsChecked.IsTrue()) {
+            //    ValidateFilters(regex_filter);
+            //}
             foreach (var sfvm in Filters.Where(x => !x.IsSeperator)) {
                 sfvm.PropertyChanged += Sfvm_PropertyChanged;
             }
@@ -192,32 +197,62 @@ namespace MonkeyPaste.Avalonia {
             var sfvm = sender as MpAvSearchFilterViewModel;
             switch (e.PropertyName) {
                 case nameof(sfvm.IsChecked):
-                    ValidateFilters();
+                    ValidateFilters(sfvm);
                     break;
             }
         }
 
-        private void ValidateFilters() {
-            //var regex_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByRegex));
-            //var case_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByIsCaseSensitive));
-            //var whole_word_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByWholeWord));
+        private void ValidateFilters(MpAvSearchFilterViewModel change_fvm) {
+            bool needsUpdate = false;
+            if (change_fvm.FilterType.HasFlag(MpContentQueryBitFlags.Regex)) {
+                // checking regex disables case and whole word, unchecking reenables
+                var case_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByIsCaseSensitive));
+                var whole_word_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByWholeWord));
 
-            //if (regex_filter.IsChecked.IsTrue()) {
-            //    case_filter.IsChecked = null;
-            //    whole_word_filter.IsChecked = null;
-            //} else {
-            //    case_filter.IsChecked = false;
-            //}
+                if(change_fvm.IsChecked.IsTrue()) {
+                    case_filter.IsChecked = false;
+                    whole_word_filter.IsChecked = false;
+                    
+                    case_filter.IsChecked = null;
+                    whole_word_filter.IsChecked = null;
+                } else {
+                    case_filter.IsChecked = false;
+                    whole_word_filter.IsChecked = false;
+                }
 
-            //var text_type_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByTextType));
-            //var image_type_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByImageType));
-            //var file_type_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByFileType));
+                needsUpdate = true;
+            } else if (change_fvm.IsChecked.IsFalse() && 
+                (change_fvm.FilterType.HasFlag(MpContentQueryBitFlags.TextType) ||
+                change_fvm.FilterType.HasFlag(MpContentQueryBitFlags.ImageType) ||
+                change_fvm.FilterType.HasFlag(MpContentQueryBitFlags.FileType))) {
+                // when last content type is unchecked reenable all content types
+                var text_type_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByTextType));
+                var image_type_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByImageType));
+                var file_type_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByFileType));
 
-            //if(text_type_filter.IsChecked.IsFalse() && image_type_filter.IsChecked.IsFalse() && file_type_filter.IsChecked.IsFalse()) {
-            //    text_type_filter.IsChecked = true;
-            //    image_type_filter.IsChecked = true;
-            //    file_type_filter.IsChecked = true;
-            //}
+                if (text_type_filter.IsChecked.IsFalse() && 
+                    image_type_filter.IsChecked.IsFalse() && 
+                    file_type_filter.IsChecked.IsFalse()) {
+
+                    text_type_filter.IsChecked = true;
+                    image_type_filter.IsChecked = true;
+                    file_type_filter.IsChecked = true;
+
+
+                    needsUpdate = true;
+                }
+            }
+
+            if(needsUpdate) {
+                var target = MpAvSearchBoxView.SearchIconButton;
+                if(target == null) {
+                    return;
+                }
+                var offset = new MpPoint(MpAvContextMenuView.Instance.HorizontalOffset, MpAvContextMenuView.Instance.VerticalOffset);
+                MpAvMenuExtension.CloseMenu();
+                MpAvMenuExtension.ShowMenu(target, PopupMenuViewModel,offset,PlacementMode.Pointer);
+            }
+                
         }
         #endregion
 

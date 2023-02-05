@@ -199,6 +199,9 @@ namespace MonkeyPaste {
 
         public object IsCheckedSrcObj { get; set; }
         public string IsCheckedPropPath { get; set; }
+        
+        public object CheckedResourceSrcObj { get; set; }
+        public string CheckedResourcePropPath { get; set; }
         #endregion
 
         #region Commands

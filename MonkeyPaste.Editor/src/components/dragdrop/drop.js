@@ -285,6 +285,9 @@ function onDragLeave(e) {
 }
 
 function onDrop(e) {
+    // get drag dist before down loc is cleared
+    let drag_dist = isDragging() ? dist(WindowMouseLoc, WindowMouseDown) : MIN_DRAG_DIST;
+
     updateWindowMouseState(e);
 
     // OVERRIDE DEFAULT
@@ -316,6 +319,13 @@ function onDrop(e) {
         return false;
     }
 
+    if (drag_dist < MIN_DRAG_DIST) {
+        log('Drop rejected, dist was ' + drag_dist + ' minimum is ' + MIN_DRAG_DIST);
+        resetDrop(e.fromHost, true);
+        return false;
+    }
+
+
     log('drop');
 
 
@@ -341,7 +351,7 @@ function onDrop(e) {
 
             // PERFORM DROP TRANSACTION    
 
-            performDataTransferOnContent(processed_dt, drop_range, source_range, drop_insert_source, 'Drop');
+            performDataTransferOnContent(processed_dt, drop_range, source_range, drop_insert_source, 'Dropped');
 
             // RESET
 

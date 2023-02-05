@@ -25,11 +25,21 @@ namespace MonkeyPaste.Avalonia {
                     };
                 }
                 return new MpMenuItemViewModel() {
-                    IsChecked = IsChecked,
-                    Command = ToggleIsCheckedCommand,
+                    IsCheckedSrcObj = this,
+                    IsCheckedPropPath = nameof(IsChecked),
+                    CommandSrcObj = this,
+                    CommandPath = nameof(ToggleIsCheckedCommand),
                     Header = Label,
                     IconBorderHexColor = MpSystemColors.Black,
-                    IconHexStr = MpSystemColors.White,
+                    IconSrcBindingObj = this,
+                    IconPropPath = nameof(CheckBoxBgHexStr),
+                    CheckedResourceSrcObj = this,
+                    CheckedResourcePropPath = nameof(CheckedResourceObj),
+
+
+                    IsChecked = IsChecked,
+                    Command = ToggleIsCheckedCommand,
+                    IconHexStr = CheckBoxBgHexStr,
                 };
             }
         }
@@ -38,6 +48,11 @@ namespace MonkeyPaste.Avalonia {
 
         public string Label { get; set; }
 
+        public string CheckBoxBgHexStr =>
+            IsEnabled ? MpSystemColors.White : MpSystemColors.Gray;
+
+        public string CheckedResourceObj =>
+            IsChecked.HasValue && IsChecked.Value ? "CheckSvg" : null;// MpPlatform.Services.PlatformResource.GetResource("CheckSvg") as string : null;
         #endregion
 
         #region Model
@@ -46,7 +61,8 @@ namespace MonkeyPaste.Avalonia {
 
         public bool? IsChecked { get; set; }
 
-        public bool IsEnabled => !IsChecked.IsNull();
+        public bool IsEnabled => 
+            IsChecked != null;
 
         public string PreferenceName { get; set; }
 
@@ -86,6 +102,12 @@ namespace MonkeyPaste.Avalonia {
         private void MpSearchFilterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsChecked):
+                    OnPropertyChanged(nameof(CheckBoxBgHexStr));
+                    OnPropertyChanged(nameof(CheckedResourceObj));
+                    OnPropertyChanged(nameof(IsEnabled));
+                    OnPropertyChanged(nameof(ToggleIsCheckedCommand));
+                    OnPropertyChanged(nameof(MenuItemViewModel));
+                    Parent.OnPropertyChanged(nameof(Parent.PopupMenuViewModel));
                     MpPrefViewModel.Instance[PreferenceName] = IsChecked;
                     break;
             }
@@ -99,13 +121,6 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 IsChecked = !IsChecked;
             }, () => {
-                //if (FilterType == MpContentFilterType.FileType ||
-                //FilterType == MpContentFilterType.ImageType ||
-                //FilterType == MpContentFilterType.TextType) {
-
-                //}
-
-                //return true;
                 return IsEnabled;
             });
         #endregion

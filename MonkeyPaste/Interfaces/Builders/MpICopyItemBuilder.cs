@@ -6,6 +6,10 @@ namespace MonkeyPaste {
         //Task<MpSearchCriteriaItem>
     }
     public interface MpICopyItemBuilder {
-        Task<MpCopyItem> BuildAsync(MpPortableDataObject pdo, bool suppressWrite = false, string createLabel = "", bool force_ext_sources = true);
+        Task<MpCopyItem> BuildAsync(
+            MpPortableDataObject pdo, 
+            bool suppressWrite = false, 
+            MpTransactionType transType = MpTransactionType.None, 
+            bool force_ext_sources = true);
     }
 }

@@ -969,15 +969,22 @@ namespace MonkeyPaste.Avalonia {
                 var other_refs = await MpPlatform.Services.SourceRefBuilder.GatherSourceRefsAsync(req_mpdo);
                 refs = other_refs.Select(x => MpPlatform.Services.SourceRefBuilder.ConvertToRefUrl(x));
             }
+            MpTransactionType transType = dataTransferCompleted_ntf.transferLabel.ToEnum<MpTransactionType>();
+           
+            if(transType == MpTransactionType.None) {
+                // what's the label?
+                Debugger.Break();
+                transType = MpTransactionType.Error;
+            }
 
-            await MpPlatform.Services.TransactionBuilder.PerformTransactionAsync(
+            await MpPlatform.Services.TransactionBuilder.ReportTransactionAsync(
                 copyItemId: BindingContext.CopyItemId,
                 reqType: MpJsonMessageFormatType.DataObject,
                 req: req_mpdo.SerializeData(),
                 respType: MpJsonMessageFormatType.Delta,
                 resp: resp_json,
                 ref_urls: refs,
-                label: dataTransferCompleted_ntf.transferLabel);
+                transType: transType);
         }
 
         #endregion

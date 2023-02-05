@@ -11,12 +11,15 @@ using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvSearchBoxView : MpAvUserControl<MpAvSearchBoxViewModel> {
+        public static Button SearchIconButton { get; private set; }
         public MpAvSearchBoxView() {
             InitializeComponent();
 
             var sb = this.FindControl<AutoCompleteBox>("SearchBox");
             sb.AttachedToVisualTree += Sb_AttachedToVisualTree;
             sb.AddHandler(Control.KeyUpEvent, SearchBox_KeyUp, RoutingStrategies.Tunnel);
+
+            SearchIconButton = this.FindControl<Button>("SearchDropDownButton");
         }
 
         #region Drop

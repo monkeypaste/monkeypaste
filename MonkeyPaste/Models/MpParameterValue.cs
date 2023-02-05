@@ -10,8 +10,7 @@ namespace MonkeyPaste {
     public enum MpParameterHostType {
         None = 0,
         Preset,
-        Action,
-        Query
+        Action
     }
     public class MpParameterValue : 
         MpDbModelBase, MpIParamterValueProvider,
@@ -68,9 +67,7 @@ namespace MonkeyPaste {
             MpParameterHostType hostType = MpParameterHostType.None,
             int hostId = 0, 
             object paramId = null,
-            string value = ""
-            //MpPluginParameterFormat format = null
-            ) {
+            string value = "") {
             if (hostType == MpParameterHostType.None) {
                 throw new Exception("Parameter Value must have a host type");
             }

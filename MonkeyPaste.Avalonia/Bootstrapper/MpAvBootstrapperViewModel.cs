@@ -50,32 +50,6 @@ namespace MonkeyPaste.Avalonia {
             MpConsole.WriteLine("Platform Load complete");
 
 
-            //var cil = await MpDataModelProvider.GetItemsAsync<MpCopyItem>();
-            //foreach(var ci in cil) {
-            //    var doil = await MpDataModelProvider.GetDataObjectItemsByDataObjectId(ci.DataObjectId);
-
-            //    switch (ci.ItemType) {
-            //        case MpCopyItemType.Text:
-            //            if(doil.FirstOrDefault(x=>x.ItemFormat == MpPortableDataFormats.Text) is MpDataObjectItem doi) {
-            //                ci.ItemSize1 = doi.ItemData.Length;
-            //                ci.ItemSize2 = doi.ItemData.Split("\n").Length + 1;
-            //            } else {
-            //                Debugger.Break();
-            //            }
-            //            break;
-            //        case MpCopyItemType.Image:
-            //            var bmp = ci.ItemData.ToAvBitmap();
-            //            ci.ItemSize1 = bmp.PixelSize.Width;
-            //            ci.ItemSize2 = bmp.PixelSize.Height;
-            //            break;
-            //        case MpCopyItemType.FileList:
-            //            ci.ItemSize1 = 0;
-            //            ci.ItemSize2 = doil.Where(x => x.ItemFormat == MpPortableDataFormats.AvFileNames).Count();
-            //            break;
-            //    }
-            //    await ci.WriteToDatabaseAsync();
-            //}
-
             MpAvSystemTray.Init();
         }
         protected override void CreateLoaderItems() {

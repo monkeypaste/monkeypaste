@@ -125,7 +125,7 @@ function onPaste(e) {
 
     getClipboardDataTransferObjectAsync_get()
         .then((result) => {
-            performDataTransferOnContent(result, cur_paste_sel,null,'api','Paste');
+            performDataTransferOnContent(result, cur_paste_sel,null,'api','Pasted');
     });
 }
 

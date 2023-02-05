@@ -22,11 +22,17 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public async Task<MpCopyItem> BuildAsync(MpPortableDataObject mpdo, bool suppressWrite = false, string createLabel = "", bool force_ext_sources = true) {
+        public async Task<MpCopyItem> BuildAsync(
+            MpPortableDataObject mpdo, 
+            bool suppressWrite = false,
+            MpTransactionType transType = MpTransactionType.None, 
+            bool force_ext_sources = true) {
             if (mpdo == null || mpdo.DataFormatLookup.Count == 0) {
                 return null;
             }
-            createLabel = string.IsNullOrEmpty(createLabel) ? "Created" : createLabel;
+            if(transType == MpTransactionType.None) {
+                throw new Exception("Must have transacion type");
+            }
 
             await NormalizePlatformFormatsAsync(mpdo);
 
@@ -76,14 +82,14 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
-            await MpPlatform.Services.TransactionBuilder.PerformTransactionAsync(
+            await MpPlatform.Services.TransactionBuilder.ReportTransactionAsync(
                             copyItemId: ci.Id,
                             reqType: MpJsonMessageFormatType.DataObject,
                             req: mpdo.SerializeData(),
                             respType: MpJsonMessageFormatType.Delta,
                             resp: itemDelta,
                             ref_urls: ref_urls,
-                            label: createLabel);
+                            transType: transType);
 
             return ci;
         }

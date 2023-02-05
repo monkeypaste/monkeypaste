@@ -315,10 +315,22 @@ namespace MonkeyPaste {
                 return;
             }
             List<Task> deleteTasks = new List<Task>();
-            if(TagType == MpTagType.Query) {
-                var scil = await MpDataModelProvider.GetCriteriaItemsByTagId(Id);
-                deleteTasks.AddRange(scil.Select(x => x.DeleteFromDatabaseAsync()));
+
+            var ctl = await MpDataModelProvider.GetChildTagsAsync(Id);
+            if (ctl != null && ctl.Count > 0) {
+                deleteTasks.AddRange(ctl.Select(x => x.DeleteFromDatabaseAsync()));
             }
+
+            var citl = await MpDataModelProvider.GetCopyItemTagsForTagAsync(Id);
+            if(citl != null && ctl.Count > 0) {
+                deleteTasks.AddRange(citl.Select(x => x.DeleteFromDatabaseAsync()));
+            }
+
+            var scil = await MpDataModelProvider.GetCriteriaItemsByTagId(Id);
+            if (scil != null && scil.Count > 0) {
+                deleteTasks.AddRange(scil.Select(x => x.DeleteFromDatabaseAsync()));                
+            }
+
             deleteTasks.Add(base.DeleteFromDatabaseAsync());
             await Task.WhenAll(deleteTasks);
         }

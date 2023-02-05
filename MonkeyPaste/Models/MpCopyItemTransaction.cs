@@ -10,18 +10,19 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    //public enum MpCopyItemSourceType {
-    //    None = 0,
-    //    Dll,
-    //    Cli,
-    //    Http,
-    //    App,
-    //    Url,
-    //    CopyItem,
-    //    Preset
-    //}
 
-    
+    public enum MpTransactionType {
+        None = 0,
+        Created,
+        Dropped,
+        Dragged,
+        Pasted,
+        Copied, 
+        Cut,
+        Edited,
+        Analyzed,
+        Error
+    }
 
     public class MpCopyItemTransaction : MpDbModelBase {
         #region Columns
@@ -39,13 +40,6 @@ namespace MonkeyPaste {
         public int CopyItemId { get; set; }
 
         public string TransactionLabel { get; set; }
-
-        //[Column("fk_TransactionObjId")]
-        //public int TransactionObjId { get; set; }
-
-
-        //[Column("e_MpCopyItemTransactionType")]
-        //public string CopyItemTransactionTypeName { get; set; }// = MpCopyItemTransactionType.None.ToString();
 
 
         [Column("e_MpJsonMessageFormatType_request")]
@@ -91,6 +85,12 @@ namespace MonkeyPaste {
             get => ResponseMessageFormatTypeName.ToEnum<MpJsonMessageFormatType>();
             set => ResponseMessageFormatTypeName = value.ToString();
         }
+        
+        [Ignore]
+        public MpTransactionType TransactionType {
+            get => TransactionLabel.ToEnum<MpTransactionType>();
+            set => TransactionLabel = value.ToString();
+        }
 
         #endregion
 
@@ -103,12 +103,15 @@ namespace MonkeyPaste {
             string respMsgJsonStr = "",
             int transUserDeviceId = 0,
             DateTime? transDateTime = null,
-            string label = "",
+            MpTransactionType transactionType = MpTransactionType.None,
             bool suppressWrite = false) {
 
             if(copyItemId == 0 && !suppressWrite) {
                 throw new Exception("Must have CopyItemId if to be written");
-            }            
+            }  
+            if(transactionType == MpTransactionType.None) {
+                throw new Exception("Must have type");
+            }
 
             var ndio = new MpCopyItemTransaction() {
                 CopyItemTransactionGuid = System.Guid.NewGuid(),
@@ -124,7 +127,7 @@ namespace MonkeyPaste {
                 ResponseMessageType = respMsgType,
                 ResponseMessageJson = respMsgJsonStr,
 
-                TransactionLabel = label,
+                TransactionType = transactionType,
 
                 TransactionUserDeviceId = transUserDeviceId == 0 ? MpDefaultDataModelTools.ThisUserDeviceId : transUserDeviceId,
 

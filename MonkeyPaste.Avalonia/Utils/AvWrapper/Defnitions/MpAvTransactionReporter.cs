@@ -7,16 +7,16 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvTransactionBuilder : MpITransactionBuilder {
+    public class MpAvTransactionReporter : MpITransactionReporter {
 
-        public async Task<MpCopyItemTransaction> PerformTransactionAsync(
+        public async Task<MpCopyItemTransaction> ReportTransactionAsync(
             int copyItemId,
             MpJsonMessageFormatType reqType, 
             string req,
             MpJsonMessageFormatType respType, 
             string resp,
             IEnumerable<string> ref_url_arg_tuples, 
-            string label) {
+            MpTransactionType transactionType) {
 
             if(copyItemId <= 0) {
                 throw new Exception("CopyItemId required to create transaction");
@@ -30,7 +30,7 @@ namespace MonkeyPaste.Avalonia {
                             reqMsgJsonStr: req,
                             respMsgType: respType,
                             respMsgJsonStr: resp,
-                            label: label);
+                            transactionType: transactionType);
 
             List<Tuple<MpISourceRef, string>> source_ref_arg_tuples = new List<Tuple<MpISourceRef, string>>();
             foreach(var url_arg_tuple in ref_url_arg_tuples) {

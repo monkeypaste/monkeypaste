@@ -77,20 +77,24 @@ namespace MonkeyPaste {
                 mpdo.SetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, ref_urls);
 
                 // create new item
-                var target_ci = await MpPlatform.Services.CopyItemBuilder.BuildAsync(mpdo,false,"Generated",true);
+                var target_ci = await
+                    MpPlatform.Services.CopyItemBuilder
+                    .BuildAsync(
+                        pdo: mpdo,
+                        transType: MpTransactionType.Created); 
                 return target_ci;
             }
 
             // NOTE for existing content, plugins should by convention always return a dataobject
             // NOTE 2 after transaction tile picks up db event, reloads, finds transaction and applies deltas (at least thats the plan)
-            await MpPlatform.Services.TransactionBuilder.PerformTransactionAsync(
+            await MpPlatform.Services.TransactionBuilder.ReportTransactionAsync(
                         copyItemId: sourceCopyItem.Id,
                         reqType: MpJsonMessageFormatType.ParameterRequest,
                         req: trans.Request.SerializeJsonObject(),
                         respType: MpJsonMessageFormatType.DataObject,
                         resp: mpdo.SerializeData(),
                         ref_urls: ref_urls,
-                        label: "Analyzed");
+                        transType: MpTransactionType.Analyzed);
 
             return null;
         }

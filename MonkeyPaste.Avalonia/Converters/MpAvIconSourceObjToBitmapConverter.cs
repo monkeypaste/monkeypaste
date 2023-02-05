@@ -72,7 +72,7 @@ namespace MonkeyPaste.Avalonia {
                                 .Convert(value, targetType, parameter, culture) as Bitmap;
                 }
                 if(valStr.EndsWith("Svg")) {
-                    if(Application.Current.Resources.TryGetValue(valStr, out object data)) {
+                    if(MpPlatform.Services.PlatformResource.GetResource(valStr) is object data) { //}, out var data)) {
                         if(data is Geometry geometry) {
                             return geometry;
                         }

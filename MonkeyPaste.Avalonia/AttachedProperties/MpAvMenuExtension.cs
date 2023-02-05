@@ -257,6 +257,9 @@ namespace MonkeyPaste.Avalonia {
             }
             SetIsOpen(control, is_open);
             MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = is_open;
+            //if (is_open) {
+            //    openSubMenuItems.AddRange(_cmInstance.ItemContainerGenerator.Containers.Where(x=>x.ContainerControl is MenuItem).Select(x=>x.ContainerControl).Cast<MenuItem>());
+            //}else 
             if(!is_open) {
                 control.ContextMenu = null;
                 openSubMenuItems.Clear();
@@ -464,10 +467,14 @@ namespace MonkeyPaste.Avalonia {
                         Icon = CreateIcon(mivm),
                         Items = mivm.SubItems == null ? null : mivm.SubItems.Where(x=>x != null && x.IsVisible).Select(x=>CreateMenuItem(x))
                     };
+
                     mi.PointerEnterItem += MenuItem_PointerEnter;
                     mi.DetachedFromVisualTree += MenuItem_DetachedFromVisualTree;
                     if (mi.Command != null && mivm.IsEnabled) {
                         mi.AddHandler(Control.PointerReleasedEvent, MenuItem_PointerReleased, RoutingStrategies.Tunnel);
+                    }
+                    if(itemType == MpMenuItemViewModel.CHECKABLE_TEMPLATE_NAME) {
+                       mi = ApplyAnyBindings(mi, mivm);
                     }
                     control = mi;
                     break;
@@ -491,7 +498,6 @@ namespace MonkeyPaste.Avalonia {
             }
             return control;
         }
-
         public static object CreateIcon(MpMenuItemViewModel mivm) {
             if(mivm.ContentTemplateName == MpMenuItemViewModel.CHECKABLE_TEMPLATE_NAME) {
                 return CreateCheckableIcon(mivm);
@@ -511,8 +517,7 @@ namespace MonkeyPaste.Avalonia {
             iconBorder.Child = iconImg;
             return iconBorder;
         }
-        private static object CreateCheckableIcon(MpMenuItemViewModel mivm) {
-            
+        private static object CreateCheckableIcon(MpMenuItemViewModel mivm) {            
             var pi = new PathIcon() {
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
@@ -525,7 +530,6 @@ namespace MonkeyPaste.Avalonia {
             iconBorder.Child = pi;
             return iconBorder;
         }
-
         private static Border GetIconBorder(MpMenuItemViewModel mivm) {
             var ib = new Border() {
                 HorizontalAlignment = HorizontalAlignment.Center,
@@ -587,6 +591,52 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
             return items;
+        }
+
+        private static MenuItem ApplyAnyBindings(MenuItem mi, MpMenuItemViewModel mivm) {
+            if(mivm.IconSrcBindingObj != null &&
+                mi.Icon is Border icon_border) {
+                // NOTE this only handles unique case for search filter check box
+                //var icon_border =
+                //    icon.GetVisualDescendants<Border>()
+                //    .FirstOrDefault(x => x.Tag != null && x.Tag.ToString() == "IconBorder");
+                if(icon_border == null) {
+                    Debugger.Break();
+                } else {
+                    icon_border.Background = null;
+                    icon_border.Bind(
+                        Border.BackgroundProperty,
+                        new Binding() {
+                            Source = mivm.IconSrcBindingObj,
+                            Path = mivm.IconPropPath,
+                            Converter = MpAvStringHexToBrushConverter.Instance
+                        });
+
+                    if(icon_border.Child is PathIcon pi) {
+                        pi.Data = null;
+                        pi.Bind(
+                            PathIcon.DataProperty,
+                            new Binding() {
+                                Source = mivm.CheckedResourceSrcObj,
+                                Path = mivm.CheckedResourcePropPath,
+                                Converter = MpAvIconSourceObjToBitmapConverter.Instance
+                            });
+                    } else {
+                        Debugger.Break();
+                    }
+                }
+            }
+            if(mivm.CommandSrcObj != null) {
+                //mi.RemoveHandler(Control.PointerReleasedEvent, MenuItem_PointerReleased);
+                mi.Command = null;
+                mi.Bind(
+                    MenuItem.CommandProperty,
+                    new Binding() {
+                        Source = mivm.CommandSrcObj,
+                        Path = mivm.CommandPath,
+                    });
+            }
+            return mi;
         }
         #endregion
 

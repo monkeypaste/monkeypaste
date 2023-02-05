@@ -158,7 +158,7 @@ namespace MonkeyPaste {
 
             var pp = sourceHandler as MpPluginPreset;
 
-            MpPlatform.Services.TransactionBuilder.PerformTransactionAsync(
+            MpPlatform.Services.TransactionBuilder.ReportTransactionAsync(
                         copyItemId: sourceCopyItem.Id,
                         reqType: MpJsonMessageFormatType.ParameterRequest,
                         req: trans.Request.SerializeJsonObject(),
@@ -167,7 +167,7 @@ namespace MonkeyPaste {
                         ref_urls: new[] { 
                             MpPlatform.Services.SourceRefBuilder.ConvertToRefUrl(pp, trans.Request.SerializeJsonObjectToBase64()) 
                         },
-                        label: "Error").FireAndForgetSafeAsync();
+                        transType: MpTransactionType.Error).FireAndForgetSafeAsync();
 
             var userAction = await MpNotificationBuilder.ShowNotificationAsync(
                 notificationType: MpNotificationType.InvalidRequest,

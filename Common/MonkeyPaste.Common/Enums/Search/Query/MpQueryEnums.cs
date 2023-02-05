@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace MonkeyPaste.Common {
@@ -88,6 +89,145 @@ namespace MonkeyPaste.Common {
                 cqbf.HasFlag(MpContentQueryBitFlags.Days) ||
                 cqbf.HasFlag(MpContentQueryBitFlags.Exactly) ;
         }
+
+        public static string ToViewFieldName(this MpContentQueryBitFlags f) {
+            switch(f) {
+                case MpContentQueryBitFlags.Content:
+                    return "ItemData";
+                case MpContentQueryBitFlags.Url:
+                    return "UrlPath";
+                case MpContentQueryBitFlags.Meta:
+                    return "ItemMetaData";
+                case MpContentQueryBitFlags.Created:
+                    return "CopyDateTime";
+                case MpContentQueryBitFlags.Modified:
+                    return "TransactionDateTime";
+                case MpContentQueryBitFlags.Pasted:
+                    return "PasteDateTime";
+                case MpContentQueryBitFlags.TextType:
+                case MpContentQueryBitFlags.ImageType:
+                case MpContentQueryBitFlags.FileType:
+                    return "e_MpCopyItemType";
+                default:
+                    return f.ToString();
+            }
+        }
+        
+        public static bool IsViewFieldFlag(this MpContentQueryBitFlags cqbf) {
+            switch(cqbf) {
+                case MpContentQueryBitFlags.Title:
+                case MpContentQueryBitFlags.Content:
+                case MpContentQueryBitFlags.Url:
+                case MpContentQueryBitFlags.UrlTitle:
+                case MpContentQueryBitFlags.AppName:
+                case MpContentQueryBitFlags.AppPath:
+                case MpContentQueryBitFlags.Meta:
+                case MpContentQueryBitFlags.DeviceName:
+                case MpContentQueryBitFlags.DeviceType:
+                case MpContentQueryBitFlags.Width:
+                case MpContentQueryBitFlags.Height:
+                case MpContentQueryBitFlags.Hex:
+                case MpContentQueryBitFlags.Rgba:
+                case MpContentQueryBitFlags.Exactly:
+                case MpContentQueryBitFlags.Before:
+                case MpContentQueryBitFlags.After:
+                case MpContentQueryBitFlags.Between:
+                case MpContentQueryBitFlags.FileName:
+                case MpContentQueryBitFlags.FilePath:
+                case MpContentQueryBitFlags.FileExt:
+                case MpContentQueryBitFlags.UrlDomain:
+                case MpContentQueryBitFlags.Created:
+                case MpContentQueryBitFlags.Modified:
+                case MpContentQueryBitFlags.Pasted:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+        public static bool IsDateTimeFilterFlag(this MpContentQueryBitFlags cqbf) {
+            switch(cqbf) {
+                case MpContentQueryBitFlags.Exactly:
+                case MpContentQueryBitFlags.Before:
+                case MpContentQueryBitFlags.After:
+                case MpContentQueryBitFlags.Between:
+                //case MpContentQueryBitFlags.Created:
+                //case MpContentQueryBitFlags.Modified:
+                //case MpContentQueryBitFlags.Pasted:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        public static bool IsStringMatchFilterFlag(this MpContentQueryBitFlags f) {
+            if(!f.IsViewFieldFlag()) {
+                return false;
+            }
+            switch (f) {
+                case MpContentQueryBitFlags.Title:
+                case MpContentQueryBitFlags.Content:
+                case MpContentQueryBitFlags.Url:
+                case MpContentQueryBitFlags.UrlTitle:
+                case MpContentQueryBitFlags.AppName:
+                case MpContentQueryBitFlags.AppPath:
+                case MpContentQueryBitFlags.Meta:
+                case MpContentQueryBitFlags.DeviceName:
+                case MpContentQueryBitFlags.FileName:
+                case MpContentQueryBitFlags.FilePath:
+                case MpContentQueryBitFlags.FileExt:
+                case MpContentQueryBitFlags.UrlDomain:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        public static IEnumerable<string> GetStringMatchFieldName(this MpContentQueryBitFlags f) {
+            foreach(string flag_name in typeof(MpContentQueryBitFlags).GetEnumNames()) {
+                MpContentQueryBitFlags cur_flag = flag_name.ToEnum<MpContentQueryBitFlags>();
+                if(!cur_flag.IsStringMatchFilterFlag()) {
+                    continue;
+                }
+                if(f.HasFlag(cur_flag)) {
+                    yield return cur_flag.ToViewFieldName();
+                }
+            }
+        }
+
+        public static string GetStringMatchOp(this MpContentQueryBitFlags f) {
+            if(f.HasFlag(MpContentQueryBitFlags.CaseSensitive)) {
+                return "GLOB";
+            }
+            if(f.HasFlag(MpContentQueryBitFlags.Regex)) {
+                return "REGEXP";
+            }
+            return "LIKE";
+        }
+
+        public static string GetStringMatchValue(this MpContentQueryBitFlags f, string matchOp, string matchVal) {
+            if(matchOp == "REGEXP") {
+                string case_flag = f.HasFlag(MpContentQueryBitFlags.CaseSensitive) ?
+                    string.Empty : "/i";
+
+                if(f.HasFlag(MpContentQueryBitFlags.WholeWord)) {
+                    return $"\b{matchVal}\b";
+                }
+                return $"{matchVal}";
+            }
+            string op_symbol = matchOp == "GLOB" ? "*" : "%";
+            switch(f) {
+                case MpContentQueryBitFlags.Matches:
+                    return matchVal;
+                case MpContentQueryBitFlags.BeginsWith:
+                    return $"{matchVal}{op_symbol}";
+                case MpContentQueryBitFlags.EndsWith:
+                    return $"{op_symbol}{matchVal}";
+                case MpContentQueryBitFlags.Contains:
+                default:
+                    return $"{op_symbol}{matchVal}{op_symbol}";
+            }
+        }
+
 
         public static DateTime? ToDateTime(this MpContentQueryBitFlags cqbf, string mv) {
             if(!cqbf.IsTimeSpanValue()) {

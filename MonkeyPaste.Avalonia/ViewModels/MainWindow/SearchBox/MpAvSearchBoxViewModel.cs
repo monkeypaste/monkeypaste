@@ -287,6 +287,10 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(SearchText):
                     OnPropertyChanged(nameof(ClearAndBusyColumnWidth));
                     OnPropertyChanged(nameof(NavButtonsColumnWidth));
+
+                    if(HasText && !IsExpanded) {
+                        IsExpanded = true;
+                    }
                     break;
                 case nameof(IsSearching):
                     OnPropertyChanged(nameof(ClearAndBusyColumnWidth));
@@ -320,6 +324,11 @@ namespace MonkeyPaste.Avalonia {
                         OnPropertyChanged(nameof(SearchBoxColumnWidth));
                         OnPropertyChanged(nameof(ClearAndBusyColumnWidth));
                         OnPropertyChanged(nameof(NavButtonsColumnWidth));
+
+                        if(IsExpanded && 
+                            !MpAvMainWindowViewModel.Instance.IsMainWindowInitiallyOpening) {
+                            IsTextBoxFocused = true;
+                        }
                     });
                     break;
             }

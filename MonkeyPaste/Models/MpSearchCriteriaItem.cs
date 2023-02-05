@@ -93,8 +93,7 @@ namespace MonkeyPaste {
 
         public override async Task DeleteFromDatabaseAsync() {
             List<Task> deleteTasks = new List<Task>();
-            var pvl = await MpDataModelProvider.GetAllParameterHostValuesAsync(MpParameterHostType.Query, Id);
-            deleteTasks.AddRange(pvl.Select(x => x.DeleteFromDatabaseAsync()));
+
             deleteTasks.Add(base.DeleteFromDatabaseAsync());
             await Task.WhenAll(deleteTasks);
         }

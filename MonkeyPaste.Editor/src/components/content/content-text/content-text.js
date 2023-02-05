@@ -748,7 +748,7 @@ function appendTextContentData(data) {
 	dt.setData('text/html', data);
 
 	// TODO append needs to be refactored (i think) to rely on dataTransferComplete_ntf
-	performDataTransferOnContent(dt, getAppendDocRange(),null, 'api', 'Append');
+	performDataTransferOnContent(dt, getAppendDocRange(),null, 'api', 'Pasted');
 }
 
 // #endregion Actions
