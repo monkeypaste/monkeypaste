@@ -238,6 +238,7 @@ function getContentHeightByType() {
 // #region State
 
 function resetContent() {
+	resetForcedCursor();
 	resetContentImage();
 }
 

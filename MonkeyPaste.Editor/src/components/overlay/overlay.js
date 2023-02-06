@@ -116,8 +116,8 @@ function updateOverlayBounds() {
 function drawHighlighting(ctx, forceColor) {
     if (HighlightRects) {
         for (var i = 0; i < HighlightRects.length; i++) {
-            let hl_color = forceColor ? forceColor : i == SelectedHighlightRectIdx ? 'rgba(255,0,0,50)' : 'rgba(0,255,255,50';
-            drawRect(ctx, HighlightRects[i], hl_color);
+            let hl_color = forceColor ? forceColor : i == SelectedHighlightRectIdx ? 'rgba(255,0,0,50)' : 'rgba(0,255,255,50)';
+            drawRect(ctx, HighlightRects[i], hl_color, 'transparent');
         }
     }
 }
@@ -219,7 +219,7 @@ function drawCaret(ctx, sel, caret_width = 1.0, caret_opacity = 1) {
     if (!sel || sel == null || sel.length > 0) {
         return;
     }
-    if (isDropping()) {
+    if (isDropping() || !quill.hasFocus()) {
         // drawn w/ drop preview lines so ignore
         return;
     }

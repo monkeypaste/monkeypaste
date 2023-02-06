@@ -18,7 +18,6 @@ body {
     --editableopacity: 0.5;
     --defaultopacity: 0.0;
     --defaultFontFamily: Helvetica;
-    caret-color: transparent;
     margin: 0px;
     padding: 0px;
     font-family: var(--defaultFontFamily);

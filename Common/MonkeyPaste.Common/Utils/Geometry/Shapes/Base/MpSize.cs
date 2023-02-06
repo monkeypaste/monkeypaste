@@ -60,6 +60,13 @@ namespace MonkeyPaste.Common {
 
         #endregion
         #region Public Methods
+        public bool IsEqual(MpSize otherSize, double thresh = 0) {
+            if (otherSize == null) {
+                return false;
+            }
+            return Math.Abs(Width - otherSize.Width) <= thresh &&
+                    Math.Abs(Height - otherSize.Height) <= thresh;
+        }
         public bool IsEmpty(double maxThreshold = 0) {
             return Width <= maxThreshold && Height <= maxThreshold;
         }

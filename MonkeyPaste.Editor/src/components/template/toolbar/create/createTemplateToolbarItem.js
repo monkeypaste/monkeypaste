@@ -127,7 +127,7 @@ function createTemplateFromDropDown(templateObjOrId, newTemplateType) {
     }
 
     hideCreateTemplateToolbarContextMenu();
-    insertTemplate(range, newTemplateObj);
+    insertTemplate(range, newTemplateObj,'user');
     focusTemplate(newTemplateObj.templateGuid, true, isNew);
     return newTemplateObj;
 }

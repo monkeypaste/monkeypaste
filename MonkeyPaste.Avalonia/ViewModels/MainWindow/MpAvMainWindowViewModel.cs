@@ -2,6 +2,8 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -86,6 +88,8 @@ namespace MonkeyPaste.Avalonia {
 
         public double MainWindowBottom { get; set; }
 
+        public MpRect MainWindowScreenRect =>
+            new MpRect(MainWindowLeft, MainWindowTop, MainWindowWidth, MainWindowHeight);
 
         #region Resize Constraints
 
@@ -215,23 +219,8 @@ namespace MonkeyPaste.Avalonia {
         public MpRect LastMainWindowRect { get; set; } = new MpRect();
         public MpRect ObservedMainWindowRect { get; set; } = new MpRect();
 
-        public MpRect MainWindowScreenRect {
-            get {
-                return new MpRect(MainWindowLeft, MainWindowTop, MainWindowWidth, MainWindowHeight);
-            }
-            set {
-                MpRect newVal = value == null ? MpRect.Empty : value;
-                MainWindowWidth = newVal.Width;// - newVal;
-                MainWindowHeight = newVal.Height;// - newVal;
-                MainWindowLeft = newVal.Left;
-                MainWindowTop = newVal.Top;
-                MainWindowRight = newVal.Right;
-                MainWindowBottom = newVal.Bottom;
 
-
-                OnPropertyChanged(nameof(MainWindowScreenRect));
-            }
-        }
+        
 
 
         public MpRect MainWindowOpenedScreenRect {
@@ -311,6 +300,29 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     return MpCursorType.ResizeWE;
                 }
+            }
+        }
+
+        private IBrush _lgb;
+        public IBrush MainWindowOpacityMask {
+            get {
+                return null;
+                if(_lgb == null) {
+                    var new_ib = new ImageBrush();
+                    new_ib.TileMode = TileMode.None;
+                    new_ib.AlignmentX = AlignmentX.Left;
+                    new_ib.AlignmentY = AlignmentY.Top;
+                    new_ib.Stretch = Stretch.Fill;
+                    new_ib.Source = MpAvIconSourceObjToBitmapConverter.Instance
+                            .Convert("TextureImage", null, null, null) as Bitmap;
+                    new_ib.SourceRect = new RelativeRect(new Rect(new Size(128, 128)), RelativeUnit.Absolute);
+                    _lgb = new_ib;
+                }
+                if(_lgb is ImageBrush ib) {
+                    var mask_size = MainWindowOpenedScreenRect.Size.ToPortablePoint() * MainWindowScreen.PixelDensity;
+                    ib.DestinationRect = new RelativeRect(new Rect(mask_size.ToAvSize()), RelativeUnit.Absolute);
+                }
+                return _lgb;
             }
         }
 
@@ -499,7 +511,7 @@ namespace MonkeyPaste.Avalonia {
             MpPlatform.Services.ClipboardMonitor.StartMonitor();
 
             SetupMainWindowSize();
-            MainWindowScreenRect = MainWindowClosedScreenRect;
+            SetMainWindowRect(MainWindowClosedScreenRect);
 
             ShowWindowCommand.Execute(null);
 
@@ -516,57 +528,7 @@ namespace MonkeyPaste.Avalonia {
             MpPlatform.Services.Query.RestoreProviderValues();
         }
 
-        public void SetupMainWindowSize(bool isOrientationChange = false) {
-            switch (MainWindowOrientationType) {
-                case MpMainWindowOrientationType.Top:
-                case MpMainWindowOrientationType.Bottom:
-                    MainWindowWidth = MainWindowScreen.WorkArea.Width;
-                    if (MainWindowHeight == 0) {
-                        // startup case                        
-                        if (MpPrefViewModel.Instance.MainWindowInitialHeight == 0) {
-                            // initial setting
-                            MpPrefViewModel.Instance.MainWindowInitialHeight = MainWindowScreen.WorkArea.Height * MainWindowDefaultHorizontalHeightRatio;
-                        }
-                        MainWindowHeight = MpPrefViewModel.Instance.MainWindowInitialHeight;
-                    } else {
-                        if (isOrientationChange) {
-                            // clear initial width 
-                            MpPrefViewModel.Instance.MainWindowInitialWidth = 0;
-                            // reset height and call again to propagate initial height setting
-                            MainWindowHeight = 0;
-                            SetupMainWindowSize(false);
-                        } else {
-                            // height is user defined
-                        }
-                    }
-
-                    break;
-                case MpMainWindowOrientationType.Left:
-                case MpMainWindowOrientationType.Right:
-                    MainWindowHeight = MainWindowScreen.WorkArea.Height;
-                    if (MainWindowWidth == 0) {
-                        // startup case                        
-                        if (MpPrefViewModel.Instance.MainWindowInitialWidth == 0) {
-                            // initial setting
-                            MpPrefViewModel.Instance.MainWindowInitialWidth = MainWindowScreen.WorkArea.Width * MainWindowDefaultVerticalWidthRatio;
-                        }
-                        MainWindowWidth = MpPrefViewModel.Instance.MainWindowInitialWidth;
-                    } else {
-                        if (isOrientationChange) {
-                            // clear initial height
-                            MpPrefViewModel.Instance.MainWindowInitialHeight = 0;
-                            // reset Width and call again to propagate initial width setting
-                            MainWindowWidth = 0;
-                            SetupMainWindowSize(false);
-                        } else {
-                            // width is user defined
-                        }
-                    }
-
-                    break;
-            }
-
-        }
+        
 
         #endregion
 
@@ -596,18 +558,35 @@ namespace MonkeyPaste.Avalonia {
                     //MpMessenger.SendGlobal(MpMessageType.MainWindowSizeChanged);
                     break;
                 case nameof(MainWindowLeft):
+                    double rl = MainWindowLeft - MainWindowOpenedScreenRect.Left;
+                    Canvas.SetLeft(MpAvMainWindow.Instance.RootGrid, rl);
+                    break;
                 case nameof(MainWindowTop):
-                    if (MpAvMainWindow.Instance == null) {
-                        return;
-                    }
-                    var p = new MpPoint(MainWindowLeft, MainWindowTop);
-                    //if (OperatingSystem.IsWindows()) 
-                    {
-                        // Window position on windows uses actual density not scaled value mac uses scaled haven't checked linux
-                        //p *= ; //MpPlatformWrapper.Services.ScreenInfoCollection.Screens.ElementAt(MainWindowMonitorIdx).PixelDensity;
-                    }
+                    double rt = MainWindowTop - MainWindowOpenedScreenRect.Top;
+                    Canvas.SetTop(MpAvMainWindow.Instance.RootGrid, rt);
+                    break;
+                case nameof(MainWindowRight):
+                    double rr = MainWindowRight - MainWindowOpenedScreenRect.Right;
+                    Canvas.SetRight(MpAvMainWindow.Instance.RootGrid, rr);
+                    break;
+                case nameof(MainWindowBottom):
+                    double rb = MainWindowBottom - MainWindowOpenedScreenRect.Bottom;
+                    Canvas.SetBottom(MpAvMainWindow.Instance.RootGrid, rb);
+                    break;
 
-                    MpAvMainWindow.Instance.Position = p.ToAvPixelPoint(MainWindowScreen.PixelDensity);
+                case nameof(MainWindowOpenedScreenRect):
+                    // mw is always open screen rect
+                    // mw opacity mask is always open screen rect
+                    // mwcg is what is animated so it hides outside current screen workarea
+
+
+                    MpAvMainWindow.Instance.Position = 
+                        MainWindowOpenedScreenRect.Location.ToAvPixelPoint(MainWindowScreen.PixelDensity);
+                    //MpAvMainWindow.Instance.Width = MainWindowOpenedScreenRect.Width;
+                    //MpAvMainWindow.Instance.Height = MainWindowOpenedScreenRect.Height;
+
+                    //OnPropertyChanged(nameof(MainWindowOpacityMask));
+
                     break;
                 case nameof(IsResizing):
                     if (IsResizing) {
@@ -660,7 +639,63 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #region Window Animation Helpers
+        private void SetupMainWindowSize(bool isOrientationChange = false) {
+            switch (MainWindowOrientationType) {
+                case MpMainWindowOrientationType.Top:
+                case MpMainWindowOrientationType.Bottom:
+                    MainWindowWidth = MainWindowScreen.WorkArea.Width;
+                    if (MainWindowHeight == 0) {
+                        // startup case                        
+                        if (MpPrefViewModel.Instance.MainWindowInitialHeight == 0) {
+                            // initial setting
+                            MpPrefViewModel.Instance.MainWindowInitialHeight = MainWindowScreen.WorkArea.Height * MainWindowDefaultHorizontalHeightRatio;
+                        }
+                        MainWindowHeight = MpPrefViewModel.Instance.MainWindowInitialHeight;
+                    } else {
+                        if (isOrientationChange) {
+                            // clear initial width 
+                            MpPrefViewModel.Instance.MainWindowInitialWidth = 0;
+                            // reset height and call again to propagate initial height setting
+                            MainWindowHeight = 0;
+                            SetupMainWindowSize(false);
+                        } else {
+                            // height is user defined
+                        }
+                    }
 
+                    break;
+                case MpMainWindowOrientationType.Left:
+                case MpMainWindowOrientationType.Right:
+                    MainWindowHeight = MainWindowScreen.WorkArea.Height;
+                    if (MainWindowWidth == 0) {
+                        // startup case                        
+                        if (MpPrefViewModel.Instance.MainWindowInitialWidth == 0) {
+                            // initial setting
+                            MpPrefViewModel.Instance.MainWindowInitialWidth = MainWindowScreen.WorkArea.Width * MainWindowDefaultVerticalWidthRatio;
+                        }
+                        MainWindowWidth = MpPrefViewModel.Instance.MainWindowInitialWidth;
+                    } else {
+                        if (isOrientationChange) {
+                            // clear initial height
+                            MpPrefViewModel.Instance.MainWindowInitialHeight = 0;
+                            // reset Width and call again to propagate initial width setting
+                            MainWindowWidth = 0;
+                            SetupMainWindowSize(false);
+                        } else {
+                            // width is user defined
+                        }
+                    }
+
+                    break;
+            }
+        }
+
+        private void SetMainWindowRect(MpRect rect) {
+            MainWindowLeft = rect.Left;
+            MainWindowTop = rect.Top;
+            MainWindowRight = rect.Right;
+            MainWindowBottom = rect.Bottom;
+        }
         private void FinishMainWindowShow() {            
             if (_isAnimationCanceled) {
                 MpConsole.WriteLine("FinishShow canceled, ignoring view changes");
@@ -686,7 +721,7 @@ namespace MonkeyPaste.Avalonia {
             //UpdateTopmost();
 
             IsMainWindowVisible = true;
-            MainWindowScreenRect = MainWindowOpenedScreenRect;
+            SetMainWindowRect(MainWindowOpenedScreenRect);
 
             MpMessenger.SendGlobal(MpMessageType.MainWindowOpened);
             MpConsole.WriteLine("SHOW WINDOW DONE");
@@ -703,9 +738,9 @@ namespace MonkeyPaste.Avalonia {
             IsMainWindowOpen = false;
             IsMainWindowClosing = false;
 
-            MainWindowScreenRect = MainWindowClosedScreenRect;
+            SetMainWindowRect(MainWindowClosedScreenRect);
             IsMainWindowVisible = false;
-            MpAvMainWindow.Instance.Hide();
+            MpAvMainWindow.Instance.IsVisible = false;
             //UpdateTopmost();
             //MpAvMainWindow.Instance.Topmost = false;
             //MpAvMainWindow.Instance.Renderer.Stop();
@@ -722,7 +757,7 @@ namespace MonkeyPaste.Avalonia {
             var active_info = MpPlatform.Services.ProcessWatcher.LastProcessInfo;
             MpConsole.WriteLine("Active: " + active_info);
         }
-        private async Task AnimateMainWindowAsync(MpRect startRect, MpRect endRect) {
+        private async Task AnimateMainWindowAsync(MpRect endRect) {
             // close 0.12 20
             // open 
             double zeta = 0.22d;
@@ -733,10 +768,10 @@ namespace MonkeyPaste.Avalonia {
             //    omega = double.Parse(st_parts[1]);
             //}
             //MainWindowScreenRect = startRect;
-            double[] x = startRect.Sides;
+            double[] x = new double[] { MainWindowLeft, MainWindowTop, MainWindowRight, MainWindowBottom };
             double[] xt = endRect.Sides;
             double[] v = new double[4];
-
+            double min_done_v = 0.9d; //0.1d;
             int anchor_idx = MainWindowOrientationType switch {
                 MpMainWindowOrientationType.Left => 0,
                 MpMainWindowOrientationType.Top => 1,
@@ -762,7 +797,7 @@ namespace MonkeyPaste.Avalonia {
                         MpAnimationHelpers.Spring(ref x[i], ref v[i], xt[i],dt, zeta, omega);
                     }
                 }
-                bool is_v_zero = v.All(x => Math.Abs(x) < 0.1d);
+                bool is_v_zero = v.All(x => Math.Abs(x) <= min_done_v);
 
                 if (is_v_zero || _isAnimationCanceled) {
                     // consider done when all v's are pretty low or canceled
@@ -770,8 +805,7 @@ namespace MonkeyPaste.Avalonia {
                     _animationTimer.Stop();
                     return;
                 }
-                MainWindowScreenRect = new MpRect(x);
-
+                SetMainWindowRect(new MpRect(x));
                             
             };
 
@@ -792,7 +826,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            MainWindowScreenRect = endRect;
+            SetMainWindowRect(endRect);
         }
 
         private async Task ResetMainWindowAnimationStateAsync() {
@@ -820,7 +854,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #endregion
-
 
         #region Global Pointer Event Handlers
         private void Instance_OnGlobalMouseWheelScroll(object sender, MpPoint delta) {
@@ -936,7 +969,7 @@ namespace MonkeyPaste.Avalonia {
                         //MpAvMainWindow.Instance.Renderer.Start();
 
                         //_animationCts.TryReset();
-                        await AnimateMainWindowAsync(MainWindowScreenRect, MainWindowOpenedScreenRect);
+                        await AnimateMainWindowAsync(MainWindowOpenedScreenRect);
                     }
                     FinishMainWindowShow();
                 });
@@ -998,27 +1031,18 @@ namespace MonkeyPaste.Avalonia {
                         //
                         //MpAvMainWindow.Instance.Topmost = false;
                         //UpdateTopmost();
-                        await AnimateMainWindowAsync(MainWindowScreenRect, MainWindowClosedScreenRect);
+                        await AnimateMainWindowAsync(MainWindowClosedScreenRect);
                     }
                     FinishMainWindowHide(active_pinfo);
                 });
-               
-
             },
             () => {
-                bool wasFocusLevelJustDecreased = 
-                    LastDecreasedFocusLevelDateTime.HasValue && 
-                        (DateTime.Now - LastDecreasedFocusLevelDateTime.Value).TotalMilliseconds < 1000;
-
-
                 bool canHide = !IsMainWindowLocked &&
                           !IsAnyDropDownOpen &&
-                          !IsAnyMainWindowTextBoxFocused &&
                           !IsMainWindowInitiallyOpening &&
                           !IsAnyDialogOpen &&
                           !IsAnyItemDragging &&
                           !IsAnyNotificationActivating &&
-                          !wasFocusLevelJustDecreased &&
                           !IsResizing;
 
                 if(!canHide) {
@@ -1026,13 +1050,10 @@ namespace MonkeyPaste.Avalonia {
                     MpConsole.WriteLine($"Cannot hide main window:");
                     MpConsole.WriteLine($"IsMainWindowLocked: {(IsMainWindowLocked)}");
                     MpConsole.WriteLine($"IsAnyDropDownOpen: {(IsAnyDropDownOpen)}");
-                    MpConsole.WriteLine($"IsAnyDialogOpen: {(IsAnyDialogOpen)}");
-                    MpConsole.WriteLine($"IsAnyTextBoxFocused: {(IsAnyMainWindowTextBoxFocused)}");
                     MpConsole.WriteLine($"IsMainWindowInitiallyOpening: {(IsMainWindowInitiallyOpening)}");
                     MpConsole.WriteLine($"IsShowingDialog: {(IsAnyDialogOpen)}");
                     MpConsole.WriteLine($"IsAnyItemDragging: {(IsAnyItemDragging)}");
                     MpConsole.WriteLine($"IsAnyNotificationActivating: {(IsAnyNotificationActivating)}");
-                    MpConsole.WriteLine($"wasFocusLevelJustDecreased: {(wasFocusLevelJustDecreased)}");
                     MpConsole.WriteLine($"IsResizing: {(IsResizing)}");
                     MpConsole.WriteLine($"IsMainWindowClosing: {(IsMainWindowClosing)}");
                     MpConsole.WriteLine("");
@@ -1040,6 +1061,30 @@ namespace MonkeyPaste.Avalonia {
                 return canHide;
             });
 
+        public ICommand DecreaseFocusCommand => new MpCommand(
+            () => {
+                HideWindowCommand.Execute(null);
+            }, () => {
+                if(!HideWindowCommand.CanExecute(null)) {
+                    return false;
+                }
+                bool wasFocusLevelJustDecreased =
+                    LastDecreasedFocusLevelDateTime.HasValue &&
+                        (DateTime.Now - LastDecreasedFocusLevelDateTime.Value).TotalMilliseconds < 1000;
+
+                bool canDecrease =
+                    !wasFocusLevelJustDecreased &&
+                          !IsAnyMainWindowTextBoxFocused;
+
+                if (!canDecrease) {
+                    MpConsole.WriteLine("");
+                    MpConsole.WriteLine($"Cannot decrease focus:");
+                    MpConsole.WriteLine($"IsAnyTextBoxFocused: {(IsAnyMainWindowTextBoxFocused)}");
+
+                    MpConsole.WriteLine($"wasFocusLevelJustDecreased: {(wasFocusLevelJustDecreased)}");
+                }
+                return canDecrease;
+            });
         public ICommand CycleOrientationCommand => new MpAsyncCommand<object>(
             async(dirStrOrEnumArg) => {
 
@@ -1065,12 +1110,7 @@ namespace MonkeyPaste.Avalonia {
                 MainWindowOrientationType = (MpMainWindowOrientationType)nextOr;
                 SetupMainWindowSize(true);
 
-                MainWindowLeft = MainWindowOpenedScreenRect.Left;
-                MainWindowTop = MainWindowOpenedScreenRect.Top;
-                MainWindowRight = MainWindowOpenedScreenRect.Right;
-                MainWindowBottom = MainWindowOpenedScreenRect.Bottom;
-
-                MainWindowScreenRect = MainWindowOpenedScreenRect;
+                SetMainWindowRect(MainWindowOpenedScreenRect);
 
 
                 var mw = MpAvMainWindow.Instance;

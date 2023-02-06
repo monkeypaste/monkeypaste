@@ -174,6 +174,14 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public MpTransactionType TransactionType {
+            get {
+                if(Transaction == null) {
+                    return MpTransactionType.None;
+                }
+                return Transaction.TransactionType;
+            }
+        }
         public string TransactionLabel {
             get {
                 if (Transaction == null || string.IsNullOrEmpty(Transaction.TransactionLabel)) {

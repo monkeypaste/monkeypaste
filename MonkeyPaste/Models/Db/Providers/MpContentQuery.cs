@@ -52,141 +52,25 @@ namespace MonkeyPaste {
         } 
 
         private static async Task<List<int>> PerformContentQueryAsync(MpIQueryInfo qi, IEnumerable<int> tagIds, bool isAdvanced, int idx) {
-            string qi_root_id_query_str = ConvertQueryToSql(qi, tagIds, isAdvanced, out string pq, out var args); 
-
+            string qi_root_id_query_str = ConvertQueryToSql(qi, tagIds, isAdvanced, out var args);
             MpConsole.WriteLine($"Current DataModel Query ({idx}): " + qi_root_id_query_str);
-
-            var result = await MpDb.QueryScalarsAsync<int>(qi_root_id_query_str);
-            var result2 = await MpDb.QueryScalarsAsync<int>(pq, args);
-            var diff = result.Distinct().ToList().Difference(result2.Distinct().ToList());
-            if(diff.Count() > 0) {
-                // what's differnt?
-                Debugger.Break();
-            }
-
+            var result = await MpDb.QueryScalarsAsync<int>(qi_root_id_query_str, args);
             return result.Distinct().ToList();
         }
 
 
-        private static string ConvertQueryToSql(MpIQueryInfo qi, IEnumerable<int> tagIds, bool isAdvanced, out string pq, out object[] args) {
+        private static string ConvertQueryToSql(MpIQueryInfo qi, IEnumerable<int> tagIds, bool isAdvanced, out object[] args) {
+            MpContentQueryBitFlags qf = qi.QueryFlags;
             string sortClause = string.Empty;
             List<string> types = new List<string>();
             List<string> filters = new List<string>();
-            string searchOp = "LIKE";
-            string searchOp2 = null;
-            string escapeStr = "";
-
-            MpContentQueryBitFlags qf = qi.QueryFlags;
-            string mv = qi.MatchValue.CaseFormat(true);
 
             // FILTERS
 
-            if (!string.IsNullOrEmpty(mv)) {
-                if (qf.HasFlag(MpContentQueryBitFlags.CaseSensitive)) {
-                    searchOp = "GLOB";
-                } else if (qf.HasFlag(MpContentQueryBitFlags.Regex)) {
-                    searchOp = "REGEXP";
-                } else {
-                    escapeStr = "%";
-                }
-                if(qf.HasFlag(MpContentQueryBitFlags.WholeWord)) {
-                    searchOp = "REGEXP";
-                }
-
-                string escapeClause = string.Empty;
-                if (searchOp == "LIKE" && mv.Contains('%')) {
-                    mv = mv.Replace("%", @"\%");
-                    escapeClause = @" ESCAPE '\'";
-                }
-                if (mv.Contains("'")) {
-                    mv = mv.Replace("'", "''");
-                }
-                string fmv = qf.GetStringMatchValue(searchOp, mv);
-                // <Field> <op> '<mv>'
-                if (qf.HasFlag(MpContentQueryBitFlags.Title)) {
-                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("Title"), searchOp, escapeStr, fmv, escapeClause));
-                }
-                if (qf.HasFlag(MpContentQueryBitFlags.Content)) {
-                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("ItemData"), searchOp, escapeStr, fmv, escapeClause));
-                }
-                if (qf.HasFlag(MpContentQueryBitFlags.Url)) {
-                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("UrlPath"), searchOp, escapeStr, fmv, escapeClause));
-                }
-                if (qf.HasFlag(MpContentQueryBitFlags.UrlTitle)) {
-                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("UrlTitle"), searchOp, escapeStr, fmv, escapeClause));
-                }
-                if (qf.HasFlag(MpContentQueryBitFlags.AppName)) {
-                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("AppName"), searchOp, escapeStr, fmv, escapeClause));
-                }
-                if (qf.HasFlag(MpContentQueryBitFlags.AppPath)) {
-                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("AppPath"), searchOp, escapeStr, fmv, escapeClause));
-                }
-                if (qf.HasFlag(MpContentQueryBitFlags.Meta)) {
-                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("ItemMetaData"), searchOp, escapeStr, fmv, escapeClause));
-                }
-                if (qf.HasFlag(MpContentQueryBitFlags.DeviceName)) {
-                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("DeviceName"), searchOp, escapeStr, fmv, escapeClause));
-                }
-                if (qf.HasFlag(MpContentQueryBitFlags.DeviceType)) {
-                    filters.Add(string.Format(@"{0} {1} '{2}{3}{2}'{4}", CaseFormat("DeviceType"), searchOp, escapeStr, fmv, escapeClause));
-                }
-
-                if (qf.HasFlag(MpContentQueryBitFlags.Before)) {
-                    searchOp = "<";
-                    string match_ticks = null;
-                    string match_ticks2 = null;
-                    if(qf.HasFlag(MpContentQueryBitFlags.Exactly)) {
-                        try {
-                            //exactly 1 < comp_field < 2
-
-                            var dt = DateTime.Parse(mv);
-                            var start_dt = dt.Date;
-                            var end_dt = start_dt + TimeSpan.FromDays(0.999999);
-                            match_ticks = start_dt.Ticks.ToString();
-                            match_ticks2 = end_dt.Ticks.ToString();
-                            searchOp = ">";
-                            searchOp2 = "<";
-                        }
-                        catch {
-                            searchOp = null;
-                        }
-                    } else {
-                        // all day units
-                        try {
-                            double today_offset = (DateTime.Now - DateTime.Today).TotalDays;
-                            double days = double.Parse(mv);
-                            double total_day_offset = days + today_offset;
-                            var dt = DateTime.Now - TimeSpan.FromDays(total_day_offset);
-                            match_ticks = dt.Ticks.ToString();
-                        }
-                        catch {
-                            searchOp = null;
-                        }
-                    }
-                    if(!string.IsNullOrEmpty(match_ticks)) {
-                        string comp_field = null;
-                        if(qf.HasFlag(MpContentQueryBitFlags.Created)) {
-                            comp_field = "CopyDateTime";
-                        } else if (qf.HasFlag(MpContentQueryBitFlags.Modified)) {
-                            comp_field = "TransactionDateTime";
-                            // filter out TransactionLabel = 'Created'
-                            filters.Add(string.Format(@"{0} {1} {2}", CaseFormat(MpTransactionType.Created.ToString()), "!=", match_ticks));
-                        } else if (qf.HasFlag(MpContentQueryBitFlags.Pasted)) {
-                            comp_field = "PasteDateTime";
-                        }
-
-                        if (!string.IsNullOrEmpty(comp_field)) {
-                            if(!string.IsNullOrEmpty(match_ticks2)) {
-                                //exactly 1 < comp_field < 2
-                                filters.Add(string.Format(@"{0} {1} {2}", CaseFormat(comp_field), searchOp2, match_ticks2));
-                            } 
-                            filters.Add(string.Format(@"{0} {1} {2}", CaseFormat(comp_field), searchOp, match_ticks));
-                        }
-                    }
-                }
-                if(qf.HasFlag(MpContentQueryBitFlags.After)) {
-                    searchOp = ">";
-                }
+            List<Tuple<string, List<object>>> arg_filters = GetParameterizedFilters(qi);
+            List<object> argList = new List<object>();
+            if (arg_filters != null) {
+                argList = arg_filters.SelectMany(x => x.Item2).ToList();
             }
 
             // TYPES
@@ -230,59 +114,23 @@ namespace MonkeyPaste {
 
             // SELECT GEN
 
-            string sql_view = isAdvanced ? "MpAdvancedSortableCopyItem_View" : "MpSortableCopyItem_View";
-
-            string query = $"SELECT RootId FROM {sql_view}";
             string tag_where_stmt = $"fk_MpTagId IN ({string.Join(",", tagIds)})";
             string tagClause =
                 @$"RootId IN 
                     (SELECT DISTINCT pk_MpCopyItemId FROM MpCopyItem WHERE pk_MpCopyItemId IN 
 		                (SELECT fk_MpCopyItemId FROM MpCopyItemTag WHERE {tag_where_stmt}))";
 
-
-            List<Tuple<string, List<object>>> arg_filters = GetParameterizedFilters(qi);
-            List<object> argList = new List<object>();
-            if (arg_filters != null) {
-                argList = arg_filters.SelectMany(x => x.Item2).ToList();
-            }
+            string sql_view = isAdvanced ? "MpAdvancedSortableCopyItem_View" : "MpSortableCopyItem_View";
+            string query = $"SELECT RootId FROM {sql_view} where {tagClause}";
             string filter_op = isAdvanced ? " AND " : " OR ";
-            string param_query = $"{query} where {tagClause}";
             if(arg_filters.Count > 0) {
-                param_query += $" AND ({string.Join(filter_op, arg_filters.Select(x=>x.Item1))})";
+                query += $" AND ({string.Join(filter_op, arg_filters.Select(x=>x.Item1))})";
             }
             if (types.Count > 0) {
-                param_query += $" AND ({string.Join(" OR ", types)})";
+                query += $" AND ({string.Join(" OR ", types)})";
             }
+            query += $" {sortClause}";
 
-            param_query += $" {sortClause}";
-
-            if (!string.IsNullOrEmpty(tagClause)) {
-                query += " where " + tagClause;
-                if (filters.Count > 0) {
-                    query += " AND (";
-                    query += string.Join(" OR ", filters) + ")";
-                }
-                if (types.Count > 0) {
-                    query += " AND (";
-                    query += string.Join(" OR ", types) + ")";
-                }
-            } else if (filters.Count > 0) {
-                query += " where ";
-                if (types.Count > 0) {
-                    query += "(";
-                }
-                query += string.Join(" OR ", filters);
-                if (types.Count > 0) {
-                    query += ") AND (";
-                    query += string.Join(" OR ", types) + ")";
-                }
-            } else if (types.Count > 0) {
-                query += " where ";
-                query += string.Join(" OR ", types);
-            }
-            query += " " + sortClause;
-
-            pq = param_query;
             args = argList.ToArray();
             return query;
         }

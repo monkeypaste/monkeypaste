@@ -24,6 +24,7 @@
                         <DataTemplate x:Key="CefNetWebViewTemplate"
                                       DataType="local:MpAvClipTileViewModel">
                             <local:MpAvCefNetContentWebView DataContext="{Binding}"
+                                                            
                                                             Classes="ContentDragAndDrop"
                                                             HorizontalAlignment="Stretch"
                                                             VerticalAlignment="Stretch" />

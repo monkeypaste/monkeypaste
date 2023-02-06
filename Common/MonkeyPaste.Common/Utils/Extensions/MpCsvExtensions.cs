@@ -5,6 +5,9 @@ using System.Text;
 
 namespace MonkeyPaste.Common {
     public static class MpCsvExtensions {
+        public static string ToCsv(this IEnumerable<string> strList, MpICustomCsvFormat csvObj) {
+            return ToCsv(strList, csvObj.CsvFormat);
+        }
         public static string ToCsv(this IEnumerable<string> strList, MpCsvFormatProperties csvProps = null) {
             if (strList == null || strList.Count() == 0) {
                 return string.Empty;
@@ -14,6 +17,9 @@ namespace MonkeyPaste.Common {
                 string.Join(
                     csvProps.EocSeparator, 
                     strList.Select(x=>csvProps.EncodeValue(x)));
+        }
+        public static List<string> ToListFromCsv(this string csvStr, MpICustomCsvFormat csvObj) {
+            return ToListFromCsv(csvStr, csvObj.CsvFormat);
         }
         public static List<string> ToListFromCsv(this string csvStr, MpCsvFormatProperties csvProps = null) {
             csvProps = csvProps == null ? MpCsvFormatProperties.Default : csvProps;

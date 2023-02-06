@@ -1714,6 +1714,9 @@ namespace MonkeyPaste.Avalonia {
                     if (IsPlaceholder) {
                         break;
                     }
+                    if(Parent != null) {
+                        Parent.ValidateQueryTray();
+                    }
                     //MpRect prevRect = Prev == null ? null : Prev.TrayRect;
                     //Parent.UpdateTileRectCommand.Execute(new object[] { this, prevRect });
                     Parent.UpdateTileRectCommand.Execute(this);

@@ -14,6 +14,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
+        public bool IsEnabled { get; set; } = true;
+
         public Window TopmostWindow {
             get {
                 if (MpAvSettingsWindow.Instance != null && 
@@ -39,18 +41,24 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
-        public bool TrySetTopmost(Window w) {
-            if(w == null) {
+
+        #endregion
+
+        #region Private Methods
+
+        private bool TrySetTopmost(Window w) {
+
+            if (w == null) {
                 return false;
             }
-            if(w.Topmost) {
+            if (w.Topmost) {
                 return true;
             }
-            if(TopmostWindow == null) {
+            if (TopmostWindow == null) {
                 w.Topmost = true;
                 return true;
             }
-            if(GetWindowTopmostPriority(w) >= GetWindowTopmostPriority(TopmostWindow)) {
+            if (GetWindowTopmostPriority(w) >= GetWindowTopmostPriority(TopmostWindow)) {
                 bool needsActivate = UnsetTopmost(TopmostWindow);
 
                 //if (!_forcedUnset.Contains(TopmostWindow)) {
@@ -70,10 +78,10 @@ namespace MonkeyPaste.Avalonia {
             return false;
         }
 
-        public bool UnsetTopmost(Window w) {
+        private bool UnsetTopmost(Window w) {
             bool wasActivated = false;
 
-            if(w != null && w.Topmost) {
+            if (w != null && w.Topmost) {
                 w.Topmost = false;
                 if (w.IsVisible) {
                     // i think this works around avalonia SetTopmost SWP_NOACTIVATE flag
@@ -82,15 +90,13 @@ namespace MonkeyPaste.Avalonia {
                     wasActivated = true;
                 }
             }
-            
+
             return wasActivated;
         }
-
-        #endregion
-
-        #region Private Methods
-
         private void Instance_OnNotificationIsVisibleChanged(object sender, Window w) {
+            if(!IsEnabled) {
+                return;
+            }
             if (w.IsVisible) {
                 if (!_ntfWindows.Contains(w)) {
                     _ntfWindows.Add(w);
@@ -111,7 +117,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
-            switch(msg) {
+            if (!IsEnabled) {
+                return;
+            }
+            switch (msg) {
                 case MpMessageType.MainWindowLocked:
                     TrySetTopmost(MpAvMainWindow.Instance);
                     break;
@@ -119,10 +128,10 @@ namespace MonkeyPaste.Avalonia {
                     UnsetTopmost(MpAvMainWindow.Instance);
                     break;
                 case MpMessageType.MainWindowOpened:
-                    if(MpAvMainWindowViewModel.Instance.AnimateShowWindow) {
+                    if (MpAvMainWindowViewModel.Instance.AnimateShowWindow) {
                         TrySetTopmost(MpAvMainWindow.Instance);
                     }
-                    
+
                     break;
                 case MpMessageType.MainWindowHid:
                 case MpMessageType.MainWindowClosing:

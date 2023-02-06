@@ -1117,6 +1117,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (IsContentSubSelectable) {
+
                 this.ExecuteJavascript("enableSubSelection_ext()");
                 if (BindingContext.HasTemplates && !BindingContext.IsDropOverTile) {
                     MpAvResizeExtension.ResizeAnimated(this, BindingContext.EditableWidth, BindingContext.EditableHeight);

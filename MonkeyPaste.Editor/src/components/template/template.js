@@ -23,8 +23,25 @@ var DragAnchorDocIdxWhenTemplateWithinSelection = -1;
 function initTemplates() {
     quill.on("text-change", onEditorTextChangedPadTemplates);
     initTemplateBlot();
+    initTemplateMatcher();
 }
 
+function initTemplateMatcher() {
+    if (Quill === undefined) {
+        /// host load error case
+        debugger;
+    }
+    let Delta = Quill.imports.delta;
+
+    quill.clipboard.addMatcher('span', function (node, delta) {
+        if (node.hasAttribute('templateguid')) {
+            delta.ops[0].attributes = delta.ops[0].insert.template;
+            //delete delta.ops[0].insert.template;
+            //delta.ops[0].insert = '';
+        }
+        return delta;
+    });
+}
 //#endregion Life Cycle
 
 // #region Getters

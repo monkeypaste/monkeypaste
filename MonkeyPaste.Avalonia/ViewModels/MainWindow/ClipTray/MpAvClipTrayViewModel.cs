@@ -1349,6 +1349,12 @@ namespace MonkeyPaste.Avalonia {
             return ctvm;
         }
 
+        public void ValidateQueryTray() {
+            var dups = Items.Where(x => x.QueryOffsetIdx >= 0 && Items.Any(y => y != x && x.QueryOffsetIdx == y.QueryOffsetIdx));
+            if(dups.Count() > 0) {
+                Debugger.Break();
+            }
+        }
         public override string ToString() {
             return $"ClipTray";
         }

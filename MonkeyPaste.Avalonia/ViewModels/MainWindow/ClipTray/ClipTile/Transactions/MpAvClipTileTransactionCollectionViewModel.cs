@@ -180,7 +180,7 @@ namespace MonkeyPaste.Avalonia {
                 Dispatcher.UIThread.Post(async () => {
                     var cisvm = await CreateClipTileSourceViewModel(cit);
                     Transactions.Add(cisvm);
-                    if(cit.TransactionLabel == "Edit") {
+                    if(cit.TransactionType == MpTransactionType.Edited) {
                         // since source is editor content doesn't need up 
                         // TODO this should only be temporary, need a better way to 
                         // react/interpret transactions
@@ -205,7 +205,6 @@ namespace MonkeyPaste.Avalonia {
             await cisvm.InitializeAsync(cit);
             return cisvm;
         }
-
 
         private void MpAvClipTileSourceCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
@@ -236,9 +235,9 @@ namespace MonkeyPaste.Avalonia {
 
         private void ApplyTransaction(MpAvTransactionItemViewModel tivm) {
             if(tivm == null || 
-                tivm.TransactionLabel == "Edit" || 
-                tivm.TransactionLabel == "Drop" || 
-                tivm.TransactionLabel == "Created") {
+                tivm.TransactionType == MpTransactionType.Edited ||
+                tivm.TransactionType == MpTransactionType.Dropped ||
+                tivm.TransactionType == MpTransactionType.Created) {
                 return;
             }
 

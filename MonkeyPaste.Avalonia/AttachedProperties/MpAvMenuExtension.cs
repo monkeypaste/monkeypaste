@@ -24,7 +24,8 @@ using KeyGesture = Avalonia.Input.KeyGesture;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvMenuExtension {
-        private static MpAvContextMenuView _cmInstance { get; set; }
+        private static MpAvContextMenuView _cmInstance =>
+            MpAvContextMenuView.Instance;
 
         private static List<MenuItem> openSubMenuItems = new List<MenuItem>();
 
@@ -220,26 +221,24 @@ namespace MonkeyPaste.Avalonia {
                 false);
 
         private static void HandleIsEnabledChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
-            if (e.NewValue is bool isEnabledVal && isEnabledVal) {
-                if (_cmInstance == null) {
-                    _cmInstance = new MpAvContextMenuView();
-                    //_cmInstance.GetObservable(MpAvContextMenuView.IsOpenProperty).Subscribe(value => OnIsOpenChanged());
-                    _cmInstance.MenuOpened += (s, e) => OnIsOpenChanged();
-                    _cmInstance.MenuClosed += (s, e) => OnIsOpenChanged();
-                }
-                if (element is Control control) {
-                    if (control.IsInitialized) {
-                        HostControl_AttachedToVisualHandler(control, null);
-                    } else {
+            if (e.NewValue is bool isEnabledVal) {
+                if(isEnabledVal) {
+                    _cmInstance.MenuOpened += _cmInstance_MenuOpened;
+                    _cmInstance.MenuClosed += _cmInstance_MenuOpened;
+                    if (element is Control control) {
                         control.AttachedToVisualTree += HostControl_AttachedToVisualHandler;
-
+                        if (control.IsInitialized) {
+                            HostControl_AttachedToVisualHandler(control, null);
+                        }
                     }
+                } else {
+                    HostControl_DetachedToVisualHandler(element, null);
                 }
-            } else {
-                HostControl_DetachedToVisualHandler(element, null);
-            }
+            } 
+        }
 
-
+        private static void _cmInstance_MenuOpened(object sender, RoutedEventArgs e) {
+            OnIsOpenChanged();
         }
 
         private static void OnIsOpenChanged() {
@@ -269,9 +268,6 @@ namespace MonkeyPaste.Avalonia {
 
         private static void HostControl_AttachedToVisualHandler(object s, VisualTreeAttachmentEventArgs? e) {
             if (s is Control control) {
-                if (e == null) {
-                    control.AttachedToVisualTree += HostControl_AttachedToVisualHandler;
-                }
                 control.DetachedFromVisualTree += HostControl_DetachedToVisualHandler;
                 control.AddHandler(Control.PointerPressedEvent, HostControl_PointerPressed, RoutingStrategies.Tunnel);
             }
@@ -304,8 +300,8 @@ namespace MonkeyPaste.Avalonia {
                 if (e.IsLeftPress(control) || GetSelectOnRightClick(control)) {
                     if (sivm.Selector.SelectedItem != dc) {
                         wait_for_selection = true;
+                        sivm.Selector.SelectedItem = dc;
                     }
-                    sivm.Selector.SelectedItem = dc;
                 }
             } else if (dc is MpISelectableViewModel svm) {
                 if (e.IsLeftPress(control) || GetSelectOnRightClick(control)) {
@@ -648,8 +644,10 @@ namespace MonkeyPaste.Avalonia {
             Control control, 
             MpMenuItemViewModel mivm, 
             MpPoint offset = null, 
-            PlacementMode placement = 
-            PlacementMode.AnchorAndGravity) {
+            PlacementMode placement = PlacementMode.AnchorAndGravity,
+            bool hideOnClick = false,
+            bool selectOnRightClick = false) {
+
             offset = offset == null ? MpPoint.Zero : offset;
 
             if(mivm.SubItems == null || mivm.SubItems.Count == 0) {
@@ -669,7 +667,8 @@ namespace MonkeyPaste.Avalonia {
                 _cmInstance.HorizontalOffset = offset.X;
                 _cmInstance.VerticalOffset = offset.Y;
             }
-
+            SetHideOnClick(control, hideOnClick);
+            SetSelectOnRightClick(control, selectOnRightClick);
             var w = control.GetVisualAncestor<Window>();
             if (w == null) {
                 Debugger.Break();

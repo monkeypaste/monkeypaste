@@ -43,7 +43,7 @@ div.ql-code-block-container, div.ql-code-block {
 .sub-select {
     user-select: auto;
     overflow: auto;
-    cursor: auto;
+    cursor: text;
     width: unset;
 }
 
@@ -62,7 +62,7 @@ body:has(.sub-select) {
 .editable {
     user-select: auto;
     white-space: unset;
-    cursor: auto;
+    cursor: text;
     width: unset;
     text-decoration: unset;
 }

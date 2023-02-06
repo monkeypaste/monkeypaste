@@ -56,49 +56,6 @@ namespace MonkeyPaste.Avalonia {
 
 
         #region Layout
-        public GridLength SearchIconColumnWidth {
-            get {
-                if (IsExpandAnimating) {
-                    return new GridLength(0.15, GridUnitType.Star);
-                }
-                return new GridLength(1, GridUnitType.Star);
-            }
-        }
-        public GridLength SearchBoxColumnWidth {
-            get {
-                if (IsExpandAnimating) {
-                    return new GridLength(1, GridUnitType.Star);
-                }
-                return new GridLength(0, GridUnitType.Pixel);
-            }
-        }
-        public GridLength ClearAndBusyColumnWidth {
-            get {
-                double w = 0;
-                if(!IsExpandAnimating) {
-                    w = 0;
-                } else if (string.IsNullOrEmpty(LastSearchText) || IsSearching || HasText) {
-                    w = 15;
-                }
-                return new GridLength(w, GridUnitType.Pixel);
-            }
-        }
-
-        public GridLength NavButtonsColumnWidth {
-            get {
-                double w = 0;
-                if (!IsExpandAnimating) {
-                    w = 0;
-                } else if (IsMultipleMatches) {
-                    w = 20;
-                }
-                return new GridLength(w, GridUnitType.Pixel);
-            }
-        }
-        
-
-        
-
         #endregion
 
         #region State
@@ -115,9 +72,21 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private ObservableCollection<string> _recentSearchTexts;
         public ObservableCollection<string> RecentSearchTexts {
-            get => new ObservableCollection<string>(MpPrefViewModel.Instance.RecentSearchTexts.Split(new string[] { MpPrefViewModel.STRING_ARRAY_SPLIT_TOKEN }, StringSplitOptions.RemoveEmptyEntries));
-            set => MpPrefViewModel.Instance.RecentSearchTexts = string.Join(MpPrefViewModel.STRING_ARRAY_SPLIT_TOKEN, value);
+            get {
+                if(_recentSearchTexts == null) {
+                    var rstl = MpPrefViewModel.Instance.RecentSearchTexts.ToListFromCsv(MpPrefViewModel.Instance);
+                    _recentSearchTexts = new ObservableCollection<string>(rstl);
+                    _recentSearchTexts.CollectionChanged += _recentSearchTexts_CollectionChanged;
+                }
+                return _recentSearchTexts;
+            }
+        }
+
+        private void _recentSearchTexts_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
+            MpPrefViewModel.Instance.RecentSearchTexts =
+                RecentSearchTexts.ToCsv(MpPrefViewModel.Instance);
         }
 
         public bool IsMultipleMatches { get; private set; } = false;
@@ -244,9 +213,6 @@ namespace MonkeyPaste.Avalonia {
         public void NotifyHasMultipleMatches() {
             Dispatcher.UIThread.VerifyAccess();
             IsMultipleMatches = true;
-
-            OnPropertyChanged(nameof(ClearAndBusyColumnWidth));
-            OnPropertyChanged(nameof(NavButtonsColumnWidth));
         }
 
         #region View Method Invokers
@@ -285,16 +251,15 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                
                 case nameof(SearchText):
-                    OnPropertyChanged(nameof(ClearAndBusyColumnWidth));
-                    OnPropertyChanged(nameof(NavButtonsColumnWidth));
+                    if(IsTextBoxFocused) {
+                        PerformSearchCommand.Execute(null);
+                    }
 
                     if(HasText && !IsExpanded) {
                         IsExpanded = true;
                     }
                     break;
                 case nameof(IsSearching):
-                    OnPropertyChanged(nameof(ClearAndBusyColumnWidth));
-                    OnPropertyChanged(nameof(NavButtonsColumnWidth));
                     OnPropertyChanged(nameof(CanAddCriteriaItem));
                     break;
                 case nameof(IsTextBoxFocused):
@@ -320,10 +285,6 @@ namespace MonkeyPaste.Avalonia {
                             await Task.Delay(50);
                         }
                         OnPropertyChanged(nameof(IsExpandAnimating));
-                        OnPropertyChanged(nameof(SearchIconColumnWidth));
-                        OnPropertyChanged(nameof(SearchBoxColumnWidth));
-                        OnPropertyChanged(nameof(ClearAndBusyColumnWidth));
-                        OnPropertyChanged(nameof(NavButtonsColumnWidth));
 
                         if(IsExpanded && 
                             !MpAvMainWindowViewModel.Instance.IsMainWindowInitiallyOpening) {
@@ -334,23 +295,36 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private void UpdateRecentSearchTexts() {
-            if (!string.IsNullOrEmpty(_text)) {
-                var rftl = RecentSearchTexts;
-                int recentFindIdx = rftl.IndexOf(_text);
+        private void UpdateRecentSearchTexts(string st) {
+            if (!string.IsNullOrEmpty(st)) {
+                int recentFindIdx = RecentSearchTexts.IndexOf(st);
                 if (recentFindIdx < 0) {
-                    rftl.Insert(0, _text);
-                    rftl = new ObservableCollection<string>(rftl.Take(MpPrefViewModel.Instance.MaxRecentTextsCount));
+                    RecentSearchTexts.Insert(0, st);
                 } else {
-                    rftl.RemoveAt(recentFindIdx);
-                    rftl.Insert(0, _text);
+                    RecentSearchTexts.RemoveAt(recentFindIdx);
+                    RecentSearchTexts.Insert(0, st);
                 }
-                RecentSearchTexts = rftl;
+                int to_remove = RecentSearchTexts.Count - MpPrefViewModel.Instance.MaxRecentTextsCount;
+                if (to_remove > 0) {
+                    RecentSearchTexts.RemoveRange(MpPrefViewModel.Instance.MaxRecentTextsCount - 1, to_remove);
+                }
             }
         }
         #endregion
 
         #region Commands
+
+        public ICommand HandleSearchButtonClickCommand => new MpCommand<object>(
+            (args) => {
+                if(!IsExpanded) {
+                    ToggleIsSearchBoxExpandedCommand.Execute(null);
+                    return;
+                }
+                var target_control = args as Control;
+                MpAvMenuExtension.ShowMenu(
+                    target_control,
+                    SearchFilterCollectionViewModel.PopupMenuViewModel);
+            });
 
         public ICommand ToggleIsSearchBoxExpandedCommand => new MpCommand(
             () => {
@@ -389,7 +363,7 @@ namespace MonkeyPaste.Avalonia {
 
                 //SetQueryInfo(); 
                 MpPlatform.Services.Query.NotifyQueryChanged();
-                UpdateRecentSearchTexts();
+                UpdateRecentSearchTexts(SearchText);
             },()=>!MpAvMainWindowViewModel.Instance.IsMainWindowLoading);
 
         public ICommand NextMatchCommand => new MpCommand(

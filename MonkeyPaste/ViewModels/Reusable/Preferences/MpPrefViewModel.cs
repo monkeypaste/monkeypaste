@@ -9,7 +9,11 @@ using Newtonsoft.Json;
 using PropertyChanged;
 
 namespace MonkeyPaste {
-    public class MpPrefViewModel : MpViewModelBase, MpIUserProvidedFileExts, MpIJsonObject {
+    public class MpPrefViewModel : 
+        MpViewModelBase, 
+        MpICustomCsvFormat,
+        MpIUserProvidedFileExts, 
+        MpIJsonObject {
         #region Private
         [JsonIgnore]
         private object _lock = new object();
@@ -52,8 +56,18 @@ namespace MonkeyPaste {
         #endregion
 
         #region Interfaces
+        #region MpIUserProvidedFileExts Implementation
+        string MpIUserProvidedFileExts.UserDefineExtPsv => 
+            UserDefinedFileExtensionsPsv;
 
-        string MpIUserProvidedFileExts.UserDefineExtPsv => UserDefinedFileExtensionsPsv;
+        #endregion
+
+        #region MpICustomCsvFormat Implementation
+        MpCsvFormatProperties MpICustomCsvFormat.CsvFormat => 
+            MpCsvFormatProperties.DefaultBase64Value;
+
+        #endregion
+
         #endregion
 
         #region Properties

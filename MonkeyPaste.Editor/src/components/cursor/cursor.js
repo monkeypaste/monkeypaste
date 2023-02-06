@@ -45,9 +45,8 @@ function forceCursor(cursor) {
 }
 
 function resetForcedCursor() {
-	let fc_elm = getForcedCursorStyleElement();
-	if (fc_elm) {
-		fc_elm.remove();
+	if (getForcedCursorStyleElement()) {
+		getForcedCursorStyleElement().remove();
 	}
 }
 

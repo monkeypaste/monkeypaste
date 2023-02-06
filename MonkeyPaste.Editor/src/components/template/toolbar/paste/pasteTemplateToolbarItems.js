@@ -427,6 +427,7 @@ function updatePasteElementInteractivity() {
 // #region Event Handlers
 
 function onPasteTemplateTimer(e) {
+    return;
     updatePasteTemplateValues(true);
     PasteTemplateTimerFlipState = !PasteTemplateTimerFlipState;
 }

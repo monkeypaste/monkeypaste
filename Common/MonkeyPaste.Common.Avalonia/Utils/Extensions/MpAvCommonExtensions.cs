@@ -19,7 +19,51 @@ using static Avalonia.VisualExtensions;
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvCommonExtensions {
 
-        #region Collections
+        #region Focus
+
+        public static IInputElement GetFocusableAncestor(this IVisual visual, bool includeSelf = true) {
+            if (visual == null) {
+                return null;
+            }
+            if (includeSelf && visual is IInputElement ie) {
+                return ie;
+            }
+            return visual
+                .GetVisualAncestors()
+                .Where(x => x is IInputElement)
+                .Cast<IInputElement>()
+                .FirstOrDefault(x => x.Focusable);
+        }
+        public static IInputElement GetFocusableDescendant(this IVisual visual, bool includeSelf = true) {
+            if (visual == null) {
+                return null;
+            }
+            if (includeSelf && visual is IInputElement ie) {
+                return ie;
+            }
+            return visual
+                .GetVisualDescendants()
+                .Where(x => x is IInputElement)
+                .Cast<IInputElement>()
+                .FirstOrDefault(x => x.Focusable);
+        }
+
+        public static bool KillFocus(this Control control) {
+            if (control == null) {
+                return false;
+            }
+            if (control.GetFocusableAncestor() is IInputElement ie &&
+                ie != null) {
+                ie.Focus();
+                return true;
+            }
+            return false;
+        }
+
+        #endregion
+
+        #region Visual Tree
+
         public static T GetVisualAncestor<T>(this IVisual visual, bool includeSelf = true) where T : IVisual? {
             if (includeSelf && visual is T) {
                 return (T)visual;
@@ -74,18 +118,6 @@ namespace MonkeyPaste.Common.Avalonia {
             return descendant.Count() > 0;
         }
 
-        public static Thickness ToAvThickness(this double[] dblArr) {
-            if(dblArr == null || dblArr.Length == 0) {
-                return new Thickness();
-            }
-            if(dblArr.Length == 1) {
-                return new Thickness(dblArr[0]);
-            }
-            if(dblArr.Length != 4) {
-                throw new Exception("Thickness must be 0, 1 or 4 length");
-            }
-            return new Thickness(dblArr[0], dblArr[1], dblArr[2], dblArr[3]);
-        }
         #endregion
 
         #region Control
@@ -155,20 +187,6 @@ namespace MonkeyPaste.Common.Avalonia {
             return new MpRect(relative_origin, observed_size);
         }
 
-        public static bool KillFocus(this Control control) {
-            if(control == null || !control.IsFocused) {
-                return false;
-            }
-            var pc = control.Parent as Control;
-            while(pc != null) {
-                if(pc.Focusable) {
-                    pc.Focus();
-                    return true;
-                }
-                pc = pc.Parent as Control;
-            }
-            return false;
-        }
         #endregion
 
         #region Text Box
@@ -491,6 +509,23 @@ namespace MonkeyPaste.Common.Avalonia {
 
         #endregion
 
+        #region Layout
+
+        public static Thickness ToAvThickness(this double[] dblArr) {
+            if (dblArr == null || dblArr.Length == 0) {
+                return new Thickness();
+            }
+            if (dblArr.Length == 1) {
+                return new Thickness(dblArr[0]);
+            }
+            if (dblArr.Length != 4) {
+                throw new Exception("Thickness must be 0, 1 or 4 length");
+            }
+            return new Thickness(dblArr[0], dblArr[1], dblArr[2], dblArr[3]);
+        }
+
+        #endregion
+
         #region Point
 
         public static MpPoint ToPortablePoint(this MpSize size) {
@@ -508,6 +543,9 @@ namespace MonkeyPaste.Common.Avalonia {
             return new MpPoint(((double)p.X/pixelDensity), ((double)p.Y/pixelDensity));
         }
 
+        public static Size ToAvSize(this MpPoint p) {
+            return p.ToPortableSize().ToAvSize();
+        }
         public static Point ToAvPoint(this MpPoint p) {
             return new Point(p.X, p.Y);
         }

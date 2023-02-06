@@ -5,14 +5,15 @@ using Avalonia.Interactivity;
 using Avalonia.Threading;
 using Avalonia.Xaml.Interactivity;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using Avalonia.VisualTree;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvDelayedTextChangedExtension {
@@ -22,9 +23,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Statics
         static MpAvDelayedTextChangedExtension() {
-            //TextProperty.Changed.Subscribe(e => {
-            //    ((MpAvDelayedTextChangedExtension)e.Sender).OnBindingValueChanged();
-            //});
             IsEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsEnabledChanged(x, y));
             TextProperty.Changed.AddClassHandler<Control>((x, y) => HandleBoundTextChanged(x, y));
         }
@@ -46,33 +44,40 @@ namespace MonkeyPaste.Avalonia {
                 false,
                 false);
         private static void HandleIsEnabledChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
-            if (e.NewValue is bool isEnabledVal && isEnabledVal) {
-                if (element is TextBox tb) {
-                    tb.AttachedToVisualTree += Tb_AttachedToVisualTree;
-                    tb.DetachedFromVisualTree += Tb_DetachedFromVisualTree;
-                    if(tb.IsInitialized) {
-                        Tb_AttachedToVisualTree(element, null);
+            if (e.NewValue is bool isEnabledVal && 
+                    element is Control control) {
+                if(isEnabledVal) {
+                    control.Initialized += Control_Initialized;
+                    control.DetachedFromVisualTree += Control_DetachedFromVisualTree;
+                    if (control.IsInitialized) {
+                        Control_Initialized(element, null);
                     }
+                } else {
+                    Control_DetachedFromVisualTree(element, null);
                 }
-            } else {
-                Tb_DetachedFromVisualTree(element, null);
+            } 
+        }
+
+        private static void Control_Initialized(object sender, EventArgs e) {
+            if(sender is Control control) {
+                if (control is TextBox tb) {
+                    control.Tag = tb.GetObservable(TextBox.TextProperty).Subscribe(x => OnTextChanged(control));
+                } 
+                if(control is AutoCompleteBox acb) {
+                    control.Tag = acb.GetObservable(AutoCompleteBox.TextProperty).Subscribe(x => OnTextChanged(control));
+                }
+            }
+        }
+        private static void Control_DetachedFromVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
+            if (sender is Control control) {
+                control.Initialized -= Control_Initialized;
+                control.DetachedFromVisualTree -= Control_DetachedFromVisualTree;
+                if(control.Tag is IDisposable disposable) {
+                    disposable.Dispose();
+                }
             }
         }
 
-
-        private static void Tb_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
-            if(sender is TextBox tb) {
-                tb.GetObservable(TextBox.TextProperty).Subscribe(x => OnTextChanged(tb));
-                //tb.KeyUp += (s,e) => OnTextChanged(tb);
-            }
-        }
-
-        private static void Tb_DetachedFromVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
-            if (sender is TextBox tb) {
-                tb.AttachedToVisualTree -= Tb_AttachedToVisualTree;
-                tb.DetachedFromVisualTree -= Tb_DetachedFromVisualTree;
-            }
-        }
         #endregion
 
         #region Text AvaloniaProperty
@@ -96,11 +101,16 @@ namespace MonkeyPaste.Avalonia {
             if (e.NewValue is string) {
                 newText = e.NewValue as string;
             }
-            if (element is TextBox tb) {
-                tb.Text = newText;
-                SetLastNotifiedText(tb, newText);
-                SetLastNotifiedDt(tb, null);
+            if(element is Control control) {
+                if (element is TextBox tb) {
+                    tb.Text = newText;
+                } else if (element is AutoCompleteBox acb) {
+                    acb.Text = newText;
+                }
+                SetLastNotifiedText(control, newText);
+                SetLastNotifiedDt(control, null);
             }
+           
         }
         #endregion
 
@@ -161,23 +171,23 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private static void OnTextChanged(TextBox tb) {
-            if(tb == null) {
+        private static void OnTextChanged(Control control) {
+            if(control == null) {
                 return;
             }
-            int delayMs = GetDelayMs(tb);
-            string lastNotifiedText = GetLastNotifiedText(tb);
+            int delayMs = GetDelayMs(control);
+            string lastNotifiedText = GetLastNotifiedText(control);
 
-            if (GetLastNotifiedDt(tb) == null) {
+            if (GetLastNotifiedDt(control) == null) {
                 MpConsole.WriteLine("Input recv'd delay started");
             }
 
             var this_input_change_dt = DateTime.Now;
-            SetLastNotifiedDt(tb, this_input_change_dt);
+            SetLastNotifiedDt(control, this_input_change_dt);
 
-            Dispatcher.UIThread.Post(async () => {
+            Dispatcher.UIThread.Post((Action)(async () => {
                 while(true) {
-                    var lndt = GetLastNotifiedDt(tb);
+                    var lndt = GetLastNotifiedDt(control);
                     if(lndt == null) {
                         return;
                     }
@@ -191,15 +201,21 @@ namespace MonkeyPaste.Avalonia {
                     }
                     await Task.Delay(10);
                 }
-                SetLastNotifiedDt(tb, null);
-                if(tb.Text == lastNotifiedText) {
+                SetLastNotifiedDt(control, null);
+                string controlText = null;
+                if(control is TextBox tb) {
+                    controlText = tb.Text;
+                } else if(control is AutoCompleteBox acb) {
+                    controlText = acb.Text;
+                }
+                if(controlText == lastNotifiedText) {
                     // ignore if text is the same
                     return;
                 }
-                MpConsole.WriteLine($"Input delay reached ntf change from '{lastNotifiedText}' to '{tb.Text}'");
-                SetLastNotifiedText(tb, tb.Text);
-                SetText(tb, tb.Text);
-            });
+                MpConsole.WriteLine($"Input delay reached ntf change from '{lastNotifiedText}' to '{controlText}'");
+                SetLastNotifiedText(control, (string)controlText);
+                SetText(control, (string)controlText);
+            }));
         }
 
 

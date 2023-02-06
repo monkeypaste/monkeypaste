@@ -159,10 +159,8 @@ function enableReadOnly_ext() {
 		clearLastDelta();
 	}
 
-	let qrmObj = {
-		itemData: getContentData(),
-		dataTransferCompletedRespFragment: edit_dt_msg_str
-	};
+	let qrmObj = getContentAsMessage();
+	qrmObj.dataTransferCompletedRespFragment = edit_dt_msg_str;
 	let resp = toBase64FromJsonObj(qrmObj);
 
 	return resp;

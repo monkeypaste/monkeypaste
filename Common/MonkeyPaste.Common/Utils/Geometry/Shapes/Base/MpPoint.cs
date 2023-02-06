@@ -73,6 +73,14 @@ namespace MonkeyPaste.Common {
             return Math.Sqrt(Math.Pow(other.X - X, 2) + Math.Pow(other.Y - Y, 2));
         }
 
+        public bool IsEqual(MpPoint otherPoint, double thresh = 0) {
+            if(otherPoint == null) {
+                return false;
+            }
+            return Math.Abs(X - otherPoint.X) <= thresh && 
+                    Math.Abs(Y - otherPoint.Y) <= thresh;
+        }
+
         public double Length => Distance(MpPoint.Zero);
         public MpPoint NormalizedUnitVector {
             get {

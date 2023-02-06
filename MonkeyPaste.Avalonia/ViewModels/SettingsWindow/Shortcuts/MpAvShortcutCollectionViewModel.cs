@@ -353,7 +353,7 @@ namespace MonkeyPaste.Avalonia {
                             shortcutCommand = MpAvMainWindowViewModel.Instance.ShowWindowCommand;
                             break;
                         case MpShortcutType.HideMainWindow:
-                            shortcutCommand = MpAvMainWindowViewModel.Instance.HideWindowCommand;
+                            shortcutCommand = MpAvMainWindowViewModel.Instance.DecreaseFocusCommand;
                             break;
                         case MpShortcutType.ShowSettings:
                             shortcutCommand = MpAvSettingsWindowViewModel.Instance.ShowSettingsWindowCommand;

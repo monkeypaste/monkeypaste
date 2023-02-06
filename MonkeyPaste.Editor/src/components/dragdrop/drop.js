@@ -286,7 +286,7 @@ function onDragLeave(e) {
 
 function onDrop(e) {
     // get drag dist before down loc is cleared
-    let drag_dist = isDragging() ? dist(WindowMouseLoc, WindowMouseDown) : MIN_DRAG_DIST;
+    let drag_dist = isDragging() ? dist(WindowMouseLoc, WindowMouseDownLoc) : MIN_DRAG_DIST;
 
     updateWindowMouseState(e);
 

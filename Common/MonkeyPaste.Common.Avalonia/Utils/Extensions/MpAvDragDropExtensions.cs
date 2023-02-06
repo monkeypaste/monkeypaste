@@ -27,21 +27,21 @@ namespace MonkeyPaste.Common {
             MpIDndUserCancelNotifier ucn = null,
             double MIN_DISTANCE = 10) {
 
-            // WINDOW POSITION INIT
-            if(wpl is Window window) {
-                wpl.DragPointerPosition = e.GetPosition(window).ToPortablePoint();
-            }            
-
-            // DRAG CYCLE
-
             MpPoint dc_down_pos = e.GetClientMousePoint(control);
             bool is_pointer_dragging = false;
             bool was_drag_started = false;
 
             EventHandler<PointerReleasedEventArgs> dragControl_PointerReleased_Handler = null;
             EventHandler<PointerEventArgs> dragControl_PointerMoved_Handler = null;
+            EventHandler userCancel_Handler = null;
 
-            // Drag Control PointerMoved Handler
+            // WINDOW POSITION INIT
+            if (wpl is Window window) {
+                wpl.DragPointerPosition = e.GetPosition(window).ToPortablePoint();
+            }            
+
+            // MOVE
+
             dragControl_PointerMoved_Handler = (s, e1) => {
                 if (wpl is Window window) {
                     wpl.DragPointerPosition = e1.GetPosition(window).ToPortablePoint();
@@ -54,7 +54,9 @@ namespace MonkeyPaste.Common {
                 if (is_pointer_dragging && !was_drag_started) {
 
                     // DRAG START
-
+                    if (ucn != null) {
+                        ucn.OnGlobalEscKeyPressed += userCancel_Handler;
+                    }
                     was_drag_started = true;
                     start?.Invoke(e);
                 }
@@ -64,10 +66,14 @@ namespace MonkeyPaste.Common {
                 }
             };
 
-            // Drag Control PointerReleased Handler
-            dragControl_PointerReleased_Handler = (s, e2) => {               
+            // RELEASE
+            
+            dragControl_PointerReleased_Handler = (s, e2) => {
 
                 // DRAG END
+                if (ucn != null) {
+                    ucn.OnGlobalEscKeyPressed -= userCancel_Handler;
+                }
 
                 control.PointerMoved -= dragControl_PointerMoved_Handler;
                 control.PointerReleased -= dragControl_PointerReleased_Handler;
@@ -77,29 +83,24 @@ namespace MonkeyPaste.Common {
 
             };
 
-            control.PointerReleased += dragControl_PointerReleased_Handler;
-            control.PointerMoved += dragControl_PointerMoved_Handler;
+            // CANCEL
 
-            // CANCEL HANDLER
-
-            EventHandler userCancel_Handler = null;
             userCancel_Handler = (s, e3) => {
                 if (ucn != null) {
                     ucn.OnGlobalEscKeyPressed -= userCancel_Handler;
                 }
-                //if (wpl is Window window) {
-                //    // when this is null on end signifies a cancel
+                if (wpl is Window window) {
+                    // when this is null on end signifies a cancel
 
-                //    wpl.DragPointerPosition = null;
-                //}
+                    wpl.DragPointerPosition = null;
+                }
 
                 // when end handler args = null signifies cancel 
                 dragControl_PointerReleased_Handler(s, null);
             };
 
-            if (ucn != null) {
-                ucn.OnGlobalEscKeyPressed += userCancel_Handler;
-            }
+            control.PointerReleased += dragControl_PointerReleased_Handler;
+            control.PointerMoved += dragControl_PointerMoved_Handler;            
         }
 
 

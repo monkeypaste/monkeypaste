@@ -8,11 +8,20 @@ function loadTextContent(itemDataStr) {
 	quill.enable(true);
 	//setRootHtml(itemDataStr)
 	//log('loading text content: ' + itemDataStr);
+
+	// HTML LOAD NOTES
+	// templates work
+	// xml breaks (randomly missing)
 	//setRootHtml('');
-	//insertHtml(0, itemDataStr, 'silent');
+	//let decoded_html = decodeHtmlSpecialEntities(itemDataStr);
+	//insertHtml(0, decoded_html, 'silent');
+
+	// DELTA LOAD NOTES
+	// xml works
+	// templates lost
 	let delta = convertHtmlToDelta(itemDataStr);
 	delta = decodeHtmlEntitiesInDeltaInserts(delta);
-	setContents(delta);
+	setContents(delta,'silent');
 
 	loadTemplates();
 	loadLinkHandlers();

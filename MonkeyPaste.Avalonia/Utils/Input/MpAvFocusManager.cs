@@ -39,6 +39,14 @@ namespace MonkeyPaste.Avalonia {
                 if(cur_focus == null) { 
                     return false;
                 }
+                if(cur_focus is Window) {
+                    return false;
+                }
+                if(cur_focus is MpAvCefNetWebView wv) {
+                    if(wv.IsContentSubSelectable) {
+                        return true;
+                    }
+                }
                 bool is_input_control = true;
                     //_inputControlTypes.Any(x => 
                     //    cur_focus.GetVisualAncestors().Any(y=>

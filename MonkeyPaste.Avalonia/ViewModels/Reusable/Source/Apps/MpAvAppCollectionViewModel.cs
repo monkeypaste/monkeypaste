@@ -125,6 +125,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvAppViewModel GetAppViewModelFromScreenPoint(MpPoint gmp, double pixelDensity) {
             IntPtr handle = IntPtr.Zero;
+
             if (MpAvMainWindowViewModel.Instance.MainWindowScreenRect.Contains(gmp)) {
                 // at least on windows (i think since its a tool window) the p/invoke doesn't return mw handle
                 handle = MpPlatform.Services.ProcessWatcher.ThisAppHandle;

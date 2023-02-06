@@ -171,8 +171,10 @@ function onWindowMouseDown(e) {
 
 function onWindowMouseMove(e) {
 	updateWindowMouseState(e);
-
-	onAnnotationWindowPointerMove(e);
+	if (hasAnnotations()) {
+		onAnnotationWindowPointerMove(e);
+	}
+	
 }
 
 function onWindowMouseUp(e) {

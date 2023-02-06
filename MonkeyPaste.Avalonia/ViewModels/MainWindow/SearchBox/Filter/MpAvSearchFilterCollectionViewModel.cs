@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Media;
 using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
@@ -244,7 +245,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if(needsUpdate) {
-                var target = MpAvSearchBoxView.SearchIconButton;
+                var target = MpAvContextMenuView.Instance.PlacementTarget;
                 if(target == null) {
                     return;
                 }

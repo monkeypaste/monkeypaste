@@ -144,6 +144,14 @@ namespace MonkeyPaste.Common {
 
         #region Public Methods
 
+        public bool IsEqual(MpRect otherRect, double thresh = 0) {
+            if (otherRect == null) {
+                return false;
+            }
+            return 
+                Location.IsEqual(otherRect.Location, thresh) &&
+                Size.IsEqual(otherRect.Size, thresh);
+        }
         public override string ToString() {
             return $"X:{X} Y:{Y} Width: {Width} Height: {Height}";
         }

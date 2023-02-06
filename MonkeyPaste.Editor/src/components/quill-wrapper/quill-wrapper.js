@@ -54,7 +54,7 @@ function getSelectedText(encodeTemplates = false) {
 }
 
 function getText(range, for_ole = false) {
-	quill.update();
+	//quill.update();
 	range = range == null ? { index: 0, length: getDocLength() } : range;
 	let text = '';
 	if (IsLoaded && for_ole) {
