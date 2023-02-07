@@ -6,13 +6,14 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System.Diagnostics;
 using System;
+using Avalonia.Threading;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvIsFocusedExtension {
         static MpAvIsFocusedExtension() {
             IsEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsEnabledChanged(x, y));
             IsFocusedProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsFocusedBindingChanged(x, y));
-            IsReadOnlyProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsReadOnlyBindingChanged(x, y));
         }
 
         #region Properties
@@ -53,46 +54,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region IsReadOnly AvaloniaProperty
-        public static bool GetIsReadOnly(AvaloniaObject obj) {
-            return obj.GetValue(IsReadOnlyProperty);
-        }
-
-        public static void SetIsReadOnly(AvaloniaObject obj, bool value) {
-            obj.SetValue(IsReadOnlyProperty, value);
-        }
-
-        public static readonly AttachedProperty<bool> IsReadOnlyProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, bool>(
-                "IsReadOnly",
-                false,
-                false,
-                BindingMode.TwoWay);
-
-        private static void HandleIsReadOnlyBindingChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
-            if (element is Control control &&
-                GetIsEnabled(control) &&
-                e.NewValue is bool isReadOnlyVal &&
-                control.GetVisualDescendant<TextBox>() is TextBox tb) {
-                if(isReadOnlyVal == tb.IsReadOnly) {
-                    MpConsole.WriteLine($"IsReadOnly IGNORED. Was already '{isReadOnlyVal}' on '{tb}' from binding on '{control}'");
-                    return;
-                }
-                
-                if(isReadOnlyVal) {
-                    tb.IsReadOnly = true;
-                    bool result = tb.IsReadOnly == true;
-                    MpConsole.WriteLine($"ReadOnly {(isReadOnlyVal ? "ENABLED" : "DISABLED")} {(result ? "SUCCEEDED" : "FAILED")} on '{tb}' from binding on '{control}'");
-                    // kill focus for mw show logic
-                    SetIsFocused(control, false);
-                    return;
-                }
-                SetIsFocused(control, true);
-                tb.IsReadOnly = false;
-            }
-        }
-        #endregion
-
         #region SelectAllOnFocus AvaloniaProperty
         public static bool GetSelectAllOnFocus(AvaloniaObject obj) {
             return obj.GetValue(SelectAllOnFocusProperty);
@@ -105,6 +66,22 @@ namespace MonkeyPaste.Avalonia {
         public static readonly AttachedProperty<bool> SelectAllOnFocusProperty =
             AvaloniaProperty.RegisterAttached<object, Control, bool>(
                 "SelectAllOnFocus",
+                false);
+
+        #endregion
+
+        #region AcceptFocusWithin AvaloniaProperty
+        public static bool GetAcceptFocusWithin(AvaloniaObject obj) {
+            return obj.GetValue(AcceptFocusWithinProperty);
+        }
+
+        public static void SetAcceptFocusWithin(AvaloniaObject obj, bool value) {
+            obj.SetValue(AcceptFocusWithinProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> AcceptFocusWithinProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>(
+                "AcceptFocusWithin",
                 false);
 
         #endregion
@@ -189,28 +166,35 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void FocusableControl_LostFocus(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
-            if(sender is Control focusableControl &&
-                focusableControl.Tag is Control attachedControl) {
-                SetIsFocused(attachedControl, false);
+            if(sender is Control control) {
+                if(GetAcceptFocusWithin(control) && control.IsKeyboardFocusWithin) {
+                    return;
+                }
+                SetIsFocused(control, false);
             }
         }
 
         private static void FocusableControl_GotFocus(object sender, global::Avalonia.Input.GotFocusEventArgs e) {
             if (sender is Control focusableControl &&
                 focusableControl.Tag is Control attachedControl) {
-                SetIsFocused(attachedControl, true);
-
-                if (GetSelectAllOnFocus(attachedControl)) {
-                    if(focusableControl is TextBox tb) {
-                        tb.SelectAll();
-                    } else if(focusableControl is AutoCompleteBox acb) {
-                        // dunno how
-                        Debugger.Break();
-                    }
-                }
+               
                 if(GetSelectViewModelOnFocus(attachedControl) &&
                     attachedControl.DataContext is MpISelectableViewModel svm) {
                     svm.IsSelected = true;
+                }
+                SetIsFocused(attachedControl, true);
+
+                if (GetSelectAllOnFocus(attachedControl)) {
+                    if (focusableControl is TextBox tb) {
+                        Dispatcher.UIThread.Post(async () => {
+                            await Task.Delay(300);
+
+                            tb.SelectAll();
+                        });
+                    } else if (focusableControl is AutoCompleteBox acb) {
+                        // dunno how
+                        Debugger.Break();
+                    }
                 }
             }
         }

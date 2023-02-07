@@ -90,11 +90,13 @@
     <AvaloniaXaml Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
     <AvaloniaXaml Remove="Controls\Content\TextElement\**" />
     <AvaloniaXaml Remove="Interfaces\Content\**" />
+    <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\Plugins\_Base\**" />
     <AvaloniaXaml Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
+    <AvaloniaXaml Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
     <AvaloniaXaml Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
     <Compile Remove="AttachedProperties\DragDrop\**" />
     <Compile Remove="Behaviors\DragDrop\**" />
@@ -106,11 +108,13 @@
     <Compile Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
     <Compile Remove="Controls\Content\TextElement\**" />
     <Compile Remove="Interfaces\Content\**" />
+    <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\**" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
     <Compile Remove="ViewModels\MainWindow\Plugins\_Base\**" />
     <Compile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
+    <Compile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
     <Compile Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
     <EmbeddedResource Remove="AttachedProperties\DragDrop\**" />
     <EmbeddedResource Remove="Behaviors\DragDrop\**" />
@@ -122,11 +126,13 @@
     <EmbeddedResource Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
     <EmbeddedResource Remove="Controls\Content\TextElement\**" />
     <EmbeddedResource Remove="Interfaces\Content\**" />
+    <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\Plugins\_Base\**" />
     <EmbeddedResource Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
+    <EmbeddedResource Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
     <EmbeddedResource Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
     <None Remove="AttachedProperties\DragDrop\**" />
     <None Remove="Behaviors\DragDrop\**" />
@@ -138,11 +144,13 @@
     <None Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
     <None Remove="Controls\Content\TextElement\**" />
     <None Remove="Interfaces\Content\**" />
+    <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\**" />
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
     <None Remove="ViewModels\MainWindow\Plugins\_Base\**" />
     <None Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
+    <None Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
     <None Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
     <Page Remove="AttachedProperties\DragDrop\**" />
     <Page Remove="Behaviors\DragDrop\**" />
@@ -153,14 +161,17 @@
     <Page Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
     <Page Remove="Controls\Content\TextElement\**" />
     <Page Remove="Interfaces\Content\**" />
+    <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\**" />
     <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
     <Page Remove="ViewModels\MainWindow\Plugins\_Base\**" />
     <Page Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
+    <Page Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
     <Page Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
     <AvaloniaXaml Remove="Themes\Default\Accents\Base.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Accents\BaseLight.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\Animations\Defaults.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Animations\Shake.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Button.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ButtonBase.axaml" />
@@ -1011,6 +1022,7 @@
     <AvaloniaResource Include="Themes\Default\Accents\Base.axaml">
       
     </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Default\Controls\Animations\Defaults.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Animations\Shake.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ListBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvClipBorder.axaml" />
@@ -1117,12 +1129,6 @@
     </Compile>
     <Compile Update="Views\ExternalDropWindow\MpAvExternalDropWindow.axaml.cs">
       <DependentUpon>MpAvExternalDropWindow.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\Items\MpAvClipTileDetailItemTipView.axaml.cs">
-      <DependentUpon>MpAvClipTileDetailItemTipView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\Items\MpAvClipTileDetailItemView.axaml.cs">
-      <DependentUpon>MpAvClipTileDetailItemView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Transactions\MpAvClipTileTransactionPaneView.axaml.cs">
       <DependentUpon>MpAvClipTileTransactionPaneView.axaml</DependentUpon>

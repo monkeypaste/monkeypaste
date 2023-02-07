@@ -5,16 +5,20 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using MonkeyPaste.Common;
+using Avalonia.Animation;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvMillisecondsToTimeSpanStringConverter : IValueConverter {
-        public static readonly MpAvMillisecondsToTimeSpanStringConverter Instance = new();
+    public class MpAvIntToTimeSpanConverter : IValueConverter {
+        public static readonly MpAvIntToTimeSpanConverter Instance = new();
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if(value is int valMs) {
-                return TimeSpan.FromMilliseconds(valMs).ToString();
+                string unit = parameter is string ? parameter as string : "ms";
+                if(unit == "ms") {
+                    return TimeSpan.FromMilliseconds(valMs);
+                }
             }
-            return string.Empty;
+            return TimeSpan.FromMilliseconds(0);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {

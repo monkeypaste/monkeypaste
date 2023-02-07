@@ -942,15 +942,15 @@ namespace MonkeyPaste.Avalonia {
 
             //BindingContext.IgnoreHasModelChanged = false;
 
-            if(is_reload) {
-                BindingContext.DetailCollectionViewModel.RefreshAsync().FireAndForgetSafeAsync(BindingContext);
-            } else {
-                BindingContext.DetailCollectionViewModel.InitializeAsync().FireAndForgetSafeAsync(BindingContext);
+            //if(is_reload) {
+            //    BindingContext.DetailCollectionViewModel.RefreshAsync().FireAndForgetSafeAsync(BindingContext);
+            //} else {
+            //    BindingContext.DetailCollectionViewModel.InitializeAsync().FireAndForgetSafeAsync(BindingContext);
 
-                //if(BindingContext.IsAppendTrayItem) {
-                //    // when new item is appender  
-                //}
-            }           
+            //    //if(BindingContext.IsAppendTrayItem) {
+            //    //    // when new item is appender  
+            //    //}
+            //}           
 
             IsContentLoaded = true;
         }

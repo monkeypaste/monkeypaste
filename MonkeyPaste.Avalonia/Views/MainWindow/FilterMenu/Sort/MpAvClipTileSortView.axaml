@@ -2,6 +2,7 @@
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        mc:Ignorable="d"
                        d:DesignWidth="250"
                        d:DesignHeight="40"
@@ -12,8 +13,115 @@
                        x:CompileBindings="True"
                        DataContext="{x:Static local:MpAvFilterMenuViewModel.Instance}"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileSortView">
-    <StackPanel Orientation="Horizontal">
-        <local:MpAvClipTileSortFieldView />
-        <local:MpAvClipTileSortDirectionView />
+    <local:MpAvUserControl.Resources>
+        <sys:Double x:Key="FieldWidth">
+            160
+        </sys:Double>
+    </local:MpAvUserControl.Resources>
+    <local:MpAvUserControl.Styles>
+        <!--  FIELD (UN)EXPAND  -->
+        <Style Selector="StackPanel.expanded local|MpAvClipBorder#SortFieldBorder">
+            <Style.Animations>
+                <Animation Duration="{StaticResource FilterExpandTimeSpan}"
+                           FillMode="Forward">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Width"
+                                Value="0" />
+                        <Setter Property="Opacity"
+                                Value="0" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Width"
+                                Value="{StaticResource FieldWidth}" />
+                        <Setter Property="Opacity"
+                                Value="1" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <Style Selector="StackPanel.unexpanded local|MpAvClipBorder#SortFieldBorder">
+            <Style.Animations>
+                <Animation Duration="{StaticResource FilterExpandTimeSpan}"
+                           FillMode="Forward">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Width"
+                                Value="{StaticResource FieldWidth}" />
+                        <Setter Property="Opacity"
+                                Value="1" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Width"
+                                Value="0" />
+                        <Setter Property="Opacity"
+                                Value="0" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+
+        <!--  FIELD ITEM FOCUS  -->
+
+        <!--  DIRECTION ICON  -->
+        <Style Selector="Button#SortDirectionButton PathIcon">
+            <Setter Property="Data"
+                    Value="{StaticResource AscendingSvg}" />
+            <Setter Property="Foreground"
+                    Value="{DynamicResource DefaultIconButtonBrush}" />
+        </Style>
+        <Style Selector="Button#SortDirectionButton.descending PathIcon">
+            <Setter Property="Data"
+                    Value="{StaticResource DescendingSvg}" />
+        </Style>
+        <Style Selector="Button#SortDirectionButton:pointerover PathIcon">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource HoverDefaultBorderBrush}" />
+        </Style>
+    </local:MpAvUserControl.Styles>
+    <StackPanel Orientation="Horizontal"
+                Classes.unexpanded="{Binding !IsExpanded, Source={x:Static local:MpAvClipTileSortDirectionViewModel.Instance}}"
+                Classes.expanded="{Binding IsExpanded, Source={x:Static local:MpAvClipTileSortDirectionViewModel.Instance}}">
+
+        <!--  SORT FIELD  -->
+
+        <local:MpAvClipBorder x:Name="SortFieldBorder"
+                              Grid.Column="1"
+                              CornerRadius="10"
+                              BorderThickness="1"
+                              BorderBrush="Black"
+                              Margin="2,5">
+
+            <ComboBox local:MpAvIsFocusedExtension.IsEnabled="True"
+                      local:MpAvIsFocusedExtension.AcceptFocusWithin="True"
+                      local:MpAvIsFocusedExtension.IsFocused="{Binding IsSortDirOrFieldFocused, Source={x:Static local:MpAvClipTileSortDirectionViewModel.Instance}, Mode=TwoWay}"
+                      FontSize="16"
+                      BorderThickness="0"
+                      Background="White"
+                      HorizontalContentAlignment="Left"
+                      VerticalContentAlignment="Center"
+                      SelectedIndex="{Binding SelectedSortTypeIdx, Source={x:Static local:MpAvClipTileSortFieldViewModel.Instance}, Mode=TwoWay}"
+                      Items="{Binding SortLabels, Source={x:Static local:MpAvClipTileSortFieldViewModel.Instance}}" />
+        </local:MpAvClipBorder>
+
+        <!--  SORT DIRECTION  -->
+        <Button x:Name="SortDirectionButton"
+                Margin="0,0,0,0"
+                Classes.iconButton="True"
+                Classes.noHoverBg="True"
+                Classes.descending="{Binding IsSortDescending, Source={x:Static local:MpAvClipTileSortDirectionViewModel.Instance}}"
+                Background="Transparent"
+                BorderThickness="0"
+                local:MpAvIsHoveringExtension.IsEnabled="True"
+                local:MpAvIsHoveringExtension.HoverCursor="Hand"
+                local:MpAvIsFocusedExtension.IsEnabled="True"
+                local:MpAvIsFocusedExtension.IsFocused="{Binding IsSortDirOrFieldFocused, Source={x:Static local:MpAvClipTileSortDirectionViewModel.Instance}, Mode=TwoWay}"
+                Height="30"
+                Width="30"
+                local:MpAvPointerPressCommandExtension.IsEnabled="True"
+                local:MpAvPointerPressCommandExtension.LeftPressCommand="{Binding ClickCommand, Source={x:Static local:MpAvClipTileSortDirectionViewModel.Instance}}"
+                local:MpAvPointerPressCommandExtension.DoubleLeftPressCommand="{Binding DoubleClickCommand, Source={x:Static local:MpAvClipTileSortDirectionViewModel.Instance}}">
+            <PathIcon HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      Margin="5" />
+        </Button>
     </StackPanel>
 </local:MpAvUserControl>

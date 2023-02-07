@@ -2,6 +2,7 @@
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:pcl="using:MonkeyPaste"
                        x:DataType="local:MpAvClipTileViewModel"
@@ -20,6 +21,7 @@
             <Setter Property="Cursor"
                     Value="Wait" />
         </Style>
+
     </local:MpAvUserControl.Styles>
     <!--  OUTER BORDER  -->
 
@@ -86,8 +88,9 @@
             </Border>
 
             <!--  Detail  -->
-            <Grid Grid.Row="2"
-                  HorizontalAlignment="Stretch"
+            <Grid x:Name="DetailContainerGrid"
+                  Grid.Row="2"
+                  HorizontalAlignment="Center"
                   VerticalAlignment="Bottom">
                 <Grid.IsVisible>
                     <MultiBinding Converter="{StaticResource MultiBoolConverter}"
@@ -96,9 +99,30 @@
                         <Binding Path="!IsContentReadOnly" />
                     </MultiBinding>
                 </Grid.IsVisible>
-                <local:MpAvClipTileDetailView DataContext="{Binding DetailCollectionViewModel}"
-                                              VerticalAlignment="Stretch"
-                                              HorizontalAlignment="Stretch" />
+                <TransitioningContentControl x:Name="DetailTransitioningContentControl"
+                                             HorizontalAlignment="Center"
+                                             Content="{Binding DetailText}">
+                    <TransitioningContentControl.PageTransition>
+                        <CompositePageTransition>
+                            <CrossFade Duration="0:00:00.500" />
+                            <PageSlide Duration="0:00:00.500"
+                                       Orientation="Horizontal" />
+                        </CompositePageTransition>
+                    </TransitioningContentControl.PageTransition>
+                    <TransitioningContentControl.ContentTemplate>
+                        <DataTemplate DataType="sys:String">
+                            <TextBlock HorizontalAlignment="Center"
+                                       VerticalAlignment="Bottom"
+                                       Background="Transparent"
+                                       MinHeight="10"
+                                       MinWidth="50"
+                                       FontSize="10"
+                                       TextAlignment="Center"
+                                       FontFamily="Calibri"
+                                       Text="{Binding}" />
+                        </DataTemplate>
+                    </TransitioningContentControl.ContentTemplate>
+                </TransitioningContentControl>
             </Grid>
 
             <!--  CORNER BUTTONS  -->

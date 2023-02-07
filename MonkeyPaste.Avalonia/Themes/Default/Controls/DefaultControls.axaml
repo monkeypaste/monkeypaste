@@ -30,5 +30,6 @@
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/ToolTip.axaml" />
 
     <!--  ANIMATIONS  -->
+    <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/Animations/Defaults.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/Animations/Shake.axaml" />
 </Styles>

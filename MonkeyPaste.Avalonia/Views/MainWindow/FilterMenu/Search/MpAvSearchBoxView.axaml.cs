@@ -17,7 +17,7 @@ namespace MonkeyPaste.Avalonia {
 
             var sb = this.FindControl<AutoCompleteBox>("SearchBox");
             sb.AttachedToVisualTree += Sb_AttachedToVisualTree;
-            sb.AddHandler(Control.KeyUpEvent, SearchBox_KeyUp, RoutingStrategies.Tunnel);
+            //sb.AddHandler(Control.KeyUpEvent, SearchBox_KeyUp, RoutingStrategies.Tunnel);
         }
 
         #region Drop

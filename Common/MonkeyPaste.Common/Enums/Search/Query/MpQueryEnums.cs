@@ -195,22 +195,31 @@ namespace MonkeyPaste.Common {
         }
 
         public static string GetStringMatchOp(this MpContentQueryBitFlags f) {
-            if(f.HasFlag(MpContentQueryBitFlags.CaseSensitive)) {
-                return "GLOB";
-            }
-            if(f.HasFlag(MpContentQueryBitFlags.Regex)) {
+
+            if (f.HasFlag(MpContentQueryBitFlags.Regex)) {
+                // if regex is set, case sensitive and whole word will be disabled
                 return "REGEXP";
+            }
+
+            if (f.HasFlag(MpContentQueryBitFlags.WholeWord)) {
+                // regardless of case sensitive whole word is regex
+                // and distinguished as not 'actual' regex by the wholeword flag
+                return "REGEXP";
+            }
+            if (f.HasFlag(MpContentQueryBitFlags.CaseSensitive)) {
+                return "GLOB";
             }
             return "LIKE";
         }
 
         public static string GetStringMatchValue(this MpContentQueryBitFlags f, string matchOp, string matchVal) {
             if(matchOp == "REGEXP") {
-                string case_flag = f.HasFlag(MpContentQueryBitFlags.CaseSensitive) ?
-                    string.Empty : "/i";
-
                 if(f.HasFlag(MpContentQueryBitFlags.WholeWord)) {
-                    return $"\b{matchVal}\b";
+                    string flags = "m";
+                    if (!f.HasFlag(MpContentQueryBitFlags.CaseSensitive)) {
+                        flags += "i";
+                    }
+                    return $"(?{flags})\b{matchVal}\b";
                 }
                 return $"{matchVal}";
             }

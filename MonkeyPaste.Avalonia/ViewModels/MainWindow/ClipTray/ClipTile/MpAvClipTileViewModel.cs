@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
@@ -15,6 +16,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -49,6 +51,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constants
+        public const int AUTO_CYCLE_DETAIL_DELAY_MS = 3000;
+
         #endregion
 
         #region Statics
@@ -93,7 +97,7 @@ namespace MonkeyPaste.Avalonia {
         #region View Models
 
         public MpAvFileItemCollectionViewModel FileItemCollectionViewModel { get; private set; }
-        public MpAvClipTileDetailCollectionViewModel DetailCollectionViewModel { get; private set; }
+        //public MpAvClipTileDetailCollectionViewModel DetailCollectionViewModel { get; private set; }
 
         private MpAvClipTileTransactionCollectionViewModel _transactionCollectionViewModel;
         public MpAvClipTileTransactionCollectionViewModel TransactionCollectionViewModel {
@@ -189,11 +193,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpIHoverableViewModel Implementation
-        public bool IsHovering { get; set; }
-
-        #endregion
-
         #region MpISelectableViewModel Implementation
         public bool IsSelected { get; set; }
         public DateTime LastSelectedDateTime { get; set; }
@@ -224,75 +223,38 @@ namespace MonkeyPaste.Avalonia {
         public int[] TitleLayerZIndexes { get; private set; } = Enumerable.Range(1, 3).ToArray();
         public string[] TitleLayerHexColors { get; private set; } = Enumerable.Repeat(MpSystemColors.Transparent, 4).ToArray();
 
-        public string TileBorderHexColor {
+        public string DetailText {
             get {
-                if (IsResizing) {
-                    return MpSystemColors.pink;
+                string detailText = string.Empty;
+                switch ((MpCopyItemDetailType)SelectedDetailIdx) {
+                    //created
+                    case MpCopyItemDetailType.DateTimeCreated:
+                        detailText = "Copied " + CopyItemCreatedDateTime.ToReadableTimeSpan();
+                        break;
+                    case MpCopyItemDetailType.DataSize:
+                        switch (CopyItemType) {
+                            case MpCopyItemType.Image:
+                                detailText = $"({(int)UnconstrainedContentDimensions.Width}px) | ({(int)UnconstrainedContentDimensions.Height}px)";
+                                break;
+                            case MpCopyItemType.Text:
+                                detailText = $"{CharCount} chars | {LineCount} lines";
+                                break;
+                            case MpCopyItemType.FileList:
+
+                                detailText = $"{LineCount} files | {CharCount} MBs";
+                                break;
+                        }
+                        break;
+                    //# copies/# pastes
+                    case MpCopyItemDetailType.UsageStats:
+                        detailText = $"{CopyCount} copies | {PasteCount} pastes";
+                        break;
+                    default:
+                        break;
                 }
-                if (CanResize) {
-                    return MpSystemColors.orange1;
-                }
-                if (IsSelected) {
-                    return MpSystemColors.Red;//.AdjustAlpha(0.7);
-                }
-                if (Parent.HasScrollVelocity) {
-                    return MpSystemColors.Transparent;
-                }
-                if (IsHovering) {
-                    return MpSystemColors.Yellow;//.AdjustAlpha(0.7);
-                }
-                return MpSystemColors.Transparent;
+                return detailText;
             }
         }
-
-
-        public string TitleTextColor {
-            get {
-                if (IsHoveringOnTitleTextGrid) {
-                    return MpSystemColors.DarkGray;
-                }
-                return MpSystemColors.White;
-            }
-        }
-
-        public string PinIconSourcePath {
-            get {
-                string path = "PinImage";
-                if (IsPinned) {
-                    if (IsOverPinButton) {
-                        path = "PinDownOverImage";
-                    } else {
-                        path = "PinDownImage";
-                    }
-                } else {
-                    if (IsOverPinButton) {
-                        path = "PinOverImage";
-                    }
-                }
-                return MpPlatform.Services.PlatformResource.GetResource(path) as string;
-            }
-        }
-
-        public string HideTitleIconSourcePath {
-            get {
-                string path = "OpenEyeImage";
-                if (IsTitleVisible) {
-                    if (IsOverHideTitleButton) {
-                        path = "OpenEyeImage";
-                    } else {
-                        path = "OpenEyeImage";
-                    }
-                } else {
-                    if (IsOverPinButton) {
-                        path = "ClosedEyeImage";
-                    } else {
-                        path = "ClosedEyeImage";
-                    }
-                }
-                return MpPlatform.Services.PlatformResource.GetResource(path) as string;
-            }
-        }
-
         #endregion
 
         #region Layout
@@ -307,6 +269,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
+
         public double TileTitleHeight => IsTitleVisible ? 100 : 0;
         public double TileDetailHeight => 25;// MpMeasurements.Instance.ClipTileDetailHeight;
 
@@ -360,24 +323,15 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public MpSize CurrentSize {
-            get {
-                if (Parent == null) {
-                    return new MpSize();
-                }
-                if (!IsContentReadOnly) {
-                    return EditableContentSize;
-                }
-                return ReadOnlyContentSize;
-            }
-        }
         public MpRect ObservedBounds { get; set; }
         public double OuterSpacing => 5;
         public double InnerSpacing => 0;
-        public MpSize MinSize => Parent == null ? MpSize.Empty : IsPinned ? Parent.DefaultPinItemSize : Parent.DefaultQueryItemSize;
+        //public MpSize MinSize => Parent == null ? MpSize.Empty : IsPinned ? Parent.DefaultPinItemSize : Parent.DefaultQueryItemSize;
 
-        public double MinWidth => MinSize.Width;
-        public double MinHeight => MinSize.Height;
+        public double MinWidth =>
+            Parent == null ? 0 : IsPinned ? Parent.DefaultPinItemWidth : Parent.DefaultQueryItemWidth;
+        public double MinHeight =>
+            Parent == null ? 0 : IsPinned ? Parent.DefaultPinItemHeight : Parent.DefaultQueryItemHeight;
 
 
         public double MaxWidth => double.PositiveInfinity;
@@ -421,14 +375,15 @@ namespace MonkeyPaste.Avalonia {
         }
         public MpSize BoundSize { get; set; } = MpSize.Empty;
 
-        public MpRect TrayRect => new MpRect(TrayLocation,BoundSize);
+        public MpRect TrayRect => 
+            new MpRect(TrayLocation,BoundSize);
 
-        public MpRect ScreenRect => Parent == null ? MpRect.Empty : new MpRect(TrayLocation - Parent.ScrollOffset, BoundSize);
+        public MpRect ScreenRect => 
+            Parent == null ? MpRect.Empty : new MpRect(TrayLocation - Parent.ScrollOffset, BoundSize);
 
 
         public double ReadOnlyWidth => MinWidth;
         public double ReadOnlyHeight => MinHeight;
-        public MpSize ReadOnlySize => new MpSize(ReadOnlyWidth, ReadOnlyHeight);
              
 
         public double EditableWidth {
@@ -446,13 +401,19 @@ namespace MonkeyPaste.Avalonia {
                 if (Parent == null) {
                     return 0;
                 }
-                return Parent.DefaultEditableItemSize.Height;
+                return Parent.DefaultQueryItemHeight;
             }
         }
 
         #endregion
 
         #region State
+
+        private int SelectedDetailIdx { get; set; } = 0;
+
+        public bool IsHovering { get; set; }
+        public bool IsHoveringOverSourceIcon { get; set; } = false;
+        public bool IsOverDetail { get; set; } = false;
 
         #region Append
         public bool IsAppendTrayItem {
@@ -482,7 +443,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool CanShowContextMenu { get; set; } = true;
 
-        public bool IsHoveringOverSourceIcon { get; set; } = false;
+        
         public bool HasTemplates { get; set; } = false;
         public bool IsFindAndReplaceVisible { get; set; } = false;
         public string TemplateRichHtml { get; set; }
@@ -610,7 +571,6 @@ namespace MonkeyPaste.Avalonia {
 
         public int LineCount { get; set; }
         public int CharCount { get; set; }
-
         
         public bool IsAnyBusy {
             get {
@@ -652,22 +612,9 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public bool IsOverHyperlink { get; set; } = false;
+        
 
-        private bool _isHoveringOnTitleTextGrid = false;
-        public bool IsHoveringOnTitleTextGrid {
-            get {
-                return _isHoveringOnTitleTextGrid;
-            }
-            set {
-                if (_isHoveringOnTitleTextGrid != value) {
-                    _isHoveringOnTitleTextGrid = value;
-                    OnPropertyChanged(nameof(IsHoveringOnTitleTextGrid));
-                    OnPropertyChanged(nameof(TitleTextColor));
-                }
-            }
-        }
-
+        
 
         #region Scroll
 
@@ -696,9 +643,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        public bool IsOverPinButton { get; set; } = false;
-
-        public bool IsOverHideTitleButton { get; set; } = false;
 
         public bool IsPinned => Parent != null &&
                                 Parent.PinnedItems.Any(x => x.CopyItemId == CopyItemId);
@@ -782,6 +726,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool AllowMultiSelect { get; set; } = false;
 
+        public DateTime TileCreatedDateTime { get; set; }
         #endregion
 
         #region Model
@@ -1068,10 +1013,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public MpAvClipTileViewModel(MpAvClipTrayViewModel parent) : base(parent) {
+            TileCreatedDateTime = DateTime.Now;
             PropertyChanged += MpClipTileViewModel_PropertyChanged;
-            //MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
             FileItemCollectionViewModel = new MpAvFileItemCollectionViewModel(this);
-            DetailCollectionViewModel = new MpAvClipTileDetailCollectionViewModel(this);
+            //DetailCollectionViewModel = new MpAvClipTileDetailCollectionViewModel(this);
             IsBusy = true;
         }
 
@@ -1087,9 +1032,16 @@ namespace MonkeyPaste.Avalonia {
             await Task.Delay(1);
 
             if (ci != null && MpAvPersistentClipTilePropertiesHelper.TryGetByPersistentSize_ById(ci.Id, out double uniqueWidth)) {
-                BoundSize = new MpSize(uniqueWidth, MinHeight);
+                //BoundSize = new MpSize(uniqueWidth, MinHeight);
+                BoundWidth = uniqueWidth;
+                BoundHeight = MinHeight;
+            } else if(ci != null && ci.Id > 0) {
+                //BoundSize = MinSize;
+                BoundWidth = MinWidth;
+                BoundHeight = MinHeight;
             } else {
-                BoundSize = MinSize;
+                BoundWidth = 0;
+                BoundHeight = 0;
             }
             // NOTE FileItems are init'd before ciid is set so Items are busy when WebView is loading content
             FileItemCollectionViewModel.InitializeAsync(ci).FireAndForgetSafeAsync(this);
@@ -1097,6 +1049,7 @@ namespace MonkeyPaste.Avalonia {
             CopyItem = ci;
             QueryOffsetIdx = queryOffset < 0 && ci != null ? QueryOffsetIdx : queryOffset;
 
+            CycleDetailCommand.Execute(0);
             await TransactionCollectionViewModel.InitializeAsync(CopyItemId);
 
             //var cial = await MpDataModelProvider.GetCopyItemAnnotationsAsync(CopyItemId);
@@ -1113,7 +1066,6 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(IconResourceObj));
             OnPropertyChanged(nameof(IsPlaceholder));
             OnPropertyChanged(nameof(TrayX));
-            OnPropertyChanged(nameof(TileBorderHexColor));
             OnPropertyChanged(nameof(CanVerticallyScroll));
             OnPropertyChanged(nameof(IsTextItem));
             OnPropertyChanged(nameof(IsFileListItem));
@@ -1480,6 +1432,9 @@ namespace MonkeyPaste.Avalonia {
                     Parent.OnPropertyChanged(nameof(Parent.CanScroll));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyHovering));
                     OnPropertyChanged(nameof(IsOverlayButtonsVisible));
+                    if(IsHovering) {
+                        AutoCycleDetailsAsync().FireAndForgetSafeAsync(this);
+                    }
                     break;
                 case nameof(IsBusy):
                     OnPropertyChanged(nameof(IsAnyBusy));
@@ -1504,25 +1459,19 @@ namespace MonkeyPaste.Avalonia {
                     }
 
                     Parent.NotifySelectionChanged();
-                    OnPropertyChanged(nameof(TileBorderHexColor));
                     break;
                 case nameof(CopyItem):
-                    DetailCollectionViewModel.InitializeAsync().FireAndForgetSafeAsync();
+                    //DetailCollectionViewModel.InitializeAsync().FireAndForgetSafeAsync();
                     if (CopyItem == null) {
                         break;
                     }
                     OnPropertyChanged(nameof(CopyItemData));
-                    OnPropertyChanged(nameof(CurrentSize));
                     //UpdateDetails();
                     break;
-                case nameof(IsOverPinButton):
                 case nameof(IsPinned):
-                    OnPropertyChanged(nameof(PinIconSourcePath));
                     OnPropertyChanged(nameof(IsPlaceholder));
                     break;
-                case nameof(IsOverHideTitleButton):
                 case nameof(IsTitleVisible):
-                    OnPropertyChanged(nameof(HideTitleIconSourcePath));
                     OnPropertyChanged(nameof(TileTitleHeight));
                     OnPropertyChanged(nameof(BoundHeight));
                     OnPropertyChanged(nameof(TileContentHeight));
@@ -1551,6 +1500,12 @@ namespace MonkeyPaste.Avalonia {
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingClipTitle));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingClipTile));
                     break;
+                case nameof(IsTitleFocused):
+                    if(IsTitleReadOnly) {
+                        break;
+                    }
+                    IsTitleReadOnly = true;
+                    break;
                 case nameof(IsContentReadOnly):
                     if (IsContentReadOnly) {
                         MpAvPersistentClipTilePropertiesHelper.RemovePersistentIsContentEditableTile_ById(CopyItemId);
@@ -1578,7 +1533,6 @@ namespace MonkeyPaste.Avalonia {
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingClipTile));
                     break;
                 case nameof(IsContextMenuOpen):
-                    OnPropertyChanged(nameof(TileBorderHexColor));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyTileContextMenuOpened));
                     break;
                 case nameof(IsPasting):
@@ -1650,7 +1604,6 @@ namespace MonkeyPaste.Avalonia {
                     break;
 
                 case nameof(CanResize):
-                    OnPropertyChanged(nameof(TileBorderHexColor));
                     Parent.OnPropertyChanged(nameof(Parent.CanAnyResize));
                     break;
                 case nameof(IsResizing):
@@ -1659,13 +1612,14 @@ namespace MonkeyPaste.Avalonia {
                         Parent.RefreshQueryTrayLayout();
                     }
                     break;
-                case nameof(MinSize):
-                    OnPropertyChanged(nameof(MinWidth));
-                    OnPropertyChanged(nameof(MinHeight));
-                    BoundSize = new MpSize(IsCustomWidth ? BoundWidth : MinSize.Width, MinSize.Height);
+                case nameof(MinHeight):
+                    BoundHeight = MinHeight;
+                    TransactionCollectionViewModel.OnPropertyChanged(nameof(TransactionCollectionViewModel.DefaultTransactionPanelHeight));
+                    break;
+                case nameof(MinWidth):
+                    BoundWidth = IsCustomWidth ? BoundWidth : MinWidth;
 
                     TransactionCollectionViewModel.OnPropertyChanged(nameof(TransactionCollectionViewModel.DefaultTransactionPanelWidth));
-                    TransactionCollectionViewModel.OnPropertyChanged(nameof(TransactionCollectionViewModel.DefaultTransactionPanelHeight));
                     break;
                 case nameof(ObservedWidth):
                     BoundWidth = ObservedWidth;
@@ -1681,10 +1635,6 @@ namespace MonkeyPaste.Avalonia {
                     if (Next == null) {
                         break;
                     }
-                    OnPropertyChanged(nameof(BoundWidth));
-                    OnPropertyChanged(nameof(BoundHeight));
-                    OnPropertyChanged(nameof(MaxWidth));
-                    OnPropertyChanged(nameof(MaxHeight));
                     TransactionCollectionViewModel.OnPropertyChanged(nameof(TransactionCollectionViewModel.MaxWidth));
                     Parent.UpdateTileRectCommand.Execute(new object[] { Next, TrayRect });
                     break;
@@ -1788,6 +1738,20 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private async Task AutoCycleDetailsAsync() {
+            if(IsPlaceholder) {
+                return;
+            }
+            DateTime lastCycle = DateTime.Now;
+            TimeSpan cycle_delay = TimeSpan.FromMilliseconds(AUTO_CYCLE_DETAIL_DELAY_MS);
+            while (IsHovering) {
+                if (DateTime.Now - lastCycle > cycle_delay) {
+                    lastCycle = DateTime.Now;
+                    CycleDetailCommand.Execute(null);
+                }
+                await Task.Delay(100);
+            }
+        }
         #endregion
 
         #region Commands
@@ -1816,11 +1780,10 @@ namespace MonkeyPaste.Avalonia {
                 IsResizing = true;
 
                 MpAvPersistentClipTilePropertiesHelper.RemovePersistentSize_ById(CopyItemId);
-                BoundSize = Parent.DefaultQueryItemSize;
+                //BoundSize = Parent.DefaultQueryItemSize;
+                BoundWidth = MinWidth;
 
                 IsResizing = false;
-            }, () => {
-                return Parent != null && MpAvPersistentClipTilePropertiesHelper.IsTileHaveUniqueSize(CopyItemId);
             });
 
 
@@ -1881,7 +1844,6 @@ namespace MonkeyPaste.Avalonia {
                 CopyItem.WriteToDatabaseAsync().FireAndForgetSafeAsync(this);
             });
 
-
         public ICommand CopyToClipboardCommand => new MpAsyncCommand(
             async() => {
                 IsBusy = true;
@@ -1899,7 +1861,24 @@ namespace MonkeyPaste.Avalonia {
                 IsBusy = false;
             });
 
-        
+        public ICommand CycleDetailCommand => new MpCommand<object>(
+            (args) => {
+                if (args is int intArg) {
+                    SelectedDetailIdx = intArg;
+                } else if (args is MpCopyItemDetailType dt) {
+                    SelectedDetailIdx = (int)dt;
+                } else {
+                    SelectedDetailIdx++;
+                    if(args is string) {
+                        // click on detail grid
+                    }
+                }
+                
+                if(SelectedDetailIdx >= Enum.GetNames(typeof(MpCopyItemDetailType)).Length) {
+                    SelectedDetailIdx = 0;
+                }
+                OnPropertyChanged(nameof(DetailText));
+            });
         #endregion
     }
 }

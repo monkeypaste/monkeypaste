@@ -53,6 +53,7 @@ namespace MonkeyPaste.Avalonia {
         public const double MAX_TILE_SIZE_CONTAINER_PAD = 50;
         public const double MIN_SIZE_ZOOM_FACTOR_COEFF = (double)1 / (double)7;
         public const double EDITOR_TOOLBAR_MIN_WIDTH = 830.0d;
+        public const double DEFAULT_ITEM_SIZE = 260;
 
         #endregion
 
@@ -525,12 +526,12 @@ namespace MonkeyPaste.Avalonia {
 
             for (int i = startIdx; i <= queryOffsetIdx; i++) {
                 int tileId = MpPlatform.Services.Query.PageTools.GetItemId(i);
-                MpSize tile_size = DefaultQueryItemSize;
+                MpSize tile_size = new MpSize(DefaultQueryItemWidth,DefaultQueryItemHeight);
                 if (MpAvPersistentClipTilePropertiesHelper.TryGetByPersistentSize_ById(tileId, out double uniqueSize)) {
                     tile_size.Width = uniqueSize;
                 }
 
-                MpPoint tile_offset = null;
+                MpPoint tile_offset;
                 if (last_rect == null) {
                     // initial case
                     tile_offset = MpPoint.Zero;
@@ -712,13 +713,14 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public MpSize DefaultQueryItemSize => new MpSize(DefaultQueryItemWidth, DefaultQueryItemHeight);
-        public MpSize DefaultPinItemSize => new MpSize(260, 260);
+        public double DefaultPinItemWidth => DEFAULT_ITEM_SIZE;
+        public double DefaultPinItemHeight => DEFAULT_ITEM_SIZE;
 
-        public double DefaultEditableItemWidth => EDITOR_TOOLBAR_MIN_WIDTH;
+        public double DefaultEditableItemWidth => 
+            EDITOR_TOOLBAR_MIN_WIDTH;
 
-        public MpSize DefaultEditableItemSize => new MpSize(DefaultEditableItemWidth, DefaultQueryItemHeight);
-        public double ScrollBarFixedAxisSize => 30;
+        public double ScrollBarFixedAxisSize => 
+            30;
 
         #endregion
 
@@ -1353,6 +1355,11 @@ namespace MonkeyPaste.Avalonia {
             var dups = Items.Where(x => x.QueryOffsetIdx >= 0 && Items.Any(y => y != x && x.QueryOffsetIdx == y.QueryOffsetIdx));
             if(dups.Count() > 0) {
                 Debugger.Break();
+                dups
+                    .OrderByDescending(x => x.TileCreatedDateTime)
+                    .Skip(1)
+                    .ForEach(x => x.TriggerUnloadedNotification());
+
             }
         }
         public override string ToString() {
@@ -1365,8 +1372,12 @@ namespace MonkeyPaste.Avalonia {
             fromItem = fromItem == null ? HeadItem : fromItem;
             UpdateTileRectCommand.Execute(fromItem);
 
-            AllItems.ForEach(x => x.OnPropertyChanged(nameof(x.MinSize)));
+            //AllItems.ForEach(x => x.OnPropertyChanged(nameof(x.MinSize)));
 
+
+            OnPropertyChanged(nameof(DefaultQueryItemWidth));
+            OnPropertyChanged(nameof(DefaultQueryItemHeight));
+            
             OnPropertyChanged(nameof(QueryTrayTotalHeight));
             OnPropertyChanged(nameof(QueryTrayTotalWidth));
 
@@ -1970,11 +1981,6 @@ namespace MonkeyPaste.Avalonia {
                         QueryCommand.Execute(ScrollOffset);
                     }
                     break;
-                //case nameof(DefaultItemWidth):
-                //case nameof(DefaultItemHeight):
-                //case nameof(DefaultItemSize):
-                //    AllItems.ForEach(x => x.OnPropertyChanged(nameof(x.MinSize)));
-                //    break;
                 case nameof(HasScrollVelocity):
                     //MpPlatformWrapper.Services.Cursor.IsCursorFrozen = HasScrollVelocity;
 
@@ -1982,26 +1988,25 @@ namespace MonkeyPaste.Avalonia {
                         MpPlatform.Services.Cursor.UnsetCursor(null);
                     } else { 
                         var hctvm = Items.FirstOrDefault(x => x.IsHovering);
-                        if (hctvm != null) {
-                            hctvm.OnPropertyChanged(nameof(hctvm.TileBorderHexColor));
-                        }
                         if (IsAnyBusy) {
                             OnPropertyChanged(nameof(IsBusy));
                         }
                     }
                     break;
-                case nameof(DefaultQueryItemSize):
+                //case nameof(DefaultQueryItemSize):
                 case nameof(DefaultQueryItemWidth):
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.MinWidth)));
+                    break;
                 case nameof(DefaultQueryItemHeight):
-                    if(!MpAvMainWindowViewModel.Instance.IsMainWindowInitiallyOpening &&
-                        MpAvMainWindowViewModel.Instance.IsMainWindowOpening) {
-                        // since spring animation is clamped along screen edge when 
-                        // it springs mw stretches and makes tiles bounce so reject tile 
-                        // update because size will return to original
-                        // (its kinda cool but is too much processing)
-                        break;
-                    }
-                    AllItems.ForEach(x => x.OnPropertyChanged(nameof(x.MinSize)));
+                    //if(!MpAvMainWindowViewModel.Instance.IsMainWindowInitiallyOpening &&
+                    //    MpAvMainWindowViewModel.Instance.IsMainWindowOpening) {
+                    //    // since spring animation is clamped along screen edge when 
+                    //    // it springs mw stretches and makes tiles bounce so reject tile 
+                    //    // update because size will return to original
+                    //    // (its kinda cool but is too much processing)
+                    //    break;
+                    //}
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.MinHeight)));
                     break;
                
                 case nameof(IsAnyTilePinned):

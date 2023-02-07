@@ -199,6 +199,10 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                 case nameof(sfvm.IsChecked):
                     ValidateFilters(sfvm);
+                    if(IsPopupMenuOpen) {
+                        // let search update query as filters change
+                        Parent.PerformSearchCommand.Execute(null);
+                    }
                     break;
             }
         }

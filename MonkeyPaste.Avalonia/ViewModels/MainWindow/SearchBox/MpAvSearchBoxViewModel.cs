@@ -323,7 +323,9 @@ namespace MonkeyPaste.Avalonia {
                 var target_control = args as Control;
                 MpAvMenuExtension.ShowMenu(
                     target_control,
-                    SearchFilterCollectionViewModel.PopupMenuViewModel);
+                    SearchFilterCollectionViewModel.PopupMenuViewModel,
+
+                    placement: PlacementMode.Pointer);
             });
 
         public ICommand ToggleIsSearchBoxExpandedCommand => new MpCommand(

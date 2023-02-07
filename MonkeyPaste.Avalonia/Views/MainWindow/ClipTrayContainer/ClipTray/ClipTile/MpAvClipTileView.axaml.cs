@@ -1,4 +1,5 @@
 using Avalonia;
+using Avalonia.Animation;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -16,10 +17,12 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTileView : MpAvUserControl<MpAvClipTileViewModel> {
+        private bool _isOverDetail = false;
         public MpAvClipTileView() {
             InitializeComponent();
             DataContextChanged += MpAvClipTileView_DataContextChanged;
         }
+
         private void MpAvClipTileView_DataContextChanged(object sender, EventArgs e) {
             if(BindingContext == null) {
                 return;

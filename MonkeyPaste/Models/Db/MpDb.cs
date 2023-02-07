@@ -420,20 +420,31 @@ namespace MonkeyPaste {
             }
         }
         private static void MatchRegex(sqlite3_context ctx, object user_data, sqlite3_value[] args) {
-            string input = SQLitePCL.raw.sqlite3_value_text(args[1]).utf8_to_string();
-            input = input == null ? string.Empty : input;
             string pattern = SQLitePCL.raw.sqlite3_value_text(args[0]).utf8_to_string();
             pattern = pattern == null ? string.Empty : pattern;
 
-            bool isMatched = System.Text.RegularExpressions.Regex.IsMatch(
-                input,
-                pattern,
-                RegexOptions.IgnoreCase);
+            string input = SQLitePCL.raw.sqlite3_value_text(args[1]).utf8_to_string();
+            input = input == null ? string.Empty : input;
 
-            if (isMatched)
+            if(args.Length > 2) {
+                string test = SQLitePCL.raw.sqlite3_value_text(args[2]).utf8_to_string();
+                test = test == null ? string.Empty : test;
+                Debugger.Break();
+            }
+            bool isMatched = false;
+            try {
+                isMatched = Regex.IsMatch(input, pattern);
+
+            } catch(Exception ex) {
+                MpConsole.WriteTraceLine($"Regex exception using pattern '{pattern}'", ex);
+                isMatched = false;
+            }
+
+            if (isMatched) {
                 SQLitePCL.raw.sqlite3_result_int(ctx, 1);
-            else
+            } else {
                 SQLitePCL.raw.sqlite3_result_int(ctx, 0);
+            }
         }
 
         private static async Task InitTablesAsync() {
