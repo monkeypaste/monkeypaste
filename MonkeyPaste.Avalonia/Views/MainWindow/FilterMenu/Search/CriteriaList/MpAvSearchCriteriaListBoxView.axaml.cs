@@ -9,8 +9,13 @@ namespace MonkeyPaste.Avalonia {
     /// <summary>
     /// Interaction logic for MpSearchDetailView.xaml
     /// </summary>
-    public partial class MpAvSearchCriteriaListBoxView : MpAvUserControl<MpAvSearchCriteriaItemCollectionViewModel> {
+    public partial class MpAvSearchCriteriaListBoxView : 
+        MpAvUserControl<MpAvSearchCriteriaItemCollectionViewModel> {
+
+        private static MpAvSearchCriteriaListBoxView _instance;
+        public static MpAvSearchCriteriaListBoxView Instance => _instance;
         public MpAvSearchCriteriaListBoxView() {
+            _instance = this;
             InitializeComponent();
             var sv = this.FindControl<ScrollViewer>("SearchCriteriaContainerScrollViewer");
             sv.AddHandler(PointerWheelChangedEvent, Sclb_PointerWheelChanged, RoutingStrategies.Tunnel);

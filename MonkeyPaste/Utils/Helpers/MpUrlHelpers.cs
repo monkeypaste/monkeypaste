@@ -50,6 +50,7 @@ namespace MonkeyPaste {
                 if (url_doc != null &&
                 url_doc.DocumentNode.SelectSingleNode("//head") is HtmlNode headNode) {
                     if (headNode.ChildNodes.FirstOrDefault(x => x.Name.ToLower() == "title") is HtmlNode titleNode) {
+                        // NOTE this is an edge case here, likely not to occur, title parsed from source string
                         url_props.Title = HttpUtility.HtmlDecode(titleNode.InnerText);
                     }
 
@@ -79,6 +80,10 @@ namespace MonkeyPaste {
                         }
                     }
                 }
+            }
+            if(string.IsNullOrEmpty(url_props.Title) &&
+                !string.IsNullOrEmpty(url_props.Source)) {
+                url_props.Title = ParseHtmlTitle(url_props.Source);
             }
 
             url_props.DomainStr = GetUrlDomain(url_props.FullyFormattedUriStr);
@@ -110,11 +115,8 @@ namespace MonkeyPaste {
             return @"http://" + str;
         }
 
-        public static async Task<string> GetUrlTitleAsync(string url) {
-            // TODO (pretty complex and unnecessary but more efficient)
-            // read source as stream only up to title tag
-            string urlSource = await ReadUrlAsString(url);
-            return GetXmlElementContent(urlSource, @"title");
+        public static string ParseHtmlTitle(string html) {
+            return GetXmlElementContent(html, @"title");
         }
 
         public static async Task<string> ReadUrlAsString(string url) {
@@ -123,6 +125,8 @@ namespace MonkeyPaste {
             }
             try {
                 using (HttpClient client = new HttpClient()) {
+                    client.DefaultRequestHeaders.Add("User-Agent", System.Guid.NewGuid().ToString());
+
                     try {
                         using (HttpResponseMessage response = await client.GetAsync(url)) {
                             using (HttpContent content = response.Content) {

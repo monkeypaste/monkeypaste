@@ -513,7 +513,7 @@ namespace MonkeyPaste {
         public bool SearchByTag { get; set; }
         public bool SearchByTitle { get; set; } = true;
 
-        public bool SearchByDescription { get; set; }
+        public bool SearchByAnnotation { get; set; }
 
         public bool SearchByRegex { get; set; }
 

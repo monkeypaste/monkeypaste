@@ -80,20 +80,32 @@
                                       DataType="local:MpAvSearchCriteriaOptionViewModel">
                             <DockPanel>
 
-                                <!--  CASE SENSITIVE CHECKBOX  -->
+                                <!--  WHOLE WORD / CASE SENSITIVE CHECKBOX  -->
+                                <StackPanel Orientation="Horizontal"
+                                            DockPanel.Dock="Right"
+                                            IsVisible="{Binding IsCheckable}">
 
-                                <CheckBox VerticalAlignment="Center"
-                                          DockPanel.Dock="Right"
-                                          Margin="0,0,5,0"
-                                          IsChecked="{Binding IsChecked, Mode=TwoWay}">
-                                    <TextBlock VerticalAlignment="Center"
-                                               TextAlignment="Left"
-                                               TextWrapping="Wrap"
-                                               MaxWidth="80"
-                                               Foreground="White"
-                                               IsVisible="{Binding IsCheckable}"
-                                               Text="Case Sensitive?" />
-                                </CheckBox>
+                                    <CheckBox VerticalAlignment="Center"
+                                              Margin="0,0,5,0"
+                                              IsChecked="{Binding IsChecked, Mode=TwoWay}">
+                                        <TextBlock VerticalAlignment="Center"
+                                                   TextAlignment="Left"
+                                                   TextWrapping="Wrap"
+                                                   MaxWidth="80"
+                                                   Foreground="White"
+                                                   Text="Case Sensitive?" />
+                                    </CheckBox>
+                                    <CheckBox VerticalAlignment="Center"
+                                              Margin="5,0,5,0"
+                                              IsChecked="{Binding IsChecked2, Mode=TwoWay}">
+                                        <TextBlock VerticalAlignment="Center"
+                                                   TextAlignment="Left"
+                                                   TextWrapping="Wrap"
+                                                   MaxWidth="80"
+                                                   Foreground="White"
+                                                   Text="Whole Word" />
+                                    </CheckBox>
+                                </StackPanel>
 
                                 <!--  TEXTBOX BORDER  -->
 

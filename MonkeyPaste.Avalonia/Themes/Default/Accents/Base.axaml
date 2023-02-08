@@ -21,6 +21,10 @@
                          Color="Black"
                          Opacity="0.01" />
 
+        <SolidColorBrush x:Key="SemiTransparentTestBrush1"
+                         Color="Yellow"
+                         Opacity="0.5" />
+
         <!--<SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">
             Transparent
         </SolidColorBrush>

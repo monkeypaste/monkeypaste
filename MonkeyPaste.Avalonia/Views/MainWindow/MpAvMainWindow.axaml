@@ -16,13 +16,10 @@
         ClipToBounds="True"
         Background="Transparent"
         ShowInTaskbar="False"
-        Topmost="True"
-        IsVisible="{Binding IsMainWindowVisible}"
         MinWidth="{Binding MainWindowMinWidth}"
         MinHeight="{Binding MainWindowMinHeight}"
         Width="{Binding MainWindowWidth}"
         Height="{Binding MainWindowHeight}"
-        OpacityMask="{Binding MainWindowOpacityMask}"
         TransparencyLevelHint="Transparent"
         Title="Monkey Paste">
     <Canvas x:Name="MainWindowCanvas"
@@ -32,11 +29,6 @@
               Background="Transparent"
               Width="{Binding MainWindowWidth}"
               Height="{Binding MainWindowHeight}">
-            <!--<Grid.RowDefinitions>
-            <RowDefinition Height="{Binding TitleMenuHeight, Source={x:Static local:MpAvMainWindowTitleMenuViewModel.Instance}, Converter={StaticResource DoubleToGridLengthConverter}}" />
-            <RowDefinition Height="{Binding FilterMenuHeight, Source={x:Static local:MpAvFilterMenuViewModel.Instance}, Converter={StaticResource DoubleToGridLengthConverter}}" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>-->
 
             <!--  Title Menu  -->
             <local:MpAvMainWindowTitleMenuView x:Name="MainWindowTitleView"

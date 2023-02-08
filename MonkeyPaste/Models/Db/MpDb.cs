@@ -478,7 +478,7 @@ namespace MonkeyPaste {
 
         private static async Task CreateViewsAsync() {
             await _connectionAsync.ExecuteAsync(@"
-CREATE VIEW MpSortableCopyItem_View as
+CREATE VIEW MpContentQueryView_simple as
 SELECT 
 	pk_MpCopyItemId as RootId,
 	MpTransactionSource.fk_SourceObjId as SourceObjId,

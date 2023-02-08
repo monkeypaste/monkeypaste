@@ -25,7 +25,7 @@ namespace MonkeyPaste {
         MainWindowOpening,
         MainWindowOpened,
         MainWindowClosing,
-        MainWindowHid,
+        MainWindowClosed,
 
         MainWindowActivated,
         MainWindowDeactivated,

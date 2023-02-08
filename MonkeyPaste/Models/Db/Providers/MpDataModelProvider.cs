@@ -70,10 +70,10 @@ namespace MonkeyPaste {
 
         #endregion
 
-        #region MpSortableCopyItem_View (PropertyPath Queries)
+        #region MpContentQueryView_simple (PropertyPath Queries)
 
         public static async Task<T> GetSortableCopyItemViewPropertyAsync<T>(int ciid,string propertyName) {
-            string query = "select ? from MpSortableCopyItem_View where pk_MpCopyItemId=?";
+            string query = "select ? from MpContentQueryView_simple where pk_MpCopyItemId=?";
             var result = await MpDb.QueryScalarAsync<T>(query, propertyName, ciid);
             return result;
         }

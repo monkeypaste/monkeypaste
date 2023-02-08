@@ -2116,7 +2116,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     AddNewItemsCommand.Execute(null);
                     break;
-                case MpMessageType.MainWindowHid:
+                case MpMessageType.MainWindowClosed:
                     // reset so tray will autosize/bringIntoView on ListBox items changed (since actual size is not bound)
                     HasUserAlteredPinTrayWidthSinceWindowShow = false;
                     break;

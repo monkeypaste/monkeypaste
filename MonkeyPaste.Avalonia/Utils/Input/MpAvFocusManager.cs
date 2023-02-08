@@ -47,11 +47,11 @@ namespace MonkeyPaste.Avalonia {
                         return true;
                     }
                 }
-                bool is_input_control = true;
-                    //_inputControlTypes.Any(x => 
-                    //    cur_focus.GetVisualAncestors().Any(y=>
-                    //        y.GetType() == x || 
-                    //        y.GetType().IsSubclassOf(x)));
+                bool is_input_control =
+                    _inputControlTypes.Any(x =>
+                        cur_focus.GetVisualAncestors().Any(y =>
+                            y.GetType() == x ||
+                            y.GetType().IsSubclassOf(x)));
 
                 MpConsole.WriteLine($"Current Focus Control Type: {cur_focus.GetType()} Is Input Control: {is_input_control.ToString().ToUpper()}");
                 return is_input_control || IsSelfManagedHistoryControlFocused;

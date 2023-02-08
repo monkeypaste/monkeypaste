@@ -15,8 +15,11 @@ namespace MonkeyPaste {
         MpIStartupState,
         MpIProgressLoader,
         MpIStartupObjectLocator {
+
+
         #region Statics
 
+        public static bool IS_PARALLEL_LOADING_ENABLED = false;
         public static bool IsCoreLoaded { get; protected set; } = false;
         public static bool IsPlatformLoaded { get; protected set; } = false;
 
@@ -32,10 +35,6 @@ namespace MonkeyPaste {
         IEnumerable<object> MpIStartupObjectLocator.Items => _coreItems.Union(_platformItems);
         #endregion
 
-        #endregion
-
-        #region Properties
-
         #region MpIStartupState Implementation
 
         public DateTime? LoadedDateTime { get; private set; } = null;
@@ -44,7 +43,8 @@ namespace MonkeyPaste {
 
         #region MpIProgressLoader Implementation
 
-        public string IconResourceKey => MpBase64Images.AppIcon;
+        public string IconResourceKey => 
+            MpBase64Images.AppIcon;
 
         public string Title { get; set; } = string.Empty;
 
@@ -55,78 +55,76 @@ namespace MonkeyPaste {
             set => throw new NotImplementedException();
         }
 
-        public double PercentLoaded => (double)LoadedCount / (double)_coreItems.Count;
+        public double PercentLoaded => 
+            (double)LoadedCount / (double)(_coreItems.Count);
 
         public MpNotificationType DialogType => MpNotificationType.Loader;
 
         #endregion
+        #endregion
 
+        #region Properties
         public int LoadedCount { get; set; } = 0;
 
+        #endregion
+
+        #region Constructors
+        public MpBootstrapperViewModelBase() { }
+
+        #endregion
+
+        #region Public Methhods
+
+        public abstract Task InitAsync();
+
         public virtual async Task BeginLoaderAsync() {
-            for (int i = 0; i < _coreItems.Count; i++) {
-                await LoadItemAsync(_coreItems[i], i);
-                while (IsBusy) {
-                    await Task.Delay(100);
-                }
-            }
-            while (_coreItems.Any(x => x.IsBusy)) {
-                await Task.Delay(100);
-            }
+            await LoadItemsAsync(_coreItems);
             await Task.Delay(1000);
         }
 
         public virtual async Task FinishLoaderAsync() {
             // once mw and all mw views are loaded load platform items
-            for (int i = 0; i < _platformItems.Count(); i++) {
-                await LoadItemAsync(_platformItems[i], i);
+            await LoadItemsAsync(_platformItems);
+            LoadedDateTime = DateTime.Now;
+        }
+
+        #endregion
+
+        #region Protected Methods
+
+        protected abstract void CreateLoaderItems();
+
+        protected abstract Task LoadItemAsync(MpBootstrappedItemViewModel item, int index);
+        #endregion
+
+        #region Private Methods
+        private async Task LoadItemsAsync(List<MpBootstrappedItemViewModel> items) {
+            if (IS_PARALLEL_LOADING_ENABLED) {
+                await LoadItemsParallelAsync(items);
+            } else {
+                await LoadItemsSequentialAsync(items);
+            }
+        }
+        private async Task LoadItemsParallelAsync(List<MpBootstrappedItemViewModel> items) {
+            await Task.WhenAll(items.Select((x,idx) => LoadItemAsync(x,idx))); 
+            while (items.Any(x => x.IsBusy)) {
+                await Task.Delay(100);
+            }
+        }
+
+        private async Task LoadItemsSequentialAsync(List<MpBootstrappedItemViewModel> items) {
+            for (int i = 0; i < items.Count; i++) {
+                await LoadItemAsync(items[i], i);
                 while (IsBusy) {
                     await Task.Delay(100);
                 }
             }
-            while (_platformItems.Any(x => x.IsBusy)) {
+            while (items.Any(x => x.IsBusy)) {
                 await Task.Delay(100);
             }
-
-            LoadedDateTime = DateTime.Now;
         }
+
         #endregion
-
-        public MpBootstrapperViewModelBase() {
-            
-        }
-
-        public abstract Task InitAsync();
-
-        protected abstract void CreateLoaderItems();
-
-        protected virtual async Task LoadItemAsync(MpBootstrappedItemViewModel item, int index) {
-            IsBusy = true;
-            await MpPlatform.Services.MainThreadMarshal.RunOnMainThreadAsync(async () => {
-                var sw = Stopwatch.StartNew();
-
-                await item.LoadItemAsync();
-                sw.Stop();
-
-                LoadedCount++;
-                MpConsole.WriteLine("Loaded " + item.Label + " at idx: " + index + " Load Count: " + LoadedCount + " Load Percent: " + PercentLoaded + " Time(ms): " + sw.ElapsedMilliseconds);
-
-                OnPropertyChanged(nameof(PercentLoaded));
-
-                OnPropertyChanged(nameof(Detail));
-
-                Body = string.IsNullOrWhiteSpace(item.Label) ? Body : item.Label;
-
-                int dotCount = index % 4;
-                Title = "LOADING";
-                for (int i = 0; i < dotCount; i++) {
-                    Title += ".";
-                }
-
-            });
-
-            IsBusy = false;
-        }
 
     }
 }

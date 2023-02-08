@@ -15,7 +15,6 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvQueryTrayView">
     <Grid x:Name="QueryTrayContainerGrid"
           Margin="0"
-          AttachedToVisualTree="MpAvClipTrayView_AttachedToVisualTree"
           Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition x:DataType="local:MpAvSearchCriteriaItemCollectionViewModel"
@@ -30,6 +29,21 @@
                 HorizontalAlignment="Stretch"
                 IsVisible="{Binding IsExpanded, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
                 DataContext="{x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}">
+            <!--
+                local:MpAvResizeExtension.MinHeight="0"
+                local:MpAvResizeExtension.MaxHeight="{Binding MaxSearchCriteriaListBoxHeight}"
+                local:MpAvResizeExtension.MinWidth="{Binding $parent.Bounds.Width}"
+                local:MpAvResizeExtension.MaxWidth="{Binding $parent.Bounds.Width}"
+                local:MpAvResizeExtension.BoundWidth="{Binding $self.Bounds.Width, Mode=TwoWay}"
+                local:MpAvResizeExtension.BoundHeight="{Binding BoundCriteriaListBoxScreenHeight, Mode=TwoWay}"
+                local:MpAvResizeExtension.DefaultWidth="{Binding $parent.Bounds.Width}"
+                local:MpAvResizeExtension.DefaultHeight="0"
+                local:MpAvResizeExtension.IsResizable="{Binding IsResizable}"
+                local:MpAvResizeExtension.XFactor="0"
+                local:MpAvResizeExtension.YFactor="1"
+                local:MpAvResizeExtension.GlobalResizeMessage="None"
+                local:MpAvResizeExtension.IsEnabled="True"
+            -->
             <local:MpAvSearchCriteriaListBoxView x:Name="SearchDetailView"
                                                  HorizontalAlignment="Stretch"
                                                  VerticalAlignment="Stretch"

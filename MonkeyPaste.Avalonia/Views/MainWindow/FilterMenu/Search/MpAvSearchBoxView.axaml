@@ -340,7 +340,7 @@
                                  Watermark="Search..."
                                  FontSize="14"
                                  Background="Transparent"
-                                 IsTextCompletionEnabled="True"
+                                 IsTextCompletionEnabled="False"
                                  MinimumPrefixLength="0"
                                  MinimumPopulateDelay="0.25"
                                  Items="{Binding RecentSearchTexts}"

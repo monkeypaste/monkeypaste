@@ -28,7 +28,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void AppTrayIcon_Clicked(object sender, EventArgs e) {
-            MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
+            MpAvMainWindowViewModel.Instance.ShowMainWindowCommand.Execute(null);
             return;
         }
 

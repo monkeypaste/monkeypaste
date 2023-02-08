@@ -113,7 +113,9 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             var ttrvm = MpAvTagTrayViewModel.Instance;
-            if (!IsExpanded && ttrvm.SelectedItem != null &&
+            if (!IsExpanded && 
+                !IsConvertingQueryToSelect &&
+                ttrvm.SelectedItem != null &&
                 !ttrvm.SelectedItem.IsQueryTag) {
                 // treat expanded like is active, so if not active and tag is not query
                 // hand back to simple
@@ -170,6 +172,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
+        public bool IsConvertingQueryToSelect { get; set; }
         public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsAnyBusy);
         public bool HasCriteriaItems => Items.Count > 0;
 
@@ -326,9 +330,9 @@ namespace MonkeyPaste.Avalonia {
         public async Task<int> ConvertCurrentSearchToAdvSearchAsync(bool selectConversion) {
             // NOTE select is only when from search plus button
             if(selectConversion) {
+                IsConvertingQueryToSelect = true;
                 SelectedSearchTagId = AvailableNotAllTagId > 0 ? AvailableNotAllTagId : AllTagId;
-            }
-            
+            }            
 
             bool is_pending = true;
             int converted_query_tag_id;
@@ -357,6 +361,7 @@ namespace MonkeyPaste.Avalonia {
                 // convert result to criteria rows
                 await InitializeAsync(converted_query_tag_id, is_pending);
             }
+            IsConvertingQueryToSelect = false;
 
             return converted_query_tag_id;
         }
@@ -384,17 +389,19 @@ namespace MonkeyPaste.Avalonia {
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch(msg) {
                 case MpMessageType.AdvancedSearchExpanded:
-                    double default_visible_row_count = 2.5d;
-                    double row_height = MpAvSearchCriteriaItemViewModel.DEFAULT_HEIGHT;
-                    double delta_open_height = Math.Min((double)Items.Count, default_visible_row_count) * row_height;
+                    Dispatcher.UIThread.Post(async () => {
+                        double default_visible_row_count = 2.5d;
+                        double row_height = MpAvSearchCriteriaItemViewModel.DEFAULT_HEIGHT;
+                        double delta_open_height = Math.Min((double)Items.Count, default_visible_row_count) * row_height;
 
-                    BoundHeaderHeight = MpAvSearchCriteriaItemViewModel.DEFAULT_HEIGHT;
-                    BoundCriteriaListBoxScreenHeight = delta_open_height;
-                    //MpAvResizeExtension.ResizeByDelta(MpAvMainWindow.Instance, 0, delta_open_height,false);
+                        BoundHeaderHeight = MpAvSearchCriteriaItemViewModel.DEFAULT_HEIGHT;
+                        BoundCriteriaListBoxScreenHeight = delta_open_height;
+                        //MpAvResizeExtension.ResizeByDelta(MpAvSearchCriteriaListBoxView.Instance, 0, delta_open_height, false);
 
-                    if(QueryTagId > 0 && !HasCriteriaItems) {
-                        InitializeAsync(QueryTagId, IsPendingQuery).FireAndForgetSafeAsync(this);
-                    }
+                        if (QueryTagId > 0 && !HasCriteriaItems) {
+                            InitializeAsync(QueryTagId, IsPendingQuery).FireAndForgetSafeAsync(this);
+                        }
+                    });
                     break;
                 case MpMessageType.AdvancedSearchUnexpanded:
                     double delta_close_height = -BoundCriteriaListBoxScreenHeight;
@@ -478,21 +485,10 @@ namespace MonkeyPaste.Avalonia {
             string st = MpAvSearchBoxViewModel.Instance.SearchText;
 
             var all_filters = MpAvSearchBoxViewModel.Instance.SearchFilterCollectionViewModel.FilterType;
-            List<MpContentQueryBitFlags> true_filters =
-                MpAvSearchBoxViewModel.Instance.SearchFilterCollectionViewModel.Filters
-                .Where(x => !x.IsSeperator && x.IsChecked.IsTrue())
-                .Select(x => x.FilterType)
-                .ToList();
 
+            var opts = GetSimpleCriteriaOptions(all_filters, st, SelectedSearchTagId);
             List<MpSearchCriteriaItem> items = new List<MpSearchCriteriaItem>();
-            foreach (var ctf in true_filters) {
-                string opt_path =
-                    GetSimpleSearchOptionString(
-                        ctf,
-                        all_filters,
-                        st);
-
-                // NOTE (I think) all simple search filters are OR based..
+            foreach (var opt_path in opts) {
                 var sci = await MpSearchCriteriaItem.CreateAsync(
                     tagId: pending_tag.Id,
                     nextJoinType: MpLogicalQueryType.Or,
@@ -508,57 +504,52 @@ namespace MonkeyPaste.Avalonia {
             }
             return pending_tag.Id;
         }
-        private string GetSimpleSearchOptionString(MpContentQueryBitFlags current_flag, MpContentQueryBitFlags all_flags, string searchText) {
-            // format:
-            // <opt1>,<opt2>,...
+        private IEnumerable<string> GetSimpleCriteriaOptions(MpContentQueryBitFlags sqf, string st, int tagId) {
+            // mv: <case sensitive>,<whole word>,<regex>,<base64 search text>
+            string mv = sqf.GetMatchValueModelToken(st);
+            List<string> opts = new List<string>();
+            //opts.Add($"{(int)MpRootOptionType.Collection},{tagId}");
 
-            // opt formats:
-            // non-leaf opt:
-            // <Enum Module>|<Enum Name>|<MpContentFilterFlag Name>
-            // leaf opt:
-            // <Enum Module>|<Enum Name>|<base64 search text>|<is case sensitive>|<MpContentFilterFlag Name>
-
-            searchText = searchText == null ? string.Empty : searchText;
-            List<object> opts = new List<object>();
-
-            switch (current_flag) {
-                // Root.Content
-                case MpContentQueryBitFlags.Title:
-                    opts.Add(MpRootOptionType.Content);
-                    opts.Add(MpContentOptionType.Title);
-                    opts.Add(MpTextOptionType.Contains);
-                    opts.Add(new object[] { 
-                        MpContentQueryBitFlags.Title, 
-                        searchText, 
-                        all_flags.HasFlag(MpContentQueryBitFlags.CaseSensitive) });
-                    break;
-                case MpContentQueryBitFlags.Content:
-                    opts.Add(MpRootOptionType.Content);
-                    opts.Add(MpContentOptionType.AnyText);
-                    opts.Add(MpTextOptionType.Contains);
-                    opts.Add(new object[] { 
-                        MpContentQueryBitFlags.Content, 
-                        searchText, 
-                        all_flags.HasFlag(MpContentQueryBitFlags.CaseSensitive) });
-                    break;
-                // Root.ContentType
-                case MpContentQueryBitFlags.TextType:
-                    opts.Add(MpRootOptionType.ContentType);
-                    opts.Add(MpContentTypeOptionType.Text);
-                    break;
-                case MpContentQueryBitFlags.ImageType:
-                    opts.Add(MpRootOptionType.ContentType);
-                    opts.Add(MpContentTypeOptionType.Image);
-                    break;
-                case MpContentQueryBitFlags.FileType:
-                    opts.Add(MpRootOptionType.ContentType);
-                    opts.Add(MpContentTypeOptionType.Files);
-                    break;
-                default:
-                    return string.Empty;
+            if (!sqf.HasFlag(MpContentQueryBitFlags.TextType) ||
+               !sqf.HasFlag(MpContentQueryBitFlags.ImageType) ||
+               !sqf.HasFlag(MpContentQueryBitFlags.FileType)) {
+                // NOTE if all types are specified, ignore type flags
+                if (sqf.HasFlag(MpContentQueryBitFlags.TextType)) {
+                    opts.Add($"{(int)MpRootOptionType.ContentType},{(int)MpContentTypeOptionType.Text}");
+                }
+                if (sqf.HasFlag(MpContentQueryBitFlags.ImageType)) {
+                    opts.Add($"{(int)MpRootOptionType.ContentType},{(int)MpContentTypeOptionType.Image}");
+                }
+                if (sqf.HasFlag(MpContentQueryBitFlags.FileType)) {
+                    opts.Add($"{(int)MpRootOptionType.ContentType},{(int)MpContentTypeOptionType.Files}");
+                }
             }
-            return opts.ToOptionPathString(current_flag);
+            
+            
+            if(sqf.HasFlag(MpContentQueryBitFlags.Title)) {
+                opts.Add($"{(int)MpRootOptionType.Content},{(int)MpContentOptionType.Title},{(int)MpTextOptionType.Contains}|{mv}");
+            }
+            if(sqf.HasFlag(MpContentQueryBitFlags.Content)) {
+                opts.Add($"{(int)MpRootOptionType.Content},{(int)MpContentOptionType.AnyText},{(int)MpTextOptionType.Contains}|{mv}");
+            }
+            if (sqf.HasFlag(MpContentQueryBitFlags.Annotations)) {
+                opts.Add($"{(int)MpRootOptionType.Content},{(int)MpContentOptionType.Annotation},{(int)MpTextOptionType.Contains}|{mv}");
+            }
+            if (sqf.HasFlag(MpContentQueryBitFlags.Url)) {
+                opts.Add($"{(int)MpRootOptionType.Source},{(int)MpSourceOptionType.Website},{(int)MpWebsiteOptionType.Url},{(int)MpTextOptionType.Contains}|{mv}");
+            }
+            if(sqf.HasFlag(MpContentQueryBitFlags.UrlTitle)) {
+                opts.Add($"{(int)MpRootOptionType.Source},{(int)MpSourceOptionType.Website},{(int)MpWebsiteOptionType.Title},{(int)MpTextOptionType.Contains}|{mv}");
+            }
+            if(sqf.HasFlag(MpContentQueryBitFlags.AppPath)) {
+                opts.Add($"{(int)MpRootOptionType.Source},{(int)MpSourceOptionType.App},{(int)MpAppOptionType.ProcessPath},{(int)MpTextOptionType.Contains}|{mv}");
+            }
+            if(sqf.HasFlag(MpContentQueryBitFlags.AppName)) {
+                opts.Add($"{(int)MpRootOptionType.Source},{(int)MpSourceOptionType.App},{(int)MpAppOptionType.ApplicationName},{(int)MpTextOptionType.Contains}|{mv}");
+            }
+            return opts;
         }
+        
         
         #endregion
 
@@ -617,6 +608,7 @@ namespace MonkeyPaste.Avalonia {
                 // wait for panel open
                 await Task.Delay(waitTimeMs);
 
+                ttrvm.SelectTagCommand.Execute(ttrvm.RootGroupTagViewModel);
                 ttrvm.RootGroupTagViewModel.AddNewChildTagCommand.Execute(PendingQueryTagId);
 
                 // clear pending flag 

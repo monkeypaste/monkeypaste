@@ -90,9 +90,9 @@ namespace MonkeyPaste.Avalonia {
                         //    MpContentFilterType.Tag),
                         new MpAvSearchFilterViewModel(
                             this,
-                            "Description",
-                            nameof(MpPrefViewModel.Instance.SearchByDescription),
-                            MpContentQueryBitFlags.Meta),
+                            "Annotations",
+                            nameof(MpPrefViewModel.Instance.SearchByAnnotation),
+                            MpContentQueryBitFlags.Annotations),
                         new MpAvSearchFilterViewModel(this,true),
                         new MpAvSearchFilterViewModel(
                             this,

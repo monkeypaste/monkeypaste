@@ -127,14 +127,14 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.MainWindowUnlocked:
                     UnsetTopmost(MpAvMainWindow.Instance);
                     break;
+                case MpMessageType.MainWindowOpening:
                 case MpMessageType.MainWindowOpened:
+                case MpMessageType.MainWindowClosing:
                     if (MpAvMainWindowViewModel.Instance.AnimateShowWindow) {
                         TrySetTopmost(MpAvMainWindow.Instance);
                     }
-
                     break;
-                case MpMessageType.MainWindowHid:
-                case MpMessageType.MainWindowClosing:
+                case MpMessageType.MainWindowClosed:
                     if (MpAvMainWindowViewModel.Instance.AnimateHideWindow) {
                         UnsetTopmost(MpAvMainWindow.Instance);
                     }

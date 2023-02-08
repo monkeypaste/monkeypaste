@@ -1007,7 +1007,9 @@ namespace MonkeyPaste.Avalonia {
 
 
         private void OnIsContentSelectedChanged() {
-            if (BindingContext == null || !IsContentLoaded) {
+            if (BindingContext == null || 
+                !IsContentLoaded ||
+                MpAvFocusManager.Instance.IsInputControlFocused) {
                 return;
             }
             var msg = new MpQuillIsHostFocusedChangedMessage() {

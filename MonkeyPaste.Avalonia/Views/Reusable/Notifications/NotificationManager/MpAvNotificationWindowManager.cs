@@ -200,7 +200,7 @@ namespace MonkeyPaste.Avalonia {
             if (MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
                 return;
             }
-            MpAvMainWindowViewModel.Instance.ShowWindowCommand.Execute(null);
+            MpAvMainWindowViewModel.Instance.ShowMainWindowCommand.Execute(null);
         }
 
         private void Nw_Closed(object sender, EventArgs e) {

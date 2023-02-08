@@ -24,7 +24,8 @@ namespace MonkeyPaste.Common {
         None = 0,
         AnyText,
         TypeSpecific,
-        Title
+        Title,
+        Annotation
     }
 
     public enum MpContentTypeOptionType {

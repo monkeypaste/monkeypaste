@@ -1003,6 +1003,11 @@ namespace MonkeyPaste.Avalonia {
                              treeSortIdx: Items.Count,
                              tagType: childTagType);
                      }
+                 } else {
+                     // updating pending query tag (always called from root group tag)
+                     t.TreeSortIdx = Items.Count;
+                     t.ParentTagId = TagId;
+                     await t.WriteToDatabaseAsync();
                  }
                  if(t != null && 
                     t.TagType == MpTagType.Query &&

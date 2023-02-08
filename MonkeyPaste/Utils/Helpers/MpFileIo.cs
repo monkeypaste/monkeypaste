@@ -7,7 +7,8 @@ using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin; 
+using MonkeyPaste.Common;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Diagnostics;
@@ -424,20 +425,8 @@ namespace MonkeyPaste {
                 MpConsole.WriteTraceLine(@"Cannot read bytes, bad url: " + uri+ " baseDir: "+baseDir);
                 return null;
             }
-            using (var httpClient = new HttpClient()) {
-                try {
-                    httpClient.DefaultRequestHeaders.Add("User-Agent", System.Guid.NewGuid().ToString());
-                    byte[] bytes = await httpClient.GetByteArrayAsync(uri).TimeoutAfter(TimeSpan.FromMilliseconds(timeoutMs));
-                    return bytes;
-                    //using (var fs = new FileStream("favicon.ico", FileMode.Create)) {
-                    //    await fs.WriteAsync(bytes, 0, bytes.Length);
-                    //    return bytes;                    
-                    //}
-                } catch (Exception ex) {
-                    MpConsole.WriteTraceLine(ex);
-                }
-            }
-            return null;
+            var bytes = await uri.ReadUriBytesAsync();
+            return bytes;
         }
 
         public static byte[] ReadBytesFromFile(string filePath) {

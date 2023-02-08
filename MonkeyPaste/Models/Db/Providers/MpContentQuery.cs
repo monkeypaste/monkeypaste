@@ -75,6 +75,16 @@ namespace MonkeyPaste {
 
             // TYPES
 
+            if(!qf.HasFlag(MpContentQueryBitFlags.TextType) &&
+               !qf.HasFlag(MpContentQueryBitFlags.ImageType) &&
+               !qf.HasFlag(MpContentQueryBitFlags.FileType)) {
+                // NOTE this only can occur in adv search from ui validation in simple
+                // so when no types are selected treat as all or there'll be no results
+                qf |= MpContentQueryBitFlags.TextType | 
+                    MpContentQueryBitFlags.ImageType | 
+                    MpContentQueryBitFlags.FileType;
+            }
+
             if (qf.HasFlag(MpContentQueryBitFlags.TextType)) {
                 types.Add(string.Format(@"e_MpCopyItemType='{0}'", MpCopyItemType.Text.ToString()));
             }
@@ -120,7 +130,7 @@ namespace MonkeyPaste {
                     (SELECT DISTINCT pk_MpCopyItemId FROM MpCopyItem WHERE pk_MpCopyItemId IN 
 		                (SELECT fk_MpCopyItemId FROM MpCopyItemTag WHERE {tag_where_stmt}))";
 
-            string sql_view = isAdvanced ? "MpAdvancedSortableCopyItem_View" : "MpSortableCopyItem_View";
+            string sql_view = isAdvanced ? "MpContentQueryView_advanced" : "MpContentQueryView_simple";
             string query = $"SELECT RootId FROM {sql_view} where {tagClause}";
             string filter_op = isAdvanced ? " AND " : " OR ";
             if(arg_filters.Count > 0) {

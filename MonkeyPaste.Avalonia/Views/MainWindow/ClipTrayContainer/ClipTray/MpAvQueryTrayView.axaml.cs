@@ -18,9 +18,6 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
         private DispatcherTimer _autoScrollTimer;
         private double[] _autoScrollAccumulators;
-
-        private ScrollViewer _sv;
-        private ListBox _lb;
         #endregion
 
         #region Statics
@@ -41,23 +38,6 @@ namespace MonkeyPaste.Avalonia {
 
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
 
-            _sv = this.FindControl<ScrollViewer>("ClipTrayScrollViewer");            
-            _lb = this.FindControl<ListBox>("ClipTrayListBox");
-            _lb.GotFocus += Lb_GotFocus;
-            var lb_sv = _lb.GetVisualDescendant<ScrollViewer>();
-            Dispatcher.UIThread.Post(async () => {
-                while(lb_sv == null) {
-                    lb_sv = _lb.GetVisualDescendant<ScrollViewer>();
-
-                    if(lb_sv == null) {
-                        await Task.Delay(100);
-                    } else {
-                        lb_sv.EffectiveViewportChanged += Lb_EffectiveViewportChanged;
-                        return;
-                    }
-                }
-            });
-
             var advSearchSplitter = this.FindControl<GridSplitter>("AdvancedSearchSplitter");
             advSearchSplitter.DragCompleted += AdvSearchSplitter_DragCompleted;
         }
@@ -67,52 +47,9 @@ namespace MonkeyPaste.Avalonia {
             scicvm.BoundCriteriaListBoxScreenHeight = Math.Min(nh, scicvm.MaxSearchCriteriaListBoxHeight);
         }
 
-        private void Lb_GotFocus(object sender, global::Avalonia.Input.GotFocusEventArgs e) {
-            if (BindingContext.IsTrayEmpty) {
-                return;
-            }
-            if (e.NavigationMethod == NavigationMethod.Tab) {
-                if (e.KeyModifiers.HasFlag(KeyModifiers.Shift)) {
-                    // shift tab from clip tray select last
-                    BindingContext.SelectedItem = BindingContext.Items.Last();
-                } else {
-                    BindingContext.SelectedItem = BindingContext.Items.First();
-                }
-            }
-        }
-
-        private void Lb_EffectiveViewportChanged(object sender, EffectiveViewportChangedEventArgs e) {
-            // NOTE don't delete below its related to orientation/layout change logic where grid loadMore locks up in vertical mode 
-            if(sender is Control control && control.GetVisualDescendant<Canvas>() is Canvas items_panel_canvas) {
-                double max_diff = 1.0;
-                double w_diff = Math.Abs(items_panel_canvas.Bounds.Width - BindingContext.QueryTrayTotalWidth);
-                double h_diff = Math.Abs(items_panel_canvas.Bounds.Height - BindingContext.QueryTrayTotalHeight);
-                if (w_diff <= max_diff && h_diff <= max_diff) {
-                    // NOTE the lb w/h is bound to total dimensions but only reports screen dimensions
-                    // the items panel is CLOSE to actual total dimensions but off by some kind of pixel snapping small value
-
-                    // this is intended to retain scroll position when orientation changes
-                    // and this event is triggered twice,
-                    // first when the container changes (which the if is trying is set to ignore)
-                    // second when the list is transformed                    
-                    // the *Begin() is called right before mw rect is changed in mwvm.CycleOrientation
-
-                    //BindingContext.DropScrollAnchor();
-                }
-            }
-            
-            return;
-        }
 
         private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);
-        }
-        private void MpAvClipTrayView_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e) {
-            if (Design.IsDesignMode) {
-                return;
-            }
-            //simulate change to initialize layout
-            ReceivedGlobalMessage(MpMessageType.TrayLayoutChanged);
         }
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
@@ -127,7 +64,6 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case MpMessageType.DropOverTraysEnd:
                     StopAutoScroll();
-
                     break;
             }
         }
@@ -162,15 +98,17 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             Dispatcher.UIThread.Post(() => {
+                var sv = this.FindControl<ScrollViewer>("ClipTrayScrollViewer");
+                var lb = this.FindControl<ListBox>("ClipTrayListBox");
                 var lbmp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
-                if(MpAvPagingListBoxExtension.CheckAndDoAutoScrollJump(_sv,_lb,lbmp)) {
+                if(MpAvPagingListBoxExtension.CheckAndDoAutoScrollJump(sv,lb,lbmp)) {
                     // drag is over a tray track and is thumb dragging
                     // until outside track, then busy for load more
                     return;
                 }
-                var scroll_delta = _sv.AutoScroll(
+                var scroll_delta = sv.AutoScroll(
                     lbmp,
-                    _sv,
+                    sv,
                     ref _autoScrollAccumulators,
                     false);
 

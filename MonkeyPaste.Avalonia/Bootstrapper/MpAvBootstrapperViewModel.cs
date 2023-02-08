@@ -14,10 +14,14 @@ using MonkeyPaste.Common.Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls;
 using Avalonia;
+using Avalonia.Media;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvBootstrapperViewModel : MpBootstrapperViewModelBase {
+        private Stopwatch _sw;
         public override async Task InitAsync() {
+            _sw = Stopwatch.StartNew();
+
             if (OperatingSystem.IsLinux()) {
                 await GtkHelper.EnsureInitialized();
             } else if (OperatingSystem.IsMacOS()) {
@@ -47,8 +51,8 @@ namespace MonkeyPaste.Avalonia {
             }
             App.Desktop.MainWindow.Show();
             IsPlatformLoaded = true;
-            MpConsole.WriteLine("Platform Load complete");
-
+            _sw.Stop();
+            MpConsole.WriteLine($"Platform Load complete. Total time: {_sw.ElapsedMilliseconds}ms");
 
             MpAvSystemTray.Init();
         }
@@ -100,25 +104,21 @@ namespace MonkeyPaste.Avalonia {
             await item.LoadItemAsync();
             sw.Stop();
 
-            if(item.IsViewDependant) {
-                // nothing at this point will join somehow later
-            } else {
-                LoadedCount++;
+            LoadedCount++;
 
-                OnPropertyChanged(nameof(PercentLoaded));
-                OnPropertyChanged(nameof(Detail));
+            OnPropertyChanged(nameof(PercentLoaded));
+            OnPropertyChanged(nameof(Detail));
 
-                Body = string.IsNullOrWhiteSpace(item.Label) ? Body : item.Label;
+            Body = string.IsNullOrWhiteSpace(item.Label) ? Body : item.Label;
 
-                int dotCount = index % 4;
-                Title = "LOADING";
-                for (int i = 0; i < dotCount; i++) {
-                    Title += ".";
-                }
+            int dotCount = index % 4;
+            Title = "LOADING";
+            for (int i = 0; i < dotCount; i++) {
+                Title += ".";
             }
 
             IsBusy = false;
-            MpConsole.WriteLine("Loaded " + item.Label + " at idx: " + index + " IsViewDependant: " + (item.IsViewDependant ? "YES" : "NO") + " Load Count: " + LoadedCount + " Load Percent: " + PercentLoaded + " Time(ms): " + sw.ElapsedMilliseconds);
+            MpConsole.WriteLine($"Loaded {item.Label} at idx: {index} Load Count: {LoadedCount} Load Percent: {PercentLoaded} Time(ms): {sw.ElapsedMilliseconds}");
         }
     }
 }

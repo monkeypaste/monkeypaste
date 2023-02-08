@@ -59,6 +59,7 @@
 
         <Button x:Name="CriteriaDragButton"
                 Grid.Column="0"
+                IsVisible="{Binding CanRemoveOrSortThisCriteriaItem}"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Classes="noBg noHoverBg"
@@ -116,7 +117,7 @@
 
                     <Button x:Name="RemoveCriteriaItemButton"
                             Classes="noBg noHoverBg shakeOver addRemoveBtn removeBtn"
-                            IsVisible="{Binding CanRemoveThisCriteriaItem}"
+                            IsVisible="{Binding CanRemoveOrSortThisCriteriaItem}"
                             Command="{Binding RemoveThisCriteriaItemCommand}">
                         <Button.RenderTransform>
                             <RotateTransform />

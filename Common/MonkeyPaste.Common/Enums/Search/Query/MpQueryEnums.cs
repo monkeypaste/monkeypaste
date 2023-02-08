@@ -24,7 +24,7 @@ namespace MonkeyPaste.Common {
         Url = 32,
         AppName = 64,
         AppPath = 128,
-        Meta = 256,
+        Annotations = 256,
         Tag = 512,
         Regex = 1024,
         Content = 2048,
@@ -96,7 +96,7 @@ namespace MonkeyPaste.Common {
                     return "ItemData";
                 case MpContentQueryBitFlags.Url:
                     return "UrlPath";
-                case MpContentQueryBitFlags.Meta:
+                case MpContentQueryBitFlags.Annotations:
                     return "ItemMetaData";
                 case MpContentQueryBitFlags.Created:
                     return "CopyDateTime";
@@ -121,7 +121,7 @@ namespace MonkeyPaste.Common {
                 case MpContentQueryBitFlags.UrlTitle:
                 case MpContentQueryBitFlags.AppName:
                 case MpContentQueryBitFlags.AppPath:
-                case MpContentQueryBitFlags.Meta:
+                case MpContentQueryBitFlags.Annotations:
                 case MpContentQueryBitFlags.DeviceName:
                 case MpContentQueryBitFlags.DeviceType:
                 case MpContentQueryBitFlags.Width:
@@ -170,7 +170,7 @@ namespace MonkeyPaste.Common {
                 case MpContentQueryBitFlags.UrlTitle:
                 case MpContentQueryBitFlags.AppName:
                 case MpContentQueryBitFlags.AppPath:
-                case MpContentQueryBitFlags.Meta:
+                case MpContentQueryBitFlags.Annotations:
                 case MpContentQueryBitFlags.DeviceName:
                 case MpContentQueryBitFlags.FileName:
                 case MpContentQueryBitFlags.FilePath:
@@ -215,11 +215,15 @@ namespace MonkeyPaste.Common {
         public static string GetStringMatchValue(this MpContentQueryBitFlags f, string matchOp, string matchVal) {
             if(matchOp == "REGEXP") {
                 if(f.HasFlag(MpContentQueryBitFlags.WholeWord)) {
-                    string flags = "m";
-                    if (!f.HasFlag(MpContentQueryBitFlags.CaseSensitive)) {
-                        flags += "i";
+                    //string flags = "m";
+                    //if (!f.HasFlag(MpContentQueryBitFlags.CaseSensitive)) {
+                    //    flags += "i";
+                    //}
+                    //return $"(?{flags})\b{matchVal}\b";
+                    if(!f.HasFlag(MpContentQueryBitFlags.CaseSensitive)) {
+                        matchVal = matchVal.ToUpper();
                     }
-                    return $"(?{flags})\b{matchVal}\b";
+                    return $@"\b{matchVal}\b";
                 }
                 return $"{matchVal}";
             }
@@ -278,6 +282,11 @@ namespace MonkeyPaste.Common {
                 return DateTime.Now - ts;
             }
             return null;
+        }
+
+        public static string GetMatchValueModelToken(this MpContentQueryBitFlags sqf, string st) {
+            st = st == null ? string.Empty : st;
+            return $"{sqf.HasFlag(MpContentQueryBitFlags.CaseSensitive)},{sqf.HasFlag(MpContentQueryBitFlags.WholeWord)},{sqf.HasFlag(MpContentQueryBitFlags.Regex)},{st.ToBase64String()}";
         }
     }
 

@@ -99,8 +99,16 @@ function isBright(hex_or_color_name_or_rgb_or_rgba, brightThreshold = 150) {
 
 function parseRgba(rgb_Or_rgba_Or_colorName_Or_hex_Str) {
     let rgba = null;
-    if (typeof rgb_Or_rgba_Or_colorName_Or_hex_Str === 'string' || rgb_Or_rgba_Or_colorName_Or_hex_Str instanceof String) {
+    if (typeof rgb_Or_rgba_Or_colorName_Or_hex_Str === 'string' ||
+        rgb_Or_rgba_Or_colorName_Or_hex_Str instanceof String) {
         // is string
+        if (rgb_Or_rgba_Or_colorName_Or_hex_Str.startsWith('var(')) {
+            // css variable 
+            // (occurs in plain html conversion)
+            // NOTE since no way to get value or know its usage,
+            // and this probably a bad idea but substituting it for a random hex color
+            rgb_Or_rgba_Or_colorName_Or_hex_Str = getRandomPaletteColor()
+        }
         if (rgb_Or_rgba_Or_colorName_Or_hex_Str.startsWith('#')) {
             // is hex color string
             rgba = hexToRgba(rgb_Or_rgba_Or_colorName_Or_hex_Str);

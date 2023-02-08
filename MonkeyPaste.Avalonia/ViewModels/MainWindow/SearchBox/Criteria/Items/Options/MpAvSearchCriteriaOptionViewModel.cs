@@ -210,9 +210,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public bool IsCheckable => UnitType.HasFlag(MpSearchCriteriaUnitFlags.Text) && !UnitType.HasFlag(MpSearchCriteriaUnitFlags.RegEx);
+        public bool IsCheckable => 
+            UnitType.HasFlag(MpSearchCriteriaUnitFlags.Text) && 
+            !UnitType.HasFlag(MpSearchCriteriaUnitFlags.RegEx);
 
         public bool IsChecked { get; set; }
+        public bool IsChecked2 { get; set; }
 
         public bool IsEnabled { get; set; } = true;
 

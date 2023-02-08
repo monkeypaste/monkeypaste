@@ -17,7 +17,8 @@ namespace MonkeyPaste.Common {
         EnumerableValue = 4096,
         RegEx = 32,
         CaseSensitivity = 64,
-        Bit = 8192
+        Bit = 8192,
+        WholeWord = 16384
     };
     public static class MpSearchCriteriaUnitFlagExtensions {
         public static bool IsUnsignedNumeric(this MpSearchCriteriaUnitFlags scuf) {
