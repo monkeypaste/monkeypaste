@@ -127,14 +127,8 @@ namespace MonkeyPaste.Avalonia {
                 Items.ForEach(x => x.IsSelected = x.TagId == _selectedItemId);
             }
         }
-
-        public MpAvTagTileViewModel LastSelectedLinkItem =>
-            Items
-            .Where(x => x.IsLinkTag)
-            .OrderByDescending(x => x.LastSelectedDateTime)
-            .FirstOrDefault();
         
-        public MpAvTagTileViewModel LastSelectedActionItem =>
+        public MpAvTagTileViewModel LastSelectedActiveItem =>
             Items
             .Where(x => x.IsNotGroupTag)
             .OrderByDescending(x => x.LastSelectedDateTime)
@@ -180,14 +174,7 @@ namespace MonkeyPaste.Avalonia {
                 SelectTagCommand.Execute(value);
             }
         }
-        public bool IsSelectionEnabled {
-            get {
-                //if(MpAvSearchCriteriaItemCollectionViewModel.Instance.HasCriteriaItems) {
-                //    return false;
-                //}
-                return true;
-            }
-        }
+
         public bool IsSelecting { get; private set; } = false;
         //public bool IsNavButtonsVisible => MpAvMainWindowViewModel.Instance.IsHorizontalOrientation && 
         //                                    TagTrayTotalWidth > TagTrayScreenWidth;
@@ -387,9 +374,7 @@ namespace MonkeyPaste.Avalonia {
                         //Debugger.Break();
                         SelectedItem = AllTagViewModel;
                     }
-                    break;
-                case nameof(IsSelectionEnabled):
-                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.CanSelect)));
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsActiveTag)));
                     break;
             }
         }
@@ -409,9 +394,6 @@ namespace MonkeyPaste.Avalonia {
 
                 case MpMessageType.TraySelectionChanged:
                     HandleClipTraySelectionChange();//.FireAndForgetSafeAsync(this);
-                    break;
-                case MpMessageType.SearchCriteriaItemsChanged:
-                    OnPropertyChanged(nameof(IsSelectionEnabled));
                     break;
                 
                 case MpMessageType.QueryChanged:
@@ -520,6 +502,8 @@ namespace MonkeyPaste.Avalonia {
                 OnPropertyChanged(nameof(PinnedItems));
                 OnPropertyChanged(nameof(IsNavButtonsVisible));
                 OnPropertyChanged(nameof(TagTrayScreenWidth));
+            }, (args) => {
+                return args is MpAvTagTileViewModel ttvm && ttvm.IsNotGroupTag;
             });
 
         public ICommand SelectTagCommand => new MpCommand<object>(
@@ -568,17 +552,13 @@ namespace MonkeyPaste.Avalonia {
                     if (SelectedItem.IsQueryTag) {
                         MpAvSearchCriteriaItemCollectionViewModel.Instance
                             .SelectAdvancedSearchCommand.Execute(SelectedItem.TagId);
-                    } else if (SelectedItem.IsLinkTag &&
-                                MpAvSearchCriteriaItemCollectionViewModel.Instance.IsAdvSearchActive) {
-                        MpAvSearchCriteriaItemCollectionViewModel.Instance
-                            .SelectSearchTagCommand.Execute(SelectedItem.TagId);
                     } else {
                         MpPlatform.Services.Query.NotifyQueryChanged(true);
                     }
                 }
             },
             (args) => {
-                return args != null && !IsSelecting && IsSelectionEnabled;
+                return args != null && !IsSelecting;
             });
 
 

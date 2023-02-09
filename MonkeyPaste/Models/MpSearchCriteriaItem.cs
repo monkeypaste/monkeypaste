@@ -32,6 +32,11 @@ namespace MonkeyPaste {
 
         public string Options { get; set; }
 
+        public string MatchValue { get; set; }
+
+        public int IsCaseSensitiveValue { get; set; }
+        public int IsWholeWordValue { get; set; }
+
         [Column("e_MpLogicalQueryType")]
         public string NextJoinTypeName { get; set; } = DEFAULT_QUERY_JOIN_TYPE.ToString();
 
@@ -55,6 +60,17 @@ namespace MonkeyPaste {
             }
         }
 
+        [Ignore]
+        public bool IsCaseSensitive {
+            get => IsCaseSensitiveValue == 1;
+            set => IsCaseSensitiveValue = value ? 1 : 0;
+        }
+        [Ignore]
+        public bool IsWholeWord {
+            get => IsWholeWordValue == 1;
+            set => IsWholeWordValue = value ? 1 : 0;
+        }
+
         public MpLogicalQueryType NextJoinType {
             get => NextJoinTypeName.ToEnum<MpLogicalQueryType>();
             set => NextJoinTypeName = value.ToString();
@@ -70,6 +86,9 @@ namespace MonkeyPaste {
             int sortOrderIdx = -1,
             MpLogicalQueryType nextJoinType = DEFAULT_QUERY_JOIN_TYPE,
             string options = "",
+            string matchValue = "",
+            bool isCaseSensitive = false,
+            bool isWholeWord = false,
             bool suppressWrite = false) {
             if(tagId < 0 && !suppressWrite) {
                 throw new Exception("Must provide tag id");
@@ -79,7 +98,10 @@ namespace MonkeyPaste {
                 QueryTagId = tagId,
                 SortOrderIdx = sortOrderIdx,
                 NextJoinType = nextJoinType,
-                Options = options
+                Options = options,
+                MatchValue = matchValue,
+                IsCaseSensitive = isCaseSensitive,
+                IsWholeWord = isWholeWord
             };
 
             if(!suppressWrite) {

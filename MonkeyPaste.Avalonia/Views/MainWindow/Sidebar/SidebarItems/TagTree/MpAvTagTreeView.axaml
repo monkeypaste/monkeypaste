@@ -31,8 +31,6 @@
                     Value="Disabled" />
             <Setter Property="IsExpanded"
                     Value="{Binding IsExpanded, Mode=TwoWay}" />
-            <Setter Property="IsEnabled"
-                    Value="{Binding CanSelect}" />
         </Style>
         <!--<Style Selector="TreeView#TagTreeView TreeViewItem /template/ Border#PART_LayoutRoot Grid#PART_Header Panel#PART_ExpandCollapseChevronContainer ToggleButton#PART_ExpandCollapseChevron Border Path#ChevronPath">-->
         <!--<Style Selector="TreeView#TagTreeView TreeViewItem /template/ ToggleButton#expander /template/ Path#ChevronPath">

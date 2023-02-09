@@ -610,11 +610,7 @@ namespace MonkeyPaste.Avalonia {
                 //}
                 return false;
             }
-        }
-
-        
-
-        
+        }      
 
         #region Scroll
 
@@ -643,11 +639,8 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
         public bool IsPinned => Parent != null &&
                                 Parent.PinnedItems.Any(x => x.CopyItemId == CopyItemId);
-
-
         public bool CanVerticallyScroll => !IsContentReadOnly ?
                                                 EditableContentSize.Height > TileContentHeight :
                                                 UnconstrainedContentDimensions.Height > TileContentHeight;

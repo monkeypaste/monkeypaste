@@ -249,9 +249,14 @@ function onDragOver(e) {
 
     // VALIDATE SELF DROP
     if (isDragging()) {
-        let is_drop_over_drag_sel = isDocIdxInRange(DropIdx, getDocSelection());
+        let sel = getDocSelection();
+        let is_drop_over_drag_sel = isDocIdxInRange(DropIdx, sel);
         let is_drop_over_template = getAllTemplateDocIdxs().includes(DropIdx);
-        if (is_drop_over_drag_sel || is_drop_over_template) {
+        if (!is_drop_over_drag_sel && !is_drop_over_template) {
+            is_drop_over_drag_sel = isPointInRange(WindowMouseLoc, sel);
+        }
+        if (is_drop_over_drag_sel ||
+            is_drop_over_template) {
             DropIdx = -1;
             e.dataTransfer.dropEffect = "none";
             log('invalidating self drop. DROP EFFECT SHOULD BE NONE IS: ' + e.dataTransfer.dropEffect + ' over drag sel: ' + is_drop_over_drag_sel + ' over template: ' + is_drop_over_template);
@@ -274,10 +279,13 @@ function onDragLeave(e) {
     //let emp = getClientMousePos(e);
     let editor_rect = getEditorContainerRect();
     if (isPointInRect(editor_rect, WindowMouseLoc)) {
+        resetDrop(e.fromHost, false);
+        log('drag canceled (pointer still in window)');
+        onDragLeave_ntf();
         return;
     }
 
-    log('drag leave confirmed');
+    log('drag leave');
 
     resetDrop(e.fromHost, true);
 
@@ -285,11 +293,6 @@ function onDragLeave(e) {
 }
 
 function onDrop(e) {
-    // get drag dist before down loc is cleared
-    let drag_dist = isDragging() ? dist(WindowMouseLoc, WindowMouseDownLoc) : MIN_DRAG_DIST;
-
-    updateWindowMouseState(e);
-
     // OVERRIDE DEFAULT
 
     // stops the browser from redirecting.
@@ -298,30 +301,46 @@ function onDrop(e) {
         e.preventDefault();
     }
 
+    // get drag dist before down loc is cleared
+    log('drop attempting. mp ' + pointStr(WindowMouseLoc) + ' mdp ' + pointStr(WindowMouseDownLoc));
+
+    let drag_dist =
+        isDragging() && isPoint(WindowMouseLoc) && isPoint(WindowMouseDownLoc) ?
+            dist(WindowMouseLoc, WindowMouseDownLoc) : null;
+
+    updateWindowMouseState(e);
+
+    
+
     // VALIDATE
 
+    if (DropIdx < 0) {
+        log('Drop rejected, dropIdx ' + DropIdx);
+        resetDrop(e.fromHost, false);
+        return false;
+    }
     if (!isDropping()) {
         log('onDrop called but not dropping, ignoring and returning false');
-        resetDrop(e.fromHost, true);
+        resetDrop(e.fromHost, false);
         return false;
     }
 
     let dropEffect = processEffectAllowed(e);
     if (dropEffect == 'none') {
         log('onDrop called but dropEffect was none, ignoring and returning false');
-        resetDrop(e.fromHost, true);
+        resetDrop(e.fromHost, false);
         return false;
     }
 
     if (isDragging() && isDocIdxInRange(DropIdx, getDocSelection())) {
         log('onDrop called but drop within drag range, ignoring and returning false');
-        resetDrop(e.fromHost, true);
+        resetDrop(e.fromHost, false);
         return false;
     }
 
-    if (drag_dist < MIN_DRAG_DIST) {
+    if (isDragging() && (!drag_dist || drag_dist < MIN_DRAG_DIST)) {
         log('Drop rejected, dist was ' + drag_dist + ' minimum is ' + MIN_DRAG_DIST);
-        resetDrop(e.fromHost, true);
+        resetDrop(e.fromHost, false);
         return false;
     }
 

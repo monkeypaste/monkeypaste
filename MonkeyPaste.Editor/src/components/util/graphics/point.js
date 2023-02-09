@@ -77,6 +77,13 @@ function dist(p1, p2) {
 function distSqr(p1, p2) {
 	return Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2);
 }
+
+function pointStr(p) {
+	if (!isPoint(p)) {
+		return p == null ? "NULL" : "NOT POINT";
+	}
+	return p.x + ',' + p.y;
+}
 // #endregion Actions
 
 // #region Event Handlers

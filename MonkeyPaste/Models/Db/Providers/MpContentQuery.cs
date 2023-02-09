@@ -53,7 +53,7 @@ namespace MonkeyPaste {
 
         private static async Task<List<int>> PerformContentQueryAsync(MpIQueryInfo qi, IEnumerable<int> tagIds, bool isAdvanced, int idx) {
             string qi_root_id_query_str = ConvertQueryToSql(qi, tagIds, isAdvanced, out var args);
-            MpConsole.WriteLine($"Current DataModel Query ({idx}): " + qi_root_id_query_str);
+            MpConsole.WriteLine($"Current DataModel Query ({idx}): " + MpDb.GetParameterizedQueryString(qi_root_id_query_str,args));
             var result = await MpDb.QueryScalarsAsync<int>(qi_root_id_query_str, args);
             return result.Distinct().ToList();
         }
@@ -61,7 +61,7 @@ namespace MonkeyPaste {
 
         private static string ConvertQueryToSql(MpIQueryInfo qi, IEnumerable<int> tagIds, bool isAdvanced, out object[] args) {
             MpContentQueryBitFlags qf = qi.QueryFlags;
-            string sortClause = string.Empty;
+            string orderByClause = string.Empty;
             List<string> types = new List<string>();
             List<string> filters = new List<string>();
 
@@ -86,66 +86,90 @@ namespace MonkeyPaste {
             }
 
             if (qf.HasFlag(MpContentQueryBitFlags.TextType)) {
-                types.Add(string.Format(@"e_MpCopyItemType='{0}'", MpCopyItemType.Text.ToString()));
-            }
-            if (qf.HasFlag(MpContentQueryBitFlags.FileType)) {
-                types.Add(string.Format(@"e_MpCopyItemType='{0}'", MpCopyItemType.FileList.ToString()));
+                //types.Add(string.Format(@"e_MpCopyItemType='{0}'", MpCopyItemType.Text.ToString()));
+                types.Add("e_MpCopyItemType=?");
+                argList.Add(MpCopyItemType.Text.ToString());
             }
             if (qf.HasFlag(MpContentQueryBitFlags.ImageType)) {
-                types.Add(string.Format(@"e_MpCopyItemType='{0}'", MpCopyItemType.Image.ToString()));
+                //types.Add(string.Format(@"e_MpCopyItemType='{0}'", MpCopyItemType.Image.ToString()));
+                types.Add("e_MpCopyItemType=?");
+                argList.Add(MpCopyItemType.Image.ToString());
+            }
+            if (qf.HasFlag(MpContentQueryBitFlags.FileType)) {
+                //types.Add(string.Format(@"e_MpCopyItemType='{0}'", MpCopyItemType.FileList.ToString()));
+                types.Add("e_MpCopyItemType=?");
+                argList.Add(MpCopyItemType.FileList.ToString());
+            }
+
+            // ORDER
+
+            switch (qi.SortType) {
+                case MpContentSortType.Source:
+                    orderByClause = "SourcePath";
+                    break;
+                case MpContentSortType.Title:
+                    orderByClause = "Title";
+                    break;
+                case MpContentSortType.ItemData:
+                    orderByClause = "ItemData";
+                    break;
+                case MpContentSortType.ItemType:
+                    orderByClause = "e_MpCopyItemType";
+                    break;
+                case MpContentSortType.UsageScore:
+                    orderByClause = "UsageScore";
+                    break;
+                case MpContentSortType.CopyDateTime:
+                    orderByClause = "CopyDateTime";
+                    break;
+                default:
+                    orderByClause = "RootId";
+                    break;
             }
 
             // SORT
 
-            switch (qi.SortType) {
-                case MpContentSortType.CopyDateTime:
-                    sortClause = string.Format(@"ORDER BY {0}", "CopyDateTime");
-                    break;
-                case MpContentSortType.Source:
-                    sortClause = string.Format(@"ORDER BY {0}", "SourcePath");
-                    break;
-                case MpContentSortType.Title:
-                    sortClause = string.Format(@"ORDER BY {0}", "Title");
-                    break;
-                case MpContentSortType.ItemData:
-                    sortClause = string.Format(@"ORDER BY {0}", "ItemData");
-                    break;
-                case MpContentSortType.ItemType:
-                    sortClause = string.Format(@"ORDER BY {0}", "e_MpCopyItemType");
-                    break;
-                case MpContentSortType.UsageScore:
-                    sortClause = string.Format(@"ORDER BY {0}", "UsageScore");
-                    break;
-            }
+            string sortClause = qi.IsDescending ? "DESC" : "ASC";
 
-            if (!string.IsNullOrEmpty(sortClause)) {
-                sortClause = qi.IsDescending ? sortClause + " DESC" : sortClause;
+            // WHERE
+
+            string whereClause = string.Empty;
+            if(!tagIds.Contains(MpTag.AllTagId)) {
+                whereClause = AddWhereCondition(
+                    whereClause,
+                    @$"RootId IN 
+                        (SELECT DISTINCT pk_MpCopyItemId FROM MpCopyItem WHERE pk_MpCopyItemId IN 
+		                    (SELECT fk_MpCopyItemId FROM MpCopyItemTag WHERE fk_MpTagId IN 
+                                ({string.Join(",", tagIds)})))");
+            }            
+
+            if(arg_filters.Count > 0) {
+                string filter_op = isAdvanced ? " AND " : " OR ";
+                whereClause = AddWhereCondition(whereClause, @$"({string.Join(filter_op, arg_filters.Select(x => x.Item1))})");
+            }
+            if (types.Count > 0) {
+                whereClause = AddWhereCondition(whereClause, @$"({string.Join(" OR ", types)})");
             }
 
             // SELECT GEN
 
-            string tag_where_stmt = $"fk_MpTagId IN ({string.Join(",", tagIds)})";
-            string tagClause =
-                @$"RootId IN 
-                    (SELECT DISTINCT pk_MpCopyItemId FROM MpCopyItem WHERE pk_MpCopyItemId IN 
-		                (SELECT fk_MpCopyItemId FROM MpCopyItemTag WHERE {tag_where_stmt}))";
-
-            string sql_view = isAdvanced ? "MpContentQueryView_advanced" : "MpContentQueryView_simple";
-            string query = $"SELECT RootId FROM {sql_view} where {tagClause}";
-            string filter_op = isAdvanced ? " AND " : " OR ";
-            if(arg_filters.Count > 0) {
-                query += $" AND ({string.Join(filter_op, arg_filters.Select(x=>x.Item1))})";
-            }
-            if (types.Count > 0) {
-                query += $" AND ({string.Join(" OR ", types)})";
-            }
-            query += $" {sortClause}";
-
+            string selectClause = "RootId";
+            string fromClause = $"{(isAdvanced ? "MpContentQueryView_advanced" : "MpContentQueryView_simple")}";
+            string query = @$"SELECT {selectClause} FROM {fromClause} WHERE {whereClause} ORDER BY {orderByClause} {sortClause}";
             args = argList.ToArray();
             return query;
         }
 
         #region Helpers
+
+        private static string AddWhereCondition(string whereClause, string condition) {
+            if(string.IsNullOrEmpty(whereClause)) {
+                whereClause = condition;
+            } else {
+                whereClause = @$"{whereClause} AND {condition}";
+            }
+            return whereClause;
+        }
 
         private static List<Tuple<string,List<object>>> GetParameterizedFilters(MpIQueryInfo qi) {
             List<Tuple<string, List<object>>> arg_filters = new List<Tuple<string, List<object>>>();
@@ -245,12 +269,17 @@ namespace MonkeyPaste {
                 if(isValue) {
                     return fieldOrSearchText.ToUpper();
                 }
-                return string.Format(@"UPPER({0})", fieldOrSearchText);
+                return $@"UPPER({fieldOrSearchText})";
             }
             return fieldOrSearchText;
         }
 
-
+        private static string EscapeMatchStr(this string matchStr) {
+            if(matchStr == null) {
+                return string.Empty;
+            }
+            return matchStr.Replace(@"\",@"\\\\");
+        }
 
         #endregion
     }

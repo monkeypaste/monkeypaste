@@ -9,6 +9,7 @@ using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using System.Text.RegularExpressions;
 using Xamarin.Forms;
 using System.Data.Common;
+using SQLite;
 
 namespace MonkeyPaste {
     
@@ -131,9 +132,7 @@ namespace MonkeyPaste {
             }
             return result[0];
         }
-        #endregion
-
-        
+        #endregion        
 
         #region MpIcon
 
@@ -442,7 +441,6 @@ namespace MonkeyPaste {
 
         #endregion
 
-
         #region MpCopyItemTransaction
 
         public static async Task<List<MpCopyItemTransaction>> GetCopyItemTransactionsByCopyItemIdAsync(int ciid) {
@@ -462,7 +460,6 @@ namespace MonkeyPaste {
         }
 
         #endregion
-
 
         #region MpISourceRef
 
@@ -515,6 +512,22 @@ namespace MonkeyPaste {
             return result;
         }
 
+        public static async Task<int> GetTotalCopyItemCountForTagAndAllDescendantsAsync(int ciid) {
+            string query =
+                @"WITH RECURSIVE
+                      tag_descendant(n) AS (
+                        VALUES(?)
+                        UNION 
+                        SELECT MpTag.pk_MpTagId FROM MpTag, tag_descendant
+                         WHERE fk_ParentTagId=tag_descendant.n
+                      )
+                    SELECT COUNT(DISTINCT fk_MpCopyItemId) FROM MpCopyItemTag WHERE fk_MpTagId IN
+                    (SELECT ? UNION ALL SELECT MpTag.pk_MpTagId FROM MpTag
+                     WHERE fk_ParentTagId IN tag_descendant AND fk_ParentTagId > 0);";
+            var result = await MpDb.QueryScalarAsync<int>(query, ciid);
+            return result;
+        }
+        
         public static List<int> GetTagIdsForCopyItem(int ciid) {
             string query = string.Format(@"select fk_MpTagId from MpCopyItemTag where fk_MpCopyItemId={0}", ciid);
             var result = MpDb.QueryScalars<int>(query);
@@ -817,6 +830,8 @@ namespace MonkeyPaste {
         #endregion
 
         #endregion
+
+        
 
         #endregion
 

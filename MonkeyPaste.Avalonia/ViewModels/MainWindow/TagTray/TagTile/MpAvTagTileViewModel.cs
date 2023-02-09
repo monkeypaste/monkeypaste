@@ -30,6 +30,7 @@ namespace MonkeyPaste.Avalonia {
 
         private string _originalTagName = string.Empty;
         private bool _wasEditingName = false;
+
         #endregion
 
         #region Statics
@@ -39,36 +40,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region Properties
-
-        #region View Models
-
-        public IEnumerable<MpAvTagTileViewModel> SortedItems => Items.OrderBy(x => x.TreeSortIdx);
-
-        public MpMenuItemViewModel AddChildPopupMenuItemViewModel {
-            get {
-                if (!IsGroupTag) {
-                    return null;
-                }
-                return new MpMenuItemViewModel() {
-                    SubItems = new List<MpMenuItemViewModel>() {
-                        new MpMenuItemViewModel() {
-                            IconSourceObj = "FolderImage",
-                            Header = "Group",
-                            Command = AddNewChildTagCommand,
-                            CommandParameter = MpTagType.Group
-                        },
-                        new MpMenuItemViewModel() {
-                            IconSourceObj = "BinocularsTiltedImage",
-                            Header = "Search",
-                            Command = AddNewChildTagCommand,
-                            CommandParameter = MpTagType.Query
-                        },
-                    }
-                };
-            }
-        }
-        #endregion
+        #region Interfaces
 
         #region MpAvTreeSelectorViewModelBase Implementation
 
@@ -97,22 +69,22 @@ namespace MonkeyPaste.Avalonia {
         //private bool _isSelected = false;
         public bool IsSelected {
             get {
-                if(Parent == null) {
+                if (Parent == null) {
                     return false;
                 }
                 return Parent.SelectedItemId == TagId;
             }
             set {
-                if(Parent == null) {
+                if (Parent == null) {
                     return;
                 }
-                if(value) {
-                    if(Parent.IsSelecting) {
+                if (value) {
+                    if (Parent.IsSelecting) {
                         // break here or stack overflows
                         return;
                     }
                     // setter calls SelectTagCommand
-                    Parent.SelectedItemId = TagId;   
+                    Parent.SelectedItemId = TagId;
                 }
             }
         }
@@ -169,6 +141,7 @@ namespace MonkeyPaste.Avalonia {
                             ShortcutArgs = new object[] { MpShortcutType.SelectTag, TagId },
                         },
                         new MpMenuItemViewModel() {
+                            IsVisible = IsNotGroupTag,
                             Header = IsModelPinned ? "Unpin" : "Pin",
                             AltNavIdx = 0,
                             IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("PinImage") as string,
@@ -239,12 +212,93 @@ namespace MonkeyPaste.Avalonia {
         public ICommand AssignCommand => AssignHotkeyCommand;
 
         #endregion
+        #endregion
+
+        #region Properties
+
+        #region View Models
+
+        public IEnumerable<MpAvTagTileViewModel> SortedItems => Items.OrderBy(x => x.TreeSortIdx);
+
+        public MpMenuItemViewModel AddChildPopupMenuItemViewModel {
+            get {
+                if (!IsGroupTag) {
+                    return null;
+                }
+                return new MpMenuItemViewModel() {
+                    SubItems = new List<MpMenuItemViewModel>() {
+                        new MpMenuItemViewModel() {
+                            IconSourceObj = "FolderImage",
+                            Header = "Group",
+                            Command = AddNewChildTagCommand,
+                            CommandParameter = MpTagType.Group
+                        },
+                        new MpMenuItemViewModel() {
+                            IconSourceObj = "BinocularsTiltedImage",
+                            Header = "Search",
+                            Command = AddNewChildTagCommand,
+                            CommandParameter = MpTagType.Query
+                        },
+                    }
+                };
+            }
+        }
+        #endregion
 
         #region State
 
+        //private int? _totalCopyItemCount = null; // only used by all tag
+        //public int LinkedCopyItemCount {
+        //    get {
+        //        if(IsAllTag) {
+        //            return _totalCopyItemCount == null ? 0 : _totalCopyItemCount.Value;
+        //        }
+        //        if(_linkedCopyItemIds == null) {
+        //            return 0;
+        //        }
+        //        return _linkedCopyItemIds.Count();
+        //    }
+        //    set {
+        //        if(!IsAllTag) {
+        //            // should only by called for all tag
+        //            Debugger.Break();
+        //            return;
+        //        }
+        //        _totalCopyItemCount = value;
+        //        OnPropertyChanged(nameof(LinkedCopyItemCount));
+        //    }
+        //}
+
+        //private IEnumerable<int> _linkedCopyItemIds; // used by all link tags except all
+        //public IEnumerable<int> LinkedCopyItemIds {
+        //    get {
+        //        if(IsAllTag) {
+        //            // shouldn't be accessed
+        //            Debugger.Break();
+        //            return null;
+        //        }
+        //        return _linkedCopyItemIds;
+        //    }
+        //    set {
+        //        if(_linkedCopyItemIds != value) {
+        //            _linkedCopyItemIds = value;
+        //            OnPropertyChanged(nameof(LinkedCopyItemIds));
+        //        }
+        //    }
+        //}
+        //public int LinkedCopyItemCount { get; set; } = -1;
+
+        public bool IsActiveTag {
+            get {
+                if(IsGroupTag || Parent == null) {
+                    return false;
+                }
+                return Parent.LastSelectedActiveItem == this;
+            }
+        }
+
         public bool IsAnyBusy => IsBusy || Children.Any(x => x.IsAnyBusy);
-        public bool CanSelect => Parent != null && Parent.IsSelectionEnabled;
-        public IEnumerable<int> LinkedCopyItemIds { get; private set; } = new List<int>();
+
         public ObservableCollection<int> CopyItemIdsNeedingView { get; set; } = new ObservableCollection<int>();
         public int BadgeCount => CopyItemIdsNeedingView.Count;
 
@@ -298,25 +352,10 @@ namespace MonkeyPaste.Avalonia {
         public bool IsTagNameTextBoxFocused { get; set; } = false;
         public bool? IsLinkedToSelectedClipTile { get; set; } = false;
 
-        public int TagClipCount { get; set; }
-        public string TagClipCountText { 
-            get {
-                if(IsAnyBusy) {
-                    return "?";
-                }
+        public int? TagClipCount { get; set; }
 
-                if(IsLinkTag) {
-                    return TagClipCount.ToString();
-                }
-                if(IsGroupTag) {
-                    return string.Empty;
-                }
-                if(IsSelected) {
-                    return TagClipCount.ToString();
-                }
-                return string.Empty;
-            }
-        }
+        public string TagClipCountText =>
+            TagClipCount == null ? string.Empty : TagClipCount.Value.ToString();
 
         public MpShape MenuIconShape =>
             IsLinkTag ? null : IsQueryTag ? QUERY_SHAPE : IsGroupTag ? GROUP_SHAPE : null;
@@ -362,7 +401,7 @@ namespace MonkeyPaste.Avalonia {
                 if(Tag == null || !IsQueryTag) {
                     if(Parent != null && IsGroupTag) {
                         // group tags pass through last selection
-                        return Parent.LastSelectedActionItem.SortType;
+                        return Parent.LastSelectedActiveItem.SortType;
                     }
                     return MpAvClipTileSortFieldViewModel.Instance.SelectedSortType;
                 }
@@ -384,7 +423,7 @@ namespace MonkeyPaste.Avalonia {
                 if(Tag == null || !IsQueryTag) {
                     if(Parent != null && IsGroupTag) {
                         // group tags pass through last selection
-                        return Parent.LastSelectedActionItem.IsSortDescending;
+                        return Parent.LastSelectedActiveItem.IsSortDescending;
                     }
                     return MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending;
                 }
@@ -580,11 +619,19 @@ namespace MonkeyPaste.Avalonia {
             if (ciid == 0 || Tag == null ||  Tag.Id == 0) {
                 return false;
             }
+            if(IsAllTag) {
+                return true;
+            }
             bool isLinked = await MpDataModelProvider.IsTagLinkedWithCopyItemAsync(Tag.Id, ciid);
             return isLinked;
         }
 
         public void UpdateLinkToSelectedClipTile(IEnumerable<int> assocTagIds) {
+            if(IsAllTag) {
+                // always linked
+                IsLinkedToSelectedClipTile = true;
+                return;
+            }
             if(assocTagIds.Any(x=>x == TagId)) {
                 IsLinkedToSelectedClipTile = true;
             } else if(AllDescendants.Cast<MpAvTagTileViewModel>().Any(x=>assocTagIds.Any(y=>y == x.TagId))) {
@@ -617,14 +664,15 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
 
         #region Db Events
-        protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
-            
+        protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {            
             if (e is MpShortcut sc) {
                 if (sc.CommandParameter == TagId.ToString() && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
-            } else if (e is MpCopyItem ci && IsAllTag) { 
-                LinkCopyItemCommand.Execute(ci.Id);
+            } else if (e is MpCopyItem && IsAllTag) {
+                Dispatcher.UIThread.Post(() => {
+                    TagClipCount++;
+                });
             }
         }
 
@@ -650,9 +698,11 @@ namespace MonkeyPaste.Avalonia {
                 }
             } else if (e is MpCopyItemTag cit && cit.TagId == TagId) {
                 UnlinkCopyItemCommand.Execute(cit.CopyItemId);
-            }// else if (e is MpCopyItem ci && LinkedCopyItemIds.Contains(ci.Id)) {
-            //    UnlinkCopyItemCommand.Execute(ci.Id);
-            //}
+            } else if (e is MpCopyItem && IsAllTag) {
+                Dispatcher.UIThread.Post(() => {
+                    TagClipCount--;
+                });
+            }
         }
         #endregion
 
@@ -687,6 +737,15 @@ namespace MonkeyPaste.Avalonia {
                         Parent.SelectTagCommand.Execute(this);
                     } else {
                         IsTagNameReadOnly = true;
+                        OnPropertyChanged(nameof(IsActiveTag));
+                    }
+                    break;
+                case nameof(IsActiveTag):
+                    if(IsActiveTag) {
+                        break;
+                    }
+                    if(IsQueryTag) {
+                        UpdateClipCountAsync().FireAndForgetSafeAsync(this);
                     }
                     break;
                 case nameof(IsTagNameTextBoxFocused):
@@ -771,8 +830,14 @@ namespace MonkeyPaste.Avalonia {
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch(msg) {
-                case MpMessageType.TrayScrollChanged:
                 case MpMessageType.RequeryCompleted:
+                    UpdateBadge();
+                    if(IsActiveTag && IsQueryTag) {
+                        // repopulate count for query tag
+                        UpdateClipCountAsync().FireAndForgetSafeAsync(this);
+                    }
+                    break;
+                case MpMessageType.TrayScrollChanged:
                 case MpMessageType.JumpToIdxCompleted:
                     UpdateBadge();
                     break;
@@ -782,12 +847,38 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-
         private async Task UpdateClipCountAsync() {
+            if (IsGroupTag) {
+                return;
+            }
             await Dispatcher.UIThread.InvokeAsync(async () => {
-                LinkedCopyItemIds = await MpDataModelProvider.GetCopyItemIdsForTagAsync(TagId);
-                TagClipCount = SelfAndAllDescendants.Cast<MpAvTagTileViewModel>().SelectMany(x => x.LinkedCopyItemIds).Distinct().Count();
-                //TagClipCount = this_tag_link_count + Items.Sum(x => x.TagClipCount);
+                if(IsAllTag) {
+                    if(TagClipCount == null) {
+                        // startup case
+                        TagClipCount = await MpDataModelProvider.GetTotalCopyItemCountAsync();
+                    } else {
+                        // ignored, all updated handled in db callbacks
+                    }
+                } else {
+                    if(IsLinkTag) {
+                        TagClipCount = await MpDataModelProvider.GetTotalCopyItemCountForTagAndAllDescendantsAsync(TagId);
+                    } else {
+                        // query tag
+                        if(IsActiveTag) {
+                            if(!MpAvSearchCriteriaItemCollectionViewModel.Instance.IsAdvSearchActive) {
+                                // shouldn't happen
+                                Debugger.Break();
+                                TagClipCount = null;
+                            } else {
+                                TagClipCount = MpAvSearchCriteriaItemCollectionViewModel.Instance.TotalAvailableItemsInQuery;
+                            }
+                        } else {
+                            TagClipCount = null;
+                        }
+                    }
+                    //TagClipCount = 
+                    //    SelfAndAllDescendants.Cast<MpAvTagTileViewModel>().SelectMany(x => x.LinkedCopyItemIds).Distinct().Count();
+                }
             });            
         }
 
@@ -836,7 +927,8 @@ namespace MonkeyPaste.Avalonia {
             
             if(isLink) {
                 // try to create link, if it was created (and didn't already exist) notify any triggers
-                var cit = await MpCopyItemTag.Create(TagId, ciid, LinkedCopyItemIds.Count());
+                int linkCount = await MpDataModelProvider.GetCopyItemCountForTagAsync(TagId);
+                var cit = await MpCopyItemTag.Create(TagId, ciid, linkCount);
 
                 if (!cit.WasDupOnCreate) {
                     CopyItemIdsNeedingView.Add(ciid);
@@ -1059,7 +1151,10 @@ namespace MonkeyPaste.Avalonia {
                     await LinkOrUnlinkCopyItemAsync((int)ciidArg, true);
                 });
             }, (ciidArg) => {
-                if(!CanLinkContent) {
+                if (IsAllTag) {
+                    return false;
+                }
+                if (!CanLinkContent) {
                     return false;
                 }
                 if (ciidArg is not int) {
@@ -1079,6 +1174,9 @@ namespace MonkeyPaste.Avalonia {
                     await LinkOrUnlinkCopyItemAsync((int)ciidArg, false);
                 });
             }, (ciidArg) => {
+                if(IsAllTag) {
+                    return false;
+                }
                 if (ciidArg is not int) {
                     return false;
                 }
@@ -1103,6 +1201,8 @@ namespace MonkeyPaste.Avalonia {
                 } else if (IsLinkedToSelectedClipTile.IsFalseOrNull()) {
                     LinkCopyItemCommand.Execute(ciid);
                 }
+            }, () => {
+                return !IsAllTag;
             });
 
         #endregion

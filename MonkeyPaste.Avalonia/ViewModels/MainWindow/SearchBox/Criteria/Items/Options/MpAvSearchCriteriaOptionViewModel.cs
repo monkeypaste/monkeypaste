@@ -59,12 +59,25 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsValueOption =>
+            !UnitType.HasFlag(MpSearchCriteriaUnitFlags.Enumerable);
+
         public int SelectedItemIdx {
             get {
                 if(SelectedItem == null) {
                     return -1;
                 }
                 return Items.IndexOf(SelectedItem);
+            }
+            set {
+                if(SelectedItemIdx != value) {
+                    if(value < 0 || value >= Items.Count) {
+                        SelectedItem = null;
+                    } else {
+                        SelectedItem = Items[value];
+                    }
+                    OnPropertyChanged(nameof(SelectedItemIdx));
+                }
             }
         }
 
@@ -88,17 +101,27 @@ namespace MonkeyPaste.Avalonia {
 
         public object SelectedItemPathObj {
             get {
-                if(ItemsOptionType == null || SelectedItemIdx < 0) {
+                // NOTE unused but maybe useful if
+                // dynamic menu is structure is added
+                // to determine selection path by reflection
+                if(ItemsOptionType == null || 
+                    SelectedItemIdx < 0) {
                     return null;
                 }
-                try {
-                    string selected_item_name = Enum.GetNames(ItemsOptionType)[SelectedItemIdx];
-                    if (Enum.TryParse(ItemsOptionType, selected_item_name, out var enumObj)) {
-                        return enumObj;
+                if(ItemsOptionType.IsEnum) {
+                    try {
+                        string selected_item_name = Enum.GetNames(ItemsOptionType)[SelectedItemIdx];
+                        if (Enum.TryParse(ItemsOptionType, selected_item_name, out var enumObj)) {
+                            return enumObj;
+                        }
                     }
-                } catch(Exception ex) {
-                    MpConsole.WriteTraceLine($"Error converting selected item to enum type.", ex);
+                    catch (Exception ex) {
+                        MpConsole.WriteTraceLine($"Error converting selected item to enum type.", ex);
+                    }
+                } else {
+                    // currently will occur on collection or device name
                 }
+               
                 Debugger.Break();
                 return null;
                 
@@ -219,8 +242,6 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsEnabled { get; set; } = true;
 
-        public bool IsLeafOption 
-            => Items == null || Items.Count == 0;
         public MpSearchCriteriaUnitFlags UnitType { get; set; }
 
         public MpContentQueryBitFlags FilterValue { get; set; }
@@ -239,76 +260,6 @@ namespace MonkeyPaste.Avalonia {
             HostCriteriaItem = host;
         }
 
-        public async Task InitializeAsync(string opt_path, int idx) {
-            IsBusy = true;
-
-            await Task.Delay(1);
-            bool? opt_checked = null;
-            int cur_opt_sel_idx = 0;
-            Type enumType = null;
-
-            var opt_parts = opt_path.Split("|");
-            if (opt_parts.Length < 2) {
-                throw new Exception($"Criteria option part parse error, each part needs full enum type and value part seperated by '|'");
-            }
-
-            // GET ENUM TYPE
-            string enumFullTypeName = opt_parts[0];
-            string enumAssemblyName = string.Join(".", enumFullTypeName.SplitNoEmpty(".").SkipLast(1));
-
-            var enumAssembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(x => x.GetName().Name == enumAssemblyName);
-            if (enumAssembly == null) {
-                throw new Exception($"Error cannot find assembly for type '{enumFullTypeName}'.");
-            }
-
-            try {
-                enumType = enumAssembly.GetType(enumFullTypeName);
-                string enum_value = opt_parts[1];
-                cur_opt_sel_idx = Enum.GetNames(enumType).IndexOf(enum_value);
-            }
-            catch (Exception ex) {
-                throw new Exception($"Error finding type '{enumFullTypeName}'.", ex);
-            }
-
-            // SET FILTER FLAG
-            string filter_name;
-            if (opt_parts.Length > 3) {
-                // HANDLE LEAF
-                var vals = opt_parts[2].ToListFromCsv(MpCsvFormatProperties.DefaultBase64Value);
-                if (vals.Count > 1) {
-                    vals.ForEach((x, idx) => Values[idx] = x);
-                } else if (vals.Count > 0) {
-                    Value = vals.FirstOrDefault();
-                } else {
-                    Value = string.Empty;
-                }
-
-                opt_checked = bool.Parse(opt_parts[3]);
-
-                filter_name = opt_parts[4];
-            } else {
-                //Values.ForEach(x => x = null);
-                filter_name = opt_parts[2];
-            }
-            IsChecked = opt_checked.IsTrue();
-            FilterValue = filter_name.ToEnum<MpContentQueryBitFlags>();
-
-            // SET CUR SELECTION
-            if (cur_opt_sel_idx >= Items.Count) {
-                MpConsole.WriteTraceLine($"Error criteria path mismatch option vm '{this}' cannot select idx '{cur_opt_sel_idx}' only has '{Items.Count}' options. Ignoring and selecting default");
-                cur_opt_sel_idx = Items.Count > 0 ? 0 : -1;
-            }
-
-            ItemsOptionType = enumType;
-            SelectedItem = cur_opt_sel_idx >= 0 ? Items[cur_opt_sel_idx] : null;
-
-            while (Items.Any(x => x.IsAnyBusy)) {
-                await Task.Delay(100);
-            }
-
-            IsBusy = false;
-        }
-
         #endregion
 
         #region Private Methods
@@ -321,15 +272,6 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsSelected):
                     HostCriteriaItem.OnPropertyChanged(nameof(HostCriteriaItem.Items));
                     HostCriteriaItem.OnPropertyChanged(nameof(HostCriteriaItem.IsInputVisible));
-                    //if((Items == null || Items.Count == 0) && !string.IsNullOrEmpty(Value)) {
-                    //    if(UnitType != MpSearchCriteriaUnitFlags.EnumerableValue) {
-                    //        // what's the unit in this case?
-                    //        Debugger.Break();
-                    //    }
-                    //    OnPropertyChanged(nameof(Value));
-                    //    // leaf enumerable value
-                    //}
-
                     OnPropertyChanged(nameof(Value));
                     break;
                 case nameof(Value1):
@@ -340,6 +282,8 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(Values):
                 case nameof(Value):
+                case nameof(IsChecked):
+                case nameof(IsChecked2):
                     if(HostCriteriaItem == null || IsBusy) {
                         // should only be busy during initial load 
                         // where collection handles ntf from adv search opened msg

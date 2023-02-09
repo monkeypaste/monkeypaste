@@ -27,33 +27,6 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <DockPanel LastChildFill="False">
-        <StackPanel DockPanel.Dock="Left"
-                    Orientation="Horizontal">
-            <TextBlock FontSize="24"
-                       FontWeight="Bold"
-                       Foreground="Gainsboro"
-                       Margin="20,0,15,0"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Left"
-                       Text="Search:" />
-            <!--  ALL TAG TILE  -->
-            <Button x:Name="AllTagTileContainer"
-                    Classes.selectedSearchTag="{Binding IsAllSelectedSearchTagId}"
-                    Classes="defaultButton textOnlyButton searchTagButton">
-                <TextBlock DataContext="{Binding AllTagId, Converter={x:Static local:MpAvTagIdToTagTileViewModelConverter.Instance}}"
-                           Text="{Binding TagName}" />
-            </Button>
-
-            <!--  SELECTED TAG TILE  -->
-            <Button x:Name="SelectedTagTileContainer"
-                    Classes.selectedSearchTag="{Binding !IsAllSelectedSearchTagId}"
-                    Classes="defaultButton textOnlyButton searchTagButton"
-                    IsVisible="{Binding AvailableNotAllTagId, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
-                <TextBlock DataContext="{Binding AvailableNotAllTagId, Converter={x:Static local:MpAvTagIdToTagTileViewModelConverter.Instance}}"
-                           Text="{Binding TagName}" />
-            </Button>
-
-        </StackPanel>
         <StackPanel DockPanel.Dock="Right"
                     Orientation="Horizontal">
 

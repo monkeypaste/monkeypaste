@@ -45,18 +45,31 @@ namespace MonkeyPaste.Avalonia {
         public MpContentSortType SortType =>
             MpAvClipTileSortFieldViewModel.Instance.SelectedSortType;
 
-        public int TagId =>
-            Parent == null ? 0 : Parent.SelectedSearchTagId;
-
-        public string MatchValue {
+        public int TagId {
             get {
-                string st = string.Empty;
-                if(LeafValueOptionViewModel != null) {
-                    st = LeafValueOptionViewModel.Value;
+                if(QueryFlags.HasFlag(MpContentQueryBitFlags.Tag)) {
+                    var ttvm = MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.Tag.Guid == MatchValue);
+                    if (ttvm == null) {
+                        // should have found, is tagId a pending query id?
+                        Debugger.Break();
+                    } else {
+                        return ttvm.TagId;
+                    }
                 }
-                return st;
+                return MpTag.AllTagId;
             }
         }
+            
+
+        //public string MatchValue {
+        //    get {
+        //        string st = string.Empty;
+        //        if(LeafValueOptionViewModel != null) {
+        //            st = LeafValueOptionViewModel.Value;
+        //        }
+        //        return st;
+        //    }
+        //}
 
         public MpContentQueryBitFlags QueryFlags { 
             get {
@@ -115,7 +128,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public MpAvSearchCriteriaOptionViewModel LeafValueOptionViewModel =>
-            SelectedOptionPath.LastOrDefault();
+            SelectedOptionPath.FirstOrDefault(x => x.IsValueOption);
 
         private ObservableCollection<MpAvSearchCriteriaOptionViewModel> _items;
         public ObservableCollection<MpAvSearchCriteriaOptionViewModel> Items {
@@ -173,10 +186,10 @@ namespace MonkeyPaste.Avalonia {
                         tovm.ItemsOptionType = typeof(MpContentOptionType);
                         tovm.Items = GetContentOptionViewModel(tovm);
                         break;
-                    //case MpRootOptionType.Collection:
-                    //    tovm.ItemsOptionType = typeof(MpFileOptionType);
-                    //    tovm.Items = GetCollectionOptionViewModel(tovm);
-                    //    break;
+                    case MpRootOptionType.Collection:
+                        tovm.ItemsOptionType = typeof(MpTag);
+                        tovm.Items = GetCollectionOptionViewModel(tovm);
+                        break;
                     case MpRootOptionType.Source:
                         tovm.ItemsOptionType = typeof(MpSourceOptionType);
                         tovm.Items = GetSourceOptionViewModel(tovm);
@@ -509,7 +522,7 @@ namespace MonkeyPaste.Avalonia {
                 var tovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
                 tovm.Label = ttvm.TagName;
                 tovm.UnitType = MpSearchCriteriaUnitFlags.EnumerableValue;
-                tovm.Value = ttvm.TagId.ToString();
+                tovm.Value = ttvm.Tag.Guid;
                 tovm.FilterValue = MpContentQueryBitFlags.Tag;
                 iovml.Add(tovm);
             }
@@ -524,14 +537,14 @@ namespace MonkeyPaste.Avalonia {
             // PATH: /Root/Source/Device
 
             var iovml = new List<MpAvSearchCriteriaOptionViewModel>();
-            string[] labels = Parent.UserDevices.Select(x=>x.MachineName).ToArray();
+            var udl = Parent.UserDevices.ToArray();
 
-            for (int i = 0; i < labels.Length; i++) {
+            foreach(var ud in udl) { 
                 var ovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
-                ovm.Label = labels[i];
+                ovm.Label = ud.MachineName;
                 ovm.UnitType = MpSearchCriteriaUnitFlags.EnumerableValue;
                 ovm.FilterValue = MpContentQueryBitFlags.DeviceName;
-                ovm.Value = labels[i];
+                ovm.Value = ud.Guid;
                 iovml.Add(ovm);
             }
             return new ObservableCollection<MpAvSearchCriteriaOptionViewModel>(iovml);
@@ -888,9 +901,6 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsJoinPanelVisible => 
             NextJoinType != MpSearchCriteriaItem.DEFAULT_QUERY_JOIN_TYPE;
-        public bool IsCaseSensitive { get; set; } = false;
-
-        public bool CanSetCaseSensitive { get; set; } = false;
 
         public bool IsInputVisible => 
             !Items[Items.Count - 1].HasChildren && 
@@ -934,6 +944,54 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public bool IsCaseSensitive {
+            get {
+                if(SearchCriteriaItem == null) {
+                    return false;
+                }
+                return SearchCriteriaItem.IsCaseSensitive;
+            }
+            set {
+                if(IsCaseSensitive != value) {
+                    SearchCriteriaItem.IsCaseSensitive = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(IsCaseSensitive));
+                }
+            }
+        }
+        
+        public bool IsWholeWord {
+            get {
+                if(SearchCriteriaItem == null) {
+                    return false;
+                }
+                return SearchCriteriaItem.IsWholeWord;
+            }
+            set {
+                if(IsWholeWord != value) {
+                    SearchCriteriaItem.IsWholeWord = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(IsWholeWord));
+                }
+            }
+        }
+        
+        public string MatchValue {
+            get {
+                if(SearchCriteriaItem == null) {
+                    return null;
+                }
+                return SearchCriteriaItem.MatchValue;
+            }
+            set {
+                if(MatchValue != value) {
+                    SearchCriteriaItem.MatchValue = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(MatchValue));
+                }
+            }
+        }
+        
         public string SearchOptions {
             get {
                 if(SearchCriteriaItem == null) {
@@ -986,10 +1044,27 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task InitializeAsync(MpSearchCriteriaItem sci) {
             IsBusy = true;
+            await Task.Delay(1);
 
             SearchCriteriaItem = sci;
 
-            RootOptionViewModel = await CreateRootOptionViewModelAsync(SearchOptions);
+            RootOptionViewModel = GetRootOption();
+            var cur_opt = RootOptionViewModel;
+            var sel_idxs = SearchOptions.SplitNoEmpty(",").Select(x => int.Parse(x));
+            foreach (var sel_idx in sel_idxs) {
+                if (cur_opt == null) {
+                    // is this expected behavior?
+                    Debugger.Break();
+                    break;
+                }
+                cur_opt.SelectedItemIdx = sel_idx;
+                cur_opt = cur_opt.SelectedItem;
+            }
+            if(LeafValueOptionViewModel != null) {
+                LeafValueOptionViewModel.Value = MatchValue;
+                LeafValueOptionViewModel.IsChecked = IsCaseSensitive;
+                LeafValueOptionViewModel.IsChecked2 = IsWholeWord;
+            }
 
             OnPropertyChanged(nameof(Items));
             OnPropertyChanged(nameof(SelectedJoinTypeIdx));
@@ -1004,9 +1079,22 @@ namespace MonkeyPaste.Avalonia {
                 // don't notify during load
                 return;
             }
-            SearchOptions = GetSelectedOptionsString();
-            if(ovm.IsLeafOption) {
+            IgnoreHasModelChanged = true;
 
+            SearchOptions =
+                string.Join(",", SelectedOptionPath.Where(x => x.SelectedItemIdx >= 0));
+            if(LeafValueOptionViewModel == null) {
+                MatchValue = null;
+                IsCaseSensitive = false;
+                IsWholeWord = false;
+            } else {
+                MatchValue = LeafValueOptionViewModel.Value;
+                IsCaseSensitive = LeafValueOptionViewModel.IsChecked;
+                IsWholeWord = LeafValueOptionViewModel.IsChecked2;
+            }
+
+            IgnoreHasModelChanged = false;
+            if(ovm.IsValueOption) {
                 Parent.NotifyQueryChanged(true);
             }
         }
@@ -1018,59 +1106,6 @@ namespace MonkeyPaste.Avalonia {
         private void ReceivedGlobalMessage(MpMessageType msg) {
 
         }
-        private async Task<MpAvSearchCriteriaOptionViewModel> CreateRootOptionViewModelAsync(string options) {
-            var root_opt_vm = GetRootOption();
-            if(string.IsNullOrWhiteSpace(options)) {
-                return root_opt_vm;
-            }
-            var cur_opt = root_opt_vm;
-            var opt_value_parts = options.Split("|");
-            string leaf_part = null;
-            string[] opt_parts = new string[] { };
-            if(opt_value_parts.Length > 0) {
-                opt_parts = opt_value_parts[0].Split(",");
-                if (opt_value_parts.Length > 1) {
-                    leaf_part = opt_value_parts[1];
-                } 
-            }
-            for (int i = 0; i < opt_parts.Length; i++) {
-                string opt_part = opt_parts[i];
-                if(string.IsNullOrEmpty(opt_part)) {
-                    cur_opt.SelectedItem = null;
-                    break;
-                }
-                try {
-                    cur_opt.SelectedItem = cur_opt.Items[int.Parse(opt_part)];
-                }
-                catch(Exception ex) {
-                    MpConsole.WriteTraceLine($"Criteria item id: {SearchCriteriaItemId} error. ex: ", ex);
-                    return GetRootOption();
-                }
-                cur_opt = cur_opt.SelectedItem;
-                if(cur_opt == null) {
-                    break;
-                }
-            }
-            if(leaf_part != null) {
-                try {
-                    var leaf_parts = leaf_part.Split(",");
-                    cur_opt.IsChecked = bool.Parse(leaf_parts[0]);
-                    cur_opt.IsChecked2 = bool.Parse(leaf_parts[1]);
-                    //bool re = bool.Parse(leaf_parts[2]);
-                    cur_opt.Value = leaf_parts[3].ToStringFromBase64();
-                } catch(Exception ex) {
-                    MpConsole.WriteTraceLine($"Error parsing leaf '{leaf_part}'", ex);
-                    return GetRootOption();
-                }                
-            }
-
-            //while(root_opt_vm.IsAnyBusy) {
-            //    await Task.Delay(100);
-            //}
-            return root_opt_vm;
-        }
-              
-
         private void MpAvSearchCriteriaItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
                 case nameof(HasModelChanged):
@@ -1101,46 +1136,6 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
         }
-
-        private string GetSelectedOptionsString() {
-            //List<object> opts =
-            //    SelectedOptionPath
-            //    .Where(x=>x.SelectedItemPathObj != null)
-            //    .Select(x=>x.SelectedItemPathObj)
-            //    //.Cast<object>()
-            //    .ToList();
-
-            //if (LeafValueOptionViewModel != null) {
-            //    opts.Add(new object[] {
-            //        LeafValueOptionViewModel.FilterValue,
-            //        LeafValueOptionViewModel.Value,
-            //        QueryFlags.HasFlag(MpContentQueryBitFlags.CaseSensitive)});
-            //}
-            //return opts.ToOptionPathString(QueryFlags);
-
-            //if(QueryFlags.HasFlag(MpContentQueryBitFlags.Tag)) {
-            //    return $"{(int)MpRootOptionType.Collection},{LeafValueOptionViewModel.Value}";
-            //}
-
-            string opt = string.Empty;
-            var sopl = SelectedOptionPath.ToList();
-            for (int i = 0; i < sopl.Count; i++) {
-                var ovm = sopl[i];
-                if(i > 0) {
-                    if(ovm.Items.Count > 0) {
-                        opt += ",";
-                    } else {
-                        opt += "|";
-                    }
-                }
-                if(ovm.SelectedItemIdx >= 0) {
-                    opt += $"{ovm.SelectedItemIdx}";
-                }else if(ovm.Items.Count == 0) {
-                    opt += QueryFlags.GetMatchValueModelToken(ovm.Value);
-                }
-            }
-            return opt;
-        }
         #endregion
 
         #region Commands
@@ -1159,6 +1154,7 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 Parent.RemoveSearchCriteriaItemCommand.Execute(this);
             },()=> CanRemoveOrSortThisCriteriaItem);
+
         #endregion
     }
 }

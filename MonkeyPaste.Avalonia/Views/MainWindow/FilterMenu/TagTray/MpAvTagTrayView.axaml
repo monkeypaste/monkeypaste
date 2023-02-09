@@ -12,13 +12,6 @@
                        x:CompileBindings="True"
                        DataContext="{x:Static local:MpAvTagTrayViewModel.Instance}"
                        x:Class="MonkeyPaste.Avalonia.MpAvTagTrayView">
-    <local:MpAvUserControl.Styles>
-        <Style Selector="ListBoxItem"
-               x:DataType="local:MpAvTagTileViewModel">
-            <Setter Property="IsEnabled"
-                    Value="{Binding CanSelect}" />
-        </Style>
-    </local:MpAvUserControl.Styles>
     <Grid x:Name="TagTrayContainerGrid"
           HorizontalAlignment="Center"
           VerticalAlignment="Stretch">

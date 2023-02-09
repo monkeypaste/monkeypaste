@@ -112,6 +112,7 @@
                   VerticalScrollBarVisibility="Auto">
         <Grid RowDefinitions="Auto,*">
             <local:MpAvSearchCriteriaHeaderView Grid.Row="0"
+                                                IsVisible="{Binding IsPendingQuery}"
                                                 Height="{Binding BoundHeaderHeight, Mode=TwoWay}"
                                                 Background="{DynamicResource SearchCriteriaRowBgBrush1}"
                                                 HorizontalAlignment="Stretch"

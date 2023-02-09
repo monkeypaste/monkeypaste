@@ -341,6 +341,10 @@ function updateFindReplaceRangeRects() {
 		];
 		CurFindReplaceDocRangeRectIdxLookup.push(rect_lookup);
 		for (var j = 0; j < cur_range_rects.length; j++) {
+			cur_range_rects[i].strokeWidth = 0;
+			cur_range_rects[i].stroke = 'transparent';
+			cur_range_rects[i].strokeOpacity = 0;
+
 			CurFindReplaceDocRangesRects.push(cur_range_rects[j]);
 		}
 	}

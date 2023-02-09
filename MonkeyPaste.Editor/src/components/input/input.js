@@ -1,6 +1,5 @@
 ﻿// #region Globals
 
-
 var IsHostFocused = false;
 // #endregion Globals
 

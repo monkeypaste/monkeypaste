@@ -175,7 +175,7 @@ function parseRect(rectStr) {
 
 
 function cleanRect(rect) {
-    return {
+    let cr = {
         left: rect ? rect.left : 0,
         top: rect ? rect.top : 0,
         right: rect ? rect.right : 0,
@@ -183,6 +183,22 @@ function cleanRect(rect) {
         width: rect ? rect.right - rect.left : 0,
         height: rect ? rect.bottom - rect.top : 0
     };
+    if (!isNullOrUndefined(rect.fill)) {
+        cr.fill = rect.fill;
+    }
+    if (!isNullOrUndefined(rect.stroke)) {
+        cr.stroke = rect.stroke;
+    }
+    if (!isNullOrUndefined(rect.strokeWidth)) {
+        cr.strokeWidth = rect.strokeWidth;
+    }
+    if (!isNullOrUndefined(rect.fillOpacity)) {
+        cr.fillOpacity = rect.fillOpacity;
+    }
+    if (!isNullOrUndefined(rect.strokeOpacity)) {
+        cr.strokeOpacity = rect.strokeOpacity;
+    }
+    return cr;
 }
 // #region Event Handlers
 

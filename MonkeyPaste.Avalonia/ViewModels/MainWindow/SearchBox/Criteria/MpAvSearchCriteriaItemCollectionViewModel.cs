@@ -164,11 +164,6 @@ namespace MonkeyPaste.Avalonia {
             SortedItems.FirstOrDefault();
         public MpAvSearchCriteriaItemViewModel SelectedItem { get; set; }
 
-
-        public MpAvTagTileViewModel AvailableNotAllTagViewModel =>
-            AvailableNotAllTagId == 0 ? null :
-            MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == AvailableNotAllTagId);
-
         #endregion
 
         #region State
@@ -184,22 +179,6 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsPendingQuery => PendingQueryTagId > 0;
 
-        public bool IsAllSelectedSearchTagId =>
-            SelectedSearchTagId == AllTagId;
-        public int AllTagId =>
-            MpTag.AllTagId;
-        public int AvailableNotAllTagId {
-            get {
-                var sttvm = MpAvTagTrayViewModel.Instance.LastSelectedLinkItem;
-                if(sttvm == null ||
-                    sttvm.IsAllTag ||
-                    !sttvm.IsLinkTag) {
-                    return 0;
-                }
-                return sttvm.TagId;
-            }
-        }
-        public int SelectedSearchTagId { get; set; }
         #endregion
 
         #region Layout
@@ -208,19 +187,27 @@ namespace MonkeyPaste.Avalonia {
 
         public double BoundCriteriaListBoxScreenHeight { get; set; }
 
-        public double MaxSearchCriteriaListBoxHeight =>
-            IsAdvSearchActive ?
-                // HEADER + BORDER
-                BoundHeaderHeight +
-                MpAvSearchCriteriaItemViewModel.CRITERIA_ITEM_BORDER_THICKNESS.Top +
-                MpAvSearchCriteriaItemViewModel.CRITERIA_ITEM_BORDER_THICKNESS.Bottom +
-                
+        public double MaxSearchCriteriaListBoxHeight {
+            get {
+                if(!IsAdvSearchActive) {
+                    return 0;
+                }
+                double h = 0;
+                if(IsPendingQuery) {
+                    // HEADER + BORDER
+                    h +=
+                        BoundHeaderHeight +
+                            MpAvSearchCriteriaItemViewModel.CRITERIA_ITEM_BORDER_THICKNESS.Top +
+                            MpAvSearchCriteriaItemViewModel.CRITERIA_ITEM_BORDER_THICKNESS.Bottom;
+                }
                 // ITEMS W/WO JOIN HEADER + BORDER
-                Items.Sum(x => x.CriteriaItemHeight) +
-                Items.Sum(x=>
-                    MpAvSearchCriteriaItemViewModel.CRITERIA_ITEM_BORDER_THICKNESS.Top + 
-                    MpAvSearchCriteriaItemViewModel.CRITERIA_ITEM_BORDER_THICKNESS.Bottom) :
-                0;
+                h += Items.Sum(x => x.CriteriaItemHeight) +
+                Items.Sum(x =>
+                    MpAvSearchCriteriaItemViewModel.CRITERIA_ITEM_BORDER_THICKNESS.Top +
+                    MpAvSearchCriteriaItemViewModel.CRITERIA_ITEM_BORDER_THICKNESS.Bottom);
+                return h;
+            }
+        }
 
         #endregion
 
@@ -323,7 +310,6 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
-            OnPropertyChanged(nameof(AvailableNotAllTagViewModel));
             MpPlatform.Services.Query.NotifyQueryChanged(true);
         }
 
@@ -331,7 +317,7 @@ namespace MonkeyPaste.Avalonia {
             // NOTE select is only when from search plus button
             if(selectConversion) {
                 IsConvertingQueryToSelect = true;
-                SelectedSearchTagId = AvailableNotAllTagId > 0 ? AvailableNotAllTagId : AllTagId;
+                //SelectedSearchTagId = AvailableNotAllTagId > 0 ? AvailableNotAllTagId : AllTagId;
             }            
 
             bool is_pending = true;
@@ -411,8 +397,8 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.RequeryCompleted:
                 case MpMessageType.TagSelectionChanged:
                     OnPropertyChanged(nameof(IsSavedQuery));
-                    OnPropertyChanged(nameof(AvailableNotAllTagId));
-                    OnPropertyChanged(nameof(AvailableNotAllTagViewModel));
+                    //OnPropertyChanged(nameof(AvailableNotAllTagId));
+                    //OnPropertyChanged(nameof(AvailableNotAllTagViewModel));
                     break;
 
             }
@@ -486,14 +472,23 @@ namespace MonkeyPaste.Avalonia {
 
             var all_filters = MpAvSearchBoxViewModel.Instance.SearchFilterCollectionViewModel.FilterType;
 
-            var opts = GetSimpleCriteriaOptions(all_filters, st, SelectedSearchTagId);
+            if(!MpAvTagTrayViewModel.Instance.LastSelectedActiveItem.IsLinkTag) {
+                // simple conversion shouldn't of been called
+                Debugger.Break();
+            }
+            int tagId = MpAvTagTrayViewModel.Instance.LastSelectedActiveItem.TagId;
+            var opt_value_tuples = GetSimpleCriteriaOptions(all_filters, st, tagId);
             List<MpSearchCriteriaItem> items = new List<MpSearchCriteriaItem>();
-            foreach (var opt_path in opts) {
+            foreach (var opt_val_tuple in opt_value_tuples) {
+
                 var sci = await MpSearchCriteriaItem.CreateAsync(
                     tagId: pending_tag.Id,
                     nextJoinType: MpLogicalQueryType.Or,
                     sortOrderIdx: items.Count,
-                    options: opt_path);
+                    options: opt_val_tuple.Item1,
+                    matchValue: opt_val_tuple.Item2,
+                    isCaseSensitive: all_filters.HasFlag(MpContentQueryBitFlags.CaseSensitive),
+                    isWholeWord: all_filters.HasFlag(MpContentQueryBitFlags.WholeWord));
                 items.Add(sci);
             }
 
@@ -504,48 +499,58 @@ namespace MonkeyPaste.Avalonia {
             }
             return pending_tag.Id;
         }
-        private IEnumerable<string> GetSimpleCriteriaOptions(MpContentQueryBitFlags sqf, string st, int tagId) {
+        private IEnumerable<Tuple<string,string>> GetSimpleCriteriaOptions(MpContentQueryBitFlags sqf, string st, int tagId) {
             // mv: <case sensitive>,<whole word>,<regex>,<base64 search text>
-            string mv = sqf.GetMatchValueModelToken(st);
-            List<string> opts = new List<string>();
-            //opts.Add($"{(int)MpRootOptionType.Collection},{tagId}");
+            List<Tuple<string, string>> opts = new List<Tuple<string, string>>();
+            if(tagId != MpTag.AllTagId) {
+                // NOTE since db value is being stored in option text field
+                // must reference it by guid or the reference will
+                // break if search criteria is sync'd from another device
+                var ttvm = MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == tagId);
+                if (ttvm == null) {
+                    // should have found, is tagId a pending query id?
+                    Debugger.Break();
+                } else {
+                    opts.Add(new Tuple<string,string>($"{(int)MpRootOptionType.Collection}", ttvm.Tag.Guid));
+                }
+            }
 
             if (!sqf.HasFlag(MpContentQueryBitFlags.TextType) ||
                !sqf.HasFlag(MpContentQueryBitFlags.ImageType) ||
                !sqf.HasFlag(MpContentQueryBitFlags.FileType)) {
                 // NOTE if all types are specified, ignore type flags
                 if (sqf.HasFlag(MpContentQueryBitFlags.TextType)) {
-                    opts.Add($"{(int)MpRootOptionType.ContentType},{(int)MpContentTypeOptionType.Text}");
+                    opts.Add(new Tuple<string,string>($"{(int)MpRootOptionType.ContentType}",$"{(int)MpContentTypeOptionType.Text}"));
                 }
                 if (sqf.HasFlag(MpContentQueryBitFlags.ImageType)) {
-                    opts.Add($"{(int)MpRootOptionType.ContentType},{(int)MpContentTypeOptionType.Image}");
+                    opts.Add(new Tuple<string,string>($"{(int)MpRootOptionType.ContentType}",$"{(int)MpContentTypeOptionType.Image}"));
                 }
                 if (sqf.HasFlag(MpContentQueryBitFlags.FileType)) {
-                    opts.Add($"{(int)MpRootOptionType.ContentType},{(int)MpContentTypeOptionType.Files}");
+                    opts.Add(new Tuple<string,string>($"{(int)MpRootOptionType.ContentType}",$"{(int)MpContentTypeOptionType.Files}"));
                 }
             }
-            
-            
+
+            MpTextOptionType tot = sqf.HasFlag(MpContentQueryBitFlags.Regex) ? MpTextOptionType.RegEx : MpTextOptionType.Contains;
             if(sqf.HasFlag(MpContentQueryBitFlags.Title)) {
-                opts.Add($"{(int)MpRootOptionType.Content},{(int)MpContentOptionType.Title},{(int)MpTextOptionType.Contains}|{mv}");
+                opts.Add(new Tuple<string,string>($"{(int)MpRootOptionType.Content},{(int)MpContentOptionType.Title},{(int)tot}",st));
             }
             if(sqf.HasFlag(MpContentQueryBitFlags.Content)) {
-                opts.Add($"{(int)MpRootOptionType.Content},{(int)MpContentOptionType.AnyText},{(int)MpTextOptionType.Contains}|{mv}");
+                opts.Add(new Tuple<string,string>($"{(int)MpRootOptionType.Content},{(int)MpContentOptionType.AnyText},{(int)tot}",st));
             }
             if (sqf.HasFlag(MpContentQueryBitFlags.Annotations)) {
-                opts.Add($"{(int)MpRootOptionType.Content},{(int)MpContentOptionType.Annotation},{(int)MpTextOptionType.Contains}|{mv}");
+                opts.Add(new Tuple<string,string>($"{(int)MpRootOptionType.Content},{(int)MpContentOptionType.Annotation},{(int)tot}",st));
             }
             if (sqf.HasFlag(MpContentQueryBitFlags.Url)) {
-                opts.Add($"{(int)MpRootOptionType.Source},{(int)MpSourceOptionType.Website},{(int)MpWebsiteOptionType.Url},{(int)MpTextOptionType.Contains}|{mv}");
+                opts.Add(new Tuple<string,string>($"{(int)MpRootOptionType.Source},{(int)MpSourceOptionType.Website},{(int)MpWebsiteOptionType.Url},{(int)tot}",st));
             }
             if(sqf.HasFlag(MpContentQueryBitFlags.UrlTitle)) {
-                opts.Add($"{(int)MpRootOptionType.Source},{(int)MpSourceOptionType.Website},{(int)MpWebsiteOptionType.Title},{(int)MpTextOptionType.Contains}|{mv}");
+                opts.Add(new Tuple<string,string>($"{(int)MpRootOptionType.Source},{(int)MpSourceOptionType.Website},{(int)MpWebsiteOptionType.Title},{(int)tot}",st));
             }
             if(sqf.HasFlag(MpContentQueryBitFlags.AppPath)) {
-                opts.Add($"{(int)MpRootOptionType.Source},{(int)MpSourceOptionType.App},{(int)MpAppOptionType.ProcessPath},{(int)MpTextOptionType.Contains}|{mv}");
+                opts.Add(new Tuple<string,string>($"{(int)MpRootOptionType.Source},{(int)MpSourceOptionType.App},{(int)MpAppOptionType.ProcessPath},{(int)tot}",st));
             }
             if(sqf.HasFlag(MpContentQueryBitFlags.AppName)) {
-                opts.Add($"{(int)MpRootOptionType.Source},{(int)MpSourceOptionType.App},{(int)MpAppOptionType.ApplicationName},{(int)MpTextOptionType.Contains}|{mv}");
+                opts.Add(new Tuple<string,string>($"{(int)MpRootOptionType.Source},{(int)MpSourceOptionType.App},{(int)MpAppOptionType.ApplicationName},{(int)tot}",st));
             }
             return opts;
         }
@@ -554,7 +559,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
-
 
         public ICommand AddSearchCriteriaItemCommand => new MpAsyncCommand<object>(
             async (args) => {
@@ -643,27 +647,6 @@ namespace MonkeyPaste.Avalonia {
                  IsExpanded = false;
              },()=>HasCriteriaItems, this, new[] { this });
 
-        public ICommand SelectSearchTagCommand => new MpCommand<object>(
-            (args) => {
-                // NOTE only content-linked tags can be search tag
-                SelectedSearchTagId = (int)args;
-                NotifyQueryChanged(true);
-            }, (args) => {
-                if(MpPlatform.Services.Query != this) {
-                    // shouldn't happend (only called from adv header)
-                    Debugger.Break();
-                    return false;
-                }
-                if(args is int tagId) {
-                    var ttvm = MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == tagId);
-                    if(ttvm == null || ttvm.TagType != MpTagType.Link) {
-                        return false;
-                    }
-                    
-                    return true;
-                }
-                return false;
-            });
 
         public ICommand SelectAdvancedSearchCommand => new MpCommand<object>(
             (args) => {
@@ -678,7 +661,6 @@ namespace MonkeyPaste.Avalonia {
                 // NOTE since query takes have no linked content
                 // but are the selected tag treat search as from
                 // all until selected tag is changed
-                SelectedSearchTagId = AllTagId;
                 InitializeAsync(queryTagId, false).FireAndForgetSafeAsync(this);
             });
 

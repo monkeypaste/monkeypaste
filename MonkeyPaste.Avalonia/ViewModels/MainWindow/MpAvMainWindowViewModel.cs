@@ -978,10 +978,17 @@ namespace MonkeyPaste.Avalonia {
                 });
             },
             () => {
+
+                bool isContextMenuOpen =
+                    FocusManager.Instance.Current != null &&
+                    FocusManager.Instance.Current is Control c &&
+                    c.GetVisualAncestor<ContextMenu>() != null;
+
                 bool canHide = !IsMainWindowLocked &&
                           !IsAnyDropDownOpen &&
                           !IsMainWindowInitiallyOpening &&
                           !IsAnyDialogOpen &&
+                    !isContextMenuOpen &&
                           !IsAnyItemDragging &&
                           !IsAnyNotificationActivating &&
                           !IsResizing;
@@ -997,6 +1004,7 @@ namespace MonkeyPaste.Avalonia {
                     MpConsole.WriteLine($"IsAnyNotificationActivating: {(IsAnyNotificationActivating)}");
                     MpConsole.WriteLine($"IsResizing: {(IsResizing)}");
                     MpConsole.WriteLine($"IsMainWindowClosing: {(IsMainWindowClosing)}");
+                    MpConsole.WriteLine($"isContextMenuOpen: {(isContextMenuOpen)}");
                     MpConsole.WriteLine("");
                 }
                 return canHide;
@@ -1013,10 +1021,12 @@ namespace MonkeyPaste.Avalonia {
                     LastDecreasedFocusLevelDateTime.HasValue &&
                         (DateTime.Now - LastDecreasedFocusLevelDateTime.Value).TotalMilliseconds < 1000;
 
+
                 bool canDecrease =
                     !wasFocusLevelJustDecreased &&
                           !IsAnyMainWindowTextBoxFocused;
 
+                
                 if (!canDecrease) {
                     MpConsole.WriteLine("");
                     MpConsole.WriteLine($"Cannot decrease focus:");

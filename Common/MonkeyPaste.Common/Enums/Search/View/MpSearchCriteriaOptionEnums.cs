@@ -15,7 +15,7 @@ namespace MonkeyPaste.Common {
         None = 0,
         Content,
         ContentType,
-        //Collection,
+        Collection,
         Source,
         DateOrTime
     }

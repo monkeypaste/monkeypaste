@@ -42,13 +42,13 @@ namespace MonkeyPaste {
 
         public async Task<MpTag> CloneDbModelAsync(bool deepClone = true, bool suppressWrite = false) {
             // NOTE deepClone is ignored no current need for content links, hotkeys etc.
+            // NOTE2 not including tag color 
 
             var cloned_tag = await MpTag.CreateAsync(
                 tagName: TagName,
                 treeSortIdx: TreeSortIdx,
                 pinSortIdx: PinSortIdx,
                 parentTagId: ParentTagId,
-                hexColor: HexColor,
                 tagType: TagType,
                 sortType: SortType,
                 isSortDescending: IsSortDescending,
@@ -57,11 +57,14 @@ namespace MonkeyPaste {
             if(TagType == MpTagType.Query) {
                 var scil = await MpDataModelProvider.GetCriteriaItemsByTagId(Id);
                 foreach(var sci in scil) {
-                    var cloned_sci = await MpSearchCriteriaItem.CreateAsync(
+                    _ = await MpSearchCriteriaItem.CreateAsync(
                         tagId: cloned_tag.Id,
                         sortOrderIdx: sci.SortOrderIdx,
                         nextJoinType: sci.NextJoinType,
                         options: sci.Options,
+                        matchValue: sci.MatchValue,
+                        isCaseSensitive: sci.IsCaseSensitive,
+                        isWholeWord: sci.IsWholeWord,
                         suppressWrite: suppressWrite);
                 }
             }
@@ -277,7 +280,6 @@ namespace MonkeyPaste {
                 throw new Exception("TagType must be specified");
             }
 
-            hexColor = string.IsNullOrEmpty(hexColor) ? MpHelpers.GetRandomColor().ToHex() : hexColor;
             if(treeSortIdx < 0) {
                 if(parentTagId <= 0) {
                     treeSortIdx = 0;
@@ -289,7 +291,7 @@ namespace MonkeyPaste {
                 Id = id,
                 TagGuid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid() : System.Guid.Parse(guid),
                 TagName = tagName,
-                HexColor = hexColor,
+                HexColor = string.IsNullOrEmpty(hexColor) ? MpHelpers.GetRandomColor().ToHex() : hexColor,
                 TreeSortIdx = treeSortIdx,
                 PinSortIdx = pinSortIdx,
                 ParentTagId = parentTagId,

@@ -677,7 +677,7 @@ function isPointOnLine(p, lineIdx) {
 	return isPointInRect(p);
 }
 
-function isPointInRange(p, range, snapToBlock) {
+function isPointInRange(p, range) {
 	let is_in_range = false;
 	let range_rects = getRangeRects(range);
 	for (var i = 0; i < range_rects.length; i++) {

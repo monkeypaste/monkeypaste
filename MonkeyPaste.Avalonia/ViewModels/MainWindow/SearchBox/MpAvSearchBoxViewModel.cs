@@ -91,9 +91,6 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsMultipleMatches { get; private set; } = false;
 
-
-        public bool CanAddCriteriaItem => true;//!string.IsNullOrEmpty(LastSearchText) && !IsSearching;
-
         public string LastSearchText { get; private set; } = string.Empty;
 
         public bool IsToAdvancedButtonVisible =>
@@ -259,9 +256,6 @@ namespace MonkeyPaste.Avalonia {
                         IsExpanded = true;
                     }
                     break;
-                case nameof(IsSearching):
-                    OnPropertyChanged(nameof(CanAddCriteriaItem));
-                    break;
                 case nameof(IsTextBoxFocused):
                     if (IsTextBoxFocused) {
                         if (!HasText) {
@@ -364,7 +358,7 @@ namespace MonkeyPaste.Avalonia {
                 OnPropertyChanged(nameof(IsSearchValid));
 
                 //SetQueryInfo(); 
-                MpPlatform.Services.Query.NotifyQueryChanged();
+                MpPlatform.Services.Query.NotifyQueryChanged(true);
                 UpdateRecentSearchTexts(SearchText);
             },()=>!MpAvMainWindowViewModel.Instance.IsMainWindowLoading);
 

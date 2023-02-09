@@ -70,6 +70,13 @@ namespace MonkeyPaste {
             MpConsole.WriteLine($"Db loading: {sw.ElapsedMilliseconds} ms");
         }
 
+        public static string GetParameterizedQueryString(string query, object[] args) {
+            if (args == null || args.Length == 0 || _connection == null) {
+                return query;
+            }
+            //return _connection.CreateCommand(query, args).ToString();
+            return query + Environment.NewLine + args == null ? string.Empty : string.Join(Environment.NewLine, args);
+        }
 
         public static string GetDbFileAsBase64() {
             var bytes = File.ReadAllBytes(MpPlatform.Services.DbInfo.DbPath);
@@ -104,8 +111,14 @@ namespace MonkeyPaste {
             if(qtm == null) {
                 return new List<object>();
             }
-            var result = await _connectionAsync.QueryAsync(qtm, query, args);
-            return result;
+            try {
+                var result = await _connectionAsync.QueryAsync(qtm, query, args);
+                return result;
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Db Error executing dynamic query on table '{tableName}' with query '{GetParameterizedQueryString(query, args)}'", ex);
+                return new List<object>();
+            }
         }
 
 
@@ -113,31 +126,55 @@ namespace MonkeyPaste {
             if (_connectionAsync == null) {
                 CreateConnection();
             }
-            var result = await _connectionAsync.QueryAsync<T>(query, args);
-            return result;
+            try {
+                var result = await _connectionAsync.QueryAsync<T>(query, args);
+                return result;
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Db Error executing query '{GetParameterizedQueryString(query, args)}' for type '{typeof(T)}'", ex);
+                return new List<T>();
+            }
         }
 
         public static async Task<T> QueryScalarAsync<T>(string query, params object[] args) {
             if(_connectionAsync == null) {
                 CreateConnection();
             }
-            var result = await _connectionAsync.ExecuteScalarAsync<T>(query, args);
-            return result;
+            try {
+                var result = await _connectionAsync.ExecuteScalarAsync<T>(query, args);
+                return result;
+            }
+            catch (Exception ex) {
+
+                MpConsole.WriteTraceLine($"Db Error executing scalar query '{GetParameterizedQueryString(query, args)}' for type '{typeof(T)}'", ex);
+                return default(T);
+            }
         }
 
         public static async Task<List<T>> QueryScalarsAsync<T>(string query, params object[] args) {
             if (_connectionAsync == null) {
                 CreateConnection();
             }
-            var result = await _connectionAsync.QueryScalarsAsync<T>(query, args);
-            return result;
+            try {
+                var result = await _connectionAsync.QueryScalarsAsync<T>(query, args);
+                return result;
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Db Error executing scalars query '{GetParameterizedQueryString(query, args)}' for type '{typeof(T)}'", ex);
+                return new List<T>();
+            }
         }
 
         public static async Task CreateTableAsync<T>() where T: new() {
             if (_connectionAsync == null) {
                 CreateConnection();
             }
-            await _connectionAsync.CreateTableAsync<T>();
+            try {
+                await _connectionAsync.CreateTableAsync<T>();
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Db Error creating table of type '{typeof(T)}'", ex);
+            }
         }
 
         public static async Task CloseConnectionAsync() {
@@ -145,8 +182,15 @@ namespace MonkeyPaste {
                 return;
             }
 
-            await _connectionAsync.CloseAsync();
-            _connectionAsync = null;
+            try {
+                await _connectionAsync.CloseAsync();
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Db Error closing async db connection.", ex);
+            }
+            finally {
+                _connectionAsync = null;
+            }
         }
 
         private static async Task AddItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
@@ -163,15 +207,11 @@ namespace MonkeyPaste {
 
             await LogWriteAsync(MpDbLogActionType.Create, item as MpDbModelBase, sourceClientGuid, ignoreTracking);
 
-            if (item is MpCopyItemTag cit) {
-                if(cit.CopyItemId == 0 && cit.TagId == 0) {
-                    return;
-                }
-            }
-
-            //await RunInMutex(async () => {
+            try {
                 await _connectionAsync.InsertAsync(item);
-            //});            
+            }catch(Exception ex) {
+                MpConsole.WriteTraceLine($"Db Error inserting type '{typeof(T)}' with data {item}", ex);
+            }
 
             NotifyWrite(MpDbLogActionType.Create, item as MpDbModelBase, ignoreSyncing);
         }
@@ -190,9 +230,12 @@ namespace MonkeyPaste {
 
             await LogWriteAsync(MpDbLogActionType.Modify, item as MpDbModelBase, sourceClientGuid, ignoreTracking);
 
-            //await RunInMutex(async () => {
-            await _connectionAsync.UpdateAsync(item);
-            //});
+            try {
+                await _connectionAsync.UpdateAsync(item);
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Db Error updating type '{typeof(T)}' with data {item}", ex);
+            }
 
             NotifyWrite(MpDbLogActionType.Modify, item as MpDbModelBase, ignoreSyncing);
         }
@@ -218,10 +261,12 @@ namespace MonkeyPaste {
 
             await LogWriteAsync(MpDbLogActionType.Delete, item as MpDbModelBase, sourceClientGuid, ignoreTracking);
 
-            //await RunInMutex( async()=> {
-            await _connectionAsync.DeleteAsync(item);
-            //});
-
+            try {
+                await _connectionAsync.DeleteAsync(item);
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Db Error deleting type '{typeof(T)}' with data {item}", ex);
+            }
             NotifyWrite(MpDbLogActionType.Delete, item as MpDbModelBase, ignoreSyncing);
         }
                 
@@ -399,24 +444,42 @@ namespace MonkeyPaste {
             if(_connection != null && _connectionAsync != null) {
                 return;
             }
-            
-            var _connStr = new SQLiteConnectionString(
-                            databasePath: dbPath,
-                            storeDateTimeAsTicks: IsDateTimeTicks,
-                            openFlags: SQLiteOpenFlags.ReadWrite |
-                                       SQLiteOpenFlags.Create |
-                                       SQLiteOpenFlags.SharedCache |
-                                       SQLiteOpenFlags.FullMutex);
+            SQLiteConnectionString connStr = null;
+            try {
+                 connStr = new SQLiteConnectionString(
+                                    databasePath: dbPath,
+                                    storeDateTimeAsTicks: IsDateTimeTicks,
+                                    openFlags: SQLiteOpenFlags.ReadWrite |
+                                               SQLiteOpenFlags.Create |
+                                               SQLiteOpenFlags.SharedCache |
+                                               SQLiteOpenFlags.FullMutex);
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Db Error creating connection str for db path '{dbPath}'.", ex);
+            }
+            if(connStr == null) {
+                return;
+            }
 
             if (_connectionAsync == null) {
-                SQLitePCL.Batteries.Init();
+                try {
+                    SQLitePCL.Batteries.Init();
 
-                _connectionAsync = new SQLiteAsyncConnection(_connStr) { Trace = true };
-                SQLitePCL.raw.sqlite3_create_function(_connectionAsync.GetConnection().Handle,"REGEXP",2, null, MatchRegex);                
+                    _connectionAsync = new SQLiteAsyncConnection(connStr) { Trace = true };
+                    SQLitePCL.raw.sqlite3_create_function(_connectionAsync.GetConnection().Handle, "REGEXP", 2, null, MatchRegex);
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Db Error creating async connection", ex);
+                }             
             }
             if(_connection == null) {
-                _connection = new SQLiteConnection(_connStr) { Trace = true };
-                SQLitePCL.raw.sqlite3_create_function(_connection.Handle, "REGEXP", 2, null, MatchRegex);
+                try {
+                    _connection = new SQLiteConnection(connStr) { Trace = true };
+                    SQLitePCL.raw.sqlite3_create_function(_connection.Handle, "REGEXP", 2, null, MatchRegex);
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Db Error creating async connection", ex);
+                }
             }
         }
         private static void MatchRegex(sqlite3_context ctx, object user_data, sqlite3_value[] args) {

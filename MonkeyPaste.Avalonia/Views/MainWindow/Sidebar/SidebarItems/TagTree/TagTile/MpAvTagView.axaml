@@ -30,7 +30,7 @@
             <Setter Property="Background"
                     Value="{DynamicResource TagTileHoverBgColor}" />
         </Style>
-        <Style Selector="local|MpAvClipBorder#TagNameBorder.contextfocus">
+        <Style Selector="local|MpAvClipBorder#TagNameBorder.contextfocus, local|MpAvClipBorder#TagNameBorder:not(.isselected).activeTag">
             <Setter Property="BorderBrush"
                     Value="{DynamicResource TagTileContextFocusBorderColor}" />
         </Style>
@@ -73,10 +73,12 @@
                               HorizontalAlignment="Stretch"
                               MinHeight="20"
                               Classes.islinked="{Binding IsLinkedToSelectedClipTile}"
+                              Classes.isgroup="{Binding IsGroupTag}"
                               Classes.isselected="{Binding IsSelected}"
                               Classes.dragover="{Binding IsDragOverTag}"
                               Classes.dragover_invalid="{Binding !IsDragOverTagValid}"
                               Classes.contextfocus="{Binding IsContextMenuOpen}"
+                              Classes.activeTag="{Binding IsActiveTag}"
                               BorderThickness="1.5">
             <StackPanel Orientation="Horizontal">
                 <Grid VerticalAlignment="Center">
@@ -88,6 +90,7 @@
                     <local:MpAvClipBorder CornerRadius="5"
                                           Grid.Column="0"
                                           MinWidth="20"
+                                          MinHeight="20"
                                           Margin="1"
                                           Padding="4,1"
                                           BorderThickness="0"
@@ -96,7 +99,7 @@
                                    Background="Transparent"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Center"
-                                   Text="{Binding TagClipCount}"
+                                   Text="{Binding TagClipCountText}"
                                    Foreground="{Binding $parent.Background, Converter={StaticResource BrushToContrastBrushConverter}}" />
                     </local:MpAvClipBorder>
                     <!--  Tag Name TextBox/ Marquee  -->

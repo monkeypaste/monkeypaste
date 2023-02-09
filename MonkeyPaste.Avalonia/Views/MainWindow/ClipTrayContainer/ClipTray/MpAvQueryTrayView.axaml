@@ -13,6 +13,35 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvQueryTrayView">
+    <local:MpAvUserControl.Resources>
+        <sys:TimeSpan x:Key="TileFadeTimeSpan">
+            0:0:0.5
+        </sys:TimeSpan>
+    </local:MpAvUserControl.Resources>
+    <local:MpAvUserControl.Styles>
+        <!--  Requery tile opacity  -->
+
+        <Style Selector="ListBox.queryListBox.notrequerying > ListBoxItem">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="Opacity"
+                                      Duration="{StaticResource TileFadeTimeSpan}" />
+                </Transitions>
+            </Setter>
+            <Setter Property="Opacity"
+                    Value="1" />
+        </Style>
+        <Style Selector="ListBox.queryListBox.requerying > ListBoxItem">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="Opacity"
+                                      Duration="{StaticResource TileFadeTimeSpan}" />
+                </Transitions>
+            </Setter>
+            <Setter Property="Opacity"
+                    Value="0" />
+        </Style>
+    </local:MpAvUserControl.Styles>
     <Grid x:Name="QueryTrayContainerGrid"
           Margin="0"
           Background="Transparent">
@@ -74,6 +103,9 @@
                           Width="{Binding QueryTrayScreenWidth}"
                           Height="{Binding QueryTrayScreenHeight}">
                 <ListBox x:Name="ClipTrayListBox"
+                         Classes="queryListBox"
+                         Classes.requerying="{Binding IsRequerying}"
+                         Classes.notrequerying="{Binding !IsRequerying}"
                          Background="Transparent"
                          HorizontalAlignment="Left"
                          VerticalAlignment="Top"
@@ -153,14 +185,15 @@
         <!--  IsBusy Overlay  -->
         <Border HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
+                IsVisible="{Binding IsRequerying}"
                 Grid.Row="1">
-            <Border.IsVisible>
+            <!--<Border.IsVisible>
                 <MultiBinding Converter="{StaticResource MultiBoolConverter}"
                               ConverterParameter="AND">
                     <Binding Path="IsQueryTrayEmpty" />
                     <Binding Path="IsAnyBusy" />
                 </MultiBinding>
-            </Border.IsVisible>
+            </Border.IsVisible>-->
             <local:MpAvBusySpinnerView HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
                                        Width="70"
@@ -176,8 +209,8 @@
             <Border.IsVisible>
                 <MultiBinding Converter="{StaticResource MultiBoolConverter}"
                               ConverterParameter="AND">
-                    <Binding Path="IsQueryTrayEmpty" />
-                    <Binding Path="!IsAnyBusy" />
+                    <Binding Path="IsQueryEmpty" />
+                    <Binding Path="!IsRequerying" />
                     <Binding Path="!IsMainWindowInitiallyOpening"
                              Source="{x:Static local:MpAvMainWindowViewModel.Instance}" />
                 </MultiBinding>

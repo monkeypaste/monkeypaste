@@ -185,7 +185,7 @@ namespace MonkeyPaste.Avalonia {
             var this_input_change_dt = DateTime.Now;
             SetLastNotifiedDt(control, this_input_change_dt);
 
-            Dispatcher.UIThread.Post((Action)(async () => {
+            Dispatcher.UIThread.Post(async () => {
                 while(true) {
                     var lndt = GetLastNotifiedDt(control);
                     if(lndt == null) {
@@ -215,7 +215,7 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine($"Input delay reached ntf change from '{lastNotifiedText}' to '{controlText}'");
                 SetLastNotifiedText(control, (string)controlText);
                 SetText(control, (string)controlText);
-            }));
+            });
         }
 
 
