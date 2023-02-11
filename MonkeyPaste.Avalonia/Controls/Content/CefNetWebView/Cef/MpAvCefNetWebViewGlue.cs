@@ -71,6 +71,9 @@ namespace MonkeyPaste.Avalonia {
             }
             return true;            
         }
+        protected override void UpdateDragCursor(CefBrowser browser, CefDragOperationsMask operation) {
+            base.UpdateDragCursor(browser, operation);
+        }
         protected override void OnBeforeContextMenu(CefBrowser browser, CefFrame frame, CefContextMenuParams menuParams, CefMenuModel model) {
             // ensure default cefnet context menu is empty
             model.Clear();

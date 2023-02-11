@@ -148,6 +148,23 @@ namespace MonkeyPaste.Avalonia {
                 false);
 
         #endregion
+        
+        #region DoubleClickDelayMs AvaloniaProperty
+        public static int GetDoubleClickDelayMs(AvaloniaObject obj) {
+            return obj.GetValue(DoubleClickDelayMsProperty);
+        }
+
+        public static void SetDoubleClickDelayMs(AvaloniaObject obj, int value) {
+            obj.SetValue(DoubleClickDelayMsProperty, value);
+        }
+
+        public static readonly AttachedProperty<int> DoubleClickDelayMsProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, int>(
+                "DoubleClickDelayMs",
+                300,
+                false);
+
+        #endregion
 
         #region DoubleLeftPressCommandParameter AvaloniaProperty
         public static object GetDoubleLeftPressCommandParameter(AvaloniaObject obj) {
@@ -219,8 +236,9 @@ namespace MonkeyPaste.Avalonia {
                 control.PointerPressed -= Control_PointerPressed;
             }
         }
-
+        private static DateTime? _lastClickDateTime = null;
         private static void Control_PointerPressed(object sender, PointerPressedEventArgs e) {
+            _lastClickDateTime = DateTime.Now;
             if(sender is Control control) {
                 ICommand cmd = null;
                 object param = null;
@@ -229,8 +247,39 @@ namespace MonkeyPaste.Avalonia {
                         cmd = GetDoubleLeftPressCommand(control);
                         param = GetDoubleLeftPressCommandParameter(control);
                     } else {
-                        cmd = GetLeftPressCommand(control);
-                        param = GetLeftPressCommandParameter(control);
+
+                        if (GetLeftPressCommand(control) != null &&
+                            GetDoubleLeftPressCommand(control) != null &&
+                            GetLeftPressCommand(control).CanExecute(GetLeftPressCommandParameter(control)) && 
+                            GetDoubleLeftPressCommand(control).CanExecute(GetDoubleLeftPressCommandParameter(control))) {
+                            Dispatcher.UIThread.Post(async () => {
+                                // to disable single vs double wait for delay if no more click
+                                var ct = _lastClickDateTime;
+                                _lastClickDateTime = null;
+                                while (true) {
+                                    if(_lastClickDateTime != null) {
+                                        // double click, reject single
+                                        return;
+                                    }
+                                    if (DateTime.Now - ct > TimeSpan.FromMilliseconds(GetDoubleClickDelayMs(control))) {
+                                        // single click
+                                        cmd = GetLeftPressCommand(control);
+                                        param = GetLeftPressCommandParameter(control);
+                                        if (cmd.CanExecute(param)) {
+                                            cmd.Execute(param);
+                                            e.Handled = GetIsPressEventHandled(control);
+                                        }
+                                        return;
+                                    }
+                                    await Task.Delay(100);
+                                }
+                            });
+                            return;
+                        }else {
+                            cmd = GetLeftPressCommand(control);
+                            param = GetLeftPressCommandParameter(control);
+                        }
+                        
                     }
                 } else if(e.IsRightPress(control)) {
                     cmd = GetRightPressCommand(control);

@@ -106,7 +106,7 @@ namespace MonkeyPaste.Avalonia {
             await MpPrefViewModel.InitAsync(prefPath, DbInfo, OsInfo);
 
             UserProvidedFileExts = MpPrefViewModel.Instance;
-            Query = MpAvQueryInfoViewModel.Parse(MpPrefViewModel.Instance.LastQueryInfoJson);
+            Query = MpAvQueryViewModel.Parse(MpPrefViewModel.Instance.LastQueryInfoJson);
             ProcessWatcher = new MpAvProcessWatcherSelector().Watcher;
 
             IconBuilder = new MpAvIconBuilder().IconBuilder;

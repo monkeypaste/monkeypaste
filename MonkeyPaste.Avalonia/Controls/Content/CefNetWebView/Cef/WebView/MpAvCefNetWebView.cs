@@ -43,6 +43,7 @@ namespace MonkeyPaste.Avalonia {
         notifyDropCompleted,
         notifyDragEnter,
         notifyDragLeave,
+        notifyDragEnd,
         notifyContentScreenShot,
         notifyUserDeletedTemplate,
         notifyAddOrUpdateTemplate,
@@ -177,6 +178,7 @@ namespace MonkeyPaste.Avalonia {
         #region MpAvIContentDragSource Implementation
         public PointerPressedEventArgs LastPointerPressedEventArgs { get; private set; }
 
+        public bool WasDragCanceled { get; set; }
         //public void NotifyDropComplete(DragDropEffects dropEffect) {
         //    var dragEndMsg = new MpQuillDragEndMessage() {
         //        dataTransfer = new MpQuillDataTransferMessageFragment() {
@@ -515,6 +517,13 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case MpAvEditorBindingFunctionType.notifyDragLeave:
                     BindingContext.IsDropOverTile = false;
+                    break;
+                case MpAvEditorBindingFunctionType.notifyDragEnd:
+                    BindingContext.IsDropOverTile = false;
+                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillDragEndMessage>(msgJsonBase64Str);
+                    if (ntf is MpQuillDragEndMessage dragEndMsg) {
+                        WasDragCanceled = dragEndMsg.wasCancel;
+                    }
                     break;
 
                 case MpAvEditorBindingFunctionType.notifyDropCompleted:
@@ -890,7 +899,6 @@ namespace MonkeyPaste.Avalonia {
             this.ExecuteJavascript($"loadContent_ext('{msgStr}')");
         }
 
-
         private void ProcessContentChangedMessage(MpQuillEditorContentChangedMessage contentChanged_ntf) {
             bool is_reload = BindingContext.PublicHandle == _lastLoadedContentHandle;
             _lastLoadedContentHandle = BindingContext.PublicHandle;
@@ -1102,8 +1110,7 @@ namespace MonkeyPaste.Avalonia {
                 BindingMode.TwoWay);
 
         private async void OnIsContentSubSelectableChanged() {
-            if (BindingContext == null ||
-               
+            if (BindingContext == null ||               
                 !IsContentLoaded ||
                 !IsContentReadOnly) {
                 return;

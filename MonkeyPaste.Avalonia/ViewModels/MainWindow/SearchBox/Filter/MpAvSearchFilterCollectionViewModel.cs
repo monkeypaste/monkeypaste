@@ -12,21 +12,12 @@ using MonkeyPaste.Common;
 namespace MonkeyPaste.Avalonia {
     public class MpAvSearchFilterCollectionViewModel : 
         MpViewModelBase<MpAvSearchBoxViewModel>,
-        MpIPopupMenuViewModel,
-        MpIQueryInfoValueProvider {
+        MpIPopupMenuViewModel {
         #region Private Variables
 
         #endregion
 
         #region Statics
-
-        #endregion
-
-        #region MpIQueryInfoProvider Implementation
-        object MpIQueryInfoValueProvider.Source => this;
-        string MpIQueryInfoValueProvider.SourcePropertyName => nameof(FilterType);
-
-        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpIQueryInfo.QueryFlags);
 
         #endregion
 
@@ -134,6 +125,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public MpContentQueryBitFlags DefaultFilters =>
+            MpContentQueryBitFlags.TextType |
+            MpContentQueryBitFlags.ImageType |
+            MpContentQueryBitFlags.FileType |
+            MpContentQueryBitFlags.Title |
+            MpContentQueryBitFlags.Content;
+
         public MpContentQueryBitFlags FilterType {
             get {
                 MpContentQueryBitFlags ft = MpContentQueryBitFlags.None;
@@ -168,8 +166,6 @@ namespace MonkeyPaste.Avalonia {
 
         public void Init() {
             OnPropertyChanged(nameof(Filters));
-            MpPlatform.Services.Query.RegisterProvider(this);
-
             // if regex is set on load, disable others
             //var regex_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByRegex));
             //if (regex_filter.IsChecked.IsTrue()) {

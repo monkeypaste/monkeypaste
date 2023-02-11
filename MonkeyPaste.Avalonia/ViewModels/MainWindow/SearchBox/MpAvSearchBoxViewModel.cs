@@ -21,8 +21,7 @@ using MonkeyPaste.Common.Plugin;
 namespace MonkeyPaste.Avalonia {
     public class MpAvSearchBoxViewModel : MpViewModelBase, 
         MpIAsyncSingletonViewModel<MpAvSearchBoxViewModel>,
-        MpIExpandableViewModel,
-        MpIQueryInfoValueProvider {
+        MpIExpandableViewModel {
         #region Private Variables
         #endregion
 
@@ -31,14 +30,6 @@ namespace MonkeyPaste.Avalonia {
         #region MpIExpandableViewModel Implementation
 
         public bool IsExpanded { get; set; }
-
-        #endregion
-
-        #region MpIQueryInfoProvider Implementation
-        object MpIQueryInfoValueProvider.Source => this;
-        string MpIQueryInfoValueProvider.SourcePropertyName => nameof(SearchText);
-
-        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpIQueryInfo.MatchValue);
 
         #endregion
 
@@ -188,8 +179,6 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task InitAsync() {
             await Task.Delay(1);
-
-            MpPlatform.Services.Query.RegisterProvider(this);
 
             SearchFilterCollectionViewModel.Init();
 

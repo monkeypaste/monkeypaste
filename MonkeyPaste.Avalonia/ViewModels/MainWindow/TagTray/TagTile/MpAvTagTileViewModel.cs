@@ -125,23 +125,22 @@ namespace MonkeyPaste.Avalonia {
                 return new MpMenuItemViewModel() {
                     SubItems = new List<MpMenuItemViewModel>() {
                         new MpMenuItemViewModel() {
+                            IsVisible = !IsTagReadOnly,
                             Header = "Rename",
                             AltNavIdx = 0,
                             IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("RenameImage") as string, //MpPlatformWrapper.Services.PlatformResource.GetResource("RenameIcon") as string,
                             Command = RenameTagCommand,
-                            IsVisible = RenameTagCommand.CanExecute(null)
                         },
                         new MpMenuItemViewModel() {
+                            IsVisible = CanHotkey,
                             Header = "Assign Hotkey",
                             AltNavIdx = 0,
                             IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("HotkeyImage") as string,
                             Command = AssignHotkeyCommand,
-                            //ShortcutObjId = TagId,
-                            //ShortcutType = MpShortcutType.SelectTag
                             ShortcutArgs = new object[] { MpShortcutType.SelectTag, TagId },
                         },
                         new MpMenuItemViewModel() {
-                            IsVisible = IsNotGroupTag,
+                            IsVisible = CanPin,
                             Header = IsModelPinned ? "Unpin" : "Pin",
                             AltNavIdx = 0,
                             IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("PinImage") as string,
@@ -155,10 +154,10 @@ namespace MonkeyPaste.Avalonia {
                             IsVisible = !IsTagReadOnly
                         },
                         new MpMenuItemViewModel() {
+                            IsVisible = !IsTagReadOnly,
                             Header = "Delete",
                             IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("DeleteImage") as string,
-                            Command = DeleteThisTagCommand,
-                            IsVisible = !IsTagReadOnly
+                            Command = DeleteThisTagCommand
                         }
                     }
                 };
@@ -310,6 +309,11 @@ namespace MonkeyPaste.Avalonia {
                 return true;
             }
         }
+
+        public bool CanPin =>
+            !IsGroupTag;
+        public bool CanHotkey =>
+            !IsGroupTag;
 
         public bool CanLinkContent => IsLinkTag;
 
@@ -734,6 +738,10 @@ namespace MonkeyPaste.Avalonia {
                         //if (!IsExpanded) {
                         //    IsExpanded = true;
                         //}
+                        if(IsQueryTag) {
+                            MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending = IsSortDescending;
+                            MpAvClipTileSortFieldViewModel.Instance.SelectedSortType = SortType;
+                        }
                         Parent.SelectTagCommand.Execute(this);
                     } else {
                         IsTagNameReadOnly = true;
@@ -754,6 +762,11 @@ namespace MonkeyPaste.Avalonia {
                         FinishRenameTagCommand.Execute(null);
                     }
                     break;
+                case nameof(IgnoreHasModelChanged):
+                    if(!IgnoreHasModelChanged && HasModelChanged) {
+                        OnPropertyChanged(nameof(HasModelChanged));
+                    }
+                    break;
                 case nameof(HasModelChanged):
                     if (IsBusy) {
                         return;
@@ -763,6 +776,9 @@ namespace MonkeyPaste.Avalonia {
                         //    HasModelChanged = false;
                         //    SuprressNextHasModelChangedHandling = false;
                         //}
+                        if(IgnoreHasModelChanged) {
+                            break;
+                        }
                         Task.Run(async () => {
                             IsBusy = true;
                             await Tag.WriteToDatabaseAsync();
@@ -844,6 +860,15 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.TraySelectionChanged:
 
                     break;
+                case MpMessageType.QuerySortChanged:
+                    if(!IsQueryTag || !IsActiveTag) {
+                        break;
+                    }
+                    IgnoreHasModelChanged = true;
+                    IsSortDescending = MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending;
+                    SortType = MpAvClipTileSortFieldViewModel.Instance.SelectedSortType;
+                    IgnoreHasModelChanged = false;
+                    break;
             }
         }
 
@@ -862,23 +887,29 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     if(IsLinkTag) {
                         TagClipCount = await MpDataModelProvider.GetTotalCopyItemCountForTagAndAllDescendantsAsync(TagId);
+                        
                     } else {
                         // query tag
-                        if(IsActiveTag) {
-                            if(!MpAvSearchCriteriaItemCollectionViewModel.Instance.IsAdvSearchActive) {
-                                // shouldn't happen
-                                Debugger.Break();
+                        if (IsActiveTag) {
+                            if (!MpAvSearchCriteriaItemCollectionViewModel.Instance.IsAdvSearchActive) {
+                                // keeping this here for debugging,
+                                // when this eval's update is called again when active though
+                                //Debugger.Break();
                                 TagClipCount = null;
                             } else {
-                                TagClipCount = MpAvSearchCriteriaItemCollectionViewModel.Instance.TotalAvailableItemsInQuery;
+                                TagClipCount =
+                                    MpPlatform.Services.Query.TotalAvailableItemsInQuery;
+                                //MpAvSearchCriteriaItemCollectionViewModel.Instance.TotalAvailableItemsInQuery;
                             }
                         } else {
                             TagClipCount = null;
                         }
                     }
+
                     //TagClipCount = 
                     //    SelfAndAllDescendants.Cast<MpAvTagTileViewModel>().SelectMany(x => x.LinkedCopyItemIds).Distinct().Count();
                 }
+                OnPropertyChanged(nameof(TagClipCountText));
             });            
         }
 
@@ -1020,7 +1051,7 @@ namespace MonkeyPaste.Avalonia {
                             TagId.ToString(),
                             ShortcutKeyString);
                 OnPropertyChanged(nameof(ShortcutKeyString));
-            });
+            },()=>CanHotkey);
 
         public ICommand ChangeColorCommand => new MpCommand<object>(
             (args) => {
@@ -1079,37 +1110,63 @@ namespace MonkeyPaste.Avalonia {
                  }
 
                  if (t == null) {
-                     if(childTagType == MpTagType.Query) {
-                         // this should only happen from add tag button w/ a group tag selected
-                         int queryTagId = await MpAvSearchCriteriaItemCollectionViewModel.Instance.
-                            ConvertCurrentSearchToAdvSearchAsync(false);
+                     //if(childTagType == MpTagType.Query) {
+                     //    // this should only happen from add tag button w/ a group tag selected
+                     //    int queryTagId = await MpAvSearchCriteriaItemCollectionViewModel.Instance.
+                     //       ConvertCurrentSearchToAdvSearchAsync(false);
 
-                         // get ref to newly created adv tag
-                         t = await MpDataModelProvider.GetItemAsync<MpTag>(queryTagId);
-                         t.TreeSortIdx = Items.Count;
-                         t.ParentTagId = TagId;
-                         await t.WriteToDatabaseAsync();
-                     } else {
-                         t = await MpTag.CreateAsync(
+                     //    // get ref to newly created adv tag
+                     //    t = await MpDataModelProvider.GetItemAsync<MpTag>(queryTagId);
+                     //    t.TreeSortIdx = Items.Count;
+                     //    t.ParentTagId = TagId;
+                     //    await t.WriteToDatabaseAsync();
+                     //} else {
+                     //    t = await MpTag.CreateAsync(
+                     //        parentTagId: TagId,
+                     //        treeSortIdx: Items.Count,
+                     //        tagType: childTagType);
+                     //}
+
+                     bool? sortDir = childTagType == MpTagType.Query ? 
+                        MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending : null;
+                     MpContentSortType? sortType = childTagType == MpTagType.Query ?
+                        MpAvClipTileSortFieldViewModel.Instance.SelectedSortType : null;
+
+                     t = await MpTag.CreateAsync(
                              parentTagId: TagId,
                              treeSortIdx: Items.Count,
-                             tagType: childTagType);
+                             tagType: childTagType,
+                             isSortDescending: sortDir,
+                             sortType: sortType);
+
+                     if (childTagType == MpTagType.Query) {
+                         // this should only happen from add tag button w/ a group tag selected
+                         //int queryTagId = await MpAvSearchCriteriaItemCollectionViewModel.Instance.
+                         //   ConvertCurrentSearchToAdvSearchAsync(false);
+
+                         //// get ref to newly created adv tag
+                         //t = await MpDataModelProvider.GetItemAsync<MpTag>(queryTagId);
+                         //t.TreeSortIdx = Items.Count;
+                         //t.ParentTagId = TagId;
+                         //await t.WriteToDatabaseAsync();
+
                      }
+
                  } else {
                      // updating pending query tag (always called from root group tag)
                      t.TreeSortIdx = Items.Count;
                      t.ParentTagId = TagId;
                      await t.WriteToDatabaseAsync();
                  }
-                 if(t != null && 
-                    t.TagType == MpTagType.Query &&
-                    (t.SortType == null || t.IsSortDescending == null)) {
-                     // ensure sort info is defined before creating vm
+                 //if(t != null && 
+                 //   t.TagType == MpTagType.Query &&
+                 //   (t.SortType == null || t.IsSortDescending == null)) {
+                 //    // ensure sort info is defined before creating vm
 
-                     t.SortType = MpAvClipTileSortFieldViewModel.Instance.SelectedSortType;
-                     t.IsSortDescending = MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending;
-                     await t.WriteToDatabaseAsync();
-                 }
+                 //    t.SortType = MpAvClipTileSortFieldViewModel.Instance.SelectedSortType;
+                 //    t.IsSortDescending = MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending;
+                 //    await t.WriteToDatabaseAsync();
+                 //}
 
                  MpAvTagTileViewModel ttvm = await CreateChildTagTileViewModel(t);
                  

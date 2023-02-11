@@ -95,8 +95,8 @@
                 local:MpAvSizeObserverExtension.ObservedWidth="{Binding QueryTrayScreenWidth, Mode=OneWayToSource}"
                 local:MpAvSizeObserverExtension.ObservedHeight="{Binding QueryTrayScreenHeight, Mode=OneWayToSource}">
             <ScrollViewer x:Name="ClipTrayScrollViewer"
-                          HorizontalScrollBarVisibility="Auto"
-                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Visible"
+                          VerticalScrollBarVisibility="Visible"
                           HorizontalAlignment="Left"
                           VerticalAlignment="Top"
                           AllowAutoHide="True"
@@ -182,10 +182,13 @@
             </ScrollViewer>
         </Border>
 
-        <!--  IsBusy Overlay  -->
+        <!--
+            IsBusy Overlay
+                IsVisible="{Binding IsRequerying}"
+        -->
         <Border HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
-                IsVisible="{Binding IsRequerying}"
+                IsVisible="False"
                 Grid.Row="1">
             <!--<Border.IsVisible>
                 <MultiBinding Converter="{StaticResource MultiBoolConverter}"
@@ -194,19 +197,30 @@
                     <Binding Path="IsAnyBusy" />
                 </MultiBinding>
             </Border.IsVisible>-->
-            <local:MpAvBusySpinnerView HorizontalAlignment="Center"
+
+            <!--<local:MpAvBusySpinnerView HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
                                        Width="70"
-                                       Height="70" />
+                                       Height="70" />-->
+            <Border HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Width="70"
+                    Height="70">
+                <local:MpAvProgressSpinnerView HorizontalAlignment="Stretch"
+                                               VerticalAlignment="Stretch"
+                                               DataContext="{Binding}" />
+            </Border>
         </Border>
 
         <!--  IsEmpty Overlay  -->
 
         <Border HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
+                IsHitTestVisible="False"
+                IsVisible="False"
                 Grid.Row="1"
                 Background="Transparent">
-            <Border.IsVisible>
+            <!--<Border.IsVisible>
                 <MultiBinding Converter="{StaticResource MultiBoolConverter}"
                               ConverterParameter="AND">
                     <Binding Path="IsQueryEmpty" />
@@ -214,7 +228,7 @@
                     <Binding Path="!IsMainWindowInitiallyOpening"
                              Source="{x:Static local:MpAvMainWindowViewModel.Instance}" />
                 </MultiBinding>
-            </Border.IsVisible>
+            </Border.IsVisible>-->
             <TextBlock HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        TextAlignment="Center"

@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Threading;
+using Gtk;
 using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
@@ -14,11 +15,13 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     public class MpAvSearchCriteriaItemCollectionViewModel : 
         MpViewModelBase,
-        MpIExpandableViewModel,
-        MpIQueryResultProvider {
+        //MpIQueryResultProvider, 
+        MpIExpandableViewModel
+        {
 
         #region Private Variable
 
+        private bool _isRestoringValues = false;
         private MpIQueryResultProvider _simpleSearchRef;
         private MpQueryPageTools _pageTools;
         #endregion
@@ -49,105 +52,117 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpIQueryResultProvider Implementation
+        //#region MpIQueryResultProvider Implementation
 
-        #region MpIJsonObject Implementation
+        //#region MpIJsonObject Implementation
 
-        public string SerializeJsonObject() {
-            if(PendingQueryTagId > 0) {
-                return (PendingQueryTagId * -1).ToString();
-            }
-            if(IsSavedQuery) {
-                return CurrentQueryTagId.ToString();
-            }
-            return "0";
-        }
+        //public string SerializeJsonObject() {
+        //    if(PendingQueryTagId > 0) {
+        //        return (PendingQueryTagId * -1).ToString();
+        //    }
+        //    if(IsSavedQuery) {
+        //        return CurrentQueryTagId.ToString();
+        //    }
+        //    return "0";
+        //}
 
-        #endregion
+        //#endregion
 
-        public int TotalAvailableItemsInQuery => _pageTools.AllQueryIds.Count;
-        public MpIDbIdCollection PageTools => _pageTools;
-        public IEnumerable<MpIQueryInfoValueProvider> ValueProviders => null;
-        public void RestoreProviderValues() {
-            // NOTE only called in mw init when last load shutdown was adv search
-            if (QueryTagId == 0) {
-                // shouldn't be called
-                Debugger.Break();
-                return;
-            }
-            InitializeAsync(QueryTagId, IsPendingQuery).FireAndForgetSafeAsync(this);
-        }
+        //public bool CanRequery =>
+        //    IsAdvSearchActive &&
+        //    !_isRestoringValues &&
+        //    MpAvClipTrayViewModel.Instance.QueryCommand.CanExecute(null);
 
-        public void RegisterProvider(MpIQueryInfoValueProvider provider) {
-            // NOTE only called in mw init when last load shutdown was adv search
-            if(MpAvBootstrapperViewModel.IsPlatformLoaded) {
-                // shouldn't happen
-                Debugger.Break();
-            }
-            if(_simpleSearchRef == null) {
-                // since simple query won't exist, create for providers to register
-                _simpleSearchRef = new MpAvQueryInfoViewModel();
-            }
-            _simpleSearchRef.RegisterProvider(provider);
-        }
+        //public int TotalAvailableItemsInQuery => _pageTools.AllQueryIds.Count;
+        //public MpIDbIdCollection PageTools => _pageTools;
 
-        public async Task<List<MpCopyItem>> FetchIdsByQueryIdxListAsync(List<int> copyItemQueryIdxList) {
-            var fetchRootIds = _pageTools.AllQueryIds
-                                .Select((val, idx) => (val, idx))
-                                .Where(x => copyItemQueryIdxList.Contains(x.idx))
-                                .Select(x => x.val).ToList();
-            var items = await MpDataModelProvider.GetCopyItemsByIdListAsync(fetchRootIds);
-            return items;
-        }
+        //public void RestoreProviderValues() {
+        //    // NOTE only called in mw init when last load shutdown was adv search
+        //    //InitializeAsync(QueryTagId, IsPendingQuery).FireAndForgetSafeAsync(this);
+        //    if (MpPlatform.Services.Query != this) {
+        //        // mistake
+        //        Debugger.Break();
+        //        return;
+        //    }
+        //    var qttvm = MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == QueryTagId);
+        //    if (qttvm == null) {
+        //        // mistake
+        //        Debugger.Break();
+        //        return;
+        //    }
+        //    _isRestoringValues = true;
+            
+        //    MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending = qttvm.IsSortDescending;
+        //    MpAvClipTileSortFieldViewModel.Instance.SelectedSortType = qttvm.SortType;
+        //    MpAvSearchBoxViewModel.Instance.SearchText = string.Empty;
+        //    MpAvSearchBoxViewModel.Instance.SearchFilterCollectionViewModel.FilterType = 
+        //        MpAvSearchBoxViewModel.Instance.SearchFilterCollectionViewModel.DefaultFilters;
+        //    _isRestoringValues = false;
 
-        public async Task QueryForTotalCountAsync() {
-            // NOTE only called on head info
+        //    if(MpAvTagTrayViewModel.Instance.LastActiveId == QueryTagId) {
+        //        NotifyQueryChanged(true);
+        //    } else {
+        //        MpAvTagTrayViewModel.Instance.SelectTagCommand.Execute(QueryTagId);
+        //    }
+        //}
 
-            var result = await MpContentQuery.QueryAllAsync(HeadItem, true);
-            _pageTools.AllQueryIds.Clear();
-            _pageTools.AllQueryIds.AddRange(result);
-        }
+        //public async Task<List<MpCopyItem>> FetchItemsByQueryIdxListAsync(IEnumerable<int> copyItemQueryIdxList, IEnumerable<int> idsToOmit) {
+        //    var fetchRootIds = _pageTools.AllQueryIds
+        //                        .Select((val, idx) => (val, idx))
+        //                        .Where(x => copyItemQueryIdxList.Contains(x.idx) && !idsToOmit.Contains(x.val))
+        //                        .Select(x => x.val).ToList();
+        //    var items = await MpDataModelProvider.GetCopyItemsByIdListAsync(fetchRootIds);
+        //    return items;
+        //}
 
-        public void NotifyQueryChanged(bool forceRequery = false) {
-            if(IsBusy) {
-                return;
-            }
-            var ttrvm = MpAvTagTrayViewModel.Instance;
-            if (!IsExpanded && 
-                !IsConvertingQueryToSelect &&
-                ttrvm.SelectedItem != null &&
-                !ttrvm.SelectedItem.IsQueryTag) {
-                // treat expanded like is active, so if not active and tag is not query
-                // hand back to simple
-                InitializeAsync(0, false).FireAndForgetSafeAsync(this);
-                return;
-            }
-            Dispatcher.UIThread.Post(() => {
-                // NOTE unlike query vm this treats forceRequery as
-                // required since value providers are internal i dunno
+        //public async Task QueryForTotalCountAsync() {
 
-                if (forceRequery) {
-                    //if(ttrvm.SelectedItemId != SelectedSearchTagId &&
-                    //    ttrvm.SelectedItem.IsLinkTag) {
-                    //    // ensure tag tree/tray selection updates searchtag when possible
-                    //    if(ttrvm.SelectedItemId != AllTagId &&
-                    //        ttrvm.SelectedItemId != AvailableNotAllTagId) {
-                    //        // shouldn't available tag already be updated?
-                    //        Debugger.Break();
-                    //    } else {
-                    //        SelectedSearchTagId = ttrvm.SelectedItemId;
-                    //    }
-                    //}
-                    _pageTools.AllQueryIds.Clear();
-                    MpMessenger.SendGlobal(MpMessageType.QueryChanged);
-                } else {
-                    MpMessenger.SendGlobal(MpMessageType.SubQueryChanged);
-                }
+        //    MpConsole.WriteLine("Adv total count called");
+        //    // NOTE only called on head info
 
-            });
-        }
+        //    var result = await MpContentQuery.QueryAllAsync(HeadItem);
+        //    _pageTools.AllQueryIds.Clear();
+        //    _pageTools.AllQueryIds.AddRange(result);
+        //    //_pageTools.AllQueryIds = new ObservableCollection<int>(result);
 
-        #endregion
+        //    MpMessenger.SendGlobal(MpMessageType.TotalQueryCountChanged);
+        //}
+
+        //public void NotifyQueryChanged(bool forceRequery = false) {
+        //    //if(IsBusy) {
+        //    //    return;
+        //    //}
+        //    var ttrvm = MpAvTagTrayViewModel.Instance;
+        //    if (!IsExpanded && 
+        //        !IsConvertingQueryToSelect &&
+        //        ttrvm.SelectedItem != null &&
+        //        !ttrvm.SelectedItem.IsQueryTag) {
+        //        // treat expanded like is active, so if not active and tag is not query
+        //        // hand back to simple
+        //        InitializeAsync(0, false).FireAndForgetSafeAsync(this);
+        //        return;
+        //    }
+
+        //    if (!CanRequery) {
+        //        return;
+        //    }
+        //    Dispatcher.UIThread.Post(() => {
+        //        // NOTE unlike query vm this treats forceRequery as
+        //        // required since value providers are internal i dunno
+
+        //        if (forceRequery) {
+        //            MpConsole.WriteLine("Adv requery called");
+        //            //_pageTools.AllQueryIds.Clear();
+        //            //MpMessenger.SendGlobal(MpMessageType.TotalQueryCountChanged);
+        //            MpMessenger.SendGlobal(MpMessageType.QueryChanged);
+        //        } else {
+        //            MpMessenger.SendGlobal(MpMessageType.SubQueryChanged);
+        //        }
+
+        //    });
+        //}
+
+        //#endregion
 
         #endregion
 
@@ -168,16 +183,24 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool HasAnyCriteriaChanged {
+            get => Items.Any(x => x.HasCriteriaChanged);
+            set => Items.ForEach(x => x.HasCriteriaChanged = value);
+        }
         public bool IsConvertingQueryToSelect { get; set; }
-        public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsAnyBusy);
-        public bool HasCriteriaItems => Items.Count > 0;
+        public bool IsAnyBusy => 
+            IsBusy || Items.Any(x => x.IsAnyBusy);
+        public bool HasCriteriaItems => 
+            Items.Count > 0;
 
         public bool IsAdvSearchActive =>
-            MpPlatform.Services.Query == this;
+            QueryTagId > 0;
 
-        public bool IsSavedQuery => CurrentQueryTagId > 0;
+        public bool IsSavedQuery => 
+            CurrentQueryTagId > 0;
 
-        public bool IsPendingQuery => PendingQueryTagId > 0;
+        public bool IsPendingQuery => 
+            PendingQueryTagId > 0;
 
         #endregion
 
@@ -256,7 +279,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public MpAvSearchCriteriaItemCollectionViewModel() : base(null) {
-            _pageTools = new MpQueryPageTools();
+            _pageTools = MpQueryPageTools.Instance;
             PropertyChanged += MpAvSearchCriteriaItemCollectionViewModel_PropertyChanged;
             Items.CollectionChanged += Items_CollectionChanged;
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
@@ -280,38 +303,57 @@ namespace MonkeyPaste.Avalonia {
             if (QueryTagId > 0) {
                 var cil = await MpDataModelProvider.GetCriteriaItemsByTagId(QueryTagId);
                 foreach (var ci in cil) {
-                    var civm = await CreateCriteriaItemViewModel(ci);
+                    var civm = await CreateCriteriaItemViewModelAsync(ci);
                     Items.Add(civm);
                 }
+            } 
+            
+            if(!HasCriteriaItems) {
+                // create empty criteria item
+                var empty_civm = await CreateCriteriaItemViewModelAsync(null);
+                Items.Add(empty_civm);
             }
 
             while(Items.Any(x=>x.IsAnyBusy)) {
                 await Task.Delay(100);
             }
 
-            if (HasCriteriaItems) {
-                if (_simpleSearchRef == null &&
-                    MpPlatform.Services.Query != this) {
-                    _simpleSearchRef = MpPlatform.Services.Query;
-                }
-                MpPlatform.Services.Query = this;
-            } else {
-                IsExpanded = false;
-                if (_simpleSearchRef != null) {
-                    MpPlatform.Services.Query = _simpleSearchRef;
-                    _simpleSearchRef = null;
-                }
-            }            
+            //if (HasCriteriaItems) {
+            //    if (_simpleSearchRef == null &&
+            //        MpPlatform.Services.Query != this) {
+            //        _simpleSearchRef = MpPlatform.Services.Query;
+            //    }
+            //    MpPlatform.Services.Query = this;
+            //    if(QueryTagId > 0 && !isPending) {
+            //        // restore will either:
+            //        // 1. select the query tag (which will re-initialize this and call restore again)
+            //        // 2. call notify query change if query tag is already selected
+            //        IsBusy = false;
+            //        RestoreProviderValues();
+            //        return;
+            //    }
+            //} else {
+            //    IsExpanded = false;
+            //    if (_simpleSearchRef != null) {
+            //        MpPlatform.Services.Query = _simpleSearchRef;
+            //        _simpleSearchRef = null;
+            //    }
+            //}            
+            
 
             IsBusy = false;
 
-            while (MpAvClipTrayViewModel.Instance.IsAnyBusy) {
-                // wait for tile layouts to update or something that prevents requery
-                await Task.Delay(100);
-            }
-
+            //if (QueryTagId > 0 && !isPending) {
+            //    // restore will either:
+            //    // 1. select the query tag (which will re-initialize this and call restore again)
+            //    // 2. call notify query change if query tag is already selected
+            //    RestoreProviderValues();
+            //} else {
+            //    MpPlatform.Services.Query.NotifyQueryChanged(true);
+            //}
             MpPlatform.Services.Query.NotifyQueryChanged(true);
         }
+
 
         public async Task<int> ConvertCurrentSearchToAdvSearchAsync(bool selectConversion) {
             // NOTE select is only when from search plus button
@@ -366,7 +408,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private async Task<MpAvSearchCriteriaItemViewModel> CreateCriteriaItemViewModel(MpSearchCriteriaItem sci) {
+        private async Task<MpAvSearchCriteriaItemViewModel> CreateCriteriaItemViewModelAsync(MpSearchCriteriaItem sci) {
             MpAvSearchCriteriaItemViewModel nscivm = new MpAvSearchCriteriaItemViewModel(this);
             await nscivm.InitializeAsync(sci);
             return nscivm;
@@ -395,6 +437,21 @@ namespace MonkeyPaste.Avalonia {
                     //MpAvResizeExtension.ResizeByDelta(MpAvMainWindow.Instance, 0, delta_close_height, false);                    
                     break;
                 case MpMessageType.RequeryCompleted:
+                    if(IsAdvSearchActive) {
+                        //MpAvClipTrayViewModel.Instance.Items.ForEach(x => x.UpdateQueryOffset());
+                        // BUG on requery w/ adv query offset isn't updating
+                        // i think its like the ref in clip tray to total count from
+                        // the interface or somehow not reevaluating query info 
+                        // but sub query fixes the offsets...
+                        //Dispatcher.UIThread.Post(async () => {
+                        //    while (MpAvClipTrayViewModel.Instance.IsAnyBusy) {
+                        //        // wait for tile layouts to update or something that prevents requery
+                        //        await Task.Delay(100);
+                        //    }
+                        //    MpAvClipTrayViewModel.Instance.QueryCommand.Execute(MpAvClipTrayViewModel.Instance.ScrollOffset);
+                        //});
+                    }
+                    break;
                 case MpMessageType.TagSelectionChanged:
                     OnPropertyChanged(nameof(IsSavedQuery));
                     //OnPropertyChanged(nameof(AvailableNotAllTagId));
@@ -435,7 +492,8 @@ namespace MonkeyPaste.Avalonia {
             if (newExpandedValue) {
                 if (!IsPendingQuery && !IsSavedQuery) {
                     // plus on search box toggled to checked
-                    await ConvertCurrentSearchToAdvSearchAsync(true);
+                    //await ConvertCurrentSearchToAdvSearchAsync(true);
+                    await InitializeAsync(0, true);
                 }
                 _isExpanded = true;
             } else {
@@ -571,7 +629,7 @@ namespace MonkeyPaste.Avalonia {
                 MpSearchCriteriaItem nsci = new MpSearchCriteriaItem() {
                     SortOrderIdx = add_idx
                 };
-                MpAvSearchCriteriaItemViewModel nscivm = await CreateCriteriaItemViewModel(nsci);
+                MpAvSearchCriteriaItemViewModel nscivm = await CreateCriteriaItemViewModelAsync(nsci);
                 Items.Add(nscivm);
                 OnPropertyChanged(nameof(SortedItems));
                 OnPropertyChanged(nameof(HasCriteriaItems));
@@ -599,7 +657,7 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(100);
                 }
                 IsBusy = false;
-                NotifyQueryChanged(true);
+                MpPlatform.Services.Query.NotifyQueryChanged(true);
             },
             (args) => args is MpAvSearchCriteriaItemViewModel);
 
@@ -636,7 +694,7 @@ namespace MonkeyPaste.Avalonia {
                  } else {
                      IgnoreHasModelChanged = false;
                  }
-             },()=>HasCriteriaItems, this, new[] { this });
+             },()=>IsAdvSearchActive, this, new[] { this });
         
         public ICommand CancelPendingOrCollapseSavedQueryCommand => new MpAsyncCommand(
              async() => {
@@ -645,7 +703,7 @@ namespace MonkeyPaste.Avalonia {
                      await RejectPendingCriteriaItemsCommand.ExecuteAsync();
                  }
                  IsExpanded = false;
-             },()=>HasCriteriaItems, this, new[] { this });
+             },()=>IsAdvSearchActive, this, new[] { this });
 
 
         public ICommand SelectAdvancedSearchCommand => new MpCommand<object>(

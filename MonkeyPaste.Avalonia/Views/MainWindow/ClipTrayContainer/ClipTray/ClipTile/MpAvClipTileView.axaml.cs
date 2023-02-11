@@ -21,6 +21,14 @@ namespace MonkeyPaste.Avalonia {
         public MpAvClipTileView() {
             InitializeComponent();
             DataContextChanged += MpAvClipTileView_DataContextChanged;
+            this.PointerMoved += MpAvClipTileView_PointerMoved;
+        }
+
+        private void MpAvClipTileView_PointerMoved(object sender, PointerEventArgs e) {
+            if(!BindingContext.IsHovering) {
+                // dc mismatch
+                Debugger.Break();
+            }
         }
 
         private void MpAvClipTileView_DataContextChanged(object sender, EventArgs e) {
@@ -33,6 +41,12 @@ namespace MonkeyPaste.Avalonia {
         private void BindingContext_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             // BUG workaround for not being able to bind to row definition w/o getting binding null warning
             switch(e.PropertyName) {
+                case nameof(BindingContext.IsHovering):
+                    if(this.IsPointerOver != BindingContext.IsHovering) {
+                        // dc mismatch
+                        Debugger.Break();
+                    }
+                    break;
                 case nameof(BindingContext.IsHeaderAndFooterVisible):
                 case nameof(BindingContext.IsTitleVisible):
                 case nameof(BindingContext.IsDetailVisible):

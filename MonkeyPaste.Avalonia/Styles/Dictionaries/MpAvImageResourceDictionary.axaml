@@ -16,6 +16,12 @@
     <sys:String x:Key="RobotClawImage">
         avares://MonkeyPaste.Avalonia/Assets/Images/robotclaw.png
     </sys:String>
+    <sys:String x:Key="AscImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/asc.png
+    </sys:String>
+  <sys:String x:Key="DescImage">
+        avares://MonkeyPaste.Avalonia/Assets/Images/desc.png
+    </sys:String>
     <sys:String x:Key="BrainImage">
         avares://MonkeyPaste.Avalonia/Assets/Images/brain.png
     </sys:String>

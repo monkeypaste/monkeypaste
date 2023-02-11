@@ -297,14 +297,14 @@ namespace MonkeyPaste.Avalonia {
 
             bool wait_for_selection = false;
             if (dc is MpISelectorItemViewModel sivm) {
-                if (e.IsLeftPress(control) || GetSelectOnRightClick(control)) {
+                if (e.IsLeftPress(control) || (e.IsRightPress(control) && GetSelectOnRightClick(control))) {
                     if (sivm.Selector.SelectedItem != dc) {
                         wait_for_selection = true;
                         sivm.Selector.SelectedItem = dc;
                     }
                 }
             } else if (dc is MpISelectableViewModel svm) {
-                if (e.IsLeftPress(control) || GetSelectOnRightClick(control)) {
+                if (e.IsLeftPress(control) || (e.IsRightPress(control) && GetSelectOnRightClick(control))) {
                     if (!svm.IsSelected) {
                         wait_for_selection = true;
                     }
@@ -647,6 +647,7 @@ namespace MonkeyPaste.Avalonia {
             PlacementMode placement = PlacementMode.AnchorAndGravity,
             bool hideOnClick = false,
             bool selectOnRightClick = false) {
+            _cmInstance.Close();
 
             offset = offset == null ? MpPoint.Zero : offset;
 

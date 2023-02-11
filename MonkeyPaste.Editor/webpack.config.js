@@ -32,5 +32,6 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
     sourceMapFilename: "[name].js.map",
     clean: true
-  }
+    },
+    devtool: "source-map"
 };

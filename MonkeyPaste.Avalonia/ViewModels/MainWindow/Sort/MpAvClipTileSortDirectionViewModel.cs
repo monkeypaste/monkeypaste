@@ -11,8 +11,7 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     public class MpAvClipTileSortDirectionViewModel : 
         MpViewModelBase, 
-        MpIExpandableViewModel,
-        MpIQueryInfoValueProvider {
+        MpIExpandableViewModel {
         #region Private Variables
 
         #endregion
@@ -29,20 +28,23 @@ namespace MonkeyPaste.Avalonia {
         public bool IsExpanded { get; set; }
 
         #endregion
-        #region MpIQueryInfoProvider Implementation
-        object MpIQueryInfoValueProvider.Source => this;
-        string MpIQueryInfoValueProvider.SourcePropertyName => nameof(IsSortDescending);
-
-        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpIQueryInfo.IsDescending);
-
-        #endregion
 
         #region Properties
 
+        #region Appearance
+
+        public string SortDirIconResourceKey =>
+            !IsSortDescending ?
+                "DescendingSvg" :
+                "AscendingSvg";
+        #endregion
         #region State
-        public bool IsSortDescending { get; set; } = true;
+        public bool IsSortDescending { get; set; } 
 
         public bool IsSortDirOrFieldFocused { get; set; }
+
+        public bool CanChangeDir =>
+            MpAvClipTrayViewModel.Instance.QueryCommand.CanExecute(null);
 
         #endregion
         #endregion
@@ -57,7 +59,6 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
         public void Init() {
             //await Task.Delay(1);
-            MpPlatform.Services.Query.RegisterProvider(this);
 
             //ResetToDefault(true);
         }
@@ -68,6 +69,7 @@ namespace MonkeyPaste.Avalonia {
         private void MpAvClipTileSortDirectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsSortDescending):
+                    OnPropertyChanged(nameof(SortDirIconResourceKey));
                     MpMessenger.SendGlobal(MpMessageType.QuerySortChanged);
                     MpPlatform.Services.Query.NotifyQueryChanged();
                     break;
@@ -94,7 +96,12 @@ namespace MonkeyPaste.Avalonia {
         #region Commands
         public ICommand ClickCommand => new MpCommand(() => {
             if(IsExpanded) {
-                IsSortDescending = !IsSortDescending;
+                if(CanChangeDir) {
+                    // toggling while querying will get button out of sync w/ query
+                    // if query cannot execute
+                    IsSortDescending = !IsSortDescending;
+                }
+                
             } else {
                 IsExpanded = true;
             }
@@ -103,7 +110,11 @@ namespace MonkeyPaste.Avalonia {
             if(IsExpanded) {
                 IsExpanded = false;
             } else {
-                IsSortDescending = !IsSortDescending;
+                if (CanChangeDir) {
+                    // toggling while querying will get button out of sync w/ query
+                    // if query cannot execute
+                    IsSortDescending = !IsSortDescending;
+                }
             }
         });
         #endregion

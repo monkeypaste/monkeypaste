@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Text;
 
@@ -14,6 +15,8 @@ namespace MonkeyPaste {
         #endregion
 
         #region Statics
+        private static MpQueryPageTools _instance;
+        public static MpQueryPageTools Instance => _instance ?? (_instance = new MpQueryPageTools());
         #endregion
 
         #region Interfaces
@@ -41,9 +44,13 @@ namespace MonkeyPaste {
             } else {
                 AllQueryIds.Insert(idx, id);
             }
+            MpMessenger.SendGlobal(MpMessageType.TotalQueryCountChanged);
         }
         public bool RemoveItemId(int itemId) {
             bool was_removed = AllQueryIds.Remove(itemId);
+            if(was_removed) {
+                MpMessenger.SendGlobal(MpMessageType.TotalQueryCountChanged);
+            }
             return was_removed;
         }
         public bool RemoveIdx(int queryIdx) {
@@ -51,20 +58,22 @@ namespace MonkeyPaste {
                 return false;
             }
             AllQueryIds.RemoveAt(queryIdx);
+            MpMessenger.SendGlobal(MpMessageType.TotalQueryCountChanged);
             return true;
         }
+
         #endregion
 
         #endregion
 
         #region Properties
 
-        public ObservableCollection<int> AllQueryIds { get; private set; }
+        public ObservableCollection<int> AllQueryIds { get;  set; }
 
         #endregion
 
         #region Constructors
-        public MpQueryPageTools() {
+        private MpQueryPageTools() {
             AllQueryIds = new ObservableCollection<int>();
             AllQueryIds.CollectionChanged += _allQueryCopyItemIds_CollectionChanged;
         }
@@ -79,7 +88,9 @@ namespace MonkeyPaste {
 
         #region Private Methods
         private void _allQueryCopyItemIds_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            MpMessenger.SendGlobal(MpMessageType.TotalQueryCountChanged);
+            if(e.Action == NotifyCollectionChangedAction.Reset) {
+
+            }
         }
         #endregion
 

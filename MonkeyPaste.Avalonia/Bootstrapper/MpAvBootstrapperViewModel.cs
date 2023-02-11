@@ -84,7 +84,8 @@ namespace MonkeyPaste.Avalonia {
                     new MpBootstrappedItemViewModel(this,typeof(MpAvTagTrayViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvExternalPasteHandler)),
                     new MpBootstrappedItemViewModel(this,typeof(MpDataModelProvider)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpAvTriggerCollectionViewModel))
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvTriggerCollectionViewModel)),
+                   // new MpBootstrappedItemViewModel(this,typeof(MpAvFilterMenuViewModel))
                });
 
             _platformItems.AddRange(

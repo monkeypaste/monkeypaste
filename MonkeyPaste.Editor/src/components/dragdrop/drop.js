@@ -94,7 +94,20 @@ function isDropping() {
 
 // #region Actions
 
-function resetDrop(fromHost, wasLeave) {
+function rejectDrop(e) {
+    DropIdx = -1;
+    if (!isNullOrUndefined(e.dataTransfer)) {
+        e.dataTransfer.dropEffect = 'none';
+    }
+    drawOverlay();
+    return false;
+}
+
+
+function resetDrop(fromHost, wasLeave, wasCancel) {
+    if (wasCancel) {
+        onDragEnd_ntf(fromHost, true);
+    }
     resetDebounceDragOver();
     stopAutoScroll(wasLeave);
 
@@ -112,22 +125,21 @@ function resetDrop(fromHost, wasLeave) {
     if (wasLeave && !isDragging() && WasNoSelectBeforeDragStart) {
         disableSubSelection();
     } else {
-        if (wasLeave && isDragging()) {// && DragDomRange) {
-            //setDomSelection(DragDomRange);
+        if (wasLeave && isDragging()) {
             // NOTE dragend isn't called on drag cancel (from escape key)
             onDragEnd();
         }
         updateAllElements();
     }
 
-    log('drop reset: ' + (fromHost ? "FROM HOST" : "INTERNALLY") + (wasLeave ? '| WAS LEAVE' : '| WAS DROP'));
+    log('drop reset: ' + (fromHost ? "FROM HOST" : "INTERNALLY") + (wasLeave ? ' | WAS LEAVE' : ' | WAS DROP'));
 }
 
 function processEffectAllowed(e) {
     let effect_str = 'none';
-    if (e.fromHost === undefined) {
+    if (e.fromHost === undefined && !isNullOrUndefined(e.dataTransfer)) {
         effect_str = e.dataTransfer.effectAllowed;
-    } else {
+    } else if (!isNullOrUndefined(e.effectAllowed_override)) {
         effect_str = e.effectAllowed_override;
     }
     if (!AllowedEffects.includes(effect_str)) {
@@ -140,7 +152,10 @@ function processEffectAllowed(e) {
     } else {
         effect_str = 'none';
     }
-    e.dataTransfer.dropEffect = effect_str;
+    if (!isNullOrUndefined(e.dataTransfer)) {
+        e.dataTransfer.dropEffect = effect_str;
+    }
+    
     return effect_str;
 }
 
@@ -205,7 +220,7 @@ function onDragOver(e) {
     if (!isDropping()) {
         // IsDropping won't be set to true when its dragOverlay ie. can't drop whole tile on itself.
         log('onDragOver called but not dropping, returning false');
-        return false;
+        return rejectDrop(e);
     }
     if (e.target.id == 'dragOverlay') {
         debugger;
@@ -228,7 +243,7 @@ function onDragOver(e) {
     }
 
     if (!is_valid) {
-        return false;
+        return rejectDrop(e);
     }
 
 
@@ -239,8 +254,9 @@ function onDragOver(e) {
         updateModKeys(e);
     }
 
+
     if (processEffectAllowed(e) == 'none') {
-        return false;
+        return rejectDrop(e);
     }  
 
     // DROP IDX
@@ -257,9 +273,8 @@ function onDragOver(e) {
         }
         if (is_drop_over_drag_sel ||
             is_drop_over_template) {
-            DropIdx = -1;
-            e.dataTransfer.dropEffect = "none";
             log('invalidating self drop. DROP EFFECT SHOULD BE NONE IS: ' + e.dataTransfer.dropEffect + ' over drag sel: ' + is_drop_over_drag_sel + ' over template: ' + is_drop_over_template);
+            return rejectDrop(e);
         }
     }
     drawOverlay();
@@ -272,22 +287,22 @@ function onDragLeave(e) {
 
     updateWindowMouseState(e);
 
-    //if (e.target.id == 'dragOverlay') {
-    //    return;
-    //}
-
-    //let emp = getClientMousePos(e);
     let editor_rect = getEditorContainerRect();
     if (isPointInRect(editor_rect, WindowMouseLoc)) {
-        resetDrop(e.fromHost, false);
+
+        if (!DropItemElms.includes(e.target)) {
+            // drag leave of block/inline element, ignore
+            return;
+        }
+        resetDrop(e.fromHost, false, true);
         log('drag canceled (pointer still in window)');
         onDragLeave_ntf();
-        return;
+        return rejectDrop(e);
     }
 
     log('drag leave');
 
-    resetDrop(e.fromHost, true);
+    resetDrop(e.fromHost, true, false);
 
     onDragLeave_ntf();
 }
@@ -308,40 +323,39 @@ function onDrop(e) {
         isDragging() && isPoint(WindowMouseLoc) && isPoint(WindowMouseDownLoc) ?
             dist(WindowMouseLoc, WindowMouseDownLoc) : null;
 
-    updateWindowMouseState(e);
-
-    
+    updateWindowMouseState(e);    
 
     // VALIDATE
 
     if (DropIdx < 0) {
         log('Drop rejected, dropIdx ' + DropIdx);
-        resetDrop(e.fromHost, false);
+        resetDrop(e.fromHost, false, true);
         return false;
     }
     if (!isDropping()) {
         log('onDrop called but not dropping, ignoring and returning false');
-        resetDrop(e.fromHost, false);
+        resetDrop(e.fromHost, false, true);
         return false;
     }
 
     let dropEffect = processEffectAllowed(e);
+
     if (dropEffect == 'none') {
         log('onDrop called but dropEffect was none, ignoring and returning false');
-        resetDrop(e.fromHost, false);
-        return false;
+        resetDrop(e.fromHost, false, true);
+        return rejectDrop(e);
     }
 
     if (isDragging() && isDocIdxInRange(DropIdx, getDocSelection())) {
         log('onDrop called but drop within drag range, ignoring and returning false');
-        resetDrop(e.fromHost, false);
-        return false;
+        resetDrop(e.fromHost, false, true);
+        return rejectDrop(e);
     }
 
     if (isDragging() && (!drag_dist || drag_dist < MIN_DRAG_DIST)) {
         log('Drop rejected, dist was ' + drag_dist + ' minimum is ' + MIN_DRAG_DIST);
-        resetDrop(e.fromHost, false);
-        return false;
+        resetDrop(e.fromHost, false, true);
+        return rejectDrop(e);
     }
 
 
@@ -374,7 +388,7 @@ function onDrop(e) {
 
             // RESET
 
-            resetDrop(e.fromHost, false);
+            resetDrop(e.fromHost, false, false);
 
             onDropCompleted_ntf();
             drawOverlay();

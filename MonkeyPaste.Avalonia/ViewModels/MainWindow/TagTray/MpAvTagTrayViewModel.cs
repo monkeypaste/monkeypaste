@@ -18,7 +18,6 @@ namespace MonkeyPaste.Avalonia {
         MpIHoverableViewModel,
         MpISelectableViewModel,
         MpISidebarItemViewModel,
-        MpIQueryInfoValueProvider,
         MpITagQueryTools {
         #region Private Variables
         
@@ -58,14 +57,6 @@ namespace MonkeyPaste.Avalonia {
             }
             return null;
         }
-        #endregion
-
-        #region MpIQueryInfoProvider Implementation
-        object MpIQueryInfoValueProvider.Source => this;
-        string MpIQueryInfoValueProvider.SourcePropertyName => nameof(SelectedItemId);
-
-        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpIQueryInfo.TagId);
-
         #endregion
 
         #region MpISidebarItemViewModel Implementation
@@ -166,14 +157,12 @@ namespace MonkeyPaste.Avalonia {
                 return _selectedItemId;
             }
             set {
-                //if(SelectedItemId != value) {
-                //    if(value <= 0) {
-                //        SelectedItem = null;
-                //    }
-                //}
                 SelectTagCommand.Execute(value);
             }
         }
+
+        public int LastActiveId =>
+            LastSelectedActiveItem == null ? 0 : LastSelectedActiveItem.TagId;
 
         public bool IsSelecting { get; private set; } = false;
         //public bool IsNavButtonsVisible => MpAvMainWindowViewModel.Instance.IsHorizontalOrientation && 
@@ -258,7 +247,6 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = true;
 
             MpPlatform.Services.TagQueryTools = this;
-            MpPlatform.Services.Query.RegisterProvider(this);
 
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
 
@@ -503,7 +491,7 @@ namespace MonkeyPaste.Avalonia {
                 OnPropertyChanged(nameof(IsNavButtonsVisible));
                 OnPropertyChanged(nameof(TagTrayScreenWidth));
             }, (args) => {
-                return args is MpAvTagTileViewModel ttvm && ttvm.IsNotGroupTag;
+                return args is MpAvTagTileViewModel ttvm && ttvm.CanPin;
             });
 
         public ICommand SelectTagCommand => new MpCommand<object>(

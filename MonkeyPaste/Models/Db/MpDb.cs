@@ -71,11 +71,12 @@ namespace MonkeyPaste {
         }
 
         public static string GetParameterizedQueryString(string query, object[] args) {
-            if (args == null || args.Length == 0 || _connection == null) {
+            if (args == null || args.Length == 0) {
                 return query;
             }
             //return _connection.CreateCommand(query, args).ToString();
-            return query + Environment.NewLine + args == null ? string.Empty : string.Join(Environment.NewLine, args);
+            string query_str = query + Environment.NewLine + (args == null ? string.Empty : string.Join(Environment.NewLine, args));
+            return query_str;
         }
 
         public static string GetDbFileAsBase64() {

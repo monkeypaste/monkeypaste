@@ -15,8 +15,7 @@ using System.Collections.Generic;
 namespace MonkeyPaste.Avalonia {
     public class MpAvClipTileSortFieldViewModel : 
         MpViewModelBase, 
-        MpISingletonViewModel<MpAvClipTileSortFieldViewModel>,
-        MpIQueryInfoValueProvider {
+        MpISingletonViewModel<MpAvClipTileSortFieldViewModel> {
         #region Statics
         private static MpAvClipTileSortFieldViewModel _instance;
         public static MpAvClipTileSortFieldViewModel Instance => _instance ?? (_instance = new MpAvClipTileSortFieldViewModel());
@@ -24,15 +23,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
-
-        #region MpIQueryInfoProvider Implementation
-
-        object MpIQueryInfoValueProvider.Source => this;
-        string MpIQueryInfoValueProvider.SourcePropertyName => nameof(SelectedSortType);
-
-        string MpIQueryInfoValueProvider.QueryValueName => nameof(MpIQueryInfo.SortType);
-
-        #endregion
 
         #endregion
 
@@ -84,7 +74,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
         public void Init() {
-            MpPlatform.Services.Query.RegisterProvider(this);
         }
 
         #endregion
@@ -93,6 +82,7 @@ namespace MonkeyPaste.Avalonia {
         private void MpClipTileSortViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e) {
             switch (e.PropertyName) {                
                 case nameof(SelectedSortType):
+                    MpMessenger.SendGlobal(MpMessageType.QuerySortChanged);
                     MpPlatform.Services.Query.NotifyQueryChanged();
                     break;
             }

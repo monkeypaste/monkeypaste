@@ -113,6 +113,13 @@ namespace MonkeyPaste {
 
         public MpSearchCriteriaItem() : base() { }
 
+        public override Task WriteToDatabaseAsync() {
+            if(string.IsNullOrEmpty(Guid)) {
+                // handle save for pending query
+                Guid = System.Guid.NewGuid().ToString();
+            }
+            return base.WriteToDatabaseAsync();
+        }
         public override async Task DeleteFromDatabaseAsync() {
             List<Task> deleteTasks = new List<Task>();
 

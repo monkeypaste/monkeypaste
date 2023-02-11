@@ -51,6 +51,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpAvIDragSource Implementation
 
+        public bool WasDragCanceled { get; set; } = false;
 
         public PointerPressedEventArgs LastPointerPressedEventArgs { get; }
 

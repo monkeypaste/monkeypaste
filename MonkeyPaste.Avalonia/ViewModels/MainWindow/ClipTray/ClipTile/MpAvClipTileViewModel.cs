@@ -409,6 +409,23 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public int RecyclePriority {
+            get {
+                if(Parent == null) {
+                    return 0;
+                }
+                if(IsPlaceholder) {
+                    return int.MaxValue;
+                }
+                if(QueryOffsetIdx < 0) {
+                    // should be caught by placeholder but they arent 
+                    // exclusively depenendant...
+                    return int.MaxValue - 1;
+                }
+                // farther from top-left, higher the priority
+                return (int)ScreenRect.Location.Length;
+            }
+        }
         private int SelectedDetailIdx { get; set; } = 0;
 
         public bool IsHovering { get; set; }
@@ -498,43 +515,9 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public int QueryOffsetIdx { get; set; } = -1;
-
-        //public int PinnedPlaceholderQueryOffsetIdx { get; set; } = -1;
-
-        //public int RowIdx {
-        //    get {
-        //        int rowIdx = 0;
-        //        if (Parent == null) {
-        //            return rowIdx;
-        //        }
-        //        if (Parent.LayoutType == MpAvClipTrayLayoutType.Stack) {
-        //            rowIdx = Parent.ListOrientation == Orientation.Horizontal ?
-        //                            0 : QueryOffsetIdx;
-        //        } else {
-        //            rowIdx = (int)((double)QueryOffsetIdx / (double)Parent.ColCount);
-        //        }
-
-        //        return rowIdx;
-        //    }
-        //}
-
-        //public int ColIdx {
-        //    get {
-        //        int colIdx = 0;
-        //        if (Parent == null) {
-        //            return colIdx;
-        //        }
-        //        if (Parent.LayoutType == MpAvClipTrayLayoutType.Stack) {
-        //            colIdx = Parent.ListOrientation == Orientation.Horizontal ?
-        //                            QueryOffsetIdx : 0;
-        //        } else {
-        //            colIdx = QueryOffsetIdx - (RowIdx * Parent.ColCount);
-        //        }
-
-        //        return colIdx;
-        //    }
-        //}
+        private int _queryOffsetIdx = -1;
+        public int QueryOffsetIdx =>
+            _queryOffsetIdx;
 
         public bool IsHorizontalScrollbarVisibile {
             get {
@@ -1007,6 +990,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvClipTileViewModel(MpAvClipTrayViewModel parent) : base(parent) {
             TileCreatedDateTime = DateTime.Now;
+            
             PropertyChanged += MpClipTileViewModel_PropertyChanged;
             FileItemCollectionViewModel = new MpAvFileItemCollectionViewModel(this);
             //DetailCollectionViewModel = new MpAvClipTileDetailCollectionViewModel(this);
@@ -1024,7 +1008,8 @@ namespace MonkeyPaste.Avalonia {
 
             await Task.Delay(1);
 
-            if (ci != null && MpAvPersistentClipTilePropertiesHelper.TryGetByPersistentSize_ById(ci.Id, out double uniqueWidth)) {
+            if (ci != null && 
+                MpAvPersistentClipTilePropertiesHelper.TryGetByPersistentSize_ById(ci.Id, out double uniqueWidth)) {
                 //BoundSize = new MpSize(uniqueWidth, MinHeight);
                 BoundWidth = uniqueWidth;
                 BoundHeight = MinHeight;
@@ -1040,7 +1025,7 @@ namespace MonkeyPaste.Avalonia {
             FileItemCollectionViewModel.InitializeAsync(ci).FireAndForgetSafeAsync(this);
 
             CopyItem = ci;
-            QueryOffsetIdx = queryOffset < 0 && ci != null ? QueryOffsetIdx : queryOffset;
+            //QueryOffsetIdx = queryOffset < 0 && ci != null ? QueryOffsetIdx : queryOffset;
 
             CycleDetailCommand.Execute(0);
             await TransactionCollectionViewModel.InitializeAsync(CopyItemId);
@@ -1076,6 +1061,7 @@ namespace MonkeyPaste.Avalonia {
             if (MpAvPersistentClipTilePropertiesHelper.IsPersistentTileTitleEditable_ById(CopyItemId)) {
                 IsTitleReadOnly = false;
             }
+            UpdateQueryOffset();
             //if(Parent.IsAnyAppendMode && HasAppendModel) {
             //    OnPropertyChanged(nameof(HasAppendModel));
             //}
@@ -1128,11 +1114,18 @@ namespace MonkeyPaste.Avalonia {
             //IsBusy = wasBusy;
         }
 
-        public void TriggerUnloadedNotification() {
+        public void TriggerUnloadedNotification(bool removeQueryItem) {
+            int unloaded_id = CopyItemId;
             CopyItem = null;
-            QueryOffsetIdx = -1;
+            if(removeQueryItem) {
+
+                MpPlatform.Services.Query.PageTools.RemoveItemId(unloaded_id);
+            }
+            _queryOffsetIdx = -1;
+            //QueryOffsetIdx = -1;
             OnPropertyChanged(nameof(IsPlaceholder));
             OnPropertyChanged(nameof(CopyItemId));
+            OnPropertyChanged(nameof(QueryOffsetIdx));
         }
 
         private MpAvIDragSource _dragSource;
@@ -1337,7 +1330,10 @@ namespace MonkeyPaste.Avalonia {
             //(Parent.CreateQrCodeFromSelectedClipsCommand as MpCommand).NotifyCanExecuteChanged();
         }
 
-
+        public void UpdateQueryOffset() {
+            _queryOffsetIdx = MpPlatform.Services.Query.PageTools.GetItemOffsetIdx(CopyItemId);
+            OnPropertyChanged(nameof(QueryOffsetIdx));
+        }
         #region IDisposable
 
         public override void DisposeViewModel() {
@@ -1459,6 +1455,7 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     }
                     OnPropertyChanged(nameof(CopyItemData));
+                    OnPropertyChanged(nameof(IsPlaceholder));
                     //UpdateDetails();
                     break;
                 case nameof(IsPinned):
@@ -1632,9 +1629,6 @@ namespace MonkeyPaste.Avalonia {
                     Parent.UpdateTileRectCommand.Execute(new object[] { Next, TrayRect });
                     break;
                 case nameof(TrayLocation):
-                    if (QueryOffsetIdx == 0 && TrayLocation.X > 0) {
-                        Debugger.Break();
-                    }
                     if (Next == null) {
                         //if (Parent.IsAnyResizing) {
                         //    // TrayX is only changed on layout change OR resize
@@ -1657,9 +1651,9 @@ namespace MonkeyPaste.Avalonia {
                     if (IsPlaceholder) {
                         break;
                     }
-                    if(Parent != null) {
-                        Parent.ValidateQueryTray();
-                    }
+                    //if(Parent != null) {
+                    //    Parent.ValidateQueryTray();
+                    //}
                     //MpRect prevRect = Prev == null ? null : Prev.TrayRect;
                     //Parent.UpdateTileRectCommand.Execute(new object[] { this, prevRect });
                     Parent.UpdateTileRectCommand.Execute(this);

@@ -39,6 +39,7 @@
                           local:MpAvMenuExtension.IsEnabled="True"
                           local:MpAvMenuExtension.CanShowMenu="{Binding CanShowContextMenu, Mode=OneWay}"
                           local:MpAvMenuExtension.SuppressDefaultRightClick="True"
+                          local:MpAvMenuExtension.SelectOnRightClick="True"
                           local:MpAvPointerPressCommandExtension.IsEnabled="True"
                           local:MpAvPointerPressCommandExtension.DoubleLeftPressCommand="{Binding EnableSubSelectionCommand}"
                           ScrollViewer.HorizontalScrollBarVisibility="Hidden"

@@ -84,9 +84,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 _isThisAppActive = value;
             }
-        }
-
-        
+        }        
         public virtual bool CanWatchProcesses() {
             // overridden on linux
             return true;
@@ -125,7 +123,6 @@ namespace MonkeyPaste.Avalonia {
                 _fileSystemProcessInfo = value;
             }
         }
-
 
         public ConcurrentDictionary<string, ObservableCollection<IntPtr>> RunningProcessLookup { get; protected set; } = new ConcurrentDictionary<string, ObservableCollection<IntPtr>>();
 

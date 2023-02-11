@@ -12,7 +12,7 @@ using Xamarin.Forms;
 namespace MonkeyPaste {
     public static class MpContentQuery {
         private static MpIQueryInfo _cur_qi;
-        public static async Task<List<int>> QueryAllAsync(MpIQueryInfo head_qi, bool isAdvanced) {
+        public static async Task<List<int>> QueryAllAsync(MpIQueryInfo head_qi) {
             List<int> result_ids = null;
             MpLogicalQueryType join_type = MpLogicalQueryType.None;
             int idx = 0;
@@ -21,7 +21,7 @@ namespace MonkeyPaste {
                 IEnumerable<int> qi_tag_ids =
                     MpPlatform.Services.TagQueryTools.GetSelfAndAllDescendantsTagIds(qi.TagId);
 
-                var qi_result = await PerformContentQueryAsync(qi, qi_tag_ids,isAdvanced,idx++);
+                var qi_result = await PerformContentQueryAsync(qi, qi_tag_ids,idx++);
                 switch(join_type) {
                     case MpLogicalQueryType.None:
                         // initial case
@@ -48,18 +48,18 @@ namespace MonkeyPaste {
             IEnumerable<int> ci_idsToOmit =
                 MpPlatform.Services.ContentQueryTools.GetOmittedContentIds();
 
-            return result_ids.Where(x => !ci_idsToOmit.Contains(x)).ToList();
+            return result_ids.Where(x => !ci_idsToOmit.Contains(x)).Distinct().ToList();
         } 
 
-        private static async Task<List<int>> PerformContentQueryAsync(MpIQueryInfo qi, IEnumerable<int> tagIds, bool isAdvanced, int idx) {
-            string qi_root_id_query_str = ConvertQueryToSql(qi, tagIds, isAdvanced, out var args);
+        private static async Task<List<int>> PerformContentQueryAsync(MpIQueryInfo qi, IEnumerable<int> tagIds, int idx) {
+            string qi_root_id_query_str = ConvertQueryToSql(qi, tagIds, out var args);
             MpConsole.WriteLine($"Current DataModel Query ({idx}): " + MpDb.GetParameterizedQueryString(qi_root_id_query_str,args));
             var result = await MpDb.QueryScalarsAsync<int>(qi_root_id_query_str, args);
             return result.Distinct().ToList();
         }
 
 
-        private static string ConvertQueryToSql(MpIQueryInfo qi, IEnumerable<int> tagIds, bool isAdvanced, out object[] args) {
+        private static string ConvertQueryToSql(MpIQueryInfo qi, IEnumerable<int> tagIds, out object[] args) {
             MpContentQueryBitFlags qf = qi.QueryFlags;
             string orderByClause = string.Empty;
             List<string> types = new List<string>();
@@ -141,8 +141,9 @@ namespace MonkeyPaste {
                         (SELECT DISTINCT pk_MpCopyItemId FROM MpCopyItem WHERE pk_MpCopyItemId IN 
 		                    (SELECT fk_MpCopyItemId FROM MpCopyItemTag WHERE fk_MpTagId IN 
                                 ({string.Join(",", tagIds)})))");
-            }            
+            }
 
+            bool isAdvanced = qi.QueryType == MpQueryType.Advanced;
             if(arg_filters.Count > 0) {
                 string filter_op = isAdvanced ? " AND " : " OR ";
                 whereClause = AddWhereCondition(whereClause, @$"({string.Join(filter_op, arg_filters.Select(x => x.Item1))})");

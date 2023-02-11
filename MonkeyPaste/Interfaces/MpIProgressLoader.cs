@@ -15,8 +15,11 @@ namespace MonkeyPaste {
         MpNotificationLayoutType ExceptionType { get; set; }
     }
 
-    public interface MpIProgressLoader : MpINotification {        
+    public interface MpIProgressIndicatorViewModel : MpIViewModel {
         double PercentLoaded { get; }
+    }
+
+    public interface MpIProgressLoader : MpIProgressIndicatorViewModel, MpINotification {        
         Task BeginLoaderAsync();
         Task FinishLoaderAsync();
     }

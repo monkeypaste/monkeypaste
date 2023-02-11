@@ -50,7 +50,6 @@ namespace MonkeyPaste.Avalonia {
         #region Statics
 
         static MpAvMarqueeTextBox() {
-
         }
         #endregion
 

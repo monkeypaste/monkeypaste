@@ -122,39 +122,13 @@ function setTemplatePasteValue(tguid, val) {
         var telm = telms[i];
         let t = getTemplateFromDomNode(telm);
         let paste_val = getTemplatePasteValue(t);
-        let has_changed = paste_val != val;
-        if (has_changed) {
-            //telm.innerText = val;
-            setTemplateElementText(telm, val);
-            telm.setAttribute('templateText', val);
-        }
-        let max_length = Math.max(paste_val.length, t.templateName.length);
         let cur_val = '';
-
-        let show_name = !quill.hasFocus() || PasteTemplateTimerFlipState;
-        if (!show_name) {
-            // show value
-            if (isNullOrEmpty(paste_val)) {
-                if (isTemplateAnInputType(t)) {
-                    cur_val = t.templateName;
-                } else {
-
-                    cur_val = EmptyPasteValText;
-                }
-            } else {
-                cur_val = paste_val;
-            }
-        } else {
-            // show label
+        if (isNullOrEmpty(paste_val)) {
             cur_val = t.templateName;
+        } else {
+            cur_val = paste_val;
         }
-        let width_pad = '';
-        if (cur_val.length < max_length) {
-            // retain template width when swapping
-            width_pad = ' '.repeat(max_length - cur_val.length);
-        }
-
-        setTemplateElementText(telm, cur_val + width_pad);
+        setTemplateElementText(telm, cur_val);
     }
     //updateTemplatesAfterTextChanged();
 }

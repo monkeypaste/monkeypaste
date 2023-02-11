@@ -32,7 +32,10 @@ namespace MonkeyPaste.Common {
             if(list == null || range == null) {
                 throw new NullReferenceException($"{(list == null ? "Dest must be initialized":string.Empty)} {(range == null ? "range must be non-null" : string.Empty)}");
             }
-            range.ForEach(x => list.Add(x));
+            //range.ForEach(x => list.Add(x));
+            foreach(var item in range) {
+                list.Add(item);
+            }
         }
 
         public static T AggregateOrDefault<T>(this IEnumerable<T> enumerable, Func<T,T,T> func){

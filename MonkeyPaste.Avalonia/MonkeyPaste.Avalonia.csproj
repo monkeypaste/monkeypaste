@@ -220,6 +220,7 @@
     <None Remove="Assets\Images\alarmClock.png" />
     <None Remove="Assets\Images\append.png" />
     <None Remove="Assets\Images\appendline.png" />
+    <None Remove="Assets\Images\asc.png" />
     <None Remove="Assets\Images\asc_black.png" />
     <None Remove="Assets\Images\asc_gray.png" />
     <None Remove="Assets\Images\asc_white.png" />
@@ -257,6 +258,7 @@
     <None Remove="Assets\Images\delete.png" />
     <None Remove="Assets\Images\delete2.png" />
     <None Remove="Assets\Images\deletebw.png" />
+    <None Remove="Assets\Images\desc.png" />
     <None Remove="Assets\Images\desc_black.png" />
     <None Remove="Assets\Images\desc_gray.png" />
     <None Remove="Assets\Images\desc_white.png" />
@@ -491,6 +493,9 @@
     <AvaloniaResource Include="Assets\Images\appendline.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\asc.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\asc_black.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -597,6 +602,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\deletebw.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\desc.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\desc_black.png">
@@ -1110,12 +1118,12 @@
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\" />
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\Mac\" />
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\Base\" />
-    <Folder Include="Controls\ProgressRing\" />
     <Folder Include="Utils\Input\Mouse\" />
     <Folder Include="Utils\Notifications\" />
     <Folder Include="ViewModels\MainWindow\SearchBox\Filter\Items\" />
     <Folder Include="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Transactions\Items\" />
     <Folder Include="Views\MainWindow\ClipTrayContainer\PinTray\" />
+    <Folder Include="Views\PlainHtmlConverter\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\MonkeyPaste.Common.Avalonia\MonkeyPaste.Common.Avalonia.csproj" />
@@ -1147,12 +1155,6 @@
     </Compile>
     <Compile Update="Views\MainWindow\FilterMenu\Search\CriteriaList\Header\MpAvSearchCriteriaHeaderView.axaml.cs">
       <DependentUpon>MpAvSearchCriteriaHeaderView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\MainWindow\FilterMenu\Sort\Direction\MpAvClipTileSortDirectionView.axaml.cs">
-      <DependentUpon>MpAvClipTileSortDirectionView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\MainWindow\FilterMenu\Sort\Field\MpAvClipTileSortFieldView.axaml.cs">
-      <DependentUpon>MpAvClipTileSortFieldView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\MainWindow\Sidebar\ButtonColumn\MpAvSidebarButtonGroupView.axaml.cs">
       <DependentUpon>MpAvSidebarButtonGroupView.axaml</DependentUpon>
@@ -1231,6 +1233,9 @@
     </Compile>
     <Compile Update="Views\Reusable\ShortcutWindow\ShortcutPanel\MpAvShortcutView.axaml.cs">
       <DependentUpon>MpAvShortcutView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Reusable\Spinners\MpAvProgressSpinnerView.axaml.cs">
+      <DependentUpon>MpAvProgressSpinnerView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Reusable\Spinners\MpAvBusySpinnerView.axaml.cs">
       <DependentUpon>MpAvBusySpinnerView.axaml</DependentUpon>

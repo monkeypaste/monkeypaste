@@ -183,6 +183,9 @@ function cleanRect(rect) {
         width: rect ? rect.right - rect.left : 0,
         height: rect ? rect.bottom - rect.top : 0
     };
+    if(!rect) {
+        return cr;
+    }
     if (!isNullOrUndefined(rect.fill)) {
         cr.fill = rect.fill;
     }

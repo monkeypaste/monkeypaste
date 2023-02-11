@@ -40,6 +40,21 @@ namespace MonkeyPaste.Avalonia {
 
             var advSearchSplitter = this.FindControl<GridSplitter>("AdvancedSearchSplitter");
             advSearchSplitter.DragCompleted += AdvSearchSplitter_DragCompleted;
+
+            var scv = this.FindControl<Control>("SearchDetailView");
+            scv.EffectiveViewportChanged += Scv_EffectiveViewportChanged;
+        }
+
+
+        private void Scv_EffectiveViewportChanged(object sender, EffectiveViewportChangedEventArgs e) {
+            //Dispatcher.UIThread.Post(async () => {
+            //    // BUG not sure why but when adv query row height changes
+            //    // all tiles location goes to 0, maybe a x/y distance property
+            //    // thats changing, i really don't know but this waits a second then updates
+            //    await Task.Delay(300);
+
+            //    MpAvClipTrayViewModel.Instance.RefreshQueryTrayLayout();
+            //});
         }
         private void AdvSearchSplitter_DragCompleted(object sender, VectorEventArgs e) {
             var scicvm = MpAvSearchCriteriaItemCollectionViewModel.Instance;

@@ -12,10 +12,11 @@ namespace MonkeyPaste.Common.Wpf {
         private static extern uint QueryDosDevice([In] string lpDeviceName, [Out] StringBuilder lpTargetPath, [In] int ucchMax);
 
         public static string FromDevicePath(string devicePath) {
-            var drive = Array.Find(DriveInfo.GetDrives(), d => devicePath.StartsWith(d.GetDevicePath(), StringComparison.InvariantCultureIgnoreCase));
+            var drive = Array.Find(
+                DriveInfo.GetDrives(), d => devicePath.StartsWith(d.GetDevicePath(), StringComparison.InvariantCultureIgnoreCase));
             return drive != null ?
                 devicePath.ReplaceFirst(drive.GetDevicePath(), drive.GetDriveLetter()) :
-                null;
+                string.Empty;
         }
 
         private static string GetDevicePath(this DriveInfo driveInfo) {

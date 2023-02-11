@@ -21,7 +21,6 @@ namespace MonkeyPaste.Avalonia {
         MpViewModelBase<MpAvSearchCriteriaItemCollectionViewModel>,
         MpIQueryInfo {
         #region Private Variables       
-
         #endregion
 
         #region Constants
@@ -39,6 +38,9 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpIQueryInfo Implementation
+
+        public MpQueryType QueryType =>
+            MpQueryType.Advanced;
 
         public bool IsDescending =>
             MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending;
@@ -59,17 +61,6 @@ namespace MonkeyPaste.Avalonia {
                 return MpTag.AllTagId;
             }
         }
-            
-
-        //public string MatchValue {
-        //    get {
-        //        string st = string.Empty;
-        //        if(LeafValueOptionViewModel != null) {
-        //            st = LeafValueOptionViewModel.Value;
-        //        }
-        //        return st;
-        //    }
-        //}
 
         public MpContentQueryBitFlags QueryFlags { 
             get {
@@ -100,6 +91,8 @@ namespace MonkeyPaste.Avalonia {
                 if(SortOrderIdx < Parent.Items.Count - 1) {
                     return Parent.SortedItems.ElementAt(SortOrderIdx + 1);
                 }
+                // tack simple onto end as OR join
+                //return MpAvSimpleQueryViewModel.Instance;
                 return null;
                 
             }
@@ -858,13 +851,17 @@ namespace MonkeyPaste.Avalonia {
         public double CriteriaItemHeight =>
             Parent == null ? 0 :
                 DEFAULT_HEIGHT * (IsJoinPanelVisible ? 2 : 1);
-                
+
         #endregion
 
         #region Layout        
         #endregion
 
         #region State
+
+        public bool HasCriteriaChanged { get; set; } = false;
+        public bool IsAdvancedTail =>
+            Next == null || Next.QueryType == MpQueryType.Simple;
 
         public bool IsDragOverTop { get; set; }
         public bool IsDragOverBottom { get; set; }
@@ -900,7 +897,8 @@ namespace MonkeyPaste.Avalonia {
             IsBusy || Items.Any(x => x.IsAnyBusy);
 
         public bool IsJoinPanelVisible => 
-            NextJoinType != MpSearchCriteriaItem.DEFAULT_QUERY_JOIN_TYPE;
+            NextJoinType != MpSearchCriteriaItem.DEFAULT_QUERY_JOIN_TYPE &&
+            !IsAdvancedTail;
 
         public bool IsInputVisible => 
             !Items[Items.Count - 1].HasChildren && 
@@ -995,7 +993,7 @@ namespace MonkeyPaste.Avalonia {
         public string SearchOptions {
             get {
                 if(SearchCriteriaItem == null) {
-                    return null;
+                    return string.Empty;
                 }
                 return SearchCriteriaItem.Options;
             }
@@ -1013,6 +1011,9 @@ namespace MonkeyPaste.Avalonia {
                 if(SearchCriteriaItem == null) {
                     return MpLogicalQueryType.None;
                 }
+                //if(IsAdvancedTail) {
+                //    return MpLogicalQueryType.Or;
+                //}
                 return SearchCriteriaItem.NextJoinType;
             }
             set {
@@ -1046,7 +1047,7 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = true;
             await Task.Delay(1);
 
-            SearchCriteriaItem = sci;
+            SearchCriteriaItem = sci == null ? new MpSearchCriteriaItem() : sci;
 
             RootOptionViewModel = GetRootOption();
             var cur_opt = RootOptionViewModel;
@@ -1082,7 +1083,7 @@ namespace MonkeyPaste.Avalonia {
             IgnoreHasModelChanged = true;
 
             SearchOptions =
-                string.Join(",", SelectedOptionPath.Where(x => x.SelectedItemIdx >= 0));
+                string.Join(",", SelectedOptionPath.Where(x => x.SelectedItemIdx >= 0).Select(x=>x.SelectedItemIdx));
             if(LeafValueOptionViewModel == null) {
                 MatchValue = null;
                 IsCaseSensitive = false;
@@ -1094,8 +1095,11 @@ namespace MonkeyPaste.Avalonia {
             }
 
             IgnoreHasModelChanged = false;
+
+            // flag criteria changed for refresh query
+            HasCriteriaChanged = true;
             if(ovm.IsValueOption) {
-                Parent.NotifyQueryChanged(true);
+                MpPlatform.Services.Query.NotifyQueryChanged(true);
             }
         }
 
@@ -1108,9 +1112,19 @@ namespace MonkeyPaste.Avalonia {
         }
         private void MpAvSearchCriteriaItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
+                case nameof(IgnoreHasModelChanged):
+                    if(!IgnoreHasModelChanged && HasModelChanged) {
+                        OnPropertyChanged(nameof(HasModelChanged));
+                    }
+                    break;
                 case nameof(HasModelChanged):
                     if(HasModelChanged) {
                         if(IgnoreHasModelChanged) {
+                            break;
+                        }
+                        if(Parent != null &&
+                            Parent.IsPendingQuery) {
+                            // ignore write while pending
                             break;
                         }
                         Task.Run(async () => {
@@ -1133,6 +1147,10 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     }
                     Parent.OnPropertyChanged(nameof(Parent.MaxSearchCriteriaListBoxHeight));
+                    break;
+                case nameof(SortOrderIdx):
+                    // update tail to hide simple OR join
+                    OnPropertyChanged(nameof(IsJoinPanelVisible));
                     break;
             }
         }

@@ -227,8 +227,7 @@
                                   Classes.valid="{Binding IsSearchValid}"
                                   Classes.expanded="{Binding IsExpanded}"
                                   Classes.unexpanded="{Binding !IsExpanded}"
-                                  Classes.expandAnimating="{Binding IsExpandAnimating}"
-                                  IsEnabled="{Binding !IsSearching}">
+                                  Classes.expandAnimating="{Binding IsExpandAnimating}">
                 <DockPanel LastChildFill="True">
 
                     <!--  Search Icon Dropdown Button  -->
@@ -375,7 +374,7 @@
                                   Opacity="0.5"
                                   Background="DimGray"
                                   BorderBrush="DimGray"
-                                  IsVisible="{Binding IsSearching}" />
+                                  IsVisible="False" />
         </Grid>
 
         <!--  CONVERT SIMPLE TO ADVANCED SEARCH BUTTON  -->

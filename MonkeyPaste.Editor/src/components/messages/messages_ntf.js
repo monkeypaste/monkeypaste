@@ -68,6 +68,18 @@ function onDragLeave_ntf() {
 	}
 }
 
+function onDragEnd_ntf(hostEnded, canceled) {
+	// output 'MpQuillDragEndMessage''
+	if (typeof notifyDragEnd === 'function') {
+		let msg = {
+			fromHost: hostEnded,
+			wasCancel: canceled
+		};
+		let msgStr = toBase64FromJsonObj(msg);
+		notifyDragEnd(msgStr);
+	}
+}
+
 
 function onSubSelectionEnabledChanged_ntf(isEnabled) {
 	// output MpQuillSubSelectionChangedNotification

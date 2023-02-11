@@ -513,17 +513,17 @@ namespace MonkeyPaste {
         }
 
         public static async Task<int> GetTotalCopyItemCountForTagAndAllDescendantsAsync(int ciid) {
-            string query =
+            string query = string.Format(
                 @"WITH RECURSIVE
                       tag_descendant(n) AS (
-                        VALUES(?)
+                        VALUES({0})
                         UNION 
                         SELECT MpTag.pk_MpTagId FROM MpTag, tag_descendant
                          WHERE fk_ParentTagId=tag_descendant.n
                       )
                     SELECT COUNT(DISTINCT fk_MpCopyItemId) FROM MpCopyItemTag WHERE fk_MpTagId IN
-                    (SELECT ? UNION ALL SELECT MpTag.pk_MpTagId FROM MpTag
-                     WHERE fk_ParentTagId IN tag_descendant AND fk_ParentTagId > 0);";
+                    (SELECT {0} UNION ALL SELECT MpTag.pk_MpTagId FROM MpTag
+                     WHERE fk_ParentTagId IN tag_descendant AND fk_ParentTagId > 0);",ciid);
             var result = await MpDb.QueryScalarAsync<int>(query, ciid);
             return result;
         }

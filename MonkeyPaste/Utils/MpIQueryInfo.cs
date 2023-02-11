@@ -7,32 +7,31 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     
-
-    public interface MpIQueryInfoValueProvider {
-        object Source { get; }
-        string SourcePropertyName { get; }
-        string QueryValueName { get; }
+    public enum MpQueryType {
+        Simple,
+        Advanced
     }
+    //public interface MpIQueryInfoValueProvider {
+    //    object Source { get; }
+    //    string SourcePropertyName { get; }
+    //    string QueryValueName { get; }
+    //}
 
     public interface MpIQueryResultProvider : MpIJsonObject {
-        
+        bool CanRequery { get; }
         public int TotalAvailableItemsInQuery { get; }
-        Task<List<MpCopyItem>> FetchIdsByQueryIdxListAsync(List<int> copyItemQueryIdxList);
+        Task<List<MpCopyItem>> FetchItemsByQueryIdxListAsync(IEnumerable<int> copyItemQueryIdxList, IEnumerable<int> idsToOmit);
         Task QueryForTotalCountAsync();
 
         void NotifyQueryChanged(bool forceRequery = false);
 
         void RestoreProviderValues();
 
-        void RegisterProvider(MpIQueryInfoValueProvider provider);
-
-        IEnumerable<MpIQueryInfoValueProvider> ValueProviders { get; }
-
         MpIDbIdCollection PageTools { get;}
     }
 
     public interface MpIQueryInfo {
-
+        MpQueryType QueryType { get; }
         //public MpTextQueryType TextFlags { get; } // advanced
 
         //public MpDateTimeQueryType TimeFlags { get; } // advanced
