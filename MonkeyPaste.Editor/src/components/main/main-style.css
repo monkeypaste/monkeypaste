@@ -8,6 +8,8 @@ body {
     --editableeditorbgcolor_opaque: rgb(255, 248, 220);
     --selbgcolor: lightblue;
     --selfgcolor: black;
+    --inactivematchbgcolor: pink;
+    --activematchbgcolor: lime;
     --caretcolor: black;
     --hovercolor: yellow;
     --opthovercolor: lightblue;
@@ -17,6 +19,7 @@ body {
     --insertselectcolor: darkorange;
     --editableopacity: 0.5;
     --defaultopacity: 0.0;
+    --highlightopacity: 0.5;
     --defaultFontFamily: Helvetica;
     margin: 0px;
     padding: 0px;

@@ -12,11 +12,14 @@ using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Input;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
+using FocusManager = Avalonia.Input.FocusManager;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvSearchBoxViewModel : MpViewModelBase, 
@@ -39,10 +42,25 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        //public ObservableCollection<MpAvSearchCriteriaItemViewModel> CriteriaItems { get; set; } = new ObservableCollection<MpAvSearchCriteriaItemViewModel>();
+        private ObservableCollection<string> _recentSearchTexts;
+        public ObservableCollection<string> RecentSearchTexts {
+            get {
+                if (_recentSearchTexts == null) {
+                    var rstl = MpPrefViewModel.Instance.RecentSearchTexts.ToListFromCsv(MpPrefViewModel.Instance);
+                    _recentSearchTexts = new ObservableCollection<string>(rstl);
+                    _recentSearchTexts.CollectionChanged += (s, e) => {
+                        MpPrefViewModel.Instance.RecentSearchTexts =
+                            RecentSearchTexts.ToCsv(MpPrefViewModel.Instance);
+
+                    };
+                }
+                return _recentSearchTexts;
+            }
+        }
 
         private MpAvSearchFilterCollectionViewModel _searchFilterCollectionViewModel;
-        public MpAvSearchFilterCollectionViewModel SearchFilterCollectionViewModel => _searchFilterCollectionViewModel ?? (_searchFilterCollectionViewModel = new MpAvSearchFilterCollectionViewModel(this));
+        public MpAvSearchFilterCollectionViewModel SearchFilterCollectionViewModel => 
+            _searchFilterCollectionViewModel ?? (_searchFilterCollectionViewModel = new MpAvSearchFilterCollectionViewModel(this));
         #endregion
 
 
@@ -53,40 +71,49 @@ namespace MonkeyPaste.Avalonia {
         public DateTime IsExpandedChangedDateTime { get; set; }
         public TimeSpan ExpandAnimationTimeSpan =>
             TimeSpan.FromMilliseconds(300);
+        
+        public TimeSpan InactivityUnexpandWaitTimeSpan =>
+            TimeSpan.FromMilliseconds(1500);
 
         public bool IsExpandAnimating {
             get {
-                if(DateTime.Now - IsExpandedChangedDateTime > ExpandAnimationTimeSpan) {
-                    return false;
+                if(DateTime.Now - IsExpandedChangedDateTime < ExpandAnimationTimeSpan) {
+                    return true;
                 }
-                return true;
+                return false;
             }
-        }
-
-        private ObservableCollection<string> _recentSearchTexts;
-        public ObservableCollection<string> RecentSearchTexts {
-            get {
-                if(_recentSearchTexts == null) {
-                    var rstl = MpPrefViewModel.Instance.RecentSearchTexts.ToListFromCsv(MpPrefViewModel.Instance);
-                    _recentSearchTexts = new ObservableCollection<string>(rstl);
-                    _recentSearchTexts.CollectionChanged += _recentSearchTexts_CollectionChanged;
-                }
-                return _recentSearchTexts;
-            }
-        }
-
-        private void _recentSearchTexts_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
-            MpPrefViewModel.Instance.RecentSearchTexts =
-                RecentSearchTexts.ToCsv(MpPrefViewModel.Instance);
         }
 
         public bool IsMultipleMatches { get; private set; } = false;
 
         public string LastSearchText { get; private set; } = string.Empty;
 
-        public bool IsToAdvancedButtonVisible =>
-            HasText || MpAvSearchCriteriaItemCollectionViewModel.Instance.IsAdvSearchActive;
+        public bool IsExpandAdvancedSearchButtonVisible =>
+            HasText || 
+            MpAvSearchCriteriaItemCollectionViewModel.Instance.IsAdvSearchActive ||
+            IsExpanded ||
+            IsExpandAnimating;
+
         public bool IsTextBoxFocused { get; set; }
+        public bool IsExpandButtonFocused { get; set; }
+
+        public bool IsAnySearchControlFocused {
+            get {
+                if(SearchFilterCollectionViewModel.IsPopupMenuOpen) {
+                    return true;
+                }
+
+                var cf = FocusManager.Instance.Current;
+                if(cf == null) {
+                    return false;
+                }
+                if(cf.GetVisualAncestor<MpAvSearchBoxView>() != null ||
+                   cf.GetVisualAncestor<MpAvSearchCriteriaListBoxView>() != null) {
+                    return true;
+                }
+                return false;
+            }
+        }
 
         public bool IsSearchValid { 
             get {
@@ -221,13 +248,13 @@ namespace MonkeyPaste.Avalonia {
                     if(MpAvTagTrayViewModel.Instance.SelectedItem.TagType == MpTagType.Query) {
 
                     }
-                    OnPropertyChanged(nameof(IsToAdvancedButtonVisible));
+                    OnPropertyChanged(nameof(IsExpandAdvancedSearchButtonVisible));
                     break;
                 case MpMessageType.AdvancedSearchUnexpanded:
                 case MpMessageType.AdvancedSearchExpanded:
                 case MpMessageType.SearchCriteriaItemsChanged:
                 case MpMessageType.TagSelectionChanged:
-                    OnPropertyChanged(nameof(IsToAdvancedButtonVisible));
+                    OnPropertyChanged(nameof(IsExpandAdvancedSearchButtonVisible));
                     break;
 
             }
@@ -255,7 +282,7 @@ namespace MonkeyPaste.Avalonia {
                         if (HasText) {
                             //MpAvThemeViewModel.Instance.GlobalBgOpacity = double.Parse(SearchText);
                         } else if(!SearchFilterCollectionViewModel.IsPopupMenuOpen) {
-                            IsExpanded = false;
+                           // IsExpanded = false;
                         }
                     }
                     OnPropertyChanged(nameof(TextBoxFontStyle));
@@ -268,10 +295,13 @@ namespace MonkeyPaste.Avalonia {
                             await Task.Delay(50);
                         }
                         OnPropertyChanged(nameof(IsExpandAnimating));
+                        OnPropertyChanged(nameof(IsExpandAdvancedSearchButtonVisible));
 
-                        if(IsExpanded && 
-                            !MpAvMainWindowViewModel.Instance.IsMainWindowInitiallyOpening) {
-                            IsTextBoxFocused = true;
+                        if(IsExpanded) {
+                            if(!MpAvMainWindowViewModel.Instance.IsMainWindowInitiallyOpening) {
+                                IsTextBoxFocused = true;
+                            }
+                            WaitForUnexpandAsync().FireAndForgetSafeAsync(this);
                         }
                     });
                     break;
@@ -293,6 +323,35 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
+
+        private async Task WaitForUnexpandAsync() {
+            if(!IsExpanded) {
+                return;
+            }
+            DateTime? no_focus_start_dt = null;
+            while(true) {
+                if(!IsExpanded) {
+                    return;
+                }
+                if(FocusManager.Instance.Current == null) {
+                    // focus is null when inactive (or hidden at least)
+                    await Task.Delay(1000);
+                    continue;
+                }
+                if (IsAnySearchControlFocused) {
+                    no_focus_start_dt = null;
+                } else if(no_focus_start_dt == null) {
+                    no_focus_start_dt = DateTime.Now; 
+                }
+
+                if(no_focus_start_dt.HasValue) {
+                    if(DateTime.Now - no_focus_start_dt >= InactivityUnexpandWaitTimeSpan) {
+                        IsExpanded = false;
+                    }
+                }
+                await Task.Delay(100);
+            }
+        }
         #endregion
 
         #region Commands
@@ -303,7 +362,9 @@ namespace MonkeyPaste.Avalonia {
                     ToggleIsSearchBoxExpandedCommand.Execute(null);
                     return;
                 }
+                IsTextBoxFocused = false;
                 var target_control = args as Control;
+
                 MpAvMenuExtension.ShowMenu(
                     target_control,
                     SearchFilterCollectionViewModel.PopupMenuViewModel,
@@ -334,12 +395,6 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand PerformSearchCommand => new MpCommand(
             () => {
-                //if (!HasText) {
-                //    LastSearchText = string.Empty;
-                //} else {
-                //    IsSearching = true;
-                //    LastSearchText = SearchText;
-                //}
                 IsSearching = true;
                 LastSearchText = SearchText;
                 IsMultipleMatches = false;

@@ -52,9 +52,10 @@
                     BorderThickness="0"
                     VerticalAlignment="Stretch"
                     HorizontalAlignment="Center"
+                    IsVisible="{Binding IsPendingQuery}"
                     Width="{Binding $self.Bounds.Height}"
                     Classes="noBg noHoverBg addRemoveBtn shakeOver outline"
-                    Command="{Binding CancelPendingOrCollapseSavedQueryCommand}">
+                    Command="{Binding RejectPendingCriteriaItemsCommand}">
                 <!--<Button.IsVisible>
                     <MultiBinding Converter="{x:Static BoolConverters.Or}">
                         <Binding Path="HasText" />

@@ -149,7 +149,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public bool IsFilterPopupOpen { get; set; }
         #endregion
 
         #endregion
@@ -166,11 +165,7 @@ namespace MonkeyPaste.Avalonia {
 
         public void Init() {
             OnPropertyChanged(nameof(Filters));
-            // if regex is set on load, disable others
-            //var regex_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByRegex));
-            //if (regex_filter.IsChecked.IsTrue()) {
-            //    ValidateFilters(regex_filter);
-            //}
+
             foreach (var sfvm in Filters.Where(x => !x.IsSeperator)) {
                 sfvm.PropertyChanged += Sfvm_PropertyChanged;
             }
@@ -181,8 +176,8 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvSearchFilterCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                case nameof(IsFilterPopupOpen):
-                    if(IsFilterPopupOpen) {
+                case nameof(IsPopupMenuOpen):
+                    if(IsPopupMenuOpen) {
                         break;
                     }
                     MpPrefViewModel.Instance.LastQueryInfoJson = 
@@ -196,6 +191,8 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(sfvm.IsChecked):
                     ValidateFilters(sfvm);
                     if(IsPopupMenuOpen) {
+                        // pass focus back to search box to trigger unexpand when clicked away
+                        //Parent.IsTextBoxFocused = true;
                         // let search update query as filters change
                         Parent.PerformSearchCommand.Execute(null);
                     }

@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System;
 using Avalonia.Threading;
 using System.Threading.Tasks;
+using Avalonia.VisualTree;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvIsFocusedExtension {
@@ -38,17 +39,31 @@ namespace MonkeyPaste.Avalonia {
             if (e.NewValue is bool isFocusedVal && 
                 element is Control control && 
                 control.GetFocusableDescendant() is IInputElement ie) {
-                if(ie.IsFocused == isFocusedVal) {
+                if (ie.IsFocused == isFocusedVal ||
+                    ie.IsKeyboardFocusWithin == isFocusedVal) {
                     MpConsole.WriteLine($"IsFocused IGNORED. Was already '{isFocusedVal}' on '{ie}' from binding on '{control}'");
                     return;
                 }
-                if(isFocusedVal) {
-                    ie.Focus();
-                    MpConsole.WriteLine($"Focus {(ie.IsFocused ? "SUCCEEDED":"FAILED")}  on '{ie}' from binding on '{control}'");
-                } else {
-                    bool result = control.KillFocus();
-                    MpConsole.WriteLine($"Kill Focus {(result ? "SUCCEEDED" : "FAILED")}  on '{ie}' from binding on '{control}'");
-                }
+                Dispatcher.UIThread.Post(async () => {
+                    if (isFocusedVal) {
+                        if(control is AutoCompleteBox acb) {
+                            var tb = acb.FindDescendantOfType<TextBox>();
+                            if(tb != null) {
+                                control = tb;
+                            }
+                        }
+                        bool success = await control.TrySetFocusAsync();
+                        if(success != ie.IsKeyboardFocusWithin) {
+                            // huh? result mismatch
+                            //Debugger.Break();
+                        }
+                        MpConsole.WriteLine($"Focus {(ie.IsKeyboardFocusWithin ? "SUCCEEDED" : "FAILED")}  on '{ie}' from binding on '{control}'");
+                    } else {
+                        bool success = await control.TryKillFocusAsync();
+                        MpConsole.WriteLine($"Kill Focus {(success ? "SUCCEEDED" : "FAILED")}  on '{ie}' from binding on '{control}'");
+                    }
+                });
+                
             } 
         }
 

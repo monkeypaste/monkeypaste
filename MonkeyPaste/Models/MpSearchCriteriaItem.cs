@@ -34,11 +34,14 @@ namespace MonkeyPaste {
 
         public string MatchValue { get; set; }
 
+        [Column("e_MpQueryType")]
+        public string QueryTypeName { get; set; }
+
         public int IsCaseSensitiveValue { get; set; }
         public int IsWholeWordValue { get; set; }
 
         [Column("e_MpLogicalQueryType")]
-        public string NextJoinTypeName { get; set; } = DEFAULT_QUERY_JOIN_TYPE.ToString();
+        public string JoinTypeName { get; set; } = DEFAULT_QUERY_JOIN_TYPE.ToString();
 
         public int SortOrderIdx { get; set; } = 0;
 
@@ -71,9 +74,15 @@ namespace MonkeyPaste {
             set => IsWholeWordValue = value ? 1 : 0;
         }
 
-        public MpLogicalQueryType NextJoinType {
-            get => NextJoinTypeName.ToEnum<MpLogicalQueryType>();
-            set => NextJoinTypeName = value.ToString();
+        [Ignore]
+        public MpLogicalQueryType JoinType {
+            get => JoinTypeName.ToEnum<MpLogicalQueryType>();
+            set => JoinTypeName = value.ToString();
+        }
+        [Ignore]
+        public MpQueryType QueryType {
+            get => QueryTypeName.ToEnum<MpQueryType>();
+            set => QueryTypeName = value.ToString();
         }
 
         #endregion
@@ -84,7 +93,8 @@ namespace MonkeyPaste {
             string guid="",
             int tagId=0,
             int sortOrderIdx = -1,
-            MpLogicalQueryType nextJoinType = DEFAULT_QUERY_JOIN_TYPE,
+            MpLogicalQueryType joinType = DEFAULT_QUERY_JOIN_TYPE,
+            MpQueryType queryType = MpQueryType.None,
             string options = "",
             string matchValue = "",
             bool isCaseSensitive = false,
@@ -93,11 +103,15 @@ namespace MonkeyPaste {
             if(tagId < 0 && !suppressWrite) {
                 throw new Exception("Must provide tag id");
             }
+            if(queryType == MpQueryType.None) {
+                throw new Exception("Must have query type");
+            }
             var sci = new MpSearchCriteriaItem() {
                 SearchCriteriaItemGuid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid() : System.Guid.Parse(guid),
                 QueryTagId = tagId,
+                QueryType = queryType,
                 SortOrderIdx = sortOrderIdx,
-                NextJoinType = nextJoinType,
+                JoinType = joinType,
                 Options = options,
                 MatchValue = matchValue,
                 IsCaseSensitive = isCaseSensitive,

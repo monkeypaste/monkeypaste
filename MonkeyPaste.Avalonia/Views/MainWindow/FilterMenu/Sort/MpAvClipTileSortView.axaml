@@ -98,8 +98,6 @@
               BorderThickness="0"
               local:MpAvIsHoveringExtension.IsEnabled="True"
               local:MpAvIsHoveringExtension.HoverCursor="Hand"
-              local:MpAvIsFocusedExtension.IsEnabled="True"
-              local:MpAvIsFocusedExtension.IsFocused="{Binding IsSortDirOrFieldFocused, Source={x:Static local:MpAvClipTileSortDirectionViewModel.Instance}, Mode=TwoWay}"
               Height="30"
               Width="30"
               local:MpAvPointerPressCommandExtension.IsEnabled="True"
@@ -112,10 +110,7 @@
       
         <!--  SORT FIELD  -->
 
-        <ComboBox local:MpAvIsFocusedExtension.IsEnabled="True"
-                  local:MpAvIsFocusedExtension.AcceptFocusWithin="True"
-                  local:MpAvIsFocusedExtension.IsFocused="{Binding IsSortDirOrFieldFocused, Source={x:Static local:MpAvClipTileSortDirectionViewModel.Instance}, Mode=TwoWay}"
-                  Grid.Column="1"
+        <ComboBox Grid.Column="1"
                   CornerRadius="10"
                   BorderBrush="Black"
                   Margin="2,5"

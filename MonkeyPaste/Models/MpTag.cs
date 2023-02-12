@@ -60,7 +60,7 @@ namespace MonkeyPaste {
                     _ = await MpSearchCriteriaItem.CreateAsync(
                         tagId: cloned_tag.Id,
                         sortOrderIdx: sci.SortOrderIdx,
-                        nextJoinType: sci.NextJoinType,
+                        joinType: sci.JoinType,
                         options: sci.Options,
                         matchValue: sci.MatchValue,
                         isCaseSensitive: sci.IsCaseSensitive,

@@ -23,6 +23,8 @@ namespace MonkeyPaste.Avalonia {
         [JsonIgnore]
         private bool _isRestoringValues = false;
         [JsonIgnore]
+        private bool _isRestoringAdvancedValues = false;
+        [JsonIgnore]
         private MpQueryPageTools _pageTools;
 
         #endregion
@@ -59,8 +61,9 @@ namespace MonkeyPaste.Avalonia {
 
         [JsonIgnore]
         public bool CanRequery =>
-            !MpAvSearchCriteriaItemCollectionViewModel.Instance.IsAdvSearchActive &&
+            //!MpAvSearchCriteriaItemCollectionViewModel.Instance.IsAdvSearchActive &&
             !_isRestoringValues &&
+            !_isRestoringAdvancedValues &&
             MpAvClipTrayViewModel.Instance.QueryCommand.CanExecute(null);
 
         [JsonIgnore]
@@ -70,15 +73,11 @@ namespace MonkeyPaste.Avalonia {
         public int TotalAvailableItemsInQuery => _pageTools.AllQueryIds.Count;
 
         public async Task QueryForTotalCountAsync() {
-            if (MpAvSearchCriteriaItemCollectionViewModel.Instance.IsAdvSearchActive) {
-                return;
-            }
-            MpConsole.WriteLine("Simp total count called");
+            MpConsole.WriteLine("total count called");
             var result = await MpContentQuery.QueryAllAsync(this);
             _pageTools.AllQueryIds.Clear();
             _pageTools.AllQueryIds.AddRange(result);
-            //_pageTools.AllQueryIds = new ObservableCollection<int>(result);
-
+            
             MpMessenger.SendGlobal(MpMessageType.TotalQueryCountChanged);
         }
 
@@ -135,9 +134,10 @@ namespace MonkeyPaste.Avalonia {
 
         public MpContentQueryBitFlags QueryFlags { get; set; } = MpContentQueryBitFlags.Content | MpContentQueryBitFlags.TextType | MpContentQueryBitFlags.ImageType | MpContentQueryBitFlags.FileType;
 
-        public MpLogicalQueryType NextJoinType =>
+        public MpLogicalQueryType JoinType =>
             MpLogicalQueryType.Or;
 
+        [JsonIgnore] // must be ignored cause criteria opt trees
         public MpIQueryInfo Next =>
             MpAvSearchCriteriaItemCollectionViewModel.Instance.IsAdvSearchActive ?
                 MpAvSearchCriteriaItemCollectionViewModel.Instance.HeadItem :
@@ -171,6 +171,35 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
+
+        public async Task RestoreAdvSearchValuesAsync(MpSearchCriteriaItem simp_ci) {
+            if(simp_ci == null) {
+                return;
+            }
+            var query_tag = await MpDataModelProvider.GetItemAsync<MpTag>(simp_ci.QueryTagId);
+            if(query_tag == null) {
+                // probably shouldn't happen
+                Debugger.Break();
+                return;
+            }
+            _isRestoringAdvancedValues = true;
+            IsDescending = query_tag.IsSortDescending.IsTrue();
+            SortType = query_tag.SortType.Value;
+            TagId = MpTag.AllTagId;
+            MatchValue = simp_ci.MatchValue;
+
+            try {
+                long qf = long.Parse(simp_ci.Options);
+                QueryFlags = (MpContentQueryBitFlags)qf;
+            } catch(Exception ex) {
+                MpConsole.WriteTraceLine($"Error converting simple search opts to flags. Opts '{simp_ci.Options}'. Setting to default.", ex);
+                QueryFlags = MpAvSearchBoxViewModel.Instance.SearchFilterCollectionViewModel.DefaultFilters;
+            }
+            RestoreProviderValues();
+            _isRestoringAdvancedValues = false;
+            // NOTE requery called from adv init
+            
+        }
         #endregion
 
         #region Private Methods

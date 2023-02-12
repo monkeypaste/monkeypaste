@@ -55,11 +55,19 @@ function isRectContainOtherRect(rect, other_rect) {
 
 // #endregion Actions
 
-function drawRect(ctx, rect, fill = 'black', stroke = 'black', strokeWidth = 0, fillOpacity = 1.0, strokeOpacity = 1.0) {
+function drawRect(
+    ctx,
+    rect,
+    fill = 'black',
+    stroke = 'black',
+    strokeWidth = 0,
+    fillOpacity = 1.0,
+    strokeOpacity = 1.0) {
+
     fill = rect.fill === undefined ? fill : rect.fill;
+    fillOpacity = rect.fillOpacity === undefined ? fillOpacity : rect.fillOpacity;
     stroke = rect.stroke === undefined ? stroke : rect.stroke;
     strokeWidth = rect.strokeWidth === undefined ? strokeWidth : rect.strokeWidth;
-    fillOpacity = rect.fillOpacity === undefined ? fillOpacity : rect.fillOpacity;
     strokeOpacity = rect.strokeOpacity === undefined ? strokeOpacity : rect.strokeOpacity;
 
     let strokStyleStr = cleanColor(stroke, strokeOpacity != 1.0 ? strokeOpacity : null, 'rgbaStyle');

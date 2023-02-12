@@ -46,6 +46,18 @@ function initFindReplaceToolbar() {
 
 // #region Getters
 
+function getInactiveMatchRangeBgColor() {
+	return getElementComputedStyleProp(document.body, '--inactivematchbgcolor');
+}
+
+function getActiveMatchRangeBgColor() {
+	return getElementComputedStyleProp(document.body, '--activematchbgcolor');
+}
+
+function getMatchRangeBgOpacity() {
+	return parseFloat(getElementComputedStyleProp(document.body, '--highlightopacity'));
+}
+
 function getFindReplaceEditorToolbarButton() {
 	return document.getElementById('findReplaceToolbarButton');
 }
@@ -240,7 +252,6 @@ function toggleFindOrReplace() {
 	});
 }
 
-
 function updateFindReplaceToolbarSizesAndPositions() {
 	if (isShowingFindReplaceToolbar()) {
 		let et_bottom = getEditorToolbarElement().getBoundingClientRect().bottom;
@@ -270,10 +281,10 @@ function resetFindReplaceToolbar() {
 function populateFindReplaceResults() {
 	resetFindReplaceResults();
 
-	let search_text = document.getElementById('findInput').value;
-	let is_case_sensitive = document.getElementById('matchCaseInput').checked;
-	let is_whole_word = document.getElementById('wholeWordInput').checked;
-	let use_regex = document.getElementById('useRegexInput').checked;	
+	let search_text = getFindInputElement().value;
+	let is_case_sensitive = getIsCaseSensitiveInputElement().checked;
+	let is_whole_word = getIsWholeWordInputElement().checked;
+	let use_regex = getUseRegExInputElement().checked;	
 
 	let sel = getDocSelection();
 	if (sel && sel.length > 0) {		
@@ -288,7 +299,13 @@ function populateFindReplaceResults() {
 		updateFindReplaceRangeRects();
 		return;
 	} 
-	let dirty_ranges = queryText(getText(), search_text, is_case_sensitive, is_whole_word, use_regex);
+	let dirty_ranges = queryText(
+		getText(),
+		search_text,
+		is_case_sensitive,
+		is_whole_word,
+		use_regex);
+
 	CurFindReplaceDocRanges = adjustQueryRangesForEmptyContent(dirty_ranges);
 
 	if (CurFindReplaceDocRanges.length == 0) {
@@ -341,14 +358,20 @@ function updateFindReplaceRangeRects() {
 		];
 		CurFindReplaceDocRangeRectIdxLookup.push(rect_lookup);
 		for (var j = 0; j < cur_range_rects.length; j++) {
-			cur_range_rects[i].strokeWidth = 0;
-			cur_range_rects[i].stroke = 'transparent';
-			cur_range_rects[i].strokeOpacity = 0;
-
-			CurFindReplaceDocRangesRects.push(cur_range_rects[j]);
+			let cur_range_rect = cleanRect(cur_range_rects[j]);
+			CurFindReplaceDocRangesRects.push(cur_range_rect);
 		}
 	}
 	drawOverlay();
+}
+
+function applyRangeRectStyle(isActive, range_rect) {	
+	range_rect.fill = isActive ?
+		getActiveMatchRangeBgColor() : getInactiveMatchRangeBgColor();
+	range_rect.fillOpacity = getMatchRangeBgOpacity();
+	range_rect.strokeWidth = 0;
+
+	return range_rect;
 }
 
 function navigateFindReplaceResults(dir) {

@@ -64,8 +64,12 @@ namespace MonkeyPaste.Avalonia {
 
         public int SelectedItemIdx {
             get {
-                if(SelectedItem == null) {
+                if(Items == null ||
+                    Items.Count == 0) {
                     return -1;
+                }
+                if(SelectedItem == null) {
+                    return 0;
                 }
                 return Items.IndexOf(SelectedItem);
             }
@@ -128,7 +132,8 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public bool IsValid => string.IsNullOrEmpty(ValidationText);
+        public bool IsValid => 
+            string.IsNullOrEmpty(ValidationText);
 
         #region Multi Value IsValid
 
@@ -215,7 +220,7 @@ namespace MonkeyPaste.Avalonia {
         private string _value;
         public string Value { 
             get {
-                if(FilterValue.IsMultiValue()) {
+                if(FilterValue.HasMultiValue()) {
                     if(Values.All(x=>string.IsNullOrEmpty(x))) {
                         return string.Empty;
                     }
@@ -327,7 +332,7 @@ namespace MonkeyPaste.Avalonia {
                 Tuple<double, double> value_range = UnitType.GetNumericBounds();
 
                 string out_of_range_msg = $"Value must be from {value_range.Item1} to {value_range.Item2}";
-                if (FilterValue.IsMultiValue()) {
+                if (FilterValue.HasMultiValue()) {
                     // multi-value 
                     var is_not_number_idxs = Values.Where(x => notNumRegEx.IsMatch(x)).Select(x=>Values.IndexOf(x)).ToList();
                     if(is_not_number_idxs.Count > 0) {
@@ -379,6 +384,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             //OnPropertyChanged(nameof(Items));
+            OnPropertyChanged(nameof(SelectedItemIdx));
         }
 
 

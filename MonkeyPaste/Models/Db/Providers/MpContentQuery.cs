@@ -13,42 +13,61 @@ namespace MonkeyPaste {
     public static class MpContentQuery {
         private static MpIQueryInfo _cur_qi;
         public static async Task<List<int>> QueryAllAsync(MpIQueryInfo head_qi) {
-            List<int> result_ids = null;
-            MpLogicalQueryType join_type = MpLogicalQueryType.None;
+            // Item1 = Param Query
+            // Item2 = INTERSECT|UNION|EXCEPT
+            // Item3 = Params
+
+            List<Tuple<string,string,List<object>>> sub_queries = new List<Tuple<string, string, List<object>>>();
+            //List<int> result_ids = null;
             int idx = 0;
             for (MpIQueryInfo qi = head_qi; qi != null; qi = qi.Next) {
                 _cur_qi = qi;
                 IEnumerable<int> qi_tag_ids =
                     MpPlatform.Services.TagQueryTools.GetSelfAndAllDescendantsTagIds(qi.TagId);
+                sub_queries.Add(GetContentQuery(qi, qi_tag_ids, idx++));
+                //var qi_result = await PerformContentQueryAsync(qi, qi_tag_ids,idx++);
+                //switch(qi.JoinType) {
+                //    case MpLogicalQueryType.None:
+                //        // initial case
+                //        result_ids = qi_result.ToList();
+                //        break;
+                //    case MpLogicalQueryType.And:
+                //        // only allow results if both this and previous had match
+                //        result_ids = result_ids.Where(x => qi_result.Contains(x)).ToList();
+                //        break;
+                //    case MpLogicalQueryType.Or:
+                //        // compound results
+                //        result_ids.AddRange(qi_result);
+                //        break;
+                //    case MpLogicalQueryType.Not:
+                //        // remove current result from total
+                //        result_ids = result_ids.Where(x => !qi_result.Contains(x)).ToList();
+                //        break;
+                //}
+                //result_ids.Distinct();
 
-                var qi_result = await PerformContentQueryAsync(qi, qi_tag_ids,idx++);
-                switch(join_type) {
-                    case MpLogicalQueryType.None:
-                        // initial case
-                        result_ids = qi_result.ToList();
-                        break;
-                    case MpLogicalQueryType.And:
-                        // only allow results if both this and previous had match
-                        result_ids = result_ids.Where(x => qi_result.Contains(x)).ToList();
-                        break;
-                    case MpLogicalQueryType.Or:
-                        // compound results
-                        result_ids.AddRange(qi_result);
-                        break;
-                    case MpLogicalQueryType.Not:
-                        // remove current result from total
-                        result_ids = result_ids.Where(x => !qi_result.Contains(x)).ToList();
-                        break;
-                }
-                result_ids.Distinct();
-                join_type = qi.NextJoinType;
             }
             _cur_qi = null;
+
+            var sb = new StringBuilder();
+            for (int i = 0; i < sub_queries.Count; i++) {
+                var sq = sub_queries[i];
+                sb.AppendLine(sq.Item1);
+                if(i < sub_queries.Count - 1) {
+                    // first query is always simple and its join value is ignored
+                    sb.AppendLine(sub_queries[i+1].Item2);
+                }                
+            }
+            sb.AppendLine($"ORDER BY {head_qi.GetSortField()} {head_qi.GetSortDirection()}");
+
+            string query = $"SELECT RootId FROM({sb})";
+            var result = await MpDb.QueryScalarsAsync<int>(query, sub_queries.SelectMany(x=>x.Item3).ToArray());
+
 
             IEnumerable<int> ci_idsToOmit =
                 MpPlatform.Services.ContentQueryTools.GetOmittedContentIds();
 
-            return result_ids.Where(x => !ci_idsToOmit.Contains(x)).Distinct().ToList();
+            return result.Where(x => !ci_idsToOmit.Contains(x)).Distinct().ToList();
         } 
 
         private static async Task<List<int>> PerformContentQueryAsync(MpIQueryInfo qi, IEnumerable<int> tagIds, int idx) {
@@ -57,11 +76,32 @@ namespace MonkeyPaste {
             var result = await MpDb.QueryScalarsAsync<int>(qi_root_id_query_str, args);
             return result.Distinct().ToList();
         }
+        private static Tuple<string, string, List<object>> GetContentQuery(MpIQueryInfo qi, IEnumerable<int> tagIds, int idx) {
+
+            // Item1 = INTERSECT|UNION|EXCEPT
+            // Item2 = Param Query
+            // Item3 = Params
+
+            string qi_root_id_query_str = ConvertQueryToSql(qi, tagIds, out var args);
+            MpConsole.WriteLine($"Current DataModel Query ({idx}): " + MpDb.GetParameterizedQueryString(qi_root_id_query_str,args));
+
+            string join =
+                qi.JoinType == MpLogicalQueryType.Or ?
+                    "UNION" :
+                    qi.JoinType == MpLogicalQueryType.And ?
+                        "INTERSECT" :
+                        qi.JoinType == MpLogicalQueryType.Not ?
+                            "EXCEPT" :
+                            throw new Exception("invalid join type");
+
+
+            var query_tuple = new Tuple<string, string, List<object>>(qi_root_id_query_str,join, args.ToList());
+            return query_tuple;
+        }
 
 
         private static string ConvertQueryToSql(MpIQueryInfo qi, IEnumerable<int> tagIds, out object[] args) {
             MpContentQueryBitFlags qf = qi.QueryFlags;
-            string orderByClause = string.Empty;
             List<string> types = new List<string>();
             List<string> filters = new List<string>();
 
@@ -86,50 +126,17 @@ namespace MonkeyPaste {
             }
 
             if (qf.HasFlag(MpContentQueryBitFlags.TextType)) {
-                //types.Add(string.Format(@"e_MpCopyItemType='{0}'", MpCopyItemType.Text.ToString()));
                 types.Add("e_MpCopyItemType=?");
                 argList.Add(MpCopyItemType.Text.ToString());
             }
             if (qf.HasFlag(MpContentQueryBitFlags.ImageType)) {
-                //types.Add(string.Format(@"e_MpCopyItemType='{0}'", MpCopyItemType.Image.ToString()));
                 types.Add("e_MpCopyItemType=?");
                 argList.Add(MpCopyItemType.Image.ToString());
             }
             if (qf.HasFlag(MpContentQueryBitFlags.FileType)) {
-                //types.Add(string.Format(@"e_MpCopyItemType='{0}'", MpCopyItemType.FileList.ToString()));
                 types.Add("e_MpCopyItemType=?");
                 argList.Add(MpCopyItemType.FileList.ToString());
             }
-
-            // ORDER
-
-            switch (qi.SortType) {
-                case MpContentSortType.Source:
-                    orderByClause = "SourcePath";
-                    break;
-                case MpContentSortType.Title:
-                    orderByClause = "Title";
-                    break;
-                case MpContentSortType.ItemData:
-                    orderByClause = "ItemData";
-                    break;
-                case MpContentSortType.ItemType:
-                    orderByClause = "e_MpCopyItemType";
-                    break;
-                case MpContentSortType.UsageScore:
-                    orderByClause = "UsageScore";
-                    break;
-                case MpContentSortType.CopyDateTime:
-                    orderByClause = "CopyDateTime";
-                    break;
-                default:
-                    orderByClause = "RootId";
-                    break;
-            }
-
-            // SORT
-
-            string sortClause = qi.IsDescending ? "DESC" : "ASC";
 
             // WHERE
 
@@ -154,9 +161,9 @@ namespace MonkeyPaste {
 
             // SELECT GEN
 
-            string selectClause = "RootId";
+            string selectClause = $"RootId,{qi.GetSortField()}";
             string fromClause = $"{(isAdvanced ? "MpContentQueryView_advanced" : "MpContentQueryView_simple")}";
-            string query = @$"SELECT {selectClause} FROM {fromClause} WHERE {whereClause} ORDER BY {orderByClause} {sortClause}";
+            string query = @$"SELECT {selectClause} FROM {fromClause} WHERE {whereClause}";
             args = argList.ToArray();
             return query;
         }
@@ -177,111 +184,211 @@ namespace MonkeyPaste {
             if(string.IsNullOrEmpty(qi.MatchValue)) {
                 return arg_filters;
             }
-
             MpContentQueryBitFlags qf = qi.QueryFlags;
             string mv = qi.MatchValue.CaseFormat(true);
-
-            if (qf.GetStringMatchFieldName() is IEnumerable<string> strFieldNames) {
-                // string matching
-                foreach(string strFieldName in strFieldNames) {
-                    string strOp = qf.GetStringMatchOp();
-                    // <Field> <op> '<mv>'
-                    string strFilter = $"{strFieldName.CaseFormat()} {strOp} ?";
-                    object strParam = qf.GetStringMatchValue(strOp, mv);
-                    arg_filters.Add(new Tuple<string, List<object>>(strFilter, new[] { strParam }.ToList()));
-                }
-            } else {
-                if (qf.HasFlag(MpContentQueryBitFlags.Before)) {
-                    string tickOp = "<";
-                    string tickOp2 = null;
-                    string match_ticks = null;
-                    string match_ticks2 = null;
-                    if (qf.HasFlag(MpContentQueryBitFlags.Exactly)) {
-                        try {
-                            //exactly 1 < comp_field < 2
-
-                            var dt = DateTime.Parse(mv);
-                            var start_dt = dt.Date;
-                            var end_dt = start_dt + TimeSpan.FromDays(0.999999);
-                            match_ticks = start_dt.Ticks.ToString();
-                            match_ticks2 = end_dt.Ticks.ToString();
-                            tickOp = ">";
-                            tickOp2 = "<";
-                        }
-                        catch {
-                            tickOp = null;
-                        }
-                    } else {
-                        // all day units
-                        try {
-                            double today_offset = (DateTime.Now - DateTime.Today).TotalDays;
-                            double days = double.Parse(mv);
-                            double total_day_offset = days + today_offset;
-                            var dt = DateTime.Now - TimeSpan.FromDays(total_day_offset);
-                            match_ticks = dt.Ticks.ToString();
-                        }
-                        catch {
-                            tickOp = null;
-                        }
-                    }
-                    if (!string.IsNullOrEmpty(match_ticks)) {
-                        string comp_field = null;
-                        if (qf.HasFlag(MpContentQueryBitFlags.Created)) {
-                            comp_field = MpContentQueryBitFlags.Created.ToViewFieldName();
-                        } else if (qf.HasFlag(MpContentQueryBitFlags.Modified)) {
-                            comp_field = MpContentQueryBitFlags.Modified.ToViewFieldName();
-                            // filter out TransactionLabel = 'Created'
-                            string strFilter = $"{"TransactionLabel".CaseFormat()} != ?";
-                            object strParam = MpTransactionType.Created.ToString();
-                            arg_filters.Add(new Tuple<string, List<object>>(strFilter, new[] { strParam }.ToList()));
-                        } else if (qf.HasFlag(MpContentQueryBitFlags.Pasted)) {
-                            comp_field = MpContentQueryBitFlags.Pasted.ToViewFieldName();
-                        }
-
-                        if (!string.IsNullOrEmpty(comp_field)) {
-                            if (!string.IsNullOrEmpty(match_ticks2)) {
-                                //exactly 1 < comp_field < 2
-
-                                string strFilter2 = $"{comp_field.CaseFormat()} {tickOp2} ?";
-                                object strParam2 = match_ticks2;
-                                arg_filters.Add(new Tuple<string, List<object>>(strFilter2, new[] { strParam2 }.ToList()));
-                            }
-                            string strFilter = $"{comp_field.CaseFormat()} {tickOp} ?";
-                            object strParam = match_ticks;
-                            arg_filters.Add(new Tuple<string, List<object>>(strFilter, new[] { strParam }.ToList()));
-                        }
-                    }
-                }
-                if (qf.HasFlag(MpContentQueryBitFlags.After)) {
-                    //searchOp = ">";
-                }
-            }
+            arg_filters.AddRange(qf.GetStringMatchOps(mv));
+            arg_filters.AddRange(qf.GetDateTimeMatchOps(mv));
 
             return arg_filters;
         }
 
+        #region Fields
+
+        private static bool IsFieldNumeric(this string fieldName) {
+            string low_field_name = fieldName.ToLower();
+            switch(low_field_name) {                 
+                case "RootId":
+                case "SourceObjId":
+                case "CopyDateTime":
+                case "LastPasteDateTime":
+                case "UsageScore":
+                case "TransactionDateTime":
+                    return true;
+            default:
+                    return false;
+        }
+        }
+        #endregion
+
+        #region String Match
+        private static IEnumerable<Tuple<string, List<object>>> GetStringMatchOps(
+            this MpContentQueryBitFlags qf, 
+            string mv) {
+            var ops = new List<Tuple<string, List<object>>>();
+            if (qf.GetStringMatchFieldName() is IEnumerable<string> strFieldNames) {
+                // string matching
+                foreach (string strFieldName in strFieldNames) {
+                    string strOp = qf.GetStringMatchOp();
+                    // <Field> <op> '<mv>'
+                    string strFilter = $"{strFieldName.CaseFormat()} {strOp} ?";
+                    object strParam = qf.GetStringMatchValue(strOp, mv);
+                    ops.Add(new Tuple<string, List<object>>(strFilter, new[] { strParam }.ToList()));
+                }
+            }
+            return ops;
+        }
+
+        #endregion
+
+        #region Date Match
+        private static IEnumerable<Tuple<string, List<object>>> GetDateTimeMatchOps(
+            this MpContentQueryBitFlags qf, string mv) {
+            var ops = new List<Tuple<string, List<object>>>();
+            ops.AddRange(qf.GetExactlyDateTimeMatchOps(mv));
+            ops.AddRange(qf.GetBeforeOrAfterDateTimeMatchOps(mv));
+            return ops;
+        }
+
+        private static IEnumerable<Tuple<string,List<object>>> GetExactlyDateTimeMatchOps(
+            this MpContentQueryBitFlags qf, string mv) {
+            var ops = new List<Tuple<string, List<object>>>();
+            if(!qf.HasFlag(MpContentQueryBitFlags.Exactly)) {
+                return ops;
+            }
+            // <Field> <op> <mv>
+            string tickOp1 = qf.HasFlag(MpContentQueryBitFlags.Before) ? "<":">";
+            string tickOp2 = qf.HasFlag(MpContentQueryBitFlags.Before) ? ">" : "<";
+            string match_ticks1 = null;
+            string match_ticks2 = null;
+            try {
+                //exactly
+                // <comp_field> <op1> <ticks1> AND <comp_field> <op2> <ticks2>
+                // example (Before)
+                // 
+                // CreatedDateTime < ticks(05/20/2019) AND CreatedDateTime 
+
+                var dt = DateTime.Parse(mv);
+                var start_dt = dt.Date;
+                var end_dt = start_dt + TimeSpan.FromDays(0.999999);
+                match_ticks1 = start_dt.Ticks.ToString();
+                match_ticks2 = end_dt.Ticks.ToString();
+            }
+            catch {
+                tickOp1 = null;
+            }
+            if (!string.IsNullOrEmpty(match_ticks1)) {
+                string comp_field = null;
+                if (qf.HasFlag(MpContentQueryBitFlags.Created)) {
+                    comp_field = MpContentQueryBitFlags.Created.ToViewFieldName();
+                } else if (qf.HasFlag(MpContentQueryBitFlags.Modified)) {
+                    comp_field = MpContentQueryBitFlags.Modified.ToViewFieldName();
+                    // filter out TransactionLabel = 'Created'
+                    string strFilter = $"{"TransactionLabel".CaseFormat()} != ?";
+                    object strParam = MpTransactionType.Created.ToString();
+                    ops.Add(new Tuple<string, List<object>>(strFilter, new[] { strParam }.ToList()));
+                } else if (qf.HasFlag(MpContentQueryBitFlags.Pasted)) {
+                    comp_field = MpContentQueryBitFlags.Pasted.ToViewFieldName();
+                }
+
+                // <Field> <op> '<mv>'
+                if (!string.IsNullOrEmpty(comp_field)) {
+                    if (!string.IsNullOrEmpty(match_ticks2)) {
+                        //exactly 1 < comp_field < 2
+
+                        string strFilter2 = $"{comp_field} {tickOp2} ?";
+                        object strParam2 = match_ticks2;
+                        ops.Add(new Tuple<string, List<object>>(strFilter2, new[] { strParam2 }.ToList()));
+                    }
+                    string strFilter = $"{comp_field} {tickOp1} ?";
+                    object strParam = match_ticks1;
+                    ops.Add(new Tuple<string, List<object>>(strFilter, new[] { strParam }.ToList()));
+                }
+            }
+            return ops;
+        }
+        
+        private static IEnumerable<Tuple<string,List<object>>> GetBeforeOrAfterDateTimeMatchOps(
+            this MpContentQueryBitFlags qf, string mv) {
+            var ops = new List<Tuple<string, List<object>>>();
+
+            if (!qf.HasFlag(MpContentQueryBitFlags.After) &&
+                !qf.HasFlag(MpContentQueryBitFlags.Before)) {
+                return ops;
+            }
+            // <Field> <op> <mv>
+            string tickOp = qf.HasFlag(MpContentQueryBitFlags.Before) ? "<" : ">";
+            string match_ticks = null;
+            // all day units
+            try {
+                double today_offset = (DateTime.Now - DateTime.Today).TotalDays;
+                double days = double.Parse(mv);
+                double total_day_offset = days + today_offset;
+                var dt = DateTime.Now - TimeSpan.FromDays(total_day_offset);
+                match_ticks = dt.Ticks.ToString();
+            }
+            catch {
+                tickOp = null;
+            }
+            if (!string.IsNullOrEmpty(match_ticks)) {
+                string comp_field = null;
+                if (qf.HasFlag(MpContentQueryBitFlags.Created)) {
+                    comp_field = MpContentQueryBitFlags.Created.ToViewFieldName();
+                } else if (qf.HasFlag(MpContentQueryBitFlags.Modified)) {
+                    comp_field = MpContentQueryBitFlags.Modified.ToViewFieldName();
+                    // filter out TransactionLabel = 'Created'
+                    string strFilter = $"{"TransactionLabel".CaseFormat()} != ?";
+                    object strParam = MpTransactionType.Created.ToString();
+                    ops.Add(new Tuple<string, List<object>>(strFilter, new[] { strParam }.ToList()));
+                } else if (qf.HasFlag(MpContentQueryBitFlags.Pasted)) {
+                    comp_field = MpContentQueryBitFlags.Pasted.ToViewFieldName();
+                }
+
+                if (!string.IsNullOrEmpty(comp_field)) {
+                    string strFilter = $"{comp_field} {tickOp} ?";
+                    object strParam = match_ticks;
+                    ops.Add(new Tuple<string, List<object>>(strFilter, new[] { strParam }.ToList()));
+                }
+            }
+            return ops;
+        }
+
+
+        #endregion
+
         private static string CaseFormat(this string fieldOrSearchText, bool isValue = false) {
-            if(_cur_qi == null) {
+            if (_cur_qi == null) {
                 // hows this called outside of sql gen?
                 Debugger.Break();
                 return fieldOrSearchText;
             }
             if (!_cur_qi.QueryFlags.HasFlag(MpContentQueryBitFlags.CaseSensitive)) {
-                if(isValue) {
+                if (isValue) {
                     return fieldOrSearchText.ToUpper();
+                }
+                if(fieldOrSearchText.IsFieldNumeric()) {
+                    // NOTE UPPER on ticks gives wrong results
+                    return fieldOrSearchText;
                 }
                 return $@"UPPER({fieldOrSearchText})";
             }
             return fieldOrSearchText;
         }
 
-        private static string EscapeMatchStr(this string matchStr) {
-            if(matchStr == null) {
-                return string.Empty;
+        public static string GetSortField(this MpIQueryInfo qi) {
+            switch (qi.SortType) {
+                case MpContentSortType.Source:
+                    return "SourcePath";                    
+                case MpContentSortType.Title:
+                    return "Title";                    
+                case MpContentSortType.ItemData:
+                    return "ItemData";                    
+                case MpContentSortType.ItemType:
+                    return "e_MpCopyItemType";                    
+                case MpContentSortType.UsageScore:
+                    return "UsageScore";                    
+                case MpContentSortType.CopyDateTime:
+                    return "CopyDateTime";                    
+                default:
+                    return "RootId";                    
             }
-            return matchStr.Replace(@"\",@"\\\\");
         }
 
+        public static string GetSortDirection(this MpIQueryInfo qi) {
+            if(qi.IsDescending) {
+                return "DESC";
+            }
+            return "ASC";
+        }
         #endregion
     }
 }

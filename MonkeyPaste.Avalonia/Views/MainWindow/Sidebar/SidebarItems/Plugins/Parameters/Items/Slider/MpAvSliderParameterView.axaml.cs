@@ -9,6 +9,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Threading;
 using MonkeyPaste;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -45,36 +46,41 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void Sb_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
-            if (!IsEnabled) {
-                return;
-            }
-            var sb = sender as Control;
-            var svtb = this.FindControl<TextBox>("SliderValueTextBox");
-            var tbl = svtb.TranslatePoint(new Point(), sb).Value;
-            var tbr = new Rect(tbl, new Size(svtb.Bounds.Width, svtb.Bounds.Height));
-
-            var mp = e.GetPosition(sb);
-
-            if (tbr.Contains(mp)) {
-                return;
-            }
-            svtb.KillFocus();
-
-            e.Pointer.Capture(sb);
-            _isSliding = e.Pointer.Captured != null;
-            if (_isSliding) {
-                _lastMousePosition = mp.ToPortablePoint();
-                //svtb.IsHitTestVisible = false;
-                e.Handled = true;
-                var sbr = new Rect(new Point(), sb.Bounds.Size);
-                if (sbr.Contains(mp)) {
-                    double newWidth = mp.X;
-                    double widthPercent = newWidth / sb.Bounds.Width;
-                    double newValue = ((BindingContext.MaxValue - BindingContext.MinValue) * widthPercent) + BindingContext.MinValue;
-                    BindingContext.CurrentValue = Math.Round(newValue, BindingContext.Precision).ToString();
+            
+            Dispatcher.UIThread.Post(async () => {
+                if (!IsEnabled) {
+                    return;
                 }
-                UpdateRectWidth();
-            }
+                var sb = sender as Control;
+                var svtb = this.FindControl<TextBox>("SliderValueTextBox");
+                var tbl = svtb.TranslatePoint(new Point(), sb).Value;
+                var tbr = new Rect(tbl, new Size(svtb.Bounds.Width, svtb.Bounds.Height));
+
+                var mp = e.GetPosition(sb);
+
+                if (tbr.Contains(mp)) {
+                    return;
+                }
+
+                await svtb.TryKillFocusAsync();
+
+                e.Pointer.Capture(sb);
+                _isSliding = e.Pointer.Captured != null;
+                if (_isSliding) {
+                    _lastMousePosition = mp.ToPortablePoint();
+                    //svtb.IsHitTestVisible = false;
+                    e.Handled = true;
+                    var sbr = new Rect(new Point(), sb.Bounds.Size);
+                    if (sbr.Contains(mp)) {
+                        double newWidth = mp.X;
+                        double widthPercent = newWidth / sb.Bounds.Width;
+                        double newValue = ((BindingContext.MaxValue - BindingContext.MinValue) * widthPercent) + BindingContext.MinValue;
+                        BindingContext.CurrentValue = Math.Round(newValue, BindingContext.Precision).ToString();
+                    }
+                    UpdateRectWidth();
+                }
+            });
+            
         }
 
 
@@ -136,20 +142,23 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void Svtb_KeyDown(object sender, global::Avalonia.Input.KeyEventArgs e) {
-            var svtb = sender as TextBox;
-            if(e.Key == Key.Enter) {
-                // trigger lost focus
-                //this.FindControl<Border>("SliderBorder").Focus();
-                svtb.KillFocus();
-                return;
-            }
-            if(e.Key == Key.Escape) {
-                // avoid breaking the binding?
-                TextBox.TextProperty.Setter.Invoke(svtb, _oldVal.ToString());
-                // trigger lost focus
-                //this.FindControl<Border>("SliderBorder").Focus();
-                svtb.KillFocus();
-            }
+            Dispatcher.UIThread.Post(async () => {
+                var svtb = sender as TextBox;
+                if (e.Key == Key.Enter) {
+                    // trigger lost focus
+                    //this.FindControl<Border>("SliderBorder").Focus();
+                    svtb.TryKillFocusAsync();
+                    return;
+                }
+                if (e.Key == Key.Escape) {
+                    // avoid breaking the binding?
+                    TextBox.TextProperty.Setter.Invoke(svtb, _oldVal.ToString());
+                    // trigger lost focus
+                    //this.FindControl<Border>("SliderBorder").Focus();
+                    svtb.TryKillFocusAsync();
+                }
+            });
+            
         }
 
         private void OnSliderValueTextBoxValueChanged() {

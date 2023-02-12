@@ -134,6 +134,9 @@ function onWindowClick(e) {
 }
 
 function onWindowDoubleClick(e) {
+	if (isSubSelectionEnabled()) {
+		return;
+	}
 	enableSubSelection();
 }
 

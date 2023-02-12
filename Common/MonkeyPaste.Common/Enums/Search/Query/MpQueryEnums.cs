@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace MonkeyPaste.Common {
     public enum MpContentSortType {
@@ -75,7 +76,8 @@ namespace MonkeyPaste.Common {
     }
 
     public static class MpQueryEnumExtensions {
-        public static bool IsMultiValue(this MpContentQueryBitFlags cqbf) {
+        #region State Helpers
+        public static bool HasMultiValue(this MpContentQueryBitFlags cqbf) {
             return
                 //cqbf.HasFlag(MpContentQueryBitFlags.DateTimeRange) ||
                 cqbf.HasFlag(MpContentQueryBitFlags.Rgba) ||
@@ -83,36 +85,14 @@ namespace MonkeyPaste.Common {
                 cqbf.HasFlag(MpContentQueryBitFlags.Between);
         }
 
-        public static bool IsTimeSpanValue(this MpContentQueryBitFlags cqbf) {
+        public static bool HasTimeSpanValue(this MpContentQueryBitFlags cqbf) {
             return
                 cqbf.HasFlag(MpContentQueryBitFlags.Hours) ||
                 cqbf.HasFlag(MpContentQueryBitFlags.Days) ||
                 cqbf.HasFlag(MpContentQueryBitFlags.Exactly) ;
         }
 
-        public static string ToViewFieldName(this MpContentQueryBitFlags f) {
-            switch(f) {
-                case MpContentQueryBitFlags.Content:
-                    return "ItemData";
-                case MpContentQueryBitFlags.Url:
-                    return "UrlPath";
-                case MpContentQueryBitFlags.Annotations:
-                    return "ItemMetaData";
-                case MpContentQueryBitFlags.Created:
-                    return "CopyDateTime";
-                case MpContentQueryBitFlags.Modified:
-                    return "TransactionDateTime";
-                case MpContentQueryBitFlags.Pasted:
-                    return "PasteDateTime";
-                case MpContentQueryBitFlags.TextType:
-                case MpContentQueryBitFlags.ImageType:
-                case MpContentQueryBitFlags.FileType:
-                    return "e_MpCopyItemType";
-                default:
-                    return f.ToString();
-            }
-        }
-        
+
         public static bool IsViewFieldFlag(this MpContentQueryBitFlags cqbf) {
             switch(cqbf) {
                 case MpContentQueryBitFlags.Title:
@@ -144,20 +124,6 @@ namespace MonkeyPaste.Common {
                     return false;
             }
         }
-        public static bool IsDateTimeFilterFlag(this MpContentQueryBitFlags cqbf) {
-            switch(cqbf) {
-                case MpContentQueryBitFlags.Exactly:
-                case MpContentQueryBitFlags.Before:
-                case MpContentQueryBitFlags.After:
-                case MpContentQueryBitFlags.Between:
-                //case MpContentQueryBitFlags.Created:
-                //case MpContentQueryBitFlags.Modified:
-                //case MpContentQueryBitFlags.Pasted:
-                    return true;
-                default:
-                    return false;
-            }
-        }
 
         public static bool IsStringMatchFilterFlag(this MpContentQueryBitFlags f) {
             if(!f.IsViewFieldFlag()) {
@@ -182,16 +148,50 @@ namespace MonkeyPaste.Common {
             }
         }
 
+        #endregion
+
+        #region Filter Helpers
+
+        public static string ToViewFieldName(this MpContentQueryBitFlags f) {
+            switch (f) {
+                case MpContentQueryBitFlags.Content:
+                    return "ItemData";
+                case MpContentQueryBitFlags.Url:
+                    return "UrlPath";
+                case MpContentQueryBitFlags.Annotations:
+                    return "ItemMetaData";
+                case MpContentQueryBitFlags.Created:
+                    return "CopyDateTime";
+                case MpContentQueryBitFlags.Modified:
+                case MpContentQueryBitFlags.Pasted:
+                    return "TransactionDateTime";
+                case MpContentQueryBitFlags.TextType:
+                case MpContentQueryBitFlags.ImageType:
+                case MpContentQueryBitFlags.FileType:
+                    return "e_MpCopyItemType";
+                default:
+                    return f.ToString();
+            }
+        }
         public static IEnumerable<string> GetStringMatchFieldName(this MpContentQueryBitFlags f) {
-            foreach(string flag_name in typeof(MpContentQueryBitFlags).GetEnumNames()) {
+            foreach (string flag_name in typeof(MpContentQueryBitFlags).GetEnumNames()) {
                 MpContentQueryBitFlags cur_flag = flag_name.ToEnum<MpContentQueryBitFlags>();
-                if(!cur_flag.IsStringMatchFilterFlag()) {
+                if (!cur_flag.IsStringMatchFilterFlag()) {
                     continue;
                 }
-                if(f.HasFlag(cur_flag)) {
+                if (f.HasFlag(cur_flag)) {
                     yield return cur_flag.ToViewFieldName();
                 }
             }
+        }
+
+        public static string GetDateTimeTickValue(this MpContentQueryBitFlags f, string mv) {
+            double today_offset = (DateTime.Now - DateTime.Today).TotalDays;
+            double days = double.Parse(mv);
+            double total_day_offset = days + today_offset;
+            var dt = DateTime.Now - TimeSpan.FromDays(total_day_offset);
+            string match_ticks = dt.Ticks.ToString();
+            return match_ticks;
         }
 
         public static string GetStringMatchOp(this MpContentQueryBitFlags f) {
@@ -243,7 +243,7 @@ namespace MonkeyPaste.Common {
 
 
         public static DateTime? ToDateTime(this MpContentQueryBitFlags cqbf, string mv) {
-            if(!cqbf.IsTimeSpanValue()) {
+            if(!cqbf.HasTimeSpanValue()) {
                 return null;
             }
             if(cqbf.HasFlag(MpContentQueryBitFlags.Exactly)) {
@@ -288,6 +288,8 @@ namespace MonkeyPaste.Common {
             st = st == null ? string.Empty : st;
             return $"{sqf.HasFlag(MpContentQueryBitFlags.CaseSensitive)},{sqf.HasFlag(MpContentQueryBitFlags.WholeWord)},{sqf.HasFlag(MpContentQueryBitFlags.Regex)},{st.ToBase64String()}";
         }
+
+        #endregion
     }
 
     // Criteria Item Flags

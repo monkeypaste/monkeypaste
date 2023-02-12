@@ -52,118 +52,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        //#region MpIQueryResultProvider Implementation
-
-        //#region MpIJsonObject Implementation
-
-        //public string SerializeJsonObject() {
-        //    if(PendingQueryTagId > 0) {
-        //        return (PendingQueryTagId * -1).ToString();
-        //    }
-        //    if(IsSavedQuery) {
-        //        return CurrentQueryTagId.ToString();
-        //    }
-        //    return "0";
-        //}
-
-        //#endregion
-
-        //public bool CanRequery =>
-        //    IsAdvSearchActive &&
-        //    !_isRestoringValues &&
-        //    MpAvClipTrayViewModel.Instance.QueryCommand.CanExecute(null);
-
-        //public int TotalAvailableItemsInQuery => _pageTools.AllQueryIds.Count;
-        //public MpIDbIdCollection PageTools => _pageTools;
-
-        //public void RestoreProviderValues() {
-        //    // NOTE only called in mw init when last load shutdown was adv search
-        //    //InitializeAsync(QueryTagId, IsPendingQuery).FireAndForgetSafeAsync(this);
-        //    if (MpPlatform.Services.Query != this) {
-        //        // mistake
-        //        Debugger.Break();
-        //        return;
-        //    }
-        //    var qttvm = MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == QueryTagId);
-        //    if (qttvm == null) {
-        //        // mistake
-        //        Debugger.Break();
-        //        return;
-        //    }
-        //    _isRestoringValues = true;
-            
-        //    MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending = qttvm.IsSortDescending;
-        //    MpAvClipTileSortFieldViewModel.Instance.SelectedSortType = qttvm.SortType;
-        //    MpAvSearchBoxViewModel.Instance.SearchText = string.Empty;
-        //    MpAvSearchBoxViewModel.Instance.SearchFilterCollectionViewModel.FilterType = 
-        //        MpAvSearchBoxViewModel.Instance.SearchFilterCollectionViewModel.DefaultFilters;
-        //    _isRestoringValues = false;
-
-        //    if(MpAvTagTrayViewModel.Instance.LastActiveId == QueryTagId) {
-        //        NotifyQueryChanged(true);
-        //    } else {
-        //        MpAvTagTrayViewModel.Instance.SelectTagCommand.Execute(QueryTagId);
-        //    }
-        //}
-
-        //public async Task<List<MpCopyItem>> FetchItemsByQueryIdxListAsync(IEnumerable<int> copyItemQueryIdxList, IEnumerable<int> idsToOmit) {
-        //    var fetchRootIds = _pageTools.AllQueryIds
-        //                        .Select((val, idx) => (val, idx))
-        //                        .Where(x => copyItemQueryIdxList.Contains(x.idx) && !idsToOmit.Contains(x.val))
-        //                        .Select(x => x.val).ToList();
-        //    var items = await MpDataModelProvider.GetCopyItemsByIdListAsync(fetchRootIds);
-        //    return items;
-        //}
-
-        //public async Task QueryForTotalCountAsync() {
-
-        //    MpConsole.WriteLine("Adv total count called");
-        //    // NOTE only called on head info
-
-        //    var result = await MpContentQuery.QueryAllAsync(HeadItem);
-        //    _pageTools.AllQueryIds.Clear();
-        //    _pageTools.AllQueryIds.AddRange(result);
-        //    //_pageTools.AllQueryIds = new ObservableCollection<int>(result);
-
-        //    MpMessenger.SendGlobal(MpMessageType.TotalQueryCountChanged);
-        //}
-
-        //public void NotifyQueryChanged(bool forceRequery = false) {
-        //    //if(IsBusy) {
-        //    //    return;
-        //    //}
-        //    var ttrvm = MpAvTagTrayViewModel.Instance;
-        //    if (!IsExpanded && 
-        //        !IsConvertingQueryToSelect &&
-        //        ttrvm.SelectedItem != null &&
-        //        !ttrvm.SelectedItem.IsQueryTag) {
-        //        // treat expanded like is active, so if not active and tag is not query
-        //        // hand back to simple
-        //        InitializeAsync(0, false).FireAndForgetSafeAsync(this);
-        //        return;
-        //    }
-
-        //    if (!CanRequery) {
-        //        return;
-        //    }
-        //    Dispatcher.UIThread.Post(() => {
-        //        // NOTE unlike query vm this treats forceRequery as
-        //        // required since value providers are internal i dunno
-
-        //        if (forceRequery) {
-        //            MpConsole.WriteLine("Adv requery called");
-        //            //_pageTools.AllQueryIds.Clear();
-        //            //MpMessenger.SendGlobal(MpMessageType.TotalQueryCountChanged);
-        //            MpMessenger.SendGlobal(MpMessageType.QueryChanged);
-        //        } else {
-        //            MpMessenger.SendGlobal(MpMessageType.SubQueryChanged);
-        //        }
-
-        //    });
-        //}
-
-        //#endregion
-
         #endregion
 
         #region Properties
@@ -187,20 +75,23 @@ namespace MonkeyPaste.Avalonia {
             get => Items.Any(x => x.HasCriteriaChanged);
             set => Items.ForEach(x => x.HasCriteriaChanged = value);
         }
-        public bool IsConvertingQueryToSelect { get; set; }
+
+        public bool IsAllCriteriaEmpty =>
+            Items.All(x => x.IsEmptyCriteria);
+
         public bool IsAnyBusy => 
             IsBusy || Items.Any(x => x.IsAnyBusy);
         public bool HasCriteriaItems => 
             Items.Count > 0;
 
         public bool IsAdvSearchActive =>
-            QueryTagId > 0;
+            IsSavedQuery || IsPendingQuery;
 
         public bool IsSavedQuery => 
-            CurrentQueryTagId > 0;
+            QueryTagId > 0;
 
-        public bool IsPendingQuery => 
-            PendingQueryTagId > 0;
+        public bool IsPendingQuery =>
+            !IsSavedQuery && HasCriteriaItems;
 
         #endregion
 
@@ -216,7 +107,7 @@ namespace MonkeyPaste.Avalonia {
                     return 0;
                 }
                 double h = 0;
-                if(IsPendingQuery) {
+                if(true) {
                     // HEADER + BORDER
                     h +=
                         BoundHeaderHeight +
@@ -241,42 +132,43 @@ namespace MonkeyPaste.Avalonia {
         public IEnumerable<MpUserDevice> UserDevices { get; private set; }
         #endregion
 
-        public int PendingQueryTagId { get; private set; }
-        public int CurrentQueryTagId { get; private set;}
+        //public int PendingQueryTagId { get; private set; }
+        public int QueryTagId { get; private set;}
 
-        public int QueryTagId {
-            get {
-                if(IsPendingQuery) {
-                    if(IsSavedQuery) {
-                        // should only be 1
-                        Debugger.Break();
-                    }
-                    return PendingQueryTagId;
-                }
-                return CurrentQueryTagId;
-            }
-        }
+
+        //public int QueryTagId {
+        //    get {
+        //        if(IsPendingQuery) {
+        //            if(IsSavedQuery) {
+        //                // should only be 1
+        //                Debugger.Break();
+        //            }
+        //            return 0;
+        //        }
+        //        return QueryTagId;
+        //    }
+        //}
 
         #endregion
 
         #endregion
 
         #region Constructors
-        public MpAvSearchCriteriaItemCollectionViewModel(int startupQueryTagId) : this() {
-            // NOTE only called BEFORE bootstrap in MpAvQueryInfoViewModel.Parse when json is an int (QueryTagId)
-            _instance = this;
+        //public MpAvSearchCriteriaItemCollectionViewModel(int startupQueryTagId) : this() {
+        //    // NOTE only called BEFORE bootstrap in MpAvQueryInfoViewModel.Parse when json is an int (QueryTagId)
+        //    _instance = this;
 
-            if (startupQueryTagId == 0) {
-                return;
-            }
-            if(startupQueryTagId < 0) {
-                // shutdown was a pending query
-                PendingQueryTagId = -startupQueryTagId;
-            } else {
-                // shutdown was a saved query
-                CurrentQueryTagId = startupQueryTagId;
-            }
-        }
+        //    if (startupQueryTagId == 0) {
+        //        return;
+        //    }
+        //    if(startupQueryTagId < 0) {
+        //        // shutdown was a pending query
+        //        PendingQueryTagId = -startupQueryTagId;
+        //    } else {
+        //        // shutdown was a saved query
+        //        CurrentQueryTagId = startupQueryTagId;
+        //    }
+        //}
 
         public MpAvSearchCriteriaItemCollectionViewModel() : base(null) {
             _pageTools = MpQueryPageTools.Instance;
@@ -296,19 +188,27 @@ namespace MonkeyPaste.Avalonia {
                 UserDevices = await MpDataModelProvider.GetItemsAsync<MpUserDevice>();
             }
 
-            CurrentQueryTagId = isPending ? 0 : tagId;
-            PendingQueryTagId = isPending ? tagId : 0;
+            if(isPending && tagId > 0) {
+                // shouldn't happen
+                Debugger.Break();
+            }
+            QueryTagId = isPending ? 0 : tagId;
 
             Items.Clear();
             if (QueryTagId > 0) {
                 var cil = await MpDataModelProvider.GetCriteriaItemsByTagId(QueryTagId);
-                foreach (var ci in cil) {
-                    var civm = await CreateCriteriaItemViewModelAsync(ci);
+
+                var simple_cil = cil.Where(x => x.QueryType == MpQueryType.Simple);
+                await MpAvQueryViewModel.Instance.RestoreAdvSearchValuesAsync(simple_cil.FirstOrDefault());
+
+                var adv_cil = cil.Where(x => x.QueryType == MpQueryType.Advanced);
+                foreach (var adv_ci in adv_cil) {
+                    var civm = await CreateCriteriaItemViewModelAsync(adv_ci);
                     Items.Add(civm);
                 }
             } 
             
-            if(!HasCriteriaItems) {
+            if(!HasCriteriaItems && isPending && !IsSavedQuery) {
                 // create empty criteria item
                 var empty_civm = await CreateCriteriaItemViewModelAsync(null);
                 Items.Add(empty_civm);
@@ -316,83 +216,14 @@ namespace MonkeyPaste.Avalonia {
 
             while(Items.Any(x=>x.IsAnyBusy)) {
                 await Task.Delay(100);
-            }
-
-            //if (HasCriteriaItems) {
-            //    if (_simpleSearchRef == null &&
-            //        MpPlatform.Services.Query != this) {
-            //        _simpleSearchRef = MpPlatform.Services.Query;
-            //    }
-            //    MpPlatform.Services.Query = this;
-            //    if(QueryTagId > 0 && !isPending) {
-            //        // restore will either:
-            //        // 1. select the query tag (which will re-initialize this and call restore again)
-            //        // 2. call notify query change if query tag is already selected
-            //        IsBusy = false;
-            //        RestoreProviderValues();
-            //        return;
-            //    }
-            //} else {
-            //    IsExpanded = false;
-            //    if (_simpleSearchRef != null) {
-            //        MpPlatform.Services.Query = _simpleSearchRef;
-            //        _simpleSearchRef = null;
-            //    }
-            //}            
-            
+            }           
 
             IsBusy = false;
 
-            //if (QueryTagId > 0 && !isPending) {
-            //    // restore will either:
-            //    // 1. select the query tag (which will re-initialize this and call restore again)
-            //    // 2. call notify query change if query tag is already selected
-            //    RestoreProviderValues();
-            //} else {
-            //    MpPlatform.Services.Query.NotifyQueryChanged(true);
-            //}
             MpPlatform.Services.Query.NotifyQueryChanged(true);
         }
 
 
-        public async Task<int> ConvertCurrentSearchToAdvSearchAsync(bool selectConversion) {
-            // NOTE select is only when from search plus button
-            if(selectConversion) {
-                IsConvertingQueryToSelect = true;
-                //SelectedSearchTagId = AvailableNotAllTagId > 0 ? AvailableNotAllTagId : AllTagId;
-            }            
-
-            bool is_pending = true;
-            int converted_query_tag_id;
-            if (QueryTagId > 0) {
-                // NOTE since this should only be the case from tag add, its assumed 
-                // save follows this cmd in add tag
-
-                is_pending = false;
-
-                var cur_query_tag = await MpDataModelProvider.GetItemAsync<MpTag>(QueryTagId);
-                bool is_cur_pending = PendingQueryTagId == QueryTagId;
-
-                // clone current adv search
-                var clone_of_cur_query_tag = await cur_query_tag.CloneDbModelAsync();
-
-                converted_query_tag_id = clone_of_cur_query_tag.Id;
-                if (is_cur_pending) {
-                    // if current is pending delete it
-                    cur_query_tag.DeleteFromDatabaseAsync().FireAndForgetSafeAsync(this);
-                }
-            } else {
-                // clone current simple search
-                converted_query_tag_id = await ConvertCurrentSimpleSearchAsync();
-            }
-            if(selectConversion) {
-                // convert result to criteria rows
-                await InitializeAsync(converted_query_tag_id, is_pending);
-            }
-            IsConvertingQueryToSelect = false;
-
-            return converted_query_tag_id;
-        }
 
         #endregion
 
@@ -417,45 +248,13 @@ namespace MonkeyPaste.Avalonia {
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch(msg) {
                 case MpMessageType.AdvancedSearchExpanded:
-                    Dispatcher.UIThread.Post(async () => {
-                        double default_visible_row_count = 2.5d;
-                        double row_height = MpAvSearchCriteriaItemViewModel.DEFAULT_HEIGHT;
-                        double delta_open_height = Math.Min((double)Items.Count, default_visible_row_count) * row_height;
-
-                        BoundHeaderHeight = MpAvSearchCriteriaItemViewModel.DEFAULT_HEIGHT;
-                        BoundCriteriaListBoxScreenHeight = delta_open_height;
-                        //MpAvResizeExtension.ResizeByDelta(MpAvSearchCriteriaListBoxView.Instance, 0, delta_open_height, false);
-
-                        if (QueryTagId > 0 && !HasCriteriaItems) {
-                            InitializeAsync(QueryTagId, IsPendingQuery).FireAndForgetSafeAsync(this);
-                        }
-                    });
+                    AnimateAdvSearchMenuAsync(true).FireAndForgetSafeAsync(this);
                     break;
                 case MpMessageType.AdvancedSearchUnexpanded:
-                    double delta_close_height = -BoundCriteriaListBoxScreenHeight;
-                    BoundCriteriaListBoxScreenHeight = 0;
-                    //MpAvResizeExtension.ResizeByDelta(MpAvMainWindow.Instance, 0, delta_close_height, false);                    
-                    break;
-                case MpMessageType.RequeryCompleted:
-                    if(IsAdvSearchActive) {
-                        //MpAvClipTrayViewModel.Instance.Items.ForEach(x => x.UpdateQueryOffset());
-                        // BUG on requery w/ adv query offset isn't updating
-                        // i think its like the ref in clip tray to total count from
-                        // the interface or somehow not reevaluating query info 
-                        // but sub query fixes the offsets...
-                        //Dispatcher.UIThread.Post(async () => {
-                        //    while (MpAvClipTrayViewModel.Instance.IsAnyBusy) {
-                        //        // wait for tile layouts to update or something that prevents requery
-                        //        await Task.Delay(100);
-                        //    }
-                        //    MpAvClipTrayViewModel.Instance.QueryCommand.Execute(MpAvClipTrayViewModel.Instance.ScrollOffset);
-                        //});
-                    }
+                    AnimateAdvSearchMenuAsync(false).FireAndForgetSafeAsync(this);
                     break;
                 case MpMessageType.TagSelectionChanged:
                     OnPropertyChanged(nameof(IsSavedQuery));
-                    //OnPropertyChanged(nameof(AvailableNotAllTagId));
-                    //OnPropertyChanged(nameof(AvailableNotAllTagViewModel));
                     break;
 
             }
@@ -488,15 +287,41 @@ namespace MonkeyPaste.Avalonia {
             UpdateCriteriaSortOrderAsync().FireAndForgetSafeAsync(this);
         }
 
+        private async Task AnimateAdvSearchMenuAsync(bool isExpanding) {
+            await Dispatcher.UIThread.InvokeAsync(async () => {
+                await Task.Delay(1);
+                if (isExpanding) {
+                    double default_visible_row_count = 2d;
+                    double delta_open_height = MpAvSearchCriteriaItemViewModel.DEFAULT_HEIGHT * default_visible_row_count;
+
+                    BoundHeaderHeight = MpAvSearchCriteriaItemViewModel.DEFAULT_HEIGHT;
+                    BoundCriteriaListBoxScreenHeight = delta_open_height;
+                    //MpAvResizeExtension.ResizeByDelta(MpAvSearchCriteriaListBoxView.Instance, 0, delta_open_height, false);
+                    OnPropertyChanged(nameof(IsPendingQuery));
+                    Items.ForEach(x => x.Items.ForEach(y => y.OnPropertyChanged(nameof(y.SelectedItemIdx))));
+                } else {
+                    double delta_close_height = -BoundCriteriaListBoxScreenHeight;
+                    BoundCriteriaListBoxScreenHeight = 0;
+                    //MpAvResizeExtension.ResizeByDelta(MpAvMainWindow.Instance, 0, delta_close_height, false);                    
+
+                }
+            });
+            
+        }
+
         private async Task SetIsExpandedAsync(bool newExpandedValue) {
             if (newExpandedValue) {
-                if (!IsPendingQuery && !IsSavedQuery) {
+                if (!IsAdvSearchActive) {
                     // plus on search box toggled to checked
                     //await ConvertCurrentSearchToAdvSearchAsync(true);
                     await InitializeAsync(0, true);
                 }
                 _isExpanded = true;
             } else {
+                if(IsPendingQuery && IsAllCriteriaEmpty) {
+                    // discard pending if nothing changed
+                    await InitializeAsync(0, false);
+                }
                 _isExpanded = false;
             }
             OnPropertyChanged(nameof(IsExpanded));
@@ -513,7 +338,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }       
 
-        private async Task<int> ConvertCurrentSimpleSearchAsync() {
+        private async Task<int> ConvertPendingToQueryTagAsync() {
             if(QueryTagId > 0) {
                 // not a simple search, check call stack
                 Debugger.Break();
@@ -526,94 +351,21 @@ namespace MonkeyPaste.Avalonia {
 
             // NOTE this is called at end of provider create so sortIdx is seed for these
 
-            string st = MpAvSearchBoxViewModel.Instance.SearchText;
+            var simple_ci = await MpSearchCriteriaItem.CreateAsync(
+                tagId: pending_tag.Id,
+                joinType: MpLogicalQueryType.And,
+                sortOrderIdx: 0,
+                options: ((long)MpAvSearchBoxViewModel.Instance.SearchFilterCollectionViewModel.FilterType).ToString(),
+                matchValue: MpAvSearchBoxViewModel.Instance.SearchText);
 
-            var all_filters = MpAvSearchBoxViewModel.Instance.SearchFilterCollectionViewModel.FilterType;
-
-            if(!MpAvTagTrayViewModel.Instance.LastSelectedActiveItem.IsLinkTag) {
-                // simple conversion shouldn't of been called
-                Debugger.Break();
-            }
-            int tagId = MpAvTagTrayViewModel.Instance.LastSelectedActiveItem.TagId;
-            var opt_value_tuples = GetSimpleCriteriaOptions(all_filters, st, tagId);
-            List<MpSearchCriteriaItem> items = new List<MpSearchCriteriaItem>();
-            foreach (var opt_val_tuple in opt_value_tuples) {
-
-                var sci = await MpSearchCriteriaItem.CreateAsync(
-                    tagId: pending_tag.Id,
-                    nextJoinType: MpLogicalQueryType.Or,
-                    sortOrderIdx: items.Count,
-                    options: opt_val_tuple.Item1,
-                    matchValue: opt_val_tuple.Item2,
-                    isCaseSensitive: all_filters.HasFlag(MpContentQueryBitFlags.CaseSensitive),
-                    isWholeWord: all_filters.HasFlag(MpContentQueryBitFlags.WholeWord));
-                items.Add(sci);
-            }
-
-            MpAvSearchBoxViewModel.Instance.ClearTextCommand.Execute("don't notify, chill");
+            Items.ForEach(x => x.QueryTagId = pending_tag.Id);
+            Items.ForEach(x => x.OnPropertyChanged(nameof(x.HasModelChanged)));
             await Task.Delay(50);
             while (IsAnyBusy) {
                 await Task.Delay(100);
             }
             return pending_tag.Id;
         }
-        private IEnumerable<Tuple<string,string>> GetSimpleCriteriaOptions(MpContentQueryBitFlags sqf, string st, int tagId) {
-            // mv: <case sensitive>,<whole word>,<regex>,<base64 search text>
-            List<Tuple<string, string>> opts = new List<Tuple<string, string>>();
-            if(tagId != MpTag.AllTagId) {
-                // NOTE since db value is being stored in option text field
-                // must reference it by guid or the reference will
-                // break if search criteria is sync'd from another device
-                var ttvm = MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == tagId);
-                if (ttvm == null) {
-                    // should have found, is tagId a pending query id?
-                    Debugger.Break();
-                } else {
-                    opts.Add(new Tuple<string,string>($"{(int)MpRootOptionType.Collection}", ttvm.Tag.Guid));
-                }
-            }
-
-            if (!sqf.HasFlag(MpContentQueryBitFlags.TextType) ||
-               !sqf.HasFlag(MpContentQueryBitFlags.ImageType) ||
-               !sqf.HasFlag(MpContentQueryBitFlags.FileType)) {
-                // NOTE if all types are specified, ignore type flags
-                if (sqf.HasFlag(MpContentQueryBitFlags.TextType)) {
-                    opts.Add(new Tuple<string,string>($"{(int)MpRootOptionType.ContentType}",$"{(int)MpContentTypeOptionType.Text}"));
-                }
-                if (sqf.HasFlag(MpContentQueryBitFlags.ImageType)) {
-                    opts.Add(new Tuple<string,string>($"{(int)MpRootOptionType.ContentType}",$"{(int)MpContentTypeOptionType.Image}"));
-                }
-                if (sqf.HasFlag(MpContentQueryBitFlags.FileType)) {
-                    opts.Add(new Tuple<string,string>($"{(int)MpRootOptionType.ContentType}",$"{(int)MpContentTypeOptionType.Files}"));
-                }
-            }
-
-            MpTextOptionType tot = sqf.HasFlag(MpContentQueryBitFlags.Regex) ? MpTextOptionType.RegEx : MpTextOptionType.Contains;
-            if(sqf.HasFlag(MpContentQueryBitFlags.Title)) {
-                opts.Add(new Tuple<string,string>($"{(int)MpRootOptionType.Content},{(int)MpContentOptionType.Title},{(int)tot}",st));
-            }
-            if(sqf.HasFlag(MpContentQueryBitFlags.Content)) {
-                opts.Add(new Tuple<string,string>($"{(int)MpRootOptionType.Content},{(int)MpContentOptionType.AnyText},{(int)tot}",st));
-            }
-            if (sqf.HasFlag(MpContentQueryBitFlags.Annotations)) {
-                opts.Add(new Tuple<string,string>($"{(int)MpRootOptionType.Content},{(int)MpContentOptionType.Annotation},{(int)tot}",st));
-            }
-            if (sqf.HasFlag(MpContentQueryBitFlags.Url)) {
-                opts.Add(new Tuple<string,string>($"{(int)MpRootOptionType.Source},{(int)MpSourceOptionType.Website},{(int)MpWebsiteOptionType.Url},{(int)tot}",st));
-            }
-            if(sqf.HasFlag(MpContentQueryBitFlags.UrlTitle)) {
-                opts.Add(new Tuple<string,string>($"{(int)MpRootOptionType.Source},{(int)MpSourceOptionType.Website},{(int)MpWebsiteOptionType.Title},{(int)tot}",st));
-            }
-            if(sqf.HasFlag(MpContentQueryBitFlags.AppPath)) {
-                opts.Add(new Tuple<string,string>($"{(int)MpRootOptionType.Source},{(int)MpSourceOptionType.App},{(int)MpAppOptionType.ProcessPath},{(int)tot}",st));
-            }
-            if(sqf.HasFlag(MpContentQueryBitFlags.AppName)) {
-                opts.Add(new Tuple<string,string>($"{(int)MpRootOptionType.Source},{(int)MpSourceOptionType.App},{(int)MpAppOptionType.ApplicationName},{(int)tot}",st));
-            }
-            return opts;
-        }
-        
-        
         #endregion
 
         #region Commands
@@ -670,21 +422,35 @@ namespace MonkeyPaste.Avalonia {
                 // wait for panel open
                 await Task.Delay(waitTimeMs);
 
-                ttrvm.SelectTagCommand.Execute(ttrvm.RootGroupTagViewModel);
-                ttrvm.RootGroupTagViewModel.AddNewChildTagCommand.Execute(PendingQueryTagId);
+                if(ttrvm.SelectedItem.IsNotGroupTag) {
+                    // NOTE when non-group tag selected 
+                    // select root group automatically
+                    // this shouldn't affect the current query cause its a group tag
+
+                    ttrvm.SelectTagCommand.Execute(ttrvm.RootGroupTagViewModel);
+                    while(ttrvm.IsSelecting) {
+                        await Task.Delay(100);
+                    }
+                }
+
+                int new_query_tag_id = await ConvertPendingToQueryTagAsync();
+
+                ttrvm.RootGroupTagViewModel.AddNewChildTagCommand.Execute(new_query_tag_id);
 
                 // clear pending flag 
-                CurrentQueryTagId = PendingQueryTagId;
-                PendingQueryTagId = 0;
-                OnPropertyChanged(nameof(QueryTagId));
-            }, () => IsPendingQuery,this, new[] { this });
+                QueryTagId = new_query_tag_id;
+            }, () => {
+                if(!IsPendingQuery ||
+                    MpAvTagTrayViewModel.Instance.SelectedItem.IsNotGroupTag) {
+                    return false;
+                }
+                return true;
+            });
 
         public MpIAsyncCommand RejectPendingCriteriaItemsCommand => new MpAsyncCommand(
             async () => {
-                var t = await MpDataModelProvider.GetItemAsync<MpTag>(PendingQueryTagId);
-                t.DeleteFromDatabaseAsync().FireAndForgetSafeAsync();
-                PendingQueryTagId = 0;
                 await InitializeAsync(0, false);
+                IsExpanded = false;
             }, () => IsPendingQuery, this, new[] { this });
 
         public ICommand SaveQueryCommand => new MpCommand(
@@ -696,14 +462,6 @@ namespace MonkeyPaste.Avalonia {
                  }
              },()=>IsAdvSearchActive, this, new[] { this });
         
-        public ICommand CancelPendingOrCollapseSavedQueryCommand => new MpAsyncCommand(
-             async() => {
-                 // NOTE only hooked to adv header minus button
-                 if(IsPendingQuery) {
-                     await RejectPendingCriteriaItemsCommand.ExecuteAsync();
-                 }
-                 IsExpanded = false;
-             },()=>IsAdvSearchActive, this, new[] { this });
 
 
         public ICommand SelectAdvancedSearchCommand => new MpCommand<object>(

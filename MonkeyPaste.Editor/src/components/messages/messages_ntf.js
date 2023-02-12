@@ -260,6 +260,22 @@ function onInternalContextMenuIsVisibleChanged_ntf(isVisible) {
 	}
 }
 
+function onShowDebugger_ntf(debugReason, breakAfterSend) {
+	// output 'MpQuillShowDebuggerNotification'
+	if (typeof notifyShowDebugger === 'function') {
+		let msg = {
+			reason: debugReason
+		};
+		let msgStr = toBase64FromJsonObj(msg);
+		notifyShowDebugger(msgStr);
+	}
+	if (breakAfterSend) {
+		// NOTE check parent in call stack
+		sleep(3000);
+		debugger;
+	}
+}
+
 function isRunningOnHost() {
 	return typeof notifyInitComplete === 'function';
 }

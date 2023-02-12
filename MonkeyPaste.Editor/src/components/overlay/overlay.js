@@ -185,20 +185,22 @@ function drawTextSelection(ctx) {
 
     if (CurFindReplaceDocRangesRects) {
         let scroll_y = getEditorContainerElement().scrollTop;
+        let scroll_x = getEditorContainerElement().scrollLeft;
+
         let active_rect_range_kvp = CurFindReplaceDocRangeRectIdxLookup[CurFindReplaceDocRangeIdx];
         CurFindReplaceDocRangesRects.forEach((cur_rect, rect_idx) => {
-
-            let cur_bg_color = sel_bg_color;
+            let adj_rect = cleanRect(cur_rect);
+            let is_active = false;
             if (rect_idx >= active_rect_range_kvp[0] &&
                 rect_idx <= active_rect_range_kvp[1]) {
-                cur_bg_color = 'lime';
-            } else {
-                cur_bg_color = sel_bg_color
+                is_active = true;
             }
-            let adj_rect = cleanRect(cur_rect);
+            adj_rect = applyRangeRectStyle(is_active, adj_rect);
+            adj_rect.left -= scroll_x;
+            adj_rect.right -= scroll_x;
             adj_rect.top -= scroll_y;
             adj_rect.bottom -= scroll_y;
-            drawRect(ctx, adj_rect, cur_bg_color, sel_fg_color, 0.5, 125 / 255);
+            drawRect(ctx, adj_rect);//, cur_bg_color, sel_fg_color, 0.5, 125 / 255);
         });
     } else if (BlurredSelectionRects) {
         let scroll_y = getEditorContainerElement().scrollTop;

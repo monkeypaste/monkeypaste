@@ -60,7 +60,8 @@ namespace MonkeyPaste.Avalonia {
         notifyAppendStateChanged,
         notifyInternalContextMenuIsVisibleChanged,
         notifyLastTransactionUndone,
-        notifyAnnotationSelected
+        notifyAnnotationSelected,
+        notifyShowDebugger
     }
     [DoNotNotify]
     public class MpAvCefNetWebView : 
@@ -633,6 +634,13 @@ namespace MonkeyPaste.Avalonia {
 
                 // OTHER
 
+                case MpAvEditorBindingFunctionType.notifyShowDebugger:
+                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillShowDebuggerNotification>(msgJsonBase64Str);
+                    if (ntf is MpQuillShowDebuggerNotification showDebugNtf) {
+                        MpConsole.WriteLine($"[{ctvm}] {showDebugNtf.reason}");
+                        this.ShowDevTools();
+                    }
+                    break;
                 case MpAvEditorBindingFunctionType.notifyException:
                     ntf = MpJsonConverter.DeserializeBase64Object<MpQuillExceptionMessage>(msgJsonBase64Str);
                     if (ntf is MpQuillExceptionMessage exceptionMsgObj) {
@@ -918,16 +926,14 @@ namespace MonkeyPaste.Avalonia {
                 ProcessDataTransferCompleteResponse(dtcn).FireAndForgetSafeAsync(BindingContext);
             }
 
-            //BindingContext.IgnoreHasModelChanged = true;
-
             bool hasSizeChanged = false;
-            if (contentChanged_ntf.length > 0) {
-                // length = width = size1
+            if (contentChanged_ntf.length > 0 &&
+                BindingContext.CharCount != contentChanged_ntf.length) {
                 hasSizeChanged = true;
                 BindingContext.CharCount = contentChanged_ntf.length;
             }
-            if (contentChanged_ntf.lines > 0) {
-                // count = height = size2
+            if (contentChanged_ntf.lines > 0 &&
+                BindingContext.LineCount != contentChanged_ntf.lines) {
                 hasSizeChanged = true;
                 BindingContext.LineCount = contentChanged_ntf.lines;
             }
@@ -944,21 +950,12 @@ namespace MonkeyPaste.Avalonia {
             }
             if (contentChanged_ntf.editorHeight > 0 && 
                 contentChanged_ntf.editorHeight > 0) {
-                BindingContext.UnconstrainedContentDimensions = new MpSize(contentChanged_ntf.editorWidth, contentChanged_ntf.editorHeight);
+                var new_size = new MpSize(contentChanged_ntf.editorWidth, contentChanged_ntf.editorHeight);
+                if(!new_size.IsEqual(BindingContext.UnconstrainedContentDimensions)) {
+                    BindingContext.UnconstrainedContentDimensions = new_size;
+                }
             }
             BindingContext.HasTemplates = contentChanged_ntf.hasTemplates;
-
-            //BindingContext.IgnoreHasModelChanged = false;
-
-            //if(is_reload) {
-            //    BindingContext.DetailCollectionViewModel.RefreshAsync().FireAndForgetSafeAsync(BindingContext);
-            //} else {
-            //    BindingContext.DetailCollectionViewModel.InitializeAsync().FireAndForgetSafeAsync(BindingContext);
-
-            //    //if(BindingContext.IsAppendTrayItem) {
-            //    //    // when new item is appender  
-            //    //}
-            //}           
 
             IsContentLoaded = true;
         }

@@ -581,7 +581,9 @@ namespace MonkeyPaste.Avalonia {
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
 
             CopyItemIdsNeedingView.CollectionChanged += CopyItemIdsNeedingView_CollectionChanged;
+            Items.CollectionChanged += Items_CollectionChanged;
         }
+
 
         public virtual async Task InitializeAsync(MpTag tag) {
             IsBusy = true;
@@ -840,7 +842,20 @@ namespace MonkeyPaste.Avalonia {
         private void CopyItemIdsNeedingView_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             if(e.Action == NotifyCollectionChangedAction.Add ||
                 e.Action == NotifyCollectionChangedAction.Remove) {
-                SelfAndAllAncestors.Cast<MpAvTagTileViewModel>().ForEach(x => x.OnPropertyChanged(nameof(x.BadgeCount)));
+                SelfAndAllAncestors
+                    .Cast<MpAvTagTileViewModel>()
+                    .ForEach(x => x.OnPropertyChanged(nameof(x.BadgeCount)));
+            }
+        }
+
+
+        private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
+            if (e.Action == NotifyCollectionChangedAction.Add ||
+                e.Action == NotifyCollectionChangedAction.Remove) {
+                Task.WhenAll(
+                    SelfAndAllAncestors
+                    .Cast<MpAvTagTileViewModel>()
+                    .Select(x => x.UpdateClipCountAsync())).FireAndForgetSafeAsync();
             }
         }
 
@@ -1085,6 +1100,7 @@ namespace MonkeyPaste.Avalonia {
                  if (!IsExpanded) {
                      IsExpanded = true;
                  }
+                 bool isNew = false;
                  MpTag t = null;
                  MpTagType childTagType = TagType;
 
@@ -1095,6 +1111,7 @@ namespace MonkeyPaste.Avalonia {
                  } else if (args is MpTagType) {
                      // coming from plus button or plus popup menu
                      childTagType = (MpTagType)args;
+                     isNew = true;
                  } else if (args is int pendingTagId) {
                      // coming from save SavePendingQueryCommand
                      if (pendingTagId <= 0) {
@@ -1103,6 +1120,7 @@ namespace MonkeyPaste.Avalonia {
                      } else {
                          // added when pending query is confirmed
                          t = await MpDataModelProvider.GetItemAsync<MpTag>(pendingTagId);
+                         isNew = true;
                      }
                  } else if (TagType == MpTagType.Group) {
                      // need to make sure type is passed cause child type isn't clear
@@ -1110,23 +1128,7 @@ namespace MonkeyPaste.Avalonia {
                  }
 
                  if (t == null) {
-                     //if(childTagType == MpTagType.Query) {
-                     //    // this should only happen from add tag button w/ a group tag selected
-                     //    int queryTagId = await MpAvSearchCriteriaItemCollectionViewModel.Instance.
-                     //       ConvertCurrentSearchToAdvSearchAsync(false);
-
-                     //    // get ref to newly created adv tag
-                     //    t = await MpDataModelProvider.GetItemAsync<MpTag>(queryTagId);
-                     //    t.TreeSortIdx = Items.Count;
-                     //    t.ParentTagId = TagId;
-                     //    await t.WriteToDatabaseAsync();
-                     //} else {
-                     //    t = await MpTag.CreateAsync(
-                     //        parentTagId: TagId,
-                     //        treeSortIdx: Items.Count,
-                     //        tagType: childTagType);
-                     //}
-
+                     // only occurs from plus button
                      bool? sortDir = childTagType == MpTagType.Query ? 
                         MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending : null;
                      MpContentSortType? sortType = childTagType == MpTagType.Query ?
@@ -1139,43 +1141,29 @@ namespace MonkeyPaste.Avalonia {
                              isSortDescending: sortDir,
                              sortType: sortType);
 
-                     if (childTagType == MpTagType.Query) {
-                         // this should only happen from add tag button w/ a group tag selected
-                         //int queryTagId = await MpAvSearchCriteriaItemCollectionViewModel.Instance.
-                         //   ConvertCurrentSearchToAdvSearchAsync(false);
-
-                         //// get ref to newly created adv tag
-                         //t = await MpDataModelProvider.GetItemAsync<MpTag>(queryTagId);
-                         //t.TreeSortIdx = Items.Count;
-                         //t.ParentTagId = TagId;
-                         //await t.WriteToDatabaseAsync();
-
-                     }
-
-                 } else {
-                     // updating pending query tag (always called from root group tag)
+                 } else if(t.ParentTagId != TagId) {
+                     // NOTE only update sort if not already child
+                     // (allowing redundant add for simplicity)
                      t.TreeSortIdx = Items.Count;
                      t.ParentTagId = TagId;
                      await t.WriteToDatabaseAsync();
                  }
-                 //if(t != null && 
-                 //   t.TagType == MpTagType.Query &&
-                 //   (t.SortType == null || t.IsSortDescending == null)) {
-                 //    // ensure sort info is defined before creating vm
-
-                 //    t.SortType = MpAvClipTileSortFieldViewModel.Instance.SelectedSortType;
-                 //    t.IsSortDescending = MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending;
-                 //    await t.WriteToDatabaseAsync();
-                 //}
-
-                 MpAvTagTileViewModel ttvm = await CreateChildTagTileViewModel(t);
+                 MpAvTagTileViewModel ttvm = Parent.Items.FirstOrDefault(x => x.TagId == t.Id);
+                 if(ttvm == null) {
+                     ttvm = await CreateChildTagTileViewModel(t);
+                 } else {
+                     ttvm.ParentTreeItem.Items.Remove(ttvm);
+                 }
                  
                  Items.Add(ttvm);
 
-                 OnPropertyChanged(nameof(Items));
+                 OnPropertyChanged(nameof(SortedItems));
                  Parent.OnPropertyChanged(nameof(Parent.Items));
-                 await Task.Delay(300);
-                 ttvm.RenameTagCommand.Execute(null);
+                 if(isNew) {
+                     await Task.Delay(300);
+                     ttvm.RenameTagCommand.Execute(null);
+                 }
+                 
              },(args) => CanAddChild);
 
         public ICommand DeleteChildTagCommand => new MpAsyncCommand<object>(

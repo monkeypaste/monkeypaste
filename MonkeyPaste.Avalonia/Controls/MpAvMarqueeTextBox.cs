@@ -337,15 +337,17 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private void OnIsReadOnlyChanged() {
-            SetTextBoxIsVisible(!IsReadOnly);
-            if(IsReadOnly) {
-                this.KillFocus();
-            } else {
-                _orgText = Text;
-                SelectAll();
-            }
-            Init();
-            this.InvalidateAll();
+            Dispatcher.UIThread.Post(async () => {
+                SetTextBoxIsVisible(!IsReadOnly);
+                if (IsReadOnly) {
+                    await this.TryKillFocusAsync();
+                } else {
+                    _orgText = Text;
+                    SelectAll();
+                }
+                Init();
+                this.InvalidateAll();
+            });
         }
 
         public override void Render(DrawingContext context) {

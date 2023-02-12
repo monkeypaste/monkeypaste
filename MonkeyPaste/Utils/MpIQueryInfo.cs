@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     
     public enum MpQueryType {
+        None = 0,
         Simple,
         Advanced
     }
@@ -35,7 +36,7 @@ namespace MonkeyPaste {
         //public MpTextQueryType TextFlags { get; } // advanced
 
         //public MpDateTimeQueryType TimeFlags { get; } // advanced
-        public MpLogicalQueryType NextJoinType { get; } // advanced
+        public MpLogicalQueryType JoinType { get; } // advanced
         MpIQueryInfo Next { get; } // advanced
 
         public bool IsDescending { get; }

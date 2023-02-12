@@ -48,14 +48,32 @@ namespace MonkeyPaste.Common.Avalonia {
                 .FirstOrDefault(x => x.Focusable);
         }
 
-        public static bool KillFocus(this Control control) {
+        public static async Task<bool> TryKillFocusAsync(this Control control) {
             if (control == null) {
                 return false;
             }
-            if (control.GetFocusableAncestor() is IInputElement ie &&
+            if (control.GetFocusableAncestor(false) is IInputElement ie &&
                 ie != null) {
+                bool success = await ie.TrySetFocusAsync();
+                return success;
+            }
+            return false;
+        }
+
+        public static async Task<bool> TrySetFocusAsync(this IInputElement ie, int time_out_ms = 1000) {
+            if(ie == null) {
+                return false;
+            }
+            var sw = Stopwatch.StartNew();
+            while(true) {
+                if(sw.ElapsedMilliseconds >= time_out_ms) {
+                    break;
+                }
+                if(ie.IsFocused) {
+                    return true;
+                }
                 ie.Focus();
-                return true;
+                await Task.Delay(100);
             }
             return false;
         }

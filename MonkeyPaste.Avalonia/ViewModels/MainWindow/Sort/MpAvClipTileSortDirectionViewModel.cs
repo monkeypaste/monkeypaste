@@ -1,5 +1,8 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Threading;
 using Cairo;
+using MonkeyPaste.Common.Avalonia;
 using MonoMac.AppKit;
 using System;
 using System.Collections.Generic;
@@ -7,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using FocusManager = Avalonia.Input.FocusManager;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvClipTileSortDirectionViewModel : 
@@ -41,7 +45,19 @@ namespace MonkeyPaste.Avalonia {
         #region State
         public bool IsSortDescending { get; set; } 
 
-        public bool IsSortDirOrFieldFocused { get; set; }
+        public bool IsSortDirOrFieldFocused { 
+            get {
+                var cf = FocusManager.Instance.Current;
+                if(cf == null) {
+                    return false;
+                }
+                if(cf is Control c && 
+                    c.GetVisualAncestor<MpAvClipTileSortView>() != null) {
+                    return true;
+                }
+                return false;
+            }
+        }
 
         public bool CanChangeDir =>
             MpAvClipTrayViewModel.Instance.QueryCommand.CanExecute(null);
