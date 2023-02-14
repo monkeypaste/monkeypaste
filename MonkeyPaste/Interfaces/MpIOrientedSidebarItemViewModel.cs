@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MonkeyPaste {
+﻿namespace MonkeyPaste {
     public interface MpISidebarItemViewModel : MpIViewModel {
         double DefaultSidebarWidth { get; }
         double DefaultSidebarHeight { get; }

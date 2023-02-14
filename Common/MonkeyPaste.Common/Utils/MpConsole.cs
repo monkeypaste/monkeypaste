@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace MonkeyPaste.Common {
     public static class MpConsole {
@@ -29,10 +28,10 @@ namespace MonkeyPaste.Common {
         public static void Init() {
             try {
                 if (File.Exists(LogFilePath)) {
-                    File.Delete(LogFilePath);                 
+                    File.Delete(LogFilePath);
                 }
             }
-            catch(Exception ex) {
+            catch (Exception ex) {
                 WriteTraceLine(@"Error deleting previus log file w/ path: " + LogFilePath + " with exception: " + ex);
             }
         }
@@ -44,25 +43,25 @@ namespace MonkeyPaste.Common {
             if (LogToConsole) {
                 WriteLineWrapper(str, false, pad_pre, pad_post);
             }
-            if(LogToFile) {
+            if (LogToFile) {
                 WriteLogLine(str);
             }
         }
 
         public static void WriteTraceLine(object line, object ex = null, [CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int lineNum = 0) {
-            line = line == null ? string.Empty: line;
+            line = line == null ? string.Empty : line;
 
             line = $"[{DateTime.Now.ToString()}] {line}";
             if (LogToConsole) {
-                WriteLineWrapper("",true);
-                WriteLineWrapper(@"-----------------------------------------------------------------------",true);
-                WriteLineWrapper("File: " + callerFilePath,true);
-                WriteLineWrapper("Member: " + callerName,true);
-                WriteLineWrapper("Line: " + lineNum,true);
-                WriteLineWrapper("Msg: " + line,true);
-                WriteLineWrapper(@"-----------------------------------------------------------------------",true);
-                WriteLineWrapper("",true);
-                if(ex != null) {
+                WriteLineWrapper("", true);
+                WriteLineWrapper(@"-----------------------------------------------------------------------", true);
+                WriteLineWrapper("File: " + callerFilePath, true);
+                WriteLineWrapper("Member: " + callerName, true);
+                WriteLineWrapper("Line: " + lineNum, true);
+                WriteLineWrapper("Msg: " + line, true);
+                WriteLineWrapper(@"-----------------------------------------------------------------------", true);
+                WriteLineWrapper("", true);
+                if (ex != null) {
                     LogException(ex);
                 }
             }
@@ -76,12 +75,12 @@ namespace MonkeyPaste.Common {
         }
 
         private static void LogException(object ex, bool isTrace = true, bool recursive = true, int depth = 0) {
-            if(ex == null) {
+            if (ex == null) {
                 return;
             }
-            if(ex is Exception exObj) {
-                string tabs = string.Join(string.Empty,Enumerable.Repeat("\t", depth));
-                WriteLineWrapper(tabs+"Exception: ", true);
+            if (ex is Exception exObj) {
+                string tabs = string.Join(string.Empty, Enumerable.Repeat("\t", depth));
+                WriteLineWrapper(tabs + "Exception: ", true);
                 WriteLineWrapper(tabs + $"Type: {ex.GetType()}", true);
                 WriteLineWrapper(tabs + $"Source: {exObj.Source}", true);
                 WriteLineWrapper(tabs + $"StackTrace: {exObj.StackTrace}", true);
@@ -91,7 +90,7 @@ namespace MonkeyPaste.Common {
                     LogException(exObj.InnerException, isTrace, recursive, depth + 1);
                 }
             } else {
-                WriteLineWrapper("Exception: "+ex.ToString(),isTrace);
+                WriteLineWrapper("Exception: " + ex.ToString(), isTrace);
             }
         }
 
@@ -101,7 +100,7 @@ namespace MonkeyPaste.Common {
         //    } else {
         //        WriteTraceLine(format, args, callerName, callerFilePath, lineNum);
         //    }
-            
+
         //}
 
         public static void WriteLogLine(object line, params object[] args) {
@@ -122,7 +121,7 @@ namespace MonkeyPaste.Common {
         private static void WriteLineWrapper(string str, bool isTrace = false, bool pad_pre = false, bool pad_post = false) {
             if (RuntimeInformation.FrameworkDescription.ToLower().Contains(".net framework") || isTrace) {
                 // wpf
-                if(pad_pre) {
+                if (pad_pre) {
                     Console.WriteLine("");
                 }
                 Console.WriteLine(str);
@@ -130,9 +129,10 @@ namespace MonkeyPaste.Common {
                     Console.WriteLine("");
                 }
                 return;
-            } else if (RuntimeInformation.FrameworkDescription.ToLower().Contains(".net 6")) {
+            } else if (RuntimeInformation.FrameworkDescription.ToLower().Contains(".net 6") ||
+                        RuntimeInformation.FrameworkDescription.ToLower().Contains(".net 7")) {
                 // avalonia
-                if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
                     if (pad_pre) {
                         Debug.WriteLine("");
                     }

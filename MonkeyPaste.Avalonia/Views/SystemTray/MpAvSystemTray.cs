@@ -1,14 +1,11 @@
-﻿using Avalonia.Controls;
-using Avalonia.Media.Imaging;
-using System;
-using System.Collections.Generic;
-using MonkeyPaste.Common;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Data;
+using Avalonia.Media.Imaging;
+using MonkeyPaste.Common;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Input;
-using Avalonia;
 using KeyGesture = Avalonia.Input.KeyGesture;
 
 namespace MonkeyPaste.Avalonia {
@@ -90,7 +87,7 @@ namespace MonkeyPaste.Avalonia {
                 rootIcon.CommandParameter = tmivm.CommandParameter;
             }
 
-            
+
 
             return rootIcon;
         }
@@ -108,7 +105,7 @@ namespace MonkeyPaste.Avalonia {
 
         private static NativeMenuItem CreateMenuItem(MpMenuItemViewModel mivm) {
             var nmi = CreateMenuItem(
-                header: mivm.IsSeparator ? "-": mivm.Header,
+                header: mivm.IsSeparator ? "-" : mivm.Header,
                 headerSrcObj: mivm.HeaderSrcObj,
                 headerPath: mivm.HeaderPropPath,
 
@@ -136,8 +133,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static NativeMenuItem CreateMenuItem(
-            string header = "", 
-            object headerSrcObj = null, 
+            string header = "",
+            object headerSrcObj = null,
             string headerPath = "",
 
             ICommand cmd = null,
@@ -162,7 +159,7 @@ namespace MonkeyPaste.Avalonia {
             IEnumerable<NativeMenuItem> children = null) {
             var nmi = new NativeMenuItem();
             // HEADER
-            
+
             if (headerSrcObj != null) {
                 nmi.Bind(
                     NativeMenuItem.HeaderProperty,
@@ -224,7 +221,7 @@ namespace MonkeyPaste.Avalonia {
                         Source = isCheckedSrcObj,
                         Path = isCheckedPropPath
                     });
-            } else if(isChecked.HasValue) {
+            } else if (isChecked.HasValue) {
                 nmi.IsChecked = isChecked.Value;
             }
             nmi.ToggleType = toggleType;
@@ -239,7 +236,7 @@ namespace MonkeyPaste.Avalonia {
             // SUB ITEMS
 
             if (children != null) {
-                if(nmi.Menu == null) {
+                if (nmi.Menu == null) {
                     nmi.Menu = new NativeMenu();
                 }
                 foreach (var cnmi in children) {

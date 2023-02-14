@@ -1,20 +1,14 @@
-﻿
-using System;
-using System.Windows;
-using System.Windows.Input;
-using MonkeyPaste;
-using System.Threading.Tasks;
-using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Controls;
-using MonkeyPaste.Common;
+﻿using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
-using Application = Avalonia.Application;
+using MonkeyPaste.Common;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Application = Avalonia.Application;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvSystemTrayViewModel : 
-        MpViewModelBase, 
+    public class MpAvSystemTrayViewModel :
+        MpViewModelBase,
         MpIAsyncSingletonViewModel<MpAvSystemTrayViewModel> {
 
         #region Private Variables

@@ -1,10 +1,7 @@
-﻿using SQLite;
-
+﻿using MonkeyPaste.Common;
+using SQLite;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public class MpContentToken : MpDbModelBase {
@@ -64,7 +61,7 @@ namespace MonkeyPaste {
             int w = 0,
             int h = 0) {
 
-            var dupCheck = await MpDataModelProvider.GetTokenAsync(copyItemId,actionId,matchData);
+            var dupCheck = await MpDataModelProvider.GetTokenAsync(copyItemId, actionId, matchData);
             if (dupCheck != null) {
                 MpConsole.WriteTraceLine("Token with same data already defined");
                 return dupCheck;

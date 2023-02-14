@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using drawing = System.Drawing;
 using IDataObject_Com = System.Runtime.InteropServices.ComTypes.IDataObject;
@@ -84,7 +81,7 @@ namespace MonkeyPaste.Common.Wpf {
             public UInt16 bV5Reserved;
         }
 
-        
+
 
         [DllImport("user32.dll", SetLastError = true)]
         public static extern bool EmptyClipboard();
@@ -92,7 +89,7 @@ namespace MonkeyPaste.Common.Wpf {
         //[DllImport("kernel32.dll")]
         //public static extern UIntPtr GlobalSize(IntPtr hMem);
 
-        [DllImport("kernel32.dll", SetLastError= true)]
+        [DllImport("kernel32.dll", SetLastError = true)]
         public static extern uint GlobalSize(IntPtr hMem);
 
         [DllImport("kernel32.dll", SetLastError = true)]
@@ -666,7 +663,7 @@ namespace MonkeyPaste.Common.Wpf {
 
         #endregion
 
-        
+
 
         [DllImport("user32.dll")]
         public static extern bool GetCursorPos(out System.Windows.Point lpPoint);
@@ -778,7 +775,7 @@ namespace MonkeyPaste.Common.Wpf {
                 //var len = GetWindowTextLength(int32Handle);
                 var sb = new StringBuilder();
                 GetWindowText(hwnd, sb, 100);
-                MpConsole.WriteLine("Clipboard is open by window: " + sb.ToString());
+                Console.WriteLine("Clipboard is open by window: " + sb.ToString());
             }
             return hwnd;
         }

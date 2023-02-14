@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using MonkeyPaste.Common.Plugin;
+﻿using MonkeyPaste.Common.Plugin;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvImageAnnotationItemViewModel : MpAvAnnotationItemViewModel {

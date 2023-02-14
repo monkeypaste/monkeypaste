@@ -2,7 +2,6 @@
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
-using System.Diagnostics;
 using System.Globalization;
 
 namespace MonkeyPaste.Avalonia {

@@ -1,7 +1,5 @@
 ﻿using SQLite;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
@@ -50,7 +48,7 @@ namespace MonkeyPaste {
             string itemData = null,
             int itemIconId = 0,
             bool suppressWrite = false) {
-            if(dataObjectId <= 0) {
+            if (dataObjectId <= 0) {
                 throw new Exception("Must have valid dataObject id, id is " + dataObjectId);
             }
 
@@ -62,7 +60,7 @@ namespace MonkeyPaste {
                 ItemDataIconId = itemIconId
             };
 
-            if(!suppressWrite) {
+            if (!suppressWrite) {
                 await ndio.WriteToDatabaseAsync();
             }
             return ndio;

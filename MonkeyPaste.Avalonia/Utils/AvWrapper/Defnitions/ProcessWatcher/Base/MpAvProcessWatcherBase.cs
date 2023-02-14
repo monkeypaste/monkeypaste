@@ -1,20 +1,18 @@
-﻿using System;
-using System.Linq;
+﻿using Avalonia.Threading;
+using MonkeyPaste.Common;
+using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using Avalonia.Threading;
-using MonkeyPaste;
-using MonkeyPaste.Common;
-using MonoMac.AppKit;
-using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
-    
+
     public abstract class MpAvProcessWatcherBase : MpIProcessWatcher {
         #region Private Variables
-        
+
         //protected Tuple<string, string, IntPtr>? _lastProcessTuple = default;
         private DispatcherTimer _timer;
 
@@ -37,8 +35,8 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
         public bool IsWatching {
             get {
-                if(IsProcessTreePolled) {
-                    if(_timer == null || 
+                if (IsProcessTreePolled) {
+                    if (_timer == null ||
                         !_timer.IsEnabled) {
                         return false;
                     }
@@ -49,7 +47,7 @@ namespace MonkeyPaste.Avalonia {
         public int PollIntervalMs { get; set; } = 300;
         public bool IsProcessTreePolled {
             get {
-                if(OperatingSystem.IsWindows()) {
+                if (OperatingSystem.IsWindows()) {
                     return true;
                 }
                 return false;
@@ -57,7 +55,7 @@ namespace MonkeyPaste.Avalonia {
         }
         public IntPtr ThisAppHandle {
             get {
-                if(App.Desktop == null || 
+                if (App.Desktop == null ||
                     App.Desktop.MainWindow == null ||
                     App.Desktop.MainWindow.PlatformImpl == null) {
                     return IntPtr.Zero;
@@ -67,24 +65,24 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private bool _isThisAppActive = false;
-        public bool IsThisAppActive { 
+        public bool IsThisAppActive {
             get {
-                if(IsProcessTreePolled) {
+                if (IsProcessTreePolled) {
                     return _isThisAppActive;
                 }
                 var active_info = GetActiveProcessInfo();
-                if(active_info == null) {
+                if (active_info == null) {
                     return false;
                 }
                 return active_info.Handle == ThisAppHandle;
             }
             set {
-                if(!IsProcessTreePolled) {
+                if (!IsProcessTreePolled) {
                     throw new Exception("Cannot set when not polling");
                 }
                 _isThisAppActive = value;
             }
-        }        
+        }
         public virtual bool CanWatchProcesses() {
             // overridden on linux
             return true;
@@ -93,15 +91,15 @@ namespace MonkeyPaste.Avalonia {
         private MpPortableProcessInfo _lastProcessInfo;
         public MpPortableProcessInfo LastProcessInfo {
             get {
-                if(IsProcessTreePolled) {
+                if (IsProcessTreePolled) {
                     return _lastProcessInfo;
                 }
 
                 var active_info = GetActiveProcessInfo();
-                if(active_info == null) {
+                if (active_info == null) {
                     return _lastProcessInfo;
                 }
-                if(active_info.Handle == ThisAppHandle) {
+                if (active_info.Handle == ThisAppHandle) {
                     return _lastProcessInfo;
                 }
                 _lastProcessInfo = active_info;
@@ -114,7 +112,7 @@ namespace MonkeyPaste.Avalonia {
         private MpPortableProcessInfo _fileSystemProcessInfo;
         public MpPortableProcessInfo FileSystemProcessInfo {
             get {
-                if(_fileSystemProcessInfo == null) {
+                if (_fileSystemProcessInfo == null) {
                     _fileSystemProcessInfo = GetProcessPathProcessInfo(MpPlatform.Services.OsInfo.OsFileManagerPath);
                 }
                 return _fileSystemProcessInfo;
@@ -146,7 +144,7 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public void StartWatcher() {
-            if(IsProcessTreePolled) {
+            if (IsProcessTreePolled) {
                 CreateRunningProcessLookup();
                 if (_timer == null) {
                     _timer = new DispatcherTimer(DispatcherPriority.Background) {
@@ -161,11 +159,11 @@ namespace MonkeyPaste.Avalonia {
 
         }
         public void StopWatcher() {
-           _timer?.Stop();
+            _timer?.Stop();
         }
 
         public void AddOtherThisAppHandle(IntPtr handle) {
-            if(_otherThisAppHandles.Contains(handle)) {
+            if (_otherThisAppHandles.Contains(handle)) {
                 return;
             }
             _otherThisAppHandles.Add(handle);
@@ -205,7 +203,7 @@ namespace MonkeyPaste.Avalonia {
 
         public virtual string GetProcessApplicationName(IntPtr hWnd) {
             string process_path = GetProcessPath(hWnd);
-            if(process_path.IsFile()) {
+            if (process_path.IsFile()) {
                 string app_name = FileVersionInfo.GetVersionInfo(process_path).FileDescription;
                 return app_name;
             }
@@ -244,13 +242,13 @@ namespace MonkeyPaste.Avalonia {
 
 
         public virtual Process GetProcess(object handleIdOrTitle) {
-            if(handleIdOrTitle is IntPtr handle) {
+            if (handleIdOrTitle is IntPtr handle) {
                 return FindProcess(handle);
             }
-            if(handleIdOrTitle is int id) {
+            if (handleIdOrTitle is int id) {
                 return FindProcess(id);
             }
-            if(handleIdOrTitle is string title) {
+            if (handleIdOrTitle is string title) {
                 return FindProcess(title);
             }
             return null;
@@ -276,7 +274,7 @@ namespace MonkeyPaste.Avalonia {
             if (activeProcessInfo == null) {
                 return;
             }
-            if(activeProcessInfo.Handle == ThisAppHandle ||
+            if (activeProcessInfo.Handle == ThisAppHandle ||
                 _otherThisAppHandles.Contains(activeProcessInfo.Handle)) {
                 IsThisAppActive = true;
                 return;
@@ -300,7 +298,7 @@ namespace MonkeyPaste.Avalonia {
 
         private MpPortableProcessInfo GetProcessPathProcessInfo(string processPath) {
             var kvp = RunningProcessLookup.FirstOrDefault(x => x.Key.ToLower() == processPath.ToLower());
-            if(kvp.Equals(default(KeyValuePair<string,ObservableCollection<IntPtr>>)) ||
+            if (kvp.Equals(default(KeyValuePair<string, ObservableCollection<IntPtr>>)) ||
                 kvp.Value == null || kvp.Value.Count == 0) {
                 return null;
             }

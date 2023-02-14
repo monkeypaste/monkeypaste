@@ -5,7 +5,7 @@ namespace MonkeyPaste.Common {
         private static string _shellTestString_cmdstr;
 
         public static string GetExeWithArgsToExePath(string exeWithArgsStr) {
-            if(string.IsNullOrEmpty(exeWithArgsStr)) {
+            if (string.IsNullOrEmpty(exeWithArgsStr)) {
                 return string.Empty;
             }
             return $"which {exeWithArgsStr}".ShellExec().Trim();
@@ -13,17 +13,17 @@ namespace MonkeyPaste.Common {
 
         public static string GetCleanShellStr(string shellStr) {
             string shell_str_type = TestShellString(shellStr);
-            if(shell_str_type == "UNKNOWN") {
+            if (shell_str_type == "UNKNOWN") {
                 throw new System.Exception("Unknown shell string: " + shellStr);
             }
-            if(shell_str_type == "EXECUTABLE") {
+            if (shell_str_type == "EXECUTABLE") {
                 return GetExeWithArgsToExePath(shellStr);
             }
             return shellStr;
         }
-        
+
         private static string TestShellString(string strToTest) {
-            if(_shellTestString_cmdstr == null) {
+            if (_shellTestString_cmdstr == null) {
                 // from https://stackoverflow.com/a/45899525/105028
                 _shellTestString_cmdstr = Environment.NewLine;
                 _shellTestString_cmdstr += $"F_NAME=\"${1}\"" + Environment.NewLine;
@@ -38,9 +38,9 @@ namespace MonkeyPaste.Common {
                 _shellTestString_cmdstr += "fi" + Environment.NewLine;
             }
             string result = $"sh -c `{_shellTestString_cmdstr}` {strToTest}".ShellExec();
-            if(result == "FILE") {
+            if (result == "FILE") {
                 bool isExecutable = !string.IsNullOrEmpty(GetExeWithArgsToExePath(strToTest));
-                if(isExecutable) {
+                if (isExecutable) {
                     return "EXECUTABLE";
                 }
             }

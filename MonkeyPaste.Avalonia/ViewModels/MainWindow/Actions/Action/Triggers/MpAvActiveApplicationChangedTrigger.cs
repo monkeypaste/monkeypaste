@@ -1,15 +1,12 @@
-﻿using System;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using MonkeyPaste;
-using MonkeyPaste.Common;
-using MonkeyPaste.Common.Plugin;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvActiveApplicationChangedTrigger : 
+    public class MpAvActiveApplicationChangedTrigger :
         MpAvTriggerActionViewModelBase {
         #region Constants
 
@@ -83,7 +80,7 @@ namespace MonkeyPaste.Avalonia {
         }
         public int PollingIntervalMs {
             get {
-                if(ArgLookup.TryGetValue(POLLING_INTERVAL_MS_PARAM_ID, out var param_vm) &&
+                if (ArgLookup.TryGetValue(POLLING_INTERVAL_MS_PARAM_ID, out var param_vm) &&
                     param_vm.IntValue is int curVal) {
                     return curVal;
                 }
@@ -131,7 +128,7 @@ namespace MonkeyPaste.Avalonia {
             if (!base.CanPerformAction(arg)) {
                 return;
             }
-            if(arg is MpPortableProcessInfo ppi) {
+            if (arg is MpPortableProcessInfo ppi) {
                 await base.PerformActionAsync(
                         new MpAvActiveAppChangedTriggerOutput() {
                             Previous = null,

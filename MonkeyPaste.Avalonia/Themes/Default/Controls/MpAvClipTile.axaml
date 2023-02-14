@@ -3,12 +3,8 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
     <Styles.Resources>
-        <Thickness x:Key="TileBorderThickness">
-            5,5,5,5
-        </Thickness>
-        <CornerRadius x:Key="TileCornerRadius">
-            10,10,10,10
-        </CornerRadius>
+        <Thickness x:Key="TileBorderThickness">5,5,5,5</Thickness>
+        <CornerRadius x:Key="TileCornerRadius">10,10,10,10</CornerRadius>
 
     </Styles.Resources>
 

@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Avalonia.Threading;
-using Avalonia.Controls;
-using Avalonia.Media.Imaging;
-using Avalonia.Layout;
+﻿using MonkeyPaste.Common;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvMessageBox : MpINativeMessageBox {
@@ -47,7 +39,7 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             }
 
-            if(result != MpNotificationDialogResultType.Cancel) {
+            if (result != MpNotificationDialogResultType.Cancel) {
                 // result type mismatch
                 Debugger.Break();
             }
@@ -63,51 +55,6 @@ namespace MonkeyPaste.Avalonia {
                                     iconResourceObj: iconResourceObj,
                                     anchor: anchor);
             return result;
-        }
-
-        private Window CreateSampleWindow(string title, string message) {
-            Button cancelButton;
-            Button okButton;
-
-            var window = new Window {
-                Title = title,
-                Height = 200,
-                Width = 200,
-                Content = new StackPanel {
-                    Spacing = 4,
-                    Children =
-                    {
-                        new TextBlock { Text = message },
-                        new StackPanel() {
-                            Orientation = Orientation.Horizontal,
-                            Children = {
-                                (cancelButton = new Button
-                                {
-                                    HorizontalAlignment = HorizontalAlignment.Center,
-                                    Content = "Cancel",
-                                    IsDefault = false
-                                }),
-                                (okButton = new Button
-                                {
-                                    HorizontalAlignment = HorizontalAlignment.Center,
-                                    Content = "Ok",
-                                    IsDefault = true
-                                })
-                            }
-                        }
-                    }
-                },
-                WindowStartupLocation = WindowStartupLocation.CenterOwner
-            };
-
-            cancelButton.Click += (s, e) => {
-                result = "Cancel";
-            };
-            okButton.Click += (s, e) => {
-                result = "Cancel";
-            };
-
-            return window;
         }
     }
 }

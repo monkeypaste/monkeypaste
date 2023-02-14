@@ -1,8 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Input;
 
 namespace MonkeyPaste {
@@ -26,7 +24,7 @@ namespace MonkeyPaste {
         public object IconSourceObj { get; set; }
 
         public object AnchorTarget { get; set; }
-        public Func<object,object> RetryAction { get; set; }
+        public Func<object, object> RetryAction { get; set; }
         public object RetryActionObj { get; set; }
 
         public ICommand FixCommand { get; set; }
@@ -43,12 +41,12 @@ namespace MonkeyPaste {
         public MpNotificationFormat() { }
 
         public MpNotificationFormat(MpPluginUserNotificationFormat pluginNotfication) {
-            if(pluginNotfication == null) {
+            if (pluginNotfication == null) {
                 return;
             }
             NotificationType = pluginNotfication.NotificationTypeStr.ToEnum<MpNotificationType>();
-            
-            if(pluginNotfication.NotificationType == MpPluginNotificationType.PluginResponseWarningWithOption) {
+
+            if (pluginNotfication.NotificationType == MpPluginNotificationType.PluginResponseWarningWithOption) {
                 MaxShowTimeMs = -1;
             } else {
                 MaxShowTimeMs = MAX_MESSAGE_DISPLAY_MS;

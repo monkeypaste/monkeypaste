@@ -4,20 +4,18 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.VisualTree;
-using PropertyChanged;
-using System.Diagnostics;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using PropertyChanged;
 using System;
-using System.Linq;
-using Avalonia.Input;
+using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
 
     [DoNotNotify]
     public partial class MpAvToolTipView : UserControl {
         #region Private Variables
-        
+
         private MpPoint _lastMousePos;
 
         #endregion
@@ -66,7 +64,7 @@ namespace MonkeyPaste.Avalonia {
             this.AttachedToVisualTree += MpAvTooltipView_AttachedToVisualTree;
             this.DetachedFromVisualTree += MpAvTooltipView_DetachedFromVisualTree;
             this.GetObservable(Control.IsVisibleProperty).Subscribe(value => OnVisibleChanged());
-            if(App.Desktop != null &&
+            if (App.Desktop != null &&
                 App.Desktop.MainWindow != null) {
                 App.Desktop.MainWindow.GetObservable(Window.IsVisibleProperty).Subscribe(value => OnVisibleChanged());
             }
@@ -74,10 +72,10 @@ namespace MonkeyPaste.Avalonia {
 
         private void OnVisibleChanged() {
             _lastMousePos = null;
-            if(App.Desktop != null &&
+            if (App.Desktop != null &&
                 !App.Desktop.MainWindow.IsVisible) {
                 // workaround for bug where tooltips don't hide when mw hides
-                if(GetPopupRoot() is PopupRoot pur) {
+                if (GetPopupRoot() is PopupRoot pur) {
                     pur.Hide();
                 }
             }
@@ -88,7 +86,7 @@ namespace MonkeyPaste.Avalonia {
             if (GetHostControl() is Control host_control) {
                 host_control.PointerMoved += Host_control_PointerMoved;
             }
-            if(GetPopupRoot() is PopupRoot pur) {
+            if (GetPopupRoot() is PopupRoot pur) {
                 pur.TransparencyLevelHint = WindowTransparencyLevel.Transparent;
                 pur.Background = Brushes.Transparent;
             }
@@ -96,7 +94,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void Host_control_PointerMoved(object sender, global::Avalonia.Input.PointerEventArgs e) {
             var hc = GetHostControl();
-            if(hc == null) {
+            if (hc == null) {
                 _lastMousePos = null;
                 return;
             }
@@ -142,7 +140,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private MpPoint GetToolTipOffset(Control hc) {
-            if(hc == null) {
+            if (hc == null) {
                 return MpPoint.Zero;
             }
             return new MpPoint() {
@@ -152,15 +150,15 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void SetToolTipOffset(Control hc, MpPoint mp) {
-            if(hc == null) {
+            if (hc == null) {
                 return;
             }
 
             var diff = mp - _lastMousePos;
             var w = GetPopupRoot();
-            
+
             //var w = hc.GetVisualAncestor<Window>();
-            if(w == null) {
+            if (w == null) {
                 // occuring in plugin preset icon popup menu (when window)
                 var test = hc.GetVisualAncestors();
                 Debugger.Break();

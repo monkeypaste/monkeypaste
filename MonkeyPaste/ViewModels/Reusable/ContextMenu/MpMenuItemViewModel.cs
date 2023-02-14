@@ -1,9 +1,9 @@
-﻿using System;
+﻿using MonkeyPaste.Common;
+using System;
 using System.Collections.Generic;
-using System.Windows.Input;
 using System.Linq;
-using MonkeyPaste.Common;
-using Xamarin.Forms;
+using System.Windows.Input;
+//using Xamarin.Forms;
 
 namespace MonkeyPaste {
 
@@ -13,7 +13,7 @@ namespace MonkeyPaste {
         MpMenuItemViewModel ContextMenuItemViewModel { get; }
     }
 
-    
+
     public interface MpIContextMenuViewModel : MpIMenuItemViewModelBase {
         bool IsContextMenuOpen { get; set; }
         MpMenuItemViewModel ContextMenuViewModel { get; }
@@ -130,7 +130,7 @@ namespace MonkeyPaste {
         public string Header {
             get => _header.EscapeMenuItemHeader(AltNavIdx);
             set {
-                if(Header != value && Header != value.EscapeMenuItemHeader(AltNavIdx)) {
+                if (Header != value && Header != value.EscapeMenuItemHeader(AltNavIdx)) {
                     _header = value;
                     OnPropertyChanged(nameof(Header));
                 }
@@ -146,7 +146,7 @@ namespace MonkeyPaste {
         public int MenuItemId { get; set; }
         public bool IsEnabled {
             get {
-                if(Command == null) {
+                if (Command == null) {
                     return true;
                 }
                 return Command.CanExecute(CommandParameter);
@@ -170,16 +170,16 @@ namespace MonkeyPaste {
 
         public bool IsVisible { get; set; } = true;
 
-        public string CheckResourceKey { 
+        public string CheckResourceKey {
             get {
-                if(IsChecked.IsTrue()) {
+                if (IsChecked.IsTrue()) {
                     return "CheckSvg";
                 }
                 if (IsChecked.IsNull()) {
                     return "DotSvg";
                 }
                 return null;
-            } 
+            }
         }
         #endregion
 
@@ -199,7 +199,7 @@ namespace MonkeyPaste {
 
         public object IsCheckedSrcObj { get; set; }
         public string IsCheckedPropPath { get; set; }
-        
+
         public object CheckedResourceSrcObj { get; set; }
         public string CheckedResourcePropPath { get; set; }
         #endregion
@@ -217,7 +217,7 @@ namespace MonkeyPaste {
 
         public string InputGestureText {
             get {
-                if(MpShortcutRef.Create(ShortcutArgs) is MpShortcutRef sr) {
+                if (MpShortcutRef.Create(ShortcutArgs) is MpShortcutRef sr) {
                     return MpDataModelProvider.GetShortcutKeystring(sr.ShortcutType.ToString(), sr.CommandParameter);
                 }
                 return null;
@@ -327,9 +327,9 @@ namespace MonkeyPaste {
         public double IconMinHeight { get; set; } = DEFAULT_ICON_HEIGHT;
 
         private double[] _iconMargin;
-        public double[] IconMargin { 
+        public double[] IconMargin {
             get {
-                if(_iconMargin == null) {
+                if (_iconMargin == null) {
                     return new double[] { 5, 0, IconMinWidth + 10, 0 };
                 }
                 return _iconMargin;
@@ -346,7 +346,7 @@ namespace MonkeyPaste {
 
         #endregion
 
-        
+
         #endregion
 
         #region Tooltip
@@ -414,7 +414,7 @@ namespace MonkeyPaste {
 
         public void ClearCommands() {
             Command = null;
-            if(SubItems != null) {
+            if (SubItems != null) {
                 SubItems.ForEach(x => x.ClearCommands());
             }
         }

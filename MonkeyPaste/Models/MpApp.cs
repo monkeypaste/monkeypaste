@@ -1,23 +1,20 @@
-﻿using SQLite;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
+using SQLite;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using System.Linq;
-using System.IO;
-using MonkeyPaste.Common.Plugin; 
-using MonkeyPaste.Common;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public class MpApp : 
-        MpDbModelBase, 
+    public class MpApp :
+        MpDbModelBase,
         MpISyncableDbObject,
         MpISourceRef,
         MpIIconResource,
         MpIDbIconId,
         MpILabelText,
-        MpIUriSource {        
+        MpIUriSource {
         #region Columns
 
         [Column("pk_MpAppId")]
@@ -35,7 +32,7 @@ namespace MonkeyPaste {
         public string Arguments { get; set; } = string.Empty;
 
         [Column("IsAppRejected")]
-        public int IsRejectedVal { get; set; } = 0;        
+        public int IsRejectedVal { get; set; } = 0;
 
         [Column("fk_MpIconId")]
         public int IconId { get; set; }
@@ -46,7 +43,7 @@ namespace MonkeyPaste {
         #endregion
 
         #region Properties
-       
+
         [Ignore]
         public bool IsAppRejected {
             get {
@@ -74,7 +71,7 @@ namespace MonkeyPaste {
 
         #endregion
 
-     
+
 
         #region MpILabelText Implementation
         string MpILabelText.LabelText => AppName;
@@ -101,36 +98,36 @@ namespace MonkeyPaste {
         #endregion
 
         public static async Task<MpApp> CreateAsync(
-            string appPath = "", 
-            string appName = "", 
+            string appPath = "",
+            string appName = "",
             string arguments = null,
             int iconId = 0,
             int appUserDeviceId = 0,
             string guid = "",
             bool suppressWrite = false) {
-            if(appPath.IsNullOrEmpty()) {
+            if (appPath.IsNullOrEmpty()) {
                 throw new Exception("App must have path");
             }
-            if(appPath != null) {
+            if (appPath != null) {
                 appPath = appPath.ToLower();
             }
-            if(string.IsNullOrWhiteSpace(arguments)) {
+            if (string.IsNullOrWhiteSpace(arguments)) {
                 arguments = null;
             }
             // NOTE checking app by path and arguments and device here
             // NOTE when args are differnt should be treated as unique app since it could be significantly different
             var dupApp = await MpDataModelProvider.GetAppByMembersAsync(appPath, arguments, MpDefaultDataModelTools.ThisUserDeviceId);
             if (dupApp != null) {
-                if(dupApp.IconId != iconId && iconId > 0) {
+                if (dupApp.IconId != iconId && iconId > 0) {
                     // this means app icon has changed (probably from an update)
                     dupApp.IconId = iconId;
-                    await dupApp.WriteToDatabaseAsync();                    
+                    await dupApp.WriteToDatabaseAsync();
                 }
                 dupApp.WasDupOnCreate = true;
                 return dupApp;
             }
 
-            if(iconId == 0) {
+            if (iconId == 0) {
                 string iconImgBase64 = MpPlatform.Services.IconBuilder.GetApplicationIconBase64(appPath);
 
                 var icon = await MpIcon.CreateAsync(
@@ -173,7 +170,7 @@ namespace MonkeyPaste {
                         break;
                     case "fk_MpUserDeviceId":
                         var userDevice = await MpDb.GetDbObjectByTableGuidAsync("MpUserDevice", li.AffectedColumnValue) as MpUserDevice;
-                        if(userDevice == null) {
+                        if (userDevice == null) {
                             Debugger.Break();
                             return appFromLog;
                         }
@@ -212,14 +209,14 @@ namespace MonkeyPaste {
             } else {
                 a.UserDeviceId = userDevice.Id;
             }
-            
+
             var icon = await MpDb.GetDbObjectByTableGuidAsync("MpIcon", objParts[2]) as MpIcon;
-            if(icon == null) {
+            if (icon == null) {
                 Debugger.Break();
             } else {
                 a.IconId = icon.Id;
             }
-            
+
 
             a.AppPath = objParts[3];
             a.AppName = objParts[4];

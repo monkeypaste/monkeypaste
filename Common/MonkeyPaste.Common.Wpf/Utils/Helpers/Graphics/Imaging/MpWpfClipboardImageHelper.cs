@@ -1,13 +1,9 @@
 ﻿
 using System;
-using System.Collections.Generic;
-using System.Drawing.Imaging;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 
@@ -20,7 +16,7 @@ namespace MonkeyPaste.Common.Wpf {
             return bytes.ToBitmapSource().ToBitmap();
         }
         public static object GetWpfDib(byte[] bytes) {
-            if(bytes.ToBitmapSource() is BitmapSource bmpSrc &&
+            if (bytes.ToBitmapSource() is BitmapSource bmpSrc &&
                 bmpSrc.ToBitmap() is Bitmap bmp) {
                 var wpfdo = GetClipboardImage_WinForms(bmp, null, null);
                 var dib_data = wpfdo.GetData(DataFormats.Dib);

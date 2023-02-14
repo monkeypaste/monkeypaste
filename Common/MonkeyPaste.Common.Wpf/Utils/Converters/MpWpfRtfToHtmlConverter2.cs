@@ -1,20 +1,16 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
-using System.Windows;
-using HtmlAgilityPack;
-using System.IO;
-using System.Windows.Controls;
 using System.Windows.Media.Imaging;
-using System.Xml.Linq;
-using System.Web;
-using System.Text.RegularExpressions;
-using System.Security.Policy;
 
 namespace MonkeyPaste.Common.Wpf {
     public static class MpWpfRtfToHtmlConverter2 {
@@ -78,16 +74,16 @@ namespace MonkeyPaste.Common.Wpf {
             //    string html_text = MpRichHtmlToPlainTextConverter.Convert(_htmlDoc.DocumentNode.InnerHtml, Environment.NewLine);
             //    html_text = html_text.UnescapeSpecialHtmlEntities();
             //    if (valid_pt != html_text) {
-            //        MpConsole.WriteLine("rtf2html validation error! returning plain text");
+            //        Console.WriteLine("rtf2html validation error! returning plain text");
             //        return valid_pt;
             //    }
             //}
-            
+
 
             string encoded_html = _htmlDoc.DocumentNode.InnerHtml;
             var errors = _htmlDoc.ParseErrors;
-            foreach(var error in errors) {
-                MpConsole.WriteLine("rtf2html parse error: " + error);
+            foreach (var error in errors) {
+                Console.WriteLine("rtf2html parse error: " + error);
             }
             return encoded_html;//HttpUtility.HtmlDecode(encoded_html);
         }
@@ -146,8 +142,8 @@ namespace MonkeyPaste.Common.Wpf {
             } else if (te is Paragraph p) {
                 return WrapWithParagraph(p, children);
             } else if (te is LineBreak) {
-               return _htmlDoc.CreateElement("br");
-            }  else if (te is Span s) {
+                return _htmlDoc.CreateElement("br");
+            } else if (te is Span s) {
                 return WrapWithSpan(s, children);
             } else if (te is Run r) {
                 return ProcessRun(r, children);
@@ -157,7 +153,7 @@ namespace MonkeyPaste.Common.Wpf {
         }
 
         private static HtmlNode ProcessRun(Run r, List<HtmlNode> children) {
-            if(!r.Text.ContainsEncodedSpecialHtmlEntities()) {
+            if (!r.Text.ContainsEncodedSpecialHtmlEntities()) {
                 // valid example "if (CopyItemData == "<p><br></p>" || CopyItemData == null)"
 
                 // no encoded entities to wrap with code tag so return encoded run
@@ -168,10 +164,10 @@ namespace MonkeyPaste.Common.Wpf {
             HtmlNode span_node = _htmlDoc.CreateElement("span");
             int cur_idx = 0;
             Match m = MpRegEx.RegExLookup[MpRegExType.EncodedHtmlEntity].Match(r.Text);
-            while(m.Success) {
+            while (m.Success) {
                 int match_idx = r.Text.Substring(cur_idx).IndexOf(m.Value);
 
-                if(match_idx > 0) {
+                if (match_idx > 0) {
                     // create lead run (in example "{'>',"")
                     string lead_text = r.Text.Substring(cur_idx, match_idx);
                     HtmlNode lead_text_node = _htmlDoc.CreateTextNode(lead_text.EncodeSpecialHtmlEntities());
@@ -192,7 +188,7 @@ namespace MonkeyPaste.Common.Wpf {
                 string test = r.Text.Substring(cur_idx);
                 m = MpRegEx.RegExLookup[MpRegExType.EncodedHtmlEntity].Match(r.Text.Substring(cur_idx));
             }
-            if(cur_idx < r.Text.Length) {
+            if (cur_idx < r.Text.Length) {
                 // create trailing run after encoded special entities
                 string trailing_text = r.Text.Substring(cur_idx);
                 HtmlNode trail_text_node = _htmlDoc.CreateTextNode(trailing_text.EncodeSpecialHtmlEntities());
@@ -203,14 +199,14 @@ namespace MonkeyPaste.Common.Wpf {
 
             string valid_check = r.Text.EncodeSpecialHtmlEntities();
             string test_check = span_node.InnerText;
-            if(valid_check != test_check) {
-                MpConsole.WriteLine("Error encoding run.", true);
-                MpConsole.WriteLine($"Actual Text:");
-                MpConsole.WriteLine(r.Text);
-                MpConsole.WriteLine($"Encoded Text:");
-                MpConsole.WriteLine(valid_check);
-                MpConsole.WriteLine($"Processed Text:");
-                MpConsole.WriteLine(test_check,false,true);
+            if (valid_check != test_check) {
+                Console.WriteLine("Error encoding run.", true);
+                Console.WriteLine($"Actual Text:");
+                Console.WriteLine(r.Text);
+                Console.WriteLine($"Encoded Text:");
+                Console.WriteLine(valid_check);
+                Console.WriteLine($"Processed Text:");
+                Console.WriteLine(test_check, false, true);
                 Debugger.Break();
             }
 
@@ -274,7 +270,7 @@ namespace MonkeyPaste.Common.Wpf {
         }
 
         private static HtmlNode WrapWithList(List l, List<HtmlNode> children) {
-            if(l.MarkerStyle == TextMarkerStyle.Decimal) {
+            if (l.MarkerStyle == TextMarkerStyle.Decimal) {
                 return WrapWithTag("ol", children);
             }
             return WrapWithTag("ul", children);
@@ -285,7 +281,7 @@ namespace MonkeyPaste.Common.Wpf {
             string listType = @"bullet";
             if (l.MarkerStyle == TextMarkerStyle.Decimal) {
                 listType = @"ordered";
-            } else if(l.MarkerStyle == TextMarkerStyle.Square) {
+            } else if (l.MarkerStyle == TextMarkerStyle.Square) {
                 listType = "unchecked";
             } else if (l.MarkerStyle == TextMarkerStyle.Box) {
                 listType = "checked";
@@ -296,8 +292,8 @@ namespace MonkeyPaste.Common.Wpf {
             var li_node = _htmlDoc.CreateElement("li");
             li_node.SetAttributeValue("data-list", listType);
             li_node.AppendChild(bullet_span);
-            foreach(var child in children) {
-                if(child.Name.ToLower() == "p") {
+            foreach (var child in children) {
+                if (child.Name.ToLower() == "p") {
                     //rtf list items are parents of paragraphs but quills are the direct content
                     child.GetClasses().ForEach(x => li_node.AddClass(x));
                     child.GetAttributes().ForEach(x => li_node.SetAttributeValue(x.Name, x.Value));
@@ -356,8 +352,8 @@ namespace MonkeyPaste.Common.Wpf {
             //}
             //children = children == null ? string.Empty : children;
             HtmlNode span_node = null;
-            if(span is Hyperlink hl) {
-                span_node = WrapWithHyperlink(hl,children, span_node);
+            if (span is Hyperlink hl) {
+                span_node = WrapWithHyperlink(hl, children, span_node);
             }
 
             if (span.TextDecorations.Equals(TextDecorations.Underline) || span is Underline) {
@@ -406,7 +402,7 @@ namespace MonkeyPaste.Common.Wpf {
             //}
             var bmpSrc = img.Source as BitmapSource;
 
-            string srcAttrbValue = string.Format(@"data:image/png;base64,{0}",bmpSrc.ToBase64String());
+            string srcAttrbValue = string.Format(@"data:image/png;base64,{0}", bmpSrc.ToBase64String());
 
             //return string.Format(
             //    @"<img src='{0}'>",
@@ -471,13 +467,13 @@ namespace MonkeyPaste.Common.Wpf {
             //}
 
             //return sb.ToString();
-            if(span_node == null) {
+            if (span_node == null) {
                 span_node = WrapWithTag("span", children);
             }
             span_node.AddClass($"ql-font-{GetHtmlFont(s)}");
             var style_parts = new List<string>();
             var sb_style = new StringBuilder();
-            if(s.FontSize.IsNumber()) {
+            if (s.FontSize.IsNumber()) {
                 style_parts.Add(GetFontSize(s));
             }
             if (s.Foreground is SolidColorBrush fg_scb) {
@@ -577,7 +573,7 @@ namespace MonkeyPaste.Common.Wpf {
                 }
             }
             catch (Exception ex) {
-                MpConsole.WriteLine("MpHelpers.ReadTextFromFile error for filePath: " + filePath + ex.ToString());
+                Console.WriteLine("MpHelpers.ReadTextFromFile error for filePath: " + filePath + ex.ToString());
                 return null;
             }
         }
@@ -590,7 +586,7 @@ namespace MonkeyPaste.Common.Wpf {
                 }
             }
             catch (Exception ex) {
-                MpConsole.WriteTraceLine($"Error writing to path '{filePath}' with text '{text}'", ex);
+                Console.WriteLine($"Error writing to path '{filePath}' with text '{text}'", ex);
                 return null;
             }
         }

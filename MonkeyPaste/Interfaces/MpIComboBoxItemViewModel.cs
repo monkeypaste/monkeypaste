@@ -7,7 +7,7 @@ namespace MonkeyPaste {
     }
     public interface MpIAsyncComboBoxItemViewModel : MpIComboBoxItemViewModel, MpIAsyncObject {
     }
-    public interface MpIAsyncComboBoxViewModel :MpIViewModel {
+    public interface MpIAsyncComboBoxViewModel : MpIViewModel {
         IEnumerable<MpIAsyncComboBoxItemViewModel> Items { get; }
         MpIAsyncComboBoxItemViewModel SelectedItem { get; set; }
 

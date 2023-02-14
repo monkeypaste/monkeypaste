@@ -1,23 +1,15 @@
-﻿using System;
+﻿using Avalonia;
+using MonkeyPaste.Common;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Markup.Localizer;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Threading;
-using MonkeyPaste;
-using MonkeyPaste.Common;
-using MonoMac.Darwin;
-using SQLite;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvSearchCriteriaItemViewModel : 
+    public class MpAvSearchCriteriaItemViewModel :
         MpViewModelBase<MpAvSearchCriteriaItemCollectionViewModel>,
         MpIQueryInfo {
         #region Private Variables       
@@ -49,7 +41,7 @@ namespace MonkeyPaste.Avalonia {
 
         public int TagId {
             get {
-                if(QueryFlags.HasFlag(MpContentQueryBitFlags.Tag)) {
+                if (QueryFlags.HasFlag(MpContentQueryBitFlags.Tag)) {
                     var ttvm = MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.Tag.Guid == MatchValue);
                     if (ttvm == null) {
                         // should have found, is tagId a pending query id?
@@ -62,16 +54,16 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public MpContentQueryBitFlags QueryFlags { 
+        public MpContentQueryBitFlags QueryFlags {
             get {
                 return
                     SelectedOptionPath
-                    .Select(x=>x.FilterValue)
+                    .Select(x => x.FilterValue)
                     .AggregateOrDefault((a, b) => a | b);
-            }        
+            }
         }
 
-        public MpIQueryInfo Next { 
+        public MpIQueryInfo Next {
             get {
                 /*
                 Join Notes:
@@ -88,15 +80,15 @@ namespace MonkeyPaste.Avalonia {
                 if (Parent == null) {
                     return null;
                 }
-                if(SortOrderIdx < Parent.Items.Count - 1) {
+                if (SortOrderIdx < Parent.Items.Count - 1) {
                     return Parent.SortedItems.ElementAt(SortOrderIdx + 1);
                 }
                 // tack simple onto end as OR join
                 //return MpAvSimpleQueryViewModel.Instance;
                 return null;
-                
+
             }
-        }     
+        }
 
         #endregion
 
@@ -126,20 +118,20 @@ namespace MonkeyPaste.Avalonia {
         private ObservableCollection<MpAvSearchCriteriaOptionViewModel> _items;
         public ObservableCollection<MpAvSearchCriteriaOptionViewModel> Items {
             get {
-                if(_items == null) {
+                if (_items == null) {
                     _items = new ObservableCollection<MpAvSearchCriteriaOptionViewModel>();
                 }
                 _items.Clear();
                 var node = RootOptionViewModel;
-                while(node != null) {
+                while (node != null) {
                     _items.Add(node);
                     int selIdx = node.Items.IndexOf(node.SelectedItem);
-                    if(selIdx <= 0 || !node.HasChildren) {
+                    if (selIdx <= 0 || !node.HasChildren) {
                         break;
                     }
                     node = node.SelectedItem;
-                }              
-                
+                }
+
                 return _items;
             }
         }
@@ -147,7 +139,7 @@ namespace MonkeyPaste.Avalonia {
         private ObservableCollection<string> _joinTypeLabels;
         public ObservableCollection<string> JoinTypeLabels {
             get {
-                if(_joinTypeLabels == null) {
+                if (_joinTypeLabels == null) {
                     _joinTypeLabels = new ObservableCollection<string>(
                         typeof(MpNextJoinOptionType)
                         .EnumToLabels()
@@ -209,7 +201,7 @@ namespace MonkeyPaste.Avalonia {
             // PATH: /Root/Content/AnyText
             // PATH: /Root/Content/Title
             // PATH: /Root/Content/TypeSpecific/Text
-            
+
             var tovml = new List<MpAvSearchCriteriaOptionViewModel>();
             string[] labels = typeof(MpTextOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
 
@@ -222,7 +214,7 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     tovm.UnitType |= MpSearchCriteriaUnitFlags.CaseSensitivity | MpSearchCriteriaUnitFlags.WholeWord;
                 }
-                switch((MpTextOptionType)i) {
+                switch ((MpTextOptionType)i) {
                     case MpTextOptionType.Matches:
                         tovm.FilterValue = MpContentQueryBitFlags.Matches;
                         break;
@@ -293,7 +285,7 @@ namespace MonkeyPaste.Avalonia {
                 var tovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
                 tovm.Label = labels[i];
                 tovm.UnitType = MpSearchCriteriaUnitFlags.Integer;
-                switch((MpDimensionOptionType)i) {
+                switch ((MpDimensionOptionType)i) {
                     case MpDimensionOptionType.Width:
                         tovm.FilterValue = MpContentQueryBitFlags.Width;
                         break;
@@ -341,7 +333,7 @@ namespace MonkeyPaste.Avalonia {
                 MpFileOptionType fot = (MpFileOptionType)i;
                 var ovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
                 ovm.Label = labels[i];
-                if(fot != MpFileOptionType.None) {
+                if (fot != MpFileOptionType.None) {
                     ovm.FilterValue = MpContentQueryBitFlags.FileExt;
                 }
                 if (fot == MpFileOptionType.Custom) {
@@ -480,7 +472,7 @@ namespace MonkeyPaste.Avalonia {
                 ovm.UnitType = MpSearchCriteriaUnitFlags.EnumerableValue;
                 ovm.Label = labels[i];
                 ovm.Value = ((MpCopyItemType)i).ToString();
-                switch((MpContentTypeOptionType)i) {
+                switch ((MpContentTypeOptionType)i) {
                     case MpContentTypeOptionType.Text:
                         ovm.FilterValue = MpContentQueryBitFlags.TextType;
                         break;
@@ -514,7 +506,7 @@ namespace MonkeyPaste.Avalonia {
             ttvml.Insert(0, null);
             foreach (var ttvm in ttvml) {
                 var tovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
-                if(ttvm == null) {
+                if (ttvm == null) {
                     // add no selection label
                     tovm.Label = DEFAULT_OPTION_LABEL;
                 } else {
@@ -538,9 +530,9 @@ namespace MonkeyPaste.Avalonia {
             var iovml = new List<MpAvSearchCriteriaOptionViewModel>();
             var udl = Parent.UserDevices.ToList();
             udl.Insert(0, null);
-            foreach(var ud in udl) { 
+            foreach (var ud in udl) {
                 var ovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
-                if(ud == null) {
+                if (ud == null) {
                     // add no selection label
                     ovm.Label = DEFAULT_OPTION_LABEL;
                 } else {
@@ -879,11 +871,11 @@ namespace MonkeyPaste.Avalonia {
         public int SelectedJoinTypeIdx {
             get => (int)(JoinType - 1);
             set {
-                if(value < 0) {
+                if (value < 0) {
                     // BUG ui randomly setting idx to -1
                     return;
                 }
-                if(SelectedJoinTypeIdx != value) {
+                if (SelectedJoinTypeIdx != value) {
                     JoinType = (MpLogicalQueryType)(value + 1);
                     OnPropertyChanged(nameof(SelectedJoinTypeIdx));
                 }
@@ -893,29 +885,29 @@ namespace MonkeyPaste.Avalonia {
         public bool IsJoinDropDownOpen { get; set; }
         public bool CanRemoveOrSortThisCriteriaItem {
             get {
-                if(Parent == null) {
+                if (Parent == null) {
                     return false;
                 }
-                if(Parent.Items.Count > 1) {
+                if (Parent.Items.Count > 1) {
                     return true;
                 }
                 // reject last item remove
                 return SortOrderIdx > 0;
             }
         }
-        public bool IsAnyBusy => 
+        public bool IsAnyBusy =>
             IsBusy || Items.Any(x => x.IsAnyBusy);
 
         public bool IsJoinPanelVisible =>
             JoinType != MpSearchCriteriaItem.DEFAULT_QUERY_JOIN_TYPE;
 
-        public bool IsInputVisible => 
-            !Items[Items.Count - 1].HasChildren && 
+        public bool IsInputVisible =>
+            !Items[Items.Count - 1].HasChildren &&
             !Items[Items.Count - 1].UnitType.HasFlag(MpSearchCriteriaUnitFlags.EnumerableValue);
 
-        public bool IsSelected { 
+        public bool IsSelected {
             get {
-                if(Parent == null) {
+                if (Parent == null) {
                     return false;
                 }
                 return Parent.SelectedItem == this;
@@ -924,15 +916,20 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsEmptyCriteria {
             get {
-                if(SelectedOptionPath.Count == 0) {
+                //if(SelectedOptionPath.Count == 0) {
+                //    return true;
+                //}
+                //if(SelectedOptionPath.Count == 1 &&
+                //    SelectedOptionPath.First() is MpAvSearchCriteriaOptionViewModel ovm) {
+                //    return ovm.SelectedItem == null;
+                //}
+                //return false;
+                if (LeafValueOptionViewModel == null ||
+                    string.IsNullOrEmpty(LeafValueOptionViewModel.Value)) {
                     return true;
                 }
-                if(SelectedOptionPath.Count == 1 &&
-                    SelectedOptionPath.First() is MpAvSearchCriteriaOptionViewModel ovm) {
-                    return ovm.SelectedItem == null;
-                }
                 return false;
-             }
+            }
         }
 
         #endregion
@@ -966,61 +963,61 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsCaseSensitive {
             get {
-                if(SearchCriteriaItem == null) {
+                if (SearchCriteriaItem == null) {
                     return false;
                 }
                 return SearchCriteriaItem.IsCaseSensitive;
             }
             set {
-                if(IsCaseSensitive != value) {
+                if (IsCaseSensitive != value) {
                     SearchCriteriaItem.IsCaseSensitive = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(IsCaseSensitive));
                 }
             }
         }
-        
+
         public bool IsWholeWord {
             get {
-                if(SearchCriteriaItem == null) {
+                if (SearchCriteriaItem == null) {
                     return false;
                 }
                 return SearchCriteriaItem.IsWholeWord;
             }
             set {
-                if(IsWholeWord != value) {
+                if (IsWholeWord != value) {
                     SearchCriteriaItem.IsWholeWord = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(IsWholeWord));
                 }
             }
         }
-        
+
         public string MatchValue {
             get {
-                if(SearchCriteriaItem == null) {
+                if (SearchCriteriaItem == null) {
                     return null;
                 }
                 return SearchCriteriaItem.MatchValue;
             }
             set {
-                if(MatchValue != value) {
+                if (MatchValue != value) {
                     SearchCriteriaItem.MatchValue = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(MatchValue));
                 }
             }
         }
-        
+
         public string SearchOptions {
             get {
-                if(SearchCriteriaItem == null) {
+                if (SearchCriteriaItem == null) {
                     return string.Empty;
                 }
                 return SearchCriteriaItem.Options;
             }
             set {
-                if(SearchOptions != value) {
+                if (SearchOptions != value) {
                     SearchCriteriaItem.Options = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(SearchOptions));
@@ -1028,9 +1025,9 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public MpLogicalQueryType JoinType { 
+        public MpLogicalQueryType JoinType {
             get {
-                if(SearchCriteriaItem == null) {
+                if (SearchCriteriaItem == null) {
                     return MpLogicalQueryType.None;
                 }
                 //if(IsAdvancedTail) {
@@ -1039,19 +1036,19 @@ namespace MonkeyPaste.Avalonia {
                 return SearchCriteriaItem.JoinType;
             }
             set {
-                if(JoinType != value) {
+                if (JoinType != value) {
                     SearchCriteriaItem.JoinType = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(IsJoinPanelVisible));
                     OnPropertyChanged(nameof(CriteriaItemHeight));
                     OnPropertyChanged(nameof(JoinType));
                 }
-            }        
-        } 
-        
-        public int QueryTagId { 
+            }
+        }
+
+        public int QueryTagId {
             get {
-                if(SearchCriteriaItem == null) {
+                if (SearchCriteriaItem == null) {
                     return 0;
                 }
                 //if(IsAdvancedTail) {
@@ -1060,13 +1057,13 @@ namespace MonkeyPaste.Avalonia {
                 return SearchCriteriaItem.QueryTagId;
             }
             set {
-                if(QueryTagId != value) {
+                if (QueryTagId != value) {
                     SearchCriteriaItem.QueryTagId = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(QueryTagId));
                 }
-            }        
-        } 
+            }
+        }
         //public MpQueryType QueryType { 
         //    get {
         //        if(SearchCriteriaItem == null) {
@@ -1113,7 +1110,7 @@ namespace MonkeyPaste.Avalonia {
                 cur_opt.SelectedItemIdx = sel_idx;
                 cur_opt = cur_opt.SelectedItem;
             }
-            if(LeafValueOptionViewModel != null) {
+            if (LeafValueOptionViewModel != null) {
                 LeafValueOptionViewModel.Value = MatchValue;
                 LeafValueOptionViewModel.IsChecked = IsCaseSensitive;
                 LeafValueOptionViewModel.IsChecked2 = IsWholeWord;
@@ -1126,7 +1123,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void NotifyValueChanged(MpAvSearchCriteriaOptionViewModel ovm) {
-            if(Parent == null ||
+            if (Parent == null ||
                 IsBusy ||
                 Parent.IsBusy) {
                 // don't notify during load
@@ -1135,8 +1132,8 @@ namespace MonkeyPaste.Avalonia {
             IgnoreHasModelChanged = true;
 
             SearchOptions =
-                string.Join(",", SelectedOptionPath.Where(x => x.SelectedItemIdx >= 0).Select(x=>x.SelectedItemIdx));
-            if(LeafValueOptionViewModel == null) {
+                string.Join(",", SelectedOptionPath.Where(x => x.SelectedItemIdx >= 0).Select(x => x.SelectedItemIdx));
+            if (LeafValueOptionViewModel == null) {
                 MatchValue = null;
                 IsCaseSensitive = false;
                 IsWholeWord = false;
@@ -1150,7 +1147,7 @@ namespace MonkeyPaste.Avalonia {
 
             // flag criteria changed for refresh query
             HasCriteriaChanged = true;
-            if(ovm.IsValueOption) {
+            if (ovm.IsValueOption) {
                 MpPlatform.Services.Query.NotifyQueryChanged(true);
             }
         }
@@ -1163,18 +1160,18 @@ namespace MonkeyPaste.Avalonia {
 
         }
         private void MpAvSearchCriteriaItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
                 case nameof(IgnoreHasModelChanged):
-                    if(!IgnoreHasModelChanged && HasModelChanged) {
+                    if (!IgnoreHasModelChanged && HasModelChanged) {
                         OnPropertyChanged(nameof(HasModelChanged));
                     }
                     break;
                 case nameof(HasModelChanged):
-                    if(HasModelChanged) {
-                        if(IgnoreHasModelChanged) {
+                    if (HasModelChanged) {
+                        if (IgnoreHasModelChanged) {
                             break;
                         }
-                        if(QueryTagId == 0) {
+                        if (QueryTagId == 0) {
                             // ignore write while pending
                             // QueryTagId is set in convertPending
                             break;
@@ -1213,17 +1210,17 @@ namespace MonkeyPaste.Avalonia {
         public ICommand SelectCustomNextJoinTypeCommand => new MpCommand(
             () => {
                 JoinType = MpLogicalQueryType.Or;
-            },()=>JoinType == MpSearchCriteriaItem.DEFAULT_QUERY_JOIN_TYPE);
+            }, () => JoinType == MpSearchCriteriaItem.DEFAULT_QUERY_JOIN_TYPE);
 
         public ICommand AddNextCriteriaItemCommand => new MpCommand(
             () => {
                 Parent.AddSearchCriteriaItemCommand.Execute(this);
-            },()=>Parent != null);
-        
+            }, () => Parent != null);
+
         public ICommand RemoveThisCriteriaItemCommand => new MpCommand(
             () => {
                 Parent.RemoveSearchCriteriaItemCommand.Execute(this);
-            },()=> CanRemoveOrSortThisCriteriaItem);
+            }, () => CanRemoveOrSortThisCriteriaItem);
 
         #endregion
     }

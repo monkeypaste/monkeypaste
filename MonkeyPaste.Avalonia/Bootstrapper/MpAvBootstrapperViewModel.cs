@@ -1,20 +1,10 @@
-﻿using System.Linq;
-using System.Reflection;
-using MonkeyPaste;
-using System;
-using System.Threading;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using MonkeyPaste.Common.Plugin; 
-using MonkeyPaste.Common; 
-using System.IO;
-using System.Collections;
+﻿using Avalonia.Controls;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Controls;
-using Avalonia;
-using Avalonia.Media;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvBootstrapperViewModel : MpBootstrapperViewModelBase {
@@ -35,7 +25,7 @@ namespace MonkeyPaste.Avalonia {
             await MpPlatform.InitAsync(pw);
 
             CreateLoaderItems();
-            await MpNotificationBuilder.ShowLoaderNotificationAsync(this);           
+            await MpNotificationBuilder.ShowLoaderNotificationAsync(this);
         }
 
         public override async Task FinishLoaderAsync() {
@@ -90,13 +80,14 @@ namespace MonkeyPaste.Avalonia {
 
             _platformItems.AddRange(
                 new List<MpBootstrappedItemViewModel>() {
-                    new MpBootstrappedItemViewModel(this,typeof(MpAvPlainHtmlConverter)),
+                    //new MpBootstrappedItemViewModel(this,typeof(MpAvPlainHtmlConverter)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvExternalDropWindow)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvAppendNotificationWindow)),
                     //new MpBootstrappedItemViewModel(this,typeof(MpAvSystemTray)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvMainWindow)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvMainWindowViewModel))
                 });
+
         }
         protected override async Task LoadItemAsync(MpBootstrappedItemViewModel item, int index) {
             IsBusy = true;

@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using MonkeyPaste.Common.Plugin;
-using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Common.Wpf {
     [StructLayout(LayoutKind.Sequential)]
@@ -22,7 +17,7 @@ namespace MonkeyPaste.Common.Wpf {
     }
 
     public static class MpWpfImagingHelper {
-        
+
         public static BitmapSource MergeImages2(IList<BitmapSource> bmpSrcList, bool scaleToSmallestSize = false, bool scaleToLargestDpi = true) {
             // if not scaled to smallest, will be scaled to largest
             int w = scaleToSmallestSize ? bmpSrcList.Min(x => x.PixelWidth) : bmpSrcList.Max(x => x.PixelWidth);
@@ -46,7 +41,7 @@ namespace MonkeyPaste.Common.Wpf {
                 }
             }
             renderTargetBitmap.Render(drawingVisual);
-            
+
             return ConvertRenderTargetBitmapToBitmapSource(renderTargetBitmap);
         }
 
@@ -155,7 +150,7 @@ namespace MonkeyPaste.Common.Wpf {
             }
         }
 
-        
+
 
         public static BitmapSource CopyScreen() {
             double left = 0;//System.Windows.Forms.Screen.AllScreens.Min(screen => screen.Bounds.X);
@@ -230,7 +225,7 @@ namespace MonkeyPaste.Common.Wpf {
             foreach (var kvp in hist) {
                 var c = Color.FromArgb(255, kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue);
 
-                //MpConsole.WriteLine(string.Format(@"R:{0} G:{1} B:{2} Count:{3}", kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, kvp.Value));
+                //Console.WriteLine(string.Format(@"R:{0} G:{1} B:{2} Count:{3}", kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, kvp.Value));
                 if (primaryIconColorList.Count == palleteSize) {
                     break;
                 }
@@ -253,11 +248,11 @@ namespace MonkeyPaste.Common.Wpf {
                 primaryIconColorList.Add(MpWpfColorHelpers.ConvertColorToHex(MpWpfColorHelpers.GetRandomColor()));
             }
             //sw.Stop();
-            //MpConsole.WriteLine("Time to create icon statistics: " + sw.ElapsedMilliseconds + " ms");
+            //Console.WriteLine("Time to create icon statistics: " + sw.ElapsedMilliseconds + " ms");
             return primaryIconColorList;
         }
 
-        
+
 
     }
 }

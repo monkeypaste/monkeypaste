@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 
 namespace MonkeyPaste.Common {
     public class MpPoint : ICloneable { //, INotifyPropertyChanged {
@@ -60,7 +59,7 @@ namespace MonkeyPaste.Common {
 
         #region Constructors
         public MpPoint() { }
-        public MpPoint(double x,double y) {
+        public MpPoint(double x, double y) {
             X = x;
             Y = y;
         }
@@ -74,10 +73,10 @@ namespace MonkeyPaste.Common {
         }
 
         public bool IsEqual(MpPoint otherPoint, double thresh = 0) {
-            if(otherPoint == null) {
+            if (otherPoint == null) {
                 return false;
             }
-            return Math.Abs(X - otherPoint.X) <= thresh && 
+            return Math.Abs(X - otherPoint.X) <= thresh &&
                     Math.Abs(Y - otherPoint.Y) <= thresh;
         }
 
@@ -86,10 +85,10 @@ namespace MonkeyPaste.Common {
             get {
                 var n = new MpPoint(X, Y);
                 n.Normalize();
-                if(n.X < 0) {
+                if (n.X < 0) {
                     n.X = 1 + n.X;
                 }
-                if(n.Y < 0) {
+                if (n.Y < 0) {
                     n.Y = 1 + n.Y;
                 }
                 return n;
@@ -115,7 +114,7 @@ namespace MonkeyPaste.Common {
             Clamp(min.X, min.Y, max.X, max.Y);
         }
 
-        public void Clamp(double min_x,double min_y,double max_x,double max_y) {
+        public void Clamp(double min_x, double min_y, double max_x, double max_y) {
             X = MpMathExtensions.Clamp(X, min_x, max_x);
             Y = MpMathExtensions.Clamp(Y, min_y, max_y);
         }

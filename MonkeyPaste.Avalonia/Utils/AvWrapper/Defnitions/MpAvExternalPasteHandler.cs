@@ -1,16 +1,9 @@
 ﻿//using MonkeyPaste.Common.Wpf;
 using MonkeyPaste.Common;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Avalonia.Threading;
-using Avalonia;
-using System.Threading;
-using Avalonia.Input;
-using static MonkeyPaste.Avalonia.MpAvExternalPasteHandler;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvExternalPasteHandler : MpIExternalPasteHandler {
@@ -44,7 +37,7 @@ namespace MonkeyPaste.Avalonia {
         #region MpIExternalPasteHandler Implementation
 
         async Task<bool> MpIExternalPasteHandler.PasteDataObjectAsync(MpPortableDataObject mpdo, MpPortableProcessInfo processInfo) {
-            if(processInfo == null) {
+            if (processInfo == null) {
                 // shouldn't happen
                 //Debugger.Break();
                 MpConsole.WriteTraceLine("Can't paste, if not lost focus somethings wrong");
@@ -52,7 +45,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             IntPtr pasteToHandle = processInfo.Handle;
-            
+
             if (processInfo is MpPortableStartProcessInfo startProcessInfo) {
                 // TODO put ProcessAutomator stuff here 
                 // NOTE needs to have non-zero handle when complete
@@ -61,7 +54,7 @@ namespace MonkeyPaste.Avalonia {
             string pasteCmd = "Control+v";
             bool finishWithEnter = false;
             var custom_paste_app_vm = MpAvAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppPath.ToLower() == processInfo.ProcessPath.ToLower() && x.PasteShortcutViewModel != null);
-            
+
             if (custom_paste_app_vm != null) {
                 pasteCmd = custom_paste_app_vm.PasteShortcutViewModel.PasteCmdKeyString;
                 finishWithEnter = custom_paste_app_vm.PasteShortcutViewModel.EnterAfterPaste;
@@ -73,11 +66,11 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
         private async Task<bool> PasteDataObjectAsync_internal_async(
-            MpPortableDataObject mpdo, 
+            MpPortableDataObject mpdo,
             IntPtr pasteToHandle,
             string pasteCmdKeyString,
             bool finishWithEnterKey) {
-            if(pasteToHandle == IntPtr.Zero) {
+            if (pasteToHandle == IntPtr.Zero) {
                 // somethings terribly wrong
                 Debugger.Break();
                 return false;

@@ -1,6 +1,4 @@
-﻿using Avalonia;
-using Avalonia.Layout;
-using MonkeyPaste;
+﻿using Avalonia.Layout;
 
 namespace MonkeyPaste.Avalonia {
     public interface MpIPagingScrollViewerViewModel : MpIViewModel {

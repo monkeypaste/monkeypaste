@@ -1,7 +1,4 @@
-﻿using Avalonia.Controls;
-using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
-using System;
+﻿using Avalonia.Markup.Xaml;
 
 namespace MonkeyPaste.Avalonia {
     /// <summary>

@@ -1,19 +1,7 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Layout;
-using Avalonia.Threading;
-using CefNet.Avalonia;
-using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
+﻿using MonkeyPaste.Common;
 //using Org.BouncyCastle.Bcpg.OpenPgp;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvHtmlClipboardData {
@@ -62,7 +50,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (mpdo.ContainsData(MpPortableDataFormats.LinuxSourceUrl) &&
                        mpdo.GetData(MpPortableDataFormats.LinuxSourceUrl) is byte[] url_bytes &&
-                       url_bytes.ToDecodedString(Encoding.ASCII,true) is string source_url_str) {
+                       url_bytes.ToDecodedString(Encoding.ASCII, true) is string source_url_str) {
                 // on linux html is not in fragment format like windows and firefox supports this format
                 // but chrome doesn't
                 //source_url_str = System.Web.HttpUtility.HtmlDecode(source_url_str);
@@ -80,7 +68,7 @@ namespace MonkeyPaste.Avalonia {
                 mpdo.GetData(MpPortableDataFormats.CefHtml) is string cefhtmlStr) {
                 htmlStr = cefhtmlStr;
             }
-            if(string.IsNullOrWhiteSpace(htmlStr)) {
+            if (string.IsNullOrWhiteSpace(htmlStr)) {
                 return null;
             }
             return ParseHtmlFragmentForSourceUrl(htmlStr);
@@ -96,7 +84,7 @@ namespace MonkeyPaste.Avalonia {
                     string parsed_url = htmlFragStr.Substring(source_url_start_idx, source_url_length);
                     if (Uri.IsWellFormedUriString(parsed_url, UriKind.Absolute)) {
                         return parsed_url;
-                    } 
+                    }
                 }
             }
 

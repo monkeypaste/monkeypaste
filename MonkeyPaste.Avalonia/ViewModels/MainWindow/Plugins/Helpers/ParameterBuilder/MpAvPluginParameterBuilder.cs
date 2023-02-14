@@ -1,18 +1,16 @@
 ﻿using MonkeyPaste.Common.Plugin;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvPluginParameterBuilder {
         public static async Task<MpAvParameterViewModelBase> CreateParameterViewModelAsync(
-            MpParameterValue aipv, 
+            MpParameterValue aipv,
             MpIParameterHostViewModel pluginHost) {
             var param = pluginHost.ComponentFormat.parameters.FirstOrDefault(x => x.paramId == aipv.ParamId);
-            if(param == null) {
+            if (param == null) {
                 // must be a bug still with reset preset, check 
                 Debugger.Break();
                 return null;

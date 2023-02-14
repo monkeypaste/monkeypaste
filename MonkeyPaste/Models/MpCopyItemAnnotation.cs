@@ -1,18 +1,12 @@
 ﻿using SQLite;
 using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using MonkeyPaste.Common.Plugin; 
-using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public class MpCopyItemAnnotation : MpDbModelBase {
         #region Columns
 
-        [PrimaryKey,AutoIncrement]
+        [PrimaryKey, AutoIncrement]
         [Column("pk_MpCopyItemAnnotationId")]
         public override int Id { get; set; }
 
@@ -44,10 +38,10 @@ namespace MonkeyPaste {
         #endregion
 
         public static async Task<MpCopyItemAnnotation> CreateAsync(
-            int copyItemId = 0, 
+            int copyItemId = 0,
             string jsonStr = "",
             bool suppressWrite = false) {
-            if(copyItemId <= 0) {
+            if (copyItemId <= 0) {
                 throw new Exception("Must have copyitem fk");
             }
             var cia = new MpCopyItemAnnotation() {
@@ -56,12 +50,12 @@ namespace MonkeyPaste {
                 AnnotationJsonStr = jsonStr
             };
 
-            if(!suppressWrite) {
+            if (!suppressWrite) {
                 await cia.WriteToDatabaseAsync();
             }
             return cia;
         }
         public MpCopyItemAnnotation() { }
-        
+
     }
 }

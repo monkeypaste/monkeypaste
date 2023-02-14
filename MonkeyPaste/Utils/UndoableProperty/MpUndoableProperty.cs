@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MonkeyPaste {
+﻿namespace MonkeyPaste {
     /// <summary>
     /// This class encapsulates a single undoable property.
     /// </summary>

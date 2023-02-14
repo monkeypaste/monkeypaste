@@ -1,26 +1,18 @@
-﻿using System;
+﻿using MonkeyPaste.Common;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
-using System.Xml;
-using MonkeyPaste.Common.Plugin; 
-using MonkeyPaste.Common;
-using System.Diagnostics;
-using System.Windows.Navigation;
-using System.Windows.Input;
-using System.Windows.Data;
-using System.Text.RegularExpressions;
-using System.Windows.Controls;
 
 namespace MonkeyPaste.Common.Wpf {
     public static class MpWpfRichDocumentExtensions {
@@ -68,9 +60,9 @@ namespace MonkeyPaste.Common.Wpf {
                 // tp is DocumentEnd pointer
                 return tp.DocumentEnd;
             }
-            
+
             var line_end_tp = next_line_start_tp.GetNextInsertionPosition(LogicalDirection.Backward);
-            if(line_end_tp == null) {
+            if (line_end_tp == null) {
                 // doc is empty and tp is both Document Start/End
                 return tp.DocumentEnd;
             }
@@ -87,7 +79,7 @@ namespace MonkeyPaste.Common.Wpf {
 
         public static RichTextBox GetRichTextBox(this TextPointer tp) {
             var fd = tp.GetFlowDocument();
-            if(fd == null) {
+            if (fd == null) {
                 return null;
             }
             return fd.GetVisualAncestor<RichTextBox>();
@@ -122,7 +114,7 @@ namespace MonkeyPaste.Common.Wpf {
             var rtb = tr.Start.Parent.FindParentOfType<RichTextBox>();
 
             var ptp = rtb.GetPositionFromPoint(p, false);
-            if(ptp == null) {
+            if (ptp == null) {
                 return false;
             }
             return tr.Contains(ptp);
@@ -138,23 +130,23 @@ namespace MonkeyPaste.Common.Wpf {
         }
 
         public static void FitDocToRtb(this RichTextBox rtb, bool needsDragDropPadding = false) {
-            if(!rtb.IsLoaded || rtb.DataContext == null) {
-                return;            
+            if (!rtb.IsLoaded || rtb.DataContext == null) {
+                return;
             }
 
             bool isReadOnly = rtb.IsReadOnly;
-            Size ds = rtb.DataContext is MpISizeViewModel ? 
+            Size ds = rtb.DataContext is MpISizeViewModel ?
                         new Size((rtb.DataContext as MpISizeViewModel).Width,
-                                 (rtb.DataContext as MpISizeViewModel).Height) 
+                                 (rtb.DataContext as MpISizeViewModel).Height)
                         : rtb.Document.GetDocumentSize();
 
 
             if (needsDragDropPadding) {
                 var fd = rtb.Document;
                 double pad = 15;
-                
-                fd.PageWidth = Math.Max(fd.PageWidth,ds.Width + pad);
-                fd.PageHeight = Math.Max(fd.PageHeight,ds.Height + pad);
+
+                fd.PageWidth = Math.Max(fd.PageWidth, ds.Width + pad);
+                fd.PageHeight = Math.Max(fd.PageHeight, ds.Height + pad);
 
 
                 var p = rtb.Document.PagePadding;
@@ -222,11 +214,11 @@ namespace MonkeyPaste.Common.Wpf {
                                 .Where(x => x is InlineUIContainer);
 
                 Dictionary<TextRange, object> clonedIuic_lookup = new Dictionary<TextRange, object>();
-                foreach(var iuic in iuicl) {
+                foreach (var iuic in iuicl) {
                     //create range's in cloned doc at each iuic offset paired w/ the iuic tag
                     var clone_iuic_start_tp = clonedDoc.ContentStart.GetPositionAtOffset(iuic.ContentStart.ToOffset());
                     var clone_iuic_end_tp = clonedDoc.ContentStart.GetPositionAtOffset(iuic.ContentEnd.ToOffset());
-                    
+
                     clonedIuic_lookup.Add(new TextRange(clone_iuic_start_tp, clone_iuic_end_tp), iuic.Tag);
                 }
 
@@ -271,7 +263,7 @@ namespace MonkeyPaste.Common.Wpf {
               position != null && position.CompareTo(doc.ContentEnd) <= 0;
               position = position.GetNextContextPosition(LogicalDirection.Forward)) {
                 if (position.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.ElementEnd) {
-                    if(position.Parent is TextElement te) {
+                    if (position.Parent is TextElement te) {
                         yield return te;
                     }
                 }
@@ -302,23 +294,23 @@ namespace MonkeyPaste.Common.Wpf {
         }
 
         public static TextRange ToTextRange(this IEnumerable<TextElement> tel) {
-            if(tel.Count() == 0) {
+            if (tel.Count() == 0) {
                 return null;
             }
 
-            
+
             var docStart = tel.ElementAt(0).ContentStart.DocumentStart;
             var toRemove = tel.Where(x => !x.ContentStart.IsInSameDocument(docStart) || !x.ContentEnd.IsInSameDocument(docStart));
-            if(toRemove.Count() > 0) {
+            if (toRemove.Count() > 0) {
                 Debugger.Break();
                 tel = tel.Where(x => !toRemove.Contains(x));
-                if(tel.Count() > 0) {
+                if (tel.Count() > 0) {
                     docStart = tel.ElementAt(0).ContentStart.DocumentStart;
                 } else {
                     Debugger.Break();
                 }
             }
-            var itemRangeStart = tel.Aggregate((a, b) => 
+            var itemRangeStart = tel.Aggregate((a, b) =>
                                         docStart.GetOffsetToPosition(a.ContentStart) <
                                         docStart.GetOffsetToPosition(b.ContentStart) ? a : b).ContentStart;
             var itemRangeEnd = tel.Aggregate((a, b) =>
@@ -354,9 +346,9 @@ namespace MonkeyPaste.Common.Wpf {
         public static string ToPlainText(this FlowDocument fd, bool removeLastLineEnding = true) {
             // NOTE this always adds a trailing line break so remove last two characters
             string pt = new TextRange(fd.ContentStart, fd.ContentEnd).Text;
-            if(removeLastLineEnding) {
+            if (removeLastLineEnding) {
                 return pt.RemoveLastLineEnding();
-            } 
+            }
             return pt;
 
         }
@@ -454,14 +446,14 @@ namespace MonkeyPaste.Common.Wpf {
             bool isCaseSensitive = false,
             bool matchWholeWord = false,
             bool useRegEx = false) {
-            
+
             input = input.Replace(Environment.NewLine, string.Empty);
 
 
-            if(useRegEx) {
+            if (useRegEx) {
                 string pattern = input;
                 string pt = fd.ToPlainText();
-                var mc = Regex.Matches(pt, pattern, isCaseSensitive ? RegexOptions.None:RegexOptions.IgnoreCase);
+                var mc = Regex.Matches(pt, pattern, isCaseSensitive ? RegexOptions.None : RegexOptions.IgnoreCase);
 
                 var trl = new List<TextRange>();
                 foreach (Match m in mc) {
@@ -473,14 +465,14 @@ namespace MonkeyPaste.Common.Wpf {
                     }
                 }
                 trl = trl.Distinct().ToList();
-                if(useRegEx && matchWholeWord) {
+                if (useRegEx && matchWholeWord) {
                     trl = trl.Where(x => Regex.IsMatch(x.Text, $"\b{x.Text}\b")).ToList();
                 }
                 return trl;
             }
 
-            return fd.ContentStart.FindAllText(fd.ContentEnd, input, isCaseSensitive,matchWholeWord).ToList();
-        }        
+            return fd.ContentStart.FindAllText(fd.ContentEnd, input, isCaseSensitive, matchWholeWord).ToList();
+        }
 
         public static Size GetDocumentSize(this FlowDocument doc, double padToAdd = 0) {
             //Table docTable = doc.GetVisualDescendent<Table>();
@@ -500,7 +492,7 @@ namespace MonkeyPaste.Common.Wpf {
                 b.LineStackingStrategy = LineStackingStrategy.MaxHeight;
                 b.LineHeight = Double.NaN;
             }
-            if(doc.Parent is FrameworkElement fe) {
+            if (doc.Parent is FrameworkElement fe) {
                 fe.UpdateLayout();
             }
         }
@@ -518,7 +510,7 @@ namespace MonkeyPaste.Common.Wpf {
               doc.FontSize,
               doc.Foreground,
               new NumberSubstitution(),
-              MpScreenInformation.ThisAppDip);
+              TextFormattingMode.Display);//MpScreenInformation.ThisAppDip);
 
             int offset = 0;
             var runsAndParagraphsList = doc.GetRunsAndParagraphs().ToList();
@@ -569,7 +561,7 @@ namespace MonkeyPaste.Common.Wpf {
         }
 
         public static BitmapSource ToBitmapSource(
-            this FlowDocument document, 
+            this FlowDocument document,
             Size? docSize = null) {
             var size = docSize.HasValue ? docSize.Value : document.GetDocumentSize();
 
@@ -579,9 +571,9 @@ namespace MonkeyPaste.Common.Wpf {
             if (size.Height <= 0) {
                 size.Height = 1;
             }
-            var dpi = VisualTreeHelper.GetDpi(Application.Current.MainWindow);
-            size.Width *= dpi.DpiScaleX;
-            size.Height *= dpi.DpiScaleY;
+            //var dpi = VisualTreeHelper.GetDpi(Application.Current.MainWindow);
+            //size.Width *= dpi.DpiScaleX;
+            //size.Height *= dpi.DpiScaleY;
 
             document.PagePadding = new Thickness(0);
             document.ColumnWidth = size.Width;
@@ -601,8 +593,9 @@ namespace MonkeyPaste.Common.Wpf {
             var bitmap = new RenderTargetBitmap(
                 (int)size.Width,
                 (int)size.Height,
-                dpi.PixelsPerInchX,
-                dpi.PixelsPerInchY,
+                //dpi.PixelsPerInchX,
+                //dpi.PixelsPerInchY,
+                96, 96,
                 PixelFormats.Pbgra32);
 
             bitmap.Render(visual);
@@ -613,7 +606,7 @@ namespace MonkeyPaste.Common.Wpf {
 
         public static FlowDocument ToFlowDocument(this string str, string strFormat = "") {
             strFormat = strFormat == string.Empty ? DataFormats.Rtf : strFormat;
-            if(strFormat != DataFormats.Text && strFormat != DataFormats.Rtf && strFormat != DataFormats.Xaml && strFormat != DataFormats.XamlPackage) {
+            if (strFormat != DataFormats.Text && strFormat != DataFormats.Rtf && strFormat != DataFormats.Xaml && strFormat != DataFormats.XamlPackage) {
                 // invalid format for tr.Load
                 Debugger.Break();
                 return new FlowDocument();
@@ -640,8 +633,8 @@ namespace MonkeyPaste.Common.Wpf {
                     return fd;
                 }
                 catch (Exception ex) {
-                    MpConsole.WriteLine("Exception converting richtext to flowdocument, attempting to fall back to plaintext...");
-                    MpConsole.WriteLine("Exception Details: " + ex);
+                    Console.WriteLine("Exception converting richtext to flowdocument, attempting to fall back to plaintext...");
+                    Console.WriteLine("Exception Details: " + ex);
                     return str.RtfToPlainText().ToFlowDocument();
                 }
             }
@@ -665,7 +658,7 @@ namespace MonkeyPaste.Common.Wpf {
                     }
                 }
                 catch (Exception ex) {
-                    MpConsole.WriteTraceLine("Error converting flow document to text: ", ex);
+                    Console.WriteLine("Error converting flow document to text: ", ex);
                     return rtf;
                 }
             }
@@ -676,19 +669,19 @@ namespace MonkeyPaste.Common.Wpf {
         }
 
         public static int Row(this TableCell tc) {
-            if(tc == null) {
+            if (tc == null) {
                 return -1;
             }
             var tableRow = tc.Parent.FindParentOfType<TableRow>();
-            if(tableRow == null) {
+            if (tableRow == null) {
                 return -1;
             }
             var tableRowGroup = tableRow.Parent.FindParentOfType<TableRowGroup>();
-            if(tableRowGroup == null) {
+            if (tableRowGroup == null) {
                 return -1;
             }
             var table = tableRowGroup.Parent.FindParentOfType<Table>();
-            if(table == null) {
+            if (table == null) {
                 return -1;
             }
 
@@ -696,7 +689,7 @@ namespace MonkeyPaste.Common.Wpf {
             int curRowIdx = 0;
             for (int i = 0; i < table.RowGroups.Count; i++) {
                 int rowIdx = table.RowGroups[i].Rows.IndexOf(tableRow);
-                if(rowIdx < 0) {
+                if (rowIdx < 0) {
                     curRowIdx += table.RowGroups[i].Rows.Count;
                 } else {
                     curRowIdx += rowIdx;

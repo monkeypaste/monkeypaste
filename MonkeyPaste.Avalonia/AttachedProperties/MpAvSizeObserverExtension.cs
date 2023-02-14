@@ -1,7 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
-using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvSizeObserverExtension {
@@ -61,14 +60,14 @@ namespace MonkeyPaste.Avalonia {
                 false,
                 false);
 
-        private static void HandleIsEnabledChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
+        private static void HandleIsEnabledChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
             if (e.NewValue is bool isEnabledVal && isEnabledVal) {
                 if (element is Control control) {
                     control.AttachedToVisualTree += AttachedToVisualHandler;
                     control.DetachedFromVisualTree += DetachedFromVisualHandler;
                     if (control.IsInitialized) {
                         AttachedToVisualHandler(control, null);
-                    } 
+                    }
                 }
             } else {
                 DetachedFromVisualHandler(element, null);
@@ -94,13 +93,13 @@ namespace MonkeyPaste.Avalonia {
 
             void Control_EffectiveViewportChanged(object sender, global::Avalonia.Layout.EffectiveViewportChangedEventArgs? e) {
                 if (sender is Control control) {
-                    if((int)control.Bounds.Width != (int)GetObservedWidth(control)) {
+                    if ((int)control.Bounds.Width != (int)GetObservedWidth(control)) {
                         SetObservedWidth(control, control.Bounds.Width);
                     }
-                    if((int)control.Bounds.Height != (int)GetObservedHeight(control)) {
+                    if ((int)control.Bounds.Height != (int)GetObservedHeight(control)) {
                         SetObservedHeight(control, control.Bounds.Height);
                     }
-                    
+
                     //if(control.Name == "ClipTrayContainerBorder") {
                     //    MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.QueryTrayScreenWidth));
                     //    MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.QueryTrayScreenHeight));

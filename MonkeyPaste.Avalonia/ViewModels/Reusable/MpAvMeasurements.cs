@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MonkeyPaste;
-
-namespace MonkeyPaste.Avalonia {
+﻿namespace MonkeyPaste.Avalonia {
     public class MpAvMeasurementsViewModel : MpISingletonViewModel<MpAvMeasurementsViewModel> {
         #region Statics
         private static MpAvMeasurementsViewModel? _instance;
@@ -14,13 +7,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
-        
+
         #endregion
 
         #region Public Methods
 
         public void Init() {
-            
+
         }
 
         #endregion

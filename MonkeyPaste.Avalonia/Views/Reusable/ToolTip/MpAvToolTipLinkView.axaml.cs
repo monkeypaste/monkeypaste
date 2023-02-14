@@ -1,23 +1,21 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Input;
 using Avalonia.Markup.Xaml;
-using Avalonia.Media;
 using Avalonia.VisualTree;
-using PropertyChanged;
-using System.Diagnostics;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using PropertyChanged;
 using System;
-using System.Linq;
-using Avalonia.Input;
+using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
 
     [DoNotNotify]
     public partial class MpAvToolTipLinkView : UserControl {
         #region Private Variables
-        
+
         private MpPoint _lastMousePos;
 
         #endregion
@@ -99,16 +97,16 @@ namespace MonkeyPaste.Avalonia {
 
         private void OnUriChanged() {
             var tb = this.FindControl<TextBlock>("ToolTipTextBlock");
-            if(tb == null) {
+            if (tb == null) {
                 Debugger.Break();
                 return;
             }
-            if(string.IsNullOrEmpty(ToolTipUri)) {
+            if (string.IsNullOrEmpty(ToolTipUri)) {
                 tb.Classes.Add("IsLink");
             } else {
                 tb.Classes.Remove("IsLink");
             }
-            
+
         }
 
 
@@ -120,7 +118,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void Host_control_PointerMoved(object sender, global::Avalonia.Input.PointerEventArgs e) {
             var hc = GetHostControl();
-            if(hc == null) {
+            if (hc == null) {
                 _lastMousePos = null;
                 return;
             }
@@ -189,7 +187,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private MpPoint GetToolTipOffset(Control hc) {
-            if(hc == null) {
+            if (hc == null) {
                 return MpPoint.Zero;
             }
             return new MpPoint() {
@@ -199,7 +197,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void SetToolTipOffset(Control hc, MpPoint newOffset) {
-            if(hc == null) {
+            if (hc == null) {
                 return;
             }
             ToolTip.SetHorizontalOffset(hc, newOffset.X);

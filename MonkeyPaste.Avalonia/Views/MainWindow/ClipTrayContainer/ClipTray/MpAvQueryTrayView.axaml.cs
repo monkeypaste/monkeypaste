@@ -1,6 +1,4 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Markup.Xaml;
@@ -8,10 +6,7 @@ using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvQueryTrayView : MpAvUserControl<MpAvClipTrayViewModel> {
@@ -33,7 +28,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             Instance = this;
-            
+
             InitializeComponent();
 
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
@@ -70,7 +65,7 @@ namespace MonkeyPaste.Avalonia {
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.MainWindowSizeChanged:
-                case MpMessageType.MainWindowOrientationChangeBegin:                
+                case MpMessageType.MainWindowOrientationChangeBegin:
                 case MpMessageType.TrayLayoutChanged:
                     //this.InvalidateMeasure();
                     break;
@@ -86,7 +81,7 @@ namespace MonkeyPaste.Avalonia {
         #region Auto Scroll
 
         private void StartAutoScroll() {
-            if(_autoScrollTimer == null) {
+            if (_autoScrollTimer == null) {
                 _autoScrollTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(100) };
                 _autoScrollTimer.Tick += _autoScrollTimer_Tick;
             }
@@ -103,20 +98,20 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void _autoScrollTimer_Tick(object sender, EventArgs e) {
-            if(!MpAvShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
+            if (!MpAvShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
                 // wait till end of dnd to stop timer
                 // otherwise it goes on/off a lot
                 BindingContext.NotifyDragOverTrays(false);
                 return;
             }
-            if(BindingContext.IsBusy) {
+            if (BindingContext.IsBusy) {
                 return;
             }
             Dispatcher.UIThread.Post(() => {
                 var sv = this.FindControl<ScrollViewer>("ClipTrayScrollViewer");
                 var lb = this.FindControl<ListBox>("ClipTrayListBox");
                 var lbmp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
-                if(MpAvPagingListBoxExtension.CheckAndDoAutoScrollJump(sv,lb,lbmp)) {
+                if (MpAvPagingListBoxExtension.CheckAndDoAutoScrollJump(sv, lb, lbmp)) {
                     // drag is over a tray track and is thumb dragging
                     // until outside track, then busy for load more
                     return;
@@ -128,7 +123,7 @@ namespace MonkeyPaste.Avalonia {
                     false);
 
                 BindingContext.ScrollOffset += scroll_delta;
-            });            
+            });
         }
 
         #endregion

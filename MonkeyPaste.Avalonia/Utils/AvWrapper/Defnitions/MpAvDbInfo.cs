@@ -1,9 +1,6 @@
-﻿using MonkeyPaste;
+﻿using System;
 using System.IO;
-using MonkeyPaste.Common.Plugin; 
-using MonkeyPaste.Common;
 using System.Reflection;
-using System;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvDbInfo : MonkeyPaste.MpIDbInfo {
@@ -11,11 +8,11 @@ namespace MonkeyPaste.Avalonia {
         public string DbName {
             get {
                 string db_name_by_os = string.Empty;
-                if(OperatingSystem.IsWindows()) {
+                if (OperatingSystem.IsWindows()) {
                     db_name_by_os = "mp_win";
-                } else if(OperatingSystem.IsLinux()) {
+                } else if (OperatingSystem.IsLinux()) {
                     db_name_by_os = "mp_x11";
-                } else if(OperatingSystem.IsMacOS()) {
+                } else if (OperatingSystem.IsMacOS()) {
                     db_name_by_os = "mp_mac";
                 } else {
                     throw new Exception("Unmanaged os");

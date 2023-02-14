@@ -5,14 +5,13 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
-using Avalonia.Platform;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using static Avalonia.VisualExtensions;
 
@@ -21,7 +20,7 @@ namespace MonkeyPaste.Common.Avalonia {
 
         #region Focus
 
-        public static IInputElement GetFocusableAncestor(this IVisual visual, bool includeSelf = true) {
+        public static IInputElement GetFocusableAncestor(this Visual visual, bool includeSelf = true) {
             if (visual == null) {
                 return null;
             }
@@ -34,7 +33,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 .Cast<IInputElement>()
                 .FirstOrDefault(x => x.Focusable);
         }
-        public static IInputElement GetFocusableDescendant(this IVisual visual, bool includeSelf = true) {
+        public static IInputElement GetFocusableDescendant(this Visual visual, bool includeSelf = true) {
             if (visual == null) {
                 return null;
             }
@@ -61,15 +60,15 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static async Task<bool> TrySetFocusAsync(this IInputElement ie, int time_out_ms = 1000) {
-            if(ie == null) {
+            if (ie == null) {
                 return false;
             }
             var sw = Stopwatch.StartNew();
-            while(true) {
-                if(sw.ElapsedMilliseconds >= time_out_ms) {
+            while (true) {
+                if (sw.ElapsedMilliseconds >= time_out_ms) {
                     break;
                 }
-                if(ie.IsFocused) {
+                if (ie.IsFocused) {
                     return true;
                 }
                 ie.Focus();
@@ -82,7 +81,7 @@ namespace MonkeyPaste.Common.Avalonia {
 
         #region Visual Tree
 
-        public static T GetVisualAncestor<T>(this IVisual visual, bool includeSelf = true) where T : IVisual? {
+        public static T GetVisualAncestor<T>(this Visual visual, bool includeSelf = true) where T : Visual? {
             if (includeSelf && visual is T) {
                 return (T)visual;
             }
@@ -92,7 +91,7 @@ namespace MonkeyPaste.Common.Avalonia {
             //}
             return visualResult;
         }
-        public static IEnumerable<T> GetVisualAncestors<T>(this IVisual visual, bool includeSelf = true) where T : IVisual {
+        public static IEnumerable<T> GetVisualAncestors<T>(this Visual visual, bool includeSelf = true) where T : Visual {
             IEnumerable<T> visualResult;
             visualResult = visual.GetVisualAncestors().Where(x => x is T).Cast<T>();
 
@@ -106,13 +105,13 @@ namespace MonkeyPaste.Common.Avalonia {
 
             return visualResult;
         }
-        public static T GetVisualDescendant<T>(this IVisual control, bool includeSelf = true) where T : IVisual {
+        public static T GetVisualDescendant<T>(this Visual control, bool includeSelf = true) where T : Visual {
             if (includeSelf && control is T) {
                 return (T)control;
             }
             return (T)control.GetVisualDescendants().FirstOrDefault(x => x is T);
         }
-        public static IEnumerable<T> GetVisualDescendants<T>(this IVisual control, bool includeSelf = true) where T : IVisual {
+        public static IEnumerable<T> GetVisualDescendants<T>(this Visual control, bool includeSelf = true) where T : Visual {
             IEnumerable<T> result;
             result = control.GetVisualDescendants().Where(x => x is T).Cast<T>();
             if (includeSelf && control is T ct) {
@@ -121,17 +120,17 @@ namespace MonkeyPaste.Common.Avalonia {
             return result;
         }
 
-        public static bool TryGetVisualAncestor<T>(this IVisual control, out T ancestor) where T : IVisual {
+        public static bool TryGetVisualAncestor<T>(this Visual control, out T ancestor) where T : Visual {
             ancestor = control.GetVisualAncestor<T>();
             return ancestor != null;
         }
 
-        public static bool TryGetVisualDescendant<T>(this IVisual control, out T descendant) where T : IVisual {
+        public static bool TryGetVisualDescendant<T>(this Visual control, out T descendant) where T : Visual {
             descendant = control.GetVisualDescendant<T>();
             return descendant != null;
         }
 
-        public static bool TryGetVisualDescendants<T>(this IVisual control, out IEnumerable<T> descendant) where T : IVisual {
+        public static bool TryGetVisualDescendants<T>(this Visual control, out IEnumerable<T> descendant) where T : Visual {
             descendant = control.GetVisualDescendants<T>();
             return descendant.Count() > 0;
         }
@@ -196,10 +195,10 @@ namespace MonkeyPaste.Common.Avalonia {
         public static void InvalidateAll(this Control control) {
             control?.InvalidateArrange();
             control?.InvalidateMeasure();
-            control?.InvalidateVisual();            
+            control?.InvalidateVisual();
         }
 
-        public static MpRect RelativeBounds(this Control control, IVisual relTo) {
+        public static MpRect RelativeBounds(this Control control, Visual relTo) {
             var relative_origin = control.TranslatePoint(new Point(0, 0), relTo).Value.ToPortablePoint();
             var observed_size = control.Bounds.Size.ToPortableSize();
             return new MpRect(relative_origin, observed_size);
@@ -210,7 +209,7 @@ namespace MonkeyPaste.Common.Avalonia {
         #region Text Box
 
         public static int SelectionLength(this TextBox tb) {
-            if(tb == null) {
+            if (tb == null) {
                 return 0;
             }
 
@@ -221,7 +220,7 @@ namespace MonkeyPaste.Common.Avalonia {
         #region MainWindow
 
         public static Window MainWindow(this Application? app) {
-            if(app != null && app.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
+            if (app != null && app.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
                 return desktop.MainWindow;
             }
             return null;
@@ -237,22 +236,22 @@ namespace MonkeyPaste.Common.Avalonia {
 
         #region Screens
 
-        public static double VisualPixelDensity(this IVisual visual, Window w = null) {
-            if(w == null && 
+        public static double VisualPixelDensity(this Visual visual, Window w = null) {
+            if (w == null &&
                 Application.Current.MainWindow() is Window) {
                 w = Application.Current.MainWindow();
             }
-            
-            if(w == null) {
+
+            if (w == null) {
                 return 1;
             }
-            if(visual == null) {
+            if (visual == null) {
                 return w.Screens.Primary.PixelDensity;
             }
             var scr = w.Screens.ScreenFromVisual(visual);
-            if(scr == null) {
+            if (scr == null) {
                 scr = Application.Current.MainWindow().Screens.Primary;
-                if(scr == null) {
+                if (scr == null) {
                     Debugger.Break();
                     return 1;
                 }
@@ -272,20 +271,26 @@ namespace MonkeyPaste.Common.Avalonia {
             double fontSize = 12.0d,
             TextAlignment textAlignment = TextAlignment.Left,
             TextWrapping textWrapping = TextWrapping.NoWrap,
+            FlowDirection flowDirection = FlowDirection.LeftToRight,
+            IBrush foreground = null,
             MpSize constraint = null) {
+            foreground = foreground ?? Brushes.Black;
             var ft = new FormattedText(
                     text,
+                    CultureInfo.CurrentCulture,
+                    flowDirection,
                     new Typeface(fontFamily, fontStyle, fontWeight),
                     fontSize,
-                    textAlignment,
-                    textWrapping,
-                    new Size());
-            if(constraint == null) {
-                // size to text
-                ft.Constraint = ft.Bounds.Size;
-            } else {
-                ft.Constraint = constraint.ToAvSize();
-            }
+                    foreground);
+            //textAlignment,
+            //textWrapping,
+            //new Size());
+            //if (constraint == null) {
+            //    // size to text
+            //    ft.Constraint = ft.Bounds.Size;
+            //} else {
+            //    ft.Constraint = constraint.ToAvSize();
+            //}
             return ft;
         }
         #endregion
@@ -357,11 +362,11 @@ namespace MonkeyPaste.Common.Avalonia {
             var adornerLayer = AdornerLayer.GetAdornerLayer(adornedControl);
 
             Stopwatch sw = null;
-            while(adornerLayer == null) {
-                if(sw == null && timeout_ms >= 0) {
+            while (adornerLayer == null) {
+                if (sw == null && timeout_ms >= 0) {
                     sw = Stopwatch.StartNew();
                 }
-                if(sw.ElapsedMilliseconds >= timeout_ms) {
+                if (sw.ElapsedMilliseconds >= timeout_ms) {
                     Debugger.Break();
                     break;
                 }
@@ -375,11 +380,11 @@ namespace MonkeyPaste.Common.Avalonia {
             // returns false if layer not found within timeout
             Dispatcher.UIThread.VerifyAccess();
             var adornerLayer = await adornedControl.GetAdornerLayerAsync(timeout_ms);
-            if(adornerLayer == null) {
+            if (adornerLayer == null) {
                 return false;
             }
             var cur_adorner = adornerLayer.Children.FirstOrDefault(x => x == adorner);
-            if(cur_adorner != null) {
+            if (cur_adorner != null) {
                 // why twice?
                 Debugger.Break();
                 adornerLayer.Children.Remove(cur_adorner);
@@ -396,21 +401,27 @@ namespace MonkeyPaste.Common.Avalonia {
         public static FormattedText ToFormattedText(this TextBox tb) {
             var ft = new FormattedText(
                     tb.Text,
+                    CultureInfo.CurrentCulture,
+                    tb.FlowDirection,
                     new Typeface(tb.FontFamily, tb.FontStyle, tb.FontWeight),
                     tb.FontSize,
-                    tb.TextAlignment,
-                    tb.TextWrapping,
-                    new Size());
+                    tb.Foreground);
+            //        tb.TextAlignment,
+            //        tb.TextWrapping,
+            //        new Size());
             return ft;
         }
         public static FormattedText ToFormattedText(this TextBlock tb) {
             var ft = new FormattedText(
                     tb.Text,
+                    CultureInfo.CurrentCulture,
+                    tb.FlowDirection,
                     new Typeface(tb.FontFamily, tb.FontStyle, tb.FontWeight),
                     tb.FontSize,
-                    tb.TextAlignment,
-                    tb.TextWrapping,
-                    new Size());
+                    tb.Foreground);
+            //tb.TextAlignment,
+            //tb.TextWrapping,
+            //new Size());
             return ft;
         }
 
@@ -418,7 +429,7 @@ namespace MonkeyPaste.Common.Avalonia {
 
         #region Scroll Viewer
         public static ScrollBar GetScrollBar(this ScrollViewer sv, Orientation orientation) {
-            if(sv == null) {
+            if (sv == null) {
                 return null;
 
             }
@@ -430,7 +441,7 @@ namespace MonkeyPaste.Common.Avalonia {
             //    //return sv.Template..FindName("PART_VerticalScrollBar", sv) as ScrollBar;
 
             //    var vresult = sv.FindControl<ScrollBar>("PART_VerticalScrollBar");
-                
+
             //    return vresult;
             //}
             ////return sv.Template.FindName("PART_HorizontalScrollBar", sv) as ScrollBar;
@@ -455,17 +466,17 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static void ScrollByPointDelta(this ScrollViewer sv, MpPoint delta) {
-            if(sv == null) {
+            if (sv == null) {
                 return;
             }
             var hsb = sv.GetScrollBar(Orientation.Horizontal);
             var vsb = sv.GetScrollBar(Orientation.Vertical);
 
             var new_offset = sv.Offset.ToPortablePoint();
-            if(hsb != null) {
+            if (hsb != null) {
                 new_offset.X = Math.Max(0, Math.Min(sv.Offset.X + delta.X, hsb.Maximum));
             }
-            if(vsb != null) {
+            if (vsb != null) {
                 new_offset.Y = Math.Max(0, Math.Min(sv.Offset.Y + delta.Y, vsb.Maximum));
             }
 
@@ -483,34 +494,34 @@ namespace MonkeyPaste.Common.Avalonia {
 
         #region Events
 
-        public static bool IsLeftPress(this PointerPressedEventArgs ppea, IVisual? control) {
+        public static bool IsLeftPress(this PointerPressedEventArgs ppea, Visual? control) {
             return ppea.GetCurrentPoint(control)
                             .Properties.PointerUpdateKind == PointerUpdateKind.LeftButtonPressed;
         }
 
-        public static bool IsRightPress(this PointerPressedEventArgs ppea, IVisual? control) {
+        public static bool IsRightPress(this PointerPressedEventArgs ppea, Visual? control) {
             return ppea.GetCurrentPoint(control)
                             .Properties.PointerUpdateKind == PointerUpdateKind.RightButtonPressed;
         }
 
-        public static bool IsLeftRelease(this PointerReleasedEventArgs ppea, IVisual? control) {
+        public static bool IsLeftRelease(this PointerReleasedEventArgs ppea, Visual? control) {
             return ppea.GetCurrentPoint(control)
                             .Properties.PointerUpdateKind == PointerUpdateKind.LeftButtonPressed;
         }
 
-        public static bool IsRightRelease(this PointerReleasedEventArgs ppea, IVisual? control) {
+        public static bool IsRightRelease(this PointerReleasedEventArgs ppea, Visual? control) {
             return ppea.GetCurrentPoint(control)
                             .Properties.PointerUpdateKind == PointerUpdateKind.RightButtonPressed;
         }
 
-        public static bool IsLeftDown(this PointerEventArgs e, IVisual? control) {
+        public static bool IsLeftDown(this PointerEventArgs e, Visual? control) {
             return e.GetCurrentPoint(control).Properties.IsLeftButtonPressed;
         }
 
-        public static MpPoint GetClientMousePoint(this PointerEventArgs e, IVisual? control) {
+        public static MpPoint GetClientMousePoint(this PointerEventArgs e, Visual? control) {
             return e.GetPosition(control).ToPortablePoint();
         }
-        public static MpPoint GetScreenMousePoint(this PointerEventArgs e, IVisual control) {
+        public static MpPoint GetScreenMousePoint(this PointerEventArgs e, Visual control) {
             var c_mp = e.GetPosition(control).ToPortablePoint();
             var c_origin = control.PointToScreen(new Point()).ToPortablePoint(control.VisualPixelDensity());
             return c_mp + c_origin;
@@ -520,10 +531,10 @@ namespace MonkeyPaste.Common.Avalonia {
 
         #region PropertyChanged
 
-        public static (T oldValue, T newValue) GetOldAndNewValue<T>(this AvaloniaPropertyChangedEventArgs e) {
-            var ev = (AvaloniaPropertyChangedEventArgs<T>)e;
-            return (ev.OldValue.GetValueOrDefault()!, ev.NewValue.GetValueOrDefault()!);
-        }
+        //public static (T oldValue, T newValue) GetOldAndNewValue<T>(this AvaloniaPropertyChangedEventArgs e) {
+        //    var ev = (AvaloniaPropertyChangedEventArgs<T>)e;
+        //    return (ev.OldValue.GetValueOrDefault()!, ev.NewValue.GetValueOrDefault()!);
+        //}
 
         #endregion
 
@@ -556,9 +567,9 @@ namespace MonkeyPaste.Common.Avalonia {
             return new MpPoint(v.X, v.Y);
         }
 
-       
+
         public static MpPoint ToPortablePoint(this PixelPoint p, double pixelDensity) {
-            return new MpPoint(((double)p.X/pixelDensity), ((double)p.Y/pixelDensity));
+            return new MpPoint(((double)p.X / pixelDensity), ((double)p.Y / pixelDensity));
         }
 
         public static Size ToAvSize(this MpPoint p) {
@@ -569,7 +580,7 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static PixelPoint ToAvPixelPoint(this MpPoint p, double pixelDensity) {
-            return new PixelPoint((int)(p.X* pixelDensity), (int)(p.Y*pixelDensity));
+            return new PixelPoint((int)(p.X * pixelDensity), (int)(p.Y * pixelDensity));
         }
 
         public static MpPoint TranslatePoint(this MpPoint p, Control relativeTo = null, bool toScreen = false) {
@@ -583,7 +594,7 @@ namespace MonkeyPaste.Common.Avalonia {
             }
 
             var pd = relativeTo.VisualPixelDensity();
-            if(toScreen) {
+            if (toScreen) {
                 MpPoint origin = relativeTo.PointToScreen(new Point()).ToPortablePoint(pd);
                 p.X = origin.X;
                 p.Y = origin.Y;
@@ -651,7 +662,7 @@ namespace MonkeyPaste.Common.Avalonia {
 
         public static MpRect ToPortableRect(this Rect rect, Control relativeTo = null, bool toScreen = false) {
             var prect = new MpRect(rect.Position.ToPortablePoint(), rect.Size.ToPortableSize());
-            if(relativeTo == null) {
+            if (relativeTo == null) {
                 return prect;
             }
             prect.TranslateOrigin(relativeTo, toScreen);
@@ -682,7 +693,7 @@ namespace MonkeyPaste.Common.Avalonia {
         #region Strings
 
         public static bool IsAvResourceString(this string str) {
-            if(str.IsNullOrEmpty()) {
+            if (str.IsNullOrEmpty()) {
                 return false;
             }
             return str.ToLower().StartsWith("avares://");

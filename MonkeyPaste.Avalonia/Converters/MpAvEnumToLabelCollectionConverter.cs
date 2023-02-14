@@ -1,10 +1,8 @@
-﻿using Avalonia;
-using Avalonia.Data.Converters;
-using System;
-using System.Globalization;
-using MonkeyPaste;
+﻿using Avalonia.Data.Converters;
 using MonkeyPaste.Common;
+using System;
 using System.Collections.ObjectModel;
+using System.Globalization;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvEnumToLabelCollectionConverter : IValueConverter {
@@ -22,7 +20,7 @@ namespace MonkeyPaste.Avalonia {
                 var paramParts = enumTypeName.Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
                 enumTypeName = paramParts[0];
                 noneLabel = paramParts[1];
-                if(noneLabel == "omit") {
+                if (noneLabel == "omit") {
                     hideFirst = true;
                 }
             }
@@ -35,7 +33,7 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 enumType = typeof(MpDb).Assembly.GetType(enumTypeName);
             }
-            return new ObservableCollection<string>(enumType.EnumToLabels(noneLabel,hideFirst));
+            return new ObservableCollection<string>(enumType.EnumToLabels(noneLabel, hideFirst));
         }
 
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) {

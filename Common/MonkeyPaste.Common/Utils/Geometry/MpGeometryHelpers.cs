@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
-using System.Text;
 
-namespace MonkeyPaste.Common { 
+namespace MonkeyPaste.Common {
     public static class MpGeometryHelpers {
         public static double GetDeterminant(double x1, double y1, double x2, double y2) {
             return x1 * y2 - x2 * y1;

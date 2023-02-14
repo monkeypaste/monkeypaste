@@ -1,13 +1,11 @@
 ﻿using Avalonia.Threading;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvUrlViewModel : 
+    public class MpAvUrlViewModel :
         MpViewModelBase<MpAvUrlCollectionViewModel>,
         MpIHoverableViewModel,
         MpISelectableViewModel
@@ -38,7 +36,7 @@ namespace MonkeyPaste.Avalonia {
         }
         public int UrlId {
             get {
-                if(Url == null) {
+                if (Url == null) {
                     return 0;
                 }
                 return Url.Id;
@@ -80,7 +78,7 @@ namespace MonkeyPaste.Avalonia {
                 return Url.IsDomainRejected;
             }
             set {
-                if(Url != null && Url.IsDomainRejected != value) {
+                if (Url != null && Url.IsDomainRejected != value) {
                     Url.IsDomainRejected = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(IsRejected));
@@ -162,10 +160,10 @@ namespace MonkeyPaste.Avalonia {
 
 
         private void MpUrlViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
                 case nameof(IsRejected):
-                    if(IsRejected) {
-                        Dispatcher.UIThread.Post(async() => { await RejectUrlOrDomain(true); });
+                    if (IsRejected) {
+                        Dispatcher.UIThread.Post(async () => { await RejectUrlOrDomain(true); });
                     }
                     break;
                 case nameof(IsSubRejected):
@@ -188,17 +186,17 @@ namespace MonkeyPaste.Avalonia {
             if (e is MpUrl url) {
                 if (url.Id == UrlId) {
                     Url = url;
-                } else if(url.UrlDomainPath.ToLower() == UrlDomainPath.ToLower()) {
-                    if(url.IsDomainRejected && !IsRejected) {
+                } else if (url.UrlDomainPath.ToLower() == UrlDomainPath.ToLower()) {
+                    if (url.IsDomainRejected && !IsRejected) {
                         //when this url's domain is rejected this url needs to know without notifying user
                         SupressPropertyChangedNotification = true;
                         IsRejected = true;
                         SupressPropertyChangedNotification = false;
                         HasModelChanged = true;
-                    } else if(!url.IsDomainRejected && IsRejected) {
+                    } else if (!url.IsDomainRejected && IsRejected) {
                         IsRejected = false;
                     }
-                    
+
                 }
 
             }

@@ -18,7 +18,7 @@ namespace MonkeyPaste {
 
         public override async Task<MpNotificationDialogResultType> ShowNotificationAsync() {
             var base_result = await base.ShowNotificationAsync();
-            if(base_result == MpNotificationDialogResultType.DoNotShow) {
+            if (base_result == MpNotificationDialogResultType.DoNotShow) {
                 HideNotification();
                 return base_result;
             }
@@ -31,7 +31,7 @@ namespace MonkeyPaste {
                     while (IsHovering || IsPinned) {
                         startTime = DateTime.Now;
                         await Task.Delay(100);
-                        if(DoNotShowAgain) {
+                        if (DoNotShowAgain) {
                             return MpNotificationDialogResultType.DoNotShow;
                         }
                     }
@@ -42,7 +42,7 @@ namespace MonkeyPaste {
         }
 
         public override void HideNotification() {
-            if(IsPinned) {
+            if (IsPinned) {
                 // ignore until unpinned
                 return;
             }

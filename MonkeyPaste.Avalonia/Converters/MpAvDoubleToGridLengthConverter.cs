@@ -1,10 +1,9 @@
-﻿using Avalonia;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Data.Converters;
-using System;
-using System.Globalization;
 using MonkeyPaste.Common;
+using System;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvDoubleToGridLengthConverter : IValueConverter {
@@ -21,7 +20,7 @@ namespace MonkeyPaste.Avalonia {
 
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) {
             if (value is GridLength gl) {
-                if(!gl.Value.IsNumber()) {
+                if (!gl.Value.IsNumber()) {
                     Debugger.Break();
                 }
                 return gl.Value;

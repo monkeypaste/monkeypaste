@@ -1,16 +1,10 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using System.Collections.ObjectModel;
-using MonkeyPaste;
-using MonkeyPaste.Common;
-using System.Linq;
 using Avalonia.Threading;
-using System;
+using MonkeyPaste.Common;
 using PropertyChanged;
-using System.Collections.Generic;
-using System.Diagnostics;
-using MonkeyPaste.Common.Avalonia;
+using System;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -33,7 +27,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void OnIsVisibleChanged() {
-            if(BindingContext == null) {
+            if (BindingContext == null) {
                 return;
             }
             if (IsVisible) {

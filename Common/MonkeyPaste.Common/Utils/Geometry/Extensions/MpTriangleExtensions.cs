@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace MonkeyPaste.Common {
+﻿namespace MonkeyPaste.Common {
     public static class MpTriangleExtensions {
         // from https://stackoverflow.com/a/2049593/105028
         private static double sign(MpPoint p1, MpPoint p2, MpPoint p3) {

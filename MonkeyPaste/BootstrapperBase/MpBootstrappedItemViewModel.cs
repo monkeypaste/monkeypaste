@@ -1,20 +1,16 @@
-﻿
-using Microsoft.CSharp.RuntimeBinder;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Xamarin.Forms;
+//using Xamarin.Forms;
 
 namespace MonkeyPaste {
-    public class MpBootstrappedItemViewModel :MpViewModelBase<MpBootstrapperViewModelBase> {
+    public class MpBootstrappedItemViewModel : MpViewModelBase<MpBootstrapperViewModelBase> {
         private string[] _removedSubStrings = new string[] {
             ".",
             "Wpf",
-            "View", 
+            "View",
             "Model",
             "Av",
             "Mp",
@@ -29,7 +25,7 @@ namespace MonkeyPaste {
         private string _label;
         public string Label {
             get {
-                if(_label.IsNullOrEmpty()) {
+                if (_label.IsNullOrEmpty()) {
                     //_label = ItemType.ToString();
                     //foreach (var rss in _removedSubStrings) {
                     //    _label = _label.Replace(rss, string.Empty);
@@ -44,7 +40,7 @@ namespace MonkeyPaste {
                 return _label;
             }
             set {
-                if(_label != value) {
+                if (_label != value) {
                     _label = value;
                     OnPropertyChanged(nameof(Label));
                 }
@@ -57,7 +53,7 @@ namespace MonkeyPaste {
             ItemType = itemType;
         }
 
-        public MpBootstrappedItemViewModel(MpBootstrapperViewModelBase parent, Type itemType, object arg) : this(parent,itemType) {
+        public MpBootstrappedItemViewModel(MpBootstrapperViewModelBase parent, Type itemType, object arg) : this(parent, itemType) {
             ItemArg = arg;
         }
 
@@ -106,8 +102,8 @@ namespace MonkeyPaste {
                 var initTask = (Task)initMethodInfo.Invoke(itemObj, args);
                 await initTask;
 
-                if(itemObj is MpIAsyncObject ao) {
-                    while(ao.IsBusy) {
+                if (itemObj is MpIAsyncObject ao) {
+                    while (ao.IsBusy) {
                         await Task.Delay(100);
                     }
                 }
@@ -124,4 +120,3 @@ namespace MonkeyPaste {
 
 
 
-            

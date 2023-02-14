@@ -1,15 +1,13 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using System;
 
 namespace MonkeyPaste.Avalonia {
     /// <summary>
     /// Interaction logic for MpSearchDetailView.xaml
     /// </summary>
-    public partial class MpAvSearchCriteriaListBoxView : 
+    public partial class MpAvSearchCriteriaListBoxView :
         MpAvUserControl<MpAvSearchCriteriaItemCollectionViewModel> {
 
         private static MpAvSearchCriteriaListBoxView _instance;

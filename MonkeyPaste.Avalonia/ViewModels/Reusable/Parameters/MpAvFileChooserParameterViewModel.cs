@@ -1,10 +1,9 @@
-﻿using MonkeyPaste;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; 
+﻿using Avalonia.Controls;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Controls;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
@@ -21,7 +20,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsDirectoryChooser {
             get {
-                if(ParameterFormat == null) {
+                if (ParameterFormat == null) {
                     return false;
                 }
                 return ParameterFormat.controlType == MpParameterControlType.DirectoryChooser;
@@ -79,7 +78,7 @@ namespace MonkeyPaste.Avalonia {
                         Title = "Select " + Label,
                         Directory = initDir
                     }.ShowAsync(MpAvMainWindow.Instance);
-                    if(!string.IsNullOrEmpty(selectedDir)) {
+                    if (!string.IsNullOrEmpty(selectedDir)) {
                         CurrentValue = selectedDir;
                     }
                 } else {

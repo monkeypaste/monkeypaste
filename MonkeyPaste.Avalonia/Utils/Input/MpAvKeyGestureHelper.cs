@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Input;
-using Avalonia.Input;
-using MonkeyPaste;
-using MonkeyPaste.Common.Avalonia;
-using SharpHook;
-using SharpHook.Native;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvKeyGestureHelper<T> where T:class {
+    public class MpAvKeyGestureHelper<T> where T : class {
         #region Private Variables
 
         private List<KeyValuePair<T, DateTime>> _downs = new List<KeyValuePair<T, DateTime>>();
@@ -19,12 +13,12 @@ namespace MonkeyPaste.Avalonia {
 
         private int _downCount = 0;
 
-        private Func<T,int> _getPriority;
+        private Func<T, int> _getPriority;
         #endregion
 
         public string CurrentGesture { get; set; }
 
-        public MpAvKeyGestureHelper(Func<T,int> getPriority) {
+        public MpAvKeyGestureHelper(Func<T, int> getPriority) {
             _getPriority = getPriority;
         }
 

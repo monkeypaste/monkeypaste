@@ -1,5 +1,5 @@
 ﻿namespace MonkeyPaste.Common.Plugin {
-    public interface MpIStyleProperties { 
+    public interface MpIStyleProperties {
         string bgColor { get; }
         string fgColor { get; }
         string fontSize { get; }

@@ -1,23 +1,17 @@
-﻿using System;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Threading;
-using MonkeyPaste;
 using System.Threading.Tasks;
-using MonkeyPaste.Common;
-using SharpHook.Native;
-using MonkeyPaste.Common.Avalonia;
-using Avalonia.Controls;
 using System.Windows.Input;
 using Key = Avalonia.Input.Key;
-using SkiaSharp;
 
 namespace MonkeyPaste.Avalonia {
 
-    public class MpAvShortcutViewModel : MpViewModelBase<MpAvShortcutCollectionViewModel>, 
+    public class MpAvShortcutViewModel : MpViewModelBase<MpAvShortcutCollectionViewModel>,
         MpIActionComponent,
         MpAvIShortcutCommandViewModel,
         MpAvIKeyGestureViewModel,
@@ -93,13 +87,13 @@ namespace MonkeyPaste.Avalonia {
 
         public MpShortcutType ShortcutType {
             get {
-                if(Shortcut == null) {
+                if (Shortcut == null) {
                     return MpShortcutType.None;
                 }
                 return Shortcut.ShortcutType;
             }
             set {
-                if(Shortcut.ShortcutType != value) {
+                if (Shortcut.ShortcutType != value) {
                     Shortcut.ShortcutType = value;
                     OnPropertyChanged(nameof(ShortcutType));
                 }
@@ -109,7 +103,7 @@ namespace MonkeyPaste.Avalonia {
         public string ShortcutTypeName {
             get {
                 if (IsCustom()) {
-                    switch(ShortcutType) {
+                    switch (ShortcutType) {
                         case MpShortcutType.PasteCopyItem:
                             return "Clip";
                         case MpShortcutType.SelectTag:
@@ -132,7 +126,7 @@ namespace MonkeyPaste.Avalonia {
             set {
                 if (SelectedRoutingTypeIdx != value) {
                     RoutingType = (MpRoutingType)value;
-                    OnPropertyChanged(nameof(SelectedRoutingTypeIdx));                    
+                    OnPropertyChanged(nameof(SelectedRoutingTypeIdx));
                 }
             }
         }
@@ -140,9 +134,9 @@ namespace MonkeyPaste.Avalonia {
         private ObservableCollection<string> _routingTypes = null;
         public ObservableCollection<string> RoutingTypes {
             get {
-                if(_routingTypes == null) {
+                if (_routingTypes == null) {
                     _routingTypes = new ObservableCollection<string>();
-                    if(IsGlobalShortcut) {
+                    if (IsGlobalShortcut) {
                         _routingTypes.Add("Direct");
                         _routingTypes.Add("Bubble");
                         _routingTypes.Add("Tunnel");
@@ -179,7 +173,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string CommandParameter {
             get {
-                if(Shortcut == null) {
+                if (Shortcut == null) {
                     return null;
                 }
                 //if(IsCustom()) {
@@ -189,8 +183,8 @@ namespace MonkeyPaste.Avalonia {
                 return Shortcut.CommandParameter;
             }
             set {
-                if(CommandParameter != value) {
-                    if(!IsCustom()) {
+                if (CommandParameter != value) {
+                    if (!IsCustom()) {
                         throw new Exception("Application shortcuts use pk not command id");
                     }
                     Shortcut.CommandParameter = value;
@@ -218,7 +212,7 @@ namespace MonkeyPaste.Avalonia {
 
         public List<List<Key>> KeyList {
             get {
-                if(Shortcut == null) {
+                if (Shortcut == null) {
                     return new List<List<Key>>();
                 }
                 //var kl = new List<List<Key>>();
@@ -235,7 +229,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string KeyString {
             get {
-                if(Shortcut == null) {
+                if (Shortcut == null) {
                     return string.Empty;
                 }
                 return Shortcut.KeyString;
@@ -257,7 +251,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string ShortcutDisplayName {
             get {
-                if(Shortcut == null) {
+                if (Shortcut == null) {
                     return string.Empty;
                 }
                 return Shortcut.ShortcutLabel;
@@ -265,7 +259,7 @@ namespace MonkeyPaste.Avalonia {
             set {
                 if (Shortcut != null && Shortcut.ShortcutLabel != value) {
                     Shortcut.ShortcutLabel = value;
-                    HasModelChanged = true; 
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(ShortcutDisplayName));
                 }
             }
@@ -273,7 +267,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpRoutingType RoutingType {
             get {
-                if(Shortcut == null) {
+                if (Shortcut == null) {
                     return MpRoutingType.None;
                 }
                 return Shortcut.RoutingType;
@@ -311,7 +305,7 @@ namespace MonkeyPaste.Avalonia {
                 return _shortcut;
             }
             set {
-                if(_shortcut != value) {
+                if (_shortcut != value) {
                     _shortcut = value;
                     OnPropertyChanged(nameof(Shortcut));
                     OnPropertyChanged(nameof(RoutingType));
@@ -369,7 +363,7 @@ namespace MonkeyPaste.Avalonia {
         private void MpShortcutViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(HasModelChanged):
-                    if(HasModelChanged) {
+                    if (HasModelChanged) {
                         Task.Run(async () => {
                             await Shortcut.WriteToDatabaseAsync();
                             HasModelChanged = false;
@@ -401,7 +395,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void Unregister() {
-            if(KeysObservable != null) {
+            if (KeysObservable != null) {
                 KeysObservable.Dispose();
                 MpConsole.WriteLine("Unregistering shortcut " + Shortcut.ToString() + " was successful");
             } else {
@@ -439,7 +433,7 @@ namespace MonkeyPaste.Avalonia {
             return KeyString.Contains(",");
         }
         public bool IsCustom() {
-            if(Shortcut == null) {
+            if (Shortcut == null) {
                 return false;
             }
             return (int)ShortcutType >= MpShortcut.MIN_USER_SHORTCUT_TYPE;
@@ -483,8 +477,8 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
             }
-            
-            if(wasChanged) {
+
+            if (wasChanged) {
                 Task.Run(async () => {
                     await Shortcut.WriteToDatabaseAsync();
                 });
@@ -541,20 +535,20 @@ namespace MonkeyPaste.Avalonia {
                 //    }
                 //}
 
-                if(!IsGlobalShortcut) {
-                    if(!mwvm.IsMainWindowActive) {
+                if (!IsGlobalShortcut) {
+                    if (!mwvm.IsMainWindowActive) {
                         canPerformShortcut = false;
-                    }                    
+                    }
                 }
 
-                MpConsole.WriteLine($"CanPerformShortcut '{ShortcutType}': {canPerformShortcut.ToString().ToUpper()}",true);
+                MpConsole.WriteLine($"CanPerformShortcut '{ShortcutType}': {canPerformShortcut.ToString().ToUpper()}", true);
 
-                if(!canPerformShortcut) {
-                    MpConsole.WriteLine($"IsGlobalShortcut: "+IsGlobalShortcut);
-                    MpConsole.WriteLine($"IsMainWindowActive: "+mwvm.IsMainWindowActive);
-                    MpConsole.WriteLine($"IsShowingDialog: "+mwvm.IsAnyDialogOpen);
-                    MpConsole.WriteLine($"IsAnyItemDragging: "+mwvm.IsAnyItemDragging);
-                    MpConsole.WriteLine($"IsAnyTextBoxFocused: "+mwvm.IsAnyMainWindowTextBoxFocused,false,true);
+                if (!canPerformShortcut) {
+                    MpConsole.WriteLine($"IsGlobalShortcut: " + IsGlobalShortcut);
+                    MpConsole.WriteLine($"IsMainWindowActive: " + mwvm.IsMainWindowActive);
+                    MpConsole.WriteLine($"IsShowingDialog: " + mwvm.IsAnyDialogOpen);
+                    MpConsole.WriteLine($"IsAnyItemDragging: " + mwvm.IsAnyItemDragging);
+                    MpConsole.WriteLine($"IsAnyTextBoxFocused: " + mwvm.IsAnyMainWindowTextBoxFocused, false, true);
                 }
                 return canPerformShortcut;
             });

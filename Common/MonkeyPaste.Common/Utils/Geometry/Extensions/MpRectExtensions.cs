@@ -7,8 +7,8 @@ namespace MonkeyPaste.Common {
         public static MpTriangle[] ToFaces(this MpRect rect) {
             // NOTE wrapping clock-wise
 
-            if(rect == null) {
-                return new MpTriangle[] {};
+            if (rect == null) {
+                return new MpTriangle[] { };
             }
             MpPoint c = rect.Centroid();
 
@@ -25,18 +25,18 @@ namespace MonkeyPaste.Common {
         }
 
         public static MpPoint Centroid(this MpRect rect) {
-            if(rect == null) {
+            if (rect == null) {
                 return MpPoint.Zero;
             }
             double mid_x = rect.Left + (rect.Width / 2);
             double mid_y = rect.Top + (rect.Height / 2);
             return new MpPoint(mid_x, mid_y);
         }
-        public static bool FuzzyEquals(this MpRect rect,MpRect otherRect, double maxThresh = 0.1d) {
-            if(rect == null && otherRect == null) {
+        public static bool FuzzyEquals(this MpRect rect, MpRect otherRect, double maxThresh = 0.1d) {
+            if (rect == null && otherRect == null) {
                 return true;
             }
-            if(rect == null || otherRect == null) {
+            if (rect == null || otherRect == null) {
                 return false;
             }
             bool isMatch_l = Math.Abs(rect.Left - otherRect.Left) <= maxThresh;
@@ -105,7 +105,7 @@ namespace MonkeyPaste.Common {
             return new MpRectSideHitTest() {
                 ClosestSideDistance = min_dist,
                 ClosestSideLabel = MpRectSideHitTest.GetSideLabel(min_idx),
-                TestRect = rect 
+                TestRect = rect
             };
         }
 

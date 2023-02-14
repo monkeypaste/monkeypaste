@@ -1,25 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Input;
-using MonkeyPaste;
-using System.Threading.Tasks;
-using System.IO;
-using System.Collections.ObjectModel;
-using MonkeyPaste.Common.Plugin; 
-using MonkeyPaste.Common; 
-using System.Diagnostics;
+﻿using Avalonia.Controls;
 using Avalonia.Threading;
-using Avalonia.Controls;
-using System.Runtime.CompilerServices;
+using MonkeyPaste.Common;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvTagTileViewModel : 
-        MpAvTreeSelectorViewModelBase<MpAvTagTrayViewModel, MpAvTagTileViewModel>, 
+    public class MpAvTagTileViewModel :
+        MpAvTreeSelectorViewModelBase<MpAvTagTrayViewModel, MpAvTagTileViewModel>,
         MpIHoverableViewModel,
         MpISelectableViewModel,
-        MpAvIShortcutCommandViewModel, 
+        MpAvIShortcutCommandViewModel,
         MpIUserColorViewModel,
         MpIActionComponent,
         MpIContextMenuViewModel,
@@ -289,7 +285,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsActiveTag {
             get {
-                if(IsGroupTag || Parent == null) {
+                if (IsGroupTag || Parent == null) {
                     return false;
                 }
                 return Parent.LastSelectedActiveItem == this;
@@ -303,7 +299,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool CanAddChild {
             get {
-                if(IsHelpTag || IsQueryTag) {
+                if (IsHelpTag || IsQueryTag) {
                     return false;
                 }
                 return true;
@@ -331,7 +327,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsSudoTag {
             get {
-                if(Tag == null) {
+                if (Tag == null) {
                     return false;
                 }
                 return Tag.Id == MpTag.AllTagId;
@@ -370,7 +366,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string TagTextHexColor {
             get {
-                if(MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
+                if (MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
                     return MpSystemColors.White;
                 }
                 if (!IsSelected && IsLinkedToSelectedClipTile.IsTrueOrNull() && !IsAllTag) {
@@ -393,7 +389,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpTagType TagType {
             get {
-                if(Tag == null) {
+                if (Tag == null) {
                     return MpTagType.None;
                 }
                 return Tag.TagType;
@@ -402,8 +398,8 @@ namespace MonkeyPaste.Avalonia {
 
         public MpContentSortType SortType {
             get {
-                if(Tag == null || !IsQueryTag) {
-                    if(Parent != null && IsGroupTag) {
+                if (Tag == null || !IsQueryTag) {
+                    if (Parent != null && IsGroupTag) {
                         // group tags pass through last selection
                         return Parent.LastSelectedActiveItem.SortType;
                     }
@@ -412,10 +408,10 @@ namespace MonkeyPaste.Avalonia {
                 return Tag.SortType.Value;
             }
             set {
-                if(Tag == null || !IsQueryTag) {
+                if (Tag == null || !IsQueryTag) {
                     return;
                 }
-                if(SortType != value) {
+                if (SortType != value) {
                     Tag.SortType = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(SortType));
@@ -424,8 +420,8 @@ namespace MonkeyPaste.Avalonia {
         }
         public bool IsSortDescending {
             get {
-                if(Tag == null || !IsQueryTag) {
-                    if(Parent != null && IsGroupTag) {
+                if (Tag == null || !IsQueryTag) {
+                    if (Parent != null && IsGroupTag) {
                         // group tags pass through last selection
                         return Parent.LastSelectedActiveItem.IsSortDescending;
                     }
@@ -434,10 +430,10 @@ namespace MonkeyPaste.Avalonia {
                 return Tag.IsSortDescending.IsTrue();
             }
             set {
-                if(Tag == null || !IsQueryTag) {
+                if (Tag == null || !IsQueryTag) {
                     return;
                 }
-                if(IsSortDescending != value) {
+                if (IsSortDescending != value) {
                     Tag.IsSortDescending = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(IsSortDescending));
@@ -447,7 +443,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsModelPinned {
             get {
-                if(Tag == null) {
+                if (Tag == null) {
                     return false;
                 }
                 return Tag.PinSortIdx >= 0;
@@ -528,9 +524,9 @@ namespace MonkeyPaste.Avalonia {
                     Tag.TagName = value;
                     if (Tag.TagName.Trim() == string.Empty) {
                         Tag.TagName = "Untitled";
-                        if(IsTagNameTextBoxFocused) {
+                        if (IsTagNameTextBoxFocused) {
                             IsTagNameReadOnly = false;
-                        } 
+                        }
                     }
                     //HasModelChanged = true;
                     OnPropertyChanged(nameof(TagName));
@@ -622,10 +618,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public async Task<bool> IsCopyItemLinkedAsync(int ciid) {
-            if (ciid == 0 || Tag == null ||  Tag.Id == 0) {
+            if (ciid == 0 || Tag == null || Tag.Id == 0) {
                 return false;
             }
-            if(IsAllTag) {
+            if (IsAllTag) {
                 return true;
             }
             bool isLinked = await MpDataModelProvider.IsTagLinkedWithCopyItemAsync(Tag.Id, ciid);
@@ -633,14 +629,14 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void UpdateLinkToSelectedClipTile(IEnumerable<int> assocTagIds) {
-            if(IsAllTag) {
+            if (IsAllTag) {
                 // always linked
                 IsLinkedToSelectedClipTile = true;
                 return;
             }
-            if(assocTagIds.Any(x=>x == TagId)) {
+            if (assocTagIds.Any(x => x == TagId)) {
                 IsLinkedToSelectedClipTile = true;
-            } else if(AllDescendants.Cast<MpAvTagTileViewModel>().Any(x=>assocTagIds.Any(y=>y == x.TagId))) {
+            } else if (AllDescendants.Cast<MpAvTagTileViewModel>().Any(x => assocTagIds.Any(y => y == x.TagId))) {
                 IsLinkedToSelectedClipTile = null;
             } else {
                 IsLinkedToSelectedClipTile = false;
@@ -648,7 +644,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void UpdateTreeSortOrder() {
-            SortedItems.ForEach((x,idx) => x.TreeSortIdx = idx);
+            SortedItems.ForEach((x, idx) => x.TreeSortIdx = idx);
         }
 
         public override void DisposeViewModel() {
@@ -670,7 +666,7 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
 
         #region Db Events
-        protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {            
+        protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
                 if (sc.CommandParameter == TagId.ToString() && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
@@ -687,7 +683,7 @@ namespace MonkeyPaste.Avalonia {
                 if (sc.CommandParameter == TagId.ToString() && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
-            } else if(e is MpTag t && t.Id == TagId) {
+            } else if (e is MpTag t && t.Id == TagId) {
                 Dispatcher.UIThread.Post(() => {
                     //await InitializeAsync(t);
                     OnPropertyChanged(nameof(TagName));
@@ -740,7 +736,7 @@ namespace MonkeyPaste.Avalonia {
                         //if (!IsExpanded) {
                         //    IsExpanded = true;
                         //}
-                        if(IsQueryTag) {
+                        if (IsQueryTag) {
                             MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending = IsSortDescending;
                             MpAvClipTileSortFieldViewModel.Instance.SelectedSortType = SortType;
                         }
@@ -751,10 +747,10 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
                 case nameof(IsActiveTag):
-                    if(IsActiveTag) {
+                    if (IsActiveTag) {
                         break;
                     }
-                    if(IsQueryTag) {
+                    if (IsQueryTag) {
                         UpdateClipCountAsync().FireAndForgetSafeAsync(this);
                     }
                     break;
@@ -765,20 +761,20 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
                 case nameof(IgnoreHasModelChanged):
-                    if(!IgnoreHasModelChanged && HasModelChanged) {
+                    if (!IgnoreHasModelChanged && HasModelChanged) {
                         OnPropertyChanged(nameof(HasModelChanged));
                     }
                     break;
                 case nameof(HasModelChanged):
                     if (IsBusy) {
                         return;
-                    } 
+                    }
                     if (HasModelChanged) {
                         //if(SuprressNextHasModelChangedHandling) {
                         //    HasModelChanged = false;
                         //    SuprressNextHasModelChangedHandling = false;
                         //}
-                        if(IgnoreHasModelChanged) {
+                        if (IgnoreHasModelChanged) {
                             break;
                         }
                         Task.Run(async () => {
@@ -810,7 +806,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(SortedItems));
                     break;
                 case nameof(TreeSortIdx):
-                    if(ParentTreeItem == null) {
+                    if (ParentTreeItem == null) {
                         break;
                     }
                     ParentTreeItem.OnPropertyChanged(nameof(ParentTreeItem.SortedItems));
@@ -827,10 +823,10 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(IsSortDescending):
                 case nameof(SortType):
-                    if(!IsSelected) {
+                    if (!IsSelected) {
                         break;
                     }
-                    if(e.PropertyName == nameof(IsSortDescending)) {
+                    if (e.PropertyName == nameof(IsSortDescending)) {
                         MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending = IsSortDescending;
                     } else {
                         MpAvClipTileSortFieldViewModel.Instance.SelectedSortType = SortType;
@@ -840,7 +836,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void CopyItemIdsNeedingView_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            if(e.Action == NotifyCollectionChangedAction.Add ||
+            if (e.Action == NotifyCollectionChangedAction.Add ||
                 e.Action == NotifyCollectionChangedAction.Remove) {
                 SelfAndAllAncestors
                     .Cast<MpAvTagTileViewModel>()
@@ -860,10 +856,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
-            switch(msg) {
+            switch (msg) {
                 case MpMessageType.RequeryCompleted:
                     UpdateBadge();
-                    if(IsActiveTag && IsQueryTag) {
+                    if (IsActiveTag && IsQueryTag) {
                         // repopulate count for query tag
                         UpdateClipCountAsync().FireAndForgetSafeAsync(this);
                     }
@@ -876,7 +872,7 @@ namespace MonkeyPaste.Avalonia {
 
                     break;
                 case MpMessageType.QuerySortChanged:
-                    if(!IsQueryTag || !IsActiveTag) {
+                    if (!IsQueryTag || !IsActiveTag) {
                         break;
                     }
                     IgnoreHasModelChanged = true;
@@ -892,17 +888,17 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             await Dispatcher.UIThread.InvokeAsync(async () => {
-                if(IsAllTag) {
-                    if(TagClipCount == null) {
+                if (IsAllTag) {
+                    if (TagClipCount == null) {
                         // startup case
                         TagClipCount = await MpDataModelProvider.GetTotalCopyItemCountAsync();
                     } else {
                         // ignored, all updated handled in db callbacks
                     }
                 } else {
-                    if(IsLinkTag) {
+                    if (IsLinkTag) {
                         TagClipCount = await MpDataModelProvider.GetTotalCopyItemCountForTagAndAllDescendantsAsync(TagId);
-                        
+
                     } else {
                         // query tag
                         if (IsActiveTag) {
@@ -925,7 +921,7 @@ namespace MonkeyPaste.Avalonia {
                     //    SelfAndAllDescendants.Cast<MpAvTagTileViewModel>().SelectMany(x => x.LinkedCopyItemIds).Distinct().Count();
                 }
                 OnPropertyChanged(nameof(TagClipCountText));
-            });            
+            });
         }
 
         private void UpdateBadge() {
@@ -952,14 +948,14 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-        
+
         private async Task NotifyTriggersAsync(int ciid, bool isLink) {
             IsBusy = true;
 
-            if(isLink && OnCopyItemLinked.HasInvokers()) {
+            if (isLink && OnCopyItemLinked.HasInvokers()) {
                 var linked_ci = await MpDataModelProvider.GetItemAsync<MpCopyItem>(ciid);
                 OnCopyItemLinked?.Invoke(this, linked_ci);
-            } else if(!isLink && OnCopyItemUnlinked.HasInvokers()) {
+            } else if (!isLink && OnCopyItemUnlinked.HasInvokers()) {
                 var unlinked_ci = await MpDataModelProvider.GetItemAsync<MpCopyItem>(ciid);
                 OnCopyItemUnlinked?.Invoke(this, unlinked_ci);
             }
@@ -970,8 +966,8 @@ namespace MonkeyPaste.Avalonia {
 
         private async Task LinkOrUnlinkCopyItemAsync(int ciid, bool isLink) {
             IsBusy = true;
-            
-            if(isLink) {
+
+            if (isLink) {
                 // try to create link, if it was created (and didn't already exist) notify any triggers
                 int linkCount = await MpDataModelProvider.GetCopyItemCountForTagAsync(TagId);
                 var cit = await MpCopyItemTag.Create(TagId, ciid, linkCount);
@@ -979,7 +975,7 @@ namespace MonkeyPaste.Avalonia {
                 if (!cit.WasDupOnCreate) {
                     CopyItemIdsNeedingView.Add(ciid);
                 }
-                
+
             } else {
                 var cit = await MpDataModelProvider.GetCopyItemTagForTagAsync(ciid, TagId);
 
@@ -1025,25 +1021,25 @@ namespace MonkeyPaste.Avalonia {
                         Tag = t;
                         t.EndSync();
                     }
-                } 
+                }
             });
         }
 
         private void MpDbObject_SyncAdd(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
-           Dispatcher.UIThread.Post(
-               async () => {
-                if (sender is MpCopyItemTag cit) {
-                    if(TagId == cit.TagId) {
-                        cit.StartSync(e.SourceGuid);
+            Dispatcher.UIThread.Post(
+                async () => {
+                    if (sender is MpCopyItemTag cit) {
+                        if (TagId == cit.TagId) {
+                            cit.StartSync(e.SourceGuid);
                             var dupCheck = await MpDataModelProvider.GetCopyItemTagForTagAsync(cit.TagId, cit.CopyItemId);
-                        if (dupCheck != null) {
-                            MpConsole.WriteTraceLine(@"Warning, copyItemTag was duplicate: " + cit.ToString());
+                            if (dupCheck != null) {
+                                MpConsole.WriteTraceLine(@"Warning, copyItemTag was duplicate: " + cit.ToString());
+                            }
+                            await cit.WriteToDatabaseAsync();
+                            cit.EndSync();
                         }
-                        await cit.WriteToDatabaseAsync();
-                        cit.EndSync();
-                    }                    
-                }
-            });
+                    }
+                });
         }
 
         #endregion
@@ -1061,17 +1057,17 @@ namespace MonkeyPaste.Avalonia {
             async () => {
                 await MpAvShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
                             $"Select '{TagName}' Collection",
-                            Parent.SelectTagCommand, 
+                            Parent.SelectTagCommand,
                             ShortcutType,
                             TagId.ToString(),
                             ShortcutKeyString);
                 OnPropertyChanged(nameof(ShortcutKeyString));
-            },()=>CanHotkey);
+            }, () => CanHotkey);
 
         public ICommand ChangeColorCommand => new MpCommand<object>(
             (args) => {
                 TagHexColor = args.ToString();
-               
+
             });
 
         public ICommand CancelRenameTagCommand => new MpCommand(
@@ -1081,14 +1077,14 @@ namespace MonkeyPaste.Avalonia {
             });
 
         public ICommand FinishRenameTagCommand => new MpAsyncCommand(
-            async() => {
+            async () => {
                 IsTagNameReadOnly = true;
                 await Tag.WriteToDatabaseAsync();
             });
 
         public ICommand RenameTagCommand => new MpCommand(
              () => {
-                _originalTagName = TagName;
+                 _originalTagName = TagName;
                  IsTagNameReadOnly = false;
              },
             () => {
@@ -1104,7 +1100,7 @@ namespace MonkeyPaste.Avalonia {
                  MpTag t = null;
                  MpTagType childTagType = TagType;
 
-                 if(args is Control control && AddChildPopupMenuItemViewModel != null) {
+                 if (args is Control control && AddChildPopupMenuItemViewModel != null) {
                      // show popup menu calling this command w/ tag type as parameter 
                      MpAvMenuExtension.ShowMenu(control, AddChildPopupMenuItemViewModel, null, PlacementMode.Right);
                      return;
@@ -1129,7 +1125,7 @@ namespace MonkeyPaste.Avalonia {
 
                  if (t == null) {
                      // only occurs from plus button
-                     bool? sortDir = childTagType == MpTagType.Query ? 
+                     bool? sortDir = childTagType == MpTagType.Query ?
                         MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending : null;
                      MpContentSortType? sortType = childTagType == MpTagType.Query ?
                         MpAvClipTileSortFieldViewModel.Instance.SelectedSortType : null;
@@ -1141,7 +1137,7 @@ namespace MonkeyPaste.Avalonia {
                              isSortDescending: sortDir,
                              sortType: sortType);
 
-                 } else if(t.ParentTagId != TagId) {
+                 } else if (t.ParentTagId != TagId) {
                      // NOTE only update sort if not already child
                      // (allowing redundant add for simplicity)
                      t.TreeSortIdx = Items.Count;
@@ -1149,49 +1145,49 @@ namespace MonkeyPaste.Avalonia {
                      await t.WriteToDatabaseAsync();
                  }
                  MpAvTagTileViewModel ttvm = Parent.Items.FirstOrDefault(x => x.TagId == t.Id);
-                 if(ttvm == null) {
+                 if (ttvm == null) {
                      ttvm = await CreateChildTagTileViewModel(t);
                  } else {
                      ttvm.ParentTreeItem.Items.Remove(ttvm);
                  }
-                 
+
                  Items.Add(ttvm);
 
                  OnPropertyChanged(nameof(SortedItems));
                  Parent.OnPropertyChanged(nameof(Parent.Items));
-                 if(isNew) {
+                 if (isNew) {
                      await Task.Delay(300);
                      ttvm.RenameTagCommand.Execute(null);
                  }
-                 
-             },(args) => CanAddChild);
+
+             }, (args) => CanAddChild);
 
         public ICommand DeleteChildTagCommand => new MpAsyncCommand<object>(
             async (args) => {
                 var child_ttvm_to_remove = args as MpAvTagTileViewModel;
-                var deleteTasks = 
+                var deleteTasks =
                     child_ttvm_to_remove.SelfAndAllDescendants
                     .Cast<MpAvTagTileViewModel>()
                     .Select(x => x.Tag.DeleteFromDatabaseAsync());
                 await Task.WhenAll(deleteTasks);
 
-                Items.Remove(child_ttvm_to_remove);                
+                Items.Remove(child_ttvm_to_remove);
 
                 UpdateTreeSortOrder();
                 OnPropertyChanged(nameof(SortedItems));
                 Parent.OnPropertyChanged(nameof(Parent.PinnedItems));
 
-                Parent.SelectTagCommand.Execute(this);                
+                Parent.SelectTagCommand.Execute(this);
             });
 
         public ICommand DeleteThisTagCommand => new MpCommand(
             () => {
                 ParentTreeItem.DeleteChildTagCommand.Execute(this);
-            }, ()=> !IsTagReadOnly);
+            }, () => !IsTagReadOnly);
 
 
         public ICommand LinkCopyItemCommand => new MpAsyncCommand<object>(
-            async(ciidArg) => {
+            async (ciidArg) => {
                 await Dispatcher.UIThread.InvokeAsync(async () => {
                     await LinkOrUnlinkCopyItemAsync((int)ciidArg, true);
                 });
@@ -1219,7 +1215,7 @@ namespace MonkeyPaste.Avalonia {
                     await LinkOrUnlinkCopyItemAsync((int)ciidArg, false);
                 });
             }, (ciidArg) => {
-                if(IsAllTag) {
+                if (IsAllTag) {
                     return false;
                 }
                 if (ciidArg is not int) {

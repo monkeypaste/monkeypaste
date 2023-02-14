@@ -1,6 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Threading;
 using CefNet;
-using Avalonia.Threading;
 using CefNet.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
@@ -11,16 +10,16 @@ namespace MonkeyPaste.Avalonia {
         public bool HandleCefMessage(CefProcessMessageReceivedEventArgs e) {
             bool isRequest = e.Name == "EvaluateScript";
             bool isResponse = e.Name == "ScriptEvaluation";
-            if(!isRequest && !isResponse) {
+            if (!isRequest && !isResponse) {
                 return false;
             }
             bool wasSuccess = false;
-            if(isRequest) {
+            if (isRequest) {
                 wasSuccess = HandleRequest(e.Frame, e.Message);
             } else {
                 wasSuccess = HandleResponse(e.Frame, e.Message);
             }
-            if(!wasSuccess) {
+            if (!wasSuccess) {
                 //MpConsole.WriteTraceLine("Error processing evalJs msg");
             }
             return true;

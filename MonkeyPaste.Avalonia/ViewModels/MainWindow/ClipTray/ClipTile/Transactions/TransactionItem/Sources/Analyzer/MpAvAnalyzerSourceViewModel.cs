@@ -1,10 +1,4 @@
-﻿using MonkeyPaste.Common;
-using MonkeyPaste.Common.Plugin;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
+﻿using MonkeyPaste.Common.Plugin;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -46,7 +40,7 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = true;
             await base.InitializeAsync(ts);
 
-            if(PresetViewModel == null) {
+            if (PresetViewModel == null) {
                 ParameterReqFormat = null;
             } else {
                 ParameterReqFormat = MpPluginRequestFormatBase.Parse(SourceArg);

@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Linq;
-using MonkeyPaste.Common;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace MonkeyPaste.Common.Plugin {
 
@@ -55,10 +53,10 @@ namespace MonkeyPaste.Common.Plugin {
         [JsonIgnore]
         string MpIParamterValueProvider.Value {
             get {
-                if(values == null || values.Count == 0) {
+                if (values == null || values.Count == 0) {
                     return string.Empty;
                 }
-                if(values.Where(x => x.isDefault).Count() > 0) {
+                if (values.Where(x => x.isDefault).Count() > 0) {
                     return values.Select(x => x.value).ToCsv(CsvProps);
                 }
                 return values.First().value;
@@ -119,7 +117,7 @@ namespace MonkeyPaste.Common.Plugin {
                             controlType == MpParameterControlType.EditableList ?
                                 MpCsvFormatProperties.DefaultBase64Value : MpCsvFormatProperties.Default;
         }
-        
+
         public static bool IsControlCsvValue(MpParameterControlType controlType) {
             return GetControlCsvProps(controlType).IsValueBase64;
         }

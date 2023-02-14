@@ -1,10 +1,8 @@
 ﻿using MonkeyPaste.Common;
-using MonkeyPaste.Common.Plugin;
 using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
@@ -15,7 +13,7 @@ namespace MonkeyPaste {
         Dropped,
         Dragged,
         Pasted,
-        Copied, 
+        Copied,
         Cut,
         Edited,
         Analyzed,
@@ -71,19 +69,19 @@ namespace MonkeyPaste {
                 Guid = value.ToString();
             }
         }
-        
+
         [Ignore]
         public MpJsonMessageFormatType RequestMessageType {
             get => RequestMessageFormatTypeName.ToEnum<MpJsonMessageFormatType>();
             set => RequestMessageFormatTypeName = value.ToString();
         }
-        
+
         [Ignore]
         public MpJsonMessageFormatType ResponseMessageType {
             get => ResponseMessageFormatTypeName.ToEnum<MpJsonMessageFormatType>();
             set => ResponseMessageFormatTypeName = value.ToString();
         }
-        
+
         [Ignore]
         public MpTransactionType TransactionType {
             get => TransactionLabel.ToEnum<MpTransactionType>();
@@ -104,10 +102,10 @@ namespace MonkeyPaste {
             MpTransactionType transactionType = MpTransactionType.None,
             bool suppressWrite = false) {
 
-            if(copyItemId == 0 && !suppressWrite) {
+            if (copyItemId == 0 && !suppressWrite) {
                 throw new Exception("Must have CopyItemId if to be written");
-            }  
-            if(transactionType == MpTransactionType.None) {
+            }
+            if (transactionType == MpTransactionType.None) {
                 throw new Exception("Must have type");
             }
 
@@ -132,7 +130,7 @@ namespace MonkeyPaste {
                 TransactionDateTime = transDateTime.HasValue ? transDateTime.Value : DateTime.Now
             };
 
-            if(!suppressWrite) {
+            if (!suppressWrite) {
                 await ndio.WriteToDatabaseAsync();
             }
             return ndio;

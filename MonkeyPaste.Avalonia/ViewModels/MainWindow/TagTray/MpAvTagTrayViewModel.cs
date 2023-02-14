@@ -1,26 +1,22 @@
-﻿using System;
+﻿using Avalonia.Threading;
+using MonkeyPaste.Common;
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using MonkeyPaste;
-using MonkeyPaste.Common;
-using System.Diagnostics;
-using Avalonia.Threading;
-using MonoMac.AppKit;
-using MonoMac.OpenAL;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvTagTrayViewModel : 
-        MpAvSelectorViewModelBase<object,MpAvTagTileViewModel>, 
+    public class MpAvTagTrayViewModel :
+        MpAvSelectorViewModelBase<object, MpAvTagTileViewModel>,
         MpIAsyncSingletonViewModel<MpAvTagTrayViewModel>,
         MpIHoverableViewModel,
         MpISelectableViewModel,
         MpISidebarItemViewModel,
         MpITagQueryTools {
         #region Private Variables
-        
+
 
         #endregion
 
@@ -118,32 +114,33 @@ namespace MonkeyPaste.Avalonia {
                 Items.ForEach(x => x.IsSelected = x.TagId == _selectedItemId);
             }
         }
-        
+
         public MpAvTagTileViewModel LastSelectedActiveItem =>
             Items
             .Where(x => x.IsNotGroupTag)
             .OrderByDescending(x => x.LastSelectedDateTime)
             .FirstOrDefault();
 
-        public IEnumerable<MpAvTagTileViewModel> PinnedItems => 
-            Items.Where(x => x.IsModelPinned).OrderBy(x=>x.PinSortIdx);
+        public IEnumerable<MpAvTagTileViewModel> PinnedItems =>
+            Items.Where(x => x.IsModelPinned).OrderBy(x => x.PinSortIdx);
 
         public MpAvTagTileViewModel SelectedPinnedItem {
             get => PinnedItems.FirstOrDefault(x => x.IsSelected);
             set {
                 if (value != SelectedPinnedItem) {
                     PinnedItems.ForEach(x => x.IsSelected = x == value);
-                }}
+                }
+            }
         }
 
-        public IEnumerable<MpAvTagTileViewModel> RootItems => 
+        public IEnumerable<MpAvTagTileViewModel> RootItems =>
             Items.Where(x => x.ParentTagId == 0);
 
         public MpAvTagTileViewModel AllTagViewModel { get; set; }
         public MpAvTagTileViewModel RootGroupTagViewModel { get; set; }
         public MpAvTagTileViewModel HelpTagViewModel { get; set; }
 
-        public IList<MpMenuItemViewModel> ContentMenuItemViewModels => 
+        public IList<MpMenuItemViewModel> ContentMenuItemViewModels =>
             AllTagViewModel.ContextMenuViewModel.SubItems;
 
         #endregion
@@ -169,7 +166,7 @@ namespace MonkeyPaste.Avalonia {
         //                                    TagTrayTotalWidth > TagTrayScreenWidth;
         public bool IsNavButtonsVisible { get; private set; } = false;
 
-        public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsBusy) || PinnedItems.Any(x=>x.IsBusy);
+        public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsBusy) || PinnedItems.Any(x => x.IsBusy);
 
         #endregion
 
@@ -263,7 +260,7 @@ namespace MonkeyPaste.Avalonia {
 
             HelpTagViewModel = new MpAvTagTileViewModel(this);
             await HelpTagViewModel.InitializeAsync(helpTag);
-            
+
             MpTag rootGroupTag = await MpDataModelProvider.GetItemAsync<MpTag>(MpTag.RootGroupTagId);
 
             RootGroupTagViewModel = new MpAvTagTileViewModel(this);
@@ -325,13 +322,13 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void ResetTagSelection() {
-            if(SelectedItem == null) {
+            if (SelectedItem == null) {
                 return;
             }
-            if(SelectedItem.TagId != DefaultTagId) {
+            if (SelectedItem.TagId != DefaultTagId) {
                 ClearTagSelection();
                 Items.Where(x => x.TagId == DefaultTagId).FirstOrDefault().IsSelected = true;
-            }            
+            }
         }
 
 
@@ -350,7 +347,7 @@ namespace MonkeyPaste.Avalonia {
                 //    MpAvMainWindowViewModel.Instance.OnPropertyChanged(nameof(MpAvMainWindowViewModel.Instance.SelectedSidebarItemViewModel));
                 //    break;
                 case nameof(IsSelected):
-                    if(IsSelected) {
+                    if (IsSelected) {
                         LastSelectedDateTime = DateTime.Now;
                     }
                     break;
@@ -358,7 +355,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(RootItems));
                     break;
                 case nameof(SelectedItem):
-                    if(SelectedItem == null) {
+                    if (SelectedItem == null) {
                         //Debugger.Break();
                         SelectedItem = AllTagViewModel;
                     }
@@ -368,14 +365,14 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
-            switch(msg) {
+            switch (msg) {
                 case MpMessageType.MainWindowSizeChanged:
                 case MpMessageType.MainWindowOrientationChangeEnd:
                     OnPropertyChanged(nameof(TagTrayScreenWidth));
                     OnPropertyChanged(nameof(TagTrayTotalWidth));
                     break;
                 //case MpMessageType.MainWindowOpened:
-                    
+
                 //    OnPropertyChanged(nameof(PinnedItems));
                 //    OnPropertyChanged(nameof(TagTrayScreenWidth));
                 //    break;
@@ -383,9 +380,9 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.TraySelectionChanged:
                     HandleClipTraySelectionChange();//.FireAndForgetSafeAsync(this);
                     break;
-                
+
                 case MpMessageType.QueryChanged:
-                    if(SelectedItem == null || !SelectedItem.IsQueryTag) {
+                    if (SelectedItem == null || !SelectedItem.IsQueryTag) {
                         break;
                     }
                     SelectedItem.SortType = MpAvClipTileSortFieldViewModel.Instance.SelectedSortType;
@@ -397,7 +394,7 @@ namespace MonkeyPaste.Avalonia {
         private void HandleClipTraySelectionChange() {
             var ctrvm = MpAvClipTrayViewModel.Instance;
 
-            if(ctrvm.SelectedItem == null) {
+            if (ctrvm.SelectedItem == null) {
                 Items.ForEach(x => x.IsLinkedToSelectedClipTile = false);
                 return;
             }
@@ -424,7 +421,7 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpCopyItem ci) {
-                
+
             }
         }
 
@@ -433,7 +430,7 @@ namespace MonkeyPaste.Avalonia {
         #region Model Sync Events
         private void MpDbObject_SyncDelete(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
             Dispatcher.UIThread.Post(() => {
-                if (sender is MpTag t) {                    
+                if (sender is MpTag t) {
                     var ttvmToRemove = Items.Where(x => x.Tag.Guid == t.Guid).FirstOrDefault();
                     if (ttvmToRemove != null) {
                         ttvmToRemove.Tag.StartSync(e.SourceGuid);
@@ -450,20 +447,20 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void MpDbObject_SyncAdd(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
-           // Dispatcher.UIThread.Post(async() => {
-                //if (sender is MpTag t) {
-                //    t.StartSync(e.SourceGuid);
-                //    var dupCheck = Items.Where(x => x.Tag.Guid == t.Guid).FirstOrDefault();
-                //    if (dupCheck == null) {
-                //        var ttvm = await CreateTagTileViewModel(t);
-                //        Items.Add(ttvm);
-                //    } else {
-                //        MpConsole.WriteTraceLine(@"Warning, attempting to add existing tag: " + dupCheck.TagName + " ignoring and updating existing.");
-                //        dupCheck.Tag = t;
-                //    }
-                //    t.EndSync();
-                //}
-           // });
+            // Dispatcher.UIThread.Post(async() => {
+            //if (sender is MpTag t) {
+            //    t.StartSync(e.SourceGuid);
+            //    var dupCheck = Items.Where(x => x.Tag.Guid == t.Guid).FirstOrDefault();
+            //    if (dupCheck == null) {
+            //        var ttvm = await CreateTagTileViewModel(t);
+            //        Items.Add(ttvm);
+            //    } else {
+            //        MpConsole.WriteTraceLine(@"Warning, attempting to add existing tag: " + dupCheck.TagName + " ignoring and updating existing.");
+            //        dupCheck.Tag = t;
+            //    }
+            //    t.EndSync();
+            //}
+            // });
         }
 
         #endregion
@@ -475,10 +472,10 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ToggleTileIsPinnedCommand => new MpCommand<object>(
             (args) => {
                 var ttvm = args as MpAvTagTileViewModel;
-                if(ttvm == null) {
+                if (ttvm == null) {
                     return;
                 }
-                if(ttvm.IsModelPinned) {
+                if (ttvm.IsModelPinned) {
                     // unpin
                     ttvm.PinSortIdx = -1;
                 } else {
@@ -509,8 +506,7 @@ namespace MonkeyPaste.Avalonia {
                     int.Parse(shorcutCommandParamTagIdStr) is int cmdTagId) {
                     // from shortcut
                     tagId = cmdTagId;
-                }
-                else {
+                } else {
                     Debugger.Break();
                     tagId = MpTag.AllTagId;
                 }
@@ -522,11 +518,11 @@ namespace MonkeyPaste.Avalonia {
                 OnPropertyChanged(nameof(SelectedItem));
                 OnPropertyChanged(nameof(SelectedPinnedItem));
 
-                if(SelectedItem != null) {
+                if (SelectedItem != null) {
                     SelectedItem.AllAncestors.ForEach(x => x.IsExpanded = true);
                 }
 
-                if(MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
+                if (MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
                     // last loaded tag is selected in ClipTray OnPostMainWindowLoaded 
                     // which notifies query changed so don't notify
                     IsSelecting = false;
@@ -536,7 +532,7 @@ namespace MonkeyPaste.Avalonia {
 
                 MpMessenger.SendGlobal(MpMessageType.TagSelectionChanged);
 
-                if(SelectedItem != null && SelectedItem.IsNotGroupTag) {
+                if (SelectedItem != null && SelectedItem.IsNotGroupTag) {
                     if (SelectedItem.IsQueryTag) {
                         MpAvSearchCriteriaItemCollectionViewModel.Instance
                             .SelectAdvancedSearchCommand.Execute(SelectedItem.TagId);

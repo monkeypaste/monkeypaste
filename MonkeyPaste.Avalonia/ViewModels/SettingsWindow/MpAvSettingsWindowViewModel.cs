@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
@@ -20,7 +16,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsVisible { get; set; } = false;
 
-        public int TabIdx { get; set; } = 0; 
+        public int TabIdx { get; set; } = 0;
 
         #endregion
 
@@ -45,17 +41,17 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private void MpAvSettingsWindowViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
                 case nameof(IsVisible):
                     MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = IsVisible;
 
-                    if(IsVisible) {
-                        var sw = new MpAvSettingsWindow();     
-                        
+                    if (IsVisible) {
+                        var sw = new MpAvSettingsWindow();
+
                         sw.Show();
                     } else {
 
-                        
+
                     }
                     break;
             }

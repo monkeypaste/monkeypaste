@@ -1,9 +1,9 @@
-﻿using SQLite;
+﻿using MonkeyPaste.Common;
+using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public enum MpDbLogActionType {
@@ -16,7 +16,7 @@ namespace MonkeyPaste {
 
     public class MpDbLog : MpDbModelBase, MpISyncableDbObject {
         [Column("pk_MpDbLogId")]
-        [PrimaryKey,AutoIncrement]
+        [PrimaryKey, AutoIncrement]
         public override int Id { get; set; }
 
         [Column("DbObjectGuid")]
@@ -27,9 +27,9 @@ namespace MonkeyPaste {
         public string AffectedColumnValue { get; set; } = @"UnknownColumnValue";
 
         [Ignore]
-        public Guid DbObjectGuid { 
+        public Guid DbObjectGuid {
             get {
-                if(string.IsNullOrEmpty(ObjectGuid)) {
+                if (string.IsNullOrEmpty(ObjectGuid)) {
                     return System.Guid.Empty;
                 }
                 return System.Guid.Parse(ObjectGuid);
@@ -60,9 +60,9 @@ namespace MonkeyPaste {
         public string ClientGuid { get; set; }
 
         [Ignore]
-        public Guid SourceClientGuid { 
+        public Guid SourceClientGuid {
             get {
-                if(string.IsNullOrEmpty(ClientGuid)) {
+                if (string.IsNullOrEmpty(ClientGuid)) {
                     return System.Guid.Empty;
                 }
                 return System.Guid.Parse(ClientGuid);
@@ -72,7 +72,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public static async Task<List<MpDbLog>> FilterOutdatedRemoteLogs (string dboGuid, List<MpDbLog> rlogs, DateTime lastSyncDt) {
+        public static async Task<List<MpDbLog>> FilterOutdatedRemoteLogs(string dboGuid, List<MpDbLog> rlogs, DateTime lastSyncDt) {
             //this is an update so cross check local log and only apply updates more recent
             //than what is local            
             //sort logs by transaction date time so most recent changes applied last
@@ -82,7 +82,7 @@ namespace MonkeyPaste {
             //query local db and get logs for item since oldest remote transaction datetime
             var llogs = await MpDataModelProvider.GetDbLogsByGuidAsync(dboGuid, remoteLogsMinDt);
             foreach (var rlog in rlogs) {
-                if(rlog.LogActionDateTime < lastSyncDt) {
+                if (rlog.LogActionDateTime < lastSyncDt) {
                     rlogsToRemove.Add(rlog);
                 } else {
                     foreach (var llog in llogs) {
@@ -144,12 +144,12 @@ namespace MonkeyPaste {
         public MpDbLog() { }
 
         public MpDbLog(
-            Guid dbObjectGuid, 
-            string tableName, 
+            Guid dbObjectGuid,
+            string tableName,
             string affectedColumnName,
-            string affectedColumnValue, 
-            MpDbLogActionType actionType, 
-            DateTime actionDateTime, 
+            string affectedColumnValue,
+            MpDbLogActionType actionType,
+            DateTime actionDateTime,
             Guid sourceClientGuid) : this() {
             DbObjectGuid = dbObjectGuid;
             DbTableName = tableName;
@@ -162,7 +162,7 @@ namespace MonkeyPaste {
 
         public override string ToString() {
             string outStr = string.Empty;
-            foreach(var prop in GetType().GetProperties()) {
+            foreach (var prop in GetType().GetProperties()) {
                 outStr += prop.Name + ": " + prop.GetValue(this) + ", ";
             }
             return outStr;

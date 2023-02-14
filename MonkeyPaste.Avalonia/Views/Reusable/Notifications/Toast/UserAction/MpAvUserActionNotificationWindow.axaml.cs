@@ -1,17 +1,8 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using System.Collections.ObjectModel;
-using MonkeyPaste;
-using MonkeyPaste.Common;
-using System.Linq;
-using Avalonia.Threading;
-using System;
-using PropertyChanged;
-using System.Collections.Generic;
-using System.Diagnostics;
 using MonkeyPaste.Common.Avalonia;
-using System.Threading.Tasks;
+using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]

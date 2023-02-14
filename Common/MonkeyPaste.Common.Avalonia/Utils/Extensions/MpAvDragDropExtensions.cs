@@ -1,21 +1,12 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using MonkeyPaste.Common;
+﻿using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Controls;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using Avalonia;
-using System.Threading.Tasks;
-using System.Diagnostics;
+using System;
+using System.Linq;
 
 namespace MonkeyPaste.Common {
-    public static class MpAvDragDropExtensions {       
+    public static class MpAvDragDropExtensions {
 
         public static void DragCheckAndStart(
             this Control control,
@@ -38,7 +29,7 @@ namespace MonkeyPaste.Common {
             // WINDOW POSITION INIT
             if (wpl is Window window) {
                 wpl.DragPointerPosition = e.GetPosition(window).ToPortablePoint();
-            }            
+            }
 
             // MOVE
 
@@ -67,7 +58,7 @@ namespace MonkeyPaste.Common {
             };
 
             // RELEASE
-            
+
             dragControl_PointerReleased_Handler = (s, e2) => {
 
                 // DRAG END
@@ -100,13 +91,13 @@ namespace MonkeyPaste.Common {
             };
 
             control.PointerReleased += dragControl_PointerReleased_Handler;
-            control.PointerMoved += dragControl_PointerMoved_Handler;            
+            control.PointerMoved += dragControl_PointerMoved_Handler;
         }
 
 
         public static MpPoint AutoScroll(
-            this ScrollViewer sv, 
-            MpPoint gmp, 
+            this ScrollViewer sv,
+            MpPoint gmp,
             Control relativeTo,
             ref double[] velAccumulators,
             bool performScroll = true,
@@ -126,8 +117,8 @@ namespace MonkeyPaste.Common {
 
             //var rt_mp = VisualExtensions.PointToClient(relativeTo, rt_mp.ToAvPixelPoint(1.0d)).ToPortablePoint();
 
-            MpRect bounds = relativeTo.Bounds.ToPortableRect(relativeTo,true);
-            if(!bounds.Contains(gmp)) {
+            MpRect bounds = relativeTo.Bounds.ToPortableRect(relativeTo, true);
+            if (!bounds.Contains(gmp)) {
                 // outside of bounds, clear v's
                 velAccumulators.ForEach(x => x = 0);
                 return MpPoint.Zero;
@@ -161,7 +152,7 @@ namespace MonkeyPaste.Common {
                 } else {
                     // accumulate sides with delta
                     velAccumulators[i] += side_deltas[i];
-                    if(i == MpRect.LEFT_IDX || i == MpRect.RIGHT_IDX) {
+                    if (i == MpRect.LEFT_IDX || i == MpRect.RIGHT_IDX) {
                         scroll_delta.X = velAccumulators[i];
                     } else {
                         scroll_delta.Y = velAccumulators[i];
@@ -169,7 +160,7 @@ namespace MonkeyPaste.Common {
                 }
             }
 
-            if(performScroll) {
+            if (performScroll) {
                 sv.ScrollByPointDelta(scroll_delta);
             }
             return scroll_delta;

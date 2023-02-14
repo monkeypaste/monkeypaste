@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MonkeyPaste.Common.Plugin {
+﻿namespace MonkeyPaste.Common.Plugin {
     public interface MpIContact {
         object Source { get; }
 

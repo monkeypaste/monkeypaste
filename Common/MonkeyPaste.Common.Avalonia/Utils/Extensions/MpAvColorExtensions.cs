@@ -1,39 +1,34 @@
 ﻿using Avalonia.Media;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MonkeyPaste.Common;
 using System.Diagnostics;
 
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvColorExtensions {
         public static Color ToAvColor(this string hexColor) {
-            if(!hexColor.IsStringHexColor()) {
+            if (!hexColor.IsStringHexColor()) {
                 return Colors.Transparent;
             }
             var c = new MpColor(hexColor);
             return c.ToAvColor();
         }
 
-        public static Brush ToAvBrush(this string hexColor) {            
+        public static Brush ToAvBrush(this string hexColor) {
             return new SolidColorBrush(hexColor.ToAvColor());
         }
 
         public static Pen ToAvPen(
-            this string octColor, 
-            double thickness = 1.0d, 
-            double[] dashStyle = null, 
+            this string octColor,
+            double thickness = 1.0d,
+            double[] dashStyle = null,
             double dashOffset = 0,
             string lineCap = "Flat",
             string lineJoin = "Miter",
             double miterLimit = 10.0) {
             dashStyle = dashStyle == null ? new double[] { 1, 1, 0 } : dashStyle;
             return new Pen(
-                octColor.ToAvBrush(), 
-                thickness, 
-                new DashStyle(dashStyle,dashOffset),
+                octColor.ToAvBrush(),
+                thickness,
+                new DashStyle(dashStyle, dashOffset),
                 lineCap.ToEnum<PenLineCap>(),
                 lineJoin.ToEnum<PenLineJoin>(),
                 miterLimit);
@@ -43,7 +38,7 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static MpColor ToPortableColor(this IBrush brush) {
-            if(brush is SolidColorBrush scb) {
+            if (brush is SolidColorBrush scb) {
                 return scb.Color.ToPortableColor();
             }
             // what is it?
@@ -64,7 +59,7 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static string ToHex(this Brush b) {
-            if(b == null) {
+            if (b == null) {
                 return MpSystemColors.Red;
             }
 
@@ -72,7 +67,7 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static string ToHex(this IBrush b) {
-            if(b is Brush brush) {
+            if (b is Brush brush) {
                 return brush.ToHex();
             }
             // what type is it?
@@ -81,7 +76,7 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static Color AdjustOpacity(this Color color, double opacity) {
-            if(color.A != 255 && opacity != 1.0d) {
+            if (color.A != 255 && opacity != 1.0d) {
                 // warning, color already has adjusted opacity
                 Debugger.Break();
             }
@@ -93,7 +88,7 @@ namespace MonkeyPaste.Common.Avalonia {
             return adjustedColor;
         }
         public static IBrush AdjustOpacity(this IBrush brush, double opacity) {
-            if(brush is SolidColorBrush scb) {
+            if (brush is SolidColorBrush scb) {
                 scb.Color = scb.Color.AdjustOpacity(opacity);
                 return scb;
             }

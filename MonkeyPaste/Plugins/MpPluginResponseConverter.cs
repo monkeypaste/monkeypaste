@@ -1,7 +1,5 @@
-﻿using Google.Apis.PeopleService.v1.Data;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -26,17 +24,17 @@ namespace MonkeyPaste {
             object sourceHandler, bool suppressWrite = false) {
 
 
-            if (trans != null && 
-                trans.Response != null && 
+            if (trans != null &&
+                trans.Response != null &&
                 !string.IsNullOrEmpty(trans.Response.errorMessage)) {
                 // on error throw exception to error handler
                 throw new MpUserNotifiedException(trans.Response.errorMessage);
             }
 
             if (sourceHandler == null ||
-                trans == null || 
-                trans.Response == null || 
-                trans.Response.dataObject == null || 
+                trans == null ||
+                trans.Response == null ||
+                trans.Response.dataObject == null ||
                 trans.Response.dataObject.DataFormatLookup.Count == 0) {
                 return null;
             }
@@ -53,7 +51,7 @@ namespace MonkeyPaste {
 
 
             // add reference to plugin
-            
+
             if (plugin_source_ref == null) {
                 Debugger.Break();
             }
@@ -81,7 +79,7 @@ namespace MonkeyPaste {
                     MpPlatform.Services.CopyItemBuilder
                     .BuildAsync(
                         pdo: mpdo,
-                        transType: MpTransactionType.Created); 
+                        transType: MpTransactionType.Created);
                 return target_ci;
             }
 

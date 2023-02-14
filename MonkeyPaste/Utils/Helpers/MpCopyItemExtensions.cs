@@ -1,16 +1,14 @@
 ﻿using MonkeyPaste.Common;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace MonkeyPaste {
     public static class MpCopyItemExtensions {
-        public static MpPortableDataObject ToPortableDataObject(this MpCopyItem ci,  bool includeRef = false, bool includeTitle = false) {
-            if(ci == null) {
+        public static MpPortableDataObject ToPortableDataObject(this MpCopyItem ci, bool includeRef = false, bool includeTitle = false) {
+            if (ci == null) {
                 return new MpPortableDataObject();
             }
             var pdo = new MpPortableDataObject();
-            switch(ci.ItemType) {
+            switch (ci.ItemType) {
                 case MpCopyItemType.Text:
                     pdo.SetData(MpPortableDataFormats.CefHtml, ci.ItemData);
                     break;
@@ -21,10 +19,10 @@ namespace MonkeyPaste {
                     pdo.SetData(MpPortableDataFormats.AvFileNames, ci.ItemData.SplitNoEmpty(Environment.NewLine));
                     break;
             }
-            if(includeRef) {
+            if (includeRef) {
                 pdo.SetData(MpPortableDataFormats.CefAsciiUrl, MpPlatform.Services.SourceRefBuilder.ToUrlAsciiBytes(ci));
             }
-            if(includeTitle) {
+            if (includeTitle) {
                 pdo.SetData(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT, ci.Title);
             }
             return pdo;

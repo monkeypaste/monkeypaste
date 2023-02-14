@@ -1,10 +1,4 @@
-﻿using MonkeyPaste.Common;
-using MonkeyPaste.Common.Plugin;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -44,7 +38,7 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = true;
             await base.InitializeAsync(ts);
 
-            AppViewModel = 
+            AppViewModel =
                 MpAvAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppId == SourceObjId);
 
             OnPropertyChanged(nameof(Children));

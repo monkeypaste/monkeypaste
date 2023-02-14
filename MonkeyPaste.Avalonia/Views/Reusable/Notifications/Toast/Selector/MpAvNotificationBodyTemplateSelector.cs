@@ -1,12 +1,7 @@
-﻿using Avalonia.Controls.Templates;
-using Avalonia.Controls;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MonkeyPaste;
+﻿using Avalonia.Controls;
+using Avalonia.Controls.Templates;
 using Avalonia.Metadata;
+using System.Collections.Generic;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvNotificationBodyTemplateSelector : IDataTemplate {
@@ -15,9 +10,9 @@ namespace MonkeyPaste.Avalonia {
         public Dictionary<string, IDataTemplate> AvailableTemplates { get; } = new Dictionary<string, IDataTemplate>();
 
 
-        public IControl Build(object param) {
+        Control ITemplate<object, Control>.Build(object param) {
             string key;
-            if(param is MpAvClipTileViewModel) {
+            if (param is MpAvClipTileViewModel) {
                 key = "RichHtmlTemplate";
             } else {
                 key = "PlainTextTemplate";

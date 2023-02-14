@@ -1,9 +1,7 @@
-﻿using Avalonia;
-using Avalonia.Data.Converters;
+﻿using Avalonia.Data.Converters;
+using Avalonia.Media;
 using System;
 using System.Globalization;
-using MonkeyPaste.Common;
-using Avalonia.Media;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvBrushToContrastBrushConverter : IValueConverter {
@@ -11,7 +9,7 @@ namespace MonkeyPaste.Avalonia {
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
             var color = (Color)new MpAvColorToContrastColorConverter().Convert(value, targetType, parameter, culture);
-            if(color == null) {
+            if (color == null) {
                 return Brushes.Red;
             }
             return new SolidColorBrush() {

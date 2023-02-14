@@ -1,12 +1,10 @@
-﻿using Avalonia;
-using Avalonia.Data.Converters;
+﻿using Avalonia.Data.Converters;
+using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Globalization;
 using System.Linq;
-using MonkeyPaste.Common;
-using System.Diagnostics;
-using System.Data;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvMultiDoubleMathConverter : IMultiValueConverter {
@@ -50,18 +48,18 @@ namespace MonkeyPaste.Avalonia {
         private static DataTable _DataTable;
         public static readonly MpAvMultiDoubleMathExpressionConverter Instance = new();
 
-        public object? Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture) {            
-            if(values == null || values.Count == 0 ||
+        public object? Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture) {
+            if (values == null || values.Count == 0 ||
                 parameter == null || string.IsNullOrWhiteSpace(parameter.ToString())) {
                 return 0;
             }
             List<double> vals = new List<double>();
-            foreach(var val in values) {
-                if(val.IsUnsetValue()) {
+            foreach (var val in values) {
+                if (val.IsUnsetValue()) {
                     vals.Add(0);
                 }
-                if(val is double dblVal) {
-                    if(dblVal.IsNumber()) {
+                if (val is double dblVal) {
+                    if (dblVal.IsNumber()) {
                         vals.Add(dblVal);
                     } else {
                         vals.Add(0);
@@ -69,7 +67,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
             var exp = parameter.ToString();
-            if(vals == null || vals.Count == 0 || string.IsNullOrWhiteSpace(exp)) {
+            if (vals == null || vals.Count == 0 || string.IsNullOrWhiteSpace(exp)) {
                 return 0;
             }
             return Evaluate(exp, vals.ToArray());
@@ -88,7 +86,7 @@ namespace MonkeyPaste.Avalonia {
                     exp = exp.Replace(exp[i], '0');
                 }
             }
-            if(_DataTable == null) {
+            if (_DataTable == null) {
                 _DataTable = new DataTable();
             }
 
@@ -96,19 +94,21 @@ namespace MonkeyPaste.Avalonia {
             try {
 
                 result = _DataTable.Compute(exp, string.Empty);
-                
-            } catch(DivideByZeroException evex) {
-                MpConsole.WriteTraceLine($"Error evaluating exp: '{exp}' with values: '{string.Join(",", values)}'",evex);
+
+            }
+            catch (DivideByZeroException evex) {
+                MpConsole.WriteTraceLine($"Error evaluating exp: '{exp}' with values: '{string.Join(",", values)}'", evex);
                 result = 0.0d;
             }
             try {
                 double resultVal = System.Convert.ToDouble(result);
-                if(resultVal.IsNumber()) {
+                if (resultVal.IsNumber()) {
                     return resultVal;
                 }
-                return 0;                
+                return 0;
 
-            }catch (Exception ex) {
+            }
+            catch (Exception ex) {
 
                 MpConsole.WriteTraceLine($"Error evaluating exp: '{exp}' with values: '{string.Join(",", values)}'", ex);
             }

@@ -2,12 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using MonkeyPaste.Common;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvAnnotationItemViewModel : 
+    public class MpAvAnnotationItemViewModel :
         MpViewModelBase<MpAvTransactionMessageViewModelBase>,
         MpAvITransactionNodeViewModel,
         MpIClampedValue {
@@ -37,15 +36,15 @@ namespace MonkeyPaste.Avalonia {
         public bool IsExpanded { get; set; }
         public MpITreeItemViewModel ParentTreeItem { get; private set; }
         public IEnumerable<MpITreeItemViewModel> Children => Items;
-        public bool IsSelected { 
+        public bool IsSelected {
             get {
-                if(Parent is MpAvAnnotationMessageViewModel iamvm) {
+                if (Parent is MpAvAnnotationMessageViewModel iamvm) {
                     return iamvm.SelectedItemGuid == AnnotationGuid;
                 }
                 return false;
             }
             set {
-                if(Parent != null && Parent.Parent != null) {
+                if (Parent != null && Parent.Parent != null) {
                     Parent.Parent.SelectChildCommand.Execute(AnnotationGuid);
                     OnPropertyChanged(nameof(IsSelected));
                 }
@@ -74,7 +73,7 @@ namespace MonkeyPaste.Avalonia {
 
         public double AnnotationMinScore {
             get {
-                if(Annotation == null) {
+                if (Annotation == null) {
                     return 0;
                 }
                 return Annotation.minScore;
@@ -82,7 +81,7 @@ namespace MonkeyPaste.Avalonia {
         }
         public double AnnotationMaxScore {
             get {
-                if(Annotation == null) {
+                if (Annotation == null) {
                     return 0;
                 }
                 return Annotation.maxScore;
@@ -90,7 +89,7 @@ namespace MonkeyPaste.Avalonia {
         }
         public double AnnotationScore {
             get {
-                if(Annotation == null) {
+                if (Annotation == null) {
                     return 0;
                 }
                 return Annotation.score;
@@ -98,7 +97,7 @@ namespace MonkeyPaste.Avalonia {
         }
         public string AnnotationType {
             get {
-                if(Annotation == null) {
+                if (Annotation == null) {
                     return null;
                 }
                 return Annotation.type;
@@ -106,16 +105,16 @@ namespace MonkeyPaste.Avalonia {
         }
         public string AnnotationLabel {
             get {
-                if(Annotation == null) {
+                if (Annotation == null) {
                     return null;
                 }
                 return Annotation.label;
             }
         }
-        
+
         public string AnnotationGuid {
             get {
-                if(Annotation == null) {
+                if (Annotation == null) {
                     return null;
                 }
                 return Annotation.guid;
@@ -147,13 +146,13 @@ namespace MonkeyPaste.Avalonia {
             Annotation = ianf;
 
             Items.Clear();
-            if(Annotation.children != null) {
-                foreach(var ca in Annotation.children) {
+            if (Annotation.children != null) {
+                foreach (var ca in Annotation.children) {
                     var cavm = await CreateAnnotationViewModel(ca);
                     Items.Add(cavm);
                 }
             }
-            
+
             OnPropertyChanged(nameof(Items));
             OnPropertyChanged(nameof(Children));
 
@@ -168,20 +167,20 @@ namespace MonkeyPaste.Avalonia {
 
         private async Task<MpAvAnnotationItemViewModel> CreateAnnotationViewModel(MpAnnotationNodeFormat anf) {
             MpAvAnnotationItemViewModel aivm = null;
-            if(anf is MpImageAnnotationNodeFormat ianf) {
+            if (anf is MpImageAnnotationNodeFormat ianf) {
                 aivm = new MpAvImageAnnotationItemViewModel(Parent);
             } else {
                 aivm = new MpAvAnnotationItemViewModel(Parent);
             }
-            await aivm.InitializeAsync(anf,this);
+            await aivm.InitializeAsync(anf, this);
             return aivm;
         }
 
 
         private void MpAvAnnotationItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
                 case nameof(IsSelected):
-                    if(IsSelected) {
+                    if (IsSelected) {
                         IsExpanded = true;
                     }
                     break;

@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using SQLite;
-
-using System.Threading.Tasks;
-using System.Linq;
-
+﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
-using MonkeyPaste.Common;
+using SQLite;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public enum MpTagType {
@@ -17,9 +14,9 @@ namespace MonkeyPaste {
         Query,
         Group
     }
-    public class MpTag : 
+    public class MpTag :
         MpDbModelBase,
-        MpIIconResource, 
+        MpIIconResource,
         MpIClonableDbModel<MpTag>,
         MpISyncableDbObject {
 
@@ -27,8 +24,8 @@ namespace MonkeyPaste {
 
         public const int AllTagId = 1;
         public const int FavoritesTagId = 2;
-        public const int HelpTagId = 3;
-        public const int RootGroupTagId = 7;
+        public const int RootGroupTagId = 3;
+        public const int HelpTagId = 4;
 
         public const MpContentSortType DEFAULT_QUERY_TAG_SORT_TYPE = MpContentSortType.CopyDateTime;
         public const bool DEFAULT_QUERY_TAG_IS_SORT_DESCENDING = true;
@@ -54,9 +51,9 @@ namespace MonkeyPaste {
                 isSortDescending: IsSortDescending,
                 suppressWrite: suppressWrite);
 
-            if(TagType == MpTagType.Query) {
+            if (TagType == MpTagType.Query) {
                 var scil = await MpDataModelProvider.GetCriteriaItemsByTagId(Id);
-                foreach(var sci in scil) {
+                foreach (var sci in scil) {
                     _ = await MpSearchCriteriaItem.CreateAsync(
                         tagId: cloned_tag.Id,
                         sortOrderIdx: sci.SortOrderIdx,
@@ -192,7 +189,7 @@ namespace MonkeyPaste {
 
         [Column("MpTagGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
-       
+
 
         [Column("TreeSortIdx")]
         public int TreeSortIdx { get; set; } = -1;
@@ -208,9 +205,9 @@ namespace MonkeyPaste {
 
         public string TagName { get; set; } = string.Empty;
 
-        public string SortTypeName { get; set; } 
+        public string SortTypeName { get; set; }
 
-        public string IsSortDescendingName { get; set; } 
+        public string IsSortDescendingName { get; set; }
 
         #endregion
 
@@ -250,7 +247,7 @@ namespace MonkeyPaste {
         [Ignore]
         public bool CanDelete {
             get {
-                if(Id == AllTagId || Id == HelpTagId || Id == RootGroupTagId) {
+                if (Id == AllTagId || Id == HelpTagId || Id == RootGroupTagId) {
                     return false;
                 }
                 return true;
@@ -265,23 +262,23 @@ namespace MonkeyPaste {
         public static async Task<MpTag> CreateAsync(
             int id = 0,
             string guid = "",
-            string tagName = "Untitled", 
+            string tagName = "Untitled",
             int treeSortIdx = -1,
             int pinSortIdx = -1,
-            int parentTagId = 0, 
+            int parentTagId = 0,
             string hexColor = "",
             MpTagType tagType = MpTagType.None,
             MpContentSortType? sortType = null,
             bool? isSortDescending = null,
             bool ignoreTracking = false,
             bool ignoreSyncing = false,
-            bool suppressWrite = false) { 
-            if(tagType == MpTagType.None) {
+            bool suppressWrite = false) {
+            if (tagType == MpTagType.None) {
                 throw new Exception("TagType must be specified");
             }
 
-            if(treeSortIdx < 0) {
-                if(parentTagId <= 0) {
+            if (treeSortIdx < 0) {
+                if (parentTagId <= 0) {
                     treeSortIdx = 0;
                 } else {
                     treeSortIdx = await MpDataModelProvider.GetChildTagCountAsync(parentTagId);
@@ -291,7 +288,7 @@ namespace MonkeyPaste {
                 Id = id,
                 TagGuid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid() : System.Guid.Parse(guid),
                 TagName = tagName,
-                HexColor = string.IsNullOrEmpty(hexColor) ? MpHelpers.GetRandomColor().ToHex() : hexColor,
+                HexColor = string.IsNullOrEmpty(hexColor) ? MpColorHelpers.GetRandomHexColor() : hexColor,
                 TreeSortIdx = treeSortIdx,
                 PinSortIdx = pinSortIdx,
                 ParentTagId = parentTagId,
@@ -299,7 +296,7 @@ namespace MonkeyPaste {
                 SortType = sortType,
                 IsSortDescending = isSortDescending
             };
-            if(!suppressWrite) {
+            if (!suppressWrite) {
 
                 await newTag.WriteToDatabaseAsync(ignoreTracking, ignoreSyncing);
             }
@@ -311,7 +308,7 @@ namespace MonkeyPaste {
         public MpTag() { }
 
         public override async Task DeleteFromDatabaseAsync() {
-            if(!CanDelete) {
+            if (!CanDelete) {
                 // this should be caught in view model
                 Debugger.Break();
                 return;
@@ -324,13 +321,13 @@ namespace MonkeyPaste {
             }
 
             var citl = await MpDataModelProvider.GetCopyItemTagsForTagAsync(Id);
-            if(citl != null && ctl.Count > 0) {
+            if (citl != null && ctl.Count > 0) {
                 deleteTasks.AddRange(citl.Select(x => x.DeleteFromDatabaseAsync()));
             }
 
             var scil = await MpDataModelProvider.GetCriteriaItemsByTagId(Id);
             if (scil != null && scil.Count > 0) {
-                deleteTasks.AddRange(scil.Select(x => x.DeleteFromDatabaseAsync()));                
+                deleteTasks.AddRange(scil.Select(x => x.DeleteFromDatabaseAsync()));
             }
 
             deleteTasks.Add(base.DeleteFromDatabaseAsync());

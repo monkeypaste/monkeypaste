@@ -1,23 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MonkeyPaste;
+﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
-using MonkeyPaste.Common;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvClipboardFormatPresetViewModel : 
-        MpAvSelectorViewModelBase<MpAvHandledClipboardFormatViewModel,MpAvParameterViewModelBase>,
+    public class MpAvClipboardFormatPresetViewModel :
+        MpAvSelectorViewModelBase<MpAvHandledClipboardFormatViewModel, MpAvParameterViewModelBase>,
         MpISelectableViewModel,
         MpIHoverableViewModel,
         MpIUserIconViewModel,
         MpILabelText,
-        MpITreeItemViewModel, 
+        MpITreeItemViewModel,
         MpISaveOrCancelableViewModel,
         MpAvIParameterCollectionViewModel {
 
@@ -104,7 +101,7 @@ namespace MonkeyPaste.Avalonia {
         public IEnumerable<MpAvParameterViewModelBase> VisibleItems => Items.Where(x => x.IsVisible);
         #endregion
 
-        
+
 
         #region Appearance
 
@@ -165,8 +162,8 @@ namespace MonkeyPaste.Avalonia {
                 }
                 return Preset.IsDefault;
             }
-            set { 
-                if(IsDefault != value) {
+            set {
+                if (IsDefault != value) {
                     Preset.IsDefault = value;
                     OnPropertyChanged(nameof(IsDefault));
                 }
@@ -348,7 +345,7 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task InitializeAsync(MpPluginPreset aip) {
-            IsBusy = true; 
+            IsBusy = true;
 
             Items.Clear();
 
@@ -434,10 +431,10 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private void MpClipboardFormatPresetViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
                 case nameof(IsEnabled):
                     // NOTE Preset should only be able to Read or Write NOT both
-                    if(IsReader && IsWriter) {
+                    if (IsReader && IsWriter) {
                         Debugger.Break();
                     }
                     // BUG commented out these root commands, they cause problems and are hard to test w/o 
@@ -456,7 +453,7 @@ namespace MonkeyPaste.Avalonia {
                     MpMessenger.SendGlobal(MpMessageType.ClipboardPresetsChanged);
                     break;
                 case nameof(HasModelChanged):
-                    if(HasModelChanged && IsAllValid) {
+                    if (HasModelChanged && IsAllValid) {
                         Task.Run(async () => {
                             await Preset.WriteToDatabaseAsync();
                             HasModelChanged = false;

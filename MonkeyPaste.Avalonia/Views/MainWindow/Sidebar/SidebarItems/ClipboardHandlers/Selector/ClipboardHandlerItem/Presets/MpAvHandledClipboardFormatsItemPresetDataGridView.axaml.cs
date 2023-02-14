@@ -1,7 +1,4 @@
-﻿using Avalonia;
-using Avalonia.Markup.Xaml;
-using MonkeyPaste.Common;
-using MonkeyPaste.Common.Wpf;
+﻿using Avalonia.Markup.Xaml;
 namespace MonkeyPaste.Avalonia {
     /// <summary>
     /// Interaction logic for MpAnalyticItemSelectorView.xaml

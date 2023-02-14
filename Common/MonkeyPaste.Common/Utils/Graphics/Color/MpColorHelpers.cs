@@ -1,9 +1,6 @@
-﻿using SkiaSharp;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Drawing;
 using System.Globalization;
-using System.Text;
 
 namespace MonkeyPaste.Common {
 
@@ -50,18 +47,18 @@ namespace MonkeyPaste.Common {
             return IsBright(hexStr, brightThreshold);
         }
         public static bool IsHexStringTransparent(this string hexStr) {
-            if(hexStr.IsStringHexColor()) {
+            if (hexStr.IsStringHexColor()) {
                 return new MpColor(hexStr).A == 0;
             }
             return false;
         }
 
         public static string HexColorToContrastingFgHexColor(
-            this string hexStr, 
-            string darkHexColor = null, 
-            string lightHexColor = null, 
+            this string hexStr,
+            string darkHexColor = null,
+            string lightHexColor = null,
             int brighThreshold = 150) {
-            if(string.IsNullOrEmpty(hexStr)) {
+            if (string.IsNullOrEmpty(hexStr)) {
                 return darkHexColor ?? MpSystemColors.Black;
             }
             if (hexStr.IsHexStringBright(brighThreshold)) {

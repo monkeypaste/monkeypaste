@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Text;
-
-namespace MonkeyPaste {
+﻿namespace MonkeyPaste {
     public enum MpCursorType {
         None = 0,
         Default,
@@ -27,5 +24,5 @@ namespace MonkeyPaste {
         void UnsetCursor(object targetObj);
     }
 
-    
+
 }

@@ -1,19 +1,14 @@
-﻿using Org.BouncyCastle.Asn1.X509;
+﻿using MonkeyPaste.Common;
+//using Xamarin.Forms;
+using MonkeyPaste.Common.Plugin;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
-using Xamarin.Forms;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
-using Xamarin.Essentials;
+//using Xamarin.Essentials;
 
-namespace MonkeyPaste {   
+namespace MonkeyPaste {
 
-    
+
     public static class MpNotificationBuilder {
         #region Static Variables
         #endregion
@@ -51,10 +46,10 @@ namespace MonkeyPaste {
 
         #region Public Methods
         public static async Task ShowMessageAsync(
-            string title = "", 
-            object body = null, 
+            string title = "",
+            object body = null,
             int maxShowTimeMs = MpNotificationFormat.MAX_MESSAGE_DISPLAY_MS,
-            MpNotificationType msgType = MpNotificationType.Message,        
+            MpNotificationType msgType = MpNotificationType.Message,
             object iconSourceObj = null,
             object anchor = null) {
             await ShowNotificationAsync(
@@ -79,14 +74,14 @@ namespace MonkeyPaste {
             string title = "",
             object body = null,
             int maxShowTimeMs = -1,
-            Func<object,object> retryAction = null,
+            Func<object, object> retryAction = null,
             object retryActionObj = null,
             object iconSourceObj = null,
             object anchor = null,
             ICommand fixCommand = null,
             object fixCommandArgs = null,
-            MpIProgressLoader loader = null) {                                   
-            if(body == null) {
+            MpIProgressLoader loader = null) {
+            if (body == null) {
                 body = string.Empty;
             }
             if (string.IsNullOrEmpty(title)) {
@@ -119,15 +114,15 @@ namespace MonkeyPaste {
             MpConsole.WriteLine($"\ttype: '{notificationType.ToString()}'");
 
             result = await ShowNotificationAsync(nf);
-            return result;            
+            return result;
         }
 
         public static async Task<string> ShowInputResultNotificationAsync(
-            string title, 
+            string title,
             string body,
             string currentInput = null,
             string placeholderText = null,
-            object anchor = null, 
+            object anchor = null,
             object iconResourceObj = null) {
             MpNotificationFormat nf = new MpNotificationFormat() {
                 Title = title,
@@ -139,7 +134,7 @@ namespace MonkeyPaste {
                 IconSourceObj = iconResourceObj
             };
             var nvm = await CreateNotifcationViewModelAsync(nf);
-            if(nvm is MpUserActionNotificationViewModel uanvm) {
+            if (nvm is MpUserActionNotificationViewModel uanvm) {
                 string result = await uanvm.ShowInputResultNotificationAsync();
                 return result;
             }
@@ -147,7 +142,7 @@ namespace MonkeyPaste {
         }
         public static async Task<MpNotificationDialogResultType> ShowNotificationAsync(MpINotificationFormat inf) {
             var nf = inf as MpNotificationFormat;
-            if(nf == null && inf is MpPluginUserNotificationFormat pnf) {
+            if (nf == null && inf is MpPluginUserNotificationFormat pnf) {
                 // convert plugin notification to core nf
                 nf = new MpNotificationFormat(pnf);
             }

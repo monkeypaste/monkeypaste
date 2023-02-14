@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MonkeyPaste {
+﻿namespace MonkeyPaste {
     public interface MpISliderViewModel : MpIViewModel {
         double SliderValue { get; }
         double MinValue { get; }

@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
-using MonkeyPaste;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using MonkeyPaste.Common.Wpf;
+using System;
 namespace MonkeyPaste.Avalonia {
 
     public partial class MpAvSliderParameterView : MpAvUserControl<MpAvSliderParameterViewModel> {
@@ -46,7 +39,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void Sb_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
-            
+
             Dispatcher.UIThread.Post(async () => {
                 if (!IsEnabled) {
                     return;
@@ -67,8 +60,8 @@ namespace MonkeyPaste.Avalonia {
                 e.Pointer.Capture(sb);
                 _isSliding = e.Pointer.Captured != null;
                 if (_isSliding) {
-                    _lastMousePosition = mp.ToPortablePoint();
-                    //svtb.IsHitTestVisible = false;
+                    _lastMousePosition = new MpPoint(mp.X, mp.Y); // mp.ToPortablePoint();
+
                     e.Handled = true;
                     var sbr = new Rect(new Point(), sb.Bounds.Size);
                     if (sbr.Contains(mp)) {
@@ -80,7 +73,7 @@ namespace MonkeyPaste.Avalonia {
                     UpdateRectWidth();
                 }
             });
-            
+
         }
 
 
@@ -112,7 +105,7 @@ namespace MonkeyPaste.Avalonia {
             double newValue = ((BindingContext.MaxValue - BindingContext.MinValue) * widthPercent) + BindingContext.MinValue;
             BindingContext.CurrentValue = Math.Round(newValue, BindingContext.Precision).ToString();
 
-            _lastMousePosition = mp.ToPortablePoint(); 
+            _lastMousePosition = new MpPoint(mp.X, mp.Y); //mp.ToPortablePoint();
             UpdateRectWidth();
         }
 
@@ -158,7 +151,7 @@ namespace MonkeyPaste.Avalonia {
                     svtb.TryKillFocusAsync();
                 }
             });
-            
+
         }
 
         private void OnSliderValueTextBoxValueChanged() {
@@ -166,12 +159,12 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             var svtb = this.FindControl<TextBox>("SliderValueTextBox");
-            if(double.TryParse(svtb.Text, out var dblVal)) {
+            if (double.TryParse(svtb.Text, out var dblVal)) {
                 BindingContext.CurrentValue = dblVal.ToString();
                 _oldVal = dblVal;
                 UpdateRectWidth();
             } else {
-                if(!_oldVal.IsNumber()) {
+                if (!_oldVal.IsNumber()) {
                     _oldVal = 0;
                 }
                 // avoid breaking the binding?

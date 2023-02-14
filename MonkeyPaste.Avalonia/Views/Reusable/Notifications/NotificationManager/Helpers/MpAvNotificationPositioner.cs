@@ -1,14 +1,11 @@
-﻿using Avalonia.Controls;
-using Avalonia;
-using MonkeyPaste.Common.Avalonia;
+﻿using Avalonia;
+using Avalonia.Controls;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvNotificationPositioner {
@@ -44,7 +41,7 @@ namespace MonkeyPaste.Avalonia {
             if (w.IsVisible) {
                 if (!_windows.Contains(w)) {
                     _windows.Add(w);
-                    w.EffectiveViewportChanged += W_EffectiveViewportChanged; 
+                    w.EffectiveViewportChanged += W_EffectiveViewportChanged;
                     w.GetObservable(Window.BoundsProperty).Subscribe(value => OnNotificationWindowBoundsChangedHandler(w));
 
                 }
@@ -91,7 +88,7 @@ namespace MonkeyPaste.Avalonia {
                     PositionWindowToSystemTray(w);
                     return;
                 case MpNotificationPlacementType.ModalAnchor:
-                    PositionWindowToAnchor(w,nvmb.AnchorTarget);
+                    PositionWindowToAnchor(w, nvmb.AnchorTarget);
                     return;
             }
         }
@@ -115,14 +112,14 @@ namespace MonkeyPaste.Avalonia {
                 anchor_pd = primaryScreen.PixelDensity;
             }
 
-            if(anchor is Control ac) {
+            if (anchor is Control ac) {
                 anchor_rect = ac.Bounds.ToPortableRect(ac.Parent == null ? null : ac.Parent as Control, true);
                 anchor_pd = ac.VisualPixelDensity();
-            } else if(anchor is MpRect ar) {
+            } else if (anchor is MpRect ar) {
                 anchor_rect = ar;
             }
 
-            if(anchor_rect == null) {
+            if (anchor_rect == null) {
                 // anchor error
                 Debugger.Break();
                 return new PixelPoint();
@@ -162,8 +159,8 @@ namespace MonkeyPaste.Avalonia {
             // when y is less than 0 i think it screws up measuring mw dimensions so its a baby
             y = Math.Max(0, y);
 
-            if(Math.Abs(w.Position.X - x) > 10 && w.DataContext is MpNotificationViewModelBase nvmb && nvmb.NotificationType == MpNotificationType.InvalidAction) {
-               // Debugger.Break();
+            if (Math.Abs(w.Position.X - x) > 10 && w.DataContext is MpNotificationViewModelBase nvmb && nvmb.NotificationType == MpNotificationType.InvalidAction) {
+                // Debugger.Break();
             }
             w.Position = new PixelPoint((int)x, (int)y);
             //ClampWindowToScreen(primaryScreen,w, pad);
@@ -182,10 +179,10 @@ namespace MonkeyPaste.Avalonia {
             double r = w.Bounds.Width + l;
             double b = w.Bounds.Height + t;
 
-            if(r > si.WorkArea.Right - pad) {
+            if (r > si.WorkArea.Right - pad) {
                 l = si.WorkArea.Right - pad - w.Bounds.Width;
             }
-            if(b > si.WorkArea.Bottom - pad) {
+            if (b > si.WorkArea.Bottom - pad) {
                 t = si.WorkArea.Bottom - pad - w.Bounds.Height;
             }
             r = w.Bounds.Width + l;

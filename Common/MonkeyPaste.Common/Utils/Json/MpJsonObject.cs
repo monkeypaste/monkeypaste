@@ -1,8 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
 using System.Text;
 
 namespace MonkeyPaste.Common {
@@ -65,14 +62,14 @@ namespace MonkeyPaste.Common {
     public abstract class MpJsonObject : MpIJsonObject, MpIJsonBase64Object {
         #region Statics
 
-        
+
         #endregion
 
         public virtual string SerializeJsonObject() {
             return this.SerializeJsonObject(null);
         }
         public virtual string SerializeJsonObject(JsonSerializerSettings settings) {
-            return MpJsonConverter.SerializeObject(this,settings);
+            return MpJsonConverter.SerializeObject(this, settings);
         }
 
         public virtual string SerializeJsonObjectToBase64(Encoding enc = null) {
@@ -83,7 +80,7 @@ namespace MonkeyPaste.Common {
         }
 
 
-        public override string ToString() {            
+        public override string ToString() {
             return SerializeJsonObject();
         }
 
@@ -93,7 +90,7 @@ namespace MonkeyPaste.Common {
         }
     }
 
-    public abstract class MpJsonObject<T> where T:class {
+    public abstract class MpJsonObject<T> where T : class {
         [JsonIgnore]
         public T Parent { get; set; }
 

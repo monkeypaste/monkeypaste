@@ -86,7 +86,7 @@
                                  Orientation="Horizontal"
                                  HorizontalAlignment="Stretch"
                                  VerticalAlignment="Stretch"
-                                 Value="{Binding ValueLoaded}"
+                                 Value="{Binding ValueLoaded, FallbackValue=0, TargetNullValue=0}"
                                  Minimum="0"
                                  Maximum="100" />
                 </Border>

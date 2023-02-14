@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,7 +8,6 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common {
@@ -18,40 +16,40 @@ namespace MonkeyPaste.Common {
         #region Collections
 
         public static void Move<T>(this IList<T> list, int oldIdx, int newIdx) {
-            if(oldIdx == newIdx) {
+            if (oldIdx == newIdx) {
                 return;
             }
             T item = list[oldIdx];
             list.RemoveAt(oldIdx);
-            if(oldIdx < newIdx) {
+            if (oldIdx < newIdx) {
                 newIdx -= 1;
             }
             list.Insert(newIdx, item);
         }
         public static void AddRange<T>(this IList<T> list, IEnumerable<T> range) {
-            if(list == null || range == null) {
-                throw new NullReferenceException($"{(list == null ? "Dest must be initialized":string.Empty)} {(range == null ? "range must be non-null" : string.Empty)}");
+            if (list == null || range == null) {
+                throw new NullReferenceException($"{(list == null ? "Dest must be initialized" : string.Empty)} {(range == null ? "range must be non-null" : string.Empty)}");
             }
             //range.ForEach(x => list.Add(x));
-            foreach(var item in range) {
+            foreach (var item in range) {
                 list.Add(item);
             }
         }
 
-        public static T AggregateOrDefault<T>(this IEnumerable<T> enumerable, Func<T,T,T> func){
-            if(enumerable == null || enumerable.Count() == 0) {
+        public static T AggregateOrDefault<T>(this IEnumerable<T> enumerable, Func<T, T, T> func) {
+            if (enumerable == null || enumerable.Count() == 0) {
                 return default;
             }
             return enumerable.Aggregate(func);
         }
         public static IEnumerable<T> Difference<T>(this IEnumerable<T> enumerable, IEnumerable<T> other) {
-            if(enumerable == null && other == null) {
+            if (enumerable == null && other == null) {
                 return new List<T>();
             }
-            if(enumerable == null) {
+            if (enumerable == null) {
                 return other;
             }
-            if(other == null) {
+            if (other == null) {
                 return enumerable;
             }
             return enumerable.Union(other).Except(enumerable.Intersect(other)); ;
@@ -191,7 +189,7 @@ namespace MonkeyPaste.Common {
             return queue.Dequeue();
         }
         public static void ForEach<T>(this IEnumerable source, Action<T> action) {
-            if(source == null) {
+            if (source == null) {
                 return;
             }
             foreach (T item in source) {
@@ -199,13 +197,13 @@ namespace MonkeyPaste.Common {
             }
         }
 
-        public static void ForEach<T>(this IEnumerable source, Action<T,int> action) {
+        public static void ForEach<T>(this IEnumerable source, Action<T, int> action) {
             if (source == null) {
                 return;
             }
             int idx = 0;
             foreach (T item in source) {
-                action(item,idx++);
+                action(item, idx++);
             }
         }
 
@@ -337,12 +335,12 @@ namespace MonkeyPaste.Common {
             return names;
         }
 
-        public static IEnumerable<TEnum> EnumerateEnum<TEnum>(this Type enumType) { 
+        public static IEnumerable<TEnum> EnumerateEnum<TEnum>(this Type enumType) {
             //where TEnum: Enum {
             if (enumType == null || !enumType.IsEnum) {
                 yield break;
             }
-            foreach(TEnum val in Enum.GetValues(enumType)) {
+            foreach (TEnum val in Enum.GetValues(enumType)) {
                 yield return val;
             }
         }
@@ -547,10 +545,10 @@ namespace MonkeyPaste.Common {
         }
 
         public static bool? DefaultToggleValue(this bool? boolVal, bool nullToggleValue = false) {
-            if(boolVal.IsTrue()) {
+            if (boolVal.IsTrue()) {
                 return false;
             }
-            if(boolVal.IsFalse()) {
+            if (boolVal.IsFalse()) {
                 return true;
             }
             return nullToggleValue;

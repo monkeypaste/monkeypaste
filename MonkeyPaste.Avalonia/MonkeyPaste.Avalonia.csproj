@@ -60,9 +60,9 @@
   </ItemGroup>
   
   <PropertyGroup Condition="'$(BuildOs)' == 'WINDOWS'">  
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <DefineConstants>WINDOWS;</DefineConstants>    
-    <UseWPF>True</UseWPF> 
+    <!--<UseWPF>True</UseWPF>--> 
   </PropertyGroup>
 
   <!-- <ItemGroup Condition="'$(BuildOs)' == 'WINDOWS'">  
@@ -70,7 +70,7 @@
   </PropertyGroup> -->
 
    <PropertyGroup Condition="'$(BuildOs)' == 'LINUX'">  
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <DefineConstants>LINUX;</DefineConstants>
   </PropertyGroup>
 
@@ -186,7 +186,6 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvClipBorder.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvClipTile.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvClipTrayContainer.axaml" />
-    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMainWindow.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMarqueeTextBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvNotificationWindow.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPinTray.axaml" />
@@ -195,7 +194,6 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvSideBarButtonGroup.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvSideBarItems.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvSliderParameter.axaml" />
-    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvTagTile.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvTooltip.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TemplatedControl.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TextBlock.axaml" />
@@ -1034,7 +1032,6 @@
     <AvaloniaResource Include="Themes\Default\Controls\Animations\Shake.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ListBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvClipBorder.axaml" />
-    <AvaloniaResource Include="Themes\Default\Controls\MpAvTagTile.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\TemplatedControl.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ComboBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\GridSplitter.axaml" />
@@ -1055,7 +1052,6 @@
     <AvaloniaResource Include="Themes\Default\Controls\MpAvPinTray.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\TextBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ToolTip.axaml" />
-    <AvaloniaResource Include="Themes\Default\Controls\MpAvMainWindow.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\TextBlock.axaml">
       
     </AvaloniaResource>
@@ -1085,29 +1081,16 @@
   </ItemGroup>
   <ItemGroup>
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <PackageReference Include="Avalonia" Version="0.10.18" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.10.18" />
-    <PackageReference Include="Avalonia.Controls.PanAndZoom" Version="10.14.0" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.10.18" />
-    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.18" />
-    <PackageReference Include="Avalonia.HtmlRenderer" Version="0.10.0" />
-    <PackageReference Include="Avalonia.MonoMac" Version="0.6.1" />
-    <PackageReference Include="Avalonia.Svg" Version="0.10.18" />
-    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.18" />
-    <PackageReference Include="Avalonia.Xaml.Interactivity" Version="0.10.18" />
-    <PackageReference Include="AvaloniaColorPicker" Version="1.3.4" />
-    <PackageReference Include="CefNet.Avalonia" Version="105.3.22248.142" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="Avalonia" Version="11.0.0-preview5" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.0-preview5" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.0-preview5" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.0-preview5" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-preview5" />
+    <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.0-preview5" />
+    <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.0-preview5" />
+    <PackageReference Include="AvaloniaColorPicker" Version="1.3.5-preview4" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
-    <PackageReference Include="SharpHook" Version="4.0.0" />
-    <PackageReference Include="SkiaSharp" Version="2.88.3" />
-    <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
-    <PackageReference Include="X11" Version="1.0.6" />
     <PackageReference Include="XamlNameReferenceGenerator" Version="1.5.1" />
-    <PackageReference Include="GtkSharp" Version="3.24.24.38" />
-    <PackageReference Include="GioSharp" Version="3.24.24.38" />
-    <PackageReference Include="MonoMac.NetStandard" Version="0.0.4" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Enums\" />
@@ -1130,6 +1113,14 @@
     <ProjectReference Include="..\Common\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
     <ProjectReference Include="..\Common\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
     <ProjectReference Include="..\MonkeyPaste\MonkeyPaste.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="CefNet">
+      <HintPath>..\..\..\..\Desktop\DotNetExamples\cefnet11\CefNet\CefNet.Avalonia\bin\Debug\net6.0\CefNet.dll</HintPath>
+    </Reference>
+    <Reference Include="CefNet.Avalonia">
+      <HintPath>..\..\..\..\Desktop\DotNetExamples\cefnet11\CefNet\CefNet.Avalonia\bin\Debug\net6.0\CefNet.Avalonia.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Views\ExternalDropWindow\DropFormatItemView\MpAvDropFormatItemView.axaml.cs">

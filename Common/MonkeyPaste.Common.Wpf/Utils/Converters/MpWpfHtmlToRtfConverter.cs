@@ -1,22 +1,13 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Management.Instrumentation;
-using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
+using System.Web;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
-using HtmlAgilityPack;
-using MonkeyPaste.Common.Plugin; 
-using MonkeyPaste.Common; 
-using MonkeyPaste.Common.Wpf;
-using System.Threading.Tasks;
-using MonkeyPaste;
-using System.Web;
 using System.Windows.Media.Imaging;
 
 namespace MonkeyPaste.Common.Wpf {
@@ -47,8 +38,8 @@ namespace MonkeyPaste.Common.Wpf {
         #region Public Methods
 
         public static string ConvertQuillHtmlToRtf(
-            string html, 
-            string defaultFontFamily = FALLBACK_DEFAULT_FONT_FAMILY, 
+            string html,
+            string defaultFontFamily = FALLBACK_DEFAULT_FONT_FAMILY,
             string defaultCodeBlockFontFamily = FALLBACK_DEFAULT_CODE_BLOCK_FONT_FAMILY,
             double defaultFontSize = FALLBACK_DEFAULT_FONT_SIZE,
             int indentCharCount = FALLBACK_DEFAULT_INDENT_CHAR_COUNT) {
@@ -66,18 +57,18 @@ namespace MonkeyPaste.Common.Wpf {
             CurrentFd.Blocks.Clear();
             foreach (var htmlBlockNode in htmlDoc.DocumentNode.ChildNodes) {
                 var docNode = htmlBlockNode;
-                if(docNode.Name == "div") {
+                if (docNode.Name == "div") {
                     // this occurs for table parent and code-block 
                     // and for code-block, i'm not sure but there maybe multiple blocks so process all 1st level children
                     docNode = htmlBlockNode.FirstChild;
-                    while(docNode != null) {
+                    while (docNode != null) {
                         CurrentFd.Blocks.Add(ConvertHtmlNode(docNode) as Block);
                         docNode = docNode.NextSibling;
                     }
                     continue;
                 }
                 var te = ConvertHtmlNode(docNode);
-                if(te == null) {
+                if (te == null) {
                     continue;
                 }
                 if (te is List l) {
@@ -93,7 +84,7 @@ namespace MonkeyPaste.Common.Wpf {
                 } else if (te is Inline i) {
                     // NOTE this occurs when html is a sub-selection fragment
                 }
-               // _ownerFd.Blocks.Add(ConvertHtmlNode(docNode) as Block);
+                // _ownerFd.Blocks.Add(ConvertHtmlNode(docNode) as Block);
             }
             return CurrentFd.ToRichText();
         }
@@ -118,7 +109,7 @@ namespace MonkeyPaste.Common.Wpf {
         private static TextElement ConvertHtmlNode(HtmlNode n) {
             var cel = new List<TextElement>();
             foreach (var c in n.ChildNodes) {
-                if(_ignoredHtmlTagNames.Contains(c.Name)) {
+                if (_ignoredHtmlTagNames.Contains(c.Name)) {
                     continue;
                 }
                 cel.Add(ConvertHtmlNode(c));
@@ -128,22 +119,22 @@ namespace MonkeyPaste.Common.Wpf {
 
         private static TextElement CreateTextElement(HtmlNode n, TextElement[] cl) {
             var te = GetTextElement(n);
-            if(te == null) {
+            if (te == null) {
                 Debugger.Break();
             }
             foreach (var c in cl) {
-                if(c == null) {
+                if (c == null) {
                     continue;
                 }
                 te = AddChildToElement(te, c);
             }
-            if(te is Table t) {
+            if (te is Table t) {
                 // since wpf TableColumns aren't TextElements need to post-process
                 // column width definitions
                 te = FinishTableFormatting(n, t);
             }
 
-            return FormatTextElement(n.Attributes,te);
+            return FormatTextElement(n.Attributes, te);
         }
 
         private static TextElement GetTextElement(HtmlNode n) {
@@ -195,7 +186,7 @@ namespace MonkeyPaste.Common.Wpf {
                     break;
                 case "ul":
                 case "ol":
-                    te = new List();                    
+                    te = new List();
                     break;
                 case "td":
                     te = new TableCell();
@@ -241,7 +232,7 @@ namespace MonkeyPaste.Common.Wpf {
                         var cvl = a.Value.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
                         foreach (var cv in cvl) {
                             te = ApplyClassFormatting(te, cv.Trim());
-                        }                        
+                        }
                         break;
                     case "style":
                         var svl = a.Value.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
@@ -249,7 +240,7 @@ namespace MonkeyPaste.Common.Wpf {
                             te = ApplyStyleFormatting(te, sv.Trim());
                         }
                         break;
-                    case "src":                        
+                    case "src":
                         te = ApplyImgSrcFormatting(te, a.Value);
                         break;
                     case "href":
@@ -270,7 +261,7 @@ namespace MonkeyPaste.Common.Wpf {
                     case "colspan":
                         te = ApplyColSpanFormatting(te, a.Value);
                         break;
-                }                
+                }
             }
             return te;
         }
@@ -296,10 +287,10 @@ namespace MonkeyPaste.Common.Wpf {
                             colWidth = double.Parse(colWidthAttrVal);
                         }
                         catch (Exception ex) {
-                            MpConsole.WriteTraceLine(ex);
+                            Console.WriteLine(ex);
                         }
                     }
-                    if(colWidth.IsNumber() && colWidth >= 0) {
+                    if (!double.IsNaN(colWidth) && colWidth >= 0) {
                         t.Columns[i].Width = new GridLength(colWidth);
                     } else {
                         t.Columns[i].Width = new GridLength(0, GridUnitType.Auto);
@@ -307,20 +298,21 @@ namespace MonkeyPaste.Common.Wpf {
                     }
                 }
             }
-            if(has_unknown_col_widths) {
+            if (has_unknown_col_widths) {
                 // try this if col's still messed up
                 t = MpCsvToRtfTableConverter.CalculateColumnWidths(t);
                 //t.Columns.ForEach(x => x.Width = new GridLength(0, GridUnitType.Auto));
             }
             return t;
         }
-        
+
         private static TextElement ApplyRowSpanFormatting(TextElement te, string hv) {
             int rowSpanVal = 1;
             try {
                 rowSpanVal = Convert.ToInt32(hv);
-            } catch(Exception ex) {
-                MpConsole.WriteTraceLine(ex);
+            }
+            catch (Exception ex) {
+                Console.WriteLine(ex);
             }
 
             (te as TableCell).RowSpan = rowSpanVal;
@@ -333,7 +325,7 @@ namespace MonkeyPaste.Common.Wpf {
                 colSpanVal = Convert.ToInt32(hv);
             }
             catch (Exception ex) {
-                MpConsole.WriteTraceLine(ex);
+                Console.WriteLine(ex);
             }
 
             (te as TableCell).ColumnSpan = colSpanVal;
@@ -375,22 +367,22 @@ namespace MonkeyPaste.Common.Wpf {
         }
 
         public static TextMarkerStyle GetListMarkerStyle(HtmlNode li_node) {
-            if(li_node.ParentNode.Name == "ol") {
+            if (li_node.ParentNode.Name == "ol") {
                 return TextMarkerStyle.Decimal;
             }
-            if(li_node.ParentNode.Name != "ul") {
+            if (li_node.ParentNode.Name != "ul") {
                 // what is it?
                 Debugger.Break();
                 return TextMarkerStyle.None;
             }
             string dataListValue = li_node.GetAttributeValue("data-checked", string.Empty);
-            if(string.IsNullOrEmpty(dataListValue)) {
+            if (string.IsNullOrEmpty(dataListValue)) {
                 return TextMarkerStyle.Disc;
             }
-            if(dataListValue == "false") {
+            if (dataListValue == "false") {
                 return TextMarkerStyle.Square;
             }
-            if(dataListValue == "true") {
+            if (dataListValue == "true") {
                 return TextMarkerStyle.Box;
             }
 
@@ -406,26 +398,26 @@ namespace MonkeyPaste.Common.Wpf {
 
         private static TextElement ApplyImgSrcFormatting(TextElement te, string sv) {
             BitmapSource bmpSrc = null;
-            if(Uri.IsWellFormedUriString(sv,UriKind.Absolute)) {
-                if(sv.StartsWith("data:image/png;base64,")) {
+            if (Uri.IsWellFormedUriString(sv, UriKind.Absolute)) {
+                if (sv.StartsWith("data:image/png;base64,")) {
                     bmpSrc = sv.Replace("data:image/png;base64,", string.Empty).ToBitmapSource();
                 } else {
                     bmpSrc = (BitmapSource)new BitmapImage(new Uri(sv));
                 }
-                
-            }else if(sv.Contains(",")) {
+
+            } else if (sv.Contains(",")) {
                 var srcvl = sv.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
-                if(srcvl.Length > 1) {
+                if (srcvl.Length > 1) {
                     string imgStr = srcvl[1];//.Replace(@"\", string.Empty);
                     int mod4 = imgStr.Length % 4;
                     if (mod4 > 0) {
                         imgStr += new string('=', 4 - mod4);
                     }
                     bmpSrc = imgStr.ToBitmapSource();
-                } 
+                }
             }
-            
-            if(bmpSrc != null) {
+
+            if (bmpSrc != null) {
                 var img = te.FindChildren<Image>().FirstOrDefault();
                 //byte[] data = Convert.FromBase64String(imgStr);
                 //string decodedString = Encoding.UTF8.GetString(data);
@@ -438,12 +430,12 @@ namespace MonkeyPaste.Common.Wpf {
 
         private static TextElement ApplyClassFormatting(TextElement te, string cv) {
             if (cv.StartsWith("ql-font-")) {
-                te.FontFamily = GetFontFamily(cv);                
+                te.FontFamily = GetFontFamily(cv);
             } else {
                 Block b = te as Block;
                 if (b == null && te.Parent is Block) {
                     b = te.Parent as Block;
-                } 
+                }
                 if (b != null) {
                     if (cv.Contains("ql-align-left")) {
                         b.TextAlignment = TextAlignment.Left;
@@ -454,13 +446,13 @@ namespace MonkeyPaste.Common.Wpf {
                     } else if (cv.Contains("ql-align-justify")) {
                         b.TextAlignment = TextAlignment.Justify;
                     } else if (cv.Contains("ql-indent-")) {
-                        if(b is Paragraph p) {
+                        if (b is Paragraph p) {
                             p.TextIndent = GetIndentLevel(cv) * CurrentIndentCharCount;
                         }
                     }
                 }
             }
-            
+
             return te;
         }
 
@@ -471,8 +463,8 @@ namespace MonkeyPaste.Common.Wpf {
             } else if (sv.StartsWith("background-color")) {
                 var itemColorBrush = ParseRgb(sv);
                 te.Background = itemColorBrush;
-            } else if(sv.StartsWith("font-size")) {
-                te.FontSize = GetFontSize(sv,te);
+            } else if (sv.StartsWith("font-size")) {
+                te.FontSize = GetFontSize(sv, te);
             }
             return te;
         }
@@ -498,7 +490,7 @@ namespace MonkeyPaste.Common.Wpf {
                 (te as Paragraph).Inlines.Add(cte as Inline);
             } else if (te is Span) {
                 (te as Span).Inlines.Add(cte as Inline);
-            } 
+            }
             return te;
         }
 
@@ -506,7 +498,7 @@ namespace MonkeyPaste.Common.Wpf {
             Brush defaultBrush = Brushes.Transparent;
 
             var color = new Color();
-            if(text.Contains("var")) {
+            if (text.Contains("var")) {
                 // occured where color: var(--color-accent-fg)'
                 //no idea how to handle this so just return black
                 return Brushes.Black;
@@ -517,9 +509,9 @@ namespace MonkeyPaste.Common.Wpf {
                 string hex = null;
                 int preNameIdx = text.IndexOf(":");
                 if (preNameIdx >= 0) {
-                    if(text.Contains("#")) {
-                        hex = "#" + text.SplitNoEmpty("#").ElementAt(1);
-                    } else if(text.Contains(" ")) {
+                    if (text.Contains("#")) {
+                        hex = "#" + text.Split(new string[] { "#" }, StringSplitOptions.RemoveEmptyEntries)[1];
+                    } else if (text.Contains(" ")) {
                         string colorName = text.Substring(preNameIdx + 1)
                                         .Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries)
                                         .FirstOrDefault(x => !string.IsNullOrWhiteSpace(x) && !x.StartsWith("!"));
@@ -530,9 +522,9 @@ namespace MonkeyPaste.Common.Wpf {
                         if (string.IsNullOrWhiteSpace(hex) || !hex.IsStringHexColor()) {
                             return defaultBrush;
                         }
-                    }                    
+                    }
                 }
-                if(hex != null) {
+                if (hex != null) {
                     return hex.ToWpfBrush();
                 }
             }
@@ -555,7 +547,7 @@ namespace MonkeyPaste.Common.Wpf {
         }
 
         public static double GetHeaderFontSize(string headerTag) {
-            switch(headerTag) {
+            switch (headerTag) {
                 case "h1":
                     return 32;
                 case "h2":
@@ -580,24 +572,25 @@ namespace MonkeyPaste.Common.Wpf {
             // NOTE non px types may need adjustment when DPI is not 96
             string fontSizeStr = string.Empty;
             double fs = CurrentDefaultFontSize;
-            if(styleValue.Contains("px")) {
+            if (styleValue.Contains("px")) {
                 fontSizeStr = styleValue.Replace("font-size: ", string.Empty).Replace("px", string.Empty);
-            } else if(styleValue.Contains("rem")) {
+            } else if (styleValue.Contains("rem")) {
                 fontSizeStr = styleValue.Replace("font-size: ", string.Empty).Replace("rem", string.Empty);
-            } else if(styleValue.Contains("em")) {
+            } else if (styleValue.Contains("em")) {
                 fontSizeStr = styleValue.Replace("font-size: ", string.Empty).Replace("em", string.Empty);
             } else if (styleValue.Contains("pt")) {
                 fontSizeStr = styleValue.Replace("font-size: ", string.Empty).Replace("pt", string.Empty);
             }
             try {
                 fs = (double)Convert.ToDouble(fontSizeStr);
-                if(styleValue.Contains("rem") || styleValue.Contains("em")) {
+                if (styleValue.Contains("rem") || styleValue.Contains("em")) {
                     fs = te.FontSize * fs;
                 } else if (styleValue.Contains("pt")) {
                     fs = fs * 1.333;
                 }
-            } catch(Exception ex) {
-                MpConsole.WriteTraceLine(ex);
+            }
+            catch (Exception ex) {
+                Console.WriteLine(ex);
             }
             MpWpfRtfDefaultProperties.Instance.AddFontSize(fs);
             return (double)((int)fs);
@@ -611,27 +604,27 @@ namespace MonkeyPaste.Common.Wpf {
             string defaultFontName = CurrentDefaultFontFamily.ToLower();
             FontFamily defaultFontFamily = null;
             FontFamily closestFontFamily = null;
-            string fontName = classValue.Replace("ql-font-", string.Empty).Replace("-"," ");
+            string fontName = classValue.Replace("ql-font-", string.Empty).Replace("-", " ");
             foreach (var ff in Fonts.SystemFontFamilies) {
                 string ffName = ff.ToString().ToLower();
-                if(ffName.Contains(fontName)) {
+                if (ffName.Contains(fontName)) {
                     closestFontFamily = ff;
                 }
-                if(ffName == fontName) {
+                if (ffName == fontName) {
                     closestFontFamily = ff;
                     break;
                 }
-                if(ffName == defaultFontName) {
+                if (ffName == defaultFontName) {
                     defaultFontFamily = ff;
                 }
             }
 
             if (closestFontFamily != null) {
-                //MpConsole.WriteLine("Could not find exact system font: " + fontName + " using "+closestFontFamily.ToString()+" instead");
+                //Console.WriteLine("Could not find exact system font: " + fontName + " using "+closestFontFamily.ToString()+" instead");
                 MpWpfRtfDefaultProperties.Instance.AddFont(closestFontFamily.ToString().ToLower());
                 return closestFontFamily;
             }
-            MpConsole.WriteLine("Could not find system font: " + fontName);
+            Console.WriteLine("Could not find system font: " + fontName);
             return defaultFontFamily;
         }
 

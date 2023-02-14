@@ -1,7 +1,4 @@
-﻿
-using System.Windows.Input;
-
-namespace MonkeyPaste {
+﻿namespace MonkeyPaste {
     public interface MpIHoverableViewModel : MpIViewModel {
         bool IsHovering { get; set; }
     }

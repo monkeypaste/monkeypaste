@@ -1,15 +1,14 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
-using System.Windows;
-using HtmlAgilityPack;
-using System.IO;
-using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
 namespace MonkeyPaste.Common.Wpf {
@@ -120,7 +119,7 @@ namespace MonkeyPaste.Common.Wpf {
                 return WrapWithParagraph(te as Paragraph, content);
             } else if (te is LineBreak) {
                 return @"<br>";
-            }  else if (te is Span) {
+            } else if (te is Span) {
                 return WrapWithSpan(te as Span, content);
             } else if (te is Run) {
                 return (te as Run).Text;
@@ -171,7 +170,7 @@ namespace MonkeyPaste.Common.Wpf {
         }
 
         private static string WrapWithList(List l, string content) {
-            if(l.MarkerStyle == TextMarkerStyle.Decimal) {
+            if (l.MarkerStyle == TextMarkerStyle.Decimal) {
                 return WrapWithTag("ol", content);
             }
             return WrapWithTag("ul", content);
@@ -182,7 +181,7 @@ namespace MonkeyPaste.Common.Wpf {
             string listType = @"bullet";
             if (l.MarkerStyle == TextMarkerStyle.Decimal) {
                 listType = @"ordered";
-            } else if(l.MarkerStyle == TextMarkerStyle.Square) {
+            } else if (l.MarkerStyle == TextMarkerStyle.Square) {
                 listType = "unchecked";
             } else if (l.MarkerStyle == TextMarkerStyle.Box) {
                 listType = "checked";
@@ -248,8 +247,8 @@ namespace MonkeyPaste.Common.Wpf {
             //    return content;
             //}
             content = content == null ? string.Empty : content;
-            if(span is Hyperlink hl) {
-                content = WrapWithHyperlink(hl,content);
+            if (span is Hyperlink hl) {
+                content = WrapWithHyperlink(hl, content);
             }
 
             if (span.TextDecorations.Equals(TextDecorations.Underline) || span is Underline) {
@@ -286,8 +285,8 @@ namespace MonkeyPaste.Common.Wpf {
             }
             var bmpSrc = img.Source as BitmapSource;
 
-            string srcAttrbValue = string.Format(@"data:image/png;base64,{0}",bmpSrc.ToBase64String());
-            
+            string srcAttrbValue = string.Format(@"data:image/png;base64,{0}", bmpSrc.ToBase64String());
+
             return string.Format(
                 @"<img src='{0}'>",
                 srcAttrbValue);
@@ -426,7 +425,7 @@ namespace MonkeyPaste.Common.Wpf {
                 }
             }
             catch (Exception ex) {
-                MpConsole.WriteLine("MpHelpers.ReadTextFromFile error for filePath: " + filePath + ex.ToString());
+                Console.WriteLine("MpHelpers.ReadTextFromFile error for filePath: " + filePath + ex.ToString());
                 return null;
             }
         }
@@ -439,7 +438,7 @@ namespace MonkeyPaste.Common.Wpf {
                 }
             }
             catch (Exception ex) {
-                MpConsole.WriteTraceLine($"Error writing to path '{filePath}' with text '{text}'", ex);
+                Console.WriteLine($"Error writing to path '{filePath}' with text '{text}'", ex);
                 return null;
             }
         }

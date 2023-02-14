@@ -1,7 +1,7 @@
 ﻿using Avalonia.Controls;
-using System.Linq;
-using MonkeyPaste.Common;
 using Avalonia.Threading;
+using MonkeyPaste.Common;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     /// <summary>
@@ -13,16 +13,16 @@ namespace MonkeyPaste.Avalonia {
             var mslb = this.FindControl<ListBox>("MultiSelectListBox");
             mslb.SelectionChanged += Mslb_SelectionChanged;
             this.DataContextChanged += MpAvMultiSelectListBoxParameterView_DataContextChanged;
-            if(DataContext != null) {
+            if (DataContext != null) {
                 MpAvMultiSelectListBoxParameterView_DataContextChanged(mslb, null);
             }
         }
 
         private void MpAvMultiSelectListBoxParameterView_DataContextChanged(object sender, System.EventArgs e) {
-            if(DataContext == null) {
+            if (DataContext == null) {
                 return;
             }
-            if(DataContext is MpIViewModel vm) {
+            if (DataContext is MpIViewModel vm) {
                 vm.PropertyChanged += BindingContext_PropertyChanged;
             }
         }

@@ -1,9 +1,4 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
-using System.Diagnostics;
-using System;
-using System.Linq;
-using System.Drawing;
+﻿using System;
 
 
 namespace MonkeyPaste.Common {
@@ -80,7 +75,7 @@ namespace MonkeyPaste.Common {
         public double Left {
             get => _left;
             set {
-                if(_left != value) {
+                if (_left != value) {
                     _right = value + Width;
                     _left = value;
                 }
@@ -123,7 +118,7 @@ namespace MonkeyPaste.Common {
 
         public MpRect() : base() { }
 
-        public MpRect(double allVal) : this(){
+        public MpRect(double allVal) : this() {
             _left = allVal;
             _top = allVal;
             _right = allVal;
@@ -148,7 +143,7 @@ namespace MonkeyPaste.Common {
             if (otherRect == null) {
                 return false;
             }
-            return 
+            return
                 Location.IsEqual(otherRect.Location, thresh) &&
                 Size.IsEqual(otherRect.Size, thresh);
         }

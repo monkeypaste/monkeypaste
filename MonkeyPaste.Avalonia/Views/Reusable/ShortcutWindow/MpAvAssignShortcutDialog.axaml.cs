@@ -1,12 +1,8 @@
 using Avalonia;
-using Avalonia.Collections;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Markup.Xaml;
-using MonkeyPaste.Common.Avalonia;
-using SharpHook.Native;
-using PropertyChanged;
 using Avalonia.Threading;
+using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -27,10 +23,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void MpAvAssignShortcutWindow_DataContextChanged(object sender, System.EventArgs e) {
-            if(DataContext == null) {
+            if (DataContext == null) {
                 return;
             }
-            if(DataContext is MpAvAssignShortcutViewModel asmwvm) {
+            if (DataContext is MpAvAssignShortcutViewModel asmwvm) {
                 //var dg = this.FindControl<DataGrid>("ShortcutDataGrid");
                 //var cv = new DataGridCollectionView(asmwvm.KeyItems);
                 //cv.GroupDescriptions.Add(new DataGridPathGroupDescription("SeqIdx"));
@@ -40,7 +36,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvAssignShortcutWindow_Opened(object sender, System.EventArgs e) {
             MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
-           
+
             MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed += Instance_OnGlobalKeyPressed;
             MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased += Instance_OnGlobalKeyReleased;
         }
@@ -50,7 +46,7 @@ namespace MonkeyPaste.Avalonia {
             MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed -= Instance_OnGlobalKeyPressed;
             MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased -= Instance_OnGlobalKeyReleased;
         }
-        
+
 
         private void Instance_OnGlobalKeyPressed(object sender, string keyStr) {
             Dispatcher.UIThread.Post(() => {
@@ -73,7 +69,7 @@ namespace MonkeyPaste.Avalonia {
                     asmwvm.RemoveKeyDownCommand.Execute(keyStr);
                 }
             });
-            
+
         }
         private void Ok_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
             (DataContext as MpAvAssignShortcutViewModel).OkCommand.Execute(null);

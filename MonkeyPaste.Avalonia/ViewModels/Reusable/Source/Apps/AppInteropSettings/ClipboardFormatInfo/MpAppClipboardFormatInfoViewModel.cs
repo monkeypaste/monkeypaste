@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MonkeyPaste.Common;
+using System;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using MonkeyPaste;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; 
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAppClipboardFormatInfoViewModel : 
+    public class MpAppClipboardFormatInfoViewModel :
         MpViewModelBase<MpAppClipboardFormatInfoCollectionViewModel>,
         MpISelectableViewModel {
 
@@ -43,9 +39,9 @@ namespace MonkeyPaste.Avalonia {
         public ObservableCollection<string> AvailableFormatTypes {
             get {
                 ObservableCollection<string> _availableFormatTypes = new ObservableCollection<string>();
-                for(int i = 0;i < Enum.GetNames(typeof(MpClipboardFormatType)).Length;i++) {
+                for (int i = 0; i < Enum.GetNames(typeof(MpClipboardFormatType)).Length; i++) {
                     var cft = (MpClipboardFormatType)i;
-                    if(cft == MpClipboardFormatType.Custom) {
+                    if (cft == MpClipboardFormatType.Custom) {
                         // TODO need to query clipboard plugins for custom formats here and have all available
                         continue;
                     }
@@ -87,7 +83,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        
+
 
         public string FormatInfo {
             get {
@@ -113,7 +109,7 @@ namespace MonkeyPaste.Avalonia {
                 return AppClipboardFormatInfo.IgnoreFormat;
             }
             set {
-                if(IgnoreFormat != value) {
+                if (IgnoreFormat != value) {
                     AppClipboardFormatInfo.IgnoreFormat = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(IgnoreFormat));
@@ -167,11 +163,11 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
-        
+
         private void MpAppClipboardFormatInfoViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
                 case nameof(HasModelChanged):
-                    if(HasModelChanged) {
+                    if (HasModelChanged) {
                         Task.Run(async () => {
                             await AppClipboardFormatInfo.WriteToDatabaseAsync();
                             HasModelChanged = false;
@@ -179,7 +175,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
                 case nameof(IsSelected):
-                    if(IsSelected) {
+                    if (IsSelected) {
                         LastSelectedDateTime = DateTime.Now;
                     }
                     break;

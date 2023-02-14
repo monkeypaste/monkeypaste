@@ -1,16 +1,15 @@
-﻿using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Diagnostics;
 
 namespace MonkeyPaste {
 
     public interface MpIStartupObjectLocator {
         IEnumerable<object> Items { get; }
     }
-    public abstract class MpBootstrapperViewModelBase : 
+    public abstract class MpBootstrapperViewModelBase :
         MpViewModelBase,
         MpIStartupState,
         MpIProgressLoader,
@@ -43,7 +42,7 @@ namespace MonkeyPaste {
 
         #region MpIProgressLoader Implementation
 
-        public string IconResourceKey => 
+        public string IconResourceKey =>
             MpBase64Images.AppIcon;
 
         public string Title { get; set; } = string.Empty;
@@ -55,7 +54,7 @@ namespace MonkeyPaste {
             set => throw new NotImplementedException();
         }
 
-        public double PercentLoaded => 
+        public double PercentLoaded =>
             (double)LoadedCount / (double)(_coreItems.Count);
 
         public MpNotificationType DialogType => MpNotificationType.Loader;
@@ -106,7 +105,7 @@ namespace MonkeyPaste {
             }
         }
         private async Task LoadItemsParallelAsync(List<MpBootstrappedItemViewModel> items) {
-            await Task.WhenAll(items.Select((x,idx) => LoadItemAsync(x,idx))); 
+            await Task.WhenAll(items.Select((x, idx) => LoadItemAsync(x, idx)));
             while (items.Any(x => x.IsBusy)) {
                 await Task.Delay(100);
             }

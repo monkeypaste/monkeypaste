@@ -169,21 +169,21 @@ namespace MonkeyPaste.Common {
                 MpConsole.WriteTraceLine($"Warning attempted to unregister a non-registered format named '{format}'");
                 return;
             }
-            if(_formatLookup.Remove(id)) {
+            if (_formatLookup.Remove(id)) {
                 MpConsole.WriteTraceLine($"Successfully unregistered format name:'{format}' id:{id}");
             }
         }
 
         public static int GetDataFormatId(string format) {
             var kvpl = _formatLookup.Where(x => x.Value.Name.ToLower() == format.ToLower());
-            if(kvpl.Count() == 0) {
+            if (kvpl.Count() == 0) {
                 return -1;
             }
-            if(kvpl.Count() > 1) {
+            if (kvpl.Count() > 1) {
                 // multiple formats w/ same name but different case detected
                 Debugger.Break();
                 var match_kvp = kvpl.FirstOrDefault(x => x.Value.Name == format);
-                if(!match_kvp.Equals(default(KeyValuePair<int,MpPortableDataFormat>))) {
+                if (!match_kvp.Equals(default(KeyValuePair<int, MpPortableDataFormat>))) {
                     // when exact match found return that one...
                     return match_kvp.Key;
                 }

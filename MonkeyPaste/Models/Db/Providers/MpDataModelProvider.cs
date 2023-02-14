@@ -1,19 +1,15 @@
-﻿using FFImageLoading.Helpers.Exif;
+﻿using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using System.Text.RegularExpressions;
-using Xamarin.Forms;
-using System.Data.Common;
-using SQLite;
+using System.Threading.Tasks;
+//using Xamarin.Forms;
 
 namespace MonkeyPaste {
-    
-    public static class MpDataModelProvider  {
+
+    public static class MpDataModelProvider {
         #region Private Variables
         #endregion
 
@@ -52,7 +48,7 @@ namespace MonkeyPaste {
             string pk_name = $"pk_{table_name}Id";
             string query = $"select * from {table_name} where {pk_name}=?";
             var result = await MpDb.QueryAsync<T>(query, id);
-            if(result == null || result.Count == 0) {
+            if (result == null || result.Count == 0) {
                 return default;
             }
             return result[0];
@@ -73,7 +69,7 @@ namespace MonkeyPaste {
 
         #region MpContentQueryView_simple (PropertyPath Queries)
 
-        public static async Task<T> GetSortableCopyItemViewPropertyAsync<T>(int ciid,string propertyName) {
+        public static async Task<T> GetSortableCopyItemViewPropertyAsync<T>(int ciid, string propertyName) {
             string query = "select ? from MpContentQueryView_simple where pk_MpCopyItemId=?";
             var result = await MpDb.QueryScalarAsync<T>(query, propertyName, ciid);
             return result;
@@ -94,17 +90,17 @@ namespace MonkeyPaste {
 
         public static async Task<MpUserDevice> GetUserDeviceByMembersAsync(string machineName, MpUserDeviceType deviceType) {
             string query = null;
-            if(string.IsNullOrEmpty(machineName)) {
+            if (string.IsNullOrEmpty(machineName)) {
                 query = $"select * from MpUserDevice where e_MpUserDeviceType=?";
             } else {
                 query = $"select * from MpUserDevice where MachineName=? and e_MpUserDeviceType=?";
             }
-            
+
             var result = await MpDb.QueryAsync<MpUserDevice>(query, machineName, deviceType.ToString());
             if (result == null || result.Count == 0) {
                 return null;
             }
-            if(result.Count > 1) {
+            if (result.Count > 1) {
                 // this should only be 1
                 Debugger.Break();
             }
@@ -178,14 +174,14 @@ namespace MonkeyPaste {
 
         public static async Task<MpApp> GetAppByMembersAsync(string path, string args, int deviceId) {
             List<MpApp> result;
-            if(args == null) {
+            if (args == null) {
                 string query = $"select * from MpApp where LOWER(AppPath)=? and Arguments is NULL and fk_MpUserDeviceId=?";
                 result = await MpDb.QueryAsync<MpApp>(query, path.ToLower(), deviceId);
             } else {
                 string query = $"select * from MpApp where LOWER(AppPath)=? and Arguments=? and fk_MpUserDeviceId=?";
                 result = await MpDb.QueryAsync<MpApp>(query, path.ToLower(), args, deviceId);
             }
-            
+
             if (result == null || result.Count == 0) {
                 return null;
             }
@@ -210,14 +206,14 @@ namespace MonkeyPaste {
 
         public static async Task<List<MpAppClipboardFormatInfo>> GetAppClipboardFormatInfosByAppIdAsync(int appId) {
             string query = $"select * from MpAppClipboardFormatInfo where fk_MpAppId=?";
-            var result = await MpDb.QueryAsync<MpAppClipboardFormatInfo>(query,appId);
+            var result = await MpDb.QueryAsync<MpAppClipboardFormatInfo>(query, appId);
             return result;
         }
 
         #endregion MpAppInteropSetting
 
         #region MpAppPasteShortcut
-        
+
         public static async Task<MpAppPasteShortcut> GetAppPasteShortcutAsync(int appId) {
             string query = $"select * from MpAppPasteShortcut where fk_MpAppId=?";
             var result = await MpDb.QueryAsync<MpAppPasteShortcut>(query, appId);
@@ -260,13 +256,13 @@ namespace MonkeyPaste {
 
         public static async Task<List<MpTransactionSource>> GetCopyItemSources(int ciid) {
             string query = $"select * from MpTransactionSource where fk_MpCopyItemTransactionId in (select pk_MpCopyItemTransactionId from MpCopyItemTransaction where fk_MpCopyItemId=?)";
-            var result = await MpDb.QueryAsync<MpTransactionSource>(query,ciid);
+            var result = await MpDb.QueryAsync<MpTransactionSource>(query, ciid);
             return result;
         }
-        
+
         public static async Task<List<MpTransactionSource>> GetCopyItemTransactionSourcesAsync(int citid) {
             string query = $"select * from MpTransactionSource where fk_MpCopyItemTransactionId=?";
-            var result = await MpDb.QueryAsync<MpTransactionSource>(query,citid);
+            var result = await MpDb.QueryAsync<MpTransactionSource>(query, citid);
             return result;
         }
         #endregion
@@ -274,9 +270,9 @@ namespace MonkeyPaste {
         #region MpCopyItem
 
         public static async Task<List<MpCopyItem>> GetCopyItemsBySourceTypeAndIdAsync(
-            MpTransactionSourceType sourceType, 
+            MpTransactionSourceType sourceType,
             int sourceObjId) {
-            string query = 
+            string query =
                 $"select fk_MpCopyItemId from MpTransactionSource where e_MpTransactionSourceType=='{sourceType.ToString()}' and fk_SourceObjId = ?";
             var result = await MpDb.QueryAsync<MpCopyItem>(query, sourceObjId);
             return result;
@@ -292,14 +288,14 @@ namespace MonkeyPaste {
             //var result = await MpDb.QueryAsync<MpCopyItem>(query);
             //return result.OrderBy(x=>ciida.IndexOf(x.Id)).ToList();
             string query = $"select * from MpCopyItem where pk_MpCopyItemId in ({string.Join(",", ciida.Select(x => "?"))})";
-            var result = await MpDb.QueryAsync<MpCopyItem>(query,ciida.Cast<object>().ToArray());
+            var result = await MpDb.QueryAsync<MpCopyItem>(query, ciida.Cast<object>().ToArray());
             return result.OrderBy(x => ciida.IndexOf(x.Id)).ToList();
         }
 
 
         public static async Task<MpCopyItem> GetCopyItemByGuidAsync(string cig) {
             string query = "select * from MpCopyItem where MpCopyItemGuid=?";
-            var result = await MpDb.QueryAsync<MpCopyItem>(query,cig);
+            var result = await MpDb.QueryAsync<MpCopyItem>(query, cig);
             if (result == null || result.Count == 0) {
                 return null;
             }
@@ -307,7 +303,7 @@ namespace MonkeyPaste {
         }
 
         public static async Task<List<MpCopyItem>> GetCopyItemsByGuidsAsync(string[] cigl) {
-            if(cigl.Length == 0) {
+            if (cigl.Length == 0) {
                 return new List<MpCopyItem>();
             }
             string whereStr = string.Join(" or ", cigl.Select(x => string.Format(@"MpCopyItemGuid='{0}'", x)));
@@ -345,8 +341,8 @@ namespace MonkeyPaste {
             return result;
         }
         public static async Task<MpCopyItem> GetMostRecentCopyItem(MpCopyItemType[] excludedFormats) {
-            var result = await GetMostRecentCopyItems(1,excludedFormats);
-            if(result.Count > 0) {
+            var result = await GetMostRecentCopyItems(1, excludedFormats);
+            if (result.Count > 0) {
                 return result[0];
             }
             return null;
@@ -406,7 +402,7 @@ namespace MonkeyPaste {
         }
 
         public static async Task<List<MpTextTemplate>> GetTextTemplatesByGuidsAsync(List<string> guids) {
-            if(guids == null || guids.Count == 0) {
+            if (guids == null || guids.Count == 0) {
                 return new List<MpTextTemplate>();
             }
             string whereStr = string.Join(" or ", guids.Select(x => string.Format(@"MpTextTemplateGuid='{0}'", x)));
@@ -417,7 +413,7 @@ namespace MonkeyPaste {
 
         public static async Task<MpTextTemplate> GetTextTemplateByNameAsync(int ciid, string templateName) {
             string query = @"select * from MpTextTemplate where fk_MpCopyItemId=? and TemplateName=?";
-            var result = await MpDb.QueryAsync<MpTextTemplate>(query,ciid,templateName);
+            var result = await MpDb.QueryAsync<MpTextTemplate>(query, ciid, templateName);
             if (result == null || result.Count == 0) {
                 return null;
             }
@@ -435,7 +431,7 @@ namespace MonkeyPaste {
 
         public static async Task<List<MpCopyItemAnnotation>> GetCopyItemAnnotationsAsync(int ciid) {
             string query = @"select * from MpCopyItemAnnotation where fk_MpCopyItemId=?";
-            var result = await MpDb.QueryAsync<MpCopyItemAnnotation>(query,ciid);
+            var result = await MpDb.QueryAsync<MpCopyItemAnnotation>(query, ciid);
             return result;
         }
 
@@ -449,7 +445,7 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public static async Task<List<MpCopyItemTransaction>> GetCopyItemTransactionsByTransactionTypeIdPairAsync(IEnumerable<KeyValuePair<MpTransactionSourceType,int>> trans_lookup) {
+        public static async Task<List<MpCopyItemTransaction>> GetCopyItemTransactionsByTransactionTypeIdPairAsync(IEnumerable<KeyValuePair<MpTransactionSourceType, int>> trans_lookup) {
             if (trans_lookup == null || trans_lookup.Count() == 0) {
                 return new List<MpCopyItemTransaction>();
             }
@@ -490,7 +486,7 @@ namespace MonkeyPaste {
         public static async Task<List<MpISourceRef>> GetSourceRefsByCopyItemTransactionIdAsync(int citid) {
             var cit_sources = await GetCopyItemTransactionSourcesAsync(citid);
             List<MpISourceRef> result = new List<MpISourceRef>();
-            foreach(var cit_source in cit_sources) {
+            foreach (var cit_source in cit_sources) {
                 var source_ref = await GetSourceRefBySourceypeAndSourceIdAsync(cit_source.CopyItemSourceType, cit_source.SourceObjId);
                 result.Add(source_ref);
             }
@@ -523,11 +519,11 @@ namespace MonkeyPaste {
                       )
                     SELECT COUNT(DISTINCT fk_MpCopyItemId) FROM MpCopyItemTag WHERE fk_MpTagId IN
                     (SELECT {0} UNION ALL SELECT MpTag.pk_MpTagId FROM MpTag
-                     WHERE fk_ParentTagId IN tag_descendant AND fk_ParentTagId > 0);",ciid);
+                     WHERE fk_ParentTagId IN tag_descendant AND fk_ParentTagId > 0);", ciid);
             var result = await MpDb.QueryScalarAsync<int>(query, ciid);
             return result;
         }
-        
+
         public static List<int> GetTagIdsForCopyItem(int ciid) {
             string query = string.Format(@"select fk_MpTagId from MpCopyItemTag where fk_MpCopyItemId={0}", ciid);
             var result = MpDb.QueryScalars<int>(query);
@@ -536,7 +532,7 @@ namespace MonkeyPaste {
 
         public static async Task<int> GetCopyItemCountForTagAsync(int tagId) {
             string query = @"select count(pk_MpCopyItemTagId) from MpCopyItemTag where fk_MpTagId=?";
-            var result = await MpDb.QueryScalarAsync<int>(query,tagId);
+            var result = await MpDb.QueryScalarAsync<int>(query, tagId);
             return result;
         }
 
@@ -563,10 +559,10 @@ namespace MonkeyPaste {
 
         public static async Task<List<string>> GetTagColorsForCopyItemAsync(int ciid) {
             string query = @"select HexColor from MpTag where pk_MpTagId in (select fk_MpTagId from MpCopyItemTag where fk_MpCopyItemId = ?)";
-            var result = await MpDb.QueryScalarsAsync<string>(query,ciid);
+            var result = await MpDb.QueryScalarsAsync<string>(query, ciid);
             return result;
         }
-        
+
 
         public static async Task<List<MpCopyItemTag>> GetCopyItemTagsForCopyItemAsync(int ciid) {
             string query = string.Format(@"select * from MpCopyItemTag where fk_MpCopyItemId={0}", ciid);
@@ -596,7 +592,7 @@ namespace MonkeyPaste {
 
         public static async Task<List<MpTag>> GetChildTagsAsync(int tagId) {
             string query = "select * from MpTag where fk_ParentTagId=?";
-            var result = await MpDb.QueryAsync<MpTag>(query,tagId);
+            var result = await MpDb.QueryAsync<MpTag>(query, tagId);
             return result;
         }
 
@@ -612,7 +608,7 @@ namespace MonkeyPaste {
 
         public static async Task<MpShortcut> GetShortcutAsync(string shortcutTypeName, string commandParameter = null) {
             List<MpShortcut> result;
-           
+
             if (commandParameter == null) {
                 string query = string.Format(@"select * from MpShortcut where ShortcutTypeName=? and CommandParameter is NULL");
                 result = await MpDb.QueryAsync<MpShortcut>(query, shortcutTypeName);
@@ -641,7 +637,7 @@ namespace MonkeyPaste {
 
         public static string GetShortcutKeystring(string shortcutTypeName, string commandParameter = null) {
             string result;
-            if(commandParameter == null) {
+            if (commandParameter == null) {
                 string query = string.Format(@"select KeyString from MpShortcut where ShortcutTypeName=? and CommandParameter is NULL");
                 result = MpDb.QueryScalar<string>(query, shortcutTypeName);
             } else {
@@ -685,16 +681,16 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public static async Task<List<MpParameterValue>> GetAllParameterHostValuesAsync(MpParameterHostType hostType,int paramHostId) {
+        public static async Task<List<MpParameterValue>> GetAllParameterHostValuesAsync(MpParameterHostType hostType, int paramHostId) {
             string query = $"select * from MpParameterValue where e_MpParameterHostType=? and fk_ParameterHostId=?";
-            var result = await MpDb.QueryAsync<MpParameterValue>(query,hostType.ToString(), paramHostId);
+            var result = await MpDb.QueryAsync<MpParameterValue>(query, hostType.ToString(), paramHostId);
             return result;
         }
 
 
         public static async Task<MpParameterValue> GetParameterValueAsync(MpParameterHostType hostType, int paramHostId, string paramId) {
             string query = $"select * from MpParameterValue where e_MpParameterHostType=? and fk_ParameterHostId=? and ParamId=?";
-            var result = await MpDb.QueryAsync<MpParameterValue>(query,hostType.ToString(), paramHostId, paramId);
+            var result = await MpDb.QueryAsync<MpParameterValue>(query, hostType.ToString(), paramHostId, paramId);
 
             if (result == null || result.Count == 0) {
                 return null;
@@ -727,7 +723,7 @@ namespace MonkeyPaste {
 
         public static async Task<MpSyncHistory> GetSyncHistoryByDeviceGuidAsync(string dg) {
             string query = string.Format(@"select * from MpSyncHistory where OtherClientGuid=?");
-            var result = await MpDb.QueryAsync<MpSyncHistory>(query,dg);
+            var result = await MpDb.QueryAsync<MpSyncHistory>(query, dg);
             if (result == null || result.Count == 0) {
                 return null;
             }
@@ -775,7 +771,7 @@ namespace MonkeyPaste {
 
         public static async Task<MpContentToken> GetTokenAsync(int copyItemId, int actionId, string matchData) {
             string query = string.Format(@"select * from MpContentToken where fk_MpCopyItemId=? and fk_MpActionId=? and MatchData=?");
-            var result = await MpDb.QueryAsync<MpContentToken>(query, copyItemId, actionId,matchData);
+            var result = await MpDb.QueryAsync<MpContentToken>(query, copyItemId, actionId, matchData);
             if (result == null || result.Count == 0) {
                 return null;
             }
@@ -800,7 +796,7 @@ namespace MonkeyPaste {
 
         public static async Task<bool> IsDataObjectContainFormatAsync(int doid, string formatName) {
             string query = string.Format(@"select count(pk_MpDataObjectItemId) from MpDataObjectItem where fk_MpDataObjectId=? and ItemFormat=?");
-            int result = await MpDb.QueryScalarAsync<int>(query, doid,formatName);
+            int result = await MpDb.QueryScalarAsync<int>(query, doid, formatName);
             return result > 0;
         }
 
@@ -812,7 +808,7 @@ namespace MonkeyPaste {
 
         public static async Task<List<MpDataObjectItem>> GetDataObjectItemsForFormatByDataObjectId(int dobjid, string format) {
             string query = "select * from MpDataObjectItem where fk_MpDataObjectId=? and ItemFormat=?";
-            var result = await MpDb.QueryAsync<MpDataObjectItem>(query, dobjid,format);
+            var result = await MpDb.QueryAsync<MpDataObjectItem>(query, dobjid, format);
             return result;
         }
 
@@ -831,7 +827,7 @@ namespace MonkeyPaste {
 
         #endregion
 
-        
+
 
         #endregion
 

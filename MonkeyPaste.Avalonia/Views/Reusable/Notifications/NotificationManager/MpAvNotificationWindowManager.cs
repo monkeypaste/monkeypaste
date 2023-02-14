@@ -1,18 +1,12 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Threading;
-using Avalonia.Markup.Xaml;
-using MonkeyPaste.Common;
+using PropertyChanged;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using PropertyChanged;
-using Avalonia;
-using MonkeyPaste.Common.Avalonia;
-using Org.BouncyCastle.Asn1.Mozilla;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -52,7 +46,7 @@ namespace MonkeyPaste.Avalonia {
             Dispatcher.UIThread.Post(() => {
                 Window nw = null;
                 var layoutType = MpNotificationViewModelBase.GetLayoutTypeFromNotificationType(nvmb.NotificationType);
-                switch(layoutType) {
+                switch (layoutType) {
                     case MpNotificationLayoutType.Loader:
                         nw = new MpAvLoaderNotificationWindow();
                         nw.DataContext = nvmb;
@@ -71,21 +65,21 @@ namespace MonkeyPaste.Avalonia {
                         nw.DataContext = nvmb;
                         break;
                 }
-                if(nw == null) {
+                if (nw == null) {
                     // somethings wrong
                     Debugger.Break();
                 }
-                
+
                 nw.Closed += Nw_Closed;
                 nw.PointerReleased += Nw_PointerReleased;
 
                 nw.GetObservable(Window.IsVisibleProperty).Subscribe(value => OnNotificationWindowIsVisibleChangedHandler(nw));
-                
+
                 if (App.Desktop.MainWindow == null) {
                     // occurs on startup
                     App.Desktop.MainWindow = nw;
-                } 
-                BeginOpen(nw);                
+                }
+                BeginOpen(nw);
             });
         }
 
@@ -108,7 +102,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsAnyNotificationActive => _windows.Any(x => x.IsActive);
         public Window HeadNotificationWindow {
             get {
-                if(!IsAnyNotificationVisible) {
+                if (!IsAnyNotificationVisible) {
                     return null;
                 }
                 return _windows.Aggregate((a, b) => a.Position.Y < b.Position.Y ? a : b);
@@ -127,6 +121,8 @@ namespace MonkeyPaste.Avalonia {
             _topmostSelector = new MpAvTopmostSelector();
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }
+
+
         #endregion
 
         #region Private Methods
@@ -139,7 +135,7 @@ namespace MonkeyPaste.Avalonia {
                 _windows.Add(nw);
             }
 
-            if(nw == MpAvAppendNotificationWindow.Instance && 
+            if (nw == MpAvAppendNotificationWindow.Instance &&
                 MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
                 return;
             }
@@ -157,14 +153,14 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 nw.Show();
             }
-            if(!nw.IsVisible) {
+            if (!nw.IsVisible) {
                 Debugger.Break();
             }
         }
 
         private void FinishClose(Window w) {
             //var nvmb = w.DataContext as MpNotificationViewModelBase;
-            if (w.DataContext is MpAvLoaderNotificationWindow) {
+            if (w is MpAvLoaderNotificationWindow) {
                 // ignore so bootstrapper can swap main window
             } else if (w == MpAvAppendNotificationWindow.Instance) {
                 w.Hide();
@@ -175,20 +171,20 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
-            switch(msg) {
+            switch (msg) {
                 case MpMessageType.MainWindowOpening:
-                    if(MpAvAppendNotificationWindow.Instance.IsVisible) {
+                    if (MpAvAppendNotificationWindow.Instance.IsVisible) {
                         HideNotification(MpAppendNotificationViewModel.Instance);
-                    }                    
+                    }
                     break;
-                
+
             }
         }
 
         #region Window Events
 
         private void Nw_PointerReleased(object sender, global::Avalonia.Input.PointerReleasedEventArgs e) {
-            if(sender == MpAvAppendNotificationWindow.Instance ||
+            if (sender == MpAvAppendNotificationWindow.Instance ||
                 sender is Window w && w.DataContext is MpNotificationViewModelBase nvmb &&
                 nvmb.IsOverOptionsButton) {
                 return;
@@ -205,11 +201,11 @@ namespace MonkeyPaste.Avalonia {
 
         private void Nw_Closed(object sender, EventArgs e) {
             //MpConsole.WriteLine($"fade out complete for: '{(sender as Control).DataContext}'");
-            
+
             var w = sender as Window;
             FinishClose(w);
         }
-                
+
 
         private async void OnNotificationWindowIsVisibleChangedHandler(Window w) {
             OnNotificationWindowIsVisibleChanged?.Invoke(this, w);

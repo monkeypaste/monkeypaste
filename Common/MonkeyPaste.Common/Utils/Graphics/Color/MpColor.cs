@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Linq;
-using System.Text;
 
 namespace MonkeyPaste.Common {
     public class MpColor {
@@ -45,7 +43,7 @@ namespace MonkeyPaste.Common {
             if (Channels == null) {
                 return string.Empty;
             }
-            if(removeAlpha) {
+            if (removeAlpha) {
                 return Channels.Skip(1).ToArray().ToHex();
             }
             return Channels.ToHex();

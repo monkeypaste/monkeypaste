@@ -1,13 +1,10 @@
-﻿using Google.Apis.PeopleService.v1.Data;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Xamarin.Forms;
 
 namespace MonkeyPaste {
     public static class MpContentQuery {
@@ -17,7 +14,7 @@ namespace MonkeyPaste {
             // Item2 = INTERSECT|UNION|EXCEPT
             // Item3 = Params
 
-            List<Tuple<string,string,List<object>>> sub_queries = new List<Tuple<string, string, List<object>>>();
+            List<Tuple<string, string, List<object>>> sub_queries = new List<Tuple<string, string, List<object>>>();
             //List<int> result_ids = null;
             int idx = 0;
             for (MpIQueryInfo qi = head_qi; qi != null; qi = qi.Next) {
@@ -53,26 +50,26 @@ namespace MonkeyPaste {
             for (int i = 0; i < sub_queries.Count; i++) {
                 var sq = sub_queries[i];
                 sb.AppendLine(sq.Item1);
-                if(i < sub_queries.Count - 1) {
+                if (i < sub_queries.Count - 1) {
                     // first query is always simple and its join value is ignored
-                    sb.AppendLine(sub_queries[i+1].Item2);
-                }                
+                    sb.AppendLine(sub_queries[i + 1].Item2);
+                }
             }
             sb.AppendLine($"ORDER BY {head_qi.GetSortField()} {head_qi.GetSortDirection()}");
 
             string query = $"SELECT RootId FROM({sb})";
-            var result = await MpDb.QueryScalarsAsync<int>(query, sub_queries.SelectMany(x=>x.Item3).ToArray());
+            var result = await MpDb.QueryScalarsAsync<int>(query, sub_queries.SelectMany(x => x.Item3).ToArray());
 
 
             IEnumerable<int> ci_idsToOmit =
                 MpPlatform.Services.ContentQueryTools.GetOmittedContentIds();
 
             return result.Where(x => !ci_idsToOmit.Contains(x)).Distinct().ToList();
-        } 
+        }
 
         private static async Task<List<int>> PerformContentQueryAsync(MpIQueryInfo qi, IEnumerable<int> tagIds, int idx) {
             string qi_root_id_query_str = ConvertQueryToSql(qi, tagIds, out var args);
-            MpConsole.WriteLine($"Current DataModel Query ({idx}): " + MpDb.GetParameterizedQueryString(qi_root_id_query_str,args));
+            MpConsole.WriteLine($"Current DataModel Query ({idx}): " + MpDb.GetParameterizedQueryString(qi_root_id_query_str, args));
             var result = await MpDb.QueryScalarsAsync<int>(qi_root_id_query_str, args);
             return result.Distinct().ToList();
         }
@@ -83,7 +80,7 @@ namespace MonkeyPaste {
             // Item3 = Params
 
             string qi_root_id_query_str = ConvertQueryToSql(qi, tagIds, out var args);
-            MpConsole.WriteLine($"Current DataModel Query ({idx}): " + MpDb.GetParameterizedQueryString(qi_root_id_query_str,args));
+            MpConsole.WriteLine($"Current DataModel Query ({idx}): " + MpDb.GetParameterizedQueryString(qi_root_id_query_str, args));
 
             string join =
                 qi.JoinType == MpLogicalQueryType.Or ?
@@ -95,7 +92,7 @@ namespace MonkeyPaste {
                             throw new Exception("invalid join type");
 
 
-            var query_tuple = new Tuple<string, string, List<object>>(qi_root_id_query_str,join, args.ToList());
+            var query_tuple = new Tuple<string, string, List<object>>(qi_root_id_query_str, join, args.ToList());
             return query_tuple;
         }
 
@@ -115,13 +112,13 @@ namespace MonkeyPaste {
 
             // TYPES
 
-            if(!qf.HasFlag(MpContentQueryBitFlags.TextType) &&
+            if (!qf.HasFlag(MpContentQueryBitFlags.TextType) &&
                !qf.HasFlag(MpContentQueryBitFlags.ImageType) &&
                !qf.HasFlag(MpContentQueryBitFlags.FileType)) {
                 // NOTE this only can occur in adv search from ui validation in simple
                 // so when no types are selected treat as all or there'll be no results
-                qf |= MpContentQueryBitFlags.TextType | 
-                    MpContentQueryBitFlags.ImageType | 
+                qf |= MpContentQueryBitFlags.TextType |
+                    MpContentQueryBitFlags.ImageType |
                     MpContentQueryBitFlags.FileType;
             }
 
@@ -141,7 +138,7 @@ namespace MonkeyPaste {
             // WHERE
 
             string whereClause = string.Empty;
-            if(!tagIds.Contains(MpTag.AllTagId)) {
+            if (!tagIds.Contains(MpTag.AllTagId)) {
                 whereClause = AddWhereCondition(
                     whereClause,
                     @$"RootId IN 
@@ -151,7 +148,7 @@ namespace MonkeyPaste {
             }
 
             bool isAdvanced = qi.QueryType == MpQueryType.Advanced;
-            if(arg_filters.Count > 0) {
+            if (arg_filters.Count > 0) {
                 string filter_op = isAdvanced ? " AND " : " OR ";
                 whereClause = AddWhereCondition(whereClause, @$"({string.Join(filter_op, arg_filters.Select(x => x.Item1))})");
             }
@@ -171,7 +168,7 @@ namespace MonkeyPaste {
         #region Helpers
 
         private static string AddWhereCondition(string whereClause, string condition) {
-            if(string.IsNullOrEmpty(whereClause)) {
+            if (string.IsNullOrEmpty(whereClause)) {
                 whereClause = condition;
             } else {
                 whereClause = @$"{whereClause} AND {condition}";
@@ -179,9 +176,9 @@ namespace MonkeyPaste {
             return whereClause;
         }
 
-        private static List<Tuple<string,List<object>>> GetParameterizedFilters(MpIQueryInfo qi) {
+        private static List<Tuple<string, List<object>>> GetParameterizedFilters(MpIQueryInfo qi) {
             List<Tuple<string, List<object>>> arg_filters = new List<Tuple<string, List<object>>>();
-            if(string.IsNullOrEmpty(qi.MatchValue)) {
+            if (string.IsNullOrEmpty(qi.MatchValue)) {
                 return arg_filters;
             }
             MpContentQueryBitFlags qf = qi.QueryFlags;
@@ -196,7 +193,7 @@ namespace MonkeyPaste {
 
         private static bool IsFieldNumeric(this string fieldName) {
             string low_field_name = fieldName.ToLower();
-            switch(low_field_name) {                 
+            switch (low_field_name) {
                 case "RootId":
                 case "SourceObjId":
                 case "CopyDateTime":
@@ -204,15 +201,15 @@ namespace MonkeyPaste {
                 case "UsageScore":
                 case "TransactionDateTime":
                     return true;
-            default:
+                default:
                     return false;
-        }
+            }
         }
         #endregion
 
         #region String Match
         private static IEnumerable<Tuple<string, List<object>>> GetStringMatchOps(
-            this MpContentQueryBitFlags qf, 
+            this MpContentQueryBitFlags qf,
             string mv) {
             var ops = new List<Tuple<string, List<object>>>();
             if (qf.GetStringMatchFieldName() is IEnumerable<string> strFieldNames) {
@@ -239,14 +236,14 @@ namespace MonkeyPaste {
             return ops;
         }
 
-        private static IEnumerable<Tuple<string,List<object>>> GetExactlyDateTimeMatchOps(
+        private static IEnumerable<Tuple<string, List<object>>> GetExactlyDateTimeMatchOps(
             this MpContentQueryBitFlags qf, string mv) {
             var ops = new List<Tuple<string, List<object>>>();
-            if(!qf.HasFlag(MpContentQueryBitFlags.Exactly)) {
+            if (!qf.HasFlag(MpContentQueryBitFlags.Exactly)) {
                 return ops;
             }
             // <Field> <op> <mv>
-            string tickOp1 = qf.HasFlag(MpContentQueryBitFlags.Before) ? "<":">";
+            string tickOp1 = qf.HasFlag(MpContentQueryBitFlags.Before) ? "<" : ">";
             string tickOp2 = qf.HasFlag(MpContentQueryBitFlags.Before) ? ">" : "<";
             string match_ticks1 = null;
             string match_ticks2 = null;
@@ -296,8 +293,8 @@ namespace MonkeyPaste {
             }
             return ops;
         }
-        
-        private static IEnumerable<Tuple<string,List<object>>> GetBeforeOrAfterDateTimeMatchOps(
+
+        private static IEnumerable<Tuple<string, List<object>>> GetBeforeOrAfterDateTimeMatchOps(
             this MpContentQueryBitFlags qf, string mv) {
             var ops = new List<Tuple<string, List<object>>>();
 
@@ -355,7 +352,7 @@ namespace MonkeyPaste {
                 if (isValue) {
                     return fieldOrSearchText.ToUpper();
                 }
-                if(fieldOrSearchText.IsFieldNumeric()) {
+                if (fieldOrSearchText.IsFieldNumeric()) {
                     // NOTE UPPER on ticks gives wrong results
                     return fieldOrSearchText;
                 }
@@ -367,24 +364,24 @@ namespace MonkeyPaste {
         public static string GetSortField(this MpIQueryInfo qi) {
             switch (qi.SortType) {
                 case MpContentSortType.Source:
-                    return "SourcePath";                    
+                    return "SourcePath";
                 case MpContentSortType.Title:
-                    return "Title";                    
+                    return "Title";
                 case MpContentSortType.ItemData:
-                    return "ItemData";                    
+                    return "ItemData";
                 case MpContentSortType.ItemType:
-                    return "e_MpCopyItemType";                    
+                    return "e_MpCopyItemType";
                 case MpContentSortType.UsageScore:
-                    return "UsageScore";                    
+                    return "UsageScore";
                 case MpContentSortType.CopyDateTime:
-                    return "CopyDateTime";                    
+                    return "CopyDateTime";
                 default:
-                    return "RootId";                    
+                    return "RootId";
             }
         }
 
         public static string GetSortDirection(this MpIQueryInfo qi) {
-            if(qi.IsDescending) {
+            if (qi.IsDescending) {
                 return "DESC";
             }
             return "ASC";

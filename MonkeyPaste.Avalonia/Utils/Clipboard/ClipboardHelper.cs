@@ -1,7 +1,7 @@
 ﻿
+using MonkeyPaste.Common;
 using System;
 using System.Runtime.InteropServices;
-using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvWin32HtmlClipboardHelper {

@@ -1,20 +1,13 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Threading;
-using Cairo;
 using MonkeyPaste.Common.Avalonia;
-using MonoMac.AppKit;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using FocusManager = Avalonia.Input.FocusManager;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvClipTileSortDirectionViewModel : 
-        MpViewModelBase, 
+    public class MpAvClipTileSortDirectionViewModel :
+        MpViewModelBase,
         MpIExpandableViewModel {
         #region Private Variables
 
@@ -43,15 +36,15 @@ namespace MonkeyPaste.Avalonia {
                 "AscendingSvg";
         #endregion
         #region State
-        public bool IsSortDescending { get; set; } 
+        public bool IsSortDescending { get; set; }
 
-        public bool IsSortDirOrFieldFocused { 
+        public bool IsSortDirOrFieldFocused {
             get {
                 var cf = FocusManager.Instance.Current;
-                if(cf == null) {
+                if (cf == null) {
                     return false;
                 }
-                if(cf is Control c && 
+                if (cf is Control c &&
                     c.GetVisualAncestor<MpAvClipTileSortView>() != null) {
                     return true;
                 }
@@ -66,7 +59,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constructors
-        public MpAvClipTileSortDirectionViewModel() :base(null) {
+        public MpAvClipTileSortDirectionViewModel() : base(null) {
             PropertyChanged += MpAvClipTileSortDirectionViewModel_PropertyChanged;
         }
 
@@ -90,16 +83,16 @@ namespace MonkeyPaste.Avalonia {
                     MpPlatform.Services.Query.NotifyQueryChanged();
                     break;
                 case nameof(IsSortDirOrFieldFocused):
-                    if(IsSortDirOrFieldFocused) {
+                    if (IsSortDirOrFieldFocused) {
                         break;
                     }
-                    if(!IsExpanded) {
+                    if (!IsExpanded) {
                         break;
                     }
                     Dispatcher.UIThread.Post(async () => {
                         // when field or dir looses focus wait a little to see if returns 
                         await Task.Delay(3000);
-                        if(IsSortDirOrFieldFocused) {
+                        if (IsSortDirOrFieldFocused) {
                             return;
                         }
                         IsExpanded = false;
@@ -111,19 +104,19 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
         public ICommand ClickCommand => new MpCommand(() => {
-            if(IsExpanded) {
-                if(CanChangeDir) {
+            if (IsExpanded) {
+                if (CanChangeDir) {
                     // toggling while querying will get button out of sync w/ query
                     // if query cannot execute
                     IsSortDescending = !IsSortDescending;
                 }
-                
+
             } else {
                 IsExpanded = true;
             }
         });
         public ICommand DoubleClickCommand => new MpCommand(() => {
-            if(IsExpanded) {
+            if (IsExpanded) {
                 IsExpanded = false;
             } else {
                 if (CanChangeDir) {

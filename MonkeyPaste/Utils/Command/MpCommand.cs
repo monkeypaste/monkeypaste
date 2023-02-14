@@ -1,12 +1,9 @@
 ﻿using MonkeyPaste.Common;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using Xamarin.Forms;
+//using Xamarin.Forms;
 
 namespace MonkeyPaste {
 
@@ -18,12 +15,12 @@ namespace MonkeyPaste {
             MpConsole.WriteTraceLine("Command error: ", ex);
         }
     }
-    public class MpCommand<T> : ICommand where T: class {
+    public class MpCommand<T> : ICommand where T : class {
         private readonly Action<T> _execute;
         private readonly Func<T, bool> _canExecute;
 
         public event EventHandler CanExecuteChanged;
-        public MpCommand(Action<T> execute) : this(execute,null,null) { }
+        public MpCommand(Action<T> execute) : this(execute, null, null) { }
 
         public MpCommand(Action execute) : this(o => execute()) { }
 
@@ -35,7 +32,7 @@ namespace MonkeyPaste {
         public MpCommand(
             Action<T> execute,
             Func<T, bool> canExecute,
-            params object[] npcArgs)  {
+            params object[] npcArgs) {
             _execute = execute;
             _canExecute = canExecute;
 
@@ -100,27 +97,29 @@ namespace MonkeyPaste {
             Action execute,
             Func<bool> canExecute,
             MpIErrorHandler errorHandler = null,
-            params object[] npcArgs)  {
+            params object[] npcArgs) {
             _execute = execute;
             _canExecute = canExecute;
             _errorHandler = errorHandler;
 
             if (npcArgs != null) {
-                foreach(var npc in npcArgs) {
-                    if(npc == null) {
+                foreach (var npc in npcArgs) {
+                    if (npc == null) {
                         continue;
                     }
                     var npci = npc as INotifyPropertyChanged;
-                    if(npci == null) {
+                    if (npci == null) {
                         throw new Exception("Command references must implement INotifyPropertyChanged");
                     }
-                    npci.PropertyChanged += (s,e)=> { 
-                        MpPlatform.Services.MainThreadMarshal.RunOnMainThread(()=>CanExecuteChanged?.Invoke(s,e)); 
+                    npci.PropertyChanged += (s, e) => {
+                        //MpPlatform.Services.MainThreadMarshal.RunOnMainThread(() => CanExecuteChanged?.Invoke(s, e));
+                        CanExecuteChanged?.Invoke(s, e);
                     };
-                }                
+
+                }
             }
         }
-        
+
         public MpCommand(
             Action execute,
             Func<bool> canExecute) : this(execute, canExecute, MpCommandErrorHandler.Instance, null) { }
@@ -139,7 +138,7 @@ namespace MonkeyPaste {
         }
 
         public void Execute(object param) {
-            if(CanExecute(param)) {
+            if (CanExecute(param)) {
                 _execute();
             }
             RaiseCanExecuteChanged();

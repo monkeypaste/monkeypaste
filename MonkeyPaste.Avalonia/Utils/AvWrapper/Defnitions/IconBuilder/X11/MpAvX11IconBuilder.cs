@@ -1,6 +1,4 @@
-﻿using System;
-using MonkeyPaste;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
@@ -10,10 +8,10 @@ namespace MonkeyPaste.Avalonia {
 
         public override string GetApplicationIconBase64(string appPath, MpIconSize iconSize = MpIconSize.MediumIcon32) {
             //return MpBase64Images.LinuxPenguin;
-            string iconBase64 = MpAvX11PathIconHelper.GetIconBase64FromX11Path(appPath,"EXECUTABLE");
+            string iconBase64 = MpAvX11PathIconHelper.GetIconBase64FromX11Path(appPath, "EXECUTABLE");
             MpConsole.WriteLine("Icon for path: " + appPath);
             MpConsole.WriteLine(iconBase64);
-            if(string.IsNullOrEmpty(iconBase64)) {
+            if (string.IsNullOrEmpty(iconBase64)) {
                 return MpBase64Images.QuestionMark;
             }
             return iconBase64;

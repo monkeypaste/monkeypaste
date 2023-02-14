@@ -1,11 +1,9 @@
-﻿using System;
+﻿using MonkeyPaste.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     //public enum MpNotifierType {
@@ -293,7 +291,7 @@ namespace MonkeyPaste {
         public virtual bool CanPin => false;
         public bool IsPinned { get; set; } = false;
 
-        public bool IsOverOptionsButton {get;set;}
+        public bool IsOverOptionsButton { get; set; }
 
         public virtual bool CanChooseNotShowAgain => true;
 
@@ -343,7 +341,7 @@ namespace MonkeyPaste {
                 return NotificationFormat.OtherArgs;
             }
             set {
-                if(OtherArgs != value) {
+                if (OtherArgs != value) {
                     NotificationFormat.OtherArgs = value;
                     OnPropertyChanged(nameof(OtherArgs));
                 }
@@ -359,7 +357,7 @@ namespace MonkeyPaste {
                 return NotificationFormat.AnchorTarget;
             }
             set {
-                if(AnchorTarget != value) {
+                if (AnchorTarget != value) {
                     NotificationFormat.AnchorTarget = value;
                     OnPropertyChanged(nameof(AnchorTarget));
                 }
@@ -367,7 +365,7 @@ namespace MonkeyPaste {
         }
         public virtual string Title {
             get {
-                if(NotificationFormat == null) {
+                if (NotificationFormat == null) {
                     return string.Empty;
                 }
                 return NotificationFormat.Title;
@@ -399,7 +397,7 @@ namespace MonkeyPaste {
                 }
                 return NotificationFormat.NotificationType;
             }
-        }        
+        }
 
         public int NotificationId => (int)NotificationType;
 
@@ -471,9 +469,9 @@ namespace MonkeyPaste {
 
         #region Private Methods
         private void MpNotificationViewModelBase_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
                 case nameof(DoNotShowAgain):
-                    if(DoNotShowAgain) {
+                    if (DoNotShowAgain) {
                         MpPrefViewModel.Instance.DoNotShowAgainNotificationIdCsvStr += NotificationId + ",";
                         // show loop checks if DoNotShowAgain is true to hide
                     }
@@ -484,7 +482,7 @@ namespace MonkeyPaste {
                 case nameof(IsPopupMenuOpen):
                     break;
                 case nameof(IsVisible):
-                    if(!IsVisible) {
+                    if (!IsVisible) {
                         IsClosing = false;
                     }
                     break;
@@ -514,7 +512,7 @@ namespace MonkeyPaste {
         public ICommand ToggleIsPinnedCommand => new MpCommand(
             () => {
                 IsPinned = !IsPinned;
-            },()=>CanPin);
+            }, () => CanPin);
         #endregion
     }
 }

@@ -3,16 +3,8 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
-using Avalonia.Xaml.Interactivity;
 using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
-using PropertyChanged;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using Avalonia.VisualTree;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -43,10 +35,10 @@ namespace MonkeyPaste.Avalonia {
                 "IsEnabled",
                 false,
                 false);
-        private static void HandleIsEnabledChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
-            if (e.NewValue is bool isEnabledVal && 
+        private static void HandleIsEnabledChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
+            if (e.NewValue is bool isEnabledVal &&
                     element is Control control) {
-                if(isEnabledVal) {
+                if (isEnabledVal) {
                     control.Initialized += Control_Initialized;
                     control.DetachedFromVisualTree += Control_DetachedFromVisualTree;
                     if (control.IsInitialized) {
@@ -55,15 +47,15 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     Control_DetachedFromVisualTree(element, null);
                 }
-            } 
+            }
         }
 
         private static void Control_Initialized(object sender, EventArgs e) {
-            if(sender is Control control) {
+            if (sender is Control control) {
                 if (control is TextBox tb) {
                     control.Tag = tb.GetObservable(TextBox.TextProperty).Subscribe(x => OnTextChanged(control));
-                } 
-                if(control is AutoCompleteBox acb) {
+                }
+                if (control is AutoCompleteBox acb) {
                     control.Tag = acb.GetObservable(AutoCompleteBox.TextProperty).Subscribe(x => OnTextChanged(control));
                 }
             }
@@ -72,7 +64,7 @@ namespace MonkeyPaste.Avalonia {
             if (sender is Control control) {
                 control.Initialized -= Control_Initialized;
                 control.DetachedFromVisualTree -= Control_DetachedFromVisualTree;
-                if(control.Tag is IDisposable disposable) {
+                if (control.Tag is IDisposable disposable) {
                     disposable.Dispose();
                 }
             }
@@ -96,12 +88,12 @@ namespace MonkeyPaste.Avalonia {
                 false,
                 BindingMode.TwoWay);
 
-        static void HandleBoundTextChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
+        static void HandleBoundTextChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
             string newText = string.Empty;
             if (e.NewValue is string) {
                 newText = e.NewValue as string;
             }
-            if(element is Control control) {
+            if (element is Control control) {
                 if (element is TextBox tb) {
                     tb.Text = newText;
                 } else if (element is AutoCompleteBox acb) {
@@ -110,7 +102,7 @@ namespace MonkeyPaste.Avalonia {
                 SetLastNotifiedText(control, newText);
                 SetLastNotifiedDt(control, null);
             }
-           
+
         }
         #endregion
 
@@ -149,7 +141,7 @@ namespace MonkeyPaste.Avalonia {
                 BindingMode.TwoWay);
 
         #endregion
-        
+
         #region LastNotifiedDt AvaloniaProperty
         private static DateTime? GetLastNotifiedDt(AvaloniaObject obj) {
             return obj.GetValue(LastNotifiedDtProperty);
@@ -172,7 +164,7 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private static void OnTextChanged(Control control) {
-            if(control == null) {
+            if (control == null) {
                 return;
             }
             int delayMs = GetDelayMs(control);
@@ -186,9 +178,9 @@ namespace MonkeyPaste.Avalonia {
             SetLastNotifiedDt(control, this_input_change_dt);
 
             Dispatcher.UIThread.Post(async () => {
-                while(true) {
+                while (true) {
                     var lndt = GetLastNotifiedDt(control);
-                    if(lndt == null) {
+                    if (lndt == null) {
                         return;
                     }
                     if (lndt != this_input_change_dt) {
@@ -203,12 +195,12 @@ namespace MonkeyPaste.Avalonia {
                 }
                 SetLastNotifiedDt(control, null);
                 string controlText = null;
-                if(control is TextBox tb) {
+                if (control is TextBox tb) {
                     controlText = tb.Text;
-                } else if(control is AutoCompleteBox acb) {
+                } else if (control is AutoCompleteBox acb) {
                     controlText = acb.Text;
                 }
-                if(controlText == lastNotifiedText) {
+                if (controlText == lastNotifiedText) {
                     // ignore if text is the same
                     return;
                 }

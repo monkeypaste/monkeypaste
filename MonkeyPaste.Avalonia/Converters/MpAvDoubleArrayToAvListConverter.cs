@@ -1,6 +1,4 @@
-﻿using Avalonia;
-using Avalonia.Collections;
-using Avalonia.Controls;
+﻿using Avalonia.Collections;
 using Avalonia.Data.Converters;
 using System;
 using System.Globalization;
@@ -11,7 +9,7 @@ namespace MonkeyPaste.Avalonia {
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             AvaloniaList<double> avDoubleList = new AvaloniaList<double>();
-            if(value is double[] doubleArr) {
+            if (value is double[] doubleArr) {
                 avDoubleList.AddRange(doubleArr);
             }
             return avDoubleList;

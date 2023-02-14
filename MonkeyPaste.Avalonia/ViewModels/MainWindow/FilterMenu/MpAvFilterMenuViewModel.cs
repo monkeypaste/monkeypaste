@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MonkeyPaste.Avalonia {
-    public class MpAvFilterMenuViewModel : 
+﻿namespace MonkeyPaste.Avalonia {
+    public class MpAvFilterMenuViewModel :
         MpViewModelBase {
         #region Statics
 
@@ -40,7 +34,7 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private void MpAvTitleMenuViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
                 case nameof(SearchBoxObservedWidth):
                     MpAvTagTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvTagTrayViewModel.Instance.TagTrayScreenWidth));
                     break;

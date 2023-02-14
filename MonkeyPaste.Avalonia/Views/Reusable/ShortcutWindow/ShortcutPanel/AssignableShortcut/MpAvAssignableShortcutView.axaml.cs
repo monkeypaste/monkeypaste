@@ -1,24 +1,10 @@
 ﻿using Avalonia.Markup.Xaml;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Xamarin.Essentials;
+//using Xamarin.Essentials;
 
 namespace MonkeyPaste.Avalonia {
-/// <summary>
-/// Interaction logic for MpFileSystemTriggerPropertyListBoxItemView.xaml
-/// </summary>
+    /// <summary>
+    /// Interaction logic for MpFileSystemTriggerPropertyListBoxItemView.xaml
+    /// </summary>
     public partial class MpAvAssignableShortcutView : MpAvUserControl<MpAvIShortcutCommandViewModel> {
         public MpAvAssignableShortcutView() {
             InitializeComponent();

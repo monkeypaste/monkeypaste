@@ -1,13 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
-using Avalonia.Controls.Shapes;
-using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using MonoMac.AppKit;
-using MonoMac.CoreGraphics;
-using MonoMac.Foundation;
-using MonoMac.WebKit;
 using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia {
@@ -29,7 +22,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void MpAvSettingsWindow_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
-            
+
         }
 
         private void MpAvSettingsWindow_Closed(object sender, System.EventArgs e) {

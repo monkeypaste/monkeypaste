@@ -1,14 +1,13 @@
-﻿using System;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using MonkeyPaste;
-using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     public abstract class MpAvIconBuildBase : MpIIconBuilder {
         public async Task<MpIcon> CreateAsync(
-            string iconBase64, 
+            string iconBase64,
             bool createBorder = true,
             bool allowDup = false,
             bool suppressWrite = false) {
@@ -36,7 +35,7 @@ namespace MonkeyPaste.Avalonia {
             var hist = bmp.GetStatistics();
             foreach (var kvp in hist) {
                 var c = kvp.Key.ToPortableColor(); //Color.FromArgb(255, kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue);
-                
+
                 //MpConsole.WriteLine(string.Format(@"R:{0} G:{1} B:{2} Count:{3}", kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, kvp.Value));
                 if (primaryIconColorList.Count == palleteSize) {
                     break;
@@ -50,7 +49,7 @@ namespace MonkeyPaste.Avalonia {
                 //0-255 0 is black
                 var grayScaleValue = 0.2126 * (int)c.R + 0.7152 * (int)c.G + 0.0722 * (int)c.B;
 
-                
+
                 double curMinRelativeDist = 1;
                 for (int i = 0; i < primaryIconColorList.Count; i++) {
                     // 
@@ -79,7 +78,7 @@ namespace MonkeyPaste.Avalonia {
         public abstract string GetApplicationIconBase64(string appPath, MpIconSize iconSize = MpIconSize.MediumIcon32);
 
 
-        
+
     }
 }
 

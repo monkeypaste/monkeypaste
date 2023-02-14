@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
@@ -104,11 +102,11 @@ namespace MonkeyPaste.Common.Wpf {
             string outStr = string.Empty;
             var fd = str.ToFlowDocument();
 
-            foreach(var block in fd.Blocks) {
-                if(block is Table t) {
-                    foreach(var rowGroup in t.RowGroups) {
-                        foreach(var row in rowGroup.Rows) {
-                            foreach(var c in row.Cells) {
+            foreach (var block in fd.Blocks) {
+                if (block is Table t) {
+                    foreach (var rowGroup in t.RowGroups) {
+                        foreach (var row in rowGroup.Rows) {
+                            foreach (var c in row.Cells) {
                                 outStr += c.ToPlainText() + ",";
                             }
                             outStr += Environment.NewLine;
@@ -124,15 +122,15 @@ namespace MonkeyPaste.Common.Wpf {
             var table = CreateTable(csv);
 
             tr.Text = string.Empty;
-            
+
             var par = tr.Start.Paragraph;
-            if(par == null || par.Parent is TextElement te) {
+            if (par == null || par.Parent is TextElement te) {
                 Debugger.Break();
-            } else if(par.Parent is FlowDocument fd) {
-                fd.Blocks.InsertAfter(par,table);
+            } else if (par.Parent is FlowDocument fd) {
+                fd.Blocks.InsertAfter(par, table);
                 fd.Blocks.Remove(par);
             }
-            
+
             return table;
         }
 
@@ -224,7 +222,7 @@ namespace MonkeyPaste.Common.Wpf {
                 columns[c].Width = new GridLength(columnWidths[c]);
             }
             double total_width = columnWidths.Sum();
-            if(MpWpfHtmlToRtfConverter.CurrentFd != null && 
+            if (MpWpfHtmlToRtfConverter.CurrentFd != null &&
                 (!MpWpfHtmlToRtfConverter.CurrentFd.PageWidth.IsNumber() ||
                 MpWpfHtmlToRtfConverter.CurrentFd.PageWidth < total_width)) {
                 MpWpfHtmlToRtfConverter.CurrentFd.PageWidth = total_width;
@@ -241,7 +239,7 @@ namespace MonkeyPaste.Common.Wpf {
             //Debugger.Break();
 
             fallback_ff = fallback_ff == null ? MpWpfHtmlToRtfConverter.CurrentDefaultFontFamily : fallback_ff;
-            var p = textRange.Start.Paragraph;            
+            var p = textRange.Start.Paragraph;
 
             var ft = new FormattedText(
                 textRange.Text,
@@ -255,8 +253,8 @@ namespace MonkeyPaste.Common.Wpf {
                     p.FontSize,
                 Brushes.Black,
                 new NumberSubstitution(),
-                MpScreenInformation.ThisAppDip);
-            if(ft.Width == 0 || !ft.Width.IsNumber()) {
+                TextFormattingMode.Display);//MpScreenInformation.ThisAppDip);
+            if (ft.Width == 0 || !ft.Width.IsNumber()) {
                 double fs = p.FontSize == 0 || !p.FontSize.IsNumber() ? MpWpfHtmlToRtfConverter.CurrentDefaultFontSize : p.FontSize;
                 return textRange.Text.Length * fs;
             }

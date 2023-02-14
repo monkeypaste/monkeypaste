@@ -1,8 +1,4 @@
 ﻿using CefNet;
-using System.Diagnostics;
-using MonkeyPaste.Common;
-using Newtonsoft.Json;
-using System.Collections.Generic;
 using System;
 
 namespace MonkeyPaste.Avalonia {

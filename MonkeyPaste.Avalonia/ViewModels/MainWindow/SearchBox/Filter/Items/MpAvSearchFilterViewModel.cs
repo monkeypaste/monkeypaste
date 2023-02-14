@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MonkeyPaste.Common;
 using System.Windows.Input;
-using MonkeyPaste;
-using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvSearchFilterViewModel : MpViewModelBase<MpAvSearchFilterCollectionViewModel> {
@@ -61,7 +55,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool? IsChecked { get; set; }
 
-        public bool IsEnabled => 
+        public bool IsEnabled =>
             IsChecked != null;
 
         public string PreferenceName { get; set; }

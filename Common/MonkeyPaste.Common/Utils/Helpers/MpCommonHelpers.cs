@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common {
     public static class MpCommonHelpers {
@@ -17,7 +13,7 @@ namespace MonkeyPaste.Common {
 
 
         public static string NewLineByEnv(MpUserDeviceType deviceType) {
-            switch(deviceType) {
+            switch (deviceType) {
                 case MpUserDeviceType.Windows:
                     return "\r\n";
                 default:

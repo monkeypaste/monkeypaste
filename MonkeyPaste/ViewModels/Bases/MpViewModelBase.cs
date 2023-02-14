@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using Newtonsoft.Json;
-using System.Diagnostics;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
-namespace MonkeyPaste {    
+namespace MonkeyPaste {
     public interface MpIViewModel {
 
         [JsonIgnore]
@@ -19,16 +18,16 @@ namespace MonkeyPaste {
         bool HasModelChanged { get; set; }
 
         void OnPropertyChanged(
-            [CallerMemberName] string propertyName = null, 
-            [CallerFilePath] string path = null, 
-            [CallerMemberName] string memName = null, 
+            [CallerMemberName] string propertyName = null,
+            [CallerFilePath] string path = null,
+            [CallerMemberName] string memName = null,
             [CallerLineNumber] int line = 0);
 
         event PropertyChangedEventHandler PropertyChanged;
     }
 
-    public abstract class MpViewModelBase : 
-        INotifyPropertyChanged, 
+    public abstract class MpViewModelBase :
+        INotifyPropertyChanged,
         MpIErrorHandler,
         MpIAsyncObject {
 
@@ -167,7 +166,7 @@ namespace MonkeyPaste {
 
         protected void NotifyModelChanged(object model, string changedPropName, object newVal) {
             object oldVal = model.GetPropertyValue(changedPropName);
-            if(oldVal == newVal) {
+            if (oldVal == newVal) {
                 // probably an error, property didn't change
                 Debugger.Break();
             }
@@ -241,8 +240,8 @@ namespace MonkeyPaste {
             }
         }
 
-        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null, [CallerFilePath] string path = null, [CallerMemberName] string memName = null,[CallerLineNumber] int line = 0) {
-            if(SupressPropertyChangedNotification) {
+        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null, [CallerFilePath] string path = null, [CallerMemberName] string memName = null, [CallerLineNumber] int line = 0) {
+            if (SupressPropertyChangedNotification) {
                 return;
             }
             var e = new PropertyChangedEventArgs(propertyName);
@@ -269,7 +268,7 @@ namespace MonkeyPaste {
         #endregion
     }
 
-    public abstract class MpViewModelBase<P> : MpViewModelBase where P: class {
+    public abstract class MpViewModelBase<P> : MpViewModelBase where P : class {
         #region Private Variables
         #endregion
 
@@ -284,14 +283,14 @@ namespace MonkeyPaste {
                 return (P)ParentObj;
             }
             private set {
-                if(Parent != value) {
+                if (Parent != value) {
                     ParentObj = value;
                     OnPropertyChanged(nameof(Parent));
                 }
             }
         }
 
-        
+
 
         #endregion
 

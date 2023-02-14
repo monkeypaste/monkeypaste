@@ -1,12 +1,9 @@
-﻿using System;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
-using MonkeyPaste;
-using MonkeyPaste.Common.Plugin; 
-using MonkeyPaste.Common;
 using System.Windows.Input;
 //using Newtonsoft.Json;
 //using SQLite;
@@ -310,7 +307,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(CurrentValue));
                 }
             }
-        }      
+        }
 
 
         public int ParameterValueId {
@@ -433,7 +430,7 @@ namespace MonkeyPaste.Avalonia {
         protected virtual void SetLastValue(object value) {
             _lastValue = value == null ? null : value.ToString();
         }
-        
+
         protected virtual void RestoreLastValue() {
             CurrentValue = _lastValue;
         }
@@ -448,7 +445,7 @@ namespace MonkeyPaste.Avalonia {
                 //case nameof(LastValue):
                 case nameof(HasModelChanged):
                 case nameof(CurrentValue):
-                    if(Parent is MpISaveOrCancelableViewModel socvm) {
+                    if (Parent is MpISaveOrCancelableViewModel socvm) {
                         // analyzers
                         socvm.OnPropertyChanged(nameof(socvm.CanSaveOrCancel));
                     } else {
@@ -490,7 +487,7 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 return HasModelChanged;
             });
-        
+
         public ICommand SaveCurrentValueCommand => new MpCommand(
             () => {
                 SetLastValue(CurrentValue);

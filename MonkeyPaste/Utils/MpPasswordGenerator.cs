@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace MonkeyPaste {
@@ -32,7 +30,7 @@ namespace MonkeyPaste {
         }
 
         public static string GetRandomPassword() {
-            if(_Rand == null) {
+            if (_Rand == null) {
                 _Rand = new Random((int)DateTime.Now.Ticks);
             }
             return "this_is_a_test_password";

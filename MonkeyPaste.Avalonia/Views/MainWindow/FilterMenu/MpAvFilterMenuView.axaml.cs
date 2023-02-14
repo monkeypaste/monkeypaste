@@ -1,13 +1,4 @@
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using Avalonia.Markup.Xaml;
-using Avalonia.Threading;
-using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvFilterMenuView : MpAvUserControl<MpAvFilterMenuViewModel> {

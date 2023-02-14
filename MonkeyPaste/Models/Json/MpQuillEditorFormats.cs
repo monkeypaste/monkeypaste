@@ -1,10 +1,6 @@
-﻿using MonkeyPaste.Common.Plugin;
-using MonkeyPaste.Common;
-using Newtonsoft.Json;
+﻿using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Org.BouncyCastle.Bcpg.OpenPgp;
 
 namespace MonkeyPaste {
     public class MpQuillInitMainRequestMessage : MpJsonObject {
@@ -80,7 +76,7 @@ namespace MonkeyPaste {
         public string deltaFragmentStr { get; set; }
         public string annotationFragmentStr { get; set; }
     }
-    
+
     public class MpQuillLastTransactionUndoneNotification : MpJsonObject {
     }
 
@@ -155,7 +151,7 @@ namespace MonkeyPaste {
         public string requestGuid { get; set; }
         public string reqMsgFragmentJsonStr { get; set; } = String.Empty;
     }
-    
+
     public class MpQuillGetResponseNotification : MpJsonObject {
         public string requestGuid { get; set; }
         public string responseFragmentJsonStr { get; set; } = string.Empty;
@@ -163,14 +159,14 @@ namespace MonkeyPaste {
 
     public class MpQuillNavigateUriRequestNotification : MpJsonObject {
         public string uri { get; set; }
-        public List<string> modKeys { get; set; } 
+        public List<string> modKeys { get; set; }
     }
 
     public class MpQuillEditorSetClipboardRequestNotification : MpJsonObject {
-        
+
     }
     public class MpQuillEditorClipboardDataObjectRequestNotification : MpJsonObject {
-        
+
     }
     public class MpQuillEditorDragDataObjectRequestNotification : MpJsonObject {
         public string unprocessedDataItemsJsonStr { get; set; }
@@ -208,7 +204,7 @@ namespace MonkeyPaste {
 
 
     public class MpQuillDataTransferMessageFragment : MpJsonObject {
-        
+
     }
 
     public class MpQuillHostDataItemFragment : MpJsonObject {
@@ -238,11 +234,11 @@ namespace MonkeyPaste {
         public MpQuillHostDataItemsMessage dataItemsFragment { get; set; }
     }
 
-    public class MpQuillAnnotationSelectedMessage : MpJsonObject { 
+    public class MpQuillAnnotationSelectedMessage : MpJsonObject {
         public string annotationGuid { get; set; }
     }
-    
-    public class MpQuillShowDebuggerNotification : MpJsonObject { 
+
+    public class MpQuillShowDebuggerNotification : MpJsonObject {
         public string reason { get; set; }
     }
 

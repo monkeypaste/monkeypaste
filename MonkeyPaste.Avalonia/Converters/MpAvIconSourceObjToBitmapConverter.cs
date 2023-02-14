@@ -1,19 +1,15 @@
-﻿using System;
-using System.Globalization;
+﻿using Avalonia.Controls;
 using Avalonia.Data.Converters;
-using Avalonia.Platform;
-using Avalonia;
-using System.Reflection;
-using Avalonia.Media.Imaging;
 using Avalonia.Media;
-using Avalonia.Controls.Shapes;
-using MonkeyPaste.Common.Avalonia;
-using System.Linq;
-using System.Collections.Generic;
+using Avalonia.Media.Imaging;
 using MonkeyPaste.Common;
-using System.IO;
-using Avalonia.Controls;
+using MonkeyPaste.Common.Avalonia;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvIconSourceObjToBitmapConverter : IValueConverter {
@@ -34,22 +30,22 @@ namespace MonkeyPaste.Avalonia {
                     return new MpAvStringBase64ToBitmapConverter().Convert(ivm.IconBorderBase64, null, scale.ToString(), CultureInfo.CurrentCulture);
                 }
                 return new MpAvStringBase64ToBitmapConverter().Convert(ivm.IconBase64, null, scale.ToString(), CultureInfo.CurrentCulture);
-            } 
-            
-            if(value is string valStr) {
+            }
+
+            if (value is string valStr) {
                 //types: resource key, hex color, base64, file system path, shape name
                 var valParts = valStr.SplitNoEmpty(",");
 
-                string hex_color = valParts.FirstOrDefault(x=>x.IsStringHexColor());
-                if(string.IsNullOrEmpty(hex_color)) {
+                string hex_color = valParts.FirstOrDefault(x => x.IsStringHexColor());
+                if (string.IsNullOrEmpty(hex_color)) {
                     string named_color = valParts.FirstOrDefault(x => x.IsStringNamedColor());
-                    if(!string.IsNullOrEmpty(named_color)) {
+                    if (!string.IsNullOrEmpty(named_color)) {
                         hex_color = MpSystemColors.ConvertFromString(named_color);
                     }
                 }
                 if (!string.IsNullOrEmpty(hex_color)) {
                     string color_img_key = "TextureImage";
-                    if(valParts.Length > 1) {
+                    if (valParts.Length > 1) {
                         color_img_key = valParts.FirstOrDefault(x => x.Contains("Image"));
                     }
                     var blank_bmp = MpAvStringResourceConverter.Instance.Convert(
@@ -58,7 +54,7 @@ namespace MonkeyPaste.Avalonia {
                     return blank_bmp;
                 }
 
-                if(valParts.Length > 1) {
+                if (valParts.Length > 1) {
                     // should only have parts for color resource
                     Debugger.Break();
                 }
@@ -71,22 +67,22 @@ namespace MonkeyPaste.Avalonia {
                     return new MpAvStringResourceConverter()
                                 .Convert(value, targetType, parameter, culture) as Bitmap;
                 }
-                if(valStr.EndsWith("Svg")) {
-                    if(MpPlatform.Services.PlatformResource.GetResource(valStr) is object data) { //}, out var data)) {
-                        if(data is Geometry geometry) {
+                if (valStr.EndsWith("Svg")) {
+                    if (MpPlatform.Services.PlatformResource.GetResource(valStr) is object data) { //}, out var data)) {
+                        if (data is Geometry geometry) {
                             return geometry;
                         }
-                        if(data is string svgPath) {
+                        if (data is string svgPath) {
                             Debugger.Break();
                         }
                     }
 
                 }
-                if(valStr.IsStringBase64()) {
+                if (valStr.IsStringBase64()) {
                     return new MpAvStringBase64ToBitmapConverter().Convert(valStr, null, null, CultureInfo.CurrentCulture);
                 }
-                if(valStr.IsFile()) {
-                    if(valStr.IsKnownImageFile() && !isFilePathIcon) {
+                if (valStr.IsFile()) {
+                    if (valStr.IsKnownImageFile() && !isFilePathIcon) {
                         try {
                             using (var fs = new FileStream(valStr, FileMode.Open)) {
                                 return new Bitmap(fs);
@@ -100,7 +96,7 @@ namespace MonkeyPaste.Avalonia {
                     string appIconBase64 = MpPlatform.Services.IconBuilder.GetApplicationIconBase64(valStr);
                     return new MpAvStringBase64ToBitmapConverter().Convert(appIconBase64, null, null, CultureInfo.CurrentCulture);
                 }
-            } 
+            }
             return null;
 
         }

@@ -1,14 +1,12 @@
 ﻿
-using Avalonia.Input;
-using MonkeyPaste.Common;
-using Avalonia.Threading;
-using System.Threading.Tasks;
-using MonkeyPaste.Common.Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Threading;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System.Diagnostics;
-using Gtk;
-using Avalonia.Interactivity;
-using Xamarin.Essentials;
+using System.Threading.Tasks;
+//using Xamarin.Essentials;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvDocumentDragHelper {
@@ -33,9 +31,9 @@ namespace MonkeyPaste.Avalonia {
             PointerEventArgs pointerEventArgs,
             DragDropEffects allowedEffects) {
             if (!Dispatcher.UIThread.CheckAccess()) {
-                await Dispatcher.UIThread.InvokeAsync(() => PerformDragAsync(dragSource,pointerEventArgs, allowedEffects));
+                await Dispatcher.UIThread.InvokeAsync(() => PerformDragAsync(dragSource, pointerEventArgs, allowedEffects));
                 return;
-            }            
+            }
 
             ResetDragState();
             HookDragEvents();
@@ -58,7 +56,7 @@ namespace MonkeyPaste.Avalonia {
 
             // wait for possible dragEnd.wasCanceled == true msg
             await Task.Delay(300);
-            if(result == DragDropEffects.None ||
+            if (result == DragDropEffects.None ||
                 dragSource.WasDragCanceled) {
                 // NOTE make sure to reset cancel property...
                 dragSource.WasDragCanceled = false;
@@ -120,12 +118,12 @@ namespace MonkeyPaste.Avalonia {
             // seems excessive...but ultimately all ole pref's come
             // from plugins so pass everthing through cb plugin system just like writing to clipboard
             await MpPlatform.Services.DataObjectHelperAsync
-                .UpdateDragDropDataObjectAsync(SourceDataObject,DragDataObject);
-           
+                .UpdateDragDropDataObjectAsync(SourceDataObject, DragDataObject);
+
         }
 
 
-        private static void OnGlobalKeyPrssedOrReleasedHandler(object sender, string key) {            
+        private static void OnGlobalKeyPrssedOrReleasedHandler(object sender, string key) {
             if (MpAvShortcutCollectionViewModel.Instance.GlobalIsEscapeDown) {
                 FinishDrag(null);
                 return;
@@ -167,7 +165,7 @@ namespace MonkeyPaste.Avalonia {
             _dragSource = null;
         }
 
-        
+
         #endregion
     }
 }

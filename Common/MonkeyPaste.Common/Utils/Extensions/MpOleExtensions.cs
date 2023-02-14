@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 
 namespace MonkeyPaste.Common {
     [Flags]
@@ -15,7 +14,7 @@ namespace MonkeyPaste.Common {
     public static class MpOleExtensions {
 
         public static string ToDataFormat(this MpJsonMessageFormatType jmft) {
-            switch(jmft) {
+            switch (jmft) {
                 case MpJsonMessageFormatType.Annotation:
                     return MpPortableDataFormats.INTERNAL_CONTENT_ANNOTATION_FORMAT;
                 case MpJsonMessageFormatType.ParameterRequest:
@@ -30,24 +29,24 @@ namespace MonkeyPaste.Common {
             }
         }
         public static void AddOrCreateUri(this MpPortableDataObject mpdo, string uri) {
-            if(string.IsNullOrWhiteSpace(uri)) {
+            if (string.IsNullOrWhiteSpace(uri)) {
                 throw new Exception("Uri must be non-whitespace");
             }
             List<string> uri_list = null;
-            if(mpdo.GetUriList() is IEnumerable<string> uri_col) {
+            if (mpdo.GetUriList() is IEnumerable<string> uri_col) {
                 uri_list = uri_col.ToList();
             } else {
                 uri_list = new List<string>();
             }
 
-            if (uri_list.Any(x=>x.ToLower() == uri.ToLower())) {
+            if (uri_list.Any(x => x.ToLower() == uri.ToLower())) {
                 // don't duplicate
                 return;
             }
             uri_list.Add(uri);
             mpdo.SetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, uri_list.AsEnumerable<string>());
         }
-        
+
         public static IEnumerable<string> GetUriList(this MpPortableDataObject mpdo) {
 
             if (mpdo.TryGetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, out object uri_list_obj)) {

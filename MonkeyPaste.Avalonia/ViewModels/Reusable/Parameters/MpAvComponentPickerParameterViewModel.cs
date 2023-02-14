@@ -1,12 +1,8 @@
-﻿using MonkeyPaste;
-using MonkeyPaste.Common.Plugin; 
-using MonkeyPaste.Common; 
-using System;
+﻿using MonkeyPaste.Common.Plugin;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 using System.Windows.Input;
-using Avalonia;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -17,7 +13,7 @@ namespace MonkeyPaste.Avalonia {
         Analyzer
     };
 
-    public class MpAvComponentPickerParameterViewModel : 
+    public class MpAvComponentPickerParameterViewModel :
         MpAvParameterViewModelBase,
         MpIPopupSelectorMenu {
         #region Private Variables
@@ -28,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsOpen { get; set; }
         public MpMenuItemViewModel PopupMenu =>
-            ComponentPicker == null ? null : ComponentPicker.GetMenu(SelectComponentCommand, null,new int[] { ComponentId }, true);
+            ComponentPicker == null ? null : ComponentPicker.GetMenu(SelectComponentCommand, null, new int[] { ComponentId }, true);
 
         public object SelectedIconResourceObj =>
             ComponentId == 0 ?
@@ -74,14 +70,14 @@ namespace MonkeyPaste.Avalonia {
             ComponentId == 0 ? null :
             ComponentType switch {
                 MpSelectableComponentType.Collection =>
-                    MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x=>x.TagId == ComponentId),
+                    MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == ComponentId),
                 MpSelectableComponentType.Action =>
-                    (Parent as MpAvActionViewModelBase).RootTriggerActionViewModel.SelfAndAllDescendants.FirstOrDefault(x=>x.ActionId == ComponentId),
+                    (Parent as MpAvActionViewModelBase).RootTriggerActionViewModel.SelfAndAllDescendants.FirstOrDefault(x => x.ActionId == ComponentId),
                 MpSelectableComponentType.Analyzer =>
-                    MpAvAnalyticItemCollectionViewModel.Instance.AllPresets.FirstOrDefault(x=>x.AnalyticItemPresetId == ComponentId),
+                    MpAvAnalyticItemCollectionViewModel.Instance.AllPresets.FirstOrDefault(x => x.AnalyticItemPresetId == ComponentId),
                 _ => null
             };
-        
+
         public MpIPopupMenuPicker ComponentPicker =>
             ComponentType switch {
                 MpSelectableComponentType.Collection =>
@@ -95,13 +91,13 @@ namespace MonkeyPaste.Avalonia {
 
         public MpSelectableComponentType ComponentType =>
            UnitType switch {
-               MpParameterValueUnitType.CollectionComponentId => 
+               MpParameterValueUnitType.CollectionComponentId =>
                         MpSelectableComponentType.Collection,
-                    MpParameterValueUnitType.ActionComponentId => 
-                        MpSelectableComponentType.Action,
-                    MpParameterValueUnitType.AnalyzerComponentId => 
-                        MpSelectableComponentType.Analyzer,
-                    _ => MpSelectableComponentType.None
+               MpParameterValueUnitType.ActionComponentId =>
+                   MpSelectableComponentType.Action,
+               MpParameterValueUnitType.AnalyzerComponentId =>
+                   MpSelectableComponentType.Analyzer,
+               _ => MpSelectableComponentType.None
            };
 
 

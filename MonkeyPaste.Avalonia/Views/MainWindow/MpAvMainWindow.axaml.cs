@@ -1,35 +1,25 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Data;
+using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using MonkeyPaste.Common;
-using PropertyChanged;
-using SharpHook;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
 using MonkeyPaste.Common.Avalonia;
-using Avalonia.Threading;
-using Avalonia.VisualTree;
-using Avalonia.Controls.Primitives;
-using System.Linq;
+using PropertyChanged;
 using System;
-using Avalonia.Data;
-using Avalonia.Input;
-using Avalonia.Interactivity;
-using MonoMac.CoreText;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvMainWindow : Window, MpAvIResizableControl { 
+    public partial class MpAvMainWindow : Window, MpAvIResizableControl {
         #region Private Variables
 
         private int? _origResizerIdx;
         #endregion
 
         #region Constants
-        
+
         public const double MIN_TRAY_VAR_DIM_LENGTH = 150.0d;
 
         #endregion
@@ -76,14 +66,14 @@ namespace MonkeyPaste.Avalonia {
             this.Activated += MainWindow_Activated;
             this.Deactivated += MainWindow_Deactivated;
             this.PointerMoved += MainWindow_PointerMoved;
-            this.PointerLeave += MainWindow_PointerLeave;
+            this.PointerExited += MainWindow_PointerLeave;
 
             var sidebarSplitter = this.FindControl<GridSplitter>("SidebarGridSplitter");
             sidebarSplitter.DragDelta += SidebarSplitter_DragDelta;
 
             RootCanvas = this.FindControl<Canvas>("MainWindowCanvas");
             RootGrid = this.FindControl<Grid>("MainWindowContainerGrid");
-            
+
             //var advSearchSplitter = this.FindControl<GridSplitter>("AdvancedSearchSplitter");
             //advSearchSplitter.DragCompleted += AdvSearchSplitter_DragCompleted;
         }
@@ -114,7 +104,7 @@ namespace MonkeyPaste.Avalonia {
             var sbbg = this.FindControl<MpAvSidebarButtonGroupView>("SidebarButtonGroup");
             var ssbcb = this.FindControl<Border>("SelectedSidebarContainerBorder");
             var sbgs = this.FindControl<GridSplitter>("SidebarGridSplitter");
-            var ctrcb = this.FindControl<Border>("ClipTrayContainerBorder");            
+            var ctrcb = this.FindControl<Border>("ClipTrayContainerBorder");
 
             var ctrcv = this.FindControl<MpAvClipTrayContainerView>("ClipTrayContainerView");
             var ctrcv_cg = ctrcv.FindControl<Grid>("ClipTrayContainerGrid");
@@ -123,7 +113,7 @@ namespace MonkeyPaste.Avalonia {
             var ctrcv_gs = ctrcv.FindControl<GridSplitter>("ClipTraySplitter");
             var ctrcv_ctrv = ctrcv.FindControl<MpAvQueryTrayView>("ClipTrayView");
             var ctrcv_ctrv_cg = ctrcv_ctrv.FindControl<Grid>("QueryTrayContainerGrid");
-            
+
 
             mwtg.RowDefinitions.Clear();
             mwtg.ColumnDefinitions.Clear();
@@ -136,7 +126,7 @@ namespace MonkeyPaste.Avalonia {
                 var sbbg_cd = new ColumnDefinition(
                     new GridLength(sbicvm.ButtonGroupFixedDimensionLength, GridUnitType.Pixel));
 
-                var ssbcb_cd = new ColumnDefinition(Math.Max(0,sbicvm.ContainerBoundWidth), GridUnitType.Pixel);
+                var ssbcb_cd = new ColumnDefinition(Math.Max(0, sbicvm.ContainerBoundWidth), GridUnitType.Pixel);
                 ssbcb_cd.Bind(
                     ColumnDefinition.WidthProperty,
                     new Binding() {
@@ -146,7 +136,7 @@ namespace MonkeyPaste.Avalonia {
                         Converter = MpAvDoubleToGridLengthConverter.Instance
                     });
 
-                var ctrcb_cd = new ColumnDefinition(Math.Max(0,ctrvm.ContainerBoundWidth), GridUnitType.Pixel);
+                var ctrcb_cd = new ColumnDefinition(Math.Max(0, ctrvm.ContainerBoundWidth), GridUnitType.Pixel);
                 ctrcb_cd.Bind(
                     ColumnDefinition.WidthProperty,
                     new Binding() {
@@ -218,7 +208,7 @@ namespace MonkeyPaste.Avalonia {
                 };
 
                 // pin tray listbox padding (horizontal) for head/tail drop adorners
-                if(MpAvClipTrayViewModel.Instance.IsAnyTilePinned) {
+                if (MpAvClipTrayViewModel.Instance.IsAnyTilePinned) {
                     ctrcv_ptr_lb.Padding = new Thickness(10, 0, 10, 0);
                 } else {
                     ctrcv_ptr_lb.Padding = new Thickness();
@@ -254,7 +244,7 @@ namespace MonkeyPaste.Avalonia {
                         Converter = MpAvDoubleToGridLengthConverter.Instance
                     });
 
-                var ssbcb_rd = new RowDefinition(Math.Max(0,sbicvm.ContainerBoundHeight), GridUnitType.Pixel);
+                var ssbcb_rd = new RowDefinition(Math.Max(0, sbicvm.ContainerBoundHeight), GridUnitType.Pixel);
                 ssbcb_rd.Bind(
                     RowDefinition.HeightProperty,
                     new Binding() {
@@ -327,7 +317,7 @@ namespace MonkeyPaste.Avalonia {
                      ptrv_rd,
                      ctrv_rd
                 };
-                
+
                 if (MpAvClipTrayViewModel.Instance.IsAnyTilePinned) {
                     ctrcv_ptr_lb.Padding = new Thickness(10, 10, 10, 10);
                 } else {
@@ -596,7 +586,6 @@ namespace MonkeyPaste.Avalonia {
 
                     tmv.Margin = new Thickness(resizer_short_side, 0, 0, 0);
                 }
-
                 tmv_lsp.Orientation = Orientation.Vertical;
                 tmv_lsp.HorizontalAlignment = HorizontalAlignment.Stretch;
                 tmv_lsp.VerticalAlignment = VerticalAlignment.Top;
@@ -808,7 +797,7 @@ namespace MonkeyPaste.Avalonia {
                     this.FindControl<MpAvMainWindowTitleMenuView>("MainWindowTitleView").PositionZoomValueButton();
                     break;
             }
-        }        
+        }
 
         #region Event Handlers
         private void SidebarSplitter_DragDelta(object sender, VectorEventArgs e) {
@@ -830,7 +819,7 @@ namespace MonkeyPaste.Avalonia {
             MpAvMainWindowViewModel.Instance.ObservedMainWindowRect = oldAndNewVals.newValue.ToPortableRect();
         }
 
-        private void MainWindow_PointerMoved(object sender, global::Avalonia.Input.PointerEventArgs e) {            
+        private void MainWindow_PointerMoved(object sender, global::Avalonia.Input.PointerEventArgs e) {
             var mwvm = MpAvMainWindowViewModel.Instance;
             if (mwvm.IsResizing) {
                 mwvm.IsResizerVisible = true;

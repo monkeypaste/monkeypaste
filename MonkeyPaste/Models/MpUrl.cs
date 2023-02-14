@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using SQLite;
-using MonkeyPaste.Common.Plugin; 
-using MonkeyPaste.Common;
-using Org.BouncyCastle.Crmf;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public class MpUrl : 
-        MpDbModelBase, 
+    public class MpUrl :
+        MpDbModelBase,
         MpISourceRef,
         MpIDbIconId,
         MpIIconResource,
@@ -113,12 +110,12 @@ namespace MonkeyPaste {
             int appId = 0,
             bool suppressWrite = false) {
             var dupCheck = await MpDataModelProvider.GetUrlByPathAsync(urlPath);
-            if(dupCheck != null) {
+            if (dupCheck != null) {
                 dupCheck = await MpDataModelProvider.GetItemAsync<MpUrl>(dupCheck.Id);
                 dupCheck.WasDupOnCreate = true;
                 return dupCheck;
             }
-            
+
             var newUrl = new MpUrl() {
                 UrlGuid = System.Guid.NewGuid(),
                 AppId = appId,
@@ -131,16 +128,16 @@ namespace MonkeyPaste {
             MpIcon icon = await MpPlatform.Services.IconBuilder.CreateAsync(
                     iconBase64: favIconImg64,
                     suppressWrite: suppressWrite);
-            
+
             newUrl.IconId = icon.Id;
             if (newUrl.IconId == 0) {
                 newUrl.IconId = MpDefaultDataModelTools.ThisAppIconId;
             }
 
-            if(!suppressWrite) {
+            if (!suppressWrite) {
                 await newUrl.WriteToDatabaseAsync();
             }
-            
+
             return newUrl;
         }
         public MpUrl() { }

@@ -1,16 +1,9 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Input;
+﻿using Avalonia.Input;
 using Avalonia.Input.Platform;
-using Cairo;
 using MonkeyPaste.Common.Wpf;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common.Avalonia {
@@ -28,17 +21,18 @@ namespace MonkeyPaste.Common.Avalonia {
                 var result = await cb.GetFormatsAsync();
                 CloseClipboard();
                 return result;
-            }catch(COMException) {
-                if(retryCount >= OLE_RETRY_COUNT) {
+            }
+            catch (COMException) {
+                if (retryCount >= OLE_RETRY_COUNT) {
                     return new string[] { };
                 }
                 await Task.Delay(OLE_RETRY_DELAY_MS);
                 var retry_result = await cb.GetFormatsSafeAsync(++retryCount);
                 return retry_result;
-            }            
+            }
         }
 
-        public static async Task<object> GetDataSafeAsync(this IClipboard cb,string format, int retryCount = 0) {
+        public static async Task<object> GetDataSafeAsync(this IClipboard cb, string format, int retryCount = 0) {
             await WaitForClipboardAsync();
 
             try {
@@ -46,7 +40,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 CloseClipboard();
                 return result;
             }
-            catch(SerializationException ex) {
+            catch (SerializationException ex) {
                 MpConsole.WriteTraceLine($"Error reading cb format: '{format}'.", ex);
                 return null;
             }
@@ -55,7 +49,7 @@ namespace MonkeyPaste.Common.Avalonia {
                     return new string[] { };
                 }
                 await Task.Delay(OLE_RETRY_DELAY_MS);
-                var retry_result = await cb.GetDataSafeAsync(format,++retryCount);
+                var retry_result = await cb.GetDataSafeAsync(format, ++retryCount);
                 return retry_result;
             }
         }
@@ -72,7 +66,7 @@ namespace MonkeyPaste.Common.Avalonia {
                     return;
                 }
                 await Task.Delay(OLE_RETRY_DELAY_MS);
-                await cb.SetDataObjectSafeAsync(ido,++retryCount);
+                await cb.SetDataObjectSafeAsync(ido, ++retryCount);
             }
         }
 

@@ -1,11 +1,6 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using MonkeyPaste.Common.Avalonia;
-using Avalonia.VisualTree;
-using Avalonia.Threading;
-using System.Threading.Tasks;
-using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvTagTrayView : MpAvUserControl<MpAvTagTrayViewModel> {
@@ -15,7 +10,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         private void NavRightRepeatButton_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
-            if(sender is ListBox TagTray) {
+            if (sender is ListBox TagTray) {
                 var sv = TagTray.GetVisualDescendant<ScrollViewer>();
                 sv.ScrollToHorizontalOffset(sv.Offset.X - 20);
             }
@@ -25,7 +20,7 @@ namespace MonkeyPaste.Avalonia {
             if (sender is ListBox TagTray) {
                 var sv = TagTray.GetVisualDescendant<ScrollViewer>();
                 sv.ScrollToHorizontalOffset(sv.Offset.X + 20);
-            }                
+            }
         }
 
         private void InitializeComponent() {

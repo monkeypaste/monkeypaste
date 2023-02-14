@@ -1,9 +1,8 @@
-using System;
-
 using Avalonia.Platform;
 using Avalonia.Threading;
 using MonoMac.Foundation;
 using MonoMac.WebKit;
+using System;
 
 namespace MonkeyPaste.Common.Avalonia {
 

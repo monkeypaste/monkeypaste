@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-
-using System.Windows.Input;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
-using MonkeyPaste;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvIconCollectionViewModel : 
-        MpViewModelBase, 
+    public class MpAvIconCollectionViewModel :
+        MpViewModelBase,
         MpIAsyncSingletonViewModel<MpAvIconCollectionViewModel>,
         MpIUserColorViewModel {
         #region Private Variables
@@ -65,12 +60,12 @@ namespace MonkeyPaste.Avalonia {
 
             IconViewModels.Clear();
             var il = await MpDataModelProvider.GetItemsAsync<MpIcon>();
-            foreach(var i in il) {
+            foreach (var i in il) {
                 var ivm = await CreateIconViewModel(i);
                 IconViewModels.Add(ivm);
             }
 
-            while(IconViewModels.Any(x=>x.IsBusy)) {
+            while (IconViewModels.Any(x => x.IsBusy)) {
                 await Task.Delay(100);
             }
             OnPropertyChanged(nameof(IconViewModels));
@@ -93,12 +88,12 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
 
         protected override async void Instance_OnItemAdded(object sender, MpDbModelBase e) {
-            if(e is MpIcon i) {
+            if (e is MpIcon i) {
 
                 IsBusy = true;
                 var ivm = await CreateIconViewModel(i);
                 IconViewModels.Add(ivm);
-                while(ivm.IsBusy) {
+                while (ivm.IsBusy) {
                     await Task.Delay(100);
                 }
                 IsBusy = false;
@@ -110,7 +105,7 @@ namespace MonkeyPaste.Avalonia {
                 var ivm = IconViewModels.FirstOrDefault(x => x.IconId == i.Id);
                 IsBusy = true;
 
-                if(ivm == null) {
+                if (ivm == null) {
                     ivm = await CreateIconViewModel(i);
                     IconViewModels.Add(ivm);
                 } else {
@@ -140,9 +135,9 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private void MpIconCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
                 case nameof(UserHexColor):
-                    if(_currentIconViewModel == null) {
+                    if (_currentIconViewModel == null) {
                         // is not a custom color so set in ChangeIconCommand
                         return;
                     }
@@ -201,15 +196,15 @@ namespace MonkeyPaste.Avalonia {
                     Title = "Select Image for Icon",
                     Directory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
                 }.ShowAsync(MpAvMainWindow.Instance);
-                
+
                 MpAvMenuExtension.CloseMenu();
-                
+
                 if (selectedImagePath != null && selectedImagePath.Length == 1 && string.IsNullOrEmpty(selectedImagePath[0])) {
                     string imagePath = selectedImagePath[0];
                     var bmpSrc = new Bitmap(imagePath);
 
                     await SetUserIconImageAsync(uivm, bmpSrc, null);
-                   
+
                 }
                 MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
             });
@@ -264,7 +259,7 @@ namespace MonkeyPaste.Avalonia {
                  //    _currentIconViewModel = null;
                  //    UserHexColor = null;
                  //}
-             },(args)=> {
+             }, (args) => {
                  if (args != null) {
                      object dc = args;
                      if (args is Control fe) {
@@ -272,7 +267,7 @@ namespace MonkeyPaste.Avalonia {
                      }
                      if (dc is MpIUserIconViewModel uivm) {
                          var icon = MpDataModelProvider.GetItem<MpIcon>(uivm.IconId);
-                         if(icon == null) {
+                         if (icon == null) {
                              return true;
                          }
                          return !icon.IsModelReadOnly;
@@ -282,7 +277,7 @@ namespace MonkeyPaste.Avalonia {
                      }
                  }
                  return false;
-            });
+             });
 
 
 

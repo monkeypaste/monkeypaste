@@ -1,38 +1,28 @@
-﻿using System;
-using MonkeyPaste;
-using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
-using Avalonia.Threading;
+﻿using MonkeyPaste.Common;
+using System;
+//using Avalonia.Gtk3;
+using System.Collections.Generic;
 //using Gio;
-//using Gtk;
+//
 //using GLib;
 //using Gdk;
-using System.Collections.Concurrent;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using System.Diagnostics;
-//using Avalonia.Gtk3;
-using X11;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using MonoMac.AppKit;
 
 namespace MonkeyPaste.Avalonia {
-    
+
     public class MpAvX11ProcessWatcher : MpAvProcessWatcherBase {
         #region Private Variables
 
         private string[] _requiredTools = new string[] {
             "xdotool"
         };
-        
+
         private object _lockObj = new object();
 
         private MpPortableProcessInfo _lastActiveInfo;
 
         private List<string> _errorWindows = new List<string>();
-        
+
         #endregion
 
         #region Properties
@@ -76,7 +66,7 @@ namespace MonkeyPaste.Avalonia {
             try {
                 active_info.Handle = new IntPtr(int.Parse(activeWindow));
 
-                if(!_errorWindows.Contains(activeWindow)) {
+                if (!_errorWindows.Contains(activeWindow)) {
                     string activePidStr = "xdotool getfocuswindow getwindowpid".ShellExec().Trim();
 
                     if (!activePidStr.IsStringNullOrWhiteSpace()) {
@@ -88,14 +78,14 @@ namespace MonkeyPaste.Avalonia {
                             try {
                                 IntPtr active_pid = new IntPtr(int.Parse(activePidStr));
                                 if (active_pid != IntPtr.Zero) {
-                                    string active_path_with_args = $"ps -q {activePidStr} -o cmd=".ShellExec().Trim();          
-                                    if(!string.IsNullOrWhiteSpace(active_path_with_args)) {
+                                    string active_path_with_args = $"ps -q {activePidStr} -o cmd=".ShellExec().Trim();
+                                    if (!string.IsNullOrWhiteSpace(active_path_with_args)) {
                                         string clean_path = MpX11ShellHelpers.GetCleanShellStr(active_path_with_args);
-                                        if(!string.IsNullOrWhiteSpace(clean_path)) {
+                                        if (!string.IsNullOrWhiteSpace(clean_path)) {
                                             // check parse here
                                             string argParts = active_path_with_args.Substring(clean_path.Length, active_path_with_args.Length - clean_path.Length);
                                             Debugger.Break();
-                                            if(!string.IsNullOrWhiteSpace(argParts)) {
+                                            if (!string.IsNullOrWhiteSpace(argParts)) {
                                                 active_info.ArgumentList = new List<string>() { argParts };
                                             }
                                             active_info.ProcessPath = clean_path;
@@ -108,9 +98,10 @@ namespace MonkeyPaste.Avalonia {
                             }
                         }
                     }
-                    
+
                 }
-            }catch(Exception) {
+            }
+            catch (Exception) {
             }
             return active_info;
         }
@@ -136,7 +127,7 @@ namespace MonkeyPaste.Avalonia {
         protected override MpPortableProcessInfo RefreshRunningProcessLookup() {
             lock (_lockObj) {
                 string activeWindow = "xdotool getactivewindow".ShellExec().Trim();
-                if(_errorWindows.Contains(activeWindow)) {
+                if (_errorWindows.Contains(activeWindow)) {
                     // window reports error when accessing pid, i think this slows system down
                     return null;
                 }
@@ -147,7 +138,7 @@ namespace MonkeyPaste.Avalonia {
                 string xdotool_error = "has no pid associated with it.";
 
                 if (!activePidStr.IsStringNullOrWhiteSpace()) {
-                    if(activePidStr.Contains(xdotool_error)) {
+                    if (activePidStr.Contains(xdotool_error)) {
                         // window handle was found but no pid, note this to avoid rechecking since it errors
                         _errorWindows.Add(activeWindow);
                         return null;
@@ -155,13 +146,13 @@ namespace MonkeyPaste.Avalonia {
                     try {
                         activeIntPtr = new IntPtr(int.Parse(activePidStr));
                         if (activeIntPtr != IntPtr.Zero) {
-                            if(_lastActiveInfo != null && _lastActiveInfo.Handle == activeIntPtr) {
+                            if (_lastActiveInfo != null && _lastActiveInfo.Handle == activeIntPtr) {
                                 return _lastActiveInfo;
                             }
 
                             activeWindowTitle = "xdotool getactivewindow getwindowname".ShellExec().Trim();
                             string activeWindowPath = $"ps -q {activePidStr} -o cmd=".ShellExec().Trim();
-                            if(!string.IsNullOrEmpty(activeWindowPath)) {
+                            if (!string.IsNullOrEmpty(activeWindowPath)) {
                                 _lastActiveInfo = new MpPortableProcessInfo() {
                                     Handle = activeIntPtr,
                                     ProcessPath = activeWindowPath,
@@ -236,7 +227,7 @@ namespace MonkeyPaste.Avalonia {
                 // return activeAppTuple;
             }
         }
-        
+
         #endregion
 
         #region Helpers
@@ -248,6 +239,6 @@ namespace MonkeyPaste.Avalonia {
             return MpAvX11ProcessWatcher_shell.GetRunningApps();
         }
         #endregion
-        
+
     }
 }

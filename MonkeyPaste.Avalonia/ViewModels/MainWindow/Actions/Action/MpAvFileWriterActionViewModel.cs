@@ -1,24 +1,18 @@
 ﻿
-using MonkeyPaste.Common;
-using MonkeyPaste;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows;
-
-using System.Windows.Input;
 using Avalonia.Controls;
 using Avalonia.Threading;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
 
-    public class MpAvFileWriterActionViewModel : 
+    public class MpAvFileWriterActionViewModel :
         MpAvActionViewModelBase, MpITooltipInfoViewModel {
         #region Constants
 
@@ -31,7 +25,7 @@ namespace MonkeyPaste.Avalonia {
         private MpActionPluginFormat _actionComponentFormat;
         public override MpActionPluginFormat ActionComponentFormat {
             get {
-                if(_actionComponentFormat == null) {
+                if (_actionComponentFormat == null) {
                     _actionComponentFormat = new MpActionPluginFormat() {
                         parameters = new List<MpParameterFormat>() {
                             new MpParameterFormat() {
@@ -144,7 +138,7 @@ namespace MonkeyPaste.Avalonia {
             var actionInput = GetInput(arg);
 
             List<string> fl = null;
-            if(actionInput.CopyItem.ItemType == MpCopyItemType.FileList) {
+            if (actionInput.CopyItem.ItemType == MpCopyItemType.FileList) {
                 fl = actionInput.CopyItem.ItemData.SplitNoEmpty(MpCopyItem.FileItemSplitter).ToList();
             } else {
                 string ci_fp = await actionInput.CopyItem.ItemData.ToFileAsync(
@@ -155,14 +149,14 @@ namespace MonkeyPaste.Avalonia {
                 fl = new List<string>() { ci_fp };
             }
             string outputData = string.Empty;
-            foreach(var fp in fl) {
+            foreach (var fp in fl) {
                 string output = await WriteToFileSystemPath(fp);
-                if(output == null) {
+                if (output == null) {
                     // error occured break and finish
                     break;
                 }
 
-                if(!string.IsNullOrEmpty(outputData)) {
+                if (!string.IsNullOrEmpty(outputData)) {
                     outputData += Environment.NewLine;
                 }
                 outputData += output;
@@ -241,12 +235,12 @@ namespace MonkeyPaste.Avalonia {
                     fixCommand: Parent.SelectActionCommand,
                     fixCommandArgs: new object[] { ActionId, 1, error_msg });
 
-                if(result == MpNotificationDialogResultType.Cancel ||
+                if (result == MpNotificationDialogResultType.Cancel ||
                     result == MpNotificationDialogResultType.Ignore) {
                     formatted_target_path = null;
                 } else {
                     // NOTE not sure right strategy so this is off top of head
-                    while(formatted_target_path == null) {
+                    while (formatted_target_path == null) {
                         await Task.Delay(100);
                     }
                 }

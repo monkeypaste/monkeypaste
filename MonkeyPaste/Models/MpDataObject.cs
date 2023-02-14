@@ -5,7 +5,6 @@ using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
@@ -43,16 +42,16 @@ namespace MonkeyPaste {
             int dataObjectId = 0,
             MpPortableDataObject pdo = null,
             bool suppressWrite = false) {
-                        
+
             var ndio = new MpDataObject() {
-                DataObjectGuid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid(): System.Guid.Parse(guid),
+                DataObjectGuid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid() : System.Guid.Parse(guid),
                 Id = dataObjectId
             };
 
-            if(!suppressWrite) {
+            if (!suppressWrite) {
                 await ndio.WriteToDatabaseAsync();
             }
-            if(pdo == null) {
+            if (pdo == null) {
                 return ndio;
             }
 
@@ -99,7 +98,7 @@ namespace MonkeyPaste {
 
                     itemDataStr = kvp.Value.ToString();
                 } else {
-                    if(kvp.Key.Name == MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT) {
+                    if (kvp.Key.Name == MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT) {
                         // don't need to worry about storing this (value type is list)
                         continue;
                     }

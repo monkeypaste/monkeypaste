@@ -19,7 +19,7 @@ namespace MonkeyPaste.Avalonia {
             if (value is DateTime dt) {
                 return dt.ToString();
             }
-            if(value is DateTimeOffset dto) {
+            if (value is DateTimeOffset dto) {
                 return dto.DateTime.ToString();
             }
             return null;

@@ -1,9 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
@@ -157,10 +154,10 @@ namespace MonkeyPaste {
             ThisAppId = this_app.Id;
 
             // OS APP
-            
+
             var osApp = await MpDataModelProvider.GetAppByMembersAsync(
-                osFileManagerPath, 
-                null, 
+                osFileManagerPath,
+                null,
                 ThisUserDeviceId);
             ThisOsFileManagerAppId = osApp.Id;
 
@@ -170,7 +167,7 @@ namespace MonkeyPaste {
             var thisAppIcon = await MpDataModelProvider.GetItemAsync<MpIcon>(ThisAppId);
             ThisAppIconId = thisAppIcon.Id;
             ThisAppIconDbImageId = thisAppIcon.IconImageId;
-           
+
         }
 
         #endregion

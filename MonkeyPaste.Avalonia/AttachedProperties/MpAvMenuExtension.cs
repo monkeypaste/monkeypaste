@@ -8,14 +8,9 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
-using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using PropertyChanged;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -158,7 +153,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region PlacementMode AvaloniaProperty
         public static PlacementMode GetPlacementMode(AvaloniaObject obj) {
-            return obj.GetValue(PlacementModeProperty); 
+            return obj.GetValue(PlacementModeProperty);
         }
 
         public static void SetPlacementMode(AvaloniaObject obj, PlacementMode value) {
@@ -220,9 +215,9 @@ namespace MonkeyPaste.Avalonia {
                 false,
                 false);
 
-        private static void HandleIsEnabledChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
+        private static void HandleIsEnabledChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
             if (e.NewValue is bool isEnabledVal) {
-                if(isEnabledVal) {
+                if (isEnabledVal) {
                     _cmInstance.MenuOpened += _cmInstance_MenuOpened;
                     _cmInstance.MenuClosed += _cmInstance_MenuOpened;
                     if (element is Control control) {
@@ -234,7 +229,7 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     HostControl_DetachedToVisualHandler(element, null);
                 }
-            } 
+            }
         }
 
         private static void _cmInstance_MenuOpened(object sender, RoutedEventArgs e) {
@@ -243,7 +238,7 @@ namespace MonkeyPaste.Avalonia {
 
         private static void OnIsOpenChanged() {
             var control = _cmInstance.PlacementTarget;
-            if(control == null) {
+            if (control == null) {
                 Debugger.Break();
             }
             object dc = GetControlDataContext(control);
@@ -259,7 +254,7 @@ namespace MonkeyPaste.Avalonia {
             //if (is_open) {
             //    openSubMenuItems.AddRange(_cmInstance.ItemContainerGenerator.Containers.Where(x=>x.ContainerControl is MenuItem).Select(x=>x.ContainerControl).Cast<MenuItem>());
             //}else 
-            if(!is_open) {
+            if (!is_open) {
                 control.ContextMenu = null;
                 openSubMenuItems.Clear();
             }
@@ -285,8 +280,8 @@ namespace MonkeyPaste.Avalonia {
 
             // VALIDATE CAN SHOW
 
-            if (control == null || 
-                !GetIsEnabled(control) || 
+            if (control == null ||
+                !GetIsEnabled(control) ||
                 !GetCanShowMenu(control)) {
                 return;
             }
@@ -331,7 +326,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
-            if(GetForcedMenuItemViewModel(control) is MpMenuItemViewModel fmivm) {
+            if (GetForcedMenuItemViewModel(control) is MpMenuItemViewModel fmivm) {
                 // used when host vm has multiple context menus
                 mivm = fmivm;
             }
@@ -358,7 +353,7 @@ namespace MonkeyPaste.Avalonia {
 
         private static void MenuItem_PointerReleased(object sender, PointerReleasedEventArgs e) {
             MenuItem mi = null;
-            if (e.Source is IVisual sourceVisual &&
+            if (e.Source is Visual sourceVisual &&
                 sourceVisual.GetVisualAncestor<MenuItem>() is MenuItem smi) {
                 mi = smi;
             } else if (sender is MenuItem sender_mi) {
@@ -374,8 +369,8 @@ namespace MonkeyPaste.Avalonia {
 
             bool hide_on_click = GetHideOnClick(_cmInstance.PlacementTarget);
             if (mivm.ContentTemplateName == MpMenuItemViewModel.CHECKABLE_TEMPLATE_NAME) {
-                
-                if(hide_on_click) {
+
+                if (hide_on_click) {
                     mivm.Command.Execute(mivm.CommandParameter);
                 } else {
                     MenuItem_PointerReleased2(mi, e);
@@ -386,16 +381,16 @@ namespace MonkeyPaste.Avalonia {
                 // NOTE hide_on_click only matters for checkbox templates
                 hide_on_click = true;
             }
-            
-            if(hide_on_click) {
+
+            if (hide_on_click) {
                 MpPlatform.Services.ContextMenuCloser.CloseMenu();
             }
-            
+
         }
 
         private static void MenuItem_DetachedFromVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
             if (sender is MenuItem control) {
-                control.PointerEnterItem -= MenuItem_PointerEnter;
+                control.PointerEntered -= MenuItem_PointerEnter;
                 control.PointerReleased -= MenuItem_PointerReleased;
                 control.RemoveHandler(Control.PointerReleasedEvent, MenuItem_PointerReleased);
             }
@@ -403,9 +398,9 @@ namespace MonkeyPaste.Avalonia {
 
         private static void MenuItem_PointerEnter(object sender, PointerEventArgs e) {
             if (e.Source is MenuItem mi && mi.DataContext is MpMenuItemViewModel mivm) {
-               
+
                 var openMenusToRemove = new List<MenuItem>();
-                foreach(var osmi in openSubMenuItems) {
+                foreach (var osmi in openSubMenuItems) {
                     var cmil = GetChildMenuItems(osmi);
                     var pmil = GetParentMenuItems(mi);
                     if (cmil.Select(x => x.DataContext).Cast<MpMenuItemViewModel>().All(x => x != mivm)) {
@@ -420,7 +415,7 @@ namespace MonkeyPaste.Avalonia {
                         openMenusToRemove.Add(osmi);
                     }
                 }
-                foreach(var mitr in openMenusToRemove) {
+                foreach (var mitr in openMenusToRemove) {
                     openSubMenuItems.Remove(mitr);
                 }
 
@@ -430,7 +425,7 @@ namespace MonkeyPaste.Avalonia {
                     mi.Background = Brushes.LightBlue;
                     var ccl = mi.GetVisualDescendants<Control>();
                     var child_border = ccl.FirstOrDefault(x => x is Border b && b.Tag == null);
-                    
+
                     if (child_border != null) {
                         (child_border as Border).Background = Brushes.LightBlue;
                     }
@@ -461,16 +456,16 @@ namespace MonkeyPaste.Avalonia {
                         InputGesture = inputGesture,
                         DataContext = mivm,
                         Icon = CreateIcon(mivm),
-                        Items = mivm.SubItems == null ? null : mivm.SubItems.Where(x=>x != null && x.IsVisible).Select(x=>CreateMenuItem(x))
+                        Items = mivm.SubItems == null ? null : mivm.SubItems.Where(x => x != null && x.IsVisible).Select(x => CreateMenuItem(x))
                     };
 
-                    mi.PointerEnterItem += MenuItem_PointerEnter;
+                    mi.PointerEntered += MenuItem_PointerEnter;
                     mi.DetachedFromVisualTree += MenuItem_DetachedFromVisualTree;
                     if (mi.Command != null && mivm.IsEnabled) {
                         mi.AddHandler(Control.PointerReleasedEvent, MenuItem_PointerReleased, RoutingStrategies.Tunnel);
                     }
-                    if(itemType == MpMenuItemViewModel.CHECKABLE_TEMPLATE_NAME) {
-                       mi = ApplyAnyBindings(mi, mivm);
+                    if (itemType == MpMenuItemViewModel.CHECKABLE_TEMPLATE_NAME) {
+                        mi = ApplyAnyBindings(mi, mivm);
                     }
                     control = mi;
                     break;
@@ -488,32 +483,32 @@ namespace MonkeyPaste.Avalonia {
                         DataContext = mivm
                     };
 
-                    control.PointerEnter += MenuItem_PointerEnter;
+                    control.PointerEntered += MenuItem_PointerEnter;
                     control.DetachedFromVisualTree += MenuItem_DetachedFromVisualTree;
                     break;
             }
             return control;
         }
         public static object CreateIcon(MpMenuItemViewModel mivm) {
-            if(mivm.ContentTemplateName == MpMenuItemViewModel.CHECKABLE_TEMPLATE_NAME) {
+            if (mivm.ContentTemplateName == MpMenuItemViewModel.CHECKABLE_TEMPLATE_NAME) {
                 return CreateCheckableIcon(mivm);
             }
-            if(mivm.IconSourceObj == null) {
+            if (mivm.IconSourceObj == null) {
                 return null;
             }
             var iconImg = new Image() {
-                        HorizontalAlignment = HorizontalAlignment.Stretch,
-                        VerticalAlignment = VerticalAlignment.Stretch,
-                        Source = MpAvIconSourceObjToBitmapConverter.Instance.Convert(mivm.IconSourceObj, null, null, null) as Bitmap,
-                    };
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch,
+                Source = MpAvIconSourceObjToBitmapConverter.Instance.Convert(mivm.IconSourceObj, null, null, null) as Bitmap,
+            };
             var iconBorder = GetIconBorder(mivm);
-            if(mivm.IsChecked.IsFalse()) {
+            if (mivm.IsChecked.IsFalse()) {
                 iconBorder.BorderBrush = Brushes.Transparent;
             }
             iconBorder.Child = iconImg;
             return iconBorder;
         }
-        private static object CreateCheckableIcon(MpMenuItemViewModel mivm) {            
+        private static object CreateCheckableIcon(MpMenuItemViewModel mivm) {
             var pi = new PathIcon() {
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
@@ -538,7 +533,7 @@ namespace MonkeyPaste.Avalonia {
                 Margin = mivm.IconMargin.ToAvThickness(),
                 Background = mivm.IconHexStr.ToAvBrush()
             };
-            if(mivm.IconShape.ToAvShape() is Shape icon_shape) {
+            if (mivm.IconShape.ToAvShape() is Shape icon_shape) {
                 //Stroke="DarkBlue" StrokeThickness="1" Fill="Violet" Canvas.Left="150" Canvas.Top="31"/>
                 icon_shape.Stroke = ib.BorderBrush;
                 icon_shape.StrokeThickness = mivm.IconBorderThickness;
@@ -555,7 +550,7 @@ namespace MonkeyPaste.Avalonia {
 
         private static IEnumerable<MenuItem> GetChildMenuItems(MenuItem mi) {
             var items = new List<MenuItem>();
-            if(mi != null) {
+            if (mi != null) {
                 items.Add(mi);
                 if (mi.Items != null) {
                     foreach (var cmiObj in mi.Items) {
@@ -590,13 +585,13 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static MenuItem ApplyAnyBindings(MenuItem mi, MpMenuItemViewModel mivm) {
-            if(mivm.IconSrcBindingObj != null &&
+            if (mivm.IconSrcBindingObj != null &&
                 mi.Icon is Border icon_border) {
                 // NOTE this only handles unique case for search filter check box
                 //var icon_border =
                 //    icon.GetVisualDescendants<Border>()
                 //    .FirstOrDefault(x => x.Tag != null && x.Tag.ToString() == "IconBorder");
-                if(icon_border == null) {
+                if (icon_border == null) {
                     Debugger.Break();
                 } else {
                     icon_border.Background = null;
@@ -608,7 +603,7 @@ namespace MonkeyPaste.Avalonia {
                             Converter = MpAvStringHexToBrushConverter.Instance
                         });
 
-                    if(icon_border.Child is PathIcon pi) {
+                    if (icon_border.Child is PathIcon pi) {
                         pi.Data = null;
                         pi.Bind(
                             PathIcon.DataProperty,
@@ -622,7 +617,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
             }
-            if(mivm.CommandSrcObj != null) {
+            if (mivm.CommandSrcObj != null) {
                 //mi.RemoveHandler(Control.PointerReleasedEvent, MenuItem_PointerReleased);
                 mi.Command = null;
                 mi.Bind(
@@ -641,9 +636,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         public static void ShowMenu(
-            Control control, 
-            MpMenuItemViewModel mivm, 
-            MpPoint offset = null, 
+            Control control,
+            MpMenuItemViewModel mivm,
+            MpPoint offset = null,
             PlacementMode placement = PlacementMode.AnchorAndGravity,
             bool hideOnClick = false,
             bool selectOnRightClick = false) {
@@ -651,7 +646,7 @@ namespace MonkeyPaste.Avalonia {
 
             offset = offset == null ? MpPoint.Zero : offset;
 
-            if(mivm.SubItems == null || mivm.SubItems.Count == 0) {
+            if (mivm.SubItems == null || mivm.SubItems.Count == 0) {
                 _cmInstance.Items = new[] { mivm };
             } else {
                 _cmInstance.Items = mivm.SubItems.Where(x => x != null && x.IsVisible).Select(x => CreateMenuItem(x));
@@ -680,11 +675,11 @@ namespace MonkeyPaste.Avalonia {
         #region Helpers
 
         private static object GetControlDataContext(Control control) {
-            if(GetForcedMenuItemViewModel(control) is MpMenuItemViewModel mivm &&
+            if (GetForcedMenuItemViewModel(control) is MpMenuItemViewModel mivm &&
                 mivm.ParentObj is object forceDc) {
                 return forceDc;
             }
-            if(control == null) {
+            if (control == null) {
                 return null;
             }
             return control.DataContext;
@@ -697,7 +692,7 @@ namespace MonkeyPaste.Avalonia {
         private static void MenuItem_PointerReleased2(object sender, PointerReleasedEventArgs e) {
             // unused can't consistently get checks to change w/o reloading...i think its from right click selecting 
             MenuItem mi = null;
-            if (e.Source is IVisual sourceVisual &&
+            if (e.Source is Visual sourceVisual &&
                 sourceVisual.GetVisualAncestor<MenuItem>() is MenuItem smi) {
                 //MpConsole.WriteLine("Released (source): " + mi);
                 mi = smi;
@@ -728,7 +723,7 @@ namespace MonkeyPaste.Avalonia {
                 bool? is_cur_mi_checked = false;
                 if (cur_mi_mivm.IsChecked.IsTrue()) {
                     is_cur_mi_checked = true;
-                } else if(cur_mi_mivm.SubItems != null && cur_mi_mivm.SubItems.Count > 0){
+                } else if (cur_mi_mivm.SubItems != null && cur_mi_mivm.SubItems.Count > 0) {
                     is_cur_mi_checked = cur_mi_mivm.SubItems.Any(x => x.IsChecked.IsTrueOrNull()) ? null : false;
                 }
                 cur_mi_mivm.IsChecked = is_cur_mi_checked;
@@ -749,4 +744,5 @@ namespace MonkeyPaste.Avalonia {
         public void CloseMenu() {
             MpAvMenuExtension.CloseMenu();
         }
-    }}
+    }
+}

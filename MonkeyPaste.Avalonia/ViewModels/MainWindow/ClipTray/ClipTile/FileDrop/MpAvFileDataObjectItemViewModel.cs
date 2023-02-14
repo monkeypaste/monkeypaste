@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MonkeyPaste.Common;
+using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using MonkeyPaste;
-using MonkeyPaste.Common;
 
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvFileDataObjectItemViewModel : MpViewModelBase<MpAvFileItemCollectionViewModel>,
         MpISelectableViewModel,
-        MpIHoverableViewModel{
+        MpIHoverableViewModel {
 
         #region Properties
 
@@ -34,7 +31,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string FileItemBackgroundHexColor {
             get {
-                if(IsHovering || IsSelected) {
+                if (IsHovering || IsSelected) {
                     return MpSystemColors.gainsboro;
                 }
                 return MpSystemColors.Transparent;
@@ -43,7 +40,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string FileItemBorderHexColor {
             get {
-                if(IsSelected) {
+                if (IsSelected) {
                     return MpSystemColors.Red;
                 }
                 if (IsHovering) {
@@ -55,9 +52,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Model
-        public string Path { 
+        public string Path {
             get {
-                if(DataObjectItem == null) {
+                if (DataObjectItem == null) {
                     return string.Empty;
                 }
                 return DataObjectItem.ItemData;
@@ -83,7 +80,7 @@ namespace MonkeyPaste.Avalonia {
                         return MpBase64Images.QuestionMark;
                     }
                     var ivm = MpAvIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == PathIconId);
-                    if(ivm == null) {
+                    if (ivm == null) {
                         // this shouldn't happen and maybe race condition issues with startup or copy item create
                         Debugger.Break();
                         _iconBase64 = MpBase64Images.Error;
@@ -103,7 +100,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvFileDataObjectItemViewModel() :base (null) { }
+        public MpAvFileDataObjectItemViewModel() : base(null) { }
 
         public MpAvFileDataObjectItemViewModel(MpAvFileItemCollectionViewModel parent) : base(parent) { }
 
@@ -113,7 +110,7 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task InitializeAsync(MpDataObjectItem dataObjectItem) {
             IsBusy = true;
-            
+
             await Task.Delay(1);
             DataObjectItem = dataObjectItem;
 
@@ -125,7 +122,7 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Overrides
 
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
-            if(e is MpIcon icon && icon.Id == PathIconId) {
+            if (e is MpIcon icon && icon.Id == PathIconId) {
                 // path icon changed will need to notify content view
                 OnPropertyChanged(nameof(IconBase64));
             }

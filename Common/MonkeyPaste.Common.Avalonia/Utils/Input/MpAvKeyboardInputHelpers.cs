@@ -1,10 +1,7 @@
 ﻿using Avalonia.Input;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvKeyboardInputHelpers {
@@ -29,9 +26,9 @@ namespace MonkeyPaste.Common.Avalonia {
         public static List<List<string>> ConvertStringToKeyLiteralSequence(string keyStr) {
             var kseq = ConvertStringToKeySequence(keyStr);
             var lseq = new List<List<string>>();
-            foreach(var kcombo in kseq) {
+            foreach (var kcombo in kseq) {
                 var lcombo = new List<string>();
-                foreach(var k in kcombo) {
+                foreach (var k in kcombo) {
                     lcombo.Add(GetKeyLiteral(k));
                 }
                 lseq.Add(lcombo);
@@ -59,7 +56,7 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static Key ConvertStringToKey(string keyStr) {
-            if(keyStr.IsNullOrEmpty()) {
+            if (keyStr.IsNullOrEmpty()) {
                 return Key.None;
             }
 
@@ -68,7 +65,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 lks == MpKeyLiteralStringHelpers.CONTROL_KEY_LITERAL.ToLower()) {
                 return Key.LeftCtrl;//.LeftCtrl;
             }
-            if(lks == MpKeyLiteralStringHelpers.AV_CAPS_LOCK_KEY_LITERAL.ToLower() ||
+            if (lks == MpKeyLiteralStringHelpers.AV_CAPS_LOCK_KEY_LITERAL.ToLower() ||
                 lks == MpKeyLiteralStringHelpers.SH_CAPS_LOCK_KEY_LITERAL.ToLower()) {
                 return Key.CapsLock;
             }
@@ -134,7 +131,7 @@ namespace MonkeyPaste.Common.Avalonia {
             if (key == Key.LeftCtrl || key == Key.RightCtrl) {
                 return MpKeyLiteralStringHelpers.AV_CONTROL_KEY_LITERAL;
             }
-            if(key == Key.Escape) {
+            if (key == Key.Escape) {
                 return MpKeyLiteralStringHelpers.ESCAPE_KEY_LITERAL;
             }
 

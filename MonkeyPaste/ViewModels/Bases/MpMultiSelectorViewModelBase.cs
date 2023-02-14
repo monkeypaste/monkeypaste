@@ -4,8 +4,8 @@ using System.Linq;
 
 namespace MonkeyPaste {
     public abstract class MpMultiSelectorViewModelBase<P, C> :
-        MpSelectorViewModelBase<P,C>,
-        MpIMultiSelectableViewModel<C> 
+        MpSelectorViewModelBase<P, C>,
+        MpIMultiSelectableViewModel<C>
         where P : class
         where C : class, MpISelectableViewModel {
 

@@ -1,9 +1,5 @@
-﻿
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
@@ -15,7 +11,7 @@ namespace MonkeyPaste.Common {
         public static MpPortableDataObject Parse(string json) {
             var mpdo = new MpPortableDataObject();
             var req_lookup = MpJsonConverter.DeserializeObject<Dictionary<string, object>>(json);
-            foreach(var kvp in req_lookup) {
+            foreach (var kvp in req_lookup) {
                 mpdo.SetData(kvp.Key, kvp.Value);
             }
             return mpdo;
@@ -70,7 +66,7 @@ namespace MonkeyPaste.Common {
         #region Properties
 
         public virtual Dictionary<MpPortableDataFormat, object> DataFormatLookup { get; private set; } = new Dictionary<MpPortableDataFormat, object>();
-        
+
         #endregion
 
         public bool ContainsData(string format) {
@@ -85,22 +81,22 @@ namespace MonkeyPaste.Common {
             DataFormatLookup.TryGetValue(pdf, out object data);
             return data;
         }
-        
+
         public bool TryGetData(string format, out object data) {
             data = null;
             var pdf = MpPortableDataFormats.GetDataFormat(format);
             if (pdf == null) {
                 return false;
             }
-            if(DataFormatLookup.TryGetValue(pdf, out object tmp)) {
+            if (DataFormatLookup.TryGetValue(pdf, out object tmp)) {
                 data = tmp;
                 return true;
             }
             return false;
         }
-        public bool TryGetData<T>(string format, out T data) where T:class {
-            if(TryGetData(format, out object dataObj)) {
-                if(dataObj is T) {
+        public bool TryGetData<T>(string format, out T data) where T : class {
+            if (TryGetData(format, out object dataObj)) {
+                if (dataObj is T) {
                     data = dataObj as T;
                     return true;
                 }
@@ -108,7 +104,7 @@ namespace MonkeyPaste.Common {
             data = default;
             return false;
         }
-        
+
         public virtual void SetData(string format, object data) {
             var pdf = MpPortableDataFormats.GetDataFormat(format);
             if (pdf == null) {
@@ -123,8 +119,8 @@ namespace MonkeyPaste.Common {
         public MpPortableDataObject(string format, object data) : this() {
             SetData(format, data);
         }
-        public MpPortableDataObject(Dictionary<string,object> formatDataLookup, bool caseSensitive = true) : this() {
-            if(formatDataLookup != null) {
+        public MpPortableDataObject(Dictionary<string, object> formatDataLookup, bool caseSensitive = true) : this() {
+            if (formatDataLookup != null) {
                 formatDataLookup.ForEach(x => SetData(x.Key, x.Value));
             }
         }
@@ -135,7 +131,7 @@ namespace MonkeyPaste.Common {
 
         public override string ToString() {
             var sb = new StringBuilder();
-            foreach(var kvp in DataFormatLookup) {
+            foreach (var kvp in DataFormatLookup) {
                 sb.AppendLine($"Format '{kvp.Key.Name}':");
                 sb.AppendLine($"'{kvp.Value.ToString()}'");
             }

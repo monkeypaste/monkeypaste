@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
-using System.Threading.Tasks;
-using MonkeyPaste.Common;
+﻿using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public class MpLoaderNotificationViewModel : MpNotificationViewModelBase {
@@ -18,7 +13,7 @@ namespace MonkeyPaste {
 
         public double ProgressBarCurrentWidth {
             get {
-                if(ProgressLoader == null) {
+                if (ProgressLoader == null) {
                     return 0;
                 }
                 return ProgressTotalBarWidth * ProgressLoader.PercentLoaded;
@@ -45,7 +40,7 @@ namespace MonkeyPaste {
 
         public override MpNotificationType NotificationType {
             get {
-                if(ProgressLoader == null) {
+                if (ProgressLoader == null) {
                     return MpNotificationType.None;
                 }
                 return ProgressLoader.DialogType;
@@ -76,7 +71,7 @@ namespace MonkeyPaste {
 
         public override async Task<MpNotificationDialogResultType> ShowNotificationAsync() {
             var base_result = await base.ShowNotificationAsync();
-            if(base_result == MpNotificationDialogResultType.DoNotShow) {
+            if (base_result == MpNotificationDialogResultType.DoNotShow) {
                 // when loader is DoNotShow base never shows it (and StartLoader is called from window)
                 // so manually perform load
                 await ProgressLoader.BeginLoaderAsync();

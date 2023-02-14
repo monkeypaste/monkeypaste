@@ -1,27 +1,10 @@
-﻿
-using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
+﻿using MonkeyPaste.Common;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-
 using System.Windows.Input;
 
-
-using MonkeyPaste;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-
-
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; 
-
 namespace MonkeyPaste.Avalonia {
-    public class MpAppClipboardFormatInfoCollectionViewModel : 
+    public class MpAppClipboardFormatInfoCollectionViewModel :
         MpAvSelectorViewModelBase<MpAvAppViewModel, MpAppClipboardFormatInfoViewModel> {
         #region Private Variables
 
@@ -67,7 +50,7 @@ namespace MonkeyPaste.Avalonia {
 
             var overrideInfos = await MpDataModelProvider.GetAppClipboardFormatInfosByAppIdAsync(appId);
             Items.Clear();
-            foreach(var format in MpPortableDataFormats.RegisteredFormats) {
+            foreach (var format in MpPortableDataFormats.RegisteredFormats) {
                 if (overrideInfos.Any(x => x.FormatType == format)) {
                     continue;
                 }
@@ -80,12 +63,12 @@ namespace MonkeyPaste.Avalonia {
                 overrideInfos.Add(defInfo);
             }
 
-            foreach (var ais in overrideInfos.OrderBy(x=>x.IgnoreFormatValue)) {
+            foreach (var ais in overrideInfos.OrderBy(x => x.IgnoreFormatValue)) {
                 var aisvm = await CreateAppClipboardFormatViewModel(ais);
                 Items.Add(aisvm);
             }
 
-            while(Items.Any(x => x.IsBusy)) {
+            while (Items.Any(x => x.IsBusy)) {
                 await Task.Delay(100);
             }
 
@@ -105,9 +88,9 @@ namespace MonkeyPaste.Avalonia {
         #region Commands
 
         public ICommand DeleteClipboardFormatTypeCommand => new MpCommand<object>(
-            async (cfaisvmArg) => {                
+            async (cfaisvmArg) => {
                 var cfaisvm = cfaisvmArg as MpAppClipboardFormatInfoViewModel;
-                if(cfaisvm == null) {
+                if (cfaisvm == null) {
                     return;
                 }
                 IsBusy = true;
@@ -132,7 +115,7 @@ namespace MonkeyPaste.Avalonia {
                 var cfaisvm = await CreateAppClipboardFormatViewModel(cfais);
                 base.Items.Add(cfaisvm);
 
-                while(cfaisvm.IsBusy) {
+                while (cfaisvm.IsBusy) {
                     await Task.Delay(100);
                 }
 

@@ -26,9 +26,9 @@ namespace MonkeyPaste.Common {
 
         private double _width;
         public double Width {
-            get => _width; 
+            get => _width;
             set {
-                if(value < 0) {
+                if (value < 0) {
                     Debugger.Break();
                     value = 0;
                 }

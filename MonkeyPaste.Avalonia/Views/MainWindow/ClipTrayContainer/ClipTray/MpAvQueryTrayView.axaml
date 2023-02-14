@@ -142,24 +142,12 @@
                          Height="{Binding QueryTrayTotalHeight}"
                          Items="{Binding Items}">
                     <ListBox.Resources>
-                        <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">
-                            Transparent
-                        </SolidColorBrush>
-                        <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">
-                            Transparent
-                        </SolidColorBrush>
-                        <SolidColorBrush x:Key="SystemControlHighlightListAccentHighBrush">
-                            Transparent
-                        </SolidColorBrush>
-                        <SolidColorBrush x:Key="SystemControlHighlightListLowBrush">
-                            Transparent
-                        </SolidColorBrush>
-                        <SolidColorBrush x:Key="SystemControlHighlightListMediumBrush">
-                            Transparent
-                        </SolidColorBrush>
-                        <SolidColorBrush x:Key="SystemControlHighlightListHighBrush">
-                            Transparent
-                        </SolidColorBrush>
+                        <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">Transparent</SolidColorBrush>
+                        <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">Transparent</SolidColorBrush>
+                        <SolidColorBrush x:Key="SystemControlHighlightListAccentHighBrush">Transparent</SolidColorBrush>
+                        <SolidColorBrush x:Key="SystemControlHighlightListLowBrush">Transparent</SolidColorBrush>
+                        <SolidColorBrush x:Key="SystemControlHighlightListMediumBrush">Transparent</SolidColorBrush>
+                        <SolidColorBrush x:Key="SystemControlHighlightListHighBrush">Transparent</SolidColorBrush>
                     </ListBox.Resources>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -184,7 +172,7 @@
 
         <!--
             IsBusy Overlay
-                IsVisible="{Binding IsRequerying}"
+            IsVisible="{Binding IsRequerying}"
         -->
         <Border HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common {
     public enum MpRegExType {
@@ -24,7 +21,7 @@ namespace MonkeyPaste.Common {
         StartsWithWindowsStyleDirectory,
         ContainsInvalidFileNameChar,
         EncodedHtmlEntity
-       // HtmlTag
+        // HtmlTag
     }
 
     public static class MpRegEx {
@@ -96,9 +93,9 @@ namespace MonkeyPaste.Common {
         };
 
         private static Dictionary<MpRegExType, Regex> _regExLookup;
-        public static Dictionary<MpRegExType, Regex> RegExLookup { 
+        public static Dictionary<MpRegExType, Regex> RegExLookup {
             get {
-                if(_regExLookup == null) {
+                if (_regExLookup == null) {
                     _regExLookup = _regExStrings.ToDictionary(
                                         x => (MpRegExType)_regExStrings.IndexOf(x),
                                         x => new Regex(x));

@@ -38,7 +38,7 @@ namespace MonkeyPaste.Common {
             // hue from 0 - 360
             MpColorHelpers.ColorToHsv(hex.ToPortableColor(), out double h, out double s, out double v);
             double new_hue = h + hue_delta;
-            if(new_hue > 360) {
+            if (new_hue > 360) {
                 // wrap hue
                 new_hue = new_hue - 360;
             }

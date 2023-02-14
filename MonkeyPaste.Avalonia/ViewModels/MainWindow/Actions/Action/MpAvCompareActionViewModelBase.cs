@@ -1,23 +1,12 @@
-﻿
-using MonkeyPaste;
+﻿using MonkeyPaste.Common;
+////using Xamarin.Essentials;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Resources;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
-using MonkeyPaste.Common;
-
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
-//using Xamarin.Essentials;
-using MonkeyPaste.Common.Plugin;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvComparisionMatch {
@@ -30,7 +19,7 @@ namespace MonkeyPaste.Avalonia {
             Length = length;
         }
 
-        public MpAvComparisionMatch(string text, int offset, int length) : this(offset,length) {
+        public MpAvComparisionMatch(string text, int offset, int length) : this(offset, length) {
             Text = text;
         }
 
@@ -68,7 +57,7 @@ namespace MonkeyPaste.Avalonia {
                                 isRequired = true,
                                 paramId = SELECTED_COMPARE_PATH_PARAM_ID,
                                 description = "",
-                                values = 
+                                values =
                                     typeof(MpContentQueryPropertyPathType)
                                     .GetEnumNames()
                                     .Select(x=>
@@ -91,7 +80,7 @@ namespace MonkeyPaste.Avalonia {
                                 isRequired = true,
                                 paramId = SELECTED_COMPARE_OP_PARAM_ID,
                                 description = "",
-                                values = 
+                                values =
                                     typeof(MpComparisonOperatorType)
                                     .GetEnumNames()
                                     .Select(x=>
@@ -315,9 +304,9 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             MpAvActionOutput ao = GetInput(arg);
-            
+
             string compareStr = await GetCompareStr(ao);
-            if(compareStr == null) {
+            if (compareStr == null) {
                 return;
             }
             MpConsole.WriteLine($"Comprarer '{Label}' match result:");
@@ -331,7 +320,7 @@ namespace MonkeyPaste.Avalonia {
 
             compareOutput.Matches = GetMatches(compareStr);
             MpConsole.WriteLine($"matches with: '{compareStr}' ");
-            MpConsole.WriteLine($"Total: '{compareOutput.Matches.Count}' ");            
+            MpConsole.WriteLine($"Total: '{compareOutput.Matches.Count}' ");
 
             if (compareOutput.Matches != null && compareOutput.Matches.Count > 0) {
                 base.PerformActionAsync(compareOutput).FireAndForgetSafeAsync(this);
@@ -366,7 +355,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task<string> GetCompareStr(MpAvActionOutput ao) {
-            if(ao == null) {
+            if (ao == null) {
                 return null;
             }
             if (ComparePropertyPathType == MpContentQueryPropertyPathType.LastOutput) {
@@ -388,7 +377,7 @@ namespace MonkeyPaste.Avalonia {
                     return ao.OutputData.ToString();
                 }
             } else {
-                var copyItemPropObj =  await MpPluginParameterValueEvaluator.QueryPropertyAsync(ao.CopyItem, ComparePropertyPathType);
+                var copyItemPropObj = await MpPluginParameterValueEvaluator.QueryPropertyAsync(ao.CopyItem, ComparePropertyPathType);
                 if (copyItemPropObj != null) {
                     return copyItemPropObj.ToString();
                 }
@@ -439,7 +428,7 @@ namespace MonkeyPaste.Avalonia {
             return matches;
         }
 
-        private MpAvComparisionMatch GetMatch(object compareObj,string matchStr, int idx = 0) {
+        private MpAvComparisionMatch GetMatch(object compareObj, string matchStr, int idx = 0) {
             bool isCaseSensitive = IsCaseSensitive;
             string compareData = matchStr;
             if (compareData == null) {
@@ -448,7 +437,7 @@ namespace MonkeyPaste.Avalonia {
             compareData = isCaseSensitive ? compareData : compareData.ToLower();
 
             if (compareObj is string compareStr) {
-                if(idx >= compareStr.Length) {
+                if (idx >= compareStr.Length) {
                     return null;
                 }
 
@@ -480,8 +469,8 @@ namespace MonkeyPaste.Avalonia {
                             return new MpAvComparisionMatch(compareData, compareStr.Length - compareData.Length, compareData.Length);
                         }
                         break;
-                } 
-            } 
+                }
+            }
             //else if (compareObj is FlowDocument fd) {
             //    var tp = fd.ContentStart.GetPositionAtOffset(idx);
             //    if(tp == null) {

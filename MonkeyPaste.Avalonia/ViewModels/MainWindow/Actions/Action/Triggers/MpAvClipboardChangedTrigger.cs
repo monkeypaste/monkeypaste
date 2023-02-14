@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using MonkeyPaste;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvClipboardChangedTrigger : 
+    public class MpAvClipboardChangedTrigger :
         MpAvTriggerActionViewModelBase {
         #region Constants
 
@@ -56,7 +50,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected override void DisableTrigger() {
-            MpPlatform.Services.ClipboardMonitor.UnregisterActionComponent(this); 
+            MpPlatform.Services.ClipboardMonitor.UnregisterActionComponent(this);
             MpPlatform.Services.ClipboardMonitor.StopMonitor();
         }
 
@@ -68,7 +62,7 @@ namespace MonkeyPaste.Avalonia {
             if (!base.CanPerformAction(arg)) {
                 return;
             }
-            if(arg is MpPortableDataObject mpdo) {
+            if (arg is MpPortableDataObject mpdo) {
                 await base.PerformActionAsync(
                         new MpAvClipboardChangedTriggerOutput() {
                             Previous = null,

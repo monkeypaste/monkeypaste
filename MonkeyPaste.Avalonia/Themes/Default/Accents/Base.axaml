@@ -3,27 +3,17 @@
        xmlns:local="using:MonkeyPaste.Avalonia"
        xmlns:sys="clr-namespace:System;assembly=mscorlib">
     <Style.Resources>
+        <sys:Double x:Key="GlobalBgOpacity">0.7</sys:Double>
+        <sys:Double x:Key="GlobalInteractiveBgOpacity">0.85</sys:Double>
+        <sys:Double x:Key="GlobalDisabledOverlayOpacity">0.75</sys:Double>
+        <sys:Double x:Key="GlobalInteractiveOpacity">1.0</sys:Double>
 
-        <sys:Double x:Key="GlobalBgOpacity">
-            0.7
-        </sys:Double>
-        <sys:Double x:Key="GlobalInteractiveBgOpacity">
-            0.85
-        </sys:Double>
-        <sys:Double x:Key="GlobalDisabledOverlayOpacity">
-            0.75
-        </sys:Double>
-        <sys:Double x:Key="GlobalInteractiveOpacity">
-            1.0
-        </sys:Double>
 
-        <SolidColorBrush x:Key="HitTestableTransparent"
-                         Color="Black"
-                         Opacity="0.01" />
+        <SolidColorBrush x:Key="HitTestableTransparent" Color="Black" Opacity="0.01" />
 
-        <SolidColorBrush x:Key="SemiTransparentTestBrush1"
-                         Color="Yellow"
-                         Opacity="0.5" />
+        <SolidColorBrush x:Key="SemiTransparentTestBrush1" Color="Yellow" Opacity="0.5" />
+        <SolidColorBrush x:Key="EnabledHighlightBrush">Lime</SolidColorBrush>
+        <SolidColorBrush x:Key="DisabledHighlightBrush">Red</SolidColorBrush>
 
         <!--<SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">
             Transparent
@@ -43,11 +33,6 @@
         <SolidColorBrush x:Key="SystemControlHighlightListHighBrush">
             Transparent
         </SolidColorBrush>-->
-        <SolidColorBrush x:Key="EnabledHighlightBrush">
-            Lime
-        </SolidColorBrush>
-        <SolidColorBrush x:Key="DisabledHighlightBrush">
-            Red
-        </SolidColorBrush>
+
     </Style.Resources>
 </Style>

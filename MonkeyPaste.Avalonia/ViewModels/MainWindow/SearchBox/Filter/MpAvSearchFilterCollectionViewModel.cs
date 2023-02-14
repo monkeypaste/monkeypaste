@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Avalonia.Controls;
+using MonkeyPaste.Common;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using Avalonia.Controls;
-using Avalonia.Media;
-using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvSearchFilterCollectionViewModel : 
+    public class MpAvSearchFilterCollectionViewModel :
         MpViewModelBase<MpAvSearchBoxViewModel>,
         MpIPopupMenuViewModel {
         #region Private Variables
@@ -141,7 +135,7 @@ namespace MonkeyPaste.Avalonia {
                 return ft;
             }
             set {
-                if(FilterType != value) {
+                if (FilterType != value) {
                     foreach (var sfvm in Filters) {
                         sfvm.IsChecked = value.HasFlag(sfvm.FilterType);
                     }
@@ -177,10 +171,10 @@ namespace MonkeyPaste.Avalonia {
         private void MpAvSearchFilterCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsPopupMenuOpen):
-                    if(IsPopupMenuOpen) {
+                    if (IsPopupMenuOpen) {
                         break;
                     }
-                    MpPrefViewModel.Instance.LastQueryInfoJson = 
+                    MpPrefViewModel.Instance.LastQueryInfoJson =
                         MpPlatform.Services.Query.SerializeJsonObject();
                     break;
             }
@@ -190,7 +184,7 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                 case nameof(sfvm.IsChecked):
                     ValidateFilters(sfvm);
-                    if(IsPopupMenuOpen) {
+                    if (IsPopupMenuOpen) {
                         // pass focus back to search box to trigger unexpand when clicked away
                         //Parent.IsTextBoxFocused = true;
                         // let search update query as filters change
@@ -207,10 +201,10 @@ namespace MonkeyPaste.Avalonia {
                 var case_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByIsCaseSensitive));
                 var whole_word_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByWholeWord));
 
-                if(change_fvm.IsChecked.IsTrue()) {
+                if (change_fvm.IsChecked.IsTrue()) {
                     case_filter.IsChecked = false;
                     whole_word_filter.IsChecked = false;
-                    
+
                     case_filter.IsChecked = null;
                     whole_word_filter.IsChecked = null;
                 } else {
@@ -219,7 +213,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 needsUpdate = true;
-            } else if (change_fvm.IsChecked.IsFalse() && 
+            } else if (change_fvm.IsChecked.IsFalse() &&
                 (change_fvm.FilterType.HasFlag(MpContentQueryBitFlags.TextType) ||
                 change_fvm.FilterType.HasFlag(MpContentQueryBitFlags.ImageType) ||
                 change_fvm.FilterType.HasFlag(MpContentQueryBitFlags.FileType))) {
@@ -228,8 +222,8 @@ namespace MonkeyPaste.Avalonia {
                 var image_type_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByImageType));
                 var file_type_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByFileType));
 
-                if (text_type_filter.IsChecked.IsFalse() && 
-                    image_type_filter.IsChecked.IsFalse() && 
+                if (text_type_filter.IsChecked.IsFalse() &&
+                    image_type_filter.IsChecked.IsFalse() &&
                     file_type_filter.IsChecked.IsFalse()) {
 
                     text_type_filter.IsChecked = true;
@@ -241,16 +235,16 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
-            if(needsUpdate) {
+            if (needsUpdate) {
                 var target = MpAvContextMenuView.Instance.PlacementTarget;
-                if(target == null) {
+                if (target == null) {
                     return;
                 }
                 var offset = new MpPoint(MpAvContextMenuView.Instance.HorizontalOffset, MpAvContextMenuView.Instance.VerticalOffset);
                 MpAvMenuExtension.CloseMenu();
-                MpAvMenuExtension.ShowMenu(target, PopupMenuViewModel,offset,PlacementMode.Pointer);
+                MpAvMenuExtension.ShowMenu(target, PopupMenuViewModel, offset, PlacementMode.Pointer);
             }
-                
+
         }
         #endregion
 

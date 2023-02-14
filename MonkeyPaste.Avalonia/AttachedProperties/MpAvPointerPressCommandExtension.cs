@@ -1,21 +1,12 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using System.Windows.Input;
-using System.Linq;
-using System;
-using Avalonia.Media;
-using Avalonia.VisualTree;
-using MonkeyPaste.Common.Avalonia;
-using MonkeyPaste.Common;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using Avalonia.Threading;
-using Avalonia.Controls.Primitives;
-using System.Diagnostics;
+using MonkeyPaste.Common.Avalonia;
+using System;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvPointerPressCommandExtension {
@@ -148,7 +139,7 @@ namespace MonkeyPaste.Avalonia {
                 false);
 
         #endregion
-        
+
         #region DoubleClickDelayMs AvaloniaProperty
         public static int GetDoubleClickDelayMs(AvaloniaObject obj) {
             return obj.GetValue(DoubleClickDelayMsProperty);
@@ -197,14 +188,14 @@ namespace MonkeyPaste.Avalonia {
                 false,
                 false);
 
-        private static void HandleIsEnabledChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
-            if(e.NewValue is bool isEnabledVal && isEnabledVal) {
+        private static void HandleIsEnabledChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
+            if (e.NewValue is bool isEnabledVal && isEnabledVal) {
                 if (element is Control control) {
                     control.AttachedToVisualTree += EnabledControl_AttachedToVisualHandler;
                     control.DetachedFromVisualTree += DisabledControl_DetachedToVisualHandler;
                     if (control.IsInitialized) {
                         EnabledControl_AttachedToVisualHandler(control, null);
-                    } 
+                    }
                 }
             } else {
                 DisabledControl_DetachedToVisualHandler(element, null);
@@ -239,25 +230,25 @@ namespace MonkeyPaste.Avalonia {
         private static DateTime? _lastClickDateTime = null;
         private static void Control_PointerPressed(object sender, PointerPressedEventArgs e) {
             _lastClickDateTime = DateTime.Now;
-            if(sender is Control control) {
+            if (sender is Control control) {
                 ICommand cmd = null;
                 object param = null;
-                if(e.IsLeftPress(control)) {
-                    if(e.ClickCount == 2) {
+                if (e.IsLeftPress(control)) {
+                    if (e.ClickCount == 2) {
                         cmd = GetDoubleLeftPressCommand(control);
                         param = GetDoubleLeftPressCommandParameter(control);
                     } else {
 
                         if (GetLeftPressCommand(control) != null &&
                             GetDoubleLeftPressCommand(control) != null &&
-                            GetLeftPressCommand(control).CanExecute(GetLeftPressCommandParameter(control)) && 
+                            GetLeftPressCommand(control).CanExecute(GetLeftPressCommandParameter(control)) &&
                             GetDoubleLeftPressCommand(control).CanExecute(GetDoubleLeftPressCommandParameter(control))) {
                             Dispatcher.UIThread.Post(async () => {
                                 // to disable single vs double wait for delay if no more click
                                 var ct = _lastClickDateTime;
                                 _lastClickDateTime = null;
                                 while (true) {
-                                    if(_lastClickDateTime != null) {
+                                    if (_lastClickDateTime != null) {
                                         // double click, reject single
                                         return;
                                     }
@@ -275,19 +266,19 @@ namespace MonkeyPaste.Avalonia {
                                 }
                             });
                             return;
-                        }else {
+                        } else {
                             cmd = GetLeftPressCommand(control);
                             param = GetLeftPressCommandParameter(control);
                         }
-                        
+
                     }
-                } else if(e.IsRightPress(control)) {
+                } else if (e.IsRightPress(control)) {
                     cmd = GetRightPressCommand(control);
                     param = GetRightPressCommandParameter(control);
                 }
                 if (cmd != null && cmd.CanExecute(param)) {
-                   cmd.Execute(param);
-                   e.Handled = GetIsPressEventHandled(control);
+                    cmd.Execute(param);
+                    e.Handled = GetIsPressEventHandled(control);
                 }
             }
         }

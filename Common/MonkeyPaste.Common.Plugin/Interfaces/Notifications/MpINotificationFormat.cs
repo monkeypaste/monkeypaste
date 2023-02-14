@@ -4,14 +4,14 @@ using System.Windows.Input;
 namespace MonkeyPaste.Common.Plugin {
     public interface MpINotificationFormat {
         string NotificationTypeStr { get; }
-       
+
         object Body { get; set; }
         string Detail { get; set; }
         ICommand FixCommand { get; set; }
         object FixCommandArgs { get; set; }
         object IconSourceObj { get; set; }
         object OtherArgs { get; set; }
-        Func<object,object> RetryAction { get; set; }
+        Func<object, object> RetryAction { get; set; }
         object RetryActionObj { get; set; }
         string Title { get; set; }
 

@@ -1,8 +1,7 @@
-﻿using MonkeyPaste.Common.Plugin;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MonkeyPaste.Common.Plugin {
@@ -13,8 +12,8 @@ namespace MonkeyPaste.Common.Plugin {
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) {
             JObject jo = JObject.Load(reader);
-            if(jo.ContainsKey("left")) {
-               // return jo.ToObject<MpImageAnnotationNodeFormat>(serializer);
+            if (jo.ContainsKey("left")) {
+                // return jo.ToObject<MpImageAnnotationNodeFormat>(serializer);
                 return JsonConvert.DeserializeObject<MpImageAnnotationNodeFormat>(jo.ToString());
             }
             return JsonConvert.DeserializeObject<MpAnnotationNodeFormat>(jo.ToString());
@@ -28,10 +27,10 @@ namespace MonkeyPaste.Common.Plugin {
             throw new NotImplementedException();
         }
     }
-    public class MpAnnotationNodeFormat : 
-        MpOmitNullJsonObject, 
+    public class MpAnnotationNodeFormat :
+        MpOmitNullJsonObject,
         MpILabelText,
-        MpIIconResource, 
+        MpIIconResource,
         MpIClampedValue,
         MpIAnnotationNode {
         #region Statics
@@ -47,7 +46,7 @@ namespace MonkeyPaste.Common.Plugin {
 
             var anf = JsonConvert.DeserializeObject(json);
 
-            if(anf is JObject jobj) {
+            if (anf is JObject jobj) {
                 return ToNode(jobj);
             }
             return null;
@@ -55,12 +54,12 @@ namespace MonkeyPaste.Common.Plugin {
 
         private static MpAnnotationNodeFormat ToNode(JObject jobj) {
             MpAnnotationNodeFormat anf = null;
-            if(jobj.SelectToken("left") == null) {
+            if (jobj.SelectToken("left") == null) {
                 anf = JsonConvert.DeserializeObject<MpAnnotationNodeFormat>(jobj.ToString());
             } else {
                 anf = JsonConvert.DeserializeObject<MpImageAnnotationNodeFormat>(jobj.ToString());
             }
-            if(jobj.SelectToken("children") is JToken jtoken) {
+            if (jobj.SelectToken("children") is JToken jtoken) {
                 JArray children = JArray.Parse(jtoken.ToString());
 
                 anf.children = children.Select(x => Parse(x.ToString())).ToList();
@@ -96,7 +95,7 @@ namespace MonkeyPaste.Common.Plugin {
 
         #region MpITreeNode Implementation
         [JsonIgnore]
-        IEnumerable<MpITreeNode> MpITreeNode.Children => children; 
+        IEnumerable<MpITreeNode> MpITreeNode.Children => children;
         [JsonIgnore]
         public bool IsExpanded { get; set; }
 
@@ -167,8 +166,8 @@ namespace MonkeyPaste.Common.Plugin {
         public string fontSize { get; }
         public string fontFamily { get; }
         public string fontWeight { get; }
-        
-        
+
+
     }
 
 }

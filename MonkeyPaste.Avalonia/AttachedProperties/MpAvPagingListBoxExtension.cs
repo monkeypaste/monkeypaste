@@ -6,9 +6,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
-using Avalonia.Media.Transformation;
 using Avalonia.Threading;
-using Avalonia.Utilities;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
@@ -468,7 +466,7 @@ namespace MonkeyPaste.Avalonia {
                 false,
                 false);
 
-        private static void HandleIsEnabledChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
+        private static void HandleIsEnabledChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
             //MpPoint lastMousePosition = null;
 
             if (e.NewValue is bool isEnabledVal && isEnabledVal) {
@@ -484,7 +482,7 @@ namespace MonkeyPaste.Avalonia {
                 //DetachedFromVisualHandler(element, VisualTreeAttachmentEventArgs.Empty);
             }
 
-            
+
         }
 
 
@@ -613,7 +611,7 @@ namespace MonkeyPaste.Avalonia {
                 SetVelocityY(lb, vy);
             }
         }
-                
+
         private static void ScrollViewerPointerPressedHandler(object s, PointerPressedEventArgs e) {
             //BUG not sure why but track and thumb don't have tag set here after orientation changes
             var sv = s as ScrollViewer;
@@ -776,7 +774,8 @@ namespace MonkeyPaste.Avalonia {
 
                     foreach (var track in tracks) {
                         track.Tag = lb;
-                        track.IsThumbDragHandled = true;
+                        track.IgnoreThumbDrag = true;
+                        //track.IsThumbDragHandled = true;
 
                         track.Bind(
                                 Track.MaximumProperty,
@@ -803,7 +802,7 @@ namespace MonkeyPaste.Avalonia {
         }
         private static void AdjustThumbTransform(Track track, MpPoint track_mp, bool isThumbPress) {
             var attached_control = track.Tag as AvaloniaObject;
-            if(attached_control == null) {
+            if (attached_control == null) {
                 // BUG this happened when clicking an editor link, 
                 // which opened an cef browser window for the link, 
                 // then after closing the window, attached_control was null
@@ -827,7 +826,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             } else {
                 SetIsThumbDraggingY(attached_control, true);
-                if (thumb.RenderTransform  is TranslateTransform tt) {
+                if (thumb.RenderTransform is TranslateTransform tt) {
                     if (isThumbPress) {
                         tt.Y = 0;
                     } else {
@@ -837,7 +836,7 @@ namespace MonkeyPaste.Avalonia {
                         double ty = track_mp.Y - hh - thumb.Bounds.Y;
                         tt.Y = Math.Max(ty_min, Math.Min(ty, ty_max));
                     }
-                } 
+                }
             }
         }
 
@@ -871,19 +870,19 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
         public static bool CheckAndDoAutoScrollJump(ScrollViewer sv, ListBox lb, MpPoint gmp) {
-            if(!GetCanThumbDrag(lb)) {
+            if (!GetCanThumbDrag(lb)) {
                 return false;
             }
 
             Track hit_track = null;
             var tracks = sv.GetVisualDescendants<Track>();
-            foreach(var track in tracks) {
+            foreach (var track in tracks) {
                 var track_rect = track.Bounds.ToPortableRect(track, true);
-                if(track_rect.Contains(gmp)) {
+                if (track_rect.Contains(gmp)) {
                     if (track.Orientation == Orientation.Horizontal &&
                         GetCanThumbDragX(lb)) {
                         hit_track = track;
-                    } else if(track.Orientation == Orientation.Vertical &&
+                    } else if (track.Orientation == Orientation.Vertical &&
                         GetCanThumbDragY(lb)) {
                         hit_track = track;
                     }
@@ -891,15 +890,15 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
-            if(hit_track == null) {
-                if(GetIsThumbDragging(lb)) {
+            if (hit_track == null) {
+                if (GetIsThumbDragging(lb)) {
                     Track finish_track = null;
-                    if(GetIsThumbDraggingX(lb)) {
+                    if (GetIsThumbDraggingX(lb)) {
                         finish_track = tracks.FirstOrDefault(x => x.Orientation == Orientation.Horizontal);
                     } else {
                         finish_track = tracks.FirstOrDefault(x => x.Orientation == Orientation.Vertical);
                     }
-                    if(finish_track == null) {
+                    if (finish_track == null) {
                         // not sure how this could happen but probably can so clear all state here
                         SetIsThumbDraggingX(lb, false);
                         SetIsThumbDraggingY(lb, false);
@@ -907,7 +906,7 @@ namespace MonkeyPaste.Avalonia {
                         // trigger jump if was thumb dragging
                         FinishThumbDrag(lb, finish_track);
                     }
-                    if(finish_track != null) {
+                    if (finish_track != null) {
                         // flag actual jump as true so timer blocks until tray finishes requery
                         return true;
                     }
@@ -916,9 +915,9 @@ namespace MonkeyPaste.Avalonia {
             }
 
             bool is_thumb_press = !GetIsThumbDragging(lb);
-            if(is_thumb_press) {
+            if (is_thumb_press) {
                 // must be initial hit
-                if(hit_track.Orientation == Orientation.Horizontal) {
+                if (hit_track.Orientation == Orientation.Horizontal) {
                     SetIsThumbDraggingX(lb, true);
                 } else {
                     SetIsThumbDraggingY(lb, true);

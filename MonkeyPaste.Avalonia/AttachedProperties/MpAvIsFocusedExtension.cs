@@ -2,13 +2,13 @@
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Input;
+using Avalonia.Threading;
+using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using System.Diagnostics;
 using System;
-using Avalonia.Threading;
+using System.Diagnostics;
 using System.Threading.Tasks;
-using Avalonia.VisualTree;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvIsFocusedExtension {
@@ -35,9 +35,9 @@ namespace MonkeyPaste.Avalonia {
                 false,
                 BindingMode.TwoWay);
 
-        private static void HandleIsFocusedBindingChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
-            if (e.NewValue is bool isFocusedVal && 
-                element is Control control && 
+        private static void HandleIsFocusedBindingChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
+            if (e.NewValue is bool isFocusedVal &&
+                element is Control control &&
                 control.GetFocusableDescendant() is IInputElement ie) {
                 if (ie.IsFocused == isFocusedVal ||
                     ie.IsKeyboardFocusWithin == isFocusedVal) {
@@ -46,14 +46,14 @@ namespace MonkeyPaste.Avalonia {
                 }
                 Dispatcher.UIThread.Post(async () => {
                     if (isFocusedVal) {
-                        if(control is AutoCompleteBox acb) {
+                        if (control is AutoCompleteBox acb) {
                             var tb = acb.FindDescendantOfType<TextBox>();
-                            if(tb != null) {
+                            if (tb != null) {
                                 control = tb;
                             }
                         }
                         bool success = await control.TrySetFocusAsync();
-                        if(success != ie.IsKeyboardFocusWithin) {
+                        if (success != ie.IsKeyboardFocusWithin) {
                             // huh? result mismatch
                             //Debugger.Break();
                         }
@@ -63,8 +63,8 @@ namespace MonkeyPaste.Avalonia {
                         MpConsole.WriteLine($"Kill Focus {(success ? "SUCCEEDED" : "FAILED")}  on '{ie}' from binding on '{control}'");
                     }
                 });
-                
-            } 
+
+            }
         }
 
         #endregion
@@ -132,10 +132,10 @@ namespace MonkeyPaste.Avalonia {
                 false,
                 false);
 
-        private static void HandleIsEnabledChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
+        private static void HandleIsEnabledChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
             if (e.NewValue is bool isEnabledVal &&
                 element is Control control) {
-                if(isEnabledVal) {
+                if (isEnabledVal) {
                     control.Initialized += Control_Initialized;
                     control.DetachedFromVisualTree += Control_DetachedToVisualHandler;
                     if (control.IsInitialized) {
@@ -144,7 +144,7 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     Control_DetachedToVisualHandler(element, null);
                 }
-            }            
+            }
         }
 
         private static void Control_Initialized(object sender, EventArgs e) {
@@ -164,25 +164,25 @@ namespace MonkeyPaste.Avalonia {
             if (s is Control control) {
                 control.Initialized -= Control_Initialized;
                 control.DetachedFromVisualTree -= Control_DetachedToVisualHandler;
-                if(control.GetFocusableDescendant() is Control focuableControl) {
+                if (control.GetFocusableDescendant() is Control focuableControl) {
                     focuableControl.GotFocus -= FocusableControl_GotFocus;
                     focuableControl.LostFocus -= FocusableControl_LostFocus;
                     focuableControl.PropertyChanged -= FocusableControl_PropertyChanged;
                 }
-                
+
             }
         }
         private static void FocusableControl_PropertyChanged(object sender, AvaloniaPropertyChangedEventArgs e) {
-            if(sender is Control focusableControl) {
-                if(e.Property.Name == "IsKeyboardFocusWithin") {
+            if (sender is Control focusableControl) {
+                if (e.Property.Name == "IsKeyboardFocusWithin") {
                     HandleIsKeyboardFocusWithinChanged(focusableControl, e);
                 }
             }
         }
 
         private static void FocusableControl_LostFocus(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
-            if(sender is Control control) {
-                if(GetAcceptFocusWithin(control) && control.IsKeyboardFocusWithin) {
+            if (sender is Control control) {
+                if (GetAcceptFocusWithin(control) && control.IsKeyboardFocusWithin) {
                     return;
                 }
                 SetIsFocused(control, false);
@@ -192,8 +192,8 @@ namespace MonkeyPaste.Avalonia {
         private static void FocusableControl_GotFocus(object sender, global::Avalonia.Input.GotFocusEventArgs e) {
             if (sender is Control focusableControl &&
                 focusableControl.Tag is Control attachedControl) {
-               
-                if(GetSelectViewModelOnFocus(attachedControl) &&
+
+                if (GetSelectViewModelOnFocus(attachedControl) &&
                     attachedControl.DataContext is MpISelectableViewModel svm) {
                     svm.IsSelected = true;
                 }
@@ -214,8 +214,8 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private static void HandleIsKeyboardFocusWithinChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
-            if(e.NewValue is bool isKeyboardFocused &&
+        private static void HandleIsKeyboardFocusWithinChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
+            if (e.NewValue is bool isKeyboardFocused &&
                 element is Control focusableControl &&
                 focusableControl.Tag is Control attachedControl) {
                 SetIsFocused(attachedControl, isKeyboardFocused);

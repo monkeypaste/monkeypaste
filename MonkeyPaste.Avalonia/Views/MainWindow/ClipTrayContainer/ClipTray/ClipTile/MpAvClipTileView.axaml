@@ -100,7 +100,7 @@
                         <Binding Path="!IsContentReadOnly" />
                     </MultiBinding>
                 </Grid.IsVisible>
-                <TransitioningContentControl x:Name="DetailTransitioningContentControl"
+                <!--<TransitioningContentControl x:Name="DetailTransitioningContentControl"
                                              HorizontalAlignment="Center"
                                              Content="{Binding DetailText}">
                     <TransitioningContentControl.PageTransition>
@@ -123,7 +123,16 @@
                                        Text="{Binding}" />
                         </DataTemplate>
                     </TransitioningContentControl.ContentTemplate>
-                </TransitioningContentControl>
+                </TransitioningContentControl>-->
+                <TextBlock HorizontalAlignment="Center"
+                           VerticalAlignment="Bottom"
+                           Background="Transparent"
+                           MinHeight="10"
+                           MinWidth="50"
+                           FontSize="10"
+                           TextAlignment="Center"
+                           FontFamily="Calibri"
+                           Text="{Binding DetailText}" />
             </Grid>
 
             <!--  CORNER BUTTONS  -->
@@ -198,8 +207,7 @@
                     VerticalAlignment="Stretch"
                     IsVisible="{Binding IsTrialOverlayVisibile}">
                 <Border.Background>
-                    <SolidColorBrush Color="Black"
-                                     Opacity="0.2" />
+                    <SolidColorBrush Color="Black" Opacity="0.2" />
                 </Border.Background>
 
                 <Viewbox Stretch="Uniform"

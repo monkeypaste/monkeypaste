@@ -2,17 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Input;
-using Avalonia.Interactivity;
-using System.Windows.Input;
-using System.Linq;
-using System;
 using Avalonia.Media;
-using Avalonia.VisualTree;
-using MonkeyPaste.Common.Avalonia;
-using System.Runtime.Intrinsics.Arm;
-using Avalonia.Media.Immutable;
-using Avalonia.Controls.Shapes;
-using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvIsHoveringExtension {
@@ -146,7 +136,7 @@ namespace MonkeyPaste.Avalonia {
             return obj.GetValue(HoverImageSourceProperty);
         }
 
-        public static void SetHoverImageSource(AvaloniaObject obj, IImage value) {            
+        public static void SetHoverImageSource(AvaloniaObject obj, IImage value) {
             obj.SetValue(HoverImageSourceProperty, value);
         }
 
@@ -190,21 +180,21 @@ namespace MonkeyPaste.Avalonia {
                 false,
                 false);
 
-        private static void HandleIsEnabledChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
-            if(e.NewValue is bool isEnabledVal && isEnabledVal) {
+        private static void HandleIsEnabledChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
+            if (e.NewValue is bool isEnabledVal && isEnabledVal) {
                 if (element is Control control) {
                     if (control.IsInitialized) {
                         AttachedToVisualHandler(control, null);
                     } else {
                         control.AttachedToVisualTree += AttachedToVisualHandler;
-                        
+
                     }
                 }
             } else {
                 DetachedToVisualHandler(element, null);
             }
 
-            
+
         }
 
         #endregion
@@ -214,8 +204,8 @@ namespace MonkeyPaste.Avalonia {
         private static void AttachedToVisualHandler(object s, VisualTreeAttachmentEventArgs e) {
             if (s is Control control) {
                 control.DetachedFromVisualTree += DetachedToVisualHandler;
-                control.PointerEnter += PointerEnterHandler;
-                control.PointerLeave += PointerLeaveHandler;
+                control.PointerEntered += PointerEnterHandler;
+                control.PointerExited += PointerLeaveHandler;
 
                 if (e == null) {
                     control.AttachedToVisualTree += AttachedToVisualHandler;
@@ -227,8 +217,8 @@ namespace MonkeyPaste.Avalonia {
             if (s is Control control) {
                 control.AttachedToVisualTree -= AttachedToVisualHandler;
                 control.DetachedFromVisualTree -= DetachedToVisualHandler;
-                control.PointerEnter -= PointerEnterHandler;
-                control.PointerLeave -= PointerLeaveHandler;
+                control.PointerEntered -= PointerEnterHandler;
+                control.PointerExited -= PointerLeaveHandler;
             }
         }
 
@@ -239,7 +229,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 SetIsHovering(control, true);
                 if (GetHoverCursor(control) is MpCursorType ct) {
-                    MpPlatform.Services.Cursor.SetCursor(control,ct);
+                    MpPlatform.Services.Cursor.SetCursor(control, ct);
                 }
                 var test = GetHoverBrush(control);
                 if (GetHoverBrush(control) is IBrush hoverBrush && control is Border border) {

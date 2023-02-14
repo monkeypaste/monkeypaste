@@ -1,15 +1,11 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
-using Avalonia.Markup.Xaml;
-using Avalonia.Interactivity;
 using Avalonia.Input;
-using MonkeyPaste.Common.Avalonia;
-using System.Diagnostics;
-using Avalonia.Threading;
-using System.Threading.Tasks;
-using System.Linq;
+using Avalonia.Interactivity;
+using Avalonia.Markup.Xaml;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvMainWindowTitleMenuView : MpAvUserControl<MpAvMainWindowTitleMenuViewModel> {
@@ -43,7 +39,7 @@ namespace MonkeyPaste.Avalonia {
 
         public void PositionZoomValueButton(MpPoint p = null) {
             var ctrvm = MpAvClipTrayViewModel.Instance;
-            double percent = 
+            double percent =
                 (ctrvm.ZoomFactor - ctrvm.MinZoomFactor) /
                 (ctrvm.MaxZoomFactor - ctrvm.MinZoomFactor);
             var czfb_cg = this.FindControl<Control>("ZoomSliderContainerGrid");
@@ -51,10 +47,10 @@ namespace MonkeyPaste.Avalonia {
 
             double offsetX = -czfb.Width * 0.5;
             double offsetY = -czfb.Height * 0.5;
-            if(MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                if(p == null) {
+            if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+                if (p == null) {
                     p = new MpPoint(
-                        czfb_cg.Width * percent, 
+                        czfb_cg.Width * percent,
                         (czfb_cg.Height / 2) - (czfb.Height / 2));
                 } else {
                     p.Y = (czfb_cg.Height / 2) - (czfb.Height / 2);
@@ -81,7 +77,7 @@ namespace MonkeyPaste.Avalonia {
                 MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
                     cg_mp.X / czfb_cg.Width :
                     cg_mp.Y / czfb_cg.Height;
-            SetZoomFactor(percent,cg_mp);
+            SetZoomFactor(percent, cg_mp);
         }
 
         private void Czfb_DoubleTapped(object sender, RoutedEventArgs e) {
@@ -97,7 +93,7 @@ namespace MonkeyPaste.Avalonia {
                 e.Pointer.Capture(sender as Control);
                 _wasZoomDragging = true;
                 PositionZoomValueButton(cg_mp);
-            } else if(_wasZoomDragging) {
+            } else if (_wasZoomDragging) {
                 _wasZoomDragging = false;
 
                 double percent =
@@ -116,13 +112,13 @@ namespace MonkeyPaste.Avalonia {
         private MpMainWindowOrientationType _curOrientation;
         private void WindowDragButton_PointerPressed(object sender, PointerPressedEventArgs e) {
             var windowDragButton = sender as Control;
-            if(windowDragButton == null) {
+            if (windowDragButton == null) {
                 return;
             }
             e.Handled = true;
             windowDragButton.DragCheckAndStart(
-                e, 
-                WindowDragButton_Start, WindowDragButton_Move, WindowDragButton_End, 
+                e,
+                WindowDragButton_Start, WindowDragButton_Move, WindowDragButton_End,
                 null,
                 MpAvShortcutCollectionViewModel.Instance);
         }
@@ -172,10 +168,10 @@ namespace MonkeyPaste.Avalonia {
 
             MpMainWindowOrientationType final_or = _curOrientation;
             bool was_canceled = e == null;
-            if(was_canceled) {
+            if (was_canceled) {
                 final_or = _startOrientation;
             }
-            if(MpAvMainWindowViewModel.Instance.MainWindowOrientationType != final_or) {
+            if (MpAvMainWindowViewModel.Instance.MainWindowOrientationType != final_or) {
                 MpAvMainWindowViewModel.Instance.CycleOrientationCommand.Execute(final_or);
             }
             MpAvMainWindow.Instance.ClampContentSizes();

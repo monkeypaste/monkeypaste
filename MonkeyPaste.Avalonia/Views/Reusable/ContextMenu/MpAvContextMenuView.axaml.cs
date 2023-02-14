@@ -2,15 +2,9 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Markup.Xaml;
-using PropertyChanged;
-using System.Collections.Generic;
-using Avalonia.Input;
 using Avalonia.Styling;
+using PropertyChanged;
 using System;
-using MonkeyPaste.Common.Avalonia;
-using Avalonia.Threading;
-using Avalonia.Controls.Generators;
-using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -19,7 +13,7 @@ namespace MonkeyPaste.Avalonia {
 
         private static MpAvContextMenuView _instance;
         public static MpAvContextMenuView Instance => _instance ?? (_instance = new MpAvContextMenuView());
-        
+
 
         public MpAvContextMenuView() {
             InitializeComponent();

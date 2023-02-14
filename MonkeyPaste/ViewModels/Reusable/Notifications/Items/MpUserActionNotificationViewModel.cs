@@ -1,8 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -49,9 +47,9 @@ namespace MonkeyPaste {
 
         #region Model
 
-        public object FixCommandArgs { 
+        public object FixCommandArgs {
             get {
-                if(NotificationFormat == null) {
+                if (NotificationFormat == null) {
                     return null;
                 }
                 return NotificationFormat.FixCommandArgs;
@@ -67,7 +65,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public Func<object,object> RetryAction {
+        public Func<object, object> RetryAction {
             get {
                 if (NotificationFormat == null) {
                     return null;
@@ -99,10 +97,10 @@ namespace MonkeyPaste {
         #region Public Methods
         public override async Task InitializeAsync(MpNotificationFormat nf) {
             IsBusy = true;
-            if(nf.IconSourceObj == null) {
-                if(IsErrorNotification) {
+            if (nf.IconSourceObj == null) {
+                if (IsErrorNotification) {
                     nf.IconSourceObj = MpBase64Images.Error;
-                } else if(IsWarningNotification) {
+                } else if (IsWarningNotification) {
                     nf.IconSourceObj = MpBase64Images.Warning;
                 } else {
                     nf.IconSourceObj = MpBase64Images.QuestionMark;
@@ -110,7 +108,7 @@ namespace MonkeyPaste {
             }
             await base.InitializeAsync(nf);
 
-            switch(ButtonsType) {
+            switch (ButtonsType) {
                 case MpNotificationButtonsType.YesNoCancel:
                     ShowYesButton = true;
                     ShowNoButton = true;
@@ -124,7 +122,7 @@ namespace MonkeyPaste {
                     ShowCancelButton = true;
                     break;
                 case MpNotificationButtonsType.TextBoxOkCancel:
-                    if(OtherArgs is string curText) {
+                    if (OtherArgs is string curText) {
                         BoundInputText = curText;
                     } else {
                         BoundInputText = string.Empty;
@@ -155,16 +153,16 @@ namespace MonkeyPaste {
             while (DialogResult == MpNotificationDialogResultType.None) {
                 await Task.Delay(100);
             }
-            if(DialogResult == MpNotificationDialogResultType.Fix) {
+            if (DialogResult == MpNotificationDialogResultType.Fix) {
                 // if fix is result, fix button becomes retry 
                 // either wait for retry to become result or immediatly trigger
                 // retry where caller should block return until retry invoked (isFixing becomes false)
                 _ = Task.Run(async () => {
-                        while (IsFixing) {
-                            await Task.Delay(100);
-                        }
-                        HideNotification();
-                        var result = RetryAction?.Invoke(RetryActionObj);
+                    while (IsFixing) {
+                        await Task.Delay(100);
+                    }
+                    HideNotification();
+                    var result = RetryAction?.Invoke(RetryActionObj);
                 });
             } else {
                 HideNotification();
@@ -175,7 +173,7 @@ namespace MonkeyPaste {
             //} else if(DialogResult != MpNotificationDialogResultType.Fix) {
             //    HideNotification();
             //}
-            
+
             return DialogResult;
         }
 
@@ -195,9 +193,9 @@ namespace MonkeyPaste {
         #region Private Methods
 
         private void MpUserActionNotificationViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
                 case nameof(BoundInputText):
-                    if(IsInputValid) {
+                    if (IsInputValid) {
                         return;
                     }
                     // NOTE trigger validate here when already flagged invalid (via OkCommand)
@@ -207,7 +205,7 @@ namespace MonkeyPaste {
         }
         private bool Validate() {
             ValidationText = string.Empty;
-            if(ShowTextBox && string.IsNullOrEmpty(BoundInputText)) {
+            if (ShowTextBox && string.IsNullOrEmpty(BoundInputText)) {
                 ValidationText = $"Value required";
             }
             OnPropertyChanged(nameof(IsInputValid));
@@ -228,7 +226,7 @@ namespace MonkeyPaste {
                 IsFixing = true;
                 FixCommand.Execute(FixCommandArgs);
                 DialogResult = MpNotificationDialogResultType.Fix;
-            },()=>CanFix);
+            }, () => CanFix);
 
         public ICommand RetryCommand => new MpCommand(
             () => {

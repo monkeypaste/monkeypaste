@@ -1,17 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using Avalonia.Markup.Xaml;
-using Avalonia.Media;
-using Avalonia.VisualTree;
 using PropertyChanged;
-using System.Diagnostics;
-using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
-using System;
-using System.Linq;
-using Avalonia.Input;
-using Avalonia.Styling;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
@@ -41,8 +31,8 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        #endregion 
-        
+        #endregion
+
         #region CommandParameter Property
 
         private object _CommandParameter = default;

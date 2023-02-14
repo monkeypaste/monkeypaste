@@ -1,12 +1,9 @@
-﻿using MonkeyPaste.Common.Plugin;
-using MonkeyPaste.Common;
-using Newtonsoft.Json;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Runtime.InteropServices;
 
 namespace MonkeyPaste {
     public static class MpPluginTransactor {
@@ -19,12 +16,12 @@ namespace MonkeyPaste {
         #region Public Methods
 
         public static async Task<MpPluginTransactionBase> PerformTransaction(
-            MpPluginFormat pluginFormat, 
+            MpPluginFormat pluginFormat,
             MpIPluginComponentBase pluginComponent,
-            Dictionary<object,string> paramValues,
+            Dictionary<object, string> paramValues,
             MpCopyItem sourceCopyItem,
             object sourceHandler,
-            bool suppressWrite = false) { 
+            bool suppressWrite = false) {
 
             // This method:
             // 0. checks data between each step and returns error info or retry message to calling analyzer if there's a problem
@@ -35,7 +32,7 @@ namespace MonkeyPaste {
             // 5. Converts the response to new content and/or updates source content (since from another, potentially 3rd party module)
             // 6. Returns new or updated content
 
-            if(pluginComponent is MpIAnalyzeAsyncComponent || pluginComponent is MpIAnalyzeComponent) {
+            if (pluginComponent is MpIAnalyzeAsyncComponent || pluginComponent is MpIAnalyzeComponent) {
                 MpAnalyzerTransaction trans = new MpAnalyzerTransaction() {
                     RequestTime = DateTime.Now,
                 };
@@ -46,15 +43,16 @@ namespace MonkeyPaste {
                                         pluginFormat.analyzer.parameters,
                                         paramValues,
                                         sourceCopyItem);
-                } catch(Exception ex) {
+                }
+                catch (Exception ex) {
                     return await HandleErrorAsync(ex, pluginFormat, trans, sourceCopyItem, sourceHandler, suppressWrite);
                 }
 
                 // FIND CONTENT
                 MpParameterFormat contentParam = pluginFormat.analyzer.parameters
                     .FirstOrDefault(x => x.unitType == MpParameterValueUnitType.PlainTextContentQuery);
-                                
-                trans.RequestContent = contentParam == null ? 
+
+                trans.RequestContent = contentParam == null ?
                     null :
                     (trans.Request as MpAnalyzerPluginRequestFormat).items
                     .FirstOrDefault(x => x.paramId.Equals(contentParam.paramId)).value;
@@ -63,9 +61,9 @@ namespace MonkeyPaste {
 
                 // GET RESPONSE
                 try {
-                    if(pluginComponent is MpIAnalyzeAsyncComponent analyzeAsyncComponent) {
+                    if (pluginComponent is MpIAnalyzeAsyncComponent analyzeAsyncComponent) {
                         trans.Response = await analyzeAsyncComponent.AnalyzeAsync(trans.Request as MpAnalyzerPluginRequestFormat);
-                    } else if(pluginComponent is MpIAnalyzeComponent analyzeComponent) {
+                    } else if (pluginComponent is MpIAnalyzeComponent analyzeComponent) {
                         trans.Response = analyzeComponent.Analyze(trans.Request as MpAnalyzerPluginRequestFormat);
                     }
                     trans.ResponseTime = DateTime.Now;
@@ -120,10 +118,10 @@ namespace MonkeyPaste {
         #region Private Methods
 
         private static async Task<MpPluginResponseFormatBase> HandlePluginNotifcationsAsync<T>(
-            MpPluginRequestFormatBase request, 
+            MpPluginRequestFormatBase request,
             MpPluginResponseFormatBase response,
             Func<Task<T>> retryFunc,
-            int cur_idx = 0) where T:MpPluginResponseFormatBase {
+            int cur_idx = 0) where T : MpPluginResponseFormatBase {
             if (response.userNotifications == null || response.userNotifications.Count == 0) {
                 return response;
             }
@@ -138,11 +136,11 @@ namespace MonkeyPaste {
                 if (result == MpNotificationDialogResultType.Ignore) {
                     continue;
                 }
-                if(result == MpNotificationDialogResultType.Retry) {
+                if (result == MpNotificationDialogResultType.Retry) {
                     // should be after fix cycle
                     // user changed settings or whatever and request is called again
                     T retry_response = await retryFunc.Invoke();
-                    
+
                     response = await HandlePluginNotifcationsAsync(request, retry_response, retryFunc, i);
                 }
             }
@@ -150,9 +148,9 @@ namespace MonkeyPaste {
         }
 
         private static async Task<MpPluginTransactionBase> HandleErrorAsync(
-            Exception ex, 
-            MpPluginFormat pluginFormat, 
-            MpPluginTransactionBase trans, 
+            Exception ex,
+            MpPluginFormat pluginFormat,
+            MpPluginTransactionBase trans,
             MpCopyItem sourceCopyItem, object sourceHandler, bool suppressWrite = false) {
             MpConsole.WriteTraceLine(ex);
 
@@ -164,8 +162,8 @@ namespace MonkeyPaste {
                         req: trans.Request.SerializeJsonObject(),
                         respType: MpJsonMessageFormatType.Error,
                         resp: ex.Message,
-                        ref_urls: new[] { 
-                            MpPlatform.Services.SourceRefBuilder.ConvertToRefUrl(pp, trans.Request.SerializeJsonObjectToBase64()) 
+                        ref_urls: new[] {
+                            MpPlatform.Services.SourceRefBuilder.ConvertToRefUrl(pp, trans.Request.SerializeJsonObjectToBase64())
                         },
                         transType: MpTransactionType.Error).FireAndForgetSafeAsync();
 
@@ -173,12 +171,12 @@ namespace MonkeyPaste {
                 notificationType: MpNotificationType.InvalidRequest,
                 body: ex.Message,
                 maxShowTimeMs: 5000);
-            
+
             if (trans.Response == null) {
                 trans.Response = new MpPluginResponseFormatBase();
             }
             if (userAction == MpNotificationDialogResultType.Retry) {
-                
+
                 trans.Response.retryMessage = "Retry";
             } else {
                 trans.Response.errorMessage = "Error";

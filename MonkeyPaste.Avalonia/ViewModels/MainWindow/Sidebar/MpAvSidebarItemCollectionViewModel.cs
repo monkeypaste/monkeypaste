@@ -1,17 +1,9 @@
-﻿using Avalonia.Controls;
-using Avalonia.Threading;
-using Avalonia.VisualTree;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using Xamarin.Forms.Internals;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvSidebarItemCollectionViewModel : 
+    public class MpAvSidebarItemCollectionViewModel :
         MpViewModelBase,
         MpIBoundSizeViewModel {
         #region Private Variable
@@ -112,9 +104,9 @@ namespace MonkeyPaste.Avalonia {
             Items.Add(sbivm);
         }
         private void MpAvSidebarItemCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
                 case nameof(SelectedItem):
-                    if(MpAvMainWindow.Instance == null) {
+                    if (MpAvMainWindow.Instance == null) {
                         return;
                     }
 
@@ -127,7 +119,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private void ReceivedGlobalMessage(MpMessageType msg) {
-            switch(msg) {
+            switch (msg) {
                 case MpMessageType.MainWindowLoadComplete:
                     Init();
                     break;
@@ -140,7 +132,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand SelectSidebarItemCommand => new MpCommand<object>(
             (args) => {
                 var sbivm = args as MpISidebarItemViewModel;
-                if(sbivm == null) {
+                if (sbivm == null) {
                     return;
                 }
                 SelectedItem = sbivm;
@@ -149,9 +141,9 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ToggleIsSidebarItemSelectedCommand => new MpCommand<object>(
             (args) => {
                 int itemIdx = -1;
-                if(args is int) {
-                    itemIdx = (int)args;                    
-                } else if(args is string) {
+                if (args is int) {
+                    itemIdx = (int)args;
+                } else if (args is string) {
                     itemIdx = int.Parse(args.ToString());
                 }
                 if (SelectedItemIdx == itemIdx) {

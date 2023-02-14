@@ -1,23 +1,19 @@
-﻿using Org.BouncyCastle.Asn1.Pkcs;
-using Org.BouncyCastle.Asn1.X509;
+﻿using MonkeyPaste.Common;
 using Org.BouncyCastle.Asn1;
+using Org.BouncyCastle.Asn1.Pkcs;
+using Org.BouncyCastle.Asn1.X509;
+using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Generators;
-using Org.BouncyCastle.Crypto.Operators;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Crypto.Prng;
-using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.OpenSsl;
 using Org.BouncyCastle.Pkcs;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Utilities;
 using Org.BouncyCastle.X509;
 using System;
-using System.Collections.Generic;
-using System.Runtime.ConstrainedExecution;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.IO;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using System.Security.Cryptography.X509Certificates;
 
 namespace MonkeyPaste {
     public class MpCertificateManager {
@@ -171,7 +167,7 @@ namespace MonkeyPaste {
             // Corresponding private key
             PrivateKeyInfo info = PrivateKeyInfoFactory.CreatePrivateKeyInfo(subjectKeyPair.Private);
 
-            
+
             const string signatureAlgorithm = "SHA256WithRSA";
             //var signatureFactory = new Asn1SignatureFactory(signatureAlgorithm, issuerKeyPair.Private);
             //var bouncyCert = certificateGenerator.Generate(signatureFactory);
@@ -216,7 +212,7 @@ namespace MonkeyPaste {
                 var cert = new X509Certificate2(bytes);
                 return cert;
             }
-            catch(Exception ex) {
+            catch (Exception ex) {
                 MpConsole.WriteTraceLine(@"Error loading cert at path: " + path, ex);
             }
             //var userStore = new X509Store(st, sl);
@@ -243,7 +239,7 @@ namespace MonkeyPaste {
                 return true;
             }
             catch (Exception ex) {
-                MpConsole.WriteTraceLine("Error writing cert to path: "+path, ex);
+                MpConsole.WriteTraceLine("Error writing cert to path: " + path, ex);
             }
             return false;
         }

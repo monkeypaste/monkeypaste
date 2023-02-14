@@ -1,10 +1,7 @@
 ﻿using MonkeyPaste.Avalonia;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
-using System.Text;
 
 namespace MonkeyPaste {
     public class MpQueryPageTools : MpIDbIdCollection {
@@ -48,7 +45,7 @@ namespace MonkeyPaste {
         }
         public bool RemoveItemId(int itemId) {
             bool was_removed = AllQueryIds.Remove(itemId);
-            if(was_removed) {
+            if (was_removed) {
                 MpMessenger.SendGlobal(MpMessageType.TotalQueryCountChanged);
             }
             return was_removed;
@@ -68,7 +65,7 @@ namespace MonkeyPaste {
 
         #region Properties
 
-        public ObservableCollection<int> AllQueryIds { get;  set; }
+        public ObservableCollection<int> AllQueryIds { get; set; }
 
         #endregion
 
@@ -88,7 +85,7 @@ namespace MonkeyPaste {
 
         #region Private Methods
         private void _allQueryCopyItemIds_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            if(e.Action == NotifyCollectionChangedAction.Reset) {
+            if (e.Action == NotifyCollectionChangedAction.Reset) {
 
             }
         }

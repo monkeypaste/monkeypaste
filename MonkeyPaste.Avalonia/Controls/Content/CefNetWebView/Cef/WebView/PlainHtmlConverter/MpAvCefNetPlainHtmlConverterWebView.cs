@@ -1,18 +1,9 @@
-﻿using Avalonia;
-using Avalonia.Data;
-using Avalonia.Threading;
-using MonkeyPaste.Common;
-using PropertyChanged;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public class MpAvCefNetPlainHtmlConverterWebView : MpAvCefNetWebView {
+    public class MpAvCefNetPlainHtmlConverterWebView :
+        MpAvCefNetWebView {
         #region Private Variables
 
         #endregion
@@ -23,10 +14,14 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
-        public override string ContentUrl => base.ContentUrl+$"?{HTML_CONVERTER_PARAMS}";
+        public override string ContentUrl => base.ContentUrl + $"?{HTML_CONVERTER_PARAMS}";
         #endregion
 
         #region Constructors
+        public MpAvCefNetPlainHtmlConverterWebView() : base() {
+            MpPlatform.Services.ContentViewLocator = this;
+        }
+
         #endregion
 
         #region Public Methods

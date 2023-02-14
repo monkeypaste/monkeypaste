@@ -1,19 +1,12 @@
-﻿using Avalonia.Input;
-using Avalonia.Interactivity;
-using Avalonia;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Avalonia.Data;
+﻿using Avalonia;
 using Avalonia.Controls;
-using PropertyChanged;
-using Avalonia.Media;
-using Avalonia.VisualTree;
+using Avalonia.Data;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using Avalonia.Threading;
+using PropertyChanged;
+using System;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
@@ -128,10 +121,10 @@ namespace MonkeyPaste.Avalonia {
             AvaloniaProperty.RegisterAttached<object, Control, bool>(
             "IsMoving",
             false,
-            false, 
+            false,
             BindingMode.TwoWay);
 
-        private static void HandleIsMovingChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
+        private static void HandleIsMovingChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
             if (e.NewValue is bool isResizing) {
                 IsAnyMoving = isResizing;
             }
@@ -170,7 +163,7 @@ namespace MonkeyPaste.Avalonia {
             AvaloniaProperty.RegisterAttached<object, Control, bool>(
             "IsEnabled",
             false);
-        private static void HandleIsEnabledChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
+        private static void HandleIsEnabledChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
             if (e.NewValue is bool isEnabledVal && isEnabledVal) {
                 if (element is Control control) {
                     if (control.IsInitialized) {
@@ -198,8 +191,8 @@ namespace MonkeyPaste.Avalonia {
             control.AddHandler(Control.PointerPressedEvent, Control_PointerPressed, RoutingStrategies.Tunnel);
             control.AddHandler(Control.PointerReleasedEvent, Control_PointerReleased, RoutingStrategies.Tunnel);
             control.PointerMoved += Control_PointerMoved;
-            control.PointerEnter += Control_PointerEnter;
-            control.PointerLeave += Control_PointerLeave;
+            control.PointerEntered += Control_PointerEnter;
+            control.PointerExited += Control_PointerLeave;
 
             //if (Control.DataContext is MpIMovableViewModel rvm) {
             //    //var dupCheck = _allMovables.FirstOrDefault(x => x.MovableId == rvm.MovableId);
@@ -219,8 +212,8 @@ namespace MonkeyPaste.Avalonia {
                 control.RemoveHandler(Control.PointerPressedEvent, Control_PointerPressed);
                 control.RemoveHandler(Control.PointerReleasedEvent, Control_PointerReleased);
                 control.PointerMoved -= Control_PointerMoved;
-                control.PointerEnter -= Control_PointerEnter;
-                control.PointerLeave -= Control_PointerLeave;
+                control.PointerEntered -= Control_PointerEnter;
+                control.PointerExited -= Control_PointerLeave;
             }
         }
 
@@ -253,7 +246,7 @@ namespace MonkeyPaste.Avalonia {
         #region Move Event Handlers
 
         private static void Control_PointerLeave(object sender, PointerEventArgs e) {
-            if(sender is Control control) {
+            if (sender is Control control) {
                 if (!GetIsMoving(control)) {
                     SetCanMove(control, false);
                 }
@@ -270,7 +263,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void Control_PointerMoved(object sender, PointerEventArgs e) {
-            if(sender is Control control &&
+            if (sender is Control control &&
                 control.DataContext is MpAvActionViewModelBase avmb) {
                 if (!GetIsMoving(control)) {
                     return;
@@ -295,14 +288,14 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void Control_PointerReleased(object sender, PointerReleasedEventArgs e) {
-            if(sender is Control control) {
+            if (sender is Control control) {
                 //e.Pointer.Capture(null);
                 FinishMove(control);
             }
         }
 
         private static void Control_PointerPressed(object sender, PointerPressedEventArgs e) {
-            if(sender is Control control) {
+            if (sender is Control control) {
                 if (MpAvZoomBorder.IsTranslating) {
                     return;
                 }
@@ -325,7 +318,7 @@ namespace MonkeyPaste.Avalonia {
         private static void FinishMove(Control control) {
             SetIsMoving(control, false);
 
-            if (_lastMousePosition != null && 
+            if (_lastMousePosition != null &&
                 _mouseDownPosition != null &&
                 (_lastMousePosition - _mouseDownPosition).Length < 5 &&
                 GetFinishMoveCommand(control) is ICommand finishMoveCmd) {

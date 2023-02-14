@@ -1,5 +1,4 @@
-﻿using Avalonia;
-using Avalonia.Data.Converters;
+﻿using Avalonia.Data.Converters;
 using System;
 using System.Globalization;
 
@@ -8,9 +7,9 @@ namespace MonkeyPaste.Avalonia {
         public static readonly MpAvContentDataConverter Instance = new();
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
-            if(value is string valStr) {
-                if(parameter is string paramStr) {
-                    if(paramStr.ToLower() == "plaintext") {
+            if (value is string valStr) {
+                if (parameter is string paramStr) {
+                    if (paramStr.ToLower() == "plaintext") {
                         return MpPlatform.Services.StringTools.ToPlainText(valStr);
                     }
                 }
@@ -20,7 +19,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) {
-            if(value is string valStr) {
+            if (value is string valStr) {
                 return valStr;
             }
             return value;

@@ -1,19 +1,11 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using Avalonia.Threading;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
-using MonkeyPaste;
-using System.IO;
-using Avalonia.Threading;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvUrlCollectionViewModel : 
-        MpAvSelectorViewModelBase<object,MpAvUrlViewModel>, 
+    public class MpAvUrlCollectionViewModel :
+        MpAvSelectorViewModelBase<object, MpAvUrlViewModel>,
         MpIAsyncSingletonViewModel<MpAvUrlCollectionViewModel> {
         #region Properties
 
@@ -52,7 +44,7 @@ namespace MonkeyPaste.Avalonia {
                 Items.Add(uvm);
             }
 
-            while(Items.Any(x=>x.IsBusy)) {
+            while (Items.Any(x => x.IsBusy)) {
                 await Task.Delay(100);
             }
             //await Task.WhenAll(Items.Select(x => UpdateRejection(x)));
@@ -117,7 +109,7 @@ namespace MonkeyPaste.Avalonia {
             async () => {
                 string UrlPath = string.Empty;
 
-                if(string.IsNullOrEmpty(UrlPath)) {
+                if (string.IsNullOrEmpty(UrlPath)) {
                     return;
                 }
 
@@ -130,7 +122,7 @@ namespace MonkeyPaste.Avalonia {
                 SelectedItem = uvm;
             });
 
-        
+
         #endregion
     }
 }

@@ -1,9 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿using MonkeyPaste.Common.Wpf;
 using System;
-using Avalonia.Markup.Xaml;
-using MonkeyPaste.Common.Wpf;
-using MonkeyPaste.Common;
-using Avalonia;
+using System.Runtime.InteropServices;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvToolWindow_Win32 {
@@ -65,7 +62,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         public static void InitTopmostWindow(IntPtr handle, int x, int y, int cx, int cy) {
-            WinApi.SetWindowPos(handle, HWND_TOPMOST, x,y,cx,cy, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
+            WinApi.SetWindowPos(handle, HWND_TOPMOST, x, y, cx, cy, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
         }
     }
 }

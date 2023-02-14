@@ -3,6 +3,8 @@
 namespace MonkeyPaste {
 
     public interface MpIPlatformWrapper : MpICommonTools {
+        MpIContentViewLocator ContentViewLocator { get; set; }
+
         MpIStartupObjectLocator StartupObjectLocator { get; set; }
         MpIPlatformCompatibility PlatformCompatibility { get; set; }
         MpIStartupState StartupState { get; set; }
@@ -24,18 +26,14 @@ namespace MonkeyPaste {
         MpITransactionReporter TransactionBuilder { get; set; }
         MpICustomColorChooserMenuAsync CustomColorChooserMenuAsync { get; set; }
         MpIKeyboardInteractionService KeyboardInteractionService { get; set; }
-        MpIGlobalTouch GlobalTouch { get; set; }
-        MpIUiLocationFetcher LocationFetcher { get; set; }
         MpIPlatformResource PlatformResource { get; set; }
         MpIPlatformScreenInfoCollection ScreenInfoCollection { get; set; }
 
         MpIDragProcessWatcher DragProcessWatcher { get; set; }
         MpIContextMenuCloser ContextMenuCloser { get; set; }
         MpIMainThreadMarshal MainThreadMarshal { get; set; }
-        MpIStringTools StringTools { get; set; }
-        MpIOsInfo OsInfo { get; set; }
         MpIPlatformDataObjectHelperAsync DataObjectHelperAsync { get; set; }
-        MpINativeMessageBox NativeMessageBox { get; set; }
+
 
         MpIClipboardMonitor ClipboardMonitor { get; set; }
 

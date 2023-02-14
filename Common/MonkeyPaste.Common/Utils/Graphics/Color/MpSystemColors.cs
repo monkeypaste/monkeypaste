@@ -6,22 +6,22 @@ namespace MonkeyPaste.Common {
     public static class MpSystemColors {
 
         public static string ConvertFromString(string namedColorOrHexStr, string fallBack = "#00000000", bool includeAlpha = true) {
-            if(string.IsNullOrWhiteSpace(namedColorOrHexStr)) {
+            if (string.IsNullOrWhiteSpace(namedColorOrHexStr)) {
                 return fallBack;
             }
-            if(namedColorOrHexStr.IsStringHexColor()) {
+            if (namedColorOrHexStr.IsStringHexColor()) {
                 return namedColorOrHexStr;
             }
             var hexColorPropInfo = typeof(MpSystemColors)
                 .GetProperties()
                 .FirstOrDefault(x => x.Name.ToLower() == namedColorOrHexStr.ToLower());
 
-            if(hexColorPropInfo == null) {
+            if (hexColorPropInfo == null) {
                 hexColorPropInfo = typeof(MpSystemColors)
                 .GetProperties()
                 .FirstOrDefault(x => x.Name.ToLower().StartsWith(namedColorOrHexStr.ToLower()));
             }
-            if(hexColorPropInfo == null) {
+            if (hexColorPropInfo == null) {
                 MpConsole.WriteTraceLine($"Color named {namedColorOrHexStr} not found, returning {fallBack}");
                 return fallBack;
             }
@@ -30,7 +30,7 @@ namespace MonkeyPaste.Common {
 
 
 
-        
+
         public static string White => "#FFFFFFFF";
         public static string DarkGray => "#FF696969"; //DimGray
         public static string Gray => "#FFC0C0C0"; //silver

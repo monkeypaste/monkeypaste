@@ -1,19 +1,15 @@
-﻿using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public enum MpMessageType {
         None,
-        
+
         RequeryCompleted,
         QueryChanged,
-        SubQueryChanged, 
+        SubQueryChanged,
         JumpToIdxCompleted,
         TotalQueryCountChanged,
 
@@ -72,7 +68,7 @@ namespace MonkeyPaste {
 
         ContentListScrollChanged, //has context (tile)
         ContentItemsChanged, //has context (tile)
-                
+
         ContentResized,
         ResizeContentCompleted,
 
@@ -109,7 +105,7 @@ namespace MonkeyPaste {
 
         public static void Register<T>(object sender, Action<T> receiverAction, object context) {
             var key = new MessengerKey(sender, typeof(T), context);
-            if(_recipientDictionary.ContainsKey(key)) {
+            if (_recipientDictionary.ContainsKey(key)) {
                 if (_recipientDictionary[key].Contains(receiverAction)) {
                     // this probably shouldn't happen, needs to be unregistered or remove old entry
 
@@ -120,7 +116,7 @@ namespace MonkeyPaste {
                 _recipientDictionary[key].Add(receiverAction);
             } else {
                 _recipientDictionary.TryAdd(key, new List<object> { receiverAction });
-            }            
+            }
         }
 
         public static void Unregister<T>(object sender, Action<T> receiverAction) {
@@ -140,7 +136,7 @@ namespace MonkeyPaste {
 
         public static void UnregisterAll() {
             _recipientDictionary.Clear();
-           // _globalRecipientDictionary.Clear();
+            // _globalRecipientDictionary.Clear();
         }
 
         public static void SendGlobal<T>(T message) {
@@ -162,8 +158,8 @@ namespace MonkeyPaste {
                 //results = from r in _recipientDictionary where r.Key.Context != null && r.Key.Context.Equals(context) select r;
             }
 
-            foreach(var result in results) {
-                foreach(var receiverAction in result.Value.ToList()) {
+            foreach (var result in results) {
+                foreach (var receiverAction in result.Value.ToList()) {
                     // NOTE enumerating over .ToList() to avoid colleciton changed exception
                     (receiverAction as Action<T>)?.Invoke(message);
                 }
@@ -173,9 +169,9 @@ namespace MonkeyPaste {
         #region (Internal class) Message Key
 
         internal class MessengerKey {
-            public object Recipient { get; private  set; }
-            public Type MessageType { get; private  set; }
-            public object Context { get; private  set; }
+            public object Recipient { get; private set; }
+            public Type MessageType { get; private set; }
+            public object Context { get; private set; }
 
             public MessengerKey(object recipient, Type messageType, object context) {
                 Recipient = recipient;

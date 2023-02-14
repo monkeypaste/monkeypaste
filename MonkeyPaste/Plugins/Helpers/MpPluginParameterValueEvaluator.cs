@@ -1,8 +1,7 @@
-﻿using MonkeyPaste.Common.Plugin;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
@@ -69,7 +68,7 @@ namespace MonkeyPaste {
                     curVal = await GetParameterQueryResultAsync(controlType, curVal, ci, false);
                     break;
                 case MpParameterValueUnitType.RawDataContentQuery:
-                    curVal = await GetParameterQueryResultAsync(controlType,curVal, ci, true);
+                    curVal = await GetParameterQueryResultAsync(controlType, curVal, ci, true);
                     break;
                 case MpParameterValueUnitType.Base64Text:
                     curVal = curVal.ToBytesFromBase64String().ToBase64String();
@@ -119,7 +118,7 @@ namespace MonkeyPaste {
 
         #region Private Methods
         private static async Task<string> GetParameterQueryResultAsync(MpParameterControlType controlType, string curVal, MpCopyItem ci, bool asRawData) {
-            if(MpParameterFormat.IsControlCsvValue(controlType)) {
+            if (MpParameterFormat.IsControlCsvValue(controlType)) {
                 // for csv values, split decode actual text to get query result then return re-encoded csv
                 var csvProps = MpParameterFormat.GetControlCsvProps(controlType);
                 var decoded_vals = curVal.ToListFromCsv(csvProps);
@@ -134,7 +133,7 @@ namespace MonkeyPaste {
             for (int i = 1; i < Enum.GetNames(typeof(MpContentQueryPropertyPathType)).Length; i++) {
                 // example content query: '{Title} is a story about {ItemData}'
                 MpContentQueryPropertyPathType ppt = (MpContentQueryPropertyPathType)i;
-                if(ppt == MpContentQueryPropertyPathType.LastOutput) {
+                if (ppt == MpContentQueryPropertyPathType.LastOutput) {
                     continue;
                 }
 
@@ -145,7 +144,7 @@ namespace MonkeyPaste {
                     string contentValue = await QueryPropertyAsync(ci, ppt) as string;
 
                     if (!asRawData) {
-                        contentValue = await GetParameterRequestValueAsync(controlType,MpParameterValueUnitType.PlainText, contentValue, ci);
+                        contentValue = await GetParameterRequestValueAsync(controlType, MpParameterValueUnitType.PlainText, contentValue, ci);
                     }
                     string pptTokenBackup = "{@" + ppt.ToString() + "@}";
                     if (curVal.Contains(pptTokenBackup)) {

@@ -1,13 +1,11 @@
 ﻿using MonkeyPaste.Common.Plugin;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public class MpContactCollectionViewModel : MpSelectorViewModelBase<object,MpContactViewModel>,
-        MpIAsyncSingletonViewModel<MpContactCollectionViewModel>{
+    public class MpContactCollectionViewModel : MpSelectorViewModelBase<object, MpContactViewModel>,
+        MpIAsyncSingletonViewModel<MpContactCollectionViewModel> {
 
         #region Statics
 
@@ -55,7 +53,7 @@ namespace MonkeyPaste {
                 var cvm = await CreateConactViewModel(c);
                 Items.Add(cvm);
             }
-            if(Items.Count == 0) {
+            if (Items.Count == 0) {
                 var ecvm = await CreateConactViewModel(MpContact.EmptyContact);
                 Items.Add(ecvm);
             }

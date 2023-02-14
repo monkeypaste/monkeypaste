@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MonkeyPaste.Common {
+﻿namespace MonkeyPaste.Common {
     public static class MpAnimationHelpers {
 
         public static void Spring(ref double x, ref double v, double xt, double h, double zeta = 0.22d, double omega = 25.0d) {

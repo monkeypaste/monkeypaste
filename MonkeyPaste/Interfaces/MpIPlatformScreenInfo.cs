@@ -1,7 +1,5 @@
 ﻿using MonkeyPaste.Common;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace MonkeyPaste {
     public interface MpIPlatformScreenInfo {

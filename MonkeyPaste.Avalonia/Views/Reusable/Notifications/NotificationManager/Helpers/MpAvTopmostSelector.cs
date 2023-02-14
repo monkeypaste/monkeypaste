@@ -1,6 +1,5 @@
 ﻿using Avalonia.Controls;
 using System.Collections.Generic;
-using MonkeyPaste;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
@@ -18,7 +17,7 @@ namespace MonkeyPaste.Avalonia {
 
         public Window TopmostWindow {
             get {
-                if (MpAvSettingsWindow.Instance != null && 
+                if (MpAvSettingsWindow.Instance != null &&
                     MpAvSettingsWindow.Instance.Topmost) {
                     return MpAvSettingsWindow.Instance;
                 }
@@ -94,7 +93,7 @@ namespace MonkeyPaste.Avalonia {
             return wasActivated;
         }
         private void Instance_OnNotificationIsVisibleChanged(object sender, Window w) {
-            if(!IsEnabled) {
+            if (!IsEnabled) {
                 return;
             }
             if (w.IsVisible) {
@@ -105,11 +104,11 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 _ntfWindows.Remove(w);
                 UnsetTopmost(w);
-                if(_ntfWindows.Count > 0) {
+                if (_ntfWindows.Count > 0) {
                     TrySetTopmost(_ntfWindows[_ntfWindows.Count - 1]);
                 } else if (MpAvSettingsWindowViewModel.Instance.IsVisible) {
                     TrySetTopmost(MpAvSettingsWindow.Instance);
-                } else if(MpAvMainWindowViewModel.Instance.IsMainWindowLocked) {
+                } else if (MpAvMainWindowViewModel.Instance.IsMainWindowLocked) {
                     TrySetTopmost(MpAvMainWindow.Instance);
                 }
             }
@@ -143,17 +142,17 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private int GetWindowTopmostPriority(Window w) {
-            if(w == null) {
+            if (w == null) {
                 return -1;
             }
-            if(w == MpAvMainWindow.Instance) {
+            if (w == MpAvMainWindow.Instance) {
                 return 1;
             }
-            if(w == MpAvSettingsWindow.Instance) {
+            if (w == MpAvSettingsWindow.Instance) {
                 return 2;
             }
-            if(w.DataContext is MpNotificationViewModelBase) {
-                if(w.DataContext is not MpAppendNotificationViewModel) {
+            if (w.DataContext is MpNotificationViewModelBase) {
+                if (w.DataContext is not MpAppendNotificationViewModel) {
                     return 3;
                 }
                 return 4;

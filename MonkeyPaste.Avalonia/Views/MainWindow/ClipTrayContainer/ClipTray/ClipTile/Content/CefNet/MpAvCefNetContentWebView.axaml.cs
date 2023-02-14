@@ -1,14 +1,4 @@
-using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using MonkeyPaste.Common.Avalonia;
-using System.Diagnostics;
-using CefNet.Avalonia;
-using Avalonia.Interactivity;
-using Avalonia.Threading;
-using Gdk;
-using Avalonia.Input;
-using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvCefNetContentWebView : MpAvUserControl<MpAvClipTileViewModel> {
@@ -17,7 +7,7 @@ namespace MonkeyPaste.Avalonia {
             InitializeComponent();
         }
 
-        
+
 
         private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);

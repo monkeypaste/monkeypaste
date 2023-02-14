@@ -1,5 +1,4 @@
 ﻿using MonkeyPaste.Common;
-using System.IO;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvActiveAppChangedTriggerOutput : MpAvActionOutput {

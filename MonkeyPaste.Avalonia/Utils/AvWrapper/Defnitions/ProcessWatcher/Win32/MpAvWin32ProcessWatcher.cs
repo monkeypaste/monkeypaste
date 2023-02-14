@@ -1,22 +1,12 @@
-﻿using System;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Wpf;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Reflection.Metadata;
 using System.Security.Principal;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Timers;
-using System.Windows;
-using MonkeyPaste;
-using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
-using MonkeyPaste.Common.Wpf;
 using static MonkeyPaste.Common.Wpf.WinApi;
 
 namespace MonkeyPaste.Avalonia {
@@ -45,7 +35,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsThisAppAdmin { get; private set; } = false;
         public override IntPtr GetParentHandleAtPoint(MpPoint p) {
             // Get the window/control that the mouse is hovering over...
-            IntPtr hwnd = WinApi.WindowFromPoint(new System.Drawing.Point((int)p.X,(int)p.Y));
+            IntPtr hwnd = WinApi.WindowFromPoint(new System.Drawing.Point((int)p.X, (int)p.Y));
             if (hwnd == null || hwnd == IntPtr.Zero) {
                 return IntPtr.Zero;
             }
@@ -60,7 +50,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public override IntPtr SetActiveProcess(IntPtr handle) {
-            if(handle == IntPtr.Zero) {
+            if (handle == IntPtr.Zero) {
                 MpConsole.WriteLine("Warning cannot set active process to IntPtr.Zero, ignoring");
                 return IntPtr.Zero;
             }
@@ -74,21 +64,21 @@ namespace MonkeyPaste.Avalonia {
             return lastActive;
         }
         public override IntPtr SetActiveProcess(IntPtr handle, ProcessWindowStyle windowStyle) {
-            if(!WinApi.ShowWindowAsync(handle, GetShowWindowState(windowStyle))) {
+            if (!WinApi.ShowWindowAsync(handle, GetShowWindowState(windowStyle))) {
                 MpConsole.WriteLine($"ShowWindowAsync failed for handle '{handle}' with window state '{windowStyle}'");
             }
             return SetActiveProcess(handle);
         }
 
         public override bool IsAdmin(object handleIdOrTitle) {
-            if(handleIdOrTitle is IntPtr handle) {
+            if (handleIdOrTitle is IntPtr handle) {
                 return IsProcessAdmin(handle);
             }
             throw new NotImplementedException();
         }
         public override ProcessWindowStyle GetWindowStyle(object handleIdOrTitle) {
             IntPtr handle = IntPtr.Zero;
-            if(handleIdOrTitle is IntPtr) {
+            if (handleIdOrTitle is IntPtr) {
                 handle = (IntPtr)handleIdOrTitle;
             } else {
                 throw new NotImplementedException();
@@ -130,7 +120,7 @@ namespace MonkeyPaste.Avalonia {
                             };
 
                             if (handle == active_handle) {
-                                if(activeProcessInfo != null) {
+                                if (activeProcessInfo != null) {
                                     // should only be set once how come?
                                     Debugger.Break();
                                 }
@@ -191,7 +181,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public override Process GetProcess(object handleIdOrTitle) {
-            if(handleIdOrTitle is IntPtr handle) {
+            if (handleIdOrTitle is IntPtr handle) {
                 GetWindowThreadProcessId(handle, out uint pid);
                 return base.GetProcess((int)pid);
             }
@@ -276,7 +266,7 @@ namespace MonkeyPaste.Avalonia {
         #region Helpers
 
         private int GetShowWindowState(ProcessWindowStyle pws) {
-            switch(pws) {
+            switch (pws) {
                 case ProcessWindowStyle.Hidden:
                     return (int)WinApi.ShowWindowCommands.Hide;
 
@@ -326,7 +316,7 @@ namespace MonkeyPaste.Avalonia {
                     }
 
                     int length = WinApi.GetWindowTextLength(hWnd);
-                   
+
                     if (length == 0 || !WinApi.IsWindow(hWnd)) {
                         return true;
                     }
@@ -338,7 +328,7 @@ namespace MonkeyPaste.Avalonia {
                     //StringBuilder builder = new StringBuilder(length);
                     //WinApi.GetWindowText(hWnd, builder, length + 1);
                     string process_path = GetProcessPath(hWnd);
-                    if(string.IsNullOrEmpty(process_path)) {
+                    if (string.IsNullOrEmpty(process_path)) {
                         return true;
                     }
                     windows.AddOrReplace(process_path, hWnd);
@@ -363,7 +353,7 @@ namespace MonkeyPaste.Avalonia {
                     //if it is not resolve its process path
                     processName = GetProcessPath(fgHandle);
                 }
-                if(processName == null) {
+                if (processName == null) {
                     return;
                 }
                 //if (processName == fallback) {
@@ -449,6 +439,6 @@ namespace MonkeyPaste.Avalonia {
 #pragma warning restore CS0162 // Unreachable code detected
         }
 
-#endregion
+        #endregion
     }
 }

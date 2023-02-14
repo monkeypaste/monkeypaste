@@ -1,15 +1,12 @@
-﻿using SQLite;
+﻿using MonkeyPaste.Common;
+using SQLite;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public class MpDbImage : MpDbModelBase, MpISyncableDbObject, MpIClonableDbModel<MpDbImage> {
-        [PrimaryKey,AutoIncrement]
+        [PrimaryKey, AutoIncrement]
         [Column("pk_MpDbImageId")]
         public override int Id { get; set; }
 
@@ -32,14 +29,14 @@ namespace MonkeyPaste {
         public string ImageBase64 { get; set; }
 
         public static async Task<MpDbImage> Create(string base64Str, bool suppressWrite = false) {
-            if(!base64Str.IsStringBase64()) {
+            if (!base64Str.IsStringBase64()) {
                 MpConsole.WriteLine("Warning malformed base64 str, cannot create dbimage so returing default");
                 var img = await MpDataModelProvider.GetItemAsync<MpDbImage>(MpDefaultDataModelTools.ThisAppIconDbImageId);
                 return img;
             }
 
             var dupCheck = await MpDataModelProvider.GetDbImageByBase64StrAsync(base64Str);
-            if(dupCheck != null) {
+            if (dupCheck != null) {
                 dupCheck = await MpDataModelProvider.GetItemAsync<MpDbImage>(dupCheck.Id);
                 return dupCheck;
             }
@@ -48,7 +45,7 @@ namespace MonkeyPaste {
                 ImageBase64 = base64Str
             };
 
-            if(!suppressWrite) {
+            if (!suppressWrite) {
                 await i.WriteToDatabaseAsync();
             }
             return i;
@@ -61,10 +58,10 @@ namespace MonkeyPaste {
                 DbImageGuid = System.Guid.NewGuid(),
                 ImageBase64 = this.ImageBase64
             };
-            if(!suppressWrite) {
+            if (!suppressWrite) {
                 await cdbi.WriteToDatabaseAsync();
             }
-            
+
             return cdbi;
         }
 
@@ -72,7 +69,7 @@ namespace MonkeyPaste {
 
         public MpDbImage() { }
 
-        public async Task<object> CreateFromLogsAsync(string imgGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {            
+        public async Task<object> CreateFromLogsAsync(string imgGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
             var imgDr = await MpDb.GetDbObjectByTableGuidAsync("MpDbImage", imgGuid);
             MpDbImage img = null;
             if (imgDr == null) {
@@ -123,7 +120,7 @@ namespace MonkeyPaste {
             await Task.Delay(1);
 
             MpDbImage other = null;
-            
+
             if (drOrModel is MpDbImage) {
                 other = drOrModel as MpDbImage;
             } else {
@@ -142,6 +139,6 @@ namespace MonkeyPaste {
             return diffLookup;
         }
 
-        
+
     }
 }

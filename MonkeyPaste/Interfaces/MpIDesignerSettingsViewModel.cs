@@ -1,5 +1,4 @@
-﻿using MonkeyPaste.Common;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 namespace MonkeyPaste {
     public interface MpIDesignerSettingsViewModel {

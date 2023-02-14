@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace MonkeyPaste.Common {
     public static class MpCsvExtensions {
@@ -13,19 +11,19 @@ namespace MonkeyPaste.Common {
                 return string.Empty;
             }
             csvProps = csvProps == null ? MpCsvFormatProperties.Default : csvProps;
-            return 
+            return
                 string.Join(
-                    csvProps.EocSeparator, 
-                    strList.Select(x=>csvProps.EncodeValue(x)));
+                    csvProps.EocSeparator,
+                    strList.Select(x => csvProps.EncodeValue(x)));
         }
         public static List<string> ToListFromCsv(this string csvStr, MpICustomCsvFormat csvObj) {
             return ToListFromCsv(csvStr, csvObj.CsvFormat);
         }
         public static List<string> ToListFromCsv(this string csvStr, MpCsvFormatProperties csvProps = null) {
             csvProps = csvProps == null ? MpCsvFormatProperties.Default : csvProps;
-            return 
+            return
                 csvStr.SplitNoEmpty(csvProps.EocSeparator)
-                .Select(x=>csvProps.DecodeValue(x))
+                .Select(x => csvProps.DecodeValue(x))
                 .ToList();
         }
 

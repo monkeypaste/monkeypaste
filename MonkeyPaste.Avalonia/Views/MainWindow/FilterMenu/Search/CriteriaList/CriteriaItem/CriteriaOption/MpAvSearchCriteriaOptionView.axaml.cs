@@ -22,9 +22,9 @@ namespace MonkeyPaste.Avalonia {
 
         private void Cocc_TemplateApplied(object sender, global::Avalonia.Controls.Primitives.TemplateAppliedEventArgs e) {
             var cocc = this.FindControl<ContentControl>("CriteriaOptionContentControl");
-            if(cocc != null) {
+            if (cocc != null) {
                 var mvtb = cocc.GetVisualDescendants<TextBox>().FirstOrDefault(x => x.Name == "MatchValueTextBox");
-                if(mvtb != null) {
+                if (mvtb != null) {
                     mvtb.LostFocus += Mvtb_LostFocus;
                 }
 
@@ -34,8 +34,8 @@ namespace MonkeyPaste.Avalonia {
                 var test4 = MpPlatform.Services.PlatformResource.GetResource("DatePickerSpacerThemeWidth");
 
                 var mvdt = cocc.GetVisualDescendant<DatePicker>();
-                if(mvdt != null) {
-                    mvdt.PointerEnter += Mvdt_PointerEnter;
+                if (mvdt != null) {
+                    mvdt.PointerEntered += Mvdt_PointerEnter;
                 }
             }
         }

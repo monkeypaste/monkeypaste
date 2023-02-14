@@ -21,27 +21,13 @@
              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
              SelectionMode="Single">
         <ListBox.Resources>
-            <Thickness x:Key="ListBoxItemPadding">
-                0,0,0,0
-            </Thickness>
-            <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">
-                Transparent
-            </SolidColorBrush>
-            <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">
-                Transparent
-            </SolidColorBrush>
-            <SolidColorBrush x:Key="SystemControlHighlightListAccentHighBrush">
-                Transparent
-            </SolidColorBrush>
-            <SolidColorBrush x:Key="SystemControlHighlightListLowBrush">
-                Transparent
-            </SolidColorBrush>
-            <SolidColorBrush x:Key="SystemControlHighlightListMediumBrush">
-                Transparent
-            </SolidColorBrush>
-            <SolidColorBrush x:Key="SystemControlHighlightListHighBrush">
-                Transparent
-            </SolidColorBrush>
+            <Thickness x:Key="ListBoxItemPadding">0,0,0,0</Thickness>
+            <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">Transparent</SolidColorBrush>
+            <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">Transparent</SolidColorBrush>
+            <SolidColorBrush x:Key="SystemControlHighlightListAccentHighBrush">Transparent</SolidColorBrush>
+            <SolidColorBrush x:Key="SystemControlHighlightListLowBrush">Transparent</SolidColorBrush>
+            <SolidColorBrush x:Key="SystemControlHighlightListMediumBrush">Transparent</SolidColorBrush>
+            <SolidColorBrush x:Key="SystemControlHighlightListHighBrush">Transparent</SolidColorBrush>
         </ListBox.Resources>
         <ListBox.ItemsPanel>
             <ItemsPanelTemplate>

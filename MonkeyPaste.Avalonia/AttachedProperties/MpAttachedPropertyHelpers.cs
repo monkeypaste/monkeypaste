@@ -2,20 +2,20 @@
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAttachedPropertyHelpers {
-        private static Dictionary<object, Dictionary<string,object>> _instancePropertyLookup =
-                                              new Dictionary<object, Dictionary<string,object>>();
+        private static Dictionary<object, Dictionary<string, object>> _instancePropertyLookup =
+                                              new Dictionary<object, Dictionary<string, object>>();
 
         public static T GetInstanceProperty<T>(object obj, string propName) {
             var propVal = GetInstanceProperty_Internal(obj, propName);
-            if(propVal == null) {
+            if (propVal == null) {
                 return default(T);
             }
             return (T)propVal;
         }
 
         private static object GetInstanceProperty_Internal(object obj, string propName) {
-            if(_instancePropertyLookup.TryGetValue(obj, out var objPropLookup)) {
-                if(objPropLookup.TryGetValue(propName, out var propVal)) {
+            if (_instancePropertyLookup.TryGetValue(obj, out var objPropLookup)) {
+                if (objPropLookup.TryGetValue(propName, out var propVal)) {
                     return propVal;
                 }
             }
@@ -24,11 +24,11 @@ namespace MonkeyPaste.Avalonia {
 
         public static void AddOrReplaceInstanceProperty<T>(object obj, string propName, T newValue) {
             AddOrReplaceInstanceProperty_Internal(obj, propName, newValue);
-        } 
-        private static void AddOrReplaceInstanceProperty_Internal(object obj,string propName, object newValue) {
-            if(_instancePropertyLookup.TryGetValue(obj, out Dictionary<string, object> objPropLookup)) {
+        }
+        private static void AddOrReplaceInstanceProperty_Internal(object obj, string propName, object newValue) {
+            if (_instancePropertyLookup.TryGetValue(obj, out Dictionary<string, object> objPropLookup)) {
                 //instance has properties
-                if(objPropLookup.ContainsKey(propName)) {
+                if (objPropLookup.ContainsKey(propName)) {
                     //instance property already has value
                     objPropLookup[propName] = newValue;
                     _instancePropertyLookup[obj] = objPropLookup;

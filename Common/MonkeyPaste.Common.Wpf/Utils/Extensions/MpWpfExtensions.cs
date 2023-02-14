@@ -1,30 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
-using System.Windows.Threading;
-
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 
 namespace MonkeyPaste.Common.Wpf {
@@ -39,7 +25,7 @@ namespace MonkeyPaste.Common.Wpf {
             // Kill logical focus
             FocusManager.SetFocusedElement(FocusManager.GetFocusScope(control), null);
             // Kill keyboard focus
-            Keyboard.ClearFocus(); 
+            Keyboard.ClearFocus();
         }
 
         #endregion
@@ -79,8 +65,8 @@ namespace MonkeyPaste.Common.Wpf {
 
         public static bool IsEmpty<T>(this IList<T> source) {
             return source.Count == 0;
-        }       
-        
+        }
+
         //public static void Move<T>(this IList<T> collection, int oldIdx, int newIdx) where T : class {
         //    var item = collection[oldIdx];
         //    collection.RemoveAt(oldIdx);
@@ -144,7 +130,7 @@ namespace MonkeyPaste.Common.Wpf {
             return !cm.IsMenuItem(idx);
         }
 
-        public static MenuItem GetMenuItem(this MenuItem mi, int idx) {            
+        public static MenuItem GetMenuItem(this MenuItem mi, int idx) {
             return mi.ItemContainerGenerator.ContainerFromItem(idx) as MenuItem;
         }
 
@@ -191,8 +177,8 @@ namespace MonkeyPaste.Common.Wpf {
             bool isMouse_L_Down = Mouse.PrimaryDevice.LeftButton == MouseButtonState.Pressed;
             bool isMouse_R_Down = Mouse.PrimaryDevice.RightButton == MouseButtonState.Pressed;
 
-            bool isCtrlDown = Keyboard.Modifiers.HasFlag(ModifierKeys.Control); 
-            bool isShiftDown = Keyboard.Modifiers.HasFlag(ModifierKeys.Shift); 
+            bool isCtrlDown = Keyboard.Modifiers.HasFlag(ModifierKeys.Control);
+            bool isShiftDown = Keyboard.Modifiers.HasFlag(ModifierKeys.Shift);
 
             var lbi = lb.GetListBoxItem(index);
             if (lbi.IsSelected) {
@@ -221,14 +207,14 @@ namespace MonkeyPaste.Common.Wpf {
                     lbi.IsSelected = false;
                 } else {
                     //12   else remove any other item from selection
-                    if(!isMouse_L_Down) {
+                    if (!isMouse_L_Down) {
                         lb.SelectedItems.Clear();
                         lbi.IsSelected = true;
 
                         lb.GetVisualAncestor<ListBox>().SelectedItems.Clear();
                         lbi.GetVisualAncestor<ListBoxItem>().IsSelected = true;
                     }
-                    
+
                 }
             } else {
                 ListBoxItem lastSelectedItem = null;
@@ -267,13 +253,13 @@ namespace MonkeyPaste.Common.Wpf {
                     lbi.IsSelected = !lbi.IsSelected;
                 } else {
                     //7    if neither ctrl nor shift are pressed clear any other selection
-                    if(isMouse_L_Down) {
+                    if (isMouse_L_Down) {
                         lbi.IsSelected = true;
                     } else {
                         lb.SelectedItems.Clear();
                     }
                 }
-            } 
+            }
         }
 
         public static void UpdateExtendedSelection(this ListBoxItem lbi) {
@@ -287,12 +273,12 @@ namespace MonkeyPaste.Common.Wpf {
 
 
         public static ScrollBar GetScrollBar(this ScrollViewer sv, Orientation orientation) {
-            if(orientation == Orientation.Vertical) {
+            if (orientation == Orientation.Vertical) {
                 return sv.Template.FindName("PART_VerticalScrollBar", sv) as ScrollBar;
             }
             return sv.Template.FindName("PART_HorizontalScrollBar", sv) as ScrollBar;
         }
-        
+
         public static ListBoxItem GetListBoxItem(this ListBox lb, int index) {
             if (lb == null) {
                 return null;
@@ -329,7 +315,7 @@ namespace MonkeyPaste.Common.Wpf {
 
         public static Rect GetRect(this ListBoxItem lbi, bool relativeToListBox = false) {
             var lbir = lbi.GetParentListBox().GetListBoxItemRect(lbi.GetListBoxItemIdx());
-            if(relativeToListBox) {
+            if (relativeToListBox) {
                 return lbir;
             }
             lbir.Location = new Point();
@@ -345,22 +331,22 @@ namespace MonkeyPaste.Common.Wpf {
             if (lbi == null || lbi.Visibility != Visibility.Visible) {
                 return new Rect();
             }
-            var sv = relativeTo == null ? lb.GetVisualDescendent<ScrollViewer>():relativeTo;
+            var sv = relativeTo == null ? lb.GetVisualDescendent<ScrollViewer>() : relativeTo;
             Point origin = lbi.TranslatePoint(new Point(0, 0), (UIElement)sv);
             //Point origin2 = lbi.TranslatePoint(new Point(0, 0), lb);
             return new Rect(origin, new Size(lbi.ActualWidth, lbi.ActualHeight));
         }
 
-        public static List<Rect> GetListBoxItemRects(this ListBox lb, Visual relativeTo = null) {            
+        public static List<Rect> GetListBoxItemRects(this ListBox lb, Visual relativeTo = null) {
             var rl = new List<Rect>();
             for (int i = 0; i < lb.Items.Count; i++) {
-                rl.Add(lb.GetListBoxItemRect(i,relativeTo));
+                rl.Add(lb.GetListBoxItemRect(i, relativeTo));
             }
             return rl;
         }
 
         public static ListBoxItem GetItemAtPoint(this ListBox lb, Point p, Visual relativeTo = null) {
-            int idx = lb.GetItemIndexAtPoint(p,relativeTo);
+            int idx = lb.GetItemIndexAtPoint(p, relativeTo);
             return idx < 0 ? null : lb.GetListBoxItem(idx);
         }
 
@@ -381,7 +367,7 @@ namespace MonkeyPaste.Common.Wpf {
                 if (lbr.Contains(mp)) {
                     //point is still in listbox
                     //get first and last lbi rect's
-                    var flbir = lb.GetListBoxItemRect(0,relativeTo);
+                    var flbir = lb.GetListBoxItemRect(0, relativeTo);
                     var llbir = lb.GetListBoxItemRect(lb.Items.Count - 1, relativeTo);
                     if (lb.GetOrientation() == Orientation.Horizontal) {
                         if (mp.X >= 0 && mp.X <= flbir.Left) {
@@ -560,7 +546,7 @@ namespace MonkeyPaste.Common.Wpf {
         }
 
         public static IEnumerable<T> GetVisualDescendents<T>(this DependencyObject d, string childName) where T : DependencyObject {
-            if(d == null) {
+            if (d == null) {
                 yield break;
             }
             var childCount = VisualTreeHelper.GetChildrenCount(d);
@@ -595,18 +581,18 @@ namespace MonkeyPaste.Common.Wpf {
             //}
             //return fe.TransformToVisual(rv).TransformBounds(LayoutInformation.GetLayoutSlot(fe));
             Point origin = new Point();
-            if(rv != null) {
+            if (rv != null) {
                 origin = fe.TranslatePoint(origin, (UIElement)rv);
             }
             return new Rect(origin, new Size(fe.ActualWidth, fe.ActualHeight));
-        }        
+        }
 
         public static bool IsVisualDescendant(this DependencyObject parent, DependencyObject child) {
-            if(parent == null || child == null) {
+            if (parent == null || child == null) {
                 return false;
             }
-            foreach(var descendant in parent.FindChildren<UIElement>()) {
-                if(descendant == child) {
+            foreach (var descendant in parent.FindChildren<UIElement>()) {
+                if (descendant == child) {
                     return true;
                 }
             }
@@ -734,6 +720,6 @@ namespace MonkeyPaste.Common.Wpf {
         }
         #endregion
 
-        
+
     }
 }

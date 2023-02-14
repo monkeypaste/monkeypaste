@@ -1,16 +1,12 @@
-﻿using MonkeyPaste;
+﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
-using MonkeyPaste.Common;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvAnalyzeActionViewModel : 
+    public class MpAvAnalyzeActionViewModel :
         MpAvActionViewModelBase,
         MpIContentTypeDependant {
         #region Constants
@@ -120,10 +116,10 @@ namespace MonkeyPaste.Avalonia {
 
             var actionInput = GetInput(arg);
 
-            var aipvm = MpAvAnalyticItemCollectionViewModel.Instance.AllPresets.FirstOrDefault(x=>x.AnalyticItemPresetId == AnalyticItemPresetId);
-            
+            var aipvm = MpAvAnalyticItemCollectionViewModel.Instance.AllPresets.FirstOrDefault(x => x.AnalyticItemPresetId == AnalyticItemPresetId);
+
             object[] args = new object[] { aipvm, actionInput.CopyItem };
-            if(aipvm != null && 
+            if (aipvm != null &&
                aipvm.Parent != null &&
                aipvm.Parent.ExecuteAnalysisCommand.CanExecute(args)) {
                 aipvm.Parent.ExecuteAnalysisCommand.Execute(args);
@@ -132,7 +128,7 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(100);
                 }
 
-                if(aipvm.Parent.LastTransaction != null && aipvm.Parent.LastTransaction.Response != null) {
+                if (aipvm.Parent.LastTransaction != null && aipvm.Parent.LastTransaction.Response != null) {
                     await base.PerformActionAsync(
                         new MpAvAnalyzeOutput() {
                             Previous = arg as MpAvActionOutput,
@@ -150,7 +146,7 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine($"Action({ActionId}) '{FullName}' Failed to execute, analyzer w/ presetId({AnalyticItemPresetId}) not found");
                 MpConsole.WriteLine("");
             }
-            
+
         }
 
         #endregion
@@ -158,7 +154,7 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            if(e is MpPluginPreset aip && aip.Id == AnalyticItemPresetId) {
+            if (e is MpPluginPreset aip && aip.Id == AnalyticItemPresetId) {
                 Task.Run(ValidateActionAsync);
             }
         }
@@ -166,7 +162,7 @@ namespace MonkeyPaste.Avalonia {
         protected override async Task ValidateActionAsync() {
             await Task.Delay(1);
 
-            if(AnalyticItemPresetId == 0) {
+            if (AnalyticItemPresetId == 0) {
                 ValidationText = $"No analyzer selection for action '{FullName}'";
             } else if (SelectedPreset == null) {
                 ValidationText = $"Analyzer for Action '{FullName}' not found";
@@ -175,15 +171,15 @@ namespace MonkeyPaste.Avalonia {
                 // check ancestors to ensure analyzer supports content type as input
 
                 MpAvActionViewModelBase closest_type_dep_ancestor = ParentActionViewModel;
-                while(closest_type_dep_ancestor != null) {
+                while (closest_type_dep_ancestor != null) {
                     // walk up action chain, to last analyzer or content add trigger to validate
-                    if(closest_type_dep_ancestor is MpAvContentAddTriggerViewModel cavm &&
+                    if (closest_type_dep_ancestor is MpAvContentAddTriggerViewModel cavm &&
                         cavm.AddedContentType != MpCopyItemType.None &&
                          !SelectedPreset.Parent.IsContentTypeValid(cavm.AddedContentType)) {
                         ValidationText = $"Parent '{closest_type_dep_ancestor.Label}' filters only for '{cavm.AddedContentType}' type content and analyzer '{SelectedPreset.FullName}' will never execute because it does not support '{cavm.AddedContentType}' type of input ";
                         break;
                     }
-                    if(closest_type_dep_ancestor is MpAvAnalyzeActionViewModel aavm &&
+                    if (closest_type_dep_ancestor is MpAvAnalyzeActionViewModel aavm &&
                         aavm.SelectedPreset != null) {
                         // TODO need to have an analyzer.IsInputValid using analyzerOutputformat flags here but 
                         // still not clear how handling previous output is it just LastOutput?
@@ -193,7 +189,7 @@ namespace MonkeyPaste.Avalonia {
                     closest_type_dep_ancestor = closest_type_dep_ancestor.ParentActionViewModel;
                 }
             }
-            if(!IsValid) {
+            if (!IsValid) {
                 ShowValidationNotification();
             }
         }
@@ -203,7 +199,7 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private void MpAvAnalyzeActionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
                 case nameof(ActionArgs):
                     OnPropertyChanged(nameof(SelectedPreset));
                     break;

@@ -1,14 +1,4 @@
 ﻿using MonkeyPaste.Common;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
 
 namespace MonkeyPaste {
 
@@ -40,12 +30,12 @@ namespace MonkeyPaste {
         #region public static Methods
 
         public static void SetCursor(object targetObj, MpCursorType cursor) {
-            if(!MpBootstrapperViewModelBase.IsCoreLoaded) { // || IsCursorFrozen) {
+            if (!MpBootstrapperViewModelBase.IsCoreLoaded) { // || IsCursorFrozen) {
                 return;
             }
 
             CurrentCursor = cursor;
-            _cursor.SetCursor(targetObj,CurrentCursor);
+            _cursor.SetCursor(targetObj, CurrentCursor);
 
             string logStr = $"Type: '{targetObj}' set Cursor to: '{cursor}'";
             MpConsole.WriteLogLine(logStr);

@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Common {
     public enum MpJsonDataTokenType {

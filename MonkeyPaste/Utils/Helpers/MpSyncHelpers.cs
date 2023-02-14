@@ -1,12 +1,11 @@
-﻿using System;
+﻿//using Xamarin.Forms;
+using MonkeyPaste.Common;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Xamarin.Forms;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public static class MpSyncHelpers {
@@ -241,7 +240,7 @@ namespace MonkeyPaste {
             await MpDb.AddOrUpdateAsync<MpSyncHistory>(sh);
         }
 
-        private static  Dictionary<Guid, List<MpDbLog>> OrderByPrecedence(Dictionary<Guid, List<MpDbLog>> dict) {
+        private static Dictionary<Guid, List<MpDbLog>> OrderByPrecedence(Dictionary<Guid, List<MpDbLog>> dict) {
             if (dict.Count == 0) {
                 return dict;
             }
@@ -256,7 +255,7 @@ namespace MonkeyPaste {
             return customSortedValues;
         }
 
-        private static  int GetDbTableOrder(MpDbLog log) {
+        private static int GetDbTableOrder(MpDbLog log) {
             var orderedLogs = MpSyncManager.DbTableSyncOrder.ToList();
             var idx = orderedLogs.IndexOf(log.DbTableName);
             if (idx < 0) {
@@ -265,9 +264,6 @@ namespace MonkeyPaste {
             return idx;
         }
 
-        public static object GetMainThreadObj() {
-            return Application.Current.MainPage;
-        }
 
         public static MpIStringToSyncObjectTypeConverter GetTypeConverter() {
             return new MpXamStringToSyncObjectTypeConverter();
@@ -277,11 +273,11 @@ namespace MonkeyPaste {
         public static ObservableCollection<MpRemoteDevice> GetRemoteDevices() {
             //_rdLock = new object();
             var rdoc = new ObservableCollection<MpRemoteDevice>();
-            Xamarin.Forms.BindingBase.EnableCollectionSynchronization(rdoc, null, ObservableCollectionCallback);
+            //Xamarin.Forms.BindingBase.EnableCollectionSynchronization(rdoc, null, ObservableCollectionCallback);
             return rdoc;
         }
 
-        private static  void ObservableCollectionCallback(IEnumerable collection, object context, Action accessMethod, bool writeAccess) {
+        private static void ObservableCollectionCallback(IEnumerable collection, object context, Action accessMethod, bool writeAccess) {
             // `lock` ensures that only one thread access the collection at a time
             lock (collection) {
                 accessMethod?.Invoke();

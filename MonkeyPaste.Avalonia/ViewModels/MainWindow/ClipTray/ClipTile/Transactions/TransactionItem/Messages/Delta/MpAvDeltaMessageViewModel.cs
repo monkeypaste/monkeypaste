@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvDeltaMessageViewModel  : MpAvTransactionMessageViewModelBase, MpAvITransactionNodeViewModel {
+    public class MpAvDeltaMessageViewModel : MpAvTransactionMessageViewModelBase, MpAvITransactionNodeViewModel {
 
         #region Interfaces
         #endregion
@@ -43,13 +43,13 @@ namespace MonkeyPaste.Avalonia {
             await Task.Delay(1);
 
             Json = jsonOrParsedFragment is string ? jsonOrParsedFragment.ToString() : string.Empty;
-            if(Items != null) {
+            if (Items != null) {
                 Items.Clear();
             }
             ParentTreeItem = parentAnnotation;
             QuillDelta = MpJsonConverter.DeserializeObject<MpQuillDelta>(jsonOrParsedFragment);
-            if(QuillDelta != null) {
-                
+            if (QuillDelta != null) {
+
             }
             OnPropertyChanged(nameof(Children));
             OnPropertyChanged(nameof(Items));

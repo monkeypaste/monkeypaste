@@ -14,7 +14,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void MpAvPasswordBoxParameterView_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
-            if(e.IsRightPress(sender as Control)) {
+            if (e.IsRightPress(sender as Control)) {
                 // disable right-click / context menu for passwords
                 e.Handled = true;
                 return;

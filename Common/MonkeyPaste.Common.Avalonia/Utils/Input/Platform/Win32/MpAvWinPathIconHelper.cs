@@ -1,10 +1,8 @@
-﻿using System;
-using Avalonia.Media.Imaging;
+﻿using Avalonia.Media.Imaging;
+using MonkeyPaste.Common.Wpf;
+using System;
 using System.IO;
 using System.Runtime.InteropServices;
-using MonoMac.AppKit;
-using MonkeyPaste.Common;
-using MonkeyPaste.Common.Wpf;
 
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvWinPathIconHelper {

@@ -1,13 +1,11 @@
-﻿using System;
-using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
-using MonkeyPaste;
-using System.Collections.Concurrent;
-using System.Collections.ObjectModel;
+﻿using MonkeyPaste.Common;
 using MonoMac.AppKit;
-using System.Linq;
-using System.Diagnostics;
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvMacProcessWatcher : MpAvProcessWatcherBase {
@@ -99,7 +97,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected override MpPortableProcessInfo RefreshRunningProcessLookup() {
-            lock(_lockObj) {
+            lock (_lockObj) {
                 MpPortableProcessInfo activeAppInfo = null;
 
                 var runningApps = NSWorkspace.SharedWorkspace.RunningApplications;
@@ -123,7 +121,7 @@ namespace MonkeyPaste.Avalonia {
                     if (handles == null) {
                         Debugger.Break();
                     }
-                    if (runningApp.Active) {                        
+                    if (runningApp.Active) {
                         // handle is active
                         if (activeAppInfo != null) {
                             Debugger.Break();
@@ -141,7 +139,7 @@ namespace MonkeyPaste.Avalonia {
 
                     RunningProcessLookup[runningApp.ExecutableUrl.AbsoluteString.ToLower()] = handles;
 
-                    if(!refreshedPaths.Contains(runningApp.ExecutableUrl.AbsoluteString.ToLower())) {
+                    if (!refreshedPaths.Contains(runningApp.ExecutableUrl.AbsoluteString.ToLower())) {
                         refreshedPaths.Add(runningApp.ExecutableUrl.AbsoluteString.ToLower());
                     }
                 }

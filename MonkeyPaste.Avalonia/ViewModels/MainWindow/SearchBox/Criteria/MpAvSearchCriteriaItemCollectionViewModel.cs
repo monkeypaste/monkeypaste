@@ -1,23 +1,19 @@
-﻿using Avalonia.Controls;
-using Avalonia.Threading;
-using Gtk;
+﻿using Avalonia.Threading;
+
 using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Diagnostics;
-using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvSearchCriteriaItemCollectionViewModel : 
+    public class MpAvSearchCriteriaItemCollectionViewModel :
         MpViewModelBase,
         //MpIQueryResultProvider, 
-        MpIExpandableViewModel
-        {
+        MpIExpandableViewModel {
 
         #region Private Variable
 
@@ -41,10 +37,10 @@ namespace MonkeyPaste.Avalonia {
         #region MpIExpandableViewModel Implementation
 
         private bool _isExpanded;
-        public bool IsExpanded { 
+        public bool IsExpanded {
             get => _isExpanded;
             set {
-                if(IsExpanded != value) {
+                if (IsExpanded != value) {
                     SetIsExpandedAsync(value).FireAndForgetSafeAsync(this);
                 }
             }
@@ -79,15 +75,15 @@ namespace MonkeyPaste.Avalonia {
         public bool IsAllCriteriaEmpty =>
             Items.All(x => x.IsEmptyCriteria);
 
-        public bool IsAnyBusy => 
+        public bool IsAnyBusy =>
             IsBusy || Items.Any(x => x.IsAnyBusy);
-        public bool HasCriteriaItems => 
+        public bool HasCriteriaItems =>
             Items.Count > 0;
 
         public bool IsAdvSearchActive =>
             IsSavedQuery || IsPendingQuery;
 
-        public bool IsSavedQuery => 
+        public bool IsSavedQuery =>
             QueryTagId > 0;
 
         public bool IsPendingQuery =>
@@ -103,11 +99,11 @@ namespace MonkeyPaste.Avalonia {
 
         public double MaxSearchCriteriaListBoxHeight {
             get {
-                if(!IsAdvSearchActive) {
+                if (!IsAdvSearchActive) {
                     return 0;
                 }
                 double h = 0;
-                if(true) {
+                if (true) {
                     // HEADER + BORDER
                     h +=
                         BoundHeaderHeight +
@@ -133,7 +129,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         //public int PendingQueryTagId { get; private set; }
-        public int QueryTagId { get; private set;}
+        public int QueryTagId { get; private set; }
 
 
         //public int QueryTagId {
@@ -188,7 +184,7 @@ namespace MonkeyPaste.Avalonia {
                 UserDevices = await MpDataModelProvider.GetItemsAsync<MpUserDevice>();
             }
 
-            if(isPending && tagId > 0) {
+            if (isPending && tagId > 0) {
                 // shouldn't happen
                 Debugger.Break();
             }
@@ -206,17 +202,17 @@ namespace MonkeyPaste.Avalonia {
                     var civm = await CreateCriteriaItemViewModelAsync(adv_ci);
                     Items.Add(civm);
                 }
-            } 
-            
-            if(!HasCriteriaItems && isPending && !IsSavedQuery) {
+            }
+
+            if (!HasCriteriaItems && isPending && !IsSavedQuery) {
                 // create empty criteria item
                 var empty_civm = await CreateCriteriaItemViewModelAsync(null);
                 Items.Add(empty_civm);
             }
 
-            while(Items.Any(x=>x.IsAnyBusy)) {
+            while (Items.Any(x => x.IsAnyBusy)) {
                 await Task.Delay(100);
-            }           
+            }
 
             IsBusy = false;
 
@@ -230,7 +226,7 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            if(e is MpTag t && t.Id == QueryTagId) {
+            if (e is MpTag t && t.Id == QueryTagId) {
                 InitializeAsync(0, false).FireAndForgetSafeAsync();
             }
         }
@@ -246,7 +242,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
-            switch(msg) {
+            switch (msg) {
                 case MpMessageType.AdvancedSearchExpanded:
                     AnimateAdvSearchMenuAsync(true).FireAndForgetSafeAsync(this);
                     break;
@@ -260,11 +256,11 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private void MpAvSearchCriteriaItemCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
                 case nameof(SelectedItem):
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
                     break;
-                case nameof(IsExpanded):                    
+                case nameof(IsExpanded):
                     if (IsExpanded) {
                         MpMessenger.SendGlobal(MpMessageType.AdvancedSearchExpanded);
                     } else {
@@ -306,7 +302,7 @@ namespace MonkeyPaste.Avalonia {
 
                 }
             });
-            
+
         }
 
         private async Task SetIsExpandedAsync(bool newExpandedValue) {
@@ -318,7 +314,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 _isExpanded = true;
             } else {
-                if(IsPendingQuery && IsAllCriteriaEmpty) {
+                if (IsPendingQuery && IsAllCriteriaEmpty) {
                     // discard pending if nothing changed
                     await InitializeAsync(0, false);
                 }
@@ -332,14 +328,14 @@ namespace MonkeyPaste.Avalonia {
                 Items.Sort(x => x.SortOrderIdx);
             } else {
                 Items.ToList().ForEach((x, idx) => x.SortOrderIdx = idx);
-                while(Items.ToList().Any(x=>x.IsBusy)) {
+                while (Items.ToList().Any(x => x.IsBusy)) {
                     await Task.Delay(100);
                 }
             }
-        }       
+        }
 
         private async Task<int> ConvertPendingToQueryTagAsync() {
-            if(QueryTagId > 0) {
+            if (QueryTagId > 0) {
                 // not a simple search, check call stack
                 Debugger.Break();
                 return 0;
@@ -385,7 +381,7 @@ namespace MonkeyPaste.Avalonia {
                 Items.Add(nscivm);
                 OnPropertyChanged(nameof(SortedItems));
                 OnPropertyChanged(nameof(HasCriteriaItems));
-                while(Items.Any(x=>x.IsAnyBusy)) {
+                while (Items.Any(x => x.IsAnyBusy)) {
                     await Task.Delay(100);
                 }
                 // manually write since was busy during init
@@ -414,7 +410,7 @@ namespace MonkeyPaste.Avalonia {
             (args) => args is MpAvSearchCriteriaItemViewModel);
 
         public ICommand SavePendingQueryCommand => new MpAsyncCommand(
-            async() => {
+            async () => {
                 // NOTE this should only occur for new searches, onced created saving is by HasModelChanged
                 var ttrvm = MpAvTagTrayViewModel.Instance;
                 int waitTimeMs = MpAvSidebarItemCollectionViewModel.Instance.SelectedItem == ttrvm ? 0 : 500;
@@ -422,13 +418,13 @@ namespace MonkeyPaste.Avalonia {
                 // wait for panel open
                 await Task.Delay(waitTimeMs);
 
-                if(ttrvm.SelectedItem.IsNotGroupTag) {
+                if (ttrvm.SelectedItem.IsNotGroupTag) {
                     // NOTE when non-group tag selected 
                     // select root group automatically
                     // this shouldn't affect the current query cause its a group tag
 
                     ttrvm.SelectTagCommand.Execute(ttrvm.RootGroupTagViewModel);
-                    while(ttrvm.IsSelecting) {
+                    while (ttrvm.IsSelecting) {
                         await Task.Delay(100);
                     }
                 }
@@ -440,7 +436,7 @@ namespace MonkeyPaste.Avalonia {
                 // clear pending flag 
                 QueryTagId = new_query_tag_id;
             }, () => {
-                if(!IsPendingQuery ||
+                if (!IsPendingQuery ||
                     MpAvTagTrayViewModel.Instance.SelectedItem.IsNotGroupTag) {
                     return false;
                 }
@@ -455,13 +451,13 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand SaveQueryCommand => new MpCommand(
              () => {
-                 if(IsPendingQuery) {
+                 if (IsPendingQuery) {
                      SavePendingQueryCommand.Execute(null);
                  } else {
                      IgnoreHasModelChanged = false;
                  }
-             },()=>IsAdvSearchActive, this, new[] { this });
-        
+             }, () => IsAdvSearchActive, this, new[] { this });
+
 
 
         public ICommand SelectAdvancedSearchCommand => new MpCommand<object>(
@@ -469,11 +465,11 @@ namespace MonkeyPaste.Avalonia {
                 // NOTE only called from tag tray when query tag is selected
                 // instead of query change ntf
                 int queryTagId = 0;
-                if(args is int tagId) {
+                if (args is int tagId) {
                     queryTagId = tagId;
                 }
                 IsExpanded = false;
-                
+
                 // NOTE since query takes have no linked content
                 // but are the selected tag treat search as from
                 // all until selected tag is changed

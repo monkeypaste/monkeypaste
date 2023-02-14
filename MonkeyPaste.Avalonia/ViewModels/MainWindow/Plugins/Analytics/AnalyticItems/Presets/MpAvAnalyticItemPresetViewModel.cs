@@ -1,29 +1,22 @@
-﻿using System;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using MonkeyPaste;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; 
-using Newtonsoft.Json;
-using Avalonia.Controls;
-using Avalonia.Animation;
-using Avalonia;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvAnalyticItemPresetViewModel : 
+    public class MpAvAnalyticItemPresetViewModel :
         MpAvTreeSelectorViewModelBase<MpAvAnalyticItemViewModel, MpAvParameterViewModelBase>,
         MpISelectableViewModel,
         MpILabelTextViewModel,
-        MpIHoverableViewModel, 
+        MpIHoverableViewModel,
         MpIMenuItemViewModel,
-        MpIActionComponent, 
-        MpIUserIconViewModel, 
+        MpIActionComponent,
+        MpIUserIconViewModel,
         MpIContentTypeDependant,
-        MpAvIShortcutCommandViewModel, 
+        MpAvIShortcutCommandViewModel,
         MpIPopupMenuPicker,
         MpIParameterHostViewModel,
         MpAvIParameterCollectionViewModel {
@@ -158,13 +151,13 @@ namespace MonkeyPaste.Avalonia {
             },
             () => {
                 return CanSaveOrCancel;
-            }, new[] {this});
+            }, new[] { this });
 
         private bool _canSaveOrCancel = false;
         public bool CanSaveOrCancel {
             get {
                 bool result = Items.Any(x => x.HasModelChanged);
-                if(result != _canSaveOrCancel) {
+                if (result != _canSaveOrCancel) {
                     _canSaveOrCancel = result;
                     OnPropertyChanged(nameof(CanSaveOrCancel));
                 }
@@ -188,8 +181,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public Dictionary<object, MpAvParameterViewModelBase> ParamLookup => 
-            Items.ToDictionary(x => x.ParamId,x => x); 
+        public Dictionary<object, MpAvParameterViewModelBase> ParamLookup =>
+            Items.ToDictionary(x => x.ParamId, x => x);
         public MpMenuItemViewModel ContextMenuItemViewModel {
             get {
                 return new MpMenuItemViewModel() {
@@ -212,7 +205,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
-        public string ResetOrDeleteLabel => $"{(IsManifestPreset ? "Reset":"Delete")} '{Label}'";
+        public string ResetOrDeleteLabel => $"{(IsManifestPreset ? "Reset" : "Delete")} '{Label}'";
         #endregion
 
         #region State
@@ -222,8 +215,8 @@ namespace MonkeyPaste.Avalonia {
         public bool IsLabelReadOnly { get; set; } = true;
         public bool IsAllValid => Items.All(x => x.IsValid);
         public bool IsManifestPreset =>
-            Parent == null ? 
-                false : 
+            Parent == null ?
+                false :
                 Parent.AnalyzerComponentFormat.presets != null &&
                     Parent.AnalyzerComponentFormat.presets.Any(x => x.guid == PresetGuid);
 
@@ -240,7 +233,7 @@ namespace MonkeyPaste.Avalonia {
                 return Preset.IsActionPreset;
             }
             set {
-                if(IsActionPreset != value) {
+                if (IsActionPreset != value) {
                     Preset.IsActionPreset = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(IsActionPreset));
@@ -250,7 +243,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string FullName {
             get {
-                if(Preset == null || Parent == null) {
+                if (Preset == null || Parent == null) {
                     return string.Empty;
                 }
                 return $"{Parent.Title}/{Label}";
@@ -268,7 +261,7 @@ namespace MonkeyPaste.Avalonia {
                 return Preset.Label;
             }
             set {
-                if(Preset.Label != value) {
+                if (Preset.Label != value) {
                     Preset.Label = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(Label));
@@ -303,7 +296,7 @@ namespace MonkeyPaste.Avalonia {
                 return Preset.SortOrderIdx;
             }
             set {
-                if(Preset != null && SortOrderIdx != value) {
+                if (Preset != null && SortOrderIdx != value) {
                     Preset.SortOrderIdx = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(SortOrderIdx));
@@ -319,7 +312,7 @@ namespace MonkeyPaste.Avalonia {
                 return Preset.IsQuickAction;
             }
             set {
-                if(IsQuickAction != value) {
+                if (IsQuickAction != value) {
                     Preset.IsQuickAction = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(IsQuickAction));
@@ -335,7 +328,7 @@ namespace MonkeyPaste.Avalonia {
                 return Preset.IconId;
             }
             set {
-                if(IconId != value) {
+                if (IconId != value) {
                     Preset.IconId = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(IconId));
@@ -363,7 +356,7 @@ namespace MonkeyPaste.Avalonia {
 
         public int AnalyticItemPresetId {
             get {
-                if(Preset == null) {
+                if (Preset == null) {
                     return 0;
                 }
                 return Preset.Id;
@@ -381,7 +374,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public MpPluginPreset Preset { get; protected set; }
-        
+
         #endregion
 
         #region MpAvIShortcutCommandViewModel Implementation
@@ -390,12 +383,12 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvShortcutViewModel ShortcutViewModel {
             get {
-                if(Parent == null || Preset == null) {
+                if (Parent == null || Preset == null) {
                     return null;
                 }
                 var scvm = MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.CommandParameter == Preset.Id.ToString() && x.ShortcutType == ShortcutType);
 
-                if(scvm == null) {
+                if (scvm == null) {
                     scvm = new MpAvShortcutViewModel(MpAvShortcutCollectionViewModel.Instance);
                 }
 
@@ -413,7 +406,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvAnalyticItemPresetViewModel() : base (null) { }
+        public MpAvAnalyticItemPresetViewModel() : base(null) { }
 
         public MpAvAnalyticItemPresetViewModel(MpAvAnalyticItemViewModel parent) : base(parent) {
             PropertyChanged += MpPresetParameterViewModel_PropertyChanged;
@@ -438,15 +431,15 @@ namespace MonkeyPaste.Avalonia {
             var presetValues = await MpAvPluginParameterValueLocator.LocateValuesAsync(
                 MpParameterHostType.Preset, AnalyticItemPresetId, Parent);
             var paramLookup = new Dictionary<string, List<MpParameterValue>>();
-            foreach(var pv in presetValues) {
-                if(!paramLookup.ContainsKey(pv.ParamId)) {
+            foreach (var pv in presetValues) {
+                if (!paramLookup.ContainsKey(pv.ParamId)) {
                     paramLookup.Add(pv.ParamId, new List<MpParameterValue>());
                 }
                 paramLookup[pv.ParamId].Add(pv);
             }
 
-           // var valLookup = presetValues.ToDictionary<string, List<MpParameterValue>>(x => x.ParamId, x=>x.Sele)
-            foreach (var paramValGroup in presetValues) {                                
+            // var valLookup = presetValues.ToDictionary<string, List<MpParameterValue>>(x => x.ParamId, x=>x.Sele)
+            foreach (var paramValGroup in presetValues) {
                 var naipvm = await CreateParameterViewModel(paramValGroup);
                 Items.Add(naipvm);
             }
@@ -509,7 +502,7 @@ namespace MonkeyPaste.Avalonia {
                 if (sc.CommandParameter == AnalyticItemPresetId.ToString() && sc.ShortcutType == ShortcutType) {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
-            } 
+            }
         }
         #endregion
 
@@ -518,13 +511,13 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private void MpPresetParameterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
                 case nameof(IsSelected):
-                    if(IsSelected) {
+                    if (IsSelected) {
                         LastSelectedDateTime = DateTime.Now;
 
                         Parent.OnPropertyChanged(nameof(Parent.IsSelected));
-                        if(Parent.SelectedItem != this) {
+                        if (Parent.SelectedItem != this) {
                             Parent.SelectedItem = this;
                         }
 
@@ -539,20 +532,20 @@ namespace MonkeyPaste.Avalonia {
                     Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
                     break;
                 case nameof(HasModelChanged):
-                    if(HasModelChanged) {
-                        Task.Run(async () => { 
+                    if (HasModelChanged) {
+                        Task.Run(async () => {
                             await Preset.WriteToDatabaseAsync();
                             HasModelChanged = false;
                         });
                     }
                     break;
                 case nameof(IsLabelReadOnly):
-                    if(!IsLabelReadOnly) {
+                    if (!IsLabelReadOnly) {
                         IsLabelTextBoxFocused = true;
                         IsSelected = true;
                     }
                     break;
-            } 
+            }
         }
 
         #endregion

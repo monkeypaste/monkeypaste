@@ -1,20 +1,4 @@
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using Avalonia.Markup.Xaml;
-using Avalonia.Media;
-using Avalonia.VisualTree;
-using PropertyChanged;
-using System.Diagnostics;
-using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
-using System;
-using System.Linq;
-using Avalonia.Input;
-using Avalonia.Styling;
-using System.Windows.Input;
-using Avalonia.Data;
-using Avalonia.Markup.Xaml.Templates;
 
 namespace MonkeyPaste.Avalonia {
 

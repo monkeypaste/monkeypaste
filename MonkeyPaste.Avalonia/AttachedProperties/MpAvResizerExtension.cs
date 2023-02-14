@@ -1,21 +1,13 @@
-﻿using Avalonia.Input;
-using Avalonia.Interactivity;
-using Avalonia;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Avalonia.Data;
+﻿using Avalonia;
 using Avalonia.Controls;
-using PropertyChanged;
-using Avalonia.Media;
-using Avalonia.VisualTree;
+using Avalonia.Data;
+using Avalonia.Input;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using Avalonia.Threading;
-using System.Diagnostics;
+using PropertyChanged;
+using System;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public enum MpResizeEdgeType {
@@ -285,7 +277,7 @@ namespace MonkeyPaste.Avalonia {
             false,
             BindingMode.TwoWay);
 
-        private static void HandleIsResizingChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
+        private static void HandleIsResizingChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
             if (e.NewValue is bool isResizing) {
                 IsAnyResizing = isResizing;
             }
@@ -327,7 +319,7 @@ namespace MonkeyPaste.Avalonia {
                 false,
                 BindingMode.OneWay);
 
-        private static void HandleIsEnabledChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
+        private static void HandleIsEnabledChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
             if (e.NewValue is bool isEnabledVal && isEnabledVal) {
                 if (element is Control control) {
                     if (control.IsInitialized) {
@@ -341,7 +333,7 @@ namespace MonkeyPaste.Avalonia {
                 DetachedToVisualHandler(element, null);
             }
 
-            
+
         }
 
         #endregion
@@ -368,7 +360,7 @@ namespace MonkeyPaste.Avalonia {
             MpPoint delta = defSize - curSize;
 
             bool wasResizing = GetIsResizing(control);
-            if(!wasResizing) {
+            if (!wasResizing) {
                 SetIsResizing(control, true);
             }
 
@@ -390,7 +382,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static void ResizeByDelta(Control control, double dx, double dy, bool isFromUser = true) {
-            if(control is MpAvIResizableControl rc) {
+            if (control is MpAvIResizableControl rc) {
                 control = rc.ResizerControl;
             }
             if (Math.Abs(dx) + Math.Abs(dy) < 0.1) {
@@ -431,11 +423,11 @@ namespace MonkeyPaste.Avalonia {
             SetBoundHeight(control, bound_height);
 
             var resizeMsg = GetGlobalResizeMessage(control);
-            if(resizeMsg != MpMessageType.None) {
+            if (resizeMsg != MpMessageType.None) {
                 MpMessenger.SendGlobal(resizeMsg);
             }
 
-            if(!isFromUser) {
+            if (!isFromUser) {
                 SetIsResizing(control, false);
             }
 
@@ -465,7 +457,7 @@ namespace MonkeyPaste.Avalonia {
             if (control == null) {
                 return;
             }
-            double zeta,omega,fps;
+            double zeta, omega, fps;
 
             //if (MpAvSearchBoxViewModel.Instance.HasText) {
             //    var st_parts = MpAvSearchBoxViewModel.Instance.SearchText.Split(",");
@@ -493,17 +485,17 @@ namespace MonkeyPaste.Avalonia {
             double step_h = dh / delay_ms;
             double vx = 0;
             Dispatcher.UIThread.Post(async () => {
-                while(true) {
+                while (true) {
                     double lw = cw;
                     MpAnimationHelpers.Spring(ref cw, ref vx, nw, delay_ms / 1000.0d, zeta, omega);
                     ResizeByDelta(control, cw - lw, step_h, false);
                     await Task.Delay(delay_ms);
 
                     bool is_v_zero = Math.Abs(vx) < 0.1d;
-                    if(is_v_zero) {
+                    if (is_v_zero) {
                         break;
                     }
-                } 
+                }
                 double fw = GetBoundWidth(control);
                 double fh = GetBoundHeight(control);
                 double fdw = nw - fw;
@@ -511,7 +503,7 @@ namespace MonkeyPaste.Avalonia {
                 ResizeByDelta(control, fdw, fdh, false);
 
                 onComplete?.Invoke();
-                
+
             });
         }
         #endregion
@@ -522,8 +514,8 @@ namespace MonkeyPaste.Avalonia {
             if (s is Control control) {
                 control.DetachedFromVisualTree += DetachedToVisualHandler;
                 //control.AddHandler(InputElement.PointerEnterEvent, PointerEnterHandler, RoutingStrategies.Tunnel);
-                control.PointerEnter += PointerEnterHandler;
-                control.PointerLeave += PointerLeaveHandler;
+                control.PointerEntered += PointerEnterHandler;
+                control.PointerExited += PointerLeaveHandler;
                 control.PointerPressed += PointerPressedHandler;
                 control.PointerReleased += PointerReleasedHandler;
                 control.PointerMoved += PointerMovedHandler;
@@ -537,8 +529,8 @@ namespace MonkeyPaste.Avalonia {
             if (s is Control control) {
                 control.AttachedToVisualTree -= AttachedToVisualHandler;
                 control.DetachedFromVisualTree -= DetachedToVisualHandler;
-                control.PointerEnter -= PointerEnterHandler;
-                control.PointerLeave -= PointerLeaveHandler;
+                control.PointerEntered -= PointerEnterHandler;
+                control.PointerExited -= PointerLeaveHandler;
                 control.PointerPressed -= PointerPressedHandler;
                 control.PointerReleased -= PointerReleasedHandler;
                 control.PointerMoved -= PointerMovedHandler;

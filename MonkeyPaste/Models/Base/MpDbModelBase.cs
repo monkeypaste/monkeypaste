@@ -1,15 +1,12 @@
-﻿using System;
+﻿using MonkeyPaste.Common;
+using Newtonsoft.Json;
+using SQLite;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using SQLite;
-using MonkeyPaste.Common;
-using Newtonsoft.Json;
 
 namespace MonkeyPaste {
     public abstract class MpDbModelBase : IComparer {
@@ -49,7 +46,7 @@ namespace MonkeyPaste {
         public MpDbModelBase() { }
 
         public static int GetUniqueId() {
-            return MpHelpers.Rand.Next(int.MaxValue - 10000, int.MaxValue);
+            return MpRandom.Rand.Next(int.MaxValue - 10000, int.MaxValue);
         }
 
         public void StartSync(string sourceGuid) {
@@ -61,7 +58,7 @@ namespace MonkeyPaste {
         }
 
         public virtual async Task WriteToDatabaseAsync(string sourceClientGuid, bool ignoreTracking = false, bool ignoreSyncing = false) {
-            if(IsModelReadOnly) {
+            if (IsModelReadOnly) {
                 MpConsole.WriteTraceLine($"Warning, trying to write read-only data object: '{GetType()}' ignoring");
                 return;
             }
@@ -77,13 +74,14 @@ namespace MonkeyPaste {
                 var addOrUpdateAsyncMethod = typeof(MpDb).GetMethod(nameof(MpDb.AddOrUpdateAsync));
                 var addOrUpdateByDboTypeAsyncMethod = addOrUpdateAsyncMethod.MakeGenericMethod(new[] { dbot });
                 await addOrUpdateByDboTypeAsyncMethod.InvokeAsync(null, new object[] { this, sourceClientGuid, ignoreTracking, ignoreSyncing });
-            } catch(Exception ex) {
+            }
+            catch (Exception ex) {
                 MpConsole.WriteTraceLine(ex);
-                
+
                 Debugger.Break();
             }
 
-            
+
         }
 
         public virtual async Task WriteToDatabaseAsync() {
@@ -224,7 +222,7 @@ namespace MonkeyPaste {
             if (y == null || y is not MpDbModelBase) {
                 return 1;
             }
-            if(x.GetType() != y.GetType()) {
+            if (x.GetType() != y.GetType()) {
                 return -1;
             }
             return (x as MpDbModelBase).Id.CompareTo((y as MpDbModelBase).Id);

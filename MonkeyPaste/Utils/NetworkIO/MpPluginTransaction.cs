@@ -1,5 +1,5 @@
-﻿using System;
-using MonkeyPaste.Common.Plugin;
+﻿using MonkeyPaste.Common.Plugin;
+using System;
 
 namespace MonkeyPaste {
     public abstract class MpPluginTransactionBase {

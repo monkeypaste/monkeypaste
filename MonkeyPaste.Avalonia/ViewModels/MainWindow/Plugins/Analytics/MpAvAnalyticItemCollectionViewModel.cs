@@ -1,22 +1,16 @@
-﻿using System;
+﻿using MonkeyPaste.Common.Plugin;
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
-using MonkeyPaste;
-using MonkeyPaste.Common.Plugin;
-using MonkeyPaste.Common;
 
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvAnalyticItemCollectionViewModel : 
-        MpAvTreeSelectorViewModelBase<object,MpAvAnalyticItemViewModel>,
+    public class MpAvAnalyticItemCollectionViewModel :
+        MpAvTreeSelectorViewModelBase<object, MpAvAnalyticItemViewModel>,
         MpIMenuItemViewModel,
-        MpIAsyncSingletonViewModel<MpAvAnalyticItemCollectionViewModel>, 
+        MpIAsyncSingletonViewModel<MpAvAnalyticItemCollectionViewModel>,
         MpIAsyncComboBoxViewModel,
         MpISidebarItemViewModel,
         MpIPopupMenuPicker {
@@ -37,7 +31,7 @@ namespace MonkeyPaste.Avalonia {
                 new MpMenuItemViewModel() {
                     Header = x.Title,
                     IconId = x.PluginIconId,
-                    SubItems = x.Items.Select(y => y.GetMenu(cmd,cmdArg, selectedAnalyticItemPresetIds,recursive)).ToList()
+                    SubItems = x.Items.Select(y => y.GetMenu(cmd, cmdArg, selectedAnalyticItemPresetIds, recursive)).ToList()
                 }).ToList()
             };
         }
@@ -122,13 +116,13 @@ namespace MonkeyPaste.Avalonia {
                     MpCopyItemType.None : MpAvClipTrayViewModel.Instance.SelectedItem.CopyItemType;
                 return GetContentContextMenuItem(contentType);
             }
-        }        
+        }
 
         public IEnumerable<MpAvAnalyticItemPresetViewModel> AllPresets => Items.OrderBy(x => x.Title).SelectMany(x => x.Items);
 
         public MpAvAnalyticItemPresetViewModel SelectedPresetViewModel {
             get {
-                if(SelectedItem == null) {
+                if (SelectedItem == null) {
                     return null;
                 }
                 return SelectedItem.SelectedItem;
@@ -190,27 +184,27 @@ namespace MonkeyPaste.Avalonia {
             Items.Clear();
 
             var pail = MpPluginLoader.Plugins.Where(x => x.Value.Component is MpIAnalyzeAsyncComponent || x.Value.Component is MpIAnalyzeComponent);
-            foreach(var pai in pail) {
+            foreach (var pai in pail) {
                 var paivm = await CreateAnalyticItemViewModel(pai.Value);
                 Items.Add(paivm);
             }
 
-            while(Items.Any(x=>x.IsBusy)) {
+            while (Items.Any(x => x.IsBusy)) {
                 await Task.Delay(100);
             }
 
             OnPropertyChanged(nameof(Items));
-            
+
             if (Items.Count > 0) {
                 // select most recent preset
                 MpAvAnalyticItemPresetViewModel presetToSelect = Items
                             .Aggregate((a, b) => a.Items.Max(x => x.LastSelectedDateTime) > b.Items.Max(x => x.LastSelectedDateTime) ? a : b)
                             .Items.Aggregate((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
 
-                if(presetToSelect != null) {
+                if (presetToSelect != null) {
                     presetToSelect.Parent.SelectedItem = presetToSelect;
                     SelectedItem = presetToSelect.Parent;
-                }                
+                }
             }
 
             OnPropertyChanged(nameof(SelectedItem));
@@ -224,7 +218,7 @@ namespace MonkeyPaste.Avalonia {
             if (sub_items.Count > 0) {
                 sub_items.Add(new MpMenuItemViewModel() { IsSeparator = true });
             }
-            if(availItems.Count() > 0) {
+            if (availItems.Count() > 0) {
 
                 sub_items.AddRange(availItems.Select(x => x.ContextMenuItemViewModel));
             }
@@ -266,7 +260,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(Children));
                     break;
                 case nameof(SelectedPresetViewModel):
-                    if(SelectedPresetViewModel == null) {
+                    if (SelectedPresetViewModel == null) {
                         return;
                     }
                     //CollectionViewSource.GetDefaultView(SelectedPresetViewModel.Items).Refresh();

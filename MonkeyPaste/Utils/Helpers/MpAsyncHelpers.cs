@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public static class MpAsyncHelpers {
@@ -34,7 +33,7 @@ namespace MonkeyPaste {
 
             SynchronizationContext.SetSynchronizationContext(oldContext);
         }
-        
+
 
         /// <summary>
         /// Execute's an async Task<T> method which has a T return type synchronously

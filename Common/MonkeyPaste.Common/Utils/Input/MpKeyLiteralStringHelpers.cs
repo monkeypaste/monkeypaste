@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MonkeyPaste.Common {
+﻿namespace MonkeyPaste.Common {
 
     public static class MpKeyLiteralStringHelpers {
         public const string AV_CONTROL_KEY_LITERAL = "Ctrl";

@@ -1,10 +1,9 @@
-﻿using Avalonia;
-using Avalonia.Data.Converters;
+﻿using Avalonia.Data.Converters;
+using Avalonia.Media;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Globalization;
-using MonkeyPaste.Common;
-using Avalonia.Media;
-using MonkeyPaste.Common.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvColorToContrastColorConverter : IValueConverter {
@@ -12,15 +11,15 @@ namespace MonkeyPaste.Avalonia {
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
             string hexStr = null;
-            if(value is IBrush brush) {
+            if (value is IBrush brush) {
                 hexStr = brush.ToHex();
             }
-            if(value is Color color) {
+            if (value is Color color) {
                 hexStr = color.ToPortableColor().ToHex();
             }
-            if(value is string valStr) {
+            if (value is string valStr) {
                 hexStr = valStr;
-                
+
             }
             if (hexStr.IsStringHexColor()) {
                 bool flip = parameter is string str && str == "flip";

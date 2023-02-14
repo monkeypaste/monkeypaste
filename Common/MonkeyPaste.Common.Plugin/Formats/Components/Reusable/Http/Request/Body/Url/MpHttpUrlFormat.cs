@@ -12,7 +12,7 @@ namespace MonkeyPaste.Common.Plugin {
 
         // joined w/ '/' seperator and terminated with '?' or "" if no query
         public List<string> path { get; set; } = new List<string>();
-        
+
         public List<MpJsonPathProperty> dynamicPath { get; set; }
 
         public List<MpHttpQueryArgument> query { get; set; }
@@ -23,7 +23,7 @@ namespace MonkeyPaste.Common.Plugin {
     #region Response 
 
     //public class MpHttpResponseFormat {
-        
+
 
     //    public MpPluginResponseContentMap responseToContentMap { get; set; }
     //    public List<MpAnalyzerPluginTextResponseFormat> text { get; set; }

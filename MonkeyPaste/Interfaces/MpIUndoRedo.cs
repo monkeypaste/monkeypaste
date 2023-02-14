@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-
-namespace MonkeyPaste {
+﻿namespace MonkeyPaste {
     /// <summary>
     /// The interface describing the Undo/Redo operation.
     /// </summary>

@@ -1,8 +1,5 @@
-﻿using MonkeyPaste.Common;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace MonkeyPaste.Common {
     public static class MpFileExtensionsHelper {
@@ -32,11 +29,11 @@ namespace MonkeyPaste.Common {
                         {MpFileOptionType.System,new string[]{"bak", "cab", "cfg", "cpl", "cur", "dll", "dmp", "drv", "icns", "ico", "ini", "lnk", "msi", "sys", "tmp"} },
                         {MpFileOptionType.Video,new string[]{"3g2", "3gp", "avi", "flv", "h264", "m4v", "mkv", "mov", "mp4", "mpg", "mpeg", "rm", "swf", "vob", "webm","wmv"} }
                     };
-                    if(MpCommonTools.Services == null ||
+                    if (MpCommonTools.Services == null ||
                         MpCommonTools.Services.UserProvidedFileExts == null) {
                         return result;
                     }
-                    result.Add( MpFileOptionType.UserDefined,MpCommonTools.Services.UserProvidedFileExts.UserDefineExtPsv.SplitNoEmpty("|") );
+                    result.Add(MpFileOptionType.UserDefined, MpCommonTools.Services.UserProvidedFileExts.UserDefineExtPsv.SplitNoEmpty("|"));
                     _extLookup = result;
                 }
                 return _extLookup;

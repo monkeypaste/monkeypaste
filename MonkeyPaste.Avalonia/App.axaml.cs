@@ -1,17 +1,9 @@
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using PropertyChanged;
-using System.Diagnostics;
 using System;
-using System.IO;
-using MonkeyPaste.Common.Avalonia;
-using MonkeyPaste.Common;
-using Avalonia.Media.Imaging;
-using System.Linq;
-using Avalonia.Controls.Converters;
-using Avalonia.Themes.Fluent;
+using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -23,7 +15,7 @@ namespace MonkeyPaste.Avalonia {
         public App() {
             //DataContext = MpAvSystemTrayViewModel.Instance;
         }
-        public override void Initialize() { 
+        public override void Initialize() {
             AvaloniaXamlLoader.Load(this);
         }
 
@@ -48,7 +40,7 @@ namespace MonkeyPaste.Avalonia {
                 var bootstrapper = new MpAvBootstrapperViewModel();
                 await bootstrapper.InitAsync();
 
-            } else if(ApplicationLifetime is ISingleViewApplicationLifetime singleView) {
+            } else if (ApplicationLifetime is ISingleViewApplicationLifetime singleView) {
                 Debugger.Break();
             }
 

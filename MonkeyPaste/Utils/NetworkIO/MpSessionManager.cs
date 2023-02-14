@@ -1,11 +1,9 @@
-﻿using System;
+﻿//using Xamarin.Essentials;
+using MonkeyPaste.Common;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Xamarin.Essentials;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public class MpSessionManager {
@@ -19,7 +17,7 @@ namespace MonkeyPaste {
                 return client;
             }
         }
-        
+
         #endregion
 
         #region Properties
@@ -60,7 +58,7 @@ namespace MonkeyPaste {
         }
 
         public async Task<string> Connect(MpDeviceEndpoint cep, int tryCount = 5) {
-            if(tryCount < 0) {
+            if (tryCount < 0) {
                 return string.Empty;
             }
             //var uri = new Uri(
@@ -87,7 +85,7 @@ namespace MonkeyPaste {
                             { "at", cep.AccessToken },
                             { "dguid", cep.DeviceGuid }
                         });
-                var response = await _client.PostAsync(uri,data);
+                var response = await _client.PostAsync(uri, data);
                 var result = await response.Content.ReadAsStringAsync();
                 return result;
             }
@@ -100,14 +98,14 @@ namespace MonkeyPaste {
 
         #region Private Methods
 
-        
+
 
         #region Event Handlers
 
-        private void MpSessionManager_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e) {
-            var access = e.NetworkAccess;
-            var profiles = e.ConnectionProfiles;
-        }
+        //private void MpSessionManager_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e) {
+        //    var access = e.NetworkAccess;
+        //    var profiles = e.ConnectionProfiles;
+        //}
 
 
 

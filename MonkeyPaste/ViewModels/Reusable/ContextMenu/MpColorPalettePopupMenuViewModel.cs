@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using MonkeyPaste;
 
 namespace MonkeyPaste {
     public class MpColorPalettePopupMenuViewModel : MpViewModelBase, MpIPopupMenuViewModel, MpIUserColorViewModel {
@@ -10,7 +9,7 @@ namespace MonkeyPaste {
         public string UserHexColor {
             get => _userHexColor;
             set {
-                if(_userHexColor != value) {
+                if (_userHexColor != value) {
                     _userHexColor = value;
                     OnColorChanged?.Invoke(this, UserHexColor);
                     OnPropertyChanged(nameof(UserHexColor));

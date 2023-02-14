@@ -1,12 +1,10 @@
-﻿using MonkeyPaste.Common;
-using MonkeyPaste.Common.Plugin;
-using System.Collections.ObjectModel;
+﻿using MonkeyPaste.Common.Plugin;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvParameterRequestMessageViewModel  : MpAvTransactionMessageViewModelBase, MpAvITransactionNodeViewModel {
+    public class MpAvParameterRequestMessageViewModel : MpAvTransactionMessageViewModelBase, MpAvITransactionNodeViewModel {
 
         #region Interfaces
         #endregion
@@ -43,13 +41,13 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = true;
 
             Json = jsonOrParsedFragment is string ? jsonOrParsedFragment.ToString() : string.Empty;
-            if(!string.IsNullOrEmpty(Json)) {
+            if (!string.IsNullOrEmpty(Json)) {
                 ParameterReqFormat = MpPluginRequestFormatBase.Parse(Json);
             }
 
             var tsl = await MpDataModelProvider.GetCopyItemTransactionSourcesAsync(TransactionId);
-            if(tsl.FirstOrDefault(x=>x.CopyItemSourceType == MpTransactionSourceType.AnalyzerPreset) is MpTransactionSource ts) {
-                if(tsl.Where(x=>x.CopyItemSourceType == MpTransactionSourceType.AnalyzerPreset).Count() > 1) {
+            if (tsl.FirstOrDefault(x => x.CopyItemSourceType == MpTransactionSourceType.AnalyzerPreset) is MpTransactionSource ts) {
+                if (tsl.Where(x => x.CopyItemSourceType == MpTransactionSourceType.AnalyzerPreset).Count() > 1) {
                     // this would be a big problem, pretty sure only analyzer can be involved in a transaction at time..
                     Debugger.Break();
                 }

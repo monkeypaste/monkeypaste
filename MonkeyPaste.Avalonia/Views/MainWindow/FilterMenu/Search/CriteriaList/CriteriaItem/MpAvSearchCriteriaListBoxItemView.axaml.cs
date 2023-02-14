@@ -6,15 +6,14 @@ using Avalonia.Markup.Xaml;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
-using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     /// <summary>
     /// Interaction logic for MpAnalyticToolbarTreeView.xaml
     /// </summary>
-    public partial class MpAvSearchCriteriaItemView : 
-        MpAvUserControl<MpAvSearchCriteriaItemViewModel>, 
+    public partial class MpAvSearchCriteriaItemView :
+        MpAvUserControl<MpAvSearchCriteriaItemViewModel>,
         MpIDndUserCancelNotifier {
         public MpAvSearchCriteriaItemView() {
             InitializeComponent();
@@ -76,7 +75,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (drop_idx == scicvm.Items.Count) {
                 // tail drop
-                if(drag_idx == drop_idx - 1) {
+                if (drag_idx == drop_idx - 1) {
                     // reject same item drop
                     ResetDragOvers();
                     return;
@@ -84,13 +83,13 @@ namespace MonkeyPaste.Avalonia {
                 scicvm.Items.ForEach(x => x.IsDragOverTop = false);
                 scicvm.Items.ForEach(x => x.IsDragOverBottom = x.SortOrderIdx == drop_idx - 1);
             } else {
-                if(drag_idx == drop_idx) {
+                if (drag_idx == drop_idx) {
                     ResetDragOvers();
                     return;
                 }
                 scicvm.Items.ForEach(x => x.IsDragOverTop = x.SortOrderIdx == drop_idx);
                 scicvm.Items.ForEach(x => x.IsDragOverBottom = false);
-            }         
+            }
         }
 
         private void CriteriaRowDragButton_End(PointerReleasedEventArgs e) {
@@ -102,19 +101,19 @@ namespace MonkeyPaste.Avalonia {
             var resorted_items = scicvm.SortedItems.ToList();
 
             var drag_over_top_item = scicvm.Items.FirstOrDefault(x => x.IsDragOverTop);
-            if(drag_over_top_item != null) {
+            if (drag_over_top_item != null) {
                 resorted_items.Move(drag_idx, drag_over_top_item.SortOrderIdx);
             } else {
                 //tail drop
                 var drag_over_bottom_item = scicvm.Items.FirstOrDefault(x => x.IsDragOverBottom);
-                if(drag_over_bottom_item != null) {
+                if (drag_over_bottom_item != null) {
                     resorted_items.Move(drag_idx, drag_over_bottom_item.SortOrderIdx);
                 } else {
                     // flag no drop
                     resorted_items = null;
                 }
             }
-            if(resorted_items != null) {
+            if (resorted_items != null) {
                 resorted_items.ForEach((x, idx) => x.SortOrderIdx = idx);
                 scicvm.OnPropertyChanged(nameof(scicvm.SortedItems));
             }

@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using System.Windows;
-
-using System.Windows.Input;
-
-
-using MonkeyPaste;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvIconViewModel : 
+    public class MpAvIconViewModel :
         MpViewModelBase<MpAvIconCollectionViewModel> {
         #region Properties
 
@@ -34,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
 
         public int IconId {
             get {
-                if(Icon == null) {
+                if (Icon == null) {
                     return 0;
                 }
                 return Icon.Id;
@@ -43,7 +33,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string IconBase64 {
             get {
-                if(IconImage == null) {
+                if (IconImage == null) {
                     return string.Empty;
                 }
                 return IconImage.ImageBase64;
@@ -75,18 +65,18 @@ namespace MonkeyPaste.Avalonia {
         public MpAvIconViewModel(MpAvIconCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpIconViewModel_PropertyChanged;
         }
-        
+
         public async Task InitializeAsync(MpIcon i) {
             IsBusy = true;
 
             Icon = i;
-            if(Icon != null && Icon.IconImageId > 0) {
+            if (Icon != null && Icon.IconImageId > 0) {
                 IconImage = await MpDataModelProvider.GetItemAsync<MpDbImage>(Icon.IconImageId);
                 OnPropertyChanged(nameof(IconBase64));
             }
             if (Icon != null && Icon.IconBorderImageId > 0) {
                 IconBorderImage = await MpDataModelProvider.GetItemAsync<MpDbImage>(Icon.IconBorderImageId);
-                
+
             }
 
             await Task.Delay(1);
@@ -99,7 +89,7 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private void MpIconViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
                 case nameof(Icon):
                     //IconBitmapSource = Icon.IconImage.ImageBase64.ToBitmapSource();
                     //IconBorderBitmapSource = Icon.IconBorderImage.ImageBase64.ToBitmapSource();

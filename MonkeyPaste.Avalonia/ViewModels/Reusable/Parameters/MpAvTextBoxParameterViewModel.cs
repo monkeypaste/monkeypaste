@@ -1,17 +1,13 @@
-﻿using MonkeyPaste;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; 
-using Newtonsoft.Json;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
-
 using System.Windows.Input;
-using Avalonia.Controls;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvTextBoxParameterViewModel : 
+    public class MpAvTextBoxParameterViewModel :
         MpAvParameterViewModelBase,
         MpIPopupMenuViewModel,
         MpIContentQueryTextBoxViewModel {
@@ -97,7 +93,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string Placeholder {
             get {
-                if(ParameterFormat == null) {
+                if (ParameterFormat == null) {
                     return string.Empty;
                 }
                 return ParameterFormat.placeholder;
@@ -155,8 +151,8 @@ namespace MonkeyPaste.Avalonia {
             } else if (CurrentValue.Length > MaxLength) {
                 ValidationMessage = $"{Label} can only be {MaxLength} characters";
             } else if (IllegalCharacters != null && CurrentValue
-                        .Split(new string[] { string.Empty },StringSplitOptions.None)
-                        .Any(x=> IllegalCharacters.Contains(x))) {
+                        .Split(new string[] { string.Empty }, StringSplitOptions.None)
+                        .Any(x => IllegalCharacters.Contains(x))) {
                 ValidationMessage = $"{Label} cannot contain {ParameterFormat.illegalCharacters} characters";
             } else {
                 ValidationMessage = string.Empty;

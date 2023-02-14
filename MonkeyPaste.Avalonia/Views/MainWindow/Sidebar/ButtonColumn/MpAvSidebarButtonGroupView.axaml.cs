@@ -1,8 +1,6 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Markup.Xaml;
-using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System.Linq;
 
@@ -21,14 +19,14 @@ namespace MonkeyPaste.Avalonia {
             AvaloniaXamlLoader.Load(this);
         }
         private void MpAvSidebarView_DataContextChanged(object sender, System.EventArgs e) {
-            if(BindingContext == null) {
+            if (BindingContext == null) {
                 return;
             }
             BindingContext.PropertyChanged += BindingContext_PropertyChanged;
         }
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
-            switch(msg) {
+            switch (msg) {
                 case MpMessageType.MainWindowOrientationChangeEnd:
                     var ctg = this.FindControl<Grid>("SidebarButtonGroupContainerGrid");
                     var tbl = ctg.GetVisualDescendants<Button>().ToList();

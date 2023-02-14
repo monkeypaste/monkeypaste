@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MonkeyPaste.Common;
-using Gio;
+﻿using GLib;
 using Gtk;
-using GLib;
-using Gdk;
-using X11;
+using System;
 using System.Runtime.InteropServices;
+using X11;
 
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvX11PathIconHelper {
@@ -99,7 +91,7 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         private static string GetAppIcon(string path, int iconSize) {
-            if(_displayPtr == IntPtr.Zero) {
+            if (_displayPtr == IntPtr.Zero) {
                 _displayPtr = Xlib.XOpenDisplay(null);
 
                 if (_displayPtr == IntPtr.Zero) {
@@ -108,7 +100,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 }
 
                 _rootWindow = Xlib.XDefaultRootWindow(_displayPtr);
-                
+
                 if (_rootWindow == default) {
                     MpConsole.WriteTraceLine("Unable to open root window");
                     return null;
@@ -133,16 +125,16 @@ namespace MonkeyPaste.Common.Avalonia {
         private static string GetFileIcon(string path, int iconSize) {
             try {
                 var file = FileFactory.NewForPath(path);
-                
+
                 var fileInfo = file.QueryInfo("standard::icon", 0, Cancellable.Current);
                 var fileIcon = fileInfo.Icon;
                 var iconTheme = Gtk.IconTheme.Default;
-                if(iconTheme == null) {
+                if (iconTheme == null) {
                     MpConsole.WriteLine("IconTheme not found");
                 } else {
                     MpConsole.WriteLine("IconTheme exists");
                 }
-                
+
                 var iconInfo = iconTheme.LookupIcon(
                     fileIcon, iconSize, IconLookupFlags.ForceSize | IconLookupFlags.UseBuiltin);
 
@@ -151,7 +143,8 @@ namespace MonkeyPaste.Common.Avalonia {
                 //string base64 = pixBuf.PixelBytes.Data.ToBase64String();
                 var bytes = pixBuf.SaveToBuffer("png");
                 return bytes.ToBase64String();
-            }catch(Exception ex) {
+            }
+            catch (Exception ex) {
                 MpConsole.WriteTraceLine("Error reading icon for path: " + path, ex);
                 return null;
             }

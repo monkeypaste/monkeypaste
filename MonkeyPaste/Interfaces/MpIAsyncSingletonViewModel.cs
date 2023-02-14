@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public interface MpISingleton<T> where T: class {
+    public interface MpISingleton<T> where T : class {
         void Init();
 
     }
@@ -17,7 +14,7 @@ namespace MonkeyPaste {
         void Init();
     }
 
-    public interface MpIAsyncSingletonViewModel<T> where T:class {
+    public interface MpIAsyncSingletonViewModel<T> where T : class {
         //static T Instance { get; }
         Task InitAsync();
     }

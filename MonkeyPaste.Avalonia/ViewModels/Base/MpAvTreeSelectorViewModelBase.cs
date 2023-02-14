@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -32,7 +31,7 @@ namespace MonkeyPaste.Avalonia {
             this.SelfAndAllAncestors();
 
 
-        public virtual MpITreeItemViewModel RootItem => 
+        public virtual MpITreeItemViewModel RootItem =>
             this.RootParent();
 
         #endregion

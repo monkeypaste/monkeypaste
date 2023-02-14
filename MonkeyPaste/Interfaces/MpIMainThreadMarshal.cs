@@ -6,7 +6,7 @@ namespace MonkeyPaste {
     public interface MpIMainThreadMarshal {
         void RunOnMainThread(Action action, MpDispatcherPriority priority = MpDispatcherPriority.Normal);
         TResult RunOnMainThread<TResult>(Func<TResult> action, MpDispatcherPriority priority = MpDispatcherPriority.Normal);
-        
+
         Task RunOnMainThreadAsync(Action action, MpDispatcherPriority priority = MpDispatcherPriority.Normal);
         Task<TResult> RunOnMainThreadAsync<TResult>(Func<TResult> action, MpDispatcherPriority priority = MpDispatcherPriority.Normal);
     }

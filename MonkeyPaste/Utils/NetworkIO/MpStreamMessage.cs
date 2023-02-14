@@ -1,8 +1,7 @@
-﻿using System;
+﻿using MonkeyPaste.Common;
+using System;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
-using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public enum MpSyncMesageType {
@@ -149,7 +148,7 @@ namespace MonkeyPaste {
             return sm;
         }
 
-//public static async Task<MpStreamMessage> CreateErrorMessage(MpDeviceEndpoint dep, string toGuid, MpSyncMesageType errorType, string msg) {
+        //public static async Task<MpStreamMessage> CreateErrorMessage(MpDeviceEndpoint dep, string toGuid, MpSyncMesageType errorType, string msg) {
         //string depStr = await dep.SerializeDbObject();
         //    var sm = await MpStreamMessage.Create(
         //        errorType,

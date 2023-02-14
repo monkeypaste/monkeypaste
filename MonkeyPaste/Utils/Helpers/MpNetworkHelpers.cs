@@ -1,21 +1,22 @@
-﻿using System;
+﻿using MonkeyPaste.Common;
+using System;
 using System.Collections.Generic;
+//using Xamarin.Forms;
+using System.IO;
+//using Xamarin.Essentials;
+using System.Linq;
+using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Net;
-using System.Text;
-using Xamarin.Essentials;
-using System.Linq;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using System.Threading.Tasks;
-using Xamarin.Forms;
-using System.IO;
 
 namespace MonkeyPaste {
     public static class MpNetworkHelpers {
+        public const string UNKNOWN_DOMAIN = "0.0.0.0";
+        public const string THIS_APP_URL = @"https://www.monkeypaste.com";
         public static string GetIpForDomain(string domain) {
             if (string.IsNullOrEmpty(domain)) {
-                return "0.0.0.0";
+                return UNKNOWN_DOMAIN;
             }
             var al = Dns.GetHostAddresses(domain).ToList();
             foreach (var a in al) {
@@ -23,16 +24,18 @@ namespace MonkeyPaste {
                     return a.ToString();
                 }
             }
-            return "0.0.0.0";
+            return UNKNOWN_DOMAIN;
         }
 
         public static bool IsConnectedToInternet() {
-            var current = Connectivity.NetworkAccess;
 
-            if (current == NetworkAccess.Internet) {
-                return true;
-            }
-            return false;
+            //var current = Connectivity.NetworkAccess;
+
+            //if (current == NetworkAccess.Internet) {
+            //    return true;
+            //}
+            //return false;]
+            return GetIpForDomain(THIS_APP_URL) != UNKNOWN_DOMAIN;
         }
         public static bool IsConnectedToNetwork() {
             return System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();

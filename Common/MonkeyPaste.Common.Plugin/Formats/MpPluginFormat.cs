@@ -1,9 +1,7 @@
 ﻿
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using MonkeyPaste.Common;
-using Newtonsoft.Json;
 
 namespace MonkeyPaste.Common.Plugin {
     public enum MpPluginComponentType {
@@ -53,7 +51,7 @@ namespace MonkeyPaste.Common.Plugin {
 
         [JsonIgnore]
         public MpPluginFormat backupCheckPluginFormat { get; set; }
-        
+
     }
 
     public class MpPluginIoTypeFormat : MpJsonObject {

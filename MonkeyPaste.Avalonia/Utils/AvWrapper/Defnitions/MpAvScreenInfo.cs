@@ -1,13 +1,5 @@
 ﻿
 using MonkeyPaste.Common;
-using Avalonia.Controls;
-using Avalonia.Layout;
-using MonkeyPaste.Common.Avalonia;
-using Avalonia;
-using Avalonia.Controls.Primitives;
-using Avalonia.Input;
-using Avalonia.VisualTree;
-using Gdk;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvScreenInfo : MpIPlatformScreenInfo {

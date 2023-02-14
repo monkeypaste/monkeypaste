@@ -1,5 +1,5 @@
-﻿using SQLite;
-//using SQLiteNetExtensionsAsync.Extensions;
+﻿using MonkeyPaste.Common;
+using SQLite;
 using SQLitePCL;
 using System;
 using System.Collections;
@@ -8,15 +8,8 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
-using Xamarin.Forms;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
-//using SQLiteNetExtensions.Extensions;
-using System.Reflection;
-using Org.BouncyCastle.Crypto.Prng;
 
 namespace MonkeyPaste {
     public static class MpDb {
@@ -98,18 +91,18 @@ namespace MonkeyPaste {
         }
 
 
-        public static async Task<List<object>> QueryAsync(string tableName,string query, params object[] args) {
+        public static async Task<List<object>> QueryAsync(string tableName, string query, params object[] args) {
             if (_connectionAsync == null) {
                 CreateConnection();
             }
             TableMapping qtm = null;
-            foreach(var tm in _connectionAsync.TableMappings) {
-                if(tm.TableName.ToLower() == tableName.ToLower()) {
+            foreach (var tm in _connectionAsync.TableMappings) {
+                if (tm.TableName.ToLower() == tableName.ToLower()) {
                     qtm = tm;
                     break;
                 }
             }
-            if(qtm == null) {
+            if (qtm == null) {
                 return new List<object>();
             }
             try {
@@ -138,7 +131,7 @@ namespace MonkeyPaste {
         }
 
         public static async Task<T> QueryScalarAsync<T>(string query, params object[] args) {
-            if(_connectionAsync == null) {
+            if (_connectionAsync == null) {
                 CreateConnection();
             }
             try {
@@ -166,7 +159,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public static async Task CreateTableAsync<T>() where T: new() {
+        public static async Task CreateTableAsync<T>() where T : new() {
             if (_connectionAsync == null) {
                 CreateConnection();
             }
@@ -179,7 +172,7 @@ namespace MonkeyPaste {
         }
 
         public static async Task CloseConnectionAsync() {
-            if(_connectionAsync == null) {
+            if (_connectionAsync == null) {
                 return;
             }
 
@@ -200,7 +193,7 @@ namespace MonkeyPaste {
             }
             sourceClientGuid = GetSourceClientGuid(sourceClientGuid);
 
-            
+
             if (item == null) {
                 MpConsole.WriteTraceLine(@"Cannot add null item, ignoring...");
                 return;
@@ -210,19 +203,20 @@ namespace MonkeyPaste {
 
             try {
                 await _connectionAsync.InsertAsync(item);
-            }catch(Exception ex) {
+            }
+            catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Db Error inserting type '{typeof(T)}' with data {item}", ex);
             }
 
             NotifyWrite(MpDbLogActionType.Create, item as MpDbModelBase, ignoreSyncing);
         }
 
-        private static async Task UpdateItemAsync<T>(T item,string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
+        private static async Task UpdateItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
             if (_connectionAsync == null) {
                 CreateConnection();
             }
             sourceClientGuid = GetSourceClientGuid(sourceClientGuid);
-            
+
 
             if (item == null) {
                 MpConsole.WriteTraceLine(@"Cannot update null item, ignoring...");
@@ -254,7 +248,7 @@ namespace MonkeyPaste {
                 CreateConnection();
             }
             sourceClientGuid = GetSourceClientGuid(sourceClientGuid);
-            
+
             if (item == null) {
                 MpConsole.WriteTraceLine(@"Cannot delete null item, ignoring...");
                 return;
@@ -270,7 +264,7 @@ namespace MonkeyPaste {
             }
             NotifyWrite(MpDbLogActionType.Delete, item as MpDbModelBase, ignoreSyncing);
         }
-                
+
         public static async Task<object> GetDbObjectByTableGuidAsync(string tableName, string objGuid) {
             var dt = await QueryAsync(
                 tableName,
@@ -307,9 +301,9 @@ namespace MonkeyPaste {
         #endregion
 
         #region Sync
-        
 
-        
+
+
 
         public static List<T> Query<T>(string query, params object[] args) where T : new() {
             if (_connection == null) {
@@ -347,19 +341,19 @@ namespace MonkeyPaste {
         #region Private Methods  
 
         private static string GetSourceClientGuid(string providedSourceClientGuid) {
-            if(!IsLoaded) {
+            if (!IsLoaded) {
                 return null;
             }
             return string.IsNullOrEmpty(providedSourceClientGuid) ? MpPrefViewModel.Instance.ThisDeviceGuid : providedSourceClientGuid;
         }
 
         private static async Task LogWriteAsync(MpDbLogActionType actionType, MpDbModelBase item, string sourceClientGuid, bool ignoreTracking) {
-            if(!IsLoaded || IgnoreLogging) {
+            if (!IsLoaded || IgnoreLogging) {
                 return;
             }
             if (item is MpISyncableDbObject && item is not MpDbLog && item is not MpSyncHistory) {
                 if (string.IsNullOrEmpty(item.Guid)) {
-                    if(actionType != MpDbLogActionType.Create) {
+                    if (actionType != MpDbLogActionType.Create) {
                         throw new Exception("Syncable object must have a predefined guid");
                     }
                     MpConsole.WriteLine("Warning, object " + item.ToString() + " doesn't have a guid on add, creating one for it");
@@ -372,7 +366,7 @@ namespace MonkeyPaste {
         }
 
         private static void NotifyWrite(MpDbLogActionType actionType, MpDbModelBase item, bool ignoreSyncing) {
-            switch(actionType) {
+            switch (actionType) {
                 case MpDbLogActionType.Create:
                     OnItemAdded?.Invoke(nameof(MpDb), item);
                     break;
@@ -412,10 +406,10 @@ namespace MonkeyPaste {
         }
 
         private static async Task InitDbAsync() {
-            bool isNewDb = await InitDbConnectionAsync(MpPlatform.Services.DbInfo, true);            
+            bool isNewDb = await InitDbConnectionAsync(MpPlatform.Services.DbInfo, true);
 
             await InitTablesAsync();
-            
+
             if (isNewDb) {
                 await CreateViewsAsync();
                 await CreateDefaultDataAsync();
@@ -428,7 +422,7 @@ namespace MonkeyPaste {
                 MpPlatform.Services.OsInfo.OsType,
                 MpPlatform.Services.OsInfo.OsFileManagerPath);
 
-            if(isNewDb) {
+            if (isNewDb) {
                 OnInitDefaultNativeData?.Invoke(nameof(MpDb), null);
             }
 
@@ -442,23 +436,23 @@ namespace MonkeyPaste {
             if (string.IsNullOrEmpty(dbPath)) {
                 dbPath = MpPlatform.Services.DbInfo.DbPath;
             }
-            if(_connection != null && _connectionAsync != null) {
+            if (_connection != null && _connectionAsync != null) {
                 return;
             }
             SQLiteConnectionString connStr = null;
             try {
-                 connStr = new SQLiteConnectionString(
-                                    databasePath: dbPath,
-                                    storeDateTimeAsTicks: IsDateTimeTicks,
-                                    openFlags: SQLiteOpenFlags.ReadWrite |
-                                               SQLiteOpenFlags.Create |
-                                               SQLiteOpenFlags.SharedCache |
-                                               SQLiteOpenFlags.FullMutex);
+                connStr = new SQLiteConnectionString(
+                                   databasePath: dbPath,
+                                   storeDateTimeAsTicks: IsDateTimeTicks,
+                                   openFlags: SQLiteOpenFlags.ReadWrite |
+                                              SQLiteOpenFlags.Create |
+                                              SQLiteOpenFlags.SharedCache |
+                                              SQLiteOpenFlags.FullMutex);
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Db Error creating connection str for db path '{dbPath}'.", ex);
             }
-            if(connStr == null) {
+            if (connStr == null) {
                 return;
             }
 
@@ -471,9 +465,9 @@ namespace MonkeyPaste {
                 }
                 catch (Exception ex) {
                     MpConsole.WriteTraceLine($"Db Error creating async connection", ex);
-                }             
+                }
             }
-            if(_connection == null) {
+            if (_connection == null) {
                 try {
                     _connection = new SQLiteConnection(connStr) { Trace = true };
                     SQLitePCL.raw.sqlite3_create_function(_connection.Handle, "REGEXP", 2, null, MatchRegex);
@@ -490,7 +484,7 @@ namespace MonkeyPaste {
             string input = SQLitePCL.raw.sqlite3_value_text(args[1]).utf8_to_string();
             input = input == null ? string.Empty : input;
 
-            if(args.Length > 2) {
+            if (args.Length > 2) {
                 string test = SQLitePCL.raw.sqlite3_value_text(args[2]).utf8_to_string();
                 test = test == null ? string.Empty : test;
                 Debugger.Break();
@@ -499,7 +493,8 @@ namespace MonkeyPaste {
             try {
                 isMatched = Regex.IsMatch(input, pattern);
 
-            } catch(Exception ex) {
+            }
+            catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Regex exception using pattern '{pattern}'", ex);
                 isMatched = false;
             }
@@ -541,6 +536,90 @@ namespace MonkeyPaste {
         }
 
         private static async Task CreateViewsAsync() {
+            // ADVANCED 
+            await _connectionAsync.ExecuteAsync(@"
+CREATE VIEW MpContentQueryView_advanced as
+SELECT 
+	pk_MpCopyItemId as RootId,
+	MpTransactionSource.fk_SourceObjId as SourceObjId,
+	MpTransactionSource.e_MpTransactionSourceType as SourceType,
+	ItemSize1,
+	ItemSize2,
+	MpCopyItemTransaction.TransactionDateTime as TransactionDateTime,
+	MpCopyItemTransaction.TransactionLabel as TransactionLabel,
+	case 
+		when MpTransactionSource.e_MpTransactionSourceType == 'App' 
+			then 
+				(select AppPath from MpApp where pk_MpAppId == MpTransactionSource.fk_SourceObjId limit 1)
+		when MpTransactionSource.e_MpTransactionSourceType == 'Url' 
+			then 
+				(select UrlPath from MpUrl where pk_MpUrlId == MpTransactionSource.fk_SourceObjId limit 1)
+		when MpTransactionSource.e_MpTransactionSourceType == 'CopyItem' 
+			then 
+				'https://localhost?type=copyItem&id=' || MpTransactionSource.fk_SourceObjId
+		else NULL
+	end as SourcePath,
+	case 
+		when MpTransactionSource.e_MpTransactionSourceType == 'App' 
+			then 
+				(select AppPath from MpApp where pk_MpAppId == MpTransactionSource.fk_SourceObjId limit 1)
+		when MpTransactionSource.e_MpTransactionSourceType == 'Url' 
+			then 
+				(select UrlTitle from MpUrl where pk_MpUrlId == MpTransactionSource.fk_SourceObjId limit 1)
+		when MpTransactionSource.e_MpTransactionSourceType == 'CopyItem' 
+			then 
+				(select Title from MpCopyItem where pk_MpCopyItemId == MpTransactionSource.fk_SourceObjId limit 1)
+		else NULL
+	end as AppPath,
+	case
+		when MpTransactionSource.e_MpTransactionSourceType == 'App' 
+				then 
+					(select AppName from MpApp where pk_MpAppId == MpTransactionSource.fk_SourceObjId limit 1)
+		else NULL
+	end as AppName,
+	case
+		when MpTransactionSource.e_MpTransactionSourceType == 'Url' 
+				then 
+					(select UrlPath from MpUrl where pk_MpUrlId == MpTransactionSource.fk_SourceObjId limit 1)
+		else NULL
+	end as UrlPath,
+	case
+		when MpTransactionSource.e_MpTransactionSourceType == 'Url' 
+				then 
+					(select UrlTitle from MpUrl where pk_MpUrlId == MpTransactionSource.fk_SourceObjId limit 1)
+		else NULL
+	end as UrlTitle,
+	case 
+		when MpTransactionSource.e_MpTransactionSourceType == 'App' 
+			then 
+				(select MachineName from MpUserDevice where pk_MpUserDeviceId in (select fk_MpUserDeviceId from MpApp where pk_MpAppId == MpTransactionSource.fk_SourceObjId limit 1))
+		else NULL
+	end as DeviceName,
+	case 
+		when MpTransactionSource.e_MpTransactionSourceType == 'App' 
+			then 
+				(select e_MpUserDeviceType from MpUserDevice where pk_MpUserDeviceId in (select fk_MpUserDeviceId from MpApp where pk_MpAppId == MpTransactionSource.fk_SourceObjId limit 1))
+		else NULL
+	end as DeviceType,
+	e_MpCopyItemType,
+	ItemMetaData,
+	Title,
+	case 
+		when MpCopyItem.e_MpCopyItemType == 'Text' or MpCopyItem.e_MpCopyItemType == 'FileList'
+			then 
+				(select ItemData from MpDataObjectItem where fk_MpDataObjectId = MpCopyItem.fk_MpDataObjectId limit 1)
+		else NULL
+	end as ItemData,
+	CopyDateTime,
+	CopyCount,
+	PasteCount,
+	CopyCount + PasteCount as UsageScore
+FROM
+	MpCopyItem 
+LEFT JOIN MpCopyItemTransaction ON MpCopyItemTransaction.fk_MpCopyItemId = MpCopyItem.pk_MpCopyItemId
+LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId = MpCopyItemTransaction.pk_MpCopyItemTransactionId");
+
+            // SIMPLE 
             await _connectionAsync.ExecuteAsync(@"
 CREATE VIEW MpContentQueryView_simple as
 SELECT 
@@ -611,7 +690,6 @@ SELECT
 		else NULL
 	end as ItemData,
 	CopyDateTime,
-	(select PasteDateTime from MpPasteHistory where fk_MpCopyItemId=pk_MpCopyItemId order by PasteDateTime desc limit 1) AS LastPasteDateTime,
 	CopyCount,
 	PasteCount,
 	CopyCount + PasteCount as UsageScore
@@ -632,10 +710,10 @@ INNER JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId
 
             #region Tags
             var default_tags = new object[] {
-                new object[] { "df388ecd-f717-4905-a35c-a8491da9c0e3", "All", Color.Blue.ToHex(), 0,0, tracked,synced, 0, MpTagType.Link},
-                new object[] { "54b61353-b031-4029-9bda-07f7ca55c123", "Favorites", Color.Yellow.ToHex(),0,1,tracked,synced, MpTag.AllTagId, MpTagType.Link},
-                new object[] { "e62b8e5d-52a6-46f1-ac51-8f446916dd85", "Searches", Color.ForestGreen.ToHex(),1,2,tracked,synced, 0, MpTagType.Group},
-                new object[] { "a0567976-dba6-48fc-9a7d-cbd306a4eaf3", "Help", Color.Orange.ToHex(),2,2,tracked,synced, 0, MpTagType.Link},
+                new object[] { "df388ecd-f717-4905-a35c-a8491da9c0e3", "All", MpSystemColors.blue1, 0,0, tracked,synced, 0, MpTagType.Link},
+                new object[] { "54b61353-b031-4029-9bda-07f7ca55c123", "Favorites", MpSystemColors.yellow1, 0,-1,tracked,synced, MpTag.AllTagId, MpTagType.Link},
+                new object[] { "e62b8e5d-52a6-46f1-ac51-8f446916dd85", "Searches", MpSystemColors.forestgreen, 1,-1,tracked,synced, 0, MpTagType.Group},
+                new object[] { "a0567976-dba6-48fc-9a7d-cbd306a4eaf3", "Help", MpSystemColors.orange1, 2,1,tracked,synced, 0, MpTagType.Link},
             };
             for (int i = 0; i < default_tags.Length; i++) {
                 var t = (object[])default_tags[i];
@@ -659,7 +737,7 @@ INNER JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId
 
             #endregion
 
-            
+
 
             MpConsole.WriteTraceLine(@"Created all default tables");
         }
@@ -698,7 +776,7 @@ INNER JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId
                  new string[] {"674bae7f-0a60-4f17-ac2c-81d5c6c3d879","Down", "SelectNextRowItem", "Internal"},
                  new string[] {"b916ab44-d4bd-4d8b-ac4a-de947343bd5a","Up", "SelectPreviousRowItem", "Internal"},
                  new string[] {"6487f6ff-da0c-475b-a2ae-ef1484233de0","Control+I", "AssignShortcut", "Internal"},
-                 new string[] {"837e0c20-04b8-4211-ada0-3b4236da0821","Control+P", "ChangeColor", "Internal"},                 
+                 new string[] {"837e0c20-04b8-4211-ada0-3b4236da0821","Control+P", "ChangeColor", "Internal"},
                  new string[] {"118a2ca6-7021-47a0-8458-7ebc31094329","Control+Z", "Undo", "Internal"},
                  new string[] {"3980efcc-933b-423f-9cad-09e455c6824a","Control+Y", "Redo", "Internal"},
                  new string[] {"7a7580d1-4129-432d-a623-2fff0dc21408","Control+E", "EditContent", "Internal"},
@@ -725,7 +803,7 @@ INNER JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId
                     keyString: defaultShortcut[1],
                     shortcutType: defaultShortcut[2].ToEnum<MpShortcutType>(),
                     routeType: defaultShortcut[3].ToEnum<MpRoutingType>(),
-                    isReadOnly: defaultShortcut.Length >= 5 ? bool.Parse(defaultShortcut[4]):false);
+                    isReadOnly: defaultShortcut.Length >= 5 ? bool.Parse(defaultShortcut[4]) : false);
             }
         }
 
@@ -796,12 +874,12 @@ INNER JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId
 
         public static async Task<DateTime> GetLastSyncForRemoteDeviceAsync(string otherDeviceGuid) {
             var shl = await MpDataModelProvider.GetItemsAsync<MpSyncHistory>();
-            if(shl.Count == 0) {
+            if (shl.Count == 0) {
                 return DateTime.MinValue;
             }
             var lsh = shl
-                        .Where(x=>x.OtherClientGuid.ToString() == otherDeviceGuid)
-                        .OrderByDescending(x=>x.SyncDateTime)
+                        .Where(x => x.OtherClientGuid.ToString() == otherDeviceGuid)
+                        .OrderByDescending(x => x.SyncDateTime)
                         .FirstOrDefault();
             if (lsh != null) {
                 return lsh.SyncDateTime;
@@ -817,7 +895,7 @@ INNER JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId
             foreach (var li in matchLogItems) {
                 dbol.Add(li as MpISyncableDbObject);
             }
-            if(dbol.Count == 0) {
+            if (dbol.Count == 0) {
                 return string.Empty;
             }
             var dbMsgStr = MpDbMessage.Create(dbol);
@@ -846,7 +924,7 @@ INNER JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId
 
         public static async Task PerformSyncAsync(
             Dictionary<Guid, List<MpDbLog>> changeLookup,
-            string remoteClientGuid) {            
+            string remoteClientGuid) {
             var lastSyncDt = await GetLastSyncForRemoteDeviceAsync(remoteClientGuid);
             //filter & separate remote logs w/ local updates after remote action dt 
             var addChanges = new Dictionary<Guid, List<MpDbLog>>();
@@ -860,14 +938,14 @@ INNER JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId
                 var rlogs = ckvp.Value;//await MpDbLog.FilterOutdatedRemoteLogs(ckvp.Key.ToString(), ckvp.Value, lastSyncDt); //
                 if (rlogs.Count > 0) {
                     //seperate changes into 3 types
-                    foreach(var l in rlogs.OrderBy(x => x.LogActionDateTime).ToList()) {
-                        switch(l.LogActionType) {
+                    foreach (var l in rlogs.OrderBy(x => x.LogActionDateTime).ToList()) {
+                        switch (l.LogActionType) {
                             case MpDbLogActionType.Create:
-                                if(!addChanges.ContainsKey(ckvp.Key)) {
+                                if (!addChanges.ContainsKey(ckvp.Key)) {
                                     addChanges.Add(ckvp.Key, new List<MpDbLog>() { l });
                                 } else {
                                     addChanges[ckvp.Key].Add(l);
-                                }                                
+                                }
                                 break;
                             case MpDbLogActionType.Modify:
                                 if (!updateChanges.ContainsKey(ckvp.Key)) {
@@ -884,8 +962,8 @@ INNER JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId
                                 }
                                 break;
                         }
-                    }                    
-                }                
+                    }
+                }
             }
 
             //ditch adds or modifies when a delete exists
@@ -930,7 +1008,7 @@ INNER JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId
                 var deleteByDboTypeMethod = deleteMethod.MakeGenericMethod(new[] { dbot });
                 var dbo = await GetDbObjectByTableGuidAsync(ckvp.Value[0].DbTableName, ckvp.Key.ToString());
                 //var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
-                var deleteTask = (Task)deleteByDboTypeMethod.Invoke(nameof(MpDb), new object[] { dbo,remoteClientGuid,false,true });
+                var deleteTask = (Task)deleteByDboTypeMethod.Invoke(nameof(MpDb), new object[] { dbo, remoteClientGuid, false, true });
                 await deleteTask;
             }
 
@@ -945,7 +1023,7 @@ INNER JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId
                 //var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
                 var addMethod = typeof(MpDb).GetMethod(nameof(AddOrUpdateAsync));
                 var addByDboTypeMethod = addMethod.MakeGenericMethod(new[] { dbot });
-                var addTask = (Task)addByDboTypeMethod.Invoke(nameof(MpDb), new object[] { dbo,remoteClientGuid,false,true });
+                var addTask = (Task)addByDboTypeMethod.Invoke(nameof(MpDb), new object[] { dbo, remoteClientGuid, false, true });
                 await addTask;
             }
 
@@ -956,11 +1034,11 @@ INNER JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId
                 }
                 var dbot = new MpXamStringToSyncObjectTypeConverter().Convert(ckvp.Value[0].DbTableName);
                 var dbo = Activator.CreateInstance(dbot);
-                dbo = await (dbo as MpISyncableDbObject).CreateFromLogsAsync(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);                
+                dbo = await (dbo as MpISyncableDbObject).CreateFromLogsAsync(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
                 //var dbo = MpDbModelBase.CreateOrUpdateFromLogs(ckvp.Value, remoteClientGuid);
                 var updateMethod = typeof(MpDb).GetMethod(nameof(AddOrUpdateAsync));
                 var updateByDboTypeMethod = updateMethod.MakeGenericMethod(new[] { dbot });
-                var updateTask = (Task)updateByDboTypeMethod.Invoke(nameof(MpDb), new object[] { dbo,remoteClientGuid,false,true });
+                var updateTask = (Task)updateByDboTypeMethod.Invoke(nameof(MpDb), new object[] { dbo, remoteClientGuid, false, true });
                 await updateTask;
             }
 
@@ -982,8 +1060,8 @@ INNER JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId
             await AddOrUpdateAsync<MpSyncHistory>(sh);
         }
 
-        private static Dictionary<Guid,List<MpDbLog>> OrderByPrecedence(Dictionary<Guid,List<MpDbLog>> dict) {
-            if(dict.Count == 0) {
+        private static Dictionary<Guid, List<MpDbLog>> OrderByPrecedence(Dictionary<Guid, List<MpDbLog>> dict) {
+            if (dict.Count == 0) {
                 return dict;
             }
             var items = from pair in dict
@@ -991,7 +1069,7 @@ INNER JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId
                         select pair;
             var customSortedValues = new Dictionary<Guid, List<MpDbLog>>();
 
-            foreach(var i in items) {
+            foreach (var i in items) {
                 customSortedValues.Add(i.Key, i.Value);
             }
             return customSortedValues;
@@ -1006,10 +1084,6 @@ INNER JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId
             return idx;
         }
 
-        public static object GetMainThreadObj() {
-            return Application.Current.MainPage;
-        }
-
         public static MpIStringToSyncObjectTypeConverter GetTypeConverter() {
             return new MpXamStringToSyncObjectTypeConverter();
         }
@@ -1017,7 +1091,7 @@ INNER JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId
         public static ObservableCollection<MpRemoteDevice> GetRemoteDevices() {
             _rdLock = new object();
             var rdoc = new ObservableCollection<MpRemoteDevice>();
-            Xamarin.Forms.BindingBase.EnableCollectionSynchronization(rdoc, null, ObservableCollectionCallback);
+            //Xamarin.Forms.BindingBase.EnableCollectionSynchronization(rdoc, null, ObservableCollectionCallback);
             return rdoc;
         }
 

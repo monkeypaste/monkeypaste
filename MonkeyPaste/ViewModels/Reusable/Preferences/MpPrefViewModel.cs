@@ -1,18 +1,18 @@
 ﻿using MonkeyPaste.Common;
+using Newtonsoft.Json;
+using PropertyChanged;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using PropertyChanged;
 
 namespace MonkeyPaste {
-    public class MpPrefViewModel : 
-        MpViewModelBase, 
+    public class MpPrefViewModel :
+        MpViewModelBase,
         MpICustomCsvFormat,
-        MpIUserProvidedFileExts, 
+        MpIUserProvidedFileExts,
         MpIJsonObject {
         #region Private
         [JsonIgnore]
@@ -57,13 +57,13 @@ namespace MonkeyPaste {
 
         #region Interfaces
         #region MpIUserProvidedFileExts Implementation
-        string MpIUserProvidedFileExts.UserDefineExtPsv => 
+        string MpIUserProvidedFileExts.UserDefineExtPsv =>
             UserDefinedFileExtensionsPsv;
 
         #endregion
 
         #region MpICustomCsvFormat Implementation
-        MpCsvFormatProperties MpICustomCsvFormat.CsvFormat => 
+        MpCsvFormatProperties MpICustomCsvFormat.CsvFormat =>
             MpCsvFormatProperties.DefaultBase64Value;
 
         #endregion
@@ -99,14 +99,14 @@ namespace MonkeyPaste {
 
         #region Application Properties
 
-        
+
         #region Encyption
         public string SslAlgorithm { get; set; } = "SHA256WITHRSA";
         public string SslCASubject { get; set; } = "CN=MPCA";
         public string SslCertSubject { get; set; } = "CN=127.0.01";
         #endregion
 
-       
+
 
         public string LocalStoragePath => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
@@ -337,7 +337,7 @@ namespace MonkeyPaste {
         public string MainWindowShowBehaviorType { get; set; } = MpMainWindowShowBehaviorType.Primary.ToString();
 
         public double MainWindowInitialWidth { get; set; } = 0;
-        public double MainWindowInitialHeight { get; set; } = 0;        
+        public double MainWindowInitialHeight { get; set; } = 0;
 
         public DateTime StartupDateTime { get; set; } = DateTime.MinValue;
 
@@ -345,7 +345,7 @@ namespace MonkeyPaste {
 
         public int UniqueContentItemIdx { get; set; } = 0;
 
-        
+
         public bool ShowMainWindowOnDragToScreenTop { get; set; } = true;
         public bool IgnoreInternalClipboardChanges { get; set; } = true;
 
@@ -524,7 +524,7 @@ namespace MonkeyPaste {
         #endregion
 
         #region User/Device Derived Models               
-        
+
 
         public string ThisDeviceGuid { get; set; } = System.Guid.NewGuid().ToString();
         #endregion
@@ -549,10 +549,10 @@ namespace MonkeyPaste {
 
         #region Constructors
 
-        public MpPrefViewModel() : base(){
-            if(_osInfo.OsType == MpUserDeviceType.Windows) {
+        public MpPrefViewModel() : base() {
+            if (_osInfo.OsType == MpUserDeviceType.Windows) {
                 FallbackProcessPath = @"C:\WINDOWS\Explorer.EXE";
-            } else if(_osInfo.OsType == MpUserDeviceType.Linux) {
+            } else if (_osInfo.OsType == MpUserDeviceType.Linux) {
                 FallbackProcessPath = "/usr/bin/systemd";
             } else {
                 // pick somethin
@@ -574,7 +574,7 @@ namespace MonkeyPaste {
             } else {
                 await CreateDefaultPrefsAsync();
             }
-            
+
         }
 
         public void Save() {
@@ -609,7 +609,7 @@ namespace MonkeyPaste {
         #region Private Methods
 
         private void MpJsonPreferenceIO_PropertyChanged(object sender, PropertyChangedEventArgs e) {
-            if(e.PropertyName == nameof(IsSaving) || IsLoading) {
+            if (e.PropertyName == nameof(IsSaving) || IsLoading) {
                 return;
             }
             Save();
@@ -631,19 +631,19 @@ namespace MonkeyPaste {
                 try {
                     prefVm = MpJsonConverter.DeserializeObject<MpPrefViewModel>(prefsStr);
                 }
-                catch(Exception ex) {
+                catch (Exception ex) {
                     MpConsole.WriteTraceLine($"Error loading pref file from '{PreferencesPath}' ", ex);
                 }
             }
-            
-            if(prefVm == null) {
+
+            if (prefVm == null) {
                 // this means pref file is invalid, likely app crashed while saving so attempt recovery
                 await CreateDefaultPrefsAsync(true);
-                if(Instance == null) {
+                if (Instance == null) {
                     // shouldn't happen
                     Debugger.Break();
                 }
-            }else {
+            } else {
                 Instance = prefVm;
             }
 
@@ -651,11 +651,11 @@ namespace MonkeyPaste {
         }
 
         private static bool ValidatePrefData(string prefStr) {
-            
-            if(string.IsNullOrWhiteSpace(prefStr)) {
+
+            if (string.IsNullOrWhiteSpace(prefStr)) {
                 return false;
             }
-            if(prefStr.StartsWith("{") && 
+            if (prefStr.StartsWith("{") &&
                 prefStr.EndsWith("}")) {
                 return true;
             }
@@ -665,10 +665,10 @@ namespace MonkeyPaste {
         private static async Task CreateDefaultPrefsAsync(bool isReset = false) {
             MpConsole.WriteTraceLine("Pref file was either missing, empty or this is initial startup. (re)creating");
 
-            if(isReset) {
-                if(PreferencesPathBackup.IsFile()) {
+            if (isReset) {
+                if (PreferencesPathBackup.IsFile()) {
                     string backup_str = MpFileIo.ReadTextFromFile(PreferencesPathBackup);
-                    if(ValidatePrefData(backup_str)) {
+                    if (ValidatePrefData(backup_str)) {
                         // pref is corrupt, check it and backup etc.
                         Debugger.Break();
                         MpFileIo.WriteTextToFile(PreferencesPath, backup_str, false);
@@ -678,7 +678,7 @@ namespace MonkeyPaste {
                 }
                 Instance = new MpPrefViewModel();
                 string discovered_device_guid = await MpDefaultDataModelTools.DiscoverThisDeviceGuidAsync(_dbInfo, _osInfo);
-                if(string.IsNullOrEmpty(discovered_device_guid)) {
+                if (string.IsNullOrEmpty(discovered_device_guid)) {
                     // this means no machine name/os type or just os type match was found in db file
                     // which would be strange and will wait to handle but should probably
                     // create a device guid...
@@ -710,12 +710,12 @@ namespace MonkeyPaste {
             }
 
             IsLoading = true;
-            
+
             // init last queryinfo to default values
             Instance.LastQueryInfoJson = Instance.SerializeJsonObject();
-            
+
             IsLoading = false;
-            
+
             Instance.Save();
 
             // NOTE this line should be removed and is only valid for current wpf db

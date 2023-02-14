@@ -1,8 +1,6 @@
 ﻿using Avalonia.Threading;
 using CefNet;
 using MonkeyPaste.Common;
-using System;
-using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -53,7 +51,7 @@ namespace MonkeyPaste.Avalonia {
             var funcType = msgTypeStr.ToEnum<MpAvEditorBindingFunctionType>();
 
             Dispatcher.UIThread.Post(() => {
-                if(e.Frame.Browser.Host.Client.GetWebView() is MpAvIWebViewBindingResponseHandler respHandler) {
+                if (e.Frame.Browser.Host.Client.GetWebView() is MpAvIWebViewBindingResponseHandler respHandler) {
                     respHandler.HandleBindingNotificationAsync(funcType, msgJsonStr).FireAndForgetSafeAsync();
                 }
             });

@@ -1,9 +1,5 @@
 ﻿using HtmlAgilityPack;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using static System.Net.Mime.MediaTypeNames;
-using System.Web;
 
 namespace MonkeyPaste.Common {
     public static class MpRichHtmlToPlainTextConverter {

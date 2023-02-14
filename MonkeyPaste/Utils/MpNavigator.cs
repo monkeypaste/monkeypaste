@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using MonkeyPaste;
-using Xamarin.Forms;
+//using Xamarin.Forms;
 
 namespace MonkeyPaste {
     public class MpNavigator : MpINavigate {

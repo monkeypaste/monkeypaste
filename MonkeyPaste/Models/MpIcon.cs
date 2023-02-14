@@ -1,12 +1,8 @@
-﻿using SQLite;
+﻿using MonkeyPaste.Common;
+using SQLite;
 using System;
 using System.Collections.Generic;
-using System.Text;
-
 using System.Threading.Tasks;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
-using System.Diagnostics;
-using System.Linq;
 
 namespace MonkeyPaste {
 
@@ -18,7 +14,7 @@ namespace MonkeyPaste {
     }
     public class MpIcon : MpDbModelBase, MpISyncableDbObject, MpIClonableDbModel<MpIcon> {
         #region Columns
-        [PrimaryKey,AutoIncrement]
+        [PrimaryKey, AutoIncrement]
         [Column("pk_MpIconId")]
         public override int Id { get; set; }
 
@@ -80,7 +76,7 @@ namespace MonkeyPaste {
                         };
             }
             set {
-                if(value == null) {
+                if (value == null) {
                     HexColors.ForEach(x => x = string.Empty);
                 } else {
                     int count = Math.Min(HexColors.Count, value.Count);
@@ -109,7 +105,7 @@ namespace MonkeyPaste {
             string guid = "",
             bool suppressWrite = false) {
 
-            if(!string.IsNullOrEmpty(iconImgBase64) && !allowDup) {
+            if (!string.IsNullOrEmpty(iconImgBase64) && !allowDup) {
                 var dupCheck = await MpDataModelProvider.GetIconByImageStrAsync(iconImgBase64);
                 if (dupCheck != null) {
                     return dupCheck;
@@ -119,14 +115,14 @@ namespace MonkeyPaste {
             var iconImage = await MpDbImage.Create(iconImgBase64, suppressWrite);
 
             var newIcon = new MpIcon() {
-                IconGuid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid():System.Guid.Parse(guid),
+                IconGuid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid() : System.Guid.Parse(guid),
                 IconImageId = iconImage.Id,
                 HexColors = hexColors
             };
 
-            if(createBorder) {
-                await newIcon.CreateOrUpdateBorderAsync(string.Empty,suppressWrite);
-            } else if(!suppressWrite) {
+            if (createBorder) {
+                await newIcon.CreateOrUpdateBorderAsync(string.Empty, suppressWrite);
+            } else if (!suppressWrite) {
                 await newIcon.WriteToDatabaseAsync();
             }
 
@@ -140,11 +136,11 @@ namespace MonkeyPaste {
         public async Task<MpIcon> CloneDbModelAsync(bool deepClone = true, bool suppressWrite = false) {
             int cimgId = 0;
             int cbimgId = 0;
-            if(deepClone) {
+            if (deepClone) {
                 if (IconImageId > 0) {
                     var img = await MpDataModelProvider.GetItemAsync<MpDbImage>(IconImageId);
                     var cimg = await img.CloneDbModelAsync(
-                        deepClone: deepClone, 
+                        deepClone: deepClone,
                         suppressWrite: suppressWrite);
                     cimgId = cimg.Id;
                 }
@@ -165,8 +161,8 @@ namespace MonkeyPaste {
                 IconBorderImageId = cbimgId
             };
 
-            
-            if(!suppressWrite) {
+
+            if (!suppressWrite) {
                 await ci.WriteToDatabaseAsync();
             }
             return ci;
@@ -184,15 +180,15 @@ namespace MonkeyPaste {
                 //make border same as icon if no builder
                 var iconBorderImage = await MpDbImage.Create(img.ImageBase64);
 
-                IconBorderImageId = iconBorderImage.Id;                
-                HexColor1 = MpHelpers.GetRandomColor().ToHex();
-                HexColor2 = MpHelpers.GetRandomColor().ToHex();
-                HexColor3 = MpHelpers.GetRandomColor().ToHex();
-                HexColor4 = MpHelpers.GetRandomColor().ToHex();
-                HexColor5 = MpHelpers.GetRandomColor().ToHex();
-            } else  {
+                IconBorderImageId = iconBorderImage.Id;
+                HexColor1 = MpColorHelpers.GetRandomHexColor();
+                HexColor2 = MpColorHelpers.GetRandomHexColor();
+                HexColor3 = MpColorHelpers.GetRandomHexColor();
+                HexColor4 = MpColorHelpers.GetRandomHexColor();
+                HexColor5 = MpColorHelpers.GetRandomHexColor();
+            } else {
                 var borderImage64Str = iconBuilder.CreateBorder(img.ImageBase64, 1.25, @"#FFFFFFFF");
-                if(IconBorderImageId == 0) {
+                if (IconBorderImageId == 0) {
                     var bimg = await MpDbImage.Create(borderImage64Str);
                     IconBorderImageId = bimg.Id;
                 } else {
@@ -207,8 +203,8 @@ namespace MonkeyPaste {
                 HexColor3 = colorList[2];
                 HexColor4 = colorList[3];
                 HexColor5 = colorList[4];
-            } 
-            if(!string.IsNullOrEmpty(forceHexColor)) {
+            }
+            if (!string.IsNullOrEmpty(forceHexColor)) {
                 HexColor1 = forceHexColor;
                 HexColor2 = forceHexColor;
                 HexColor3 = forceHexColor;
@@ -216,7 +212,7 @@ namespace MonkeyPaste {
                 HexColor5 = forceHexColor;
             }
 
-            if(!suppressWrite) {
+            if (!suppressWrite) {
                 await WriteToDatabaseAsync();
             }
         }
@@ -225,9 +221,9 @@ namespace MonkeyPaste {
                 return;
             }
             List<Task> delete_tasks = new List<Task>();
-            if(IconImageId > 0) {
+            if (IconImageId > 0) {
                 var icon_img = await MpDataModelProvider.GetItemAsync<MpDbImage>(IconImageId);
-                if(icon_img != null) {
+                if (icon_img != null) {
                     delete_tasks.Add(icon_img.DeleteFromDatabaseAsync());
                 }
             }
@@ -253,10 +249,10 @@ namespace MonkeyPaste {
                         break;
                     case "fk_IconDbImageId":
                         var img = await MpDb.GetDbObjectByTableGuidAsync("MpDbImage", li.AffectedColumnValue) as MpDbImage;
-                        if(img != null) {
+                        if (img != null) {
                             icon.IconImageId = img.Id;
                         }
-                        
+
                         break;
                     case "fk_IconBorderDbImageId":
                         var bimg = await MpDb.GetDbObjectByTableGuidAsync("MpDbImage", li.AffectedColumnValue) as MpDbImage;
@@ -301,7 +297,7 @@ namespace MonkeyPaste {
             if (img != null) {
                 icon.IconBorderImageId = bimg.Id;
             }
-            
+
             icon.HexColor1 = objParts[5];
             icon.HexColor2 = objParts[6];
             icon.HexColor3 = objParts[7];
@@ -350,7 +346,7 @@ namespace MonkeyPaste {
                 "fk_IconDbImageId",
                 diffLookup,
                 MpDataModelProvider.GetItem<MpDbImage>(IconImageId).Guid);
-            if(IconBorderImageId > 0) {
+            if (IconBorderImageId > 0) {
                 diffLookup = CheckValue(IconBorderImageId, other.IconBorderImageId,
                 "fk_IconBorderDbImageId",
                 diffLookup,

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using Xamarin.Essentials;
+//using Xamarin.Essentials;
 
 namespace MonkeyPaste {
     public class MpContactViewModel : MpViewModelBase<MpContactCollectionViewModel>,
@@ -14,7 +12,7 @@ namespace MonkeyPaste {
         public bool IsSelected { get; set; }
 
         public DateTime LastSelectedDateTime { get; set; }
-        
+
         #endregion
 
         #region Model
@@ -47,7 +45,7 @@ namespace MonkeyPaste {
         public MpContactViewModel(MpContactCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpContactViewModel_PropertyChanged;
         }
-               
+
 
         #endregion
 
@@ -67,9 +65,9 @@ namespace MonkeyPaste {
         #region Private Methods
 
         private void MpContactViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
                 case nameof(IsSelected):
-                    if(IsSelected) {
+                    if (IsSelected) {
                         LastSelectedDateTime = DateTime.Now;
                     }
                     break;

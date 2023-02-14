@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-
-namespace MonkeyPaste.Common.Plugin {
+﻿namespace MonkeyPaste.Common.Plugin {
     public interface MpIAnnotation {
-        
+
         string type { get; set; }
         //double score { get; set; }
         //string label { get; set; }
@@ -12,7 +10,7 @@ namespace MonkeyPaste.Common.Plugin {
         string type { get; set; }
         string content { get; set; }
     }
-    public interface MpIDocumentElement { 
+    public interface MpIDocumentElement {
         MpIContentElement header { get; }
         MpIContentElement body { get; }
         MpIContentElement footer { get; }

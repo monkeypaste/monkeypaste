@@ -1,10 +1,6 @@
 ﻿using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media.Imaging;
-using Avalonia.Threading;
-using MonkeyPaste;
-using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -49,7 +45,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Statics
         public static Cursor ConvertCursorTypeToAvCursor(MpCursorType ct, Cursor fallback = null) {
-            if(_cursorLookup.TryGetValue(ct, out Cursor avCursor)) {
+            if (_cursorLookup.TryGetValue(ct, out Cursor avCursor)) {
                 return avCursor;
             }
             Debugger.Break();
@@ -64,7 +60,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         public MpAvCursor(MpAvPlatformResource resLoader) {
-            if(_cursorLookup != null) {
+            if (_cursorLookup != null) {
                 Debugger.Break();
                 return;
             }
@@ -118,7 +114,7 @@ namespace MonkeyPaste.Avalonia {
 
             //    if (_waitObj != null) {
             //        if(targetObj != _waitObj) {
-                        
+
 
             //            MpConsole.WriteLine("Set cursor rejected for " +targetObj+". " + _waitObj + " is overriding because its busy");
             //            return;
@@ -135,7 +131,7 @@ namespace MonkeyPaste.Avalonia {
             //                // NOTE only forece cursor when view model is busy
             //                _waitObj = targetObj;
             //            }
-                        
+
             //        }
             //    }
 

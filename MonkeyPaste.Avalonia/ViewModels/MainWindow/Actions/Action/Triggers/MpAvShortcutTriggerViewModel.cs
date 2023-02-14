@@ -1,15 +1,12 @@
 ﻿using MonkeyPaste.Common.Plugin;
-using MonkeyPaste;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Input;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
 
-    public class MpAvShortcutTriggerViewModel : 
+    public class MpAvShortcutTriggerViewModel :
         MpAvTriggerActionViewModelBase,
-        MpIApplicationCommandCollectionViewModel{
+        MpIApplicationCommandCollectionViewModel {
 
         #region Constants
 
@@ -66,7 +63,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvShortcutViewModel ShortcutViewModel {
             get {
-                if(ArgLookup.TryGetValue(CURRENT_SHORTCUT_PARAM_ID, out var param_vm) && 
+                if (ArgLookup.TryGetValue(CURRENT_SHORTCUT_PARAM_ID, out var param_vm) &&
                     param_vm is MpAvShortcutRecorderParameterViewModel scpvm) {
                     return scpvm.ShortcutViewModel;
                 }
@@ -109,8 +106,8 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        protected override void EnableTrigger() {            
-            if(ShortcutViewModel == null) {
+        protected override void EnableTrigger() {
+            if (ShortcutViewModel == null) {
                 return;
             }
             ShortcutViewModel.RegisterActionComponent(this);
@@ -129,7 +126,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         private void MpAvShortcutTriggerViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
 
             }
         }
@@ -138,7 +135,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        
+
 
 
 

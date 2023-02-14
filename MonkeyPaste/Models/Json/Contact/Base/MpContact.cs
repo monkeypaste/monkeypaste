@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 
 namespace MonkeyPaste {
@@ -38,7 +34,7 @@ namespace MonkeyPaste {
 
         public virtual string PhoneNumber { get; set; }
 
-        public virtual string Address { get; set; }        
+        public virtual string Address { get; set; }
 
         public MpContact() { }
 
@@ -57,7 +53,7 @@ namespace MonkeyPaste {
         }
 
         public object GetField(string propertyPath, object[] index = null) {
-            if(_contactSource == null) {
+            if (_contactSource == null) {
                 return this.GetPropertyValue(propertyPath);
             }
 

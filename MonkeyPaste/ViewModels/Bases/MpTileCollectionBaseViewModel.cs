@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Text;
+﻿using System.Collections.ObjectModel;
 
 namespace MonkeyPaste {
     public abstract class MpTileCollectionBaseViewModel<TCollectionItems> : MpViewModelBase {

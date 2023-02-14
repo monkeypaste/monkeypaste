@@ -1,8 +1,8 @@
-﻿using System;
+﻿using MonkeyPaste.Common;
+using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public class MpAsyncCommand<T> : MpIAsyncCommand<T> {
@@ -17,13 +17,13 @@ namespace MonkeyPaste {
         public MpAsyncCommand(
             Func<T, Task> execute,
             Func<T, bool> canExecute = null,
-            MpIErrorHandler errorHandler = null) : this(execute,canExecute,errorHandler, null) { }
+            MpIErrorHandler errorHandler = null) : this(execute, canExecute, errorHandler, null) { }
 
-       public MpAsyncCommand(
-            Func<T, Task> execute, 
-            Func<T, bool> canExecute = null, 
-            MpIErrorHandler errorHandler = null,
-            params object[] npcArgs) {
+        public MpAsyncCommand(
+             Func<T, Task> execute,
+             Func<T, bool> canExecute = null,
+             MpIErrorHandler errorHandler = null,
+             params object[] npcArgs) {
             _execute = execute;
             _canExecute = canExecute;
             _errorHandler = errorHandler;
@@ -66,7 +66,7 @@ namespace MonkeyPaste {
 
         #region Explicit implementations
         bool ICommand.CanExecute(object parameter) {
-            if(parameter == null) {
+            if (parameter == null) {
                 return CanExecute(default(T));
             }
             return CanExecute((T)parameter);
@@ -88,7 +88,7 @@ namespace MonkeyPaste {
         public MpAsyncCommand(
             Func<Task> execute,
             Func<bool> canExecute = null,
-            MpIErrorHandler errorHandler = null) : this(execute,canExecute,errorHandler,null) { }
+            MpIErrorHandler errorHandler = null) : this(execute, canExecute, errorHandler, null) { }
 
         public MpAsyncCommand(
             Func<Task> execute,

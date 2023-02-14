@@ -1,9 +1,8 @@
-﻿using System;
-using System.Globalization;
-using Avalonia.Data.Converters;
-using Avalonia.Media;
+﻿using Avalonia.Data.Converters;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using System;
+using System.Globalization;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvStringBase64ToBitmapConverter : IValueConverter {
@@ -11,11 +10,11 @@ namespace MonkeyPaste.Avalonia {
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
             double scale = 1.0d;
-            if(value is string valStr) {
-                if(parameter is string paramStr && double.TryParse(paramStr,out scale)) {
+            if (value is string valStr) {
+                if (parameter is string paramStr && double.TryParse(paramStr, out scale)) {
 
-                } 
-                if(valStr.IsStringBase64()) {
+                }
+                if (valStr.IsStringBase64()) {
                     return valStr.ToAvBitmap(scale);
                 }
             }

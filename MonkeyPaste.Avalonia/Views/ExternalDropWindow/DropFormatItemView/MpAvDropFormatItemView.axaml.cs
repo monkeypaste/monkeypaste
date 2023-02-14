@@ -1,17 +1,10 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Avalonia.Input;
-using System.Diagnostics;
-using System;
-using Avalonia.Interactivity;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvDropFormatItemView : MpAvUserControl<MpAvClipboardFormatPresetViewModel> {
@@ -40,7 +33,7 @@ namespace MonkeyPaste.Avalonia {
         private void DragEnter(object sender, DragEventArgs e) {
             // no matter what flag that this dnd has a unique state so 
             // any config's should be ignored, too bad (i think)
-            if(!Dispatcher.UIThread.CheckAccess()) {
+            if (!Dispatcher.UIThread.CheckAccess()) {
                 Dispatcher.UIThread.Post(() => DragEnter(sender, e));
                 return;
             }
@@ -54,7 +47,7 @@ namespace MonkeyPaste.Avalonia {
             }
             BindingContext.IsDropItemHovering = true;
 
-            MpConsole.WriteLine("[DragEnter] ClipboardFormat: "+BindingContext);
+            MpConsole.WriteLine("[DragEnter] ClipboardFormat: " + BindingContext);
             BindingContext.TogglePresetIsEnabledCommand.Execute(null);
         }
 
@@ -71,10 +64,10 @@ namespace MonkeyPaste.Avalonia {
             // assume its the container border, false readings from internal textblock
 
             //    }
-            if(e.Source is Border) {
+            if (e.Source is Border) {
                 BindingContext.IsDropItemHovering = false;
             }
-            
+
         }
 
         private void Drop(object sender, DragEventArgs e) {

@@ -1,19 +1,13 @@
-﻿
-
-using MonkeyPaste;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; 
-using System;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
-
 using System.Windows.Input;
 
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvEnumerableParameterValueViewModel : 
+    public class MpAvEnumerableParameterValueViewModel :
         MpViewModelBase<MpAvEnumerableParameterViewModel>,
         MpIPopupMenuViewModel,
         MpIContentQueryTextBoxViewModel {
@@ -110,7 +104,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string BackgroundBrush {
             get {
-                if(IsSelected) {
+                if (IsSelected) {
                     return MpSystemColors.blue1;
                 }
                 return MpSystemColors.Transparent;
@@ -144,7 +138,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsReadOnly {
             get {
-                if(Parent == null) {
+                if (Parent == null) {
                     return false;
                 }
                 return Parent.ParameterFormat.controlType != MpParameterControlType.EditableList;
@@ -179,7 +173,7 @@ namespace MonkeyPaste.Avalonia {
             ValueIdx = idx;
             Label = label;
             Value = value;
-            IsSelected = isSelected;           
+            IsSelected = isSelected;
 
             IsBusy = false;
         }
@@ -196,7 +190,7 @@ namespace MonkeyPaste.Avalonia {
         private void MpAnalyticItemParameterValueViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsSelected):
-                    if(IsBusy || Parent.IsBusy) {
+                    if (IsBusy || Parent.IsBusy) {
                         return;
                     }
 
@@ -206,7 +200,7 @@ namespace MonkeyPaste.Avalonia {
                     Parent.CurrentValue = Parent.SelectedItems.Select(x => x.Value).ToList().ToCsv(CsvProperties);
                     break;
                 case nameof(Value):
-                    if(Parent == null) {
+                    if (Parent == null) {
                         break;
                     }
                     Parent.CurrentValue = Parent.SelectedItems.Select(x => x.Value).ToList().ToCsv(CsvProperties);

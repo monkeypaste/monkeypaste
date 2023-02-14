@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 
 namespace MonkeyPaste.Common {
     public enum MpContentSortType {
@@ -47,7 +46,7 @@ namespace MonkeyPaste.Common {
         Height = 33_554_432,
 
         Hex = 67_108_864,
-        Rgba = 134_217_728, 
+        Rgba = 134_217_728,
 
         Exactly = 268_435_456,
         Before = 536_870_912,
@@ -89,12 +88,12 @@ namespace MonkeyPaste.Common {
             return
                 cqbf.HasFlag(MpContentQueryBitFlags.Hours) ||
                 cqbf.HasFlag(MpContentQueryBitFlags.Days) ||
-                cqbf.HasFlag(MpContentQueryBitFlags.Exactly) ;
+                cqbf.HasFlag(MpContentQueryBitFlags.Exactly);
         }
 
 
         public static bool IsViewFieldFlag(this MpContentQueryBitFlags cqbf) {
-            switch(cqbf) {
+            switch (cqbf) {
                 case MpContentQueryBitFlags.Title:
                 case MpContentQueryBitFlags.Content:
                 case MpContentQueryBitFlags.Url:
@@ -126,7 +125,7 @@ namespace MonkeyPaste.Common {
         }
 
         public static bool IsStringMatchFilterFlag(this MpContentQueryBitFlags f) {
-            if(!f.IsViewFieldFlag()) {
+            if (!f.IsViewFieldFlag()) {
                 return false;
             }
             switch (f) {
@@ -213,14 +212,14 @@ namespace MonkeyPaste.Common {
         }
 
         public static string GetStringMatchValue(this MpContentQueryBitFlags f, string matchOp, string matchVal) {
-            if(matchOp == "REGEXP") {
-                if(f.HasFlag(MpContentQueryBitFlags.WholeWord)) {
+            if (matchOp == "REGEXP") {
+                if (f.HasFlag(MpContentQueryBitFlags.WholeWord)) {
                     //string flags = "m";
                     //if (!f.HasFlag(MpContentQueryBitFlags.CaseSensitive)) {
                     //    flags += "i";
                     //}
                     //return $"(?{flags})\b{matchVal}\b";
-                    if(!f.HasFlag(MpContentQueryBitFlags.CaseSensitive)) {
+                    if (!f.HasFlag(MpContentQueryBitFlags.CaseSensitive)) {
                         matchVal = matchVal.ToUpper();
                     }
                     return $@"\b{matchVal}\b";
@@ -228,7 +227,7 @@ namespace MonkeyPaste.Common {
                 return $"{matchVal}";
             }
             string op_symbol = matchOp == "GLOB" ? "*" : "%";
-            switch(f) {
+            switch (f) {
                 case MpContentQueryBitFlags.Matches:
                     return matchVal;
                 case MpContentQueryBitFlags.BeginsWith:
@@ -243,13 +242,13 @@ namespace MonkeyPaste.Common {
 
 
         public static DateTime? ToDateTime(this MpContentQueryBitFlags cqbf, string mv) {
-            if(!cqbf.HasTimeSpanValue()) {
+            if (!cqbf.HasTimeSpanValue()) {
                 return null;
             }
-            if(cqbf.HasFlag(MpContentQueryBitFlags.Exactly)) {
+            if (cqbf.HasFlag(MpContentQueryBitFlags.Exactly)) {
                 try {
                     var dt = DateTime.Parse(mv);
-                    if(cqbf.HasFlag(MpContentQueryBitFlags.Before)) {
+                    if (cqbf.HasFlag(MpContentQueryBitFlags.Before)) {
 
                     }
                 }
@@ -260,13 +259,14 @@ namespace MonkeyPaste.Common {
             double v = 0;
             try {
                 v = double.Parse(mv);
-            } catch {
+            }
+            catch {
                 return null;
             }
-            if(v == 0) {
+            if (v == 0) {
                 return null;
             }
-            if(v < 0) {
+            if (v < 0) {
                 // is this ok?
                 Debugger.Break();
             }
@@ -275,10 +275,10 @@ namespace MonkeyPaste.Common {
             }
             // all timespans are factored into day values
             var ts = TimeSpan.FromDays(v);
-            if(cqbf.HasFlag(MpContentQueryBitFlags.Before)) {
+            if (cqbf.HasFlag(MpContentQueryBitFlags.Before)) {
                 return DateTime.Now - ts;
             }
-            if(cqbf.HasFlag(MpContentQueryBitFlags.After)) {
+            if (cqbf.HasFlag(MpContentQueryBitFlags.After)) {
                 return DateTime.Now - ts;
             }
             return null;

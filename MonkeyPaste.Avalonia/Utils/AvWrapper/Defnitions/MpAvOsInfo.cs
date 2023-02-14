@@ -1,7 +1,6 @@
-﻿using System;
+﻿using MonkeyPaste.Common;
+using System;
 using System.IO;
-using MonkeyPaste;
-using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvOsInfo : MpIOsInfo {
@@ -9,10 +8,10 @@ namespace MonkeyPaste.Avalonia {
         public bool IsAvalonia => true;
         public string OsFileManagerPath {
             get {
-                if(OperatingSystem.IsWindows()) {
+                if (OperatingSystem.IsWindows()) {
                     return Path.Combine(Directory.GetParent(Environment.SystemDirectory).FullName, "explorer.exe");
                 }
-                if(OperatingSystem.IsLinux()) {
+                if (OperatingSystem.IsLinux()) {
                     // TODO will likely need to have user specify path and name of file manager on linux. 
                     return @"/usr/bin/nautilus";
                 }

@@ -1,15 +1,9 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 using Avalonia.Styling;
 using PropertyChanged;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using MonkeyPaste.Common;
-using System.Linq;
-using MonkeyPaste.Common.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -52,7 +46,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         public override void Render(DrawingContext context) {
-            if(!IsVisible) {
+            if (!IsVisible) {
                 return;
             }
             base.Render(context);
@@ -67,7 +61,7 @@ namespace MonkeyPaste.Avalonia {
 
             context.DrawEllipse(
                 brush: Brushes.Transparent,
-                pen: new Pen(Brushes.Silver,arc_width),
+                pen: new Pen(Brushes.Silver, arc_width),
                 center: new Point(cx, cy),
                 radiusX: r,
                 radiusY: r);
@@ -76,7 +70,7 @@ namespace MonkeyPaste.Avalonia {
             var c = new Point(cx, cy);
 
             double sa = -90 * (Math.PI / 180.0d);
-            double ea = (deg-90)*(Math.PI/180.0d);
+            double ea = (deg - 90) * (Math.PI / 180.0d);
             bool isLarge = Percent >= 0.5;
             Point p0 = c + new Vector(Math.Cos(sa), Math.Sin(sa)) * r;
             Point p1 = c + new Vector(Math.Cos(ea), Math.Sin(ea)) * r;

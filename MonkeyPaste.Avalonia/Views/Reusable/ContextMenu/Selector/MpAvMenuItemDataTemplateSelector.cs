@@ -1,11 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Metadata;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     internal class MpAvMenuItemDataTemplateSelector : IDataTemplate {
@@ -19,9 +15,9 @@ namespace MonkeyPaste.Avalonia {
             }
             return keyStr;
         }
-        public IControl Build(object param) {
+        Control ITemplate<object, Control>.Build(object param) {
             string keyStr = GetTemplateName(param);
-            return AvailableTemplates[keyStr].Build(param); 
+            return AvailableTemplates[keyStr].Build(param);
         }
 
         public bool Match(object data) {

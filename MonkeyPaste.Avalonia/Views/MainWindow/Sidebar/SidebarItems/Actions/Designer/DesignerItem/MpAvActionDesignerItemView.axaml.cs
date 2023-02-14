@@ -3,7 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using MonkeyPaste;
 
 namespace MonkeyPaste.Avalonia {
     /// <summary>
@@ -21,7 +20,7 @@ namespace MonkeyPaste.Avalonia {
             AvaloniaXamlLoader.Load(this);
         }
         private void Dicc_KeyDown(object sender, global::Avalonia.Input.KeyEventArgs e) {
-            if(e.Key == Key.Delete) {
+            if (e.Key == Key.Delete) {
                 if (BindingContext.IsSelected) {
                     e.Handled = true;
                     BindingContext.DeleteThisActionCommand.Execute(null);

@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Net;
-using System.Net.Sockets;
 using System.Net.Security;
+using System.Net.Sockets;
 using System.Security.Authentication;
-using System.Text;
 using System.Security.Cryptography.X509Certificates;
-using System.IO;
+using System.Text;
 
 namespace MonkeyPaste {
     public class MpSslTcpServer {
@@ -50,7 +48,7 @@ namespace MonkeyPaste {
             try {
                 sslStream.AuthenticateAsServer(
                     _serverCertificate,
-                    clientCertificateRequired: false, 
+                    clientCertificateRequired: false,
                     enabledSslProtocols: SslProtocols.Default,
                     checkCertificateRevocation: true);
 
@@ -82,7 +80,8 @@ namespace MonkeyPaste {
                 sslStream.Close();
                 client.Close();
                 return;
-            } finally {
+            }
+            finally {
                 // The client stream will be closed with the sslStream
                 // because we specified this behavior when creating
                 // the sslStream.

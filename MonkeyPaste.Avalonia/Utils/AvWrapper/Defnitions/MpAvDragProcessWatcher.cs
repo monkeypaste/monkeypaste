@@ -10,7 +10,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constants
-        
+
         public const double MIN_DRAG_DIST = 10;
 
         #endregion

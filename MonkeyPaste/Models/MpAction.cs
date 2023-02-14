@@ -1,10 +1,8 @@
-﻿using SQLite;
+﻿using MonkeyPaste.Common;
+using SQLite;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using MonkeyPaste.Common;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public enum MpMacroActionType {
@@ -32,7 +30,7 @@ namespace MonkeyPaste {
 
     public enum MpTriggerType {
         None = 0,
-        ContentAdded, 
+        ContentAdded,
         FileSystemChange,
         ContentTagged,
         Shortcut,
@@ -41,8 +39,8 @@ namespace MonkeyPaste {
     }
 
     public enum MpActionType {
-                   //ActionObjId(below)
-        None = 0, 
+        //ActionObjId(below)
+        None = 0,
         Classify,  //tagid
         Analyze,   //analyticItemPresetId
         Compare,   //MatcherTypeEnumId
@@ -145,7 +143,7 @@ namespace MonkeyPaste {
             //    MpConsole.WriteTraceLine("Action must have unique name");
             //    return null;
             //}
-            if(sortOrderIdx == 0 && parentId > 0) {
+            if (sortOrderIdx == 0 && parentId > 0) {
                 sortOrderIdx = await MpDataModelProvider.GetChildActionCountAsync(parentId);
             }
             location = location == null ? new MpPoint() : location;
@@ -164,7 +162,7 @@ namespace MonkeyPaste {
                 Y = location.Y
             };
 
-            if(!suppressWrite) {
+            if (!suppressWrite) {
                 await mr.WriteToDatabaseAsync();
             }
             return mr;

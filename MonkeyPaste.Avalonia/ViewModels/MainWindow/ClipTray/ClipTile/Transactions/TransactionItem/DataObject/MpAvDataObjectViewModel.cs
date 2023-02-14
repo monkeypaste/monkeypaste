@@ -1,9 +1,5 @@
-﻿using Avalonia.Input;
-using MonkeyPaste.Common;
-using System;
+﻿using MonkeyPaste.Common;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -24,7 +20,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public Dictionary<string,MpAvITransactionNodeViewModel> DataLookup { get; private set; }
+        public Dictionary<string, MpAvITransactionNodeViewModel> DataLookup { get; private set; }
         #endregion
 
         #region Model

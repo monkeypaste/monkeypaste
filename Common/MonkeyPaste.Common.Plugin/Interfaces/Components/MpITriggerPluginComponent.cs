@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace MonkeyPaste.Common.Plugin {
     public interface MpIActionOutputNode : MpILabelText {

@@ -1,62 +1,59 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Documents;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Resources;
-using MonkeyPaste.Common.Plugin; 
-using MonkeyPaste.Common;
-using System.Diagnostics;
 using WinformsBitmap = System.Drawing.Bitmap;
-using WinformsRectangle = System.Drawing.Rectangle;
-using WinformsPoint = System.Drawing.Point;
-using WinformsPixelFormat = System.Drawing.Imaging.PixelFormat;
 using WinformsBitmapData = System.Drawing.Imaging.BitmapData;
 using WinformsImageLockMode = System.Drawing.Imaging.ImageLockMode;
-using System.Runtime.InteropServices;
-using System.Windows.Interop;
+using WinformsPixelFormat = System.Drawing.Imaging.PixelFormat;
+using WinformsPoint = System.Drawing.Point;
+using WinformsRectangle = System.Drawing.Rectangle;
 
 namespace MonkeyPaste.Common.Wpf {
     public static class MpWpfImageExtensions {
 
-        public static Point ToWpfPoint(this MpPoint p) {
-            return new Point() { X = p.X, Y = p.Y };
-        }
+        //public static Point ToWpfPoint(this MpPoint p) {
+        //    return new Point() { X = p.X, Y = p.Y };
+        //}
 
-        public static Size ToWpfSize(this MpSize s) {
-            return new Size() { Width = s.Width, Height = s.Height };
-        }
+        //public static Size ToWpfSize(this MpSize s) {
+        //    return new Size() { Width = s.Width, Height = s.Height };
+        //}
 
-        public static Rect ToWpfRect(this MpRect rect) {
-            return new Rect(rect.Location.ToWpfPoint(), rect.Size.ToWpfSize());
-        }
+        //public static Rect ToWpfRect(this MpRect rect) {
+        //    return new Rect(rect.Location.ToWpfPoint(), rect.Size.ToWpfSize());
+        //}
 
-        public static MpRect ToPortableRect(this System.Drawing.Rectangle rect) {
-            return new MpRect(new MpPoint(rect.X, rect.Y), new MpSize(rect.Width, rect.Height));
-        }
+        //public static MpRect ToPortableRect(this System.Drawing.Rectangle rect) {
+        //    return new MpRect(new MpPoint(rect.X, rect.Y), new MpSize(rect.Width, rect.Height));
+        //}
 
-        public static MpRect ToPortableRect(this Rect rect) {
-            return new MpRect(rect.Location.ToPortablePoint(), rect.Size.ToPortableSize());
-        }
+        //public static MpRect ToPortableRect(this Rect rect) {
+        //    return new MpRect(rect.Location.ToPortablePoint(), rect.Size.ToPortableSize());
+        //}
 
-        public static MpSize ToPortableSize(this Size size) {
-            return new MpSize(size.Width, size.Height);
-        }
+        //public static MpSize ToPortableSize(this Size size) {
+        //    return new MpSize(size.Width, size.Height);
+        //}
 
         public static Size PixelSize(this BitmapSource bmpSrc) {
-            if(bmpSrc == null) {
+            if (bmpSrc == null) {
                 return new Size();
             }
             return new Size(bmpSrc.PixelWidth, bmpSrc.PixelHeight);
         }
 
         public static Size PixelSize(this ImageSource imgSrc) {
-            if(imgSrc == null) {
+            if (imgSrc == null) {
                 return new Size();
             }
-            if(imgSrc is BitmapSource bmpSrc) {
+            if (imgSrc is BitmapSource bmpSrc) {
                 return bmpSrc.PixelSize();
             }
             Debugger.Break();
@@ -71,12 +68,12 @@ namespace MonkeyPaste.Common.Wpf {
         //          pixels.GetLength(0) * pixels.GetLength(1) * sizeof(PixelColor),
         //          stride);
         //}
-        public static MpPoint ToPortablePoint(this Point p) {
-            return new MpPoint(p.X, p.Y);
-        }
-        public static Point ToPoint(this MpPoint p) {
-            return new Point(p.X, p.Y);
-        }
+        //public static MpPoint ToPortablePoint(this Point p) {
+        //    return new MpPoint(p.X, p.Y);
+        //}
+        //public static Point ToPoint(this MpPoint p) {
+        //    return new Point(p.X, p.Y);
+        //}
 
         public static BitmapSource ReadImageFromFile(string filePath) {
             return new BitmapImage(new Uri(filePath));
@@ -88,7 +85,8 @@ namespace MonkeyPaste.Common.Wpf {
                 return sbmpSrc;
             }
             catch (Exception ex) {
-                MpConsole.WriteTraceLine("Error scaling bmp", ex);
+                //Console.WriteLine("Error scaling bmp", ex);
+                Console.WriteLine("Error scaling bmp");
                 return bmpSrc;
             }
         }
@@ -106,7 +104,7 @@ namespace MonkeyPaste.Common.Wpf {
         public static BitmapSource Tint(this BitmapSource bmpSrc, Brush brush, bool retainAlpha = true) {
             return bmpSrc.Tint(((SolidColorBrush)brush).Color, retainAlpha);
         }
-        public static BitmapSource Tint(this BitmapSource bmpSrc,Color tint, bool retainAlpha = true) {
+        public static BitmapSource Tint(this BitmapSource bmpSrc, Color tint, bool retainAlpha = true) {
             BitmapSource formattedBmpSrc = null;
             if (bmpSrc.Width != bmpSrc.PixelWidth || bmpSrc.Height != bmpSrc.PixelHeight) {
                 //means bmp dpi isn't 96
@@ -145,7 +143,7 @@ namespace MonkeyPaste.Common.Wpf {
             if (bs == null) {
                 return null;
             }
-            if(!bs.IsFrozen && bs.CanFreeze) {
+            if (!bs.IsFrozen && bs.CanFreeze) {
                 bs.Freeze();
             }
             PngBitmapEncoder encoder = new PngBitmapEncoder();
@@ -159,7 +157,7 @@ namespace MonkeyPaste.Common.Wpf {
                     return bit;
                 }
                 catch (Exception ex) {
-                    MpConsole.WriteLine("MpHelpers.ConvertBitmapSourceToByteArray exception: " + ex);
+                    Console.WriteLine("MpHelpers.ConvertBitmapSourceToByteArray exception: " + ex);
                     return null;
                 }
 
@@ -192,7 +190,7 @@ namespace MonkeyPaste.Common.Wpf {
                 drawingContext.Close();
             }
             RenderTargetBitmap bmp = new RenderTargetBitmap((int)source.Width, (int)source.Height, 96, 96, PixelFormats.Pbgra32);
-            bmp.Render(drawingVisual);            
+            bmp.Render(drawingVisual);
             return bmp;
         }
 
@@ -212,7 +210,7 @@ namespace MonkeyPaste.Common.Wpf {
                 dpiY = dpiY == 0 ? 96 : dpiY;
                 bmp.SetResolution((float)dpiX, (float)dpiY);
 
-                return bmp;                
+                return bmp;
             }
         }
 
@@ -253,7 +251,7 @@ namespace MonkeyPaste.Common.Wpf {
         }
         public static BitmapSource BitmapToBitmapSource(WinformsBitmap bmp) {
             // from https://weblog.west-wind.com/posts/2020/Sep/16/Retrieving-Images-from-the-Clipboard-and-WPF-Image-Control-Woes#clipboardgetimage-isnt-reliable
-            
+
             var hBitmap = bmp.GetHbitmap();
             var imageSource = Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero,
                 System.Windows.Int32Rect.Empty,
@@ -264,12 +262,12 @@ namespace MonkeyPaste.Common.Wpf {
 
         public static string ToAsciiImage(this BitmapSource bmpSrc, Size? docSize = null) {
             //Size size = docSize.HasValue ? docSize.Value : new Size(50, 50);
-            Size size = new Size(100,100);
-            if(docSize.HasValue) {
+            Size size = new Size(100, 100);
+            if (docSize.HasValue) {
                 size = docSize.Value;
             } else {
                 Size pixelSize = bmpSrc.PixelSize();
-                if(pixelSize.Width >= pixelSize.Height) {
+                if (pixelSize.Width >= pixelSize.Height) {
                     double ar = pixelSize.Height / pixelSize.Width;
                     size.Height *= ar;
                 } else {
@@ -346,19 +344,25 @@ namespace MonkeyPaste.Common.Wpf {
 
 
             var bmpSrc = (BitmapSource)new ImageSourceConverter().ConvertFrom(bytes);
-            if(freeze) {
+            if (freeze) {
                 bmpSrc.Freeze();
-            } 
+            }
             return bmpSrc;
         }
 
 
         public static BitmapSource ToBitmapSource(this string base64Str, bool freeze = true) {
-            if (string.IsNullOrEmpty(base64Str) || !base64Str.IsStringBase64()) {
+            if (string.IsNullOrEmpty(base64Str)) {
                 return new BitmapImage();
             }
-            var bytes = System.Convert.FromBase64String(base64Str);
-            return bytes.ToBitmapSource(freeze);
+            try {
+                var bytes = System.Convert.FromBase64String(base64Str);
+                return bytes.ToBitmapSource(freeze);
+            }
+            catch (Exception ex) {
+                Console.WriteLine($"Error converting base64 to bitmapsource. {Environment.NewLine} {ex}");
+                return new BitmapImage();
+            }
         }
 
         public static void CopyPixels(this BitmapSource source, PixelColor[,] pixels, int stride, int offset, bool dummy) {
@@ -420,6 +424,6 @@ namespace MonkeyPaste.Common.Wpf {
             return grayScaleSsBmp;
         }
 
-        
+
     }
 }

@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public interface MpIAppBuilder {

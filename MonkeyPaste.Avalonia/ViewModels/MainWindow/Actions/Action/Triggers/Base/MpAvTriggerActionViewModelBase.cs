@@ -1,26 +1,14 @@
-﻿
-using MonkeyPaste;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-
-using System.Windows.Input;
-using MonkeyPaste.Common.Plugin;
+﻿using Avalonia.Threading;
 using MonkeyPaste.Common;
-using Avalonia.Threading;
-using System.Diagnostics;
-using Avalonia.Controls;
-using Avalonia.Controls.Selection;
-using MonkeyPaste.Common.Avalonia;
-using Avalonia.Media;
+using MonkeyPaste.Common.Plugin;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
 
-    public abstract class MpAvTriggerActionViewModelBase : 
+    public abstract class MpAvTriggerActionViewModelBase :
         MpAvActionViewModelBase,
         MpITriggerPluginComponent {
         #region Private Variables
@@ -129,8 +117,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Appearance
-        public string EnabledHexColor => (MpPlatform.Services.PlatformResource.GetResource("EnabledHighlightBrush") as SolidColorBrush).Color.ToPortableColor().ToHex();
-        public string DisabledHexColor => (MpPlatform.Services.PlatformResource.GetResource("DisabledHighlightBrush") as SolidColorBrush).Color.ToPortableColor().ToHex();
+        public string EnabledHexColor => MpSystemColors.limegreen; //(MpPlatform.Services.PlatformResource.GetResource("EnabledHighlightBrush") as SolidColorBrush).Color.ToPortableColor().ToHex();
+        public string DisabledHexColor => MpSystemColors.Red; //(MpPlatform.Services.PlatformResource.GetResource("DisabledHighlightBrush") as SolidColorBrush).Color.ToPortableColor().ToHex();
 
         public string CurEnableOrDisableHexColor => IsEnabled.HasValue ? IsEnabled.IsTrue() ? EnabledHexColor : DisabledHexColor : MpSystemColors.Transparent;
         public string ToggleEnableOrDisableResourceKey => IsEnabled.HasValue ? IsEnabled.IsTrue() ? DisabledHexColor : EnabledHexColor : "WarningImage";
@@ -170,10 +158,10 @@ namespace MonkeyPaste.Avalonia {
             get => string.IsNullOrEmpty(Arg2) ? null : bool.Parse(Arg2);
             set {
                 var newVal = value == null ? null : value.ToString();
-                if(Arg2 != newVal) {
+                if (Arg2 != newVal) {
                     Arg2 = newVal;
                     OnPropertyChanged(nameof(IsEnabled));
-                }                
+                }
             }
 
         }
@@ -255,11 +243,11 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(IsTriggerEnabled));
                     break;
                 case nameof(IsAllValid):
-                    if(IsAllValid && IsEnabled.IsNull()) {
+                    if (IsAllValid && IsEnabled.IsNull()) {
                         // when trigger is all valid set to disabled state 
                         // to allow enabling
                         IsEnabled = false;
-                    } else if(!IsAllValid) {
+                    } else if (!IsAllValid) {
                         // IsEnabled null forces trigger to be valid before enabling
                         IsEnabled = null;
                     }
@@ -268,7 +256,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(SelfAndAllDescendants));
                     break;
                 case nameof(IsBusy):
-                    if(Parent != null) {
+                    if (Parent != null) {
                         Parent.OnPropertyChanged(nameof(Parent.IsAnyBusy));
                     }
                     break;
@@ -294,7 +282,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand EnableTriggerCommand => new MpAsyncCommand(
             async () => {
                 await ValidateActionAsync();
-                if(!IsValid) {
+                if (!IsValid) {
                     return;
                 }
                 EnableOrDisableTrigger(true);
@@ -303,8 +291,8 @@ namespace MonkeyPaste.Avalonia {
             });
 
         public ICommand DisableTriggerCommand => new MpAsyncCommand(
-            async() => {
-                while(IsAnyBusy) {
+            async () => {
+                while (IsAnyBusy) {
                     await Task.Delay(100);
                 }
                 EnableOrDisableTrigger(false);
@@ -322,15 +310,15 @@ namespace MonkeyPaste.Avalonia {
                      EnableTriggerCommand.Execute(null);
                      return;
                  }
-            }, () => {
-                if(IsEnabled.IsTrue()) {
-                    return DisableTriggerCommand.CanExecute(null);
-                }
-                if(IsEnabled.IsFalse()) {
-                    return EnableTriggerCommand.CanExecute(null);
-                }
-                return false;
-            });
+             }, () => {
+                 if (IsEnabled.IsTrue()) {
+                     return DisableTriggerCommand.CanExecute(null);
+                 }
+                 if (IsEnabled.IsFalse()) {
+                     return EnableTriggerCommand.CanExecute(null);
+                 }
+                 return false;
+             });
 
 
         #endregion

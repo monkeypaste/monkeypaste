@@ -1,17 +1,10 @@
-﻿using MonkeyPaste;
-using MonkeyPaste.Common.Plugin;
-using MonkeyPaste.Common;
-using System;
+﻿using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using Avalonia.Controls;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvClassifyActionViewModel : 
+    public class MpAvClassifyActionViewModel :
         MpAvActionViewModelBase {
         #region Private Variables
 
@@ -101,7 +94,7 @@ namespace MonkeyPaste.Avalonia {
         }
         protected override async Task ValidateActionAsync() {
             await Task.Delay(1);
-            if(TagId == 0) {
+            if (TagId == 0) {
                 ValidationText = $"No Collection selected for Classifier '{FullName}'";
             } else {
                 //while (MpAvTagTrayViewModel.Instance.IsAnyBusy) {
@@ -115,7 +108,7 @@ namespace MonkeyPaste.Avalonia {
                     ValidationText = string.Empty;
                 }
             }
-            if(!IsValid) {
+            if (!IsValid) {
                 ShowValidationNotification();
             }
         }
@@ -129,7 +122,7 @@ namespace MonkeyPaste.Avalonia {
             var actionInput = GetInput(arg);
 
             var ttvm = MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
-            if(ttvm != null && actionInput != null && actionInput.CopyItem != null) {
+            if (ttvm != null && actionInput != null && actionInput.CopyItem != null) {
                 ttvm.LinkCopyItemCommand.Execute(actionInput.CopyItem.Id);
             }
 

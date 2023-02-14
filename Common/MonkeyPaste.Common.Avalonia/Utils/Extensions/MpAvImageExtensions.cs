@@ -1,15 +1,10 @@
-﻿using System;
+﻿using Avalonia;
+using Avalonia.Media.Imaging;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using Avalonia;
-using Avalonia.Media.Imaging;
-using Avalonia.Platform;
-using Avalonia.Visuals.Media.Imaging;
 //using MonkeyPaste.Common.Wpf;
 
 namespace MonkeyPaste.Common.Avalonia {
@@ -25,32 +20,33 @@ namespace MonkeyPaste.Common.Avalonia {
         #region Converters        
 
         public static Bitmap? ToAvBitmap(this string base64Str, double scale = 1.0) {
-            if(!base64Str.IsStringBase64()) {
+            if (!base64Str.IsStringBase64()) {
                 return null;
             }
             var bytes = Convert.FromBase64String(base64Str);
             var bmp = bytes.ToAvBitmap();
-            if(bmp == null) {
+            if (bmp == null) {
                 return null;
             }
-            if(scale == 1.0) {
+            if (scale == 1.0) {
                 return bmp;
             }
-            return bmp.Scale(new MpSize(scale,scale));
+            return bmp.Scale(new MpSize(scale, scale));
         }
 
         public static Bitmap ToAvBitmap(this byte[] bytes) {
             using (var stream = new MemoryStream(bytes)) {
                 try {
                     return new Bitmap(stream);
-                } catch(Exception ex) {
+                }
+                catch (Exception ex) {
                     MpConsole.WriteTraceLine("Error creating bitmap from bytes ", ex);
                     return null;
-                }                
+                }
             }
         }
         public static byte[] ToByteArray(this Bitmap bmp) {
-            using(var stream = new MemoryStream()) {
+            using (var stream = new MemoryStream()) {
                 bmp.Save(stream);
                 return stream.ToArray();
             }
@@ -85,7 +81,7 @@ namespace MonkeyPaste.Common.Avalonia {
         public static unsafe Bitmap? Tint(this Bitmap bmp, string hexColor, bool retainAlpha = true) {
             var tint = hexColor.ToAvColor();
             var tintPixelColor = new PixelColor { Alpha = tint.A, Red = tint.R, Green = tint.G, Blue = tint.B };
-            if(tintPixelColor.Alpha == 0) {
+            if (tintPixelColor.Alpha == 0) {
                 // don't change image if tint is transparent
                 return bmp;
             }
@@ -160,7 +156,7 @@ namespace MonkeyPaste.Common.Avalonia {
                         for (int col = 0; col < width; col++) {
                             PixelColor c = pixels[col, row];
                             byte avg = (byte)((double)(c.Red + c.Green + c.Blue) / 3.0d);
-                            PixelColor grayColor = new PixelColor() { Alpha = 255, Red = avg, Green = avg, Blue = avg }; 
+                            PixelColor grayColor = new PixelColor() { Alpha = 255, Red = avg, Green = avg, Blue = avg };
                             int index = (int)((double)(grayColor.Red * 10) / 255.0d);
                             outStr += asciiChars[index];
                             bmpPtr = PutPixel(writeableBitmap, c, bmpPtr);
@@ -219,8 +215,8 @@ namespace MonkeyPaste.Common.Avalonia {
 
                 for (int row = 0; row < height; row++) {
                     for (int col = 0; col < width; col++) {
-                        byte blue = *bmpPtr++; 
-                        byte green = *bmpPtr++; 
+                        byte blue = *bmpPtr++;
+                        byte green = *bmpPtr++;
                         byte red = *bmpPtr++;
                         byte alpha = *bmpPtr++;
 
@@ -237,7 +233,7 @@ namespace MonkeyPaste.Common.Avalonia {
             }
         }
         public static unsafe byte* PutPixel(WriteableBitmap bitmap, PixelColor pixel, byte* bmpPtr) {
-            *bmpPtr++ = pixel.Blue; 
+            *bmpPtr++ = pixel.Blue;
             *bmpPtr++ = pixel.Green;
             *bmpPtr++ = pixel.Red;
             *bmpPtr++ = pixel.Alpha;
@@ -282,6 +278,6 @@ namespace MonkeyPaste.Common.Avalonia {
             }
         }
 
-        
+
     }
 }

@@ -1,20 +1,9 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Layout;
 using Avalonia.Markup.Xaml;
-using System.Collections.ObjectModel;
-using MonkeyPaste;
-using MonkeyPaste.Common;
-using System.Linq;
-using Avalonia.Threading;
-using System;
 using PropertyChanged;
-using System.Collections.Generic;
-using System.Diagnostics;
-using MonkeyPaste.Common.Avalonia;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Avalonia.Platform;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -76,11 +65,11 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ShowNotifierDevToolsCommand => new MpCommand(
             () => {
-                var wv = this.GetVisualDescendant<MpAvCefNetWebView>();
-                if(wv == null) {
-                    return;
+                if (BindingContext != null &&
+                    BindingContext.Body is MpAvClipTileViewModel ctvm &&
+                    ctvm.GetContentView() is MpIContentView cv) {
+                    cv.ShowDevTools();
                 }
-                wv.ShowDevTools();
             });
     }
 

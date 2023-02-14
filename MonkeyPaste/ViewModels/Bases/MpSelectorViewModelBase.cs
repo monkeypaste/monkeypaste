@@ -1,20 +1,19 @@
-﻿using System;
+﻿using MonkeyPaste.Common;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
 
-    public abstract class MpSelectorViewModelBase<P,C> : 
-        MpViewModelBase<P>, 
+    public abstract class MpSelectorViewModelBase<P, C> :
+        MpViewModelBase<P>,
         MpISelectorViewModel
-        where P:class 
-        where C: class, MpISelectableViewModel {
+        where P : class
+        where C : class, MpISelectableViewModel {
 
         public MpSelectorViewModelBase() : base(null) { }
 
-        public MpSelectorViewModelBase(P p):base(p) { }
+        public MpSelectorViewModelBase(P p) : base(p) { }
 
         public virtual ObservableCollection<C> Items { get; set; } = new ObservableCollection<C>();
 
@@ -23,7 +22,7 @@ namespace MonkeyPaste {
             set {
                 if (SelectedItem != value) {
                     Items.ForEach(x => x.IsSelected = x == value);
-                    if(MpPlatform.Services.StartupState.LoadedDateTime != null &&
+                    if (MpPlatform.Services.StartupState.LoadedDateTime != null &&
                         SelectedItem != null) {
                         SelectedItem.LastSelectedDateTime = DateTime.Now;
                     }

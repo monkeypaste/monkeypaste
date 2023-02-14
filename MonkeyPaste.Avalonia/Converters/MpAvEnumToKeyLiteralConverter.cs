@@ -1,10 +1,8 @@
-﻿using Avalonia;
-using Avalonia.Data.Converters;
+﻿using Avalonia.Data.Converters;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Globalization;
-using MonkeyPaste.Common;
-using Avalonia.Media;
-using MonkeyPaste.Common.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvEnumToKeyLiteralConverter : IValueConverter {
@@ -17,7 +15,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 string key_literal = MpAvKeyboardInputHelpers.GetKeyLiteral(
                         MpAvKeyboardInputHelpers.ConvertStringToKey(valueStr));
-                if(parameter is string paramStr && paramStr == "label") {
+                if (parameter is string paramStr && paramStr == "label") {
                     key_literal = key_literal.ToLabel();
                 }
                 return key_literal;

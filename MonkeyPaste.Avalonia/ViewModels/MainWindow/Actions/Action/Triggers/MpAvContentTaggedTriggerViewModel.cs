@@ -1,12 +1,10 @@
-﻿using MonkeyPaste;
-using MonkeyPaste.Common.Plugin;
+﻿using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvContentTaggedTriggerViewModel : 
+    public class MpAvContentTaggedTriggerViewModel :
         MpAvTriggerActionViewModelBase {
 
 
@@ -45,7 +43,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public MpAvTagTileViewModel SelectedTag => 
+        public MpAvTagTileViewModel SelectedTag =>
             MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
 
         #endregion
@@ -108,8 +106,8 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        protected override void EnableTrigger() {            
-            if(SelectedTag == null) {
+        protected override void EnableTrigger() {
+            if (SelectedTag == null) {
                 return;
             }
             SelectedTag.RegisterActionComponent(this);
@@ -125,7 +123,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
         private void MpAvContentTaggedTriggerViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
                 case nameof(HasArgsChanged):
                     //OnPropertyChanged(nameof(TagId));
                     break;

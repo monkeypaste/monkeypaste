@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using SharpHook.Native;
+using System.Collections.Generic;
 using System.Linq;
-using SharpHook.Native;
 
 namespace MonkeyPaste.Common.Avalonia {
     public class MpSharpHookMouseButtonMap {
-        
+
 
         #region Statics
-        private static Dictionary<MouseButton, MpPortablePointerButtonType> _DefaultButtonMap { 
+        private static Dictionary<MouseButton, MpPortablePointerButtonType> _DefaultButtonMap {
             get {
                 return new Dictionary<MouseButton, MpPortablePointerButtonType>() {
                     {
@@ -53,10 +53,10 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public MpSharpHookMouseButtonMap(
-            MpPortablePointerButtonType b1, 
-            MpPortablePointerButtonType b2, 
-            MpPortablePointerButtonType b3, 
-            MpPortablePointerButtonType b4, 
+            MpPortablePointerButtonType b1,
+            MpPortablePointerButtonType b2,
+            MpPortablePointerButtonType b3,
+            MpPortablePointerButtonType b4,
             MpPortablePointerButtonType b5) {
             ButtonMap = new Dictionary<MouseButton, MpPortablePointerButtonType>() {
                     {

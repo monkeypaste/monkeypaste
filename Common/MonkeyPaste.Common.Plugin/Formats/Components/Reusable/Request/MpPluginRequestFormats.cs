@@ -19,7 +19,7 @@ namespace MonkeyPaste.Common.Plugin {
                     }
                 }
                 return new MpPluginRequestFormatBase() {
-                    items = param_lookup.Select(x=>new MpParameterRequestItemFormat(x.Key,x.Value)).ToList()
+                    items = param_lookup.Select(x => new MpParameterRequestItemFormat(x.Key, x.Value)).ToList()
                 };
             }
             return null;

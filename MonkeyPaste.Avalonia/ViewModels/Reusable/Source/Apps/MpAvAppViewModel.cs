@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
+﻿using Avalonia.Threading;
+using System;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using Avalonia.Controls.Primitives;
-using Avalonia.Threading;
-using MonkeyPaste;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvAppViewModel : 
+    public class MpAvAppViewModel :
         MpViewModelBase<MpAvAppCollectionViewModel>,
         MpISelectableViewModel,
         MpIHoverableViewModel
@@ -54,7 +47,7 @@ namespace MonkeyPaste.Avalonia {
 
         public int AppId {
             get {
-                if(App == null) {
+                if (App == null) {
                     return 0;
                 }
                 return App.Id;
@@ -96,7 +89,7 @@ namespace MonkeyPaste.Avalonia {
                 return App.IsAppRejected;
             }
             set {
-                if(App != null && App.IsAppRejected != value) {
+                if (App != null && App.IsAppRejected != value) {
                     App.IsAppRejected = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(IsRejected));
@@ -127,16 +120,16 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task InitializeAsync(MpApp app) {
             IsBusy = true;
-            
+
 
             App = app;
-            
+
             OnPropertyChanged(nameof(IconId));
 
             await ClipboardFormatInfos.InitializeAsync(AppId);
 
             MpAppPasteShortcut aps = await MpDataModelProvider.GetAppPasteShortcutAsync(AppId);
-            if(aps != null) {
+            if (aps != null) {
                 PasteShortcutViewModel = new MpPasteShortcutViewModel(this);
                 await PasteShortcutViewModel.InitializeAsync(aps);
             }
@@ -172,33 +165,33 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void MpAppViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
                 case nameof(IsSelected):
-                    if(IsSelected) {
+                    if (IsSelected) {
                         ClipboardFormatInfos.OnPropertyChanged(nameof(ClipboardFormatInfos.Items));
-                        if(PasteShortcutViewModel != null) {
+                        if (PasteShortcutViewModel != null) {
                             PasteShortcutViewModel.OnPropertyChanged(nameof(PasteShortcutViewModel.PasteCmdKeyString));
                         }
-                        
+
                         Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
                         //CollectionViewSource.GetDefaultView(ClipboardFormatInfos.Items).Refresh();
                         ClipboardFormatInfos.OnPropertyChanged(nameof(ClipboardFormatInfos.Items));
                     }
                     break;
                 case nameof(IsRejected):
-                    if(IsRejected) {
-                        Dispatcher.UIThread.Post(async()=> { await RejectApp(); });
+                    if (IsRejected) {
+                        Dispatcher.UIThread.Post(async () => { await RejectApp(); });
                     }
                     break;
 
                 case nameof(HasModelChanged):
-                    if(HasModelChanged) {
+                    if (HasModelChanged) {
                         Task.Run(async () => {
                             await App.WriteToDatabaseAsync();
                             HasModelChanged = false;
                         });
                     }
-                    
+
                     break;
             }
         }

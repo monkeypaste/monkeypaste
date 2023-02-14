@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
+using System;
 using System.Diagnostics;
-using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using MonkeyPaste.Common.Plugin; 
-using MonkeyPaste.Common;
 namespace MonkeyPaste {
 
     public class MpCommandLinePlugin : MpIAnalyzeComponent {
@@ -31,7 +26,7 @@ namespace MonkeyPaste {
             process.WaitForExit();
 
             return new MpAnalyzerPluginResponseFormat() {
-                dataObject = new MpPortableDataObject(MpPortableDataFormats.Text,output)
+                dataObject = new MpPortableDataObject(MpPortableDataFormats.Text, output)
             };
         }
 

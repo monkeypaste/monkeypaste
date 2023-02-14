@@ -1,10 +1,6 @@
-﻿using System;
+﻿using SharpHook.Native;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SharpHook.Native;
-using MonkeyPaste.Common;
 using System.Diagnostics;
 
 namespace MonkeyPaste.Common.Avalonia {
@@ -45,7 +41,7 @@ namespace MonkeyPaste.Common.Avalonia {
             return outStr;
         }
 
-        public static KeyCode GetKeyValue(string keyStr) {           
+        public static KeyCode GetKeyValue(string keyStr) {
             string lks = keyStr.ToLower();
             if (lks == MpKeyLiteralStringHelpers.AV_CONTROL_KEY_LITERAL.ToLower() ||
                 lks == MpKeyLiteralStringHelpers.CONTROL_KEY_LITERAL.ToLower()) {
@@ -114,7 +110,7 @@ namespace MonkeyPaste.Common.Avalonia {
             if (key == KeyCode.VcLeftControl || key == KeyCode.VcRightControl) {
                 return MpKeyLiteralStringHelpers.CONTROL_KEY_LITERAL;
             }
-            if(key == KeyCode.VcCapsLock) {
+            if (key == KeyCode.VcCapsLock) {
                 return MpKeyLiteralStringHelpers.CAPS_LOCK_KEY_LITERAL;
             }
             if (key == KeyCode.VcNumPadEnter) {
@@ -135,7 +131,7 @@ namespace MonkeyPaste.Common.Avalonia {
             if (key == KeyCode.VcNumPadAdd) {
                 return @"+";
             }
-            if (key == KeyCode.VcNumPadSeparator) { 
+            if (key == KeyCode.VcNumPadSeparator) {
                 // what key is this?
                 Debugger.Break();
             }
@@ -173,7 +169,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 return @"\";
             }
             string keyStr = key.ToString();
-            if(keyStr.StartsWith("VcNumPad")) {
+            if (keyStr.StartsWith("VcNumPad")) {
                 return key.ToString().Replace("VcNumPad", String.Empty);
             }
             return key.ToString().Replace("Vc", String.Empty);

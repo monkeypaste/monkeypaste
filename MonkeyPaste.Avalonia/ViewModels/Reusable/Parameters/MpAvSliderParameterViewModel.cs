@@ -1,8 +1,6 @@
-﻿using MonkeyPaste;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; 
-using Newtonsoft.Json;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -20,16 +18,17 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpISliderViewModel Implementation
 
-        public double SliderValue { 
+        public double SliderValue {
             get {
                 object val = GetClampedValue(CurrentValue);
-                if(val == null) {
+                if (val == null) {
                     return 0;
                 }
 
                 try {
                     return double.Parse(CurrentValue);
-                } catch(Exception ex) {
+                }
+                catch (Exception ex) {
                     MpConsole.WriteTraceLine($"Error converting slider current value '{CurrentValue}' ex: ", ex);
                     return 0;
                 }
@@ -87,7 +86,8 @@ namespace MonkeyPaste.Avalonia {
                     default:
                         return double.Parse(value);
                 }
-            } catch(Exception ex) {
+            }
+            catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Error converting slider value '{value}' ex: ", ex);
                 return null;
             }

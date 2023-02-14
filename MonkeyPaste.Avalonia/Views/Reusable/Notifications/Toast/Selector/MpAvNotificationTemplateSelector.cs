@@ -1,12 +1,8 @@
-﻿using Avalonia.Controls.Templates;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
+using Avalonia.Controls.Templates;
+using Avalonia.Metadata;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MonkeyPaste;
-using Avalonia.Metadata;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvNotificationTemplateSelector : IDataTemplate {
@@ -15,15 +11,15 @@ namespace MonkeyPaste.Avalonia {
         public Dictionary<string, IDataTemplate> AvailableTemplates { get; } = new Dictionary<string, IDataTemplate>();
 
 
-        public IControl Build(object param) {
+        Control ITemplate<object, Control>.Build(object param) {
             string key;
-            if(param is MpLoaderNotificationViewModel) {
+            if (param is MpLoaderNotificationViewModel) {
                 key = "LoaderTemplate";
-            } else if(param is MpMessageNotificationViewModel) {
+            } else if (param is MpMessageNotificationViewModel) {
                 key = "MessageTemplate";
-            } else if(param is MpUserActionNotificationViewModel) {
+            } else if (param is MpUserActionNotificationViewModel) {
                 key = "UserActionTemplate";
-            }  else {
+            } else {
                 throw new Exception("Unknown notification: " + param);
             }
             // build the control to display

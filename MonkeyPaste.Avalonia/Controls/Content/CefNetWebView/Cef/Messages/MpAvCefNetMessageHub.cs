@@ -1,10 +1,4 @@
 ﻿using CefNet;
-using MonkeyPaste.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvCefNetMessageHub {
@@ -31,11 +25,11 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public void MessageReceived(object sender, CefProcessMessageReceivedEventArgs e) {
-            if(_jsEvaluator.HandleCefMessage(e)) {
+            if (_jsEvaluator.HandleCefMessage(e)) {
                 e.Handled = true;
                 return;
             }
-            if(WindowBinder.HandleCefMessage(e)) {
+            if (WindowBinder.HandleCefMessage(e)) {
                 e.Handled = true;
                 return;
             }

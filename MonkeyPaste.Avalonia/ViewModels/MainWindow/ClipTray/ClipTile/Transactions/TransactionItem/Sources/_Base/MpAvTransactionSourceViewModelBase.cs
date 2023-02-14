@@ -1,17 +1,14 @@
-﻿using MonkeyPaste;
+﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Transactions;
 using System.Windows.Input;
-using Xamarin.Forms.Internals;
 
 namespace MonkeyPaste.Avalonia {
-    public abstract class MpAvTransactionSourceViewModelBase  : 
+    public abstract class MpAvTransactionSourceViewModelBase :
         MpViewModelBase<MpAvTransactionItemViewModel>,
         MpAvITransactionNodeViewModel {
 
@@ -78,8 +75,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-        public bool IsAnyBusy => 
-            IsBusy || 
+        public bool IsAnyBusy =>
+            IsBusy ||
             (Items != null && Items.Cast<MpAvTransactionSourceViewModelBase>().Any(x => x.IsAnyBusy));
         public bool IsHovering { get; set; }
 

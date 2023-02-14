@@ -3,9 +3,7 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
     <Styles.Resources>
-        <sys:Double x:Key="DefaultGridSplitterFixedDimensionLength">
-            5
-        </sys:Double>
+        <sys:Double x:Key="DefaultGridSplitterFixedDimensionLength">5</sys:Double>
     </Styles.Resources>
     <Style Selector="GridSplitter.horizontal">
         <Setter Property="Cursor"

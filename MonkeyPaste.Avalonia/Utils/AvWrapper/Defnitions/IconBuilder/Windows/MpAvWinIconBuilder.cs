@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-//using Avalonia.Media.Imaging;
-using MonkeyPaste.Common.Avalonia;
+﻿//using Avalonia.Media.Imaging;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvWinIconBuilder : MpAvIconBuildBase {
@@ -13,7 +8,7 @@ namespace MonkeyPaste.Avalonia {
 
         public override string GetApplicationIconBase64(string appPath, MpIconSize iconSize = MpIconSize.MediumIcon32) {
             string base64 = MpAvWinPathIconHelper.GetIconBase64FromWindowsPath(appPath, (int)iconSize);
-            if(base64.IsNullOrEmpty()) {
+            if (base64.IsNullOrEmpty()) {
                 return MpBase64Images.QuestionMark;
             }
             return base64;

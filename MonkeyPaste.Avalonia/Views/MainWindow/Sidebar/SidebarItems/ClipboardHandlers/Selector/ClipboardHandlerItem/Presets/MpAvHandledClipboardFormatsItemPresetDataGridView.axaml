@@ -10,6 +10,16 @@
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800">
+    <local:MpAvUserControl.Styles>
+        <Style Selector="DataGridRow:nth-child(odd)">
+            <Setter Property="Background"
+                    Value="Silver" />
+        </Style>
+        <Style Selector="DataGridRow:nth-child(even)">
+            <Setter Property="Background"
+                    Value="LightGray" />
+        </Style>
+    </local:MpAvUserControl.Styles>
     <Border CornerRadius="3"
             Margin="10,0"
             BorderThickness="1"
@@ -24,8 +34,6 @@
                 <DataGrid x:Name="ClipboardFormatPresetDatagrid"
                           IsVisible="{Binding ., Converter={x:Static ObjectConverters.IsNotNull}}"
                           Focusable="True"
-                          RowBackground="Silver"
-                          AlternatingRowBackground="LightGray"
                           Items="{Binding Items}"
                           SelectedItem="{Binding SelectedItem}"
                           SelectionMode="Single"

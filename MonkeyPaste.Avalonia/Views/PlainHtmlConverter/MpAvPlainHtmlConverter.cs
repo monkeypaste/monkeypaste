@@ -1,12 +1,8 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Layout;
-using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -95,7 +91,7 @@ namespace MonkeyPaste.Avalonia {
                 inputFormatType = "html";
             } else if (inputFormatType == "text") {
                 htmlDataStr = htmlDataStr.Replace(Environment.NewLine, "\n");
-            } 
+            }
             htmlDataStr = htmlDataStr.ToString().ToBase64String();
 
             if (string.IsNullOrWhiteSpace(htmlDataStr)) {

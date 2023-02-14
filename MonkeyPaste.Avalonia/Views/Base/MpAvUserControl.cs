@@ -1,5 +1,4 @@
 ﻿using Avalonia.Controls;
-using MonkeyPaste;
 using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia {
@@ -11,7 +10,7 @@ namespace MonkeyPaste.Avalonia {
             DataContext = dataContext;
         }
     }
-    public abstract class MpAvUserControl<T> : MpAvUserControl where T: class {
+    public abstract class MpAvUserControl<T> : MpAvUserControl where T : class {
         public T BindingContext {
             get {
                 if (Design.IsDesignMode ||

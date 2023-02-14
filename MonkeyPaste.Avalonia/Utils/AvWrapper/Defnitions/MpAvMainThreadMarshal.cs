@@ -14,7 +14,7 @@ namespace MonkeyPaste.Avalonia {
                 () => {
                     result = action.Invoke();
                 }, ConvertPriority(priority));
-            
+
             return result;
         }
 
@@ -27,14 +27,13 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public DispatcherPriority ConvertPriority(MpDispatcherPriority dp) {
-            
-            if((int)dp < (int)DispatcherPriority.MinValue) {
-                return DispatcherPriority.MinValue;
+            if (dp == MpDispatcherPriority.Normal) {
+                return DispatcherPriority.Normal;
             }
-            if((int)dp > (int)DispatcherPriority.Render) {
-                dp++;
+            if (dp == MpDispatcherPriority.Background) {
+                return DispatcherPriority.Background;
             }
-            return (DispatcherPriority)((int)dp);
+            throw new Exception("Add converter");
         }
     }
 

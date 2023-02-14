@@ -1,5 +1,4 @@
 ﻿using System;
-using MonkeyPaste;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -7,9 +6,9 @@ namespace MonkeyPaste.Avalonia {
         public MpITrayIcon TrayIcon { get; }
 
         public MpAvTrayIcon() {
-            if(OperatingSystem.IsMacOS()) {
+            if (OperatingSystem.IsMacOS()) {
                 TrayIcon = new MpAvMacTrayIcon();
-            } else if(OperatingSystem.IsWindows()) {
+            } else if (OperatingSystem.IsWindows()) {
 
             }
         }

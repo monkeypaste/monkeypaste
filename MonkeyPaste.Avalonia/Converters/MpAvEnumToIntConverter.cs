@@ -1,8 +1,5 @@
-﻿using Avalonia;
-using Avalonia.Data.Converters;
-using MonkeyPaste.Common;
+﻿using Avalonia.Data.Converters;
 using System;
-using System.Collections.ObjectModel;
 using System.Globalization;
 
 namespace MonkeyPaste.Avalonia {

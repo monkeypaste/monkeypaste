@@ -1,10 +1,7 @@
-
-using MonkeyPaste.Common;
 using System;
-using System.Collections.Concurrent;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common {
     public static class MpX11ShellEval {

@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
+﻿using MonkeyPaste.Common;
+using System;
 using System.Threading.Tasks;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public class MpDbLogTracker {
         public static async Task LogDbWriteAsync(MpDbLogActionType actionType, MpDbModelBase dbModel, string clientGuid = "") {
-            if(string.IsNullOrEmpty(dbModel.Guid)) {
+            if (string.IsNullOrEmpty(dbModel.Guid)) {
                 MpConsole.WriteLine(@"Cannot track item without a guid");
                 return;
             }
@@ -118,7 +114,7 @@ namespace MonkeyPaste {
             Task.Run(async () => {
                 var dblil = await MpDataModelProvider.GetItemsAsync<MpDbLog>();
 
-                foreach(var dbli in dblil) {
+                foreach (var dbli in dblil) {
                     Console.WriteLine(dbli.ToString());
                 }
             });

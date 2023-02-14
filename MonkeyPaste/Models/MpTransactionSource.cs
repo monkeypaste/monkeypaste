@@ -1,10 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using SQLite;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
@@ -31,7 +27,7 @@ namespace MonkeyPaste {
         ////[Indexed]
         //public int CopyItemId { get; set; }
 
-        
+
         [Column("fk_MpCopyItemTransactionId")]
         public int TransactionId { get; set; }
 
@@ -77,7 +73,7 @@ namespace MonkeyPaste {
             MpTransactionSourceType sourceType = MpTransactionSourceType.None,
             DateTime? createdDateTime = null,
             bool suppressWrite = false) {
-            if(transactionId <= 0) {
+            if (transactionId <= 0) {
                 throw new Exception("Must have valid transaction id, id is " + transactionId);
             }
             if (sourceObjId <= 0) {
@@ -100,7 +96,7 @@ namespace MonkeyPaste {
                     // self reference (ole within item), ignore
                     MpConsole.WriteLine($"Self reference detected. Ignoring MpTransactionSource create for ciid: " + sourceObjId);
                     return null;
-                } 
+                }
             }
 
             if (!createdDateTime.HasValue) {
@@ -116,7 +112,7 @@ namespace MonkeyPaste {
                 TransactionDateTime = createdDateTime.Value
             };
 
-            if(!suppressWrite) {
+            if (!suppressWrite) {
                 await ndio.WriteToDatabaseAsync();
             }
             return ndio;

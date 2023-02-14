@@ -1,25 +1,16 @@
-﻿using Avalonia.Controls;
-using HtmlAgilityPack;
-using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using PropertyChanged;
-using Avalonia;
-using Avalonia.Data;
-using Avalonia.Styling;
+﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Input;
-using MonkeyPaste.Avalonia;
-using MonkeyPaste;
+using Avalonia.Styling;
+using MonkeyPaste.Common.Avalonia;
+using PropertyChanged;
+using System;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public class MpAvTextBox : 
-        TextBox, 
+    public class MpAvTextBox :
+        TextBox,
         MpAvIDragSource,
         IStyleable {
         #region Private Variables
@@ -32,7 +23,7 @@ namespace MonkeyPaste.Avalonia {
             TextProperty.Changed.AddClassHandler<MpAvTextBox>((x, y) => HandleTextChanged(x, y));
         }
 
-        private static void HandleTextChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
+        private static void HandleTextChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
             if (element is MpAvTextBox tb) {
                 //RaisePropertyChanged(TextProperty, oldValue, value);
             }
@@ -80,6 +71,23 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
+
+        #endregion
+
+        #region Protected Methods
+        protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
+            base.OnAttachedToVisualTree(e);
+            if (DataContext is MpAvClipTileViewModel ctvm) {
+                ctvm.IsViewLoaded = true;
+            }
+        }
+
+        protected override void OnDataContextChanged(EventArgs e) {
+            base.OnDataContextChanged(e);
+            if (DataContext is MpAvClipTileViewModel ctvm) {
+                ctvm.IsViewLoaded = true;
+            }
+        }
 
         #endregion
 

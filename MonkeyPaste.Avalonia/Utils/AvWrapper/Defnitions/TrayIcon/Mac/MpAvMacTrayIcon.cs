@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform;
 using Avalonia.Threading;
 using MonoMac.AppKit;
+using System;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvMacTrayIcon : MpAvTrayIconBase {

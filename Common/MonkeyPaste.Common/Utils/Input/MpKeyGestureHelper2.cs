@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Common {
     public class MpKeyGestureHelper2 {
@@ -26,7 +25,7 @@ namespace MonkeyPaste.Common {
                 return;
             }
 
-            if(_downCount == 0) {
+            if (_downCount == 0) {
                 // Sequences must be multiple keys where:
                 // 1. only 1 key is changed between each combo ie. <Some Modifier Keys> + J, <Same modifier keys> + L
 
@@ -35,7 +34,7 @@ namespace MonkeyPaste.Common {
             }
             _downCount++;
 
-            if(_curKeysDown.Contains(SEQUENCE_SEPARATOR)) {
+            if (_curKeysDown.Contains(SEQUENCE_SEPARATOR)) {
                 //shouldn't happen
                 //MpDebuggerHelper.Break();
             }
@@ -43,7 +42,7 @@ namespace MonkeyPaste.Common {
             AddPressedKey(key);
         }
 
-        public void RemoveKeyDown(string key) {            
+        public void RemoveKeyDown(string key) {
             _downCount--;
             if (IsModifierKey(key) || _downCount == 0) {
                 // when modifier goes up or nothing else is down that's the end of the sequence no matter what
@@ -52,7 +51,7 @@ namespace MonkeyPaste.Common {
             }
             if (string.IsNullOrEmpty(_currentGesture)) {
                 _currentGesture = _curKeysDown;
-            } else if(_currentGesture.IndexListOfAll(SEQUENCE_SEPARATOR).Count + 1 < _MAX_COMBOS) {
+            } else if (_currentGesture.IndexListOfAll(SEQUENCE_SEPARATOR).Count + 1 < _MAX_COMBOS) {
                 _currentGesture += SEQUENCE_SEPARATOR + _curKeysDown;
             }
             RemovePressedKey(key);
@@ -63,10 +62,10 @@ namespace MonkeyPaste.Common {
         }
 
         public string GetCurrentGesture() {
-            if(!string.IsNullOrEmpty(_finalGesture)) {
+            if (!string.IsNullOrEmpty(_finalGesture)) {
                 return _finalGesture;
             }
-            if(!string.IsNullOrEmpty(_currentGesture)) {
+            if (!string.IsNullOrEmpty(_currentGesture)) {
                 return _currentGesture;
             }
             return _curKeysDown;
@@ -82,7 +81,7 @@ namespace MonkeyPaste.Common {
 
         private void AddPressedKey(string key) {
             var curDownParts = _curKeysDown.Split(new string[] { COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries).ToList();
-            if(curDownParts.Any(x=>x.ToLower() == key.ToLower())) {
+            if (curDownParts.Any(x => x.ToLower() == key.ToLower())) {
                 //shouldn't happen
                 //MpDebuggerHelper.Break();
                 //MpDebuggerHelper.Break();
@@ -95,7 +94,7 @@ namespace MonkeyPaste.Common {
         private void RemovePressedKey(string key) {
             var curDownParts = _curKeysDown.Split(new string[] { COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries).ToList();
             string down_toRemove = curDownParts.FirstOrDefault(x => x.ToLower() == key.ToLower());
-            if(string.IsNullOrEmpty(down_toRemove)) {
+            if (string.IsNullOrEmpty(down_toRemove)) {
                 //shouldn't happen
                 //MpDebuggerHelper.Break();
                 return;

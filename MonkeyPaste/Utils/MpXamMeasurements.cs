@@ -2,7 +2,7 @@
 using System;
 using System.Windows;
 using Xamarin.Essentials;
-using Xamarin.Forms;
+//using Xamarin.Forms;
 
 namespace MonkeyPaste {
     public class MpXamMeasurements  {

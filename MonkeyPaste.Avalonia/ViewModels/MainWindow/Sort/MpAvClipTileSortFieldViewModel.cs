@@ -1,20 +1,10 @@
-﻿using System;
+﻿using MonkeyPaste.Common;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Windows;
-using System.Windows.Input;
-using System.Linq;
-using MonkeyPaste;
-using System.Threading.Tasks;
-using Avalonia;
-using MonkeyPaste.Common;
-using MonoMac.AppKit;
-using System.Collections.Generic;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvClipTileSortFieldViewModel : 
-        MpViewModelBase, 
+    public class MpAvClipTileSortFieldViewModel :
+        MpViewModelBase,
         MpISingletonViewModel<MpAvClipTileSortFieldViewModel> {
         #region Statics
         private static MpAvClipTileSortFieldViewModel _instance;
@@ -33,7 +23,7 @@ namespace MonkeyPaste.Avalonia {
         private ObservableCollection<string> _sortLabels;
         public ObservableCollection<string> SortLabels {
             get {
-                if(_sortLabels == null) {
+                if (_sortLabels == null) {
                     _sortLabels = new ObservableCollection<string>(
                         typeof(MpContentSortType)
                         .EnumToLabels());
@@ -80,13 +70,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods       
         private void MpClipTileSortViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e) {
-            switch (e.PropertyName) {                
+            switch (e.PropertyName) {
                 case nameof(SelectedSortType):
                     MpMessenger.SendGlobal(MpMessageType.QuerySortChanged);
                     MpPlatform.Services.Query.NotifyQueryChanged();
                     break;
             }
-            
+
         }
 
         #endregion

@@ -1,22 +1,18 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Metadata;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvTransactionMessageBodyTemplateSelector : IDataTemplate {
         [Content]
         public Dictionary<string, IDataTemplate> AvailableTemplates { get; } = new Dictionary<string, IDataTemplate>();
 
-        public IControl Build(object param) {
+        Control ITemplate<object, Control>.Build(object param) {
             string key = "PlainTextMessageTemplate";
             if (param is MpAvParameterRequestMessageViewModel prmvm) {
                 key = "ParameterRequestMessageTemplate";
-            } else if(param is MpAvAnnotationMessageViewModel) {
+            } else if (param is MpAvAnnotationMessageViewModel) {
                 key = "AnnotationMessageTemplate";
             }
 

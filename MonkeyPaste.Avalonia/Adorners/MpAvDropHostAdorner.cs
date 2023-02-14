@@ -1,26 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using MonkeyPaste.Common.Plugin;
-using MonkeyPaste.Common;
-
-using System.Diagnostics;
+﻿using Avalonia.Controls;
 using Avalonia.Media;
-using Avalonia.Controls;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using Avalonia.Threading;
-using Avalonia;
-using System.Threading;
-using Avalonia.Rendering;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvDropHostAdorner : MpAvAdornerBase {
         #region Private Variables
 
-        private  MpShape[] _dropShapes;
+        private MpShape[] _dropShapes;
 
         #endregion
 
@@ -42,7 +29,7 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public void DrawDropAdorner(MpShape[] dropShapes) {
-            _dropShapes = dropShapes; 
+            _dropShapes = dropShapes;
             //IsTileOnScreen = _isAdornerVisible;
             this.InvalidateVisual();
         }
@@ -59,7 +46,7 @@ namespace MonkeyPaste.Avalonia {
             base.Render(dc);
         }
 
-       
+
         #endregion
     }
 }

@@ -1,12 +1,7 @@
 ﻿using SQLite;
 using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using MonkeyPaste.Common.Plugin;
-using MonkeyPaste.Common;
 
 namespace MonkeyPaste {
     public class MpAppClipboardFormatInfo : MpDbModelBase {
@@ -54,22 +49,22 @@ namespace MonkeyPaste {
             string formatInfo = "",
             bool ignoreFormat = false,
             bool suppressWrite = false) {
-            if(string.IsNullOrEmpty(format)) {
+            if (string.IsNullOrEmpty(format)) {
                 throw new Exception("Must have format name");
             }
-            if(appId == 0) {
+            if (appId == 0) {
                 throw new Exception("Must have app id");
             }
             var dupCheck = await MpDataModelProvider.GetAppClipboardFormatInfosByAppIdAsync(appId);
-            if(dupCheck.Any(x=>x.FormatType.ToLower() == format.ToLower())) {
+            if (dupCheck.Any(x => x.FormatType.ToLower() == format.ToLower())) {
                 var dup = dupCheck.FirstOrDefault(x => x.FormatType.ToLower() == format.ToLower());
                 dup.WasDupOnCreate = true;
                 dup.FormatInfo = formatInfo;
                 dup.IgnoreFormat = ignoreFormat;
-                if(!suppressWrite) {
+                if (!suppressWrite) {
                     await dup.WriteToDatabaseAsync();
                 }
-                return dup;                
+                return dup;
             }
             var ais = new MpAppClipboardFormatInfo() {
                 AppClipboardFormatInfoGuid = System.Guid.NewGuid(),

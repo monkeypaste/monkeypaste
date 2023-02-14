@@ -1,13 +1,11 @@
-﻿using System;
-using System.Globalization;
+﻿using Avalonia;
 using Avalonia.Data.Converters;
-using Avalonia.Platform;
-using Avalonia;
-using System.Reflection;
-using Avalonia.Media.Imaging;
 using Avalonia.Media;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform;
+using System;
+using System.Globalization;
 using System.IO;
-using Google.Apis.Logging;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvStringResourceConverter : IValueConverter {
@@ -16,15 +14,16 @@ namespace MonkeyPaste.Avalonia {
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
             string rawUri;
             if (value == null) {
-                if(parameter == null) {
+                if (parameter == null) {
                     throw new NotSupportedException();
-                } else if(parameter is string) {
+                } else if (parameter is string) {
                     rawUri = parameter as string;
                 } else {
                     throw new NotSupportedException();
                 }
-            } else if(value is string) {
+            } else if (value is string) {
                 rawUri = value as string;
+                rawUri = rawUri.Trim();
             } else {
                 return null;
             }
@@ -36,7 +35,7 @@ namespace MonkeyPaste.Avalonia {
                 uri = new Uri(rawUri);
             } else {
                 string resource_val = MpPlatform.Services.PlatformResource.GetResource(rawUri) as string;
-                if(string.IsNullOrWhiteSpace(resource_val)) {
+                if (string.IsNullOrWhiteSpace(resource_val)) {
                     return null;
                 }
                 uri = new Uri(resource_val);
@@ -52,7 +51,7 @@ namespace MonkeyPaste.Avalonia {
                     return StreamGeometry.Parse(sr.ReadToEnd());
                 }
             }
-            if (targetType == null || typeof(IImage).IsAssignableFrom(targetType)) { 
+            if (targetType == null || typeof(IImage).IsAssignableFrom(targetType)) {
                 return new Bitmap(asset);
             }
             return null;

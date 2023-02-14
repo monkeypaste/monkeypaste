@@ -1,9 +1,5 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -43,12 +39,12 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = true;
             await base.InitializeAsync(ts);
 
-            if(string.IsNullOrEmpty(SourceArg)) {
+            if (string.IsNullOrEmpty(SourceArg)) {
                 ParameterReqFormat = null;
             } else {
                 ParameterReqFormat = MpJsonConverter.DeserializeObject<MpPluginRequestFormatBase>(SourceArg);
             }
-            PresetViewModel = 
+            PresetViewModel =
                 MpAvAnalyticItemCollectionViewModel.Instance.AllPresets.FirstOrDefault(x => x.AnalyticItemPresetId == SourceObjId);
 
             OnPropertyChanged(nameof(Children));

@@ -1,8 +1,4 @@
-﻿using MonkeyPaste;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; 
-using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvCheckBoxParameterViewModel : MpAvParameterViewModelBase {

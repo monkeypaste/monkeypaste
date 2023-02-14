@@ -5,132 +5,44 @@
     <Style.Resources>
 
         <!--  COLORS  -->
-        <Color x:Key="MainWindowBgColor">
-            Purple
-        </Color>
-
-        <Color x:Key="DefaultInvalidColor">
-            Red
-        </Color>
-        <Color x:Key="DefaultWarningColor1">
-            Yellow
-        </Color>
-        <Color x:Key="DefaultWarningColor2">
-            Black
-        </Color>
-
-        <Color x:Key="MainWindowTitleMenuActiveBgColor">
-            GoldenRod
-        </Color>
-
-        <Color x:Key="MainWindowTitleMenuInactiveBgColor">
-            Gainsboro
-        </Color>
-
-
-        <Color x:Key="DisabledTextFgColor">
-            LightGray
-        </Color>
-
-        <Color x:Key="DisabledBgColor">
-            Gainsboro
-        </Color>
-
-        <Color x:Key="UnselectedBorderColor">
-            Transparent
-        </Color>
-        <Color x:Key="SelectedBorderColor">
-            Red
-        </Color>
-        <Color x:Key="DefaultIconButtonColor">
-            White
-        </Color>
-        <Color x:Key="DefaultButtonColor">
-            DimGray
-        </Color>
-        <Color x:Key="HoverButtonColor">
-            Gray
-        </Color>
-        <Color x:Key="DefaultBorderColor">
-            Silver
-        </Color>
-        <Color x:Key="HoverDefaultBorderColor">
-            Yellow
-        </Color>
-        <Color x:Key="HoverSelectedBorderColor">
-            SpringGreen
-        </Color>
-        <Color x:Key="CanResizeBorderColor">
-            DeepPink
-        </Color>
-        <Color x:Key="IsResizingBorderColor">
-            LightPink
-        </Color>
-
-        <Color x:Key="SelectableItemDefaultBgColor">
-            White
-        </Color>
-        <Color x:Key="SelectableItemPointerOverBgColor">
-            LightBlue
-        </Color>
-        <Color x:Key="SelectableItemSelectedBgColor">
-            DarkTurquoise
-        </Color>
-
-        <Color x:Key="ClipTileContentBackgroundColor">
-            OldLace
-        </Color>
-
-        <Color x:Key="ClipTileTransactionPaneBackgroundColor">
-            GhostWhite
-        </Color>
-
-        <Color x:Key="PluginParameterItemBgColor1">
-            DarkMagenta
-        </Color>
-
-        <Color x:Key="PluginParameterItemBgColor2">
-            DarkMagenta
-        </Color>
-
-        <Color x:Key="PluginParameterItemHoverBgColor">
-            DarkViolet
-        </Color>
-
+        <Color x:Key="MainWindowBgColor">Purple</Color>
+        <Color x:Key="DefaultInvalidColor">Red</Color>
+        <Color x:Key="DefaultWarningColor1">Yellow</Color>
+        <Color x:Key="DefaultWarningColor2">Black</Color>
+        <Color x:Key="MainWindowTitleMenuActiveBgColor">GoldenRod</Color>
+        <Color x:Key="MainWindowTitleMenuInactiveBgColor">Gainsboro</Color>
+        <Color x:Key="DisabledTextFgColor">LightGray</Color>
+        <Color x:Key="DisabledBgColor">Gainsboro</Color>
+        <Color x:Key="UnselectedBorderColor">Transparent</Color>
+        <Color x:Key="SelectedBorderColor">Red</Color>
+        <Color x:Key="DefaultIconButtonColor">White</Color>
+        <Color x:Key="DefaultButtonColor">DimGray</Color>
+        <Color x:Key="HoverButtonColor">Gray</Color>
+        <Color x:Key="DefaultBorderColor">Silver</Color>
+        <Color x:Key="HoverDefaultBorderColor">Yellow</Color>
+        <Color x:Key="HoverSelectedBorderColor">SpringGreen</Color>
+        <Color x:Key="CanResizeBorderColor">DeepPink</Color>
+        <Color x:Key="IsResizingBorderColor">LightPink</Color>
+        <Color x:Key="SelectableItemDefaultBgColor">White</Color>
+        <Color x:Key="SelectableItemPointerOverBgColor">LightBlue</Color>
+        <Color x:Key="SelectableItemSelectedBgColor">DarkTurquoise</Color>
+        <Color x:Key="ClipTileContentBackgroundColor">OldLace</Color>
+        <Color x:Key="ClipTileTransactionPaneBackgroundColor">GhostWhite</Color>
+        <Color x:Key="PluginParameterItemBgColor1">DarkMagenta</Color>
+        <Color x:Key="PluginParameterItemBgColor2">DarkMagenta</Color>
+        <Color x:Key="PluginParameterItemHoverBgColor">DarkViolet</Color>
         <!--  SIDEBAR BUTTONS  -->
-        <Color x:Key="SidebarButtonsBgColor">
-            Gainsboro
-        </Color>
-
+        <Color x:Key="SidebarButtonsBgColor">Gainsboro</Color>
         <!--  ACTIONS  -->
-        <Color x:Key="ActionDesignerBgColor">
-            Gainsboro
-        </Color>
-
+        <Color x:Key="ActionDesignerBgColor">Gainsboro</Color>
         <!--  SEARCH CRITERIA  -->
-        <Color x:Key="SearchCriteriaRowBgColor1">
-            Lavender
-        </Color>
-        <Color x:Key="SearchCriteriaRowBgColor2">
-            LavenderBlush
-        </Color>
-        <Color x:Key="SearchCriteriaRowBgHoverColor">
-            GhostWhite
-        </Color>
-
+        <Color x:Key="SearchCriteriaRowBgColor1">Lavender</Color>
+        <Color x:Key="SearchCriteriaRowBgColor2">LavenderBlush</Color>
+        <Color x:Key="SearchCriteriaRowBgHoverColor">GhostWhite</Color>
         <!--  GRID SPLITTERS  -->
-
-        <Color x:Key="DefaultGridSplitterColor">
-            PowderBlue
-        </Color>
-
-        <Color x:Key="SidebarGridSplitterColor">
-            Cyan
-        </Color>
-
-        <Color x:Key="ClipTrayGridSplitterColor">
-            Magenta
-        </Color>
+        <Color x:Key="DefaultGridSplitterColor">PowderBlue</Color>
+        <Color x:Key="SidebarGridSplitterColor">Cyan</Color>
+        <Color x:Key="ClipTrayGridSplitterColor">Magenta</Color>
 
 
         <!--  BRUSHES  -->

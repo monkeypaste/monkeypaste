@@ -1,20 +1,7 @@
-﻿
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Metadata;
-using MonkeyPaste;
-using MonkeyPaste.Avalonia;
-using MonkeyPaste.Common;
-using MonkeyPaste.Common.Plugin;
-using MonkeyPaste.Common.Wpf;
+using System.Collections.Generic;
 namespace MonkeyPaste.Avalonia {
 
 
@@ -23,19 +10,19 @@ namespace MonkeyPaste.Avalonia {
 
         public Dictionary<string, IDataTemplate> AvailableTemplates { get; } = new Dictionary<string, IDataTemplate>();
 
-        public IControl Build(object param) {
+        Control ITemplate<object, Control>.Build(object param) {
             if (param == null) {
                 return null;
             }
             string keyStr = null;
-            if(param is MpAvActionViewModelBase avm) {
-                if(avm.IsValid) {
+            if (param is MpAvActionViewModelBase avm) {
+                if (avm.IsValid) {
                     keyStr = param is MpAvTriggerActionViewModelBase ? "TriggerTemplate" : "ActionTemplate";
                 } else {
                     keyStr = "ErrorTemplate";
                 }
             }
-            if(string.IsNullOrEmpty(keyStr)) {
+            if (string.IsNullOrEmpty(keyStr)) {
                 return null;
             }
             return AvailableTemplates[keyStr].Build(param);

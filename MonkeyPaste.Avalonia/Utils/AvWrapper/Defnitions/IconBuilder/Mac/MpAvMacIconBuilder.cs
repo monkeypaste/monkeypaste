@@ -1,6 +1,4 @@
-﻿using System;
-using MonkeyPaste;
-using MonkeyPaste.Common.Avalonia;
+﻿using MonkeyPaste.Common.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvMacIconBuilder : MpAvIconBuildBase {

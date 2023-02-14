@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
+﻿using System.Collections.Generic;
 namespace MonkeyPaste.Common.Wpf {
     public static class MpWpfHtmlDefaultProperties {
 
@@ -13,13 +7,13 @@ namespace MonkeyPaste.Common.Wpf {
                 return new string[] {
                     "#text",
                     "span",
-                    "a", 
-                    "em", 
-                    "strong", 
-                    "u", 
-                    "s", 
-                    "sub", 
-                    "sup", 
+                    "a",
+                    "em",
+                    "strong",
+                    "u",
+                    "s",
+                    "sub",
+                    "sup",
                     "img"
                 };
             }
@@ -28,18 +22,18 @@ namespace MonkeyPaste.Common.Wpf {
         public static string[] QuillBlockTagNames {
             get {
                 return new string[] {
-                    "p", 
-                    "ol", 
-                    "ul", 
+                    "p",
+                    "ol",
+                    "ul",
                     "li",
-                    "div", 
-                    "table", 
-                    "colgroup", 
-                    "col", 
-                    "tbody", 
-                    "tr", 
-                    "td", 
-                    "iframe", 
+                    "div",
+                    "table",
+                    "colgroup",
+                    "col",
+                    "tbody",
+                    "tr",
+                    "td",
+                    "iframe",
                     "blockquote"
                 };
             }

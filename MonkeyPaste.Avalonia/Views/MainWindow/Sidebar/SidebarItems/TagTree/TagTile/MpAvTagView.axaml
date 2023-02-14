@@ -46,6 +46,16 @@
             <Setter Property="BorderBrush"
                     Value="{DynamicResource TagTileDragOverInvalidBorderColor}" />
         </Style>
+
+
+        <Style Selector="local|MpAvMarqueeTextBox:focus DataValidationErrors /template/ ScrollViewer ScrollBar">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+        <Style Selector="local|MpAvMarqueeTextBox:focus DataValidationErrors /template/ ScrollViewer ScrollBar:pointerover">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Grid x:Name="TagViewContainerGrid"
           ClipToBounds="False"
@@ -103,11 +113,11 @@
                                    Foreground="{Binding $parent.Background, Converter={StaticResource BrushToContrastBrushConverter}}" />
                     </local:MpAvClipBorder>
                     <!--  Tag Name TextBox/ Marquee  -->
-                    <Grid Grid.Column="1"
+                    <!--<Grid Grid.Column="1"
                           HorizontalAlignment="Left"
                           Margin="5,0,0,0"
-                          MaxWidth="100">
-                        <TextBox x:Name="TagNameTextBox"
+                          MaxWidth="100">-->
+                    <!--<TextBox x:Name="TagNameTextBox"
                                  local:MpAvIsFocusedExtension.IsEnabled="True"
                                  local:MpAvIsFocusedExtension.SelectViewModelOnFocus="False"
                                  local:MpAvIsFocusedExtension.IsFocused="{Binding IsTagNameTextBoxFocused, Mode=TwoWay}"
@@ -128,8 +138,34 @@
                                  VerticalAlignment="Center"
                                  IsReadOnly="{Binding IsTagNameReadOnly, Mode=OneWay}"
                                  FontSize="16"
-                                 Text="{Binding TagName, Mode=TwoWay}" />
-                    </Grid>
+                                 Text="{Binding TagName, Mode=TwoWay}" />-->
+                    <local:MpAvMarqueeTextBox x:Name="TagNameTextBox"
+                                              Grid.Column="1"
+                                              FocusAdorner="{x:Null}"
+                                              HorizontalAlignment="Stretch"
+                                              VerticalAlignment="Stretch"
+                                              HorizontalContentAlignment="Left"
+                                              VerticalContentAlignment="Center"
+                                              Margin="5,0,0,0"
+                                              FontSize="16"
+                                              Padding="0"
+                                              MinWidth="100"
+                                              MaxWidth="100"
+                                              ClipToBounds="True"
+                                              local:MpAvIsFocusedExtension.IsEnabled="True"
+                                              local:MpAvIsFocusedExtension.SelectViewModelOnFocus="False"
+                                              local:MpAvIsFocusedExtension.IsFocused="{Binding IsTagNameTextBoxFocused, Mode=TwoWay}"
+                                              EditOnFocus="False"
+                                              CancelEditCommand="{Binding CancelRenameTagCommand}"
+                                              BeginEditCommand="{Binding FinishRenameTagCommand}"
+                                              ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                              ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                                              IsReadOnly="{Binding IsTagNameReadOnly, Mode=OneWay}"
+                                              FontFamily="Arial"
+                                              ReadOnlyBackground="Transparent"
+                                              ReadOnlyForeground="{Binding TagTextHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
+                                              Text="{Binding TagName, Mode=TwoWay}" />
+                    <!--</Grid>-->
                 </Grid>
             </StackPanel>
         </local:MpAvClipBorder>

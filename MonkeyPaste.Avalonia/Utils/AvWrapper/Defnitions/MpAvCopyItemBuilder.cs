@@ -1,21 +1,19 @@
-﻿using System;
+﻿using Avalonia;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Plugin;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using MonkeyPaste;
-using MonkeyPaste.Common.Plugin; 
-using MonkeyPaste.Common; 
-using MonkeyPaste.Common.Avalonia;
-using System.Reflection;
-using Avalonia;
-using MonkeyPaste.Common.Wpf;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvCopyItemBuilder : MpICopyItemBuilder {
         #region Private Variables
+        private bool _isRtfSupported = false;
         #endregion
+
 
         #region Properties
         #endregion
@@ -23,14 +21,14 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task<MpCopyItem> BuildAsync(
-            MpPortableDataObject mpdo, 
+            MpPortableDataObject mpdo,
             bool suppressWrite = false,
-            MpTransactionType transType = MpTransactionType.None, 
+            MpTransactionType transType = MpTransactionType.None,
             bool force_ext_sources = true) {
             if (mpdo == null || mpdo.DataFormatLookup.Count == 0) {
                 return null;
             }
-            if(transType == MpTransactionType.None) {
+            if (transType == MpTransactionType.None) {
                 throw new Exception("Must have transacion type");
             }
 
@@ -65,19 +63,19 @@ namespace MonkeyPaste.Avalonia {
                 itemType: itemType,
                 suppressWrite: suppressWrite);
 
-            List<string> ref_urls = refs.Select(x=>MpPlatform.Services.SourceRefBuilder.ConvertToRefUrl(x)).ToList();
-            if (mpdo.TryGetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, out IEnumerable<string> urls)) { 
+            List<string> ref_urls = refs.Select(x => MpPlatform.Services.SourceRefBuilder.ConvertToRefUrl(x)).ToList();
+            if (mpdo.TryGetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, out IEnumerable<string> urls)) {
                 var urlList = urls.ToList();
                 for (int i = 0; i < ref_urls.Count; i++) {
                     var provided_url = urlList.FirstOrDefault(x => x.ToLower().StartsWith(ref_urls[i].ToLower()));
-                    if(provided_url != null) {
+                    if (provided_url != null) {
                         // prefer provided url in case it has args and remove so not added later
                         ref_urls[i] = provided_url;
                         urlList.Remove(provided_url);
                     }
                 }
                 // add remaining urls for transaction
-                if(urlList.Count > 0) {
+                if (urlList.Count > 0) {
                     ref_urls.AddRange(urlList);
                 }
             }
@@ -100,13 +98,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region Source Helpers
 
-        
+
 
         #endregion
 
         #region Content Helpers
 
-        private async Task<Tuple<MpCopyItemType,string,string>> DecodeContentDataAsync(MpPortableDataObject mpdo) {
+        private async Task<Tuple<MpCopyItemType, string, string>> DecodeContentDataAsync(MpPortableDataObject mpdo) {
             string inputTextFormat = null;
             string itemData = null;
             MpCopyItemType itemType = MpCopyItemType.None;
@@ -157,7 +155,8 @@ namespace MonkeyPaste.Avalonia {
                 //    //itemData = csvStr.ToRichText();
                 //    itemData = itemData.ToRichHtmlText(MpPortableDataFormats.AvCsv);
                 //}
-            } else if (mpdo.ContainsData(MpPortableDataFormats.AvRtf_bytes) &&
+            } else if (_isRtfSupported &&
+                        mpdo.ContainsData(MpPortableDataFormats.AvRtf_bytes) &&
                         !mpdo.ContainsData(MpPortableDataFormats.AvHtml_bytes) &&
                         mpdo.GetData(MpPortableDataFormats.AvRtf_bytes) is byte[] rtfBytes &&
                     rtfBytes.ToDecodedString() is string rtfStr) {
@@ -169,7 +168,8 @@ namespace MonkeyPaste.Avalonia {
                 itemData = rtfStr.EscapeExtraOfficeRtfFormatting();
             } else if (mpdo.ContainsData(MpPortableDataFormats.AvPNG) &&
                         mpdo.GetData(MpPortableDataFormats.AvPNG) is byte[] pngBytes &&
-                        pngBytes.ToBase64String() is string pngBase64Str) {
+                        //pngBytes.ToBase64String() is string pngBase64Str) {
+                        Convert.ToBase64String(pngBytes) is string pngBase64Str) {
 
                 // BITMAP (bytes)
                 itemType = MpCopyItemType.Image;
@@ -224,45 +224,55 @@ namespace MonkeyPaste.Avalonia {
                     inputTextFormat = "text";
                 }
 
-                var htmlClipboardData = await MpAvPlainHtmlConverter.Instance.ParseAsync(itemData, inputTextFormat);
-                if (htmlClipboardData == null) {
-                    itemData = null;
-                } else {
-                    itemData = htmlClipboardData.RichHtml;
-                    delta = htmlClipboardData.Delta;
-                    if(!string.IsNullOrEmpty(htmlClipboardData.Html) &&
-                        htmlClipboardData.Html.StartsWith("<img")) {
-                        try {
-                            var img_parts = htmlClipboardData.Html.Split("src=\"");
-                            if (img_parts.Length > 1) {
-                                var img_parts2 = img_parts[1].Split("\"");
-                                if (img_parts2.Length > 0) {
-                                    string img_src_uri = img_parts2[0];
-                                    var img_bytes = await MpFileIo.ReadBytesFromUriAsync(img_src_uri);
-                                    if (img_bytes != null && img_bytes.Length > 0 &&
-                                        Convert.ToBase64String(img_bytes) is string img_base64) {
-                                        // update item type to image and clear delta (it references img uri not bytes)
-                                        itemType = MpCopyItemType.Image;
-                                        itemData = img_base64;
-                                        delta = null;
+                MpAvHtmlClipboardData htmlClipboardData = null;
+
+                if (MpAvCefNetApplication.UseCefNet) {
+                    htmlClipboardData = await MpAvPlainHtmlConverter.Instance.ParseAsync(itemData, inputTextFormat);
+                    if (htmlClipboardData == null) {
+                        itemData = null;
+                    } else {
+                        itemData = htmlClipboardData.RichHtml;
+                        delta = htmlClipboardData.Delta;
+                        if (!string.IsNullOrEmpty(htmlClipboardData.Html) &&
+                            htmlClipboardData.Html.StartsWith("<img")) {
+                            try {
+                                var img_parts = htmlClipboardData.Html.Split("src=\"");
+                                if (img_parts.Length > 1) {
+                                    var img_parts2 = img_parts[1].Split("\"");
+                                    if (img_parts2.Length > 0) {
+                                        string img_src_uri = img_parts2[0];
+                                        var img_bytes = await MpFileIo.ReadBytesFromUriAsync(img_src_uri);
+                                        if (img_bytes != null && img_bytes.Length > 0 &&
+                                            Convert.ToBase64String(img_bytes) is string img_base64) {
+                                            // update item type to image and clear delta (it references img uri not bytes)
+                                            itemType = MpCopyItemType.Image;
+                                            itemData = img_base64;
+                                            delta = null;
+                                        }
                                     }
                                 }
                             }
+                            catch (Exception ex) {
+                                MpConsole.WriteTraceLine($"Error converting img html to img content. Img html: '{htmlClipboardData.Html}'", ex);
+                            }
+                            // handle special case that item is an image drop from browser (tested on chrome in windows)
+
                         }
-                        catch(Exception ex) {
-                            MpConsole.WriteTraceLine($"Error converting img html to img content. Img html: '{htmlClipboardData.Html}'", ex);
-                        }
-                        // handle special case that item is an image drop from browser (tested on chrome in windows)
-                        
                     }
-                }                
+                } else {
+                    if (!string.IsNullOrEmpty(itemData)) {
+                        if (inputTextFormat == "html") {
+                            itemData = itemData.ToPlainText();
+                        }
+                    }
+                }
             }
-            if(string.IsNullOrEmpty(delta)) {
+            if (string.IsNullOrEmpty(delta)) {
                 MpQuillDelta deltaObj = new MpQuillDelta() {
                     ops = new List<Op>()
                 };
 
-                switch(itemType) {
+                switch (itemType) {
                     case MpCopyItemType.Text:
                         deltaObj.ops.Add(new Op() { insert = itemData });
                         break;
@@ -281,7 +291,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 delta = deltaObj.SerializeJsonObject();
             }
-            return new Tuple<MpCopyItemType, string,string>(itemType, itemData,delta);
+            return new Tuple<MpCopyItemType, string, string>(itemType, itemData, delta);
         }
 
         private string GetPreferredContentType(MpCopyItemType itemType) {
@@ -298,7 +308,7 @@ namespace MonkeyPaste.Avalonia {
 
         private string GetDefaultItemTitle(MpCopyItemType itemType, MpPortableDataObject mpdo) {
             string default_title = mpdo.GetData(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT) as string;
-            if(string.IsNullOrEmpty(default_title)) {
+            if (string.IsNullOrEmpty(default_title)) {
                 default_title = $"{itemType} {(++MpPrefViewModel.Instance.UniqueContentItemIdx)}";
             }
             return default_title;
@@ -307,13 +317,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region Platform Handling
         private async Task<MpPortableDataObject> NormalizePlatformFormatsAsync(MpPortableDataObject mpdo) {
-            if(OperatingSystem.IsWindows()) {
-                bool canOpen = WinApi.IsClipboardOpen() == IntPtr.Zero;
-                while (!canOpen) {
-                    await Task.Delay(50);
-                    canOpen = WinApi.IsClipboardOpen() == IntPtr.Zero;
-                }
-            }
+            //if (OperatingSystem.IsWindows()) {
+            //    bool canOpen = WinApi.IsClipboardOpen() == IntPtr.Zero;
+            //    while (!canOpen) {
+            //        await Task.Delay(50);
+            //        canOpen = WinApi.IsClipboardOpen() == IntPtr.Zero;
+            //    }
+            //}
             var actual_formats = await Application.Current.Clipboard.GetFormatsSafeAsync();
             actual_formats.ForEach(x => MpConsole.WriteLine("Actual format: " + x));
 
@@ -339,36 +349,36 @@ namespace MonkeyPaste.Avalonia {
             // }
 
             if (OperatingSystem.IsLinux()) {
-                    // linux doesn't case non-html formats the same as windows so mapping them here
-                    bool isLinuxFileList = mpdo.ContainsData(MpPortableDataFormats.CefText) &&
-                                        actual_formats.Contains(MpPortableDataFormats.LinuxGnomeFiles);
-                    if (isLinuxFileList) {
-                        // NOTE avalonia doesn't acknowledge files (no 'FileNames' entry) on Ubuntu 22.04
-                        // and is beyond support for the clipboard plugin right now so..
-                        // TODO eventually should tidy up clipboard handling so plugins are clear example code
-                        string files_text_base64 = mpdo.GetData(MpPortableDataFormats.CefText) as string;
-                        if (!string.IsNullOrEmpty(files_text_base64)) {
-                            string files_text = files_text_base64.ToStringFromBase64();
-                            MpConsole.WriteLine("Got file text: " + files_text);
-                            mpdo.SetData(MpPortableDataFormats.AvFileNames, files_text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
-                        }
+                // linux doesn't case non-html formats the same as windows so mapping them here
+                bool isLinuxFileList = mpdo.ContainsData(MpPortableDataFormats.CefText) &&
+                                    actual_formats.Contains(MpPortableDataFormats.LinuxGnomeFiles);
+                if (isLinuxFileList) {
+                    // NOTE avalonia doesn't acknowledge files (no 'FileNames' entry) on Ubuntu 22.04
+                    // and is beyond support for the clipboard plugin right now so..
+                    // TODO eventually should tidy up clipboard handling so plugins are clear example code
+                    string files_text_base64 = mpdo.GetData(MpPortableDataFormats.CefText) as string;
+                    if (!string.IsNullOrEmpty(files_text_base64)) {
+                        string files_text = files_text_base64.ToStringFromBase64();
+                        MpConsole.WriteLine("Got file text: " + files_text);
+                        mpdo.SetData(MpPortableDataFormats.AvFileNames, files_text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
+                    }
 
-                    } else {
-                        bool isLinuxAndNeedsCommonPlainText = mpdo.ContainsData(MpPortableDataFormats.CefText) &&
-                                                                !mpdo.ContainsData(MpPortableDataFormats.Text);
-                        if (isLinuxAndNeedsCommonPlainText) {
-                            string plain_text = mpdo.GetData(MpPortableDataFormats.CefText) as string;
-                            mpdo.SetData(MpPortableDataFormats.Text, plain_text);
-                        }
+                } else {
+                    bool isLinuxAndNeedsCommonPlainText = mpdo.ContainsData(MpPortableDataFormats.CefText) &&
+                                                            !mpdo.ContainsData(MpPortableDataFormats.Text);
+                    if (isLinuxAndNeedsCommonPlainText) {
+                        string plain_text = mpdo.GetData(MpPortableDataFormats.CefText) as string;
+                        mpdo.SetData(MpPortableDataFormats.Text, plain_text);
                     }
                 }
+            }
 
             mpdo.DataFormatLookup.ForEach(x => MpConsole.WriteLine("Creating copyItem w/ available format; " + x.Key.Name));
             return mpdo;
         }
 
         #endregion
-        
+
         #endregion
 
         #region Commands

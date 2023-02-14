@@ -1,5 +1,5 @@
 ﻿namespace MonkeyPaste.Avalonia {
-    public class MpAvFileWriterOutput : MpAvActionOutput {        
+    public class MpAvFileWriterOutput : MpAvActionOutput {
         public string OutputFilesStr { get; set; }
         public override object OutputData => OutputFilesStr;
 

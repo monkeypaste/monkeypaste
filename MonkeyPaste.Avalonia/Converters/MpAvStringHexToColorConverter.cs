@@ -1,7 +1,7 @@
-﻿using System;
-using System.Globalization;
-using Avalonia.Data.Converters;
+﻿using Avalonia.Data.Converters;
 using Avalonia.Media;
+using System;
+using System.Globalization;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvStringHexToColorConverter : IValueConverter {
@@ -9,7 +9,7 @@ namespace MonkeyPaste.Avalonia {
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
             var b = MpAvStringHexToBrushConverter.Instance.Convert(value, targetType, parameter, culture) as SolidColorBrush;
-            if(b != null) {
+            if (b != null) {
                 return b.Color;
             }
             return null;

@@ -1,15 +1,12 @@
-﻿using System;
+﻿using MonkeyPaste.Common;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MonkeyPaste;
 using System.Collections.ObjectModel;
-using Xamarin.Forms.Internals;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
-    public abstract class MpAvSelectorViewModelBase<P,C> : 
-        MpSelectorViewModelBase<P,C>
+    public abstract class MpAvSelectorViewModelBase<P, C> :
+        MpSelectorViewModelBase<P, C>
         where P : class
         where C : class, MpISelectableViewModel {
 
@@ -34,9 +31,9 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvSelectorViewModelBase(P p) : base(p) { }
     }
-    
-    public abstract class MpAvMultiSelectorViewModelBase<P,C> : 
-        MpMultiSelectorViewModelBase<P,C>
+
+    public abstract class MpAvMultiSelectorViewModelBase<P, C> :
+        MpMultiSelectorViewModelBase<P, C>
         where P : class
         where C : class, MpISelectableViewModel {
 

@@ -1,16 +1,9 @@
-﻿using MonkeyPaste;
-using MonkeyPaste.Common;
-using MonkeyPaste.Common.Plugin;
-using System;
-using System.Collections.Generic;
+﻿using MonkeyPaste.Common;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvDataObjectMessageViewModel  : MpAvTransactionMessageViewModelBase, MpAvITransactionNodeViewModel {
+    public class MpAvDataObjectMessageViewModel : MpAvTransactionMessageViewModelBase, MpAvITransactionNodeViewModel {
 
         #region Interfaces
         #endregion
@@ -49,13 +42,13 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = true;
 
             Json = jsonOrParsedFragment is string ? jsonOrParsedFragment.ToString() : string.Empty;
-            if(Items != null) {
+            if (Items != null) {
                 Items.Clear();
             }
             ParentTreeItem = parentAnnotation;
             DataObject = MpPortableDataObject.Parse(Json);
-            if(DataObject != null) {
-                foreach(var kvp in DataObject.DataFormatLookup) {
+            if (DataObject != null) {
+                foreach (var kvp in DataObject.DataFormatLookup) {
                     var doivm = await CreateDataObjectItemViewModel(kvp.Key.Name, kvp.Value);
                     Items.Add(doivm);
                 }
@@ -73,7 +66,7 @@ namespace MonkeyPaste.Avalonia {
 
         private async Task<MpAvTransactionMessageViewModelBase> CreateDataObjectItemViewModel(string format, object data) {
             MpAvTransactionMessageViewModelBase doivm;
-            switch(format) {
+            switch (format) {
                 case MpPortableDataFormats.INTERNAL_CONTENT_ANNOTATION_FORMAT:
                     doivm = new MpAvAnnotationMessageViewModel(Parent);
                     break;

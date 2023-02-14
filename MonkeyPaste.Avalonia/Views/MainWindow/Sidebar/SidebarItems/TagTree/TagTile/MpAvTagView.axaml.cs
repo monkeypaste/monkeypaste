@@ -1,17 +1,13 @@
 using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using System.Linq;
 using PropertyChanged;
-using Avalonia.Interactivity;
-using Avalonia.Input;
-using Avalonia.Threading;
-using System;
-using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -50,10 +46,10 @@ namespace MonkeyPaste.Avalonia {
 
 
         private void TagNameBorder_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
-            if(e.GetCurrentPoint(this).Properties.PointerUpdateKind == PointerUpdateKind.RightButtonPressed) {
+            if (e.GetCurrentPoint(this).Properties.PointerUpdateKind == PointerUpdateKind.RightButtonPressed) {
                 return;
             }
-            if(e.ClickCount > 1) {
+            if (e.ClickCount > 1) {
                 BindingContext.RenameTagCommand.Execute(null);
             } else if (BindingContext.IsSelected) {
                 //MpPlatform.Services.QueryInfo.NotifyQueryChanged();
@@ -72,13 +68,13 @@ namespace MonkeyPaste.Avalonia {
 
         private void DragEnter(object sender, DragEventArgs e) {
             MpConsole.WriteLine("[DragEnter] TagTile: " + BindingContext);
-             BindingContext.IsDragOverTag  = true;
+            BindingContext.IsDragOverTag = true;
         }
 
         private async void DragOver(object sender, DragEventArgs e) {
             MpConsole.WriteLine("[DragOver] TagTile: " + BindingContext);
             // e.DragEffects = DragDropEffects.Default;
-             
+
             bool is_copy = e.KeyModifiers.HasFlag(KeyModifiers.Control);
             BindingContext.IsDragOverTagValid = await IsDropValidAsync(e.Data, is_copy);
             MpConsole.WriteLine("[DragOver] TagTile: " + BindingContext + " IsCopy: " + is_copy + " IsValid: " + BindingContext.IsDragOverTagValid);
@@ -124,16 +120,16 @@ namespace MonkeyPaste.Avalonia {
         private async Task<bool> IsDropValidAsync(IDataObject avdo, bool is_copy) {
             // called in DropExtension DragOver 
 
-            MpConsole.WriteLine($"DragOverTag: " + BindingContext + " IsCopy: "+is_copy);
+            MpConsole.WriteLine($"DragOverTag: " + BindingContext + " IsCopy: " + is_copy);
 
-            bool is_internal =  avdo.ContainsInternalContentItem();
-            if(!is_copy && is_internal) {
+            bool is_internal = avdo.ContainsInternalContentItem();
+            if (!is_copy && is_internal) {
                 // invalidate tile drag if tag is already linked to copy item and its not a copy operation
                 string drop_ctvm_pub_handle = avdo.Get(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT) as string;
                 var ctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle == drop_ctvm_pub_handle);
-                if(ctvm != null) {
+                if (ctvm != null) {
                     bool is_already_linked = await BindingContext.IsCopyItemLinkedAsync(ctvm.CopyItemId);
-                    if(is_already_linked) {
+                    if (is_already_linked) {
                         return false;
                     }
                 }
@@ -162,7 +158,7 @@ namespace MonkeyPaste.Avalonia {
                 // move
                 drop_ci = drop_ctvm.CopyItem;
             }
-            if(drop_ci == null)  {
+            if (drop_ci == null) {
                 return;
             }
 
@@ -170,13 +166,13 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task PerformExternalOrPartialDropAsync(IDataObject avdo) {
-            MpPortableDataObject mpdo = await MpPlatform.Services.DataObjectHelperAsync.ReadDragDropDataObjectAsync(avdo) as MpPortableDataObject ;
+            MpPortableDataObject mpdo = await MpPlatform.Services.DataObjectHelperAsync.ReadDragDropDataObjectAsync(avdo) as MpPortableDataObject;
 
             //int drag_ciid = -1;
             string drag_ctvm_pub_handle = mpdo.GetData(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT) as string;
             if (!string.IsNullOrEmpty(drag_ctvm_pub_handle)) {
                 var drag_ctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle == drag_ctvm_pub_handle);
-                if(drag_ctvm != null) {
+                if (drag_ctvm != null) {
                     // tile sub-selection drop
                     //drag_ciid = drag_ctvm.CopyItemId;
 
@@ -193,7 +189,7 @@ namespace MonkeyPaste.Avalonia {
             BindingContext.LinkCopyItemCommand.Execute(drop_ci.Id);
 
             // wait for all tags to update before notifiying clip tray
-            while(MpAvTagTrayViewModel.Instance.IsAnyBusy) { await Task.Delay(100); }
+            while (MpAvTagTrayViewModel.Instance.IsAnyBusy) { await Task.Delay(100); }
 
             //push new item onto new item list so it shows in pin regardless if tile is selected
             // NOTE avoiding altering query tray without clicking the thing as consistent behavior.
@@ -204,7 +200,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        
+
 
         #endregion
     }

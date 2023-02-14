@@ -3,13 +3,11 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Threading;
-using MonkeyPaste;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using PropertyChanged;
 using System;
 using System.Diagnostics;
-using System.Linq;
-using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -65,7 +63,7 @@ namespace MonkeyPaste.Avalonia {
                 false);
 
         #endregion
-        
+
         #region MaxScale AvaloniaProperty
         public double MaxScale {
             get { return (double)GetValue(MaxScaleProperty); }
@@ -97,7 +95,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public void Initialize(IControl element) {
+        public void Initialize(Control element) {
             this.Child = element;
             if (Child != null) {
                 Child.PointerWheelChanged += child_MouseWheel;
@@ -125,7 +123,7 @@ namespace MonkeyPaste.Avalonia {
             child_MouseMove(Child, e);
         }
         public void Reset() {
-            if(DesignerItem == null) {
+            if (DesignerItem == null) {
                 return;
             }
 
@@ -199,7 +197,7 @@ namespace MonkeyPaste.Avalonia {
         protected override void OnPointerWheelChanged(PointerWheelEventArgs e) {
             base.OnPointerWheelChanged(e);
 
-            child_MouseWheel(Child,e);
+            child_MouseWheel(Child, e);
         }
 
         #endregion
@@ -209,18 +207,18 @@ namespace MonkeyPaste.Avalonia {
         #region Child Events
 
         private void child_MouseWheel(object sender, PointerWheelEventArgs e) {
-            if(Child == null || DesignerItem == null) {
+            if (Child == null || DesignerItem == null) {
                 return;
             }
             double zoom = e.Delta.Y > 0 ? .2 : -.2;
             Zoom(zoom, e.GetPosition(Child).ToPortablePoint());
         }
-        
+
         private void child_PreviewMouseLeftButtonDown(object sender, PointerPressedEventArgs e) {
             if (Child != null && !MpAvMoveExtension.IsAnyMoving) {
                 mp_start = e.GetPosition(this).ToPortablePoint();
                 e.Pointer.Capture(this);
-                if(e.Pointer.Captured != this) {
+                if (e.Pointer.Captured != this) {
                     var capturer = e.Pointer.Captured;
                     Debugger.Break();
                 } else {
@@ -234,7 +232,7 @@ namespace MonkeyPaste.Avalonia {
             if (Child != null) {
                 IsTranslating = false;
                 e.Pointer.Capture(null);
-                if(DataContext is MpAvTriggerCollectionViewModel acvm) {
+                if (DataContext is MpAvTriggerCollectionViewModel acvm) {
                     acvm.HasModelChanged = true;
                 }
             }
@@ -249,10 +247,10 @@ namespace MonkeyPaste.Avalonia {
                 if (IsTranslating) {
                     //var tt = GetTranslateTransform(Child);
                     var mp = e.GetPosition(this).ToPortablePoint();
-                    var v =  mp_start - mp;
+                    var v = mp_start - mp;
                     TranslateOrigin(v.X, v.Y);
                     mp_start = mp;
-                } 
+                }
             }
         }
 
@@ -267,9 +265,9 @@ namespace MonkeyPaste.Avalonia {
         //    return (ScaleTransform)((TransformGroup)element.RenderTransform)
         //      .Children.First(tr => tr is ScaleTransform);
         //}
-        
+
         private void DrawGrid(DrawingContext dc) {
-            if(DesignerItem == null) {
+            if (DesignerItem == null) {
                 return;
             }
 
@@ -282,8 +280,8 @@ namespace MonkeyPaste.Avalonia {
             double offset_y = di.TranslateOffsetY;
 
             //var st = GetScaleTransform(Child);
-            int HorizontalGridLineCount = (int)((w / GridLineSpacing) * (1/di.Scale));
-            int VerticalGridLineCount = (int)((h / GridLineSpacing) * (1/di.Scale));
+            int HorizontalGridLineCount = (int)((w / GridLineSpacing) * (1 / di.Scale));
+            int VerticalGridLineCount = (int)((h / GridLineSpacing) * (1 / di.Scale));
 
             int major_count = 5;
             double major_thickness = 2;

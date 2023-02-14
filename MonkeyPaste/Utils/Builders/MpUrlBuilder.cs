@@ -1,11 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Google.Apis.PeopleService.v1.Data;
-using MonkeyPaste;
-using MonkeyPaste.Common;
+﻿using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public class MpUrlBuilder : MpIUrlBuilder {
@@ -25,7 +18,7 @@ namespace MonkeyPaste {
             }
 
             var urlProps = await MpUrlHelpers.DiscoverUrlProperties(url);
-            if(urlProps == null) {
+            if (urlProps == null) {
                 return null;
             }
 

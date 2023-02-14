@@ -1,20 +1,14 @@
 ﻿
+using Avalonia.Input;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using MonkeyPaste;
-using MonkeyPaste.Common.Plugin;
-using MonkeyPaste.Common;
-using Avalonia.Input;
-using Avalonia;
-using System.Runtime.InteropServices;
-using MonkeyPaste.Common.Avalonia;
-using Avalonia.Threading;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -177,15 +171,15 @@ namespace MonkeyPaste.Avalonia {
         public IEnumerable<MpAvClipboardFormatPresetViewModel> AllAvailableWriterPresets {
             get {
                 var aawpl = new List<MpAvClipboardFormatPresetViewModel>();
-                foreach(var handlerItem in Items) {
-                    foreach(var writerFormat in handlerItem.Writers) {
+                foreach (var handlerItem in Items) {
+                    foreach (var writerFormat in handlerItem.Writers) {
                         yield return writerFormat.Items.OrderByDescending(x => x.LastSelectedDateTime).First();
                     }
                 }
             }
         }
 
-        public IEnumerable<MpIClipboardReaderComponent> EnabledReaderComponents => 
+        public IEnumerable<MpIClipboardReaderComponent> EnabledReaderComponents =>
             EnabledReaders
             .Select(x => x.Parent.ClipboardPluginComponent)
             .Distinct()
@@ -258,7 +252,7 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = true;
 
             //MpMessenger.Register<MpMessageType>(typeof(MpDragDropManager), ReceivedDragDropManagerMessage);
-           
+
             Items.Clear();
 
             var pail = MpPluginLoader.Plugins.Where(x => x.Value.Component is MpIClipboardPluginComponent);
@@ -286,7 +280,7 @@ namespace MonkeyPaste.Avalonia {
                             }
                         }
                     }
-                }                
+                }
 
                 if (presetToSelect != null) {
                     presetToSelect.Parent.SelectedItem = presetToSelect;
@@ -375,17 +369,17 @@ namespace MonkeyPaste.Avalonia {
                     isAvalonia = true,
                     mainWindowImplicitHandle = MpPlatform.Services.ProcessWatcher.ThisAppHandle.ToInt32(),
                     platform = MpPlatform.Services.OsInfo.OsType.ToString(),
-                    readFormats = 
+                    readFormats =
                         EnabledReaders
                         .Where(x => x.Parent.ClipboardPluginComponent == read_component)
                         .Select(x => x.Parent.HandledFormat)
                         .Distinct()
                         .ToList(),
-                    items = 
+                    items =
                         EnabledReaders
                         .Where(x => x.Parent.ClipboardPluginComponent == read_component)
                         .SelectMany(x => x.Items
-                            .Select(y=>new MpParameterRequestItemFormat(y.ParamId,y.CurrentValue)))
+                            .Select(y => new MpParameterRequestItemFormat(y.ParamId, y.CurrentValue)))
                         .ToList(),
                     forcedClipboardDataObject = forced_ido
                 };
@@ -410,9 +404,9 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
             mpdo.MapAllPseudoFormats();
-            if(source_process != null) {
+            if (source_process != null) {
                 var avm = MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(source_process);
-                if(avm != null) {
+                if (avm != null) {
                     MpConsole.WriteLine($"Drag Source ref '{avm.App}' added to drag dataobject");
                     mpdo.AddOrCreateUri(avm.App.ToSourceUri());
                 }
@@ -444,13 +438,13 @@ namespace MonkeyPaste.Avalonia {
                 var write_request = new MpClipboardWriterRequest() {
                     data = ido,
                     writeToClipboard = writeToClipboard,
-                    writeFormats = 
+                    writeFormats =
                         EnabledWriters
                             .Where(x => x.Parent.ClipboardPluginComponent == write_component)
                             .Select(x => x.Parent.HandledFormat)
                             .Distinct()
                             .ToList(),
-                    items = 
+                    items =
                         EnabledWriters
                             .Where(x => x.Parent.ClipboardPluginComponent == write_component)
                             .SelectMany(x => x.Items
@@ -466,13 +460,13 @@ namespace MonkeyPaste.Avalonia {
                 MpClipboardWriterResponse writerResponse = await write_component.WriteClipboardDataAsync(write_request);
 
                 writerResponse = await MpPluginTransactor.ValidatePluginResponseAsync(
-                    write_request, 
+                    write_request,
                     writerResponse,
                     retryHandlerWriteFunc);
 
                 if (writerResponse != null && writerResponse.processedDataObject is IDataObject processed_ido) {
                     processed_ido.GetAllDataFormats().ForEach(x => dobj.SetData(x, processed_ido.Get(x)));
-                } 
+                }
             }
 
             MpConsole.WriteLine("Data written to " + (writeToClipboard ? "CLIPBOARD" : "DATAOBJECT") + ":");
@@ -487,11 +481,11 @@ namespace MonkeyPaste.Avalonia {
 
 
         private async Task WaitForBusyAsync() {
-            if(IsBusy) {
+            if (IsBusy) {
                 string req_guid = System.Guid.NewGuid().ToString();
                 _oleReqGuids.Add(req_guid);
-                while(true) {
-                    if(!IsBusy && _oleReqGuids.First() == req_guid) {
+                while (true) {
+                    if (!IsBusy && _oleReqGuids.First() == req_guid) {
                         IsBusy = true;
                         _oleReqGuids.Remove(req_guid);
                         return;
@@ -533,7 +527,7 @@ namespace MonkeyPaste.Avalonia {
                         return;
                     }
                     otherEnabled.IsEnabled = false;
-                    
+
                     MpPortableDataFormats.RegisterDataFormat(handlerVm.HandledFormat);
                 } else {
                     // when preset isDisabled unregister format 

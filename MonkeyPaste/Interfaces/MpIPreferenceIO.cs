@@ -1,8 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Xamarin.Essentials;
+//using Xamarin.Essentials;
 
 namespace MonkeyPaste {
     public interface MpIPreferenceIO {

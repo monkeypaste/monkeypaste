@@ -1,18 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Markup;
-using System.Windows.Threading;
-using System.Xml;
-using MonkeyPaste.Common.Wpf;
 
 namespace MonkeyPaste.Common.Wpf {
     public static class MpWpfFlowDocumentSearchExtensions {
@@ -34,7 +26,7 @@ namespace MonkeyPaste.Common.Wpf {
             //            }
             //        }
             //        catch (Exception ex) {
-            //            MpConsole.WriteTraceLine(ex);
+            //            Console.WriteLine(ex);
             //            return tr.Text;
             //        }
             //    }
@@ -83,7 +75,7 @@ namespace MonkeyPaste.Common.Wpf {
             return matchRangeList;
         }
 
-        public static TextRange FindStringRangeFromPosition(TextPointer position, string matchStr,bool isCaseSensitive = false) {
+        public static TextRange FindStringRangeFromPosition(TextPointer position, string matchStr, bool isCaseSensitive = false) {
             if (string.IsNullOrEmpty(matchStr)) {
                 return null;
             }

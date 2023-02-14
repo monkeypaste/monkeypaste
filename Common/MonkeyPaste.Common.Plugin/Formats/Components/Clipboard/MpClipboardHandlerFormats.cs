@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MonkeyPaste.Common;
+﻿using System.Collections.Generic;
 
 namespace MonkeyPaste.Common.Plugin {
     public class MpClipboardHandlerFormats : MpJsonObject {
         public List<MpClipboardHandlerFormat> readers { get; set; }
-        public List<MpClipboardHandlerFormat> writers{ get; set; }
+        public List<MpClipboardHandlerFormat> writers { get; set; }
     }
 
     public class MpClipboardHandlerFormat : MpParameterHostBaseFormat {
-        
+
         public string iconUri { get; set; }
         public string handlerGuid { get; set; }
-        
+
         public string displayName { get; set; }
         public string clipboardName { get; set; }
 
@@ -28,7 +24,7 @@ namespace MonkeyPaste.Common.Plugin {
         public List<string> readFormats { get; set; }
 
         public bool ignoreParams { get; set; }
-        
+
         public object forcedClipboardDataObject { get; set; } // (optional) this is used to convert drag/drop data 
     }
 
@@ -36,12 +32,12 @@ namespace MonkeyPaste.Common.Plugin {
         public object data { get; set; }
         public List<string> writeFormats { get; set; }
         public bool writeToClipboard { get; set; } = true; // (optional) this is used when creating drag/drop data object
-        
+
     }
 
     public class MpClipboardReaderResponse : MpPluginResponseFormatBase { }
 
-    public class MpClipboardWriterResponse : MpPluginResponseFormatBase { 
+    public class MpClipboardWriterResponse : MpPluginResponseFormatBase {
         public object processedDataObject { get; set; }
     }
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Text;
-
-namespace MonkeyPaste {
+﻿namespace MonkeyPaste {
     public interface MpIResizableViewModel {
         bool IsResizing { get; set; }
         bool CanResize { get; set; }
@@ -25,7 +22,7 @@ namespace MonkeyPaste {
         double DefaultHeight { get; }
 
         bool AllowResizeWidth { get; }
-       
+
         bool AllowResizeHeight { get; }
 
     }

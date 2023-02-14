@@ -1,19 +1,14 @@
 ﻿using MonkeyPaste.Common.Plugin;
-using MonkeyPaste.Common;
-using Newtonsoft.Json;
 using SQLite;
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System.Diagnostics;
 
 namespace MonkeyPaste {
-    public class MpPluginPreset : 
-        MpDbModelBase, 
+    public class MpPluginPreset :
+        MpDbModelBase,
         MpISourceRef,
         MpIDbIconId,
         MpIIconResource,
@@ -151,29 +146,29 @@ namespace MonkeyPaste {
         #endregion
 
         public static async Task<MpPluginPreset> CreateOrUpdateAsync(
-            string pluginGuid = "", 
+            string pluginGuid = "",
             string guid = "",
             string label = "",
             string description = "",
-            int iconId = 0, 
-            bool isDefault = false, 
-            bool isQuickAction = false, 
+            int iconId = 0,
+            bool isDefault = false,
+            bool isQuickAction = false,
             bool isActionPreset = false,
-            int sortOrderIdx = -1, 
+            int sortOrderIdx = -1,
             DateTime? manifestLastModifiedDateTime = null) {
 
-            if(iconId == 0) {
+            if (iconId == 0) {
                 throw new Exception("needs icon");
             }
-            if(string.IsNullOrEmpty(pluginGuid)) {
+            if (string.IsNullOrEmpty(pluginGuid)) {
                 throw new Exception("needs analyzer id");
             }
-            if(sortOrderIdx < 0) {
+            if (sortOrderIdx < 0) {
                 sortOrderIdx = await MpDataModelProvider.GetPluginPresetCountByPluginGuidAsync(pluginGuid);
             }
 
             var dup_check = await MpDataModelProvider.GetPluginPresetByPresetGuidAsync(guid);
-            if(dup_check != null) {
+            if (dup_check != null) {
                 dup_check.Label = label;
                 dup_check.IconId = iconId;
                 dup_check.SortOrderIdx = sortOrderIdx;
@@ -194,7 +189,8 @@ namespace MonkeyPaste {
                 IsActionPreset = isActionPreset,
                 SortOrderIdx = sortOrderIdx,
                 ShortcutId = 0,
-                ManifestLastModifiedDateTime = manifestLastModifiedDateTime.HasValue ? manifestLastModifiedDateTime.Value : DateTime.Now};
+                ManifestLastModifiedDateTime = manifestLastModifiedDateTime.HasValue ? manifestLastModifiedDateTime.Value : DateTime.Now
+            };
 
             //newPluginPreset.ComponentFormat = format;
 
@@ -216,7 +212,7 @@ namespace MonkeyPaste {
                 ManifestLastModifiedDateTime = this.ManifestLastModifiedDateTime
             };
 
-            if(deepClone) {
+            if (deepClone) {
                 if (IconId > 0) {
                     var icon = await MpDataModelProvider.GetItemAsync<MpIcon>(IconId);
                     var ci = await icon.CloneDbModelAsync(
@@ -226,12 +222,12 @@ namespace MonkeyPaste {
                 }
             }
 
-            if(!suppressWrite) {
+            if (!suppressWrite) {
                 // NOTE writing to db before creating preset values because they rely on cloned preset pk
                 await caip.WriteToDatabaseAsync();
             }
 
-            if(deepClone) {
+            if (deepClone) {
                 var presetValues = await MpDataModelProvider.GetAllParameterHostValuesAsync(MpParameterHostType.Preset, Id);
                 foreach (var ppv in presetValues) {
                     var cppv = await ppv.CloneDbModelAsync(
@@ -250,19 +246,19 @@ namespace MonkeyPaste {
         public MpPluginPreset() : base() { }
 
         public override async Task DeleteFromDatabaseAsync() {
-            if(Id < 1) {
+            if (Id < 1) {
                 return;
             }
             List<Task> delete_tasks = new List<Task>();
             var pppvl = await MpDataModelProvider.GetAllParameterHostValuesAsync(MpParameterHostType.Preset, Id);
-            if(pppvl != null && pppvl.Count > 0) {
+            if (pppvl != null && pppvl.Count > 0) {
                 delete_tasks.AddRange(pppvl.Select(x => x.DeleteFromDatabaseAsync()));
             }
 
 
             if (IconId > 0) {
                 var icon = await MpDataModelProvider.GetItemAsync<MpIcon>(IconId);
-                if(icon != null) {
+                if (icon != null) {
                     delete_tasks.Add(icon.DeleteFromDatabaseAsync());
                 }
                 IconId = 0;

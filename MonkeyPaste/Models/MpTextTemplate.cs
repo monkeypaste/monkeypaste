@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Threading.Tasks;
-using SQLite;
-using System.Linq;
-using System.Text;
+﻿using MonkeyPaste.Common;
 using Newtonsoft.Json;
-using MonkeyPaste.Common;
+using SQLite;
+using System;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public enum MpTextTemplateType {
@@ -20,7 +17,7 @@ namespace MonkeyPaste {
         DateTime
     }
 
-    public class MpTextTemplate : MpDbModelBase, MpIClonableDbModel<MpTextTemplate>,MpIJsonObject, MpIJsonBase64Object {
+    public class MpTextTemplate : MpDbModelBase, MpIClonableDbModel<MpTextTemplate>, MpIJsonObject, MpIJsonBase64Object {
         #region Constants
         public const string TextTemplateOpenToken = @"{t{";
         public const string TextTemplateCloseToken = @"}t}";
@@ -65,7 +62,7 @@ namespace MonkeyPaste {
 
         [JsonProperty("templateName")]
         public string TemplateName { get; set; }
-        
+
         [JsonProperty("templateColor")]
         public string HexColor { get; set; }
 
@@ -90,7 +87,7 @@ namespace MonkeyPaste {
         #region MpIJsonBase64Object Implementation
 
         public string SerializeJsonObjectToBase64(Encoding enc = null) {
-            return MpJsonConverter.SerializeObjectToBase64JsonStr(this,null, enc);
+            return MpJsonConverter.SerializeObjectToBase64JsonStr(this, null, enc);
         }
 
         #endregion
@@ -139,7 +136,7 @@ namespace MonkeyPaste {
         [JsonIgnore]
         public string EncodedTemplate {
             get {
-                return TextTemplateOpenToken+Guid+TextTemplateCloseToken;
+                return TextTemplateOpenToken + Guid + TextTemplateCloseToken;
             }
         }
 
@@ -156,7 +153,7 @@ namespace MonkeyPaste {
         public static async Task<MpTextTemplate> CreateAsync(
             string guid = "",
             MpTextTemplateType templateType = MpTextTemplateType.Dynamic,
-            string templateName = "", 
+            string templateName = "",
             string templateColor = "",
             string templateTypeData = "",
             string rtfFormatJson = "",
@@ -176,7 +173,7 @@ namespace MonkeyPaste {
                 HexColor = string.IsNullOrEmpty(templateColor) ? MpColorHelpers.GetRandomHexColor() : templateColor,
                 TemplateType = templateType,
                 TemplateData = templateTypeData,
-                RichTextFormatJson = string.IsNullOrWhiteSpace(rtfFormatJson) ? 
+                RichTextFormatJson = string.IsNullOrWhiteSpace(rtfFormatJson) ?
                                         DefaultRichTextFormat.SerializeJsonObject() : rtfFormatJson,
                 TemplateDeltaFormat = deltaFormatJson
             };
@@ -198,10 +195,10 @@ namespace MonkeyPaste {
                 RichTextFormatJson = this.RichTextFormatJson,
                 TemplateText = this.TemplateText,
                 TemplateData = this.TemplateData,
-                TemplateType = this.TemplateType,                
+                TemplateType = this.TemplateType,
                 Guid = suppressWrite ? this.Guid : System.Guid.NewGuid().ToString(),
             };
-            if(!suppressWrite) {
+            if (!suppressWrite) {
                 await ccit.WriteToDatabaseAsync();
             }
             return ccit;

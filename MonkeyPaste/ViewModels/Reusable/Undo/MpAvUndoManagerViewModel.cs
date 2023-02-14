@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste {
@@ -30,8 +28,8 @@ namespace MonkeyPaste {
                 return MpPrefViewModel.Instance.MaxUndoLimit; ;
             }
             set {
-                if(MaximumUndoLimit != value) {
-                    MpPrefViewModel.Instance.MaxUndoLimit = Math.Max(0,value);
+                if (MaximumUndoLimit != value) {
+                    MpPrefViewModel.Instance.MaxUndoLimit = Math.Max(0, value);
                     OnPropertyChanged(nameof(MaximumUndoLimit));
                     TrimUndoList();
                 }
@@ -94,7 +92,7 @@ namespace MonkeyPaste {
                 // Now repopulate the undo and redo lists.
                 UpdateRedoList(copyRedoList);
                 UndoList.Clear();
-                foreach(var ui in copyUndoList) {
+                foreach (var ui in copyUndoList) {
                     UndoList.Add(ui);
                 }
             }
@@ -127,7 +125,7 @@ namespace MonkeyPaste {
         }
         private void UpdateRedoList(List<MpIUndoRedo> redoList) {
             RedoList.Clear();
-            foreach(var ri in redoList) {
+            foreach (var ri in redoList) {
                 RedoList.Add(ri);
             }
         }

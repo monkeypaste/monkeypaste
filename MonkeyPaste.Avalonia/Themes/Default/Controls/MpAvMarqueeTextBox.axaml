@@ -3,11 +3,8 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
     <Styles.Resources>
-        <SolidColorBrush x:Key="TextControlBackground"
-                         Color="Transparent" />
-        <sys:Double x:Key="TextControlThemeMinHeight">
-            10
-        </sys:Double>
+        <SolidColorBrush x:Key="TextControlBackground" Color="Transparent" />
+        <sys:Double x:Key="TextControlThemeMinHeight">10</sys:Double>
         <!--<sys:Double x:Key="TextControlThemeMinWidth">
             0
         </sys:Double>-->

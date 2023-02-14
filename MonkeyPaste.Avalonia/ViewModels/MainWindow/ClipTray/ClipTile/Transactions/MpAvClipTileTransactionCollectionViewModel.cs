@@ -2,23 +2,20 @@
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using MonoMac.OpenGL;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public interface MpAvITransactionNodeViewModel : 
-        MpITreeItemViewModel, 
-        MpISelectableViewModel, 
+    public interface MpAvITransactionNodeViewModel :
+        MpITreeItemViewModel,
+        MpISelectableViewModel,
         MpIHoverableViewModel,
-        MpILabelTextViewModel, 
-        MpISortableViewModel, 
+        MpILabelTextViewModel,
+        MpISortableViewModel,
         MpIHasIconSourceObjViewModel,
         MpIMenuItemViewModel,
         MpIAsyncCollectionObject {
@@ -26,7 +23,7 @@ namespace MonkeyPaste.Avalonia {
         object Body { get; }
     }
 
-    public class MpAvClipTileTransactionCollectionViewModel : 
+    public class MpAvClipTileTransactionCollectionViewModel :
         MpViewModelBase<MpAvClipTileViewModel> {
         #region Private Variables
 
@@ -56,7 +53,7 @@ namespace MonkeyPaste.Avalonia {
             Messages
             .OrderByDescending(x => x.ComparableSortValue);
 
-        public MpAvITransactionNodeViewModel PrimaryItem => 
+        public MpAvITransactionNodeViewModel PrimaryItem =>
             Transactions.OrderBy(x => x.TransactionDateTime).FirstOrDefault();
 
         #endregion
@@ -93,16 +90,16 @@ namespace MonkeyPaste.Avalonia {
         }
         public double BoundWidth { get; set; }
         public double BoundHeight { get; set; }
-        
+
         public double ObservedWidth { get; set; }
         public double ObservedHeight { get; set; }
 
         public double MaxWidth {
             get {
-                if(Parent == null) {
+                if (Parent == null) {
                     return 0;
                 }
-                if(!IsTransactionPaneOpen) {
+                if (!IsTransactionPaneOpen) {
                     return 0;
                 }
                 return Parent.BoundWidth * 0.5;
@@ -124,7 +121,7 @@ namespace MonkeyPaste.Avalonia {
 
         public int CopyItemId {
             get {
-                if(Parent == null) {
+                if (Parent == null) {
                     return 0;
                 }
                 return Parent.CopyItemId;
@@ -155,12 +152,12 @@ namespace MonkeyPaste.Avalonia {
             Transactions.Clear();
 
             var ci_transactions = await MpDataModelProvider.GetCopyItemTransactionsByCopyItemIdAsync(copyItemId);
-            foreach (var cit in ci_transactions.OrderByDescending(x=>x.TransactionDateTime)) {
+            foreach (var cit in ci_transactions.OrderByDescending(x => x.TransactionDateTime)) {
                 var cisvm = await CreateClipTileSourceViewModel(cit);
                 Transactions.Add(cisvm);
             }
 
-            while (Transactions.Any(x=>x.IsAnyBusy)) {
+            while (Transactions.Any(x => x.IsAnyBusy)) {
                 await Task.Delay(100);
             }
             OnPropertyChanged(nameof(Transactions));
@@ -176,17 +173,17 @@ namespace MonkeyPaste.Avalonia {
         #region Db Op Overrides
 
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
-            if(e is MpCopyItemTransaction cit && cit.CopyItemId == CopyItemId) {
+            if (e is MpCopyItemTransaction cit && cit.CopyItemId == CopyItemId) {
                 Dispatcher.UIThread.Post(async () => {
                     var cisvm = await CreateClipTileSourceViewModel(cit);
                     Transactions.Add(cisvm);
-                    if(cit.TransactionType == MpTransactionType.Edited) {
+                    if (cit.TransactionType == MpTransactionType.Edited) {
                         // since source is editor content doesn't need up 
                         // TODO this should only be temporary, need a better way to 
                         // react/interpret transactions
                         return;
                     }
-                    while(cisvm.IsAnyBusy) {
+                    while (cisvm.IsAnyBusy) {
                         await Task.Delay(100);
                     }
                     OpenTransactionPaneCommand.Execute(null);
@@ -207,22 +204,22 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void MpAvClipTileSourceCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
                 case nameof(IsBusy):
-                    if(Parent == null) {
+                    if (Parent == null) {
                         break;
                     }
                     OnPropertyChanged(nameof(IsAnyBusy));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyBusy));
                     break;
                 case nameof(IsTransactionPaneOpen):
-                    if(Parent == null) {
+                    if (Parent == null) {
                         break;
                     }
                     Parent.OnPropertyChanged(nameof(Parent.IsTitleVisible));
                     break;
                 case nameof(PrimaryItem):
-                    if(Parent == null) {
+                    if (Parent == null) {
                         break;
                     }
                     Parent.OnPropertyChanged(nameof(Parent.IconResourceObj));
@@ -234,23 +231,23 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void ApplyTransaction(MpAvTransactionItemViewModel tivm) {
-            if(tivm == null || 
+            if (tivm == null ||
                 tivm.TransactionType == MpTransactionType.Edited ||
                 tivm.TransactionType == MpTransactionType.Dropped ||
                 tivm.TransactionType == MpTransactionType.Created) {
                 return;
             }
 
-            if (Parent.GetDragSource() is MpAvCefNetWebView wv) {
+            if (Parent.GetContentView() is MpIContentView cv) {
                 MpJsonObject updateObj = null;
                 updateObj = tivm.GetTransactionDelta();
-                if(updateObj == null) {
+                if (updateObj == null) {
                     updateObj = tivm.GetTransactionAnnotation();
                 }
-                if(updateObj == null) {
+                if (updateObj == null) {
                     return;
                 }
-                wv.PerformUpdateContentRequestAsync(updateObj).FireAndForgetSafeAsync(this);
+                cv.UpdateContentAsync(updateObj).FireAndForgetSafeAsync(this);
             }
         }
 
@@ -259,8 +256,8 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(SortedTransactions));
         }
         private void SetTransactionViewGridLength(GridLength gl) {
-            if (Parent.GetDragSource() is MpAvCefNetWebView wv &&
-                    wv.GetVisualAncestor<MpAvClipTileView>() is MpAvClipTileView ctv &&
+            if (Parent.GetContentView() is Control Control &&
+                    Control.GetVisualAncestor<MpAvClipTileView>() is MpAvClipTileView ctv &&
                     ctv.FindControl<Grid>("TileGrid") is Grid tileGrid) {
                 // setting all column 1 view to IsVisible=false doesn't decrease 
                 // the column's grid length so all other tileGrid views (column 0) 
@@ -290,10 +287,10 @@ namespace MonkeyPaste.Avalonia {
                 double nh = Parent.BoundHeight;
                 Dispatcher.UIThread.Post(() => {
                     MpAvResizeExtension.ResizeAnimated(
-                        Parent.GetDragSource() as MpAvCefNetWebView, 
-                        nw, nh, 
+                        Parent.GetContentView() as Control,
+                        nw, nh,
                         () => {
-                            if(Parent.IsPinned) {
+                            if (Parent.IsPinned) {
                                 return;
                             }
                             Parent.Parent.RefreshQueryTrayLayout();
@@ -313,7 +310,7 @@ namespace MonkeyPaste.Avalonia {
                 double nh = Parent.Parent.DefaultQueryItemHeight;
                 Dispatcher.UIThread.Post(() => {
                     MpAvResizeExtension.ResizeAnimated(
-                        Parent.GetDragSource() as MpAvCefNetWebView, 
+                        Parent.GetContentView() as Control,
                         nw, nh,
                         () => {
                             if (Parent.IsPinned) {
@@ -341,20 +338,20 @@ namespace MonkeyPaste.Avalonia {
         public ICommand RemoveTransactionCommand => new MpCommand<object>(
             (args) => {
                 MpAvTransactionItemViewModel tivm = null;
-                if(args is MpAvTransactionItemViewModel) {
+                if (args is MpAvTransactionItemViewModel) {
                     tivm = args as MpAvTransactionItemViewModel;
                 }
 
-                if(tivm == null) {
+                if (tivm == null) {
                     return;
                 }
                 int tivm_to_select_idx = -1;
-                if(tivm == SelectedTransaction) {
+                if (tivm == SelectedTransaction) {
                     tivm_to_select_idx = SortedTransactions.IndexOf(tivm);
                 }
                 Transactions.Remove(tivm);
                 tivm.Transaction.DeleteFromDatabaseAsync().FireAndForgetSafeAsync(this);
-                if(tivm_to_select_idx >= 0 && tivm_to_select_idx < Transactions.Count) {
+                if (tivm_to_select_idx >= 0 && tivm_to_select_idx < Transactions.Count) {
                     SelectedTransaction = SortedTransactions.ElementAt(tivm_to_select_idx);
                 }
             });

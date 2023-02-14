@@ -2,9 +2,6 @@
 using SQLite;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
@@ -90,8 +87,8 @@ namespace MonkeyPaste {
         #region Statics
 
         public static async Task<MpSearchCriteriaItem> CreateAsync(
-            string guid="",
-            int tagId=0,
+            string guid = "",
+            int tagId = 0,
             int sortOrderIdx = -1,
             MpLogicalQueryType joinType = DEFAULT_QUERY_JOIN_TYPE,
             MpQueryType queryType = MpQueryType.None,
@@ -100,10 +97,10 @@ namespace MonkeyPaste {
             bool isCaseSensitive = false,
             bool isWholeWord = false,
             bool suppressWrite = false) {
-            if(tagId < 0 && !suppressWrite) {
+            if (tagId < 0 && !suppressWrite) {
                 throw new Exception("Must provide tag id");
             }
-            if(queryType == MpQueryType.None) {
+            if (queryType == MpQueryType.None) {
                 throw new Exception("Must have query type");
             }
             var sci = new MpSearchCriteriaItem() {
@@ -118,7 +115,7 @@ namespace MonkeyPaste {
                 IsWholeWord = isWholeWord
             };
 
-            if(!suppressWrite) {
+            if (!suppressWrite) {
                 await sci.WriteToDatabaseAsync();
             }
             return sci;
@@ -128,7 +125,7 @@ namespace MonkeyPaste {
         public MpSearchCriteriaItem() : base() { }
 
         public override Task WriteToDatabaseAsync() {
-            if(string.IsNullOrEmpty(Guid)) {
+            if (string.IsNullOrEmpty(Guid)) {
                 // handle save for pending query
                 Guid = System.Guid.NewGuid().ToString();
             }

@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media;
-using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Common.Wpf {
     public static class MpWpfColorExtensions {

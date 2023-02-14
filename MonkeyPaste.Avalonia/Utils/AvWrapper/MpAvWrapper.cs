@@ -1,23 +1,22 @@
-﻿using Avalonia.Controls;
-using System.Linq;
-using System.Text;
-//using Avalonia.Win32;
-using Avalonia.Media.Imaging;
-using System.Threading.Tasks;
+﻿using MonkeyPaste.Common;
 using System;
-using System.IO;
-using System.Reflection;
-using MonkeyPaste.Common;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+//using Avalonia.Win32;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvWrapper : MpIPlatformWrapper {
 
         #region Bootstrapped Services (incomplete)
-        
+
         public MpIContentQueryTools ContentQueryTools { get; set; }
         public MpITagQueryTools TagQueryTools { get; set; }
         public MpIStartupObjectLocator StartupObjectLocator { get; set; }
+
+        public MpIContentViewLocator ContentViewLocator { get; set; }
 
         #endregion
 
@@ -40,8 +39,6 @@ namespace MonkeyPaste.Avalonia {
         public MpITransactionReporter TransactionBuilder { get; set; }
         public MpICustomColorChooserMenuAsync CustomColorChooserMenuAsync { get; set; }
         public MpIKeyboardInteractionService KeyboardInteractionService { get; set; }
-        public MpIGlobalTouch GlobalTouch { get; set; }
-        public MpIUiLocationFetcher LocationFetcher { get; set; }
         public MpIPlatformResource PlatformResource { get; set; }
         public MpIPlatformScreenInfoCollection ScreenInfoCollection { get; set; }
         public MpIContextMenuCloser ContextMenuCloser { get; set; }
@@ -71,7 +68,7 @@ namespace MonkeyPaste.Avalonia {
             if (OperatingSystem.IsMacOS()) {
                 prefFileName = "pref_mac.json";
             }
-            if(prefFileName == null) {
+            if (prefFileName == null) {
                 throw new Exception("Unknown os");
             }
             string prefPath = Path.Combine(
@@ -81,7 +78,7 @@ namespace MonkeyPaste.Avalonia {
             DbInfo = new MpAvDbInfo();
             OsInfo = new MpAvOsInfo();
 
-            if(Program.Args != null) {
+            if (Program.Args != null) {
                 if (Program.Args.Any(x => x.ToLower() == Program.BACKUP_DATA_ARG)) {
                     // TODO move reset stuff to that backup folder
                 }
@@ -102,7 +99,7 @@ namespace MonkeyPaste.Avalonia {
                     MpConsole.WriteLine("All data successfully deleted.");
                 }
             }
-            
+
             await MpPrefViewModel.InitAsync(prefPath, DbInfo, OsInfo);
 
             UserProvidedFileExts = MpPrefViewModel.Instance;

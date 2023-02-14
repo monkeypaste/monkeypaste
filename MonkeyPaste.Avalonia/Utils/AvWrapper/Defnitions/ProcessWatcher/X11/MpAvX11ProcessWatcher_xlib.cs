@@ -1,20 +1,12 @@
-﻿using System;
-using MonkeyPaste;
-using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
-using Avalonia.Threading;
-using System.Collections.Concurrent;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using System.Diagnostics;
-using X11;
+﻿using MonkeyPaste.Common;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
+using X11;
 
 namespace MonkeyPaste.Avalonia {
-    
-    public static class MpAvX11ProcessWatcher_xlib  {
+
+    public static class MpAvX11ProcessWatcher_xlib {
         #region Private Variables
 
         private static IntPtr _displayPtr;
@@ -31,7 +23,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             _rootWindow = Xlib.XDefaultRootWindow(_displayPtr);
-            
+
             if (_rootWindow == default) {
                 MpConsole.WriteTraceLine("Unable to open root window");
                 return;
@@ -49,15 +41,15 @@ namespace MonkeyPaste.Avalonia {
             Xlib.XGrabServer(_displayPtr);
 
             int status = Xlib.XQueryTree(
-                _displayPtr, 
+                _displayPtr,
                 _rootWindow, ref ReturnedRoot, ref ReturnedParent,
                 out var ChildWindows);
-            
-            if(status == 0) {
+
+            if (status == 0) {
                 // could not query tree
                 return null;
             }
-            foreach(var child in ChildWindows) {
+            foreach (var child in ChildWindows) {
                 // var a = XInternAtom(_displayPtr, "_NET_CLIENT_LIST", true);
                 // Atom actualType;
                 // int format;
@@ -122,5 +114,5 @@ namespace MonkeyPaste.Avalonia {
 
     }
 
-    
+
 }

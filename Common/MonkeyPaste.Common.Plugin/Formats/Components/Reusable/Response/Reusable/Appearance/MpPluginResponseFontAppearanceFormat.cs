@@ -1,7 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System.Text;
-
-namespace MonkeyPaste.Common.Plugin {
+﻿namespace MonkeyPaste.Common.Plugin {
 
     public class MpPluginResponseFontAppearanceFormat : MpJsonObject {
         public string fontFamily { get; set; } = "Consolas";

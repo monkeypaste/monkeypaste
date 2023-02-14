@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows.Input;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
-using MonkeyPaste;
+using System;
+using System.Collections.Generic;
+using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     public abstract class MpAvTrayIconBase : MpITrayIcon {
         public MpAvTrayIconBase() {

@@ -1,18 +1,12 @@
-﻿using System;
+﻿using MonkeyPaste.Common;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using MonkeyPaste;
-
-using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvClipboardFormatViewModel : 
-        MpAvTreeSelectorViewModelBase<MpAvClipboardHandlerCollectionViewModel,MpAvClipboardHandlerItemViewModel>,
+    public class MpAvClipboardFormatViewModel :
+        MpAvTreeSelectorViewModelBase<MpAvClipboardHandlerCollectionViewModel, MpAvClipboardHandlerItemViewModel>,
         MpITreeItemViewModel,
         MpISelectableViewModel {
 
@@ -22,10 +16,10 @@ namespace MonkeyPaste.Avalonia {
 
         public IEnumerable<MpAvClipboardHandlerItemViewModel> Readers {
             get {
-                if(Parent == null) {
+                if (Parent == null) {
                     return new ObservableCollection<MpAvClipboardHandlerItemViewModel>();
                 }
-                return Parent.Items.Where(x => x.Items.Any(y => y.HandledFormat == FormatName && y.Items.Any(z=>z.IsReader)));
+                return Parent.Items.Where(x => x.Items.Any(y => y.HandledFormat == FormatName && y.Items.Any(z => z.IsReader)));
             }
         }
 
@@ -51,13 +45,13 @@ namespace MonkeyPaste.Avalonia {
         #region MpAvTreeSelectorViewModelBase Overrides
 
         public override MpITreeItemViewModel ParentTreeItem => Parent;
-        public override IEnumerable<MpITreeItemViewModel> Children { 
+        public override IEnumerable<MpITreeItemViewModel> Children {
             get {
                 var c = new ObservableCollection<MpITreeItemViewModel>();
-                foreach(var r in Readers) {
+                foreach (var r in Readers) {
                     c.Add(r);
                 }
-                foreach(var w in Writers) {
+                foreach (var w in Writers) {
                     c.Add(w);
                 }
                 return c;
@@ -70,7 +64,7 @@ namespace MonkeyPaste.Avalonia {
         public string IconResourceKeyStr {
             get {
                 string keyStr = "FormatIcon";
-                switch(FormatName) {
+                switch (FormatName) {
                     case MpPortableDataFormats.AvRtf_bytes:
                         keyStr = "Rtf" + keyStr;
                         break;
@@ -92,7 +86,7 @@ namespace MonkeyPaste.Avalonia {
                         keyStr = "QuestionMarkIcon";
                         break;
                 }
-                
+
 
                 return MpPlatform.Services.PlatformResource.GetResource(keyStr) as string;
             }
@@ -109,16 +103,16 @@ namespace MonkeyPaste.Avalonia {
 
         public string FormatName {
             get {
-                if(Format == null) {
+                if (Format == null) {
                     return string.Empty;
-                } 
+                }
                 return Format.Name;
             }
         }
 
         public int FormatId {
             get {
-                if(Format == null) {
+                if (Format == null) {
                     return -1;
                 }
                 return Format.Id;

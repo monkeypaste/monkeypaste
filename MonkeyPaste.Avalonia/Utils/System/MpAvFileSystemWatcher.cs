@@ -1,20 +1,14 @@
-﻿using MonkeyPaste;
+﻿using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using MonkeyPaste.Common.Plugin;
-using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvFileSystemWatcher : 
-        MpIAsyncSingletonViewModel<MpAvFileSystemWatcher>, 
-        IDisposable, 
+    public class MpAvFileSystemWatcher :
+        MpIAsyncSingletonViewModel<MpAvFileSystemWatcher>,
+        IDisposable,
         MpIActionComponent {
         #region Private Variables
 
@@ -51,7 +45,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         public MpAvFileSystemWatcher() {
-            
+
         }
 
         public async Task InitAsync() {
@@ -65,12 +59,12 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public void AddWatcher(string path, MpIFileSystemEventHandler handler = null) {
-            if(!File.Exists(path) && !Directory.Exists(path)) {
+            if (!File.Exists(path) && !Directory.Exists(path)) {
                 throw new FileNotFoundException(path);
             }
             FileSystemWatcher watcher = _watchers.FirstOrDefault(x => x.Path.ToLower() == path.ToLower());
-            
-            if(watcher == null) {
+
+            if (watcher == null) {
                 watcher = new FileSystemWatcher(path);
                 _watchers.Add(watcher);
             } else {
@@ -83,7 +77,7 @@ namespace MonkeyPaste.Avalonia {
                                  | NotifyFilters.DirectoryName
                                  | NotifyFilters.FileName
                                  //| NotifyFilters.LastAccess
-                                 | NotifyFilters.LastWrite; 
+                                 | NotifyFilters.LastWrite;
             //| NotifyFilters.Security
             //| NotifyFilters.Size;
 
@@ -101,7 +95,7 @@ namespace MonkeyPaste.Avalonia {
                 //watcher.Error += handler.OnError;
             }
 
-            if(Directory.Exists(path)) {
+            if (Directory.Exists(path)) {
                 watcher.Filter = "*";
                 watcher.IncludeSubdirectories = watcher.IncludeSubdirectories;
                 watcher.EnableRaisingEvents = true;
@@ -110,7 +104,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool RemoveWatcher(string path) {
             FileSystemWatcher watcher = _watchers.FirstOrDefault(x => x.Path.ToLower() == path.ToLower());
-            if(watcher == null) {
+            if (watcher == null) {
                 return false;
             }
             _watchers.Remove(watcher);
@@ -150,10 +144,10 @@ namespace MonkeyPaste.Avalonia {
             MpConsole.WriteLine($"    New: {e.FullPath}");
         }
 
-        private  void OnError(object sender, ErrorEventArgs e) =>
+        private void OnError(object sender, ErrorEventArgs e) =>
             PrintException(e.GetException());
 
-        private  void PrintException(object e) {
+        private void PrintException(object e) {
             if (e != null && e is Exception ex) {
                 MpConsole.WriteLine($"Message: {ex.Message}");
                 MpConsole.WriteLine("Stacktrace:");

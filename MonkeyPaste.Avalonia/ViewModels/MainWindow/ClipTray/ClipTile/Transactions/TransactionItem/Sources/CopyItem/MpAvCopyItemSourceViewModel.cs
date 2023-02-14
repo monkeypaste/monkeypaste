@@ -1,10 +1,4 @@
-﻿using MonkeyPaste.Common;
-using MonkeyPaste.Common.Plugin;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -20,14 +14,14 @@ namespace MonkeyPaste.Avalonia {
         private MpAvClipTileViewModel _clipTileViewModel;
         public MpAvClipTileViewModel ClipTileViewModel {
             get {
-                if(_clipTileViewModel == null ||
+                if (_clipTileViewModel == null ||
                     _clipTileViewModel.CopyItemId != CopyItemId) {
                     _clipTileViewModel = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.CopyItemId == CopyItemId);
                 }
                 return _clipTileViewModel;
             }
         }
-            
+
 
         #endregion
 

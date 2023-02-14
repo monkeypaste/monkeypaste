@@ -1,16 +1,12 @@
-﻿using MonkeyPaste;
-using MonkeyPaste.Common;
-using MonkeyPaste.Common.Plugin;
+﻿using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public abstract class MpAvTransactionMessageViewModelBase  : 
+    public abstract class MpAvTransactionMessageViewModelBase :
         MpViewModelBase<MpAvTransactionItemViewModel>,
         MpAvITransactionNodeViewModel {
 
@@ -26,8 +22,8 @@ namespace MonkeyPaste.Avalonia {
         public object ComparableSortValue => ParentTreeItem == null ? 0 : ParentTreeItem.Children.IndexOf(this);
         public object IconSourceObj {
             get {
-                if(IconResourceObj == null) {
-                    if(Parent == null) {
+                if (IconResourceObj == null) {
+                    if (Parent == null) {
                         return null;
                     }
                     return Parent.IconSourceObj;
@@ -72,13 +68,13 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Model
-        
+
         public MpJsonMessageFormatType JsonFormat { get; private set; }
         public string Json { get; protected set; }
 
         public int TransactionId {
             get {
-                if(Parent == null) {
+                if (Parent == null) {
                     return 0;
                 }
                 return Parent.TransactionId;
@@ -100,7 +96,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
-        
+
 
         #endregion
     }

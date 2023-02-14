@@ -1,10 +1,7 @@
 ﻿using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics;
-using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -35,8 +32,8 @@ namespace MonkeyPaste.Common {
         }
 
         public string DecodeValue(string value) {
-            if(IsValueBase64) {
-                if(!value.IsStringBase64()) {
+            if (IsValueBase64) {
+                if (!value.IsStringBase64()) {
                     // predefined values may not be encoded..
                     return value;
                 }
@@ -48,7 +45,7 @@ namespace MonkeyPaste.Common {
     }
     public static class MpCsvToRichHtmlTableConverter {
 
-       public static string RichHtmlTableToCsv(string richHtmlTableStr, MpCsvFormatProperties csvProps = null) {
+        public static string RichHtmlTableToCsv(string richHtmlTableStr, MpCsvFormatProperties csvProps = null) {
             csvProps = csvProps == null ? MpCsvFormatProperties.Default : csvProps;
 
             var sb = new StringBuilder();
@@ -57,9 +54,9 @@ namespace MonkeyPaste.Common {
             htmlDoc.LoadHtml(richHtmlTableStr);
 
             var rows = htmlDoc.DocumentNode.SelectNodes("tr");
-            foreach(var rowNode in rows) {
+            foreach (var rowNode in rows) {
                 var cols = rowNode.SelectNodes("td");
-                foreach(var colNode in cols) {
+                foreach (var colNode in cols) {
                     string colText = colNode.InnerText;
                     sb.Append(colText + csvProps.EocSeparator);
                 }
@@ -81,7 +78,7 @@ namespace MonkeyPaste.Common {
                 string csvRowStr = csvRows[r];
                 if (r == csvRows.Count - 1) {
                     Debugger.Break();
-                    if(string.IsNullOrEmpty(csvRowStr) || csvRowStr == MpCsvFormatProperties.EXCEL_EOF_MARKER) {
+                    if (string.IsNullOrEmpty(csvRowStr) || csvRowStr == MpCsvFormatProperties.EXCEL_EOF_MARKER) {
                         // ignoring trailing end line
                         continue;
                     }
@@ -94,11 +91,11 @@ namespace MonkeyPaste.Common {
                     string csvColStr = csvCols[c];
 
                     // est cell width and update column def if larger than current
-                    double cur_estimated_col_width = csvColStr.Length * csvProps.FormattedFontSize;                    
-                    if(colWidths.Count <= c) {
+                    double cur_estimated_col_width = csvColStr.Length * csvProps.FormattedFontSize;
+                    if (colWidths.Count <= c) {
                         // new column def
                         colWidths.Add(cur_estimated_col_width);
-                    } else if (colWidths[c] < cur_estimated_col_width){
+                    } else if (colWidths[c] < cur_estimated_col_width) {
                         colWidths[c] = cur_estimated_col_width;
                     }
 
@@ -106,12 +103,12 @@ namespace MonkeyPaste.Common {
                     curRowCellHtmlStr += curCellHtmlStr;
 
                 }
-                string curRowHtmlStr = string.Format(@"<tr data-row='{0}'>{1}</tr>",r + 1,curRowCellHtmlStr);
+                string curRowHtmlStr = string.Format(@"<tr data-row='{0}'>{1}</tr>", r + 1, curRowCellHtmlStr);
                 tableBodyHtmlStr += curRowHtmlStr;
             }
             tableBodyHtmlStr += "</tbody>";
 
-            string colGroupHtml = string.Format(@"<colgroup>{0}</colgroup>", string.Join(string.Empty,colWidths.Select(x=> string.Format(@"<col width='{0}px'>", x))));
+            string colGroupHtml = string.Format(@"<colgroup>{0}</colgroup>", string.Join(string.Empty, colWidths.Select(x => string.Format(@"<col width='{0}px'>", x))));
             double tableWidth = colWidths.Sum();
 
             string tableHtmlStr = string.Format(

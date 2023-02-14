@@ -48,5 +48,5 @@
         AnalyzeCopyItemWithPreset = 103,
         InvokeAction = 104
     }
-    
+
 }

@@ -1,17 +1,12 @@
 ﻿using Avalonia.Threading;
-using MonkeyPaste;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvRepeaterActionViewModel : 
+    public class MpAvRepeaterActionViewModel :
         MpAvActionViewModelBase,
         MpISliderViewModel {
 
@@ -33,7 +28,7 @@ namespace MonkeyPaste.Avalonia {
         public double SliderValue {
             get => (double)RepeatCount;
             set {
-                if((int)value != RepeatCount) {
+                if ((int)value != RepeatCount) {
                     RepeatCount = (int)value;
                     OnPropertyChanged(nameof(SliderValue));
                 }
@@ -143,7 +138,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvRepeaterActionViewModel(MpAvTriggerCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpAvTimerActionViewModel_PropertyChanged;
-            
+
         }
 
 
@@ -163,17 +158,17 @@ namespace MonkeyPaste.Avalonia {
             if (ParentActionViewModel != null) {
                 ParentActionViewModel.PerformActionAsync(args).FireAndForgetSafeAsync(this);
 
-                if(_actionTickTimer == null) {
+                if (_actionTickTimer == null) {
                     _actionTickTimer = new DispatcherTimer();
                     _actionTickTimer.Tick += _actionTickTimer_Tick;
                     ParentActionViewModel.OnActionComplete += SelectedTickActionViewModel_OnActionComplete;
                 }
                 _actionTickTimer.Interval = TimeSpan.FromMilliseconds(RepeatCount);
-                if(!_actionTickTimer.IsEnabled) {
+                if (!_actionTickTimer.IsEnabled) {
                     _actionTickTimer.Start();
                 }
-            } 
-            if(isInitialRun) {
+            }
+            if (isInitialRun) {
                 // no unique output for timer, just pass through
                 await base.PerformActionAsync(args);
             }
@@ -217,9 +212,9 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private void MpAvTimerActionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
                 case nameof(RootTriggerActionViewModel):
-                    if(RootTriggerActionViewModel == null) {
+                    if (RootTriggerActionViewModel == null) {
                         break;
                     }
                     RootTriggerActionViewModel.PropertyChanged += RootTriggerActionViewModel_PropertyChanged;
@@ -228,7 +223,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void RootTriggerActionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
                 case nameof(RootTriggerActionViewModel.IsEnabled):
                     if (RootTriggerActionViewModel.IsEnabled.IsFalseOrNull()) {
                         if (_actionTickTimer != null && _actionTickTimer.IsEnabled) {

@@ -6,19 +6,17 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
-using Avalonia.Platform;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using KeyEventArgs = Avalonia.Input.KeyEventArgs;
 using Key = Avalonia.Input.Key;
+using KeyEventArgs = Avalonia.Input.KeyEventArgs;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvMarqueeTextBoxExtension {
@@ -72,7 +70,7 @@ namespace MonkeyPaste.Avalonia {
         public static readonly AttachedProperty<Point> DropShadowOffsetProperty =
             AvaloniaProperty.RegisterAttached<object, TextBox, Point>(
                 "DropShadowOffset",
-                new Point(1,1));
+                new Point(1, 1));
 
         #endregion
 
@@ -88,7 +86,7 @@ namespace MonkeyPaste.Avalonia {
         public static readonly AttachedProperty<bool> IsReadOnlyProperty =
             AvaloniaProperty.RegisterAttached<object, TextBox, bool>(
                 "IsReadOnly",
-                true,false, BindingMode.TwoWay);
+                true, false, BindingMode.TwoWay);
 
         #endregion
 
@@ -105,8 +103,8 @@ namespace MonkeyPaste.Avalonia {
             AvaloniaProperty.RegisterAttached<object, TextBox, IBrush>(
                 "ForegroundBrush",
                 Brushes.White);
-        private static void HandleForegroundBrushChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
-            if(element is TextBox textbox) {
+        private static void HandleForegroundBrushChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
+            if (element is TextBox textbox) {
                 Init(textbox);
             }
         }
@@ -303,8 +301,8 @@ namespace MonkeyPaste.Avalonia {
                 false,
                 false);
 
-        private static void HandleIsEnabledChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
-            
+        private static void HandleIsEnabledChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
+
 
             if (e.NewValue is bool isEnabledVal && isEnabledVal) {
                 if (element is TextBox tb) {
@@ -319,7 +317,7 @@ namespace MonkeyPaste.Avalonia {
                 DetachedToVisualHandler(element, null);
             }
 
-            
+
         }
 
         #endregion
@@ -393,11 +391,11 @@ namespace MonkeyPaste.Avalonia {
                 parentPanel.AddHandler(Panel.PointerPressedEvent, ParentPanel_PointerPressed, RoutingStrategies.Tunnel);
                 parentPanel.DetachedFromVisualTree += ParentPanel_DetachedFromVisualTree;
 
-                canvas.PointerEnter += Canvas_PointerEnter;
+                canvas.PointerEntered += Canvas_PointerEnter;
                 canvas.GetObservable(Canvas.IsVisibleProperty).Subscribe(value => Canvas_IsVisibleChanged(canvas, value));
                 canvas.DetachedFromVisualTree += Canvas_DetachedFromVisualTree;
                 canvas.PointerMoved += Canvas_PointerMoved;
-                canvas.PointerLeave += Canvas_PointerLeave;
+                canvas.PointerExited += Canvas_PointerLeave;
 
                 tb.DataContextChanged += Tb_DataContextChanged;
                 tb.GetObservable(TextBox.TextProperty).Subscribe(value => Init(tb));
@@ -469,7 +467,7 @@ namespace MonkeyPaste.Avalonia {
                     mp = new MpPoint(canvas.Width / 2, 0);
                 } else {
                     mp = e.GetPosition(canvas.Parent).ToPortablePoint();
-                    
+
                 }
                 SetCanvasMousePoint(canvas, mp);
                 AnimateAsync(canvas).FireAndForgetSafeAsync(canvas.DataContext as MpViewModelBase);
@@ -490,10 +488,10 @@ namespace MonkeyPaste.Avalonia {
 
         private static void Canvas_DetachedFromVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
             if (sender is Canvas canvas) {
-                canvas.PointerEnter -= Canvas_PointerEnter;
+                canvas.PointerEntered -= Canvas_PointerEnter;
                 canvas.DetachedFromVisualTree -= Canvas_DetachedFromVisualTree;
                 canvas.PointerMoved -= Canvas_PointerMoved;
-                canvas.PointerLeave -= Canvas_PointerLeave;
+                canvas.PointerExited -= Canvas_PointerLeave;
             }
         }
 
@@ -704,35 +702,39 @@ namespace MonkeyPaste.Avalonia {
             var canvas = GetCanvas(tb);
             int pad = (int)GetTailPadding(canvas);
             double fs = Math.Max(1.0d, tb.FontSize);
-
-            Size textSize = new Size(tb.Text.Length * fs, fs);
             var ft = tb.ToFormattedText();
-            ft.FontSize = Math.Max(1.0d, tb.FontSize);
-            
-            ftSize = ft.Bounds.Size;
-            ft.Constraint = ftSize;
-            // pixelsPerDip = 1.75
-            // pixelsPerInch = 168
-
-            var dpi = MpAvMainWindowViewModel.Instance.MainWindowScreen.PixelsPerInch.ToAvVector();
-            double pixelsPerDip = 1;// MpAvMainWindowViewModel.Instance.MainWindowScreen.PixelDensity;
+            ft.SetFontSize(Math.Max(1.0d, tb.FontSize));
+            ftSize = new Size(ft.Width, ft.Height);
+            double pixelsPerDip = MpAvMainWindowViewModel.Instance.MainWindowScreen.PixelDensity;
 
             var ftBmp = new RenderTargetBitmap(
                 new PixelSize(
-                    (int)Math.Max(1.0, ft.Bounds.Width * pixelsPerDip) + pad + (int)GetDropShadowOffset(canvas).X,
-                    (int)Math.Max(1.0, ft.Bounds.Height * pixelsPerDip) + (int)GetDropShadowOffset(canvas).Y));
+                    (int)Math.Max(1.0, ftSize.Width * pixelsPerDip) + pad + (int)GetDropShadowOffset(canvas).X,
+                    (int)Math.Max(1.0, ftSize.Height * pixelsPerDip) + (int)GetDropShadowOffset(canvas).Y));
 
+            //using (var context = ftBmp.CreateDrawingContext(null)) {
+            //    context.Clear(Colors.Transparent);
+            //    context.DrawText(GetDropShadowBrush(tb), GetDropShadowOffset(canvas), ft.PlatformImpl);
+            //    context.DrawText(GetForegroundBrush(tb), new Point(0, 0), ft.PlatformImpl);
+            //}
             using (var context = ftBmp.CreateDrawingContext(null)) {
-                context.Clear(Colors.Transparent);
-                context.DrawText(GetDropShadowBrush(tb), GetDropShadowOffset(canvas), ft.PlatformImpl);
-                context.DrawText(GetForegroundBrush(tb), new Point(0, 0), ft.PlatformImpl);
+                using (var ctx = new DrawingContext(context, false)) {
+                    context.Clear(Colors.Transparent);
+
+                    ft.SetForegroundBrush(GetDropShadowBrush(canvas));
+                    ctx.DrawText(ft, GetDropShadowOffset(canvas));
+                    ft.SetForegroundBrush(GetForegroundBrush(tb));
+                    ctx.DrawText(ft, new Point(0, 0));
+
+                    var bmp = ftBmp.ToAvBitmap();
+
+                    MpFileIo.WriteByteArrayToFile(@"C:\Users\tkefauver\Desktop\text_bmp.png", bmp.ToByteArray(), false);
+
+                    return bmp;
+                }
             }
 
-            var bmp = ftBmp.ToAvBitmap();
 
-            //MpFileIo.WriteByteArrayToFile(@"C:\Users\tkefauver\Desktop\text_bmp.png", bmp.ToBytesFromBase64String(), false);
-
-            return bmp;
         }
         #endregion
     }

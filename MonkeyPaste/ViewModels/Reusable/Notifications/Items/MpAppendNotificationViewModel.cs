@@ -1,6 +1,4 @@
-﻿using System;
-using System.Reflection;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public class MpAppendNotificationViewModel : MpMessageNotificationViewModel {
@@ -27,7 +25,7 @@ namespace MonkeyPaste {
 
         public override string Title {
             get {
-                if(Body is MpIAppendTitleViewModel atvm) {
+                if (Body is MpIAppendTitleViewModel atvm) {
                     return atvm.AppendTitle;
                 }
                 return string.Empty;

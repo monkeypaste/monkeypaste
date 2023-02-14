@@ -20,14 +20,16 @@
   <ItemGroup>
     <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
   </ItemGroup>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(BuildOs)' == 'WINDOWS'">
+  <!--<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(BuildOs)' == 'WINDOWS'">-->
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <ItemGroup>
       <BuildFiles Include="$(TargetDir)\*.*" />
       <ProjectFiles Include="$(ProjectDir)\*.*" />
     </ItemGroup>
-    <Copy SourceFiles="@(BuildFiles)" OverwriteReadOnlyFiles="False" SkipUnchangedFiles="true" ContinueOnError="true" DestinationFolder="$(SolutionDir)MonkeyPaste.Avalonia\bin\Debug\net6.0\Plugins\$(ProjectName)\" />
-    <Copy SourceFiles="@(BuildFiles)" OverwriteReadOnlyFiles="False" SkipUnchangedFiles="true" ContinueOnError="true" DestinationFolder="$(SolutionDir)MonkeyPaste.Avalonia\bin\Debug\net6.0-windows\Plugins\$(ProjectName)\" />
-    <Copy SourceFiles="@(ProjectFiles)" OverwriteReadOnlyFiles="False" SkipUnchangedFiles="true" ContinueOnError="true" DestinationFolder="$(SolutionDir)MonkeyPaste.Avalonia\bin\Debug\net6.0\Plugins\$(ProjectName)\" />
-    <Copy SourceFiles="@(ProjectFiles)" OverwriteReadOnlyFiles="False" SkipUnchangedFiles="true" ContinueOnError="true" DestinationFolder="$(SolutionDir)MonkeyPaste.Avalonia\bin\Debug\net6.0-windows\Plugins\$(ProjectName)\" />
+    <Copy SourceFiles="@(BuildFiles)" OverwriteReadOnlyFiles="False" SkipUnchangedFiles="true" ContinueOnError="true" DestinationFolder="$(SolutionDir)MonkeyPaste.Avalonia\bin\Debug\net7.0\Plugins\$(ProjectName)\" />
+    <Copy SourceFiles="@(ProjectFiles)" OverwriteReadOnlyFiles="False" SkipUnchangedFiles="true" ContinueOnError="true" DestinationFolder="$(SolutionDir)MonkeyPaste.Avalonia\bin\Debug\net7.0\Plugins\$(ProjectName)\" />
+    
+    <Copy SourceFiles="@(BuildFiles)" OverwriteReadOnlyFiles="False" SkipUnchangedFiles="true" ContinueOnError="true" DestinationFolder="$(SolutionDir)MonkeyPaste.Avalonia\bin\Debug\net7.0-windows\Plugins\$(ProjectName)\" />
+    <Copy SourceFiles="@(ProjectFiles)" OverwriteReadOnlyFiles="False" SkipUnchangedFiles="true" ContinueOnError="true" DestinationFolder="$(SolutionDir)MonkeyPaste.Avalonia\bin\Debug\net7.0-windows\Plugins\$(ProjectName)\" />
   </Target>
 </Project>

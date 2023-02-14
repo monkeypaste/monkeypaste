@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public interface MpISourceRefBuilder {
-         Task<List<MpTransactionSource>> AddTransactionSourcesAsync(int copyItemTransactionId, IEnumerable<Tuple<MpISourceRef,string>> transactionSources);
+        Task<List<MpTransactionSource>> AddTransactionSourcesAsync(int copyItemTransactionId, IEnumerable<Tuple<MpISourceRef, string>> transactionSources);
         Task<MpISourceRef> FetchOrCreateSourceAsync(string uri);
 
         string ParseRefArgs(string ref_url);

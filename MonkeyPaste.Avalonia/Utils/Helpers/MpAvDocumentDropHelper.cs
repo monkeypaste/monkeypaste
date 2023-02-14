@@ -1,16 +1,10 @@
 ﻿
 using Avalonia.Input;
 using MonkeyPaste.Common;
-using Avalonia.Threading;
-using System.Threading.Tasks;
 using MonkeyPaste.Common.Avalonia;
-using Avalonia.Controls;
-using System.Diagnostics;
-using Gtk;
-using Avalonia.Interactivity;
-using Xamarin.Essentials;
-using System.Collections.Generic;
 using System;
+//using Xamarin.Essentials;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {

@@ -1,8 +1,6 @@
 ﻿using SQLite;
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace MonkeyPaste {
     public enum MpBillableItemType {
@@ -52,16 +50,16 @@ namespace MonkeyPaste {
         public int CurrentCycleResponseByteCount { get; set; }
 
         public DateTime NextPaymentDateTime { get; set; }
-    #endregion
+        #endregion
 
-    #region Fk Models
+        #region Fk Models
 
 
-    #endregion
+        #endregion
 
-    #region Properties
+        #region Properties
 
-    [Ignore]
+        [Ignore]
         public MpBillableItemType BillableItemType {
             get {
                 return (MpBillableItemType)BillableItemTypeId;

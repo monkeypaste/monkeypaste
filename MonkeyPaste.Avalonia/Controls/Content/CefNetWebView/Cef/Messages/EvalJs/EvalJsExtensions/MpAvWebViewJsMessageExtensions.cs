@@ -1,13 +1,12 @@
-﻿using MonkeyPaste.Common;
-using System.Collections.Concurrent;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using System;
+﻿using Avalonia.Threading;
 using CefNet;
 using CefNet.Avalonia;
+using MonkeyPaste.Common;
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using Avalonia.Threading;
-using MonkeyPaste.Common.Avalonia;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvWebViewJsMessageExtensions {
@@ -20,14 +19,14 @@ namespace MonkeyPaste.Avalonia {
 
         public static int PendingEvalCount(this WebView wv) {
             var kvp = GetJsPendingMessageLookup(wv);
-            if(kvp == null) {
+            if (kvp == null) {
                 return 0;
             }
             return kvp.Values.Count;
         }
 
         public static async Task<string> EvaluateJavascriptAsync(this WebView wv, string script) {
-            if(wv is MpAvIDomStateAwareWebView dom_state_wv) {
+            if (wv is MpAvIDomStateAwareWebView dom_state_wv) {
                 while (!dom_state_wv.IsDomLoaded) {
                     await Task.Delay(100);
                 }
@@ -48,7 +47,7 @@ namespace MonkeyPaste.Avalonia {
                 string resp = await wv.EvaluateJavascriptAsync_helper(script, evalKey);
                 bool is_valid = resp != null && resp != MpAvCefNetApplication.JS_REF_ERROR;
 
-                if(wv is MpAvIAsyncJsEvalWebView async_wv && 
+                if (wv is MpAvIAsyncJsEvalWebView async_wv &&
                     async_wv.NeedsEvalJsCleared) {
                     // wv is being recycled so clear evals and breakout here
                     ClearWebViewEvals(wv);
@@ -70,7 +69,7 @@ namespace MonkeyPaste.Avalonia {
             // what else?
             MpConsole.WriteLine($"retry count exceeded for '{script}' w/ key:'{evalKey}' attempts#:{attempt}");
             Debugger.Break();
-            if(wv is MpAvIReloadableContentWebView reloadable_wv) {
+            if (wv is MpAvIReloadableContentWebView reloadable_wv) {
                 reloadable_wv.ReloadContentAsync().FireAndForgetSafeAsync();
             }
 
@@ -154,18 +153,18 @@ namespace MonkeyPaste.Avalonia {
                     // one case for ths is wv is being recycled and calling method has already acknowledge and removed this requeset
                     return null;
                 }
-                if(wv is MpAvIAsyncJsEvalWebView async_wv &&
+                if (wv is MpAvIAsyncJsEvalWebView async_wv &&
                     async_wv.NeedsEvalJsCleared) {
                     // break out of this eval
                     MpConsole.WriteLine("wv unload caught in eval helper, returning null");
                     return null;
                 }
-                if(_evalResultLookup[evalKey] == null) {
+                if (_evalResultLookup[evalKey] == null) {
                     await Task.Delay(100);
                 } else {
                     return _evalResultLookup[evalKey];
                 }
-                
+
             }
         }
         private static ConcurrentDictionary<string, string> GetJsPendingMessageLookup(WebView wv) {
@@ -199,11 +198,11 @@ namespace MonkeyPaste.Avalonia {
                     pendingEvalLookup.ForEach(x => MpConsole.WriteLine($"Key: '{x.Key}' Script: '{x.Value}'"));
                     return;
                 }
-            });            
+            });
         }
 
         private static void ClearWebViewEvals(WebView wv) {
-            if(!_webViewEvalJsLookup.ContainsKey(wv)) {
+            if (!_webViewEvalJsLookup.ContainsKey(wv)) {
                 return;
             }
             int eval_count = _webViewEvalJsLookup[wv].Count;

@@ -1,13 +1,9 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
-using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System;
-using System.Linq;
 using System.Reactive.Linq;
 
 namespace MonkeyPaste.Avalonia {
@@ -72,30 +68,30 @@ namespace MonkeyPaste.Avalonia {
                 false,
                 false);
 
-        private static void HandleIsEnabledChanged(IAvaloniaObject element, AvaloniaPropertyChangedEventArgs e) {
+        private static void HandleIsEnabledChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
             if (e.NewValue is bool isEnabledVal && isEnabledVal) {
                 if (element is Control control) {
                     control.DetachedFromVisualTree += DetachedFromVisualHandler;
                     control.AttachedToVisualTree += Control_AttachedToVisualTree;
-                    if(control.IsInitialized) {
+                    if (control.IsInitialized) {
                         Control_AttachedToVisualTree(control, null);
                     }
 
-                    
+
                 }
             } else {
                 DetachedFromVisualHandler(element, null);
             }
-            
+
         }
 
         private static void Control_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
             var control = sender as Control;
-            if(control == null) {
+            if (control == null) {
                 return;
             }
-            
-            if(control.GetVisualAncestor<ListBoxItem>() is ListBoxItem lbi) {
+
+            if (control.GetVisualAncestor<ListBoxItem>() is ListBoxItem lbi) {
                 // workaround since ListBoxItem is abstract in clip tray..
                 var boundsObserver = lbi.GetObservable(ListBoxItem.BoundsProperty);
                 boundsObserver.Subscribe(x => BoundsChangedHandler(control));
@@ -113,7 +109,7 @@ namespace MonkeyPaste.Avalonia {
 
         private static void BoundsChangedHandler(Control control) {
             MpRect new_bounds = control.Bounds.ToPortableRect();
-            if(control.GetVisualAncestor<ListBoxItem>() is ListBoxItem lbi) {
+            if (control.GetVisualAncestor<ListBoxItem>() is ListBoxItem lbi) {
                 //SetObservedBounds_safe(control, lbi);
                 new_bounds = lbi.Bounds.ToPortableRect();
             }

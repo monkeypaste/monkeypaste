@@ -1,11 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives.PopupPositioning;
-using Avalonia.Data;
 using Avalonia.Input;
-using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using Avalonia.Media;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System.Linq;
@@ -24,7 +20,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void Sb_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
             var sb = sender as AutoCompleteBox;
-            
+
             sb.AddHandler(DragDrop.DragOverEvent, DragOver);
             sb.AddHandler(DragDrop.DropEvent, Drop);
         }
@@ -34,7 +30,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void DragOver(object sender, DragEventArgs e) {
             //e.DragEffects = DragDropEffects.Default;
-            if(!e.Data.GetDataFormats().Contains(MpPortableDataFormats.Text)) {
+            if (!e.Data.GetDataFormats().Contains(MpPortableDataFormats.Text)) {
                 e.DragEffects = DragDropEffects.None;
             }
         }
@@ -54,13 +50,13 @@ namespace MonkeyPaste.Avalonia {
 
         private void SearchBox_KeyUp(object sender, global::Avalonia.Input.KeyEventArgs e) {
             if (e.Key == Key.Enter) {
-                if(sender is Control control && 
+                if (sender is Control control &&
                     control.GetVisualDescendant<TextBox>() is TextBox tb) {
                     tb.SelectAll();
                 }
                 e.Handled = true;
                 BindingContext.PerformSearchCommand.Execute(null);
-                
+
             }
         }
 

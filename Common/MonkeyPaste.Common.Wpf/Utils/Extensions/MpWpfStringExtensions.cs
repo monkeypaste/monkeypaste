@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Common.Wpf {
     public static class MpWpfStringExtensions {
@@ -13,7 +11,7 @@ namespace MonkeyPaste.Common.Wpf {
                 if (row.Length > maxCols) {
                     maxCols = row.Length;
                 }
-            } 
+            }
             return maxCols;
         }
 
@@ -64,7 +62,7 @@ namespace MonkeyPaste.Common.Wpf {
             if (str == null) {
                 return string.Empty;
             }
-            if(str.IsStringBase64()) {
+            if (str.IsStringBase64()) {
                 return str.ToBitmapSource().ToAsciiImage();
             }
             if (str.IsStringPlainText()) {
@@ -72,6 +70,6 @@ namespace MonkeyPaste.Common.Wpf {
                 return str;
             }
             return str.ToFlowDocument().ToPlainText();
-        }          
+        }
     }
 }

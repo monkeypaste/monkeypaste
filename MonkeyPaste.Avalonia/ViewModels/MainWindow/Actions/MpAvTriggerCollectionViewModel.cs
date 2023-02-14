@@ -1,24 +1,14 @@
-﻿using MonkeyPaste;
+﻿using Avalonia.Controls;
+using Avalonia.Threading;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
-using MonkeyPaste.Common.Plugin;
-using MonkeyPaste.Common;
-using Avalonia;
-using Avalonia.Collections;
-using Avalonia.Controls;
-using MonkeyPaste.Common.Avalonia;
-using Avalonia.Threading;
-using Avalonia.Controls.Selection;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvTriggerCollectionViewModel :
@@ -115,7 +105,7 @@ namespace MonkeyPaste.Avalonia {
             Scale = 1;
             TranslateOffsetX = FocusActionScreenX;
             TranslateOffsetY = FocusActionScreenY;
-        },()=>FocusAction != null);
+        }, () => FocusAction != null);
 
         #region Designer Measure Properties
 
@@ -176,7 +166,7 @@ namespace MonkeyPaste.Avalonia {
             return DesignerCenterLocation;
         }
         private bool ParseShowGrid(string text) {
-            if(SelectedTrigger == null) {
+            if (SelectedTrigger == null) {
                 return false;
             }
             if (string.IsNullOrEmpty(DesignerSettingsArg)) {
@@ -204,7 +194,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 double w = _defaultSelectorColumnVarDimLength;
                 //if (SelectedTrigger != null) {
-                    w += _defaultParameterColumnVarDimLength;
+                w += _defaultParameterColumnVarDimLength;
                 //}
                 return w;
             }
@@ -233,7 +223,7 @@ namespace MonkeyPaste.Avalonia {
         public ObservableCollection<MpAvActionViewModelBase> Items { get; private set; } = new ObservableCollection<MpAvActionViewModelBase>();
 
         public MpAvTriggerActionViewModelBase SelectedTrigger { get; set; }
-        public MpAvActionViewModelBase FocusAction { get;  set; }
+        public MpAvActionViewModelBase FocusAction { get; set; }
 
         #endregion
 
@@ -248,7 +238,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsAnyBusy {
             get {
-                if(IsBusy) {
+                if (IsBusy) {
                     return true;
                 }
                 return Items.Any(x => x.IsAnyBusy);
@@ -296,7 +286,7 @@ namespace MonkeyPaste.Avalonia {
 
             await RestoreAllEnabled();
 
-            if(Items.Count() > 0) {
+            if (Items.Count() > 0) {
                 // select most recent action
                 MpAvActionViewModelBase actionToSelect = Items
                                 .Aggregate((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
@@ -304,12 +294,12 @@ namespace MonkeyPaste.Avalonia {
                 if (actionToSelect != null) {
                     SelectActionCommand.Execute(actionToSelect);
                 }
-            }           
+            }
 
             IsBusy = false;
         }
         public async Task<MpAvTriggerActionViewModelBase> CreateTriggerViewModel(MpAction a) {
-            if(a.ActionType != MpActionType.Trigger) {
+            if (a.ActionType != MpActionType.Trigger) {
                 throw new Exception("This is only supposed to load root level triggers");
             }
             MpAvTriggerActionViewModelBase tavm = null;
@@ -367,7 +357,7 @@ namespace MonkeyPaste.Avalonia {
 
         public void SetErrorToolTip(int actionId, int argNum, string text) {
             return;
-            Dispatcher.UIThread.Post(async() => {
+            Dispatcher.UIThread.Post(async () => {
                 if (FocusAction != null && FocusAction.ActionId != actionId) {
                     // ignore non-visible tooltip validation changes
                     return;
@@ -458,7 +448,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand AddTriggerCommand => new MpCommand<object>(
              async (args) => {
                  IsBusy = true;
-                                  
+
                  MpTriggerType tt = args == null ? MpTriggerType.None : (MpTriggerType)args;
 
                  MpAction na = await MpAction.CreateAsync(
@@ -471,11 +461,11 @@ namespace MonkeyPaste.Avalonia {
 
                  var new_trigger_vm = await CreateTriggerViewModel(na);
 
-                 while(new_trigger_vm.IsBusy) {
+                 while (new_trigger_vm.IsBusy) {
                      await Task.Delay(100);
                  }
                  //Items.Add(new_trigger_vm);
-                 
+
                  await Task.Delay(300);
 
                  //SelectActionCommand.Execute(new_trigger_vm);
@@ -514,7 +504,7 @@ namespace MonkeyPaste.Avalonia {
                 };
 
                 bool remove_descendants = false;
-                if(child_to_delete_avm.ParentActionId == 0) {
+                if (child_to_delete_avm.ParentActionId == 0) {
                     // trigger deletes children by default
                     remove_descendants = true;
                 } else if (child_to_delete_avm.Children.Count() > 0) {
@@ -534,7 +524,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 FocusAction = child_to_delete_avm.ParentActionViewModel;
-                
+
                 if (remove_descendants) {
                     to_remove_list.AddRange(child_to_delete_avm.AllDescendants);
                 } else {
@@ -542,14 +532,14 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 foreach (var to_remove_avm in to_remove_list.OrderByDescending(x => x.TreeLevel).ThenBy(x => x.SortOrderIdx)) {
-                    while(to_remove_avm.IsBusy) {
+                    while (to_remove_avm.IsBusy) {
                         await Task.Delay(100);
                     }
                     await to_remove_avm.Action.DeleteFromDatabaseAsync();
                     //to_remove_avm.RootTriggerActionViewModel.Children.Remove(to_remove_avm);
                     Items.Remove(to_remove_avm);
                 }
-                if(child_to_delete_avm.ParentActionId == 0) {
+                if (child_to_delete_avm.ParentActionId == 0) {
                     await UpdateSortOrderAsync();
                     SelectedTrigger = null;
                     //OnPropertyChanged(nameof(Triggers));
@@ -584,7 +574,7 @@ namespace MonkeyPaste.Avalonia {
 
                 OnPropertyChanged(nameof(FocusAction));
 
-                if(focusArgNum > 0) {
+                if (focusArgNum > 0) {
 
                     MpAvSidebarItemCollectionViewModel.Instance.SelectSidebarItemCommand.Execute(this);
                 }
@@ -595,11 +585,11 @@ namespace MonkeyPaste.Avalonia {
             }, (args) => {
                 MpAvActionViewModelBase toSelect_avmb = null;
                 int focusArgNum = -1;
-                if(args is MpAvActionViewModelBase) {
+                if (args is MpAvActionViewModelBase) {
                     toSelect_avmb = args as MpAvActionViewModelBase;
-                } else if(args is int actionId) {
+                } else if (args is int actionId) {
                     toSelect_avmb = Items.FirstOrDefault(x => x.ActionId == actionId);
-                } else if(args is object[] argParts) {
+                } else if (args is object[] argParts) {
                     if (argParts[0] is int actionIdPart) {
                         toSelect_avmb = Items.FirstOrDefault(x => x.ActionId == actionIdPart);
                     }
@@ -607,17 +597,17 @@ namespace MonkeyPaste.Avalonia {
                         focusArgNum = (int)argParts[1];
                     }
                 }
-                if(toSelect_avmb != null && focusArgNum >= 0) {
+                if (toSelect_avmb != null && focusArgNum >= 0) {
                     // always allow execute when focus is passed (should only be from validation ntf)
                     return true;
                 }
-                if(toSelect_avmb == null && FocusAction != null) {
+                if (toSelect_avmb == null && FocusAction != null) {
                     return true;
                 }
-                if(toSelect_avmb != null && FocusAction == null) {
+                if (toSelect_avmb != null && FocusAction == null) {
                     return true;
                 }
-                if(toSelect_avmb == null && FocusAction == null) {
+                if (toSelect_avmb == null && FocusAction == null) {
                     return true;
                 }
                 return FocusAction.ActionId != toSelect_avmb.ActionId;
@@ -630,11 +620,11 @@ namespace MonkeyPaste.Avalonia {
                     actionId = int.Parse(args.ToString());
                 } else if (args is int) {
                     actionId = (int)args;
-                } else if(args is MpAvActionViewModelBase argAvm) {
+                } else if (args is MpAvActionViewModelBase argAvm) {
                     actionId = argAvm.ActionId;
                 }
                 var avm = Items.FirstOrDefault(x => x.ActionId == actionId);
-                if(avm == null) {
+                if (avm == null) {
                     return;
                 }
                 avm.InvokeThisActionCommand.Execute(null);

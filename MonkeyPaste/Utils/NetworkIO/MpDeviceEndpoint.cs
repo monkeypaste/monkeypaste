@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -32,7 +31,7 @@ namespace MonkeyPaste {
         public string PrivateIp4AddressesCsv {
             get {
                 var sb = new StringBuilder();
-                foreach(var ip in PrivateIp4Addresses) {
+                foreach (var ip in PrivateIp4Addresses) {
                     sb.Append(ip + ",");
                 }
                 return sb.ToString();
@@ -123,7 +122,7 @@ namespace MonkeyPaste {
             var ep = new MpDeviceEndpoint() {
                 PublicIp4Address = epParts[0],
                 PublicPortNum = Convert.ToInt32(epParts[1]),
-                PrivateIp4Addresses = new ObservableCollection<string>(epParts[2].Split(new string[] { "," },StringSplitOptions.RemoveEmptyEntries)),
+                PrivateIp4Addresses = new ObservableCollection<string>(epParts[2].Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries)),
                 PrimaryPrivateIp4AddressIdx = Convert.ToInt32(epParts[3]),
                 PrivatePortNum = Convert.ToInt32(epParts[4]),
                 AccessToken = epParts[5],
@@ -144,8 +143,8 @@ namespace MonkeyPaste {
         }
 
         public int CompareTo(object obj) {
-            if(obj != null && obj is MpDeviceEndpoint ode) {
-                if(ode.PrimaryPrivateIp4Address == PrimaryPrivateIp4Address && ode.PublicIp4Address == PublicIp4Address) {
+            if (obj != null && obj is MpDeviceEndpoint ode) {
+                if (ode.PrimaryPrivateIp4Address == PrimaryPrivateIp4Address && ode.PublicIp4Address == PublicIp4Address) {
                     return 0;
                 }
                 return ConnectDateTime.CompareTo(ode.ConnectDateTime);

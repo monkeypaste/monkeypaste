@@ -1,6 +1,4 @@
 ﻿using MonoMac.AppKit;
-using System;
-using System.IO;
 
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvMacHelpers {

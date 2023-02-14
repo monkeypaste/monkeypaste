@@ -1,22 +1,20 @@
-﻿using MonkeyPaste.Common;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
 namespace MonkeyPaste.Common {
     public interface MpIProcessWatcher : MpIActionComponent {
         int PollIntervalMs { get; }
-        IntPtr ThisAppHandle { get;}
+        IntPtr ThisAppHandle { get; }
         bool IsWatching { get; }
-        
+
         bool IsThisAppActive { get; }
         MpPortableProcessInfo GetActiveProcessInfo();
         MpPortableProcessInfo LastProcessInfo { get; }
         MpPortableProcessInfo FileSystemProcessInfo { get; }
 
-        ConcurrentDictionary<string,ObservableCollection<IntPtr>> RunningProcessLookup { get; }
+        ConcurrentDictionary<string, ObservableCollection<IntPtr>> RunningProcessLookup { get; }
 
         //bool IsParentHandle(IntPtr parentHandle, IntPtr handle);
         IntPtr GetParentHandleAtPoint(MpPoint poIntPtr);

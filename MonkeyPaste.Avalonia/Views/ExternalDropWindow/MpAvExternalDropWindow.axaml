@@ -18,7 +18,7 @@
         Background="Transparent"
         TransparencyLevelHint="Transparent"
         WindowState="Normal"
-        HasSystemDecorations="False"
+        SystemDecorations="None"
         ShowInTaskbar="False">
     <Border x:Name="DumbParentBorder"
             HorizontalAlignment="Stretch"

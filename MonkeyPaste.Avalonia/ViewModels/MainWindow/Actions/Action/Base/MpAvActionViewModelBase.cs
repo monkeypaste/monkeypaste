@@ -1,10 +1,7 @@
 ﻿
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives.PopupPositioning;
-using Avalonia.Controls.Shapes;
 using Avalonia.Media;
 using Avalonia.Threading;
-using MonkeyPaste;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
@@ -14,9 +11,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -48,14 +43,14 @@ namespace MonkeyPaste.Avalonia {
         #region Statics
 
         public static string GetDefaultActionIconResourceKey(object actionOrTriggerType) {
-            if(actionOrTriggerType is MpAvActionViewModelBase avmb) {
-                if(avmb is MpAvTriggerActionViewModelBase tvmb) {
+            if (actionOrTriggerType is MpAvActionViewModelBase avmb) {
+                if (avmb is MpAvTriggerActionViewModelBase tvmb) {
                     actionOrTriggerType = tvmb.TriggerType;
                 } else {
                     actionOrTriggerType = avmb.ActionType;
                 }
             }
-            if(actionOrTriggerType is MpTriggerType tt) {
+            if (actionOrTriggerType is MpTriggerType tt) {
                 switch (tt) {
                     case MpTriggerType.ContentAdded:
                         return "ClipboardImage";
@@ -67,8 +62,8 @@ namespace MonkeyPaste.Avalonia {
                         return "HotkeyImage";
                 }
             }
-            if(actionOrTriggerType is MpActionType at) {
-                switch(at) {
+            if (actionOrTriggerType is MpActionType at) {
+                switch (at) {
                     case MpActionType.Analyze:
                         return "BrainImage";
                     case MpActionType.Classify:
@@ -184,7 +179,7 @@ namespace MonkeyPaste.Avalonia {
                 if (result != _canSaveOrCancel) {
                     _canSaveOrCancel = result;
                     OnPropertyChanged(nameof(CanSaveOrCancel));
-                    if(!_canSaveOrCancel) {
+                    if (!_canSaveOrCancel) {
                         // leaf actions need to use ActionArgs property change to update parameter properties
                         OnPropertyChanged(nameof(ActionArgs));
                     }
@@ -346,7 +341,7 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region View Models       
-        
+
         private MpAvActionViewModelBase _parentActionViewModel;
         public MpAvActionViewModelBase ParentActionViewModel {
             get {
@@ -419,7 +414,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string IconBackgroundHexColor {
             get {
-                if(IconResourceObj is string &&
+                if (IconResourceObj is string &&
                     GetDefaultActionIconResourceKey(this) == IconResourceObj.ToString()) {
                     return ActionBackgroundHexColor;
                 }
@@ -431,7 +426,7 @@ namespace MonkeyPaste.Avalonia {
         public virtual object IconResourceObj {
             get {
                 string resourceKey;
-                if (IsValid) {                   
+                if (IsValid) {
                     resourceKey = GetDefaultActionIconResourceKey(ActionType);
                 } else {
                     resourceKey = "WarningImage";
@@ -452,7 +447,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         public bool IsActionDesignerVisible => Parent.SelectedTrigger == RootTriggerActionViewModel;
-        
+
         public bool IsAnyBusy {
             get {
                 if (IsBusy) {
@@ -788,11 +783,11 @@ namespace MonkeyPaste.Avalonia {
             Action = a;
 
             ActionArgs.Clear();
-            if(ComponentFormat != null &&
+            if (ComponentFormat != null &&
                 ComponentFormat.parameters != null) {
                 var param_values = await MpAvPluginParameterValueLocator.LocateValuesAsync(
                     MpParameterHostType.Action, ActionId, this);
-                foreach(var param_format in param_values) {
+                foreach (var param_format in param_values) {
                     var param_vm =
                         await CreateActionParameterViewModel(param_format);
                     ActionArgs.Add(param_vm);
@@ -940,7 +935,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 _isShowingValidationMsg = true;
 
-                Func<object,object> retryFunc = (args) => {
+                Func<object, object> retryFunc = (args) => {
                     Dispatcher.UIThread.Post(async () => {
                         await ValidateActionAsync();
                     });
@@ -1039,21 +1034,21 @@ namespace MonkeyPaste.Avalonia {
                     if (IsSelected) {
                         Parent.SelectActionCommand.Execute(this);
                     }
-                    OnPropertyChanged(nameof(IsTrigger)); 
-                    
+                    OnPropertyChanged(nameof(IsTrigger));
+
                     //if (this is MpAvIParameterCollectionViewModel ppcvm) {
                     //    ppcvm.OnPropertyChanged(nameof(ppcvm.Items));
                     //}
                     break;
                 case nameof(HasArgsChanged):
-                    if(HasArgsChanged) {
+                    if (HasArgsChanged) {
                         HasArgsChanged = false;
-                        if(IsTriggerEnabled || !IsValid) {
+                        if (IsTriggerEnabled || !IsValid) {
                             // NOTE only when args change and trigger is active or invalid already, 
                             // invoke validation to avoid unnecessary warnings during create or while
                             // its disabled
                             ValidateActionAsync().FireAndForgetSafeAsync(this);
-                        }                        
+                        }
                     }
                     break;
                 case nameof(HasModelChanged):
@@ -1084,21 +1079,21 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(IsValid):
                     RootTriggerActionViewModel.OnPropertyChanged(nameof(RootTriggerActionViewModel.IsAllValid));
-                    if(!IsValid && IsSelected) {
+                    if (!IsValid && IsSelected) {
                         Dispatcher.UIThread.Post(async () => {
                             // wait for content control to bind to primary action...
                             await Task.Delay(300);
                             var apv = MpAvMainWindow.Instance.GetVisualDescendant<MpAvActionPropertyHeaderView>();
                             if (apv != null) {
                                 var icc = apv.FindControl<ContentControl>("ActionPropertyIconContentControl");
-                                
+
                                 icc.ApplyTemplate();
                             }
                         });
                     }
                     break;
                 case nameof(ActionArgs):
-                    if(this is MpAvIParameterCollectionViewModel ppcvm) {
+                    if (this is MpAvIParameterCollectionViewModel ppcvm) {
                         ppcvm.OnPropertyChanged(nameof(ppcvm.Items));
                     }
                     break;
@@ -1144,8 +1139,8 @@ namespace MonkeyPaste.Avalonia {
             }
 
             return new MpPoint(
-                MpHelpers.Rand.NextDouble() * Parent.ObservedDesignerBounds.Width,
-                MpHelpers.Rand.NextDouble() * Parent.ObservedDesignerBounds.Height);
+                MpRandom.Rand.NextDouble() * Parent.ObservedDesignerBounds.Width,
+                MpRandom.Rand.NextDouble() * Parent.ObservedDesignerBounds.Height);
         }
 
         private bool OverlapsItem(MpPoint targetTopLeft) {
@@ -1201,14 +1196,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        
+
 
         public ICommand ShowActionSelectorMenuCommand => new MpCommand<object>(
              (args) => {
                  var fe = args as Control;
                  Parent.FocusAction = this;
                  MpAvMenuExtension.ShowMenu(fe, PopupMenuViewModel);
-             },(args) => args is Control);
+             }, (args) => args is Control);
 
         public ICommand AddChildActionCommand => new MpCommand<object>(
              async (args) => {
@@ -1224,7 +1219,7 @@ namespace MonkeyPaste.Avalonia {
 
                  var navm = await CreateActionViewModel(na);
 
-                 while(navm.IsBusy) {
+                 while (navm.IsBusy) {
                      await Task.Delay(100);
                  }
 
@@ -1242,8 +1237,8 @@ namespace MonkeyPaste.Avalonia {
         public ICommand DeleteThisActionCommand => new MpCommand(
             () => {
                 Parent.DeleteActionCommand.Execute(this);
-            },()=>!IsAnyBusy);
-                
+            }, () => !IsAnyBusy);
+
 
         public ICommand FinishMoveCommand => new MpCommand(() => {
             HasModelChanged = true;
@@ -1286,7 +1281,7 @@ namespace MonkeyPaste.Avalonia {
                 IsPerformingActionFromCommand = false;
             });
 
-        
+
 
 
 

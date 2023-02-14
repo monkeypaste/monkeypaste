@@ -1,18 +1,12 @@
-﻿using MonkeyPaste;
-using MonkeyPaste.Common;
-using MonkeyPaste.Common.Plugin;
-using Newtonsoft.Json;
-using System;
+﻿using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public class MpMasterTemplateModelCollectionViewModel : 
-        MpViewModelBase, 
+    public class MpMasterTemplateModelCollectionViewModel :
+        MpViewModelBase,
         MpIMenuItemViewModel,
         MpIAsyncSingletonViewModel<MpMasterTemplateModelCollectionViewModel> {
         #region Private Variables
@@ -76,13 +70,13 @@ namespace MonkeyPaste {
 
         }
 
-        public async Task UpdateAsync(List<MpTextTemplate> updatedTemplates, List<string> removedGuids) {            
-            if(removedGuids != null) {
+        public async Task UpdateAsync(List<MpTextTemplate> updatedTemplates, List<string> removedGuids) {
+            if (removedGuids != null) {
                 var rtl = await MpDataModelProvider.GetTextTemplatesByGuidsAsync(removedGuids);
                 await Task.WhenAll(rtl.Select(x => x.DeleteFromDatabaseAsync()));
             }
 
-            if(updatedTemplates != null) {
+            if (updatedTemplates != null) {
                 await Task.WhenAll(updatedTemplates.Select(x => x.WriteToDatabaseAsync()));
                 AllTemplates = new ObservableCollection<MpTextTemplate>(updatedTemplates);
             } else {
@@ -92,22 +86,22 @@ namespace MonkeyPaste {
         }
 
         public async Task<IEnumerable<MpContact>> GetContactsAsync() {
-            var contacts = new List<MpIContact>(); 
+            var contacts = new List<MpIContact>();
 
-            var fetchers = MpPluginLoader.Plugins.Where(x => x.Value.Component is MpIContactFetcherComponentBase).Select(x=>x.Value.Component).Distinct();
-            foreach(var fetcher in fetchers) {
-                if(fetcher is MpIContactFetcherComponent cfc) {
+            var fetchers = MpPluginLoader.Plugins.Where(x => x.Value.Component is MpIContactFetcherComponentBase).Select(x => x.Value.Component).Distinct();
+            foreach (var fetcher in fetchers) {
+                if (fetcher is MpIContactFetcherComponent cfc) {
                     contacts.AddRange(cfc.FetchContacts(null));
-                } else if(fetcher is MpIContactFetcherComponentAsync cfac) {
+                } else if (fetcher is MpIContactFetcherComponentAsync cfac) {
                     var results = await cfac.FetchContactsAsync(null);
                     contacts.AddRange(results);
                 }
             }
-            return contacts.Select(x=>new MpContact(x));
+            return contacts.Select(x => new MpContact(x));
         }
 
         public string GetTemplateTypeIconResourceStr(MpTextTemplateType templateType) {
-            switch(templateType) {
+            switch (templateType) {
                 case MpTextTemplateType.Contact:
                     return "ContactIcon";
                 case MpTextTemplateType.DateTime:
@@ -125,13 +119,13 @@ namespace MonkeyPaste {
         #region Protected Methods
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            if(e is MpTextTemplate tt) {
+            if (e is MpTextTemplate tt) {
                 // TODO will need to scan CopyItemData for TemplateGuid and remove span tag here
                 // also note ciid then notify clip tray items where match exists
 
                 Task.Run(async () => {
                     var cil = await MpDataModelProvider.GetCopyItemsByTextTemplateGuid(tt.Guid);
-                    foreach(var ci in cil) {
+                    foreach (var ci in cil) {
 
                     }
                 });

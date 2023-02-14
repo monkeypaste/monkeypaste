@@ -1,16 +1,15 @@
-﻿using System;
+﻿using MonkeyPaste.Common;
+using System;
 using System.Diagnostics;
-using System.Threading;
-using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvUriNavigator {
         public static void NavigateToUri(Uri uri) {
-            if(uri.Scheme == Uri.UriSchemeFile) {
+            if (uri.Scheme == Uri.UriSchemeFile) {
                 NavigateToPath(uri.LocalPath);
                 return;
             }
-            
+
 
             if (OperatingSystem.IsWindows()) {
                 Process.Start("explorer.exe", uri.AbsoluteUri);
@@ -26,9 +25,9 @@ namespace MonkeyPaste.Avalonia {
         public static void NavigateToPath(string path, bool useFileBrowser = true) {
             if (path.IsFile() && useFileBrowser) {
                 path = path.FindParentDirectory();
-            } 
+            }
             path = path.Contains(" ") ? $"\"{path}\"" : path;
-            
+
             if (OperatingSystem.IsWindows()) {
                 //using (var myProcess = new Process()) {
                 //    myProcess.StartInfo.UseShellExecute = false;

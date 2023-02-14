@@ -1,10 +1,4 @@
 ﻿using Avalonia.Controls;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace MonkeyPaste.Avalonia {
     /// <summary>
@@ -18,7 +12,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void El_AttachedToVisualTree(object sender, global::Avalonia.VisualTreeAttachmentEventArgs e) {
-            if(BindingContext.Items.Count == 0) {
+            if (BindingContext.Items.Count == 0) {
                 BindingContext.AddValueCommand.Execute(null);
             }
         }

@@ -1,8 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace MonkeyPaste.Common.Plugin {
@@ -18,7 +16,7 @@ namespace MonkeyPaste.Common.Plugin {
         public override string SerializeJsonObjectToBase64(Encoding enc = null) {
             return base.SerializeJsonObjectToBase64(new JsonSerializerSettings() {
                 NullValueHandling = NullValueHandling.Ignore
-            },enc);
+            }, enc);
         }
     }
     public class MpQuillDelta : MpOmitNullJsonObject {

@@ -2,16 +2,12 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
-using Avalonia.Media.Immutable;
 using Avalonia.Threading;
-using MonkeyPaste;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using MonkeyPaste.Common.Wpf;
 using PropertyChanged;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -128,10 +124,10 @@ namespace MonkeyPaste.Avalonia {
             base.Render(dc);
 
             MpAvTriggerActionViewModelBase tavm = null;
-            if(DataContext is MpAvTriggerCollectionViewModel tcvm) {
+            if (DataContext is MpAvTriggerCollectionViewModel tcvm) {
                 tavm = tcvm.SelectedTrigger;
             }
-            if(tavm == null) {
+            if (tavm == null) {
                 return;
             }
             foreach (MpAvActionViewModelBase avm in tavm.SelfAndAllDescendants) {
@@ -168,14 +164,14 @@ namespace MonkeyPaste.Avalonia {
                 EndPoint = new RelativePoint(p.ToAvPoint(), RelativeUnit.Absolute)
             };
 
-            if(pavm.IsValid) {
+            if (pavm.IsValid) {
                 fillBrush.GradientStops.Add(new GradientStop(parent_color, 0));
                 fillBrush.GradientStops.Add(new GradientStop(parent_color, 0.45d));
             } else {
                 fillBrush.GradientStops.AddRange(GetGradientStripes(warning_color1, warning_color2, 0, 0.5, 7));
                 //fillBrush.GradientStops.Add(new GradientStop(warning_color1, 0));
                 //fillBrush.GradientStops.Add(new GradientStop(warning_color2, 0.1d));
-                
+
                 //fillBrush.GradientStops.Add(new GradientStop(warning_color1, 0.1d));
                 //fillBrush.GradientStops.Add(new GradientStop(warning_color2, 0.2d));
 
@@ -215,11 +211,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void DrawArrow(
-            DrawingContext dc, 
-            MpPoint startPoint, 
-            MpPoint endPoint, 
-            double dw, 
-            IBrush borderBrush, 
+            DrawingContext dc,
+            MpPoint startPoint,
+            MpPoint endPoint,
+            double dw,
+            IBrush borderBrush,
             IBrush fillBrush) {
             MpPoint direction = endPoint - startPoint;
 

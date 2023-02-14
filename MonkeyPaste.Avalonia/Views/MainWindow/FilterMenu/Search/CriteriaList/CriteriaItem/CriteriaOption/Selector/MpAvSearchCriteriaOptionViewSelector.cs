@@ -2,10 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Metadata;
-using MonkeyPaste;
 using MonkeyPaste.Common;
-using MonkeyPaste.Common.Wpf;
-using Pango;
 using System.Collections.Generic;
 
 namespace MonkeyPaste.Avalonia {
@@ -13,7 +10,7 @@ namespace MonkeyPaste.Avalonia {
         [Content]
         public Dictionary<string, IDataTemplate> AvailableTemplates { get; } = new Dictionary<string, IDataTemplate>();
 
-        public IControl Build(object param) {
+        Control ITemplate<object, Control>.Build(object param) {
             string key = null;
             var scovm = param as MpAvSearchCriteriaOptionViewModel;
             if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.EnumerableValue)) {
@@ -30,14 +27,14 @@ namespace MonkeyPaste.Avalonia {
                 scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.UnitDecimalX4)) {
                 key = "RGBAOptionTemplate";
             }
-            if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.Text) || 
+            if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.Text) ||
                 scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.Decimal)) {
                 key = "TextOptionTemplate";
             }
             if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.DateTime)) {
                 key = "DateOptionTemplate";
             }
-            if(string.IsNullOrEmpty(key)) {
+            if (string.IsNullOrEmpty(key)) {
                 return null;
             }
             return AvailableTemplates[key].Build(param);

@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using SQLite;
+using System;
 using System.Threading.Tasks;
-using SQLite;
 
 
 namespace MonkeyPaste {
@@ -13,19 +12,19 @@ namespace MonkeyPaste {
 
         [Column("MpPasteToAppPathGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
-              
+
         public string AppPath { get; set; }
         public string AppName { get; set; }
 
         [Column("IsAdmin")]
-        public int Admin { get; set; }        
+        public int Admin { get; set; }
 
         [Column("IsSilent")]
-        public int Silent { get; set; }        
+        public int Silent { get; set; }
 
         [Column("PressEnter")]
         public int Enter { get; set; }
-        
+
         public string Args { get; set; }
         public string Label { get; set; }
 
@@ -91,7 +90,7 @@ namespace MonkeyPaste {
             }
         }
         #endregion
-        
+
         public static async Task<MpPasteToAppPath> Create(
             string appPath = "",
             string appName = "",
@@ -104,7 +103,7 @@ namespace MonkeyPaste {
             bool pressEnter = false) {
 
             var icon = await MpIcon.CreateAsync(
-                iconImgBase64: iconStr, 
+                iconImgBase64: iconStr,
                 createBorder: false);
 
             var pasteToAppPath = new MpPasteToAppPath() {
@@ -121,6 +120,6 @@ namespace MonkeyPaste {
             };
             await pasteToAppPath.WriteToDatabaseAsync();
             return pasteToAppPath;
-        }        
+        }
     }
 }

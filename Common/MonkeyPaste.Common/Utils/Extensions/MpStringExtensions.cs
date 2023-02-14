@@ -1,22 +1,20 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using HtmlAgilityPack;
+using MonkeyPaste.Common;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using MonkeyPaste.Common;
-using System.Globalization;
-using System.Xml.Linq;
-using Newtonsoft.Json;
-using System.Reflection;
 using System.Threading.Tasks;
-using HtmlAgilityPack;
-using System.Diagnostics;
-using System.Net.Http;
-using System.Threading;
 using System.Web;
+using System.Xml.Linq;
 
 namespace MonkeyPaste.Common {
     public static class MpStringExtensions {
@@ -36,7 +34,7 @@ namespace MonkeyPaste.Common {
             } else {
                 out_str = enc.GetString(bytes);
             }
-            if(stripNulls) {
+            if (stripNulls) {
                 // some cases the string has '\0' chars, which will invalidate URI as a prob
                 // i think its when the byte count is longer than the actual string or 
                 // some kind of padding isn't right so '\0' is added to the byte[]
@@ -87,14 +85,14 @@ namespace MonkeyPaste.Common {
             if (text.IsStringRichHtml()) {
                 return MpRichHtmlToPlainTextConverter.Convert(text);
             }
-            
+
             return text;
         }
 
         #endregion
 
         public static string ToPrettyPrintJsonString(this object obj) {
-            if(obj == null) {
+            if (obj == null) {
                 return string.Empty;
             }
             return MpJsonConverter.SerializeObject(obj).ToPrettyPrintJson();
@@ -107,13 +105,13 @@ namespace MonkeyPaste.Common {
         }
 
         public static bool IsStringImageResourcePathOrKey(this string str) {
-            if(string.IsNullOrWhiteSpace(str)) {
+            if (string.IsNullOrWhiteSpace(str)) {
                 return false;
             }
-            if(str.ToLower().EndsWith("image")) {
+            if (str.ToLower().EndsWith("image")) {
                 return true;
             }
-            if(str.ToLower().EndsWith("png")) {
+            if (str.ToLower().EndsWith("png")) {
                 return true;
             }
             return false;
@@ -125,7 +123,7 @@ namespace MonkeyPaste.Common {
                 var textNode = htmlDoc.CreateTextNode(data);
                 var textSpan = htmlDoc.CreateElement("span");
                 textSpan.AppendChild(textNode);
-                if(insertNewLine) {
+                if (insertNewLine) {
                     var textPar = htmlDoc.CreateElement("p");
                     textPar.AppendChild(textSpan);
                     htmlDoc.DocumentNode.AppendChild(textPar);
@@ -139,16 +137,16 @@ namespace MonkeyPaste.Common {
         }
         public static string ReplaceRange(this string str, int index, int length, string text) {
             int preStrLength = index + 1;
-            if(str.Length < preStrLength) {
+            if (str.Length < preStrLength) {
                 throw new Exception("invalid range replace");
             }
             string preStr = str.Substring(0, preStrLength);
             int postStrIdx = index + length;
-            if(postStrIdx >= str.Length) {
+            if (postStrIdx >= str.Length) {
                 throw new Exception("invalid range replace");
             }
             int postStrLength = str.Length - (index + length);
-            if(postStrIdx + postStrLength > str.Length) {
+            if (postStrIdx + postStrLength > str.Length) {
                 throw new Exception("invalid range replace");
             }
             string postStr = str.Substring(postStrIdx, postStrLength);
@@ -156,10 +154,10 @@ namespace MonkeyPaste.Common {
         }
 
         public static bool IsStringUrl(this string str) {
-            if(string.IsNullOrWhiteSpace(str) || !str.ToLower().StartsWith("http")) {
+            if (string.IsNullOrWhiteSpace(str) || !str.ToLower().StartsWith("http")) {
                 return false;
             }
-            return Uri.IsWellFormedUriString(str,UriKind.Absolute);
+            return Uri.IsWellFormedUriString(str, UriKind.Absolute);
         }
 
         public static bool IsStringNullOrEmpty(this string str) {
@@ -178,7 +176,7 @@ namespace MonkeyPaste.Common {
         }
 
         public static string[] SplitNoEmpty(this string str, string separator) {
-            if(str == null) {
+            if (str == null) {
                 return new string[] { };
             }
             return str.Split(new string[] { separator }, StringSplitOptions.RemoveEmptyEntries);
@@ -189,8 +187,8 @@ namespace MonkeyPaste.Common {
                 return new string[] { };
             }
             string[] split_types = new string[] { "\r\n", "\n" };
-            foreach(var st in split_types) {
-                if(str.Contains(st)) {
+            foreach (var st in split_types) {
+                if (str.Contains(st)) {
                     return str.SplitNoEmpty(st);
                 }
             }
@@ -253,13 +251,13 @@ namespace MonkeyPaste.Common {
                 return string.Format($"{totalYears} years ago");
             }
             if (totalMonths >= 1 && totalWeeks >= 4) {
-                return string.Format($"{(totalMonths == 1 ? "Last":totalMonths.ToString())} month{(totalMonths == 1 ? string.Empty : "s ago")}");
+                return string.Format($"{(totalMonths == 1 ? "Last" : totalMonths.ToString())} month{(totalMonths == 1 ? string.Empty : "s ago")}");
             }
             if (totalWeeks >= 1) {
-                return string.Format($"{(totalWeeks == 1 ? "Last":totalWeeks.ToString())} week{(totalWeeks == 1 ? string.Empty : "s ago")}");
+                return string.Format($"{(totalWeeks == 1 ? "Last" : totalWeeks.ToString())} week{(totalWeeks == 1 ? string.Empty : "s ago")}");
             }
             if (totalDays >= 1) {
-                return string.Format($"{(totalDays == 1 ? "Yesterday":totalDays.ToString())} {(totalDays == 1 ? string.Empty : "days ago")}");
+                return string.Format($"{(totalDays == 1 ? "Yesterday" : totalDays.ToString())} {(totalDays == 1 ? string.Empty : "days ago")}");
             }
             if (totalHours >= 1) {
                 return string.Format($"{totalHours} hour{(totalHours == 1 ? string.Empty : "s")} ago");
@@ -290,7 +288,7 @@ namespace MonkeyPaste.Common {
 
             string out_str = string.Empty;
             if (totalDays >= 1) {
-                out_str += string.Format($"{totalDays.ToString()} Day{(totalDays > 1 ? "s":"")} ");
+                out_str += string.Format($"{totalDays.ToString()} Day{(totalDays > 1 ? "s" : "")} ");
             }
             if (totalHours >= 1) {
                 out_str += string.Format($"{totalHours.ToString()} Hour{(totalHours > 1 ? "s" : "")} ");
@@ -330,7 +328,7 @@ namespace MonkeyPaste.Common {
             return result;
         }
 
-        
+
         public static string CheckSum(this string str) {
             using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create()) {
                 string hash = BitConverter.ToString(
@@ -343,7 +341,8 @@ namespace MonkeyPaste.Common {
             if (bytes == null) {
                 return string.Empty;
             }
-            return Convert.ToBase64String(bytes);
+            var str = Convert.ToBase64String(bytes);
+            return str;
         }
 
 
@@ -375,12 +374,12 @@ namespace MonkeyPaste.Common {
             }
             string srcAttrVal = imgNode.GetAttributeValue("src", string.Empty);
             int base64_token_idx = srcAttrVal.IndexOf("data:image/png;base64,");
-            if(base64_token_idx >= 0) {
+            if (base64_token_idx >= 0) {
                 return srcAttrVal.Substring(base64_token_idx + 1).Trim();
             }
-            if(srcAttrVal.IsStringUrl()) {
+            if (srcAttrVal.IsStringUrl()) {
                 var src_bytes = await srcAttrVal.ReadUriBytesAsync(timeoutMs);
-                if(src_bytes == null || src_bytes.Length == 0) {
+                if (src_bytes == null || src_bytes.Length == 0) {
                     return fallbackBase64Str;
                 }
                 return src_bytes.ToBase64String();
@@ -392,8 +391,8 @@ namespace MonkeyPaste.Common {
 
         #region Enums
 
-        public static TEnum ToEnum<TEnum>(this object obj, bool ignoreCase = true, TEnum notFoundValue = default) where TEnum: struct {
-            if(obj != null) {
+        public static TEnum ToEnum<TEnum>(this object obj, bool ignoreCase = true, TEnum notFoundValue = default) where TEnum : struct {
+            if (obj != null) {
                 try {
                     if (obj is string str) {
                         if (Enum.TryParse<TEnum>(str, ignoreCase, out TEnum result)) {
@@ -412,26 +411,26 @@ namespace MonkeyPaste.Common {
             }
             return notFoundValue;
         }
-        
-        public static TEnum ToEnumFlags<TEnum>(this string csvStr, bool ignoreCase = true, MpCsvFormatProperties csvProps = null, TEnum notFoundValue = default) where TEnum: struct {
-            if(string.IsNullOrEmpty(csvStr)) {
+
+        public static TEnum ToEnumFlags<TEnum>(this string csvStr, bool ignoreCase = true, MpCsvFormatProperties csvProps = null, TEnum notFoundValue = default) where TEnum : struct {
+            if (string.IsNullOrEmpty(csvStr)) {
                 return notFoundValue;
             }
             csvProps = csvProps == null ? MpCsvFormatProperties.Default : csvProps;
 
             try {
-                if(csvStr.ToListFromCsv(csvProps) is List<string> valueNames) {
+                if (csvStr.ToListFromCsv(csvProps) is List<string> valueNames) {
                     long resultVal = default;
-                    foreach(string valueName in valueNames) {
+                    foreach (string valueName in valueNames) {
                         if (Enum.TryParse<TEnum>(valueName, ignoreCase, out TEnum cur_result)) {
-                            if(cur_result is long cur_val) {
+                            if (cur_result is long cur_val) {
                                 resultVal |= cur_val;
                             }
                         }
                     }
                     return resultVal.ToEnum(ignoreCase, notFoundValue);
-                } 
-                
+                }
+
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine(ex);
@@ -439,7 +438,7 @@ namespace MonkeyPaste.Common {
             return notFoundValue;
         }
 
-        public static string ToFlagNamesCsvString<TEnum>(this TEnum flagEnum, MpCsvFormatProperties csvProps = null) where TEnum: struct {
+        public static string ToFlagNamesCsvString<TEnum>(this TEnum flagEnum, MpCsvFormatProperties csvProps = null) where TEnum : struct {
             csvProps = csvProps == null ? MpCsvFormatProperties.Default : csvProps;
             List<string> flagNames = new List<string>();
             //var eobj = Enum.ToObject(typeof(TEnum), flagEnum);
@@ -449,7 +448,7 @@ namespace MonkeyPaste.Common {
             if (typeof(TEnum).GetCustomAttributes(typeof(FlagsAttribute), false).Length == 0) {
                 flagNames.Add(flagEnum.ToString());
             } else {
-                foreach(string curName in typeof(TEnum).GetEnumNames()) {
+                foreach (string curName in typeof(TEnum).GetEnumNames()) {
                     if (Enum.TryParse(curName, false, out TEnum curEnum)) {
                         flagNames.Add(curName);
                     }
@@ -499,7 +498,7 @@ namespace MonkeyPaste.Common {
             }
         }
         public static bool IsStringEscapedHtml(this string str) {
-            if(str.Contains("&lt;") && str.Contains("&gt;")) {
+            if (str.Contains("&lt;") && str.Contains("&gt;")) {
                 // only check if both '<' and '>' are present otherwise it wouldn't be valid html
                 return true;
             }
@@ -510,8 +509,8 @@ namespace MonkeyPaste.Common {
             new Dictionary<char, string>() {
                 {' ',"&nbsp;" },
                 {'&',"&amp;" },
-                {'\"',"&quot;" }, 
-                {'\'',"&apos;" }, 
+                {'\"',"&quot;" },
+                {'\'',"&apos;" },
                 {'>',"&gt;" },
                 {'¢',"&cent;" },
                 {'£',"&pound;" },
@@ -527,7 +526,7 @@ namespace MonkeyPaste.Common {
             for (int i = 0; i < str.Length; i++) {
                 if (HtmlEntityLookup.ContainsKey(str[i])) {
                     var already_encoded_kvp = HtmlEntityLookup.FirstOrDefault(x => str.Substring(i).StartsWith(x.Value));
-                    if(!already_encoded_kvp.Equals(default(KeyValuePair<char,string>))) {
+                    if (!already_encoded_kvp.Equals(default(KeyValuePair<char, string>))) {
                         sb.Append(already_encoded_kvp.Value);
                         i += already_encoded_kvp.Value.Length - 1;
                         continue;
@@ -544,7 +543,7 @@ namespace MonkeyPaste.Common {
             var sb = new StringBuilder();
             for (int i = 0; i < str.Length; i++) {
                 var kvp = HtmlEntityLookup.FirstOrDefault(x => str.Substring(i).StartsWith(x.Value));
-                if(!kvp.Equals(default(KeyValuePair<char,string>))) {
+                if (!kvp.Equals(default(KeyValuePair<char, string>))) {
                     sb.Append(kvp.Key);
                     i += kvp.Value.Length - 1;
                 } else {
@@ -563,13 +562,13 @@ namespace MonkeyPaste.Common {
         }
 
         public static string EscapeMenuItemHeader(this string str, int altNavIdx = -1) {
-            if(str == null) {
+            if (str == null) {
                 return null;
             }
             // NOTE underscores are ommitted from menu items and when dynamic this is problematic, allow for 0 idx though cause that's the shor
             var sb = new StringBuilder();
             for (int i = 0; i < str.Length; i++) {
-                if(i == altNavIdx) {
+                if (i == altNavIdx) {
                     sb.Append("_");
                 }
                 if (str[i] == '_') {
@@ -586,14 +585,14 @@ namespace MonkeyPaste.Common {
 
         public static string ParseGuid(this string str) {
             var m = MpRegEx.RegExLookup[MpRegExType.Guid].Match(str);
-            if(m.Success) {
+            if (m.Success) {
                 return m.Value;
             }
             return null;
         }
 
         public static bool IsKnownImageFile(this string str) {
-            if(!str.IsFile()) {
+            if (!str.IsFile()) {
                 return false;
             }
             string[] image_exts = new string[] { "png", "gif", "jpg", "jpeg", "bmp" };
@@ -638,7 +637,8 @@ namespace MonkeyPaste.Common {
         }
 
 
-        public static List<int> IndexListOfAll(this string text, string str, StringComparison comparisonType = StringComparison.InvariantCultureIgnoreCase) {List<int> allIndexOf = new List<int>();
+        public static List<int> IndexListOfAll(this string text, string str, StringComparison comparisonType = StringComparison.InvariantCultureIgnoreCase) {
+            List<int> allIndexOf = new List<int>();
             int index = text.IndexOf(str, comparisonType);
             while (index != -1) {
                 allIndexOf.Add(index);
@@ -702,13 +702,13 @@ namespace MonkeyPaste.Common {
         }
 
         public static bool IsStringHexColor(this string str) {
-            if(string.IsNullOrWhiteSpace(str)) {
+            if (string.IsNullOrWhiteSpace(str)) {
                 return false;
             }
             return MpRegEx.RegExLookup[MpRegExType.HexColor].IsMatch(str);
         }
         public static bool IsStringGuid(this string str) {
-            if(string.IsNullOrWhiteSpace(str)) {
+            if (string.IsNullOrWhiteSpace(str)) {
                 return false;
             }
             return MpRegEx.RegExLookup[MpRegExType.Guid].IsMatch(str);
@@ -743,7 +743,7 @@ namespace MonkeyPaste.Common {
         }
 
         public static bool IsStringBase64_FromException(this string str) {
-            if(string.IsNullOrWhiteSpace(str)) {
+            if (string.IsNullOrWhiteSpace(str)) {
                 return false;
             }
             try {
@@ -761,7 +761,7 @@ namespace MonkeyPaste.Common {
         }
 
         public static bool IsStringWindowsFileOrPathFormat(this string path) {
-            if(string.IsNullOrWhiteSpace(path) || path.Length < 3) {
+            if (string.IsNullOrWhiteSpace(path) || path.Length < 3) {
                 return false;
             }
             if (!MpRegEx.RegExLookup[MpRegExType.StartsWithWindowsStyleDirectory].IsMatch(path.Substring(0, 3))) {
@@ -788,12 +788,12 @@ namespace MonkeyPaste.Common {
         }
 
         public static bool IsStringRichHtmlImage(this string str) {
-            if(string.IsNullOrWhiteSpace(str) || !str.ToLower().StartsWith("<p>")) {
+            if (string.IsNullOrWhiteSpace(str) || !str.ToLower().StartsWith("<p>")) {
                 return false;
             }
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(str);
-            if(htmlDoc.DocumentNode.ChildNodes.Count == 1 &&
+            if (htmlDoc.DocumentNode.ChildNodes.Count == 1 &&
                 htmlDoc.DocumentNode.FirstChild.Name.ToLower() == "p" &&
                 htmlDoc.DocumentNode.FirstChild.ChildNodes.Count == 1 &&
                 htmlDoc.DocumentNode.FirstChild.FirstChild.Name.ToLower() == "img") {

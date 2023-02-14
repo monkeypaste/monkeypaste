@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MonkeyPaste.Common;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using MonkeyPaste;
-using MonkeyPaste.Common;
 
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvFileItemCollectionViewModel : MpViewModelBase<MpAvClipTileViewModel>{
+    public class MpAvFileItemCollectionViewModel : MpViewModelBase<MpAvClipTileViewModel> {
         #region Statics
 
         public static async Task<string> CreateFileListEditorFragment(MpCopyItem ci) {
@@ -46,7 +41,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvFileItemCollectionViewModel() :base (null) { }
+        public MpAvFileItemCollectionViewModel() : base(null) { }
 
         public MpAvFileItemCollectionViewModel(MpAvClipTileViewModel parent) : base(parent) {
             Items.CollectionChanged += Items_CollectionChanged;
@@ -73,7 +68,7 @@ namespace MonkeyPaste.Avalonia {
             var fivml = await Task.WhenAll(ci_dobil.Select(x => CreateFileItemViewModel(x)));
             Items.Clear();
             fivml.ForEach(x => Items.Add(x));
-            while(Items.Any(x=>x.IsBusy)) {
+            while (Items.Any(x => x.IsBusy)) {
                 await Task.Delay(100);
             }
 
@@ -92,7 +87,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            if(Parent == null) {
+            if (Parent == null) {
                 return;
             }
             Parent.OnPropertyChanged(nameof(Parent.IconResourceObj));

@@ -37,7 +37,6 @@
   <!-- DYNAMIC -->
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
     <Nullable>disable</Nullable>
     <TrimMode>copyused</TrimMode>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
@@ -45,11 +44,15 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(BuildOs)' == 'WINDOWS'">  
-    <DefineConstants>WINDOWS;</DefineConstants>    
+    <DefineConstants>WINDOWS;</DefineConstants>
+    <TargetFramework>net7.0</TargetFramework>
+    <!--<ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>-->
+    <!--<UseWPF>True</UseWPF>-->
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(BuildOs)' == 'LINUX'">  
-    <DefineConstants>LINUX;</DefineConstants>    
+    <DefineConstants>LINUX;</DefineConstants>
+    <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -82,33 +85,27 @@
     <TrimmableAssembly Include="Avalonia.Themes.Default" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.10.18" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.10.18" />
+    <PackageReference Include="Avalonia" Version="11.0.0-preview5" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.0-preview5" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.18" />
-    <PackageReference Include="Avalonia.MonoMac" Version="0.6.1" />
-    <PackageReference Include="GioSharp" Version="3.24.24.38" />
     <PackageReference Include="GtkSharp" Version="3.24.24.38" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
-    <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
+    <PackageReference Include="MonoMac.NetStandard" Version="0.0.4" />
     <PackageReference Include="SharpHook" Version="4.0.0" />
     <PackageReference Include="X11" Version="1.0.6" />
     <PackageReference Include="XamlNameReferenceGenerator" Version="1.5.1" />
-    <PackageReference Include="Avalonia.Gtk3" Version="0.8.4" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
+    <Reference Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\PresentationFramework.dll" Condition="'$(BuildOs)' == 'WINDOWS'" />
+
+    <!--<Reference Include="PresentationFramework" Condition="'$(BuildOs)' == 'WINDOWS'">
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\PresentationFramework.dll</HintPath>
+    </Reference>-->
     <ProjectReference Include="..\MonkeyPaste.Common.Wpf\MonkeyPaste.Common.Wpf.csproj" Condition="'$(BuildOs)' == 'WINDOWS'" />
     <ProjectReference Include="..\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controls\Adorner\" />
     <Folder Include="Utils\Helpers\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="PresentationFramework" Condition="'$(BuildOs)' == 'WINDOWS'">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\PresentationFramework.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <PropertyGroup>
      <!-- 

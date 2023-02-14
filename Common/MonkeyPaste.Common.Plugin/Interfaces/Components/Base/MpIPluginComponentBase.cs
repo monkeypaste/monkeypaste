@@ -1,7 +1,4 @@
-﻿
-using System.Collections.Generic;
-
-namespace MonkeyPaste.Common.Plugin {
+﻿namespace MonkeyPaste.Common.Plugin {
     public interface MpIPluginComponentBase {
     }
 }

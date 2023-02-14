@@ -8,10 +8,10 @@ namespace MonkeyPaste.Avalonia {
 
         public override string ActionDescription {
             get {
-                if(Matches == null || Matches.Count == 0) {
+                if (Matches == null || Matches.Count == 0) {
                     return $"CopyItem({CopyItem.Id},{CopyItem.Title}) was NOT a match";
                 }
-                return $"CopyItem({CopyItem.Id},{CopyItem.Title}) was matched w/ Match Value: {string.Join(Environment.NewLine,Matches)}";
+                return $"CopyItem({CopyItem.Id},{CopyItem.Title}) was matched w/ Match Value: {string.Join(Environment.NewLine, Matches)}";
             }
         }
     }

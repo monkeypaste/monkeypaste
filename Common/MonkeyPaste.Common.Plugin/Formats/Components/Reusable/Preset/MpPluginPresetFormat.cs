@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Common.Plugin {
     public class MpPluginPresetFormat : MpJsonObject {

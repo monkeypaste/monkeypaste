@@ -2,12 +2,8 @@
 using SQLite;
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace MonkeyPaste {
 
@@ -33,7 +29,7 @@ namespace MonkeyPaste {
         public string RouteTypeName { get; set; }
 
         //[Column("e_ShortcutTypeId")]
-        public string ShortcutTypeName { get; set; } 
+        public string ShortcutTypeName { get; set; }
 
         public int RoutingDelayMs { get; set; } = 100;
 
@@ -111,10 +107,10 @@ namespace MonkeyPaste {
             string commandParameter = null,
             string guid = "",
             bool isReadOnly = false) {
-            if(shortcutType == MpShortcutType.None) {
+            if (shortcutType == MpShortcutType.None) {
                 throw new Exception("Needs type");
             }
-            if(string.IsNullOrEmpty(keyString)) {
+            if (string.IsNullOrEmpty(keyString)) {
                 throw new Exception("Needs keystring");
             }
 
@@ -122,7 +118,7 @@ namespace MonkeyPaste {
             guid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid().ToString() : guid;
             defKeyString = string.IsNullOrEmpty(defKeyString) ? keyString : defKeyString;
 
-            var dupShortcut = await MpDataModelProvider.GetShortcutAsync(shortcutType.ToString(),commandParameter);
+            var dupShortcut = await MpDataModelProvider.GetShortcutAsync(shortcutType.ToString(), commandParameter);
             if (dupShortcut != null) {
                 MpConsole.WriteLine($"Shortcut '{dupShortcut.ShortcutLabel}' already exists.");
                 MpConsole.WriteLine($"Updating name from '{dupShortcut.ShortcutLabel}' to '{shortcutLabel}'");
@@ -168,7 +164,7 @@ namespace MonkeyPaste {
         }
 
         public override async Task WriteToDatabaseAsync() {
-            if(IsReadOnly && Id > 0) {
+            if (IsReadOnly && Id > 0) {
                 // Should be caught before here
                 Debugger.Break();
                 return;
@@ -187,5 +183,5 @@ namespace MonkeyPaste {
         #endregion
 
     }
-    
+
 }

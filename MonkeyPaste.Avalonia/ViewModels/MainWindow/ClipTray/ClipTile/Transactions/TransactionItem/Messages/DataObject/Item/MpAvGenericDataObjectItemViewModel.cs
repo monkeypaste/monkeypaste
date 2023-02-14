@@ -1,7 +1,4 @@
-﻿
-using MonkeyPaste.Common;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -19,10 +16,10 @@ namespace MonkeyPaste.Avalonia {
 
             Format = string.Empty;
             Data = string.Empty;
-            if(jsonOrParsedFragment is KeyValuePair<string,object> kvp) {
+            if (jsonOrParsedFragment is KeyValuePair<string, object> kvp) {
                 Format = kvp.Key;
                 Data = kvp.Value;
-            } 
+            }
             IsBusy = false;
         }
 

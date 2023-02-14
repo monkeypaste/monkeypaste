@@ -1,6 +1,6 @@
 ﻿//using Avalonia.Win32;
-using System;
 using MonkeyPaste.Common;
+using System;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvPlatformShortcuts : MpIPlatformShorcuts {

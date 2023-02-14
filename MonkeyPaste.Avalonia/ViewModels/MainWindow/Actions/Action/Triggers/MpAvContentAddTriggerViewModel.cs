@@ -1,16 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using MonkeyPaste;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
+using System.Collections.Generic;
 
 namespace MonkeyPaste.Avalonia {
     public interface MpIContentTypeDependant {
         bool IsContentTypeValid(MpCopyItemType cit);
     }
-    public class MpAvContentAddTriggerViewModel : 
+    public class MpAvContentAddTriggerViewModel :
         MpAvTriggerActionViewModelBase, MpIContentTypeDependant {
         #region Constants
 
@@ -67,7 +63,7 @@ namespace MonkeyPaste.Avalonia {
         #region MpIContentTypeDependant Implementation
 
         bool MpIContentTypeDependant.IsContentTypeValid(MpCopyItemType cit) {
-            if(AddedContentType == MpCopyItemType.None) {
+            if (AddedContentType == MpCopyItemType.None) {
                 return true;
             }
             return AddedContentType == cit;
@@ -83,7 +79,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpCopyItemType AddedContentType {
             get {
-                if(ArgLookup.TryGetValue(CONTENT_TYPE_PARAM_ID, out var param_vm) &&
+                if (ArgLookup.TryGetValue(CONTENT_TYPE_PARAM_ID, out var param_vm) &&
                     param_vm.CurrentValue is string curVal) {
                     return curVal.ToEnum<MpCopyItemType>();
                 }
@@ -120,14 +116,14 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected override bool CanPerformAction(object arg) {
-            if(!base.CanPerformAction(arg)) {
+            if (!base.CanPerformAction(arg)) {
                 return false;
             }
-            if(AddedContentType == MpCopyItemType.None) {
+            if (AddedContentType == MpCopyItemType.None) {
                 // NOTE Default is treated as all types
                 return true;
             }
-            if(arg is MpCopyItem ci && ci.ItemType != AddedContentType) {
+            if (arg is MpCopyItem ci && ci.ItemType != AddedContentType) {
                 return false;
             }
             return true;

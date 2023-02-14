@@ -1,19 +1,18 @@
-﻿using Newtonsoft.Json;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Threading.Tasks;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.IO;
-using Newtonsoft.Json.Linq;
-using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Web;
-using MonkeyPaste.Common.Plugin;
-using MonkeyPaste.Common;
-using Xamarin.Forms;
+//using Xamarin.Forms;
 
 namespace MonkeyPaste {
     public class MpHttpAnalyzerPlugin : MpIAnalyzeAsyncComponent {
@@ -489,7 +488,7 @@ namespace MonkeyPaste {
 
         public HttpMethod RequestMethod {
             get {
-                if(_httpTransactionFormat == null || 
+                if (_httpTransactionFormat == null ||
                     _httpTransactionFormat.request == null ||
                    string.IsNullOrWhiteSpace(_httpTransactionFormat.request.method)) {
                     throw new HttpRequestException("Request method undefined for " + _httpTransactionFormat.name);
@@ -516,17 +515,17 @@ namespace MonkeyPaste {
             string unalteredHttpFormat = JsonConvert.SerializeObject(_httpTransactionFormat);
 
             _reqParams = request.items;
-            if(_reqParams == null) {
+            if (_reqParams == null) {
                 Console.WriteLine($"Warning! Empty or malformed request arguments for plugin: '{_httpTransactionFormat.name}'");
                 Console.WriteLine($"With args: {request.SerializeJsonObject()}");
                 _reqParams = new List<MpParameterRequestItemFormat>();
             }
 
-            using(var client = new HttpClient()) {
+            using (var client = new HttpClient()) {
                 using (var httpRequest = CreateRequestMessage(_reqParams)) {
                     try {
                         var response = await client.SendAsync(httpRequest);
-                        
+
                         if (!response.IsSuccessStatusCode) {
                             // NOTE fix command should probably open manfiest folder but only http plugin info is provided so just opening plugin folder
                             var userAction = await MpNotificationBuilder.ShowNotificationAsync(
@@ -566,7 +565,7 @@ namespace MonkeyPaste {
 
         public string GetRequestUri(IEnumerable<MpParameterRequestItemFormat> reqParams) {
             var reqMsg = CreateRequestMessage(reqParams);
-            if(reqMsg == null) {
+            if (reqMsg == null) {
                 return null;
             }
             return reqMsg.RequestUri.AbsoluteUri;
@@ -618,14 +617,14 @@ namespace MonkeyPaste {
             var urlFormat = _httpTransactionFormat.request.url;
             string uriStr = string.Format(@"{0}://", urlFormat.protocol);
             uriStr += string.Join(".", urlFormat.host) + "/";
-            if(urlFormat.dynamicPath != null) {
+            if (urlFormat.dynamicPath != null) {
                 urlFormat.dynamicPath.ForEach(x => x.SetValue(null, _reqParams));
                 uriStr += string.Join("/", urlFormat.dynamicPath.Select(x => x.value)) + "?";
             } else {
                 uriStr += string.Join("/", urlFormat.path) + "?";
             }
 
-            if(urlFormat.query != null) {
+            if (urlFormat.query != null) {
                 foreach (var qkvp in urlFormat.query) {
                     string queryVal = qkvp.value;
                     if (qkvp.isEnumId) {
@@ -638,7 +637,7 @@ namespace MonkeyPaste {
                 }
             }
             uriStr = uriStr.Substring(0, uriStr.Length - 1);
-            if(!Uri.IsWellFormedUriString(uriStr,UriKind.Absolute)) {
+            if (!Uri.IsWellFormedUriString(uriStr, UriKind.Absolute)) {
                 Console.WriteLine("Uri string is not properly defined: " + uriStr);
                 return null;
             }
@@ -651,29 +650,29 @@ namespace MonkeyPaste {
             string mediaType = _httpTransactionFormat.request.body.mediaType;
 
             Encoding reqEncoding = Encoding.UTF8;
-            if(_httpTransactionFormat.request.body.encoding.ToUpper() == "UTF8") {
+            if (_httpTransactionFormat.request.body.encoding.ToUpper() == "UTF8") {
                 reqEncoding = Encoding.UTF8;
             }
             Console.WriteLine("Content-Encoding: " + reqEncoding.ToString());
             Console.WriteLine("Media-Type", mediaType);
             string body = CreatRequestBody();
-            if(mediaType.ToLower() == "application/json") {
+            if (mediaType.ToLower() == "application/json") {
                 var sc = new StringContent(body, reqEncoding, mediaType);
                 sc.Headers.ContentType = new MediaTypeHeaderValue(mediaType);
                 return sc;
-            } else if(mediaType.ToLower() == "application/octet-stream") {
+            } else if (mediaType.ToLower() == "application/octet-stream") {
                 var bac = new ByteArrayContent(Convert.FromBase64String(body));
                 bac.Headers.ContentType = new MediaTypeHeaderValue(mediaType);
                 return bac;
             } else {
                 throw new Exception("Currently unsupported mediaType");
             }
-            
+
         }
 
         private string CreatRequestBody() {
             string raw = _httpTransactionFormat.request.body.raw;
-            if(!string.IsNullOrEmpty(raw)  && 
+            if (!string.IsNullOrEmpty(raw) &&
                _httpTransactionFormat.request.body.mode.ToLower() == "parameterized") {
                 Regex paramReg = new Regex(_paramRefRegEx, RegexOptions.Compiled | RegexOptions.Multiline);
                 MatchCollection mc = paramReg.Matches(raw);
@@ -687,7 +686,7 @@ namespace MonkeyPaste {
                             raw = raw.Replace(c.Value, escapedParamVal);
                             // JsonConvert.SerializeObject(raw.Replace(c.Value, paramEnum.value));
                             //raw = JsonConvert.SerializeObject(raw);
-                            
+
                             //System.Object[] body = new System.Object[] { new { Text = paramVal } };
                             //var test = JsonConvert.SerializeObject(body);
 
@@ -721,16 +720,17 @@ namespace MonkeyPaste {
         }
 
         private string GetParamIdStr(string queryParamValueStr) {
-            if(string.IsNullOrEmpty(queryParamValueStr)) {
+            if (string.IsNullOrEmpty(queryParamValueStr)) {
                 throw new Exception("Error creating http uri, dynamic query item has undefined value");
             }
-            if(!queryParamValueStr.StartsWith("@")) {
+            if (!queryParamValueStr.StartsWith("@")) {
                 throw new Exception("Parameterized values must start with '@'");
             }
             try {
                 return queryParamValueStr.Substring(1, queryParamValueStr.Length - 1);
-            } catch(Exception ex) {
-                throw new Exception("Error converting param reference: " + queryParamValueStr + " "+ex);
+            }
+            catch (Exception ex) {
+                throw new Exception("Error converting param reference: " + queryParamValueStr + " " + ex);
             }
         }
 
@@ -750,12 +750,12 @@ namespace MonkeyPaste {
         }
 
         private MpPluginResponseNewContentFormat CreateNewContent(MpPluginResponseNewContentFormat prncf, JToken curToken) {
-            if(prncf == null) {
+            if (prncf == null) {
                 return null;
             }
 
             prncf = CreateElement(prncf, curToken, 0) as MpPluginResponseNewContentFormat;
-            if(prncf != null) {
+            if (prncf != null) {
                 if (prncf.content != null) {
                     prncf.content.SetValue(curToken, _reqParams);
                 }
@@ -766,13 +766,13 @@ namespace MonkeyPaste {
 
         private List<MpPluginResponseAnnotationFormat> CreateAnnotations(
             List<MpPluginResponseAnnotationFormat> al, JToken curToken, int idx = 0) {
-            if(al == null) {
+            if (al == null) {
                 return null;
             }
 
             for (int i = 0; i < al.Count; i++) {
                 var a = CreateAnnotation(al[i], curToken, i);
-                if(a != null) {
+                if (a != null) {
                     al[i] = a;
                 }
             }
@@ -781,7 +781,7 @@ namespace MonkeyPaste {
 
         private MpPluginResponseAnnotationFormat CreateAnnotation(MpPluginResponseAnnotationFormat a, JToken curToken, int idx = 0) {
             a = CreateElement(a, curToken, idx) as MpPluginResponseAnnotationFormat;
-            if(a != null) {
+            if (a != null) {
                 try {
                     if (a.box != null) {
                         a.box.x.SetValue(curToken, _reqParams, idx);
@@ -801,7 +801,7 @@ namespace MonkeyPaste {
 
         private MpPluginResponseItemBaseFormat CreateElement(
             MpPluginResponseItemBaseFormat a, JToken curToken, int idx = 0) {
-            if(a != null) {
+            if (a != null) {
                 try {
                     //if (a.queryPath != null) {
                     //    if(a.queryPath.pathType == MpJsonPathType.Absolute) {

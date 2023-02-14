@@ -1,14 +1,12 @@
-﻿using Microsoft.Win32;
-using MonkeyPaste;
+﻿using Avalonia.Controls;
+using Avalonia.Threading;
+using MonkeyPaste.Common;
+using PropertyChanged;
 using System;
 using System.IO;
-using System.Threading.Tasks;
-using MonkeyPaste.Common;
-using Avalonia.Threading;
-using PropertyChanged;
-using Avalonia.Controls;
-using System.Windows.Input;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvFolderWatcherTriggerViewModel : MpAvTriggerActionViewModelBase, MpIFileSystemEventHandler {
@@ -45,7 +43,7 @@ namespace MonkeyPaste.Avalonia {
             }
             set {
                 if (IncludeSubdirectories != value) {
-                    Arg5 = value ? "1":"0";
+                    Arg5 = value ? "1" : "0";
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(IncludeSubdirectories));
                 }
@@ -69,11 +67,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region Protected Methods
 
-        protected override void EnableTrigger() {            
+        protected override void EnableTrigger() {
             MpAvFileSystemWatcher.Instance.RegisterActionComponent(this);
         }
 
-        protected override void DisableTrigger() {            
+        protected override void DisableTrigger() {
             MpAvFileSystemWatcher.Instance.UnregisterActionComponent(this);
         }
 
@@ -81,7 +79,7 @@ namespace MonkeyPaste.Avalonia {
             await Task.Delay(1);
             if (string.IsNullOrEmpty(FolderPath)) {
                 ValidationText = $"No folder specified for trigger action '{FullName}'";
-            } else if(!FolderPath.IsDirectory()) {
+            } else if (!FolderPath.IsDirectory()) {
                 ValidationText = $"Folder'{FolderPath}' not found for trigger action '{FullName}'";
             } else {
                 ValidationText = string.Empty;
@@ -97,7 +95,7 @@ namespace MonkeyPaste.Avalonia {
 
         [SuppressPropertyChangedWarnings]
         public void OnFileSystemItemChanged(object sender, FileSystemEventArgs e) {
-            if(!MpBootstrapperViewModelBase.IsCoreLoaded) {
+            if (!MpBootstrapperViewModelBase.IsCoreLoaded) {
                 // NOTE this check maybe unnecessary. Rtf test was being generated onto desktop during startup and interfering w/ this trigger's lifecycle
                 return;
             }
@@ -122,7 +120,7 @@ namespace MonkeyPaste.Avalonia {
                     case WatcherChangeTypes.Renamed:
                         RenamedEventArgs re = e as RenamedEventArgs;
                         ci = await MpDataModelProvider.GetCopyItemByDataAsync(re.OldFullPath);
-                        if(ci == null) {
+                        if (ci == null) {
                             ci = await MpCopyItem.CreateAsync(
                                 //sourceId: MpDefaultDataModelTools.ThisOsFileManagerAppId,
                                 itemType: MpCopyItemType.FileList,
@@ -134,14 +132,14 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     case WatcherChangeTypes.Deleted:
                         ci = await MpDataModelProvider.GetCopyItemByDataAsync(e.FullPath);
-                        if(ci == null) {
+                        if (ci == null) {
                             return;
                         }
                         bool isVisible = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.CopyItemId == ci.Id) != null;
                         await ci.DeleteFromDatabaseAsync();
-                        if(isVisible) {
+                        if (isVisible) {
                             MpPlatform.Services.Query.NotifyQueryChanged();
-                            
+
                         }
                         break;
                 }
@@ -189,14 +187,14 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(300);
                     EnableTriggerCommand.Execute(null);
                 }
-            },()=>IsValid);
+            }, () => IsValid);
 
         public ICommand SelectFileSystemPathCommand => new MpAsyncCommand(
             async () => {
                 string initDir = FolderPath;
-                if(string.IsNullOrEmpty(initDir)) {
+                if (string.IsNullOrEmpty(initDir)) {
                     initDir = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                } else if(File.Exists(initDir)) {
+                } else if (File.Exists(initDir)) {
                     initDir = Path.GetDirectoryName(initDir);
                 }
                 MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
@@ -204,19 +202,19 @@ namespace MonkeyPaste.Avalonia {
                     Title = "Select folder",
                     Directory = initDir
                 }.ShowAsync(MpAvMainWindow.Instance);
-                
+
                 MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
 
                 bool wasEnabled = IsEnabled.IsTrue();
                 // remove old watcher
                 DisableTriggerCommand.Execute(null);
                 FolderPath = selectedDir;
-                if(string.IsNullOrEmpty(FolderPath)) {
+                if (string.IsNullOrEmpty(FolderPath)) {
                     IncludeSubdirectories = false;
                 }
 
 
-                if(wasEnabled) {
+                if (wasEnabled) {
                     while (IsBusy) { await Task.Delay(100); }
                     await Task.Delay(300);
                     EnableTriggerCommand.Execute(null);

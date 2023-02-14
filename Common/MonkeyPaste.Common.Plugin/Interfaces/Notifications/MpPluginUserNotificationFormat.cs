@@ -13,7 +13,7 @@ namespace MonkeyPaste.Common.Plugin {
         public object IconSourceObj { get; set; }
         public object AnchorTarget { get; set; }
         public object OtherArgs { get; set; }
-        public Func<object,object> RetryAction { get; set; }
+        public Func<object, object> RetryAction { get; set; }
         public object RetryActionObj { get; set; }
         public string Title { get; set; }
     }

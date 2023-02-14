@@ -19,7 +19,7 @@ namespace MonkeyPaste.Avalonia {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if (value is IControlTemplate ctrlTemplate)
                 return ctrlTemplate;
-            else if (value is IControl ctrl) {
+            else if (value is Control ctrl) {
                 ctrl.Measure(Size.Infinity);
                 Thickness ctrlMargin = ctrl.Margin;
                 double ctrlWidth = ctrl.DesiredSize.Width + ctrlMargin.Left + ctrlMargin.Right;

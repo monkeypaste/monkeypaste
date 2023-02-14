@@ -1,16 +1,10 @@
-﻿using MonkeyPaste;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common; 
-using Newtonsoft.Json;
-using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using Atk;
-using System.Collections.ObjectModel;
 using System.Windows.Input;
-using Gtk;
+
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvShortcutRecorderParameterViewModel : 
+    public class MpAvShortcutRecorderParameterViewModel :
         MpAvParameterViewModelBase, MpAvIShortcutCommandViewModel {
         #region Private Variables
         #endregion
@@ -30,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
 
                 ICommand cmd = null;
                 object cmdParam = null;
-                if(Parent is MpAvShortcutTriggerViewModel sctvm) {
+                if (Parent is MpAvShortcutTriggerViewModel sctvm) {
                     cmd = MpAvTriggerCollectionViewModel.Instance.InvokeActionCommand;
                     cmdParam = sctvm.ActionId;
                 }
@@ -94,14 +88,14 @@ namespace MonkeyPaste.Avalonia {
 
             await base.InitializeAsync(aipv);
 
-            OnPropertyChanged(nameof(CurrentValue));     
-            if(this is MpISliderViewModel svm) {
+            OnPropertyChanged(nameof(CurrentValue));
+            if (this is MpISliderViewModel svm) {
                 svm.OnPropertyChanged(nameof(svm.MinValue));
                 svm.OnPropertyChanged(nameof(svm.MaxValue));
                 svm.OnPropertyChanged(nameof(svm.SliderValue));
 
             }
-            
+
             await Task.Delay(1);
 
             IsBusy = false;

@@ -1,10 +1,7 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -40,7 +37,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string SelectedItemGuid {
             get {
-                if(SelectedItem == null) {
+                if (SelectedItem == null) {
                     return null;
                 }
                 return SelectedItem.AnnotationGuid;
@@ -74,12 +71,12 @@ namespace MonkeyPaste.Avalonia {
             Json = jsonOrParsedFragment is string ? jsonOrParsedFragment.ToString() : string.Empty;
 
             var rootAnnotation = MpAnnotationNodeFormat.Parse(Json);
-            if(rootAnnotation is MpImageAnnotationNodeFormat) {
+            if (rootAnnotation is MpImageAnnotationNodeFormat) {
                 RootAnnotationViewModel = new MpAvImageAnnotationItemViewModel(this);
             } else {
                 RootAnnotationViewModel = new MpAvAnnotationItemViewModel(this);
             }
-            await RootAnnotationViewModel.InitializeAsync(rootAnnotation,null);
+            await RootAnnotationViewModel.InitializeAsync(rootAnnotation, null);
 
             while (RootAnnotationViewModel.IsAnyBusy) {
                 await Task.Delay(100);
@@ -97,9 +94,9 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private void MpAvAnnotationMessageViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
                 case nameof(SelectedItem):
-                    if(RootAnnotationViewModel != null) {
+                    if (RootAnnotationViewModel != null) {
                         var all_anns = RootAnnotationViewModel
                             .SelfAndAllDescendants();
                         all_anns
@@ -107,17 +104,17 @@ namespace MonkeyPaste.Avalonia {
                             .ForEach(x => x.IsSelected = x.AnnotationGuid == SelectedItemGuid);
                     }
 
-                    if(Parent == null || 
+                    if (Parent == null ||
                         Parent.Parent == null ||
                         Parent.Parent.Parent == null) {
                         break;
                     }
                     var ctvm = Parent.Parent.Parent;
-                    if(ctvm.GetDragSource() is MpAvCefNetWebView wv) {
+                    if (ctvm.GetContentView() is MpIContentView cv) {
                         var msg = new MpQuillAnnotationSelectedMessage() {
                             annotationGuid = SelectedItemGuid
                         };
-                        wv.ExecuteJavascript($"annotationSelected_ext('{msg.SerializeJsonObjectToBase64()}')");
+                        cv.SendMessage($"annotationSelected_ext('{msg.SerializeJsonObjectToBase64()}')");
                     }
                     break;
             }

@@ -13,7 +13,7 @@
     #region Response 
 
     //public class MpHttpResponseFormat {
-        
+
 
     //    public MpPluginResponseContentMap responseToContentMap { get; set; }
     //    public List<MpAnalyzerPluginTextResponseFormat> text { get; set; }

@@ -1,17 +1,15 @@
-﻿using Avalonia.Controls.Platform;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
+using Avalonia.Controls.Platform;
 using Avalonia.Platform;
 using Avalonia.Platform.Interop;
 using Avalonia.Threading;
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.IO;
 namespace MonkeyPaste.Common.Avalonia {
     public static unsafe class GdiApi {
         private const string GlibName = "libglib-2.0.so.0";
@@ -84,7 +82,7 @@ namespace MonkeyPaste.Common.Avalonia {
 
         [DllImport(GdkName)]
         public static extern IntPtr gdk_set_allowed_backends(Utf8Buffer backends);
-        
+
         [DllImport(GtkName)]
         public static extern bool gtk_init_check(int argc, IntPtr argv);
 
@@ -445,8 +443,7 @@ namespace MonkeyPaste.Common.Avalonia {
         public string HandleDescriptor => "XID";
 
         public void Destroy() {
-            Glib.RunOnGlibThreadAsync(() =>
-            {
+            Glib.RunOnGlibThreadAsync(() => {
                 GtkApi.gtk_widget_destroy(_widget);
                 return 0;
             }).Wait();

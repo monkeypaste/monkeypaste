@@ -1,7 +1,7 @@
 ﻿using System.Windows.Input;
 
 namespace MonkeyPaste {
-    public interface MpISaveOrCancelableViewModel : MpIViewModel{
+    public interface MpISaveOrCancelableViewModel : MpIViewModel {
         ICommand SaveCommand { get; }
         ICommand CancelCommand { get; }
 

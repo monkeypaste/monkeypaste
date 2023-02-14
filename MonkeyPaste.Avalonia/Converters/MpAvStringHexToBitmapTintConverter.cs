@@ -1,6 +1,4 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Data.Converters;
+﻿using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -14,41 +12,42 @@ namespace MonkeyPaste.Avalonia {
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
             object imgResourceObj = null;
-            string hex = null; 
-            if(parameter is string paramStr) {
-                if(paramStr.Contains("|")) {
+            string hex = null;
+            if (parameter is string paramStr) {
+                if (paramStr.Contains("|")) {
                     hex = MpSystemColors.ConvertFromString(paramStr.SplitNoEmpty("|")[0]);
                     imgResourceObj = MpSystemColors.ConvertFromString(paramStr.SplitNoEmpty("|")[1]);
-                } else if(paramStr.IsStringImageResourcePathOrKey()) {
+                } else if (paramStr.IsStringImageResourcePathOrKey()) {
                     imgResourceObj = paramStr;
                 } else {
                     hex = MpSystemColors.ConvertFromString(paramStr, null);
                 }
             }
 
-            if(value is int paramIconId) {
+            if (value is int paramIconId) {
                 imgResourceObj = paramIconId;
             }
-            if(value is string valStr) {
+            if (value is string valStr) {
                 if (valStr.IsStringImageResourcePathOrKey()) {
                     imgResourceObj = valStr;
                 } else {
                     hex = MpSystemColors.ConvertFromString(valStr, null);
                 }
             }
-            if(hex == null) {
+            if (hex == null) {
                 hex = "#FF000000";
-            } 
-            if(imgResourceObj == null) {
+            }
+            if (imgResourceObj == null) {
                 imgResourceObj = "TextureImage";
             }
-            if(imgResourceObj is string &&
+            if (imgResourceObj is string &&
                 !imgResourceObj.ToString().IsStringImageResourcePathOrKey()) {
                 try {
-                    if(int.TryParse(imgResourceObj.ToString(), out int iconId)) {
+                    if (int.TryParse(imgResourceObj.ToString(), out int iconId)) {
                         imgResourceObj = iconId;
                     }
-                }catch {
+                }
+                catch {
                     // what does imgResource end with? what is value and param?
                     Debugger.Break();
                 }

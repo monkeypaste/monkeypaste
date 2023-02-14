@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Windows;
-using System.Windows.Media;
 
 namespace MonkeyPaste.Common.Wpf {
 
@@ -124,7 +123,7 @@ namespace MonkeyPaste.Common.Wpf {
             RawDpi = Math.Max(dpiX, dpiY);
             DpiX = dpiX;
             DpiY = dpiY;
-            ThisAppDip = VisualTreeHelper.GetDpi(Application.Current.MainWindow).PixelsPerDip;
+            ThisAppDip = 1; //VisualTreeHelper.GetDpi(Application.Current.MainWindow).PixelsPerDip;
         }
 
         public static Point ConvertWinFormsScreenPointToWpf(System.Drawing.Point winFormsPoint) {

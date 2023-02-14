@@ -1,29 +1,26 @@
-﻿using MonkeyPaste;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.Threading;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Avalonia.Utils.Extensions;
+using SharpHook;
+using SharpHook.Native;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using MonkeyPaste.Common;
-using Avalonia;
-using Avalonia.Threading;
-using SharpHook.Native;
-using Avalonia.Input;
-using SharpHook;
-using System.Threading;
-using MonkeyPaste.Common.Avalonia;
-using Avalonia.Controls;
-using Avalonia.Interactivity;
-using MonkeyPaste.Common.Avalonia.Utils.Extensions;
 using KeyEventArgs = Avalonia.Input.KeyEventArgs;
-using Key = Avalonia.Input.Key;
 
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvShortcutCollectionViewModel : 
-        MpAvSelectorViewModelBase<object,MpAvShortcutViewModel>, 
+    public class MpAvShortcutCollectionViewModel :
+        MpAvSelectorViewModelBase<object, MpAvShortcutViewModel>,
         MpIAsyncSingletonViewModel<MpAvShortcutCollectionViewModel>,
         MpIDndUserCancelNotifier {
 
@@ -82,7 +79,7 @@ namespace MonkeyPaste.Avalonia {
         public MpKeyModifierFlags GlobalKeyModifierFlags {
             get {
                 MpKeyModifierFlags kmf = MpKeyModifierFlags.None;
-                if(GlobalIsCtrlDown) {
+                if (GlobalIsCtrlDown) {
                     kmf |= MpKeyModifierFlags.Control;
                 }
                 if (GlobalIsAltDown) {
@@ -213,7 +210,7 @@ namespace MonkeyPaste.Avalonia {
             string shortcutKeyString = await MpAvAssignShortcutViewModel.ShowAssignShortcutDialog(title, keys, command, commandParameter);
 
             MpAvShortcutViewModel scvm = null;
-            if((int)shortcutType < MpShortcut.MIN_USER_SHORTCUT_TYPE) {
+            if ((int)shortcutType < MpShortcut.MIN_USER_SHORTCUT_TYPE) {
                 // for non-custom shortcuts check shortcut type
                 scvm = Items.FirstOrDefault(x => x.ShortcutType == shortcutType);
             } else {
@@ -230,28 +227,28 @@ namespace MonkeyPaste.Avalonia {
                 shortcutKeyString = string.Empty;
             } else if (shortcutKeyString == string.Empty) {
                 //if an empty assignment was ok'd check if exists 
-                
+
                 //if it does clear, save and unregister
                 if (scvm != null) {
                     scvm.ClearShortcutKeyString();
                     await scvm.Shortcut.WriteToDatabaseAsync();
                     scvm.Unregister();
 
-                    if (scvm.IsCustom())  {
+                    if (scvm.IsCustom()) {
                         Items.Remove(scvm);
                     }
                 } else {
                     //nothing to do since no shortcut created
                 }
-            } else if(scvm == null) {
+            } else if (scvm == null) {
                 //if new shortcut
                 MpRoutingType routingType = shortcutType == MpShortcutType.PasteCopyItem ? MpRoutingType.Direct : MpRoutingType.Internal;
                 //copyitem direct, tag internal, analyzer internal
                 var sc = await MpShortcut.CreateAsync(
-                    shortcutLabel: title, 
+                    shortcutLabel: title,
                     keyString: shortcutKeyString,
-                    routeType: routingType, 
-                    shortcutType: shortcutType, 
+                    routeType: routingType,
+                    shortcutType: shortcutType,
                     commandParameter: commandParameter);
                 scvm = await CreateShortcutViewModel(sc, command);
                 Items.Add(scvm);
@@ -271,7 +268,7 @@ namespace MonkeyPaste.Avalonia {
                     CreatePseudoGlobalInputHooks(MpAvMainWindow.Instance);
                 });
             }
-            if(IS_GLOBAL_INPUT_ENABLED) {
+            if (IS_GLOBAL_INPUT_ENABLED) {
                 CreateGlobalInputHooks();
             }
         }
@@ -286,7 +283,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public async Task<bool> SimulateKeyStrokeSequenceAsync(string keystr, int holdDelay = 0, int releaseDelay = 0) {            
+        public async Task<bool> SimulateKeyStrokeSequenceAsync(string keystr, int holdDelay = 0, int releaseDelay = 0) {
             List<List<KeyCode>> seq = MpSharpHookKeyboardInputHelpers.ConvertStringToKeySequence(keystr);
             foreach (var combo in seq) {
                 foreach (var key in combo) {
@@ -429,7 +426,7 @@ namespace MonkeyPaste.Avalonia {
                             shortcutCommand = MpAvClipTrayViewModel.Instance.ScrollToEndCommand;
                             break;
                         case MpShortcutType.WindowSizeUp:
-                            shortcutCommand = MpAvMainWindowViewModel.Instance.WindowSizeUpCommand;                            
+                            shortcutCommand = MpAvMainWindowViewModel.Instance.WindowSizeUpCommand;
                             break;
                         case MpShortcutType.WindowSizeDown:
                             shortcutCommand = MpAvMainWindowViewModel.Instance.WindowSizeDownCommand;
@@ -462,12 +459,12 @@ namespace MonkeyPaste.Avalonia {
                                 shortcutCommand = MpAvTagTrayViewModel.Instance.SelectTagCommand;
                             } else if (sc.ShortcutType == MpShortcutType.AnalyzeCopyItemWithPreset) {
                                 shortcutCommand = MpAvClipTrayViewModel.Instance.AnalyzeSelectedItemCommand;
-                            }else if (sc.ShortcutType == MpShortcutType.InvokeAction) {
+                            } else if (sc.ShortcutType == MpShortcutType.InvokeAction) {
                                 shortcutCommand = MpAvTriggerCollectionViewModel.Instance.InvokeActionCommand;
                             }
                             break;
                     }
-                    var scvm = await CreateShortcutViewModel(sc,shortcutCommand);
+                    var scvm = await CreateShortcutViewModel(sc, shortcutCommand);
                     Items.Add(scvm);
                 }
             });
@@ -534,14 +531,14 @@ namespace MonkeyPaste.Avalonia {
                     result = true;
                 }
             });
-            
+
             //_keyboardGestureHelper.Reset();
             //_waitToExecuteShortcutStartDateTime = null;
             return result;
         }
 
 
-        
+
 
         #region Global Input
 
@@ -549,7 +546,7 @@ namespace MonkeyPaste.Avalonia {
             if (_hook == null) {
                 _hook = new SimpleGlobalHook();
 
-                if(IS_GLOBAL_MOUSE_INPUT_ENABLED) {
+                if (IS_GLOBAL_MOUSE_INPUT_ENABLED) {
                     _hook.MouseWheel += Hook_MouseWheel;
 
                     _hook.MouseMoved += Hook_MouseMoved;
@@ -562,7 +559,7 @@ namespace MonkeyPaste.Avalonia {
                     _hook.MouseDragged += Hook_MouseDragged;
                 }
 
-                if(IS_GLOBAL_KEYBOARD_INPUT_ENABLED) {
+                if (IS_GLOBAL_KEYBOARD_INPUT_ENABLED) {
                     _hook.KeyPressed += Hook_KeyPressed;
                     _hook.KeyReleased += Hook_KeyReleased;
                 }
@@ -623,12 +620,12 @@ namespace MonkeyPaste.Avalonia {
 
         private void Hook_MousePressed(object sender, MouseHookEventArgs e) {
             MpPortablePointerButtonType button = e.Data.Button.ToPortableButton();
-            if(button == MpPortablePointerButtonType.Left) {
+            if (button == MpPortablePointerButtonType.Left) {
                 HandlePointerPress(true);
-            } else if(button == MpPortablePointerButtonType.Right) {
+            } else if (button == MpPortablePointerButtonType.Right) {
                 HandlePointerPress(false);
             } else {
-                MpConsole.WriteTraceLine("Unknown mouse button pressed: SharpButton: " + e.Data.Button + " PortableButton: "+button);
+                MpConsole.WriteTraceLine("Unknown mouse button pressed: SharpButton: " + e.Data.Button + " PortableButton: " + button);
             }
 
         }
@@ -665,12 +662,12 @@ namespace MonkeyPaste.Avalonia {
 
             if (GlobalIsMouseLeftButtonDown) {
                 // NOTE only flag drag when left button is down, any other is poop
-                if(!GlobalIsPointerDragging) {
+                if (!GlobalIsPointerDragging) {
                     GlobalIsPointerDragging = true;
                     OnGlobalDragBegin?.Invoke(this, null);
                 }
             }
-            
+
             var gmp = GetScaledScreenPoint(e.Data);
             HandlePointerMove(gmp);
         }
@@ -767,55 +764,70 @@ namespace MonkeyPaste.Avalonia {
         #region Pointer
 
         private void HandlePointerPress(bool isLeftButton) {
-            if (isLeftButton) {
-                GlobalIsMouseLeftButtonDown = true;
-                GlobalMouseLeftButtonDownLocation = GlobalMouseLocation;
-                LastLeftClickDateTime = DateTime.Now;
-            } else {
-                GlobalIsMouseRightButtonDown = true;
-                LastRightClickDateTime = DateTime.Now;
-                if (GlobalIsPointerDragging) {
-                    // NOTE no matter what when right mouse is pressed don't treat as dragging (drag handler still processes mouse move)
-                    GlobalIsPointerDragging = false;
-                    OnGlobalDragEnd?.Invoke(this, null);
+            Dispatcher.UIThread.Post(() => {
+                if (isLeftButton) {
+                    GlobalIsMouseLeftButtonDown = true;
+                    GlobalMouseLeftButtonDownLocation = GlobalMouseLocation;
+                    LastLeftClickDateTime = DateTime.Now;
+                } else {
+                    GlobalIsMouseRightButtonDown = true;
+                    LastRightClickDateTime = DateTime.Now;
+                    if (GlobalIsPointerDragging) {
+                        // NOTE no matter what when right mouse is pressed don't treat as dragging (drag handler still processes mouse move)
+                        GlobalIsPointerDragging = false;
+                        OnGlobalDragEnd?.Invoke(this, null);
+                    }
                 }
-            }
 
-            OnGlobalMousePressed?.Invoke(this, isLeftButton);
+                OnGlobalMousePressed?.Invoke(this, isLeftButton);
+            });
+
         }
 
         private void HandlePointerReleased(bool isLeftButton) {
-            if (isLeftButton) {
-                GlobalMouseLeftButtonDownLocation = null;
-                GlobalIsMouseLeftButtonDown = false;
-                if (GlobalIsPointerDragging) {
-                    // this signals end of left pointer drag
-                    GlobalIsPointerDragging = false;
-                    OnGlobalDragEnd?.Invoke(this, null);
+            Dispatcher.UIThread.Post(() => {
+                if (isLeftButton) {
+                    GlobalMouseLeftButtonDownLocation = null;
+                    GlobalIsMouseLeftButtonDown = false;
+                    if (GlobalIsPointerDragging) {
+                        // this signals end of left pointer drag
+                        GlobalIsPointerDragging = false;
+                        OnGlobalDragEnd?.Invoke(this, null);
+                    }
+
+                } else {
+                    GlobalIsMouseRightButtonDown = false;
                 }
 
-            } else {
-                GlobalIsMouseRightButtonDown = false;
-            }
+                OnGlobalMouseReleased?.Invoke(this, isLeftButton);
+            });
 
-            OnGlobalMouseReleased?.Invoke(this, isLeftButton);
         }
         private void HandlePointerMove(MpPoint gmp) {
-            GlobalMouseLocation = gmp;
-            OnGlobalMouseMove?.Invoke(typeof(MpAvShortcutCollectionViewModel).ToString(), GlobalMouseLocation);
+            Dispatcher.UIThread.Post(() => {
+                GlobalMouseLocation = gmp;
+                OnGlobalMouseMove?.Invoke(typeof(MpAvShortcutCollectionViewModel).ToString(), GlobalMouseLocation);
 
-            if(GlobalIsPointerDragging) {
-                OnGlobalDrag?.Invoke(typeof(MpAvShortcutCollectionViewModel).ToString(), GlobalMouseLocation);
-            }
+                if (GlobalIsPointerDragging) {
+                    OnGlobalDrag?.Invoke(typeof(MpAvShortcutCollectionViewModel).ToString(), GlobalMouseLocation);
+                }
+
+            });
         }
 
 
         private void HandlePointerClick(bool isLeftButton) {
-            OnGlobalMouseClicked?.Invoke(this, isLeftButton);
+            Dispatcher.UIThread.Post(() => {
+                OnGlobalMouseClicked?.Invoke(this, isLeftButton);
+
+            });
         }
 
         private void HandlePointerWheel(MpPoint delta) {
-            OnGlobalMouseWheelScroll?.Invoke(typeof(MpAvShortcutCollectionViewModel).ToString(), delta);
+            Dispatcher.UIThread.Post(() => {
+
+                OnGlobalMouseWheelScroll?.Invoke(typeof(MpAvShortcutCollectionViewModel).ToString(), delta);
+            });
         }
 
         #endregion
@@ -832,7 +844,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 if (keyStr.IsShift()) {
-                    GlobalIsShiftDown = true;                    
+                    GlobalIsShiftDown = true;
                 }
                 if (keyStr.IsAlt()) {
                     GlobalIsAltDown = true;
@@ -854,7 +866,7 @@ namespace MonkeyPaste.Avalonia {
                 if (IsShortcutsEnabled) {
                     HandleGestureRouting_Down(keyStr);
                 }
-            });           
+            });
         }
 
         private void HandleKeyUp(string keyStr) {
@@ -872,7 +884,7 @@ namespace MonkeyPaste.Avalonia {
                     GlobalIsAltDown = false;
                 }
                 if (keyStr.IsCtrl()) {
-                    GlobalIsCtrlDown = false; 
+                    GlobalIsCtrlDown = false;
                     //MpConsole.WriteLine("Global ctrl key: UP");
                 }
                 if (keyStr.IsMeta()) {
@@ -888,7 +900,7 @@ namespace MonkeyPaste.Avalonia {
                 if (IsShortcutsEnabled) {
                     HandleGestureRouting_Up(keyStr);
                 }
-            });            
+            });
         }
 
         #region Gesture Handling
@@ -906,9 +918,9 @@ namespace MonkeyPaste.Avalonia {
             _keyboardGestureHelper.ClearCurrentGesture();
             ValidateGesture();
 
-            var exactMatch = 
+            var exactMatch =
                 Items
-                .Where(x=>!string.IsNullOrEmpty(x.KeyString))
+                .Where(x => !string.IsNullOrEmpty(x.KeyString))
                 .FirstOrDefault(x => x.KeyString.ToLower() == curGestureStr.ToLower());
             if (exactMatch != default) {
                 MpConsole.WriteLine($"Shorcut Gesture '{curGestureStr}' matched for shortcut '{exactMatch.ShortcutType}'");
@@ -920,7 +932,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         private void ValidateGesture() {
-            if(_downCount < 0) {
+            if (_downCount < 0) {
                 _downCount = 0;
                 // should never be below zero
                 //Debugger.Break();
@@ -938,7 +950,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-       
+
 
 
         #endregion
@@ -965,11 +977,11 @@ namespace MonkeyPaste.Avalonia {
                 await RegisterViewModelShortcutAsync(
                     sccvm.ShortcutLabel,
                     sccvm.ShortcutCommand,
-                    sccvm.ShortcutType, 
-                    sccvm.ModelId.ToString(), 
+                    sccvm.ShortcutType,
+                    sccvm.ModelId.ToString(),
                     shortcutKeyString);
 
-                if(sccvm is MpViewModelBase vmb) {
+                if (sccvm is MpViewModelBase vmb) {
                     vmb.OnPropertyChanged(nameof(vmb.SelfBindingRef));
                 }
             });
@@ -980,7 +992,7 @@ namespace MonkeyPaste.Avalonia {
                 var scvm = Items[SelectedShortcutIndex];
                 //await RemoveAsync(scvm);
                 await scvm.Shortcut.DeleteFromDatabaseAsync();
-            },(args)=> args is MpAvShortcutViewModel svm && svm.CanDelete);
+            }, (args) => args is MpAvShortcutViewModel svm && svm.CanDelete);
 
 
         public ICommand ResetShortcutCommand => new MpCommand<object>(
@@ -989,14 +1001,14 @@ namespace MonkeyPaste.Avalonia {
 
                 var scvm = Items[SelectedShortcutIndex];
                 scvm.KeyString = scvm.Shortcut.DefaultKeyString;
-                await scvm.InitializeAsync(scvm.Shortcut,scvm.Command);
+                await scvm.InitializeAsync(scvm.Shortcut, scvm.Command);
                 await scvm.Shortcut.WriteToDatabaseAsync();
-            },(args) => args is MpAvShortcutViewModel svm && !string.IsNullOrEmpty(svm.DefaultKeyString));
+            }, (args) => args is MpAvShortcutViewModel svm && !string.IsNullOrEmpty(svm.DefaultKeyString));
 
         public ICommand SimulateKeyStrokeCommand => new MpCommand<object>(
             (keysArg) => {
                 string keys = keysArg as string;
-                if(string.IsNullOrEmpty(keys)) {
+                if (string.IsNullOrEmpty(keys)) {
                     return;
                 }
                 SimulateKeyStrokeSequenceAsync(keys).FireAndForgetSafeAsync();

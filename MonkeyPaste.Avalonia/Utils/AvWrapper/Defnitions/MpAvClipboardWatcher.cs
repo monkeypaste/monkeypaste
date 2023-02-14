@@ -1,21 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Security.Permissions;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Avalonia;
-using Avalonia.Input;
-using Avalonia.Media.Imaging;
-using Avalonia.Threading;
-using MonkeyPaste;
+﻿using Avalonia.Threading;
 using MonkeyPaste.Common;
-using MonkeyPaste.Common.Plugin;
-using MonkeyPaste.Common.Avalonia;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvClipboardWatcher : MpIClipboardMonitor, MpIPlatformDataObjectRegistrar {
@@ -72,13 +59,13 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void StartMonitor() {
-            if(_timer == null) {
+            if (_timer == null) {
                 _timer = new DispatcherTimer(DispatcherPriority.Background) {
                     Interval = TimeSpan.FromMilliseconds(300)
                 };
                 _timer.Tick += _timer_Tick;
             }
-            if(_timer.IsEnabled) {
+            if (_timer.IsEnabled) {
                 return;
             }
 
@@ -98,12 +85,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private void _timer_Tick(object sender, EventArgs e) {            
+        private void _timer_Tick(object sender, EventArgs e) {
             CheckClipboard();
         }
 
-        private void CheckClipboard() {            
-            if(MpPlatform.Services.DataObjectHelperAsync.IsOleBusy) {
+        private void CheckClipboard() {
+            if (MpPlatform.Services.DataObjectHelperAsync.IsOleBusy) {
                 // don't bother it
                 return;
             }
@@ -111,7 +98,7 @@ namespace MonkeyPaste.Avalonia {
         }
         private async Task CheckClipboardHelper() {
             if (_lastCbo == null) {
-                if(_isInitialStart) {
+                if (_isInitialStart) {
                     _isInitialStart = false;
                 } else {
                     // this ensures start/stop ignores last change
@@ -122,9 +109,9 @@ namespace MonkeyPaste.Avalonia {
 
             var cbo = await ConvertManagedFormats();
 
-            if (MpPortableDataObject.IsDataNotEqual(_lastCbo,cbo)) {
+            if (MpPortableDataObject.IsDataNotEqual(_lastCbo, cbo)) {
                 MpConsole.WriteLine("Cb changed");
-                 _lastCbo = cbo;
+                _lastCbo = cbo;
                 var process_cbo = await MpPlatform.Services.DataObjectHelperAsync.GetPlatformClipboardDataObjectAsync(false) as MpPortableDataObject;
                 OnClipboardChanged?.Invoke(typeof(MpAvClipboardWatcher).ToString(), process_cbo);
             }

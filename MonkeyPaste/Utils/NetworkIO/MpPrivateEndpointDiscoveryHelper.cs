@@ -1,12 +1,10 @@
-﻿using System;
+﻿using MonkeyPaste.Common;
+using System;
 using System.Collections.Generic;
-using System.Net.Sockets;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
 using System.Diagnostics;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public class MpPrivateEndpointDiscoveryHelper {
@@ -68,10 +66,11 @@ namespace MonkeyPaste {
                 } else {
                     tcp.EndConnect(ar);
                 }
-            } finally {
+            }
+            finally {
                 wh.Close();
             }
-            if(tcp != null && tcp.Client.Connected) {
+            if (tcp != null && tcp.Client.Connected) {
                 return tcp.Client;
             }
             return null;
@@ -93,7 +92,7 @@ namespace MonkeyPaste {
                 //tcpc = null;
             }
             catch (Exception) {
-                if(tcpc != null && !tcpc.Connected) {
+                if (tcpc != null && !tcpc.Connected) {
                     tcpc.Close();
                     tcpc.Dispose();
                     tcpc = null;
@@ -112,7 +111,7 @@ namespace MonkeyPaste {
                 try {
                     sock.SendTimeout = 25;
                     sock.Connect(IPAddress.Parse(hostname), portno);
-                    if (sock.Connected) {                        
+                    if (sock.Connected) {
                         //sock.Close();
                         return sock;
                     }

@@ -1,20 +1,14 @@
-﻿using Avalonia.Controls;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PropertyChanged;
-using MonkeyPaste.Common.Avalonia;
+﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Threading;
-using Avalonia;
+using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public abstract class MpAvAdornerBase : Control {
         public Control AdornedControl { get; private set; }
 
-        public MpAvAdornerBase(Control adornedControl) : base() {            
+        public MpAvAdornerBase(Control adornedControl) : base() {
             AdornedControl = adornedControl;
             //adornedControl.GetObservable(Control.IsVisibleProperty).Subscribe(value => Draw());
             //adornedControl.GetObservable(Control.BoundsProperty).Subscribe(value => Draw());
@@ -36,7 +30,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public virtual void Draw(bool? forceIsVisibleValue = null) {
-            if(forceIsVisibleValue.HasValue) {
+            if (forceIsVisibleValue.HasValue) {
                 IsVisible = forceIsVisibleValue.Value;
             } else {
                 IsVisible = true;

@@ -2,13 +2,9 @@
 using Avalonia.Input;
 using Avalonia.VisualTree;
 using AvaloniaColorPicker;
-using CefNet.Avalonia;
 using MonkeyPaste.Common;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public interface MpIFocusableViewModel : MpIViewModel {
@@ -25,7 +21,7 @@ namespace MonkeyPaste.Avalonia {
             typeof(TextBox),
             typeof(AutoCompleteBox),
             typeof(ComboBoxItem),
-            typeof(WebView),
+            //typeof(WebView),
             typeof(ColorPickerWindow)
         };
 
@@ -36,20 +32,20 @@ namespace MonkeyPaste.Avalonia {
         public bool IsInputControlFocused {
             get {
                 IInputElement cur_focus = FocusManager.Instance.Current;
-                if(cur_focus == null) { 
+                if (cur_focus == null) {
                     return false;
                 }
-                if(cur_focus is Window) {
+                if (cur_focus is Window) {
                     return false;
                 }
-                if(cur_focus is MpAvCefNetWebView wv) {
-                    if(wv.IsContentSubSelectable) {
+                if (cur_focus is MpIContentView wv) {
+                    if (wv.IsSubSelectable) {
                         return true;
                     }
                 }
-                bool is_input_control =
+                bool is_input_control = cur_focus is Control c &&
                     _inputControlTypes.Any(x =>
-                        cur_focus.GetVisualAncestors().Any(y =>
+                        c.GetVisualAncestors().Any(y =>
                             y.GetType() == x ||
                             y.GetType().IsSubclassOf(x)));
 
@@ -61,9 +57,8 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsSelfManagedHistoryControlFocused {
             get {
-                if(FocusManager.Instance.Current is MpAvCefNetWebView wv &&
-                    wv.DataContext is MpAvClipTileViewModel ctvm) {
-                    return ctvm.IsSubSelectionEnabled;
+                if (FocusManager.Instance.Current is MpIContentView wv) {
+                    return wv.IsSubSelectable;
                 }
                 return false;
             }

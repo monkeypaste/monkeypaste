@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
+using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
-using MonkeyPaste;
-using MonkeyPaste.Common.Plugin;
-using MonkeyPaste.Common;
-using System.Diagnostics;
-using System.IO;
 
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvHandledClipboardFormatViewModel :
-        MpAvTreeSelectorViewModelBase<MpAvClipboardHandlerItemViewModel,MpAvClipboardFormatPresetViewModel>,
+        MpAvTreeSelectorViewModelBase<MpAvClipboardHandlerItemViewModel, MpAvClipboardFormatPresetViewModel>,
         MpISelectableViewModel,
         MpIParameterHostViewModel,
         MpIHoverableViewModel {
@@ -164,7 +159,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string HandledFormat {
             get {
-                if(ClipboardPluginFormat == null) {
+                if (ClipboardPluginFormat == null) {
                     return null;
                 }
                 return ClipboardPluginFormat.clipboardName;
@@ -184,7 +179,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsCoreHandler {
             get {
-                if(PluginFormat == null) {
+                if (PluginFormat == null) {
                     return false;
                 }
                 return PluginFormat.guid == MpPrefViewModel.Instance.CoreClipboardHandlerGuid;
@@ -209,7 +204,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        
+
         #endregion
 
         #endregion
@@ -235,7 +230,7 @@ namespace MonkeyPaste.Avalonia {
         //public async Task InitializeAsync(MpPluginFormat plugin, int handlerIdx, bool isReader) {
         public async Task InitializeAsync(MpClipboardHandlerFormat handlerFormat) {
             IsValid = ValidateClipboardHandlerFormat(handlerFormat);
-            if(!IsValid) {
+            if (!IsValid) {
                 return;
             }
             if (IsLoaded) {
@@ -389,7 +384,7 @@ namespace MonkeyPaste.Avalonia {
                         //CollectionViewSource.GetDefaultView(SelectedItem.Items).Refresh();
                         OnPropertyChanged(nameof(Items));
                         SelectedItem.OnPropertyChanged(nameof(SelectedItem.Items));
-                        
+
                         //Items.ForEach(x => x.IsEditingParameters = false);
                         //SelectedIt em.IsEditingParameters = true;
                     }
@@ -606,7 +601,7 @@ namespace MonkeyPaste.Avalonia {
 
                 // recreate default preset record (name, icon, etc.)
                 var defaultPresetModel = await MpAvPluginPresetLocator.CreateOrResetManifestPresetModelAsync(
-                    this,defvm.PresetGuid,Items.IndexOf(defvm));
+                    this, defvm.PresetGuid, Items.IndexOf(defvm));
 
                 // store IsEnabled to current state
                 bool wasEnabled = defvm.IsEnabled;
@@ -619,7 +614,7 @@ namespace MonkeyPaste.Avalonia {
                 Items.ForEach(x => x.IsSelected = x.PresetId == defvm.PresetId);
                 OnPropertyChanged(nameof(SelectedItem));
 
-                if(wasEnabled) {
+                if (wasEnabled) {
                     MpAvClipboardHandlerCollectionViewModel.Instance.ToggleFormatPresetIsEnabled.Execute(defvm);
                 }
 

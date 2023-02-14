@@ -1,24 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
-using System.Security.Cryptography;
-using Xamarin.Essentials;
-using Org.BouncyCastle.Asn1.Pkcs;
-using Org.BouncyCastle.Asn1.X509;
-using Org.BouncyCastle.Asn1;
-using Org.BouncyCastle.Crypto.Generators;
-using Org.BouncyCastle.Crypto.Operators;
-using Org.BouncyCastle.Crypto.Parameters;
-using Org.BouncyCastle.Crypto.Prng;
-using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.OpenSsl;
-using Org.BouncyCastle.Pkcs;
-using Org.BouncyCastle.Security;
-using Org.BouncyCastle.Utilities;
-using Org.BouncyCastle.X509;
+//using Xamarin.Essentials;
 
 namespace MonkeyPaste {
     public class MpHttpsValidation : IDisposable {
@@ -31,7 +15,7 @@ namespace MonkeyPaste {
 
         //Call GenerateSSLpubklickey callback method and repalce here   
         public MpHttpsValidation(Uri serverUri, string serverPublicKey) {
-            if(!MpNetworkHelpers.IsConnectedToNetwork()) {
+            if (!MpNetworkHelpers.IsConnectedToNetwork()) {
                 Dispose();
             }
 
@@ -65,7 +49,7 @@ namespace MonkeyPaste {
         }
 
         public void Dispose() {
-            
+
         }
     }
 }

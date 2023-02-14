@@ -1,14 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Net;
-using System.Net.Sockets;
 using System.Net.WebSockets;
-using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
-using System.Linq;
 
 namespace MonkeyPaste {
     public class MpRemoteDevice : IComparable {
@@ -19,7 +11,7 @@ namespace MonkeyPaste {
 
         public bool IsWebSocket {
             get {
-                if(RemoteSocket == null) {
+                if (RemoteSocket == null) {
                     return false;
                 }
                 return RemoteSocket is ClientWebSocket;
@@ -41,7 +33,7 @@ namespace MonkeyPaste {
         }
 
         public int CompareTo(object obj) {
-            if(obj != null && obj is MpRemoteDevice ord) {
+            if (obj != null && obj is MpRemoteDevice ord) {
                 return RemoteEndpoint.CompareTo(ord);
             }
             return -1;

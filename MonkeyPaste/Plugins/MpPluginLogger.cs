@@ -1,26 +1,20 @@
-﻿using MonkeyPaste.Common.Plugin;
-using MonkeyPaste.Common;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public static class MpPluginLogger {
         public static async Task<int> LogTransactionAsync(
             MpPluginFormat pluginFormat,
-            MpPluginTransactionBase trans, 
-            MpCopyItem sourceContent, 
+            MpPluginTransactionBase trans,
+            MpCopyItem sourceContent,
             object sourceHandler,
             bool suppressWrite = false) {
-            if(trans is MpAnalyzerTransaction at) {
+            if (trans is MpAnalyzerTransaction at) {
                 int ci_trans_id = await LogAnalyzerTransactionAsync(
-                    pluginFormat, at, 
-                    sourceContent, 
-                    sourceHandler as MpPluginPreset, 
+                    pluginFormat, at,
+                    sourceContent,
+                    sourceHandler as MpPluginPreset,
                     suppressWrite);
                 return ci_trans_id;
             }
@@ -36,7 +30,7 @@ namespace MonkeyPaste {
 
             MpJsonMessageFormatType respType = MpJsonMessageFormatType.Error;
             string respStr = trans.TransactionErrorMessage;
-            if(string.IsNullOrEmpty(respStr)) {
+            if (string.IsNullOrEmpty(respStr)) {
                 respType = MpJsonMessageFormatType.DataObject;
                 respStr = trans.Response.SerializeJsonObject();
             }
@@ -100,7 +94,7 @@ namespace MonkeyPaste {
         //                string pluginDir = Path.GetDirectoryName(manifestPath);
         //                string pluginName = Path.GetFileName(pluginDir);
         //                string processPath = Path.Combine(pluginDir, pluginName + ".exe");
-                        
+
         //                if (pluginFormat.ioType.isCli) {
         //                    var pluginProcessInfo = new MpPortableProcessInfo() {
         //                        ProcessPath = processPath,

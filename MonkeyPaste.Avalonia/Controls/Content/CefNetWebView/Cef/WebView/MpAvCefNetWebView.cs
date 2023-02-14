@@ -18,7 +18,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -27,7 +26,7 @@ namespace MonkeyPaste.Avalonia {
     public enum MpAvEditorBindingFunctionType {
         // two-way *_get async requests
         getDragData,
-        getAllNonInputTemplatesFromDb, 
+        getAllNonInputTemplatesFromDb,
         getClipboardDataTransferObject,
         getDragDataTransferObject,
 
@@ -37,7 +36,7 @@ namespace MonkeyPaste.Avalonia {
         notifySubSelectionEnabledChanged,
         notifyException,
         notifyReadOnlyEnabled,
-        notifyReadOnlyDisabled, 
+        notifyReadOnlyDisabled,
         notifyInitComplete,
         notifyDomLoaded,
         notifyDropCompleted,
@@ -63,10 +62,13 @@ namespace MonkeyPaste.Avalonia {
         notifyAnnotationSelected,
         notifyShowDebugger
     }
+
+
     [DoNotNotify]
-    public class MpAvCefNetWebView : 
-        WebView, 
-        //MpAvIContentView, 
+    public class MpAvCefNetWebView :
+        WebView,
+        MpIContentView,
+        MpIContentViewLocator,
         MpAvIDragSource,
         MpAvIResizableControl,
         MpAvIDomStateAwareWebView,
@@ -90,29 +92,29 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
+        public static string DefaultContentUrl => MpAvClipTrayViewModel.EditorPath;
 
         private static List<MpAvCefNetWebView> _AllWebViews = new List<MpAvCefNetWebView>();
 
-        public static string DefaultContentUrl => MpAvClipTrayViewModel.EditorPath;
         public static MpAvCefNetWebView LocateModalWebView() {
             return _AllWebViews.FirstOrDefault(x => x.DataContext is MpAvClipTileViewModel ctvm && ctvm.IsAppendNotifier);
         }
         public static MpAvCefNetWebView LocateTrayTileWebView(int ciid) {
-            if(ciid < 1) {
+            if (ciid < 1) {
                 return null;
             }
             var result = _AllWebViews
-                .Where(x => 
-                    x.DataContext is MpAvClipTileViewModel ctvm && 
+                .Where(x =>
+                    x.DataContext is MpAvClipTileViewModel ctvm &&
                     !ctvm.IsAppendNotifier &&
                     ctvm.CopyItemId == ciid)
                 .OrderByDescending(x => x._locatedDateTime)
                 .ToList();
 
-            if(result.Count == 0) {
+            if (result.Count == 0) {
                 return null;
             }
-            if(result.Count > 1) {
+            if (result.Count > 1) {
                 // is this during a pin toggle? was this item pinned?
                 //Debugger.Break();
                 // remove old refs
@@ -127,25 +129,38 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region Properties
+        #region Interfaces
 
-        #region View Models
-        public MpAvClipTileViewModel BindingContext {
-            get {
-                if(DataContext is MpAvClipTileViewModel) {
-                    return DataContext as MpAvClipTileViewModel;
-                }
-                if(DataContext is MpNotificationViewModelBase nvmb) {
-                    return nvmb.Body as MpAvClipTileViewModel;
-                }
-                return null;
-            }
-        }
+        #region MpIContentViewLocator
+
 
         #endregion
 
-        #region Bindings & Life Cycle
+        #region MpIContentViewLocator
 
+        MpIContentView MpIContentViewLocator.LocateContentView(int contentId) =>
+            LocateTrayTileWebView(contentId);
+        MpIContentView MpIContentViewLocator.LocateModalContentView() =>
+            LocateModalWebView();
+
+        #endregion
+
+        #region MpIContentView
+
+        void MpIContentView.ShowDevTools() =>
+            ShowDevTools();
+
+        bool MpIContentView.IsSubSelectable =>
+            IsContentSubSelectable;
+
+        Task MpIContentView.LoadContentAsync() =>
+            PerformLoadContentRequestAsync();
+
+        Task MpIContentView.UpdateContentAsync(MpJsonObject contentJsonObj) =>
+            PerformUpdateContentRequestAsync(contentJsonObj);
+
+        void MpIContentView.SendMessage(string msgJsonBase64Str) =>
+            this.ExecuteJavascript(msgJsonBase64Str);
 
         #endregion
 
@@ -161,7 +176,7 @@ namespace MonkeyPaste.Avalonia {
         private Control _resizerControl;
         Control MpAvIResizableControl.ResizerControl {
             get {
-                if(_resizerControl == null) {
+                if (_resizerControl == null) {
                     var ctv = this.GetVisualAncestor<MpAvClipTileView>();
                     if (ctv != null) {
                         _resizerControl = ctv.FindControl<Control>("ClipTileResizeBorder");
@@ -196,7 +211,7 @@ namespace MonkeyPaste.Avalonia {
         //}
         public void NotifyModKeyStateChanged(bool ctrl, bool alt, bool shift, bool esc, bool meta) {
             if (!Dispatcher.UIThread.CheckAccess()) {
-                Dispatcher.UIThread.Post(() => (this as MpAvIDragSource).NotifyModKeyStateChanged(ctrl,alt,shift,esc,meta));
+                Dispatcher.UIThread.Post(() => (this as MpAvIDragSource).NotifyModKeyStateChanged(ctrl, alt, shift, esc, meta));
                 return;
             }
             var modKeyMsg = new MpQuillModifierKeysNotification() {
@@ -210,7 +225,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public async Task<MpAvDataObject> GetDataObjectAsync(bool forOle, string[] formats = null) {
-            if(BindingContext == null) {
+            if (BindingContext == null) {
                 Debugger.Break();
                 return new MpAvDataObject();
             }
@@ -239,9 +254,9 @@ namespace MonkeyPaste.Avalonia {
                 contentDataReq.formats.Remove(MpPortableDataFormats.WinDib);
             }
 
-            var contentDataRespStr = 
+            var contentDataRespStr =
                 await this.EvaluateJavascriptAsync($"contentRequest_ext('{contentDataReq.SerializeJsonObjectToBase64()}')");
-            MpQuillContentDataResponseMessage contentDataResp = 
+            MpQuillContentDataResponseMessage contentDataResp =
                 MpJsonConverter.DeserializeBase64Object<MpQuillContentDataResponseMessage>(contentDataRespStr);
 
 
@@ -289,14 +304,14 @@ namespace MonkeyPaste.Avalonia {
                 //avdo.SetData(MpPortableDataFormats.CefAsciiUrl, MpPlatformWrapper.Services.SourceRefBuilder.ToUrlAsciiBytes(ctvm.CopyItem));
 
                 List<string> uri_list = new List<string>();
-                if(avdo.TryGetData<IEnumerable<string>>(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT,out var uris)) {
+                if (avdo.TryGetData<IEnumerable<string>>(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, out var uris)) {
                     uri_list = uris.ToList();
                 }
                 uri_list.Add(MpPlatform.Services.SourceRefBuilder.ConvertToRefUrl(ctvm.CopyItem));
                 avdo.SetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, uri_list);
             }
 
-            
+
             avdo.MapAllPseudoFormats();
 
             //avdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.AvPNG));
@@ -309,6 +324,29 @@ namespace MonkeyPaste.Avalonia {
             return avdo;
         }
         public bool IsCurrentDropTarget => BindingContext == null ? false : BindingContext.IsDropOverTile;
+
+        #endregion
+        #endregion
+
+        #region Properties
+
+        #region View Models
+        public MpAvClipTileViewModel BindingContext {
+            get {
+                if (DataContext is MpAvClipTileViewModel) {
+                    return DataContext as MpAvClipTileViewModel;
+                }
+                if (DataContext is MpNotificationViewModelBase nvmb) {
+                    return nvmb.Body as MpAvClipTileViewModel;
+                }
+                return null;
+            }
+        }
+
+        #endregion
+
+        #region Bindings & Life Cycle
+
 
         #endregion
 
@@ -329,8 +367,12 @@ namespace MonkeyPaste.Avalonia {
             this.GetObservable(MpAvCefNetWebView.IsContentResizingProperty).Subscribe(value => OnIsContentResizingChanged());
             this.GetObservable(MpAvCefNetWebView.IsContentReadOnlyProperty).Subscribe(value => OnIsContentReadOnlyChanged());
             this.GetObservable(MpAvCefNetWebView.IsContentSubSelectableProperty).Subscribe(value => OnIsContentSubSelectableChanged());
-            this.GetObservable(MpAvCefNetWebView.IsContentFindAndReplaceVisibleProperty).Subscribe(value => OnIsContentFindOrReplaceVisibleChanged());   
+            this.GetObservable(MpAvCefNetWebView.IsContentFindAndReplaceVisibleProperty).Subscribe(value => OnIsContentFindOrReplaceVisibleChanged());
+
+            this.PointerPressed += MpAvCefNetWebView_PointerPressed;
+            this.AttachedToLogicalTree += MpAvCefNetWebView_AttachedToLogicalTree;
         }
+
 
 
         #endregion
@@ -344,12 +386,6 @@ namespace MonkeyPaste.Avalonia {
         protected override WebViewGlue CreateWebViewGlue() {
             return new MpAvCefNetWebViewGlue(this);
         }
-
-        protected override void OnPointerPressed(PointerPressedEventArgs e) {
-            base.OnPointerPressed(e);
-            LastPointerPressedEventArgs = e;
-        }
-
 
         #endregion
 
@@ -385,7 +421,7 @@ namespace MonkeyPaste.Avalonia {
 
         async Task MpAvIWebViewBindingResponseHandler.HandleBindingNotificationAsync(MpAvEditorBindingFunctionType notificationType, string msgJsonBase64Str) {
             var ctvm = BindingContext;
-            if (ctvm == null && 
+            if (ctvm == null &&
                 notificationType != MpAvEditorBindingFunctionType.notifyDomLoaded &&
                 notificationType != MpAvEditorBindingFunctionType.notifyInitComplete) {
                 // converter doesn't have data context but needs to notify dom loaded which doesn't need it
@@ -440,7 +476,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpAvEditorBindingFunctionType.notifyDataTransferCompleted:
                     ntf = MpJsonConverter.DeserializeBase64Object<MpQuillDataTransferCompletedNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillDataTransferCompletedNotification dataTransferCompleted_ntf) {
-                        ProcessDataTransferCompleteResponse(dataTransferCompleted_ntf).FireAndForgetSafeAsync(BindingContext);                      
+                        ProcessDataTransferCompleteResponse(dataTransferCompleted_ntf).FireAndForgetSafeAsync(BindingContext);
                     }
                     break;
                 case MpAvEditorBindingFunctionType.notifyLastTransactionUndone:
@@ -460,7 +496,7 @@ namespace MonkeyPaste.Avalonia {
                         ctvm.IsSubSelectionEnabled = subSelChangedNtf.isSubSelectionEnabled;
                     }
                     break;
-                
+
                 case MpAvEditorBindingFunctionType.notifyAnnotationSelected:
                     ntf = MpJsonConverter.DeserializeBase64Object<MpQuillAnnotationSelectedMessage>(msgJsonBase64Str);
                     if (ntf is MpQuillAnnotationSelectedMessage annSelectedMsg) {
@@ -494,7 +530,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpAvEditorBindingFunctionType.notifyAppendStateChanged:
                     ntf = MpJsonConverter.DeserializeBase64Object<MpQuillAppendStateChangedMessage>(msgJsonBase64Str);
                     if (ntf is MpQuillAppendStateChangedMessage appendStateChangedMsg) {
-                        ProcessAppendStateChangedMessage(appendStateChangedMsg,"editor");
+                        ProcessAppendStateChangedMessage(appendStateChangedMsg, "editor");
                     }
                     break;
 
@@ -691,7 +727,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
 
-            if(string.IsNullOrEmpty(getResp.responseFragmentJsonStr)) {
+            if (string.IsNullOrEmpty(getResp.responseFragmentJsonStr)) {
                 // no data to return
                 return;
             }
@@ -704,9 +740,7 @@ namespace MonkeyPaste.Avalonia {
         #region Control Life Cycle
 
 
-        protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e) {
-            base.OnAttachedToLogicalTree(e);
-
+        private void MpAvCefNetWebView_AttachedToLogicalTree(object sender, LogicalTreeAttachmentEventArgs e) {
             if (_AllWebViews.Contains(this)) {
                 // should only happen once
                 Debugger.Break();
@@ -718,6 +752,11 @@ namespace MonkeyPaste.Avalonia {
             _AllWebViews.Add(this);
         }
 
+        private void MpAvCefNetWebView_PointerPressed(object sender, PointerPressedEventArgs e) {
+            LastPointerPressedEventArgs = e;
+        }
+
+
         protected override void OnDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e) {
             base.OnDetachedFromLogicalTree(e);
             _AllWebViews.Remove(this);
@@ -728,7 +767,7 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void OnDataContextEndUpdate() {
             base.OnDataContextEndUpdate();
-            if(_locatedDateTime == null) {
+            if (_locatedDateTime == null) {
                 // is this called before attached to logical tree?
                 Debugger.Break();
             }
@@ -759,8 +798,8 @@ namespace MonkeyPaste.Avalonia {
 
         public virtual string ContentUrl {
             get {
-                if(this.GetVisualRoot() == MpAvMainWindow.Instance) {
-                    return MpAvClipTrayViewModel.EditorPath; 
+                if (this.GetVisualRoot() == MpAvMainWindow.Instance) {
+                    return MpAvClipTrayViewModel.EditorPath;
                 }
                 return $"{MpAvClipTrayViewModel.EditorPath}?{APPEND_NOTIFIER_URL_PARAMS}";
             }
@@ -836,7 +875,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion 
 
         private void OnContentIdChanged() {
-            if(BindingContext == null ||
+            if (BindingContext == null ||
                 !BindingContext.IsContentReadOnly) {
                 return;
             }
@@ -847,15 +886,15 @@ namespace MonkeyPaste.Avalonia {
         public async Task PerformUpdateContentRequestAsync(MpJsonObject jsonObj) {
             Dispatcher.UIThread.VerifyAccess();
             await Task.Delay(1);
-            if(!IsEditorInitialized || !IsContentLoaded) {
+            if (!IsEditorInitialized || !IsContentLoaded) {
                 // which is it? what's the state of tile?
                 Debugger.Break();
                 return;
             }
             var req = new MpQuillUpdateContentRequestMessage();
-            if(jsonObj is MpQuillDelta) {
+            if (jsonObj is MpQuillDelta) {
                 req.deltaFragmentStr = jsonObj.SerializeJsonObjectToBase64();
-            } else if(jsonObj is MpAnnotationNodeFormat) {
+            } else if (jsonObj is MpAnnotationNodeFormat) {
                 req.annotationFragmentStr = jsonObj.SerializeJsonObjectToBase64();
             } else {
                 return;
@@ -865,7 +904,7 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task PerformLoadContentRequestAsync() {
             Dispatcher.UIThread.VerifyAccess();
-            
+
             IsContentLoaded = false;
 
             if (this.PendingEvalCount() > 0) {
@@ -874,7 +913,7 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(100);
                 }
             }
-             
+
             if (BindingContext.IsPlaceholder && !BindingContext.IsPinned) {
                 return;
             }
@@ -920,8 +959,8 @@ namespace MonkeyPaste.Avalonia {
                 Debugger.Break();
                 return;
             }
-            if(!string.IsNullOrWhiteSpace(contentChanged_ntf.dataTransferCompletedRespFragment) &&
-                MpJsonConverter.DeserializeBase64Object<MpQuillDataTransferCompletedNotification>(contentChanged_ntf.dataTransferCompletedRespFragment) is 
+            if (!string.IsNullOrWhiteSpace(contentChanged_ntf.dataTransferCompletedRespFragment) &&
+                MpJsonConverter.DeserializeBase64Object<MpQuillDataTransferCompletedNotification>(contentChanged_ntf.dataTransferCompletedRespFragment) is
                 MpQuillDataTransferCompletedNotification dtcn) {
                 ProcessDataTransferCompleteResponse(dtcn).FireAndForgetSafeAsync(BindingContext);
             }
@@ -937,21 +976,21 @@ namespace MonkeyPaste.Avalonia {
                 hasSizeChanged = true;
                 BindingContext.LineCount = contentChanged_ntf.lines;
             }
-            if(hasSizeChanged) {
+            if (hasSizeChanged) {
                 BindingContext.CopyItemSize = new MpSize(BindingContext.CharCount, BindingContext.LineCount);
             }
 
             if (contentChanged_ntf.itemData != null) {
-                if(contentChanged_ntf.itemData.IsEmptyRichHtmlString()) {
+                if (contentChanged_ntf.itemData.IsEmptyRichHtmlString()) {
                     // data's getting reset again
                     Debugger.Break();
                 }
                 BindingContext.CopyItemData = contentChanged_ntf.itemData;
             }
-            if (contentChanged_ntf.editorHeight > 0 && 
+            if (contentChanged_ntf.editorHeight > 0 &&
                 contentChanged_ntf.editorHeight > 0) {
                 var new_size = new MpSize(contentChanged_ntf.editorWidth, contentChanged_ntf.editorHeight);
-                if(!new_size.IsEqual(BindingContext.UnconstrainedContentDimensions)) {
+                if (!new_size.IsEqual(BindingContext.UnconstrainedContentDimensions)) {
                     BindingContext.UnconstrainedContentDimensions = new_size;
                 }
             }
@@ -975,8 +1014,8 @@ namespace MonkeyPaste.Avalonia {
                 refs = other_refs.Select(x => MpPlatform.Services.SourceRefBuilder.ConvertToRefUrl(x));
             }
             MpTransactionType transType = dataTransferCompleted_ntf.transferLabel.ToEnum<MpTransactionType>();
-           
-            if(transType == MpTransactionType.None) {
+
+            if (transType == MpTransactionType.None) {
                 // what's the label?
                 Debugger.Break();
                 transType = MpTransactionType.Error;
@@ -1012,7 +1051,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         private void OnIsContentSelectedChanged() {
-            if (BindingContext == null || 
+            if (BindingContext == null ||
                 !IsContentLoaded ||
                 MpAvFocusManager.Instance.IsInputControlFocused) {
                 return;
@@ -1107,17 +1146,17 @@ namespace MonkeyPaste.Avalonia {
                 BindingMode.TwoWay);
 
         private async void OnIsContentSubSelectableChanged() {
-            if (BindingContext == null ||               
+            if (BindingContext == null ||
                 !IsContentLoaded ||
                 !IsContentReadOnly) {
                 return;
             }
 
-            if(!IsEditorInitialized && BindingContext.IsPlaceholder) {
+            if (!IsEditorInitialized && BindingContext.IsPlaceholder) {
                 // it does happen (i think this is the other i case for pin/unpin thing)
                 Debugger.Break();
             }
-            while(!IsEditorInitialized) {
+            while (!IsEditorInitialized) {
                 // when tile ispinned is toggled and was subselectable, need to let the new view catch up
                 await Task.Delay(100);
             }
@@ -1130,7 +1169,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             } else {
                 this.ExecuteJavascript("disableSubSelection_ext()");
-                MpAvResizeExtension.ResizeAnimated(this,BindingContext.ReadOnlyWidth, BindingContext.ReadOnlyHeight);
+                MpAvResizeExtension.ResizeAnimated(this, BindingContext.ReadOnlyWidth, BindingContext.ReadOnlyHeight);
             }
 
         }
@@ -1188,7 +1227,7 @@ namespace MonkeyPaste.Avalonia {
                 (x, o) => x.AppendModeState = o,
                 MpAppendModeFlags.None,
                 BindingMode.TwoWay);
-        
+
         #endregion
 
         #region AppendData Property
@@ -1207,7 +1246,7 @@ namespace MonkeyPaste.Avalonia {
                 null,
                 BindingMode.TwoWay);
 
-        
+
         #endregion
 
         private void OnAppendModeStateChanged(string source) {
@@ -1241,7 +1280,7 @@ namespace MonkeyPaste.Avalonia {
                 isAppendLineMode = AppendModeState.HasFlag(MpAppendModeFlags.AppendLine),
                 isAppendMode = AppendModeState.HasFlag(MpAppendModeFlags.Append),
                 isAppendManualMode = AppendModeState.HasFlag(MpAppendModeFlags.Manual),
-                appendData = AppendData 
+                appendData = AppendData
             };
             this.ExecuteJavascript($"appendDataToNotifier_ext('{req.SerializeJsonObjectToBase64()}')");
 
@@ -1262,16 +1301,16 @@ namespace MonkeyPaste.Avalonia {
                         ctrvm.ToggleAppendLineModeCommand.Execute(null);
                     } else if (appendChangedMsg.isAppendMode && !ctrvm.IsAppendMode) {
                         ctrvm.ToggleAppendModeCommand.Execute(null);
-                    } else if(BindingContext.IsAppendNotifier &&
+                    } else if (BindingContext.IsAppendNotifier &&
                         (!appendChangedMsg.isAppendLineMode && !appendChangedMsg.isAppendMode && ctrvm.IsAnyAppendMode)) {
                         // only let notifier deactivate
                         await ctrvm.DeactivateAppendModeAsync();
-                    } else if(BindingContext.IsAppendNotifier &&
+                    } else if (BindingContext.IsAppendNotifier &&
                                 !string.IsNullOrEmpty(appendChangedMsg.appendData)) {
                         MpNotificationBuilder.ShowNotificationAsync(MpNotificationType.AppendChanged).FireAndForgetSafeAsync();
                     }
                 }
-                while(ctrvm.IsAnyBusy) {
+                while (ctrvm.IsAnyBusy) {
                     await Task.Delay(100);
                 }
                 while (ctrvm.IsAddingClipboardItem) {
@@ -1287,8 +1326,8 @@ namespace MonkeyPaste.Avalonia {
             if (BindingContext.IsAppendNotifier) {
                 // relay to tray tile
                 dest_wv = LocateTrayTileWebView(BindingContext.CopyItemId);
-               
-            } else if(BindingContext.IsAppendTrayItem) {
+
+            } else if (BindingContext.IsAppendTrayItem) {
                 // relay to notifier
                 dest_wv = LocateModalWebView();
             }

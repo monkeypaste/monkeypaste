@@ -1,10 +1,8 @@
-﻿using MonkeyPaste.Common.Plugin; 
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using SQLite;
 using System;
 using System.Threading.Tasks;
-using System.Linq;
-using System.Diagnostics;
 
 namespace MonkeyPaste {
     public enum MpParameterHostType {
@@ -12,7 +10,7 @@ namespace MonkeyPaste {
         Preset,
         Action
     }
-    public class MpParameterValue : 
+    public class MpParameterValue :
         MpDbModelBase, MpIParamterValueProvider,
         MpIClonableDbModel<MpParameterValue> {
 
@@ -65,7 +63,7 @@ namespace MonkeyPaste {
 
         public static async Task<MpParameterValue> CreateAsync(
             MpParameterHostType hostType = MpParameterHostType.None,
-            int hostId = 0, 
+            int hostId = 0,
             object paramId = null,
             string value = "") {
             if (hostType == MpParameterHostType.None) {
@@ -74,7 +72,7 @@ namespace MonkeyPaste {
             if (hostId == 0) {
                 throw new Exception("Preset Value must be associated with a preset and parameter");
             }
-            if(string.IsNullOrEmpty(paramId.ToString())) {
+            if (string.IsNullOrEmpty(paramId.ToString())) {
                 throw new Exception("ParamId must cannot be null or empty");
             }
             var dup_check = await MpDataModelProvider.GetParameterValueAsync(hostType, hostId, paramId.ToString());

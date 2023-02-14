@@ -1,8 +1,6 @@
-﻿using Avalonia;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Data.Converters;
 using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Globalization;
 
@@ -11,19 +9,19 @@ namespace MonkeyPaste.Avalonia {
         public static readonly MpAvBoolToGridLengthConverter Instance = new();
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            if(value is bool boolVal && 
+            if (value is bool boolVal &&
                 parameter is string paramStr &&
                 paramStr.SplitNoEmpty("|") is string[] paramParts) {
                 int idx = boolVal ? 0 : 1;
                 string param_val = paramParts[idx];
-                if(param_val.ToLower().EndsWith("*")) {
-                    if(param_val == "*") {
+                if (param_val.ToLower().EndsWith("*")) {
+                    if (param_val == "*") {
                         return GridLength.Star;
                     }
                     double star_val = double.Parse(param_val.Replace("*", string.Empty));
                     return new GridLength(star_val, GridUnitType.Star);
                 }
-                if(param_val.ToLower() == "auto") {
+                if (param_val.ToLower() == "auto") {
                     return GridLength.Auto;
                 }
                 double pixel_val = double.Parse(param_val);

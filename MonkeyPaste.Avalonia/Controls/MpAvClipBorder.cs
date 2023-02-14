@@ -1,17 +1,20 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
-using MonkeyPaste.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Avalonia.Styling;
+using Avalonia.Threading;
 using PropertyChanged;
+using System;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public class MpAvClipBorder : Border {
+    }
+    [DoNotNotify]
+    public class MpAvClipBorder2 : Border, IStyleable {
+
+        Type IStyleable.StyleKey => typeof(Border);
+
         private Geometry clipGeometry = null;
         private object oldClip;
 
@@ -20,7 +23,7 @@ namespace MonkeyPaste.Avalonia {
             base.Render(context);
         }
 
-        public new IControl Child {
+        public new Control? Child {
             get {
                 return base.Child;
             }
@@ -48,14 +51,16 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected virtual void OnApplyChildClip() {
-            IControl child = this.Child;
+            Control? child = this.Child;
             if (child != null) {
                 // Get the geometry of a rounded rectangle border based on the BorderThickness and CornerRadius
                 clipGeometry = GeometryHelper.GetRoundRectangle(
                     new Rect(Child.Bounds.Size), this.BorderThickness, this.CornerRadius);
 
                 //clipGeometry.Freeze();
-                child.Clip = clipGeometry;
+                //child.Clip = clipGeometry;
+
+                Dispatcher.UIThread.Post(() => { child.Clip = clipGeometry; });
             }
         }
     }
@@ -163,7 +168,7 @@ namespace MonkeyPaste.Avalonia {
                 context.LineTo(bottomLeftRect.BottomRight);
                 // BottomLeft Arc
                 context.ArcTo(bottomLeftRect.TopLeft, bottomLeftRect.Size, 0, false, SweepDirection.Clockwise);
-                
+
                 context.EndFigure(true);
             }
 

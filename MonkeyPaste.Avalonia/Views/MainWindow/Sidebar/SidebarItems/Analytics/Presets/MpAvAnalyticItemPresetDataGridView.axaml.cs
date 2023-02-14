@@ -1,16 +1,10 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
-using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using System.Linq;
 using System;
-using Avalonia.Input;
-using Avalonia.Media;
-using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvAnalyticItemPresetDataGridView : MpAvUserControl<MpAvAnalyticItemViewModel> {
@@ -18,13 +12,13 @@ namespace MonkeyPaste.Avalonia {
         public MpAvAnalyticItemPresetDataGridView() {
             InitializeComponent();
             this.DataContextChanged += MpAvAnalyticItemPresetDataGridView_DataContextChanged;
-            if(DataContext != null) {
+            if (DataContext != null) {
                 MpAvAnalyticItemPresetDataGridView_DataContextChanged(this, null);
             }
         }
 
         private void MpAvAnalyticItemPresetDataGridView_DataContextChanged(object sender, EventArgs e) {
-            if(BindingContext == null) {
+            if (BindingContext == null) {
                 return;
             }
             BindingContext.PropertyChanged += BindingContext_PropertyChanged;
@@ -35,7 +29,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void PresetVIewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             var aipvm = sender as MpAvAnalyticItemPresetViewModel;
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
                 case nameof(aipvm.IconId):
                     RefreshDataGrid();
                     break;
@@ -51,13 +45,13 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void BindingContext_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
                 case nameof(BindingContext.SelectedItem):
                 case nameof(BindingContext.IsSelected):
                     RefreshDataGrid();
                     break;
                 case nameof(BindingContext.HasModelChanged):
-                    if(!BindingContext.HasModelChanged) {
+                    if (!BindingContext.HasModelChanged) {
                         RefreshDataGrid();
                     }
                     break;
@@ -67,7 +61,7 @@ namespace MonkeyPaste.Avalonia {
         private async void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             // wait for view to catchup ?
             await Task.Delay(300);
-            if(e.NewItems != null) {
+            if (e.NewItems != null) {
                 e.NewItems.Cast<MpViewModelBase>().Where(x => x != null).ForEach(x => x.PropertyChanged += PresetVIewModel_PropertyChanged);
             }
             //if(e.OldItems != null) {

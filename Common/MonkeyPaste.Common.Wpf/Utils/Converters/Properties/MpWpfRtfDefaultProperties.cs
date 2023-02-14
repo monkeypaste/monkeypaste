@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media;
 
 namespace MonkeyPaste.Common.Wpf {
@@ -103,7 +101,7 @@ namespace MonkeyPaste.Common.Wpf {
 
         #region Public Methods
         public void AddFont(string fontName) {
-            if(!FontFamilys.Contains(fontName)) {
+            if (!FontFamilys.Contains(fontName)) {
                 FontFamilys.Add(fontName);
                 FontFamilys = new ObservableCollection<string>(FontFamilys.OrderBy(x => x));
             }
@@ -123,7 +121,7 @@ namespace MonkeyPaste.Common.Wpf {
         }
 
         public void SetDefaultFont(string fontName) {
-            if(!FontFamilys.Contains(fontName)) {
+            if (!FontFamilys.Contains(fontName)) {
                 AddFont(fontName);
             }
             _defaultFontIdx = FontFamilys.IndexOf(fontName);

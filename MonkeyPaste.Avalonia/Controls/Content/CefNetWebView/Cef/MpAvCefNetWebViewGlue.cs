@@ -1,21 +1,8 @@
-﻿using Avalonia.Controls.ApplicationLifetimes;
+﻿using Avalonia.Input;
 using Avalonia.Threading;
 using CefNet;
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using MonkeyPaste.Common.Avalonia;
-using MonkeyPaste.Common;
-using Newtonsoft.Json;
-using System.Collections.Generic;
 using CefNet.Avalonia;
 using CefNet.Internal;
-using Avalonia.Input;
-using Avalonia.Controls;
-using Avalonia.Interactivity;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvCefNetWebViewGlue : AvaloniaWebViewGlue {
@@ -39,7 +26,7 @@ namespace MonkeyPaste.Avalonia {
             if (source == CefFocusSource.Navigation) {
                 return false;
             }
-            
+
             return true;
         }
 
@@ -57,19 +44,22 @@ namespace MonkeyPaste.Avalonia {
         /// <returns>Return false to abort the drag operation or true to handle the drag operation.</returns>
         /// 
         protected override bool StartDragging(CefBrowser browser, CefDragData dragData, CefDragOperationsMask allowedOps, int x, int y) {
-            if(browser.Host.Client.GetWebView() is MpAvIDragSource ds) {
+            if (browser.Host.Client.GetWebView() is MpAvIDragSource ds) {
                 Dispatcher.UIThread.Post(async () => {
 
                     //var gmp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
                     //var kmf = MpAvShortcutCollectionViewModel.Instance.GlobalKeyModifierFlags;
                     //var pe = MpAvPointerInputHelpers.SimulatePointerEventArgs(ds as Control, gmp, kmf);
-                    await MpAvDocumentDragHelper.PerformDragAsync(ds, ds.LastPointerPressedEventArgs, allowedOps.ToDragDropEffects());
+
+                    //var de = allowedOps.ToDragDropEffects();
+                    var de = DragDropEffects.Move | DragDropEffects.Copy;
+                    await MpAvDocumentDragHelper.PerformDragAsync(ds, ds.LastPointerPressedEventArgs, de);
 
                     browser.Host.DragSourceEndedAt(0, 0, CefDragOperationsMask.None);
                     browser.Host.DragSourceSystemDragEnded();
                 });
             }
-            return true;            
+            return true;
         }
         protected override void UpdateDragCursor(CefBrowser browser, CefDragOperationsMask operation) {
             base.UpdateDragCursor(browser, operation);

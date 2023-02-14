@@ -1,10 +1,6 @@
 ﻿using MonoMac.AppKit;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvMacPathIconHelper {
@@ -39,7 +35,7 @@ namespace MonkeyPaste.Common.Avalonia {
                     string base64 = Convert.ToBase64String(bytes);
                     return base64;
                 }
-            }    
+            }
         }
         #endregion
     }

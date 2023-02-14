@@ -1,11 +1,9 @@
-﻿using SQLite;
-
+﻿using MonkeyPaste.Common;
+using SQLite;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     [Table("MpCopyItemTag")]
@@ -57,8 +55,8 @@ namespace MonkeyPaste {
         #region Statics
 
         public static async Task<MpCopyItemTag> Create(int tagId, int copyItemId, int sortIdx = 0) {
-            var dupCheck = await MpDataModelProvider.GetCopyItemTagForTagAsync(copyItemId,tagId);
-            if(dupCheck != null) {
+            var dupCheck = await MpDataModelProvider.GetCopyItemTagForTagAsync(copyItemId, tagId);
+            if (dupCheck != null) {
                 dupCheck.WasDupOnCreate = true;
                 return dupCheck;
             }
@@ -123,7 +121,7 @@ namespace MonkeyPaste {
         }
 
         public async Task<string> SerializeDbObjectAsync() {
-            var cit =await  MpDataModelProvider.GetItemAsync<MpCopyItem>(CopyItemId);
+            var cit = await MpDataModelProvider.GetItemAsync<MpCopyItem>(CopyItemId);
             var t = await MpDataModelProvider.GetItemAsync<MpTag>(TagId);
 
             return string.Format(
@@ -176,7 +174,7 @@ namespace MonkeyPaste {
             return Id != MpTag.AllTagId;
         }
         public override async Task WriteToDatabaseAsync() {
-            if(CopyItemId < 0) {
+            if (CopyItemId < 0) {
                 // why is this happening? (have a hunch its when dragging tile onto pin tray or onto tag)
                 Debugger.Break();
                 CopyItemId *= -1;

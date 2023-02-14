@@ -1,18 +1,16 @@
-﻿using System;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
+using SQLite;
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using SQLite;
-using MonkeyPaste.Common.Plugin;
-using MonkeyPaste.Common;
-
-using System.Diagnostics;
 
 namespace MonkeyPaste {
-    public class MpCopyItem : 
-        MpDbModelBase, 
-        MpISyncableDbObject, 
+    public class MpCopyItem :
+        MpDbModelBase,
+        MpISyncableDbObject,
         MpISourceRef,
         MpIIconResource,
         MpIDbIconId,
@@ -25,7 +23,7 @@ namespace MonkeyPaste {
                 return Environment.NewLine;
             }
         }
-        
+
         #endregion
 
         #region Column Definitions
@@ -127,34 +125,34 @@ namespace MonkeyPaste {
 
         #region Static Methods
         public static async Task<MpCopyItem> CreateAsync(
-            string data = "", 
+            string data = "",
             string dataFormat = MpPortableDataFormats.Text,
             MpCopyItemType itemType = MpCopyItemType.Text,
             string title = "",
             int dataObjectId = 0,
             bool suppressWrite = false) {
             MpCopyItem dupCheck = null;
-            if(MpPrefViewModel.Instance.IgnoreNewDuplicates && !suppressWrite) {
+            if (MpPrefViewModel.Instance.IgnoreNewDuplicates && !suppressWrite) {
                 dupCheck = await MpDataModelProvider.GetCopyItemByDataAsync(data);
                 if (dupCheck != null) {
                     dupCheck.WasDupOnCreate = true;
                     return dupCheck;
                 }
-            } 
-            
+            }
 
-            if(MpPrefViewModel.Instance.UniqueContentItemIdx == 0 && !suppressWrite) {
+
+            if (MpPrefViewModel.Instance.UniqueContentItemIdx == 0 && !suppressWrite) {
                 MpPrefViewModel.Instance.UniqueContentItemIdx = await MpDataModelProvider.GetTotalCopyItemCountAsync();
             }
-            
+
 
             var newCopyItem = new MpCopyItem() {
                 CopyItemGuid = System.Guid.NewGuid(),
                 CopyDateTime = DateTime.Now,
-                Title = title, 
+                Title = title,
                 ItemData = data,
                 ItemType = itemType,
-                DataFormat = dataFormat,                     
+                DataFormat = dataFormat,
                 CopyCount = 1,
                 DataObjectId = dataObjectId
             };
@@ -164,7 +162,7 @@ namespace MonkeyPaste {
             return newCopyItem;
         }
 
-         #endregion
+        #endregion
 
         [Ignore]
         public int ManualSortIdx { get; set; }
@@ -214,12 +212,12 @@ namespace MonkeyPaste {
         }
 
         public override async Task WriteToDatabaseAsync() {
-            if(IgnoreDb) {
+            if (IgnoreDb) {
                 MpConsole.WriteLine($"Db write for '{ToString()}' was ignored");
                 return;
             }
 
-            if(ItemData.IsEmptyRichHtmlString()) {
+            if (ItemData.IsEmptyRichHtmlString()) {
                 // what IS this nasty shit??
                 Debugger.Break();
                 return;
@@ -254,18 +252,18 @@ namespace MonkeyPaste {
             delete_tasks.Add(dobj.DeleteFromDatabaseAsync());
 
             var do_model = await MpDataModelProvider.GetItemAsync<MpDataObject>(DataObjectId);
-            if(do_model != null) {
+            if (do_model != null) {
                 delete_tasks.Add(do_model.DeleteFromDatabaseAsync());
             }
 
             var citrl = await MpDataModelProvider.GetCopyItemTransactionsByCopyItemIdAsync(Id);
-            if(citrl != null && citrl.Count > 0) {
-                delete_tasks.AddRange(citrl.Select(x=>x.DeleteFromDatabaseAsync()));
+            if (citrl != null && citrl.Count > 0) {
+                delete_tasks.AddRange(citrl.Select(x => x.DeleteFromDatabaseAsync()));
             }
 
-            if(IconId > 0) {
+            if (IconId > 0) {
                 var ci_icon = await MpDataModelProvider.GetItemAsync<MpIcon>(IconId);
-                if(ci_icon != null) {
+                if (ci_icon != null) {
                     delete_tasks.Add(ci_icon.DeleteFromDatabaseAsync());
                 }
             }
@@ -319,7 +317,7 @@ namespace MonkeyPaste {
             await Task.Delay(1);
 
             MpCopyItem other = null;
-            if(drOrModel == null) {
+            if (drOrModel == null) {
                 other = new MpCopyItem();
             } else if (drOrModel is MpCopyItem) {
                 other = drOrModel as MpCopyItem;
@@ -430,10 +428,10 @@ namespace MonkeyPaste {
                 CopyCount = 1,
                 CopyDateTime = DateTime.Now,
                 Id = 0,
-                CopyItemGuid = System.Guid.NewGuid()                
+                CopyItemGuid = System.Guid.NewGuid()
             };
 
-            if(isDeepClone) {
+            if (isDeepClone) {
                 await newItem.WriteToDatabaseAsync();
 
                 var tags = await MpDataModelProvider.GetCopyItemTagsForCopyItemAsync(this.Id);

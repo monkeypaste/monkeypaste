@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MonkeyPaste;
+﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
-using MonkeyPaste.Common;
+using System;
+using System.Collections.Generic;
 using System.IO;
-using System.ComponentModel;
-using System.Collections;
-using Avalonia.Controls.Notifications;
-using System.Windows.Input;
+using System.Linq;
+using System.Threading.Tasks;
 
 
 namespace MonkeyPaste.Avalonia {
@@ -83,7 +76,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        
+
 
         #region State
 
@@ -104,7 +97,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string HandlerName {
             get {
-                if(PluginFormat == null) {
+                if (PluginFormat == null) {
                     return string.Empty;
                 }
                 return PluginFormat.title;
@@ -156,7 +149,7 @@ namespace MonkeyPaste.Avalonia {
                 Items.Add(hcfvm);
             }
 
-            while(Items.Any(x=>x.IsBusy)) {
+            while (Items.Any(x => x.IsBusy)) {
                 await Task.Delay(100);
             }
 
@@ -180,13 +173,13 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private void MpClipboardHandlerItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
                 case nameof(IsSelected):
-                    if(IsSelected) {
+                    if (IsSelected) {
                         LastSelectedDateTime = DateTime.Now;
 
-                        if(SelectedItem == null) {
-                            if(Items.Count > 0) {
+                        if (SelectedItem == null) {
+                            if (Items.Count > 0) {
                                 Items[0].IsSelected = true;
                             }
                         }
@@ -196,15 +189,15 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task<bool> ValidateClipboardHandlerAsync() {
-            if(PluginFormat == null) {
+            if (PluginFormat == null) {
                 MpConsole.WriteTraceLine("plugin error, not registered");
                 return false;
             }
-            if(PluginFormat.clipboardHandler == null) {
+            if (PluginFormat.clipboardHandler == null) {
                 MpConsole.WriteTraceLine("clipboard handler empty, ignoring");
-                return false;            
+                return false;
             }
-            if(PluginFormat.clipboardHandler.readers.Count == 0 &&
+            if (PluginFormat.clipboardHandler.readers.Count == 0 &&
                PluginFormat.clipboardHandler.writers.Count == 0) {
                 MpConsole.WriteTraceLine($"Plugin '{PluginFormat.title}' is identified as a clipboard handler but has no readers or writerss, ignoring");
                 return false;
@@ -216,13 +209,13 @@ namespace MonkeyPaste.Avalonia {
             var dupNames = PluginFormat.clipboardHandler.readers.GroupBy(x => x.clipboardName).Where(x => x.Count() > 1);
             if (dupNames.Count() > 0) {
                 string msg = $"plugin error: clipboard format names must be unique, {string.Join(",", dupNames)} are duplicated in readers";
-                error_notifications.Add(CreateInvalidNotification(msg,PluginFormat));
+                error_notifications.Add(CreateInvalidNotification(msg, PluginFormat));
             }
 
             dupNames = PluginFormat.clipboardHandler.writers.GroupBy(x => x.clipboardName).Where(x => x.Count() > 1);
             if (dupNames.Count() > 0) {
                 string msg = $"plugin error: clipboard format names must be unique, {string.Join(",", dupNames)} are duplicated in writers";
-                error_notifications.Add(CreateInvalidNotification(msg,PluginFormat));
+                error_notifications.Add(CreateInvalidNotification(msg, PluginFormat));
             }
 
             var allHandlers = new List<MpClipboardHandlerFormat>();
@@ -231,18 +224,18 @@ namespace MonkeyPaste.Avalonia {
 
             var dupGuids = allHandlers.GroupBy(x => x.handlerGuid).Where(x => x.Count() > 1);
             if (dupGuids.Count() > 0) {
-                foreach(var dupGuid_group in dupGuids) {
+                foreach (var dupGuid_group in dupGuids) {
                     string msg = "plugin error: clipboard 'handlerGuid' must be unique." + Environment.NewLine;
                     msg += $"'{string.Join(" and ", dupGuid_group.Select(x => $"'{x.displayName}'"))}'";
                     msg += $" have matching 'handlerGuid': '{dupGuid_group.Key}'";
-                    error_notifications.Add(CreateInvalidNotification(msg,PluginFormat));
+                    error_notifications.Add(CreateInvalidNotification(msg, PluginFormat));
                 }
             }
 
             foreach (var handler in allHandlers) {
                 var paramNameGroups = handler.parameters.GroupBy(x => x.paramId);
-                foreach(var paramNameGroup in paramNameGroups) {
-                    if(paramNameGroup.Count() <= 1) {
+                foreach (var paramNameGroup in paramNameGroups) {
+                    if (paramNameGroup.Count() <= 1) {
                         continue;
                     }
                     // TODO each notification type should probably have a pop up link to help...
@@ -252,11 +245,11 @@ namespace MonkeyPaste.Avalonia {
                     msg += $"paramName '{paramNameGroup.Key}' has multiple entries";
                     error_notifications.Add(CreateInvalidNotification(msg, PluginFormat));
                 }
-                
+
             }
 
             bool needs_fixing = error_notifications.Count > 0;
-            if(needs_fixing) {
+            if (needs_fixing) {
                 // only need first error to recurse
 
                 var invalid_nf = error_notifications[0];
@@ -289,7 +282,7 @@ namespace MonkeyPaste.Avalonia {
                 Title = $"{pf.title} Error",
                 Body = msg,
                 NotificationType = MpNotificationType.InvalidPlugin,
-                FixCommand = new MpCommand(() => MpFileIo.OpenFileBrowser(Path.Combine(pf.RootDirectory,"manifest.json")))
+                FixCommand = new MpCommand(() => MpFileIo.OpenFileBrowser(Path.Combine(pf.RootDirectory, "manifest.json")))
             };
         }
 

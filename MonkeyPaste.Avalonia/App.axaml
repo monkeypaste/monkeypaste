@@ -17,6 +17,7 @@
         </ResourceDictionary>
     </Application.Resources>
     <Application.Styles>
+        <!--<FluentTheme />-->
         <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/DefaultLight.axaml" />
         <Style Selector="TextBlock.h1, TextBlock.h2, TextBlock.h3">
             <Setter Property="TextWrapping"

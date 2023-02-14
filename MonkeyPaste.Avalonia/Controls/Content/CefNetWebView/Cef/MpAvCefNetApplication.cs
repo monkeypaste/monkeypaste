@@ -1,15 +1,11 @@
 ﻿using Avalonia.Threading;
 using CefNet;
+using MonkeyPaste.Common;
 using System;
 using System.IO;
-using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using MonkeyPaste.Common.Avalonia;
-using MonkeyPaste.Common;
-using CefNet.Avalonia;
-using System.Reflection;
-using Avalonia.Controls;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvCefNetApplication : CefNetApplication {
@@ -75,7 +71,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static void ShutdownCefNet() {
-            if(Instance == null) {
+            if (Instance == null) {
                 return;
             }
             Instance.Shutdown();
@@ -91,7 +87,7 @@ namespace MonkeyPaste.Avalonia {
             string datFileName = "icudtl.dat";
             //string cefRootDir = @"C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia\cef";
             string solution_dir = MpCommonHelpers.GetSolutionDir();
-            string cefRootDir = Path.Combine(solution_dir,"MonkeyPaste.Avalonia", "cef");
+            string cefRootDir = Path.Combine(solution_dir, "MonkeyPaste.Avalonia", "cef");
 
             string localDirPath = string.Empty;
             string resourceDirPath = string.Empty;
@@ -113,26 +109,27 @@ namespace MonkeyPaste.Avalonia {
                 releaseDir = Path.Combine(cefRootDir, "Release");
                 datFileSourcePath = Path.Combine(resourceDirPath, datFileName);
                 datFileTargetPath = Path.Combine(releaseDir, datFileName);
-            } else if(OperatingSystem.IsMacOS()) {
+            } else if (OperatingSystem.IsMacOS()) {
                 cefRootDir = Path.Combine(cefRootDir, "mac");
-            }  else {
+            } else {
                 throw new Exception("No cef implementation found for this architecture");
             }
 
-            if(!File.Exists(datFileTargetPath)) {
+            if (!File.Exists(datFileTargetPath)) {
                 // NOTE this would/will occur when a new cef version is installed
-                if(!File.Exists(datFileSourcePath)) {
+                if (!File.Exists(datFileSourcePath)) {
                     throw new Exception($"'CefNet cannot initialize, '{datFileSourcePath}' cannot be found");
                 }
                 try {
                     File.Copy(datFileSourcePath, datFileTargetPath);
-                }catch(Exception ex) {
-                    throw new Exception($"'CefNet cannot initialize, '{datFileSourcePath}' cannot be written to '{datFileTargetPath}'"+Environment.NewLine,ex);
                 }
-            }            
+                catch (Exception ex) {
+                    throw new Exception($"'CefNet cannot initialize, '{datFileSourcePath}' cannot be written to '{datFileTargetPath}'" + Environment.NewLine, ex);
+                }
+            }
 
             var settings = new CefSettings();
-            if(_useExternalMessagePump) {
+            if (_useExternalMessagePump) {
                 // when true will only work on windows or linux, also maybe pointless...trying to configure for single process
                 if (OperatingSystem.IsWindows() || OperatingSystem.IsLinux()) {
                     settings.MultiThreadedMessageLoop = false;
@@ -148,30 +145,30 @@ namespace MonkeyPaste.Avalonia {
                 settings.ExternalMessagePump = false;
             }
 
-            if(OperatingSystem.IsLinux()) {
+            if (OperatingSystem.IsLinux()) {
                 settings.NoSandbox = true;
                 //settings.CommandLineArgsDisabled = true;
                 settings.WindowlessRenderingEnabled = true;
-            } else if(OperatingSystem.IsWindows()) {
+            } else if (OperatingSystem.IsWindows()) {
                 settings.NoSandbox = true;
                 //settings.CommandLineArgsDisabled = true;
                 settings.WindowlessRenderingEnabled = true;
             }
-            
+
             settings.LocalesDirPath = localDirPath;
             settings.ResourcesDirPath = resourceDirPath;
             settings.LogSeverity = CefLogSeverity.Warning;
-        
+
             App.FrameworkShutdown += App_FrameworkShutdown;
-            
+
             _messageHub = new MpAvCefNetMessageHub(this);
 
             Initialize(Path.Combine(cefRootDir, "Release"), settings);
             MpConsole.WriteLine("CefNet Initialized.");
             return;
         }
-        
-        protected override void OnBeforeCommandLineProcessing(string processType, CefCommandLine commandLine)  {
+
+        protected override void OnBeforeCommandLineProcessing(string processType, CefCommandLine commandLine) {
             base.OnBeforeCommandLineProcessing(processType, commandLine);
             //return;
             // Console.WriteLine("ChromiumWebBrowser_OnBeforeCommandLineProcessing");
@@ -205,8 +202,7 @@ namespace MonkeyPaste.Avalonia {
             //commandLine.AppendSwitchWithValue("enable-blink-features", "CSSPseudoHas");
 
             commandLine.AppendSwitch("disable-component-update");
-            if (OperatingSystem.IsLinux())
-            {
+            if (OperatingSystem.IsLinux()) {
                 commandLine.AppendSwitch("no-zygote");
                 commandLine.AppendSwitch("no-sandbox");
             }
@@ -224,5 +220,5 @@ namespace MonkeyPaste.Avalonia {
 
     }
 
-    
+
 }

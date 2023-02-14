@@ -1,23 +1,11 @@
-﻿using System;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MonkeyPaste;
-using System.Net;
-
 using System.Windows.Input;
-
-using Newtonsoft.Json;
-using System.Web;
-using System.Windows;
-using MonkeyPaste.Common.Plugin;
-using MonkeyPaste.Common;
-using Avalonia.Media;
-using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
-using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
     [Flags]
@@ -36,8 +24,8 @@ namespace MonkeyPaste.Avalonia {
         BoundingBox = 4,
         File = 8
     }
-    public class MpAvAnalyticItemViewModel : 
-        MpAvTreeSelectorViewModelBase<MpAvAnalyticItemCollectionViewModel,MpAvAnalyticItemPresetViewModel>, 
+    public class MpAvAnalyticItemViewModel :
+        MpAvTreeSelectorViewModelBase<MpAvAnalyticItemCollectionViewModel, MpAvAnalyticItemPresetViewModel>,
         MpISelectableViewModel,
         MpIHoverableViewModel,
         MpIAsyncComboBoxItemViewModel,
@@ -99,9 +87,9 @@ namespace MonkeyPaste.Avalonia {
         #region View Models
 
         public MpMenuItemViewModel ContextMenuItemViewModel {
-            get { 
-                var subItems = Items.Where(x=>!x.IsActionPreset).Select(x => x.ContextMenuItemViewModel).ToList();
-                if(subItems.Count > 0) {
+            get {
+                var subItems = Items.Where(x => !x.IsActionPreset).Select(x => x.ContextMenuItemViewModel).ToList();
+                if (subItems.Count > 0) {
                     subItems.Add(new MpMenuItemViewModel() { IsSeparator = true });
                 }
                 subItems.Add(
@@ -112,7 +100,7 @@ namespace MonkeyPaste.Avalonia {
                         CommandParameter = PluginGuid
                     });
                 return new MpMenuItemViewModel() {
-                    Header = Title, 
+                    Header = Title,
                     IconId = PluginIconId,
                     SubItems = subItems
                 };
@@ -128,16 +116,16 @@ namespace MonkeyPaste.Avalonia {
 
         public string CannotExecuteTooltip {
             get {
-                if(CanAnalyzerExecute) {
+                if (CanAnalyzerExecute) {
                     return string.Empty;
                 }
 
                 string outStr = string.Empty;
-                if(SelectedItem != null) {
+                if (SelectedItem != null) {
                     outStr = SelectedItem.FullName + " only accepts input of type(s): ";
                 }
 
-                if(InputFormatFlags.HasFlag(MpAnalyzerInputFormatFlags.File)) {
+                if (InputFormatFlags.HasFlag(MpAnalyzerInputFormatFlags.File)) {
                     outStr += "Files,";
                 }
                 if (InputFormatFlags.HasFlag(MpAnalyzerInputFormatFlags.Image)) {
@@ -298,24 +286,24 @@ namespace MonkeyPaste.Avalonia {
         #region Db
 
         public int PluginIconId { get; private set; }
-        
+
         #endregion
 
         #region Analyzer Plugin
 
-        public MpAnalyzerInputFormatFlags InputFormatFlags { 
+        public MpAnalyzerInputFormatFlags InputFormatFlags {
             get {
                 MpAnalyzerInputFormatFlags flags = MpAnalyzerInputFormatFlags.None;
-                if(AnalyzerComponentFormat == null || AnalyzerComponentFormat.inputType == null) {
+                if (AnalyzerComponentFormat == null || AnalyzerComponentFormat.inputType == null) {
                     return flags;
                 }
-                if(AnalyzerComponentFormat.inputType.text) {
+                if (AnalyzerComponentFormat.inputType.text) {
                     flags |= MpAnalyzerInputFormatFlags.Text;
                 }
-                if(AnalyzerComponentFormat.inputType.image) {
+                if (AnalyzerComponentFormat.inputType.image) {
                     flags |= MpAnalyzerInputFormatFlags.Image;
                 }
-                if(AnalyzerComponentFormat.inputType.file) {
+                if (AnalyzerComponentFormat.inputType.file) {
                     flags |= MpAnalyzerInputFormatFlags.File;
                 }
 
@@ -364,7 +352,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        
+
         public MpBillableItem BillableItem { get; set; }
 
 
@@ -394,7 +382,7 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task InitializeAsync(MpPluginFormat analyzerPlugin) {
-            if(!ValidateAnalyzer(analyzerPlugin)) {
+            if (!ValidateAnalyzer(analyzerPlugin)) {
                 return;
             }
             if (IsLoaded) {
@@ -414,7 +402,7 @@ namespace MonkeyPaste.Avalonia {
             while (MpAvIconCollectionViewModel.Instance.IsAnyBusy) {
                 await Task.Delay(100);
             }
-                       
+
             base.Items.Clear();
             //if(Title == "Yolo") {
             //    Debugger.Break();
@@ -441,7 +429,7 @@ namespace MonkeyPaste.Avalonia {
             MpAvAnalyticItemPresetViewModel naipvm = new MpAvAnalyticItemPresetViewModel(this);
             await naipvm.InitializeAsync(aip);
             return naipvm;
-        }       
+        }
 
         public string GetUniquePresetName() {
             int uniqueIdx = 1;
@@ -451,7 +439,7 @@ namespace MonkeyPaste.Avalonia {
                                         uniqueName.ToLower(),
                                         uniqueIdx);
 
-            while(base.Items.Any(x => x.Label.ToLower() == testName)) {
+            while (base.Items.Any(x => x.Label.ToLower() == testName)) {
                 uniqueIdx++;
                 testName = string.Format(
                                         @"{0}{1}",
@@ -468,7 +456,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public virtual bool Validate() {
-            if(SelectedItem == null) {
+            if (SelectedItem == null) {
                 return true;
             }
             return SelectedItem.IsAllValid;
@@ -498,17 +486,17 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpPluginPreset aip) {
-                
+
             }
         }
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            if(e is MpPluginPreset aip) {
-                if(aip.PluginGuid == PluginGuid) {
+            if (e is MpPluginPreset aip) {
+                if (aip.PluginGuid == PluginGuid) {
                     var presetVm = base.Items.FirstOrDefault(x => x.Preset.Id == aip.Id);
-                    if(presetVm != null) {
+                    if (presetVm != null) {
                         int presetIdx = base.Items.IndexOf(presetVm);
-                        if(presetIdx >= 0) {
+                        if (presetIdx >= 0) {
                             base.Items.RemoveAt(presetIdx);
                             base.OnPropertyChanged(nameof(MpAvSelectorViewModelBase<MpAvAnalyticItemCollectionViewModel, MpAvAnalyticItemPresetViewModel>.Items));
                             OnPropertyChanged(nameof(SelectedItem));
@@ -521,7 +509,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        
+
 
         protected virtual async Task TransformContent() {
             await Task.Delay(1);
@@ -537,7 +525,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         private void ReceivedClipTrayMessage(MpMessageType msg) {
-            switch(msg) {
+            switch (msg) {
                 case MpMessageType.TraySelectionChanged:
                     OnPropertyChanged(nameof(CanAnalyzerExecute));
                     OnPropertyChanged(nameof(CannotExecuteTooltip));
@@ -550,12 +538,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void MpAnalyticItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
                 case nameof(IsSelected):
-                    if(IsSelected) {
+                    if (IsSelected) {
                         LastSelectedDateTime = DateTime.Now;
 
-                        if(SelectedItem == null) {
+                        if (SelectedItem == null) {
                             base.SelectedItem = base.Items.Aggregate((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
                         }
                         //CollectionViewSource.GetDefaultView(SelectedItem.Items).Refresh();
@@ -563,15 +551,15 @@ namespace MonkeyPaste.Avalonia {
 
                         //Items.ForEach(x => x.IsEditingParameters = false);
                         //SelectedIt em.IsEditingParameters = true;
-                    }                    
+                    }
                     Parent.OnPropertyChanged(nameof(Parent.IsAnySelected));
                     Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
                     break;
                 case nameof(SelectedItem):
-                    if(SelectedItem != null) {
-                        if(!SelectedItem.IsSelected) {
+                    if (SelectedItem != null) {
+                        if (!SelectedItem.IsSelected) {
                             SelectedItem.IsSelected = true;
-                        }                        
+                        }
                     } else {
                         base.Items.ForEach(x => x.IsSelected = false);
                     }
@@ -580,10 +568,10 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private void UpdatePresetSortOrder(bool fromModel = false) {
-            if(fromModel) {
+            if (fromModel) {
                 base.Items.Sort(x => x.SortOrderIdx);
             } else {
-                foreach(var aipvm in base.Items) {
+                foreach (var aipvm in base.Items) {
                     aipvm.SortOrderIdx = base.Items.IndexOf(aipvm);
                 }
             }
@@ -673,31 +661,31 @@ namespace MonkeyPaste.Avalonia {
                     LastTransaction = result as MpAnalyzerTransaction;
                     OnAnalysisCompleted?.Invoke(SelectedItem, LastTransaction.ResponseContent);
 
-                    if(isUserExecutedAnalysis) {
+                    if (isUserExecutedAnalysis) {
 
                     }
                 }
-                                
+
 
                 IsBusy = false;
-            },(args)=>CanExecuteAnalysis(args));
+            }, (args) => CanExecuteAnalysis(args));
 
         public virtual bool CanExecuteAnalysis(object args) {
-            if(IsBusy) {
+            if (IsBusy) {
                 return false;
             }
 
             MpAvAnalyticItemPresetViewModel spvm = null;
             MpCopyItem sci = null;
             string sstr = null;
-            if(args == null) {
+            if (args == null) {
                 // analyzer request from MpAvClipTrayViewModel.Instance.AnalyzeSelectedItemCommand
 
                 spvm = SelectedItem;
-                if(MpAvClipTrayViewModel.Instance.SelectedItem != null) {
+                if (MpAvClipTrayViewModel.Instance.SelectedItem != null) {
                     sci = MpAvClipTrayViewModel.Instance.SelectedItem.CopyItem;
                 }
-            } else if(args is MpAvAnalyticItemPresetViewModel) {
+            } else if (args is MpAvAnalyticItemPresetViewModel) {
                 // analyzer request from MpAnalyticItemPresetDataGridView
 
                 if (MpAvClipTrayViewModel.Instance.SelectedItem == null) {
@@ -705,42 +693,42 @@ namespace MonkeyPaste.Avalonia {
                 }
                 spvm = args as MpAvAnalyticItemPresetViewModel;
                 sci = MpAvClipTrayViewModel.Instance.SelectedItem.CopyItem;
-            } else if(args is object[] argParts) {
+            } else if (args is object[] argParts) {
                 // analyzer request from MpAnalyzerActionViewModel
-                
+
                 spvm = argParts[0] as MpAvAnalyticItemPresetViewModel;
                 sci = argParts[1] as MpCopyItem;
-                if(sci == null) {
+                if (sci == null) {
                     sstr = argParts[1] as string;
                 }
             }
 
-            if((sci == null && sstr == null) || spvm == null) {
+            if ((sci == null && sstr == null) || spvm == null) {
                 return false;
             }
             bool isOkType = true;
-            if(sci != null) {
+            if (sci != null) {
                 isOkType = IsContentTypeValid(sci.ItemType);
             } else {
                 isOkType = IsContentTypeValid(MpCopyItemType.Text);
             }
 
             spvm.Items.ForEach(x => x.Validate());
-            return spvm.IsAllValid && 
+            return spvm.IsAllValid &&
                    isOkType;
         }
 
 
         public ICommand SelectPresetCommand => new MpCommand<MpAvAnalyticItemPresetViewModel>(
              (selectedPresetVm) => {
-                //if(!IsLoaded) {
-                //    await LoadChildren();
-                //}
-                if(!IsSelected) {
+                 //if(!IsLoaded) {
+                 //    await LoadChildren();
+                 //}
+                 if (!IsSelected) {
                      Parent.SelectedItem = this;
                  }
                  SelectedItem = selectedPresetVm;
-            });
+             });
 
         public ICommand ManageAnalyticItemCommand => new MpCommand(
              () => {
@@ -763,7 +751,7 @@ namespace MonkeyPaste.Avalonia {
                 IsBusy = true;
 
                 var presetVm = presetVmArg as MpAvAnalyticItemPresetViewModel;
-                foreach(var presetVal in presetVm.Items) {
+                foreach (var presetVal in presetVm.Items) {
                     await presetVal.PresetValueModel.DeleteFromDatabaseAsync();
                 }
                 await presetVm.Preset.DeleteFromDatabaseAsync();
@@ -798,9 +786,9 @@ namespace MonkeyPaste.Avalonia {
 
                 IsBusy = false;
             },
-            (presetVmArg) => { 
-               if(presetVmArg is MpAvAnalyticItemPresetViewModel aipvm &&
-                    aipvm.IsManifestPreset) {
+            (presetVmArg) => {
+                if (presetVmArg is MpAvAnalyticItemPresetViewModel aipvm &&
+                     aipvm.IsManifestPreset) {
                     return true;
                 }
                 return false;
@@ -812,13 +800,13 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     DeletePresetCommand.Execute(presetVmArg);
                 }
-            },(presetVmArg) => {
+            }, (presetVmArg) => {
                 return presetVmArg is MpAvAnalyticItemPresetViewModel;
             });
         public ICommand ShiftPresetCommand => new MpCommand<object>(
             // [0] = new_idx [1] = presetvm
             (args) => {
-                if(args is object[] argParts &&
+                if (args is object[] argParts &&
                     argParts.Length == 2 &&
                     argParts[0] is int new_idx &&
                     argParts[1] is MpAvAnalyticItemPresetViewModel pvm) {
@@ -866,7 +854,7 @@ namespace MonkeyPaste.Avalonia {
                     IsBusy = true;
 
                     var aipvm = args as MpAvAnalyticItemPresetViewModel;
-                    if(aipvm == null) {
+                    if (aipvm == null) {
                         throw new Exception("DuplicatedPresetCommand must have preset as argument");
                     }
                     var p_to_clone = aipvm.Preset;

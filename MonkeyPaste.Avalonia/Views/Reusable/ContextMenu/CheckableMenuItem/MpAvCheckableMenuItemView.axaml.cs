@@ -1,11 +1,9 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using PropertyChanged;
-using MonkeyPaste;
 using Avalonia.Styling;
-using System;
 using MonkeyPaste.Common.Avalonia;
+using PropertyChanged;
+using System;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -20,7 +18,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void MpAvCheckableMenuItemView_Checked(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
-            if(!this.IsInitialized) {
+            if (!this.IsInitialized) {
                 return;
             }
         }
@@ -35,7 +33,7 @@ namespace MonkeyPaste.Avalonia {
                 //don't close tree item parents
                 MpAvMenuExtension.CloseMenu();
             }
-            
+
         }
 
         private void InitializeComponent() {

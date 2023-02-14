@@ -1,16 +1,13 @@
-﻿using MonkeyPaste.Common.Plugin; using MonkeyPaste.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 namespace MonkeyPaste.Common.Wpf {
     public static class MpWpfKeyboardInputHelpers {
 
         public static List<List<Key>> ConvertStringToKeySequence(string keyStr) {
             var keyList = new List<List<Key>>();
-            if(string.IsNullOrEmpty(keyStr)) {
+            if (string.IsNullOrEmpty(keyStr)) {
                 return keyList;
             }
 
@@ -228,7 +225,7 @@ namespace MonkeyPaste.Common.Wpf {
                                     sb.Append("{F" + val + "}");
                                 }
                                 catch (Exception ex) {
-                                    MpConsole.WriteLine(@"ShortcutViewModel.SendKeys exception creating key: " + key + " with exception: " + ex);
+                                    Console.WriteLine(@"ShortcutViewModel.SendKeys exception creating key: " + key + " with exception: " + ex);
                                     //outStr += key.ToUpper();
                                     sb.Append(key.ToUpper());
                                     break;

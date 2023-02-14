@@ -1,17 +1,14 @@
-﻿using Avalonia;
-using Avalonia.Data.Converters;
+﻿using Avalonia.Data.Converters;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvMultiStringAppendConverter : IMultiValueConverter {
         public static readonly MpAvMultiStringAppendConverter Instance = new();
 
         public object? Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture) {
-            if(values != null) {
+            if (values != null) {
                 return string.Join(string.Empty, values);
             }
             return string.Empty;

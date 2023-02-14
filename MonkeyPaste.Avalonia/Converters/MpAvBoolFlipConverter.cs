@@ -1,5 +1,4 @@
-﻿using Avalonia;
-using Avalonia.Data.Converters;
+﻿using Avalonia.Data.Converters;
 using System;
 using System.Globalization;
 
@@ -8,7 +7,7 @@ namespace MonkeyPaste.Avalonia {
         public static readonly MpAvBoolFlipConverter Instance = new();
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
-            if(value is bool boolVal) {
+            if (value is bool boolVal) {
                 return !boolVal;
             }
             return null;

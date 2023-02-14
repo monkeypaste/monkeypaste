@@ -1,23 +1,16 @@
 ﻿
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
-using MonkeyPaste;
-using System.IO;
-
-
-using MonkeyPaste.Common;
 using Avalonia.Threading;
+using MonkeyPaste.Common;
+using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvAppCollectionViewModel : 
-        MpAvSelectorViewModelBase<object,MpAvAppViewModel>, 
+    public class MpAvAppCollectionViewModel :
+        MpAvSelectorViewModelBase<object, MpAvAppViewModel>,
         MpIAsyncSingletonViewModel<MpAvAppCollectionViewModel> {
         #region Private Variables
         #endregion
@@ -34,7 +27,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvAppViewModel LastActiveAppViewModel {
             get => _lastActiveAppViewModel == null ? ThisAppViewModel : _lastActiveAppViewModel;
             private set {
-                if(LastActiveAppViewModel != value) {
+                if (LastActiveAppViewModel != value) {
                     _lastActiveAppViewModel = value;
                     OnPropertyChanged(nameof(LastActiveAppViewModel));
                 }
@@ -112,7 +105,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAppClipboardFormatInfoCollectionViewModel GetInteropSettingByAppId(int appId) {
             var aivm = Items.FirstOrDefault(x => x.AppId == appId);
-            if(aivm == null) {
+            if (aivm == null) {
                 return null;
             }
             return aivm.ClipboardFormatInfos;
@@ -130,14 +123,14 @@ namespace MonkeyPaste.Avalonia {
                 // at least on windows (i think since its a tool window) the p/invoke doesn't return mw handle
                 handle = MpPlatform.Services.ProcessWatcher.ThisAppHandle;
             }
-            if(handle == IntPtr.Zero) {
+            if (handle == IntPtr.Zero) {
                 handle = MpPlatform.Services.ProcessWatcher.GetParentHandleAtPoint(gmp);
             }
-            if(handle == IntPtr.Zero) {
+            if (handle == IntPtr.Zero) {
                 return null;
             }
             string handle_path = MpPlatform.Services.ProcessWatcher.GetProcessPath(handle);
-            MpConsole.WriteLine("Drop Path: " + handle_path,true,true);
+            MpConsole.WriteLine("Drop Path: " + handle_path, true, true);
             // TODO need to filter by current device here
             return Items.FirstOrDefault(x => x.AppPath.ToLower() == handle_path.ToLower());
         }
@@ -146,7 +139,7 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
 
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
-            if(e is MpApp a && Items.All(x=>x.AppId != a.Id)) {
+            if (e is MpApp a && Items.All(x => x.AppId != a.Id)) {
                 Dispatcher.UIThread.Post(async () => {
                     IsBusy = true;
                     MpConsole.WriteLine($"Adding new app to app collection:");
@@ -164,7 +157,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
         private void MpAppCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
                 case nameof(SelectedItem):
                     if (SelectedItem != null) {
                         SelectedItem.OnPropertyChanged(nameof(SelectedItem.IconId));
@@ -208,7 +201,7 @@ namespace MonkeyPaste.Avalonia {
                                     .Select(x => new MpPortableProcessInfo() { ProcessPath = x }).ToList();
 
             MpConsole.WriteLine($"AppCollection RegisterWithProcessesManager '{unknownApps.Count}' unknown apps detected.");
-            foreach(var uap in unknownApps) {
+            foreach (var uap in unknownApps) {
                 //var handle = MpPlatformWrapper.Services.ProcessWatcher.RunningProcessLookup[uap][0];
                 //string appName = MpPlatformWrapper.Services.ProcessWatcher.GetProcessApplicationName(handle);
 
@@ -222,7 +215,7 @@ namespace MonkeyPaste.Avalonia {
                 var app = await MpPlatform.Services.AppBuilder.CreateAsync(uap);
                 // wait for db add callback to pickup db add event
                 await Task.Delay(100);
-                while(IsBusy) {
+                while (IsBusy) {
                     // wait for app to be added to items from db add callback
                     await Task.Delay(100);
                 }
@@ -237,7 +230,7 @@ namespace MonkeyPaste.Avalonia {
         private async void MpProcessManager_OnAppActivated(object sender, MpPortableProcessInfo e) {
             // if app is unknown add it
             // TODO device logic
-            while(IsBusy) {
+            while (IsBusy) {
                 await Task.Delay(100);
             }
             Dispatcher.UIThread.Post(async () => {
@@ -249,21 +242,21 @@ namespace MonkeyPaste.Avalonia {
                     await MpPlatform.Services.AppBuilder.CreateAsync(e);
                     // wait for db add to pick up model
                     await Task.Delay(100);
-                    while(IsBusy) {
+                    while (IsBusy) {
                         // wait for vm to be added to items
                         await Task.Delay(100);
                     }
 
                     // BUG may need to add .ToList() on items here, hopefully fixed w/ dbAdd waiting
                     avm = Items.FirstOrDefault(x => x.AppPath.ToLower() == e.ProcessPath.ToLower());
-                    if(avm == null) {
+                    if (avm == null) {
                         // somethings wrong check console for db add msgs
                         Debugger.Break();
                     }
-                } 
+                }
                 LastActiveAppViewModel = avm;
             });
-            
+
         }
 
         #endregion
@@ -303,11 +296,11 @@ namespace MonkeyPaste.Avalonia {
                 //            avm = await CreateAppViewModel(app);
                 //            Items.Add(avm);
                 //        }
-                        
+
                 //    }
 
                 //    SelectedItem = avm;
-                }
+            }
             );
 
         #endregion

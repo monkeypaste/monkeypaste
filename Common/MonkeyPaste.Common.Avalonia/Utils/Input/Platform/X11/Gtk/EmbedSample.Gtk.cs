@@ -1,8 +1,7 @@
-using System.IO;
-using System.Diagnostics;
 using Avalonia.Platform;
-using Avalonia.Controls.Platform;
 using System;
+using System.Diagnostics;
+using System.IO;
 
 namespace MonkeyPaste.Common.Avalonia {
 

@@ -1,5 +1,4 @@
-﻿using Avalonia.Input;
-using MonkeyPaste.Common.Plugin;
+﻿using MonkeyPaste.Common.Plugin;
 
 namespace MonkeyPaste.Avalonia {
     public abstract class MpAvActionOutput : MpIActionOutputNode {
@@ -14,7 +13,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpCopyItem CopyItem {
             get;
-            set; 
+            set;
         }
     }
 

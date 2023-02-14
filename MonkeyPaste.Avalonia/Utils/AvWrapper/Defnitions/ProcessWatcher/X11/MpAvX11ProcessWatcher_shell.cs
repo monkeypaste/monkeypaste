@@ -1,29 +1,20 @@
-﻿using System;
-using MonkeyPaste;
-using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
-using Avalonia.Threading;
+﻿using MonkeyPaste.Common;
+using System;
 //using Gio;
-//using Gtk;
+//
 //using GLib;
 //using Gdk;
-using System.Collections.Concurrent;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using System.Diagnostics;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
 
 namespace MonkeyPaste.Avalonia {
-    
+
     public static class MpAvX11ProcessWatcher_shell {
         #region Private Variables
 
         private static string[] _requiredTools = new string[] {
             "xdotool"
         };
-        
+
 
         #endregion
 
@@ -35,18 +26,19 @@ namespace MonkeyPaste.Avalonia {
             var winHandles = winHandleStr.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
 
             foreach (string winHandle in winHandles) {
-                if(winHandle.IsStringNullOrWhiteSpace()) {
+                if (winHandle.IsStringNullOrWhiteSpace()) {
                     continue;
                 }
                 int handleInt = 0;
 
                 try {
                     handleInt = int.Parse(winHandle);
-                }catch(FormatException) {
+                }
+                catch (FormatException) {
                     //MpConsole.WriteTraceLine($"Error parsing x11 handle: '{winHandle}'", ex);
 
                 }
-                if(handleInt == 0) {
+                if (handleInt == 0) {
                     continue;
                 }
                 //MpConsole.WriteLine("WindowHandleStr: " + winHandle + " Int: "+handleInt);
@@ -69,8 +61,8 @@ namespace MonkeyPaste.Avalonia {
             }
             return runningApps;
         }
-        
+
     }
 
-    
+
 }

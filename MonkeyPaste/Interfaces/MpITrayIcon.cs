@@ -1,21 +1,20 @@
-﻿using System;
-namespace MonkeyPaste {
+﻿namespace MonkeyPaste {
     public interface MpITrayIcon {
         /// <summary>
         /// Gets or sets the icon for the notify icon. Either a file system path
         /// or a <c>resm:</c> manifest resource path can be specified.
         /// </summary>
-        public string IconPath { get;  }
+        public string IconPath { get; }
 
         /// <summary>
         /// Gets or sets the tooltip text for the notify icon.
         /// </summary>
-        public string ToolTipText { get;  }
+        public string ToolTipText { get; }
 
         /// <summary>
         /// Gets or sets the context- (right-click)-menu for the notify icon.
         /// </summary>
-        public MpMenuItemViewModel ContextMenuItemViewModel { get;  }
+        public MpMenuItemViewModel ContextMenuItemViewModel { get; }
 
         /// <summary>
         /// Gets or sets if the notify icon is visible in the 

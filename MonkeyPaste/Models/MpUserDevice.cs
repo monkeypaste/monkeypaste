@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MonkeyPaste.Common;
 using SQLite;
-using MonkeyPaste.Common.Plugin; 
-using MonkeyPaste.Common;
-using CsvHelper;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    
+
 
     public class MpUserDevice : MpDbModelBase, MpISyncableDbObject, MpISourceRef {
         #region MpISourceRef Implementation
@@ -25,7 +20,7 @@ namespace MonkeyPaste {
 
         #region Columns
 
-        [PrimaryKey,AutoIncrement]
+        [PrimaryKey, AutoIncrement]
         [Column("pk_MpUserDeviceId")]
         public override int Id { get; set; }
 
@@ -87,7 +82,7 @@ namespace MonkeyPaste {
             PlatformType = platformTypeId;
         }
 
-        public async Task<object> CreateFromLogsAsync(string udGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {            
+        public async Task<object> CreateFromLogsAsync(string udGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
             var ud = await MpDb.GetDbObjectByTableGuidAsync("MpUserDevice", udGuid) as MpUserDevice;
 
             foreach (var li in logs) {

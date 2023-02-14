@@ -2,20 +2,14 @@
 using Avalonia.Controls.Templates;
 using Avalonia.Metadata;
 using MonkeyPaste.Common.Plugin;
-using Pango;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvPluginParameterTemplateSelector : IDataTemplate {
         [Content]
         public Dictionary<string, IDataTemplate> AvailableTemplates { get; } = new Dictionary<string, IDataTemplate>();
 
-        public IControl Build(object param) {
+        Control ITemplate<object, Control>.Build(object param) {
             if (param == null) {
                 return null;
             }
