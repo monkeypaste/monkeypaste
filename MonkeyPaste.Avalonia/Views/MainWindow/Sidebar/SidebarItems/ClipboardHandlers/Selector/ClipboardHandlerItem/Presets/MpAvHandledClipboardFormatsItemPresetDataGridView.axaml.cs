@@ -1,4 +1,12 @@
-﻿using Avalonia.Markup.Xaml;
+﻿using Avalonia.Controls;
+using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+
 namespace MonkeyPaste.Avalonia {
     /// <summary>
     /// Interaction logic for MpAnalyticItemSelectorView.xaml
@@ -6,60 +14,90 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvHandledClipboardFormatsItemPresetDataGridView : MpAvUserControl<MpAvClipboardHandlerItemViewModel> {
         public MpAvHandledClipboardFormatsItemPresetDataGridView() {
             InitializeComponent();
+            this.DataContextChanged += MpAvAnalyticItemPresetDataGridView_DataContextChanged;
+            if (DataContext != null) {
+                MpAvAnalyticItemPresetDataGridView_DataContextChanged(this, null);
+            }
         }
 
         private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);
         }
-        //private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-        //    var cmb = sender as ComboBox;
-        //    ClipboardFormatPresetDatagridContainer.DataContext = cmb.SelectedItem;
-        //    ClipboardFormatPresetDatagrid.Items.Refresh();
+        private void MpAvAnalyticItemPresetDataGridView_DataContextChanged(object sender, EventArgs e) {
+            if (BindingContext == null) {
+                return;
+            }
+            BindingContext.PropertyChanged += BindingContext_PropertyChanged;
+            BindingContext.Items.CollectionChanged += Items_CollectionChanged;
+            BindingContext.Items.ForEach(x => x.PropertyChanged += PresetVIewModel_PropertyChanged);
+            RefreshDataGrid();
+        }
 
-        //    var cbhisv = this.GetVisualAncestor<MpAvClipboardHandlerItemSelectorView>();
-        //    if(cbhisv == null) {
-        //        return;
-        //    }
-        //    cbhisv.ClipboardFormatPresetParameterListBoxView.DataContext = ClipboardFormatPresetDatagrid.SelectedItem;
-        //    cbhisv.ClipboardFormatPresetParameterListBoxView.ConfigurePresetListBox.Items.Refresh();
-        //}
+        private void PresetVIewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            var aipvm = sender as MpAvClipboardHandlerItemViewModel;
+            switch (e.PropertyName) {
+                case nameof(aipvm.PluginIconId):
+                    RefreshDataGrid();
+                    break;
+                case nameof(aipvm.IsSelected):
+                    RefreshDataGrid();
+                    break;
+                case nameof(aipvm.HasModelChanged):
+                    if (!aipvm.HasModelChanged) {
+                        RefreshDataGrid();
+                    }
+                    break;
+            }
+        }
 
-        //private void ClipboardFormatPresetDatagrid_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-        //    var dg = sender as DataGrid;
-        //    var cbhisv = this.GetVisualAncestor<MpAvClipboardHandlerItemSelectorView>();
-        //    if (cbhisv == null) {
-        //        return;
-        //    }
-        //    cbhisv.ClipboardFormatPresetParameterListBoxView.DataContext = dg.SelectedItem;
-        //    cbhisv.ClipboardFormatPresetParameterListBoxView.ConfigurePresetListBox.Items.Refresh();
-        //}
+        private void BindingContext_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(BindingContext.SelectedItem):
+                case nameof(BindingContext.IsSelected):
+                    RefreshDataGrid();
+                    break;
+                case nameof(BindingContext.HasModelChanged):
+                    if (!BindingContext.HasModelChanged) {
+                        RefreshDataGrid();
+                    }
+                    break;
+            }
+        }
 
-        //private void Grid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-        //    if (sender is Panel p) {
-        //        var tbb = p.GetVisualDescendent<TextBoxBase>();
-        //        if (tbb.IsVisible) {
-        //            return;
-        //        }
-        //        e.Handled = true;
-        //        var cbfpvm = tbb.DataContext as MpAvClipboardFormatPresetViewModel;
-        //        if (cbfpvm == null) {
-        //            return;
-        //        }
-        //        cbfpvm.IsLabelReadOnly = false;
-        //    }
-        //}
+        private async void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            // wait for view to catchup ?
+            await Task.Delay(300);
+            if (e.NewItems != null) {
+                e.NewItems.Cast<MpViewModelBase>().Where(x => x != null).ForEach(x => x.PropertyChanged += PresetVIewModel_PropertyChanged);
+            }
+            //if(e.OldItems != null) {
+            //    e.OldItems.Cast<MpViewModelBase>().Where(x => x != null).ForEach(x => x.PropertyChanged -= PresetVIewModel_PropertyChanged);
+            //}
+            RefreshDataGrid();
+        }
 
-        //private void Button_MouseEnter(object sender, MouseEventArgs e) {
-        //    var pvm = (sender as FrameworkElement).DataContext as MpAnalyticItemPresetViewModel;
-        //    if (pvm != null && pvm.IsDefault) {
-        //        MpCursorStack.CurrentCursor = MpCursorType.Invalid;
-        //    } else {
-        //        MpCursorStack.CurrentCursor = MpCursorType.Default;
-        //    }
-        //}
-
-        //private void Button_MouseLeave(object sender, MouseEventArgs e) {
-        //    MpCursorStack.CurrentCursor = MpCursorType.Default;
-        //}
+        private void RefreshDataGrid() {
+            Dispatcher.UIThread.Post(() => {
+                // BUG can't get dataGrid to resize w/ row changes so hardsetting height (RowHeight=40)
+                var pdg = this.FindControl<DataGrid>("ClipboardFormatPresetDatagrid");
+                if (pdg == null) {
+                    return;
+                }
+                pdg.ApplyTemplate();
+                double nh = 0;
+                if (BindingContext != null) {
+                    nh = BindingContext.Items.Count * pdg.RowHeight;
+                }
+                pdg.Height = nh;
+                pdg.InvalidateMeasure();
+                var sv = pdg.GetVisualDescendant<ScrollViewer>();
+                if (sv == null) {
+                    //Debugger.Break();
+                    return;
+                }
+                sv.ScrollByPointDelta(new MpPoint(0, 5));
+                sv.ScrollByPointDelta(new MpPoint(0, -5));
+            });
+        }
     }
 }

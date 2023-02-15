@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
     public class MpAvCopyItemBuilder : MpICopyItemBuilder {
         #region Private Variables
-        private bool _isRtfSupported = false;
         #endregion
 
 
@@ -155,8 +154,7 @@ namespace MonkeyPaste.Avalonia {
                 //    //itemData = csvStr.ToRichText();
                 //    itemData = itemData.ToRichHtmlText(MpPortableDataFormats.AvCsv);
                 //}
-            } else if (_isRtfSupported &&
-                        mpdo.ContainsData(MpPortableDataFormats.AvRtf_bytes) &&
+            } else if (mpdo.ContainsData(MpPortableDataFormats.AvRtf_bytes) &&
                         !mpdo.ContainsData(MpPortableDataFormats.AvHtml_bytes) &&
                         mpdo.GetData(MpPortableDataFormats.AvRtf_bytes) is byte[] rtfBytes &&
                     rtfBytes.ToDecodedString() is string rtfStr) {

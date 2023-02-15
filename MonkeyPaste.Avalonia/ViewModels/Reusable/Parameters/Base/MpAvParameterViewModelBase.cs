@@ -445,12 +445,17 @@ namespace MonkeyPaste.Avalonia {
                 //case nameof(LastValue):
                 case nameof(HasModelChanged):
                 case nameof(CurrentValue):
+
                     if (Parent is MpISaveOrCancelableViewModel socvm) {
                         // analyzers
                         socvm.OnPropertyChanged(nameof(socvm.CanSaveOrCancel));
                     } else {
-                        // for action parameters
-                        //SaveCurrentValueCommand.Execute(null);
+                        // for action or clipboard handler parameters
+                        if (!IsBusy) {
+                            // ignore init changes
+
+                            SaveCurrentValueCommand.Execute(null);
+                        }
                     }
                     break;
                 case nameof(ValidationMessage):

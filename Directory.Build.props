@@ -1,5 +1,10 @@
 <Project> 
   <PropertyGroup>
     <BuildOs>WINDOWS</BuildOs>
+    <MainTargetFramework>net7.0-windows</MainTargetFramework>
+    <MainProjectName>MonkeyPaste.Avalonia</MainProjectName>
+    <MainProjectDir>$(SolutionDir)\$(MainProjectName)</MainProjectDir>
+    <MainTargetDir>$(MainProjectDir)\bin\Debug\$(MainTargetFramework)</MainTargetDir>
+    <PluginTargetDir>$(MainTargetDir)\Plugins</PluginTargetDir>
   </PropertyGroup>
 </Project>

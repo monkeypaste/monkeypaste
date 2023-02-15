@@ -64,9 +64,15 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public IEnumerable<MpAvHandledClipboardFormatViewModel> Writers => Items.Where(x => x.IsWriter);
-        public IEnumerable<MpAvHandledClipboardFormatViewModel> Readers => Items.Where(x => !x.IsWriter);
+        public IEnumerable<MpAvHandledClipboardFormatViewModel> Writers =>
+            Items.Where(x => x.IsWriter);
+        public IEnumerable<MpAvHandledClipboardFormatViewModel> Readers =>
+            Items.Where(x => !x.IsWriter);
 
+        public IEnumerable<MpAvHandledClipboardFormatViewModel> TitleSortedItems =>
+            Items.OrderBy(x => x.SelectorLabel);
+
+        public override MpAvHandledClipboardFormatViewModel SelectedItem { get; set; }
         #endregion
 
 
@@ -79,6 +85,20 @@ namespace MonkeyPaste.Avalonia {
 
 
         #region State
+
+        //public int SelectedTitleSortedItemIdx {
+        //    get {
+        //        return TitleSortedItems.IndexOf(SelectedItem);
+        //    }
+        //    set {
+        //        if (SelectedTitleSortedItemIdx != value) {
+        //            SelectedItem = value >= 0 && value < Items.Count ?
+        //                TitleSortedItems.ElementAt(value) : null;
+        //            OnPropertyChanged(nameof(SelectedTitleSortedItemIdx));
+        //        }
+        //    }
+
+        //}
 
         #region Drag Drop
 
@@ -185,6 +205,10 @@ namespace MonkeyPaste.Avalonia {
                         }
                     }
                     break;
+                case nameof(SelectedItem):
+                    //OnPropertyChanged(nameof(SelectedTitleSortedItemIdx));
+                    Items.ForEach(x => x.IsSelected = x == SelectedItem);
+                    break;
             }
         }
 
@@ -206,21 +230,32 @@ namespace MonkeyPaste.Avalonia {
             //var sb = new StringBuilder();
             var error_notifications = new List<MpNotificationFormat>();
 
-            var dupNames = PluginFormat.clipboardHandler.readers.GroupBy(x => x.clipboardName).Where(x => x.Count() > 1);
-            if (dupNames.Count() > 0) {
-                string msg = $"plugin error: clipboard format names must be unique, {string.Join(",", dupNames)} are duplicated in readers";
-                error_notifications.Add(CreateInvalidNotification(msg, PluginFormat));
+            if (PluginFormat.clipboardHandler.readers != null) {
+                var dupNames = PluginFormat.clipboardHandler.readers.GroupBy(x => x.clipboardName).Where(x => x.Count() > 1);
+                if (dupNames.Count() > 0) {
+                    string msg = $"plugin error: clipboard format names must be unique, {string.Join(",", dupNames)} are duplicated in readers";
+                    error_notifications.Add(CreateInvalidNotification(msg, PluginFormat));
+                }
             }
 
-            dupNames = PluginFormat.clipboardHandler.writers.GroupBy(x => x.clipboardName).Where(x => x.Count() > 1);
-            if (dupNames.Count() > 0) {
-                string msg = $"plugin error: clipboard format names must be unique, {string.Join(",", dupNames)} are duplicated in writers";
-                error_notifications.Add(CreateInvalidNotification(msg, PluginFormat));
+            if (PluginFormat.clipboardHandler.writers != null) {
+                var dupNames = PluginFormat.clipboardHandler.writers.GroupBy(x => x.clipboardName).Where(x => x.Count() > 1);
+                if (dupNames.Count() > 0) {
+                    string msg = $"plugin error: clipboard format names must be unique, {string.Join(",", dupNames)} are duplicated in writers";
+                    error_notifications.Add(CreateInvalidNotification(msg, PluginFormat));
+                }
             }
+
 
             var allHandlers = new List<MpClipboardHandlerFormat>();
-            allHandlers.AddRange(PluginFormat.clipboardHandler.readers);
-            allHandlers.AddRange(PluginFormat.clipboardHandler.writers);
+            if (PluginFormat.clipboardHandler.readers != null) {
+                allHandlers.AddRange(PluginFormat.clipboardHandler.readers);
+
+            }
+
+            if (PluginFormat.clipboardHandler.writers != null) {
+                allHandlers.AddRange(PluginFormat.clipboardHandler.writers);
+            }
 
             var dupGuids = allHandlers.GroupBy(x => x.handlerGuid).Where(x => x.Count() > 1);
             if (dupGuids.Count() > 0) {

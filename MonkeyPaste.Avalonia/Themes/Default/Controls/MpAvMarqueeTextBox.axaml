@@ -9,4 +9,13 @@
             0
         </sys:Double>-->
     </Styles.Resources>
+
+    <Style Selector="local|MpAvMarqueeTextBox:focus DataValidationErrors /template/ ScrollViewer ScrollBar">
+        <Setter Property="IsVisible"
+                Value="False" />
+    </Style>
+    <Style Selector="local|MpAvMarqueeTextBox:focus DataValidationErrors /template/ ScrollViewer ScrollBar:pointerover">
+        <Setter Property="IsVisible"
+                Value="False" />
+    </Style>
 </Styles>

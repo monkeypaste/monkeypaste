@@ -112,8 +112,8 @@ namespace MonkeyPaste {
                         throw new Exception("Command references must implement INotifyPropertyChanged");
                     }
                     npci.PropertyChanged += (s, e) => {
-                        //MpPlatform.Services.MainThreadMarshal.RunOnMainThread(() => CanExecuteChanged?.Invoke(s, e));
-                        CanExecuteChanged?.Invoke(s, e);
+                        MpPlatform.Services.MainThreadMarshal.RunOnMainThread(() => CanExecuteChanged?.Invoke(s, e));
+                        //CanExecuteChanged?.Invoke(s, e);
                     };
 
                 }

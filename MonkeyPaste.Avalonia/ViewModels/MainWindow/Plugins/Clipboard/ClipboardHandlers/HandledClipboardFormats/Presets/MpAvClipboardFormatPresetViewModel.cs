@@ -457,7 +457,7 @@ namespace MonkeyPaste.Avalonia {
                         Task.Run(async () => {
                             await Preset.WriteToDatabaseAsync();
                             HasModelChanged = false;
-                        }).FireAndForgetSafeAsync(this);
+                        });
                     }
                     break;
 

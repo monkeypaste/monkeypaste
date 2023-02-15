@@ -1,4 +1,5 @@
 ﻿using Avalonia.Threading;
+using MonkeyPaste.Common;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,9 +8,26 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvAppViewModel :
         MpViewModelBase<MpAvAppCollectionViewModel>,
         MpISelectableViewModel,
-        MpIHoverableViewModel
+        MpIHoverableViewModel,
+        MpIIsValueEqual<MpAvAppViewModel>
         //MpISourceItemViewModel 
         {
+        #region Interfaces
+
+        #region MpIIsFuzzyValueEqual Implementation
+
+        public bool IsValueEqual(MpAvAppViewModel oavm) {
+            if (oavm == null) {
+                return false;
+            }
+            return
+                AppPath.ToLower() == oavm.AppPath.ToLower() &&
+                UserDeviceId == oavm.UserDeviceId;
+        }
+        #endregion
+
+        #endregion
+
         #region Properties
 
         #region View Models
@@ -141,8 +159,6 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
-
-
         public async Task RejectApp() {
             IsBusy = true;
             bool wasCanceled = false;
@@ -164,6 +180,24 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
+        public override string ToString() {
+            if (App == null) {
+                return base.ToString();
+            }
+            return App.ToString();
+        }
+
+        #endregion
+
+        #region Protected Methods
+
+        #region Db Event Handlers
+
+        #endregion
+
+        #endregion
+
+        #region Private Methods
         private void MpAppViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsSelected):
@@ -195,15 +229,6 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
         }
-
-        #endregion
-
-        #region Protected Methods
-
-        #region Db Event Handlers
-
-        #endregion
-
         #endregion
 
         #region Commands

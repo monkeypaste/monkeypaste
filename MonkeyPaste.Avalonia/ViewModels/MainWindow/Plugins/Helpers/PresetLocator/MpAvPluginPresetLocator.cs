@@ -172,7 +172,14 @@ namespace MonkeyPaste.Avalonia {
             string preset_label = preset_format.label;
             if (string.IsNullOrEmpty(preset_label)) {
                 int manifest_preset_idx = pluginHost.ComponentFormat.presets.IndexOf(preset_format);
-                preset_label = $"{pluginHost.PluginFormat.title} - Default{manifest_preset_idx + 1}";
+                string host_label = pluginHost.PluginFormat.title;
+                if (pluginHost.ComponentFormat is MpILabelText lt &&
+                    !string.IsNullOrEmpty(lt.LabelText)) {
+                    // for clipboard handlers use display name instead of plugin name, 
+                    // plugin name doesn't describe item
+                    host_label += $" {lt.LabelText}";
+                }
+                preset_label = $"{host_label} - Default{manifest_preset_idx + 1}";
             }
 
             string preset_description = preset_format.description;

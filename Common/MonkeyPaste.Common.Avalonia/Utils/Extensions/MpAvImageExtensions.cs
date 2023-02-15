@@ -67,6 +67,7 @@ namespace MonkeyPaste.Common.Avalonia {
 
         public static Bitmap ToAvBitmap(this RenderTargetBitmap rtbmp) {
             return new Bitmap(rtbmp.PlatformImpl);
+            //return rtbmp.ToBase64String().ToAvBitmap();
         }
 
         public static string ToRichHtmlImage(this Bitmap bmp) {
@@ -120,6 +121,7 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static Bitmap? Resize(this Bitmap bmpSrc, MpSize size) {
+
             var bmpTarget = bmpSrc.CreateScaledBitmap(new PixelSize((int)size.Width, (int)size.Height));
             return bmpTarget;
         }
@@ -199,7 +201,12 @@ namespace MonkeyPaste.Common.Avalonia {
         #endregion
 
         #region Read/Write
-
+        public static Stream ToStream(this Bitmap bitmap) {
+            var ms = new MemoryStream();
+            bitmap.Save(ms);
+            ms.Seek(0, SeekOrigin.Begin);
+            return ms;
+        }
         public static unsafe PixelColor[,] GetPixels(this Bitmap bitmap) {
             using (var memoryStream = new MemoryStream()) {
                 bitmap.Save(memoryStream);

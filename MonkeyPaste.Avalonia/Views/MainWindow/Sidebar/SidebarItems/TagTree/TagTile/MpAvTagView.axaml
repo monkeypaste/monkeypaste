@@ -46,19 +46,8 @@
             <Setter Property="BorderBrush"
                     Value="{DynamicResource TagTileDragOverInvalidBorderColor}" />
         </Style>
-
-
-        <Style Selector="local|MpAvMarqueeTextBox:focus DataValidationErrors /template/ ScrollViewer ScrollBar">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>
-        <Style Selector="local|MpAvMarqueeTextBox:focus DataValidationErrors /template/ ScrollViewer ScrollBar:pointerover">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>
     </local:MpAvUserControl.Styles>
     <Grid x:Name="TagViewContainerGrid"
-          ClipToBounds="False"
           local:MpAvIsHoveringExtension.IsEnabled="True"
           local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
           local:MpAvIsHoveringExtension.HoverCursor="Hand"
@@ -91,7 +80,7 @@
                               Classes.activeTag="{Binding IsActiveTag}"
                               BorderThickness="1.5">
             <StackPanel Orientation="Horizontal">
-                <Grid VerticalAlignment="Center">
+                <Grid VerticalAlignment="Stretch">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition Width="Auto" />
@@ -113,59 +102,31 @@
                                    Foreground="{Binding $parent.Background, Converter={StaticResource BrushToContrastBrushConverter}}" />
                     </local:MpAvClipBorder>
                     <!--  Tag Name TextBox/ Marquee  -->
-                    <!--<Grid Grid.Column="1"
-                          HorizontalAlignment="Left"
-                          Margin="5,0,0,0"
-                          MaxWidth="100">-->
-                    <!--<TextBox x:Name="TagNameTextBox"
-                                 local:MpAvIsFocusedExtension.IsEnabled="True"
-                                 local:MpAvIsFocusedExtension.SelectViewModelOnFocus="False"
-                                 local:MpAvIsFocusedExtension.IsFocused="{Binding IsTagNameTextBoxFocused, Mode=TwoWay}"
-                                 local:MpAvMarqueeTextBoxExtension.IsEnabled="True"
-                                 local:MpAvMarqueeTextBoxExtension.EditOnMouseClick="False"
-                                 local:MpAvMarqueeTextBoxExtension.CancelEditCommand="{Binding CancelRenameTagCommand}"
-                                 local:MpAvMarqueeTextBoxExtension.FinishEditCommand="{Binding FinishRenameTagCommand}"
-                                 local:MpAvMarqueeTextBoxExtension.IsReadOnly="{Binding IsTagNameReadOnly, Mode=TwoWay}"
-                                 local:MpAvMarqueeTextBoxExtension.ForegroundBrush="{Binding TagTextHexColor}"
-                                 local:MpAvMarqueeTextBoxExtension.Margin="0,0,0,0"
-                                 Background="White"
-                                 Foreground="Black"
-                                 MinHeight="0"
-                                 Margin="0"
-                                 Padding="0"
-                                 BorderThickness="0"
-                                 HorizontalAlignment="Center"
-                                 VerticalAlignment="Center"
-                                 IsReadOnly="{Binding IsTagNameReadOnly, Mode=OneWay}"
-                                 FontSize="16"
-                                 Text="{Binding TagName, Mode=TwoWay}" />-->
                     <local:MpAvMarqueeTextBox x:Name="TagNameTextBox"
                                               Grid.Column="1"
                                               FocusAdorner="{x:Null}"
                                               HorizontalAlignment="Stretch"
-                                              VerticalAlignment="Stretch"
+                                              VerticalAlignment="Center"
                                               HorizontalContentAlignment="Left"
                                               VerticalContentAlignment="Center"
                                               Margin="5,0,0,0"
                                               FontSize="16"
                                               Padding="0"
-                                              MinWidth="100"
+                                              MinWidth="70"
                                               MaxWidth="100"
-                                              ClipToBounds="True"
                                               local:MpAvIsFocusedExtension.IsEnabled="True"
                                               local:MpAvIsFocusedExtension.SelectViewModelOnFocus="False"
                                               local:MpAvIsFocusedExtension.IsFocused="{Binding IsTagNameTextBoxFocused, Mode=TwoWay}"
-                                              EditOnFocus="False"
+                                              EditOnFocus="{Binding !IsTagNameReadOnly, Mode=OneWay}"
                                               CancelEditCommand="{Binding CancelRenameTagCommand}"
                                               BeginEditCommand="{Binding FinishRenameTagCommand}"
                                               ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                               ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                                               IsReadOnly="{Binding IsTagNameReadOnly, Mode=OneWay}"
-                                              FontFamily="Arial"
+                                              FontFamily="Segoe UI"
                                               ReadOnlyBackground="Transparent"
                                               ReadOnlyForeground="{Binding TagTextHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
                                               Text="{Binding TagName, Mode=TwoWay}" />
-                    <!--</Grid>-->
                 </Grid>
             </StackPanel>
         </local:MpAvClipBorder>

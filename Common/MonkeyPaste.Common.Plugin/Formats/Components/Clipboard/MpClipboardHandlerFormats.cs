@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace MonkeyPaste.Common.Plugin {
     public class MpClipboardHandlerFormats : MpJsonObject {
@@ -6,7 +7,9 @@ namespace MonkeyPaste.Common.Plugin {
         public List<MpClipboardHandlerFormat> writers { get; set; }
     }
 
-    public class MpClipboardHandlerFormat : MpParameterHostBaseFormat {
+    public class MpClipboardHandlerFormat : MpParameterHostBaseFormat, MpILabelText {
+        [JsonIgnore]
+        string MpILabelText.LabelText => displayName;
 
         public string iconUri { get; set; }
         public string handlerGuid { get; set; }

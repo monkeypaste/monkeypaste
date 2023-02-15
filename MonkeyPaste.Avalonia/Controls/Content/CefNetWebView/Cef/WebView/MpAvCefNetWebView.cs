@@ -990,7 +990,7 @@ namespace MonkeyPaste.Avalonia {
             if (contentChanged_ntf.editorHeight > 0 &&
                 contentChanged_ntf.editorHeight > 0) {
                 var new_size = new MpSize(contentChanged_ntf.editorWidth, contentChanged_ntf.editorHeight);
-                if (!new_size.IsEqual(BindingContext.UnconstrainedContentDimensions)) {
+                if (!new_size.IsValueEqual(BindingContext.UnconstrainedContentDimensions)) {
                     BindingContext.UnconstrainedContentDimensions = new_size;
                 }
             }

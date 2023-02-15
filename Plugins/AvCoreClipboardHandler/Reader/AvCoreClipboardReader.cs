@@ -1,12 +1,10 @@
-﻿using Avalonia.Input;
-using MonkeyPaste.Common.Avalonia;
+﻿using Avalonia;
+using Avalonia.Input;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Text;
-using Avalonia;
-using MonkeyPaste.Common.Wpf;
 
 namespace AvCoreClipboardHandler {
     public static class AvCoreClipboardReader {
@@ -33,23 +31,24 @@ namespace AvCoreClipboardHandler {
                 //await Util.WaitForClipboard();
                 availableFormats = await Application.Current.Clipboard.GetFormatsSafeAsync();
                 //Util.CloseClipboard();
-            } else if(request.forcedClipboardDataObject is IDataObject) {
+            } else if (request.forcedClipboardDataObject is IDataObject) {
                 avdo = request.forcedClipboardDataObject as IDataObject;
 
                 try {
 
                     availableFormats = avdo.GetDataFormats();//.Where(x => avdo.Get(x) != null).ToArray();
-                }catch(Exception ex) {
-                    MpConsole.WriteTraceLine($"Error reading dnd formats retrying (attempt {10-retryCount+1})", ex);
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Error reading dnd formats retrying (attempt {10 - retryCount + 1})", ex);
                     await Task.Delay(100);
 
-                    if(retryCount == 0) {
+                    if (retryCount == 0) {
                         MpConsole.WriteLine("Retry attempts reached, failed");
                         return null;
                     }
                     var retry_result = await ProcessReadRequestAsync(request, retryCount--);
                     return retry_result;
-                }               
+                }
 
             }
 
@@ -60,7 +59,7 @@ namespace AvCoreClipboardHandler {
 
             foreach (var read_format in readFormats) {
                 object data = await ReadDataObjectFormat(read_format, avdo);
-                if(!request.ignoreParams) {
+                if (!request.ignoreParams) {
                     foreach (var param in request.items) {
                         data = ProcessReaderParam(param, read_format, data, out var ex, out var param_nfl);
                         if (ex != null) {
@@ -88,18 +87,18 @@ namespace AvCoreClipboardHandler {
             };
         }
 
-       
+
         private static async Task<object> ReadDataObjectFormat(string format, IDataObject avdo) {
             object dataObj;
 
-            if(avdo == null) {
+            if (avdo == null) {
                 //await Util.WaitForClipboard();
                 dataObj = await Application.Current.Clipboard.GetDataSafeAsync(format);
-                if(OperatingSystem.IsWindows() &&
+                if (OperatingSystem.IsWindows() &&
                     format == MpPortableDataFormats.AvHtml_bytes && dataObj is byte[] htmlBytes) {
                     var detected_encoding = htmlBytes.DetectTextEncoding(out string detected_text);
                     dataObj = Encoding.UTF8.GetBytes(detected_text);
-                    if(detected_text.Contains("Â")) {
+                    if (detected_text.Contains("Â")) {
                         Debugger.Break();
                     }
                 }
@@ -113,7 +112,7 @@ namespace AvCoreClipboardHandler {
                     dataObj = avdo.GetFileNames();
                 } else {
                     dataObj = avdo.Get(format);
-                }                
+                }
             }
             string dataStr = null;
 
@@ -129,7 +128,12 @@ namespace AvCoreClipboardHandler {
         }
 
 
-        private static object ProcessReaderParam(MpParameterRequestItemFormat pkvp, string format, object data, out Exception ex, out List<MpPluginUserNotificationFormat> nfl) {
+        private static object ProcessReaderParam(
+            MpParameterRequestItemFormat pkvp,
+            string format,
+            object data,
+            out Exception ex,
+            out List<MpPluginUserNotificationFormat> nfl) {
             ex = null;
             nfl = null;
             if (data == null) {
@@ -141,6 +145,42 @@ namespace AvCoreClipboardHandler {
                 // plugin creator has to manage mapping internally
                 CoreClipboardParamType paramType = (CoreClipboardParamType)Convert.ToInt32(pkvp.paramId);
                 switch (format) {
+                    case MpPortableDataFormats.AvRtf_bytes:
+
+                        switch (paramType) {
+                            case CoreClipboardParamType.R_MaxCharCount_Rtf:
+                                if (data is string rtf) {
+                                    int max_length = int.Parse(pkvp.value);
+                                    if (rtf.Length > max_length) {
+                                        nfl = new List<MpPluginUserNotificationFormat>() {
+                                            Util.CreateNotification(
+                                                MpPluginNotificationType.PluginResponseWarning,
+                                                "Max Char Count Reached",
+                                                $"{format} limit is '{max_length}' and data was '{rtf.Length}'",
+                                                "CoreClipboardWriter")
+                                        };
+                                        data = rtf.Substring(0, max_length);
+                                    }
+                                }
+                                break;
+                            case CoreClipboardParamType.R_Ignore_Rtf:
+                                bool ignoreRtf = bool.Parse(pkvp.value);
+                                if (ignoreRtf) {
+                                    nfl = new List<MpPluginUserNotificationFormat>() {
+                                        Util.CreateNotification(
+                                            MpPluginNotificationType.PluginResponseWarning,
+                                            "Format Ignored",
+                                            $"{format} Format is flagged as 'ignored'",
+                                            "CoreClipboardWriter")
+                                    };
+                                    data = null;
+
+                                } else {
+                                    return data;
+                                }
+                                break;
+                        }
+                        break;
                     case MpPortableDataFormats.Text:
                         switch (paramType) {
                             case CoreClipboardParamType.R_MaxCharCount_Text:
@@ -160,7 +200,7 @@ namespace AvCoreClipboardHandler {
                                 break;
                             case CoreClipboardParamType.R_Ignore_Text:
                                 bool ignoreText = bool.Parse(pkvp.value);
-                                if(ignoreText) {
+                                if (ignoreText) {
                                     nfl = new List<MpPluginUserNotificationFormat>() {
                                         Util.CreateNotification(
                                             MpPluginNotificationType.PluginResponseWarning,

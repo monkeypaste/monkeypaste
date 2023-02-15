@@ -22,7 +22,22 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpISelectableViewModel Implementation
 
-        public bool IsSelected { get; set; }
+        public bool IsSelected {
+            get {
+                if (Parent == null) {
+                    return false;
+                }
+                return Parent.SelectedItem == this;
+            }
+            set {
+                if (IsSelected != value) {
+                    if (Parent != null && value) {
+                        Parent.SelectedItem = this;
+                        OnPropertyChanged(nameof(IsSelected));
+                    }
+                }
+            }
+        }
 
         public DateTime LastSelectedDateTime { get; set; }
 
@@ -165,6 +180,7 @@ namespace MonkeyPaste.Avalonia {
                 return ClipboardPluginFormat.clipboardName;
             }
         }
+
         #endregion
 
         #region Model
@@ -193,6 +209,8 @@ namespace MonkeyPaste.Avalonia {
                 return ClipboardPluginFormat.displayName;
             }
         }
+        public string SelectorLabel =>
+            $"{Title} ({(IsReader ? "Reader" : "Writer")})";
 
         public string Description {
             get {
@@ -387,9 +405,10 @@ namespace MonkeyPaste.Avalonia {
 
                         //Items.ForEach(x => x.IsEditingParameters = false);
                         //SelectedIt em.IsEditingParameters = true;
+
                     }
                     Parent.OnPropertyChanged(nameof(Parent.IsAnySelected));
-                    Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
+                    //Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
 
                     Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.IsAnySelected));
                     Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.SelectedItem));

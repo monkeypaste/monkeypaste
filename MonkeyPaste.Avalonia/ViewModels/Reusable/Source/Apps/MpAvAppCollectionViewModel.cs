@@ -45,12 +45,13 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
         private static MpAvAppCollectionViewModel _instance;
-        public static MpAvAppCollectionViewModel Instance => _instance ?? (_instance = new MpAvAppCollectionViewModel());
+        public static MpAvAppCollectionViewModel Instance => _instance ??= new MpAvAppCollectionViewModel();
 
         public MpAvAppCollectionViewModel() : base(null) {
             //Dispatcher.UIThread.InvokeAsync(Init);
             PropertyChanged += MpAppCollectionViewModel_PropertyChanged;
         }
+
 
         #endregion
 
@@ -84,6 +85,8 @@ namespace MonkeyPaste.Avalonia {
                 if (Items.Count > 0) {
                     Items[0].IsSelected = true;
                 }
+
+                ValidateAppViewModels();
 
                 //IsBusy = false;
             });
@@ -169,7 +172,14 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private void ValidateAppViewModels() {
+            var dups = Items.Where(x => Items.Any(y => y != x && x.IsValueEqual(y)));
+            if (dups.Any()) {
+                // dup app view models, check db to see if dup app model
+                Debugger.Break();
+            }
 
+        }
 
         private async Task InitLastAppViewModel() {
             // wait for running processes to get created
@@ -197,22 +207,12 @@ namespace MonkeyPaste.Avalonia {
             //PlatformWrapper.Services.ProcessWatcher.StartWatcher();
 
             var unknownApps = MpPlatform.Services.ProcessWatcher.RunningProcessLookup.Keys
-                                    .Where(x => !Items.Any(y => y.AppPath.ToLower() == x.ToLower()))
+                                    .Where(x => Items.All(y => y.AppPath.ToLower() != x.ToLower()))
                                     .Select(x => new MpPortableProcessInfo() { ProcessPath = x }).ToList();
 
             MpConsole.WriteLine($"AppCollection RegisterWithProcessesManager '{unknownApps.Count}' unknown apps detected.");
             foreach (var uap in unknownApps) {
-                //var handle = MpPlatformWrapper.Services.ProcessWatcher.RunningProcessLookup[uap][0];
-                //string appName = MpPlatformWrapper.Services.ProcessWatcher.GetProcessApplicationName(handle);
-
-                //var iconStr = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(uap);
-                //var icon = await MpIcon.Create(iconStr);
-                //var app = await MpApp.CreateAsync(
-                //    appPath: uap, 
-                //    appName: appName, 
-                //    iconId: icon.Id);
-                //al.Add(app);
-                var app = await MpPlatform.Services.AppBuilder.CreateAsync(uap);
+                _ = await MpPlatform.Services.AppBuilder.CreateAsync(uap);
                 // wait for db add callback to pickup db add event
                 await Task.Delay(100);
                 while (IsBusy) {
@@ -238,8 +238,7 @@ namespace MonkeyPaste.Avalonia {
 
                 if (avm == null) {
                     // unknown app activated add like in registration
-                    var new_app =
-                    await MpPlatform.Services.AppBuilder.CreateAsync(e);
+                    var new_app = await MpPlatform.Services.AppBuilder.CreateAsync(e);
                     // wait for db add to pick up model
                     await Task.Delay(100);
                     while (IsBusy) {
@@ -248,11 +247,16 @@ namespace MonkeyPaste.Avalonia {
                     }
 
                     // BUG may need to add .ToList() on items here, hopefully fixed w/ dbAdd waiting
-                    avm = Items.FirstOrDefault(x => x.AppPath.ToLower() == e.ProcessPath.ToLower());
+                    avm = Items.FirstOrDefault(x => x.AppId == new_app.Id);
                     if (avm == null) {
                         // somethings wrong check console for db add msgs
-                        Debugger.Break();
+                        // this happen on initial startup sometimes, not sure why
+                        // the db add callback is getting hit but add here and validate
+                        Items.Add(avm);
+                        OnPropertyChanged(nameof(Items));
+
                     }
+                    ValidateAppViewModels();
                 }
                 LastActiveAppViewModel = avm;
             });

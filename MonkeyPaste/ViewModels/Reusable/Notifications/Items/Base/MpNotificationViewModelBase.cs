@@ -328,6 +328,7 @@ namespace MonkeyPaste {
                 return NotificationFormat.MaxShowTimeMs;
             }
         }
+
         #endregion
 
         #region Model

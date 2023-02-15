@@ -351,8 +351,8 @@ namespace MonkeyPaste.Avalonia {
             if (IsReadOnly) {
                 // NOTE disabling marquee image, its distorted (update SetTextBoxIsVisible to swap out)
                 SetTextBoxIsVisible(false);
-                //RenderMarquee(context);
-                base.Render(context);
+                RenderMarquee(context);
+                //base.Render(context);
             } else {
                 SetTextBoxIsVisible(true);
                 base.Render(context);
@@ -414,16 +414,16 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 _offsetX2 = 0;
             }
-
+            MinHeight = _ftSize.Height;
             Dispatcher.UIThread.Post(InvalidateVisual);
         }
         private void SetTextBoxIsVisible(bool isTextBoxVisible) {
             Dispatcher.UIThread.Post(() => {
                 foreach (var c in VisualChildren) {
-                    //c.IsVisible = isTextBoxVisible;
-                    if (c is Control vc) {
-                        vc.IsHitTestVisible = false;
-                    }
+                    c.IsVisible = isTextBoxVisible;
+                    //if (c is Control vc) {
+                    //    vc.IsHitTestVisible = false;
+                    //}
 
                 }
                 if (isTextBoxVisible) {
@@ -443,18 +443,42 @@ namespace MonkeyPaste.Avalonia {
 
             //ctx.FillRectangle(ReadOnlyBackground, this.Bounds);
 
-            MpRect src_rect = new MpRect(MpPoint.Zero, _marqueeBitmap.Size.ToPortableSize());
-            //MpRect dest_rect = new MpRect(MpPoint.Zero, this.Bounds.Size.ToPortableSize());// _marqueeBitmap.Size.ToPortableSize());
+            //MpRect src_rect = new MpRect(MpPoint.Zero, _marqueeBitmap.Size.ToPortableSize());
+            ////MpRect dest_rect = new MpRect(MpPoint.Zero, this.Bounds.Size.ToPortableSize());// _marqueeBitmap.Size.ToPortableSize());
 
-            MpRect rect1 = src_rect;
-            rect1.X = _offsetX1;
-            ctx.DrawImage(_marqueeBitmap, src_rect.ToAvRect(), rect1.ToAvRect(), BitmapInterpolationMode.Default);
+            //MpRect rect1 = src_rect;
+            //rect1.X = _offsetX1;
 
-            if (CanMarquee()) {
-                MpRect rect2 = src_rect;
-                rect2.X = _offsetX2;
-                ctx.DrawImage(_marqueeBitmap, src_rect.ToAvRect(), rect2.ToAvRect(), BitmapInterpolationMode.Default);
+            //ctx.DrawImage(_marqueeBitmap, src_rect.ToAvRect(), rect1.ToAvRect(), BitmapInterpolationMode.Default);
+
+            //if (CanMarquee()) {
+            //    MpRect rect2 = src_rect;
+            //    rect2.X = _offsetX2;
+            //    ctx.DrawImage(_marqueeBitmap, src_rect.ToAvRect(), rect2.ToAvRect(), BitmapInterpolationMode.Default);
+            //}
+
+            var dpiv = MpAvMainWindowViewModel.Instance.MainWindowScreen.PixelsPerInch.ToAvVector();
+            this.FontSize = Math.Max(1.0d, FontSize);
+            var ft = this.ToFormattedText();
+            ft.SetFontSize(this.FontSize);
+            ft.SetForegroundBrush(ReadOnlyForeground);
+            ctx.FillRectangle(ReadOnlyBackground, this.Bounds);
+
+            using (ctx.PushPostTransform(Matrix.CreateTranslation(new Vector(_offsetX1, 0)))) {
+                ft.SetForegroundBrush(DropShadowBrush);
+                ctx.DrawText(ft, DropShadowOffset);
+                ft.SetForegroundBrush(ReadOnlyForeground);
+                ctx.DrawText(ft, new Point(0, 0));
             }
+            if (CanMarquee()) {
+                using (ctx.PushPostTransform(Matrix.CreateTranslation(new Vector(_offsetX2, 0)))) {
+                    ft.SetForegroundBrush(DropShadowBrush);
+                    ctx.DrawText(ft, DropShadowOffset);
+                    ft.SetForegroundBrush(ReadOnlyForeground);
+                    ctx.DrawText(ft, new Point(0, 0));
+                }
+            }
+
         }
 
         private bool CanMarquee() {
@@ -586,19 +610,18 @@ namespace MonkeyPaste.Avalonia {
             int pad = (int)TailPadding;
 
             var dpiv = MpAvMainWindowViewModel.Instance.MainWindowScreen.PixelsPerInch.ToAvVector();
-            double dpi = 96;// dpiv.X 
             this.FontSize = Math.Max(1.0d, FontSize);
             var ft = this.ToFormattedText();
             ft.SetFontSize(this.FontSize);
             ft.SetForegroundBrush(ReadOnlyForeground);
             ftSize = new MpSize(ft.Width, ft.Height);
 
-            double pixelsPerDip = 1;// MpAvMainWindowViewModel.Instance.MainWindowScreen.PixelDensity;
+            double pixelsPerDip = MpAvMainWindowViewModel.Instance.MainWindowScreen.PixelDensity;
 
             var ftBmp = new RenderTargetBitmap(
                 new PixelSize(
                     (int)Math.Max(1.0, ft.Width * pixelsPerDip) + pad + (int)DropShadowOffset.X,
-                    (int)Math.Max(1.0, ft.Height * pixelsPerDip) + (int)DropShadowOffset.Y), new Vector(dpi, dpi));
+                    (int)Math.Max(1.0, ft.Height * pixelsPerDip) + (int)DropShadowOffset.Y), dpiv);
 
             using (var ctxi = ftBmp.CreateDrawingContext(null)) {
                 using (var ctx = new DrawingContext(ctxi)) {
@@ -616,8 +639,20 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
             var bmp = ftBmp.ToAvBitmap();
-            //MpFileIo.WriteByteArrayToFile(@"C:\Users\tkefauver\Desktop\text_bmp.png", bmp.ToByteArray(), false);
+            MpFileIo.WriteByteArrayToFile(@"C:\Users\tkefauver\Desktop\text_bmp.png", bmp.ToByteArray(), false);
 
+            //using (var bmp_ms = ftBmp.ToStream()) {
+            //    bmp_ms.Seek(0, SeekOrigin.Begin);
+            //    var sbmp = Bitmap.DecodeToHeight(bmp_ms, (int)this.Bounds.Height);
+            //    MpFileIo.WriteByteArrayToFile(@"C:\Users\tkefauver\Desktop\text_bmp2.png", sbmp.ToByteArray(), false);
+            //    return sbmp;
+            //}
+            //double ar = this.Bounds.Height / ftBmp.PixelSize.Height;
+            //var scaled_size = ftBmp.PixelSize.ToPortableSize().ToPortablePoint() * ar;
+
+            //var sbmp = bmp.CreateScaledBitmap(scaled_size.ToPortableSize().ToAvPixelSize());
+            //MpFileIo.WriteByteArrayToFile(@"C:\Users\tkefauver\Desktop\text_bmp2.png", sbmp.ToByteArray(), false);
+            //return sbmp;
             return bmp;
         }
         #endregion

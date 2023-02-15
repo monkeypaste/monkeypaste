@@ -41,11 +41,6 @@
                                         <Border Classes="outerComboBoxItemBorder">
                                             <DockPanel>
                                                 <Image Source="{Binding PluginIconId, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
-
-                                                <Border Classes="comboBoxItemBusyBorder"
-                                                        IsVisible="{Binding IsBusy}">
-                                                    <local:MpAvBusySpinnerView />
-                                                </Border>
                                                 <TextBlock Text="{Binding HandlerName}" />
                                             </DockPanel>
                                         </Border>
@@ -70,18 +65,13 @@
 
                                 <Border Classes="iconLabelComboBox">
                                     <ComboBox SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
-                                              Items="{Binding Items}">
+                                              Items="{Binding TitleSortedItems}">
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate>
                                                 <Border Classes="outerComboBoxItemBorder">
                                                     <DockPanel>
                                                         <Image Source="{Binding HandledFormatIconId, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
-
-                                                        <Border Classes="comboBoxItemBusyBorder"
-                                                                IsVisible="{Binding IsBusy}">
-                                                            <local:MpAvBusySpinnerView />
-                                                        </Border>
-                                                        <TextBlock Text="{Binding Title}" />
+                                                        <TextBlock Text="{Binding SelectorLabel}" />
                                                     </DockPanel>
                                                 </Border>
                                             </DataTemplate>

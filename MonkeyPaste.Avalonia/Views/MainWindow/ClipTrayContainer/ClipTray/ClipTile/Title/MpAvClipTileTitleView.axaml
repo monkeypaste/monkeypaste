@@ -12,54 +12,54 @@
                        d:DesignWidth="260"
                        d:DesignHeight="52"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileTitleView">
+    <local:MpAvUserControl.Styles>
+        <Style Selector="Grid#SourceIconContainerGrid:pointerover Image#ClipTileAppIconBorderImage">
+            <Style.Animations>
+                <Animation Duration="0:0:0.3"
+                           Easing="CubicEaseOut"
+                           FillMode="Forward">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="IsVisible"
+                                Value="True" />
+                        <Setter Property="ScaleTransform.ScaleX"
+                                Value="1" />
+                        <Setter Property="ScaleTransform.ScaleY"
+                                Value="1" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="ScaleTransform.ScaleX"
+                                Value="1.1" />
+                        <Setter Property="ScaleTransform.ScaleY"
+                                Value="1.1" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <Style Selector="Grid#SourceIconContainerGrid:not(:pointerover) Image#ClipTileAppIconBorderImage">
+            <Style.Animations>
+                <Animation Duration="0:0:0.3"
+                           Easing="CubicEaseOut"
+                           FillMode="Forward">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="ScaleTransform.ScaleX"
+                                Value="1.1" />
+                        <Setter Property="ScaleTransform.ScaleY"
+                                Value="1.1" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="IsVisible"
+                                Value="False" />
+                        <Setter Property="ScaleTransform.ScaleX"
+                                Value="1" />
+                        <Setter Property="ScaleTransform.ScaleY"
+                                Value="1" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+    </local:MpAvUserControl.Styles>
     <Grid x:Name="TitleContainerGrid"
           ColumnDefinitions="0.7*,0.3*">
-        <Grid.Styles>
-            <Style Selector="Grid#SourceIconContainerGrid:pointerover Image#ClipTileAppIconBorderImage">
-                <Style.Animations>
-                    <Animation Duration="0:0:0.3"
-                               Easing="CubicEaseOut"
-                               FillMode="Forward">
-                        <KeyFrame Cue="0%">
-                            <Setter Property="IsVisible"
-                                    Value="True" />
-                            <Setter Property="ScaleTransform.ScaleX"
-                                    Value="1" />
-                            <Setter Property="ScaleTransform.ScaleY"
-                                    Value="1" />
-                        </KeyFrame>
-                        <KeyFrame Cue="100%">
-                            <Setter Property="ScaleTransform.ScaleX"
-                                    Value="1.1" />
-                            <Setter Property="ScaleTransform.ScaleY"
-                                    Value="1.1" />
-                        </KeyFrame>
-                    </Animation>
-                </Style.Animations>
-            </Style>
-            <Style Selector="Grid#SourceIconContainerGrid:not(:pointerover) Image#ClipTileAppIconBorderImage">
-                <Style.Animations>
-                    <Animation Duration="0:0:0.3"
-                               Easing="CubicEaseOut"
-                               FillMode="Forward">
-                        <KeyFrame Cue="0%">
-                            <Setter Property="ScaleTransform.ScaleX"
-                                    Value="1.1" />
-                            <Setter Property="ScaleTransform.ScaleY"
-                                    Value="1.1" />
-                        </KeyFrame>
-                        <KeyFrame Cue="100%">
-                            <Setter Property="IsVisible"
-                                    Value="False" />
-                            <Setter Property="ScaleTransform.ScaleX"
-                                    Value="1" />
-                            <Setter Property="ScaleTransform.ScaleY"
-                                    Value="1" />
-                        </KeyFrame>
-                    </Animation>
-                </Style.Animations>
-            </Style>
-        </Grid.Styles>
         <!--  Swirl  -->
         <Viewbox HorizontalAlignment="Left"
                  VerticalAlignment="Top"
@@ -147,16 +147,16 @@
 
         </Viewbox>
         <!--  Title Text Box  -->
+
         <local:MpAvMarqueeTextBox x:Name="TileTitleTextBox"
                                   Grid.Column="0"
                                   Cursor="IBeam"
                                   HorizontalAlignment="Stretch"
-                                  VerticalAlignment="Top"
                                   HorizontalContentAlignment="Left"
+                                  VerticalAlignment="Top"
                                   VerticalContentAlignment="Top"
                                   Margin="15,0,0,0"
                                   Padding="0"
-                                  FontSize="16"
                                   ClipToBounds="True"
                                   ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                   ScrollViewer.HorizontalScrollBarVisibility="Hidden"
@@ -170,55 +170,6 @@
                                   CancelEditCommand="{Binding CancelEditTitleCommand}"
                                   IsReadOnly="{Binding IsTitleReadOnly, Mode=TwoWay}"
                                   Text="{Binding CopyItemTitle, Mode=TwoWay}">
-            <local:MpAvMarqueeTextBox.Styles>
-                <Style Selector="local|MpAvMarqueeTextBox:focus DataValidationErrors /template/ ScrollViewer ScrollBar">
-                    <Setter Property="IsVisible"
-                            Value="False" />
-                </Style>
-                <Style Selector="local|MpAvMarqueeTextBox:focus DataValidationErrors /template/ ScrollViewer ScrollBar:pointerover">
-                    <Setter Property="IsVisible"
-                            Value="False" />
-                </Style>
-            </local:MpAvMarqueeTextBox.Styles>
-            <!--<local:MpAvMarqueeTextBox.FontSize>
-                <MultiBinding Converter="{StaticResource MultiDoubleMathConverter}"
-                              ConverterParameter="(a/b)-c"
-                              FallbackValue="16"
-                              TargetNullValue="16">
-                    <Binding Path="Bounds.Height"
-                             ElementName="TitleContainerGrid"
-                             FallbackValue="20"
-                             TargetNullValue="20" />
-                    <Binding>
-                        <Binding.Source>
-                            <sys:Double>2</sys:Double>
-                        </Binding.Source>
-                    </Binding>
-                    <Binding>
-                        <Binding.Source>
-                            <sys:Double>2</sys:Double>
-                        </Binding.Source>
-                    </Binding>
-                </MultiBinding>
-            </local:MpAvMarqueeTextBox.FontSize>
-            <local:MpAvMarqueeTextBox.Height>
-                <MultiBinding Converter="{StaticResource MultiDoubleMathConverter}"
-                              ConverterParameter="(a+b)"
-                              FallbackValue="30"
-                              TargetNullValue="30">
-                    <Binding Path="FontSize"
-                             ElementName="TileTitleTextBox"
-                             FallbackValue="16"
-                             TargetNullValue="16" />
-                    <Binding>
-                        <Binding.Source>
-                            <sys:Double>5</sys:Double>
-                        </Binding.Source>
-                    </Binding>
-                </MultiBinding>
-            </local:MpAvMarqueeTextBox.Height>-->
-
-
             <local:MpAvMarqueeTextBox.Height>
                 <MultiBinding Converter="{StaticResource MultiDoubleMathConverter}"
                               ConverterParameter="+">
@@ -231,20 +182,6 @@
                     </Binding>
                 </MultiBinding>
             </local:MpAvMarqueeTextBox.Height>
-            <!--<local:MpAvMarqueeTextBox.MaxWidth>
-                <MultiBinding Converter="{StaticResource MultiDoubleMathConverter}">
-                    <Binding Path="Bounds.Width"
-                             ElementName="TileTitleTextBox" />
-                    <Binding Path="Bounds.Width"
-                             ElementName="SourceIconContainerGrid"
-                             Converter="{StaticResource NegateDoubleConverter}" />
-                    <Binding>
-                        <Binding.Source>
-                            <sys:Double>-5</sys:Double>
-                        </Binding.Source>
-                    </Binding>
-                </MultiBinding>
-            </local:MpAvMarqueeTextBox.MaxWidth>-->
             <local:MpAvMarqueeTextBox.FontSize>
                 <MultiBinding Converter="{StaticResource MultiDoubleMathConverter}"
                               ConverterParameter="/,-">

@@ -19,6 +19,15 @@
             <Setter Property="Background"
                     Value="LightGray" />
         </Style>
+        <Style Selector="DataGridCell">
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView ToolTipText="{Binding $parent[DataGridColumn].Header}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </local:MpAvUserControl.Styles>
     <Border CornerRadius="3"
             Margin="10,0"
@@ -32,6 +41,7 @@
                         Orientation="Vertical"
                         DataContext="{Binding SelectedItem}">
                 <DataGrid x:Name="ClipboardFormatPresetDatagrid"
+                          MinWidth="300"
                           IsVisible="{Binding ., Converter={x:Static ObjectConverters.IsNotNull}}"
                           Focusable="True"
                           Items="{Binding Items}"
@@ -143,7 +153,7 @@
 
                         <!--  IS ENABLED CHECKBOX  -->
 
-                        <DataGridTemplateColumn Header="Enabled?"
+                        <!--<DataGridTemplateColumn Header="Enabled?"
                                                 Width="Auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate DataType="local:MpAvClipboardFormatPresetViewModel">
@@ -156,7 +166,9 @@
                                     </CheckBox>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                        </DataGridTemplateColumn>-->
+                        <DataGridCheckBoxColumn Header="Enabled?"
+                                                Binding="{Binding IsEnabled, Mode=TwoWay}" />
 
                         <!--  DUPLICATE COLUMN  -->
                         <DataGridTemplateColumn Width="30"

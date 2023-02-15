@@ -144,8 +144,8 @@ namespace MonkeyPaste.Common {
                 return false;
             }
             return
-                Location.IsEqual(otherRect.Location, thresh) &&
-                Size.IsEqual(otherRect.Size, thresh);
+                Location.IsValueEqual(otherRect.Location, thresh) &&
+                Size.IsValueEqual(otherRect.Size, thresh);
         }
         public override string ToString() {
             return $"X:{X} Y:{Y} Width: {Width} Height: {Height}";

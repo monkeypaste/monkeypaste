@@ -1,52 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <!-- WINDOWS -->
-  <!--<PropertyGroup>
-    <OutputType>WinExe</OutputType>
-     <TargetFramework>net6.0-windows</TargetFramework> 
-     <UseWPF>True</UseWPF> 
-    <Nullable>disable</Nullable>
-    <TrimMode>copyused</TrimMode>
-    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <KnownFrameworkReference Update="Microsoft.WindowsDesktop.App.WPF" IsWindowsOnly="false" />
-</ItemGroup>
-  <PropertyGroup>
-    <RunningOnWindows>true</RunningOnWindows>
-  </PropertyGroup>
-   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DefineConstants>WINDOWS;</DefineConstants>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>WINDOWS;</DefineConstants>
-  </PropertyGroup>-->
-  
-  <!-- LINUX -->
-  <!-- <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
-    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
-    <Nullable>disable</Nullable>
-    <TrimMode>copyused</TrimMode>
-    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
-  </PropertyGroup>
-  
-
-  <PropertyGroup>
-    <RunningOnWindows>false</RunningOnWindows>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DefineConstants>LINUX;</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>LINUX;</DefineConstants>
-  </PropertyGroup> -->
-
-  <!-- DYNAMIC-->
-
    <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
@@ -54,23 +6,18 @@
     <TrimMode>copyused</TrimMode>
     <WarningLevel>4</WarningLevel>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+     <TargetFramework>$(MainTargetFramework)</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <KnownFrameworkReference Update="Microsoft.WindowsDesktop.App.WPF" IsWindowsOnly="false" />
   </ItemGroup>
   
   <PropertyGroup Condition="'$(BuildOs)' == 'WINDOWS'">  
-    <TargetFramework>net7.0-windows</TargetFramework>
     <DefineConstants>WINDOWS;</DefineConstants>    
-    <!--<UseWPF>True</UseWPF>--> 
+    <UseWPF>True</UseWPF>
   </PropertyGroup>
 
-  <!-- <ItemGroup Condition="'$(BuildOs)' == 'WINDOWS'">  
-    <KnownFrameworkReference Update="Microsoft.WindowsDesktop.App.WPF" IsWindowsOnly="false" />
-  </PropertyGroup> -->
-
    <PropertyGroup Condition="'$(BuildOs)' == 'LINUX'">  
-    <TargetFramework>net7.0</TargetFramework>
     <DefineConstants>LINUX;</DefineConstants>
   </PropertyGroup>
 
@@ -1249,7 +1196,6 @@
   <Target Name="_CollectWatchItems" />
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="call $(ProjectDir)scripts\kill_mpav_processes.bat" Condition="'$(BuildOs)' == 'WINDOWS'" />
-    <Exec Command="call $(ProjectDir)scripts\move_declarative_plugins_to_bin.bat" Condition="'$(BuildOs)' == 'WINDOWS'" />
   </Target>
   <PropertyGroup>
      <!-- 

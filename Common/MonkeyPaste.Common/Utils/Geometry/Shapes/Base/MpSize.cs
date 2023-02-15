@@ -11,7 +11,7 @@ namespace MonkeyPaste.Common {
             NewSize = newSize;
         }
     }
-    public class MpSize {
+    public class MpSize : MpIIsFuzzyValueEqual<MpSize> {
         //public static MpSize Parse(string text) {
         //    text = text.Trim();
         //    if(text.Contains())
@@ -19,6 +19,20 @@ namespace MonkeyPaste.Common {
         #region Statics
 
         public static MpSize Empty => new MpSize();
+
+        #endregion
+
+        #region Interfaces
+
+        #region MpIIsFuzzyValueEqual Implementation
+        public bool IsValueEqual(MpSize otherSize, double thresh = 0) {
+            if (otherSize == null) {
+                return false;
+            }
+            return Math.Abs(Width - otherSize.Width) <= thresh &&
+                    Math.Abs(Height - otherSize.Height) <= thresh;
+        }
+        #endregion
 
         #endregion
 
@@ -59,14 +73,9 @@ namespace MonkeyPaste.Common {
         }
 
         #endregion
+
         #region Public Methods
-        public bool IsEqual(MpSize otherSize, double thresh = 0) {
-            if (otherSize == null) {
-                return false;
-            }
-            return Math.Abs(Width - otherSize.Width) <= thresh &&
-                    Math.Abs(Height - otherSize.Height) <= thresh;
-        }
+
         public bool IsEmpty(double maxThreshold = 0) {
             return Width <= maxThreshold && Height <= maxThreshold;
         }

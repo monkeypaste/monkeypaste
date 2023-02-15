@@ -1,7 +1,9 @@
 ﻿using System;
 
 namespace MonkeyPaste.Common {
-    public class MpPoint : ICloneable { //, INotifyPropertyChanged {
+    public class MpPoint :
+        ICloneable,
+        MpIIsFuzzyValueEqual<MpPoint> { //, INotifyPropertyChanged {
         #region Statics
         public static MpPoint Zero => new MpPoint(0, 0);
 
@@ -44,6 +46,21 @@ namespace MonkeyPaste.Common {
 
         #endregion
 
+        #region Interfaces
+
+        #region MpIIsFuzzyValueEqual Implementation
+
+        public bool IsValueEqual(MpPoint otherPoint, double thresh = 0) {
+            if (otherPoint == null) {
+                return false;
+            }
+            return Math.Abs(X - otherPoint.X) <= thresh &&
+                    Math.Abs(Y - otherPoint.Y) <= thresh;
+        }
+        #endregion
+
+        #endregion
+
         #region Properties
 
         public double[] Values => new double[] { X, Y };
@@ -72,13 +89,6 @@ namespace MonkeyPaste.Common {
             return Math.Sqrt(Math.Pow(other.X - X, 2) + Math.Pow(other.Y - Y, 2));
         }
 
-        public bool IsEqual(MpPoint otherPoint, double thresh = 0) {
-            if (otherPoint == null) {
-                return false;
-            }
-            return Math.Abs(X - otherPoint.X) <= thresh &&
-                    Math.Abs(Y - otherPoint.Y) <= thresh;
-        }
 
         public double Length => Distance(MpPoint.Zero);
         public MpPoint NormalizedUnitVector {

@@ -94,7 +94,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void PositionWindowToAnchor(Window w, object anchor) {
-            w.Position = FindAnchorPoint(w, null);// anchor);
+
+            w.Position = FindAnchorPoint(w, null);
         }
 
         private PixelPoint FindAnchorPoint(Window w, object anchor) {

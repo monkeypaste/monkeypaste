@@ -1051,6 +1051,8 @@ namespace MonkeyPaste.Avalonia {
         public ICommand SelectTagCommand => new MpCommand(
             () => {
                 Parent.SelectTagCommand.Execute(this);
+            }, () => {
+                return IsTagNameReadOnly;
             });
 
         public ICommand AssignHotkeyCommand => new MpCommand(

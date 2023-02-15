@@ -1418,6 +1418,12 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(IsOverlayButtonsVisible));
                     if (IsHovering) {
                         AutoCycleDetailsAsync().FireAndForgetSafeAsync(this);
+                        Dispatcher.UIThread.Post(async () => {
+                            while (IsHovering) {
+                                OnPropertyChanged(nameof(CopyItemTitle));
+                                await Task.Delay(3000);
+                            }
+                        });
                     }
                     break;
                 case nameof(IsBusy):

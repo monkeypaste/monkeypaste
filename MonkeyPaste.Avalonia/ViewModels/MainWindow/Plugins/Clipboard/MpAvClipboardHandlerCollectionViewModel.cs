@@ -21,6 +21,10 @@ namespace MonkeyPaste.Avalonia {
         MpIClipboardFormatDataHandlers,
         MpIPlatformDataObjectHelperAsync { //
 
+        #region Constants
+
+        #endregion
+
         #region Statics
 
         private static List<string> _oleReqGuids = new List<string>();
@@ -61,7 +65,7 @@ namespace MonkeyPaste.Avalonia {
         public double DefaultSidebarWidth {
             get {
                 if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                    return 350;
+                    return 750;
                 } else {
                     return MpAvMainWindowViewModel.Instance.MainWindowWidth;
                 }
