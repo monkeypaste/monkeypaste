@@ -40,8 +40,14 @@ namespace MonkeyPaste.Common {
             }
         }
 
-        private static string _allExtPst;
-        public static string AllExtPsv =>
-            _allExtPst == null ? string.Empty : string.Join("|", ExtLookup.SelectMany(x => x.Value).Distinct());
+        private static string _allExtPst = null;
+        public static string AllExtPsv {
+            get {
+                if (_allExtPst == null) {
+                    _allExtPst = string.Join("|", ExtLookup.SelectMany(x => x.Value).Distinct());
+                }
+                return _allExtPst;
+            }
+        }
     }
 }

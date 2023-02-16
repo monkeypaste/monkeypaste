@@ -12,6 +12,7 @@ namespace MonkeyPaste.Avalonia {
                 Debugger.Break();
                 return null;
             }
+
             string processPath, appName, iconBase64;
 
             // GET APP PATH
@@ -26,6 +27,12 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 processPath = pi.ProcessPath;
             }
+            if (string.IsNullOrEmpty(processPath)) {
+                MpConsole.WriteWarningLine($"could not find process path for info (using this app): ");
+                MpConsole.WriteLine(pi.ToString());
+                var this_app_fallback = await MpDataModelProvider.GetItemAsync<MpApp>(MpDefaultDataModelTools.ThisAppId);
+                return this_app_fallback;
+            }
 
             // GET APP NAME
             if (string.IsNullOrWhiteSpace(pi.MainWindowTitle)) {
@@ -39,7 +46,16 @@ namespace MonkeyPaste.Avalonia {
             }
 
             // GET APP ICON
-            iconBase64 = string.IsNullOrEmpty(pi.MainWindowIconBase64) ? MpPlatform.Services.IconBuilder.GetApplicationIconBase64(processPath) : pi.MainWindowIconBase64;
+            iconBase64 =
+                string.IsNullOrEmpty(pi.MainWindowIconBase64) ?
+                    MpPlatform.Services.IconBuilder.GetApplicationIconBase64(processPath) :
+                    pi.MainWindowIconBase64;
+
+            if (string.IsNullOrEmpty(iconBase64)) {
+                MpConsole.WriteWarningLine($" could not find icon for info (using question mark): ");
+                MpConsole.WriteLine(pi.ToString());
+                iconBase64 = MpBase64Images.QuestionMark;
+            }
 
             var icon = await MpPlatform.Services.IconBuilder.CreateAsync(iconBase64);
 

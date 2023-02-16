@@ -1,59 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <!-- WINDOWS -->
-  <!--<PropertyGroup>
-    <OutputType>Library</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
-    <Nullable>disable</Nullable>
-    <TrimMode>copyused</TrimMode>
-    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
-    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <RunningOnWindows>True</RunningOnWindows>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>WINDOWS</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>WINDOWS</DefineConstants>
-  </PropertyGroup>-->
   
-  <!-- LINUX-->
-  <!-- <PropertyGroup>
-    <OutputType>Library</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
-    <Nullable>disable</Nullable>
-    <TrimMode>copyused</TrimMode>
-    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
-    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <RunningOnWindows>False</RunningOnWindows>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>LINUX</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>LINUX</DefineConstants>
-  </PropertyGroup> -->
-
-  <!-- DYNAMIC -->
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <Nullable>disable</Nullable>
     <TrimMode>copyused</TrimMode>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(BuildOs)' == 'WINDOWS'">  
+  <!--<PropertyGroup Condition="'$(BuildOs)' == 'WINDOWS'">  
     <DefineConstants>WINDOWS;</DefineConstants>
     <TargetFramework>net7.0</TargetFramework>
-    <!--<ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>-->
-    <!--<UseWPF>True</UseWPF>-->
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(BuildOs)' == 'LINUX'">  
     <DefineConstants>LINUX;</DefineConstants>
     <TargetFramework>net7.0</TargetFramework>
-  </PropertyGroup>
+  </PropertyGroup>-->
 
   <PropertyGroup>
     <NoWarn>CS8632</NoWarn>
@@ -64,9 +28,17 @@
 
   <ItemGroup>
     <AvaloniaXaml Remove="Utils\Input\Platform\Win32\COM\**" />
+    <AvaloniaXaml Remove="Utils\Input\Platform\X11\Glib\**" />
+    <AvaloniaXaml Remove="Utils\Input\Platform\X11\Gtk\**" />
     <Compile Remove="Utils\Input\Platform\Win32\COM\**" />
+    <Compile Remove="Utils\Input\Platform\X11\Glib\**" />
+    <Compile Remove="Utils\Input\Platform\X11\Gtk\**" />
     <EmbeddedResource Remove="Utils\Input\Platform\Win32\COM\**" />
+    <EmbeddedResource Remove="Utils\Input\Platform\X11\Glib\**" />
+    <EmbeddedResource Remove="Utils\Input\Platform\X11\Gtk\**" />
     <None Remove="Utils\Input\Platform\Win32\COM\**" />
+    <None Remove="Utils\Input\Platform\X11\Glib\**" />
+    <None Remove="Utils\Input\Platform\X11\Gtk\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -76,6 +48,11 @@
     <None Remove=".gitignore" />
     <None Remove="Mono.GtkSharp" />
     <None Remove="Avalonia.Gtk3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Utils\Input\Platform\X11\Glib\GlibApi.cs" />
+    <Compile Include="Utils\Input\Platform\X11\Gtk\GtkApi.cs" />
+    <Compile Include="Utils\Input\Platform\X11\Gtk\GtkHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <!--This helps with theme dll-s trimming.

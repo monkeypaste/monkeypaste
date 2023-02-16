@@ -1,10 +1,67 @@
 <Project> 
+  <!-- TARGETS -->
+  <!-- WINDOWS - net7.0-windows-->
+  <!-- LINUX,MAC,BROWSER - net7.0-->
+  <!-- ANDROID - net7.0-android-->
+  <!-- IOS - net7.0-ios-->
+  
   <PropertyGroup>
     <BuildOs>WINDOWS</BuildOs>
+  </PropertyGroup>
+
+  <!--<PropertyGroup Condition="$(BuildOs) == 'WINDOWS' Or $(BuildOs) == 'LINUX' Or $(BuildOs) == 'MAC'">-->
+  <!--<PropertyGroup Condition="$(BuildOs) == 'WINDOWS'">
+    <DefineConstants>DESKTOP;</DefineConstants>
+    <IsDesktop>true</IsDesktop>
+  </PropertyGroup>-->
+  
+  <PropertyGroup Condition="$(BuildOs) == 'WINDOWS'">
     <MainTargetFramework>net7.0-windows</MainTargetFramework>
-    <MainProjectName>MonkeyPaste.Avalonia</MainProjectName>
+    <DefineConstants>WINDOWS;DESKTOP;</DefineConstants>
+    <MainProjectName>MonkeyPaste.Avalonia.Desktop</MainProjectName>
+    <IsDesktop>true</IsDesktop>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="$(BuildOs) == 'LINUX'">
+    <MainTargetFramework>net7.0</MainTargetFramework>
+    <DefineConstants>LINUX;DESKTOP;</DefineConstants>
+    <MainProjectName>MonkeyPaste.Avalonia.Desktop</MainProjectName>
+    <IsDesktop>true</IsDesktop>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="$(BuildOs) == 'MAC'">
+    <MainTargetFramework>net7.0</MainTargetFramework>
+    <DefineConstants>MAC;DESKTOP;</DefineConstants>
+    <MainProjectName>MonkeyPaste.Avalonia.Desktop</MainProjectName>
+    <IsDesktop>true</IsDesktop>
+  </PropertyGroup>
+    
+  <PropertyGroup Condition="$(BuildOs) == 'BROWSER'">
+    <MainTargetFramework>net7.0</MainTargetFramework>
+    <DefineConstants>BROWSER;</DefineConstants>
+    <MainProjectName>MonkeyPaste.Avalonia.Web</MainProjectName>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="$(BuildOs) == 'ANDROID'">
+    <MainTargetFramework>net7.0-android</MainTargetFramework>
+    <DefineConstants>ANDROID;</DefineConstants>
+    <MainProjectName>MonkeyPaste.Avalonia.Android</MainProjectName>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(BuildOs) == 'IOS'">
+    <MainTargetFramework>net7.0-ios</MainTargetFramework>
+    <DefineConstants>IOS;</DefineConstants>
+    <MainProjectName>MonkeyPaste.Avalonia.iOS</MainProjectName>
+  </PropertyGroup>
+  
+  <PropertyGroup>
     <MainProjectDir>$(SolutionDir)\$(MainProjectName)</MainProjectDir>
     <MainTargetDir>$(MainProjectDir)\bin\Debug\$(MainTargetFramework)</MainTargetDir>
     <PluginTargetDir>$(MainTargetDir)\Plugins</PluginTargetDir>
+  </PropertyGroup>
+
+
+  <PropertyGroup>
+    <Nullable>disable</Nullable>
   </PropertyGroup>
 </Project>

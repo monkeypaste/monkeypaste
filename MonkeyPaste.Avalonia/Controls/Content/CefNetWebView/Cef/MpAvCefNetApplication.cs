@@ -84,10 +84,13 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private MpAvCefNetApplication() : base() {
+#if !DESKTOP
+            return;
+#endif
             string datFileName = "icudtl.dat";
             //string cefRootDir = @"C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia\cef";
             string solution_dir = MpCommonHelpers.GetSolutionDir();
-            string cefRootDir = Path.Combine(solution_dir, "MonkeyPaste.Avalonia", "cef");
+            string cefRootDir = Path.Combine(solution_dir, "MonkeyPaste.Avalonia.Desktop", "cef");
 
             string localDirPath = string.Empty;
             string resourceDirPath = string.Empty;

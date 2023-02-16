@@ -246,7 +246,8 @@ namespace MonkeyPaste.Common.Avalonia {
                 return 1;
             }
             if (visual == null) {
-                return w.Screens.Primary.PixelDensity;
+                //return w.Screens.Primary.PixelDensity;
+                return w.Screens.Primary.Scaling;
             }
             var scr = w.Screens.ScreenFromVisual(visual);
             if (scr == null) {
@@ -256,7 +257,8 @@ namespace MonkeyPaste.Common.Avalonia {
                     return 1;
                 }
             }
-            return scr.PixelDensity;
+            //return scr.PixelDensity;
+            return scr.Scaling;
         }
 
         #endregion

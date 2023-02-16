@@ -1,10 +1,15 @@
 ﻿using Avalonia.Input;
 using Avalonia.Input.Platform;
-using MonkeyPaste.Common.Wpf;
-using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
+using System;
+
+#if WINDOWS
+
+using MonkeyPaste.Common.Wpf;
+
+#endif
 
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvClipboardExtensions {
@@ -71,6 +76,8 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         private static async Task WaitForClipboardAsync() {
+            await Task.Delay(0);
+#if WINDOWS
             if (OperatingSystem.IsWindows()) {
                 bool canOpen = WinApi.IsClipboardOpen() == IntPtr.Zero;
                 while (!canOpen) {
@@ -78,12 +85,15 @@ namespace MonkeyPaste.Common.Avalonia {
                     canOpen = WinApi.IsClipboardOpen() == IntPtr.Zero;
                 }
             }
+#endif
         }
 
         private static void CloseClipboard() {
+#if WINDOWS
             if (OperatingSystem.IsWindows()) {
                 WinApi.CloseClipboard();
             }
+#endif
         }
     }
 }

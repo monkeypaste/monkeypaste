@@ -7,6 +7,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public override string GetApplicationIconBase64(string appPath, MpIconSize iconSize = MpIconSize.MediumIcon32) {
+            if (string.IsNullOrEmpty(appPath)) {
+                return null;
+            }
             //return MpBase64Images.LinuxPenguin;
             string iconBase64 = MpAvX11PathIconHelper.GetIconBase64FromX11Path(appPath, "EXECUTABLE");
             MpConsole.WriteLine("Icon for path: " + appPath);

@@ -5,6 +5,7 @@ namespace MonkeyPaste {
     public interface MpIPlatformWrapper : MpICommonTools {
         MpIContentViewLocator ContentViewLocator { get; set; }
 
+        MpINativePathDialog NativePathDialog { get; set; }
         MpIStartupObjectLocator StartupObjectLocator { get; set; }
         MpIPlatformCompatibility PlatformCompatibility { get; set; }
         MpIStartupState StartupState { get; set; }

@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>$(MainTargetFramework)</TargetFramework>
+    <Nullable>enable</Nullable>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.0-preview5" />
+    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.0-preview5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MonkeyPaste.Avalonia\MonkeyPaste.Avalonia.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="CefNet">
+      <HintPath>..\..\..\..\Desktop\DotNetExamples\cefnet11\CefNet\CefNet.Avalonia\bin\Debug\net6.0\CefNet.dll</HintPath>
+    </Reference>
+    <Reference Include="CefNet.Avalonia">
+      <HintPath>..\..\..\..\Desktop\DotNetExamples\cefnet11\CefNet\CefNet.Avalonia\bin\Debug\net6.0\CefNet.Avalonia.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

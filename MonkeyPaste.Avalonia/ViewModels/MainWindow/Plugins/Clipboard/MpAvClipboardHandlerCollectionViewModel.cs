@@ -110,7 +110,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        async Task<object> MpIPlatformDataObjectHelperAsync.ReadDragDropDataObjectAsync(object idoObj, int retryCount = 5) {
+        async Task<object> MpIPlatformDataObjectHelperAsync.ReadDragDropDataObjectAsync(object idoObj) {
             if (idoObj is IDataObject ido) {
                 var drag_pi = MpPlatform.Services.DragProcessWatcher.DragProcess;
                 MpPlatform.Services.DragProcessWatcher.Reset();

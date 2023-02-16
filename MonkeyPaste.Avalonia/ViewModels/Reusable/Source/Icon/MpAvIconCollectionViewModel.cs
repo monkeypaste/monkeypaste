@@ -4,7 +4,6 @@ using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -187,20 +186,13 @@ namespace MonkeyPaste.Avalonia {
 
                 MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
 
-                var selectedImagePath = await new OpenFileDialog() {
-                    Filters = new List<FileDialogFilter>() {
-                        new FileDialogFilter() {
-                            Name = "Image",
-                            Extensions = new List<string>("png,gif,jpg,jpeg,bmp".Split(","))
-                            }},
-                    Title = "Select Image for Icon",
-                    Directory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
-                }.ShowAsync(MpAvMainWindow.Instance);
+                var selectedImagePath = await MpPlatform.Services.NativePathDialog
+                        .ShowFileDialogAsync($"Image", null, "png,gif,jpg,jpeg,bmp".Split(","));
 
                 MpAvMenuExtension.CloseMenu();
 
-                if (selectedImagePath != null && selectedImagePath.Length == 1 && string.IsNullOrEmpty(selectedImagePath[0])) {
-                    string imagePath = selectedImagePath[0];
+                if (string.IsNullOrEmpty(selectedImagePath)) {
+                    string imagePath = selectedImagePath;
                     var bmpSrc = new Bitmap(imagePath);
 
                     await SetUserIconImageAsync(uivm, bmpSrc, null);

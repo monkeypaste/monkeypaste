@@ -1,5 +1,4 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
@@ -356,41 +355,42 @@ namespace MonkeyPaste.Avalonia {
 
 
         public void SetErrorToolTip(int actionId, int argNum, string text) {
+            // NOTE COMMENTED BELOW NEEDS MORE TESTING...
             return;
-            Dispatcher.UIThread.Post(async () => {
-                if (FocusAction != null && FocusAction.ActionId != actionId) {
-                    // ignore non-visible tooltip validation changes
-                    return;
-                }
-                // wait for content control to bind to primary action...
-                await Task.Delay(300);
-                var apv = MpAvMainWindow.Instance.GetVisualDescendant<MpAvActionPropertyView>();
-                if (apv != null) {
-                    var rapcc = apv.FindControl<ContentControl>("RootActionPropertyContentControl");
-                    if (rapcc != null) {
+            //Dispatcher.UIThread.Post(async () => {
+            //    if (FocusAction != null && FocusAction.ActionId != actionId) {
+            //        // ignore non-visible tooltip validation changes
+            //        return;
+            //    }
+            //    // wait for content control to bind to primary action...
+            //    await Task.Delay(300);
+            //    var apv = MpAvMainWindow.Instance.GetVisualDescendant<MpAvActionPropertyView>();
+            //    if (apv != null) {
+            //        var rapcc = apv.FindControl<ContentControl>("RootActionPropertyContentControl");
+            //        if (rapcc != null) {
 
-                        var allArgControls =
-                            rapcc.GetVisualDescendants<Control>()
-                            .Where(x => x.Classes.Any(x => x.StartsWith("arg")));
+            //            var allArgControls =
+            //                rapcc.GetVisualDescendants<Control>()
+            //                .Where(x => x.Classes.Any(x => x.StartsWith("arg")));
 
-                        var argToolTip = new MpAvToolTipView() {
-                            ToolTipText = text,
-                            Classes = Classes.Parse("error")
-                        };
-                        foreach (var arg_control in allArgControls) {
-                            if (arg_control.Classes.Any(x => x == $"arg{argNum}")) {
-                                ToolTip.SetTip(arg_control, argToolTip);
-                                if (!arg_control.Classes.Contains("invalid")) {
-                                    arg_control.Classes.Add("invalid");
-                                }
-                            } else {
-                                ToolTip.SetTip(arg_control, null);
-                                arg_control.Classes.Remove("invalid");
-                            }
-                        }
-                    }
-                }
-            });
+            //            var argToolTip = new MpAvToolTipView() {
+            //                ToolTipText = text,
+            //                Classes = Classes.Parse("error")
+            //            };
+            //            foreach (var arg_control in allArgControls) {
+            //                if (arg_control.Classes.Any(x => x == $"arg{argNum}")) {
+            //                    ToolTip.SetTip(arg_control, argToolTip);
+            //                    if (!arg_control.Classes.Contains("invalid")) {
+            //                        arg_control.Classes.Add("invalid");
+            //                    }
+            //                } else {
+            //                    ToolTip.SetTip(arg_control, null);
+            //                    arg_control.Classes.Remove("invalid");
+            //                }
+            //            }
+            //        }
+            //    }
+            //});
         }
         #endregion
 

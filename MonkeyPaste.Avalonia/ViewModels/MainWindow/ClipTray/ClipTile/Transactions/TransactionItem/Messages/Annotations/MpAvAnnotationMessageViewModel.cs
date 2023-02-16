@@ -32,7 +32,7 @@ namespace MonkeyPaste.Avalonia {
         public override string LabelText => "Annotation";
 
         #region State
-        public bool IsAnyBusy =>
+        public override bool IsAnyBusy =>
             base.IsAnyBusy || RootAnnotationViewModel.IsAnyBusy;
 
         public string SelectedItemGuid {

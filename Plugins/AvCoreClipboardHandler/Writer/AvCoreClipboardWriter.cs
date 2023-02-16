@@ -1,12 +1,8 @@
-﻿using Avalonia.Input;
-using MonkeyPaste.Common.Avalonia;
+﻿using Avalonia;
+using Avalonia.Input;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Text;
-using Avalonia;
-using MonkeyPaste.Common.Wpf;
 
 namespace AvCoreClipboardHandler {
     public static class AvCoreClipboardWriter {
@@ -30,7 +26,7 @@ namespace AvCoreClipboardHandler {
                 return null;
             }
             var ido = request.data as IDataObject;
-            if(ido == null) {
+            if (ido == null) {
                 return null;
             }
             List<MpPluginUserNotificationFormat> nfl = new List<MpPluginUserNotificationFormat>();
@@ -38,27 +34,27 @@ namespace AvCoreClipboardHandler {
             IDataObject write_output = ido ?? new MpAvDataObject();
             var writeFormats = request.writeFormats.Where(x => ido.GetAllDataFormats().Contains(x));
 
-            foreach(var write_format in writeFormats) {
+            foreach (var write_format in writeFormats) {
                 object data = write_output.Get(write_format);
                 foreach (var param in request.items) {
                     data = ProcessWriterParam(param, write_format, data, out var ex, out var param_nfl);
-                    if(ex != null) {
+                    if (ex != null) {
                         exl.Add(ex);
                     }
-                    if(param_nfl != null) {
+                    if (param_nfl != null) {
                         nfl.AddRange(param_nfl);
                     }
-                    if(data == null) {
+                    if (data == null) {
                         // param omitted format, don't process rest of params
                         break;
                     }
                 }
-                if(data == null) {
+                if (data == null) {
                     continue;
                 }
                 write_output.Set(write_format, data);
             }
-           
+
             if (request.writeToClipboard) {
                 //await Util.WaitForClipboard();
                 await Application.Current.Clipboard.SetDataObjectSafeAsync(write_output);
@@ -68,20 +64,20 @@ namespace AvCoreClipboardHandler {
             return new MpClipboardWriterResponse() {
                 processedDataObject = write_output,
                 userNotifications = nfl,
-                errorMessage = string.Join(Environment.NewLine,exl)
+                errorMessage = string.Join(Environment.NewLine, exl)
             };
         }
 
         private static object ProcessWriterParam(MpParameterRequestItemFormat pkvp, string format, object data, out Exception ex, out List<MpPluginUserNotificationFormat> nfl) {
             ex = null;
             nfl = null;
-            if(data == null) {
+            if (data == null) {
                 // already omitted
                 return null;
             }
             try {
                 CoreClipboardParamType paramType = (CoreClipboardParamType)Convert.ToInt32(pkvp.paramId);
-                switch(format) {
+                switch (format) {
                     case MpPortableDataFormats.Text:
                         switch (paramType) {
                             case CoreClipboardParamType.W_MaxCharCount_Text:
@@ -111,7 +107,7 @@ namespace AvCoreClipboardHandler {
                 }
                 return data;
             }
-            catch(Exception e) {
+            catch (Exception e) {
                 ex = e;
             }
             return data;

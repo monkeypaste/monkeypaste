@@ -6,6 +6,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public override string GetApplicationIconBase64(string appPath, MpIconSize iconSize = MpIconSize.MediumIcon32) {
+            if (string.IsNullOrEmpty(appPath)) {
+                return null;
+            }
             return MpAvMacPathIconHelper.GetIconBase64FromMacPath(appPath);
         }
     }

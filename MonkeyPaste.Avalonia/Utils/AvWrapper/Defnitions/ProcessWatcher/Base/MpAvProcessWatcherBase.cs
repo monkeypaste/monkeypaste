@@ -234,7 +234,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public virtual bool IsHandleRunningProcess(IntPtr handle) {
-            if (handle == null || handle == IntPtr.Zero) {
+            if (handle == IntPtr.Zero) {
                 return false;
             }
             return RunningProcessLookup.Any(x => x.Value.Contains(handle));

@@ -1,7 +1,4 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Media;
-using Avalonia.Media.Imaging;
+﻿using Avalonia.Controls;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -287,40 +284,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Appearance
-
-        public MpCursorType ResizerCursor {
-            get {
-                if (IsHorizontalOrientation) {
-                    return MpCursorType.ResizeNS;
-                } else {
-                    return MpCursorType.ResizeWE;
-                }
-            }
-        }
-
-        private IBrush _lgb;
-        public IBrush MainWindowOpacityMask {
-            get {
-                return null;
-                if (_lgb == null) {
-                    var new_ib = new ImageBrush();
-                    new_ib.TileMode = TileMode.None;
-                    new_ib.AlignmentX = AlignmentX.Left;
-                    new_ib.AlignmentY = AlignmentY.Top;
-                    new_ib.Stretch = Stretch.Fill;
-                    new_ib.Source = MpAvIconSourceObjToBitmapConverter.Instance
-                            .Convert("TextureImage", null, null, null) as Bitmap;
-                    new_ib.SourceRect = new RelativeRect(new Rect(new Size(128, 128)), RelativeUnit.Absolute);
-                    _lgb = new_ib;
-                }
-                if (_lgb is ImageBrush ib) {
-                    var mask_size = MainWindowOpenedScreenRect.Size.ToPortablePoint() * MainWindowScreen.PixelDensity;
-                    ib.DestinationRect = new RelativeRect(new Rect(mask_size.ToAvSize()), RelativeUnit.Absolute);
-                }
-                return _lgb;
-            }
-        }
-
         #endregion
 
         #region State

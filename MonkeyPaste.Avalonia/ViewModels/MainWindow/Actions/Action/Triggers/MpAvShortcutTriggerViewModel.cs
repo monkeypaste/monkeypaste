@@ -126,9 +126,9 @@ namespace MonkeyPaste.Avalonia {
 
 
         private void MpAvShortcutTriggerViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch (e.PropertyName) {
+            //switch (e.PropertyName) {
 
-            }
+            //}
         }
 
         #endregion

@@ -33,10 +33,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Variables
 
-        //private double _maxDeltaLocation = 10;
-
-        private MpPoint _lastLocation = null;
-
         private bool _isShowingValidationMsg = false;
         #endregion
 

@@ -207,11 +207,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public async Task InitializeAsync(int currentQueryTagId) {
-
-        }
-
-
 
         public void NotifyHasMultipleMatches() {
             Dispatcher.UIThread.VerifyAccess();

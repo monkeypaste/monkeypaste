@@ -1,6 +1,5 @@
 ﻿using MonkeyPaste.Common;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvDataObjectViewModel : MpViewModelBase {
@@ -40,9 +39,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public async Task AddOrReplaceFormatAsync(string format, string data) {
-
-        }
 
         #endregion
 

@@ -6,7 +6,6 @@ using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTileView : MpAvUserControl<MpAvClipTileViewModel> {
-        private bool _isOverDetail = false;
         public MpAvClipTileView() {
             InitializeComponent();
             DataContextChanged += MpAvClipTileView_DataContextChanged;

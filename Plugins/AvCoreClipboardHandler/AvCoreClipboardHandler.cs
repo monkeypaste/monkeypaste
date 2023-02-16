@@ -1,13 +1,6 @@
-﻿using Avalonia.Input;
-using MonkeyPaste.Common.Avalonia;
-using MonkeyPaste.Common;
+﻿using Avalonia.Threading;
 using MonkeyPaste.Common.Plugin;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Text;
-using Avalonia;
-using MonkeyPaste.Common.Wpf;
-using Avalonia.Threading;
 
 namespace AvCoreClipboardHandler {
     public class AvCoreClipboardHandler :
@@ -17,7 +10,7 @@ namespace AvCoreClipboardHandler {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
 
-        
+
 
         #region Private Variables
         #endregion
@@ -25,8 +18,8 @@ namespace AvCoreClipboardHandler {
         #region MpIClipboardReaderComponentAsync Implementation
 
         public async Task<MpClipboardReaderResponse> ReadClipboardDataAsync(MpClipboardReaderRequest request) {
-            if(!Dispatcher.UIThread.CheckAccess()) {
-                return await Dispatcher.UIThread.InvokeAsync(()=>ReadClipboardDataAsync(request));
+            if (!Dispatcher.UIThread.CheckAccess()) {
+                return await Dispatcher.UIThread.InvokeAsync(() => ReadClipboardDataAsync(request));
             }
             MpClipboardReaderResponse resp = await AvCoreClipboardReader.ProcessReadRequestAsync(request);
             return resp;

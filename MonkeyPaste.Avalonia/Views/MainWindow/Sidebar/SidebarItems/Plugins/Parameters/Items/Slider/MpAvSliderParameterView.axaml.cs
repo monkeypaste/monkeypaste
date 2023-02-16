@@ -135,12 +135,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void Svtb_KeyDown(object sender, global::Avalonia.Input.KeyEventArgs e) {
-            Dispatcher.UIThread.Post(async () => {
+            Dispatcher.UIThread.Post(() => {
                 var svtb = sender as TextBox;
                 if (e.Key == Key.Enter) {
                     // trigger lost focus
                     //this.FindControl<Border>("SliderBorder").Focus();
-                    svtb.TryKillFocusAsync();
+                    svtb.TryKillFocusAsync().FireAndForgetSafeAsync();
                     return;
                 }
                 if (e.Key == Key.Escape) {
@@ -148,7 +148,7 @@ namespace MonkeyPaste.Avalonia {
                     TextBox.TextProperty.Setter.Invoke(svtb, _oldVal.ToString());
                     // trigger lost focus
                     //this.FindControl<Border>("SliderBorder").Focus();
-                    svtb.TryKillFocusAsync();
+                    svtb.TryKillFocusAsync().FireAndForgetSafeAsync();
                 }
             });
 

@@ -2,8 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 #if WINDOWS
@@ -126,6 +126,9 @@ namespace MonkeyPaste.Common.Avalonia {
 
         // private  uint CF_BITMAP = 0;
         public void SetBitmap(byte[] bytes) {
+            if (!OperatingSystem.IsWindows()) {
+                return;
+            }
             //if(CF_BITMAP == 0) {
             //    CF_BITMAP = WinApi.RegisterClipboardFormatA("Bitmap");
             //}
@@ -179,7 +182,9 @@ namespace MonkeyPaste.Common.Avalonia {
 
             }
             finally {
+#if WINDOWS
                 WinApi.CloseClipboard();
+#endif
             }
         }
 

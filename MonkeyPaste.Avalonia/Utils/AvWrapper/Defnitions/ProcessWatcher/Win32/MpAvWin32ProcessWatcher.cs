@@ -1,13 +1,18 @@
 ﻿using MonkeyPaste.Common;
-using MonkeyPaste.Common.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Security.Principal;
 using System.Text;
+using System.Management;
+using System.Linq;
+using System.ComponentModel;
+using System.Security.Principal;
+#if WINDOWS
+using MonkeyPaste.Common.Wpf;
 using static MonkeyPaste.Common.Wpf.WinApi;
+
+#endif
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvWin32ProcessWatcher : MpAvProcessWatcherBase {
@@ -18,38 +23,48 @@ namespace MonkeyPaste.Avalonia {
         };
 
         private string _FallbackProcessPath = @"C:\WINDOWS\Explorer.EXE";
-
-        //private IntPtr _thisAppHandle;
-        //public override IntPtr ThisAppHandle {
-        //    get => _thisAppHandle;
-        //    set {
-        //        if (_thisAppHandle != value) {
-        //            _thisAppHandle = value;
-        //            if (_thisAppHandle != IntPtr.Zero) {
-        //                IsThisAppAdmin = IsProcessAdmin(ThisAppHandle);
-        //            }
-        //        }
-        //    }
-        //}
-
         public bool IsThisAppAdmin { get; private set; } = false;
+
+        #region Private Variable
+        #endregion
+
+        #region Constants
+        #endregion
+
+        #region Statics
+        #endregion
+
+        #region Interfaces
+        #endregion
+
+        #region Properties
+        #endregion
+
+        #region Constructors
+        #endregion
+
+        #region Public Methods
         public override IntPtr GetParentHandleAtPoint(MpPoint p) {
+#if WINDOWS
             // Get the window/control that the mouse is hovering over...
             IntPtr hwnd = WinApi.WindowFromPoint(new System.Drawing.Point((int)p.X, (int)p.Y));
-            if (hwnd == null || hwnd == IntPtr.Zero) {
+            if (hwnd == IntPtr.Zero) {
                 return IntPtr.Zero;
             }
             // Continue to get the parent until we reach the top-level window (with parent of NULL)...
             while (true) {
                 IntPtr p_hwnd = WinApi.GetParent(hwnd);
-                if (p_hwnd == null || p_hwnd == IntPtr.Zero) {
+                if (p_hwnd == IntPtr.Zero) {
                     return hwnd;
                 }
                 hwnd = p_hwnd;
             }
+#endif
+            return IntPtr.Zero;
         }
 
         public override IntPtr SetActiveProcess(IntPtr handle) {
+#if WINDOWS
             if (handle == IntPtr.Zero) {
                 MpConsole.WriteLine("Warning cannot set active process to IntPtr.Zero, ignoring");
                 return IntPtr.Zero;
@@ -62,12 +77,17 @@ namespace MonkeyPaste.Avalonia {
             bool success = WinApi.SetForegroundWindow(handle);
             MpConsole.WriteLine($"SetForegroundWindow to '{handle}' from '{lastActive}' was {(success ? "SUCCESSFUL" : "FAILED")}");
             return lastActive;
+#endif
+            return IntPtr.Zero;
         }
         public override IntPtr SetActiveProcess(IntPtr handle, ProcessWindowStyle windowStyle) {
+#if WINDOWS
             if (!WinApi.ShowWindowAsync(handle, GetShowWindowState(windowStyle))) {
                 MpConsole.WriteLine($"ShowWindowAsync failed for handle '{handle}' with window state '{windowStyle}'");
             }
             return SetActiveProcess(handle);
+#endif
+            return IntPtr.Zero;
         }
 
         public override bool IsAdmin(object handleIdOrTitle) {
@@ -77,6 +97,7 @@ namespace MonkeyPaste.Avalonia {
             throw new NotImplementedException();
         }
         public override ProcessWindowStyle GetWindowStyle(object handleIdOrTitle) {
+#if WINDOWS
             IntPtr handle = IntPtr.Zero;
             if (handleIdOrTitle is IntPtr) {
                 handle = (IntPtr)handleIdOrTitle;
@@ -84,9 +105,24 @@ namespace MonkeyPaste.Avalonia {
                 throw new NotImplementedException();
             }
             ShowWindowCommands swc = (ShowWindowCommands)GetWindowLong(handle, GWL_STYLE);
-            return GetWindowStyle(swc);
+            switch (swc) {
+                case ShowWindowCommands.Hide:
+                    return ProcessWindowStyle.Hidden;
+
+                case ShowWindowCommands.Minimized:
+                    return ProcessWindowStyle.Minimized;
+
+                case ShowWindowCommands.Maximized:
+                    return ProcessWindowStyle.Maximized;
+
+                default:
+                    return ProcessWindowStyle.Normal;
+            }
+#endif
+            return ProcessWindowStyle.Normal;
         }
         public override MpPortableProcessInfo GetActiveProcessInfo() {
+#if WINDOWS
             IntPtr active_handle = WinApi.GetForegroundWindow();
             var active_info = new MpPortableProcessInfo() {
                 Handle = active_handle,
@@ -94,12 +130,76 @@ namespace MonkeyPaste.Avalonia {
                 MainWindowTitle = GetProcessApplicationName(active_handle)
             };
             return active_info;
+#endif
+            return null;
         }
-        //protected override IEnumerable<MpPortableProcessInfo> GetRunningProcessInfos() {
+        public override string GetProcessTitle(IntPtr hWnd) {
+#if WINDOWS
+            try {
+                if (hWnd == IntPtr.Zero) {
+                    return "Unknown Application";
+                }
+                int length = WinApi.GetWindowTextLength(hWnd);
+                if (length == 0) {
+                    return string.Empty;
+                }
 
-        //}
+                StringBuilder builder = new StringBuilder(length);
+                WinApi.GetWindowText(hWnd, builder, length + 1);
+                return builder.ToString();
+            }
+            catch (Exception ex) {
+                return "MpHelpers.GetProcessMainWindowTitle Exception: " + ex.ToString();
+            }
+#endif
+            return null;
+        }
+
+        public override Process GetProcess(object handleIdOrTitle) {
+#if WINDOWS
+            if (handleIdOrTitle is IntPtr handle) {
+                GetWindowThreadProcessId(handle, out uint pid);
+                return base.GetProcess((int)pid);
+            }
+            return base.GetProcess(handleIdOrTitle);
+#endif
+            return null;
+        }
+        public override string GetProcessPath(IntPtr hWnd) {
+
+            string fallback = _FallbackProcessPath;
+
+            if (hWnd == IntPtr.Zero) {
+                return fallback; //fallback;
+            }
+            var getMeths = new Func<IntPtr, string>[] {
+                GetProcessPath1,
+                GetProcessPath2,
+                GetProcessPath3,
+                GetProcessPath4,
+            };
+
+            foreach (var getMeth in getMeths) {
+                try {
+                    string process_path = getMeth(hWnd);
+                    if (!string.IsNullOrEmpty(process_path)) {
+                        return process_path;
+                    }
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"GetProcessPath error on method #{getMeths.IndexOf(getMeth)}.", ex);
+                }
+            }
+
+            return fallback;
+
+        }
+        #endregion
+
+        #region Protected Methods
 
         protected override MpPortableProcessInfo RefreshRunningProcessLookup() {
+#if WINDOWS
             lock (RunningProcessLookup) {
                 //called in LastWindowWatcher's timer to remove closed window handles and processes
                 IntPtr active_handle = WinApi.GetForegroundWindow();
@@ -159,96 +259,9 @@ namespace MonkeyPaste.Avalonia {
 
                 return activeProcessInfo;
             }
+#endif
+            return null;
         }
-
-        public override string GetProcessTitle(IntPtr hWnd) {
-            try {
-                if (hWnd == null || hWnd == IntPtr.Zero) {
-                    return "Unknown Application";
-                }
-                int length = WinApi.GetWindowTextLength(hWnd);
-                if (length == 0) {
-                    return string.Empty;
-                }
-
-                StringBuilder builder = new StringBuilder(length);
-                WinApi.GetWindowText(hWnd, builder, length + 1);
-                return builder.ToString();
-            }
-            catch (Exception ex) {
-                return "MpHelpers.GetProcessMainWindowTitle Exception: " + ex.ToString();
-            }
-        }
-
-        public override Process GetProcess(object handleIdOrTitle) {
-            if (handleIdOrTitle is IntPtr handle) {
-                GetWindowThreadProcessId(handle, out uint pid);
-                return base.GetProcess((int)pid);
-            }
-            return base.GetProcess(handleIdOrTitle);
-        }
-        public override string GetProcessPath(IntPtr hWnd) {
-            string fallback = _FallbackProcessPath;
-            try {
-                if (hWnd == null || hWnd == IntPtr.Zero) {
-                    return fallback; //fallback;
-                }
-
-                //WinApi.GetWindowThreadProcessId(hwnd, out uint pid);
-                //using (Process proc = Process.GetProcessById((int)pid)) {
-                //    // TODO when user clicks eye (to hide it) icon on running apps it should add to a string[] pref
-                //    // and if it contains proc.ProcessName return fallback (so choice persists
-                //    if (_ignoredProcessNames.Contains(proc.ProcessName.ToLower())) {
-                //        //occurs with messageboxes and dialogs
-                //        MpConsole.WriteTraceLine($"Active process '{proc.ProcessName}' is on ignored list, using fallback '{fallback}'");
-                //        return fallback; //fallback;
-                //    }
-                //    if (proc.MainWindowHandle == IntPtr.Zero) {
-                //        return fallback; //fallback;
-                //    }
-
-
-                //    if (!Environment.Is64BitProcess && Is64Bit(proc)) {
-                //        return fallback;
-                //    }
-
-                //    bool isProcElevated = IsProcessAdmin(proc.MainWindowHandle);
-
-                //    if (!IsThisAppAdmin && isProcElevated) {
-                //        return fallback;
-                //    }
-
-                //    try {
-                //        return proc.MainModule.FileName.ToString().ToLower();
-                //    }
-                //    catch (InvalidOperationException) {
-                //        return fallback;
-                //    }
-
-                //}
-
-                StringBuilder sb = new StringBuilder(2000);
-
-                /** Need to get the process ID from handle under cursor **/
-                GetWindowThreadProcessId(hWnd, out uint pid);
-
-                /** Hook into process **/
-                IntPtr pic = OpenProcess(ProcessAccessFlags.All, true, (int)pid);
-
-                /** This gets the filename of the process image. Path is in device format **/
-                GetProcessImageFileName(pic, sb, 2000);
-
-                return MpWpfDevicePathMapper.FromDevicePath(sb.ToString());
-
-            }
-            catch (Exception e) {
-                MpConsole.WriteTraceLine("Cannot find process path (w/ Handle " + hWnd.ToString() + ") : " + e.ToString(), e);
-                //return GetExecutablePathAboveVista(hwnd);
-                return fallback; //fallback;
-            }
-        }
-
-
         protected override void CreateRunningProcessLookup() {
             // get lookup of all window handles by process path
             var pkvp = GetOpenWindows();
@@ -262,54 +275,129 @@ namespace MonkeyPaste.Avalonia {
             }
             RefreshRunningProcessLookup();
         }
+        #endregion
 
+        #region Private Methods
         #region Helpers
 
+        private string GetProcessPath1(IntPtr hWnd) {
+#if WINDOWS
+            StringBuilder sb = new StringBuilder(2000);
+
+            /** Need to get the process ID from handle under cursor **/
+            GetWindowThreadProcessId(hWnd, out uint pid);
+
+            /** Hook into process **/
+            IntPtr pic = OpenProcess(ProcessAccessFlags.All, true, (int)pid);
+
+            /** This gets the filename of the process image. Path is in device format **/
+            GetProcessImageFileName(pic, sb, 2000);
+
+            return MpWpfDevicePathMapper.FromDevicePath(sb.ToString());
+#endif
+            return null;
+        }
+
+        private string GetProcessPath2(IntPtr hwnd) {
+#if WINDOWS
+            GetWindowThreadProcessId(hwnd, out uint pid);
+            string Query = "SELECT ExecutablePath FROM Win32_Process WHERE ProcessId = " + pid;
+
+            using (ManagementObjectSearcher mos = new ManagementObjectSearcher(Query)) {
+                using (ManagementObjectCollection moc = mos.Get()) {
+                    if (moc.Count == 0) {
+                        return null;
+                    }
+                    var proc_record = (from mo in moc.Cast<ManagementObject>() select mo["ExecutablePath"]).FirstOrDefault();
+                    if (proc_record is string path) {
+                        return path;
+                    }
+                }
+            }
+#endif
+            return null;
+
+        }
+        private string GetProcessPath3(IntPtr hwnd) {
+#if WINDOWS
+            GetWindowThreadProcessId(hwnd, out uint pid);
+            int capacity = 1024;
+            StringBuilder sb = new StringBuilder(capacity);
+            IntPtr handle = OpenProcess(ProcessAccessFlags.QueryLimitedInformation, false, pid);
+            QueryFullProcessImageName(handle, 0, sb, ref capacity);
+            string fullPath = sb.ToString();
+
+            return fullPath;
+#endif
+            return null;
+        }
+        private string GetProcessPath4(IntPtr hwnd) {
+#if WINDOWS
+            GetWindowThreadProcessId(hwnd, out uint pid);
+            using (Process proc = Process.GetProcessById((int)pid)) {
+                // TODO when user clicks eye (to hide it) icon on running apps it should add to a string[] pref
+                // and if it contains proc.ProcessName return fallback (so choice persists
+                if (_ignoredProcessNames.Contains(proc.ProcessName.ToLower())) {
+                    //occurs with messageboxes and dialogs
+                    //MpConsole.WriteTraceLine($"Active process '{proc.ProcessName}' is on ignored list, using fallback '{fallback}'");
+                    return null;
+                }
+                if (proc.MainWindowHandle == IntPtr.Zero) {
+                    return null; //null;
+                }
+
+
+                if (!Environment.Is64BitProcess && Is64Bit(proc)) {
+                    return null;
+                }
+
+                bool isProcElevated = IsProcessAdmin(proc.MainWindowHandle);
+
+                if (!IsThisAppAdmin && isProcElevated) {
+                    return null;
+                }
+
+                return proc.MainModule.FileName.ToString().ToLower();
+            }
+#endif
+            return null;
+
+        }
+
         private int GetShowWindowState(ProcessWindowStyle pws) {
+#if WINDOWS
             switch (pws) {
                 case ProcessWindowStyle.Hidden:
-                    return (int)WinApi.ShowWindowCommands.Hide;
+                    return (int)ShowWindowCommands.Hide;
 
                 case ProcessWindowStyle.Minimized:
-                    return (int)WinApi.ShowWindowCommands.Minimized;
+                    return (int)ShowWindowCommands.Minimized;
 
                 case ProcessWindowStyle.Maximized:
-                    return (int)WinApi.ShowWindowCommands.Maximized;
+                    return (int)ShowWindowCommands.Maximized;
 
                 default:
-                    return (int)WinApi.ShowWindowCommands.Normal;
+                    return (int)ShowWindowCommands.Normal;
             }
+#endif
+            return (int)ProcessWindowStyle.Normal;
         }
 
-        private ProcessWindowStyle GetWindowStyle(ShowWindowCommands swc) {
-            switch (swc) {
-                case ShowWindowCommands.Hide:
-                    return ProcessWindowStyle.Hidden;
-
-                case ShowWindowCommands.Minimized:
-                    return ProcessWindowStyle.Minimized;
-
-                case ShowWindowCommands.Maximized:
-                    return ProcessWindowStyle.Maximized;
-
-                default:
-                    return ProcessWindowStyle.Normal;
-            }
-        }
         private IDictionary<string, IntPtr> GetOpenWindows() {
-            IntPtr shellWindow = WinApi.GetShellWindow();
+#if WINDOWS
+            IntPtr shellWindow = GetShellWindow();
             Dictionary<string, IntPtr> windows = new Dictionary<string, IntPtr>();
 
-            WinApi.EnumWindows(delegate (IntPtr hWnd, int lParam) {
+            EnumWindows(delegate (IntPtr hWnd, int lParam) {
                 if (hWnd == shellWindow) {
                     return true;
                 }
-                if (!WinApi.IsWindowVisible(hWnd)) {
+                if (!IsWindowVisible(hWnd)) {
                     return true;
                 }
 
                 try {
-                    WinApi.GetWindowThreadProcessId(hWnd, out uint pid);
+                    GetWindowThreadProcessId(hWnd, out uint pid);
                     var process = Process.GetProcessById((int)pid);
                     if (process.MainWindowHandle == IntPtr.Zero) {
                         return true;
@@ -343,6 +431,8 @@ namespace MonkeyPaste.Avalonia {
             }, 0);
 
             return windows;
+#endif
+            return null;
         }
 
         private void UpdateHandleStack(IntPtr fgHandle) {
@@ -390,17 +480,22 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private bool Is64Bit(Process process) {
-            if (!Environment.Is64BitOperatingSystem)
+#if WINDOWS
+            if (!Environment.Is64BitOperatingSystem) {
                 return false;
+            }
             // if this method is not available in your version of .NET, use GetNativeSystemInfo via P/Invoke instead
 
             bool isWow64;
             if (!WinApi.IsWow64Process(process.Handle, out isWow64))
                 throw new Win32Exception();
             return !isWow64;
+#endif
+            return false;
+
         }
 
-        public bool IsProcessAdmin(IntPtr handle) {
+        private bool IsProcessAdmin(IntPtr handle) {
 #if WINDOWS
             if (handle == null || handle == IntPtr.Zero) {
                 return false;
@@ -439,6 +534,11 @@ namespace MonkeyPaste.Avalonia {
 #pragma warning restore CS0162 // Unreachable code detected
         }
 
+        #endregion
+
+        #endregion
+
+        #region Commands
         #endregion
     }
 }

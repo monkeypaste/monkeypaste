@@ -53,36 +53,6 @@ namespace MonkeyPaste.Common.Wpf {
 
 
 
-        [StructLayout(LayoutKind.Sequential)]
-        public struct BITMAPV5HEADER {
-            public uint bV5Size;
-            public int bV5Width;
-            public int bV5Height;
-            public UInt16 bV5Planes;
-            public UInt16 bV5BitCount;
-            public uint bV5Compression;
-            public uint bV5SizeImage;
-            public int bV5XPelsPerMeter;
-            public int bV5YPelsPerMeter;
-            public UInt16 bV5ClrUsed;
-            public UInt16 bV5ClrImportant;
-            public UInt16 bV5RedMask;
-            public UInt16 bV5GreenMask;
-            public UInt16 bV5BlueMask;
-            public UInt16 bV5AlphaMask;
-            public UInt16 bV5CSType;
-            public IntPtr bV5Endpoints;
-            public UInt16 bV5GammaRed;
-            public UInt16 bV5GammaGreen;
-            public UInt16 bV5GammaBlue;
-            public UInt16 bV5Intent;
-            public UInt16 bV5ProfileData;
-            public UInt16 bV5ProfileSize;
-            public UInt16 bV5Reserved;
-        }
-
-
-
         [DllImport("user32.dll", SetLastError = true)]
         public static extern bool EmptyClipboard();
 
@@ -112,39 +82,9 @@ namespace MonkeyPaste.Common.Wpf {
         public static extern bool IsClipboardFormatAvailable(uint format);
 
         #region Process Stuff
-        [StructLayout(LayoutKind.Sequential)]
-        public struct Win32Point {
-            public Int32 X;
-            public Int32 Y;
-        };
-        [Flags]
-        public enum ExtendedWindowStyles {
-            // ...
-            WS_EX_TOOLWINDOW = 0x00000080,
-            // ...
-        }
 
-        public enum GetWindowLongFields {
-            // ...
-            GWL_EXSTYLE = (-20),
-            // ...
-        }
 
-        public enum ProcessAccessFlags : uint {
-            All = 0x001F0FFF,
-            Terminate = 0x00000001,
-            CreateThread = 0x00000002,
-            VirtualMemoryOperation = 0x00000008,
-            VirtualMemoryRead = 0x00000010,
-            VirtualMemoryWrite = 0x00000020,
-            DuplicateHandle = 0x00000040,
-            CreateProcess = 0x000000080,
-            SetQuota = 0x00000100,
-            SetInformation = 0x00000200,
-            QueryInformation = 0x00000400,
-            QueryLimitedInformation = 0x00001000,
-            Synchronize = 0x00100000
-        }
+
 
         public const int STANDARD_RIGHTS_REQUIRED = 0xF0000;
         public const int TOKEN_ASSIGN_PRIMARY = 0x1;
@@ -215,20 +155,7 @@ namespace MonkeyPaste.Common.Wpf {
         [DllImport("kernel32.dll", EntryPoint = "SetLastError")]
         public static extern void SetLastError(int dwErrorCode);
 
-        [StructLayout(LayoutKind.Sequential)]
-        public struct PointInter {
-            public int X;
-            public int Y;
-            public static explicit operator System.Drawing.Point(PointInter point) => new System.Drawing.Point(point.X, point.Y);
-        }
 
-        public static class Windows {
-            public const int NORMAL = 1;
-            public const int HIDE = 0;
-            public const int RESTORE = 9;
-            public const int SHOW = 5;
-            public const int MAXIMIXED = 3;
-        }
 
         [DllImport("msvcrt.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int memcmp(byte[] b1, byte[] b2, long count);
@@ -334,12 +261,12 @@ namespace MonkeyPaste.Common.Wpf {
         //[DllImport("user32.dll")]
         //public static extern bool GetCursorPos(out System.Windows.Point lpPoint);
 
-        internal static int RegisterWindowMessage(string format, params object[] args) {
+        public static int RegisterWindowMessage(string format, params object[] args) {
             string message = string.Format(format, args);
             return RegisterWindowMessage(message);
         }
 
-        internal static void ShowToFront(IntPtr window) {
+        public static void ShowToFront(IntPtr window) {
             ShowWindow(window, SW_SHOWNORMAL);
             SetForegroundWindow(window);
         }
@@ -400,87 +327,7 @@ namespace MonkeyPaste.Common.Wpf {
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool GetWindowPlacement(IntPtr hWnd, ref WINDOWPLACEMENT lpwndpl);
 
-        [Serializable]
-        [StructLayout(LayoutKind.Sequential)]
-        public struct WINDOWPLACEMENT {
-            public int length;
-            public int flags;
-            public ShowWindowCommands showCmd;
-            public System.Drawing.Point ptMinPosition;
-            public System.Drawing.Point ptMaxPosition;
-            public System.Drawing.Rectangle rcNormalPosition;
-        }
 
-        public enum ShowWindowCommands : int {
-            Hide = 0,
-            Normal = 1,
-            Minimized = 2,
-            Maximized = 3,
-        }
-
-        //--
-        public struct TOKEN_PRIVILEGES {
-            public UInt32 PrivilegeCount;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 1)]
-            public LUID_AND_ATTRIBUTES[] Privileges;
-        }
-
-        [StructLayout(LayoutKind.Sequential, Pack = 4)]
-        public struct LUID_AND_ATTRIBUTES {
-            public LUID Luid;
-            public UInt32 Attributes;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct LUID {
-            public uint LowPart;
-            public int HighPart;
-        }
-
-        [Flags]
-
-
-        public enum SECURITY_IMPERSONATION_LEVEL {
-            SecurityAnonymous,
-            SecurityIdentification,
-            SecurityImpersonation,
-            SecurityDelegation
-        }
-
-        public enum TOKEN_TYPE {
-            TokenPrimary = 1,
-            TokenImpersonation
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct PROCESS_INFORMATION {
-            public IntPtr hProcess;
-            public IntPtr hThread;
-            public int dwProcessId;
-            public int dwThreadId;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-        public struct STARTUPINFO {
-            public Int32 cb;
-            public string lpReserved;
-            public string lpDesktop;
-            public string lpTitle;
-            public Int32 dwX;
-            public Int32 dwY;
-            public Int32 dwXSize;
-            public Int32 dwYSize;
-            public Int32 dwXCountChars;
-            public Int32 dwYCountChars;
-            public Int32 dwFillAttribute;
-            public Int32 dwFlags;
-            public Int16 wShowWindow;
-            public Int16 cbReserved2;
-            public IntPtr lpReserved2;
-            public IntPtr hStdInput;
-            public IntPtr hStdOutput;
-            public IntPtr hStdError;
-        }
 
         [DllImport("kernel32.dll", ExactSpelling = true)]
         public static extern IntPtr GetCurrentProcess();
@@ -509,18 +356,7 @@ namespace MonkeyPaste.Common.Wpf {
         [DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetParent(IntPtr hWnd);
         #region icon loader
-        public const int SHGFI_SMALLICON = 0x1;
-        public const int SHGFI_LARGEICON = 0x0;
-        public const int SHIL_JUMBO = 0x4;
-        public const int SHIL_EXTRALARGE = 0x2;
-        public const int WM_CLOSE = 0x0010;
 
-        public enum IconSizeEnum {
-            SmallIcon16 = SHGFI_SMALLICON,
-            MediumIcon32 = SHGFI_LARGEICON,
-            LargeIcon48 = SHIL_EXTRALARGE,
-            ExtraLargeIcon = SHIL_JUMBO
-        }
 
         [DllImport("shell32.dll")]
         public static extern int SHGetImageList(
@@ -540,73 +376,6 @@ namespace MonkeyPaste.Common.Wpf {
         public static extern int DestroyIcon(
             IntPtr hIcon);
 
-        public struct SHFILEINFO {
-            public IntPtr hIcon;
-            public int iIcon;
-            public uint dwAttributes;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 254)]
-            public string szDisplayName;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
-            public string szTypeName;
-        };
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct RECT {
-            public int Left;
-            public int Top;
-            public int Right;
-            public int Bottom;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct POINT {
-            public int X;
-            public int Y;
-
-            public POINT(int x, int y) {
-                this.X = x;
-                this.Y = y;
-            }
-
-            public POINT(System.Drawing.Point pt) : this(pt.X, pt.Y) { }
-
-            public static implicit operator System.Drawing.Point(POINT p) {
-                return new System.Drawing.Point(p.X, p.Y);
-            }
-
-            public static implicit operator POINT(System.Drawing.Point p) {
-                return new POINT(p.X, p.Y);
-            }
-        }
-
-        public struct IMAGELISTDRAWPARAMS {
-            public int cbSize;
-            public IntPtr himl;
-            public int i;
-            public IntPtr hdcDst;
-            public int x;
-            public int y;
-            public int cx;
-            public int cy;
-            public int xBitmap;
-            public int yBitmap;
-            public int rgbBk;
-            public int rgbFg;
-            public int fStyle;
-            public int dwRop;
-            public int fState;
-            public int Frame;
-            public int crEffect;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct IMAGEINFO {
-            public IntPtr hbmImage;
-            public IntPtr hbmMask;
-            public int Unused1;
-            public int Unused2;
-            public RECT rcImage;
-        }
 
         [ComImportAttribute]
         [GuidAttribute("46EB5926-582E-4017-9FDF-E8998DAA0950")]
@@ -678,31 +447,7 @@ namespace MonkeyPaste.Common.Wpf {
         //public static extern bool GetCursorPos(out System.Windows.Point lpPoint);
 
         #region Native Control
-        public enum CommonControls : uint {
-            ICC_LISTVIEW_CLASSES = 0x00000001, // listview, header
-            ICC_TREEVIEW_CLASSES = 0x00000002, // treeview, tooltips
-            ICC_BAR_CLASSES = 0x00000004, // toolbar, statusbar, trackbar, tooltips
-            ICC_TAB_CLASSES = 0x00000008, // tab, tooltips
-            ICC_UPDOWN_CLASS = 0x00000010, // updown
-            ICC_PROGRESS_CLASS = 0x00000020, // progress
-            ICC_HOTKEY_CLASS = 0x00000040, // hotkey
-            ICC_ANIMATE_CLASS = 0x00000080, // animate
-            ICC_WIN95_CLASSES = 0x000000FF,
-            ICC_DATE_CLASSES = 0x00000100, // month picker, date picker, time picker, updown
-            ICC_USEREX_CLASSES = 0x00000200, // comboex
-            ICC_COOL_CLASSES = 0x00000400, // rebar (coolbar) control
-            ICC_INTERNET_CLASSES = 0x00000800,
-            ICC_PAGESCROLLER_CLASS = 0x00001000, // page scroller
-            ICC_NATIVEFNTCTL_CLASS = 0x00002000, // native font control
-            ICC_STANDARD_CLASSES = 0x00004000,
-            ICC_LINK_CLASS = 0x00008000
-        }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public struct INITCOMMONCONTROLSEX {
-            public int dwSize;
-            public uint dwICC;
-        }
 
         [DllImport("Comctl32.dll")]
         public static extern void InitCommonControlsEx(ref INITCOMMONCONTROLSEX init);
@@ -732,11 +477,7 @@ namespace MonkeyPaste.Common.Wpf {
             IntPtr hInstance,
             IntPtr lpParam);
 
-        [StructLayout(LayoutKind.Sequential)]
-        public struct SETTEXTEX {
-            public uint Flags;
-            public uint Codepage;
-        }
+
 
         [DllImport("user32.dll", CharSet = CharSet.Unicode, EntryPoint = "SendMessageW")]
         public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, ref SETTEXTEX wParam, byte[] lParam);
@@ -796,5 +537,282 @@ namespace MonkeyPaste.Common.Wpf {
         //    return true;
         //}
         #endregion
+
+        #region Enums
+
+        public enum ProcessAccessFlags : uint {
+            All = 0x001F0FFF,
+            Terminate = 0x00000001,
+            CreateThread = 0x00000002,
+            VirtualMemoryOperation = 0x00000008,
+            VirtualMemoryRead = 0x00000010,
+            VirtualMemoryWrite = 0x00000020,
+            DuplicateHandle = 0x00000040,
+            CreateProcess = 0x000000080,
+            SetQuota = 0x00000100,
+            SetInformation = 0x00000200,
+            QueryInformation = 0x00000400,
+            QueryLimitedInformation = 0x00001000,
+            Synchronize = 0x00100000
+        }
+
+        public enum ShowWindowCommands : int {
+            Hide = 0,
+            Normal = 1,
+            Minimized = 2,
+            Maximized = 3,
+        }
+
+        [Flags]
+        public enum SECURITY_IMPERSONATION_LEVEL {
+            SecurityAnonymous,
+            SecurityIdentification,
+            SecurityImpersonation,
+            SecurityDelegation
+        }
+
+        public enum TOKEN_TYPE {
+            TokenPrimary = 1,
+            TokenImpersonation
+        }
+        [Flags]
+        public enum ExtendedWindowStyles {
+            // ...
+            WS_EX_TOOLWINDOW = 0x00000080,
+            // ...
+        }
+
+        public enum GetWindowLongFields {
+            // ...
+            GWL_EXSTYLE = (-20),
+            // ...
+        }
+
+
+        public enum IconSizeEnum {
+            SmallIcon16 = 0x1,
+            MediumIcon32 = 0x0,
+            LargeIcon48 = 0x2,
+            ExtraLargeIcon = 0x4
+        }
+
+        public enum CommonControls : uint {
+            ICC_LISTVIEW_CLASSES = 0x00000001, // listview, header
+            ICC_TREEVIEW_CLASSES = 0x00000002, // treeview, tooltips
+            ICC_BAR_CLASSES = 0x00000004, // toolbar, statusbar, trackbar, tooltips
+            ICC_TAB_CLASSES = 0x00000008, // tab, tooltips
+            ICC_UPDOWN_CLASS = 0x00000010, // updown
+            ICC_PROGRESS_CLASS = 0x00000020, // progress
+            ICC_HOTKEY_CLASS = 0x00000040, // hotkey
+            ICC_ANIMATE_CLASS = 0x00000080, // animate
+            ICC_WIN95_CLASSES = 0x000000FF,
+            ICC_DATE_CLASSES = 0x00000100, // month picker, date picker, time picker, updown
+            ICC_USEREX_CLASSES = 0x00000200, // comboex
+            ICC_COOL_CLASSES = 0x00000400, // rebar (coolbar) control
+            ICC_INTERNET_CLASSES = 0x00000800,
+            ICC_PAGESCROLLER_CLASS = 0x00001000, // page scroller
+            ICC_NATIVEFNTCTL_CLASS = 0x00002000, // native font control
+            ICC_STANDARD_CLASSES = 0x00004000,
+            ICC_LINK_CLASS = 0x00008000
+        }
+        #endregion
+
+        #region Structs
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct BITMAPV5HEADER {
+            public uint bV5Size;
+            public int bV5Width;
+            public int bV5Height;
+            public UInt16 bV5Planes;
+            public UInt16 bV5BitCount;
+            public uint bV5Compression;
+            public uint bV5SizeImage;
+            public int bV5XPelsPerMeter;
+            public int bV5YPelsPerMeter;
+            public UInt16 bV5ClrUsed;
+            public UInt16 bV5ClrImportant;
+            public UInt16 bV5RedMask;
+            public UInt16 bV5GreenMask;
+            public UInt16 bV5BlueMask;
+            public UInt16 bV5AlphaMask;
+            public UInt16 bV5CSType;
+            public IntPtr bV5Endpoints;
+            public UInt16 bV5GammaRed;
+            public UInt16 bV5GammaGreen;
+            public UInt16 bV5GammaBlue;
+            public UInt16 bV5Intent;
+            public UInt16 bV5ProfileData;
+            public UInt16 bV5ProfileSize;
+            public UInt16 bV5Reserved;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct Win32Point {
+            public Int32 X;
+            public Int32 Y;
+        };
+
+        [Serializable]
+        [StructLayout(LayoutKind.Sequential)]
+        public struct WINDOWPLACEMENT {
+            public int length;
+            public int flags;
+            public ShowWindowCommands showCmd;
+            public System.Drawing.Point ptMinPosition;
+            public System.Drawing.Point ptMaxPosition;
+            public System.Drawing.Rectangle rcNormalPosition;
+        }
+
+
+        //--
+        public struct TOKEN_PRIVILEGES {
+            public UInt32 PrivilegeCount;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 1)]
+            public LUID_AND_ATTRIBUTES[] Privileges;
+        }
+
+        [StructLayout(LayoutKind.Sequential, Pack = 4)]
+        public struct LUID_AND_ATTRIBUTES {
+            public LUID Luid;
+            public UInt32 Attributes;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct LUID {
+            public uint LowPart;
+            public int HighPart;
+        }
+
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct PROCESS_INFORMATION {
+            public IntPtr hProcess;
+            public IntPtr hThread;
+            public int dwProcessId;
+            public int dwThreadId;
+        }
+
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        public struct STARTUPINFO {
+            public Int32 cb;
+            public string lpReserved;
+            public string lpDesktop;
+            public string lpTitle;
+            public Int32 dwX;
+            public Int32 dwY;
+            public Int32 dwXSize;
+            public Int32 dwYSize;
+            public Int32 dwXCountChars;
+            public Int32 dwYCountChars;
+            public Int32 dwFillAttribute;
+            public Int32 dwFlags;
+            public Int16 wShowWindow;
+            public Int16 cbReserved2;
+            public IntPtr lpReserved2;
+            public IntPtr hStdInput;
+            public IntPtr hStdOutput;
+            public IntPtr hStdError;
+        }
+
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct INITCOMMONCONTROLSEX {
+            public int dwSize;
+            public uint dwICC;
+        }
+        [StructLayout(LayoutKind.Sequential)]
+        public struct PointInter {
+            public int X;
+            public int Y;
+            public static explicit operator System.Drawing.Point(PointInter point) => new System.Drawing.Point(point.X, point.Y);
+        }
+
+
+        public struct SHFILEINFO {
+            public IntPtr hIcon;
+            public int iIcon;
+            public uint dwAttributes;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 254)]
+            public string szDisplayName;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+            public string szTypeName;
+        };
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RECT {
+            public int Left;
+            public int Top;
+            public int Right;
+            public int Bottom;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct POINT {
+            public int X;
+            public int Y;
+
+            public POINT(int x, int y) {
+                this.X = x;
+                this.Y = y;
+            }
+
+            public POINT(System.Drawing.Point pt) : this(pt.X, pt.Y) { }
+
+            public static implicit operator System.Drawing.Point(POINT p) {
+                return new System.Drawing.Point(p.X, p.Y);
+            }
+
+            public static implicit operator POINT(System.Drawing.Point p) {
+                return new POINT(p.X, p.Y);
+            }
+        }
+
+        public struct IMAGELISTDRAWPARAMS {
+            public int cbSize;
+            public IntPtr himl;
+            public int i;
+            public IntPtr hdcDst;
+            public int x;
+            public int y;
+            public int cx;
+            public int cy;
+            public int xBitmap;
+            public int yBitmap;
+            public int rgbBk;
+            public int rgbFg;
+            public int fStyle;
+            public int dwRop;
+            public int fState;
+            public int Frame;
+            public int crEffect;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct IMAGEINFO {
+            public IntPtr hbmImage;
+            public IntPtr hbmMask;
+            public int Unused1;
+            public int Unused2;
+            public RECT rcImage;
+        }
+        [StructLayout(LayoutKind.Sequential)]
+        public struct SETTEXTEX {
+            public uint Flags;
+            public uint Codepage;
+        }
+        #endregion
+
+        #region Classes
+        public static class Windows {
+            public const int NORMAL = 1;
+            public const int HIDE = 0;
+            public const int RESTORE = 9;
+            public const int SHOW = 5;
+            public const int MAXIMIXED = 3;
+        }
+        #endregion
     }
+
+
 }

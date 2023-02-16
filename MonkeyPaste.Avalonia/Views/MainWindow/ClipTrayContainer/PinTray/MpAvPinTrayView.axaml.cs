@@ -111,7 +111,7 @@ namespace MonkeyPaste.Avalonia {
             MpRectSideHitTest closet_side_ht = null;
             int closest_side_lbi_idx = -1;
             for (int i = 0; i < BindingContext.PinnedItems.Count; i++) {
-                var lbi_rect = ptr_lb.ItemContainerGenerator.ContainerFromIndex(i).Bounds.ToPortableRect();
+                var lbi_rect = ptr_lb.ContainerFromIndex(i).Bounds.ToPortableRect();
                 var cur_tup = lbi_rect.GetClosestSideToPoint(ptr_lb_mp, "t,b");
                 if (closet_side_ht == null || cur_tup.ClosestSideDistance < closet_side_ht.ClosestSideDistance) {
                     closet_side_ht = cur_tup;
@@ -223,7 +223,7 @@ namespace MonkeyPaste.Avalonia {
             }
             MpLine drop_line;
             int ref_lbi_idx = Math.Clamp(drop_idx, 0, total_count - 1);
-            var ref_lbi = ptr_lb.ItemContainerGenerator.ContainerFromIndex(ref_lbi_idx) as ListBoxItem;
+            var ref_lbi = ptr_lb.ContainerFromIndex(ref_lbi_idx) as ListBoxItem;
             var ref_lbi_rect = ref_lbi.Bounds.ToPortableRect();
 
             if (drop_idx < total_count) {

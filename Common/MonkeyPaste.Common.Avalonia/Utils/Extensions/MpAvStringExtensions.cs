@@ -1,6 +1,10 @@
-﻿using MonkeyPaste.Common.Wpf;
-using System;
+﻿using System;
 
+#if WINDOWS
+
+using MonkeyPaste.Common.Wpf;
+
+#endif
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvStringExtensions {
         public static bool IsRichHtmlMixedMedia(this string qhtml) {
@@ -43,8 +47,10 @@ namespace MonkeyPaste.Common.Avalonia {
         public static string ToRichHtmlText(this string str, string strFormat) {
             if (str.IsStringRichText() &&
                 OperatingSystem.IsWindows()) {
+#if WINDOWS
                 string qhtml = MonkeyPaste.Common.Wpf.MpWpfRtfToHtmlConverter2.ConvertFormatToHtml(str, strFormat);
                 return qhtml;
+#endif
             } else if (str.IsStringCsv()) {
                 // TODO create quill tables here
 
@@ -56,8 +62,10 @@ namespace MonkeyPaste.Common.Avalonia {
 
         public static string ToContentRichText(this string str) {
             if (str.IsStringRichHtml() && OperatingSystem.IsWindows()) {
+#if WINDOWS
                 string rtf = MpWpfHtmlToRtfConverter.ConvertQuillHtmlToRtf(str);
                 return rtf;
+#endif
             }
             return str;
         }

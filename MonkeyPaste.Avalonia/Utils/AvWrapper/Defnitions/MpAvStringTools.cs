@@ -1,12 +1,18 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+#if WINDOWS
+
 using MonkeyPaste.Common.Wpf;
+
+#endif
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvStringTools : MpIStringTools {
         public string ToPlainText(string text) {
             if (text.IsStringRichText()) {
+#if WINDOWS
                 return text.RtfToPlainText();
+#endif
             }
             if (text.IsStringRichHtml()) {
                 return MpRichHtmlToPlainTextConverter.Convert(text);

@@ -1,8 +1,6 @@
-﻿using Avalonia.Controls;
-using Avalonia.Threading;
+﻿using Avalonia.Threading;
 using MonkeyPaste.Common;
 using PropertyChanged;
-using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -191,17 +189,10 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand SelectFileSystemPathCommand => new MpAsyncCommand(
             async () => {
-                string initDir = FolderPath;
-                if (string.IsNullOrEmpty(initDir)) {
-                    initDir = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                } else if (File.Exists(initDir)) {
-                    initDir = Path.GetDirectoryName(initDir);
-                }
                 MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
-                var selectedDir = await new OpenFolderDialog() {
-                    Title = "Select folder",
-                    Directory = initDir
-                }.ShowAsync(MpAvMainWindow.Instance);
+
+                var selectedDir = await MpPlatform.Services.NativePathDialog
+                        .ShowFolderDialogAsync($"Select Folder", FolderPath);
 
                 MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
 

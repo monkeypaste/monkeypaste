@@ -47,7 +47,9 @@ namespace MonkeyPaste.Common {
                 WriteLogLine(str);
             }
         }
-
+        public static void WriteWarningLine(string line, bool pad_pre = false, bool pad_post = false) {
+            WriteLine("[WARNING] " + line, pad_pre, pad_post);
+        }
         public static void WriteTraceLine(object line, object ex = null, [CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int lineNum = 0) {
             line = line == null ? string.Empty : line;
 

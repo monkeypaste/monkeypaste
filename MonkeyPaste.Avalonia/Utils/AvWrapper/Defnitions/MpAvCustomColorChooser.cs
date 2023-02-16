@@ -1,4 +1,6 @@
 ﻿//using AvaloniaColorPicker;
+using AvaloniaColorPicker;
+using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -19,14 +21,12 @@ namespace MonkeyPaste.Avalonia {
 
             MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
 
-            //var cpw = new ColorPickerWindow(selectedColor.ToAvColor()) {
-            //    IsPaletteVisible = true,
-            //    Topmost = true,
-            //    Title = string.IsNullOrWhiteSpace(title) ? "Pick a color, any color" : title
-            //};
-            //var result = await cpw.ShowDialog(MpAvMainWindow.Instance);
-            object result = null;
-
+            var cpw = new ColorPickerWindow(selectedColor.ToAvColor()) {
+                IsPaletteVisible = true,
+                Topmost = true,
+                Title = string.IsNullOrWhiteSpace(title) ? "Pick a color, any color" : title
+            };
+            var result = await cpw.ShowDialog(MpAvMainWindow.Instance);
             if (result != null) {
                 newColor = result.ToString();
                 if (ucvm != null) {

@@ -39,7 +39,7 @@ namespace MonkeyPaste.Avalonia {
                                 new MpSize(
                                     x.Bounds.Width / PixelScaling,
                                     x.Bounds.Height / PixelScaling)),
-                            IsPrimary = x.Primary,
+                            IsPrimary = x.IsPrimary,
                             Name = $"Monitor {i}",
                             WorkArea = new MpRect(
                                 new MpPoint(

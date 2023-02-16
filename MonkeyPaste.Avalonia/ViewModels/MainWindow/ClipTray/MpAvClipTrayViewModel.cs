@@ -2,7 +2,6 @@
 using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
-using MonkeyPaste.Common.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -692,15 +691,9 @@ namespace MonkeyPaste.Avalonia {
 
         public double DefaultQueryItemWidth {
             get {
-                double defaultWidth;
-                if (true) {
-                    defaultWidth = ListOrientation == Orientation.Horizontal ?
+                double defaultWidth = ListOrientation == Orientation.Horizontal ?
                                     (QueryTrayScreenHeight * ZoomFactor) :
                                     (QueryTrayScreenWidth * ZoomFactor);
-                } else {
-                    defaultWidth = MpAvMainWindowViewModel.Instance.MainWindowScreen.Bounds.Width *
-                                ZoomFactor * MIN_SIZE_ZOOM_FACTOR_COEFF;
-                }
                 double scrollBarSize = ScrollBarFixedAxisSize;// IsHorizontalScrollBarVisible ? 30:0;
                 return Math.Clamp(defaultWidth - scrollBarSize, 0, MaxTileWidth);
             }
@@ -708,15 +701,11 @@ namespace MonkeyPaste.Avalonia {
 
         public double DefaultQueryItemHeight {
             get {
-                double defaultHeight;
-                if (true) {
-                    defaultHeight = ListOrientation == Orientation.Horizontal ?
+                double defaultHeight = ListOrientation == Orientation.Horizontal ?
                                     (QueryTrayScreenHeight * ZoomFactor) :
                                     (QueryTrayScreenWidth * ZoomFactor);
-                } else {
-                    defaultHeight = MpAvMainWindowViewModel.Instance.MainWindowScreen.Bounds.Width *
-                                ZoomFactor * MIN_SIZE_ZOOM_FACTOR_COEFF;
-                }
+                //defaultHeight = MpAvMainWindowViewModel.Instance.MainWindowScreen.Bounds.Width *
+                //            ZoomFactor * MIN_SIZE_ZOOM_FACTOR_COEFF;
                 double scrollBarSize = ScrollBarFixedAxisSize;// IsVerticalScrollBarVisible ? 30 : 0;
                 return Math.Clamp(defaultHeight - scrollBarSize, 0, MaxTileHeight);
             }
@@ -1320,7 +1309,6 @@ namespace MonkeyPaste.Avalonia {
             //    await ci.WriteToDatabaseAsync();
             //}
             Items.Clear();
-            int idx = 0;
             for (int i = 0; i < DefaultLoadCount; i++) {
                 var ctvm = await CreateClipTileViewModel(null);
                 Items.Add(ctvm);
@@ -3077,7 +3065,7 @@ namespace MonkeyPaste.Avalonia {
             (args) => {
                 string pt = string.Join(
                             Environment.NewLine,
-                            MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Select(x => x.ItemData.RtfToPlainText()));
+                            MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Select(x => MpPlatform.Services.StringTools.ToPlainText(x.ItemData)));
 
                 //MpHelpers.OpenUrl(args.ToString() + Uri.EscapeDataString(pt));
             }, (args) => args != null && args is string);

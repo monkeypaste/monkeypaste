@@ -16,10 +16,6 @@ namespace MonkeyPaste.Avalonia {
         MpIExpandableViewModel {
 
         #region Private Variable
-
-        private bool _isRestoringValues = false;
-        private MpIQueryResultProvider _simpleSearchRef;
-        private MpQueryPageTools _pageTools;
         #endregion
 
         #region Constants
@@ -167,7 +163,6 @@ namespace MonkeyPaste.Avalonia {
         //}
 
         public MpAvSearchCriteriaItemCollectionViewModel() : base(null) {
-            _pageTools = MpQueryPageTools.Instance;
             PropertyChanged += MpAvSearchCriteriaItemCollectionViewModel_PropertyChanged;
             Items.CollectionChanged += Items_CollectionChanged;
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);

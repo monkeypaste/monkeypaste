@@ -2,10 +2,13 @@
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public interface MpIContentView {
+    public interface MpIHasDataContext {
+        object DataContext { get; }
+
+    }
+    public interface MpIContentView : MpIHasDataContext {
         void ShowDevTools();
         bool IsSubSelectable { get; }
-        object DataContext { get; }
         Task LoadContentAsync();
         Task UpdateContentAsync(MpJsonObject contentJsonObj);
 

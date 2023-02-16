@@ -39,13 +39,17 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" >
+
+  <ItemGroup>
+    <Folder Include="Util\" />
+  </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <ItemGroup>
       <BuildFiles Include="$(TargetDir)\*.*" />
       <ProjectFiles Include="$(ProjectDir)\*.*" />
     </ItemGroup>
-    <Copy SourceFiles="@(BuildFiles)" DestinationFolder="$(PluginTargetDir)\$(ProjectName)\"  OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" ContinueOnError="true" />
-    <Copy SourceFiles="@(ProjectFiles)" DestinationFolder="$(PluginTargetDir)\$(ProjectName)\" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" ContinueOnError="true"  />
+    <Copy SourceFiles="@(BuildFiles)" DestinationFolder="$(PluginTargetDir)\$(ProjectName)\" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" ContinueOnError="true" />
+    <Copy SourceFiles="@(ProjectFiles)" DestinationFolder="$(PluginTargetDir)\$(ProjectName)\" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" ContinueOnError="true" />
 
   </Target>
 </Project>

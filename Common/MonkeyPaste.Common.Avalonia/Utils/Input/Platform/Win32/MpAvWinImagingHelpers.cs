@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using System;
 
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvWinImagingHelpers {
@@ -8,7 +9,7 @@ namespace MonkeyPaste.Common.Avalonia {
         #region System.Drawing
 
         public static Bitmap? ToAvBitmap(this System.Drawing.Image img) {
-            if (img == null) {
+            if (img == null || !OperatingSystem.IsWindows()) {
                 return null;
             }
             using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(img)) {
@@ -17,6 +18,9 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static Bitmap? ToAvBitmap(this System.Drawing.Bitmap bmp) {
+            if (bmp == null || !OperatingSystem.IsWindows()) {
+                return null;
+            }
             System.Drawing.Imaging.BitmapData? bitmapData =
                     bmp.LockBits(
                         new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height),

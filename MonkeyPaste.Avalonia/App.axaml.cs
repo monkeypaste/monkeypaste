@@ -8,22 +8,41 @@ using System.Diagnostics;
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class App : Application {
+        #region Private Variable
+        #endregion
 
+        #region Constants
+        public const string RESET_DATA_ARG = "resetdata";
+        public const string BACKUP_DATA_ARG = "backupdata";
+
+        #endregion
+
+        #region Statics
+        public static string[] Args { get; set; }
+        public static IClassicDesktopStyleApplicationLifetime Desktop { get; private set; }
+        #endregion
+
+        #region Interfaces
+        #endregion
+
+        #region Properties
+        #endregion
+
+        #region Events
         public static event EventHandler FrameworkInitialized;
         public static event EventHandler FrameworkShutdown;
-        public static IClassicDesktopStyleApplicationLifetime Desktop { get; private set; }
+        #endregion
+
+        #region Constructors
         public App() {
             //DataContext = MpAvSystemTrayViewModel.Instance;
         }
+        #endregion
+
+        #region Public Methods
         public override void Initialize() {
             AvaloniaXamlLoader.Load(this);
         }
-
-        private void AppTrayIcon_Clicked(object sender, EventArgs e) {
-            MpAvMainWindowViewModel.Instance.ShowMainWindowCommand.Execute(null);
-            return;
-        }
-
         public override async void OnFrameworkInitializationCompleted() {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
                 Desktop = desktop;
@@ -31,7 +50,7 @@ namespace MonkeyPaste.Avalonia {
                 desktop.Startup += Startup;
                 desktop.Exit += Exit;
 
-                ReportCommandLineArgs(Program.Args);
+                ReportCommandLineArgs(Args);
 
                 if (MpAvCefNetApplication.UseCefNet) {
                     MpAvCefNetApplication.InitCefNet();
@@ -46,7 +65,12 @@ namespace MonkeyPaste.Avalonia {
 
             base.OnFrameworkInitializationCompleted();
         }
+        #endregion
 
+        #region Protected Methods
+        #endregion
+
+        #region Private Methods
 
         private void Startup(object sender, ControlledApplicationLifetimeStartupEventArgs e) {
             FrameworkInitialized?.Invoke(this, EventArgs.Empty);
@@ -65,5 +89,9 @@ namespace MonkeyPaste.Avalonia {
             Console.WriteLine("Program args: ");
             Console.Write(string.Join(Environment.NewLine, args));
         }
+        #endregion
+
+        #region Commands
+        #endregion
     }
 }

@@ -20,6 +20,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        public MpINativePathDialog NativePathDialog { get; set; }
         public MpIUserProvidedFileExts UserProvidedFileExts { get; set; }
         public MpIStartupState StartupState { get; set; }
         public MpIPlatformCompatibility PlatformCompatibility { get; set; }
@@ -78,11 +79,11 @@ namespace MonkeyPaste.Avalonia {
             DbInfo = new MpAvDbInfo();
             OsInfo = new MpAvOsInfo();
 
-            if (Program.Args != null) {
-                if (Program.Args.Any(x => x.ToLower() == Program.BACKUP_DATA_ARG)) {
+            if (App.Args != null) {
+                if (App.Args.Any(x => x.ToLower() == App.BACKUP_DATA_ARG)) {
                     // TODO move reset stuff to that backup folder
                 }
-                if (Program.Args.Any(x => x.ToLower() == Program.RESET_DATA_ARG)) {
+                if (App.Args.Any(x => x.ToLower() == App.RESET_DATA_ARG)) {
 
                     // TODO! Change tagids:
                     // RootGroudTagId=3
@@ -102,6 +103,7 @@ namespace MonkeyPaste.Avalonia {
 
             await MpPrefViewModel.InitAsync(prefPath, DbInfo, OsInfo);
 
+            NativePathDialog = new MpAvPathDialog();
             UserProvidedFileExts = MpPrefViewModel.Instance;
             Query = MpAvQueryViewModel.Parse(MpPrefViewModel.Instance.LastQueryInfoJson);
             ProcessWatcher = new MpAvProcessWatcherSelector().Watcher;

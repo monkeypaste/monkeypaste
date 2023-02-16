@@ -1,6 +1,4 @@
-﻿
-using Avalonia.Controls;
-using Avalonia.Threading;
+﻿using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
@@ -191,16 +189,16 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private void MpFileSystemTriggerViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch (e.PropertyName) {
-                //case nameof(FileSystemPath):
-                //    if (IsBusy) {
-                //        return;
-                //    }
-                //    if (IsEnabled.IsTrue()) {
-                //        ReEnable().FireAndForgetSafeAsync(this);
-                //    }
-                //    break;
-            }
+            //switch (e.PropertyName) {
+            //case nameof(FileSystemPath):
+            //    if (IsBusy) {
+            //        return;
+            //    }
+            //    if (IsEnabled.IsTrue()) {
+            //        ReEnable().FireAndForgetSafeAsync(this);
+            //    }
+            //    break;
+            //}
         }
 
         private async Task<string> WriteToFileSystemPath(string unformatted_path) {
@@ -255,18 +253,11 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand SelectFileSystemPathCommand => new MpAsyncCommand(
             async () => {
-                string initDir = FileSystemPath;
-                if (string.IsNullOrEmpty(initDir)) {
-                    initDir = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                } else if (File.Exists(initDir)) {
-                    initDir = Path.GetDirectoryName(initDir);
-                }
-
                 MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
-                var selectedDir = await new OpenFolderDialog() {
-                    Title = "Select folder",
-                    Directory = initDir
-                }.ShowAsync(MpAvMainWindow.Instance);
+
+                var selectedDir = await MpPlatform.Services.NativePathDialog
+                        .ShowFolderDialogAsync($"Select Folder", FileSystemPath);
+
                 MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
 
                 FileSystemPath = selectedDir;

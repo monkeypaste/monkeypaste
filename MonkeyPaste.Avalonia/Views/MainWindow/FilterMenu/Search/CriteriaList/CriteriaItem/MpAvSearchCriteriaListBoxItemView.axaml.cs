@@ -13,13 +13,11 @@ namespace MonkeyPaste.Avalonia {
     /// Interaction logic for MpAnalyticToolbarTreeView.xaml
     /// </summary>
     public partial class MpAvSearchCriteriaItemView :
-        MpAvUserControl<MpAvSearchCriteriaItemViewModel>,
-        MpIDndUserCancelNotifier {
+        MpAvUserControl<MpAvSearchCriteriaItemViewModel> {
         public MpAvSearchCriteriaItemView() {
             InitializeComponent();
             var db = this.FindControl<Control>("CriteriaDragButton");
             db.AddHandler(PointerPressedEvent, Db_PointerPressed, RoutingStrategies.Tunnel);
-            OnGlobalEscKeyPressed += MpAvSearchCriteriaItemView_OnGlobalEscKeyPressed;
         }
 
 
@@ -31,10 +29,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIDndUserCancelNotifier Implementation
 
-        public event EventHandler OnGlobalEscKeyPressed;
 
         private void MpAvSearchCriteriaItemView_OnGlobalEscKeyPressed(object sender, EventArgs e) {
             ResetDragOvers();
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalEscKeyPressed -= MpAvSearchCriteriaItemView_OnGlobalEscKeyPressed;
         }
 
         #endregion
@@ -45,15 +43,19 @@ namespace MonkeyPaste.Avalonia {
             if (dragButton == null) {
                 return;
             }
+
+
             e.Handled = true;
             dragButton.DragCheckAndStart(
                 e,
                 CriteriaRowDragButton_Start, CriteriaRowDragButton_Move, CriteriaRowDragButton_End,
                 null,
-                this);
+                MpAvShortcutCollectionViewModel.Instance);
         }
 
         private void CriteriaRowDragButton_Start(PointerPressedEventArgs e) {
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalEscKeyPressed += MpAvSearchCriteriaItemView_OnGlobalEscKeyPressed;
+
             e.Pointer.Capture(e.Source as Control);
             DragDrop.DoDragDrop(e, new DataObject(), DragDropEffects.Move).FireAndForgetSafeAsync(null);
             var lb = this.GetVisualAncestor<ListBox>();
@@ -93,6 +95,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void CriteriaRowDragButton_End(PointerReleasedEventArgs e) {
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalEscKeyPressed -= MpAvSearchCriteriaItemView_OnGlobalEscKeyPressed;
+
             e.Pointer.Capture(null);
 
             int drag_idx = BindingContext.SortOrderIdx;
@@ -133,7 +137,7 @@ namespace MonkeyPaste.Avalonia {
             MpRectSideHitTest closet_side_ht = null;
             int closest_side_lbi_idx = -1;
             for (int i = 0; i < scicvm.Items.Count; i++) {
-                var lbi_rect = lb.ItemContainerGenerator.ContainerFromIndex(i).Bounds.ToPortableRect();
+                var lbi_rect = lb.ContainerFromIndex(i).Bounds.ToPortableRect();
                 var cur_tup = lbi_rect.GetClosestSideToPoint(lb_mp, "r,l");
                 if (closet_side_ht == null || cur_tup.ClosestSideDistance < closet_side_ht.ClosestSideDistance) {
                     closet_side_ht = cur_tup;

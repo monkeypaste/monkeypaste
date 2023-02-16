@@ -1,16 +1,11 @@
-﻿using Avalonia.Controls;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
-using System;
-using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvFileChooserParameterViewModel : MpAvParameterViewModelBase {
         #region Private Variables
-
-        //private string _defaultValue;
 
         #endregion
 
@@ -51,44 +46,27 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Private Methods
+        #endregion
+
         #region Commands
 
         public ICommand SelectFileSystemPathCommand => new MpAsyncCommand(
             async () => {
                 string initDir = CurrentValue;
-                if (string.IsNullOrEmpty(initDir)) {
-                    initDir = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                } else if (initDir.IsFile()) {
-                    initDir = Path.GetDirectoryName(initDir);
-                }
                 MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
 
-
+                string result = null;
                 if (IsDirectoryChooser) {
-                    //var dlg = new MpFolderPicker() {
-                    //    InputPath = initDir,
-                    //    Title = "Select " + Label
-                    //};
-                    //bool result = dlg.ShowDialog() == true;
-                    //if (result) {
-                    //    CurrentValue = dlg.ResultPath;
-                    //}
-
-                    var selectedDir = await new OpenFolderDialog() {
-                        Title = "Select " + Label,
-                        Directory = initDir
-                    }.ShowAsync(MpAvMainWindow.Instance);
-                    if (!string.IsNullOrEmpty(selectedDir)) {
-                        CurrentValue = selectedDir;
-                    }
+                    result = await MpPlatform.Services.NativePathDialog
+                        .ShowFolderDialogAsync($"Select {Label}", initDir);
                 } else {
-                    var selectedFile = await new OpenFileDialog() {
-                        Title = "Select " + Label,
-                        Directory = initDir
-                    }.ShowAsync(MpAvMainWindow.Instance);
-                    if (selectedFile != null && selectedFile.Length == 1 && !string.IsNullOrEmpty(selectedFile[0])) {
-                        CurrentValue = selectedFile[0];
-                    }
+                    result = await MpPlatform.Services.NativePathDialog
+                        .ShowFileDialogAsync($"Select {Label}", initDir, null);
+                }
+
+                if (!string.IsNullOrEmpty(result)) {
+                    CurrentValue = result;
                 }
 
                 MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;

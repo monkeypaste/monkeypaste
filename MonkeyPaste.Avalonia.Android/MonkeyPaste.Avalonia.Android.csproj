@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0-android</TargetFramework>
+    
+    <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
+    <ApplicationId>com.CompanyName.MonkeyPaste.Avalonia</ApplicationId>
+    <ApplicationVersion>1</ApplicationVersion>
+    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+    <AndroidPackageFormat>apk</AndroidPackageFormat>
+    <AndroidEnableProfiledAot>False</AndroidEnableProfiledAot>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(BuildOs)' == 'ANDROID'">
+
+   
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AndroidResource Include="Icon.png">
+      <Link>Resources\drawable\Icon.png</Link>
+    </AndroidResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia.Android" Version="11.0.0-preview5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MonkeyPaste.Avalonia\MonkeyPaste.Avalonia.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="CefNet">
+      <HintPath>..\..\..\..\Desktop\DotNetExamples\cefnet11\CefNet\CefNet.Avalonia\bin\Debug\net6.0\CefNet.dll</HintPath>
+    </Reference>
+    <Reference Include="CefNet.Avalonia">
+      <HintPath>..\..\..\..\Desktop\DotNetExamples\cefnet11\CefNet\CefNet.Avalonia\bin\Debug\net6.0\CefNet.Avalonia.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>
