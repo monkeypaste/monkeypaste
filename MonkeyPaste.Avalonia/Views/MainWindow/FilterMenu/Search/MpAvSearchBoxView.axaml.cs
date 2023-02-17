@@ -4,7 +4,9 @@ using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvSearchBoxView : MpAvUserControl<MpAvSearchBoxViewModel> {
@@ -13,9 +15,19 @@ namespace MonkeyPaste.Avalonia {
 
             var sb = this.FindControl<AutoCompleteBox>("SearchBox");
             sb.AttachedToVisualTree += Sb_AttachedToVisualTree;
+
             //sb.AddHandler(Control.KeyUpEvent, SearchBox_KeyUp, RoutingStrategies.Tunnel);
         }
 
+        protected override async void OnDataContextChanged(EventArgs e) {
+            base.OnDataContextChanged(e);
+            if (BindingContext == null) {
+                return;
+            }
+            await Task.Delay(500);
+            BindingContext.OnPropertyChanged(nameof(BindingContext.IsExpanded));
+            this?.InvalidateAll();
+        }
         #region Drop
 
         private void Sb_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {

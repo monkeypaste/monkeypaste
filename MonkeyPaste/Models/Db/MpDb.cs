@@ -458,7 +458,7 @@ namespace MonkeyPaste {
 
             if (_connectionAsync == null) {
                 try {
-                    SQLitePCL.Batteries.Init();
+                    SQLitePCL.Batteries_V2.Init();
 
                     _connectionAsync = new SQLiteAsyncConnection(connStr) { Trace = true };
                     SQLitePCL.raw.sqlite3_create_function(_connectionAsync.GetConnection().Handle, "REGEXP", 2, null, MatchRegex);

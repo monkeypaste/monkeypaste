@@ -129,9 +129,9 @@ namespace MonkeyPaste.Avalonia {
             e.Pointer.Capture(e.Source as Control);
         }
         private void WindowDragButton_Move(PointerEventArgs e) {
-            MpPoint mw_mp = e.GetClientMousePoint(MpAvMainWindow.Instance);
+            MpPoint mw_mp = e.GetClientMousePoint(MpAvMainView.Instance);
 
-            MpPoint screen_mp = MpAvMainWindow.Instance.PointToScreen(
+            MpPoint screen_mp = MpAvMainView.Instance.PointToScreen(
                 mw_mp.ToAvPoint())
                 .ToPortablePoint(MpAvMainWindowViewModel.Instance.MainWindowScreen.PixelDensity);
 
@@ -174,7 +174,7 @@ namespace MonkeyPaste.Avalonia {
             if (MpAvMainWindowViewModel.Instance.MainWindowOrientationType != final_or) {
                 MpAvMainWindowViewModel.Instance.CycleOrientationCommand.Execute(final_or);
             }
-            MpAvMainWindow.Instance.ClampContentSizes();
+            MpAvMainView.Instance.ClampContentSizes();
         }
 
         #endregion

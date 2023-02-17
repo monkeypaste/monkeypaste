@@ -69,7 +69,7 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine("Warning cannot set active process to IntPtr.Zero, ignoring");
                 return IntPtr.Zero;
             }
-            //if (!MpAvMainWindow.Instance.IsVisible) {
+            //if (!MpAvMainView.Instance.IsVisible) {
             //    MpConsole.WriteLine("Warning cannot set active process mw is not visible");
             //    return IntPtr.Zero;
             //}

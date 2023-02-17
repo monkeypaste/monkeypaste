@@ -1,4 +1,5 @@
-﻿using Android.App;
+﻿
+using Android.App;
 using Android.Content.PM;
 using Android.Content.Res;
 using Android.Widget;
@@ -8,7 +9,6 @@ using Avalonia.Threading;
 using Orientation = Android.Content.Res.Orientation;
 
 namespace MonkeyPaste.Avalonia.Android;
-
 [Activity(
     Label = "MonkeyPaste.Avalonia.Android",
     Theme = "@style/MyTheme.NoActionBar",

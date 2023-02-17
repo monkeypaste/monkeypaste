@@ -14,16 +14,9 @@
                            x:Class="MonkeyPaste.Avalonia.MpAvContextMenuView">
     <local:MpAvContextMenuView.Resources>
         <SolidColorBrush x:Key="MenuFlyoutItemBackgroundPointerOver">LightBlue</SolidColorBrush>
-
-        <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">Transparent</SolidColorBrush>
-        <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">Transparent</SolidColorBrush>
-        <SolidColorBrush x:Key="SystemControlHighlightListAccentHighBrush">Transparent</SolidColorBrush>
-        <SolidColorBrush x:Key="SystemControlHighlightListLowBrush">Transparent</SolidColorBrush>
-        <SolidColorBrush x:Key="SystemControlHighlightListMediumBrush">Transparent</SolidColorBrush>
-        <SolidColorBrush x:Key="SystemControlHighlightListHighBrush">Transparent</SolidColorBrush>
     </local:MpAvContextMenuView.Resources>
     <local:MpAvContextMenuView.Styles>
-        <Style Selector="MenuItem">
+        <!--<Style Selector="MenuItem">
             <Setter Property="Background"
                     Value="Transparent" />
         </Style>
@@ -34,6 +27,6 @@
         <Style Selector="MenuItem:pointerover /template/ Border">
             <Setter Property="Background"
                     Value="LightBlue" />
-        </Style>
+        </Style>-->
     </local:MpAvContextMenuView.Styles>
 </local:MpAvContextMenuView>

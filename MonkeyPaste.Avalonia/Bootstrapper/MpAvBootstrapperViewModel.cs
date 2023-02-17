@@ -75,15 +75,23 @@ namespace MonkeyPaste.Avalonia {
                    // new MpBootstrappedItemViewModel(this,typeof(MpAvFilterMenuViewModel))
                });
 
-            _platformItems.AddRange(
-                new List<MpBootstrappedItemViewModel>() {
-                    new MpBootstrappedItemViewModel(this,typeof(MpAvPlainHtmlConverter)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpAvExternalDropWindow)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpAvAppendNotificationWindow)),
-                    //new MpBootstrappedItemViewModel(this,typeof(MpAvSystemTray)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpAvMainWindow)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpAvMainWindowViewModel))
-                });
+            if (MpPlatform.Services.OsInfo.IsDesktop) {
+                _platformItems.AddRange(
+                   new List<MpBootstrappedItemViewModel>() {
+                        new MpBootstrappedItemViewModel(this,typeof(MpAvPlainHtmlConverter)),
+                        new MpBootstrappedItemViewModel(this,typeof(MpAvExternalDropWindow)),
+                        new MpBootstrappedItemViewModel(this,typeof(MpAvAppendNotificationWindow)),
+                        //new MpBootstrappedItemViewModel(this,typeof(MpAvSystemTray)),
+                        new MpBootstrappedItemViewModel(this,typeof(MpAvMainView)),
+                        new MpBootstrappedItemViewModel(this,typeof(MpAvMainWindowViewModel))
+                   });
+            } else {
+                _platformItems.AddRange(
+                   new List<MpBootstrappedItemViewModel>() {
+                        new MpBootstrappedItemViewModel(this,typeof(MpAvMainWindowViewModel))
+                   });
+            }
+
 
         }
         protected override async Task LoadItemAsync(MpBootstrappedItemViewModel item, int index) {

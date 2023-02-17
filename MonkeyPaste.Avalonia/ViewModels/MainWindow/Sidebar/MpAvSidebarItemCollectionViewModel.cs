@@ -106,14 +106,14 @@ namespace MonkeyPaste.Avalonia {
         private void MpAvSidebarItemCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(SelectedItem):
-                    if (MpAvMainWindow.Instance == null) {
+                    if (MpAvMainView.Instance == null) {
                         return;
                     }
 
                     if (SelectedItem != null) {
                         LastSelectedItem = SelectedItem;
                     }
-                    MpAvMainWindow.Instance.UpdateContentLayout();
+                    MpAvMainView.Instance.UpdateContentLayout();
                     OnPropertyChanged(nameof(SelectedItemIdx));
                     break;
             }

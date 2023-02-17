@@ -92,7 +92,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
-        public static string DefaultContentUrl => MpAvClipTrayViewModel.EditorPath;
+        public static string DefaultContentUrl =>
+            MpAvClipTrayViewModel.EditorPath;
 
         private static List<MpAvCefNetWebView> _AllWebViews = new List<MpAvCefNetWebView>();
 
@@ -392,11 +393,12 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private void MpAvCefNetWebView_CreateWindow(object sender, CreateWindowEventArgs e) {
-            IPlatformHandle platformHandle = MpAvMainWindow.Instance.PlatformImpl.Handle;
-            if (platformHandle is IMacOSTopLevelPlatformHandle macOSHandle)
+            IPlatformHandle platformHandle = App.MainWindow.PlatformImpl.Handle;
+            if (platformHandle is IMacOSTopLevelPlatformHandle macOSHandle) {
                 e.WindowInfo.SetAsWindowless(macOSHandle.GetNSWindowRetained());
-            else
+            } else {
                 e.WindowInfo.SetAsWindowless(platformHandle.Handle);
+            }
 
             e.Client = this.Client;
         }
@@ -798,7 +800,7 @@ namespace MonkeyPaste.Avalonia {
 
         public virtual string ContentUrl {
             get {
-                if (this.GetVisualRoot() == MpAvMainWindow.Instance) {
+                if (this.GetVisualRoot() == App.MainWindow) {
                     return MpAvClipTrayViewModel.EditorPath;
                 }
                 return $"{MpAvClipTrayViewModel.EditorPath}?{APPEND_NOTIFIER_URL_PARAMS}";

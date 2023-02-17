@@ -364,7 +364,7 @@ namespace MonkeyPaste.Avalonia {
             //    }
             //    // wait for content control to bind to primary action...
             //    await Task.Delay(300);
-            //    var apv = MpAvMainWindow.Instance.GetVisualDescendant<MpAvActionPropertyView>();
+            //    var apv = MpAvMainView.Instance.GetVisualDescendant<MpAvActionPropertyView>();
             //    if (apv != null) {
             //        var rapcc = apv.FindControl<ContentControl>("RootActionPropertyContentControl");
             //        if (rapcc != null) {

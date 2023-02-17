@@ -437,6 +437,12 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task InitializeAsync() {
+            if (App.MainWindow != null) {
+                App.MainWindow.DataContext = this;
+            } else {
+                MpAvMainView.Instance.DataContext = this;
+            }
+
             MpMessenger.SendGlobal(MpMessageType.MainWindowSizeChanged);
 
             IsMainWindowLoading = false;
@@ -492,19 +498,19 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(MainWindowLeft):
                     double rl = MainWindowLeft - MainWindowOpenedScreenRect.Left;
-                    Canvas.SetLeft(MpAvMainWindow.Instance.RootGrid, rl);
+                    Canvas.SetLeft(MpAvMainView.Instance.RootGrid, rl);
                     break;
                 case nameof(MainWindowTop):
                     double rt = MainWindowTop - MainWindowOpenedScreenRect.Top;
-                    Canvas.SetTop(MpAvMainWindow.Instance.RootGrid, rt);
+                    Canvas.SetTop(MpAvMainView.Instance.RootGrid, rt);
                     break;
                 case nameof(MainWindowRight):
                     double rr = MainWindowRight - MainWindowOpenedScreenRect.Right;
-                    Canvas.SetRight(MpAvMainWindow.Instance.RootGrid, rr);
+                    Canvas.SetRight(MpAvMainView.Instance.RootGrid, rr);
                     break;
                 case nameof(MainWindowBottom):
                     double rb = MainWindowBottom - MainWindowOpenedScreenRect.Bottom;
-                    Canvas.SetBottom(MpAvMainWindow.Instance.RootGrid, rb);
+                    Canvas.SetBottom(MpAvMainView.Instance.RootGrid, rb);
                     break;
 
                 case nameof(MainWindowOpenedScreenRect):
@@ -512,11 +518,13 @@ namespace MonkeyPaste.Avalonia {
                     // mw opacity mask is always open screen rect
                     // mwcg is what is animated so it hides outside current screen workarea
 
+                    if (App.MainWindow != null) {
+                        App.MainWindow.Position =
+                            MainWindowOpenedScreenRect.Location.ToAvPixelPoint(MainWindowScreen.PixelDensity);
+                    }
 
-                    MpAvMainWindow.Instance.Position =
-                        MainWindowOpenedScreenRect.Location.ToAvPixelPoint(MainWindowScreen.PixelDensity);
-                    //MpAvMainWindow.Instance.Width = MainWindowOpenedScreenRect.Width;
-                    //MpAvMainWindow.Instance.Height = MainWindowOpenedScreenRect.Height;
+                    //MpAvMainView.Instance.Width = MainWindowOpenedScreenRect.Width;
+                    //MpAvMainView.Instance.Height = MainWindowOpenedScreenRect.Height;
 
                     //OnPropertyChanged(nameof(MainWindowOpacityMask));
 
@@ -540,7 +548,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
                 case nameof(IsMainWindowLocked):
-                    //MpAvMainWindow.Instance.Topmost = IsMainWindowLocked;
+                    //MpAvMainView.Instance.Topmost = IsMainWindowLocked;
                     //UpdateTopmost();
                     MpMessenger.SendGlobal(IsMainWindowLocked ? MpMessageType.MainWindowLocked : MpMessageType.MainWindowUnlocked);
                     break;
@@ -625,13 +633,19 @@ namespace MonkeyPaste.Avalonia {
             MainWindowBottom = rect.Bottom;
         }
         private void StartMainWindowShow() {
-            //MpAvMainWindow.Instance.Renderer.Start();
+            //MpAvMainView.Instance.Renderer.Start();
             SetupMainWindowSize();
             IsMainWindowOpening = true;
-            MpAvMainWindow.Instance.Show();
+            if (App.MainWindow != null) {
+
+                App.MainWindow.Show();
+            }
             SetMainWindowRect(MainWindowOpenedScreenRect);
-            //MpAvMainWindow.Instance.InvalidateAll();
-            MpAvMainWindow.Instance.Renderer.Paint(MainWindowOpenedScreenRect.ToAvRect());
+            //MpAvMainView.Instance.InvalidateAll();
+            if (App.MainWindow != null) {
+
+                App.MainWindow.Renderer.Paint(MainWindowOpenedScreenRect.ToAvRect());
+            }
             // BUG after initial show mw doesn't repaint unless resized
             //WindowSizeUpCommand.Execute(null);
             //WindowSizeDownCommand.Execute(null);
@@ -646,8 +660,10 @@ namespace MonkeyPaste.Avalonia {
             IsMainWindowLoading = false;
             IsMainWindowOpen = true;
             IsMainWindowOpening = false;
+            if (App.MainWindow != null) {
 
-            MpAvMainWindow.Instance.Renderer.Paint(MainWindowOpenedScreenRect.ToAvRect());
+                App.MainWindow.Renderer.Paint(MainWindowOpenedScreenRect.ToAvRect());
+            }
 
             MpConsole.WriteLine("SHOW WINDOW DONE");
         }
@@ -664,9 +680,12 @@ namespace MonkeyPaste.Avalonia {
             IsMainWindowClosing = false;
 
             //IsMainWindowVisible = false;
-            MpAvMainWindow.Instance.Hide();
-            //MpAvMainWindow.Instance.WindowState = WindowState.Minimized;
-            //MpAvMainWindow.Instance.Renderer.Stop();
+            if (App.MainWindow != null) {
+
+                App.MainWindow.Hide();
+            }
+            //MpAvMainView.Instance.WindowState = WindowState.Minimized;
+            //MpAvMainView.Instance.Renderer.Stop();
             //SetMainWindowRect(MainWindowClosedScreenRect);
 
             MpConsole.WriteLine("CLOSE WINDOW DONE");
@@ -789,14 +808,14 @@ namespace MonkeyPaste.Avalonia {
 
         private void Instance_OnGlobalMouseClicked(object sender, bool isLeftButton) {
             Dispatcher.UIThread.Post(() => {
-                if (MpAvMainWindow.Instance.IsActive ||
+                if ((App.MainWindow != null && App.MainWindow.IsActive) ||
                 !isLeftButton ||
                 !IsMainWindowOpen ||
                 IsMainWindowClosing) {
                     return;
                 }
                 var gmavp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation.ToAvPoint();
-                if (!MpAvMainWindow.Instance.Bounds.Contains(gmavp)) {
+                if (!MpAvMainView.Instance.Bounds.Contains(gmavp)) {
                     // attempt to hide mw
                     HideMainWindowCommand.Execute(null);
                 }
@@ -806,18 +825,18 @@ namespace MonkeyPaste.Avalonia {
 
         private void Instance_OnGlobalMouseReleased(object sender, bool isLeftButton) {
             Dispatcher.UIThread.Post(() => {
-                if (MpAvMainWindow.Instance == null) {
+                if (MpAvMainView.Instance == null) {
                     return;
                 }
                 if (!IsMainWindowOpen) {
                     if (MpAvClipTrayViewModel.Instance.IsAutoCopyMode) {
-                        if (isLeftButton && !MpAvMainWindow.Instance.IsActive) {
+                        if (isLeftButton && !App.MainWindow.IsActive) {
                             //SimulateKeyStrokeSequence("control+c");
                             MpConsole.WriteLine("Auto copy is ON");
                         }
                     }
                     if (MpAvClipTrayViewModel.Instance.IsRightClickPasteMode) {
-                        if (!isLeftButton && !MpAvMainWindow.Instance.IsActive) {
+                        if (!isLeftButton && !App.MainWindow.IsActive) {
                             // TODO this is hacky because mouse gestures are not formally handled
                             // also app collection should be queried for custom paste cmd instead of this
                             MpAvShortcutCollectionViewModel.Instance.SimulateKeyStrokeSequenceAsync("control+v").FireAndForgetSafeAsync();
@@ -942,7 +961,7 @@ namespace MonkeyPaste.Avalonia {
                     //    MpPlatformWrapper.Services.ProcessWatcher.SetActiveProcess(MpPlatformWrapper.Services.ProcessWatcher.ThisAppHandle);
                     //}
                     //
-                    //MpAvMainWindow.Instance.Topmost = false;
+                    //MpAvMainView.Instance.Topmost = false;
                     //UpdateTopmost();
                     await AnimateMainWindowAsync(MainWindowClosedScreenRect);
                 }
@@ -1037,7 +1056,7 @@ namespace MonkeyPaste.Avalonia {
                 SetMainWindowRect(MainWindowOpenedScreenRect);
 
 
-                MpAvMainWindow.Instance.UpdateContentLayout();
+                MpAvMainView.Instance.UpdateContentLayout();
 
                 await Task.Delay(300);
                 MpMessenger.SendGlobal(MpMessageType.MainWindowOrientationChangeEnd);
@@ -1062,7 +1081,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     IsResizing = true;
 
-                    MpAvResizeExtension.ResizeByDelta(MpAvMainWindow.Instance, deltaSize.X, deltaSize.Y);
+                    MpAvResizeExtension.ResizeByDelta(MpAvMainView.Instance, deltaSize.X, deltaSize.Y);
 
                     IsResizing = false;
                 });
@@ -1107,13 +1126,13 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand WindowSizeToDefaultCommand => new MpCommand(
             () => {
-                //var rc = MpAvMainWindow.Instance.GetResizerControl();
+                //var rc = MpAvMainView.Instance.GetResizerControl();
                 //if (rc == null) {
                 //    return;
                 //}
                 IsResizing = true;
 
-                MpAvResizeExtension.ResetToDefault(MpAvMainWindow.Instance);
+                MpAvResizeExtension.ResetToDefault(MpAvMainView.Instance);
 
                 IsResizing = false;
             });

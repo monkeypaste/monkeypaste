@@ -23,6 +23,10 @@
             <Setter Property="Cursor"
                     Value="Arrow" />
         </Style>
+        <Style Selector="ListBox.clipTileListBox > ListBoxItem">
+            <!--<Setter Property="Focusable"
+                    Value="False" />-->
+        </Style>
     </local:MpAvUserControl.Styles>
     <!--  NOTE! Layout is in mw code behind orientation change  -->
     <Grid x:Name="ClipTrayContainerGrid"
@@ -33,7 +37,7 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-      <!-- PIN TRAY -->
+        <!--  PIN TRAY  -->
         <local:MpAvPinTrayView x:Name="PinTrayView"
                                Grid.Column="0"
                                DataContext="{Binding}"
@@ -44,18 +48,18 @@
                                MaxHeight="{Binding MaxPinTrayScreenHeight}"
                                local:MpAvSizeObserverExtension.IsEnabled="True"
                                local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedPinTrayScreenWidth, Mode=OneWayToSource}"
-                               local:MpAvSizeObserverExtension.ObservedHeight="{Binding ObservedPinTrayScreenHeight, Mode=OneWayToSource}"/>
-      <!-- PIN/QUERY SPLITTER -->  
-      <GridSplitter x:Name="ClipTraySplitter"
+                               local:MpAvSizeObserverExtension.ObservedHeight="{Binding ObservedPinTrayScreenHeight, Mode=OneWayToSource}" />
+        <!--  PIN/QUERY SPLITTER  -->
+        <GridSplitter x:Name="ClipTraySplitter"
                       Grid.Column="0"
                       IsTabStop="False"
                       Classes.clipTraySplitter="True"
                       Classes.vertical="{Binding !IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                       Classes.horizontal="{Binding IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}" />
 
-      <!-- QUERY TRAY -->
-      <local:MpAvQueryTrayView x:Name="ClipTrayView"
-                                Grid.Column="1"
-                                DataContext="{Binding}" />
+        <!--  QUERY TRAY  -->
+        <local:MpAvQueryTrayView x:Name="ClipTrayView"
+                                 Grid.Column="1"
+                                 DataContext="{Binding}" />
     </Grid>
 </local:MpAvUserControl>

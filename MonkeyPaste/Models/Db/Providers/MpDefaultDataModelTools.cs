@@ -59,8 +59,7 @@ namespace MonkeyPaste {
 
             await MpDb.CreateTableAsync<MpApp>();
 
-            using var process = Process.GetCurrentProcess();
-            string thisAppPath = process.MainModule.FileName;
+            string thisAppPath = MpCommonHelpers.GetExecutingPath();
             var this_app = await MpDataModelProvider.GetAppByMembersAsync(thisAppPath, null, this_device.Id);
             if (this_app == null) {
                 // reset error
@@ -69,14 +68,15 @@ namespace MonkeyPaste {
             ThisAppId = this_app.Id;
 
 
-            var this_os_file_manager = await MpDataModelProvider.GetAppByMembersAsync(osInfo.OsFileManagerPath, null, this_device.Id);
-            if (this_os_file_manager == null) {
-                // reset error
-                Debugger.Break();
+            if (MpPlatform.Services.OsInfo.IsDesktop) {
+                var this_os_file_manager = await MpDataModelProvider.GetAppByMembersAsync(osInfo.OsFileManagerPath, null, this_device.Id);
+                if (this_os_file_manager == null) {
+                    // reset error
+                    Debugger.Break();
+                }
+                ThisOsFileManagerAppId = this_os_file_manager.Id;
             }
-            ThisOsFileManagerAppId = this_os_file_manager.Id;
-            //var osAppSource = await MpDataModelProvider.GetSourceByMembersAsync(osApp.Id,0);
-            //MpPrefViewModel.Instance.ThisOsFileManagerAppId = osAppSource.Id;
+
 
             await MpDb.CloseConnectionAsync();
             return ThisUserDeviceGuid;
@@ -108,8 +108,7 @@ namespace MonkeyPaste {
 
             // This App
 
-            var process = Process.GetCurrentProcess();
-            string thisAppPath = process.MainModule.FileName;
+            string thisAppPath = MpCommonHelpers.GetExecutingPath();
             string thisAppName = MpPrefViewModel.Instance.ApplicationName;
             var thisApp = await MpApp.CreateAsync(
                 appPath: thisAppPath,
@@ -118,11 +117,13 @@ namespace MonkeyPaste {
 
             ThisAppId = thisApp.Id;
 
-            // OS App
-            var osApp = await MpApp.CreateAsync(
-                appPath: MpPlatform.Services.OsInfo.OsFileManagerPath,
-                appName: MpPlatform.Services.OsInfo.OsFileManagerName);
-            ThisOsFileManagerAppId = osApp.Id;
+            if (MpPlatform.Services.OsInfo.IsDesktop) {
+                // OS App
+                var osApp = await MpApp.CreateAsync(
+                    appPath: MpPlatform.Services.OsInfo.OsFileManagerPath,
+                    appName: MpPlatform.Services.OsInfo.OsFileManagerName);
+                ThisOsFileManagerAppId = osApp.Id;
+            }
 
         }
 
@@ -144,8 +145,7 @@ namespace MonkeyPaste {
 
             // THIS APP
 
-            using var process = Process.GetCurrentProcess();
-            string thisAppPath = process.MainModule.FileName;
+            string thisAppPath = MpCommonHelpers.GetExecutingPath();
             var this_app = await MpDataModelProvider.GetAppByMembersAsync(thisAppPath, null, ThisUserDeviceId);
             if (this_app == null) {
                 // reset error
@@ -153,13 +153,15 @@ namespace MonkeyPaste {
             }
             ThisAppId = this_app.Id;
 
-            // OS APP
+            if (MpPlatform.Services.OsInfo.IsDesktop) {
+                // OS APP
 
-            var osApp = await MpDataModelProvider.GetAppByMembersAsync(
-                osFileManagerPath,
-                null,
-                ThisUserDeviceId);
-            ThisOsFileManagerAppId = osApp.Id;
+                var osApp = await MpDataModelProvider.GetAppByMembersAsync(
+                    osFileManagerPath,
+                    null,
+                    ThisUserDeviceId);
+                ThisOsFileManagerAppId = osApp.Id;
+            }
 
 
             // ICON

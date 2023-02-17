@@ -832,6 +832,12 @@ namespace MonkeyPaste.Avalonia {
                         MpAvClipTileSortFieldViewModel.Instance.SelectedSortType = SortType;
                     }
                     break;
+                case nameof(TagClipCount):
+                    if (ParentTreeItem == null) {
+                        break;
+                    }
+                    ParentTreeItem.UpdateClipCountAsync().FireAndForgetSafeAsync(this);
+                    break;
             }
         }
 

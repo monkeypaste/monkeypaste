@@ -3,7 +3,8 @@
         string OsMachineName { get; }
         string OsFileManagerPath { get; }
         string OsFileManagerName { get; }
-        bool IsAvalonia { get; }
+        bool IsDesktop { get; }
+        string OsShortName { get; }
 
         MpUserDeviceType OsType { get; }
     }

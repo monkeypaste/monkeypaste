@@ -140,7 +140,7 @@ namespace MonkeyPaste.Avalonia {
 
             MpMessenger.SendGlobal(MpMessageType.ShortcutAssignmentStarted);
 
-            await ascw.ShowDialog(MpAvMainWindow.Instance);
+            await ascw.ShowDialog(App.MainWindow);
 
             MpMessenger.SendGlobal(MpMessageType.ShortcutAssignmentEnded);
 

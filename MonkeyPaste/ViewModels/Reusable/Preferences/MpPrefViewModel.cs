@@ -363,7 +363,6 @@ namespace MonkeyPaste {
 
         public DateTime SslCertExpirationDateTime { get; set; } = DateTime.UtcNow.AddDays(-1);
 
-        public string FallbackProcessPath { get; set; } // set in constructor based on os
         #endregion
 
         #region Db
@@ -554,14 +553,6 @@ namespace MonkeyPaste {
         #region Constructors
 
         public MpPrefViewModel() : base() {
-            if (_osInfo.OsType == MpUserDeviceType.Windows) {
-                FallbackProcessPath = @"C:\WINDOWS\Explorer.EXE";
-            } else if (_osInfo.OsType == MpUserDeviceType.Linux) {
-                FallbackProcessPath = "/usr/bin/systemd";
-            } else {
-                // pick somethin
-                Debugger.Break();
-            }
             PropertyChanged += MpJsonPreferenceIO_PropertyChanged;
         }
 

@@ -1079,7 +1079,7 @@ namespace MonkeyPaste.Avalonia {
                         Dispatcher.UIThread.Post(async () => {
                             // wait for content control to bind to primary action...
                             await Task.Delay(300);
-                            var apv = MpAvMainWindow.Instance.GetVisualDescendant<MpAvActionPropertyHeaderView>();
+                            var apv = MpAvMainView.Instance.GetVisualDescendant<MpAvActionPropertyHeaderView>();
                             if (apv != null) {
                                 var icc = apv.FindControl<ContentControl>("ActionPropertyIconContentControl");
 

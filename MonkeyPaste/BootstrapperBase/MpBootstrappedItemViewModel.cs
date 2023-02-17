@@ -57,13 +57,13 @@ namespace MonkeyPaste {
             ItemArg = arg;
         }
 
-        public async Task LoadItemAsync() {
+        public async Task LoadItemAsync(bool static_fallback = false) {
             object itemObj = null;
             object[] args = ItemArg == null ? null : new[] { ItemArg };
             MethodInfo initMethodInfo;
             PropertyInfo instancePropertyInfo = ItemType.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static);
 
-            if (instancePropertyInfo == null) {
+            if (instancePropertyInfo == null || static_fallback) {
                 // class
                 initMethodInfo = ItemType.GetMethod("Init", BindingFlags.Static | BindingFlags.Public);
                 if (initMethodInfo == null) {
@@ -87,7 +87,9 @@ namespace MonkeyPaste {
                     if (initMethodInfo == null) {
                         initMethodInfo = ItemType.GetMethod("InitializeAsync");
                         if (initMethodInfo == null) {
-                            MpConsole.WriteTraceLine("Error,couldn't load " + ItemType);
+                            //MpConsole.WriteTraceLine("Error,couldn't load " + ItemType);
+                            //return;
+                            await LoadItemAsync(true);
                             return;
                         }
                     }

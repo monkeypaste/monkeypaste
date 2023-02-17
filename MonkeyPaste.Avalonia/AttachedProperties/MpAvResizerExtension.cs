@@ -577,7 +577,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 SetIsResizing(control, true);
 
-                _lastMousePosition = _mouseDownPosition = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation; //e.GetPosition(MpAvMainWindow.Instance).ToPortablePoint();//MpAvMainWindow.Instance.PointToScreen(e.GetCurrentPoint(null).Position).ToPoint(1).ToPortablePoint();
+                _lastMousePosition = _mouseDownPosition = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation; //e.GetPosition(MpAvMainView.Instance).ToPortablePoint();//MpAvMainView.Instance.PointToScreen(e.GetCurrentPoint(null).Position).ToPoint(1).ToPortablePoint();
             }
         }
 
@@ -610,7 +610,7 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
 
-                var mw_mp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;// e.GetPosition(MpAvMainWindow.Instance).ToPortablePoint();//MpAvMainWindow.Instance.PointToScreen(e.GetCurrentPoint(null).Position).ToPoint(1).ToPortablePoint();
+                var mw_mp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;// e.GetPosition(MpAvMainView.Instance).ToPortablePoint();//MpAvMainView.Instance.PointToScreen(e.GetCurrentPoint(null).Position).ToPoint(1).ToPortablePoint();
                 //MpConsole.WriteLine("mp: " + mw_mp + " s_mp"+_mouseDownPosition);
                 if (GetIsResizing(control)) {
                     var delta = _lastMousePosition - mw_mp; //new Point(mw_mp.X - _lastMousePosition.X, mw_mp.Y - _lastMousePosition.Y);

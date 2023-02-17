@@ -1,0 +1,147 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:TypeArguments="local:MpAvMainWindowViewModel"
+                       x:DataType="local:MpAvMainWindowViewModel"
+                       x:CompileBindings="True"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Class="MonkeyPaste.Avalonia.MpAvMainView">
+    <Canvas x:Name="MainWindowCanvas"
+            Width="{Binding MainWindowWidth}"
+            Height="{Binding MainWindowHeight}">
+        <Grid x:Name="MainWindowContainerGrid"
+              Background="Transparent"
+              Width="{Binding MainWindowWidth}"
+              Height="{Binding MainWindowHeight}">
+
+            <!--  Title Menu  -->
+            <local:MpAvMainWindowTitleMenuView x:Name="MainWindowTitleView"
+                                               Grid.Row="0"
+                                               HorizontalAlignment="Stretch"
+                                               VerticalAlignment="Stretch" />
+
+            <!--  Filter Menu  -->
+            <local:MpAvFilterMenuView x:Name="FilterMenuView"
+                                      Grid.Row="1"
+                                      HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Center" />
+
+
+
+
+            <!--  CONTENT ROW  -->
+            <Grid x:Name="MainWindowTrayGrid"
+                  Grid.Row="3"
+                  x:CompileBindings="False"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch">
+                <!--  SIDEBAR BUTTONS  -->
+                <local:MpAvSidebarButtonGroupView x:Name="SidebarButtonGroup"
+                                                  Grid.Column="0"
+                                                  HorizontalAlignment="Stretch"
+                                                  VerticalAlignment="Stretch"
+                                                  HorizontalContentAlignment="Stretch"
+                                                  VerticalContentAlignment="Stretch" />
+
+                <!--  SELECTED SIDEBAR ITEM  -->
+                <Border x:Name="SelectedSidebarContainerBorder"
+                        x:CompileBindings="False"
+                        Grid.Column="1"
+                        DataContext="{Binding LastSelectedItem, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch">
+                    <ContentControl x:Name="SelectedSidebarContentControl"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    HorizontalContentAlignment="Stretch"
+                                    VerticalContentAlignment="Stretch"
+                                    local:MpAvSizeObserverExtension.IsEnabled="True"
+                                    local:MpAvSizeObserverExtension.ObservedWidth="{Binding SidebarWidth, Mode=OneWayToSource}"
+                                    local:MpAvSizeObserverExtension.ObservedHeight="{Binding SidebarHeight, Mode=OneWayToSource}"
+                                    Content="{Binding}">
+                        <ContentControl.DataTemplates>
+                            <local:MpAvSidebarItemTemplateSelector>
+                                <!--  TAG TREE  -->
+                                <DataTemplate x:Key="TagTreeViewTemplate"
+                                              x:DataType="local:MpAvTagTrayViewModel">
+                                    <local:MpAvTagTreeView HorizontalAlignment="Stretch"
+                                                           HorizontalContentAlignment="Stretch" />
+
+                                </DataTemplate>
+
+                                <!--  CLIPBOARD HANDLER  -->
+                                <DataTemplate x:Key="ClipboardHandlerSelectorViewTemplate"
+                                              x:DataType="local:MpAvClipboardHandlerCollectionViewModel">
+                                    <local:MpAvClipboardHandlerSelectorView HorizontalAlignment="Stretch"
+                                                                            HorizontalContentAlignment="Stretch" />
+
+
+                                </DataTemplate>
+                                <!--  ANALYZERS  -->
+                                <DataTemplate x:Key="AnalyticItemSelectorViewTemplate"
+                                              x:DataType="local:MpAvAnalyticItemCollectionViewModel">
+                                    <local:MpAvAnalyticItemSelectorView HorizontalAlignment="Stretch"
+                                                                        HorizontalContentAlignment="Stretch" />
+
+                                </DataTemplate>
+                                <!--  ACTIONS  -->
+                                <DataTemplate x:Key="TriggerActionChooserViewTemplate"
+                                              x:DataType="local:MpAvTriggerCollectionViewModel">
+
+                                    <local:MpAvTriggerActionChooserView HorizontalAlignment="Stretch"
+                                                                        HorizontalContentAlignment="Stretch" />
+                                </DataTemplate>
+                            </local:MpAvSidebarItemTemplateSelector>
+                        </ContentControl.DataTemplates>
+                    </ContentControl>
+                </Border>
+
+
+                <!--  SIDEBAR SPLITTER  -->
+
+                <GridSplitter x:Name="SidebarGridSplitter"
+                              Grid.Column="1"
+                              Width="5"
+                              ResizeDirection="Columns"
+                              HorizontalAlignment="Right"
+                              VerticalAlignment="Stretch"
+                              IsVisible="False"
+                              Classes.sidebarSplitter="True"
+                              Classes.vertical="{Binding !IsVerticalOrientation}"
+                              Classes.horizontal="{Binding IsVerticalOrientation}" />
+
+                <!--  CONTENT TRAY CONTAINER  -->
+
+                <Border x:Name="ClipTrayContainerBorder"
+                        x:CompileBindings="False"
+                        Grid.Column="2"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch">
+                    <local:MpAvClipTrayContainerView x:Name="ClipTrayContainerView"
+                                                     Grid.Column="2"
+                                                     local:MpAvSizeObserverExtension.IsEnabled="True"
+                                                     local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedContainerScreenWidth, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=OneWayToSource}"
+                                                     local:MpAvSizeObserverExtension.ObservedHeight="{Binding ObservedContainerScreenHeight, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=OneWayToSource}"
+                                                     HorizontalAlignment="Stretch"
+                                                     VerticalAlignment="Stretch" />
+                </Border>
+            </Grid>
+
+            <!--  Resize Handle  -->
+            <local:MpAvMainWindowResizerView x:Name="MainWindowResizerView"
+                                             ZIndex="1000"
+                                             Background="Transparent"
+                                             RenderTransformOrigin="0,0"
+                                             DataContext="{Binding}">
+                <local:MpAvMainWindowResizerView.RenderTransform>
+                    <TranslateTransform />
+                </local:MpAvMainWindowResizerView.RenderTransform>
+            </local:MpAvMainWindowResizerView>
+        </Grid>
+    </Canvas>
+</local:MpAvUserControl>

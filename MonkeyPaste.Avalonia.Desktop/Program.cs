@@ -13,7 +13,7 @@ namespace MonkeyPaste.Avalonia {
         public static void Main(string[] args) {
             try {
 
-                App.Args = args;
+                App.Args = args ?? new string[] { };
                 BuildAvaloniaApp()
                 //.StartWithClassicDesktopLifetime(args);
                 .StartWithCefNetApplicationLifetime(args);

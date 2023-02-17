@@ -293,7 +293,7 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     double delta_close_height = -BoundCriteriaListBoxScreenHeight;
                     BoundCriteriaListBoxScreenHeight = 0;
-                    //MpAvResizeExtension.ResizeByDelta(MpAvMainWindow.Instance, 0, delta_close_height, false);                    
+                    //MpAvResizeExtension.ResizeByDelta(MpAvMainView.Instance, 0, delta_close_height, false);                    
 
                 }
             });

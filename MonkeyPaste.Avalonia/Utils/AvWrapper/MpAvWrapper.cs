@@ -59,46 +59,27 @@ namespace MonkeyPaste.Avalonia {
 
         public MpICopyItemBuilder CopyItemBuilder { get; set; }
         public async Task InitializeAsync() {
-            string prefFileName = null;
-            if (OperatingSystem.IsWindows()) {
-                prefFileName = "pref_win.json";
-            }
-            if (OperatingSystem.IsLinux()) {
-                prefFileName = "pref_x11.json";
-            }
-            if (OperatingSystem.IsMacOS()) {
-                prefFileName = "pref_mac.json";
-            }
-            if (prefFileName == null) {
-                throw new Exception("Unknown os");
-            }
+            OsInfo = new MpAvOsInfo();
+            DbInfo = new MpAvDbInfo();
+
             string prefPath = Path.Combine(
                 Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
-                prefFileName);
+                $"pref_{OsInfo.OsShortName}.json");
 
-            DbInfo = new MpAvDbInfo();
-            OsInfo = new MpAvOsInfo();
+            if (App.Args.Any(x => x.ToLower() == App.BACKUP_DATA_ARG)) {
+                // TODO move reset stuff to that backup folder
+            }
+            if (App.Args.Any(x => x.ToLower() == App.RESET_DATA_ARG)) {
+                Debugger.Break();
 
-            if (App.Args != null) {
-                if (App.Args.Any(x => x.ToLower() == App.BACKUP_DATA_ARG)) {
-                    // TODO move reset stuff to that backup folder
-                }
-                if (App.Args.Any(x => x.ToLower() == App.RESET_DATA_ARG)) {
+                // delete db, plugin cache, pref and pref.backup
+                MpFileIo.DeleteFile(DbInfo.DbPath);
 
-                    // TODO! Change tagids:
-                    // RootGroudTagId=3
-                    // HelpTagId=4
-                    Debugger.Break();
+                MpFileIo.DeleteFileOrDirectory(MpPluginLoader.PluginManifestBackupFolderPath);
+                MpFileIo.DeleteFile(prefPath);
+                MpFileIo.DeleteFile($"{prefPath}.{MpPrefViewModel.PREF_BACKUP_PATH_EXT}");
 
-                    // delete db, plugin cache, pref and pref.backup
-                    MpFileIo.DeleteFile(DbInfo.DbPath);
-
-                    MpFileIo.DeleteFileOrDirectory(MpPluginLoader.PluginManifestBackupFolderPath);
-                    MpFileIo.DeleteFile(prefPath);
-                    MpFileIo.DeleteFile($"{prefPath}.{MpPrefViewModel.PREF_BACKUP_PATH_EXT}");
-
-                    MpConsole.WriteLine("All data successfully deleted.");
-                }
+                MpConsole.WriteLine("All data successfully deleted.");
             }
 
             await MpPrefViewModel.InitAsync(prefPath, DbInfo, OsInfo);

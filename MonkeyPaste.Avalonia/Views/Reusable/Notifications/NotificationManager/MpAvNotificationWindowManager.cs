@@ -42,45 +42,17 @@ namespace MonkeyPaste.Avalonia {
                 // somethigns wrong
                 Debugger.Break();
             }
+            if (MpPlatform.Services.OsInfo.IsDesktop) {
+                ShowDesktopNotification(nvmb);
+            } else {
+                if (nvmb is MpLoaderNotificationViewModel lnvm) {
+                    Dispatcher.UIThread.Post(async () => {
 
-            Dispatcher.UIThread.Post(() => {
-                Window nw = null;
-                var layoutType = MpNotificationViewModelBase.GetLayoutTypeFromNotificationType(nvmb.NotificationType);
-                switch (layoutType) {
-                    case MpNotificationLayoutType.Loader:
-                        nw = new MpAvLoaderNotificationWindow();
-                        nw.DataContext = nvmb;
-                        break;
-                    case MpNotificationLayoutType.ErrorWithOption:
-                    case MpNotificationLayoutType.UserAction:
-                    case MpNotificationLayoutType.ErrorAndShutdown:
-                        nw = new MpAvUserActionNotificationWindow();
-                        nw.DataContext = nvmb;
-                        break;
-                    case MpNotificationLayoutType.Append:
-                        nw = MpAvAppendNotificationWindow.Instance;
-                        break;
-                    default:
-                        nw = new MpAvMessageNotificationWindow();
-                        nw.DataContext = nvmb;
-                        break;
+                        await lnvm.ProgressLoader.BeginLoaderAsync();
+                        await lnvm.ProgressLoader.FinishLoaderAsync();
+                    });
                 }
-                if (nw == null) {
-                    // somethings wrong
-                    Debugger.Break();
-                }
-
-                nw.Closed += Nw_Closed;
-                nw.PointerReleased += Nw_PointerReleased;
-
-                nw.GetObservable(Window.IsVisibleProperty).Subscribe(value => OnNotificationWindowIsVisibleChangedHandler(nw));
-
-                if (App.MainWindow == null) {
-                    // occurs on startup
-                    App.MainWindow = nw;
-                }
-                BeginOpen(nw);
-            });
+            }
         }
 
 
@@ -126,7 +98,46 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
+        private void ShowDesktopNotification(MpNotificationViewModelBase nvmb) {
+            Dispatcher.UIThread.Post(() => {
+                Window nw = null;
+                var layoutType = MpNotificationViewModelBase.GetLayoutTypeFromNotificationType(nvmb.NotificationType);
+                switch (layoutType) {
+                    case MpNotificationLayoutType.Loader:
+                        nw = new MpAvLoaderNotificationWindow();
+                        nw.DataContext = nvmb;
+                        break;
+                    case MpNotificationLayoutType.ErrorWithOption:
+                    case MpNotificationLayoutType.UserAction:
+                    case MpNotificationLayoutType.ErrorAndShutdown:
+                        nw = new MpAvUserActionNotificationWindow();
+                        nw.DataContext = nvmb;
+                        break;
+                    case MpNotificationLayoutType.Append:
+                        nw = MpAvAppendNotificationWindow.Instance;
+                        break;
+                    default:
+                        nw = new MpAvMessageNotificationWindow();
+                        nw.DataContext = nvmb;
+                        break;
+                }
+                if (nw == null) {
+                    // somethings wrong
+                    Debugger.Break();
+                }
 
+                nw.Closed += Nw_Closed;
+                nw.PointerReleased += Nw_PointerReleased;
+
+                nw.GetObservable(Window.IsVisibleProperty).Subscribe(value => OnNotificationWindowIsVisibleChangedHandler(nw));
+
+                if (App.MainWindow == null) {
+                    // occurs on startup
+                    App.MainWindow = nw;
+                }
+                BeginOpen(nw);
+            });
+        }
         private void BeginOpen(Window nw) {
             var nvmb = nw.DataContext as MpNotificationViewModelBase;
             nvmb.IsClosing = false;
@@ -190,7 +201,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            if (MpAvMainWindow.Instance == null || !MpAvMainWindow.Instance.IsInitialized) {
+            if (MpAvMainView.Instance == null || !MpAvMainView.Instance.IsInitialized) {
                 return;
             }
             if (MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {

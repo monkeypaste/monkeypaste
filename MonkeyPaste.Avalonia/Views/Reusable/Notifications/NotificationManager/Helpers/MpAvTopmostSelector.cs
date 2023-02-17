@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using MonkeyPaste.Common.Avalonia;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -21,9 +22,9 @@ namespace MonkeyPaste.Avalonia {
                     MpAvSettingsWindow.Instance.Topmost) {
                     return MpAvSettingsWindow.Instance;
                 }
-                if (MpAvMainWindow.Instance != null &&
-                    MpAvMainWindow.Instance.Topmost) {
-                    return MpAvMainWindow.Instance;
+                if (App.MainWindow != null &&
+                    App.MainWindow.GetVisualAncestor<Window>() is Window mw) {
+                    return mw;
                 }
                 return _ntfWindows.FirstOrDefault(x => x.Topmost);
             }
@@ -109,7 +110,7 @@ namespace MonkeyPaste.Avalonia {
                 } else if (MpAvSettingsWindowViewModel.Instance.IsVisible) {
                     TrySetTopmost(MpAvSettingsWindow.Instance);
                 } else if (MpAvMainWindowViewModel.Instance.IsMainWindowLocked) {
-                    TrySetTopmost(MpAvMainWindow.Instance);
+                    TrySetTopmost(App.MainWindow);
                 }
             }
 
@@ -121,21 +122,21 @@ namespace MonkeyPaste.Avalonia {
             }
             switch (msg) {
                 case MpMessageType.MainWindowLocked:
-                    TrySetTopmost(MpAvMainWindow.Instance);
+                    TrySetTopmost(App.MainWindow);
                     break;
                 case MpMessageType.MainWindowUnlocked:
-                    UnsetTopmost(MpAvMainWindow.Instance);
+                    UnsetTopmost(App.MainWindow);
                     break;
                 case MpMessageType.MainWindowOpening:
                 case MpMessageType.MainWindowOpened:
                     //case MpMessageType.MainWindowClosing:
                     if (MpAvMainWindowViewModel.Instance.AnimateShowWindow) {
-                        TrySetTopmost(MpAvMainWindow.Instance);
+                        TrySetTopmost(App.MainWindow);
                     }
                     break;
                 case MpMessageType.MainWindowClosed:
                     if (MpAvMainWindowViewModel.Instance.AnimateHideWindow) {
-                        UnsetTopmost(MpAvMainWindow.Instance);
+                        UnsetTopmost(App.MainWindow);
                     }
                     break;
             }
@@ -145,7 +146,7 @@ namespace MonkeyPaste.Avalonia {
             if (w == null) {
                 return -1;
             }
-            if (w == MpAvMainWindow.Instance) {
+            if (w == App.MainWindow) {
                 return 1;
             }
             if (w == MpAvSettingsWindow.Instance) {

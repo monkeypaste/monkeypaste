@@ -22,19 +22,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
-        public static string[] Args { get; set; }
-
-        //public static Control MainWindowOrView {
-        //    get {
-        //        if (Lifetime is IClassicDesktopStyleApplicationLifetime cdsal) {
-        //            return cdsal.MainWindow;
-        //        }
-        //        if (Lifetime is ISingleViewApplicationLifetime sval) {
-        //            return sval.MainView;
-        //        }
-        //        return null;
-        //    }
-        //}
+        public static string[] Args { get; set; } = new string[] { };
 
         private static App _instance;
         public static Window MainWindow {
@@ -79,24 +67,18 @@ namespace MonkeyPaste.Avalonia {
             AvaloniaXamlLoader.Load(this);
         }
         public override async void OnFrameworkInitializationCompleted() {
-            if (ApplicationLifetime is IControlledApplicationLifetime lifetime) {
+            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
+                desktop.Startup += Startup;
+                desktop.Exit += Exit;
+            }
+            ReportCommandLineArgs(Args);
 
-                lifetime.Startup += Startup;
-                lifetime.Exit += Exit;
-
-                ReportCommandLineArgs(Args);
-
-                if (MpAvCefNetApplication.UseCefNet) {
-                    MpAvCefNetApplication.InitCefNet();
-                }
-
-                var bootstrapper = new MpAvBootstrapperViewModel();
-                await bootstrapper.InitAsync();
-
-            } else {
-                MpDebug.Break();
+            if (MpAvCefNetApplication.UseCefNet) {
+                MpAvCefNetApplication.InitCefNet();
             }
 
+            var bootstrapper = new MpAvBootstrapperViewModel();
+            await bootstrapper.InitAsync();
             base.OnFrameworkInitializationCompleted();
         }
         #endregion

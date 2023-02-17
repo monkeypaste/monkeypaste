@@ -1097,6 +1097,9 @@
     <Compile Update="Views\MainWindow\FilterMenu\Search\CriteriaList\Header\MpAvSearchCriteriaHeaderView.axaml.cs">
       <DependentUpon>MpAvSearchCriteriaHeaderView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\MainWindow\MpAvMainView.axaml.cs">
+      <DependentUpon>MpAvMainView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\MainWindow\Sidebar\ButtonColumn\MpAvSidebarButtonGroupView.axaml.cs">
       <DependentUpon>MpAvSidebarButtonGroupView.axaml</DependentUpon>
     </Compile>

@@ -27,11 +27,13 @@ namespace MonkeyPaste.Avalonia {
             //    Topmost = true,
             //    Title = string.IsNullOrWhiteSpace(title) ? "Pick a color, any color" : title
             //};
-            //var result = await cpw.ShowDialog(MpAvMainWindow.Instance);
+            //var result = await cpw.ShowDialog(MpAvMainView.Instance);
 
 
             var cw = new Window() {
-                Content = new MpAvColorPickerView(),
+                Content = new MpAvColorPickerView() {
+                    SelectedHexColor = selectedColor
+                },
                 Width = 300,
                 Height = 300,
                 WindowState = WindowState.Normal,

@@ -21,7 +21,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIExpandableViewModel Implementation
 
-        public bool IsExpanded { get; set; }
+        public bool IsExpanded { get; set; } = false;
 
         #endregion
 

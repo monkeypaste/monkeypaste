@@ -69,9 +69,8 @@ namespace MonkeyPaste.Avalonia {
                 //if(OperatingSystem.IsLinux()) {
 
                 //}
-                var uri = new Uri(MpAvCefNetApplication.GetEditorPath(), UriKind.Absolute);
-                string uriStr = uri.AbsoluteUri;
-                return uriStr;
+
+                return MpAvCefNetApplication.GetEditorPath().ToFileSystemUriFromPath();
             }
         }
 

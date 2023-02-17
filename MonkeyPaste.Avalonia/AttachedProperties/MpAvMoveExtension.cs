@@ -272,7 +272,7 @@ namespace MonkeyPaste.Avalonia {
                     FinishMove(control);
                 }
 
-                Control relativeTo = control.GetVisualAncestor<MpAvDesignerCanvas>(); //MpAvMainWindow.Instance;
+                Control relativeTo = control.GetVisualAncestor<MpAvDesignerCanvas>(); //MpAvMainView.Instance;
                 var mwmp = e.GetPosition(relativeTo).ToPortablePoint();
 
                 MpPoint delta = mwmp - _lastMousePosition;
@@ -299,7 +299,7 @@ namespace MonkeyPaste.Avalonia {
                 if (MpAvZoomBorder.IsTranslating) {
                     return;
                 }
-                Control relativeTo = control.GetVisualAncestor<MpAvDesignerCanvas>(); //MpAvMainWindow.Instance;
+                Control relativeTo = control.GetVisualAncestor<MpAvDesignerCanvas>(); //MpAvMainView.Instance;
 
                 _mouseDownPosition = e.GetPosition(relativeTo).ToPortablePoint();
                 _lastMousePosition = _mouseDownPosition;

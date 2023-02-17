@@ -265,7 +265,7 @@ namespace MonkeyPaste.Avalonia {
         public void StartInputListener() {
             if (IS_PSEUDO_GLOBAL_INPUT_ENABLED) {
                 Dispatcher.UIThread.Post(() => {
-                    CreatePseudoGlobalInputHooks(MpAvMainWindow.Instance);
+                    CreatePseudoGlobalInputHooks(MpAvMainView.Instance);
                 });
             }
             if (IS_GLOBAL_INPUT_ENABLED) {
@@ -275,7 +275,7 @@ namespace MonkeyPaste.Avalonia {
         public void StopInputListener() {
             if (IS_PSEUDO_GLOBAL_INPUT_ENABLED) {
                 Dispatcher.UIThread.Post(() => {
-                    DisposePseudoGlobalInputHooks(MpAvMainWindow.Instance);
+                    DisposePseudoGlobalInputHooks(MpAvMainView.Instance);
                 });
             }
             if (IS_GLOBAL_INPUT_ENABLED) {
@@ -722,18 +722,18 @@ namespace MonkeyPaste.Avalonia {
 
         private void PseudoGlobalControl_PointerPressed(object sender, PointerPressedEventArgs e) {
             e.Handled = false;
-            HandlePointerPress(e.IsLeftDown(MpAvMainWindow.Instance));
+            HandlePointerPress(e.IsLeftDown(MpAvMainView.Instance));
         }
         private void PseudoGlobalControl_PointerMoved(object sender, PointerEventArgs e) {
             // NOTE only called when global input is disabled
-            var mw_mp = e.GetClientMousePoint(MpAvMainWindow.Instance);
-            var gmp = VisualExtensions.PointToScreen(MpAvMainWindow.Instance, mw_mp.ToAvPoint()).ToPortablePoint(MpAvMainWindowViewModel.Instance.MainWindowScreen.PixelDensity);
+            var mw_mp = e.GetClientMousePoint(MpAvMainView.Instance);
+            var gmp = VisualExtensions.PointToScreen(MpAvMainView.Instance, mw_mp.ToAvPoint()).ToPortablePoint(MpAvMainWindowViewModel.Instance.MainWindowScreen.PixelDensity);
             HandlePointerMove(gmp);
         }
 
         private void PseudoGlobalControl_PointerReleased(object sender, PointerReleasedEventArgs e) {
             e.Handled = false;
-            HandlePointerReleased(GlobalIsMouseLeftButtonDown != e.IsLeftDown(MpAvMainWindow.Instance));
+            HandlePointerReleased(GlobalIsMouseLeftButtonDown != e.IsLeftDown(MpAvMainView.Instance));
         }
 
 

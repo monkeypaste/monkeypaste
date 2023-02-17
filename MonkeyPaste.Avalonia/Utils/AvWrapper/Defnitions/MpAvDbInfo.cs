@@ -1,47 +1,28 @@
-﻿using System;
+﻿using MonkeyPaste.Common;
+using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvDbInfo : MonkeyPaste.MpIDbInfo {
         public string DbExtension => "mpcdb";
+        private string _dbName = null;
         public string DbName {
             get {
-                string db_name_by_os = string.Empty;
-                if (OperatingSystem.IsWindows()) {
-                    db_name_by_os = "mp_win";
-                } else if (OperatingSystem.IsLinux()) {
-                    db_name_by_os = "mp_x11";
-                } else if (OperatingSystem.IsMacOS()) {
-                    db_name_by_os = "mp_mac";
-                } else {
-                    throw new Exception("Unmanaged os");
+                if (_dbName == null) {
+                    // NOTE this accessed in cefnet init for renderer thread ref
+                    // so can't use platform wrapper
+                    MpAvOsInfo osi = new MpAvOsInfo();
+                    _dbName = $"mp_{osi.OsShortName}.{DbExtension}";
                 }
-                return $"{db_name_by_os}.{DbExtension}";
+                return _dbName;
             }
         }
+
+
         public string DbPath => Path.Combine(
             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), DbName);
-        //public string GetDbFilePath() {
-        //    //string appDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        //    //if (string.IsNullOrEmpty(MpJsonPreferenceIO.Instance.DbPath) ||
-        //    //    !File.Exists(MpJsonPreferenceIO.Instance.DbPath)) {
-        //    //    MpConsole.WriteLine("Db does not exist in " + appDir);
-        //    //    MpJsonPreferenceIO.Instance.DbPath = Path.Combine(appDir,MpJsonPreferenceIO.Instance.DbName);
-        //    //    MpJsonPreferenceIO.Instance.DbPassword = string.Empty;
-        //    //}
-        //    //return MpJsonPreferenceIO.Instance.DbPath;
-        //    return MpPrefViewModel.Instance.DbPath;
-        //}
 
-        //public string GetDbName() {
-        //    return "mp.db";
-        //}
-
-        //public string GetDbPassword() {
-        //    return string.Empty;
-        //}
-
-        //public MpAvDbInfo() { }
     }
 }

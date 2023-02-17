@@ -29,6 +29,7 @@
         <local:MpAvSearchBoxView x:Name="SearchBoxView"
                                  RelativePanel.AlignRightWithPanel="True"
                                  VerticalAlignment="Stretch"
+                                 HorizontalAlignment="Right"
                                  Tag="Search" />
 
         <!--  Tag Tray View  -->

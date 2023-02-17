@@ -5,7 +5,36 @@ using System.IO;
 namespace MonkeyPaste.Avalonia {
     public class MpAvOsInfo : MpIOsInfo {
         public string OsMachineName => Environment.MachineName;
-        public bool IsAvalonia => true;
+
+        public string OsShortName {
+            get {
+                if (OperatingSystem.IsWindows()) {
+                    return "win";
+                }
+                if (OperatingSystem.IsLinux()) {
+                    return "x11";
+                }
+                if (OperatingSystem.IsMacOS()) {
+                    return "mac";
+                }
+                if (OperatingSystem.IsAndroid()) {
+                    return "android";
+                }
+                if (OperatingSystem.IsIOS()) {
+                    return "ios";
+                }
+                if (OperatingSystem.IsBrowser()) {
+                    return "browser";
+                }
+                throw new Exception("Unknown os");
+            }
+        }
+
+        public bool IsDesktop =>
+            OperatingSystem.IsWindows() ||
+            OperatingSystem.IsMacOS() ||
+            OperatingSystem.IsLinux();
+
         public string OsFileManagerPath {
             get {
                 if (OperatingSystem.IsWindows()) {

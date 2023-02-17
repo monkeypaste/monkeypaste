@@ -19,6 +19,7 @@ public class SplashActivity : AvaloniaSplashActivity<App> {
     }
 
     protected override void OnCreate(Bundle? savedInstanceState) {
+
         base.OnCreate(savedInstanceState);
     }
 
@@ -31,8 +32,13 @@ public class SplashActivity : AvaloniaSplashActivity<App> {
         Finish();
     }
 
+    protected override void OnPause() {
+        base.OnPause();
+        MpAvMainWindowViewModel.Instance.IsMainWindowActive = false;
+    }
     protected override void OnResume() {
         base.OnResume();
+        MpAvMainWindowViewModel.Instance.IsMainWindowActive = true;
 
         StartActivity(new Intent(Application.Context, typeof(MainActivity)));
 
