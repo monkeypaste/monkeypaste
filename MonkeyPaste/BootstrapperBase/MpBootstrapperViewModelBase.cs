@@ -78,12 +78,14 @@ namespace MonkeyPaste {
 
         public virtual async Task BeginLoaderAsync() {
             await LoadItemsAsync(_coreItems);
+            MpConsole.WriteLine("Core load complete");
             await Task.Delay(1000);
         }
 
         public virtual async Task FinishLoaderAsync() {
             // once mw and all mw views are loaded load platform items
             await LoadItemsAsync(_platformItems);
+            MpConsole.WriteLine("Platform load complete");
             LoadedDateTime = DateTime.Now;
         }
 

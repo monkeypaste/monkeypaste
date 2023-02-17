@@ -9,7 +9,7 @@
     </Styles.Resources>
 
 
-    <Style Selector="local|MpAvClipTrayContainerView ListBoxItem"
+    <Style Selector="local|MpAvClipTrayContainerView ListBox.clipTileListBox ListBoxItem"
            x:DataType="local:MpAvClipTileViewModel">
         <Setter Property="Margin"
                 Value="{Binding OuterSpacing}" />

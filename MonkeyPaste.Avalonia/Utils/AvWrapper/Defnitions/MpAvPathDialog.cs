@@ -64,7 +64,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private IStorageProvider GetStorageProvider() {
-            return App.Current.MainWindow().StorageProvider;
+            return App.Current.GetMainWindow().StorageProvider;
         }
     }
 }

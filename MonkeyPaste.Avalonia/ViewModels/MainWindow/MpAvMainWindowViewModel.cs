@@ -395,7 +395,7 @@ namespace MonkeyPaste.Avalonia {
                 //    return null;
                 //}
                 //if (MainWindowMonitorIdx >= MpPlatformWrapper.Services.ScreenInfoCollection.Screens.Count()) {
-                //    Debugger.Break();
+                //    MpDebug.Break();
                 //    return null;
                 //}
                 //return MpPlatformWrapper.Services.ScreenInfoCollection.Screens.ElementAt(MainWindowMonitorIdx);

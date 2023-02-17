@@ -55,12 +55,11 @@ namespace MonkeyPaste.Avalonia {
         }
         public IntPtr ThisAppHandle {
             get {
-                if (App.Desktop == null ||
-                    App.Desktop.MainWindow == null ||
-                    App.Desktop.MainWindow.PlatformImpl == null) {
+                if (App.MainWindow == null ||
+                    App.MainWindow.PlatformImpl == null) {
                     return IntPtr.Zero;
                 }
-                return App.Desktop.MainWindow.PlatformImpl.Handle.Handle;
+                return App.MainWindow.PlatformImpl.Handle.Handle;
             }
         }
 

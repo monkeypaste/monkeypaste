@@ -1,4 +1,5 @@
 ﻿using Avalonia.Threading;
+using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +8,27 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
     public class MpAvUrlViewModel :
         MpViewModelBase<MpAvUrlCollectionViewModel>,
+        MpIIsValueEqual<MpAvUrlViewModel>,
         MpIHoverableViewModel,
         MpISelectableViewModel
         //MpISourceItemViewModel
         {
+
+
+        #region Interfaces
+
+        #region MpIIsValueEqual Implementation
+
+        public bool IsValueEqual(MpAvUrlViewModel ouvm) {
+            if (ouvm == null) {
+                return false;
+            }
+            return
+                UrlPath.ToLower() == ouvm.UrlPath.ToLower();
+        }
+        #endregion
+
+        #endregion
         #region Properties
 
         #region View Models

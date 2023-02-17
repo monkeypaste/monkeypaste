@@ -31,6 +31,7 @@
         <Grid HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
             <ListBox x:Name="PinTrayListBox"
+                     Classes="clipTileListBox"
                      Background="Transparent"
                      TabIndex="1"
                      IsTabStop="True"

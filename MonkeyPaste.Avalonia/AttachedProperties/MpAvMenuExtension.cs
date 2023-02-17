@@ -351,6 +351,15 @@ namespace MonkeyPaste.Avalonia {
             ShowMenu(control, mivm, e.GetPosition(control).ToPortablePoint(), GetPlacementMode(control));
         }
 
+
+        private static void MenuItem_DetachedFromVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
+            if (sender is MenuItem control) {
+                control.PointerEntered -= MenuItem_PointerEnter;
+                control.PointerReleased -= MenuItem_PointerReleased;
+                control.RemoveHandler(Control.PointerReleasedEvent, MenuItem_PointerReleased);
+            }
+        }
+
         private static void MenuItem_PointerReleased(object sender, PointerReleasedEventArgs e) {
             MenuItem mi = null;
             if (e.Source is Visual sourceVisual &&
@@ -388,13 +397,6 @@ namespace MonkeyPaste.Avalonia {
 
         }
 
-        private static void MenuItem_DetachedFromVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
-            if (sender is MenuItem control) {
-                control.PointerEntered -= MenuItem_PointerEnter;
-                control.PointerReleased -= MenuItem_PointerReleased;
-                control.RemoveHandler(Control.PointerReleasedEvent, MenuItem_PointerReleased);
-            }
-        }
 
         private static void MenuItem_PointerEnter(object sender, PointerEventArgs e) {
             if (e.Source is MenuItem mi && mi.DataContext is MpMenuItemViewModel mivm) {

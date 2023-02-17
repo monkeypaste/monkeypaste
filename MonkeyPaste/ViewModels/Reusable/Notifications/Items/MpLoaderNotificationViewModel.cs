@@ -75,6 +75,7 @@ namespace MonkeyPaste {
                 // when loader is DoNotShow base never shows it (and StartLoader is called from window)
                 // so manually perform load
                 await ProgressLoader.BeginLoaderAsync();
+                await ProgressLoader.FinishLoaderAsync();
                 return base_result;
             }
             // NOTE returning loading notifies builder not to hide loader

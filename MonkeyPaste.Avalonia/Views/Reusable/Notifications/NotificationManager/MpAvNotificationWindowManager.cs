@@ -75,9 +75,9 @@ namespace MonkeyPaste.Avalonia {
 
                 nw.GetObservable(Window.IsVisibleProperty).Subscribe(value => OnNotificationWindowIsVisibleChangedHandler(nw));
 
-                if (App.Desktop.MainWindow == null) {
+                if (App.MainWindow == null) {
                     // occurs on startup
-                    App.Desktop.MainWindow = nw;
+                    App.MainWindow = nw;
                 }
                 BeginOpen(nw);
             });

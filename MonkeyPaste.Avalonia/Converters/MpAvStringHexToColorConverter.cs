@@ -1,5 +1,6 @@
 ﻿using Avalonia.Data.Converters;
 using Avalonia.Media;
+using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Globalization;
 
@@ -16,7 +17,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) {
-            throw new NotSupportedException();
+            if (value is Color c) {
+                return c.ToPortableColor().ToHex();
+            }
+            return null;
         }
     }
 

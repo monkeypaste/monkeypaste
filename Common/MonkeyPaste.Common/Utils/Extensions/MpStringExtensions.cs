@@ -77,6 +77,15 @@ namespace MonkeyPaste.Common {
 
         #region Converters
 
+        public static string ToFileSystemUriFromPath(this string path) {
+            try {
+                return new Uri(path, UriKind.Absolute).AbsoluteUri;
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error converting path '{path}' to uri.", ex);
+                return string.Empty;
+            }
+        }
         public static string ToPlainText(this string text, string sourceFormat = "") {
             sourceFormat = sourceFormat.ToLower();
             if (sourceFormat == "text") {
@@ -369,7 +378,7 @@ namespace MonkeyPaste.Common {
             var imgNode = htmlDoc.DocumentNode.FirstChild.FirstChild;
             if (imgNode.Name.ToLower() != "img") {
                 // what is the string how'd it happen?
-                Debugger.Break();
+                MpDebug.Break();
                 return fallbackBase64Str;
             }
             string srcAttrVal = imgNode.GetAttributeValue("src", string.Empty);

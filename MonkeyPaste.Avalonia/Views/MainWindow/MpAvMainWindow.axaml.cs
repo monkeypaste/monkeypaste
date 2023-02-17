@@ -83,7 +83,7 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
         public async Task InitAsync() {
             await Task.Delay(1);
-            App.Desktop.MainWindow = this;
+            App.MainWindow = this;
 
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
             if (OperatingSystem.IsWindows()) {

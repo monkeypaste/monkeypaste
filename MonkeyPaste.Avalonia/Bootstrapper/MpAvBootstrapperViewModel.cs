@@ -30,19 +30,16 @@ namespace MonkeyPaste.Avalonia {
 
         public override async Task FinishLoaderAsync() {
             IsCoreLoaded = true;
-
-            MpConsole.WriteLine("Core Load complete");
-            Window lw = App.Desktop.MainWindow;
+            Window lw = App.MainWindow;
 
             await base.FinishLoaderAsync();
 
             if (lw != null) {
                 lw.Close();
             }
-            App.Desktop.MainWindow.Show();
+            App.MainWindow.Show();
             IsPlatformLoaded = true;
             _sw.Stop();
-            MpConsole.WriteLine($"Platform Load complete. Total time: {_sw.ElapsedMilliseconds}ms");
 
             MpAvSystemTray.Init();
         }

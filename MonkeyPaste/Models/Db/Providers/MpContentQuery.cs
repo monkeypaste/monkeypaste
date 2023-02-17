@@ -22,27 +22,6 @@ namespace MonkeyPaste {
                 IEnumerable<int> qi_tag_ids =
                     MpPlatform.Services.TagQueryTools.GetSelfAndAllDescendantsTagIds(qi.TagId);
                 sub_queries.Add(GetContentQuery(qi, qi_tag_ids, idx++));
-                //var qi_result = await PerformContentQueryAsync(qi, qi_tag_ids,idx++);
-                //switch(qi.JoinType) {
-                //    case MpLogicalQueryType.None:
-                //        // initial case
-                //        result_ids = qi_result.ToList();
-                //        break;
-                //    case MpLogicalQueryType.And:
-                //        // only allow results if both this and previous had match
-                //        result_ids = result_ids.Where(x => qi_result.Contains(x)).ToList();
-                //        break;
-                //    case MpLogicalQueryType.Or:
-                //        // compound results
-                //        result_ids.AddRange(qi_result);
-                //        break;
-                //    case MpLogicalQueryType.Not:
-                //        // remove current result from total
-                //        result_ids = result_ids.Where(x => !qi_result.Contains(x)).ToList();
-                //        break;
-                //}
-                //result_ids.Distinct();
-
             }
             _cur_qi = null;
 
@@ -67,12 +46,6 @@ namespace MonkeyPaste {
             return result.Where(x => !ci_idsToOmit.Contains(x)).Distinct().ToList();
         }
 
-        private static async Task<List<int>> PerformContentQueryAsync(MpIQueryInfo qi, IEnumerable<int> tagIds, int idx) {
-            string qi_root_id_query_str = ConvertQueryToSql(qi, tagIds, out var args);
-            MpConsole.WriteLine($"Current DataModel Query ({idx}): " + MpDb.GetParameterizedQueryString(qi_root_id_query_str, args));
-            var result = await MpDb.QueryScalarsAsync<int>(qi_root_id_query_str, args);
-            return result.Distinct().ToList();
-        }
         private static Tuple<string, string, List<object>> GetContentQuery(MpIQueryInfo qi, IEnumerable<int> tagIds, int idx) {
 
             // Item1 = INTERSECT|UNION|EXCEPT

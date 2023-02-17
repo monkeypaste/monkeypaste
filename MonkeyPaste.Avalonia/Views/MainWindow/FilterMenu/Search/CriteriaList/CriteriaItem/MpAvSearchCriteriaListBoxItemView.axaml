@@ -25,33 +25,33 @@
                     Value="{Binding Source={StaticResource LinesX2HorizVertArrowsImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=dimgray}" />
         </Style>
 
-        <Style Selector="local|MpAvClipBorder.optComboBoxBorder">
+        <Style Selector="ComboBox:pointerover.criteriaComboBox">
+            <Setter Property="BorderBrush"
+                    Value="Yellow" />
+        </Style>
+        <Style Selector="ComboBox.criteriaComboBox">
             <Setter Property="CornerRadius"
                     Value="10" />
             <Setter Property="BorderThickness"
                     Value="1" />
             <Setter Property="BorderBrush"
-                    Value="Black" />
+                    Value="Silver" />
             <Setter Property="HorizontalAlignment"
                     Value="Center" />
             <Setter Property="VerticalAlignment"
                     Value="Center" />
             <Setter Property="Margin"
                     Value="5" />
-        </Style>
-        <Style Selector="local|MpAvClipBorder.optComboBoxBorder ComboBox">
-            <Setter Property="MinWidth"
-                    Value="85" />
-            <Setter Property="FontSize"
-                    Value="16" />
-            <Setter Property="BorderThickness"
-                    Value="0" />
             <Setter Property="Background"
                     Value="White" />
             <Setter Property="HorizontalContentAlignment"
                     Value="Left" />
             <Setter Property="VerticalContentAlignment"
                     Value="Center" />
+            <Setter Property="MinWidth"
+                    Value="85" />
+            <Setter Property="FontSize"
+                    Value="16" />
         </Style>
     </local:MpAvUserControl.Styles>
     <Grid ColumnDefinitions="50,*">
@@ -81,24 +81,16 @@
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Left"
                         IsVisible="{Binding IsJoinPanelVisible}">
-                <local:MpAvClipBorder Classes="optComboBoxBorder">
-                    <ComboBox MinWidth="85"
-                              Classes="criteriaComboBox"
-                              FontSize="16"
-                              BorderThickness="0"
-                              Background="White"
-                              HorizontalContentAlignment="Left"
-                              VerticalContentAlignment="Center"
-                              IsDropDownOpen="{Binding IsJoinDropDownOpen, Mode=TwoWay}"
-                              Items="{Binding JoinTypeLabels}"
-                              SelectedIndex="{Binding SelectedJoinTypeIdx, Mode=TwoWay}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding}" />
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                </local:MpAvClipBorder>
+                <ComboBox Classes="criteriaComboBox"
+                          IsDropDownOpen="{Binding IsJoinDropDownOpen, Mode=TwoWay}"
+                          Items="{Binding JoinTypeLabels}"
+                          SelectedIndex="{Binding SelectedJoinTypeIdx, Mode=TwoWay}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
                 <TextBlock Text="of the following are true"
                            Margin="15,0,0,0"
                            VerticalAlignment="Center" />

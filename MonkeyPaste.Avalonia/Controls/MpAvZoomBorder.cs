@@ -20,7 +20,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
         #region Statics
         static MpAvZoomBorder() {
             //IsEnabledProperty.Changed.AddClassHandler<MpAvZoomBorder>((x, y) => HandleDesignerItemChanged(x, y));

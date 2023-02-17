@@ -1,4 +1,5 @@
 ﻿using Avalonia.Threading;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -7,6 +8,14 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvUrlCollectionViewModel :
         MpAvSelectorViewModelBase<object, MpAvUrlViewModel>,
         MpIAsyncSingletonViewModel<MpAvUrlCollectionViewModel> {
+        #region Statics
+
+        private static MpAvUrlCollectionViewModel _instance;
+        public static MpAvUrlCollectionViewModel Instance => _instance ?? (_instance = new MpAvUrlCollectionViewModel());
+
+
+        #endregion
+
         #region Properties
 
         #region View Models
@@ -23,13 +32,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        private static MpAvUrlCollectionViewModel _instance;
-        public static MpAvUrlCollectionViewModel Instance => _instance ?? (_instance = new MpAvUrlCollectionViewModel());
-
 
         public MpAvUrlCollectionViewModel() : base(null) {
+            Items.CollectionChanged += Items_CollectionChanged;
         }
 
+        #endregion
+
+        #region Public Methods
         public async Task InitAsync() {
             IsBusy = true;
             while (MpAvIconCollectionViewModel.Instance.IsAnyBusy) {
@@ -50,13 +60,9 @@ namespace MonkeyPaste.Avalonia {
             //await Task.WhenAll(Items.Select(x => UpdateRejection(x)));
             OnPropertyChanged(nameof(Items));
 
+            ValidateUrlViewModels();
             IsBusy = false;
         }
-
-        #endregion
-
-        #region Public Methods
-
         public async Task<MpAvUrlViewModel> CreateUrlViewModel(MpUrl url) {
             var uvm = new MpAvUrlViewModel(this);
             await uvm.InitializeAsync(url);
@@ -100,6 +106,22 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         #endregion
+
+        #endregion
+
+        #region Private Methods
+
+        private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            ValidateUrlViewModels();
+        }
+        private void ValidateUrlViewModels() {
+            var dups = Items.Where(x => Items.Any(y => y != x && x.IsValueEqual(y)));
+            if (dups.Any()) {
+                // dup app view models, check db to see if dup app model
+                Debugger.Break();
+            }
+
+        }
 
         #endregion
 

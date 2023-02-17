@@ -99,6 +99,9 @@ namespace MonkeyPaste {
 
         #region Application Properties
 
+        #region Editor
+
+        #endregion
 
         #region Encyption
         public string SslAlgorithm { get; set; } = "SHA256WITHRSA";
@@ -108,7 +111,8 @@ namespace MonkeyPaste {
 
 
 
-        public string LocalStoragePath => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        public string LocalStoragePath =>
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
         #region Db        
 

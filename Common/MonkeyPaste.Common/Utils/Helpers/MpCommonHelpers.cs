@@ -6,6 +6,9 @@ namespace MonkeyPaste.Common {
         public static string GetExecutingDir() {
             return Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
         }
+        public static string GetExecutingPath() {
+            return Path.Combine(GetExecutingDir(), System.Reflection.Assembly.GetExecutingAssembly().FullName);
+        }
         public static string GetSolutionDir() {
             string solution_path = Environment.CurrentDirectory.FindParentDirectory("MonkeyPaste");
             return solution_path;

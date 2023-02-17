@@ -11,6 +11,8 @@ namespace MonkeyPaste.Avalonia {
                 Watcher = new MpAvX11ProcessWatcher();
             } else if (OperatingSystem.IsMacOS()) {
                 Watcher = new MpAvMacProcessWatcher();
+            } else if (OperatingSystem.IsAndroid()) {
+                Watcher = new MpAvAndroidProcessWatcher();
             }
         }
     }

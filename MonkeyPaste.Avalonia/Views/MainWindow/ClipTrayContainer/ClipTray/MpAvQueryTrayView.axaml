@@ -103,7 +103,7 @@
                           Width="{Binding QueryTrayScreenWidth}"
                           Height="{Binding QueryTrayScreenHeight}">
                 <ListBox x:Name="ClipTrayListBox"
-                         Classes="queryListBox"
+                         Classes="clipTileListBox queryListBox"
                          Classes.requerying="{Binding IsRequerying}"
                          Classes.notrequerying="{Binding !IsRequerying}"
                          Background="Transparent"

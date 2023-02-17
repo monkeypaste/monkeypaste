@@ -1,21 +1,28 @@
-<ContextMenu xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:local="using:MonkeyPaste.Avalonia"
-             xmlns:pcl="using:MonkeyPaste"
-             mc:Ignorable="d"
-             d:DesignWidth="800"
-             d:DesignHeight="450"
-             x:DataType="pcl:MpMenuItemViewModel"
-             x:CompileBindings="True"
-             HorizontalAlignment="Stretch"
-             VerticalAlignment="Stretch"
-             x:Class="MonkeyPaste.Avalonia.MpAvContextMenuView">
-    <ContextMenu.Resources>
+<local:MpAvContextMenuView xmlns="https://github.com/avaloniaui"
+                           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                           xmlns:local="using:MonkeyPaste.Avalonia"
+                           xmlns:pcl="using:MonkeyPaste"
+                           mc:Ignorable="d"
+                           d:DesignWidth="800"
+                           d:DesignHeight="450"
+                           x:DataType="pcl:MpMenuItemViewModel"
+                           x:CompileBindings="True"
+                           HorizontalAlignment="Stretch"
+                           VerticalAlignment="Stretch"
+                           x:Class="MonkeyPaste.Avalonia.MpAvContextMenuView">
+    <local:MpAvContextMenuView.Resources>
         <SolidColorBrush x:Key="MenuFlyoutItemBackgroundPointerOver">LightBlue</SolidColorBrush>
-    </ContextMenu.Resources>
-    <ContextMenu.Styles>
+
+        <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">Transparent</SolidColorBrush>
+        <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">Transparent</SolidColorBrush>
+        <SolidColorBrush x:Key="SystemControlHighlightListAccentHighBrush">Transparent</SolidColorBrush>
+        <SolidColorBrush x:Key="SystemControlHighlightListLowBrush">Transparent</SolidColorBrush>
+        <SolidColorBrush x:Key="SystemControlHighlightListMediumBrush">Transparent</SolidColorBrush>
+        <SolidColorBrush x:Key="SystemControlHighlightListHighBrush">Transparent</SolidColorBrush>
+    </local:MpAvContextMenuView.Resources>
+    <local:MpAvContextMenuView.Styles>
         <Style Selector="MenuItem">
             <Setter Property="Background"
                     Value="Transparent" />
@@ -28,5 +35,5 @@
             <Setter Property="Background"
                     Value="LightBlue" />
         </Style>
-    </ContextMenu.Styles>
-</ContextMenu>
+    </local:MpAvContextMenuView.Styles>
+</local:MpAvContextMenuView>

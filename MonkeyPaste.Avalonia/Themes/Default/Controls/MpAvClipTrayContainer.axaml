@@ -7,7 +7,7 @@
                 Value="{DynamicResource ClipTrayBgColor}" />
     </Style>
 
-    <Style Selector="local|MpAvClipTrayContainerView ListBoxItem"
+    <Style Selector="local|MpAvClipTrayContainerView ListBox.clipTileListBox ListBoxItem"
            x:DataType="local:MpAvClipTileViewModel">
         <Setter Property="Canvas.Left"
                 Value="{Binding TrayX}" />

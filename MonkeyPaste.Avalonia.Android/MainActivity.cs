@@ -4,7 +4,7 @@ using Android.Content.Res;
 using Android.Widget;
 
 using Avalonia.Android;
-
+using Avalonia.Threading;
 using Orientation = Android.Content.Res.Orientation;
 
 namespace MonkeyPaste.Avalonia.Android;
@@ -16,6 +16,12 @@ namespace MonkeyPaste.Avalonia.Android;
     LaunchMode = LaunchMode.SingleTop,
     ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
 public class MainActivity : AvaloniaMainActivity {
+    public override void OnAttachedToWindow() {
+        base.OnAttachedToWindow();
+        Dispatcher.UIThread.Post(async () => {
+
+        });
+    }
     public override void OnConfigurationChanged(Configuration newConfig) {
         base.OnConfigurationChanged(newConfig);
 

@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace MonkeyPaste.Common {
+
     public static class MpConsole {
         #region Private Variables
 

@@ -19,7 +19,18 @@ namespace MonkeyPaste.Avalonia {
         #region Constants
 
         public const string JS_REF_ERROR = "JS_REF_ERROR";
-        public static bool UseCefNet { get; private set; } = true;
+        private static bool _useCefNet = true;
+        public static bool UseCefNet {
+            get {
+                if (!_useCefNet) {
+                    return false;
+                }
+#if DESKTOP
+                return true;
+#endif
+                return false;
+            }
+        }
         #endregion
 
         #region Statics
@@ -188,10 +199,10 @@ namespace MonkeyPaste.Avalonia {
             //e.CommandLine.AppendSwitchWithValue("user-agent", "Mozilla/5.0 (Windows 10.0) WebKa/" + DateTime.UtcNow.Ticks);
 
             //double scale;
-            //if (App.Desktop == null || App.Desktop.MainWindow == null) {
+            //if (App.Desktop == null || App.MainWindow == null) {
             //    scale = new Window().PlatformImpl.DesktopScaling;
             //} else {
-            //    scale = App.Desktop.MainWindow.PlatformImpl.DesktopScaling;
+            //    scale = App.MainWindow.PlatformImpl.DesktopScaling;
             //}
             //commandLine.AppendSwitchWithValue("force-device-scale-factor", scale.ToString());
 

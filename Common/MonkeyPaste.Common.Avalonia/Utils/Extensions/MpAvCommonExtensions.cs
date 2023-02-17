@@ -18,6 +18,11 @@ using static Avalonia.VisualExtensions;
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvCommonExtensions {
 
+        #region Environment
+
+
+        #endregion
+
         #region Focus
 
         public static IInputElement GetFocusableAncestor(this Visual visual, bool includeSelf = true) {
@@ -219,14 +224,33 @@ namespace MonkeyPaste.Common.Avalonia {
 
         #region MainWindow
 
-        public static Window MainWindow(this Application? app) {
-            if (app != null && app.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-                return desktop.MainWindow;
+        public static Window GetMainWindow(this Application? app) {
+            if (app.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime cdsal) {
+                return cdsal.MainWindow;
+            }
+            if (app.ApplicationLifetime is ISingleViewApplicationLifetime sval &&
+                sval.MainView != null) {
+                var test = sval.MainView.GetVisualAncestors<Control>();
+                var test2 = test.Where(x => x is Window).Cast<Window>().FirstOrDefault();
+                return test2;
             }
             return null;
         }
-        public static IntPtr MainWindowHandle(this Application? app) {
-            if (app.MainWindow() is Window w &&
+        public static Window SetMainWindow(this Application? app, Window w) {
+            // return old MainWindow
+            Window last_main_window = app.GetMainWindow();
+            if (app.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime cdsal) {
+                cdsal.MainWindow = w;
+            }
+            if (app.ApplicationLifetime is ISingleViewApplicationLifetime sval &&
+                sval.MainView != null) {
+                MpDebug.Break("dunno how to deal w/ window management yet");
+            }
+            return last_main_window;
+        }
+
+        public static IntPtr GetMainWindowHandle(this Application? app) {
+            if (app.GetMainWindow() is Window w &&
                 w.PlatformImpl != null && w.PlatformImpl.Handle != null) {
                 return w.PlatformImpl.Handle.Handle;
             }
@@ -238,8 +262,8 @@ namespace MonkeyPaste.Common.Avalonia {
 
         public static double VisualPixelDensity(this Visual visual, Window w = null) {
             if (w == null &&
-                Application.Current.MainWindow() is Window) {
-                w = Application.Current.MainWindow();
+                Application.Current.GetMainWindow() is Window) {
+                w = Application.Current.GetMainWindow();
             }
 
             if (w == null) {
@@ -251,7 +275,7 @@ namespace MonkeyPaste.Common.Avalonia {
             }
             var scr = w.Screens.ScreenFromVisual(visual);
             if (scr == null) {
-                scr = Application.Current.MainWindow().Screens.Primary;
+                scr = Application.Current.GetMainWindow().Screens.Primary;
                 if (scr == null) {
                     Debugger.Break();
                     return 1;
@@ -589,7 +613,7 @@ namespace MonkeyPaste.Common.Avalonia {
             // NOTE when toScreen is FALSE p is assumed to be a screen point
 
             if (relativeTo == null) {
-                relativeTo = Application.Current.MainWindow();
+                relativeTo = Application.Current.GetMainWindow();
                 if (relativeTo == null) {
                     return p;
                 }

@@ -4,6 +4,16 @@ using System.Diagnostics;
 
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvColorExtensions {
+        public static Color GetColor(this IBrush b) {
+            if (b is IImmutableSolidColorBrush iscb) {
+                return iscb.Color;
+            }
+            if (b is SolidColorBrush scb) {
+                return scb.Color;
+            }
+            MpDebug.Break("Unsupported brush type for color");
+            return MpColorHelpers.GetRandomHexColor().ToAvColor();
+        }
         public static Color ToAvColor(this string hexColor) {
             if (!hexColor.IsStringHexColor()) {
                 return Colors.Transparent;

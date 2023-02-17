@@ -1,9 +1,13 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
 using System.Diagnostics;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -19,7 +23,34 @@ namespace MonkeyPaste.Avalonia {
 
         #region Statics
         public static string[] Args { get; set; }
-        public static IClassicDesktopStyleApplicationLifetime Desktop { get; private set; }
+
+        //public static Control MainWindowOrView {
+        //    get {
+        //        if (Lifetime is IClassicDesktopStyleApplicationLifetime cdsal) {
+        //            return cdsal.MainWindow;
+        //        }
+        //        if (Lifetime is ISingleViewApplicationLifetime sval) {
+        //            return sval.MainView;
+        //        }
+        //        return null;
+        //    }
+        //}
+
+        private static App _instance;
+        public static Window MainWindow {
+            get {
+                if (_instance == null) {
+                    return null;
+                }
+                return _instance.GetMainWindow();
+            }
+            set {
+                if (_instance == null) {
+                    return;
+                }
+                _instance.SetMainWindow(value);
+            }
+        }
         #endregion
 
         #region Interfaces
@@ -36,6 +67,10 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
         public App() {
             //DataContext = MpAvSystemTrayViewModel.Instance;
+            if (_instance != null) {
+                MpDebug.Break();
+            }
+            _instance = this;
         }
         #endregion
 
@@ -44,11 +79,10 @@ namespace MonkeyPaste.Avalonia {
             AvaloniaXamlLoader.Load(this);
         }
         public override async void OnFrameworkInitializationCompleted() {
-            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-                Desktop = desktop;
+            if (ApplicationLifetime is IControlledApplicationLifetime lifetime) {
 
-                desktop.Startup += Startup;
-                desktop.Exit += Exit;
+                lifetime.Startup += Startup;
+                lifetime.Exit += Exit;
 
                 ReportCommandLineArgs(Args);
 
@@ -59,8 +93,8 @@ namespace MonkeyPaste.Avalonia {
                 var bootstrapper = new MpAvBootstrapperViewModel();
                 await bootstrapper.InitAsync();
 
-            } else if (ApplicationLifetime is ISingleViewApplicationLifetime singleView) {
-                Debugger.Break();
+            } else {
+                MpDebug.Break();
             }
 
             base.OnFrameworkInitializationCompleted();

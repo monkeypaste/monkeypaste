@@ -1054,8 +1054,7 @@
   <ItemGroup>
     <Folder Include="Themes\Default\Assets\" />
     <Folder Include="Themes\Default\DensityStyles\" />
-    <Folder Include="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\" />
-    <Folder Include="Utils\AvWrapper\Defnitions\ProcessWatcher\Base\" />
+    <Folder Include="Utils\AvWrapper\Defnitions\ProcessWatcher\_Base\" />
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\" />
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\Mac\" />
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\Base\" />
@@ -1142,6 +1141,9 @@
     </Compile>
     <Compile Update="Views\Reusable\Buttons\MpAvClearTextButton.axaml.cs">
       <DependentUpon>MpAvClearTextButton.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Reusable\ColorPicker\MpAvColorPickerView.axaml.cs">
+      <DependentUpon>MpAvColorPickerView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Reusable\ContextMenu\CheckableMenuItem\MpAvCheckableMenuItemView.axaml.cs">
       <DependentUpon>MpAvCheckableMenuItemView.axaml</DependentUpon>

@@ -36,7 +36,7 @@ namespace MonkeyPaste.Avalonia {
             var _evalResultLookup = GetJsPendingMessageLookup(wv);
             if (_evalResultLookup.ContainsKey(evalKey)) {
                 // shouldn't happen
-                Debugger.Break();
+                MpDebug.Break();
             }
             _evalResultLookup.TryAdd(evalKey, null);
 
@@ -68,13 +68,13 @@ namespace MonkeyPaste.Avalonia {
             // 1. I think this happens from drag/drop using fileItem and redirecting to file 
             // what else?
             MpConsole.WriteLine($"retry count exceeded for '{script}' w/ key:'{evalKey}' attempts#:{attempt}");
-            Debugger.Break();
+            MpDebug.Break();
             if (wv is MpAvIReloadableContentWebView reloadable_wv) {
                 reloadable_wv.ReloadContentAsync().FireAndForgetSafeAsync();
             }
 
 
-            //Debugger.Break();
+            //MpDebug.Break();
             return null;
         }
 
@@ -118,7 +118,7 @@ namespace MonkeyPaste.Avalonia {
             }
             if (!_evalResultLookup.TryAdd(evalKey, result)) {
                 // MpConsole.WriteTraceLine("Js Eval error, couldn't write to lookup, if happens should probably loop here..");
-                Debugger.Break();
+                MpDebug.Break();
             }
         }
 

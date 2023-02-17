@@ -88,7 +88,7 @@
                     <!--  Tag Count Box  -->
                     <local:MpAvClipBorder CornerRadius="5"
                                           Grid.Column="0"
-                                          MinWidth="20"
+                                          MinWidth="{Binding $self.Bounds.Height}"
                                           MinHeight="20"
                                           Margin="1"
                                           Padding="4,1"

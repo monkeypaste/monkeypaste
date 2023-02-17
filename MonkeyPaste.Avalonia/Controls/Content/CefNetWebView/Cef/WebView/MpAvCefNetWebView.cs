@@ -116,7 +116,7 @@ namespace MonkeyPaste.Avalonia {
             }
             if (result.Count > 1) {
                 // is this during a pin toggle? was this item pinned?
-                //Debugger.Break();
+                //MpDebug.Break();
                 // remove old refs
                 var stale_wvl = result.Skip(1);
                 // TODO? do these need further processing? besides hiding from locator?
@@ -226,7 +226,7 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task<MpAvDataObject> GetDataObjectAsync(bool forOle, string[] formats = null) {
             if (BindingContext == null) {
-                Debugger.Break();
+                MpDebug.Break();
                 return new MpAvDataObject();
             }
             var ctvm = BindingContext;
@@ -623,7 +623,7 @@ namespace MonkeyPaste.Avalonia {
                             }
                             if (t.IsInputTypeTemplate()) {
                                 // shouldn't exist
-                                Debugger.Break();
+                                MpDebug.Break();
                             }
                             await t.DeleteFromDatabaseAsync();
                             MpConsole.WriteLine($"Template '{t}': DELETED");
@@ -681,7 +681,7 @@ namespace MonkeyPaste.Avalonia {
                     ntf = MpJsonConverter.DeserializeBase64Object<MpQuillExceptionMessage>(msgJsonBase64Str);
                     if (ntf is MpQuillExceptionMessage exceptionMsgObj) {
                         MpConsole.WriteLine($"[{ctvm}] {exceptionMsgObj}");
-                        //Debugger.Break();
+                        //MpDebug.Break();
                     }
                     break;
 
@@ -743,7 +743,7 @@ namespace MonkeyPaste.Avalonia {
         private void MpAvCefNetWebView_AttachedToLogicalTree(object sender, LogicalTreeAttachmentEventArgs e) {
             if (_AllWebViews.Contains(this)) {
                 // should only happen once
-                Debugger.Break();
+                MpDebug.Break();
                 return;
             }
             // set locatedDateTime to filter out webviews recyling during
@@ -769,7 +769,7 @@ namespace MonkeyPaste.Avalonia {
             base.OnDataContextEndUpdate();
             if (_locatedDateTime == null) {
                 // is this called before attached to logical tree?
-                Debugger.Break();
+                MpDebug.Break();
             }
             // update locate time to match this data context
             _locatedDateTime = DateTime.Now;
@@ -888,7 +888,7 @@ namespace MonkeyPaste.Avalonia {
             await Task.Delay(1);
             if (!IsEditorInitialized || !IsContentLoaded) {
                 // which is it? what's the state of tile?
-                Debugger.Break();
+                MpDebug.Break();
                 return;
             }
             var req = new MpQuillUpdateContentRequestMessage();
@@ -951,12 +951,12 @@ namespace MonkeyPaste.Avalonia {
             _lastLoadedContentHandle = BindingContext.PublicHandle;
 
             if (!IsContentLoaded) {
-                //Debugger.Break();
+                //MpDebug.Break();
             }
 
             if (contentChanged_ntf == null) {
                 // shouldn't be null
-                Debugger.Break();
+                MpDebug.Break();
                 return;
             }
             if (!string.IsNullOrWhiteSpace(contentChanged_ntf.dataTransferCompletedRespFragment) &&
@@ -983,7 +983,7 @@ namespace MonkeyPaste.Avalonia {
             if (contentChanged_ntf.itemData != null) {
                 if (contentChanged_ntf.itemData.IsEmptyRichHtmlString()) {
                     // data's getting reset again
-                    Debugger.Break();
+                    MpDebug.Break();
                 }
                 BindingContext.CopyItemData = contentChanged_ntf.itemData;
             }
@@ -1017,7 +1017,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (transType == MpTransactionType.None) {
                 // what's the label?
-                Debugger.Break();
+                MpDebug.Break();
                 transType = MpTransactionType.Error;
             }
 
@@ -1154,7 +1154,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (!IsEditorInitialized && BindingContext.IsPlaceholder) {
                 // it does happen (i think this is the other i case for pin/unpin thing)
-                Debugger.Break();
+                MpDebug.Break();
             }
             while (!IsEditorInitialized) {
                 // when tile ispinned is toggled and was subselectable, need to let the new view catch up

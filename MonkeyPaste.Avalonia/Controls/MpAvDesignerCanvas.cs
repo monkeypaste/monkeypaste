@@ -89,7 +89,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region TransitionLineEnabledFillBrush Property
         public IBrush TransitionLineEnabledFillBrush {
-            get { return (IBrush)GetValue(TransitionLineEnabledFillBrushProperty); }
+            get { return GetValue(TransitionLineEnabledFillBrushProperty); }
             set { SetValue(TransitionLineEnabledFillBrushProperty, value); }
         }
 
@@ -150,10 +150,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private IBrush GetArrowFillBrush(MpAvActionViewModelBase pavm, MpAvActionViewModelBase avm, MpPoint pp, MpPoint p) {
-            Color enabled_color = ((SolidColorBrush)TransitionLineEnabledFillBrush).Color;
-            Color disabled_color = ((SolidColorBrush)TransitionLineDisabledFillBrush).Color;
-            Color warning_color1 = ((SolidColorBrush)WarningBrush1).Color;
-            Color warning_color2 = ((SolidColorBrush)WarningBrush2).Color;
+            Color enabled_color = TransitionLineEnabledFillBrush.GetColor();
+            Color disabled_color = TransitionLineDisabledFillBrush.GetColor();
+            Color warning_color1 = WarningBrush1.GetColor();
+            Color warning_color2 = WarningBrush2.GetColor();
 
             var parent_color = pavm.IsTriggerEnabled ? enabled_color : disabled_color;
             var cur_color = avm.IsTriggerEnabled ? enabled_color : disabled_color;

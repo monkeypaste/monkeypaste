@@ -14,7 +14,7 @@ namespace MonkeyPaste.Avalonia {
         {
         #region Interfaces
 
-        #region MpIIsFuzzyValueEqual Implementation
+        #region MpIIsValueEqual Implementation
 
         public bool IsValueEqual(MpAvAppViewModel oavm) {
             if (oavm == null) {
