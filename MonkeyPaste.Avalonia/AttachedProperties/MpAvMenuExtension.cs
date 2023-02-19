@@ -291,15 +291,20 @@ namespace MonkeyPaste.Avalonia {
             // HANDLE SELECTION
 
             bool wait_for_selection = false;
-            if (dc is MpISelectorItemViewModel sivm) {
-                if (e.IsLeftPress(control) || (e.IsRightPress(control) && GetSelectOnRightClick(control))) {
+            bool can_select =
+                e.IsLeftPress(control) ||
+                (e.IsRightPress(control) && GetSelectOnRightClick(control));
+            if (can_select &&
+                dc is MpIConditionalSelectableViewModel csvm && !csvm.CanSelect) {
+                can_select = false;
+            }
+            if (can_select) {
+                if (dc is MpISelectorItemViewModel sivm) {
                     if (sivm.Selector.SelectedItem != dc) {
                         wait_for_selection = true;
                         sivm.Selector.SelectedItem = dc;
                     }
-                }
-            } else if (dc is MpISelectableViewModel svm) {
-                if (e.IsLeftPress(control) || (e.IsRightPress(control) && GetSelectOnRightClick(control))) {
+                } else if (dc is MpISelectableViewModel svm) {
                     if (!svm.IsSelected) {
                         wait_for_selection = true;
                     }

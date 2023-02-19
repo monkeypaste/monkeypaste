@@ -14,7 +14,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvTagTileViewModel :
         MpAvTreeSelectorViewModelBase<MpAvTagTrayViewModel, MpAvTagTileViewModel>,
         MpIHoverableViewModel,
-        MpISelectableViewModel,
+        MpIConditionalSelectableViewModel,
         MpAvIShortcutCommandViewModel,
         MpIUserColorViewModel,
         MpIActionComponent,
@@ -74,7 +74,7 @@ namespace MonkeyPaste.Avalonia {
                 if (Parent == null) {
                     return;
                 }
-                if (value) {
+                if (value && CanSelect) {
                     if (Parent.IsSelecting) {
                         // break here or stack overflows
                         return;
@@ -305,6 +305,9 @@ namespace MonkeyPaste.Avalonia {
                 return true;
             }
         }
+
+        public bool CanSelect =>
+            IsTagNameReadOnly;
 
         public bool CanPin =>
             !IsGroupTag;
@@ -741,7 +744,7 @@ namespace MonkeyPaste.Avalonia {
                             MpAvClipTileSortFieldViewModel.Instance.SelectedSortType = SortType;
                         }
                         Parent.SelectTagCommand.Execute(this);
-                    } else {
+                    } else if (!IsTagNameTextBoxFocused) {
                         IsTagNameReadOnly = true;
                         OnPropertyChanged(nameof(IsActiveTag));
                     }
@@ -800,7 +803,7 @@ namespace MonkeyPaste.Avalonia {
                         return;
                     }
                     Parent.OnPropertyChanged(nameof(Parent.IsNavButtonsVisible));
-                    Parent.OnPropertyChanged(nameof(Parent.TagTrayScreenWidth));
+                    Parent.OnPropertyChanged(nameof(Parent.MaxTagTrayScreenWidth));
                     break;
                 case nameof(Items):
                     OnPropertyChanged(nameof(SortedItems));
@@ -893,6 +896,7 @@ namespace MonkeyPaste.Avalonia {
             if (IsGroupTag) {
                 return;
             }
+
             await Dispatcher.UIThread.InvokeAsync(async () => {
                 if (IsAllTag) {
                     if (TagClipCount == null) {

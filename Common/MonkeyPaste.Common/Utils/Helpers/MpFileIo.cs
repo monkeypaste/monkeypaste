@@ -122,7 +122,7 @@ namespace MonkeyPaste.Common {
             }
 
             if (string.IsNullOrEmpty(browserFileName)) {
-                if (MpCommonTools.Services.OsInfo.OsType == MpUserDeviceType.Windows) {
+                if (MpCommonTools.Services.PlatformInfo.OsType == MpUserDeviceType.Windows) {
                     browserFileName = "explorer.exe";
                 } else {
                     throw new Exception("need file browser paths for non-windows os here");

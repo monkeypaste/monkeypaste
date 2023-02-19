@@ -65,7 +65,7 @@ namespace MonkeyPaste.Avalonia {
                     w_origin = screen_bounds.TopLeft + new MpPoint(10, 10);
                     break;
             }
-            Position = w_origin.ToAvPixelPoint(MpAvMainWindowViewModel.Instance.MainWindowScreen.PixelDensity);
+            Position = w_origin.ToAvPixelPoint(MpAvMainWindowViewModel.Instance.MainWindowScreen.Scaling);
         }
 
         #region Drop

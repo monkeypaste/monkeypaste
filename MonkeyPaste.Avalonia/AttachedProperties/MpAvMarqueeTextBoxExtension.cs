@@ -705,7 +705,7 @@ namespace MonkeyPaste.Avalonia {
             var ft = tb.ToFormattedText();
             ft.SetFontSize(Math.Max(1.0d, tb.FontSize));
             ftSize = new Size(ft.Width, ft.Height);
-            double pixelsPerDip = MpAvMainWindowViewModel.Instance.MainWindowScreen.PixelDensity;
+            double pixelsPerDip = MpAvMainWindowViewModel.Instance.MainWindowScreen.Scaling;
 
             var ftBmp = new RenderTargetBitmap(
                 new PixelSize(

@@ -23,8 +23,7 @@
     <Compile Remove="Models\PreferenceModels\**" />
     <Compile Remove="Repositories\**" />
     <Compile Remove="Resources\Data\Analytics\**" />
-    <Compile Remove="Resources\Html\Editor\**" />
-    <Compile Remove="Resources\Html\temp\**" />
+    <Compile Remove="Resources\Styles\**" />
     <Compile Remove="Selectors\**" />
     <Compile Remove="Services\**" />
     <Compile Remove="Utils\NetworkIO\Json\**" />
@@ -38,8 +37,7 @@
     <EmbeddedResource Remove="Models\PreferenceModels\**" />
     <EmbeddedResource Remove="Repositories\**" />
     <EmbeddedResource Remove="Resources\Data\Analytics\**" />
-    <EmbeddedResource Remove="Resources\Html\Editor\**" />
-    <EmbeddedResource Remove="Resources\Html\temp\**" />
+    <EmbeddedResource Remove="Resources\Styles\**" />
     <EmbeddedResource Remove="Selectors\**" />
     <EmbeddedResource Remove="Services\**" />
     <EmbeddedResource Remove="Utils\NetworkIO\Json\**" />
@@ -53,8 +51,7 @@
     <None Remove="Models\PreferenceModels\**" />
     <None Remove="Repositories\**" />
     <None Remove="Resources\Data\Analytics\**" />
-    <None Remove="Resources\Html\Editor\**" />
-    <None Remove="Resources\Html\temp\**" />
+    <None Remove="Resources\Styles\**" />
     <None Remove="Selectors\**" />
     <None Remove="Services\**" />
     <None Remove="Utils\NetworkIO\Json\**" />
@@ -85,12 +82,9 @@
     <None Remove="Resources\Data\Google\client_secrets.json" />
     <None Remove="Resources\Data\Google\client_secrets_desktop.json" />
     <None Remove="Resources\Fonts\password.ttf" />
-    <None Remove="Resources\Html\Editor.html" />
     <None Remove="Resources\Icons\monkey.png" />
     <None Remove="Behaviors\" />
     <EmbeddedResource Remove="App.xaml" />
-    <EmbeddedResource Remove="Resources\Styles\MpWpfConverters.xaml" />
-    <Compile Remove="Resources\Styles\MpWpfConverters.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -99,7 +93,6 @@
 
   <ItemGroup>
     <EmbeddedResource Remove="MainPage.xaml" />
-    <EmbeddedResource Remove="Resources\Styles\MpPagingListBoxResourceDictionary.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -142,16 +135,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Views\Shell\MpMainShell.xaml" />
-    <None Include="Views\Shell\MainFlyOut\TagTileCollectionView\MpTagTileCollectionView.xaml" />
-    <None Include="Views\Shell\MainFlyOut\TagTileCollectionView\Tag\MpTagTileView.xaml" />
-    <None Include="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\MpClipTileCollectionPageView.xaml" />
-    <None Include="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\Clip\MpClipTileView.xaml" />
-    <None Include="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\Clip\MpClipDetailPageView.xaml" />
-    <None Include="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\Clip\AssociatedTags\MpClipTagAssociationPageView.xaml" />
-    <None Include="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\Clip\AssociatedTags\MpClipTagAssociatedItemView.xaml" />
     <None Include="App.xaml" />
-    <None Include="Views\Shell\MainFlyOut\ContextMenu\MpContextMenuView.xaml" />
     <None Include="Controls\MpPopupPage.xaml" />
   </ItemGroup>
   <ItemGroup>
@@ -161,8 +145,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Resources\Html\" />
-    <Folder Include="Resources\Styles" />
     <Folder Include="Utils\Helpers\Graphics\Animation\" />
   </ItemGroup>
 

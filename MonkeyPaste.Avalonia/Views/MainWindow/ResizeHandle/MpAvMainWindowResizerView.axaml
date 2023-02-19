@@ -30,8 +30,6 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <Border x:Name="MainWindowResizeOuterBorder"
-            
-            Opacity="{Binding MainWindowOpacity, Source={x:Static pcl:MpPrefViewModel.Instance}}"
             Classes.IsVertical="{Binding IsVerticalOrientation}">
         <!--Border.RenderTransform>
             <TranslateTransform Y="-5" />
@@ -51,7 +49,7 @@
                 local:MpAvResizeExtension.XFactor="{Binding ResizeXFactor}"
                 local:MpAvResizeExtension.YFactor="{Binding ResizeYFactor}"
                 local:MpAvResizeExtension.GlobalResizeMessage="MainWindowSizeChanged"
-                local:MpAvResizeExtension.IsEnabled="True"                
+                local:MpAvResizeExtension.IsEnabled="True"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
                 BorderThickness="0" />

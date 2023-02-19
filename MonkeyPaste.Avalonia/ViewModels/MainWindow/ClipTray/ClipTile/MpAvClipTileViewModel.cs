@@ -280,12 +280,11 @@ namespace MonkeyPaste.Avalonia {
 
         public double TileContentWidth =>
             BoundWidth -
-            (InnerSpacing * 2);
+            TransactionCollectionViewModel.BoundWidth;
 
         public double TileContentHeight =>
             BoundHeight -
             TileTitleHeight -
-            (InnerSpacing * 2) -
             TileDetailHeight;
 
 
@@ -313,10 +312,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public MpRect ObservedBounds { get; set; }
-        public double OuterSpacing => 5;
-        public double InnerSpacing => 0;
-        //public MpSize MinSize => Parent == null ? MpSize.Empty : IsPinned ? Parent.DefaultPinItemSize : Parent.DefaultQueryItemSize;
-
         public double MinWidth =>
             Parent == null ? 0 : IsPinned ? Parent.DefaultPinItemWidth : Parent.DefaultQueryItemWidth;
         public double MinHeight =>
@@ -597,9 +592,15 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         public bool CanEdit => IsSelected && IsTextItem;
-
+        public bool IsListBoxItemFocused { get; set; } = false;
         public bool IsTitleFocused { get; set; } = false;
+
+        public bool IsAnyFocused =>
+            IsListBoxItemFocused ||
+            IsTitleFocused;
+
         public bool IsPasting { get; set; } = false;
+
         public bool IsCustomWidth => Parent == null ? false : MpAvPersistentClipTilePropertiesHelper.IsTileHaveUniqueSize(CopyItemId);
         public bool IsPlaceholder => CopyItem == null;
 

@@ -17,7 +17,7 @@
                        VerticalContentAlignment="Stretch"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileView">
     <local:MpAvUserControl.Styles>
-        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.IsAnyBusy">
+        <Style Selector="Border#ClipTileContainerBorder.IsAnyBusy">
             <Setter Property="Cursor"
                     Value="Wait" />
         </Style>

@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
 using PropertyChanged;
 using System;
@@ -42,7 +43,7 @@ namespace MonkeyPaste.Avalonia {
                 // somethigns wrong
                 Debugger.Break();
             }
-            if (MpPlatform.Services.OsInfo.IsDesktop) {
+            if (MpPlatform.Services.PlatformInfo.IsDesktop) {
                 ShowDesktopNotification(nvmb);
             } else {
                 if (nvmb is MpLoaderNotificationViewModel lnvm) {
@@ -104,21 +105,24 @@ namespace MonkeyPaste.Avalonia {
                 var layoutType = MpNotificationViewModelBase.GetLayoutTypeFromNotificationType(nvmb.NotificationType);
                 switch (layoutType) {
                     case MpNotificationLayoutType.Loader:
-                        nw = new MpAvLoaderNotificationWindow();
-                        nw.DataContext = nvmb;
+                        nw = new MpAvLoaderNotificationWindow() {
+                            DataContext = nvmb
+                        };
                         break;
                     case MpNotificationLayoutType.ErrorWithOption:
                     case MpNotificationLayoutType.UserAction:
                     case MpNotificationLayoutType.ErrorAndShutdown:
-                        nw = new MpAvUserActionNotificationWindow();
-                        nw.DataContext = nvmb;
+                        nw = new MpAvUserActionNotificationWindow() {
+                            DataContext = nvmb
+                        };
                         break;
                     case MpNotificationLayoutType.Append:
                         nw = MpAvAppendNotificationWindow.Instance;
                         break;
                     default:
-                        nw = new MpAvMessageNotificationWindow();
-                        nw.DataContext = nvmb;
+                        nw = new MpAvMessageNotificationWindow() {
+                            DataContext = nvmb
+                        };
                         break;
                 }
                 if (nw == null) {
@@ -131,10 +135,6 @@ namespace MonkeyPaste.Avalonia {
 
                 nw.GetObservable(Window.IsVisibleProperty).Subscribe(value => OnNotificationWindowIsVisibleChangedHandler(nw));
 
-                if (App.MainWindow == null) {
-                    // occurs on startup
-                    App.MainWindow = nw;
-                }
                 BeginOpen(nw);
             });
         }
@@ -145,12 +145,14 @@ namespace MonkeyPaste.Avalonia {
             if (!_windows.Contains(nw)) {
                 _windows.Add(nw);
             }
-
-            if (nw == MpAvAppendNotificationWindow.Instance &&
+            if (MpBootstrapperViewModelBase.IsPlatformLoaded) {
+                if (nw == MpAvAppendNotificationWindow.Instance &&
                 MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
-                return;
+                    return;
+                }
+                MpAvMainWindowViewModel.Instance.IsAnyNotificationActivating = true;
             }
-            MpAvMainWindowViewModel.Instance.IsAnyNotificationActivating = true;
+
             if (nvmb.IsModal) {
                 bool wasLocked = MpAvMainWindowViewModel.Instance.IsMainWindowLocked;
                 if (!wasLocked) {
@@ -163,6 +165,12 @@ namespace MonkeyPaste.Avalonia {
                 }
             } else {
                 nw.Show();
+            }
+
+            if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop &&
+                    desktop.MainWindow == null) {
+                // occurs on startup
+                desktop.MainWindow = nw;
             }
             if (!nw.IsVisible) {
                 Debugger.Break();
@@ -184,7 +192,8 @@ namespace MonkeyPaste.Avalonia {
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.MainWindowOpening:
-                    if (MpAvAppendNotificationWindow.Instance.IsVisible) {
+                    if (MpAvAppendNotificationWindow.Instance != null &&
+                        MpAvAppendNotificationWindow.Instance.IsVisible) {
                         HideNotification(MpAppendNotificationViewModel.Instance);
                     }
                     break;

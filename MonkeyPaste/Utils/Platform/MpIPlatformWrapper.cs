@@ -1,8 +1,10 @@
 ﻿using MonkeyPaste.Common;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste {
 
     public interface MpIPlatformWrapper : MpICommonTools {
+        Task InitializeAsync();
         MpIContentViewLocator ContentViewLocator { get; set; }
 
         MpINativePathDialog NativePathDialog { get; set; }

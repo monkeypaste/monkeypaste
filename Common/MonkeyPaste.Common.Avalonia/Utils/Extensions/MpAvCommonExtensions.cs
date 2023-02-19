@@ -5,6 +5,9 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Media.Transformation;
+using Avalonia.Platform;
+using Avalonia.Rendering;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using System;
@@ -20,6 +23,13 @@ namespace MonkeyPaste.Common.Avalonia {
 
         #region Environment
 
+        public static Screen AsScreen(this IRenderRoot rr, double scaling = 1) {
+            return new Screen(
+                            scaling,
+                            new PixelRect(rr.ClientSize.ToAvPixelSize()),
+                            new PixelRect(rr.ClientSize.ToAvPixelSize()),
+                            true);
+        }
 
         #endregion
 
@@ -85,6 +95,20 @@ namespace MonkeyPaste.Common.Avalonia {
         #endregion
 
         #region Visual Tree
+
+        public static Control FindVisualDescendantWithHashCode(this Control control, int hashCode, bool printInfo = false) {
+            var target = control.GetVisualDescendants<Control>().FirstOrDefault(x => x.GetHashCode() == hashCode);
+            if (target != null && printInfo) {
+                var control_up = target.GetVisualAncestors<Control>();
+                MpConsole.WriteLine("UP:");
+                control_up.ForEach(x => MpConsole.WriteLine($"Type: '{x.GetType()}' Name: '{x.Name}'"));
+
+                var control_down = target.GetVisualDescendants<Control>();
+                MpConsole.WriteLine("DOWN:");
+                control_down.ForEach(x => MpConsole.WriteLine($"Type: '{x.GetType()}' Name: '{x.Name}'"));
+            }
+            return target;
+        }
 
         public static T GetVisualAncestor<T>(this Visual visual, bool includeSelf = true) where T : Visual? {
             if (includeSelf && visual is T) {
@@ -291,10 +315,10 @@ namespace MonkeyPaste.Common.Avalonia {
 
         public static FormattedText ToFormattedText(
             this string text,
+            double fontSize = 12.0d,
             string fontFamily = FontFamily.DefaultFontFamilyName,
             FontStyle fontStyle = FontStyle.Normal,
             FontWeight fontWeight = FontWeight.Normal,
-            double fontSize = 12.0d,
             TextAlignment textAlignment = TextAlignment.Left,
             TextWrapping textWrapping = TextWrapping.NoWrap,
             FlowDirection flowDirection = FlowDirection.LeftToRight,
@@ -318,6 +342,34 @@ namespace MonkeyPaste.Common.Avalonia {
             //    ft.Constraint = constraint.ToAvSize();
             //}
             return ft;
+        }
+
+
+        public static FormattedText ToFormattedText(this TextBox tb) {
+            var ft = new FormattedText(
+                    tb.Text,
+                    CultureInfo.CurrentCulture,
+                    tb.FlowDirection,
+                    new Typeface(tb.FontFamily, tb.FontStyle, tb.FontWeight),
+                    Math.Max(1, tb.FontSize),
+                    tb.Foreground);
+            ft.TextAlignment = tb.TextAlignment;
+            return ft;
+        }
+        public static FormattedText ToFormattedText(this TextBlock tb) {
+            var ft = new FormattedText(
+                    tb.Text,
+                    CultureInfo.CurrentCulture,
+                    tb.FlowDirection,
+                    new Typeface(tb.FontFamily, tb.FontStyle, tb.FontWeight),
+                    Math.Max(1, tb.FontSize),
+                    tb.Foreground);
+            ft.TextAlignment = tb.TextAlignment;
+            return ft;
+        }
+
+        public static MpSize GetFormattedTextSize(this FormattedText ft) {
+            return new MpSize(ft.Width, ft.Height);
         }
         #endregion
 
@@ -424,32 +476,6 @@ namespace MonkeyPaste.Common.Avalonia {
 
         #region TextBox
 
-        public static FormattedText ToFormattedText(this TextBox tb) {
-            var ft = new FormattedText(
-                    tb.Text,
-                    CultureInfo.CurrentCulture,
-                    tb.FlowDirection,
-                    new Typeface(tb.FontFamily, tb.FontStyle, tb.FontWeight),
-                    tb.FontSize,
-                    tb.Foreground);
-            //        tb.TextAlignment,
-            //        tb.TextWrapping,
-            //        new Size());
-            return ft;
-        }
-        public static FormattedText ToFormattedText(this TextBlock tb) {
-            var ft = new FormattedText(
-                    tb.Text,
-                    CultureInfo.CurrentCulture,
-                    tb.FlowDirection,
-                    new Typeface(tb.FontFamily, tb.FontStyle, tb.FontWeight),
-                    tb.FontSize,
-                    tb.Foreground);
-            //tb.TextAlignment,
-            //tb.TextWrapping,
-            //new Size());
-            return ft;
-        }
 
         #endregion
 
@@ -657,12 +683,12 @@ namespace MonkeyPaste.Common.Avalonia {
 
 
 
-        public static MpSize ToPortableSize(this PixelSize size) {
-            return new MpSize(size.Width, size.Height);
+        public static MpSize ToPortableSize(this PixelSize size, double scaling) {
+            return new MpSize(size.Width / scaling, size.Height / scaling);
         }
 
-        public static PixelSize ToAvPixelSize(this MpSize size) {
-            return new PixelSize((int)size.Width, (int)size.Height);
+        public static PixelSize ToAvPixelSize(this MpSize size, double scaling) {
+            return new PixelSize((int)(size.Width * scaling), (int)(size.Height * scaling));
         }
 
         public static PixelSize ToAvPixelSize(this Size size) {
@@ -700,11 +726,11 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static MpRect ToPortableRect(this PixelRect rect, double pixelDensity) {
-            return new MpRect(rect.Position.ToPortablePoint(pixelDensity), rect.Size.ToPortableSize());
+            return new MpRect(rect.Position.ToPortablePoint(pixelDensity), rect.Size.ToPortableSize(pixelDensity));
         }
 
         public static PixelRect ToAvPixelRect(this MpRect rect, double pixelDensity) {
-            return new PixelRect(rect.Location.ToAvPixelPoint(pixelDensity), rect.Size.ToAvPixelSize());
+            return new PixelRect(rect.Location.ToAvPixelPoint(pixelDensity), rect.Size.ToAvPixelSize(pixelDensity));
         }
 
 

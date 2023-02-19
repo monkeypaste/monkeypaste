@@ -1,7 +1,10 @@
-﻿using Avalonia.Layout;
+﻿using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,6 +13,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using FocusManager = Avalonia.Input.FocusManager;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -968,6 +972,9 @@ namespace MonkeyPaste.Avalonia {
         private MpClipTrayLayoutType? _layoutType;
         public MpClipTrayLayoutType LayoutType {
             get {
+                if (MpPrefViewModel.Instance == null) {
+                    return MpClipTrayLayoutType.Stack;
+                }
                 if (_layoutType == null) {
                     _layoutType = MpPrefViewModel.Instance.ClipTrayLayoutTypeName.ToEnum<MpClipTrayLayoutType>();
                 }
@@ -976,7 +983,9 @@ namespace MonkeyPaste.Avalonia {
             set {
                 if (LayoutType != value) {
                     _layoutType = value;
-                    MpPrefViewModel.Instance.ClipTrayLayoutTypeName = value.ToString();
+                    if (MpPrefViewModel.Instance != null) {
+                        MpPrefViewModel.Instance.ClipTrayLayoutTypeName = value.ToString();
+                    }
                     OnPropertyChanged(nameof(LayoutType));
                 }
             }
@@ -1189,6 +1198,8 @@ namespace MonkeyPaste.Avalonia {
         public bool IsFilteringByApp { get; set; } = false;
 
         public bool IsQueryEmpty =>
+            MpPlatform.Services == null ||
+            MpPlatform.Services.Query == null ||
             MpPlatform.Services.Query.TotalAvailableItemsInQuery == 0;
 
         public bool IsPinTrayEmpty =>
@@ -1251,7 +1262,8 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsAnyTilePinned => PinnedItems.Count > 0;
 
-
+        public bool IsAnyTileListBoxItemFocused =>
+            AllItems.Any(x => x.IsListBoxItemFocused);
 
         #endregion
 
@@ -1295,6 +1307,8 @@ namespace MonkeyPaste.Avalonia {
             MpPlatform.Services.ClipboardMonitor.OnClipboardChanged += ClipboardChanged;
 
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
+
+            OnPropertyChanged(nameof(LayoutType));
 
             ModalClipTileViewModel = await CreateClipTileViewModel(null);
             //for (int i = 1; i <= 1000; i++) {
@@ -2285,7 +2299,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private bool CanTileNavigate() {
-            bool canNavigate = !IsAnyBusy && !IsArrowSelecting &&
+            bool canNavigate =
+                !IsAnyBusy &&
+                !IsArrowSelecting &&
 
                   !HasScrollVelocity &&
                   !IsScrollingIntoView;
@@ -2296,7 +2312,13 @@ namespace MonkeyPaste.Avalonia {
                     (SelectedItem != null && !SelectedItem.IsTitleReadOnly && SelectedItem.IsTitleFocused)) {
                     canNavigate = false;
                 }
+                if (canNavigate) {
+                    if (!IsAnyTileListBoxItemFocused) {
+                        canNavigate = false;
+                    }
+                }
             }
+
             return canNavigate;
         }
 

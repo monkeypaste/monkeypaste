@@ -412,20 +412,16 @@ namespace MonkeyPaste {
 
             if (isNewDb) {
                 await CreateViewsAsync();
-                await CreateDefaultDataAsync();
+                await InitDefaultDataAsync();
 
                 OnInitDefaultNativeData?.Invoke(nameof(MpDb), null);
             }
 
-            await MpDefaultDataModelTools.InitializeAsync(
-                MpPrefViewModel.Instance.ThisDeviceGuid,
-                MpPlatform.Services.OsInfo.OsType,
-                MpPlatform.Services.OsInfo.OsFileManagerPath);
+            await MpDefaultDataModelTools.InitializeAsync();
 
             if (isNewDb) {
                 OnInitDefaultNativeData?.Invoke(nameof(MpDb), null);
             }
-
 
             MpConsole.WriteLine(@"Db file located: " + MpPlatform.Services.DbInfo.DbPath);
             MpConsole.WriteLine(@"This Client Guid: " + MpPrefViewModel.Instance.ThisDeviceGuid);
@@ -700,7 +696,7 @@ INNER JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId
 
         }
 
-        private static async Task CreateDefaultDataAsync() {
+        private static async Task InitDefaultDataAsync() {
             // NOTE! MpTag.AllTagId needs to be changed to 1 not 2 since recent was removed
 
             await MpDefaultDataModelTools.CreateAsync();

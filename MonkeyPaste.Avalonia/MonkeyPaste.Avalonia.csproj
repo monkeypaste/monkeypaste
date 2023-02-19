@@ -7,6 +7,8 @@
     <WarningLevel>4</WarningLevel>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <TargetFramework>$(MainTargetFramework)</TargetFramework>
+     <!--<RunPostBuildEvent>Always</RunPostBuildEvent>-->
+     <!--<DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>-->
   </PropertyGroup>
   <!--<ItemGroup>
     <KnownFrameworkReference Update="Microsoft.WindowsDesktop.App.WPF" IsWindowsOnly="false" />
@@ -140,7 +142,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvActionDesigner.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvActionDesignerItemColors.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvActionProperty.axaml" />
-    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvClipBorder.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\Border.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvClipTile.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvClipTrayContainer.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMarqueeTextBox.axaml" />
@@ -152,6 +154,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvSideBarItems.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvSliderParameter.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvTooltip.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\ScrollBar.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TemplatedControl.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TextBlock.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TextBox.axaml" />
@@ -989,7 +992,6 @@
     <AvaloniaResource Include="Themes\Default\Controls\Animations\Defaults.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Animations\Shake.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ListBox.axaml" />
-    <AvaloniaResource Include="Themes\Default\Controls\MpAvClipBorder.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\TemplatedControl.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ComboBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\GridSplitter.axaml" />
@@ -1008,6 +1010,7 @@
     <AvaloniaResource Include="Themes\Default\Controls\Button.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvClipTrayContainer.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvPinTray.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\ScrollBar.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\TextBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ToolTip.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\TextBlock.axaml">
@@ -1059,7 +1062,6 @@
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\Mac\" />
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\Base\" />
     <Folder Include="Utils\Input\Mouse\" />
-    <Folder Include="Utils\Notifications\" />
     <Folder Include="ViewModels\MainWindow\SearchBox\Filter\Items\" />
     <Folder Include="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Transactions\Items\" />
     <Folder Include="Views\MainWindow\ClipTrayContainer\PinTray\" />
@@ -1070,6 +1072,7 @@
     <ProjectReference Include="..\Common\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
     <ProjectReference Include="..\Common\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
     <ProjectReference Include="..\MonkeyPaste\MonkeyPaste.csproj" />
+    <ProjectReference Include="..\_build\_build.csproj" />
   </ItemGroup>
   
   <ItemGroup>
@@ -1166,6 +1169,9 @@
     <Compile Update="Views\Reusable\Notifications\Toast\UserAction\MpAvUserActionNotificationWindow.axaml.cs">
       <DependentUpon>MpAvUserActionNotificationWindow.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Reusable\Notifications\Toast\_Window\MpAvNotificationWindow.axaml.cs">
+      <DependentUpon>MpAvNotificationWindow.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\Reusable\ShortcutWindow\MpAvAssignShortcutDialog.axaml.cs">
       <DependentUpon>MpAvAssignShortcutDialog.axaml</DependentUpon>
     </Compile>
@@ -1203,9 +1209,7 @@
   </Target>
 
   <Target Name="_CollectWatchItems" />
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="call $(ProjectDir)scripts\kill_mpav_processes.bat" Condition="'$(BuildOs)' == 'WINDOWS'" />
-  </Target>
+  
   <PropertyGroup>
      <!-- 
      Turns off reference assembly generation 

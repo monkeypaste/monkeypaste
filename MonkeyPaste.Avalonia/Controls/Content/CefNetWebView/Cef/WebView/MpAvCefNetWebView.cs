@@ -393,6 +393,9 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private void MpAvCefNetWebView_CreateWindow(object sender, CreateWindowEventArgs e) {
+            if (App.MainWindow == null) {
+                return;
+            }
             IPlatformHandle platformHandle = App.MainWindow.PlatformImpl.Handle;
             if (platformHandle is IMacOSTopLevelPlatformHandle macOSHandle) {
                 e.WindowInfo.SetAsWindowless(macOSHandle.GetNSWindowRetained());
@@ -421,7 +424,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpAvIWebViewBindingResponseHandler Implementation
 
-        async Task MpAvIWebViewBindingResponseHandler.HandleBindingNotificationAsync(MpAvEditorBindingFunctionType notificationType, string msgJsonBase64Str) {
+        void MpAvIWebViewBindingResponseHandler.HandleBindingNotification(MpAvEditorBindingFunctionType notificationType, string msgJsonBase64Str) {
             var ctvm = BindingContext;
             if (ctvm == null &&
                 notificationType != MpAvEditorBindingFunctionType.notifyDomLoaded &&
@@ -800,7 +803,7 @@ namespace MonkeyPaste.Avalonia {
 
         public virtual string ContentUrl {
             get {
-                if (this.GetVisualRoot() == App.MainWindow) {
+                if (this.GetVisualRoot() == App.MainView) {
                     return MpAvClipTrayViewModel.EditorPath;
                 }
                 return $"{MpAvClipTrayViewModel.EditorPath}?{APPEND_NOTIFIER_URL_PARAMS}";
@@ -830,7 +833,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             var req = new MpQuillInitMainRequestMessage() {
-                envName = MpPlatform.Services.OsInfo.OsType.ToString()
+                envName = MpPlatform.Services.PlatformInfo.OsType.ToString()
             };
             this.ExecuteJavascript($"initMain_ext('{req.SerializeJsonObjectToBase64()}')");
         }

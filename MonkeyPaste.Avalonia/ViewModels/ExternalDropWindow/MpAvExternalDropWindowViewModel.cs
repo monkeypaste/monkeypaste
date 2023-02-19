@@ -180,7 +180,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 // TODO need to account for other screen here and use density for screen where gmp is contained
-                var result = MpAvAppCollectionViewModel.Instance.GetAppViewModelFromScreenPoint(gmp, MpAvMainWindowViewModel.Instance.MainWindowScreen.PixelDensity);
+                var result = MpAvAppCollectionViewModel.Instance.GetAppViewModelFromScreenPoint(gmp, MpAvMainWindowViewModel.Instance.MainWindowScreen.Scaling);
                 if (result != null) {
                     if (HasUserToggledAnyHandlers || (DropAppViewModel != null && result.AppId == DropAppViewModel.AppId)) {
                         return;

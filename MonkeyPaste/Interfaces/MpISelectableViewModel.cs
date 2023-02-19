@@ -7,6 +7,10 @@ namespace MonkeyPaste {
         DateTime LastSelectedDateTime { get; set; }
     }
 
+    public interface MpIConditionalSelectableViewModel : MpISelectableViewModel {
+        bool CanSelect { get; }
+    }
+
     public interface MpISelectorItemViewModel : MpIViewModel {
         MpISelectorViewModel Selector { get; }
     }

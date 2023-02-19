@@ -24,7 +24,7 @@
         TransparencyLevelHint="Transparent"
         Background="Transparent"
         Title="">
-    <local:MpAvClipBorder HorizontalAlignment="Stretch"
+    <Border HorizontalAlignment="Stretch"
                           VerticalAlignment="Stretch"
                           MinHeight="130"
                           BorderThickness="7"
@@ -162,5 +162,5 @@
                                      local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverOptionsButton, Mode=TwoWay}"
                                      local:MpAvMenuExtension.PlacementMode="Left" />
         </Grid>
-    </local:MpAvClipBorder>
+    </Border>
 </Window>

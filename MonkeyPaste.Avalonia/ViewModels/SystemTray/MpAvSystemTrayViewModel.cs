@@ -101,7 +101,7 @@ namespace MonkeyPaste.Avalonia {
                             CommandPath = nameof(MpAvSettingsWindowViewModel.Instance.ShowSettingsWindowCommand),
                             ShortcutArgs = new object[] { MpShortcutType.ShowSettings },
                         },
-#if DEBUG
+#if DEBUG && DESKTOP
                         new MpMenuItemViewModel() {
                             Header = "Show Converter DevTools",
                             Command = MpAvPlainHtmlConverter.Instance.ShowConverterDevTools,

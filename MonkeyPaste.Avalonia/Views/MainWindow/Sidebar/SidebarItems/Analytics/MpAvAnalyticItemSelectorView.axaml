@@ -62,7 +62,7 @@
 
                             <local:MpAvAnalyticItemPresetDataGridView HorizontalAlignment="Stretch"
                                                                       VerticalAlignment="Stretch"
-                                                                      DataContext="{Binding}" />
+                                                                      DataContext="{Binding .}" />
                         </Border>
                     </StackPanel>
                 </Border>
@@ -87,7 +87,7 @@
                                 <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
                                     <local:MpAvPluginParameterListBoxView HorizontalAlignment="Stretch"
                                                                           VerticalAlignment="Stretch"
-                                                                          DataContext="{Binding}" />
+                                                                          DataContext="{Binding .}" />
                                 </DataTemplate>
                             </TransitioningContentControl.ContentTemplate>
                         </TransitioningContentControl>

@@ -132,7 +132,7 @@ namespace MonkeyPaste.Common.Avalonia {
             if (docSize != null) {
                 size = docSize;
             } else {
-                MpSize pixelSize = bmpSrc.PixelSize.ToPortableSize();
+                MpSize pixelSize = bmpSrc.PixelSize.ToPortableSize(1);
                 if (pixelSize.Width >= pixelSize.Height) {
                     double ar = pixelSize.Height / pixelSize.Width;
                     size.Height *= ar;

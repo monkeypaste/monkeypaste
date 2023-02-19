@@ -18,7 +18,6 @@ namespace MonkeyPaste {
         #region Device
         public static int ThisUserDeviceId { get; private set; }
         public static string ThisUserDeviceGuid { get; private set; }
-        public static MpUserDeviceType ThisUserDeviceType { get; private set; }
 
         #endregion
 
@@ -36,7 +35,7 @@ namespace MonkeyPaste {
 
         #region Public Methods
 
-        public static async Task<string> DiscoverThisDeviceGuidAsync(MpIDbInfo dbInfo, MpIOsInfo osInfo) {
+        public static async Task<Tuple<string, int>> DiscoverPrefInfoAsync(MpIDbInfo dbInfo, MpIPlatformInfo osInfo) {
             bool wouldBeNewDb = await MpDb.InitDbConnectionAsync(dbInfo, false);
             if (wouldBeNewDb) {
                 //this should be caught in pref init so somethings wrong
@@ -44,6 +43,7 @@ namespace MonkeyPaste {
                 return null;
             }
             await MpDb.CreateTableAsync<MpUserDevice>();
+
             MpUserDevice this_device = await MpDataModelProvider.GetUserDeviceByMembersAsync(osInfo.OsMachineName, osInfo.OsType);
             if (this_device == null) {
                 // maybe user changed machine name so fallback and query just by device type
@@ -55,11 +55,11 @@ namespace MonkeyPaste {
                 }
             }
             ThisUserDeviceGuid = this_device.Guid;
-            ThisUserDeviceType = osInfo.OsType;
+            ThisUserDeviceId = this_device.Id;
 
             await MpDb.CreateTableAsync<MpApp>();
 
-            string thisAppPath = MpCommonHelpers.GetExecutingPath();
+            string thisAppPath = osInfo.ExecutingPath;
             var this_app = await MpDataModelProvider.GetAppByMembersAsync(thisAppPath, null, this_device.Id);
             if (this_app == null) {
                 // reset error
@@ -68,7 +68,7 @@ namespace MonkeyPaste {
             ThisAppId = this_app.Id;
 
 
-            if (MpPlatform.Services.OsInfo.IsDesktop) {
+            if (osInfo.IsDesktop) {
                 var this_os_file_manager = await MpDataModelProvider.GetAppByMembersAsync(osInfo.OsFileManagerPath, null, this_device.Id);
                 if (this_os_file_manager == null) {
                     // reset error
@@ -77,22 +77,22 @@ namespace MonkeyPaste {
                 ThisOsFileManagerAppId = this_os_file_manager.Id;
             }
 
+            await MpDb.CreateTableAsync<MpCopyItem>();
+            int total_count = await MpDataModelProvider.GetTotalCopyItemCountAsync();
 
             await MpDb.CloseConnectionAsync();
-            return ThisUserDeviceGuid;
+            return new Tuple<string, int>(ThisUserDeviceGuid, total_count);
         }
 
         public static async Task CreateAsync() {
 
             // User Device
 
-            ThisUserDeviceType = MpPlatform.Services.OsInfo.OsType;
-
             ThisUserDeviceGuid = Guid.NewGuid().ToString();
 
             var thisDevice = new MpUserDevice() {
                 UserDeviceGuid = Guid.Parse(MpPrefViewModel.Instance.ThisDeviceGuid),
-                PlatformType = ThisUserDeviceType,
+                PlatformType = MpPlatform.Services.PlatformInfo.OsType,
                 MachineName = Environment.MachineName
             };
 
@@ -108,56 +108,48 @@ namespace MonkeyPaste {
 
             // This App
 
-            string thisAppPath = MpCommonHelpers.GetExecutingPath();
             string thisAppName = MpPrefViewModel.Instance.ApplicationName;
             var thisApp = await MpApp.CreateAsync(
-                appPath: thisAppPath,
+                appPath: MpPlatform.Services.PlatformInfo.ExecutingPath,
                 appName: thisAppName,
                 iconId: thisAppIcon.Id);
 
             ThisAppId = thisApp.Id;
 
-            if (MpPlatform.Services.OsInfo.IsDesktop) {
+            if (MpPlatform.Services.PlatformInfo.IsDesktop) {
                 // OS App
                 var osApp = await MpApp.CreateAsync(
-                    appPath: MpPlatform.Services.OsInfo.OsFileManagerPath,
-                    appName: MpPlatform.Services.OsInfo.OsFileManagerName);
+                    appPath: MpPlatform.Services.PlatformInfo.OsFileManagerPath,
+                    appName: MpPlatform.Services.PlatformInfo.OsFileManagerName);
                 ThisOsFileManagerAppId = osApp.Id;
             }
 
         }
 
-        public static async Task InitializeAsync(
-            string userDeviceGuid,
-            MpUserDeviceType osType,
-            string osFileManagerPath) {
-
+        public static async Task InitializeAsync() {
             // USER DEVICE
-
-            var thisUserDevice = await MpDataModelProvider.GetUserDeviceByGuidAsync(userDeviceGuid);
+            var thisUserDevice = await MpDataModelProvider.GetUserDeviceByGuidAsync(MpPrefViewModel.Instance.ThisDeviceGuid);
             if (thisUserDevice == null) {
                 // reset error
                 Debugger.Break();
             }
             ThisUserDeviceId = thisUserDevice.Id;
             ThisUserDeviceGuid = thisUserDevice.Guid;
-            ThisUserDeviceType = osType;
 
             // THIS APP
 
-            string thisAppPath = MpCommonHelpers.GetExecutingPath();
-            var this_app = await MpDataModelProvider.GetAppByMembersAsync(thisAppPath, null, ThisUserDeviceId);
+            var this_app = await MpDataModelProvider.GetAppByMembersAsync(MpPlatform.Services.PlatformInfo.ExecutingPath, null, ThisUserDeviceId);
             if (this_app == null) {
                 // reset error
                 Debugger.Break();
             }
             ThisAppId = this_app.Id;
 
-            if (MpPlatform.Services.OsInfo.IsDesktop) {
+            if (MpPlatform.Services.PlatformInfo.IsDesktop) {
                 // OS APP
 
                 var osApp = await MpDataModelProvider.GetAppByMembersAsync(
-                    osFileManagerPath,
+                    MpPlatform.Services.PlatformInfo.OsFileManagerPath,
                     null,
                     ThisUserDeviceId);
                 ThisOsFileManagerAppId = osApp.Id;
@@ -175,6 +167,18 @@ namespace MonkeyPaste {
         #endregion
 
         #region Private Methods
+        private static async Task InitUserDeviceAsync(string userDeviceGuid, string machineName, MpUserDeviceType? deviceType) {
+            // CASE 1 - initialize
+            if (!string.IsNullOrEmpty(userDeviceGuid)) {
+                var thisUserDevice = await MpDataModelProvider.GetUserDeviceByGuidAsync(userDeviceGuid);
+                if (thisUserDevice == null) {
+                    // reset error
+                    Debugger.Break();
+                }
+                ThisUserDeviceId = thisUserDevice.Id;
+                ThisUserDeviceGuid = thisUserDevice.Guid;
+            }
+        }
         #endregion
 
         #region Commands

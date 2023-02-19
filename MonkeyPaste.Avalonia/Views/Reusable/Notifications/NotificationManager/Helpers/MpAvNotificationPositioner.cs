@@ -110,7 +110,7 @@ namespace MonkeyPaste.Avalonia {
                     return new PixelPoint();
                 }
                 anchor_rect = primaryScreen.WorkArea;
-                anchor_pd = primaryScreen.PixelDensity;
+                anchor_pd = primaryScreen.Scaling;
             }
 
             if (anchor is Control ac) {
@@ -138,8 +138,8 @@ namespace MonkeyPaste.Avalonia {
             // TODO this should somehow know where system tray is on device, it just assumes its bottom right (windows)
             var s = GetWindowSize(w);
 
-
-            var primaryScreen = new MpAvScreenInfoCollection().Screens.FirstOrDefault(x => x.IsPrimary);
+            var primaryScreen = new MpAvScreenInfo(w.Screens.All.FirstOrDefault(x => x.IsPrimary));
+            //new MpAvScreenInfoCollection().Screens.FirstOrDefault(x => x.IsPrimary);
             if (primaryScreen == null) {
                 // happens before loader attached
                 return;
@@ -153,8 +153,8 @@ namespace MonkeyPaste.Avalonia {
 
             //if(OperatingSystem.IsWindows()) 
             {
-                x *= primaryScreen.PixelDensity;
-                y *= primaryScreen.PixelDensity;
+                x *= primaryScreen.Scaling;
+                y *= primaryScreen.Scaling;
             }
 
             // when y is less than 0 i think it screws up measuring mw dimensions so its a baby

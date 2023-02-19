@@ -133,7 +133,7 @@ namespace MonkeyPaste.Avalonia {
 
             MpPoint screen_mp = MpAvMainView.Instance.PointToScreen(
                 mw_mp.ToAvPoint())
-                .ToPortablePoint(MpAvMainWindowViewModel.Instance.MainWindowScreen.PixelDensity);
+                .ToPortablePoint(MpAvMainWindowViewModel.Instance.MainWindowScreen.Scaling);
 
             MpRect mw_screen_rect = MpAvMainWindowViewModel.Instance.MainWindowScreen.Bounds;
             var screen_faces = mw_screen_rect.ToFaces();

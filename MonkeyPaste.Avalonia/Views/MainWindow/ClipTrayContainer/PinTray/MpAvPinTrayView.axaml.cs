@@ -242,7 +242,7 @@ namespace MonkeyPaste.Avalonia {
             // get child to adjust height
             var ctv = ref_lbi.GetVisualDescendant<MpAvClipTileView>();
             // NOTE get inner child because of border thickness
-            var lbi_child = ctv.FindControl<MpAvClipBorder>("ClipTileContainerBorder").Child;
+            var lbi_child = ctv.FindControl<Border>("ClipTileContainerBorder").Child;
             var lbi_child_tl = lbi_child.TranslatePoint(new Point(0, 0), ptr_lb_wp);
             drop_line.P1.Y = lbi_child_tl.Value.Y;
 

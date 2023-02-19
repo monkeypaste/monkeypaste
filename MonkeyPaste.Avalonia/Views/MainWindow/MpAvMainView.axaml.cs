@@ -1,10 +1,13 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
+using Avalonia.VisualTree;
+using Avalonia.Win32;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
@@ -14,7 +17,10 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvMainView :
-        MpAvUserControl<MpAvMainWindowViewModel>, MpAvIResizableControl {
+        MpAvUserControl<MpAvMainWindowViewModel>,
+        MpAvIResizableControl,
+        MpIMainView,
+        MpIAsyncObject {
         #region Private Variables
 
         private int? _origResizerIdx;
@@ -29,16 +35,17 @@ namespace MonkeyPaste.Avalonia {
         #region Statics
         private static MpAvMainView _instance;
         public static MpAvMainView Instance => _instance;
-        public static void Init() {
-
-            if (MpPlatform.Services.OsInfo.IsDesktop) {
+        public static async Task Init() {
+            await Task.Delay(1);
+            if (MpPlatform.Services.PlatformInfo.IsDesktop) {
                 var mw = new MpAvMainWindow();
                 if (mw.Content is MpAvMainView mv) {
                     _instance = mv;
-
-
                 }
-                App.MainWindow = mw;
+                if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
+                    desktop.MainWindow = mw;
+                }
+                //App.MainWindow = mw;
                 if (App.MainWindow == null) {
                     // huh?
                     MpDebug.Break();
@@ -49,10 +56,22 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 //mw.DataContext = MpAvMainWindowViewModel.Instance;
+            } else {
+                if (Application.Current.ApplicationLifetime is ISingleViewApplicationLifetime lifetime) {
+                    _instance = lifetime.MainView as MpAvMainView;
+                    //lifetime.MainView = _instance;
+                    //await MpAvMainWindowViewModel.Instance.InitializeAsync();
+                }
             }
             //DataContext = MpAvMainWindowViewModel.Instance;
         }
 
+        #endregion
+
+        #region Interfaces
+
+        #region MpIAsyncObject
+        public bool IsBusy { get; set; }
         #endregion
 
         #region MpAvIResizableControl Implementation
@@ -69,6 +88,32 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
 
+        public bool IsActive =>
+            BindingContext.IsMainWindowActive;
+        public nint Handle {
+            get {
+                //if(this.GetVisualRoot() is TopLevel tl &&
+                //    tl.PlatformImpl != null &&
+                //    tl.PlatformImpl.)
+                //((WindowImpl)((TopLevel)this.GetVisualRoot()).PlatformImpl).Handle.Handle;
+                return 0;
+            }
+        }
+
+        public void Show() {
+            //throw new NotImplementedException();
+        }
+
+        public void Hide() {
+            //throw new NotImplementedException();
+        }
+
+        public void SetPosition(MpPoint p, double scale) {
+            //throw new NotImplementedException();
+        }
+
+        #endregion
+
         #region Properties
         public Grid RootGrid { get; }
         #endregion
@@ -76,12 +121,24 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
         public MpAvMainView() {
+            if (_instance != null) {
+                MpDebug.Break("Duplicat singleton");
+                return;
+            }
             AvaloniaXamlLoader.Load(this);
             HorizontalAlignment = HorizontalAlignment.Stretch;
             VerticalAlignment = VerticalAlignment.Stretch;
 
             RootGrid = this.FindControl<Grid>("MainWindowContainerGrid");
+            //if (RootGrid.Parent is Canvas c) {
+            //    c.Width = 1000;
+            //    RootGrid.Width = 1000;
+            //    c.Height = 1000;
+            //    RootGrid.Height = 1000;
+            //}
+            this.AttachedToVisualTree += (s, e) => {
 
+            };
             this.PointerMoved += MainWindow_PointerMoved;
             this.PointerExited += MainWindow_PointerLeave;
 
@@ -371,7 +428,7 @@ namespace MonkeyPaste.Avalonia {
             UpdateSidebarGridsplitter();
             UpdateTitleLayout();
             UpdateResizerLayout();
-            mwtg.InvalidateMeasure();
+            //mwtg.InvalidateMeasure();
         }
 
         private void UpdateResizerLayout() {
@@ -858,6 +915,7 @@ namespace MonkeyPaste.Avalonia {
         private void MainWindow_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e) {
             MpAvMainWindowViewModel.Instance.IsResizerVisible = false;
         }
+
 
 
         #endregion

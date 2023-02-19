@@ -16,8 +16,12 @@
         <sys:TimeSpan x:Key="FadeTimeSpan">
             0:0:0.2
         </sys:TimeSpan>
+        <Thickness x:Key="SaveCancelVisibleListBoxMargin">0,55,0,0</Thickness>
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
+
+        <!--  SAVE/CANCEL TRANSITION  -->
+
         <Style Selector="Grid#ParameterContainerGrid.canSave ListBox#PluginParameterListBox">
             <Setter Property="Transitions">
                 <Transitions>
@@ -26,7 +30,7 @@
                 </Transitions>
             </Setter>
             <Setter Property="Margin"
-                    Value="0,45,0,0" />
+                    Value="{StaticResource SaveCancelVisibleListBoxMargin}" />
         </Style>
         <Style Selector="Grid#ParameterContainerGrid:not(.canSave) ListBox#PluginParameterListBox">
             <Setter Property="Transitions">
@@ -61,6 +65,18 @@
             <Setter Property="Opacity"
                     Value="0" />
         </Style>
+
+        <!--  SAVE/CANCEL BUTTONS  -->
+        <Style Selector="Button.saveOrCancelButton">
+            <Setter Property="Margin"
+                    Value="3" />
+            <Setter Property="FontSize"
+                    Value="10" />
+        </Style>
+
+        <!--  PARAM LISTBOXITEM  -->
+
+
     </local:MpAvUserControl.Styles>
     <Grid x:Name="ParameterContainerGrid"
           HorizontalAlignment="Stretch"

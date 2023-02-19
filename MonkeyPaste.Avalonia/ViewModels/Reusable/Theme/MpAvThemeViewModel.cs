@@ -43,6 +43,9 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
         private MpAvThemeViewModel() {
             PropertyChanged += MpAvThemeViewModel_PropertyChanged;
+#if !DESKTOP
+            GlobalBgOpacity = 1.0d;
+#endif
         }
 
 

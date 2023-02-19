@@ -727,7 +727,7 @@ namespace MonkeyPaste.Avalonia {
         private void PseudoGlobalControl_PointerMoved(object sender, PointerEventArgs e) {
             // NOTE only called when global input is disabled
             var mw_mp = e.GetClientMousePoint(MpAvMainView.Instance);
-            var gmp = VisualExtensions.PointToScreen(MpAvMainView.Instance, mw_mp.ToAvPoint()).ToPortablePoint(MpAvMainWindowViewModel.Instance.MainWindowScreen.PixelDensity);
+            var gmp = VisualExtensions.PointToScreen(MpAvMainView.Instance, mw_mp.ToAvPoint()).ToPortablePoint(MpAvMainWindowViewModel.Instance.MainWindowScreen.Scaling);
             HandlePointerMove(gmp);
         }
 

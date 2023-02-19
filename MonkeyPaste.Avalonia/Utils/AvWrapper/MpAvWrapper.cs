@@ -10,6 +10,10 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
     public class MpAvWrapper : MpIPlatformWrapper {
 
+        #region Interfaces
+
+        #region MpIPlatformWrapper Implementation
+
         #region Bootstrapped Services (incomplete)
 
         public MpIContentQueryTools ContentQueryTools { get; set; }
@@ -45,7 +49,7 @@ namespace MonkeyPaste.Avalonia {
         public MpIContextMenuCloser ContextMenuCloser { get; set; }
         public MpIMainThreadMarshal MainThreadMarshal { get; set; }
         public MpIStringTools StringTools { get; set; }
-        public MpIOsInfo OsInfo { get; set; }
+        public MpIPlatformInfo PlatformInfo { get; set; }
         public MpIPlatformDataObjectHelperAsync DataObjectHelperAsync { get; set; }
         public MpINativeMessageBox NativeMessageBox { get; set; }
 
@@ -58,13 +62,27 @@ namespace MonkeyPaste.Avalonia {
         public MpIPlatformDataObjectRegistrar DataObjectRegistrar { get; set; }
 
         public MpICopyItemBuilder CopyItemBuilder { get; set; }
+
+        #endregion
+
+        #endregion
+
+        #region Constructors
+        public MpAvWrapper(MpIStartupState ss, MpIStartupObjectLocator sol) {
+            StartupState = ss;
+            StartupObjectLocator = sol;
+        }
+        #endregion
+
+        #region Public Methods
+
         public async Task InitializeAsync() {
-            OsInfo = new MpAvOsInfo();
+            PlatformInfo = new MpAvPlatformInfo();
             DbInfo = new MpAvDbInfo();
 
             string prefPath = Path.Combine(
                 Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
-                $"pref_{OsInfo.OsShortName}.json");
+                $"pref_{PlatformInfo.OsShortName}.json");
 
             if (App.Args.Any(x => x.ToLower() == App.BACKUP_DATA_ARG)) {
                 // TODO move reset stuff to that backup folder
@@ -82,7 +100,7 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine("All data successfully deleted.");
             }
 
-            await MpPrefViewModel.InitAsync(prefPath, DbInfo, OsInfo);
+            await MpPrefViewModel.InitAsync(prefPath, DbInfo, PlatformInfo);
 
             NativePathDialog = new MpAvPathDialog();
             UserProvidedFileExts = MpPrefViewModel.Instance;
@@ -122,6 +140,6 @@ namespace MonkeyPaste.Avalonia {
 
             PlatformShorcuts = new MpAvPlatformShortcuts();
         }
-
+        #endregion
     }
 }

@@ -6,6 +6,7 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using FocusManager = Avalonia.Input.FocusManager;
@@ -34,7 +35,8 @@ namespace MonkeyPaste.Avalonia {
         private ObservableCollection<string> _recentSearchTexts;
         public ObservableCollection<string> RecentSearchTexts {
             get {
-                if (_recentSearchTexts == null) {
+                if (_recentSearchTexts == null &&
+                    MpPrefViewModel.Instance != null) {
                     var rstl = MpPrefViewModel.Instance.RecentSearchTexts.ToListFromCsv(MpPrefViewModel.Instance);
                     _recentSearchTexts = new ObservableCollection<string>(rstl);
                     _recentSearchTexts.CollectionChanged += (s, e) => {
@@ -194,19 +196,20 @@ namespace MonkeyPaste.Avalonia {
             PropertyChanged += MpAvSearchBoxViewModel_PropertyChanged;
         }
 
+
+        #endregion
+
+        #region Public Methods
+
         public async Task InitAsync() {
             await Task.Delay(1);
+            OnPropertyChanged(nameof(RecentSearchTexts));
 
             SearchFilterCollectionViewModel.Init();
 
 
             MpMessenger.RegisterGlobal(ReceiveGlobalMessage);
         }
-
-        #endregion
-
-        #region Public Methods
-
 
         public void NotifyHasMultipleMatches() {
             Dispatcher.UIThread.VerifyAccess();
@@ -255,6 +258,9 @@ namespace MonkeyPaste.Avalonia {
 
                     if (HasText && !IsExpanded) {
                         IsExpanded = true;
+                    }
+                    if (HasText) {
+                        //_ = App.MainWindow.FindVisualDescendantWithHashCode(int.Parse(SearchText), true);
                     }
                     break;
                 case nameof(IsTextBoxFocused):

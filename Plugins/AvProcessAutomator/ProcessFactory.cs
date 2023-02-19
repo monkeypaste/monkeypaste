@@ -1,16 +1,16 @@
-﻿using System;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Threading;
-using System.Xml.Linq;
 using System.Linq;
-using MonkeyPaste.Common.Plugin;
-using MonkeyPaste.Common;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Text;
-using System.Security;
 using System.Runtime.InteropServices;
+using System.Security;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace ProcessAutomation {
     public static class ProcessFactory {
@@ -118,12 +118,12 @@ namespace ProcessAutomation {
                 p.StartInfo.ErrorDialog = showError;
 
                 p.StartInfo.UserName = userName;
-                if(OperatingSystem.IsWindows()) {
+                if (OperatingSystem.IsWindows()) {
                     p.StartInfo.LoadUserProfile = loadUserProfile;
                     p.StartInfo.Domain = domain;
                     p.StartInfo.PasswordInClearText = password;
                 }
-                
+
 
                 if (showError) {
                     p.StartInfo.ErrorDialogParentHandle = ProcessPlugin.ThisAppHandle;
@@ -189,7 +189,7 @@ namespace ProcessAutomation {
                     StandardOutput = stdOut,
                     StandardError = stdErr
                 };
-                out_psi = SetActiveProcess(out_psi,waitForInputIdleTimeout);
+                out_psi = SetActiveProcess(out_psi, waitForInputIdleTimeout);
 
                 if (!useShellExecute) {
                     // To avoid deadlocks, use an asynchronous read operation on at least one of the streams.  
@@ -208,7 +208,7 @@ namespace ProcessAutomation {
                 MpConsole.WriteLine("Start Process error (Admin to Normal mode): " + ex);
                 SetPath(originalPath);
             }
-            if(out_psi == null) {
+            if (out_psi == null) {
                 out_psi = new MpPortableStartProcessInfo() {
                     Handle = outHandle,
                     ProcessPath = processPath,
@@ -241,7 +241,7 @@ namespace ProcessAutomation {
                 pi.CloseOnComplete = false;
 
                 if (string.IsNullOrEmpty(pi.ProcessPath)) {
-                    if (pi.Handle == null || pi.Handle == IntPtr.Zero) {
+                    if (pi.Handle == IntPtr.Zero) {
                         return pi;
                     }
                     pi.ProcessPath = MpCommonTools.Services.ProcessWatcher.GetProcessPath((IntPtr)pi.Handle);
@@ -249,7 +249,7 @@ namespace ProcessAutomation {
 
                 //pi.Handle is only passed when its a running application
 
-                if (!MpCommonTools.Services.ProcessWatcher.IsHandleRunningProcess(pi.Handle) && 
+                if (!MpCommonTools.Services.ProcessWatcher.IsHandleRunningProcess(pi.Handle) &&
                     !MpCommonTools.Services.ProcessWatcher.RunningProcessLookup.ContainsKey(pi.ProcessPath)) {
                     //if process is not running anymore or needs to be started (custom pastetoapppath)
                     pi = StartProcess(pi);
@@ -261,7 +261,7 @@ namespace ProcessAutomation {
                         foreach (var h in handleList) {
                             if (pi.IsAdmin == MpCommonTools.Services.ProcessWatcher.IsAdmin(h)) {
                                 pi.Handle = h;
-                                if (MpCommonTools.Services.ProcessWatcher.RunningProcessLookup.Any(x=>x.Value.Contains(h))) {
+                                if (MpCommonTools.Services.ProcessWatcher.RunningProcessLookup.Any(x => x.Value.Contains(h))) {
                                     pi.WindowState = MpCommonTools.Services.ProcessWatcher.GetWindowStyle(h);
                                 }
                                 wasMatched = true;
@@ -382,10 +382,11 @@ namespace ProcessAutomation {
             var newValue = oldValue + string.Format(@";{0}", dir);
             try {
                 Environment.SetEnvironmentVariable(name, newValue, scope);
-            } catch(SecurityException sex) {
+            }
+            catch (SecurityException sex) {
                 MpConsole.WriteTraceLine("MpProcessAutomation.SetPath exception (likely this app is not running as admin and therefore cannot set env var): ", sex);
             }
-            
+
         }
 
         private static void SetPath(string newPath) {
@@ -393,11 +394,12 @@ namespace ProcessAutomation {
             var scope = EnvironmentVariableTarget.Machine;
             try {
                 Environment.SetEnvironmentVariable(name, newPath, scope);
-            } catch(SecurityException sex) {
+            }
+            catch (SecurityException sex) {
                 MpConsole.WriteTraceLine("MpProcessAutomation.SetPath exception (likely this app is not running as admin and therefore cannot set env var): ", sex);
 
             }
-            
+
         }
 
         #endregion

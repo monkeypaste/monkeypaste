@@ -12,7 +12,7 @@
                        mc:Ignorable="d"
                        x:Class="MonkeyPaste.Avalonia.MpAvTagView">
     <local:MpAvUserControl.Styles>
-        <Style Selector="local|MpAvClipBorder#TagNameBorder">
+        <Style Selector="Border#TagNameBorder">
             <Setter Property="Background"
                     Value="{DynamicResource TagTileBgColor}" />
             <Setter Property="BorderBrush"
@@ -22,19 +22,19 @@
             <Setter Property="BorderDashOffset"
                     Value="0" />
         </Style>
-        <Style Selector="local|MpAvClipBorder#TagNameBorder.isselected">
+        <Style Selector="Border#TagNameBorder.isselected">
             <Setter Property="Background"
                     Value="{DynamicResource TagTileSelectedBgColor}" />
         </Style>
-        <Style Selector="local|MpAvClipBorder#TagNameBorder:pointerover:not(.isselected)">
+        <Style Selector="Border#TagNameBorder:pointerover:not(.isselected)">
             <Setter Property="Background"
                     Value="{DynamicResource TagTileHoverBgColor}" />
         </Style>
-        <Style Selector="local|MpAvClipBorder#TagNameBorder.contextfocus, local|MpAvClipBorder#TagNameBorder:not(.isselected).activeTag">
+        <Style Selector="Border#TagNameBorder.contextfocus, Border#TagNameBorder:not(.isselected).activeTag">
             <Setter Property="BorderBrush"
                     Value="{DynamicResource TagTileContextFocusBorderColor}" />
         </Style>
-        <Style Selector="local|MpAvClipBorder#TagNameBorder.dragover">
+        <Style Selector="Border#TagNameBorder.dragover">
             <Setter Property="BorderBrush"
                     Value="{DynamicResource TagTileDragOverBorderColor}" />
             <Setter Property="BorderDashArray"
@@ -42,7 +42,7 @@
             <Setter Property="BorderDashOffset"
                     Value="2" />
         </Style>
-        <Style Selector="local|MpAvClipBorder#TagNameBorder.dragover.dragover_invalid">
+        <Style Selector="Border#TagNameBorder.dragover.dragover_invalid">
             <Setter Property="BorderBrush"
                     Value="{DynamicResource TagTileDragOverInvalidBorderColor}" />
         </Style>
@@ -64,21 +64,21 @@
           MinWidth="100"
           MaxWidth="130"
           Height="30">
-        <local:MpAvClipBorder x:Name="TagNameBorder"
-                              CornerRadius="7"
-                              Margin="5,0,0,0"
-                              Padding="1"
-                              VerticalAlignment="Stretch"
-                              HorizontalAlignment="Stretch"
-                              MinHeight="20"
-                              Classes.islinked="{Binding IsLinkedToSelectedClipTile}"
-                              Classes.isgroup="{Binding IsGroupTag}"
-                              Classes.isselected="{Binding IsSelected}"
-                              Classes.dragover="{Binding IsDragOverTag}"
-                              Classes.dragover_invalid="{Binding !IsDragOverTagValid}"
-                              Classes.contextfocus="{Binding IsContextMenuOpen}"
-                              Classes.activeTag="{Binding IsActiveTag}"
-                              BorderThickness="1.5">
+        <Border x:Name="TagNameBorder"
+                CornerRadius="7"
+                Margin="5,0,0,0"
+                Padding="1"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Stretch"
+                MinHeight="20"
+                Classes.islinked="{Binding IsLinkedToSelectedClipTile}"
+                Classes.isgroup="{Binding IsGroupTag}"
+                Classes.isselected="{Binding IsSelected}"
+                Classes.dragover="{Binding IsDragOverTag}"
+                Classes.dragover_invalid="{Binding !IsDragOverTagValid}"
+                Classes.contextfocus="{Binding IsContextMenuOpen}"
+                Classes.activeTag="{Binding IsActiveTag}"
+                BorderThickness="1.5">
             <StackPanel Orientation="Horizontal">
                 <Grid VerticalAlignment="Stretch">
                     <Grid.ColumnDefinitions>
@@ -86,21 +86,21 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <!--  Tag Count Box  -->
-                    <local:MpAvClipBorder CornerRadius="5"
-                                          Grid.Column="0"
-                                          MinWidth="{Binding $self.Bounds.Height}"
-                                          MinHeight="20"
-                                          Margin="1"
-                                          Padding="4,1"
-                                          BorderThickness="0"
-                                          Background="{Binding TagHexColor, Converter={StaticResource StringHexToBrushConverter}}">
+                    <Border CornerRadius="5"
+                            Grid.Column="0"
+                            MinWidth="{Binding $self.Bounds.Height}"
+                            MinHeight="20"
+                            Margin="1"
+                            Padding="4,1"
+                            BorderThickness="0"
+                            Background="{Binding TagHexColor, Converter={StaticResource StringHexToBrushConverter}}">
                         <TextBlock x:Name="TagCountTextBlock"
                                    Background="Transparent"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Center"
                                    Text="{Binding TagClipCountText}"
                                    Foreground="{Binding $parent.Background, Converter={StaticResource BrushToContrastBrushConverter}}" />
-                    </local:MpAvClipBorder>
+                    </Border>
                     <!--  Tag Name TextBox/ Marquee  -->
                     <local:MpAvMarqueeTextBox x:Name="TagNameTextBox"
                                               Grid.Column="1"
@@ -114,22 +114,22 @@
                                               Padding="0"
                                               MinWidth="70"
                                               MaxWidth="100"
-                                              local:MpAvIsFocusedExtension.IsEnabled="True"
-                                              local:MpAvIsFocusedExtension.SelectViewModelOnFocus="False"
-                                              local:MpAvIsFocusedExtension.IsFocused="{Binding IsTagNameTextBoxFocused, Mode=TwoWay}"
-                                              EditOnFocus="{Binding !IsTagNameReadOnly, Mode=OneWay}"
+                                              EditOnFocus="False"
+                                              FocusOnDisableReadOnly="True"
+                                              EnableReadOnlyOnLostFocus="False"
+                                              SelectViewModelOnFocus="False"
                                               CancelEditCommand="{Binding CancelRenameTagCommand}"
                                               BeginEditCommand="{Binding FinishRenameTagCommand}"
                                               ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                               ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                                              IsReadOnly="{Binding IsTagNameReadOnly, Mode=OneWay}"
+                                              IsReadOnly="{Binding IsTagNameReadOnly, Mode=TwoWay}"
                                               FontFamily="Segoe UI"
                                               ReadOnlyBackground="Transparent"
                                               ReadOnlyForeground="{Binding TagTextHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
                                               Text="{Binding TagName, Mode=TwoWay}" />
                 </Grid>
             </StackPanel>
-        </local:MpAvClipBorder>
+        </Border>
 
         <Border Background="Red"
                 ClipToBounds="False"

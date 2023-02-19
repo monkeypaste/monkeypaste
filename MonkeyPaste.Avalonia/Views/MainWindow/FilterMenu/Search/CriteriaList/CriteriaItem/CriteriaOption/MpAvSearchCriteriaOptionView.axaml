@@ -51,7 +51,7 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <Grid Margin="0,3">
-        <local:MpAvClipBorder BorderThickness="0"
+        <Border BorderThickness="0"
                               Background="Transparent"
                               Padding="0"
                               CornerRadius="0">
@@ -107,7 +107,7 @@
 
                                 <!--  TEXTBOX BORDER  -->
 
-                                <local:MpAvClipBorder Margin="5"
+                                <Border Margin="5"
                                                       Padding="5"
                                                       HorizontalAlignment="Stretch"
                                                       VerticalAlignment="Center"
@@ -128,7 +128,7 @@
                                              local:MpAvDelayedTextChangedExtension.IsEnabled="True"
                                              local:MpAvDelayedTextChangedExtension.DelayMs="500"
                                              local:MpAvDelayedTextChangedExtension.Text="{Binding Value, Mode=TwoWay}" />
-                                </local:MpAvClipBorder>
+                                </Border>
                             </DockPanel>
                         </DataTemplate>
                         <DataTemplate x:Key="RGBAOptionTemplate"
@@ -175,6 +175,6 @@
                     </local:MpAvSearchCriteriaOptionViewSelector>
                 </ContentControl.DataTemplates>
             </ContentControl>
-        </local:MpAvClipBorder>
+        </Border>
     </Grid>
 </local:MpAvUserControl>

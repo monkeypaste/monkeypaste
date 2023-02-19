@@ -13,7 +13,7 @@ namespace MonkeyPaste.Avalonia {
                 if (_dbName == null) {
                     // NOTE this accessed in cefnet init for renderer thread ref
                     // so can't use platform wrapper
-                    MpAvOsInfo osi = new MpAvOsInfo();
+                    MpAvPlatformInfo osi = new MpAvPlatformInfo();
                     _dbName = $"mp_{osi.OsShortName}.{DbExtension}";
                 }
                 return _dbName;

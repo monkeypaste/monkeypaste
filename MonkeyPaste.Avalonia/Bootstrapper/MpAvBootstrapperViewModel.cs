@@ -4,6 +4,7 @@ using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -18,32 +19,33 @@ namespace MonkeyPaste.Avalonia {
                 MpAvMacHelpers.EnsureInitialized();
             }
 
-            var pw = new MpAvWrapper();
-            pw.StartupState = this;
-            pw.StartupObjectLocator = this;
-            await pw.InitializeAsync();
-            await MpPlatform.InitAsync(pw);
+            await MpPlatform.InitAsync(new MpAvWrapper(this, this));
 
             CreateLoaderItems();
+
+            // init cefnet (if needed) BEFORE window creation
+            // or chromium child process stuff will re-initialize (and show loader again)
+            await LoadItemsAsync(_baseItems);
             await MpNotificationBuilder.ShowLoaderNotificationAsync(this);
         }
 
         public override async Task FinishLoaderAsync() {
             IsCoreLoaded = true;
-            Window lw = App.MainWindow;
 
             await base.FinishLoaderAsync();
 
-            if (lw != null) {
-                lw.Close();
+            if (MpPlatform.Services.PlatformInfo.IsDesktop) {
+                App.MainView.Show();
+                MpAvSystemTray.Init();
             }
-            App.MainWindow.Show();
             IsPlatformLoaded = true;
             _sw.Stop();
-
-            MpAvSystemTray.Init();
         }
         protected override void CreateLoaderItems() {
+            if (MpPlatform.Services.PlatformInfo.IsDesktop) {
+                _baseItems.Add(new MpBootstrappedItemViewModel(this, typeof(MpAvCefNetApplication)));
+            }
+
             _coreItems.AddRange(
                new List<MpBootstrappedItemViewModel>() {
                     new MpBootstrappedItemViewModel(this,typeof(MpAvNotificationWindowManager)),
@@ -75,7 +77,7 @@ namespace MonkeyPaste.Avalonia {
                    // new MpBootstrappedItemViewModel(this,typeof(MpAvFilterMenuViewModel))
                });
 
-            if (MpPlatform.Services.OsInfo.IsDesktop) {
+            if (MpPlatform.Services.PlatformInfo.IsDesktop) {
                 _platformItems.AddRange(
                    new List<MpBootstrappedItemViewModel>() {
                         new MpBootstrappedItemViewModel(this,typeof(MpAvPlainHtmlConverter)),
@@ -88,23 +90,28 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 _platformItems.AddRange(
                    new List<MpBootstrappedItemViewModel>() {
+                        new MpBootstrappedItemViewModel(this,typeof(MpAvMainView)),
                         new MpBootstrappedItemViewModel(this,typeof(MpAvMainWindowViewModel))
                    });
             }
 
 
         }
-        protected override async Task LoadItemAsync(MpBootstrappedItemViewModel item, int index) {
+
+        protected override async Task LoadItemAsync(MpBootstrappedItemViewModel item, int index, bool affectsCount) {
             IsBusy = true;
             var sw = Stopwatch.StartNew();
 
             await item.LoadItemAsync();
             sw.Stop();
 
-            LoadedCount++;
+            if (affectsCount) {
+                // NOTE just to be tidy base items (cef only atm) are ignored or count goes over 1
 
-            OnPropertyChanged(nameof(PercentLoaded));
-            OnPropertyChanged(nameof(Detail));
+                LoadedCount++;
+                OnPropertyChanged(nameof(PercentLoaded));
+                OnPropertyChanged(nameof(Detail));
+            }
 
             Body = string.IsNullOrWhiteSpace(item.Label) ? Body : item.Label;
 

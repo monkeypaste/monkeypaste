@@ -13,17 +13,17 @@
                 Value="Stretch" />
     </Style>
 
-    <Style Selector="ListBox#PluginParameterListBox ListBoxItem:nth-child(odd) Border#OuterParameterItemBorder">
+    <Style Selector="ListBox#PluginParameterListBox ListBoxItem:nth-child(odd)">
         <Setter Property="Background"
                 Value="{DynamicResource PluginParameterItemBgBrush1}" />
     </Style>
 
-    <Style Selector="ListBox#PluginParameterListBox ListBoxItem:nth-child(even) Border#OuterParameterItemBorder">
+    <Style Selector="ListBox#PluginParameterListBox ListBoxItem:nth-child(even)">
         <Setter Property="Background"
                 Value="{DynamicResource PluginParameterItemBgBrush2}" />
     </Style>
 
-    <Style Selector="ListBox#PluginParameterListBox ListBoxItem:pointerover Border#OuterParameterItemBorder">
+    <Style Selector="ListBox#PluginParameterListBox ListBoxItem:pointerover">
         <Setter Property="Background"
                 Value="{DynamicResource PluginParameterItemHoverBgBrush}" />
     </Style>

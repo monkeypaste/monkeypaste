@@ -59,8 +59,9 @@ namespace MonkeyPaste.Avalonia {
                 }
                 hwnd = p_hwnd;
             }
-#endif
+#else
             return IntPtr.Zero;
+#endif
         }
 
         public override IntPtr SetActiveProcess(IntPtr handle) {
@@ -77,8 +78,9 @@ namespace MonkeyPaste.Avalonia {
             bool success = WinApi.SetForegroundWindow(handle);
             MpConsole.WriteLine($"SetForegroundWindow to '{handle}' from '{lastActive}' was {(success ? "SUCCESSFUL" : "FAILED")}");
             return lastActive;
-#endif
+#else
             return IntPtr.Zero;
+#endif
         }
         public override IntPtr SetActiveProcess(IntPtr handle, ProcessWindowStyle windowStyle) {
 #if WINDOWS
@@ -86,8 +88,9 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine($"ShowWindowAsync failed for handle '{handle}' with window state '{windowStyle}'");
             }
             return SetActiveProcess(handle);
-#endif
+#else
             return IntPtr.Zero;
+#endif
         }
 
         public override bool IsAdmin(object handleIdOrTitle) {
@@ -118,8 +121,9 @@ namespace MonkeyPaste.Avalonia {
                 default:
                     return ProcessWindowStyle.Normal;
             }
-#endif
+#else
             return ProcessWindowStyle.Normal;
+#endif
         }
         public override MpPortableProcessInfo GetActiveProcessInfo() {
 #if WINDOWS
@@ -130,8 +134,9 @@ namespace MonkeyPaste.Avalonia {
                 MainWindowTitle = GetProcessApplicationName(active_handle)
             };
             return active_info;
-#endif
+#else
             return null;
+#endif
         }
         public override string GetProcessTitle(IntPtr hWnd) {
 #if WINDOWS
@@ -151,8 +156,9 @@ namespace MonkeyPaste.Avalonia {
             catch (Exception ex) {
                 return "MpHelpers.GetProcessMainWindowTitle Exception: " + ex.ToString();
             }
-#endif
+#else
             return null;
+#endif
         }
 
         public override Process GetProcess(object handleIdOrTitle) {
@@ -162,8 +168,9 @@ namespace MonkeyPaste.Avalonia {
                 return base.GetProcess((int)pid);
             }
             return base.GetProcess(handleIdOrTitle);
-#endif
+#else
             return null;
+#endif
         }
         public override string GetProcessPath(IntPtr hWnd) {
 
@@ -259,8 +266,9 @@ namespace MonkeyPaste.Avalonia {
 
                 return activeProcessInfo;
             }
-#endif
+#else
             return null;
+#endif
         }
         protected override void CreateRunningProcessLookup() {
             // get lookup of all window handles by process path
@@ -294,8 +302,9 @@ namespace MonkeyPaste.Avalonia {
             GetProcessImageFileName(pic, sb, 2000);
 
             return MpWpfDevicePathMapper.FromDevicePath(sb.ToString());
-#endif
+#else
             return null;
+#endif
         }
 
         private string GetProcessPath2(IntPtr hwnd) {
@@ -328,8 +337,9 @@ namespace MonkeyPaste.Avalonia {
             string fullPath = sb.ToString();
 
             return fullPath;
-#endif
+#else
             return null;
+#endif
         }
         private string GetProcessPath4(IntPtr hwnd) {
 #if WINDOWS
@@ -359,8 +369,9 @@ namespace MonkeyPaste.Avalonia {
 
                 return proc.MainModule.FileName.ToString().ToLower();
             }
-#endif
+#else
             return null;
+#endif
 
         }
 
@@ -379,8 +390,9 @@ namespace MonkeyPaste.Avalonia {
                 default:
                     return (int)ShowWindowCommands.Normal;
             }
-#endif
+#else
             return (int)ProcessWindowStyle.Normal;
+#endif
         }
 
         private IDictionary<string, IntPtr> GetOpenWindows() {
@@ -431,8 +443,9 @@ namespace MonkeyPaste.Avalonia {
             }, 0);
 
             return windows;
-#endif
+#else
             return null;
+#endif
         }
 
         private void UpdateHandleStack(IntPtr fgHandle) {
@@ -490,14 +503,15 @@ namespace MonkeyPaste.Avalonia {
             if (!WinApi.IsWow64Process(process.Handle, out isWow64))
                 throw new Win32Exception();
             return !isWow64;
-#endif
+#else
             return false;
+#endif
 
         }
 
         private bool IsProcessAdmin(IntPtr handle) {
 #if WINDOWS
-            if (handle == null || handle == IntPtr.Zero) {
+            if (handle == IntPtr.Zero) {
                 return false;
             }
             try {
@@ -528,10 +542,9 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine("IsProcessAdmin error: " + ex.ToString());
                 return true;
             }
-#endif
-#pragma warning disable CS0162 // Unreachable code detected
+#else
             return false;
-#pragma warning restore CS0162 // Unreachable code detected
+#endif
         }
 
         #endregion

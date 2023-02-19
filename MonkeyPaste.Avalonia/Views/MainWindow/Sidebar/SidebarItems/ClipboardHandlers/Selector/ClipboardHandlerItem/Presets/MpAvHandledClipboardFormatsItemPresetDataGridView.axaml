@@ -64,7 +64,7 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate DataType="local:MpAvClipboardFormatPresetViewModel">
 
-                                    <local:MpAvClipBorder BorderThickness="0"
+                                    <Border BorderThickness="0"
                                                           Padding="3"
                                                           CornerRadius="0">
                                         <Button x:Name="PresetIcon"
@@ -81,7 +81,7 @@
                                                    VerticalAlignment="Center"
                                                    Source="{Binding IconId, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
                                         </Button>
-                                    </local:MpAvClipBorder>
+                                    </Border>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
 

@@ -1,4 +1,4 @@
-﻿using PropertyChanged;
+﻿
 using System;
 
 #if DESKTOP
@@ -7,7 +7,9 @@ using PropertyChanged;
 #endif
 
 namespace MonkeyPaste.Avalonia {
+#if DESKTOP
     [DoNotNotify]
+#endif
     public abstract class MpAvWebViewBase :
 #if DESKTOP
         WebView

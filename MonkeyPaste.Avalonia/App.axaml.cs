@@ -1,13 +1,18 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Layout;
 using Avalonia.Markup.Xaml;
+using Avalonia.Media;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -30,13 +35,25 @@ namespace MonkeyPaste.Avalonia {
                 if (_instance == null) {
                     return null;
                 }
-                return _instance.GetMainWindow();
-            }
-            set {
-                if (_instance == null) {
-                    return;
+                if (_instance.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
+                    return desktop.MainWindow as MpAvMainWindow;
                 }
-                _instance.SetMainWindow(value);
+                return null;
+            }
+        }
+
+        public static MpIMainView MainView {
+            get {
+                if (_instance == null) {
+                    return null;
+                }
+                if (_instance.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
+                    return desktop.MainWindow as MpAvMainWindow;
+                }
+                if (_instance.ApplicationLifetime is ISingleViewApplicationLifetime mobile) {
+                    return mobile.MainView as MpAvMainView;
+                }
+                return null;
             }
         }
         #endregion
@@ -67,18 +84,34 @@ namespace MonkeyPaste.Avalonia {
             AvaloniaXamlLoader.Load(this);
         }
         public override async void OnFrameworkInitializationCompleted() {
+            ReportCommandLineArgs(Args);
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
                 desktop.Startup += Startup;
                 desktop.Exit += Exit;
-            }
-            ReportCommandLineArgs(Args);
 
-            if (MpAvCefNetApplication.UseCefNet) {
-                MpAvCefNetApplication.InitCefNet();
+                var bootstrapper = new MpAvBootstrapperViewModel();
+                await bootstrapper.InitAsync();
+            } else if (ApplicationLifetime is ISingleViewApplicationLifetime mobile) {
+                Dispatcher.UIThread.Post(async () => {
+                    var bootstrapper = new MpAvBootstrapperViewModel();
+                    await bootstrapper.InitAsync();
+                });
+                mobile.MainView = new MpAvMainView() {
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Stretch,
+                    DataContext = MpAvMainWindowViewModel.Instance
+                };
             }
 
-            var bootstrapper = new MpAvBootstrapperViewModel();
-            await bootstrapper.InitAsync();
+            //if (MpAvCefNetApplication.UseCefNet) {
+            //    MpAvCefNetApplication.Init();
+            //}
+
+
+            //while (!MpBootstrapperViewModelBase.IsPlatformLoaded) {
+            //    await Task.Delay(100);
+            //}
+
             base.OnFrameworkInitializationCompleted();
         }
         #endregion

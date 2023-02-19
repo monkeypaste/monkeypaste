@@ -86,7 +86,7 @@ namespace MonkeyPaste.Common.Wpf {
             }
             catch (Exception ex) {
                 //Console.WriteLine("Error scaling bmp", ex);
-                Console.WriteLine("Error scaling bmp");
+                Console.WriteLine("Error scaling bmp," + ex);
                 return bmpSrc;
             }
         }

@@ -52,7 +52,7 @@ namespace MonkeyPaste.Avalonia {
 
             Dispatcher.UIThread.Post(() => {
                 if (e.Frame.Browser.Host.Client.GetWebView() is MpAvIWebViewBindingResponseHandler respHandler) {
-                    respHandler.HandleBindingNotificationAsync(funcType, msgJsonStr).FireAndForgetSafeAsync();
+                    respHandler.HandleBindingNotification(funcType, msgJsonStr);
                 }
             });
 

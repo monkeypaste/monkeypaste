@@ -6,6 +6,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Media.Transformation;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -628,10 +629,6 @@ namespace MonkeyPaste.Avalonia {
                 thumb = track.GetVisualDescendant<Thumb>();
             }
             thumb.Tag = sv.Tag;
-            //if(thumb.RenderTransform is TransformOperations tos) {
-            //    tos.
-            //}
-            //thumb.RenderTransform = new TranslateTransform();
 
             AdjustThumbTransform(track, track_mp, isThumbPress);
 
@@ -742,11 +739,6 @@ namespace MonkeyPaste.Avalonia {
 
                 SetVelocityX(lb, vx);
                 SetVelocityY(lb, vy);
-
-                //sv.ScrollToHorizontalOffset(scrollOffsetX);
-                //sv.ScrollToVerticalOffset(scrollOffsetY);
-
-
             }
         }
 
@@ -791,7 +783,6 @@ namespace MonkeyPaste.Avalonia {
                         if (track.Thumb is Thumb thumb) {
                             thumb.Tag = lb;
                             thumb.RenderTransform = new TranslateTransform();
-
                         }
                     }
                     return true;
@@ -810,61 +801,85 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             var thumb = track.GetVisualDescendant<Thumb>();
+            var tt = thumb.RenderTransform as TranslateTransform;
+            //TransformOperation tt = GetThumbTranslateOp(thumb);
             if (track.Orientation == Orientation.Horizontal) {
                 SetIsThumbDraggingX(attached_control, true);
+                //var tt = thumb.GetTransform<TranslateTransform>(true);
 
-                if (thumb.RenderTransform is TranslateTransform tt) {
-                    if (isThumbPress) {
-                        tt.X = 0;
-                    } else {
-                        double hw = thumb.Bounds.Width / 2;
-                        double tx_min = -thumb.Bounds.X;
-                        double tx_max = track.Bounds.Width - hw - thumb.Bounds.X;
-                        double tx = track_mp.X - hw - thumb.Bounds.X;
-                        tt.X = Math.Max(tx_min, Math.Min(tx, tx_max));
-                    }
+                if (isThumbPress) {
+                    tt.X = 0;
+                    //tt.Data.Translate.X = 0;
+                } else {
+                    double hw = thumb.Bounds.Width / 2;
+                    double tx_min = -thumb.Bounds.X;
+                    double tx_max = track.Bounds.Width - hw - thumb.Bounds.X;
+                    double tx = track_mp.X - hw - thumb.Bounds.X;
+                    tt.X = Math.Max(tx_min, Math.Min(tx, tx_max));
+                    //tt.Data.Translate.X = Math.Max(tx_min, Math.Min(tx, tx_max));
                 }
             } else {
                 SetIsThumbDraggingY(attached_control, true);
-                if (thumb.RenderTransform is TranslateTransform tt) {
-                    if (isThumbPress) {
-                        tt.Y = 0;
-                    } else {
-                        double hh = thumb.Bounds.Height / 2;
-                        double ty_min = -thumb.Bounds.Y;
-                        double ty_max = track.Bounds.Height - hh - thumb.Bounds.Y;
-                        double ty = track_mp.Y - hh - thumb.Bounds.Y;
-                        tt.Y = Math.Max(ty_min, Math.Min(ty, ty_max));
-                    }
+                if (isThumbPress) {
+                    tt.Y = 0;
+                    //tt.Data.Translate.Y = 0;
+                } else {
+                    double hh = thumb.Bounds.Height / 2;
+                    double ty_min = -thumb.Bounds.Y;
+                    double ty_max = track.Bounds.Height - hh - thumb.Bounds.Y;
+                    double ty = track_mp.Y - hh - thumb.Bounds.Y;
+                    tt.Y = Math.Max(ty_min, Math.Min(ty, ty_max));
+                    //tt.Data.Translate.Y = Math.Max(ty_min, Math.Min(ty, ty_max));
                 }
             }
+            //tt.Bake();
         }
 
         private static void FinishThumbDrag(ListBox lb, Track track) {
             var thumb = track.GetVisualDescendant<Thumb>();
-            if (GetIsThumbDraggingX(lb)) {
-                if (thumb.RenderTransform is TranslateTransform tt) {
-                    double hw = thumb.Bounds.Width / 2;
-                    double x = tt.X + thumb.Bounds.X + hw;
-                    track.Value = track.ValueFromPoint(new Point(x, 0));
-                    tt.X = 0;
-                    SetScrollOffsetX(lb, track.Value);
-                    SetIsThumbDraggingX(lb, false);
-                }
 
+            var tt = thumb.RenderTransform as TranslateTransform;
+            //TransformOperation tt = GetThumbTranslateOp(thumb);
+
+            if (GetIsThumbDraggingX(lb)) {
+                double hw = thumb.Bounds.Width / 2;
+                double x = tt.X + thumb.Bounds.X + hw;
+                //double x = tt.Data.Translate.X + thumb.Bounds.X + hw;
+                track.Value = track.ValueFromPoint(new Point(x, 0));
+                tt.X = 0;
+                //tt.Data.Translate.X = 0;
+                SetScrollOffsetX(lb, track.Value);
+                SetIsThumbDraggingX(lb, false);
             } else if (GetIsThumbDraggingY(lb)) {
-                if (thumb.RenderTransform is TranslateTransform tt) {
-                    double hh = thumb.Bounds.Height / 2;
-                    double y = tt.Y + thumb.Bounds.Y + hh;
-                    track.Value = track.ValueFromPoint(new Point(0, y));
-                    tt.Y = 0;
-                    SetScrollOffsetY(lb, track.Value);
-                    SetIsThumbDraggingY(lb, false);
-                }
+                double hh = thumb.Bounds.Height / 2;
+                double y = tt.Y + thumb.Bounds.Y + hh;
+                //double y = tt.Data.Translate.Y + thumb.Bounds.Y + hh;
+                track.Value = track.ValueFromPoint(new Point(0, y));
+                tt.Y = 0;
+                //tt.Data.Translate.Y = 0;
+                SetScrollOffsetY(lb, track.Value);
+                SetIsThumbDraggingY(lb, false);
             } else {
                 // shouldn't happen
                 Debugger.Break();
             }
+            //tt.Bake();
+        }
+
+        private static TransformOperation GetThumbTranslateOp(Thumb thumb) {
+            if (thumb.RenderTransform is TransformOperations tos) {
+                if (tos.Operations.FirstOrDefault(x => x.Type == TransformOperation.OperationType.Translate) is TransformOperation tto) {
+                    return tto;
+                }
+                //return new TransformOperation() {
+                //    Type = TransformOperation.OperationType.Translate,
+                //    Data = new TransformOperation.DataLayout() {
+                //        Translate = new TransformOperation.DataLayout.TranslateLayout()
+                //    }
+                //};
+            }
+            MpDebug.Break("Transform error, may need to define in binding");
+            return default;
         }
         #endregion
 

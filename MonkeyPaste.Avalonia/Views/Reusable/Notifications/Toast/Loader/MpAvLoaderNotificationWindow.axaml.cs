@@ -22,10 +22,6 @@ namespace MonkeyPaste.Avalonia {
             //this.Opened += MpAvLoaderNotificationWindow_Opened;
         }
 
-        private void MpAvLoaderNotificationWindow_Opened(object sender, EventArgs e) {
-
-        }
-
         private void OnIsVisibleChanged() {
             if (BindingContext == null) {
                 return;

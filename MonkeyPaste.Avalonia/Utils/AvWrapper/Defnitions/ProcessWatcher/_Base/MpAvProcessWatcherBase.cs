@@ -55,11 +55,10 @@ namespace MonkeyPaste.Avalonia {
         }
         public IntPtr ThisAppHandle {
             get {
-                if (App.MainWindow == null ||
-                    App.MainWindow.PlatformImpl == null) {
+                if (App.MainView == null) {
                     return IntPtr.Zero;
                 }
-                return App.MainWindow.PlatformImpl.Handle.Handle;
+                return App.MainView.Handle;
             }
         }
 
@@ -112,7 +111,7 @@ namespace MonkeyPaste.Avalonia {
         public MpPortableProcessInfo FileSystemProcessInfo {
             get {
                 if (_fileSystemProcessInfo == null) {
-                    _fileSystemProcessInfo = GetProcessPathProcessInfo(MpPlatform.Services.OsInfo.OsFileManagerPath);
+                    _fileSystemProcessInfo = GetProcessPathProcessInfo(MpPlatform.Services.PlatformInfo.OsFileManagerPath);
                 }
                 return _fileSystemProcessInfo;
             }

@@ -22,6 +22,7 @@ namespace MonkeyPaste {
         public static bool IsCoreLoaded { get; protected set; } = false;
         public static bool IsPlatformLoaded { get; protected set; } = false;
 
+        protected static List<MpBootstrappedItemViewModel> _baseItems { get; private set; } = new List<MpBootstrappedItemViewModel>();
         protected static List<MpBootstrappedItemViewModel> _coreItems { get; private set; } = new List<MpBootstrappedItemViewModel>();
         protected static List<MpBootstrappedItemViewModel> _platformItems { get; private set; } = new List<MpBootstrappedItemViewModel>();
 
@@ -95,27 +96,28 @@ namespace MonkeyPaste {
 
         protected abstract void CreateLoaderItems();
 
-        protected abstract Task LoadItemAsync(MpBootstrappedItemViewModel item, int index);
+        protected abstract Task LoadItemAsync(MpBootstrappedItemViewModel item, int index, bool affectsCount);
+
+        protected async Task LoadItemsAsync(List<MpBootstrappedItemViewModel> items, bool affectsCount = true) {
+            if (IS_PARALLEL_LOADING_ENABLED) {
+                await LoadItemsParallelAsync(items, affectsCount);
+            } else {
+                await LoadItemsSequentialAsync(items, affectsCount);
+            }
+        }
         #endregion
 
         #region Private Methods
-        private async Task LoadItemsAsync(List<MpBootstrappedItemViewModel> items) {
-            if (IS_PARALLEL_LOADING_ENABLED) {
-                await LoadItemsParallelAsync(items);
-            } else {
-                await LoadItemsSequentialAsync(items);
-            }
-        }
-        private async Task LoadItemsParallelAsync(List<MpBootstrappedItemViewModel> items) {
-            await Task.WhenAll(items.Select((x, idx) => LoadItemAsync(x, idx)));
+        private async Task LoadItemsParallelAsync(List<MpBootstrappedItemViewModel> items, bool affectsCount) {
+            await Task.WhenAll(items.Select((x, idx) => LoadItemAsync(x, idx, affectsCount)));
             while (items.Any(x => x.IsBusy)) {
                 await Task.Delay(100);
             }
         }
 
-        private async Task LoadItemsSequentialAsync(List<MpBootstrappedItemViewModel> items) {
+        private async Task LoadItemsSequentialAsync(List<MpBootstrappedItemViewModel> items, bool affectsCount) {
             for (int i = 0; i < items.Count; i++) {
-                await LoadItemAsync(items[i], i);
+                await LoadItemAsync(items[i], i, affectsCount);
                 while (IsBusy) {
                     await Task.Delay(100);
                 }

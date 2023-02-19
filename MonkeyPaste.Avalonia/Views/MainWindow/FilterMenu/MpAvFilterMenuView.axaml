@@ -22,14 +22,16 @@
                                     RelativePanel.AlignLeftWithPanel="True"
                                     VerticalAlignment="Center"
                                     Tag="Sort"
-                                    local:MpAvSizeObserverExtension.IsEnabled="False"
-                                    local:MpAvSizeObserverExtension.ObservedWidth="{Binding ClipTileSortViewWidth, Mode=OneWayToSource}" />
+                                    local:MpAvSizeObserverExtension.IsEnabled="True"
+                                    local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedSortViewWidth, Source={x:Static local:MpAvFilterMenuViewModel.Instance}, Mode=TwoWay}" />
         <!--  SearchBox View  -->
 
         <local:MpAvSearchBoxView x:Name="SearchBoxView"
                                  RelativePanel.AlignRightWithPanel="True"
                                  VerticalAlignment="Stretch"
                                  HorizontalAlignment="Right"
+                                 local:MpAvSizeObserverExtension.IsEnabled="True"
+                                 local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedSearchBoxWidth, Source={x:Static local:MpAvFilterMenuViewModel.Instance}, Mode=TwoWay}"
                                  Tag="Search" />
 
         <!--  Tag Tray View  -->
@@ -37,6 +39,8 @@
                                RelativePanel.AlignVerticalCenterWithPanel="True"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
+                               local:MpAvSizeObserverExtension.IsEnabled="True"
+                               local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedTagTrayWidth, Source={x:Static local:MpAvFilterMenuViewModel.Instance}, Mode=TwoWay}"
                                IsVisible="{Binding IsHorizontalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}" />
 
         <!--</mech:ToolBarTray>-->

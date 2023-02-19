@@ -25,7 +25,7 @@ namespace MonkeyPaste {
         private static MpIDbInfo _dbInfo;
 
         [JsonIgnore]
-        private static MpIOsInfo _osInfo;
+        private static MpIPlatformInfo _osInfo;
         #endregion
 
         #region Constants
@@ -402,7 +402,12 @@ namespace MonkeyPaste {
 
         #region Appearance
 
-        public double MainWindowOpacity { get; set; } = 0.7;
+        public double MainWindowOpacity { get; set; }
+#if DESKTOP
+        = 0.7;
+#else
+        = 1.0d;
+#endif
 
         public string UserCustomColorIdxArray { get; set; } = "0";
 
@@ -560,7 +565,7 @@ namespace MonkeyPaste {
 
         #region Public Methods
 
-        public static async Task InitAsync(string prefPath, MpIDbInfo dbInfo, MpIOsInfo osInfo) {
+        public static async Task InitAsync(string prefPath, MpIDbInfo dbInfo, MpIPlatformInfo osInfo) {
             _prefPath = prefPath;
             _dbInfo = dbInfo;
             _osInfo = osInfo;
@@ -604,6 +609,9 @@ namespace MonkeyPaste {
         #region Private Methods
 
         private void MpJsonPreferenceIO_PropertyChanged(object sender, PropertyChangedEventArgs e) {
+            if (e.PropertyName == nameof(UniqueContentItemIdx)) {
+
+            }
             if (e.PropertyName == nameof(IsSaving) || IsLoading) {
                 return;
             }
@@ -672,7 +680,9 @@ namespace MonkeyPaste {
                     }
                 }
                 Instance = new MpPrefViewModel();
-                string discovered_device_guid = await MpDefaultDataModelTools.DiscoverThisDeviceGuidAsync(_dbInfo, _osInfo);
+                var info_tuple = await MpDefaultDataModelTools.DiscoverPrefInfoAsync(_dbInfo, _osInfo);
+                string discovered_device_guid = info_tuple.Item1;
+                int total_count = info_tuple.Item2;
                 if (string.IsNullOrEmpty(discovered_device_guid)) {
                     // this means no machine name/os type or just os type match was found in db file
                     // which would be strange and will wait to handle but should probably
@@ -681,6 +691,7 @@ namespace MonkeyPaste {
                 } else {
                     IsLoading = true;
                     Instance.ThisDeviceGuid = discovered_device_guid;
+                    Instance.UniqueContentItemIdx = total_count;
                 }
             } else {
                 // TODO remove this later only to automate restoring test db and preferences

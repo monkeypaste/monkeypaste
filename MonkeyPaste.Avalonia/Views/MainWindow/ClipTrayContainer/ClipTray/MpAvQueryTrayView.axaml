@@ -41,6 +41,16 @@
             <Setter Property="Opacity"
                     Value="0" />
         </Style>
+        <Style Selector="ListBox.queryListBox > ListBoxItem"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="Canvas.Left"
+                    Value="{Binding TrayX}" />
+            <Setter Property="Canvas.Top"
+                    Value="{Binding TrayY}" />
+        </Style>
+
+
+
     </local:MpAvUserControl.Styles>
     <Grid x:Name="QueryTrayContainerGrid"
           Margin="0"

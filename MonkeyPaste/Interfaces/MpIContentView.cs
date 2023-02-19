@@ -6,6 +6,9 @@ namespace MonkeyPaste {
         object DataContext { get; }
 
     }
+    public interface MPIHasSettableDataContext : MpIHasDataContext {
+        new object DataContext { get; set; }
+    }
     public interface MpIContentView : MpIHasDataContext {
         void ShowDevTools();
         bool IsSubSelectable { get; }

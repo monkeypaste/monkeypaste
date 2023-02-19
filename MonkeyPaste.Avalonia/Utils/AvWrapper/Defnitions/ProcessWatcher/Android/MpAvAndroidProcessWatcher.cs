@@ -31,7 +31,7 @@ namespace MonkeyPaste.Avalonia {
             if (_thisAppInfo == null) {
                 _thisAppInfo = new MpPortableProcessInfo() {
                     Handle = App.Current.GetMainWindowHandle(),
-                    ProcessPath = MpCommonHelpers.GetExecutingPath(),
+                    ProcessPath = MpPlatform.Services.PlatformInfo.ExecutingPath,
                     MainWindowTitle = MpPrefViewModel.Instance.ApplicationName,
                     MainWindowIconBase64 = MpBase64Images.AppIcon
                 };

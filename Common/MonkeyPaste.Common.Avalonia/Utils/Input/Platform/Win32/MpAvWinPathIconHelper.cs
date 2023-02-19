@@ -47,8 +47,9 @@ namespace MonkeyPaste.Common.Avalonia {
                     return bitmap.ToAvBitmap();
                 }
             }
-#endif
+#else
             return null;
+#endif
         }
 
         private static IntPtr GetIconHandleFromFilePath(string filepath, int iconsize) {
@@ -86,8 +87,9 @@ namespace MonkeyPaste.Common.Avalonia {
             var hIcon = IntPtr.Zero;
             _ = iml.GetIcon(iconIndex, ILD_TRANSPARENT, ref hIcon);
             return hIcon;
-#endif
+#else
             return IntPtr.Zero;
+#endif
         }
         #endregion
     }

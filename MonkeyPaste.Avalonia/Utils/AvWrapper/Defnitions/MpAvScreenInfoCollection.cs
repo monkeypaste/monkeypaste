@@ -1,6 +1,7 @@
 ﻿
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform;
 using Avalonia.Rendering;
 using Avalonia.VisualTree;
@@ -34,43 +35,20 @@ namespace MonkeyPaste.Avalonia {
                 IEnumerable<Screen> screens = null;
                 if (App.MainWindow is Window w) {
                     screens = w.Screens.All;
-                } else if (App.MainWindow is Control mainView) {
+                } else if (Application.Current.ApplicationLifetime is ISingleViewApplicationLifetime mobile &&
+                            mobile.MainView is Control mainView &&
+                            mainView.GetVisualRoot() is IRenderRoot rr) {
                     // NOTE Pretty sure client size is equiv to workarea but
                     // either way not sure how to get bounds (or workarea if vice versa) here 
                     screens = new[] {
-                        new Screen(
-                            PixelScaling,
-                            new PixelRect(mainView.GetVisualRoot().ClientSize.ToAvPixelSize()),
-                            new PixelRect(mainView.GetVisualRoot().ClientSize.ToAvPixelSize()),
-                            true)
+                        rr.AsScreen(PixelScaling)
                     };
                 }
                 if (screens == null) {
                     return new List<MpIPlatformScreenInfo>();
                 }
 
-                return
-                   screens
-                    .Select((x, i) =>
-                        new MpAvScreenInfo() {
-                            Bounds = new MpRect(
-                                new MpPoint(
-                                    x.Bounds.X / PixelScaling,
-                                    x.Bounds.Y) / PixelScaling,
-                                new MpSize(
-                                    x.Bounds.Width / PixelScaling,
-                                    x.Bounds.Height / PixelScaling)),
-                            IsPrimary = x.IsPrimary,
-                            Name = $"Monitor {i}",
-                            WorkArea = new MpRect(
-                                new MpPoint(
-                                    x.WorkingArea.X / PixelScaling,
-                                    x.WorkingArea.Y / PixelScaling),
-                                new MpSize(
-                                    x.WorkingArea.Width / PixelScaling,
-                                    x.WorkingArea.Height / PixelScaling)),
-                            PixelDensity = PixelScaling
-                        });
+                return screens.Select((x, idx) => new MpAvScreenInfo(x, idx));
             }
         }
 

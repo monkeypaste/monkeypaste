@@ -27,8 +27,9 @@ namespace MonkeyPaste.Avalonia {
                 }
 #if DESKTOP
                 return true;
-#endif
+#else
                 return false;
+#endif
             }
         }
         #endregion
@@ -69,13 +70,13 @@ namespace MonkeyPaste.Avalonia {
         #region Events
 
         #endregion
-        public static void InitCefNet() {
+        public static void Init() {
             ResetCefNetLogging();
             _ = new MpAvCefNetApplication();
         }
 
         public static void ResetCefNetLogging() {
-            string debug_log_path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "debug.log");
+            string debug_log_path = Path.Combine(MpPlatform.Services.PlatformInfo.ExecutingDir, "debug.log");
             if (!string.IsNullOrEmpty(debug_log_path)) {
                 MpFileIo.WriteTextToFile(debug_log_path, string.Empty, false);
             }
@@ -95,9 +96,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private MpAvCefNetApplication() : base() {
-#if !DESKTOP
-            return;
-#endif
+
             string datFileName = "icudtl.dat";
             //string cefRootDir = @"C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia\cef";
             string solution_dir = MpCommonHelpers.GetSolutionDir();
@@ -179,7 +178,6 @@ namespace MonkeyPaste.Avalonia {
 
             Initialize(Path.Combine(cefRootDir, "Release"), settings);
             MpConsole.WriteLine("CefNet Initialized.");
-            return;
         }
 
         protected override void OnBeforeCommandLineProcessing(string processType, CefCommandLine commandLine) {

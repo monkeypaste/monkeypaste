@@ -372,7 +372,7 @@ namespace MonkeyPaste.Avalonia {
                     ignoreParams = ignorePlugins,
                     isAvalonia = true,
                     mainWindowImplicitHandle = MpPlatform.Services.ProcessWatcher.ThisAppHandle.ToInt32(),
-                    platform = MpPlatform.Services.OsInfo.OsType.ToString(),
+                    platform = MpPlatform.Services.PlatformInfo.OsType.ToString(),
                     readFormats =
                         EnabledReaders
                         .Where(x => x.Parent.ClipboardPluginComponent == read_component)

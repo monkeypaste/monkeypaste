@@ -8,10 +8,7 @@ using System;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public class MpAvClipBorder : Border {
-    }
-    [DoNotNotify]
-    public class MpAvClipBorder2 : Border, IStyleable {
+    public class MpAvClipBorder : Border, IStyleable {
 
         Type IStyleable.StyleKey => typeof(Border);
 

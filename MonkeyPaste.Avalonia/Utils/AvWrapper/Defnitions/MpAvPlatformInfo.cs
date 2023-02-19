@@ -1,10 +1,39 @@
-﻿using MonkeyPaste.Common;
+﻿
+using MonkeyPaste.Common;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvOsInfo : MpIOsInfo {
-        public string OsMachineName => Environment.MachineName;
+    public class MpAvPlatformInfo : MpIPlatformInfo {
+        public string OsMachineName =>
+            Environment.MachineName;
+
+        // TODO Add per env info here
+        public string OsVersionInfo =>
+            string.Empty;
+        public string ExecutingDir {
+            get {
+                return AppContext.BaseDirectory;
+                //return Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            }
+        }
+        public string ExecutableName {
+            get {
+                if (Environment.GetCommandLineArgs().Any()) {
+                    string main_mod_path = Environment.GetCommandLineArgs()[0];
+                    return Path.GetFileNameWithoutExtension(main_mod_path);
+                }
+
+                MpDebug.Break("is this android?");
+                return null;
+            }
+        }
+        public string ExecutingPath {
+            get {
+                return Path.Combine(ExecutingDir, ExecutableName + GetExecutableExt());
+            }
+        }
 
         public string OsShortName {
             get {
@@ -78,9 +107,39 @@ namespace MonkeyPaste.Avalonia {
                 if (OperatingSystem.IsMacOS()) {
                     return MpUserDeviceType.Mac;
                 }
+                if (OperatingSystem.IsAndroid()) {
+                    return MpUserDeviceType.Android;
+                }
+                if (OperatingSystem.IsIOS()) {
+                    return MpUserDeviceType.Ios;
+                }
+                if (OperatingSystem.IsBrowser()) {
+                    return MpUserDeviceType.Browser;
+                }
                 return MpUserDeviceType.Unknown;
             }
         }
+
+        #region Private Methods
+
+        private string GetExecutableExt() {
+            if (OsType == MpUserDeviceType.Windows) {
+                return ".exe";
+            } else if (OsType == MpUserDeviceType.Android) {
+                // NOTE this may need OsVersionInfo too
+                return ".apk";
+            } else if (OsType == MpUserDeviceType.Mac) {
+                return @"/";
+            } else if (OsType == MpUserDeviceType.Linux) {
+                // TODO this is a place OsVersionInfo will be needed
+                return @".deb";
+            }
+
+            // add
+            MpDebug.Break("missing executable exit");
+            return null;
+        }
+        #endregion
     }
 }
 

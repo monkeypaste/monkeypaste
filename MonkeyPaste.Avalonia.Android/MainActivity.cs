@@ -2,6 +2,7 @@
 using Android.App;
 using Android.Content.PM;
 using Android.Content.Res;
+using Android.OS;
 using Android.Widget;
 
 using Avalonia.Android;
@@ -16,15 +17,10 @@ namespace MonkeyPaste.Avalonia.Android;
     LaunchMode = LaunchMode.SingleTop,
     ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
 public class MainActivity : AvaloniaMainActivity {
-    public override void OnAttachedToWindow() {
-        base.OnAttachedToWindow();
-        Dispatcher.UIThread.Post(async () => {
-
-        });
-    }
     public override void OnConfigurationChanged(Configuration newConfig) {
         base.OnConfigurationChanged(newConfig);
 
+        var test = App.MainView;
         // Checks the orientation of the screen
         if (newConfig.Orientation == Orientation.Landscape) {
             Toast.MakeText(this, "landscape", ToastLength.Short).Show();

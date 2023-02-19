@@ -11,8 +11,16 @@ using System;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
+    public interface MpIMainView : MPIHasSettableDataContext {
+        bool IsActive { get; }
+        nint Handle { get; }
+        void Show();
+        void Hide();
+        void SetPosition(MpPoint p, double scale);
+    }
+
     [DoNotNotify]
-    public partial class MpAvMainWindow : Window {
+    public partial class MpAvMainWindow : Window, MpIMainView {
         #region Private Variables
         #endregion
 
@@ -26,6 +34,19 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Interfaces
+
+        #region MpIMainView Implementation
+
+        public nint Handle =>
+            PlatformImpl.Handle.Handle;
+
+        public void SetPosition(MpPoint p, double scale) {
+            Position = p.ToAvPixelPoint(scale);
+        }
+        #endregion
+
+        #endregion
 
 
         #region Properties
@@ -37,7 +58,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
         public MpAvMainWindow() {
-
+            //App.MainView = this;
 
             InitializeComponent();
 #if DEBUG
@@ -45,7 +66,6 @@ namespace MonkeyPaste.Avalonia {
 #endif
             this.Activated += MainWindow_Activated;
             this.Deactivated += MainWindow_Deactivated;
-
         }
 
         #endregion
@@ -74,6 +94,7 @@ namespace MonkeyPaste.Avalonia {
             //MpConsole.WriteLine("MainWindow DEACTIVATED");
             MpAvMainWindowViewModel.Instance.IsMainWindowActive = false;
         }
+
 
         #endregion
 
