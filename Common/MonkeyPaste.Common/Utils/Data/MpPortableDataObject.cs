@@ -65,7 +65,7 @@ namespace MonkeyPaste.Common {
 
         #region Properties
 
-        public virtual Dictionary<MpPortableDataFormat, object> DataFormatLookup { get; private set; } = new Dictionary<MpPortableDataFormat, object>();
+        public virtual Dictionary<MpPortableDataFormat, object> DataFormatLookup { get; set; } = new Dictionary<MpPortableDataFormat, object>();
 
         #endregion
 

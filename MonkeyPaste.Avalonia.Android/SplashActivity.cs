@@ -12,6 +12,13 @@ namespace MonkeyPaste.Avalonia.Android;
 [Activity(Theme = "@style/MyTheme.Splash", MainLauncher = true, NoHistory = true)]
 public class SplashActivity : AvaloniaSplashActivity<App> {
 
+    protected override AppBuilder CustomizeAppBuilder(AppBuilder builder) {
+        return base.CustomizeAppBuilder(builder)
+             .AfterSetup(_ => {
+                 //Pages.EmbedSample.Implementation = new EmbedSampleAndroid();
+                 MpAvNativeWebViewHost.Implementation = new MpAvAdWebViewBuilder();
+             });
+    }
     protected override void OnPause() {
         base.OnPause();
         //MpAvMainWindowViewModel.Instance.IsMainWindowActive = false;

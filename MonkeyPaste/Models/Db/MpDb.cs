@@ -733,11 +733,41 @@ INNER JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId
 
             #endregion
 
+            await InitHelpContentAsync();
 
 
             MpConsole.WriteTraceLine(@"Created all default tables");
         }
 
+        private static async Task InitHelpContentAsync() {
+            // NOTE called in clip tray init when initial startup is flagged
+
+            var helpContentDefinitions = new List<string[]> {
+                new string[] {
+                    "Welcome to the jungle!",
+                    "<h1>Monkey paste is a b"
+                }
+            };
+
+            var hci_idl = new List<int>();
+            foreach (var hcd in helpContentDefinitions) {
+                var hci = await MpPlatform.Services.CopyItemBuilder.BuildAsync(
+                    pdo: new MpPortableDataObject() {
+                        DataFormatLookup = new Dictionary<MpPortableDataFormat, object>() {
+                            {
+                                MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT),
+                                hcd[0]
+                            },
+                            {
+                                MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.CefHtml),
+                                hcd[1]
+                            }
+                        }
+                    },
+                    transType: MpTransactionType.System,
+                    force_ext_sources: false);
+            }
+        }
         public static async Task ResetShortcutsAsync() {
             var sl = await MpDataModelProvider.GetItemsAsync<MpShortcut>();
             await Task.WhenAll(sl.Select(x => x.DeleteFromDatabaseAsync()));

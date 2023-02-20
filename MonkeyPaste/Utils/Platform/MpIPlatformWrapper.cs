@@ -9,12 +9,11 @@ namespace MonkeyPaste {
 
         MpINativePathDialog NativePathDialog { get; set; }
         MpIStartupObjectLocator StartupObjectLocator { get; set; }
-        MpIPlatformCompatibility PlatformCompatibility { get; set; }
         MpIStartupState StartupState { get; set; }
         MpIPlatformShorcuts PlatformShorcuts { get; set; }
         MpINotificationManager NotificationManager { get; set; }
         MpIFocusMonitor FocusMonitor { get; set; }
-        //MpIProcessWatcher ProcessWatcher { get; set; }
+
         MpICursor Cursor { get; set; }
         MpIDbInfo DbInfo { get; set; }
         MpIQueryResultProvider Query { get; set; }

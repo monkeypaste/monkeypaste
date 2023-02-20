@@ -21,13 +21,13 @@ namespace MonkeyPaste.Avalonia {
         public MpIStartupObjectLocator StartupObjectLocator { get; set; }
 
         public MpIContentViewLocator ContentViewLocator { get; set; }
+        public MpIGlobalInputListener GlobalInputListener { get; set; }
 
         #endregion
 
         public MpINativePathDialog NativePathDialog { get; set; }
         public MpIUserProvidedFileExts UserProvidedFileExts { get; set; }
         public MpIStartupState StartupState { get; set; }
-        public MpIPlatformCompatibility PlatformCompatibility { get; set; }
         public MpIPlatformShorcuts PlatformShorcuts { get; set; }
         public MpINotificationManager NotificationManager { get; set; }
         public MpIProcessWatcher ProcessWatcher { get; set; }
@@ -121,7 +121,6 @@ namespace MonkeyPaste.Avalonia {
 
             CustomColorChooserMenuAsync = new MpAvCustomColorChooser();
 
-            PlatformCompatibility = new MpAvPlatformCompatibility();
             PlatformResource = new MpAvPlatformResource();
             Cursor = new MpAvCursor((MpAvPlatformResource)PlatformResource);
             ContextMenuCloser = new MpAvContextMenuCloser();

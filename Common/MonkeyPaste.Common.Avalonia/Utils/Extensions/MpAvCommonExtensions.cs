@@ -23,9 +23,9 @@ namespace MonkeyPaste.Common.Avalonia {
 
         #region Environment
 
-        public static Screen AsScreen(this IRenderRoot rr, double scaling = 1) {
+        public static Screen AsScreen(this IRenderRoot rr) {
             return new Screen(
-                            scaling,
+                            1,
                             new PixelRect(rr.ClientSize.ToAvPixelSize()),
                             new PixelRect(rr.ClientSize.ToAvPixelSize()),
                             true);
@@ -332,22 +332,13 @@ namespace MonkeyPaste.Common.Avalonia {
                     new Typeface(fontFamily, fontStyle, fontWeight),
                     fontSize,
                     foreground);
-            //textAlignment,
-            //textWrapping,
-            //new Size());
-            //if (constraint == null) {
-            //    // size to text
-            //    ft.Constraint = ft.Bounds.Size;
-            //} else {
-            //    ft.Constraint = constraint.ToAvSize();
-            //}
             return ft;
         }
 
 
         public static FormattedText ToFormattedText(this TextBox tb) {
             var ft = new FormattedText(
-                    tb.Text,
+                    tb.Text ?? string.Empty,
                     CultureInfo.CurrentCulture,
                     tb.FlowDirection,
                     new Typeface(tb.FontFamily, tb.FontStyle, tb.FontWeight),
@@ -358,7 +349,7 @@ namespace MonkeyPaste.Common.Avalonia {
         }
         public static FormattedText ToFormattedText(this TextBlock tb) {
             var ft = new FormattedText(
-                    tb.Text,
+                    tb.Text ?? string.Empty,
                     CultureInfo.CurrentCulture,
                     tb.FlowDirection,
                     new Typeface(tb.FontFamily, tb.FontStyle, tb.FontWeight),
@@ -366,10 +357,6 @@ namespace MonkeyPaste.Common.Avalonia {
                     tb.Foreground);
             ft.TextAlignment = tb.TextAlignment;
             return ft;
-        }
-
-        public static MpSize GetFormattedTextSize(this FormattedText ft) {
-            return new MpSize(ft.Width, ft.Height);
         }
         #endregion
 

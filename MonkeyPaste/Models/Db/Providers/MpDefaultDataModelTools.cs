@@ -90,11 +90,10 @@ namespace MonkeyPaste {
 
             ThisUserDeviceGuid = Guid.NewGuid().ToString();
 
-            var thisDevice = new MpUserDevice() {
-                UserDeviceGuid = Guid.Parse(MpPrefViewModel.Instance.ThisDeviceGuid),
-                PlatformType = MpPlatform.Services.PlatformInfo.OsType,
-                MachineName = Environment.MachineName
-            };
+            var thisDevice = await MpUserDevice.CreateAsync(
+                deviceType: MpPlatform.Services.PlatformInfo.OsType,
+                machineName: MpPlatform.Services.PlatformInfo.OsMachineName,
+                versionInfo: MpPlatform.Services.PlatformInfo.OsVersionInfo);
 
             await thisDevice.WriteToDatabaseAsync();
 

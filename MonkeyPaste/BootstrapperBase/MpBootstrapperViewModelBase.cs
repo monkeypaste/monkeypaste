@@ -14,30 +14,27 @@ namespace MonkeyPaste {
         MpIStartupState,
         MpIProgressLoader,
         MpIStartupObjectLocator {
+        #region Private Variables
+
+        #endregion
 
 
-        #region Statics
-
-        public static bool IS_PARALLEL_LOADING_ENABLED = false;
-        public static bool IsCoreLoaded { get; protected set; } = false;
-        public static bool IsPlatformLoaded { get; protected set; } = false;
-
-        protected static List<MpBootstrappedItemViewModel> _baseItems { get; private set; } = new List<MpBootstrappedItemViewModel>();
-        protected static List<MpBootstrappedItemViewModel> _coreItems { get; private set; } = new List<MpBootstrappedItemViewModel>();
-        protected static List<MpBootstrappedItemViewModel> _platformItems { get; private set; } = new List<MpBootstrappedItemViewModel>();
-
+        #region Statics        
         #endregion
 
         #region Interfaces
 
         #region MpIStartupObjectLocator Implementation
 
-        IEnumerable<object> MpIStartupObjectLocator.Items => _coreItems.Union(_platformItems);
+        IEnumerable<object> MpIStartupObjectLocator.Items => CoreItems.Union(PlatformItems);
         #endregion
 
         #region MpIStartupState Implementation
 
         public DateTime? LoadedDateTime { get; private set; } = null;
+        public bool IsCoreLoaded { get; protected set; } = false;
+        public bool IsPlatformLoaded { get; protected set; } = false;
+        public bool IsInitialStartup { get; protected set; } = false;
 
         #endregion
 
@@ -56,7 +53,7 @@ namespace MonkeyPaste {
         }
 
         public double PercentLoaded =>
-            (double)LoadedCount / (double)(_coreItems.Count);
+            (double)LoadedCount / (double)(CoreItems.Count);
 
         public MpNotificationType DialogType => MpNotificationType.Loader;
 
@@ -64,7 +61,22 @@ namespace MonkeyPaste {
         #endregion
 
         #region Properties
+
+        #region View Models
+        public List<MpBootstrappedItemViewModel> BaseItems { get; private set; } = new List<MpBootstrappedItemViewModel>();
+        public List<MpBootstrappedItemViewModel> CoreItems { get; private set; } = new List<MpBootstrappedItemViewModel>();
+        public List<MpBootstrappedItemViewModel> PlatformItems { get; private set; } = new List<MpBootstrappedItemViewModel>();
+
+
+        #endregion
+
+        #region State
+        public bool IS_PARALLEL_LOADING_ENABLED =>
+            false;
+
         public int LoadedCount { get; set; } = 0;
+
+        #endregion
 
         #endregion
 
@@ -75,17 +87,17 @@ namespace MonkeyPaste {
 
         #region Public Methhods
 
-        public abstract Task InitAsync();
+        public abstract Task InitAsync(DateTime startup_datetime);
 
         public virtual async Task BeginLoaderAsync() {
-            await LoadItemsAsync(_coreItems);
+            await LoadItemsAsync(CoreItems);
             MpConsole.WriteLine("Core load complete");
             await Task.Delay(1000);
         }
 
         public virtual async Task FinishLoaderAsync() {
             // once mw and all mw views are loaded load platform items
-            await LoadItemsAsync(_platformItems);
+            await LoadItemsAsync(PlatformItems);
             MpConsole.WriteLine("Platform load complete");
             LoadedDateTime = DateTime.Now;
         }

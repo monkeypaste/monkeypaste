@@ -7,7 +7,47 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
 
 
-    public class MpUserDevice : MpDbModelBase, MpISyncableDbObject, MpISourceRef {
+    public class MpUserDevice :
+        MpDbModelBase,
+        MpISyncableDbObject,
+        MpISourceRef {
+        #region Statics
+
+        public static async Task<MpUserDevice> CreateAsync(
+            string guid = "",
+            MpUserDeviceType deviceType = MpUserDeviceType.None,
+            string machineName = "",
+            string versionInfo = "",
+            bool suppressWrite = false) {
+            var dupCheck = await MpDataModelProvider.GetUserDeviceByMembersAsync(machineName, deviceType);
+            if (dupCheck != null) {
+                bool needsUpdate = false;
+                if (dupCheck.VersionInfo != versionInfo) {
+                    needsUpdate = true;
+                    MpConsole.WriteLine($"UserDevice '{dupCheck}' version info changed, updating...");
+                    dupCheck.VersionInfo = versionInfo;
+                }
+                if (needsUpdate) {
+                    await dupCheck.WriteToDatabaseAsync();
+                }
+                return dupCheck;
+            }
+
+            var ud = new MpUserDevice() {
+                Guid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid().ToString() : guid,
+                UserDeviceType = deviceType,
+                MachineName = machineName,
+                VersionInfo = versionInfo
+            };
+            if (!suppressWrite) {
+                await ud.WriteToDatabaseAsync();
+            }
+            return ud;
+        }
+        #endregion
+
+        #region Interfaces
+
         #region MpISourceRef Implementation
 
         public int Priority => 1;
@@ -17,6 +57,10 @@ namespace MonkeyPaste {
         public string LabelText => "<UserName>-<DeviceName> here";
 
         #endregion
+
+        #endregion
+
+        #region Properties
 
         #region Columns
 
@@ -29,13 +73,13 @@ namespace MonkeyPaste {
 
         public string MachineName { get; set; }
 
+        public string VersionInfo { get; set; }
+
         [Column("e_MpUserDeviceType")]
-        public string PlatformTypeName { get; set; } = MpUserDeviceType.None.ToString();
+        public string UserDeviceTypeName { get; set; } = MpUserDeviceType.None.ToString();
 
 
         #endregion
-
-        #region Properties
 
         [Ignore]
         public Guid UserDeviceGuid {
@@ -51,9 +95,9 @@ namespace MonkeyPaste {
         }
 
         [Ignore]
-        public MpUserDeviceType PlatformType {
-            get => PlatformTypeName.ToEnum<MpUserDeviceType>();
-            set => PlatformTypeName = value.ToString();
+        public MpUserDeviceType UserDeviceType {
+            get => UserDeviceTypeName.ToEnum<MpUserDeviceType>();
+            set => UserDeviceTypeName = value.ToString();
         }
 
         [Ignore]
@@ -69,19 +113,26 @@ namespace MonkeyPaste {
         [Ignore]
         public bool IsThisPlatform {
             get {
-                return PlatformType == MpPlatform.Services.PlatformInfo.OsType;
+                return UserDeviceType == MpPlatform.Services.PlatformInfo.OsType;
             }
         }
 
         #endregion
 
+        #region Constructors
+
         public MpUserDevice() { }
 
-        public MpUserDevice(string deviceGuid, MpUserDeviceType platformTypeId) : this() {
-            UserDeviceGuid = System.Guid.Parse(deviceGuid);
-            PlatformType = platformTypeId;
-        }
+        #endregion
 
+        #region Public Methods
+
+        public override string ToString() {
+            return $"[{MachineName}] - '{VersionInfo}'";
+        }
+        #endregion
+
+        #region Sync
         public async Task<object> CreateFromLogsAsync(string udGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
             var ud = await MpDb.GetDbObjectByTableGuidAsync("MpUserDevice", udGuid) as MpUserDevice;
 
@@ -91,7 +142,7 @@ namespace MonkeyPaste {
                         ud.UserDeviceGuid = System.Guid.Parse(li.AffectedColumnValue);
                         break;
                     case "e_MpUserDeviceType":
-                        ud.PlatformType = (MpUserDeviceType)Convert.ToInt32(li.AffectedColumnValue);
+                        ud.UserDeviceType = (MpUserDeviceType)Convert.ToInt32(li.AffectedColumnValue);
                         break;
                     default:
                         MpConsole.WriteTraceLine(@"Unknown table-column: " + li.DbTableName + "-" + li.AffectedColumnName);
@@ -106,7 +157,7 @@ namespace MonkeyPaste {
             var objParts = objStr.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);
             var ud = new MpUserDevice() {
                 UserDeviceGuid = System.Guid.Parse(objParts[0]),
-                PlatformType = (MpUserDeviceType)Convert.ToInt32(objParts[1])
+                UserDeviceType = (MpUserDeviceType)Convert.ToInt32(objParts[1])
             };
             return ud;
         }
@@ -118,7 +169,7 @@ namespace MonkeyPaste {
                 @"{0}{1}{0}{2}{0}",
                 ParseToken,
                 UserDeviceGuid.ToString(),
-                (int)PlatformType);
+                (int)UserDeviceType);
         }
 
         public Type GetDbObjectType() {
@@ -141,13 +192,13 @@ namespace MonkeyPaste {
                 "MpUserDeviceGuid",
                 diffLookup,
                 UserDeviceGuid.ToString());
-            diffLookup = CheckValue(PlatformType, other.PlatformType,
+            diffLookup = CheckValue(UserDeviceType, other.UserDeviceType,
                 "e_MpUserDeviceType",
                 diffLookup,
-                PlatformType.ToString());
+                UserDeviceType.ToString());
 
             return diffLookup;
         }
-
+        #endregion
     }
 }

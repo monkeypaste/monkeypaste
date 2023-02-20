@@ -475,7 +475,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected virtual void MpAnalyticItemParameterValueViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            if (!MpBootstrapperViewModelBase.IsCoreLoaded) {
+            bool is_core_loaded = MpPlatform.Services != null &&
+                     MpPlatform.Services.StartupState != null &&
+                     MpPlatform.Services.StartupState.IsCoreLoaded;
+            if (!is_core_loaded) {
                 return;
             }
             OnValidate?.Invoke(this, new EventArgs());

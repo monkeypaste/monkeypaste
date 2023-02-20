@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
     public class MpAvBootstrapperViewModel : MpBootstrapperViewModelBase {
         private Stopwatch _sw;
-        public override async Task InitAsync() {
+        public override async Task InitAsync(DateTime startup_datetime) {
             _sw = Stopwatch.StartNew();
 
             if (OperatingSystem.IsLinux()) {
@@ -21,11 +21,19 @@ namespace MonkeyPaste.Avalonia {
 
             await MpPlatform.InitAsync(new MpAvWrapper(this, this));
 
+            if (MpPrefViewModel.Instance != null) {
+                if (MpPrefViewModel.Instance.LastStartupDateTime == null) {
+                    IsInitialStartup = true;
+                }
+                MpPrefViewModel.Instance.LastStartupDateTime = MpPrefViewModel.Instance.StartupDateTime;
+                MpPrefViewModel.Instance.StartupDateTime = startup_datetime;
+            }
+
             CreateLoaderItems();
 
             // init cefnet (if needed) BEFORE window creation
             // or chromium child process stuff will re-initialize (and show loader again)
-            await LoadItemsAsync(_baseItems);
+            await LoadItemsAsync(BaseItems);
             await MpNotificationBuilder.ShowLoaderNotificationAsync(this);
         }
 
@@ -43,10 +51,10 @@ namespace MonkeyPaste.Avalonia {
         }
         protected override void CreateLoaderItems() {
             if (MpPlatform.Services.PlatformInfo.IsDesktop) {
-                _baseItems.Add(new MpBootstrappedItemViewModel(this, typeof(MpAvCefNetApplication)));
+                BaseItems.Add(new MpBootstrappedItemViewModel(this, typeof(MpAvCefNetApplication)));
             }
 
-            _coreItems.AddRange(
+            CoreItems.AddRange(
                new List<MpBootstrappedItemViewModel>() {
                     new MpBootstrappedItemViewModel(this,typeof(MpAvNotificationWindowManager)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvThemeViewModel)),
@@ -78,7 +86,7 @@ namespace MonkeyPaste.Avalonia {
                });
 
             if (MpPlatform.Services.PlatformInfo.IsDesktop) {
-                _platformItems.AddRange(
+                PlatformItems.AddRange(
                    new List<MpBootstrappedItemViewModel>() {
                         new MpBootstrappedItemViewModel(this,typeof(MpAvPlainHtmlConverter)),
                         new MpBootstrappedItemViewModel(this,typeof(MpAvExternalDropWindow)),
@@ -88,7 +96,7 @@ namespace MonkeyPaste.Avalonia {
                         new MpBootstrappedItemViewModel(this,typeof(MpAvMainWindowViewModel))
                    });
             } else {
-                _platformItems.AddRange(
+                PlatformItems.AddRange(
                    new List<MpBootstrappedItemViewModel>() {
                         new MpBootstrappedItemViewModel(this,typeof(MpAvMainView)),
                         new MpBootstrappedItemViewModel(this,typeof(MpAvMainWindowViewModel))

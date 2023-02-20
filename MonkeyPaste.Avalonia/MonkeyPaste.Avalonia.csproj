@@ -39,6 +39,9 @@
     <NoWarn>$(NoWarn),IDE1006</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <AndroidJavaSource Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
+    <AndroidLibrary Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
+    <AndroidNativeLibrary Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <AvaloniaXaml Remove="AttachedProperties\DragDrop\**" />
     <AvaloniaXaml Remove="Behaviors\DragDrop\**" />
     <AvaloniaXaml Remove="Behaviors\Highlighting\**" />
@@ -54,6 +57,7 @@
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\Plugins\_Base\**" />
+    <AvaloniaXaml Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <AvaloniaXaml Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <AvaloniaXaml Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
     <AvaloniaXaml Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
@@ -72,6 +76,7 @@
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
     <Compile Remove="ViewModels\MainWindow\Plugins\_Base\**" />
+    <Compile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <Compile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <Compile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
     <Compile Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
@@ -90,9 +95,11 @@
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\Plugins\_Base\**" />
+    <EmbeddedResource Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <EmbeddedResource Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <EmbeddedResource Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
     <EmbeddedResource Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
+    <JavaSourceJar Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <None Remove="AttachedProperties\DragDrop\**" />
     <None Remove="Behaviors\DragDrop\**" />
     <None Remove="Behaviors\Highlighting\**" />
@@ -108,6 +115,7 @@
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
     <None Remove="ViewModels\MainWindow\Plugins\_Base\**" />
+    <None Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <None Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <None Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
     <None Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
@@ -128,6 +136,8 @@
     <Page Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <Page Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
     <Page Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
+    <ProguardConfiguration Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
+    <TransformFile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <AvaloniaXaml Remove="Themes\Default\Accents\Base.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Accents\BaseLight.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Animations\Defaults.axaml" />
@@ -389,8 +399,10 @@
     <Compile Remove="Adorners\MpAvContentDragDropAdorner.cs" />
     <Compile Remove="AttachedProperties\MpAvCefNetWebViewExtension.cs" />
     <Compile Remove="AttachedProperties\MpAvCefWebViewExtension.cs" />
+    <Compile Remove="AttachedProperties\MpAvMarqueeTextBoxExtension.cs" />
     <Compile Remove="AttachedProperties\MpAvTextSelectionExtension.cs" />
     <Compile Remove="Behaviors\MpAvMoveBehavior.cs" />
+    <Compile Remove="Controls\Content\CefNetWebView\Cef\WebView\MpAvCefNetWebView.cs" />
     <Compile Remove="Program.cs" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\MpAvWin32ProcessWatcher2.cs" />
     <Compile Remove="Utils\Input\Mouse\MpAvMouseHook_Win32.cs" />
@@ -1081,6 +1093,9 @@
     </Compile>
     <Compile Update="Views\ExternalDropWindow\MpAvExternalDropWindow.axaml.cs">
       <DependentUpon>MpAvExternalDropWindow.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\ContentWebViewContainer\MpAvContentWebViewContainer.axaml.cs">
+      <DependentUpon>MpAvContentWebViewContainer.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Transactions\MpAvClipTileTransactionPaneView.axaml.cs">
       <DependentUpon>MpAvClipTileTransactionPaneView.axaml</DependentUpon>

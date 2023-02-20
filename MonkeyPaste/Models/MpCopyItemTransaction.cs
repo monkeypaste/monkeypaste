@@ -17,7 +17,8 @@ namespace MonkeyPaste {
         Cut,
         Edited,
         Analyzed,
-        Error
+        Error,
+        System
     }
 
     public class MpCopyItemTransaction : MpDbModelBase {

@@ -88,7 +88,9 @@ namespace MonkeyPaste {
             return result[0];
         }
 
-        public static async Task<MpUserDevice> GetUserDeviceByMembersAsync(string machineName, MpUserDeviceType deviceType) {
+        public static async Task<MpUserDevice> GetUserDeviceByMembersAsync(
+            string machineName,
+            MpUserDeviceType deviceType) {
             string query = null;
             if (string.IsNullOrEmpty(machineName)) {
                 query = $"select * from MpUserDevice where e_MpUserDeviceType=?";

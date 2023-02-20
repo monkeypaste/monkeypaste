@@ -41,7 +41,7 @@ namespace MonkeyPaste.Avalonia {
                     // NOTE Pretty sure client size is equiv to workarea but
                     // either way not sure how to get bounds (or workarea if vice versa) here 
                     screens = new[] {
-                        rr.AsScreen(PixelScaling)
+                        rr.AsScreen()
                     };
                 }
                 if (screens == null) {

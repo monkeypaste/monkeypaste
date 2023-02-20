@@ -290,10 +290,8 @@
             </TabItem>
         </TabControl>
 
-
         <GridSplitter x:Name="TransactionTreeBodySplitter"
                       Grid.Row="2"
-                      Height="5"
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Top"
                       ResizeDirection="Rows"

@@ -39,7 +39,7 @@ namespace MonkeyPaste.Avalonia {
                             break;
                     }
                 }
-                return outVal;
+                return Math.Abs(outVal);
             }
             return 0;
         }

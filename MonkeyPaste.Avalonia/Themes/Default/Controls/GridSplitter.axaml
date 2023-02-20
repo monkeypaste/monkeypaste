@@ -3,13 +3,16 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
     <Styles.Resources>
+        <sys:Double x:Key="DefaultGridSplitterFixedDimensionLength_desktop">5</sys:Double>
+        <sys:Double x:Key="DefaultGridSplitterFixedDimensionLength_mobile">10</sys:Double>
         <sys:Double x:Key="DefaultGridSplitterFixedDimensionLength">5</sys:Double>
     </Styles.Resources>
+
     <Style Selector="GridSplitter.horizontal">
         <Setter Property="Cursor"
                 Value="SizeNorthSouth" />
         <Setter Property="Height"
-                Value="{StaticResource DefaultGridSplitterFixedDimensionLength}" />
+                Value="{DynamicResource DefaultGridSplitterFixedDimensionLength}" />
         <Setter Property="ResizeDirection"
                 Value="Rows" />
     </Style>
@@ -17,7 +20,7 @@
         <Setter Property="Cursor"
                 Value="SizeWestEast" />
         <Setter Property="Width"
-                Value="{StaticResource DefaultGridSplitterFixedDimensionLength}" />
+                Value="{DynamicResource DefaultGridSplitterFixedDimensionLength}" />
         <Setter Property="ResizeDirection"
                 Value="Columns" />
     </Style>

@@ -267,7 +267,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
         #region SelectViewModelOnFocus AvaloniaProperty
         private bool _selectViewModelOnFocus = true;
         public bool SelectViewModelOnFocus {
@@ -346,6 +345,9 @@ namespace MonkeyPaste.Avalonia {
             this.BorderThickness = new Thickness(0);
             //this.MinHeight = 5;
             this.IsReadOnly = true;
+            if (!this.FontSize.IsNumber() || this.FontSize < 1) {
+                this.FontSize = 1;
+            }
             //this.HorizontalAlignment = HorizontalAlignment.Stretch;
             //this.VerticalAlignment = VerticalAlignment.Stretch;
 
@@ -556,24 +558,23 @@ namespace MonkeyPaste.Avalonia {
 
         }
         private void RenderMarquee(DrawingContext ctx) {
-            var ft = _ft;
-            ft.SetForegroundBrush(ReadOnlyForeground);
+            _ft.SetForegroundBrush(ReadOnlyForeground);
             ctx.FillRectangle(ReadOnlyBackground, this.Bounds);
 
             var origin1 = new Point(_offsetX1, 0);
             //using (ctx.PushPostTransform(Matrix.CreateTranslation(new Vector(_offsetX1, 0)))) {
-            ft.SetForegroundBrush(DropShadowBrush);
-            ctx.DrawText(ft, origin1 + DropShadowOffset);
-            ft.SetForegroundBrush(ReadOnlyForeground);
-            ctx.DrawText(ft, origin1);
+            _ft.SetForegroundBrush(DropShadowBrush);
+            ctx.DrawText(_ft, origin1 + DropShadowOffset);
+            _ft.SetForegroundBrush(ReadOnlyForeground);
+            ctx.DrawText(_ft, origin1);
             //}
             if (CanMarquee()) {
                 var origin2 = new Point(_offsetX2, 0);
                 // using (ctx.PushPostTransform(Matrix.CreateTranslation(new Vector(_offsetX2, 0)))) {
-                ft.SetForegroundBrush(DropShadowBrush);
-                ctx.DrawText(ft, origin2 + DropShadowOffset);
-                ft.SetForegroundBrush(ReadOnlyForeground);
-                ctx.DrawText(ft, origin2);
+                _ft.SetForegroundBrush(DropShadowBrush);
+                ctx.DrawText(_ft, origin2 + DropShadowOffset);
+                _ft.SetForegroundBrush(ReadOnlyForeground);
+                ctx.DrawText(_ft, origin2);
                 // }
             }
         }

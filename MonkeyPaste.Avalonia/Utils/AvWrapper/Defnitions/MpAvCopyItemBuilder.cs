@@ -182,10 +182,16 @@ namespace MonkeyPaste.Avalonia {
                         mpdo.GetData(MpPortableDataFormats.AvHtml_bytes) is byte[] htmlBytes &&
                         htmlBytes.ToDecodedString() is string htmlStr) {
 
-                // HTML
+                // HTML (bytes)
                 inputTextFormat = "html";
                 itemType = MpCopyItemType.Text;
                 itemData = htmlStr;
+            } else if (mpdo.TryGetData(MpPortableDataFormats.CefHtml, out string cefHtmlStr)) {
+
+                // HTML (xml)
+                inputTextFormat = "html";
+                itemType = MpCopyItemType.Text;
+                itemData = cefHtmlStr;
             } else if (mpdo.ContainsData(MpPortableDataFormats.Text) &&
                         mpdo.GetData(MpPortableDataFormats.Text) is string textStr) {
 
@@ -224,7 +230,7 @@ namespace MonkeyPaste.Avalonia {
 
                 MpAvHtmlClipboardData htmlClipboardData = null;
 
-                if (MpAvCefNetApplication.UseCefNet) {
+                if (MpPrefViewModel.Instance.IsRichHtmlContentEnabled) {
                     htmlClipboardData = await MpAvPlainHtmlConverter.Instance.ParseAsync(itemData, inputTextFormat);
                     if (htmlClipboardData == null) {
                         itemData = null;

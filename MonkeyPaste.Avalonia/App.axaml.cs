@@ -84,17 +84,19 @@ namespace MonkeyPaste.Avalonia {
             AvaloniaXamlLoader.Load(this);
         }
         public override async void OnFrameworkInitializationCompleted() {
+            DateTime startup_datetime = DateTime.Now;
+
             ReportCommandLineArgs(Args);
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
                 desktop.Startup += Startup;
                 desktop.Exit += Exit;
 
                 var bootstrapper = new MpAvBootstrapperViewModel();
-                await bootstrapper.InitAsync();
+                await bootstrapper.InitAsync(startup_datetime);
             } else if (ApplicationLifetime is ISingleViewApplicationLifetime mobile) {
                 Dispatcher.UIThread.Post(async () => {
                     var bootstrapper = new MpAvBootstrapperViewModel();
-                    await bootstrapper.InitAsync();
+                    await bootstrapper.InitAsync(startup_datetime);
                 });
                 mobile.MainView = new MpAvMainView() {
                     HorizontalAlignment = HorizontalAlignment.Stretch,

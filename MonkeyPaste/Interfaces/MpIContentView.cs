@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Common;
+using System;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
@@ -6,15 +7,36 @@ namespace MonkeyPaste {
         object DataContext { get; }
 
     }
-    public interface MPIHasSettableDataContext : MpIHasDataContext {
+    public interface MpIHasSettableDataContext : MpIHasDataContext {
         new object DataContext { get; set; }
     }
-    public interface MpIContentView : MpIHasDataContext {
+
+    public interface MpIPlatformView {
+        EventHandler OnViewAttached { get; }
+        bool IsViewInitialized { get; }
+
+    }
+    public interface MpIHasDevTools {
         void ShowDevTools();
+    }
+
+    public interface MpIJsonMessenger {
+        void SendMessage(string msgJsonBase64Str);
+    }
+
+    public interface MpIAyncJsonMessenger {
+        Task<string> SendMessageAsync(string msgJsonBase64Str);
+    }
+
+    public interface MpIPlainHtmlConverterView : MpIJsonMessenger, MpIHasDevTools, MpIPlatformView {
+
+    }
+
+    public interface MpIContentView :
+        MpIHasDataContext, MpIHasDevTools, MpIJsonMessenger {
         bool IsSubSelectable { get; }
         Task LoadContentAsync();
         Task UpdateContentAsync(MpJsonObject contentJsonObj);
 
-        void SendMessage(string msgJsonBase64Str);
     }
 }

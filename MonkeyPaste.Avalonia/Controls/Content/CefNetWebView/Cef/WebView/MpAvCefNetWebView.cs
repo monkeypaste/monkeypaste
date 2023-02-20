@@ -23,45 +23,6 @@ using System.Web;
 
 namespace MonkeyPaste.Avalonia {
 
-    public enum MpAvEditorBindingFunctionType {
-        // two-way *_get async requests
-        getDragData,
-        getAllNonInputTemplatesFromDb,
-        getClipboardDataTransferObject,
-        getDragDataTransferObject,
-
-        // one-way *_ntf notifications
-        notifyDocSelectionChanged,
-        notifyContentChanged,
-        notifySubSelectionEnabledChanged,
-        notifyException,
-        notifyReadOnlyEnabled,
-        notifyReadOnlyDisabled,
-        notifyInitComplete,
-        notifyDomLoaded,
-        notifyDropCompleted,
-        notifyDragEnter,
-        notifyDragLeave,
-        notifyDragEnd,
-        notifyContentScreenShot,
-        notifyUserDeletedTemplate,
-        notifyAddOrUpdateTemplate,
-        notifyPasteRequest,
-        notifyFindReplaceVisibleChange,
-        notifyQuerySearchRangesChanged,
-        notifyLoadComplete,
-        notifyShowCustomColorPicker,
-        notifyNavigateUriRequested,
-        notifySetClipboardRequested,
-        notifyDataTransferCompleted,
-        notifySelectionChanged,
-        notifyScrollChanged,
-        notifyAppendStateChanged,
-        notifyInternalContextMenuIsVisibleChanged,
-        notifyLastTransactionUndone,
-        notifyAnnotationSelected,
-        notifyShowDebugger
-    }
 
 
     [DoNotNotify]
@@ -148,7 +109,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIContentView
 
-        void MpIContentView.ShowDevTools() =>
+        void MpIHasDevTools.ShowDevTools() =>
             ShowDevTools();
 
         bool MpIContentView.IsSubSelectable =>
@@ -160,7 +121,7 @@ namespace MonkeyPaste.Avalonia {
         Task MpIContentView.UpdateContentAsync(MpJsonObject contentJsonObj) =>
             PerformUpdateContentRequestAsync(contentJsonObj);
 
-        void MpIContentView.SendMessage(string msgJsonBase64Str) =>
+        void MpIJsonMessenger.SendMessage(string msgJsonBase64Str) =>
             this.ExecuteJavascript(msgJsonBase64Str);
 
         #endregion
@@ -362,6 +323,8 @@ namespace MonkeyPaste.Avalonia {
             MpMessenger.RegisterGlobal(ReceivedGlobalMessega);
             this.GetObservable(MpAvCefNetWebView.AppendDataProperty).Subscribe(value => OnAppendDataChanged());
             this.GetObservable(MpAvCefNetWebView.AppendModeStateProperty).Subscribe(value => OnAppendModeStateChanged("command"));
+
+            this.GetObservable(MpAvCefNetWebView.IsEditorInitializedProperty).Subscribe(value => OnIsEditorInitializedChanged());
 
             this.GetObservable(MpAvCefNetWebView.ContentIdProperty).Subscribe(value => OnContentIdChanged());
             this.GetObservable(MpAvCefNetWebView.IsContentSelectedProperty).Subscribe(value => OnIsContentSelectedChanged());
@@ -743,8 +706,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Control Life Cycle
-
-
         private void MpAvCefNetWebView_AttachedToLogicalTree(object sender, LogicalTreeAttachmentEventArgs e) {
             if (_AllWebViews.Contains(this)) {
                 // should only happen once
@@ -760,8 +721,6 @@ namespace MonkeyPaste.Avalonia {
         private void MpAvCefNetWebView_PointerPressed(object sender, PointerPressedEventArgs e) {
             LastPointerPressedEventArgs = e;
         }
-
-
         protected override void OnDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e) {
             base.OnDetachedFromLogicalTree(e);
             _AllWebViews.Remove(this);
@@ -783,7 +742,25 @@ namespace MonkeyPaste.Avalonia {
 
         #region Dom Init
 
-        public bool IsEditorInitialized { get; private set; } = false;
+
+        #region IsEditorInitialized Property
+
+        private bool _isEditorInitialized = false;
+        public bool IsEditorInitialized {
+            get { return _isEditorInitialized; }
+            protected set { SetAndRaise(IsEditorInitializedProperty, ref _isEditorInitialized, value); }
+        }
+
+        public static DirectProperty<MpAvCefNetWebView, bool> IsEditorInitializedProperty =
+            AvaloniaProperty.RegisterDirect<MpAvCefNetWebView, bool>(
+                nameof(IsEditorInitialized),
+                x => x.IsEditorInitialized,
+                (x, o) => x.IsEditorInitialized = o);
+
+        protected virtual void OnIsEditorInitializedChanged() {
+
+        }
+        #endregion
 
         #region IsDomLoaded Property
 

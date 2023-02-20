@@ -45,8 +45,7 @@ namespace MonkeyPaste {
         public static bool UseEncryption = false;
 
         [JsonIgnore]
-        public static MpPrefViewModel Instance { get; private set; } //=> _instance ?? (new MpJsonPreferenceIO());
-
+        public static MpPrefViewModel Instance { get; private set; }
         [JsonIgnore]
         public static string PreferencesPath => _prefPath;
 
@@ -65,6 +64,13 @@ namespace MonkeyPaste {
         #region MpICustomCsvFormat Implementation
         MpCsvFormatProperties MpICustomCsvFormat.CsvFormat =>
             MpCsvFormatProperties.DefaultBase64Value;
+
+        #endregion
+
+        #region MpIJsonObject Implementation
+        public string SerializeJsonObject() {
+            return MpJsonConverter.SerializeObject(this);
+        }
 
         #endregion
 
@@ -99,6 +105,10 @@ namespace MonkeyPaste {
 
         #region Application Properties
 
+        #region User/Device Derived Models    
+        public string ThisDeviceGuid { get; set; } = System.Guid.NewGuid().ToString();
+        #endregion
+
         #region Editor
 
         #endregion
@@ -108,8 +118,6 @@ namespace MonkeyPaste {
         public string SslCASubject { get; set; } = "CN=MPCA";
         public string SslCertSubject { get; set; } = "CN=127.0.01";
         #endregion
-
-
 
         public string LocalStoragePath =>
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
@@ -319,6 +327,7 @@ namespace MonkeyPaste {
 
         #region User Properties          
 
+        public bool IsRichHtmlContentEnabled { get; set; } = true;
         public bool TrackExternalPasteHistory { get; set; } = false;
         public string UserDefinedFileExtensionsPsv { get; set; } = string.Empty;
         public int MaxUndoLimit { get; set; } = 100;
@@ -336,7 +345,12 @@ namespace MonkeyPaste {
 
         public string AppStorageFilePath { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-        public string MainWindowOrientation { get; set; } = MpMainWindowOrientationType.Bottom.ToString();
+        public string MainWindowOrientation { get; set; }
+#if DESKTOP
+        = MpMainWindowOrientationType.Bottom.ToString();
+#else
+        = MpMainWindowOrientationType.Left.ToString();
+#endif
 
         public string MainWindowShowBehaviorType { get; set; } = MpMainWindowShowBehaviorType.Primary.ToString();
 
@@ -344,6 +358,7 @@ namespace MonkeyPaste {
         public double MainWindowInitialHeight { get; set; } = 0;
 
         public DateTime StartupDateTime { get; set; } = DateTime.MinValue;
+        public DateTime? LastStartupDateTime { get; set; } = null;
 
         public string UserCultureInfoName { get; set; } = @"en-US";
 
@@ -531,20 +546,8 @@ namespace MonkeyPaste {
 
         #endregion
 
-        #region User/Device Derived Models               
 
-
-        public string ThisDeviceGuid { get; set; } = System.Guid.NewGuid().ToString();
-        #endregion
-
-        #region MpIJsonObject Implementation
-        public string SerializeJsonObject() {
-            return MpJsonConverter.SerializeObject(this);
-        }
-
-        #endregion
-
-        #region Preferences Properties
+        #region State
 
         [JsonIgnore]
         public bool IsSaving { get; private set; }
@@ -574,7 +577,6 @@ namespace MonkeyPaste {
             } else {
                 await CreateDefaultPrefsAsync();
             }
-
         }
 
         public void Save() {
@@ -694,24 +696,6 @@ namespace MonkeyPaste {
                     Instance.UniqueContentItemIdx = total_count;
                 }
             } else {
-                // TODO remove this later only to automate restoring test db and preferences
-
-                //string db_ext = _dbInfo.DbExtension;
-                //string execute_path = Assembly.GetExecutingAssembly().Location;
-                //string execute_dir = Path.GetDirectoryName(execute_path);
-                //string backup_path = Path.Combine(MpCommonHelpers.GetSolutionDir(), "db", "backup");
-                //if(_osInfo.OsType == MpUserDeviceType.Windows) {
-                //    backup_path = Path.Combine(backup_path, "win");
-                //    File.Copy(Path.Combine(backup_path, $"mp_win.{db_ext}"), Path.Combine(execute_dir, $"mp_win.{db_ext}"));
-                //    File.Copy(Path.Combine(backup_path, "pref_win.json"), Path.Combine(execute_dir, "pref_win.json"));
-                //} else if (_osInfo.OsType == MpUserDeviceType.Linux) {
-                //    backup_path = Path.Combine(backup_path, "x11");
-                //    File.Copy(Path.Combine(backup_path, $"mp_x11.{db_ext}"), Path.Combine(execute_dir, $"mp_x11.{db_ext}"));
-                //    File.Copy(Path.Combine(backup_path, "pref_x11.json"), Path.Combine(execute_dir, "pref_x11.json"));
-                //}
-                //MpConsole.WriteLine("Debug Settings restored from " + backup_path + " reinitializing...");
-                //await InitAsync(_prefPath, _dbInfo, _osInfo);
-                //return;
                 Instance = new MpPrefViewModel();
             }
 
@@ -724,8 +708,6 @@ namespace MonkeyPaste {
 
             Instance.Save();
 
-            // NOTE this line should be removed and is only valid for current wpf db
-            //Instance.ThisDeviceGuid = "f64b221e-806a-4e28-966a-f9c5ff0d9370";
             while (Instance.IsSaving) {
                 await Task.Delay(100);
             }

@@ -70,8 +70,19 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public double MainWindowDefaultHorizontalHeightRatio => 0.35;
-        public double MainWindowDefaultVerticalWidthRatio => 0.2;
+        public double MainWindowDefaultHorizontalHeightRatio =>
+#if DESKTOP
+            0.35;
+#else
+            1.0d;
+#endif
+
+        public double MainWindowDefaultVerticalWidthRatio =>
+#if DESKTOP
+            0.2;
+#else
+            1.0d;
+#endif
 
         public double MainWindowWidth { get; set; }
         public double MainWindowHeight { get; set; }
@@ -296,6 +307,26 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public double MainWindowTransformAngle {
+            get {
+#if DESKTOP
+                return 0;
+#else
+                switch (MainWindowOrientationType) {
+                    case MpMainWindowOrientationType.Right:
+                    case MpMainWindowOrientationType.Top:
+                        return 180;
+                    default:
+                        return 0;
+                }
+#endif
+            }
+        }
+        public bool IsDesktop =>
+            MpPlatform.Services != null &&
+            MpPlatform.Services.PlatformInfo != null &&
+            MpPlatform.Services.PlatformInfo.IsDesktop;
+
         private IEnumerable<MpIAsyncObject> _busyCheckInstances;
         public bool IsAnyBusy {
             get {
@@ -333,22 +364,14 @@ namespace MonkeyPaste.Avalonia {
         public bool IsMainWindowOrientationDragging { get; set; } = false;
         public bool IsResizerVisible { get; set; } = false;
         public bool IsHovering { get; set; }
-
         public bool IsMainWindowInitiallyOpening { get; set; } = true;
-
         public bool IsMainWindowOpening { get; private set; }
         public bool IsMainWindowClosing { get; private set; }
-
         public bool IsMainWindowOpen { get; private set; } = false;
-
         public bool IsMainWindowVisible { get; set; }
-
         public bool IsMainWindowLoading { get; set; } = true;
-
         public bool IsMainWindowLocked { get; set; } = false;
-
         public bool IsResizing { get; set; } = false;
-
         public bool CanResize { get; set; } = false;
 
         private bool _isAnyMainWindowTextBoxFocused;
@@ -376,10 +399,12 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsFilterMenuVisible { get; set; } = true;
 
-        public bool IsHorizontalOrientation => MainWindowOrientationType == MpMainWindowOrientationType.Bottom ||
-                                                MainWindowOrientationType == MpMainWindowOrientationType.Top;
+        public bool IsHorizontalOrientation =>
+            MainWindowOrientationType == MpMainWindowOrientationType.Bottom ||
+            MainWindowOrientationType == MpMainWindowOrientationType.Top;
 
-        public bool IsVerticalOrientation => !IsHorizontalOrientation;
+        public bool IsVerticalOrientation =>
+            !IsHorizontalOrientation;
 
         public MpMainWindowOrientationType MainWindowOrientationType { get; private set; }
         public MpMainWindowShowBehaviorType MainWindowShowBehaviorType { get; private set; }
@@ -409,7 +434,7 @@ namespace MonkeyPaste.Avalonia {
                     !MpPlatform.Services.ScreenInfoCollection.Screens.Any()) {
                     if (Application.Current.ApplicationLifetime is ISingleViewApplicationLifetime mobile
                         && mobile.MainView != null) {
-                        return new MpAvScreenInfo(mobile.MainView.GetVisualRoot().AsScreen(1));
+                        return new MpAvScreenInfo(mobile.MainView.GetVisualRoot().AsScreen());
                     }
                     return new MpAvScreenInfo() { IsPrimary = true };
                 }
@@ -473,6 +498,7 @@ namespace MonkeyPaste.Avalonia {
             MainWindowOrientationType = (MpMainWindowOrientationType)Enum.Parse(typeof(MpMainWindowOrientationType), MpPrefViewModel.Instance.MainWindowOrientation, false);
             MainWindowShowBehaviorType = (MpMainWindowShowBehaviorType)Enum.Parse(typeof(MpMainWindowShowBehaviorType), MpPrefViewModel.Instance.MainWindowShowBehaviorType, false);
             OnPropertyChanged(nameof(MainWindowScreen));
+            OnPropertyChanged(nameof(IsDesktop));
 
             MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseReleased += Instance_OnGlobalMouseReleased;
             MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseMove += Instance_OnGlobalMouseMove;
@@ -829,7 +855,11 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
 
-                if (!IsMainWindowOpening && MpBootstrapperViewModelBase.IsCoreLoaded) {
+                bool is_core_loaded = MpPlatform.Services != null &&
+                     MpPlatform.Services.StartupState != null &&
+                     MpPlatform.Services.StartupState.IsCoreLoaded;
+
+                if (!IsMainWindowOpening && is_core_loaded) {
                     if (MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation != null &&
                              MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight) {
                         // show mw on top edge scroll flick
@@ -1084,6 +1114,7 @@ namespace MonkeyPaste.Avalonia {
                 MpMessenger.SendGlobal(MpMessageType.MainWindowOrientationChangeBegin);
 
                 MainWindowOrientationType = (MpMainWindowOrientationType)nextOr;
+                OnPropertyChanged(nameof(MainWindowTransformAngle));
                 SetupMainWindowSize(true);
 
                 SetMainWindowRect(MainWindowOpenedScreenRect);

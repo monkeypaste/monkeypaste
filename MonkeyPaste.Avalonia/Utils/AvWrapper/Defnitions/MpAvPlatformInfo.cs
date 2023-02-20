@@ -11,7 +11,8 @@ namespace MonkeyPaste.Avalonia {
 
         // TODO Add per env info here
         public string OsVersionInfo =>
-            string.Empty;
+            Environment.OSVersion.VersionString;
+
         public string ExecutingDir {
             get {
                 return AppContext.BaseDirectory;

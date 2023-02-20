@@ -19,19 +19,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constants
 
         public const string JS_REF_ERROR = "JS_REF_ERROR";
-        private static bool _useCefNet = true;
-        public static bool UseCefNet {
-            get {
-                if (!_useCefNet) {
-                    return false;
-                }
-#if DESKTOP
-                return true;
-#else
-                return false;
-#endif
-            }
-        }
+
         #endregion
 
         #region Statics

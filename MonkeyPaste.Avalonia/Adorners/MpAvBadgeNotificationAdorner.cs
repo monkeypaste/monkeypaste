@@ -3,6 +3,7 @@ using Avalonia.Media;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
+using System;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -42,15 +43,6 @@ namespace MonkeyPaste.Avalonia {
             if (AdornedControl == null) {
                 return;
             }
-            //if(!AdornedControl.IsVisible) {
-            //    IsVisible = false;
-            //} else {
-            //    if (NotificationCount == 0) {
-            //        IsVisible = false;
-            //    } else {
-            //        IsVisible = true;
-            //    }
-            //}
             IsVisible = NotificationCount > 0;
 
             if (!IsVisible) {
@@ -68,7 +60,7 @@ namespace MonkeyPaste.Avalonia {
 
             // DRAW COUNT
 
-            double fs = (r * 2) - (lw * 2) - 1;
+            double fs = Math.Max(10, (r * 2) - (lw * 2) - 1);
             // for more than 9 notifications just draw asterisk
             string count_text = NotificationCount > 9 ? "*" : NotificationCount.ToString();
             FormattedText count_ft = count_text.ToFormattedText(

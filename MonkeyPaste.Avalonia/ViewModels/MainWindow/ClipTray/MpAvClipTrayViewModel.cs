@@ -997,8 +997,12 @@ namespace MonkeyPaste.Avalonia {
 
         public string EmptyQueryTrayText {
             get {
+                if (MpPlatform.Services == null ||
+                    MpPlatform.Services.StartupState == null) {
+                    return string.Empty;
+                }
                 if (!IsQueryEmpty ||
-                    !MpAvBootstrapperViewModel.IsPlatformLoaded) {
+                    !MpPlatform.Services.StartupState.IsPlatformLoaded) {
                     return string.Empty;
                 }
 
@@ -1311,21 +1315,13 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(LayoutType));
 
             ModalClipTileViewModel = await CreateClipTileViewModel(null);
-            //for (int i = 1; i <= 1000; i++) {
-            //    var ci = new MpCopyItem() {
-            //        ItemType = MpCopyItemType.Text,
-            //        ItemData = "This is test " + i,
-            //        Title = "Test" + i,
-            //        SourceId = 1,
-            //        CopyDateTime = DateTime.Now
-            //    };
-            //    await ci.WriteToDatabaseAsync();
-            //}
+
             Items.Clear();
             for (int i = 0; i < DefaultLoadCount; i++) {
                 var ctvm = await CreateClipTileViewModel(null);
                 Items.Add(ctvm);
             }
+
             while (Items.Any(x => x.IsAnyBusy)) {
                 await Task.Delay(100);
             }

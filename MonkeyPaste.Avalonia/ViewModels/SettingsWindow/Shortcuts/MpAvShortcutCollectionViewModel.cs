@@ -22,6 +22,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvShortcutCollectionViewModel :
         MpAvSelectorViewModelBase<object, MpAvShortcutViewModel>,
         MpIAsyncSingletonViewModel<MpAvShortcutCollectionViewModel>,
+        MpIGlobalInputListener,
         MpIDndUserCancelNotifier {
 
         #region Constants
@@ -164,8 +165,14 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Constructors
+        public MpAvShortcutCollectionViewModel() : base(null) {
+            MpPlatform.Services.GlobalInputListener = this;
+        }
+
+        #endregion
+
         #region Public Methods
-        public MpAvShortcutCollectionViewModel() : base(null) { }
 
         public async Task InitAsync() {
             _keyboardGestureHelper = new MpKeyGestureHelper2();
@@ -301,6 +308,7 @@ namespace MonkeyPaste.Avalonia {
                         //return false;
                     }
                 }
+
                 await Task.Delay(releaseDelay);
             }
             MpConsole.WriteLine($"Key Gesture '{keystr}' successfully simulated");
@@ -1014,13 +1022,5 @@ namespace MonkeyPaste.Avalonia {
                 SimulateKeyStrokeSequenceAsync(keys).FireAndForgetSafeAsync();
             });
         #endregion
-    }
-    public static class MpDebuggerHelper {
-        public static void Break() {
-            MpAvShortcutCollectionViewModel.Instance.StopInputListener();
-            Thread.Sleep(1000);
-            Debugger.Break();
-            MpAvShortcutCollectionViewModel.Instance.StartInputListener();
-        }
     }
 }

@@ -474,7 +474,7 @@ namespace MonkeyPaste.Avalonia {
             set {
 
                 if (IsContentReadOnly != value) {
-                    if (!value && !MpAvCefNetApplication.UseCefNet) {
+                    if (!value && !MpPrefViewModel.Instance.IsRichHtmlContentEnabled) {
                         // this circumvents standard property changes (if user hasn't added to ignore) 
                         // so content isn't degraded in edit mode (and just to keep it simpler its on mode change not data change)
                         DisableReadOnlyInPlainTextHandlerAsync().FireAndForgetSafeAsync();
@@ -1574,7 +1574,7 @@ namespace MonkeyPaste.Avalonia {
                         //        return;
                         //    }
                         //}
-                        if (!MpAvCefNetApplication.UseCefNet) {
+                        if (!MpPrefViewModel.Instance.IsRichHtmlContentEnabled) {
                             MpConsole.WriteLine("Ignoring plain text mode copyitem write for " + this);
                             HasModelChanged = false;
                             return;

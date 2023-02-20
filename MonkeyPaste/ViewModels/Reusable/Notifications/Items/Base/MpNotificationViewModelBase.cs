@@ -497,7 +497,12 @@ namespace MonkeyPaste {
                  // TODO this should be moved to somewhere in preferences
                  MpPrefViewModel.Instance.DoNotShowAgainNotificationIdCsvStr = string.Empty;
 
-             }, () => MpBootstrapperViewModelBase.IsCoreLoaded);
+             }, () => {
+                 return
+                     MpPlatform.Services != null &&
+                     MpPlatform.Services.StartupState != null &&
+                     MpPlatform.Services.StartupState.IsCoreLoaded;
+             });
 
         public ICommand CheckDoNotShowAgainCommand => new MpCommand(
             () => {

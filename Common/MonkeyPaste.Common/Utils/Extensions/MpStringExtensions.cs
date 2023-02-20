@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
@@ -531,37 +532,17 @@ namespace MonkeyPaste.Common {
                 {'<',"&lt;" }
             };
         public static string EncodeSpecialHtmlEntities(this string str) {
-            //var sb = new StringBuilder();
-            //for (int i = 0; i < str.Length; i++) {
-            //    if (HtmlEntityLookup.ContainsKey(str[i])) {
-            //        var already_encoded_kvp = HtmlEntityLookup.FirstOrDefault(x => str.Substring(i).StartsWith(x.Value));
-            //        if (!already_encoded_kvp.Equals(default(KeyValuePair<char, string>))) {
-            //            sb.Append(already_encoded_kvp.Value);
-            //            i += already_encoded_kvp.Value.Length - 1;
-            //            continue;
-            //        }
-            //        sb.Append(HtmlEntityLookup[str[i]]);
-            //    } else {
-            //        sb.Append(str[i]);
-            //    }
-            //}
-            //return sb.ToString();
-            return HttpUtility.HtmlEncode(str);
+            foreach (var pattern in HtmlEntityLookup) {
+                str = str.Replace(pattern.Key.ToString(), pattern.Value);
+            }
+            return str;
         }
 
         public static string DecodeSpecialHtmlEntities(this string str) {
-            //var sb = new StringBuilder();
-            //for (int i = 0; i < str.Length; i++) {
-            //    var kvp = HtmlEntityLookup.FirstOrDefault(x => str.Substring(i).StartsWith(x.Value));
-            //    if (!kvp.Equals(default(KeyValuePair<char, string>))) {
-            //        sb.Append(kvp.Key);
-            //        i += kvp.Value.Length - 1;
-            //    } else {
-            //        sb.Append(str[i]);
-            //    }
-            //}
-            //return HttpUtility.HtmlDecode(sb.ToString());
-            return HttpUtility.HtmlDecode(str);
+            foreach (var pattern in HtmlEntityLookup) {
+                str = str.Replace(pattern.Value, pattern.Key.ToString());
+            }
+            return str;
         }
 
         public static bool ContainsSpecialHtmlEntities(this string str) {

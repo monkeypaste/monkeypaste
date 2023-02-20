@@ -273,7 +273,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #endregion
-
         public MpAvPinTrayView() {
             if (Instance != null) {
                 // ensure singleton
@@ -286,8 +285,6 @@ namespace MonkeyPaste.Avalonia {
 
             PinTrayListBox = this.FindControl<ListBox>("PinTrayListBox");
             PinTrayListBox.AttachedToVisualTree += PinTrayListBox_AttachedToVisualTree;
-            //PinTrayListBox.ItemContainerGenerator.ItemContainerIndexChanged
-            //PinTrayListBox.ItemContainerGenerator.Dematerialized += ItemContainerGenerator_Dematerialized;
             PinTrayListBox.GotFocus += PinTrayListBox_GotFocus;
             this.DataContextChanged += MpAvPinTrayView_DataContextChanged;
             if (DataContext != null) {
@@ -325,7 +322,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        //private void ItemContainerGenerator_Dematerialized(object sender, ItemContainerEventArgs e) {
         private void OnItemRemoved() {
             if (BindingContext == null || BindingContext.HasUserAlteredPinTrayWidthSinceWindowShow) {
                 // ignore collection changed if user in workflow
@@ -344,7 +340,6 @@ namespace MonkeyPaste.Avalonia {
                 .UpdatePinTrayVarDimension(new GridLength(new_length, GridUnitType.Auto));
         }
 
-        //private void ItemContainerGenerator_Materialized(object sender, ItemContainerEventArgs e) {
         private void OnItemAdded() {
             if (BindingContext == null ||
                 BindingContext.HasUserAlteredPinTrayWidthSinceWindowShow ||

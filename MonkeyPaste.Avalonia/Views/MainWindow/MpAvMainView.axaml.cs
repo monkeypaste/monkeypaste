@@ -87,6 +87,7 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
+        #region MpIMainView Implementation
 
         public bool IsActive =>
             BindingContext.IsMainWindowActive;
@@ -113,9 +114,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #endregion
+        #endregion
 
         #region Properties
         public Grid RootGrid { get; }
+
         #endregion
 
         #region Constructors
@@ -128,17 +131,12 @@ namespace MonkeyPaste.Avalonia {
             AvaloniaXamlLoader.Load(this);
             HorizontalAlignment = HorizontalAlignment.Stretch;
             VerticalAlignment = VerticalAlignment.Stretch;
+#if !DESKTOP
+            Background = Brushes.Lime;
+#endif
 
             RootGrid = this.FindControl<Grid>("MainWindowContainerGrid");
-            //if (RootGrid.Parent is Canvas c) {
-            //    c.Width = 1000;
-            //    RootGrid.Width = 1000;
-            //    c.Height = 1000;
-            //    RootGrid.Height = 1000;
-            //}
-            this.AttachedToVisualTree += (s, e) => {
 
-            };
             this.PointerMoved += MainWindow_PointerMoved;
             this.PointerExited += MainWindow_PointerLeave;
 
@@ -154,23 +152,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
-        //public async Task InitAsync() {
-        //    await Task.Delay(1);
-        //    if (MpPlatform.Services.OsInfo.IsDesktop) {
-        //        App.MainWindow = this.GetVisualAncestor<Window>();
-        //        if (App.MainWindow == null) {
-        //            // huh?
-        //            MpDebug.Break();
-        //        } else {
-        //            if (OperatingSystem.IsWindows()) {
-        //                MpAvToolWindow_Win32.InitToolWindow(App.MainWindow.PlatformImpl.Handle.Handle);
-        //            }
-        //        }
-
-        //        //mw.DataContext = MpAvMainWindowViewModel.Instance;
-        //    }
-        //    //DataContext = MpAvMainWindowViewModel.Instance;
-        //}
 
         #region Orientation Updates
         public void UpdateContentLayout() {

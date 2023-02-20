@@ -16,9 +16,7 @@ namespace MonkeyPaste.Avalonia {
             }
             Instance = this;
 
-            InitializeComponent();
-
-
+            AvaloniaXamlLoader.Load(this);
 
             if (BindingContext == null) {
                 this.DataContextChanged += MpAvClipTrayContainerView_DataContextChanged;
@@ -69,11 +67,5 @@ namespace MonkeyPaste.Avalonia {
             //ctr_ctvm_lbi?.BringIntoView();
             return;
         }
-
-        private void InitializeComponent() {
-            AvaloniaXamlLoader.Load(this);
-        }
-
-
     }
 }

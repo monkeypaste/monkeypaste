@@ -101,7 +101,6 @@
     <Compile Include="ViewModels\Reusable\Contacts\MpContactViewModel.cs" />
     <Compile Include="ViewModels\Reusable\ContextMenu\MpColorPalettePopupMenuViewModel.cs" />
     <Compile Include="ViewModels\Reusable\ContextMenu\MpMenuItemViewModel.cs" />
-    <Compile Include="ViewModels\Reusable\MpCursor.cs" />
     <Compile Include="ViewModels\Reusable\Notifications\Builder\MpNotificationBuilder.cs" />
     <Compile Include="ViewModels\Reusable\Notifications\Items\Base\MpNotificationViewModelBase.cs" />
     <Compile Include="ViewModels\Reusable\Notifications\Items\MpLoaderNotificationViewModel.cs" />

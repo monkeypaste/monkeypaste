@@ -2,7 +2,12 @@
 
 namespace MonkeyPaste.Avalonia {
     public enum MpThemeResourceKey {
-        GlobalBgOpacity
+        GlobalBgOpacity_desktop,
+        GlobalBgOpacity_mobile,
+        GlobalBgOpacity,
+        DefaultGridSplitterFixedDimensionLength_desktop,
+        DefaultGridSplitterFixedDimensionLength_mobile,
+        DefaultGridSplitterFixedDimensionLength,
     }
     public class MpAvThemeViewModel : MpViewModelBase {
         #region Private Variable
@@ -24,6 +29,20 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
+        #region Fixed Resources
+
+        public double GlobalBgOpacity_desktop =>
+            (double)MpPlatform.Services.PlatformResource.GetResource(MpThemeResourceKey.GlobalBgOpacity_desktop.ToString());
+        public double GlobalBgOpacity_mobile =>
+            (double)MpPlatform.Services.PlatformResource.GetResource(MpThemeResourceKey.GlobalBgOpacity_mobile.ToString());
+
+        public double DefaultGridSplitterFixedDimensionLength_desktop =>
+            (double)MpPlatform.Services.PlatformResource.GetResource(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength_desktop.ToString());
+        public double DefaultGridSplitterFixedDimensionLength_mobile =>
+            (double)MpPlatform.Services.PlatformResource.GetResource(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength_mobile.ToString());
+
+        #endregion
+
         public double GlobalBgOpacity {
             get => (double)MpPlatform.Services.PlatformResource.GetResource(MpThemeResourceKey.GlobalBgOpacity.ToString());
             set {
@@ -36,6 +55,19 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
+
+        public double DefaultGridSplitterFixedDimensionLength {
+            get => (double)MpPlatform.Services.PlatformResource.GetResource(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength.ToString());
+            set {
+                if (DefaultGridSplitterFixedDimensionLength != value) {
+                    MpPlatform.Services.PlatformResource.SetResource(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength.ToString(), value);
+                    MpPrefViewModel.Instance.MainWindowOpacity = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(DefaultGridSplitterFixedDimensionLength));
+                }
+            }
+        }
+
         #endregion
 
         #endregion
@@ -43,8 +75,12 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
         private MpAvThemeViewModel() {
             PropertyChanged += MpAvThemeViewModel_PropertyChanged;
-#if !DESKTOP
-            GlobalBgOpacity = 1.0d;
+#if DESKTOP
+            GlobalBgOpacity = GlobalBgOpacity_desktop;
+            DefaultGridSplitterFixedDimensionLength = DefaultGridSplitterFixedDimensionLength_desktop;
+#else
+            GlobalBgOpacity = GlobalBgOpacity_mobile;
+            DefaultGridSplitterFixedDimensionLength = DefaultGridSplitterFixedDimensionLength_mobile;
 #endif
         }
 

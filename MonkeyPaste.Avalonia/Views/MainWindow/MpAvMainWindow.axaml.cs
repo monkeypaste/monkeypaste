@@ -11,7 +11,7 @@ using System;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public interface MpIMainView : MPIHasSettableDataContext {
+    public interface MpIMainView : MpIHasSettableDataContext {
         bool IsActive { get; }
         nint Handle { get; }
         void Show();

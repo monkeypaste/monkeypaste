@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvPlainHtmlConverter : MpIBootstrappedItem, MpIAsyncObject {
+    public class MpAvPlainHtmlConverter :
+        MpIBootstrappedItem,
+        MpIAsyncObject {
         #region Private Variables
 
         #endregion
@@ -26,7 +28,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
-        public MpAvCefNetPlainHtmlConverterWebView ConverterWebView { get; private set; }
+        public MpAvPlainHtmlConverterWebView ConverterWebView { get; private set; }
 
         #endregion
 
@@ -37,12 +39,12 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task InitAsync() {
-            if (!MpAvCefNetApplication.UseCefNet) {
+            if (!MpPrefViewModel.Instance.IsRichHtmlContentEnabled) {
                 return;
             }
             IsBusy = true;
 
-            ConverterWebView = new MpAvCefNetPlainHtmlConverterWebView() {
+            ConverterWebView = new MpAvPlainHtmlConverterWebView() {
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
             };
@@ -51,8 +53,7 @@ namespace MonkeyPaste.Avalonia {
                 Width = 300,
                 Height = 300,
                 ShowInTaskbar = false,
-                SystemDecorations = SystemDecorations.None,
-                //Position = new PixelPoint(808080, 808080)
+                SystemDecorations = SystemDecorations.None
             };
 
             quillWindow.Content = ConverterWebView;
@@ -79,7 +80,7 @@ namespace MonkeyPaste.Avalonia {
             if (htmlDataStr == null) {
                 return null;
             }
-            if (!MpAvCefNetApplication.UseCefNet) {
+            if (!MpPrefViewModel.Instance.IsRichHtmlContentEnabled) {
                 return MpAvHtmlClipboardData.Parse(htmlDataStr.ToString());
             }
             if (inputFormatType == "rtf") {
@@ -105,7 +106,7 @@ namespace MonkeyPaste.Avalonia {
                 dataFormatType = inputFormatType,
                 isBase64 = true
             };
-            string respStr = await ConverterWebView.EvaluateJavascriptAsync($"convertPlainHtml_ext('{req.SerializeJsonObjectToBase64()}')");
+            string respStr = await ConverterWebView.SendMessageAsync($"convertPlainHtml_ext('{req.SerializeJsonObjectToBase64()}')");
             var resp = MpJsonConverter.DeserializeBase64Object<MpQuillConvertPlainHtmlToQuillHtmlResponseMessage>(respStr);
             return new MpAvHtmlClipboardData() {
                 Html = resp.html.ToStringFromBase64(),

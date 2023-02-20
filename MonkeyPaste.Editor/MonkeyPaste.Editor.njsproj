@@ -57,6 +57,7 @@
     <Content Include="src\components\delta\delta-wrapper.js" />
     <Content Include="src\components\dragdrop\debouncer\dragover-debouncer.js" />
     <Content Include="src\components\history\history.js" />
+    <Content Include="src\components\messages\messenger.js" />
     <Content Include="src\components\paste-toolbar\popup\paste-button-popup.js" />
     <Content Include="src\components\datatransfer\datatransfer.js">
       <SubType>Code</SubType>

@@ -189,9 +189,10 @@ function onQuerySearchRangesChanged_ntf(range_count) {
 }
 
 function onInitComplete_ntf() {
-	if (typeof notifyInitComplete === 'function') {
-		notifyInitComplete();
-	}
+	//if (typeof notifyInitComplete === 'function') {
+	//	notifyInitComplete();
+	//}
+	sendMessage('notifyInitComplete', '');
 }
 
 function onShowCustomColorPicker_ntf(hexStr,title) {

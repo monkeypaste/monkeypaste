@@ -145,7 +145,10 @@ namespace MonkeyPaste.Avalonia {
             if (!_windows.Contains(nw)) {
                 _windows.Add(nw);
             }
-            if (MpBootstrapperViewModelBase.IsPlatformLoaded) {
+            bool is_platform_loaded = MpPlatform.Services != null &&
+                     MpPlatform.Services.StartupState != null &&
+                     MpPlatform.Services.StartupState.IsPlatformLoaded;
+            if (is_platform_loaded) {
                 if (nw == MpAvAppendNotificationWindow.Instance &&
                 MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
                     return;

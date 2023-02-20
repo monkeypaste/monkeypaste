@@ -13,7 +13,7 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvPlainTextContentView">
     <local:MpAvTextBox x:Name="PlainTextContentTextBox"
                        BorderThickness="0"
-                       Margin="3"
+                       Margin="10,3"
                        Background="Transparent"
                        TextWrapping="Wrap"
                        AcceptsReturn="True"

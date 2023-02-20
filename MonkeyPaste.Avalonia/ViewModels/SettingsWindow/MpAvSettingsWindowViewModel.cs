@@ -69,7 +69,13 @@ namespace MonkeyPaste.Avalonia {
                     TabIdx = 1;
                 }
                 IsVisible = true;
-            }, (args) => MpBootstrapperViewModelBase.IsCoreLoaded && !IsVisible);
+                //   }, (args) => MpBootstrapperViewModelBase.IsCoreLoaded && !IsVisible);
+            }, (args) => {
+                bool is_core_loaded = MpPlatform.Services != null &&
+                     MpPlatform.Services.StartupState != null &&
+                     MpPlatform.Services.StartupState.IsCoreLoaded;
+                return is_core_loaded && !IsVisible;
+            });
         #endregion
     }
 }

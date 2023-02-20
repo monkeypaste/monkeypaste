@@ -187,7 +187,6 @@
                           Grid.Column="1"
                           Grid.Row="0"
                           Grid.RowSpan="3"
-                          Width="5"
                           Classes="vertical"
                           IsVisible="{Binding IsTransactionPaneOpen, FallbackValue=False, TargetNullValue=False}"
                           HorizontalAlignment="Left"

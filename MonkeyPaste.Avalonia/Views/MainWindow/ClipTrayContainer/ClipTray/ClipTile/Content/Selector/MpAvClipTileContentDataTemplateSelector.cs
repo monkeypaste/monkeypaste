@@ -9,7 +9,8 @@ namespace MonkeyPaste.Avalonia {
         public Dictionary<string, IDataTemplate> AvailableTemplates { get; } = new Dictionary<string, IDataTemplate>();
 
         Control ITemplate<object, Control>.Build(object param) {
-            string key = MpAvCefNetApplication.UseCefNet ? "CefNetWebViewTemplate" : "PlainTextTemplate";
+            string key = MpPrefViewModel.Instance.IsRichHtmlContentEnabled ?
+                "ContentWebViewTemplate" : "PlainTextTemplate";
             return AvailableTemplates[key].Build(param);
         }
 
