@@ -88,8 +88,6 @@ namespace MonkeyPaste {
 
             // User Device
 
-            ThisUserDeviceGuid = Guid.NewGuid().ToString();
-
             var thisDevice = await MpUserDevice.CreateAsync(
                 deviceType: MpPlatform.Services.PlatformInfo.OsType,
                 machineName: MpPlatform.Services.PlatformInfo.OsMachineName,
@@ -98,7 +96,7 @@ namespace MonkeyPaste {
             await thisDevice.WriteToDatabaseAsync();
 
             ThisUserDeviceId = thisDevice.Id;
-
+            ThisUserDeviceGuid = thisDevice.Guid;
             // Icon
 
             var thisAppIcon = await MpIcon.CreateAsync(MpBase64Images.AppIcon);
@@ -130,6 +128,7 @@ namespace MonkeyPaste {
             var thisUserDevice = await MpDataModelProvider.GetUserDeviceByGuidAsync(MpPrefViewModel.Instance.ThisDeviceGuid);
             if (thisUserDevice == null) {
                 // reset error
+                var test = await MpDataModelProvider.GetItemsAsync<MpUserDevice>();
                 Debugger.Break();
             }
             ThisUserDeviceId = thisUserDevice.Id;

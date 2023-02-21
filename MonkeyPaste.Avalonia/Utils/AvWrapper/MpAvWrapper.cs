@@ -87,7 +87,7 @@ namespace MonkeyPaste.Avalonia {
             if (App.Args.Any(x => x.ToLower() == App.BACKUP_DATA_ARG)) {
                 // TODO move reset stuff to that backup folder
             }
-            if (App.Args.Any(x => x.ToLower() == App.RESET_DATA_ARG)) {
+            if (true || App.Args.Any(x => x.ToLower() == App.RESET_DATA_ARG)) {
                 Debugger.Break();
 
                 // delete db, plugin cache, pref and pref.backup
@@ -98,6 +98,10 @@ namespace MonkeyPaste.Avalonia {
                 MpFileIo.DeleteFile($"{prefPath}.{MpPrefViewModel.PREF_BACKUP_PATH_EXT}");
 
                 MpConsole.WriteLine("All data successfully deleted.");
+
+                prefPath = Path.Combine(
+                PlatformInfo.StorageDir,
+                $"pref_{PlatformInfo.OsShortName}.json");
             }
 
             await MpPrefViewModel.InitAsync(prefPath, DbInfo, PlatformInfo);

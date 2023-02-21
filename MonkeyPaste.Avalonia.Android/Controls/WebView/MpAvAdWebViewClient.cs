@@ -18,7 +18,6 @@ namespace MonkeyPaste.Avalonia.Android {
         #region Properties
         #endregion
 
-
         #region Events
         public event EventHandler<string> Navigated;
 

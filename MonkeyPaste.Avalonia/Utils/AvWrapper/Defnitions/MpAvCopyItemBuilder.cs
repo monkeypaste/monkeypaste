@@ -328,6 +328,10 @@ namespace MonkeyPaste.Avalonia {
             //        canOpen = WinApi.IsClipboardOpen() == IntPtr.Zero;
             //    }
             //}
+            while (Application.Current.Clipboard == null) {
+                MpConsole.WriteLine("waiting for clipboard...");
+                await Task.Delay(100);
+            }
             var actual_formats = await Application.Current.Clipboard.GetFormatsSafeAsync();
             actual_formats.ForEach(x => MpConsole.WriteLine("Actual format: " + x));
 

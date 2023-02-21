@@ -34,7 +34,6 @@ namespace MonkeyPaste {
         #endregion
 
         #region Events
-        public static event EventHandler OnInitDefaultNativeData;
 
         public static event EventHandler<MpDbModelBase> OnItemAdded;
         public static event EventHandler<MpDbModelBase> OnItemUpdated;
@@ -46,9 +45,6 @@ namespace MonkeyPaste {
         #endregion
 
         #region Constructors
-
-
-
         #endregion
 
         #region Public Methods
@@ -72,18 +68,14 @@ namespace MonkeyPaste {
             return query_str;
         }
 
-        public static string GetDbFileAsBase64() {
-            var bytes = File.ReadAllBytes(MpPlatform.Services.DbInfo.DbPath);
-            return Convert.ToBase64String(bytes);
-        }
         #region Queries
 
-        #region Async
+        #region Async Query
 
         public static async Task<TableMapping> GetTableMappingAsync(string tableName) {
             await Task.Delay(1);
             if (_connectionAsync == null) {
-                CreateConnection();
+                await CreateConnectionAsync();
             }
             return _connectionAsync
                     .TableMappings
@@ -93,7 +85,7 @@ namespace MonkeyPaste {
 
         public static async Task<List<object>> QueryAsync(string tableName, string query, params object[] args) {
             if (_connectionAsync == null) {
-                CreateConnection();
+                await CreateConnectionAsync();
             }
             TableMapping qtm = null;
             foreach (var tm in _connectionAsync.TableMappings) {
@@ -118,7 +110,7 @@ namespace MonkeyPaste {
 
         public static async Task<List<T>> QueryAsync<T>(string query, params object[] args) where T : new() {
             if (_connectionAsync == null) {
-                CreateConnection();
+                await CreateConnectionAsync();
             }
             try {
                 var result = await _connectionAsync.QueryAsync<T>(query, args);
@@ -132,7 +124,7 @@ namespace MonkeyPaste {
 
         public static async Task<T> QueryScalarAsync<T>(string query, params object[] args) {
             if (_connectionAsync == null) {
-                CreateConnection();
+                await CreateConnectionAsync();
             }
             try {
                 var result = await _connectionAsync.ExecuteScalarAsync<T>(query, args);
@@ -147,7 +139,7 @@ namespace MonkeyPaste {
 
         public static async Task<List<T>> QueryScalarsAsync<T>(string query, params object[] args) {
             if (_connectionAsync == null) {
-                CreateConnection();
+                await CreateConnectionAsync();
             }
             try {
                 var result = await _connectionAsync.QueryScalarsAsync<T>(query, args);
@@ -161,7 +153,7 @@ namespace MonkeyPaste {
 
         public static async Task CreateTableAsync<T>() where T : new() {
             if (_connectionAsync == null) {
-                CreateConnection();
+                await CreateConnectionAsync();
             }
             try {
                 await _connectionAsync.CreateTableAsync<T>();
@@ -189,7 +181,7 @@ namespace MonkeyPaste {
 
         private static async Task AddItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
             if (_connectionAsync == null) {
-                CreateConnection();
+                await CreateConnectionAsync();
             }
             sourceClientGuid = GetSourceClientGuid(sourceClientGuid);
 
@@ -213,7 +205,7 @@ namespace MonkeyPaste {
 
         private static async Task UpdateItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
             if (_connectionAsync == null) {
-                CreateConnection();
+                await CreateConnectionAsync();
             }
             sourceClientGuid = GetSourceClientGuid(sourceClientGuid);
 
@@ -245,7 +237,7 @@ namespace MonkeyPaste {
 
         public static async Task DeleteItemAsync<T>(T item, string sourceClientGuid = "", bool ignoreTracking = false, bool ignoreSyncing = false) where T : new() {
             if (_connectionAsync == null) {
-                CreateConnection();
+                await CreateConnectionAsync();
             }
             sourceClientGuid = GetSourceClientGuid(sourceClientGuid);
 
@@ -300,10 +292,7 @@ namespace MonkeyPaste {
 
         #endregion
 
-        #region Sync
-
-
-
+        #region Sync Query
 
         public static List<T> Query<T>(string query, params object[] args) where T : new() {
             if (_connection == null) {
@@ -332,13 +321,99 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public static byte[] GetDbFileBytes() {
-            return File.ReadAllBytes(MpPlatform.Services.DbInfo.DbPath);
-        }
-
         #endregion
 
         #region Private Methods  
+
+        private static async Task InitDbAsync() {
+            bool isNewDb = await InitDbConnectionAsync(MpPlatform.Services.DbInfo, true);
+
+            await InitTablesAsync();
+
+            if (isNewDb) {
+                await MpDefaultDataModelTools.CreateAsync();
+                await CreateViewsAsync();
+                await InitDefaultDataAsync();
+            } else {
+                await MpDefaultDataModelTools.InitializeAsync();
+            }
+        }
+        public static async Task<bool> InitDbConnectionAsync(MpIDbInfo dbInfo, bool allowCreate) {
+            string dbPath = dbInfo.DbPath;
+            bool isNewDb = !File.Exists(dbPath);
+
+            if (isNewDb && allowCreate) {
+                using (File.Create(dbPath)) { }
+            }
+
+            await CreateConnectionAsync(dbPath);
+
+            MpConsole.WriteLine($"Db {(isNewDb ? "CREATED" : "CONNECTED")} at '{dbPath}'");
+            return isNewDb;
+        }
+
+        private static SQLiteConnectionString GetConnectionString(string dbPath = "") {
+            if (string.IsNullOrEmpty(dbPath)) {
+                dbPath = MpPlatform.Services.DbInfo.DbPath;
+            }
+            SQLiteConnectionString connStr = null;
+            try {
+                connStr = new SQLiteConnectionString(
+                                   databasePath: dbPath,
+                                   storeDateTimeAsTicks: IsDateTimeTicks,
+                                   openFlags: SQLiteOpenFlags.ReadWrite |
+                                              SQLiteOpenFlags.Create |
+                                              SQLiteOpenFlags.SharedCache |
+                                              SQLiteOpenFlags.FullMutex);
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Db Error creating connection str for db path '{dbPath}'.", ex);
+                return null;
+            }
+            return connStr;
+        }
+        private static async Task CreateConnectionAsync(string dbPath = "") {
+            if (_connectionAsync != null) {
+                return;
+            }
+
+            Batteries_V2.Init();
+            if (_connectionAsync == null) {
+                try {
+                    _connectionAsync = new SQLiteAsyncConnection(GetConnectionString(dbPath)) { Trace = true };
+                    raw.sqlite3_create_function(_connectionAsync.GetConnection().Handle, "REGEXP", 2, null, MatchRegex);
+
+                    if (UseWAL) {
+                        await _connectionAsync.EnableWriteAheadLoggingAsync();
+                    }
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Db Error creating async connection", ex);
+                }
+            }
+            MpConsole.WriteLine($"Db Async WAL: {(UseWAL ? "ENABLED" : "DISABLED")}");
+        }
+        private static void CreateConnection(string dbPath = "") {
+            if (_connection != null) {
+                return;
+            }
+
+            Batteries_V2.Init();
+            if (_connection == null) {
+                try {
+                    _connection = new SQLiteConnection(GetConnectionString(dbPath)) { Trace = true };
+                    raw.sqlite3_create_function(_connection.Handle, "REGEXP", 2, null, MatchRegex);
+
+                    if (UseWAL) {
+                        _connection.EnableWriteAheadLogging();
+                    }
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Db Error creating async connection", ex);
+                }
+            }
+            MpConsole.WriteLine($"Db Sync WAL: {(UseWAL ? "ENABLED" : "DISABLED")}");
+        }
 
         private static string GetSourceClientGuid(string providedSourceClientGuid) {
             if (!IsLoaded) {
@@ -382,106 +457,15 @@ namespace MonkeyPaste {
             }
         }
 
-        public static async Task<bool> InitDbConnectionAsync(MpIDbInfo dbInfo, bool allowCreate) {
-            //SQLitePCL.Batteries.Init();
-
-            var dbPath = dbInfo.DbPath;
-
-            //File.Delete(dbPath);
-
-            bool isNewDb = !File.Exists(dbPath);
-
-            if (isNewDb && allowCreate) {
-                using (File.Create(dbPath)) { }
-            }
-
-            CreateConnection(dbPath);
-
-            if (UseWAL) {
-                if (_connectionAsync != null) {
-                    await _connectionAsync.EnableWriteAheadLoggingAsync().ConfigureAwait(false);
-                }
-            }
-            return isNewDb;
-        }
-
-        private static async Task InitDbAsync() {
-            bool isNewDb = await InitDbConnectionAsync(MpPlatform.Services.DbInfo, true);
-
-            await InitTablesAsync();
-
-            if (isNewDb) {
-                await CreateViewsAsync();
-                await InitDefaultDataAsync();
-
-                OnInitDefaultNativeData?.Invoke(nameof(MpDb), null);
-            }
-
-            await MpDefaultDataModelTools.InitializeAsync();
-
-            if (isNewDb) {
-                OnInitDefaultNativeData?.Invoke(nameof(MpDb), null);
-            }
-
-            MpConsole.WriteLine(@"Db file located: " + MpPlatform.Services.DbInfo.DbPath);
-            MpConsole.WriteLine(@"This Client Guid: " + MpPrefViewModel.Instance.ThisDeviceGuid);
-            MpConsole.WriteLine("Write ahead logging: " + (UseWAL ? "ENABLED" : "DISABLED"));
-        }
-
-        private static void CreateConnection(string dbPath = "") {
-            if (string.IsNullOrEmpty(dbPath)) {
-                dbPath = MpPlatform.Services.DbInfo.DbPath;
-            }
-            if (_connection != null && _connectionAsync != null) {
-                return;
-            }
-            SQLiteConnectionString connStr = null;
-            try {
-                connStr = new SQLiteConnectionString(
-                                   databasePath: dbPath,
-                                   storeDateTimeAsTicks: IsDateTimeTicks,
-                                   openFlags: SQLiteOpenFlags.ReadWrite |
-                                              SQLiteOpenFlags.Create |
-                                              SQLiteOpenFlags.SharedCache |
-                                              SQLiteOpenFlags.FullMutex);
-            }
-            catch (Exception ex) {
-                MpConsole.WriteTraceLine($"Db Error creating connection str for db path '{dbPath}'.", ex);
-            }
-            if (connStr == null) {
-                return;
-            }
-
-            if (_connectionAsync == null) {
-                try {
-                    SQLitePCL.Batteries_V2.Init();
-
-                    _connectionAsync = new SQLiteAsyncConnection(connStr) { Trace = true };
-                    SQLitePCL.raw.sqlite3_create_function(_connectionAsync.GetConnection().Handle, "REGEXP", 2, null, MatchRegex);
-                }
-                catch (Exception ex) {
-                    MpConsole.WriteTraceLine($"Db Error creating async connection", ex);
-                }
-            }
-            if (_connection == null) {
-                try {
-                    _connection = new SQLiteConnection(connStr) { Trace = true };
-                    SQLitePCL.raw.sqlite3_create_function(_connection.Handle, "REGEXP", 2, null, MatchRegex);
-                }
-                catch (Exception ex) {
-                    MpConsole.WriteTraceLine($"Db Error creating async connection", ex);
-                }
-            }
-        }
         private static void MatchRegex(sqlite3_context ctx, object user_data, sqlite3_value[] args) {
-            string pattern = SQLitePCL.raw.sqlite3_value_text(args[0]).utf8_to_string();
+            string pattern = raw.sqlite3_value_text(args[0]).utf8_to_string();
             pattern = pattern == null ? string.Empty : pattern;
 
-            string input = SQLitePCL.raw.sqlite3_value_text(args[1]).utf8_to_string();
+            string input = raw.sqlite3_value_text(args[1]).utf8_to_string();
             input = input == null ? string.Empty : input;
 
             if (args.Length > 2) {
-                string test = SQLitePCL.raw.sqlite3_value_text(args[2]).utf8_to_string();
+                string test = raw.sqlite3_value_text(args[2]).utf8_to_string();
                 test = test == null ? string.Empty : test;
                 Debugger.Break();
             }
@@ -496,9 +480,9 @@ namespace MonkeyPaste {
             }
 
             if (isMatched) {
-                SQLitePCL.raw.sqlite3_result_int(ctx, 1);
+                raw.sqlite3_result_int(ctx, 1);
             } else {
-                SQLitePCL.raw.sqlite3_result_int(ctx, 0);
+                raw.sqlite3_result_int(ctx, 0);
             }
         }
 
@@ -699,8 +683,6 @@ INNER JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId
         private static async Task InitDefaultDataAsync() {
             // NOTE! MpTag.AllTagId needs to be changed to 1 not 2 since recent was removed
 
-            await MpDefaultDataModelTools.CreateAsync();
-
             bool tracked = true;
             bool synced = true;
 
@@ -736,7 +718,7 @@ INNER JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId
             await InitHelpContentAsync();
 
 
-            MpConsole.WriteTraceLine(@"Created all default tables");
+            MpConsole.WriteLine(@"Created all default tables");
         }
 
         private static async Task InitHelpContentAsync() {
@@ -745,15 +727,18 @@ INNER JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId
             var helpContentDefinitions = new List<string[]> {
                 new string[] {
                     "Welcome to the jungle!",
-                    "<h1>Monkey paste is a b"
+                    "<h1>Monkey paste is the <b>best</b> am I <i>right</i>?!</h1>"
+                },
+                new string[] {
+                    "Help Test 1",
+                    "<h1>Here at Monkey paste we earn our bananas by aiding you with business logic automation</h1>"
                 }
             };
 
             var hci_idl = new List<int>();
             foreach (var hcd in helpContentDefinitions) {
-                var hci = await MpPlatform.Services.CopyItemBuilder.BuildAsync(
-                    pdo: new MpPortableDataObject() {
-                        DataFormatLookup = new Dictionary<MpPortableDataFormat, object>() {
+                var hci_mpdo = new MpPortableDataObject() {
+                    DataFormatLookup = new Dictionary<MpPortableDataFormat, object>() {
                             {
                                 MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT),
                                 hcd[0]
@@ -763,10 +748,19 @@ INNER JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId
                                 hcd[1]
                             }
                         }
-                    },
-                    transType: MpTransactionType.System,
-                    force_ext_sources: false);
+                };
+
+                var hci_do = await MpDataObject.CreateAsync(pdo: hci_mpdo);
+
+                var hci = await MpCopyItem.CreateAsync(
+                    title: hcd[0],
+                    data: hcd[1],
+                    dataObjectId: hci_do.Id);
+
+                hci_idl.Add(hci.Id);
             }
+
+            await Task.WhenAll(hci_idl.Select((x, idx) => MpCopyItemTag.Create(MpTag.HelpTagId, x, idx)));
         }
         public static async Task ResetShortcutsAsync() {
             var sl = await MpDataModelProvider.GetItemsAsync<MpShortcut>();

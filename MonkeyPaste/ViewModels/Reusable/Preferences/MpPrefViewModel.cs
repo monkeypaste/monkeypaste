@@ -668,7 +668,7 @@ namespace MonkeyPaste {
         }
 
         private static async Task CreateDefaultPrefsAsync(bool isReset = false) {
-            MpConsole.WriteTraceLine("Pref file was either missing, empty or this is initial startup. (re)creating");
+            MpConsole.WriteLine("Pref file was either missing, empty or this is initial startup. (re)creating");
 
             if (isReset) {
                 if (PreferencesPathBackup.IsFile()) {

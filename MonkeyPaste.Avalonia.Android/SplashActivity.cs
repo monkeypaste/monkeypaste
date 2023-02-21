@@ -13,6 +13,8 @@ namespace MonkeyPaste.Avalonia.Android;
 public class SplashActivity : AvaloniaSplashActivity<App> {
 
     protected override AppBuilder CustomizeAppBuilder(AppBuilder builder) {
+        MpAvAdUncaughtExceptionHandler.Instance.Init();
+
         return base.CustomizeAppBuilder(builder)
              .AfterSetup(_ => {
                  //Pages.EmbedSample.Implementation = new EmbedSampleAndroid();

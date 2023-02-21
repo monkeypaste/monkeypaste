@@ -3,6 +3,7 @@ using MonkeyPaste.Common;
 using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvPlatformInfo : MpIPlatformInfo {
@@ -33,6 +34,15 @@ namespace MonkeyPaste.Avalonia {
         public string ExecutingPath {
             get {
                 return Path.Combine(ExecutingDir, ExecutableName + GetExecutableExt());
+            }
+        }
+
+        public string StorageDir {
+            get {
+                if (OperatingSystem.IsAndroid()) {
+                    return Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                }
+                return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             }
         }
 

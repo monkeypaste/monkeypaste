@@ -1,14 +1,14 @@
-﻿using MonkeyPaste.Common;
+﻿using MonkeyPaste;
+using MonkeyPaste.Common;
 using System;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvDbInfo : MonkeyPaste.MpIDbInfo {
+    public class MpAvDbInfo : MpIDbInfo {
         public string DbExtension => "mpcdb";
         private string _dbName = null;
-        public string DbName {
+        public string DbFileName {
             get {
                 if (_dbName == null) {
                     // NOTE this accessed in cefnet init for renderer thread ref
@@ -20,9 +20,18 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-
-        public string DbPath => Path.Combine(
-            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), DbName);
+        private string _dbDIr;
+        public string DbDir {
+            get {
+                if (_dbDIr == null) {
+                    MpAvPlatformInfo osi = new MpAvPlatformInfo();
+                    _dbDIr = osi.StorageDir;
+                }
+                return _dbDIr;
+            }
+        }
+        public string DbPath =>
+            Path.Combine(DbDir, DbFileName);
 
     }
 }

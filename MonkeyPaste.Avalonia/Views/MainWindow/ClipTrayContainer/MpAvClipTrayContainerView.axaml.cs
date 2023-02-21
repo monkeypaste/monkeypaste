@@ -23,6 +23,13 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 MpAvClipTrayContainerView_DataContextChanged(null, null);
             }
+
+            var gs = this.FindControl<GridSplitter>("ClipTraySplitter");
+            gs.DragStarted += Gs_DragStarted;
+        }
+
+        private void Gs_DragStarted(object sender, global::Avalonia.Input.VectorEventArgs e) {
+
         }
 
         public void UpdatePinTrayVarDimension(GridLength gl) {

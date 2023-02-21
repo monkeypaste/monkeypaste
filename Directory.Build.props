@@ -46,6 +46,8 @@
     <MainTargetFramework>net7.0-android</MainTargetFramework>
     <DefineConstants>ANDROID;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.Android</MainProjectName>
+    <AndroidPackageName>com.CompanyName.MonkeyPaste.Avalonia</AndroidPackageName>
+    <AndroidInternalStorageDir>/data/user/0/$(AndroidPackageName)/files</AndroidInternalStorageDir>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(BuildOs) == 'IOS'">

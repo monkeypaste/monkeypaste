@@ -57,7 +57,7 @@ namespace MonkeyPaste.Common {
             INTERNAL_PARAMETER_REQUEST_FORMAT
         };
 
-        private static Dictionary<int, MpPortableDataFormat> _formatLookup;
+        private static Dictionary<int, MpPortableDataFormat> _formatLookup = new Dictionary<int, MpPortableDataFormat>();
 
         #endregion
 
@@ -158,7 +158,7 @@ namespace MonkeyPaste.Common {
             id = _registrar.RegisterFormat(format);
             var pdf = new MpPortableDataFormat(format, id);
             _formatLookup.Add(pdf.Id, pdf);
-            MpConsole.WriteTraceLine($"Successfully registered format name:'{format}' id:{id}");
+            MpConsole.WriteLine($"Successfully registered format name:'{format}' id:{id}");
             return pdf;
         }
 
@@ -170,7 +170,7 @@ namespace MonkeyPaste.Common {
                 return;
             }
             if (_formatLookup.Remove(id)) {
-                MpConsole.WriteTraceLine($"Successfully unregistered format name:'{format}' id:{id}");
+                MpConsole.WriteLine($"Successfully unregistered format name:'{format}' id:{id}");
             }
         }
 

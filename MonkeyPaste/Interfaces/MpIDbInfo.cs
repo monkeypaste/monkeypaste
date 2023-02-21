@@ -8,7 +8,8 @@
 
         //public int MaxDbPasswordAttempts => 3;
         string DbExtension { get; }
-        string DbName { get; }
+        string DbFileName { get; }
+        string DbDir { get; }
         string DbPath { get; }
 
         //string GetDbFilePath();

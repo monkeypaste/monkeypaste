@@ -25,11 +25,11 @@ namespace MonkeyPaste.Avalonia {
         MpIGlobalInputListener,
         MpIDndUserCancelNotifier {
 
-        #region Constants
-        public static bool IS_GLOBAL_MOUSE_INPUT_ENABLED = true;
-        public static bool IS_GLOBAL_KEYBOARD_INPUT_ENABLED = true;
+        #region Statics
+        public static bool IS_GLOBAL_MOUSE_INPUT_ENABLED { get; set; } = true;
+        public static bool IS_GLOBAL_KEYBOARD_INPUT_ENABLED { get; set; } = true;
         public static bool IS_GLOBAL_INPUT_ENABLED => IS_GLOBAL_KEYBOARD_INPUT_ENABLED || IS_GLOBAL_MOUSE_INPUT_ENABLED;
-        public static bool IS_PSEUDO_GLOBAL_INPUT_ENABLED = false;
+        public static bool IS_PSEUDO_GLOBAL_INPUT_ENABLED { get; set; } = false;
         public const double MIN_GLOBAL_DRAG_DIST = 20;
 
         #endregion
@@ -168,6 +168,12 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
         public MpAvShortcutCollectionViewModel() : base(null) {
             MpPlatform.Services.GlobalInputListener = this;
+            if (!MpPlatform.Services.PlatformInfo.IsDesktop) {
+                IS_GLOBAL_MOUSE_INPUT_ENABLED = false;
+                IS_GLOBAL_KEYBOARD_INPUT_ENABLED = false;
+
+                IS_PSEUDO_GLOBAL_INPUT_ENABLED = true;
+            }
         }
 
         #endregion

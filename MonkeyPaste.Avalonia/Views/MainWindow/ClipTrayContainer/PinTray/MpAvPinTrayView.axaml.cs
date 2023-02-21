@@ -290,6 +290,8 @@ namespace MonkeyPaste.Avalonia {
             if (DataContext != null) {
                 MpAvPinTrayView_DataContextChanged(null, null);
             }
+
+
         }
 
         private void MpAvPinTrayView_DataContextChanged(object sender, EventArgs e) {

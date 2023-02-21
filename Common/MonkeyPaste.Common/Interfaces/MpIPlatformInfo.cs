@@ -8,6 +8,8 @@
         string ExecutableName { get; }
         string ExecutingDir { get; }
         string ExecutingPath { get; }
+
+        string StorageDir { get; }
         bool IsDesktop { get; }
         string OsShortName { get; }
 

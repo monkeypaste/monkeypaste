@@ -1,10 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
   </PropertyGroup>
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <!--<Target Name="PostBuild" AfterTargets="PostBuildEvent">-->
-    <Exec Command="call $(ProjectDir)scripts\kill_mpav_processes.bat $(MainProjectName)" Condition="'$(BuildOs)' == 'WINDOWS'" />
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(BuildOs)' == 'WINDOWS'">
+    <Exec Command="call $(ProjectDir)scripts\windows\kill_mpav_processes.bat $(MainProjectName)"  />
+    <Exec Command="call $(ProjectDir)scripts\windows\move_declarative_plugins_to_bin.bat $(SolutionDir) $(MainTargetDir)"  />
+  </Target>
+  
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(BuildOs)' == 'ANDROID'">
+    <Exec Command="call $(ProjectDir)scripts\android\adb_wake.bat" />
+    <Exec Command="call $(ProjectDir)scripts\android\adb_kill_mpav.bat $(AndroidPackageName)" />
   </Target>
 </Project>

@@ -227,7 +227,7 @@ namespace MonkeyPaste.Avalonia {
                 Grid.SetColumn(sbgs, 1);
                 sbgs.Height = double.NaN;
                 sbgs.VerticalAlignment = VerticalAlignment.Stretch;
-                sbgs.Width = 5.0d;
+                sbgs.Width = MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength;
                 sbgs.HorizontalAlignment = HorizontalAlignment.Right;
                 sbgs.ResizeDirection = GridResizeDirection.Columns;
 
@@ -280,7 +280,7 @@ namespace MonkeyPaste.Avalonia {
                 // clip/pin tray grid splitter
                 ctrcv_gs.HorizontalAlignment = HorizontalAlignment.Right;
                 ctrcv_gs.VerticalAlignment = VerticalAlignment.Stretch;
-                ctrcv_gs.Width = 5;
+                ctrcv_gs.Width = MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength;
                 ctrcv_gs.Height = double.NaN;
                 ctrcv_gs.ResizeDirection = GridResizeDirection.Columns;
                 ctrcv_gs.Cursor = new Cursor(StandardCursorType.SizeWestEast);
@@ -335,7 +335,7 @@ namespace MonkeyPaste.Avalonia {
                 Grid.SetRow(sbgs, 1);
                 Grid.SetRowSpan(sbgs, 1);
                 Grid.SetColumn(sbgs, 0);
-                sbgs.Height = 5.0d;
+                sbgs.Height = MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength;
                 sbgs.Width = double.NaN;
                 sbgs.VerticalAlignment = VerticalAlignment.Top;
                 sbgs.HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -392,7 +392,7 @@ namespace MonkeyPaste.Avalonia {
                 ctrcv_gs.HorizontalAlignment = HorizontalAlignment.Stretch;
                 ctrcv_gs.VerticalAlignment = VerticalAlignment.Bottom;
                 ctrcv_gs.Width = double.NaN;
-                ctrcv_gs.Height = 5;
+                ctrcv_gs.Height = MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength;
                 ctrcv_gs.ResizeDirection = GridResizeDirection.Rows;
                 ctrcv_gs.Cursor = new Cursor(StandardCursorType.SizeNorthSouth);
 
