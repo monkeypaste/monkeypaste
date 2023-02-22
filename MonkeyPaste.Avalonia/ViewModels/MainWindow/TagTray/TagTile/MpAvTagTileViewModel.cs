@@ -19,6 +19,7 @@ namespace MonkeyPaste.Avalonia {
         MpIUserColorViewModel,
         MpIActionComponent,
         MpIContextMenuViewModel,
+        MpIPopupMenuViewModel,
         MpIPopupMenuPicker {
 
         #region Private Variables
@@ -161,6 +162,15 @@ namespace MonkeyPaste.Avalonia {
         }
         public bool IsContextMenuOpen { get; set; } = false;
 
+        #endregion
+
+        #region MpIPopUpMenuViewModel Implementation
+
+        MpMenuItemViewModel MpIPopupMenuViewModel.PopupMenuViewModel => ContentMenuItemViewModel;
+        bool MpIPopupMenuViewModel.IsPopupMenuOpen {
+            get => IsContextMenuOpen;
+            set => IsContextMenuOpen = value;
+        }
         #endregion
 
         #region MpIHoverableViewModel Implementation
@@ -346,7 +356,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsFavoriteTag => TagId == MpTag.FavoritesTagId;
         public bool IsHelpTag => TagId == MpTag.HelpTagId;
 
-        public bool IsLinkTag => !IsQueryTag && !IsGroupTag && !IsHelpTag;
+        public bool IsLinkTag => !IsQueryTag && !IsGroupTag;
         public bool IsQueryTag => TagType == MpTagType.Query;
         public bool IsGroupTag => TagType == MpTagType.Group;
         public bool IsNotGroupTag => IsLinkTag || IsQueryTag;

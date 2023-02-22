@@ -12,6 +12,7 @@ namespace MonkeyPaste {
 
         MpPoint PixelsPerInch { get; } // PixelsPerInch == 96 * PixelDensity
         string Name { get; set; }
+        void Rotate(double angle);
     }
 
     public interface MpIPlatformScreenInfoCollection {

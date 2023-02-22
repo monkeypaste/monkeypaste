@@ -77,31 +77,32 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task InitializeAsync() {
-            PlatformInfo = new MpAvPlatformInfo();
+            if (MpDeviceWrapper.Instance != null) {
+                PlatformInfo = MpDeviceWrapper.Instance.PlatformInfo;
+            } else {
+                PlatformInfo = new MpAvPlatformInfo_desktop();
+            }
+
             DbInfo = new MpAvDbInfo();
 
-            string prefPath = Path.Combine(
-                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
-                $"pref_{PlatformInfo.OsShortName}.json");
+            string prefPath = Path.Combine(PlatformInfo.StorageDir, $"pref_{PlatformInfo.OsShortName}.json");
 
             if (App.Args.Any(x => x.ToLower() == App.BACKUP_DATA_ARG)) {
                 // TODO move reset stuff to that backup folder
             }
-            if (true || App.Args.Any(x => x.ToLower() == App.RESET_DATA_ARG)) {
+            if (App.Args.Any(x => x.ToLower() == App.RESET_DATA_ARG)) {
                 Debugger.Break();
 
                 // delete db, plugin cache, pref and pref.backup
                 MpFileIo.DeleteFile(DbInfo.DbPath);
+                MpFileIo.DeleteFile(DbInfo.DbPath + "-shm");
+                MpFileIo.DeleteFile(DbInfo.DbPath + "-wal");
 
                 MpFileIo.DeleteFileOrDirectory(MpPluginLoader.PluginManifestBackupFolderPath);
                 MpFileIo.DeleteFile(prefPath);
                 MpFileIo.DeleteFile($"{prefPath}.{MpPrefViewModel.PREF_BACKUP_PATH_EXT}");
 
                 MpConsole.WriteLine("All data successfully deleted.");
-
-                prefPath = Path.Combine(
-                PlatformInfo.StorageDir,
-                $"pref_{PlatformInfo.OsShortName}.json");
             }
 
             await MpPrefViewModel.InitAsync(prefPath, DbInfo, PlatformInfo);

@@ -128,6 +128,17 @@
                                               ReadOnlyForeground="{Binding TagTextHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
                                               Text="{Binding TagName, Mode=TwoWay}" />
                 </Grid>
+                <local:MpAvOptionsButton x:Name="MobileContextOptionButton"
+                                         VerticalAlignment="Stretch"
+                                         local:MpAvMenuExtension.IsEnabled="True">
+                    <local:MpAvOptionsButton.IsVisible>
+                        <MultiBinding Converter="{x:Static BoolConverters.And}">
+                            <Binding Path="IsSelected" />
+                            <Binding Path="!IsDesktop"
+                                     Source="{x:Static local:MpAvThemeViewModel.Instance}" />
+                        </MultiBinding>
+                    </local:MpAvOptionsButton.IsVisible>
+                </local:MpAvOptionsButton>
             </StackPanel>
         </Border>
 

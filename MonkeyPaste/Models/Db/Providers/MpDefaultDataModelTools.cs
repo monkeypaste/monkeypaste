@@ -84,11 +84,12 @@ namespace MonkeyPaste {
             return new Tuple<string, int>(ThisUserDeviceGuid, total_count);
         }
 
-        public static async Task CreateAsync() {
-
+        public static async Task CreateAsync(string thisDeviceGuid) {
+            // NOTE on initial startup 
             // User Device
 
             var thisDevice = await MpUserDevice.CreateAsync(
+                guid: thisDeviceGuid,
                 deviceType: MpPlatform.Services.PlatformInfo.OsType,
                 machineName: MpPlatform.Services.PlatformInfo.OsMachineName,
                 versionInfo: MpPlatform.Services.PlatformInfo.OsVersionInfo);
@@ -165,18 +166,6 @@ namespace MonkeyPaste {
         #endregion
 
         #region Private Methods
-        private static async Task InitUserDeviceAsync(string userDeviceGuid, string machineName, MpUserDeviceType? deviceType) {
-            // CASE 1 - initialize
-            if (!string.IsNullOrEmpty(userDeviceGuid)) {
-                var thisUserDevice = await MpDataModelProvider.GetUserDeviceByGuidAsync(userDeviceGuid);
-                if (thisUserDevice == null) {
-                    // reset error
-                    Debugger.Break();
-                }
-                ThisUserDeviceId = thisUserDevice.Id;
-                ThisUserDeviceGuid = thisUserDevice.Guid;
-            }
-        }
         #endregion
 
         #region Commands

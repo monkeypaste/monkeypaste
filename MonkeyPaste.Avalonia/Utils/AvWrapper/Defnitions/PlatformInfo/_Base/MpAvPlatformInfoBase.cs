@@ -6,21 +6,21 @@ using System.Linq;
 using System.Reflection;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvPlatformInfo : MpIPlatformInfo {
-        public string OsMachineName =>
+    public abstract class MpAvPlatformInfoBase : MpIPlatformInfo {
+        public virtual string OsMachineName =>
             Environment.MachineName;
 
         // TODO Add per env info here
-        public string OsVersionInfo =>
+        public virtual string OsVersionInfo =>
             Environment.OSVersion.VersionString;
 
-        public string ExecutingDir {
+        public virtual string ExecutingDir {
             get {
                 return AppContext.BaseDirectory;
                 //return Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             }
         }
-        public string ExecutableName {
+        public virtual string ExecutableName {
             get {
                 if (Environment.GetCommandLineArgs().Any()) {
                     string main_mod_path = Environment.GetCommandLineArgs()[0];
@@ -31,13 +31,13 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
         }
-        public string ExecutingPath {
+        public virtual string ExecutingPath {
             get {
                 return Path.Combine(ExecutingDir, ExecutableName + GetExecutableExt());
             }
         }
 
-        public string StorageDir {
+        public virtual string StorageDir {
             get {
                 if (OperatingSystem.IsAndroid()) {
                     return Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
@@ -46,7 +46,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public string OsShortName {
+        public virtual string OsShortName {
             get {
                 if (OperatingSystem.IsWindows()) {
                     return "win";
@@ -70,12 +70,12 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public bool IsDesktop =>
+        public virtual bool IsDesktop =>
             OperatingSystem.IsWindows() ||
             OperatingSystem.IsMacOS() ||
             OperatingSystem.IsLinux();
 
-        public string OsFileManagerPath {
+        public virtual string OsFileManagerPath {
             get {
                 if (OperatingSystem.IsWindows()) {
                     return Path.Combine(Directory.GetParent(Environment.SystemDirectory).FullName, "explorer.exe");

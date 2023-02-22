@@ -21,22 +21,19 @@ namespace MonkeyPaste.Avalonia {
             Bounds = s.Bounds.ToPortableRect(Scaling);
             WorkArea = s.WorkingArea.ToPortableRect(Scaling);
             IsPrimary = s.IsPrimary;
+        }
 
-
-            //Bounds = new MpRect(
-            //                    new MpPoint(
-            //                        s.Bounds.X / Scaling,
-            //                        s.Bounds.Y) / Scaling,
-            //                    new MpSize(
-            //                        s.Bounds.Width / Scaling,
-            //                        s.Bounds.Height / Scaling));
-            //WorkArea = new MpRect(
-            //    new MpPoint(
-            //        s.WorkingArea.X / Scaling,
-            //        s.WorkingArea.Y / Scaling),
-            //    new MpSize(
-            //        s.WorkingArea.Width / Scaling,
-            //        s.WorkingArea.Height / Scaling));
+        private MpRect _baseBounds;
+        public void Rotate(double angle) {
+            if (_baseBounds == null) {
+                _baseBounds = Bounds;
+            }
+            MpRect nb = _baseBounds;
+            if (angle == 270 || angle == 90) {
+                nb = new MpRect(0, 0, _baseBounds.Height, _baseBounds.Width);
+            }
+            Bounds = nb;
+            WorkArea = nb;
         }
     }
 }

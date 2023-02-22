@@ -57,6 +57,34 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Interfaces
+
+        #region MpIGlobalInputListener
+        public void StartInputListener() {
+            if (IS_PSEUDO_GLOBAL_INPUT_ENABLED) {
+                Dispatcher.UIThread.Post(() => {
+                    CreatePseudoGlobalInputHooks(MpAvMainView.Instance);
+                });
+            }
+            if (IS_GLOBAL_INPUT_ENABLED) {
+                CreateGlobalInputHooks();
+            }
+        }
+        public void StopInputListener() {
+            if (IS_PSEUDO_GLOBAL_INPUT_ENABLED) {
+                Dispatcher.UIThread.Post(() => {
+                    DisposePseudoGlobalInputHooks(MpAvMainView.Instance);
+                });
+            }
+            if (IS_GLOBAL_INPUT_ENABLED) {
+                DisposeGlobalInputHooks();
+            }
+        }
+
+        #endregion
+
+        #endregion
+
         #region Properties
 
         #region View Models
@@ -172,7 +200,7 @@ namespace MonkeyPaste.Avalonia {
                 IS_GLOBAL_MOUSE_INPUT_ENABLED = false;
                 IS_GLOBAL_KEYBOARD_INPUT_ENABLED = false;
 
-                IS_PSEUDO_GLOBAL_INPUT_ENABLED = true;
+                IS_PSEUDO_GLOBAL_INPUT_ENABLED = false;
             }
         }
 
@@ -275,26 +303,7 @@ namespace MonkeyPaste.Avalonia {
             return shortcutKeyString;
         }
 
-        public void StartInputListener() {
-            if (IS_PSEUDO_GLOBAL_INPUT_ENABLED) {
-                Dispatcher.UIThread.Post(() => {
-                    CreatePseudoGlobalInputHooks(MpAvMainView.Instance);
-                });
-            }
-            if (IS_GLOBAL_INPUT_ENABLED) {
-                CreateGlobalInputHooks();
-            }
-        }
-        public void StopInputListener() {
-            if (IS_PSEUDO_GLOBAL_INPUT_ENABLED) {
-                Dispatcher.UIThread.Post(() => {
-                    DisposePseudoGlobalInputHooks(MpAvMainView.Instance);
-                });
-            }
-            if (IS_GLOBAL_INPUT_ENABLED) {
-                DisposeGlobalInputHooks();
-            }
-        }
+
 
         public async Task<bool> SimulateKeyStrokeSequenceAsync(string keystr, int holdDelay = 0, int releaseDelay = 0) {
             List<List<KeyCode>> seq = MpSharpHookKeyboardInputHelpers.ConvertStringToKeySequence(keystr);

@@ -92,27 +92,19 @@ namespace MonkeyPaste.Avalonia {
                 desktop.Exit += Exit;
 
                 var bootstrapper = new MpAvBootstrapperViewModel();
-                await bootstrapper.InitAsync(startup_datetime);
+                await bootstrapper.CreatePlatformAsync(startup_datetime);
+                await bootstrapper.InitAsync();
             } else if (ApplicationLifetime is ISingleViewApplicationLifetime mobile) {
-                Dispatcher.UIThread.Post(async () => {
-                    var bootstrapper = new MpAvBootstrapperViewModel();
-                    await bootstrapper.InitAsync(startup_datetime);
-                });
+                var bootstrapper = new MpAvBootstrapperViewModel();
+                await bootstrapper.CreatePlatformAsync(startup_datetime);
+                bootstrapper.InitAsync().FireAndForgetSafeAsync();
+
                 mobile.MainView = new MpAvMainView() {
                     HorizontalAlignment = HorizontalAlignment.Stretch,
                     VerticalAlignment = VerticalAlignment.Stretch,
                     DataContext = MpAvMainWindowViewModel.Instance
                 };
             }
-
-            //if (MpAvCefNetApplication.UseCefNet) {
-            //    MpAvCefNetApplication.Init();
-            //}
-
-
-            //while (!MpBootstrapperViewModelBase.IsPlatformLoaded) {
-            //    await Task.Delay(100);
-            //}
 
             base.OnFrameworkInitializationCompleted();
         }

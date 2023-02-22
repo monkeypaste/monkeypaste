@@ -104,80 +104,83 @@
                 local:MpAvSizeObserverExtension.IsEnabled="True"
                 local:MpAvSizeObserverExtension.ObservedWidth="{Binding QueryTrayScreenWidth, Mode=OneWayToSource}"
                 local:MpAvSizeObserverExtension.ObservedHeight="{Binding QueryTrayScreenHeight, Mode=OneWayToSource}">
-            <ScrollViewer x:Name="ClipTrayScrollViewer"
-                          HorizontalScrollBarVisibility="Visible"
-                          VerticalScrollBarVisibility="Visible"
-                          HorizontalAlignment="Left"
-                          VerticalAlignment="Top"
-                          AllowAutoHide="True"
-                          Width="{Binding QueryTrayScreenWidth}"
-                          Height="{Binding QueryTrayScreenHeight}">
-                <ListBox x:Name="ClipTrayListBox"
-                         Classes="clipTileListBox queryListBox"
-                         Classes.requerying="{Binding IsRequerying}"
-                         Classes.notrequerying="{Binding !IsRequerying}"
-                         Background="Transparent"
-                         HorizontalAlignment="Left"
-                         VerticalAlignment="Top"
-                         BorderThickness="0"
-                         TabIndex="2"
-                         IsTabStop="True"
-                         AutoScrollToSelectedItem="False"
-                         SelectedItem="{Binding SelectedClipTrayItem, Mode=TwoWay}"
-                         ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                         ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                         local:MpAvPagingListBoxExtension.IsEnabled="True"
-                         local:MpAvPagingListBoxExtension.FrictionX="0.85"
-                         local:MpAvPagingListBoxExtension.WheelDampeningX="0.03"
-                         local:MpAvPagingListBoxExtension.FrictionY="0.75"
-                         local:MpAvPagingListBoxExtension.WheelDampeningY="0.03"
-                         local:MpAvPagingListBoxExtension.ScrollOffsetX="{Binding ScrollOffsetX, Mode=TwoWay}"
-                         local:MpAvPagingListBoxExtension.ScrollOffsetY="{Binding ScrollOffsetY, Mode=TwoWay}"
-                         local:MpAvPagingListBoxExtension.IsThumbDraggingX="{Binding IsThumbDraggingX, Mode=TwoWay}"
-                         local:MpAvPagingListBoxExtension.IsThumbDraggingY="{Binding IsThumbDraggingY, Mode=TwoWay}"
-                         local:MpAvPagingListBoxExtension.IsThumbDragging="{Binding IsThumbDragging}"
-                         local:MpAvPagingListBoxExtension.CanThumbDragX="{Binding CanThumbDragX}"
-                         local:MpAvPagingListBoxExtension.CanThumbDragY="{Binding CanThumbDragY}"
-                         local:MpAvPagingListBoxExtension.CanThumbDrag="{Binding CanThumbDrag}"
-                         local:MpAvPagingListBoxExtension.IsScrollJumping="{Binding IsScrollJumping, Mode=TwoWay}"
-                         local:MpAvPagingListBoxExtension.MaxScrollOffsetX="{Binding MaxScrollOffsetX}"
-                         local:MpAvPagingListBoxExtension.MaxScrollOffsetY="{Binding MaxScrollOffsetY}"
-                         local:MpAvPagingListBoxExtension.VelocityX="{Binding ScrollVelocityX, Mode=TwoWay}"
-                         local:MpAvPagingListBoxExtension.VelocityY="{Binding ScrollVelocityY, Mode=TwoWay}"
-                         local:MpAvPagingListBoxExtension.CanScrollX="{Binding CanScroll}"
-                         local:MpAvPagingListBoxExtension.CanScrollY="{Binding CanScroll}"
-                         local:MpAvPagingListBoxExtension.ListOrientation="{Binding ListOrientation}"
-                         local:MpAvPagingListBoxExtension.LayoutType="{Binding LayoutType}"
-                         Width="{Binding QueryTrayTotalWidth}"
-                         Height="{Binding QueryTrayTotalHeight}"
-                         Items="{Binding Items}">
-                    <ListBox.Resources>
-                        <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">Transparent</SolidColorBrush>
-                        <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">Transparent</SolidColorBrush>
-                        <SolidColorBrush x:Key="SystemControlHighlightListAccentHighBrush">Transparent</SolidColorBrush>
-                        <SolidColorBrush x:Key="SystemControlHighlightListLowBrush">Transparent</SolidColorBrush>
-                        <SolidColorBrush x:Key="SystemControlHighlightListMediumBrush">Transparent</SolidColorBrush>
-                        <SolidColorBrush x:Key="SystemControlHighlightListHighBrush">Transparent</SolidColorBrush>
-                    </ListBox.Resources>
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <local:MpAvClipTileView DataContext="{Binding .}"
-                                                    local:MpAvIsHoveringExtension.IsEnabled="True"
-                                                    local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
-                                                    local:MpAvBoundsObserverExtension.IsEnabled="True"
-                                                    local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedBounds, Mode=TwoWay}"
-                                                    IsVisible="{Binding !IsPlaceholder}" />
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas x:Name="ClipTrayItemsPanelCanvas"
-                                    Width="{Binding QueryTrayTotalWidth}"
-                                    Height="{Binding QueryTrayTotalHeight}" />
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-                </ListBox>
-            </ScrollViewer>
+            <!--<local:MpAvNativeWebViewContainer HorizontalAlignment="Stretch"
+                                              VerticalAlignment="Stretch">-->
+                <ScrollViewer x:Name="ClipTrayScrollViewer"
+                              HorizontalScrollBarVisibility="Visible"
+                              VerticalScrollBarVisibility="Visible"
+                              HorizontalAlignment="Left"
+                              VerticalAlignment="Top"
+                              AllowAutoHide="True"
+                              Width="{Binding QueryTrayScreenWidth}"
+                              Height="{Binding QueryTrayScreenHeight}">
+                    <ListBox x:Name="ClipTrayListBox"
+                             Classes="clipTileListBox queryListBox"
+                             Classes.requerying="{Binding IsRequerying}"
+                             Classes.notrequerying="{Binding !IsRequerying}"
+                             Background="Transparent"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top"
+                             BorderThickness="0"
+                             TabIndex="2"
+                             IsTabStop="True"
+                             AutoScrollToSelectedItem="False"
+                             SelectedItem="{Binding SelectedClipTrayItem, Mode=TwoWay}"
+                             ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                             ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                             local:MpAvPagingListBoxExtension.IsEnabled="True"
+                             local:MpAvPagingListBoxExtension.FrictionX="0.85"
+                             local:MpAvPagingListBoxExtension.WheelDampeningX="0.03"
+                             local:MpAvPagingListBoxExtension.FrictionY="0.75"
+                             local:MpAvPagingListBoxExtension.WheelDampeningY="0.03"
+                             local:MpAvPagingListBoxExtension.ScrollOffsetX="{Binding ScrollOffsetX, Mode=TwoWay}"
+                             local:MpAvPagingListBoxExtension.ScrollOffsetY="{Binding ScrollOffsetY, Mode=TwoWay}"
+                             local:MpAvPagingListBoxExtension.IsThumbDraggingX="{Binding IsThumbDraggingX, Mode=TwoWay}"
+                             local:MpAvPagingListBoxExtension.IsThumbDraggingY="{Binding IsThumbDraggingY, Mode=TwoWay}"
+                             local:MpAvPagingListBoxExtension.IsThumbDragging="{Binding IsThumbDragging}"
+                             local:MpAvPagingListBoxExtension.CanThumbDragX="{Binding CanThumbDragX}"
+                             local:MpAvPagingListBoxExtension.CanThumbDragY="{Binding CanThumbDragY}"
+                             local:MpAvPagingListBoxExtension.CanThumbDrag="{Binding CanThumbDrag}"
+                             local:MpAvPagingListBoxExtension.IsScrollJumping="{Binding IsScrollJumping, Mode=TwoWay}"
+                             local:MpAvPagingListBoxExtension.MaxScrollOffsetX="{Binding MaxScrollOffsetX}"
+                             local:MpAvPagingListBoxExtension.MaxScrollOffsetY="{Binding MaxScrollOffsetY}"
+                             local:MpAvPagingListBoxExtension.VelocityX="{Binding ScrollVelocityX, Mode=TwoWay}"
+                             local:MpAvPagingListBoxExtension.VelocityY="{Binding ScrollVelocityY, Mode=TwoWay}"
+                             local:MpAvPagingListBoxExtension.CanScrollX="{Binding CanScroll}"
+                             local:MpAvPagingListBoxExtension.CanScrollY="{Binding CanScroll}"
+                             local:MpAvPagingListBoxExtension.ListOrientation="{Binding ListOrientation}"
+                             local:MpAvPagingListBoxExtension.LayoutType="{Binding LayoutType}"
+                             Width="{Binding QueryTrayTotalWidth}"
+                             Height="{Binding QueryTrayTotalHeight}"
+                             Items="{Binding Items}">
+                        <ListBox.Resources>
+                            <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">Transparent</SolidColorBrush>
+                            <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">Transparent</SolidColorBrush>
+                            <SolidColorBrush x:Key="SystemControlHighlightListAccentHighBrush">Transparent</SolidColorBrush>
+                            <SolidColorBrush x:Key="SystemControlHighlightListLowBrush">Transparent</SolidColorBrush>
+                            <SolidColorBrush x:Key="SystemControlHighlightListMediumBrush">Transparent</SolidColorBrush>
+                            <SolidColorBrush x:Key="SystemControlHighlightListHighBrush">Transparent</SolidColorBrush>
+                        </ListBox.Resources>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <local:MpAvClipTileView DataContext="{Binding .}"
+                                                        local:MpAvIsHoveringExtension.IsEnabled="True"
+                                                        local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
+                                                        local:MpAvBoundsObserverExtension.IsEnabled="True"
+                                                        local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedBounds, Mode=TwoWay}"
+                                                        IsVisible="{Binding !IsPlaceholder}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas x:Name="ClipTrayItemsPanelCanvas"
+                                        Width="{Binding QueryTrayTotalWidth}"
+                                        Height="{Binding QueryTrayTotalHeight}" />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                    </ListBox>
+                </ScrollViewer>
+            <!--</local:MpAvNativeWebViewContainer>-->
         </Border>
 
         <!--

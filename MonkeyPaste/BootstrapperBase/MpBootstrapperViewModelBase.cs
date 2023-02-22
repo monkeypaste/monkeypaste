@@ -86,8 +86,9 @@ namespace MonkeyPaste {
         #endregion
 
         #region Public Methhods
+        public abstract Task CreatePlatformAsync(DateTime startup_datetime);
 
-        public abstract Task InitAsync(DateTime startup_datetime);
+        public abstract Task InitAsync();
 
         public virtual async Task BeginLoaderAsync() {
             await LoadItemsAsync(CoreItems);

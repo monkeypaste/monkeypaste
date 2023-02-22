@@ -28,7 +28,7 @@ namespace MonkeyPaste.Avalonia {
 
 
             int html_start_idx = htmlClipboardData.IndexOf(htmlStartToken) + htmlStartToken.Length;
-            if (html_start_idx >= 0) {
+            if (html_start_idx > htmlStartToken.Length) {
                 int html_end_idx = htmlClipboardData.IndexOf(htmlEndToken);
                 int html_length = html_end_idx - html_start_idx;
 
@@ -39,6 +39,10 @@ namespace MonkeyPaste.Avalonia {
                     // which makes problems w/ templates and since this is plain text mode there's no need to keep html anyways so downsample to plain text
                     hcd.RichHtml = MpAvContentDataConverter.Instance.Convert(plainHtml, null, "plaintext", null) as string;
                 }
+            } else {
+                // must not be html fragment
+                hcd.Html = htmlClipboardData;
+                hcd.RichHtml = htmlClipboardData;
             }
             hcd.SourceUrl = ParseHtmlFragmentForSourceUrl(htmlClipboardData);
             return hcd;
@@ -89,7 +93,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             MpConsole.WriteTraceLine($"Could not find source url in html fragment: '{htmlFragStr}'");
-            return null;
+            return string.Empty;
         }
     }
 }

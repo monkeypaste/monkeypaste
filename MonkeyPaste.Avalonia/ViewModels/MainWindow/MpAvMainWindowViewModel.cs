@@ -226,10 +226,6 @@ namespace MonkeyPaste.Avalonia {
         public MpRect LastMainWindowRect { get; set; } = new MpRect();
         public MpRect ObservedMainWindowRect { get; set; } = new MpRect();
 
-
-
-
-
         public MpRect MainWindowOpenedScreenRect {
             get {
                 if (!MpPlatform.Services.PlatformInfo.IsDesktop) {
@@ -313,11 +309,15 @@ namespace MonkeyPaste.Avalonia {
                 return 0;
 #else
                 switch (MainWindowOrientationType) {
-                    case MpMainWindowOrientationType.Right:
-                    case MpMainWindowOrientationType.Top:
-                        return 180;
                     default:
+                    case MpMainWindowOrientationType.Bottom:
+                        return 270;
+                    case MpMainWindowOrientationType.Left:
                         return 0;
+                    case MpMainWindowOrientationType.Top:
+                        return 90;
+                    case MpMainWindowOrientationType.Right:
+                        return 180;
                 }
 #endif
             }
@@ -362,7 +362,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         public bool IsMainWindowOrientationDragging { get; set; } = false;
-        public bool IsResizerVisible { get; set; } = false;
         public bool IsHovering { get; set; }
         public bool IsMainWindowInitiallyOpening { get; set; } = true;
         public bool IsMainWindowOpening { get; private set; }
@@ -445,17 +444,6 @@ namespace MonkeyPaste.Avalonia {
                     }
                     _mainWindowScreen = MpPlatform.Services.ScreenInfoCollection.Screens.ElementAt(MainWindowMonitorIdx);
                 }
-#if !DESKTOP
-                //if (_mainWindowScreen == null) {
-                //    return new MpAvScreenInfo() {
-                //        Name = "PoopHead",
-                //        Bounds = new MpRect(0, 0, 1500, 1500),
-                //        WorkArea = new MpRect(0, 0, 1500, 1500),
-                //        IsPrimary = true,
-                //        PixelDensity = 1
-                //    };
-                //}
-#endif
                 return _mainWindowScreen;
             }
         }
@@ -636,7 +624,6 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
         }
-
 
         #region Window Animation Helpers
         private void SetupMainWindowSize(bool isOrientationChange = false) {
@@ -1032,6 +1019,11 @@ namespace MonkeyPaste.Avalonia {
                 //});
             },
             () => {
+                if (MpPlatform.Services != null &&
+                    MpPlatform.Services.PlatformInfo != null &&
+                    !MpPlatform.Services.PlatformInfo.IsDesktop) {
+                    return false;
+                }
 
                 bool isContextMenuOpen =
                     FocusManager.Instance.Current != null &&
@@ -1115,9 +1107,14 @@ namespace MonkeyPaste.Avalonia {
 
                 MainWindowOrientationType = (MpMainWindowOrientationType)nextOr;
                 OnPropertyChanged(nameof(MainWindowTransformAngle));
+                if (!MpPlatform.Services.PlatformInfo.IsDesktop) {
+                    MainWindowScreen.Rotate(MainWindowTransformAngle);
+                }
+                OnPropertyChanged(nameof(MainWindowScreen));
                 SetupMainWindowSize(true);
 
                 SetMainWindowRect(MainWindowOpenedScreenRect);
+                MpConsole.WriteLine($"MW Orientation: '{MainWindowOrientationType}' Angle: '{MainWindowTransformAngle}' Bounds: '{MainWindowScreen.Bounds}'");
 
 
                 MpAvMainView.Instance.UpdateContentLayout();

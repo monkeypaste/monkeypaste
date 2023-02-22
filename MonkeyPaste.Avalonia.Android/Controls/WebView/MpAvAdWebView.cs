@@ -31,13 +31,16 @@ namespace MonkeyPaste.Avalonia.Android {
         #endregion
 
         #region Properties
-        public new MpAvAdWebViewClient WebViewClient { get; }
+        private MpAvAdWebViewClient _webViewClient = new MpAvAdWebViewClient();
+        public new MpAvAdWebViewClient WebViewClient =>
+            _webViewClient;
 
         #endregion
 
         #region Constructors
 
         public MpAvAdWebView(Context context) : base(context) {
+
         }
 
         public MpAvAdWebView(Context context, IAttributeSet attrs) : base(context, attrs) {

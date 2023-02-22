@@ -13,6 +13,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void MpAvClipTileView_PointerMoved(object sender, PointerEventArgs e) {
+            if (!MpPlatform.Services.PlatformInfo.IsDesktop) {
+                return;
+            }
             if (!BindingContext.IsHovering) {
                 // dc mismatch
                 Debugger.Break();

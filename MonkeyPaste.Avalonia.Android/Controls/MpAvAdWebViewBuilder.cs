@@ -24,6 +24,9 @@ public class MpAvAdWebViewBuilder :
             ?? global::Android.App.Application.Context;
 
         var webView = new MpAvAdWebView(parentContext);
+        webView.Settings.AllowFileAccess = true;
+        webView.Settings.AllowFileAccessFromFileURLs = true;
+        webView.Settings.AllowUniversalAccessFromFileURLs = true;
 
         string url = args.ToString() ?? "https://www.android.com/";
         webView.LoadUrl(url);
@@ -89,6 +92,7 @@ public class MpAvAdWebViewBuilder :
             };
 
             handler.OnNavigateRequest += navReg;
+
             wv.WebViewClient.Navigated += navResp;
 
             // TODO add detach when unload here?

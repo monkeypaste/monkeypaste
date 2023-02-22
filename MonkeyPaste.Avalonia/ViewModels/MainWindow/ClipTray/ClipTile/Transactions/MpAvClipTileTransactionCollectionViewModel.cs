@@ -232,6 +232,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void ApplyTransaction(MpAvTransactionItemViewModel tivm) {
             if (tivm == null ||
+                tivm.TransactionType == MpTransactionType.Pasted ||
                 tivm.TransactionType == MpTransactionType.Edited ||
                 tivm.TransactionType == MpTransactionType.Dropped ||
                 tivm.TransactionType == MpTransactionType.Created) {

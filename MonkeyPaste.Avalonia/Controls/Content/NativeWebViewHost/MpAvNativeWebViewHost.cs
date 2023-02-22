@@ -113,7 +113,7 @@ namespace MonkeyPaste.Avalonia {
                     Implementation.Build(
                         parent,
                         () => base.CreateNativeControlCore(parent),
-                        MpAvCefNetApplication.GetEditorPath().ToFileSystemUriFromPath());
+                        MpAvClipTrayViewModel.EditorUri);
 
             }
             if (Interop != null &&

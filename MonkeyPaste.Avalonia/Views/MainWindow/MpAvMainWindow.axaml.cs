@@ -48,7 +48,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
         #region Properties
 
         public MpAvMainWindowViewModel BindingContext => MpAvMainWindowViewModel.Instance;

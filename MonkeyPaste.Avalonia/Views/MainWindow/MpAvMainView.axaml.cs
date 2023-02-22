@@ -22,8 +22,6 @@ namespace MonkeyPaste.Avalonia {
         MpIMainView,
         MpIAsyncObject {
         #region Private Variables
-
-        private int? _origResizerIdx;
         #endregion
 
         #region Constants
@@ -137,16 +135,10 @@ namespace MonkeyPaste.Avalonia {
 
             RootGrid = this.FindControl<Grid>("MainWindowContainerGrid");
 
-            this.PointerMoved += MainWindow_PointerMoved;
-            this.PointerExited += MainWindow_PointerLeave;
-
             var sidebarSplitter = this.FindControl<GridSplitter>("SidebarGridSplitter");
             sidebarSplitter.DragDelta += SidebarSplitter_DragDelta;
 
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
-
-            //var advSearchSplitter = this.FindControl<GridSplitter>("AdvancedSearchSplitter");
-            //advSearchSplitter.DragCompleted += AdvSearchSplitter_DragCompleted;
         }
 
         #endregion
@@ -393,7 +385,7 @@ namespace MonkeyPaste.Avalonia {
                 ctrcv_gs.VerticalAlignment = VerticalAlignment.Bottom;
                 ctrcv_gs.Width = double.NaN;
                 ctrcv_gs.Height = MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength;
-                ctrcv_gs.ResizeDirection = GridResizeDirection.Rows;
+                ctrcv_gs.ResizeDirection = GridResizeDirection.Auto;
                 ctrcv_gs.Cursor = new Cursor(StandardCursorType.SizeNorthSouth);
 
                 Grid.SetRow(ctrcv_ptrv, 0);
@@ -409,7 +401,7 @@ namespace MonkeyPaste.Avalonia {
             UpdateSidebarGridsplitter();
             UpdateTitleLayout();
             UpdateResizerLayout();
-            //mwtg.InvalidateMeasure();
+            mwtg.InvalidateAll();
         }
 
         private void UpdateResizerLayout() {
@@ -862,42 +854,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region Event Handlers
         private void SidebarSplitter_DragDelta(object sender, VectorEventArgs e) {
+            if (!e.Vector.X.IsNumber() || !e.Vector.Y.IsNumber()) {
+                MpDebug.Break();
+            }
             UpdateClipTrayContainerSize(e.Vector.ToPortablePoint());
         }
-
-        private void MainWindow_PointerMoved(object sender, global::Avalonia.Input.PointerEventArgs e) {
-            var mwvm = MpAvMainWindowViewModel.Instance;
-            if (mwvm.IsResizing) {
-                mwvm.IsResizerVisible = true;
-            } else {
-                var mw_mp = e.GetCurrentPoint(Parent).Position;
-                var titleView = this.FindControl<MpAvMainWindowTitleMenuView>("MainWindowTitleView");
-                if (titleView.Bounds.Contains(e.GetCurrentPoint(titleView.Parent).Position) &&
-                    mwvm.MainWindowOrientationType != MpMainWindowOrientationType.Bottom) {
-                    mwvm.IsResizerVisible = false;
-                } else {
-                    mwvm.IsResizerVisible = !this.Bounds.Deflate(mwvm.ResizerLength).Contains(mw_mp);
-                }
-
-                var resizerView = this.FindControl<MpAvMainWindowResizerView>("MainWindowResizerView");
-                if (_origResizerIdx == null) {
-                    _origResizerIdx = resizerView.ZIndex;
-                }
-
-                if (mwvm.IsResizerVisible) {
-                    resizerView.ZIndex = 1000;
-                } else {
-                    resizerView.ZIndex = _origResizerIdx.Value;
-                }
-
-            }
-
-        }
-        private void MainWindow_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e) {
-            MpAvMainWindowViewModel.Instance.IsResizerVisible = false;
-        }
-
-
 
         #endregion
 

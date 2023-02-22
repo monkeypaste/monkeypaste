@@ -12,10 +12,11 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvPlainTextContentView">
     <local:MpAvTextBox x:Name="PlainTextContentTextBox"
+                       Focusable="True"
                        BorderThickness="0"
-                       Margin="10,3"
+                       Padding="3"
                        Background="Transparent"
-                       TextWrapping="Wrap"
+                       TextWrapping="WrapWithOverflow"
                        AcceptsReturn="True"
                        AcceptsTab="True"
                        ScrollViewer.HorizontalScrollBarVisibility="{Binding IsHorizontalScrollbarVisibile, Converter={StaticResource BoolToScrollBarVisibilityConverter}, ConverterParameter=AUTO|DISABLED}"
@@ -27,5 +28,6 @@
                        VerticalAlignment="Top"
                        HorizontalContentAlignment="Left"
                        VerticalContentAlignment="Top"
+                       Foreground="Black"
                        Text="{Binding CopyItemData, Converter={StaticResource ContentDataConverter}, ConverterParameter=PlainText}" />
 </local:MpAvUserControl>

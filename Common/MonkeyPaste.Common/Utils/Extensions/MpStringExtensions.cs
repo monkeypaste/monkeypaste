@@ -92,7 +92,7 @@ namespace MonkeyPaste.Common {
             if (sourceFormat == "text") {
                 return text;
             }
-            if (text.IsStringRichHtml()) {
+            if (text.IsStringRichHtml() || sourceFormat == "html") {
                 return MpRichHtmlToPlainTextConverter.Convert(text);
             }
 

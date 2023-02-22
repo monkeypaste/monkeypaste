@@ -278,7 +278,7 @@ namespace MonkeyPaste.Avalonia {
 
                 switch (itemType) {
                     case MpCopyItemType.Text:
-                        deltaObj.ops.Add(new Op() { insert = itemData });
+                        deltaObj.ops.Add(new Op() { insert = itemData.ToPlainText(inputTextFormat) });
                         break;
                     case MpCopyItemType.Image:
                         deltaObj.ops.Add(new Op() {
@@ -321,16 +321,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Platform Handling
         private async Task<MpPortableDataObject> NormalizePlatformFormatsAsync(MpPortableDataObject mpdo) {
-            //if (OperatingSystem.IsWindows()) {
-            //    bool canOpen = WinApi.IsClipboardOpen() == IntPtr.Zero;
-            //    while (!canOpen) {
-            //        await Task.Delay(50);
-            //        canOpen = WinApi.IsClipboardOpen() == IntPtr.Zero;
-            //    }
-            //}
-            while (Application.Current.Clipboard == null) {
-                MpConsole.WriteLine("waiting for clipboard...");
-                await Task.Delay(100);
+            if (OperatingSystem.IsAndroid()) {
+                return mpdo;
             }
             var actual_formats = await Application.Current.Clipboard.GetFormatsSafeAsync();
             actual_formats.ForEach(x => MpConsole.WriteLine("Actual format: " + x));

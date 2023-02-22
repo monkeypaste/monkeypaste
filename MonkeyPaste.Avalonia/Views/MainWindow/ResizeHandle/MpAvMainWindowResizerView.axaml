@@ -49,7 +49,7 @@
                 local:MpAvResizeExtension.XFactor="{Binding ResizeXFactor}"
                 local:MpAvResizeExtension.YFactor="{Binding ResizeYFactor}"
                 local:MpAvResizeExtension.GlobalResizeMessage="MainWindowSizeChanged"
-                local:MpAvResizeExtension.IsEnabled="True"
+                local:MpAvResizeExtension.IsEnabled="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}, FallbackValue=False, TargetNullValue=False}"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
                 BorderThickness="0" />

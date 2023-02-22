@@ -24,7 +24,15 @@ namespace MonkeyPaste {
         #region Properties
 
         public static bool IsDateTimeTicks { get; set; } = true;
-        public static bool UseWAL { get; set; } = true;
+        public static bool UseWAL {
+            get {
+                //if (MpPlatform.Services.PlatformInfo.OsType == MpUserDeviceType.Android) {
+                //    return false;
+                //}
+                return true;
+            }
+        }
+
         public static string IdentityToken { get; set; }
         public static string AccessToken { get; set; }
         public static bool IsLoaded { get; set; } = false;
@@ -52,7 +60,6 @@ namespace MonkeyPaste {
         public static async Task InitAsync() {
             var sw = new Stopwatch();
             sw.Start();
-            //MpJsonPreferenceIO.Instance.StartupDateTime = DateTime.Now;
             await InitDbAsync();
             IsLoaded = true;
             sw.Stop();
@@ -331,7 +338,7 @@ namespace MonkeyPaste {
             await InitTablesAsync();
 
             if (isNewDb) {
-                await MpDefaultDataModelTools.CreateAsync();
+                await MpDefaultDataModelTools.CreateAsync(MpPrefViewModel.Instance.ThisDeviceGuid);
                 await CreateViewsAsync();
                 await InitDefaultDataAsync();
             } else {
@@ -735,6 +742,9 @@ INNER JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId
                 }
             };
 
+            var thisApp = await MpDataModelProvider.GetItemAsync<MpApp>(MpDefaultDataModelTools.ThisAppId);
+            var thisAppRef = MpPlatform.Services.SourceRefBuilder.ConvertToRefUrl(thisApp);
+
             var hci_idl = new List<int>();
             foreach (var hcd in helpContentDefinitions) {
                 var hci_mpdo = new MpPortableDataObject() {
@@ -750,12 +760,26 @@ INNER JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId
                         }
                 };
 
-                var hci_do = await MpDataObject.CreateAsync(pdo: hci_mpdo);
+                //var hci_do = await MpDataObject.CreateAsync(pdo: hci_mpdo);
 
-                var hci = await MpCopyItem.CreateAsync(
-                    title: hcd[0],
-                    data: hcd[1],
-                    dataObjectId: hci_do.Id);
+                //var hci = await MpCopyItem.CreateAsync(
+                //    title: hcd[0],
+                //    data: hcd[1],
+                //    dataObjectId: hci_do.Id);
+
+                //await MpPlatform.Services.TransactionBuilder.ReportTransactionAsync(
+                //            copyItemId: hci.Id,
+                //            reqType: MpJsonMessageFormatType.DataObject,
+                //            req: hci_mpdo.SerializeData(),
+                //            respType: MpJsonMessageFormatType.None,
+                //            resp: null,
+                //            ref_urls: new[] { thisAppRef },
+                //            transType: MpTransactionType.Created);
+
+                var hci = await MpPlatform.Services.CopyItemBuilder.BuildAsync(
+                    pdo: hci_mpdo,
+                    transType: MpTransactionType.System,
+                    force_ext_sources: false);
 
                 hci_idl.Add(hci.Id);
             }

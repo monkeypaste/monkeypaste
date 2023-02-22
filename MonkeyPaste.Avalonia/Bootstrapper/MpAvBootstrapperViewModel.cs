@@ -10,9 +10,7 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
     public class MpAvBootstrapperViewModel : MpBootstrapperViewModelBase {
         private Stopwatch _sw;
-        public override async Task InitAsync(DateTime startup_datetime) {
-            _sw = Stopwatch.StartNew();
-
+        public override async Task CreatePlatformAsync(DateTime startup_datetime) {
             if (OperatingSystem.IsLinux()) {
                 await GtkHelper.EnsureInitialized();
             } else if (OperatingSystem.IsMacOS()) {
@@ -28,6 +26,10 @@ namespace MonkeyPaste.Avalonia {
                 MpPrefViewModel.Instance.LastStartupDateTime = MpPrefViewModel.Instance.StartupDateTime;
                 MpPrefViewModel.Instance.StartupDateTime = startup_datetime;
             }
+        }
+
+        public override async Task InitAsync() {
+            _sw = Stopwatch.StartNew();
 
             CreateLoaderItems();
 

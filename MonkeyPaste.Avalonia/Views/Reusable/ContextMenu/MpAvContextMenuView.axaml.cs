@@ -15,27 +15,19 @@ namespace MonkeyPaste.Avalonia {
         public static MpAvContextMenuView Instance => _instance ?? (_instance = new MpAvContextMenuView());
 
 
-        public MpAvContextMenuView() {
+        public MpAvContextMenuView() : base() {
             InitializeComponent();
             this.Initialized += MpAvContextMenuView_Initialized;
         }
 
         private void MpAvContextMenuView_Initialized(object sender, EventArgs e) {
-            (this.VisualRoot as PopupRoot).AttachDevTools();
+            if (this.VisualRoot is PopupRoot pr) {
+                pr.AttachDevTools();
+            }
         }
-
-        //public void CloseMenu() {
-        //    if(IsInitialized && !IsShowingChildDialog) {
-        //        IsOpen = false;
-        //    }
-        //}
 
         private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);
         }
     }
-    //[DoNotNotify]
-    //public class MpAvMenuItem : MenuItem, IStyleable {
-    //    //Type IStyleable.StyleKey => typeof(MenuItem);
-    //}
 }

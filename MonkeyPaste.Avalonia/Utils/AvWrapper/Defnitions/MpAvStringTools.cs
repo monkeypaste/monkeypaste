@@ -8,16 +8,13 @@ using MonkeyPaste.Common.Wpf;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvStringTools : MpIStringTools {
-        public string ToPlainText(string text) {
+        public string ToPlainText(string text, string source_format = "") {
             if (text.IsStringRichText()) {
 #if WINDOWS
                 return text.RtfToPlainText();
 #endif
             }
-            if (text.IsStringRichHtml()) {
-                return MpRichHtmlToPlainTextConverter.Convert(text);
-            }
-            return text;
+            return text.ToPlainText(source_format);
         }
 
         public string ToRichText(string text) {

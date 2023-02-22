@@ -603,7 +603,7 @@ namespace MonkeyPaste.Common.Avalonia {
             return new MpPoint(p.X, p.Y);
         }
         public static MpPoint ToPortablePoint(this Vector v) {
-            return new MpPoint(v.X, v.Y);
+            return new MpPoint(v.X.IsNumber() ? v.X : 0, v.Y.IsNumber() ? v.Y : 0);
         }
 
 

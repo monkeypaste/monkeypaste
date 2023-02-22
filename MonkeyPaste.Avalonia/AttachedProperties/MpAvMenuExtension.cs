@@ -8,6 +8,7 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System.Collections.Generic;
@@ -670,13 +671,27 @@ namespace MonkeyPaste.Avalonia {
                 _cmInstance.HorizontalOffset = offset.X;
                 _cmInstance.VerticalOffset = offset.Y;
             }
+
             SetHideOnClick(control, hideOnClick);
             SetSelectOnRightClick(control, selectOnRightClick);
-            var w = control.GetVisualAncestor<Window>();
-            if (w == null) {
-                Debugger.Break();
+            _cmInstance.ContextMenuOpening += (s, e) => {
+                if (s is ContextMenu cm) {
+                    cm.AttachedToVisualTree += (s1, e1) => {
+                    };
+                }
+            };
+
+            if (MpPlatform.Services.PlatformInfo.IsDesktop) {
+                var w = control.GetVisualAncestor<Window>();
+                _cmInstance.Open(w);
+            } else {
+                //_cmInstance.HorizontalOffset = 0;
+                //_cmInstance.VerticalOffset = 0;
+                //control.ContextMenu = _cmInstance;
+                //control.ContextMenu.Open();
+                _cmInstance.Open(App.MainView as Control);
             }
-            _cmInstance.Open(w);
+
         }
 
         #region Helpers

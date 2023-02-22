@@ -138,6 +138,7 @@
     <Page Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
     <ProguardConfiguration Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <TransformFile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
+    <AndroidAsset Remove="Assets\Images\burlap.png" />
     <AvaloniaXaml Remove="Themes\Default\Accents\Base.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Accents\BaseLight.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Animations\Defaults.axaml" />
@@ -513,6 +514,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\bullseye.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\burlap.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\butterfly.png">

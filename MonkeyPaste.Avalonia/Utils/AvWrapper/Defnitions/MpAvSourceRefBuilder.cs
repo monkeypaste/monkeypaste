@@ -157,7 +157,10 @@ namespace MonkeyPaste.Avalonia {
             //    app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(MpPlatformWrapper.Services.ProcessWatcher.LastHandle);
             //}
             if (last_pinfo == null) {
-                Debugger.Break();
+                if (MpPlatform.Services.PlatformInfo.IsDesktop) {
+
+                    Debugger.Break();
+                }
                 return null;
             }
             var app = await MpPlatform.Services.AppBuilder.CreateAsync(last_pinfo);

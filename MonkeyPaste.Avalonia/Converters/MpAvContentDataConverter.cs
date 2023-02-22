@@ -10,7 +10,7 @@ namespace MonkeyPaste.Avalonia {
             if (value is string valStr) {
                 if (parameter is string paramStr) {
                     if (paramStr.ToLower() == "plaintext") {
-                        return MpPlatform.Services.StringTools.ToPlainText(valStr);
+                        return MpPlatform.Services.StringTools.ToPlainText(valStr, "html");
                     }
                 }
                 return valStr;

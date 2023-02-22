@@ -80,8 +80,10 @@ namespace MonkeyPaste.Avalonia {
             if (htmlDataStr == null) {
                 return null;
             }
-            if (!MpPrefViewModel.Instance.IsRichHtmlContentEnabled) {
-                return MpAvHtmlClipboardData.Parse(htmlDataStr.ToString());
+            if (!MpPrefViewModel.Instance.IsRichHtmlContentEnabled ||
+                ConverterWebView == null) {
+                var result = MpAvHtmlClipboardData.Parse(htmlDataStr.ToString());
+                return result;
             }
             if (inputFormatType == "rtf") {
                 // create 'dirty' quill html w/ internal converter and treat as plain for quill to parse

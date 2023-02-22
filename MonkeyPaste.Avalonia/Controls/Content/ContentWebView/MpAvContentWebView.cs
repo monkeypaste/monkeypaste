@@ -101,7 +101,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Statics
         public static string DefaultContentUrl =>
-            MpAvClipTrayViewModel.EditorPath;
+            MpAvClipTrayViewModel.EditorUri;
 
         private static List<MpAvContentWebView> _AllWebViews = new List<MpAvContentWebView>();
 
@@ -853,9 +853,9 @@ namespace MonkeyPaste.Avalonia {
         public virtual string ContentUrl {
             get {
                 if (this.GetVisualRoot() == App.MainView) {
-                    return MpAvClipTrayViewModel.EditorPath;
+                    return MpAvClipTrayViewModel.EditorUri;
                 }
-                return $"{MpAvClipTrayViewModel.EditorPath}?{APPEND_NOTIFIER_URL_PARAMS}";
+                return $"{MpAvClipTrayViewModel.EditorUri}?{APPEND_NOTIFIER_URL_PARAMS}";
             }
         }
 

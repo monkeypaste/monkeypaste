@@ -70,6 +70,14 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region State
+
+        public bool IsDesktop =>
+            MpPlatform.Services != null &&
+            MpPlatform.Services.PlatformInfo != null &&
+            MpPlatform.Services.PlatformInfo.IsDesktop;
+        #endregion
+
         #endregion
 
         #region Constructors

@@ -59,7 +59,7 @@ namespace MonkeyPaste.Avalonia {
         public static MpAvClipTrayViewModel Instance => _instance ?? (_instance = new MpAvClipTrayViewModel());
 
 
-        public static string EditorPath {
+        public static string EditorUri {
             get {
                 //file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html
                 //string editorPath = Path.Combine(Environment.CurrentDirectory, "Resources", "Html", "Editor", "index.html");
@@ -73,7 +73,10 @@ namespace MonkeyPaste.Avalonia {
                 //if(OperatingSystem.IsLinux()) {
 
                 //}
-
+                if (OperatingSystem.IsAndroid()) {
+                    string uri = System.IO.Path.Combine(MpPlatform.Services.PlatformInfo.StorageDir, "MonkeyPaste.Editor", "index.html").ToFileSystemUriFromPath();
+                    return uri;
+                }
                 return MpAvCefNetApplication.GetEditorPath().ToFileSystemUriFromPath();
             }
         }

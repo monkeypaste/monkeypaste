@@ -126,4 +126,5 @@
     <sys:String x:Key="TextureImage">avares://MonkeyPaste.Avalonia/Assets/Images/texture.png</sys:String>
     <sys:String x:Key="RoundedTextureImage">avares://MonkeyPaste.Avalonia/Assets/Images/RoundedTexture.png</sys:String>
     <sys:String x:Key="CircleTextureImage">avares://MonkeyPaste.Avalonia/Assets/Images/CircleTexture.png</sys:String>
+    <sys:String x:Key="BurlapTextureImage">avares://MonkeyPaste.Avalonia/Assets/Images/burlap.png</sys:String>
 </ResourceDictionary>
