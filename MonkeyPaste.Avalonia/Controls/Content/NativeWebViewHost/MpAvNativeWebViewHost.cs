@@ -1,7 +1,9 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Platform;
+using Avalonia.Threading;
 using Gdk;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
 using System.Collections.Generic;
@@ -19,9 +21,17 @@ namespace MonkeyPaste.Avalonia {
         void Bind(MpIWebViewBindable handler);
 
     }
+    public interface MpIOffscreenRenderSourceHost {
+        MpIOffscreenRenderSource RenderSource { get; }
+    }
+    public interface MpIOffscreenRenderSource {
+        byte[] Buffer { get; }
+        event EventHandler BufferChanged;
+    }
     public interface MpIWebViewBindable {
         event EventHandler<string> OnNavigateRequest;
         void OnNavigated(string url);
+        void OnRenderBufferChanged();
 
     }
     public interface MpIAsyncJsEvalTracker {
@@ -70,9 +80,13 @@ namespace MonkeyPaste.Avalonia {
         #region MpIWebViewEventHandler Implementation
         public event EventHandler<string> OnNavigateRequest;
         public virtual void OnNavigated(string url) {
-
+            Dispatcher.UIThread.Post(this.InvalidateVisual);
         }
 
+        public void OnRenderBufferChanged() {
+            Dispatcher.UIThread.Post(this.InvalidateVisual);
+
+        }
         #endregion
 
         #region MpIHasDevTools Implementation
@@ -98,6 +112,18 @@ namespace MonkeyPaste.Avalonia {
             OnNavigateRequest?.Invoke(this, url);
         }
 
+        public override void Render(global::Avalonia.Media.DrawingContext context) {
+            //base.Render(context);
+            if (PlatformHandle is MpIOffscreenRenderSourceHost osrsh &&
+                    osrsh.RenderSource is MpIOffscreenRenderSource osrs &&
+                    osrs.Buffer != null &&
+                    osrs.Buffer.Length > 0) {
+
+                context.DrawImage(osrs.Buffer.ToAvBitmap(), this.Bounds);
+            } else {
+                base.Render(context);
+            }
+        }
         #endregion
 
         #region Protected Methods
@@ -119,6 +145,7 @@ namespace MonkeyPaste.Avalonia {
             if (Interop != null &&
                 PlatformHandle != null) {
                 Interop.Bind(this);
+                Navigate(MpAvClipTrayViewModel.EditorUri);
             }
 
             return PlatformHandle;
@@ -127,7 +154,6 @@ namespace MonkeyPaste.Avalonia {
         protected override void DestroyNativeControlCore(IPlatformHandle control) {
             base.DestroyNativeControlCore(control);
         }
-
 
         #endregion
 

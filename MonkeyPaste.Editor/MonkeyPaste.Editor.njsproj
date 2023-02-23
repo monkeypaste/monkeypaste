@@ -42,6 +42,7 @@
     <Content Include="build.js">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="test.html" />
     <Content Include="index.html" />
     <Content Include="images\icons\monkey.ico" />
     <Content Include="package.json" />

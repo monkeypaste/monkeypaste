@@ -104,13 +104,8 @@
           Classes.busy="{Binding IsAnyBusy}"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
         <!--  PIN TRAY  -->
         <local:MpAvPinTrayView x:Name="PinTrayView"
-                               Grid.Column="0"
                                DataContext="{Binding}"
                                Classes.dragover="{Binding IsDragOverPinTray}"
                                MinWidth="{Binding MinPinTrayScreenWidth}"
@@ -118,19 +113,17 @@
                                MaxWidth="{Binding MaxPinTrayScreenWidth}"
                                MaxHeight="{Binding MaxPinTrayScreenHeight}"
                                local:MpAvSizeObserverExtension.IsEnabled="True"
-                               local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedPinTrayScreenWidth, Mode=OneWayToSource}"
-                               local:MpAvSizeObserverExtension.ObservedHeight="{Binding ObservedPinTrayScreenHeight, Mode=OneWayToSource}" />
+                               local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedPinTrayScreenWidth, Mode=TwoWay}"
+                               local:MpAvSizeObserverExtension.ObservedHeight="{Binding ObservedPinTrayScreenHeight, Mode=TwoWay}" />
         <!--  PIN/QUERY SPLITTER  -->
         <GridSplitter x:Name="ClipTraySplitter"
-                      Grid.Column="0"
-                      IsTabStop="False"
+                      Classes.desktop="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                       Classes.clipTraySplitter="True"
                       Classes.vertical="{Binding !IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                       Classes.horizontal="{Binding IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}" />
 
         <!--  QUERY TRAY  -->
         <local:MpAvQueryTrayView x:Name="ClipTrayView"
-                                 Grid.Column="1"
                                  Background="{DynamicResource ClipTrayBgColor}"
                                  DataContext="{Binding}" />
     </Grid>

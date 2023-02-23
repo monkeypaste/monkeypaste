@@ -51,13 +51,16 @@
           local:MpAvIsHoveringExtension.IsEnabled="True"
           local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
           local:MpAvIsHoveringExtension.HoverCursor="Hand"
-          local:MpAvMenuExtension.IsEnabled="True"
+          local:MpAvMenuExtension.IsEnabled="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
           local:MpAvMenuExtension.SelectOnRightClick="False"
           local:MpAvMenuExtension.IsOpen="{Binding IsContextMenuOpen, Mode=TwoWay}"
           local:MpAvPointerPressCommandExtension.IsEnabled="True"
           local:MpAvPointerPressCommandExtension.RoutingStrategy="Tunnel"
           local:MpAvPointerPressCommandExtension.LeftPressCommand="{Binding SelectTagCommand}"
           local:MpAvPointerPressCommandExtension.DoubleLeftPressCommand="{Binding RenameTagCommand}"
+          local:MpAvPointerPressCommandExtension.DoubleLeftPressCommandParameter="IsPressEvent"
+          local:MpAvPointerPressCommandExtension.HoldingCommand="{Binding ShowContextMenuCommand}"
+          local:MpAvPointerPressCommandExtension.HoldingCommandParameter="{Binding $self}"
           Cursor="Hand"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch"
@@ -130,7 +133,9 @@
                 </Grid>
                 <local:MpAvOptionsButton x:Name="MobileContextOptionButton"
                                          VerticalAlignment="Stretch"
-                                         local:MpAvMenuExtension.IsEnabled="True">
+                                         local:MpAvMenuExtension.IsEnabled="True"
+                                         Command="{Binding ShowContextMenuCommand}"
+                                         CommandParameter="{Binding $self}">
                     <local:MpAvOptionsButton.IsVisible>
                         <MultiBinding Converter="{x:Static BoolConverters.And}">
                             <Binding Path="IsSelected" />

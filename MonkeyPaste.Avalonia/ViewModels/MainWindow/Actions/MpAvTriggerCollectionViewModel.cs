@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Media;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
@@ -20,13 +21,14 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
         #region Constants
 
         public const double DEFAULT_MIN_SCALE = 0.1;
         public const double DEFAULT_MAX_SCALE = 3.0d;
 
         #endregion
+
+        #region Interfaces
 
         #region MpIPopupMenuViewModel Implementation
         bool MpIPopupMenuViewModel.IsPopupMenuOpen { get; set; }
@@ -212,6 +214,10 @@ namespace MonkeyPaste.Avalonia {
         }
         public double SidebarWidth { get; set; } = 0;
         public double SidebarHeight { get; set; } = 0;
+        public string SidebarBgHexColor =>
+            (MpPlatform.Services.PlatformResource.GetResource("ActionPropertyListBgBrush") as IBrush).ToHex();
+
+        #endregion
 
         #endregion
 

@@ -188,6 +188,7 @@
                           Grid.Row="0"
                           Grid.RowSpan="3"
                           Classes="vertical"
+                          Classes.desktop="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                           IsVisible="{Binding IsTransactionPaneOpen, FallbackValue=False, TargetNullValue=False}"
                           HorizontalAlignment="Left"
                           VerticalAlignment="Stretch" />

@@ -1,4 +1,6 @@
-﻿using MonkeyPaste.Common.Plugin;
+﻿using Avalonia.Media;
+using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,6 +70,9 @@ namespace MonkeyPaste.Avalonia {
         public double SidebarWidth { get; set; } = 0;
         public double SidebarHeight { get; set; } = 0;
 
+        public string SidebarBgHexColor =>
+            (MpPlatform.Services.PlatformResource.GetResource("AnalyzerSidebarBgBrush") as IBrush).ToHex();
+
         #endregion
 
         #region MpISelectableViewModel Implementation
@@ -78,7 +83,6 @@ namespace MonkeyPaste.Avalonia {
 
 
         #endregion
-
 
         #region MpIAsyncComboBoxViewModel Implementation
 
@@ -93,6 +97,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #endregion
+
         #endregion
 
         #region Properties

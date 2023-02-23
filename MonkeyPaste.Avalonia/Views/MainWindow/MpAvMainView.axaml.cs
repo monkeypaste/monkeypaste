@@ -130,7 +130,7 @@ namespace MonkeyPaste.Avalonia {
             HorizontalAlignment = HorizontalAlignment.Stretch;
             VerticalAlignment = VerticalAlignment.Stretch;
 #if !DESKTOP
-            Background = Brushes.Lime;
+            //Background = Brushes.Lime;
 #endif
 
             RootGrid = this.FindControl<Grid>("MainWindowContainerGrid");
@@ -385,7 +385,7 @@ namespace MonkeyPaste.Avalonia {
                 ctrcv_gs.VerticalAlignment = VerticalAlignment.Bottom;
                 ctrcv_gs.Width = double.NaN;
                 ctrcv_gs.Height = MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength;
-                ctrcv_gs.ResizeDirection = GridResizeDirection.Auto;
+                ctrcv_gs.ResizeDirection = GridResizeDirection.Rows;
                 ctrcv_gs.Cursor = new Cursor(StandardCursorType.SizeNorthSouth);
 
                 Grid.SetRow(ctrcv_ptrv, 0);
@@ -681,7 +681,7 @@ namespace MonkeyPaste.Avalonia {
             }
             tmv.PositionZoomValueButton();
         }
-        private void UpdateSidebarGridsplitter() {
+        private void UpdateSidebarGridsplitter2() {
             var mwvm = MpAvMainWindowViewModel.Instance;
             var ctrvm = MpAvClipTrayViewModel.Instance;
             var sbicvm = MpAvSidebarItemCollectionViewModel.Instance;
@@ -696,11 +696,52 @@ namespace MonkeyPaste.Avalonia {
             var ctrcv = this.FindControl<MpAvClipTrayContainerView>("ClipTrayContainerView");
             var mwtg = this.FindControl<Grid>("MainWindowTrayGrid");
 
+            var ssbivm = MpAvSidebarItemCollectionViewModel.Instance.SelectedItem;
+            if (ssbivm == null) {
+                // closing
+                if (BindingContext.IsHorizontalOrientation) {
+                } else {
+                    mwtg.RowDefinitions[0].Height = new GridLength(mwtg.Bounds.Height - sbicvm.ButtonGroupFixedDimensionLength, GridUnitType.Pixel);
+                    mwtg.RowDefinitions[1].Height = new GridLength(0, GridUnitType.Auto);
+                    mwtg.RowDefinitions[2].Height = new GridLength(sbicvm.ButtonGroupFixedDimensionLength, GridUnitType.Pixel);
+                    return;
+
+                }
+                return;
+            } else {
+                // opening
+                if (BindingContext.IsHorizontalOrientation) {
+                } else {
+                    mwtg.RowDefinitions[0].Height = new GridLength(mwtg.Bounds.Height - ssbivm.DefaultSidebarHeight - sbbg.Bounds.Height, GridUnitType.Pixel);
+                    mwtg.RowDefinitions[1].Height = new GridLength(ssbivm.DefaultSidebarHeight, GridUnitType.Auto);
+                    mwtg.RowDefinitions[2].Height = new GridLength(sbicvm.ButtonGroupFixedDimensionLength, GridUnitType.Pixel);
+                    return;
+
+                }
+                return;
+            }
+        }
+        private void UpdateSidebarGridsplitter() {
+            //UpdateSidebarGridsplitter2();
+            //return;
+            var mwvm = MpAvMainWindowViewModel.Instance;
+            var ctrvm = MpAvClipTrayViewModel.Instance;
+            var sbicvm = MpAvSidebarItemCollectionViewModel.Instance;
+            var mwtmvm = MpAvMainWindowTitleMenuViewModel.Instance;
+            var fmvm = MpAvFilterMenuViewModel.Instance;
+
+            var sbgs = this.FindControl<GridSplitter>("SidebarGridSplitter");
+            //var sbcv = this.FindControl<MpAvSidebarContainerView>("SidebarContainerView");
+            var ssbcb = this.FindControl<Border>("SelectedSidebarContainerBorder");
+            var sbbg = this.FindControl<MpAvSidebarButtonGroupView>("SidebarButtonGroup");
+            var ctrcb = this.FindControl<Border>("ClipTrayContainerBorder");
+            var ctrcv = this.FindControl<MpAvClipTrayContainerView>("ClipTrayContainerView");
+            var mwtg = this.FindControl<Grid>("MainWindowTrayGrid");
 
             var ssbivm = MpAvSidebarItemCollectionViewModel.Instance.SelectedItem;
+
             bool is_opening = ssbivm != null;
             bool is_closing = BindingContext.IsHorizontalOrientation ? ssbcb.Bounds.Width > 0 : ssbcb.Bounds.Height > 0;
-
             double mw_w = mwvm.MainWindowWidth;
             double mw_h = mwvm.MainWindowHeight;
 
@@ -726,7 +767,7 @@ namespace MonkeyPaste.Avalonia {
                 nsbi_h = is_opening ? ssbivm.DefaultSidebarHeight : 0;
 
                 nctrcb_w = mwtg.Bounds.Width;
-                nctrcb_h = mw_h - sbicvm.ButtonGroupFixedDimensionLength;// - nsbi_h - fmvm.FilterMenuHeight;
+                nctrcb_h = mw_h - sbicvm.ButtonGroupFixedDimensionLength;// - fmvm.FilterMenuHeight; // - nsbi_h
             }
             nsbi_w = Math.Max(0, nsbi_w);
             nsbi_h = Math.Max(0, nsbi_h);

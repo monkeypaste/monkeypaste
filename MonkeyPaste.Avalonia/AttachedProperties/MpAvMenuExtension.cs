@@ -266,17 +266,46 @@ namespace MonkeyPaste.Avalonia {
             if (s is Control control) {
                 control.DetachedFromVisualTree += HostControl_DetachedToVisualHandler;
                 control.AddHandler(Control.PointerPressedEvent, HostControl_PointerPressed, RoutingStrategies.Tunnel);
+                //control.AddHandler(Control.HoldingEvent, HostControl_Holding, RoutingStrategies.Tunnel);
             }
         }
+
+
         private static void HostControl_DetachedToVisualHandler(object s, VisualTreeAttachmentEventArgs? e) {
             if (s is Control host_control) {
                 host_control.AttachedToVisualTree -= HostControl_AttachedToVisualHandler;
                 host_control.DetachedFromVisualTree -= HostControl_DetachedToVisualHandler;
                 host_control.RemoveHandler(Control.PointerPressedEvent, HostControl_PointerPressed);
+                //host_control.RemoveHandler(Control.HoldingEvent, HostControl_Holding);
             }
         }
 
-        private static async void HostControl_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
+        private static void HostControl_Holding(object sender, HoldingRoutedEventArgs e) {
+            if (MpPlatform.Services.PlatformInfo.IsDesktop) {
+                return;
+            }
+            var control = sender as Control;
+            object dc = GetControlDataContext(control);
+            MpMenuItemViewModel mivm = null;
+            if (dc is MpIContextMenuViewModel cmvm) {
+                mivm = cmvm.ContextMenuViewModel;
+            }
+            if (GetForcedMenuItemViewModel(control) is MpMenuItemViewModel fmivm) {
+                // used when host vm has multiple context menus
+                mivm = fmivm;
+            }
+            if (mivm == null || mivm.SubItems == null) {
+                //e.Handled = GetSuppressDefaultRightClick(control) && e.IsRightPress(control);
+                e.Handled = false;
+                return;
+            }
+
+            e.Handled = true;
+            // CREATE & SHOW MENU
+
+            ShowMenu(control, mivm, e.Position.ToPortablePoint(), GetPlacementMode(control));
+        }
+        private static async void HostControl_PointerPressed(object sender, PointerPressedEventArgs e) {
             var control = sender as Control;
 
             // VALIDATE CAN SHOW
@@ -299,6 +328,7 @@ namespace MonkeyPaste.Avalonia {
                 dc is MpIConditionalSelectableViewModel csvm && !csvm.CanSelect) {
                 can_select = false;
             }
+
             if (can_select) {
                 if (dc is MpISelectorItemViewModel sivm) {
                     if (sivm.Selector.SelectedItem != dc) {
@@ -336,15 +366,6 @@ namespace MonkeyPaste.Avalonia {
                 // used when host vm has multiple context menus
                 mivm = fmivm;
             }
-
-            //e.Handled = 
-            //    (GetSuppressDefaultRightClick(control) && e.IsRightPress(control)) ||
-            //    (GetSuppressDefaultLeftClick(control) && e.IsLeftPress(control));
-
-
-            //if (mivm == null || mivm.SubItems == null) {
-            //    return;
-            //}
 
             if (mivm == null || mivm.SubItems == null) {
                 e.Handled = GetSuppressDefaultRightClick(control) && e.IsRightPress(control);
@@ -674,12 +695,6 @@ namespace MonkeyPaste.Avalonia {
 
             SetHideOnClick(control, hideOnClick);
             SetSelectOnRightClick(control, selectOnRightClick);
-            _cmInstance.ContextMenuOpening += (s, e) => {
-                if (s is ContextMenu cm) {
-                    cm.AttachedToVisualTree += (s1, e1) => {
-                    };
-                }
-            };
 
             if (MpPlatform.Services.PlatformInfo.IsDesktop) {
                 var w = control.GetVisualAncestor<Window>();

@@ -217,6 +217,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand AssignCommand => AssignHotkeyCommand;
 
         #endregion
+
         #endregion
 
         #region Properties
@@ -252,47 +253,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        //private int? _totalCopyItemCount = null; // only used by all tag
-        //public int LinkedCopyItemCount {
-        //    get {
-        //        if(IsAllTag) {
-        //            return _totalCopyItemCount == null ? 0 : _totalCopyItemCount.Value;
-        //        }
-        //        if(_linkedCopyItemIds == null) {
-        //            return 0;
-        //        }
-        //        return _linkedCopyItemIds.Count();
-        //    }
-        //    set {
-        //        if(!IsAllTag) {
-        //            // should only by called for all tag
-        //            Debugger.Break();
-        //            return;
-        //        }
-        //        _totalCopyItemCount = value;
-        //        OnPropertyChanged(nameof(LinkedCopyItemCount));
-        //    }
-        //}
-
-        //private IEnumerable<int> _linkedCopyItemIds; // used by all link tags except all
-        //public IEnumerable<int> LinkedCopyItemIds {
-        //    get {
-        //        if(IsAllTag) {
-        //            // shouldn't be accessed
-        //            Debugger.Break();
-        //            return null;
-        //        }
-        //        return _linkedCopyItemIds;
-        //    }
-        //    set {
-        //        if(_linkedCopyItemIds != value) {
-        //            _linkedCopyItemIds = value;
-        //            OnPropertyChanged(nameof(LinkedCopyItemIds));
-        //        }
-        //    }
-        //}
-        //public int LinkedCopyItemCount { get; set; } = -1;
-
         public bool IsActiveTag {
             get {
                 if (IsGroupTag || Parent == null) {
@@ -322,9 +282,10 @@ namespace MonkeyPaste.Avalonia {
         public bool CanPin =>
             !IsGroupTag;
         public bool CanHotkey =>
-            !IsGroupTag;
+            !IsGroupTag && MpPlatform.Services.PlatformInfo.IsDesktop;
 
-        public bool CanLinkContent => IsLinkTag;
+        public bool CanLinkContent =>
+            IsLinkTag;
 
         public bool IsNew {
             get {
@@ -1104,12 +1065,18 @@ namespace MonkeyPaste.Avalonia {
                 await Tag.WriteToDatabaseAsync();
             });
 
-        public ICommand RenameTagCommand => new MpCommand(
-             () => {
+        public ICommand RenameTagCommand => new MpCommand<object>(
+             (args) => {
                  _originalTagName = TagName;
                  IsTagNameReadOnly = false;
              },
-            () => {
+            (args) => {
+                if (args != null &&
+                    !MpPlatform.Services.PlatformInfo.IsDesktop) {
+                    // disable double click cmd on mobile to allow hold event to take priority
+                    // in pointerPress extension
+                    return false;
+                }
                 return !IsTagReadOnly;
             });
 
@@ -1266,6 +1233,18 @@ namespace MonkeyPaste.Avalonia {
                 }
             }, () => {
                 return !IsAllTag;
+            });
+
+        public ICommand ShowContextMenuCommand => new MpCommand<object>(
+            (args) => {
+                var control = args as Control;
+                if (control == null) {
+                    return;
+                }
+                MpAvMenuExtension.ShowMenu(control, ContextMenuViewModel);
+            },
+            (args) => {
+                return !MpPlatform.Services.PlatformInfo.IsDesktop;
             });
 
         #endregion

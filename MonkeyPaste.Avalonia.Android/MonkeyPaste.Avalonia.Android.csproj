@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <PackageReference Include="Avalonia.Android" Version="11.0.0-preview5" />
+    <PackageReference Include="SkiaSharp.Views" Version="2.88.3" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageReference Include="System.Reactive" Version="5.0.0" />
     <PackageReference Include="Xamarin.Essentials" Version="1.7.5" />

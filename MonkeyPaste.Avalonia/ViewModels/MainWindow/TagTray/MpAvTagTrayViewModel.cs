@@ -1,5 +1,7 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Media;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -77,6 +79,9 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
+
+        public string SidebarBgHexColor =>
+            (MpPlatform.Services.PlatformResource.GetResource("TagTreeBgBrush") as IBrush).ToHex();
 
 
         #endregion

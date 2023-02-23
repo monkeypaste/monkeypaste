@@ -51,6 +51,8 @@
                         x:CompileBindings="False"
                         Grid.Column="1"
                         DataContext="{Binding LastSelectedItem, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
+                        Background="{Binding SidebarBgHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
+                        Padding="10,10,0,10"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch">
                     <ContentControl x:Name="SelectedSidebarContentControl"
@@ -59,8 +61,8 @@
                                     HorizontalContentAlignment="Stretch"
                                     VerticalContentAlignment="Stretch"
                                     local:MpAvSizeObserverExtension.IsEnabled="True"
-                                    local:MpAvSizeObserverExtension.ObservedWidth="{Binding SidebarWidth, Mode=OneWayToSource}"
-                                    local:MpAvSizeObserverExtension.ObservedHeight="{Binding SidebarHeight, Mode=OneWayToSource}"
+                                    local:MpAvSizeObserverExtension.ObservedWidth="{Binding SidebarWidth, Mode=TwoWay}"
+                                    local:MpAvSizeObserverExtension.ObservedHeight="{Binding SidebarHeight, Mode=TwoWay}"
                                     Content="{Binding}">
                         <ContentControl.DataTemplates>
                             <local:MpAvSidebarItemTemplateSelector>
@@ -109,6 +111,7 @@
                               VerticalAlignment="Stretch"
                               IsVisible="False"
                               Classes.sidebarSplitter="True"
+                              Classes.desktop="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                               Classes.vertical="{Binding !IsVerticalOrientation}"
                               Classes.horizontal="{Binding IsVerticalOrientation}" />
 
@@ -122,8 +125,8 @@
                     <local:MpAvClipTrayContainerView x:Name="ClipTrayContainerView"
                                                      Grid.Column="2"
                                                      local:MpAvSizeObserverExtension.IsEnabled="True"
-                                                     local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedContainerScreenWidth, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=OneWayToSource}"
-                                                     local:MpAvSizeObserverExtension.ObservedHeight="{Binding ObservedContainerScreenHeight, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=OneWayToSource}"
+                                                     local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedContainerScreenWidth, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=TwoWay}"
+                                                     local:MpAvSizeObserverExtension.ObservedHeight="{Binding ObservedContainerScreenHeight, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=TwoWay}"
                                                      HorizontalAlignment="Stretch"
                                                      VerticalAlignment="Stretch" />
                 </Border>

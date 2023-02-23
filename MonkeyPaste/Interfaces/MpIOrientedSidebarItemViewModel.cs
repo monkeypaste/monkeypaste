@@ -4,5 +4,7 @@
         double DefaultSidebarHeight { get; }
         double SidebarWidth { get; set; }
         double SidebarHeight { get; set; }
+
+        string SidebarBgHexColor { get; }
     }
 }

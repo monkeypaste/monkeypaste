@@ -1,3 +1,4 @@
+using Android.Views;
 using Android.Webkit;
 using Avalonia.Android;
 using Avalonia.Platform;
@@ -12,6 +13,16 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace ControlCatalog.Android;
+
+public class MpAvAdAndroidViewControlHandle :
+    AndroidViewControlHandle, MpIOffscreenRenderSourceHost {
+    public MpIOffscreenRenderSource RenderSource { get; private set; }
+    public MpAvAdAndroidViewControlHandle(View view) : base(view) {
+        if (view is MpAvAdWebView wv) {
+            RenderSource = wv;
+        }
+    }
+}
 
 public class MpAvAdWebViewBuilder :
     MpAvINativeControlBuilder,
@@ -29,8 +40,8 @@ public class MpAvAdWebViewBuilder :
         webView.Settings.AllowUniversalAccessFromFileURLs = true;
 
         string url = args.ToString() ?? "https://www.android.com/";
-        webView.LoadUrl(url);
-        return new AndroidViewControlHandle(webView);
+        //webView.Navigate(url);
+        return new MpAvAdAndroidViewControlHandle(webView);
     }
     #endregion
 
@@ -82,18 +93,24 @@ public class MpAvAdWebViewBuilder :
     public void Bind(MpIWebViewBindable handler) {
         if (handler is MpAvIPlatformHandleHost phh &&
             phh.PlatformHandle is AndroidViewControlHandle avch &&
-            avch.View is MpAvAdWebView wv) {
+            avch.View is MpAvAdWebView wv &&
+            wv is MpIWebViewNavigator wvn &&
+            wv is MpIOffscreenRenderSource osrs) {
 
             EventHandler<string> navReg = (s, e) => {
-                wv.LoadUrl(e);
+                wvn.Navigate(e);
             };
             EventHandler<string> navResp = (s, e) => {
                 handler.OnNavigated(e);
             };
+            EventHandler onRender = (s, e) => {
+                handler.OnRenderBufferChanged();
+            };
 
             handler.OnNavigateRequest += navReg;
 
-            wv.WebViewClient.Navigated += navResp;
+            osrs.BufferChanged += onRender;
+            wv.Navigated += navResp;
 
             // TODO add detach when unload here?
         }

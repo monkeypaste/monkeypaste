@@ -292,6 +292,7 @@
 
         <GridSplitter x:Name="TransactionTreeBodySplitter"
                       Grid.Row="2"
+                      Classes.desktop="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Top"
                       ResizeDirection="Rows"

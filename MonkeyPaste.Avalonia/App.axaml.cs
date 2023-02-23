@@ -4,6 +4,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Layout;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
+using Avalonia.Styling;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -87,6 +88,8 @@ namespace MonkeyPaste.Avalonia {
             DateTime startup_datetime = DateTime.Now;
 
             ReportCommandLineArgs(Args);
+            //RequestedThemeVariant = ThemeVariant.Light;
+
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
                 desktop.Startup += Startup;
                 desktop.Exit += Exit;

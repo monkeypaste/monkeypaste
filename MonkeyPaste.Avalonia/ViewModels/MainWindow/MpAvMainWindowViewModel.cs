@@ -1085,6 +1085,9 @@ namespace MonkeyPaste.Avalonia {
             });
         public ICommand CycleOrientationCommand => new MpAsyncCommand<object>(
             async (dirStrOrEnumArg) => {
+                while (MpAvMainView.Instance == null) {
+                    await Task.Delay(100);
+                }
 
                 int nextOr = (int)MainWindowOrientationType;
 

@@ -74,7 +74,7 @@ namespace MonkeyPaste.Avalonia {
 
                 //}
                 if (OperatingSystem.IsAndroid()) {
-                    string uri = System.IO.Path.Combine(MpPlatform.Services.PlatformInfo.StorageDir, "MonkeyPaste.Editor", "index.html").ToFileSystemUriFromPath();
+                    string uri = System.IO.Path.Combine(MpPlatform.Services.PlatformInfo.StorageDir, "MonkeyPaste.Editor", "test.html").ToFileSystemUriFromPath();
                     return uri;
                 }
                 return MpAvCefNetApplication.GetEditorPath().ToFileSystemUriFromPath();
@@ -352,7 +352,8 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public Orientation ListOrientation => MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ? Orientation.Horizontal : Orientation.Vertical;
+        public Orientation ListOrientation =>
+            MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ? Orientation.Horizontal : Orientation.Vertical;
 
         public bool IsHorizontalScrollBarVisible => true;// QueryTrayTotalTileWidth > QueryTrayScreenWidth;
         public bool IsVerticalScrollBarVisible => true;// QueryTrayTotalTileHeight > QueryTrayScreenHeight;
@@ -928,27 +929,22 @@ namespace MonkeyPaste.Avalonia {
         public double ObservedContainerScreenHeight { get; set; }
         public double ObservedPinTrayScreenWidth { get; set; }
         public double ObservedPinTrayScreenHeight { get; set; }
-        public double DefaultPinTrayWidth => DefaultQueryItemWidth * 1.4;
+        public double DefaultPinTrayWidth =>
+            DefaultQueryItemWidth * 1.4;
 
         public double DesiredPinTrayWidth { get; set; }
         public double DesiredPinTrayHeight { get; set; }
 
-        public double MinPinTrayScreenWidth {
-            get {
-                return IsPinTrayVisible ? MinClipOrPinTrayScreenWidth : 0;
-            }
-        }
-        public double MinPinTrayScreenHeight {
-            get {
-                return IsPinTrayVisible ? MinClipOrPinTrayScreenHeight : 0;
-            }
-        }
+        public double MinPinTrayScreenWidth =>
+            IsPinTrayVisible ? MinClipOrPinTrayScreenWidth : 0;
+        public double MinPinTrayScreenHeight =>
+            IsPinTrayVisible ? MinClipOrPinTrayScreenHeight : 0;
 
         public double MaxPinTrayScreenWidth {
             get {
                 if (ListOrientation == Orientation.Horizontal) {
 
-                    return ObservedContainerScreenWidth - MinClipTrayScreenWidth;
+                    return Math.Max(0, ObservedContainerScreenWidth - MinClipTrayScreenWidth);
                 }
                 return double.PositiveInfinity;
             }
@@ -959,16 +955,22 @@ namespace MonkeyPaste.Avalonia {
 
                     return double.PositiveInfinity;
                 }
-                return ObservedContainerScreenHeight - MinClipTrayScreenHeight;
+                return Math.Max(0, ObservedContainerScreenHeight - MinClipTrayScreenHeight);
             }
         }
 
-        public double MinClipTrayScreenWidth => MinClipOrPinTrayScreenWidth;
-        public double MinClipTrayScreenHeight => MinClipOrPinTrayScreenHeight;
-        public double MinClipOrPinTrayScreenWidth => 50;
-        public double MinClipOrPinTrayScreenHeight => 50;
-        public double MaxTileWidth => double.PositiveInfinity;// Math.Max(0, QueryTrayScreenWidth - MAX_TILE_SIZE_CONTAINER_PAD);
-        public double MaxTileHeight => double.PositiveInfinity;// Math.Max(0, QueryTrayScreenHeight - MAX_TILE_SIZE_CONTAINER_PAD);
+        public double MinClipTrayScreenWidth =>
+            MinClipOrPinTrayScreenWidth;
+        public double MinClipTrayScreenHeight =>
+            MinClipOrPinTrayScreenHeight;
+        public double MinClipOrPinTrayScreenWidth =>
+            50;
+        public double MinClipOrPinTrayScreenHeight =>
+            50;
+        public double MaxTileWidth =>
+            double.PositiveInfinity;// Math.Max(0, QueryTrayScreenWidth - MAX_TILE_SIZE_CONTAINER_PAD);
+        public double MaxTileHeight =>
+            double.PositiveInfinity;// Math.Max(0, QueryTrayScreenHeight - MAX_TILE_SIZE_CONTAINER_PAD);
 
         public int CurGridFixedCount { get; set; }
 
@@ -2010,6 +2012,14 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsAnyTilePinned):
                     MpMessenger.SendGlobal(MpMessageType.PinTrayEmptyOrHasTile);
                     break;
+                case nameof(ObservedContainerScreenHeight):
+                    OnPropertyChanged(nameof(MaxPinTrayScreenHeight));
+                    break;
+                case nameof(ObservedContainerScreenWidth):
+                    OnPropertyChanged(nameof(MaxPinTrayScreenWidth));
+                    break;
+
+
                     //case nameof(IsAnyTileDragging):
                     //    MpAvMainWindowViewModel.Instance.OnPropertyChanged(nameof(MpAvMainWindowViewModel.Instance.IsAnyItemDragging));
                     //    break;

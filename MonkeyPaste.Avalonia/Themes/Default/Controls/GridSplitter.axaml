@@ -4,10 +4,18 @@
         xmlns:local="using:MonkeyPaste.Avalonia">
     <Styles.Resources>
         <sys:Double x:Key="DefaultGridSplitterFixedDimensionLength_desktop">5</sys:Double>
-        <sys:Double x:Key="DefaultGridSplitterFixedDimensionLength_mobile">10</sys:Double>
+        <sys:Double x:Key="DefaultGridSplitterFixedDimensionLength_mobile">15</sys:Double>
         <sys:Double x:Key="DefaultGridSplitterFixedDimensionLength">5</sys:Double>
     </Styles.Resources>
 
+    <Style Selector="GridSplitter">
+        <Setter Property="Background"
+                Value="{DynamicResource DefaultGridSplitterBrush}" />
+        <Setter Property="MinWidth"
+                Value="1" />
+        <Setter Property="MinHeight"
+                Value="1" />
+    </Style>
     <Style Selector="GridSplitter.horizontal">
         <Setter Property="Cursor"
                 Value="SizeNorthSouth" />
@@ -15,6 +23,15 @@
                 Value="{DynamicResource DefaultGridSplitterFixedDimensionLength}" />
         <Setter Property="ResizeDirection"
                 Value="Rows" />
+        <!--<Setter Property="Foreground">
+            <Setter.Value>
+              <ImageBrush Source="{Binding Source={StaticResource Dots2x10Image}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}"
+                          TileMode="None"
+                          AlignmentX="Center"
+                          AlignmentY="Center"
+                          Stretch="Uniform"/>
+            </Setter.Value>
+        </Setter>-->
     </Style>
     <Style Selector="GridSplitter.vertical">
         <Setter Property="Cursor"
@@ -25,14 +42,6 @@
                 Value="Columns" />
     </Style>
 
-    <Style Selector="GridSplitter">
-        <Setter Property="Background"
-                Value="{DynamicResource DefaultGridSplitterBrush}" />
-        <Setter Property="MinWidth"
-                Value="1" />
-        <Setter Property="MinHeight"
-                Value="1" />
-    </Style>
     <Style Selector="GridSplitter.sidebarSplitter">
         <Setter Property="Background"
                 Value="{DynamicResource SidebarGridSplitterBrush}" />
@@ -41,7 +50,7 @@
         <Setter Property="Background"
                 Value="{DynamicResource ClipTrayGridSplitterBrush}" />
     </Style>
-    <Style Selector="GridSplitter:pointerover">
+    <Style Selector="GridSplitter:pointerover, GridSplitter:pressed">
         <Setter Property="Background"
                 Value="{DynamicResource HoverDefaultGridSplitterBgBrush}" />
     </Style>

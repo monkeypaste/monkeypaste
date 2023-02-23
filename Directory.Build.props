@@ -6,7 +6,7 @@
   <!-- IOS - net7.0-ios-->
   
   <PropertyGroup>
-    <BuildOs>WINDOWS</BuildOs>
+    <BuildOs>ANDROID</BuildOs>
   </PropertyGroup>
 
   <!--<PropertyGroup Condition="$(BuildOs) == 'WINDOWS' Or $(BuildOs) == 'LINUX' Or $(BuildOs) == 'MAC'">-->

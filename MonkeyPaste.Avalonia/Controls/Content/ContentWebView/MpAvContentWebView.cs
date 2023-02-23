@@ -876,9 +876,11 @@ namespace MonkeyPaste.Avalonia {
 #else
         protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e) {
             base.OnAttachedToLogicalTree(e);
-            Navigate(ContentUrl);
         }
 
+        protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
+            base.OnAttachedToVisualTree(e);
+        }
         public override void OnNavigated(string url) {
             base.OnNavigated(url);
             if (url == BLANK_URL) {

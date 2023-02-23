@@ -36,8 +36,8 @@
                             VerticalContentAlignment="Stretch"
                             MaxWidth="{Binding $parent.Bounds.Width}"
                             local:MpAvSizeObserverExtension.IsEnabled="True"
-                            local:MpAvSizeObserverExtension.ObservedWidth="{Binding SidebarWidth, Mode=OneWayToSource}"
-                            local:MpAvSizeObserverExtension.ObservedHeight="{Binding SidebarHeight, Mode=OneWayToSource}"
+                            local:MpAvSizeObserverExtension.ObservedWidth="{Binding SidebarWidth, Mode=TwoWay}"
+                            local:MpAvSizeObserverExtension.ObservedHeight="{Binding SidebarHeight, Mode=TwoWay}"
                             Content="{Binding}">
                 <ContentControl.DataTemplates>
                     <local:MpAvSidebarItemTemplateSelector>

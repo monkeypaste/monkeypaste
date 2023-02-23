@@ -4,7 +4,8 @@
              xmlns:local="using:MonkeyPaste.Avalonia"
              x:DataType="local:MpAvSystemTrayViewModel"
              x:CompileBindings="True"
-             x:Class="MonkeyPaste.Avalonia.App">
+             x:Class="MonkeyPaste.Avalonia.App"
+             RequestedThemeVariant="Light">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

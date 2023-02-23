@@ -2,6 +2,16 @@
 using System;
 
 namespace MonkeyPaste.Avalonia.Android {
+    public class MpAvAdWebChromeClient : WebChromeClient {
+        public event EventHandler ProgressDone;
+        public override void OnProgressChanged(WebView view, int newProgress) {
+            base.OnProgressChanged(view, newProgress);
+            if (newProgress == 100) {
+                ProgressDone?.Invoke(this, null);
+            }
+        }
+    }
+
     public class MpAvAdWebViewClient : WebViewClient {
         #region Private Variable
         #endregion
@@ -19,17 +29,20 @@ namespace MonkeyPaste.Avalonia.Android {
         #endregion
 
         #region Events
-        public event EventHandler<string> Navigated;
+        public event EventHandler<string> PageFinished;
 
         #endregion
 
         #region Constructors
+        public MpAvAdWebViewClient() : base() {
+
+        }
         #endregion
 
         #region Public Methods
         public override void OnPageFinished(WebView view, string url) {
             base.OnPageFinished(view, url);
-            Navigated?.Invoke(this, url);
+            PageFinished?.Invoke(this, url);
         }
 
         #endregion

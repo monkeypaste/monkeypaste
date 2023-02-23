@@ -73,35 +73,35 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region RightPressCommand AvaloniaProperty
-        public static ICommand GetRightPressCommand(AvaloniaObject obj) {
-            return obj.GetValue(RightPressCommandProperty);
+        #region HoldingCommand AvaloniaProperty
+        public static ICommand GetHoldingCommand(AvaloniaObject obj) {
+            return obj.GetValue(HoldingCommandProperty);
         }
 
-        public static void SetRightPressCommand(AvaloniaObject obj, ICommand value) {
-            obj.SetValue(RightPressCommandProperty, value);
+        public static void SetHoldingCommand(AvaloniaObject obj, ICommand value) {
+            obj.SetValue(HoldingCommandProperty, value);
         }
 
-        public static readonly AttachedProperty<ICommand> RightPressCommandProperty =
+        public static readonly AttachedProperty<ICommand> HoldingCommandProperty =
             AvaloniaProperty.RegisterAttached<object, Control, ICommand>(
-                "RightPressCommand",
+                "HoldingCommand",
                 null,
                 false);
 
         #endregion
 
-        #region RightPressCommandParameter AvaloniaProperty
-        public static object GetRightPressCommandParameter(AvaloniaObject obj) {
-            return obj.GetValue(RightPressCommandParameterProperty);
+        #region HoldingCommandParameter AvaloniaProperty
+        public static object GetHoldingCommandParameter(AvaloniaObject obj) {
+            return obj.GetValue(HoldingCommandParameterProperty);
         }
 
-        public static void SetRightPressCommandParameter(AvaloniaObject obj, object value) {
-            obj.SetValue(RightPressCommandParameterProperty, value);
+        public static void SetHoldingCommandParameter(AvaloniaObject obj, object value) {
+            obj.SetValue(HoldingCommandParameterProperty, value);
         }
 
-        public static readonly AttachedProperty<object> RightPressCommandParameterProperty =
+        public static readonly AttachedProperty<object> HoldingCommandParameterProperty =
             AvaloniaProperty.RegisterAttached<object, Control, object>(
-                "RightPressCommandParameter",
+                "HoldingCommandParameter",
                 null,
                 false);
 
@@ -174,6 +174,42 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+
+        #region RightPressCommand AvaloniaProperty
+        public static ICommand GetRightPressCommand(AvaloniaObject obj) {
+            return obj.GetValue(RightPressCommandProperty);
+        }
+
+        public static void SetRightPressCommand(AvaloniaObject obj, ICommand value) {
+            obj.SetValue(RightPressCommandProperty, value);
+        }
+
+        public static readonly AttachedProperty<ICommand> RightPressCommandProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, ICommand>(
+                "RightPressCommand",
+                null,
+                false);
+
+        #endregion
+
+        #region RightPressCommandParameter AvaloniaProperty
+        public static object GetRightPressCommandParameter(AvaloniaObject obj) {
+            return obj.GetValue(RightPressCommandParameterProperty);
+        }
+
+        public static void SetRightPressCommandParameter(AvaloniaObject obj, object value) {
+            obj.SetValue(RightPressCommandParameterProperty, value);
+        }
+
+        public static readonly AttachedProperty<object> RightPressCommandParameterProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, object>(
+                "RightPressCommandParameter",
+                null,
+                false);
+
+        #endregion
+
+
         #region IsEnabled AvaloniaProperty
         public static bool GetIsEnabled(AvaloniaObject obj) {
             return obj.GetValue(IsEnabledProperty);
@@ -214,7 +250,10 @@ namespace MonkeyPaste.Avalonia {
                     // NOTE pointerpress is swallowed by button unless tunneled, may need for other controls too...
                     b.AddHandler(Button.PointerPressedEvent, Control_PointerPressed, RoutingStrategies.Tunnel);
                 }
-                control.AddHandler(Button.PointerPressedEvent, Control_PointerPressed, GetRoutingStrategy(control));
+                control.AddHandler(Control.PointerPressedEvent, Control_PointerPressed, GetRoutingStrategy(control));
+                if (GetHoldingCommand(control) != null) {
+                    control.AddHandler(Control.HoldingEvent, Control_Holding, RoutingStrategies.Tunnel);
+                }
             }
         }
 
@@ -225,11 +264,12 @@ namespace MonkeyPaste.Avalonia {
                 control.AttachedToVisualTree -= EnabledControl_AttachedToVisualHandler;
                 control.DetachedFromVisualTree -= DisabledControl_DetachedToVisualHandler;
                 control.PointerPressed -= Control_PointerPressed;
+                control.Holding -= Control_Holding;
             }
         }
-        private static DateTime? _lastClickDateTime = null;
+        private static DateTime? _lastPressDateTime = null;
         private static void Control_PointerPressed(object sender, PointerPressedEventArgs e) {
-            _lastClickDateTime = DateTime.Now;
+            _lastPressDateTime = DateTime.Now;
             if (sender is Control control) {
                 ICommand cmd = null;
                 object param = null;
@@ -239,24 +279,53 @@ namespace MonkeyPaste.Avalonia {
                         param = GetDoubleLeftPressCommandParameter(control);
                     } else {
 
-                        if (GetLeftPressCommand(control) != null &&
+                        bool needs_double_delay_check =
+                            // press vs double press
+                            (GetLeftPressCommand(control) != null &&
                             GetDoubleLeftPressCommand(control) != null &&
                             GetLeftPressCommand(control).CanExecute(GetLeftPressCommandParameter(control)) &&
-                            GetDoubleLeftPressCommand(control).CanExecute(GetDoubleLeftPressCommandParameter(control))) {
+                            GetDoubleLeftPressCommand(control).CanExecute(GetDoubleLeftPressCommandParameter(control)));
+
+                        bool needs_hold_check =
+                              // press vs hold
+                              (GetLeftPressCommand(control) != null &&
+                              GetHoldingCommand(control) != null &&
+                              GetLeftPressCommand(control).CanExecute(GetLeftPressCommandParameter(control)) &&
+                              GetHoldingCommand(control).CanExecute(GetHoldingCommandParameter(control)));
+
+                        if (needs_double_delay_check || needs_hold_check) {
+                            e.Handled = true;
                             Dispatcher.UIThread.Post(async () => {
+                                bool is_still_down = true;
+                                EventHandler<PointerReleasedEventArgs> release_handler = null;
+                                if (needs_hold_check) {
+                                    is_still_down = true;
+                                    release_handler = (s, e) => {
+                                        is_still_down = false;
+                                        control.PointerReleased -= release_handler;
+                                    };
+                                    control.PointerReleased += release_handler;
+                                }
                                 // to disable single vs double wait for delay if no more click
-                                var ct = _lastClickDateTime;
-                                _lastClickDateTime = null;
+                                var ct = _lastPressDateTime;
+                                _lastPressDateTime = null;
                                 while (true) {
-                                    if (_lastClickDateTime != null) {
+                                    if (_lastPressDateTime != null) {
                                         // double click, reject single
                                         return;
                                     }
                                     if (DateTime.Now - ct > TimeSpan.FromMilliseconds(GetDoubleClickDelayMs(control))) {
-                                        // single click
-                                        cmd = GetLeftPressCommand(control);
-                                        param = GetLeftPressCommandParameter(control);
-                                        if (cmd.CanExecute(param)) {
+                                        if (needs_hold_check && is_still_down) {
+                                            // hold 
+                                            cmd = GetHoldingCommand(control);
+                                            param = GetHoldingCommandParameter(control);
+                                        } else {
+                                            // single click
+                                            cmd = GetLeftPressCommand(control);
+                                            param = GetLeftPressCommandParameter(control);
+                                        }
+                                        if (cmd != null &&
+                                            cmd.CanExecute(param)) {
                                             cmd.Execute(param);
                                             e.Handled = GetIsPressEventHandled(control);
                                         }
@@ -283,6 +352,12 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private static void Control_Holding(object sender, HoldingRoutedEventArgs e) {
+            if (sender is Control c &&
+                GetHoldingCommand(c) is ICommand cmd) {
+                cmd.Execute(GetHoldingCommandParameter(c));
+            }
+        }
         #endregion
     }
 

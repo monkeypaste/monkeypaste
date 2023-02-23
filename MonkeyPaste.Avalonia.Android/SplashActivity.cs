@@ -11,7 +11,6 @@ namespace MonkeyPaste.Avalonia.Android;
 
 [Activity(Theme = "@style/MyTheme.Splash", MainLauncher = true, NoHistory = true)]
 public class SplashActivity : AvaloniaSplashActivity<App> {
-
     protected override AppBuilder CustomizeAppBuilder(AppBuilder builder) {
         //MpAvAdUncaughtExceptionHandler.Instance.Init();
         new MpAvAdWrapper().CreateDeviceInstance();

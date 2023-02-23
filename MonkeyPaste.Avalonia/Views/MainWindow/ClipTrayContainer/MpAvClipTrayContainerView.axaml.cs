@@ -1,8 +1,10 @@
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonoMac.OpenGL;
 using System;
 using System.Diagnostics;
 
@@ -27,18 +29,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             var gs = this.FindControl<GridSplitter>("ClipTraySplitter");
-            gs.DragStarted += Gs_DragStarted;
-            gs.DragDelta += Gs_DragDelta;
-            gs.AddHandler(GridSplitter.DragDeltaEvent, Gs_DragDelta, RoutingStrategies.Tunnel);
-        }
-
-        private void Gs_DragDelta(object sender, global::Avalonia.Input.VectorEventArgs e) {
-            e.Handled = true;
-            MpConsole.WriteLine($"X '{e.Vector.X}' Y '{e.Vector.Y}'");
-        }
-
-        private void Gs_DragStarted(object sender, global::Avalonia.Input.VectorEventArgs e) {
-
+            //gs.AddHandler(GridSplitter.PointerPressedEvent, Gs_PointerPressed, RoutingStrategies.Tunnel);
         }
 
         public void UpdatePinTrayVarDimension(GridLength gl) {
