@@ -433,9 +433,9 @@ namespace MonkeyPaste.Avalonia {
                     !MpPlatform.Services.ScreenInfoCollection.Screens.Any()) {
                     if (Application.Current.ApplicationLifetime is ISingleViewApplicationLifetime mobile
                         && mobile.MainView != null) {
-                        return new MpAvScreenInfo(mobile.MainView.GetVisualRoot().AsScreen());
+                        return new MpAvDesktopScreenInfo(mobile.MainView.GetVisualRoot().AsScreen());
                     }
-                    return new MpAvScreenInfo() { IsPrimary = true };
+                    return new MpAvDesktopScreenInfo() { IsPrimary = true };
                 }
                 if (_mainWindowScreen == null) {
                     if (MainWindowMonitorIdx < 0 &&

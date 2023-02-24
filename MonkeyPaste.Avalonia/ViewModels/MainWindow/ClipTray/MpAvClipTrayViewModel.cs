@@ -74,7 +74,7 @@ namespace MonkeyPaste.Avalonia {
 
                 //}
                 if (OperatingSystem.IsAndroid()) {
-                    string uri = System.IO.Path.Combine(MpPlatform.Services.PlatformInfo.StorageDir, "MonkeyPaste.Editor", "test.html").ToFileSystemUriFromPath();
+                    string uri = System.IO.Path.Combine(MpPlatform.Services.PlatformInfo.StorageDir, "MonkeyPaste.Editor", "index.html").ToFileSystemUriFromPath();
                     return uri;
                 }
                 return MpAvCefNetApplication.GetEditorPath().ToFileSystemUriFromPath();
@@ -3389,6 +3389,30 @@ namespace MonkeyPaste.Avalonia {
                 SelectedItem.IsFindAndReplaceVisible = true;
             }, () => SelectedItem != null && !SelectedItem.IsFindAndReplaceVisible && SelectedItem.IsTextItem);
 
+        public ICommand SelectClipTileCommand => new MpCommand<object>(
+            (args) => {
+                //Dispatcher.UIThread.Post(() => {
+                MpAvClipTileViewModel ctvm = null;
+                if (args is MpAvClipTileViewModel) {
+                    ctvm = args as MpAvClipTileViewModel;
+                } else if (args is int ciid) {
+                    ctvm = AllItems.FirstOrDefault(x => x.CopyItemId == ciid);
+                }
+                //if (ctvm != null) {
+                //    if (ctvm.IsSelected) {
+                //        return;
+                //    }
+                //    ctvm.IsSelected = true;
+                //}
+
+                SelectedItem = ctvm;
+                //if (ctvm == null) {
+                //    SelectedItem = null;
+                //} else {
+                //    ctvm.IsSelected = true;
+                //}
+                //});
+            });
 
 
         #region Append

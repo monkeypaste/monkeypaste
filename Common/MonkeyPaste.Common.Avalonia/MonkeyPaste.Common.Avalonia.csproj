@@ -64,12 +64,13 @@
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.0.0-preview5" />
     <PackageReference Include="Avalonia.Desktop" Version="11.0.0-preview5" />
+    <PackageReference Include="Avalonia.Headless" Version="11.0.0-preview5" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Include="GtkSharp" Version="3.24.24.38" />
     <PackageReference Include="MonoMac.NetStandard" Version="0.0.4" />
     <PackageReference Include="SharpHook" Version="4.0.0" />
     <PackageReference Include="X11" Version="1.0.6" />
-    <PackageReference Include="XamlNameReferenceGenerator" Version="1.5.1" />
+    <PackageReference Include="XamlNameReferenceGenerator" Version="1.6.1" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\PresentationFramework.dll" Condition="'$(BuildOs)' == 'WINDOWS'" />

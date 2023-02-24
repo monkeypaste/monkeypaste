@@ -788,8 +788,14 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            sbicvm.AnimateSize(new MpSize(nsbi_w, nsbi_h));
+            //sbicvm.ContainerBoundWidth = nsbi_w;
+            //sbicvm.ContainerBoundHeight = nsbi_h;
 
+            //ctrvm.ContainerBoundWidth = nctrcb_w;
+            //ctrvm.ContainerBoundHeight = nctrcb_h;
+            //UpdateClipTrayContainerSize(null);
+
+            sbicvm.AnimateSize(new MpSize(nsbi_w, nsbi_h));
             ctrvm.AnimateSize(
                 new MpSize(nctrcb_w, nctrcb_h),
                 () => {

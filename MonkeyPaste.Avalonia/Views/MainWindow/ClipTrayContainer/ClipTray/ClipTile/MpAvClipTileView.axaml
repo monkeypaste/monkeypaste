@@ -24,7 +24,12 @@
 
     </local:MpAvUserControl.Styles>
     <!--  OUTER BORDER  -->
-
+    <!--
+        local:MpAvMenuExtension.IsEnabled="True"
+        local:MpAvMenuExtension.CanShowMenu="{Binding CanShowContextMenu, Mode=OneWay}"
+        local:MpAvMenuExtension.SuppressDefaultRightClick="True"
+        local:MpAvMenuExtension.SelectOnRightClick="True"
+    -->
     <local:MpAvClipBorder x:Name="ClipTileContainerBorder"
                           ClipToBounds="True"
                           HorizontalAlignment="Stretch"
@@ -36,12 +41,12 @@
                           Classes.showTitle="{Binding IsTitleVisible}"
                           Classes.showDetail="{Binding IsDetailVisible}"
                           VerticalAlignment="Stretch"
-                          local:MpAvMenuExtension.IsEnabled="True"
-                          local:MpAvMenuExtension.CanShowMenu="{Binding CanShowContextMenu, Mode=OneWay}"
-                          local:MpAvMenuExtension.SuppressDefaultRightClick="True"
-                          local:MpAvMenuExtension.SelectOnRightClick="True"
                           local:MpAvPointerPressCommandExtension.IsEnabled="True"
+                          local:MpAvPointerPressCommandExtension.LeftPressCommand="{Binding SelectClipTileCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                          local:MpAvPointerPressCommandExtension.LeftPressCommandParameter="{Binding .}"
                           local:MpAvPointerPressCommandExtension.DoubleLeftPressCommand="{Binding EnableSubSelectionCommand}"
+                          local:MpAvPointerPressCommandExtension.HoldingCommand="{Binding ShowContextMenuCommand}"
+                          local:MpAvPointerPressCommandExtension.HoldingCommandParameter="{Binding $self}"
                           ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                           ScrollViewer.VerticalScrollBarVisibility="Hidden"
                           CornerRadius="{StaticResource TileCornerRadius}"
@@ -96,7 +101,8 @@
                 <Grid.IsVisible>
                     <MultiBinding Converter="{StaticResource MultiBoolConverter}"
                                   ConverterParameter="OR">
-                        <Binding Path="IsHovering" />
+                        <Binding Path="IsDetailVisible" />
+                        <Binding Path="IsCornerButtonsVisible" />
                         <Binding Path="!IsContentReadOnly" />
                     </MultiBinding>
                 </Grid.IsVisible>
@@ -130,7 +136,7 @@
 
             <local:MpAvClipTileCornerButtonsView Grid.Row="0"
                                                  Grid.RowSpan="3"
-                                                 IsVisible="{Binding IsOverlayButtonsVisible}"
+                                                 IsVisible="{Binding IsCornerButtonsVisible}"
                                                  HorizontalAlignment="Stretch"
                                                  VerticalAlignment="Stretch"
                                                  DataContext="{Binding}" />

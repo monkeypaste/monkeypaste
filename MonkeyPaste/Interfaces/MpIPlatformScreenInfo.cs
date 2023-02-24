@@ -1,5 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace MonkeyPaste {
     public interface MpIPlatformScreenInfo {
@@ -16,7 +17,6 @@ namespace MonkeyPaste {
     }
 
     public interface MpIPlatformScreenInfoCollection {
-        double PixelScaling { get; }
-        IEnumerable<MpIPlatformScreenInfo> Screens { get; }
+        ObservableCollection<MpIPlatformScreenInfo> Screens { get; }
     }
 }

@@ -1,7 +1,9 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Platform;
 using Avalonia.Threading;
-using Gdk;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
@@ -26,13 +28,10 @@ namespace MonkeyPaste.Avalonia {
     }
     public interface MpIOffscreenRenderSource {
         byte[] Buffer { get; }
-        event EventHandler BufferChanged;
     }
     public interface MpIWebViewBindable {
         event EventHandler<string> OnNavigateRequest;
         void OnNavigated(string url);
-        void OnRenderBufferChanged();
-
     }
     public interface MpIAsyncJsEvalTracker {
         int PendingEvals { get; set; }
@@ -44,9 +43,16 @@ namespace MonkeyPaste.Avalonia {
         void Navigate(string url);
     }
 
+    public interface MpIWebViewHost {
+        void Render();
+        void SendPointerEvent(float x, float y, MpPointerEventType eventType);
+        MpAvIWebViewBindingResponseHandler BindingHandler { get; }
+    }
+
     [DoNotNotify]
-    public class MpAvNativeWebViewHost :
+    public abstract class MpAvNativeWebViewHost :
         NativeControlHost,
+        MpIWebViewHost,
         MpIWebViewBindable,
         MpIAsyncJsEvalTracker,
         MpAvIPlatformHandleHost,
@@ -71,22 +77,41 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
+        #region MpIWebViewHost Implementation
+        void MpIWebViewHost.Render() {
+            Dispatcher.UIThread.Post(this.InvalidateVisual);
+        }
+
+        void MpIWebViewHost.SendPointerEvent(float x, float y, MpPointerEventType eventType) {
+            var mp = new PixelPoint((int)x, (int)y).ToPortablePoint(MpAvMainWindowViewModel.Instance.MainWindowScreen.Scaling);
+            var gmp = this.TranslatePoint(mp.ToAvPoint(), App.MainView as Control).Value.ToPortablePoint();
+
+            var pe = MpAvPointerInputHelpers.SimulatePointerEventArgs(
+                eventType.ToRoutedEvent(),
+                App.MainView as Control,
+                gmp,
+                MpKeyModifierFlags.None,
+                false);
+
+            RaiseEvent(pe);
+        }
+
+
+        public abstract MpAvIWebViewBindingResponseHandler BindingHandler { get; }
+        #endregion
+
         #region MpIAsyncJsEvalTracker Implementation
 
         public int PendingEvals { get; set; }
 
         #endregion
 
-        #region MpIWebViewEventHandler Implementation
+        #region MpIWebViewBindable Implementation
         public event EventHandler<string> OnNavigateRequest;
         public virtual void OnNavigated(string url) {
             Dispatcher.UIThread.Post(this.InvalidateVisual);
         }
 
-        public void OnRenderBufferChanged() {
-            Dispatcher.UIThread.Post(this.InvalidateVisual);
-
-        }
         #endregion
 
         #region MpIHasDevTools Implementation
@@ -113,7 +138,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public override void Render(global::Avalonia.Media.DrawingContext context) {
-            //base.Render(context);
+            if (!MpAvMainWindowViewModel.Instance.IsMainWindowActive) {
+                return;
+            }
             if (PlatformHandle is MpIOffscreenRenderSourceHost osrsh &&
                     osrsh.RenderSource is MpIOffscreenRenderSource osrs &&
                     osrs.Buffer != null &&
@@ -139,7 +166,7 @@ namespace MonkeyPaste.Avalonia {
                     Implementation.Build(
                         parent,
                         () => base.CreateNativeControlCore(parent),
-                        MpAvClipTrayViewModel.EditorUri);
+                        this);
 
             }
             if (Interop != null &&
@@ -153,6 +180,15 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void DestroyNativeControlCore(IPlatformHandle control) {
             base.DestroyNativeControlCore(control);
+        }
+
+        protected override void OnPointerPressed(PointerPressedEventArgs e) {
+            Dispatcher.UIThread.Post(() => {
+                base.OnPointerPressed(e);
+                if (DataContext is MpAvClipTileViewModel ctvm) {
+                    MpAvClipTrayViewModel.Instance.SelectClipTileCommand.Execute(ctvm);
+                }
+            });
         }
 
         #endregion

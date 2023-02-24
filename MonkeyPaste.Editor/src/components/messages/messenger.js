@@ -25,6 +25,18 @@ function getDotNetModuleName() {
 
 // #region State
 
+function isRunningOnHost() {
+	return isRunningOnCef() || isRunningOnXam();
+}
+
+function isRunningOnCef() {
+	return typeof window['notifyLoadComplete'] === 'function'
+}
+
+function isRunningOnXam() {
+	return typeof window['CSharp'] === 'object';
+}
+
 function isWindowFunction(fn) {
 	if (typeof window[fn] === 'function') {
 		return true;
@@ -42,20 +54,17 @@ function isDesktop() {
 // #endregion State
 
 // #region Actions
-function test() {
-	DotNet.invokeMethodAsync('{ASSEMBLY NAME}', '{.NET METHOD ID}', { ARGUMENTS });
-}
 
 function sendMessage(fn, msg) {
-	if (isWindowFunction(fn)) {
+	if (isRunningOnCef()) {
 		window[fn](msg);
 		return;
 	}
-	if (isWindowFunction('DotNet.invokeMethod')) {
-		DotNet.invokeMethod(getDotNetModuleName(), DOT_NET_MSG_METHOD_NAME, fn, msg);
+	if (isRunningOnXam()) {
+		CSharp.InvokeMethod(fn, msg);
 		return;
 	}
-	onShowDebugger_ntf("can't send message");
+	log("can't send message. type '" + fn + "' data '" + msg + "'");	
 }
 // #endregion Actions
 

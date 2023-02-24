@@ -1,21 +1,17 @@
 // these functions wrap window binding so main editor doesn't worry about details
 function onContentLoaded_ntf(conentMsg) {
 	// output MpQuillEditorContentChangedMessage
-	if (typeof notifyLoadComplete === 'function') {
-		let msgStr = toBase64FromJsonObj(conentMsg);
-		notifyLoadComplete(msgStr);
-	}
+	let msgStr = toBase64FromJsonObj(conentMsg);
+	sendMessage('notifyLoadComplete', msgStr);
 }
 
 function onAnnotationSelected_ntf(ann_guid) {
 	// output 'MpQuillAnnotationSelectedMessage'
-	if (typeof notifyAnnotationSelected === 'function') {
-		let msg = {
-			annotationGuid: ann_guid
-		};
-		let msgStr = toBase64FromJsonObj(msg);
-		notifyAnnotationSelected(msgStr);
-	}
+	let msg = {
+		annotationGuid: ann_guid
+	};
+	let msgStr = toBase64FromJsonObj(msg);
+	sendMessage('notifyAnnotationSelected', msgStr);
 }
 
 function onReadOnlyChanged_ntf(isReadOnly) {
@@ -26,166 +22,136 @@ function onReadOnlyChanged_ntf(isReadOnly) {
 		return;
 	}
 	if (isReadOnly) {
-		if (typeof notifyReadOnlyEnabled === 'function') {
-			let msgStr = toBase64FromJsonObj(getContentAsMessage());
-			notifyReadOnlyEnabled(msgStr);
-		}
+
+		let msgStr = toBase64FromJsonObj(getContentAsMessage());
+		sendMessage('notifyReadOnlyEnabled', msgStr);
 	} else {
-		if (typeof notifyReadOnlyDisabled === 'function') {
-			let msg = {
-				editorWidth: getEditorWidth(),
-				editorHeight: getEditorHeight()
-			};
-			let msgStr = toBase64FromJsonObj(msg);
-			notifyReadOnlyDisabled(msgStr);
-		}
+		let msg = {
+			editorWidth: getEditorWidth(),
+			editorHeight: getEditorHeight()
+		};
+		let msgStr = toBase64FromJsonObj(msg);
+		sendMessage('notifyReadOnlyDisabled', msgStr);
 	}
 }
 
 function onContentChanged_ntf() {
 	// output MpQuillEditorContentChangedMessage
-	if (typeof notifyContentChanged === 'function') {
-		let msgStr = toBase64FromJsonObj(getContentAsMessage());
-		return notifyContentChanged(msgStr);
-	}
+	let msgStr = toBase64FromJsonObj(getContentAsMessage());
+	sendMessage('notifyContentChanged', msgStr);
 }
 
 function onDropCompleted_ntf() {
-	if (typeof notifyDropCompleted === 'function') {
-		notifyDropCompleted();
-	}
+	sendMessage('notifyDropCompleted', '');
 }
 
 function onDragEnter_ntf() {
-	if (typeof notifyDragEnter === 'function') {
-		notifyDragEnter();
-	}
+	sendMessage('notifyDragEnter', '');
 }
 
 function onDragLeave_ntf() {
-	if (typeof notifyDragLeave === 'function') {
-		notifyDragLeave();
-	}
+	sendMessage('notifyDragLeave', '');
 }
 
 function onDragEnd_ntf(hostEnded, canceled) {
 	// output 'MpQuillDragEndMessage''
-	if (typeof notifyDragEnd === 'function') {
-		let msg = {
-			fromHost: hostEnded,
-			wasCancel: canceled
-		};
-		let msgStr = toBase64FromJsonObj(msg);
-		notifyDragEnd(msgStr);
-	}
+	let msg = {
+		fromHost: hostEnded,
+		wasCancel: canceled
+	};
+	let msgStr = toBase64FromJsonObj(msg);
+	sendMessage('notifyDragEnd', msgStr);
 }
 
 
 function onSubSelectionEnabledChanged_ntf(isEnabled) {
 	// output MpQuillSubSelectionChangedNotification
 
-	if (typeof notifySubSelectionEnabledChanged === 'function') {
-		let msg = {
-			isSubSelectionEnabled: isEnabled
-		};
-		let msgStr = toBase64FromJsonObj(msg);
-		notifySubSelectionEnabledChanged(msgStr);
-	}
+	let msg = {
+		isSubSelectionEnabled: isEnabled
+	};
+	let msgStr = toBase64FromJsonObj(msg);
+	sendMessage('notifySubSelectionEnabledChanged', msgStr);
 }
 
 
 function onPasteRequest_ntf() {
 	// isRequest is for paste (when true) or drag drop doesn't care just waits for this msg 
-	if (typeof notifyPasteRequest === 'function') {
-		notifyPasteRequest();
-	}
+	sendMessage('notifyPasteRequest', '');
 }
 
 function onDomLoaded_ntf() {
-	if (typeof notifyDomLoaded === 'function') {
-		notifyDomLoaded();
-	}
+	sendMessage('notifyDomLoaded', '');
 }
 
 function onUserDeletedTemplate_ntf(dtguid) {
 	// output 'MpQuillUserDeletedTemplateNotification'
 	log('userDeletedTemplate called for tguid: ' + dtguid);
 
-	if (typeof notifyUserDeletedTemplate === 'function') {
-		let ntf = {
-			userDeletedTemplateGuid: dtguid
-		};
-
-		notifyUserDeletedTemplate(toBase64FromJsonObj(ntf));
-	}
+	let ntf = {
+		userDeletedTemplateGuid: dtguid
+	};
+	let msgStr = toBase64FromJsonObj(ntf);
+	sendMessage('notifyUserDeletedTemplate', msgStr);
 }
 
 function onAddOrUpdateTemplate_ntf(t) {
 	// output 'MpQuillTemplateAddOrUpdateNotification'
 	log('addOrUpdateTemplate called for: ' + JSON.stringify(t));
-	if (typeof notifyAddOrUpdateTemplate === 'function') {
-		let ntf = {
-			addedOrUpdatedTextTemplateBase64JsonStr: toBase64FromJsonObj(t)
-		};
-		notifyAddOrUpdateTemplate(toBase64FromJsonObj(ntf));
-	}
+	let ntf = {
+		addedOrUpdatedTextTemplateBase64JsonStr: toBase64FromJsonObj(t)
+	};
+	let msgStr = toBase64FromJsonObj(ntf);
+	sendMessage('notifyAddOrUpdateTemplate', msgStr);
 }
 
 function onException_ntf(exMsg, exUrl, exLine, exCol, exErrorObj) {
 	// output 'MpQuillExceptionMessage'
 
-	if (typeof notifyException === 'function') {
-		log('');
-		log('exception! ');
-		log('Msg: ' + exMsg);
-		log('URL: ' + exUrl);
-		log('Line: ' + exLine);
-		log('');
+	log('');
+	log('exception! ');
+	log('Msg: ' + exMsg);
+	log('URL: ' + exUrl);
+	log('Line: ' + exLine);
+	log('');
 
-		let msg = {
-			msg: exMsg,
-			url: exUrl,
-			lineNum: exLine,
-			colNum: exCol,
-			errorObjJsonStr: JSON.stringify(exErrorObj)
-		};
-		let msgStr = toBase64FromJsonObj(msg);
-		notifyException(msgStr);
-	}	
+	let msg = {
+		msg: exMsg,
+		url: exUrl,
+		lineNum: exLine,
+		colNum: exCol,
+		errorObjJsonStr: JSON.stringify(exErrorObj)
+	};
+	let msgStr = toBase64FromJsonObj(msg);
+	sendMessage('notifyException', msgStr);
 } 
 
 async function onCreateContentScreenShot_ntf(sel) {
 	// output 'MpQuillContentScreenShotNotificationMessage'
-	if (typeof notifyContentScreenShot === 'function') {
-		let result = await getContentImageBase64Async(sel);
-		let msg = {
-			contentScreenShotBase64: result
-		};
-		let msgStr = toBase64FromJsonObj(msg);
-		notifyContentScreenShot(msgStr);
-	}	
+	let result = await getContentImageBase64Async(sel);
+	let msg = {
+		contentScreenShotBase64: result
+	};
+	let msgStr = toBase64FromJsonObj(msg);
+	sendMessage('notifyContentScreenShot', msgStr);
 }
 
 function onFindReplaceVisibleChange_ntf(isVisible) {
 	// output 'MpQuillContentFindReplaceVisibleChanedNotificationMessage'
-	if (typeof notifyFindReplaceVisibleChange === 'function') {
-		let msg = {
-			isFindReplaceVisible: isVisible
-		};
-		let msgStr = toBase64FromJsonObj(msg);
-		notifyFindReplaceVisibleChange(msgStr);
-	}
+	let msg = {
+		isFindReplaceVisible: isVisible
+	};
+	let msgStr = toBase64FromJsonObj(msg);
+	sendMessage('notifyFindReplaceVisibleChange', msgStr);
 }
 
 function onQuerySearchRangesChanged_ntf(range_count) {
 	// output 'MpQuillContentFindReplaceVisibleChanedotificationMessage'
-	if (typeof notifyQuerySearchRangesChanged === 'function') {
-		let msg = {
-			rangeCount: range_count
-		};
-		let msgStr = toBase64FromJsonObj(msg);
-		notifyQuerySearchRangesChanged(msgStr);
-	}
+	let msg = {
+		rangeCount: range_count
+	};
+	let msgStr = toBase64FromJsonObj(msg);
+	sendMessage('notifyQuerySearchRangesChanged', msgStr);
 }
 
 function onInitComplete_ntf() {
@@ -197,92 +163,72 @@ function onInitComplete_ntf() {
 
 function onShowCustomColorPicker_ntf(hexStr,title) {
 	// output 'MpQuillShowCustomColorPickerNotification'
-	if (typeof notifyShowCustomColorPicker === 'function') {
-		let msg = {
-			currentHexColor: hexStr,
-			pickerTitle: title
-		};
-		let msgStr = toBase64FromJsonObj(msg);
-		notifyShowCustomColorPicker(msgStr);
-	}
+	let msg = {
+		currentHexColor: hexStr,
+		pickerTitle: title
+	};
+	let msgStr = toBase64FromJsonObj(msg);
+	sendMessage('notifyShowCustomColorPicker', msgStr);
 }
 
 function onNavigateUriRequested_ntf(navUri, curModKeys) {
 	// output 'MpQuillNavigateUriRequestNotification'
-	if (typeof notifyNavigateUriRequested === 'function') {
-		let msg = {
-			uri: navUri,
-			modKeys: curModKeys
-		};
-		let msgStr = toBase64FromJsonObj(msg);
-		notifyNavigateUriRequested(msgStr);
-	}
+	let msg = {
+		uri: navUri,
+		modKeys: curModKeys
+	};
+	let msgStr = toBase64FromJsonObj(msg);
+	sendMessage('notifyNavigateUriRequested', msgStr);
 }
 
 function onSetClipboardRequested_ntf() {
 	// output 'MpQuillEditorSetClipboardRequestNotification'
-	if (typeof notifySetClipboardRequested === 'function') {
-		let msg = {
-			// empty
-		};
-		let msgStr = toBase64FromJsonObj(msg);
-		notifySetClipboardRequested(msgStr);
-	}
+	let msg = {
+		// empty
+	};
+	let msgStr = toBase64FromJsonObj(msg);
+	sendMessage('notifySetClipboardRequested', msgStr);
 }
 
 function onDataTransferCompleted_ntf(changeDelta, input_dataObj, transfer_label) {
 	// output 'MpQuillDataTransferCompletedNotification'
-	if (typeof notifyDataTransferCompleted === 'function') {
-		let msg = {
-			changeDeltaJsonStr: changeDelta ? toBase64FromJsonObj(changeDelta) : null,
-			sourceDataItemsJsonStr: input_dataObj ? toBase64FromJsonObj(input_dataObj) : null,
-			transferLabel: transfer_label
-		};
-		let msgStr = toBase64FromJsonObj(msg);
-		notifyDataTransferCompleted(msgStr);
-	}
+	let msg = {
+		changeDeltaJsonStr: changeDelta ? toBase64FromJsonObj(changeDelta) : null,
+		sourceDataItemsJsonStr: input_dataObj ? toBase64FromJsonObj(input_dataObj) : null,
+		transferLabel: transfer_label
+	};
+	let msgStr = toBase64FromJsonObj(msg);
+	sendMessage('notifyDataTransferCompleted', msgStr);
 }
 
 function onLastTransactionUndone_ntf() {
 	// output 'MpQuillLastTransactionUndoneNotification' (empty)
-	if (typeof notifyLastTransactionUndone === 'function') {
-		notifyLastTransactionUndone('');
-	}
+
+	sendMessage('notifyLastTransactionUndone', '');
 }
 
 function onInternalContextMenuIsVisibleChanged_ntf(isVisible) {
 	// output 'MpQuillInternalContextIsVisibleChangedNotification'
-	if (typeof notifyInternalContextMenuIsVisibleChanged === 'function') {
-		let msg = {
-			isInternalContextMenuVisible: isVisible
-		};
-		let msgStr = toBase64FromJsonObj(msg);
-		notifyInternalContextMenuIsVisibleChanged(msgStr);
-	}
+	let msg = {
+		isInternalContextMenuVisible: isVisible
+	};
+	let msgStr = toBase64FromJsonObj(msg);
+	sendMessage('notifyInternalContextMenuIsVisibleChanged', msgStr);
 }
 
 function onShowDebugger_ntf(debugReason, breakAfterSend) {
 	// output 'MpQuillShowDebuggerNotification'
-	if (typeof notifyShowDebugger === 'function') {
-		let msg = {
-			reason: debugReason
-		};
-		let msgStr = toBase64FromJsonObj(msg);
-		notifyShowDebugger(msgStr);
-	}
+	let msg = {
+		reason: debugReason
+	};
+	let msgStr = toBase64FromJsonObj(msg);
+	sendMessage('notifyShowDebugger', msgStr);
 	if (breakAfterSend) {
 		// NOTE check parent in call stack
 		sleep(3000);
 		debugger;
 	}
 }
-
-function isRunningOnHost() {
-	return typeof notifyInitComplete === 'function';
-}
-
-
-
 
 function onAppendStateChanged_ntf(appendDataStr = null) {	
 	// output 'MpQuillAppendStateChangedMessage'
@@ -291,18 +237,16 @@ function onAppendStateChanged_ntf(appendDataStr = null) {
 		debugger;
 		return;
 	}
-	if (typeof notifyAppendStateChanged === 'function') {
-		let msg = {
-			isAppendLineMode: IsAppendLineMode,
-			isAppendMode: IsAppendMode,
-			isAppendManualMode: IsAppendManualMode,
-			appendDocIdx: getAppendDocRange().index,
-			appendDocLength: getAppendDocRange().length,
-			appendData: appendDataStr
-		};
-		let msgStr = toBase64FromJsonObj(msg);
-		notifyAppendStateChanged(msgStr);
-	}
+	let msg = {
+		isAppendLineMode: IsAppendLineMode,
+		isAppendMode: IsAppendMode,
+		isAppendManualMode: IsAppendManualMode,
+		appendDocIdx: getAppendDocRange().index,
+		appendDocLength: getAppendDocRange().length,
+		appendData: appendDataStr
+	};
+	let msgStr = toBase64FromJsonObj(msg);
+	sendMessage('notifyAppendStateChanged', msgStr);
 }
 
 //function onSelectionChanged_ntf(sel) {

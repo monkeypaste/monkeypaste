@@ -1,4 +1,5 @@
-﻿using Avalonia.Layout;
+﻿using Avalonia.Controls;
+using Avalonia.Layout;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using System;
@@ -32,9 +33,6 @@ namespace MonkeyPaste.Avalonia {
         private List<string> _tempFileList = new List<string>();
         private IntPtr _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
         //private MpPasteToAppPathViewModel _selectedPasteToAppPathViewModel = null;
-
-
-
         private string _originalTitle;
 
         #endregion
@@ -55,74 +53,6 @@ namespace MonkeyPaste.Avalonia {
         #region MpIContextMenuViewModel Implementation
 
         public MpMenuItemViewModel ContextMenuViewModel => IsSelected ? Parent.ContextMenuViewModel : null;
-
-        #endregion
-
-        #endregion
-
-        #region Properties
-
-        #region Property Reflection Referencer
-        //public object this[string propertyName] {
-        //    get {
-        //        // probably faster without reflection:
-        //        // like:  return MpJsonPreferenceIO.Instance.PropertyValues[propertyName] 
-        //        // instead of the following
-        //        Type myType = typeof(MpAvClipTileViewModel);
-        //        PropertyInfo myPropInfo = myType.GetProperty(propertyName);
-        //        if (myPropInfo == null) {
-        //            throw new Exception("Unable to find property: " + propertyName);
-        //        }
-        //        return myPropInfo.GetValue(this, null);
-        //    }
-        //    set {
-        //        Type myType = typeof(MpAvClipTileViewModel);
-        //        PropertyInfo myPropInfo = myType.GetProperty(propertyName);
-        //        myPropInfo.SetValue(this, value, null);
-        //    }
-        //}
-        #endregion
-
-        #region View Models
-
-        public MpAvFileItemCollectionViewModel FileItemCollectionViewModel { get; private set; }
-        //public MpAvClipTileDetailCollectionViewModel DetailCollectionViewModel { get; private set; }
-
-        private MpAvClipTileTransactionCollectionViewModel _transactionCollectionViewModel;
-        public MpAvClipTileTransactionCollectionViewModel TransactionCollectionViewModel {
-            get {
-                if (_transactionCollectionViewModel == null) {
-                    _transactionCollectionViewModel = new MpAvClipTileTransactionCollectionViewModel(this);
-                }
-                return _transactionCollectionViewModel;
-            }
-        }
-
-        public MpAvClipTileViewModel Next {
-            get {
-                if (IsPlaceholder || Parent == null) {
-                    return null;
-                }
-                if (IsPinned) {
-                    int pinIdx = Parent.PinnedItems.IndexOf(this);
-                    return Parent.PinnedItems.FirstOrDefault(x => Parent.PinnedItems.IndexOf(x) == pinIdx + 1);
-                }
-                return Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == QueryOffsetIdx + 1);
-            }
-        }
-
-        public MpAvClipTileViewModel Prev {
-            get {
-                if (IsPlaceholder || Parent == null || QueryOffsetIdx == 0) {
-                    return null;
-                }
-                if (IsPinned) {
-                    int pinIdx = Parent.PinnedItems.IndexOf(this);
-                    return Parent.PinnedItems.FirstOrDefault(x => Parent.PinnedItems.IndexOf(x) == pinIdx - 1);
-                }
-                return Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == QueryOffsetIdx - 1);
-            }
-        }
 
         #endregion
 
@@ -206,6 +136,52 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #endregion
+
+        #endregion
+
+        #region Properties
+
+        #region View Models
+
+        public MpAvFileItemCollectionViewModel FileItemCollectionViewModel { get; private set; }
+
+        private MpAvClipTileTransactionCollectionViewModel _transactionCollectionViewModel;
+        public MpAvClipTileTransactionCollectionViewModel TransactionCollectionViewModel {
+            get {
+                if (_transactionCollectionViewModel == null) {
+                    _transactionCollectionViewModel = new MpAvClipTileTransactionCollectionViewModel(this);
+                }
+                return _transactionCollectionViewModel;
+            }
+        }
+
+        public MpAvClipTileViewModel Next {
+            get {
+                if (IsPlaceholder || Parent == null) {
+                    return null;
+                }
+                if (IsPinned) {
+                    int pinIdx = Parent.PinnedItems.IndexOf(this);
+                    return Parent.PinnedItems.FirstOrDefault(x => Parent.PinnedItems.IndexOf(x) == pinIdx + 1);
+                }
+                return Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == QueryOffsetIdx + 1);
+            }
+        }
+
+        public MpAvClipTileViewModel Prev {
+            get {
+                if (IsPlaceholder || Parent == null || QueryOffsetIdx == 0) {
+                    return null;
+                }
+                if (IsPinned) {
+                    int pinIdx = Parent.PinnedItems.IndexOf(this);
+                    return Parent.PinnedItems.FirstOrDefault(x => Parent.PinnedItems.IndexOf(x) == pinIdx - 1);
+                }
+                return Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == QueryOffsetIdx - 1);
+            }
+        }
+
+        #endregion        
 
         #region Appearance
 
@@ -618,8 +594,6 @@ namespace MonkeyPaste.Avalonia {
                                                 EditableContentSize.Height > TileContentHeight :
                                                 UnconstrainedContentDimensions.Height > TileContentHeight;
 
-        public bool IsOverlayButtonsVisible =>
-            IsHovering && !IsAppendNotifier && !Parent.IsAnyDropOverTrays;
 
         public bool IsResizable => !IsAppendNotifier;
         public bool CanResize { get; set; } = false;
@@ -646,6 +620,21 @@ namespace MonkeyPaste.Avalonia {
                     _isTitleVisible = value;
                     OnPropertyChanged(nameof(IsTitleVisible));
                 }
+            }
+        }
+
+
+        public bool IsCornerButtonsVisible {
+            get {
+                if (MpPlatform.Services.PlatformInfo.IsDesktop) {
+                    if (IsHovering && !IsAppendNotifier && !Parent.IsAnyDropOverTrays) {
+                        return true;
+                    }
+                } else if (IsSelected) {
+                    return true;
+                }
+                return false;
+
             }
         }
 
@@ -682,6 +671,7 @@ namespace MonkeyPaste.Avalonia {
                     IsDetailVisible = value;
                     IsTitleVisible = value;
                     OnPropertyChanged(nameof(IsHeaderAndFooterVisible));
+                    OnPropertyChanged(nameof(IsCornerButtonsVisible));
                 }
             }
         }
@@ -1416,7 +1406,7 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsHovering):
                     Parent.OnPropertyChanged(nameof(Parent.CanScroll));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyHovering));
-                    OnPropertyChanged(nameof(IsOverlayButtonsVisible));
+                    OnPropertyChanged(nameof(IsCornerButtonsVisible));
                     if (IsHovering) {
                         AutoCycleDetailsAsync().FireAndForgetSafeAsync(this);
                         Dispatcher.UIThread.Post(async () => {
@@ -1448,7 +1438,7 @@ namespace MonkeyPaste.Avalonia {
                             }
                         }
                     }
-
+                    OnPropertyChanged(nameof(IsCornerButtonsVisible));
                     Parent.NotifySelectionChanged();
                     break;
                 case nameof(CopyItem):
@@ -1776,7 +1766,6 @@ namespace MonkeyPaste.Avalonia {
             });
 
 
-
         private MpCommand<object> _searchWebCommand;
         public ICommand SearchWebCommand {
             get {
@@ -1872,6 +1861,20 @@ namespace MonkeyPaste.Avalonia {
                     SelectedDetailIdx = 0;
                 }
                 OnPropertyChanged(nameof(DetailText));
+            });
+
+        public ICommand ShowContextMenuCommand => new MpCommand<object>(
+            (args) => {
+                var control = args as Control;
+                if (control == null) {
+                    return;
+                }
+                if (!IsSelected) {
+                    IsSelected = true;
+                }
+                MpAvMenuExtension.ShowMenu(control, ContextMenuViewModel);
+            }, (args) => {
+                return CanShowContextMenu;
             });
         #endregion
     }

@@ -1,33 +1,96 @@
-﻿namespace MonkeyPaste.Common.Avalonia {
-    public static class MpAvPointerInputHelpers {
-        //public static PointerEventArgs SimulatePointerEventArgs(IInteractive interactive, MpPoint gmp, MpKeyModifierFlags kmf) {
-        //    Control control = interactive as Control;
-        //    if (control == null) {
-        //        control = Application.Current.MainWindow();
-        //        if (control == null) {
-        //            // needs control (i think)
-        //            Debugger.Break();
-        //            return null;
-        //        }
-        //    }
-        //    Control vroot = control.GetVisualRoot() as Control;
-        //    if (vroot == null) {
-        //        // needs root
-        //        Debugger.Break();
-        //        return null;
-        //    }
-        //    var root_mp = gmp.TranslatePoint(vroot, false);
-        //    Pointer pointer = new Pointer(Pointer.GetNextFreeId(), PointerType.Mouse, true);
-        //    var pe = new PointerEventArgs(
-        //        Control.PointerPressedEvent,
-        //        control,
-        //        pointer,
-        //        vroot,
-        //        root_mp.ToAvPoint(),
-        //        (ulong)DateTime.Now.Ticks,
-        //        new PointerPointProperties(RawInputModifiers.LeftMouseButton, PointerUpdateKind.LeftButtonPressed), kmf.ToAvKeyModifiers());
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Headless;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.VisualTree;
+using System;
+using System.Diagnostics;
 
-        //    return pe;
-        //}
+namespace MonkeyPaste.Common.Avalonia {
+    public enum MpPointerEventType {
+        None = 0,
+        Press,
+        Release,
+        Enter,
+        Leave,
+        Move
+    }
+    public static class MpAvPointerInputHelpers {
+        public static RoutedEvent ToRoutedEvent(this MpPointerEventType pet) {
+            switch (pet) {
+                case MpPointerEventType.Press:
+                    return Control.PointerPressedEvent;
+
+                case MpPointerEventType.Release:
+                    return Control.PointerReleasedEvent;
+
+                case MpPointerEventType.Enter:
+                    return Control.PointerEnteredEvent;
+
+                case MpPointerEventType.Leave:
+                    return Control.PointerExitedEvent;
+
+                case MpPointerEventType.Move:
+                    return Control.PointerMovedEvent;
+            }
+            return null;
+        }
+
+        public static RoutedEventArgs SimulatePointerEventArgs(
+            RoutedEvent eventType, Interactive interactive, MpPoint mp, MpKeyModifierFlags kmf, bool isLocalMp) {
+            Control control = interactive as Control;
+            if (control == null) {
+                return null;
+            }
+            Control vroot = control.GetVisualRoot() as Control;
+            if (vroot == null) {
+                // needs root
+                Debugger.Break();
+                return null;
+            }
+            var root_mp = mp.TranslatePoint(vroot, isLocalMp);
+            Pointer pointer = new Pointer(Pointer.GetNextFreeId(), PointerType.Mouse, true);
+            RoutedEventArgs out_event;
+
+            if (eventType == Control.PointerPressedEvent) {
+#pragma warning disable CS0618 // Type or member is obsolete
+                out_event = new PointerPressedEventArgs(
+                    control,
+                    pointer,
+                    vroot,
+                    root_mp.ToAvPoint(),
+                    (ulong)DateTime.Now.Ticks,
+                    new PointerPointProperties(RawInputModifiers.LeftMouseButton, PointerUpdateKind.LeftButtonPressed),
+                    kmf.ToAvKeyModifiers());
+#pragma warning restore CS0618 // Type or member is obsolete
+            } else if (eventType == Control.PointerReleasedEvent) {
+#pragma warning disable CS0618 // Type or member is obsolete
+                out_event = new PointerReleasedEventArgs(
+                    control,
+                    pointer,
+                    vroot,
+                    root_mp.ToAvPoint(),
+                    (ulong)DateTime.Now.Ticks,
+                    new PointerPointProperties(RawInputModifiers.LeftMouseButton, PointerUpdateKind.LeftButtonPressed),
+                    kmf.ToAvKeyModifiers(), MouseButton.Left);
+#pragma warning restore CS0618 // Type or member is obsolete
+            } else {
+#pragma warning disable CS0618 // Type or member is obsolete
+                out_event = new PointerEventArgs(
+                    eventType,
+                    control,
+                    pointer,
+                    vroot,
+                    root_mp.ToAvPoint(),
+                    (ulong)DateTime.Now.Ticks,
+                    new PointerPointProperties(RawInputModifiers.LeftMouseButton, PointerUpdateKind.LeftButtonPressed),
+                    kmf.ToAvKeyModifiers());
+#pragma warning restore CS0618 // Type or member is obsolete
+            }
+
+
+            return out_event;
+        }
     }
 }

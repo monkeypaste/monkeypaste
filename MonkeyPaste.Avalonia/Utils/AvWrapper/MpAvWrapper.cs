@@ -14,6 +14,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIPlatformWrapper Implementation
 
+        #region Lazy Services
+
+        public MpIPlatformScreenInfoCollection ScreenInfoCollection { get; set; }
+
+        #endregion
+
         #region Bootstrapped Services (incomplete)
 
         public MpIContentQueryTools ContentQueryTools { get; set; }
@@ -45,7 +51,6 @@ namespace MonkeyPaste.Avalonia {
         public MpICustomColorChooserMenuAsync CustomColorChooserMenuAsync { get; set; }
         public MpIKeyboardInteractionService KeyboardInteractionService { get; set; }
         public MpIPlatformResource PlatformResource { get; set; }
-        public MpIPlatformScreenInfoCollection ScreenInfoCollection { get; set; }
         public MpIContextMenuCloser ContextMenuCloser { get; set; }
         public MpIMainThreadMarshal MainThreadMarshal { get; set; }
         public MpIStringTools StringTools { get; set; }
@@ -79,6 +84,7 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitializeAsync() {
             if (MpDeviceWrapper.Instance != null) {
                 PlatformInfo = MpDeviceWrapper.Instance.PlatformInfo;
+                ScreenInfoCollection = MpDeviceWrapper.Instance.ScreenInfoCollection;
             } else {
                 PlatformInfo = new MpAvPlatformInfo_desktop();
             }
@@ -139,7 +145,6 @@ namespace MonkeyPaste.Avalonia {
             ClipboardMonitor = new MpAvClipboardWatcher();
             DataObjectRegistrar = ClipboardMonitor as MpIPlatformDataObjectRegistrar;
 
-            ScreenInfoCollection = new MpAvScreenInfoCollection();
             NotificationManager = MpAvNotificationWindowManager.Instance;
 
             PlatformShorcuts = new MpAvPlatformShortcuts();

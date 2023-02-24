@@ -140,6 +140,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
+        #region MpIWebView Implementation
+
+        public override MpAvIWebViewBindingResponseHandler BindingHandler =>
+            this;
+
+        #endregion
+
         #region MpIJsonMessenger Implementation
         public void SendMessage(string msgJsonBase64Str) {
 #if DESKTOP

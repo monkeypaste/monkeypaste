@@ -104,7 +104,7 @@ namespace MonkeyPaste.Avalonia {
             double anchor_pd = w.VisualPixelDensity();
             if (anchor == null) {
                 // find active screen center
-                var primaryScreen = new MpAvScreenInfoCollection().Screens.FirstOrDefault(x => x.IsPrimary);
+                MpIPlatformScreenInfo primaryScreen = MpPlatform.Services.ScreenInfoCollection.Screens.FirstOrDefault(x => x.IsPrimary);
                 if (primaryScreen == null) {
                     // happens before loader attached
                     return new PixelPoint();
@@ -138,7 +138,7 @@ namespace MonkeyPaste.Avalonia {
             // TODO this should somehow know where system tray is on device, it just assumes its bottom right (windows)
             var s = GetWindowSize(w);
 
-            var primaryScreen = new MpAvScreenInfo(w.Screens.All.FirstOrDefault(x => x.IsPrimary));
+            var primaryScreen = new MpAvDesktopScreenInfo(w.Screens.All.FirstOrDefault(x => x.IsPrimary));
             //new MpAvScreenInfoCollection().Screens.FirstOrDefault(x => x.IsPrimary);
             if (primaryScreen == null) {
                 // happens before loader attached

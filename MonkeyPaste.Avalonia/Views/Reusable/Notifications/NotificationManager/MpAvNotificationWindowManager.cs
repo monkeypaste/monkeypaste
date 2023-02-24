@@ -142,6 +142,13 @@ namespace MonkeyPaste.Avalonia {
             var nvmb = nw.DataContext as MpNotificationViewModelBase;
             nvmb.IsClosing = false;
 
+            if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop &&
+                    desktop.MainWindow == null) {
+                // occurs on startup
+                desktop.MainWindow = nw;
+                MpPlatform.Services.ScreenInfoCollection = new MpAvDesktopScreenInfoCollection(nw);
+            }
+
             if (!_windows.Contains(nw)) {
                 _windows.Add(nw);
             }
@@ -170,11 +177,7 @@ namespace MonkeyPaste.Avalonia {
                 nw.Show();
             }
 
-            if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop &&
-                    desktop.MainWindow == null) {
-                // occurs on startup
-                desktop.MainWindow = nw;
-            }
+
             if (!nw.IsVisible) {
                 Debugger.Break();
             }

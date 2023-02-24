@@ -11,7 +11,7 @@ var PendingGetResponses = [];
 async function getAllNonInputTemplatesFromDbAsync_get() {
     // output 'MpQuillNonInputTemplateRequestMessage'
     let all_non_input_templates = [];
-    if (typeof getAllNonInputTemplatesFromDb === 'function') {
+    if (isRunningOnHost()) {
         let req = {
             templateTypes: [
                 'Static',
@@ -19,37 +19,34 @@ async function getAllNonInputTemplatesFromDbAsync_get() {
                 'DateTime'
             ]
         };
-        all_non_input_templates = await processGetRequestAsync(getAllNonInputTemplatesFromDb, JSON.stringify(req));
+        all_non_input_templates = await processGetRequestAsync('getAllNonInputTemplatesFromDb', JSON.stringify(req));
     } else {
+
         await delay(1000);
-	}
+    }
     return all_non_input_templates;
 }
 
 async function getClipboardDataTransferObjectAsync_get() {
     // output 'MpQuillEditorClipboardDataObjectRequestNotification'
     let clipboard_dt = new DataTransfer();
-    if (typeof getClipboardDataTransferObject === 'function') {
-        let req = {
-            //empty
-        };
-        let dt_json_obj = await processGetRequestAsync(getClipboardDataTransferObject, JSON.stringify(req));
-        clipboard_dt = convertHostDataItemsToDataTransfer(dt_json_obj);
-    } 
+    let req = {
+        //empty
+    };
+    let dt_json_obj = await processGetRequestAsync('getClipboardDataTransferObject', JSON.stringify(req));
+    clipboard_dt = convertHostDataItemsToDataTransfer(dt_json_obj); 
     return clipboard_dt;
 }
 
 async function getDragDataTransferObjectAsync_get(unprocessed_dt) {
     // output 'MpQuillEditorDragDataObjectRequestNotification'
     let processed_drag_dt = null;
-    if (typeof getDragDataTransferObject === 'function') {
-        let unprocessed_hdo = convertDataTransferToHostDataItems(unprocessed_dt);
-        let req = {
-            unprocessedDataItemsJsonStr: toBase64FromJsonObj(unprocessed_hdo)
-        };
-        let processed_hdo = await processGetRequestAsync(getDragDataTransferObject, JSON.stringify(req));
-        processed_drag_dt = convertHostDataItemsToDataTransfer(processed_hdo);
-    } 
+    let unprocessed_hdo = convertDataTransferToHostDataItems(unprocessed_dt);
+    let req = {
+        unprocessedDataItemsJsonStr: toBase64FromJsonObj(unprocessed_hdo)
+    };
+    let processed_hdo = await processGetRequestAsync('getDragDataTransferObject', JSON.stringify(req));
+    processed_drag_dt = convertHostDataItemsToDataTransfer(processed_hdo);
     return processed_drag_dt;
 }
 
@@ -134,7 +131,7 @@ function receiveGetResponse(reqGuid) {
 
 // #region Actions
 
-async function processGetRequestAsync(func, reqMsgStr) {
+async function processGetRequestAsync(fn, reqMsgStr) {
     // output 'MpQuillGetRequestNotification'
 
     let reqObj = {
@@ -143,7 +140,7 @@ async function processGetRequestAsync(func, reqMsgStr) {
     };
 
     let req = toBase64FromJsonObj(reqObj);
-    func(req);
+    sendMessage(fn, req);
 
     while (true) {
         let resp = receiveGetResponse(reqObj.requestGuid);

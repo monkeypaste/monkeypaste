@@ -24,5 +24,13 @@
                               AppendData="{Binding AppendData, Mode=TwoWay, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                               AppendModeState="{Binding AppendModeStateFlags, Mode=TwoWay, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                               HorizontalAlignment="Stretch"
-                              VerticalAlignment="Stretch" />
+                              VerticalAlignment="Stretch">
+        <!--<local:MpAvContentWebView.Focusable>
+            <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                <Binding Path="IsDesktop"
+                         Source="{x:Static local:MpAvThemeViewModel.Instance}" />
+                <Binding Path="IsSelected" />
+            </MultiBinding>
+        </local:MpAvContentWebView.Focusable>-->
+    </local:MpAvContentWebView>
 </local:MpAvUserControl>

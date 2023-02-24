@@ -140,19 +140,19 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region DoubleClickDelayMs AvaloniaProperty
-        public static int GetDoubleClickDelayMs(AvaloniaObject obj) {
-            return obj.GetValue(DoubleClickDelayMsProperty);
+        #region PointerGestureDelayMs AvaloniaProperty
+        public static int GetPointerGestureDelayMs(AvaloniaObject obj) {
+            return obj.GetValue(PointerGestureDelayMsProperty);
         }
 
-        public static void SetDoubleClickDelayMs(AvaloniaObject obj, int value) {
-            obj.SetValue(DoubleClickDelayMsProperty, value);
+        public static void SetPointerGestureDelayMs(AvaloniaObject obj, int value) {
+            obj.SetValue(PointerGestureDelayMsProperty, value);
         }
 
-        public static readonly AttachedProperty<int> DoubleClickDelayMsProperty =
+        public static readonly AttachedProperty<int> PointerGestureDelayMsProperty =
             AvaloniaProperty.RegisterAttached<object, Control, int>(
-                "DoubleClickDelayMs",
-                300,
+                "PointerGestureDelayMs",
+                500,
                 false);
 
         #endregion
@@ -173,7 +173,6 @@ namespace MonkeyPaste.Avalonia {
                 false);
 
         #endregion
-
 
         #region RightPressCommand AvaloniaProperty
         public static ICommand GetRightPressCommand(AvaloniaObject obj) {
@@ -208,7 +207,6 @@ namespace MonkeyPaste.Avalonia {
                 false);
 
         #endregion
-
 
         #region IsEnabled AvaloniaProperty
         public static bool GetIsEnabled(AvaloniaObject obj) {
@@ -267,96 +265,107 @@ namespace MonkeyPaste.Avalonia {
                 control.Holding -= Control_Holding;
             }
         }
-        private static DateTime? _lastPressDateTime = null;
+
         private static void Control_PointerPressed(object sender, PointerPressedEventArgs e) {
-            _lastPressDateTime = DateTime.Now;
-            if (sender is Control control) {
-                ICommand cmd = null;
-                object param = null;
-                if (e.IsLeftPress(control)) {
-                    if (e.ClickCount == 2) {
-                        cmd = GetDoubleLeftPressCommand(control);
-                        param = GetDoubleLeftPressCommandParameter(control);
-                    } else {
+            var control = sender as Control;
+            if (control == null) {
+                return;
+            }
+            ICommand cmd = null;
+            object param = null;
+            if (e.IsLeftPress(control)) {
+                if (e.ClickCount == 2) {
+                    cmd = GetDoubleLeftPressCommand(control);
+                    param = GetDoubleLeftPressCommandParameter(control);
+                } else {
+                    bool needs_double_delay_check =
+                        // press vs double press
+                        (GetLeftPressCommand(control) != null &&
+                        GetDoubleLeftPressCommand(control) != null &&
+                        GetLeftPressCommand(control).CanExecute(GetLeftPressCommandParameter(control)) &&
+                        GetDoubleLeftPressCommand(control).CanExecute(GetDoubleLeftPressCommandParameter(control)));
 
-                        bool needs_double_delay_check =
-                            // press vs double press
-                            (GetLeftPressCommand(control) != null &&
-                            GetDoubleLeftPressCommand(control) != null &&
-                            GetLeftPressCommand(control).CanExecute(GetLeftPressCommandParameter(control)) &&
-                            GetDoubleLeftPressCommand(control).CanExecute(GetDoubleLeftPressCommandParameter(control)));
+                    bool needs_hold_check =
+                          // press vs hold
+                          (GetLeftPressCommand(control) != null &&
+                          GetHoldingCommand(control) != null &&
+                          GetLeftPressCommand(control).CanExecute(GetLeftPressCommandParameter(control)) &&
+                          GetHoldingCommand(control).CanExecute(GetHoldingCommandParameter(control)));
 
-                        bool needs_hold_check =
-                              // press vs hold
-                              (GetLeftPressCommand(control) != null &&
-                              GetHoldingCommand(control) != null &&
-                              GetLeftPressCommand(control).CanExecute(GetLeftPressCommandParameter(control)) &&
-                              GetHoldingCommand(control).CanExecute(GetHoldingCommandParameter(control)));
+                    if (needs_double_delay_check ||
+                        needs_hold_check) {
+                        e.Handled = true;
 
-                        if (needs_double_delay_check || needs_hold_check) {
-                            e.Handled = true;
-                            Dispatcher.UIThread.Post(async () => {
-                                bool is_still_down = true;
+                        Dispatcher.UIThread.Post(async () => {
+                            bool is_still_down = true;
+                            if (needs_hold_check) {
                                 EventHandler<PointerReleasedEventArgs> release_handler = null;
-                                if (needs_hold_check) {
-                                    is_still_down = true;
-                                    release_handler = (s, e) => {
-                                        is_still_down = false;
-                                        control.PointerReleased -= release_handler;
-                                    };
-                                    control.PointerReleased += release_handler;
+                                is_still_down = true;
+                                release_handler = (s, e) => {
+                                    is_still_down = false;
+                                    control.PointerReleased -= release_handler;
+                                };
+                                control.PointerReleased += release_handler;
+                            }
+                            DateTime this_press_dt = DateTime.Now;
+                            bool was_new_press = false;
+                            if (needs_double_delay_check) {
+                                EventHandler<PointerPressedEventArgs> next_press_handler = null;
+                                next_press_handler = (s, e) => {
+                                    was_new_press = false;
+                                    control.PointerPressed -= next_press_handler;
+                                };
+                                control.PointerPressed += next_press_handler;
+                            }
+                            // to disable single vs double wait for delay if no more click
+                            while (true) {
+                                if (was_new_press) {
+                                    // double click, reject single
+                                    return;
                                 }
-                                // to disable single vs double wait for delay if no more click
-                                var ct = _lastPressDateTime;
-                                _lastPressDateTime = null;
-                                while (true) {
-                                    if (_lastPressDateTime != null) {
-                                        // double click, reject single
-                                        return;
+                                if (DateTime.Now - this_press_dt > TimeSpan.FromMilliseconds(GetPointerGestureDelayMs(control))) {
+                                    if (needs_hold_check && is_still_down) {
+                                        // hold 
+                                        cmd = GetHoldingCommand(control);
+                                        param = GetHoldingCommandParameter(control);
+                                    } else {
+                                        // single click
+                                        cmd = GetLeftPressCommand(control);
+                                        param = GetLeftPressCommandParameter(control);
                                     }
-                                    if (DateTime.Now - ct > TimeSpan.FromMilliseconds(GetDoubleClickDelayMs(control))) {
-                                        if (needs_hold_check && is_still_down) {
-                                            // hold 
-                                            cmd = GetHoldingCommand(control);
-                                            param = GetHoldingCommandParameter(control);
-                                        } else {
-                                            // single click
-                                            cmd = GetLeftPressCommand(control);
-                                            param = GetLeftPressCommandParameter(control);
-                                        }
-                                        if (cmd != null &&
-                                            cmd.CanExecute(param)) {
-                                            cmd.Execute(param);
-                                            e.Handled = GetIsPressEventHandled(control);
-                                        }
-                                        return;
+                                    if (cmd != null &&
+                                        cmd.CanExecute(param)) {
+                                        cmd.Execute(param);
+                                        e.Handled = GetIsPressEventHandled(control);
                                     }
-                                    await Task.Delay(100);
+                                    return;
                                 }
-                            });
-                            return;
-                        } else {
-                            cmd = GetLeftPressCommand(control);
-                            param = GetLeftPressCommandParameter(control);
-                        }
-
+                                await Task.Delay(100);
+                            }
+                        });
+                        return;
+                    } else {
+                        cmd = GetLeftPressCommand(control);
+                        param = GetLeftPressCommandParameter(control);
                     }
-                } else if (e.IsRightPress(control)) {
-                    cmd = GetRightPressCommand(control);
-                    param = GetRightPressCommandParameter(control);
+
                 }
-                if (cmd != null && cmd.CanExecute(param)) {
-                    cmd.Execute(param);
-                    e.Handled = GetIsPressEventHandled(control);
-                }
+            } else if (e.IsRightPress(control)) {
+                cmd = GetRightPressCommand(control);
+                param = GetRightPressCommandParameter(control);
+            }
+            if (cmd != null && cmd.CanExecute(param)) {
+                cmd.Execute(param);
+                e.Handled = GetIsPressEventHandled(control);
             }
         }
 
         private static void Control_Holding(object sender, HoldingRoutedEventArgs e) {
-            if (sender is Control c &&
-                GetHoldingCommand(c) is ICommand cmd) {
-                cmd.Execute(GetHoldingCommandParameter(c));
-            }
+            //if (sender is Control c &&
+            //    GetHoldingCommand(c) is ICommand cmd) {
+            //    cmd.Execute(GetHoldingCommandParameter(c));
+            //}
+            e.Handled = true;
         }
         #endregion
     }

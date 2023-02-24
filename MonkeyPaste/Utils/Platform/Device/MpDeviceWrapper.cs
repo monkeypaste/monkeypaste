@@ -13,14 +13,16 @@ namespace MonkeyPaste {
         #region Interfaces
 
         #region MpIDeviceWrapper Implementation
-        public abstract MpIPlatformInfo PlatformInfo { get; }
+        public abstract MpIPlatformInfo PlatformInfo { get; set; }
+        public abstract MpIPlatformScreenInfoCollection ScreenInfoCollection { get; set; }
 
         #endregion
         #endregion
 
         #region Public Methods
 
-        public abstract void CreateDeviceInstance();
+        public abstract void CreateDeviceInstance(object args);
+
         #endregion
 
 

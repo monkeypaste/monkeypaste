@@ -424,7 +424,6 @@ namespace MonkeyPaste.Avalonia {
 
         }
 
-
         private static void MenuItem_PointerEnter(object sender, PointerEventArgs e) {
             if (e.Source is MenuItem mi && mi.DataContext is MpMenuItemViewModel mivm) {
 

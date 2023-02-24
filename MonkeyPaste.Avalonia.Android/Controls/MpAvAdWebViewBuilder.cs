@@ -30,17 +30,12 @@ public class MpAvAdWebViewBuilder :
     #region Interfaces
 
     #region MpAvINativeControlBuilder Implementation
-    public IPlatformHandle Build(IPlatformHandle parent, Func<IPlatformHandle> createDefault, object args) {
+    public IPlatformHandle Build(IPlatformHandle parent, Func<IPlatformHandle> createDefault, MpIWebViewHost host) {
         var parentContext = (parent as AndroidViewControlHandle)?.View.Context
             ?? global::Android.App.Application.Context;
 
-        var webView = new MpAvAdWebView(parentContext);
-        webView.Settings.AllowFileAccess = true;
-        webView.Settings.AllowFileAccessFromFileURLs = true;
-        webView.Settings.AllowUniversalAccessFromFileURLs = true;
+        var webView = new MpAvAdWebView(parentContext, host);
 
-        string url = args.ToString() ?? "https://www.android.com/";
-        //webView.Navigate(url);
         return new MpAvAdAndroidViewControlHandle(webView);
     }
     #endregion
@@ -103,13 +98,9 @@ public class MpAvAdWebViewBuilder :
             EventHandler<string> navResp = (s, e) => {
                 handler.OnNavigated(e);
             };
-            EventHandler onRender = (s, e) => {
-                handler.OnRenderBufferChanged();
-            };
 
             handler.OnNavigateRequest += navReg;
 
-            osrs.BufferChanged += onRender;
             wv.Navigated += navResp;
 
             // TODO add detach when unload here?
