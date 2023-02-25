@@ -316,30 +316,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIPagingScrollViewer Implementation
 
-        public double ScrollFrictionX {
-            get {
-                if (LayoutType == MpClipTrayLayoutType.Stack) {
-                    return 0.85d;
-                }
-                return 0.85d;
-            }
-        }
-
         public double ScrollWheelDampeningX {
             get {
                 if (LayoutType == MpClipTrayLayoutType.Stack) {
                     return 0.03d;
                 }
                 return 0.01d;
-            }
-        }
-
-        public double ScrollFrictionY {
-            get {
-                if (LayoutType == MpClipTrayLayoutType.Stack) {
-                    return 0.85d;
-                }
-                return 0.85d;
             }
         }
 
@@ -449,6 +431,15 @@ namespace MonkeyPaste.Avalonia {
         public double ScrollVelocityX { get; set; }
         public double ScrollVelocityY { get; set; }
 
+        public double ScrollFrictionX =>
+            MpPlatform.Services.PlatformInfo.IsDesktop ?
+            0.85 : 0.3;
+
+        public double ScrollFrictionY =>
+            MpPlatform.Services.PlatformInfo.IsDesktop ?
+            0.75 : 0.0;
+
+        public bool HasScrollVelocity => Math.Abs(ScrollVelocityX) + Math.Abs(ScrollVelocityY) > 0.1d;
         public MpPoint ScrollVelocity {
             get => new MpPoint(ScrollVelocityX, ScrollVelocityY);
             set {
@@ -457,6 +448,9 @@ namespace MonkeyPaste.Avalonia {
                 ScrollVelocityY = newVal.Y;
             }
         }
+
+        public bool CanSelect =>
+            ScrollVelocity.IsValueEqual(MpPoint.Zero);
 
         public bool CanScroll {
             get {
@@ -490,6 +484,12 @@ namespace MonkeyPaste.Avalonia {
                 return true;
             }
         }
+
+        public bool CanScrollX =>
+            CanScroll && (LayoutType == MpClipTrayLayoutType.Grid || ListOrientation == Orientation.Horizontal);
+
+        public bool CanScrollY =>
+            CanScroll && (LayoutType == MpClipTrayLayoutType.Grid || ListOrientation == Orientation.Vertical);
         public bool IsThumbDraggingX { get; set; } = false;
         public bool IsThumbDraggingY { get; set; } = false;
         public bool IsThumbDragging => IsThumbDraggingX || IsThumbDraggingY;
@@ -840,6 +840,9 @@ namespace MonkeyPaste.Avalonia {
                 return AllItems.FirstOrDefault(x => x.IsSelected);
             }
             set {
+                if (!CanSelect) {
+                    return;
+                }
                 if (value == null) {
                     AllItems.ForEach(x => x.IsSelected = false);
                 } else {
@@ -858,6 +861,9 @@ namespace MonkeyPaste.Avalonia {
                 return SelectedItem;
             }
             set {
+                if (!CanSelect) {
+                    return;
+                }
                 if (value == null || value.IsPlaceholder) {
                     // BUG trying to stop case when placeholder is being treated like
                     // init'd tile and selectionState isb being stored but 
@@ -879,6 +885,9 @@ namespace MonkeyPaste.Avalonia {
                 return SelectedItem;
             }
             set {
+                if (!CanSelect) {
+                    return;
+                }
                 if (value == null || value.IsPlaceholder) {
                     // see SelectedPinTray comments
                     Items.ForEach(x => x.IsSelected = false);
@@ -943,7 +952,6 @@ namespace MonkeyPaste.Avalonia {
         public double MaxPinTrayScreenWidth {
             get {
                 if (ListOrientation == Orientation.Horizontal) {
-
                     return Math.Max(0, ObservedContainerScreenWidth - MinClipTrayScreenWidth);
                 }
                 return double.PositiveInfinity;
@@ -952,10 +960,37 @@ namespace MonkeyPaste.Avalonia {
         public double MaxPinTrayScreenHeight {
             get {
                 if (ListOrientation == Orientation.Horizontal) {
-
                     return double.PositiveInfinity;
                 }
                 return Math.Max(0, ObservedContainerScreenHeight - MinClipTrayScreenHeight);
+            }
+        }
+
+        public double MaxContainerScreenWidth {
+            get {
+                if (ListOrientation == Orientation.Horizontal) {
+                    return
+                        MpAvMainWindowViewModel.Instance.MainWindowWidth -
+                        MpAvSidebarItemCollectionViewModel.Instance.TotalSidebarWidth;
+                }
+                return
+                    MpAvMainWindowViewModel.Instance.MainWindowWidth -
+                    MpAvMainWindowTitleMenuViewModel.Instance.DefaultTitleMenuFixedLength;
+            }
+        }
+
+        public double MaxContainerScreenHeight {
+            get {
+                if (ListOrientation == Orientation.Horizontal) {
+                    return
+                        MpAvMainWindowViewModel.Instance.MainWindowHeight -
+                        MpAvMainWindowTitleMenuViewModel.Instance.DefaultTitleMenuFixedLength -
+                        MpAvFilterMenuViewModel.Instance.DefaultFilterMenuFixedSize;
+                }
+                return
+                        MpAvMainWindowViewModel.Instance.MainWindowHeight -
+                        MpAvSidebarItemCollectionViewModel.Instance.TotalSidebarHeight -
+                        MpAvFilterMenuViewModel.Instance.DefaultFilterMenuFixedSize;
             }
         }
 
@@ -1226,7 +1261,7 @@ namespace MonkeyPaste.Avalonia {
                 return true;
             }
         }
-        public bool HasScrollVelocity => Math.Abs(ScrollVelocityX) + Math.Abs(ScrollVelocityY) > 0.1d;
+
 
         public bool IsScrollingIntoView { get; set; }
 
@@ -1376,6 +1411,9 @@ namespace MonkeyPaste.Avalonia {
 
             OnPropertyChanged(nameof(IsHorizontalScrollBarVisible));
             OnPropertyChanged(nameof(IsVerticalScrollBarVisible));
+
+            OnPropertyChanged(nameof(MaxContainerScreenWidth));
+            OnPropertyChanged(nameof(MaxContainerScreenHeight));
         }
         public void ForceScrollOffsetX(double newOffsetX, bool isSilent = false) {
             if (newOffsetX < 0 || newOffsetX > MaxScrollOffsetX) {
@@ -1462,6 +1500,7 @@ namespace MonkeyPaste.Avalonia {
         #region View Invokers
 
         public void ScrollIntoView(object obj) {
+            //return;
             MpAvClipTileViewModel ctvm = null;
             if (obj is MpAvClipTileViewModel) {
                 ctvm = obj as MpAvClipTileViewModel;
@@ -1893,6 +1932,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
+
+
         private void MpAvClipTrayViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsBusy):
@@ -2034,6 +2075,10 @@ namespace MonkeyPaste.Avalonia {
                     LockScrollToAnchor();
                     CheckLoadMore();
                     SetScrollAnchor();
+                    break;
+                case MpMessageType.SidebarItemSizeChanged:
+                    OnPropertyChanged(nameof(MaxContainerScreenWidth));
+                    OnPropertyChanged(nameof(MaxContainerScreenHeight));
                     break;
                 // LAYOUT CHANGE
                 case MpMessageType.TrayLayoutChanged:
@@ -2322,7 +2367,9 @@ namespace MonkeyPaste.Avalonia {
                     canNavigate = false;
                 }
                 if (canNavigate) {
-                    if (!IsAnyTileListBoxItemFocused) {
+                    var cf = FocusManager.Instance.Current;
+                    if (!IsAnyTileListBoxItemFocused && (cf != null && cf != App.MainView as IInputElement && cf is not MpAvContentWebView)) {
+
                         canNavigate = false;
                     }
                 }

@@ -64,6 +64,42 @@ namespace MonkeyPaste.Avalonia {
 
         public double ButtonGroupFixedDimensionLength => 40;
 
+        public double SelectedItemWidth {
+            get {
+                if (SelectedItem == null) {
+                    return 0;
+                }
+                return
+                    SelectedItem.SidebarWidth +
+                    (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
+                        MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength : 0);
+            }
+        }
+
+        public double SelectedItemHeight {
+            get {
+                if (SelectedItem == null) {
+                    return 0;
+                }
+                return
+                    SelectedItem.SidebarHeight +
+                    (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
+                        0 : MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength);
+            }
+        }
+
+        public double TotalSidebarWidth =>
+            MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
+               ButtonGroupFixedDimensionLength + SelectedItemWidth :
+               MpAvMainWindowViewModel.Instance.MainWindowWidth;
+
+        public double TotalSidebarHeight =>
+            MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
+               MpAvMainWindowViewModel.Instance.MainWindowHeight -
+               MpAvMainWindowTitleMenuViewModel.Instance.DefaultTitleMenuFixedLength -
+               MpAvFilterMenuViewModel.Instance.DefaultFilterMenuFixedSize :
+               ButtonGroupFixedDimensionLength + SelectedItemHeight;
+
         #endregion
 
         #endregion
@@ -102,7 +138,10 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             Items.Add(sbivm);
+            sbivm.PropertyChanged += Sbivm_PropertyChanged;
         }
+
+
         private void MpAvSidebarItemCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(SelectedItem):
@@ -115,6 +154,20 @@ namespace MonkeyPaste.Avalonia {
                     }
                     MpAvMainView.Instance.UpdateContentLayout();
                     OnPropertyChanged(nameof(SelectedItemIdx));
+                    break;
+            }
+        }
+
+
+        private void Sbivm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(MpISidebarItemViewModel.SidebarWidth):
+                    OnPropertyChanged(nameof(SelectedItemWidth));
+                    MpMessenger.SendGlobal(MpMessageType.SidebarItemSizeChanged);
+                    break;
+                case nameof(MpISidebarItemViewModel.SidebarHeight):
+                    OnPropertyChanged(nameof(SelectedItemHeight));
+                    MpMessenger.SendGlobal(MpMessageType.SidebarItemSizeChanged);
                     break;
             }
         }

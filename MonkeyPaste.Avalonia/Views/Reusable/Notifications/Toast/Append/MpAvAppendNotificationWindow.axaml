@@ -63,6 +63,7 @@
                                      Grid.Column="2"
                                      local:MpAvIsHoveringExtension.IsEnabled="True"
                                      local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverOptionsButton, Mode=TwoWay}"
+                                     local:MpAvMenuExtension.IsEnabled="True"
                                      local:MpAvMenuExtension.PlacementMode="Left" />
 
             <local:MpAvClipTileView Grid.Row="1"

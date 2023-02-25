@@ -217,6 +217,9 @@ namespace MonkeyPaste {
 
         public string InputGestureText {
             get {
+                if (!MpPlatform.Services.PlatformInfo.IsDesktop) {
+                    return null;
+                }
                 if (MpShortcutRef.Create(ShortcutArgs) is MpShortcutRef sr) {
                     return MpDataModelProvider.GetShortcutKeystring(sr.ShortcutType.ToString(), sr.CommandParameter);
                 }

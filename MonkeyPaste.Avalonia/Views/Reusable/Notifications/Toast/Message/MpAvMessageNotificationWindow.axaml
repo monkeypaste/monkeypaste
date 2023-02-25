@@ -73,6 +73,7 @@
                                      Grid.Column="2"
                                      local:MpAvIsHoveringExtension.IsEnabled="True"
                                      local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverOptionsButton, Mode=TwoWay}"
+                                     local:MpAvMenuExtension.IsEnabled="True"
                                      local:MpAvMenuExtension.PlacementMode="Left" />
 
             <Border Grid.Row="1"

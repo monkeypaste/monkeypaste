@@ -297,6 +297,13 @@ namespace MonkeyPaste.Avalonia {
                         Converter = MpAvDoubleToGridLengthConverter.Instance
                     });
 
+                ctrcb_rd.Bind(
+                    RowDefinition.MaxHeightProperty,
+                    new Binding() {
+                        Source = ctrvm,
+                        Path = nameof(ctrvm.MaxContainerScreenHeight)
+                    });
+
                 var ssbcb_rd = new RowDefinition(Math.Max(0, sbicvm.ContainerBoundHeight), GridUnitType.Pixel);
                 ssbcb_rd.Bind(
                     RowDefinition.HeightProperty,
@@ -309,6 +316,7 @@ namespace MonkeyPaste.Avalonia {
 
                 var sbbg_rd = new RowDefinition(
                     new GridLength(sbicvm.ButtonGroupFixedDimensionLength, GridUnitType.Pixel));
+                sbbg_rd.MinHeight = sbicvm.ButtonGroupFixedDimensionLength;
 
                 mwtg.RowDefinitions.Add(ctrcb_rd);
                 mwtg.RowDefinitions.Add(ssbcb_rd);
@@ -816,7 +824,8 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            if (mwvm.IsVerticalOrientation && splitter_delta != null) {
+            if (mwvm.IsVerticalOrientation &&
+                splitter_delta != null) {
                 // BUG grid splitter doesn't drag in vertical automatically, must manually adjust
                 sbicvm.ContainerBoundHeight -= splitter_delta.Y;
             }

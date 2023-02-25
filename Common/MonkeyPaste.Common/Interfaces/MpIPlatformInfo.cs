@@ -11,6 +11,7 @@
 
         string StorageDir { get; }
         bool IsDesktop { get; }
+        bool IsTouchInputEnabled { get; }
         string OsShortName { get; }
 
         MpUserDeviceType OsType { get; }

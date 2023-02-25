@@ -24,12 +24,12 @@
         Background="Transparent"
         Title="">
     <Border HorizontalAlignment="Stretch"
-                          VerticalAlignment="Stretch"
-                          BorderThickness="7"
-                          BorderBrush="{Binding BorderHexColor, Converter={StaticResource StringHexToBrushConverter}}"
-                          Background="{Binding BackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
-                          local:MpAvIsHoveringExtension.IsEnabled="True"
-                          local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
+            VerticalAlignment="Stretch"
+            BorderThickness="7"
+            BorderBrush="{Binding BorderHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+            Background="{Binding BackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+            local:MpAvIsHoveringExtension.IsEnabled="True"
+            local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
         <Grid x:Name="NotificationWindowContainerGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.35*" />
@@ -104,6 +104,7 @@
             <local:MpAvOptionsButton Grid.Column="1"
                                      local:MpAvIsHoveringExtension.IsEnabled="True"
                                      local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverOptionsButton, Mode=TwoWay}"
+                                     local:MpAvMenuExtension.IsEnabled="True"
                                      local:MpAvMenuExtension.PlacementMode="Left" />
         </Grid>
     </Border>

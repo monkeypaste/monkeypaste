@@ -38,7 +38,9 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static RoutedEventArgs SimulatePointerEventArgs(
-            RoutedEvent eventType, Interactive interactive, MpPoint mp, MpKeyModifierFlags kmf, bool isLocalMp) {
+            RoutedEvent eventType,
+            Interactive interactive,
+            MpPoint mp, MpKeyModifierFlags kmf, bool isLocalMp) {
             Control control = interactive as Control;
             if (control == null) {
                 return null;
@@ -53,8 +55,8 @@ namespace MonkeyPaste.Common.Avalonia {
             Pointer pointer = new Pointer(Pointer.GetNextFreeId(), PointerType.Mouse, true);
             RoutedEventArgs out_event;
 
-            if (eventType == Control.PointerPressedEvent) {
 #pragma warning disable CS0618 // Type or member is obsolete
+            if (eventType == Control.PointerPressedEvent) {
                 out_event = new PointerPressedEventArgs(
                     control,
                     pointer,
@@ -63,20 +65,16 @@ namespace MonkeyPaste.Common.Avalonia {
                     (ulong)DateTime.Now.Ticks,
                     new PointerPointProperties(RawInputModifiers.LeftMouseButton, PointerUpdateKind.LeftButtonPressed),
                     kmf.ToAvKeyModifiers());
-#pragma warning restore CS0618 // Type or member is obsolete
             } else if (eventType == Control.PointerReleasedEvent) {
-#pragma warning disable CS0618 // Type or member is obsolete
                 out_event = new PointerReleasedEventArgs(
                     control,
                     pointer,
                     vroot,
                     root_mp.ToAvPoint(),
                     (ulong)DateTime.Now.Ticks,
-                    new PointerPointProperties(RawInputModifiers.LeftMouseButton, PointerUpdateKind.LeftButtonPressed),
+                    new PointerPointProperties(RawInputModifiers.LeftMouseButton, PointerUpdateKind.LeftButtonReleased),
                     kmf.ToAvKeyModifiers(), MouseButton.Left);
-#pragma warning restore CS0618 // Type or member is obsolete
             } else {
-#pragma warning disable CS0618 // Type or member is obsolete
                 out_event = new PointerEventArgs(
                     eventType,
                     control,
@@ -86,8 +84,8 @@ namespace MonkeyPaste.Common.Avalonia {
                     (ulong)DateTime.Now.Ticks,
                     new PointerPointProperties(RawInputModifiers.LeftMouseButton, PointerUpdateKind.LeftButtonPressed),
                     kmf.ToAvKeyModifiers());
-#pragma warning restore CS0618 // Type or member is obsolete
             }
+#pragma warning restore CS0618 // Type or member is obsolete
 
 
             return out_event;

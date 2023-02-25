@@ -133,6 +133,7 @@
                 </Grid>
                 <local:MpAvOptionsButton x:Name="MobileContextOptionButton"
                                          VerticalAlignment="Stretch"
+                                         Margin="3,0"
                                          local:MpAvMenuExtension.IsEnabled="True"
                                          Command="{Binding ShowContextMenuCommand}"
                                          CommandParameter="{Binding $self}">

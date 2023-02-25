@@ -11,5 +11,7 @@ namespace MonkeyPaste.Avalonia.Android {
             DeviceInfo.Name;
         public override string OsVersionInfo =>
             DeviceInfo.VersionString;
+        public override bool IsTouchInputEnabled =>
+            true;
     }
 }

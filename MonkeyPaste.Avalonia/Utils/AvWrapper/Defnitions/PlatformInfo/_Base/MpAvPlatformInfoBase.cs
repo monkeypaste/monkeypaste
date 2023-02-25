@@ -75,6 +75,7 @@ namespace MonkeyPaste.Avalonia {
             OperatingSystem.IsMacOS() ||
             OperatingSystem.IsLinux();
 
+        public abstract bool IsTouchInputEnabled { get; }
         public virtual string OsFileManagerPath {
             get {
                 if (OperatingSystem.IsWindows()) {

@@ -4,6 +4,10 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Webkit;
+using Avalonia.Android;
+using Avalonia.Android.Platform.Specific;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Input.Raw;
 using Com.Xamarin.Formsviewgroup;
 using Java.Nio;
 using MonkeyPaste.Common;
@@ -16,6 +20,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AvApplication = Avalonia.Application;
 
 namespace MonkeyPaste.Avalonia.Android {
     public class MpAvAdWebView :
@@ -47,7 +52,6 @@ namespace MonkeyPaste.Avalonia.Android {
             get => _buffer;
             private set {
                 _buffer = value;
-                //BufferChanged?.Invoke(this, null);
             }
         }
 
@@ -84,7 +88,7 @@ namespace MonkeyPaste.Avalonia.Android {
 
         public MpAvAdWebView(Context context, MpIWebViewHost host) : base(context) {
             _host = host;
-
+            SetBackgroundColor(Color.Transparent);
             Settings.JavaScriptEnabled = true;
             Settings.AllowFileAccess = true;
             Settings.AllowFileAccessFromFileURLs = true;
@@ -120,12 +124,8 @@ namespace MonkeyPaste.Avalonia.Android {
 
         #region Protected Methods
         public override bool OnTouchEvent(MotionEvent e) {
-            if (_host == null) {
-                return true;
-            }
-
-            _host.SendPointerEvent(e.RawX, e.RawY, e.Action.ToPointerEventType());
-            return false;
+            MpAvReceivesEventsExtension.SendEvent(_host, e.RawX, e.RawY, e.Action.ToPointerEventType());
+            return base.OnTouchEvent(e);
         }
         protected override void OnDraw(Canvas canvas) {
             //We want the superclass to draw directly to the offscreen canvas so that we don't get an infinitely deep recursive call

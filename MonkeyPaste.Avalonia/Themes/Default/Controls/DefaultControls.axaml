@@ -21,7 +21,7 @@
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/MpAvSideBarItems.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/MpAvSliderParameter.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/MpAvTooltip.axaml" />
-    <!--<StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/ScrollBar.axaml" />-->
+    <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/ScrollBar.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/TemplatedControl.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/TextBlock.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/TextBox.axaml" />

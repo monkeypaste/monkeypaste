@@ -48,8 +48,7 @@ namespace MonkeyPaste.Avalonia {
         public static readonly AttachedProperty<bool> CanScrollXProperty =
             AvaloniaProperty.RegisterAttached<object, ListBox, bool>(
                 "CanScrollX",
-                true,
-                false);
+                true);
 
         #endregion
 
@@ -65,8 +64,7 @@ namespace MonkeyPaste.Avalonia {
         public static readonly AttachedProperty<bool> CanScrollYProperty =
             AvaloniaProperty.RegisterAttached<object, ListBox, bool>(
                 "CanScrollY",
-                true,
-                false);
+                true);
 
         #endregion
 
@@ -501,9 +499,23 @@ namespace MonkeyPaste.Avalonia {
                     RoutingStrategies.Tunnel);
 
                 lb.AddHandler(
-                    InputElement.PointerPressedEvent,
-                    PreviewControlPointerPressedHandler,
-                    RoutingStrategies.Tunnel);
+                       InputElement.PointerPressedEvent,
+                       PreviewControlPointerPressedHandler,
+                       RoutingStrategies.Tunnel);
+                if (MpPlatform.Services.PlatformInfo.IsTouchInputEnabled) {
+
+
+                    lb.AddHandler(
+                        InputElement.PointerMovedEvent,
+                        PreviewControlPointerMovedHandler,
+                        RoutingStrategies.Tunnel);
+
+                    lb.AddHandler(
+                        InputElement.PointerReleasedEvent,
+                        PreviewControlPointerReleasedHandler,
+                        RoutingStrategies.Tunnel);
+                }
+
 
                 if (e == null) {
                     lb.AttachedToVisualTree += AttachedToVisualHandler;
@@ -567,13 +579,77 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private static MpPoint _downOffset;
+        private static MpPoint _down_touch_loc;
+        private static MpPoint _last_touch_loc;
+        private static MpPoint _last_v;
+
+        private static DateTime? _last_touch_dt;
         private static void PreviewControlPointerPressedHandler(object s, PointerPressedEventArgs e) {
             // when user clicks always halt any animated scrolling
             if (s is ListBox lb) {
                 SetVelocityX(lb, 0);
                 SetVelocityY(lb, 0);
+                if (MpPlatform.Services.PlatformInfo.IsTouchInputEnabled) {
+                    //e.Pointer.Capture(lb);
+                    _down_touch_loc = e.GetPosition(App.MainView as Control).ToPortablePoint();
+                    _downOffset = new MpPoint(GetScrollOffsetX(lb), GetScrollOffsetY(lb));
+                }
+
             }
             e.Handled = false;
+        }
+
+        private static void PreviewControlPointerMovedHandler(object s, PointerEventArgs e) {
+            if (!MpPlatform.Services.PlatformInfo.IsTouchInputEnabled) {
+                return;
+            }
+            if (s is ListBox lb) {
+                var cur_touch_loc = e.GetPosition(App.MainView as Control).ToPortablePoint();
+                var cur_touch_dt = DateTime.Now;
+                if (_down_touch_loc == null) {
+                    _down_touch_loc = cur_touch_loc;
+                }
+
+                if (_last_touch_dt == null) {
+                    _last_touch_dt = DateTime.Now;
+                }
+                var new_offset = _downOffset - (cur_touch_loc - _down_touch_loc);
+                ApplyScrollOffset(lb, new_offset.X, new_offset.Y);
+                if (_last_v == null) {
+                    _last_v = MpPoint.Zero;
+                } else {
+                    _last_v = (cur_touch_loc - _last_v) / (cur_touch_dt - _last_touch_dt.Value).TotalMilliseconds;
+                }
+
+                _last_touch_loc = cur_touch_loc;
+                _last_touch_dt = cur_touch_dt;
+            }
+
+        }
+
+        private static void PreviewControlPointerReleasedHandler(object s, PointerReleasedEventArgs e) {
+            if (!MpPlatform.Services.PlatformInfo.IsTouchInputEnabled ||
+                _last_v == null) {
+                return;
+            }
+
+            if (s is ListBox lb) {
+                _last_v *= 100;
+                if (GetCanScrollY(lb)) {
+                    SetVelocityY(lb, _last_v.Y);
+                    MpConsole.WriteLine($"Y Vel: {_last_v.Y}");
+                }
+                if (GetCanScrollX(lb)) {
+                    SetVelocityX(lb, _last_v.X);
+                    MpConsole.WriteLine($"Y Vel: {_last_v.X}");
+                }
+
+                _last_v = null;
+                _last_touch_loc = null;
+                _down_touch_loc = null;
+                _last_touch_dt = null;
+            }
         }
 
         private static void PointerMouseWheelHandler(object s, global::Avalonia.Input.PointerWheelEventArgs e) {
@@ -681,6 +757,10 @@ namespace MonkeyPaste.Avalonia {
                     vm.IsBusy) {
                     return;
                 }
+                if (_last_v != null) {
+                    // touch in progress
+                    return;
+                }
                 bool isThumbDragging = GetIsThumbDragging(lb);
                 bool canScroll = GetCanScrollX(lb) || GetCanScrollY(lb);
                 bool is_scroll_frozen = isThumbDragging || !canScroll;
@@ -720,22 +800,7 @@ namespace MonkeyPaste.Avalonia {
                 vx *= GetFrictionX(lb);
                 vy *= GetFrictionY(lb);
 
-                // set scroll offset for container scroll viewer (bound to tracks)
-                SetScrollOffsetX(lb, scrollOffsetX);
-                SetScrollOffsetY(lb, scrollOffsetY);
-
-                //if(!GetIsThumbDragging(lb)) 
-                {
-                    // manually set actual listbox scroll
-                    // so thumb drag smoothly scrolls (updates visual container sv)
-                    // and load more check doesn't occur to mouse up
-                    var lb_sv = lb.GetVisualDescendant<ScrollViewer>();
-                    lb_sv.ScrollToHorizontalOffset(scrollOffsetX);
-                    lb_sv.ScrollToVerticalOffset(scrollOffsetY);
-
-                    sv.ScrollToHorizontalOffset(scrollOffsetX);
-                    sv.ScrollToVerticalOffset(scrollOffsetY);
-                }
+                ApplyScrollOffset(lb, scrollOffsetX, scrollOffsetY);
 
                 SetVelocityX(lb, vx);
                 SetVelocityY(lb, vy);
@@ -745,6 +810,32 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Helper Methods
+
+        private static void ApplyScrollOffset(ListBox lb, double x, double y) {
+            var sv = GetScrollViewer(lb);
+            if (sv.DataContext is MpIAsyncObject vm &&
+                    vm.IsBusy) {
+                return;
+            }
+
+            // set scroll offset for container scroll viewer (bound to tracks)
+            var lb_sv = lb.GetVisualDescendant<ScrollViewer>();
+            if (GetCanScrollX(lb)) {
+                SetScrollOffsetX(lb, x);
+                // manually set actual listbox scroll
+                // so thumb drag smoothly scrolls (updates visual container sv)
+                // and load more check doesn't occur to mouse up
+                lb_sv.ScrollToHorizontalOffset(x);
+                sv.ScrollToHorizontalOffset(x);
+            }
+            if (GetCanScrollY(lb)) {
+                SetScrollOffsetY(lb, y);
+                lb_sv.ScrollToVerticalOffset(y);
+                sv.ScrollToVerticalOffset(y);
+            }
+
+
+        }
 
         private static bool BindScrollViewerAndTracks(ListBox lb) {
             if (GetScrollViewer(lb) is ScrollViewer sv &&
@@ -866,21 +957,6 @@ namespace MonkeyPaste.Avalonia {
             //tt.Bake();
         }
 
-        private static TransformOperation GetThumbTranslateOp(Thumb thumb) {
-            if (thumb.RenderTransform is TransformOperations tos) {
-                if (tos.Operations.FirstOrDefault(x => x.Type == TransformOperation.OperationType.Translate) is TransformOperation tto) {
-                    return tto;
-                }
-                //return new TransformOperation() {
-                //    Type = TransformOperation.OperationType.Translate,
-                //    Data = new TransformOperation.DataLayout() {
-                //        Translate = new TransformOperation.DataLayout.TranslateLayout()
-                //    }
-                //};
-            }
-            MpDebug.Break("Transform error, may need to define in binding");
-            return default;
-        }
         #endregion
 
         #region Public Methods

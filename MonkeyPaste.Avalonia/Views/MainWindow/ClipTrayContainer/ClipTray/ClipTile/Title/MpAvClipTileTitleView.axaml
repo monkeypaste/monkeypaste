@@ -13,7 +13,7 @@
                        d:DesignHeight="52"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileTitleView">
     <local:MpAvUserControl.Styles>
-        <Style Selector="Grid#SourceIconContainerGrid:pointerover Image#ClipTileAppIconBorderImage">
+        <Style Selector="StackPanel#SourceIconContainerPanel:pointerover Image#ClipTileAppIconBorderImage">
             <Style.Animations>
                 <Animation Duration="0:0:0.3"
                            Easing="CubicEaseOut"
@@ -35,7 +35,7 @@
                 </Animation>
             </Style.Animations>
         </Style>
-        <Style Selector="Grid#SourceIconContainerGrid:not(:pointerover) Image#ClipTileAppIconBorderImage">
+        <Style Selector="StackPanel#SourceIconContainerPanel:not(:pointerover) Image#ClipTileAppIconBorderImage">
             <Style.Animations>
                 <Animation Duration="0:0:0.3"
                            Easing="CubicEaseOut"
@@ -202,12 +202,12 @@
         </local:MpAvMarqueeTextBox>
 
         <!--  Source Icon  -->
-        <Grid x:Name="SourceIconContainerGrid"
-              Grid.Column="1"
-              Width="{Binding Bounds.Height, ElementName=TitleContainerGrid}"
-              HorizontalAlignment="Right"
-              Margin="0,0,10,0"
-              ClipToBounds="False">
+        <StackPanel x:Name="SourceIconContainerPanel"
+                    Grid.Column="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="0,0,10,0"
+                    ClipToBounds="False">
 
             <!--<Ellipse x:Name="SourceMatchEllipse"
                      IsVisible="False"
@@ -218,6 +218,7 @@
                      Margin="0,3,13,0" />-->
             <Button x:Name="ClipTileAppIconImageButton"
                     Classes="noBg noHoverBg shakeOver"
+                    Width="{Binding Bounds.Height, ElementName=TitleContainerGrid}"
                     Command="{Binding TransactionCollectionViewModel.ToggleTransactionPaneOpenCommand}"
                     ClipToBounds="False"
                     BorderThickness="0"
@@ -256,6 +257,22 @@
                 </Grid>
             </Button>
 
-        </Grid>
+            <local:MpAvOptionsButton x:Name="MobileContextOptionButton"
+                                     Margin="0,0,0,0"
+                                     Width="25"
+                                     Height="25"
+                                     VerticalAlignment="Stretch"
+                                     VerticalContentAlignment="Stretch"
+                                     Command="{Binding ShowContextMenuCommand}"
+                                     CommandParameter="{Binding $self}">
+                <local:MpAvOptionsButton.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <!--<Binding Path="IsSelected" />-->
+                        <Binding Path="!IsDesktop"
+                                 Source="{x:Static local:MpAvThemeViewModel.Instance}" />
+                    </MultiBinding>
+                </local:MpAvOptionsButton.IsVisible>
+            </local:MpAvOptionsButton>
+        </StackPanel>
     </Grid>
 </local:MpAvUserControl>

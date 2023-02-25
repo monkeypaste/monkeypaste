@@ -1049,7 +1049,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(HasModelChanged):
                     if (HasModelChanged) {
-                        HasModelChanged = false;
+                        //HasModelChanged = false;
 
                         Task.Run(async () => {
                             IsBusy = true;

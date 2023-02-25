@@ -39,6 +39,8 @@
                     Value="{Binding BoundWidth}" />
             <Setter Property="Height"
                     Value="{Binding BoundHeight}" />
+            <!--<Setter Property="IsHitTestVisible"
+                    Value="{Binding !HasScrollVelocity, Source={x:Static local:MpAvClipTrayViewModel.Instance}}" />-->
         </Style>
 
         <!--  TILE BORDER TRANSITIONS  -->

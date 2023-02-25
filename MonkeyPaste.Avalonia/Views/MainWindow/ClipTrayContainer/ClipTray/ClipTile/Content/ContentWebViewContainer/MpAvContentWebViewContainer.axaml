@@ -13,7 +13,8 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvContentWebViewContainer">
     <local:MpAvContentWebView x:Name="ContentWebView"
-                              Focusable="True"
+                              Focusable="{Binding IsSubSelectionEnabled}"
+                              local:MpAvReceivesEventsExtension.IsEnabled="{Binding !IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                               ContentId="{Binding CopyItemId, Mode=OneWay}"
                               IsContentLoaded="{Binding IsViewLoaded, Mode=TwoWay}"
                               IsContentResizing="{Binding IsResizing}"

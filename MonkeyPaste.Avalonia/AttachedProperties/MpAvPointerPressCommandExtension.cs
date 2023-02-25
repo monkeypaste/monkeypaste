@@ -294,7 +294,7 @@ namespace MonkeyPaste.Avalonia {
 
                     if (needs_double_delay_check ||
                         needs_hold_check) {
-                        e.Handled = true;
+                        //e.Handled = true;
 
                         Dispatcher.UIThread.Post(async () => {
                             bool is_still_down = true;

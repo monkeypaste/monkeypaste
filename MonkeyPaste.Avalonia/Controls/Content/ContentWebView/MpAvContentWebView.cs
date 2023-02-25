@@ -141,9 +141,10 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpIWebView Implementation
-
+#if !DESKTOP
         public override MpAvIWebViewBindingResponseHandler BindingHandler =>
             this;
+#endif
 
         #endregion
 
@@ -810,7 +811,7 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void OnDataContextEndUpdate() {
             base.OnDataContextEndUpdate();
-            if (_locatedDateTime == null) {
+            if (_locatedDateTime == null && this is not MpAvPlainHtmlConverterWebView) {
                 // is this called before attached to logical tree?
                 MpDebug.Break();
             }

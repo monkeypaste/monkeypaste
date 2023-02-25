@@ -136,6 +136,7 @@
 
                     <local:MpAvOptionsButton VerticalAlignment="Stretch"
                                              Classes="addRemoveBtn outline"
+                                             local:MpAvMenuExtension.IsEnabled="True"
                                              IsVisible="{Binding !IsJoinPanelVisible}"
                                              Command="{Binding SelectCustomNextJoinTypeCommand}" />
                 </StackPanel>

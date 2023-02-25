@@ -49,22 +49,31 @@ namespace MonkeyPaste.Avalonia {
                 VerticalAlignment = VerticalAlignment.Stretch,
             };
 
-            var quillWindow = new Window() {
-                Width = 300,
-                Height = 300,
-                ShowInTaskbar = false,
-                SystemDecorations = SystemDecorations.None
-            };
 
-            quillWindow.Content = ConverterWebView;
-            ConverterWebView.AttachedToVisualTree += (s, e) => {
-                if (OperatingSystem.IsWindows()) {
-                    // hide converter window from windows alt-tab menu
-                    MpAvToolWindow_Win32.InitToolWindow(quillWindow.PlatformImpl.Handle.Handle);
-                }
-                quillWindow.Hide();
-            };
-            quillWindow.Show();
+            if (MpPlatform.Services.PlatformInfo.IsDesktop) {
+                var quillWindow = new Window() {
+                    Width = 300,
+                    Height = 300,
+                    ShowInTaskbar = false,
+                    SystemDecorations = SystemDecorations.None
+                };
+
+                quillWindow.Content = ConverterWebView;
+                ConverterWebView.AttachedToVisualTree += (s, e) => {
+                    if (OperatingSystem.IsWindows()) {
+                        // hide converter window from windows alt-tab menu
+                        MpAvToolWindow_Win32.InitToolWindow(quillWindow.PlatformImpl.Handle.Handle);
+                    }
+                    quillWindow.Hide();
+                };
+                quillWindow.Show();
+            } else if (App.MainView is MpAvMainView mv) {
+                ConverterWebView.AttachedToLogicalTree += (s, e) => {
+
+                    ConverterWebView.IsVisible = false;
+                };
+                mv.RootGrid.Children.Add(ConverterWebView);
+            }
 
             MpConsole.WriteLine("Waiting for Html converter to initialize...");
             while (!ConverterWebView.IsEditorInitialized) {

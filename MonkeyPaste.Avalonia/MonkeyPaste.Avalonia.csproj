@@ -525,9 +525,6 @@
     <AvaloniaResource Include="Assets\Images\caret.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\catdog.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\chain.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>

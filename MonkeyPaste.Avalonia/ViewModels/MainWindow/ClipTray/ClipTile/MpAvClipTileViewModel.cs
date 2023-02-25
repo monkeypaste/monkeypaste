@@ -369,6 +369,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public MpIEmbedHost EmbedHost =>
+            GetContentView() as MpIEmbedHost;
+
         public int RecyclePriority {
             get {
                 if (Parent == null) {
@@ -1115,7 +1118,8 @@ namespace MonkeyPaste.Avalonia {
             }
             if (MpPlatform.Services.ContentViewLocator == null) {
                 // may need to reorganize load or block in a task to get this guy
-                Debugger.Break();
+                //Debugger.Break();
+                return null;
             }
             if (IsAppendNotifier) {
                 _contentView = MpPlatform.Services.ContentViewLocator.LocateModalContentView();
@@ -1402,6 +1406,7 @@ namespace MonkeyPaste.Avalonia {
                     // false = PublicHandle changed
 
                     OnPropertyChanged(nameof(IsAnyBusy));
+                    OnPropertyChanged(nameof(EmbedHost));
                     break;
                 case nameof(IsHovering):
                     Parent.OnPropertyChanged(nameof(Parent.CanScroll));

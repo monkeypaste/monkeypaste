@@ -341,6 +341,8 @@ namespace MonkeyPaste {
                 await MpDefaultDataModelTools.CreateAsync(MpPrefViewModel.Instance.ThisDeviceGuid);
                 await CreateViewsAsync();
                 await InitDefaultDataAsync();
+
+                await CreateTestDataAsync();
             } else {
                 await MpDefaultDataModelTools.InitializeAsync();
             }
@@ -785,6 +787,16 @@ INNER JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId
             }
 
             await Task.WhenAll(hci_idl.Select((x, idx) => MpCopyItemTag.Create(MpTag.HelpTagId, x, idx)));
+        }
+        private static async Task CreateTestDataAsync() {
+            for (int i = 0; i < 100; i++) {
+                var mpdo = new MpPortableDataObject(MpPortableDataFormats.Text, $"This is test {i}.");
+                await MpPlatform.Services.CopyItemBuilder.BuildAsync(
+                    pdo: mpdo,
+                    transType: MpTransactionType.Created,
+                    force_ext_sources: false);
+            }
+
         }
         public static async Task ResetShortcutsAsync() {
             var sl = await MpDataModelProvider.GetItemsAsync<MpShortcut>();

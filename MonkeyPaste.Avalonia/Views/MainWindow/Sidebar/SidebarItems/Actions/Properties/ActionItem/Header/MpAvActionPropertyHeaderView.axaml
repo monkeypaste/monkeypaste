@@ -68,6 +68,7 @@
                                  Width="15"
                                  Height="25"
                                  Margin="3,0,10,0"
+                                 local:MpAvMenuExtension.IsEnabled="True"
                                  local:MpAvMenuExtension.PlacementMode="Left"
                                  VerticalAlignment="Center"
                                  HorizontalAlignment="Left" />

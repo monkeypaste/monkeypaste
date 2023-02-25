@@ -200,7 +200,6 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
 
         protected abstract void EnableTrigger();
-
         protected abstract void DisableTrigger();
 
 
