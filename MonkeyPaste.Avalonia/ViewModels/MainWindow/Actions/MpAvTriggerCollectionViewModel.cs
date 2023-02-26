@@ -1,4 +1,6 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Media;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -227,6 +229,12 @@ namespace MonkeyPaste.Avalonia {
 
         public ObservableCollection<MpAvActionViewModelBase> Items { get; private set; } = new ObservableCollection<MpAvActionViewModelBase>();
 
+        public IEnumerable<MpAvTriggerActionViewModelBase> SortedTriggers =>
+            Items
+            .Where(x => x is MpAvTriggerActionViewModelBase)
+            .Cast<MpAvTriggerActionViewModelBase>()
+            .OrderBy(x => x.Label);
+
         public MpAvTriggerActionViewModelBase SelectedTrigger { get; set; }
         public MpAvActionViewModelBase FocusAction { get; set; }
 
@@ -241,6 +249,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsDesignerWindowOpen { get; set; }
+
+        public int SelectedTriggerIdx {
+            get => SortedTriggers.IndexOf(SelectedTrigger);
+            set => SelectedTrigger = SortedTriggers.ElementAtOrDefault(value);
+        }
         public bool IsAnyBusy {
             get {
                 if (IsBusy) {
@@ -422,6 +436,7 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(SelectedTrigger):
                     FocusAction = SelectedTrigger;
 
+                    OnPropertyChanged(nameof(SelectedTriggerIdx));
                     OnPropertyChanged(nameof(MinScale));
                     OnPropertyChanged(nameof(MaxScale));
                     OnPropertyChanged(nameof(Scale));
@@ -437,6 +452,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             OnPropertyChanged(nameof(Items));
+            OnPropertyChanged(nameof(SortedTriggers));
             Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsTrigger)));
             Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsActionDesignerVisible)));
             //OnPropertyChanged(nameof(Triggers));
@@ -636,6 +652,56 @@ namespace MonkeyPaste.Avalonia {
                 avm.InvokeThisActionCommand.Execute(null);
 
             });
+
+        public ICommand OpenDesignerWindowCommand => new MpCommand<object>(
+            (args) => {
+                if (MpPlatform.Services.PlatformInfo.IsDesktop) {
+                    var dw = new Window() {
+                        Width = 500,
+                        Height = 500,
+                        ShowInTaskbar = true,
+                        Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", null, null, null) as WindowIcon,
+                        Title = $"Trigger Designer - {SelectedTrigger.Label}",
+                        WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                        Content = new MpAvActionDesignerView() {
+                            BorderThickness = new Thickness(1),
+                            BorderBrush = Brushes.Black
+                        },
+                        DataContext = this,
+                        Padding = new Thickness(10)
+                    };
+
+                    dw.Bind(
+                        Window.TitleProperty,
+                        new Binding() {
+                            Source = FocusAction,
+                            Path = nameof(FocusAction.Label)
+                        });
+
+                    dw.Bind(
+                        Window.BackgroundProperty,
+                        new Binding() {
+                            Source = FocusAction,
+                            Path = nameof(FocusAction.ActionBackgroundHexColor),
+                            Mode = BindingMode.OneWay,
+                            Converter = MpAvStringHexToBrushConverter.Instance
+                        });
+
+                    dw.Closed += Dw_Closed;
+                    dw.Show();
+                } else {
+                    // Some kinda view nav here
+                    // see https://github.com/AvaloniaUI/Avalonia/discussions/9818
+
+                }
+                IsDesignerWindowOpen = true;
+            }, (args) => {
+                return !IsDesignerWindowOpen;
+            });
+
+        private void Dw_Closed(object sender, EventArgs e) {
+            IsDesignerWindowOpen = false;
+        }
 
         #endregion
     }

@@ -30,7 +30,7 @@ namespace MonkeyPaste.Avalonia {
                 return new MpMenuItemViewModel() {
                     TooltipSrcObj = MpAvMainWindowViewModel.Instance,
                     TooltipPropPath = nameof(MpAvMainWindowViewModel.Instance.ShowOrHideLabel),
-                    IconResourceKey = "AppTrayIcon",
+                    IconResourceKey = "AppIcon",
                     CommandPath = nameof(MpAvMainWindowViewModel.Instance.ToggleShowMainWindowCommand),
                     CommandSrcObj = MpAvMainWindowViewModel.Instance,
                     SubItems = new List<MpMenuItemViewModel>() {

@@ -22,6 +22,8 @@
     <Style Selector=":is(Button).defaultButton /template/ ContentPresenter">
         <Setter Property="Background"
                 Value="Beige" />
+        <Setter Property="Foreground"
+                Value="Black" />
         <Setter Property="CornerRadius"
                 Value="5" />
         <Setter Property="BorderThickness"

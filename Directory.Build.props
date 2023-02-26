@@ -8,12 +8,6 @@
   <PropertyGroup>
     <BuildOs>WINDOWS</BuildOs>
   </PropertyGroup>
-
-  <!--<PropertyGroup Condition="$(BuildOs) == 'WINDOWS' Or $(BuildOs) == 'LINUX' Or $(BuildOs) == 'MAC'">-->
-  <!--<PropertyGroup Condition="$(BuildOs) == 'WINDOWS'">
-    <DefineConstants>DESKTOP;</DefineConstants>
-    <IsDesktop>true</IsDesktop>
-  </PropertyGroup>-->
   
   <PropertyGroup Condition="$(BuildOs) == 'WINDOWS'">
     <MainTargetFramework>net7.0-windows</MainTargetFramework>

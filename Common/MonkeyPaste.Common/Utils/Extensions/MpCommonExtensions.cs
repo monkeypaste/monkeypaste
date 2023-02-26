@@ -188,6 +188,12 @@ namespace MonkeyPaste.Common {
             }
             return queue.Dequeue();
         }
+        //public static T ElementAtOrDefault<T>(this IEnumerable<T> source, int idx) {
+        //    if (source == null || idx < 0 || idx >= source.Count()) {
+        //        return default(T);
+        //    }
+        //    return source.ElementAt(idx);
+        //}
         public static void ForEach<T>(this IEnumerable source, Action<T> action) {
             if (source == null) {
                 return;

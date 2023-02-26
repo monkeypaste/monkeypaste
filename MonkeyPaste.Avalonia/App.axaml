@@ -9,11 +9,11 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceInclude Source="/Styles/Dictionaries/MpAvImageResourceDictionary.axaml" />
-                <ResourceInclude Source="/Styles/Dictionaries/MpAvIconResourceDictionary.axaml" />
-                <ResourceInclude Source="/Styles/Dictionaries/MpAvSvgResourceDictionary.axaml" />
-                <ResourceInclude Source="/Styles/Dictionaries/MpAvConverterResourceDictionary.axaml" />
-                <ResourceInclude Source="/Styles/Dictionaries/MpAvCursorResourceDictionary.axaml" />
+                <ResourceInclude Source="/Resources/MpAvImageResourceDictionary.axaml" />
+                <ResourceInclude Source="/Resources/MpAvIconResourceDictionary.axaml" />
+                <ResourceInclude Source="/Resources/MpAvSvgResourceDictionary.axaml" />
+                <ResourceInclude Source="/Resources/MpAvConverterResourceDictionary.axaml" />
+                <ResourceInclude Source="/Resources/MpAvCursorResourceDictionary.axaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

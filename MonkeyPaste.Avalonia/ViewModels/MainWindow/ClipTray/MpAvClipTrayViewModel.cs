@@ -400,12 +400,18 @@ namespace MonkeyPaste.Avalonia {
         public double QueryTrayTotalTileWidth { get; private set; }
         public double QueryTrayTotalTileHeight { get; private set; }
 
-        public double QueryTrayTotalWidth => Math.Max(0, Math.Max(QueryTrayScreenWidth, QueryTrayTotalTileWidth));
-        public double QueryTrayTotalHeight => Math.Max(0, Math.Max(QueryTrayScreenHeight, QueryTrayTotalTileHeight));
+        public double QueryTrayTotalWidth =>
+            Math.Max(0, Math.Max(QueryTrayScreenWidth, QueryTrayTotalTileWidth));
+        public double QueryTrayTotalHeight =>
+            Math.Max(0, Math.Max(QueryTrayScreenHeight, QueryTrayTotalTileHeight));
 
         public double QueryTrayScreenWidth { get; set; }
 
         public double QueryTrayScreenHeight { get; set; }
+
+        public double QueryTrayFixedDimensionLength =>
+            ListOrientation == Orientation.Horizontal ?
+                QueryTrayScreenHeight : QueryTrayScreenWidth;
 
         public double PinTrayScreenWidth { get; set; }
 
@@ -513,6 +519,31 @@ namespace MonkeyPaste.Avalonia {
             QueryTrayTotalTileWidth = totalTileSize.Width;
             QueryTrayTotalTileHeight = totalTileSize.Height;
         }
+        public MpRect FindTileRect(int queryOffsetIdx, MpRect prevOffsetRect) {
+
+            object result = FindTileRectOrQueryIdxOrTotalTileSize_internal(
+                                queryOffsetIdx: queryOffsetIdx,
+                                scrollOffsetX: -1,
+                                scrollOffsetY: -1,
+                                prevOffsetRect: prevOffsetRect);
+            if (result is MpRect tileRect) {
+                return tileRect;
+            }
+            return MpRect.Empty;
+        }
+
+        public int FindJumpTileIdx(double scrollOffsetX, double scrollOffsetY, out MpRect tileRect) {
+            object result = FindTileRectOrQueryIdxOrTotalTileSize_internal(
+                                queryOffsetIdx: -1,
+                                scrollOffsetX: scrollOffsetX,
+                                scrollOffsetY: scrollOffsetY);
+            if (result is object[] resultParts) {
+                tileRect = resultParts[1] as MpRect;
+                return (int)resultParts[0];
+            }
+            tileRect = MpRect.Empty;
+            return -1;
+        }
 
         private object FindTileRectOrQueryIdxOrTotalTileSize_internal(int queryOffsetIdx, double scrollOffsetX, double scrollOffsetY, MpRect prevOffsetRect = null) {
             // For TotalTileSize<MpSize>: all params -1
@@ -538,6 +569,8 @@ namespace MonkeyPaste.Avalonia {
             int gridFixedCount = -1;
 
             MpRect last_rect = null;// prevOffsetRect;
+
+            UpdateDefaultQueryItemSize();
 
             for (int i = startIdx; i <= queryOffsetIdx; i++) {
                 int tileId = MpPlatform.Services.Query.PageTools.GetItemId(i);
@@ -636,31 +669,7 @@ namespace MonkeyPaste.Avalonia {
             return null;
         }
 
-        public MpRect FindTileRect(int queryOffsetIdx, MpRect prevOffsetRect) {
 
-            object result = FindTileRectOrQueryIdxOrTotalTileSize_internal(
-                                queryOffsetIdx: queryOffsetIdx,
-                                scrollOffsetX: -1,
-                                scrollOffsetY: -1,
-                                prevOffsetRect: prevOffsetRect);
-            if (result is MpRect tileRect) {
-                return tileRect;
-            }
-            return MpRect.Empty;
-        }
-
-        public int FindJumpTileIdx(double scrollOffsetX, double scrollOffsetY, out MpRect tileRect) {
-            object result = FindTileRectOrQueryIdxOrTotalTileSize_internal(
-                                queryOffsetIdx: -1,
-                                scrollOffsetX: scrollOffsetX,
-                                scrollOffsetY: scrollOffsetY);
-            if (result is object[] resultParts) {
-                tileRect = resultParts[1] as MpRect;
-                return (int)resultParts[0];
-            }
-            tileRect = MpRect.Empty;
-            return -1;
-        }
 
         #region Default Tile Layout 
 
@@ -696,26 +705,36 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public double DefaultQueryItemWidth {
-            get {
-                double defaultWidth = ListOrientation == Orientation.Horizontal ?
-                                    (QueryTrayScreenHeight * ZoomFactor) :
-                                    (QueryTrayScreenWidth * ZoomFactor);
-                double scrollBarSize = ScrollBarFixedAxisSize;// IsHorizontalScrollBarVisible ? 30:0;
-                return Math.Clamp(defaultWidth - scrollBarSize, 0, MaxTileWidth);
-            }
-        }
 
-        public double DefaultQueryItemHeight {
-            get {
-                double defaultHeight = ListOrientation == Orientation.Horizontal ?
-                                    (QueryTrayScreenHeight * ZoomFactor) :
-                                    (QueryTrayScreenWidth * ZoomFactor);
-                //defaultHeight = MpAvMainWindowViewModel.Instance.MainWindowScreen.Bounds.Width *
-                //            ZoomFactor * MIN_SIZE_ZOOM_FACTOR_COEFF;
-                double scrollBarSize = ScrollBarFixedAxisSize;// IsVerticalScrollBarVisible ? 30 : 0;
-                return Math.Clamp(defaultHeight - scrollBarSize, 0, MaxTileHeight);
-            }
+        private double _defaultQueryItemWidth;
+        public double DefaultQueryItemWidth =>
+            _defaultQueryItemWidth; // NOTE updated in F
+
+        private double _defaultQueryItemHeight;
+        public double DefaultQueryItemHeight =>
+            _defaultQueryItemHeight;
+
+        private void UpdateDefaultQueryItemSize() {
+            double length = QueryTrayFixedDimensionLength * ZoomFactor;
+
+            double scrollBarSize_x = ScrollBarFixedAxisSize + (IsHorizontalScrollBarVisible ? 30 : 0);
+            _defaultQueryItemWidth = Math.Clamp(length - scrollBarSize_x, 0, MaxTileWidth);
+
+            double scrollBarSize_y = ScrollBarFixedAxisSize + (IsVerticalScrollBarVisible ? 30 : 0);
+            _defaultQueryItemHeight = Math.Clamp(length - scrollBarSize_y, 0, MaxTileHeight);
+            //double defaultWidth;
+            //if (LayoutType == MpClipTrayLayoutType.Stack) {
+            //    defaultWidth = ListOrientation == Orientation.Horizontal ?
+            //                    (QueryTrayScreenWidth * ZoomFactor) :
+            //                    (QueryTrayScreenWidth * ZoomFactor);
+            //} else {
+            //    defaultWidth = MpAvMainWindowViewModel.Instance.MainWindowScreen.Bounds.Width *
+            //                ZoomFactor * MIN_SIZE_ZOOM_FACTOR_COEFF;
+            //}
+            //double scrollBarSize = ScrollBarFixedAxisSize;// IsHorizontalScrollBarVisible ? 30:0;
+            //return Math.Clamp(defaultWidth - scrollBarSize, 0, MaxTileWidth);
+            OnPropertyChanged(nameof(DefaultQueryItemWidth));
+            OnPropertyChanged(nameof(DefaultQueryItemHeight));
         }
 
         public double DefaultPinItemWidth => DEFAULT_ITEM_SIZE;
@@ -1143,25 +1162,15 @@ namespace MonkeyPaste.Avalonia {
         public int DefaultLoadCount {
             get {
                 if (LayoutType == MpClipTrayLayoutType.Stack) {
-                    return 20;
+                    if (MpPlatform.Services.PlatformInfo.IsDesktop) {
+                        return 20;
+                    }
+                    return 5;
                 } else {
-                    return 40;
-                    // for grid try to make default load count so it lands at the end of the fixed side
-                    //double length = ListOrientation != Orientation.Horizontal ? QueryTrayScreenHeight : QueryTrayScreenWidth;
-                    //double item_length = ListOrientation != Orientation.Horizontal ? DefaultItemSize.Height : DefaultItemSize.Width;
-                    //double items_per_length = length / item_length;
-
-                    //return (int)items_per_length * 2;
-
-                    //double count_val = (double)CurGridFixedCount * items_per_length;
-                    //int count = (int)count_val;
-                    //while(count % CurGridFixedCount != 0) {
-                    //    count--;
-                    //    if(count <= 0) {
-                    //        Debugger.Break();
-                    //    }
-                    //}
-                    //return count * 3;
+                    if (MpPlatform.Services.PlatformInfo.IsDesktop) {
+                        return 40;
+                    }
+                    return 5;
                 }
             }
         }
@@ -1971,22 +1980,16 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(ListOrientation):
                     break;
                 case nameof(ZoomFactor):
+                    UpdateDefaultQueryItemSize();
                     MpMessenger.SendGlobal<MpMessageType>(MpMessageType.TrayZoomFactorChanged);
                     break;
-                case nameof(LayoutType):
-
+                case nameof(MaxTileHeight):
+                case nameof(MaxTileWidth):
+                case nameof(IsHorizontalScrollBarVisible):
+                case nameof(IsVerticalScrollBarVisible):
                 case nameof(QueryTrayScreenHeight):
-                    if (QueryTrayScreenHeight < 0) {
-                        Debugger.Break();
-                        QueryTrayScreenHeight = 0;
-                    }
-                    break;
                 case nameof(QueryTrayScreenWidth):
-                    if (QueryTrayScreenWidth < 0) {
-                        Debugger.Break();
-                        QueryTrayScreenWidth = 0;
-                    }
-                    //RefreshLayout();
+                    UpdateDefaultQueryItemSize();
                     break;
                 case nameof(QueryTrayTotalTileWidth):
                 case nameof(QueryTrayTotalTileHeight):
@@ -2059,11 +2062,6 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(ObservedContainerScreenWidth):
                     OnPropertyChanged(nameof(MaxPinTrayScreenWidth));
                     break;
-
-
-                    //case nameof(IsAnyTileDragging):
-                    //    MpAvMainWindowViewModel.Instance.OnPropertyChanged(nameof(MpAvMainWindowViewModel.Instance.IsAnyItemDragging));
-                    //    break;
             }
         }
 

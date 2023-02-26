@@ -1,6 +1,4 @@
-﻿//using AvaloniaColorPicker;
-using Avalonia.Controls;
-using AvaloniaColorPicker;
+﻿using Avalonia.Controls;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Threading.Tasks;

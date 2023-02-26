@@ -635,7 +635,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (s is ListBox lb) {
-                _last_v *= 100;
+                //_last_v *= 100;
                 if (GetCanScrollY(lb)) {
                     SetVelocityY(lb, _last_v.Y);
                     MpConsole.WriteLine($"Y Vel: {_last_v.Y}");

@@ -12,6 +12,8 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -132,7 +134,6 @@ namespace MonkeyPaste.Avalonia {
 #if !DESKTOP
             //Background = Brushes.Lime;
 #endif
-
             RootGrid = this.FindControl<Grid>("MainWindowContainerGrid");
 
             var sidebarSplitter = this.FindControl<GridSplitter>("SidebarGridSplitter");
@@ -140,6 +141,7 @@ namespace MonkeyPaste.Avalonia {
 
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }
+
 
         #endregion
 
@@ -907,6 +909,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
         }
+
 
         #region Event Handlers
         private void SidebarSplitter_DragDelta(object sender, VectorEventArgs e) {

@@ -332,9 +332,9 @@ namespace MonkeyPaste {
         private double[] _iconMargin;
         public double[] IconMargin {
             get {
-                if (_iconMargin == null) {
-                    return new double[] { 5, 0, IconMinWidth + 10, 0 };
-                }
+                //if (_iconMargin == null) {
+                //    return new double[] { 5, 0, IconMinWidth + 10, 0 };
+                //}
                 return _iconMargin;
             }
             set {

@@ -7,7 +7,7 @@ using System.Diagnostics;
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTileView : MpAvUserControl<MpAvClipTileViewModel> {
         public MpAvClipTileView() {
-            InitializeComponent();
+            AvaloniaXamlLoader.Load(this);
             DataContextChanged += MpAvClipTileView_DataContextChanged;
             this.PointerMoved += MpAvClipTileView_PointerMoved;
         }
@@ -60,10 +60,5 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
         }
-
-        private void InitializeComponent() {
-            AvaloniaXamlLoader.Load(this);
-        }
-
     }
 }

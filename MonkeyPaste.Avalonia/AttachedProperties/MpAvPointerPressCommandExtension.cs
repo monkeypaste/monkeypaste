@@ -5,6 +5,7 @@ using Avalonia.Interactivity;
 using Avalonia.Threading;
 using MonkeyPaste.Common.Avalonia;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -223,17 +224,22 @@ namespace MonkeyPaste.Avalonia {
                 false);
 
         private static void HandleIsEnabledChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
-            if (e.NewValue is bool isEnabledVal && isEnabledVal) {
-                if (element is Control control) {
+            if (element is Control control &&
+                e.NewValue is bool isEnabledVal) {
+                if (control.DataContext is MpAvClipTileViewModel) {
+                    Debugger.Break();
+                }
+                if (isEnabledVal) {
                     control.AttachedToVisualTree += EnabledControl_AttachedToVisualHandler;
                     control.DetachedFromVisualTree += DisabledControl_DetachedToVisualHandler;
                     if (control.IsInitialized) {
                         EnabledControl_AttachedToVisualHandler(control, null);
                     }
+                } else {
+                    DisabledControl_DetachedToVisualHandler(element, null);
                 }
-            } else {
-                DisabledControl_DetachedToVisualHandler(element, null);
             }
+
         }
 
         #endregion

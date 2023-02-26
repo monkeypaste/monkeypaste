@@ -538,10 +538,11 @@ namespace MonkeyPaste.Avalonia {
         }
         private static object CreateCheckableIcon(MpMenuItemViewModel mivm) {
             var pi = new PathIcon() {
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch,
                 Width = mivm.CheckResourceKey == "CheckSvg" ? 15 : 7,
                 Height = mivm.CheckResourceKey == "CheckSvg" ? 15 : 7,
+                //Margin = mivm.CheckResourceKey == "CheckSvg" ? new Thickness(10) : new Thickness(15),
                 Data = MpPlatform.Services.PlatformResource.GetResource(mivm.CheckResourceKey) as StreamGeometry,
                 Foreground = mivm.IconHexStr.HexColorToContrastingFgHexColor().ToAvBrush()
             };
@@ -551,8 +552,10 @@ namespace MonkeyPaste.Avalonia {
         }
         private static Border GetIconBorder(MpMenuItemViewModel mivm) {
             var ib = new Border() {
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
+                //HorizontalAlignment = HorizontalAlignment.Center,
+                //VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch,
                 MinWidth = mivm.IconMinWidth,
                 MinHeight = mivm.IconMinHeight,
                 BorderThickness = new Thickness(mivm.IconBorderThickness),

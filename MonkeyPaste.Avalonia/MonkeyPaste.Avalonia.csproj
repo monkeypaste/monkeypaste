@@ -288,6 +288,7 @@
     <None Remove="Assets\Images\minus.png" />
     <None Remove="Assets\Images\minus2.png" />
     <None Remove="Assets\Images\monkey.png" />
+    <None Remove="Assets\Images\newwindow.png" />
     <None Remove="Assets\Images\noentry.png" />
     <None Remove="Assets\Images\noneclick.png" />
     <None Remove="Assets\Images\paste.png" />
@@ -384,8 +385,6 @@
     <None Remove="CefGlue.Avalonia" />
     <None Remove="Dotnet.Bundle" />
     <None Remove="WebkitGtkSharp" />
-    <None Remove="Styles\Spinner\" />
-    <EmbeddedResource Remove="Styles\Spinner\Spinner.xaml" />
     <None Remove="Controls\ProgressRing\" />
     <None Remove="GtkSharp" />
     <None Remove="GioSharp" />
@@ -747,6 +746,9 @@
     <AvaloniaResource Include="Assets\Images\monkey.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\newwindow.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\noentry.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -1062,7 +1064,6 @@
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-preview5" />
     <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.0-preview5" />
     <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.0-preview5" />
-    <PackageReference Include="AvaloniaColorPicker" Version="1.3.5-preview4" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
     <PackageReference Include="System.Management" Version="8.0.0-preview.1.23110.8" />
     <PackageReference Include="XamlNameReferenceGenerator" Version="1.6.1" />

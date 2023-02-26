@@ -1,7 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.VisualTree;
-using AvaloniaColorPicker;
 using MonkeyPaste.Common;
 using System;
 using System.Linq;
@@ -22,7 +21,7 @@ namespace MonkeyPaste.Avalonia {
             typeof(AutoCompleteBox),
             typeof(ComboBoxItem),
             //typeof(WebView),
-            typeof(ColorPickerWindow)
+            typeof(MpAvColorPickerView)
         };
 
         private static MpAvFocusManager _instance;

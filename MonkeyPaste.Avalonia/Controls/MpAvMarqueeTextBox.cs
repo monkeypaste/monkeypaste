@@ -37,7 +37,7 @@ namespace MonkeyPaste.Avalonia {
 
         private MpPoint _tb_mp;
 
-        private int _delayMs = (int)(1000 / 60);
+        private int _delayMs = (int)(1000 / 50);
 
         private int _curLoopWaitMs = 0;
         private double _distTraveled = 0;
@@ -144,14 +144,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region MaxVelocity AvaloniaProperty
 
-        private double _maxVelocity = -5.0d;
+        private double _maxVelocity = -3.0d;
         public double MaxVelocity {
             get => _maxVelocity;
             set => SetAndRaise(MaxVelocityProperty, ref _maxVelocity, value);
         }
 
         public static readonly StyledProperty<double> MaxVelocityProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, double>(nameof(MaxVelocity), -5.0d);
+            AvaloniaProperty.Register<MpAvMarqueeTextBox, double>(nameof(MaxVelocity), -3.0d);
 
         #endregion
 
@@ -614,7 +614,7 @@ namespace MonkeyPaste.Avalonia {
                 var cmp = _tb_mp == null ? new MpPoint() : _tb_mp;
                 bool isReseting = _tb_mp == null || !new MpRect(MpPoint.Zero, this.Bounds.Size.ToPortableSize()).Contains(cmp);
 
-                double max_width = GetRenderWidth();
+                double max_width = Math.Max(1, this.Bounds.Width); //GetRenderWidth();
                 double velMultiplier = isReseting ? 1.0 : Math.Min(1.0, Math.Max(0.1, cmp.X / max_width));
 
                 if (AutoMarquee) {

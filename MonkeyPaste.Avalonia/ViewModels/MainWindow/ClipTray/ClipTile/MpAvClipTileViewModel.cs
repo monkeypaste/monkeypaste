@@ -38,7 +38,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constants
-        public const int AUTO_CYCLE_DETAIL_DELAY_MS = 3000;
+        public const int AUTO_CYCLE_DETAIL_DELAY_MS = 5000;
 
         #endregion
 
@@ -224,6 +224,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Layout
 
+
         private MpSize _unconstrainedContentSize = MpSize.Empty;
         public MpSize UnconstrainedContentDimensions {
             get => _unconstrainedContentSize;
@@ -236,7 +237,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public double TileTitleHeight => IsTitleVisible ? 100 : 0;
-        public double TileDetailHeight => 25;// MpMeasurements.Instance.ClipTileDetailHeight;
+        public double TileDetailHeight =>
+            IsCornerButtonsVisible ? 20 : 0;
 
         private double _tileEditToolbarHeight = 40;// MpMeasurements.Instance.ClipTileEditToolbarDefaultHeight;
         public double TileEditToolbarHeight {
@@ -1412,12 +1414,14 @@ namespace MonkeyPaste.Avalonia {
                     Parent.OnPropertyChanged(nameof(Parent.CanScroll));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyHovering));
                     OnPropertyChanged(nameof(IsCornerButtonsVisible));
-                    if (IsHovering) {
+                    break;
+                case nameof(IsCornerButtonsVisible):
+                    if (IsCornerButtonsVisible) {
                         AutoCycleDetailsAsync().FireAndForgetSafeAsync(this);
                         Dispatcher.UIThread.Post(async () => {
-                            while (IsHovering) {
+                            while (IsCornerButtonsVisible) {
                                 OnPropertyChanged(nameof(CopyItemTitle));
-                                await Task.Delay(3000);
+                                await Task.Delay(AUTO_CYCLE_DETAIL_DELAY_MS);
                             }
                         });
                     }
@@ -1728,7 +1732,7 @@ namespace MonkeyPaste.Avalonia {
             }
             DateTime lastCycle = DateTime.Now;
             TimeSpan cycle_delay = TimeSpan.FromMilliseconds(AUTO_CYCLE_DETAIL_DELAY_MS);
-            while (IsHovering) {
+            while (IsCornerButtonsVisible) {
                 if (DateTime.Now - lastCycle > cycle_delay) {
                     lastCycle = DateTime.Now;
                     CycleDetailCommand.Execute(null);

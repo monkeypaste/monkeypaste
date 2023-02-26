@@ -30,6 +30,8 @@
         local:MpAvMenuExtension.SuppressDefaultRightClick="True"
         local:MpAvMenuExtension.SelectOnRightClick="True"
     -->
+    <!--
+    -->
     <local:MpAvClipBorder x:Name="ClipTileContainerBorder"
                           ClipToBounds="True"
                           HorizontalAlignment="Stretch"
@@ -38,29 +40,32 @@
                           Classes.CanResize="{Binding CanResize}"
                           Classes.IsResizing="{Binding IsResizing}"
                           Classes.IsAnyBusy="{Binding IsAnyBusy}"
-                          Classes.showTitle="{Binding IsTitleVisible}"
-                          Classes.showDetail="{Binding IsDetailVisible}"
                           local:MpAvReceivesEventsExtension.IsEnabled="{Binding !IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                           local:MpAvReceivesEventsExtension.SenderFilter="{Binding EmbedHost}"
                           VerticalAlignment="Stretch"
                           local:MpAvPointerPressCommandExtension.IsEnabled="True"
+                          local:MpAvPointerPressCommandExtension.RoutingStrategy="Tunnel"
                           local:MpAvPointerPressCommandExtension.DoubleLeftPressCommand="{Binding EnableSubSelectionCommand}"
                           local:MpAvPointerPressCommandExtension.HoldingCommand="{Binding ShowContextMenuCommand}"
                           local:MpAvPointerPressCommandExtension.HoldingCommandParameter="{Binding $self}"
+                          local:MpAvPointerPressCommandExtension.RightPressCommand="{Binding ShowContextMenuCommand}"
+                          local:MpAvPointerPressCommandExtension.RightPressCommandParameter="{Binding $self}"
                           ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                           ScrollViewer.VerticalScrollBarVisibility="Hidden"
                           CornerRadius="{StaticResource TileCornerRadius}"
                           BorderThickness="{StaticResource TileBorderThickness}"
                           Background="{DynamicResource ClipTileContentBackgroundBrush}">
 
-
-        <!--  SPLIT VIEW CONTENT  -->
-
         <Grid x:Name="TileGrid"
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch"
-              RowDefinitions="0.25*,*,20"
               ColumnDefinitions="*,Auto">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.25*"
+                               MaxHeight="40" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="20" />
+            </Grid.RowDefinitions>
 
             <!--  Title  -->
 
@@ -75,6 +80,7 @@
             <!--  Content  -->
             <local:MpAvClipTileContentView x:Name="ClipTileContentView"
                                            Grid.Row="1"
+                                           Grid.RowSpan="2"
                                            HorizontalAlignment="Stretch"
                                            VerticalAlignment="Stretch"
                                            DataContext="{Binding}" />
@@ -82,7 +88,8 @@
             <!--
                 IsBusy Overlay
             -->
-            <Border Grid.Row="1"
+            <Border x:Name="BusyOverlay"
+                    Grid.Row="1"
                     IsVisible="{Binding IsAnyBusy, FallbackValue=True, TargetNullValue=True}"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
@@ -96,16 +103,9 @@
             <!--  Detail  -->
             <Grid x:Name="DetailContainerGrid"
                   Grid.Row="2"
+                  IsVisible="{Binding IsCornerButtonsVisible}"
                   HorizontalAlignment="Center"
                   VerticalAlignment="Bottom">
-                <Grid.IsVisible>
-                    <MultiBinding Converter="{StaticResource MultiBoolConverter}"
-                                  ConverterParameter="OR">
-                        <Binding Path="IsDetailVisible" />
-                        <Binding Path="IsCornerButtonsVisible" />
-                        <Binding Path="!IsContentReadOnly" />
-                    </MultiBinding>
-                </Grid.IsVisible>
                 <TransitioningContentControl x:Name="DetailTransitioningContentControl"
                                              HorizontalAlignment="Center"
                                              Content="{Binding DetailText}">
@@ -134,7 +134,8 @@
 
             <!--  CORNER BUTTONS  -->
 
-            <local:MpAvClipTileCornerButtonsView Grid.Row="0"
+            <local:MpAvClipTileCornerButtonsView x:Name="CornerButtonOverlay"
+                                                 Grid.Row="0"
                                                  Grid.RowSpan="3"
                                                  IsVisible="{Binding IsCornerButtonsVisible}"
                                                  HorizontalAlignment="Stretch"
@@ -144,10 +145,11 @@
             <!--  TRANSACTION COLUMN  -->
 
 
-            <local:MpAvClipTileTransactionPaneView DataContext="{Binding TransactionCollectionViewModel}"
+            <local:MpAvClipTileTransactionPaneView x:Name="TransactionPanelColumn"
                                                    Grid.Column="1"
                                                    Grid.Row="0"
                                                    Grid.RowSpan="3"
+                                                   DataContext="{Binding TransactionCollectionViewModel}"
                                                    Background="{DynamicResource ClipTileTransactionPaneBackgroundBrush}"
                                                    IsVisible="{Binding IsTransactionPaneOpen}"
                                                    HorizontalAlignment="Stretch"
@@ -200,7 +202,8 @@
                           VerticalAlignment="Stretch" />
 
             <!--  Trial Expired Overlay  -->
-            <Border HorizontalAlignment="Stretch"
+            <Border x:Name="TrialExpiredOverlay"
+                    HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
                     IsVisible="{Binding IsTrialOverlayVisibile}">
                 <Border.Background>

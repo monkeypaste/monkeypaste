@@ -52,7 +52,7 @@
                         Grid.Column="1"
                         DataContext="{Binding LastSelectedItem, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
                         Background="{Binding SidebarBgHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
-                        Padding="10,10,0,10"
+                        Padding="0,10,0,0"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch">
                     <ContentControl x:Name="SelectedSidebarContentControl"

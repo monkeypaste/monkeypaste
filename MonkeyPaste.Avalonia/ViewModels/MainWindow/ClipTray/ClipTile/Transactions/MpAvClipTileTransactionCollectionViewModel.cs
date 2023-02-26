@@ -231,26 +231,25 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void ApplyTransaction(MpAvTransactionItemViewModel tivm) {
-            return; // f transactions
-            if (tivm == null ||
-                tivm.TransactionType == MpTransactionType.Pasted ||
-                tivm.TransactionType == MpTransactionType.Edited ||
-                tivm.TransactionType == MpTransactionType.Dropped ||
-                tivm.TransactionType == MpTransactionType.Created) {
-                return;
-            }
+            //if (tivm == null ||
+            //    tivm.TransactionType == MpTransactionType.Pasted ||
+            //    tivm.TransactionType == MpTransactionType.Edited ||
+            //    tivm.TransactionType == MpTransactionType.Dropped ||
+            //    tivm.TransactionType == MpTransactionType.Created) {
+            //    return;
+            //}
 
-            if (Parent.GetContentView() is MpIContentView cv) {
-                MpJsonObject updateObj = null;
-                updateObj = tivm.GetTransactionDelta();
-                if (updateObj == null) {
-                    updateObj = tivm.GetTransactionAnnotation();
-                }
-                if (updateObj == null) {
-                    return;
-                }
-                cv.UpdateContentAsync(updateObj).FireAndForgetSafeAsync(this);
-            }
+            //if (Parent.GetContentView() is MpIContentView cv) {
+            //    MpJsonObject updateObj = null;
+            //    updateObj = tivm.GetTransactionDelta();
+            //    if (updateObj == null) {
+            //        updateObj = tivm.GetTransactionAnnotation();
+            //    }
+            //    if (updateObj == null) {
+            //        return;
+            //    }
+            //    cv.UpdateContentAsync(updateObj).FireAndForgetSafeAsync(this);
+            //}
         }
 
         private void Transactions_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
