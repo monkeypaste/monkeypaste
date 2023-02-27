@@ -16,11 +16,9 @@ namespace MonkeyPaste.Avalonia {
             var czfb = this.FindControl<Control>("CurZoomFactorButton");
             czfb.PointerMoved += Czfb_PointerMoved;
             czfb.DoubleTapped += Czfb_DoubleTapped;
-            //czfb.EffectiveViewportChanged += (s, e) => PositionZoomValueButton();
 
             var czfb_cg = this.FindControl<Control>("ZoomSliderContainerGrid");
             czfb_cg.PointerReleased += Czfb_cg_PointerReleased;
-            //czfb_cg.EffectiveViewportChanged += (s, e) => PositionZoomValueButton();
 
             var windowDragButton = this.FindControl<Control>("WindowOrientationHandleButton");
             windowDragButton.AddHandler(Control.PointerPressedEvent, WindowDragButton_PointerPressed, RoutingStrategies.Tunnel);
@@ -45,24 +43,24 @@ namespace MonkeyPaste.Avalonia {
             var czfb_cg = this.FindControl<Control>("ZoomSliderContainerGrid");
             var czfb = this.FindControl<Control>("CurZoomFactorButton");
 
-            double offsetX = -czfb.Width * 0.5;
-            double offsetY = -czfb.Height * 0.5;
+            double offsetX = -czfb.Bounds.Width * 0.5;
+            double offsetY = -czfb.Bounds.Height * 0.5;
             if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
                 if (p == null) {
                     p = new MpPoint(
-                        czfb_cg.Width * percent,
-                        (czfb_cg.Height / 2) - (czfb.Height / 2));
+                        czfb_cg.Bounds.Width * percent,
+                        (czfb_cg.Bounds.Height / 2) - (czfb.Bounds.Height / 2));
                 } else {
-                    p.Y = (czfb_cg.Height / 2) - (czfb.Height / 2);
+                    p.Y = (czfb_cg.Bounds.Height / 2) - (czfb.Bounds.Height / 2);
                 }
                 p.X += offsetX;
             } else {
                 if (p == null) {
                     p = new MpPoint(
-                        (czfb_cg.Width / 2) - (czfb.Width / 2),
-                        czfb_cg.Height * percent);
+                        (czfb_cg.Bounds.Width / 2) - (czfb.Bounds.Width / 2),
+                        czfb_cg.Bounds.Height * percent);
                 } else {
-                    p.X = (czfb_cg.Width / 2) - (czfb.Width / 2);
+                    p.X = (czfb_cg.Bounds.Width / 2) - (czfb.Bounds.Width / 2);
                 }
                 p.Y += offsetY;
             }
@@ -75,8 +73,8 @@ namespace MonkeyPaste.Avalonia {
 
             double percent =
                 MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
-                    cg_mp.X / czfb_cg.Width :
-                    cg_mp.Y / czfb_cg.Height;
+                    cg_mp.X / czfb_cg.Bounds.Width :
+                    cg_mp.Y / czfb_cg.Bounds.Height;
             SetZoomFactor(percent, cg_mp);
         }
 

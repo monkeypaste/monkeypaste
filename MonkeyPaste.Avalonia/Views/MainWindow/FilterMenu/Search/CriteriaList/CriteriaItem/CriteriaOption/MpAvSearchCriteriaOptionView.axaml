@@ -20,7 +20,7 @@
         <Style Selector="ComboBox.criteriaComboBox ComboBoxItem"
                x:DataType="local:MpAvSearchCriteriaOptionViewModel">
             <Setter Property="IsVisible"
-                    Value="{Binding IsVisible}" />
+                    Value="{Binding IsDropDownItemVisible}" />
         </Style>
         <Style Selector="TextBox"
                x:DataType="local:MpAvSearchCriteriaOptionViewModel">
@@ -50,131 +50,125 @@
                     Value="True" />
         </Style>
     </local:MpAvUserControl.Styles>
-    <Grid Margin="0,3">
-        <Border BorderThickness="0"
-                              Background="Transparent"
-                              Padding="0"
-                              CornerRadius="0">
-            <ContentControl x:Name="CriteriaOptionContentControl"
-                            Content="{Binding}">
-                <ContentControl.DataTemplates>
-                    <local:MpAvSearchCriteriaOptionViewSelector>
-                        <!--  ENUMERABLE COMBOBOX  -->
-                        <DataTemplate x:Key="EnumerableOptionTemplate"
-                                      DataType="local:MpAvSearchCriteriaOptionViewModel">
-                            <ComboBox IsDropDownOpen="{Binding IsDropDownOpen, Mode=TwoWay}"
-                                      Items="{Binding Items}"
-                                      Classes="criteriaComboBox"
-                                      SelectedIndex="{Binding SelectedItemIdx, Mode=TwoWay}">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Label}" />
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
-                        </DataTemplate>
-                        <!--  TEXTBOX  -->
-                        <DataTemplate x:Key="TextOptionTemplate"
-                                      DataType="local:MpAvSearchCriteriaOptionViewModel">
-                            <DockPanel>
+    <ContentControl x:Name="CriteriaOptionContentControl"
+                    Margin="0,3"
+                    Content="{Binding}">
+        <ContentControl.DataTemplates>
+            <local:MpAvSearchCriteriaOptionViewSelector>
+                <!--  ENUMERABLE COMBOBOX  -->
+                <DataTemplate x:Key="EnumerableOptionTemplate"
+                              DataType="local:MpAvSearchCriteriaOptionViewModel">
+                    <ComboBox IsDropDownOpen="{Binding IsDropDownOpen}"
+                              Items="{Binding Items}"
+                              Classes="criteriaComboBox"
+                              SelectedIndex="{Binding SelectedItemIdx, Mode=TwoWay}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Label}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </DataTemplate>
+                <!--  TEXTBOX  -->
+                <DataTemplate x:Key="TextOptionTemplate"
+                              DataType="local:MpAvSearchCriteriaOptionViewModel">
+                    <DockPanel>
 
-                                <!--  WHOLE WORD / CASE SENSITIVE CHECKBOX  -->
-                                <StackPanel Orientation="Horizontal"
-                                            DockPanel.Dock="Right"
-                                            IsVisible="{Binding IsCheckable}">
+                        <!--  WHOLE WORD / CASE SENSITIVE CHECKBOX  -->
+                        <StackPanel Orientation="Horizontal"
+                                    DockPanel.Dock="Right"
+                                    IsVisible="{Binding IsCheckable}">
 
-                                    <CheckBox VerticalAlignment="Center"
-                                              Margin="0,0,5,0"
-                                              IsChecked="{Binding IsChecked, Mode=TwoWay}">
-                                        <TextBlock VerticalAlignment="Center"
-                                                   TextAlignment="Left"
-                                                   TextWrapping="Wrap"
-                                                   MaxWidth="80"
-                                                   Foreground="White"
-                                                   Text="Case Sensitive?" />
-                                    </CheckBox>
-                                    <CheckBox VerticalAlignment="Center"
-                                              Margin="5,0,5,0"
-                                              IsChecked="{Binding IsChecked2, Mode=TwoWay}">
-                                        <TextBlock VerticalAlignment="Center"
-                                                   TextAlignment="Left"
-                                                   TextWrapping="Wrap"
-                                                   MaxWidth="80"
-                                                   Foreground="White"
-                                                   Text="Whole Word" />
-                                    </CheckBox>
-                                </StackPanel>
+                            <CheckBox VerticalAlignment="Center"
+                                      Margin="0,0,5,0"
+                                      IsChecked="{Binding IsChecked, Mode=TwoWay}">
+                                <TextBlock VerticalAlignment="Center"
+                                           TextAlignment="Left"
+                                           TextWrapping="Wrap"
+                                           MaxWidth="80"
+                                           Foreground="White"
+                                           Text="Case Sensitive?" />
+                            </CheckBox>
+                            <CheckBox VerticalAlignment="Center"
+                                      Margin="5,0,5,0"
+                                      IsChecked="{Binding IsChecked2, Mode=TwoWay}">
+                                <TextBlock VerticalAlignment="Center"
+                                           TextAlignment="Left"
+                                           TextWrapping="Wrap"
+                                           MaxWidth="80"
+                                           Foreground="White"
+                                           Text="Whole Word" />
+                            </CheckBox>
+                        </StackPanel>
 
-                                <!--  TEXTBOX BORDER  -->
+                        <!--  TEXTBOX BORDER  -->
 
-                                <Border Margin="5"
-                                                      Padding="5"
-                                                      HorizontalAlignment="Stretch"
-                                                      VerticalAlignment="Center"
-                                                      CornerRadius="10"
-                                                      Background="White"
-                                                      BorderBrush="White">
-                                    <TextBox x:Name="MatchValueTextBox"
-                                             Padding="5,0,0,0"
-                                             Watermark="Enter search term..."
-                                             MinWidth="500"
-                                             BorderThickness="0"
-                                             ClipToBounds="False"
-                                             HorizontalAlignment="Stretch"
-                                             HorizontalContentAlignment="Left"
-                                             VerticalAlignment="Center"
-                                             VerticalContentAlignment="Center"
-                                             Classes.valid="{Binding IsValid}"
-                                             local:MpAvDelayedTextChangedExtension.IsEnabled="True"
-                                             local:MpAvDelayedTextChangedExtension.DelayMs="500"
-                                             local:MpAvDelayedTextChangedExtension.Text="{Binding Value, Mode=TwoWay}" />
-                                </Border>
-                            </DockPanel>
-                        </DataTemplate>
-                        <DataTemplate x:Key="RGBAOptionTemplate"
-                                      DataType="local:MpAvSearchCriteriaOptionViewModel">
-                            <StackPanel Orientation="Horizontal">
-                                <StackPanel Orientation="Horizontal">
-                                    <Label Content="R" />
-                                    <TextBox MinWidth="20"
-                                             VerticalContentAlignment="Center"
-                                             Classes.valid="{Binding IsValid1}"
-                                             Text="{Binding Value1, Mode=TwoWay}" />
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal">
-                                    <Label Content="G" />
-                                    <TextBox MinWidth="20"
-                                             VerticalContentAlignment="Center"
-                                             Classes.valid="{Binding IsValid2}"
-                                             Text="{Binding Value2, Mode=TwoWay}" />
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal">
-                                    <Label Content="B" />
-                                    <TextBox MinWidth="20"
-                                             VerticalContentAlignment="Center"
-                                             Classes.valid="{Binding IsValid3}"
-                                             Text="{Binding Value3, Mode=TwoWay}" />
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal">
-                                    <Label Content="A" />
-                                    <TextBox MinWidth="20"
-                                             VerticalContentAlignment="Center"
-                                             Classes.valid="{Binding IsValid4}"
-                                             Text="{Binding Value4, Mode=TwoWay}" />
-                                </StackPanel>
-                            </StackPanel>
-                        </DataTemplate>
-                        <DataTemplate x:Key="DateOptionTemplate"
-                                      DataType="local:MpAvSearchCriteriaOptionViewModel">
-                            <DatePicker Width="300"
-                                        Margin="5,0,0,0"
-                                        SelectedDate="{Binding Value, Converter={x:Static local:MpAvStringToDateTimeOffsetConverter.Instance}, Mode=TwoWay}" />
-                        </DataTemplate>
-                        <DataTemplate x:Key="EmptyOption"
-                                      DataType="local:MpAvSearchCriteriaOptionViewModel" />
-                    </local:MpAvSearchCriteriaOptionViewSelector>
-                </ContentControl.DataTemplates>
-            </ContentControl>
-        </Border>
-    </Grid>
+                        <Border Margin="5"
+                                Padding="5"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center"
+                                CornerRadius="10"
+                                Background="White"
+                                BorderBrush="White">
+                            <TextBox x:Name="MatchValueTextBox"
+                                     Padding="5,0,0,0"
+                                     Watermark="Enter search term..."
+                                     MinWidth="500"
+                                     BorderThickness="0"
+                                     ClipToBounds="False"
+                                     HorizontalAlignment="Stretch"
+                                     HorizontalContentAlignment="Left"
+                                     VerticalAlignment="Center"
+                                     VerticalContentAlignment="Center"
+                                     Classes.valid="{Binding IsValid}"
+                                     local:MpAvDelayedTextChangedExtension.IsEnabled="True"
+                                     local:MpAvDelayedTextChangedExtension.DelayMs="500"
+                                     local:MpAvDelayedTextChangedExtension.Text="{Binding Value, Mode=TwoWay}" />
+                        </Border>
+                    </DockPanel>
+                </DataTemplate>
+                <DataTemplate x:Key="RGBAOptionTemplate"
+                              DataType="local:MpAvSearchCriteriaOptionViewModel">
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="R" />
+                            <TextBox MinWidth="20"
+                                     VerticalContentAlignment="Center"
+                                     Classes.valid="{Binding IsValid1}"
+                                     Text="{Binding Value1, Mode=TwoWay}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="G" />
+                            <TextBox MinWidth="20"
+                                     VerticalContentAlignment="Center"
+                                     Classes.valid="{Binding IsValid2}"
+                                     Text="{Binding Value2, Mode=TwoWay}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="B" />
+                            <TextBox MinWidth="20"
+                                     VerticalContentAlignment="Center"
+                                     Classes.valid="{Binding IsValid3}"
+                                     Text="{Binding Value3, Mode=TwoWay}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="A" />
+                            <TextBox MinWidth="20"
+                                     VerticalContentAlignment="Center"
+                                     Classes.valid="{Binding IsValid4}"
+                                     Text="{Binding Value4, Mode=TwoWay}" />
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+                <DataTemplate x:Key="DateOptionTemplate"
+                              DataType="local:MpAvSearchCriteriaOptionViewModel">
+                    <DatePicker Width="300"
+                                Margin="5,0,0,0"
+                                SelectedDate="{Binding Value, Converter={x:Static local:MpAvStringToDateTimeOffsetConverter.Instance}, Mode=TwoWay}" />
+                </DataTemplate>
+                <DataTemplate x:Key="EmptyOption"
+                              DataType="local:MpAvSearchCriteriaOptionViewModel" />
+            </local:MpAvSearchCriteriaOptionViewSelector>
+        </ContentControl.DataTemplates>
+    </ContentControl>
 </local:MpAvUserControl>

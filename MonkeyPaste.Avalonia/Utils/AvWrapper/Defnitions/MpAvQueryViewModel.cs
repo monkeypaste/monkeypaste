@@ -90,7 +90,11 @@ namespace MonkeyPaste.Avalonia {
             _isRestoringValues = true;
             MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending = IsDescending;
             MpAvClipTileSortFieldViewModel.Instance.SelectedSortType = SortType;
-            MpAvTagTrayViewModel.Instance.SelectTagCommand.Execute(TagId);
+            if (MpAvTagTrayViewModel.Instance.LastActiveId != TagId) {
+                // NOTE need this check to avoid selection loop (i think) since 
+                // tag can be reselected to refresh
+                MpAvTagTrayViewModel.Instance.SelectTagCommand.Execute(TagId);
+            }
             MpAvSearchBoxViewModel.Instance.SearchText = MatchValue;
             MpAvSearchBoxViewModel.Instance.SearchFilterCollectionViewModel.FilterType = QueryFlags;
             _isRestoringValues = false;

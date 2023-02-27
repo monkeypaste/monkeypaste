@@ -51,22 +51,25 @@
         <Style Selector="local|MpAvSearchCriteriaItemView">
             <Setter Property="BorderBrush"
                     Value="DimGray" />
-            <Setter Property="Width"
-                    Value="{Binding QueryTrayScreenWidth, Source={x:Static local:MpAvClipTrayViewModel.Instance}}" />
         </Style>
-        <Style Selector="ListBoxItem:nth-child(even) local|MpAvSearchCriteriaItemView">
+
+        <Style Selector="ListBox.criteriaList > ListBoxItem">
+            <Setter Property="Width"
+                    Value="{Binding $parent[ListBox].Bounds.Width}" />
+        </Style>
+        <Style Selector="ListBox.criteriaList > ListBoxItem:nth-child(even) local|MpAvSearchCriteriaItemView">
             <Setter Property="Background"
                     Value="{DynamicResource SearchCriteriaRowBgBrush1}" />
         </Style>
-        <Style Selector="ListBoxItem:nth-child(odd) local|MpAvSearchCriteriaItemView">
+        <Style Selector="ListBox.criteriaList > ListBoxItem:nth-child(odd) local|MpAvSearchCriteriaItemView">
             <Setter Property="Background"
                     Value="{DynamicResource SearchCriteriaRowBgBrush2}" />
         </Style>
-        <Style Selector="ListBoxItem:pointerover local|MpAvSearchCriteriaItemView">
+        <Style Selector="ListBox.criteriaList > ListBoxItem:pointerover local|MpAvSearchCriteriaItemView">
             <Setter Property="Background"
                     Value="{DynamicResource SearchCriteriaRowBgHoverBrush}" />
         </Style>
-        <Style Selector="ListBoxItem:selected local|MpAvSearchCriteriaItemView">
+        <Style Selector="ListBox.criteriaList > ListBoxItem:selected local|MpAvSearchCriteriaItemView">
             <Setter Property="BorderBrush"
                     Value="Red" />
         </Style>
@@ -102,6 +105,16 @@
             <Setter Property="Stretch"
                     Value="Fill" />
         </Style>
+
+        <!--  DROP LINES  -->
+        <Style Selector="Border.dropLine">
+            <Setter Property="Background"
+                    Value="Red" />
+        </Style>
+        <Style Selector="Border.dropLine.isCopy">
+            <Setter Property="Background"
+                    Value="Lime" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <ScrollViewer x:Name="SearchCriteriaContainerScrollViewer"
                   MaxHeight="{Binding MaxSearchCriteriaListBoxHeight}"
@@ -110,7 +123,10 @@
                   HorizontalAlignment="Stretch"
                   HorizontalScrollBarVisibility="Auto"
                   VerticalScrollBarVisibility="Auto">
-        <Grid RowDefinitions="Auto,*">
+        <Grid RowDefinitions="Auto,*"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch"
+              Width="{Binding $parent[local:MpAvSearchCriteriaListBoxView].Bounds.Width}">
             <local:MpAvSearchCriteriaHeaderView Grid.Row="0"
                                                 Height="{Binding BoundHeaderHeight, Mode=TwoWay}"
                                                 Background="{DynamicResource SearchCriteriaRowBgBrush1}"
@@ -118,9 +134,10 @@
                                                 VerticalAlignment="Stretch" />
             <ListBox x:Name="SearchCriteriaListBox"
                      Classes="criteriaList"
+                     Classes.windowed="{Binding IsCriteriaWindowOpen}"
                      DragDrop.AllowDrop="True"
                      Grid.Row="1"
-                     Background="Transparent"
+                     Background="{DynamicResource SearchCriteriaRowBgBrush1}"
                      BorderThickness="0"
                      BorderBrush="Black"
                      Items="{Binding SortedItems}"
@@ -128,6 +145,7 @@
                      SelectionMode="Single"
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch"
+                     Width="{Binding $parent[local:MpAvSearchCriteriaListBoxView].Bounds.Width}"
                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
                      ScrollViewer.HorizontalScrollBarVisibility="Hidden">
                 <ListBox.Resources>
@@ -140,21 +158,31 @@
                 </ListBox.Resources>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Grid>
-                            <local:MpAvSearchCriteriaItemView BorderThickness="0"
-                                                              Height="{Binding CriteriaItemHeight}"
-                                                              DataContext="{Binding}" />
-                            <Border IsVisible="{Binding IsDragOverTop}"
+                        <!--<Grid Width="{Binding $parent[ListBoxItem].Bounds.Width}">-->
+                        <DockPanel LastChildFill="True"
+                                   Width="{Binding $parent[ListBoxItem].Bounds.Width}">
+                            <Border x:Name="SortDropBorder_top"
+                                    Classes="dropLine"
+                                    Classes.isCopy="{Binding IsDragOverCopy}"
+                                    DockPanel.Dock="Top"
+                                    IsVisible="{Binding IsDragOverTop}"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Top"
-                                    Background="Red"
                                     Height="5" />
-                            <Border IsVisible="{Binding IsDragOverBottom}"
+                            <Border x:Name="SortDropBorder_bottom"
+                                    DockPanel.Dock="Bottom"
+                                    Classes="dropLine"
+                                    Classes.isCopy="{Binding IsDragOverCopy}"
+                                    IsVisible="{Binding IsDragOverBottom}"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Bottom"
-                                    Background="Red"
                                     Height="5" />
-                        </Grid>
+                            <local:MpAvSearchCriteriaItemView BorderThickness="0"
+                                                              Height="{Binding CriteriaItemHeight}"
+                                                              HorizontalAlignment="Stretch"
+                                                              DataContext="{Binding}" />
+                        </DockPanel>
+                        <!--</Grid>-->
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>

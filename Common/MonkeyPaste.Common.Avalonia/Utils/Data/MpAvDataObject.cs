@@ -17,6 +17,7 @@ namespace MonkeyPaste.Common.Avalonia {
 
         #endregion
         public MpAvDataObject() : base() { }
+        public MpAvDataObject(string format, object data) : base(format, data) { }
         public MpAvDataObject(Dictionary<string, object> items, bool caseSensitive = false) : base(items, caseSensitive) { }
 
         public override void SetData(string format, object data) {

@@ -58,7 +58,7 @@ namespace MonkeyPaste.Avalonia {
                     // should only have parts for color resource
                     Debugger.Break();
                 }
-                if (valStr.EndsWith("Icon")) {
+                if (valStr.EndsWith("Icon") || targetType == typeof(WindowIcon)) {
                     return new WindowIcon(
                         MpAvStringResourceConverter.Instance.Convert(
                             MpPlatform.Services.PlatformResource.GetResource(valStr), null, null, null) as Bitmap);

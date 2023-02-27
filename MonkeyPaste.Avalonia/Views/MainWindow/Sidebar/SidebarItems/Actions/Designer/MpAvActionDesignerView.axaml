@@ -183,8 +183,7 @@
                             Grid.Column="4"
                             Classes="noBg noHoverBg defaultButton outline outlineOver"
                             IsVisible="{Binding !IsDesignerWindowOpen}"
-                            Command="{Binding OpenDesignerWindowCommand}"
-                            CommandParameter="{Binding $parent[local:MpAvActionDesignerView]}">
+                            Command="{Binding OpenDesignerWindowCommand}">
                         <ToolTip.Tip>
                             <local:MpAvToolTipView ToolTipText="Float" />
                         </ToolTip.Tip>

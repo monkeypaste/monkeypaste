@@ -28,27 +28,22 @@
     </local:MpAvUserControl.Styles>
     <DockPanel LastChildFill="False">
         <StackPanel DockPanel.Dock="Right"
-                    Orientation="Horizontal">
+                    Orientation="Horizontal"
+                    Margin="0,0,30,0">
 
             <!--  SAVE BUTTON  -->
             <Button x:Name="SaveSearchButton"
-                    Classes="defaultButton textOnlyButton"
+                    Classes="defaultButton textOnlyButton outline outlineOver"
+                    IsVisible="{Binding IsPendingQuery}"
                     Command="{Binding SaveQueryCommand}"
                     Margin="0,0,5,0">
-                <!--<Button.IsVisible>
-                    <MultiBinding Converter="{x:Static BoolConverters.And}">
-                        <Binding Path="HasCriteriaItems" />
-                        <Binding Path="PendingQueryTagId"
-                                 Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
-                    </MultiBinding>
-                </Button.IsVisible>-->
                 <TextBlock Text="Save" />
             </Button>
 
             <!--  ADVANCED SEARCH TOGGLE BUTTON  -->
 
             <Button x:Name="DeleteSearchButton"
-                    Margin="5,5,30,5"
+                    Margin="5,5,5,5"
                     BorderThickness="0"
                     VerticalAlignment="Stretch"
                     HorizontalAlignment="Center"
@@ -56,20 +51,24 @@
                     Width="{Binding $self.Bounds.Height}"
                     Classes="noBg noHoverBg addRemoveBtn shakeOver outline"
                     Command="{Binding RejectPendingCriteriaItemsCommand}">
-                <!--<Button.IsVisible>
-                    <MultiBinding Converter="{x:Static BoolConverters.Or}">
-                        <Binding Path="HasText" />
-                        <Binding Path="HasCriteriaItems"
-                                 Source="{x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}" />
-                    </MultiBinding>
-                </Button.IsVisible>-->
-                <!--<PathIcon Data="{StaticResource PlusBoxSvg}" />-->
                 <Image Classes="shakeOver"
                        Source="{Binding ., Source={StaticResource MinusImage}, Converter={StaticResource IconSourceObjToBitmapConverter}}">
                     <Image.RenderTransform>
                         <RotateTransform />
                     </Image.RenderTransform>
                 </Image>
+            </Button>
+
+            <!--  POP OUT WINDOW BUTTON  -->
+
+            <Button x:Name="ShowCriteriaWindowButton"
+                    Classes="noBg noHoverBg defaultButton outline outlineOver"
+                    IsVisible="{Binding !IsCriteriaWindowOpen}"
+                    Command="{Binding OpenCriteriaWindowCommand}">
+                <ToolTip.Tip>
+                    <local:MpAvToolTipView ToolTipText="Float" />
+                </ToolTip.Tip>
+                <Image Source="{Binding Source={StaticResource NewWindowImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
             </Button>
         </StackPanel>
     </DockPanel>

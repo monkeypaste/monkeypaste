@@ -12,6 +12,7 @@
                        d:DesignHeight="50"
                        d:DesignWidth="800">
     <local:MpAvUserControl.Styles>
+        <!--  RE-ORDER BUTTONS  -->
         <Style Selector="Button#CriteriaDragButton Image">
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource LinesX2HorizImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=white}" />
@@ -25,6 +26,7 @@
                     Value="{Binding Source={StaticResource LinesX2HorizVertArrowsImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=dimgray}" />
         </Style>
 
+        <!--  CRITERIA ITEM OPTION COMBOX BOX  -->
         <Style Selector="ComboBox:pointerover.criteriaComboBox">
             <Setter Property="BorderBrush"
                     Value="Yellow" />
@@ -53,8 +55,12 @@
             <Setter Property="FontSize"
                     Value="16" />
         </Style>
+        <Style Selector="ListBoxItem">
+            <Setter Property="BorderThickness"
+                    Value="0" />
+        </Style>
     </local:MpAvUserControl.Styles>
-    <Grid ColumnDefinitions="50,*">
+    <Grid ColumnDefinitions="Auto,*">
         <!--  SORT DRAG BUTTON  -->
 
         <Button x:Name="CriteriaDragButton"

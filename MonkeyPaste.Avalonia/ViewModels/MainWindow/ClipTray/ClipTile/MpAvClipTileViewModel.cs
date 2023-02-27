@@ -430,8 +430,10 @@ namespace MonkeyPaste.Avalonia {
         public bool IsFindAndReplaceVisible { get; set; } = false;
         public string TemplateRichHtml { get; set; }
 
-        public bool IsAnyQueryCornerVisible => Parent == null ? false : ScreenRect.IsAnyPointWithinOtherRect(Parent.QueryTrayScreenRect);
-        public bool IsAllQueryCornersVisible => Parent == null ? false : ScreenRect.IsAllPointWithinOtherRect(Parent.QueryTrayScreenRect);
+        public bool IsAnyQueryCornerVisible =>
+            Parent == null ? false : ScreenRect.IsAnyPointWithinOtherRect(Parent.QueryTrayScreenRect);
+        public bool IsAllQueryCornersVisible =>
+            Parent == null ? false : ScreenRect.IsAllPointWithinOtherRect(Parent.QueryTrayScreenRect);
 
         public bool IsDevToolsVisible { get; set; } = false;
 
@@ -991,15 +993,11 @@ namespace MonkeyPaste.Avalonia {
 
             IsBusy = true;
 
-            await Task.Delay(1);
-
             if (ci != null &&
                 MpAvPersistentClipTilePropertiesHelper.TryGetByPersistentSize_ById(ci.Id, out double uniqueWidth)) {
-                //BoundSize = new MpSize(uniqueWidth, MinHeight);
                 BoundWidth = uniqueWidth;
                 BoundHeight = MinHeight;
             } else if (ci != null && ci.Id > 0) {
-                //BoundSize = MinSize;
                 BoundWidth = MinWidth;
                 BoundHeight = MinHeight;
             } else {
@@ -1036,7 +1034,6 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(Prev));
             OnPropertyChanged(nameof(CopyItemId));
             OnPropertyChanged(nameof(IsAnyBusy));
-            //OnPropertyChanged(nameof(SourceViewModel));
 
             //MpMessenger.Send<MpMessageType>(MpMessageType.ContentItemsChanged, this);
 
@@ -1510,8 +1507,8 @@ namespace MonkeyPaste.Avalonia {
                         OnPropertyChanged(nameof(IsTitleVisible));
                     }
                     MpMessenger.Send<MpMessageType>(IsContentReadOnly ? MpMessageType.IsReadOnly : MpMessageType.IsEditable, this);
-                    Parent.OnPropertyChanged(nameof(Parent.IsHorizontalScrollBarVisible));
-                    Parent.OnPropertyChanged(nameof(Parent.IsVerticalScrollBarVisible));
+                    Parent.OnPropertyChanged(nameof(Parent.IsQueryHorizontalScrollBarVisible));
+                    Parent.OnPropertyChanged(nameof(Parent.IsQueryVerticalScrollBarVisible));
 
                     OnPropertyChanged(nameof(IsHorizontalScrollbarVisibile));
                     OnPropertyChanged(nameof(IsVerticalScrollbarVisibile));

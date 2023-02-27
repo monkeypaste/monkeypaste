@@ -1244,7 +1244,7 @@ namespace MonkeyPaste.Avalonia {
                 MpAvMenuExtension.ShowMenu(control, ContextMenuViewModel);
             },
             (args) => {
-                return !MpPlatform.Services.PlatformInfo.IsDesktop;
+                return IsTagNameReadOnly;
             });
 
         #endregion

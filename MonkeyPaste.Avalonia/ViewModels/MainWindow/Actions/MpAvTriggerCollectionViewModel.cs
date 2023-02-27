@@ -205,7 +205,7 @@ namespace MonkeyPaste.Avalonia {
         public double DefaultSidebarHeight {
             get {
                 if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                    return MpAvClipTrayViewModel.Instance.QueryTrayScreenHeight;
+                    return MpAvClipTrayViewModel.Instance.ObservedQueryTrayScreenHeight;
                 }
                 double h = _defaultSelectorColumnVarDimLength;
                 //if (SelectedItem != null) {
@@ -653,20 +653,20 @@ namespace MonkeyPaste.Avalonia {
 
             });
 
-        public ICommand OpenDesignerWindowCommand => new MpCommand<object>(
-            (args) => {
+        public ICommand OpenDesignerWindowCommand => new MpCommand(
+            () => {
                 if (MpPlatform.Services.PlatformInfo.IsDesktop) {
                     var dw = new Window() {
                         Width = 500,
                         Height = 500,
                         ShowInTaskbar = true,
                         Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", null, null, null) as WindowIcon,
-                        Title = $"Trigger Designer - {SelectedTrigger.Label}",
                         WindowStartupLocation = WindowStartupLocation.CenterScreen,
                         Content = new MpAvActionDesignerView() {
                             BorderThickness = new Thickness(1),
                             BorderBrush = Brushes.Black
                         },
+                        Topmost = true,
                         DataContext = this,
                         Padding = new Thickness(10)
                     };
@@ -675,7 +675,8 @@ namespace MonkeyPaste.Avalonia {
                         Window.TitleProperty,
                         new Binding() {
                             Source = FocusAction,
-                            Path = nameof(FocusAction.Label)
+                            Path = nameof(FocusAction.Label),
+                            StringFormat = "Trigger Designer - {0}"
                         });
 
                     dw.Bind(
@@ -695,7 +696,7 @@ namespace MonkeyPaste.Avalonia {
 
                 }
                 IsDesignerWindowOpen = true;
-            }, (args) => {
+            }, () => {
                 return !IsDesignerWindowOpen;
             });
 

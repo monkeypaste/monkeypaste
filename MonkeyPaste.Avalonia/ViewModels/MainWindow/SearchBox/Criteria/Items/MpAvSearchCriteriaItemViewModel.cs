@@ -867,6 +867,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsDragOverTop { get; set; }
         public bool IsDragOverBottom { get; set; }
+        public bool IsDragOverCopy { get; set; }
 
         public int SelectedJoinTypeIdx {
             get => (int)(JoinType - 1);
@@ -1051,9 +1052,6 @@ namespace MonkeyPaste.Avalonia {
                 if (SearchCriteriaItem == null) {
                     return 0;
                 }
-                //if(IsAdvancedTail) {
-                //    return MpLogicalQueryType.Or;
-                //}
                 return SearchCriteriaItem.QueryTagId;
             }
             set {
@@ -1064,18 +1062,6 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-        //public MpQueryType QueryType { 
-        //    get {
-        //        if(SearchCriteriaItem == null) {
-        //            return MpQueryType.Simple;
-        //        }
-        //        //if(IsAdvancedTail) {
-        //        //    return MpLogicalQueryType.Or;
-        //        //}
-        //        return SearchCriteriaItem.QueryType;
-        //    }     
-        //} 
-
         public MpSearchCriteriaItem SearchCriteriaItem { get; set; }
 
 

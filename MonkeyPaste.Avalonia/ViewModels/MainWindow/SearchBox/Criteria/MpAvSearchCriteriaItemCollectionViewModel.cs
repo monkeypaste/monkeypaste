@@ -1,5 +1,9 @@
-﻿using Avalonia.Threading;
-
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Data;
+using Avalonia.Media;
+using Avalonia.Threading;
+using CefNet.CApi;
 using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
@@ -16,6 +20,9 @@ namespace MonkeyPaste.Avalonia {
         MpIExpandableViewModel {
 
         #region Private Variable
+
+        private Window _criteriaWindow;
+
         #endregion
 
         #region Constants
@@ -59,9 +66,15 @@ namespace MonkeyPaste.Avalonia {
             SortedItems.FirstOrDefault();
         public MpAvSearchCriteriaItemViewModel SelectedItem { get; set; }
 
+        public MpAvTagTileViewModel CurrentQueryTagViewModel =>
+            MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == QueryTagId);
+
         #endregion
 
         #region State
+
+        public bool IsCriteriaWindowOpen =>
+            _criteriaWindow != null;
 
         public bool HasAnyCriteriaChanged {
             get => Items.Any(x => x.HasCriteriaChanged);
@@ -92,6 +105,9 @@ namespace MonkeyPaste.Avalonia {
         public double BoundHeaderHeight { get; set; }
 
         public double BoundCriteriaListBoxScreenHeight { get; set; }
+
+        public double MaxSearchCriteriaRowHeight =>
+            IsCriteriaWindowOpen ? 0 : MaxSearchCriteriaListBoxHeight;
 
         public double MaxSearchCriteriaListBoxHeight {
             get {
@@ -124,22 +140,7 @@ namespace MonkeyPaste.Avalonia {
         public IEnumerable<MpUserDevice> UserDevices { get; private set; }
         #endregion
 
-        //public int PendingQueryTagId { get; private set; }
         public int QueryTagId { get; private set; }
-
-
-        //public int QueryTagId {
-        //    get {
-        //        if(IsPendingQuery) {
-        //            if(IsSavedQuery) {
-        //                // should only be 1
-        //                Debugger.Break();
-        //            }
-        //            return 0;
-        //        }
-        //        return QueryTagId;
-        //    }
-        //}
 
         #endregion
 
@@ -199,10 +200,15 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
-            if (!HasCriteriaItems && isPending && !IsSavedQuery) {
-                // create empty criteria item
-                var empty_civm = await CreateCriteriaItemViewModelAsync(null);
-                Items.Add(empty_civm);
+            if (!HasCriteriaItems && !IsSavedQuery) {
+                if (isPending) {
+                    // create empty criteria item
+                    var empty_civm = await CreateCriteriaItemViewModelAsync(null);
+                    Items.Add(empty_civm);
+                } else if (IsCriteriaWindowOpen) {
+                    // active search is no longer query tag, close criteria window
+                    _criteriaWindow.Close();
+                }
             }
 
             while (Items.Any(x => x.IsAnyBusy)) {
@@ -215,6 +221,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
+        public async Task<MpAvSearchCriteriaItemViewModel> CreateCriteriaItemViewModelAsync(MpSearchCriteriaItem sci) {
+            MpAvSearchCriteriaItemViewModel nscivm = new MpAvSearchCriteriaItemViewModel(this);
+            await nscivm.InitializeAsync(sci);
+            return nscivm;
+        }
 
         #endregion
 
@@ -230,11 +241,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private async Task<MpAvSearchCriteriaItemViewModel> CreateCriteriaItemViewModelAsync(MpSearchCriteriaItem sci) {
-            MpAvSearchCriteriaItemViewModel nscivm = new MpAvSearchCriteriaItemViewModel(this);
-            await nscivm.InitializeAsync(sci);
-            return nscivm;
-        }
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
@@ -265,6 +271,13 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IgnoreHasModelChanged):
                     Items.ForEach(x => x.IgnoreHasModelChanged = IgnoreHasModelChanged);
                     Items.ForEach(x => x.OnPropertyChanged(nameof(HasModelChanged)));
+                    break;
+                case nameof(QueryTagId):
+                    OnPropertyChanged(nameof(CurrentQueryTagViewModel));
+                    break;
+                case nameof(IsCriteriaWindowOpen):
+                    OnPropertyChanged(nameof(MaxSearchCriteriaListBoxHeight));
+                    OnPropertyChanged(nameof(MaxSearchCriteriaRowHeight));
                     break;
             }
         }
@@ -304,7 +317,6 @@ namespace MonkeyPaste.Avalonia {
             if (newExpandedValue) {
                 if (!IsAdvSearchActive) {
                     // plus on search box toggled to checked
-                    //await ConvertCurrentSearchToAdvSearchAsync(true);
                     await InitializeAsync(0, true);
                 }
                 _isExpanded = true;
@@ -340,9 +352,8 @@ namespace MonkeyPaste.Avalonia {
                             sortType: MpAvClipTileSortFieldViewModel.Instance.SelectedSortType,
                             isSortDescending: MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending);
 
-            // NOTE this is called at end of provider create so sortIdx is seed for these
-
             var simple_ci = await MpSearchCriteriaItem.CreateAsync(
+                queryType: MpQueryType.Simple,
                 tagId: pending_tag.Id,
                 joinType: MpLogicalQueryType.And,
                 sortOrderIdx: 0,
@@ -406,6 +417,18 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand SavePendingQueryCommand => new MpAsyncCommand(
             async () => {
+                if (IsCriteriaWindowOpen && !MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
+                    // when saving from float window show mw to rename/confirm new query tag
+                    if (!MpAvMainWindowViewModel.Instance.ShowMainWindowCommand.CanExecute(null)) {
+                        // why not?
+                        MpDebug.Break();
+                    } else {
+                        MpAvMainWindowViewModel.Instance.ShowMainWindowCommand.Execute(null);
+                        while (!MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
+                            await Task.Delay(100);
+                        }
+                    }
+                }
                 // NOTE this should only occur for new searches, onced created saving is by HasModelChanged
                 var ttrvm = MpAvTagTrayViewModel.Instance;
                 int waitTimeMs = MpAvSidebarItemCollectionViewModel.Instance.SelectedItem == ttrvm ? 0 : 500;
@@ -431,11 +454,7 @@ namespace MonkeyPaste.Avalonia {
                 // clear pending flag 
                 QueryTagId = new_query_tag_id;
             }, () => {
-                if (!IsPendingQuery ||
-                    MpAvTagTrayViewModel.Instance.SelectedItem.IsNotGroupTag) {
-                    return false;
-                }
-                return true;
+                return IsPendingQuery;
             });
 
         public MpIAsyncCommand RejectPendingCriteriaItemsCommand => new MpAsyncCommand(
@@ -471,7 +490,67 @@ namespace MonkeyPaste.Avalonia {
                 InitializeAsync(queryTagId, false).FireAndForgetSafeAsync(this);
             });
 
+        public ICommand OpenCriteriaWindowCommand => new MpCommand<object>(
+            (args) => {
+                if (MpPlatform.Services.PlatformInfo.IsDesktop) {
+                    _criteriaWindow = new Window() {
+                        Width = 500,
+                        Height = 300,
+                        ShowInTaskbar = true,
+                        Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", null, null, null) as WindowIcon,
+                        WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                        Content = new MpAvSearchCriteriaListBoxView() {
+                            Background = Brushes.Violet,
+                            DataContext = this
+                        },
+                        Topmost = true,
+                        Padding = new Thickness(10)
+                    };
 
+                    _criteriaWindow.Bind(
+                        Window.DataContextProperty,
+                        new Binding() {
+                            Source = this,
+                            Path = nameof(CurrentQueryTagViewModel)
+                        });
+
+                    _criteriaWindow.Bind(
+                        Window.TitleProperty,
+                        new Binding() {
+                            Source = CurrentQueryTagViewModel,
+                            Path = nameof(MpAvTagTileViewModel.TagName),
+                            StringFormat = "Search Criteria - {0}",
+                            TargetNullValue = "Search Criteria - Untitled",
+                            FallbackValue = "Search Criteria - Untitled"
+                        });
+
+                    _criteriaWindow.Bind(
+                        Window.BackgroundProperty,
+                        new Binding() {
+                            Source = CurrentQueryTagViewModel,
+                            Path = nameof(MpAvTagTileViewModel.TagHexColor),
+                            Mode = BindingMode.OneWay,
+                            Converter = MpAvStringHexToBrushConverter.Instance,
+                            TargetNullValue = MpSystemColors.darkviolet,
+                            FallbackValue = MpSystemColors.darkviolet
+                        });
+
+                    _criteriaWindow.Closed += Dw_Closed;
+                    _criteriaWindow.Show();
+                } else {
+                    // Some kinda view nav here
+                    // see https://github.com/AvaloniaUI/Avalonia/discussions/9818
+
+                }
+                OnPropertyChanged(nameof(IsCriteriaWindowOpen));
+            }, (args) => {
+                return !IsCriteriaWindowOpen;
+            });
+
+        private void Dw_Closed(object sender, EventArgs e) {
+            _criteriaWindow = null;
+            OnPropertyChanged(nameof(IsCriteriaWindowOpen));
+        }
         #endregion
     }
 }

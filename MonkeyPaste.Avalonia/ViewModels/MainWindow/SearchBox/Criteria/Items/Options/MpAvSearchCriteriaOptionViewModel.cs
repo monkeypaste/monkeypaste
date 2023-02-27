@@ -82,7 +82,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public bool IsDropDownOpen { get; set; }
-        public bool IsVisible {
+        public bool IsDropDownItemVisible {
             get {
                 if (Parent == null || !Parent.IsDropDownOpen) {
                     return true;
@@ -303,7 +303,7 @@ namespace MonkeyPaste.Avalonia {
                     Parent.OnPropertyChanged(nameof(IsAnyBusy));
                     break;
                 case nameof(IsDropDownOpen):
-                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsVisible)));
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsDropDownItemVisible)));
                     break;
                 case nameof(ValidationText):
                     if (IsValid) {

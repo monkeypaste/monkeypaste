@@ -337,8 +337,8 @@ namespace MonkeyPaste.Avalonia {
         public Orientation ListOrientation =>
             MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ? Orientation.Horizontal : Orientation.Vertical;
 
-        public bool IsHorizontalScrollBarVisible => true;// QueryTrayTotalTileWidth > QueryTrayScreenWidth;
-        public bool IsVerticalScrollBarVisible => true;// QueryTrayTotalTileHeight > QueryTrayScreenHeight;
+        public bool IsQueryHorizontalScrollBarVisible => true;// QueryTrayTotalTileWidth > ObservedQueryTrayScreenWidth;
+        public bool IsQueryVerticalScrollBarVisible => true;// QueryTrayTotalTileHeight > ObservedQueryTrayScreenHeight;
 
         public double LastScrollOffsetX { get; set; } = 0;
         public double LastScrollOffsetY { get; set; } = 0;
@@ -383,40 +383,37 @@ namespace MonkeyPaste.Avalonia {
 
         public double MaxScrollOffsetX {
             get {
-                double maxScrollOffsetX = Math.Max(0, QueryTrayTotalTileWidth - QueryTrayScreenWidth);
+                double maxScrollOffsetX = Math.Max(0, QueryTrayTotalTileWidth - ObservedQueryTrayScreenWidth);
                 return maxScrollOffsetX;
             }
         }
         public double MaxScrollOffsetY {
             get {
-                double maxScrollOffsetY = Math.Max(0, QueryTrayTotalTileHeight - QueryTrayScreenHeight);
+                double maxScrollOffsetY = Math.Max(0, QueryTrayTotalTileHeight - ObservedQueryTrayScreenHeight);
                 return maxScrollOffsetY;
             }
         }
 
-        public MpRect QueryTrayScreenRect => new MpRect(0, 0, QueryTrayScreenWidth, QueryTrayScreenHeight);
+        public MpRect QueryTrayScreenRect =>
+            new MpRect(0, 0, ObservedQueryTrayScreenWidth, ObservedQueryTrayScreenHeight);
 
 
         public double QueryTrayTotalTileWidth { get; private set; }
         public double QueryTrayTotalTileHeight { get; private set; }
 
         public double QueryTrayTotalWidth =>
-            Math.Max(0, Math.Max(QueryTrayScreenWidth, QueryTrayTotalTileWidth));
+            Math.Max(0, Math.Max(ObservedQueryTrayScreenWidth, QueryTrayTotalTileWidth));
         public double QueryTrayTotalHeight =>
-            Math.Max(0, Math.Max(QueryTrayScreenHeight, QueryTrayTotalTileHeight));
+            Math.Max(0, Math.Max(ObservedQueryTrayScreenHeight, QueryTrayTotalTileHeight));
 
-        public double QueryTrayScreenWidth { get; set; }
-
-        public double QueryTrayScreenHeight { get; set; }
 
         public double QueryTrayFixedDimensionLength =>
             ListOrientation == Orientation.Horizontal ?
-                QueryTrayScreenHeight : QueryTrayScreenWidth;
+                ObservedQueryTrayScreenHeight : ObservedQueryTrayScreenWidth;
 
-        public double PinTrayScreenWidth { get; set; }
-
-        public double PinTrayScreenHeight { get; set; }
-
+        public double PinTrayFixedDimensionLength =>
+            ListOrientation == Orientation.Horizontal ?
+                ObservedPinTrayScreenHeight : ObservedPinTrayScreenWidth;
         public double LastZoomFactor { get; set; }
 
         public double DefaultZoomFactor { get; set; } = 1.0;
@@ -570,7 +567,7 @@ namespace MonkeyPaste.Avalonia {
 
             MpRect last_rect = null;// prevOffsetRect;
 
-            UpdateDefaultQueryItemSize();
+            UpdateDefaultItemSize();
 
             for (int i = startIdx; i <= queryOffsetIdx; i++) {
                 int tileId = MpPlatform.Services.Query.PageTools.GetItemId(i);
@@ -679,10 +676,10 @@ namespace MonkeyPaste.Avalonia {
                     if (LayoutType == MpClipTrayLayoutType.Stack) {
                         return double.PositiveInfinity;
                     }
-                    return QueryTrayScreenWidth;
+                    return ObservedQueryTrayScreenWidth;
                 } else {
                     if (LayoutType == MpClipTrayLayoutType.Stack) {
-                        return QueryTrayScreenWidth;
+                        return ObservedQueryTrayScreenWidth;
                     }
                     return double.PositiveInfinity;
                 }
@@ -693,14 +690,14 @@ namespace MonkeyPaste.Avalonia {
             get {
                 if (ListOrientation == Orientation.Horizontal) {
                     if (LayoutType == MpClipTrayLayoutType.Stack) {
-                        return QueryTrayScreenHeight;
+                        return ObservedQueryTrayScreenHeight;
                     }
                     return double.PositiveInfinity;
                 } else {
                     if (LayoutType == MpClipTrayLayoutType.Stack) {
                         return double.PositiveInfinity;
                     }
-                    return QueryTrayScreenHeight;
+                    return ObservedQueryTrayScreenHeight;
                 }
             }
         }
@@ -714,37 +711,55 @@ namespace MonkeyPaste.Avalonia {
         public double DefaultQueryItemHeight =>
             _defaultQueryItemHeight;
 
-        private void UpdateDefaultQueryItemSize() {
-            double length = QueryTrayFixedDimensionLength * ZoomFactor;
+        private void UpdateDefaultItemSize() {
+            //double query_item_length = QueryTrayFixedDimensionLength * ZoomFactor;
 
-            double scrollBarSize_x = ScrollBarFixedAxisSize + (IsHorizontalScrollBarVisible ? 30 : 0);
-            _defaultQueryItemWidth = Math.Clamp(length - scrollBarSize_x, 0, MaxTileWidth);
+            //double scrollBarSize_x = ScrollBarFixedAxisSize + (IsQueryHorizontalScrollBarVisible ? 30 : 0);
+            //_defaultQueryItemWidth = Math.Clamp(query_item_length - HorizontalScrollBarHeight, 0, MaxTileWidth);
 
-            double scrollBarSize_y = ScrollBarFixedAxisSize + (IsVerticalScrollBarVisible ? 30 : 0);
-            _defaultQueryItemHeight = Math.Clamp(length - scrollBarSize_y, 0, MaxTileHeight);
-            //double defaultWidth;
-            //if (LayoutType == MpClipTrayLayoutType.Stack) {
-            //    defaultWidth = ListOrientation == Orientation.Horizontal ?
-            //                    (QueryTrayScreenWidth * ZoomFactor) :
-            //                    (QueryTrayScreenWidth * ZoomFactor);
-            //} else {
-            //    defaultWidth = MpAvMainWindowViewModel.Instance.MainWindowScreen.Bounds.Width *
-            //                ZoomFactor * MIN_SIZE_ZOOM_FACTOR_COEFF;
-            //}
-            //double scrollBarSize = ScrollBarFixedAxisSize;// IsHorizontalScrollBarVisible ? 30:0;
-            //return Math.Clamp(defaultWidth - scrollBarSize, 0, MaxTileWidth);
+            //double scrollBarSize_y = ScrollBarFixedAxisSize + (IsQueryVerticalScrollBarVisible ? 30 : 0);
+            //_defaultQueryItemHeight = Math.Clamp(query_item_length - scrollBarSize_y, 0, MaxTileHeight);
+
+            double query_item_length = QueryTrayFixedDimensionLength * ZoomFactor;
+            double pin_item_length = PinTrayFixedDimensionLength * ZoomFactor;
+            if (ListOrientation == Orientation.Horizontal) {
+                _defaultQueryItemWidth = query_item_length - QueryTrayVerticalScrollBarWidth;
+                _defaultQueryItemHeight = QueryTrayFixedDimensionLength - QueryTrayHorizontalScrollBarHeight;
+
+                _defaultPinItemWidth = pin_item_length;
+                _defaultPinItemHeight = PinTrayFixedDimensionLength;
+            } else {
+                _defaultQueryItemWidth = QueryTrayFixedDimensionLength - QueryTrayVerticalScrollBarWidth;
+                _defaultQueryItemHeight = query_item_length - QueryTrayHorizontalScrollBarHeight;
+
+                _defaultPinItemWidth = PinTrayFixedDimensionLength;
+                _defaultPinItemHeight = pin_item_length;
+            }
             OnPropertyChanged(nameof(DefaultQueryItemWidth));
             OnPropertyChanged(nameof(DefaultQueryItemHeight));
+            OnPropertyChanged(nameof(DefaultPinItemWidth));
+            OnPropertyChanged(nameof(DefaultPinItemHeight));
         }
 
-        public double DefaultPinItemWidth => DEFAULT_ITEM_SIZE;
-        public double DefaultPinItemHeight => DEFAULT_ITEM_SIZE;
+        private double _defaultPinItemWidth;
+        public double DefaultPinItemWidth =>
+            _defaultPinItemWidth;
+
+        private double _defaultPinItemHeight;
+        public double DefaultPinItemHeight =>
+            _defaultPinItemHeight;
 
         public double DefaultEditableItemWidth =>
             EDITOR_TOOLBAR_MIN_WIDTH;
 
         public double ScrollBarFixedAxisSize =>
             30;
+
+        public double QueryTrayHorizontalScrollBarHeight =>
+            IsQueryHorizontalScrollBarVisible ? ScrollBarFixedAxisSize : 0;
+
+        public double QueryTrayVerticalScrollBarWidth =>
+            IsQueryVerticalScrollBarVisible ? ScrollBarFixedAxisSize : 0;
 
         #endregion
 
@@ -775,8 +790,8 @@ namespace MonkeyPaste.Avalonia {
         public int MaxClipTrayQueryIdx => MpPlatform.Services.Query.TotalAvailableItemsInQuery - 1;
         public int MinClipTrayQueryIdx => 0;
 
-        public bool CanThumbDragY => QueryTrayScreenHeight < QueryTrayTotalHeight;
-        public bool CanThumbDragX => QueryTrayScreenWidth < QueryTrayTotalWidth;
+        public bool CanThumbDragY => ObservedQueryTrayScreenHeight < QueryTrayTotalHeight;
+        public bool CanThumbDragX => ObservedQueryTrayScreenWidth < QueryTrayTotalWidth;
 
         public bool CanThumbDrag => CanThumbDragX || CanThumbDragY;
         #endregion
@@ -830,6 +845,9 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
+        public IEnumerable<MpAvClipTileViewModel> AllActiveItems =>
+            AllItems.Where(x => !x.IsPlaceholder);
+
         public MpAvClipTileViewModel HeadItem =>
             SortOrderedItems.ElementAtOrDefault(0);
 
@@ -953,10 +971,22 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Layout
+
+        #region Observed Dimensions
         public double ObservedContainerScreenWidth { get; set; }
         public double ObservedContainerScreenHeight { get; set; }
         public double ObservedPinTrayScreenWidth { get; set; }
         public double ObservedPinTrayScreenHeight { get; set; }
+
+        public double ObservedQueryTrayScreenWidth { get; set; }
+
+        public double ObservedQueryTrayScreenHeight { get; set; }
+
+        #endregion
+
+        #region Bound Dimensions
+        #endregion
+
         public double DefaultPinTrayWidth =>
             DefaultQueryItemWidth * 1.4;
 
@@ -1022,9 +1052,9 @@ namespace MonkeyPaste.Avalonia {
         public double MinClipOrPinTrayScreenHeight =>
             50;
         public double MaxTileWidth =>
-            double.PositiveInfinity;// Math.Max(0, QueryTrayScreenWidth - MAX_TILE_SIZE_CONTAINER_PAD);
+            double.PositiveInfinity;// Math.Max(0, ObservedQueryTrayScreenWidth - MAX_TILE_SIZE_CONTAINER_PAD);
         public double MaxTileHeight =>
-            double.PositiveInfinity;// Math.Max(0, QueryTrayScreenHeight - MAX_TILE_SIZE_CONTAINER_PAD);
+            double.PositiveInfinity;// Math.Max(0, ObservedQueryTrayScreenHeight - MAX_TILE_SIZE_CONTAINER_PAD);
 
         public int CurGridFixedCount { get; set; }
 
@@ -1418,8 +1448,8 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(QueryTrayTotalTileWidth));
             OnPropertyChanged(nameof(QueryTrayTotalTileHeight));
 
-            OnPropertyChanged(nameof(IsHorizontalScrollBarVisible));
-            OnPropertyChanged(nameof(IsVerticalScrollBarVisible));
+            OnPropertyChanged(nameof(IsQueryHorizontalScrollBarVisible));
+            OnPropertyChanged(nameof(IsQueryVerticalScrollBarVisible));
 
             OnPropertyChanged(nameof(MaxContainerScreenWidth));
             OnPropertyChanged(nameof(MaxContainerScreenHeight));
@@ -1564,7 +1594,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             double pad = 0;
-            MpRect svr = new MpRect(0, 0, QueryTrayScreenWidth, QueryTrayScreenHeight);
+            MpRect svr = new MpRect(0, 0, ObservedQueryTrayScreenWidth, ObservedQueryTrayScreenHeight);
             MpRect ctvm_rect = ctvm.ScreenRect;
 
             MpPoint delta_scroll_offset = new MpPoint();
@@ -1977,31 +2007,17 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsGridLayout):
                     ToggleLayoutTypeCommand.Execute(null);
                     break;
-                case nameof(ListOrientation):
-                    break;
-                case nameof(ZoomFactor):
-                    UpdateDefaultQueryItemSize();
-                    MpMessenger.SendGlobal<MpMessageType>(MpMessageType.TrayZoomFactorChanged);
-                    break;
-                case nameof(MaxTileHeight):
-                case nameof(MaxTileWidth):
-                case nameof(IsHorizontalScrollBarVisible):
-                case nameof(IsVerticalScrollBarVisible):
-                case nameof(QueryTrayScreenHeight):
-                case nameof(QueryTrayScreenWidth):
-                    UpdateDefaultQueryItemSize();
-                    break;
                 case nameof(QueryTrayTotalTileWidth):
                 case nameof(QueryTrayTotalTileHeight):
                     if (QueryTrayTotalTileWidth < 0 || QueryTrayTotalTileHeight < 0) {
                         Debugger.Break();
-                        QueryTrayScreenWidth = 0;
+                        ObservedQueryTrayScreenWidth = 0;
                     }
                     OnPropertyChanged(nameof(MaxScrollOffsetX));
                     OnPropertyChanged(nameof(MaxScrollOffsetY));
 
-                    OnPropertyChanged(nameof(IsHorizontalScrollBarVisible));
-                    OnPropertyChanged(nameof(IsVerticalScrollBarVisible));
+                    OnPropertyChanged(nameof(IsQueryHorizontalScrollBarVisible));
+                    OnPropertyChanged(nameof(IsQueryVerticalScrollBarVisible));
                     break;
                 case nameof(ScrollOffsetX):
                 case nameof(ScrollOffsetY):
@@ -2037,20 +2053,31 @@ namespace MonkeyPaste.Avalonia {
                         }
                     }
                     break;
-                //case nameof(DefaultQueryItemSize):
+
+                case nameof(ZoomFactor):
+                    UpdateDefaultItemSize();
+                    MpMessenger.SendGlobal<MpMessageType>(MpMessageType.TrayZoomFactorChanged);
+                    break;
+                case nameof(MaxTileHeight):
+                case nameof(MaxTileWidth):
+                case nameof(QueryTrayVerticalScrollBarWidth):
+                case nameof(QueryTrayHorizontalScrollBarHeight):
+                case nameof(QueryTrayFixedDimensionLength):
+                case nameof(PinTrayFixedDimensionLength):
+                    UpdateDefaultItemSize();
+                    break;
                 case nameof(DefaultQueryItemWidth):
-                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.MinWidth)));
+                    QueryItems.ForEach(x => x.OnPropertyChanged(nameof(x.MinWidth)));
                     break;
                 case nameof(DefaultQueryItemHeight):
-                    //if(!MpAvMainWindowViewModel.Instance.IsMainWindowInitiallyOpening &&
-                    //    MpAvMainWindowViewModel.Instance.IsMainWindowOpening) {
-                    //    // since spring animation is clamped along screen edge when 
-                    //    // it springs mw stretches and makes tiles bounce so reject tile 
-                    //    // update because size will return to original
-                    //    // (its kinda cool but is too much processing)
-                    //    break;
-                    //}
-                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.MinHeight)));
+                    QueryItems.ForEach(x => x.OnPropertyChanged(nameof(x.MinHeight)));
+                    break;
+
+                case nameof(DefaultPinItemWidth):
+                    PinnedItems.ForEach(x => x.OnPropertyChanged(nameof(x.MinWidth)));
+                    break;
+                case nameof(DefaultPinItemHeight):
+                    PinnedItems.ForEach(x => x.OnPropertyChanged(nameof(x.MinHeight)));
                     break;
 
                 case nameof(IsAnyTilePinned):
@@ -2275,8 +2302,8 @@ namespace MonkeyPaste.Avalonia {
                     // Debugger.Break();
                 }
                 //double hi_diff = isScrollHorizontal ?
-                //                    hi_ctvm.TrayRect.Right - ScrollOffsetX - QueryTrayScreenWidth :
-                //                    hi_ctvm.TrayRect.Bottom - ScrollOffsetY - QueryTrayScreenHeight;
+                //                    hi_ctvm.TrayRect.Right - ScrollOffsetX - ObservedQueryTrayScreenWidth :
+                //                    hi_ctvm.TrayRect.Bottom - ScrollOffsetY - ObservedQueryTrayScreenHeight;
                 //bool addMoreToTail = hi_diff < 0;
                 //bool addMoreToTail = ScreenRect.Contains(hi_ctvm.ScreenRect.BottomRight);
                 bool addMoreToTail = hi_ctvm == null || hi_ctvm.QueryOffsetIdx >= hi_thresholdQueryIdx;
@@ -2335,8 +2362,8 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(IsQueryEmpty));
             OnPropertyChanged(nameof(EmptyQueryTrayText));
             OnPropertyChanged(nameof(IsQueryTrayEmpty));
-            OnPropertyChanged(nameof(IsHorizontalScrollBarVisible));
-            OnPropertyChanged(nameof(IsVerticalScrollBarVisible));
+            OnPropertyChanged(nameof(IsQueryHorizontalScrollBarVisible));
+            OnPropertyChanged(nameof(IsQueryVerticalScrollBarVisible));
 
             while (IsAnyBusy) {
                 await Task.Delay(100);
@@ -2346,8 +2373,8 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(IsPinTrayEmpty));
             OnPropertyChanged(nameof(EmptyQueryTrayText));
             OnPropertyChanged(nameof(IsQueryTrayEmpty));
-            OnPropertyChanged(nameof(IsHorizontalScrollBarVisible));
-            OnPropertyChanged(nameof(IsVerticalScrollBarVisible));
+            OnPropertyChanged(nameof(IsQueryHorizontalScrollBarVisible));
+            OnPropertyChanged(nameof(IsQueryVerticalScrollBarVisible));
         }
 
         private bool CanTileNavigate() {
@@ -2567,9 +2594,9 @@ namespace MonkeyPaste.Avalonia {
              () => {
                  MpPoint scroll_delta = MpPoint.Zero;
                  if (DefaultScrollOrientation == Orientation.Horizontal) {
-                     scroll_delta.X = QueryTrayScreenWidth;
+                     scroll_delta.X = ObservedQueryTrayScreenWidth;
                  } else {
-                     scroll_delta.Y = QueryTrayScreenHeight;
+                     scroll_delta.Y = ObservedQueryTrayScreenHeight;
                  }
                  var nextPageOffset = (ScrollOffset + scroll_delta);
                  QueryCommand.Execute(nextPageOffset);
@@ -2582,9 +2609,9 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 MpPoint scroll_delta = MpPoint.Zero;
                 if (DefaultScrollOrientation == Orientation.Horizontal) {
-                    scroll_delta.X = QueryTrayScreenWidth;
+                    scroll_delta.X = ObservedQueryTrayScreenWidth;
                 } else {
-                    scroll_delta.Y = QueryTrayScreenHeight;
+                    scroll_delta.Y = ObservedQueryTrayScreenHeight;
                 }
                 var prevPageOffset = (ScrollOffset - scroll_delta);
                 QueryCommand.Execute(prevPageOffset);
@@ -2699,8 +2726,8 @@ namespace MonkeyPaste.Avalonia {
                  OnPropertyChanged(nameof(PinnedItems));
                  OnPropertyChanged(nameof(MinPinTrayScreenWidth));
                  OnPropertyChanged(nameof(MaxPinTrayScreenWidth));
-                 OnPropertyChanged(nameof(QueryTrayScreenWidth));
-                 OnPropertyChanged(nameof(QueryTrayScreenHeight));
+                 OnPropertyChanged(nameof(ObservedQueryTrayScreenWidth));
+                 OnPropertyChanged(nameof(ObservedQueryTrayScreenHeight));
                  UpdateEmptyPropertiesAsync().FireAndForgetSafeAsync(this);
              },
             (args) =>
@@ -2722,8 +2749,8 @@ namespace MonkeyPaste.Avalonia {
                  OnPropertyChanged(nameof(IsAnyTilePinned));
                  OnPropertyChanged(nameof(MinPinTrayScreenWidth));
                  OnPropertyChanged(nameof(MaxPinTrayScreenWidth));
-                 OnPropertyChanged(nameof(QueryTrayScreenWidth));
-                 OnPropertyChanged(nameof(QueryTrayScreenHeight));
+                 OnPropertyChanged(nameof(ObservedQueryTrayScreenWidth));
+                 OnPropertyChanged(nameof(ObservedQueryTrayScreenHeight));
 
                  ClearClipSelection(false);
                  // perform inplace requery to potentially put unpinned tile back
@@ -2942,8 +2969,8 @@ namespace MonkeyPaste.Avalonia {
                         OnPropertyChanged(nameof(QueryTrayTotalWidth));
                         OnPropertyChanged(nameof(MaxScrollOffsetX));
                         OnPropertyChanged(nameof(MaxScrollOffsetY));
-                        OnPropertyChanged(nameof(IsHorizontalScrollBarVisible));
-                        OnPropertyChanged(nameof(IsVerticalScrollBarVisible));
+                        OnPropertyChanged(nameof(IsQueryHorizontalScrollBarVisible));
+                        OnPropertyChanged(nameof(IsQueryVerticalScrollBarVisible));
                     }
 
                     loadOffsetIdx = Math.Max(0, loadOffsetIdx);
@@ -3045,8 +3072,8 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(QueryTrayTotalWidth));
                     OnPropertyChanged(nameof(MaxScrollOffsetX));
                     OnPropertyChanged(nameof(MaxScrollOffsetY));
-                    OnPropertyChanged(nameof(IsHorizontalScrollBarVisible));
-                    OnPropertyChanged(nameof(IsVerticalScrollBarVisible));
+                    OnPropertyChanged(nameof(IsQueryHorizontalScrollBarVisible));
+                    OnPropertyChanged(nameof(IsQueryVerticalScrollBarVisible));
 
                     if (Items.Where(x => !x.IsPlaceholder).Count() == 0) {
                         ScrollOffsetX = 0;

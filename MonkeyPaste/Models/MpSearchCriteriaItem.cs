@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     [Table("MpSearchCriteriaItem")]
-    public class MpSearchCriteriaItem : MpDbModelBase {
+    public class MpSearchCriteriaItem : MpDbModelBase, MpIClonableDbModel<MpSearchCriteriaItem> {
         #region Constants
 
         public const MpLogicalQueryType DEFAULT_QUERY_JOIN_TYPE = MpLogicalQueryType.And;
@@ -14,6 +14,23 @@ namespace MonkeyPaste {
         #endregion
 
         #region Interfaces
+
+        #region MpIClonableDbModel Implementation
+
+        public async Task<MpSearchCriteriaItem> CloneDbModelAsync(bool deepClone = true, bool suppressWrite = false) {
+            var sci_clone = await MpSearchCriteriaItem.CreateAsync(
+                tagId: QueryTagId,
+                sortOrderIdx: SortOrderIdx,
+                joinType: JoinType,
+                options: Options,
+                matchValue: MatchValue,
+                isCaseSensitive: IsCaseSensitive,
+                isWholeWord: IsWholeWord,
+                suppressWrite: suppressWrite);
+            return sci_clone;
+        }
+        #endregion
+
         #endregion
 
         #region Columns
@@ -32,7 +49,7 @@ namespace MonkeyPaste {
         public string MatchValue { get; set; }
 
         [Column("e_MpQueryType")]
-        public string QueryTypeName { get; set; }
+        public string QueryTypeName { get; set; } = MpQueryType.Advanced.ToString();
 
         public int IsCaseSensitiveValue { get; set; }
         public int IsWholeWordValue { get; set; }
@@ -43,7 +60,6 @@ namespace MonkeyPaste {
         public int SortOrderIdx { get; set; } = 0;
 
         #endregion
-
 
         #region Properties
 

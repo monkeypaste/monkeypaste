@@ -725,11 +725,14 @@ INNER JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId
             #endregion
 
             await InitHelpContentAsync();
-
+            await InitQueryTagsAsync();
 
             MpConsole.WriteLine(@"Created all default tables");
         }
 
+        private static async Task InitQueryTagsAsync() {
+            await Task.Delay(1);
+        }
         private static async Task InitHelpContentAsync() {
             // NOTE called in clip tray init when initial startup is flagged
 

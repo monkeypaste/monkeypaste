@@ -57,32 +57,25 @@
           Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition x:DataType="local:MpAvSearchCriteriaItemCollectionViewModel"
-                           Height="{Binding BoundCriteriaListBoxScreenHeight, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvDoubleToGridLengthConverter.Instance}}"
-                           MaxHeight="{Binding MaxSearchCriteriaListBoxHeight, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}" />
+                           Height="{Binding BoundCriteriaListBoxScreenHeight, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvDoubleToGridLengthConverter.Instance}, ConverterParameter=Auto}"
+                           MaxHeight="{Binding MaxSearchCriteriaRowHeight, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <!--  ADVANCED SEARCH  -->
-        <Border Grid.Row="0"
+        <Border x:Name="AdvancedSearchContainerBorder"
+                Grid.Row="0"
                 VerticalAlignment="Top"
                 HorizontalAlignment="Stretch"
-                IsVisible="{Binding IsExpanded, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
                 DataContext="{x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}">
-            <!--
-                local:MpAvResizeExtension.MinHeight="0"
-                local:MpAvResizeExtension.MaxHeight="{Binding MaxSearchCriteriaListBoxHeight}"
-                local:MpAvResizeExtension.MinWidth="{Binding $parent.Bounds.Width}"
-                local:MpAvResizeExtension.MaxWidth="{Binding $parent.Bounds.Width}"
-                local:MpAvResizeExtension.BoundWidth="{Binding $self.Bounds.Width, Mode=TwoWay}"
-                local:MpAvResizeExtension.BoundHeight="{Binding BoundCriteriaListBoxScreenHeight, Mode=TwoWay}"
-                local:MpAvResizeExtension.DefaultWidth="{Binding $parent.Bounds.Width}"
-                local:MpAvResizeExtension.DefaultHeight="0"
-                local:MpAvResizeExtension.IsResizable="{Binding IsResizable}"
-                local:MpAvResizeExtension.XFactor="0"
-                local:MpAvResizeExtension.YFactor="1"
-                local:MpAvResizeExtension.GlobalResizeMessage="None"
-                local:MpAvResizeExtension.IsEnabled="True"
-            -->
+            <Border.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="IsExpanded"
+                             Source="{x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}" />
+                    <Binding Path="!IsCriteriaWindowOpen"
+                             Source="{x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}" />
+                </MultiBinding>
+            </Border.IsVisible>
             <local:MpAvSearchCriteriaListBoxView x:Name="SearchDetailView"
                                                  HorizontalAlignment="Stretch"
                                                  VerticalAlignment="Stretch"
@@ -97,24 +90,31 @@
                       Classes.desktop="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                       IsVisible="{Binding IsExpanded, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
                       HorizontalAlignment="Stretch"
-                      VerticalAlignment="Bottom" />
+                      VerticalAlignment="Bottom">
+            <GridSplitter.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="IsExpanded"
+                             Source="{x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}" />
+                    <Binding Path="!IsCriteriaWindowOpen"
+                             Source="{x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}" />
+                </MultiBinding>
+            </GridSplitter.IsVisible>
+        </GridSplitter>
 
         <!--  QUERY TRAY  -->
-        <Border x:Name="ClipTrayContainerBorder"
+        <Border x:Name="QueryTrayContainerBorder"
                 Grid.Row="1"
                 local:MpAvSizeObserverExtension.IsEnabled="True"
-                local:MpAvSizeObserverExtension.ObservedWidth="{Binding QueryTrayScreenWidth, Mode=TwoWay}"
-                local:MpAvSizeObserverExtension.ObservedHeight="{Binding QueryTrayScreenHeight, Mode=TwoWay}">
-            <!--<local:MpAvNativeWebViewContainer HorizontalAlignment="Stretch"
-                                              VerticalAlignment="Stretch">-->
+                local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedQueryTrayScreenWidth, Mode=TwoWay}"
+                local:MpAvSizeObserverExtension.ObservedHeight="{Binding ObservedQueryTrayScreenHeight, Mode=TwoWay}">
             <ScrollViewer x:Name="ClipTrayScrollViewer"
                           HorizontalScrollBarVisibility="Visible"
                           VerticalScrollBarVisibility="Visible"
                           HorizontalAlignment="Left"
                           VerticalAlignment="Top"
                           AllowAutoHide="True"
-                          Width="{Binding QueryTrayScreenWidth}"
-                          Height="{Binding QueryTrayScreenHeight}">
+                          Width="{Binding $parent.Bounds.Width}"
+                          Height="{Binding $parent.Bounds.Height}">
                 <ListBox x:Name="ClipTrayListBox"
                          Classes="clipTileListBox queryListBox"
                          Classes.requerying="{Binding IsRequerying}"
@@ -189,7 +189,8 @@
             IsBusy Overlay
             IsVisible="{Binding IsRequerying}"
         -->
-        <Border HorizontalAlignment="Stretch"
+        <Border x:Name="QueryTrayBusyOuterBorder"
+                HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
                 IsVisible="False"
                 Grid.Row="1">
@@ -205,11 +206,13 @@
                                        VerticalAlignment="Center"
                                        Width="70"
                                        Height="70" />-->
-            <Border HorizontalAlignment="Center"
+            <Border x:Name="QueryTrayBusyInnerBorder"
+                    HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Width="70"
                     Height="70">
-                <local:MpAvProgressSpinnerView HorizontalAlignment="Stretch"
+                <local:MpAvProgressSpinnerView x:Name="QueryTrayBusySpinner"
+                                               HorizontalAlignment="Stretch"
                                                VerticalAlignment="Stretch"
                                                DataContext="{Binding}" />
             </Border>
@@ -217,7 +220,8 @@
 
         <!--  IsEmpty Overlay  -->
 
-        <Border HorizontalAlignment="Stretch"
+        <Border x:Name="QueryTrayEmptyContainer"
+                HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
                 IsHitTestVisible="False"
                 IsVisible="False"
