@@ -40,23 +40,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region DoubleLeftPressCommand AvaloniaProperty
-        public static ICommand GetDoubleLeftPressCommand(AvaloniaObject obj) {
-            return obj.GetValue(DoubleLeftPressCommandProperty);
-        }
-
-        public static void SetDoubleLeftPressCommand(AvaloniaObject obj, ICommand value) {
-            obj.SetValue(DoubleLeftPressCommandProperty, value);
-        }
-
-        public static readonly AttachedProperty<ICommand> DoubleLeftPressCommandProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, ICommand>(
-                "DoubleLeftPressCommand",
-                null,
-                false);
-
-        #endregion
-
         #region LeftPressCommandParameter AvaloniaProperty
         public static object GetLeftPressCommandParameter(AvaloniaObject obj) {
             return obj.GetValue(LeftPressCommandParameterProperty);
@@ -74,86 +57,19 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region HoldingCommand AvaloniaProperty
-        public static ICommand GetHoldingCommand(AvaloniaObject obj) {
-            return obj.GetValue(HoldingCommandProperty);
+        #region DoubleLeftPressCommand AvaloniaProperty
+        public static ICommand GetDoubleLeftPressCommand(AvaloniaObject obj) {
+            return obj.GetValue(DoubleLeftPressCommandProperty);
         }
 
-        public static void SetHoldingCommand(AvaloniaObject obj, ICommand value) {
-            obj.SetValue(HoldingCommandProperty, value);
+        public static void SetDoubleLeftPressCommand(AvaloniaObject obj, ICommand value) {
+            obj.SetValue(DoubleLeftPressCommandProperty, value);
         }
 
-        public static readonly AttachedProperty<ICommand> HoldingCommandProperty =
+        public static readonly AttachedProperty<ICommand> DoubleLeftPressCommandProperty =
             AvaloniaProperty.RegisterAttached<object, Control, ICommand>(
-                "HoldingCommand",
+                "DoubleLeftPressCommand",
                 null,
-                false);
-
-        #endregion
-
-        #region HoldingCommandParameter AvaloniaProperty
-        public static object GetHoldingCommandParameter(AvaloniaObject obj) {
-            return obj.GetValue(HoldingCommandParameterProperty);
-        }
-
-        public static void SetHoldingCommandParameter(AvaloniaObject obj, object value) {
-            obj.SetValue(HoldingCommandParameterProperty, value);
-        }
-
-        public static readonly AttachedProperty<object> HoldingCommandParameterProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, object>(
-                "HoldingCommandParameter",
-                null,
-                false);
-
-        #endregion
-
-        #region RoutingStrategy AvaloniaProperty
-        public static RoutingStrategies GetRoutingStrategy(AvaloniaObject obj) {
-            return obj.GetValue(RoutingStrategyProperty);
-        }
-
-        public static void SetRoutingStrategy(AvaloniaObject obj, RoutingStrategies value) {
-            obj.SetValue(RoutingStrategyProperty, value);
-        }
-
-        public static readonly AttachedProperty<RoutingStrategies> RoutingStrategyProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, RoutingStrategies>(
-                "RoutingStrategy",
-                RoutingStrategies.Direct);
-
-        #endregion
-
-        #region IsPressEventHandled AvaloniaProperty
-        public static bool GetIsPressEventHandled(AvaloniaObject obj) {
-            return obj.GetValue(IsPressEventHandledProperty);
-        }
-
-        public static void SetIsPressEventHandled(AvaloniaObject obj, bool value) {
-            obj.SetValue(IsPressEventHandledProperty, value);
-        }
-
-        public static readonly AttachedProperty<bool> IsPressEventHandledProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, bool>(
-                "IsPressEventHandled",
-                true,
-                false);
-
-        #endregion
-
-        #region PointerGestureDelayMs AvaloniaProperty
-        public static int GetPointerGestureDelayMs(AvaloniaObject obj) {
-            return obj.GetValue(PointerGestureDelayMsProperty);
-        }
-
-        public static void SetPointerGestureDelayMs(AvaloniaObject obj, int value) {
-            obj.SetValue(PointerGestureDelayMsProperty, value);
-        }
-
-        public static readonly AttachedProperty<int> PointerGestureDelayMsProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, int>(
-                "PointerGestureDelayMs",
-                500,
                 false);
 
         #endregion
@@ -209,6 +125,106 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region HoldingCommand AvaloniaProperty
+        public static ICommand GetHoldingCommand(AvaloniaObject obj) {
+            return obj.GetValue(HoldingCommandProperty);
+        }
+
+        public static void SetHoldingCommand(AvaloniaObject obj, ICommand value) {
+            obj.SetValue(HoldingCommandProperty, value);
+        }
+
+        public static readonly AttachedProperty<ICommand> HoldingCommandProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, ICommand>(
+                "HoldingCommand",
+                null,
+                false);
+
+        #endregion
+
+        #region HoldingCommandParameter AvaloniaProperty
+        public static object GetHoldingCommandParameter(AvaloniaObject obj) {
+            return obj.GetValue(HoldingCommandParameterProperty);
+        }
+
+        public static void SetHoldingCommandParameter(AvaloniaObject obj, object value) {
+            obj.SetValue(HoldingCommandParameterProperty, value);
+        }
+
+        public static readonly AttachedProperty<object> HoldingCommandParameterProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, object>(
+                "HoldingCommandParameter",
+                null,
+                false);
+
+        #endregion
+
+        #region IsHoldingEnabled AvaloniaProperty
+        public static bool GetIsHoldingEnabled(AvaloniaObject obj) {
+            return obj.GetValue(IsHoldingEnabledProperty);
+        }
+
+        public static void SetIsHoldingEnabled(AvaloniaObject obj, bool value) {
+            obj.SetValue(IsHoldingEnabledProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> IsHoldingEnabledProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>(
+                "IsHoldingEnabled",
+                true);
+
+        #endregion
+
+        #region RoutingStrategy AvaloniaProperty
+        public static RoutingStrategies GetRoutingStrategy(AvaloniaObject obj) {
+            return obj.GetValue(RoutingStrategyProperty);
+        }
+
+        public static void SetRoutingStrategy(AvaloniaObject obj, RoutingStrategies value) {
+            obj.SetValue(RoutingStrategyProperty, value);
+        }
+
+        public static readonly AttachedProperty<RoutingStrategies> RoutingStrategyProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, RoutingStrategies>(
+                "RoutingStrategy",
+                RoutingStrategies.Direct);
+
+        #endregion
+
+        #region IsPressEventHandled AvaloniaProperty
+        public static bool GetIsPressEventHandled(AvaloniaObject obj) {
+            return obj.GetValue(IsPressEventHandledProperty);
+        }
+
+        public static void SetIsPressEventHandled(AvaloniaObject obj, bool value) {
+            obj.SetValue(IsPressEventHandledProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> IsPressEventHandledProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>(
+                "IsPressEventHandled",
+                true,
+                false);
+
+        #endregion
+
+        #region PointerGestureDelayMs AvaloniaProperty
+        public static int GetPointerGestureDelayMs(AvaloniaObject obj) {
+            return obj.GetValue(PointerGestureDelayMsProperty);
+        }
+
+        public static void SetPointerGestureDelayMs(AvaloniaObject obj, int value) {
+            obj.SetValue(PointerGestureDelayMsProperty, value);
+        }
+
+        public static readonly AttachedProperty<int> PointerGestureDelayMsProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, int>(
+                "PointerGestureDelayMs",
+                500,
+                false);
+
+        #endregion
+
         #region IsEnabled AvaloniaProperty
         public static bool GetIsEnabled(AvaloniaObject obj) {
             return obj.GetValue(IsEnabledProperty);
@@ -255,7 +271,7 @@ namespace MonkeyPaste.Avalonia {
                     b.AddHandler(Button.PointerPressedEvent, Control_PointerPressed, RoutingStrategies.Tunnel);
                 }
                 control.AddHandler(Control.PointerPressedEvent, Control_PointerPressed, GetRoutingStrategy(control));
-                if (GetHoldingCommand(control) != null) {
+                if (GetHoldingCommand(control) != null && GetIsHoldingEnabled(control)) {
                     control.AddHandler(Control.HoldingEvent, Control_Holding, RoutingStrategies.Tunnel);
                 }
             }
@@ -295,6 +311,7 @@ namespace MonkeyPaste.Avalonia {
                           // press vs hold
                           (GetLeftPressCommand(control) != null &&
                           GetHoldingCommand(control) != null &&
+                          GetIsHoldingEnabled(control) &&
                           GetLeftPressCommand(control).CanExecute(GetLeftPressCommandParameter(control)) &&
                           GetHoldingCommand(control).CanExecute(GetHoldingCommandParameter(control)));
 

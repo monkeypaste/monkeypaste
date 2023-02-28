@@ -233,9 +233,6 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.RequeryCompleted:
                     IsSearching = false;
                     OnPropertyChanged(nameof(IsSearchValid));
-                    if (MpAvTagTrayViewModel.Instance.SelectedItem.TagType == MpTagType.Query) {
-
-                    }
                     OnPropertyChanged(nameof(IsExpandAdvancedSearchButtonVisible));
                     break;
                 case MpMessageType.AdvancedSearchUnexpanded:

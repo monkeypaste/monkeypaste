@@ -184,6 +184,11 @@ namespace MonkeyPaste.Avalonia {
                 // shouldn't happen
                 Debugger.Break();
             }
+            if (MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == tagId) is MpAvTagTileViewModel ttvm &&
+                ttvm.IsLinkTag) {
+                // clear adv search
+                tagId = 0;
+            }
             QueryTagId = isPending ? 0 : tagId;
 
             Items.Clear();
@@ -200,15 +205,15 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
-            if (!HasCriteriaItems && !IsSavedQuery) {
-                if (isPending) {
-                    // create empty criteria item
-                    var empty_civm = await CreateCriteriaItemViewModelAsync(null);
-                    Items.Add(empty_civm);
-                } else if (IsCriteriaWindowOpen) {
-                    // active search is no longer query tag, close criteria window
-                    _criteriaWindow.Close();
-                }
+            if (!HasCriteriaItems && (IsSavedQuery || isPending)) {
+                // create empty criteria item
+                var empty_civm = await CreateCriteriaItemViewModelAsync(null);
+                Items.Add(empty_civm);
+            }
+
+            if (!HasCriteriaItems && IsCriteriaWindowOpen) {
+                // active search no longer query tag, close criteria window
+                _criteriaWindow.Close();
             }
 
             while (Items.Any(x => x.IsAnyBusy)) {
@@ -223,6 +228,15 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task<MpAvSearchCriteriaItemViewModel> CreateCriteriaItemViewModelAsync(MpSearchCriteriaItem sci) {
             MpAvSearchCriteriaItemViewModel nscivm = new MpAvSearchCriteriaItemViewModel(this);
+            if (sci == null) {
+                // create default empty item
+                // NOTE when pending its not written until saved
+                sci = await MpSearchCriteriaItem.CreateAsync(
+                    tagId: QueryTagId,
+                    sortOrderIdx: Items.Count,
+                    queryType: MpQueryType.Advanced,
+                    suppressWrite: !IsSavedQuery);
+            }
             await nscivm.InitializeAsync(sci);
             return nscivm;
         }
@@ -376,15 +390,13 @@ namespace MonkeyPaste.Avalonia {
             async (args) => {
                 IsBusy = true;
 
-                int add_idx = Items.Count;
-                if (args is MpAvSearchCriteriaItemViewModel scivm) {
-                    add_idx = scivm.SortOrderIdx + 1;
-                }
-                MpSearchCriteriaItem nsci = new MpSearchCriteriaItem() {
-                    SortOrderIdx = add_idx
-                };
-                MpAvSearchCriteriaItemViewModel nscivm = await CreateCriteriaItemViewModelAsync(nsci);
+                MpAvSearchCriteriaItemViewModel nscivm = await CreateCriteriaItemViewModelAsync(null);
                 Items.Add(nscivm);
+                if (args is MpAvSearchCriteriaItemViewModel scivm) {
+                    var resorted_items = SortedItems.ToList();
+                    resorted_items.Move(Items.Count - 1, scivm.SortOrderIdx + 1);
+                    resorted_items.ForEach((x, idx) => x.SortOrderIdx = idx);
+                }
                 OnPropertyChanged(nameof(SortedItems));
                 OnPropertyChanged(nameof(HasCriteriaItems));
                 while (Items.Any(x => x.IsAnyBusy)) {
@@ -488,13 +500,19 @@ namespace MonkeyPaste.Avalonia {
                 // but are the selected tag treat search as from
                 // all until selected tag is changed
                 InitializeAsync(queryTagId, false).FireAndForgetSafeAsync(this);
+            }, (args) => {
+                if (args is int tagId &&
+                    tagId == QueryTagId) {
+                    return false;
+                }
+                return true;
             });
 
         public ICommand OpenCriteriaWindowCommand => new MpCommand<object>(
             (args) => {
                 if (MpPlatform.Services.PlatformInfo.IsDesktop) {
                     _criteriaWindow = new Window() {
-                        Width = 500,
+                        Width = 1100,
                         Height = 300,
                         ShowInTaskbar = true,
                         Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", null, null, null) as WindowIcon,

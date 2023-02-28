@@ -7,6 +7,7 @@ namespace MonkeyPaste {
     public enum MpMessageType {
         None,
 
+        QueryCompleted,
         RequeryCompleted,
         QueryChanged,
         SubQueryChanged,

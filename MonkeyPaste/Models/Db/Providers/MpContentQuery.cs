@@ -15,12 +15,18 @@ namespace MonkeyPaste {
             // Item3 = Params
 
             List<Tuple<string, string, List<object>>> sub_queries = new List<Tuple<string, string, List<object>>>();
-            //List<int> result_ids = null;
             int idx = 0;
             for (MpIQueryInfo qi = head_qi; qi != null; qi = qi.Next) {
                 _cur_qi = qi;
-                IEnumerable<int> qi_tag_ids =
-                    MpPlatform.Services.TagQueryTools.GetSelfAndAllDescendantsTagIds(qi.TagId);
+                IEnumerable<int> qi_tag_ids = null;
+                if (qi == head_qi && qi.Next != null) {
+                    // when adv search is active simp query's tagId is QueryTagId 
+                    // to keep RefreshQuery giving accurate results but needs to use AllTag
+                    qi_tag_ids = new[] { MpTag.AllTagId };
+                } else {
+                    qi_tag_ids = MpPlatform.Services.TagQueryTools.GetSelfAndAllDescendantsTagIds(qi.TagId);
+                }
+
                 sub_queries.Add(GetContentQuery(qi, qi_tag_ids, idx++));
             }
             _cur_qi = null;
@@ -132,8 +138,7 @@ namespace MonkeyPaste {
             // SELECT GEN
 
             string selectClause = $"RootId,{qi.GetSortField()}";
-            string fromClause = $"{(isAdvanced ? "MpContentQueryView_advanced" : "MpContentQueryView_simple")}";
-            string query = @$"SELECT {selectClause} FROM {fromClause} WHERE {whereClause}";
+            string query = @$"SELECT {selectClause} FROM MpContentQueryView WHERE {whereClause}";
             args = argList.ToArray();
             return query;
         }
@@ -280,11 +285,14 @@ namespace MonkeyPaste {
             string match_ticks = null;
             // all day units
             try {
-                double today_offset = (DateTime.Now - DateTime.Today).TotalDays;
+                //double today_offset = (DateTime.Now - DateTime.Today).TotalDays;
+                //double days = double.Parse(mv);
+                //double total_day_offset = days + today_offset;
+                //var dt = DateTime.Now - TimeSpan.FromDays(total_day_offset);
+                //match_ticks = dt.Ticks.ToString();
                 double days = double.Parse(mv);
-                double total_day_offset = days + today_offset;
-                var dt = DateTime.Now - TimeSpan.FromDays(total_day_offset);
-                match_ticks = dt.Ticks.ToString();
+                var match_dt = DateTime.Today - TimeSpan.FromDays(days);
+                match_ticks = match_dt.Ticks.ToString();
             }
             catch {
                 tickOp = null;

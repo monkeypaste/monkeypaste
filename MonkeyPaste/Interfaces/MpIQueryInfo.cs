@@ -10,13 +10,9 @@ namespace MonkeyPaste {
         Simple,
         Advanced
     }
-    //public interface MpIQueryInfoValueProvider {
-    //    object Source { get; }
-    //    string SourcePropertyName { get; }
-    //    string QueryValueName { get; }
-    //}
 
     public interface MpIQueryResultProvider : MpIJsonObject {
+        bool IsQuerying { get; }
         bool CanRequery { get; }
         public int TotalAvailableItemsInQuery { get; }
         Task<List<MpCopyItem>> FetchItemsByQueryIdxListAsync(IEnumerable<int> copyItemQueryIdxList, IEnumerable<int> idsToOmit);
@@ -31,9 +27,6 @@ namespace MonkeyPaste {
 
     public interface MpIQueryInfo {
         MpQueryType QueryType { get; }
-        //public MpTextQueryType TextFlags { get; } // advanced
-
-        //public MpDateTimeQueryType TimeFlags { get; } // advanced
         public MpLogicalQueryType JoinType { get; } // advanced
         MpIQueryInfo Next { get; } // advanced
 

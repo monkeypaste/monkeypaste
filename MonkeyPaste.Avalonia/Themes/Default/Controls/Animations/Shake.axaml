@@ -3,7 +3,7 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
     <Style Selector=":is(Button):pointerover.shakeOver, Image:pointerover.shakeOver">
-        <Style.Animations>
+        <!--<Style.Animations>
             <Animation Duration="0:0:1.0"
                        FillMode="None"
                        IterationCount="Infinite">
@@ -24,10 +24,10 @@
                             Value="0" />
                 </KeyFrame>
             </Animation>
-        </Style.Animations>
+        </Style.Animations>-->
     </Style>
     <Style Selector=":is(Button).shakeOver, Image.shakeOver">
-        <Setter Property="RotateTransform.Angle"
-                Value="0" />
+        <!--<Setter Property="RotateTransform.Angle"
+                Value="0" />-->
     </Style>
 </Styles>

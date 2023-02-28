@@ -3131,6 +3131,10 @@ namespace MonkeyPaste.Avalonia {
                         while (IsAnyBusy) {
                             await Task.Delay(100);
                         }
+                        if (!isLoadMore) {
+
+                            MpMessenger.SendGlobal(MpMessageType.QueryCompleted);
+                        }
                         ValidateQueryTray();
                     });
                     #endregion

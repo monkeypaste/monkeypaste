@@ -670,9 +670,10 @@ namespace MonkeyPaste.Avalonia {
             Control control,
             MpMenuItemViewModel mivm,
             MpPoint offset = null,
-            PlacementMode placement = PlacementMode.AnchorAndGravity,
+            PlacementMode placement = PlacementMode.Pointer,
             bool hideOnClick = false,
-            bool selectOnRightClick = false) {
+            bool selectOnRightClick = false,
+            PopupAnchor anchor = PopupAnchor.None) {
             _cmInstance.Close();
 
             offset = offset == null ? MpPoint.Zero : offset;
@@ -686,8 +687,18 @@ namespace MonkeyPaste.Avalonia {
             _cmInstance.DataContext = mivm;
             _cmInstance.PlacementTarget = control;
             _cmInstance.PlacementMode = placement;
-            _cmInstance.PlacementAnchor = PopupAnchor.TopLeft;
+            _cmInstance.PlacementAnchor = anchor;
+            if (_cmInstance.PlacementAnchor == PopupAnchor.None) {
+                switch (MpAvMainWindowViewModel.Instance.MainWindowOrientationType) {
+                    case MpMainWindowOrientationType.Bottom:
+                        _cmInstance.PlacementAnchor = PopupAnchor.BottomLeft;
+                        break;
+                    default:
+                        _cmInstance.PlacementAnchor = PopupAnchor.TopLeft;
+                        break;
 
+                }
+            }
             _cmInstance.HorizontalOffset = 0;
             _cmInstance.VerticalOffset = 0;
             if (_cmInstance.PlacementMode == PlacementMode.Pointer) {
@@ -700,7 +711,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (MpPlatform.Services.PlatformInfo.IsDesktop) {
                 var w = control.GetVisualAncestor<Window>();
-                _cmInstance.Open(w);
+                //_cmInstance.Open();
             } else {
                 //_cmInstance.HorizontalOffset = 0;
                 //_cmInstance.VerticalOffset = 0;
@@ -713,10 +724,10 @@ namespace MonkeyPaste.Avalonia {
 
                 _cmInstance.HorizontalOffset = 0;
                 _cmInstance.VerticalOffset = 0;
-                _cmInstance.Open(control);
+                //_cmInstance.Open(control);
 
             }
-
+            _cmInstance.Open(control);
         }
 
         #region Helpers

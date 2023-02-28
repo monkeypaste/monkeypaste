@@ -53,12 +53,15 @@ namespace MonkeyPaste.Avalonia {
         #region Properties     
 
         #region MpIQueryResultProvider Implementation
+        [JsonIgnore]
+        public bool IsQuerying { get; private set; }
 
         [JsonIgnore]
         public bool CanRequery =>
             //!MpAvSearchCriteriaItemCollectionViewModel.Instance.IsAdvSearchActive &&
             !_isRestoringValues &&
             !_isRestoringAdvancedValues &&
+            !IsQuerying &&
             MpAvClipTrayViewModel.Instance.QueryCommand.CanExecute(null);
 
         [JsonIgnore]
@@ -90,11 +93,7 @@ namespace MonkeyPaste.Avalonia {
             _isRestoringValues = true;
             MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending = IsDescending;
             MpAvClipTileSortFieldViewModel.Instance.SelectedSortType = SortType;
-            if (MpAvTagTrayViewModel.Instance.LastActiveId != TagId) {
-                // NOTE need this check to avoid selection loop (i think) since 
-                // tag can be reselected to refresh
-                MpAvTagTrayViewModel.Instance.SelectTagCommand.Execute(TagId);
-            }
+            MpAvTagTrayViewModel.Instance.SelectTagCommand.Execute(TagId);
             MpAvSearchBoxViewModel.Instance.SearchText = MatchValue;
             MpAvSearchBoxViewModel.Instance.SearchFilterCollectionViewModel.FilterType = QueryFlags;
             _isRestoringValues = false;
@@ -106,8 +105,9 @@ namespace MonkeyPaste.Avalonia {
             if (!CanRequery) {
                 return;
             }
-            Dispatcher.UIThread.Post(() => {
-                bool has_query_changed = RefreshQuery();
+            Dispatcher.UIThread.Post(async () => {
+                IsQuerying = true;
+                bool has_query_changed = await RefreshQueryAsync();
 
                 if (has_query_changed || forceRequery) {
                     MpPrefViewModel.Instance.LastQueryInfoJson = SerializeJsonObject();
@@ -164,6 +164,7 @@ namespace MonkeyPaste.Avalonia {
         private MpAvQueryViewModel() {
             _pageTools = MpQueryPageTools.Instance;
             PropertyChanged += MpAvQueryInfoViewModel_PropertyChanged;
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }
 
 
@@ -184,7 +185,7 @@ namespace MonkeyPaste.Avalonia {
             _isRestoringAdvancedValues = true;
             IsDescending = query_tag.IsSortDescending.IsTrue();
             SortType = query_tag.SortType.Value;
-            TagId = MpTag.AllTagId;
+            TagId = simp_ci.QueryTagId;
             MatchValue = simp_ci.MatchValue;
 
             try {
@@ -211,16 +212,25 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private bool RefreshQuery() {
+        private void ReceivedGlobalMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.QueryCompleted:
+                    if (!IsQuerying) {
+                        MpDebug.Break("Query state mismatch");
+                    }
+                    IsQuerying = false;
+                    break;
+            }
+        }
+
+        private async Task<bool> RefreshQueryAsync() {
             // set internal properties to current registered values from bound controls
             bool hasChanged = false;
             if (MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending != IsDescending) {
                 hasChanged = true;
             } else if (MpAvClipTileSortFieldViewModel.Instance.SelectedSortType != SortType) {
                 hasChanged = true;
-            } else if ((MpAvTagTrayViewModel.Instance.LastSelectedActiveItem == null && TagId > 0) ||
-                (MpAvTagTrayViewModel.Instance.LastSelectedActiveItem != null &&
-                MpAvTagTrayViewModel.Instance.LastSelectedActiveItem.TagId != TagId)) {
+            } else if (MpAvTagTrayViewModel.Instance.LastActiveId != TagId) {
                 hasChanged = true;
             } else if (MpAvSearchBoxViewModel.Instance.SearchText != MatchValue) {
                 hasChanged = true;
@@ -236,10 +246,15 @@ namespace MonkeyPaste.Avalonia {
 
             IsDescending = MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending;
             SortType = MpAvClipTileSortFieldViewModel.Instance.SelectedSortType;
-            TagId = MpAvTagTrayViewModel.Instance.LastSelectedActiveItem == null ? 0 :
-                    MpAvTagTrayViewModel.Instance.LastSelectedActiveItem.TagId;
+            TagId = MpAvTagTrayViewModel.Instance.LastActiveId;
             MatchValue = MpAvSearchBoxViewModel.Instance.SearchText;
             QueryFlags = MpAvSearchBoxViewModel.Instance.SearchFilterCollectionViewModel.FilterType;
+
+            MpAvSearchCriteriaItemCollectionViewModel.Instance.SelectAdvancedSearchCommand.Execute(TagId);
+            while (MpAvSearchCriteriaItemCollectionViewModel.Instance.IsAnyBusy) {
+                await Task.Delay(100);
+            }
+
 
             return hasChanged;
         }

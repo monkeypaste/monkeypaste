@@ -13,18 +13,6 @@
                        d:DesignHeight="450"
                        d:DesignWidth="800">
     <local:MpAvUserControl.Styles>
-        <Style Selector="Button.searchTagButton">
-            <Setter Property="Padding"
-                    Value="7,3" />
-            <Setter Property="Margin"
-                    Value="0,10,10,10" />
-            <Setter Property="VerticalAlignment"
-                    Value="Center" />
-        </Style>
-        <Style Selector="Button.searchTagButton.selectedSearchTag /template/ ContentPresenter">
-            <Setter Property="BorderBrush"
-                    Value="Red" />
-        </Style>
     </local:MpAvUserControl.Styles>
     <DockPanel LastChildFill="False">
         <StackPanel DockPanel.Dock="Right"
@@ -68,7 +56,9 @@
                 <ToolTip.Tip>
                     <local:MpAvToolTipView ToolTipText="Float" />
                 </ToolTip.Tip>
-                <Image Source="{Binding Source={StaticResource NewWindowImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                <Image Width="25"
+                       Height="25"
+                       Source="{Binding Source={StaticResource NewWindowImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
             </Button>
         </StackPanel>
     </DockPanel>

@@ -227,19 +227,19 @@ namespace MonkeyPaste.Common {
                 return $"{matchVal}";
             }
             string op_symbol = matchOp == "GLOB" ? "*" : "%";
-            switch (f) {
-                case MpContentQueryBitFlags.Matches:
-                    return matchVal;
-                case MpContentQueryBitFlags.BeginsWith:
-                    return $"{matchVal}{op_symbol}";
-                case MpContentQueryBitFlags.EndsWith:
-                    return $"{op_symbol}{matchVal}";
-                case MpContentQueryBitFlags.Contains:
-                default:
-                    return $"{op_symbol}{matchVal}{op_symbol}";
+            if (f.HasFlag(MpContentQueryBitFlags.Matches)) {
+                return matchVal;
             }
-        }
+            if (f.HasFlag(MpContentQueryBitFlags.BeginsWith)) {
+                return $"{matchVal}{op_symbol}";
+            }
+            if (f.HasFlag(MpContentQueryBitFlags.EndsWith)) {
+                return $"{op_symbol}{matchVal}";
+            }
+            // contains or no str match flag
 
+            return $"{op_symbol}{matchVal}{op_symbol}";
+        }
 
         public static DateTime? ToDateTime(this MpContentQueryBitFlags cqbf, string mv) {
             if (!cqbf.HasTimeSpanValue()) {

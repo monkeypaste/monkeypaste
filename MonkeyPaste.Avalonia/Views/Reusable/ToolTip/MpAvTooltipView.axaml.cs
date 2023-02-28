@@ -86,6 +86,7 @@ namespace MonkeyPaste.Avalonia {
                 host_control.PointerMoved += Host_control_PointerMoved;
             }
             if (GetPopupRoot() is PopupRoot pur) {
+                pur.IsHitTestVisible = false;
                 pur.TransparencyLevelHint = WindowTransparencyLevel.Transparent;
                 pur.Background = Brushes.Transparent;
             }

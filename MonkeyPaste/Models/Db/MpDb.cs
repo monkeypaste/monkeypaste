@@ -525,9 +525,8 @@ namespace MonkeyPaste {
         }
 
         private static async Task CreateViewsAsync() {
-            // ADVANCED 
             await _connectionAsync.ExecuteAsync(@"
-CREATE VIEW MpContentQueryView_advanced as
+CREATE VIEW MpContentQueryView as
 SELECT 
 	pk_MpCopyItemId as RootId,
 	MpTransactionSource.fk_SourceObjId as SourceObjId,
@@ -607,85 +606,6 @@ FROM
 	MpCopyItem 
 LEFT JOIN MpCopyItemTransaction ON MpCopyItemTransaction.fk_MpCopyItemId = MpCopyItem.pk_MpCopyItemId
 LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId = MpCopyItemTransaction.pk_MpCopyItemTransactionId");
-
-            // SIMPLE 
-            await _connectionAsync.ExecuteAsync(@"
-CREATE VIEW MpContentQueryView_simple as
-SELECT 
-	pk_MpCopyItemId as RootId,
-	MpTransactionSource.fk_SourceObjId as SourceObjId,
-	MpTransactionSource.e_MpTransactionSourceType as SourceType,	
-	case 
-		when MpTransactionSource.e_MpTransactionSourceType == 'App' 
-			then 
-				(select AppPath from MpApp where pk_MpAppId == MpTransactionSource.fk_SourceObjId limit 1)
-		when MpTransactionSource.e_MpTransactionSourceType == 'Url' 
-			then 
-				(select UrlPath from MpUrl where pk_MpUrlId == MpTransactionSource.fk_SourceObjId limit 1)
-		when MpTransactionSource.e_MpTransactionSourceType == 'CopyItem' 
-			then 
-				'https://localhost?type=copyItem&id=' || MpTransactionSource.fk_SourceObjId
-		else NULL
-	end as SourcePath,
-	case 
-		when MpTransactionSource.e_MpTransactionSourceType == 'App' 
-			then 
-				(select AppPath from MpApp where pk_MpAppId == MpTransactionSource.fk_SourceObjId limit 1)
-		when MpTransactionSource.e_MpTransactionSourceType == 'Url' 
-			then 
-				(select UrlTitle from MpUrl where pk_MpUrlId == MpTransactionSource.fk_SourceObjId limit 1)
-		when MpTransactionSource.e_MpTransactionSourceType == 'CopyItem' 
-			then 
-				(select Title from MpCopyItem where pk_MpCopyItemId == MpTransactionSource.fk_SourceObjId limit 1)
-		else NULL
-	end as AppPath,
-	case
-		when MpTransactionSource.e_MpTransactionSourceType == 'App' 
-				then 
-					(select AppName from MpApp where pk_MpAppId == MpTransactionSource.fk_SourceObjId limit 1)
-		else NULL
-	end as AppName,
-	case
-		when MpTransactionSource.e_MpTransactionSourceType == 'Url' 
-				then 
-					(select UrlPath from MpUrl where pk_MpUrlId == MpTransactionSource.fk_SourceObjId limit 1)
-		else NULL
-	end as UrlPath,
-	case
-		when MpTransactionSource.e_MpTransactionSourceType == 'Url' 
-				then 
-					(select UrlTitle from MpUrl where pk_MpUrlId == MpTransactionSource.fk_SourceObjId limit 1)
-		else NULL
-	end as UrlTitle,
-	case 
-		when MpTransactionSource.e_MpTransactionSourceType == 'App' 
-			then 
-				(select MachineName from MpUserDevice where pk_MpUserDeviceId in (select fk_MpUserDeviceId from MpApp where pk_MpAppId == MpTransactionSource.fk_SourceObjId limit 1))
-		else NULL
-	end as DeviceName,
-	case 
-		when MpTransactionSource.e_MpTransactionSourceType == 'App' 
-			then 
-				(select e_MpUserDeviceType from MpUserDevice where pk_MpUserDeviceId in (select fk_MpUserDeviceId from MpApp where pk_MpAppId == MpTransactionSource.fk_SourceObjId limit 1))
-		else NULL
-	end as DeviceType,
-	e_MpCopyItemType,
-	ItemMetaData,
-	Title,
-	case 
-		when MpCopyItem.e_MpCopyItemType == 'Text' or MpCopyItem.e_MpCopyItemType == 'FileList'
-			then 
-				(select ItemData from MpDataObjectItem where fk_MpDataObjectId = MpCopyItem.fk_MpDataObjectId limit 1)
-		else NULL
-	end as ItemData,
-	CopyDateTime,
-	CopyCount,
-	PasteCount,
-	CopyCount + PasteCount as UsageScore
-FROM
-	MpCopyItem
-INNER JOIN MpCopyItemTransaction ON MpCopyItemTransaction.fk_MpCopyItemId = MpCopyItem.pk_MpCopyItemId
-INNER JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId = MpCopyItemTransaction.pk_MpCopyItemTransactionId");
 
         }
 

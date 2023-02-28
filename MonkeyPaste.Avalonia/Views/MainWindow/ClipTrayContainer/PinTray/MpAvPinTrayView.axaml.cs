@@ -53,7 +53,7 @@ namespace MonkeyPaste.Avalonia {
                 ClearAdorner();
             }
         }
-        private void DragLeave(object sender, RoutedEventArgs e) {
+        private void DragLeave(object sender, DragEventArgs e) {
             MpConsole.WriteLine("[DragLeave] PinTrayListBox: ");
             ResetDrop();
         }

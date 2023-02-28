@@ -17,6 +17,11 @@
             <Setter Property="BorderBrush"
                     Value="Yellow" />
         </Style>
+        <Style Selector="ComboBox.criteriaComboBox">
+            <!--  Keep uniform width for criteria combo boxes  -->
+            <Setter Property="Width"
+                    Value="150" />
+        </Style>
         <Style Selector="ComboBox.criteriaComboBox ComboBoxItem"
                x:DataType="local:MpAvSearchCriteriaOptionViewModel">
             <Setter Property="IsVisible"
@@ -72,7 +77,7 @@
                 <!--  TEXTBOX  -->
                 <DataTemplate x:Key="TextOptionTemplate"
                               DataType="local:MpAvSearchCriteriaOptionViewModel">
-                    <DockPanel>
+                    <DockPanel LastChildFill="True">
 
                         <!--  WHOLE WORD / CASE SENSITIVE CHECKBOX  -->
                         <StackPanel Orientation="Horizontal"
@@ -113,9 +118,7 @@
                             <TextBox x:Name="MatchValueTextBox"
                                      Padding="5,0,0,0"
                                      Watermark="Enter search term..."
-                                     MinWidth="500"
                                      BorderThickness="0"
-                                     ClipToBounds="False"
                                      HorizontalAlignment="Stretch"
                                      HorizontalContentAlignment="Left"
                                      VerticalAlignment="Center"

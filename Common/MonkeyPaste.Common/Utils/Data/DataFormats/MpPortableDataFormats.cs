@@ -54,7 +54,8 @@ namespace MonkeyPaste.Common {
             INTERNAL_CONTENT_ROI_FORMAT,
             INTERNAL_CONTENT_ANNOTATION_FORMAT,
             INTERNAL_CONTENT_DELTA_FORMAT,
-            INTERNAL_PARAMETER_REQUEST_FORMAT
+            INTERNAL_PARAMETER_REQUEST_FORMAT,
+            INTERNAL_SEARCH_CRITERIA_ITEM_FORMAT
         };
 
         private static Dictionary<int, MpPortableDataFormat> _formatLookup = new Dictionary<int, MpPortableDataFormat>();

@@ -364,7 +364,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(SelectedItem):
                     if (SelectedItem == null) {
-                        //Debugger.Break();
+                        Debugger.Break();
                         SelectedItem = AllTagViewModel;
                     }
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsActiveTag)));
@@ -500,7 +500,7 @@ namespace MonkeyPaste.Avalonia {
             });
 
         public ICommand SelectTagCommand => new MpCommand<object>(
-            (args) => {
+            async (args) => {
                 IsSelecting = true;
 
                 int tagId;
@@ -537,24 +537,29 @@ namespace MonkeyPaste.Avalonia {
                     SelectedItem.AllAncestors.ForEach(x => x.IsExpanded = true);
                 }
 
-                if (MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
-                    // last loaded tag is selected in ClipTray OnPostMainWindowLoaded 
-                    // which notifies query changed so don't notify
-                    IsSelecting = false;
-                    return;
-                }
-                IsSelecting = false;
+                //if (MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
+                //    // last loaded tag is selected in ClipTray OnPostMainWindowLoaded 
+                //    // which notifies query changed so don't notify
+                //    IsSelecting = false;
+                //    return;
+                //}
 
                 MpMessenger.SendGlobal(MpMessageType.TagSelectionChanged);
 
-                if (SelectedItem != null && SelectedItem.IsNotGroupTag) {
-                    if (SelectedItem.IsQueryTag) {
-                        MpAvSearchCriteriaItemCollectionViewModel.Instance
-                            .SelectAdvancedSearchCommand.Execute(SelectedItem.TagId);
-                    } else {
-                        MpPlatform.Services.Query.NotifyQueryChanged(true);
+                if (!MpAvMainWindowViewModel.Instance.IsMainWindowLoading &&
+                    SelectedItem != null && SelectedItem.IsNotGroupTag) {
+                    //if (SelectedItem.IsQueryTag) {
+                    //    MpAvSearchCriteriaItemCollectionViewModel.Instance
+                    //        .SelectAdvancedSearchCommand.Execute(SelectedItem.TagId);
+                    //} else {
+                    //    MpPlatform.Services.Query.NotifyQueryChanged(true);
+                    //}
+                    MpPlatform.Services.Query.NotifyQueryChanged();
+                    while (!MpPlatform.Services.Query.CanRequery) {
+                        await Task.Delay(100);
                     }
                 }
+                IsSelecting = false;
             },
             (args) => {
                 return args != null && !IsSelecting;

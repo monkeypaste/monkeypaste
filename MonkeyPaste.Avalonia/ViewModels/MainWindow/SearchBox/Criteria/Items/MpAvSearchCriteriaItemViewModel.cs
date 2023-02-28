@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
@@ -56,10 +57,17 @@ namespace MonkeyPaste.Avalonia {
 
         public MpContentQueryBitFlags QueryFlags {
             get {
-                return
+                MpContentQueryBitFlags flags =
                     SelectedOptionPath
                     .Select(x => x.FilterValue)
                     .AggregateOrDefault((a, b) => a | b);
+                if (IsCaseSensitive) {
+                    flags |= MpContentQueryBitFlags.CaseSensitive;
+                }
+                if (IsWholeWord) {
+                    flags |= MpContentQueryBitFlags.WholeWord;
+                }
+                return flags;
             }
         }
 
@@ -777,7 +785,7 @@ namespace MonkeyPaste.Avalonia {
                     case MpDateAfterUnitType.Yesterday:
                         tovm.UnitType = MpSearchCriteriaUnitFlags.EnumerableValue;
                         tovm.FilterValue = MpContentQueryBitFlags.Days;
-                        tovm.Value = 1.ToString();
+                        tovm.Value = 0.ToString();
                         break;
                     case MpDateAfterUnitType.LastWeek:
                         tovm.UnitType = MpSearchCriteriaUnitFlags.EnumerableValue;
@@ -997,7 +1005,7 @@ namespace MonkeyPaste.Avalonia {
         public string MatchValue {
             get {
                 if (SearchCriteriaItem == null) {
-                    return null;
+                    return string.Empty;
                 }
                 return SearchCriteriaItem.MatchValue;
             }
@@ -1031,9 +1039,6 @@ namespace MonkeyPaste.Avalonia {
                 if (SearchCriteriaItem == null) {
                     return MpLogicalQueryType.None;
                 }
-                //if(IsAdvancedTail) {
-                //    return MpLogicalQueryType.Or;
-                //}
                 return SearchCriteriaItem.JoinType;
             }
             set {
@@ -1046,7 +1051,6 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-
         public int QueryTagId {
             get {
                 if (SearchCriteriaItem == null) {
@@ -1082,7 +1086,11 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = true;
             await Task.Delay(1);
 
-            SearchCriteriaItem = sci == null ? new MpSearchCriteriaItem() : sci;
+            if (sci == null) {
+                MpDebug.Break("should be created in collection create ");
+
+            }
+            SearchCriteriaItem = sci;
 
             RootOptionViewModel = GetRootOption();
             var cur_opt = RootOptionViewModel;
@@ -1133,7 +1141,8 @@ namespace MonkeyPaste.Avalonia {
 
             // flag criteria changed for refresh query
             HasCriteriaChanged = true;
-            if (ovm.IsValueOption) {
+            if (ovm == null || ovm.IsValueOption) {
+                // ovm is null when join type changes
                 MpPlatform.Services.Query.NotifyQueryChanged(true);
             }
         }
@@ -1172,7 +1181,23 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(IsJoinDropDownOpen):
                     OnPropertyChanged(nameof(IsJoinPanelVisible));
-                    OnPropertyChanged(nameof(JoinType));
+                    //OnPropertyChanged(nameof(JoinType));
+                    break;
+                case nameof(JoinType):
+                    if (HasModelChanged && !IgnoreHasModelChanged) {
+                        // NOTE when join type changes it'll create a race
+                        // condition for IsBusy if its writing to db
+                        // so notify will reject because model is updating
+                        // so wait until model is written to notify
+                        Dispatcher.UIThread.Post(async () => {
+                            while (HasModelChanged) {
+                                await Task.Delay(100);
+                            }
+                            NotifyValueChanged(null);
+                        });
+                        return;
+                    }
+                    NotifyValueChanged(null);
                     break;
                 case nameof(IsJoinPanelVisible):
                     OnPropertyChanged(nameof(CriteriaItemHeight));

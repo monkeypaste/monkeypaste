@@ -443,6 +443,8 @@ namespace MonkeyPaste.Avalonia {
         private void OnIsReadOnlyChanged() {
             Dispatcher.UIThread.Post(async () => {
                 SetTextBoxIsVisible(!IsReadOnly);
+                await Task.Delay(300);
+
                 if (IsReadOnly) {
                     await this.TryKillFocusAsync();
                 } else {
@@ -450,9 +452,10 @@ namespace MonkeyPaste.Avalonia {
                     if (FocusOnDisableReadOnly) {
                         bool success = await this.TrySetFocusAsync();
                         if (!success) {
-                            MpDebug.Break("Focus error");
+                            //MpDebug.Break("Focus error");
                         }
                     }
+                    await Task.Delay(300);
                     SelectAll();
                 }
                 Init();

@@ -32,10 +32,11 @@ namespace MonkeyPaste.Avalonia {
         #region Drag Drop
         private void InitDragDrop() {
             var clb = this.FindControl<ListBox>("SearchCriteriaListBox");
-            clb.AddHandler(DragDrop.DragEnterEvent, SearchCriteriaListBox_DragEnter, RoutingStrategies.Direct);
-            clb.AddHandler(DragDrop.DragOverEvent, SearchCriteriaListBox_DragOver, RoutingStrategies.Direct);
-            clb.AddHandler(DragDrop.DragLeaveEvent, SearchCriteriaListBox_DragLeave, RoutingStrategies.Direct);
-            clb.AddHandler(DragDrop.DropEvent, SearchCriteriaListBox_Drop, RoutingStrategies.Direct);
+            DragDrop.SetAllowDrop(clb, true);
+            clb.AddHandler(DragDrop.DragEnterEvent, SearchCriteriaListBox_DragEnter);
+            clb.AddHandler(DragDrop.DragOverEvent, SearchCriteriaListBox_DragOver);
+            clb.AddHandler(DragDrop.DragLeaveEvent, SearchCriteriaListBox_DragLeave);
+            clb.AddHandler(DragDrop.DropEvent, SearchCriteriaListBox_Drop);
         }
 
         private void SearchCriteriaListBox_DragEnter(object sender, DragEventArgs e) {

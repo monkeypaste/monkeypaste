@@ -1029,7 +1029,9 @@ namespace MonkeyPaste.Avalonia {
                     FocusManager.Instance.Current != null &&
                     FocusManager.Instance.Current is Control c &&
                     (c.GetVisualAncestor<ContextMenu>() != null ||
-                        c.GetVisualAncestor<ComboBoxItem>() != null);
+                        c.GetVisualAncestor<ComboBoxItem>() != null ||
+                        (c.GetVisualAncestor<TextBox>() is TextBox tb &&
+                         !tb.IsReadOnly));
 
                 bool canHide = !IsMainWindowLocked &&
                           !IsAnyDropDownOpen &&

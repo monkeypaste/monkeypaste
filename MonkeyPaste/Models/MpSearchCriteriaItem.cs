@@ -46,7 +46,7 @@ namespace MonkeyPaste {
 
         public string Options { get; set; }
 
-        public string MatchValue { get; set; }
+        public string MatchValue { get; set; } = string.Empty;
 
         [Column("e_MpQueryType")]
         public string QueryTypeName { get; set; } = MpQueryType.Advanced.ToString();
