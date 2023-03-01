@@ -67,7 +67,7 @@
                                                Height="20"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center"
-                                               Source="{Binding IconId, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
+                                               Source="{Binding IconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                                     </Button>
                                 </Border>
                             </DataTemplate>
@@ -130,7 +130,7 @@
                                         </ToolTip.Tip>
                                         <Image Width="20"
                                                Height="20"
-                                               Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource EditImage}}" />
+                                               Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource EditImage}}" />
 
 
                                     </ToggleButton>
@@ -226,7 +226,7 @@
                                     </ToolTip.Tip>
                                     <Image Width="20"
                                            Height="20"
-                                           Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource HotkeyImage}}" />
+                                           Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource HotkeyImage}}" />
                                 </Button>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -249,12 +249,12 @@
                                             </ToolTip.Tip>
                                             <Image Width="20"
                                                    Height="20"
-                                                   Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource ExecuteImage}}" />
+                                                   Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource ExecuteImage}}" />
                                         </Button>
                                         <Image Width="20"
                                                Height="20"
                                                IsVisible="{Binding !Parent.CanAnalyzerExecute}}"
-                                               Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource NoEntryImage}}">
+                                               Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource NoEntryImage}}">
                                             <ToolTip.Tip>
                                                 <local:MpAvToolTipView ToolTipText="{Binding Parent.CannotExecuteTooltip}" />
                                             </ToolTip.Tip>
@@ -288,7 +288,7 @@
                                         </ToolTip.Tip>
                                         <Image Width="20"
                                                Height="20"
-                                               Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource SheepImage}}" />
+                                               Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource SheepImage}}" />
                                     </Button>
                                     <Border IsVisible="{Binding Parent.IsBusy, FallbackValue=True, TargetNullValue=True}">
 
@@ -313,11 +313,11 @@
                                         <Style Selector="Button.canReset Image"
                                                x:DataType="local:MpAvAnalyticItemPresetViewModel">
                                             <Setter Property="Source"
-                                                    Value="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource ResetImage}}" />
+                                                    Value="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource ResetImage}}" />
                                         </Style>
                                         <Style Selector="Button:not(.canReset) Image">
                                             <Setter Property="Source"
-                                                    Value="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource TrashCanImage}}" />
+                                                    Value="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource TrashCanImage}}" />
                                         </Style>
                                     </Grid.Styles>
                                     <Button Background="Transparent"
@@ -368,7 +368,7 @@
                         HorizontalAlignment="Stretch"
                         Padding="5">
                     <DockPanel>
-                        <Image Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource AddImage}}"
+                        <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource AddImage}}"
                                DockPanel.Dock="Left"
                                Width="15"
                                Height="15" />

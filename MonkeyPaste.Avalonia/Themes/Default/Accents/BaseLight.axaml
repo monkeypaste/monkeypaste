@@ -141,10 +141,6 @@
         <SolidColorBrush x:Key="TagTileHoverBgColor" Color="LightGray" />
         <!--  BORDER  -->
         <SolidColorBrush x:Key="TagTileBorderColor" Color="Transparent" />
-
-        <SolidColorBrush x:Key="TagTileDragOverBorderColor" Color="Lime" />
-
-        <SolidColorBrush x:Key="TagTileDragOverInvalidBorderColor" Color="Red" />
         <SolidColorBrush x:Key="TagTileContextFocusBorderColor" Color="Red" />
 
 

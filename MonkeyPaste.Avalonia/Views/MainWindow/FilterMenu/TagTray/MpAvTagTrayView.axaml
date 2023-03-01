@@ -75,10 +75,21 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <local:MpAvTagView local:MpAvBoundsObserverExtension.IsEnabled="True"
-                                       local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedTagTrayBounds, Mode=TwoWay}"
-                                       DataContext="{Binding}" />
-
+                    <Grid>
+                        <local:MpAvTagView local:MpAvBoundsObserverExtension.IsEnabled="True"
+                                           local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedTagTrayBounds, Mode=TwoWay}"
+                                           DataContext="{Binding}" />
+                        <Border x:Name="SortDropBorder_left"
+                                Classes="dropLine left"
+                                Classes.invalid="{Binding !IsTagDragValid}"
+                                Classes.dragOver="{Binding IsTagDragOverTop}"
+                                Classes.isCopy="{Binding IsTagDragOverCopy}" />
+                        <Border x:Name="SortDropBorder_right"
+                                Classes="dropLine right"
+                                Classes.invalid="{Binding !IsTagDragValid}"
+                                Classes.dragOver="{Binding IsTagDragOverBottom}"
+                                Classes.isCopy="{Binding IsTagDragOverCopy}" />
+                    </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

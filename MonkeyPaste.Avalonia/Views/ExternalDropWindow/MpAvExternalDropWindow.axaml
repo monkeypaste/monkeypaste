@@ -94,7 +94,7 @@
                                HorizontalAlignment="Stretch"
                                VerticalAlignment="Stretch">
                         <Image DockPanel.Dock="Left"
-                               Source="{Binding IconId, Converter={StaticResource IconSourceObjToBitmapConverter}}"
+                               Source="{Binding IconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
                                Stretch="UniformToFill"
                                Width="{Binding $self.Bounds.Height}"
                                VerticalAlignment="Stretch" />
@@ -107,7 +107,7 @@
                                    FontSize="16"
                                    Foreground="White">
                             <TextBlock.Text>
-                                <MultiBinding Converter="{StaticResource MultiStringAppendConverter}">
+                                <MultiBinding Converter="{x:Static local:MpAvMultiStringAppendConverter.Instance}">
                                     <Binding>
                                         <Binding.Source>
                                             <sys:String>Remember Drop Settings for '</sys:String>

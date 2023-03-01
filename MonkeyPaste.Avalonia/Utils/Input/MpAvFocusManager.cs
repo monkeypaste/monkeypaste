@@ -48,7 +48,7 @@ namespace MonkeyPaste.Avalonia {
                             y.GetType() == x ||
                             y.GetType().IsSubclassOf(x)));
 
-                MpConsole.WriteLine($"Current Focus Control Type: {cur_focus.GetType()} Is Input Control: {is_input_control.ToString().ToUpper()}");
+                //MpConsole.WriteLine($"Current Focus Control Type: {cur_focus.GetType()} Is Input Control: {is_input_control.ToString().ToUpper()}");
                 return is_input_control || IsSelfManagedHistoryControlFocused;
 
             }

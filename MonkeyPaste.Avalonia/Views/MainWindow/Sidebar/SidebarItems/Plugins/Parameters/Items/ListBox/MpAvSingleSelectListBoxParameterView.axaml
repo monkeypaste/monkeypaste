@@ -32,8 +32,8 @@
                                 HorizontalAlignment="Stretch"
                                 Background="Transparent"
                                 IsVisible="{Binding IsReadOnly}"
-                                BorderBrush="{Binding BorderBrush, Converter={StaticResource StringHexToBrushConverter}}">
-                            <TextBlock Background="{Binding BackgroundBrush, Converter={StaticResource StringHexToBrushConverter}}"
+                                BorderBrush="{Binding BorderBrush, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}">
+                            <TextBlock Background="{Binding BackgroundBrush, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
                                        Foreground="OldLace"
                                        local:MpAvIsHoveringExtension.IsEnabled="True"
                                        local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"

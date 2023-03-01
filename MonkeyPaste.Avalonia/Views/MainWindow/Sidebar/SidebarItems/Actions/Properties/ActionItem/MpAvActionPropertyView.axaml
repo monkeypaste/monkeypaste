@@ -16,7 +16,7 @@
         <StackPanel Orientation="Vertical">
             <local:MpAvActionPropertyHeaderView CornerRadius="10"
                                                 BorderBrush="Khaki"
-                                                Background="{Binding ActionBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                                                Background="{Binding ActionBackgroundHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
                                                 Padding="5,0"
                                                 HorizontalAlignment="Stretch"
                                                 DataContext="{Binding}" />

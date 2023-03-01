@@ -995,6 +995,12 @@ namespace MonkeyPaste.Avalonia {
 
             if (ci != null &&
                 MpAvPersistentClipTilePropertiesHelper.TryGetByPersistentSize_ById(ci.Id, out double uniqueWidth)) {
+                if(Math.Abs(uniqueWidth - MinWidth) < 1) {
+                    // i think this is a bug when tile goes from placeholder to active it thinks it has
+                    // a unique size
+                    MpAvPersistentClipTilePropertiesHelper.RemovePersistentSize_ById(ci.Id);
+
+                }
                 BoundWidth = uniqueWidth;
                 BoundHeight = MinHeight;
             } else if (ci != null && ci.Id > 0) {

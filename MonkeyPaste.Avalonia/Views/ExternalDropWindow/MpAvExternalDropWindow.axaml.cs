@@ -41,6 +41,7 @@ namespace MonkeyPaste.Avalonia {
 
             var dilb = this.FindControl<ListBox>("DropItemListBox");
             dilb.AddHandler(DragDrop.DragOverEvent, DragOver);
+            dilb.AddHandler(DragDrop.DragLeaveEvent, DragLeave);
         }
         #endregion
 
@@ -72,20 +73,18 @@ namespace MonkeyPaste.Avalonia {
 
         #region Drop Events
 
-        public void AutoScrollListBox(DragEventArgs e) {
-            var lb = this.GetVisualDescendant<ListBox>();
-            var sv = lb.GetVisualDescendant<ScrollViewer>();
 
-            sv.AutoScroll(
-                lb.PointToScreen(e.GetPosition(lb)).ToPortablePoint(lb.VisualPixelDensity()),
-                lb,
-                ref _autoScrollAccumulators);
-        }
 
         private void DragOver(object sender, DragEventArgs e) {
             MpConsole.WriteLine("[DragOver] Dnd Widget Window Cur Formats: " + String.Join(Environment.NewLine, e.Data.GetDataFormats()));
             e.DragEffects = DragDropEffects.None;
-            AutoScrollListBox(e);
+            var lb = this.GetVisualDescendant<ListBox>();
+            lb.AutoScrollItemsControl(e);
+        }
+
+        private void DragLeave(object sender, DragEventArgs e) {
+            var lb = this.GetVisualDescendant<ListBox>();
+            lb.AutoScrollItemsControl(null);
         }
 
         private void OnHideOver(object sender, DragEventArgs e) {

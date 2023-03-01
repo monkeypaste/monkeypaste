@@ -24,7 +24,7 @@
                             <Style Selector="CheckBox /template/ ContentPresenter"
                                    x:DataType="pcl:MpMenuItemViewModel">
                                 <Setter Property="Background"
-                                        Value="{Binding IconHexStr, Converter={StaticResource StringHexToBrushConverter}}" />
+                                        Value="{Binding IconHexStr, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}" />
                             </Style>
                         </CheckBox.Styles>
                     </CheckBox>

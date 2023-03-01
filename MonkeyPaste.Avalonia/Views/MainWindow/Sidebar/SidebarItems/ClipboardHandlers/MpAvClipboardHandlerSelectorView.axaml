@@ -40,7 +40,7 @@
                                     <DataTemplate>
                                         <Border Classes="outerComboBoxItemBorder">
                                             <DockPanel>
-                                                <Image Source="{Binding PluginIconId, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
+                                                <Image Source="{Binding PluginIconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                                                 <TextBlock Text="{Binding HandlerName}" />
                                             </DockPanel>
                                         </Border>
@@ -70,7 +70,7 @@
                                             <DataTemplate>
                                                 <Border Classes="outerComboBoxItemBorder">
                                                     <DockPanel>
-                                                        <Image Source="{Binding HandledFormatIconId, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
+                                                        <Image Source="{Binding HandledFormatIconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                                                         <TextBlock Text="{Binding SelectorLabel}" />
                                                     </DockPanel>
                                                 </Border>

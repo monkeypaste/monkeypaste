@@ -4,5 +4,5 @@
     <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Accents/Base.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Accents/BaseLight.axaml" />
-    <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/DefaultControls.axaml" />
+    <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/_DefaultControls.axaml" />
 </Styles>

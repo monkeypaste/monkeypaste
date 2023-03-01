@@ -36,7 +36,7 @@
         </Style>
         <Style Selector="Border#TagNameBorder.dragover">
             <Setter Property="BorderBrush"
-                    Value="{DynamicResource TagTileDragOverBorderColor}" />
+                    Value="{DynamicResource DragIntoBrush}" />
             <Setter Property="BorderDashArray"
                     Value="2,2" />
             <Setter Property="BorderDashOffset"
@@ -44,7 +44,7 @@
         </Style>
         <Style Selector="Border#TagNameBorder.dragover.dragover_invalid">
             <Setter Property="BorderBrush"
-                    Value="{DynamicResource TagTileDragOverInvalidBorderColor}" />
+                    Value="{DynamicResource DragInvalidBrush}" />
         </Style>
     </local:MpAvUserControl.Styles>
     <Grid x:Name="TagViewContainerGrid"
@@ -77,8 +77,8 @@
                 Classes.islinked="{Binding IsLinkedToSelectedClipTile}"
                 Classes.isgroup="{Binding IsGroupTag}"
                 Classes.isselected="{Binding IsSelected}"
-                Classes.dragover="{Binding IsDragOverTag}"
-                Classes.dragover_invalid="{Binding !IsDragOverTagValid}"
+                Classes.dragover="{Binding IsContentDragOverTag}"
+                Classes.dragover_invalid="{Binding !IsContentDragOverTagValid}"
                 Classes.contextfocus="{Binding IsContextMenuOpen}"
                 Classes.activeTag="{Binding IsActiveTag}"
                 BorderThickness="1.5">
@@ -96,13 +96,13 @@
                             Margin="1"
                             Padding="4,1"
                             BorderThickness="0"
-                            Background="{Binding TagHexColor, Converter={StaticResource StringHexToBrushConverter}}">
+                            Background="{Binding TagHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}">
                         <TextBlock x:Name="TagCountTextBlock"
                                    Background="Transparent"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Center"
                                    Text="{Binding TagClipCountText}"
-                                   Foreground="{Binding $parent.Background, Converter={StaticResource BrushToContrastBrushConverter}}" />
+                                   Foreground="{Binding $parent.Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
                     </Border>
                     <!--  Tag Name TextBox/ Marquee  -->
                     <local:MpAvMarqueeTextBox x:Name="TagNameTextBox"
@@ -157,7 +157,7 @@
                 BorderBrush="White"
                 VerticalAlignment="Top"
                 HorizontalAlignment="Left"
-                IsVisible="{Binding BadgeCount, Converter={StaticResource IsNotNullZeroOrEmptyToBoolConverter}}">
+                IsVisible="{Binding BadgeCount, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
             <TextBlock Foreground="White"
                        FontSize="10"
                        MinWidth="15"

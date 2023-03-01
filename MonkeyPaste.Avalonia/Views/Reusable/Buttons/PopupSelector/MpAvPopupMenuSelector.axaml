@@ -88,7 +88,7 @@
                 <DockPanel LastChildFill="True">
                     <Image Height="25"
                            Width="25"
-                           Source="{Binding SelectedIconResourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
+                           Source="{Binding SelectedIconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                     <local:MpAvMarqueeTextBox Padding="3"
                                               Margin="7,3,0,0"
                                               MinWidth="100"

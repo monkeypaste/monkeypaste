@@ -91,7 +91,7 @@
             <Grid RowDefinitions="25,15"
                   HorizontalAlignment="Stretch">
                 <Image Grid.Row="0"
-                       Source="{Binding ., Source={StaticResource TrashCanImage}, Converter={StaticResource IconSourceObjToBitmapConverter}}"
+                       Source="{Binding ., Source={StaticResource TrashCanImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
                        Width="20"
                        Height="20"
                        HorizontalAlignment="Center"
@@ -112,7 +112,7 @@
             <Grid RowDefinitions="25,15"
                   HorizontalAlignment="Stretch">
                 <Image Grid.Row="0"
-                       Source="{Binding ., Source={StaticResource SaveImage}, Converter={StaticResource IconSourceObjToBitmapConverter}}"
+                       Source="{Binding ., Source={StaticResource SaveImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
                        Width="20"
                        Height="20"
                        HorizontalAlignment="Center"
@@ -127,7 +127,7 @@
                  Grid.Row="1"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Top"
-                 IsVisible="{Binding Items, Converter={StaticResource CollectionIsNotEmptyToBoolConverter}, FallbackValue=True, TargetNullValue=True}"
+                 IsVisible="{Binding Items, Converter={x:Static local:MpAvCollectionIsNotEmptyToBoolConverter.Instance}, FallbackValue=True, TargetNullValue=True}"
                  Items="{Binding Items}"
                  SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
             <ListBox.ItemsPanel>
@@ -150,7 +150,7 @@
         <Border HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 MinWidth="50"
-                IsVisible="{Binding Items, ConverterParameter=flip, Converter={StaticResource CollectionIsNotEmptyToBoolConverter}, FallbackValue=False, TargetNullValue=False}"
+                IsVisible="{Binding Items, ConverterParameter=flip, Converter={x:Static local:MpAvCollectionIsNotEmptyToBoolConverter.Instance}, FallbackValue=False, TargetNullValue=False}"
                 Background="Transparent">
             <TextBlock HorizontalAlignment="Center"
                        VerticalAlignment="Center"
@@ -159,7 +159,7 @@
                        FontSize="14"
                        Classes="disabled">
                 <TextBlock.Text>
-                    <MultiBinding Converter="{StaticResource MultiStringAppendConverter}">
+                    <MultiBinding Converter="{x:Static local:MpAvMultiStringAppendConverter.Instance}">
                         <Binding>
                             <Binding.Source>
                                 <sys:String>'</sys:String>

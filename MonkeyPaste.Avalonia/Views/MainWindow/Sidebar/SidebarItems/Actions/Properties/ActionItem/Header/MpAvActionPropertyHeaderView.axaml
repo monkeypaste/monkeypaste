@@ -55,7 +55,7 @@
             <Style Selector="ContentControl ToggleButton#ToggleEnableButton[IsEnabled=false] Image"
                    x:DataType="local:MpAvTriggerActionViewModelBase">
                 <Setter Property="Source"
-                        Value="{Binding IconResourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
+                        Value="{Binding IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
             </Style>
             <Style Selector="ContentControl ToggleButton#ToggleEnableButton:pointerover"
                    x:DataType="local:MpAvTriggerActionViewModelBase">
@@ -117,7 +117,7 @@
                                Stretch="Uniform"
                                Width="{StaticResource IconSize}"
                                Height="{StaticResource IconSize}"
-                               Source="{Binding IconResourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
+                               Source="{Binding IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                     </DataTemplate>
                     <DataTemplate x:Key="ErrorTemplate"
                                   x:DataType="local:MpAvActionViewModelBase">
@@ -126,7 +126,7 @@
                                Stretch="Uniform"
                                Width="{StaticResource IconSize}"
                                Height="{StaticResource IconSize}"
-                               Source="{Binding Source={StaticResource WarningImage}, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
+                               Source="{Binding Source={StaticResource WarningImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                     </DataTemplate>
                 </local:MpAvActionPropertyIconTemplateSelector>
 

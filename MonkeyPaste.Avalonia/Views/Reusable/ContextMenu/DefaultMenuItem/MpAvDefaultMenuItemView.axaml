@@ -16,7 +16,7 @@
                 <Template>
                     <Image HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch"
-                           Source="{Binding IconSourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
+                           Source="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                 </Template>
             </Setter>
             <Setter Property="Header"
@@ -42,7 +42,7 @@
     <StackPanel Orientation="Horizontal">
         <Image Width="20"
                Height="20"
-               Source="{Binding IconSourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
+               Source="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         <Label Content="{Binding Header}" />
     </StackPanel>
 </local:MpAvUserControl>

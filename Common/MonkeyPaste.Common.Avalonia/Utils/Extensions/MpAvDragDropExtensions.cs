@@ -1,5 +1,7 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Layout;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
@@ -7,7 +9,104 @@ using System.Linq;
 
 namespace MonkeyPaste.Common {
     public static class MpAvDragDropExtensions {
+        private static double[] _autoScrollAccumulators;
+        public static int GetDropIdx(this ItemsControl ic, MpPoint ic_mp, Orientation orientation) {
+            if (ic == null) {
+                return -1;
+            }
+            string excluded_sides =
+                orientation == Orientation.Horizontal ? "b,t" : "r,l";
 
+            if (!ic.Bounds.Contains(ic_mp.ToAvPoint())) {
+                return -1;
+            }
+
+            if (ic.ItemCount == 0) {
+                return 0;
+            }
+            MpRectSideHitTest closet_side_ht = null;
+            int closest_side_lbi_idx = -1;
+            for (int i = 0; i < ic.ItemCount; i++) {
+                var lbi = ic.ContainerFromIndex(i);
+                if (lbi == null) {
+                    //offscreen
+                    continue;
+                }
+
+                var lbi_rect = lbi.Bounds.ToPortableRect();
+                var cur_tup = lbi_rect.GetClosestSideToPoint(ic_mp, excluded_sides);
+                if (closet_side_ht == null || cur_tup.ClosestSideDistance < closet_side_ht.ClosestSideDistance) {
+                    closet_side_ht = cur_tup;
+                    closest_side_lbi_idx = i;
+                }
+            }
+
+            string tail_side = orientation == Orientation.Horizontal ? "r" : "b";
+            if (closet_side_ht.ClosestSideLabel == tail_side) {
+                return closest_side_lbi_idx + 1;
+            }
+            return closest_side_lbi_idx;
+        }
+
+        public static int GetTreeDropIdx(
+            this ItemsControl ic,
+            MpPoint ic_mp,
+            Orientation orientation,
+            out ItemsControl drop_parent_ic,
+            ItemsControl root_ic = null) {
+            drop_parent_ic = null;
+
+            if (ic == null) {
+                return -1;
+            }
+            string excluded_sides =
+                orientation == Orientation.Horizontal ? "b,t" : "r,l";
+
+            if (!ic.Bounds.Contains(ic_mp.ToAvPoint())) {
+                return -1;
+            }
+
+            drop_parent_ic = ic;
+            if (ic.ItemCount == 0) {
+                return 0;
+            }
+
+            root_ic = root_ic == null ? ic : root_ic;
+            MpRectSideHitTest closet_side_ht = null;
+            int closest_side_lbi_idx = -1;
+            for (int i = 0; i < ic.ItemCount; i++) {
+                var lbi = ic.ContainerFromIndex(i);
+                if (lbi == null) {
+                    //offscreen
+                    continue;
+                }
+
+                var lbi_rect = lbi.Bounds.ToPortableRect(root_ic);
+                var cur_tup = lbi_rect.GetClosestSideToPoint(ic_mp, excluded_sides);
+                if (closet_side_ht == null || cur_tup.ClosestSideDistance < closet_side_ht.ClosestSideDistance) {
+                    closet_side_ht = cur_tup;
+                    closest_side_lbi_idx = i;
+
+                    if (lbi_rect.Contains(ic_mp) &&
+                        lbi is ItemsControl cur_ic &&
+                        cur_ic.ItemCount > 0) {
+                        // descend into items control
+                        drop_parent_ic = cur_ic;
+                        int result_drop_idx = cur_ic.GetTreeDropIdx(ic_mp, orientation, out ItemsControl result_drop_parent_ic, root_ic);
+                        if (result_drop_idx >= 0) {
+                            drop_parent_ic = result_drop_parent_ic;
+                            return result_drop_idx;
+                        }
+                    }
+                }
+            }
+
+            string tail_side = orientation == Orientation.Horizontal ? "r" : "b";
+            if (closet_side_ht.ClosestSideLabel == tail_side) {
+                return closest_side_lbi_idx + 1;
+            }
+            return closest_side_lbi_idx;
+        }
         public static void DragCheckAndStart(
             this Control control,
             PointerPressedEventArgs e,
@@ -95,6 +194,19 @@ namespace MonkeyPaste.Common {
         }
 
 
+        public static void AutoScrollItemsControl(this ItemsControl lb, DragEventArgs e) {
+            var sv = lb.GetVisualDescendant<ScrollViewer>();
+
+            if (e == null) {
+                // terminating case
+                _autoScrollAccumulators = null;
+                return;
+            }
+            sv.AutoScroll(
+                lb.PointToScreen(e.GetPosition(lb)).ToPortablePoint(lb.VisualPixelDensity()),
+                lb,
+                ref _autoScrollAccumulators);
+        }
         public static MpPoint AutoScroll(
             this ScrollViewer sv,
             MpPoint gmp,
@@ -162,6 +274,7 @@ namespace MonkeyPaste.Common {
 
             if (performScroll) {
                 sv.ScrollByPointDelta(scroll_delta);
+                MpConsole.WriteLine($"Auto-scroll delta: '{scroll_delta}'");
             }
             return scroll_delta;
         }

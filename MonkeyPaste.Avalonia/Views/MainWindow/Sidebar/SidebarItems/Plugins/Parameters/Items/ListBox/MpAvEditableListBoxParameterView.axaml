@@ -31,7 +31,7 @@
                     <DataTemplate>
                         <local:MpAvContentQueryTextBoxView Background="Transparent"
                                                            DataContext="{Binding}"
-                                                           BorderBrush="{Binding BorderBrush, Converter={StaticResource StringHexToBrushConverter}}" />
+                                                           BorderBrush="{Binding BorderBrush, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}" />
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
@@ -40,7 +40,7 @@
                     HorizontalAlignment="Right"
                     Command="{Binding AddValueCommand}">
                 <DockPanel>
-                    <Image Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource AddImage}}"
+                    <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource AddImage}}"
                            DockPanel.Dock="Left" />
                     <TextBlock DockPanel.Dock="Right"
                                Text="Add" />

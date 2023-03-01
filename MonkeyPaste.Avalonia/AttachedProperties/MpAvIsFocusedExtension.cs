@@ -41,7 +41,7 @@ namespace MonkeyPaste.Avalonia {
                 control.GetFocusableDescendant() is IInputElement ie) {
                 if (ie.IsFocused == isFocusedVal ||
                     ie.IsKeyboardFocusWithin == isFocusedVal) {
-                    MpConsole.WriteLine($"IsFocused IGNORED. Was already '{isFocusedVal}' on '{ie}' from binding on '{control}'");
+                    //MpConsole.WriteLine($"IsFocused IGNORED. Was already '{isFocusedVal}' on '{ie}' from binding on '{control}'");
                     return;
                 }
                 Dispatcher.UIThread.Post(async () => {
@@ -57,10 +57,10 @@ namespace MonkeyPaste.Avalonia {
                             // huh? result mismatch
                             //Debugger.Break();
                         }
-                        MpConsole.WriteLine($"Focus {(ie.IsKeyboardFocusWithin ? "SUCCEEDED" : "FAILED")}  on '{ie}' from binding on '{control}'");
+                        //MpConsole.WriteLine($"Focus {(ie.IsKeyboardFocusWithin ? "SUCCEEDED" : "FAILED")}  on '{ie}' from binding on '{control}'");
                     } else {
                         bool success = await control.TryKillFocusAsync();
-                        MpConsole.WriteLine($"Kill Focus {(success ? "SUCCEEDED" : "FAILED")}  on '{ie}' from binding on '{control}'");
+                        //MpConsole.WriteLine($"Kill Focus {(success ? "SUCCEEDED" : "FAILED")}  on '{ie}' from binding on '{control}'");
                     }
                 });
 

@@ -107,7 +107,7 @@
     <Style Selector="ContentControl#DesignerItemContentControl:not(.valid) Image"
            x:DataType="local:MpAvActionViewModelBase">
         <Setter Property="Source"
-                Value="{Binding IconResourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
+                Value="{Binding IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
     </Style>
     <Style Selector="ContentControl#DesignerItemContentControl.valid Image"
            x:DataType="local:MpAvActionViewModelBase">

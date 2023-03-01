@@ -40,8 +40,8 @@
             VerticalAlignment="Stretch"
             BorderThickness="7"
             Padding="10,3,10,10"
-            BorderBrush="{Binding BorderHexColor, Converter={StaticResource StringHexToBrushConverter}}"
-            Background="{Binding BackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+            BorderBrush="{Binding BorderHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
+            Background="{Binding BackgroundHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
             local:MpAvIsHoveringExtension.IsEnabled="True"
             local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
         <Grid x:Name="NotificationWindowContainerGrid"
@@ -56,8 +56,8 @@
                    Width="{Binding Bounds.Height, ElementName=NotificationIconImage}"
                    HorizontalAlignment="Left"
                    VerticalAlignment="Top"
-                   IsVisible="{Binding IconSourceObj, Converter={StaticResource IsNotNullZeroOrEmptyToBoolConverter}}"
-                   Source="{Binding IconSourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}"
+                   IsVisible="{Binding IconSourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                   Source="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
                    Stretch="Fill" />
             <local:MpAvOptionsButton Grid.Row="0"
                                      Grid.Column="2"

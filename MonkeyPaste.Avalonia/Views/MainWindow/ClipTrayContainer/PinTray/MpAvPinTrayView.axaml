@@ -103,7 +103,7 @@
                     Padding="5,2"
                     Command="{Binding UnpinAllCommand}">
                 <Image DockPanel.Dock="Left"
-                       Source="{Binding ., Source={StaticResource ClearGridImage}, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
+                       Source="{Binding ., Source={StaticResource ClearGridImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
             </Button>
 
         </Grid>

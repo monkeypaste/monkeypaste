@@ -15,7 +15,7 @@
         <!--  RE-ORDER BUTTONS  -->
         <Style Selector="Button#CriteriaDragButton Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource LinesX2HorizImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=white}" />
+                    Value="{Binding Source={StaticResource LinesX2HorizImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=black}" />
         </Style>
         <Style Selector="Button#CriteriaDragButton:pointerover Image">
             <Setter Property="Source"
@@ -26,48 +26,36 @@
                     Value="{Binding Source={StaticResource LinesX2HorizVertArrowsImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=dimgray}" />
         </Style>
 
-        <!--  CRITERIA ITEM OPTION COMBOX BOX  -->
-        <Style Selector="ComboBox:pointerover.criteriaComboBox">
-            <Setter Property="BorderBrush"
-                    Value="Yellow" />
-        </Style>
-        <Style Selector="ComboBox.criteriaComboBox">
-            <Setter Property="CornerRadius"
-                    Value="10" />
-            <Setter Property="BorderThickness"
-                    Value="1" />
-            <Setter Property="BorderBrush"
-                    Value="Silver" />
-            <Setter Property="HorizontalAlignment"
-                    Value="Center" />
-            <Setter Property="VerticalAlignment"
-                    Value="Center" />
-            <Setter Property="Margin"
-                    Value="5" />
-            <Setter Property="Background"
-                    Value="White" />
-            <Setter Property="HorizontalContentAlignment"
-                    Value="Left" />
-            <Setter Property="VerticalContentAlignment"
-                    Value="Center" />
-            <Setter Property="MinWidth"
-                    Value="85" />
-            <Setter Property="FontSize"
-                    Value="16" />
-        </Style>
+        <!--  OPTION LISTBOXITEM  -->
         <Style Selector="ListBoxItem">
+            <!--  NOTE important cause outerlistbox selector pulls these items for some reason  -->
             <Setter Property="BorderThickness"
                     Value="0" />
         </Style>
+
+        <!--  INDENT  -->
+        <Style Selector="DockPanel Grid#CriteriaRowButtonsContainer">
+            <Setter Property="Margin"
+                    Value="0,0,10,0" />
+        </Style>
+        <Style Selector="DockPanel.indented Grid#CriteriaRowButtonsContainer">
+            <Setter Property="Margin"
+                    Value="0,0,10,0" />
+        </Style>
+        <Style Selector="DockPanel.indented ListBox">
+            <Setter Property="Margin"
+                    Value="20,0,0,0" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Grid ColumnDefinitions="Auto,*">
+
         <!--  SORT DRAG BUTTON  -->
 
         <Button x:Name="CriteriaDragButton"
                 Grid.Column="0"
                 IsVisible="{Binding CanRemoveOrSortThisCriteriaItem}"
                 HorizontalAlignment="Left"
-                VerticalAlignment="Top"
+                VerticalAlignment="Center"
                 Classes="noBg noHoverBg"
                 Cursor="SizeAll"
                 Margin="15,0,0,0"
@@ -80,11 +68,20 @@
             </Image>
         </Button>
 
-        <StackPanel Grid.Column="1"
-                    Orientation="Vertical">
+        <!--<StackPanel Grid.Column="1"
+                    Orientation="Vertical">-->
+
+
+        <!--  SEARCH CRITERIA ITEM CONTAINER  -->
+
+        <DockPanel Grid.Column="1"
+                   LastChildFill="True"
+                   Classes.indented="{Binding IsJoinPanelVisible}">
+
             <!--  JOIN CRITERIA ITEM HEADER  -->
 
-            <StackPanel Orientation="Horizontal"
+            <StackPanel DockPanel.Dock="Top"
+                        Orientation="Horizontal"
                         HorizontalAlignment="Left"
                         IsVisible="{Binding IsJoinPanelVisible}">
                 <ComboBox Classes="criteriaComboBox"
@@ -102,73 +99,73 @@
                            VerticalAlignment="Center" />
             </StackPanel>
 
-            <!--  SEARCH CRITERIA ITEM CONTAINER  -->
+            <Grid x:Name="CriteriaRowButtonsContainer"
+                  IsVisible="{Binding $parent[ListBoxItem].IsPointerOver}"
+                  DockPanel.Dock="Right"
+                  ColumnDefinitions="30,30,30">
 
-            <DockPanel LastChildFill="True"
-                       Margin="20,0,0,0">
+                <!--  ADD ITEM BUTTON  -->
 
-                <StackPanel Orientation="Horizontal"
-                            DockPanel.Dock="Right"
-                            Margin="0,0,30,0">
+                <Button x:Name="AddCriteriaItemButton"
+                        Grid.Column="0"
+                        Classes="defaultButton outline outlineOver addRemoveBtn noBg noHoverBg"
+                        Command="{Binding AddNextCriteriaItemCommand}">
+                    <Image Source="{Binding ., Source={StaticResource PlusImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                </Button>
 
-                    <!--  REMOVE ITEM BUTTON  -->
+                <!--  REMOVE ITEM BUTTON  -->
 
-                    <Button x:Name="RemoveCriteriaItemButton"
-                            Classes="noBg noHoverBg shakeOver addRemoveBtn removeBtn"
-                            IsVisible="{Binding CanRemoveOrSortThisCriteriaItem}"
-                            Command="{Binding RemoveThisCriteriaItemCommand}">
-                        <Button.RenderTransform>
-                            <RotateTransform />
-                        </Button.RenderTransform>
-                        <Border>
-                            <Image Source="{Binding ., Source={StaticResource MinusImage}, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
-                        </Border>
-                    </Button>
+                <Button x:Name="RemoveCriteriaItemButton"
+                        Grid.Column="1"
+                        Classes="defaultButton outline outlineOver addRemoveBtn removeBtn noBg noHoverBg"
+                        IsVisible="{Binding CanRemoveOrSortThisCriteriaItem}"
+                        Command="{Binding RemoveThisCriteriaItemCommand}">
+                    <Image Source="{Binding ., Source={StaticResource MinusImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                </Button>
 
-                    <!--  ADD ITEM BUTTON  -->
 
-                    <Button x:Name="AddCriteriaItemButton"
-                            Classes="noBg noHoverBg shakeOver addRemoveBtn"
-                            Command="{Binding AddNextCriteriaItemCommand}">
-                        <Button.RenderTransform>
-                            <RotateTransform />
-                        </Button.RenderTransform>
-                        <Border>
-                            <Image Source="{Binding ., Source={StaticResource PlusImage}, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
-                        </Border>
-                    </Button>
+                <!--  SPECIAL ADD POPUP  -->
 
-                    <!--  SPECIAL ADD POPUP  -->
+                <Button x:Name="SpecialJoinTypeButton"
+                        Grid.Column="2"
+                        Classes="defaultButton outline outlineOver addRemoveBtn noBg noHoverBg"
+                        IsVisible="{Binding !IsJoinPanelVisible}"
+                        Command="{Binding SelectCustomNextJoinTypeCommand}">
+                    <Image Source="{Binding ., Source={StaticResource Dots1x3Image}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                </Button>
+            </Grid>
 
-                    <local:MpAvOptionsButton VerticalAlignment="Stretch"
-                                             Classes="addRemoveBtn outline"
-                                             local:MpAvMenuExtension.IsEnabled="True"
-                                             IsVisible="{Binding !IsJoinPanelVisible}"
-                                             Command="{Binding SelectCustomNextJoinTypeCommand}" />
-                </StackPanel>
+            <!--  OPTIONS LISTBOX  -->
 
-                <!--  OPTIONS LISTBOX  -->
+            <ListBox Background="Transparent"
+                     Classes="optionsList"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                     BorderThickness="0"
+                     Items="{Binding Items}">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.Resources>
 
-                <ListBox Background="Transparent"
-                         Classes="optionsList"
-                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                         ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                         BorderThickness="0"
-                         Items="{Binding Items}">
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel Orientation="Horizontal" />
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-                    <ListBox.ItemTemplate>
-                        <DataTemplate DataType="local:MpAvSearchCriteriaOptionViewModel">
-                            <local:MpAvSearchCriteriaOptionView DataContext="{Binding}"
-                                                                local:MpAvIsHoveringExtension.IsEnabled="True"
-                                                                local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}" />
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </DockPanel>
-        </StackPanel>
+                    <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">Transparent</SolidColorBrush>
+                    <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">Transparent</SolidColorBrush>
+                    <SolidColorBrush x:Key="SystemControlHighlightListAccentHighBrush">Transparent</SolidColorBrush>
+                    <SolidColorBrush x:Key="SystemControlHighlightListLowBrush">Transparent</SolidColorBrush>
+                    <SolidColorBrush x:Key="SystemControlHighlightListMediumBrush">Transparent</SolidColorBrush>
+                    <SolidColorBrush x:Key="SystemControlHighlightListHighBrush">Transparent</SolidColorBrush>
+                </ListBox.Resources>
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="local:MpAvSearchCriteriaOptionViewModel">
+                        <local:MpAvSearchCriteriaOptionView DataContext="{Binding}"
+                                                            local:MpAvIsHoveringExtension.IsEnabled="True"
+                                                            local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </DockPanel>
+        <!--</StackPanel>-->
     </Grid>
 </local:MpAvUserControl>

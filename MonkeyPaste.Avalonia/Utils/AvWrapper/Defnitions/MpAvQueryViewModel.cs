@@ -215,9 +215,9 @@ namespace MonkeyPaste.Avalonia {
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.QueryCompleted:
-                    if (!IsQuerying) {
-                        MpDebug.Break("Query state mismatch");
-                    }
+                    //if (!IsQuerying) {
+                    //    MpDebug.Break("Query state mismatch");
+                    //}
                     IsQuerying = false;
                     break;
             }

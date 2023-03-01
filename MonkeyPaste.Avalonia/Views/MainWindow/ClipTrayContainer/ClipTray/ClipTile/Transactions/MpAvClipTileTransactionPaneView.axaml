@@ -57,7 +57,7 @@
 
             <Style Selector="Button#CloseTransactionsButton Image">
                 <Setter Property="Source"
-                        Value="{Binding ., Source={StaticResource DescendingImage}, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
+                        Value="{Binding ., Source={StaticResource DescendingImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
             </Style>
 
             <Style Selector="Button#CloseTransactionsButton:pointerover Image">
@@ -148,7 +148,7 @@
                                    Margin="5,2"
                                    Width="15"
                                    Height="15"
-                                   Source="{Binding IconSourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}}" />
+                                   Source="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}}" />
                             <TextBlock Grid.Column="1"
                                        Foreground="Black"
                                        Margin="5,0,5,0"
@@ -174,7 +174,7 @@
                     VerticalAlignment="Top"
                     TabStripPlacement="Top">
             <TabControl.MaxHeight>
-                <MultiBinding Converter="{StaticResource MultiDoubleMathConverter}"
+                <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
                               ConverterParameter="/">
                     <Binding Path="Bounds.Height"
                              ElementName="TransactionContainerGrid" />
@@ -270,7 +270,7 @@
                                                     <Image VerticalAlignment="Stretch"
                                                            Margin="2"
                                                            Width="{Binding $self.Bounds.Height}"
-                                                           Source="{Binding IconSourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}}" />
+                                                           Source="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}}" />
                                                     <TextBlock Foreground="Black"
                                                                Margin="5,0,0,0"
                                                                VerticalAlignment="Center"

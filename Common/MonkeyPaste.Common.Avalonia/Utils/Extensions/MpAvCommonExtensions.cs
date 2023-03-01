@@ -513,10 +513,14 @@ namespace MonkeyPaste.Common.Avalonia {
 
             var new_offset = sv.Offset.ToPortablePoint();
             if (hsb != null) {
-                new_offset.X = Math.Max(0, Math.Min(sv.Offset.X + delta.X, hsb.Maximum));
+                //new_offset.X = Math.Max(0, Math.Min(sv.Offset.X + delta.X, hsb.Maximum));
+                new_offset.X = sv.Offset.X + delta.X;
             }
             if (vsb != null) {
-                new_offset.Y = Math.Max(0, Math.Min(sv.Offset.Y + delta.Y, vsb.Maximum));
+                // NOTE willy nilly changing y to MINUS cause i don't think i've tested before now
+                // and it was negative but accurate so flipping
+                //new_offset.Y = Math.Max(0, Math.Min(sv.Offset.Y + delta.Y, vsb.Maximum));
+                new_offset.Y = sv.Offset.Y + delta.Y;
             }
 
             sv.ScrollToPoint(new_offset);

@@ -3,8 +3,8 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
     <Styles.Resources>
-        <ControlTheme x:Key="{x:Type ScrollBar}"
-                      TargetType="ScrollBar">
+        <ControlTheme x:Key="{x:Type local:MpAvPagingScrollBar}"
+                      TargetType="local:MpAvPagingScrollBar">
             <Setter Property="MinWidth"
                     Value="{DynamicResource ScrollBarSize}" />
             <Setter Property="MinHeight"

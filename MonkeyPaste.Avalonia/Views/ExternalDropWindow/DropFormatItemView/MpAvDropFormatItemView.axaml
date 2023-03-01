@@ -18,7 +18,7 @@
             Background="Transparent"
             CornerRadius="5"
             BorderThickness="1"
-            BorderBrush="{Binding DropItemBorderHexColor, Converter={StaticResource StringHexToBrushConverter}}">
+            BorderBrush="{Binding DropItemBorderHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}">
         <Grid HorizontalAlignment="Stretch"
               IsHitTestVisible="False"
               DragDrop.AllowDrop="False"
@@ -45,11 +45,11 @@
                    Height="30"
                    Margin="5"
                    Stretch="Fill"
-                   Source="{Binding IconId, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
+                   Source="{Binding IconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
 
             <TextBlock Grid.Row="1"
                        DragDrop.AllowDrop="False"
-                       Foreground="{Binding DropItemTitleHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                       Foreground="{Binding DropItemTitleHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
                        Text="{Binding Parent.Title}" />
         </Grid>
     </Border>

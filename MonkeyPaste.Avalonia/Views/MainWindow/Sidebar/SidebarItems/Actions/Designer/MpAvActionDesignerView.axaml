@@ -80,7 +80,7 @@
             <local:MpAvZoomBorder ClipToBounds="False"
                                   HorizontalAlignment="Stretch"
                                   VerticalAlignment="Stretch"
-                                  IsVisible="{Binding SelectedTrigger, Converter={StaticResource IsNotNullZeroOrEmptyToBoolConverter}}"
+                                  IsVisible="{Binding SelectedTrigger, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                   Classes="actionDesigner"
                                   MinScale="{Binding MinScale}"
                                   MaxScale="{Binding MaxScale}"
@@ -144,7 +144,7 @@
             <!--  SHOW GRID/ RESET VIEW MENU  -->
 
             <Border x:Name="DesignerViewMenu"
-                    IsVisible="{Binding SelectedTrigger, Converter={StaticResource IsNotNullZeroOrEmptyToBoolConverter}}"
+                    IsVisible="{Binding SelectedTrigger, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
                     Margin="0,5,10,0"
@@ -161,7 +161,7 @@
                                   Classes="defaultButton textOnlyButton outline outlineOver"
                                   Grid.Column="0"
                                   IsThreeState="False"
-                                  IsEnabled="{Binding SelectedTrigger, Converter={StaticResource IsNotNullZeroOrEmptyToBoolConverter}}"
+                                  IsEnabled="{Binding SelectedTrigger, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                   IsChecked="{Binding IsGridVisible, Mode=TwoWay}"
                                   Content="Grid" />
                     <Border Grid.Column="1" />
@@ -195,7 +195,7 @@
             <!--  ZOOM SLIDER  -->
             <Border HorizontalAlignment="Right"
                     VerticalAlignment="Bottom"
-                    IsVisible="{Binding SelectedTrigger, Converter={StaticResource IsNotNullZeroOrEmptyToBoolConverter}}"
+                    IsVisible="{Binding SelectedTrigger, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                     Margin="0,0,5,5">
                 <Slider x:Name="DesignerZoomSlider"
                         Value="{Binding Scale, Mode=TwoWay}"
@@ -212,7 +212,7 @@
                     VerticalAlignment="Center"
                     MinWidth="50"
                     MinHeight="50"
-                    IsVisible="{Binding SelectedTrigger, ConverterParameter=flip, Converter={StaticResource IsNotNullZeroOrEmptyToBoolConverter}}"
+                    IsVisible="{Binding SelectedTrigger, ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                     Margin="0,0,5,5">
                 <Border.Styles>
                     <Style Selector="Button Ellipse">

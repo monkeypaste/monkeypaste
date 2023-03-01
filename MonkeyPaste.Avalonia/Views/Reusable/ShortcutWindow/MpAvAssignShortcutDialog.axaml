@@ -68,7 +68,7 @@
                    Foreground="Red"
                    Text="{Binding KeyString}" />
         <Border Grid.Row="3"
-                Background="{Binding WarningBorderHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                Background="{Binding WarningBorderHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
                 IsVisible="{Binding HasWarning}"
                 Margin="10"
                 CornerRadius="10"
@@ -93,7 +93,7 @@
                            HorizontalAlignment="Left"
                            VerticalAlignment="Center"
                            Padding="10,5"
-                           Foreground="{Binding WarningTextHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                           Foreground="{Binding WarningTextHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
                            Text="{Binding WarningString}" />
             </Grid>
         </Border>

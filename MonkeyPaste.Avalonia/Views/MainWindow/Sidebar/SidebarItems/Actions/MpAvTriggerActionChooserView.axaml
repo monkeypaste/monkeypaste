@@ -69,10 +69,10 @@
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <Border Classes="outerComboBoxItemBorder"
-                                                IsVisible="{Binding ., Converter={StaticResource IsNotNullZeroOrEmptyToBoolConverter}}">
+                                                IsVisible="{Binding ., Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
                                             <DockPanel LastChildFill="True">
                                                 <Image DockPanel.Dock="Left"
-                                                       Source="{Binding IconResourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
+                                                       Source="{Binding IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                                                 <TextBlock Text="{Binding Label}" />
                                             </DockPanel>
                                         </Border>
@@ -94,7 +94,7 @@
                             <ToolTip.Tip>
                                 <local:MpAvToolTipView ToolTipText="New Trigger" />
                             </ToolTip.Tip>
-                            <Image Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource AddImage}}"
+                            <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource AddImage}}"
                                    Margin="5"
                                    Width="15"
                                    Height="15" />
@@ -120,7 +120,7 @@
 
                                     <local:MpAvActionPropertyView VerticalAlignment="Stretch"
                                                                   HorizontalAlignment="Stretch"
-                                                                  IsVisible="{Binding ., Converter={StaticResource IsNotNullZeroOrEmptyToBoolConverter}, FallbackValue=False, TargetNullValue=False}"
+                                                                  IsVisible="{Binding ., Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}, FallbackValue=False, TargetNullValue=False}"
                                                                   DataContext="{Binding}" />
                                 </ScrollViewer>
                             </StackPanel>

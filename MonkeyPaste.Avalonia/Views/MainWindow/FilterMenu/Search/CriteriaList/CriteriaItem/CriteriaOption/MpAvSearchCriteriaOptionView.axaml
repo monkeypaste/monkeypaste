@@ -9,51 +9,7 @@
                        d:DesignHeight="450"
                        d:DesignWidth="800">
     <local:MpAvUserControl.Styles>
-        <Style Selector="CheckBox /template/ Border#NormalRectangle">
-            <Setter Property="BorderBrush"
-                    Value="White" />
-        </Style>
-        <Style Selector="CheckBox:pointerover /template/ Border#NormalRectangle">
-            <Setter Property="BorderBrush"
-                    Value="Yellow" />
-        </Style>
-        <Style Selector="ComboBox.criteriaComboBox">
-            <!--  Keep uniform width for criteria combo boxes  -->
-            <Setter Property="Width"
-                    Value="150" />
-        </Style>
-        <Style Selector="ComboBox.criteriaComboBox ComboBoxItem"
-               x:DataType="local:MpAvSearchCriteriaOptionViewModel">
-            <Setter Property="IsVisible"
-                    Value="{Binding IsDropDownItemVisible}" />
-        </Style>
-        <Style Selector="TextBox"
-               x:DataType="local:MpAvSearchCriteriaOptionViewModel">
-            <Setter Property="BorderThickness"
-                    Value="1" />
-            <Setter Property="BorderBrush"
-                    Value="Black" />
-            <Setter Property="ToolTip.Tip">
-                <Setter.Value>
-                    <Template>
-                        <local:MpAvToolTipView ToolTipText="{Binding ValidationText}"
-                                               Classes="error" />
-                    </Template>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style Selector="TextBox:not(.valid)">
-            <Setter Property="BorderBrush"
-                    Value="Red" />
-        </Style>
-        <Style Selector="TextBox.valid /template/ local|MpAvToolTipView">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>
-        <Style Selector="TextBox:not(.valid) /template/ local|MpAvToolTipView">
-            <Setter Property="IsVisible"
-                    Value="True" />
-        </Style>
+
     </local:MpAvUserControl.Styles>
     <ContentControl x:Name="CriteriaOptionContentControl"
                     Margin="0,3"
@@ -84,50 +40,20 @@
                                     DockPanel.Dock="Right"
                                     IsVisible="{Binding IsCheckable}">
 
-                            <CheckBox VerticalAlignment="Center"
-                                      Margin="0,0,5,0"
-                                      IsChecked="{Binding IsChecked, Mode=TwoWay}">
-                                <TextBlock VerticalAlignment="Center"
-                                           TextAlignment="Left"
-                                           TextWrapping="Wrap"
-                                           MaxWidth="80"
-                                           Foreground="White"
-                                           Text="Case Sensitive?" />
-                            </CheckBox>
-                            <CheckBox VerticalAlignment="Center"
-                                      Margin="5,0,5,0"
-                                      IsChecked="{Binding IsChecked2, Mode=TwoWay}">
-                                <TextBlock VerticalAlignment="Center"
-                                           TextAlignment="Left"
-                                           TextWrapping="Wrap"
-                                           MaxWidth="80"
-                                           Foreground="White"
-                                           Text="Whole Word" />
-                            </CheckBox>
+                            <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                                      Content="Case Sensitive" />
+                            <CheckBox IsChecked="{Binding IsChecked2, Mode=TwoWay}"
+                                      Content="Whole Word" />
                         </StackPanel>
 
                         <!--  TEXTBOX BORDER  -->
 
-                        <Border Margin="5"
-                                Padding="5"
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Center"
-                                CornerRadius="10"
-                                Background="White"
-                                BorderBrush="White">
-                            <TextBox x:Name="MatchValueTextBox"
-                                     Padding="5,0,0,0"
-                                     Watermark="Enter search term..."
-                                     BorderThickness="0"
-                                     HorizontalAlignment="Stretch"
-                                     HorizontalContentAlignment="Left"
-                                     VerticalAlignment="Center"
-                                     VerticalContentAlignment="Center"
-                                     Classes.valid="{Binding IsValid}"
-                                     local:MpAvDelayedTextChangedExtension.IsEnabled="True"
-                                     local:MpAvDelayedTextChangedExtension.DelayMs="500"
-                                     local:MpAvDelayedTextChangedExtension.Text="{Binding Value, Mode=TwoWay}" />
-                        </Border>
+                        <TextBox x:Name="MatchValueTextBox"
+                                 Watermark="Enter search term..."
+                                 Classes.valid="{Binding IsValid}"
+                                 local:MpAvDelayedTextChangedExtension.IsEnabled="True"
+                                 local:MpAvDelayedTextChangedExtension.DelayMs="500"
+                                 local:MpAvDelayedTextChangedExtension.Text="{Binding Value, Mode=TwoWay}" />
                     </DockPanel>
                 </DataTemplate>
                 <DataTemplate x:Key="RGBAOptionTemplate"
@@ -135,29 +61,25 @@
                     <StackPanel Orientation="Horizontal">
                         <StackPanel Orientation="Horizontal">
                             <Label Content="R" />
-                            <TextBox MinWidth="20"
-                                     VerticalContentAlignment="Center"
+                            <TextBox Classes="compositeTextBox"
                                      Classes.valid="{Binding IsValid1}"
                                      Text="{Binding Value1, Mode=TwoWay}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="G" />
-                            <TextBox MinWidth="20"
-                                     VerticalContentAlignment="Center"
+                            <TextBox Classes="compositeTextBox"
                                      Classes.valid="{Binding IsValid2}"
                                      Text="{Binding Value2, Mode=TwoWay}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="B" />
-                            <TextBox MinWidth="20"
-                                     VerticalContentAlignment="Center"
+                            <TextBox Classes="compositeTextBox"
                                      Classes.valid="{Binding IsValid3}"
                                      Text="{Binding Value3, Mode=TwoWay}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="A" />
-                            <TextBox MinWidth="20"
-                                     VerticalContentAlignment="Center"
+                            <TextBox Classes="compositeTextBox"
                                      Classes.valid="{Binding IsValid4}"
                                      Text="{Binding Value4, Mode=TwoWay}" />
                         </StackPanel>

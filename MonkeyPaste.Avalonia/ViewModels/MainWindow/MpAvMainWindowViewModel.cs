@@ -1037,9 +1037,10 @@ namespace MonkeyPaste.Avalonia {
                           !IsAnyDropDownOpen &&
                           !IsMainWindowInitiallyOpening &&
                           !IsAnyDialogOpen &&
-                    !isContextMenuOpen &&
+                            !isContextMenuOpen &&
                           !IsAnyItemDragging &&
                           !IsAnyNotificationActivating &&
+                          !MpAvShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown && // reject drag cancel event
                           !IsResizing;
 
                 if (!canHide) {

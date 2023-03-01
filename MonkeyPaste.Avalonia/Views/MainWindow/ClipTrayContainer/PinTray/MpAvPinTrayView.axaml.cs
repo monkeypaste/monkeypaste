@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Shapes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
@@ -39,8 +40,10 @@ namespace MonkeyPaste.Avalonia {
 
         private void DragOver(object sender, DragEventArgs e) {
             MpConsole.WriteLine("[DragOver] PinTrayListBox: ");
-            var ptr_mp = e.GetPosition(sender as Control).ToPortablePoint();
-            int drop_idx = GetDropIdx(ptr_mp);
+            var ptr_lb = this.FindControl<ListBox>("PinTrayListBox");
+            var ptr_mp = e.GetPosition(ptr_lb).ToPortablePoint();
+            int drop_idx = ptr_lb.GetDropIdx(ptr_mp, Orientation.Horizontal);
+
             bool is_copy = e.KeyModifiers.HasFlag(KeyModifiers.Control);
             bool is_drop_valid = IsDropValid(e.Data, drop_idx, is_copy);
             MpConsole.WriteLine("[DragOver] PinTrayListBox DropIdx: " + drop_idx + " IsCopy: " + is_copy + " IsValid: " + is_drop_valid);
@@ -61,8 +64,10 @@ namespace MonkeyPaste.Avalonia {
         private async void Drop(object sender, DragEventArgs e) {
             // NOTE only pin tray allows drop not clip tray
 
-            var host_mp = e.GetPosition(sender as Control).ToPortablePoint();
-            int drop_idx = GetDropIdx(host_mp);
+            var ptr_lb = this.FindControl<ListBox>("PinTrayListBox");
+            var ptr_mp = e.GetPosition(ptr_lb).ToPortablePoint();
+            int drop_idx = ptr_lb.GetDropIdx(ptr_mp, Orientation.Horizontal);
+
             bool is_copy = e.KeyModifiers.HasFlag(KeyModifiers.Control);
             bool is_drop_valid = IsDropValid(e.Data, drop_idx, is_copy);
             MpConsole.WriteLine("[Drop] PinTrayListBox DropIdx: " + drop_idx + " IsCopy: " + is_copy + " IsValid: " + is_drop_valid);
@@ -95,35 +100,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Drop Helpers
-        private int GetDropIdx(MpPoint host_mp) {
-            var ptr_lb = this.FindControl<ListBox>("PinTrayListBox");
-            var ptr_lb_mp = this.TranslatePoint(host_mp.ToAvPoint(), ptr_lb).Value.ToPortablePoint();
-
-            if (!ptr_lb.Bounds.Contains(ptr_lb_mp.ToAvPoint())) {
-                return -1;
-            }
-
-            if (BindingContext.PinnedItems.Count == 0) {
-                // TODO Add logic for pin popout overlay or add binding somewhere when empty
-                return 0;
-            }
-
-            MpRectSideHitTest closet_side_ht = null;
-            int closest_side_lbi_idx = -1;
-            for (int i = 0; i < BindingContext.PinnedItems.Count; i++) {
-                var lbi_rect = ptr_lb.ContainerFromIndex(i).Bounds.ToPortableRect();
-                var cur_tup = lbi_rect.GetClosestSideToPoint(ptr_lb_mp, "t,b");
-                if (closet_side_ht == null || cur_tup.ClosestSideDistance < closet_side_ht.ClosestSideDistance) {
-                    closet_side_ht = cur_tup;
-                    closest_side_lbi_idx = i;
-                }
-            }
-
-            if (closet_side_ht.ClosestSideLabel == "r") {
-                return closest_side_lbi_idx + 1;
-            }
-            return closest_side_lbi_idx;
-        }
 
         private bool IsDropValid(IDataObject avdo, int drop_idx, bool is_copy) {
             // called in DropExtension DragOver 

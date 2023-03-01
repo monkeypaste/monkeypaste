@@ -61,7 +61,7 @@
                     HorizontalAlignment="Right"
                     Margin="0,0,22,0"
                     local:MpAvMenuExtension.IsEnabled="True">
-                <Image Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource FilterImage}}"
+                <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource FilterImage}}"
                        Stretch="Uniform"
                        Width="15"
                        Height="15" />
@@ -72,7 +72,7 @@
                     HorizontalAlignment="Right"
                     Command="{Binding ClearQueryCommand}"
                     CommandParameter="{Binding .}">
-                <Image Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource DeleteImage}}"
+                <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource DeleteImage}}"
                        Stretch="Uniform"
                        Width="15"
                        Height="15" />

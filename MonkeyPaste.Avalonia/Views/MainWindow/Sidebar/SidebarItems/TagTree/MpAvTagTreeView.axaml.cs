@@ -1,48 +1,42 @@
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Layout;
 using Avalonia.Markup.Xaml;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvTagTreeView : MpAvUserControl<MpAvTagTrayViewModel> {
-
+        #region Private Variables
+        #endregion
         public MpAvTagTreeView() {
-            InitializeComponent();
-
-            //var tagTreeView = this.FindControl<TreeView>("TagTreeView");
-            //tagTreeView.ItemContainerGenerator.Materialized += ItemContainerGenerator_Materialized;
-            //tagTreeView.SelectionChanged += TagTreeView_SelectionChanged;
-        }
-
-        //private void TagTreeView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-        //    return;
-        //}
-
-        //private void ItemContainerGenerator_Materialized(object sender, global::Avalonia.Controls.Generators.ItemContainerEventArgs e) {
-        //    foreach(var ici in e.Containers) {
-        //        TreeViewItem tvi = ici.ContainerControl as TreeViewItem;
-        //        tvi.GetObservable(IsPointerOverProperty).Subscribe(value => TreeViewItem_IsPointerOverChange(tvi, value));
-        //        //tvi.PointerPressed += Tvi_PointerPressed;
-        //    }
-        //    return;
-        //}
-
-        //private void Tvi_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
-        //    if(sender is TreeViewItem tvi && 
-        //        tvi.DataContext is MpAvTagTileViewModel ttvm) {
-        //        if(e.GetCurrentPoint(tvi).Properties.PointerUpdateKind == PointerUpdateKind.LeftButtonPressed) {
-        //            //ttvm.Parent.SelectTagCommand.Execute(ttvm);
-        //        } else if (e.GetCurrentPoint(tvi).Properties.PointerUpdateKind == PointerUpdateKind.RightButtonPressed) {
-        //            //MpAvMenuExtension.ShowContextMenu(tvi);
-        //        }
-        //    }
-        //}
-
-        //void TreeViewItem_IsPointerOverChange(TreeViewItem tvi, bool isPointerOver) {
-        //    if(tvi.DataContext is MpAvTagTileViewModel ttvm) {
-        //        //ttvm.IsHovering = isPointerOver;
-        //    }
-        //}
-
-        private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);
+            InitDragDrop();
         }
+
+        #region Drag Drop
+        private void InitDragDrop() {
+            var ttv = this.FindControl<TreeView>("TagTreeView");
+            DragDrop.SetAllowDrop(ttv, true);
+            ttv.AddHandler(DragDrop.DragOverEvent, TagTreeListBox_DragOver);
+            ttv.AddHandler(DragDrop.DragLeaveEvent, TagTreeListBox_DragLeave);
+        }
+        private void TagTreeListBox_DragOver(object sender, DragEventArgs e) {
+            e.DragEffects = DragDropEffects.None;
+            var ttv = this.FindControl<TreeView>("TagTreeView");
+            ttv.AutoScrollItemsControl(e);
+        }
+        private void TagTreeListBox_DragLeave(object sender, DragEventArgs e) {
+            var ttv = this.FindControl<TreeView>("TagTreeView");
+            ttv.AutoScrollItemsControl(null);
+        }
+
+        #endregion
     }
 }

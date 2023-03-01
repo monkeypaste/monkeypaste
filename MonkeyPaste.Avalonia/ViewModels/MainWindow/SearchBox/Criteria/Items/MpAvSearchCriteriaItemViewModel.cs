@@ -17,14 +17,16 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constants
+
         public const string DEFAULT_OPTION_LABEL = " - Please Select - ";
-        public const double DEFAULT_HEIGHT = 50;
+
         #endregion
 
         #region Statics
         // NOTE must match xaml
         public static Thickness CRITERIA_ITEM_BORDER_THICKNESS =>
             new Thickness(0, 1, 0, 1);
+
 
         #endregion
 
@@ -860,21 +862,24 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
-        public double CriteriaItemHeight =>
-            Parent == null ? 0 :
-                DEFAULT_HEIGHT * (IsJoinPanelVisible ? 2 : 1);
 
         #endregion
 
-        #region Layout        
+        #region Layout       
+
+        public double CriteriaItemHeight =>
+            Parent == null ? 0 :
+                Parent.DefaultCriteriaRowHeight * (IsJoinPanelVisible ? 2 : 1) +
+                (Parent.CriteriaDropLineHeight * 2);
         #endregion
 
         #region State
 
         public bool HasCriteriaChanged { get; set; } = false;
-
+        public bool IsDragging { get; set; }
         public bool IsDragOverTop { get; set; }
         public bool IsDragOverBottom { get; set; }
+
         public bool IsDragOverCopy { get; set; }
 
         public int SelectedJoinTypeIdx {
@@ -1160,6 +1165,12 @@ namespace MonkeyPaste.Avalonia {
                     if (!IgnoreHasModelChanged && HasModelChanged) {
                         OnPropertyChanged(nameof(HasModelChanged));
                     }
+                    break;
+                case nameof(IsDragging):
+                    if (Parent == null) {
+                        break;
+                    }
+                    Parent.OnPropertyChanged(nameof(Parent.IsAnyDragging));
                     break;
                 case nameof(HasModelChanged):
                     if (HasModelChanged) {

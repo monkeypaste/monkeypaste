@@ -29,6 +29,6 @@
     <Style Selector="ContentControl#DesignerItemContentControl :is(Shape)"
            x:DataType="local:MpAvActionViewModelBase">
         <Setter Property="Fill"
-                Value="{Binding ActionBackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}" />
+                Value="{Binding ActionBackgroundHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}" />
     </Style>
 </Styles>

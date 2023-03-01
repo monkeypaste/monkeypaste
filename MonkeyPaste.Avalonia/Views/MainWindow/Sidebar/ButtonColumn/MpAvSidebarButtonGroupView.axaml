@@ -107,7 +107,7 @@
                                                                     ConverterParameter={x:Static pcl:MpShortcutType.ToggleAppendMode}}"
                                                   Padding="10">
                                         <Image Source="{Binding Source={StaticResource AppendRunImage},
-                                                                Converter={StaticResource StringResourceConverter}}"
+                                                                Converter={x:Static local:MpAvStringResourceConverter.Instance}}"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center" />
                                     </RadioButton>
@@ -133,14 +133,14 @@
                                         </RadioButton.ToolTip>-->
             <!--
                                         <Image Source="{Binding Source={StaticResource AppendLineImage},
-                                                                Converter={StaticResource StringResourceConverter}}"
+                                                                Converter={x:Static local:MpAvStringResourceConverter.Instance}}"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center" />
                                     </RadioButton>
                                 </StackPanel>
                             </Popup>
                             <Image Source="{Binding Source={StaticResource AppendImage},
-                                                    Converter={StaticResource StringResourceConverter}}"
+                                                    Converter={x:Static local:MpAvStringResourceConverter.Instance}}"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center" />
                         </Grid>
@@ -183,7 +183,7 @@
                                             </TextBlock>
                                         </RadioButton.ToolTip>
                                         <Image Source="{Binding Source={StaticResource LeftClickImage},
-                                                                Converter={StaticResource StringResourceConverter}}"
+                                                                Converter={x:Static local:MpAvStringResourceConverter.Instance}}"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center" />
                                     </RadioButton>
@@ -208,14 +208,14 @@
                                             </TextBlock>
                                         </RadioButton.ToolTip>
                                         <Image Source="{Binding Source={StaticResource RightClickImage},
-                                                                Converter={StaticResource StringResourceConverter}}"
+                                                                Converter={x:Static local:MpAvStringResourceConverter.Instance}}"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center" />
                                     </RadioButton>
                                 </StackPanel>
                             </Popup>
                             <Image Source="{Binding MouseModeImageSourcePath,
-                                                    Converter={StaticResource StringResourceConverter}}"
+                                                    Converter={x:Static local:MpAvStringResourceConverter.Instance}}"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center" />
                         </Grid>

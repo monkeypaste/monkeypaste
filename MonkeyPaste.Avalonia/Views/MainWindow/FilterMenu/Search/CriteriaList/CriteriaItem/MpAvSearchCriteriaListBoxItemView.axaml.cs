@@ -26,9 +26,12 @@ namespace MonkeyPaste.Avalonia {
             if (dragButton == null) {
                 return;
             }
+            BindingContext.IsDragging = true;
+
             var mpdo = new MpAvDataObject(MpPortableDataFormats.INTERNAL_SEARCH_CRITERIA_ITEM_FORMAT, BindingContext);
             var result = await DragDrop.DoDragDrop(e, mpdo, DragDropEffects.Move | DragDropEffects.Copy);
 
+            BindingContext.IsDragging = false;
             MpConsole.WriteLine($"SearchCriteria Drop Result: '{result}'");
         }
     }

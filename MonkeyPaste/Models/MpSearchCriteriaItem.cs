@@ -21,6 +21,7 @@ namespace MonkeyPaste {
             var sci_clone = await MpSearchCriteriaItem.CreateAsync(
                 tagId: QueryTagId,
                 sortOrderIdx: SortOrderIdx,
+                queryType: QueryType,
                 joinType: JoinType,
                 options: Options,
                 matchValue: MatchValue,

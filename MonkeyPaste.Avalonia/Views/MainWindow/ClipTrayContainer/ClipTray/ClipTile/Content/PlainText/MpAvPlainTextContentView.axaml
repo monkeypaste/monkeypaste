@@ -19,8 +19,8 @@
                        TextWrapping="WrapWithOverflow"
                        AcceptsReturn="True"
                        AcceptsTab="True"
-                       ScrollViewer.HorizontalScrollBarVisibility="{Binding IsHorizontalScrollbarVisibile, Converter={StaticResource BoolToScrollBarVisibilityConverter}, ConverterParameter=AUTO|DISABLED}"
-                       ScrollViewer.VerticalScrollBarVisibility="{Binding IsVerticalScrollbarVisibile, Converter={StaticResource BoolToScrollBarVisibilityConverter}, ConverterParameter=AUTO|DISABLED}"
+                       ScrollViewer.HorizontalScrollBarVisibility="{Binding IsHorizontalScrollbarVisibile, Converter={x:Static local:MpAvBoolToScrollBarVisibilityConverter.Instance}, ConverterParameter=AUTO|DISABLED}"
+                       ScrollViewer.VerticalScrollBarVisibility="{Binding IsVerticalScrollbarVisibile, Converter={x:Static local:MpAvBoolToScrollBarVisibilityConverter.Instance}, ConverterParameter=AUTO|DISABLED}"
                        IsHitTestVisible="{Binding IsSubSelectionEnabled}"
                        IsReadOnly="{Binding IsContentReadOnly}"
                        Width="{Binding BoundWidth}"
@@ -29,5 +29,5 @@
                        HorizontalContentAlignment="Left"
                        VerticalContentAlignment="Top"
                        Foreground="Black"
-                       Text="{Binding CopyItemData, Converter={StaticResource ContentDataConverter}, ConverterParameter=PlainText}" />
+                       Text="{Binding CopyItemData, Converter={x:Static local:MpAvContentDataConverter.Instance}, ConverterParameter=PlainText}" />
 </local:MpAvUserControl>

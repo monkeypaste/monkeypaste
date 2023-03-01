@@ -10,7 +10,7 @@
              d:DesignHeight="450"
              x:Class="MonkeyPaste.Avalonia.MpAvPluginSelectorView">
     <Border Classes="iconLabelComboBox">
-        <ComboBox IsEnabled="{Binding Items, Converter={StaticResource CollectionIsNotEmptyToBoolConverter}}"
+        <ComboBox IsEnabled="{Binding Items, Converter={x:Static local:MpAvCollectionIsNotEmptyToBoolConverter.Instance}}"
                   SelectedIndex="{Binding Selection.SelectedIndex, Mode=TwoWay}"
                   Items="{Binding Items}">
             <ComboBox.ItemTemplate>

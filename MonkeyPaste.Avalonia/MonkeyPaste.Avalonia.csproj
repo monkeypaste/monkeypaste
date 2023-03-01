@@ -42,6 +42,9 @@
     <AndroidJavaSource Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <AndroidLibrary Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <AndroidNativeLibrary Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
+    <AvaloniaXaml Remove="Assets\Images\MpRichTextBox\**" />
+    <AvaloniaXaml Remove="Assets\Images\resize_backup\**" />
+    <AvaloniaXaml Remove="Assets\Images\Tests\**" />
     <AvaloniaXaml Remove="AttachedProperties\DragDrop\**" />
     <AvaloniaXaml Remove="Behaviors\DragDrop\**" />
     <AvaloniaXaml Remove="Behaviors\Highlighting\**" />
@@ -61,6 +64,9 @@
     <AvaloniaXaml Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <AvaloniaXaml Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
     <AvaloniaXaml Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
+    <Compile Remove="Assets\Images\MpRichTextBox\**" />
+    <Compile Remove="Assets\Images\resize_backup\**" />
+    <Compile Remove="Assets\Images\Tests\**" />
     <Compile Remove="AttachedProperties\DragDrop\**" />
     <Compile Remove="Behaviors\DragDrop\**" />
     <Compile Remove="Behaviors\Highlighting\**" />
@@ -80,6 +86,9 @@
     <Compile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <Compile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
     <Compile Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
+    <EmbeddedResource Remove="Assets\Images\MpRichTextBox\**" />
+    <EmbeddedResource Remove="Assets\Images\resize_backup\**" />
+    <EmbeddedResource Remove="Assets\Images\Tests\**" />
     <EmbeddedResource Remove="AttachedProperties\DragDrop\**" />
     <EmbeddedResource Remove="Behaviors\DragDrop\**" />
     <EmbeddedResource Remove="Behaviors\Highlighting\**" />
@@ -100,6 +109,9 @@
     <EmbeddedResource Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
     <EmbeddedResource Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
     <JavaSourceJar Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
+    <None Remove="Assets\Images\MpRichTextBox\**" />
+    <None Remove="Assets\Images\resize_backup\**" />
+    <None Remove="Assets\Images\Tests\**" />
     <None Remove="AttachedProperties\DragDrop\**" />
     <None Remove="Behaviors\DragDrop\**" />
     <None Remove="Behaviors\Highlighting\**" />
@@ -119,6 +131,9 @@
     <None Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <None Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
     <None Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
+    <Page Remove="Assets\Images\MpRichTextBox\**" />
+    <Page Remove="Assets\Images\resize_backup\**" />
+    <Page Remove="Assets\Images\Tests\**" />
     <Page Remove="AttachedProperties\DragDrop\**" />
     <Page Remove="Behaviors\DragDrop\**" />
     <Page Remove="Behaviors\Highlighting\**" />
@@ -147,7 +162,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\ButtonBase.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ComboBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ComboBoxItem.axaml" />
-    <AvaloniaXaml Remove="Themes\Default\Controls\DefaultControls.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\Dnd\Dnd.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\GridSplitter.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ListBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvActionDesigner.axaml" />
@@ -158,6 +173,8 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvClipTrayContainer.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMarqueeTextBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvNotificationWindow.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPagingScrollBar.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPagingScrollViewer.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPinTray.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPluginParameterListBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPluginParameterListBoxItem.axaml" />
@@ -165,11 +182,11 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvSideBarItems.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvSliderParameter.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvTooltip.axaml" />
-    <AvaloniaXaml Remove="Themes\Default\Controls\ScrollBar.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TemplatedControl.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TextBlock.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TextBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ToolTip.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\_DefaultControls.axaml" />
     <AvaloniaXaml Remove="Themes\Default\DefaultLight.axaml" />
     <AvaloniaXaml Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\MpAvActionPropertyListBoxView.axaml" />
     <AvaloniaXaml Remove="Views\MainWindow\Sidebar\SidebarItems\ClipboardHandlers\Selector\MpAvClipboardHandlerItemSelectorView.axaml" />
@@ -656,9 +673,6 @@
     <AvaloniaResource Include="Assets\Images\frame_grip.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\frame_grip_org.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\googleIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -1006,7 +1020,9 @@
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Default\Controls\Animations\Defaults.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Animations\Shake.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\Dnd\Dnd.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ListBox.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\MpAvPagingScrollViewer.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\TemplatedControl.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ComboBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\GridSplitter.axaml" />
@@ -1025,13 +1041,13 @@
     <AvaloniaResource Include="Themes\Default\Controls\Button.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvClipTrayContainer.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvPinTray.axaml" />
-    <AvaloniaResource Include="Themes\Default\Controls\ScrollBar.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\MpAvPagingScrollBar.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\TextBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ToolTip.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\TextBlock.axaml">
       
     </AvaloniaResource>
-    <AvaloniaResource Include="Themes\Default\Controls\DefaultControls.axaml">
+    <AvaloniaResource Include="Themes\Default\Controls\_DefaultControls.axaml">
       
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Default\Controls\ButtonBase.axaml">

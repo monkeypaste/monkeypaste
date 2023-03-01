@@ -29,8 +29,8 @@
                           MinHeight="130"
                           BorderThickness="7"
                           Padding="10"
-                          BorderBrush="{Binding BorderHexColor, Converter={StaticResource StringHexToBrushConverter}}"
-                          Background="{Binding BackgroundHexColor, Converter={StaticResource StringHexToBrushConverter}}"
+                          BorderBrush="{Binding BorderHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
+                          Background="{Binding BackgroundHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
                           local:MpAvIsHoveringExtension.IsEnabled="True"
                           local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
         <Grid x:Name="NotificationWindowContainerGrid"
@@ -41,8 +41,8 @@
                    Grid.Column="0"
                    Width="64"
                    Height="64"
-                   IsVisible="{Binding IconSourceObj, Converter={StaticResource IsNotNullZeroOrEmptyToBoolConverter}}"
-                   Source="{Binding IconSourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}"
+                   IsVisible="{Binding IconSourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                   Source="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
                    Stretch="Fill"
                    HorizontalAlignment="Left"
                    VerticalAlignment="Top"
@@ -90,7 +90,7 @@
                        FontWeight="SemiBold"
                        Background="Transparent"
                        Focusable="True"
-                       Foreground="{Binding NotificationTextForegroundColor, Converter={StaticResource StringHexToBrushConverter}}"
+                       Foreground="{Binding NotificationTextForegroundColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
                        Text="{Binding Body}" />
 
             <!--  TEXTBOX (Optional)  -->

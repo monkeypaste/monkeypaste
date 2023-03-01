@@ -152,6 +152,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsAnyDragging =>
+            Items.Any(x => x.IsDragging);
+
         private int _selectedItemId;
         public int SelectedItemId {
             // NOTE only used w/ QueryInfo

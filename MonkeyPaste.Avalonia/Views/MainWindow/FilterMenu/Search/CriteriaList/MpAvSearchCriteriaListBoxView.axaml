@@ -20,13 +20,15 @@
             <!--  MUST MATCH VM VALUE  -->
             0,1,0,1
         </Thickness>
+        <sys:Double x:Key="CriteriaOptionDropLineHeight">
+            <!--  MUST MATCH VM VALUE  -->
+            5
+        </sys:Double>
+        <sys:Double x:Key="CriteriaOptionMinWidth">150</sys:Double>
+        <sys:Double x:Key="CriteriaOptionCompositeMinWidth">20</sys:Double>
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
-        <Style Selector="TextBlock">
-            <Setter Property="FontFamily"
-                    Value="Calibri" />
-        </Style>
-        <!--  CRITIERA ITEM  -->
+        <!--  CRITIERA LISTBOX ITEM & HEADER  -->
         <Style Selector="ListBoxItem">
             <Setter Property="HorizontalContentAlignment"
                     Value="Left" />
@@ -41,80 +43,236 @@
             <Setter Property="BorderThickness"
                     Value="{StaticResource CriteriaItemBorderThickness}" />
             <Setter Property="BorderBrush"
-                    Value="Gainsboro" />
+                    Value="Black" />
         </Style>
 
-        <Style Selector="ListBox.criteriaList > ListBoxItem:pointerover, local|MpAvSearchCriteriaHeaderView">
+        <Style Selector="ListBox.criteriaList:not(.drag) > ListBoxItem:pointerover, ListBox.criteriaList:not(.drag) local|MpAvSearchCriteriaHeaderView:pointerover">
             <Setter Property="BorderBrush"
                     Value="Yellow" />
         </Style>
+
+        <Style Selector="ListBox.criteriaList.drag > ListBoxItem, local|MpAvSearchCriteriaHeaderView">
+            <!--  NOTE LBI Borders are transparent during dnd to see drop lines  -->
+            <Setter Property="BorderBrush"
+                    Value="Transparent" />
+        </Style>
+
         <Style Selector="local|MpAvSearchCriteriaItemView">
             <Setter Property="BorderBrush"
                     Value="DimGray" />
         </Style>
 
-        <Style Selector="ListBox.criteriaList > ListBoxItem">
+        <Style Selector="ListBox.criteriaList > ListBoxItem"
+               x:DataType="local:MpAvSearchCriteriaItemViewModel">
             <Setter Property="Width"
                     Value="{Binding $parent[ListBox].Bounds.Width}" />
+            <Setter Property="local:MpAvIsHoveringExtension.IsEnabled"
+                    Value="True" />
+            <Setter Property="Height"
+                    Value="{Binding CriteriaItemHeight, FallbackValue=0, TargetNullValue=0}" />
         </Style>
-        <Style Selector="ListBox.criteriaList > ListBoxItem:nth-child(even) local|MpAvSearchCriteriaItemView">
+        <Style Selector="ListBox.criteriaList > ListBoxItem:nth-child(even)">
             <Setter Property="Background"
                     Value="{DynamicResource SearchCriteriaRowBgBrush1}" />
         </Style>
-        <Style Selector="ListBox.criteriaList > ListBoxItem:nth-child(odd) local|MpAvSearchCriteriaItemView">
+        <Style Selector="ListBox.criteriaList > ListBoxItem:nth-child(odd)">
             <Setter Property="Background"
                     Value="{DynamicResource SearchCriteriaRowBgBrush2}" />
         </Style>
-        <Style Selector="ListBox.criteriaList > ListBoxItem:pointerover local|MpAvSearchCriteriaItemView">
+        <Style Selector="ListBox.criteriaList > ListBoxItem:pointerover">
             <Setter Property="Background"
                     Value="{DynamicResource SearchCriteriaRowBgHoverBrush}" />
         </Style>
-        <Style Selector="ListBox.criteriaList > ListBoxItem:selected local|MpAvSearchCriteriaItemView">
+        <Style Selector="ListBox.criteriaList > ListBoxItem:selected">
             <Setter Property="BorderBrush"
                     Value="Red" />
         </Style>
 
-        <!--  ADD/REMOVE BUTTONS  -->
+        <!--  COMBOX BOXES  -->
 
-        <Style Selector="Button.addRemoveBtn">
+        <Style Selector="ComboBox:pointerover.criteriaComboBox">
+            <Setter Property="BorderBrush"
+                    Value="Yellow" />
+        </Style>
+        <Style Selector="ComboBox.criteriaComboBox">
+            <Setter Property="CornerRadius"
+                    Value="10" />
+            <Setter Property="BorderThickness"
+                    Value="1" />
+            <Setter Property="BorderBrush"
+                    Value="Silver" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
             <Setter Property="Margin"
-                    Value="3,0" />
+                    Value="5" />
+            <Setter Property="Background"
+                    Value="White" />
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Left" />
+            <Setter Property="VerticalContentAlignment"
+                    Value="Center" />
+            <Setter Property="MinWidth"
+                    Value="{StaticResource CriteriaOptionMinWidth}" />
+            <Setter Property="FontSize"
+                    Value="16" />
+        </Style>
+
+        <Style Selector="ComboBox.criteriaComboBox ComboBoxItem"
+               x:DataType="local:MpAvSearchCriteriaOptionViewModel">
+            <Setter Property="IsVisible"
+                    Value="{Binding IsDropDownItemVisible}" />
+        </Style>
+
+        <!--  CHECK BOXES  -->
+
+        <Style Selector="CheckBox">
+            <Setter Property="Margin"
+                    Value="5,0" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="Foreground"
+                    Value="Black" />
+        </Style>
+        <Style Selector="CheckBox:pointerover /template/ Border#NormalRectangle">
+            <Setter Property="BorderBrush"
+                    Value="Yellow" />
+            <!--<Setter Property="Width"
+                    Value="10" />
+            <Setter Property="Height"
+                    Value="10" />-->
+        </Style>
+        <Style Selector="CheckBox:checked:pointerover /template/ Border#NormalRectangle">
+            <!--<Setter Property="Width"
+                    Value="10" />
+            <Setter Property="Height"
+                    Value="10" />-->
+        </Style>
+        <Style Selector="CheckBox /template/ TextBlock">
+            <!--<Setter Property="FontSize"
+                    Value="11" />
+            <Setter Property="Foreground"
+                    Value="Black" />-->
+        </Style>
+        <!--  TEXT BOXES  -->
+
+        <Style Selector="TextBox"
+               x:DataType="local:MpAvSearchCriteriaOptionViewModel">
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView ToolTipText="{Binding ValidationText}"
+                                               Classes="error" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style Selector="TextBox">
+            <Setter Property="Background"
+                    Value="White" />
+            <Setter Property="FontFamily"
+                    Value="Calibri" />
+            <Setter Property="BorderThickness"
+                    Value="1" />
+            <Setter Property="BorderBrush"
+                    Value="White" />
+            <Setter Property="Margin"
+                    Value="10,5,5,5" />
+            <Setter Property="Padding"
+                    Value="5" />
+            <Setter Property="CornerRadius"
+                    Value="10" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Left" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalContentAlignment"
+                    Value="Center" />
+            <Setter Property="MinWidth"
+                    Value="{StaticResource CriteriaOptionMinWidth}" />
+        </Style>
+        <Style Selector="TextBox.compositeTextBox">
+            <Setter Property="MinWidth"
+                    Value="{StaticResource CriteriaOptionCompositeMinWidth}" />
+        </Style>
+
+        <Style Selector="TextBox:pointerover">
+            <Setter Property="BorderBrush"
+                    Value="Black" />
+        </Style>
+        <Style Selector="TextBox:not(.valid)">
+            <Setter Property="BorderBrush"
+                    Value="Red" />
+        </Style>
+        <Style Selector="TextBox.valid /template/ local|MpAvToolTipView">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+        <Style Selector="TextBox:not(.valid) /template/ local|MpAvToolTipView">
+            <Setter Property="IsVisible"
+                    Value="True" />
+        </Style>
+
+        <!--  TEXT BLOCKS  -->
+
+        <Style Selector="TextBlock">
+            <Setter Property="FontFamily"
+                    Value="Calibri" />
+            <Setter Property="Foreground"
+                    Value="Black" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Left" />
+            <Setter Property="TextWrapping"
+                    Value="WrapWithOverflow" />
+            <Setter Property="TextAlignment"
+                    Value="Left" />
+        </Style>
+
+        <!--  BUTTONS  -->
+        <Style Selector=":is(Button)">
+            <Setter Property="Margin"
+                    Value="5,0" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+        </Style>
+        <Style Selector=":is(Button).addRemoveBtn">
             <Setter Property="Width"
                     Value="25" />
             <Setter Property="Height"
                     Value="25" />
-            <Setter Property="BorderThickness"
-                    Value="2" />
-            <Setter Property="VerticalAlignment"
-                    Value="Center" />
-        </Style>
-
-        <Style Selector="Button.addRemoveBtn Border">
-            <Setter Property="BorderThickness"
-                    Value="1" />
-            <Setter Property="BorderBrush"
-                    Value="DimGray" />
-            <Setter Property="CornerRadius"
-                    Value="2" />
-        </Style>
-        <Style Selector="Button.addRemoveBtn:pointerover Border">
-            <Setter Property="BorderBrush"
-                    Value="LightGray" />
-        </Style>
-        <Style Selector="Button.addRemoveBtn Image">
-            <Setter Property="Stretch"
-                    Value="Fill" />
         </Style>
 
         <!--  DROP LINES  -->
-        <Style Selector="Border.dropLine">
+        <!--<Style Selector="Border.dropLine">
             <Setter Property="Background"
+                    Value="Transparent" />
+            <Setter Property="BorderBrush"
+                    Value="Transparent" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Stretch" />
+            <Setter Property="Height"
+                    Value="5" />
+            <Setter Property="BorderDashArray"
+                    Value="5,5" />
+            <Setter Property="BorderDashOffset"
+                    Value="{StaticResource DropDashOffset}" />
+        </Style>
+        <Style Selector="Border.dropLine.dragOver">
+            <Setter Property="BorderBrush"
                     Value="Red" />
         </Style>
-        <Style Selector="Border.dropLine.isCopy">
-            <Setter Property="Background"
+        <Style Selector="Border.dropLine.dragOver.isCopy">
+            <Setter Property="BorderBrush"
                     Value="Lime" />
-        </Style>
+        </Style>-->
     </local:MpAvUserControl.Styles>
     <ScrollViewer x:Name="SearchCriteriaContainerScrollViewer"
                   MaxHeight="{Binding MaxSearchCriteriaListBoxHeight}"
@@ -128,15 +286,16 @@
               VerticalAlignment="Stretch"
               Width="{Binding $parent[local:MpAvSearchCriteriaListBoxView].Bounds.Width}">
             <local:MpAvSearchCriteriaHeaderView Grid.Row="0"
+                                                IsVisible="{Binding !IsCriteriaWindowOpen}"
                                                 Height="{Binding BoundHeaderHeight, Mode=TwoWay}"
                                                 Background="{DynamicResource SearchCriteriaRowBgBrush1}"
                                                 HorizontalAlignment="Stretch"
                                                 VerticalAlignment="Stretch" />
             <ListBox x:Name="SearchCriteriaListBox"
+                     Grid.Row="1"
                      Classes="criteriaList"
                      Classes.windowed="{Binding IsCriteriaWindowOpen}"
-                     DragDrop.AllowDrop="True"
-                     Grid.Row="1"
+                     Classes.drag="{Binding IsAnyDragging}"
                      Background="{DynamicResource SearchCriteriaRowBgBrush1}"
                      BorderThickness="0"
                      BorderBrush="Black"
@@ -158,31 +317,18 @@
                 </ListBox.Resources>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <!--<Grid Width="{Binding $parent[ListBoxItem].Bounds.Width}">-->
-                        <DockPanel LastChildFill="True"
-                                   Width="{Binding $parent[ListBoxItem].Bounds.Width}">
-                            <Border x:Name="SortDropBorder_top"
-                                    Classes="dropLine"
-                                    Classes.isCopy="{Binding IsDragOverCopy}"
-                                    DockPanel.Dock="Top"
-                                    IsVisible="{Binding IsDragOverTop}"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Top"
-                                    Height="5" />
-                            <Border x:Name="SortDropBorder_bottom"
-                                    DockPanel.Dock="Bottom"
-                                    Classes="dropLine"
-                                    Classes.isCopy="{Binding IsDragOverCopy}"
-                                    IsVisible="{Binding IsDragOverBottom}"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Bottom"
-                                    Height="5" />
-                            <local:MpAvSearchCriteriaItemView BorderThickness="0"
-                                                              Height="{Binding CriteriaItemHeight}"
-                                                              HorizontalAlignment="Stretch"
+                        <Grid Width="{Binding $parent[ListBoxItem].Bounds.Width}">
+                            <local:MpAvSearchCriteriaItemView HorizontalAlignment="Stretch"
                                                               DataContext="{Binding}" />
-                        </DockPanel>
-                        <!--</Grid>-->
+                            <Border x:Name="SortDropBorder_top"
+                                    Classes="dropLine top"
+                                    Classes.dragOver="{Binding IsDragOverTop}"
+                                    Classes.isCopy="{Binding IsDragOverCopy}" />
+                            <Border x:Name="SortDropBorder_bottom"
+                                    Classes="dropLine bottom"
+                                    Classes.dragOver="{Binding IsDragOverBottom}"
+                                    Classes.isCopy="{Binding IsDragOverCopy}" />
+                        </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>

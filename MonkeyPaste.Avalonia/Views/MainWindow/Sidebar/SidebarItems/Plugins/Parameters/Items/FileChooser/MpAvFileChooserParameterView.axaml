@@ -16,12 +16,12 @@
             <Style Selector="Button:not(.empty) Image"
                    x:DataType="local:MpAvFileChooserParameterViewModel">
                 <Setter Property="Source"
-                        Value="{Binding CurrentValue, ConverterParameter=pathIcon, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
+                        Value="{Binding CurrentValue, ConverterParameter=pathIcon, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
             </Style>
             <Style Selector="Button.empty Image"
                    x:DataType="local:MpAvFileChooserParameterViewModel">
                 <Setter Property="Source"
-                        Value="{Binding Source={StaticResource QuestionMarkImage}, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
+                        Value="{Binding Source={StaticResource QuestionMarkImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
             </Style>
         </Border.Styles>
         <ToolTip.Tip>
@@ -31,14 +31,14 @@
                 MinWidth="100"
                 Classes.defaultButton="True"
                 Classes.iconTextButton="True"
-                Classes.empty="{Binding CurrentValue, ConverterParameter=flip, Converter={StaticResource IsNotNullZeroOrEmptyToBoolConverter}}"
+                Classes.empty="{Binding CurrentValue, ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                 HorizontalAlignment="Center"
                 HorizontalContentAlignment="Center"
                 Command="{Binding SelectFileSystemPathCommand}">
             <DockPanel LastChildFill="False">
                 <Image DockPanel.Dock="Left" />
                 <TextBlock DockPanel.Dock="Right"
-                           Text="{Binding CurrentValue, Converter={StaticResource AbsoluteToRelativePathStringConverter}, ConverterParameter=Select}" />
+                           Text="{Binding CurrentValue, Converter={x:Static local:MpAvAbsoluteToRelativePathStringConverter.Instance}, ConverterParameter=Select}" />
             </DockPanel>
         </Button>
     </Border>

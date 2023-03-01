@@ -310,12 +310,20 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsUserTag => !IsSudoTag;
 
-        public bool IsDragOverTag { get; set; }
+        public bool IsContentDragOverTag { get; set; }
+        public bool IsContentDragOverTagValid { get; set; }
+        public bool IsDragging { get; set; }
+        public bool IsTagDragOverTop { get; set; }
+        public bool IsTagDragOverBottom { get; set; }
+        public bool IsTagDragValid { get; set; }
 
-        public bool IsDragOverTagValid { get; set; }
+        public bool IsTagDragOverCopy { get; set; }
+
         public bool IsAllTag => TagId == MpTag.AllTagId;
         public bool IsFavoriteTag => TagId == MpTag.FavoritesTagId;
         public bool IsHelpTag => TagId == MpTag.HelpTagId;
+        public bool IsRootGroupTag => TagId == MpTag.RootGroupTagId;
+
 
         public bool IsLinkTag => !IsQueryTag && !IsGroupTag;
         public bool IsQueryTag => TagType == MpTagType.Query;
@@ -329,7 +337,7 @@ namespace MonkeyPaste.Avalonia {
         public int? TagClipCount { get; set; }
 
         public string TagClipCountText =>
-            TagClipCount == null ? string.Empty : TagClipCount.Value.ToString();
+            TagClipCount == null ? null : TagClipCount.Value.ToString();
 
         public MpShape MenuIconShape =>
             IsLinkTag ? null : IsQueryTag ? QUERY_SHAPE : IsGroupTag ? GROUP_SHAPE : null;
@@ -811,6 +819,12 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     }
                     ParentTreeItem.UpdateClipCountAsync().FireAndForgetSafeAsync(this);
+                    break;
+                case nameof(IsDragging):
+                    if (Parent == null) {
+                        break;
+                    }
+                    Parent.OnPropertyChanged(nameof(Parent.IsAnyDragging));
                     break;
             }
         }

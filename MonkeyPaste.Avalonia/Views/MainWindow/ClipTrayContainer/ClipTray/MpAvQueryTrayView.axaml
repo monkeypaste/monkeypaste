@@ -107,14 +107,14 @@
                 local:MpAvSizeObserverExtension.IsEnabled="True"
                 local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedQueryTrayScreenWidth, Mode=TwoWay}"
                 local:MpAvSizeObserverExtension.ObservedHeight="{Binding ObservedQueryTrayScreenHeight, Mode=TwoWay}">
-            <ScrollViewer x:Name="ClipTrayScrollViewer"
-                          HorizontalScrollBarVisibility="Visible"
-                          VerticalScrollBarVisibility="Visible"
-                          HorizontalAlignment="Left"
-                          VerticalAlignment="Top"
-                          AllowAutoHide="True"
-                          Width="{Binding $parent.Bounds.Width}"
-                          Height="{Binding $parent.Bounds.Height}">
+            <local:MpAvPagingScrollViewer x:Name="ClipTrayScrollViewer"
+                                          HorizontalScrollBarVisibility="Visible"
+                                          VerticalScrollBarVisibility="Visible"
+                                          HorizontalAlignment="Left"
+                                          VerticalAlignment="Top"
+                                          AllowAutoHide="True"
+                                          Width="{Binding $parent.Bounds.Width}"
+                                          Height="{Binding $parent.Bounds.Height}">
                 <ListBox x:Name="ClipTrayListBox"
                          Classes="clipTileListBox queryListBox"
                          Classes.requerying="{Binding IsRequerying}"
@@ -181,7 +181,7 @@
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
                 </ListBox>
-            </ScrollViewer>
+            </local:MpAvPagingScrollViewer>
             <!--</local:MpAvNativeWebViewContainer>-->
         </Border>
 
@@ -195,7 +195,7 @@
                 IsVisible="False"
                 Grid.Row="1">
             <!--<Border.IsVisible>
-                <MultiBinding Converter="{StaticResource MultiBoolConverter}"
+                <MultiBinding Converter="{x:Static local:MpAvMultiBoolConverter.Instance}"
                               ConverterParameter="AND">
                     <Binding Path="IsQueryTrayEmpty" />
                     <Binding Path="IsAnyBusy" />
@@ -228,7 +228,7 @@
                 Grid.Row="1"
                 Background="Transparent">
             <!--<Border.IsVisible>
-                <MultiBinding Converter="{StaticResource MultiBoolConverter}"
+                <MultiBinding Converter="{x:Static local:MpAvMultiBoolConverter.Instance}"
                               ConverterParameter="AND">
                     <Binding Path="IsQueryEmpty" />
                     <Binding Path="!IsRequerying" />

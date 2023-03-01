@@ -72,7 +72,7 @@
                     Height="55">
                 <Ellipse x:Name="layer2"
                          StrokeThickness="0"
-                         Fill="{Binding TitleLayerHexColors[2], Converter={StaticResource StringHexToBrushConverter}}"
+                         Fill="{Binding TitleLayerHexColors[2], Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
                          Width="100"
                          Height="28"
                          Opacity="0.3"
@@ -82,7 +82,7 @@
                 <Path x:Name="layer0"
                       ZIndex="{Binding TitleLayerZIndexes[0]}"
                       StrokeThickness="0"
-                      Fill="{Binding TitleLayerHexColors[0], Converter={StaticResource StringHexToBrushConverter}}">
+                      Fill="{Binding TitleLayerHexColors[0], Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}">
                     <Path.Data>
                         <PathGeometry>
                             <PathGeometry.Figures>
@@ -103,7 +103,7 @@
                 <Path x:Name="layer1"
                       StrokeThickness="0"
                       ZIndex="{Binding TitleLayerZIndexes[1]}"
-                      Fill="{Binding TitleLayerHexColors[1], Converter={StaticResource StringHexToBrushConverter}}">
+                      Fill="{Binding TitleLayerHexColors[1], Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}">
                     <Path.Data>
                         <PathGeometry>
                             <PathGeometry.Figures>
@@ -127,7 +127,7 @@
                 <Path x:Name="layer3"
                       StrokeThickness="0"
                       ZIndex="{Binding TitleLayerZIndexes[2]}"
-                      Fill="{Binding TitleLayerHexColors[3], Converter={StaticResource StringHexToBrushConverter}}">
+                      Fill="{Binding TitleLayerHexColors[3], Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}">
                     <Path.Data>
                         <PathGeometry>
                             <PathGeometry.Figures>
@@ -171,7 +171,7 @@
                                   IsReadOnly="{Binding IsTitleReadOnly, Mode=TwoWay}"
                                   Text="{Binding CopyItemTitle, Mode=TwoWay}">
             <local:MpAvMarqueeTextBox.Height>
-                <MultiBinding Converter="{StaticResource MultiDoubleMathConverter}"
+                <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
                               ConverterParameter="+">
                     <Binding Path="FontSize"
                              ElementName="TileTitleTextBox" />
@@ -183,7 +183,7 @@
                 </MultiBinding>
             </local:MpAvMarqueeTextBox.Height>
             <local:MpAvMarqueeTextBox.FontSize>
-                <MultiBinding Converter="{StaticResource MultiDoubleMathConverter}"
+                <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
                               ConverterParameter="/,-">
                     <Binding Path="Bounds.Height"
                              ElementName="TitleContainerGrid" />
@@ -235,7 +235,7 @@
                 <Grid>
                     <Image x:Name="ClipTileAppIconBorderImage"
                            IsHitTestVisible="False"
-                           Source="{Binding IconResourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}, ConverterParameter=border}"
+                           Source="{Binding IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, ConverterParameter=border}"
                            Stretch="UniformToFill"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch">
@@ -249,7 +249,7 @@
                     </Image>
                     <Image x:Name="ClipTileAppIconImage"
                            IsHitTestVisible="False"
-                           Source="{Binding IconResourceObj, Converter={StaticResource IconSourceObjToBitmapConverter}}"
+                           Source="{Binding IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
                            Stretch="UniformToFill"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch">

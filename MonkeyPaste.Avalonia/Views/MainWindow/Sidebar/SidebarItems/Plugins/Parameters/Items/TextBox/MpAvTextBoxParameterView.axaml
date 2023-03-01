@@ -31,7 +31,7 @@
                     Margin="5"
                     IsVisible="{Binding IsContentQuery}"
                     local:MpAvMenuExtension.IsEnabled="True">
-                <Image Source="{Binding ., Converter={StaticResource IconSourceObjToBitmapConverter}, Source={StaticResource FilterImage}}"
+                <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource FilterImage}}"
                        Stretch="Uniform"
                        Width="10"
                        Height="10" />

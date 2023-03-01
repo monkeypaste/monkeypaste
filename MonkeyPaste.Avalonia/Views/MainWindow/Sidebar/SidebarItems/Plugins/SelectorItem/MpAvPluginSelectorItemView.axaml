@@ -15,7 +15,7 @@
 
     <Border Classes="outerComboBoxItemBorder">
         <DockPanel>
-            <Image Source="{Binding IconId, Converter={StaticResource IconSourceObjToBitmapConverter}}" />
+            <Image Source="{Binding IconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
 
             <Border Classes="comboBoxItemBusyBorder"
                     IsVisible="{Binding IsBusy}">

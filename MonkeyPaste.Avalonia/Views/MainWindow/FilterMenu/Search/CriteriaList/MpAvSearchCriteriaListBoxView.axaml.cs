@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Layout;
 using Avalonia.Markup.Xaml;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -66,27 +67,27 @@ namespace MonkeyPaste.Avalonia {
             var scicvm = MpAvSearchCriteriaItemCollectionViewModel.Instance;
 
             int drag_idx = drag_vm.SortOrderIdx;
-            int drop_idx = GetDropIdx(sclb, sclb_mp);
+            int drop_idx = sclb.GetDropIdx(sclb_mp, Orientation.Vertical);
             MpConsole.WriteLine("(DragOver) DropIdx: " + drop_idx);
 
             if (drop_idx == scicvm.Items.Count) {
                 // tail drop
-                if (drag_idx == drop_idx - 1) {
-                    // reject same item drop
-                    e.DragEffects = DragDropEffects.None;
-                    ResetDragOvers();
-                    return;
-                }
+                //if (drag_idx == drop_idx - 1) {
+                //    // reject same item drop
+                //    e.DragEffects = DragDropEffects.None;
+                //    ResetDragOvers();
+                //    return;
+                //}
                 scicvm.Items.ForEach(x => x.IsDragOverTop = false);
                 scicvm.Items.ForEach(x => x.IsDragOverBottom = x.SortOrderIdx == drop_idx - 1);
                 scicvm.Items.ForEach(x => x.IsDragOverCopy = x.SortOrderIdx == drop_idx - 1 && is_copy);
             } else {
-                if (drag_idx == drop_idx) {
-                    // reject same item drop
-                    e.DragEffects = DragDropEffects.None;
-                    ResetDragOvers();
-                    return;
-                }
+                //if (drag_idx == drop_idx) {
+                //    // reject same item drop
+                //    e.DragEffects = DragDropEffects.None;
+                //    ResetDragOvers();
+                //    return;
+                //}
                 scicvm.Items.ForEach(x => x.IsDragOverTop = x.SortOrderIdx == drop_idx);
                 scicvm.Items.ForEach(x => x.IsDragOverCopy = x.SortOrderIdx == drop_idx && is_copy);
                 scicvm.Items.ForEach(x => x.IsDragOverBottom = false);
@@ -104,14 +105,14 @@ namespace MonkeyPaste.Avalonia {
                 ResetDragOvers();
                 return;
             }
-            bool is_copy = e.DragEffects.HasFlag(DragDropEffects.Copy);
+            bool is_copy = e.KeyModifiers.HasFlag(KeyModifiers.Control);
 
             var drag_vm = e.Data.Get(MpPortableDataFormats.INTERNAL_SEARCH_CRITERIA_ITEM_FORMAT) as MpAvSearchCriteriaItemViewModel;
             if (drag_vm == null) {
                 return;
             }
-            var scicvm = MpAvSearchCriteriaItemCollectionViewModel.Instance;
             int drag_idx = drag_vm.SortOrderIdx;
+            var scicvm = MpAvSearchCriteriaItemCollectionViewModel.Instance;
             var resorted_items = scicvm.SortedItems.ToList();
 
             if (is_copy) {
@@ -156,32 +157,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #region Dnd Helpers
-        private int GetDropIdx(ListBox lb, MpPoint lb_mp) {
-            if (!lb.Bounds.Contains(lb_mp.ToAvPoint())) {
-                return -1;
-            }
-            var scicvm = MpAvSearchCriteriaItemCollectionViewModel.Instance;
-
-            if (scicvm.Items.Count == 0) {
-                // TODO Add logic for pin popout overlay or add binding somewhere when empty
-                return 0;
-            }
-            MpRectSideHitTest closet_side_ht = null;
-            int closest_side_lbi_idx = -1;
-            for (int i = 0; i < scicvm.Items.Count; i++) {
-                var lbi_rect = lb.ContainerFromIndex(i).Bounds.ToPortableRect();
-                var cur_tup = lbi_rect.GetClosestSideToPoint(lb_mp, "r,l");
-                if (closet_side_ht == null || cur_tup.ClosestSideDistance < closet_side_ht.ClosestSideDistance) {
-                    closet_side_ht = cur_tup;
-                    closest_side_lbi_idx = i;
-                }
-            }
-
-            if (closet_side_ht.ClosestSideLabel == "b") {
-                return closest_side_lbi_idx + 1;
-            }
-            return closest_side_lbi_idx;
-        }
         private void ResetDragOvers() {
             var scicvm = MpAvSearchCriteriaItemCollectionViewModel.Instance;
             scicvm.Items.ForEach(x => x.IsDragOverTop = false);

@@ -267,7 +267,7 @@
                                                    VerticalAlignment="Stretch"
                                                    Width="{Binding $self.Bounds.Height}">
                             <local:MpAvBusySpinnerView.IsVisible>
-                                <MultiBinding Converter="{StaticResource MultiBoolConverter}"
+                                <MultiBinding Converter="{x:Static local:MpAvMultiBoolConverter.Instance}"
                                               ConverterParameter="AND">
                                     <Binding Path="HasText" />
                                     <Binding Path="IsSearching" />
@@ -285,7 +285,7 @@
                                                    Width="{Binding $self.Bounds.Height}"
                                                    VerticalAlignment="Stretch">
                             <local:MpAvClearTextButton.IsVisible>
-                                <MultiBinding Converter="{StaticResource MultiBoolConverter}"
+                                <MultiBinding Converter="{x:Static local:MpAvMultiBoolConverter.Instance}"
                                               ConverterParameter="AND">
                                     <Binding Path="HasText" />
                                     <Binding Path="!IsSearching" />

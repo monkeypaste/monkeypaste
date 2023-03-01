@@ -13,8 +13,7 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvTagTreeView">
     <local:MpAvUserControl.Resources>
-        <SolidColorBrush x:Key="TreeViewItemForeground"
-                         Color="White" />
+        <SolidColorBrush x:Key="TreeViewItemForeground" Color="White" />
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
         <Style Selector="TreeView#TagTreeView TreeViewItem"
@@ -77,7 +76,19 @@
             <TreeView.ItemTemplate>
                 <TreeDataTemplate DataType="{x:Type local:MpAvTagTileViewModel}"
                                   ItemsSource="{Binding SortedItems}">
-                    <local:MpAvTagView DataContext="{Binding}" />
+                    <Grid>
+                        <local:MpAvTagView DataContext="{Binding}" />
+                        <Border x:Name="SortDropBorder_top"
+                                Classes="dropLine top"
+                                Classes.invalid="{Binding !IsTagDragValid}"
+                                Classes.dragOver="{Binding IsTagDragOverTop}"
+                                Classes.isCopy="{Binding IsTagDragOverCopy}" />
+                        <Border x:Name="SortDropBorder_bottom"
+                                Classes="dropLine bottom"
+                                Classes.invalid="{Binding !IsTagDragValid}"
+                                Classes.dragOver="{Binding IsTagDragOverBottom}"
+                                Classes.isCopy="{Binding IsTagDragOverCopy}" />
+                    </Grid>
                 </TreeDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
@@ -112,7 +123,7 @@
             <ToolTip.Tip>
                 <local:MpAvToolTipView>
                     <local:MpAvToolTipView.ToolTipText>
-                        <MultiBinding Converter="{StaticResource MultiStringAppendConverter}">
+                        <MultiBinding Converter="{x:Static local:MpAvMultiStringAppendConverter.Instance}">
                             <Binding>
                                 <Binding.Source>
                                     <sys:String>Add Collection to '</sys:String>

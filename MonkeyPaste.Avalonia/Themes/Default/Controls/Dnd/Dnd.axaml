@@ -1,0 +1,70 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="using:MonkeyPaste.Avalonia">
+    <Styles.Resources>
+        <sys:String x:Key="DropDashArrayStr">2,2</sys:String>
+        <SolidColorBrush x:Key="DragMoveBrush">Cyan</SolidColorBrush>
+        <SolidColorBrush x:Key="DragCopyBrush">Magenta</SolidColorBrush>
+        <SolidColorBrush x:Key="DragIntoBrush">Lime</SolidColorBrush>
+        <SolidColorBrush x:Key="DragInvalidBrush">Red</SolidColorBrush>
+    </Styles.Resources>
+    <Style Selector="Border.dropLine">
+        <Setter Property="Background"
+                Value="Transparent" />
+        <Setter Property="BorderBrush"
+                Value="Transparent" />
+        <Setter Property="BorderDashArray"
+                Value="5,5" />
+        <Setter Property="BorderDashOffset"
+                Value="2" />
+    </Style>
+    <Style Selector="Border.dropLine.dragOver:not(.invalid)">
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource DragMoveBrush}" />
+    </Style>
+    <Style Selector="Border.dropLine.dragOver.isCopy:not(.invalid)">
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource DragCopyBrush}" />
+    </Style>
+    <Style Selector="Border.dropLine.dragOver.invalid">
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource DragInvalidBrush}" />
+    </Style>
+    <Style Selector="Border.dropLine.top, Border.dropLine.bottom">
+        <Setter Property="HorizontalAlignment"
+                Value="Stretch" />
+        <Setter Property="Height"
+                Value="1" />
+    </Style>
+    <Style Selector="Border.dropLine.left, Border.dropLine.right">
+        <Setter Property="VerticalAlignment"
+                Value="Stretch" />
+        <Setter Property="Width"
+                Value="1" />
+    </Style>
+    <Style Selector="Border.dropLine.top">
+        <Setter Property="VerticalAlignment"
+                Value="Top" />
+        <Setter Property="BorderThickness"
+                Value="0,1,0,0" />
+    </Style>
+    <Style Selector="Border.dropLine.bottom">
+        <Setter Property="VerticalAlignment"
+                Value="Bottom" />
+        <Setter Property="BorderThickness"
+                Value="0,0,0,1" />
+    </Style>
+    <Style Selector="Border.dropLine.left">
+        <Setter Property="HorizontalAlignment"
+                Value="Left" />
+        <Setter Property="BorderThickness"
+                Value="1,0,0,0" />
+    </Style>
+    <Style Selector="Border.dropLine.right">
+        <Setter Property="HorizontalAlignment"
+                Value="Right" />
+        <Setter Property="BorderThickness"
+                Value="0,0,1,0" />
+    </Style>
+</Styles>

@@ -40,7 +40,7 @@
                     Classes="noBg noHoverBg addRemoveBtn shakeOver outline"
                     Command="{Binding RejectPendingCriteriaItemsCommand}">
                 <Image Classes="shakeOver"
-                       Source="{Binding ., Source={StaticResource MinusImage}, Converter={StaticResource IconSourceObjToBitmapConverter}}">
+                       Source="{Binding ., Source={StaticResource MinusImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}">
                     <Image.RenderTransform>
                         <RotateTransform />
                     </Image.RenderTransform>

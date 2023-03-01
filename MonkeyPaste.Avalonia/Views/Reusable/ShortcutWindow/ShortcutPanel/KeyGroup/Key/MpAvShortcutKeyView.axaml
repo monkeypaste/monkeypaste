@@ -23,7 +23,7 @@
                    VerticalAlignment="Center"
                    FontSize="10"
                    Foreground="Black"
-                   Text="{Binding KeyStr, Converter={StaticResource EnumToKeyLiteralConverter}, ConverterParameter=label}"
+                   Text="{Binding KeyStr, Converter={x:Static local:MpAvEnumToKeyLiteralConverter.Instance}, ConverterParameter=label}"
                    FontWeight="Bold" />
     </Border>
 </local:MpAvUserControl>

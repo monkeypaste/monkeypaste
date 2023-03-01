@@ -72,7 +72,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-
+        public bool IsAnyDragging =>
+            Items.Any(x => x.IsDragging);
         public bool IsCriteriaWindowOpen =>
             _criteriaWindow != null;
 
@@ -102,6 +103,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region Layout
 
+        public double CriteriaDropLineHeight =>
+            5;
+        public double DefaultCriteriaRowHeight =>
+            60;
+        public double HeaderHeight =>
+            35;
         public double BoundHeaderHeight { get; set; }
 
         public double BoundCriteriaListBoxScreenHeight { get; set; }
@@ -113,6 +120,9 @@ namespace MonkeyPaste.Avalonia {
             get {
                 if (!IsAdvSearchActive) {
                     return 0;
+                }
+                if (IsCriteriaWindowOpen) {
+                    return double.PositiveInfinity;
                 }
                 double h = 0;
                 if (true) {
@@ -310,9 +320,9 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(1);
                 if (isExpanding) {
                     double default_visible_row_count = 2d;
-                    double delta_open_height = MpAvSearchCriteriaItemViewModel.DEFAULT_HEIGHT * default_visible_row_count;
+                    double delta_open_height = DefaultCriteriaRowHeight * default_visible_row_count;
 
-                    BoundHeaderHeight = MpAvSearchCriteriaItemViewModel.DEFAULT_HEIGHT;
+                    BoundHeaderHeight = HeaderHeight;
                     BoundCriteriaListBoxScreenHeight = delta_open_height;
                     //MpAvResizeExtension.ResizeByDelta(MpAvSearchCriteriaListBoxView.Instance, 0, delta_open_height, false);
                     OnPropertyChanged(nameof(IsPendingQuery));
