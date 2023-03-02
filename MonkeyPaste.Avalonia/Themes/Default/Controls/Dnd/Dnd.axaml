@@ -3,7 +3,8 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
     <Styles.Resources>
-        <sys:String x:Key="DropDashArrayStr">2,2</sys:String>
+        <sys:String x:Key="DropDashArrayStr">6,1</sys:String>
+        <SolidColorBrush x:Key="DragSourceBrush">Blue</SolidColorBrush>
         <SolidColorBrush x:Key="DragMoveBrush">Cyan</SolidColorBrush>
         <SolidColorBrush x:Key="DragCopyBrush">Magenta</SolidColorBrush>
         <SolidColorBrush x:Key="DragIntoBrush">Lime</SolidColorBrush>
@@ -15,7 +16,13 @@
         <Setter Property="BorderBrush"
                 Value="Transparent" />
         <Setter Property="BorderDashArray"
-                Value="5,5" />
+                Value="{x:Null}" />
+        <Setter Property="BorderDashOffset"
+                Value="0" />
+    </Style>
+    <Style Selector="Border.dropLine.dragOver">
+        <Setter Property="BorderDashArray"
+                Value="2,2" />
         <Setter Property="BorderDashOffset"
                 Value="2" />
     </Style>
@@ -47,13 +54,13 @@
         <Setter Property="VerticalAlignment"
                 Value="Top" />
         <Setter Property="BorderThickness"
-                Value="0,1,0,0" />
+                Value="0,1,0,1" />
     </Style>
     <Style Selector="Border.dropLine.bottom">
         <Setter Property="VerticalAlignment"
                 Value="Bottom" />
         <Setter Property="BorderThickness"
-                Value="0,0,0,1" />
+                Value="0,1,0,1" />
     </Style>
     <Style Selector="Border.dropLine.left">
         <Setter Property="HorizontalAlignment"

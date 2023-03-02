@@ -520,8 +520,8 @@ namespace MonkeyPaste.Avalonia {
             return nscvm;
         }
 
-
         private async Task<bool> PerformMatchedShortcut(MpAvShortcutViewModel matchedShortcut, string cur_keystr) {
+            // DON"T REMOVE, can be used for gesture input buffer
             bool result = false;
             await Dispatcher.UIThread.InvokeAsync(async () => {
                 if (!matchedShortcut.PerformShortcutCommand.CanExecute(null)) {
@@ -728,8 +728,6 @@ namespace MonkeyPaste.Avalonia {
             control.KeyDown += PseudoGlobalControl_KeyDown;
             control.KeyUp += PseudoGlobalControl_KeyUp;
         }
-
-
         private void DisposePseudoGlobalInputHooks(Control control) {
             // mouse
             control.PointerMoved -= PseudoGlobalControl_PointerMoved;

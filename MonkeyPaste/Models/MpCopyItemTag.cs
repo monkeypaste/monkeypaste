@@ -7,75 +7,31 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     [Table("MpCopyItemTag")]
-    public class MpCopyItemTag : MpDbModelBase, MpISyncableDbObject {
-        #region Columns
-        [PrimaryKey, AutoIncrement]
-        [Column("pk_MpCopyItemTagId")]
-        public override int Id { get; set; }
+    public class MpCopyItemTag :
+        MpDbModelBase,
+        MpIClonableDbModel<MpCopyItemTag>,
+        MpISyncableDbObject {
+        #region Interfaces
 
-        [Column("MpCopyItemTagGuid")]
-        public new string Guid { get => base.Guid; set => base.Guid = value; }
+        #region MpIClonableDbModel Implementation
+        public async Task<MpCopyItemTag> CloneDbModelAsync(
+            bool deepClone = true,
+            bool suppressWrite = false) {
+            // NOTE deepClone and parent are ignored for this model
+            // NOTE2 have to ignore duplicate or it will not clone
 
-        [Ignore]
-        public Guid CopyItemTagGuid {
-            get {
-                if (string.IsNullOrEmpty(Guid)) {
-                    return System.Guid.Empty;
-                }
-                return System.Guid.Parse(Guid);
-            }
-            set {
-                Guid = value.ToString();
-            }
+            var cloned_cit = await MpCopyItemTag.CreateAsync(
+                tagId: TagId,
+                copyItemId: CopyItemId,
+                sortIdx: CopyItemSortIdx,
+                ignoreDuplicate: true,
+                suppressWrite: suppressWrite);
+            return cloned_cit;
         }
-
-        //[ForeignKey(typeof(MpTag))]
-        [Column("fk_MpTagId")]
-        [Indexed]
-        public int TagId { get; set; }
-
-        //[ForeignKey(typeof(MpCopyItem))]
-        [Column("fk_MpCopyItemId")]
-        [Indexed]
-        public int CopyItemId { get; set; }
-
-        public int CopyItemSortIdx { get; set; } = 0;
 
         #endregion
 
-        #region Fk Models
-
-        //[OneToOne]
-        //public MpCopyItem CopyItem { get; set; }
-
-        //[OneToOne]
-        //public MpTag Tag { get; set; }
-        #endregion
-
-        #region Statics
-
-        public static async Task<MpCopyItemTag> Create(int tagId, int copyItemId, int sortIdx = 0) {
-            var dupCheck = await MpDataModelProvider.GetCopyItemTagForTagAsync(copyItemId, tagId);
-            if (dupCheck != null) {
-                dupCheck.WasDupOnCreate = true;
-                return dupCheck;
-            }
-
-            var newCopyItemTag = new MpCopyItemTag() {
-                CopyItemTagGuid = System.Guid.NewGuid(),
-                TagId = tagId,
-                CopyItemId = copyItemId,
-                CopyItemSortIdx = sortIdx
-            };
-
-            await newCopyItemTag.WriteToDatabaseAsync();
-
-            return newCopyItemTag;
-        }
-
-        #endregion              
-
-        #region Sync
+        #region MpISyncableDbObject Implementation
 
         public async Task<object> CreateFromLogsAsync(string tagGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
             var citdr = await MpDb.GetDbObjectByTableGuidAsync("MpCopyItemTag", tagGuid);
@@ -162,6 +118,96 @@ namespace MonkeyPaste {
                 (t == null ? string.Empty : t.Guid));
 
             return diffLookup;
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Columns
+        [PrimaryKey, AutoIncrement]
+        [Column("pk_MpCopyItemTagId")]
+        public override int Id { get; set; }
+
+        [Column("MpCopyItemTagGuid")]
+        public new string Guid { get => base.Guid; set => base.Guid = value; }
+
+        [Ignore]
+        public Guid CopyItemTagGuid {
+            get {
+                if (string.IsNullOrEmpty(Guid)) {
+                    return System.Guid.Empty;
+                }
+                return System.Guid.Parse(Guid);
+            }
+            set {
+                Guid = value.ToString();
+            }
+        }
+
+        //[ForeignKey(typeof(MpTag))]
+        [Column("fk_MpTagId")]
+        [Indexed]
+        public int TagId { get; set; }
+
+        //[ForeignKey(typeof(MpCopyItem))]
+        [Column("fk_MpCopyItemId")]
+        [Indexed]
+        public int CopyItemId { get; set; }
+
+        public int CopyItemSortIdx { get; set; } = 0;
+
+        #endregion
+
+        #region Fk Models
+
+        //[OneToOne]
+        //public MpCopyItem CopyItem { get; set; }
+
+        //[OneToOne]
+        //public MpTag Tag { get; set; }
+        #endregion
+
+        #region Statics
+
+        public static async Task<MpCopyItemTag> CreateAsync(
+            int tagId = 0,
+            int copyItemId = 0,
+            int sortIdx = 0,
+            bool suppressWrite = false,
+            bool ignoreDuplicate = false) {
+            // NOTE if no sort specified its ignored since its unimplemented
+            // but would allow for a custom user defined sort (dnd?)
+
+            if (tagId == 0) {
+                throw new Exception("Must have tag id");
+            }
+            if (tagId == MpTag.AllTagId) {
+                throw new Exception("No physical links to all tag should be made");
+            }
+            if (copyItemId == 0) {
+                throw new Exception("Must have copy item id");
+            }
+
+            if (!ignoreDuplicate) {
+                var dupCheck = await MpDataModelProvider.GetCopyItemTagForTagAsync(copyItemId, tagId);
+                if (dupCheck != null) {
+                    dupCheck.WasDupOnCreate = true;
+                    return dupCheck;
+                }
+            }
+
+            var newCopyItemTag = new MpCopyItemTag() {
+                CopyItemTagGuid = System.Guid.NewGuid(),
+                TagId = tagId,
+                CopyItemId = copyItemId,
+                CopyItemSortIdx = sortIdx
+            };
+            if (!suppressWrite) {
+                await newCopyItemTag.WriteToDatabaseAsync();
+            }
+
+            return newCopyItemTag;
         }
 
         #endregion

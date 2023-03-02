@@ -56,11 +56,11 @@
                 IsVisible="{Binding CanRemoveOrSortThisCriteriaItem}"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
-                Classes="noBg noHoverBg"
+                Classes="noBg noHoverBg outlineOver"
                 Cursor="SizeAll"
                 Margin="15,0,0,0"
-                Width="50"
-                Height="50">
+                Width="25"
+                Height="25">
             <Image Classes="">
                 <Image.RenderTransform>
                     <RotateTransform />

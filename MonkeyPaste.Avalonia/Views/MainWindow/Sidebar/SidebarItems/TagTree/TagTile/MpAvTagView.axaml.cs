@@ -1,8 +1,10 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Shapes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
@@ -14,8 +16,6 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvTagView : MpAvUserControl<MpAvTagTileViewModel> {
         #region Private Variables
-
-        private static double[] _autoScrollAccumulators;
         #endregion
 
         #region Properties
@@ -24,23 +24,42 @@ namespace MonkeyPaste.Avalonia {
         public MpAvTagView() {
             AvaloniaXamlLoader.Load(this);
             this.AttachedToVisualTree += MpAvTagView_AttachedToVisualTree;
-
             this.AddHandler(PointerPressedEvent, MpAvTagView_PointerPressed, RoutingStrategies.Tunnel);
+
         }
 
-        private async void MpAvTagView_PointerPressed(object sender, PointerPressedEventArgs e) {
-            var dragButton = sender as Control;
-            if (dragButton == null) {
-                return;
+        private void MpAvTagView_PointerPressed(object sender, PointerPressedEventArgs e) {
+            if (!BindingContext.IsSelected) {
+                // ignore drag check when not selected, 
+                // to pass input to select tag
             }
-            BindingContext.IsDragging = true;
-            _autoScrollAccumulators = null;
+            bool ended = false;
+            this.DragCheckAndStart(e,
+                async (start_e) => {
+                    while (MpPlatform.Services.Query.IsQuerying) {
+                        // wait for tag selection to finish 
+                        if (ended) {
+                            // was just a click
+                            return;
+                        }
+                        await Task.Delay(50);
+                    }
+                    var dragButton = sender as Control;
+                    if (dragButton == null) {
+                        return;
+                    }
+                    BindingContext.IsDragging = true;
+                    BindingContext.IsPinTagDragging = IsPinTrayTagView();
 
-            var mpdo = new MpAvDataObject(MpPortableDataFormats.INTERNAL_TAG_ITEM_FORMAT, BindingContext);
-            var result = await DragDrop.DoDragDrop(e, mpdo, DragDropEffects.Move | DragDropEffects.Copy);
+                    var mpdo = new MpAvDataObject(MpPortableDataFormats.INTERNAL_TAG_ITEM_FORMAT, BindingContext);
+                    var result = await DragDrop.DoDragDrop(e, mpdo, DragDropEffects.Move | DragDropEffects.Copy);
 
-            BindingContext.IsDragging = false;
-            MpConsole.WriteLine($"Tag Tile Drop Result: '{result}'");
+                    BindingContext.IsDragging = false;
+                    BindingContext.IsPinTagDragging = false;
+                    MpConsole.WriteLine($"Tag Tile Drop Result: '{result}'");
+                }, null, (end_e) => {
+                    ended = true;
+                });
         }
 
         private void MpAvTagView_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
@@ -82,33 +101,37 @@ namespace MonkeyPaste.Avalonia {
 
         private void DragEnter(object sender, DragEventArgs e) {
             //MpConsole.WriteLine("[DragEnter] TagTile: " + BindingContext);
+            BindingContext.IsExpanded = true;
             BindingContext.IsContentDragOverTag = !e.Data.Contains(MpPortableDataFormats.INTERNAL_TAG_ITEM_FORMAT);
+
+        }
+        private void DragLeave(object sender, RoutedEventArgs e) {
+            //MpConsole.WriteLine("[DragLeave] TagTile: " + BindingContext);
+            ResetDrop();
         }
 
-        private async void DragOver(object sender, DragEventArgs e) {
+        private void DragOver(object sender, DragEventArgs e) {
             //MpConsole.WriteLine("[DragOver] TagTile: " + BindingContext);
-            // e.DragEffects = DragDropEffects.Default;
+            //e.Handled = true;
+            BindingContext.Parent.IsPinTrayDragOver = IsPinTrayTagView();
 
             bool is_copy = e.KeyModifiers.HasFlag(KeyModifiers.Control);
-            bool is_valid = await IsDropValidAsync(e.Data, is_copy);
+            bool is_valid = IsDropValid(e.Data, is_copy);
             if (BindingContext.IsContentDragOverTag) {
                 BindingContext.IsContentDragOverTagValid = is_valid;
             } else {
                 BindingContext.IsTagDragValid = is_valid;
             }
 
-            //MpConsole.WriteLine("[DragOver] TagTile: " + BindingContext + " IsCopy: " + is_copy + " IsValid: " + BindingContext.IsContentDragOverTagValid);
             e.DragEffects =
                 is_copy ? DragDropEffects.Copy :
                 is_valid ?
                     DragDropEffects.Move : DragDropEffects.None;
+            MpConsole.WriteLine($"[DragOver] TagTile: '{e.DragEffects}'");
 
-            var drag_tag_vm = e.Data.Get(MpPortableDataFormats.INTERNAL_TAG_ITEM_FORMAT) as MpAvTagTileViewModel;
-            if (drag_tag_vm == null) {
+            if (!e.Data.Contains(MpPortableDataFormats.INTERNAL_TAG_ITEM_FORMAT)) {
                 return;
             }
-
-            BindingContext.IsExpanded = true;
 
             if (is_valid) {
                 BindingContext.IsTagDragOverCopy = is_copy;
@@ -117,54 +140,88 @@ namespace MonkeyPaste.Avalonia {
             }
 
             bool is_after;
+            bool is_leaf_child_drop = false;
             var mp = e.GetPosition(this);
-            if (IsTreeTagView()) {
-                is_after = mp.Y > this.Bounds.Height / 2;
-            } else {
+            if (IsPinTrayTagView()) {
                 is_after = mp.X > this.Bounds.Width / 2;
+                is_leaf_child_drop = false;
+            } else {
+                is_after = mp.Y > this.Bounds.Height / 2;
+                // for tree drop check special case if leaf
+                // to decide if drag is a child or next sibling by x offset
+                if (BindingContext.IsLeaf && is_after) {
+                    is_leaf_child_drop = mp.X > this.Bounds.Width / 4;
+                }
             }
             BindingContext.IsTagDragOverBottom = is_after;
             BindingContext.IsTagDragOverTop = !is_after;
-
-
-        }
-        private void DragLeave(object sender, RoutedEventArgs e) {
-            //MpConsole.WriteLine("[DragLeave] TagTile: " + BindingContext);
-            ResetDrop();
+            BindingContext.IsTagDragLeafChildDrop = is_leaf_child_drop;
         }
 
         private async void Drop(object sender, DragEventArgs e) {
-            // NOTE only pin tray allows drop not clip tray
-
-            bool is_copy = e.KeyModifiers.HasFlag(KeyModifiers.Control);
-            BindingContext.IsContentDragOverTagValid = await IsDropValidAsync(e.Data, is_copy);
             //MpConsole.WriteLine("[Drop] TagTile: " + BindingContext + " IsCopy: " + is_copy + " IsValid: " + BindingContext.IsContentDragOverTagValid);
 
-            if (!BindingContext.IsContentDragOverTagValid) {
+            bool is_copy = e.KeyModifiers.HasFlag(KeyModifiers.Control);
+            bool is_valid = IsDropValid(e.Data, is_copy);
+            if (BindingContext.IsContentDragOverTag) {
+                BindingContext.IsContentDragOverTagValid = is_valid;
+            } else {
+                BindingContext.IsTagDragValid = is_valid;
+            }
+
+            e.DragEffects =
+                is_copy ? DragDropEffects.Copy :
+                is_valid ?
+                    DragDropEffects.Move : DragDropEffects.None;
+
+            if (e.DragEffects == DragDropEffects.None) {
                 ResetDrop();
                 return;
             }
-            e.DragEffects = is_copy ? DragDropEffects.Copy : DragDropEffects.Move;
-            if (e.Data.Get(MpPortableDataFormats.INTERNAL_TAG_ITEM_FORMAT) is MpAvTagTileViewModel drag_ttvm) {
-                // TODO handle tile move/copy here
+
+            //
+            if (e.Data.Contains(MpPortableDataFormats.INTERNAL_TAG_ITEM_FORMAT) &&
+                e.Data.Get(MpPortableDataFormats.INTERNAL_TAG_ITEM_FORMAT) is MpAvTagTileViewModel drag_ttvm) {
+                int this_sort_idx = IsPinTrayTagView() ?
+                    BindingContext.PinSortIdx : BindingContext.TreeSortIdx;
+
+                int drop_idx = BindingContext.IsTagDragOverTop ?
+                    this_sort_idx : this_sort_idx + 1;
+
+                bool is_pinning = IsPinTrayTagView();
+
+                int target_parent_id = BindingContext.IsTagDragLeafChildDrop ?
+                    BindingContext.TagId : BindingContext.ParentTagId;
+
+                //Dispatcher.UIThread.Post(async () => {
+                await drag_ttvm.MoveOrCopyThisTagCommand.ExecuteAsync(
+                    new object[] {
+                            target_parent_id,
+                            drop_idx,
+                            is_pinning,
+                            is_copy});
+                //});
             } else {
-                bool is_internal = e.Data.ContainsInternalContentItem();
-                if (is_internal) {
-                    // Internal Drop
-                    await PerformTileDropAsync(e.Data, is_copy);
-                } else {
-                    // External Drop
-                    await PerformExternalOrPartialDropAsync(e.Data);
-                }
+                Dispatcher.UIThread.Post(async () => {
+                    bool is_internal = e.Data.ContainsInternalContentItem();
+                    if (is_internal) {
+                        // Internal Drop
+                        await PerformTileDropAsync(e.Data, is_copy);
+                    } else {
+                        // External Drop
+                        await PerformExternalOrPartialDropAsync(e.Data);
+                    }
+                });
             }
             ResetDrop();
+            // });
         }
 
         #endregion
 
         #region Drop Helpers
 
-        private async Task<bool> IsDropValidAsync(IDataObject avdo, bool is_copy) {
+        private bool IsDropValid(IDataObject avdo, bool is_copy) {
             if (avdo.Contains(MpPortableDataFormats.INTERNAL_SEARCH_CRITERIA_ITEM_FORMAT)) {
                 // can't sit here!
                 return false;
@@ -173,11 +230,15 @@ namespace MonkeyPaste.Avalonia {
             //MpConsole.WriteLine($"DragOverTag: " + BindingContext + " IsCopy: " + is_copy);
             if (avdo.Contains(MpPortableDataFormats.INTERNAL_TAG_ITEM_FORMAT) &&
                 avdo.Get(MpPortableDataFormats.INTERNAL_TAG_ITEM_FORMAT) is MpAvTagTileViewModel drag_ttvm) {
-                if (!IsTreeTagView()) {
-                    // on pin board hierarchy is meaningless
+                if (!drag_ttvm.CanMove && !is_copy) {
+                    // reject moving root tags
+                    return false;
+                }
+                if (IsPinTrayTagView()) {
+                    // on pin tray rely on CanPin property
                     return drag_ttvm.CanPin;
                 }
-                if (drag_ttvm.SelfAndAllDescendants.Any(x => x == BindingContext)) {
+                if (drag_ttvm.AllDescendants.Any(x => x == BindingContext)) {
                     // reject self or child drop
                     return false;
                 }
@@ -200,7 +261,7 @@ namespace MonkeyPaste.Avalonia {
                 string drop_ctvm_pub_handle = avdo.Get(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT) as string;
                 var ctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle == drop_ctvm_pub_handle);
                 if (ctvm != null) {
-                    bool is_already_linked = await BindingContext.IsCopyItemLinkedAsync(ctvm.CopyItemId);
+                    bool is_already_linked = BindingContext.IsCopyItemLinked(ctvm.CopyItemId);
                     if (is_already_linked) {
                         return false;
                     }
@@ -216,6 +277,8 @@ namespace MonkeyPaste.Avalonia {
             BindingContext.IsTagDragOverTop = false;
             BindingContext.IsTagDragOverBottom = false;
             BindingContext.IsTagDragOverCopy = false;
+            BindingContext.IsTagDragLeafChildDrop = false;
+
         }
 
         private async Task PerformTileDropAsync(IDataObject avdo, bool isCopy) {
@@ -228,7 +291,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (isCopy) {
                 //  duplicate
-                drop_ci = (MpCopyItem)await drop_ctvm.CopyItem.Clone(true);
+                drop_ci = await drop_ctvm.CopyItem.CloneDbModelAsync(deepClone: true);
                 await drop_ci.WriteToDatabaseAsync();
             } else {
                 // move
@@ -278,8 +341,8 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        private bool IsTreeTagView() {
-            return this.GetVisualAncestor<MpAvTagTrayView>() == null;
+        private bool IsPinTrayTagView() {
+            return this.GetVisualAncestor<MpAvTagTrayView>() != null;
         }
     }
 }

@@ -62,6 +62,26 @@ namespace MonkeyPaste.Common.Avalonia {
                 other_ido.GetAllDataFormats().ForEach(x => mpdo.SetData(x, other_ido.Get(x)));
             }
         }
+        //public static bool TryGet(this IDataObject ido, string format, out object data) {
+        //    data = null;
+        //    if (ido == null ||
+        //        !ido.Contains(format)) {
+        //        return false;
+        //    }
+        //    data = ido.Get(format);
+        //    return true;
+        //}
+
+        //public static bool TryGet<T>(this IDataObject ido, string format, out T data) where T : class {
+        //    data = default;
+        //    if (ido == null ||
+        //        !ido.Contains(format)) {
+        //        return false;
+        //    }
+        //    data = ido.Get(format) as T;
+        //    return false;
+        //}
+
         public static bool TryRemove(this IDataObject ido, string format) {
             if (ido == null) {
                 return false;

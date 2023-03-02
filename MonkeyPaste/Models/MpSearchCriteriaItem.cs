@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     [Table("MpSearchCriteriaItem")]
-    public class MpSearchCriteriaItem : MpDbModelBase, MpIClonableDbModel<MpSearchCriteriaItem> {
+    public class MpSearchCriteriaItem :
+        MpDbModelBase,
+        MpIClonableDbModel<MpSearchCriteriaItem> {
         #region Constants
 
         public const MpLogicalQueryType DEFAULT_QUERY_JOIN_TYPE = MpLogicalQueryType.And;
@@ -18,6 +20,7 @@ namespace MonkeyPaste {
         #region MpIClonableDbModel Implementation
 
         public async Task<MpSearchCriteriaItem> CloneDbModelAsync(bool deepClone = true, bool suppressWrite = false) {
+            // NOTE parent id is cloned if not provided
             var sci_clone = await MpSearchCriteriaItem.CreateAsync(
                 tagId: QueryTagId,
                 sortOrderIdx: SortOrderIdx,

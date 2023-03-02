@@ -12,7 +12,6 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvExternalDropWindow : Window {
         #region Private Variables
-        private double[] _autoScrollAccumulators;
         #endregion
 
         #region Statics
@@ -29,7 +28,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
         public MpAvExternalDropWindow() {
-            InitializeComponent();
+            AvaloniaXamlLoader.Load(this);
             this.GetObservable(IsVisibleProperty).Subscribe(value => Window_OnIsVisibleChanged());
 #if DEBUG
             this.AttachDevTools();
@@ -40,14 +39,9 @@ namespace MonkeyPaste.Avalonia {
             hdmb.AddHandler(DragDrop.DragOverEvent, OnHideOver);
 
             var dilb = this.FindControl<ListBox>("DropItemListBox");
-            dilb.AddHandler(DragDrop.DragOverEvent, DragOver);
-            dilb.AddHandler(DragDrop.DragLeaveEvent, DragLeave);
+            dilb.EnableItemsControlAutoScroll();
         }
         #endregion
-
-        private void InitializeComponent() {
-            AvaloniaXamlLoader.Load(this);
-        }
 
 
         private void Window_OnIsVisibleChanged() {

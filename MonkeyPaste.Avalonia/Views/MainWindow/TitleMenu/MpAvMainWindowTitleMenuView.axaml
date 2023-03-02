@@ -103,10 +103,10 @@
             </ToggleButton>
 
             <!--  Lock Toggle Button  -->
-
+            <!--  IsChecked="{Binding IsMainWindowLocked, Source={x:Static local:MpAvMainWindowViewModel.Instance}, Mode=TwoWay}"  -->
             <ToggleButton x:Name="LockToggleButton"
-                          Classes="noBg noHoverBg shakeOver"
-                          IsChecked="{Binding IsMainWindowLocked, Source={x:Static local:MpAvMainWindowViewModel.Instance}, Mode=TwoWay}">
+                          Command="{Binding ToggleMainWindowLockCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
+                          Classes="noBg noHoverBg shakeOver">
 
                 <ToggleButton.RenderTransform>
                     <RotateTransform />
@@ -121,7 +121,7 @@
         <Button x:Name="WindowOrientationHandleButton"
                 BorderThickness="0"
                 Cursor="SizeAll"
-                Classes="noBg noHoverBg"
+                Classes="noBg noHoverBg outlineOver"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Stretch">
             <Image>

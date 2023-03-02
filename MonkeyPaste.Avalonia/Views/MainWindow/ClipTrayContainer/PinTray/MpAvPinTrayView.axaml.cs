@@ -147,7 +147,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (isCopy) {
                 //  duplicate
-                var dup_ci = (MpCopyItem)await BindingContext.SelectedItem.CopyItem.Clone(true);
+                var dup_ci = await BindingContext.SelectedItem.CopyItem.CloneDbModelAsync(deepClone: true);
 
                 await dup_ci.WriteToDatabaseAsync();
 

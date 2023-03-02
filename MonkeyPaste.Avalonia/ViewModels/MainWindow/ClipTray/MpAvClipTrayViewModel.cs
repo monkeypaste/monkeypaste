@@ -2513,6 +2513,8 @@ namespace MonkeyPaste.Avalonia {
         private async Task PasteClipTileAsync(MpAvClipTileViewModel ctvm) {
             MpPortableDataObject mpdo = null;
             ctvm.IsPasting = true;
+
+            MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
             var cv = ctvm.GetContentView();
             if (cv == null) {
                 if (ctvm.CopyItem != null) {
@@ -2536,6 +2538,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             CleanupAfterPaste(ctvm, pi, mpdo);
+            MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
         }
 
 
@@ -2805,7 +2808,8 @@ namespace MonkeyPaste.Avalonia {
         public ICommand DuplicateSelectedClipsCommand => new MpAsyncCommand(
             async () => {
                 IsBusy = true;
-                var clonedCopyItem = (MpCopyItem)await SelectedItem.CopyItem.Clone(true);
+                var clonedCopyItem = await SelectedItem.CopyItem.CloneDbModelAsync(
+                    deepClone: true);
 
                 await clonedCopyItem.WriteToDatabaseAsync();
                 _newModels.Add(clonedCopyItem);

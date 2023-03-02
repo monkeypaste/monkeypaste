@@ -91,6 +91,7 @@
       
       <Button x:Name="SortDirectionButton"
               Margin="0,0,0,0"
+              Classes="noBg noHoverBg outlineOver"
               Classes.iconButton="True"
               Classes.noHoverBg="True"
               Classes.descending="{Binding IsSortDescending, FallbackValue=True, TargetNullValue=True, Source={x:Static local:MpAvClipTileSortDirectionViewModel.Instance}}"

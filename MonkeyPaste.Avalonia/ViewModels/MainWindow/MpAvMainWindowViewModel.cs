@@ -369,7 +369,23 @@ namespace MonkeyPaste.Avalonia {
         public bool IsMainWindowOpen { get; private set; } = false;
         public bool IsMainWindowVisible { get; set; }
         public bool IsMainWindowLoading { get; set; } = true;
-        public bool IsMainWindowLocked { get; set; } = false;
+
+        private bool _isMainWindowLocked;
+        public bool IsMainWindowLocked {
+            get {
+                if (IsMainWindowSilentLocked) {
+                    return true;
+                }
+                return _isMainWindowLocked;
+            }
+            set {
+                if (_isMainWindowLocked != value) {
+                    _isMainWindowLocked = value;
+                    OnPropertyChanged(nameof(IsMainWindowLocked));
+                }
+            }
+        }
+        public bool IsMainWindowSilentLocked { get; set; } = false;
         public bool IsResizing { get; set; } = false;
         public bool CanResize { get; set; } = false;
 
@@ -598,6 +614,9 @@ namespace MonkeyPaste.Avalonia {
                             MpMessenger.SendGlobal(MpMessageType.MainWindowSizeChangeEnd);
                         });
                     }
+                    break;
+                case nameof(IsMainWindowSilentLocked):
+                    OnPropertyChanged(nameof(IsMainWindowLocked));
                     break;
                 case nameof(IsMainWindowLocked):
                     //MpAvMainView.Instance.Topmost = IsMainWindowLocked;

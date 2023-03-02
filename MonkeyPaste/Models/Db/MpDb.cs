@@ -709,7 +709,10 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
                 hci_idl.Add(hci.Id);
             }
 
-            await Task.WhenAll(hci_idl.Select((x, idx) => MpCopyItemTag.Create(MpTag.HelpTagId, x, idx)));
+            await Task.WhenAll(hci_idl.Select((x, idx) => MpCopyItemTag.CreateAsync(
+                tagId: MpTag.HelpTagId,
+                copyItemId: x,
+                sortIdx: idx)));
         }
         private static async Task CreateTestDataAsync() {
             for (int i = 0; i < 100; i++) {

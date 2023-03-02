@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -224,7 +225,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public IEnumerable<MpAvTagTileViewModel> SortedItems => Items.OrderBy(x => x.TreeSortIdx);
+        public IEnumerable<MpAvTagTileViewModel> SortedItems =>
+            Items.OrderBy(x => x.TreeSortIdx);
 
         public MpMenuItemViewModel AddChildPopupMenuItemViewModel {
             get {
@@ -265,7 +267,8 @@ namespace MonkeyPaste.Avalonia {
         public bool IsAnyBusy => IsBusy || Children.Any(x => x.IsAnyBusy);
 
         public ObservableCollection<int> CopyItemIdsNeedingView { get; set; } = new ObservableCollection<int>();
-        public int BadgeCount => CopyItemIdsNeedingView.Count;
+        public int BadgeCount =>
+            CopyItemIdsNeedingView.Count;
 
         public bool CanAddChild {
             get {
@@ -281,34 +284,28 @@ namespace MonkeyPaste.Avalonia {
 
         public bool CanPin =>
             !IsGroupTag;
+
+        public bool CanMove =>
+            !IsRootGroupTag && !IsAllTag && !IsHelpTag;
+
         public bool CanHotkey =>
             !IsGroupTag && MpPlatform.Services.PlatformInfo.IsDesktop;
 
         public bool CanLinkContent =>
             IsLinkTag;
 
-        public bool IsNew {
-            get {
-                return Tag == null || Tag.Id <= 0;
-            }
-        }
+        public bool IsNew =>
+            Tag == null || Tag.Id <= 0;
 
-        public bool IsTagReadOnly {
-            get {
-                return IsAllTag || IsHelpTag || IsFavoriteTag;
-            }
-        }
+        public bool IsLeaf =>
+            Items.Count == 0;
 
-        public bool IsSudoTag {
-            get {
-                if (Tag == null) {
-                    return false;
-                }
-                return Tag.Id == MpTag.AllTagId;
-            }
-        }
+        public bool IsTail =>
+            ParentTreeItem != null &&
+            TreeSortIdx == ParentTreeItem.Items.Count - 1;
 
-        public bool IsUserTag => !IsSudoTag;
+        public bool IsTagReadOnly =>
+            IsAllTag || IsHelpTag || IsRootGroupTag;
 
         public bool IsContentDragOverTag { get; set; }
         public bool IsContentDragOverTagValid { get; set; }
@@ -316,19 +313,26 @@ namespace MonkeyPaste.Avalonia {
         public bool IsTagDragOverTop { get; set; }
         public bool IsTagDragOverBottom { get; set; }
         public bool IsTagDragValid { get; set; }
-
         public bool IsTagDragOverCopy { get; set; }
+        public bool IsTagDragLeafChildDrop { get; set; }
+        public bool IsPinTagDragging { get; set; }
 
-        public bool IsAllTag => TagId == MpTag.AllTagId;
-        public bool IsFavoriteTag => TagId == MpTag.FavoritesTagId;
-        public bool IsHelpTag => TagId == MpTag.HelpTagId;
-        public bool IsRootGroupTag => TagId == MpTag.RootGroupTagId;
-
-
-        public bool IsLinkTag => !IsQueryTag && !IsGroupTag;
-        public bool IsQueryTag => TagType == MpTagType.Query;
-        public bool IsGroupTag => TagType == MpTagType.Group;
-        public bool IsNotGroupTag => IsLinkTag || IsQueryTag;
+        public bool IsAllTag =>
+            TagId == MpTag.AllTagId;
+        public bool IsFavoriteTag =>
+            TagId == MpTag.FavoritesTagId;
+        public bool IsHelpTag =>
+            TagId == MpTag.HelpTagId;
+        public bool IsRootGroupTag =>
+            TagId == MpTag.RootGroupTagId;
+        public bool IsLinkTag =>
+            !IsQueryTag && !IsGroupTag;
+        public bool IsQueryTag =>
+            TagType == MpTagType.Query;
+        public bool IsGroupTag =>
+            TagType == MpTagType.Group;
+        public bool IsNotGroupTag =>
+            IsLinkTag || IsQueryTag;
 
         public bool IsTagNameReadOnly { get; set; } = true;
         public bool IsTagNameTextBoxFocused { get; set; } = false;
@@ -336,8 +340,8 @@ namespace MonkeyPaste.Avalonia {
 
         public int? TagClipCount { get; set; }
 
-        public string TagClipCountText =>
-            TagClipCount == null ? null : TagClipCount.Value.ToString();
+        //public string TagClipCountText =>
+        //    TagClipCount == null ? null : TagClipCount.Value.ToString();
 
         public MpShape MenuIconShape =>
             IsLinkTag ? null : IsQueryTag ? QUERY_SHAPE : IsGroupTag ? GROUP_SHAPE : null;
@@ -610,6 +614,18 @@ namespace MonkeyPaste.Avalonia {
             return isLinked;
         }
 
+        public bool IsCopyItemLinked(int ciid) {
+            // NOTE only used for content drop dragOver to keep dragOver synchronous
+            if (ciid == 0 || Tag == null || Tag.Id == 0) {
+                return false;
+            }
+            if (IsAllTag) {
+                return true;
+            }
+            bool isLinked = MpDataModelProvider.IsTagLinkedWithCopyItem(Tag.Id, ciid);
+            return isLinked;
+        }
+
         public void UpdateLinkToSelectedClipTile(IEnumerable<int> assocTagIds) {
             if (IsAllTag) {
                 // always linked
@@ -623,10 +639,6 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 IsLinkedToSelectedClipTile = false;
             }
-        }
-
-        public void UpdateTreeSortOrder() {
-            SortedItems.ForEach((x, idx) => x.TreeSortIdx = idx);
         }
 
         public override void DisposeViewModel() {
@@ -826,6 +838,12 @@ namespace MonkeyPaste.Avalonia {
                     }
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyDragging));
                     break;
+                case nameof(IsPinTagDragging):
+                    if (Parent == null) {
+                        break;
+                    }
+                    Parent.OnPropertyChanged(nameof(Parent.IsAnyDragging));
+                    break;
             }
         }
 
@@ -911,11 +929,8 @@ namespace MonkeyPaste.Avalonia {
                             TagClipCount = null;
                         }
                     }
-
-                    //TagClipCount = 
-                    //    SelfAndAllDescendants.Cast<MpAvTagTileViewModel>().SelectMany(x => x.LinkedCopyItemIds).Distinct().Count();
                 }
-                OnPropertyChanged(nameof(TagClipCountText));
+                //OnPropertyChanged(nameof(TagClipCountText));
             });
         }
 
@@ -965,7 +980,10 @@ namespace MonkeyPaste.Avalonia {
             if (isLink) {
                 // try to create link, if it was created (and didn't already exist) notify any triggers
                 int linkCount = await MpDataModelProvider.GetCopyItemCountForTagAsync(TagId);
-                var cit = await MpCopyItemTag.Create(TagId, ciid, linkCount);
+                var cit = await MpCopyItemTag.CreateAsync(
+                    tagId: TagId,
+                    copyItemId: ciid,
+                    sortIdx: linkCount);
 
                 if (!cit.WasDupOnCreate) {
                     CopyItemIdsNeedingView.Add(ciid);
@@ -1094,7 +1112,7 @@ namespace MonkeyPaste.Avalonia {
                 return !IsTagReadOnly;
             });
 
-        public ICommand AddNewChildTagCommand => new MpAsyncCommand<object>(
+        public MpIAsyncCommand<object> AddNewChildTagCommand => new MpAsyncCommand<object>(
              async (args) => {
                  if (!IsExpanded) {
                      IsExpanded = true;
@@ -1175,8 +1193,7 @@ namespace MonkeyPaste.Avalonia {
                 await Task.WhenAll(deleteTasks);
 
                 Items.Remove(child_ttvm_to_remove);
-
-                UpdateTreeSortOrder();
+                SortedItems.ToList().ForEach((x, idx) => x.TreeSortIdx = idx);
                 OnPropertyChanged(nameof(SortedItems));
                 Parent.OnPropertyChanged(nameof(Parent.PinnedItems));
 
@@ -1259,6 +1276,113 @@ namespace MonkeyPaste.Avalonia {
             },
             (args) => {
                 return IsTagNameReadOnly;
+            });
+
+        public MpIAsyncCommand<object> MoveOrCopyThisTagCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                // args = [new_parent_tag_id, sort_idx ( < 0 is pin idx), is_copy]
+                var argParts = args as object[];
+
+                int old_parent_tag_id = ParentTagId;
+                int new_parent_tag_id = (int)argParts[0];
+                int new_sort_idx = (int)argParts[1];
+                bool is_pinning = (bool)argParts[2];
+                bool is_copy = (bool)argParts[3];
+
+                if (is_copy) {
+                    // when duplicating clone model/vm w/o changing parent then call 
+                    // this cmd w/ new vm
+                    var temp_parent_vm = ParentTreeItem;
+                    if (temp_parent_vm == null) {
+                        // when cloning all or root group
+                        // make new child of it not parent
+                        temp_parent_vm = this;
+                    }
+                    var cloned_tag = await Tag.CloneDbModelAsync();
+                    cloned_tag.ParentTagId = temp_parent_vm.TagId;
+                    // reset clones treeIdx to tail 
+                    cloned_tag.TreeSortIdx = temp_parent_vm.Items.Count;
+                    var cloned_tag_vm = await temp_parent_vm.CreateChildTagTileViewModel(cloned_tag);
+                    temp_parent_vm.Items.Add(cloned_tag_vm);
+
+                    while (temp_parent_vm.IsAnyBusy) {
+                        // make sure its added
+                        await Task.Delay(100);
+                    }
+
+                    // move clone with provided args w/ false copy arg
+                    argParts[3] = false;
+                    await cloned_tag_vm.MoveOrCopyThisTagCommand.ExecuteAsync(argParts);
+                    return;
+                }
+
+                if (is_pinning) {
+                    var pinned_vml = Parent.PinnedItems.ToList();
+                    if (pinned_vml.Any(x => x.TagId == TagId)) {
+                        // already pinned just move it
+                        pinned_vml.Move(PinSortIdx, new_sort_idx);
+                    } else {
+                        pinned_vml.Insert(new_sort_idx, this);
+                    }
+                    pinned_vml.ForEach((x, idx) => x.PinSortIdx = idx);
+                    while (Parent.IsAnyBusy) {
+                        // wait for pinned db stuff
+                        await Task.Delay(100);
+                    }
+                    Parent.OnPropertyChanged(nameof(Parent.PinnedItems));
+                    return;
+                }
+
+                // remove from old parent (even if same)
+                var old_parent_vm = Parent.Items.FirstOrDefault(x => x.TagId == ParentTagId);
+                old_parent_vm.Items.Remove(this);
+                old_parent_vm.SortedItems.ToList().ForEach((x, idx) => x.TreeSortIdx = idx);
+                while (old_parent_vm.IsAnyBusy) {
+                    // wait for old parent db stuff
+                    await Task.Delay(100);
+                }
+                old_parent_vm.OnPropertyChanged(nameof(old_parent_vm.SortedItems));
+
+                // add to new parent 
+                var new_parent_vm = Parent.Items.FirstOrDefault(x => x.TagId == new_parent_tag_id);
+                ParentTagId = new_parent_tag_id;
+                TreeSortIdx = new_sort_idx;
+                new_parent_vm.Items.Add(this);
+                // update sort order using tree sort idx as primary sort then by if its this item
+                new_parent_vm.Items
+                    .OrderBy(x => x.TreeSortIdx)
+                    .ThenBy(x => x.TagId != TagId)
+                    .ToList()
+                    .ForEach((x, idx) => x.TreeSortIdx = idx);
+                while (new_parent_vm.IsAnyBusy) {
+                    // wait for new parent db stuff
+                    await Task.Delay(100);
+                }
+                new_parent_vm.OnPropertyChanged(nameof(new_parent_vm.SortedItems));
+
+
+                // update old/new ancestor counts
+                List<MpAvTagTileViewModel> count_update_vml = new List<MpAvTagTileViewModel>();
+
+                count_update_vml.AddRange(
+                        old_parent_vm
+                        .SelfAndAllAncestors
+                        .Cast<MpAvTagTileViewModel>());
+
+                count_update_vml.AddRange(
+                        new_parent_vm
+                        .SelfAndAllAncestors
+                        .Cast<MpAvTagTileViewModel>());
+
+                await Task.WhenAll(
+                count_update_vml
+                    .Distinct()
+                    .ToList()
+                    .Select(x => x.UpdateClipCountAsync()));
+
+            },
+            (args) => {
+                return args is object[];
             });
 
         #endregion

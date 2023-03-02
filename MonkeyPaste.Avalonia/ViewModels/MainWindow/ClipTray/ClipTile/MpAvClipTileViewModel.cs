@@ -953,20 +953,11 @@ namespace MonkeyPaste.Avalonia {
         #region Events
 
         public event EventHandler OnScrollToHomeRequest;
-        //public event EventHandler OnFocusRequest;
         public event EventHandler OnSyncModels;
-
-        //public event EventHandler<Point> OnScrollOffsetRequest;
         public event EventHandler<object> OnPastePortableDataObject;
-
         public event EventHandler<double> OnScrollWheelRequest;
-        //public event EventHandler OnFitContentRequest;
-        //public event EventHandler OnSubSelected;
-
         public event EventHandler OnMergeRequest;
-        //public event EventHandler<bool> OnUiResetRequest;
         public event EventHandler OnClearTemplatesRequest;
-        //public event EventHandler OnCreateTemplatesRequest;
         #endregion
 
         #region Constructors
@@ -977,10 +968,8 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvClipTileViewModel(MpAvClipTrayViewModel parent) : base(parent) {
             TileCreatedDateTime = DateTime.Now;
-
             PropertyChanged += MpClipTileViewModel_PropertyChanged;
             FileItemCollectionViewModel = new MpAvFileItemCollectionViewModel(this);
-            //DetailCollectionViewModel = new MpAvClipTileDetailCollectionViewModel(this);
             IsBusy = true;
         }
 
@@ -995,7 +984,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (ci != null &&
                 MpAvPersistentClipTilePropertiesHelper.TryGetByPersistentSize_ById(ci.Id, out double uniqueWidth)) {
-                if(Math.Abs(uniqueWidth - MinWidth) < 1) {
+                if (Math.Abs(uniqueWidth - MinWidth) < 1) {
                     // i think this is a bug when tile goes from placeholder to active it thinks it has
                     // a unique size
                     MpAvPersistentClipTilePropertiesHelper.RemovePersistentSize_ById(ci.Id);
@@ -1249,17 +1238,9 @@ namespace MonkeyPaste.Avalonia {
             OnSyncModels?.Invoke(this, null);
         }
 
-        //public void RequestScrollOffset(Point p) {
-        //    OnScrollOffsetRequest?.Invoke(this, p);
-        //}
-
         public void RequestPastePortableDataObject(object portableDataObjectOrCopyItem) {
             OnPastePortableDataObject?.Invoke(this, portableDataObjectOrCopyItem);
         }
-
-        //public void RequestFitContent() {
-        //    OnFitContentRequest?.Invoke(this, null);
-        //}
 
 
         public void RequestMerge() {
@@ -1269,10 +1250,6 @@ namespace MonkeyPaste.Avalonia {
         public void RequestClearHyperlinks() {
             OnClearTemplatesRequest?.Invoke(this, null);
         }
-
-        //public void RequestCreateHyperlinks() {
-        //    OnCreateTemplatesRequest?.Invoke(this, null);
-        //}
 
         public void RequestScrollWheelChange(double delta) {
             OnScrollWheelRequest?.Invoke(this, delta);

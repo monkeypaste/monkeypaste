@@ -47,7 +47,6 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private bool TrySetTopmost(Window w) {
-
             if (w == null) {
                 return false;
             }

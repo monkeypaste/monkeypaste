@@ -31,11 +31,6 @@
             <Setter Property="IsExpanded"
                     Value="{Binding IsExpanded, Mode=TwoWay}" />
         </Style>
-        <!--<Style Selector="TreeView#TagTreeView TreeViewItem /template/ Border#PART_LayoutRoot Grid#PART_Header Panel#PART_ExpandCollapseChevronContainer ToggleButton#PART_ExpandCollapseChevron Border Path#ChevronPath">-->
-        <!--<Style Selector="TreeView#TagTreeView TreeViewItem /template/ ToggleButton#expander /template/ Path#ChevronPath">
-            <Setter Property="Fill"
-                    Value="White" />
-        </Style>-->
         <Style Selector="TreeView#TagTreeView TreeViewItem:selected /template/ Border#PART_LayoutRoot">
             <Setter Property="Background"
                     Value="Transparent" />
@@ -57,11 +52,30 @@
             <Setter Property="Background"
                     Value="Transparent" />
         </Style>
+
+        <!--  DROP LINE  -->
+        <Style Selector="Border.dropLine.bottom">
+            <Setter Property="RenderTransform"
+                    Value="translateX(0px)" />
+        </Style>
+        <Style Selector="Border.dropLine.bottom.leaf">
+            <Setter Property="RenderTransform"
+                    Value="translateX(30px)" />
+        </Style>
+        <Style Selector="TreeView:focus-within Border.dropLine">
+            <Setter Property="IsVisible"
+                    Value="True" />
+        </Style>
+        <Style Selector="TreeView:not(:focus-within) Border.dropLine">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Grid HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch"
           Background="{DynamicResource TagTreeBgBrush}">
         <TreeView x:Name="TagTreeView"
+                  Classes.treeDrag="{Binding !IsPinTrayDragOver}"
                   Margin="5,10,20,0"
                   Padding="0,0,0,150"
                   AutoScrollToSelectedItem="True"
@@ -77,17 +91,28 @@
                 <TreeDataTemplate DataType="{x:Type local:MpAvTagTileViewModel}"
                                   ItemsSource="{Binding SortedItems}">
                     <Grid>
-                        <local:MpAvTagView DataContext="{Binding}" />
+                        <local:MpAvTagView x:Name="TagView"
+                                           DataContext="{Binding}" />
                         <Border x:Name="SortDropBorder_top"
+                                IsVisible="{Binding !IsPinTrayDragOver, Source={x:Static local:MpAvTagTrayViewModel.Instance}}"
                                 Classes="dropLine top"
                                 Classes.invalid="{Binding !IsTagDragValid}"
                                 Classes.dragOver="{Binding IsTagDragOverTop}"
                                 Classes.isCopy="{Binding IsTagDragOverCopy}" />
                         <Border x:Name="SortDropBorder_bottom"
+                                IsVisible="{Binding !IsPinTrayDragOver, Source={x:Static local:MpAvTagTrayViewModel.Instance}}"
                                 Classes="dropLine bottom"
+                                Classes.leaf="{Binding IsTagDragLeafChildDrop}"
                                 Classes.invalid="{Binding !IsTagDragValid}"
                                 Classes.dragOver="{Binding IsTagDragOverBottom}"
-                                Classes.isCopy="{Binding IsTagDragOverCopy}" />
+                                Classes.isCopy="{Binding IsTagDragOverCopy}">
+                            <Border.Transitions>
+                                <Transitions>
+                                    <TransformOperationsTransition Property="RenderTransform"
+                                                                   Duration="0:0:0.1" />
+                                </Transitions>
+                            </Border.Transitions>
+                        </Border>
                     </Grid>
                 </TreeDataTemplate>
             </TreeView.ItemTemplate>

@@ -128,6 +128,7 @@ namespace MonkeyPaste.Common {
         public MpRect(double[] sides) : this(sides[0], sides[1], sides[2] - sides[0], sides[3] - sides[1]) { }
         public MpRect(double x, double y, double w, double h) : this(new MpPoint(x, y), new MpSize(w, h)) { }
 
+        public MpRect(MpSize size) : this(MpPoint.Zero, size) { }
         public MpRect(MpPoint location, MpSize size) : this() {
             _left = location.X;
             _top = location.Y;

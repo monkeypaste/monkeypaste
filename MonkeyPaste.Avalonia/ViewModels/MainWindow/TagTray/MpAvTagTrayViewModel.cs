@@ -13,6 +13,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvTagTrayViewModel :
         MpAvSelectorViewModelBase<object, MpAvTagTileViewModel>,
         MpIAsyncSingletonViewModel<MpAvTagTrayViewModel>,
+        MpIHasDragOverProperty,
         MpIHoverableViewModel,
         MpISelectableViewModel,
         MpISidebarItemViewModel,
@@ -31,7 +32,13 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+        #region MpIHasDragOverProperty Implementation
 
+        bool MpIHasDragOverProperty.IsDragOver {
+            get => IsPinTrayDragOver;
+            set => IsPinTrayDragOver = value;
+        }
+        #endregion
 
         #region MpITagQueryTools Implementation
 
@@ -154,6 +161,10 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsAnyDragging =>
             Items.Any(x => x.IsDragging);
+        public bool IsAnyPinTagDragging =>
+            Items.Any(x => x.IsPinTagDragging);
+
+        public bool IsPinTrayDragOver { get; set; }
 
         private int _selectedItemId;
         public int SelectedItemId {
@@ -292,33 +303,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void TagTileViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            UpdateTreeSortOrder();
-            //OnPropertyChanged(nameof(RootItems));
+
         }
 
         private void PinnedItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            UpdateTraySortOrder();
             OnPropertyChanged(nameof(MaxTagTrayScreenWidth));
-        }
-
-        public void UpdateTreeSortOrder(bool fromModel = false) {
-            //if (fromModel) {
-            //    //Items.Sort(x => x.TagSortIdx);
-            //} else {
-            //    foreach (var ttvm in Items) {
-            //        //ttvm.TreeSortIdx = Items.IndexOf(ttvm);
-            //    }
-            //}
-            RootItems.ForEach(x => x.UpdateTreeSortOrder());
-        }
-        public void UpdateTraySortOrder(bool fromModel = false) {
-            if (fromModel) {
-                //Items.Sort(x => x.TagSortIdx);
-            } else {
-                foreach (var ttvm in PinnedItems) {
-                    ttvm.PinSortIdx = PinnedItems.IndexOf(ttvm);
-                }
-            }
         }
 
 
@@ -345,18 +334,16 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Protected Methods
+
+        #region Db Events
+        #endregion
+
+        #endregion
         #region Private Methods
 
         private void MpTagTrayViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                //case nameof(IsSidebarVisible):
-                //    if(IsSidebarVisible) {
-                //        MpAvAnalyticItemCollectionViewModel.Instance.IsSidebarVisible = false;
-                //        MpAvTriggerCollectionViewModel.Instance.IsSidebarVisible = false;
-                //        MpAvClipboardHandlerCollectionViewModel.Instance.IsSidebarVisible = false;
-                //    }
-                //    MpAvMainWindowViewModel.Instance.OnPropertyChanged(nameof(MpAvMainWindowViewModel.Instance.SelectedSidebarItemViewModel));
-                //    break;
                 case nameof(IsSelected):
                     if (IsSelected) {
                         LastSelectedDateTime = DateTime.Now;
@@ -416,28 +403,6 @@ namespace MonkeyPaste.Avalonia {
             // Notify clip tray context menu changed if was selected w/ right click
             MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.ContextMenuViewModel));
         }
-
-
-        #region Db Events
-
-        protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
-            if (e is MpCopyItem ci) {
-            }
-        }
-
-        protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
-            if (e is MpCopyItem ci) {
-            }
-        }
-
-        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            if (e is MpCopyItem ci) {
-
-            }
-        }
-
-        #endregion
-
         #region Model Sync Events
         private void MpDbObject_SyncDelete(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
             Dispatcher.UIThread.Post(() => {

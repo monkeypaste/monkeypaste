@@ -108,7 +108,7 @@ namespace MonkeyPaste.Avalonia {
         public double DefaultCriteriaRowHeight =>
             60;
         public double HeaderHeight =>
-            35;
+            40;
         public double BoundHeaderHeight { get; set; }
 
         public double BoundCriteriaListBoxScreenHeight { get; set; }
@@ -235,7 +235,6 @@ namespace MonkeyPaste.Avalonia {
             MpPlatform.Services.Query.NotifyQueryChanged(true);
         }
 
-
         public async Task<MpAvSearchCriteriaItemViewModel> CreateCriteriaItemViewModelAsync(MpSearchCriteriaItem sci) {
             MpAvSearchCriteriaItemViewModel nscivm = new MpAvSearchCriteriaItemViewModel(this);
             if (sci == null) {
@@ -264,7 +263,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
-
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
@@ -471,10 +469,18 @@ namespace MonkeyPaste.Avalonia {
 
                 int new_query_tag_id = await ConvertPendingToQueryTagAsync();
 
-                ttrvm.RootGroupTagViewModel.AddNewChildTagCommand.Execute(new_query_tag_id);
-
                 // clear pending flag 
                 QueryTagId = new_query_tag_id;
+
+                await ttrvm.RootGroupTagViewModel.AddNewChildTagCommand.ExecuteAsync(new_query_tag_id);
+                // wait for tag to be added
+
+                await Task.Delay(300);
+                if (ttrvm.RootGroupTagViewModel.Items.FirstOrDefault(x => x.TagId == new_query_tag_id) is MpAvTagTileViewModel new_query_ttvm) {
+                    // trigger rename
+                    new_query_ttvm.RenameTagCommand.Execute(null);
+                }
+
             }, () => {
                 return IsPendingQuery;
             });
@@ -484,17 +490,6 @@ namespace MonkeyPaste.Avalonia {
                 await InitializeAsync(0, false);
                 IsExpanded = false;
             }, () => IsPendingQuery, this, new[] { this });
-
-        public ICommand SaveQueryCommand => new MpCommand(
-             () => {
-                 if (IsPendingQuery) {
-                     SavePendingQueryCommand.Execute(null);
-                 } else {
-                     IgnoreHasModelChanged = false;
-                 }
-             }, () => IsAdvSearchActive, this, new[] { this });
-
-
 
         public ICommand SelectAdvancedSearchCommand => new MpCommand<object>(
             (args) => {
@@ -527,9 +522,13 @@ namespace MonkeyPaste.Avalonia {
                         ShowInTaskbar = true,
                         Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", null, null, null) as WindowIcon,
                         WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                        Content = new MpAvSearchCriteriaListBoxView() {
-                            Background = Brushes.Violet,
-                            DataContext = this
+                        Content = new Border() {
+                            Padding = new Thickness(3),
+                            Background = Brushes.Black,
+                            Child = new MpAvSearchCriteriaListBoxView() {
+                                Background = Brushes.Violet,
+                                DataContext = this,
+                            }
                         },
                         Topmost = true,
                         Padding = new Thickness(10)

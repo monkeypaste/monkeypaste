@@ -57,22 +57,7 @@ namespace MonkeyPaste {
         public virtual MpViewModelBase SelfBindingRef => this;
 
         [JsonIgnore]
-        private bool _isBusy = false;
-
-        [JsonIgnore]
-        public bool IsBusy {
-            get => _isBusy;
-            set {
-                SetProperty(ref _isBusy, value);
-                //if(_isBusy) {
-                //    // NOTE normally null should be passed for target but for wait cursor pass viewmodel
-                //    MpPlatformWrapper.Services.Cursor.SetCursor(this, MpCursorType.Waiting);
-                //} else {
-                //    MpPlatformWrapper.Services.Cursor.UnsetCursor(this);
-                //}
-            }
-        }
-
+        public bool IsBusy { get; set; }
 
         [JsonIgnore]
         public bool SupressPropertyChangedNotification { get; set; } = false;
@@ -233,10 +218,12 @@ namespace MonkeyPaste {
         protected void SetProperty<T>(ref T field, T value, [CallerMemberName] string name = "") {
             if (!EqualityComparer<T>.Default.Equals(field, value)) {
                 field = value;
-                var handler = PropertyChanged;
-                if (handler != null) {
-                    handler(this, new PropertyChangedEventArgs(name));
-                }
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+                //PropertyChanged(this, new PropertyChangedEventArgs(name));
+                //var handler = PropertyChanged;
+                //if (handler != null) {
+                //    handler(this, new PropertyChangedEventArgs(name));
+                //}
             }
         }
 

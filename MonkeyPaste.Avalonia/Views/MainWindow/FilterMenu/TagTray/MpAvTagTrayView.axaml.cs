@@ -1,11 +1,15 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvTagTrayView : MpAvUserControl<MpAvTagTrayViewModel> {
         public MpAvTagTrayView() {
-            InitializeComponent();
+            AvaloniaXamlLoader.Load(this);
+
+            var tt_lb = this.FindControl<ListBox>("TagTray");
+            //tt_lb.EnableItemsControlAutoScroll();
         }
 
 
@@ -21,10 +25,6 @@ namespace MonkeyPaste.Avalonia {
                 var sv = TagTray.GetVisualDescendant<ScrollViewer>();
                 sv.ScrollToHorizontalOffset(sv.Offset.X + 20);
             }
-        }
-
-        private void InitializeComponent() {
-            AvaloniaXamlLoader.Load(this);
         }
     }
 }

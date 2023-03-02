@@ -12,6 +12,28 @@
                        x:CompileBindings="True"
                        DataContext="{x:Static local:MpAvTagTrayViewModel.Instance}"
                        x:Class="MonkeyPaste.Avalonia.MpAvTagTrayView">
+    <local:MpAvUserControl.Styles>
+
+        <Style Selector="PathIcon">
+            <Setter Property="Width"
+                    Value="{Binding NavButtonSize}" />
+            <Setter Property="Height"
+                    Value="{Binding NavButtonSize}" />
+            <Setter Property="Foreground"
+                    Value="Black" />
+        </Style>
+
+        <!--  DROP LINE  -->
+        <Style Selector="ListBox.trayDrag Border.dropLine">
+            <Setter Property="IsVisible"
+                    Value="True" />
+        </Style>
+        <Style Selector="ListBox:not(.trayDrag) Border.dropLine">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+    </local:MpAvUserControl.Styles>
+
     <Grid x:Name="TagTrayContainerGrid"
           HorizontalAlignment="Center"
           VerticalAlignment="Stretch">
@@ -23,16 +45,6 @@
                               MaxWidth="{Binding MaxTagTrayScreenWidth}" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <Grid.Styles>
-            <Style Selector="PathIcon">
-                <Setter Property="Width"
-                        Value="{Binding NavButtonSize}" />
-                <Setter Property="Height"
-                        Value="{Binding NavButtonSize}" />
-                <Setter Property="Foreground"
-                        Value="Black" />
-            </Style>
-        </Grid.Styles>
 
         <RepeatButton x:Name="TagTrayNavLeftButton"
                       HorizontalAlignment="Left"
@@ -45,6 +57,7 @@
         </RepeatButton>
         <ListBox x:Name="TagTray"
                  Grid.Column="1"
+                 Classes.trayDrag="{Binding !IsPinTrayDragOver}"
                  Background="Transparent"
                  AutoScrollToSelectedItem="False"
                  BorderBrush="Transparent"
@@ -80,11 +93,13 @@
                                            local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedTagTrayBounds, Mode=TwoWay}"
                                            DataContext="{Binding}" />
                         <Border x:Name="SortDropBorder_left"
+                                IsVisible="{Binding IsPinTrayDragOver, Source={x:Static local:MpAvTagTrayViewModel.Instance}}"
                                 Classes="dropLine left"
                                 Classes.invalid="{Binding !IsTagDragValid}"
                                 Classes.dragOver="{Binding IsTagDragOverTop}"
                                 Classes.isCopy="{Binding IsTagDragOverCopy}" />
                         <Border x:Name="SortDropBorder_right"
+                                IsVisible="{Binding IsPinTrayDragOver, Source={x:Static local:MpAvTagTrayViewModel.Instance}}"
                                 Classes="dropLine right"
                                 Classes.invalid="{Binding !IsTagDragValid}"
                                 Classes.dragOver="{Binding IsTagDragOverBottom}"

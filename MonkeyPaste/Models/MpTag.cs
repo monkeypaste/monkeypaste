@@ -38,11 +38,16 @@ namespace MonkeyPaste {
 
 
         public async Task<MpTag> CloneDbModelAsync(bool deepClone = true, bool suppressWrite = false) {
-            // NOTE deepClone is ignored no current need for content links, hotkeys etc.
-            // NOTE2 not including tag color 
+            // NOTE sort orders are cloned, must be handled in calling method
 
+            // NOTE2 deepClone info:
+            // excludes: hotkeys, actions and transaction references
+            // includes: child tags, search criteria and copy item links of self and all descendants
+
+            // NOTE3 parent_id is cloned if not provided
             var cloned_tag = await MpTag.CreateAsync(
                 tagName: TagName,
+                hexColor: HexColor,
                 treeSortIdx: TreeSortIdx,
                 pinSortIdx: PinSortIdx,
                 parentTagId: ParentTagId,
@@ -51,20 +56,52 @@ namespace MonkeyPaste {
                 isSortDescending: IsSortDescending,
                 suppressWrite: suppressWrite);
 
+            if (!deepClone) {
+                return cloned_tag;
+            }
+
+            if (suppressWrite) {
+                throw new ArgumentException("Cannot clone descendant without persisting model");
+            }
+            // OPTIMIZATION descendant clones can probably fired and forgotten
+
             if (TagType == MpTagType.Query) {
+                // clone query tag criteria
+
                 var scil = await MpDataModelProvider.GetCriteriaItemsByTagId(Id);
-                foreach (var sci in scil) {
-                    _ = await MpSearchCriteriaItem.CreateAsync(
-                        tagId: cloned_tag.Id,
-                        sortOrderIdx: sci.SortOrderIdx,
-                        joinType: sci.JoinType,
-                        options: sci.Options,
-                        matchValue: sci.MatchValue,
-                        isCaseSensitive: sci.IsCaseSensitive,
-                        isWholeWord: sci.IsWholeWord,
-                        suppressWrite: suppressWrite);
+                var cloned_scil = await Task.WhenAll(scil.Select(x => x.CloneDbModelAsync(
+                    deepClone: deepClone,
+                    suppressWrite: suppressWrite)));
+                cloned_scil.ForEach(x => x.QueryTagId = cloned_tag.Id);
+                await Task.WhenAll(cloned_scil.Select(x => x.WriteToDatabaseAsync()));
+            } else if (TagType == MpTagType.Link) {
+                // clone link tag copy item links
+
+                if (Id == AllTagId) {
+                    // handle special case of all tag, create links for ALL items (its their funeral :/)
+                    var cil = await MpDataModelProvider.GetItemsAsync<MpCopyItem>();
+                    _ = await Task.WhenAll(
+                        cil.Select((x, idx) =>
+                        MpCopyItemTag.CreateAsync(
+                            tagId: cloned_tag.Id,
+                            copyItemId: x.Id,
+                            sortIdx: idx)));
+                } else {
+                    var citl = await MpDataModelProvider.GetCopyItemTagsForTagAsync(Id);
+                    var cloned_citl = await Task.WhenAll(
+                        citl.Select(x => x.CloneDbModelAsync()));
+                    cloned_citl.ForEach(x => x.TagId = cloned_tag.Id);
+                    await Task.WhenAll(cloned_citl.Select(x => x.WriteToDatabaseAsync()));
                 }
             }
+
+            // recurse and clone child tags
+            var ctl = await MpDataModelProvider.GetChildTagsAsync(Id);
+            var cloned_ctl = await Task.WhenAll(ctl.Select(x => x.CloneDbModelAsync(
+                    deepClone: deepClone,
+                    suppressWrite: suppressWrite)));
+            cloned_ctl.ForEach(x => x.ParentTagId = cloned_tag.Id);
+            await Task.WhenAll(cloned_ctl.Select(x => x.WriteToDatabaseAsync()));
             return cloned_tag;
         }
         #endregion
@@ -306,7 +343,13 @@ namespace MonkeyPaste {
         #endregion
 
         public MpTag() { }
-
+        public override async Task WriteToDatabaseAsync() {
+            if (Id > 0 && Id == ParentTagId) {
+                MpDebug.Break("Self ref error");
+                return;
+            }
+            await base.WriteToDatabaseAsync();
+        }
         public override async Task DeleteFromDatabaseAsync() {
             if (!CanDelete) {
                 // this should be caught in view model

@@ -34,9 +34,16 @@
             <Setter Property="BorderBrush"
                     Value="{DynamicResource TagTileContextFocusBorderColor}" />
         </Style>
+
+        <Style Selector="Border#TagNameBorder.drag">
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource DragSourceBrush}" />
+        </Style>
         <Style Selector="Border#TagNameBorder.dragover">
             <Setter Property="BorderBrush"
                     Value="{DynamicResource DragIntoBrush}" />
+        </Style>
+        <Style Selector="Border#TagNameBorder.dragover,Border#TagNameBorder.drag">
             <Setter Property="BorderDashArray"
                     Value="2,2" />
             <Setter Property="BorderDashOffset"
@@ -74,6 +81,7 @@
                 VerticalAlignment="Stretch"
                 HorizontalAlignment="Stretch"
                 MinHeight="20"
+                Classes.drag="{Binding IsDragging}"
                 Classes.islinked="{Binding IsLinkedToSelectedClipTile}"
                 Classes.isgroup="{Binding IsGroupTag}"
                 Classes.isselected="{Binding IsSelected}"
@@ -101,7 +109,7 @@
                                    Background="Transparent"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Center"
-                                   Text="{Binding TagClipCountText}"
+                                   Text="{Binding TagClipCount, Converter={x:Static local:MpAvNullableToStringConverter.Instance}}"
                                    Foreground="{Binding $parent.Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
                     </Border>
                     <!--  Tag Name TextBox/ Marquee  -->

@@ -23,7 +23,7 @@
             <Button x:Name="SaveSearchButton"
                     Classes="defaultButton textOnlyButton outline outlineOver"
                     IsVisible="{Binding IsPendingQuery}"
-                    Command="{Binding SaveQueryCommand}"
+                    Command="{Binding SavePendingQueryCommand}"
                     Margin="0,0,5,0">
                 <TextBlock Text="Save" />
             </Button>

@@ -8,9 +8,15 @@ using System.Globalization;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvStringHexToBitmapTintConverter : IValueConverter {
+        private static bool IS_DYNAMIC_TINT_ENABLED = false;
+
         public static readonly MpAvStringHexToBitmapTintConverter Instance = new();
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
+            if (!IS_DYNAMIC_TINT_ENABLED) {
+                return MpAvIconSourceObjToBitmapConverter.Instance.Convert(value, targetType, parameter, culture);
+            }
+
             object imgResourceObj = null;
             string hex = null;
             if (parameter is string paramStr) {

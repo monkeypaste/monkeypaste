@@ -109,6 +109,20 @@ namespace MonkeyPaste.Common {
             };
         }
 
+        public static MpPoint GetCornerByLabel(this MpRect rect, string cornerLabel) {
+            cornerLabel = cornerLabel.ToLower();
+            switch (cornerLabel) {
+                case "tl":
+                    return rect.TopLeft;
+                case "tr":
+                    return rect.TopRight;
+                case "bl":
+                    return rect.BottomLeft;
+                case "br":
+                    return rect.BottomRight;
+            }
+            return MpPoint.Zero;
+        }
 
         public static MpLine GetSideByLabel(this MpRect rect, string sideLabel) {
             if (string.IsNullOrEmpty(sideLabel)) {
@@ -128,7 +142,6 @@ namespace MonkeyPaste.Common {
                     MpConsole.WriteTraceLine("Error! Unknown MpRect sidelabel (returning null): " + sideLabel);
                     return MpLine.Empty; ;
             }
-
         }
     }
 }

@@ -11,6 +11,7 @@ namespace MonkeyPaste {
     public class MpCopyItem :
         MpDbModelBase,
         MpISyncableDbObject,
+        MpIClonableDbModel<MpCopyItem>,
         MpISourceRef,
         MpIIconResource,
         MpIDbIconId,
@@ -104,6 +105,8 @@ namespace MonkeyPaste {
 
         #endregion
 
+        #region Interfaces
+
         #region MpILabelText Implementation
         string MpILabelText.LabelText => Title;
 
@@ -121,6 +124,49 @@ namespace MonkeyPaste {
 
         public object IconResourceObj => IconId;
         public string Uri => MpPlatform.Services.SourceRefBuilder.ConvertToRefUrl(this);
+        #endregion
+
+        #region  Implementation
+
+        public async Task<MpCopyItem> CloneDbModelAsync(
+            bool deepClone = true,
+            bool suppressWrite = false) {
+            // NOTE parent are ignored for this model
+
+            var newItem = new MpCopyItem() {
+                ItemType = this.ItemType,
+                Title = this.Title,
+                ItemData = this.ItemData,
+                IconId = this.IconId,
+                //SourceId = this.SourceId,
+                CopyCount = 1,
+                CopyDateTime = DateTime.Now,
+                Id = 0,
+                CopyItemGuid = System.Guid.NewGuid()
+            };
+
+            if (deepClone) {
+                await newItem.WriteToDatabaseAsync();
+
+                var tags = await MpDataModelProvider.GetCopyItemTagsForCopyItemAsync(this.Id);
+                foreach (var tag in tags) {
+                    await MpCopyItemTag.CreateAsync(
+                        tagId: tag.Id,
+                        copyItemId: newItem.Id);
+                }
+
+                //var templates = await MpDataModelProvider.GetTextTemplatesAsync(this.Id);
+                //foreach (var template in templates) {
+                //    var templateClone = await template.CloneDbModel();
+                //    templateClone.CopyItemId = newItem.Id;
+                //    await templateClone.WriteToDatabaseAsync();
+                //}
+            }
+
+            return newItem;
+        }
+        #endregion
+
         #endregion
 
         #region Static Methods
@@ -412,43 +458,6 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public async Task<object> Clone(bool isDeepClone) {
-            // NOTE isReplica is used when duplicating item which retains tag associations but not shortcuts
-
-            //if(Source == null) {
-            //    Source = await MpDataModelProvider.GetItemAsync<MpSource>(SourceId);
-            //}
-
-            var newItem = new MpCopyItem() {
-                ItemType = this.ItemType,
-                Title = this.Title,
-                ItemData = this.ItemData,
-                IconId = this.IconId,
-                //SourceId = this.SourceId,
-                CopyCount = 1,
-                CopyDateTime = DateTime.Now,
-                Id = 0,
-                CopyItemGuid = System.Guid.NewGuid()
-            };
-
-            if (isDeepClone) {
-                await newItem.WriteToDatabaseAsync();
-
-                var tags = await MpDataModelProvider.GetCopyItemTagsForCopyItemAsync(this.Id);
-                foreach (var tag in tags) {
-                    await MpCopyItemTag.Create(tag.Id, newItem.Id);
-                }
-
-                //var templates = await MpDataModelProvider.GetTextTemplatesAsync(this.Id);
-                //foreach (var template in templates) {
-                //    var templateClone = await template.CloneDbModel();
-                //    templateClone.CopyItemId = newItem.Id;
-                //    await templateClone.WriteToDatabaseAsync();
-                //}
-            }
-
-            return newItem;
-        }
 
     }
 

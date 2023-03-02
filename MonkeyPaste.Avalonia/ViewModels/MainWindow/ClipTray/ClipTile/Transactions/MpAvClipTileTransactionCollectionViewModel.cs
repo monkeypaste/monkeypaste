@@ -298,7 +298,11 @@ namespace MonkeyPaste.Avalonia {
                         });
                 });
             }, () => {
-                return Parent != null && !IsTransactionPaneOpen;
+                // just ignoring now
+
+                //return Parent != null && !IsTransactionPaneOpen;
+                return false;
+
             });
 
         public ICommand CloseTransactionPaneCommand => new MpCommand(

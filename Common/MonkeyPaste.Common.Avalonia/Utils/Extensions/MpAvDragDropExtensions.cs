@@ -5,11 +5,17 @@ using Avalonia.Layout;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MonkeyPaste.Common {
     public static class MpAvDragDropExtensions {
+        private const int MIN_AUTOSCROLL_REST_DELAY_MS = 5_000;
+
         private static double[] _autoScrollAccumulators;
+        private static DateTime? _lastAutoScrollDt = null;
+
+
         public static int GetDropIdx(this ItemsControl ic, MpPoint ic_mp, Orientation orientation) {
             if (ic == null) {
                 return -1;
@@ -110,9 +116,9 @@ namespace MonkeyPaste.Common {
         public static void DragCheckAndStart(
             this Control control,
             PointerPressedEventArgs e,
-            Action<PointerPressedEventArgs> start,
-            Action<PointerEventArgs> move,
-            Action<PointerReleasedEventArgs> end,
+            Action<PointerPressedEventArgs> start = null,
+            Action<PointerEventArgs> move = null,
+            Action<PointerReleasedEventArgs> end = null,
             MpIDndWindowPointerLocator wpl = null,
             MpIDndUserCancelNotifier ucn = null,
             double MIN_DISTANCE = 10) {
@@ -193,20 +199,74 @@ namespace MonkeyPaste.Common {
             control.PointerMoved += dragControl_PointerMoved_Handler;
         }
 
+        #region Auto Scroll
+        private static List<Control> _omitNotify = new List<Control>();
+        public static void EnableItemsControlAutoScroll(this ItemsControl icb, bool notifyDragInterfaces = true) {
+            if (!notifyDragInterfaces && !_omitNotify.Contains(icb)) {
+                // workaround to discern tag tree vs tray...
+                _omitNotify.Add(icb);
+            }
+            DragDrop.SetAllowDrop(icb, true);
+            icb.AddHandler(DragDrop.DragOverEvent, DragOver);
+            icb.AddHandler(DragDrop.DragLeaveEvent, DragLeave);
+        }
+
+        public static void DisableItemsControlAutoScroll(this ItemsControl icb) {
+            _omitNotify.Remove(icb);
+            DragDrop.SetAllowDrop(icb, false);
+            icb.RemoveHandler(DragDrop.DragOverEvent, DragOver);
+            icb.RemoveHandler(DragDrop.DragLeaveEvent, DragLeave);
+        }
+
+        #region Dnd Event Handlers
+        private static void DragOver(object sender, DragEventArgs e) {
+            MpConsole.WriteLine("[DragOver] Dnd Widget Window Cur Formats: " + String.Join(Environment.NewLine, e.Data.GetDataFormats()));
+            e.DragEffects = DragDropEffects.None;
+            var ic = sender as ItemsControl;
+            ic.AutoScrollItemsControl(e);
+            if (!_omitNotify.Contains(ic) &&
+                ic.DataContext is MpIHasDragOverProperty hdop) {
+                hdop.IsDragOver = true;
+            }
+        }
+
+        private static void DragLeave(object sender, DragEventArgs e) {
+            e.DragEffects = DragDropEffects.None;
+            var ic = sender as ItemsControl;
+            ic.AutoScrollItemsControl(null);
+            if (!_omitNotify.Contains(ic) &&
+                ic.DataContext is MpIHasDragOverProperty hdop) {
+                hdop.IsDragOver = false;
+            }
+        }
+
+        #endregion
 
         public static void AutoScrollItemsControl(this ItemsControl lb, DragEventArgs e) {
-            var sv = lb.GetVisualDescendant<ScrollViewer>();
-
             if (e == null) {
                 // terminating case
                 _autoScrollAccumulators = null;
+                _lastAutoScrollDt = null;
                 return;
             }
+            if (_lastAutoScrollDt == null ||
+                (DateTime.Now - _lastAutoScrollDt.Value).TotalMilliseconds >= MIN_AUTOSCROLL_REST_DELAY_MS) {
+                // reset or init for this autoscroll
+                _lastAutoScrollDt = DateTime.Now;
+                _autoScrollAccumulators = null;
+            }
+            var sv = lb.GetVisualDescendant<ScrollViewer>();
+            if (lb.Parent is ScrollViewer) {
+                // workaround when list is in another scrollviewer, maynot always be right
+                sv = lb.Parent as ScrollViewer;
+            }
+
             sv.AutoScroll(
                 lb.PointToScreen(e.GetPosition(lb)).ToPortablePoint(lb.VisualPixelDensity()),
                 lb,
                 ref _autoScrollAccumulators);
         }
+
         public static MpPoint AutoScroll(
             this ScrollViewer sv,
             MpPoint gmp,
@@ -279,5 +339,6 @@ namespace MonkeyPaste.Common {
             return scroll_delta;
         }
 
+        #endregion
     }
 }

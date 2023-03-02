@@ -16,14 +16,13 @@ namespace MonkeyPaste.Avalonia {
         MpAvUserControl<MpAvSearchCriteriaItemCollectionViewModel> {
         #region Private Variables
 
-        private double[] _autoScrollAccumulators;
         #endregion
 
         private static MpAvSearchCriteriaListBoxView _instance;
         public static MpAvSearchCriteriaListBoxView Instance => _instance;
         public MpAvSearchCriteriaListBoxView() {
             _instance = this;
-            InitializeComponent();
+            AvaloniaXamlLoader.Load(this);
             var sv = this.FindControl<ScrollViewer>("SearchCriteriaContainerScrollViewer");
             sv.AddHandler(PointerWheelChangedEvent, Sclb_PointerWheelChanged, RoutingStrategies.Tunnel);
 
@@ -33,6 +32,8 @@ namespace MonkeyPaste.Avalonia {
         #region Drag Drop
         private void InitDragDrop() {
             var clb = this.FindControl<ListBox>("SearchCriteriaListBox");
+            clb.EnableItemsControlAutoScroll();
+
             DragDrop.SetAllowDrop(clb, true);
             clb.AddHandler(DragDrop.DragEnterEvent, SearchCriteriaListBox_DragEnter);
             clb.AddHandler(DragDrop.DragOverEvent, SearchCriteriaListBox_DragOver);
@@ -43,26 +44,22 @@ namespace MonkeyPaste.Avalonia {
         private void SearchCriteriaListBox_DragEnter(object sender, DragEventArgs e) {
             MpConsole.WriteLine($"Drag Enter");
 
-            var sv = this.FindControl<ScrollViewer>("SearchCriteriaContainerScrollViewer");
-            var lb = this.FindControl<ListBox>("SearchCriteriaListBox");
-            sv.AutoScroll(
-                lb.PointToScreen(e.GetPosition(lb)).ToPortablePoint(lb.VisualPixelDensity()),
-                lb,
-                ref _autoScrollAccumulators);
         }
         private void SearchCriteriaListBox_DragOver(object sender, DragEventArgs e) {
             MpConsole.WriteLine($"Drag Over");
 
             e.Handled = true;
             e.DragEffects = DragDropEffects.None;
-            var drag_vm = e.Data.Get(MpPortableDataFormats.INTERNAL_SEARCH_CRITERIA_ITEM_FORMAT) as MpAvSearchCriteriaItemViewModel;
-            if (drag_vm == null) {
+            if (!e.Data.Contains(MpPortableDataFormats.INTERNAL_SEARCH_CRITERIA_ITEM_FORMAT)) {
+                ResetDragOvers();
                 return;
             }
+            MpAvSearchCriteriaItemViewModel drag_vm = e.Data.Get(MpPortableDataFormats.INTERNAL_SEARCH_CRITERIA_ITEM_FORMAT) as MpAvSearchCriteriaItemViewModel;
             bool is_copy = e.KeyModifiers.HasFlag(KeyModifiers.Control);
             e.DragEffects = is_copy ? DragDropEffects.Copy : DragDropEffects.Move;
 
             var sclb = this.FindControl<ListBox>("SearchCriteriaListBox");
+
             MpPoint sclb_mp = e.GetPosition(sclb).ToPortablePoint();
             var scicvm = MpAvSearchCriteriaItemCollectionViewModel.Instance;
 
@@ -71,23 +68,10 @@ namespace MonkeyPaste.Avalonia {
             MpConsole.WriteLine("(DragOver) DropIdx: " + drop_idx);
 
             if (drop_idx == scicvm.Items.Count) {
-                // tail drop
-                //if (drag_idx == drop_idx - 1) {
-                //    // reject same item drop
-                //    e.DragEffects = DragDropEffects.None;
-                //    ResetDragOvers();
-                //    return;
-                //}
                 scicvm.Items.ForEach(x => x.IsDragOverTop = false);
                 scicvm.Items.ForEach(x => x.IsDragOverBottom = x.SortOrderIdx == drop_idx - 1);
                 scicvm.Items.ForEach(x => x.IsDragOverCopy = x.SortOrderIdx == drop_idx - 1 && is_copy);
             } else {
-                //if (drag_idx == drop_idx) {
-                //    // reject same item drop
-                //    e.DragEffects = DragDropEffects.None;
-                //    ResetDragOvers();
-                //    return;
-                //}
                 scicvm.Items.ForEach(x => x.IsDragOverTop = x.SortOrderIdx == drop_idx);
                 scicvm.Items.ForEach(x => x.IsDragOverCopy = x.SortOrderIdx == drop_idx && is_copy);
                 scicvm.Items.ForEach(x => x.IsDragOverBottom = false);
@@ -175,10 +159,5 @@ namespace MonkeyPaste.Avalonia {
             //sv.ScrollByPointDelta(new MpPoint(0, amt * dir));
             e.Handled = true;
         }
-
-        private void InitializeComponent() {
-            AvaloniaXamlLoader.Load(this);
-        }
-
     }
 }
