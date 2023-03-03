@@ -4,6 +4,7 @@
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:pcl="using:MonkeyPaste"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        x:TypeArguments="local:MpAvClipTrayViewModel"
                        x:DataType="local:MpAvClipTrayViewModel"
                        x:CompileBindings="True"
@@ -12,6 +13,87 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvSidebarButtonGroupView">
+    <local:MpAvUserControl.Styles>
+
+        <Style Selector="RadioButton.sidebarRadio /template/ Border#RootBorder > Grid > Grid">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+        <Style Selector="RadioButton.sidebarRadio /template/ ContentPresenter">
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <TranslateTransform X="-15" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style Selector="RadioButton.sidebarRadio">
+            <Setter Property="local:MpAvPointerCommandExtension.IsEnabled"
+                    Value="True" />
+            <Setter Property="local:MpAvPointerCommandExtension.DragEnterCommand"
+                    Value="{Binding SidebarButtonDragEnterCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}" />
+            <Setter Property="local:MpAvPointerCommandExtension.DragEnterCommandParameter"
+                    Value="{Binding $self}" />
+            <Setter Property="Background"
+                    Value="{StaticResource HitTestableTransparent}" />
+            <Setter Property="Cursor"
+                    Value="Hand" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalContentAlignment"
+                    Value="Center" />
+            <Setter Property="Padding"
+                    Value="10" />
+            <Setter Property="CornerRadius"
+                    Value="3" />
+            <Setter Property="BorderThickness"
+                    Value="0" />
+        </Style>
+
+        <Style Selector="local|MpAvSidebarButtonGroupView:not(.horizontal) RadioButton.sidebarRadio">
+            <Setter Property="Height"
+                    Value="{Binding $self.Bounds.Width}" />
+        </Style>
+        <Style Selector="local|MpAvSidebarButtonGroupView.horizontal RadioButton.sidebarRadio">
+            <Setter Property="Width"
+                    Value="{Binding $self.Bounds.Height}" />
+        </Style>
+
+        <Style Selector="RadioButton.sidebarRadio PathIcon">
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="Width"
+                    Value="24" />
+            <Setter Property="Height"
+                    Value="24" />
+        </Style>
+        <Style Selector="RadioButton.sidebarRadio:pointerover /template/ ContentPresenter">
+            <Setter Property="Background"
+                    Value="Transparent" />
+        </Style>
+        <Style Selector="RadioButton.sidebarRadio PathIcon">
+            <Setter Property="Foreground"
+                    Value="DimGray" />
+        </Style>
+        <Style Selector="RadioButton.sidebarRadio:pointerover PathIcon">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource HoverDefaultBorderBrush}" />
+        </Style>
+        <Style Selector="RadioButton.sidebarRadio:pointerover:checked PathIcon">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource SelectedBorderBrush}" />
+        </Style>
+        <Style Selector="RadioButton.sidebarRadio:checked PathIcon">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource HoverSelectedBorderBrush}" />
+        </Style>
+    </local:MpAvUserControl.Styles>
     <Grid x:Name="SidebarButtonGroupContainerGrid"
           Classes.horizontal="{Binding !IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
           IsTabStop="True"
@@ -19,14 +101,10 @@
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch"
           RowDefinitions="*,*,*,*,*">
-        <Grid.Styles>
-            <Style Selector="RadioButton">
-                <Setter Property="GroupName"
-                        Value="SidebarButtonGroup" />
-            </Style>
-        </Grid.Styles>
         <RadioButton x:Name="TagTreeToggleButton"
                      Grid.Row="0"
+                     GroupName="SidebarButtonGroup"
+                     Classes="sidebarRadio"
                      Command="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
                      CommandParameter="0"
                      IsChecked="{Binding SelectedItemIdx, Mode=OneWay, ConverterParameter=0, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvIntToBoolConverter.Instance}}">
@@ -37,6 +115,8 @@
         </RadioButton>
         <RadioButton x:Name="ClipboardHandlerToggleButton"
                      Grid.Row="1"
+                     GroupName="SidebarButtonGroup"
+                     Classes="sidebarRadio"
                      Command="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
                      CommandParameter="1"
                      IsChecked="{Binding SelectedItemIdx, Mode=OneWay, ConverterParameter=1, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvIntToBoolConverter.Instance}}">
@@ -47,6 +127,8 @@
         </RadioButton>
         <RadioButton x:Name="AnalyzerToggleButton"
                      Grid.Row="2"
+                     GroupName="SidebarButtonGroup"
+                     Classes="sidebarRadio"
                      Command="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
                      CommandParameter="2"
                      IsChecked="{Binding SelectedItemIdx, Mode=OneWay, ConverterParameter=2, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvIntToBoolConverter.Instance}}">
@@ -57,6 +139,8 @@
         </RadioButton>
         <RadioButton x:Name="ActionsToggleButton"
                      Grid.Row="3"
+                     GroupName="SidebarButtonGroup"
+                     Classes="sidebarRadio"
                      Command="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
                      CommandParameter="3"
                      IsChecked="{Binding SelectedItemIdx, Mode=OneWay, ConverterParameter=3, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvIntToBoolConverter.Instance}}">
@@ -67,171 +151,43 @@
         </RadioButton>
         <RadioButton x:Name="AppModeToggleButton"
                      Grid.Row="4"
+                     GroupName="SidebarButtonGroup"
+                     Classes="sidebarRadio"
+                     
+                     Command="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
+                     CommandParameter="4"
                      IsEnabled="{Binding !IsAppPaused}">
+            <RadioButton.Resources>
+                <SolidColorBrush x:Key="FlyoutPresenterBackground">Transparent</SolidColorBrush>
+                <SolidColorBrush x:Key="FlyoutBorderThemeBrush">Transparent</SolidColorBrush>
+                <Thickness x:Key="FlyoutContentThemePadding">0,0,0,0</Thickness>
+                <Thickness x:Key="FlyoutBorderThemePadding">0,0,0,0</Thickness>
+                <sys:Double x:Key="FlyoutThemeMinWidth">0</sys:Double>
+                <sys:Double x:Key="FlyoutThemeMinHeight">0</sys:Double>
+            </RadioButton.Resources>
             <ToolTip.Tip>
                 <local:MpAvToolTipView ToolTipText="Clipboard Modes" />
             </ToolTip.Tip>
-            <!--<RadioButton.Resources>
-                <StackPanel x:Key="AppModeToggleButtonStackPanel"
-                            Orientation="Horizontal">
-                    <RadioButton x:Name="AppendModeToggleButton"
-                                  Loaded="AppendModeToggleButton_Loaded"
-                                  Grid.Row="4"
-                                  Padding="10"
+            <RadioButton.Flyout>
+                <Flyout Placement="RightEdgeAlignedBottom">
+                    <Panel Background="Transparent"
+                           Width="100"
+                           Height="150">
+                        <local:MpAvAppModeFlyoutView Background="Transparent"
+                                                     HorizontalAlignment="Stretch"
+                                                     VerticalAlignment="Stretch" />
+                    </Panel>
 
-                                  VerticalAlignment="Bottom"
-                                  HorizontalAlignment="Center"
-                                  Template="{StaticResource AppModeToggleButtonControlTemplate_NOCHECKED_STYLE}"
-                                  DataContext="{x:Static local:MpClipTrayViewModel.Instance}"
-                                  ToolTip="Append to Clipboard"
-                                  IsEnabled="{Binding IsAppPaused,
-                                                      Converter={StaticResource BoolFlipConverter}}"
-                                  PreviewMouseLeftButtonDown="ToggleButton_PreviewMouseLeftButtonDown">
-                        <Grid>
-                            <Popup IsOpen="False"
-                                   AllowsTransparency="True">
-                                <StackPanel Orientation="Vertical"
-                                            Background="Transparent">
-                                    <RadioButton x:Name="AppendToggleButton"
-                                                  Loaded="AppendToggleButton_Loaded"
-                                                  PreviewMouseLeftButtonDown="ToggleButton_PreviewMouseLeftButtonDown"
-                                                  DataContext="{x:Static local:MpClipTrayViewModel.Instance}"
-                                                  Width="{Binding AppStateButtonPanelWidth,
-                                                                  Source={x:Static local:MpMeasurements.Instance}}"
-                                                  Height="{Binding AppStateButtonPanelWidth,
-                                                                   Source={x:Static local:MpMeasurements.Instance}}"
-                                                  VerticalAlignment="Center"
-                                                  HorizontalAlignment="Center"
-                                                  ToolTip="{Binding .,
-                                                                    Converter={StaticResource ShortcutTypeToStringConverter},
-                                                                    ConverterParameter={x:Static pcl:MpShortcutType.ToggleAppendMode}}"
-                                                  Padding="10">
-                                        <Image Source="{Binding Source={StaticResource AppendRunImage},
-                                                                Converter={x:Static local:MpAvStringResourceConverter.Instance}}"
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Center" />
-                                    </RadioButton>
-                                    <RadioButton x:Name="AppendLineToggleButton"
-                                                  Loaded="AppendLineToggleButton_Loaded"
-                                                  PreviewMouseLeftButtonDown="ToggleButton_PreviewMouseLeftButtonDown"
-                                                  DataContext="{x:Static local:MpClipTrayViewModel.Instance}"
-                                                  Width="{Binding AppStateButtonPanelWidth,
-                                                                  Source={x:Static local:MpMeasurements.Instance}}"
-                                                  Height="{Binding AppStateButtonPanelWidth,
-                                                                   Source={x:Static local:MpMeasurements.Instance}}"
-                                                  VerticalAlignment="Center"
-                                                  HorizontalAlignment="Center"
-                                                  Padding="10">
-            -->
-            <!--<RadioButton.ToolTip>
-                                            <TextBlock>
-                                                <Run Text="Append Line Cut/Copy " />
-                                                <Run Text="{Binding .,
-                                                                    Converter={StaticResource ShortcutTypeToStringConverter},
-                                                                    ConverterParameter={x:Static pcl:MpShortcutType.ToggleAppendLineMode}}" />
-                                            </TextBlock>
-                                        </RadioButton.ToolTip>-->
-            <!--
-                                        <Image Source="{Binding Source={StaticResource AppendLineImage},
-                                                                Converter={x:Static local:MpAvStringResourceConverter.Instance}}"
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Center" />
-                                    </RadioButton>
-                                </StackPanel>
-                            </Popup>
-                            <Image Source="{Binding Source={StaticResource AppendImage},
-                                                    Converter={x:Static local:MpAvStringResourceConverter.Instance}}"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center" />
-                        </Grid>
-                    </RadioButton>
-                    <RadioButton x:Name="MouseModeToggleButton"
-                                  Loaded="MouseModeToggleButton_Loaded"
-                                  Grid.Row="3"
-                                  ToolTip="Mouse Modes"
-                                  VerticalAlignment="Center"
-                                  HorizontalAlignment="Left"
-                                  Template="{StaticResource AppModeToggleButtonControlTemplate_NOCHECKED_STYLE}"
-                                  IsEnabled="{Binding IsAppPaused,
-                                                      Converter={StaticResource BoolFlipConverter}}"
-                                  PreviewMouseLeftButtonDown="ToggleButton_PreviewMouseLeftButtonDown"
-                                  Padding="10">
-                        <Grid>
-                            <Popup IsOpen="False"
-                                   AllowsTransparency="True">
-                                <StackPanel Orientation="Vertical"
-                                            Background="Transparent">
-                                    <RadioButton x:Name="AutoCopyToggleButton"
-                                                  Loaded="AutoCopyToggleButton_Loaded"
-                                                  Width="{Binding AppStateButtonPanelWidth,
-                                                                  Source={x:Static local:MpMeasurements.Instance}}"
-                                                  Height="{Binding AppStateButtonPanelWidth,
-                                                                   Source={x:Static local:MpMeasurements.Instance}}"
-                                                  VerticalAlignment="Center"
-                                                  HorizontalAlignment="Center"
-                                                  IsEnabled="{Binding IsAppPaused,
-                                                                      Converter={StaticResource BoolFlipConverter}}"
-                                                  PreviewMouseLeftButtonDown="ToggleButton_PreviewMouseLeftButtonDown"
-                                                  Padding="10">
-                                        <RadioButton.ToolTip>
-                                            <TextBlock>
-                                                <Run Text="Auto-Copy Selection " />
+                </Flyout>
+            </RadioButton.Flyout>
+            <!--<Grid>
+                <Image IsVisible="{Binding IsAutoCopyMode, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                       Source="{Binding Source={StaticResource LeftClickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                <Image IsVisible="{Binding IsRightClickPasteMode, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                       Source="{Binding Source={StaticResource RightClickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
 
-                                                <Run Text="{Binding .,
-                                                                    Converter={StaticResource ShortcutTypeToStringConverter},
-                                                                    ConverterParameter={x:Static pcl:MpShortcutType.ToggleAutoCopyMode}}" />
-                                            </TextBlock>
-                                        </RadioButton.ToolTip>
-                                        <Image Source="{Binding Source={StaticResource LeftClickImage},
-                                                                Converter={x:Static local:MpAvStringResourceConverter.Instance}}"
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Center" />
-                                    </RadioButton>
-                                    <RadioButton x:Name="RightClickPasteToggleButton"
-                                                  Loaded="RightClickPasteToggleButton_Loaded"
-                                                  Width="{Binding AppStateButtonPanelWidth,
-                                                                  Source={x:Static local:MpMeasurements.Instance}}"
-                                                  Height="{Binding AppStateButtonPanelWidth,
-                                                                   Source={x:Static local:MpMeasurements.Instance}}"
-                                                  VerticalAlignment="Center"
-                                                  HorizontalAlignment="Center"
-                                                  IsEnabled="{Binding IsAppPaused,
-                                                                      Converter={StaticResource BoolFlipConverter}}"
-                                                  PreviewMouseLeftButtonDown="ToggleButton_PreviewMouseLeftButtonDown"
-                                                  Padding="10">
-                                        <RadioButton.ToolTip>
-                                            <TextBlock>
-                                                <Run Text="Right-Click Paste " />
-                                                <Run Text="{Binding .,
-                                                                    Converter={StaticResource ShortcutTypeToStringConverter},
-                                                                    ConverterParameter={x:Static pcl:MpShortcutType.ToggleRightClickPasteMode}}" />
-                                            </TextBlock>
-                                        </RadioButton.ToolTip>
-                                        <Image Source="{Binding Source={StaticResource RightClickImage},
-                                                                Converter={x:Static local:MpAvStringResourceConverter.Instance}}"
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Center" />
-                                    </RadioButton>
-                                </StackPanel>
-                            </Popup>
-                            <Image Source="{Binding MouseModeImageSourcePath,
-                                                    Converter={x:Static local:MpAvStringResourceConverter.Instance}}"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center" />
-                        </Grid>
-                    </RadioButton>
-                </StackPanel>
-            </RadioButton.Resources>
-            <RadioButton.ContextMenu>
-                <ContextMenu>
-                    <ContextMenu.Template>
-                        <ControlTemplate>
-                            <ContentControl Content="{StaticResource AppModeToggleButtonStackPanel}" />
-                        </ControlTemplate>
-                    </ContextMenu.Template>
-                </ContextMenu>
-            </RadioButton.ContextMenu>-->
-
+                <PathIcon Data="{StaticResource MouseSvg}" />
+            </Grid>-->
             <PathIcon Data="{StaticResource MouseSvg}" />
         </RadioButton>
     </Grid>

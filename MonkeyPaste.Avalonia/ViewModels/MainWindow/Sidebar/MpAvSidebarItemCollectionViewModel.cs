@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Avalonia.Controls;
+using MonkeyPaste.Common;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -52,7 +54,7 @@ namespace MonkeyPaste.Avalonia {
                 //if(value < -1) {
                 //    return;
                 //}
-                SelectedItem = value < 0 || value > Items.Count ? null : Items[value];
+                SelectedItem = value < 0 || value >= Items.Count ? null : Items[value];
             }
         }
         public MpISidebarItemViewModel SelectedItem { get; private set; }
@@ -113,9 +115,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
-
-
-
         #endregion
 
         #region Protected Methods
@@ -169,6 +168,9 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(SelectedItemHeight));
                     MpMessenger.SendGlobal(MpMessageType.SidebarItemSizeChanged);
                     break;
+                case nameof(SelectedItemIdx):
+                    MpMessenger.SendGlobal(MpMessageType.SelectedSidebarItemChanged);
+                    break;
             }
         }
         private void ReceivedGlobalMessage(MpMessageType msg) {
@@ -196,15 +198,40 @@ namespace MonkeyPaste.Avalonia {
                 int itemIdx = -1;
                 if (args is int) {
                     itemIdx = (int)args;
-                } else if (args is string) {
-                    itemIdx = int.Parse(args.ToString());
+                } else if (args is string argStr) {
+                    if (argStr.Contains(",") &&
+                        argStr.SplitNoEmpty(",") is string[] argParts) {
+                        // for now only dragEnter is a prefix arg
+                        itemIdx = int.Parse(argParts[1]);
+
+                        if (itemIdx == SelectedItemIdx) {
+                            //MpConsole.WriteLine($"Sidebar DragEnter for idx '{itemIdx}' IGNORED. Its already selected.");
+                            return;
+                        }
+                    } else {
+                        itemIdx = int.Parse(argStr);
+                    }
                 }
+
                 if (SelectedItemIdx == itemIdx) {
                     SelectedItemIdx = -1;
                 } else {
                     SelectedItemIdx = itemIdx;
                 }
                 OnPropertyChanged(nameof(SelectedItemIdx));
+            });
+
+        public ICommand SidebarButtonDragEnterCommand => new MpCommand<object>(
+            (args) => {
+                var button = args as Button;
+                if (button == null) {
+                    return;
+                }
+                object param = button.CommandParameter;
+                if (param is string paramStr) {
+                    param = "DragEnter," + paramStr;
+                }
+                button.Command?.Execute(param);
             });
         #endregion
     }

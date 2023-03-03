@@ -62,6 +62,7 @@ namespace MonkeyPaste {
         TrayLayoutChanged,
 
         SidebarItemSizeChanged,
+        SelectedSidebarItemChanged,
 
         PinTrayEmptyOrHasTile,
 

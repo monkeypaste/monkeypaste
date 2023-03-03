@@ -189,6 +189,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\_DefaultControls.axaml" />
     <AvaloniaXaml Remove="Themes\Default\DefaultLight.axaml" />
     <AvaloniaXaml Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\MpAvActionPropertyListBoxView.axaml" />
+    <AvaloniaXaml Remove="Views\MainWindow\Sidebar\SidebarItems\AppMode\MpAvAppModeFlyoutView2.axaml" />
     <AvaloniaXaml Remove="Views\MainWindow\Sidebar\SidebarItems\ClipboardHandlers\Selector\MpAvClipboardHandlerItemSelectorView.axaml" />
     <AvaloniaXaml Remove="Views\Reusable\Notifications\Toast\MpAvNotificationWindow.axaml" />
     <AvaloniaXaml Remove="Views\Reusable\Notifications\Toast\UserAction\MpAvUserActionNotificationView.axaml" />
@@ -429,6 +430,7 @@
     <Compile Remove="ViewModels\Reusable\Source\MpAvSourceCollectionViewModel.cs" />
     <Compile Remove="ViewModels\Reusable\Source\MpAvSourceViewModel.cs" />
     <Compile Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\MpAvActionPropertyListBoxView.axaml.cs" />
+    <Compile Remove="Views\MainWindow\Sidebar\SidebarItems\AppMode\MpAvAppModeFlyoutView2.axaml.cs" />
     <Compile Remove="Views\MainWindow\Sidebar\SidebarItems\ClipboardHandlers\Selector\MpAvClipboardHandlerItemSelectorView.axaml.cs" />
     <Compile Remove="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\Items\CheckBox\MpCheckBoxParameterView.axaml.cs" />
     <Compile Remove="Views\Reusable\Notifications\Toast\MpAvNotificationWindow.axaml.cs" />

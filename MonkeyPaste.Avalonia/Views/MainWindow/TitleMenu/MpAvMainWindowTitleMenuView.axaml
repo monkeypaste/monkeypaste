@@ -101,9 +101,7 @@
                 </ToolTip.Tip>
                 <PathIcon Data="{StaticResource CogSvg}" />
             </ToggleButton>
-
-            <!--  Lock Toggle Button  -->
-            <!--  IsChecked="{Binding IsMainWindowLocked, Source={x:Static local:MpAvMainWindowViewModel.Instance}, Mode=TwoWay}"  -->
+          
             <ToggleButton x:Name="LockToggleButton"
                           Command="{Binding ToggleMainWindowLockCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                           Classes="noBg noHoverBg shakeOver">
@@ -210,9 +208,9 @@
                     Command="{Binding CycleOrientationCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                     CommandParameter="CCW"
                     Classes="noBg noHoverBg shakeOver"
-                    local:MpAvPointerPressCommandExtension.IsEnabled="True"
-                    local:MpAvPointerPressCommandExtension.RightPressCommand="{Binding CycleOrientationCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
-                    local:MpAvPointerPressCommandExtension.RightPressCommandParameter="CW">
+                    local:MpAvPointerCommandExtension.IsEnabled="True"
+                    local:MpAvPointerCommandExtension.RightPressCommand="{Binding CycleOrientationCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
+                    local:MpAvPointerCommandExtension.RightPressCommandParameter="CW">
 
                 <Button.RenderTransform>
                     <RotateTransform />

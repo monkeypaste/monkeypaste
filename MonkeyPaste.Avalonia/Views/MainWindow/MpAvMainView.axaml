@@ -41,6 +41,8 @@
                 <!--  SIDEBAR BUTTONS  -->
                 <local:MpAvSidebarButtonGroupView x:Name="SidebarButtonGroup"
                                                   Grid.Column="0"
+                                                  Padding="3"
+                                                  Background="{DynamicResource SidebarButtonsBgBrush}"
                                                   HorizontalAlignment="Stretch"
                                                   VerticalAlignment="Stretch"
                                                   HorizontalContentAlignment="Stretch"

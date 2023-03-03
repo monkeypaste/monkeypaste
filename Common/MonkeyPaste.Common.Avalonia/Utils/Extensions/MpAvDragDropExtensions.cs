@@ -256,15 +256,21 @@ namespace MonkeyPaste.Common {
                 _autoScrollAccumulators = null;
             }
             var sv = lb.GetVisualDescendant<ScrollViewer>();
-            if (lb.Parent is ScrollViewer) {
+            if (lb.Parent.Parent is ScrollViewer) {
                 // workaround when list is in another scrollviewer, maynot always be right
-                sv = lb.Parent as ScrollViewer;
+                sv = lb.Parent.Parent as ScrollViewer;
+
+                sv.AutoScroll(
+                    sv.PointToScreen(e.GetPosition(sv)).ToPortablePoint(lb.VisualPixelDensity()),
+                    sv,
+                    ref _autoScrollAccumulators);
+            } else {
+                sv.AutoScroll(
+                    lb.PointToScreen(e.GetPosition(lb)).ToPortablePoint(lb.VisualPixelDensity()),
+                    lb,
+                    ref _autoScrollAccumulators);
             }
 
-            sv.AutoScroll(
-                lb.PointToScreen(e.GetPosition(lb)).ToPortablePoint(lb.VisualPixelDensity()),
-                lb,
-                ref _autoScrollAccumulators);
         }
 
         public static MpPoint AutoScroll(

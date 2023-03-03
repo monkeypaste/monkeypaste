@@ -1245,21 +1245,6 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsRightClickPasteMode { get; set; }
 
-        public string MouseModeImageSourcePath {
-            get {
-                if (IsRightClickPasteMode && IsAutoCopyMode) {
-                    return MpPlatform.Services.PlatformResource.GetResource("BothClickImage") as string;
-                }
-                if (IsRightClickPasteMode) {
-                    return MpPlatform.Services.PlatformResource.GetResource("RightClickImage") as string;
-                }
-                if (IsAutoCopyMode) {
-                    return MpPlatform.Services.PlatformResource.GetResource("LeftClickImage") as string;
-                }
-                return MpPlatform.Services.PlatformResource.GetResource("NoneClickImage") as string;
-            }
-        }
-
         #endregion
 
         public bool IsAppPaused { get; set; } = false;

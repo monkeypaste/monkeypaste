@@ -1,32 +1,48 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Markup.Xaml;
+using Avalonia.VisualTree;
 using MonkeyPaste.Common.Avalonia;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvSidebarButtonGroupView : MpAvUserControl<MpAvClipTrayViewModel> {
-        public ToggleButton AppendModeToggleButton, MouseModeToggleButton;
 
         public MpAvSidebarButtonGroupView() {
-            InitializeComponent();
-            this.DataContextChanged += MpAvSidebarView_DataContextChanged;
-
-            MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
-        }
-
-        private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);
-        }
-        private void MpAvSidebarView_DataContextChanged(object sender, System.EventArgs e) {
-            if (BindingContext == null) {
-                return;
+            MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
+
+            var amb = this.FindControl<Control>("AppModeToggleButton");
+            //amb.PointerReleased += Amb_PointerReleased;
+
+            if (FlyoutBase.GetAttachedFlyout(amb) is Flyout fo) {
+
+                fo.Closing += Fb_Closing;
             }
-            BindingContext.PropertyChanged += BindingContext_PropertyChanged;
+        }
+        private void Fb_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
+            if (MpAvSidebarItemCollectionViewModel.Instance.SelectedItemIdx == 4) {
+                // mode changes trigger ntf windows that deactivate mw and close flyout
+                // force flyout to be closed by toggling sidebar button
+                e.Cancel = true;
+            }
+        }
+        private void Amb_PointerReleased(object sender, global::Avalonia.Input.PointerReleasedEventArgs e) {
+            if (sender is Control c) {
+                FlyoutBase.ShowAttachedFlyout(c);
+            }
         }
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
+                case MpMessageType.SidebarItemSizeChanged:
+                    if (MpAvSidebarItemCollectionViewModel.Instance.SelectedItemIdx != 4) {
+                        var amb = this.FindControl<Control>("AppModeToggleButton");
+                        if (FlyoutBase.GetAttachedFlyout(amb) is Flyout fo) {
+                            fo.Hide();
+                        }
+                    }
+                    break;
                 case MpMessageType.MainWindowOrientationChangeEnd:
                     var ctg = this.FindControl<Grid>("SidebarButtonGroupContainerGrid");
                     var tbl = ctg.GetVisualDescendants<Button>().ToList();
@@ -44,24 +60,6 @@ namespace MonkeyPaste.Avalonia {
                         tbl.ForEach(x => Grid.SetRow(x, 0));
                         tbl.ForEach(x => Grid.SetColumn(x, tbl.IndexOf(x)));
                     }
-                    break;
-            }
-        }
-
-        private void BindingContext_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch (e.PropertyName) {
-                case nameof(BindingContext.ClipboardModeFlags):
-                    if (AppendModeToggleButton.ContextMenu != null) {
-                        AppendModeToggleButton.ContextMenu.Close();
-                    }
-                    break;
-                case nameof(BindingContext.IsAutoCopyMode):
-                case nameof(BindingContext.IsRightClickPasteMode):
-                    if (AppendModeToggleButton.ContextMenu != null) {
-                        AppendModeToggleButton.ContextMenu.Close();
-                    }
-                    MouseModeToggleButton.IsChecked = BindingContext.IsAnyMouseModeEnabled;
-                    BindingContext.OnPropertyChanged(nameof(BindingContext.IsAnyMouseModeEnabled));
                     break;
             }
         }

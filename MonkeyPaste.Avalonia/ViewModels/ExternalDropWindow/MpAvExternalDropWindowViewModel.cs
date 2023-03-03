@@ -163,6 +163,7 @@ namespace MonkeyPaste.Avalonia {
         #region Commands
         public ICommand ShowDropWindowCommand => new MpCommand(
             () => {
+                StartDropTargetListener();
                 IsShowingDropWindow = true;
                 IsShowingFinishMenu = false;
                 HasUserToggledAnyHandlers = false;
@@ -228,6 +229,8 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ShowFinishDropMenuCommand => new MpAsyncCommand<object>(
             async (drop_gmp_arg) => {
+                StopDropTargetListener();
+
                 if (DropAppViewModel == null || !HasPresetsChanged()) {
                     DoNotRememberDropInfoCommand.Execute(null);
                     return;

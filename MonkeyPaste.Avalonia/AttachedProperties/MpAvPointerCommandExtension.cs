@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public static class MpAvPointerPressCommandExtension {
+    public static class MpAvPointerCommandExtension {
         #region Private Variables
 
         #endregion
 
         #region Constants
         #endregion
-        static MpAvPointerPressCommandExtension() {
+        static MpAvPointerCommandExtension() {
             IsEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsEnabledChanged(x, y));
         }
 
@@ -159,6 +159,40 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region DragEnterCommand AvaloniaProperty
+        public static ICommand GetDragEnterCommand(AvaloniaObject obj) {
+            return obj.GetValue(DragEnterCommandProperty);
+        }
+
+        public static void SetDragEnterCommand(AvaloniaObject obj, ICommand value) {
+            obj.SetValue(DragEnterCommandProperty, value);
+        }
+
+        public static readonly AttachedProperty<ICommand> DragEnterCommandProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, ICommand>(
+                "DragEnterCommand",
+                null,
+                false);
+
+        #endregion
+
+        #region DragEnterCommandParameter AvaloniaProperty
+        public static object GetDragEnterCommandParameter(AvaloniaObject obj) {
+            return obj.GetValue(DragEnterCommandParameterProperty);
+        }
+
+        public static void SetDragEnterCommandParameter(AvaloniaObject obj, object value) {
+            obj.SetValue(DragEnterCommandParameterProperty, value);
+        }
+
+        public static readonly AttachedProperty<object> DragEnterCommandParameterProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, object>(
+                "DragEnterCommandParameter",
+                null,
+                false);
+
+        #endregion
+
         #region IsHoldingEnabled AvaloniaProperty
         public static bool GetIsHoldingEnabled(AvaloniaObject obj) {
             return obj.GetValue(IsHoldingEnabledProperty);
@@ -274,13 +308,14 @@ namespace MonkeyPaste.Avalonia {
                 if (GetHoldingCommand(control) != null && GetIsHoldingEnabled(control)) {
                     control.AddHandler(Control.HoldingEvent, Control_Holding, RoutingStrategies.Tunnel);
                 }
+                if (GetDragEnterCommand(control) != null) {
+                    EnableDragEnter(control);
+                }
             }
         }
 
-
         private static void DisabledControl_DetachedToVisualHandler(object s, VisualTreeAttachmentEventArgs? e) {
             if (s is Control control) {
-                // control
                 control.AttachedToVisualTree -= EnabledControl_AttachedToVisualHandler;
                 control.DetachedFromVisualTree -= DisabledControl_DetachedToVisualHandler;
                 control.PointerPressed -= Control_PointerPressed;
@@ -390,6 +425,21 @@ namespace MonkeyPaste.Avalonia {
             //}
             e.Handled = true;
         }
+
+        #region Dnd
+
+        private static void EnableDragEnter(Control control) {
+            void Control_DragEnter(object sender, DragEventArgs e) {
+                if (GetDragEnterCommand(control) is ICommand cmd) {
+                    cmd.Execute(GetDragEnterCommandParameter(control));
+                }
+            }
+            DragDrop.SetAllowDrop(control, true);
+            control.AddHandler(DragDrop.DragEnterEvent, Control_DragEnter);
+        }
+
+        #endregion
+
         #endregion
     }
 

@@ -456,13 +456,15 @@ namespace MonkeyPaste.Avalonia {
                     ttvm.PinSortIdx = -1;
                 } else {
                     // pin
-                    ttvm.PinSortIdx = PinnedItems.Count() - 1;
+                    ttvm.PinSortIdx = PinnedItems.Count();
                 }
                 OnPropertyChanged(nameof(ttvm.IsModelPinned));
 
                 OnPropertyChanged(nameof(PinnedItems));
                 OnPropertyChanged(nameof(IsNavButtonsVisible));
                 OnPropertyChanged(nameof(MaxTagTrayScreenWidth));
+
+                PinnedItems.OrderBy(x => x.PinSortIdx).ForEach((x, idx) => x.PinSortIdx = idx);
             }, (args) => {
                 return args is MpAvTagTileViewModel ttvm && ttvm.CanPin;
             });

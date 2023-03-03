@@ -59,6 +59,7 @@ namespace MonkeyPaste.Avalonia {
             e.DragEffects = is_copy ? DragDropEffects.Copy : DragDropEffects.Move;
 
             var sclb = this.FindControl<ListBox>("SearchCriteriaListBox");
+            sclb.AutoScrollItemsControl(e);
 
             MpPoint sclb_mp = e.GetPosition(sclb).ToPortablePoint();
             var scicvm = MpAvSearchCriteriaItemCollectionViewModel.Instance;

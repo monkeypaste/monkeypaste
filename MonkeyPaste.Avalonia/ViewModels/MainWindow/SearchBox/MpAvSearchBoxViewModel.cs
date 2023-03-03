@@ -269,8 +269,10 @@ namespace MonkeyPaste.Avalonia {
 
                         if (HasText) {
                             //MpAvThemeViewModel.Instance.GlobalBgOpacity = double.Parse(SearchText);
-                        } else if (!SearchFilterCollectionViewModel.IsPopupMenuOpen) {
+                        } else if (!SearchFilterCollectionViewModel.IsPopupMenuOpen && !HasText) {
                             // IsExpanded = false;
+
+                            WaitForUnexpandAsync().FireAndForgetSafeAsync(this);
                         }
                     }
                     OnPropertyChanged(nameof(TextBoxFontStyle));
@@ -318,7 +320,7 @@ namespace MonkeyPaste.Avalonia {
             }
             DateTime? no_focus_start_dt = null;
             while (true) {
-                if (!IsExpanded) {
+                if (!IsExpanded || HasText) {
                     return;
                 }
                 if (FocusManager.Instance.Current == null) {

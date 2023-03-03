@@ -113,6 +113,8 @@ namespace MonkeyPaste.Avalonia {
         private void DragOver(object sender, DragEventArgs e) {
             //MpConsole.WriteLine("[DragOver] TagTile: " + BindingContext);
             //e.Handled = true;
+            GetItemsControl().AutoScrollItemsControl(e);
+
             BindingContext.Parent.IsPinTrayDragOver = IsPinTrayTagView();
 
             bool is_copy = e.KeyModifiers.HasFlag(KeyModifiers.Control);
@@ -341,8 +343,24 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        private ItemsControl _itemsControl;
+        private bool? _isPinView;
         private bool IsPinTrayTagView() {
-            return this.GetVisualAncestor<MpAvTagTrayView>() != null;
+            if (_isPinView == null) {
+                _isPinView = this.GetVisualAncestor<MpAvTagTrayView>() != null;
+            }
+            return _isPinView.IsTrue();
+        }
+
+        private ItemsControl GetItemsControl() {
+            if (_itemsControl == null) {
+                if (this.GetVisualAncestor<TreeView>() is TreeView tv) {
+                    _itemsControl = tv;
+                } else if (this.GetVisualAncestor<ListBox>() is ListBox lb) {
+                    _itemsControl = lb;
+                }
+            }
+            return _itemsControl;
         }
     }
 }

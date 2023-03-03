@@ -16,6 +16,9 @@ namespace MonkeyPaste.Common {
         #region Collections
 
         public static void Move<T>(this IList<T> list, int oldIdx, int newIdx) {
+            oldIdx = Math.Max(0, Math.Min(list.Count - 1, oldIdx));
+            newIdx = Math.Max(0, Math.Min(list.Count - 1, newIdx));
+
             if (oldIdx == newIdx) {
                 return;
             }
