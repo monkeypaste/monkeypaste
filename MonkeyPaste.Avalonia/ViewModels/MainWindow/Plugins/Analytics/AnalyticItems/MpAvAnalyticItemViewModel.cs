@@ -392,7 +392,6 @@ namespace MonkeyPaste.Avalonia {
 
             PluginFormat = analyzerPlugin;
 
-
             if (PluginComponent == null) {
                 throw new Exception("Cannot find component");
             }
@@ -449,11 +448,6 @@ namespace MonkeyPaste.Avalonia {
             return uniqueName + uniqueIdx;
         }
 
-        public virtual async Task<MpParameterFormat> DeferredCreateParameterModel(MpParameterFormat aip) {
-            //used to load remote content and called from CreateParameterViewModel in preset
-            await Task.Delay(1);
-            return aip;
-        }
 
         public virtual bool Validate() {
             if (SelectedItem == null) {

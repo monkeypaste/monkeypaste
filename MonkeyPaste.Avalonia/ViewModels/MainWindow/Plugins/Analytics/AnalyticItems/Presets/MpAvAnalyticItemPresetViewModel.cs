@@ -422,14 +422,25 @@ namespace MonkeyPaste.Avalonia {
             Items.Clear();
 
             Preset = aip;
-            //if (AnalyticItemPresetId == 774) {
-            //    Debugger.Break();
-            //}
 
             // get all preset values from db
             //var presetValues = await PrepareParameterValueModelsAsync();
-            var presetValues = await MpAvPluginParameterValueLocator.LocateValuesAsync(
-                MpParameterHostType.Preset, AnalyticItemPresetId, Parent);
+            IEnumerable<MpParameterValue> presetValues = new List<MpParameterValue>();
+
+            try {
+                presetValues = await MpAvPluginParameterValueLocator.LocateValuesAsync(
+                    hostType: MpParameterHostType.Preset,
+                    paramHostId: AnalyticItemPresetId,
+                    pluginHost: Parent);
+            }
+            catch (Exception ex) {
+                // currently only managed exception is for missing deferredValueComponent when paramFormat is flagged w/ isDeferredValue
+
+                // show exception but continue loading
+                _ = MpNotificationBuilder.ShowNotificationAsync(
+                                notificationType: MpNotificationType.PluginResponseWarning,
+                                body: ex.Message);
+            }
             var paramLookup = new Dictionary<string, List<MpParameterValue>>();
             foreach (var pv in presetValues) {
                 if (!paramLookup.ContainsKey(pv.ParamId)) {
@@ -462,8 +473,6 @@ namespace MonkeyPaste.Avalonia {
             naipvm.OnValidate += ParameterViewModel_OnValidate;
             return naipvm;
         }
-
-
 
         #endregion
 
@@ -548,6 +557,11 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public virtual async Task<MpParameterFormat> DeferredCreateParameterModel(MpParameterFormat aip) {
+            //used to load remote content and called from CreateParameterViewModel in preset
+            await Task.Delay(1);
+            return aip;
+        }
         #endregion
 
         #region Commands

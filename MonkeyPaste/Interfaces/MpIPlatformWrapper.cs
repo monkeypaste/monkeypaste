@@ -31,6 +31,7 @@ namespace MonkeyPaste {
         MpIPlatformScreenInfoCollection ScreenInfoCollection { get; set; }
 
         MpIDragProcessWatcher DragProcessWatcher { get; set; }
+        MpIDropProcessWatcher DropProcessWatcher { get; set; }
         MpIContextMenuCloser ContextMenuCloser { get; set; }
         MpIMainThreadMarshal MainThreadMarshal { get; set; }
         MpIPlatformDataObjectHelperAsync DataObjectHelperAsync { get; set; }

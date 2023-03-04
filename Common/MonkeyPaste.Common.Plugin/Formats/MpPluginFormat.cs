@@ -49,12 +49,14 @@ namespace MonkeyPaste.Common.Plugin {
         [JsonIgnore]
         public object Component { get; set; } = null;
 
+
         [JsonIgnore]
         public MpPluginFormat backupCheckPluginFormat { get; set; }
 
     }
 
     public class MpPluginIoTypeFormat : MpJsonObject {
+        public bool isNuget { get; set; } = false;
         public bool isDll { get; set; } = false;
         public bool isCli { get; set; } = false;
         public bool isHttp { get; set; } = false;

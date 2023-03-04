@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -34,6 +35,8 @@ namespace MonkeyPaste {
         #region Public Methods
 
         public static async Task InitAsync() {
+
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
             Plugins.Clear();
             //find plugin folder in main app folder
 
@@ -59,6 +62,30 @@ namespace MonkeyPaste {
             catch (Exception ex) {
                 MpConsole.WriteTraceLine("Plugin loader error, invalid plugins will be ignored: ", ex);
             }
+        }
+
+        private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args) {
+            string assembly_name = args.Name.SplitNoEmpty(",").FirstOrDefault();
+            if (string.IsNullOrEmpty(assembly_name)) {
+                return null;
+            }
+            //assembly_name += ".dll";
+            foreach (var plugin in Plugins) {
+                string plugin_dir = Path.GetDirectoryName(plugin.Key);
+                string assembly_test_Path = Path.Combine(plugin_dir, assembly_name + ".dll");
+                if (assembly_test_Path.IsFile()) {
+                    try {
+
+                        var ass = Assembly.LoadFrom(assembly_test_Path);
+                        return ass;
+                    }
+                    catch (Exception ex) {
+                        var ass2 = Assembly.Load(assembly_name);
+                        return ass2;
+                    }
+                }
+            }
+            return null;
         }
 
         public static async Task<MpPluginFormat> ReloadPluginAsync(string manifestPath) {
@@ -162,47 +189,33 @@ namespace MonkeyPaste {
 
         private static object GetPluginComponent(string manifestPath, MpPluginFormat plugin) {
             plugin.manifestLastModifiedDateTime = File.GetLastWriteTime(manifestPath);
-            string pluginDir = Path.GetDirectoryName(manifestPath);
-            string pluginName = Path.GetFileName(pluginDir);
-            if (plugin.ioType.isDll) {
-                string dllPath = Path.Combine(pluginDir, string.Format(@"{0}.dll", pluginName));
-                if (!File.Exists(dllPath)) {
-                    throw new MpUserNotifiedException($"Error, Plugin '{pluginName}' is flagged as dll type in '{manifestPath}' but does not have a matching '{pluginName}.dll' in its folder.");
-                }
-                Assembly pluginAssembly = null;
-                try {
-                    pluginAssembly = Assembly.LoadFrom(dllPath);
-                }
-                catch (Exception rtle) {
-                    throw new MpUserNotifiedException($"Plugin Compilation error '{pluginName}':" + Environment.NewLine + rtle);
-                }
-                int typeCount = 0;
-                try {
-                    typeCount = pluginAssembly.GetTypes().Length;
-                }
-                catch (ReflectionTypeLoadException rtle) {
-                    throw new MpUserNotifiedException("Error loading " + pluginName + " ", rtle);
-                }
 
-
-                for (int i = 0; i < typeCount; i++) {
-                    var curType = pluginAssembly.GetTypes()[i];
-                    if (curType.GetInterface("MonkeyPaste.Common.Plugin." + nameof(MpIPluginComponentBase)) != null) {
-                        var pluginObj = Activator.CreateInstance(curType);
-                        if (pluginObj != null) {
-                            return pluginObj;
-                        }
-                    }
-                }
-            } else if (plugin.ioType.isCli) {
-                string exePath = Path.Combine(pluginDir, string.Format(@"{0}.exe", pluginName));
-                if (!File.Exists(exePath)) {
-                    throw new MpUserNotifiedException($"Error, Plugin '{pluginName}' is flagged as a CLI type in '{manifestPath}' but does not have a matching '{pluginName}.exe' in its folder.");
-                }
-                return new MpCommandLinePlugin() { Endpoint = exePath };
-            } else if (plugin.ioType.isHttp) {
+            if (plugin.ioType.isHttp) {
                 return new MpHttpAnalyzerPlugin(plugin.analyzer.http);
             }
+
+            string pluginDir = Path.GetDirectoryName(manifestPath);
+            string pluginName = Path.GetFileName(pluginDir);
+            string pluginPathName = pluginName;
+            string pluginExt = plugin.ioType.ToFileExt();
+            if (plugin.ioType.isNuget) {
+                pluginPathName += "." + plugin.version;
+            }
+            string pluginPath = Path.Combine(pluginDir, $"{pluginPathName}.{plugin.ioType.ToFileExt()}");
+
+            if (!File.Exists(pluginPath)) {
+                throw new MpUserNotifiedException($"Error, Plugin '{pluginName}' is flagged as {pluginExt} type in '{manifestPath}' but does not have a matching '{pluginName}.{pluginExt}' in its folder.");
+            }
+            if (plugin.ioType.isNuget) {
+                return GetNugetComponent(pluginPath, pluginName);
+            }
+            if (plugin.ioType.isDll) {
+                return GetDllComponent(pluginPath, pluginName);
+            }
+            if (plugin.ioType.isCli) {
+                return new MpCommandLinePlugin() { Endpoint = pluginPath };
+            }
+
             throw new MpUserNotifiedException(@"Unknown or undefined plugin type: " + JsonConvert.SerializeObject(plugin.ioType));
         }
 
@@ -221,7 +234,24 @@ namespace MonkeyPaste {
             }
             return true;
         }
+        private static string ToFileExt(this MpPluginIoTypeFormat ioType) {
+            if (ioType.isNuget) {
+                return "nupkg";
+            }
+            if (ioType.isDll) {
+                return "dll";
+            }
+            if (ioType.isCli) {
 
+                switch (MpPlatform.Services.PlatformInfo.OsType) {
+                    case MpUserDeviceType.Windows:
+                        return "exe";
+                    default:
+                        throw new NotSupportedException("needs to be implemented");
+                }
+            }
+            return string.Empty;
+        }
         private static bool ValidateLoadedPlugins() {
             var invalidGuida = Plugins.GroupBy(x => x.Value.guid).Where(x => x.Count() > 1).Select(x => x.Key);
 
@@ -237,6 +267,52 @@ namespace MonkeyPaste {
                 throw new MpUserNotifiedException(sb.ToString());
             }
             return true;
+        }
+
+        private static object GetDllComponent(string dllPath, string pluginName) {
+            Assembly pluginAssembly;
+            try {
+                pluginAssembly = Assembly.LoadFrom(dllPath);
+            }
+            catch (Exception rtle) {
+                throw new MpUserNotifiedException($"Plugin Compilation error '{pluginName}':" + Environment.NewLine + rtle);
+            }
+            return GetComponentFromAssembly(pluginAssembly, pluginName);
+        }
+        private static object GetNugetComponent(string nupkgPath, string pluginName) {
+            using var archive = ZipFile.OpenRead(nupkgPath);
+            var entry = archive.Entries.FirstOrDefault(x => x.Name.EndsWith($"{pluginName}.dll"));
+
+            using var target = new MemoryStream();
+
+            using var source = entry.Open();
+            source.CopyTo(target);
+
+            var assembly = Assembly.Load(target.ToArray());
+            return GetComponentFromAssembly(assembly, pluginName);
+        }
+
+        private static object GetComponentFromAssembly(Assembly pluginAssembly, string pluginName) {
+            if (pluginAssembly == null) {
+                return null;
+            }
+            int typeCount = 0;
+            try {
+                typeCount = pluginAssembly.GetTypes().Length;
+            }
+            catch (ReflectionTypeLoadException rtle) {
+                throw new MpUserNotifiedException("Error loading " + pluginName + " ", rtle);
+            }
+            for (int i = 0; i < typeCount; i++) {
+                var curType = pluginAssembly.GetTypes()[i];
+                if (curType.GetInterface("MonkeyPaste.Common.Plugin." + nameof(MpIPluginComponentBase)) != null) {
+                    var pluginObj = Activator.CreateInstance(curType);
+                    if (pluginObj != null) {
+                        return pluginObj;
+                    }
+                }
+            }
+            return null;
         }
 
         public static MpPluginFormat GetLastLoadedBackupPluginFormat(MpPluginFormat plugin) {

@@ -195,17 +195,15 @@ namespace MonkeyPaste.Avalonia {
                         //
                         for (int i = 0; i < acil.Count; i++) {
                             var aci = acil[i];
-                            var wpvm = MpAvClipboardHandlerCollectionViewModel.Instance.AllAvailableWriterPresets.FirstOrDefault(x => x.ClipboardFormat.clipboardName == aci.FormatType);
+                            var wpvm =
+                                MpAvClipboardHandlerCollectionViewModel.Instance
+                                .AllAvailableWriterPresets
+                                .FirstOrDefault(x => x.ClipboardFormat.clipboardName == aci.FormatType);
                             if (wpvm == null) {
                                 continue;
                             }
                             wpvm.IsEnabled = !aci.IgnoreFormat;
                         }
-                        //MpAvClipboardHandlerCollectionViewModel.Instance.AllAvailableWriterPresets
-                        //.Where(x => acil.Any(y => y.FormatType == x.ClipboardFormat.clipboardName))
-                        //.ForEach(x => x.IsEnabled = !acil.FirstOrDefault(y => y.FormatType == x.ClipboardFormat.clipboardName).IgnoreFormat);
-
-                        //Dispatcher.UIThread.Post(MpAvClipboardHandlerCollectionViewModel.Instance.OnPropertyChanged(nameof(MpAvClipboardHandlerCollectionViewModel.Instance.AllAvailableWriterPresets)));
                     });
                 }
             }, (drop_gmp_arg) => {

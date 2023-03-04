@@ -687,8 +687,11 @@ namespace MonkeyPaste.Avalonia {
             if (GlobalIsMouseLeftButtonDown) {
                 // NOTE only flag drag when left button is down, any other is poop
                 if (!GlobalIsPointerDragging) {
-                    GlobalIsPointerDragging = true;
-                    OnGlobalDragBegin?.Invoke(this, null);
+                    Dispatcher.UIThread.Post(() => {
+
+                        GlobalIsPointerDragging = true;
+                        OnGlobalDragBegin?.Invoke(this, null);
+                    });
                 }
             }
 

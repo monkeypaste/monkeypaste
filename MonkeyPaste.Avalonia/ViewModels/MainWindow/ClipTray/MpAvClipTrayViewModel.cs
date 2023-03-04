@@ -3727,34 +3727,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
 
-        //public ICommand SpeakSelectedClipsCommand => new MpAsyncCommand(
-        //    async () => {
-        //        await Task.Delay(1);
-        //await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
-        //    var speechSynthesizer = new SpeechSynthesizer();
-        //    speechSynthesizer.SetOutputToDefaultAudioDevice();
-        //    if (string.IsNullOrEmpty(MpPrefViewModel.Instance.SpeechSynthVoiceName)) {
-        //        speechSynthesizer.SelectVoice(speechSynthesizer.GetInstalledVoices()[0].VoiceInfo.Name);
-        //    } else {
-        //        speechSynthesizer.SelectVoice(MpPrefViewModel.Instance.SpeechSynthVoiceName);
-        //    }
-        //    speechSynthesizer.Rate = 0;
-        //    speechSynthesizer.SpeakCompleted += (s, e) => {
-        //        speechSynthesizer.Dispose();
-        //    };
-        //    // Create a PromptBuilder object and append a text string.
-        //    PromptBuilder promptBuilder = new PromptBuilder();
 
-        //    promptBuilder.AppendText(Environment.NewLine + SelectedItem.CopyItem.ItemData.ToPlainText());
-
-        //    // Speak the contents of the prompt asynchronously.
-        //    speechSynthesizer.SpeakAsync(promptBuilder);
-
-        //}, DispatcherPriority.Background);
-        //},
-        //() => {
-        //    return SelectedItem != null && SelectedItem.IsTextItem;
-        //});
 
         //public ICommand SendToEmailCommand => new MpCommand(
         //    () => {

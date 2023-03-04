@@ -119,6 +119,22 @@ namespace MonkeyPaste.Avalonia {
             return Items.FirstOrDefault(x => x.AppPath.ToLower() == ppi.ProcessPath.ToLower() && x.UserDeviceId == MpDefaultDataModelTools.ThisUserDeviceId);
         }
 
+        public async Task<MpAvAppViewModel> GetOrCreateAppViewModelByProcessInfo(MpPortableProcessInfo ppi) {
+            if (GetAppByProcessInfo(ppi) is MpAvAppViewModel avm) {
+                return avm;
+            }
+            var app = await MpPlatform.Services.AppBuilder.CreateAsync(ppi);
+            if (app == null) {
+                return null;
+            }
+            var new_avm = await CreateAppViewModel(app);
+            Items.Add(new_avm);
+            while (IsAnyBusy) {
+                await Task.Delay(100);
+            }
+            return new_avm;
+        }
+
         public MpAvAppViewModel GetAppViewModelFromScreenPoint(MpPoint gmp, double pixelDensity) {
             IntPtr handle = IntPtr.Zero;
 

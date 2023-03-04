@@ -96,6 +96,7 @@ namespace MonkeyPaste.Common.Plugin {
         public MpParameterControlType controlType { get; set; } = MpParameterControlType.None;
         public MpParameterValueUnitType unitType { get; set; } = MpParameterValueUnitType.PlainText;
 
+        public bool isValueDeferred { get; set; }
         public bool isVisible { get; set; } = true;
         public bool isReadOnly { get; set; } = false;
         public bool isRequired { get; set; } = false;

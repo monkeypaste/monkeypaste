@@ -3,14 +3,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="using:MonkeyPaste.Avalonia"
-        xmlns:webview="clr-namespace:WebViewControl;assembly=WebViewControl.Avalonia"
         mc:Ignorable="d"
         d:DesignWidth="800"
         d:DesignHeight="450"
         x:Class="MonkeyPaste.Avalonia.MpAvSettingsWindow"
-        MinWidth="500"
-        MinHeight="500"
+        Width="800"
+        Height="450"
+        ShowInTaskbar="True"
+        Topmost="True"
         WindowStartupLocation="CenterScreen"
         WindowState="Normal"
         Icon="/Assets/Icons/cog.ico"
-        Title="Settings" />
+        Title="Settings">
+    <local:MpAvSettingsView />
+</Window>

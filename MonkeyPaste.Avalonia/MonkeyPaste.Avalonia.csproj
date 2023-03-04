@@ -429,6 +429,7 @@
     <Compile Remove="ViewModels\MainWindow\ClipTray\MpAvCopyItemCollectionViewModel.cs" />
     <Compile Remove="ViewModels\Reusable\Source\MpAvSourceCollectionViewModel.cs" />
     <Compile Remove="ViewModels\Reusable\Source\MpAvSourceViewModel.cs" />
+    <Compile Remove="ViewModels\SettingsWindow\Sound\MpStandardBalloonViewModel.cs" />
     <Compile Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\MpAvActionPropertyListBoxView.axaml.cs" />
     <Compile Remove="Views\MainWindow\Sidebar\SidebarItems\AppMode\MpAvAppModeFlyoutView2.axaml.cs" />
     <Compile Remove="Views\MainWindow\Sidebar\SidebarItems\ClipboardHandlers\Selector\MpAvClipboardHandlerItemSelectorView.axaml.cs" />

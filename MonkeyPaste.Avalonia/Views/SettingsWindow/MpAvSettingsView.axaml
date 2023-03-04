@@ -1,0 +1,202 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="750"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:TypeArguments="local:MpAvSettingsWindowViewModel"
+                       x:DataType="local:MpAvSettingsWindowViewModel"
+                       x:CompileBindings="True"
+                       DataContext="{x:Static local:MpAvSettingsWindowViewModel.Instance}"
+                       x:Class="MonkeyPaste.Avalonia.MpAvSettingsView">
+    <local:MpAvUserControl.Styles>
+        <Style Selector="ToggleButton">
+            <!--<Setter Property="Background"
+                    Value="Khaki" />-->
+            <Setter Property="HorizontalAlignment"
+                    Value="Stretch" />
+            <Setter Property="VerticalAlignment"
+                    Value="Stretch" />
+            <Setter Property="CornerRadius"
+                    Value="0" />
+            <Setter Property="Margin"
+                    Value="0" />
+            <Setter Property="BorderThickness"
+                    Value="1" />
+            <Setter Property="BorderBrush"
+                    Value="DimGray" />
+        </Style>
+        <Style Selector="ToggleButton Image">
+            <Setter Property="MinWidth"
+                    Value="30" />
+            <Setter Property="MinHeight"
+                    Value="30" />
+            <Setter Property="MaxWidth"
+                    Value="60" />
+            <Setter Property="MaxHeight"
+                    Value="60" />
+            <Setter Property="Stretch"
+                    Value="Uniform" />
+            <Setter Property="Margin"
+                    Value="0,10,0,0" />
+        </Style>
+        <Style Selector="ToggleButton Label">
+            <Setter Property="DockPanel.Dock"
+                    Value="Bottom" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="FontWeight"
+                    Value="Medium" />
+            <Setter Property="Margin"
+                    Value="5" />
+            <Setter Property="FontSize"
+                    Value="16" />
+        </Style>
+        <Style Selector="Button">
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Center" />
+            <Setter Property="Padding"
+                    Value="5,3" />
+        </Style>
+    </local:MpAvUserControl.Styles>
+    <DockPanel LastChildFill="True">
+        <!--  Header Panel  -->
+        <Grid x:Name="HeaderContainer"
+              DockPanel.Dock="Top"
+              Margin="0,0,0,5"
+              ColumnDefinitions="0.16*,0.16*,0.16*,0.16*,0.16*,0.16*">
+            <!--  Account Tab Button  -->
+            <ToggleButton Grid.Column="0"
+                          IsChecked="{Binding IsTabSelected[0], Mode=OneWay}"
+                          Command="{Binding SelectTabCommand}"
+                          CommandParameter="0">
+                <DockPanel>
+                    <Label Content="Account" />
+                    <Image Source="{Binding Source={StaticResource UserImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                </DockPanel>
+            </ToggleButton>
+            <!--  Prefs Tab Button  -->
+            <ToggleButton Grid.Column="1"
+                          IsChecked="{Binding IsTabSelected[1], Mode=OneWay}"
+                          Command="{Binding SelectTabCommand}"
+                          CommandParameter="1">
+                <DockPanel>
+                    <Label Content="Preferences" />
+                    <Image Source="{Binding Source={StaticResource SlidersImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                </DockPanel>
+            </ToggleButton>
+            <!--  Security Tab Button  -->
+            <ToggleButton Grid.Column="2"
+                          IsChecked="{Binding IsTabSelected[2], Mode=OneWay}"
+                          Command="{Binding SelectTabCommand}"
+                          CommandParameter="2">
+                <DockPanel>
+                    <Label Content="Security" />
+                    <Image Source="{Binding Source={StaticResource ShieldImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                </DockPanel>
+            </ToggleButton>
+            <!--  Shortcuts tab button  -->
+            <ToggleButton Grid.Column="3"
+                          IsChecked="{Binding IsTabSelected[3], Mode=OneWay}"
+                          Command="{Binding SelectTabCommand}"
+                          CommandParameter="3">
+                <DockPanel>
+                    <Label Content="Shortcuts" />
+                    <Image Source="{Binding Source={StaticResource HotkeyImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                </DockPanel>
+            </ToggleButton>
+            <!--  Interop tab button  -->
+            <ToggleButton Grid.Column="4"
+                          IsChecked="{Binding IsTabSelected[4], Mode=OneWay}"
+                          Command="{Binding SelectTabCommand}"
+                          CommandParameter="4">
+                <DockPanel>
+                    <Label Content="Interop" />
+                    <Image Source="{Binding Source={StaticResource ClipboardImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                </DockPanel>
+            </ToggleButton>
+            <!--  Help tab Button  -->
+            <ToggleButton Grid.Column="5"
+                          IsChecked="{Binding IsTabSelected[5], Mode=OneWay}"
+                          Command="{Binding SelectTabCommand}"
+                          CommandParameter="5">
+                <DockPanel>
+                    <Label Content="Help" />
+                    <Image Source="{Binding Source={StaticResource QuestionMarkImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                </DockPanel>
+            </ToggleButton>
+        </Grid>
+
+        <!--  Footer  -->
+        <DockPanel DockPanel.Dock="Bottom"
+                   HorizontalAlignment="Stretch">
+            <Button x:Name="ResetButton"
+                    Classes="defaultButton textOnlyButton"
+                    DockPanel.Dock="Left"
+                    Width="100"
+                    Margin="10,20,10,10"
+                    Command="{Binding ResetSettingsCommand}"
+                    Content="Reset All" />
+            <StackPanel DockPanel.Dock="Right"
+                        HorizontalAlignment="Right"
+                        Orientation="Horizontal">
+                <Button x:Name="SaveButton"
+                        Classes="defaultButton textOnlyButton"
+                        Width="100"
+                        Margin="10,20,10,10"
+                        IsDefault="True"
+                        Command="{Binding SaveSettingsCommand}"
+                        Content="Save" />
+                <Button x:Name="CancelButton"
+                        Classes="defaultButton textOnlyButton"
+                        Width="100"
+                        Margin="10,20,10,10"
+                        Command="{Binding CancelSettingsCommand}"
+                        Content="Cancel" />
+            </StackPanel>
+        </DockPanel>
+
+        <!--  Content  -->
+
+        <Grid Margin="5">
+            <!--  Account Panel  -->
+            <StackPanel Grid.Row="1"
+                        IsVisible="{Binding IsTabSelected[0]}">
+                <!--<local:MpAccountTabPanel DataContext="{Binding}" />-->
+                <Label Content="Account" />
+            </StackPanel>
+            <!--  Preferences  -->
+            <StackPanel Grid.Row="1"
+                        IsVisible="{Binding IsTabSelected[1]}">
+                <!--<local:MpPreferencesTabPanel DataContext="{Binding PreferencesViewModel}" />-->
+                <Label Content="Preferences" />
+            </StackPanel>
+            <!--  Security  -->
+            <StackPanel Grid.Row="1"
+                        IsVisible="{Binding IsTabSelected[2]}">
+                <!--<local:MpSecurityTabPanel DataContext="{Binding}" />-->
+                <Label Content="Security" />
+            </StackPanel>
+            <!--  Shortcuts  -->
+            <!--<local:MpShortcutsTabPanel Grid.Row="1"
+                                   IsVisible="{Binding IsTabSelected[3]}"
+                                   DataContext="{Binding}" />-->
+            <Grid Grid.Row="1"
+                  IsVisible="{Binding IsTabSelected[4]}">
+                <!--<local:MpAppInteropChooserView Grid.Row="1"
+                                           DataContext="{x:Static local:MpAvAppCollectionViewModel.Instance}" />-->
+                <Label Content="Interop" />
+            </Grid>
+            <!--  Help  -->
+            <StackPanel Grid.Row="1"
+                        IsVisible="{Binding IsTabSelected[5]}">
+                <!--<local:MpHelpTabPanel DataContext="{Binding}" />-->
+                <Label Content="Help" />
+            </StackPanel>
+        </Grid>
+    </DockPanel>
+</local:MpAvUserControl>

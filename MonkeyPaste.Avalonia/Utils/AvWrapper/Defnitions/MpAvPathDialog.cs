@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvPathDialog : MpINativePathDialog {
-        public async Task<string> ShowFileDialogAsync(string title, string initDir, string[] filters) {
-            var result = await ShowFileOrFolderDialogAsync(false, title, initDir, filters);
+        public async Task<string> ShowFileDialogAsync(string title, string initDir, string[] filters, bool resolveShortcutPath = false) {
+            var result = await ShowFileOrFolderDialogAsync(false, title, initDir, filters, resolveShortcutPath);
             return result;
         }
 
@@ -19,9 +19,9 @@ namespace MonkeyPaste.Avalonia {
             return result;
         }
 
-        private async Task<string> ShowFileOrFolderDialogAsync(bool isFolder, string title, string initDir, string[] filters) {
+        private async Task<string> ShowFileOrFolderDialogAsync(bool isFolder, string title, string initDir, string[] filters, bool resolveShortcutPath = false) {
             var storage_provider = GetStorageProvider();
-            if(storage_provider == null) {
+            if (storage_provider == null) {
                 return null;
             }
             IStorageFolder start_location = await GetInitFolderAsync(initDir);
@@ -40,13 +40,18 @@ namespace MonkeyPaste.Avalonia {
                        new FilePickerOpenOptions() {
                            AllowMultiple = false,
                            Title = title,
-                           FileTypeFilter = filters == null ? null : filters.Select(x=>new FilePickerFileType(x)).ToList(),
+                           FileTypeFilter = filters == null ? null : filters.Select(x => new FilePickerFileType(x)).ToList(),
                            SuggestedStartLocation = start_location
                        });
             }
 
             if (result.FirstOrDefault() is IStorageItem si) {
-                return si.Path.LocalPath;
+                string path = si.Path.LocalPath;
+                if (resolveShortcutPath &&
+                    path.IsShortcutPath()) {
+                    path = MpFileIo.GetLnkTargetPath(path);
+                }
+                return path;
             }
             return null;
         }

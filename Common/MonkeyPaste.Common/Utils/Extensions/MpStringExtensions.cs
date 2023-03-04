@@ -603,6 +603,17 @@ namespace MonkeyPaste.Common {
             return str.IsFile() || str.IsDirectory();
         }
 
+        public static bool IsShortcutPath(this string str) {
+            if (!str.IsFile()) {
+                return false;
+            }
+            if (MpCommonTools.Services.PlatformInfo.OsType == MpUserDeviceType.Windows) {
+                return str.ToLower().EndsWith("lnk");
+            }
+            // TODO not sure if symbolic links need to be resolved 
+            return false;
+        }
+
         public static string FindParentDirectory(this string path, int level = 0) {
             if (!path.IsFileOrDirectory()) {
                 return null;

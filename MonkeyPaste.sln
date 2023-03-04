@@ -53,7 +53,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonkeyPaste.Avalonia.iOS", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonkeyPaste.Avalonia.Web", "MonkeyPaste.Avalonia.Web\MonkeyPaste.Avalonia.Web.csproj", "{79053682-3013-4E67-9FA7-E130F0E02894}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_build", "_build\_build.csproj", "{1672D6A5-2A5F-49BF-BF89-787167B155F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "_build\_build.csproj", "{1672D6A5-2A5F-49BF-BF89-787167B155F6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

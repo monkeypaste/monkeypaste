@@ -1,5 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,6 +20,24 @@ namespace MonkeyPaste.Avalonia {
 
             // loop through plugin formats parameters and add or replace (if found in db) to the preset values
             foreach (MpParameterFormat paramFormat in pluginHost.ComponentFormat.parameters) {
+                if (paramFormat.isValueDeferred) {
+                    // make deferred value request
+                    var req = new MpPluginDeferredParameterValueRequestFormat() { paramId = paramFormat.paramId };
+                    MpPluginDeferredParameterValueResponseFormat resp = null;
+                    if (pluginHost.PluginFormat.Component is MpISupportDeferredValue sdv) {
+                        resp = sdv.RequestParameterValue(req);
+                    } else if (pluginHost.PluginFormat.Component is MpISupportDeferredValueAsync sdva) {
+                        resp = await sdva.RequestParameterValueAsync(req);
+                    } else {
+                        throw new Exception($"Plugin '{pluginHost.PluginFormat.title}' does not support deferred values, value will be unavailable");
+                    }
+                    if (resp == null) {
+                        // values will just be empty, up to plugin configuration to handle that
+                    } else {
+                        paramFormat.values = resp.Values;
+                    }
+
+                }
                 if (!param_db_values.Any(x => paramFormat.paramId.Equals(x.ParamId))) {
                     // if no value is found in db for a parameter defined in manifest...
 

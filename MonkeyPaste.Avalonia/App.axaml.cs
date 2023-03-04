@@ -79,6 +79,7 @@ namespace MonkeyPaste.Avalonia {
             }
             _instance = this;
         }
+
         #endregion
 
         #region Public Methods

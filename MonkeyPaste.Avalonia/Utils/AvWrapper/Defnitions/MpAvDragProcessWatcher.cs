@@ -2,9 +2,9 @@
 using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvDragProcessWatcher : MpIDragProcessWatcher {
+    public class MpAvDragProcessWatcher :
+        MpIDragProcessWatcher {
         #region Private Variable
-        private MpPortableProcessInfo _activeProcessInfo;
 
         private DispatcherPriority _watcherPriority = DispatcherPriority.Normal;
         #endregion
@@ -34,9 +34,6 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             sccvm.OnGlobalDragBegin += Sccvm_OnGlobalDragBegin;
-            //sccvm.OnGlobalDragEnd += Sccvm_OnGlobalDragEnd;
-
-            //MpPlatformWrapper.Services.ProcessWatcher.OnAppActivated += ProcessWatcher_OnAppActivated;
         }
 
         public void StopWatcher() {
@@ -45,8 +42,6 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             sccvm.OnGlobalDragBegin -= Sccvm_OnGlobalDragBegin;
-            //sccvm.OnGlobalDragEnd -= Sccvm_OnGlobalDragEnd;
-            //MpPlatformWrapper.Services.ProcessWatcher.OnAppActivated -= ProcessWatcher_OnAppActivated;
         }
 
         public void Reset() {
@@ -69,22 +64,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
-
-        private void ProcessWatcher_OnAppActivated(object sender, MpPortableProcessInfo e) {
-            Dispatcher.UIThread.Post(() => {
-                _activeProcessInfo = e;
-            }, _watcherPriority);
-        }
         private void Sccvm_OnGlobalDragBegin(object sender, System.EventArgs e) {
             Dispatcher.UIThread.Post(() => {
-                //DragProcess = _activeProcessInfo;
                 DragProcess = MpPlatform.Services.ProcessWatcher.LastProcessInfo;
-            }, _watcherPriority);
-        }
-
-        private void Sccvm_OnGlobalDragEnd(object sender, System.EventArgs e) {
-            Dispatcher.UIThread.Post(() => {
-                DragProcess = null;
             }, _watcherPriority);
         }
 

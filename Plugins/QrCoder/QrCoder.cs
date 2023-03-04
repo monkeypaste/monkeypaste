@@ -1,11 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
-using MonkeyPaste.Common.Plugin; 
-using MonkeyPaste.Common;
-using System.Linq;
-using System.IO;
-using SkiaSharp.QrCode.Image;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using SkiaSharp;
+using SkiaSharp.QrCode.Image;
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace QrCoder {
     public class QrCoder : MpIAnalyzeComponent {

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common.Plugin {
     public interface MpIAnalyzeAsyncComponent : MpIPluginComponentBase {
@@ -7,4 +8,5 @@ namespace MonkeyPaste.Common.Plugin {
     public interface MpIAnalyzeComponent : MpIPluginComponentBase {
         MpAnalyzerPluginResponseFormat Analyze(MpAnalyzerPluginRequestFormat req);
     }
+
 }
