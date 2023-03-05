@@ -67,6 +67,7 @@ namespace MonkeyPaste.Avalonia {
                     new MpBootstrappedItemViewModel(this,typeof(MpMasterTemplateModelCollectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpPluginLoader)),
                     new MpBootstrappedItemViewModel(this,typeof(MpMasterTemplateModelCollectionViewModel)),
+                    new MpBootstrappedItemViewModel(this,typeof(MpAvSoundPlayerViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvIconCollectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvAppCollectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpAvUrlCollectionViewModel)),

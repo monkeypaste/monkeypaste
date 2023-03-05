@@ -2482,9 +2482,12 @@ namespace MonkeyPaste.Avalonia {
             bool wasAppended = false;
             if (IsAnyAppendMode) {
                 wasAppended = await UpdateAppendModeAsync(ci);
-            }
 
-            if (!wasAppended) {
+            }
+            if (wasAppended) {
+                MpMessenger.SendGlobal(MpMessageType.AppendBufferChanged);
+            } else {
+                MpMessenger.SendGlobal(MpMessageType.ContentAdded);
                 //if (!MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
                 //    MpAvTagTrayViewModel.Instance.AllTagViewModel.LinkCopyItemCommand.Execute(ci.Id);
                 //}
@@ -2516,9 +2519,12 @@ namespace MonkeyPaste.Avalonia {
                 pi = MpPlatform.Services.ProcessWatcher.LastProcessInfo;
                 // NOTE paste success is very crude, false positive is likely
                 bool success = await MpPlatform.Services.ExternalPasteHandler.PasteDataObjectAsync(mpdo, pi);
-                if (!success) {
+                if (success) {
+                    MpMessenger.SendGlobal(MpMessageType.ContentPasted);
+                } else {
                     // clear pi to ignore paste history
                     pi = null;
+                    MpMessenger.SendGlobal(MpMessageType.AppError);
                 }
             }
 
@@ -3439,12 +3445,14 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 IsRightClickPasteMode = !IsRightClickPasteMode;
                 MpNotificationBuilder.ShowMessageAsync("MODE CHANGED", string.Format("RIGHT CLICK PASTE MODE: {0}", IsRightClickPasteMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
+                MpMessenger.SendGlobal(IsRightClickPasteMode ? MpMessageType.RightClickPasteEnabled : MpMessageType.RightClickPasteDisabled);
             }, () => !IsAppPaused);
 
         public ICommand ToggleAutoCopyModeCommand => new MpCommand(
             () => {
                 IsAutoCopyMode = !IsAutoCopyMode;
                 MpNotificationBuilder.ShowMessageAsync("MODE CHANGED", string.Format("AUTO-COPY SELECTION MODE: {0}", IsAutoCopyMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
+                MpMessenger.SendGlobal(IsAutoCopyMode ? MpMessageType.AutoCopyEnabled : MpMessageType.AutoCopyDisabled);
             }, () => !IsAppPaused);
 
 
@@ -3693,6 +3701,7 @@ namespace MonkeyPaste.Avalonia {
                     ActivateAppendModeAsync(false, IsAppendManualMode).FireAndForgetSafeAsync();
                 }
 
+                MpMessenger.SendGlobal(IsAppendMode ? MpMessageType.AppendModeActivated : MpMessageType.AppendModeDeactivated);
             });
 
         public ICommand ToggleAppendLineModeCommand => new MpCommand(

@@ -23,15 +23,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
         public MpAvSoundNotificationViewModel(MpSoundNotificationType type, object notificationProperty) : base(null) {
-            //PropertyChanged += (s, e) => {
-            //switch (e.PropertyName) {
-            //case nameof(NotificationType):
-            //    string ntstr = Enum.GetName(typeof(MpNotificationType), type);
-            //    IsAudible = ntstr.ToLower().Contains("Sound");
-            //    IsVisual = ntstr.ToLower().Contains("Show");
-            //    break;
-            //}
-            //};
             NotificationType = type;
             _property = notificationProperty;
         }

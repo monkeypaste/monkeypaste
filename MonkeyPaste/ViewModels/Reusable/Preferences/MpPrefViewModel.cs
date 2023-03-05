@@ -38,11 +38,9 @@ namespace MonkeyPaste {
         #endregion
 
         #region Statics
-        //[JsonIgnore]
-        //public const string PREFERENCES_FILE_NAME = "Pref.json";
 
         [JsonIgnore]
-        public static bool UseEncryption = false;
+        public static bool EncryptionActive { get; set; } = false;
 
         [JsonIgnore]
         public static MpPrefViewModel Instance { get; private set; }
@@ -124,6 +122,9 @@ namespace MonkeyPaste {
 
         #region Db        
 
+        public bool EncryptDb { get; set; } = true;
+
+
         #region Sync
         public string SyncCertFolderPath => Path.Combine(LocalStoragePath, "SyncCerts");
 
@@ -194,6 +195,29 @@ namespace MonkeyPaste {
 
         #endregion
 
+        #region Sound
+
+        public string NotificationCopySound1Path {
+            get {
+                return @"Sounds/Ting.wav";
+            }
+        }
+
+
+        public bool NotificationDoPasteSound { get; set; } = true;
+
+        public bool NotificationDoCopySound { get; set; } = true;
+
+        public bool NotificationDoLoadedSound { get; set; } = true;
+        public string NotificationCopySoundCustomPath { get; set; }
+        public bool NotificationDoModeChangeSound { get; set; } = true;
+        public string NotificationLoadedPath { get; set; } = @"Sounds/MonkeySound1.wav";
+        public string NotificationAppendModeOnSoundPath { get; set; } = @"Sounds/blip2.wav";
+
+        public string NotificationAppendModeOffSoundPath { get; set; } = @"Sounds/blip2.wav";
+
+        #endregion
+
         #region Experience
         public int ShowMainWindowAnimationMilliseconds {
             get {
@@ -213,11 +237,6 @@ namespace MonkeyPaste {
             }
         }
 
-        public string NotificationCopySound1Path {
-            get {
-                return @"Sounds/Ting.wav";
-            }
-        }
 
         public int ShowMainWindowMouseHitZoneHeight {
             get {
@@ -325,25 +344,109 @@ namespace MonkeyPaste {
 
         #endregion
 
-        #region User Properties          
+        #region Dynamic Properties          
+
+        #region Account
+        public string UserName { get; set; } = "Not Set";
+
+        public string UserEmail { get; set; } = "tkefauver@gmail.com";
+
+        #endregion
+
+        #region Preferences
+
+        #region Look & Feel
+
+        public string CurrentThemeName { get; set; } = MpThemeType.Light.ToString();
+        public int NotificationSoundGroupIdx { get; set; } = 1;
+        public double NotificationSoundVolume { get; set; } = 1;
+        public double MainWindowOpacity { get; set; }
+#if DESKTOP
+        = 0.7;
+#else
+        = 1.0d;
+#endif
+
+        public bool ShowItemPreview { get; set; } = false;
+        #endregion
+
+        #region Content
+
+        public bool IgnoreNewDuplicates { get; set; } = true;
 
         public bool IsRichHtmlContentEnabled { get; set; } = true;
-        public bool TrackExternalPasteHistory { get; set; } = false;
-        public string UserDefinedFileExtensionsPsv { get; set; } = string.Empty;
-        public int MaxUndoLimit { get; set; } = 100;
 
+        public bool UseSpellCheck { get; set; } = false;
+
+        #endregion
+
+        #region Language
+
+        public string UserLanguage { get; set; } = "English";
+        #endregion
+
+        #region History
+
+        public int MaxUndoLimit { get; set; } = 100;
+        public int MaxRecentTextsCount { get; set; } = 8;
+
+        public int MaxRecentClipItems { get; set; } = 25;
+
+        public bool TrackExternalPasteHistory { get; set; } = false; // will show warning about storage or something
+        #endregion
+
+        #region Startup
+
+        public bool LoadOnLogin { get; set; } = false;
+        #endregion
+
+        #endregion
+
+        #region Interop
+
+        public string IgnoredProcessNames { get; set; } = string.Empty;
+
+        public string UserDefinedFileExtensionsPsv { get; set; } = string.Empty;
+        public bool ShowMainWindowOnDragToScreenTop { get; set; } = true;
+        public bool IgnoreInternalClipboardChanges { get; set; } = true;
+        public bool IgnoreWhiteSpaceCopyItems { get; set; } = true;
+        public bool ResetClipboardAfterMonkeyPaste { get; set; }
+
+        public bool IgnoreAppendedItems { get; set; } = true;
+        #endregion
+
+        #region Security
+
+        public bool IsSettingsEncrypted { get; set; } = false; // requires restart and only used to trigger convert on exit (may not be necessary to restart)
+
+
+        #endregion
+
+        #region Shortcuts
+
+        public bool DoShowMainWindowWithMouseEdgeAndScrollDelta { get; set; } = true;
+        public bool DoShowMainWindowWithMouseEdge { get; set; } = true;
+        public string MainWindowShowBehaviorType { get; set; } = MpMainWindowShowBehaviorType.Primary.ToString();
+
+        #endregion
+
+        #region Runtime/Dependant Properties
+
+        #region Auto-Complete
         public string RecentFindTexts { get; set; } = string.Empty;
 
         public string RecentReplaceTexts { get; set; } = string.Empty;
 
         public string RecentSearchTexts { get; set; } = string.Empty;
+        #endregion
 
-        public int MaxRecentTextsCount { get; set; } = 8;
+        #region Ignored Ntf
 
-        public string IgnoredProcessNames { get; set; } = string.Empty;
         public string DoNotShowAgainNotificationIdCsvStr { get; set; } = string.Empty;
 
-        public string AppStorageFilePath { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        #endregion
+
+        #region Last Load Remembers
 
         public string MainWindowOrientation { get; set; }
 #if DESKTOP
@@ -351,24 +454,16 @@ namespace MonkeyPaste {
 #else
         = MpMainWindowOrientationType.Left.ToString();
 #endif
-
-        public string MainWindowShowBehaviorType { get; set; } = MpMainWindowShowBehaviorType.Primary.ToString();
-
         public double MainWindowInitialWidth { get; set; } = 0;
         public double MainWindowInitialHeight { get; set; } = 0;
 
         public DateTime StartupDateTime { get; set; } = DateTime.MinValue;
         public DateTime? LastStartupDateTime { get; set; } = null;
 
-        public string UserCultureInfoName { get; set; } = @"en-US";
-
         public int UniqueContentItemIdx { get; set; } = 0;
 
-
-        public bool ShowMainWindowOnDragToScreenTop { get; set; } = true;
-        public bool IgnoreInternalClipboardChanges { get; set; } = true;
-
         public string ClipTrayLayoutTypeName { get; set; } = MpClipTrayLayoutType.Stack.ToString();
+        #endregion
 
         #region Encrytion
 
@@ -381,9 +476,6 @@ namespace MonkeyPaste {
         #endregion
 
         #region Db
-
-        public bool EncryptDb { get; set; } = true;
-
         public string DbPassword { get; set; } = MpPasswordGenerator.GetRandomPassword();
         #endregion
 
@@ -391,126 +483,7 @@ namespace MonkeyPaste {
         public int SyncPort { get; set; } = 11000;
         #endregion
 
-        #region REST
-
-        public int RestfulLinkMinificationMaxCount { get; set; } = 5;
-
-        public int RestfulDictionaryDefinitionMaxCount { get; set; } = 5;
-
-        public int RestfulTranslationMaxCount { get; set; } = 5;
-        public int RestfulCurrencyConversionMaxCount { get; set; } = 5;
-
-        public int RestfulLinkMinificationCount { get; set; } = 0;
-
-        public int RestfulDictionaryDefinitionCount { get; set; } = 0;
-
-        public int RestfulCurrencyConversionCount { get; set; } = 0;
-
-        public int RestfulTranslationCount { get; set; } = 0;
-
-        public DateTime RestfulBillingDate { get; set; } = DateTime.UtcNow;
-
-        public int RestfulOpenAiCount { get; set; } = 0;
-
-        public int RestfulOpenAiMaxCount { get; set; } = 5;
-        #endregion
-
-        #region Appearance
-
-        public double MainWindowOpacity { get; set; }
-#if DESKTOP
-        = 0.7;
-#else
-        = 1.0d;
-#endif
-
-        public string UserCustomColorIdxArray { get; set; } = "0";
-
-        public string ThemeClipTileBackgroundColor { get; set; } = "#FFFFF";
-
-        public string HighlightFocusedHexColorString { get; set; } = "#FFC0CB";
-
-        public string HighlightColorHexString { get; set; } = "#FFFF00";
-
-        public string ClipTileBackgroundColor { get; set; } = "#FFFFFF";
-
-        public string DefaultFontFamily { get; set; } = "Consolas";
-
-        public double DefaultFontSize { get; set; } = 12.0d;
-
-        public string SpeechSynthVoiceName { get; set; } = "Zira";
-
-        public bool IgnoreNewDuplicates { get; set; } = true;
-        public bool IgnoreAppendedItems { get; set; } = true;
-
-        public int MaxRecentClipItems { get; set; } = 25;
-
-        public int NotificationBalloonVisibilityTimeMs { get; set; } = 3000;
-
-        public int NotificationSoundGroupIdx { get; set; } = 1;
-
-
-        public bool UseSpellCheck { get; set; } = false;
-
-        public string UserLanguage { get; set; } = "English";
-
-        public bool ShowItemPreview { get; set; } = false;
-
-        public bool NotificationDoPasteSound { get; set; } = true;
-
-        public bool NotificationDoCopySound { get; set; } = true;
-
-        public bool NotificationShowCopyToast { get; set; } = true;
-        public bool NotificationDoLoadedSound { get; set; } = true;
-
-        public string NotificationLoadedPath { get; set; } = @"Sounds/MonkeySound1.wav";
-
-        public string NotificationCopySoundCustomPath { get; set; }
-        public string NotificationAppendModeOnSoundPath { get; set; } = @"Sounds/blip2.wav";
-
-        public string NotificationAppendModeOffSoundPath { get; set; } = @"Sounds/blip2.wav";
-        public bool NotificationDoModeChangeSound { get; set; } = true;
-
-        public bool NotificationShowModeChangeToast { get; set; } = true;
-
-        public bool NotificationShowAppendBufferToast { get; set; } = false;
-        public bool NotificationShowCopyItemTooLargeToast { get; set; }
-
-        public bool DoShowMainWindowWithMouseEdgeAndScrollDelta { get; set; } = true;
-
-        public bool DoShowMainWindowWithMouseEdge { get; set; } = true;
-        #endregion
-
-        #region Drag & Drop
-        public string[] PasteAsImageDefaultProcessNameCollection { get; set; }
-
-        #endregion
-
-        #region Preferences
-
-        public int MaxRtfCharCount { get; set; } = 250_000;
-
-        public bool LoadOnLogin { get; set; } = false;
-
-        public bool IgnoreWhiteSpaceCopyItems { get; set; } = true;
-
-        public bool ResetClipboardAfterMonkeyPaste { get; set; }
-
-        public double ThisAppDip { get; set; } = 1.0d;
-
-        public string UserDefaultBrowserProcessPath { get; set; } = string.Empty;
-
-        public bool DoFindBrowserUrlForCopy { get; set; } = true;
-
-        public int MainWindowMonitorIdx { get; set; } = 0;
-
-        public int DoShowMainWIndowWithMouseEdgeIndex { get; set; } = 1;
-        #endregion
-
         #region Account
-        public string UserName { get; set; } = "Not Set";
-
-        public string UserEmail { get; set; } = "tkefauver@gmail.com";
 
         public bool IsTrialExpired { get; set; }
 
@@ -546,6 +519,7 @@ namespace MonkeyPaste {
 
         #endregion
 
+        #endregion
 
         #region State
 
@@ -592,7 +566,7 @@ namespace MonkeyPaste {
 
                     string prefStr = SerializeJsonObject();
 
-                    if (UseEncryption) {
+                    if (EncryptionActive) {
                         prefStr = MpEncryption.SimpleEncryptWithPassword(prefStr, "testtesttest");
                     }
 
@@ -620,11 +594,11 @@ namespace MonkeyPaste {
             Save();
         }
 
-        private static async Task LoadPrefsAsync() {
+        private static async Task LoadPrefsAsync(bool encrypt = false) {
             IsLoading = true;
 
             string prefsStr;
-            if (UseEncryption) {
+            if (encrypt) {
                 string prefsStr_Encrypted = MpFileIo.ReadTextFromFile(PreferencesPath);
                 prefsStr = MpEncryption.SimpleDecryptWithPassword(prefsStr_Encrypted, "testtesttest");
             } else {
@@ -633,6 +607,7 @@ namespace MonkeyPaste {
 
             MpPrefViewModel prefVm = null;
             if (ValidatePrefData(prefsStr)) {
+                EncryptionActive = encrypt;
                 try {
                     prefVm = MpJsonConverter.DeserializeObject<MpPrefViewModel>(prefsStr);
                 }
@@ -642,6 +617,11 @@ namespace MonkeyPaste {
             }
 
             if (prefVm == null) {
+                if (!encrypt) {
+                    // try to load w/ encryption
+                    await LoadPrefsAsync(true);
+                    return;
+                }
                 // this means pref file is invalid, likely app crashed while saving so attempt recovery
                 await CreateDefaultPrefsAsync(true);
                 if (Instance == null) {

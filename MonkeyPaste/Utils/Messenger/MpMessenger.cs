@@ -73,6 +73,25 @@ namespace MonkeyPaste {
         ContentListScrollChanged, //has context (tile)
         ContentItemsChanged, //has context (tile)
 
+        // START Sound ntf messages 
+
+        ContentAdded,
+        ContentPasted,
+
+        AppError,
+
+        AppendModeActivated,
+        AppendModeDeactivated,
+        AppendBufferChanged,
+
+        RightClickPasteEnabled,
+        RightClickPasteDisabled,
+
+        AutoCopyEnabled,
+        AutoCopyDisabled,
+
+        // END Sound ntf messages 
+
         ContentResized,
         ResizeContentCompleted,
 

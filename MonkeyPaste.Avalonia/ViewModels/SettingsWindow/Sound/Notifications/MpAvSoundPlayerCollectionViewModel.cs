@@ -8,28 +8,18 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
     public class MpAvSoundPlayerCollectionViewModel : MpViewModelBase {
         #region Singleton
-        private static readonly Lazy<MpAvSoundPlayerCollectionViewModel> _Lazy = new Lazy<MpAvSoundPlayerCollectionViewModel>(() => new MpAvSoundPlayerCollectionViewModel());
-        public static MpAvSoundPlayerCollectionViewModel Instance { get { return _Lazy.Value; } }
+        private static MpAvSoundPlayerCollectionViewModel _instance;
+        public static MpAvSoundPlayerCollectionViewModel Instance => _instance ?? (_instance = new MpAvSoundPlayerCollectionViewModel());
         #endregion
 
         #region Properties
 
         #region View Models
-        private ObservableCollection<MpAvSoundNotificationViewModel> _soundNotificationViewModels = new ObservableCollection<MpAvSoundNotificationViewModel>();
-        public ObservableCollection<MpAvSoundNotificationViewModel> SoundNotificationViewModels {
-            get {
-                return _soundNotificationViewModels;
-            }
-            set {
-                if (_soundNotificationViewModels != value) {
-                    _soundNotificationViewModels = value;
-                    OnPropertyChanged(nameof(SoundNotificationViewModels));
-                }
-            }
-        }
+        public ObservableCollection<MpAvSoundNotificationViewModel> SoundNotificationViewModels { get; set; } = new ObservableCollection<MpAvSoundNotificationViewModel>();
         #endregion
 
         #endregion
+
         #region Public Methods
         public void Init() {
             //empty to trigger singleton constructor

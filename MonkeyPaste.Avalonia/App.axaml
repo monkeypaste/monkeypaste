@@ -12,6 +12,7 @@
                 <ResourceInclude Source="/Resources/MpAvImageResourceDictionary.axaml" />
                 <ResourceInclude Source="/Resources/MpAvIconResourceDictionary.axaml" />
                 <ResourceInclude Source="/Resources/MpAvSvgResourceDictionary.axaml" />
+                <ResourceInclude Source="/Resources/MpAvSoundResourceDictionary.axaml" />
                 <ResourceInclude Source="/Resources/MpAvCursorResourceDictionary.axaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

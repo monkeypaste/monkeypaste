@@ -17,6 +17,7 @@ namespace MonkeyPaste.Avalonia {
         private static MpAvSettingsWindowViewModel _instance;
         public static MpAvSettingsWindowViewModel Instance => _instance ?? (_instance = new MpAvSettingsWindowViewModel());
 
+
         #endregion
 
         #region Properties
@@ -105,12 +106,12 @@ namespace MonkeyPaste.Avalonia {
             });
         public ICommand SaveSettingsCommand => new MpCommand(
             () => {
-
+                IsVisible = false;
             });
 
         public ICommand CancelSettingsCommand => new MpCommand(
             () => {
-
+                IsVisible = false;
             });
         public ICommand SelectTabCommand => new MpCommand<object>(
             (args) => {

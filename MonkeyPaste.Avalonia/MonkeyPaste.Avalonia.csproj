@@ -60,6 +60,8 @@
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\Plugins\_Base\**" />
+    <AvaloniaXaml Remove="ViewModels\SettingsWindow\Sound\Groups\**" />
+    <AvaloniaXaml Remove="ViewModels\SettingsWindow\Sound\Notifications\**" />
     <AvaloniaXaml Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <AvaloniaXaml Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <AvaloniaXaml Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
@@ -82,6 +84,8 @@
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
     <Compile Remove="ViewModels\MainWindow\Plugins\_Base\**" />
+    <Compile Remove="ViewModels\SettingsWindow\Sound\Groups\**" />
+    <Compile Remove="ViewModels\SettingsWindow\Sound\Notifications\**" />
     <Compile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <Compile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <Compile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
@@ -104,6 +108,8 @@
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\Plugins\_Base\**" />
+    <EmbeddedResource Remove="ViewModels\SettingsWindow\Sound\Groups\**" />
+    <EmbeddedResource Remove="ViewModels\SettingsWindow\Sound\Notifications\**" />
     <EmbeddedResource Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <EmbeddedResource Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <EmbeddedResource Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
@@ -127,6 +133,8 @@
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
     <None Remove="ViewModels\MainWindow\Plugins\_Base\**" />
+    <None Remove="ViewModels\SettingsWindow\Sound\Groups\**" />
+    <None Remove="ViewModels\SettingsWindow\Sound\Notifications\**" />
     <None Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <None Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <None Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
@@ -148,6 +156,8 @@
     <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
     <Page Remove="ViewModels\MainWindow\Plugins\_Base\**" />
+    <Page Remove="ViewModels\SettingsWindow\Sound\Groups\**" />
+    <Page Remove="ViewModels\SettingsWindow\Sound\Notifications\**" />
     <Page Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <Page Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
     <Page Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
@@ -1083,8 +1093,10 @@
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-preview5" />
     <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.0-preview5" />
     <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.0-preview5" />
+    <PackageReference Include="NetCoreAudio" Version="1.7.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
     <PackageReference Include="System.Management" Version="8.0.0-preview.1.23110.8" />
+    <PackageReference Include="System.Speech" Version="7.0.0" />
     <PackageReference Include="XamlNameReferenceGenerator" Version="1.6.1" />
   </ItemGroup>
   <ItemGroup>
@@ -1235,6 +1247,48 @@
     <Compile Update="Views\Reusable\ToolTip\MpAvToolTipInfoHintView.axaml.cs">
       <DependentUpon>MpAvToolTipInfoHintView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\SettingsWindow\Tabs\Account\MpAvAccountView.axaml.cs">
+      <DependentUpon>MpAvAccountView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\SettingsWindow\Tabs\Help\MpAvHelpView.axaml.cs">
+      <DependentUpon>MpAvHelpView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\SettingsWindow\Tabs\Interop\MpAvInteropView.axaml.cs">
+      <DependentUpon>MpAvInteropView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\SettingsWindow\Tabs\Preferences\MpAvPreferencesView.axaml.cs">
+      <DependentUpon>MpAvPreferencesView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\SettingsWindow\Tabs\Security\MpAvSecurityView.axaml.cs">
+      <DependentUpon>MpAvSecurityView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\SettingsWindow\Tabs\Shortcuts\MpAvShortcutsView.axaml.cs">
+      <DependentUpon>MpAvShortcutsView.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Update="Assets\Sounds\alert.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\Sounds\blip.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\Sounds\blip2.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\Sounds\chime.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\Sounds\Monkey1.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\Sounds\Monkey2.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\Sounds\ting.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <!--<Exec Command="xcopy /s /D /Y  &quot;$(SolutionDir)MonkeyPaste\Resources\*&quot; &quot;$(TargetDir)\Resources&quot;" />

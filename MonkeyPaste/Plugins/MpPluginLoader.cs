@@ -79,7 +79,7 @@ namespace MonkeyPaste {
                         var ass = Assembly.LoadFrom(assembly_test_Path);
                         return ass;
                     }
-                    catch (Exception ex) {
+                    catch (Exception) {
                         var ass2 = Assembly.Load(assembly_name);
                         return ass2;
                     }
