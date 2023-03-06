@@ -49,7 +49,7 @@ namespace MonkeyPaste {
 
         public bool IsUndoRedoSuppressed {
             get {
-                return MpPlatform.Services.FocusMonitor.IsSelfManagedHistoryControlFocused;
+                return Mp.Services.FocusMonitor.IsSelfManagedHistoryControlFocused;
             }
         }
         #endregion

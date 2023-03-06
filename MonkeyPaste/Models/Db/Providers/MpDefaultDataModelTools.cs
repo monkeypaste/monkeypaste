@@ -90,9 +90,9 @@ namespace MonkeyPaste {
 
             var thisDevice = await MpUserDevice.CreateAsync(
                 guid: thisDeviceGuid,
-                deviceType: MpPlatform.Services.PlatformInfo.OsType,
-                machineName: MpPlatform.Services.PlatformInfo.OsMachineName,
-                versionInfo: MpPlatform.Services.PlatformInfo.OsVersionInfo);
+                deviceType: Mp.Services.PlatformInfo.OsType,
+                machineName: Mp.Services.PlatformInfo.OsMachineName,
+                versionInfo: Mp.Services.PlatformInfo.OsVersionInfo);
 
             await thisDevice.WriteToDatabaseAsync();
 
@@ -108,17 +108,17 @@ namespace MonkeyPaste {
 
             string thisAppName = MpPrefViewModel.Instance.ApplicationName;
             var thisApp = await MpApp.CreateAsync(
-                appPath: MpPlatform.Services.PlatformInfo.ExecutingPath,
+                appPath: Mp.Services.PlatformInfo.ExecutingPath,
                 appName: thisAppName,
                 iconId: thisAppIcon.Id);
 
             ThisAppId = thisApp.Id;
 
-            if (MpPlatform.Services.PlatformInfo.IsDesktop) {
+            if (Mp.Services.PlatformInfo.IsDesktop) {
                 // OS App
                 var osApp = await MpApp.CreateAsync(
-                    appPath: MpPlatform.Services.PlatformInfo.OsFileManagerPath,
-                    appName: MpPlatform.Services.PlatformInfo.OsFileManagerName);
+                    appPath: Mp.Services.PlatformInfo.OsFileManagerPath,
+                    appName: Mp.Services.PlatformInfo.OsFileManagerName);
                 ThisOsFileManagerAppId = osApp.Id;
             }
 
@@ -137,18 +137,18 @@ namespace MonkeyPaste {
 
             // THIS APP
 
-            var this_app = await MpDataModelProvider.GetAppByMembersAsync(MpPlatform.Services.PlatformInfo.ExecutingPath, null, ThisUserDeviceId);
+            var this_app = await MpDataModelProvider.GetAppByMembersAsync(Mp.Services.PlatformInfo.ExecutingPath, null, ThisUserDeviceId);
             if (this_app == null) {
                 // reset error
                 Debugger.Break();
             }
             ThisAppId = this_app.Id;
 
-            if (MpPlatform.Services.PlatformInfo.IsDesktop) {
+            if (Mp.Services.PlatformInfo.IsDesktop) {
                 // OS APP
 
                 var osApp = await MpDataModelProvider.GetAppByMembersAsync(
-                    MpPlatform.Services.PlatformInfo.OsFileManagerPath,
+                    Mp.Services.PlatformInfo.OsFileManagerPath,
                     null,
                     ThisUserDeviceId);
                 ThisOsFileManagerAppId = osApp.Id;

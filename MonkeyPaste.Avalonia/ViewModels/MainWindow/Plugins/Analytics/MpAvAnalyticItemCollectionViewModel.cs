@@ -71,7 +71,7 @@ namespace MonkeyPaste.Avalonia {
         public double SidebarHeight { get; set; } = 0;
 
         public string SidebarBgHexColor =>
-            (MpPlatform.Services.PlatformResource.GetResource("AnalyzerSidebarBgBrush") as IBrush).ToHex();
+            (Mp.Services.PlatformResource.GetResource("AnalyzerSidebarBgBrush") as IBrush).ToHex();
 
         #endregion
 
@@ -231,7 +231,7 @@ namespace MonkeyPaste.Avalonia {
             return new MpMenuItemViewModel() {
                 Header = @"Analyze",
                 AltNavIdx = 0,
-                IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("BrainImage") as string,
+                IconResourceKey = Mp.Services.PlatformResource.GetResource("BrainImage") as string,
                 SubItems = sub_items
             };
         }

@@ -93,9 +93,9 @@ namespace MonkeyPaste.Avalonia {
 
         [SuppressPropertyChangedWarnings]
         public void OnFileSystemItemChanged(object sender, FileSystemEventArgs e) {
-            bool is_core_loaded = MpPlatform.Services != null &&
-                     MpPlatform.Services.StartupState != null &&
-                     MpPlatform.Services.StartupState.IsCoreLoaded;
+            bool is_core_loaded = Mp.Services != null &&
+                     Mp.Services.StartupState != null &&
+                     Mp.Services.StartupState.IsCoreLoaded;
             if (!is_core_loaded) {
                 // NOTE this check maybe unnecessary. Rtf test was being generated onto desktop during startup and interfering w/ this trigger's lifecycle
                 return;
@@ -139,7 +139,7 @@ namespace MonkeyPaste.Avalonia {
                         bool isVisible = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.CopyItemId == ci.Id) != null;
                         await ci.DeleteFromDatabaseAsync();
                         if (isVisible) {
-                            MpPlatform.Services.Query.NotifyQueryChanged();
+                            Mp.Services.Query.NotifyQueryChanged();
 
                         }
                         break;
@@ -194,7 +194,7 @@ namespace MonkeyPaste.Avalonia {
             async () => {
                 MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
 
-                var selectedDir = await MpPlatform.Services.NativePathDialog
+                var selectedDir = await Mp.Services.NativePathDialog
                         .ShowFolderDialogAsync($"Select Folder", FolderPath);
 
                 MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;

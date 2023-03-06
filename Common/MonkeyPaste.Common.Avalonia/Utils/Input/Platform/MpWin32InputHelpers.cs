@@ -10,11 +10,11 @@ namespace MonkeyPaste.Common.Avalonia {
             //}
 
             var sb = new StringBuilder();
-            string[] keySequences = keyString.Split(new string[] { MpKeyGestureHelper2.SEQUENCE_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
+            string[] keySequences = keyString.Split(new string[] { MpInputConstants.SEQUENCE_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < keySequences.Length; i++) {
                 string seq = keySequences[i].Trim();
                 //string outStr = string.Empty;
-                var keys = seq.Split(new string[] { MpKeyGestureHelper2.COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
+                var keys = seq.Split(new string[] { MpInputConstants.COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var key in keys) {
                     switch (key) {
                         case "Control":

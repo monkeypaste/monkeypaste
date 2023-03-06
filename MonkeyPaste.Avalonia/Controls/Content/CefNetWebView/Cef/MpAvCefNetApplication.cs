@@ -64,7 +64,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static void ResetCefNetLogging() {
-            string debug_log_path = Path.Combine(MpPlatform.Services.PlatformInfo.ExecutingDir, "debug.log");
+            string debug_log_path = Path.Combine(Mp.Services.PlatformInfo.ExecutingDir, "debug.log");
             if (!string.IsNullOrEmpty(debug_log_path)) {
                 MpFileIo.WriteTextToFile(debug_log_path, string.Empty, false);
             }

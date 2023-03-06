@@ -455,12 +455,12 @@ namespace MonkeyPaste {
         protected void ShowBalloon() {
             //_nbv.ShowWindow(nvmb);
             //IsVisible = true;
-            MpPlatform.Services.NotificationManager.ShowNotification(this);
+            Mp.Services.NotificationManager.ShowNotification(this);
         }
 
         protected void HideBalloon() {
             //_nbv.HideWindow(nvmb);
-            MpPlatform.Services.NotificationManager.HideNotification(this);
+            Mp.Services.NotificationManager.HideNotification(this);
             //Parent.RemoveNotificationCommand.Execute(this);
             //Notifications.Remove(nvmb);
             //IsVisible = false;
@@ -499,9 +499,9 @@ namespace MonkeyPaste {
 
              }, () => {
                  return
-                     MpPlatform.Services != null &&
-                     MpPlatform.Services.StartupState != null &&
-                     MpPlatform.Services.StartupState.IsCoreLoaded;
+                     Mp.Services != null &&
+                     Mp.Services.StartupState != null &&
+                     Mp.Services.StartupState.IsCoreLoaded;
              });
 
         public ICommand CheckDoNotShowAgainCommand => new MpCommand(
@@ -512,7 +512,7 @@ namespace MonkeyPaste {
 
         public ICommand CloseNotificationCommand => new MpCommand(
             () => {
-                MpPlatform.Services.NotificationManager.HideNotification(this);
+                Mp.Services.NotificationManager.HideNotification(this);
             });
 
         public ICommand ToggleIsPinnedCommand => new MpCommand(

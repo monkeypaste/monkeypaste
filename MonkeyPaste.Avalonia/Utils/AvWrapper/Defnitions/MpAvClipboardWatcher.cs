@@ -90,7 +90,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void CheckClipboard() {
-            if (MpPlatform.Services.DataObjectHelperAsync.IsOleBusy) {
+            if (Mp.Services.DataObjectHelperAsync.IsOleBusy) {
                 // don't bother it
                 return;
             }
@@ -112,13 +112,13 @@ namespace MonkeyPaste.Avalonia {
             if (MpPortableDataObject.IsDataNotEqual(_lastCbo, cbo)) {
                 MpConsole.WriteLine("Cb changed");
                 _lastCbo = cbo;
-                var process_cbo = await MpPlatform.Services.DataObjectHelperAsync.GetPlatformClipboardDataObjectAsync(false) as MpPortableDataObject;
+                var process_cbo = await Mp.Services.DataObjectHelperAsync.GetPlatformClipboardDataObjectAsync(false) as MpPortableDataObject;
                 OnClipboardChanged?.Invoke(typeof(MpAvClipboardWatcher).ToString(), process_cbo);
             }
         }
 
         private async Task<MpPortableDataObject> ConvertManagedFormats() {
-            var result = await MpPlatform.Services.DataObjectHelperAsync.GetPlatformClipboardDataObjectAsync(true);
+            var result = await Mp.Services.DataObjectHelperAsync.GetPlatformClipboardDataObjectAsync(true);
             return result as MpPortableDataObject;
         }
 

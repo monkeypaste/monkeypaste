@@ -9,20 +9,28 @@
                        x:CompileBindings="True"
                        mc:Ignorable="d"
                        x:Class="MonkeyPaste.Avalonia.MpAvShortcutKeyGroupView">
+    <local:MpAvUserControl.Styles>
+        <Style Selector="Grid#ComboContainer:nth-child > TextBlock">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+    </local:MpAvUserControl.Styles>
     <Grid ColumnDefinitions="*,Auto"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch">
         <Border Grid.Column="0"
-                Background="Cyan"
+                Classes="comboBorder"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
-                BorderThickness="1"
+                Background="Cyan"
                 BorderBrush="Black"
+                BorderThickness="1"
                 CornerRadius="5">
             <ItemsControl Items="{Binding Items}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <local:MpAvShortcutKeyView DataContext="{Binding}" />
+                        <local:MpAvShortcutKeyView Grid.Column="1"
+                                                   DataContext="{Binding}" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
                 <ItemsControl.ItemsPanel>
@@ -34,9 +42,9 @@
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
         </Border>
-        <Label x:Name="ComboLabel"
+        <Label Classes="comboLabel"
                Grid.Column="1"
-               IsVisible="{Binding IsPlusVisible}"
+               IsVisible="False"
                Content="+"
                FontSize="14"
                FontWeight="Bold"

@@ -58,10 +58,10 @@ namespace MonkeyPaste.Avalonia {
 
                 string result = null;
                 if (IsDirectoryChooser) {
-                    result = await MpPlatform.Services.NativePathDialog
+                    result = await Mp.Services.NativePathDialog
                         .ShowFolderDialogAsync($"Select {Label}", initDir);
                 } else {
-                    result = await MpPlatform.Services.NativePathDialog
+                    result = await Mp.Services.NativePathDialog
                         .ShowFileDialogAsync($"Select {Label}", initDir, null);
                 }
 

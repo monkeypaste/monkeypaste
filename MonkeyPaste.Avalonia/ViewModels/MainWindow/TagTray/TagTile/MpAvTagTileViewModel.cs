@@ -126,14 +126,14 @@ namespace MonkeyPaste.Avalonia {
                             IsVisible = !IsTagReadOnly,
                             Header = "Rename",
                             AltNavIdx = 0,
-                            IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("RenameImage") as string, //MpPlatformWrapper.Services.PlatformResource.GetResource("RenameIcon") as string,
+                            IconResourceKey = Mp.Services.PlatformResource.GetResource("RenameImage") as string, //MpPlatformWrapper.Services.PlatformResource.GetResource("RenameIcon") as string,
                             Command = RenameTagCommand,
                         },
                         new MpMenuItemViewModel() {
                             IsVisible = CanHotkey,
                             Header = "Assign Hotkey",
                             AltNavIdx = 0,
-                            IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("HotkeyImage") as string,
+                            IconResourceKey = Mp.Services.PlatformResource.GetResource("HotkeyImage") as string,
                             Command = AssignHotkeyCommand,
                             ShortcutArgs = new object[] { MpShortcutType.SelectTag, TagId },
                         },
@@ -141,7 +141,7 @@ namespace MonkeyPaste.Avalonia {
                             IsVisible = CanPin,
                             Header = IsModelPinned ? "Unpin" : "Pin",
                             AltNavIdx = 0,
-                            IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("PinImage") as string,
+                            IconResourceKey = Mp.Services.PlatformResource.GetResource("PinImage") as string,
                             Command = Parent.ToggleTileIsPinnedCommand,
                             CommandParameter = this
                         },
@@ -154,7 +154,7 @@ namespace MonkeyPaste.Avalonia {
                         new MpMenuItemViewModel() {
                             IsVisible = !IsTagReadOnly,
                             Header = "Delete",
-                            IconResourceKey = MpPlatform.Services.PlatformResource.GetResource("DeleteImage") as string,
+                            IconResourceKey = Mp.Services.PlatformResource.GetResource("DeleteImage") as string,
                             Command = DeleteThisTagCommand
                         }
                     }
@@ -289,7 +289,7 @@ namespace MonkeyPaste.Avalonia {
             !IsRootGroupTag && !IsAllTag && !IsHelpTag;
 
         public bool CanHotkey =>
-            !IsGroupTag && MpPlatform.Services.PlatformInfo.IsDesktop;
+            !IsGroupTag && Mp.Services.PlatformInfo.IsDesktop;
 
         public bool CanLinkContent =>
             IsLinkTag;
@@ -922,7 +922,7 @@ namespace MonkeyPaste.Avalonia {
                                 TagClipCount = null;
                             } else {
                                 TagClipCount =
-                                    MpPlatform.Services.Query.TotalAvailableItemsInQuery;
+                                    Mp.Services.Query.TotalAvailableItemsInQuery;
                                 //MpAvSearchCriteriaItemCollectionViewModel.Instance.TotalAvailableItemsInQuery;
                             }
                         } else {
@@ -1104,7 +1104,7 @@ namespace MonkeyPaste.Avalonia {
              },
             (args) => {
                 if (args != null &&
-                    !MpPlatform.Services.PlatformInfo.IsDesktop) {
+                    !Mp.Services.PlatformInfo.IsDesktop) {
                     // disable double click cmd on mobile to allow hold event to take priority
                     // in pointerPress extension
                     return false;

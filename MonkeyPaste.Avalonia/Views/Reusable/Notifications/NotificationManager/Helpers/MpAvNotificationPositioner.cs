@@ -104,7 +104,7 @@ namespace MonkeyPaste.Avalonia {
             double anchor_pd = w.VisualPixelDensity();
             if (anchor == null) {
                 // find active screen center
-                MpIPlatformScreenInfo primaryScreen = MpPlatform.Services.ScreenInfoCollection.Screens.FirstOrDefault(x => x.IsPrimary);
+                MpIPlatformScreenInfo primaryScreen = Mp.Services.ScreenInfoCollection.Screens.FirstOrDefault(x => x.IsPrimary);
                 if (primaryScreen == null) {
                     // happens before loader attached
                     return new PixelPoint();

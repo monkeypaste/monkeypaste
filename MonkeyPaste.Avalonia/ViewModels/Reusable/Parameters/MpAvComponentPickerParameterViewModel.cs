@@ -153,7 +153,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(SelectedLabel));
                     OnPropertyChanged(nameof(SelectedIconResourceObj));
 
-                    MpPlatform.Services.ContextMenuCloser.CloseMenu();
+                    Mp.Services.ContextMenuCloser.CloseMenu();
                 }
             });
 

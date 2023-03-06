@@ -1,16 +1,81 @@
+using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using PropertyChanged;
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvShortcutView : MpAvUserControl<MpAvIKeyGestureViewModel> {
 
-        public MpAvShortcutView() {
-            InitializeComponent();
+        #region RecordCommandParameter Property
+
+        private object _RecordCommandParameter = null;
+
+        public static readonly DirectProperty<MpAvShortcutView, object> RecordCommandParameterProperty =
+            AvaloniaProperty.RegisterDirect<MpAvShortcutView, object>
+            (
+                nameof(RecordCommandParameter),
+                o => o.RecordCommandParameter,
+                (o, v) => o.RecordCommandParameter = v
+            );
+
+        public object RecordCommandParameter {
+            get => _RecordCommandParameter;
+            set {
+                SetAndRaise(RecordCommandParameterProperty, ref _RecordCommandParameter, value);
+            }
         }
 
-        private void InitializeComponent() {
+        #endregion 
+
+        #region RecordCommand Property
+
+        private ICommand _RecordCommand = new MpCommand(() => { }, () => false);
+
+        public static readonly DirectProperty<MpAvShortcutView, ICommand> RecordCommandProperty =
+            AvaloniaProperty.RegisterDirect<MpAvShortcutView, ICommand>
+            (
+                nameof(RecordCommand),
+                o => o.RecordCommand,
+                (o, v) => o.RecordCommand = v
+            );
+
+        public ICommand RecordCommand {
+            get => _RecordCommand;
+            set {
+                SetAndRaise(RecordCommandProperty, ref _RecordCommand, value);
+            }
+        }
+
+        #endregion 
+
+        public bool CanRecord =>
+            RecordCommand != null && RecordCommand.CanExecute(RecordCommandParameter);
+        public MpAvShortcutView() {
             AvaloniaXamlLoader.Load(this);
+            this.PointerEntered += MpAvShortcutView_PointerEntered;
+            this.PointerExited += MpAvShortcutView_PointerExited;
+        }
+
+        private void MpAvShortcutView_PointerExited(object sender, global::Avalonia.Input.PointerEventArgs e) {
+            if (!CanRecord) {
+                return;
+            }
+            var sclb = this.FindControl<Control>("ShortcutListBox");
+            var rb = this.FindControl<Control>("RecordButton");
+            sclb.IsVisible = true;
+            rb.IsVisible = false;
+        }
+
+        private void MpAvShortcutView_PointerEntered(object sender, global::Avalonia.Input.PointerEventArgs e) {
+            if (!CanRecord) {
+                return;
+            }
+            var sclb = this.FindControl<Control>("ShortcutListBox");
+            var rb = this.FindControl<Control>("RecordButton");
+            sclb.IsVisible = false;
+            rb.IsVisible = true;
         }
     }
 }

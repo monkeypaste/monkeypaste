@@ -41,13 +41,13 @@ namespace MonkeyPaste.Avalonia {
                     Items.Remove(itemsToRemove[i]);
                 }
                 var pmivml = new List<MpMenuItemViewModel>();
-                foreach (var kvp in MpPlatform.Services.ProcessWatcher.RunningProcessLookup) {
-                    var appName = MpPlatform.Services.ProcessWatcher.GetProcessApplicationName(kvp.Value[0]);
+                foreach (var kvp in Mp.Services.ProcessWatcher.RunningProcessLookup) {
+                    var appName = Mp.Services.ProcessWatcher.GetProcessApplicationName(kvp.Value[0]);
                     if (kvp.Value.Count == 0 || string.IsNullOrEmpty(appName)) {
                         continue;
                     }
                     var processPath = kvp.Key;
-                    var processName = MpPlatform.Services.ProcessWatcher.GetProcessApplicationName(kvp.Value[0]);
+                    var processName = Mp.Services.ProcessWatcher.GetProcessApplicationName(kvp.Value[0]);
                     var avm = MpAvAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppPath.ToLower() == processPath.ToLower());
                     var rpmivm = new MpMenuItemViewModel() {
                         Header = processName,
@@ -59,9 +59,9 @@ namespace MonkeyPaste.Avalonia {
                                 this,
                                 new MpPasteToAppPath() {
                                     AppPath = processPath,
-                                    AppName = MpPlatform.Services.ProcessWatcher.GetProcessApplicationName(handle),
+                                    AppName = Mp.Services.ProcessWatcher.GetProcessApplicationName(handle),
                                     IconId = avm == null ? 0 : avm.IconId,
-                                    IsAdmin = MpPlatform.Services.ProcessWatcher.IsAdmin(handle)
+                                    IsAdmin = Mp.Services.ProcessWatcher.IsAdmin(handle)
                                 },
                                 handle);
 
@@ -356,7 +356,7 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
 
-                    string openResult = await MpPlatform.Services.NativePathDialog
+                    string openResult = await Mp.Services.NativePathDialog
                             .ShowFileDialogAsync($"Select application path", null, MpFileIo.GetOsExecutableFileFilters().Split(","));
 
                     MpAvMenuExtension.CloseMenu();

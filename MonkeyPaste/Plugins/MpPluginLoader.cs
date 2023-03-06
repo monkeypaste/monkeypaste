@@ -27,9 +27,9 @@ namespace MonkeyPaste {
         public static Dictionary<string, MpPluginFormat> Plugins { get; set; } = new Dictionary<string, MpPluginFormat>();
 
         public static string PluginRootFolderPath =>
-            Path.Combine(MpPlatform.Services.PlatformInfo.StorageDir, PLUG_FOLDER_NAME);
+            Path.Combine(Mp.Services.PlatformInfo.StorageDir, PLUG_FOLDER_NAME);
         public static string PluginManifestBackupFolderPath =>
-            Path.Combine(MpPlatform.Services.PlatformInfo.StorageDir, MANIFEST_BACKUP_FOLDER_NAME);
+            Path.Combine(Mp.Services.PlatformInfo.StorageDir, MANIFEST_BACKUP_FOLDER_NAME);
         #endregion
 
         #region Public Methods
@@ -243,7 +243,7 @@ namespace MonkeyPaste {
             }
             if (ioType.isCli) {
 
-                switch (MpPlatform.Services.PlatformInfo.OsType) {
+                switch (Mp.Services.PlatformInfo.OsType) {
                     case MpUserDeviceType.Windows:
                         return "exe";
                     default:

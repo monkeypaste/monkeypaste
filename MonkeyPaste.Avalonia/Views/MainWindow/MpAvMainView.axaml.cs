@@ -37,7 +37,7 @@ namespace MonkeyPaste.Avalonia {
         public static MpAvMainView Instance => _instance;
         public static async Task Init() {
             await Task.Delay(1);
-            if (MpPlatform.Services.PlatformInfo.IsDesktop) {
+            if (Mp.Services.PlatformInfo.IsDesktop) {
                 var mw = new MpAvMainWindow();
                 if (mw.Content is MpAvMainView mv) {
                     _instance = mv;

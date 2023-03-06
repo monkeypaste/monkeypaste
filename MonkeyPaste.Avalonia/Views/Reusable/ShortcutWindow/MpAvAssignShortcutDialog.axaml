@@ -11,6 +11,7 @@
         SizeToContent="Width"
         ShowInTaskbar="False"
         Topmost="True"
+        Classes="assignWindow fadeIn"
         WindowStartupLocation="CenterScreen"
         x:DataType="local:MpAvAssignShortcutViewModel"
         x:CompileBindings="True"
@@ -19,6 +20,10 @@
     <Grid RowDefinitions="20,*,Auto,Auto,50">
         <TextBlock Grid.Row="0"
                    FontSize="16"
+                   FontWeight="SemiBold"
+                   Margin="10,5"
+                   TextAlignment="Center"
+                   TextWrapping="WrapWithOverflow"
                    HorizontalAlignment="Center"
                    Text="{Binding ShortcutDisplayName}" />
         <Border Grid.Row="1"
@@ -121,7 +126,7 @@
                     Click="Cancel_Click"
                     Content="Cancel" />
             <Button Command="{Binding ClearCommand}"
-                    Content="Clear"/>
+                    Content="Clear" />
             <Button Content="Ok"
                     IsDefault="True"
                     Click="Ok_Click" />

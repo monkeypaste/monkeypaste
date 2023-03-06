@@ -275,8 +275,8 @@ namespace MonkeyPaste {
             MpTransactionSourceType sourceType,
             int sourceObjId) {
             string query =
-                $"select fk_MpCopyItemId from MpTransactionSource where e_MpTransactionSourceType=='{sourceType.ToString()}' and fk_SourceObjId = ?";
-            var result = await MpDb.QueryAsync<MpCopyItem>(query, sourceObjId);
+                $"select * from MpCopyItem where pk_MpCopyItemId in (select fk_MpCopyItemId from MpCopyItemTransaction where pk_MpCopyItemTransactionId IN (select fk_MpCopyItemTransactionId from MpTransactionSource where e_MpTransactionSourceType=? and fk_SourceObjId=?))";
+            var result = await MpDb.QueryAsync<MpCopyItem>(query, sourceType.ToString(), sourceObjId);
             return result;
         }
 

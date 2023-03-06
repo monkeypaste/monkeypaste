@@ -175,7 +175,7 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     }
                     MpPrefViewModel.Instance.LastQueryInfoJson =
-                        MpPlatform.Services.Query.SerializeJsonObject();
+                        Mp.Services.Query.SerializeJsonObject();
                     break;
             }
         }

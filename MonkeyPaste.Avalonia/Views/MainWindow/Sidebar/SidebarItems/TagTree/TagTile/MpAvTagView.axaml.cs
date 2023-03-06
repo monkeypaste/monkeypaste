@@ -36,7 +36,7 @@ namespace MonkeyPaste.Avalonia {
             bool ended = false;
             this.DragCheckAndStart(e,
                 async (start_e) => {
-                    while (MpPlatform.Services.Query.IsQuerying) {
+                    while (Mp.Services.Query.IsQuerying) {
                         // wait for tag selection to finish 
                         if (ended) {
                             // was just a click
@@ -307,7 +307,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task PerformExternalOrPartialDropAsync(IDataObject avdo) {
-            MpPortableDataObject mpdo = await MpPlatform.Services.DataObjectHelperAsync.ReadDragDropDataObjectAsync(avdo) as MpPortableDataObject;
+            MpPortableDataObject mpdo = await Mp.Services.DataObjectHelperAsync.ReadDragDropDataObjectAsync(avdo) as MpPortableDataObject;
 
             //int drag_ciid = -1;
             string drag_ctvm_pub_handle = mpdo.GetData(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT) as string;
@@ -317,11 +317,11 @@ namespace MonkeyPaste.Avalonia {
                     // tile sub-selection drop
                     //drag_ciid = drag_ctvm.CopyItemId;
 
-                    mpdo.SetData(MpPortableDataFormats.LinuxUriList, new string[] { MpPlatform.Services.SourceRefBuilder.ConvertToRefUrl(drag_ctvm.CopyItem) });
+                    mpdo.SetData(MpPortableDataFormats.LinuxUriList, new string[] { Mp.Services.SourceRefBuilder.ConvertToRefUrl(drag_ctvm.CopyItem) });
                 }
             }
 
-            MpCopyItem drop_ci = await MpPlatform.Services.CopyItemBuilder.BuildAsync(mpdo);//, drag_ciid);
+            MpCopyItem drop_ci = await Mp.Services.CopyItemBuilder.BuildAsync(mpdo);//, drag_ciid);
 
             if (drop_ci == null) {
                 return;

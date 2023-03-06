@@ -13,9 +13,11 @@ using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Cursor = Avalonia.Input.Cursor;
 using Key = Avalonia.Input.Key;
 using KeyEventArgs = Avalonia.Input.KeyEventArgs;
 
@@ -26,6 +28,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Variables
 
+        private IBrush _defNavUriBrush = Brushes.Maroon;
         private FormattedText _ft;
         private MpSize _ftSize;
         private MpSize _bmpSize;
@@ -53,14 +56,15 @@ namespace MonkeyPaste.Avalonia {
 
         #region ReadOnlyForeground AvaloniaProperty
 
-        private IBrush _readOnlyForeground = Brushes.White;
+        private static IBrush _defReadOnlyForeground = Brushes.White;
         public IBrush ReadOnlyForeground {
-            get => _readOnlyForeground;
-            set => SetAndRaise(ReadOnlyForegroundProperty, ref _readOnlyForeground, value);
+            get => GetValue(ReadOnlyForegroundProperty);
+            set => SetValue(ReadOnlyForegroundProperty, value); //SetAndRaise(ReadOnlyForegroundProperty, ref _readOnlyForeground, value);
         }
 
         public static readonly StyledProperty<IBrush> ReadOnlyForegroundProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, IBrush>(nameof(ReadOnlyForeground), Brushes.White);
+            AvaloniaProperty.Register<MpAvMarqueeTextBox, IBrush>(nameof(ReadOnlyForeground), _defReadOnlyForeground);
+
 
         #endregion
 
@@ -279,6 +283,50 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region HoverBrush AvaloniaProperty
+        public IBrush HoverBrush {
+            get => GetValue(HoverBrushProperty);
+            set => SetValue(HoverBrushProperty, value);
+        }
+
+        public static readonly StyledProperty<IBrush> HoverBrushProperty =
+            AvaloniaProperty.Register<MpAvMarqueeTextBox, IBrush>(nameof(HoverBrush));
+
+        #endregion
+
+        #region NavigateUri AvaloniaProperty
+        public string NavigateUri {
+            get => GetValue(NavigateUriProperty);
+            set => SetValue(NavigateUriProperty, value);
+        }
+
+        public static readonly StyledProperty<string> NavigateUriProperty =
+            AvaloniaProperty.Register<MpAvMarqueeTextBox, string>(nameof(NavigateUri));
+
+        #endregion
+
+        #region NavigateUriCommand AvaloniaProperty
+        public ICommand NavigateUriCommand {
+            get => GetValue(NavigateUriCommandProperty);
+            set => SetValue(NavigateUriCommandProperty, value);
+        }
+
+        public static readonly StyledProperty<ICommand> NavigateUriCommandProperty =
+            AvaloniaProperty.Register<MpAvMarqueeTextBox, ICommand>(nameof(NavigateUriCommand));
+
+        #endregion
+
+        #region NavigateUriCommandParameter AvaloniaProperty
+        public object NavigateUriCommandParameter {
+            get => GetValue(NavigateUriCommandParameterProperty);
+            set => SetValue(NavigateUriCommandParameterProperty, value);
+        }
+
+        public static readonly StyledProperty<object> NavigateUriCommandParameterProperty =
+            AvaloniaProperty.Register<MpAvMarqueeTextBox, object>(nameof(NavigateUriCommandParameter));
+
+        #endregion
+
         #region Highlighting
 
         #region HighlightRanges AvaloniaProperty
@@ -409,6 +457,10 @@ namespace MonkeyPaste.Avalonia {
         }
         protected override void OnPointerEntered(PointerEventArgs e) {
             base.OnPointerEntered(e);
+            if (NavigateUri != null && IsReadOnly) {
+                this.Cursor = new Cursor(StandardCursorType.Hand);
+                Dispatcher.UIThread.Post(this.InvalidateVisual);
+            }
             _tb_mp = e.GetClientMousePoint(this);
             AnimateAsync().FireAndForgetSafeAsync();
         }
@@ -421,9 +473,18 @@ namespace MonkeyPaste.Avalonia {
             if (DataContext is MpISelectableViewModel svm) {
                 svm.IsSelected = true;
             }
+            if (NavigateUri != null &&
+                IsReadOnly &&
+                e.KeyModifiers.HasFlag(KeyModifiers.Control)) {
+                NavigateUriCommand?.Execute(NavigateUriCommandParameter);
+            }
         }
         protected override void OnPointerExited(PointerEventArgs e) {
             base.OnPointerExited(e);
+            if (NavigateUri != null && IsReadOnly) {
+                this.Cursor = Cursor.Default;
+                Dispatcher.UIThread.Post(this.InvalidateVisual);
+            }
             _tb_mp = null;
         }
 
@@ -531,6 +592,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private void Init() {
+
             _bmpSize = GetScaledTextSize(out _ftSize);
             _offsetX1 = 0;
             if (CanMarquee()) {
@@ -561,14 +623,30 @@ namespace MonkeyPaste.Avalonia {
 
         }
         private void RenderMarquee(DrawingContext ctx) {
-            _ft.SetForegroundBrush(ReadOnlyForeground);
+            if (_ft == null) {
+                Init();
+                if (_ft == null) {
+                    return;
+                }
+            }
+
+            IBrush fg = ReadOnlyForeground;
+            if (IsPointerOver) {
+                if (HoverBrush != null) {
+                    fg = HoverBrush;
+                } else if (NavigateUri != null) {
+                    fg = _defNavUriBrush;
+                }
+            }
+
+            _ft.SetForegroundBrush(fg);
             ctx.FillRectangle(ReadOnlyBackground, this.Bounds);
 
             var origin1 = new Point(_offsetX1, 0);
             //using (ctx.PushPostTransform(Matrix.CreateTranslation(new Vector(_offsetX1, 0)))) {
             _ft.SetForegroundBrush(DropShadowBrush);
             ctx.DrawText(_ft, origin1 + DropShadowOffset);
-            _ft.SetForegroundBrush(ReadOnlyForeground);
+            _ft.SetForegroundBrush(fg);
             ctx.DrawText(_ft, origin1);
             //}
             if (CanMarquee()) {
@@ -576,7 +654,7 @@ namespace MonkeyPaste.Avalonia {
                 // using (ctx.PushPostTransform(Matrix.CreateTranslation(new Vector(_offsetX2, 0)))) {
                 _ft.SetForegroundBrush(DropShadowBrush);
                 ctx.DrawText(_ft, origin2 + DropShadowOffset);
-                _ft.SetForegroundBrush(ReadOnlyForeground);
+                _ft.SetForegroundBrush(fg);
                 ctx.DrawText(_ft, origin2);
                 // }
             }
@@ -710,6 +788,9 @@ namespace MonkeyPaste.Avalonia {
             }
 
             _ft = this.ToFormattedText();
+            if (NavigateUri != null) {
+                _ft.SetTextDecorations(TextDecorations.Underline);
+            }
             ftSize = new MpSize(_ft.Width + TailPadding, _ft.Height);
 
             double pixelsPerDip = MpAvMainWindowViewModel.Instance.MainWindowScreen.Scaling;

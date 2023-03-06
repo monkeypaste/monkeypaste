@@ -1,8 +1,33 @@
-﻿namespace MonkeyPaste.Avalonia {
+﻿using System.Collections.ObjectModel;
+
+namespace MonkeyPaste.Avalonia {
     public static class MpAvDesignData {
 
         public static MpAvSettingsWindowViewModel Design { get; } = new MpAvSettingsWindowViewModel {
             // View Model initialization here.
+        };
+
+        public static MpAvShortcutCollectionViewModel ShortcutCollection { get; } = new MpAvShortcutCollectionViewModel {
+            Items = new ObservableCollection<MpAvShortcutViewModel>() {
+                new MpAvShortcutViewModel(null) {
+                    Shortcut = new MpShortcut() {
+                        DefaultKeyString = "Control+S",
+                        KeyString = "Control+S",
+                        RoutingType = MpRoutingType.Direct,
+                        ShortcutLabel = "Test Label 1",
+                        ShortcutType = MpShortcutType.ShowMainWindow
+                    }
+                },
+                new MpAvShortcutViewModel(null) {
+                    Shortcut = new MpShortcut() {
+                        DefaultKeyString = "Control+F5|Control+F4",
+                        KeyString = "Control+F5|Control+F4",
+                        RoutingType = MpRoutingType.Direct,
+                        ShortcutLabel = "Sequence Test Label 2",
+                        ShortcutType = MpShortcutType.ToggleMainWindowLocked
+                    }
+                }
+            }
         };
     }
 }

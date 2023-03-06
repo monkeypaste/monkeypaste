@@ -217,7 +217,7 @@ namespace MonkeyPaste {
 
         public string InputGestureText {
             get {
-                if (!MpPlatform.Services.PlatformInfo.IsDesktop) {
+                if (!Mp.Services.PlatformInfo.IsDesktop) {
                     return null;
                 }
                 if (MpShortcutRef.Create(ShortcutArgs) is MpShortcutRef sr) {
@@ -390,7 +390,7 @@ namespace MonkeyPaste {
                         // if selected color is custom make background of custom icon that color (default white)
                         header = selectedHexStr;
                     }
-                    command = MpPlatform.Services.CustomColorChooserMenuAsync.SelectCustomColorCommand;
+                    command = Mp.Services.CustomColorChooserMenuAsync.SelectCustomColorCommand;
                     commandArg = ucvm;
                 } else {
                     command = SetColorCommand;
@@ -438,7 +438,7 @@ namespace MonkeyPaste {
                 MpIUserColorViewModel ucvm = argParts[0] as MpIUserColorViewModel;
                 string hexColor = argParts[1] as string;
                 ucvm.UserHexColor = hexColor;
-                MpPlatform.Services.ContextMenuCloser.CloseMenu();
+                Mp.Services.ContextMenuCloser.CloseMenu();
             });
 
         #endregion

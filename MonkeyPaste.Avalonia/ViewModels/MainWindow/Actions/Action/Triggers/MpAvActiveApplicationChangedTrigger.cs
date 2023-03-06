@@ -108,20 +108,20 @@ namespace MonkeyPaste.Avalonia {
 
         #region Protected Methods
         protected override void EnableTrigger() {
-            MpPlatform.Services.ProcessWatcher.RegisterActionComponent(this);
-            if (MpPlatform.Services.ProcessWatcher.IsWatching) {
+            Mp.Services.ProcessWatcher.RegisterActionComponent(this);
+            if (Mp.Services.ProcessWatcher.IsWatching) {
                 return;
             }
 
         }
 
         protected override void DisableTrigger() {
-            MpPlatform.Services.ProcessWatcher.UnregisterActionComponent(this);
+            Mp.Services.ProcessWatcher.UnregisterActionComponent(this);
 
-            if (!MpPlatform.Services.ProcessWatcher.IsWatching) {
+            if (!Mp.Services.ProcessWatcher.IsWatching) {
                 return;
             }
-            MpPlatform.Services.ProcessWatcher.StopWatcher();
+            Mp.Services.ProcessWatcher.StopWatcher();
         }
 
         public override async Task PerformActionAsync(object arg) {

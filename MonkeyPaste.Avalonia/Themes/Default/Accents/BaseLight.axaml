@@ -177,6 +177,11 @@
         <SolidColorBrush x:Key="CanResizeBorderBrush" Color="{DynamicResource CanResizeBorderColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <SolidColorBrush x:Key="IsResizingBorderBrush" Color="{DynamicResource IsResizingBorderColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
+
+
+        <!--  SETTINGS WINDOW  -->
+        <SolidColorBrush x:Key="SettingsViewBgBrush" Color="{DynamicResource MainWindowBgColor}" />
+
     </Style.Resources>
 
 </Style>

@@ -1,0 +1,20 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="using:MonkeyPaste.Avalonia">
+    <Style Selector="local|MpAvShortcutView ItemsControl#ShortcutListBox.multi Border.comboBorder">
+
+        <Setter Property="Background"
+                Value="Cyan" />
+        <Setter Property="BorderBrush"
+                Value="Black" />
+    </Style>
+
+    <Style Selector="Window:not(.assignWindow) ItemsControl#ShortcutListBox:not(.multi) Border.comboBorder">
+        <!--  Hide combo group border if only 1 item  -->
+        <Setter Property="Background"
+                Value="Transparent" />
+        <Setter Property="BorderBrush"
+                Value="Transparent" />
+    </Style>
+</Styles>

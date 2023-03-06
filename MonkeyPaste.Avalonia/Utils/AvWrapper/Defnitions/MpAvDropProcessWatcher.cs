@@ -18,7 +18,7 @@ namespace MonkeyPaste.Avalonia {
         #region Statics
         public static void Init() {
             // called in bootstrapper after shortcut collection created
-            MpPlatform.Services.DropProcessWatcher.StartWatcher();
+            Mp.Services.DropProcessWatcher.StartWatcher();
         }
 
         #endregion
@@ -68,7 +68,7 @@ namespace MonkeyPaste.Avalonia {
         private void Sccvm_OnGlobalDragEnd(object sender, System.EventArgs e) {
             Dispatcher.UIThread.Post(() => {
                 //DragProcess = _activeProcessInfo;
-                DropProcess = MpPlatform.Services.ProcessWatcher.LastProcessInfo;
+                DropProcess = Mp.Services.ProcessWatcher.LastProcessInfo;
             }, _watcherPriority);
         }
 

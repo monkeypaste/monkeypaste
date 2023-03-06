@@ -9,6 +9,7 @@
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/MpAvActionDesigner.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/MpAvActionDesignerItemColors.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/MpAvActionProperty.axaml" />
+    <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/MpAvAssignShortcutWindow.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/MpAvClipTile.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/MpAvClipTrayContainer.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/MpAvMainWindowTitle.axaml" />

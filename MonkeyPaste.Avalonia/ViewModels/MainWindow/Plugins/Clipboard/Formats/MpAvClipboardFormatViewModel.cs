@@ -88,7 +88,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
 
-                return MpPlatform.Services.PlatformResource.GetResource(keyStr) as string;
+                return Mp.Services.PlatformResource.GetResource(keyStr) as string;
             }
         }
         #endregion

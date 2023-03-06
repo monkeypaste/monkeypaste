@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Controls;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
@@ -21,8 +22,7 @@ namespace MonkeyPaste.Avalonia {
         #region MpAvIShortcutCommandViewModel Implementation
 
         public ICommand AssignCommand => new MpCommand(() => {
-            Parent.SelectedItem = this;
-            Parent.ReassignSelectedShortcutCommand.Execute(null);
+            Parent.ShowAssignShortcutDialogCommand.Execute(this);
         });
 
         public MpAvShortcutViewModel ShortcutViewModel => this;
@@ -39,16 +39,17 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public ObservableCollection<MpAvShortcutKeyGroupViewModel> KeyGroups => new ObservableCollection<MpAvShortcutKeyGroupViewModel>(KeyItems);
+        public ObservableCollection<MpAvShortcutKeyGroupViewModel> KeyGroups =>
+            new ObservableCollection<MpAvShortcutKeyGroupViewModel>(KeyItems);
         public IEnumerable<MpAvShortcutKeyGroupViewModel> KeyItems {
             get {
                 var keyItems = new List<MpAvShortcutKeyGroupViewModel>();
-                var combos = KeyString.Split(new String[] { MpKeyGestureHelper2.SEQUENCE_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
+                var combos = KeyString.Split(new String[] { MpInputConstants.SEQUENCE_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
                 int maxComboIdx = combos.Length - 1;
                 for (int comboIdx = 0; comboIdx < combos.Length; comboIdx++) {
                     string combo = combos[comboIdx];
                     var comboGroup = new MpAvShortcutKeyGroupViewModel();
-                    var keys = combo.Split(new String[] { MpKeyGestureHelper2.COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
+                    var keys = combo.Split(new String[] { MpInputConstants.COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
                     for (int keyIdx = 0; keyIdx < keys.Length; keyIdx++) {
                         string key = keys[keyIdx];
 
@@ -61,73 +62,6 @@ namespace MonkeyPaste.Avalonia {
                     keyItems.Add(comboGroup);
                 }
                 return keyItems;
-            }
-        }
-
-
-        #endregion
-
-        #region State
-
-        public ICommand Command { get; set; }
-
-        public IDisposable KeysObservable { get; set; }
-
-        public bool IsGlobalShortcut => RoutingType != MpRoutingType.None && RoutingType != MpRoutingType.Internal;
-
-
-
-        public bool CanDelete => IsCustom();
-
-        public bool IsNew {
-            get {
-                return ShortcutId == 0;
-            }
-        }
-
-        public MpShortcutType ShortcutType {
-            get {
-                if (Shortcut == null) {
-                    return MpShortcutType.None;
-                }
-                return Shortcut.ShortcutType;
-            }
-            set {
-                if (Shortcut.ShortcutType != value) {
-                    Shortcut.ShortcutType = value;
-                    OnPropertyChanged(nameof(ShortcutType));
-                }
-            }
-        }
-
-        public string ShortcutTypeName {
-            get {
-                if (IsCustom()) {
-                    switch (ShortcutType) {
-                        case MpShortcutType.PasteCopyItem:
-                            return "Clip";
-                        case MpShortcutType.SelectTag:
-                            return "Tag";
-                        case MpShortcutType.AnalyzeCopyItemWithPreset:
-                            return "Analyzer";
-                    }
-                }
-                return "Application";
-            }
-        }
-
-        public int SelectedRoutingTypeIdx {
-            get {
-                if (Shortcut == null) {
-                    return 0;
-                }
-                return (int)RoutingType;
-            }
-            set {
-                if (SelectedRoutingTypeIdx != value) {
-                    RoutingType = (MpRoutingType)value;
-                    OnPropertyChanged(nameof(SelectedRoutingTypeIdx));
-                }
             }
         }
 
@@ -148,6 +82,81 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        #endregion
+
+        #region State
+        public bool IsCustom {
+            get {
+                if (Shortcut == null) {
+                    return false;
+                }
+                return (int)ShortcutType >= MpShortcut.MIN_USER_SHORTCUT_TYPE;
+            }
+        }
+        public ICommand Command { get; set; }
+
+        public IDisposable KeysObservable { get; set; }
+
+        public bool IsGlobalShortcut =>
+            RoutingType != MpRoutingType.None && RoutingType != MpRoutingType.Internal;
+
+        public bool CanDelete =>
+            IsCustom;
+
+        public bool CanReset =>
+            !IsCustom && ShortcutKeyString != DefaultKeyString;
+
+        public bool CanDeleteOrReset =>
+            CanDelete || CanReset;
+
+        public bool IsNew =>
+            ShortcutId == 0;
+
+        public MpShortcutType ShortcutType {
+            get {
+                if (Shortcut == null) {
+                    return MpShortcutType.None;
+                }
+                return Shortcut.ShortcutType;
+            }
+            set {
+                if (Shortcut.ShortcutType != value) {
+                    Shortcut.ShortcutType = value;
+                    OnPropertyChanged(nameof(ShortcutType));
+                }
+            }
+        }
+
+        public string ShortcutTypeName {
+            get {
+                if (IsCustom) {
+                    switch (ShortcutType) {
+                        case MpShortcutType.PasteCopyItem:
+                            return "Clip";
+                        case MpShortcutType.SelectTag:
+                            return "Tag";
+                        case MpShortcutType.AnalyzeCopyItemWithPreset:
+                            return "Analyzer";
+                    }
+                }
+                return "Application";
+            }
+        }
+
+        public int SelectedRoutingTypeIdx {
+            get {
+                if (Shortcut == null) {
+                    return 0;
+                }
+                return (int)RoutingType - (int)MpRoutingType.Internal - 1;
+            }
+            set {
+                if (SelectedRoutingTypeIdx != value) {
+                    RoutingType = (MpRoutingType)(value + (int)MpRoutingType.Internal + 1);
+                    OnPropertyChanged(nameof(SelectedRoutingTypeIdx));
+                }
+            }
+        }
 
         public bool IsEmpty => KeyItems.Count() == 0;
 
@@ -176,7 +185,7 @@ namespace MonkeyPaste.Avalonia {
                 if (Shortcut == null) {
                     return null;
                 }
-                //if(IsCustom()) {
+                //if(IsCustom) {
                 //    return Shortcut.CommandId;
                 //}
                 //return ShortcutId;
@@ -184,7 +193,7 @@ namespace MonkeyPaste.Avalonia {
             }
             set {
                 if (CommandParameter != value) {
-                    if (!IsCustom()) {
+                    if (!IsCustom) {
                         throw new Exception("Application shortcuts use pk not command id");
                     }
                     Shortcut.CommandParameter = value;
@@ -210,20 +219,18 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private List<List<Key>> _keyList = new List<List<Key>>();
         public List<List<Key>> KeyList {
             get {
+                _keyList.Clear();
                 if (Shortcut == null) {
-                    return new List<List<Key>>();
+                    return _keyList;
                 }
-                //var kl = new List<List<Key>>();
-                //for (int i = 0; i < Shortcut.KeyList.Count; i++) {
-                //    kl.Add(new List<Key>());
-                //    for (int j = 0; j < Shortcut.KeyList[i].Count; j++) {
-                //        kl[i].Add((Key)Shortcut.KeyList[i][j]);
-                //    }
-                //}
-                //return kl;
-                return MpAvKeyboardInputHelpers.ConvertStringToKeySequence(KeyString);
+                Mp.Services.KeyConverter
+                    .ConvertStringToKeySequence<Key>(KeyString)
+                    .ForEach(x => _keyList.Add(x.ToList()));
+
+                return _keyList; //MpAvInternalKeyConverter.ConvertStringToKeySequence(KeyString);
             }
         }
 
@@ -239,15 +246,10 @@ namespace MonkeyPaste.Avalonia {
                     Shortcut.KeyString = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(KeyString));
-                    OnPropertyChanged(nameof(SendKeyStr));
                     OnPropertyChanged(nameof(KeyList));
                 }
             }
         }
-
-
-        private string _sendKeyStr;
-        public string SendKeyStr => _sendKeyStr;
 
         public string ShortcutDisplayName {
             get {
@@ -298,6 +300,8 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
+        public bool IsModelReadOnly =>
+            Shortcut == null || Shortcut.IsReadOnly;
 
         private MpShortcut _shortcut = null;
         public MpShortcut Shortcut {
@@ -342,8 +346,8 @@ namespace MonkeyPaste.Avalonia {
 
             Shortcut = s;
             Command = command;
-            _sendKeyStr = MpAvKeyboardInputHelpers.ConvertKeyStringToSendKeysString(KeyString);
 
+            OnPropertyChanged(nameof(IsGlobalShortcut));
             OnPropertyChanged(nameof(KeyItems));
             OnPropertyChanged(nameof(IsEmpty));
         }
@@ -358,40 +362,6 @@ namespace MonkeyPaste.Avalonia {
         public void UnregisterActionComponent(MpIInvokableAction mvm) {
             OnShortcutExecuted -= mvm.OnActionInvoked;
             MpConsole.WriteLine($"Matcher {mvm.Label} Unregistered from OnShortcutExecuted");
-        }
-
-        private void MpShortcutViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch (e.PropertyName) {
-                case nameof(HasModelChanged):
-                    if (HasModelChanged) {
-                        Task.Run(async () => {
-                            await Shortcut.WriteToDatabaseAsync();
-                            HasModelChanged = false;
-                        });
-                    }
-                    break;
-                case nameof(KeyItems):
-
-                    OnPropertyChanged(nameof(KeyGroups));
-                    break;
-                case nameof(KeyString):
-                    //if (IsCustom()) {
-                    //    if (Shortcut.CopyItemId > 0) {
-                    //        var ctvm = MpAvClipTrayViewModel.Instance.GetContentItemViewModelById(Shortcut.CopyItemId);
-                    //        ctvm.ShortcutKeyString = Shortcut.KeyString;
-                    //    } else {
-                    //        var ttvm = MpAvTagTrayViewModel.Instance.Items.Where(x => x.Tag.Id == Shortcut.TagId).Single();
-                    //        ttvm.ShortcutKeyString = Shortcut.KeyString;
-                    //    }
-                    //}
-                    OnPropertyChanged(nameof(KeyItems));
-                    OnPropertyChanged(nameof(KeyGroups));
-                    OnPropertyChanged(nameof(IsEmpty));
-                    break;
-                case nameof(IsBusy):
-                    Parent.OnPropertyChanged(nameof(Parent.IsAnyBusy));
-                    break;
-            }
         }
 
         public void Unregister() {
@@ -432,12 +402,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsSequence() {
             return KeyString.Contains(",");
         }
-        public bool IsCustom() {
-            if (Shortcut == null) {
-                return false;
-            }
-            return (int)ShortcutType >= MpShortcut.MIN_USER_SHORTCUT_TYPE;
-        }
+
 
         public void ClearShortcutKeyString() {
             KeyString = string.Empty;
@@ -488,6 +453,43 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
+
+        private void MpShortcutViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(HasModelChanged):
+                    if (HasModelChanged) {
+                        Task.Run(async () => {
+                            IsBusy = true;
+                            await Shortcut.WriteToDatabaseAsync();
+                            HasModelChanged = false;
+                            IsBusy = false;
+                        });
+                    }
+                    break;
+                case nameof(KeyItems):
+
+                    OnPropertyChanged(nameof(KeyGroups));
+                    break;
+                case nameof(KeyString):
+                    //if (IsCustom) {
+                    //    if (Shortcut.CopyItemId > 0) {
+                    //        var ctvm = MpAvClipTrayViewModel.Instance.GetContentItemViewModelById(Shortcut.CopyItemId);
+                    //        ctvm.ShortcutKeyString = Shortcut.KeyString;
+                    //    } else {
+                    //        var ttvm = MpAvTagTrayViewModel.Instance.Items.Where(x => x.Tag.Id == Shortcut.TagId).Single();
+                    //        ttvm.ShortcutKeyString = Shortcut.KeyString;
+                    //    }
+                    //}
+                    OnPropertyChanged(nameof(KeyItems));
+                    OnPropertyChanged(nameof(KeyGroups));
+                    OnPropertyChanged(nameof(IsEmpty));
+                    OnPropertyChanged(nameof(CanReset));
+                    break;
+                case nameof(IsBusy):
+                    Parent.OnPropertyChanged(nameof(Parent.IsAnyBusy));
+                    break;
+            }
+        }
 
         #endregion
 
@@ -553,6 +555,24 @@ namespace MonkeyPaste.Avalonia {
                 return canPerformShortcut;
             });
 
+        public ICommand DeleteOrResetThisShortcutCommand => new MpCommand(
+            () => {
+                if (IsCustom) {
+                    Parent.DeleteShortcutCommand.Execute(this);
+                    return;
+                }
+                Parent.ResetShortcutCommand.Execute(this);
+            },
+            () => {
+                return Parent != null && IsCustom ? CanDelete : CanReset;
+            });
+
+        public ICommand ReassignShortcutCommand => new MpCommand(
+            () => {
+                if (IsCustom) {
+
+                }
+            });
 
         #endregion
     }

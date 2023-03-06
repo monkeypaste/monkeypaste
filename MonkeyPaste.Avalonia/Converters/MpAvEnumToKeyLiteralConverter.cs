@@ -2,7 +2,9 @@
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvEnumToKeyLiteralConverter : IValueConverter {
@@ -13,12 +15,17 @@ namespace MonkeyPaste.Avalonia {
                 if (string.IsNullOrEmpty(valueStr)) {
                     return string.Empty;
                 }
-                string key_literal = MpAvKeyboardInputHelpers.GetKeyLiteral(
-                        MpAvKeyboardInputHelpers.ConvertStringToKey(valueStr));
-                if (parameter is string paramStr && paramStr == "label") {
-                    key_literal = key_literal.ToLabel();
+                //string key_literal = MpAvInternalKeyConverter.GetKeyLiteral(
+                //        MpAvInternalKeyConverter.ConvertStringToKey(valueStr));
+                var kl = Mp.Services.KeyConverter.ConvertStringToKeyLiteralSequence(valueStr);
+                if (kl.FirstOrDefault() is IEnumerable<string> kl2 &&
+                    kl2.FirstOrDefault() is string kl3) {
+                    if (parameter is string paramStr && paramStr == "label") {
+                        kl3 = kl3.ToLabel();
+                    }
+                    return kl3;
                 }
-                return key_literal;
+
             }
             return null;
         }

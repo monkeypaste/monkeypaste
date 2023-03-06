@@ -1148,7 +1148,7 @@ namespace MonkeyPaste.Avalonia {
             HasCriteriaChanged = true;
             if (ovm == null || ovm.IsValueOption) {
                 // ovm is null when join type changes
-                MpPlatform.Services.Query.NotifyQueryChanged(true);
+                Mp.Services.Query.NotifyQueryChanged(true);
             }
         }
 

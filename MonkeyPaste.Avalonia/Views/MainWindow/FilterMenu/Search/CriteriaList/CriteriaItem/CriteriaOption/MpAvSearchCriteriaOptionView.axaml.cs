@@ -28,10 +28,10 @@ namespace MonkeyPaste.Avalonia {
                     mvtb.LostFocus += Mvtb_LostFocus;
                 }
 
-                var test = MpPlatform.Services.PlatformResource.GetResource("DatePickerFlyoutPresenterHighlightHeight");
-                var test2 = MpPlatform.Services.PlatformResource.GetResource("DatePickerFlyoutPresenterSpacerFill");
-                var test3 = MpPlatform.Services.PlatformResource.GetResource("DatePickerFlyoutPresenterHighlightHeight");
-                var test4 = MpPlatform.Services.PlatformResource.GetResource("DatePickerSpacerThemeWidth");
+                var test = Mp.Services.PlatformResource.GetResource("DatePickerFlyoutPresenterHighlightHeight");
+                var test2 = Mp.Services.PlatformResource.GetResource("DatePickerFlyoutPresenterSpacerFill");
+                var test3 = Mp.Services.PlatformResource.GetResource("DatePickerFlyoutPresenterHighlightHeight");
+                var test4 = Mp.Services.PlatformResource.GetResource("DatePickerSpacerThemeWidth");
 
                 var mvdt = cocc.GetVisualDescendant<DatePicker>();
                 if (mvdt != null) {

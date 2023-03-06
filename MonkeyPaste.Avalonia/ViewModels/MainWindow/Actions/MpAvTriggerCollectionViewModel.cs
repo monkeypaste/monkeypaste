@@ -217,7 +217,7 @@ namespace MonkeyPaste.Avalonia {
         public double SidebarWidth { get; set; } = 0;
         public double SidebarHeight { get; set; } = 0;
         public string SidebarBgHexColor =>
-            (MpPlatform.Services.PlatformResource.GetResource("ActionPropertyListBgBrush") as IBrush).ToHex();
+            (Mp.Services.PlatformResource.GetResource("ActionPropertyListBgBrush") as IBrush).ToHex();
 
         #endregion
 
@@ -531,7 +531,7 @@ namespace MonkeyPaste.Avalonia {
                     remove_descendants = true;
                 } else if (child_to_delete_avm.Children.Count() > 0) {
                     MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
-                    var remove_descendants_result = await MpPlatform.Services.NativeMessageBox.ShowYesNoCancelMessageBoxAsync(
+                    var remove_descendants_result = await Mp.Services.NativeMessageBox.ShowYesNoCancelMessageBoxAsync(
                         title: $"Remove Options",
                         message: $"Would you like to remove all the sub-actions for '{child_to_delete_avm.Label}'? (Otherwise they will be re-parented to '{child_to_delete_avm.ParentActionViewModel.Label}')",
                         iconResourceObj: "ChainImage",
@@ -655,7 +655,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand OpenDesignerWindowCommand => new MpCommand(
             () => {
-                if (MpPlatform.Services.PlatformInfo.IsDesktop) {
+                if (Mp.Services.PlatformInfo.IsDesktop) {
                     var dw = new Window() {
                         Width = 500,
                         Height = 500,

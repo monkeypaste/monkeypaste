@@ -228,7 +228,8 @@ namespace MonkeyPaste.Avalonia {
 
             // KEY GESTURE
             KeyGesture inputGesture = null;
-            if (!string.IsNullOrEmpty(keyGestureStr)) {
+            if (!string.IsNullOrEmpty(keyGestureStr) &&
+                !keyGestureStr.Contains(MpInputConstants.SEQUENCE_SEPARATOR)) {
                 inputGesture = KeyGesture.Parse(keyGestureStr);
             }
             nmi.Gesture = inputGesture;

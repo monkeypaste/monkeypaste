@@ -80,7 +80,7 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsSortDescending):
                     OnPropertyChanged(nameof(SortDirIconResourceKey));
                     MpMessenger.SendGlobal(MpMessageType.QuerySortChanged);
-                    MpPlatform.Services.Query.NotifyQueryChanged();
+                    Mp.Services.Query.NotifyQueryChanged();
                     break;
                 case nameof(IsSortDirOrFieldFocused):
                     if (IsSortDirOrFieldFocused) {

@@ -399,7 +399,7 @@ namespace MonkeyPaste.Avalonia {
         public string ActionBackgroundHexColor {
             get {
                 string keyStr = $"{ActionType}ActionBrush";
-                var brush = MpPlatform.Services.PlatformResource.GetResource(keyStr) as IBrush;
+                var brush = Mp.Services.PlatformResource.GetResource(keyStr) as IBrush;
                 if (brush == null) {
                     Debugger.Break();
                     return MpSystemColors.Black;

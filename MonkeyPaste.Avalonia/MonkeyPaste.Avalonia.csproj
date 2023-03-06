@@ -179,6 +179,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvActionDesignerItemColors.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvActionProperty.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Border.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvAssignShortcutWindow.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvClipTile.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvClipTrayContainer.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMarqueeTextBox.axaml" />
@@ -1035,6 +1036,7 @@
     <AvaloniaResource Include="Themes\Default\Controls\Animations\Shake.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Dnd\Dnd.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ListBox.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\MpAvAssignShortcutWindow.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvPagingScrollViewer.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\TemplatedControl.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ComboBox.axaml" />
@@ -1240,9 +1242,6 @@
     </Compile>
     <Compile Update="Views\Reusable\Spinners\MpAvBusySpinnerView.axaml.cs">
       <DependentUpon>MpAvBusySpinnerView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Reusable\ToolTip\MpAvToolTipLinkView.axaml.cs">
-      <DependentUpon>MpAvToolTipLinkView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Reusable\ToolTip\MpAvToolTipInfoHintView.axaml.cs">
       <DependentUpon>MpAvToolTipInfoHintView.axaml</DependentUpon>

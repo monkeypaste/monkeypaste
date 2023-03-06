@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public static class MpPlatform {
+    public static class Mp {
         public static MpIPlatformWrapper Services { get; set; }
 
         public static async Task InitAsync(MpIPlatformWrapper niw) {

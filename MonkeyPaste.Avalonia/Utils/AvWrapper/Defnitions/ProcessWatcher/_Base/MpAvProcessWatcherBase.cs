@@ -111,7 +111,7 @@ namespace MonkeyPaste.Avalonia {
         public MpPortableProcessInfo FileSystemProcessInfo {
             get {
                 if (_fileSystemProcessInfo == null) {
-                    _fileSystemProcessInfo = GetProcessPathProcessInfo(MpPlatform.Services.PlatformInfo.OsFileManagerPath);
+                    _fileSystemProcessInfo = GetProcessPathProcessInfo(Mp.Services.PlatformInfo.OsFileManagerPath);
                 }
                 return _fileSystemProcessInfo;
             }

@@ -113,7 +113,7 @@ namespace MonkeyPaste {
         [Ignore]
         public bool IsThisPlatform {
             get {
-                return UserDeviceType == MpPlatform.Services.PlatformInfo.OsType;
+                return UserDeviceType == Mp.Services.PlatformInfo.OsType;
             }
         }
 

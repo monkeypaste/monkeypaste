@@ -88,7 +88,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public string SidebarBgHexColor =>
-            (MpPlatform.Services.PlatformResource.GetResource("TagTreeBgBrush") as IBrush).ToHex();
+            (Mp.Services.PlatformResource.GetResource("TagTreeBgBrush") as IBrush).ToHex();
 
 
         #endregion
@@ -265,7 +265,7 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitAsync() {
             IsBusy = true;
 
-            MpPlatform.Services.TagQueryTools = this;
+            Mp.Services.TagQueryTools = this;
 
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
 
@@ -524,8 +524,8 @@ namespace MonkeyPaste.Avalonia {
                     //} else {
                     //    MpPlatform.Services.Query.NotifyQueryChanged(true);
                     //}
-                    MpPlatform.Services.Query.NotifyQueryChanged();
-                    while (!MpPlatform.Services.Query.CanRequery) {
+                    Mp.Services.Query.NotifyQueryChanged();
+                    while (!Mp.Services.Query.CanRequery) {
                         await Task.Delay(100);
                     }
                 }

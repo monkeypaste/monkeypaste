@@ -21,6 +21,15 @@
             <Setter Property="Background"
                     Value="LightGray" />
         </Style>
+
+        <Style Selector="Button.hotkeyButton Image">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource HotkeyImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+        </Style>
+        <Style Selector="Button.hotkeyButton.assigned Image">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource HotkeyActiveImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Border x:Name="AnalyticItemPluginContainerBorder"
             BorderThickness="0"
@@ -61,8 +70,9 @@
                                             Cursor="Hand"
                                             Background="Transparent"
                                             DataContext="{Binding}"
-                                            Command="{Binding ChangeIconCommand, Source={x:Static local:MpAvIconCollectionViewModel.Instance}}"
-                                            CommandParameter="{Binding $self}">
+                                            local:MpAvPointerCommandExtension.IsEnabled="True"
+                                            local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ChangeIconCommand, Source={x:Static local:MpAvIconCollectionViewModel.Instance}}"
+                                            local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding $self}">
                                         <Image Width="20"
                                                Height="20"
                                                HorizontalAlignment="Center"
@@ -123,7 +133,9 @@
                                                   BorderThickness="0"
                                                   HorizontalAlignment="Center"
                                                   Cursor="Hand"
-                                                  IsChecked="{Binding !IsLabelReadOnly, Mode=TwoWay}">
+                                                  local:MpAvPointerCommandExtension.IsEnabled="True"
+                                                  local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ToggleIsLabelReadOnlyCommand}"
+                                                  IsChecked="{Binding !IsLabelReadOnly, Mode=OneWay}">
 
                                         <ToolTip.Tip>
                                             <local:MpAvToolTipView ToolTipText="Edit Label" />
@@ -162,7 +174,9 @@
                                                   VerticalAlignment="Center"
                                                   Width="15"
                                                   Height="15"
-                                                  IsChecked="{Binding IsQuickAction, Mode=TwoWay}">
+                                                  local:MpAvPointerCommandExtension.IsEnabled="True"
+                                                  local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ToggleIsQuickActionCommand}"
+                                                  IsChecked="{Binding IsQuickAction, Mode=OneWay}">
 
                                         <ToolTip.Tip>
                                             <local:MpAvToolTipView ToolTipText="Quick Action" />
@@ -218,15 +232,18 @@
                                             Header="Shortcut">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
-                                <Button Background="Transparent"
+                                <Button Classes="hotkeyButton"
+                                        Classes.assigned="{Binding ShortcutKeyString, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                        HorizontalAlignment="Center"
+                                        Background="Transparent"
                                         BorderThickness="0"
-                                        Command="{Binding AssignHotkeyCommand}">
+                                        local:MpAvPointerCommandExtension.IsEnabled="True"
+                                        local:MpAvPointerCommandExtension.LeftPressCommand="{Binding AssignHotkeyCommand}">
                                     <ToolTip.Tip>
-                                        <local:MpAvToolTipView ToolTipText="Assign Shortcut" />
+                                        <local:MpAvToolTipView ToolTipText="{Binding ShortcutTooltipText}" />
                                     </ToolTip.Tip>
                                     <Image Width="20"
-                                           Height="20"
-                                           Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource HotkeyImage}}" />
+                                           Height="20" />
                                 </Button>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -242,8 +259,9 @@
                                         <Button Background="Transparent"
                                                 BorderThickness="0"
                                                 IsVisible="{Binding Parent.CanAnalyzerExecute}"
-                                                Command="{Binding AnalyzeSelectedItemCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
-                                                CommandParameter="{Binding AnalyticItemPresetId}">
+                                                local:MpAvPointerCommandExtension.IsEnabled="True"
+                                                local:MpAvPointerCommandExtension.LeftPressCommand="{Binding AnalyzeSelectedItemCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                                                local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding AnalyticItemPresetId}">
                                             <ToolTip.Tip>
                                                 <local:MpAvToolTipView ToolTipText="Analyze" />
                                             </ToolTip.Tip>
@@ -277,12 +295,13 @@
                                             Header="Clone">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
-                                <Grid>
+                                <Grid HorizontalAlignment="Center">
                                     <Button Background="Transparent"
+                                            HorizontalAlignment="Center"
                                             BorderThickness="0"
                                             IsVisible="{Binding !Parent.IsBusy}"
-                                            Command="{Binding Parent.DuplicatePresetCommand}"
-                                            CommandParameter="{Binding}">
+                                            local:MpAvPointerCommandExtension.IsEnabled="True"
+                                            local:MpAvPointerCommandExtension.LeftPressCommand="{Binding DuplicateThisPresetCommand}">
                                         <ToolTip.Tip>
                                             <local:MpAvToolTipView ToolTipText="Clone" />
                                         </ToolTip.Tip>
@@ -290,7 +309,8 @@
                                                Height="20"
                                                Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource SheepImage}}" />
                                     </Button>
-                                    <Border IsVisible="{Binding Parent.IsBusy, FallbackValue=True, TargetNullValue=True}">
+                                    <Border HorizontalAlignment="Center"
+                                            IsVisible="{Binding Parent.IsBusy, FallbackValue=True, TargetNullValue=True}">
 
                                         <local:MpAvBusySpinnerView HorizontalAlignment="Center"
                                                                    VerticalAlignment="Center"
@@ -308,7 +328,7 @@
                                             Width="30">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
-                                <Grid>
+                                <Grid HorizontalAlignment="Center">
                                     <Grid.Styles>
                                         <Style Selector="Button.canReset Image"
                                                x:DataType="local:MpAvAnalyticItemPresetViewModel">
@@ -321,18 +341,20 @@
                                         </Style>
                                     </Grid.Styles>
                                     <Button Background="Transparent"
+                                            HorizontalAlignment="Center"
                                             IsVisible="{Binding !Parent.IsBusy}"
                                             BorderThickness="0"
                                             Classes.canReset="{Binding IsManifestPreset}"
-                                            Command="{Binding Parent.ResetOrDeletePresetCommand}"
-                                            CommandParameter="{Binding}">
+                                            local:MpAvPointerCommandExtension.IsEnabled="True"
+                                            local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ResetOrDeleteThisPresetCommand}">
                                         <ToolTip.Tip>
                                             <local:MpAvToolTipView ToolTipText="{Binding ResetOrDeleteLabel}" />
                                         </ToolTip.Tip>
                                         <Image Width="20"
                                                Height="20" />
                                     </Button>
-                                    <Border IsVisible="{Binding IsBusy, FallbackValue=True, TargetNullValue=True}">
+                                    <Border HorizontalAlignment="Center"
+                                            IsVisible="{Binding IsBusy, FallbackValue=True, TargetNullValue=True}">
 
                                         <local:MpAvBusySpinnerView HorizontalAlignment="Center"
                                                                    VerticalAlignment="Center"

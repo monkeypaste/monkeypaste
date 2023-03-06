@@ -134,7 +134,7 @@ namespace MonkeyPaste.Avalonia {
                     resourceKey = "WarningImage";
                 }
 
-                return MpPlatform.Services.PlatformResource.GetResource(resourceKey) as string;
+                return Mp.Services.PlatformResource.GetResource(resourceKey) as string;
             }
         }
 

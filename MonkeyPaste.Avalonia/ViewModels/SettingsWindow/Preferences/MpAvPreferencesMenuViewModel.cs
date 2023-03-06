@@ -162,14 +162,14 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void SetLoadOnLogin(bool loadOnLogin) {
-            if (!MpPlatform.Services.ProcessWatcher.IsAdmin(MpPlatform.Services.ProcessWatcher.ThisAppHandle)) {
+            if (!Mp.Services.ProcessWatcher.IsAdmin(Mp.Services.ProcessWatcher.ThisAppHandle)) {
                 //MonkeyPaste.MpConsole.WriteLine("Process not running as admin, cannot alter load on login");
                 return;
             }
 #if WINDOWS
             Microsoft.Win32.RegistryKey rk = Microsoft.Win32.Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             string appName = Application.Current.MainWindow.GetType().Assembly.GetName().Name;
-            string appPath = MpPlatform.Services.PlatformInfo.ExecutingPath;
+            string appPath = Mp.Services.PlatformInfo.ExecutingPath;
             if (loadOnLogin) {
                 rk.SetValue(appName, appPath);
             } else {

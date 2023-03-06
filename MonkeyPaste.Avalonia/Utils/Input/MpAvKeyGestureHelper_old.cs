@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvKeyGestureHelper<T> where T : class {
+    public class MpAvKeyGestureHelper_old<T> where T : class {
         #region Private Variables
 
         private List<KeyValuePair<T, DateTime>> _downs = new List<KeyValuePair<T, DateTime>>();
@@ -18,7 +18,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string CurrentGesture { get; set; }
 
-        public MpAvKeyGestureHelper(Func<T, int> getPriority) {
+        public MpAvKeyGestureHelper_old(Func<T, int> getPriority) {
             _getPriority = getPriority;
         }
 

@@ -21,7 +21,6 @@ using KeyEventArgs = Avalonia.Input.KeyEventArgs;
 namespace MonkeyPaste.Avalonia {
     public class MpAvShortcutCollectionViewModel :
         MpAvSelectorViewModelBase<object, MpAvShortcutViewModel>,
-        MpIAsyncSingletonViewModel<MpAvShortcutCollectionViewModel>,
         MpIGlobalInputListener,
         MpIDndUserCancelNotifier {
 
@@ -37,14 +36,13 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
 
         private string _sim_keystr_to_this_app = string.Empty;
-        private MpKeyGestureHelper2 _keyboardGestureHelper;
+        private MpKeyGestureHelper _keyboardGestureHelper;
 
         //private DateTime? _waitToExecuteShortcutStartDateTime;
 
         private const int _MAX_WAIT_TO_EXECUTE_SHORTCUT_MS = 500;
 
         private SimpleGlobalHook _hook;
-        private EventSimulator _eventSimulator;
 
         private CancellationTokenSource _simInputCts;
 
@@ -89,22 +87,21 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public IEnumerable<MpAvShortcutViewModel> ApplicationShortcuts => Items.Where(x => x.RoutingType == MpRoutingType.Internal);
+        public IEnumerable<MpAvShortcutViewModel> ApplicationShortcuts =>
+            Items.Where(x => x.RoutingType == MpRoutingType.Internal);
 
-        public IEnumerable<MpAvShortcutViewModel> GlobalShortcuts => Items.Where(x => !ApplicationShortcuts.Contains(x));
+        public IEnumerable<MpAvShortcutViewModel> GlobalShortcuts =>
+            Items.Where(x => !ApplicationShortcuts.Contains(x));
 
-        #endregion
-
-        #region Input Hooks
-
-        //public IKeyboardMouseEvents GlobalHook { get; set; }
-        //public IKeyboardMouseEvents ApplicationHook { get; set; }
+        public IEnumerable<MpAvShortcutViewModel> EditableItems =>
+            Items.Where(x => !x.IsModelReadOnly);
 
         #endregion
 
         #region State
 
-        public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsBusy);
+        public bool IsAnyBusy =>
+            IsBusy || Items.Any(x => x.IsBusy);
         public MpKeyModifierFlags GlobalKeyModifierFlags {
             get {
                 MpKeyModifierFlags kmf = MpKeyModifierFlags.None;
@@ -195,8 +192,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         public MpAvShortcutCollectionViewModel() : base(null) {
-            MpPlatform.Services.GlobalInputListener = this;
-            if (!MpPlatform.Services.PlatformInfo.IsDesktop) {
+            Mp.Services.GlobalInputListener = this;
+            if (!Mp.Services.PlatformInfo.IsDesktop) {
                 IS_GLOBAL_MOUSE_INPUT_ENABLED = false;
                 IS_GLOBAL_KEYBOARD_INPUT_ENABLED = false;
 
@@ -209,7 +206,7 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task InitAsync() {
-            _keyboardGestureHelper = new MpKeyGestureHelper2();
+            _keyboardGestureHelper = new MpKeyGestureHelper();
             _simInputCts = new CancellationTokenSource();
 
             await InitShortcutsAsync();
@@ -275,7 +272,7 @@ namespace MonkeyPaste.Avalonia {
                     await scvm.Shortcut.WriteToDatabaseAsync();
                     scvm.Unregister();
 
-                    if (scvm.IsCustom()) {
+                    if (scvm.IsCustom) {
                         Items.Remove(scvm);
                     }
                 } else {
@@ -301,33 +298,6 @@ namespace MonkeyPaste.Avalonia {
             }
             MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
             return shortcutKeyString;
-        }
-
-
-
-        public async Task<bool> SimulateKeyStrokeSequenceAsync(string keystr, int holdDelay = 0, int releaseDelay = 0) {
-            List<List<KeyCode>> seq = MpSharpHookKeyboardInputHelpers.ConvertStringToKeySequence(keystr);
-            foreach (var combo in seq) {
-                foreach (var key in combo) {
-                    UioHookResult result = _eventSimulator.SimulateKeyPress(key);
-                    if (result != UioHookResult.Success) {
-                        throw new Exception($"Error pressing key: '{key}' in seq: '{keystr}' error: '{result}'");
-                        //return false;
-                    }
-                }
-                await Task.Delay(holdDelay);
-                foreach (var key in combo) {
-                    UioHookResult result = _eventSimulator.SimulateKeyRelease(key);
-                    if (result != UioHookResult.Success) {
-                        throw new Exception($"Error releasing key: '{key}' in seq: '{keystr}' error: '{result}'");
-                        //return false;
-                    }
-                }
-
-                await Task.Delay(releaseDelay);
-            }
-            MpConsole.WriteLine($"Key Gesture '{keystr}' successfully simulated");
-            return true;
         }
 
         #endregion
@@ -540,7 +510,7 @@ namespace MonkeyPaste.Avalonia {
                             // pass gesture before invoking command
 
                             //System.Windows.Forms.SendKeys.SendWait(cur_keystr);
-                            await SimulateKeyStrokeSequenceAsync(cur_keystr);
+                            await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(cur_keystr);
                             matchedShortcut.PerformShortcutCommand.Execute(null);
                             break;
                         case MpRoutingType.Tunnel:
@@ -548,7 +518,7 @@ namespace MonkeyPaste.Avalonia {
 
                             matchedShortcut.PerformShortcutCommand.Execute(null);
                             //System.Windows.Forms.SendKeys.SendWait(cur_keystr);
-                            await SimulateKeyStrokeSequenceAsync(cur_keystr);
+                            await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(cur_keystr);
                             break;
                     }
                     result = true;
@@ -559,10 +529,6 @@ namespace MonkeyPaste.Avalonia {
             //_waitToExecuteShortcutStartDateTime = null;
             return result;
         }
-
-
-
-
         #region Global Input
 
         private void CreateGlobalInputHooks() {
@@ -589,10 +555,6 @@ namespace MonkeyPaste.Avalonia {
 
             }
 
-            if (_eventSimulator == null) {
-                _eventSimulator = new EventSimulator();
-            }
-
 
             _hook.RunAsync();
         }
@@ -616,8 +578,6 @@ namespace MonkeyPaste.Avalonia {
                 _hook.Dispose();
                 _hook = null;
             }
-
-            _eventSimulator = null;
         }
 
         private MpPoint GetScaledScreenPoint(MouseEventData med) {
@@ -703,13 +663,15 @@ namespace MonkeyPaste.Avalonia {
 
         #region Keyboard EventHandlers
         private void Hook_KeyPressed(object sender, KeyboardHookEventArgs e) {
-            string keyStr = MpSharpHookKeyboardInputHelpers.GetKeyLiteral(e.Data.KeyCode);
+            //string keyStr = MpGlobalKeyConverter.GetKeyLiteral(e.Data.KeyCode);
+            string keyStr = Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { e.Data.KeyCode } });
             HandleKeyDown(keyStr);
         }
 
 
         private void Hook_KeyReleased(object sender, KeyboardHookEventArgs e) {
-            string keyStr = MpSharpHookKeyboardInputHelpers.GetKeyLiteral(e.Data.KeyCode);
+            //string keyStr = MpGlobalKeyConverter.GetKeyLiteral(e.Data.KeyCode);
+            string keyStr = Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { e.Data.KeyCode } });
             HandleKeyUp(keyStr);
         }
 
@@ -771,13 +733,15 @@ namespace MonkeyPaste.Avalonia {
         #region Keyboard
 
         private void PseudoGlobalControl_KeyDown(object sender, KeyEventArgs e) {
-            string keyLiteral = MpAvKeyboardInputHelpers.GetKeyLiteral(e.Key);
-            HandleKeyDown(keyLiteral);
+            //string keyLiteral = MpAvInternalKeyConverter.GetKeyLiteral(e.Key);
+            string keyStr = Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { e.Key } });
+            HandleKeyDown(keyStr);
         }
 
         private void PseudoGlobalControl_KeyUp(object sender, KeyEventArgs e) {
-            string keyLiteral = MpAvKeyboardInputHelpers.GetKeyLiteral(e.Key);
-            HandleKeyUp(keyLiteral);
+            //string keyStr = MpAvInternalKeyConverter.GetKeyLiteral(e.Key);
+            string keyStr = Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { e.Key } });
+            HandleKeyUp(keyStr);
         }
 
         #endregion
@@ -975,46 +939,41 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
-
-
         #endregion
 
         #region Commands
 
-        public ICommand ReassignSelectedShortcutCommand => new MpCommand(
-            async () => {
-                var scvm = Items[SelectedShortcutIndex];
-                await RegisterViewModelShortcutAsync(
-                    scvm.ShortcutDisplayName,
-                    scvm.Command,
-                    scvm.ShortcutType,
-                    scvm.CommandParameter,
-                    scvm.KeyString
-                );
-            });
+        public ICommand ShowAssignShortcutDialogCommand => new MpCommand<object>(
+            async (args) => {
+                if (args is MpICustomShortcutCommandViewModel cscvm) {
+                    string param = MpShortcut.IsUserDefinedShortcut(cscvm.ShortcutType) ? cscvm.ModelId.ToString() : null;
+                    string shortcutKeyString = await MpDataModelProvider.GetShortcutKeystringAsync(cscvm.ShortcutType.ToString(), param);
 
-        public ICommand ShowAssignShortcutDialogCommand => new MpCommand<MpIShortcutCommandViewModel>(
-            async (sccvm) => {
-                string param = MpShortcut.IsUserDefinedShortcut(sccvm.ShortcutType) ? sccvm.ModelId.ToString() : null;
-                string shortcutKeyString = await MpDataModelProvider.GetShortcutKeystringAsync(sccvm.ShortcutType.ToString(), param);
+                    await RegisterViewModelShortcutAsync(
+                        cscvm.ShortcutLabel,
+                        cscvm.ShortcutCommand,
+                        cscvm.ShortcutType,
+                        cscvm.ModelId.ToString(),
+                        shortcutKeyString);
+                } else if (args is MpAvShortcutViewModel scvm) {
+                    await RegisterViewModelShortcutAsync(
+                        scvm.ShortcutDisplayName,
+                        scvm.Command,
+                        scvm.ShortcutType,
+                        scvm.CommandParameter,
+                        scvm.KeyString);
+                }
 
-                await RegisterViewModelShortcutAsync(
-                    sccvm.ShortcutLabel,
-                    sccvm.ShortcutCommand,
-                    sccvm.ShortcutType,
-                    sccvm.ModelId.ToString(),
-                    shortcutKeyString);
 
-                if (sccvm is MpViewModelBase vmb) {
+                if (args is MpViewModelBase vmb) {
                     vmb.OnPropertyChanged(nameof(vmb.SelfBindingRef));
                 }
             });
 
         public ICommand DeleteShortcutCommand => new MpCommand<object>(
             async (args) => {
-                MpConsole.WriteLine("Deleting shortcut row: " + SelectedShortcutIndex);
-                var scvm = Items[SelectedShortcutIndex];
+                //MpConsole.WriteLine("Deleting shortcut row: " + SelectedShortcutIndex);
+                var scvm = args as MpAvShortcutViewModel;
                 //await RemoveAsync(scvm);
                 await scvm.Shortcut.DeleteFromDatabaseAsync();
             }, (args) => args is MpAvShortcutViewModel svm && svm.CanDelete);
@@ -1022,22 +981,14 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ResetShortcutCommand => new MpCommand<object>(
             async (args) => {
-                MpConsole.WriteLine("Reset row: " + SelectedShortcutIndex);
+                //MpConsole.WriteLine("Reset row: " + SelectedShortcutIndex);
 
-                var scvm = Items[SelectedShortcutIndex];
+                var scvm = args as MpAvShortcutViewModel;
                 scvm.KeyString = scvm.Shortcut.DefaultKeyString;
                 await scvm.InitializeAsync(scvm.Shortcut, scvm.Command);
                 await scvm.Shortcut.WriteToDatabaseAsync();
             }, (args) => args is MpAvShortcutViewModel svm && !string.IsNullOrEmpty(svm.DefaultKeyString));
 
-        public ICommand SimulateKeyStrokeCommand => new MpCommand<object>(
-            (keysArg) => {
-                string keys = keysArg as string;
-                if (string.IsNullOrEmpty(keys)) {
-                    return;
-                }
-                SimulateKeyStrokeSequenceAsync(keys).FireAndForgetSafeAsync();
-            });
         #endregion
     }
 }

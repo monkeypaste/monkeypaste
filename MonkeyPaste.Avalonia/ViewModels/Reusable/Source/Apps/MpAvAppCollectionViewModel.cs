@@ -123,7 +123,7 @@ namespace MonkeyPaste.Avalonia {
             if (GetAppByProcessInfo(ppi) is MpAvAppViewModel avm) {
                 return avm;
             }
-            var app = await MpPlatform.Services.AppBuilder.CreateAsync(ppi);
+            var app = await Mp.Services.AppBuilder.CreateAsync(ppi);
             if (app == null) {
                 return null;
             }
@@ -140,15 +140,15 @@ namespace MonkeyPaste.Avalonia {
 
             if (MpAvMainWindowViewModel.Instance.MainWindowScreenRect.Contains(gmp)) {
                 // at least on windows (i think since its a tool window) the p/invoke doesn't return mw handle
-                handle = MpPlatform.Services.ProcessWatcher.ThisAppHandle;
+                handle = Mp.Services.ProcessWatcher.ThisAppHandle;
             }
             if (handle == IntPtr.Zero) {
-                handle = MpPlatform.Services.ProcessWatcher.GetParentHandleAtPoint(gmp);
+                handle = Mp.Services.ProcessWatcher.GetParentHandleAtPoint(gmp);
             }
             if (handle == IntPtr.Zero) {
                 return null;
             }
-            string handle_path = MpPlatform.Services.ProcessWatcher.GetProcessPath(handle);
+            string handle_path = Mp.Services.ProcessWatcher.GetProcessPath(handle);
             MpConsole.WriteLine("Drop Path: " + handle_path, true, true);
             // TODO need to filter by current device here
             return Items.FirstOrDefault(x => x.AppPath.ToLower() == handle_path.ToLower());
@@ -200,10 +200,10 @@ namespace MonkeyPaste.Avalonia {
         private async Task InitLastAppViewModel() {
             // wait for running processes to get created
             await Task.Delay(0);
-            var la_pi = MpPlatform.Services.ProcessWatcher.LastProcessInfo;
+            var la_pi = Mp.Services.ProcessWatcher.LastProcessInfo;
             if (la_pi == null) {
                 // since application is being started from file system init LastActive to file system app
-                la_pi = MpPlatform.Services.ProcessWatcher.FileSystemProcessInfo;
+                la_pi = Mp.Services.ProcessWatcher.FileSystemProcessInfo;
                 if (la_pi == null) {
                     // need to get this set on init in process watcher
                     //Debugger.Break();
@@ -222,13 +222,13 @@ namespace MonkeyPaste.Avalonia {
             // This is only called during init to keep app storage in sync so any running apps are added if unknown
             //PlatformWrapper.Services.ProcessWatcher.StartWatcher();
 
-            var unknownApps = MpPlatform.Services.ProcessWatcher.RunningProcessLookup.Keys
+            var unknownApps = Mp.Services.ProcessWatcher.RunningProcessLookup.Keys
                                     .Where(x => Items.All(y => y.AppPath.ToLower() != x.ToLower()))
                                     .Select(x => new MpPortableProcessInfo() { ProcessPath = x }).ToList();
 
             MpConsole.WriteLine($"AppCollection RegisterWithProcessesManager '{unknownApps.Count}' unknown apps detected.");
             foreach (var uap in unknownApps) {
-                _ = await MpPlatform.Services.AppBuilder.CreateAsync(uap);
+                _ = await Mp.Services.AppBuilder.CreateAsync(uap);
                 // wait for db add callback to pickup db add event
                 await Task.Delay(100);
                 while (IsBusy) {
@@ -240,7 +240,7 @@ namespace MonkeyPaste.Avalonia {
             await InitLastAppViewModel();
 
             // wait to add activated handler until all apps at startup are syncd
-            MpPlatform.Services.ProcessWatcher.OnAppActivated += MpProcessManager_OnAppActivated;
+            Mp.Services.ProcessWatcher.OnAppActivated += MpProcessManager_OnAppActivated;
         }
 
         private async void MpProcessManager_OnAppActivated(object sender, MpPortableProcessInfo e) {
@@ -254,7 +254,7 @@ namespace MonkeyPaste.Avalonia {
 
                 if (avm == null) {
                     // unknown app activated add like in registration
-                    var new_app = await MpPlatform.Services.AppBuilder.CreateAsync(e);
+                    var new_app = await Mp.Services.AppBuilder.CreateAsync(e);
                     // wait for db add to pick up model
                     await Task.Delay(100);
                     while (IsBusy) {

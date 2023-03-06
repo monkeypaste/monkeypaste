@@ -115,7 +115,7 @@ namespace MonkeyPaste.Avalonia {
                 // Sounds have no build action and are copied to output directory so path is resolved here
 
                 string resource_key = $"{SelectedSoundGroup}{snt}Sound";
-                string resource_val = MpPlatform.Services.PlatformResource.GetResource(resource_key) as string;
+                string resource_val = Mp.Services.PlatformResource.GetResource(resource_key) as string;
                 if (string.IsNullOrEmpty(resource_val)) {
                     continue;
                 }

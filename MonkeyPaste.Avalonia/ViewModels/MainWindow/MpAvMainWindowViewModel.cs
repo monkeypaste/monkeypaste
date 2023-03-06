@@ -228,7 +228,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpRect MainWindowOpenedScreenRect {
             get {
-                if (!MpPlatform.Services.PlatformInfo.IsDesktop) {
+                if (!Mp.Services.PlatformInfo.IsDesktop) {
                     return MainWindowScreen.Bounds;
                 }
 
@@ -323,9 +323,9 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         public bool IsDesktop =>
-            MpPlatform.Services != null &&
-            MpPlatform.Services.PlatformInfo != null &&
-            MpPlatform.Services.PlatformInfo.IsDesktop;
+            Mp.Services != null &&
+            Mp.Services.PlatformInfo != null &&
+            Mp.Services.PlatformInfo.IsDesktop;
 
         private IEnumerable<MpIAsyncObject> _busyCheckInstances;
         public bool IsAnyBusy {
@@ -335,7 +335,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 if (_busyCheckInstances == null) {
                     _busyCheckInstances =
-                        MpPlatform.Services.StartupObjectLocator
+                        Mp.Services.StartupObjectLocator
                         .Items
                         .Where(x => x is MpIAsyncObject)
                         .Cast<MpIAsyncObject>();
@@ -429,11 +429,11 @@ namespace MonkeyPaste.Avalonia {
                     case MpMainWindowShowBehaviorType.Primary:
                     default:
                         // NOTE will need another monitor to build out non-primary display types
-                        int monitorIdx = MpPlatform.Services.ScreenInfoCollection.Screens.IndexOf(x => x.IsPrimary);
+                        int monitorIdx = Mp.Services.ScreenInfoCollection.Screens.IndexOf(x => x.IsPrimary);
                         _mainWindowScreen =
                             monitorIdx < 0 ?
-                            MpPlatform.Services.ScreenInfoCollection.Screens.FirstOrDefault() :
-                            MpPlatform.Services.ScreenInfoCollection.Screens.ElementAt(monitorIdx);
+                            Mp.Services.ScreenInfoCollection.Screens.FirstOrDefault() :
+                            Mp.Services.ScreenInfoCollection.Screens.ElementAt(monitorIdx);
                         return monitorIdx;
                 }
             }
@@ -443,10 +443,10 @@ namespace MonkeyPaste.Avalonia {
         public MpIPlatformScreenInfo MainWindowScreen {
             get {
 
-                if (MpPlatform.Services == null ||
-                    MpPlatform.Services.ScreenInfoCollection == null ||
-                    MpPlatform.Services.ScreenInfoCollection.Screens == null ||
-                    !MpPlatform.Services.ScreenInfoCollection.Screens.Any()) {
+                if (Mp.Services == null ||
+                    Mp.Services.ScreenInfoCollection == null ||
+                    Mp.Services.ScreenInfoCollection.Screens == null ||
+                    !Mp.Services.ScreenInfoCollection.Screens.Any()) {
                     if (Application.Current.ApplicationLifetime is ISingleViewApplicationLifetime mobile
                         && mobile.MainView != null) {
                         return new MpAvDesktopScreenInfo(mobile.MainView.GetVisualRoot().AsScreen());
@@ -455,10 +455,10 @@ namespace MonkeyPaste.Avalonia {
                 }
                 if (_mainWindowScreen == null) {
                     if (MainWindowMonitorIdx < 0 &&
-                        MpPlatform.Services.ScreenInfoCollection.Screens.Any()) {
+                        Mp.Services.ScreenInfoCollection.Screens.Any()) {
 
                     }
-                    _mainWindowScreen = MpPlatform.Services.ScreenInfoCollection.Screens.ElementAt(MainWindowMonitorIdx);
+                    _mainWindowScreen = Mp.Services.ScreenInfoCollection.Screens.ElementAt(MainWindowMonitorIdx);
                 }
                 return _mainWindowScreen;
             }
@@ -509,7 +509,7 @@ namespace MonkeyPaste.Avalonia {
             MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseClicked += Instance_OnGlobalMouseClicked;
             MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseWheelScroll += Instance_OnGlobalMouseWheelScroll;
 
-            if (!MpPlatform.Services.PlatformInfo.IsDesktop) {
+            if (!Mp.Services.PlatformInfo.IsDesktop) {
                 AnimateShowWindow = false;
                 AnimateHideWindow = false;
             }
@@ -519,7 +519,7 @@ namespace MonkeyPaste.Avalonia {
 
             IsMainWindowLoading = false;
 
-            MpPlatform.Services.ClipboardMonitor.StartMonitor();
+            Mp.Services.ClipboardMonitor.StartMonitor();
 
             SetupMainWindowSize();
             SetMainWindowRect(MainWindowClosedScreenRect);
@@ -536,7 +536,7 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
-            MpPlatform.Services.Query.RestoreProviderValues();
+            Mp.Services.Query.RestoreProviderValues();
         }
 
 
@@ -861,9 +861,9 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
 
-                bool is_core_loaded = MpPlatform.Services != null &&
-                     MpPlatform.Services.StartupState != null &&
-                     MpPlatform.Services.StartupState.IsCoreLoaded;
+                bool is_core_loaded = Mp.Services != null &&
+                     Mp.Services.StartupState != null &&
+                     Mp.Services.StartupState.IsCoreLoaded;
 
                 if (!IsMainWindowOpening && is_core_loaded) {
                     if (MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation != null &&
@@ -909,7 +909,7 @@ namespace MonkeyPaste.Avalonia {
                         if (!isLeftButton && !App.MainView.IsActive) {
                             // TODO this is hacky because mouse gestures are not formally handled
                             // also app collection should be queried for custom paste cmd instead of this
-                            MpAvShortcutCollectionViewModel.Instance.SimulateKeyStrokeSequenceAsync("control+v").FireAndForgetSafeAsync();
+                            Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync("control+v").FireAndForgetSafeAsync();
                         }
                     }
                 } else if (!IsMainWindowClosing &&
@@ -1038,9 +1038,9 @@ namespace MonkeyPaste.Avalonia {
                 //});
             },
             () => {
-                if (MpPlatform.Services != null &&
-                    MpPlatform.Services.PlatformInfo != null &&
-                    !MpPlatform.Services.PlatformInfo.IsDesktop) {
+                if (Mp.Services != null &&
+                    Mp.Services.PlatformInfo != null &&
+                    !Mp.Services.PlatformInfo.IsDesktop) {
                     return false;
                 }
 
@@ -1132,7 +1132,7 @@ namespace MonkeyPaste.Avalonia {
 
                 MainWindowOrientationType = (MpMainWindowOrientationType)nextOr;
                 OnPropertyChanged(nameof(MainWindowTransformAngle));
-                if (!MpPlatform.Services.PlatformInfo.IsDesktop) {
+                if (!Mp.Services.PlatformInfo.IsDesktop) {
                     MainWindowScreen.Rotate(MainWindowTransformAngle);
                 }
                 OnPropertyChanged(nameof(MainWindowScreen));

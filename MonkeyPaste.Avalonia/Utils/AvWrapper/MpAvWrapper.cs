@@ -1,5 +1,4 @@
 ﻿using MonkeyPaste.Common;
-using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -31,6 +30,8 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        public MpIKeyConverterHub KeyConverter { get; set; }
+        public MpIKeyStrokeSimulator KeyStrokeSimulator { get; set; }
         public MpINativePathDialog NativePathDialog { get; set; }
         public MpIUserProvidedFileExts UserProvidedFileExts { get; set; }
         public MpIStartupState StartupState { get; set; }
@@ -118,7 +119,7 @@ namespace MonkeyPaste.Avalonia {
             UserProvidedFileExts = MpPrefViewModel.Instance;
             Query = MpAvQueryViewModel.Parse(MpPrefViewModel.Instance.LastQueryInfoJson);
             ProcessWatcher = new MpAvProcessWatcherSelector().Watcher;
-
+            KeyConverter = new MpAvKeyConverter();
             IconBuilder = new MpAvIconBuilder().IconBuilder;
             UrlBuilder = new MpUrlBuilder();
             AppBuilder = new MpAvAppBuilder();
@@ -134,6 +135,7 @@ namespace MonkeyPaste.Avalonia {
 
             CustomColorChooserMenuAsync = new MpAvCustomColorChooser();
 
+            KeyStrokeSimulator = new MpAvKeyStrokeSimulator();
             PlatformResource = new MpAvPlatformResource();
             Cursor = new MpAvCursor((MpAvPlatformResource)PlatformResource);
             ContextMenuCloser = new MpAvContextMenuCloser();

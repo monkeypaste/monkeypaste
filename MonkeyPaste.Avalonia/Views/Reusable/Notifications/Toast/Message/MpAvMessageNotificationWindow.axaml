@@ -14,7 +14,7 @@
         x:CompileBindings="True"
         x:Class="MonkeyPaste.Avalonia.MpAvMessageNotificationWindow"
         Classes.IsClosing="{Binding IsClosing}"
-        Classes.notificationWindow="True"
+        Classes="notificationWindow fadeIn fadeOut"
         IsVisible="{Binding IsVisible}"
         Width="350"
         MinHeight="50"

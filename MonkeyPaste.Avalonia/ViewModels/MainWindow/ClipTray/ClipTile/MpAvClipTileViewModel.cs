@@ -15,7 +15,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvClipTileViewModel : MpViewModelBase<MpAvClipTrayViewModel>,
         MpISelectableViewModel,
         MpISelectorItemViewModel,
-        MpIShortcutCommandViewModel,
+        MpICustomShortcutCommandViewModel,
         MpIScrollIntoView,
         MpIUserColorViewModel,
         MpIHoverableViewModel,
@@ -633,7 +633,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsCornerButtonsVisible {
             get {
-                if (MpPlatform.Services.PlatformInfo.IsDesktop) {
+                if (Mp.Services.PlatformInfo.IsDesktop) {
                     if (IsHovering && !IsAppendNotifier && !Parent.IsAnyDropOverTrays) {
                         return true;
                     }
@@ -1096,7 +1096,7 @@ namespace MonkeyPaste.Avalonia {
             CopyItem = null;
             if (removeQueryItem) {
 
-                MpPlatform.Services.Query.PageTools.RemoveItemId(unloaded_id);
+                Mp.Services.Query.PageTools.RemoveItemId(unloaded_id);
             }
             _queryOffsetIdx = -1;
             //QueryOffsetIdx = -1;
@@ -1110,15 +1110,15 @@ namespace MonkeyPaste.Avalonia {
             if (_contentView != null) {
                 return _contentView;
             }
-            if (MpPlatform.Services.ContentViewLocator == null) {
+            if (Mp.Services.ContentViewLocator == null) {
                 // may need to reorganize load or block in a task to get this guy
                 //Debugger.Break();
                 return null;
             }
             if (IsAppendNotifier) {
-                _contentView = MpPlatform.Services.ContentViewLocator.LocateModalContentView();
+                _contentView = Mp.Services.ContentViewLocator.LocateModalContentView();
             } else {
-                _contentView = MpPlatform.Services.ContentViewLocator.LocateContentView(CopyItemId);
+                _contentView = Mp.Services.ContentViewLocator.LocateContentView(CopyItemId);
             }
 
             return _contentView;
@@ -1205,12 +1205,12 @@ namespace MonkeyPaste.Avalonia {
                     return null;
                 }
                 return Parent.PinnedItems[target_idx];
-            } else if (target_idx >= MpPlatform.Services.Query.TotalAvailableItemsInQuery) {
+            } else if (target_idx >= Mp.Services.Query.TotalAvailableItemsInQuery) {
                 return null;
             }
             var neighbor_ctvm = Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == target_idx);
             if (neighbor_ctvm == null) {
-                int neighbor_ciid = MpPlatform.Services.Query.PageTools.GetItemId(target_idx);
+                int neighbor_ciid = Mp.Services.Query.PageTools.GetItemId(target_idx);
                 Parent.ScrollIntoView(neighbor_ciid);
                 await Task.Delay(100);
                 while (Parent.IsAnyBusy) { await Task.Delay(100); }
@@ -1301,7 +1301,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void UpdateQueryOffset() {
-            _queryOffsetIdx = MpPlatform.Services.Query.PageTools.GetItemOffsetIdx(CopyItemId);
+            _queryOffsetIdx = Mp.Services.Query.PageTools.GetItemOffsetIdx(CopyItemId);
             OnPropertyChanged(nameof(QueryOffsetIdx));
         }
         #region IDisposable
@@ -1826,7 +1826,7 @@ namespace MonkeyPaste.Avalonia {
                     IsBusy = false;
                     return;
                 }
-                await MpPlatform.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(mpdo, true);
+                await Mp.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(mpdo, true);
 
                 // wait extra for cb watcher to know about data
                 await Task.Delay(300);

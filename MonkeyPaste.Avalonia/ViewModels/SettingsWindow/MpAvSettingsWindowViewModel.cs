@@ -115,7 +115,7 @@ namespace MonkeyPaste.Avalonia {
             });
         public ICommand SelectTabCommand => new MpCommand<object>(
             (args) => {
-                int tab_idx = -1;
+                int tab_idx = 0;
                 if (args is int intArg) {
                     tab_idx = intArg;
                 } else if (args is string strArg) {

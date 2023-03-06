@@ -8,16 +8,16 @@
                        xmlns:pcl="using:MonkeyPaste"
                        mc:Ignorable="d"
                        d:DesignWidth="800"
-                       d:DesignHeight="750"
+                       d:DesignHeight="450"
                        x:TypeArguments="local:MpAvSettingsWindowViewModel"
                        x:DataType="local:MpAvSettingsWindowViewModel"
                        x:CompileBindings="True"
                        DataContext="{x:Static local:MpAvSettingsWindowViewModel.Instance}"
                        x:Class="MonkeyPaste.Avalonia.MpAvSettingsView">
     <local:MpAvUserControl.Styles>
-        <Style Selector="ToggleButton">
+        <Style Selector="ToggleButton.tab">
             <!--<Setter Property="Background"
-                    Value="Khaki" />-->
+                    Value="DimGray" />-->
             <Setter Property="HorizontalAlignment"
                     Value="Stretch" />
             <Setter Property="VerticalAlignment"
@@ -31,7 +31,43 @@
             <Setter Property="BorderBrush"
                     Value="DimGray" />
         </Style>
-        <Style Selector="ToggleButton Image">
+        <Style Selector="ToggleButton.tab:unchecked:pointerover /template/ ContentPresenter">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0%,0%"
+                                         EndPoint="0%,100%">
+                        <LinearGradientBrush.GradientStops>
+                            <GradientStop Color="Gainsboro"
+                                          Offset="0" />
+                            <GradientStop Color="Yellow"
+                                          Offset="0.7" />
+                            <GradientStop Color="Gainsboro"
+                                          Offset="1" />
+                        </LinearGradientBrush.GradientStops>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Foreground"
+                    Value="Black" />
+        </Style>
+        <Style Selector="ToggleButton.tab:unchecked /template/ ContentPresenter">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0%,0%"
+                                         EndPoint="0%,100%">
+                        <LinearGradientBrush.GradientStops>
+                            <GradientStop Color="Gainsboro"
+                                          Offset="0" />
+                            <GradientStop Color="LightSlateGray"
+                                          Offset="0.7" />
+                            <GradientStop Color="Gainsboro"
+                                          Offset="1" />
+                        </LinearGradientBrush.GradientStops>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="ToggleButton.tab Image">
             <Setter Property="MinWidth"
                     Value="30" />
             <Setter Property="MinHeight"
@@ -45,7 +81,7 @@
             <Setter Property="Margin"
                     Value="0,10,0,0" />
         </Style>
-        <Style Selector="ToggleButton Label">
+        <Style Selector="ToggleButton.tab Label">
             <Setter Property="DockPanel.Dock"
                     Value="Bottom" />
             <Setter Property="HorizontalAlignment"
@@ -57,21 +93,26 @@
             <Setter Property="FontSize"
                     Value="16" />
         </Style>
-        <Style Selector="Button">
+        <Style Selector="Button.footer">
             <Setter Property="HorizontalContentAlignment"
                     Value="Center" />
             <Setter Property="Padding"
                     Value="5,3" />
+            <Setter Property="Width"
+                    Value="100" />
+            <Setter Property="Margin"
+                    Value="10,0" />
         </Style>
     </local:MpAvUserControl.Styles>
-    <DockPanel LastChildFill="True">
+    <DockPanel LastChildFill="True"
+               Background="Purple">
         <!--  Header Panel  -->
         <Grid x:Name="HeaderContainer"
               DockPanel.Dock="Top"
-              Margin="0,0,0,5"
-              ColumnDefinitions="0.16*,0.16*,0.16*,0.16*,0.16*,0.16*">
+              ColumnDefinitions="*,*,*,*,*,*">
             <!--  Account Tab Button  -->
             <ToggleButton Grid.Column="0"
+                          Classes="tab outline outlineOver"
                           IsChecked="{Binding IsTabSelected[0], Mode=OneWay}"
                           Command="{Binding SelectTabCommand}"
                           CommandParameter="0">
@@ -82,6 +123,7 @@
             </ToggleButton>
             <!--  Prefs Tab Button  -->
             <ToggleButton Grid.Column="1"
+                          Classes="tab outline outlineOver"
                           IsChecked="{Binding IsTabSelected[1], Mode=OneWay}"
                           Command="{Binding SelectTabCommand}"
                           CommandParameter="1">
@@ -92,6 +134,7 @@
             </ToggleButton>
             <!--  Security Tab Button  -->
             <ToggleButton Grid.Column="2"
+                          Classes="tab outline outlineOver"
                           IsChecked="{Binding IsTabSelected[2], Mode=OneWay}"
                           Command="{Binding SelectTabCommand}"
                           CommandParameter="2">
@@ -102,6 +145,7 @@
             </ToggleButton>
             <!--  Shortcuts tab button  -->
             <ToggleButton Grid.Column="3"
+                          Classes="tab outline outlineOver"
                           IsChecked="{Binding IsTabSelected[3], Mode=OneWay}"
                           Command="{Binding SelectTabCommand}"
                           CommandParameter="3">
@@ -112,6 +156,7 @@
             </ToggleButton>
             <!--  Interop tab button  -->
             <ToggleButton Grid.Column="4"
+                          Classes="tab outline outlineOver"
                           IsChecked="{Binding IsTabSelected[4], Mode=OneWay}"
                           Command="{Binding SelectTabCommand}"
                           CommandParameter="4">
@@ -122,6 +167,7 @@
             </ToggleButton>
             <!--  Help tab Button  -->
             <ToggleButton Grid.Column="5"
+                          Classes="tab outline outlineOver"
                           IsChecked="{Binding IsTabSelected[5], Mode=OneWay}"
                           Command="{Binding SelectTabCommand}"
                           CommandParameter="5">
@@ -134,37 +180,32 @@
 
         <!--  Footer  -->
         <DockPanel DockPanel.Dock="Bottom"
-                   HorizontalAlignment="Stretch">
+                   HorizontalAlignment="Stretch"
+                   Margin="10">
             <Button x:Name="ResetButton"
-                    Classes="defaultButton textOnlyButton"
+                    Classes="defaultButton textOnlyButton footer"
                     DockPanel.Dock="Left"
-                    Width="100"
-                    Margin="10,20,10,10"
                     Command="{Binding ResetSettingsCommand}"
                     Content="Reset All" />
             <StackPanel DockPanel.Dock="Right"
                         HorizontalAlignment="Right"
                         Orientation="Horizontal">
                 <Button x:Name="SaveButton"
-                        Classes="defaultButton textOnlyButton"
-                        Width="100"
-                        Margin="10,20,10,10"
+                        Classes="defaultButton textOnlyButton footer"
                         IsDefault="True"
                         Command="{Binding SaveSettingsCommand}"
                         Content="Save" />
                 <Button x:Name="CancelButton"
-                        Classes="defaultButton textOnlyButton"
-                        Width="100"
-                        Margin="10,20,10,10"
+                        Classes="defaultButton textOnlyButton footer"
                         Command="{Binding CancelSettingsCommand}"
                         Content="Cancel" />
             </StackPanel>
         </DockPanel>
 
         <!--  Content  -->
-
-        <Grid Margin="5">
+        <ScrollViewer MinHeight="300">
             <TransitioningContentControl x:Name="SettingsTransitioningContentControl"
+                                         Margin="10,5"
                                          Content="{Binding}">
                 <TransitioningContentControl.PageTransition>
                     <CompositePageTransition>
@@ -180,15 +221,27 @@
                     <ContentControl.DataTemplates>
                         <local:MpAvSettingsTabDataTemplateSelector>
                             <DataTemplate x:Key="AccountTemplate">
-                                <local:MpAvAccountView Background="Pink" />
+                                <local:MpAvAccountView />
                             </DataTemplate>
                             <DataTemplate x:Key="PreferencesTemplate">
-                                <local:MpAvAccountView Background="Orange" />
+                                <local:MpAvAccountView />
+                            </DataTemplate>
+                            <DataTemplate x:Key="SecurityTemplate">
+                                <local:MpAvSecurityView />
+                            </DataTemplate>
+                            <DataTemplate x:Key="ShortcutsTemplate">
+                                <local:MpAvShortcutsView />
+                            </DataTemplate>
+                            <DataTemplate x:Key="InteropTemplate">
+                                <local:MpAvSecurityView />
+                            </DataTemplate>
+                            <DataTemplate x:Key="HelpTemplate">
+                                <local:MpAvHelpView />
                             </DataTemplate>
                         </local:MpAvSettingsTabDataTemplateSelector>
                     </ContentControl.DataTemplates>
                 </ContentControl>
             </TransitioningContentControl>
-        </Grid>
+        </ScrollViewer>
     </DockPanel>
 </local:MpAvUserControl>

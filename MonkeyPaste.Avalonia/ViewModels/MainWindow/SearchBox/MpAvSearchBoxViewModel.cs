@@ -122,7 +122,7 @@ namespace MonkeyPaste.Avalonia {
                     return true;
                 }
                 // when current tag has items but current search criteria produces no result mark as invalid
-                return MpPlatform.Services.Query.TotalAvailableItemsInQuery > 0;
+                return Mp.Services.Query.TotalAvailableItemsInQuery > 0;
             }
         }
 
@@ -375,7 +375,7 @@ namespace MonkeyPaste.Avalonia {
                 if (!string.IsNullOrWhiteSpace(LastSearchText) && !suppressNotify) {
                     //MpPlatform.Services.QueryInfo.NotifyQueryChanged();
                     //SetQueryInfo();
-                    MpPlatform.Services.Query.NotifyQueryChanged();
+                    Mp.Services.Query.NotifyQueryChanged();
                 }
                 LastSearchText = string.Empty;
             },
@@ -392,7 +392,7 @@ namespace MonkeyPaste.Avalonia {
                 OnPropertyChanged(nameof(IsSearchValid));
 
                 //SetQueryInfo(); 
-                MpPlatform.Services.Query.NotifyQueryChanged(true);
+                Mp.Services.Query.NotifyQueryChanged(true);
                 UpdateRecentSearchTexts(SearchText);
             }, () => !MpAvMainWindowViewModel.Instance.IsMainWindowLoading);
 

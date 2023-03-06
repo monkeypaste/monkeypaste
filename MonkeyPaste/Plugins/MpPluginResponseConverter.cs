@@ -43,10 +43,10 @@ namespace MonkeyPaste {
             var outputType = pluginFormat.analyzer.outputType;
             List<string> ref_urls = new List<string>();
 
-            string source_url_ref = MpPlatform.Services.SourceRefBuilder.ConvertToRefUrl(sourceCopyItem);
+            string source_url_ref = Mp.Services.SourceRefBuilder.ConvertToRefUrl(sourceCopyItem);
 
             var plugin_source_ref = sourceHandler as MpISourceRef;
-            string plugin_param_req_ref_url = MpPlatform.Services.SourceRefBuilder.ConvertToRefUrl(
+            string plugin_param_req_ref_url = Mp.Services.SourceRefBuilder.ConvertToRefUrl(
                 plugin_source_ref, trans.Request.SerializeJsonObjectToBase64());
 
 
@@ -76,7 +76,7 @@ namespace MonkeyPaste {
 
                 // create new item
                 var target_ci = await
-                    MpPlatform.Services.CopyItemBuilder
+                    Mp.Services.CopyItemBuilder
                     .BuildAsync(
                         pdo: mpdo,
                         transType: MpTransactionType.Created);
@@ -85,7 +85,7 @@ namespace MonkeyPaste {
 
             // NOTE for existing content, plugins should by convention always return a dataobject
             // NOTE 2 after transaction tile picks up db event, reloads, finds transaction and applies deltas (at least thats the plan)
-            await MpPlatform.Services.TransactionBuilder.ReportTransactionAsync(
+            await Mp.Services.TransactionBuilder.ReportTransactionAsync(
                         copyItemId: sourceCopyItem.Id,
                         reqType: MpJsonMessageFormatType.ParameterRequest,
                         req: trans.Request.SerializeJsonObject(),

@@ -34,7 +34,7 @@ namespace MonkeyPaste.Avalonia {
             if (rawUri.StartsWith("avares://")) {
                 uri = new Uri(rawUri);
             } else {
-                string resource_val = MpPlatform.Services.PlatformResource.GetResource(rawUri) as string;
+                string resource_val = Mp.Services.PlatformResource.GetResource(rawUri) as string;
                 if (string.IsNullOrWhiteSpace(resource_val)) {
                     return null;
                 }

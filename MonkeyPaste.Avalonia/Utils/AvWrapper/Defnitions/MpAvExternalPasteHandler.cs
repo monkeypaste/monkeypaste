@@ -80,27 +80,27 @@ namespace MonkeyPaste.Avalonia {
 
             // SET CLIPBOARD
 
-            await MpPlatform.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(mpdo, true);
+            await Mp.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(mpdo, true);
 
             // ACTIVATE TARGET
             if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
-                IntPtr lastActive = MpPlatform.Services.ProcessWatcher.SetActiveProcess(pasteToHandle);
+                IntPtr lastActive = Mp.Services.ProcessWatcher.SetActiveProcess(pasteToHandle);
                 if (!MpAvMainWindowViewModel.Instance.IsMainWindowLocked) {
                     MpAvMainWindowViewModel.Instance.FinishMainWindowHide(null);
                 }
 
             } else if (MpAvAppendNotificationWindow.Instance.IsActive) {
-                IntPtr lastActive = MpPlatform.Services.ProcessWatcher.SetActiveProcess(pasteToHandle);
+                IntPtr lastActive = Mp.Services.ProcessWatcher.SetActiveProcess(pasteToHandle);
                 //MpAvNotificationWindowManager.Instance.HideNotification(MpAppendNotificationViewModel.Instance);
             } else {
                 // assume target is active (if was start process info needs to be activated earlier)
             }
 
             // SIMULATE PASTE CMD
-            await MpAvShortcutCollectionViewModel.Instance.SimulateKeyStrokeSequenceAsync(pasteCmdKeyString);
+            await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(pasteCmdKeyString);
 
             if (finishWithEnterKey) {
-                await MpAvShortcutCollectionViewModel.Instance.SimulateKeyStrokeSequenceAsync(MpKeyLiteralStringHelpers.ENTER_KEY_LITERAL);
+                await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(MpKeyLiteralStringHelpers.ENTER_KEY_LITERAL);
             }
 
             //await Task.Delay(300);

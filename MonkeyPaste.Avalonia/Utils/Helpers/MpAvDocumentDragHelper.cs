@@ -69,11 +69,11 @@ namespace MonkeyPaste.Avalonia {
                     dragSource is Control control &&
                     control.DataContext is MpAvClipTileViewModel ctvm) {
                 string drop_app_url = null;
-                if (MpPlatform.Services.ProcessWatcher.LastProcessInfo is MpPortableProcessInfo drop_pi &&
+                if (Mp.Services.ProcessWatcher.LastProcessInfo is MpPortableProcessInfo drop_pi &&
                     MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(drop_pi) is MpAvAppViewModel drop_avm) {
-                    drop_app_url = MpPlatform.Services.SourceRefBuilder.ConvertToRefUrl(drop_avm.App);
+                    drop_app_url = Mp.Services.SourceRefBuilder.ConvertToRefUrl(drop_avm.App);
                 } else {
-                    drop_app_url = MpPlatform.Services.SourceRefBuilder.ConvertToRefUrl(
+                    drop_app_url = Mp.Services.SourceRefBuilder.ConvertToRefUrl(
                         MpAvAppCollectionViewModel.Instance.ThisAppViewModel.App);
                 }
                 if (string.IsNullOrEmpty(drop_app_url)) {
@@ -82,7 +82,7 @@ namespace MonkeyPaste.Avalonia {
                 } else {
 
                     // report drop transaction
-                    MpPlatform.Services.TransactionBuilder.ReportTransactionAsync(
+                    Mp.Services.TransactionBuilder.ReportTransactionAsync(
                                 copyItemId: ctvm.CopyItemId,
                                 reqType: MpJsonMessageFormatType.DataObject,
                                 req: mpdo.SerializeData(),
@@ -117,7 +117,7 @@ namespace MonkeyPaste.Avalonia {
         private static async Task ApplyClipboardPresetToDragDataAsync() {
             // seems excessive...but ultimately all ole pref's come
             // from plugins so pass everthing through cb plugin system just like writing to clipboard
-            await MpPlatform.Services.DataObjectHelperAsync
+            await Mp.Services.DataObjectHelperAsync
                 .UpdateDragDropDataObjectAsync(SourceDataObject, DragDataObject);
 
         }

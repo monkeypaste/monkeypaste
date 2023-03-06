@@ -12,11 +12,24 @@ namespace MonkeyPaste.Avalonia {
             string key = null;
             if (param is int tabId) {
                 switch (tabId) {
+                    default:
                     case 0:
                         key = "AccountTemplate";
                         break;
                     case 1:
                         key = "PreferencesTemplate";
+                        break;
+                    case 2:
+                        key = "SecurityTemplate";
+                        break;
+                    case 3:
+                        key = "ShortcutsTemplate";
+                        break;
+                    case 4:
+                        key = "InteropTemplate";
+                        break;
+                    case 5:
+                        key = "HelpTemplate";
                         break;
                 }
             }

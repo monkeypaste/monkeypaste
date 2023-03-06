@@ -125,7 +125,7 @@ namespace MonkeyPaste {
             };
 
             string favIconImg64 = await MpUrlHelpers.GetUrlFavIconAsync(urlPath);
-            MpIcon icon = await MpPlatform.Services.IconBuilder.CreateAsync(
+            MpIcon icon = await Mp.Services.IconBuilder.CreateAsync(
                     iconBase64: favIconImg64,
                     suppressWrite: suppressWrite);
 

@@ -73,7 +73,7 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                 case nameof(SelectedSortType):
                     MpMessenger.SendGlobal(MpMessageType.QuerySortChanged);
-                    MpPlatform.Services.Query.NotifyQueryChanged();
+                    Mp.Services.Query.NotifyQueryChanged();
                     break;
             }
 

@@ -1,47 +1,12 @@
-﻿using SharpHook.Native;
+﻿using MonkeyPaste.Common;
+using SharpHook.Native;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace MonkeyPaste.Common.Avalonia {
-    public static class MpSharpHookKeyboardInputHelpers {
-        public static List<List<KeyCode>> ConvertStringToKeySequence(string keyStr) {
-            var keyList = new List<List<KeyCode>>();
-            if (string.IsNullOrEmpty(keyStr)) {
-                return keyList;
-            }
-
-            var combos = keyStr.Split(new string[] { MpKeyGestureHelper2.SEQUENCE_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var c in combos) {
-                var keys = c.Split(new string[] { MpKeyGestureHelper2.COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
-                keyList.Add(new List<KeyCode>());
-                foreach (var k in keys) {
-                    keyList[keyList.Count - 1].Add(GetKeyValue(k));
-                }
-            }
-            return keyList;
-        }
-
-        public static string ConvertKeySequenceToString(List<List<KeyCode>> keyList) {
-            var outStr = string.Empty;
-            foreach (var kl in keyList) {
-                if (!string.IsNullOrEmpty(outStr)) {
-                    outStr += MpKeyGestureHelper2.SEQUENCE_SEPARATOR;
-                }
-                foreach (var k in kl) {
-                    outStr += GetKeyLiteral(k) + MpKeyGestureHelper2.COMBO_SEPARATOR;
-                }
-                outStr = outStr.Remove(outStr.Length - MpKeyGestureHelper2.COMBO_SEPARATOR.Length, MpKeyGestureHelper2.COMBO_SEPARATOR.Length);
-            }
-            if (!string.IsNullOrEmpty(outStr)) {
-                if (outStr.EndsWith(MpKeyGestureHelper2.SEQUENCE_SEPARATOR)) {
-                    outStr = outStr.Remove(outStr.Length - MpKeyGestureHelper2.SEQUENCE_SEPARATOR.Length, MpKeyGestureHelper2.SEQUENCE_SEPARATOR.Length);
-                }
-            }
-            return outStr;
-        }
-
-        public static KeyCode GetKeyValue(string keyStr) {
+namespace MonkeyPaste.Avalonia {
+    public class MpGlobalKeyConverter : MpIKeyConverter<KeyCode> {
+        public KeyCode ConvertStringToKey(string keyStr) {
             string lks = keyStr.ToLower();
             if (lks == MpKeyLiteralStringHelpers.AV_CONTROL_KEY_LITERAL.ToLower() ||
                 lks == MpKeyLiteralStringHelpers.CONTROL_KEY_LITERAL.ToLower()) {
@@ -100,7 +65,7 @@ namespace MonkeyPaste.Common.Avalonia {
             throw new Exception("unkown key: " + lks);
         }
 
-        public static string GetKeyLiteral(KeyCode key) {
+        public string GetKeyLiteral(KeyCode key) {
             if (key == KeyCode.VcLeftShift || key == KeyCode.VcRightShift) {
                 return MpKeyLiteralStringHelpers.SHIFT_KEY_LITERAL;
             }
@@ -174,5 +139,6 @@ namespace MonkeyPaste.Common.Avalonia {
             }
             return key.ToString().Replace("Vc", String.Empty);
         }
+
     }
 }

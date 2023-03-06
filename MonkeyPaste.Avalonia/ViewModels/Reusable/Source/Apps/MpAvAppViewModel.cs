@@ -3,6 +3,7 @@ using MonkeyPaste.Common;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvAppViewModel :
@@ -232,6 +233,11 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
+
+        public ICommand ToggleIsRejectedCommand => new MpCommand(
+            () => {
+                IsRejected = !IsRejected;
+            });
 
         #endregion
     }

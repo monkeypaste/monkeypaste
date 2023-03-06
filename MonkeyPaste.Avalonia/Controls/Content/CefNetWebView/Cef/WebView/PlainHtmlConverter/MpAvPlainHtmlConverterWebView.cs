@@ -37,7 +37,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         public MpAvPlainHtmlConverterWebView() : base() {
-            MpPlatform.Services.ContentViewLocator = this;
+            Mp.Services.ContentViewLocator = this;
 
         }
 

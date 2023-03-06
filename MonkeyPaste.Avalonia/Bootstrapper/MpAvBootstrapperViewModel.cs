@@ -17,7 +17,7 @@ namespace MonkeyPaste.Avalonia {
                 MpAvMacHelpers.EnsureInitialized();
             }
 
-            await MpPlatform.InitAsync(new MpAvWrapper(this, this));
+            await Mp.InitAsync(new MpAvWrapper(this, this));
 
             if (MpPrefViewModel.Instance != null) {
                 if (MpPrefViewModel.Instance.LastStartupDateTime == null) {
@@ -44,7 +44,7 @@ namespace MonkeyPaste.Avalonia {
 
             await base.FinishLoaderAsync();
 
-            if (MpPlatform.Services.PlatformInfo.IsDesktop) {
+            if (Mp.Services.PlatformInfo.IsDesktop) {
                 App.MainView.Show();
                 MpAvSystemTray.Init();
             }
@@ -52,7 +52,7 @@ namespace MonkeyPaste.Avalonia {
             _sw.Stop();
         }
         protected override void CreateLoaderItems() {
-            if (MpPlatform.Services.PlatformInfo.IsDesktop) {
+            if (Mp.Services.PlatformInfo.IsDesktop) {
                 BaseItems.Add(new MpBootstrappedItemViewModel(this, typeof(MpAvCefNetApplication)));
             }
 
@@ -62,7 +62,7 @@ namespace MonkeyPaste.Avalonia {
                     new MpBootstrappedItemViewModel(this,typeof(MpAvThemeViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpConsole)),
                     new MpBootstrappedItemViewModel(this,typeof(MpTempFileManager)),
-                    new MpBootstrappedItemViewModel(this,typeof(MpPortableDataFormats),MpPlatform.Services.DataObjectRegistrar),
+                    new MpBootstrappedItemViewModel(this,typeof(MpPortableDataFormats),Mp.Services.DataObjectRegistrar),
                     new MpBootstrappedItemViewModel(this,typeof(MpDb)),
                     new MpBootstrappedItemViewModel(this,typeof(MpMasterTemplateModelCollectionViewModel)),
                     new MpBootstrappedItemViewModel(this,typeof(MpPluginLoader)),
@@ -88,7 +88,7 @@ namespace MonkeyPaste.Avalonia {
                    // new MpBootstrappedItemViewModel(this,typeof(MpAvFilterMenuViewModel))
                });
 
-            if (MpPlatform.Services.PlatformInfo.IsDesktop) {
+            if (Mp.Services.PlatformInfo.IsDesktop) {
                 PlatformItems.AddRange(
                    new List<MpBootstrappedItemViewModel>() {
                         new MpBootstrappedItemViewModel(this,typeof(MpAvPlainHtmlConverter)),

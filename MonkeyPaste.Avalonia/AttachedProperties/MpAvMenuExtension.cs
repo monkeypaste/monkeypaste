@@ -281,7 +281,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void HostControl_Holding(object sender, HoldingRoutedEventArgs e) {
-            if (MpPlatform.Services.PlatformInfo.IsDesktop) {
+            if (Mp.Services.PlatformInfo.IsDesktop) {
                 return;
             }
             var control = sender as Control;
@@ -419,7 +419,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (hide_on_click) {
-                MpPlatform.Services.ContextMenuCloser.CloseMenu();
+                Mp.Services.ContextMenuCloser.CloseMenu();
             }
 
         }
@@ -469,7 +469,8 @@ namespace MonkeyPaste.Avalonia {
             Control control = null;
             string itemType = new MpAvMenuItemDataTemplateSelector().GetTemplateName(mivm);
             KeyGesture inputGesture = null;
-            if (!string.IsNullOrEmpty(mivm.InputGestureText)) {
+            if (!string.IsNullOrEmpty(mivm.InputGestureText) &&
+                !mivm.InputGestureText.Contains(MpInputConstants.SEQUENCE_SEPARATOR)) {
                 inputGesture = KeyGesture.Parse(mivm.InputGestureText);
             }
 
@@ -543,7 +544,7 @@ namespace MonkeyPaste.Avalonia {
                 Width = mivm.CheckResourceKey == "CheckSvg" ? 15 : 7,
                 Height = mivm.CheckResourceKey == "CheckSvg" ? 15 : 7,
                 //Margin = mivm.CheckResourceKey == "CheckSvg" ? new Thickness(10) : new Thickness(15),
-                Data = MpPlatform.Services.PlatformResource.GetResource(mivm.CheckResourceKey) as StreamGeometry,
+                Data = Mp.Services.PlatformResource.GetResource(mivm.CheckResourceKey) as StreamGeometry,
                 Foreground = mivm.IconHexStr.HexColorToContrastingFgHexColor().ToAvBrush()
             };
             var iconBorder = GetIconBorder(mivm);
@@ -709,7 +710,7 @@ namespace MonkeyPaste.Avalonia {
             SetHideOnClick(control, hideOnClick);
             SetSelectOnRightClick(control, selectOnRightClick);
 
-            if (MpPlatform.Services.PlatformInfo.IsDesktop) {
+            if (Mp.Services.PlatformInfo.IsDesktop) {
                 var w = control.GetVisualAncestor<Window>();
                 //_cmInstance.Open();
             } else {

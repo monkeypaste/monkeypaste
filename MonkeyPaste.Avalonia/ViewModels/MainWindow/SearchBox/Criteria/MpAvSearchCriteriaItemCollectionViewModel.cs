@@ -232,7 +232,7 @@ namespace MonkeyPaste.Avalonia {
 
             IsBusy = false;
 
-            MpPlatform.Services.Query.NotifyQueryChanged(true);
+            Mp.Services.Query.NotifyQueryChanged(true);
         }
 
         public async Task<MpAvSearchCriteriaItemViewModel> CreateCriteriaItemViewModelAsync(MpSearchCriteriaItem sci) {
@@ -431,7 +431,7 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(100);
                 }
                 IsBusy = false;
-                MpPlatform.Services.Query.NotifyQueryChanged(true);
+                Mp.Services.Query.NotifyQueryChanged(true);
             },
             (args) => args is MpAvSearchCriteriaItemViewModel);
 
@@ -515,7 +515,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand OpenCriteriaWindowCommand => new MpCommand<object>(
             (args) => {
-                if (MpPlatform.Services.PlatformInfo.IsDesktop) {
+                if (Mp.Services.PlatformInfo.IsDesktop) {
                     _criteriaWindow = new Window() {
                         Width = 1100,
                         Height = 300,

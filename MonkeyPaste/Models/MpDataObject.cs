@@ -75,8 +75,8 @@ namespace MonkeyPaste {
                     foreach (var fp in valueParts) {
                         int fp_icon_id = 0;
                         if (fp.IsFileOrDirectory()) {
-                            var fp_icon_base64_str = MpPlatform.Services.IconBuilder.GetApplicationIconBase64(fp);
-                            var fp_icon = await MpPlatform.Services.IconBuilder.CreateAsync(fp_icon_base64_str);
+                            var fp_icon_base64_str = Mp.Services.IconBuilder.GetApplicationIconBase64(fp);
+                            var fp_icon = await Mp.Services.IconBuilder.CreateAsync(fp_icon_base64_str);
                             fp_icon_id = fp_icon.Id;
                         } else {
                             // what's wrong with the path string?

@@ -118,12 +118,10 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
         #region MpILabelTextViewModel Implementation
 
         string MpILabelText.LabelText => Label;
         #endregion
-
 
         #region MpAvIParameterCollectionViewModel Implementation
 
@@ -209,6 +207,11 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
+        public string ShortcutTooltipText =>
+            string.IsNullOrEmpty(ShortcutKeyString) ?
+                $"Assign shortcut to '{Label}'" :
+                ShortcutKeyString;
 
         public bool HasAnyParameterValueChange => Items.Any(x => x.HasModelChanged);
         public bool IsLabelTextBoxFocused { get; set; } = false;
@@ -460,6 +463,7 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
+            OnPropertyChanged(nameof(ShortcutTooltipText));
             OnPropertyChanged(nameof(ShortcutViewModel));
             OnPropertyChanged(nameof(Items));
             Items.ForEach(x => x.Validate());
@@ -597,7 +601,31 @@ namespace MonkeyPaste.Avalonia {
                 IsLabelReadOnly = !IsLabelReadOnly;
             });
 
+        public ICommand ToggleIsQuickActionCommand => new MpCommand(
+            () => {
+                IsQuickAction = !IsQuickAction;
+            });
 
+        public ICommand ToggleIsLabelReadOnlyCommand => new MpCommand(
+            () => {
+                IsLabelReadOnly = !IsLabelReadOnly;
+            });
+
+        public ICommand ResetOrDeleteThisPresetCommand => new MpCommand(
+            () => {
+                if (Parent == null) {
+                    return;
+                }
+                Parent.ResetOrDeletePresetCommand.Execute(this);
+            });
+
+        public ICommand DuplicateThisPresetCommand => new MpCommand(
+            () => {
+                if (Parent == null) {
+                    return;
+                }
+                Parent.DuplicatePresetCommand.Execute(this);
+            });
 
         #endregion
     }

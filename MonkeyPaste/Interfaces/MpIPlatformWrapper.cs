@@ -2,8 +2,11 @@
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
+
     public interface MpIPlatformWrapper : MpICommonTools {
         Task InitializeAsync();
+        MpIKeyConverterHub KeyConverter { get; set; }
+        MpIKeyStrokeSimulator KeyStrokeSimulator { get; set; }
         MpIContentViewLocator ContentViewLocator { get; set; }
 
         MpINativePathDialog NativePathDialog { get; set; }

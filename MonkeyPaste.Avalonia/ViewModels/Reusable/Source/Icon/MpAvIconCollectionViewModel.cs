@@ -186,7 +186,7 @@ namespace MonkeyPaste.Avalonia {
 
                 MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
 
-                var selectedImagePath = await MpPlatform.Services.NativePathDialog
+                var selectedImagePath = await Mp.Services.NativePathDialog
                         .ShowFileDialogAsync($"Image", null, "png,gif,jpg,jpeg,bmp".Split(","));
 
                 MpAvMenuExtension.CloseMenu();

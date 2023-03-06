@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvUrlViewModel :
@@ -225,7 +226,15 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
+        public ICommand ToggleIsRejectedCommand => new MpCommand(
+            () => {
+                IsSubRejected = !IsSubRejected;
+            });
 
+        public ICommand ToggleIsDomainRejectedCommand => new MpCommand(
+            () => {
+                IsRejected = !IsRejected;
+            });
         #endregion
     }
 }

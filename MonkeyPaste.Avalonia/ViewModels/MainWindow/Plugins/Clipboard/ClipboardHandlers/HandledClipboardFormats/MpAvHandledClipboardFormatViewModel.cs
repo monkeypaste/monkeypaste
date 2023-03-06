@@ -147,7 +147,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string HandledFormatIconResourceKey {
             get {
-                return MpPlatform.Services.PlatformResource.GetResource("AppImage") as string;
+                return Mp.Services.PlatformResource.GetResource("AppImage") as string;
 
                 //switch (HandledFormat) {
                 //    case MpClipboardFormatType.Bitmap:

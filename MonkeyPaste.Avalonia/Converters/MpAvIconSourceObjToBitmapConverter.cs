@@ -49,7 +49,7 @@ namespace MonkeyPaste.Avalonia {
                         color_img_key = valParts.FirstOrDefault(x => x.Contains("Image"));
                     }
                     var blank_bmp = MpAvStringResourceConverter.Instance.Convert(
-                        MpPlatform.Services.PlatformResource.GetResource(color_img_key), null, null, null) as Bitmap;
+                        Mp.Services.PlatformResource.GetResource(color_img_key), null, null, null) as Bitmap;
                     blank_bmp = blank_bmp.Tint(valStr);
                     return blank_bmp;
                 }
@@ -61,14 +61,14 @@ namespace MonkeyPaste.Avalonia {
                 if (valStr.EndsWith("Icon") || targetType == typeof(WindowIcon)) {
                     return new WindowIcon(
                         MpAvStringResourceConverter.Instance.Convert(
-                            MpPlatform.Services.PlatformResource.GetResource(valStr), null, null, null) as Bitmap);
+                            Mp.Services.PlatformResource.GetResource(valStr), null, null, null) as Bitmap);
                 }
                 if (valStr.EndsWith("Image") || valStr.IsAvResourceString()) {
                     return new MpAvStringResourceConverter()
                                 .Convert(value, targetType, parameter, culture) as Bitmap;
                 }
                 if (valStr.EndsWith("Svg")) {
-                    if (MpPlatform.Services.PlatformResource.GetResource(valStr) is object data) { //}, out var data)) {
+                    if (Mp.Services.PlatformResource.GetResource(valStr) is object data) { //}, out var data)) {
                         if (data is Geometry geometry) {
                             return geometry;
                         }
@@ -93,7 +93,7 @@ namespace MonkeyPaste.Avalonia {
                             return null;
                         }
                     }
-                    string appIconBase64 = MpPlatform.Services.IconBuilder.GetApplicationIconBase64(valStr);
+                    string appIconBase64 = Mp.Services.IconBuilder.GetApplicationIconBase64(valStr);
                     return new MpAvStringBase64ToBitmapConverter().Convert(appIconBase64, null, null, CultureInfo.CurrentCulture);
                 }
             }

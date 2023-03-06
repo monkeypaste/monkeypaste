@@ -32,23 +32,23 @@ namespace MonkeyPaste.Avalonia {
         #region Fixed Resources
 
         public double GlobalBgOpacity_desktop =>
-            (double)MpPlatform.Services.PlatformResource.GetResource(MpThemeResourceKey.GlobalBgOpacity_desktop.ToString());
+            (double)Mp.Services.PlatformResource.GetResource(MpThemeResourceKey.GlobalBgOpacity_desktop.ToString());
         public double GlobalBgOpacity_mobile =>
-            (double)MpPlatform.Services.PlatformResource.GetResource(MpThemeResourceKey.GlobalBgOpacity_mobile.ToString());
+            (double)Mp.Services.PlatformResource.GetResource(MpThemeResourceKey.GlobalBgOpacity_mobile.ToString());
 
         public double DefaultGridSplitterFixedDimensionLength_desktop =>
-            (double)MpPlatform.Services.PlatformResource.GetResource(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength_desktop.ToString());
+            (double)Mp.Services.PlatformResource.GetResource(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength_desktop.ToString());
         public double DefaultGridSplitterFixedDimensionLength_mobile =>
-            (double)MpPlatform.Services.PlatformResource.GetResource(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength_mobile.ToString());
+            (double)Mp.Services.PlatformResource.GetResource(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength_mobile.ToString());
 
         #endregion
 
         public double GlobalBgOpacity {
-            get => (double)MpPlatform.Services.PlatformResource.GetResource(MpThemeResourceKey.GlobalBgOpacity.ToString());
+            get => (double)Mp.Services.PlatformResource.GetResource(MpThemeResourceKey.GlobalBgOpacity.ToString());
             set {
                 if (GlobalBgOpacity != value) {
                     double clamped_value = Math.Max(0, Math.Min(value, 1.0d));
-                    MpPlatform.Services.PlatformResource.SetResource(MpThemeResourceKey.GlobalBgOpacity.ToString(), clamped_value);
+                    Mp.Services.PlatformResource.SetResource(MpThemeResourceKey.GlobalBgOpacity.ToString(), clamped_value);
                     MpPrefViewModel.Instance.MainWindowOpacity = clamped_value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(GlobalBgOpacity));
@@ -57,10 +57,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public double DefaultGridSplitterFixedDimensionLength {
-            get => (double)MpPlatform.Services.PlatformResource.GetResource(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength.ToString());
+            get => (double)Mp.Services.PlatformResource.GetResource(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength.ToString());
             set {
                 if (DefaultGridSplitterFixedDimensionLength != value) {
-                    MpPlatform.Services.PlatformResource.SetResource(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength.ToString(), value);
+                    Mp.Services.PlatformResource.SetResource(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength.ToString(), value);
                     MpPrefViewModel.Instance.MainWindowOpacity = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(DefaultGridSplitterFixedDimensionLength));
@@ -73,9 +73,9 @@ namespace MonkeyPaste.Avalonia {
         #region State
 
         public bool IsDesktop =>
-            MpPlatform.Services != null &&
-            MpPlatform.Services.PlatformInfo != null &&
-            MpPlatform.Services.PlatformInfo.IsDesktop;
+            Mp.Services != null &&
+            Mp.Services.PlatformInfo != null &&
+            Mp.Services.PlatformInfo.IsDesktop;
         #endregion
 
         #endregion

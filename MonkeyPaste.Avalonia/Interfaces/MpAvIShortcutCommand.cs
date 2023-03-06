@@ -14,7 +14,7 @@ namespace MonkeyPaste.Avalonia {
         string ShortcutKeyString { get; }
     }
 
-    public interface MpIShortcutCommandViewModel : MpIViewModel {
+    public interface MpICustomShortcutCommandViewModel : MpIViewModel {
         string ShortcutLabel { get; }
         MpShortcutType ShortcutType { get; }
 

@@ -50,7 +50,7 @@ namespace MonkeyPaste.Avalonia {
             };
 
 
-            if (MpPlatform.Services.PlatformInfo.IsDesktop) {
+            if (Mp.Services.PlatformInfo.IsDesktop) {
                 var quillWindow = new Window() {
                     Width = 300,
                     Height = 300,

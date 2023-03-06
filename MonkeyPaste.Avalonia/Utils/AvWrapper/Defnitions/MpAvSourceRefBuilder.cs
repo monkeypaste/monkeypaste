@@ -15,7 +15,7 @@ namespace MonkeyPaste.Avalonia {
                 if (Uri.TryCreate(sourceUrl, UriKind.Absolute, out Uri uri) && uri.IsFile) {
                     // this SHOULD be an executable file path but not checking 
                     // to stay portable
-                    var app = await MpPlatform.Services.AppBuilder.CreateAsync(
+                    var app = await Mp.Services.AppBuilder.CreateAsync(
                         new MpPortableProcessInfo() {
                             ProcessPath = uri.LocalPath
                         });
@@ -32,7 +32,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (!sourceUrl.StartsWith(INTERNAL_SOURCE_DOMAIN.ToLower())) {
                 // add or fetch external url
-                var url = await MpPlatform.Services.UrlBuilder.CreateAsync(sourceUrl);
+                var url = await Mp.Services.UrlBuilder.CreateAsync(sourceUrl);
                 return url;
             }
             if (!sourceUrl.Contains("?")) {
@@ -117,7 +117,7 @@ namespace MonkeyPaste.Avalonia {
                 urlBytes.ToDecodedString(Encoding.ASCII, true) is string urlRef &&
                 Uri.IsWellFormedUriString(urlRef, UriKind.Absolute)) {
 
-                MpISourceRef sr = await MpPlatform.Services.SourceRefBuilder.FetchOrCreateSourceAsync(urlRef);
+                MpISourceRef sr = await Mp.Services.SourceRefBuilder.FetchOrCreateSourceAsync(urlRef);
                 if (sr != null) {
                     // occurs on sub-selection drop onto pintray or tag
                     refs.Add(sr);
@@ -127,7 +127,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (uri_strings != null) {
                 var list_refs = await Task.WhenAll(
-                    uri_strings.Select(x => MpPlatform.Services.SourceRefBuilder.FetchOrCreateSourceAsync(x)));
+                    uri_strings.Select(x => Mp.Services.SourceRefBuilder.FetchOrCreateSourceAsync(x)));
                 refs.AddRange(list_refs);
             }
 
@@ -147,7 +147,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task<IEnumerable<MpISourceRef>> GatherExternalSourceRefsAsync(MpPortableDataObject mpdo) {
-            var last_pinfo = MpPlatform.Services.ProcessWatcher.LastProcessInfo;
+            var last_pinfo = Mp.Services.ProcessWatcher.LastProcessInfo;
 
             //if(OperatingSystem.IsLinux()) {
             //    // this maybe temporary but linux not following process watching convention because its SLOW
@@ -157,18 +157,18 @@ namespace MonkeyPaste.Avalonia {
             //    app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(MpPlatformWrapper.Services.ProcessWatcher.LastHandle);
             //}
             if (last_pinfo == null) {
-                if (MpPlatform.Services.PlatformInfo.IsDesktop) {
+                if (Mp.Services.PlatformInfo.IsDesktop) {
 
                     Debugger.Break();
                 }
                 return null;
             }
-            var app = await MpPlatform.Services.AppBuilder.CreateAsync(last_pinfo);
+            var app = await Mp.Services.AppBuilder.CreateAsync(last_pinfo);
 
             MpUrl url = null;
             string source_url = MpAvHtmlClipboardData.FindSourceUrl(mpdo);
             if (!string.IsNullOrWhiteSpace(source_url)) {
-                url = await MpPlatform.Services.UrlBuilder.CreateAsync(
+                url = await Mp.Services.UrlBuilder.CreateAsync(
                     url: source_url,
                     appId: app == null ? 0 : app.Id);
             }

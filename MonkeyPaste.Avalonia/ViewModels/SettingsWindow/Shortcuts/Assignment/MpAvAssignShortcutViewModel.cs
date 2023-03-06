@@ -18,7 +18,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Variables
 
-        private MpKeyGestureHelper2 _gestureHelper;
+        private MpKeyGestureHelper _gestureHelper;
 
         private bool _isReplacingShortcut = false;
         private bool _wasPreviouslyASequence = false;
@@ -40,12 +40,12 @@ namespace MonkeyPaste.Avalonia {
                 if (KeyString == null) {
                     return keyItems;
                 }
-                var combos = KeyString.SplitNoEmpty(MpKeyGestureHelper2.SEQUENCE_SEPARATOR);
+                var combos = KeyString.SplitNoEmpty(MpInputConstants.SEQUENCE_SEPARATOR);
                 int maxComboIdx = combos.Length - 1;
                 for (int comboIdx = 0; comboIdx < combos.Length; comboIdx++) {
                     string combo = combos[comboIdx];
                     var comboGroup = new MpAvShortcutKeyGroupViewModel();
-                    var keys = combo.SplitNoEmpty(MpKeyGestureHelper2.COMBO_SEPARATOR);
+                    var keys = combo.SplitNoEmpty(MpInputConstants.COMBO_SEPARATOR);
 
                     for (int keyIdx = 0; keyIdx < keys.Length; keyIdx++) {
                         string key = keys[keyIdx];
@@ -81,7 +81,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public bool IsSequence => KeyString != null && KeyString.Contains(MpKeyGestureHelper2.SEQUENCE_SEPARATOR);
+        public bool IsSequence => KeyString != null && KeyString.Contains(MpInputConstants.SEQUENCE_SEPARATOR);
 
         public bool ShowWarning => IsSequence || _wasPreviouslyASequence || _isReplacingShortcut;
         public string WarningString { get; set; }
@@ -173,7 +173,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(KeyItems));
 
 
-            _gestureHelper = new MpKeyGestureHelper2();
+            _gestureHelper = new MpKeyGestureHelper();
             //KeysString = keysList;
         }
 

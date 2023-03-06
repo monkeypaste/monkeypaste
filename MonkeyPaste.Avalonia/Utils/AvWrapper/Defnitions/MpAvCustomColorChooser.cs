@@ -48,7 +48,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
             MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
-            MpPlatform.Services.ContextMenuCloser.CloseMenu();
+            Mp.Services.ContextMenuCloser.CloseMenu();
 
             return newColor;
         }

@@ -24,7 +24,7 @@ namespace MonkeyPaste {
                     // to keep RefreshQuery giving accurate results but needs to use AllTag
                     qi_tag_ids = new[] { MpTag.AllTagId };
                 } else {
-                    qi_tag_ids = MpPlatform.Services.TagQueryTools.GetSelfAndAllDescendantsTagIds(qi.TagId);
+                    qi_tag_ids = Mp.Services.TagQueryTools.GetSelfAndAllDescendantsTagIds(qi.TagId);
                 }
 
                 sub_queries.Add(GetContentQuery(qi, qi_tag_ids, idx++));
@@ -47,7 +47,7 @@ namespace MonkeyPaste {
 
 
             IEnumerable<int> ci_idsToOmit =
-                MpPlatform.Services.ContentQueryTools.GetOmittedContentIds();
+                Mp.Services.ContentQueryTools.GetOmittedContentIds();
 
             return result.Where(x => !ci_idsToOmit.Contains(x)).Distinct().ToList();
         }

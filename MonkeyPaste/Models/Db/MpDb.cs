@@ -333,7 +333,7 @@ namespace MonkeyPaste {
         #region Private Methods  
 
         private static async Task InitDbAsync() {
-            bool isNewDb = await InitDbConnectionAsync(MpPlatform.Services.DbInfo, true);
+            bool isNewDb = await InitDbConnectionAsync(Mp.Services.DbInfo, true);
 
             await InitTablesAsync();
 
@@ -363,7 +363,7 @@ namespace MonkeyPaste {
 
         private static SQLiteConnectionString GetConnectionString(string dbPath = "") {
             if (string.IsNullOrEmpty(dbPath)) {
-                dbPath = MpPlatform.Services.DbInfo.DbPath;
+                dbPath = Mp.Services.DbInfo.DbPath;
             }
             SQLiteConnectionString connStr = null;
             try {
@@ -668,7 +668,7 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
             };
 
             var thisApp = await MpDataModelProvider.GetItemAsync<MpApp>(MpDefaultDataModelTools.ThisAppId);
-            var thisAppRef = MpPlatform.Services.SourceRefBuilder.ConvertToRefUrl(thisApp);
+            var thisAppRef = Mp.Services.SourceRefBuilder.ConvertToRefUrl(thisApp);
 
             var hci_idl = new List<int>();
             foreach (var hcd in helpContentDefinitions) {
@@ -701,7 +701,7 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
                 //            ref_urls: new[] { thisAppRef },
                 //            transType: MpTransactionType.Created);
 
-                var hci = await MpPlatform.Services.CopyItemBuilder.BuildAsync(
+                var hci = await Mp.Services.CopyItemBuilder.BuildAsync(
                     pdo: hci_mpdo,
                     transType: MpTransactionType.System,
                     force_ext_sources: false);
@@ -717,7 +717,7 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
         private static async Task CreateTestDataAsync() {
             for (int i = 0; i < 100; i++) {
                 var mpdo = new MpPortableDataObject(MpPortableDataFormats.Text, $"This is test {i}.");
-                await MpPlatform.Services.CopyItemBuilder.BuildAsync(
+                await Mp.Services.CopyItemBuilder.BuildAsync(
                     pdo: mpdo,
                     transType: MpTransactionType.Created,
                     force_ext_sources: false);
@@ -732,7 +732,7 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
         }
 
         private static async Task InitDefaultShortcutsAsync() {
-            var ps = MpPlatform.Services.PlatformShorcuts;
+            var ps = Mp.Services.PlatformShorcuts;
             List<string[]> defaultShortcutDefinitions = new List<string[]>() {
                 // ORDER:
                 // guid,keyString,shortcutType,routeType, readOnly = false

@@ -1,20 +1,21 @@
 ﻿using Avalonia.Input;
+using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MonkeyPaste.Common.Avalonia {
-    public static class MpAvKeyboardInputHelpers {
+namespace MonkeyPaste.Avalonia {
+    public class MpAvInternalKeyConverter : MpIKeyConverter<Key> {
 
-        public static List<List<Key>> ConvertStringToKeySequence(string keyStr) {
+        public List<List<Key>> ConvertStringToKeySequence(string keyStr) {
             var keyList = new List<List<Key>>();
             if (string.IsNullOrEmpty(keyStr)) {
                 return keyList;
             }
 
-            var combos = keyStr.Split(new string[] { MpKeyGestureHelper2.SEQUENCE_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
+            var combos = keyStr.Split(new string[] { MpInputConstants.SEQUENCE_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var c in combos) {
-                var keys = c.Split(new string[] { MpKeyGestureHelper2.COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
+                var keys = c.Split(new string[] { MpInputConstants.COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
                 keyList.Add(new List<Key>());
                 foreach (var k in keys) {
                     keyList[keyList.Count - 1].Add(ConvertStringToKey(k));
@@ -23,39 +24,9 @@ namespace MonkeyPaste.Common.Avalonia {
             return keyList;
         }
 
-        public static List<List<string>> ConvertStringToKeyLiteralSequence(string keyStr) {
-            var kseq = ConvertStringToKeySequence(keyStr);
-            var lseq = new List<List<string>>();
-            foreach (var kcombo in kseq) {
-                var lcombo = new List<string>();
-                foreach (var k in kcombo) {
-                    lcombo.Add(GetKeyLiteral(k));
-                }
-                lseq.Add(lcombo);
-            }
-            return lseq;
-        }
 
-        public static string ConvertKeySequenceToString(List<List<Key>> keyList) {
-            var outStr = string.Empty;
-            foreach (var kl in keyList) {
-                if (!string.IsNullOrEmpty(outStr)) {
-                    outStr += MpKeyGestureHelper2.SEQUENCE_SEPARATOR;
-                }
-                foreach (var k in kl) {
-                    outStr += GetKeyLiteral(k) + MpKeyGestureHelper2.COMBO_SEPARATOR;
-                }
-                outStr = outStr.Remove(outStr.Length - 1, 1);
-            }
-            if (!string.IsNullOrEmpty(outStr)) {
-                if (outStr.EndsWith("|")) {
-                    outStr = outStr.Remove(outStr.Length - 2, 2);
-                }
-            }
-            return outStr;
-        }
 
-        public static Key ConvertStringToKey(string keyStr) {
+        public Key ConvertStringToKey(string keyStr) {
             if (keyStr.IsNullOrEmpty()) {
                 return Key.None;
             }
@@ -121,7 +92,7 @@ namespace MonkeyPaste.Common.Avalonia {
             return (Key)Enum.Parse(typeof(Key), keyStr, true);
         }
 
-        public static string GetKeyLiteral(Key key) {
+        public string GetKeyLiteral(Key key) {
             if (key == Key.LeftShift || key == Key.RightShift) {
                 return MpKeyLiteralStringHelpers.SHIFT_KEY_LITERAL;
             }
@@ -174,18 +145,18 @@ namespace MonkeyPaste.Common.Avalonia {
             return key.ToString();
         }
 
-        public static string ConvertKeyStringToSendKeysString(string keyString) {
+        public string ConvertKeyStringToSendKeysString(string keyString) {
             // NOTE keyString should NOT be a sequence
             //if(keyString.Contains(",")) {
             //    throw new Exception($"keyString '{keyString}' is a sequence and SendKeys only handles one gesture, if seq necessary call multiple times w/ delay in between");
             //}
 
             var sb = new StringBuilder();
-            string[] keySequences = keyString.Split(new string[] { MpKeyGestureHelper2.SEQUENCE_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
+            string[] keySequences = keyString.Split(new string[] { MpInputConstants.SEQUENCE_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < keySequences.Length; i++) {
                 string seq = keySequences[i].Trim();
                 //string outStr = string.Empty;
-                var keys = seq.Split(new string[] { MpKeyGestureHelper2.COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
+                var keys = seq.Split(new string[] { MpInputConstants.COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var key in keys) {
                     switch (key) {
                         case "Ctrl":
@@ -261,7 +232,7 @@ namespace MonkeyPaste.Common.Avalonia {
             return sb.ToString();
         }
 
-        //public static System.Windows.Input.Key WinformsToWPFKey(System.Windows.Forms.Keys formsKey) {
+        //public System.Windows.Input.Key WinformsToWPFKey(System.Windows.Forms.Keys formsKey) {
 
         //    // Put special case logic here if there's a key you need but doesn't map...  
         //    try {
@@ -273,7 +244,7 @@ namespace MonkeyPaste.Common.Avalonia {
         //    }
         //}
 
-        //public static System.Windows.Forms.Keys WpfKeyToWinformsKey(Key wpfKey) {
+        //public System.Windows.Forms.Keys WpfKeyToWinformsKey(Key wpfKey) {
 
         //    // Put special case logic here if there's a key you need but doesn't map...  
         //    try {

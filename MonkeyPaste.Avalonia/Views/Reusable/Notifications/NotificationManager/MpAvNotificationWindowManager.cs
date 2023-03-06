@@ -43,7 +43,7 @@ namespace MonkeyPaste.Avalonia {
                 // somethigns wrong
                 Debugger.Break();
             }
-            if (MpPlatform.Services.PlatformInfo.IsDesktop) {
+            if (Mp.Services.PlatformInfo.IsDesktop) {
                 ShowDesktopNotification(nvmb);
             } else {
                 if (nvmb is MpLoaderNotificationViewModel lnvm) {
@@ -146,15 +146,15 @@ namespace MonkeyPaste.Avalonia {
                     desktop.MainWindow == null) {
                 // occurs on startup
                 desktop.MainWindow = nw;
-                MpPlatform.Services.ScreenInfoCollection = new MpAvDesktopScreenInfoCollection(nw);
+                Mp.Services.ScreenInfoCollection = new MpAvDesktopScreenInfoCollection(nw);
             }
 
             if (!_windows.Contains(nw)) {
                 _windows.Add(nw);
             }
-            bool is_platform_loaded = MpPlatform.Services != null &&
-                     MpPlatform.Services.StartupState != null &&
-                     MpPlatform.Services.StartupState.IsPlatformLoaded;
+            bool is_platform_loaded = Mp.Services != null &&
+                     Mp.Services.StartupState != null &&
+                     Mp.Services.StartupState.IsPlatformLoaded;
             if (is_platform_loaded) {
                 if (nw == MpAvAppendNotificationWindow.Instance &&
                 MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {

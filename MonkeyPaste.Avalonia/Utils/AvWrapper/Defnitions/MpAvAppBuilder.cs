@@ -23,7 +23,7 @@ namespace MonkeyPaste.Avalonia {
                     return null;
                 }
                 // likely running application when no process path, find the path from the handle and use handle to query for mw title (if not already set)
-                processPath = MpPlatform.Services.ProcessWatcher.GetProcessPath(pi.Handle);
+                processPath = Mp.Services.ProcessWatcher.GetProcessPath(pi.Handle);
             } else {
                 processPath = pi.ProcessPath;
             }
@@ -39,16 +39,16 @@ namespace MonkeyPaste.Avalonia {
                 if (pi.Handle == IntPtr.Zero) {
                     appName = Path.GetFileNameWithoutExtension(pi.ProcessPath);
                 } else {
-                    appName = MpPlatform.Services.ProcessWatcher.GetProcessApplicationName(pi.Handle);
+                    appName = Mp.Services.ProcessWatcher.GetProcessApplicationName(pi.Handle);
                 }
             } else {
-                appName = MpPlatform.Services.ProcessWatcher.ParseTitleForApplicationName(pi.MainWindowTitle);
+                appName = Mp.Services.ProcessWatcher.ParseTitleForApplicationName(pi.MainWindowTitle);
             }
 
             // GET APP ICON
             iconBase64 =
                 string.IsNullOrEmpty(pi.MainWindowIconBase64) ?
-                    MpPlatform.Services.IconBuilder.GetApplicationIconBase64(processPath) :
+                    Mp.Services.IconBuilder.GetApplicationIconBase64(processPath) :
                     pi.MainWindowIconBase64;
 
             if (string.IsNullOrEmpty(iconBase64)) {
@@ -57,7 +57,7 @@ namespace MonkeyPaste.Avalonia {
                 iconBase64 = MpBase64Images.QuestionMark;
             }
 
-            var icon = await MpPlatform.Services.IconBuilder.CreateAsync(iconBase64);
+            var icon = await Mp.Services.IconBuilder.CreateAsync(iconBase64);
 
             string args = pi.ArgumentList == null || pi.ArgumentList.Count == 0 ?
                 null : string.Join(Environment.NewLine, pi.ArgumentList);

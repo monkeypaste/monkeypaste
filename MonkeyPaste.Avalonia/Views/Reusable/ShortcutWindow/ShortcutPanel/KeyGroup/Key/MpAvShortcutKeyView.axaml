@@ -21,7 +21,7 @@
             CornerRadius="5">
         <TextBlock HorizontalAlignment="Center"
                    VerticalAlignment="Center"
-                   FontSize="10"
+                   FontSize="12"
                    Foreground="Black"
                    Text="{Binding KeyStr, Converter={x:Static local:MpAvEnumToKeyLiteralConverter.Instance}, ConverterParameter=label}"
                    FontWeight="Bold" />

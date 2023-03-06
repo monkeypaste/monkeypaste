@@ -502,7 +502,7 @@ namespace MonkeyPaste.Avalonia {
                        InputElement.PointerPressedEvent,
                        PreviewControlPointerPressedHandler,
                        RoutingStrategies.Tunnel);
-                if (MpPlatform.Services.PlatformInfo.IsTouchInputEnabled) {
+                if (Mp.Services.PlatformInfo.IsTouchInputEnabled) {
 
 
                     lb.AddHandler(
@@ -590,7 +590,7 @@ namespace MonkeyPaste.Avalonia {
             if (s is ListBox lb) {
                 SetVelocityX(lb, 0);
                 SetVelocityY(lb, 0);
-                if (MpPlatform.Services.PlatformInfo.IsTouchInputEnabled) {
+                if (Mp.Services.PlatformInfo.IsTouchInputEnabled) {
                     //e.Pointer.Capture(lb);
                     _down_touch_loc = e.GetPosition(App.MainView as Control).ToPortablePoint();
                     _downOffset = new MpPoint(GetScrollOffsetX(lb), GetScrollOffsetY(lb));
@@ -601,7 +601,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void PreviewControlPointerMovedHandler(object s, PointerEventArgs e) {
-            if (!MpPlatform.Services.PlatformInfo.IsTouchInputEnabled) {
+            if (!Mp.Services.PlatformInfo.IsTouchInputEnabled) {
                 return;
             }
             if (s is ListBox lb) {
@@ -629,7 +629,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void PreviewControlPointerReleasedHandler(object s, PointerReleasedEventArgs e) {
-            if (!MpPlatform.Services.PlatformInfo.IsTouchInputEnabled ||
+            if (!Mp.Services.PlatformInfo.IsTouchInputEnabled ||
                 _last_v == null) {
                 return;
             }
