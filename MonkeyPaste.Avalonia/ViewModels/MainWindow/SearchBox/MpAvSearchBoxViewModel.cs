@@ -37,13 +37,8 @@ namespace MonkeyPaste.Avalonia {
             get {
                 if (_recentSearchTexts == null &&
                     MpPrefViewModel.Instance != null) {
-                    var rstl = MpPrefViewModel.Instance.RecentSearchTexts.ToListFromCsv(MpPrefViewModel.Instance);
+                    var rstl = MpPrefViewModel.Instance.RecentSearchTexts.ToListFromCsv(MpCsvFormatProperties.DefaultBase64Value);
                     _recentSearchTexts = new ObservableCollection<string>(rstl);
-                    _recentSearchTexts.CollectionChanged += (s, e) => {
-                        MpPrefViewModel.Instance.RecentSearchTexts =
-                            RecentSearchTexts.ToCsv(MpPrefViewModel.Instance);
-
-                    };
                 }
                 return _recentSearchTexts;
             }
@@ -146,15 +141,6 @@ namespace MonkeyPaste.Avalonia {
                 return $"Search '{tag_name}'...";
             }
         }
-        public FontStyle TextBoxFontStyle {
-            get {
-                if (HasText) {
-                    return FontStyle.Normal; //FontStyles.Normal;
-                }
-                return FontStyle.Italic; //FontStyles.Italic;
-            }
-        }
-
         #endregion
 
         #region Model
@@ -170,7 +156,7 @@ namespace MonkeyPaste.Avalonia {
                     //SearchText = Text;
                     OnPropertyChanged(nameof(SearchText));
                     OnPropertyChanged(nameof(HasText));
-                    OnPropertyChanged(nameof(TextBoxFontStyle));
+                    //OnPropertyChanged(nameof(TextBoxFontStyle));
                 }
             }
         }
@@ -203,12 +189,10 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task InitAsync() {
             await Task.Delay(1);
-            OnPropertyChanged(nameof(RecentSearchTexts));
 
             SearchFilterCollectionViewModel.Init();
-
-
             MpMessenger.RegisterGlobal(ReceiveGlobalMessage);
+            OnPropertyChanged(nameof(RecentSearchTexts));
         }
 
         public void NotifyHasMultipleMatches() {
@@ -249,9 +233,9 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
 
                 case nameof(SearchText):
-                    if (IsTextBoxFocused) {
-                        PerformSearchCommand.Execute(null);
-                    }
+                    //if (IsTextBoxFocused) {
+                    PerformSearchCommand.Execute(null);
+                    //}
 
                     if (HasText && !IsExpanded) {
                         IsExpanded = true;
@@ -275,7 +259,7 @@ namespace MonkeyPaste.Avalonia {
                             WaitForUnexpandAsync().FireAndForgetSafeAsync(this);
                         }
                     }
-                    OnPropertyChanged(nameof(TextBoxFontStyle));
+                    //OnPropertyChanged(nameof(TextBoxFontStyle));
                     break;
                 case nameof(IsExpanded):
                     IsExpandedChangedDateTime = DateTime.Now;
@@ -298,20 +282,24 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private void UpdateRecentSearchTexts(string st) {
-            if (!string.IsNullOrEmpty(st)) {
-                int recentFindIdx = RecentSearchTexts.IndexOf(st);
-                if (recentFindIdx < 0) {
-                    RecentSearchTexts.Insert(0, st);
-                } else {
-                    RecentSearchTexts.RemoveAt(recentFindIdx);
-                    RecentSearchTexts.Insert(0, st);
-                }
-                int to_remove = RecentSearchTexts.Count - MpPrefViewModel.Instance.MaxRecentTextsCount;
-                if (to_remove > 0) {
-                    RecentSearchTexts.RemoveRange(MpPrefViewModel.Instance.MaxRecentTextsCount - 1, to_remove);
-                }
+        private async Task AddOrUpdateRecentSearchTextsAsync(string st) {
+            if (string.IsNullOrEmpty(st)) {
+                return;
             }
+            while (MpPrefViewModel.Instance.IsSaving) {
+                await Task.Delay(100);
+            }
+            int recentFindIdx = RecentSearchTexts.IndexOf(st);
+            if (recentFindIdx < 0) {
+                RecentSearchTexts.Insert(0, st);
+            } else {
+                RecentSearchTexts.Move(recentFindIdx, 0);
+            }
+            int to_remove = RecentSearchTexts.Count - MpPrefViewModel.Instance.MaxRecentTextsCount;
+            while (to_remove > 0) {
+                RecentSearchTexts.RemoveAt(RecentSearchTexts.Count - 1);
+            }
+            MpPrefViewModel.Instance.RecentSearchTexts = RecentSearchTexts.ToCsv(MpCsvFormatProperties.DefaultBase64Value);
         }
 
         private async Task WaitForUnexpandAsync() {
@@ -393,7 +381,7 @@ namespace MonkeyPaste.Avalonia {
 
                 //SetQueryInfo(); 
                 Mp.Services.Query.NotifyQueryChanged(true);
-                UpdateRecentSearchTexts(SearchText);
+                AddOrUpdateRecentSearchTextsAsync(SearchText).FireAndForgetSafeAsync(this);
             }, () => !MpAvMainWindowViewModel.Instance.IsMainWindowLoading);
 
         public ICommand NextMatchCommand => new MpCommand(

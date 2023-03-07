@@ -16,6 +16,9 @@
                        HorizontalContentAlignment="Stretch"
                        VerticalContentAlignment="Stretch"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileView">
+    <Interaction.Behaviors>
+        <local:MpHighlightSelectorBehavior />
+    </Interaction.Behaviors>
     <local:MpAvUserControl.Styles>
         <Style Selector="Border#ClipTileContainerBorder.IsAnyBusy">
             <Setter Property="Cursor"

@@ -9,12 +9,14 @@ using Avalonia.Styling;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using Org.BouncyCastle.Bcpg;
 using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Cursor = Avalonia.Input.Cursor;
@@ -22,6 +24,7 @@ using Key = Avalonia.Input.Key;
 using KeyEventArgs = Avalonia.Input.KeyEventArgs;
 
 namespace MonkeyPaste.Avalonia {
+
     [DoNotNotify]
     public class MpAvMarqueeTextBox : TextBox, IStyleable {
         Type IStyleable.StyleKey => typeof(TextBox);
@@ -330,37 +333,35 @@ namespace MonkeyPaste.Avalonia {
         #region Highlighting
 
         #region HighlightRanges AvaloniaProperty
+        // FORMAT [index,count]
 
-        private ObservableCollection<Tuple<double, double>> _highlightRanges = null;
-        public ObservableCollection<Tuple<double, double>> HighlightRanges {
-            get => _highlightRanges;
-            set => SetAndRaise(HighlightRangesProperty, ref _highlightRanges, value);
+        public ObservableCollection<MpTextRange> HighlightRanges {
+            get => GetValue(HighlightRangesProperty);
+            set => SetValue(HighlightRangesProperty, value);
         }
 
-        public static readonly StyledProperty<ObservableCollection<Tuple<double, double>>> HighlightRangesProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, ObservableCollection<Tuple<double, double>>>(nameof(HighlightRanges), null);
+        public static readonly StyledProperty<ObservableCollection<MpTextRange>> HighlightRangesProperty =
+            AvaloniaProperty.Register<MpAvMarqueeTextBox, ObservableCollection<MpTextRange>>(nameof(HighlightRanges), null);
 
         #endregion
 
         #region ActiveHighlightIdx AvaloniaProperty
 
-        private int _activeHighlightIdx = 0;
-        public int ActiveHighlightIdx {
-            get => _activeHighlightIdx;
-            set => SetAndRaise(ActiveHighlightIdxProperty, ref _activeHighlightIdx, value);
+        public int? ActiveHighlightIdx {
+            get => GetValue(ActiveHighlightIdxProperty);
+            set => SetValue(ActiveHighlightIdxProperty, value);
         }
 
-        public static readonly StyledProperty<int> ActiveHighlightIdxProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, int>(nameof(ActiveHighlightIdx), 0);
+        public static readonly StyledProperty<int?> ActiveHighlightIdxProperty =
+            AvaloniaProperty.Register<MpAvMarqueeTextBox, int?>(nameof(ActiveHighlightIdx), null);
 
         #endregion
 
         #region ActiveHighlightBrush AvaloniaProperty
 
-        private IBrush _activeHighlightBrush = Brushes.Black;
         public IBrush ActiveHighlightBrush {
-            get => _activeHighlightBrush;
-            set => SetAndRaise(ActiveHighlightBrushProperty, ref _activeHighlightBrush, value);
+            get => GetValue(ActiveHighlightBrushProperty);
+            set => SetValue(ActiveHighlightBrushProperty, value);
         }
 
         public static readonly StyledProperty<IBrush> ActiveHighlightBrushProperty =
@@ -370,10 +371,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region InactiveHighlightBrush AvaloniaProperty
 
-        private IBrush _inactiveHighlightBrush = Brushes.Black;
         public IBrush InactiveHighlightBrush {
-            get => _inactiveHighlightBrush;
-            set => SetAndRaise(InactiveHighlightBrushProperty, ref _inactiveHighlightBrush, value);
+            get => GetValue(InactiveHighlightBrushProperty);
+            set => SetValue(InactiveHighlightBrushProperty, value);
         }
 
         public static readonly StyledProperty<IBrush> InactiveHighlightBrushProperty =
@@ -590,9 +590,9 @@ namespace MonkeyPaste.Avalonia {
                 SetValue(IsReadOnlyProperty, true);
                 EndEditCommand?.Execute(null);
             }
+
         }
         private void Init() {
-
             _bmpSize = GetScaledTextSize(out _ftSize);
             _offsetX1 = 0;
             if (CanMarquee()) {
@@ -639,25 +639,103 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
-            _ft.SetForegroundBrush(fg);
+            // CLEAR BG
             ctx.FillRectangle(ReadOnlyBackground, this.Bounds);
+            double hl_x = GetActiveHighlighAdjOffset(ctx, _offsetX1);
 
-            var origin1 = new Point(_offsetX1, 0);
-            //using (ctx.PushPostTransform(Matrix.CreateTranslation(new Vector(_offsetX1, 0)))) {
-            _ft.SetForegroundBrush(DropShadowBrush);
-            ctx.DrawText(_ft, origin1 + DropShadowOffset);
-            _ft.SetForegroundBrush(fg);
-            ctx.DrawText(_ft, origin1);
-            //}
+
+            var origin1 = new Point(_offsetX1 + hl_x, 0);
+            // DRAW SHADOW 1
+            DrawReadOnlyText(ctx, DropShadowBrush, origin1 + DropShadowOffset, false);
+            // DRAG FG 1
+            DrawReadOnlyText(ctx, fg, origin1, true);
+
             if (CanMarquee()) {
-                var origin2 = new Point(_offsetX2, 0);
-                // using (ctx.PushPostTransform(Matrix.CreateTranslation(new Vector(_offsetX2, 0)))) {
-                _ft.SetForegroundBrush(DropShadowBrush);
-                ctx.DrawText(_ft, origin2 + DropShadowOffset);
-                _ft.SetForegroundBrush(fg);
-                ctx.DrawText(_ft, origin2);
-                // }
+                var origin2 = new Point(_offsetX2 + hl_x, 0);
+                // DRAW SHADOW 2
+                DrawReadOnlyText(ctx, DropShadowBrush, origin2 + DropShadowOffset, false);
+                // DRAG FG 2
+                DrawReadOnlyText(ctx, fg, origin2, true);
             }
+        }
+        private double GetActiveHighlighAdjOffset(DrawingContext ctx, double x_offset) {
+            if (HighlightRanges == null ||
+                HighlightRanges.Count == 0 ||
+                ActiveHighlightIdx == null) {
+                return 0;
+            }
+            var test_hl_geom = _ft.BuildHighlightGeometry(new Point(x_offset, 0), HighlightRanges[ActiveHighlightIdx.Value].StartIdx, 1);
+            if (DataContext is MpAvClipTileViewModel ctvm && ctvm.CopyItemId == 24) {
+
+            }
+            double delta_x = 0;
+            double max_x = x_offset + GetRenderWidth();
+            if (max_x < test_hl_geom.Bounds.Left) {
+                // when active off to the right offset so its start is in the middle
+                delta_x = max_x - test_hl_geom.Bounds.Left - (GetRenderWidth() / 2);
+            } else if (test_hl_geom.Bounds.Left < x_offset) {
+                delta_x = test_hl_geom.Bounds.Left - x_offset;
+            }
+            return delta_x;
+        }
+        private void DrawReadOnlyText(DrawingContext ctx, IBrush fg, Point offset, bool showHighlight) {
+            if (showHighlight &&
+                HighlightRanges != null &&
+                HighlightRanges.Count > 0) {
+                var brl = GetAllBrushes(ReadOnlyBackground, InactiveHighlightBrush, ActiveHighlightBrush, ActiveHighlightIdx, HighlightRanges.ToArray());
+                var gl = brl.Select(x => _ft.BuildHighlightGeometry(offset, x.Value.StartIdx, x.Value.Count));
+                gl.ForEach((x, idx) => ctx.DrawGeometry(brl[idx].Key, null, x));
+            }
+
+            _ft.SetForegroundBrush(fg);
+            ctx.DrawText(_ft, offset);
+        }
+
+        private KeyValuePair<IBrush, MpTextRange>[] GetAllBrushes(
+            IBrush def_brush,
+            IBrush hl_brush,
+            IBrush active_hl_brush,
+            int? active_idx,
+            MpTextRange[] hl_ranges) {
+
+            List<KeyValuePair<IBrush, MpTextRange>> brush_tuples = new List<KeyValuePair<IBrush, MpTextRange>>();
+            if (string.IsNullOrEmpty(Text)) {
+                return brush_tuples.ToArray();
+            }
+            if (hl_ranges.Length == 0) {
+                // no hl return whole range with def
+                brush_tuples.Add(new KeyValuePair<IBrush, MpTextRange>(def_brush, new MpTextRange(0, Text.Length)));
+                return brush_tuples.ToArray();
+            }
+            if (hl_ranges.First().StartIdx > 0) {
+                // add pre def
+                brush_tuples.Add(new KeyValuePair<IBrush, MpTextRange>(def_brush, new MpTextRange(0, hl_ranges[0].BeforeStartIdx)));
+            }
+
+            foreach (var (hlr, hlr_idx) in hl_ranges.WithIndex()) {
+                var cur_brush = active_idx.HasValue && hlr_idx == active_idx ? active_hl_brush : hl_brush;
+                brush_tuples.Add(new KeyValuePair<IBrush, MpTextRange>(cur_brush, hlr));
+                if (hlr_idx < hl_ranges.Length - 1 &&
+                    hlr.AfterEndIdx < Text.Length) {
+                    int inner_sidx = hlr.AfterEndIdx;
+                    int inner_count = hl_ranges[hlr_idx + 1].StartIdx - inner_sidx;
+                    if (inner_count > 0) {
+                        // add inner def range
+                        brush_tuples.Add(new KeyValuePair<IBrush, MpTextRange>(def_brush, new MpTextRange(inner_sidx, inner_count)));
+                    }
+                }
+            }
+            if (hl_ranges.Last().AfterEndIdx < Text.Length - 1) {
+                // add post def
+                brush_tuples.Add(new KeyValuePair<IBrush, MpTextRange>(def_brush, new MpTextRange(hl_ranges.Last().AfterEndIdx, Text.Length - hl_ranges.Last().AfterEndIdx)));
+            }
+
+            var valid = brush_tuples.Where(x => x.Value.StartIdx < 0 || x.Value.EndIdx >= Text.Length);
+            if (valid.Any()) {
+                string test = Text;
+                Debugger.Break();
+            }
+            return brush_tuples.ToArray();
         }
 
         private bool CanMarquee() {
@@ -680,6 +758,7 @@ namespace MonkeyPaste.Avalonia {
             }
             return 100;
         }
+
 
         private async Task AnimateAsync() {
             while (true) {

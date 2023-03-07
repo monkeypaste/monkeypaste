@@ -5,6 +5,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using CefNet.CApi;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -111,12 +112,16 @@ namespace MonkeyPaste.Avalonia {
             40;
         public double BoundHeaderHeight { get; set; }
 
-        public double BoundCriteriaListBoxScreenHeight { get; set; }
+        public double BoundCriteriaListViewScreenHeight { get; set; }
+        public double BoundCriteriaListBoxScreenHeight =>
+            BoundCriteriaListViewScreenHeight - BoundHeaderHeight;
 
         public double MaxSearchCriteriaRowHeight =>
-            IsCriteriaWindowOpen ? 0 : MaxSearchCriteriaListBoxHeight;
+            IsCriteriaWindowOpen ? 0 : MaxSearchCriteriaViewHeight;
 
-        public double MaxSearchCriteriaListBoxHeight {
+        public double MaxSearchCriteriaListBoxHeight =>
+            MaxSearchCriteriaViewHeight - BoundHeaderHeight;
+        public double MaxSearchCriteriaViewHeight {
             get {
                 if (!IsAdvSearchActive) {
                     return 0;
@@ -298,8 +303,12 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(CurrentQueryTagViewModel));
                     break;
                 case nameof(IsCriteriaWindowOpen):
-                    OnPropertyChanged(nameof(MaxSearchCriteriaListBoxHeight));
-                    OnPropertyChanged(nameof(MaxSearchCriteriaRowHeight));
+                    if (IsCriteriaWindowOpen) {
+                        IsExpanded = false;
+                    } else {
+                        // force remeasure 
+                        SetIsExpandedAsync(false).FireAndForgetSafeAsync();
+                    }
                     break;
             }
         }
@@ -308,7 +317,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(Items));
             OnPropertyChanged(nameof(SortedItems));
             OnPropertyChanged(nameof(HasCriteriaItems));
-            OnPropertyChanged(nameof(MaxSearchCriteriaListBoxHeight));
+            OnPropertyChanged(nameof(MaxSearchCriteriaViewHeight));
 
             UpdateCriteriaSortOrderAsync().FireAndForgetSafeAsync(this);
         }
@@ -321,13 +330,14 @@ namespace MonkeyPaste.Avalonia {
                     double delta_open_height = DefaultCriteriaRowHeight * default_visible_row_count;
 
                     BoundHeaderHeight = HeaderHeight;
-                    BoundCriteriaListBoxScreenHeight = delta_open_height;
+                    BoundCriteriaListViewScreenHeight = delta_open_height;
                     //MpAvResizeExtension.ResizeByDelta(MpAvSearchCriteriaListBoxView.Instance, 0, delta_open_height, false);
                     OnPropertyChanged(nameof(IsPendingQuery));
+                    OnPropertyChanged(nameof(BoundCriteriaListBoxScreenHeight));
                     Items.ForEach(x => x.Items.ForEach(y => y.OnPropertyChanged(nameof(y.SelectedItemIdx))));
                 } else {
-                    double delta_close_height = -BoundCriteriaListBoxScreenHeight;
-                    BoundCriteriaListBoxScreenHeight = 0;
+                    double delta_close_height = -BoundCriteriaListViewScreenHeight;
+                    BoundCriteriaListViewScreenHeight = 0;
                     //MpAvResizeExtension.ResizeByDelta(MpAvMainView.Instance, 0, delta_close_height, false);                    
 
                 }
@@ -561,7 +571,7 @@ namespace MonkeyPaste.Avalonia {
                             TargetNullValue = MpSystemColors.darkviolet,
                             FallbackValue = MpSystemColors.darkviolet
                         });
-
+                    //_criteriaWindow.Closing += _criteriaWindow_Closing;
                     _criteriaWindow.Closed += Dw_Closed;
                     _criteriaWindow.Show();
                 } else {
@@ -572,11 +582,34 @@ namespace MonkeyPaste.Avalonia {
                 OnPropertyChanged(nameof(IsCriteriaWindowOpen));
             }, (args) => {
                 return !IsCriteriaWindowOpen;
-            });
+            }, new[] { this });
+
+        private void _criteriaWindow_Closing(object sender, WindowClosingEventArgs e) {
+            // MpMessenger.SendGlobal(MpMessageType.ChildWindowClosed);
+            if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen &&
+                !MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked) {
+                e.Cancel = true;
+                MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
+                if (App.MainView is Window w) {
+                    // criteria takes topmost so ac
+                    w.Topmost = true;
+                }
+                _criteriaWindow.Close();
+            }
+
+        }
 
         private void Dw_Closed(object sender, EventArgs e) {
+            _criteriaWindow.Closing -= _criteriaWindow_Closing;
+            _criteriaWindow.Closed -= Dw_Closed;
+
             _criteriaWindow = null;
             OnPropertyChanged(nameof(IsCriteriaWindowOpen));
+            OnPropertyChanged(nameof(MaxSearchCriteriaViewHeight));
+            OnPropertyChanged(nameof(MaxSearchCriteriaListBoxHeight));
+            MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
+
+
         }
         #endregion
     }

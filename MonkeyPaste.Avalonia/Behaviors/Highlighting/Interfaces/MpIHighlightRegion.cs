@@ -10,12 +10,12 @@ namespace MonkeyPaste.Avalonia {
 
         int MatchCount { get; }
         int SelectedIdx { get; set; }
-        int ContentItemIdx { get; }
+        //int ContentItemIdx { get; }
 
         Task FindHighlightingAsync();
         Task ApplyHighlightingAsync();
         void Reset();
-        Task ScrollToSelectedItemAsync();
+        //Task ScrollToSelectedItemAsync();
         //void SelectNextMatch();
         //void SelectPreviousMatch();
     }

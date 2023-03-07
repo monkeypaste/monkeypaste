@@ -6,11 +6,19 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvImageHighlightBehavior : MpAvHighlightBehaviorBase<MpAvClipTileContentView> {
-        protected override MpAvITextRange ContentRange => null;
+        protected override MpTextRange ContentRange => null;
 
         public override MpHighlightType HighlightType => MpHighlightType.Content;
 
-        public override async Task ScrollToSelectedItemAsync() {
+        public override async Task FindHighlightingAsync() {
+            await Task.Delay(1);
+        }
+
+        public override void ClearHighlighting() {
+            base.ClearHighlighting();
+        }
+
+        public override async Task ApplyHighlightingAsync() {
             await Task.Delay(1);
         }
     }

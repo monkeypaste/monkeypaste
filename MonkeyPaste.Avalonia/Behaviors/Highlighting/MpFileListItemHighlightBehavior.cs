@@ -1,4 +1,4 @@
-﻿using AvaloniaEdit.Document;
+﻿
 using MonkeyPaste.Common;
 
 using PropertyChanged;
@@ -8,7 +8,7 @@ namespace MonkeyPaste.Avalonia {
 
     [DoNotNotify]
     public class MpAvFileListItemHighlightBehavior : MpAvHighlightBehaviorBase<MpAvClipTileView> { //<MpFileListItemView> {
-        protected override MpAvITextRange ContentRange {
+        protected override MpTextRange ContentRange {
             get {
                 //if (AssociatedObject == null || AssociatedObject.FileListItemTextBlock == null) {
                 //    return null;
@@ -22,15 +22,16 @@ namespace MonkeyPaste.Avalonia {
 
 
         public override MpHighlightType HighlightType => MpHighlightType.Content;
+        public override async Task FindHighlightingAsync() {
+            await Task.Delay(1);
+        }
 
-        public override async Task ScrollToSelectedItemAsync() {
-            if (SelectedIdx < 0) {
-                return;
-            }
-            MpRect characterRect =  await _matches[SelectedIdx].End.GetCharacterRectAsync(LogicalDirection.Forward);
-            
-            //AssociatedObject.BringIntoView();
-            //AssociatedObject.FileListItemTextBlock.BringIntoView(characterRect);
+        public override void ClearHighlighting() {
+            base.ClearHighlighting();
+        }
+
+        public override async Task ApplyHighlightingAsync() {
+            await Task.Delay(1);
         }
     }
 }

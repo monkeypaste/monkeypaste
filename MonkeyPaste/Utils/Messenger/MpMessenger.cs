@@ -95,6 +95,8 @@ namespace MonkeyPaste {
         ContentResized,
         ResizeContentCompleted,
 
+        ChildWindowClosed,
+
         AdvancedSearchExpanded,
         AdvancedSearchUnexpanded,
 

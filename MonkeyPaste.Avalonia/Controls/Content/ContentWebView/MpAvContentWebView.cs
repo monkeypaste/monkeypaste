@@ -391,6 +391,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+        public MpQuillContentQuerySearchRangesChangedNotificationMessage SearchResponse { get; set; }
         #endregion
 
         #endregion
@@ -450,17 +451,17 @@ namespace MonkeyPaste.Avalonia {
 #endif
 
         private void ReceivedGlobalMessega(MpMessageType msg) {
-            switch (msg) {
-                case MpMessageType.SelectNextMatch:
-                    var navNextMsg = new MpQuillContentSearchRangeNavigationMessage() { curIdxOffset = 1 };
-                    SendMessage($"searchNavOffsetChanged_ext('{navNextMsg.SerializeJsonObjectToBase64()}')");
-                    break;
-                case MpMessageType.SelectPreviousMatch:
-                    var navPrevMsg = new MpQuillContentSearchRangeNavigationMessage() { curIdxOffset = -1 };
-                    SendMessage($"searchNavOffsetChanged_ext('{navPrevMsg.SerializeJsonObjectToBase64()}')");
-                    break;
+            //switch (msg) {
+            //case MpMessageType.SelectNextMatch:
+            //    var navNextMsg = new MpQuillContentSearchRangeNavigationMessage() { curIdxOffset = 1 };
+            //    SendMessage($"searchNavOffsetChanged_ext('{navNextMsg.SerializeJsonObjectToBase64()}')");
+            //    break;
+            //case MpMessageType.SelectPreviousMatch:
+            //    var navPrevMsg = new MpQuillContentSearchRangeNavigationMessage() { curIdxOffset = -1 };
+            //    SendMessage($"searchNavOffsetChanged_ext('{navPrevMsg.SerializeJsonObjectToBase64()}')");
+            //    break;
 
-            }
+            //}
         }
 
         #endregion
@@ -627,9 +628,8 @@ namespace MonkeyPaste.Avalonia {
                 case MpAvEditorBindingFunctionType.notifyQuerySearchRangesChanged:
                     ntf = MpJsonConverter.DeserializeBase64Object<MpQuillContentQuerySearchRangesChangedNotificationMessage>(msgJsonBase64Str);
                     if (ntf is MpQuillContentQuerySearchRangesChangedNotificationMessage searchRangeCountMsg) {
-                        if (searchRangeCountMsg.rangeCount > 1) {
-                            MpAvSearchBoxViewModel.Instance.NotifyHasMultipleMatches();
-                        }
+                        // NOTE content highlight blocks until this is recv'd
+                        SearchResponse = searchRangeCountMsg;
                     }
                     break;
 

@@ -18,11 +18,14 @@ const DefaultFindReplaceInputState = {
 
 var LastFindReplaceInputState = null;
 
+var IsFindReplaceInactive = true;
+
 // #endregion Globals
 
 // #region Life Cycle
 
 function initFindReplaceToolbar() {
+
 	addClickOrKeyClickEventListener(getFindReplaceEditorToolbarButton(), onFindReplaceToolbarButtonClick);
 	getFindReplaceEditorToolbarButton().innerHTML = getSvgHtml('findreplace')
 
@@ -267,6 +270,7 @@ function resetFindReplaceResults() {
 
 	CurFindReplaceDocRangesRects = null;
 	CurFindReplaceDocRangeRectIdxLookup = null;
+
 }
 
 function resetFindReplaceInput() {
@@ -365,8 +369,8 @@ function updateFindReplaceRangeRects() {
 	drawOverlay();
 }
 
-function applyRangeRectStyle(isActive, range_rect) {	
-	range_rect.fill = isActive ?
+function applyRangeRectStyle(isActive, range_rect) {
+	range_rect.fill = isActive && !IsFindReplaceInactive ?
 		getActiveMatchRangeBgColor() : getInactiveMatchRangeBgColor();
 	range_rect.fillOpacity = getMatchRangeBgOpacity();
 	range_rect.strokeWidth = 0;
@@ -409,6 +413,15 @@ function navigateFindReplaceResults(dir) {
 	//scrollEditorTop(active_y);
 
 	//drawOverlay();
+}
+
+function deactivateFindReplace() {
+	IsFindReplaceInactive = true;
+	drawOverlay();
+}
+function activateFindReplace() {
+	IsFindReplaceInactive = false;
+	drawOverlay();
 }
 
 // #endregion Actions

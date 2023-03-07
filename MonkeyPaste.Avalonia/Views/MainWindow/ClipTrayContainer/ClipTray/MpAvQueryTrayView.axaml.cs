@@ -53,8 +53,8 @@ namespace MonkeyPaste.Avalonia {
         }
         private void AdvSearchSplitter_DragCompleted(object sender, VectorEventArgs e) {
             var scicvm = MpAvSearchCriteriaItemCollectionViewModel.Instance;
-            double nh = scicvm.BoundCriteriaListBoxScreenHeight + e.Vector.ToPortablePoint().Y;
-            scicvm.BoundCriteriaListBoxScreenHeight = Math.Min(nh, scicvm.MaxSearchCriteriaListBoxHeight);
+            double nh = scicvm.BoundCriteriaListViewScreenHeight + e.Vector.ToPortablePoint().Y;
+            scicvm.BoundCriteriaListViewScreenHeight = Math.Min(nh, scicvm.MaxSearchCriteriaViewHeight);
         }
 
 

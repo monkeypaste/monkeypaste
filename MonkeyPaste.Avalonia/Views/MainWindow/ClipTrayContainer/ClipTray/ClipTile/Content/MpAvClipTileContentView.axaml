@@ -19,6 +19,9 @@
                 VerticalAlignment="Stretch">
             <ContentControl x:Name="ClipTileContentControl"
                             Content="{Binding}">
+                <Interaction.Behaviors>
+                    <local:MpAvContentHighlightBehavior />
+                </Interaction.Behaviors>
                 <ContentControl.DataTemplates>
                     <local:MpAvClipTileContentDataTemplateSelector>
                         <DataTemplate x:Key="ContentWebViewTemplate"
@@ -26,7 +29,10 @@
                             <local:MpAvContentWebViewContainer DataContext="{Binding}"
                                                                Classes="ContentDragAndDrop"
                                                                HorizontalAlignment="Stretch"
-                                                               VerticalAlignment="Stretch" />
+                                                               VerticalAlignment="Stretch">
+
+
+                            </local:MpAvContentWebViewContainer>
                         </DataTemplate>
                         <DataTemplate x:Key="PlainTextTemplate"
                                       DataType="local:MpAvClipTileViewModel">

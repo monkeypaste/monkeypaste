@@ -1,106 +1,99 @@
-﻿using MonkeyPaste;
+﻿using Avalonia.Controls;
+using Avalonia.Threading;
+using Avalonia.Xaml.Interactivity;
+using MonkeyPaste;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using PropertyChanged;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public class MpHighlightSelectorBehavior : MpAvBehavior<MpAvClipTileView> {
-        //private List<MpIHighlightRegion> _highlighters {
-        //    get {
-        //        List<MpIHighlightRegion> dtl = new List<MpIHighlightRegion>();
-        //        if(AssociatedObject == null) {
-        //            return dtl;
-        //        }
+    public class MpHighlightSelectorBehavior : Behavior<MpAvClipTileView> {
+        List<MpIHighlightRegion> _items = new List<MpIHighlightRegion>();
+        List<MpIHighlightRegion> Items =>
+            _items;
 
-        //        var rtbvl = AssociatedObject.GetVisualDescendents<MpRtbView>();
-        //        dtl.AddRange(rtbvl.Select(x => x.RtbHighlightBehavior).ToList());
+        MpIHighlightRegion SelectedItem =>
+            _selectedHighlighterIdx >= 0 && _selectedHighlighterIdx < Items.Count ?
+            Items[_selectedHighlighterIdx] :
+            null;
 
-        //        var flivl = AssociatedObject.GetVisualDescendents<MpFileListItemView>();
-        //        dtl.AddRange(flivl.Select(x => x.FileListItemHighlightBehavior).ToList());
-
-        //        dtl.Add(AssociatedObject.TileTitleView.ClipTileTitleHighlightBehavior);
-        //        dtl.Add(AssociatedObject.TileTitleView.SourceHighlightBehavior);
-
-        //        dtl.Sort((x, y) => x.ContentItemIdx.CompareTo(y.ContentItemIdx));
-        //        return dtl;
-        //    }
-        //}
+        int SelectedMatchIdx =>
+            SelectedItem == null ? -1 : SelectedItem.SelectedIdx;
 
         private int _selectedHighlighterIdx = 0;
 
-        protected override async void OnLoad() {
-            if(_isLoaded) {
-                return;
-            }
-            base.OnLoad();
-            
-            MpMessenger.Register<MpMessageType>(
-                    MpAvSearchBoxViewModel.Instance,
-                    ReceivedSearchBoxViewModelMessage);
+        bool IsActive =>
+            Items.Any(x => x.MatchCount > 0);
+        protected override void OnAttached() {
+            base.OnAttached();
 
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
+            AssociatedObject.DataContextChanged += AssociatedObject_DataContextChanged;
+            //AssociatedObject.AttachedToVisualTree += AssociatedObject_AttachedToVisualTree;
 
-            if(!string.IsNullOrEmpty(MpDataModelProvider.QueryInfo.SearchText)) {
-                while (AssociatedObject == null) {
-                    await Task.Delay(10);
-                }
-                await PerformHighlighting();
-            } else {
-                var hll = await GetHighlighters();
-                Reset(hll);
-            }
         }
 
-        protected override async void OnUnload() {
-            base.OnUnload();
+        //private void AssociatedObject_AttachedToVisualTree(object sender, global::Avalonia.VisualTreeAttachmentEventArgs e) {
+        //    throw new System.NotImplementedException();
+        //}
 
-            MpMessenger.Unregister<MpMessageType>(
-                    MpAvSearchBoxViewModel.Instance,
-                    ReceivedSearchBoxViewModelMessage);
+        private void AssociatedObject_DataContextChanged(object sender, System.EventArgs e) {
+            if (AssociatedObject == null ||
+                AssociatedObject.DataContext == null ||
+                string.IsNullOrEmpty(MpAvQueryViewModel.Instance.MatchValue)) {
+                Reset();
+            }
+            if (!Items.Any()) {
+
+                Items.Clear();
+                if (AssociatedObject.FindControl<Control>("ClipTileContentView") is Control ctcv) {
+                    if (ctcv.FindControl<ContentControl>("ClipTileContentControl") is ContentControl ctcc) {
+                        // content
+                        Items.Add(Interaction.GetBehaviors(ctcc).FirstOrDefault() as MpIHighlightRegion);
+
+                    }
+                }
+
+                if (AssociatedObject.FindControl<MpAvClipTileTitleView>("TileTitleView") is MpAvClipTileTitleView cttv) {
+                    if (cttv.FindControl<MpAvMarqueeTextBox>("TileTitleTextBox") is MpAvMarqueeTextBox mtb) {
+                        // title
+                        Items.Add(Interaction.GetBehaviors(mtb).FirstOrDefault() as MpIHighlightRegion);
+                    }
+                    if (cttv.FindControl<Button>("ClipTileAppIconImageButton") is Button b) {
+                        // source
+                        Items.Add(Interaction.GetBehaviors(b).FirstOrDefault() as MpIHighlightRegion);
+                    }
+                }
+                _items = Items.OrderBy(x => x.Priority).ToList();
+            }
+            PerformHighlighting().FireAndForgetSafeAsync();
+        }
+
+        protected override void OnDetaching() {
+            base.OnDetaching();
 
             MpMessenger.UnregisterGlobal(ReceivedGlobalMessage);
-
-            var hll = await GetHighlighters();
-            Reset(hll);
+            Reset();
         }
-
-        private async Task<List<MpIHighlightRegion>> GetHighlighters() {
-            List<MpIHighlightRegion> dtl = new List<MpIHighlightRegion>();
-            while (AssociatedObject == null) {
-                await Task.Delay(50);
-            }
-
-            var rtbvl = AssociatedObject.GetVisualDescendants<MpAvClipTileContentView>();
-            dtl.AddRange(rtbvl.Select(x => x.HighlightBehavior).ToList());
-
-            dtl.Add(AssociatedObject.TileTitleView.ClipTileTitleHighlightBehavior);
-            dtl.Add(AssociatedObject.TileTitleView.SourceHighlightBehavior);
-
-            dtl.Sort((x, y) => x.ContentItemIdx.CompareTo(y.ContentItemIdx));
-            return dtl;
-        }
-
-        private async void ReceivedSearchBoxViewModelMessage(MpMessageType msg) {            
-            switch (msg) {
-                case MpMessageType.SelectNextMatch:
-                case MpMessageType.SelectPreviousMatch:
-                    var hll = await GetHighlighters();
-                    if(msg == MpMessageType.SelectNextMatch) {
-                        SelectNextMatch(hll);
-                    } else {
-                        SelectPreviousMatch(hll);
-                    }
-                    break;
-            }
-        }
-
         private async void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
+
+                case MpMessageType.SelectNextMatch:
+                case MpMessageType.SelectPreviousMatch:
+                    if (msg == MpMessageType.SelectNextMatch) {
+                        SelectNextMatch();
+                    } else {
+                        SelectPreviousMatch();
+                    }
+                    break;
                 case MpMessageType.RequeryCompleted:
+                    Reset();
                     await PerformHighlighting();
                     break;
                 case MpMessageType.JumpToIdxCompleted:
@@ -111,90 +104,144 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task PerformHighlighting() {
-            var hll = await GetHighlighters();
-
-            if (hll.Count == 0 ||
-                        string.IsNullOrEmpty(MpDataModelProvider.QueryInfo.SearchText)) {
-                Reset(hll);
+            if (AssociatedObject != null &&
+                AssociatedObject.BindingContext != null) {
+                while (AssociatedObject.BindingContext.IsAnyBusy) {
+                    await Task.Delay(100);
+                }
+            }
+            if (string.IsNullOrEmpty(MpAvQueryViewModel.Instance.MatchValue)) {
+                Reset();
                 return;
             }
 
-            await Task.WhenAll(hll.Select(x => x.FindHighlightingAsync()));
+            await Task.WhenAll(Items.Select(x => x.FindHighlightingAsync()));
             _selectedHighlighterIdx = 0;
-            if (hll.All(x => x.MatchCount == 0)) {
+            if (Items.All(x => x.MatchCount == 0)) {
                 return;
             }
-            SelectNextMatch(hll);
-            hll.ForEach(x => x.ApplyHighlightingAsync());
+            if (Items.Any(x => x.MatchCount > 1)) {
+                MpAvSearchBoxViewModel.Instance.NotifyHasMultipleMatches();
+            }
+            SelectNextMatch();
+            Items.ForEach(x => x.ApplyHighlightingAsync());
         }
-        public void SelectNextMatch(List<MpIHighlightRegion> hll) {
-            if (hll.All(x => x.MatchCount == 0)) {
+
+        private void SelectNextItem() {
+            if (!IsActive) {
                 return;
             }
-            if (hll[_selectedHighlighterIdx].SelectedIdx >= hll[_selectedHighlighterIdx].MatchCount - 1) {
-                hll[_selectedHighlighterIdx].SelectedIdx = -1;
+            SelectedItem.SelectedIdx = -1;
+            do {
                 _selectedHighlighterIdx++;
-            }
-            if(_selectedHighlighterIdx == hll.Count) {
-               // _highlighters[_selectedHighlighterIdx].SelectedIdx = -1;
-                _selectedHighlighterIdx = 0;
-                hll[_selectedHighlighterIdx].SelectedIdx = 0;
-            } else {
-                hll[_selectedHighlighterIdx].SelectedIdx++;
-            }
-            
+                if (_selectedHighlighterIdx >= Items.Count) {
+                    _selectedHighlighterIdx = 0;
+                }
+            } while (SelectedItem.MatchCount == 0);
 
-            if(hll[_selectedHighlighterIdx].MatchCount == 0) {
-                SelectNextMatch(hll);
+            SelectedItem.SelectedIdx = 0;
+        }
+        private void SelectPrevItem() {
+            if (!IsActive) {
                 return;
             }
-            hll.ForEach(x => x.ApplyHighlightingAsync());
+            SelectedItem.SelectedIdx = -1;
+            do {
+                _selectedHighlighterIdx--;
+                if (_selectedHighlighterIdx < 0) {
+                    _selectedHighlighterIdx = Items.Count - 1;
+                }
+            } while (SelectedItem.MatchCount == 0);
+
+            SelectedItem.SelectedIdx = SelectedItem.MatchCount - 1;
+        }
+        private void SelectNextMatch() {
+            if (!IsActive) {
+                return;
+            }
+            int next_idx = SelectedMatchIdx + 1;
+            if (next_idx >= SelectedItem.MatchCount) {
+                SelectNextItem();
+            } else {
+                SelectedItem.SelectedIdx = next_idx;
+            }
+            //if (Items[_selectedHighlighterIdx].SelectedIdx >= Items[_selectedHighlighterIdx].MatchCount - 1) {
+            //    Items[_selectedHighlighterIdx].SelectedIdx = -1;
+            //    _selectedHighlighterIdx++;
+            //}
+            //if (_selectedHighlighterIdx == Items.Count) {
+            //    // _highlighters[_selectedHighlighterIdx].SelectedIdx = -1;
+            //    _selectedHighlighterIdx = 0;
+            //    Items[_selectedHighlighterIdx].SelectedIdx = 0;
+            //} else {
+            //    Items[_selectedHighlighterIdx].SelectedIdx++;
+            //}
+
+
+            //if (Items[_selectedHighlighterIdx].MatchCount == 0) {
+            //    SelectNextMatch();
+            //    return;
+            //}
+            Items.ForEach(x => x.ApplyHighlightingAsync());
         }
 
-        public void SelectPreviousMatch(List<MpIHighlightRegion> hll) {
-            if (hll.All(x => x.MatchCount == 0)) {
+        private void SelectPreviousMatch() {
+            if (!IsActive) {
                 return;
             }
-            if (hll[_selectedHighlighterIdx].SelectedIdx == 0){
-                hll[_selectedHighlighterIdx].SelectedIdx = -1;
-                if (_selectedHighlighterIdx == 0) {
-                    _selectedHighlighterIdx = hll.Count - 1;
-                } else {
-                    _selectedHighlighterIdx--;
-                }
-                hll[_selectedHighlighterIdx].SelectedIdx = hll[_selectedHighlighterIdx].MatchCount - 1;
+            int prev_idx = SelectedMatchIdx - 1;
+            if (prev_idx < 0) {
+                SelectPrevItem();
             } else {
-                hll[_selectedHighlighterIdx].SelectedIdx--;
-                
-                //NOTE this added for untested stack overflow of decrementing SelectedIdx
-                //from here
-                if(hll[_selectedHighlighterIdx].SelectedIdx < 0) {
-                    if (_selectedHighlighterIdx == 0) {
-                        _selectedHighlighterIdx = hll.Count - 1;
-                    } else {
-                        _selectedHighlighterIdx--;
-                    }
-                    hll[_selectedHighlighterIdx].SelectedIdx = hll[_selectedHighlighterIdx].MatchCount - 1;
-                }
-                //to here
+                SelectedItem.SelectedIdx = prev_idx;
             }
+            //if (Items.All(x => x.MatchCount == 0)) {
+            //    return;
+            //}
+            //if (Items[_selectedHighlighterIdx].SelectedIdx == 0) {
+            //    Items[_selectedHighlighterIdx].SelectedIdx = -1;
+            //    if (_selectedHighlighterIdx == 0) {
+            //        _selectedHighlighterIdx = Items.Count - 1;
+            //    } else {
+            //        _selectedHighlighterIdx--;
+            //    }
+            //    Items[_selectedHighlighterIdx].SelectedIdx = Items[_selectedHighlighterIdx].MatchCount - 1;
+            //} else {
+            //    Items[_selectedHighlighterIdx].SelectedIdx--;
+
+            //    //NOTE this added for untested stack overflow of decrementing SelectedIdx
+            //    //from here
+            //    if (Items[_selectedHighlighterIdx].SelectedIdx < 0) {
+            //        if (_selectedHighlighterIdx == 0) {
+            //            _selectedHighlighterIdx = Items.Count - 1;
+            //        } else {
+            //            _selectedHighlighterIdx--;
+            //        }
+            //        Items[_selectedHighlighterIdx].SelectedIdx = Items[_selectedHighlighterIdx].MatchCount - 1;
+            //    }
+            //    //to here
+            //}
             //if (_selectedHighlighterIdx >= _highlighters.Count - 1) {
             //    _highlighters[_selectedHighlighterIdx].SelectedIdx = -1;
             //    _selectedHighlighterIdx = 0;
             //}
-            
 
-            if (hll[_selectedHighlighterIdx].MatchCount == 0) {
-                SelectPreviousMatch(hll);
-                return;
-            }
 
-            hll.ForEach(x => x.ApplyHighlightingAsync());
+            //if (Items[_selectedHighlighterIdx].MatchCount == 0) {
+            //    SelectPreviousMatch();
+            //    return;
+            //}
+
+            Items.ForEach(x => x.ApplyHighlightingAsync());
         }
 
-        private void Reset(List<MpIHighlightRegion> hll) {
+        //private void Reset(List<MpIHighlightRegion> _highlighters) {
+        //    _selectedHighlighterIdx = 0;
+        //    _highlighters.ForEach(x => x.Reset());
+        //}
+        private void Reset() {
             _selectedHighlighterIdx = 0;
-            hll.ForEach(x => x.Reset());
+            Items.ForEach(x => x.Reset());
         }
     }
 }

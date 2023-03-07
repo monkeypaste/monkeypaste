@@ -44,6 +44,7 @@ namespace MonkeyPaste {
 
     public class MpQuillContentSearchRangeNavigationMessage : MpJsonObject {
         public int curIdxOffset { get; set; }
+        public bool isAbsoluteOffset { get; set; }
     }
     public class MpQuillDisableReadOnlyRequestMessage : MpJsonObject {
         // NOTE props ignored in Avalonia only for wpf...

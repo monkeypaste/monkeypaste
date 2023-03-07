@@ -215,6 +215,31 @@ function hideFindAndReplace_ext() {
 	hideFindReplaceToolbar(true);
 }
 
+function activateFindReplace_ext(msgBase64Str) {
+	// input 'MpQuillContentSearchRangeNavigationMessage'
+
+	// NOTE ignoring isAbsoluteOffset because its a different msg
+	// its usage is tbd
+	let msg = toJsonObjFromBase64Str(msgBase64Str);
+	log('findrepalce activated');
+	if (msg) {
+		// NOTE to not overcomplicate state change, incrementally nav to msg offset
+		const diff = msg.curIdxOffset - CurFindReplaceDocRangeIdx;
+		const dir = diff == 0 ? 0 : diff > 0 ? 1: -1;
+		if (dir != 0) {
+			while (CurFindReplaceDocRangeIdx != msg.curIdxOffset) {
+				navigateFindReplaceResults(dir);
+			}
+		}
+		
+	}
+	activateFindReplace();
+}
+
+function deactivateFindReplace_ext() {
+	log('findrepalce deactivated');
+	deactivateFindReplace();
+}
 function searchNavOffsetChanged_ext(msgBase64Str) {
 	// input 'MpQuillContentSearchRangeNavigationMessage'
 

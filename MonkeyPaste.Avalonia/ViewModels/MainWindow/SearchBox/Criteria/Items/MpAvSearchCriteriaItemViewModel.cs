@@ -1217,7 +1217,7 @@ namespace MonkeyPaste.Avalonia {
                     if (Parent == null) {
                         break;
                     }
-                    Parent.OnPropertyChanged(nameof(Parent.MaxSearchCriteriaListBoxHeight));
+                    Parent.OnPropertyChanged(nameof(Parent.MaxSearchCriteriaViewHeight));
                     break;
                 case nameof(SortOrderIdx):
                     // update tail to hide simple OR join

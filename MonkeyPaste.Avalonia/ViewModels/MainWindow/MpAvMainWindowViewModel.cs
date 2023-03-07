@@ -59,13 +59,13 @@ namespace MonkeyPaste.Avalonia {
                 if (IsVerticalOrientation) {
                     return MainWindowHeight -
                         //MpAvMainWindowTitleMenuViewModel.Instance.TitleMenuHeight -
-                        MpAvSearchCriteriaItemCollectionViewModel.Instance.BoundCriteriaListBoxScreenHeight -
+                        MpAvSearchCriteriaItemCollectionViewModel.Instance.BoundCriteriaListViewScreenHeight -
                         MpAvFilterMenuViewModel.Instance.FilterMenuHeight -
                         MpAvSidebarItemCollectionViewModel.Instance.ButtonGroupFixedDimensionLength;
                 }
                 return MainWindowHeight -
                         MpAvMainWindowTitleMenuViewModel.Instance.TitleMenuHeight -
-                        MpAvSearchCriteriaItemCollectionViewModel.Instance.BoundCriteriaListBoxScreenHeight -
+                        MpAvSearchCriteriaItemCollectionViewModel.Instance.BoundCriteriaListViewScreenHeight -
                         MpAvFilterMenuViewModel.Instance.FilterMenuHeight;
             }
         }
@@ -1049,6 +1049,7 @@ namespace MonkeyPaste.Avalonia {
                     FocusManager.Instance.Current is Control c &&
                     (c.GetVisualAncestor<ContextMenu>() != null ||
                         c.GetVisualAncestor<ComboBoxItem>() != null ||
+                        c.GetVisualAncestor<Window>() != null ||
                         (c.GetVisualAncestor<TextBox>() is TextBox tb &&
                          !tb.IsReadOnly));
 

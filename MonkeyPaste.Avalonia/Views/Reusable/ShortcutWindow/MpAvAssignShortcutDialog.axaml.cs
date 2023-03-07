@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using PropertyChanged;
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -18,6 +19,7 @@ namespace MonkeyPaste.Avalonia {
             this.Opened += MpAvAssignShortcutWindow_Opened;
             this.DataContextChanged += MpAvAssignShortcutWindow_DataContextChanged;
             var lb = this.FindControl<ListBox>("ShortcutListBox");
+
             //this.KeyDown += MpAvAssignShortcutWindow_KeyDown;
             //this.KeyUp += MpAvAssignShortcutWindow_KeyUp;
         }

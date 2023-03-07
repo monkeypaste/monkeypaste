@@ -1130,7 +1130,7 @@ namespace MonkeyPaste.Avalonia {
             if (row_offset < 0) {
                 var pre_items =
                     items
-                    .Where(x => x != this && x.ObservedBounds.Y < ObservedBounds.Y)
+                    .Where(x => x != this && x.ObservedBounds != null && x.ObservedBounds.Y < ObservedBounds.Y)
                     .OrderByDescending(x => x.ObservedBounds.Y);
                 if (pre_items.Count() > 0) {
                     target_ctvm =
@@ -1153,7 +1153,7 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 var post_items =
                     items
-                    .Where(x => x != this && x.ObservedBounds.Y > ObservedBounds.Y)
+                    .Where(x => x != this && x.ObservedBounds != null && x.ObservedBounds.Y > ObservedBounds.Y)
                     .OrderBy(x => x.ObservedBounds.Y);
                 if (post_items.Count() > 0) {
                     target_ctvm =

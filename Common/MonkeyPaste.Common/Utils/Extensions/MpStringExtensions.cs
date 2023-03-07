@@ -16,6 +16,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Xml.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MonkeyPaste.Common {
     public static class MpStringExtensions {
@@ -100,6 +101,34 @@ namespace MonkeyPaste.Common {
         }
 
         #endregion
+
+        public static IEnumerable<Tuple<int, int>> QueryText(
+            this string pt,
+            string search_text,
+            bool case_sensitive,
+            bool whole_word,
+            bool use_regex) {
+            Regex regex;
+            RegexOptions flags = RegexOptions.None;
+            if (!case_sensitive) {
+                flags |= RegexOptions.IgnoreCase;
+            }
+
+            if (use_regex) {
+                regex = new Regex(search_text, flags);
+            } else {
+                var word_str = whole_word ? "\\b" : "";
+                regex = new Regex($"{word_str}{search_text}{word_str}", flags);
+            }
+            var mc = regex.Matches(pt);
+            foreach (Match m in mc) {
+                foreach (Group mg in m.Groups) {
+                    foreach (Capture c in mg.Captures) {
+                        yield return new Tuple<int, int>(c.Index, c.Length);
+                    }
+                }
+            }
+        }
 
         public static string ToPrettyPrintJsonString(this object obj) {
             if (obj == null) {

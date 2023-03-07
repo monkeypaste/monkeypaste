@@ -48,6 +48,12 @@ function loadContent(
 		resetContent();
 	}
 
+
+	if (!IsFindReplaceInactive) {
+		log('activated findreplace detected during load, deactivating...');
+	}
+	IsFindReplaceInactive = true;
+
 	//let contentBg_rgba = getContentBg(contentData);
 
 	loadContentData(contentData);

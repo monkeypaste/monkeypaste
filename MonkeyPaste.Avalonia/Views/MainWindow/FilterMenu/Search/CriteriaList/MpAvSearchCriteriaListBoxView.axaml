@@ -275,7 +275,7 @@
         </Style>-->
     </local:MpAvUserControl.Styles>
     <ScrollViewer x:Name="SearchCriteriaContainerScrollViewer"
-                  MaxHeight="{Binding MaxSearchCriteriaListBoxHeight}"
+                  MaxHeight="{Binding MaxSearchCriteriaViewHeight}"
                   VerticalAlignment="Top"
                   VerticalContentAlignment="Stretch"
                   HorizontalAlignment="Stretch"
@@ -304,6 +304,7 @@
                      SelectionMode="Single"
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch"
+                     MinHeight="{Binding MaxSearchCriteriaListBoxHeight}"
                      Width="{Binding $parent[local:MpAvSearchCriteriaListBoxView].Bounds.Width}"
                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
                      ScrollViewer.HorizontalScrollBarVisibility="Hidden">

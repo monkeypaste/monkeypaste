@@ -2,9 +2,11 @@
 using Newtonsoft.Json;
 using PropertyChanged;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -40,15 +42,13 @@ namespace MonkeyPaste {
         #region Statics
 
         [JsonIgnore]
-        public static bool EncryptionActive { get; set; } = false;
-
-        [JsonIgnore]
         public static MpPrefViewModel Instance { get; private set; }
         [JsonIgnore]
         public static string PreferencesPath => _prefPath;
 
         [JsonIgnore]
         public static string PreferencesPathBackup => $"{PreferencesPath}.{PREF_BACKUP_PATH_EXT}";
+
 
         #endregion
 
@@ -420,6 +420,7 @@ namespace MonkeyPaste {
         public bool IsSettingsEncrypted { get; set; } = false; // requires restart and only used to trigger convert on exit (may not be necessary to restart)
 
 
+        public string DbPassword { get; set; } = MpPasswordGenerator.GetRandomPassword();
         #endregion
 
         #region Shortcuts
@@ -476,7 +477,6 @@ namespace MonkeyPaste {
         #endregion
 
         #region Db
-        public string DbPassword { get; set; } = MpPasswordGenerator.GetRandomPassword();
         #endregion
 
         #region Sync
@@ -566,8 +566,8 @@ namespace MonkeyPaste {
 
                     string prefStr = SerializeJsonObject();
 
-                    if (EncryptionActive) {
-                        prefStr = MpEncryption.SimpleEncryptWithPassword(prefStr, "testtesttest");
+                    if (IsSettingsEncrypted) {
+                        prefStr = MpEncryption.SimpleEncryptWithPassword(prefStr, GetPrefPassword());
                     }
 
                     MpFileIo.WriteTextToFile(PreferencesPath, prefStr, false);
@@ -594,20 +594,20 @@ namespace MonkeyPaste {
             Save();
         }
 
-        private static async Task LoadPrefsAsync(bool encrypt = false) {
+        private static string GetPrefPassword() {
+            string seed = $"{Environment.UserName}{Environment.MachineName}";
+            return seed.CheckSum();
+        }
+        private static async Task LoadPrefsAsync() {
             IsLoading = true;
 
-            string prefsStr;
-            if (encrypt) {
-                string prefsStr_Encrypted = MpFileIo.ReadTextFromFile(PreferencesPath);
-                prefsStr = MpEncryption.SimpleDecryptWithPassword(prefsStr_Encrypted, "testtesttest");
-            } else {
-                prefsStr = MpFileIo.ReadTextFromFile(PreferencesPath);
+            string prefsStr = MpFileIo.ReadTextFromFile(PreferencesPath);
+            if (IsEncrypted(prefsStr)) {
+                prefsStr = MpEncryption.SimpleDecryptWithPassword(prefsStr, GetPrefPassword());
             }
 
             MpPrefViewModel prefVm = null;
             if (ValidatePrefData(prefsStr)) {
-                EncryptionActive = encrypt;
                 try {
                     prefVm = MpJsonConverter.DeserializeObject<MpPrefViewModel>(prefsStr);
                 }
@@ -617,11 +617,6 @@ namespace MonkeyPaste {
             }
 
             if (prefVm == null) {
-                if (!encrypt) {
-                    // try to load w/ encryption
-                    await LoadPrefsAsync(true);
-                    return;
-                }
                 // this means pref file is invalid, likely app crashed while saving so attempt recovery
                 await CreateDefaultPrefsAsync(true);
                 if (Instance == null) {
@@ -636,7 +631,6 @@ namespace MonkeyPaste {
         }
 
         private static bool ValidatePrefData(string prefStr) {
-
             if (string.IsNullOrWhiteSpace(prefStr)) {
                 return false;
             }
@@ -645,6 +639,9 @@ namespace MonkeyPaste {
                 return true;
             }
             return false;
+        }
+        private static bool IsEncrypted(string prefStr) {
+            return prefStr != null && prefStr.Length > 10 && !ValidatePrefData(prefStr);
         }
 
         private static async Task CreateDefaultPrefsAsync(bool isReset = false) {

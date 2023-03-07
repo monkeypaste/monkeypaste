@@ -57,7 +57,7 @@
           Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition x:DataType="local:MpAvSearchCriteriaItemCollectionViewModel"
-                           Height="{Binding BoundCriteriaListBoxScreenHeight, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvDoubleToGridLengthConverter.Instance}, ConverterParameter=Auto}"
+                           Height="{Binding BoundCriteriaListViewScreenHeight, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvDoubleToGridLengthConverter.Instance}, ConverterParameter=Auto}"
                            MaxHeight="{Binding MaxSearchCriteriaRowHeight, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
@@ -80,7 +80,7 @@
                                                  HorizontalAlignment="Stretch"
                                                  VerticalAlignment="Stretch"
                                                  VerticalContentAlignment="Stretch"
-                                                 Height="{Binding BoundCriteriaListBoxScreenHeight, Mode=TwoWay}"
+                                                 Height="{Binding BoundCriteriaListViewScreenHeight, Mode=TwoWay}"
                                                  IsVisible="{Binding HasCriteriaItems}" />
         </Border>
         <GridSplitter x:Name="AdvancedSearchSplitter"

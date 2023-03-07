@@ -120,6 +120,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             switch (msg) {
+                case MpMessageType.ChildWindowClosed:
                 case MpMessageType.MainWindowLocked:
                     TrySetTopmost(App.MainWindow);
                     break;

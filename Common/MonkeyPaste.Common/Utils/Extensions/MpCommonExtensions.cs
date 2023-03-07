@@ -14,7 +14,10 @@ namespace MonkeyPaste.Common {
     public static class MpCommonExtensions {
 
         #region Collections
-
+        public static IEnumerable<(T item, int index)> WithIndex<T>(this IEnumerable<T> source) {
+            // from https://thomaslevesque.com/2019/11/18/using-foreach-with-index-in-c/
+            return source.Select((item, index) => (item, index));
+        }
         public static void Move<T>(this IList<T> list, int oldIdx, int newIdx) {
             oldIdx = Math.Max(0, Math.Min(list.Count - 1, oldIdx));
             newIdx = Math.Max(0, Math.Min(list.Count - 1, newIdx));

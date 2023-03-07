@@ -353,7 +353,6 @@
                                      MinimumPrefixLength="0"
                                      MinimumPopulateDelay="0.25"
                                      Items="{Binding RecentSearchTexts}"
-                                     FontStyle="{Binding TextBoxFontStyle}"
                                      BorderThickness="0"
                                      Padding="0"
                                      Margin="5,0,0,0">
@@ -384,6 +383,7 @@
                       Grid.Column="1"
                       VerticalAlignment="Stretch"
                       HorizontalAlignment="Stretch"
+                      IsEnabled="{Binding !IsCriteriaWindowOpen, Mode=OneWay, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
                       IsChecked="{Binding IsExpanded, Mode=TwoWay, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
                       Classes="noBg noHoverBg outlineOver"
                       Classes.saved="{Binding IsSavedQuery, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}">

@@ -47,7 +47,6 @@
     <AvaloniaXaml Remove="Assets\Images\Tests\**" />
     <AvaloniaXaml Remove="AttachedProperties\DragDrop\**" />
     <AvaloniaXaml Remove="Behaviors\DragDrop\**" />
-    <AvaloniaXaml Remove="Behaviors\Highlighting\**" />
     <AvaloniaXaml Remove="Behaviors\_Base\**" />
     <AvaloniaXaml Remove="Behaviors\__Factory\**" />
     <AvaloniaXaml Remove="cef\**" />
@@ -71,7 +70,6 @@
     <Compile Remove="Assets\Images\Tests\**" />
     <Compile Remove="AttachedProperties\DragDrop\**" />
     <Compile Remove="Behaviors\DragDrop\**" />
-    <Compile Remove="Behaviors\Highlighting\**" />
     <Compile Remove="Behaviors\_Base\**" />
     <Compile Remove="Behaviors\__Factory\**" />
     <Compile Remove="cef\**" />
@@ -95,7 +93,6 @@
     <EmbeddedResource Remove="Assets\Images\Tests\**" />
     <EmbeddedResource Remove="AttachedProperties\DragDrop\**" />
     <EmbeddedResource Remove="Behaviors\DragDrop\**" />
-    <EmbeddedResource Remove="Behaviors\Highlighting\**" />
     <EmbeddedResource Remove="Behaviors\_Base\**" />
     <EmbeddedResource Remove="Behaviors\__Factory\**" />
     <EmbeddedResource Remove="cef\**" />
@@ -120,7 +117,6 @@
     <None Remove="Assets\Images\Tests\**" />
     <None Remove="AttachedProperties\DragDrop\**" />
     <None Remove="Behaviors\DragDrop\**" />
-    <None Remove="Behaviors\Highlighting\**" />
     <None Remove="Behaviors\_Base\**" />
     <None Remove="Behaviors\__Factory\**" />
     <None Remove="cef\**" />
@@ -144,7 +140,6 @@
     <Page Remove="Assets\Images\Tests\**" />
     <Page Remove="AttachedProperties\DragDrop\**" />
     <Page Remove="Behaviors\DragDrop\**" />
-    <Page Remove="Behaviors\Highlighting\**" />
     <Page Remove="Behaviors\_Base\**" />
     <Page Remove="Behaviors\__Factory\**" />
     <Page Remove="cef_old\**" />
