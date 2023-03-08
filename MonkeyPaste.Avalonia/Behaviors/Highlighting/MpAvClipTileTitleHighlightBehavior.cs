@@ -3,6 +3,7 @@
 using Avalonia.Controls;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -17,29 +18,34 @@ namespace MonkeyPaste.Avalonia {
             get {
                 if (_contentRange == null &&
                     AssociatedObject is MpAvMarqueeTextBox mtb) {
-                    _contentRange = new MpTextRange() { Document = mtb };
+                    _contentRange = mtb.ContentRange;
                 }
                 return _contentRange;
             }
         }
 
-        public override int MatchCount {
-            get => _matches.Count;
-            protected set => base.MatchCount = value;
-        }
+        public override MpHighlightType HighlightType =>
+            MpHighlightType.Title;
 
-        public override MpHighlightType HighlightType => MpHighlightType.Title;
+        public override MpContentQueryBitFlags AcceptanceFlags =>
+            MpContentQueryBitFlags.Title;
 
         public override async Task FindHighlightingAsync() {
             await Task.Delay(1);
             _matches.Clear();
             if (AssociatedObject is MpAvMarqueeTextBox mtb) {
-                var result = mtb.Text.QueryText(
-                    MpAvQueryViewModel.Instance.MatchValue,
-                    MpAvQueryViewModel.Instance.QueryFlags.HasFlag(MpContentQueryBitFlags.CaseSensitive),
-                    MpAvQueryViewModel.Instance.QueryFlags.HasFlag(MpContentQueryBitFlags.WholeWord),
-                    MpAvQueryViewModel.Instance.QueryFlags.HasFlag(MpContentQueryBitFlags.Regex));
-                _matches = result.Select(x => new MpTextRange(x.Item1, x.Item2)).ToList();
+
+                _matches.AddRange(
+                    Mp.Services.Query.Infos
+                    .Where(x => !string.IsNullOrEmpty(x.MatchValue))
+                    .SelectMany(x =>
+                        mtb.Text.QueryText(
+                            x.MatchValue,
+                            x.QueryFlags.HasFlag(MpContentQueryBitFlags.CaseSensitive),
+                            x.QueryFlags.HasFlag(MpContentQueryBitFlags.WholeWord),
+                            x.QueryFlags.HasFlag(MpContentQueryBitFlags.Regex)))
+                    .Select(x => new MpTextRange(ContentRange.Document, x.Item1, x.Item2))
+                    .Distinct());
 
                 if (mtb.HighlightRanges == null) {
                     mtb.HighlightRanges = new ObservableCollection<MpTextRange>();
@@ -47,6 +53,7 @@ namespace MonkeyPaste.Avalonia {
                 mtb.HighlightRanges.Clear();
                 mtb.HighlightRanges.AddRange(_matches);
             }
+            SetMatchCount(_matches.Count);
         }
         public override async Task ApplyHighlightingAsync() {
             await Task.Delay(1);
@@ -58,7 +65,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public override void ClearHighlighting() {
-            base.ClearHighlighting();
             if (AssociatedObject is MpAvMarqueeTextBox mtb) {
                 mtb.HighlightRanges = null;
                 mtb.ActiveHighlightIdx = null;

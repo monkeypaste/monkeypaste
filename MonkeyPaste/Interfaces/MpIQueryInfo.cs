@@ -22,6 +22,8 @@ namespace MonkeyPaste {
 
         void RestoreProviderValues();
 
+        IEnumerable<MpIQueryInfo> Infos { get; }
+
         MpIDbIdCollection PageTools { get; }
     }
 

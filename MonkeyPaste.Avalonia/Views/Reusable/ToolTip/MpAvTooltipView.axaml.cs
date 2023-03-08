@@ -90,6 +90,8 @@ namespace MonkeyPaste.Avalonia {
                 pur.TransparencyLevelHint = WindowTransparencyLevel.Transparent;
                 pur.Background = Brushes.Transparent;
             }
+            if (GetHostControl() is Control c) {
+            }
         }
 
         private void Host_control_PointerMoved(object sender, global::Avalonia.Input.PointerEventArgs e) {

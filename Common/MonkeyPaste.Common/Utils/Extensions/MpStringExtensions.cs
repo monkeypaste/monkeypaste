@@ -102,9 +102,10 @@ namespace MonkeyPaste.Common {
 
         #endregion
 
+
         public static IEnumerable<Tuple<int, int>> QueryText(
-            this string pt,
-            string search_text,
+            this string search_text,
+            string match_value,
             bool case_sensitive,
             bool whole_word,
             bool use_regex) {
@@ -115,12 +116,12 @@ namespace MonkeyPaste.Common {
             }
 
             if (use_regex) {
-                regex = new Regex(search_text, flags);
+                regex = new Regex(match_value, flags);
             } else {
                 var word_str = whole_word ? "\\b" : "";
-                regex = new Regex($"{word_str}{search_text}{word_str}", flags);
+                regex = new Regex($"{word_str}{match_value}{word_str}", flags);
             }
-            var mc = regex.Matches(pt);
+            var mc = regex.Matches(search_text);
             foreach (Match m in mc) {
                 foreach (Group mg in m.Groups) {
                     foreach (Capture c in mg.Captures) {
@@ -129,7 +130,6 @@ namespace MonkeyPaste.Common {
                 }
             }
         }
-
         public static string ToPrettyPrintJsonString(this object obj) {
             if (obj == null) {
                 return string.Empty;

@@ -4,6 +4,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using Avalonia.Xaml.Interactivity;
 using MonkeyPaste;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
@@ -33,43 +34,15 @@ namespace MonkeyPaste.Avalonia {
         protected abstract MpTextRange ContentRange { get; }
 
         public abstract MpHighlightType HighlightType { get; }
+        public abstract MpContentQueryBitFlags AcceptanceFlags { get; }
 
         public int Priority => (int)HighlightType;
 
         public int SelectedIdx { get; set; } = -1;
 
-        public virtual int MatchCount { get; protected set; }
-
-        #region InactiveHighlightBrush Dependency Property
-
-        public IBrush InactiveHighlightBrush {
-            get => GetValue(InactiveHighlightBrushProperty);
-            set => SetValue(InactiveHighlightBrushProperty, value);
-        }
-
-        public static readonly AttachedProperty<IBrush> InactiveHighlightBrushProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, IBrush>(
-                "InactiveHighlightBrush",
-                Brushes.Pink,
-                false);
-
-        #endregion
-
-        #region ActiveHighlightBrush Dependency Property
-
-        public IBrush ActiveHighlightBrush {
-            get { return (IBrush)GetValue(ActiveHighlightBrushProperty); }
-            set { SetValue(ActiveHighlightBrushProperty, value); }
-        }
-
-
-        public static readonly AttachedProperty<IBrush> ActiveHighlightBrushProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, IBrush>(
-                "InactiveHighlightBrush",
-                Brushes.Crimson,
-                false);
-
-        #endregion
+        private int _matchCount = 0;
+        public int MatchCount =>
+            _matchCount;
 
         #endregion
 
@@ -88,17 +61,29 @@ namespace MonkeyPaste.Avalonia {
 
         public void Reset() {
             ClearHighlighting();
+            SetMatchCount(0);
+            SelectedIdx = -1;
         }
 
         public abstract Task FindHighlightingAsync();
 
-        public virtual void ClearHighlighting() {
-            SelectedIdx = -1;
-            MatchCount = 0;
-        }
+        public abstract void ClearHighlighting();
 
         public abstract Task ApplyHighlightingAsync();
 
+        #endregion
+
+        #region Protected Methods
+
+        protected void SetMatchCount(int count) {
+            _matchCount = count;
+            if (count > 0) {
+
+            }
+            if (MatchCount > 1) {
+                MpAvSearchBoxViewModel.Instance.NotifyHasMultipleMatches();
+            }
+        }
         #endregion
 
         #region Private Methods
@@ -118,7 +103,8 @@ namespace MonkeyPaste.Avalonia {
                 return ((int)Priority).CompareTo(((int)ohltrvm.Priority));
             }
 
-            return ContentRange.StartIdx.CompareTo(ohltrvm.ContentRange.StartIdx);
+            //return ContentRange.StartIdx.CompareTo(ohltrvm.ContentRange.StartIdx);
+            return ContentRange.CompareTo(ohltrvm.ContentRange);
         }
         #endregion
     }

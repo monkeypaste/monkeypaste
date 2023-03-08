@@ -1,13 +1,13 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using HtmlAgilityPack;
-using MonkeyPaste.Common;
-using MonkeyPaste.Common.Plugin;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace AvCoreAnnotator {
@@ -27,13 +27,13 @@ namespace AvCoreAnnotator {
 
         #region Public Methods
 
-        public static MpQuillDelta Annotate(string plain_text,IEnumerable<MpRegExType> formats) {
+        public static MpQuillDelta Annotate(string plain_text, IEnumerable<MpRegExType> formats) {
             MpQuillDelta delta = new MpQuillDelta() { ops = new List<Op>() };
-            if(string.IsNullOrEmpty(plain_text)) {
+            if (string.IsNullOrEmpty(plain_text)) {
                 return delta;
             }
 
-            foreach(MpRegExType ft in formats) {
+            foreach (MpRegExType ft in formats) {
                 var annotation_type_results = AnnotateType(plain_text, ft);
                 delta.ops.AddRange(annotation_type_results.ops);
             }
@@ -47,11 +47,11 @@ namespace AvCoreAnnotator {
         private static MpQuillDelta AnnotateType(string pt, MpRegExType annotationRegExType) {
             MpQuillDelta delta = new MpQuillDelta() { ops = new List<Op>() };
 
-            if(annotationRegExType == MpRegExType.None ||
+            if (annotationRegExType == MpRegExType.None ||
                 (int)annotationRegExType > MpRegEx.MAX_ANNOTATION_REGEX_TYPE) {
                 return delta;
             }
-           
+
             Regex regex = MpRegEx.RegExLookup[annotationRegExType];
             MatchCollection mc = regex.Matches(pt);
             foreach (Match m in mc) {
@@ -61,7 +61,7 @@ namespace AvCoreAnnotator {
 
                         Op op = new Op() {
                             format = new DeltaRange() { index = c.Index, length = c.Length },
-                            attributes = GetLinkAttributes(annotationRegExType,c.Value)
+                            attributes = GetLinkAttributes(annotationRegExType, c.Value)
                         };
 
                         delta.ops.Add(op);
@@ -75,8 +75,8 @@ namespace AvCoreAnnotator {
             var attr = new Attributes() {
                 linkType = annotationRegExType.ToString().ToLower(),
                 link = GetLinkHref(annotationRegExType, match)
-            }; 
-            if(annotationRegExType == MpRegExType.HexColor) {
+            };
+            if (annotationRegExType == MpRegExType.HexColor) {
                 var color = new MpColor(match);
                 attr.background = color.ToHex(true);
                 attr.color = attr.background.IsHexStringBright() ? MpSystemColors.Black : MpSystemColors.White;
@@ -115,17 +115,19 @@ namespace AvCoreAnnotator {
 
         private static MpQuillDelta ProcessCollisions(MpQuillDelta delta) {
             List<Op> ops_to_remove = new List<Op>();
-            // order ops by desc length, then remove any op that collides with it (so longest match in any collision remains)
-            foreach (var op in delta.ops.OrderByDescending(x=>x.format.length)) {
-                if(ops_to_remove.Contains(op)) {
+            // order ops by desc length,
+            // then remove any op that collides with it
+            // (so longest match in any collision remains)
+            foreach (var op in delta.ops.OrderByDescending(x => x.format.length)) {
+                if (ops_to_remove.Contains(op)) {
                     continue;
                 }
-                foreach (var other_op in delta.ops.Where(x=>x != op)) {
+                foreach (var other_op in delta.ops.Where(x => x != op)) {
                     if (ops_to_remove.Contains(op)) {
                         continue;
                     }
 
-                    if (IsCollision(op,other_op)) {
+                    if (op.format.IntersectsWith(other_op.format)) {
                         ops_to_remove.Add(other_op);
                     }
                 }
@@ -136,21 +138,6 @@ namespace AvCoreAnnotator {
             return delta;
         }
 
-        private static bool IsCollision(Op op,Op other_op) {
-            int op_start_idx = op.format.index;
-            int op_end_idx = op.format.index + op.format.length;
-            
-            int other_op_start_idx = other_op.format.index;
-            int other_op_end_idx = other_op.format.index + other_op.format.length;
-
-            if(other_op_start_idx >= op_start_idx && other_op_start_idx <= op_end_idx) {
-                return true;
-            }
-            if(other_op_end_idx >= op_start_idx && other_op_end_idx <= op_end_idx) {
-                return true;
-            }
-            return false;
-        }
         #endregion
 
         #region Protected Methods

@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Media;
 using MonkeyPaste;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,14 +11,29 @@ using System.Windows;
 namespace MonkeyPaste.Avalonia {
     public class MpAvSourceHighlightBehavior : MpAvHighlightBehaviorBase<Button> {
         protected List<MpTextRange> _matches = new List<MpTextRange>();
-        protected override MpTextRange ContentRange => null;
 
-        public override MpHighlightType HighlightType => MpHighlightType.Source;
-
-        public override int MatchCount {
-            get => _matches.Count;
-            protected set => base.MatchCount = value;
+        private MpTextRange _contentRange;
+        protected override MpTextRange ContentRange {
+            get {
+                if (_contentRange == null &&
+                    AssociatedObject is Control mtb) {
+                    _contentRange = new MpTextRange(AssociatedObject);
+                }
+                return _contentRange;
+            }
         }
+
+        public override MpHighlightType HighlightType =>
+            MpHighlightType.Source;
+        public override MpContentQueryBitFlags AcceptanceFlags =>
+            MpContentQueryBitFlags.Url |
+            MpContentQueryBitFlags.UrlDomain |
+            MpContentQueryBitFlags.UrlTitle |
+            MpContentQueryBitFlags.AppName |
+            MpContentQueryBitFlags.AppPath |
+            MpContentQueryBitFlags.DeviceName |
+            MpContentQueryBitFlags.DeviceType;
+
 
         public override async Task ApplyHighlightingAsync() {
             await Task.Delay(1);
@@ -72,6 +88,7 @@ namespace MonkeyPaste.Avalonia {
             //_matches = _matches.Distinct().ToList();
 
             SelectedIdx = -1;
+            SetMatchCount(_matches.Count);
         }
 
         private void ShowSourceHighlight(bool isSelected) {
@@ -92,7 +109,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public override void ClearHighlighting() {
-            base.ClearHighlighting();
+
             HideSourceHighlight();
         }
     }

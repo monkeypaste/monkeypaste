@@ -147,49 +147,52 @@ namespace MonkeyPaste.Avalonia {
 
             IsBusy = false;
         }
-        public async Task RejectUrlOrDomain(bool isDomain) {
-            IsBusy = true;
+        public async Task<bool> VerifyRejectAsync(bool isDomain) {
+            bool rejectContent = false;
 
-            bool wasCanceled = false;
-
-            List<MpCopyItem> clipsFromUrl = new List<MpCopyItem>();
-            //MessageBoxResult confirmExclusionResult = MessageBox.Show("Would you also like to remove all clips from '" + UrlPath + "'", "Remove associated clips?", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
-            //if (confirmExclusionResult == MessageBoxResult.Yes) {
-            //    IsBusy = true;
-            //    if(isDomain) {
-            //        clipsFromUrl = await MpDataModelProvider.GetCopyItemsByUrlDomainAsync(UrlDomainPath);
-            //    } else {
-            //        clipsFromUrl = await MpDataModelProvider.GetCopyItemsByUrlIdAsync(UrlId);
-            //    }                
-            //} else if (confirmExclusionResult == MessageBoxResult.Cancel) {
-            //    wasCanceled = true;
-            //}
-
-
-            if (wasCanceled) {
-                IsBusy = false;
-                return;
+            IEnumerable<MpCopyItem> to_delete_cil = null;
+            if (isDomain) {
+                var domain_uvml = Parent.Items.Where(x => x.UrlDomainPath.ToLower() == UrlDomainPath.ToLower());
+                var all_results = await Task.WhenAll(domain_uvml.Select(x => MpDataModelProvider.GetCopyItemsBySourceTypeAndIdAsync(MpTransactionSourceType.Url, x.UrlId)));
+                to_delete_cil = all_results.SelectMany(x => x);
+            } else {
+                to_delete_cil = await MpDataModelProvider.GetCopyItemsBySourceTypeAndIdAsync(MpTransactionSourceType.Url, UrlId);
             }
 
-            await Task.WhenAll(clipsFromUrl.Select(x => x.DeleteFromDatabaseAsync()));
+            if (to_delete_cil != null && to_delete_cil.Any()) {
+                var result = await Mp.Services.NativeMessageBox.ShowYesNoCancelMessageBoxAsync(
+                    title: $"Remove associated clips?",
+                    message: $"Would you also like to remove all clips from '{(isDomain ? UrlDomainPath : UrlPath)}'",
+                    iconResourceObj: IconId);
+                if (result.IsNull()) {
+                    // flag as cancel so cmd will untoggle reject
+                    return false;
+                }
+                rejectContent = result.IsTrue();
+            }
+            if (!rejectContent) {
+                return true;
+            }
 
+            IsBusy = true;
+            await Task.WhenAll(to_delete_cil.Select(x => x.DeleteFromDatabaseAsync()));
             IsBusy = false;
-            return;
+            return true;
         }
 
 
         private void MpUrlViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                case nameof(IsRejected):
-                    if (IsRejected) {
-                        Dispatcher.UIThread.Post(async () => { await RejectUrlOrDomain(true); });
-                    }
-                    break;
-                case nameof(IsSubRejected):
-                    if (IsSubRejected) {
-                        Dispatcher.UIThread.Post(async () => { await RejectUrlOrDomain(false); });
-                    }
-                    break;
+                //case nameof(IsRejected):
+                //    if (IsRejected) {
+                //        Dispatcher.UIThread.Post(async () => { await VerifyRejectAsync(true); });
+                //    }
+                //    break;
+                //case nameof(IsSubRejected):
+                //    if (IsSubRejected) {
+                //        Dispatcher.UIThread.Post(async () => { await VerifyRejectAsync(false); });
+                //    }
+                //    break;
                 case nameof(HasModelChanged):
                     Task.Run(Url.WriteToDatabaseAsync);
                     break;
@@ -226,14 +229,28 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
-        public ICommand ToggleIsRejectedCommand => new MpCommand(
-            () => {
+        public ICommand ToggleIsRejectedCommand => new MpAsyncCommand(
+            async () => {
                 IsSubRejected = !IsSubRejected;
+                if (IsSubRejected) {
+                    bool was_confirmed = await VerifyRejectAsync(false);
+                    if (!was_confirmed) {
+                        // canceled from delete content msgbox
+                        IsSubRejected = false;
+                    }
+                }
             });
 
-        public ICommand ToggleIsDomainRejectedCommand => new MpCommand(
-            () => {
+        public ICommand ToggleIsDomainRejectedCommand => new MpAsyncCommand(
+            async () => {
                 IsRejected = !IsRejected;
+                if (IsRejected) {
+                    bool was_confirmed = await VerifyRejectAsync(true);
+                    if (!was_confirmed) {
+                        // canceled from delete content msgbox
+                        IsRejected = false;
+                    }
+                }
             });
         #endregion
     }

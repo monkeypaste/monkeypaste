@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonkeyPaste.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,12 +11,17 @@ namespace MonkeyPaste.Avalonia {
 
         public override MpHighlightType HighlightType => MpHighlightType.Content;
 
+        public override MpContentQueryBitFlags AcceptanceFlags =>
+            MpContentQueryBitFlags.Hex |
+            MpContentQueryBitFlags.Rgba |
+            MpContentQueryBitFlags.Annotations |
+            MpContentQueryBitFlags.Content;
         public override async Task FindHighlightingAsync() {
             await Task.Delay(1);
         }
 
         public override void ClearHighlighting() {
-            base.ClearHighlighting();
+            
         }
 
         public override async Task ApplyHighlightingAsync() {

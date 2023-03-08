@@ -1,10 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using MonkeyPaste.Common;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public interface MpIHighlightRegion {
         int Priority { get; }
 
         MpHighlightType HighlightType { get; }
+
+        MpContentQueryBitFlags AcceptanceFlags { get; }
 
         bool IsVisible { get; }
 

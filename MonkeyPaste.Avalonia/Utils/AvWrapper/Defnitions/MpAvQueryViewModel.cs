@@ -50,7 +50,8 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region Properties     
+        #region Interfaces
+
 
         #region MpIQueryResultProvider Implementation
         [JsonIgnore]
@@ -69,6 +70,18 @@ namespace MonkeyPaste.Avalonia {
 
         [JsonIgnore]
         public int TotalAvailableItemsInQuery => _pageTools.AllQueryIds.Count;
+
+        [JsonIgnore]
+        public IEnumerable<MpIQueryInfo> Infos {
+            get {
+                yield return this;
+                var next = Next;
+                while (next != null) {
+                    yield return next;
+                    next = next.Next;
+                }
+            }
+        }
 
         public async Task QueryForTotalCountAsync() {
             MpConsole.WriteLine("total count called");
@@ -153,6 +166,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #endregion
+
+        #endregion
+
+        #region Properties     
+
 
         #endregion
 

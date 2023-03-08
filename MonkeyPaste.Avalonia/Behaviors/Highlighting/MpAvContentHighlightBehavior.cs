@@ -19,32 +19,29 @@ namespace MonkeyPaste.Avalonia {
             get {
                 if (_contentRange == null &&
                     AssociatedObject.GetVisualDescendant<MpAvContentWebView>() is MpAvContentWebView wv) {
-                    _contentRange = new MpTextRange() { Document = wv };
+                    _contentRange = new MpTextRange(wv);
                 }
                 return _contentRange;
             }
         }
 
-        private int _matchCount;
-        public override int MatchCount {
-            get => _matchCount;
-            protected set => _matchCount = value;
-        }
-
         public override MpHighlightType HighlightType => MpHighlightType.Content;
-
+        public override MpContentQueryBitFlags AcceptanceFlags =>
+            MpContentQueryBitFlags.Annotations |
+            MpContentQueryBitFlags.Content;
         public override async Task FindHighlightingAsync() {
+            int matchCount = 0;
             if (ContentRange != null &&
                 ContentRange.Document is MpAvContentWebView wv) {
                 await wv.PerformLoadContentRequestAsync();
                 while (wv.SearchResponse == null) {
                     await Task.Delay(100);
                 }
-                MatchCount = wv.SearchResponse.rangeCount;
+                matchCount = wv.SearchResponse.rangeCount;
                 wv.SearchResponse = null;
             }
+            SetMatchCount(matchCount);
         }
-
 
         public override async Task ApplyHighlightingAsync() {
             await Task.Delay(1);
@@ -63,7 +60,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         public override void ClearHighlighting() {
-            base.ClearHighlighting();
+
             if (ContentRange != null &&
                 ContentRange.Document is MpAvContentWebView wv) {
 

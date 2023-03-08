@@ -4,9 +4,9 @@
         xmlns:local="using:MonkeyPaste.Avalonia">
 
     <Style Selector="ToolTip">
-        <Setter Property="BorderThickness"
+        <!--<Setter Property="BorderThickness"
                 Value="0" />
         <Setter Property="Background"
-                Value="Transparent" />
+                Value="Transparent" />-->
     </Style>
 </Styles>

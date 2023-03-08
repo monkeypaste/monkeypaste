@@ -19,6 +19,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{E0839402-4D82-4FF2-8778-A2E538ABCEAB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonkeyPaste.Common", "Common\MonkeyPaste.Common\MonkeyPaste.Common.csproj", "{E641A0B5-0461-47F3-91BB-340BE880A545}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1672D6A5-2A5F-49BF-BF89-787167B155F6} = {1672D6A5-2A5F-49BF-BF89-787167B155F6}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonkeyPaste.Common.Plugin", "Common\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj", "{400473EB-9A5B-4E8D-816D-5BC5B315C542}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -48,6 +51,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonkeyPaste.Avalonia.Android", "MonkeyPaste.Avalonia.Android\MonkeyPaste.Avalonia.Android.csproj", "{877E2685-B78C-450A-89DC-2E2C1CBBDAE3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonkeyPaste.Avalonia.Desktop", "MonkeyPaste.Avalonia.Desktop\MonkeyPaste.Avalonia.Desktop.csproj", "{F580CAF2-038C-44D3-8634-6F48E67224F4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1672D6A5-2A5F-49BF-BF89-787167B155F6} = {1672D6A5-2A5F-49BF-BF89-787167B155F6}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonkeyPaste.Avalonia.iOS", "MonkeyPaste.Avalonia.iOS\MonkeyPaste.Avalonia.iOS.csproj", "{62E4FEB6-C9D6-4BF5-9914-A70EC3A1E58D}"
 EndProject

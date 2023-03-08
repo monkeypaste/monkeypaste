@@ -279,6 +279,13 @@ namespace MonkeyPaste.Avalonia {
                         }
                     });
                     break;
+                case nameof(IsMultipleMatches):
+                    if (IsMultipleMatches && !IsExpanded) {
+                        ToggleIsSearchBoxExpandedCommand.Execute(null);
+                        break;
+                    }
+
+                    break;
             }
         }
 

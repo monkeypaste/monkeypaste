@@ -14,6 +14,7 @@ namespace MonkeyPaste.Common {
     public static class MpCommonExtensions {
 
         #region Collections
+
         public static IEnumerable<(T item, int index)> WithIndex<T>(this IEnumerable<T> source) {
             // from https://thomaslevesque.com/2019/11/18/using-foreach-with-index-in-c/
             return source.Select((item, index) => (item, index));

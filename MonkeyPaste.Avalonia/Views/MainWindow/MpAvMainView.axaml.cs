@@ -50,9 +50,14 @@ namespace MonkeyPaste.Avalonia {
                     // huh?
                     MpDebug.Break();
                 } else {
-                    if (OperatingSystem.IsWindows()) {
-                        MpAvToolWindow_Win32.InitToolWindow(App.MainWindow.PlatformImpl.Handle.Handle);
+                    if (!MpPrefViewModel.Instance.ShowInTaskSwitcher) {
+                        if (OperatingSystem.IsWindows()) {
+                            MpAvToolWindow_Win32.InitToolWindow(App.MainWindow.PlatformImpl.Handle.Handle);
+                        } else {
+                            // TODO or error, not sure if mac/linux supports
+                        }
                     }
+
                 }
 
                 //mw.DataContext = MpAvMainWindowViewModel.Instance;

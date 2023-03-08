@@ -51,9 +51,18 @@ namespace MonkeyPaste.Common.Plugin {
 
     }
 
-    public class DeltaRange : MpOmitNullJsonObject {
+    public class DeltaRange : MpOmitNullJsonObject, MpITextRange {
+
         public int index { get; set; }
         public int length { get; set; }
+
+        [JsonIgnore]
+        int MpITextRange.Offset =>
+            index;
+
+        [JsonIgnore]
+        int MpITextRange.Length =>
+            length;
     }
     public class Attributes : MpOmitNullJsonObject {
         public string align { get; set; }

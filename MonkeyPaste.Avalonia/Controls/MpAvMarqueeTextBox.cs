@@ -57,6 +57,16 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
+        private MpTextRange _contentRange;
+        public MpTextRange ContentRange {
+            get {
+                if (_contentRange == null) {
+                    _contentRange = new MpTextRange(this);
+                }
+                return _contentRange;
+            }
+        }
+
         #region ReadOnlyForeground AvaloniaProperty
 
         private static IBrush _defReadOnlyForeground = Brushes.White;
@@ -593,6 +603,8 @@ namespace MonkeyPaste.Avalonia {
 
         }
         private void Init() {
+            ContentRange.Count = Text == null ? 0 : Text.Length;
+
             _bmpSize = GetScaledTextSize(out _ftSize);
             _offsetX1 = 0;
             if (CanMarquee()) {
@@ -704,12 +716,12 @@ namespace MonkeyPaste.Avalonia {
             }
             if (hl_ranges.Length == 0) {
                 // no hl return whole range with def
-                brush_tuples.Add(new KeyValuePair<IBrush, MpTextRange>(def_brush, new MpTextRange(0, Text.Length)));
+                brush_tuples.Add(new KeyValuePair<IBrush, MpTextRange>(def_brush, new MpTextRange(ContentRange.Document, 0, Text.Length)));
                 return brush_tuples.ToArray();
             }
             if (hl_ranges.First().StartIdx > 0) {
                 // add pre def
-                brush_tuples.Add(new KeyValuePair<IBrush, MpTextRange>(def_brush, new MpTextRange(0, hl_ranges[0].BeforeStartIdx)));
+                brush_tuples.Add(new KeyValuePair<IBrush, MpTextRange>(def_brush, new MpTextRange(ContentRange.Document, 0, hl_ranges[0].BeforeStartIdx)));
             }
 
             foreach (var (hlr, hlr_idx) in hl_ranges.WithIndex()) {
@@ -721,13 +733,13 @@ namespace MonkeyPaste.Avalonia {
                     int inner_count = hl_ranges[hlr_idx + 1].StartIdx - inner_sidx;
                     if (inner_count > 0) {
                         // add inner def range
-                        brush_tuples.Add(new KeyValuePair<IBrush, MpTextRange>(def_brush, new MpTextRange(inner_sidx, inner_count)));
+                        brush_tuples.Add(new KeyValuePair<IBrush, MpTextRange>(def_brush, new MpTextRange(ContentRange.Document, inner_sidx, inner_count)));
                     }
                 }
             }
             if (hl_ranges.Last().AfterEndIdx < Text.Length - 1) {
                 // add post def
-                brush_tuples.Add(new KeyValuePair<IBrush, MpTextRange>(def_brush, new MpTextRange(hl_ranges.Last().AfterEndIdx, Text.Length - hl_ranges.Last().AfterEndIdx)));
+                brush_tuples.Add(new KeyValuePair<IBrush, MpTextRange>(def_brush, new MpTextRange(ContentRange.Document, hl_ranges.Last().AfterEndIdx, Text.Length - hl_ranges.Last().AfterEndIdx)));
             }
 
             var valid = brush_tuples.Where(x => x.Value.StartIdx < 0 || x.Value.EndIdx >= Text.Length);

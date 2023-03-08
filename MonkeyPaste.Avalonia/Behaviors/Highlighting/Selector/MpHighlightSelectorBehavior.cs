@@ -1,4 +1,6 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Threading;
 using Avalonia.Xaml.Interactivity;
 using MonkeyPaste;
@@ -14,9 +16,17 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public class MpHighlightSelectorBehavior : Behavior<MpAvClipTileView> {
+        #region Properties
+
         List<MpIHighlightRegion> _items = new List<MpIHighlightRegion>();
         List<MpIHighlightRegion> Items =>
             _items;
+
+        IEnumerable<MpIHighlightRegion> EnabledItems =>
+            Items.Where(x => IsRegionEnabled(x));
+
+        IEnumerable<MpIHighlightRegion> DisabledItems =>
+            Items.Where(x => !IsRegionEnabled(x));
 
         MpIHighlightRegion SelectedItem =>
             _selectedHighlighterIdx >= 0 && _selectedHighlighterIdx < Items.Count ?
@@ -30,19 +40,31 @@ namespace MonkeyPaste.Avalonia {
 
         bool IsActive =>
             Items.Any(x => x.MatchCount > 0);
+
+        #endregion
+
+        #region Protected Methods
         protected override void OnAttached() {
             base.OnAttached();
 
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
             AssociatedObject.DataContextChanged += AssociatedObject_DataContextChanged;
-            //AssociatedObject.AttachedToVisualTree += AssociatedObject_AttachedToVisualTree;
 
         }
+        protected override void OnDetaching() {
+            if (AssociatedObject != null) {
+                AssociatedObject.DataContextChanged -= AssociatedObject_DataContextChanged;
+            }
+            base.OnDetaching();
 
-        //private void AssociatedObject_AttachedToVisualTree(object sender, global::Avalonia.VisualTreeAttachmentEventArgs e) {
-        //    throw new System.NotImplementedException();
-        //}
+            MpMessenger.UnregisterGlobal(ReceivedGlobalMessage);
+            Reset();
+        }
+        #endregion
 
+        #region Private Methods
+
+        #region Event Handlers
         private void AssociatedObject_DataContextChanged(object sender, System.EventArgs e) {
             if (AssociatedObject == null ||
                 AssociatedObject.DataContext == null ||
@@ -75,12 +97,7 @@ namespace MonkeyPaste.Avalonia {
             PerformHighlighting().FireAndForgetSafeAsync();
         }
 
-        protected override void OnDetaching() {
-            base.OnDetaching();
 
-            MpMessenger.UnregisterGlobal(ReceivedGlobalMessage);
-            Reset();
-        }
         private async void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
 
@@ -97,11 +114,13 @@ namespace MonkeyPaste.Avalonia {
                     await PerformHighlighting();
                     break;
                 case MpMessageType.JumpToIdxCompleted:
-                    await Task.Delay(500);
+                    //await Task.Delay(500);
                     await PerformHighlighting();
                     break;
             }
         }
+
+        #endregion
 
         private async Task PerformHighlighting() {
             if (AssociatedObject != null &&
@@ -110,23 +129,36 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(100);
                 }
             }
-            if (string.IsNullOrEmpty(MpAvQueryViewModel.Instance.MatchValue)) {
-                Reset();
+
+            DisabledItems.ForEach(x => x.Reset());
+            if (!EnabledItems.Any()) {
                 return;
             }
 
-            await Task.WhenAll(Items.Select(x => x.FindHighlightingAsync()));
+            await Task.WhenAll(
+                EnabledItems
+                .Select(x => x.FindHighlightingAsync()));
+
             _selectedHighlighterIdx = 0;
-            if (Items.All(x => x.MatchCount == 0)) {
+            if (EnabledItems.All(x => x.MatchCount == 0)) {
                 return;
-            }
-            if (Items.Any(x => x.MatchCount > 1)) {
-                MpAvSearchBoxViewModel.Instance.NotifyHasMultipleMatches();
             }
             SelectNextMatch();
-            Items.ForEach(x => x.ApplyHighlightingAsync());
+            EnabledItems.ForEach(x => x.ApplyHighlightingAsync());
         }
 
+        private bool IsRegionEnabled(MpIHighlightRegion hr) {
+            return
+                Mp.Services.Query.Infos
+                .Any(x => x.QueryFlags.HasAnyFlag(hr.AcceptanceFlags));
+        }
+
+        private void Reset() {
+            _selectedHighlighterIdx = 0;
+            Items.ForEach(x => x.Reset());
+        }
+
+        #region Selection
         private void SelectNextItem() {
             if (!IsActive) {
                 return;
@@ -165,26 +197,8 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 SelectedItem.SelectedIdx = next_idx;
             }
-            //if (Items[_selectedHighlighterIdx].SelectedIdx >= Items[_selectedHighlighterIdx].MatchCount - 1) {
-            //    Items[_selectedHighlighterIdx].SelectedIdx = -1;
-            //    _selectedHighlighterIdx++;
-            //}
-            //if (_selectedHighlighterIdx == Items.Count) {
-            //    // _highlighters[_selectedHighlighterIdx].SelectedIdx = -1;
-            //    _selectedHighlighterIdx = 0;
-            //    Items[_selectedHighlighterIdx].SelectedIdx = 0;
-            //} else {
-            //    Items[_selectedHighlighterIdx].SelectedIdx++;
-            //}
-
-
-            //if (Items[_selectedHighlighterIdx].MatchCount == 0) {
-            //    SelectNextMatch();
-            //    return;
-            //}
-            Items.ForEach(x => x.ApplyHighlightingAsync());
+            EnabledItems.ForEach(x => x.ApplyHighlightingAsync());
         }
-
         private void SelectPreviousMatch() {
             if (!IsActive) {
                 return;
@@ -195,53 +209,11 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 SelectedItem.SelectedIdx = prev_idx;
             }
-            //if (Items.All(x => x.MatchCount == 0)) {
-            //    return;
-            //}
-            //if (Items[_selectedHighlighterIdx].SelectedIdx == 0) {
-            //    Items[_selectedHighlighterIdx].SelectedIdx = -1;
-            //    if (_selectedHighlighterIdx == 0) {
-            //        _selectedHighlighterIdx = Items.Count - 1;
-            //    } else {
-            //        _selectedHighlighterIdx--;
-            //    }
-            //    Items[_selectedHighlighterIdx].SelectedIdx = Items[_selectedHighlighterIdx].MatchCount - 1;
-            //} else {
-            //    Items[_selectedHighlighterIdx].SelectedIdx--;
 
-            //    //NOTE this added for untested stack overflow of decrementing SelectedIdx
-            //    //from here
-            //    if (Items[_selectedHighlighterIdx].SelectedIdx < 0) {
-            //        if (_selectedHighlighterIdx == 0) {
-            //            _selectedHighlighterIdx = Items.Count - 1;
-            //        } else {
-            //            _selectedHighlighterIdx--;
-            //        }
-            //        Items[_selectedHighlighterIdx].SelectedIdx = Items[_selectedHighlighterIdx].MatchCount - 1;
-            //    }
-            //    //to here
-            //}
-            //if (_selectedHighlighterIdx >= _highlighters.Count - 1) {
-            //    _highlighters[_selectedHighlighterIdx].SelectedIdx = -1;
-            //    _selectedHighlighterIdx = 0;
-            //}
-
-
-            //if (Items[_selectedHighlighterIdx].MatchCount == 0) {
-            //    SelectPreviousMatch();
-            //    return;
-            //}
-
-            Items.ForEach(x => x.ApplyHighlightingAsync());
+            EnabledItems.ForEach(x => x.ApplyHighlightingAsync());
         }
+        #endregion
 
-        //private void Reset(List<MpIHighlightRegion> _highlighters) {
-        //    _selectedHighlighterIdx = 0;
-        //    _highlighters.ForEach(x => x.Reset());
-        //}
-        private void Reset() {
-            _selectedHighlighterIdx = 0;
-            Items.ForEach(x => x.Reset());
-        }
+        #endregion
     }
 }

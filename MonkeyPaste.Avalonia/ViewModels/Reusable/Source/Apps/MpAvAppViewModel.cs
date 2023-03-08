@@ -160,25 +160,30 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
-        public async Task RejectApp() {
-            IsBusy = true;
-            bool wasCanceled = false;
+        public async Task<bool> VerifyRejectAsync() {
+            bool rejectContent = false;
 
             var clipsFromApp = await MpDataModelProvider.GetCopyItemsBySourceTypeAndIdAsync(MpTransactionSourceType.App, AppId);
 
             if (clipsFromApp != null && clipsFromApp.Count > 0) {
-                //MessageBoxResult confirmExclusionResult = MessageBox.Show("Would you also like to remove all clips from '" + AppName + "'", "Remove associated clips?", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
-                //if (confirmExclusionResult == MessageBoxResult.Cancel) {
-                //    wasCanceled = true;
-                //}
+                var result = await Mp.Services.NativeMessageBox.ShowYesNoCancelMessageBoxAsync(
+                    title: $"Remove associated clips?",
+                    message: $"Would you also like to remove all clips from '{AppName}'",
+                    iconResourceObj: IconId);
+                if (result.IsNull()) {
+                    // flag as cancel so cmd will untoggle reject
+                    return false;
+                }
+                rejectContent = result.IsTrue();
             }
-            if (wasCanceled) {
-                IsBusy = false;
-                return;
+            if (!rejectContent) {
+                return true;
             }
 
+            IsBusy = true;
             await Task.WhenAll(clipsFromApp.Select(x => x.DeleteFromDatabaseAsync()));
             IsBusy = false;
+            return true;
         }
 
         public override string ToString() {
@@ -215,7 +220,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(IsRejected):
                     if (IsRejected) {
-                        Dispatcher.UIThread.Post(async () => { await RejectApp(); });
+                        Dispatcher.UIThread.Post(async () => { await VerifyRejectAsync(); });
                     }
                     break;
 
@@ -234,9 +239,16 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public ICommand ToggleIsRejectedCommand => new MpCommand(
-            () => {
+        public ICommand ToggleIsRejectedCommand => new MpAsyncCommand(
+            async () => {
                 IsRejected = !IsRejected;
+                if (IsRejected) {
+                    bool was_confirmed = await VerifyRejectAsync();
+                    if (!was_confirmed) {
+                        // canceled from delete content msgbox
+                        IsRejected = false;
+                    }
+                }
             });
 
         #endregion

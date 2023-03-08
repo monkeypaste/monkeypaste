@@ -357,6 +357,8 @@ namespace MonkeyPaste {
 
         #region Look & Feel
 
+        public bool ShowInTaskbar { get; set; } = true;
+        public bool ShowInTaskSwitcher { get; set; } = true;
         public string CurrentThemeName { get; set; } = MpThemeType.Light.ToString();
         public int NotificationSoundGroupIdx { get; set; } = 1;
         public double NotificationSoundVolume { get; set; } = 1;

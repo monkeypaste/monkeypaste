@@ -61,6 +61,8 @@ namespace MonkeyPaste.Avalonia {
                 if (valStr.EndsWith("Icon") || targetType == typeof(WindowIcon)) {
                     return new WindowIcon(
                         MpAvStringResourceConverter.Instance.Convert(
+                            valStr.IsAvResourceString() ?
+                            valStr :
                             Mp.Services.PlatformResource.GetResource(valStr), null, null, null) as Bitmap);
                 }
                 if (valStr.EndsWith("Image") || valStr.IsAvResourceString()) {

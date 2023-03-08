@@ -187,7 +187,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsAnySourceRejected(IEnumerable<MpISourceRef> refs) {
             foreach (var source_ref in refs) {
                 if (source_ref is MpUrl url &&
-                    (url.IsDomainRejected || url.IsDomainRejected)) {
+                    (url.IsDomainRejected || url.IsUrlRejected)) {
                     MpConsole.WriteLine($"Rejected url detected. Url: '{url}'");
                     return true;
                 } else if (source_ref is MpApp app &&
