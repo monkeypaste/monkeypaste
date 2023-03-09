@@ -71,8 +71,6 @@ namespace MonkeyPaste {
 
         #endregion
 
-
-
         #region MpILabelText Implementation
         string MpILabelText.LabelText => AppName;
 
@@ -112,7 +110,7 @@ namespace MonkeyPaste {
                 appPath = appPath.ToLower();
             }
             if (string.IsNullOrWhiteSpace(arguments)) {
-                arguments = null;
+                arguments = string.Empty;
             }
             // NOTE checking app by path and arguments and device here
             // NOTE when args are differnt should be treated as unique app since it could be significantly different

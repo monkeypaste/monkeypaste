@@ -11,12 +11,26 @@ namespace MonkeyPaste.Avalonia {
         MpViewModelBase<MpAvUrlCollectionViewModel>,
         MpIIsValueEqual<MpAvUrlViewModel>,
         MpIHoverableViewModel,
+        MpIFilterMatch,
         MpISelectableViewModel
         //MpISourceItemViewModel
         {
 
 
         #region Interfaces
+
+        #region MpIFilterMatch Implementation
+        bool MpIFilterMatch.IsMatch(string filter) {
+            if (string.IsNullOrEmpty(filter)) {
+                return true;
+            }
+            return
+                UrlTitle.ToLower().Contains(filter.ToLower()) ||
+                UrlPath.ToLower().Contains(filter.ToLower()) ||
+                UrlDomainPath.ToLower().Contains(filter.ToLower());
+        }
+
+        #endregion
 
         #region MpIIsValueEqual Implementation
 
@@ -252,6 +266,8 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
             });
+
+
         #endregion
     }
 }

@@ -86,15 +86,15 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region View Models
+        public IEnumerable<MpAvShortcutViewModel> FilteredItems =>
+            Items
+            .Where(x => (x as MpIFilterMatch).IsMatch(MpAvSettingsWindowViewModel.Instance.FilterText));
+
+        public IEnumerable<MpAvShortcutViewModel> CustomShortcuts =>
+            FilteredItems.Where(x => x.IsCustom);
 
         public IEnumerable<MpAvShortcutViewModel> ApplicationShortcuts =>
-            Items.Where(x => x.RoutingType == MpRoutingType.Internal);
-
-        public IEnumerable<MpAvShortcutViewModel> GlobalShortcuts =>
-            Items.Where(x => !ApplicationShortcuts.Contains(x));
-
-        public IEnumerable<MpAvShortcutViewModel> EditableItems =>
-            Items.Where(x => !x.IsModelReadOnly);
+            FilteredItems.Where(x => !x.IsCustom);
 
         #endregion
 
@@ -199,6 +199,14 @@ namespace MonkeyPaste.Avalonia {
 
                 IS_PSEUDO_GLOBAL_INPUT_ENABLED = false;
             }
+            Items.CollectionChanged += Items_CollectionChanged;
+        }
+
+        private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            OnPropertyChanged(nameof(Items));
+            OnPropertyChanged(nameof(FilteredItems));
+            OnPropertyChanged(nameof(ApplicationShortcuts));
+            OnPropertyChanged(nameof(CustomShortcuts));
         }
 
         #endregion
@@ -308,7 +316,9 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             MpAvShortcutViewModel scvmToRemove = null;
-            if (e is MpCopyItem ci) {
+            if (e is MpShortcut sc) {
+                scvmToRemove = Items.FirstOrDefault(x => x.ShortcutId == sc.Id);
+            } else if (e is MpCopyItem ci) {
                 scvmToRemove = Items.FirstOrDefault(x => x.CommandParameter == ci.Id.ToString() && x.ShortcutType == MpShortcutType.PasteCopyItem);
             } else if (e is MpTag t) {
                 scvmToRemove = Items.FirstOrDefault(x => x.CommandParameter == t.Id.ToString() && x.ShortcutType == MpShortcutType.SelectTag);
@@ -316,10 +326,9 @@ namespace MonkeyPaste.Avalonia {
                 scvmToRemove = Items.FirstOrDefault(x => x.CommandParameter == aip.Id.ToString() && x.ShortcutType == MpShortcutType.AnalyzeCopyItemWithPreset);
             }
             if (scvmToRemove != null) {
-                Items.Remove(scvmToRemove);
-                OnPropertyChanged(nameof(Items));
-                OnPropertyChanged(nameof(ApplicationShortcuts));
-                OnPropertyChanged(nameof(GlobalShortcuts));
+                Dispatcher.UIThread.Post(() => {
+                    Items.Remove(scvmToRemove);
+                });
             }
         }
 
@@ -464,6 +473,11 @@ namespace MonkeyPaste.Avalonia {
         }
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
+                case MpMessageType.SettingsFilterTextChanged:
+                    OnPropertyChanged(nameof(FilteredItems));
+                    OnPropertyChanged(nameof(CustomShortcuts));
+                    OnPropertyChanged(nameof(ApplicationShortcuts));
+                    break;
                 case MpMessageType.MainWindowLoadComplete: {
                         StartInputListener();
                         break;

@@ -33,7 +33,12 @@
         <Setter Property="Padding"
                 Value="5,3" />
     </Style>
-
+    <Style Selector=":is(Button).defaultButton:disabled /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="Silver" />
+        <Setter Property="Cursor"
+                Value="Arrow" />
+    </Style>
     <Style Selector=":is(Button).textOnlyButton /template/ ContentPresenter">
         <Setter Property="Padding"
                 Value="10,3" />

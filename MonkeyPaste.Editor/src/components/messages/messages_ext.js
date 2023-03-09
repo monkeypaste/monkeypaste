@@ -17,22 +17,16 @@ function loadContent_ext(loadContentMsgStr_base64) {
 
 	let req = toJsonObjFromBase64Str(loadContentMsgStr_base64);
 
-	let searchStateObj = null;
-	if (!isNullOrEmpty(req.searchText)) {
-		searchStateObj = {
-			searchText: req.searchText,
-			replaceText: null,
-			isReplace: false,
-			isCaseSensitive: req.isCaseSensitive,
-			isWholeWordMatch: req.isWholeWord,
-			useRegEx: req.useRegex
-		};
+	let searches = null;
+	if (!isNullOrEmpty(req.searchesFragment)) {
+		const searchesObj = toJsonObjFromBase64Str(req.searchesFragment);
+		searches = searchesObj.searches;
 	}
 	loadContent(
 		req.contentHandle,
 		req.contentType,
 		req.itemData,
-		searchStateObj,
+		searches,
 		req.isAppendLineMode,
 		req.isAppendMode,
 		req.annotationsJsonStr);

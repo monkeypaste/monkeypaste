@@ -95,7 +95,11 @@ function queryText(pt, search_text, case_sensitive, whole_word, use_regex) {
     let match_ranges = [];
     var result;
     while (result = regex.exec(pt)) {
-        let cur_range = { index: result.index, length: result[0].length };
+        let cur_range = {
+            index: result.index,
+            length: result[0].length,
+            text: result[0]
+        };
         match_ranges.push(cur_range);
     }
     return match_ranges;

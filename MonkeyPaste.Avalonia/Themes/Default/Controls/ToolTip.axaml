@@ -2,11 +2,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
+    <Styles.Resources>
+        <sys:Double x:Key="ToolTipContentMaxWidth">1000</sys:Double>
+    </Styles.Resources>
 
     <Style Selector="ToolTip">
-        <!--<Setter Property="BorderThickness"
+        <Setter Property="BorderThickness"
                 Value="0" />
         <Setter Property="Background"
-                Value="Transparent" />-->
+                Value="Transparent" />
     </Style>
 </Styles>

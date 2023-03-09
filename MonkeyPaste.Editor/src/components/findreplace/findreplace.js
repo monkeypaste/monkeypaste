@@ -20,6 +20,8 @@ var LastFindReplaceInputState = null;
 
 var IsFindReplaceInactive = true;
 
+var Searches = null;
+
 // #endregion Globals
 
 // #region Life Cycle
@@ -43,6 +45,26 @@ function initFindReplaceToolbar() {
 	addClickOrKeyClickEventListener(getFindReplaceReplaceButton(), onFindReplaceReplaceButtonClick);
 
 	enableResize(getFindReplaceToolbarElement());
+}
+
+function loadFindReplace(searches) {
+	Searches = searches;
+
+	if (searches == null) {
+		if (isShowingFindReplaceToolbar()) {
+			resetFindReplaceToolbar();
+			hideFindReplaceToolbar();
+		}
+		if (CurFindReplaceDocRanges) {
+			hideAllScrollbars();
+			resetFindReplaceResults();
+		}
+	} else {
+		showAllScrollbars();
+		//setFindReplaceInputState(searches);
+		populateFindReplaceResults();
+		onQuerySearchRangesChanged_ntf(CurFindReplaceDocRanges.length);
+	}
 }
 
 // #endregion Life Cycle
@@ -138,8 +160,8 @@ function getFindReplaceInputState() {
 // #region Setters
 
 function setFindReplaceInputState(inputState) {
-	if (!inputState) {
-		debugger;
+	if (isNullOrUndefined(inputState)) {
+		onShowDebugger_ntf('invalid input state');
 		return;
 	}
 
@@ -159,6 +181,10 @@ function setFindReplaceInputState(inputState) {
 // #endregion Setters
 
 // #region State
+
+function isGlobalSearchState() {
+	return Searches != null;
+}
 
 function isShowingFindReplaceToolbar() {
 	return !getFindReplaceToolbarElement().classList.contains('hidden');
@@ -184,7 +210,11 @@ function isFindReplaceActive() {
 }
 
 function isFindReplaceStateChanged() {
-	if (LastFindReplaceInputState == null || LastFindReplaceInputState.searchText === undefined) {
+	if (isGlobalSearchState()) {
+		return false;
+	}
+	if (LastFindReplaceInputState == null ||
+		LastFindReplaceInputState.searchText === undefined) {
 		return true;
 	}
 
@@ -215,6 +245,8 @@ function isFindReplaceStateChanged() {
 // #region Actions
 
 function showFindReplaceToolbar(fromHost = false) {
+	activateFindReplace();
+
 	getFindReplaceToolbarElement().classList.remove('hidden');
 
 	let inputState = LastFindReplaceInputState ? LastFindReplaceInputState : DefaultFindReplaceInputState;
@@ -237,7 +269,9 @@ function showFindReplaceToolbar(fromHost = false) {
 }
 
 function hideFindReplaceToolbar(fromHost = false) {
+	deactivateFindReplace();
 	getFindReplaceToolbarElement().classList.add('hidden');
+	resetFindReplaceResults();
 	updateAllElements();
 
 	if (!fromHost) {
@@ -270,7 +304,6 @@ function resetFindReplaceResults() {
 
 	CurFindReplaceDocRangesRects = null;
 	CurFindReplaceDocRangeRectIdxLookup = null;
-
 }
 
 function resetFindReplaceInput() {
@@ -282,35 +315,89 @@ function resetFindReplaceToolbar() {
 	resetFindReplaceResults();
 }
 
+function adjustQueryRangesForEmptyContent(rangesWithMatchVal) {
+	// HACK leading embed's and listitems underset range.index,
+	// this scans from given range until provided text is matched
+	const maxIdx = getDocLength();
+	let adj_ranges = [];
+	for (var i = 0; i < rangesWithMatchVal.length; i++) {
+		const match_value = rangesWithMatchVal[i].text.toLowerCase();
+		// NOTE duplicating range so param remains intact 
+		let adj_range = { index: rangesWithMatchVal[i].index, length: rangesWithMatchVal[i].length };
+		while (true) {
+			if (adj_range.index > maxIdx) {
+				onShowDebugger_ntf($`adj query range error, can't find ${rangesWithMatchVal[i].text}`);
+				break;
+			}
+			if (getText(adj_range).toLowerCase() == match_value) {
+				break;
+			}
+			// move forward until offset is correct
+			adj_range.index++;
+		}
+		//let pre_template_count = getTemplateCountBeforeDocIdx(cur_doc_idx);
+		//let pre_list_item_count = getListItemCountBeforeDocIdx(cur_doc_idx);
+		//adj_range.index += pre_template_count + pre_list_item_count;
+
+		adj_ranges.push(adj_range);
+	}
+	return adj_ranges;
+}
+
+function processSearch(searchObj) {
+	if (isNullOrUndefined(searchObj)) {
+		onShowDebugger_ntf('missing searchObj');
+		return;
+	}
+
+	if (isNullOrEmpty(searchObj.searchText)) {
+		resetFindReplaceResults();
+		updateFindReplaceRangeRects();
+		return;
+	}
+
+	let dirty_ranges_with_match_text = queryText(
+		getText(),
+		searchObj.searchText,
+		searchObj.isCaseSensitive,
+		searchObj.isWholeWordMatch,
+		searchObj.useRegEx);
+
+	if (CurFindReplaceDocRanges == null) {
+		CurFindReplaceDocRanges = [];
+	}
+	const clean_ranges = adjustQueryRangesForEmptyContent(dirty_ranges_with_match_text);
+
+	CurFindReplaceDocRanges.push(...clean_ranges);
+}
+
 function populateFindReplaceResults() {
 	resetFindReplaceResults();
 
-	let search_text = getFindInputElement().value;
-	let is_case_sensitive = getIsCaseSensitiveInputElement().checked;
-	let is_whole_word = getIsWholeWordInputElement().checked;
-	let use_regex = getUseRegExInputElement().checked;	
-
 	let sel = getDocSelection();
-	if (sel && sel.length > 0) {		
+	if (sel && sel.length > 0) {
 		// when text is selected unselect but retain caret idx
 		sel.length = 0;
 		setDocSelection(sel.index, 0);
 	}
 	sel = sel ? sel : { index: 0, length: 0 };
 
-	if (isNullOrEmpty(search_text)) {
-		resetFindReplaceResults();
-		updateFindReplaceRangeRects();
-		return;
-	} 
-	let dirty_ranges = queryText(
-		getText(),
-		search_text,
-		is_case_sensitive,
-		is_whole_word,
-		use_regex);
-
-	CurFindReplaceDocRanges = adjustQueryRangesForEmptyContent(dirty_ranges);
+	if (isGlobalSearchState()) {
+		for (var i = 0; i < Searches.length; i++) {
+			processSearch(Searches[i]);
+		}
+	} else {
+		const input_search_obj = getFindReplaceInputState();
+		processSearch(input_search_obj);
+	}
+	CurFindReplaceDocRanges.sort((a, b) => {
+		// sort by docIdx then by range length
+		let result = a.index - b.index;
+		if (result == 0) {
+			result = a.length = b.length;
+		}
+		return result;
+	})
 
 	if (CurFindReplaceDocRanges.length == 0) {
 		resetFindReplaceResults();

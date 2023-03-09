@@ -10,10 +10,23 @@ namespace MonkeyPaste.Avalonia {
         MpViewModelBase<MpAvAppCollectionViewModel>,
         MpISelectableViewModel,
         MpIHoverableViewModel,
+        MpIFilterMatch,
         MpIIsValueEqual<MpAvAppViewModel>
         //MpISourceItemViewModel 
         {
         #region Interfaces
+
+        #region MpIFilterMatch Implementation
+        bool MpIFilterMatch.IsMatch(string filter) {
+            if (string.IsNullOrEmpty(filter)) {
+                return true;
+            }
+            return
+                AppName.ToLower().Contains(filter.ToLower()) ||
+                AppPath.ToLower().Contains(filter.ToLower());
+        }
+
+        #endregion
 
         #region MpIIsValueEqual Implementation
 
@@ -218,12 +231,6 @@ namespace MonkeyPaste.Avalonia {
                         ClipboardFormatInfos.OnPropertyChanged(nameof(ClipboardFormatInfos.Items));
                     }
                     break;
-                case nameof(IsRejected):
-                    if (IsRejected) {
-                        Dispatcher.UIThread.Post(async () => { await VerifyRejectAsync(); });
-                    }
-                    break;
-
                 case nameof(HasModelChanged):
                     if (HasModelChanged) {
                         Task.Run(async () => {

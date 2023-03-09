@@ -9,17 +9,18 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvPathDialog : MpINativePathDialog {
-        public async Task<string> ShowFileDialogAsync(string title, string initDir, string[] filters, bool resolveShortcutPath = false) {
+        public async Task<string> ShowFileDialogAsync(string title = "", string initDir = "", string[] filters = null, bool resolveShortcutPath = false) {
             var result = await ShowFileOrFolderDialogAsync(false, title, initDir, filters, resolveShortcutPath);
             return result;
         }
 
-        public async Task<string> ShowFolderDialogAsync(string title, string initDir) {
+        public async Task<string> ShowFolderDialogAsync(string title = "", string initDir = "") {
             var result = await ShowFileOrFolderDialogAsync(false, title, initDir, null);
             return result;
         }
 
         private async Task<string> ShowFileOrFolderDialogAsync(bool isFolder, string title, string initDir, string[] filters, bool resolveShortcutPath = false) {
+            title = title == null ? $"Select {(isFolder ? "Folder" : "File")}" : title;
             var storage_provider = GetStorageProvider();
             if (storage_provider == null) {
                 return null;

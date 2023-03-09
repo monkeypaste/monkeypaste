@@ -24,6 +24,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public string FilterText { get; set; }
+
         public bool IsVisible { get; set; } = false;
 
         public int SelectedTabIdx {
@@ -79,7 +81,7 @@ namespace MonkeyPaste.Avalonia {
                     //MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = IsVisible;
 
                     if (IsVisible) {
-                        _settingsWindow = _settingsWindow ?? new MpAvSettingsWindow();
+                        _settingsWindow = new MpAvSettingsWindow();
                         _settingsWindow.Show();
                     } else {
                         if (_settingsWindow != null) {
@@ -88,6 +90,10 @@ namespace MonkeyPaste.Avalonia {
 
                     }
                     break;
+                case nameof(FilterText):
+                    MpMessenger.SendGlobal(MpMessageType.SettingsFilterTextChanged);
+                    break;
+
             }
         }
 

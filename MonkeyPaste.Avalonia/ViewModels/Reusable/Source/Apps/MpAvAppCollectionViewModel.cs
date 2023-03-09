@@ -2,13 +2,19 @@
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
+    public interface MpIFilterMatch {
+        bool IsMatch(string filter);
+    }
+
     public class MpAvAppCollectionViewModel :
         MpAvSelectorViewModelBase<object, MpAvAppViewModel>,
         MpIAsyncSingletonViewModel<MpAvAppCollectionViewModel> {
@@ -19,9 +25,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public ObservableCollection<MpAvAppViewModel> FilteredApps { get; set; }
+        public IEnumerable<MpAvAppViewModel> FilteredItems =>
+            Items
+            .Where(x => (x as MpIFilterMatch).IsMatch(MpAvSettingsWindowViewModel.Instance.FilterText));
 
-        public MpAvAppViewModel ThisAppViewModel => Items.FirstOrDefault(x => x.AppId == MpDefaultDataModelTools.ThisAppId);
+        public MpAvAppViewModel ThisAppViewModel =>
+            Items.FirstOrDefault(x => x.AppId == MpDefaultDataModelTools.ThisAppId);
 
         private MpAvAppViewModel _lastActiveAppViewModel;
         public MpAvAppViewModel LastActiveAppViewModel {
@@ -50,7 +59,10 @@ namespace MonkeyPaste.Avalonia {
         public MpAvAppCollectionViewModel() : base(null) {
             //Dispatcher.UIThread.InvokeAsync(Init);
             PropertyChanged += MpAppCollectionViewModel_PropertyChanged;
+            Items.CollectionChanged += Items_CollectionChanged;
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }
+
 
 
         #endregion
@@ -187,7 +199,16 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
         }
-
+        private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            OnPropertyChanged(nameof(Items));
+        }
+        private void ReceivedGlobalMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.SettingsFilterTextChanged:
+                    OnPropertyChanged(nameof(FilteredItems));
+                    break;
+            }
+        }
         private void ValidateAppViewModels() {
             var dups = Items.Where(x => Items.Any(y => y != x && x.IsValueEqual(y)));
             if (dups.Any()) {
@@ -285,43 +306,31 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand AddAppCommand => new MpAsyncCommand(
             async () => {
-                await Task.Delay(1);
-                //string appPath = string.Empty;
+                string appPath = await Mp.Services.NativePathDialog.ShowFileDialogAsync(
+                    title: "Select application path",
+                    filters: MpFileIo.GetOsExecutableFileFilters().Split(","),
+                    resolveShortcutPath: true);
 
-                //var openFileDialog = new System.Windows.Forms.OpenFileDialog() {
-                //    Filter = "Applications|*.lnk;*.exe",
-                //    Title = "Select application path",
-                //    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
-                //};
-                //MpAvMainWindowViewModel.Instance.IsShowingDialog = true;
+                if (string.IsNullOrEmpty(appPath)) {
+                    return;
+                }
+                var pi = new MpPortableProcessInfo() { ProcessPath = appPath };
+                var avm = GetAppByProcessInfo(pi);
+                if (avm == null) {
+                    var app = await Mp.Services.AppBuilder.CreateAsync(pi);
+                    while (avm == null) {
+                        avm = Items.FirstOrDefault(x => x.AppPath.ToLower() == appPath.ToLower());
+                        await Task.Delay(300);
+                    }
+                } else {
+                    MpNotificationBuilder.ShowMessageAsync(
+                            title: "Duplicate",
+                            body: $"App at path '{appPath}' already exists",
+                            msgType: MpNotificationType.Message).FireAndForgetSafeAsync(this);
+                }
 
-                //var openResult = openFileDialog.ShowDialog();
-
-                //MpAvMainWindowViewModel.Instance.IsShowingDialog = false;
-                //if (openResult == System.Windows.Forms.DialogResult.Cancel) {
-                //    return;
-                //}
-                //if (openResult == System.Windows.Forms.DialogResult.OK) {
-                //    appPath = openFileDialog.FileName;
-                //    if (Path.GetExtension(openFileDialog.FileName).Contains("lnk")) {
-                //        appPath = MpHelpers.GetShortcutTargetPath(openFileDialog.FileName);
-                //    }
-                //    MpApp app = null;
-                //    var avm = Items.FirstOrDefault(x => x.AppPath.ToLower() == appPath.ToLower());
-                //    if (avm == null) {
-                //        var iconBmpSrc = MpPlatformWrapper.Services.IconBuilder.GetApplicationIconBase64(appPath).ToBitmapSource();
-                //        var icon = await MpIcon.Create(iconBmpSrc.ToBase64String());
-                //        app = await MpApp.Create(appPath, Path.GetFileName(appPath), icon.Id);
-                //        if (Items.All(x => x.AppId != app.Id)) {
-                //            avm = await CreateAppViewModel(app);
-                //            Items.Add(avm);
-                //        }
-
-                //    }
-
-                //    SelectedItem = avm;
-            }
-            );
+                SelectedItem = avm;
+            });
 
         #endregion
     }

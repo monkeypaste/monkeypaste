@@ -14,10 +14,24 @@ namespace MonkeyPaste.Avalonia {
 
     public class MpAvShortcutViewModel : MpViewModelBase<MpAvShortcutCollectionViewModel>,
         MpIActionComponent,
+        MpIFilterMatch,
         MpAvIShortcutCommandViewModel,
         MpAvIKeyGestureViewModel,
         MpISelectableViewModel {
         #region Properties        
+
+        #region MpIFilterMatch Implementation
+        bool MpIFilterMatch.IsMatch(string filter) {
+            if (string.IsNullOrEmpty(filter)) {
+                return true;
+            }
+            return
+                ShortcutTypeName.ToLower().Contains(filter.ToLower()) ||
+                ShortcutDisplayName.ToLower().Contains(filter.ToLower()) ||
+                RoutingType.ToString().ToLower().Contains(filter.ToLower());
+        }
+
+        #endregion
 
         #region MpAvIShortcutCommandViewModel Implementation
 

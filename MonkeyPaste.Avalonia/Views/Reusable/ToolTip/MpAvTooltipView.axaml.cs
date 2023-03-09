@@ -25,33 +25,60 @@ namespace MonkeyPaste.Avalonia {
         static MpAvToolTipView() {
             ToolTipTextProperty.Changed.AddClassHandler<Control>((s, e) => {
                 if (s is MpAvToolTipView ttv) {
-                    if (e.NewValue is string text && !string.IsNullOrEmpty(text)) {
-                        ttv.IsVisible = true;
-                        var tb = ttv.FindControl<TextBlock>("ToolTipTextBlock");
-                        tb.Text = text;
-                    } else {
-                        ttv.IsVisible = false;
-                    }
+                    ttv.Init();
+                }
+            });
+            ToolTipHtmlProperty.Changed.AddClassHandler<Control>((s, e) => {
+                if (s is MpAvToolTipView ttv) {
+                    ttv.Init();
                 }
             });
         }
 
+        public string ToolTipContent =>
+            string.IsNullOrEmpty(ToolTipText) ?
+                ToolTipHtml :
+                ToolTipText;
+
         #region ToolTipText Property
 
-        private string _ToolTipText = default;
+        private string _ToolTipText = string.Empty;
 
         public static readonly DirectProperty<MpAvToolTipView, string> ToolTipTextProperty =
             AvaloniaProperty.RegisterDirect<MpAvToolTipView, string>
             (
                 nameof(ToolTipText),
                 o => o.ToolTipText,
-                (o, v) => o.ToolTipText = v
+                (o, v) => o.ToolTipText = v,
+                string.Empty
             );
 
         public string ToolTipText {
             get => _ToolTipText;
             set {
                 SetAndRaise(ToolTipTextProperty, ref _ToolTipText, value);
+            }
+        }
+
+        #endregion
+
+        #region ToolTipHtml Property
+
+        private string _ToolTipHtml = string.Empty;
+
+        public static readonly DirectProperty<MpAvToolTipView, string> ToolTipHtmlProperty =
+            AvaloniaProperty.RegisterDirect<MpAvToolTipView, string>
+            (
+                nameof(ToolTipHtml),
+                o => o.ToolTipHtml,
+                (o, v) => o.ToolTipHtml = v,
+                string.Empty
+            );
+
+        public string ToolTipHtml {
+            get => _ToolTipHtml;
+            set {
+                SetAndRaise(ToolTipHtmlProperty, ref _ToolTipHtml, value);
             }
         }
 
@@ -66,6 +93,16 @@ namespace MonkeyPaste.Avalonia {
             this.GetObservable(Control.IsVisibleProperty).Subscribe(value => OnVisibleChanged());
             if (App.MainWindow != null) {
                 App.MainWindow.GetObservable(Window.IsVisibleProperty).Subscribe(value => OnVisibleChanged());
+            }
+        }
+
+        public void Init() {
+            IsVisible = !string.IsNullOrEmpty(ToolTipContent);
+            if (IsVisible) {
+                var tb = this.FindControl<Control>("ToolTipTextBlock");
+                var hl = this.FindControl<Control>("ToolTipHtmlPanel");
+                tb.IsVisible = !string.IsNullOrEmpty(ToolTipText);
+                hl.IsVisible = !string.IsNullOrEmpty(ToolTipHtml);
             }
         }
 

@@ -19,7 +19,7 @@ function loadContent(
 	contentHandle,
 	contentType,
 	contentData,
-	searchStateObj,
+	searches,
 	isAppendLineMode,
 	isAppendMode,
 	annotationsJsonStr) {
@@ -65,21 +65,7 @@ function loadContent(
 		quill.enable(false);
 	}
 
-	if (searchStateObj == null) {
-		if (isShowingFindReplaceToolbar()) {
-			resetFindReplaceToolbar();
-			hideFindReplaceToolbar();
-		}
-		if (CurFindReplaceDocRanges) {
-			hideAllScrollbars();
-			resetFindReplaceResults();
-		}
-	} else {
-		showAllScrollbars();
-		setFindReplaceInputState(searchStateObj);
-		populateFindReplaceResults();
-		onQuerySearchRangesChanged_ntf(CurFindReplaceDocRanges.length);
-	}
+	loadFindReplace(searches);
 
 	if (sel_to_restore != null) {
 		sel_to_restore = cleanDocRange(sel_to_restore);

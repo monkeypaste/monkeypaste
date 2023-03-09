@@ -14,15 +14,27 @@ namespace MonkeyPaste {
 
         public string itemData { get; set; }
 
-        public string searchText { get; set; } = null;
-        public bool isCaseSensitive { get; set; } = false;
-        public bool isWholeWord { get; set; } = false;
-        public bool useRegex { get; set; } = false;
+        // fragment 'MpQuillContentSearchesFragment'
+        public string searchesFragment { get; set; }
 
         public bool isAppendLineMode { get; set; }
         public bool isAppendMode { get; set; }
 
         public string annotationsJsonStr { get; set; }
+    }
+
+    public class MpQuillContentSearchesFragment : MpJsonObject {
+        public List<MpQuillContentSearchRequestMessage> searches { get; set; }
+    }
+    public class MpQuillContentSearchRequestMessage : MpJsonObject {
+        public string searchText { get; set; } = null;
+        public bool isCaseSensitive { get; set; } = false;
+        public bool isWholeWordMatch { get; set; } = false;
+        public bool useRegEx { get; set; } = false;
+
+        public bool isReplace { get; set; }
+        public string replaceText { get; set; }
+
     }
 
     public class MpQuillContentDataRequestMessage : MpJsonObject {

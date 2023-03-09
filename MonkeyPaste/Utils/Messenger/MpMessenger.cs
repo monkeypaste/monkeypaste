@@ -92,6 +92,8 @@ namespace MonkeyPaste {
 
         // END Sound ntf messages 
 
+        SettingsFilterTextChanged,
+
         ContentResized,
         ResizeContentCompleted,
 

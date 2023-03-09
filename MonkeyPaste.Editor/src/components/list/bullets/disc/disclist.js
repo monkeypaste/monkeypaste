@@ -7,7 +7,9 @@
 // #endregion Life Cycle
 
 // #region Getters
-
+function getDiscListToolbarButton() {
+	return document.getElementById('discListToolbarButton');
+}
 // #endregion Getters
 
 // #region Setters

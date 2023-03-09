@@ -1087,6 +1087,7 @@
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.0-preview5" />
     <PackageReference Include="Avalonia.Desktop" Version="11.0.0-preview5" />
     <PackageReference Include="Avalonia.Diagnostics" Version="11.0.0-preview5" />
+    <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.0-preview5" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-preview5" />
     <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.0-preview5" />
     <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.0-preview5" />
@@ -1238,7 +1239,7 @@
     <Compile Update="Views\Reusable\Spinners\MpAvBusySpinnerView.axaml.cs">
       <DependentUpon>MpAvBusySpinnerView.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\Reusable\ToolTip\MpAvToolTipInfoHintView.axaml.cs">
+    <Compile Update="Views\Reusable\ToolTip\Hint\MpAvToolTipInfoHintView.axaml.cs">
       <DependentUpon>MpAvToolTipInfoHintView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\SettingsWindow\Tabs\Account\MpAvAccountView.axaml.cs">
@@ -1258,6 +1259,9 @@
     </Compile>
     <Compile Update="Views\SettingsWindow\Tabs\Shortcuts\MpAvShortcutsView.axaml.cs">
       <DependentUpon>MpAvShortcutsView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\SettingsWindow\Tabs\Shortcuts\ShortcutDataGrid\MpAvShortcutDataGridView.axaml.cs">
+      <DependentUpon>MpAvShortcutDataGridView.axaml</DependentUpon>
     </Compile>
   </ItemGroup>
   

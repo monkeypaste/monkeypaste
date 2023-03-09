@@ -738,18 +738,6 @@ function convertTextContentToFormats(isForOle, formats) {
 	return items;
 }
 
-function adjustQueryRangesForEmptyContent(ranges) {
-	// HACK embed's are empty string in getText.
-	// this counts all template instance leading to the range
-	// and adjusts for that count 
-	for (var i = 0; i < ranges.length; i++) {
-		let cur_doc_idx = ranges[i].index;
-		let pre_template_count = getTemplateCountBeforeDocIdx(cur_doc_idx);
-
-		ranges[i].index += pre_template_count;
-	}
-	return ranges;
-}
 
 function appendTextContentData(data) {
 	let dt = new DataTransfer();

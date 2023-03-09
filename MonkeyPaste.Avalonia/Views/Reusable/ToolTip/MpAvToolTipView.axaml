@@ -2,22 +2,33 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:av="clr-namespace:TheArtOfDev.HtmlRenderer.Avalonia;assembly=Avalonia.HtmlRenderer"
              xmlns:local="using:MonkeyPaste.Avalonia"
+             x:Name="ToolTipView"
              mc:Ignorable="d"
              d:DesignWidth="800"
              d:DesignHeight="450"
              x:Class="MonkeyPaste.Avalonia.MpAvToolTipView"
              Background="Transparent">
+    <UserControl.Resources>
+        <sys:String x:Key="CssStyle">
+            body{foreground: black; background: khaki;border: 1.5 outset darkkhaki;}
+        </sys:String>
+    </UserControl.Resources>
     <UserControl.RenderTransform>
         <TranslateTransform />
     </UserControl.RenderTransform>
-    <Grid>
-        <Border>
+    <Border Classes.text="{Binding ToolTipText, ElementName=ToolTipView, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+            Classes.html="{Binding ToolTipHtml, ElementName=ToolTipView, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
+        <Grid>
             <TextBlock x:Name="ToolTipTextBlock"
-                       MaxWidth="300"
                        FontWeight="Light"
-                       TextWrapping="WrapWithOverflow" />
+                       TextWrapping="WrapWithOverflow"
+                       Text="{Binding ToolTipText, ElementName=ToolTipView}" />
 
-        </Border>
-    </Grid>
+            <av:HtmlLabel x:Name="ToolTipHtmlPanel"
+                          Text="{Binding ToolTipHtml, ElementName=ToolTipView}" />
+        </Grid>
+    </Border>
 </UserControl>

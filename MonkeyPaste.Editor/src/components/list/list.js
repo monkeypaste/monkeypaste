@@ -80,13 +80,12 @@ function registerListBlot() {
 
 // #region Getters
 
-
-function getDiscListToolbarButton() {
-	return document.getElementById('discListToolbarButton');
-}
-
-function getCheckListToolbarButton() {
-	return document.getElementById('checkListToolbarButton');
+function getListItemToolbarElements() {
+	return [
+		getOrderedListToolbarButton(),
+		getDiscListToolbarButton(),
+		getCheckableListToolbarButton()
+	];
 }
 
 function getListItemCountBeforeDocIdx(docIdx) {
@@ -239,10 +238,36 @@ function isDocIdxAtListItemStart(docIdx) {
 	return getAllListItemBulletDocIdxs().includes(docIdx - 1);
 }
 
+function isAddListItemValid() {
+	let sel = getDocSelection();
+	if (!sel) {
+		return false;
+	}
+	if (isDocIdxInTable(sel.index) ||
+		isDocIdxInTable(sel.index + sel.length)) {
+		return false;
+	}
+	return true;
+}
+
 // #endregion State
 
 // #region Actions
 
+function updateAddListItemToolbarButtonIsEnabled() {
+	// NOTE since ordered and disc use built in events
+	// have to manually disabled because they're not using addClick helper
+	const is_valid = isAddListItemValid();
+	getListItemToolbarElements().forEach(x => {
+		if (is_valid) {
+			x.classList.remove('disabled');
+			x.removeAttribute('disabled');
+		} else {
+			x.classList.add('disabled');
+			x.setAttribute('disabled',true);
+		}
+	});
+}
 // #endregion Actions
 
 // #region Event Handlers

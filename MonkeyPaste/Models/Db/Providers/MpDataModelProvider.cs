@@ -176,14 +176,8 @@ namespace MonkeyPaste {
 
         public static async Task<MpApp> GetAppByMembersAsync(string path, string args, int deviceId) {
             List<MpApp> result;
-            if (args == null) {
-                string query = $"select * from MpApp where LOWER(AppPath)=? and Arguments is NULL and fk_MpUserDeviceId=?";
-                result = await MpDb.QueryAsync<MpApp>(query, path.ToLower(), deviceId);
-            } else {
-                string query = $"select * from MpApp where LOWER(AppPath)=? and Arguments=? and fk_MpUserDeviceId=?";
-                result = await MpDb.QueryAsync<MpApp>(query, path.ToLower(), args, deviceId);
-            }
-
+            string query = $"select * from MpApp where LOWER(AppPath)=? and Arguments=? and fk_MpUserDeviceId=?";
+            result = await MpDb.QueryAsync<MpApp>(query, path.ToLower(), args, deviceId);
             if (result == null || result.Count == 0) {
                 return null;
             }

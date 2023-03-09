@@ -34,7 +34,6 @@ namespace MonkeyPaste.Avalonia {
             await Task.Delay(1);
             _matches.Clear();
             if (AssociatedObject is MpAvMarqueeTextBox mtb) {
-
                 _matches.AddRange(
                     Mp.Services.Query.Infos
                     .Where(x => !string.IsNullOrEmpty(x.MatchValue))
@@ -45,7 +44,9 @@ namespace MonkeyPaste.Avalonia {
                             x.QueryFlags.HasFlag(MpContentQueryBitFlags.WholeWord),
                             x.QueryFlags.HasFlag(MpContentQueryBitFlags.Regex)))
                     .Select(x => new MpTextRange(ContentRange.Document, x.Item1, x.Item2))
-                    .Distinct());
+                    .Distinct()
+                    .OrderBy(x => x.StartIdx)
+                    .ThenBy(x => x.Count));
 
                 if (mtb.HighlightRanges == null) {
                     mtb.HighlightRanges = new ObservableCollection<MpTextRange>();

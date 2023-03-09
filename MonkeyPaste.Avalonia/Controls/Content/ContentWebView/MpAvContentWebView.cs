@@ -1013,13 +1013,21 @@ namespace MonkeyPaste.Avalonia {
                 //annotationsJsonStr = BindingContext.AnnotationsJsonStr
             };
 
-            if (!string.IsNullOrEmpty(MpAvSearchBoxViewModel.Instance.SearchText)) {
-                loadContentMsg.searchText = MpAvSearchBoxViewModel.Instance.SearchText;
-                var sfcvm = MpAvSearchBoxViewModel.Instance.SearchFilterCollectionViewModel;
-                loadContentMsg.isCaseSensitive = sfcvm.Filters.FirstOrDefault(x => x.FilterType == MpContentQueryBitFlags.CaseSensitive).IsChecked.IsTrue();
-                loadContentMsg.isWholeWord = sfcvm.Filters.FirstOrDefault(x => x.FilterType == MpContentQueryBitFlags.WholeWord).IsChecked.IsTrue();
-                loadContentMsg.useRegex = sfcvm.Filters.FirstOrDefault(x => x.FilterType == MpContentQueryBitFlags.Regex).IsChecked.IsTrue();
-            }
+            var searches =
+                Mp.Services.Query.Infos
+                .Where(x => !string.IsNullOrEmpty(x.MatchValue))
+                .Select(x => new MpQuillContentSearchRequestMessage() {
+                    searchText = x.MatchValue,
+                    isCaseSensitive = x.QueryFlags.HasFlag(MpContentQueryBitFlags.CaseSensitive),
+                    isWholeWordMatch = x.QueryFlags.HasFlag(MpContentQueryBitFlags.WholeWord),
+                    useRegEx = x.QueryFlags.HasFlag(MpContentQueryBitFlags.Regex)
+                });
+            loadContentMsg.searchesFragment =
+                searches.Any() ?
+                new MpQuillContentSearchesFragment() {
+                    searches = searches.ToList()
+                }.SerializeJsonObjectToBase64() : null;
+
             string msgStr = loadContentMsg.SerializeJsonObjectToBase64();
 
             SendMessage($"loadContent_ext('{msgStr}')");

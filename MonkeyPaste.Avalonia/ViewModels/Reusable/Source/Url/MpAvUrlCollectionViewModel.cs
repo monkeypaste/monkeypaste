@@ -1,4 +1,7 @@
 ﻿using Avalonia.Threading;
+using MonkeyPaste.Common;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,6 +22,9 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region View Models
+        public IEnumerable<MpAvUrlViewModel> FilteredItems =>
+            Items
+            .Where(x => (x as MpIFilterMatch).IsMatch(MpAvSettingsWindowViewModel.Instance.FilterText));
 
         #endregion
 
@@ -35,6 +41,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvUrlCollectionViewModel() : base(null) {
             Items.CollectionChanged += Items_CollectionChanged;
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }
 
         #endregion
@@ -90,6 +97,7 @@ namespace MonkeyPaste.Avalonia {
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
             if (e is MpUrl url) {
                 Dispatcher.UIThread.Post(async () => {
+                    IsBusy = true;
                     var uvm = await CreateUrlViewModel(url);
                     Items.Add(uvm);
                     OnPropertyChanged(nameof(Items));
@@ -113,6 +121,14 @@ namespace MonkeyPaste.Avalonia {
 
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             ValidateUrlViewModels();
+            OnPropertyChanged(nameof(Items));
+        }
+        private void ReceivedGlobalMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.SettingsFilterTextChanged:
+                    OnPropertyChanged(nameof(FilteredItems));
+                    break;
+            }
         }
         private void ValidateUrlViewModels() {
             var dups = Items.Where(x => Items.Any(y => y != x && x.IsValueEqual(y)));
@@ -127,24 +143,49 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public ICommand AddUrlCommand => new MpCommand(
+        public ICommand AddUrlCommand => new MpAsyncCommand(
             async () => {
-                string UrlPath = string.Empty;
+                string urlPath = null;
 
-                if (string.IsNullOrEmpty(UrlPath)) {
+                while (urlPath == null) {
+                    urlPath = await Mp.Services.NativeMessageBox.ShowTextBoxMessageBoxAsync(
+                        title: "Add url",
+                        message: "Enter full url:",
+                        iconResourceObj: "WebImage");
+                    if (!Uri.IsWellFormedUriString(urlPath, UriKind.Absolute)) {
+                        var invalid_result = await Mp.Services.NativeMessageBox.ShowOkCancelMessageBoxAsync(
+                            title: "Error",
+                            message: "Url must be in valid format");
+                        urlPath = null;
+                        if (invalid_result) {
+                            // try again
+                        } else {
+                            // cancel
+                            break;
+                        }
+                    }
+                }
+
+                if (string.IsNullOrEmpty(urlPath)) {
                     return;
                 }
 
-                var uvm = Items.FirstOrDefault(x => x.UrlPath.ToLower() == UrlPath.ToLower());
+                var uvm = Items.FirstOrDefault(x => x.UrlPath.ToLower() == urlPath.ToLower());
                 if (uvm == null) {
-                    //var url = await MpUrl.CreateAsync(UrlPath);
-                    var url = await Mp.Services.UrlBuilder.CreateAsync(UrlPath);
-                    uvm = await CreateUrlViewModel(url);
+                    var url = await Mp.Services.UrlBuilder.CreateAsync(urlPath);
+                    while (uvm == null) {
+                        uvm = Items.FirstOrDefault(x => x.UrlPath.ToLower() == urlPath.ToLower());
+                        await Task.Delay(300);
+                    }
+                } else {
+                    MpNotificationBuilder.ShowMessageAsync(
+                            title: "Duplicate",
+                            body: $"Url already exists '{urlPath}' already exists",
+                            msgType: MpNotificationType.Message).FireAndForgetSafeAsync(this);
                 }
+
                 SelectedItem = uvm;
             });
-
-
         #endregion
     }
 }

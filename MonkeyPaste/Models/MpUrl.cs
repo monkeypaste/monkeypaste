@@ -26,11 +26,11 @@ namespace MonkeyPaste {
         public int AppId { get; set; }
 
         [Indexed]
-        public string UrlPath { get; set; }
+        public string UrlPath { get; set; } = string.Empty;
 
-        public string UrlDomainPath { get; set; }
+        public string UrlDomainPath { get; set; } = string.Empty;
 
-        public string UrlTitle { get; set; }
+        public string UrlTitle { get; set; } = string.Empty;
 
         public int UrlRejected { get; set; } = 0;
 
@@ -124,12 +124,16 @@ namespace MonkeyPaste {
                 UrlDomainPath = domain
             };
 
-            string favIconImg64 = await MpUrlHelpers.GetUrlFavIconAsync(urlPath);
-            MpIcon icon = await Mp.Services.IconBuilder.CreateAsync(
-                    iconBase64: favIconImg64,
-                    suppressWrite: suppressWrite);
+            if (iconId == 0) {
+                string favIconImg64 = await MpUrlHelpers.GetUrlFavIconAsync(urlPath);
+                MpIcon icon = await Mp.Services.IconBuilder.CreateAsync(
+                        iconBase64: favIconImg64,
+                        suppressWrite: suppressWrite);
+                iconId = icon.Id;
+            }
 
-            newUrl.IconId = icon.Id;
+
+            newUrl.IconId = iconId;
             if (newUrl.IconId == 0) {
                 newUrl.IconId = MpDefaultDataModelTools.ThisAppIconId;
             }

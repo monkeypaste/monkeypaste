@@ -560,6 +560,7 @@ namespace MonkeyPaste.Common {
                 case MpUserDeviceType.Windows:
                     return "lnk,exe";
                 default:
+                    MpDebug.Break("Add here or deal with it");
                     return string.Empty;
             }
         }
