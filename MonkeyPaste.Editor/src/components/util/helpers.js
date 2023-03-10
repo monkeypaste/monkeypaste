@@ -21,6 +21,15 @@
     return os;
 }
 
+function distinct(arr) {
+    arr = arr.filter((value, index) => {
+        return index === arr.findIndex((obj) => {
+            return JSON.stringify(obj) === JSON.stringify(value);
+        })
+    });
+    return arr;
+}
+
 function removeAllChildren(elm) {
     if (!elm) {
         return;

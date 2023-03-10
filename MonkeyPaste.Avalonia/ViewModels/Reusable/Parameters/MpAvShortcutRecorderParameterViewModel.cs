@@ -77,7 +77,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvShortcutRecorderParameterViewModel() : base(null) { }
 
-        public MpAvShortcutRecorderParameterViewModel(MpIParameterHostViewModel parent) : base(parent) { }
+        public MpAvShortcutRecorderParameterViewModel(MpViewModelBase parent) : base(parent) { }
 
         #endregion
 

@@ -1,4 +1,4 @@
-#region Private Variable
+#region Private Variables
 #endregion
 
 #region Constants

@@ -1,18 +1,26 @@
 ﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using MonkeyPaste.Common.Wpf;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvPreferencesMenuViewModel : MpViewModelBase<MpAvSettingsWindowViewModel> {
+    public class MpAvPreferencesMenuViewModel :
+        MpViewModelBase {
         #region Private Variables
 
         #endregion
+        #region Statics
 
-        #region View Models
+        private static MpAvPreferencesMenuViewModel _instance;
+        public static MpAvPreferencesMenuViewModel Instance => _instance ?? (_instance = new MpAvPreferencesMenuViewModel());
+
+
         #endregion
-
         #region Properties
 
 
@@ -29,6 +37,12 @@ namespace MonkeyPaste.Avalonia {
         //    }
         //}
 
+
+        #region View Models
+        public ObservableCollection<MpAvPreferenceFrameViewModel> Items { get; set; } = new ObservableCollection<MpAvPreferenceFrameViewModel>();
+
+        public MpAvPreferenceFrameViewModel LookAndFeelFrame { get; set; }
+        #endregion
         private string _selectedLanguage = MpPrefViewModel.Instance.UserLanguage;
         public string SelectedLanguage {
             get {
@@ -136,27 +150,81 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
-        #region Public Methods
-        public MpAvPreferencesMenuViewModel() : base(null) { }
+        #region Constructors
+        public MpAvPreferencesMenuViewModel() : base(null) {
+            PropertyChanged += MpAvPreferencesMenuViewModel_PropertyChanged;
+            InitializeAsync().FireAndForgetSafeAsync(this);
+        }
+        #endregion
 
-        public MpAvPreferencesMenuViewModel(MpAvSettingsWindowViewModel parent) : base(parent) {
-            PropertyChanged += (s, e) => {
-                switch (e.PropertyName) {
-                    case nameof(IsLoadOnLoginChecked):
-                        SetLoadOnLogin(IsLoadOnLoginChecked);
-                        break;
-                    case nameof(SelectedLanguage):
-                        SetLanguage(SelectedLanguage);
-                        break;
+        #region Public Methods
+        public async Task InitializeAsync() {
+            IsLoadOnLoginChecked = MpPrefViewModel.Instance.LoadOnLogin;
+            UseSpellCheck = MpPrefViewModel.Instance.UseSpellCheck;
+
+            // look & feel
+            LookAndFeelFrame = new MpAvPreferenceFrameViewModel(this) {
+                LabelText = "Look & Feel",
+                PluginFormat = new MpPluginFormat() {
+                    headless = new MpHeadlessPluginFormat() {
+                        parameters = new List<MpParameterFormat>() {
+                            new MpParameterFormat() {
+                                paramId = nameof(MpPrefViewModel.Instance.MainWindowOpacity),
+                                controlType = MpParameterControlType.Slider,
+                                unitType = MpParameterValueUnitType.Decimal,
+                                label = "Background Opacity",
+                                minimum = 0,
+                                maximum = 1,
+                                values = new List<MpPluginParameterValueFormat>() {
+                                    new MpPluginParameterValueFormat() {
+                                        isDefault = true,
+                                        value = MpPrefViewModel.Instance.MainWindowOpacity.ToString()
+                                    }
+                                }
+                            },
+                            new MpParameterFormat() {
+                                paramId = nameof(MpPrefViewModel.Instance.NotificationSoundVolume),
+                                controlType = MpParameterControlType.Slider,
+                                unitType = MpParameterValueUnitType.Decimal,
+                                label = "Notification Volume",
+                                minimum = 0,
+                                maximum = 1,
+                                values = new List<MpPluginParameterValueFormat>() {
+                                    new MpPluginParameterValueFormat() {
+                                        isDefault = true,
+                                        value = MpPrefViewModel.Instance.NotificationSoundVolume.ToString()
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             };
 
-            IsLoadOnLoginChecked = MpPrefViewModel.Instance.LoadOnLogin;
-            UseSpellCheck = MpPrefViewModel.Instance.UseSpellCheck;
+            LookAndFeelFrame.Items = await Task.WhenAll(
+                LookAndFeelFrame.PluginFormat.headless.parameters.Select(x =>
+                    MpAvPluginParameterBuilder.CreateParameterViewModelAsync(
+                        new MpParameterValue() {
+                            ParamId = x.paramId,
+                            Value = x.values.FirstOrDefault(x => x.isDefault).value
+                        }, LookAndFeelFrame)));
+
+            Items.Add(LookAndFeelFrame);
         }
         #endregion
 
         #region Private Methods
+
+        private void MpAvPreferencesMenuViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(IsLoadOnLoginChecked):
+                    SetLoadOnLogin(IsLoadOnLoginChecked);
+                    break;
+                case nameof(SelectedLanguage):
+                    SetLanguage(SelectedLanguage);
+                    break;
+            }
+        }
         private void SetLanguage(string newLanguage) {
             MpCurrentCultureViewModel.Instance.SetLanguageCommand.Execute(newLanguage);
         }

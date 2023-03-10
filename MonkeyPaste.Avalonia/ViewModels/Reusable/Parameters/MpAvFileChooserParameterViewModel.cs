@@ -30,7 +30,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvFileChooserParameterViewModel() : base(null) { }
 
-        public MpAvFileChooserParameterViewModel(MpIParameterHostViewModel parent) : base(parent) { }
+        public MpAvFileChooserParameterViewModel(MpViewModelBase parent) : base(parent) { }
 
         public override async Task InitializeAsync(MpParameterValue aipv) {
             IsBusy = true;

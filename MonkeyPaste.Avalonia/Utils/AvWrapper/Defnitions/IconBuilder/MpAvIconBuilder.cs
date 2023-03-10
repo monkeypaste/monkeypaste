@@ -5,13 +5,13 @@ namespace MonkeyPaste.Avalonia {
         public MpIIconBuilder IconBuilder { get; private set; }
 
         public MpAvIconBuilder() {
-            if (OperatingSystem.IsWindows()) {
-                IconBuilder = new MpAvWinIconBuilder();
-            } else if (OperatingSystem.IsLinux()) {
-                IconBuilder = new MpAvX11IconBuilder();
-            } else if (OperatingSystem.IsMacOS()) {
-                IconBuilder = new MpAvMacIconBuilder();
-            }
+#if WINDOWS
+            IconBuilder = new MpAvWinIconBuilder();
+#elif LINUX
+            IconBuilder = new MpAvX11IconBuilder();
+#elif MAC
+            IconBuilder = new MpAvMacIconBuilder();
+#endif
         }
     }
 }

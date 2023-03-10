@@ -89,6 +89,8 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        bool MpISaveOrCancelableViewModel.IsSaveCancelEnabled =>
+            true;
         #endregion
         #endregion
 
@@ -100,8 +102,6 @@ namespace MonkeyPaste.Avalonia {
 
         public IEnumerable<MpAvParameterViewModelBase> VisibleItems => Items.Where(x => x.IsVisible);
         #endregion
-
-
 
         #region Appearance
 

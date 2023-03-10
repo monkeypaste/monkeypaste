@@ -15,11 +15,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIParameterHost Overrides
 
-        private MpActionPluginFormat _actionComponentFormat;
-        public override MpActionPluginFormat ActionComponentFormat {
+        private MpHeadlessPluginFormat _actionComponentFormat;
+        public override MpHeadlessPluginFormat ActionComponentFormat {
             get {
                 if (_actionComponentFormat == null) {
-                    _actionComponentFormat = new MpActionPluginFormat();
+                    _actionComponentFormat = new MpHeadlessPluginFormat();
                 }
                 return _actionComponentFormat;
             }

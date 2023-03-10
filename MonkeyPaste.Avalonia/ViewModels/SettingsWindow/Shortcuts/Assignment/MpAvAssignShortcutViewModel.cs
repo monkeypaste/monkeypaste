@@ -20,10 +20,6 @@ namespace MonkeyPaste.Avalonia {
 
         private MpKeyGestureHelper _gestureHelper;
 
-        private bool _isReplacingShortcut = false;
-        private bool _wasPreviouslyASequence = false;
-
-
         private ICommand _assigningCommand = null;
         private string _commandParameter;
         #endregion
@@ -81,48 +77,14 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public bool IsSequence => KeyString != null && KeyString.Contains(MpInputConstants.SEQUENCE_SEPARATOR);
+        public bool IsSequence =>
+            KeyString != null && KeyString.Contains(MpInputConstants.SEQUENCE_SEPARATOR);
 
-        public bool ShowWarning => IsSequence || _wasPreviouslyASequence || _isReplacingShortcut;
+
         public string WarningString { get; set; }
+        public string WarningString2 { get; set; }
 
-        public Bitmap WarningBmp {
-            get {
-                if (_isReplacingShortcut) {
-                    return MpBase64Images.Warning.ToAvBitmap();//(Bitmap)new BitmapImage(new Uri(MpPrefViewModel.Instance.AbsoluteResourcesPath+@"/Images/warning.png"));
-                }
-                if (_wasPreviouslyASequence || IsSequence) {
-                    return MpBase64Images.QuestionMark.ToAvBitmap(); //(Bitmap)new BitmapImage(new Uri(MpPrefViewModel.Instance.AbsoluteResourcesPath + @"/Images/info.png"));
-                }
-                return null;// new BitmapImage();
-            }
-        }
 
-        public bool HasWarning => !string.IsNullOrEmpty(WarningString);
-
-        public string WarningBorderHexColor {
-            get {
-                if (_isReplacingShortcut) {
-                    return MpSystemColors.indianred;
-                }
-                if (_wasPreviouslyASequence || IsSequence) {
-                    return MpSystemColors.lightblue;
-                }
-                return MpSystemColors.Transparent;
-            }
-        }
-
-        public string WarningTextHexColor {
-            get {
-                if (_isReplacingShortcut) {
-                    return MpSystemColors.antiquewhite;
-                }
-                if (_wasPreviouslyASequence || IsSequence) {
-                    return MpSystemColors.dimgray;
-                }
-                return MpSystemColors.Transparent;
-            }
-        }
         #endregion
 
         #region Events
@@ -159,11 +121,6 @@ namespace MonkeyPaste.Avalonia {
         private MpAvAssignShortcutViewModel(string shortcutName, string keyString, ICommand command, string commandParameter) : base(null) {
             PropertyChanged += MpAssignShortcutModalWindowViewModel_PropertyChanged;
 
-            if (!string.IsNullOrEmpty(keyString) && keyString.Contains(@",")) {
-                _wasPreviouslyASequence = true;
-                WarningString = @"Sequence hot key's require a restart to be enabled";
-            }
-
             _assigningCommand = command;
             _commandParameter = commandParameter;
             KeyString = keyString;
@@ -179,12 +136,6 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAssignShortcutModalWindowViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                case nameof(WarningString):
-                    OnPropertyChanged(nameof(WarningBorderHexColor));
-                    OnPropertyChanged(nameof(HasWarning));
-                    OnPropertyChanged(nameof(WarningBmp));
-                    OnPropertyChanged(nameof(WarningTextHexColor));
-                    break;
                 case nameof(KeyString):
                     OnPropertyChanged(nameof(KeyItems));
                     OnPropertyChanged(nameof(KeyGroups));
@@ -214,40 +165,38 @@ namespace MonkeyPaste.Avalonia {
         private bool Validate() {
             //when KeysString changes check full system for duplicates, ignoring order of combinations
             WarningString = string.Empty;
+            WarningString2 = string.Empty;
             DuplicatedShortcutViewModel = null;
-            _isReplacingShortcut = false;
+            if (string.IsNullOrEmpty(KeyString)) {
+                return true;
+            }
+
             //iterate over ALL shortcuts
+            string assign_keystr = KeyString.ToLower();
             foreach (var scvm in MpAvShortcutCollectionViewModel.Instance.Items) {
-                if (scvm.Command == _assigningCommand ||
-                    scvm.KeyList.Count != KeyItems.Count() ||
+                if ((scvm.Command == _assigningCommand && scvm.CommandParameter == _commandParameter) ||
+                    //scvm.KeyList.Count != KeyItems.Count() ||
                     scvm.KeyList.Count == 0) {
                     //ignore same, empty or shortcut w/ different key counts
                     continue;
                 }
+                string cur_keystr = scvm.KeyString.ToLower();
 
-                _isReplacingShortcut = scvm.KeyString == KeyString;
-                //int klIdx = 0;
-                //foreach(var kl in scvm.KeyList) {
-                //    if(kl.Count != KeyList[klIdx].Count) {
-                //        _isReplacingShortcut = false;
-                //        break;
-                //    }
-                //    foreach(var k in kl) {
-                //        if(!KeyList[klIdx].Contains(k)) {
-                //            _isReplacingShortcut = false;
-                //        }
-                //    }
-                //    klIdx++;
-                //}
-                if (_isReplacingShortcut && KeyString != string.Empty && scvm.Command != _assigningCommand && scvm.CommandParameter != _commandParameter) {
+                if (cur_keystr == assign_keystr) {
                     DuplicatedShortcutViewModel = scvm;
                     WarningString = "This combination conflicts with '" + scvm.ShortcutDisplayName + "' which will be cleared if saved";
                     return false;
+                } else if (IsSequence && assign_keystr.StartsWith(cur_keystr)) {
+                    WarningString = "This sequence starts with '" + scvm.ShortcutDisplayName + "' which will still occur when executing this sequence";
+                    // NOTE don't return here to continue checking for dups
                 }
             }
-            if (_wasPreviouslyASequence || IsSequence) {
-                WarningString = @"Sequence hot key's require a restart to be enabled";
-                return true;
+            if (!string.IsNullOrEmpty(assign_keystr)) {
+                bool has_mods = MpInputConstants.MOD_LITERALS.Any(x => assign_keystr.Contains(x.ToLower()));
+                if (!has_mods) {
+                    WarningString2 = "Warning! Confirm at your own risk, this shortcut has no modifier keys and may interfere with standard input.";
+                }
+
             }
             return true;
         }

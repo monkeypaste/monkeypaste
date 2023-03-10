@@ -23,8 +23,10 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpIKeyStrokeSimulator Implementation
+        public bool IsSimulating { get; private set; }
 
         public async Task<bool> SimulateKeyStrokeSequenceAsync(string keystr, int holdDelay = 0, int releaseDelay = 0) {
+            IsSimulating = true;
             var seq = Mp.Services.KeyConverter.ConvertStringToKeySequence<KeyCode>(keystr);
             foreach (var combo in seq) {
                 foreach (var key in combo) {
@@ -45,6 +47,7 @@ namespace MonkeyPaste.Avalonia {
 
                 await Task.Delay(releaseDelay);
             }
+            IsSimulating = false;
             MpConsole.WriteLine($"Key Gesture '{keystr}' successfully simulated");
             return true;
         }

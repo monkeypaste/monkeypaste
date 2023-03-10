@@ -8,12 +8,12 @@ namespace MonkeyPaste.Avalonia {
     public class MpGlobalKeyConverter : MpIKeyConverter<KeyCode> {
         public KeyCode ConvertStringToKey(string keyStr) {
             string lks = keyStr.ToLower();
-            if (lks == MpKeyLiteralStringHelpers.AV_CONTROL_KEY_LITERAL.ToLower() ||
-                lks == MpKeyLiteralStringHelpers.CONTROL_KEY_LITERAL.ToLower()) {
+            if (lks == MpInputConstants.AV_CONTROL_KEY_LITERAL.ToLower() ||
+                lks == MpInputConstants.CONTROL_KEY_LITERAL.ToLower()) {
                 return KeyCode.VcLeftControl;//.LeftCtrl;
             }
-            if (lks == MpKeyLiteralStringHelpers.AV_CAPS_LOCK_KEY_LITERAL.ToLower() ||
-               lks == MpKeyLiteralStringHelpers.SH_CAPS_LOCK_KEY_LITERAL.ToLower()) {
+            if (lks == MpInputConstants.AV_CAPS_LOCK_KEY_LITERAL.ToLower() ||
+               lks == MpInputConstants.SH_CAPS_LOCK_KEY_LITERAL.ToLower()) {
                 return KeyCode.VcCapsLock;
             }
             if (lks == "alt") {
@@ -67,19 +67,19 @@ namespace MonkeyPaste.Avalonia {
 
         public string GetKeyLiteral(KeyCode key) {
             if (key == KeyCode.VcLeftShift || key == KeyCode.VcRightShift) {
-                return MpKeyLiteralStringHelpers.SHIFT_KEY_LITERAL;
+                return MpInputConstants.SHIFT_KEY_LITERAL;
             }
             if (key == KeyCode.VcLeftAlt || key == KeyCode.VcRightAlt) {
-                return MpKeyLiteralStringHelpers.ALT_KEY_LITERAL;
+                return MpInputConstants.ALT_KEY_LITERAL;
             }
             if (key == KeyCode.VcLeftControl || key == KeyCode.VcRightControl) {
-                return MpKeyLiteralStringHelpers.CONTROL_KEY_LITERAL;
+                return MpInputConstants.CONTROL_KEY_LITERAL;
             }
             if (key == KeyCode.VcCapsLock) {
-                return MpKeyLiteralStringHelpers.CAPS_LOCK_KEY_LITERAL;
+                return MpInputConstants.CAPS_LOCK_KEY_LITERAL;
             }
             if (key == KeyCode.VcNumPadEnter) {
-                return MpKeyLiteralStringHelpers.ENTER_KEY_LITERAL;
+                return MpInputConstants.ENTER_KEY_LITERAL;
             }
             if (key == KeyCode.VcNumPadDivide) {
                 return @"/";

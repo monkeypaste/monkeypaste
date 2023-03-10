@@ -59,7 +59,7 @@
                            VerticalAlignment="Top"
                            HorizontalAlignment="Stretch"
                            TextAlignment="Left"
-                           FontSize="32"
+                           FontSize="24"
                            Foreground="White"
                            FontWeight="SemiBold"
                            TextWrapping="WrapWithOverflow"

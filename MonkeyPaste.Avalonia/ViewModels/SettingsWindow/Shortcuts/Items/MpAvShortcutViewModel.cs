@@ -18,8 +18,7 @@ namespace MonkeyPaste.Avalonia {
         MpAvIShortcutCommandViewModel,
         MpAvIKeyGestureViewModel,
         MpISelectableViewModel {
-        #region Properties        
-
+        #region Interfaces
         #region MpIFilterMatch Implementation
         bool MpIFilterMatch.IsMatch(string filter) {
             if (string.IsNullOrEmpty(filter)) {
@@ -50,6 +49,9 @@ namespace MonkeyPaste.Avalonia {
         public DateTime LastSelectedDateTime { get; set; }
 
         #endregion
+
+        #endregion
+        #region Properties        
 
         #region View Models
 
@@ -85,9 +87,10 @@ namespace MonkeyPaste.Avalonia {
                 if (_routingTypes == null) {
                     _routingTypes = new ObservableCollection<string>();
                     if (IsGlobalShortcut) {
-                        _routingTypes.Add("Direct");
+                        //_routingTypes.Add("Direct");
                         _routingTypes.Add("Bubble");
                         _routingTypes.Add("Tunnel");
+                        _routingTypes.Add("Override");
                     } else {
                         _routingTypes.Add("Internal");
                     }
@@ -162,11 +165,16 @@ namespace MonkeyPaste.Avalonia {
                 if (Shortcut == null) {
                     return 0;
                 }
-                return (int)RoutingType - (int)MpRoutingType.Internal - 1;
+                return RoutingTypes.IndexOf(RoutingType.ToString());
+                //return (int)RoutingType - (int)MpRoutingType.Internal - 1;
             }
             set {
+                if (RoutingType == MpRoutingType.Internal) {
+                    return;
+                }
                 if (SelectedRoutingTypeIdx != value) {
-                    RoutingType = (MpRoutingType)(value + (int)MpRoutingType.Internal + 1);
+                    //RoutingType = (MpRoutingType)(value + (int)MpRoutingType.Internal + 1);
+                    RoutingType = RoutingTypes[value].ToString().ToEnum<MpRoutingType>();
                     OnPropertyChanged(nameof(SelectedRoutingTypeIdx));
                 }
             }
@@ -251,6 +259,10 @@ namespace MonkeyPaste.Avalonia {
         public string KeyString {
             get {
                 if (Shortcut == null) {
+                    return string.Empty;
+                }
+                if (Shortcut.KeyString == null) {
+                    // avoid null errors for input matching
                     return string.Empty;
                 }
                 return Shortcut.KeyString;

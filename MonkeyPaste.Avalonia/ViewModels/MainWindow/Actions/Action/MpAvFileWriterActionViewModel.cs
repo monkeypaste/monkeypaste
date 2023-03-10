@@ -18,13 +18,14 @@ namespace MonkeyPaste.Avalonia {
         public const string CUSTOM_FILE_NAME_PARAM_ID = "CustomName";
 
         #endregion
+
         #region MpIParameterHost Overrides
 
-        private MpActionPluginFormat _actionComponentFormat;
-        public override MpActionPluginFormat ActionComponentFormat {
+        private MpHeadlessPluginFormat _actionComponentFormat;
+        public override MpHeadlessPluginFormat ActionComponentFormat {
             get {
                 if (_actionComponentFormat == null) {
-                    _actionComponentFormat = new MpActionPluginFormat() {
+                    _actionComponentFormat = new MpHeadlessPluginFormat() {
                         parameters = new List<MpParameterFormat>() {
                             new MpParameterFormat() {
                                 label = "Directory",

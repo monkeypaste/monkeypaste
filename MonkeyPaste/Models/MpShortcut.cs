@@ -102,7 +102,7 @@ namespace MonkeyPaste {
             string shortcutLabel = "",
             string keyString = "",
             string defKeyString = "",
-            MpRoutingType routeType = MpRoutingType.Direct,
+            MpRoutingType routeType = MpRoutingType.Bubble,
             MpShortcutType shortcutType = MpShortcutType.None,
             string commandParameter = null,
             string guid = "",

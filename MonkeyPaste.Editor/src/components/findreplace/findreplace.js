@@ -372,15 +372,10 @@ function processSearch(searchObj) {
 }
 
 function populateFindReplaceResults() {
+	// CLEAR
 	resetFindReplaceResults();
 
-	let sel = getDocSelection();
-	if (sel && sel.length > 0) {
-		// when text is selected unselect but retain caret idx
-		sel.length = 0;
-		setDocSelection(sel.index, 0);
-	}
-	sel = sel ? sel : { index: 0, length: 0 };
+	// FIND
 
 	if (isGlobalSearchState()) {
 		for (var i = 0; i < Searches.length; i++) {
@@ -390,6 +385,12 @@ function populateFindReplaceResults() {
 		const input_search_obj = getFindReplaceInputState();
 		processSearch(input_search_obj);
 	}
+
+	// FILTER
+
+	CurFindReplaceDocRanges = distinct(CurFindReplaceDocRanges);
+
+	// SORT
 	CurFindReplaceDocRanges.sort((a, b) => {
 		// sort by docIdx then by range length
 		let result = a.index - b.index;

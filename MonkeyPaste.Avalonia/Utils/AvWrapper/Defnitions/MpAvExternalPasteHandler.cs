@@ -100,7 +100,7 @@ namespace MonkeyPaste.Avalonia {
             await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(pasteCmdKeyString);
 
             if (finishWithEnterKey) {
-                await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(MpKeyLiteralStringHelpers.ENTER_KEY_LITERAL);
+                await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(MpInputConstants.ENTER_KEY_LITERAL);
             }
 
             //await Task.Delay(300);

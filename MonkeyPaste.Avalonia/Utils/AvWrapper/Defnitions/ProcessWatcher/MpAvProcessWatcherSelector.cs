@@ -5,15 +5,15 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvProcessWatcherSelector {
         public MpIProcessWatcher Watcher { get; private set; }
         public MpAvProcessWatcherSelector() {
-            if (OperatingSystem.IsWindows()) {
-                Watcher = new MpAvWin32ProcessWatcher();
-            } else if (OperatingSystem.IsLinux()) {
-                Watcher = new MpAvX11ProcessWatcher();
-            } else if (OperatingSystem.IsMacOS()) {
-                Watcher = new MpAvMacProcessWatcher();
-            } else if (OperatingSystem.IsAndroid()) {
-                Watcher = new MpAvAndroidProcessWatcher();
-            }
+#if WINDOWS
+            Watcher = new MpAvWin32ProcessWatcher();
+#elif LINUX
+            Watcher = new MpAvX11ProcessWatcher();
+#elif MAC
+            Watcher = new MpAvMacProcessWatcher();
+#elif ANDROID
+            Watcher = new MpAvAndroidProcessWatcher();
+#endif
         }
     }
 }

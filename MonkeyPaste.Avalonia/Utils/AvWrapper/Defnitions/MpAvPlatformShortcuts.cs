@@ -10,8 +10,8 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvPlatformShortcuts() {
             string opKey = OperatingSystem.IsMacOS() ?
-                MpKeyLiteralStringHelpers.META_KEY_LITERAL :
-                MpKeyLiteralStringHelpers.CONTROL_KEY_LITERAL;
+                MpInputConstants.META_KEY_LITERAL :
+                MpInputConstants.CONTROL_KEY_LITERAL;
 
             CutKeys = $"{opKey}+X";
             CopyKeys = $"{opKey}+C";

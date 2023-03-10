@@ -18,8 +18,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIParameterHost Overrides
 
-        private MpActionPluginFormat _actionComponentFormat;
-        public override MpActionPluginFormat ActionComponentFormat {
+        private MpHeadlessPluginFormat _actionComponentFormat;
+        public override MpHeadlessPluginFormat ActionComponentFormat {
             get {
                 if (_actionComponentFormat == null) {
                     List<MpPluginParameterValueFormat> ignoredVals =
@@ -30,7 +30,7 @@ namespace MonkeyPaste.Avalonia {
                             isDefault = true
                         }).ToList() : null;
 
-                    _actionComponentFormat = new MpActionPluginFormat() {
+                    _actionComponentFormat = new MpHeadlessPluginFormat() {
                         parameters = new List<MpParameterFormat>() {
                             new MpParameterFormat() {
                                 label = "Ignored Process Names",

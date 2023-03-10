@@ -69,16 +69,9 @@
             </Button>
             <DataGrid Grid.Row="1"
                       x:Name="ExcludedAppDatagrid"
-                      Items="{Binding FilteredItems}"
-                      HorizontalAlignment="Center"
-                      VerticalAlignment="Stretch"
-                      VerticalScrollBarVisibility="Hidden"
-                      HorizontalScrollBarVisibility="Hidden"
-                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                      Items="{Binding FilteredItems}" 
                       SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
-                      SelectionMode="Single"
-                      GridLinesVisibility="All"
-                      AutoGenerateColumns="False">
+                      SelectionMode="Single">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Width="30">
                         <DataGridTemplateColumn.CellTemplate>
@@ -157,14 +150,7 @@
             <DataGrid Grid.Row="1"
                       x:Name="ExcludedUrlDatagrid"
                       Items="{Binding FilteredItems}"
-                      HorizontalAlignment="Center"
-                      VerticalAlignment="Stretch"
-                      VerticalScrollBarVisibility="Hidden"
-                      HorizontalScrollBarVisibility="Hidden"
-                      SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
-                      SelectionMode="Single"
-                      GridLinesVisibility="All"
-                      AutoGenerateColumns="False">
+                      SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Width="30">
                         <DataGridTemplateColumn.CellTemplate>

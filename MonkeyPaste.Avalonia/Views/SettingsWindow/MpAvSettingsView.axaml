@@ -118,9 +118,13 @@
             <Setter Property="GridLinesVisibility"
                     Value="All" />
             <Setter Property="ScrollViewer.VerticalScrollBarVisibility"
-                    Value="Auto" />
+                    Value="Hidden" />
             <Setter Property="ScrollViewer.HorizontalScrollBarVisibility"
-                    Value="Auto" />
+                    Value="Hidden" />
+            <Setter Property="VerticalScrollBarVisibility"
+                    Value="Hidden" />
+            <Setter Property="HorizontalScrollBarVisibility"
+                    Value="Hidden" />
             <Setter Property="RowHeight"
                     Value="40" />
             <Setter Property="SelectionMode"
@@ -129,6 +133,8 @@
                     Value="Stretch" />
             <Setter Property="VerticalAlignment"
                     Value="Stretch" />
+            <Setter Property="AutoGenerateColumns"
+                    Value="False" />
         </Style>
         <!--  DATAGRID ROW BG  -->
         <Style Selector="DataGridRow:nth-child(odd)">
@@ -356,7 +362,7 @@
                                 <local:MpAvAccountView />
                             </DataTemplate>
                             <DataTemplate x:Key="PreferencesTemplate">
-                                <local:MpAvAccountView />
+                                <local:MpAvPreferencesView />
                             </DataTemplate>
                             <DataTemplate x:Key="SecurityTemplate">
                                 <local:MpAvSecurityView />

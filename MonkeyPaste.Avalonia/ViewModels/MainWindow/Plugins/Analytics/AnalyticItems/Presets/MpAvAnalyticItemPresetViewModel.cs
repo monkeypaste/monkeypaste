@@ -135,7 +135,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #region MpISaveOrCancelableViewModel Implementation
-
+        bool MpISaveOrCancelableViewModel.IsSaveCancelEnabled =>
+            true;
         public ICommand SaveCommand => new MpCommand(
             () => {
                 Items.ForEach(x => x.SaveCurrentValueCommand.Execute(null));

@@ -13,16 +13,16 @@ namespace MonkeyPaste.Avalonia {
                     Shortcut = new MpShortcut() {
                         DefaultKeyString = "Control+S",
                         KeyString = "Control+S",
-                        RoutingType = MpRoutingType.Direct,
+                        RoutingType = MpRoutingType.Bubble,
                         ShortcutLabel = "Test Label 1",
-                        ShortcutType = MpShortcutType.ShowMainWindow
+                        ShortcutType = MpShortcutType.ToggleMainWindow
                     }
                 },
                 new MpAvShortcutViewModel(null) {
                     Shortcut = new MpShortcut() {
                         DefaultKeyString = "Control+F5|Control+F4",
                         KeyString = "Control+F5|Control+F4",
-                        RoutingType = MpRoutingType.Direct,
+                        RoutingType = MpRoutingType.Bubble,
                         ShortcutLabel = "Sequence Test Label 2",
                         ShortcutType = MpShortcutType.ToggleMainWindowLocked
                     }

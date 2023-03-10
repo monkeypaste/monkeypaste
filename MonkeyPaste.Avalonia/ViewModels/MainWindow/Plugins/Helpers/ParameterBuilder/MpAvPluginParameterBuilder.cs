@@ -3,48 +3,64 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Automation;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvPluginParameterBuilder {
         public static async Task<MpAvParameterViewModelBase> CreateParameterViewModelAsync(
+            MpViewModelBase parent,
+            MpParameterFormat pf) {
+            var result = await CreateParameterViewModelAsync_internal(pf.controlType, null, parent);
+            return result;
+        }
+        public static async Task<MpAvParameterViewModelBase> CreateParameterViewModelAsync(
             MpParameterValue aipv,
-            MpIParameterHostViewModel pluginHost) {
-            var param = pluginHost.ComponentFormat.parameters.FirstOrDefault(x => x.paramId == aipv.ParamId);
+            MpIParameterHostViewModel host) {
+            MpParameterControlType controlType = MpParameterControlType.None;
+            var param = host.ComponentFormat.parameters.FirstOrDefault(x => x.paramId == aipv.ParamId);
             if (param == null) {
                 // must be a bug still with reset preset, check 
                 Debugger.Break();
                 return null;
             }
-            MpParameterControlType controlType = param.controlType;
+            controlType = param.controlType;
+            var result = await CreateParameterViewModelAsync_internal(controlType, aipv, host as MpViewModelBase);
+            return result;
+        }
 
+        private static async Task<MpAvParameterViewModelBase> CreateParameterViewModelAsync_internal(
+            MpParameterControlType controlType,
+            MpParameterValue aipv,
+            MpViewModelBase parent) {
             MpAvParameterViewModelBase naipvm = null;
+
 
             switch (controlType) {
                 case MpParameterControlType.List:
                 case MpParameterControlType.MultiSelectList:
                 case MpParameterControlType.EditableList:
                 case MpParameterControlType.ComboBox:
-                    naipvm = new MpAvEnumerableParameterViewModel(pluginHost);
+                    naipvm = new MpAvEnumerableParameterViewModel(parent);
                     break;
                 case MpParameterControlType.PasswordBox:
                 case MpParameterControlType.TextBox:
-                    naipvm = new MpAvTextBoxParameterViewModel(pluginHost);
+                    naipvm = new MpAvTextBoxParameterViewModel(parent);
                     break;
                 case MpParameterControlType.CheckBox:
-                    naipvm = new MpAvCheckBoxParameterViewModel(pluginHost);
+                    naipvm = new MpAvCheckBoxParameterViewModel(parent);
                     break;
                 case MpParameterControlType.Slider:
-                    naipvm = new MpAvSliderParameterViewModel(pluginHost);
+                    naipvm = new MpAvSliderParameterViewModel(parent);
                     break;
                 case MpParameterControlType.DirectoryChooser:
                 case MpParameterControlType.FileChooser:
-                    naipvm = new MpAvFileChooserParameterViewModel(pluginHost);
+                    naipvm = new MpAvFileChooserParameterViewModel(parent);
                     break;
                 case MpParameterControlType.ComponentPicker:
-                    naipvm = new MpAvComponentPickerParameterViewModel(pluginHost);
+                    naipvm = new MpAvComponentPickerParameterViewModel(parent);
                     break;
                 case MpParameterControlType.ShortcutRecorder:
-                    naipvm = new MpAvShortcutRecorderParameterViewModel(pluginHost);
+                    naipvm = new MpAvShortcutRecorderParameterViewModel(parent);
                     break;
                 default:
                     throw new Exception(@"Unsupported Paramter type: " + Enum.GetName(typeof(MpParameterControlType), controlType));

@@ -22,6 +22,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
+        #region View Models
+
+        #endregion
+
         #region State
 
         public string FilterText { get; set; }
@@ -70,6 +74,7 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitAsync() {
             await Task.Delay(1);
         }
+
 
         #endregion
 

@@ -39,6 +39,7 @@
                 <!--  DESCRIPTION  -->
 
                 <local:MpAvToolTipInfoHintView DockPanel.Dock="Right"
+                                               IsVisible="{Binding Description, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                                Margin="0,5,2,0"
                                                ClipToBounds="False"
                                                VerticalAlignment="Top"

@@ -102,7 +102,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvEnumerableParameterViewModel() : this(null) { }
 
-        public MpAvEnumerableParameterViewModel(MpIParameterHostViewModel parent) : base(parent) {
+        public MpAvEnumerableParameterViewModel(MpViewModelBase parent) : base(parent) {
             PropertyChanged += MpEnumerableParameterViewModel_PropertyChanged;
         }
 

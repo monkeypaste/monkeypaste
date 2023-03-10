@@ -5,13 +5,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvClipboardWatcher : MpIClipboardMonitor, MpIPlatformDataObjectRegistrar {
+
+    public class MpAvClipboardWatcher :
+        MpIClipboardMonitor,
+        MpIPlatformDataObjectRegistrar {
         #region Private Variables
 
         private bool _isInitialStart = false;
         private MpPortableDataObject _lastCbo;
-
-        private object _lockObj = new object();
 
         private DispatcherTimer _timer;
 
@@ -22,6 +23,9 @@ namespace MonkeyPaste.Avalonia {
         };
 
         #endregion
+
+        #region Interfaces
+
 
         #region MpIActionComponent Implementation
 
@@ -36,8 +40,11 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
-        #region Properties
+        #endregion
 
+        #region Properties
+        public MpPortableDataObject LastClipboardDataObject =>
+            _lastCbo;
         //public bool IgnoreClipboardChanges { get; set; }
         #endregion
 

@@ -32,12 +32,12 @@ namespace MonkeyPaste.Avalonia {
             }
 
             string lks = keyStr.ToLower();
-            if (lks == MpKeyLiteralStringHelpers.AV_CONTROL_KEY_LITERAL.ToLower() ||
-                lks == MpKeyLiteralStringHelpers.CONTROL_KEY_LITERAL.ToLower()) {
+            if (lks == MpInputConstants.AV_CONTROL_KEY_LITERAL.ToLower() ||
+                lks == MpInputConstants.CONTROL_KEY_LITERAL.ToLower()) {
                 return Key.LeftCtrl;//.LeftCtrl;
             }
-            if (lks == MpKeyLiteralStringHelpers.AV_CAPS_LOCK_KEY_LITERAL.ToLower() ||
-                lks == MpKeyLiteralStringHelpers.SH_CAPS_LOCK_KEY_LITERAL.ToLower()) {
+            if (lks == MpInputConstants.AV_CAPS_LOCK_KEY_LITERAL.ToLower() ||
+                lks == MpInputConstants.SH_CAPS_LOCK_KEY_LITERAL.ToLower()) {
                 return Key.CapsLock;
             }
 
@@ -94,16 +94,16 @@ namespace MonkeyPaste.Avalonia {
 
         public string GetKeyLiteral(Key key) {
             if (key == Key.LeftShift || key == Key.RightShift) {
-                return MpKeyLiteralStringHelpers.SHIFT_KEY_LITERAL;
+                return MpInputConstants.SHIFT_KEY_LITERAL;
             }
             if (key == Key.LeftAlt || key == Key.RightAlt) {
-                return MpKeyLiteralStringHelpers.ALT_KEY_LITERAL;
+                return MpInputConstants.ALT_KEY_LITERAL;
             }
             if (key == Key.LeftCtrl || key == Key.RightCtrl) {
-                return MpKeyLiteralStringHelpers.AV_CONTROL_KEY_LITERAL;
+                return MpInputConstants.AV_CONTROL_KEY_LITERAL;
             }
             if (key == Key.Escape) {
-                return MpKeyLiteralStringHelpers.ESCAPE_KEY_LITERAL;
+                return MpInputConstants.ESCAPE_KEY_LITERAL;
             }
 
             if (key == Key.OemSemicolon) {

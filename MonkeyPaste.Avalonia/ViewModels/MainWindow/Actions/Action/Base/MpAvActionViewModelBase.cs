@@ -168,6 +168,8 @@ namespace MonkeyPaste.Avalonia {
         //        return false;
         //    }
         //}
+        bool MpISaveOrCancelableViewModel.IsSaveCancelEnabled =>
+            true;
         private bool _canSaveOrCancel = false;
         public bool CanSaveOrCancel {
             get {
@@ -198,10 +200,10 @@ namespace MonkeyPaste.Avalonia {
 
         public MpParameterHostBaseFormat ComponentFormat => ActionComponentFormat;
         MpParameterHostBaseFormat MpIParameterHostViewModel.BackupComponentFormat =>
-            PluginFormat == null || PluginFormat.backupCheckPluginFormat == null || PluginFormat.backupCheckPluginFormat.action == null ?
-                null : PluginFormat.backupCheckPluginFormat.action;
+            PluginFormat == null || PluginFormat.backupCheckPluginFormat == null || PluginFormat.backupCheckPluginFormat.headless == null ?
+                null : PluginFormat.backupCheckPluginFormat.headless;
 
-        public virtual MpActionPluginFormat ActionComponentFormat { get; protected set; }
+        public virtual MpHeadlessPluginFormat ActionComponentFormat { get; protected set; }
 
         public MpIPluginComponentBase PluginComponent =>
             PluginFormat == null ? null : PluginFormat.Component as MpIPluginComponentBase;

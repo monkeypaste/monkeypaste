@@ -56,6 +56,15 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsActiveProcess {
+            get {
+                if (Parent == null) {
+                    return false;
+                }
+                return Parent.LastActiveAppViewModel == this;
+            }
+        }
+
         public bool IsSelected { get; set; }
 
         public DateTime LastSelectedDateTime { get; set; }
@@ -152,7 +161,6 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task InitializeAsync(MpApp app) {
             IsBusy = true;
-
 
             App = app;
 

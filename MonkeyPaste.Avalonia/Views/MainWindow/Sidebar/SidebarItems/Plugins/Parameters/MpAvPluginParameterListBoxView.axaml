@@ -22,7 +22,7 @@
 
         <!--  SAVE/CANCEL TRANSITION  -->
 
-        <Style Selector="Grid#ParameterContainerGrid.canSave ListBox#PluginParameterListBox">
+        <Style Selector="Grid#ParameterContainerGrid.canSave.showSaveCancel ListBox#PluginParameterListBox">
             <Setter Property="Transitions">
                 <Transitions>
                     <ThicknessTransition Property="Margin"
@@ -32,7 +32,7 @@
             <Setter Property="Margin"
                     Value="{StaticResource SaveCancelVisibleListBoxMargin}" />
         </Style>
-        <Style Selector="Grid#ParameterContainerGrid:not(.canSave) ListBox#PluginParameterListBox">
+        <Style Selector="Grid#ParameterContainerGrid:not(.canSave).showSaveCancel ListBox#PluginParameterListBox">
             <Setter Property="Transitions">
                 <Transitions>
                     <ThicknessTransition Property="Margin"
@@ -44,7 +44,7 @@
                     Value="0,5,0,0" />
         </Style>
 
-        <Style Selector="Grid#ParameterContainerGrid.canSave Button.saveOrCancelButton">
+        <Style Selector="Grid#ParameterContainerGrid.canSave.showSaveCancel Button.saveOrCancelButton">
             <Setter Property="Transitions">
                 <Transitions>
                     <DoubleTransition Property="Opacity"
@@ -55,7 +55,7 @@
             <Setter Property="Opacity"
                     Value="1" />
         </Style>
-        <Style Selector="Grid#ParameterContainerGrid:not(.canSave) Button.saveOrCancelButton">
+        <Style Selector="Grid#ParameterContainerGrid:not(.canSave).showSaveCancel Button.saveOrCancelButton">
             <Setter Property="Transitions">
                 <Transitions>
                     <DoubleTransition Property="Opacity"
@@ -67,6 +67,10 @@
         </Style>
 
         <!--  SAVE/CANCEL BUTTONS  -->
+        <Style Selector="Grid#ParameterContainerGrid:not(.showSaveCancel) Button.saveOrCancelButton">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
         <Style Selector="Button.saveOrCancelButton">
             <Setter Property="Margin"
                     Value="3" />
@@ -81,6 +85,7 @@
     <Grid x:Name="ParameterContainerGrid"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch"
+          Classes.showSaveCancel="{Binding IsSaveCancelEnabled}"
           Classes.canSave="{Binding CanSaveOrCancel}">
         <Button x:Name="CancelButon"
                 Width="{Binding $self.Bounds.Height}"

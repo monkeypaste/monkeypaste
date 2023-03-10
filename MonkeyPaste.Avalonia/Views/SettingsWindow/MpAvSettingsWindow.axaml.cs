@@ -12,7 +12,7 @@ namespace MonkeyPaste.Avalonia {
             if (Instance == null) {
                 Instance = this;
             }
-            InitializeComponent();
+            AvaloniaXamlLoader.Load(this);
             DataContext = MpAvSettingsWindowViewModel.Instance;
             this.AttachedToVisualTree += MpAvSettingsWindow_AttachedToVisualTree;
             this.Closed += MpAvSettingsWindow_Closed;
@@ -27,10 +27,11 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvSettingsWindow_Closed(object sender, System.EventArgs e) {
             MpAvSettingsWindowViewModel.Instance.IsVisible = false;
+            if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen &&
+                App.MainView is Window w) {
+                w.Activate();
+            }
         }
 
-        private void InitializeComponent() {
-            AvaloniaXamlLoader.Load(this);
-        }
     }
 }

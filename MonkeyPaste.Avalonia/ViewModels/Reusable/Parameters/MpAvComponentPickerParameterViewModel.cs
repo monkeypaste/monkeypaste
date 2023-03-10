@@ -126,7 +126,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvComponentPickerParameterViewModel() : base(null) { }
 
-        public MpAvComponentPickerParameterViewModel(MpIParameterHostViewModel parent) : base(parent) { }
+        public MpAvComponentPickerParameterViewModel(MpViewModelBase parent) : base(parent) { }
 
         public override async Task InitializeAsync(MpParameterValue aipv) {
             IsBusy = true;

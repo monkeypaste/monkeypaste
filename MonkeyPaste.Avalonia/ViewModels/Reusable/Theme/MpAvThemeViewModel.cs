@@ -49,8 +49,8 @@ namespace MonkeyPaste.Avalonia {
                 if (GlobalBgOpacity != value) {
                     double clamped_value = Math.Max(0, Math.Min(value, 1.0d));
                     Mp.Services.PlatformResource.SetResource(MpThemeResourceKey.GlobalBgOpacity.ToString(), clamped_value);
-                    MpPrefViewModel.Instance.MainWindowOpacity = clamped_value;
-                    HasModelChanged = true;
+                    //MpPrefViewModel.Instance.MainWindowOpacity = clamped_value;
+                    //HasModelChanged = true;
                     OnPropertyChanged(nameof(GlobalBgOpacity));
                 }
             }
@@ -76,12 +76,14 @@ namespace MonkeyPaste.Avalonia {
             Mp.Services != null &&
             Mp.Services.PlatformInfo != null &&
             Mp.Services.PlatformInfo.IsDesktop;
+
         #endregion
 
         #endregion
 
         #region Constructors
         private MpAvThemeViewModel() {
+            MpPrefViewModel.Instance.PropertyChanged += Instance_PropertyChanged;
             PropertyChanged += MpAvThemeViewModel_PropertyChanged;
 #if DESKTOP
             GlobalBgOpacity = GlobalBgOpacity_desktop;
@@ -91,6 +93,7 @@ namespace MonkeyPaste.Avalonia {
             DefaultGridSplitterFixedDimensionLength = DefaultGridSplitterFixedDimensionLength_mobile;
 #endif
         }
+
 
 
         #endregion
@@ -110,6 +113,13 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private void Instance_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(MpPrefViewModel.Instance.MainWindowOpacity):
+                    GlobalBgOpacity = MpPrefViewModel.Instance.MainWindowOpacity;
+                    break;
+            }
+        }
         #endregion
 
         #region Commands

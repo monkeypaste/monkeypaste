@@ -6,5 +6,4 @@ namespace MonkeyPaste.Common.Plugin {
         public List<MpParameterFormat> parameters { get; set; } = null;
         public List<MpPluginPresetFormat> presets { get; set; } = null;
     }
-
 }

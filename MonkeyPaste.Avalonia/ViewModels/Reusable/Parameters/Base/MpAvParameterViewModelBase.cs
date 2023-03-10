@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvParameterViewModelBase :
-        MpViewModelBase<MpIParameterHostViewModel>,
+        MpViewModelBase<MpViewModelBase>,
         MpITreeItemViewModel,
         MpISelectableViewModel,
         MpIHoverableViewModel,
@@ -96,6 +96,24 @@ namespace MonkeyPaste.Avalonia {
         public bool IsValid => string.IsNullOrEmpty(ValidationMessage);
 
         public bool IsActionParameter { get; set; } = false;
+
+        public object CurrentTypedValue {
+            get {
+                switch (UnitType) {
+                    case MpParameterValueUnitType.Bool:
+                        return BoolValue;
+                    case MpParameterValueUnitType.ActionComponentId:
+                    case MpParameterValueUnitType.CollectionComponentId:
+                    case MpParameterValueUnitType.AnalyzerComponentId:
+                    case MpParameterValueUnitType.Integer:
+                        return IntValue;
+                    case MpParameterValueUnitType.Decimal:
+                        return DoubleValue;
+                    default:
+                        return CurrentValue;
+                }
+            }
+        }
 
         public double DoubleValue {
             get {
@@ -370,14 +388,23 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-
+        private MpParameterFormat _paramFormat;
         public MpParameterFormat ParameterFormat {
             get {
-                if (Parent == null || PresetValueModel == null) {
-                    return null;
+                if (Parent is MpIParameterHostViewModel phvm) {
+                    return phvm.ComponentFormat.parameters.FirstOrDefault(x => x.paramId == PresetValueModel.ParamId);
                 }
-                //AnalyzerFormat.parameters.FirstOrDefault(y => y.paramName == x.ParamName)
-                return Parent.ComponentFormat.parameters.FirstOrDefault(x => x.paramId == PresetValueModel.ParamId);
+                return _paramFormat;
+
+            }
+            set {
+                if (Parent is MpIParameterHostViewModel) {
+                    throw new Exception("Error, param format should not be set for plugin parameters");
+                }
+                if (_paramFormat != value) {
+                    _paramFormat = value;
+                    OnPropertyChanged(nameof(ParameterFormat));
+                }
             }
         }
         #endregion
@@ -396,8 +423,10 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvParameterViewModelBase() : this(null) { }
 
-        public MpAvParameterViewModelBase(MpIParameterHostViewModel parent) : base(parent) {
+        //public MpAvParameterViewModelBase(MpIParameterHostViewModel parent) : this(parent as MpViewModelBase) { }
+        public MpAvParameterViewModelBase(MpViewModelBase parent) : base(parent) {
             PropertyChanged += MpAnalyticItemParameterViewModel_PropertyChanged;
+
         }
 
         #endregion
@@ -504,6 +533,7 @@ namespace MonkeyPaste.Avalonia {
                     //IsBusy = true;
                     await PresetValueModel.WriteToDatabaseAsync();
                     //IsBusy = false;
+                    return;
                 });
             },
             () => {

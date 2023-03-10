@@ -1047,11 +1047,12 @@ namespace MonkeyPaste.Avalonia {
                 bool isContextMenuOpen =
                     FocusManager.Instance.Current != null &&
                     FocusManager.Instance.Current is Control c &&
-                    (c.GetVisualAncestor<ContextMenu>() != null ||
+                    (
+                        c.GetVisualAncestor<ContextMenu>() != null ||
                         c.GetVisualAncestor<ComboBoxItem>() != null ||
-                        c.GetVisualAncestor<Window>() != null ||
-                        (c.GetVisualAncestor<TextBox>() is TextBox tb &&
-                         !tb.IsReadOnly));
+                        (c.GetVisualAncestor<Window>() is Window w && w != App.MainWindow) ||
+                        (c.GetVisualAncestor<TextBox>() is TextBox tb && !tb.IsReadOnly)
+                    );
 
                 bool canHide = !IsMainWindowLocked &&
                           !IsAnyDropDownOpen &&
@@ -1106,6 +1107,19 @@ namespace MonkeyPaste.Avalonia {
                 }
                 return canDecrease;
             });
+
+
+        public ICommand ToggleShowMainWindowCommand => new MpCommand(
+             () => {
+
+                 bool will_open = !IsMainWindowOpen;
+                 if (will_open) {
+                     ShowMainWindowCommand.Execute(null);
+                 } else {
+                     HideMainWindowCommand.Execute(null);
+                 }
+             }, () => !IsMainWindowLoading);
+
         public ICommand CycleOrientationCommand => new MpAsyncCommand<object>(
             async (dirStrOrEnumArg) => {
                 while (MpAvMainView.Instance == null) {
@@ -1224,16 +1238,6 @@ namespace MonkeyPaste.Avalonia {
                 IsResizing = false;
             });
 
-        public ICommand ToggleShowMainWindowCommand => new MpCommand(() => {
-            if (IsMainWindowOpen) {
-                if (IsMainWindowLocked) {
-                    IsMainWindowLocked = false;
-                }
-                HideMainWindowCommand.Execute(null);
-            } else {
-                ShowMainWindowCommand.Execute(null);
-            }
-        }, () => !IsMainWindowLoading);
         #endregion
 
     }

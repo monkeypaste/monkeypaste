@@ -49,7 +49,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvSliderParameterViewModel() : base(null) { }
 
-        public MpAvSliderParameterViewModel(MpIParameterHostViewModel parent) : base(parent) {
+        public MpAvSliderParameterViewModel(MpViewModelBase parent) : base(parent) {
         }
 
 

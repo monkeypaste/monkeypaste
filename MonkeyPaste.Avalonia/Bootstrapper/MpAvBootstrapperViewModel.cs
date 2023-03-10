@@ -11,11 +11,13 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvBootstrapperViewModel : MpBootstrapperViewModelBase {
         private Stopwatch _sw;
         public override async Task CreatePlatformAsync(DateTime startup_datetime) {
-            if (OperatingSystem.IsLinux()) {
+#if LINUX
+            
                 await GtkHelper.EnsureInitialized();
-            } else if (OperatingSystem.IsMacOS()) {
+#elif MAC
+
                 MpAvMacHelpers.EnsureInitialized();
-            }
+#endif
 
             await Mp.InitAsync(new MpAvWrapper(this, this));
 

@@ -119,7 +119,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvTextBoxParameterViewModel() : base(null) { }
 
-        public MpAvTextBoxParameterViewModel(MpIParameterHostViewModel parent) : base(parent) {
+        public MpAvTextBoxParameterViewModel(MpViewModelBase parent) : base(parent) {
             PropertyChanged += MpTextBoxParameterViewModel_PropertyChanged;
         }
 

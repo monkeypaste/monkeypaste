@@ -186,7 +186,6 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPluginParameterListBoxItem.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvSideBarButtonGroup.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvSideBarItems.axaml" />
-    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvSliderParameter.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvTooltip.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TemplatedControl.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TextBlock.axaml" />
@@ -1045,7 +1044,6 @@
     <AvaloniaResource Include="Themes\Default\Controls\MpAvMarqueeTextBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvSideBarButtonGroup.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvSideBarItems.axaml" />
-    <AvaloniaResource Include="Themes\Default\Controls\MpAvSliderParameter.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvTooltip.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvNotificationWindow.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Button.axaml" />
@@ -1251,6 +1249,9 @@
     <Compile Update="Views\SettingsWindow\Tabs\Interop\MpAvInteropView.axaml.cs">
       <DependentUpon>MpAvInteropView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\SettingsWindow\Tabs\Preferences\Frame\MpAvPreferenceFrameView.axaml.cs">
+      <DependentUpon>MpAvPreferenceFrameView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\SettingsWindow\Tabs\Preferences\MpAvPreferencesView.axaml.cs">
       <DependentUpon>MpAvPreferencesView.axaml</DependentUpon>
     </Compile>
@@ -1288,6 +1289,27 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  
+  
+  <ItemGroup Condition="'$(BuildOs)' == 'LINUX'">
+    
+    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\**" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\**" />
+    
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(BuildOs)' == 'MAC'">
+    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\**" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\X11\**" />
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(BuildOs)' == 'WINDOWS'">
+    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\X11\**" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\Mac\**" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\X11\**" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\**" />
+  </ItemGroup>
+  
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <!--<Exec Command="xcopy /s /D /Y  &quot;$(SolutionDir)MonkeyPaste\Resources\*&quot; &quot;$(TargetDir)\Resources&quot;" />
     <ItemGroup>

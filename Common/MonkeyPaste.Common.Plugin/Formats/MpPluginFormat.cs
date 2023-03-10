@@ -37,7 +37,7 @@ namespace MonkeyPaste.Common.Plugin {
 
         public MpPluginIoTypeFormat ioType { get; set; } = new MpPluginIoTypeFormat();
 
-        public MpActionPluginFormat action { get; set; } = null;
+        public MpHeadlessPluginFormat headless { get; set; } = null;
         public MpAnalyzerPluginFormat analyzer { get; set; } = null;
 
         public MpClipboardHandlerFormats clipboardHandler { get; set; }

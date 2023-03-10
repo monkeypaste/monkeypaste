@@ -8,17 +8,6 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
-
-  <!--<PropertyGroup Condition="'$(BuildOs)' == 'WINDOWS'">  
-    <DefineConstants>WINDOWS;</DefineConstants>
-    <TargetFramework>net7.0</TargetFramework>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(BuildOs)' == 'LINUX'">  
-    <DefineConstants>LINUX;</DefineConstants>
-    <TargetFramework>net7.0</TargetFramework>
-  </PropertyGroup>-->
-
   <PropertyGroup>
     <NoWarn>CS8632</NoWarn>
     <NoWarn>CS8073</NoWarn>
@@ -30,7 +19,7 @@
     <AvaloniaXaml Remove="Utils\Input\Platform\Win32\COM\**" />
     <AvaloniaXaml Remove="Utils\Input\Platform\X11\Glib\**" />
     <AvaloniaXaml Remove="Utils\Input\Platform\X11\Gtk\**" />
-    <Compile Remove="Utils\Input\Platform\Win32\COM\**" />
+    <Compile Remove="Utils\Input\Platform\Win32\**" />
     <Compile Remove="Utils\Input\Platform\X11\Glib\**" />
     <Compile Remove="Utils\Input\Platform\X11\Gtk\**" />
     <EmbeddedResource Remove="Utils\Input\Platform\Win32\COM\**" />
@@ -49,15 +38,8 @@
     <None Remove="Mono.GtkSharp" />
     <None Remove="Avalonia.Gtk3" />
   </ItemGroup>
+  
   <ItemGroup>
-    <Compile Include="Utils\Input\Platform\X11\Glib\GlibApi.cs" />
-    <Compile Include="Utils\Input\Platform\X11\Gtk\GtkApi.cs" />
-    <Compile Include="Utils\Input\Platform\X11\Gtk\GtkHelper.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <!--This helps with theme dll-s trimming.
-	If you will publish your application in self-contained mode with p:PublishTrimmed=true and it will use Fluent theme Default theme will be trimmed from the output and vice versa.
-	https://github.com/AvaloniaUI/Avalonia/issues/5593 -->
     <TrimmableAssembly Include="Avalonia.Themes.Fluent" />
     <TrimmableAssembly Include="Avalonia.Themes.Default" />
   </ItemGroup>
@@ -65,20 +47,36 @@
     <PackageReference Include="Avalonia" Version="11.0.0-preview5" />
     <PackageReference Include="Avalonia.Desktop" Version="11.0.0-preview5" />
     <PackageReference Include="Avalonia.Headless" Version="11.0.0-preview5" />
-    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <PackageReference Include="GtkSharp" Version="3.24.24.38" />
-    <PackageReference Include="MonoMac.NetStandard" Version="0.0.4" />
     <PackageReference Include="SharpHook" Version="4.0.0" />
-    <PackageReference Include="X11" Version="1.0.6" />
     <PackageReference Include="XamlNameReferenceGenerator" Version="1.6.1" />
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\PresentationFramework.dll" Condition="'$(BuildOs)' == 'WINDOWS'" />
 
-    <!--<Reference Include="PresentationFramework" Condition="'$(BuildOs)' == 'WINDOWS'">
-      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\PresentationFramework.dll</HintPath>
-    </Reference>-->
-    <ProjectReference Include="..\MonkeyPaste.Common.Wpf\MonkeyPaste.Common.Wpf.csproj" Condition="'$(BuildOs)' == 'WINDOWS'" />
+  <ItemGroup Condition="'$(BuildOs)' == 'LINUX'">
+    
+    <Compile Include="Utils\Input\Platform\X11\MpAvX11PathIconHelper.cs" />
+    <Compile Remove="Utils\Input\Platform\MacOs\*.*" />
+    <Compile Remove="Utils\Input\Platform\Win32\*.*" />
+    <PackageReference Include="GtkSharp" Version="3.24.24.38" />
+    <PackageReference Include="X11" Version="1.0.6" />
+    
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(BuildOs)' == 'MAC'">
+    <PackageReference Include="MonoMac.NetStandard" Version="0.0.4" />
+    <Compile Remove="Utils\Input\Platform\X11\*.*" />
+    <Compile Remove="Utils\Input\Platform\Win32\*.*" />
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(BuildOs)' == 'WINDOWS'">
+    <PackageReference Include="MonoMac.NetStandard" Version="0.0.4" />
+    <Reference Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\PresentationFramework.dll" />
+    <ProjectReference Include="..\MonkeyPaste.Common.Wpf\MonkeyPaste.Common.Wpf.csproj"  />
+    <Compile Remove="Utils\Input\Platform\X11\*.*" />
+    <Compile Remove="Utils\Input\Platform\MacOs\*.*" />
+    <Compile Include="Utils\Input\Platform\Win32\*.*" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
   </ItemGroup>
   <ItemGroup>

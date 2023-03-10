@@ -82,6 +82,7 @@
         <!--  BR Edit Toggle Button  -->
         <ToggleButton x:Name="ClipTileToggleEditButton"
                       Classes="noBg noHoverBg shakeOver"
+                      IsVisible="{Binding CanEdit}"
                       HorizontalAlignment="Right"
                       VerticalAlignment="Bottom"
                       IsChecked="{Binding !IsContentReadOnly, Mode=TwoWay}">

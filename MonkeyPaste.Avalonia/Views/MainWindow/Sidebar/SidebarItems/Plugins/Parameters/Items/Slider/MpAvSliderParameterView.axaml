@@ -11,6 +11,40 @@
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800">
+    <local:MpAvUserControl.Styles>
+        <!--<Style Selector="Border#SliderBorder">
+        <Setter Property="BorderBrush"
+                Value="Black" />
+    </Style>
+    <Style Selector="Border#SliderBorder:pointerover">
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource HoverDefaultBorderBrush}" />
+    </Style>-->
+        <Style Selector="TextBox">
+            <Setter Property="Background"
+                    Value="Transparent" />
+            <Setter Property="Foreground"
+                    Value="White" />
+        </Style>
+        <Style Selector="TextBox:pointerover">
+            <Setter Property="Background"
+                    Value="White" />
+            <Setter Property="Foreground"
+                    Value="Black" />
+        </Style>
+        <Style Selector="TextBox:focus">
+            <Setter Property="Background"
+                    Value="White" />
+            <Setter Property="Foreground"
+                    Value="Black" />
+        </Style>
+        <Style Selector="TextBox:not(:focus)">
+            <Setter Property="Background"
+                    Value="Transparent" />
+            <Setter Property="Foreground"
+                    Value="White" />
+        </Style>
+    </local:MpAvUserControl.Styles>
     <Border x:Name="SliderBorder"
             Classes.paramBorder="True"
             Classes.sliderBorder="True"
@@ -23,6 +57,7 @@
                        HorizontalAlignment="Left"
                        VerticalAlignment="Stretch"
                        MinWidth="0"
+                       Margin="0,0,2,0"
                        MaxWidth="{Binding Bounds.Width, ElementName=SliderBorder}">
                 <Rectangle.Fill>
                     <SolidColorBrush Color="Black" Opacity="0.6" />

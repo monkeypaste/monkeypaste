@@ -1,0 +1,55 @@
+{
+  "title": "File Converter",
+  "description": "Allows files to be translated into images or text content types",
+  "version": "1.0",
+  "credits": "Somebody",
+  "guid": "04c4d099-530e-432d-b107-3b0696b980cf",
+  "url": "https://www.monkeypaste.com",
+  "iconUri": "icon.png",
+  "ioType": {
+    "isDll": true
+  },
+  "analyzer": {
+    "inputType": {
+      "file": true
+    },
+    "outputType": {
+      "image": true,
+      "text": true
+    },
+    "parameters": [
+      {
+        "label": "File to convert",
+        "description": "",
+        "controlType": "TextBox",
+        "unitType": "RawDataContentQuery",
+        "isVisible": false,
+        "paramId": 1,
+        "values": [
+          {
+            "value": "{ItemData}"
+          }
+        ]
+      },
+      {
+        "label": "Output Type",
+        "description": "Only .png or .txt right now",
+        "controlType": "ComboBox",
+        "unitType": "PlainText",
+        "isRequired": true,
+        "paramId": 2,
+        "values": [
+          {
+            "label": "Text",
+            "value": "Text",
+            "isDefault": true
+          },
+          {
+            "label": "Image",
+            "value": "Image"
+          }
+        ]
+      }
+    ]
+  }
+}

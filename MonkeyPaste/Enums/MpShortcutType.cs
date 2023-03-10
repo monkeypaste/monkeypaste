@@ -2,7 +2,7 @@
     public enum MpShortcutType {
         None = 0,
         // GLOBALS
-        ShowMainWindow,
+        ToggleMainWindow,
         ToggleAppendMode,
         ToggleAppendLineMode,
         ToggleAutoCopyMode,

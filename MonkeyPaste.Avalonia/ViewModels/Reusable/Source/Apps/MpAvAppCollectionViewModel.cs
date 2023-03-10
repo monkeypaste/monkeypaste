@@ -89,7 +89,6 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(100);
                 }
 
-
                 await RegisterWithProcessesManager();
 
                 OnPropertyChanged(nameof(Items));
@@ -196,6 +195,9 @@ namespace MonkeyPaste.Avalonia {
                         //CollectionViewSource.GetDefaultView(SelectedItem.ClipboardFormatInfos.Items).Refresh();
                         SelectedItem.ClipboardFormatInfos.OnPropertyChanged(nameof(SelectedItem.ClipboardFormatInfos.Items));
                     }
+                    break;
+                case nameof(LastActiveAppViewModel):
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsActiveProcess)));
                     break;
             }
         }

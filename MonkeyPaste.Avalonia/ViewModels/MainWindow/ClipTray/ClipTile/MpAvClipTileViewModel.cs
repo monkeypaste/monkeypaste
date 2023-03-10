@@ -574,7 +574,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        public bool CanEdit => IsSelected && IsTextItem;
+        public bool CanEdit => IsTextItem;
         public bool IsListBoxItemFocused { get; set; } = false;
         public bool IsTitleFocused { get; set; } = false;
 
@@ -1083,7 +1083,15 @@ namespace MonkeyPaste.Avalonia {
             if (hexColors.Count == 0) {
                 hexColors = Enumerable.Repeat(MpColorHelpers.GetRandomHexColor(), layerCount).ToList();
             }
-            hexColors = hexColors.Take(layerCount).ToList();
+
+            // BUG very intermittently hexColors is list of nulls I think
+            // its race condition something or other w/ transaction vm but
+            // select fixes null here
+            hexColors =
+                hexColors
+                .Take(layerCount)
+                .Select(x => string.IsNullOrEmpty(x) ? MpColorHelpers.GetRandomHexColor() : x)
+                .ToList();
 
             TitleLayerHexColors = hexColors.Select((x, i) => x.AdjustAlpha((double)MpRandom.Rand.Next(40, 120) / 255)).ToArray();
             TitleLayerZIndexes = new List<int> { 1, 2, 3 }.Randomize().ToArray();

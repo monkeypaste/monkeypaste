@@ -39,8 +39,32 @@ namespace MonkeyPaste {
         /// Execute's an async Task<T> method which has a T return type synchronously
         /// </summary>
         /// <typeparam name="T">Return Type</typeparam>
-        /// <param name="task">Task<T> method to execute</param>
+        /// <param name="func">Task<T> method to execute</param>
         /// <returns></returns>
+        public static T RunSync<T>(Func<T> func) {
+            var oldContext = SynchronizationContext.Current;
+            var synch = new ExclusiveSynchronizationContext();
+            SynchronizationContext.SetSynchronizationContext(synch);
+            T ret = default(T);
+#pragma warning disable VSTHRD101 // Avoid unsupported async delegates
+            synch.Post(_ => {
+                try {
+                    ret = func();
+                }
+                catch (Exception e) {
+                    synch.InnerException = e;
+                    throw;
+                }
+                finally {
+                    synch.EndMessageLoop();
+                }
+            }, null);
+#pragma warning restore VSTHRD101 // Avoid unsupported async delegates
+            synch.BeginMessageLoop();
+            SynchronizationContext.SetSynchronizationContext(oldContext);
+            return ret;
+        }
+
         public static T RunSync<T>(Func<Task<T>> task) {
             var oldContext = SynchronizationContext.Current;
             var synch = new ExclusiveSynchronizationContext();
