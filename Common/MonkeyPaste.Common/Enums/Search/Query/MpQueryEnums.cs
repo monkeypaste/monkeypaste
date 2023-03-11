@@ -124,27 +124,26 @@ namespace MonkeyPaste.Common {
             }
         }
 
+        public static bool HasStringMatchFilterFlag(this MpContentQueryBitFlags qf) {
+            return
+                qf.HasFlag(MpContentQueryBitFlags.Title) ||
+                qf.HasFlag(MpContentQueryBitFlags.Content) ||
+                qf.HasFlag(MpContentQueryBitFlags.Url) ||
+                qf.HasFlag(MpContentQueryBitFlags.UrlTitle) ||
+                qf.HasFlag(MpContentQueryBitFlags.AppName) ||
+                qf.HasFlag(MpContentQueryBitFlags.AppPath) ||
+                qf.HasFlag(MpContentQueryBitFlags.Annotations) ||
+                qf.HasFlag(MpContentQueryBitFlags.DeviceName) ||
+                qf.HasFlag(MpContentQueryBitFlags.FileName) ||
+                qf.HasFlag(MpContentQueryBitFlags.FilePath) ||
+                qf.HasFlag(MpContentQueryBitFlags.FileExt) ||
+                qf.HasFlag(MpContentQueryBitFlags.UrlDomain);
+        }
         public static bool IsStringMatchFilterFlag(this MpContentQueryBitFlags f) {
             if (!f.IsViewFieldFlag()) {
                 return false;
             }
-            switch (f) {
-                case MpContentQueryBitFlags.Title:
-                case MpContentQueryBitFlags.Content:
-                case MpContentQueryBitFlags.Url:
-                case MpContentQueryBitFlags.UrlTitle:
-                case MpContentQueryBitFlags.AppName:
-                case MpContentQueryBitFlags.AppPath:
-                case MpContentQueryBitFlags.Annotations:
-                case MpContentQueryBitFlags.DeviceName:
-                case MpContentQueryBitFlags.FileName:
-                case MpContentQueryBitFlags.FilePath:
-                case MpContentQueryBitFlags.FileExt:
-                case MpContentQueryBitFlags.UrlDomain:
-                    return true;
-                default:
-                    return false;
-            }
+            return HasStringMatchFilterFlag(f);
         }
 
         #endregion

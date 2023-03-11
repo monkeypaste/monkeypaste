@@ -30,7 +30,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <local:MpAvShortcutKeyView Grid.Column="1"
-                                                   DataContext="{Binding}" />
+                                                    />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
                 <ItemsControl.ItemsPanel>

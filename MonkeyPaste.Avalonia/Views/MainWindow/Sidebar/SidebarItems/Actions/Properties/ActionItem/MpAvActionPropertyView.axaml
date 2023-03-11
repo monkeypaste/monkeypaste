@@ -19,10 +19,10 @@
                                                 Background="{Binding ActionBackgroundHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
                                                 Padding="5,0"
                                                 HorizontalAlignment="Stretch"
-                                                DataContext="{Binding}" />
+                                                 />
             <local:MpAvPluginParameterListBoxView HorizontalAlignment="Stretch"
                                                   VerticalAlignment="Stretch"
-                                                  DataContext="{Binding}" />
+                                                   />
         </StackPanel>
     </Border>
 </local:MpAvUserControl>

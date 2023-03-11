@@ -89,17 +89,23 @@ namespace MonkeyPaste.Avalonia {
         private void MpAvPreferenceFrameViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(CanSaveOrCancel):
-                    if (!CanSaveOrCancel) {
+                    if (!CanSaveOrCancel || IsBusy) {
                         break;
                     }
                     Dispatcher.UIThread.Post(async () => {
+                        IsBusy = true;
+                        while (MpAvShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
+                            // when slider scrubbing get random errors writing to file
+                            await Task.Delay(100);
+                        }
                         var to_save = Items.Where(x => x.HasModelChanged).ToList();
                         foreach (var pvm in to_save) {
-                            while (MpPrefViewModel.Instance.IsSaving) {
-                                await Task.Delay(100);
-                            }
+                            //while (MpPrefViewModel.Instance.IsSaving) {
+                            //    await Task.Delay(100);
+                            //}
                             MpPrefViewModel.Instance.SetPropertyValue(pvm.ParamId.ToString(), pvm.CurrentTypedValue);
                         }
+                        IsBusy = false;
                     });
                     break;
             }

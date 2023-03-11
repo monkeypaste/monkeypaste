@@ -90,8 +90,7 @@
                 <DataTemplate>
                     <Grid>
                         <local:MpAvTagView local:MpAvBoundsObserverExtension.IsEnabled="True"
-                                           local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedTagTrayBounds, Mode=TwoWay}"
-                                           DataContext="{Binding}" />
+                                           local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedTagTrayBounds, Mode=TwoWay}" />
                         <Border x:Name="SortDropBorder_left"
                                 IsVisible="{Binding IsPinTrayDragOver, Source={x:Static local:MpAvTagTrayViewModel.Instance}}"
                                 Classes="dropLine left"

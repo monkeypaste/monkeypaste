@@ -18,7 +18,8 @@ namespace MonkeyPaste.Common.Plugin {
         PasswordBox,
         Radio,
         ComponentPicker,
-        ShortcutRecorder
+        ShortcutRecorder,
+        Button
     }
 
     public enum MpParameterValueUnitType {

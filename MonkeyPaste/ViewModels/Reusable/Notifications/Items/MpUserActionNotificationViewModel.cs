@@ -7,9 +7,6 @@ using System.Windows.Input;
 namespace MonkeyPaste {
     public class MpUserActionNotificationViewModel : MpNotificationViewModelBase {
         #region Private Variables
-
-
-
         #endregion
 
         #region Properties
@@ -17,7 +14,7 @@ namespace MonkeyPaste {
         #region State
 
         public override bool ShowOptionsButton =>
-            ButtonsType != MpNotificationButtonsType.TextBoxOkCancel;
+            false;//ButtonsType != MpNotificationButtonsType.TextBoxOkCancel;
 
         public bool IsFixing { get; set; } = false;
 

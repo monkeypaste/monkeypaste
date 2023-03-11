@@ -72,8 +72,7 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <Grid HorizontalAlignment="Stretch"
-          VerticalAlignment="Stretch"
-          Background="{DynamicResource TagTreeBgBrush}">
+          VerticalAlignment="Stretch">
         <TreeView x:Name="TagTreeView"
                   Classes.treeDrag="{Binding !IsPinTrayDragOver}"
                   Margin="5,10,20,0"
@@ -92,7 +91,7 @@
                                   ItemsSource="{Binding SortedItems}">
                     <Grid>
                         <local:MpAvTagView x:Name="TagView"
-                                           DataContext="{Binding}" />
+                                            />
                         <Border x:Name="SortDropBorder_top"
                                 IsVisible="{Binding !IsPinTrayDragOver, Source={x:Static local:MpAvTagTrayViewModel.Instance}}"
                                 Classes="dropLine top"

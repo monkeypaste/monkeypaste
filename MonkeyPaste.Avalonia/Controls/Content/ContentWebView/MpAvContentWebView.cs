@@ -813,7 +813,7 @@ namespace MonkeyPaste.Avalonia {
             base.OnDataContextEndUpdate();
             if (_locatedDateTime == null && this is not MpAvPlainHtmlConverterWebView) {
                 // is this called before attached to logical tree?
-                MpDebug.Break();
+                //MpDebug.Break();
             }
             // update locate time to match this data context
             _locatedDateTime = DateTime.Now;
@@ -1015,7 +1015,7 @@ namespace MonkeyPaste.Avalonia {
 
             var searches =
                 Mp.Services.Query.Infos
-                .Where(x => !string.IsNullOrEmpty(x.MatchValue))
+                .Where(x => !string.IsNullOrEmpty(x.MatchValue) && x.QueryFlags.HasStringMatchFilterFlag())
                 .Select(x => new MpQuillContentSearchRequestMessage() {
                     searchText = x.MatchValue,
                     isCaseSensitive = x.QueryFlags.HasFlag(MpContentQueryBitFlags.CaseSensitive),

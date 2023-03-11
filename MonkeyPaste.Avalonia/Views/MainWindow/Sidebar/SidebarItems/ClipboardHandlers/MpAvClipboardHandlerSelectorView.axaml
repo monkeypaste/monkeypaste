@@ -14,8 +14,7 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvClipboardHandlerSelectorView">
     <Border HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            Padding="10"
-            Background="{DynamicResource ClipboardSidebarBgBrush}">
+            Padding="10">
         <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                       VerticalScrollBarVisibility="Auto">
             <WrapPanel Orientation="Horizontal"
@@ -84,7 +83,7 @@
                                                                                          Grid.Column="0"
                                                                                          Margin="0,5,0,0"
                                                                                          VerticalAlignment="Top"
-                                                                                         DataContext="{Binding}" />
+                                                                                          />
                             </StackPanel>
                         </Border>
                     </StackPanel>
@@ -111,7 +110,7 @@
                                 <DataTemplate DataType="local:MpAvClipboardFormatPresetViewModel">
                                     <local:MpAvPluginParameterListBoxView HorizontalAlignment="Stretch"
                                                                           VerticalAlignment="Stretch"
-                                                                          DataContext="{Binding}" />
+                                                                           />
                                 </DataTemplate>
                             </TransitioningContentControl.ContentTemplate>
                         </TransitioningContentControl>

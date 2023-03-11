@@ -125,8 +125,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpAvIParameterCollectionViewModel Implementation
 
-        IEnumerable<MpAvParameterViewModelBase>
-            MpAvIParameterCollectionViewModel.Items => VisibleItems;
+        IEnumerable<MpAvParameterViewModelBase> MpAvIParameterCollectionViewModel.Items =>
+            VisibleItems;
 
         MpAvParameterViewModelBase
             MpAvIParameterCollectionViewModel.SelectedItem {
@@ -198,7 +198,8 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public IEnumerable<MpAvParameterViewModelBase> VisibleItems => Items.Where(x => x.IsVisible);
+        public IEnumerable<MpAvParameterViewModelBase> VisibleItems =>
+            Items.Where(x => x.IsVisible);
 
         #endregion
 
@@ -414,7 +415,9 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvAnalyticItemPresetViewModel(MpAvAnalyticItemViewModel parent) : base(parent) {
             PropertyChanged += MpPresetParameterViewModel_PropertyChanged;
+            Items.CollectionChanged += Items_CollectionChanged;
         }
+
 
         #endregion
 
@@ -562,6 +565,11 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            if (this is MpAvIParameterCollectionViewModel pcvm) {
+                pcvm.OnPropertyChanged(nameof(pcvm.Items));
+            }
+        }
         public virtual async Task<MpParameterFormat> DeferredCreateParameterModel(MpParameterFormat aip) {
             //used to load remote content and called from CreateParameterViewModel in preset
             await Task.Delay(1);

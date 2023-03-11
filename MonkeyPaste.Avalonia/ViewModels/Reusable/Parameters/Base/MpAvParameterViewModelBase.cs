@@ -113,6 +113,12 @@ namespace MonkeyPaste.Avalonia {
                         return CurrentValue;
                 }
             }
+            set {
+                if (CurrentTypedValue != value) {
+                    CurrentValue = value == null ? null : value.ToString();
+                    OnPropertyChanged(nameof(CurrentTypedValue));
+                }
+            }
         }
 
         public double DoubleValue {
@@ -277,6 +283,7 @@ namespace MonkeyPaste.Avalonia {
                             return MpParameterValueUnitType.Bool;
                         case MpParameterControlType.Slider:
                             return MpParameterValueUnitType.Decimal;
+                        case MpParameterControlType.Button:
                         case MpParameterControlType.PasswordBox:
                         case MpParameterControlType.TextBox:
                         case MpParameterControlType.List:

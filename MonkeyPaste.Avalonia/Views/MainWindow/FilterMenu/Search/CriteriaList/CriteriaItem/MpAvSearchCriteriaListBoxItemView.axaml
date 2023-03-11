@@ -159,8 +159,7 @@
                 </ListBox.Resources>
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="local:MpAvSearchCriteriaOptionViewModel">
-                        <local:MpAvSearchCriteriaOptionView DataContext="{Binding}"
-                                                            local:MpAvIsHoveringExtension.IsEnabled="True"
+                        <local:MpAvSearchCriteriaOptionView local:MpAvIsHoveringExtension.IsEnabled="True"
                                                             local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}" />
                     </DataTemplate>
                 </ListBox.ItemTemplate>

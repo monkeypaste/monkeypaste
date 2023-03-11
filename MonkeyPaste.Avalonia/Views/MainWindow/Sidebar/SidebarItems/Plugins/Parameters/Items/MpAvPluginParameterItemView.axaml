@@ -29,19 +29,20 @@
                 <TextBlock DockPanel.Dock="Left"
                            HorizontalAlignment="Left"
                            VerticalAlignment="Top"
-                           MaxWidth="120"
+                           MaxWidth="70"
                            FontSize="12"
                            TextWrapping="Wrap"
                            Foreground="White"
                            Margin="5,1,0,0"
                            Text="{Binding Label}" />
 
-                <!--  DESCRIPTION  -->
+                <!--
+                    DESCRIPTION
+                -->
 
                 <local:MpAvToolTipInfoHintView DockPanel.Dock="Right"
-                                               IsVisible="{Binding Description, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                                Margin="0,5,2,0"
-                                               ClipToBounds="False"
+                                               IsVisible="{Binding Description, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                                VerticalAlignment="Top"
                                                HorizontalAlignment="Right"
                                                ToolTipText="{Binding Description}" />
@@ -55,7 +56,7 @@
                             Margin="1"
                             HorizontalAlignment="Stretch"
                             HorizontalContentAlignment="Stretch"
-                            Content="{Binding .}">
+                            Content="{Binding}">
                 <ToolTip.Tip>
                     <local:MpAvToolTipView Classes.error="True"
                                            IsVisible="{Binding !IsValid}"
@@ -68,49 +69,56 @@
 
                         <DataTemplate x:Key="MultiSelectListParameterTemplate"
                                       DataType="local:MpAvEnumerableParameterViewModel">
-                            <local:MpAvMultiSelectListBoxParameterView DataContext="{Binding .}" />
+                            <local:MpAvMultiSelectListBoxParameterView />
                         </DataTemplate>
 
                         <!--  Single Select ListBox Parameter  -->
 
                         <DataTemplate x:Key="ListParameterTemplate"
                                       DataType="local:MpAvEnumerableParameterViewModel">
-                            <local:MpAvSingleSelectListBoxParameterView DataContext="{Binding .}" />
+                            <local:MpAvSingleSelectListBoxParameterView />
                         </DataTemplate>
 
                         <!--  Editable ListBox Parameter  -->
 
                         <DataTemplate x:Key="EditableListParameterTemplate"
                                       DataType="local:MpAvEnumerableParameterViewModel">
-                            <local:MpAvEditableListBoxParameterView DataContext="{Binding .}" />
+                            <local:MpAvEditableListBoxParameterView />
                         </DataTemplate>
 
                         <!--  ComboBox Parameter  -->
 
                         <DataTemplate x:Key="ComboBoxParameterTemplate"
                                       DataType="local:MpAvEnumerableParameterViewModel">
-                            <local:MpAvComboBoxParameterView DataContext="{Binding .}" />
+                            <local:MpAvComboBoxParameterView />
                         </DataTemplate>
 
                         <!--  TextBox Parameter  -->
 
                         <DataTemplate x:Key="TextBoxParameterTemplate"
                                       DataType="local:MpAvTextBoxParameterViewModel">
-                            <local:MpAvTextBoxParameterView DataContext="{Binding .}" />
+                            <local:MpAvTextBoxParameterView />
                         </DataTemplate>
 
                         <!--  PasswordBox Parameter  -->
 
                         <DataTemplate x:Key="PasswordBoxParameterTemplate"
                                       DataType="local:MpAvTextBoxParameterViewModel">
-                            <local:MpAvPasswordBoxParameterView DataContext="{Binding .}" />
+                            <local:MpAvPasswordBoxParameterView />
                         </DataTemplate>
 
                         <!--  CheckBox Parameter  -->
 
                         <DataTemplate x:Key="CheckBoxParameterTemplate"
                                       DataType="local:MpAvCheckBoxParameterViewModel">
-                            <local:MpAvCheckBoxParameterView DataContext="{Binding .}" />
+                            <local:MpAvCheckBoxParameterView />
+                        </DataTemplate>
+
+                        <!--  Button Parameter  -->
+
+                        <DataTemplate x:Key="ButtonParameterTemplate"
+                                      DataType="local:MpAvButtonParameterViewModel">
+                            <local:MpAvButtonParameterView />
                         </DataTemplate>
 
                         <!--  Slider Parameter  -->
@@ -119,29 +127,28 @@
                                       DataType="local:MpAvSliderParameterViewModel">
                             <local:MpAvSliderParameterView Margin="10,0"
                                                            local:MpAvIsHoveringExtension.IsEnabled="True"
-                                                           local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
-                                                           DataContext="{Binding .}" />
+                                                           local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}" />
                         </DataTemplate>
 
                         <!--  File or Directory Chooser Parameter  -->
 
                         <DataTemplate x:Key="FileChooserParameterTemplate"
                                       DataType="local:MpAvFileChooserParameterViewModel">
-                            <local:MpAvFileChooserParameterView DataContext="{Binding .}" />
+                            <local:MpAvFileChooserParameterView />
                         </DataTemplate>
 
                         <!--  Component Picker Parameter  -->
 
                         <DataTemplate x:Key="ComponentPickerParameterTemplate"
                                       DataType="local:MpAvComponentPickerParameterViewModel">
-                            <local:MpAvComponentPickerParameterView DataContext="{Binding .}" />
+                            <local:MpAvComponentPickerParameterView />
                         </DataTemplate>
 
                         <!--  Shortcut Recorder Parameter  -->
 
                         <DataTemplate x:Key="ShortcutRecorderParameterTemplate"
                                       DataType="local:MpAvShortcutRecorderParameterViewModel">
-                            <local:MpAvShortcutRecorderParameterView DataContext="{Binding .}" />
+                            <local:MpAvShortcutRecorderParameterView />
                         </DataTemplate>
                     </local:MpAvPluginParameterTemplateSelector>
                 </ContentControl.DataTemplates>

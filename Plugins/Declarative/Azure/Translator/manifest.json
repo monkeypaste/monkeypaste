@@ -73,7 +73,7 @@
         "newContentItem": {
           "name": "TranslatedContent",
           "label": {
-            "value": "Azure Translation",
+            "value": "Azure Translation"
           },
           "content": {
             "pathExpression": "$.['translations'][0].text"

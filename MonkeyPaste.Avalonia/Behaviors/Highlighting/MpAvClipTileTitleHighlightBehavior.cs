@@ -36,7 +36,7 @@ namespace MonkeyPaste.Avalonia {
             if (AssociatedObject is MpAvMarqueeTextBox mtb) {
                 _matches.AddRange(
                     Mp.Services.Query.Infos
-                    .Where(x => !string.IsNullOrEmpty(x.MatchValue))
+                    .Where(x => !string.IsNullOrEmpty(x.MatchValue) && x.QueryFlags.HasStringMatchFilterFlag())
                     .SelectMany(x =>
                         mtb.Text.QueryText(
                             x.MatchValue,

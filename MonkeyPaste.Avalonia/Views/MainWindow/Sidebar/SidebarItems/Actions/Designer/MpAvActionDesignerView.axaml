@@ -135,7 +135,7 @@
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>
                         <DataTemplate DataType="local:MpAvActionViewModelBase">
-                            <local:MpAvActionDesignerItemView DataContext="{Binding}" />
+                            <local:MpAvActionDesignerItemView />
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>

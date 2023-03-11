@@ -26,7 +26,7 @@ namespace MonkeyPaste.Avalonia {
             var svtb = this.FindControl<TextBox>("SliderValueTextBox");
             svtb.GotFocus += Svtb_GotFocus;
             svtb.LostFocus += Svtb_LostFocus;
-            svtb.KeyDown += Svtb_KeyDown;
+            svtb.AddHandler(KeyDownEvent, Svtb_KeyDown, RoutingStrategies.Tunnel);
             svtb.GetObservable(TextBox.TextProperty).Subscribe(value => OnSliderTextChanged());
         }
 
@@ -139,15 +139,12 @@ namespace MonkeyPaste.Avalonia {
                 var svtb = sender as TextBox;
                 if (e.Key == Key.Enter) {
                     // trigger lost focus
-                    //this.FindControl<Border>("SliderBorder").Focus();
+                    e.Handled = true;
                     svtb.TryKillFocusAsync().FireAndForgetSafeAsync();
                     return;
                 }
                 if (e.Key == Key.Escape) {
-                    // avoid breaking the binding?
-                    TextBox.TextProperty.Setter.Invoke(svtb, _oldVal.ToString());
-                    // trigger lost focus
-                    //this.FindControl<Border>("SliderBorder").Focus();
+                    svtb.Text = _oldVal.ToString();
                     svtb.TryKillFocusAsync().FireAndForgetSafeAsync();
                 }
             });
@@ -167,8 +164,7 @@ namespace MonkeyPaste.Avalonia {
                 if (!_oldVal.IsNumber()) {
                     _oldVal = 0;
                 }
-                // avoid breaking the binding?
-                TextBox.TextProperty.Setter.Invoke(svtb, _oldVal.ToString());
+                svtb.Text = _oldVal.ToString();
                 OnSliderValueTextBoxValueChanged();
             }
         }

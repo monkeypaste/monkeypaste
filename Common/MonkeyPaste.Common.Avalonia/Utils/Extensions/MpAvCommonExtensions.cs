@@ -330,7 +330,7 @@ namespace MonkeyPaste.Common.Avalonia {
                     CultureInfo.CurrentCulture,
                     flowDirection,
                     new Typeface(fontFamily, fontStyle, fontWeight),
-                    fontSize,
+                    Math.Max(1, fontSize),
                     foreground);
             return ft;
         }

@@ -72,7 +72,7 @@
                                                 CornerRadius="0"
                                                 Cursor="Hand"
                                                 Background="Transparent"
-                                                DataContext="{Binding}"
+                                                
                                                 Command="{Binding ChangeIconCommand, Source={x:Static local:MpAvIconCollectionViewModel.Instance}}"
                                                 CommandParameter="{Binding $self}">
                                             <Image Width="20"

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -42,13 +43,16 @@ namespace MonkeyPaste {
         #region Statics
 
         [JsonIgnore]
-        public static MpPrefViewModel Instance { get; private set; }
+        private static MpPrefViewModel _instance;
+        [JsonIgnore]
+        public static MpPrefViewModel Instance =>
+            _instance;
+
         [JsonIgnore]
         public static string PreferencesPath => _prefPath;
 
         [JsonIgnore]
         public static string PreferencesPathBackup => $"{PreferencesPath}.{PREF_BACKUP_PATH_EXT}";
-
 
         #endregion
 
@@ -357,11 +361,11 @@ namespace MonkeyPaste {
 
         #region Look & Feel
 
+        public string CurrentThemeName { get; set; } = MpThemeType.Light.ToString();
+        public int NotificationSoundGroupIdx { get; set; } = 1; // not shown
+        public double NotificationSoundVolume { get; set; } = 0;
         public bool ShowInTaskbar { get; set; } = true;
         public bool ShowInTaskSwitcher { get; set; } = true;
-        public string CurrentThemeName { get; set; } = MpThemeType.Light.ToString();
-        public int NotificationSoundGroupIdx { get; set; } = 1;
-        public double NotificationSoundVolume { get; set; } = 1;
         public double MainWindowOpacity { get; set; }
 #if DESKTOP
         = 0.7;
@@ -369,37 +373,36 @@ namespace MonkeyPaste {
         = 1.0d;
 #endif
 
-        public bool ShowItemPreview { get; set; } = false;
         #endregion
 
         #region Content
 
-        public bool IgnoreNewDuplicates { get; set; } = true;
+        public bool IsDuplicateCheckEnabled { get; set; } = true;
 
         public bool IsRichHtmlContentEnabled { get; set; } = true;
-
-        public bool UseSpellCheck { get; set; } = false;
 
         #endregion
 
         #region Language
 
-        public string UserLanguage { get; set; } = "English";
+        public string UserLanguageCode { get; set; } = CultureInfo.CurrentCulture.Name;
+
         #endregion
 
         #region History
 
-        public int MaxUndoLimit { get; set; } = 100;
-        public int MaxRecentTextsCount { get; set; } = 8;
+        public int MaxUndoLimit { get; set; } = 10;
+        public int MaxRecentTextsCount { get; set; } = 10;
 
-        public int MaxRecentClipItems { get; set; } = 25;
+        public int MaxStagedClipCount { get; set; } = 25;
 
         public bool TrackExternalPasteHistory { get; set; } = false; // will show warning about storage or something
         #endregion
 
-        #region Startup
+        #region System
 
         public bool LoadOnLogin { get; set; } = false;
+
         #endregion
 
         #endregion
@@ -421,7 +424,6 @@ namespace MonkeyPaste {
 
         public bool IsSettingsEncrypted { get; set; } = false; // requires restart and only used to trigger convert on exit (may not be necessary to restart)
 
-
         public string DbPassword { get; set; } = MpPasswordGenerator.GetRandomPassword();
         #endregion
 
@@ -434,6 +436,20 @@ namespace MonkeyPaste {
         #endregion
 
         #region Runtime/Dependant Properties
+
+        #region Language
+
+        public string FlowDirectionName {
+            get {
+                if (CultureInfo.GetCultureInfo(UserLanguageCode) is CultureInfo ci &&
+                    ci.TextInfo.IsRightToLeft) {
+                    return "RightToLeft";
+                }
+                return "LeftToRight";
+            }
+        }
+
+        #endregion
 
         #region Auto-Complete
         public string RecentFindTexts { get; set; } = string.Empty;
@@ -587,9 +603,6 @@ namespace MonkeyPaste {
         #region Private Methods
 
         private void MpJsonPreferenceIO_PropertyChanged(object sender, PropertyChangedEventArgs e) {
-            if (e.PropertyName == nameof(UniqueContentItemIdx)) {
-
-            }
             if (e.PropertyName == nameof(IsSaving) || IsLoading) {
                 return;
             }
@@ -626,7 +639,7 @@ namespace MonkeyPaste {
                     Debugger.Break();
                 }
             } else {
-                Instance = prefVm;
+                _instance = prefVm;
             }
 
             IsLoading = false;
@@ -660,7 +673,7 @@ namespace MonkeyPaste {
                         return;
                     }
                 }
-                Instance = new MpPrefViewModel();
+                _instance = new MpPrefViewModel();
                 var info_tuple = await MpDefaultDataModelTools.DiscoverPrefInfoAsync(_dbInfo, _osInfo);
                 string discovered_device_guid = info_tuple.Item1;
                 int total_count = info_tuple.Item2;
@@ -675,7 +688,7 @@ namespace MonkeyPaste {
                     Instance.UniqueContentItemIdx = total_count;
                 }
             } else {
-                Instance = new MpPrefViewModel();
+                _instance = new MpPrefViewModel();
             }
 
             IsLoading = true;

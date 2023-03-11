@@ -30,7 +30,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <local:MpAvContentQueryTextBoxView Background="Transparent"
-                                                           DataContext="{Binding}"
+                                                           
                                                            BorderBrush="{Binding BorderBrush, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}" />
                     </DataTemplate>
                 </ListBox.ItemTemplate>

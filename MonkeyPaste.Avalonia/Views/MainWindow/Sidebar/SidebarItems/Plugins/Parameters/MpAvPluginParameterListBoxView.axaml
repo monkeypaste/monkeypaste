@@ -79,7 +79,90 @@
         </Style>
 
         <!--  PARAM LISTBOXITEM  -->
+        <Style Selector="ListBox#PluginParameterListBox > ListBoxItem"
+               x:DataType="local:MpAvParameterViewModelBase">
+            <Setter Property="IsVisible"
+                    Value="{Binding ., Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}" />
+        </Style>
+        <Style Selector="ListBox#PluginParameterListBox ListBoxItem">
+            <Setter Property="Margin"
+                    Value="0,2.5" />
+            <Setter Property="Padding"
+                    Value="0" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Stretch" />
+            <Setter Property="BorderBrush"
+                    Value="Silver" />
+        </Style>
+        <!--<Style Selector="ListBox#PluginParameterListBox ListBoxItem:pointerover">
+            <Setter Property="BorderBrush"
+                    Value="Yellow" />
+        </Style>-->
 
+        <Style Selector="ListBox#PluginParameterListBox ListBoxItem">
+            <Setter Property="BorderThickness"
+                    Value="0,0,0,1" />
+        </Style>
+
+        <Style Selector="ListBox#PluginParameterListBox ListBoxItem:nth-last-child()">
+            <Setter Property="BorderThickness"
+                    Value="0,0,0,0" />
+        </Style>
+
+
+
+        <Style Selector="Border.paramBorder">
+            <Setter Property="Margin"
+                    Value="10,2" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Stretch" />
+            <Setter Property="CornerRadius"
+                    Value="2" />
+            <Setter Property="BorderThickness"
+                    Value="1" />
+            <Setter Property="BorderBrush"
+                    Value="Transparent" />
+        </Style>
+        <Style Selector="Border.paramBorder Button">
+            <Setter Property="Margin"
+                    Value="10,2" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Stretch" />
+            <Setter Property="CornerRadius"
+                    Value="2" />
+            <Setter Property="BorderThickness"
+                    Value="1" />
+            <Setter Property="BorderBrush"
+                    Value="Transparent" />
+        </Style>
+        <Style Selector="Border.paramBorder.sliderBorder">
+            <Setter Property="BorderBrush"
+                    Value="Black" />
+            <Setter Property="Background"
+                    Value="{StaticResource HitTestableTransparent}" />
+        </Style>
+        <Style Selector="Border.paramBorder:not(.sliderBorder) TextBox">
+            <Setter Property="BorderBrush"
+                    Value="Black" />
+            <Setter Property="BorderThickness"
+                    Value="1" />
+            <Setter Property="Padding"
+                    Value="5" />
+            <Setter Property="Margin"
+                    Value="3,0,0,0" />
+            <Setter Property="FontSize"
+                    Value="12" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Stretch" />
+        </Style>
+        <Style Selector="Border:pointerover.paramBorder.sliderBorder">
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource HoverDefaultBorderBrush}" />
+        </Style>
+        <Style Selector="local|MpAvPluginParameterItemView.invalid Border.paramBorder">
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource DefaultInvalidBrush}" />
+        </Style>
 
     </local:MpAvUserControl.Styles>
     <Grid x:Name="ParameterContainerGrid"
@@ -130,11 +213,25 @@
         </Button>
         <ListBox x:Name="PluginParameterListBox"
                  Grid.Row="1"
+                 Margin="5,0"
+                 Padding="0"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Top"
-                 IsVisible="{Binding Items, Converter={x:Static local:MpAvCollectionIsNotEmptyToBoolConverter.Instance}, FallbackValue=True, TargetNullValue=True}"
+                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 BorderThickness="0"
+                 Background="Transparent"
+                 IsVisible="{Binding Items, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                  Items="{Binding Items}"
                  SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+            <ListBox.Resources>
+                <!--<SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">Transparent</SolidColorBrush>
+                <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">Transparent</SolidColorBrush>
+                <SolidColorBrush x:Key="SystemControlHighlightListAccentHighBrush">Transparent</SolidColorBrush>
+                <SolidColorBrush x:Key="SystemControlHighlightListLowBrush">Transparent</SolidColorBrush>
+                <SolidColorBrush x:Key="SystemControlHighlightListMediumBrush">Transparent</SolidColorBrush>
+                <SolidColorBrush x:Key="SystemControlHighlightListHighBrush">Transparent</SolidColorBrush>-->
+            </ListBox.Resources>
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel Orientation="Vertical"
@@ -145,8 +242,7 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <local:MpAvPluginParameterItemView HorizontalAlignment="Stretch"
-                                                       Classes.invalid="{Binding !IsValid}"
-                                                       DataContext="{Binding}" />
+                                                       Classes.invalid="{Binding !IsValid}" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
@@ -155,7 +251,7 @@
         <Border HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 MinWidth="50"
-                IsVisible="{Binding Items, ConverterParameter=flip, Converter={x:Static local:MpAvCollectionIsNotEmptyToBoolConverter.Instance}, FallbackValue=False, TargetNullValue=False}"
+                IsVisible="{Binding Items, ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                 Background="Transparent">
             <TextBlock HorizontalAlignment="Center"
                        VerticalAlignment="Center"

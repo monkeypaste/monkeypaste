@@ -98,8 +98,6 @@ namespace MonkeyPaste.Avalonia {
         public bool IsPopupMenuOpen { get; set; }
         #endregion
 
-
-
         #region Appearance
 
         public string BackgroundBrush {
@@ -145,7 +143,21 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public string Label { get; set; }
+        private string _label;
+        public string Label {
+            get {
+                if (string.IsNullOrEmpty(_label)) {
+                    return Value;
+                }
+                return _label;
+            }
+            set {
+                if (_label != value) {
+                    _label = value;
+                    OnPropertyChanged(nameof(Label));
+                }
+            }
+        }
 
         public string Value { get; set; }
 

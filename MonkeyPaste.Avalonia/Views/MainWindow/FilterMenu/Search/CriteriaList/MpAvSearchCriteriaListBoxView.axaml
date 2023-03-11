@@ -157,7 +157,7 @@
         </Style>
         <!--  TEXT BOXES  -->
 
-        <Style Selector="TextBox"
+        <Style Selector="TextBox:not(.valid)"
                x:DataType="local:MpAvSearchCriteriaOptionViewModel">
             <Setter Property="ToolTip.Tip">
                 <Setter.Value>
@@ -319,8 +319,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid Width="{Binding $parent[ListBoxItem].Bounds.Width}">
-                            <local:MpAvSearchCriteriaItemView HorizontalAlignment="Stretch"
-                                                              DataContext="{Binding}" />
+                            <local:MpAvSearchCriteriaItemView HorizontalAlignment="Stretch" />
                             <Border x:Name="SortDropBorder_top"
                                     Classes="dropLine top"
                                     Classes.dragOver="{Binding IsDragOverTop}"

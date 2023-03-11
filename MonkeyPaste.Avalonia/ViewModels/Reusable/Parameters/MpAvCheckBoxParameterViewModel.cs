@@ -20,13 +20,6 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvCheckBoxParameterViewModel(MpViewModelBase parent) : base(parent) { }
 
-        public override async Task InitializeAsync(MpParameterValue aipv) {
-            IsBusy = true;
-
-            await base.InitializeAsync(aipv);
-
-            IsBusy = false;
-        }
 
         #endregion
     }

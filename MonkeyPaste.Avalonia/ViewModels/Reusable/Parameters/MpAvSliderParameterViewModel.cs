@@ -8,13 +8,8 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
         #endregion
 
-        #region Properties
+        #region Interfaces
 
-        #region View Models
-        #endregion
-
-        #region Appearance
-        #endregion
 
         #region MpISliderViewModel Implementation
 
@@ -39,9 +34,22 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #endregion
+
+        #region Properties
+
+        #region View Models
+        #endregion
+
+        #region Appearance
+        #endregion
+
+        #region State
+        #endregion
+
         #region Model
 
-        #endregion        
+        #endregion
 
         #endregion
 
@@ -80,7 +88,7 @@ namespace MonkeyPaste.Avalonia {
             try {
                 switch (UnitType) {
                     case MpParameterValueUnitType.Integer:
-                        return int.Parse(value);
+                        return (int)double.Parse(value);
                     case MpParameterValueUnitType.Decimal:
                         return Math.Round(double.Parse(value), Precision);
                     default:

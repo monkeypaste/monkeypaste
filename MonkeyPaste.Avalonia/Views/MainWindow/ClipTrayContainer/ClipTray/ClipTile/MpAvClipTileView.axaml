@@ -76,7 +76,6 @@
             <local:MpAvClipTileTitleView x:Name="TileTitleView"
                                          Grid.Row="0"
                                          MaxHeight="40"
-                                         DataContext="{Binding}"
                                          HorizontalAlignment="Stretch"
                                          VerticalAlignment="Top"
                                          IsVisible="{Binding IsTitleVisible}" />
@@ -86,8 +85,7 @@
                                            Grid.Row="1"
                                            Grid.RowSpan="2"
                                            HorizontalAlignment="Stretch"
-                                           VerticalAlignment="Stretch"
-                                           DataContext="{Binding}" />
+                                           VerticalAlignment="Stretch" />
 
             <!--
                 IsBusy Overlay
@@ -143,8 +141,7 @@
                                                  Grid.RowSpan="3"
                                                  IsVisible="{Binding IsCornerButtonsVisible}"
                                                  HorizontalAlignment="Stretch"
-                                                 VerticalAlignment="Stretch"
-                                                 DataContext="{Binding}" />
+                                                 VerticalAlignment="Stretch" />
 
             <!--  TRANSACTION COLUMN  -->
 

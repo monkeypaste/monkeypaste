@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -97,6 +98,10 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(FilterText):
                     MpMessenger.SendGlobal(MpMessageType.SettingsFilterTextChanged);
+                    if (_settingsWindow is Window w && !string.IsNullOrWhiteSpace(FilterText)) {
+                        var test = w.FindVisualDescendantWithHashCode(int.Parse(FilterText), true);
+                    }
+
                     break;
 
             }

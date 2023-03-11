@@ -11,5 +11,5 @@
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800">
-    <local:MpAvAssignableShortcutView DataContext="{Binding}"/>
+    <local:MpAvAssignableShortcutView />
 </local:MpAvUserControl>

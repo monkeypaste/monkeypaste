@@ -165,8 +165,7 @@
                     </ListBox.Resources>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <local:MpAvClipTileView DataContext="{Binding .}"
-                                                    local:MpAvIsHoveringExtension.IsEnabled="True"
+                            <local:MpAvClipTileView local:MpAvIsHoveringExtension.IsEnabled="True"
                                                     local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
                                                     local:MpAvBoundsObserverExtension.IsEnabled="True"
                                                     local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedBounds, Mode=TwoWay}"
@@ -213,8 +212,7 @@
                     Height="70">
                 <local:MpAvProgressSpinnerView x:Name="QueryTrayBusySpinner"
                                                HorizontalAlignment="Stretch"
-                                               VerticalAlignment="Stretch"
-                                               DataContext="{Binding}" />
+                                               VerticalAlignment="Stretch" />
             </Border>
         </Border>
 

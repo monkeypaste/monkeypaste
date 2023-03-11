@@ -50,6 +50,32 @@
           }
         ]
       }
+    ],
+    "presets": [
+      {
+        "guid": "2159a492-cdc5-429d-bf26-08c478f87e52",
+        "label": "Convert to Text",
+        "iconUri": "text.png",
+        "description": "Attempts to convert provided file to plain text",
+        "values": [
+          {
+            "paramId": 2,
+            "value": "Text"
+          }
+        ]
+      },
+      {
+        "guid": "c24df3c2-5316-45e2-aac4-ffccdf8a8460",
+        "iconUri": "image.png",
+        "label": "Convert to Image",
+        "description": "Attempts to convert provided file to in-memory image",
+        "values": [
+          {
+            "paramId": 2,
+            "value": "Image"
+          }
+        ]
+      }
     ]
   }
 }

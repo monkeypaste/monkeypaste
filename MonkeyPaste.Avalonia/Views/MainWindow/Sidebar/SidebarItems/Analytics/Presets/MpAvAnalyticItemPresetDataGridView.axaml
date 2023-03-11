@@ -69,7 +69,6 @@
                                             CornerRadius="0"
                                             Cursor="Hand"
                                             Background="Transparent"
-                                            DataContext="{Binding}"
                                             local:MpAvPointerCommandExtension.IsEnabled="True"
                                             local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ChangeIconCommand, Source={x:Static local:MpAvIconCollectionViewModel.Instance}}"
                                             local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding $self}">

@@ -457,6 +457,29 @@ namespace MonkeyPaste.Common {
             }
             return true;
         }
+
+        public static bool CreateDirectory(string path) {
+            if (path.IsDirectory()) {
+                MpConsole.WriteTraceLine($"Warning directory '{path}' already exists");
+                return true;
+            }
+            if (path.IsFile()) {
+                MpConsole.WriteTraceLine($"Error '{path}' is a file not a directory");
+                return false;
+            }
+            if (string.IsNullOrEmpty(path)) {
+                MpConsole.WriteTraceLine($"Error no directory path provided");
+                return false;
+            }
+            try {
+                Directory.CreateDirectory(path);
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error creating Directory '{path}'", ex);
+                return false;
+            }
+            return true;
+        }
         public static bool DeleteDirectory(string path, bool recursive = true) {
             if (path.IsDirectory()) {
                 try {

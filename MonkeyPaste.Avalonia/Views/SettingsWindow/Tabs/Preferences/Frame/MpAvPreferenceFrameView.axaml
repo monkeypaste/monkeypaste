@@ -15,14 +15,14 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvPreferenceFrameView">
     <Border BorderThickness="1"
             CornerRadius="10"
+            BorderBrush="White"
             Padding="5">
         <StackPanel>
             <Label Classes="h1"
                    Content="{Binding LabelText}" />
             <Border Classes="labelUnderline" />
             <local:MpAvPluginParameterListBoxView HorizontalAlignment="Stretch"
-                                                  VerticalAlignment="Stretch"
-                                                  DataContext="{Binding .}" />
+                                                  VerticalAlignment="Stretch" />
         </StackPanel>
     </Border>
 </local:MpAvUserControl>

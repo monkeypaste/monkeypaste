@@ -178,7 +178,7 @@ namespace MonkeyPaste {
             int dataObjectId = 0,
             bool suppressWrite = false) {
             MpCopyItem dupCheck = null;
-            if (MpPrefViewModel.Instance.IgnoreNewDuplicates && !suppressWrite) {
+            if (MpPrefViewModel.Instance.IsDuplicateCheckEnabled && !suppressWrite) {
                 dupCheck = await MpDataModelProvider.GetCopyItemByDataAsync(data);
                 if (dupCheck != null) {
                     dupCheck.WasDupOnCreate = true;

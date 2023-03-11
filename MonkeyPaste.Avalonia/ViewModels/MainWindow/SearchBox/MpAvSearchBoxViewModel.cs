@@ -315,7 +315,7 @@ namespace MonkeyPaste.Avalonia {
             }
             DateTime? no_focus_start_dt = null;
             while (true) {
-                if (!IsExpanded || HasText) {
+                if (!IsExpanded || HasText || IsMultipleMatches) {
                     return;
                 }
                 if (FocusManager.Instance.Current == null) {

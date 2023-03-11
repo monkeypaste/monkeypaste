@@ -23,7 +23,7 @@
                   MinWidth="80">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock DataContext="{Binding}" 
+                    <TextBlock  
                                Text="{Binding Label}" />
                 </DataTemplate>
             </ComboBox.ItemTemplate>

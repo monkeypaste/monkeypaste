@@ -19,7 +19,8 @@
                   ScrollViewer.VerticalScrollBarVisibility="Auto">
         <ItemsControl.ItemTemplate>
             <DataTemplate>
-                <local:MpAvPreferenceFrameView DataContext="{Binding}"
+                <local:MpAvPreferenceFrameView 
+                                               Margin="10"
                                                Width="300"
                                                MinHeight="50" />
             </DataTemplate>

@@ -15,8 +15,7 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvAnalyticItemSelectorView">
     <Border HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            Padding="10"
-            Background="{DynamicResource AnalyzerSidebarBgBrush}">
+            Padding="10">
         <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                       VerticalScrollBarVisibility="Auto">
             <WrapPanel Orientation="Horizontal"
@@ -61,8 +60,7 @@
                                 DataContext="{Binding SelectedItem}">
 
                             <local:MpAvAnalyticItemPresetDataGridView HorizontalAlignment="Stretch"
-                                                                      VerticalAlignment="Stretch"
-                                                                      DataContext="{Binding .}" />
+                                                                      VerticalAlignment="Stretch" />
                         </Border>
                     </StackPanel>
                 </Border>
@@ -84,10 +82,9 @@
                                            Duration="0:00:00.250" />
                             </TransitioningContentControl.PageTransition>
                             <TransitioningContentControl.ContentTemplate>
-                                <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
+                                <DataTemplate DataType="local:MpAvIParameterCollectionViewModel">
                                     <local:MpAvPluginParameterListBoxView HorizontalAlignment="Stretch"
-                                                                          VerticalAlignment="Stretch"
-                                                                          DataContext="{Binding .}" />
+                                                                          VerticalAlignment="Stretch" />
                                 </DataTemplate>
                             </TransitioningContentControl.ContentTemplate>
                         </TransitioningContentControl>

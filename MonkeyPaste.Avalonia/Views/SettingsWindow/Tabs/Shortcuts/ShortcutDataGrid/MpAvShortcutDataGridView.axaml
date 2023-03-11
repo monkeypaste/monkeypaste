@@ -104,7 +104,7 @@
                                                         local:MpAvPointerCommandExtension.LeftPressCommand="{Binding AssignCommand}"
                                                         local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
                                                         RecordCommand="{Binding AssignCommand}"
-                                                        DataContext="{Binding}" />
+                                                         />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

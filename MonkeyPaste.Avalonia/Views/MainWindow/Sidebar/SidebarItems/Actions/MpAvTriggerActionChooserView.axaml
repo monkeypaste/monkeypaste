@@ -16,8 +16,7 @@
     <!--<Grid x:Name="TriggerSelectorViewContainerGrid"
           ColumnDefinitions="400,*">-->
     <Border HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            Background="{DynamicResource AnalyzerSidebarBgBrush}">
+            VerticalAlignment="Stretch">
         <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                       VerticalScrollBarVisibility="Auto">
             <WrapPanel Orientation="Horizontal"
@@ -121,7 +120,7 @@
                                     <local:MpAvActionPropertyView VerticalAlignment="Stretch"
                                                                   HorizontalAlignment="Stretch"
                                                                   IsVisible="{Binding ., Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}, FallbackValue=False, TargetNullValue=False}"
-                                                                  DataContext="{Binding}" />
+                                                                   />
                                 </ScrollViewer>
                             </StackPanel>
                         </Border>
@@ -142,8 +141,7 @@
                             MinHeight="350"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch">
-                        <local:MpAvActionDesignerView DataContext="{Binding}"
-                                                      HorizontalAlignment="Stretch"
+                        <local:MpAvActionDesignerView HorizontalAlignment="Stretch"
                                                       VerticalAlignment="Stretch" />
                     </Border>
                 </Border>

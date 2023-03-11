@@ -19,7 +19,7 @@ namespace MonkeyPaste.Avalonia {
         public static readonly StyledProperty<string> TextProperty =
             AvaloniaProperty.Register<MpAvLostFocusUpdateBindingBehavior, string>(
             name: nameof(Text),
-            defaultValue: string.Empty,
+            //defaultValue: string.Empty,
             defaultBindingMode: BindingMode.TwoWay);
 
         public string Text {
@@ -28,21 +28,24 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected override void OnAttached() {
-            if (AssociatedObject != null) {
-                AssociatedObject.LostFocus += OnLostFocus;
-                AssociatedObject.DetachedFromLogicalTree += AssociatedObject_DetachedFromLogicalTree;
-            }
+            //if (AssociatedObject != null) {
+            //    AssociatedObject.LostFocus += OnLostFocus;
+            //    AssociatedObject.DetachedFromLogicalTree += AssociatedObject_DetachedFromLogicalTree;
+            //    //AssociatedObject.Text = Text;
+            //}
+            AssociatedObject.LostFocus += OnLostFocus;
             base.OnAttached();
         }
 
-        private void AssociatedObject_DetachedFromLogicalTree(object sender, global::Avalonia.LogicalTree.LogicalTreeAttachmentEventArgs e) {
-            this.Detach();
-        }
+        //private void AssociatedObject_DetachedFromLogicalTree(object sender, global::Avalonia.LogicalTree.LogicalTreeAttachmentEventArgs e) {
+        //    this.Detach();
+        //}
 
         protected override void OnDetaching() {
-            if (AssociatedObject != null) {
-                AssociatedObject.LostFocus -= OnLostFocus;
-            }
+            //if (AssociatedObject != null) {
+            //    AssociatedObject.LostFocus -= OnLostFocus;
+            //}
+            AssociatedObject.LostFocus -= OnLostFocus;
             base.OnDetaching();
         }
 

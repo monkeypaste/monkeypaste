@@ -311,7 +311,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private string GetDefaultItemTitle(MpCopyItemType itemType, MpPortableDataObject mpdo) {
-            string default_title = mpdo.GetData(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT) as string;
+
+            string default_title = null;
+            if (mpdo.ContainsData(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT)) {
+                default_title = mpdo.GetData(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT) as string;
+            }
             if (string.IsNullOrEmpty(default_title)) {
                 default_title = $"{itemType} {(++MpPrefViewModel.Instance.UniqueContentItemIdx)}";
             }

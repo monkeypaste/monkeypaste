@@ -76,8 +76,7 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <local:MpAvDropFormatItemView HorizontalAlignment="Stretch"
-                                                          VerticalAlignment="Stretch"
-                                                          DataContext="{Binding}" />
+                                                          VerticalAlignment="Stretch" />
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>

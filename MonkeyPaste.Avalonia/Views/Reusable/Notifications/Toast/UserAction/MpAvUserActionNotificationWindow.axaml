@@ -25,17 +25,17 @@
         Background="Transparent"
         Title="">
     <Border HorizontalAlignment="Stretch"
-                          VerticalAlignment="Stretch"
-                          MinHeight="130"
-                          BorderThickness="7"
-                          Padding="10"
-                          BorderBrush="{Binding BorderHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
-                          Background="{Binding BackgroundHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
-                          local:MpAvIsHoveringExtension.IsEnabled="True"
-                          local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
+            VerticalAlignment="Stretch"
+            MinHeight="130"
+            BorderThickness="7"
+            Padding="10"
+            BorderBrush="{Binding BorderHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
+            Background="{Binding BackgroundHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
+            local:MpAvIsHoveringExtension.IsEnabled="True"
+            local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
         <Grid x:Name="NotificationWindowContainerGrid"
               ColumnDefinitions="0.35*,0.75*"
-              RowDefinitions="Auto,Auto,*,Auto,0.6*">
+              RowDefinitions="Auto,Auto,Auto,Auto,0.6*">
             <!--  ICON  -->
             <Image Grid.Row="0"
                    Grid.Column="0"
@@ -74,7 +74,6 @@
                         Classes="labelUnderline labelUnderline_long"
                         BorderThickness="0" />
             </StackPanel>
-
 
 
             <!--  MESSAGE BODY  -->

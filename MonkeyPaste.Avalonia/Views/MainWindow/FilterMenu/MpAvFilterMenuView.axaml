@@ -15,7 +15,7 @@
     <RelativePanel x:Name="FilterDockPanel"
                    HorizontalAlignment="Stretch"
                    VerticalAlignment="Stretch"
-                   Background="{StaticResource FilterMenuBgBrush}">
+                   Background="{StaticResource MainWindowBgBrush}">
 
         <!--  Content Sort View  -->
         <local:MpAvClipTileSortView x:Name="SortView"

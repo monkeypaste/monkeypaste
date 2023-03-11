@@ -176,14 +176,11 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\Border.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvAssignShortcutWindow.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvClipTile.axaml" />
-    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvClipTrayContainer.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMarqueeTextBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvNotificationWindow.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPagingScrollBar.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPagingScrollViewer.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPinTray.axaml" />
-    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPluginParameterListBox.axaml" />
-    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPluginParameterListBoxItem.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvSideBarButtonGroup.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvSideBarItems.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvTooltip.axaml" />
@@ -1036,8 +1033,6 @@
     <AvaloniaResource Include="Themes\Default\Controls\ComboBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\GridSplitter.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ComboBoxItem.axaml" />
-    <AvaloniaResource Include="Themes\Default\Controls\MpAvPluginParameterListBoxItem.axaml" />
-    <AvaloniaResource Include="Themes\Default\Controls\MpAvPluginParameterListBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvActionDesignerItemColors.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvActionDesigner.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvActionProperty.axaml" />
@@ -1047,7 +1042,6 @@
     <AvaloniaResource Include="Themes\Default\Controls\MpAvTooltip.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvNotificationWindow.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Button.axaml" />
-    <AvaloniaResource Include="Themes\Default\Controls\MpAvClipTrayContainer.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvPinTray.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvPagingScrollBar.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\TextBox.axaml" />
@@ -1170,6 +1164,9 @@
     </Compile>
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Analytics\Presets\MpAvAnalyticItemPresetDataGridView.axaml.cs">
       <DependentUpon>MpAvAnalyticItemPresetDataGridView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\Items\Button\MpAvButtonParameterView.axaml.cs">
+      <DependentUpon>MpAvButtonParameterView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\Items\ShortcutRecorder\MpAvShortcutRecorderParameterView.axaml.cs">
       <DependentUpon>MpAvShortcutRecorderParameterView.axaml</DependentUpon>

@@ -108,7 +108,6 @@
           VerticalAlignment="Stretch">
         <!--  PIN TRAY  -->
         <local:MpAvPinTrayView x:Name="PinTrayView"
-                               DataContext="{Binding}"
                                Classes.dragover="{Binding IsDragOverPinTray}"
                                MinWidth="{Binding MinPinTrayScreenWidth}"
                                MinHeight="{Binding MinPinTrayScreenHeight}"
@@ -126,7 +125,6 @@
 
         <!--  QUERY TRAY  -->
         <local:MpAvQueryTrayView x:Name="ClipTrayView"
-                                 Background="{DynamicResource ClipTrayBgColor}"
-                                 DataContext="{Binding}" />
+                                 Background="{DynamicResource ClipTrayBgColor}" />
     </Grid>
 </local:MpAvUserControl>

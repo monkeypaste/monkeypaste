@@ -49,6 +49,8 @@
 
         <!--  GENERAL  -->
 
+        <SolidColorBrush x:Key="MainWindowBgBrush" Color="{DynamicResource MainWindowBgColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
+
         <!--  GRID SPLITTERS  -->
 
         <SolidColorBrush x:Key="DefaultGridSplitterBrush" Color="{DynamicResource DefaultGridSplitterColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
@@ -98,7 +100,6 @@
         <SolidColorBrush x:Key="TitleMenuInactiveBgBrush" Color="{DynamicResource MainWindowTitleMenuInactiveBgColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  FILTER MENU  -->
-        <SolidColorBrush x:Key="FilterMenuBgBrush" Color="{DynamicResource MainWindowBgColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  ADV SEARCH  -->
         <SolidColorBrush x:Key="SearchCriteriaRowBgBrush1" Color="{DynamicResource SearchCriteriaRowBgColor1}" Opacity="{DynamicResource GlobalBgOpacity}" />

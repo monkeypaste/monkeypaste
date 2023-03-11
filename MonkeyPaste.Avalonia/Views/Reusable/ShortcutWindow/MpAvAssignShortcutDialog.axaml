@@ -105,7 +105,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <local:MpAvShortcutKeyGroupView MinHeight="50"
-                                                        DataContext="{Binding}" />
+                                                         />
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>

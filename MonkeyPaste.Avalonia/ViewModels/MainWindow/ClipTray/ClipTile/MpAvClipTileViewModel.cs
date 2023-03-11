@@ -503,16 +503,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-
-        public bool IsTooltipVisible {
-            get {
-                if (!MpPrefViewModel.Instance.ShowItemPreview) {
-                    return false;
-                }
-                return (Parent.HasScrollVelocity || IsSelected) ? false : true;
-            }
-        }
-
         public bool IsTrialOverlayVisibile {
             get {
                 return MpPrefViewModel.Instance.IsTrialExpired ? true : false;
