@@ -9,10 +9,10 @@
                        mc:Ignorable="d"
                        d:DesignWidth="800"
                        d:DesignHeight="450"
-                       x:TypeArguments="local:MpAvSettingsWindowViewModel"
-                       x:DataType="local:MpAvSettingsWindowViewModel"
+                       x:TypeArguments="local:MpAvSettingsViewModel"
+                       x:DataType="local:MpAvSettingsViewModel"
                        x:CompileBindings="True"
-                       DataContext="{x:Static local:MpAvSettingsWindowViewModel.Instance}"
+                       DataContext="{x:Static local:MpAvSettingsViewModel.Instance}"
                        x:Class="MonkeyPaste.Avalonia.MpAvSettingsView">
     <local:MpAvUserControl.Styles>
         <!--  TABS  -->
@@ -223,7 +223,7 @@
         <Grid x:Name="HeaderContainer"
               DockPanel.Dock="Top"
               MaxHeight="250"
-              ColumnDefinitions="*,*,*,*,*,*"
+              ColumnDefinitions="*,*,*,*,*"
               RowDefinitions="Auto,30">
             <!--  Account Tab Button  -->
             <ToggleButton Grid.Column="0"
@@ -269,19 +269,8 @@
                     <Image Source="{Binding Source={StaticResource HotkeyImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                 </DockPanel>
             </ToggleButton>
-            <!--  Interop tab button  -->
-            <ToggleButton Grid.Column="4"
-                          Classes="tab outline outlineOver"
-                          IsChecked="{Binding IsTabSelected[4], Mode=OneWay}"
-                          Command="{Binding SelectTabCommand}"
-                          CommandParameter="4">
-                <DockPanel>
-                    <Label Content="Interop" />
-                    <Image Source="{Binding Source={StaticResource ClipboardImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                </DockPanel>
-            </ToggleButton>
             <!--  Help tab Button  -->
-            <ToggleButton Grid.Column="5"
+            <ToggleButton Grid.Column="4"
                           Classes="tab outline outlineOver"
                           IsChecked="{Binding IsTabSelected[5], Mode=OneWay}"
                           Command="{Binding SelectTabCommand}"
@@ -311,7 +300,7 @@
                          Padding="10,0,0,0"
                          local:MpAvDelayedTextChangedExtension.IsEnabled="True"
                          local:MpAvDelayedTextChangedExtension.DelayMs="500"
-                         local:MpAvDelayedTextChangedExtension.Text="{Binding FilterText, Source={x:Static local:MpAvSettingsWindowViewModel.Instance}, Mode=TwoWay}"
+                         local:MpAvDelayedTextChangedExtension.Text="{Binding FilterText, Source={x:Static local:MpAvSettingsViewModel.Instance}, Mode=TwoWay}"
                          Watermark="Filter..." />
             </Border>
         </Grid>
@@ -325,7 +314,7 @@
                     DockPanel.Dock="Left"
                     Command="{Binding ResetSettingsCommand}"
                     Content="Reset All" />
-            <StackPanel DockPanel.Dock="Right"
+            <!--<StackPanel DockPanel.Dock="Right"
                         HorizontalAlignment="Right"
                         Orientation="Horizontal">
                 <Button x:Name="SaveButton"
@@ -337,7 +326,7 @@
                         Classes="defaultButton textOnlyButton footer"
                         Command="{Binding CancelSettingsCommand}"
                         Content="Cancel" />
-            </StackPanel>
+            </StackPanel>-->
         </DockPanel>
 
         <!--  Content  -->

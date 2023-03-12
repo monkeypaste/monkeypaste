@@ -9,7 +9,10 @@ using System.Windows.Input;
 
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvExternalDropWindowViewModel : MpViewModelBase, MpIHoverableViewModel {
+    public class MpAvExternalDropWindowViewModel :
+        MpViewModelBase,
+        MpIWindowViewModel,
+        MpIHoverableViewModel {
         #region Private Variables
         private Dictionary<int, bool> _preShowPresetState { get; set; } = new Dictionary<int, bool>();
         private DispatcherTimer _curDropTargetTimer { get; set; }
@@ -22,8 +25,17 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Interfaces
+
         #region MpIHoverableViewModel Implementation
         public bool IsHovering { get; set; } = false;
+
+        #endregion
+
+        #region MpIWindowViewModel Implementation
+        public MpWindowType WindowType =>
+            MpWindowType.Modal;
+        #endregion
 
         #endregion
 

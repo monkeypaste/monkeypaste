@@ -9,8 +9,8 @@
                        mc:Ignorable="d"
                        d:DesignWidth="800"
                        d:DesignHeight="750"
-                       x:TypeArguments="local:MpAvPreferenceFrameViewModel"
-                       x:DataType="local:MpAvPreferenceFrameViewModel"
+                       x:TypeArguments="local:MpAvSettingsFrameViewModel"
+                       x:DataType="local:MpAvSettingsFrameViewModel"
                        x:CompileBindings="True"
                        x:Class="MonkeyPaste.Avalonia.MpAvPreferenceFrameView">
     <Border BorderThickness="1"

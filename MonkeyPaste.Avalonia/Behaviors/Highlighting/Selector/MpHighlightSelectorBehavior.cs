@@ -125,13 +125,23 @@ namespace MonkeyPaste.Avalonia {
         private async Task PerformHighlighting() {
             if (AssociatedObject != null &&
                 AssociatedObject.BindingContext != null) {
-                while (AssociatedObject.BindingContext.IsAnyBusy) {
+                while (true) {
+                    if (AssociatedObject == null ||
+                        AssociatedObject.BindingContext == null) {
+                        return;
+                    }
+                    if (!AssociatedObject.BindingContext.IsAnyBusy) {
+                        break;
+                    }
                     await Task.Delay(100);
                 }
             }
 
             DisabledItems.ForEach(x => x.Reset());
             if (!EnabledItems.Any()) {
+                return;
+            }
+            if (!AssociatedObject.BindingContext.IsViewLoaded) {
                 return;
             }
 

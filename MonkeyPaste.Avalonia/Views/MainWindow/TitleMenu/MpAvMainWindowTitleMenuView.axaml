@@ -91,7 +91,7 @@
 
             <ToggleButton x:Name="SettingsToggleButton"
                           Classes="noBg noHoverBg shakeOver"
-                          IsChecked="{Binding IsVisible, Source={x:Static local:MpAvSettingsWindowViewModel.Instance}}"
+                          IsChecked="{Binding IsVisible, Source={x:Static local:MpAvSettingsViewModel.Instance}}"
                           ToolTip.ShowDelay="500">
                 <ToggleButton.RenderTransform>
                     <RotateTransform />

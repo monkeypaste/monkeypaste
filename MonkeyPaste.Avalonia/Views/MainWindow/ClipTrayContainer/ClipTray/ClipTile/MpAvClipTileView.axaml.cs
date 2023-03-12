@@ -13,7 +13,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void MpAvClipTileView_PointerMoved(object sender, PointerEventArgs e) {
-            if (!Mp.Services.PlatformInfo.IsDesktop) {
+            if (!Mp.Services.PlatformInfo.IsDesktop ||
+                BindingContext.IsPopOutVisible) {
                 return;
             }
             if (!BindingContext.IsHovering) {
@@ -33,7 +34,8 @@ namespace MonkeyPaste.Avalonia {
             // BUG workaround for not being able to bind to row definition w/o getting binding null warning
             switch (e.PropertyName) {
                 case nameof(BindingContext.IsHovering):
-                    if (this.IsPointerOver != BindingContext.IsHovering) {
+                    if (this.IsPointerOver != BindingContext.IsHovering &&
+                        !BindingContext.IsPopOutVisible) {
                         // dc mismatch
                         Debugger.Break();
                     }

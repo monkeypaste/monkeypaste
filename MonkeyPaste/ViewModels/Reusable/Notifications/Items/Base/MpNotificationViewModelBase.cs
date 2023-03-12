@@ -98,7 +98,10 @@ namespace MonkeyPaste {
         ErrorWithOption, //retry/ignore/quit
         ErrorAndShutdown //confirm
     }
-    public abstract class MpNotificationViewModelBase : MpViewModelBase, MpIPopupMenuViewModel {
+    public abstract class MpNotificationViewModelBase :
+        MpViewModelBase,
+        MpIChildWindowViewModel,
+        MpIPopupMenuViewModel {
         #region Constants
 
         public const int DEFAULT_NOTIFICATION_SHOWTIME_MS = 3000;
@@ -188,7 +191,18 @@ namespace MonkeyPaste {
 
         #endregion
 
-        #region Properties
+        #region Interfaces
+
+
+        #region MpIChildWindowViewModel Implementation
+        MpWindowType MpIWindowViewModel.WindowType =>
+            IsModal ? MpWindowType.Modal : MpWindowType.Toast;
+
+        bool MpIChildWindowViewModel.IsOpen {
+            get => IsVisible;
+            set => IsVisible = value;
+        }
+        #endregion
 
         #region MpIPopupMenuViewModel Implementation
 
@@ -221,6 +235,9 @@ namespace MonkeyPaste {
         public bool IsPopupMenuOpen { get; set; }
         #endregion
 
+
+        #endregion
+        #region Properties
         #region Appearance
         public object IconSourceObj {
             get {
@@ -456,6 +473,7 @@ namespace MonkeyPaste {
             //_nbv.ShowWindow(nvmb);
             //IsVisible = true;
             Mp.Services.NotificationManager.ShowNotification(this);
+
         }
 
         protected void HideBalloon() {

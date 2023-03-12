@@ -40,6 +40,8 @@
         ToggleMainWindowLocked,
         ToggleFilterMenuVisible,
         ShowSettings,
+        ToggleStaged,
+        OpenContentInWindow,
         // CUT-OFF 
         MAX_APP_SHORTCUT,
         //remaining are data (not context) driven using commandId

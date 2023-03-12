@@ -1,5 +1,8 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Layout;
+using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using System;
@@ -12,9 +15,14 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
+    public interface MpIDisposableObject {
+        void Dispose();
+    }
     public class MpAvClipTileViewModel : MpViewModelBase<MpAvClipTrayViewModel>,
         MpISelectableViewModel,
         MpISelectorItemViewModel,
+        MpIChildWindowViewModel,
+        MpIDisposableObject,
         MpICustomShortcutCommandViewModel,
         MpIScrollIntoView,
         MpIUserColorViewModel,
@@ -35,6 +43,8 @@ namespace MonkeyPaste.Avalonia {
         //private MpPasteToAppPathViewModel _selectedPasteToAppPathViewModel = null;
         private string _originalTitle;
 
+        private bool _wasPopoutPinned = false;
+
         #endregion
 
         #region Constants
@@ -49,6 +59,23 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+        #region MpIDisposableObject Implementation
+        void MpIDisposableObject.Dispose() {
+            TriggerUnloadedNotification(false);
+        }
+        #endregion
+
+        #region MpIChildWindowViewModel Implementation
+
+        public MpWindowType WindowType =>
+            MpWindowType.PopOut;
+
+        bool MpIChildWindowViewModel.IsOpen {
+            get => IsPopOutVisible;
+            set => IsPopOutVisible = value;
+        }
+        #endregion
 
         #region MpIContextMenuViewModel Implementation
 
@@ -371,6 +398,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsPopOutVisible { get; set; }
         public MpIEmbedHost EmbedHost =>
             GetContentView() as MpIEmbedHost;
 
@@ -969,6 +997,7 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitializeAsync(MpCopyItem ci, int queryOffset = -1, bool isRestoringSelection = false) {
             _curItemRandomHexColor = string.Empty;
             _contentView = null;
+            _wasPopoutPinned = false;
 
             IsBusy = true;
 
@@ -1101,6 +1130,53 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(IsPlaceholder));
             OnPropertyChanged(nameof(CopyItemId));
             OnPropertyChanged(nameof(QueryOffsetIdx));
+        }
+
+        public void OpenPopOutWindow() {
+            var _popoutWindow = new MpAvWindow() {
+                Width = 500,
+                Height = 500,
+                DataContext = this,
+                ShowInTaskbar = true,
+                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", null, null, null) as WindowIcon,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                Content = new MpAvClipTileView(),
+                Topmost = true,
+                Padding = new Thickness(10)
+            };
+
+            _popoutWindow.Bind(
+                Window.TitleProperty,
+                new Binding() {
+                    Source = this,
+                    Path = nameof(CopyItemTitle)
+                });
+
+            _popoutWindow.Bind(
+                Window.BackgroundProperty,
+                new Binding() {
+                    Source = this,
+                    Path = nameof(CopyItemHexColor),
+                    Mode = BindingMode.OneWay,
+                    Converter = MpAvStringHexToBrushConverter.Instance,
+                    TargetNullValue = MpSystemColors.darkviolet,
+                    FallbackValue = MpSystemColors.darkviolet
+                });
+
+            if (_popoutWindow.Content is Control c) {
+                c.Bind(
+                    MpAvIsHoveringExtension.IsHoveringProperty,
+                    new Binding() {
+                        Source = this,
+                        Path = nameof(IsHovering),
+                        Mode = BindingMode.TwoWay
+                    });
+                MpAvIsHoveringExtension.SetIsEnabled(c, true);
+            }
+
+            _popoutWindow.Show();
+
+            OnPropertyChanged(nameof(IsPopOutVisible));
         }
 
         private MpIContentView _contentView;
@@ -1646,47 +1722,15 @@ namespace MonkeyPaste.Avalonia {
                     }
                     CopyItemSize = UnconstrainedContentDimensions;
                     break;
-                    //case nameof(IsFindMode):
-                    //    if (IsFindMode) {
-                    //        if (IsReplaceMode) {
-                    //            IsReplaceMode = false;
-                    //        } else {
-                    //            ToggleFindAndReplaceVisibleCommand.Execute(null);
-                    //        }
-                    //    } else if (!IsReplaceMode) {
-                    //        //ToggleFindAndReplaceVisibleCommand.Execute(null);
-                    //        if (!IsContentReadOnly) {
-                    //            IsFindAndReplaceVisible = false;
-                    //        }
-                    //    }
-                    //    break;
-                    //case nameof(IsReplaceMode):
-                    //    if (IsReplaceMode) {
-                    //        if (IsFindMode) {
-                    //            IsFindMode = false;
-                    //        } else {
-                    //            ToggleFindAndReplaceVisibleCommand.Execute(null);
-                    //        }
-                    //    } else if (!IsFindMode) {
-                    //        //ToggleFindAndReplaceVisibleCommand.Execute(null);
-                    //        if (!IsContentReadOnly) {
-                    //            IsFindAndReplaceVisible = false;
-                    //        }
-                    //    }
-                    //    break;
-                    //case nameof(IsFindAndReplaceVisible):
-                    //    if (!IsFindAndReplaceVisible && !IsContentReadOnly) {
-                    //        IsFindMode = IsReplaceMode = false;
-                    //    }
-                    //    break;
-                    //case nameof(FindText):
-                    //case nameof(ReplaceText):
-                    //case nameof(MatchCase):
-                    //case nameof(UseRegEx):
-                    //case nameof(MatchWholeWord):
-                    //    UpdateFindAndReplaceMatches();
-                    //    break;
-
+                case nameof(IsPopOutVisible):
+                    if (Parent == null) {
+                        break;
+                    }
+                    Parent.OnPropertyChanged(nameof(Parent.InternalPinnedItems));
+                    if (!IsPopOutVisible) {
+                        PopInTileCommand.Execute(null);
+                    }
+                    break;
             }
         }
 
@@ -1863,6 +1907,46 @@ namespace MonkeyPaste.Avalonia {
             }, (args) => {
                 return CanShowContextMenu;
             });
+
+        public ICommand PopInTileCommand => new MpCommand(() => {
+            int ciid = CopyItemId;
+
+            if (Parent != null) {
+                //if (_wasPopoutPinned) {
+                //    Parent.PinTileCommand.Execute(this);
+                //} else {
+                //    Parent.QueryCommand.Execute(string.Empty);
+                //    while (Parent.IsQuerying) {
+                //        await Task.Delay(100);
+                //    }
+                //    //wait a little longer
+                //    await Task.Delay(300);
+                //    if (Parent.Items.FirstOrDefault(x => x.CopyItemId == ciid) is MpAvClipTileViewModel popped_in_ctvm) {
+                //        popped_in_ctvm.IsSelected = true;
+                //    }
+                //}
+                Parent.PinTileCommand.Execute(this);
+            }
+
+            _wasPopoutPinned = false;
+        });
+        public ICommand PinToPopoutWindowCommand => new MpCommand<object>(
+            (args) => {
+                if (!IsSelected) {
+                    IsSelected = true;
+                }
+                if (Mp.Services.PlatformInfo.IsDesktop) {
+                    _wasPopoutPinned = IsPinned;
+                    Parent.PinTileCommand.Execute(new object[] { this, MpPinType.Window });
+                } else {
+                    // Some kinda view nav here
+                    // see https://github.com/AvaloniaUI/Avalonia/discussions/9818
+
+                }
+            }, (args) => {
+                return !IsPopOutVisible && Parent != null;
+            }, new[] { this });
+
         #endregion
     }
 }

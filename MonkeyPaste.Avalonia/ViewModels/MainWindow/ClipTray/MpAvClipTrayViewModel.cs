@@ -16,7 +16,12 @@ using System.Windows.Input;
 using FocusManager = Avalonia.Input.FocusManager;
 
 namespace MonkeyPaste.Avalonia {
-
+    public enum MpPinType {
+        None = 0,
+        Internal,
+        Window,
+        Append
+    }
     public class MpAvClipTrayViewModel :
         MpAvSelectorViewModelBase<object, MpAvClipTileViewModel>,
         MpIBootstrappedItem,
@@ -187,6 +192,20 @@ namespace MonkeyPaste.Avalonia {
                             IconResourceKey = "EditContentImage",
                             Command = EditSelectedContentCommand,
                             ShortcutArgs = new object[] { MpShortcutType.EditContent },
+                        },
+                        new MpMenuItemViewModel() {
+                            Header = SelectedItem.IsPinned ? "Unstage":"Stage",
+                            AltNavIdx = 0,
+                            IconResourceKey = "PinImage",
+                            Command = ToggleTileIsPinnedCommand,
+                            ShortcutArgs = new object[] { MpShortcutType.ToggleStaged },
+                        },
+                        new MpMenuItemViewModel() {
+                            Header = SelectedItem.IsPinned ? "Unstage":"Stage",
+                            AltNavIdx = 0,
+                            IconResourceKey = "PinImage",
+                            Command = ToggleTileIsPinnedCommand,
+                            ShortcutArgs = new object[] { MpShortcutType.ToggleStaged },
                         },
                         new MpMenuItemViewModel() {
                             IsSeparator = true
@@ -819,6 +838,8 @@ namespace MonkeyPaste.Avalonia {
         #region View Models
         public ObservableCollection<MpAvClipTileViewModel> PinnedItems { get; set; } = new ObservableCollection<MpAvClipTileViewModel>();
 
+        public IEnumerable<MpAvClipTileViewModel> InternalPinnedItems =>
+            PinnedItems.Where(x => !x.IsPopOutVisible && !x.IsAppendNotifier);
         public MpAvClipTileViewModel ModalClipTileViewModel { get; private set; }
 
         public MpAvClipTileViewModel AppendClipTileViewModel =>
@@ -1271,7 +1292,7 @@ namespace MonkeyPaste.Avalonia {
             Mp.Services.Query.TotalAvailableItemsInQuery == 0;
 
         public bool IsPinTrayEmpty =>
-            PinnedItems.Count == 0;
+            InternalPinnedItems.Count() == 0;
 
         public bool IsPinTrayVisible {
             get {
@@ -2338,6 +2359,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void PinnedItems_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
+            OnPropertyChanged(nameof(InternalPinnedItems));
+            OnPropertyChanged(nameof(IsPinTrayEmpty));
             UpdateEmptyPropertiesAsync().FireAndForgetSafeAsync();
         }
 
@@ -2651,6 +2674,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand PinTileCommand => new MpAsyncCommand<object>(
              async (args) => {
+                 MpPinType pinType = MpPinType.Internal;
                  int pin_idx = 0;
                  MpAvClipTileViewModel ctvm_to_pin = null;
                  if (args is MpAvClipTileViewModel) {
@@ -2659,7 +2683,11 @@ namespace MonkeyPaste.Avalonia {
                  } else if (args is object[] argParts) {
                      // dnd pin tray drop 
                      ctvm_to_pin = argParts[0] as MpAvClipTileViewModel;
-                     pin_idx = (int)argParts[1];
+                     if (argParts[1] is int) {
+                         pin_idx = (int)argParts[1];
+                     } else {
+                         pinType = (MpPinType)argParts[1];
+                     }
                  }
 
                  if (ctvm_to_pin == null || ctvm_to_pin.IsPlaceholder) {
@@ -2667,18 +2695,6 @@ namespace MonkeyPaste.Avalonia {
                      Debugger.Break();
                      return;
                  }
-
-                 //if (MpPlatform.Services.Query.PageTools.RemoveItemId(ctvm_to_pin.CopyItemId)) {
-                 //    // tile was part of query tray
-                 //    if (Items.Contains(ctvm_to_pin)) {
-                 //        int ctvm_to_pin_qidx = ctvm_to_pin.QueryOffsetIdx;
-
-                 //        // trigger PublicHandle change to unload view
-                 //        ctvm_to_pin.QueryOffsetIdx = -1;
-                 //        Items.Remove(ctvm_to_pin);
-                 //        Items.Where(x => x.QueryOffsetIdx > ctvm_to_pin_qidx).ForEach(x => x.QueryOffsetIdx = x.QueryOffsetIdx - 1);
-                 //    }
-                 //}
 
                  if (Items.Contains(ctvm_to_pin)) {
                      // create temp tile w/ model ref
@@ -2689,6 +2705,9 @@ namespace MonkeyPaste.Avalonia {
                      ctvm_to_pin = temp_ctvm;
                  } else if (ctvm_to_pin.QueryOffsetIdx >= 0) {
                      Mp.Services.Query.PageTools.RemoveItemId(ctvm_to_pin.CopyItemId);
+                 }
+                 if (pinType == MpPinType.Window) {
+                     ctvm_to_pin.OpenPopOutWindow();
                  }
 
                  if (ctvm_to_pin.IsPinned) {
@@ -2714,7 +2733,6 @@ namespace MonkeyPaste.Avalonia {
                  RefreshQueryTrayLayout();
                  await Task.Delay(200);
                  SelectedItem = ctvm_to_pin;
-
 
                  OnPropertyChanged(nameof(Items));
                  OnPropertyChanged(nameof(PinnedItems));
@@ -2796,6 +2814,12 @@ namespace MonkeyPaste.Avalonia {
             }
         });
 
+        public ICommand OpenSelectedTileInWindowCommand => new MpCommand(
+            () => {
+                SelectedItem.PinToPopoutWindowCommand.Execute(null);
+            }, () => {
+                return SelectedItem != null && !SelectedItem.IsPopOutVisible;
+            });
         public ICommand DuplicateSelectedClipsCommand => new MpAsyncCommand(
             async () => {
                 IsBusy = true;

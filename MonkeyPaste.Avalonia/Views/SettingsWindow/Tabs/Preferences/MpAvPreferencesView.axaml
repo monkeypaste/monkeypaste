@@ -9,12 +9,12 @@
                        mc:Ignorable="d"
                        d:DesignWidth="800"
                        d:DesignHeight="750"
-                       x:TypeArguments="local:MpAvPreferencesMenuViewModel"
-                       x:DataType="local:MpAvPreferencesMenuViewModel"
+                       x:TypeArguments="local:MpAvSettingsViewModel"
+                       x:DataType="local:MpAvSettingsViewModel"
                        x:CompileBindings="True"
-                       DataContext="{x:Static local:MpAvPreferencesMenuViewModel.Instance}"
+                       DataContext="{x:Static local:MpAvSettingsViewModel.Instance}"
                        x:Class="MonkeyPaste.Avalonia.MpAvPreferencesView">
-    <ItemsControl Items="{Binding Items}"
+    <ItemsControl Items="{Binding PreferenceItems}"
                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                   ScrollViewer.VerticalScrollBarVisibility="Auto">
         <ItemsControl.ItemTemplate>

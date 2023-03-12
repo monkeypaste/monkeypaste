@@ -1,80 +1,125 @@
 ﻿using Avalonia.Controls;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
-using MonkeyPaste.Common.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Configuration;
-using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public enum MpButtonCommandPrefType {
-        None = 0,
-        ResetNtf,
-        ResetPluginCache
-    }
-
-    public class MpAvPreferencesMenuViewModel :
-        MpViewModelBase {
+    public class MpAvSettingsViewModel :
+        MpViewModelBase,
+        MpIChildWindowViewModel {
         #region Private Variables
 
+        private Window _settingsWindow;
         #endregion
+
         #region Statics
 
-        private static MpAvPreferencesMenuViewModel _instance;
-        public static MpAvPreferencesMenuViewModel Instance => _instance ?? (_instance = new MpAvPreferencesMenuViewModel());
+        private static MpAvSettingsViewModel _instance;
+        public static MpAvSettingsViewModel Instance => _instance ?? (_instance = new MpAvSettingsViewModel());
 
 
         #endregion
-        #region Properties
 
+        #region Interfaces
+        #region MpIWindowViewModel Implementation
+        public MpWindowType WindowType =>
+            MpWindowType.Main;
 
-        //private ObservableCollection<string> _languages = null;
-        //public ObservableCollection<string> Languages {
-        //    get {
-        //        if (_languages == null) {
-        //            _languages = new ObservableCollection<string>();
-        //            foreach (var lang in MpLanguageTranslator.LanguageList) {
-        //                _languages.Add(lang);
-        //            }
-        //        }
-        //        return _languages;
-        //    }
-        //}
-
-
-        #region View Models
-        public ObservableCollection<MpAvPreferenceFrameViewModel> Items { get; set; } = new ObservableCollection<MpAvPreferenceFrameViewModel>();
-
-        public MpAvPreferenceFrameViewModel LookAndFeelFrame { get; set; }
-        public MpAvPreferenceFrameViewModel InternationalFrame { get; set; }
-        public MpAvPreferenceFrameViewModel ContentFrame { get; set; }
-        public MpAvPreferenceFrameViewModel HistoryFrame { get; set; }
-        public MpAvPreferenceFrameViewModel SystemFrame { get; set; }
-
-        #endregion
-        #endregion
-
-        #region Constructors
-        public MpAvPreferencesMenuViewModel() : base(null) {
-            MpPrefViewModel.Instance.PropertyChanged += Instance_PropertyChanged;
-            PropertyChanged += MpAvPreferencesMenuViewModel_PropertyChanged;
-            InitializeAsync().FireAndForgetSafeAsync(this);
+        bool MpIChildWindowViewModel.IsOpen {
+            get => IsVisible;
+            set => IsVisible = value;
         }
 
         #endregion
 
+        #endregion
+
+        #region Properties
+
+        #region View Models
+
+        public ObservableCollection<MpAvSettingsFrameViewModel> Items { get; set; } = new ObservableCollection<MpAvSettingsFrameViewModel>();
+
+        #region Preferences
+        public IEnumerable<MpAvSettingsFrameViewModel> PreferenceItems =>
+            Items
+            .Where(x => x.TabType == MpSettingsTabType.Preferences)
+            .OrderBy(x => x.SortOrderIdx);
+
+        public MpAvSettingsFrameViewModel LookAndFeelFrame { get; set; }
+        public MpAvSettingsFrameViewModel InternationalFrame { get; set; }
+        public MpAvSettingsFrameViewModel ContentFrame { get; set; }
+        public MpAvSettingsFrameViewModel HistoryFrame { get; set; }
+        public MpAvSettingsFrameViewModel SystemFrame { get; set; }
+        #endregion
+        #endregion
+
+        #region Interop
+        //public MpAvSettingsFrameViewModel InteropFrame { get; set; }
+
+        #endregion
+
+        #region State
+
+        public string FilterText { get; set; }
+
+        public bool IsVisible { get; set; } = false;
+
+        public int SelectedTabIdx {
+            get {
+                for (int i = 0; i < IsTabSelected.Count; i++) {
+                    if (IsTabSelected[i]) {
+                        return i;
+                    }
+
+                }
+                return -1;
+            }
+            set {
+                if (SelectedTabIdx != value) {
+                    for (int i = 0; i < IsTabSelected.Count; i++) {
+                        IsTabSelected[i] = i == value;
+                    }
+                    OnPropertyChanged(nameof(SelectedTabIdx));
+                }
+            }
+        }
+
+        public ObservableCollection<bool> IsTabSelected { get; set; }
+
+        #endregion
+
+        #endregion
+
+        #region Constructors
+
+        public MpAvSettingsViewModel() : base() {
+            MpPrefViewModel.Instance.PropertyChanged += Instance_PropertyChanged;
+            PropertyChanged += MpAvSettingsWindowViewModel_PropertyChanged;
+            IsTabSelected = new ObservableCollection<bool>(Enumerable.Repeat(false, 6));
+            IsTabSelected.CollectionChanged += IsTabSelected_CollectionChanged;
+        }
+
+
+        #endregion
+
         #region Public Methods
-        public async Task InitializeAsync() {
+
+        public async Task InitAsync() {
+            #region Preferences
 
             #region look & feel
 
-            LookAndFeelFrame = new MpAvPreferenceFrameViewModel(this) {
+            LookAndFeelFrame = new MpAvSettingsFrameViewModel() {
+                TabType = MpSettingsTabType.Preferences,
+                SortOrderIdx = 0,
                 LabelText = "Look & Feel",
                 PluginFormat = new MpPluginFormat() {
                     headless = new MpHeadlessPluginFormat() {
@@ -160,7 +205,10 @@ namespace MonkeyPaste.Avalonia {
 
             #region International
 
-            InternationalFrame = new MpAvPreferenceFrameViewModel(this) {
+            InternationalFrame = new MpAvSettingsFrameViewModel() {
+                TabType = MpSettingsTabType.Preferences,
+                SortOrderIdx = 1,
+                IsVisible = false,
                 LabelText = "International Settings",
                 PluginFormat = new MpPluginFormat() {
                     headless = new MpHeadlessPluginFormat() {
@@ -189,51 +237,11 @@ namespace MonkeyPaste.Avalonia {
 
             #endregion
 
-            #region Content
-
-            ContentFrame = new MpAvPreferenceFrameViewModel(this) {
-                LabelText = "Content",
-                PluginFormat = new MpPluginFormat() {
-                    headless = new MpHeadlessPluginFormat() {
-                        parameters = new List<MpParameterFormat>() {
-                            new MpParameterFormat() {
-                                paramId = nameof(MpPrefViewModel.Instance.IsDuplicateCheckEnabled),
-                                description = "When <b>duplicate</b> is detected on clipboard, it will be <b>staged</b> from original source and not added redundantly.",
-                                controlType = MpParameterControlType.CheckBox,
-                                unitType = MpParameterValueUnitType.Bool,
-                                label = "Ignore New Duplicates",
-                                values = new List<MpPluginParameterValueFormat>() {
-                                    new MpPluginParameterValueFormat() {
-                                        isDefault = MpPrefViewModel.Instance.ShowInTaskSwitcher.ToString() == MpThemeType.Light.ToString(),
-                                        value = MpPrefViewModel.Instance.IsDuplicateCheckEnabled.ToString()
-                                    },
-                                }
-                            },
-                            new MpParameterFormat() {
-                                paramId = nameof(MpPrefViewModel.Instance.IsRichHtmlContentEnabled),
-                                controlType = MpParameterControlType.CheckBox,
-                                unitType = MpParameterValueUnitType.Bool,
-                                label = "Rich Content",
-                                description = "Disabling rich text will significantly reduce memory consumption but will disable some advanced features, such as: templates, annotations, find/replace and drag drop",
-                                values = new List<MpPluginParameterValueFormat>() {
-                                    new MpPluginParameterValueFormat() {
-                                        isDefault = true,
-                                        value = MpPrefViewModel.Instance.IsRichHtmlContentEnabled.ToString()
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            };
-
-            Items.Add(ContentFrame);
-
-            #endregion
-
             #region History
 
-            HistoryFrame = new MpAvPreferenceFrameViewModel(this) {
+            HistoryFrame = new MpAvSettingsFrameViewModel() {
+                TabType = MpSettingsTabType.Preferences,
+                SortOrderIdx = 3,
                 LabelText = "History",
                 PluginFormat = new MpPluginFormat() {
                     headless = new MpHeadlessPluginFormat() {
@@ -324,7 +332,9 @@ namespace MonkeyPaste.Avalonia {
 
             #region System
 
-            SystemFrame = new MpAvPreferenceFrameViewModel(this) {
+            SystemFrame = new MpAvSettingsFrameViewModel() {
+                TabType = MpSettingsTabType.Preferences,
+                SortOrderIdx = 4,
                 LabelText = "System",
                 PluginFormat = new MpPluginFormat() {
                     headless = new MpHeadlessPluginFormat() {
@@ -374,6 +384,104 @@ namespace MonkeyPaste.Avalonia {
 
             #endregion
 
+            #region Content
+
+            ContentFrame = new MpAvSettingsFrameViewModel() {
+                TabType = MpSettingsTabType.Preferences,
+                SortOrderIdx = 2,
+                LabelText = "Content",
+                PluginFormat = new MpPluginFormat() {
+                    headless = new MpHeadlessPluginFormat() {
+                        parameters = new List<MpParameterFormat>() {
+                            new MpParameterFormat() {
+                                paramId = nameof(MpPrefViewModel.Instance.IsDuplicateCheckEnabled),
+                                description = "When <b>duplicate</b> is detected on clipboard, it will be <b>staged</b> from original source and not added redundantly.",
+                                controlType = MpParameterControlType.CheckBox,
+                                unitType = MpParameterValueUnitType.Bool,
+                                label = "Ignore New Duplicates",
+                                values = new List<MpPluginParameterValueFormat>() {
+                                    new MpPluginParameterValueFormat() {
+                                        isDefault = MpPrefViewModel.Instance.ShowInTaskSwitcher.ToString() == MpThemeType.Light.ToString(),
+                                        value = MpPrefViewModel.Instance.IsDuplicateCheckEnabled.ToString()
+                                    },
+                                }
+                            },
+                            new MpParameterFormat() {
+                                paramId = nameof(MpPrefViewModel.Instance.IsRichHtmlContentEnabled),
+                                controlType = MpParameterControlType.CheckBox,
+                                unitType = MpParameterValueUnitType.Bool,
+                                label = "Rich Content",
+                                description = "Disabling rich text will significantly reduce memory consumption but will disable some advanced features, such as: templates, annotations, find/replace and drag drop",
+                                values = new List<MpPluginParameterValueFormat>() {
+                                    new MpPluginParameterValueFormat() {
+                                        isDefault = true,
+                                        value = MpPrefViewModel.Instance.IsRichHtmlContentEnabled.ToString()
+                                    }
+                                }
+                            },
+                            new MpParameterFormat() {
+                                paramId = nameof(MpPrefViewModel.Instance.IgnoreAppendedItems),
+                                controlType = MpParameterControlType.CheckBox,
+                                unitType = MpParameterValueUnitType.Bool,
+                                label = "Ignore Appends",
+                                description = "When new clipboard content is appended it will not be tracked",
+                                values = new List<MpPluginParameterValueFormat>() {
+                                    new MpPluginParameterValueFormat() {
+                                        isDefault = true,
+                                        value = MpPrefViewModel.Instance.IgnoreAppendedItems.ToString()
+                                    }
+                                }
+                            },
+                            new MpParameterFormat() {
+                                paramId = nameof(MpPrefViewModel.Instance.IgnoreInternalClipboardChanges),
+                                controlType = MpParameterControlType.CheckBox,
+                                unitType = MpParameterValueUnitType.Bool,
+                                label = "Ignore Internal Clipboard Tracking",
+                                description = "Clipboard changes from within the app will not be tracked",
+                                values = new List<MpPluginParameterValueFormat>() {
+                                    new MpPluginParameterValueFormat() {
+                                        isDefault = true,
+                                        value = MpPrefViewModel.Instance.IgnoreInternalClipboardChanges.ToString()
+                                    }
+                                }
+                            },
+                            new MpParameterFormat() {
+                                paramId = nameof(MpPrefViewModel.Instance.IgnoreWhiteSpaceCopyItems),
+                                controlType = MpParameterControlType.CheckBox,
+                                unitType = MpParameterValueUnitType.Bool,
+                                label = "Ignore Only White Space",
+                                description = "Spaces, tabs and new lines will be ignored from tracking",
+                                values = new List<MpPluginParameterValueFormat>() {
+                                    new MpPluginParameterValueFormat() {
+                                        isDefault = true,
+                                        value = MpPrefViewModel.Instance.IgnoreWhiteSpaceCopyItems.ToString()
+                                    }
+                                }
+                            },
+                            new MpParameterFormat() {
+                                paramId = nameof(MpPrefViewModel.Instance.ResetClipboardAfterMonkeyPaste),
+                                controlType = MpParameterControlType.CheckBox,
+                                unitType = MpParameterValueUnitType.Bool,
+                                label = "Reset Clipboard after Monkey Pasting",
+                                description = "<warning/>Monkey Paste uses the system clipboard to interoperate and changes your current clipboard when pasting to an external program. This will <b>attempt</b> to restore the state of the clipboard after an external paste. Restoration cannot be guaranteed and may reduce performance or even crash Monkey Paste depending on the source of the data (looking at you windows).",
+                                values = new List<MpPluginParameterValueFormat>() {
+                                    new MpPluginParameterValueFormat() {
+                                        isDefault = true,
+                                        value = MpPrefViewModel.Instance.ResetClipboardAfterMonkeyPaste.ToString()
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            Items.Add(ContentFrame);
+
+            #endregion
+
+            #endregion
+
             foreach (var fvm in Items) {
                 fvm.Items = await Task.WhenAll(
                 fvm.PluginFormat.headless.parameters.Select(x =>
@@ -391,17 +499,48 @@ namespace MonkeyPaste.Avalonia {
                     .Cast<MpAvButtonParameterViewModel>()
                     .ForEach(x => x.ClickCommand = ButtonParameterClickCommand);
             }
-
-
         }
+
+
         #endregion
 
         #region Private Methods
 
-        private void MpAvPreferencesMenuViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            //switch (e.PropertyName) {
-            //}
+        private void MpAvSettingsWindowViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(IsVisible):
+                    if (IsVisible) {
+                        _settingsWindow = new MpAvWindow() {
+                            Classes = new Classes("fadeIn"),
+                            ShowInTaskbar = true,
+                            Width = 800,
+                            Height = 500,
+                            Topmost = true,
+                            Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("CogIcon", null, null, null) as WindowIcon,
+                            WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                            WindowState = WindowState.Normal,
+                            DataContext = this,
+                            Content = new MpAvSettingsView()
+                        };
+                        _settingsWindow.Show();
+                    } else {
+                        if (_settingsWindow != null) {
+                            _settingsWindow.Close();
+                        }
+
+                    }
+                    break;
+                case nameof(FilterText):
+                    MpMessenger.SendGlobal(MpMessageType.SettingsFilterTextChanged);
+                    if (_settingsWindow is Window w && !string.IsNullOrWhiteSpace(FilterText)) {
+                        var test = w.FindVisualDescendantWithHashCode(int.Parse(FilterText), true);
+                    }
+
+                    break;
+
+            }
         }
+
 
         private void Instance_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
@@ -413,6 +552,10 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
         }
+        private void IsTabSelected_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            OnPropertyChanged(nameof(IsTabSelected));
+        }
+
         private void SetLanguage(string cultureCode) {
             MpCurrentCultureViewModel.Instance.SetLanguageCommand.Execute(cultureCode);
         }
@@ -436,11 +579,43 @@ namespace MonkeyPaste.Avalonia {
 
             MpConsole.WriteLine("App " + appName + " with path " + appPath + " has load on login set to: " + loadOnLogin);
         }
-
-
         #endregion
 
         #region Commands
+
+        public ICommand ResetSettingsCommand => new MpCommand(
+            () => {
+
+            });
+        public ICommand SaveSettingsCommand => new MpCommand(
+            () => {
+                IsVisible = false;
+            });
+
+        public ICommand CancelSettingsCommand => new MpCommand(
+            () => {
+                IsVisible = false;
+            });
+        public ICommand SelectTabCommand => new MpCommand<object>(
+            (args) => {
+                int tab_idx = 0;
+                if (args is int intArg) {
+                    tab_idx = intArg;
+                } else if (args is string strArg) {
+                    try {
+                        tab_idx = int.Parse(strArg);
+                    }
+                    catch { }
+                }
+
+                SelectedTabIdx = tab_idx;
+            });
+
+        public ICommand ShowSettingsWindowCommand => new MpCommand<object>(
+            (args) => {
+                SelectTabCommand.Execute(args);
+                IsVisible = true;
+            });
 
         public ICommand ButtonParameterClickCommand => new MpAsyncCommand<object>(
             async (args) => {
@@ -506,5 +681,21 @@ namespace MonkeyPaste.Avalonia {
                 }
             });
         #endregion
+    }
+
+    public enum MpButtonCommandPrefType {
+        None = 0,
+        ResetNtf,
+        ResetPluginCache
+    }
+
+    public enum MpSettingsTabType {
+        None = 0,
+        Account,
+        Preferences,
+        Interop,
+        Security,
+        Shortcuts,
+        Help
     }
 }

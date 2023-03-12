@@ -93,7 +93,8 @@ namespace MonkeyPaste.Avalonia {
                 }).TimeoutAfter(
                     TimeSpan.FromSeconds(5),
                     () => {
-                        throw new Exception("frame must be initialized. initialization timed out");
+                        MpConsole.WriteLine("frame must be initialized. initialization timed out");
+                        return true;
                     })
                     .FireAndForgetSafeAsync();
                 return;

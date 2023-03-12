@@ -3,7 +3,7 @@
 namespace MonkeyPaste.Avalonia {
     public static class MpAvDesignData {
 
-        public static MpAvSettingsWindowViewModel Design { get; } = new MpAvSettingsWindowViewModel {
+        public static MpAvSettingsViewModel Design { get; } = new MpAvSettingsViewModel {
             // View Model initialization here.
         };
 

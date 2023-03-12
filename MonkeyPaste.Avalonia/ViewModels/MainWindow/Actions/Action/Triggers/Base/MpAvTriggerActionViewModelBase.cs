@@ -17,6 +17,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+
         #region MpIParameterHost Overrides
 
         private MpHeadlessPluginFormat _actionComponentFormat;
@@ -50,6 +51,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Interfaces
 
         #region MpITriggerPluginComponent Implementation
 
@@ -67,6 +69,8 @@ namespace MonkeyPaste.Avalonia {
         void MpITriggerPluginComponent.DisableTrigger() => DisableTrigger();
 
         bool? MpITriggerPluginComponent.IsEnabled => IsEnabled;
+
+        #endregion
 
         #endregion
 

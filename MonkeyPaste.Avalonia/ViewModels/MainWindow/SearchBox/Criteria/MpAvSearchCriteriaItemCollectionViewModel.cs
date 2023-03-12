@@ -17,7 +17,7 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     public class MpAvSearchCriteriaItemCollectionViewModel :
         MpViewModelBase,
-        //MpIQueryResultProvider, 
+        MpIWindowViewModel,
         MpIExpandableViewModel {
 
         #region Private Variable
@@ -38,6 +38,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
+        #region MpIWindowViewModel Implementation
+        public MpWindowType WindowType =>
+            MpWindowType.PopOut;
+
+        #endregion
         #region MpIExpandableViewModel Implementation
 
         private bool _isExpanded;
@@ -303,6 +308,9 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(CurrentQueryTagViewModel));
                     break;
                 case nameof(IsCriteriaWindowOpen):
+
+                    OnPropertyChanged(nameof(MaxSearchCriteriaViewHeight));
+                    OnPropertyChanged(nameof(MaxSearchCriteriaListBoxHeight));
                     if (IsCriteriaWindowOpen) {
                         IsExpanded = false;
                     } else {
@@ -526,9 +534,10 @@ namespace MonkeyPaste.Avalonia {
         public ICommand OpenCriteriaWindowCommand => new MpCommand<object>(
             (args) => {
                 if (Mp.Services.PlatformInfo.IsDesktop) {
-                    _criteriaWindow = new Window() {
+                    _criteriaWindow = new MpAvWindow() {
                         Width = 1100,
                         Height = 300,
+                        DataContext = this,
                         ShowInTaskbar = true,
                         Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", null, null, null) as WindowIcon,
                         WindowStartupLocation = WindowStartupLocation.CenterScreen,
@@ -537,19 +546,18 @@ namespace MonkeyPaste.Avalonia {
                             Background = Brushes.Black,
                             Child = new MpAvSearchCriteriaListBoxView() {
                                 Background = Brushes.Violet,
-                                DataContext = this,
                             }
                         },
                         Topmost = true,
                         Padding = new Thickness(10)
                     };
 
-                    _criteriaWindow.Bind(
-                        Window.DataContextProperty,
-                        new Binding() {
-                            Source = this,
-                            Path = nameof(CurrentQueryTagViewModel)
-                        });
+                    //_criteriaWindow.Bind(
+                    //    Window.DataContextProperty,
+                    //    new Binding() {
+                    //        Source = this,
+                    //        Path = nameof(CurrentQueryTagViewModel)
+                    //    });
 
                     _criteriaWindow.Bind(
                         Window.TitleProperty,
@@ -571,8 +579,6 @@ namespace MonkeyPaste.Avalonia {
                             TargetNullValue = MpSystemColors.darkviolet,
                             FallbackValue = MpSystemColors.darkviolet
                         });
-                    //_criteriaWindow.Closing += _criteriaWindow_Closing;
-                    _criteriaWindow.Closed += Dw_Closed;
                     _criteriaWindow.Show();
                 } else {
                     // Some kinda view nav here
@@ -584,33 +590,6 @@ namespace MonkeyPaste.Avalonia {
                 return !IsCriteriaWindowOpen;
             }, new[] { this });
 
-        private void _criteriaWindow_Closing(object sender, WindowClosingEventArgs e) {
-            // MpMessenger.SendGlobal(MpMessageType.ChildWindowClosed);
-            if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen &&
-                !MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked) {
-                e.Cancel = true;
-                MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
-                if (App.MainView is Window w) {
-                    // criteria takes topmost so ac
-                    w.Topmost = true;
-                }
-                _criteriaWindow.Close();
-            }
-
-        }
-
-        private void Dw_Closed(object sender, EventArgs e) {
-            _criteriaWindow.Closing -= _criteriaWindow_Closing;
-            _criteriaWindow.Closed -= Dw_Closed;
-
-            _criteriaWindow = null;
-            OnPropertyChanged(nameof(IsCriteriaWindowOpen));
-            OnPropertyChanged(nameof(MaxSearchCriteriaViewHeight));
-            OnPropertyChanged(nameof(MaxSearchCriteriaListBoxHeight));
-            MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
-
-
-        }
         #endregion
     }
 }

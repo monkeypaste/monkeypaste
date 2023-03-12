@@ -4,6 +4,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
 using PropertyChanged;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region Properties
+        #region Statics
 
         private static MpAvNotificationWindowManager _instance;
         public static MpAvNotificationWindowManager Instance => _instance ?? (_instance = new MpAvNotificationWindowManager());
@@ -31,11 +32,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region Events
-
-        public event EventHandler<Window> OnNotificationWindowIsVisibleChanged;
-
-        #endregion
+        #region Interfaces
 
         #region MpINotificationManager Implementation
         public void ShowNotification(MpNotificationViewModelBase nvmb) {
@@ -68,7 +65,12 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #endregion
+
+
+
         #region Properties
+
 
         public bool IsAnyNotificationVisible => _windows.Any(x => x.IsVisible);
 
@@ -84,6 +86,12 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+
+        #region Events
+
+        public event EventHandler<Window> OnNotificationWindowIsVisibleChanged;
+
+        #endregion
         #region Constructors
         private MpAvNotificationWindowManager() { }
         #endregion

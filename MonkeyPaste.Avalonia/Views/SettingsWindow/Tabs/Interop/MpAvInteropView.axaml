@@ -8,10 +8,10 @@
                        xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:pcl="using:MonkeyPaste"
-                       x:TypeArguments="local:MpAvSettingsWindowViewModel"
-                       x:DataType="local:MpAvSettingsWindowViewModel"
+                       x:TypeArguments="local:MpAvSettingsViewModel"
+                       x:DataType="local:MpAvSettingsViewModel"
                        x:CompileBindings="True"
-                       DataContext="{x:Static local:MpAvSettingsWindowViewModel.Instance}"
+                       DataContext="{x:Static local:MpAvSettingsViewModel.Instance}"
                        x:Class="MonkeyPaste.Avalonia.MpAvInteropView">
     <Grid />
 </local:MpAvUserControl>

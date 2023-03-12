@@ -42,7 +42,7 @@
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch"
                      SelectedItem="{Binding SelectedPinTrayItem, Mode=TwoWay}"
-                     Items="{Binding PinnedItems}">
+                     Items="{Binding InternalPinnedItems}">
                 <ListBox.Resources>
                     <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">Transparent</SolidColorBrush>
                     <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">Transparent</SolidColorBrush>
@@ -77,32 +77,56 @@
                 </ListBox.ItemsPanel>
             </ListBox>
 
-            <!--  IsBusy Overlay  -->
-            <Border HorizontalAlignment="Stretch"
+            <!--  IsEmpty Overlay  -->
+
+            <Border x:Name="PinTrayEmptyContainer"
+                    HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
-                    Cursor="Wait"
-                    IsVisible="{Binding IsPinTrayBusy}">
-                <local:MpAvBusySpinnerView HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"
-                                           Width="70"
-                                           Height="70" />
+                    IsHitTestVisible="False"
+                    IsVisible="{Binding InternalPinnedItems, ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                    Padding="10"
+                    Background="Transparent">
+                <TextBlock HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           TextAlignment="Center"
+                           TextWrapping="Wrap"
+                           FontSize="32"
+                           Text="Pin or Drop any media here!"
+                           Classes="disabled" />
             </Border>
-            <!--  UNPIN All  -->
+
+            <!--  UNPIN All /Busy  -->
 
             <Button x:Name="UnpinAllButton"
                     Classes="defaultButton"
-                    IsVisible="{Binding !IsPinTrayEmpty}"
+                    IsEnabled="{Binding !IsPinTrayBusy}"
+                    IsVisible="{Binding InternalPinnedItems, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
+                    Width="25"
+                    Height="25"
                     Margin="0,5,10,0"
                     CornerRadius="10"
                     BorderThickness="1"
                     BorderBrush="DimGray"
                     Background="Silver"
-                    Padding="5,2"
                     Command="{Binding UnpinAllCommand}">
-                <Image DockPanel.Dock="Left"
-                       Source="{Binding ., Source={StaticResource ClearGridImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                <Grid>
+                    <Image IsVisible="{Binding IsPinTrayBusy}"
+                           Margin="5,2"
+                           Source="{Binding ., Source={StaticResource ClearGridImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                    <!--  IsBusy Overlay  -->
+                    <!--<Border HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Cursor="Wait"
+                        IsVisible="{Binding $parent.IsEnabled}">-->
+                    <local:MpAvBusySpinnerView HorizontalAlignment="Stretch"
+                                               VerticalAlignment="Stretch"
+                                               Cursor="Wait"
+                                               IsVisible="{Binding IsPinTrayBusy}" />
+                    <!--</Border>-->
+                </Grid>
+
             </Button>
 
         </Grid>

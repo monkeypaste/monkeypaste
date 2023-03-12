@@ -27,7 +27,7 @@ namespace MonkeyPaste.Avalonia {
 
         public IEnumerable<MpAvAppViewModel> FilteredItems =>
             Items
-            .Where(x => (x as MpIFilterMatch).IsMatch(MpAvSettingsWindowViewModel.Instance.FilterText));
+            .Where(x => (x as MpIFilterMatch).IsMatch(MpAvSettingsViewModel.Instance.FilterText));
 
         public MpAvAppViewModel ThisAppViewModel =>
             Items.FirstOrDefault(x => x.AppId == MpDefaultDataModelTools.ThisAppId);

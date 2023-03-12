@@ -52,7 +52,8 @@ namespace MonkeyPaste {
         public static string PreferencesPath => _prefPath;
 
         [JsonIgnore]
-        public static string PreferencesPathBackup => $"{PreferencesPath}.{PREF_BACKUP_PATH_EXT}";
+        public static string PreferencesPathBackup =>
+            $"{PreferencesPath}.{PREF_BACKUP_PATH_EXT}";
 
         #endregion
 
@@ -366,20 +367,13 @@ namespace MonkeyPaste {
         public double NotificationSoundVolume { get; set; } = 0;
         public bool ShowInTaskbar { get; set; } = true;
         public bool ShowInTaskSwitcher { get; set; } = true;
+        public bool ShowMainWindowOnDragToScreenTop { get; set; } = true;
         public double MainWindowOpacity { get; set; }
 #if DESKTOP
         = 0.7;
 #else
         = 1.0d;
 #endif
-
-        #endregion
-
-        #region Content
-
-        public bool IsDuplicateCheckEnabled { get; set; } = true;
-
-        public bool IsRichHtmlContentEnabled { get; set; } = true;
 
         #endregion
 
@@ -405,23 +399,26 @@ namespace MonkeyPaste {
 
         #endregion
 
-        #endregion
+        #region Content
 
-        #region Interop
+        public bool IsDuplicateCheckEnabled { get; set; } = true;
 
-        public string IgnoredProcessNames { get; set; } = string.Empty;
+        public bool IsRichHtmlContentEnabled { get; set; } = true;
+        public bool IgnoreAppendedItems { get; set; } = true;
 
-        public string UserDefinedFileExtensionsPsv { get; set; } = string.Empty;
-        public bool ShowMainWindowOnDragToScreenTop { get; set; } = true;
         public bool IgnoreInternalClipboardChanges { get; set; } = true;
         public bool IgnoreWhiteSpaceCopyItems { get; set; } = true;
         public bool ResetClipboardAfterMonkeyPaste { get; set; }
 
-        public bool IgnoreAppendedItems { get; set; } = true;
+        #endregion
+
+        public string UserDefinedFileExtensionsPsv { get; set; } = string.Empty;
+
+
         #endregion
 
         #region Security
-
+        public string IgnoredProcessNames { get; set; } = string.Empty;
         public bool IsSettingsEncrypted { get; set; } = false; // requires restart and only used to trigger convert on exit (may not be necessary to restart)
 
         public string DbPassword { get; set; } = MpPasswordGenerator.GetRandomPassword();
@@ -572,30 +569,31 @@ namespace MonkeyPaste {
         }
 
         public void Save() {
-            Task.Run(() => {
-                //while (IsSaving) {
-                //    await Task.Delay(100);
-                //}
-
-                lock (_lock) {
-                    IsSaving = true;
-
-                    var sw = Stopwatch.StartNew();
-
-                    string prefStr = SerializeJsonObject();
-
-                    if (IsSettingsEncrypted) {
-                        prefStr = MpEncryption.SimpleEncryptWithPassword(prefStr, GetPrefPassword());
-                    }
-
-                    MpFileIo.WriteTextToFile(PreferencesPath, prefStr, false);
-                    // write backup after succesful save
-                    MpFileIo.WriteTextToFile(PreferencesPathBackup, prefStr, false);
-
-                    MpConsole.WriteLine("Preferences Updated Total Ms: " + sw.ElapsedMilliseconds);
-
-                    IsSaving = false;
+            //Mp.Services.MainThreadMarshal.RunOnMainThread(async () => {
+            Task.Run(async () => {
+                while (IsSaving) {
+                    await Task.Delay(100);
                 }
+
+                //lock (_lock) {
+                IsSaving = true;
+
+                var sw = Stopwatch.StartNew();
+
+                string prefStr = SerializeJsonObject();
+
+                if (IsSettingsEncrypted) {
+                    prefStr = MpEncryption.SimpleEncryptWithPassword(prefStr, GetPrefPassword());
+                }
+
+                MpFileIo.WriteTextToFile(PreferencesPath, prefStr, false);
+                // write backup after succesful save
+                MpFileIo.WriteTextToFile(PreferencesPathBackup, prefStr, false);
+
+                MpConsole.WriteLine("Preferences Updated Total Ms: " + sw.ElapsedMilliseconds);
+
+                IsSaving = false;
+                //}
             }).FireAndForgetSafeAsync(this);
         }
         #endregion

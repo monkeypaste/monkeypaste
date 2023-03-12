@@ -51,6 +51,13 @@ namespace MonkeyPaste.Avalonia {
             var funcType = msgTypeStr.ToEnum<MpAvEditorBindingFunctionType>();
 
             Dispatcher.UIThread.Post(() => {
+                if (e.Frame == null ||
+                    e.Frame.Browser == null ||
+                    e.Frame.Browser.Host == null ||
+                    e.Frame.Browser.Host.Client == null) {
+                    // occurs when control was detached (as a known case)
+                    return;
+                }
                 if (e.Frame.Browser.Host.Client.GetWebView() is MpAvIWebViewBindingResponseHandler respHandler) {
                     respHandler.HandleBindingNotification(funcType, msgJsonStr);
                 }

@@ -16,7 +16,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvTriggerCollectionViewModel :
         MpViewModelBase,
         MpIPopupMenuViewModel,
-        //MpIAsyncComboBoxViewModel,
+        MpIChildWindowViewModel,
         MpISidebarItemViewModel,
         MpIDesignerSettingsViewModel {
         #region Private Variables
@@ -31,6 +31,16 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+        #region MpIChildWindowViewModel Implementation
+        MpWindowType MpIWindowViewModel.WindowType =>
+            MpWindowType.PopOut;
+        bool MpIChildWindowViewModel.IsOpen {
+            get => IsDesignerWindowOpen;
+            set => IsDesignerWindowOpen = value;
+        }
+
+        #endregion
 
         #region MpIPopupMenuViewModel Implementation
         bool MpIPopupMenuViewModel.IsPopupMenuOpen { get; set; }
@@ -656,7 +666,8 @@ namespace MonkeyPaste.Avalonia {
         public ICommand OpenDesignerWindowCommand => new MpCommand(
             () => {
                 if (Mp.Services.PlatformInfo.IsDesktop) {
-                    var dw = new Window() {
+                    var dw = new MpAvWindow() {
+                        Classes = new Classes("fadeIn"),
                         Width = 500,
                         Height = 500,
                         ShowInTaskbar = true,
@@ -688,7 +699,6 @@ namespace MonkeyPaste.Avalonia {
                             Converter = MpAvStringHexToBrushConverter.Instance
                         });
 
-                    dw.Closed += Dw_Closed;
                     dw.Show();
                 } else {
                     // Some kinda view nav here
@@ -700,9 +710,6 @@ namespace MonkeyPaste.Avalonia {
                 return !IsDesignerWindowOpen;
             });
 
-        private void Dw_Closed(object sender, EventArgs e) {
-            IsDesignerWindowOpen = false;
-        }
 
         #endregion
     }

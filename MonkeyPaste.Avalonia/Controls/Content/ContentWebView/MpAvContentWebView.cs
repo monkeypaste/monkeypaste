@@ -469,6 +469,10 @@ namespace MonkeyPaste.Avalonia {
         #region MpAvIWebViewBindingResponseHandler Implementation
 
         void MpAvIWebViewBindingResponseHandler.HandleBindingNotification(MpAvEditorBindingFunctionType notificationType, string msgJsonBase64Str) {
+            if (!this.IsAttachedToVisualTree()) {
+                NeedsEvalJsCleared = true;
+                return;
+            }
             var ctvm = BindingContext;
             if (ctvm == null &&
                 notificationType != MpAvEditorBindingFunctionType.notifyDomLoaded &&
@@ -986,11 +990,16 @@ namespace MonkeyPaste.Avalonia {
 
             IsContentLoaded = false;
 
-            if (this.PendingEvalCount() > 0) {
+            if (this.PendingEvalCount() > 0 ||
+                BindingContext == null) {
                 this.NeedsEvalJsCleared = true;
                 while (NeedsEvalJsCleared) {
                     await Task.Delay(100);
                 }
+            }
+            if (BindingContext == null) {
+                // unloaded
+                return;
             }
 
             if (BindingContext.IsPlaceholder && !BindingContext.IsPinned) {

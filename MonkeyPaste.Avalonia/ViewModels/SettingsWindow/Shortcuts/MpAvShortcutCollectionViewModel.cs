@@ -88,7 +88,7 @@ namespace MonkeyPaste.Avalonia {
         #region View Models
         public IEnumerable<MpAvShortcutViewModel> FilteredItems =>
             Items
-            .Where(x => (x as MpIFilterMatch).IsMatch(MpAvSettingsWindowViewModel.Instance.FilterText));
+            .Where(x => (x as MpIFilterMatch).IsMatch(MpAvSettingsViewModel.Instance.FilterText));
 
         public IEnumerable<MpAvShortcutViewModel> CustomShortcuts =>
             FilteredItems.Where(x => x.IsCustom);
@@ -337,7 +337,7 @@ namespace MonkeyPaste.Avalonia {
                             shortcutCommand = MpAvMainWindowViewModel.Instance.DecreaseFocusCommand;
                             break;
                         case MpShortcutType.ShowSettings:
-                            shortcutCommand = MpAvSettingsWindowViewModel.Instance.ShowSettingsWindowCommand;
+                            shortcutCommand = MpAvSettingsViewModel.Instance.ShowSettingsWindowCommand;
                             break;
                         case MpShortcutType.ExitApplication:
                             shortcutCommand = MpAvSystemTrayViewModel.Instance.ExitApplicationCommand;
@@ -435,6 +435,12 @@ namespace MonkeyPaste.Avalonia {
                             break;
                         case MpShortcutType.ToggleFilterMenuVisible:
                             shortcutCommand = MpAvMainWindowViewModel.Instance.ToggleFilterMenuVisibleCommand;
+                            break;
+                        case MpShortcutType.ToggleStaged:
+                            shortcutCommand = MpAvClipTrayViewModel.Instance.ToggleTileIsPinnedCommand;
+                            break;
+                        case MpShortcutType.OpenContentInWindow:
+                            shortcutCommand = MpAvClipTrayViewModel.Instance.OpenSelectedTileInWindowCommand;
                             break;
                         default:
                             if (sc.ShortcutType == MpShortcutType.PasteCopyItem) {
@@ -1035,6 +1041,19 @@ namespace MonkeyPaste.Avalonia {
                 await scvm.InitializeAsync(scvm.Shortcut, scvm.Command);
                 await scvm.Shortcut.WriteToDatabaseAsync();
             }, (args) => args is MpAvShortcutViewModel svm && !string.IsNullOrEmpty(svm.DefaultKeyString));
+
+        public ICommand ResetAllShortcuts => new MpAsyncCommand(async () => {
+            bool result = await Mp.Services.NativeMessageBox.ShowOkCancelMessageBoxAsync(
+                title: "Confirm",
+                message: "Are you sure you want to reset all shortcuts? All custom shortcuts will be removed.",
+                iconResourceObj: "WarningImage");
+            if (!result) {
+                return;
+            }
+            Items.Clear();
+            await MpDb.ResetShortcutsAsync();
+            InitShortcutsAsync().FireAndForgetSafeAsync(this);
+        });
 
         #endregion
     }

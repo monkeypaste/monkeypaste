@@ -26,6 +26,11 @@
                 Spacing="20">
 
         <local:MpAvShortcutDataGridView DataContext="{Binding FilteredItems}" />
+
+        <Button Classes="defaultButton textOnlyButton"
+                Content="Reset All Shortcuts"
+                Command="{Binding ResetAllShortcuts}"
+                HorizontalAlignment="Right" />
         <!--<Expander ExpandDirection="Down">
             <Expander.Header>
                 <StackPanel Orientation="Vertical">

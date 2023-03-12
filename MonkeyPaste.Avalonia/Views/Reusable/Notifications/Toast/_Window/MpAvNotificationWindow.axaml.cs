@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvNotificationWindow : Window {
+    public partial class MpAvNotificationWindow : MpAvWindow {
 
         public MpLoaderNotificationViewModel BindingContext => DataContext as MpLoaderNotificationViewModel;
         public MpAvNotificationWindow() {

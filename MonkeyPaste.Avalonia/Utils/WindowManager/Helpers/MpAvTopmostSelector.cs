@@ -106,7 +106,7 @@ namespace MonkeyPaste.Avalonia {
                 UnsetTopmost(w);
                 if (_ntfWindows.Count > 0) {
                     TrySetTopmost(_ntfWindows[_ntfWindows.Count - 1]);
-                } else if (MpAvSettingsWindowViewModel.Instance.IsVisible) {
+                } else if (MpAvSettingsViewModel.Instance.IsVisible) {
                     TrySetTopmost(MpAvSettingsWindow.Instance);
                 } else if (MpAvMainWindowViewModel.Instance.IsMainWindowLocked) {
                     TrySetTopmost(App.MainWindow);

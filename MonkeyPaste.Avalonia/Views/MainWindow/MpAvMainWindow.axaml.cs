@@ -20,7 +20,7 @@ namespace MonkeyPaste.Avalonia {
     }
 
     [DoNotNotify]
-    public partial class MpAvMainWindow : Window, MpIMainView {
+    public partial class MpAvMainWindow : MpAvWindow, MpIMainView {
         #region Private Variables
         #endregion
 

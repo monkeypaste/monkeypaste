@@ -49,31 +49,40 @@
         <!--  TL Pin Tile Button  -->
 
         <ToggleButton x:Name="PinTileButton"
-                      Classes="noBg noHoverBg shakeOver"
+                      Classes="noBg noHoverBg"
                       Command="{Binding ToggleTileIsPinnedCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                       CommandParameter="{Binding}"
                       IsChecked="{Binding IsPinned}"
                       IsVisible="{Binding IsContentReadOnly}"
                       HorizontalAlignment="Left"
                       VerticalAlignment="Top">
-            <ToggleButton.RenderTransform>
-                <RotateTransform />
-            </ToggleButton.RenderTransform>
             <PathIcon HorizontalAlignment="Left"
                       VerticalAlignment="Bottom"
                       Data="{StaticResource PinSvg}" />
         </ToggleButton>
 
+        <!--  TR Pin Tile Button  -->
+
+        <Button x:Name="OpenWindowButton"
+                Classes="noBg noHoverBg"
+                Command="{Binding PinToPopoutWindowCommand}"
+                IsVisible="{Binding !IsPopOutVisible}"
+                CommandParameter="{Binding}"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top">
+            <Image Width="10"
+                   Height="10"
+                   Source="{Binding Source={StaticResource NewWindowImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+
+        </Button>
+
         <!--  BL Hotkey Button  -->
         <Button x:Name="ClipTileHotkeyButton"
-                Classes="noBg noHoverBg shakeOver"
+                Classes="noBg noHoverBg"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
                 Command="{Binding ShowAssignShortcutDialogCommand, Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}"
                 CommandParameter="{Binding}">
-            <Button.RenderTransform>
-                <RotateTransform />
-            </Button.RenderTransform>
             <PathIcon HorizontalAlignment="Right"
                       VerticalAlignment="Top"
                       Data="{StaticResource ControllerOutlineSvg}" />
@@ -81,14 +90,11 @@
 
         <!--  BR Edit Toggle Button  -->
         <ToggleButton x:Name="ClipTileToggleEditButton"
-                      Classes="noBg noHoverBg shakeOver"
+                      Classes="noBg noHoverBg"
                       IsVisible="{Binding CanEdit}"
                       HorizontalAlignment="Right"
                       VerticalAlignment="Bottom"
                       IsChecked="{Binding !IsContentReadOnly, Mode=TwoWay}">
-            <ToggleButton.RenderTransform>
-                <RotateTransform />
-            </ToggleButton.RenderTransform>
             <PathIcon HorizontalAlignment="Left"
                       VerticalAlignment="Top"
                       Data="{StaticResource PencilOutlineSvg}" />

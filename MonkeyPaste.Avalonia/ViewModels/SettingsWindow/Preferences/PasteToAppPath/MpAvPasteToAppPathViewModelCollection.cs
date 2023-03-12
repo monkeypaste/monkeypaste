@@ -86,7 +86,7 @@ namespace MonkeyPaste.Avalonia {
                 pmivml.Add(new MpMenuItemViewModel() {
                     Header = "Add Application",
                     IconResourceKey = Application.Current.Resources["AddIcon"] as string,
-                    Command = MpAvSettingsWindowViewModel.Instance.ShowSettingsWindowCommand,
+                    Command = MpAvSettingsViewModel.Instance.ShowSettingsWindowCommand,
                     CommandParameter = 1
                 });
                 var rmivm = new MpMenuItemViewModel() {

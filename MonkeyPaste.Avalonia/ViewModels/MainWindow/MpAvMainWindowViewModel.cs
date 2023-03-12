@@ -1,7 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Platform;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
@@ -16,7 +15,14 @@ using System.Windows.Input;
 using FocusManager = Avalonia.Input.FocusManager;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvMainWindowViewModel : MpViewModelBase, MpIResizableViewModel {
+    public interface MpITopmostWindow {
+        bool IsTopmost { get; }
+    }
+    public class MpAvMainWindowViewModel :
+        MpViewModelBase,
+        MpIWindowViewModel,
+        MpITopmostWindow,
+        MpIResizableViewModel {
         #region Private Variables
 
         private double _resize_shortcut_nudge_amount = 50;
@@ -33,6 +39,22 @@ namespace MonkeyPaste.Avalonia {
         private static MpAvMainWindowViewModel _instance;
 
         public static MpAvMainWindowViewModel Instance => _instance ?? (_instance = new MpAvMainWindowViewModel());
+        #endregion
+
+        #region Interfaces
+
+        #region MpITopmostWindow Implementation
+        bool MpITopmostWindow.IsTopmost =>
+            IsMainWindowLocked;
+
+        #endregion
+
+        #region MpIWindowViewModel Implementation
+        public MpWindowType WindowType =>
+            MpWindowType.Main;
+
+        #endregion
+
         #endregion
 
         #region Properties
@@ -703,11 +725,16 @@ namespace MonkeyPaste.Avalonia {
             MainWindowBottom = rect.Bottom;
         }
         private void StartMainWindowShow() {
-            //MpAvMainView.Instance.Renderer.Start();
             SetupMainWindowSize();
             IsMainWindowOpening = true;
 
-            App.MainView.Show();
+            if (App.MainWindow is Window w &&
+                MpPrefViewModel.Instance.ShowInTaskbar) {
+                w.WindowState = WindowState.Normal;
+            } else {
+                App.MainView.Show();
+            }
+
             SetMainWindowRect(MainWindowOpenedScreenRect);
             //MpAvMainView.Instance.InvalidateAll();
             //if (App.MainWindow != null) {
@@ -728,10 +755,6 @@ namespace MonkeyPaste.Avalonia {
             IsMainWindowLoading = false;
             IsMainWindowOpen = true;
             IsMainWindowOpening = false;
-            //if (App.MainWindow != null) {
-
-            //App.MainWindow.Renderer.Paint(MainWindowOpenedScreenRect.ToAvRect());
-            //}
 
             MpConsole.WriteLine("SHOW WINDOW DONE");
         }
@@ -747,12 +770,12 @@ namespace MonkeyPaste.Avalonia {
             IsMainWindowOpen = false;
             IsMainWindowClosing = false;
 
-            //IsMainWindowVisible = false;
-
-            App.MainView.Hide();
-            //MpAvMainView.Instance.WindowState = WindowState.Minimized;
-            //MpAvMainView.Instance.Renderer.Stop();
-            //SetMainWindowRect(MainWindowClosedScreenRect);
+            if (App.MainWindow is Window w &&
+                MpPrefViewModel.Instance.ShowInTaskbar) {
+                w.WindowState = WindowState.Minimized;
+            } else {
+                App.MainView.Hide();
+            }
 
             MpConsole.WriteLine("CLOSE WINDOW DONE");
         }

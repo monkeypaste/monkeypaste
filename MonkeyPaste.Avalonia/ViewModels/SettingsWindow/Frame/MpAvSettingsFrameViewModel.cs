@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvPreferenceFrameViewModel :
-        MpViewModelBase<MpAvPreferencesMenuViewModel>,
+    public class MpAvSettingsFrameViewModel :
+        MpViewModelBase,
         MpIFilterMatch,
         MpILabelTextViewModel,
         MpIParameterHostViewModel,
@@ -57,9 +57,9 @@ namespace MonkeyPaste.Avalonia {
         public IEnumerable<MpAvParameterViewModelBase> Items { get; set; }
         public MpAvParameterViewModelBase SelectedItem { get; set; }
         public ICommand SaveCommand =>
-            MpAvSettingsWindowViewModel.Instance.SaveSettingsCommand;
+            MpAvSettingsViewModel.Instance.SaveSettingsCommand;
         public ICommand CancelCommand =>
-            MpAvSettingsWindowViewModel.Instance.CancelSettingsCommand;
+            MpAvSettingsViewModel.Instance.CancelSettingsCommand;
         public bool CanSaveOrCancel =>
             Items == null ? false : Items.Any(x => x.HasModelChanged);
         bool MpISaveOrCancelableViewModel.IsSaveCancelEnabled =>
@@ -68,13 +68,17 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
-        #region Model
+        #region State
 
+        public MpSettingsTabType TabType { get; set; }
+        public int SortOrderIdx { get; set; }
+
+        public bool IsVisible { get; set; } = true;
         #endregion
         #endregion
 
         #region Constructors
-        public MpAvPreferenceFrameViewModel(MpAvPreferencesMenuViewModel parent) : base(parent) {
+        public MpAvSettingsFrameViewModel() : base(null) {
             PropertyChanged += MpAvPreferenceFrameViewModel_PropertyChanged;
         }
         #endregion

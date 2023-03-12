@@ -98,8 +98,8 @@ namespace MonkeyPaste.Avalonia {
                         new MpMenuItemViewModel() {
                             Header = "Settings",
                             IconResourceKey = "CogImage",
-                            CommandSrcObj = MpAvSettingsWindowViewModel.Instance,
-                            CommandPath = nameof(MpAvSettingsWindowViewModel.Instance.ShowSettingsWindowCommand),
+                            CommandSrcObj = MpAvSettingsViewModel.Instance,
+                            CommandPath = nameof(MpAvSettingsViewModel.Instance.ShowSettingsWindowCommand),
                             ShortcutArgs = new object[] { MpShortcutType.ShowSettings },
                         },
 #if DEBUG && DESKTOP

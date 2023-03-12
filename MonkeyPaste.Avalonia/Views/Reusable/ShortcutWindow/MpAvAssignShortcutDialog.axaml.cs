@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvAssignShortcutDialog : Window {
+    public partial class MpAvAssignShortcutDialog : MpAvWindow {
 
         public bool DialogResult { get; set; } = false;
         public MpAvAssignShortcutDialog() {

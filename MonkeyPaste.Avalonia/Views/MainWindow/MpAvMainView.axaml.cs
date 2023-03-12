@@ -17,6 +17,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
+
     [DoNotNotify]
     public partial class MpAvMainView :
         MpAvUserControl<MpAvMainWindowViewModel>,
@@ -39,6 +40,7 @@ namespace MonkeyPaste.Avalonia {
             await Task.Delay(1);
             if (Mp.Services.PlatformInfo.IsDesktop) {
                 var mw = new MpAvMainWindow();
+
                 if (mw.Content is MpAvMainView mv) {
                     _instance = mv;
                 }
@@ -75,7 +77,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
-        #region MpIAsyncObject
+        #region MpIAsyncObject I
         public bool IsBusy { get; set; }
         #endregion
 
