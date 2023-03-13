@@ -240,8 +240,8 @@ namespace MonkeyPaste.Avalonia {
                     if (HasText && !IsExpanded) {
                         IsExpanded = true;
                     }
-                    if (HasText) {
-                        //_ = App.MainWindow.FindVisualDescendantWithHashCode(int.Parse(SearchText), true);
+                    if (HasText && SearchText.StartsWith("#")) {
+                        var test = MpAvWindowManager.FindByHashCode(SearchText);
                     }
                     break;
                 case nameof(IsTextBoxFocused):

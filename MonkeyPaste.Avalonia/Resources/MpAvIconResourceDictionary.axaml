@@ -2,5 +2,5 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
     <sys:String x:Key="AppIcon">avares://MonkeyPaste.Avalonia/Assets/Icons/monkey.ico</sys:String>
-    <sys:String x:Key="CogTrayIcon">avares://MonkeyPaste.Avalonia/Assets/Icons/cog.ico</sys:String>
+    <sys:String x:Key="CogIcon">avares://MonkeyPaste.Avalonia/Assets/Icons/cog.ico</sys:String>
 </ResourceDictionary>

@@ -195,6 +195,7 @@
     <AvaloniaXaml Remove="Views\MainWindow\Sidebar\SidebarItems\ClipboardHandlers\Selector\MpAvClipboardHandlerItemSelectorView.axaml" />
     <AvaloniaXaml Remove="Views\Reusable\Notifications\Toast\MpAvNotificationWindow.axaml" />
     <AvaloniaXaml Remove="Views\Reusable\Notifications\Toast\UserAction\MpAvUserActionNotificationView.axaml" />
+    <AvaloniaXaml Remove="Views\SettingsWindow\MpAvSettingsWindow.axaml" />
     <None Remove="Assets\Cursors\copy.png" />
     <None Remove="Assets\Cursors\hand_closed.png" />
     <None Remove="Assets\Cursors\hand_open.png" />
@@ -426,6 +427,7 @@
     <Compile Remove="Program.cs" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\MpAvWin32ProcessWatcher2.cs" />
     <Compile Remove="Utils\Input\Mouse\MpAvMouseHook_Win32.cs" />
+    <Compile Remove="Utils\WindowManager\Helpers\MpAvTopmostSelector.cs" />
     <Compile Remove="ViewModels\MainWindow\Actions\Action\Triggers\MpAvTimerTriggerViewModel.cs" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\MpAvClipTrayCollectionViewModel.cs" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\MpAvCopyItemCollectionViewModel.cs" />
@@ -438,6 +440,7 @@
     <Compile Remove="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\Items\CheckBox\MpCheckBoxParameterView.axaml.cs" />
     <Compile Remove="Views\Reusable\Notifications\Toast\MpAvNotificationWindow.axaml.cs" />
     <Compile Remove="Views\Reusable\Notifications\Toast\UserAction\MpAvUserActionNotificationView.axaml.cs" />
+    <Compile Remove="Views\SettingsWindow\MpAvSettingsWindow.axaml.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Remove=".gitignore" />

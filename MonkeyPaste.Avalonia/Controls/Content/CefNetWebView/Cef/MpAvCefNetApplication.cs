@@ -185,10 +185,10 @@ namespace MonkeyPaste.Avalonia {
             //e.CommandLine.AppendSwitchWithValue("user-agent", "Mozilla/5.0 (Windows 10.0) WebKa/" + DateTime.UtcNow.Ticks);
 
             //double scale;
-            //if (App.Desktop == null || App.MainWindow == null) {
+            //if (App.Desktop == null || MpAvWindowManager.MainWindow == null) {
             //    scale = new Window().PlatformImpl.DesktopScaling;
             //} else {
-            //    scale = App.MainWindow.PlatformImpl.DesktopScaling;
+            //    scale = MpAvWindowManager.MainWindow.PlatformImpl.DesktopScaling;
             //}
             //commandLine.AppendSwitchWithValue("force-device-scale-factor", scale.ToString());
 

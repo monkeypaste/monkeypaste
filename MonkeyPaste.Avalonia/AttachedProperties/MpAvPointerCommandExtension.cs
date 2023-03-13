@@ -276,9 +276,6 @@ namespace MonkeyPaste.Avalonia {
         private static void HandleIsEnabledChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
             if (element is Control control &&
                 e.NewValue is bool isEnabledVal) {
-                if (control.DataContext is MpAvClipTileViewModel) {
-                    Debugger.Break();
-                }
                 if (isEnabledVal) {
                     control.AttachedToVisualTree += EnabledControl_AttachedToVisualHandler;
                     control.DetachedFromVisualTree += DisabledControl_DetachedToVisualHandler;

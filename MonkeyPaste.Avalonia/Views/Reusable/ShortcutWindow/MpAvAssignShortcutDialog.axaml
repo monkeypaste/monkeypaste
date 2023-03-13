@@ -1,27 +1,25 @@
 <local:MpAvWindow xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d"
-        d:DesignWidth="800"
-        d:DesignHeight="450"
-        xmlns:local="using:MonkeyPaste.Avalonia"
-        Height="300"
-        MinWidth="400"
-        SizeToContent="Width"
-        ShowInTaskbar="False"
-        Topmost="True"
-        Classes="assignWindow fadeIn"
-        WindowStartupLocation="CenterScreen"
-        x:DataType="local:MpAvAssignShortcutViewModel"
-        x:CompileBindings="True"
-        x:Class="MonkeyPaste.Avalonia.MpAvAssignShortcutDialog"
-        Title="Assign Shortcut">
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  mc:Ignorable="d"
+                  d:DesignWidth="800"
+                  d:DesignHeight="450"
+                  xmlns:local="using:MonkeyPaste.Avalonia"
+                  Height="300"
+                  MinWidth="400"
+                  SizeToContent="Width"
+                  ShowInTaskbar="False"
+                  Topmost="True"
+                  Classes="assignWindow fadeIn"
+                  WindowStartupLocation="CenterScreen"
+                  x:DataType="local:MpAvAssignShortcutViewModel"
+                  x:CompileBindings="True"
+                  x:Class="MonkeyPaste.Avalonia.MpAvAssignShortcutDialog"
+                  Title="Assign Shortcut">
     <local:MpAvWindow.Styles>
-        <!--  WARNINGS  -->
-        <Style Selector="Border.warning">
-            <Setter Property="Background"
-                    Value="IndianRed" />
+        <!--  MSG  -->
+        <Style Selector="Border.msg">
             <Setter Property="Margin"
                     Value="10" />
             <Setter Property="CornerRadius"
@@ -33,9 +31,8 @@
             <Setter Property="BorderBrush"
                     Value="AntiqueWhite" />
         </Style>
-        <Style Selector="Border.warning Image">
-            <Setter Property="Source"
-                    Value="{Binding Source={StaticResource WarningImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+
+        <Style Selector="Border.msg Image">
             <Setter Property="Margin"
                     Value="10,7,0,7" />
             <Setter Property="Width"
@@ -47,7 +44,8 @@
             <Setter Property="VerticalAlignment"
                     Value="Center" />
         </Style>
-        <Style Selector="Border.warning TextBlock">
+
+        <Style Selector="Border.msg TextBlock">
             <Setter Property="Foreground"
                     Value="AntiqueWhite" />
             <Setter Property="FontSize"
@@ -59,20 +57,31 @@
             <Setter Property="Padding"
                     Value="10,5" />
             <Setter Property="HorizontalAlignment"
-                    Value="Left" />
+                    Value="Center" />
             <Setter Property="VerticalAlignment"
                     Value="Center" />
         </Style>
+        <!--  INFO  -->
+        <Style Selector="Border.msg.info">
+            <Setter Property="Background"
+                    Value="SkyBlue" />
+        </Style>
+        <!--  WARNINGS  -->
+        <Style Selector="Border.msg.warning">
+            <Setter Property="Background"
+                    Value="IndianRed" />
+        </Style>
+        <Style Selector="Border.msg.warning Image">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource WarningImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+
+        </Style>
     </local:MpAvWindow.Styles>
-    <Grid RowDefinitions="20,*,Auto,Auto,Auto,50">
-        <TextBlock Grid.Row="0"
-                   FontSize="16"
-                   FontWeight="SemiBold"
-                   Margin="10,5"
-                   TextAlignment="Center"
-                   TextWrapping="WrapWithOverflow"
-                   HorizontalAlignment="Center"
-                   Text="{Binding ShortcutDisplayName}" />
+    <Grid RowDefinitions="Auto,*,Auto,Auto,50">
+        <Border Grid.Row="0"
+                Classes="msg info">
+            <TextBlock Text="{Binding ShortcutDisplayName}" />
+        </Border>
         <Border Grid.Row="1"
                 CornerRadius="10"
                 BorderThickness="0"
@@ -104,47 +113,29 @@
                 </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <local:MpAvShortcutKeyGroupView MinHeight="50"
-                                                         />
+                        <local:MpAvShortcutKeyGroupView MinHeight="50" />
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
         </Border>
-        <TextBlock Grid.Row="2"
-                   FontSize="10"
-                   MinHeight="30"
-                   IsVisible="False"
-                   FontStyle="Oblique"
-                   TextWrapping="Wrap"
-                   HorizontalAlignment="Center"
-                   Foreground="Red"
-                   Text="{Binding KeyString}" />
-        <Border Grid.Row="3"
-                Classes="warning"
+
+        <Border Grid.Row="2"
+                Classes="msg warning"
                 IsVisible="{Binding WarningString, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.1*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Image />
-                <TextBlock Grid.Column="1"
-                           Text="{Binding WarningString}" />
-            </Grid>
+            <DockPanel>
+                <Image DockPanel.Dock="Left" />
+                <TextBlock Text="{Binding WarningString}" />
+            </DockPanel>
         </Border>
-        <Border Grid.Row="4"
+        <Border Grid.Row="3"
+                Classes="msg warning"
                 IsVisible="{Binding WarningString2, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.1*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Image />
-                <TextBlock Grid.Column="1"
-                           Text="{Binding WarningString2}" />
-            </Grid>
+            <DockPanel>
+                <Image DockPanel.Dock="Left" />
+                <TextBlock Text="{Binding WarningString2}" />
+            </DockPanel>
         </Border>
-        <StackPanel Grid.Row="5"
+        <StackPanel Grid.Row="4"
                     Orientation="Horizontal"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Bottom">
@@ -164,12 +155,15 @@
                             Value="Center" />
                 </Style>
             </StackPanel.Styles>
-            <Button IsCancel="True"
+            <Button Classes="defaultButton textOnlyButton"
+                    IsCancel="True"
                     Click="Cancel_Click"
                     Content="Cancel" />
-            <Button Command="{Binding ClearCommand}"
+            <Button Classes="defaultButton textOnlyButton"
+                    Command="{Binding ClearCommand}"
                     Content="Clear" />
-            <Button Content="Ok"
+            <Button Classes="defaultButton textOnlyButton"
+                    Content="Ok"
                     IsDefault="True"
                     Click="Ok_Click" />
         </StackPanel>

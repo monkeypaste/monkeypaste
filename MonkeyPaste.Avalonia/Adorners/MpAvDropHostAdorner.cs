@@ -40,6 +40,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Overrides
         public override void Render(DrawingContext dc) {
+            if (IgnoreRender) {
+                return;
+            }
             if (_dropShapes != null) {
                 _dropShapes.ForEach(x => x.DrawShape(dc));
             }

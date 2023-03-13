@@ -508,32 +508,10 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvSettingsWindowViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                case nameof(IsVisible):
-                    if (IsVisible) {
-                        _settingsWindow = new MpAvWindow() {
-                            Classes = new Classes("fadeIn"),
-                            ShowInTaskbar = true,
-                            Width = 800,
-                            Height = 500,
-                            Topmost = true,
-                            Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("CogIcon", null, null, null) as WindowIcon,
-                            WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                            WindowState = WindowState.Normal,
-                            DataContext = this,
-                            Content = new MpAvSettingsView()
-                        };
-                        _settingsWindow.Show();
-                    } else {
-                        if (_settingsWindow != null) {
-                            _settingsWindow.Close();
-                        }
-
-                    }
-                    break;
                 case nameof(FilterText):
                     MpMessenger.SendGlobal(MpMessageType.SettingsFilterTextChanged);
-                    if (_settingsWindow is Window w && !string.IsNullOrWhiteSpace(FilterText)) {
-                        var test = w.FindVisualDescendantWithHashCode(int.Parse(FilterText), true);
+                    if (FilterText.StartsWith("#")) {
+                        var test = MpAvWindowManager.FindByHashCode(FilterText);
                     }
 
                     break;
@@ -614,7 +592,21 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ShowSettingsWindowCommand => new MpCommand<object>(
             (args) => {
                 SelectTabCommand.Execute(args);
-                IsVisible = true;
+                if (Mp.Services.PlatformInfo.IsDesktop) {
+                    var sw = new MpAvWindow() {
+                        Classes = new Classes("fadeIn"),
+                        ShowInTaskbar = true,
+                        Width = 800,
+                        Height = 500,
+                        Topmost = true,
+                        Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("CogIcon", null, null, null) as WindowIcon,
+                        WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                        WindowState = WindowState.Normal,
+                        DataContext = this,
+                        Content = new MpAvSettingsView()
+                    };
+                    sw.ShowChild();
+                }
             });
 
         public ICommand ButtonParameterClickCommand => new MpAsyncCommand<object>(

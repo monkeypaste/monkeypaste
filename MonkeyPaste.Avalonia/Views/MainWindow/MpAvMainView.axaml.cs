@@ -47,14 +47,14 @@ namespace MonkeyPaste.Avalonia {
                 if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
                     desktop.MainWindow = mw;
                 }
-                //App.MainWindow = mw;
-                if (App.MainWindow == null) {
+                //MpAvWindowManager.MainWindow = mw;
+                if (MpAvWindowManager.MainWindow == null) {
                     // huh?
                     MpDebug.Break();
                 } else {
                     if (!MpPrefViewModel.Instance.ShowInTaskSwitcher) {
                         if (OperatingSystem.IsWindows()) {
-                            MpAvToolWindow_Win32.InitToolWindow(App.MainWindow.PlatformImpl.Handle.Handle);
+                            MpAvToolWindow_Win32.InitToolWindow(MpAvWindowManager.MainWindow.PlatformImpl.Handle.Handle);
                         } else {
                             // TODO or error, not sure if mac/linux supports
                         }

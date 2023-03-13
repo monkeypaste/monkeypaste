@@ -32,6 +32,7 @@
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
+
     </local:MpAvUserControl.Styles>
 
     <Grid x:Name="TagTrayContainerGrid"

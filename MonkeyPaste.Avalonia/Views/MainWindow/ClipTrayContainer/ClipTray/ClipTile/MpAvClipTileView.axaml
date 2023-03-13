@@ -20,9 +20,17 @@
         <local:MpHighlightSelectorBehavior />
     </Interaction.Behaviors>
     <local:MpAvUserControl.Styles>
-        <Style Selector="Border#ClipTileContainerBorder.IsAnyBusy">
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.IsAnyBusy">
             <Setter Property="Cursor"
                     Value="Wait" />
+        </Style>
+        <Style Selector="Grid#DetailContainerGrid TextBlock">
+            <Setter Property="Foreground"
+                    Value="Black" />
+        </Style>
+      <Style Selector="Grid#DetailContainerGrid.subselect TextBlock">
+            <Setter Property="Foreground"
+                    Value="AntiqueWhite" />
         </Style>
 
     </local:MpAvUserControl.Styles>
@@ -68,7 +76,7 @@
                 <RowDefinition Height="0.25*"
                                MaxHeight="40" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="20" />
+                <RowDefinition Height="25" />
             </Grid.RowDefinitions>
 
             <!--  Title  -->
@@ -105,6 +113,7 @@
             <!--  Detail  -->
             <Grid x:Name="DetailContainerGrid"
                   Grid.Row="2"
+                  Classes.subselect="{Binding IsSubSelectionEnabled}"
                   IsVisible="{Binding IsCornerButtonsVisible}"
                   HorizontalAlignment="Center"
                   VerticalAlignment="Bottom">

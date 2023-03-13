@@ -34,8 +34,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         public MpAvTopmostSelector() {
-            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
-            MpAvNotificationWindowManager.Instance.OnNotificationWindowIsVisibleChanged += Instance_OnNotificationIsVisibleChanged;
+            //MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
+            //MpAvNotificationWindowManager.Instance.OnNotificationWindowIsVisibleChanged += Instance_OnNotificationIsVisibleChanged;
 
         }
         #endregion

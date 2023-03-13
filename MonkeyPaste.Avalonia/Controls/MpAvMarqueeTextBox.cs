@@ -24,10 +24,12 @@ using Key = Avalonia.Input.Key;
 using KeyEventArgs = Avalonia.Input.KeyEventArgs;
 
 namespace MonkeyPaste.Avalonia {
+    public interface MpIOverrideRender {
+        bool IgnoreRender { get; set; }
+    }
 
     [DoNotNotify]
-    public class MpAvMarqueeTextBox : TextBox, IStyleable {
-        Type IStyleable.StyleKey => typeof(TextBox);
+    public class MpAvMarqueeTextBox : TextBox, IStyleable, MpIOverrideRender {
 
         #region Private Variables
 
@@ -53,6 +55,18 @@ namespace MonkeyPaste.Avalonia {
 
         static MpAvMarqueeTextBox() {
         }
+        #endregion
+
+        #region Interfaces
+
+        #region IStyleable Implementation
+        Type IStyleable.StyleKey => typeof(TextBox);
+        #endregion
+
+        #region MpIOverrideRender Implementation
+        public bool IgnoreRender { get; set; }
+        #endregion
+
         #endregion
 
         #region Properties
@@ -535,6 +549,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public override void Render(DrawingContext context) {
+            if (IgnoreRender) {
+                // BUG workaround for 'https://github.com/AvaloniaUI/Avalonia/issues/10057'
+                return;
+            }
             if (!IsVisible) {
                 return;
             }

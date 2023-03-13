@@ -17,13 +17,11 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     public class MpAvSearchCriteriaItemCollectionViewModel :
         MpViewModelBase,
-        MpIWindowViewModel,
+        MpIChildWindowViewModel,
         MpIExpandableViewModel {
 
         #region Private Variable
-
-        private Window _criteriaWindow;
-
+        //private Window _criteriaWindow;
         #endregion
 
         #region Constants
@@ -41,8 +39,14 @@ namespace MonkeyPaste.Avalonia {
         #region MpIWindowViewModel Implementation
         public MpWindowType WindowType =>
             MpWindowType.PopOut;
-
+        bool MpIChildWindowViewModel.IsOpen {
+            get => IsCriteriaWindowOpen;
+            set => IsCriteriaWindowOpen = value;
+        }
         #endregion
+
+
+
         #region MpIExpandableViewModel Implementation
 
         private bool _isExpanded;
@@ -80,8 +84,8 @@ namespace MonkeyPaste.Avalonia {
         #region State
         public bool IsAnyDragging =>
             Items.Any(x => x.IsDragging);
-        public bool IsCriteriaWindowOpen =>
-            _criteriaWindow != null;
+        public bool IsCriteriaWindowOpen { get; set; }
+        //public bool IsCriteriaWindowOpen => _criteriaWindow != null;//{ get; set; }
 
         public bool HasAnyCriteriaChanged {
             get => Items.Any(x => x.HasCriteriaChanged);
@@ -119,20 +123,17 @@ namespace MonkeyPaste.Avalonia {
 
         public double BoundCriteriaListViewScreenHeight { get; set; }
         public double BoundCriteriaListBoxScreenHeight =>
-            BoundCriteriaListViewScreenHeight - BoundHeaderHeight;
+            Math.Max(0, BoundCriteriaListViewScreenHeight - BoundHeaderHeight);
 
         public double MaxSearchCriteriaRowHeight =>
             IsCriteriaWindowOpen ? 0 : MaxSearchCriteriaViewHeight;
 
         public double MaxSearchCriteriaListBoxHeight =>
-            MaxSearchCriteriaViewHeight - BoundHeaderHeight;
+            Math.Max(0, MaxSearchCriteriaViewHeight - BoundHeaderHeight);
         public double MaxSearchCriteriaViewHeight {
             get {
                 if (!IsAdvSearchActive) {
                     return 0;
-                }
-                if (IsCriteriaWindowOpen) {
-                    return double.PositiveInfinity;
                 }
                 double h = 0;
                 if (true) {
@@ -147,7 +148,7 @@ namespace MonkeyPaste.Avalonia {
                 Items.Sum(x =>
                     MpAvSearchCriteriaItemViewModel.CRITERIA_ITEM_BORDER_THICKNESS.Top +
                     MpAvSearchCriteriaItemViewModel.CRITERIA_ITEM_BORDER_THICKNESS.Bottom);
-                return h;
+                return Math.Max(0, h);
             }
         }
 
@@ -194,6 +195,7 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task InitializeAsync(int tagId, bool isPending) {
+
             IsBusy = true;
 
             if (UserDevices == null) {
@@ -233,7 +235,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (!HasCriteriaItems && IsCriteriaWindowOpen) {
                 // active search no longer query tag, close criteria window
-                _criteriaWindow.Close();
+                IsCriteriaWindowOpen = false;
             }
 
             while (Items.Any(x => x.IsAnyBusy)) {
@@ -534,7 +536,8 @@ namespace MonkeyPaste.Avalonia {
         public ICommand OpenCriteriaWindowCommand => new MpCommand<object>(
             (args) => {
                 if (Mp.Services.PlatformInfo.IsDesktop) {
-                    _criteriaWindow = new MpAvWindow() {
+                    Items.ForEach(x => x.LogPropertyChangedEvents = true);
+                    var _criteriaWindow = new MpAvWindow() {
                         Width = 1100,
                         Height = 300,
                         DataContext = this,
@@ -579,7 +582,8 @@ namespace MonkeyPaste.Avalonia {
                             TargetNullValue = MpSystemColors.darkviolet,
                             FallbackValue = MpSystemColors.darkviolet
                         });
-                    _criteriaWindow.Show();
+                    //IsCriteriaWindowOpen = true;
+                    _criteriaWindow.ShowChild();
                 } else {
                     // Some kinda view nav here
                     // see https://github.com/AvaloniaUI/Avalonia/discussions/9818

@@ -6,100 +6,9 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste {
-    //public enum MpNotifierType {
-    //    Default = 0,
-    //    Startup,
-    //    Dialog
-    //}
-
-    public enum MpNotificationPlacementType {
-        None = 0,
-        SystemTray,
-        ModalAnchor
-    }
-
-    public enum MpNotificationDialogResultType {
-        None = 0,
-        Yes,
-        No,
-        Ok,
-        Cancel,
-        Ignore,
-        Retry,
-        Fix,
-        Shutdown,
-        DoNotShow,
-        Loading,
-        Text
-    }
-
-    public enum MpNotificationButtonsType {
-        None = 0,
-        YesNoCancel,
-        Ok,
-        OkCancel,
-        TextBoxOkCancel,
-        IgnoreRetryFix,
-        IgnoreRetryShutdown,
-        ProgressBar
-    }
-    public enum MpNotificationType {
-        None = 0,
-        // Loader
-        Loader,
-
-        // Message
-        DbError,
-        Help,
-        PluginUpdated,
-        Message,
-        UserTriggerEnabled,
-        UserTriggerDisabled,
-        AppModeChange,
-        TrialExpired,
-
-        // User Action (System Tray)
-        InvalidPlugin,
-        InvalidClipboardFormatHandler,
-        InvalidAction,
-        BadHttpRequest,
-        AnalyzerTimeout,
-        InvalidRequest,
-        InvalidResponse,
-        FileIoError,
-
-        // User Action (Modal) 
-
-        ModalContentFormatDegradation,
-        ModalYesNoCancelMessageBox,
-        ModalOkCancelMessageBox,
-        ModalTextBoxOkCancelMessageBox,
-
-        // Append Tile
-
-        AppendChanged,
-
-        // Plugin Wrapper 
-        PluginResponseMessage,
-        PluginResponseError,
-        PluginResponseWarning,
-        PluginResponseWarningWithOption,
-        PluginResponseOther
-    }
-
-    public enum MpNotificationLayoutType {
-        //Default = 0,
-        Message,
-        Append,
-        Loader,
-        Warning, //confirm
-        UserAction, //retry/ignore/quit
-        Error, //confirm
-        ErrorWithOption, //retry/ignore/quit
-        ErrorAndShutdown //confirm
-    }
     public abstract class MpNotificationViewModelBase :
         MpViewModelBase,
+        MpIWantsTopmostWindowViewModel,
         MpIChildWindowViewModel,
         MpIPopupMenuViewModel {
         #region Constants
@@ -193,6 +102,12 @@ namespace MonkeyPaste {
 
         #region Interfaces
 
+        #region MpIWantsTopmostWindowViewModel Implementation
+
+        bool MpIWantsTopmostWindowViewModel.WantsTopmost =>
+            true;
+
+        #endregion
 
         #region MpIChildWindowViewModel Implementation
         MpWindowType MpIWindowViewModel.WindowType =>

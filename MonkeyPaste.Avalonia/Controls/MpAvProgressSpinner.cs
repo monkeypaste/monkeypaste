@@ -7,8 +7,8 @@ using System;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public class MpAvProgressSpinner : Canvas, IStyleable {
-        Type IStyleable.StyleKey => typeof(Canvas);
+    public class MpAvProgressSpinner :
+        Canvas, IStyleable, MpIOverrideRender {
 
         #region Statics
 
@@ -18,6 +18,18 @@ namespace MonkeyPaste.Avalonia {
         private static void HandlePercentChanged(MpAvProgressSpinner ps) {
             ps.InvalidateVisual();
         }
+
+        #endregion
+
+        #region Interfaces
+
+        #region IStyleable Implementation
+        Type IStyleable.StyleKey => typeof(Canvas);
+        #endregion
+
+        #region MpIOverrideRender Implementation
+        public bool IgnoreRender { get; set; }
+        #endregion
 
         #endregion
 
@@ -47,6 +59,9 @@ namespace MonkeyPaste.Avalonia {
 
         public override void Render(DrawingContext context) {
             if (!IsVisible) {
+                return;
+            }
+            if (IgnoreRender) {
                 return;
             }
             base.Render(context);

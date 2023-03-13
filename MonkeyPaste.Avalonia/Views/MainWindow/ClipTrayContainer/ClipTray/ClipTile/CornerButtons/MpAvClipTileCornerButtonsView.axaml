@@ -13,6 +13,13 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileCornerButtonsView">
     <local:MpAvUserControl.Styles>
+        <Style Selector=":is(Button)">
+            <Setter Property="local:MpAvPointerCommandExtension.IsEnabled"
+                    Value="True" />
+            <Setter Property="local:MpAvPointerCommandExtension.RoutingStrategy"
+                    Value="Tunnel" />
+        </Style>
+
         <Style Selector=":is(Button):pointerover PathIcon">
             <Setter Property="Foreground"
                     Value="Gold" />
@@ -50,8 +57,8 @@
 
         <ToggleButton x:Name="PinTileButton"
                       Classes="noBg noHoverBg"
-                      Command="{Binding ToggleTileIsPinnedCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
-                      CommandParameter="{Binding}"
+                      local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ToggleTileIsPinnedCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                      local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding}"
                       IsChecked="{Binding IsPinned}"
                       IsVisible="{Binding IsContentReadOnly}"
                       HorizontalAlignment="Left"
@@ -65,7 +72,7 @@
 
         <Button x:Name="OpenWindowButton"
                 Classes="noBg noHoverBg"
-                Command="{Binding PinToPopoutWindowCommand}"
+                local:MpAvPointerCommandExtension.LeftPressCommand="{Binding PinToPopoutWindowCommand}"
                 IsVisible="{Binding !IsPopOutVisible}"
                 CommandParameter="{Binding}"
                 HorizontalAlignment="Right"
@@ -81,8 +88,8 @@
                 Classes="noBg noHoverBg"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
-                Command="{Binding ShowAssignShortcutDialogCommand, Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}"
-                CommandParameter="{Binding}">
+                local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ShowAssignShortcutDialogCommand, Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}"
+                local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding}">
             <PathIcon HorizontalAlignment="Right"
                       VerticalAlignment="Top"
                       Data="{StaticResource ControllerOutlineSvg}" />
@@ -94,7 +101,8 @@
                       IsVisible="{Binding CanEdit}"
                       HorizontalAlignment="Right"
                       VerticalAlignment="Bottom"
-                      IsChecked="{Binding !IsContentReadOnly, Mode=TwoWay}">
+                      local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ToggleIsContentReadOnlyCommand}"
+                      IsChecked="{Binding !IsContentReadOnly, Mode=OneWay}">
             <PathIcon HorizontalAlignment="Left"
                       VerticalAlignment="Top"
                       Data="{StaticResource PencilOutlineSvg}" />

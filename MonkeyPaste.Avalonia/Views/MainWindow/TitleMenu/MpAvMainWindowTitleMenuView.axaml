@@ -91,7 +91,8 @@
 
             <ToggleButton x:Name="SettingsToggleButton"
                           Classes="noBg noHoverBg shakeOver"
-                          IsChecked="{Binding IsVisible, Source={x:Static local:MpAvSettingsViewModel.Instance}}"
+                          Command="{Binding ShowSettingsWindowCommand, Source={x:Static local:MpAvSettingsViewModel.Instance}}"
+                          IsChecked="{Binding IsVisible, Source={x:Static local:MpAvSettingsViewModel.Instance}, Mode=OneWay}"
                           ToolTip.ShowDelay="500">
                 <ToggleButton.RenderTransform>
                     <RotateTransform />
@@ -137,7 +138,6 @@
                   ToolTip.ShowDelay="0"
                   ToolTip.Placement="Top"
                   ToolTip.Tip="{Binding ZoomFactor, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=OneWay, StringFormat='Scale {0}x'}"
-                            
                   Background="{StaticResource HitTestableTransparent}"
                   Cursor="Hand">
                 <!--  TRACK LINE  -->

@@ -476,7 +476,14 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-
+        public int ItemIdx {
+            get {
+                if (IsPinned) {
+                    return Parent.InternalPinnedItems.IndexOf(this);
+                }
+                return Parent.Items.IndexOf(this);
+            }
+        }
         public bool IsTitleReadOnly { get; set; } = true;
 
         private bool _isContentReadOnly = true;
@@ -592,7 +599,8 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        public bool CanEdit => IsTextItem;
+        public bool CanEdit =>
+            IsTextItem;
         public bool IsListBoxItemFocused { get; set; } = false;
         public bool IsTitleFocused { get; set; } = false;
 
@@ -998,7 +1006,9 @@ namespace MonkeyPaste.Avalonia {
             _curItemRandomHexColor = string.Empty;
             _contentView = null;
             _wasPopoutPinned = false;
+            if (ci != null && ci.Id == 297) {
 
+            }
             IsBusy = true;
 
             if (ci != null &&
@@ -1174,7 +1184,7 @@ namespace MonkeyPaste.Avalonia {
                 MpAvIsHoveringExtension.SetIsEnabled(c, true);
             }
 
-            _popoutWindow.Show();
+            _popoutWindow.ShowChild();
 
             OnPropertyChanged(nameof(IsPopOutVisible));
         }
@@ -1912,6 +1922,8 @@ namespace MonkeyPaste.Avalonia {
             int ciid = CopyItemId;
 
             if (Parent != null) {
+                //MpAvPersistentClipTilePropertiesHelper.AddOrReplacePersistentSize_ById
+                //Parent.QueryCommand.Execute(string.Empty);
                 //if (_wasPopoutPinned) {
                 //    Parent.PinTileCommand.Execute(this);
                 //} else {
@@ -1925,6 +1937,7 @@ namespace MonkeyPaste.Avalonia {
                 //        popped_in_ctvm.IsSelected = true;
                 //    }
                 //}
+                Parent.PinnedItems.Remove(this);
                 Parent.PinTileCommand.Execute(this);
             }
 
@@ -1947,6 +1960,13 @@ namespace MonkeyPaste.Avalonia {
                 return !IsPopOutVisible && Parent != null;
             }, new[] { this });
 
+        public ICommand ToggleIsContentReadOnlyCommand => new MpCommand(
+            () => {
+                IsContentReadOnly = !IsContentReadOnly;
+            },
+            () => {
+                return CanEdit;
+            });
         #endregion
     }
 }

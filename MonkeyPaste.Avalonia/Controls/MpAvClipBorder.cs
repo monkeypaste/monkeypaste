@@ -8,14 +8,31 @@ using System;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public class MpAvClipBorder : Border, IStyleable {
+    public class MpAvClipBorder : Border, IStyleable, MpIOverrideRender {
 
-        Type IStyleable.StyleKey => typeof(Border);
+        #region Private Variables
 
         private Geometry clipGeometry = null;
         private object oldClip;
 
+        #endregion
+
+        #region Interfaces
+
+        #region IStyleable Implementation
+        Type IStyleable.StyleKey => typeof(Border);
+        #endregion
+
+        #region MpIOverrideRender Implementation
+        public bool IgnoreRender { get; set; }
+        #endregion
+
+        #endregion
+
         public override void Render(DrawingContext context) {
+            if (IgnoreRender) {
+                return;
+            }
             OnApplyChildClip();
             base.Render(context);
         }

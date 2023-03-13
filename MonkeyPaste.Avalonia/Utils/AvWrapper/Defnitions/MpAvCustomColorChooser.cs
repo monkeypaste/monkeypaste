@@ -40,7 +40,7 @@ namespace MonkeyPaste.Avalonia {
                 ShowInTaskbar = false
             };
 
-            await cw.ShowDialog(App.MainWindow);
+            await cw.ShowDialog(MpAvWindowManager.MainWindow);
             if (cw.Tag is string) {
                 newColor = cw.Tag.ToString();
                 if (ucvm != null) {

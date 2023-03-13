@@ -32,17 +32,6 @@ namespace MonkeyPaste.Avalonia {
         public static string[] Args { get; set; } = new string[] { };
 
         private static App _instance;
-        public static Window MainWindow {
-            get {
-                if (_instance == null) {
-                    return null;
-                }
-                if (_instance.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-                    return desktop.MainWindow as MpAvMainWindow;
-                }
-                return null;
-            }
-        }
 
         public static MpIMainView MainView {
             get {

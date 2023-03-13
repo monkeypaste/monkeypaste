@@ -6,7 +6,7 @@ using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvUserActionNotificationWindow : Window {
+    public partial class MpAvUserActionNotificationWindow : MpAvWindow {
 
         public MpUserActionNotificationViewModel BindingContext => DataContext as MpUserActionNotificationViewModel;
         public MpAvUserActionNotificationWindow() {

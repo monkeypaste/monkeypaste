@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvAppendNotificationWindow : Window {
+    public partial class MpAvAppendNotificationWindow : MpAvWindow {
         #region Private Variables
         #endregion
 

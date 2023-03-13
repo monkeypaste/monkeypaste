@@ -63,7 +63,7 @@ namespace MonkeyPaste {
         }
 
         public void RaiseCanExecuteChanged() {
-            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+            Mp.Services.MainThreadMarshal.RunOnMainThread(() => CanExecuteChanged?.Invoke(this, EventArgs.Empty));
         }
 
         #region Explicit implementations

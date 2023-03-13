@@ -16,7 +16,7 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
 
         private MpAvNotificationPositioner _positioner;
-        private MpAvTopmostSelector _topmostSelector;
+        //private MpAvTopmostSelector _topmostSelector;
 
         private ObservableCollection<Window> _windows = new ObservableCollection<Window>();
 
@@ -99,7 +99,7 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
         public void Init() {
             _positioner = new MpAvNotificationPositioner();
-            _topmostSelector = new MpAvTopmostSelector();
+            //_topmostSelector = new MpAvTopmostSelector();
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }
 

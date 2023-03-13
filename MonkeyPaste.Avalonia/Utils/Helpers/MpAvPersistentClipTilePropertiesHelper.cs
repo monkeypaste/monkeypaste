@@ -7,6 +7,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         #endregion
+
         #region IsSelected
         public static List<MpCopyItem> PersistentSelectedModels { get; set; } = new List<MpCopyItem>();
         #endregion

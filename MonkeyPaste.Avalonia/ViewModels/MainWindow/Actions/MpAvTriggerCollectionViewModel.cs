@@ -699,7 +699,7 @@ namespace MonkeyPaste.Avalonia {
                             Converter = MpAvStringHexToBrushConverter.Instance
                         });
 
-                    dw.Show();
+                    dw.ShowChild();
                 } else {
                     // Some kinda view nav here
                     // see https://github.com/AvaloniaUI/Avalonia/discussions/9818

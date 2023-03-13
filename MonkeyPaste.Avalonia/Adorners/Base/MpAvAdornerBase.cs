@@ -5,7 +5,17 @@ using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public abstract class MpAvAdornerBase : Control {
+    public abstract class MpAvAdornerBase :
+        Control,
+        MpIOverrideRender {
+
+        #region Interfaces
+
+        #region MpIOverrideRender Implementation
+        public bool IgnoreRender { get; set; }
+        #endregion
+
+        #endregion
         public Control AdornedControl { get; private set; }
 
         public MpAvAdornerBase(Control adornedControl) : base() {

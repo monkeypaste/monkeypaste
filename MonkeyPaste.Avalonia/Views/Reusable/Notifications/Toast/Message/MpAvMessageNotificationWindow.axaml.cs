@@ -5,7 +5,7 @@ using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvMessageNotificationWindow : Window {
+    public partial class MpAvMessageNotificationWindow : MpAvWindow {
         #region Private Variables
         #endregion
 

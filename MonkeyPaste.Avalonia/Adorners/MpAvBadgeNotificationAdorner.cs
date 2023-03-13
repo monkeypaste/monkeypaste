@@ -38,9 +38,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region Overrides
 
-
         public override void Render(DrawingContext context) {
             if (AdornedControl == null) {
+                return;
+            }
+            if (IgnoreRender) {
                 return;
             }
             IsVisible = NotificationCount > 0;

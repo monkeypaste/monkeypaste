@@ -15,17 +15,9 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvPinTrayView">
     <local:MpAvUserControl.Styles>
-        <Style Selector="Border#PinTrayContainerBorder.empty Button#UnpinAllButton">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>
-        <Style Selector="Border#PinTrayContainerBorder:pointerover:not(.empty) Button#UnpinAllButton">
-            <Setter Property="IsVisible"
-                    Value="True" />
-        </Style>
+        
     </local:MpAvUserControl.Styles>
     <Border x:Name="PinTrayContainerBorder"
-            Classes.empty="{Binding IsPinTrayEmpty}"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
         <Grid HorizontalAlignment="Stretch"
@@ -90,6 +82,7 @@
                            VerticalAlignment="Center"
                            TextAlignment="Center"
                            TextWrapping="Wrap"
+                           Foreground="DimGray"
                            FontSize="32"
                            Text="Pin or Drop any media here!"
                            Classes="disabled" />
@@ -112,7 +105,7 @@
                     Background="Silver"
                     Command="{Binding UnpinAllCommand}">
                 <Grid>
-                    <Image IsVisible="{Binding IsPinTrayBusy}"
+                    <Image IsVisible="{Binding !IsPinTrayBusy}"
                            Margin="5,2"
                            Source="{Binding ., Source={StaticResource ClearGridImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                     <!--  IsBusy Overlay  -->

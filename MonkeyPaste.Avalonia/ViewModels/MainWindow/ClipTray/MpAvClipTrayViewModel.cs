@@ -2732,7 +2732,8 @@ namespace MonkeyPaste.Avalonia {
                  }
                  RefreshQueryTrayLayout();
                  await Task.Delay(200);
-                 SelectedItem = ctvm_to_pin;
+                 //SelectedItem = ctvm_to_pin;
+                 ctvm_to_pin.IsSelected = true;
 
                  OnPropertyChanged(nameof(Items));
                  OnPropertyChanged(nameof(PinnedItems));
@@ -2766,23 +2767,35 @@ namespace MonkeyPaste.Avalonia {
 
                  ClearClipSelection(false);
                  // perform inplace requery to potentially put unpinned tile back
-                 QueryCommand.Execute(string.Empty);
-                 while (IsAnyBusy) {
-                     await Task.Delay(100);
-                 }
-                 await Task.Delay(300);
-                 var unpinned_ctvm = Items.FirstOrDefault(x => x.CopyItemId == unpinnedId);
+                 await QueryCommand.ExecuteAsync(string.Empty);
 
-                 if (unpinned_ctvm != null) {
-                     // if unpinned tile is in current page select it
-                     SelectedItem = unpinned_ctvm;
-                 } else if (IsPinTrayEmpty) {
-                     // select left most visible tile if pin tray empty
-                     SelectedItem = VisibleItems.AggregateOrDefault((a, b) => a.QueryOffsetIdx < b.QueryOffsetIdx ? a : b);
+                 //await Task.Delay(300);
+                 MpAvClipTileViewModel to_select_ctvm =
+                    Items.FirstOrDefault(x => x.CopyItemId == unpinnedId);
+
+                 if (to_select_ctvm == null) {
+                     if (IsPinTrayEmpty) {
+                         while (IsAnyBusy) {
+                             // query returns before sub tasks complete and updated offsets are needed
+                             await Task.Delay(100);
+                         }
+                         // select left most visible tile if pin tray empty
+                         to_select_ctvm = VisibleItems.AggregateOrDefault((a, b) => a.QueryOffsetIdx < b.QueryOffsetIdx ? a : b);
+                     } else {
+                         // prefer select prev pinned neighbor tile
+                         //int sel_idx = Math.Min(PinnedItems.Count - 1, Math.Max(0, unpinned_ctvm_idx));
+                         //to_select_ctvm = PinnedItems[sel_idx];
+                         //
+                         to_select_ctvm =
+                            InternalPinnedItems
+                            .Aggregate((a, b) => unpinned_ctvm_idx - a.ItemIdx < unpinned_ctvm_idx - b.ItemIdx ? a : b);
+                     }
+                 }
+                 if (to_select_ctvm == null) {
+                     // should probably not happen or will have no effect (empty query) but in case
+                     ResetClipSelection(false);
                  } else {
-                     // prefer select neighbor pin tile 
-                     int sel_idx = Math.Min(PinnedItems.Count - 1, Math.Max(0, unpinned_ctvm_idx));
-                     SelectedItem = PinnedItems[sel_idx];
+                     to_select_ctvm.IsSelected = true;
                  }
 
                  UpdateEmptyPropertiesAsync().FireAndForgetSafeAsync(this);
@@ -2810,7 +2823,12 @@ namespace MonkeyPaste.Avalonia {
         public ICommand UnpinAllCommand => new MpCommand(() => {
             int pin_count = PinnedItems.Count;
             while (pin_count > 0) {
-                UnpinTileCommand.Execute(PinnedItems[--pin_count]);
+                var to_unpin_ctvm = PinnedItems[--pin_count];
+                if (to_unpin_ctvm.IsPopOutVisible ||
+                    to_unpin_ctvm.IsAppendNotifier) {
+                    continue;
+                }
+                UnpinTileCommand.Execute(to_unpin_ctvm);
             }
         });
 
@@ -2895,270 +2913,270 @@ namespace MonkeyPaste.Avalonia {
             });
 
         private bool _canQuery = true;
-        public ICommand QueryCommand => new MpCommand<object>(
-            (offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg) => {
+        public MpIAsyncCommand<object> QueryCommand => new MpAsyncCommand<object>(
+            async (offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg) => {
                 MpConsole.WriteLine($"Query called. Arg: '{offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg}'");
-                //Dispatcher.UIThread.VerifyAccess();
+                Dispatcher.UIThread.VerifyAccess();
                 _canQuery = false;
-                Dispatcher.UIThread.Post(async () => {
-                    IsBusy = true;
-                    IsQuerying = true;
-                    var sw = new Stopwatch();
-                    sw.Start();
+                //Dispatcher.UIThread.Post(async () => {
+                IsBusy = true;
+                IsQuerying = true;
+                var sw = new Stopwatch();
+                sw.Start();
 
-                    #region Gather Args
+                #region Gather Args
 
-                    bool isSubQuery = offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg != null;
-                    bool isScrollJump = offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg is MpPoint;
-                    bool isOffsetJump = offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg is int;
-                    bool isLoadMore = offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg is bool;
-                    bool isInPlaceRequery = offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg is string;
-                    bool isRequery = !isSubQuery;
+                bool isSubQuery = offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg != null;
+                bool isScrollJump = offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg is MpPoint;
+                bool isOffsetJump = offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg is int;
+                bool isLoadMore = offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg is bool;
+                bool isInPlaceRequery = offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg is string;
+                bool isRequery = !isSubQuery;
 
-                    int loadOffsetIdx = 0;
-                    int loadCount = 0;
+                int loadOffsetIdx = 0;
+                int loadCount = 0;
 
-                    bool isLoadMoreTail = false;
+                bool isLoadMoreTail = false;
 
-                    MpPoint newScrollOffset = default;
+                MpPoint newScrollOffset = default;
 
-                    #endregion
+                #endregion
 
-                    #region TotalCount Query & Offset Calc
+                #region TotalCount Query & Offset Calc
 
-                    if (isSubQuery) {
-                        // sub-query of visual, data-specific or incremental offset 
+                if (isSubQuery) {
+                    // sub-query of visual, data-specific or incremental offset 
 
-                        if (isOffsetJump) {
-                            // sub-query to data-specific (query Idx) offset
+                    if (isOffsetJump) {
+                        // sub-query to data-specific (query Idx) offset
 
-                            loadOffsetIdx = (int)offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg;
-                            var loadTileRect = FindTileRect(loadOffsetIdx, null);
-                            newScrollOffset = loadTileRect.Location;
-                        } else if (isScrollJump) {
-                            // sub-query to visual (scroll position) offset 
+                        loadOffsetIdx = (int)offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg;
+                        var loadTileRect = FindTileRect(loadOffsetIdx, null);
+                        newScrollOffset = loadTileRect.Location;
+                    } else if (isScrollJump) {
+                        // sub-query to visual (scroll position) offset 
 
-                            newScrollOffset = offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg as MpPoint;
-                            loadOffsetIdx = FindJumpTileIdx(newScrollOffset.X, newScrollOffset.Y, out MpRect offsetTileRect);
-                            newScrollOffset = offsetTileRect.Location;
-                        } else if (isLoadMore) {
-                            // sub-query either forward (true) or backward (false) based on current offset
+                        newScrollOffset = offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg as MpPoint;
+                        loadOffsetIdx = FindJumpTileIdx(newScrollOffset.X, newScrollOffset.Y, out MpRect offsetTileRect);
+                        newScrollOffset = offsetTileRect.Location;
+                    } else if (isLoadMore) {
+                        // sub-query either forward (true) or backward (false) based on current offset
 
-                            loadCount = LoadMorePageSize;
+                        loadCount = LoadMorePageSize;
 
-                            if ((bool)offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg) {
-                                //load More to tail
-                                isLoadMoreTail = true;
-                                loadOffsetIdx = TailQueryIdx + 1;
-                                if (loadOffsetIdx > MaxClipTrayQueryIdx) {
-                                    IsQuerying = false;
-                                    IsBusy = false;
-                                    return;
-                                }
-                            } else {
-                                //load more to head
-                                isLoadMoreTail = false;
-                                loadOffsetIdx = HeadQueryIdx - loadCount;
-                                if (loadOffsetIdx < MinClipTrayQueryIdx) {
-                                    IsQuerying = false;
-                                    IsBusy = false;
-                                    return;
-                                }
+                        if ((bool)offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg) {
+                            //load More to tail
+                            isLoadMoreTail = true;
+                            loadOffsetIdx = TailQueryIdx + 1;
+                            if (loadOffsetIdx > MaxClipTrayQueryIdx) {
+                                IsQuerying = false;
+                                IsBusy = false;
+                                return;
                             }
-                        } else if (isInPlaceRequery) {
-                            newScrollOffset = ScrollOffset;
-                            loadOffsetIdx = HeadQueryIdx;
-                        }
-                    } else {
-                        // new query all content and offsets are re-initialized
-                        ClearClipSelection();
-
-                        // trigger unload event to wipe js eval's that maybe pending 
-                        Items.Where(x => !x.IsPlaceholder).ForEach(x => x.TriggerUnloadedNotification(false));
-
-                        MpAvPersistentClipTilePropertiesHelper.ClearPersistentWidths();
-                    }
-
-                    if (isRequery || isInPlaceRequery) {
-                        await Mp.Services.Query.QueryForTotalCountAsync();
-
-                        FindTotalTileSize();
-
-                        OnPropertyChanged(nameof(Mp.Services.Query.TotalAvailableItemsInQuery));
-                        OnPropertyChanged(nameof(QueryTrayTotalWidth));
-                        OnPropertyChanged(nameof(MaxScrollOffsetX));
-                        OnPropertyChanged(nameof(MaxScrollOffsetY));
-                        OnPropertyChanged(nameof(IsQueryHorizontalScrollBarVisible));
-                        OnPropertyChanged(nameof(IsQueryVerticalScrollBarVisible));
-                    }
-
-                    loadOffsetIdx = Math.Max(0, loadOffsetIdx);
-
-                    if (loadCount == 0) {
-                        // is not an LoadMore Query
-                        loadCount = Math.Min(DefaultLoadCount, Mp.Services.Query.TotalAvailableItemsInQuery);
-                    } else if (loadOffsetIdx < 0) {
-                        loadCount = 0;
-                    }
-
-                    if (loadOffsetIdx + loadCount > MaxClipTrayQueryIdx) {
-                        // clamp load offset to max query total count
-                        loadOffsetIdx = MaxLoadQueryIdx;
-                    }
-
-                    #endregion
-
-                    #region Normalize Items By Load Count
-                    // make list of select idx's
-                    List<int> fetchQueryIdxList = Enumerable.Range(loadOffsetIdx, loadCount).ToList();
-                    if (!isLoadMore) {
-                        // Cleanup Tray item count depending on last query 
-                        int itemCountDiff = Items.Count - fetchQueryIdxList.Count;
-                        if (itemCountDiff > 0) {
-                            while (itemCountDiff > 0) {
-                                // keep unneeded items as placeholders (maybe good to cap to some limit...)
-                                //Items.RemoveAt(0);
-                                Items[--itemCountDiff].TriggerUnloadedNotification(false);
-                            }
-                        } else if (itemCountDiff < 0) {
-                            while (itemCountDiff < 0) {
-                                var ctvm = await CreateClipTileViewModel(null);
-                                Items.Add(ctvm);
-                                itemCountDiff++;
-                            }
-                        }
-                    }
-                    #endregion
-
-                    #region Fetch Data & Create Init Tasks
-
-                    var cil = await Mp.Services.Query
-                        .FetchItemsByQueryIdxListAsync(
-                        fetchQueryIdxList, new int[] { });// Items.Where(x=>x.CopyItemId > 0).Select(x=>x.CopyItemId));
-                    //since tiles watch for their model changes, remove any items
-
-                    //var recycle_order_items = Items.OrderByDescending(x => x.RecyclePriority).ToList();
-                    //var recycle_idxs = GetLoadItemIdxs(isLoadMore ? isLoadMoreTail : null, cil.Count);
-                    int recycle_base_query_idx = isLoadMoreTail ? HeadQueryIdx : TailQueryIdx;
-                    int dir = isLoadMoreTail ? 1 : -1;
-                    List<Task> initTasks = new List<Task>();
-
-                    for (int i = 0; i < cil.Count; i++) {
-                        MpAvClipTileViewModel cur_ctvm = null;
-                        if (isLoadMore) {
-                            int cur_query_idx = recycle_base_query_idx + (dir * i);
-                            cur_ctvm = Items.FirstOrDefault(x => x.QueryOffsetIdx == cur_query_idx);
                         } else {
-                            cur_ctvm = Items[i]; //recycle_order_items[i];
+                            //load more to head
+                            isLoadMoreTail = false;
+                            loadOffsetIdx = HeadQueryIdx - loadCount;
+                            if (loadOffsetIdx < MinClipTrayQueryIdx) {
+                                IsQuerying = false;
+                                IsBusy = false;
+                                return;
+                            }
                         }
-
-                        if (cur_ctvm == null || (isLoadMore && cur_ctvm.IsAnyQueryCornerVisible)) {
-                            //Debugger.Break();
-                            cur_ctvm = new MpAvClipTileViewModel(this);
-                            Items.Add(cur_ctvm);
-                        }
-
-                        if (cur_ctvm.IsSelected) {
-                            StoreSelectionState(cur_ctvm);
-                            cur_ctvm.ClearSelection();
-                        }
-                        bool needsRestore = false;
-                        if (isSubQuery && MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Any(x => x.Id == cil[i].Id)) {
-                            needsRestore = true;
-                        }
-                        initTasks.Add(cur_ctvm.InitializeAsync(cil[i], fetchQueryIdxList[i], needsRestore));
-
-
+                    } else if (isInPlaceRequery) {
+                        newScrollOffset = ScrollOffset;
+                        loadOffsetIdx = HeadQueryIdx;
                     }
+                } else {
+                    // new query all content and offsets are re-initialized
+                    ClearClipSelection();
 
-                    #endregion
+                    // trigger unload event to wipe js eval's that maybe pending 
+                    Items.Where(x => !x.IsPlaceholder).ForEach(x => x.TriggerUnloadedNotification(false));
 
-                    #region Initialize Items
+                    MpAvPersistentClipTilePropertiesHelper.ClearPersistentWidths();
+                }
 
-                    //if(IsRequerying) {
-                    //    await Task.WhenAll(initTasks);
-                    //} else {
-                    Task.WhenAll(initTasks).FireAndForgetSafeAsync();
-                    //}
-                    //
+                if (isRequery || isInPlaceRequery) {
+                    await Mp.Services.Query.QueryForTotalCountAsync();
 
-                    #endregion
-
-                    #region Finalize State & Measurements
+                    FindTotalTileSize();
 
                     OnPropertyChanged(nameof(Mp.Services.Query.TotalAvailableItemsInQuery));
-                    OnPropertyChanged(nameof(QueryTrayTotalTileWidth));
                     OnPropertyChanged(nameof(QueryTrayTotalWidth));
                     OnPropertyChanged(nameof(MaxScrollOffsetX));
                     OnPropertyChanged(nameof(MaxScrollOffsetY));
                     OnPropertyChanged(nameof(IsQueryHorizontalScrollBarVisible));
                     OnPropertyChanged(nameof(IsQueryVerticalScrollBarVisible));
+                }
 
-                    if (Items.Where(x => !x.IsPlaceholder).Count() == 0) {
-                        ScrollOffsetX = 0;
-                        LastScrollOffsetX = 0;
-                        ScrollOffsetY = 0;
-                        LastScrollOffsetY = 0;
+                loadOffsetIdx = Math.Max(0, loadOffsetIdx);
+
+                if (loadCount == 0) {
+                    // is not an LoadMore Query
+                    loadCount = Math.Min(DefaultLoadCount, Mp.Services.Query.TotalAvailableItemsInQuery);
+                } else if (loadOffsetIdx < 0) {
+                    loadCount = 0;
+                }
+
+                if (loadOffsetIdx + loadCount > MaxClipTrayQueryIdx) {
+                    // clamp load offset to max query total count
+                    loadOffsetIdx = MaxLoadQueryIdx;
+                }
+
+                #endregion
+
+                #region Normalize Items By Load Count
+                // make list of select idx's
+                List<int> fetchQueryIdxList = Enumerable.Range(loadOffsetIdx, loadCount).ToList();
+                if (!isLoadMore) {
+                    // Cleanup Tray item count depending on last query 
+                    int itemCountDiff = Items.Count - fetchQueryIdxList.Count;
+                    if (itemCountDiff > 0) {
+                        while (itemCountDiff > 0) {
+                            // keep unneeded items as placeholders (maybe good to cap to some limit...)
+                            //Items.RemoveAt(0);
+                            Items[--itemCountDiff].TriggerUnloadedNotification(false);
+                        }
+                    } else if (itemCountDiff < 0) {
+                        while (itemCountDiff < 0) {
+                            var ctvm = await CreateClipTileViewModel(null);
+                            Items.Add(ctvm);
+                            itemCountDiff++;
+                        }
+                    }
+                }
+                #endregion
+
+                #region Fetch Data & Create Init Tasks
+
+                var cil = await Mp.Services.Query
+                    .FetchItemsByQueryIdxListAsync(
+                    fetchQueryIdxList, new int[] { });// Items.Where(x=>x.CopyItemId > 0).Select(x=>x.CopyItemId));
+                                                      //since tiles watch for their model changes, remove any items
+
+                //var recycle_order_items = Items.OrderByDescending(x => x.RecyclePriority).ToList();
+                //var recycle_idxs = GetLoadItemIdxs(isLoadMore ? isLoadMoreTail : null, cil.Count);
+                int recycle_base_query_idx = isLoadMoreTail ? HeadQueryIdx : TailQueryIdx;
+                int dir = isLoadMoreTail ? 1 : -1;
+                List<Task> initTasks = new List<Task>();
+
+                for (int i = 0; i < cil.Count; i++) {
+                    MpAvClipTileViewModel cur_ctvm = null;
+                    if (isLoadMore) {
+                        int cur_query_idx = recycle_base_query_idx + (dir * i);
+                        cur_ctvm = Items.FirstOrDefault(x => x.QueryOffsetIdx == cur_query_idx);
+                    } else {
+                        cur_ctvm = Items[i]; //recycle_order_items[i];
                     }
 
-                    IsBusy = false;
-                    IsQuerying = false;
-                    OnPropertyChanged(nameof(IsAnyBusy));
-                    OnPropertyChanged(nameof(IsQueryEmpty));
+                    if (cur_ctvm == null || (isLoadMore && cur_ctvm.IsAnyQueryCornerVisible)) {
+                        //Debugger.Break();
+                        cur_ctvm = new MpAvClipTileViewModel(this);
+                        Items.Add(cur_ctvm);
+                    }
 
-                    sw.Stop();
-                    MpConsole.WriteLine($"Update tray of {Items.Count} items took: " + sw.ElapsedMilliseconds);
+                    if (cur_ctvm.IsSelected) {
+                        StoreSelectionState(cur_ctvm);
+                        cur_ctvm.ClearSelection();
+                    }
+                    bool needsRestore = false;
+                    if (isSubQuery && MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Any(x => x.Id == cil[i].Id)) {
+                        needsRestore = true;
+                    }
+                    initTasks.Add(cur_ctvm.InitializeAsync(cil[i], fetchQueryIdxList[i], needsRestore));
 
-                    if (isRequery) {
-                        //_scrollOffset = LastScrollOffsetX = 0;
-                        //ForceScrollOffset(MpPoint.Zero);
-                        MpMessenger.SendGlobal(MpMessageType.RequeryCompleted);
 
-                        if (SelectedItem == null &&
-                            MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Count == 0 &&
-                            Mp.Services.Query.TotalAvailableItemsInQuery > 0) {
-                            Dispatcher.UIThread.Post(async () => {
-                                while (IsAnyBusy) {
-                                    await Task.Delay(100);
-                                }
-                                ResetClipSelection();
-                            });
-                        }
-                    } else {
+                }
 
-                        if (isOffsetJump || isScrollJump || isInPlaceRequery) {
-                            ForceScrollOffset(newScrollOffset);
-                            MpMessenger.SendGlobal(MpMessageType.JumpToIdxCompleted);
-                        } else {
-                            //recheck loadMore once done for rejected scroll change events
+                #endregion
+
+                #region Initialize Items
+
+                //if(IsRequerying) {
+                //    await Task.WhenAll(initTasks);
+                //} else {
+                Task.WhenAll(initTasks).FireAndForgetSafeAsync();
+                //}
+                //
+
+                #endregion
+
+                #region Finalize State & Measurements
+
+                OnPropertyChanged(nameof(Mp.Services.Query.TotalAvailableItemsInQuery));
+                OnPropertyChanged(nameof(QueryTrayTotalTileWidth));
+                OnPropertyChanged(nameof(QueryTrayTotalWidth));
+                OnPropertyChanged(nameof(MaxScrollOffsetX));
+                OnPropertyChanged(nameof(MaxScrollOffsetY));
+                OnPropertyChanged(nameof(IsQueryHorizontalScrollBarVisible));
+                OnPropertyChanged(nameof(IsQueryVerticalScrollBarVisible));
+
+                if (Items.Where(x => !x.IsPlaceholder).Count() == 0) {
+                    ScrollOffsetX = 0;
+                    LastScrollOffsetX = 0;
+                    ScrollOffsetY = 0;
+                    LastScrollOffsetY = 0;
+                }
+
+                IsBusy = false;
+                IsQuerying = false;
+                OnPropertyChanged(nameof(IsAnyBusy));
+                OnPropertyChanged(nameof(IsQueryEmpty));
+
+                sw.Stop();
+                MpConsole.WriteLine($"Update tray of {Items.Count} items took: " + sw.ElapsedMilliseconds);
+
+                if (isRequery) {
+                    //_scrollOffset = LastScrollOffsetX = 0;
+                    //ForceScrollOffset(MpPoint.Zero);
+                    MpMessenger.SendGlobal(MpMessageType.RequeryCompleted);
+
+                    if (SelectedItem == null &&
+                        MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Count == 0 &&
+                        Mp.Services.Query.TotalAvailableItemsInQuery > 0) {
+                        Dispatcher.UIThread.Post(async () => {
                             while (IsAnyBusy) {
                                 await Task.Delay(100);
                             }
-                            if (isLoadMore) {
-                                CheckLoadMore();
-                            } else {
-                                RefreshQueryTrayLayout();
-                            }
-                        }
+                            ResetClipSelection();
+                        });
                     }
+                } else {
 
-                    if (isRequery || isInPlaceRequery) {
-                        UpdateEmptyPropertiesAsync().FireAndForgetSafeAsync();
-                    }
-
-                    Dispatcher.UIThread.Post(async () => {
+                    if (isOffsetJump || isScrollJump || isInPlaceRequery) {
+                        ForceScrollOffset(newScrollOffset);
+                        MpMessenger.SendGlobal(MpMessageType.JumpToIdxCompleted);
+                    } else {
+                        //recheck loadMore once done for rejected scroll change events
                         while (IsAnyBusy) {
                             await Task.Delay(100);
                         }
-                        if (!isLoadMore) {
-
-                            MpMessenger.SendGlobal(MpMessageType.QueryCompleted);
+                        if (isLoadMore) {
+                            CheckLoadMore();
+                        } else {
+                            RefreshQueryTrayLayout();
                         }
-                        ValidateQueryTray();
-                    });
-                    #endregion
-                    _canQuery = true;
+                    }
+                }
+
+                if (isRequery || isInPlaceRequery) {
+                    UpdateEmptyPropertiesAsync().FireAndForgetSafeAsync();
+                }
+
+                Dispatcher.UIThread.Post(async () => {
+                    while (IsAnyBusy) {
+                        await Task.Delay(100);
+                    }
+                    if (!isLoadMore) {
+
+                        MpMessenger.SendGlobal(MpMessageType.QueryCompleted);
+                    }
+                    ValidateQueryTray();
                 });
+                #endregion
+                _canQuery = true;
+                //});
             },
             (offsetIdx_Or_ScrollOffset_Arg) => {
                 return !IsAnyBusy && !IsQuerying && !IsRequerying && _canQuery;

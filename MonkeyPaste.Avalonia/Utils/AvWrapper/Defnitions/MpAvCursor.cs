@@ -103,7 +103,7 @@ namespace MonkeyPaste.Avalonia {
             //    if(targetObj is InputElement) {
             //        targetElm = targetObj as InputElement;
             //    } else {
-            //        targetElm = App.MainWindow;
+            //        targetElm = MpAvWindowManager.MainWindow;
             //    }
 
 

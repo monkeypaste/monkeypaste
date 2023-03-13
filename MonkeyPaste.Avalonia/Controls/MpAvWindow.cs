@@ -34,11 +34,21 @@ namespace MonkeyPaste.Avalonia {
             this.AttachDevTools();
 #endif
             MpAvWindowManager.AllWindows.Add(this);
+            this.Closed += MpAvWindow_Closed;
 
+        }
+
+        private void MpAvWindow_Closed(object sender, EventArgs e) {
+            MpAvWindowManager.AllWindows.Remove(this);
+            this.Closed -= MpAvWindow_Closed;
         }
         #endregion
 
         #region Public Methods
+        public void ShowChild() {
+            MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
+            Show();
+        }
         #endregion
 
         #region Protected Methods

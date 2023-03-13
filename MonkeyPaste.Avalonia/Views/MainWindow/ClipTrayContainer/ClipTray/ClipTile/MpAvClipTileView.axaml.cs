@@ -37,12 +37,15 @@ namespace MonkeyPaste.Avalonia {
                     if (this.IsPointerOver != BindingContext.IsHovering &&
                         !BindingContext.IsPopOutVisible) {
                         // dc mismatch
-                        Debugger.Break();
+                        //Debugger.Break();
                     }
                     break;
                 case nameof(BindingContext.IsHeaderAndFooterVisible):
                 case nameof(BindingContext.IsTitleVisible):
                 case nameof(BindingContext.IsDetailVisible):
+                    if (BindingContext.IsPopOutVisible) {
+                        return;
+                    }
                     var tg = this.FindControl<Grid>("TileGrid");
                     if (tg == null) {
                         return;

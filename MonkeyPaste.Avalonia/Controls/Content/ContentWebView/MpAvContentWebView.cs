@@ -436,10 +436,10 @@ namespace MonkeyPaste.Avalonia {
 
 #if DESKTOP
         private void MpAvCefNetWebView_CreateWindow(object sender, CreateWindowEventArgs e) {
-            if (App.MainWindow == null) {
+            if (MpAvWindowManager.MainWindow == null) {
                 return;
             }
-            IPlatformHandle platformHandle = App.MainWindow.PlatformImpl.Handle;
+            IPlatformHandle platformHandle = MpAvWindowManager.MainWindow.PlatformImpl.Handle;
             if (platformHandle is IMacOSTopLevelPlatformHandle macOSHandle) {
                 e.WindowInfo.SetAsWindowless(macOSHandle.GetNSWindowRetained());
             } else {
