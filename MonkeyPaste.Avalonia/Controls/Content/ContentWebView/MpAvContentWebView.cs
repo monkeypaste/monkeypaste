@@ -495,7 +495,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpAvEditorBindingFunctionType.notifyLoadComplete:
                     ntf = MpJsonConverter.DeserializeBase64Object<MpQuillEditorContentChangedMessage>(msgJsonBase64Str);
                     if (ntf is MpQuillEditorContentChangedMessage loadComplete_ntf) {
-                        IsContentLoaded = true;
+                        IsEditorLoaded = true;
                         ProcessContentChangedMessage(loadComplete_ntf);
                         //OnAppendModeStateChanged("editor");
                     }
@@ -815,17 +815,20 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void OnDataContextEndUpdate() {
             base.OnDataContextEndUpdate();
-            if (_locatedDateTime == null && this is not MpAvPlainHtmlConverterWebView) {
-                // is this called before attached to logical tree?
-                //MpDebug.Break();
-            }
+            //if (_locatedDateTime == null &&
+            //    this is not MpAvPlainHtmlConverterWebView &&
+            //    (Mp.Services.PlatformInfo.IsDesktop &&
+            //    this.GetVisualAncestor<MpAvAppendNotificationWindow>() == null)) {
+            //    // is this called before attached to logical tree?
+            //    MpDebug.Break();
+            //}
+            //if(!_AllWebViews.Contains(this))
             // update locate time to match this data context
             _locatedDateTime = DateTime.Now;
         }
         #endregion
 
         #region Dom Init
-
 
         #region IsEditorInitialized Property
 
@@ -864,10 +867,11 @@ namespace MonkeyPaste.Avalonia {
 
         public virtual string ContentUrl {
             get {
-                if (this.GetVisualRoot() == App.MainView) {
-                    return MpAvClipTrayViewModel.EditorUri;
+                if (this.GetVisualRoot() is MpAvAppendNotificationWindow) {
+                    return $"{MpAvClipTrayViewModel.EditorUri}?{APPEND_NOTIFIER_URL_PARAMS}";
                 }
-                return $"{MpAvClipTrayViewModel.EditorUri}?{APPEND_NOTIFIER_URL_PARAMS}";
+
+                return MpAvClipTrayViewModel.EditorUri;
             }
         }
 
@@ -911,7 +915,12 @@ namespace MonkeyPaste.Avalonia {
             }
 
             var req = new MpQuillInitMainRequestMessage() {
-                envName = Mp.Services.PlatformInfo.OsType.ToString()
+                envName = Mp.Services.PlatformInfo.OsType.ToString(),
+                defaultFontFamily = MpPrefViewModel.Instance.DefaultFontFamily,
+                defaultFontSize = MpPrefViewModel.Instance.DefaultFontSize.ToString() + "px",
+                isSpellCheckEnabled = MpPrefViewModel.Instance.IsSpellCheckEnabled,
+                currentTheme = MpPrefViewModel.Instance.CurrentThemeName,
+                bgOpacity = MpPrefViewModel.Instance.MainWindowOpacity
             };
             SendMessage($"initMain_ext('{req.SerializeJsonObjectToBase64()}')");
         }
@@ -940,17 +949,17 @@ namespace MonkeyPaste.Avalonia {
 
         #region IsContentLoaded Property
 
-        private bool _isContentLoaded;
-        public bool IsContentLoaded {
-            get { return _isContentLoaded; }
-            set { SetAndRaise(IsContentLoadedProperty, ref _isContentLoaded, value); }
+        private bool _isEditorLoaded;
+        public bool IsEditorLoaded {
+            get { return _isEditorLoaded; }
+            set { SetAndRaise(IsEditorLoadedProperty, ref _isEditorLoaded, value); }
         }
 
-        public static DirectProperty<MpAvContentWebView, bool> IsContentLoadedProperty =
+        public static DirectProperty<MpAvContentWebView, bool> IsEditorLoadedProperty =
             AvaloniaProperty.RegisterDirect<MpAvContentWebView, bool>(
-                nameof(IsContentLoaded),
-                x => x.IsContentLoaded,
-                (x, o) => x.IsContentLoaded = o,
+                nameof(IsEditorLoaded),
+                x => x.IsEditorLoaded,
+                (x, o) => x.IsEditorLoaded = o,
                 false,
                 BindingMode.TwoWay);
 
@@ -969,7 +978,7 @@ namespace MonkeyPaste.Avalonia {
         public async Task PerformUpdateContentRequestAsync(MpJsonObject jsonObj) {
             Dispatcher.UIThread.VerifyAccess();
             await Task.Delay(1);
-            if (!IsEditorInitialized || !IsContentLoaded) {
+            if (!IsEditorInitialized || !IsEditorLoaded) {
                 // which is it? what's the state of tile?
                 MpDebug.Break();
                 return;
@@ -988,7 +997,7 @@ namespace MonkeyPaste.Avalonia {
         public async Task PerformLoadContentRequestAsync() {
             Dispatcher.UIThread.VerifyAccess();
 
-            IsContentLoaded = false;
+            IsEditorLoaded = false;
 
             if (this.PendingEvalCount() > 0 ||
                 BindingContext == null) {
@@ -1046,7 +1055,7 @@ namespace MonkeyPaste.Avalonia {
             bool is_reload = BindingContext.PublicHandle == _lastLoadedContentHandle;
             _lastLoadedContentHandle = BindingContext.PublicHandle;
 
-            if (!IsContentLoaded) {
+            if (!IsEditorLoaded) {
                 //MpDebug.Break();
             }
 
@@ -1092,7 +1101,7 @@ namespace MonkeyPaste.Avalonia {
             }
             BindingContext.HasTemplates = contentChanged_ntf.hasTemplates;
 
-            IsContentLoaded = true;
+            IsEditorLoaded = true;
         }
 
         private async Task ProcessDataTransferCompleteResponse(MpQuillDataTransferCompletedNotification dataTransferCompleted_ntf) {
@@ -1148,7 +1157,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void OnIsContentSelectedChanged() {
             if (BindingContext == null ||
-                !IsContentLoaded ||
+                !IsEditorLoaded ||
                 MpAvFocusManager.Instance.IsInputControlFocused) {
                 return;
             }
@@ -1178,7 +1187,7 @@ namespace MonkeyPaste.Avalonia {
                 (x, o) => x.IsContentResizing = o);
 
         private void OnIsContentResizingChanged() {
-            if (BindingContext == null || !IsContentLoaded) {
+            if (BindingContext == null || !IsEditorLoaded) {
                 return;
             }
             if (IsContentResizing) {
@@ -1206,14 +1215,17 @@ namespace MonkeyPaste.Avalonia {
                 BindingMode.TwoWay);
 
         private void OnIsContentReadOnlyChanged() {
-            if (BindingContext == null || !IsContentLoaded) {
+            if (BindingContext == null || !IsEditorLoaded) {
                 return;
             }
             Dispatcher.UIThread.Post(async () => {
                 if (IsContentReadOnly) {
                     MpAvMainWindowViewModel.Instance.IsAnyMainWindowTextBoxFocused = false;
 
-                    MpAvResizeExtension.ResizeAnimated(this, BindingContext.ReadOnlyWidth, BindingContext.ReadOnlyHeight);
+                    if (!BindingContext.IsPopOutVisible) {
+                        MpAvResizeExtension.ResizeAnimated(this, BindingContext.ReadOnlyWidth, BindingContext.ReadOnlyHeight);
+                    }
+
                     string enableReadOnlyRespStr = await SendMessageAsync("enableReadOnly_ext()");
                     var qrm = MpJsonConverter.DeserializeBase64Object<MpQuillEditorContentChangedMessage>(enableReadOnlyRespStr);
                     ProcessContentChangedMessage(qrm);
@@ -1243,7 +1255,7 @@ namespace MonkeyPaste.Avalonia {
 
         private async void OnIsContentSubSelectableChanged() {
             if (BindingContext == null ||
-                !IsContentLoaded ||
+                !IsEditorLoaded ||
                 !IsContentReadOnly) {
                 return;
             }
@@ -1290,7 +1302,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void OnIsContentFindOrReplaceVisibleChanged() {
             if (BindingContext == null ||
-                !IsContentLoaded) {
+                !IsEditorLoaded) {
                 return;
             }
             if (IsContentFindAndReplaceVisible) {

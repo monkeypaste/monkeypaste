@@ -35,7 +35,6 @@ namespace MonkeyPaste.Avalonia {
 #endif
             MpAvWindowManager.AllWindows.Add(this);
             this.Closed += MpAvWindow_Closed;
-
         }
 
         private void MpAvWindow_Closed(object sender, EventArgs e) {

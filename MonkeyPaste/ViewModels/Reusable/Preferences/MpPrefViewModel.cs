@@ -368,6 +368,9 @@ namespace MonkeyPaste {
         public bool ShowInTaskbar { get; set; } = true;
         public bool ShowInTaskSwitcher { get; set; } = true;
         public bool ShowMainWindowOnDragToScreenTop { get; set; } = true;
+
+        public string DefaultFontFamily { get; set; } //unset falls back to base ff
+        public int DefaultFontSize { get; set; } = 12;
         public double MainWindowOpacity { get; set; }
 #if DESKTOP
         = 0.7;
@@ -405,6 +408,7 @@ namespace MonkeyPaste {
 
         public bool IsRichHtmlContentEnabled { get; set; } = true;
         public bool IgnoreAppendedItems { get; set; } = true;
+        public bool IsSpellCheckEnabled { get; set; } = true;
 
         public bool IgnoreInternalClipboardChanges { get; set; } = true;
         public bool IgnoreWhiteSpaceCopyItems { get; set; } = true;

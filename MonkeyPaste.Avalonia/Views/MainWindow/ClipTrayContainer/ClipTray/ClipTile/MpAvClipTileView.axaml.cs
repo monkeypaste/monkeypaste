@@ -1,25 +1,37 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
+using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Diagnostics;
+using System.Security.Cryptography;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTileView : MpAvUserControl<MpAvClipTileViewModel> {
         public MpAvClipTileView() {
             AvaloniaXamlLoader.Load(this);
+            DetachedFromLogicalTree += MpAvClipTileView_DetachedFromLogicalTree;
             DataContextChanged += MpAvClipTileView_DataContextChanged;
-            this.PointerMoved += MpAvClipTileView_PointerMoved;
+            PointerMoved += MpAvClipTileView_PointerMoved;
+        }
+
+        private void MpAvClipTileView_DetachedFromLogicalTree(object sender, global::Avalonia.LogicalTree.LogicalTreeAttachmentEventArgs e) {
+            if (BindingContext != null) {
+                BindingContext.PropertyChanged -= BindingContext_PropertyChanged;
+            }
+            DetachedFromLogicalTree -= MpAvClipTileView_DetachedFromLogicalTree;
+            DataContextChanged -= MpAvClipTileView_DataContextChanged;
+            PointerMoved -= MpAvClipTileView_PointerMoved;
         }
 
         private void MpAvClipTileView_PointerMoved(object sender, PointerEventArgs e) {
-            if (!Mp.Services.PlatformInfo.IsDesktop ||
-                BindingContext.IsPopOutVisible) {
+            if (!Mp.Services.PlatformInfo.IsDesktop) {
                 return;
             }
-            if (!BindingContext.IsHovering) {
+            if (!TestDcMismatchByHover()) {
                 // dc mismatch
                 Debugger.Break();
+                Fix();
             }
         }
 
@@ -34,17 +46,17 @@ namespace MonkeyPaste.Avalonia {
             // BUG workaround for not being able to bind to row definition w/o getting binding null warning
             switch (e.PropertyName) {
                 case nameof(BindingContext.IsHovering):
-                    if (this.IsPointerOver != BindingContext.IsHovering &&
-                        !BindingContext.IsPopOutVisible) {
+                    if (!TestDcMismatchByHover()) {
                         // dc mismatch
-                        //Debugger.Break();
+                        Debugger.Break();
+                        Fix();
                     }
                     break;
                 case nameof(BindingContext.IsHeaderAndFooterVisible):
                 case nameof(BindingContext.IsTitleVisible):
                 case nameof(BindingContext.IsDetailVisible):
                     if (BindingContext.IsPopOutVisible) {
-                        return;
+                        //return;
                     }
                     var tg = this.FindControl<Grid>("TileGrid");
                     if (tg == null) {
@@ -63,6 +75,30 @@ namespace MonkeyPaste.Avalonia {
                     tg.RowDefinitions = new RowDefinitions(rd);
                     tg.RowDefinitions[0].MaxHeight = 40.0d;
                     break;
+            }
+        }
+
+        private bool TestDcMismatchByHover() {
+            if (this.GetVisualAncestor<MpAvAppendNotificationWindow>() != null) {
+                return true;
+            }
+            return this.IsPointerOver == BindingContext.IsHovering;
+        }
+        private void Fix() {
+
+            if (this.IsPointerOver != BindingContext.IsHovering) {
+
+
+                Control target = this;
+                if (this.GetVisualAncestor<ListBoxItem>() is ListBoxItem lbi) {
+                    target = lbi;
+                } else if (this.GetVisualAncestor<Window>() is Window w) {
+                    target = w;
+                }
+                if (target.DataContext != BindingContext) {
+                    target.DataContext = BindingContext;
+
+                }
             }
         }
     }

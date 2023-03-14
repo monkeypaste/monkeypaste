@@ -10,6 +10,12 @@
         <sys:Double x:Key="GlobalDisabledOverlayOpacity">0.75</sys:Double>
         <sys:Double x:Key="GlobalInteractiveOpacity">1.0</sys:Double>
 
+        <!--  NOTE when editable is different from base, user changed font which will apply stem wide. keep base and editable same here  -->
+        <sys:String x:Key="BaseEditableFontFamily">Helvetica</sys:String>
+        <sys:String x:Key="BaseReadOnlyFontFamily">Sege UI</sys:String>
+
+        <sys:String x:Key="DefaultEditableFontFamily">Helvetica</sys:String>
+        <sys:String x:Key="DefaultReadOnlyFontFamily">Segoe UI</sys:String>
 
         <SolidColorBrush x:Key="HitTestableTransparent" Color="Black" Opacity="0.01" />
 

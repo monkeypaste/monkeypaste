@@ -11,6 +11,13 @@
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800">
+    <local:MpAvUserControl.Styles>
+        <Style Selector="ComboBox.fontChooser ComboBoxItem TextBlock"
+               x:DataType="local:MpAvEnumerableParameterValueViewModel">
+            <Setter Property="FontFamily"
+                    Value="{Binding $self.Text, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />
+        </Style>
+    </local:MpAvUserControl.Styles>
     <Border Classes="paramBorder">
         <ToolTip.Tip>
             <local:MpAvToolTipView ToolTipText="{Binding ParameterTooltipText}" />
@@ -23,8 +30,7 @@
                   MinWidth="80">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock  
-                               Text="{Binding Label}" />
+                    <TextBlock Text="{Binding Label}" />
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>

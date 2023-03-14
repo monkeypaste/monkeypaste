@@ -33,13 +33,35 @@ function getSvgHtml(svgKey, classes) {
 	let htmlStr = SvgElements[svgKey];
 	classes = isNullOrEmpty(classes) ? 'svg-icon' : classes;
 	htmlStr = htmlStr.replace('<svg ', `<svg class='${classes}' `);
+
+	//let dummy = document.createElement('div');
+	//dummy.innerHTML = htmlStr;
+
+	//let result = applyShapeStyles(dummy.firstChild);
+	//return result.outerHTML;
 	return htmlStr;
 }
 function createSvgElement(svgKey, classes) {
 	let dummy = document.createElement('div');
 	dummy.innerHTML = getSvgHtml(svgKey, classes);
-	//dummy.removeChild(svg_elm);
-	return dummy.firstChild;
+
+	let result = applyShapeStyles(dummy.firstChild);
+	return result;
+}
+
+function applyShapeStyles(svgElm) {
+	if (!svgElm) {
+		return svgElm;
+	}
+	let fills = Array.from(svgElm.querySelectorAll('path,circle,g,polygon'));
+	for (var i = 0; i < fills.length; i++) {
+		fills[i].classList.add('ql-fill');
+	}
+	let strokes = Array.from(svgElm.querySelectorAll('line,polyline,path,rect,circle'));
+	for (var i = 0; i < strokes.length; i++) {
+		strokes[i].classList.add('ql-stroke');
+	}
+	return svgElm;
 }
 
 function setSvgElmColor(svgElm, chex) {

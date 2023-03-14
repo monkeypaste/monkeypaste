@@ -172,8 +172,6 @@
         <Style Selector="TextBox">
             <Setter Property="Background"
                     Value="White" />
-            <Setter Property="FontFamily"
-                    Value="Calibri" />
             <Setter Property="BorderThickness"
                     Value="1" />
             <Setter Property="BorderBrush"
@@ -220,8 +218,6 @@
         <!--  TEXT BLOCKS  -->
 
         <Style Selector="TextBlock">
-            <Setter Property="FontFamily"
-                    Value="Calibri" />
             <Setter Property="Foreground"
                     Value="Black" />
             <Setter Property="VerticalAlignment"
@@ -286,7 +282,6 @@
               VerticalAlignment="Stretch"
               Width="{Binding $parent[local:MpAvSearchCriteriaListBoxView].Bounds.Width}">
             <local:MpAvSearchCriteriaHeaderView Grid.Row="0"
-                                                IsVisible="{Binding !IsCriteriaWindowOpen}"
                                                 Height="{Binding BoundHeaderHeight, Mode=TwoWay}"
                                                 Background="{DynamicResource SearchCriteriaRowBgBrush1}"
                                                 HorizontalAlignment="Stretch"

@@ -8,6 +8,10 @@ namespace MonkeyPaste.Avalonia {
         DefaultGridSplitterFixedDimensionLength_desktop,
         DefaultGridSplitterFixedDimensionLength_mobile,
         DefaultGridSplitterFixedDimensionLength,
+        BaseEditableDefaultFontFamily,
+        BaseReadOnlyDefaultFontFamily,
+        DefaultEditableFontFamily,
+        DefaultReadOnlyFontFamily
     }
     public class MpAvThemeViewModel : MpViewModelBase {
         #region Private Variable
@@ -68,6 +72,30 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public string DefaultFontFamily {
+            get => Mp.Services.PlatformResource.GetResource(MpThemeResourceKey.DefaultEditableFontFamily.ToString()) as string;
+            set {
+                if (DefaultFontFamily != value) {
+                    string ro_ff, e_ff;
+                    if (value != null &&
+                        value.ToLower() != Mp.Services.PlatformResource.GetResource(MpThemeResourceKey.BaseEditableDefaultFontFamily.ToString()) as string) {
+                        ro_ff = value;
+                        e_ff = value;
+                    } else {
+                        ro_ff = Mp.Services.PlatformResource.GetResource(MpThemeResourceKey.BaseReadOnlyDefaultFontFamily.ToString()) as string;
+                        e_ff = Mp.Services.PlatformResource.GetResource(MpThemeResourceKey.BaseEditableDefaultFontFamily.ToString()) as string;
+                    }
+
+
+                    Mp.Services.PlatformResource.SetResource(MpThemeResourceKey.DefaultEditableFontFamily.ToString(), e_ff);
+                    Mp.Services.PlatformResource.SetResource(MpThemeResourceKey.DefaultReadOnlyFontFamily.ToString(), ro_ff);
+                    MpPrefViewModel.Instance.DefaultFontFamily = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(DefaultFontFamily));
+                }
+            }
+        }
+
         #endregion
 
         #region State
@@ -117,6 +145,10 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                 case nameof(MpPrefViewModel.Instance.MainWindowOpacity):
                     GlobalBgOpacity = MpPrefViewModel.Instance.MainWindowOpacity;
+                    break;
+                case nameof(MpPrefViewModel.Instance.DefaultFontFamily):
+                    if (!string.IsNullOrEmpty(MpPrefViewModel.Instance.DefaultFontFamily))
+                        DefaultFontFamily = MpPrefViewModel.Instance.DefaultFontFamily;
                     break;
             }
         }

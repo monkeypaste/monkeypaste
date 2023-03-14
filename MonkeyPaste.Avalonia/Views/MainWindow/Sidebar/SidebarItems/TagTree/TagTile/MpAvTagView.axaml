@@ -134,7 +134,6 @@
                                               ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                               ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                                               IsReadOnly="{Binding IsTagNameReadOnly, Mode=TwoWay}"
-                                              FontFamily="Segoe UI"
                                               ReadOnlyBackground="Transparent"
                                               ReadOnlyForeground="{Binding TagTextHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
                                               Text="{Binding TagName, Mode=TwoWay}" />

@@ -99,8 +99,7 @@ namespace MonkeyPaste {
 
         ChildWindowClosed,
 
-        AdvancedSearchExpanded,
-        AdvancedSearchUnexpanded,
+        AdvancedSearchExpandedChanged,
 
         TagSelectionChanged,
 

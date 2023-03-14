@@ -9,6 +9,6 @@
     </Styles.Resources>
     <Style Selector="TextBox">
         <Setter Property="FontFamily"
-                Value="Helvetica" />
+                Value="{Binding Source={DynamicResource DefaultEditableFontFamily}, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />
     </Style>
 </Styles>

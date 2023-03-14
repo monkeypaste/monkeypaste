@@ -1,4 +1,13 @@
+.ql-stroke {
+    stroke: var(--editortoolbarbuttoncolor) !important;
+}
+.ql-picker-label {
+    color: var(--editortoolbarbuttoncolor) !important;
+}
 
+.ql-fill, .ql-path {
+    fill: var(--editortoolbarbuttoncolor) !important;
+}
 .ql-editor {
     height: auto;
     padding: 2px 10px;

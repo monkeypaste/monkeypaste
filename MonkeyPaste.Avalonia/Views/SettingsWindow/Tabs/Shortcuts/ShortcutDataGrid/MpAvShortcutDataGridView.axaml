@@ -103,8 +103,7 @@
                                                         local:MpAvPointerCommandExtension.IsEnabled="True"
                                                         local:MpAvPointerCommandExtension.LeftPressCommand="{Binding AssignCommand}"
                                                         local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
-                                                        RecordCommand="{Binding AssignCommand}"
-                                                         />
+                                                        RecordCommand="{Binding AssignCommand}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -133,7 +132,6 @@
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center"
                                                FontWeight="SemiBold"
-                                               FontFamily="Calibri"
                                                IsVisible="{Binding !IsGlobalShortcut}" />
                                 </Grid>
                             </DataTemplate>

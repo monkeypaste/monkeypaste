@@ -85,6 +85,15 @@ function initLinkToolbarButton() {
 function getEditorToolbarElement() {
 	return document.getElementsByClassName('ql-toolbar')[0];
 }
+
+function getThemableToolbarSvgElements() {
+	return [
+		document.getElementById('createTemplateToolbarButton').firstChild,
+		document.getElementById('alignEditorToolbarButton').firstChild,
+		document.getElementById('createTableToolbarButtonLabel').firstChild,
+		document.getElementById('findReplaceToolbarButton').firstChild
+	];
+}
 // #endregion Getters
 
 function getEditorToolbarWidth() {
@@ -122,6 +131,8 @@ function hideEditorToolbar() {
 function showEditorToolbar() {
 	getEditorToolbarElement().classList.remove("hidden");
 	getEditorToolbarElement().style.display = 'block';
+
+	getThemableToolbarSvgElements().forEach(x => applyShapeStyles(x));
 	updateAllElements();
 }
 // #endregion Actions

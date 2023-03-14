@@ -8,7 +8,7 @@ function initMain_ext(initMsgStr_base64) {
 		log('init error, request null. ignoring');
 		return;
 	}
-	initMain(initMsgObj.envName);
+	initMain(initMsgObj);
 }
 
 function loadContent_ext(loadContentMsgStr_base64) {

@@ -219,8 +219,8 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(IsSearchValid));
                     OnPropertyChanged(nameof(IsExpandAdvancedSearchButtonVisible));
                     break;
-                case MpMessageType.AdvancedSearchUnexpanded:
-                case MpMessageType.AdvancedSearchExpanded:
+                case MpMessageType.AdvancedSearchExpandedChanged:
+                //case MpMessageType.AdvancedSearchExpanded:
                 case MpMessageType.SearchCriteriaItemsChanged:
                 case MpMessageType.TagSelectionChanged:
                     OnPropertyChanged(nameof(IsExpandAdvancedSearchButtonVisible));

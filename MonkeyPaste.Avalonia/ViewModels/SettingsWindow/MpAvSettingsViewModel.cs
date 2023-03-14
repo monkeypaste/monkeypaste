@@ -1,4 +1,7 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Media;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
@@ -17,6 +20,14 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
 
         private Window _settingsWindow;
+
+        private string[] _reinitContentParams = new string[] {
+            nameof(MpPrefViewModel.Instance.DefaultFontFamily),
+            nameof(MpPrefViewModel.Instance.DefaultFontSize),
+            nameof(MpPrefViewModel.Instance.IsSpellCheckEnabled),
+            nameof(MpPrefViewModel.Instance.CurrentThemeName),
+            nameof(MpPrefViewModel.Instance.MainWindowOpacity),
+        };
         #endregion
 
         #region Statics
@@ -193,6 +204,31 @@ namespace MonkeyPaste.Avalonia {
                                         value = MpPrefViewModel.Instance.MainWindowOpacity.ToString()
                                     }
                                 }
+                            },
+                            new MpParameterFormat() {
+                                paramId = nameof(MpPrefViewModel.Instance.DefaultFontFamily),
+                                controlType = MpParameterControlType.ComboBox,
+                                unitType = MpParameterValueUnitType.PlainText,
+                                label = "Font Family",
+                                values =
+                                    FontManager.Current.GetInstalledFontFamilyNames(true)
+                                    .Where(x=>!string.IsNullOrEmpty(x))
+                                    .Select(x=>new MpPluginParameterValueFormat() {
+                                        isDefault = MpAvThemeViewModel.Instance.DefaultFontFamily.ToLower() == x.ToLower(),
+                                        value = x
+                                    }).ToList()
+                            },
+                            new MpParameterFormat() {
+                                paramId = nameof(MpPrefViewModel.Instance.DefaultFontSize),
+                                controlType = MpParameterControlType.ComboBox,
+                                unitType = MpParameterValueUnitType.Integer,
+                                label = "Font Size",
+                                values =
+                                    new int[]{ 8, 9, 10, 12, 14, 16, 20, 24, 32, 42, 54, 68, 84, 98 }
+                                    .Select(x=>new MpPluginParameterValueFormat() {
+                                        isDefault = MpPrefViewModel.Instance.DefaultFontSize == x,
+                                        value = x.ToString(),
+                                    }).ToList()
                             }
                         }
                     }
@@ -407,6 +443,18 @@ namespace MonkeyPaste.Avalonia {
                                 }
                             },
                             new MpParameterFormat() {
+                                paramId = nameof(MpPrefViewModel.Instance.IsSpellCheckEnabled),
+                                controlType = MpParameterControlType.CheckBox,
+                                unitType = MpParameterValueUnitType.Bool,
+                                label = "Content Spell Check",
+                                values = new List<MpPluginParameterValueFormat>() {
+                                    new MpPluginParameterValueFormat() {
+                                        isDefault = true,
+                                        value = MpPrefViewModel.Instance.IsSpellCheckEnabled.ToString()
+                                    },
+                                }
+                            },
+                            new MpParameterFormat() {
                                 paramId = nameof(MpPrefViewModel.Instance.IsRichHtmlContentEnabled),
                                 controlType = MpParameterControlType.CheckBox,
                                 unitType = MpParameterValueUnitType.Bool,
@@ -507,6 +555,7 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private void MpAvSettingsWindowViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+
             switch (e.PropertyName) {
                 case nameof(FilterText):
                     MpMessenger.SendGlobal(MpMessageType.SettingsFilterTextChanged);
@@ -515,7 +564,6 @@ namespace MonkeyPaste.Avalonia {
                     }
 
                     break;
-
             }
         }
 
@@ -528,6 +576,11 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(MpPrefViewModel.Instance.UserLanguageCode):
                     SetLanguage(MpPrefViewModel.Instance.UserLanguageCode);
                     break;
+            }
+            if (_reinitContentParams.Any(x => x.ToLower() == e.PropertyName.ToLower())) {
+                Task.WhenAll(MpAvClipTrayViewModel.Instance.AllActiveItems
+                    .Where(x => x.GetContentView() != null)
+                    .Select(x => x.GetContentView().LoadContentAsync())).FireAndForgetSafeAsync();
             }
         }
         private void IsTabSelected_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
@@ -556,6 +609,47 @@ namespace MonkeyPaste.Avalonia {
             MpPrefViewModel.Instance.LoadOnLogin = loadOnLogin;
 
             MpConsole.WriteLine("App " + appName + " with path " + appPath + " has load on login set to: " + loadOnLogin);
+        }
+
+
+        private void Sw_Opened(object sender, EventArgs e) {
+            var sw = sender as Window;
+
+            Dispatcher.UIThread.Post(async () => {
+                var ff_vm = LookAndFeelFrame.Items.FirstOrDefault(x => x.ParamId.ToString().ToLower() == nameof(MpPrefViewModel.Instance.DefaultFontFamily).ToLower());
+                if (ff_vm != null) {
+                    ComboBox ff_cb = sw.GetVisualDescendants<ComboBox>().FirstOrDefault(x => x.DataContext == ff_vm);
+                    while (ff_cb == null) {
+                        await Task.Delay(100);
+                        ff_cb = sw.GetVisualDescendants<ComboBox>().FirstOrDefault(x => x.DataContext == ff_vm);
+                        if (!sw.IsInitialized) {
+                            // pref tab never selected and closed so stop it
+                            return;
+                        }
+                    }
+                    //ff_cb.DropDownOpened += Ff_cb_DropDownOpened;
+
+                    ff_cb.Classes.Add("fontChooser");
+
+                }
+            });
+        }
+
+        private void Ff_cb_DropDownOpened(object sender, EventArgs e) {
+            var ff_cb = sender as ComboBox;
+            for (int i = 0; i < ff_cb.ItemCount; i++) {
+                var ff_cbi = ff_cb.ContainerFromIndex(i);
+                //while (ff_cbi == null) {
+                //    await Task.Delay(100);
+                //    ff_cbi = ff_cb.ContainerFromIndex(i);
+                //}
+                if (ff_cbi is TemplatedControl tc &&
+                    tc.DataContext is MpAvEnumerableParameterValueViewModel pvvm) {
+                    tc.FontFamily = new FontFamily(pvvm.Value);
+                } else {
+
+                }
+            }
         }
         #endregion
 
@@ -599,15 +693,18 @@ namespace MonkeyPaste.Avalonia {
                         Width = 800,
                         Height = 500,
                         Topmost = true,
+                        Title = "Settings".ToWindowTitleText(),
                         Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("CogIcon", null, null, null) as WindowIcon,
                         WindowStartupLocation = WindowStartupLocation.CenterScreen,
                         WindowState = WindowState.Normal,
                         DataContext = this,
                         Content = new MpAvSettingsView()
                     };
+                    sw.Opened += Sw_Opened;
                     sw.ShowChild();
                 }
             });
+
 
         public ICommand ButtonParameterClickCommand => new MpAsyncCommand<object>(
             async (args) => {

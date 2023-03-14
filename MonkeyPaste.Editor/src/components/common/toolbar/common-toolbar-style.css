@@ -1,4 +1,16 @@
-﻿
+﻿#editorToolbar {
+    background-color: var(--editortoolbarbgcolor);
+    border-color: var(--editortoolbarsepbgcolor);
+}
+
+.toolbar-separator {
+    width: 1px;
+    height: 25px;
+    background-color: var(--editortoolbarsepbgcolor);
+    display: inline-block;
+    float: left;
+}
+
 .common-toolbar {
     display: flex;
     flex-wrap: nowrap;

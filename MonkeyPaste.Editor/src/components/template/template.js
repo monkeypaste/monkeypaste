@@ -298,10 +298,15 @@ function getTemplateDisplayValue(t) {
     if (!t) {
         return '';
     }
-    if (isShowingPasteToolbar() && !isNullOrEmpty(t.templateText)) {
-        return t.templateText;
+    let dv = getTemplatePasteValue(t);
+    if (isNullOrEmpty(dv)) {
+        dv = t.templateName;
     }
-    return t.templateName;
+    //if (isShowingPasteToolbar() && !isNullOrEmpty(t.templateText)) {
+    //    return t.templateText;
+    //}
+    //return t.templateName;
+    return dv;
 }
 
 function getTemplatePlainTextForDocRange(range) {
@@ -443,6 +448,7 @@ function setTemplateBgColor(tguid, color_name_or_hex) {
 }
 
 function setTemplateElementText(telm, text) {
+
     getTemplateElementTextSpan(telm).innerText = text;
 }
 // #endregion Setters

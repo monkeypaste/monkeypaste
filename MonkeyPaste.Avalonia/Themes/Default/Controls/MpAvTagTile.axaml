@@ -1,0 +1,15 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="using:MonkeyPaste.Avalonia">
+    <Style Selector="local|MpAvTagTreeView"
+           x:DataType="local:MpAvTagTrayViewModel">
+        <Setter Property="IsHitTestVisible"
+                Value="{Binding !IsSelecting}" />
+    </Style>
+    <Style Selector="local|MpAvTagTrayView"
+           x:DataType="local:MpAvTagTrayViewModel">
+        <Setter Property="IsHitTestVisible"
+                Value="{Binding !IsSelecting}" />
+    </Style>
+</Styles>

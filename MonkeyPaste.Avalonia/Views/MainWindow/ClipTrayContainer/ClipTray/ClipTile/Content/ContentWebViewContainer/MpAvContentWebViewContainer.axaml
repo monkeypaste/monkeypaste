@@ -16,7 +16,7 @@
                               Focusable="{Binding IsSubSelectionEnabled}"
                               local:MpAvReceivesEventsExtension.IsEnabled="{Binding !IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                               ContentId="{Binding CopyItemId, Mode=OneWay}"
-                              IsContentLoaded="{Binding IsViewLoaded, Mode=TwoWay}"
+                              IsEditorLoaded="{Binding IsEditorLoaded, Mode=TwoWay}"
                               IsContentResizing="{Binding IsResizing}"
                               IsContentSelected="{Binding IsSelected}"
                               IsContentReadOnly="{Binding IsContentReadOnly, Mode=TwoWay}"

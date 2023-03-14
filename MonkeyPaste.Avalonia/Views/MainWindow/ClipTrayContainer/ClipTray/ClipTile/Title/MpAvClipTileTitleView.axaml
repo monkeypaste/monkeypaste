@@ -160,7 +160,6 @@
                                   ClipToBounds="True"
                                   ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                   ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                                  FontFamily="Segoe UI"
                                   local:MpAvIsFocusedExtension.IsEnabled="{Binding IsMarqueeEnabled, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                                   local:MpAvIsFocusedExtension.IsFocused="{Binding IsTitleFocused, Mode=TwoWay}"
                                   local:MpAvIsFocusedExtension.SelectAllOnFocus="True"

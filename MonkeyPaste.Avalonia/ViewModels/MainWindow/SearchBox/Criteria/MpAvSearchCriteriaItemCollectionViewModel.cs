@@ -49,15 +49,16 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIExpandableViewModel Implementation
 
-        private bool _isExpanded;
-        public bool IsExpanded {
-            get => _isExpanded;
-            set {
-                if (IsExpanded != value) {
-                    SetIsExpandedAsync(value).FireAndForgetSafeAsync(this);
-                }
-            }
-        }
+        //private bool _isExpanded;
+        //public bool IsExpanded {
+        //    get => _isExpanded;
+        //    set {
+        //        if (IsExpanded != value) {
+        //            SetIsExpandedAsync(value).FireAndForgetSafeAsync(this);
+        //        }
+        //    }
+        //}
+        public bool IsExpanded { get; set; }
 
         #endregion
 
@@ -207,7 +208,7 @@ namespace MonkeyPaste.Avalonia {
                 Debugger.Break();
             }
             if (MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == tagId) is MpAvTagTileViewModel ttvm &&
-                ttvm.IsLinkTag) {
+                !ttvm.IsQueryTag) {
                 // clear adv search
                 tagId = 0;
             }
@@ -244,7 +245,10 @@ namespace MonkeyPaste.Avalonia {
 
             IsBusy = false;
 
-            Mp.Services.Query.NotifyQueryChanged(true);
+
+            if (IsSavedQuery) {
+                Mp.Services.Query.NotifyQueryChanged(true);
+            }
         }
 
         public async Task<MpAvSearchCriteriaItemViewModel> CreateCriteriaItemViewModelAsync(MpSearchCriteriaItem sci) {
@@ -278,12 +282,10 @@ namespace MonkeyPaste.Avalonia {
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
-                case MpMessageType.AdvancedSearchExpanded:
-                    AnimateAdvSearchMenuAsync(true).FireAndForgetSafeAsync(this);
-                    break;
-                case MpMessageType.AdvancedSearchUnexpanded:
-                    AnimateAdvSearchMenuAsync(false).FireAndForgetSafeAsync(this);
-                    break;
+                //case MpMessageType.AdvancedSearchExpanded:
+                //case MpMessageType.AdvancedSearchUnexpanded:
+                //    AnimateAdvSearchMenuAsync(IsExpanded).FireAndForgetSafeAsync(this);
+                //    break;
                 case MpMessageType.TagSelectionChanged:
                     OnPropertyChanged(nameof(IsSavedQuery));
                     break;
@@ -294,13 +296,6 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                 case nameof(SelectedItem):
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
-                    break;
-                case nameof(IsExpanded):
-                    if (IsExpanded) {
-                        MpMessenger.SendGlobal(MpMessageType.AdvancedSearchExpanded);
-                    } else {
-                        MpMessenger.SendGlobal(MpMessageType.AdvancedSearchUnexpanded);
-                    }
                     break;
                 case nameof(IgnoreHasModelChanged):
                     Items.ForEach(x => x.IgnoreHasModelChanged = IgnoreHasModelChanged);
@@ -313,12 +308,17 @@ namespace MonkeyPaste.Avalonia {
 
                     OnPropertyChanged(nameof(MaxSearchCriteriaViewHeight));
                     OnPropertyChanged(nameof(MaxSearchCriteriaListBoxHeight));
-                    if (IsCriteriaWindowOpen) {
-                        IsExpanded = false;
-                    } else {
-                        // force remeasure 
-                        SetIsExpandedAsync(false).FireAndForgetSafeAsync();
-                    }
+                    //if (IsCriteriaWindowOpen) {
+                    //    IsExpanded = false;
+                    //} else {
+                    //    // force remeasure 
+                    //    SetIsExpandedAsync(false).FireAndForgetSafeAsync();
+                    //}
+                    IsExpanded = false;
+                    break;
+                case nameof(IsExpanded):
+                    MpMessenger.SendGlobal(MpMessageType.AdvancedSearchExpandedChanged);
+                    AnimateAdvSearchMenuAsync(IsExpanded).FireAndForgetSafeAsync(this);
                     break;
             }
         }
@@ -333,44 +333,58 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task AnimateAdvSearchMenuAsync(bool isExpanding) {
-            await Dispatcher.UIThread.InvokeAsync(async () => {
-                await Task.Delay(1);
-                if (isExpanding) {
-                    double default_visible_row_count = 2d;
-                    double delta_open_height = DefaultCriteriaRowHeight * default_visible_row_count;
-
-                    BoundHeaderHeight = HeaderHeight;
-                    BoundCriteriaListViewScreenHeight = delta_open_height;
-                    //MpAvResizeExtension.ResizeByDelta(MpAvSearchCriteriaListBoxView.Instance, 0, delta_open_height, false);
-                    OnPropertyChanged(nameof(IsPendingQuery));
-                    OnPropertyChanged(nameof(BoundCriteriaListBoxScreenHeight));
-                    Items.ForEach(x => x.Items.ForEach(y => y.OnPropertyChanged(nameof(y.SelectedItemIdx))));
-                } else {
-                    double delta_close_height = -BoundCriteriaListViewScreenHeight;
-                    BoundCriteriaListViewScreenHeight = 0;
-                    //MpAvResizeExtension.ResizeByDelta(MpAvMainView.Instance, 0, delta_close_height, false);                    
-
-                }
-            });
-
-        }
-
-        private async Task SetIsExpandedAsync(bool newExpandedValue) {
-            if (newExpandedValue) {
+            if (isExpanding) {
                 if (!IsAdvSearchActive) {
                     // plus on search box toggled to checked
                     await InitializeAsync(0, true);
                 }
-                _isExpanded = true;
+                double default_visible_row_count = 2d;
+                double delta_open_height = DefaultCriteriaRowHeight * default_visible_row_count;
+
+                BoundHeaderHeight = HeaderHeight;
+                BoundCriteriaListViewScreenHeight = delta_open_height;
+
+                //MpAvResizeExtension.ResizeByDelta(MpAvSearchCriteriaListBoxView.Instance, 0, delta_open_height, false);
+                OnPropertyChanged(nameof(IsPendingQuery));
+                OnPropertyChanged(nameof(BoundCriteriaListBoxScreenHeight));
+                Items.ForEach(x => x.Items.ForEach(y => y.OnPropertyChanged(nameof(y.SelectedItemIdx))));
+                OnPropertyChanged(nameof(MaxSearchCriteriaListBoxHeight));
+                OnPropertyChanged(nameof(MaxSearchCriteriaRowHeight));
+                OnPropertyChanged(nameof(MaxSearchCriteriaViewHeight));
             } else {
-                if (IsPendingQuery && IsAllCriteriaEmpty) {
+                if (IsPendingQuery && IsAllCriteriaEmpty && !IsCriteriaWindowOpen) {
                     // discard pending if nothing changed
                     await InitializeAsync(0, false);
                 }
-                _isExpanded = false;
+
+                double delta_close_height = -BoundCriteriaListViewScreenHeight;
+                BoundCriteriaListViewScreenHeight = 0;
+                //MpAvResizeExtension.ResizeByDelta(MpAvMainView.Instance, 0, delta_close_height, false);                    
+
             }
-            OnPropertyChanged(nameof(IsExpanded));
         }
+
+        //private async Task SetIsExpandedAsync(bool newExpandedValue) {
+        //    if (newExpandedValue) {
+        //        if (!IsAdvSearchActive) {
+        //            // plus on search box toggled to checked
+        //            await InitializeAsync(0, true);
+        //            while (!Mp.Services.Query.CanRequery) {
+        //                await Task.Delay(100);
+        //            }
+        //        }
+        //        _isExpanded = true;
+        //    } else {
+        //        if (IsPendingQuery && IsAllCriteriaEmpty) {
+        //            // discard pending if nothing changed
+        //            await InitializeAsync(0, false);
+        //        }
+        //        _isExpanded = false;
+        //    }
+        //    OnPropertyChanged(nameof(IsExpanded));
+        //    MpMessenger.SendGlobal(IsExpanded ? MpMessageType.AdvancedSearchExpanded : MpMessageType.AdvancedSearchUnexpanded);
+
+        //}
 
         private async Task UpdateCriteriaSortOrderAsync(bool fromModel = false) {
             if (fromModel) {
@@ -526,9 +540,10 @@ namespace MonkeyPaste.Avalonia {
                 // all until selected tag is changed
                 InitializeAsync(queryTagId, false).FireAndForgetSafeAsync(this);
             }, (args) => {
-                if (args is int tagId &&
-                    tagId == QueryTagId) {
-                    return false;
+                if (args is int tagId) {
+                    if (tagId == QueryTagId) {
+                        return false;
+                    }
                 }
                 return true;
             });
@@ -567,9 +582,10 @@ namespace MonkeyPaste.Avalonia {
                         new Binding() {
                             Source = CurrentQueryTagViewModel,
                             Path = nameof(MpAvTagTileViewModel.TagName),
-                            StringFormat = "Search Criteria - {0}",
-                            TargetNullValue = "Search Criteria - Untitled",
-                            FallbackValue = "Search Criteria - Untitled"
+                            StringFormat = "Search Criteria '{0}'",
+                            TargetNullValue = "Search Criteria 'Untitled'",
+                            FallbackValue = "Search Criteria 'Untitled'",
+                            Converter = MpAvStringToWindowTitleConverter.Instance
                         });
 
                     _criteriaWindow.Bind(

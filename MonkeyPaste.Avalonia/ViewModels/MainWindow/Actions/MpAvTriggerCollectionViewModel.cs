@@ -687,7 +687,8 @@ namespace MonkeyPaste.Avalonia {
                         new Binding() {
                             Source = FocusAction,
                             Path = nameof(FocusAction.Label),
-                            StringFormat = "Trigger Designer - {0}"
+                            StringFormat = "Trigger Designer '{0}'",
+                            Converter = MpAvStringToWindowTitleConverter.Instance
                         });
 
                     dw.Bind(

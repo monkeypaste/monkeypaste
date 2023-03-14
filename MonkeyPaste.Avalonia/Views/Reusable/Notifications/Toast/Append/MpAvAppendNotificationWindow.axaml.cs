@@ -34,8 +34,8 @@ namespace MonkeyPaste.Avalonia {
 
             if (Instance.Content is Control rootControl) {
                 rootControl.AttachedToVisualTree += (s, e) => {
+                    Instance.WindowState = WindowState.Minimized;
                     Instance.Hide();
-
                     Mp.Services.ProcessWatcher.AddOtherThisAppHandle(Instance.PlatformImpl.Handle.Handle);
                 };
             }

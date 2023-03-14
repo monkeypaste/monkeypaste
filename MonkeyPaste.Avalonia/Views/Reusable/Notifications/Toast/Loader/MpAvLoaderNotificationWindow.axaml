@@ -97,7 +97,6 @@
                            HorizontalAlignment="Right"
                            FontSize="10"
                            Foreground="Cyan"
-                           FontFamily="Courier"
                            Text="{Binding ProgressLoader.Body}" />
             </Grid>
 

@@ -47,6 +47,8 @@
                     Value="{Binding TrayX}" />
             <Setter Property="Canvas.Top"
                     Value="{Binding TrayY}" />
+            <Setter Property="IsVisible"
+                    Value="{Binding !IsPlaceholder}" />
         </Style>
 
 
@@ -168,8 +170,7 @@
                             <local:MpAvClipTileView local:MpAvIsHoveringExtension.IsEnabled="True"
                                                     local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
                                                     local:MpAvBoundsObserverExtension.IsEnabled="True"
-                                                    local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedBounds, Mode=TwoWay}"
-                                                    IsVisible="{Binding !IsPlaceholder}" />
+                                                    local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedBounds, Mode=TwoWay}" />
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                     <ListBox.ItemsPanel>

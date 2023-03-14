@@ -108,7 +108,6 @@
                                                                   HorizontalAlignment="Stretch"
                                                                   HorizontalContentAlignment="Left"
                                                                   VerticalContentAlignment="Center"
-                                                                  FontFamily="Segue UI"
                                                                   Text="{Binding Label, Mode=TwoWay}" />
                                     </Grid>
                                 </DataTemplate>

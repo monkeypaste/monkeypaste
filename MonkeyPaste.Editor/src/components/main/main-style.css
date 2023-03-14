@@ -3,12 +3,17 @@ html {
 }
 
 body {
-    --subselecteditorbgcolor: rgb(189, 188, 188,var(--editableopacity));
+    --noselectbgcolor: rgba(0,0,0,0);
+    --subselecteditorbgcolor: rgba(189, 188, 188,var(--editableopacity));
     --editableeditorbgcolor: rgba(255, 248, 220,var(--editableopacity));
     --editableeditorbgcolor_opaque: rgb(255, 248, 220);
+    --editortoolbarbgcolor: white;
+    --editortoolbarsepbgcolor: silver;
+    --editortoolbarbuttoncolor: dimgray;
+    --defcontentfgcolor: black;
     --selbgcolor: lightblue;
     --selfgcolor: black;
-    --inactivematchbgcolor: pink;
+    --inactivematchbgcolor: yellow;
     --activematchbgcolor: lime;
     --caretcolor: black;
     --hovercolor: yellow;
@@ -21,6 +26,10 @@ body {
     --defaultopacity: 0.0;
     --highlightopacity: 0.5;
     --defaultFontFamily: Helvetica;
+    --defaultFontSize: 12px;
+    --pastetemplatebgcolor: teal;
+    --pastetoolbarbuttoncolor: dodgerblue;
+    --edittemplatebgcolor: palegreen;
     margin: 0px;
     padding: 0px;
     font-family: var(--defaultFontFamily);
@@ -71,10 +80,11 @@ textarea {
     border-width: 1px;
     border-color: white;
     font-family: var(--defaultFontFamily);
-    background-color: white;
     border-radius: 3px;
     margin: 12px;
     padding: 8px;
+    background-color: var(--editableeditorbgcolor_opaque);
+    color: var(--defcontentfgcolor);
 }
     textarea:focus {
         border-color: black;
@@ -103,7 +113,7 @@ button {
     text-decoration: none;
     font-size: 10px;
     border-radius: 5px;
-    border: solid white 1px;
+    border: solid var(--editableeditorbgcolor_opaque) 1px;
     transition: .4s;
     align-items: center;
     cursor: pointer;
@@ -128,14 +138,6 @@ button {
     width: 18px;
     height: 18px;
     margin-right: 3px;
-}
-
-.toolbar-separator {
-    width: 1px;
-    height: 25px;
-    background-color: silver;
-    display: inline-block;
-    float: left;
 }
 
 /* ENDLESS ROTATE */

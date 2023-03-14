@@ -121,7 +121,7 @@ function applyTemplateToDomNode(node, value) {
     node.setAttribute('templateHtmlFormat', value.templateHtmlFormat);
     node.setAttribute('wasVisited', value.wasVisited);
 
-    node.setAttribute("spellcheck", "false");
+    node.setAttribute("spellcheck", IsSpellCheckEnabled);
     node.classList.add(TemplateEmbedClass);
     node.setAttribute('draggable', false);
     //node.setAttribute('contenteditable', false);

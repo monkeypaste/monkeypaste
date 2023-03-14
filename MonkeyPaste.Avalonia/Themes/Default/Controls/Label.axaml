@@ -1,0 +1,17 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="using:MonkeyPaste.Avalonia">
+    <Style Selector="Label">
+        <Setter Property="FontFamily"
+                Value="{Binding Source={DynamicResource DefaultReadOnlyFontFamily}, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />
+    </Style>
+    <Style Selector="Label.disabled">
+        <Setter Property="FontStyle"
+                Value="Italic" />
+        <Setter Property="FontWeight"
+                Value="SemiBold" />
+        <Setter Property="Foreground"
+                Value="{StaticResource DisabledTextFgBrush}" />
+    </Style>
+</Styles>

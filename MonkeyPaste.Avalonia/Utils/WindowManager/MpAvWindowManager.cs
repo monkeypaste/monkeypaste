@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
+using CefNet;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
@@ -52,6 +53,11 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
             return null;
+        }
+
+        public static string ToWindowTitleText(this string title) {
+            string prefix = string.IsNullOrEmpty(title) ? string.Empty : $"{title} - ";
+            return $"{prefix}{MpPrefViewModel.Instance.ApplicationName}";
         }
 
         #endregion
@@ -162,6 +168,7 @@ namespace MonkeyPaste.Avalonia {
                         MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
                         e.Cancel = true;
                         w.Close();
+                        return;
                     }
                 }
 

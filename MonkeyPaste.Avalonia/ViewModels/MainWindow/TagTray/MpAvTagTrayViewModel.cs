@@ -507,25 +507,17 @@ namespace MonkeyPaste.Avalonia {
                     SelectedItem.AllAncestors.ForEach(x => x.IsExpanded = true);
                 }
 
-                //if (MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
-                //    // last loaded tag is selected in ClipTray OnPostMainWindowLoaded 
-                //    // which notifies query changed so don't notify
-                //    IsSelecting = false;
-                //    return;
-                //}
-
                 MpMessenger.SendGlobal(MpMessageType.TagSelectionChanged);
 
                 if (!MpAvMainWindowViewModel.Instance.IsMainWindowLoading &&
                     SelectedItem != null && SelectedItem.IsNotGroupTag) {
-                    //if (SelectedItem.IsQueryTag) {
-                    //    MpAvSearchCriteriaItemCollectionViewModel.Instance
-                    //        .SelectAdvancedSearchCommand.Execute(SelectedItem.TagId);
-                    //} else {
-                    //    MpPlatform.Services.Query.NotifyQueryChanged(true);
-                    //}
                     Mp.Services.Query.NotifyQueryChanged();
+                    // wait for query to execute
+                    await Task.Delay(300);
                     while (!Mp.Services.Query.CanRequery) {
+                        await Task.Delay(100);
+                    }
+                    while (MpAvClipTrayViewModel.Instance.IsAnyBusy) {
                         await Task.Delay(100);
                     }
                 }

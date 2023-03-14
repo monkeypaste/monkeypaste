@@ -43,8 +43,6 @@ namespace MonkeyPaste.Avalonia {
         //private MpPasteToAppPathViewModel _selectedPasteToAppPathViewModel = null;
         private string _originalTitle;
 
-        private bool _wasPopoutPinned = false;
-
         #endregion
 
         #region Constants
@@ -466,12 +464,12 @@ namespace MonkeyPaste.Avalonia {
         public bool IsDevToolsVisible { get; set; } = false;
 
         private bool _isViewLoaded;
-        public bool IsViewLoaded {
+        public bool IsEditorLoaded {
             get => _isViewLoaded;
             set {
                 if (_isViewLoaded != value) {
                     _isViewLoaded = value;
-                    OnPropertyChanged(nameof(IsViewLoaded));
+                    OnPropertyChanged(nameof(IsEditorLoaded));
                 }
             }
         }
@@ -554,10 +552,13 @@ namespace MonkeyPaste.Avalonia {
                 }
                 //bool isplaceHolder = IsPlaceholder && !IsAppendNotifier;
                 //var cv = GetContentView();
-                //if(cv == null || !cv.IsViewLoaded) {
+                //if(cv == null || !cv.IsEditorLoaded) {
                 //    return true;
                 //}
-                if (!IsPlaceholder && !IsViewLoaded) {//IsAnyQueryCornerVisible) {
+                if (!IsPlaceholder && !IsEditorLoaded) {
+                    if (!IsPopOutVisible) {
+
+                    }
                     return true;
                 }
 
@@ -1005,7 +1006,6 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitializeAsync(MpCopyItem ci, int queryOffset = -1, bool isRestoringSelection = false) {
             _curItemRandomHexColor = string.Empty;
             _contentView = null;
-            _wasPopoutPinned = false;
             if (ci != null && ci.Id == 297) {
 
             }
@@ -1159,7 +1159,8 @@ namespace MonkeyPaste.Avalonia {
                 Window.TitleProperty,
                 new Binding() {
                     Source = this,
-                    Path = nameof(CopyItemTitle)
+                    Path = nameof(CopyItemTitle),
+                    Converter = MpAvStringToWindowTitleConverter.Instance
                 });
 
             _popoutWindow.Bind(
@@ -1467,7 +1468,7 @@ namespace MonkeyPaste.Avalonia {
                         Parent.OnPropertyChanged(nameof(Parent.IsAnyBusy));
                     }
                     break;
-                case nameof(IsViewLoaded):
+                case nameof(IsEditorLoaded):
                     // true = recv'd notifyLoadComplete
                     // false = PublicHandle changed
 
@@ -1940,8 +1941,6 @@ namespace MonkeyPaste.Avalonia {
                 Parent.PinnedItems.Remove(this);
                 Parent.PinTileCommand.Execute(this);
             }
-
-            _wasPopoutPinned = false;
         });
         public ICommand PinToPopoutWindowCommand => new MpCommand<object>(
             (args) => {
@@ -1949,7 +1948,6 @@ namespace MonkeyPaste.Avalonia {
                     IsSelected = true;
                 }
                 if (Mp.Services.PlatformInfo.IsDesktop) {
-                    _wasPopoutPinned = IsPinned;
                     Parent.PinTileCommand.Execute(new object[] { this, MpPinType.Window });
                 } else {
                     // Some kinda view nav here

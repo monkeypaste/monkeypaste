@@ -28,10 +28,11 @@ namespace MonkeyPaste.Avalonia {
             //var result = await cpw.ShowDialog(MpAvMainView.Instance);
 
 
-            var cw = new Window() {
+            var cw = new MpAvWindow() {
                 Content = new MpAvColorPickerView() {
                     SelectedHexColor = selectedColor
                 },
+                Title = "Color Chooser".ToWindowTitleText(),
                 Width = 300,
                 Height = 300,
                 WindowState = WindowState.Normal,

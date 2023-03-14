@@ -136,7 +136,6 @@
                                        MinWidth="50"
                                        FontSize="10"
                                        TextAlignment="Center"
-                                       FontFamily="Calibri"
                                        Text="{Binding}" />
                         </DataTemplate>
                     </TransitioningContentControl.ContentTemplate>

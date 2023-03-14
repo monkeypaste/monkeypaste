@@ -4,7 +4,7 @@
         xmlns:local="using:MonkeyPaste.Avalonia">
     <Style Selector="TextBlock">
         <Setter Property="FontFamily"
-                Value="Helvetica" />
+                Value="{Binding Source={DynamicResource DefaultReadOnlyFontFamily}, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />
     </Style>
     <Style Selector="TextBlock.disabled">
         <Setter Property="FontStyle"

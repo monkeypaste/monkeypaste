@@ -78,14 +78,14 @@ namespace MonkeyPaste.Avalonia {
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
             base.OnAttachedToVisualTree(e);
             if (DataContext is MpAvClipTileViewModel ctvm) {
-                ctvm.IsViewLoaded = true;
+                ctvm.IsEditorLoaded = true;
             }
         }
 
         protected override void OnDataContextChanged(EventArgs e) {
             base.OnDataContextChanged(e);
             if (DataContext is MpAvClipTileViewModel ctvm) {
-                ctvm.IsViewLoaded = true;
+                ctvm.IsEditorLoaded = true;
             }
         }
 

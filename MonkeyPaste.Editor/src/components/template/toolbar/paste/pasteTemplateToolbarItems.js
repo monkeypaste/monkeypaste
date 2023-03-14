@@ -295,7 +295,8 @@ function updatePasteTemplateToolbarToSelection(force_ftguid) {
         // called from focus template when either:
         // 1. template blot was clicked
         // 2. nav button clicked
-        
+
+        updatePasteTemplateValues();
 	}
     
     createTemplateSelector(ftguid, paste_sel);

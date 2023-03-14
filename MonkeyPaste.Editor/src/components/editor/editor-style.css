@@ -1,6 +1,7 @@
 
 #editor span, a, em, strong, u, s, sub, sup, img, p, ol, ul, li, div, table, colgroup, col, tbody, tr, td, iframe, blockquote, pre {
     background-color: transparent;
+    color: var(--defcontentfgcolor);
 }
 
 div.ql-code-block-container, div.ql-code-block {
@@ -15,7 +16,8 @@ div.ql-code-block-container, div.ql-code-block {
     padding: 0px;
     z-index: -1;
     white-space: pre;
-    font-family: var(--defaultFontFamily)
+    font-family: var(--defaultFontFamily);
+    font-size: var(--defaultFontSize);
 }
 
 .no-select {
@@ -53,6 +55,11 @@ div.ql-code-block-container, div.ql-code-block {
     }
 .underline-content {
     text-decoration: underline blink dimgray;
+}
+
+body:has(.no-select) {
+    background-color: var(--noselectbgcolor);
+    transition: .4s;
 }
 body:has(.sub-select) {
     background-color: var(--subselecteditorbgcolor);

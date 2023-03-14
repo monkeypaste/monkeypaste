@@ -184,13 +184,14 @@ function hexToRgba(hexStr) {
 
 function rgbaToHex(rgba, ignoreAlpha = true) {
     let hex = '#';
-    if (!ignoreAlpha && rgba.a !== undefined) {
-        // BUG when a is 0 
-        hex += getHexChannelStrPart(rgba.a, 255);
-    }
     hex += getHexChannelStrPart(rgba.r);
     hex += getHexChannelStrPart(rgba.g);
     hex += getHexChannelStrPart(rgba.b);
+
+    if (!ignoreAlpha && !isNullOrUndefined(rgba.a)) {
+        // BUG when a is 0 
+        hex += getHexChannelStrPart(rgba.a, 255);
+    }
     return hex;
 }
 
@@ -200,18 +201,18 @@ function hexToRgb(hex) {
     return rgba;
 }
 
-function cleanHexColor(rgb_Or_rgba_Or_colorName_Or_hex_Str, forceOpacity, ignoreAlpha) {
-    let rgba = cleanColor(rgb_Or_rgba_Or_colorName_Or_hex_Str, forceOpacity);
+function cleanHexColor(rgb_Or_rgba_Or_colorName_Or_hex_Str, forcedOpacity, ignoreAlpha) {
+    let rgba = cleanColor(rgb_Or_rgba_Or_colorName_Or_hex_Str, forcedOpacity);
     return rgbaToHex(rgba, ignoreAlpha);
 }
 
-function cleanColor(rgb_Or_rgba_Or_colorName_Or_hex_Str, forceOpacity, outputType = 'rgbaObj') {
+function cleanColor(rgb_Or_rgba_Or_colorName_Or_hex_Str, forcedOpacity, outputType = 'rgbaObj') {
     if (!rgb_Or_rgba_Or_colorName_Or_hex_Str) {
         return { r: 0, g: 0, b: 0, a: 0 };
     }
     let color = parseRgba(rgb_Or_rgba_Or_colorName_Or_hex_Str);
-    if (forceOpacity !== undefined && forceOpacity != null) {
-        color.a = forceOpacity;
+    if (forcedOpacity !== undefined && forcedOpacity != null) {
+        color.a = forcedOpacity;
     }
     if (outputType == 'rgbaObj') {
         return color;

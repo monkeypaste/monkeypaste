@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Layout;
+using Avalonia.Platform;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
@@ -51,10 +52,13 @@ namespace MonkeyPaste.Avalonia {
 
 
             if (Mp.Services.PlatformInfo.IsDesktop) {
-                var quillWindow = new Window() {
-                    Width = 300,
-                    Height = 300,
+                var quillWindow = new MpAvWindow() {
+                    Width = 0,
+                    Height = 0,
+                    Opacity = 0,
+                    TransparencyLevelHint = WindowTransparencyLevel.Transparent,
                     ShowInTaskbar = false,
+                    ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome,
                     SystemDecorations = SystemDecorations.None
                 };
 
@@ -65,6 +69,7 @@ namespace MonkeyPaste.Avalonia {
                         MpAvToolWindow_Win32.InitToolWindow(quillWindow.PlatformImpl.Handle.Handle);
                     }
                     quillWindow.Hide();
+                    quillWindow.WindowState = WindowState.Minimized;
                 };
                 quillWindow.Show();
             } else if (App.MainView is MpAvMainView mv) {

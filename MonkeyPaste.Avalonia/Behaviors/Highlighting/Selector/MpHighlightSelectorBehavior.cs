@@ -141,7 +141,10 @@ namespace MonkeyPaste.Avalonia {
             if (!EnabledItems.Any()) {
                 return;
             }
-            if (!AssociatedObject.BindingContext.IsViewLoaded) {
+            if (AssociatedObject == null ||
+                AssociatedObject.BindingContext == null ||
+                !AssociatedObject.BindingContext.IsEditorLoaded) {
+                // NOTE this happens when popout is unloading and it has highlighting
                 return;
             }
 

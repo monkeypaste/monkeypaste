@@ -1,11 +1,11 @@
 ﻿.paste-toolbar {
-    background-color: teal;
+    background-color: var(--pastetemplatebgcolor);
 }
 
     .paste-toolbar button {
-        background-color: dodgerblue;
-        border: solid 2px #67c5ff;
-        color: white;
+        background-color: var(--pastetoolbarbuttoncolor);
+        border: solid 2px var(--editortoolbarsepbgcolor);
+        color: var(--defcontentfgcolor);
     }
 
 #pasteButtonAndModeContainer {
@@ -19,6 +19,9 @@
     border-radius: 5px 0 0 5px;
     border-width: 1px 0 1px 1px;
 }
+    #pasteButton:hover {
+        border-width: 1px 1px 1px 1px;
+    }
 
     #pasteButton span {
         margin-left: 5px;
@@ -31,3 +34,6 @@
     border-radius: 0 5px 5px 0;
     border-width: 1px 1px 1px 0;
 }
+    #pasteButtonPopupExpander:hover {
+        border-width: 1px 1px 1px 1px;
+    }

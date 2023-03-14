@@ -18,4 +18,12 @@
         <Setter Property="IsVisible"
                 Value="False" />
     </Style>
+    <Style Selector="local|MpAvMarqueeTextBox[IsReadOnly=true]">
+        <Setter Property="FontFamily"
+                Value="{DynamicResource DefaultReadOnlyFontFamily}" />
+    </Style>
+    <Style Selector="local|MpAvMarqueeTextBox[IsReadOnly=false]">
+        <Setter Property="FontFamily"
+                Value="{DynamicResource DefaultEditableFontFamily}" />
+    </Style>
 </Styles>

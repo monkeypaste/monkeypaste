@@ -111,8 +111,6 @@
 
         <!--  DATAGRIDS  -->
         <Style Selector="DataGrid">
-            <Setter Property="FontFamily"
-                    Value="Calibri" />
             <Setter Property="Background"
                     Value="Khaki" />
             <Setter Property="GridLinesVisibility"
@@ -176,8 +174,6 @@
                     Value="Left" />
             <Setter Property="VerticalContentAlignment"
                     Value="Center" />
-            <Setter Property="FontFamily"
-                    Value="Segue UI" />
         </Style>
 
         <!--  DATAGRID CHECKBOXES  -->

@@ -168,7 +168,7 @@ function applyTemplateToDomNode(node, value) {
     node.setAttribute('wasVisited', value.wasVisited);
 
     // DOM
-    node.setAttribute("spellcheck", "false");
+    node.setAttribute("spellcheck", IsSpellCheckEnabled);
     node.setAttribute('draggable', false);
     node.setAttribute('contenteditable', false);
 

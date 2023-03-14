@@ -97,7 +97,6 @@
                                               DropShadowBrush="Black"
                                               VerticalAlignment="Stretch"
                                               HorizontalAlignment="Left"
-                                              FontFamily="Segue UI"
                                               FontSize="14"
                                               Text="{Binding SelectedLabel}" />
                 </DockPanel>
