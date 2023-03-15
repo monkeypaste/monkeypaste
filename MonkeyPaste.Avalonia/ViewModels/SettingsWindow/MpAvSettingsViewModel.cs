@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 using Avalonia.Threading;
@@ -22,11 +23,12 @@ namespace MonkeyPaste.Avalonia {
         private Window _settingsWindow;
 
         private string[] _reinitContentParams = new string[] {
-            nameof(MpPrefViewModel.Instance.DefaultFontFamily),
+            nameof(MpPrefViewModel.Instance.DefaultReadOnlyFontFamily),
+            nameof(MpPrefViewModel.Instance.DefaultEditableFontFamily),
             nameof(MpPrefViewModel.Instance.DefaultFontSize),
             nameof(MpPrefViewModel.Instance.IsSpellCheckEnabled),
             nameof(MpPrefViewModel.Instance.CurrentThemeName),
-            nameof(MpPrefViewModel.Instance.MainWindowOpacity),
+            nameof(MpPrefViewModel.Instance.GlobalBgOpacity),
         };
         #endregion
 
@@ -57,6 +59,16 @@ namespace MonkeyPaste.Avalonia {
         #region View Models
 
         public ObservableCollection<MpAvSettingsFrameViewModel> Items { get; set; } = new ObservableCollection<MpAvSettingsFrameViewModel>();
+        #region Account
+
+        public IEnumerable<MpAvSettingsFrameViewModel> AccountItems =>
+            Items
+            .Where(x => x.TabType == MpSettingsTabType.Account)
+            .OrderBy(x => x.SortOrderIdx);
+
+        public MpAvSettingsFrameViewModel AccountFrame { get; set; }
+
+        #endregion
 
         #region Preferences
         public IEnumerable<MpAvSettingsFrameViewModel> PreferenceItems =>
@@ -69,13 +81,10 @@ namespace MonkeyPaste.Avalonia {
         public MpAvSettingsFrameViewModel ContentFrame { get; set; }
         public MpAvSettingsFrameViewModel HistoryFrame { get; set; }
         public MpAvSettingsFrameViewModel SystemFrame { get; set; }
-        #endregion
-        #endregion
-
-        #region Interop
-        //public MpAvSettingsFrameViewModel InteropFrame { get; set; }
 
         #endregion
+
+        #endregion        
 
         #region State
 
@@ -124,6 +133,54 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task InitAsync() {
+            #region Account
+
+            AccountFrame = new MpAvSettingsFrameViewModel() {
+                TabType = MpSettingsTabType.Account,
+                SortOrderIdx = 1,
+                LabelText = "Account",
+                PluginFormat = new MpPluginFormat() {
+                    headless = new MpHeadlessPluginFormat() {
+                        parameters = new List<MpParameterFormat>() {
+                            new MpParameterFormat() {
+                                paramId = nameof(MpPrefViewModel.Instance.UserEmail),
+                                isVisible = !string.IsNullOrEmpty(MpPrefViewModel.Instance.UserEmail),
+                                controlType = MpParameterControlType.TextBox,
+                                unitType = MpParameterValueUnitType.PlainText,
+                                isReadOnly = true,
+                                label = "Email",
+                                values =new List<MpPluginParameterValueFormat>() {
+                                    new MpPluginParameterValueFormat() {
+                                        isDefault = true,
+                                        value = string.IsNullOrEmpty(MpPrefViewModel.Instance.UserEmail) ?
+                                            "Unavailable":MpPrefViewModel.Instance.UserEmail
+                                    },
+                                }
+
+                            },
+                            //new MpParameterFormat() {
+                            //    paramId = nameof(MpButtonCommandPrefType.AccountClick),
+                            //    isVisible = 
+                            //    controlType = MpParameterControlType.Button,
+                            //    isReadOnly = true,
+                            //    label = "Account",
+                            //    values =new List<MpPluginParameterValueFormat>() {
+                            //        new MpPluginParameterValueFormat() {
+                            //            isDefault = true,
+                            //            value = string.IsNullOrEmpty(MpPrefViewModel.Instance.UserEmail)
+                            //        },
+                            //    }
+
+                            //}
+                        }
+                    }
+                }
+            };
+
+            Items.Add(AccountFrame);
+
+            #endregion
+
             #region Preferences
 
             #region look & feel
@@ -150,6 +207,58 @@ namespace MonkeyPaste.Avalonia {
                                         value = MpThemeType.Dark.ToString()
                                     },
                                 }
+                            },
+                            new MpParameterFormat() {
+                                paramId = nameof(MpPrefViewModel.Instance.DefaultReadOnlyFontFamily),
+                                controlType = MpParameterControlType.ComboBox,
+                                unitType = MpParameterValueUnitType.PlainText,
+                                label = "UI Font Family",
+                                description = "Requires restart :(",
+                                values =
+                                    FontManager.Current.GetInstalledFontFamilyNames(true)
+                                    .Where(x=>!string.IsNullOrEmpty(x))
+                                    .Select(x=>new MpPluginParameterValueFormat() {
+                                        isDefault = MpAvThemeViewModel.Instance.DefaultReadOnlyFontFamily.ToLower() == x.ToLower(),
+                                        value = x
+                                    }).ToList()
+                            },
+                            new MpParameterFormat() {
+                                paramId = nameof(MpPrefViewModel.Instance.DefaultEditableFontFamily),
+                                controlType = MpParameterControlType.ComboBox,
+                                unitType = MpParameterValueUnitType.PlainText,
+                                label = "Content Font Family",
+                                values =
+                                    FontManager.Current.GetInstalledFontFamilyNames(true)
+                                    .Where(x=>!string.IsNullOrEmpty(x))
+                                    .Select(x=>new MpPluginParameterValueFormat() {
+                                        isDefault = MpAvThemeViewModel.Instance.DefaultEditableFontFamily.ToLower() == x.ToLower(),
+                                        value = x
+                                    }).ToList()
+                            },
+                            new MpParameterFormat() {
+                                paramId = nameof(MpPrefViewModel.Instance.DefaultFontSize),
+                                controlType = MpParameterControlType.ComboBox,
+                                unitType = MpParameterValueUnitType.Integer,
+                                label = "Content Font Size",
+                                values =
+                                    new int[]{ 8, 9, 10, 12, 14, 16, 20, 24, 32, 42, 54, 68, 84, 98 }
+                                    .Select(x=>new MpPluginParameterValueFormat() {
+                                        isDefault = MpPrefViewModel.Instance.DefaultFontSize == x,
+                                        value = x.ToString(),
+                                    }).ToList()
+                            },
+                            new MpParameterFormat() {
+                                paramId = nameof(MpPrefViewModel.Instance.NotificationSoundGroupIdx),
+                                controlType = MpParameterControlType.ComboBox,
+                                unitType = MpParameterValueUnitType.Integer,
+                                label = "Sound Theme",
+                                values =
+                                    new int[]{ 0, 1, 2, 3 }
+                                    .Select(x=>new MpPluginParameterValueFormat() {
+                                        isDefault = MpPrefViewModel.Instance.NotificationSoundGroupIdx == x,
+                                        label = ((MpSoundGroupType)x).ToString(),
+                                        value = x.ToString(),
+                                    }).ToList()
                             },
                             new MpParameterFormat() {
                                 paramId = nameof(MpPrefViewModel.Instance.NotificationSoundVolume),
@@ -192,7 +301,7 @@ namespace MonkeyPaste.Avalonia {
                                 }
                             },
                             new MpParameterFormat() {
-                                paramId = nameof(MpPrefViewModel.Instance.MainWindowOpacity),
+                                paramId = nameof(MpPrefViewModel.Instance.GlobalBgOpacity),
                                 controlType = MpParameterControlType.Slider,
                                 unitType = MpParameterValueUnitType.Decimal,
                                 label = "Background Opacity",
@@ -201,34 +310,9 @@ namespace MonkeyPaste.Avalonia {
                                 values = new List<MpPluginParameterValueFormat>() {
                                     new MpPluginParameterValueFormat() {
                                         isDefault = true,
-                                        value = MpPrefViewModel.Instance.MainWindowOpacity.ToString()
+                                        value = MpPrefViewModel.Instance.GlobalBgOpacity.ToString()
                                     }
                                 }
-                            },
-                            new MpParameterFormat() {
-                                paramId = nameof(MpPrefViewModel.Instance.DefaultFontFamily),
-                                controlType = MpParameterControlType.ComboBox,
-                                unitType = MpParameterValueUnitType.PlainText,
-                                label = "Font Family",
-                                values =
-                                    FontManager.Current.GetInstalledFontFamilyNames(true)
-                                    .Where(x=>!string.IsNullOrEmpty(x))
-                                    .Select(x=>new MpPluginParameterValueFormat() {
-                                        isDefault = MpAvThemeViewModel.Instance.DefaultFontFamily.ToLower() == x.ToLower(),
-                                        value = x
-                                    }).ToList()
-                            },
-                            new MpParameterFormat() {
-                                paramId = nameof(MpPrefViewModel.Instance.DefaultFontSize),
-                                controlType = MpParameterControlType.ComboBox,
-                                unitType = MpParameterValueUnitType.Integer,
-                                label = "Font Size",
-                                values =
-                                    new int[]{ 8, 9, 10, 12, 14, 16, 20, 24, 32, 42, 54, 68, 84, 98 }
-                                    .Select(x=>new MpPluginParameterValueFormat() {
-                                        isDefault = MpPrefViewModel.Instance.DefaultFontSize == x,
-                                        value = x.ToString(),
-                                    }).ToList()
                             }
                         }
                     }
@@ -580,7 +664,7 @@ namespace MonkeyPaste.Avalonia {
             if (_reinitContentParams.Any(x => x.ToLower() == e.PropertyName.ToLower())) {
                 Task.WhenAll(MpAvClipTrayViewModel.Instance.AllActiveItems
                     .Where(x => x.GetContentView() != null)
-                    .Select(x => x.GetContentView().LoadContentAsync())).FireAndForgetSafeAsync();
+                    .Select(x => x.GetContentView().ReloadAsync())).FireAndForgetSafeAsync();
             }
         }
         private void IsTabSelected_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
@@ -614,43 +698,33 @@ namespace MonkeyPaste.Avalonia {
 
         private void Sw_Opened(object sender, EventArgs e) {
             var sw = sender as Window;
+            SetParamClasses<ComboBox>(sw, nameof(MpPrefViewModel.Instance.DefaultReadOnlyFontFamily), "fontChooser");
+            SetParamClasses<ComboBox>(sw, nameof(MpPrefViewModel.Instance.DefaultEditableFontFamily), "fontChooser");
 
+        }
+
+        private void SetParamClasses<T>(Window w, string paramId, string classes) where T : Visual {
+            if (w == null) {
+                return;
+            }
             Dispatcher.UIThread.Post(async () => {
-                var ff_vm = LookAndFeelFrame.Items.FirstOrDefault(x => x.ParamId.ToString().ToLower() == nameof(MpPrefViewModel.Instance.DefaultFontFamily).ToLower());
+                var ff_vm = LookAndFeelFrame.Items.FirstOrDefault(x => x.ParamId.ToString().ToLower() == paramId.ToLower());
                 if (ff_vm != null) {
-                    ComboBox ff_cb = sw.GetVisualDescendants<ComboBox>().FirstOrDefault(x => x.DataContext == ff_vm);
+                    T ff_cb = w.GetVisualDescendants<T>().FirstOrDefault(x => x.DataContext == ff_vm);
                     while (ff_cb == null) {
                         await Task.Delay(100);
-                        ff_cb = sw.GetVisualDescendants<ComboBox>().FirstOrDefault(x => x.DataContext == ff_vm);
-                        if (!sw.IsInitialized) {
+                        ff_cb = w.GetVisualDescendants<T>().FirstOrDefault(x => x.DataContext == ff_vm);
+                        if (!w.IsInitialized) {
                             // pref tab never selected and closed so stop it
                             return;
                         }
                     }
-                    //ff_cb.DropDownOpened += Ff_cb_DropDownOpened;
-
                     ff_cb.Classes.Add("fontChooser");
 
                 }
             });
         }
 
-        private void Ff_cb_DropDownOpened(object sender, EventArgs e) {
-            var ff_cb = sender as ComboBox;
-            for (int i = 0; i < ff_cb.ItemCount; i++) {
-                var ff_cbi = ff_cb.ContainerFromIndex(i);
-                //while (ff_cbi == null) {
-                //    await Task.Delay(100);
-                //    ff_cbi = ff_cb.ContainerFromIndex(i);
-                //}
-                if (ff_cbi is TemplatedControl tc &&
-                    tc.DataContext is MpAvEnumerableParameterValueViewModel pvvm) {
-                    tc.FontFamily = new FontFamily(pvvm.Value);
-                } else {
-
-                }
-            }
-        }
         #endregion
 
         #region Commands
@@ -703,7 +777,7 @@ namespace MonkeyPaste.Avalonia {
                     sw.Opened += Sw_Opened;
                     sw.ShowChild();
                 }
-            });
+            }, (args) => !IsVisible);
 
 
         public ICommand ButtonParameterClickCommand => new MpAsyncCommand<object>(
@@ -775,7 +849,11 @@ namespace MonkeyPaste.Avalonia {
     public enum MpButtonCommandPrefType {
         None = 0,
         ResetNtf,
-        ResetPluginCache
+        ResetPluginCache,
+        AccountRegister,
+        AccountSignIn,
+        AccountClick,
+        AccountSignOut,
     }
 
     public enum MpSettingsTabType {

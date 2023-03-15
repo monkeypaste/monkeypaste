@@ -180,7 +180,7 @@ function applyTemplateToDomNode(node, value) {
 
     // ICON
     let icon_elm = document.createElement('SVG');
-    icon_elm = createSvgElement(getTemplateTypeSvgKey(value.templateType), 'template-type-icon svg-icon contrast-bg');
+    icon_elm = createSvgElement(getTemplateTypeSvgKey(value.templateType), 'template-type-icon svg-icon');
     node.appendChild(icon_elm);
 
     // LABEL
@@ -194,12 +194,13 @@ function applyTemplateToDomNode(node, value) {
 
     // DELETE BUTTON
     let delete_elm = document.createElement('SVG');
-    delete_elm = createSvgElement('delete','delete-template-button contrast-bg');
+    delete_elm = createSvgElement('delete', 'delete-template-button svg-icon template-type-icon');
     node.appendChild(delete_elm);
 
     // EVENTS
 
     node.addEventListener('click', onTemplateClick, true);
+    span_elm.addEventListener('click', onTemplateClick, true);
     delete_elm.addEventListener('click', onTemplateDeleteButtonClick);
 
     return node;
@@ -225,6 +226,12 @@ function onTemplateClick(e) {
         return;
     }
     let t = getTemplateFromDomNode(e.currentTarget);
+    if (!t) {
+        t = getTemplateFromDomNode(e.currentTarget.parentNode);
+        if (!t) {
+            return;
+        }
+    }
 
     focusTemplate(t.templateGuid);
 }

@@ -36,6 +36,7 @@ namespace MonkeyPaste {
         MpIHasDataContext, MpIHasDevTools, MpIJsonMessenger {
         bool IsSubSelectable { get; }
         Task LoadContentAsync();
+        Task ReloadAsync();
         Task UpdateContentAsync(MpJsonObject contentJsonObj);
 
     }

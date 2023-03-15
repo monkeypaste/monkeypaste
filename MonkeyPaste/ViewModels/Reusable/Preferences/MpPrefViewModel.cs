@@ -9,7 +9,9 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MonkeyPaste {
     public class MpPrefViewModel :
@@ -41,6 +43,8 @@ namespace MonkeyPaste {
         #endregion
 
         #region Statics
+        [JsonIgnore]
+        static ReaderWriterLock locker = new ReaderWriterLock();
 
         [JsonIgnore]
         private static MpPrefViewModel _instance;
@@ -352,7 +356,6 @@ namespace MonkeyPaste {
         #region Dynamic Properties          
 
         #region Account
-        public string UserName { get; set; } = "Not Set";
 
         public string UserEmail { get; set; } = "tkefauver@gmail.com";
 
@@ -369,9 +372,10 @@ namespace MonkeyPaste {
         public bool ShowInTaskSwitcher { get; set; } = true;
         public bool ShowMainWindowOnDragToScreenTop { get; set; } = true;
 
-        public string DefaultFontFamily { get; set; } //unset falls back to base ff
+        public string DefaultReadOnlyFontFamily { get; set; } = "Segoe UI";
+        public string DefaultEditableFontFamily { get; set; } = "Arial";
         public int DefaultFontSize { get; set; } = 12;
-        public double MainWindowOpacity { get; set; }
+        public double GlobalBgOpacity { get; set; }
 #if DESKTOP
         = 0.7;
 #else
@@ -574,12 +578,15 @@ namespace MonkeyPaste {
 
         public void Save() {
             //Mp.Services.MainThreadMarshal.RunOnMainThread(async () => {
-            Task.Run(async () => {
-                while (IsSaving) {
-                    await Task.Delay(100);
-                }
+            //Task.Run(async () => {
+            //    while (IsSaving) {
+            //        await Task.Delay(100);
+            //    }
 
-                //lock (_lock) {
+            //lock (_lock) {
+
+            try {
+                locker.AcquireWriterLock(int.MaxValue);
                 IsSaving = true;
 
                 var sw = Stopwatch.StartNew();
@@ -597,8 +604,13 @@ namespace MonkeyPaste {
                 MpConsole.WriteLine("Preferences Updated Total Ms: " + sw.ElapsedMilliseconds);
 
                 IsSaving = false;
-                //}
-            }).FireAndForgetSafeAsync(this);
+            }
+            finally {
+                locker.ReleaseWriterLock();
+            }
+
+            //}
+            // }).FireAndForgetSafeAsync(this);
         }
         #endregion
 

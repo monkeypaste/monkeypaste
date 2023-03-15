@@ -154,14 +154,13 @@ function showTemplateToolbarContextMenu() {
 
     let spinner_mil = [
         {
-            icon: 'fa-solid fa-spinner',
+            icon: 'spinner',
             iconFgColor: 'dimgray',
             iconClassList: ['rotate'],
             label: 'Loading...'
         }
     ];
     superCm.createMenu(spinner_mil, { pageX: x, pageY: y });
-
     getAllNonInputTemplatesFromDbAsync_get()
         .then((result) => {
             result = result ? result : [];
@@ -195,7 +194,7 @@ function showTemplateToolbarContextMenu() {
                 }
                 tmi.submenu.push(
                     {
-                        icon: 'fa-solid fa-plus',
+                        icon: 'plus',
                         iconFgColor: 'lime',
                         label: 'New...',
                         action: function (option, contextMenuIndex, optionIndex) {

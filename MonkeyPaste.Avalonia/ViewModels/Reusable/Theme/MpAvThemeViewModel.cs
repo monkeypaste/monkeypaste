@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Avalonia.Controls;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
+using System;
+using System.Reflection;
 
 namespace MonkeyPaste.Avalonia {
     public enum MpThemeResourceKey {
@@ -8,10 +12,9 @@ namespace MonkeyPaste.Avalonia {
         DefaultGridSplitterFixedDimensionLength_desktop,
         DefaultGridSplitterFixedDimensionLength_mobile,
         DefaultGridSplitterFixedDimensionLength,
-        BaseEditableDefaultFontFamily,
-        BaseReadOnlyDefaultFontFamily,
         DefaultEditableFontFamily,
-        DefaultReadOnlyFontFamily
+        DefaultReadOnlyFontFamily,
+        ContentControlThemeFontFamily
     }
     public class MpAvThemeViewModel : MpViewModelBase {
         #region Private Variable
@@ -36,62 +39,55 @@ namespace MonkeyPaste.Avalonia {
         #region Fixed Resources
 
         public double GlobalBgOpacity_desktop =>
-            (double)Mp.Services.PlatformResource.GetResource(MpThemeResourceKey.GlobalBgOpacity_desktop.ToString());
+            GetThemeValue<double>(MpThemeResourceKey.GlobalBgOpacity_desktop);
         public double GlobalBgOpacity_mobile =>
-            (double)Mp.Services.PlatformResource.GetResource(MpThemeResourceKey.GlobalBgOpacity_mobile.ToString());
+            GetThemeValue<double>(MpThemeResourceKey.GlobalBgOpacity_mobile);
 
         public double DefaultGridSplitterFixedDimensionLength_desktop =>
-            (double)Mp.Services.PlatformResource.GetResource(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength_desktop.ToString());
+            GetThemeValue<double>(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength_desktop);
         public double DefaultGridSplitterFixedDimensionLength_mobile =>
-            (double)Mp.Services.PlatformResource.GetResource(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength_mobile.ToString());
+            GetThemeValue<double>(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength_mobile);
 
         #endregion
 
         public double GlobalBgOpacity {
-            get => (double)Mp.Services.PlatformResource.GetResource(MpThemeResourceKey.GlobalBgOpacity.ToString());
+            get => GetThemeValue<double>(MpThemeResourceKey.GlobalBgOpacity);
             set {
                 if (GlobalBgOpacity != value) {
                     double clamped_value = Math.Max(0, Math.Min(value, 1.0d));
-                    Mp.Services.PlatformResource.SetResource(MpThemeResourceKey.GlobalBgOpacity.ToString(), clamped_value);
-                    //MpPrefViewModel.Instance.MainWindowOpacity = clamped_value;
-                    //HasModelChanged = true;
+                    SetThemeValue(MpThemeResourceKey.GlobalBgOpacity, clamped_value);
                     OnPropertyChanged(nameof(GlobalBgOpacity));
                 }
             }
         }
 
         public double DefaultGridSplitterFixedDimensionLength {
-            get => (double)Mp.Services.PlatformResource.GetResource(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength.ToString());
+            get => GetThemeValue<double>(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength);
             set {
                 if (DefaultGridSplitterFixedDimensionLength != value) {
-                    Mp.Services.PlatformResource.SetResource(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength.ToString(), value);
-                    MpPrefViewModel.Instance.MainWindowOpacity = value;
-                    HasModelChanged = true;
+                    SetThemeValue(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength, value);
                     OnPropertyChanged(nameof(DefaultGridSplitterFixedDimensionLength));
                 }
             }
         }
 
-        public string DefaultFontFamily {
-            get => Mp.Services.PlatformResource.GetResource(MpThemeResourceKey.DefaultEditableFontFamily.ToString()) as string;
+        public string DefaultReadOnlyFontFamily {
+            get => GetThemeValue<string>(MpThemeResourceKey.DefaultReadOnlyFontFamily);
             set {
-                if (DefaultFontFamily != value) {
-                    string ro_ff, e_ff;
-                    if (value != null &&
-                        value.ToLower() != Mp.Services.PlatformResource.GetResource(MpThemeResourceKey.BaseEditableDefaultFontFamily.ToString()) as string) {
-                        ro_ff = value;
-                        e_ff = value;
-                    } else {
-                        ro_ff = Mp.Services.PlatformResource.GetResource(MpThemeResourceKey.BaseReadOnlyDefaultFontFamily.ToString()) as string;
-                        e_ff = Mp.Services.PlatformResource.GetResource(MpThemeResourceKey.BaseEditableDefaultFontFamily.ToString()) as string;
-                    }
+                if (DefaultReadOnlyFontFamily != value) {
+                    SetThemeValue(MpThemeResourceKey.DefaultReadOnlyFontFamily, value);
+                    SetThemeValue(MpThemeResourceKey.ContentControlThemeFontFamily, value);
+                    OnPropertyChanged(nameof(DefaultReadOnlyFontFamily));
+                }
+            }
+        }
 
-
-                    Mp.Services.PlatformResource.SetResource(MpThemeResourceKey.DefaultEditableFontFamily.ToString(), e_ff);
-                    Mp.Services.PlatformResource.SetResource(MpThemeResourceKey.DefaultReadOnlyFontFamily.ToString(), ro_ff);
-                    MpPrefViewModel.Instance.DefaultFontFamily = value;
-                    HasModelChanged = true;
-                    OnPropertyChanged(nameof(DefaultFontFamily));
+        public string DefaultEditableFontFamily {
+            get => GetThemeValue<string>(MpThemeResourceKey.DefaultEditableFontFamily);
+            set {
+                if (DefaultEditableFontFamily != value) {
+                    SetThemeValue(MpThemeResourceKey.DefaultEditableFontFamily, value);
+                    OnPropertyChanged(nameof(DefaultEditableFontFamily));
                 }
             }
         }
@@ -111,7 +107,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         private MpAvThemeViewModel() {
-            MpPrefViewModel.Instance.PropertyChanged += Instance_PropertyChanged;
+            MpPrefViewModel.Instance.PropertyChanged += PrefViewModel_Instance_PropertyChanged;
             PropertyChanged += MpAvThemeViewModel_PropertyChanged;
 #if DESKTOP
             GlobalBgOpacity = GlobalBgOpacity_desktop;
@@ -120,10 +116,9 @@ namespace MonkeyPaste.Avalonia {
             GlobalBgOpacity = GlobalBgOpacity_mobile;
             DefaultGridSplitterFixedDimensionLength = DefaultGridSplitterFixedDimensionLength_mobile;
 #endif
+
+            SyncThemePrefs();
         }
-
-
-
         #endregion
 
         #region Public Methods
@@ -141,16 +136,32 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private void Instance_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch (e.PropertyName) {
-                case nameof(MpPrefViewModel.Instance.MainWindowOpacity):
-                    GlobalBgOpacity = MpPrefViewModel.Instance.MainWindowOpacity;
-                    break;
-                case nameof(MpPrefViewModel.Instance.DefaultFontFamily):
-                    if (!string.IsNullOrEmpty(MpPrefViewModel.Instance.DefaultFontFamily))
-                        DefaultFontFamily = MpPrefViewModel.Instance.DefaultFontFamily;
-                    break;
+        private void PrefViewModel_Instance_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            SyncThemePref(e.PropertyName);
+        }
+
+        private void SyncThemePrefs() {
+            string[] names = new string[] {
+                nameof(MpPrefViewModel.Instance.DefaultReadOnlyFontFamily),
+                nameof(MpPrefViewModel.Instance.DefaultEditableFontFamily),
+                nameof(MpPrefViewModel.Instance.DefaultFontSize),
+                nameof(MpPrefViewModel.Instance.GlobalBgOpacity)
+            };
+            names.ForEach(x => SyncThemePref(x));
+        }
+        private void SyncThemePref(string prefName) {
+            if (!this.HasProperty(prefName)) {
+                return;
             }
+            this.SetPropertyValue(prefName, MpPrefViewModel.Instance.GetPropertyValue(prefName));
+        }
+
+        private T GetThemeValue<T>(MpThemeResourceKey trk) {
+            return (T)Mp.Services.PlatformResource.GetResource(trk.ToString());
+        }
+        private void SetThemeValue(MpThemeResourceKey trk, object value) {
+            Mp.Services.PlatformResource.SetResource(trk.ToString(), value);
+
         }
         #endregion
 

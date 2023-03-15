@@ -582,26 +582,40 @@ namespace MonkeyPaste.Common {
             await awaitable;
         }
 
-        public static object GetPropertyValue(this object obj, string propertyPath, object[] index = null) {
+        public static bool HasProperty(this object obj, string propertyPath) {
+            try {
+                object test = GetPropertyValue(obj, propertyPath, null, false);
+                return true;
+            }
+            catch (MpReflectionException ex) {
+                MpConsole.WriteTraceLine(string.Empty, ex);
+                return false;
+            }
+        }
+
+        public static object GetPropertyValue(this object obj, string propertyPath, object[] index = null, bool safe = true) {
             object propObj = obj;
             PropertyInfo propInfo = null;
-            var propPathParts = propertyPath.Split(new string[] { "." }, StringSplitOptions.RemoveEmptyEntries);
+            var propPathParts = propertyPath.SplitNoEmpty(".");
             for (int i = 0; i < propPathParts.Length; i++) {
                 string propPathPart = propPathParts[i];
 
                 if (propObj == null) {
-                    throw new Exception($"Child Object {propPathPart} on path {propertyPath} not found on object: {obj.GetType()}");
+                    throw new MpReflectionException($"Child Object {propPathPart} on path {propertyPath} not found on object: {obj.GetType()}");
                 }
                 Type objType = propObj.GetType();
                 propInfo = objType.GetProperty(propPathPart);
                 if (propObj == null) {
-                    throw new Exception($"Property {propPathPart} not found on object: {propObj.GetType()}");
+                    throw new MpReflectionException($"Property {propPathPart} not found on object");
                 }
 
                 if (propInfo == null) {
-                    //this breaks when combining static/dynamic content parameters for http requests
-                    //but returning the path is intended flow
-                    return propertyPath;
+                    if (safe) {
+                        //this breaks when combining static/dynamic content parameters for http requests
+                        //but returning the path is intended flow
+                        return propertyPath;
+                    }
+                    throw new MpReflectionException($"Property {propPathPart} not found on object");
                 }
                 propInfo.GetValue(propObj);
 

@@ -1,5 +1,6 @@
 .ql-stroke {
     stroke: var(--editortoolbarbuttoncolor) !important;
+    stroke-width: 1px !important;
 }
 .ql-picker-label {
     color: var(--editortoolbarbuttoncolor) !important;
@@ -8,6 +9,14 @@
 .ql-fill, .ql-path {
     fill: var(--editortoolbarbuttoncolor) !important;
 }
+
+.template-type-icon .ql-fill, .paste-toolbar-icon .ql-fill {
+    fill: white !important;
+}
+.template-type-icon .ql-stroke, .paste-toolbar-icon .ql-stroke {
+    stroke: white;
+}
+
 .ql-editor {
     height: auto;
     padding: 2px 10px;

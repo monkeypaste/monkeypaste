@@ -105,12 +105,19 @@
                             Padding="4,1"
                             BorderThickness="0"
                             Background="{Binding TagHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}">
-                        <TextBlock x:Name="TagCountTextBlock"
-                                   Background="Transparent"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Center"
-                                   Text="{Binding TagClipCount, Converter={x:Static local:MpAvNullableToStringConverter.Instance}}"
-                                   Foreground="{Binding $parent.Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
+                        <Grid x:Name="CountContainer">
+                            <TextBlock x:Name="TagCountTextBlock"
+                                       IsVisible="{Binding !IsBusy}"
+                                       Background="Transparent"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Text="{Binding TagClipCount, Converter={x:Static local:MpAvNullableToStringConverter.Instance}}"
+                                       Foreground="{Binding $parent.Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
+                            <local:MpAvBusySpinnerView HorizontalAlignment="Stretch"
+                                                       VerticalAlignment="Stretch"
+                                                       Cursor="Wait"
+                                                       IsVisible="{Binding IsBusy}" />
+                        </Grid>
                     </Border>
                     <!--  Tag Name TextBox/ Marquee  -->
                     <local:MpAvMarqueeTextBox x:Name="TagNameTextBox"

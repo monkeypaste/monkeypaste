@@ -103,6 +103,16 @@
                     Value="10,0" />
         </Style>
 
+        <!--  FRAMES  -->
+        <Style Selector="local|MpAvSettingsFrameView">
+            <Setter Property="Margin"
+                    Value="10" />
+            <Setter Property="Width"
+                    Value="300" />
+            <Setter Property="MinHeight"
+                    Value="50" />
+        </Style>
+
         <!--  EXPANDERS  -->
         <Style Selector="Expander">
             <Setter Property="HorizontalAlignment"

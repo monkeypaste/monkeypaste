@@ -137,7 +137,7 @@ function createTemplateSelectorItem(t, sel, ftguid, onClick) {
     let label_elm = document.createElement('SPAN');
 
     // ICON SVG
-    let icon_svg_elm = createSvgElement(icon_svg_key, 'contrast-bg');
+    let icon_svg_elm = createSvgElement(icon_svg_key, 'svg-icon paste-toolbar-icon');
     icon_elm.appendChild(icon_svg_elm);
 
     // ICON CONTAINER

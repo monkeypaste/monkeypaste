@@ -166,6 +166,7 @@
     <Folder Include="images\" />
     <Folder Include="images\icons\" />
     <Folder Include="images\svg\" />
+    <Folder Include="lib\" />
     <Folder Include="src\" />
     <Folder Include="src\components\" />
     <Folder Include="src\components\append\toolbar\" />

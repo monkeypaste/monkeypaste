@@ -44,7 +44,13 @@ function initFindReplaceToolbar() {
 	addClickOrKeyClickEventListener(getFindReplaceReplaceAllButton(), onFindReplaceReplaceAllButtonClick);
 	addClickOrKeyClickEventListener(getFindReplaceReplaceButton(), onFindReplaceReplaceButtonClick);
 
+	initFindReplaceIcons();
 	enableResize(getFindReplaceToolbarElement());
+}
+
+function initFindReplaceIcons() {
+	getFindReplacePreviousButton().innerHTML = getSvgHtml('arrow-left');
+	getFindReplaceNextButton().innerHTML = getSvgHtml('arrow-right');
 }
 
 function loadFindReplace(searches) {

@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using Avalonia.Themes.Fluent;
 using System.Diagnostics;
 namespace MonkeyPaste.Avalonia {
     public class MpAvPlatformResource : MpIPlatformResource {

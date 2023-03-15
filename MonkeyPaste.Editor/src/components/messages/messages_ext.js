@@ -11,6 +11,11 @@ function initMain_ext(initMsgStr_base64) {
 	initMain(initMsgObj);
 }
 
+function initDefaults_ext(defaultsMsgStr_base64) {
+	let defaults_obj = toJsonObjFromBase64Str(defaultsMsgStr_base64);
+	initDefaults(defaults_obj);
+}
+
 function loadContent_ext(loadContentMsgStr_base64) {
 	// input 'MpQuillLoadContentRequestMessage'
 	log('loadContent_ext: ' + loadContentMsgStr_base64);

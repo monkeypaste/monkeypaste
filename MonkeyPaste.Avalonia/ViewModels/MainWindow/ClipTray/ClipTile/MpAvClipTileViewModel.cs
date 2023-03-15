@@ -1476,6 +1476,9 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(EmbedHost));
                     break;
                 case nameof(IsHovering):
+                    // refresh busy
+                    OnPropertyChanged(nameof(IsAnyBusy));
+
                     Parent.OnPropertyChanged(nameof(Parent.CanScroll));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyHovering));
                     OnPropertyChanged(nameof(IsCornerButtonsVisible));
@@ -1645,7 +1648,13 @@ namespace MonkeyPaste.Avalonia {
                         }
                         Task.Run(async () => {
                             await CopyItem.WriteToDatabaseAsync();
-                            HasModelChanged = false;
+                            Dispatcher.UIThread.Post(() => {
+                                // BUG i think this is a preview5 bug
+                                // something w/ WeakEvent has no obj ref
+                                // so set this back on ui thread
+                                HasModelChanged = false;
+
+                            });
                         });
                     }
                     break;

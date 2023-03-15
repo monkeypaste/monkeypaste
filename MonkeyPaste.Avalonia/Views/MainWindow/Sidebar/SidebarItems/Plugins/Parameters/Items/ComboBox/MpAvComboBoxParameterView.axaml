@@ -12,8 +12,13 @@
                        d:DesignHeight="450"
                        d:DesignWidth="800">
     <local:MpAvUserControl.Styles>
+        <Style Selector="ComboBox.fontChooser"
+               x:DataType="local:MpAvEnumerableParameterViewModel">
+            <Setter Property="FontFamily"
+                    Value="{Binding SelectedValue, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />
+        </Style>
         <Style Selector="ComboBox.fontChooser ComboBoxItem TextBlock"
-               x:DataType="local:MpAvEnumerableParameterValueViewModel">
+               x:DataType="local:MpAvEnumerableParameterViewModel">
             <Setter Property="FontFamily"
                     Value="{Binding $self.Text, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />
         </Style>
@@ -23,7 +28,7 @@
             <local:MpAvToolTipView ToolTipText="{Binding ParameterTooltipText}" />
         </ToolTip.Tip>
         <ComboBox Items="{Binding Items}"
-                  SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                  SelectedIndex="{Binding SelectedItemIdx, Mode=TwoWay}"
                   IsDropDownOpen="{Binding IsParameterDropDownOpen}"
                   HorizontalAlignment="Stretch"
                   Margin="3"

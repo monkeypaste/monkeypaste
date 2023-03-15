@@ -87,6 +87,21 @@ namespace MonkeyPaste.Avalonia {
                 return ParameterFormat.CsvProps;
             }
         }
+
+        public int SelectedItemIdx {
+            get {
+                return Items.IndexOf(SelectedItem);
+            }
+            set {
+                if (SelectedItemIdx != value) {
+                    Items.ForEach((x, idx) => x.IsSelected = value == idx);
+                    OnPropertyChanged(nameof(SelectedItemIdx));
+                }
+            }
+        }
+
+        public string SelectedValue =>
+            SelectedItem == null ? string.Empty : SelectedItem.Value;
         #endregion
 
         #region Model
@@ -113,6 +128,10 @@ namespace MonkeyPaste.Avalonia {
 
         public override async Task InitializeAsync(MpParameterValue aipv) {
             IsBusy = true;
+
+            if (aipv.ParamId == "DefaultEditableFontFamily") {
+
+            }
 
             await base.InitializeAsync(aipv);
 
@@ -160,6 +179,7 @@ namespace MonkeyPaste.Avalonia {
 
             OnPropertyChanged(nameof(SelectedItem));
             OnPropertyChanged(nameof(SelectedItems));
+            OnPropertyChanged(nameof(SelectedItemIdx));
 
             Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
 

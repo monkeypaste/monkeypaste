@@ -192,15 +192,16 @@
         <Border x:Name="QueryTrayBusyOuterBorder"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
-                IsVisible="False"
                 Grid.Row="1">
-            <!--<Border.IsVisible>
+            <Border.IsVisible>
                 <MultiBinding Converter="{x:Static local:MpAvMultiBoolConverter.Instance}"
                               ConverterParameter="AND">
-                    <Binding Path="IsQueryTrayEmpty" />
+                    <Binding Path="QueryItems"
+                             Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}"
+                             ConverterParameter="flip" />
                     <Binding Path="IsAnyBusy" />
                 </MultiBinding>
-            </Border.IsVisible>-->
+            </Border.IsVisible>
 
             <!--<local:MpAvBusySpinnerView HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
@@ -223,18 +224,20 @@
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
                 IsHitTestVisible="False"
-                IsVisible="False"
                 Grid.Row="1"
                 Background="Transparent">
-            <!--<Border.IsVisible>
+            <Border.IsVisible>
                 <MultiBinding Converter="{x:Static local:MpAvMultiBoolConverter.Instance}"
                               ConverterParameter="AND">
-                    <Binding Path="IsQueryEmpty" />
+
+                    <Binding Path="QueryItems"
+                             Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}"
+                             ConverterParameter="flip" />
                     <Binding Path="!IsRequerying" />
                     <Binding Path="!IsMainWindowInitiallyOpening"
                              Source="{x:Static local:MpAvMainWindowViewModel.Instance}" />
                 </MultiBinding>
-            </Border.IsVisible>-->
+            </Border.IsVisible>
             <TextBlock HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        TextAlignment="Center"

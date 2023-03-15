@@ -207,7 +207,7 @@ namespace MonkeyPaste.Common.Wpf {
                 //    break;
 
                 case "div":
-                    // should only occur for code-block
+                    // should only occur for code-block if its qhtml
                     if (n.HasClass("ql-code-block")) {
                         te = new Paragraph() {
                             Padding = new Thickness(3),
@@ -216,7 +216,8 @@ namespace MonkeyPaste.Common.Wpf {
                             FontFamily = new FontFamily(CurrentDefaultCodeBlockFontFamily)
                         };
                     } else {
-                        throw new Exception("Unhanlded html doc element: " + n.ToString());
+                        //throw new Exception("Unhanlded html doc element: " + n.ToString());
+                        te = new Paragraph();
                     }
                     break;
                 default:
@@ -469,25 +470,36 @@ namespace MonkeyPaste.Common.Wpf {
             return te;
         }
         private static TextElement AddChildToElement(TextElement te, TextElement cte) {
-            if (te is Table t) {
-                t.RowGroups.Add(cte as TableRowGroup);
-            } else if (te is TableRowGroup trg) {
-                trg.Rows.Add(cte as TableRow);
-            } else if (te is TableRow tr) {
-                tr.Cells.Add(cte as TableCell);
-            } else if (te is TableCell tc) {
-                tc.Blocks.Add(cte as Block);
-            } else if (te is List) {
-                (te as List).ListItems.Add(cte as ListItem);
-            } else if (te is ListItem) {
-                if ((te as ListItem).Blocks.Count == 0) {
+            if (te is Table t && cte is TableRowGroup trg_child) {
+                t.RowGroups.Add(trg_child);
+            } else if (te is TableRowGroup trg && cte is TableRow tr_child) {
+                trg.Rows.Add(tr_child);
+            } else if (te is TableRow tr && cte is TableCell tc_child) {
+                tr.Cells.Add(tc_child);
+            } else if (te is TableCell tc && cte is Block b_child) {
+                tc.Blocks.Add(b_child);
+            } else if (te is List l && cte is ListItem li_child) {
+                l.ListItems.Add(li_child);
+            } else if (te is ListItem li) {
+                if (li.Blocks.Count == 0) {
                     //special case since wpf requires list items to be in a paragraph
                     //we must add them implicitly
-                    (te as ListItem).Blocks.Add(new Paragraph());
+                    li.Blocks.Add(new Paragraph());
                 }
-                ((te as ListItem).Blocks.FirstBlock as Paragraph).Inlines.Add(cte as Inline);
-            } else if (te is Paragraph) {
-                (te as Paragraph).Inlines.Add(cte as Inline);
+                if (li.Blocks.FirstBlock is Paragraph p && cte is Inline i_child) {
+                    p.Inlines.Add(i_child);
+                }
+            } else if (te is Paragraph p) {
+                if (cte is Inline i_child) {
+                    p.Inlines.Add(i_child);
+                } else if (cte is Paragraph p_child) {
+                    // NOTE started happenindg 3/15/2022 dnd from web onto tag
+                    // something w/ h tags
+                    // since te isn't part of document yet and only 1 block is returned
+                    // add parent to document and return child to continue
+                    CurrentFd.Blocks.Add(p);
+                    return p_child;
+                }
             } else if (te is Span) {
                 (te as Span).Inlines.Add(cte as Inline);
             }

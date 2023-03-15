@@ -6,4 +6,5 @@ namespace MonkeyPaste {
         public MpException(string msg) : base(msg) { }
         public MpException(string msg, Exception innerException) : base(msg, innerException) { }
     }
+
 }

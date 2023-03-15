@@ -2,10 +2,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
-    <Style Selector="TextBlock">
-        <Setter Property="FontFamily"
-                Value="{Binding Source={DynamicResource DefaultReadOnlyFontFamily}, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />
-    </Style>
     <Style Selector="TextBlock.disabled">
         <Setter Property="FontStyle"
                 Value="Italic" />

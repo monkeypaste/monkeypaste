@@ -5,7 +5,8 @@
     .paste-toolbar button {
         background-color: var(--pastetoolbarbuttoncolor);
         border: solid 2px var(--editortoolbarsepbgcolor);
-        color: var(--defcontentfgcolor);
+        color: white;
+        max-height: 25px;
     }
 
 #pasteButtonAndModeContainer {
@@ -14,23 +15,22 @@
 }
 
 #pasteButton {
-    margin-left: 10px;
-    margin-right: 0;
+    margin: 1px 0 0 10px;
     border-radius: 5px 0 0 5px;
     border-width: 1px 0 1px 1px;
+    display: inline-flex;
 }
     #pasteButton:hover {
         border-width: 1px 1px 1px 1px;
     }
 
     #pasteButton span {
-        margin-left: 5px;
+        font-size: 12px;
     }
 
 #pasteButtonPopupExpander {
-    font-size: 10px;
-    margin-left: 0;
-    margin-right: 10px;
+    font-size: 14px;
+    margin: 0 10px 0 0;
     border-radius: 0 5px 5px 0;
     border-width: 1px 1px 1px 0;
 }

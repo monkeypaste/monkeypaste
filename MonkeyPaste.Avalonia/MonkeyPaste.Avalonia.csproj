@@ -1253,8 +1253,11 @@
     <Compile Update="Views\SettingsWindow\Tabs\Interop\MpAvInteropView.axaml.cs">
       <DependentUpon>MpAvInteropView.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\SettingsWindow\Tabs\Preferences\Frame\MpAvPreferenceFrameView.axaml.cs">
-      <DependentUpon>MpAvPreferenceFrameView.axaml</DependentUpon>
+    <Compile Update="Views\SettingsWindow\Frame\MpAvSettingsFrameView.axaml.cs">
+      <DependentUpon>MpAvSettingsFrameView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\SettingsWindow\Frame\MpAvSettingsFrameView.axaml.cs">
+      <DependentUpon>MpAvSettingsFrameView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\SettingsWindow\Tabs\Preferences\MpAvPreferencesView.axaml.cs">
       <DependentUpon>MpAvPreferencesView.axaml</DependentUpon>

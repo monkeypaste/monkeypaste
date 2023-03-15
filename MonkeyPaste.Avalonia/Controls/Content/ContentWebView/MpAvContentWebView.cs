@@ -399,7 +399,6 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
         public MpAvContentWebView() : base() {
-            MpMessenger.RegisterGlobal(ReceivedGlobalMessega);
             this.GetObservable(MpAvContentWebView.AppendDataProperty).Subscribe(value => OnAppendDataChanged());
             this.GetObservable(MpAvContentWebView.AppendModeStateProperty).Subscribe(value => OnAppendModeStateChanged("command"));
 
@@ -421,6 +420,11 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
+
+        public async Task ReloadAsync() {
+            await LoadEditorAsync();
+            await PerformLoadContentRequestAsync();
+        }
 
         #endregion
 
@@ -450,18 +454,15 @@ namespace MonkeyPaste.Avalonia {
         }
 #endif
 
-        private void ReceivedGlobalMessega(MpMessageType msg) {
-            //switch (msg) {
-            //case MpMessageType.SelectNextMatch:
-            //    var navNextMsg = new MpQuillContentSearchRangeNavigationMessage() { curIdxOffset = 1 };
-            //    SendMessage($"searchNavOffsetChanged_ext('{navNextMsg.SerializeJsonObjectToBase64()}')");
-            //    break;
-            //case MpMessageType.SelectPreviousMatch:
-            //    var navPrevMsg = new MpQuillContentSearchRangeNavigationMessage() { curIdxOffset = -1 };
-            //    SendMessage($"searchNavOffsetChanged_ext('{navPrevMsg.SerializeJsonObjectToBase64()}')");
-            //    break;
+        private MpQuillDefaultsRequestMessage GetDefaultsMessage() {
+            return new MpQuillDefaultsRequestMessage() {
 
-            //}
+                defaultFontFamily = MpPrefViewModel.Instance.DefaultEditableFontFamily,
+                defaultFontSize = MpPrefViewModel.Instance.DefaultFontSize.ToString() + "px",
+                isSpellCheckEnabled = MpPrefViewModel.Instance.IsSpellCheckEnabled,
+                currentTheme = MpPrefViewModel.Instance.CurrentThemeName,
+                bgOpacity = MpPrefViewModel.Instance.GlobalBgOpacity
+            };
         }
 
         #endregion
@@ -916,11 +917,7 @@ namespace MonkeyPaste.Avalonia {
 
             var req = new MpQuillInitMainRequestMessage() {
                 envName = Mp.Services.PlatformInfo.OsType.ToString(),
-                defaultFontFamily = MpPrefViewModel.Instance.DefaultFontFamily,
-                defaultFontSize = MpPrefViewModel.Instance.DefaultFontSize.ToString() + "px",
-                isSpellCheckEnabled = MpPrefViewModel.Instance.IsSpellCheckEnabled,
-                currentTheme = MpPrefViewModel.Instance.CurrentThemeName,
-                bgOpacity = MpPrefViewModel.Instance.MainWindowOpacity
+                defaults = GetDefaultsMessage()
             };
             SendMessage($"initMain_ext('{req.SerializeJsonObjectToBase64()}')");
         }

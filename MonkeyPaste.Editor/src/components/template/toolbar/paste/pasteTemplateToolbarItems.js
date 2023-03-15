@@ -2,30 +2,38 @@
 // #region Globals
 
 const PasteToolbarDefaultWidth = 1125.0;
-const PasteTemplateTimerTickMs = 5000;
 const EmptyPasteValText = '???';
 
-var PasteTemplateTimerFlipState = false;
-
 var IsTemplatePasteValueTextAreaFocused = false;
-
-var PasteTemplateTimerInterval = null;
 
 // #endregion Globals
 
 // #region Life Cycle
 
 function initPasteTemplateToolbarItems() {
+
     addClickOrKeyClickEventListener(getPasteGotoNextButtonElement(), onPasteTemplateGotoNextClickOrKeyDown);
     addClickOrKeyClickEventListener(getPasteGotoPrevButtonElement(), onPasteTemplateGotoPrevClickOrKeyDown);
     addClickOrKeyClickEventListener(getPasteClearTextButtonElement(), onPasteTemplateClearAllValuesClickOrKeyDown);
     addClickOrKeyClickEventListener(getPasteEditFocusTemplateButtonElement(), onPasteEditFocusTemplateClickOrKeyDown);
+
+    initPasteToolbarIcons();
 
     initPasteTemplateValue();
 
     initPasteTemplateFocusSelector();
 }
 
+function initPasteToolbarIcons() {
+    getPasteGotoPrevButtonElement().innerHTML = getSvgHtml('arrow-left', 'svg-icon paste-toolbar-icon');
+    getPasteGotoNextButtonElement().innerHTML = getSvgHtml('arrow-right', 'svg-icon paste-toolbar-icon');
+
+    let clear_icon_elm = getPasteClearTextButtonElement().firstChild;
+    clear_icon_elm.replaceWith(createSvgElement('delete', 'svg-icon paste-toolbar-icon'));
+
+    let edit_icon_elm = getPasteEditFocusTemplateButtonElement().firstChild;
+    edit_icon_elm.replaceWith(createSvgElement('edit-template', 'svg-icon paste-toolbar-icon'));
+}
 
 function showPasteTemplateToolbarItems() {
     let ptil = Array.from(document.getElementsByClassName('paste-template-item'));
@@ -36,8 +44,6 @@ function showPasteTemplateToolbarItems() {
     hidePasteTemplateSelectorOptions();
 
     updatePasteTemplateToolbarToSelection();
-
-    PasteTemplateTimerInterval = setInterval(onPasteTemplateTimer, PasteTemplateTimerTickMs, getEditorElement());
 }
 
 function hidePasteTemplateToolbarItems() {
@@ -47,8 +53,6 @@ function hidePasteTemplateToolbarItems() {
     for (var i = 0; i < ptil.length; i++) {
         ptil[i].classList.add('hidden');
     }
-
-    clearInterval(PasteTemplateTimerInterval);
 }
 
 // #endregion Life Cycle
@@ -120,15 +124,16 @@ function setTemplatePasteValue(tguid, val) {
     var telms = getTemplateElements(tguid);
     for (var i = 0; i < telms.length; i++) {
         var telm = telms[i];
-        let t = getTemplateFromDomNode(telm);
-        let paste_val = getTemplatePasteValue(t);
-        let cur_val = '';
-        if (isNullOrEmpty(paste_val)) {
-            cur_val = t.templateName;
-        } else {
-            cur_val = paste_val;
-        }
-        setTemplateElementText(telm, cur_val);
+        //let t = getTemplateFromDomNode(telm);
+        //let paste_val = getTemplatePasteValue(t);
+        //let cur_val = val;
+        //if (isNullOrEmpty(paste_val)) {
+        //    cur_val = t.templateName;
+        //} else {
+        //    cur_val = paste_val;
+        //}
+        //setTemplateElementText(telm, val);
+        telm.setAttribute('templateText', val);
     }
     //updateTemplatesAfterTextChanged();
 }
@@ -326,14 +331,10 @@ function updatePasteTemplateToolbarToFocus(ftguid, paste_sel) {
 }
 
 
-function updatePasteTemplateValues(fromTimer = false) {
+function updatePasteTemplateValues() {
     let tl = getTemplateDefs();
     for (var i = 0; i < tl.length; i++) {
         let t = tl[i];
-        if (fromTimer && TemplateBeforeEdit && TemplateBeforeEdit.templateGuid == t.templateGuid) {
-            // don't auto-update template if is editing
-            continue;
-		}
         setTemplatePasteValue(t.templateGuid, getTemplatePasteValue(t));
     }
 }
@@ -400,12 +401,6 @@ function updatePasteElementInteractivity() {
 // #endregion Actions
 
 // #region Event Handlers
-
-function onPasteTemplateTimer(e) {
-    return;
-    updatePasteTemplateValues(true);
-    PasteTemplateTimerFlipState = !PasteTemplateTimerFlipState;
-}
 
 
 function onPasteTemplateGotoNextClickOrKeyDown(e) {

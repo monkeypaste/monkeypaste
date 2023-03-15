@@ -180,6 +180,7 @@ namespace MonkeyPaste.Avalonia {
                 ResetDrop();
                 return;
             }
+            BindingContext.IsBusy = true;
 
             //
             if (e.Data.Contains(MpPortableDataFormats.INTERNAL_TAG_ITEM_FORMAT) &&
@@ -204,18 +205,19 @@ namespace MonkeyPaste.Avalonia {
                             is_copy});
                 //});
             } else {
-                Dispatcher.UIThread.Post(async () => {
-                    bool is_internal = e.Data.ContainsInternalContentItem();
-                    if (is_internal) {
-                        // Internal Drop
-                        await PerformTileDropAsync(e.Data, is_copy);
-                    } else {
-                        // External Drop
-                        await PerformExternalOrPartialDropAsync(e.Data);
-                    }
-                });
+                bool is_internal = e.Data.ContainsInternalContentItem();
+                //Dispatcher.UIThread.Post(async () => {
+                if (is_internal) {
+                    // Internal Drop
+                    await PerformTileDropAsync(e.Data, is_copy);
+                } else {
+                    // External Drop
+                    await PerformExternalOrPartialDropAsync(e.Data);
+                }
+                //});
             }
             ResetDrop();
+            BindingContext.IsBusy = false;
             // });
         }
 
@@ -315,13 +317,12 @@ namespace MonkeyPaste.Avalonia {
                 var drag_ctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle == drag_ctvm_pub_handle);
                 if (drag_ctvm != null) {
                     // tile sub-selection drop
-                    //drag_ciid = drag_ctvm.CopyItemId;
 
                     mpdo.SetData(MpPortableDataFormats.LinuxUriList, new string[] { Mp.Services.SourceRefBuilder.ConvertToRefUrl(drag_ctvm.CopyItem) });
                 }
             }
 
-            MpCopyItem drop_ci = await Mp.Services.CopyItemBuilder.BuildAsync(mpdo);//, drag_ciid);
+            MpCopyItem drop_ci = await Mp.Services.CopyItemBuilder.BuildAsync(mpdo, transType: MpTransactionType.Created);//, drag_ciid);
 
             if (drop_ci == null) {
                 return;

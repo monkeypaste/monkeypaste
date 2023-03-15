@@ -4,14 +4,18 @@
     text-decoration: none;
     border-radius: 8px;
     cursor: pointer;
-    /*background-blend-mode: multiply;*/
     z-index: 0;
     padding-left: 3px;
     padding-right: 3px;
+    border: 2px solid transparent;
 }
 
     .template-blot:hover > span {
         color: var(--hovercolor) !important;
+    }
+
+    .template-blot:hover {
+        border-color: var(--pastetoolbarbuttoncolor);
     }
 
 /*
@@ -55,16 +59,9 @@
     height: 10px !important;
 }
 
-    .delete-template-button path {
-        fill: black;
-    }
-
-    .delete-template-button:hover {
-        background-color: black;
-    }
-
-    .delete-template-button:hover path {
-        fill: white;
+    
+    .delete-template-button:hover .ql-fill {
+        fill: red !important;
     }
 
 
@@ -79,8 +76,8 @@
     padding: 1px;
 }
 
-.template-blot-label {
-    /*transition: 1s;*/
+.template-label {
+    margin: 0 10px 0 5px;
 }
 
 .template-blot-sub-selected {

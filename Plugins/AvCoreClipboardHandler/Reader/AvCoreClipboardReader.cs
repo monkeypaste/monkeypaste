@@ -36,7 +36,7 @@ namespace AvCoreClipboardHandler {
 
                 try {
 
-                    availableFormats = avdo.GetDataFormats();//.Where(x => avdo.Get(x) != null).ToArray();
+                    availableFormats = avdo.GetAllDataFormats();//.Where(x => avdo.Get(x) != null).ToArray();
                 }
                 catch (Exception ex) {
                     MpConsole.WriteTraceLine($"Error reading dnd formats retrying (attempt {10 - retryCount + 1})", ex);

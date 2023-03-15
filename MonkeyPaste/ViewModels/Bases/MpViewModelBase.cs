@@ -66,7 +66,7 @@ namespace MonkeyPaste {
         public bool IgnoreHasModelChanged { get; set; } = false;
 
         [JsonIgnore]
-        public virtual bool HasModelChanged { get; set; } = false;
+        public virtual bool HasModelChanged { get; set; }
 
         [JsonIgnore]
         public bool LogPropertyChangedEvents { get; set; } = false;

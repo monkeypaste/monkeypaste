@@ -9,6 +9,8 @@ function initPasteToolbar() {
 
     addClickOrKeyClickEventListener(getPasteButtonElement(), onPasteButtonClickOrKeyDown);
 
+    let paste_icon_elm = getPasteButtonElement().firstChild;
+    paste_icon_elm.replaceWith(createSvgElement('paste','svg-icon paste-toolbar-icon'));
     initPasteTemplateToolbarItems();
 
     initPastePopup();

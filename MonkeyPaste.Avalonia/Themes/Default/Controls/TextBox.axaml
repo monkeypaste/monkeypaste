@@ -7,8 +7,4 @@
         <Thickness x:Key="TextControlBorderThemeThicknessFocused">0,0,0,0</Thickness>
         <sys:Double x:Key="TextControlThemeMinHeight">0</sys:Double>
     </Styles.Resources>
-    <Style Selector="TextBox">
-        <Setter Property="FontFamily"
-                Value="{Binding Source={DynamicResource DefaultEditableFontFamily}, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />
-    </Style>
 </Styles>

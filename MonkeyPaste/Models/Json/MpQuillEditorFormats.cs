@@ -6,6 +6,10 @@ namespace MonkeyPaste {
     public class MpQuillInitMainRequestMessage : MpJsonObject {
 
         public string envName { get; set; } // will be wpf,android, etc.
+        public MpQuillDefaultsRequestMessage defaults { get; set; }
+    }
+    public class MpQuillDefaultsRequestMessage : MpJsonObject {
+
         public string defaultFontFamily { get; set; }
         public string defaultFontSize { get; set; }
         public bool isSpellCheckEnabled { get; set; }

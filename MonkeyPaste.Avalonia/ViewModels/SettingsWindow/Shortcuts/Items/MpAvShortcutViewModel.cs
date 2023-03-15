@@ -173,6 +173,7 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
                 if (SelectedRoutingTypeIdx != value) {
+                    value = Math.Max(0, value);
                     //RoutingType = (MpRoutingType)(value + (int)MpRoutingType.Internal + 1);
                     RoutingType = RoutingTypes[value].ToString().ToEnum<MpRoutingType>();
                     OnPropertyChanged(nameof(SelectedRoutingTypeIdx));

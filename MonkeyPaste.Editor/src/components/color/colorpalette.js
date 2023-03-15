@@ -112,7 +112,7 @@ function getColorPaletteHtml(sel_color) {
             let item_style = '';
             if (idx == ContentColors.length - 1) {
                 c = sel_color;
-                item_class += ' fa-solid fa-plus color-palette-item custom-color-palette-item';
+                item_class += ' color-palette-item custom-color-palette-item';
                 item_style = `background-color: transparent;`;
                 if (is_selected) {
                     item_style += `color: ${c};`;
@@ -122,7 +122,7 @@ function getColorPaletteHtml(sel_color) {
             } else {
                 item_style = 'background-color: ' + c + ';';
             }
-            let item = `<td><a href="javascript:void(0);"><div class="${item_class}" style="${item_style}" ></div></a></td>`;
+            let item = `<td><a href="javascript:void(0);"><div class="${item_class}" style="${item_style}" >+</div></a></td>`;
             paletteHtml += item;
             idx++;
         }
