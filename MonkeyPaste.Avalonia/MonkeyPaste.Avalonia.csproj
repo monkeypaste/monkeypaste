@@ -1157,6 +1157,9 @@
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\MpAvActionPropertyView.axaml.cs">
       <DependentUpon>MpAvActionPropertyView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Actions\TriggerOptions\MpAvTriggerOptionsView.axaml.cs">
+      <DependentUpon>MpAvTriggerOptionsView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Analytics\MpAvAnalyticItemSelectorView.axaml.cs">
       <DependentUpon>MpAvAnalyticItemSelectorView.axaml</DependentUpon>
     </Compile>

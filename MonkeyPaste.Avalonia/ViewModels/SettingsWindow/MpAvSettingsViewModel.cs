@@ -20,8 +20,6 @@ namespace MonkeyPaste.Avalonia {
         MpIChildWindowViewModel {
         #region Private Variables
 
-        private Window _settingsWindow;
-
         private string[] _reinitContentParams = new string[] {
             nameof(MpPrefViewModel.Instance.DefaultReadOnlyFontFamily),
             nameof(MpPrefViewModel.Instance.DefaultEditableFontFamily),

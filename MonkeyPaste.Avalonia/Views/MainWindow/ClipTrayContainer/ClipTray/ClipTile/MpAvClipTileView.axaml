@@ -28,9 +28,22 @@
             <Setter Property="Foreground"
                     Value="Black" />
         </Style>
-      <Style Selector="Grid#DetailContainerGrid.subselect TextBlock">
+        <Style Selector="Grid#DetailContainerGrid.subselect TextBlock">
             <Setter Property="Foreground"
                     Value="AntiqueWhite" />
+        </Style>
+
+        <Style Selector="Border#ClipTileResizeBorder:not(.resizeEnabled)">
+            <Setter Property="Cursor"
+                    Value="Arrow" />
+            <Setter Property="local:MpAvResizeExtension.IsEnabled"
+                    Value="False" />
+        </Style>
+        <Style Selector="Border#ClipTileResizeBorder.resizeEnabled">
+            <Setter Property="Cursor"
+                    Value="SizeWestEast" />
+            <Setter Property="local:MpAvResizeExtension.IsEnabled"
+                    Value="True" />
         </Style>
 
     </local:MpAvUserControl.Styles>
@@ -166,6 +179,7 @@
             <!--  RESIZER  -->
 
             <Border x:Name="ClipTileResizeBorder"
+                    Classes.resizeEnabled="{Binding IsResizerEnabled}"
                     Grid.Row="0"
                     Grid.RowSpan="3"
                     Grid.ColumnSpan="2"
@@ -183,11 +197,9 @@
                     local:MpAvResizeExtension.XFactor="-1"
                     local:MpAvResizeExtension.YFactor="0"
                     local:MpAvResizeExtension.GlobalResizeMessage="None"
-                    local:MpAvResizeExtension.IsEnabled="True"
                     local:MpAvPointerCommandExtension.IsEnabled="True"
                     local:MpAvPointerCommandExtension.DoubleLeftPressCommand="{Binding ResetTileSizeToDefaultCommand}"
                     local:MpAvIsHoveringExtension.IsEnabled="True"
-                    Cursor="SizeWestEast"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Stretch"
                     Width="10"

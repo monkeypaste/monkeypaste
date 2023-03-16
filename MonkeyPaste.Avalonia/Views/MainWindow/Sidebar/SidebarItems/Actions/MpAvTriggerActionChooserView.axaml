@@ -5,7 +5,7 @@
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:local="using:MonkeyPaste.Avalonia"
-                       x:CompileBindings="True"
+                       x:CompileBindings="False"
                        DataContext="{x:Static local:MpAvTriggerCollectionViewModel.Instance}"
                        x:TypeArguments="local:MpAvTriggerCollectionViewModel"
                        x:DataType="local:MpAvTriggerCollectionViewModel"
@@ -13,141 +13,173 @@
                        d:DesignHeight="450"
                        d:DesignWidth="800">
 
-    <!--<Grid x:Name="TriggerSelectorViewContainerGrid"
-          ColumnDefinitions="400,*">-->
-    <Border HorizontalAlignment="Stretch"
+    <Border x:Name="TriggerSidebarOuterContainer"
+            HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
-        <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+        <ScrollViewer x:Name="TriggerScrollViewer"
+                      HorizontalScrollBarVisibility="Disabled"
                       VerticalScrollBarVisibility="Auto">
-            <WrapPanel Orientation="Horizontal"
-                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                       ScrollViewer.VerticalScrollBarVisibility="Disabled">
-
+            <Grid x:Name="TriggerSidebarContainer"
+                  RowDefinitions="Auto,*"
+                  ColumnDefinitions="*"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch">
                 <!--  TRIGGER SELECTOR & SELECTED ACTION PROPERTY COLUMN  -->
 
-                <Border CornerRadius="3"
-                        Background="{DynamicResource ActionPropertyListBgBrush}"
-                        Grid.Column="0"
+                <!--    -->
+                <Border x:Name="ActionPropertyOuterContainer"
                         Width="350"
+                        MaxHeight="{Binding Bounds.Height, ElementName=TriggerSidebarOuterContainer}"
                         HorizontalAlignment="Left"
-                        VerticalAlignment="Top">
-                    <Border.Styles>
-                        <Style Selector="local|MpAvPluginSelectorView TextBlock">
-                            <Setter Property="Foreground"
-                                    Value="White" />
-                        </Style>
-                    </Border.Styles>
-                    <Grid Margin="10,0,10,10"
-                          HorizontalAlignment="Stretch"
-                          VerticalAlignment="Stretch"
-                          RowDefinitions="25,5,50,*"
-                          ColumnDefinitions="*,25,25">
-                        <!--  TRIGGER SELECTOR HEADER  -->
-                        <Label Grid.Row="0"
-                               Grid.Column="0"
-                               Grid.ColumnSpan="3"
-                               HorizontalAlignment="Left"
-                               VerticalAlignment="Top"
-                               Classes="h1"
-                               Content="Trigger" />
-                        <Border Grid.Row="1"
-                                Grid.Column="0"
-                                Grid.ColumnSpan="3"
-                                Classes="labelUnderline"
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Bottom" />
+                        VerticalAlignment="Stretch">
+                    <ScrollViewer x:Name="PropertyScrollViewer"
+                                  Grid.Column="0"
+                                  Grid.Row="0"
+                                  VerticalAlignment="Stretch"
+                                  HorizontalScrollBarVisibility="Hidden"
+                                  VerticalScrollBarVisibility="Hidden">
+                        <Grid RowDefinitions="30,5,50,Auto,Auto,Auto,Auto,Auto,*"
+                              ColumnDefinitions="*,25"
+                              Margin="10,0,20,10"
+                              HorizontalAlignment="Stretch"
+                              VerticalAlignment="Stretch">
+                            <!--
+                                >
+                            -->
+
+                            <!--  TRIGGER SELECTOR HEADER  -->
+
+                            <Label Grid.Row="0"
+                                   Grid.Column="0"
+                                   Grid.ColumnSpan="2"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Top"
+                                   Classes="h1"
+                                   Content="Triggers" />
+                            <Border Grid.Row="1"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="2"
+                                    Classes="labelUnderline"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Bottom" />
 
 
-                        <!--  TRIGGER SELECTOR  -->
-                        <Border Classes="iconLabelComboBox"
-                                Grid.Row="2"
-                                Grid.Column="0">
-                            <ComboBox x:Name="TriggerComboBox"
-                                      SelectedIndex="{Binding SelectedTriggerIdx, Mode=TwoWay}"
-                                      Items="{Binding SortedTriggers}">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <Border Classes="outerComboBoxItemBorder"
-                                                IsVisible="{Binding ., Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
-                                            <DockPanel LastChildFill="True">
-                                                <Image DockPanel.Dock="Left"
-                                                       Source="{Binding IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                                                <TextBlock Text="{Binding Label}" />
-                                            </DockPanel>
-                                        </Border>
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
-                        </Border>
+                            <!--  TRIGGER SELECTOR  -->
 
-                        <!--  ADD TRIGGER BUTTON  -->
+                            <Border Classes="iconLabelComboBox"
+                                    Grid.Row="2"
+                                    Grid.Column="0">
+                                <ComboBox x:Name="TriggerComboBox"
+                                          Width="275"
+                                          SelectedIndex="{Binding SelectedTriggerIdx, Mode=TwoWay}"
+                                          Items="{Binding SortedTriggers}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Classes="outerComboBoxItemBorder"
+                                                    IsVisible="{Binding ., Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
+                                                <DockPanel LastChildFill="True">
+                                                    <Image DockPanel.Dock="Left"
+                                                           Source="{Binding IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                                                    <TextBlock Text="{Binding Label}" />
+                                                </DockPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </Border>
 
-                        <Button x:Name="AddTriggerButton"
-                                Grid.Row="2"
-                                Grid.Column="1"
-                                Cursor="Hand"
-                                Classes="hoverOutline"
-                                Margin="5"
-                                Command="{Binding ShowTriggerSelectorMenuCommand}"
-                                CommandParameter="{Binding $self}">
-                            <ToolTip.Tip>
-                                <local:MpAvToolTipView ToolTipText="New Trigger" />
-                            </ToolTip.Tip>
-                            <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource AddImage}}"
-                                   Margin="5"
-                                   Width="15"
-                                   Height="15" />
-                        </Button>
+                            <!--  ADD TRIGGER BUTTON  -->
 
-                        <!--  SELECTED TRIGGER ACTION PROPERTY VIEW  -->
-                        <Border x:Name="ActionPropertyContainer"
-                                Grid.Row="3"
-                                Grid.Column="0"
-                                Grid.ColumnSpan="3"
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Top"
-                                Margin="0,10,0,0"
-                                Padding="0,0,30,0">
-                            <StackPanel>
-                                <Label HorizontalAlignment="Left"
-                                       Classes="h1"
-                                       Content="Action" />
-                                <Border Classes="labelUnderline"
-                                        HorizontalAlignment="Stretch"
-                                        VerticalAlignment="Bottom" />
-                                <ScrollViewer DataContext="{Binding FocusAction}">
+                            <Button x:Name="AddTriggerButton"
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    Cursor="Hand"
+                                    Classes="noBg noHoverBg outlineOver"
+                                    Command="{Binding ShowTriggerSelectorMenuCommand}"
+                                    CommandParameter="{Binding $self}">
+                                <ToolTip.Tip>
+                                    <local:MpAvToolTipView ToolTipText="New Trigger" />
+                                </ToolTip.Tip>
+                                <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource AddImage}}"
+                                       Margin="5"
+                                       Width="15"
+                                       Height="15" />
+                            </Button>
 
-                                    <local:MpAvActionPropertyView VerticalAlignment="Stretch"
-                                                                  HorizontalAlignment="Stretch"
-                                                                  IsVisible="{Binding ., Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}, FallbackValue=False, TargetNullValue=False}"
-                                                                   />
-                                </ScrollViewer>
-                            </StackPanel>
-                        </Border>
-                    </Grid>
+                            <!--  TRIGGER OPTIONS  -->
+
+                            <Label Grid.Row="3"
+                                   Grid.Column="0"
+                                   Grid.ColumnSpan="2"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Top"
+                                   Classes="h1"
+                                   IsVisible="{Binding SelectedTrigger, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                   Content="{Binding SelectedTrigger.Label}" />
+                            <Border Grid.Row="4"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="2"
+                                    Classes="labelUnderline"
+                                    IsVisible="{Binding SelectedTrigger, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Bottom" />
+                            <local:MpAvTriggerOptionsView Grid.Row="5"
+                                                          Grid.Column="0"
+                                                          Grid.ColumnSpan="2"
+                                                          Margin="0,5"
+                                                          IsVisible="{Binding SelectedTrigger, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                                          HorizontalAlignment="Stretch"
+                                                          VerticalAlignment="Center" />
+
+                            <!--  SELECTED TRIGGER ACTION PROPERTY  -->
+
+                            <Label Grid.Row="6"
+                                   Grid.ColumnSpan="2"
+                                   HorizontalAlignment="Left"
+                                   IsVisible="{Binding SelectedTrigger, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                   Classes="h1"
+                                   Content="Action" />
+                            <Border Grid.Row="7"
+                                    Grid.ColumnSpan="2"
+                                    IsVisible="{Binding SelectedTrigger, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                    Classes="labelUnderline"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Bottom" />
+                            <Border DataContext="{Binding FocusAction}"
+                                    Grid.Row="8"
+                                    Grid.ColumnSpan="2"
+                                    VerticalAlignment="Stretch"
+                                    HorizontalAlignment="Stretch">
+                                <local:MpAvActionPropertyView VerticalAlignment="Stretch"
+                                                              HorizontalAlignment="Stretch"
+                                                              IsVisible="{Binding ., Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}, FallbackValue=False, TargetNullValue=False}" />
+                            </Border>
+                        </Grid>
+
+                    </ScrollViewer>
                 </Border>
 
 
                 <!--  SELECTED TRIGGER DESIGNER COLUMN  -->
 
                 <Border x:Name="ActionDesignerOuterContainerBorder"
-                        Grid.Column="1"
                         IsVisible="{Binding !IsDesignerWindowOpen}"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top">
+                        MaxHeight="{Binding Bounds.Height, ElementName=TriggerSidebarOuterContainer}"
+                        Margin="10"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch">
                     <Border x:Name="ActionDesignerInnerContainerBorder"
                             ClipToBounds="True"
-                            MinWidth="350"
-                            MinHeight="350"
+                            BorderBrush="White"
+                            BorderThickness="5"
+                            MinHeight="100"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch">
                         <local:MpAvActionDesignerView HorizontalAlignment="Stretch"
                                                       VerticalAlignment="Stretch" />
                     </Border>
                 </Border>
-                <!--</Grid>-->
-
-            </WrapPanel>
+            </Grid>
         </ScrollViewer>
     </Border>
 </local:MpAvUserControl>

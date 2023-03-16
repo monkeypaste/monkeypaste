@@ -33,20 +33,7 @@ namespace MonkeyPaste.Avalonia {
         #region View Models
 
         public ObservableCollection<MpISidebarItemViewModel> Items { get; private set; } = new ObservableCollection<MpISidebarItemViewModel>();
-        //public override MpISidebarItemViewModel LastSelectedItem {
-        //    get {
-        //        if(base.LastSelectedItem == null) {
-        //            return null;
-        //        }
-        //        if (MpPlatformWrapper.Services.StartupState.LoadedDateTime == null) {
-        //            return null;
-        //        }
-        //        if(base.LastSelectedItem.LastSelectedDateTime < MpPlatformWrapper.Services.StartupState.LoadedDateTime) {
-        //            return null;
-        //        }
-        //        return base.LastSelectedItem;
-        //    }
-        //}
+
 
         public int SelectedItemIdx {
             get => Items.IndexOf(SelectedItem);

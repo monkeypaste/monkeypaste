@@ -396,6 +396,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsResizerEnabled =>
+            MpAvThemeViewModel.Instance.IsDesktop &&
+            !IsPopOutVisible;
+
         public bool IsPopOutVisible { get; set; }
         public MpIEmbedHost EmbedHost =>
             GetContentView() as MpIEmbedHost;
@@ -1188,6 +1192,7 @@ namespace MonkeyPaste.Avalonia {
             _popoutWindow.ShowChild();
 
             OnPropertyChanged(nameof(IsPopOutVisible));
+            OnPropertyChanged(nameof(IsResizerEnabled));
         }
 
         private MpIContentView _contentView;

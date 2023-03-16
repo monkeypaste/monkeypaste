@@ -1,4 +1,5 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Controls;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
@@ -164,6 +165,7 @@ namespace MonkeyPaste.Avalonia {
                 var newVal = value == null ? null : value.ToString();
                 if (Arg2 != newVal) {
                     Arg2 = newVal;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(IsEnabled));
                 }
             }
@@ -323,7 +325,32 @@ namespace MonkeyPaste.Avalonia {
                  return false;
              });
 
+        public ICommand DeleteThisTriggerCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                bool confirmed =
+                    await Mp.Services.NativeMessageBox.ShowOkCancelMessageBoxAsync(
+                        title: $"Confirm",
+                        message: $"Are you sure you want to delete '{Label}' and all associated actions?",
+                        iconResourceObj: "WarningImage",
+                        anchor: args as Control);
+                if (!confirmed) {
+                    return;
+                }
 
+                Parent.DeleteActionCommand.Execute(this);
+            }, (args) => {
+                return Parent != null;
+            });
+
+        public ICommand DuplicateTriggerCommand => new MpAsyncCommand(
+            async () => {
+                var dup_trigger = await Action.CloneDbModelAsync();
+                dup_trigger.Label = Parent.GetUniqueTriggerName("(Copy) " + dup_trigger.Label);
+                await dup_trigger.WriteToDatabaseAsync();
+                await Parent.CreateTriggerViewModel(dup_trigger);
+            }, () => {
+                return Action != null && Parent != null;
+            });
         #endregion
     }
 }

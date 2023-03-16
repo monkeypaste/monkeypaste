@@ -12,6 +12,41 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvSidebarContainerView">
+    <local:MpAvUserControl.Resources>
+        <SolidColorBrush x:Key="ComboBoxForeground" Color="White" />
+        <SolidColorBrush x:Key="ToggleSwitchContentForeground" Color="White" />
+    </local:MpAvUserControl.Resources>
+
+    <local:MpAvUserControl.Styles>
+        <Style Selector=":is(TemplatedControl)">
+            <Setter Property="Foreground"
+                    Value="White" />
+        </Style>
+        <Style Selector=":is(TemplatedControl) /template/ ContentPresenter">
+            <Setter Property="Foreground"
+                    Value="White" />
+        </Style>
+        <Style Selector="TextBlock">
+            <Setter Property="Foreground"
+                    Value="White" />
+        </Style>
+
+        <Style Selector="ComboBox /template/ TextBlock">
+            <Setter Property="Foreground"
+                    Value="White" />
+        </Style>
+
+        <Style Selector="ToggleSwitch:unchcecked /template/ Border">
+            <Setter Property="BorderBrush"
+                    Value="White" />
+        </Style>
+
+        <Style Selector="ToggleSwitch:unchcecked /template/ Ellipse">
+            <Setter Property="Fill"
+                    Value="White" />
+        </Style>
+
+    </local:MpAvUserControl.Styles>
     <Grid x:Name="SidebarContainerGrid"
           IsTabStop="True"
           TabIndex="0"

@@ -1,0 +1,121 @@
+﻿<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvTriggerOptionsView"
+                       xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:paz="using:Avalonia.Controls.PanAndZoom"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       x:CompileBindings="True"
+                       x:TypeArguments="local:MpAvTriggerCollectionViewModel"
+                       x:DataType="local:MpAvTriggerCollectionViewModel"
+                       mc:Ignorable="d">
+    <local:MpAvUserControl.Styles>
+
+        <Style Selector=":is(Button)">
+            <Setter Property="Margin"
+                    Value="5,2" />
+            <Setter Property="Padding"
+                    Value="5,2" />
+            <Setter Property="FontSize"
+                    Value="12" />
+        </Style>
+        <Style Selector="Border.splitter">
+            <Setter Property="Width"
+                    Value="1" />
+            <Setter Property="VerticalAlignment"
+                    Value="Stretch" />
+            <Setter Property="Background"
+                    Value="Silver" />
+            <Setter Property="Margin"
+                    Value="1,0" />
+        </Style>
+
+        <!--  DUPLICATE  -->
+
+        <Style Selector="Button#DuplicateTriggerButton">
+            <Setter Property="Background"
+                    Value="Blue" />
+            <Setter Property="Foreground"
+                    Value="White" />
+        </Style>
+        <Style Selector="Button#DuplicateTriggerButton:pointerover">
+            <Setter Property="Background"
+                    Value="LightBlue" />
+            <Setter Property="Foreground"
+                    Value="Black" />
+        </Style>
+
+        <Style Selector="Button#DuplicateTriggerButton /template/ ContentPresenter">
+            <Setter Property="Background"
+                    Value="Blue" />
+            <Setter Property="Foreground"
+                    Value="White" />
+        </Style>
+        <Style Selector="Button#DuplicateTriggerButton:pointerover /template/ ContentPresenter">
+            <Setter Property="Background"
+                    Value="LightBlue" />
+            <Setter Property="Foreground"
+                    Value="Black" />
+        </Style>
+
+        <!--  DELETE  -->
+
+        <Style Selector="Button#DeleteTriggerButton">
+            <Setter Property="Background"
+                    Value="Crimson" />
+        </Style>
+        <Style Selector="Button#DeleteTriggerButton:pointerover">
+            <Setter Property="Background"
+                    Value="Salmon" />
+        </Style>
+
+        <Style Selector="Button#DeleteTriggerButton /template/ ContentPresenter">
+            <Setter Property="Background"
+                    Value="Crimson" />
+        </Style>
+        <Style Selector="Button#DeleteTriggerButton:pointerover /template/ ContentPresenter">
+            <Setter Property="Background"
+                    Value="Salmon" />
+        </Style>
+
+    </local:MpAvUserControl.Styles>
+    <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,Auto"
+          x:DataType="local:MpAvTriggerActionViewModelBase"
+          DataContext="{Binding SelectedTrigger}"
+          HorizontalAlignment="Center"
+          VerticalAlignment="Stretch">
+
+        <!--  ENABLED TOGGLE  -->
+        <ToggleSwitch Grid.Column="0"
+                      Foreground="White"
+                      IsThreeState="True"
+                      IsChecked="{Binding IsEnabled, Mode=OneWay}"
+                      Command="{Binding ToggleTriggerEnabledCommand}"
+                      IsEnabled="{Binding IsAllValid}" />
+
+        <Border Grid.Column="1"
+                Classes="splitter" />
+
+        <!--  DUPLICATE BUTTON  -->
+
+        <Button x:Name="DuplicateTriggerButton"
+                Grid.Column="2"
+                Classes="outline outlineOver"
+                Command="{Binding DuplicateTriggerCommand}"
+                Content="DUPLICATE" />
+
+        <Border Grid.Column="3"
+                Classes="splitter" />
+
+        <!--  DELETE BUTTON  -->
+
+        <Button x:Name="DeleteTriggerButton"
+                Grid.Column="4"
+                Classes="outline outlineOver"
+                Command="{Binding DeleteThisTriggerCommand}"
+                CommandParameter="{Binding $self}"
+                Content="DELETE" />
+    </Grid>
+
+</local:MpAvUserControl>

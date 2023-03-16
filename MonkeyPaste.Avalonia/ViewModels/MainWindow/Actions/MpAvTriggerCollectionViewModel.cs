@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
+using Avalonia.Layout;
 using Avalonia.Media;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -199,7 +200,7 @@ namespace MonkeyPaste.Avalonia {
         #region MpISidebarItemViewModel Implementation
 
         private double _defaultSelectorColumnVarDimLength = 400;
-        private double _defaultParameterColumnVarDimLength = 625;
+        //private double _defaultParameterColumnVarDimLength = 625;
         public double DefaultSidebarWidth {
             get {
                 if (MpAvMainWindowViewModel.Instance.IsVerticalOrientation) {
@@ -207,7 +208,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 double w = _defaultSelectorColumnVarDimLength;
                 //if (SelectedTrigger != null) {
-                w += _defaultParameterColumnVarDimLength;
+                //w += _defaultParameterColumnVarDimLength;
                 //}
                 return w;
             }
@@ -255,6 +256,15 @@ namespace MonkeyPaste.Avalonia {
 
         #region Layout
 
+        public Orientation SidebarOrientation {
+            get {
+                if (MpAvSidebarItemCollectionViewModel.Instance.SelectedItemWidth <= _defaultSelectorColumnVarDimLength * 2) {
+                    return Orientation.Vertical;
+                }
+                return Orientation.Horizontal;
+            }
+        }
+
         #endregion
 
         #region State
@@ -286,6 +296,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvTriggerCollectionViewModel() : base(null) {
             PropertyChanged += MpAvTriggerCollectionViewModel_PropertyChanged;
             Items.CollectionChanged += Items_CollectionChanged;
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }
 
         #endregion
@@ -354,11 +365,13 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task RestoreAllEnabled() {
             // NOTE this is only called on init and needs to wait for dependant vm's to load so wait here
-
+            var enabled_triggers =
             Items
             .Where(x => x is MpAvTriggerActionViewModelBase)
             .Cast<MpAvTriggerActionViewModelBase>()
-            .Where(x => x.IsEnabled.IsTrue())
+            .Where(x => x.IsEnabled.IsTrue());
+
+            enabled_triggers
             .ForEach(x => x.EnableTriggerCommand.Execute(null));
 
             while (Items.Any(x => x.IsAnyBusy)) {
@@ -366,21 +379,24 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public string GetUniqueTriggerName(string prefix) {
+        public string GetUniqueTriggerName(string given_name) {
+            if (!SortedTriggers.Any(x => x.Label.ToLower() == given_name)) {
+                return given_name;
+            }
             int uniqueIdx = 1;
             string testName = string.Format(
                                         @"{0}{1}",
-                                        prefix.ToLower(),
+                                        given_name.ToLower(),
                                         uniqueIdx);
 
-            while (Items.Any(x => x.Label.ToLower() == testName)) {
+            while (SortedTriggers.Any(x => x.Label.ToLower() == testName)) {
                 uniqueIdx++;
                 testName = string.Format(
                                         @"{0}{1}",
-                                        prefix.ToLower(),
+                                        given_name.ToLower(),
                                         uniqueIdx);
             }
-            return prefix + uniqueIdx;
+            return given_name + uniqueIdx;
         }
 
 
@@ -466,6 +482,14 @@ namespace MonkeyPaste.Avalonia {
             Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsTrigger)));
             Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsActionDesignerVisible)));
             //OnPropertyChanged(nameof(Triggers));
+        }
+
+        private void ReceivedGlobalMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.SidebarItemSizeChanged:
+                    OnPropertyChanged(nameof(SidebarOrientation));
+                    break;
+            }
         }
         #endregion
 

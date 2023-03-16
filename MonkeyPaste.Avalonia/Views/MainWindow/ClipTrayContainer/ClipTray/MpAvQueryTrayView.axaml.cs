@@ -110,14 +110,14 @@ namespace MonkeyPaste.Avalonia {
             Dispatcher.UIThread.Post(() => {
                 var sv = this.FindControl<ScrollViewer>("ClipTrayScrollViewer");
                 var lb = this.FindControl<ListBox>("ClipTrayListBox");
-                var lbmp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
-                if (MpAvPagingListBoxExtension.CheckAndDoAutoScrollJump(sv, lb, lbmp)) {
+                var gmp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
+                if (MpAvPagingListBoxExtension.CheckAndDoAutoScrollJump(sv, lb, gmp)) {
                     // drag is over a tray track and is thumb dragging
                     // until outside track, then busy for load more
                     return;
                 }
                 var scroll_delta = sv.AutoScroll(
-                    lbmp,
+                    gmp,
                     sv,
                     ref _autoScrollAccumulators,
                     false);

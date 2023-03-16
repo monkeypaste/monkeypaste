@@ -215,29 +215,25 @@ namespace MonkeyPaste {
         [JsonIgnore]
         private bool ThrowOnInvalidPropertyName => false;
 
-        protected void SetProperty<T>(ref T field, T value, [CallerMemberName] string name = "") {
-            if (!EqualityComparer<T>.Default.Equals(field, value)) {
-                field = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-                //PropertyChanged(this, new PropertyChangedEventArgs(name));
-                //var handler = PropertyChanged;
-                //if (handler != null) {
-                //    handler(this, new PropertyChangedEventArgs(name));
-                //}
-            }
-        }
 
         public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null, [CallerFilePath] string path = null, [CallerMemberName] string memName = null, [CallerLineNumber] int line = 0) {
-            if (SupressPropertyChangedNotification) {
+            if (SupressPropertyChangedNotification ||
+                PropertyChanged == null ||
+                propertyName == null) {
                 return;
             }
-            var e = new PropertyChangedEventArgs(propertyName);
+            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            //var handler = PropertyChanged;
+            //if (handler != null) {
+            //    handler(this, new PropertyChangedEventArgs(name));
+            //}
+            //var e = new PropertyChangedEventArgs(propertyName);
 
             if (LogPropertyChangedEvents) {
-                MpConsole.WriteLine($"{this} {e.PropertyName} => {this.GetPropertyValue(e.PropertyName)?.ToString()}");
+                MpConsole.WriteLine($"{this} {propertyName} => {this.GetPropertyValue(propertyName)?.ToString()}");
             }
 
-            PropertyChanged?.Invoke(this, e);
+            //PropertyChanged?.Invoke(this, e);
             //return;
 
             //MpHelpers.RunOnMainThreadAsync(() => {

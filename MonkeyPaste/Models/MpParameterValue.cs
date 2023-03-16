@@ -119,7 +119,10 @@ namespace MonkeyPaste {
                 Value = this.Value,
                 //ParameterFormat = this.ParameterFormat
             };
-            await cppv.WriteToDatabaseAsync();
+            if (!suppressWrite) {
+
+                await cppv.WriteToDatabaseAsync();
+            }
             return cppv;
         }
 

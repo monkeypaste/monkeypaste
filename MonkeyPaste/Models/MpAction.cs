@@ -49,7 +49,64 @@ namespace MonkeyPaste {
         FileWriter,
     }
 
-    public class MpAction : MpDbModelBase {
+    public class MpAction : MpDbModelBase, MpIClonableDbModel<MpAction> {
+
+        #region Interfaces
+
+        #region MpIClonableDbModel Implementation
+
+        public async Task<MpAction> CloneDbModelAsync(bool deepClone = true, bool suppressWrite = false) {
+            // NOTE parentId must be set after calling this method
+            // NOTE2 If is Shortcut trigger, shortcut not cloned
+
+            // CLONE ACTION 
+            var cloned_a = await CreateAsync(
+                actionType: ActionType,
+                label: Label,
+                parentId: 0,
+                sortOrderIdx: SortOrderIdx,
+                arg1: Arg1,
+                arg2: Arg2,
+                arg3: Arg3,
+                arg4: Arg4,
+                description: Description,
+                isReadOnly: IsModelReadOnly,
+                location: new MpPoint(X, Y),
+                suppressWrite: suppressWrite);
+            if (!deepClone) {
+                return cloned_a;
+            }
+
+            // CLONE CHILDREN & UPDATE PARENT
+
+            var child_al = await MpDataModelProvider.GetChildActionsAsync(Id);
+            foreach (var (ca, caidx) in child_al.OrderBy(x => x.SortOrderIdx).WithIndex()) {
+                var cloned_ca = await ca.CloneDbModelAsync(
+                    deepClone: deepClone,
+                    suppressWrite: suppressWrite);
+                cloned_ca.ParentActionId = cloned_a.Id;
+                cloned_ca.SortOrderIdx = caidx;
+                if (!suppressWrite) {
+                    await cloned_ca.WriteToDatabaseAsync();
+                }
+            }
+
+            // CLONE PARAMETERS & UPDATE HOST 
+            var pvl = await MpDataModelProvider.GetAllParameterHostValuesAsync(MpParameterHostType.Action, Id);
+
+            foreach (var pv in pvl) {
+                var cloned_pv = await pv.CloneDbModelAsync();
+                cloned_pv.ParameterHostId = cloned_a.Id;
+                if (!suppressWrite) {
+                    await cloned_pv.WriteToDatabaseAsync();
+                }
+            }
+
+            return cloned_a;
+        }
+        #endregion
+
+        #endregion
 
         #region Columns
 
@@ -180,5 +237,6 @@ namespace MonkeyPaste {
         public override string ToString() {
             return $"Action Id: {Id} ParentId: {ParentActionId} Type: '{ActionType}' Label: '{Label}'";
         }
+
     }
 }

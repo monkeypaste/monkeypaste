@@ -123,7 +123,7 @@
                 Classes="noBg noHoverBg outlineOver"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Stretch">
-            <Image>
+            <Image Margin="5,0">
                 <Image.RenderTransform>
                     <RotateTransform />
                 </Image.RenderTransform>
