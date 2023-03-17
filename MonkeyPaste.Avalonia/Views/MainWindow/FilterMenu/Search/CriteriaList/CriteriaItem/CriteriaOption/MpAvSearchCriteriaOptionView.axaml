@@ -51,6 +51,7 @@
                         <TextBox x:Name="MatchValueTextBox"
                                  Watermark="Enter search term..."
                                  Classes.valid="{Binding IsValid}"
+                                 AttachedToLogicalTree="TextBox_AttachedToLogicalTree"
                                  local:MpAvDelayedTextChangedExtension.IsEnabled="True"
                                  local:MpAvDelayedTextChangedExtension.DelayMs="500"
                                  local:MpAvDelayedTextChangedExtension.Text="{Binding Value, Mode=TwoWay}" />
@@ -63,24 +64,28 @@
                             <Label Content="R" />
                             <TextBox Classes="compositeTextBox"
                                      Classes.valid="{Binding IsValid1}"
+                                     AttachedToLogicalTree="TextBox_AttachedToLogicalTree"
                                      Text="{Binding Value1, Mode=TwoWay}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="G" />
                             <TextBox Classes="compositeTextBox"
                                      Classes.valid="{Binding IsValid2}"
+                                     AttachedToLogicalTree="TextBox_AttachedToLogicalTree"
                                      Text="{Binding Value2, Mode=TwoWay}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="B" />
                             <TextBox Classes="compositeTextBox"
                                      Classes.valid="{Binding IsValid3}"
+                                     AttachedToLogicalTree="TextBox_AttachedToLogicalTree"
                                      Text="{Binding Value3, Mode=TwoWay}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="A" />
                             <TextBox Classes="compositeTextBox"
                                      Classes.valid="{Binding IsValid4}"
+                                     AttachedToLogicalTree="TextBox_AttachedToLogicalTree"
                                      Text="{Binding Value4, Mode=TwoWay}" />
                         </StackPanel>
                     </StackPanel>

@@ -112,7 +112,7 @@
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center"
                                        Text="{Binding TagClipCount, Converter={x:Static local:MpAvNullableToStringConverter.Instance}}"
-                                       Foreground="{Binding $parent.Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
+                                       Foreground="{Binding $parent[Border].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
                             <local:MpAvBusySpinnerView HorizontalAlignment="Stretch"
                                                        VerticalAlignment="Stretch"
                                                        Cursor="Wait"

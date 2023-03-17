@@ -11,6 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using FocusManager = Avalonia.Input.FocusManager;
@@ -486,6 +487,15 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsVerticalOrientation =>
             !IsHorizontalOrientation;
+
+        public bool IsLeftOrientation =>
+            MainWindowOrientationType == MpMainWindowOrientationType.Left;
+        public bool IsTopOrientation =>
+            MainWindowOrientationType == MpMainWindowOrientationType.Top;
+        public bool IsRightOrientation =>
+            MainWindowOrientationType == MpMainWindowOrientationType.Right;
+        public bool IsBottomOrientation =>
+            MainWindowOrientationType == MpMainWindowOrientationType.Bottom;
 
         public MpMainWindowOrientationType MainWindowOrientationType { get; private set; }
         public MpMainWindowShowBehaviorType MainWindowShowBehaviorType { get; private set; }
@@ -1012,7 +1022,7 @@ namespace MonkeyPaste.Avalonia {
                         gmp.Distance(MpAvShortcutCollectionViewModel.Instance.GlobalMouseLeftButtonDownLocation) >= MpAvShortcutCollectionViewModel.MIN_GLOBAL_DRAG_DIST &&
                         gmp.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight) {
                         // show mw during dnd and user drags to top of screen (when pref set)
-                        // ShowMainWindowCommand.Execute(null)
+                        ShowMainWindowCommand.Execute(null);
                     }
                 }
             });

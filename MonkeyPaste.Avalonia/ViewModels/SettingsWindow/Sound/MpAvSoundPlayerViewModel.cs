@@ -85,12 +85,10 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task InitializeAsync() {
-            await Task.Delay(1);
             IsBusy = true;
             if (_player == null) {
                 _player = new Player();
-                byte volume = (byte)((double)byte.MaxValue * MpPrefViewModel.Instance.NotificationSoundVolume);
-                _player.SetVolume(volume).FireAndForgetSafeAsync(this);
+                await UpdateVolumeCommand.ExecuteAsync();
             }
             SelectedSoundGroup = (MpSoundGroupType)MpPrefViewModel.Instance.NotificationSoundGroupIdx;
 
@@ -137,6 +135,7 @@ namespace MonkeyPaste.Avalonia {
 
             IsBusy = false;
         }
+
         #endregion
 
         #region Private Methods
@@ -185,9 +184,16 @@ namespace MonkeyPaste.Avalonia {
 
             }
         }
+
         #endregion
 
         #region Commands
+
+        public MpIAsyncCommand UpdateVolumeCommand => new MpAsyncCommand(
+            async () => {
+                byte volume = (byte)((double)byte.MaxValue * MpPrefViewModel.Instance.NotificationSoundVolume);
+                await _player.SetVolume(volume);
+            });
 
         public ICommand PlaySoundCommand => new MpAsyncCommand<object>(
             async (args) => {
@@ -204,6 +210,8 @@ namespace MonkeyPaste.Avalonia {
             }, (args) => {
                 return args is MpSoundNotificationType && SelectedSoundGroup != MpSoundGroupType.None;
             });
+
+
 #if WINDOWS
         const int MAX_PATH = 128;
 

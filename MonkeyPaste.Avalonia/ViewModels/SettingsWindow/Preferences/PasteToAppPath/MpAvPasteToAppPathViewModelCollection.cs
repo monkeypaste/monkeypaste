@@ -357,15 +357,12 @@ namespace MonkeyPaste.Avalonia {
                     MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
 
                     string openResult = await Mp.Services.NativePathDialog
-                            .ShowFileDialogAsync($"Select application path", null, MpFileIo.GetOsExecutableFileFilters().Split(","));
+                            .ShowFileDialogAsync($"Select application path", null, null, true);
 
                     MpAvMenuExtension.CloseMenu();
 
                     if (openResult.IsFile()) {
                         appPath = openResult;
-                        if (appPath.IsShortcutPath()) {
-                            appPath = MpFileIo.GetLnkTargetPath(appPath);
-                        }
                     }
                     MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
                 }

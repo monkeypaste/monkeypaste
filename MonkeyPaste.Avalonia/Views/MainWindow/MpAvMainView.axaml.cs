@@ -86,8 +86,8 @@ namespace MonkeyPaste.Avalonia {
         Control MpAvIResizableControl.ResizerControl {
             get {
                 if (_resizerControl == null) {
-                    var mwrv = this.GetVisualDescendant<MpAvMainWindowResizerView>();
-                    _resizerControl = mwrv.FindControl<Control>("MainWindowResizeBorder");
+                    var mwtmv = this.FindControl<MpAvMainWindowTitleMenuView>("MainWindowTitleView");
+                    _resizerControl = mwtmv.FindControl<Border>("MainWindowResizerBorder");
                 }
                 return _resizerControl;
             }
@@ -417,91 +417,10 @@ namespace MonkeyPaste.Avalonia {
 
             UpdateSidebarGridsplitter();
             UpdateTitleLayout();
-            UpdateResizerLayout();
+            //UpdateResizerLayout();
             mwtg.InvalidateAll();
         }
 
-        private void UpdateResizerLayout() {
-            var mwvm = MpAvMainWindowViewModel.Instance;
-
-            var resizerView = this.FindControl<MpAvMainWindowResizerView>("MainWindowResizerView");
-            var resizerHandle = resizerView.FindControl<Border>("MainWindowResizeOuterBorder");
-            var resizerTransform = resizerView.RenderTransform as TranslateTransform;
-
-            double resizer_long_side = mwvm.IsHorizontalOrientation ? mwvm.MainWindowWidth : mwvm.MainWindowHeight;
-            double resizer_short_side = mwvm.ResizerLength;
-
-            resizerTransform.X = 0;
-            resizerTransform.Y = 0;
-            switch (mwvm.MainWindowOrientationType) {
-                case MpMainWindowOrientationType.Bottom:
-                    resizerHandle.Width = resizer_long_side;
-                    resizerHandle.Height = resizer_short_side;
-                    resizerHandle.HorizontalAlignment = HorizontalAlignment.Stretch;
-                    resizerHandle.VerticalAlignment = VerticalAlignment.Stretch;
-
-                    resizerView.Width = resizer_long_side;
-                    resizerView.Height = resizer_short_side;
-                    resizerView.HorizontalAlignment = HorizontalAlignment.Stretch;
-                    resizerView.VerticalAlignment = VerticalAlignment.Top;
-                    //resizerTransform.Y -= 3;
-
-                    //resizerView.Background = Brushes.Transparent;
-                    break;
-                case MpMainWindowOrientationType.Top:
-                    resizerHandle.Width = resizer_long_side;
-                    resizerHandle.Height = resizer_short_side;
-                    resizerHandle.HorizontalAlignment = HorizontalAlignment.Center;
-                    resizerHandle.VerticalAlignment = VerticalAlignment.Stretch;
-
-                    resizerView.Width = resizer_long_side;
-                    resizerView.Height = resizer_short_side;
-                    resizerView.HorizontalAlignment = HorizontalAlignment.Stretch;
-                    resizerView.VerticalAlignment = VerticalAlignment.Top;
-
-                    resizerTransform.Y = mwvm.MainWindowHeight - resizerView.Height;
-
-                    //resizerView.Background = new SolidColorBrush() {
-                    //    Color = Colors.White,
-                    //    Opacity = 0.5
-                    //};
-                    break;
-                case MpMainWindowOrientationType.Left:
-                    resizerHandle.Width = resizer_short_side;
-                    resizerHandle.Height = resizer_long_side;
-                    resizerHandle.HorizontalAlignment = HorizontalAlignment.Stretch;
-                    resizerHandle.VerticalAlignment = VerticalAlignment.Center;
-
-                    resizerView.Width = resizer_short_side;
-                    resizerView.Height = mwvm.MainWindowHeight;
-                    resizerView.HorizontalAlignment = HorizontalAlignment.Right;
-                    resizerView.VerticalAlignment = VerticalAlignment.Top;
-
-                    resizerTransform.X = MpAvMainWindowTitleMenuViewModel.Instance.TitleMenuWidth;
-                    //resizerView.Background = new SolidColorBrush() {
-                    //    Color = Colors.White,
-                    //    Opacity = 0.5
-                    //};
-                    break;
-                case MpMainWindowOrientationType.Right:
-                    resizerHandle.Width = resizer_short_side;
-                    resizerHandle.Height = resizer_long_side;
-                    resizerHandle.HorizontalAlignment = HorizontalAlignment.Stretch;
-                    resizerHandle.VerticalAlignment = VerticalAlignment.Center;
-
-                    resizerView.Width = resizer_short_side;
-                    resizerView.Height = mwvm.MainWindowHeight;
-                    resizerView.HorizontalAlignment = HorizontalAlignment.Left;
-                    resizerView.VerticalAlignment = VerticalAlignment.Top;
-
-
-                    //resizerView.Background = new SolidColorBrush() {
-                    //    Color = Colors.White,
-                    //    Opacity = 0.5
-                    //};
-                    break;
-            }
-        }
         private void UpdateTitleLayout() {
             var mwvm = MpAvMainWindowViewModel.Instance;
             var tmvm = MpAvMainWindowTitleMenuViewModel.Instance;
@@ -573,12 +492,8 @@ namespace MonkeyPaste.Avalonia {
 
                 tmv_wohb.VerticalAlignment = VerticalAlignment.Stretch;
                 tmv_wohb.HorizontalAlignment = HorizontalAlignment.Center;
-                if (tmv_wohb.GetVisualDescendant<Image>() is Image tmv_wohb_img &&
-                    tmv_wohb_img.RenderTransform is RotateTransform rott) {
+                if (tmv_wohb.RenderTransform is RotateTransform rott) {
                     rott.Angle = 0;
-
-                    tmv_wohb_img.Width = tmvm.TitleDragHandleLongLength;
-                    tmv_wohb_img.Height = tmvm.DefaultTitleMenuFixedLength;
                 }
 
                 tmv_rsp.Orientation = Orientation.Horizontal;
@@ -662,11 +577,8 @@ namespace MonkeyPaste.Avalonia {
 
                 tmv_wohb.VerticalAlignment = VerticalAlignment.Center;
                 tmv_wohb.HorizontalAlignment = HorizontalAlignment.Stretch;
-                if (tmv_wohb.GetVisualDescendant<Image>() is Image tmv_wohb_img &&
-                    tmv_wohb_img.RenderTransform is RotateTransform rott) {
+                if (tmv_wohb.RenderTransform is RotateTransform rott) {
                     rott.Angle = 90;
-                    tmv_wohb_img.Width = tmvm.TitleDragHandleLongLength;
-                    tmv_wohb_img.Height = tmvm.DefaultTitleMenuFixedLength;
                 }
 
                 tmv_rsp.Orientation = Orientation.Vertical;
@@ -905,9 +817,9 @@ namespace MonkeyPaste.Avalonia {
                         if (mwvm.MainWindowOrientationType == MpMainWindowOrientationType.Top) {
                             // can't figure out how to make resizer align to bottom so have to manually translate to bottom
 
-                            var resizerView = this.FindControl<MpAvMainWindowResizerView>("MainWindowResizerView");
-                            var resizerTransform = resizerView.RenderTransform as TranslateTransform;
-                            resizerTransform.Y = mwvm.MainWindowHeight - resizerView.Height;
+                            //var resizerView = this.FindControl<MpAvMainWindowResizerView>("MainWindowResizerView");
+                            //var resizerTransform = resizerView.RenderTransform as TranslateTransform;
+                            //resizerTransform.Y = mwvm.MainWindowHeight - resizerView.Height;
                         }
                         break;
                     }

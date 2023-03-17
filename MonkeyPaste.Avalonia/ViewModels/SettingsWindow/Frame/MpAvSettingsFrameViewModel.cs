@@ -103,6 +103,7 @@ namespace MonkeyPaste.Avalonia {
                             await Task.Delay(100);
                         }
                         var to_save = Items.Where(x => x.HasModelChanged).ToList();
+                        to_save.ForEach(x => x.SaveCurrentValueCommand.Execute("skip model save"));
                         foreach (var pvm in to_save) {
                             //while (MpPrefViewModel.Instance.IsSaving) {
                             //    await Task.Delay(100);

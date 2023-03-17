@@ -135,7 +135,8 @@ namespace MonkeyPaste.Avalonia {
                 // external ole create
                 var ext_refs = await GatherExternalSourceRefsAsync(mpdo);
                 if (ext_refs != null && ext_refs.Count() > 0) {
-                    refs.AddRange(ext_refs);
+                    // NOTE ensure ext is in front so if url is present it is written first
+                    refs.InsertRange(0, ext_refs);
                 }
             }
             if (refs.Count == 0) {

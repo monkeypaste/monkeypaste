@@ -64,6 +64,7 @@
     <AvaloniaXaml Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <AvaloniaXaml Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <AvaloniaXaml Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
+    <AvaloniaXaml Remove="Views\MainWindow\ResizeHandle\**" />
     <AvaloniaXaml Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
     <Compile Remove="Assets\Images\MpRichTextBox\**" />
     <Compile Remove="Assets\Images\resize_backup\**" />
@@ -87,6 +88,7 @@
     <Compile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <Compile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <Compile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
+    <Compile Remove="Views\MainWindow\ResizeHandle\**" />
     <Compile Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
     <EmbeddedResource Remove="Assets\Images\MpRichTextBox\**" />
     <EmbeddedResource Remove="Assets\Images\resize_backup\**" />
@@ -110,6 +112,7 @@
     <EmbeddedResource Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <EmbeddedResource Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <EmbeddedResource Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
+    <EmbeddedResource Remove="Views\MainWindow\ResizeHandle\**" />
     <EmbeddedResource Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
     <JavaSourceJar Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <None Remove="Assets\Images\MpRichTextBox\**" />
@@ -134,6 +137,7 @@
     <None Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <None Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <None Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
+    <None Remove="Views\MainWindow\ResizeHandle\**" />
     <None Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
     <Page Remove="Assets\Images\MpRichTextBox\**" />
     <Page Remove="Assets\Images\resize_backup\**" />
@@ -155,6 +159,7 @@
     <Page Remove="ViewModels\SettingsWindow\Sound\Notifications\**" />
     <Page Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <Page Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
+    <Page Remove="Views\MainWindow\ResizeHandle\**" />
     <Page Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
     <ProguardConfiguration Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <TransformFile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
@@ -171,9 +176,6 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\GridSplitter.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Label.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ListBox.axaml" />
-    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvActionDesigner.axaml" />
-    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvActionDesignerItemColors.axaml" />
-    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvActionProperty.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Border.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvAssignShortcutWindow.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvClipTile.axaml" />
@@ -1039,9 +1041,6 @@
     <AvaloniaResource Include="Themes\Default\Controls\ComboBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\GridSplitter.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ComboBoxItem.axaml" />
-    <AvaloniaResource Include="Themes\Default\Controls\MpAvActionDesignerItemColors.axaml" />
-    <AvaloniaResource Include="Themes\Default\Controls\MpAvActionDesigner.axaml" />
-    <AvaloniaResource Include="Themes\Default\Controls\MpAvActionProperty.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvMarqueeTextBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvSideBarButtonGroup.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvSideBarItems.axaml" />

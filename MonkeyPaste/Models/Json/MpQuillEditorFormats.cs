@@ -15,6 +15,8 @@ namespace MonkeyPaste {
         public bool isSpellCheckEnabled { get; set; }
         public string currentTheme { get; set; }
         public double bgOpacity { get; set; }
+
+        public int maxUndo { get; set; }
     }
 
     public class MpQuillLoadContentRequestMessage : MpJsonObject {

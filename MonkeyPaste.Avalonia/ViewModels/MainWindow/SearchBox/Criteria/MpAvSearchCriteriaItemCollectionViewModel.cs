@@ -548,6 +548,13 @@ namespace MonkeyPaste.Avalonia {
                 return true;
             });
 
+        public ICommand ExpandCriteriaFromDragEnterCommand => new MpCommand(
+            () => {
+                IsExpanded = true;
+            }, () => {
+                return IsAdvSearchActive && !IsExpanded && !IsCriteriaWindowOpen;
+            });
+
         public ICommand OpenCriteriaWindowCommand => new MpCommand<object>(
             (args) => {
                 if (Mp.Services.PlatformInfo.IsDesktop) {

@@ -86,6 +86,9 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Protected Methods
+
+        #endregion
         #region Private Methods
 
         private void MpIconViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {

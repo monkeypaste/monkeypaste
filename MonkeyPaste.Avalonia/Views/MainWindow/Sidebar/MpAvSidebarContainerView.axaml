@@ -15,17 +15,19 @@
     <local:MpAvUserControl.Resources>
         <SolidColorBrush x:Key="ComboBoxForeground" Color="White" />
         <SolidColorBrush x:Key="ToggleSwitchContentForeground" Color="White" />
+        <SolidColorBrush x:Key="TextControlBackground" Color="White" />
+        <SolidColorBrush x:Key="CheckBoxForegroundUnchecked" Color="White" />
     </local:MpAvUserControl.Resources>
 
     <local:MpAvUserControl.Styles>
-        <Style Selector=":is(TemplatedControl)">
+        <!--<Style Selector=":is(TemplatedControl)">
             <Setter Property="Foreground"
                     Value="White" />
         </Style>
         <Style Selector=":is(TemplatedControl) /template/ ContentPresenter">
             <Setter Property="Foreground"
                     Value="White" />
-        </Style>
+        </Style>-->
         <Style Selector="TextBlock">
             <Setter Property="Foreground"
                     Value="White" />
@@ -34,6 +36,11 @@
         <Style Selector="ComboBox /template/ TextBlock">
             <Setter Property="Foreground"
                     Value="White" />
+        </Style>
+
+        <Style Selector="ComboBox:dropdownopen /template/ TextBlock">
+            <Setter Property="Foreground"
+                    Value="Black" />
         </Style>
 
         <Style Selector="ToggleSwitch:unchcecked /template/ Border">

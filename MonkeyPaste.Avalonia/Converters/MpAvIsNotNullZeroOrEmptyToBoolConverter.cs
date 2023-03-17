@@ -15,7 +15,7 @@ namespace MonkeyPaste.Avalonia {
                 flip = true;
             }
             if (value is int intVal) {
-                return intVal == 0 ? flip : !flip;
+                return intVal <= 0 ? flip : !flip;
             }
             if (value is double doubleVal) {
                 return doubleVal == 0 ? flip : !flip;

@@ -32,7 +32,7 @@
                         <Border Classes="iconLabelComboBox"
                                 Grid.Row="2"
                                 Grid.Column="0">
-                            <ComboBox SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                            <ComboBox SelectedIndex="{Binding SelectedItemIdx, Mode=TwoWay}"
                                       Items="{Binding Items}">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>

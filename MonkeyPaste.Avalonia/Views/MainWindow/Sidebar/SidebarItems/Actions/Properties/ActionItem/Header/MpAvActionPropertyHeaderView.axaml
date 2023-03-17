@@ -15,7 +15,7 @@
     <Grid ColumnDefinitions="Auto,Auto,*,Auto">
         <Grid.Resources>
             <sys:Double x:Key="IconSize">
-                40
+                30
             </sys:Double>
         </Grid.Resources>
         <Grid.Styles>
@@ -94,7 +94,6 @@
                                       CornerRadius="12.5"
                                       HorizontalAlignment="Left"
                                       VerticalAlignment="Center"
-                                      Command="{Binding ToggleTriggerEnabledCommand}"
                                       HorizontalContentAlignment="Stretch"
                                       VerticalContentAlignment="Stretch"
                                       Grid.Column="1">

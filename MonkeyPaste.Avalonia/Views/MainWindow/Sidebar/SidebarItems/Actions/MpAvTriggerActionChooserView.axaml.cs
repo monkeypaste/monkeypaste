@@ -46,7 +46,9 @@ namespace MonkeyPaste.Avalonia {
                     var g = this.FindControl<Grid>("TriggerSidebarContainer");
                     var vert_sv = this.FindControl<ScrollViewer>("TriggerScrollViewer");
                     var horiz_sv = this.FindControl<ScrollViewer>("PropertyScrollViewer");
+                    var oc = this.FindControl<Control>("TriggerSidebarOuterContainer");
                     var adc = this.FindControl<Control>("ActionDesignerOuterContainerBorder");
+                    var apc = this.FindControl<Control>("ActionPropertyOuterContainer");
                     if (g == null) {
                         return;
                     }
@@ -82,25 +84,35 @@ namespace MonkeyPaste.Avalonia {
                         vert_sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
                         vert_sv.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
 
-                        horiz_sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
+                        horiz_sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
                         horiz_sv.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
 
 
                         adc.MinHeight = 0;
+
+                        // NOTE setting the height here is needed or measure fails because height becomes NaN
+                        //apc.Height = Math.Min(apc.Bounds.Height, oc.Bounds.Height);
+                        //apc.Bind(
+                        //    Control.MaxHeightProperty,
+                        //    new Binding() {
+                        //        Source = oc,
+                        //        Path = nameof(Bounds.Height),
+                        //        Mode = BindingMode.OneWay
+                        //    });
                     } else {
                         g.RowDefinitions.AddRange(new[] { new RowDefinition(GridLength.Auto), new RowDefinition(GridLength.Star) });
                         g.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
-                        adc.MinHeight = 350;
-                        //adc.MaxHeight = double.PositiveInfinity;
-                        //adc.Height = double.NaN;
                         Grid.SetRow(adc, 1);
                         Grid.SetColumn(adc, 0);
 
-                        vert_sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
+                        vert_sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
                         vert_sv.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
 
                         horiz_sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
                         horiz_sv.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+
+                        adc.MinHeight = 350;
+                        //apc.MaxHeight = double.PositiveInfinity;
                     }
 
                     BindingContext.ResetDesignerViewCommand.Execute(null);

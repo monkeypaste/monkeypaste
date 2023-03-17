@@ -22,6 +22,11 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 		theme: "snow",
 		formula: true,
 		preserveWhiteSpace: true,
+		history: {
+			delay: 1000,
+			userOnly: false,
+			maxStack: MaxUndoLimit < 0 ? Number.MAX_SAFE_INTEGER : MaxUndoLimit
+		},
 		//syntax: true,
 		modules: {
 			toolbar: toolbarId,

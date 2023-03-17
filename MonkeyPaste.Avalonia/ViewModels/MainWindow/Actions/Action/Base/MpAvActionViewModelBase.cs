@@ -76,10 +76,30 @@ namespace MonkeyPaste.Avalonia {
             Debugger.Break();
             return "QuestiongMarkImage";
         }
+
+        public static string GetActionHexColor(MpActionType actionType) {
+            switch (actionType) {
+                case MpActionType.None:
+                    return MpSystemColors.Transparent;
+                case MpActionType.Trigger:
+                    return MpSystemColors.maroon;
+                case MpActionType.Analyze:
+                    return MpSystemColors.magenta;
+                case MpActionType.Classify:
+                    return MpSystemColors.tomato1;
+                case MpActionType.Compare:
+                    return MpSystemColors.darkturquoise;
+                case MpActionType.Repeater:
+                    return MpSystemColors.steelblue;
+                case MpActionType.FileWriter:
+                    return MpSystemColors.forestgreen;
+                default:
+                    throw new Exception($"Unknow action type: '{actionType}'");
+            }
+        }
         #endregion
 
         #region Interfaces
-
 
         #region MpITreeItemViewModel Implementation
 
@@ -169,20 +189,17 @@ namespace MonkeyPaste.Avalonia {
         //    }
         //}
         bool MpISaveOrCancelableViewModel.IsSaveCancelEnabled =>
-            true;
-        private bool _canSaveOrCancel = false;
+            false;
+
         public bool CanSaveOrCancel {
             get {
+                var toSave_pvml = ActionArgs.Where(x => x.HasModelChanged);
+                toSave_pvml.ForEach(x => x.SaveCurrentValueCommand.Execute(null));
                 bool result = ActionArgs.Any(x => x.HasModelChanged);
-                if (result != _canSaveOrCancel) {
-                    _canSaveOrCancel = result;
-                    OnPropertyChanged(nameof(CanSaveOrCancel));
-                    if (!_canSaveOrCancel) {
-                        // leaf actions need to use ActionArgs property change to update parameter properties
-                        OnPropertyChanged(nameof(ActionArgs));
-                    }
+                if (toSave_pvml.Any()) {
+                    OnPropertyChanged(nameof(ActionArgs));
                 }
-                return _canSaveOrCancel;
+                return false;
             }
         }
 
@@ -301,6 +318,7 @@ namespace MonkeyPaste.Avalonia {
         public virtual MpMenuItemViewModel PopupMenuViewModel {
             get {
                 return new MpMenuItemViewModel() {
+                    ParentObj = this,
                     SubItems = new List<MpMenuItemViewModel>() {
                         new MpMenuItemViewModel() {
                             Header = "Add",
@@ -398,17 +416,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Appearance
-        public string ActionBackgroundHexColor {
-            get {
-                string keyStr = $"{ActionType}ActionBrush";
-                var brush = Mp.Services.PlatformResource.GetResource(keyStr) as IBrush;
-                if (brush == null) {
-                    Debugger.Break();
-                    return MpSystemColors.Black;
-                }
-                return brush.ToHex();
-            }
-        }
+        public string ActionBackgroundHexColor =>
+            GetActionHexColor(ActionType);
 
         public string IconBackgroundHexColor {
             get {
@@ -1053,7 +1062,7 @@ namespace MonkeyPaste.Avalonia {
                     if (HasModelChanged) {
                         //HasModelChanged = false;
 
-                        Task.Run(async () => {
+                        Dispatcher.UIThread.Post(async () => {
                             IsBusy = true;
 
                             await Action.WriteToDatabaseAsync();
@@ -1225,10 +1234,6 @@ namespace MonkeyPaste.Avalonia {
                  navm.OnPropertyChanged(nameof(navm.Y));
                  Parent.FocusAction = navm;
 
-                 //if(RootTriggerActionViewModel.IsEnabled.IsTrue()) {
-                 //    navm.ValidateActionAsync().FireAndForgetSafeAsync(navm);
-                 //}
-
                  IsBusy = false;
              }, (args) => ActionType != MpActionType.None);
 
@@ -1280,7 +1285,13 @@ namespace MonkeyPaste.Avalonia {
             });
 
 
-
+        public ICommand ShowAddChildContextMenuCommand => new MpCommand<object>(
+            (args) => {
+                MpAvMenuExtension.ShowMenu(
+                    control: args as Control,
+                    mivm: ContextMenuViewModel,
+                    selectOnRightClick: true);
+            });
 
 
         #endregion

@@ -19,7 +19,7 @@
                     Value="0,10,0,0" />
         </Style>
         <!--  DATAGRID  -->
-        <Style Selector="DataGrid">
+        <Style Selector="DockPanel.dataPanel">
             <Setter Property="Margin"
                     Value="10" />
         </Style>
@@ -54,7 +54,8 @@
         <Label Classes="h1"
                Content="Applications" />
         <Border Classes="labelUnderline" />
-        <DockPanel VerticalAlignment="Top"
+        <DockPanel Classes="dataPanel"
+                   VerticalAlignment="Top"
                    x:DataType="local:MpAvAppCollectionViewModel"
                    DataContext="{x:Static local:MpAvAppCollectionViewModel.Instance}">
             <Button DockPanel.Dock="Bottom"
@@ -69,7 +70,7 @@
             </Button>
             <DataGrid Grid.Row="1"
                       x:Name="ExcludedAppDatagrid"
-                      Items="{Binding FilteredItems}" 
+                      Items="{Binding FilteredItems}"
                       SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                       SelectionMode="Single">
                 <DataGrid.Columns>
@@ -134,7 +135,8 @@
         <Label Classes="h1"
                Content="Websites" />
         <Border Classes="labelUnderline" />
-        <DockPanel VerticalAlignment="Top"
+        <DockPanel Classes="dataPanel"
+                   VerticalAlignment="Top"
                    x:DataType="local:MpAvUrlCollectionViewModel"
                    DataContext="{x:Static local:MpAvUrlCollectionViewModel.Instance}">
             <Button DockPanel.Dock="Bottom"

@@ -456,12 +456,12 @@ namespace MonkeyPaste.Avalonia {
 
         private MpQuillDefaultsRequestMessage GetDefaultsMessage() {
             return new MpQuillDefaultsRequestMessage() {
-
                 defaultFontFamily = MpPrefViewModel.Instance.DefaultEditableFontFamily,
                 defaultFontSize = MpPrefViewModel.Instance.DefaultFontSize.ToString() + "px",
                 isSpellCheckEnabled = MpPrefViewModel.Instance.IsSpellCheckEnabled,
                 currentTheme = MpPrefViewModel.Instance.CurrentThemeName,
-                bgOpacity = MpPrefViewModel.Instance.GlobalBgOpacity
+                bgOpacity = MpPrefViewModel.Instance.GlobalBgOpacity,
+                maxUndo = MpPrefViewModel.Instance.MaxUndoLimit
             };
         }
 

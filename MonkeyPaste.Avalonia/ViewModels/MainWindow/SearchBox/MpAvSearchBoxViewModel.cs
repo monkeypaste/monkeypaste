@@ -401,7 +401,12 @@ namespace MonkeyPaste.Avalonia {
                 MpMessenger.SendGlobal(MpMessageType.SelectPreviousMatch);
             });
 
-
+        public ICommand ExpandFromDragCommand => new MpCommand(
+            () => {
+                ToggleIsSearchBoxExpandedCommand.Execute(null);
+            }, () => {
+                return !IsExpanded;
+            });
 
         #endregion
     }

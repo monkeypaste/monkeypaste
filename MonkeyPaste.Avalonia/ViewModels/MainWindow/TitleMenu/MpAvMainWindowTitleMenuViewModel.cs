@@ -32,7 +32,7 @@ namespace MonkeyPaste.Avalonia {
         public double ZoomSliderShortMargin => 3;
         public double ZoomSliderLongMargin => 10;
 
-        public double TitleDragHandleLongLength => 40;
+        public double TitleDragHandleLongLength => 50;
         public double DefaultTitleMenuFixedLength => 20;
         public double TitleMenuWidth { get; set; }
         public double TitleMenuHeight { get; set; }

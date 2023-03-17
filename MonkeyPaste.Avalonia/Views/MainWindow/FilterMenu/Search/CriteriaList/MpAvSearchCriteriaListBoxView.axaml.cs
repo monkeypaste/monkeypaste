@@ -62,10 +62,27 @@ namespace MonkeyPaste.Avalonia {
             sclb.AutoScrollItemsControl(e);
 
             MpPoint sclb_mp = e.GetPosition(sclb).ToPortablePoint();
+            var gmp = sclb.PointToScreen(sclb_mp.ToAvPoint()).ToPortablePoint(sclb.VisualPixelDensity());
+            MpConsole.WriteLine("Mp: " + sclb_mp);
             var scicvm = MpAvSearchCriteriaItemCollectionViewModel.Instance;
 
             int drag_idx = drag_vm.SortOrderIdx;
-            int drop_idx = sclb.GetDropIdx(sclb_mp, Orientation.Vertical);
+            int drop_idx = -1;
+            for (int i = 0; i < sclb.ItemCount; i++) {
+                if (sclb.ContainerFromIndex(i) is ListBoxItem lbi) {
+                    var go = lbi.PointToScreen(new Point()).ToPortablePoint(lbi.VisualPixelDensity());
+                    var gb = lbi.Bounds.ToPortableRect();
+                    gb.Move(go);
+                    if (gb.Contains(gmp)) {
+                        drop_idx = i;
+                        if (gmp.Y > gb.Y + gb.Height / 2) {
+                            drop_idx++;
+                        }
+                        break;
+                    }
+
+                }
+            }
             MpConsole.WriteLine("(DragOver) DropIdx: " + drop_idx);
 
             if (drop_idx == scicvm.Items.Count) {

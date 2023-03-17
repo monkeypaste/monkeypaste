@@ -17,6 +17,9 @@
             0:0:0.2
         </sys:TimeSpan>
         <Thickness x:Key="SaveCancelVisibleListBoxMargin">0,55,0,0</Thickness>
+        <SolidColorBrush x:Key="ComboBoxForeground" Color="White" />
+        <SolidColorBrush x:Key="TextControlBackground" Color="White" />
+        <SolidColorBrush x:Key="CheckBoxForegroundUnchecked" Color="White" />
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
 
@@ -164,6 +167,24 @@
                     Value="{DynamicResource DefaultInvalidBrush}" />
         </Style>
 
+        <!--  CHECK BOXES  -->
+        <Style Selector="CheckBox:pointerover /template/ Border#NormalRectangle">
+            <Setter Property="BorderBrush"
+                    Value="Yellow" />
+            <!--<Setter Property="Width"
+                    Value="10" />
+            <Setter Property="Height"
+                    Value="10" />-->
+        </Style>
+        <Style Selector="CheckBox:unchecked /template/ Border#NormalRectangle">
+            <!--<Setter Property="Width"
+                    Value="10" />
+            <Setter Property="Height"
+                    Value="10" />-->
+          <Setter Property="BorderBrush"
+                    Value="White" />
+        </Style>
+
     </local:MpAvUserControl.Styles>
     <Grid x:Name="ParameterContainerGrid"
           HorizontalAlignment="Stretch"
@@ -213,7 +234,6 @@
         </Button>
         <ListBox x:Name="PluginParameterListBox"
                  Grid.Row="1"
-                 Margin="5,0"
                  Padding="0"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Top"

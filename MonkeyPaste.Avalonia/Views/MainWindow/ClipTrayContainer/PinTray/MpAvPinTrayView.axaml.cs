@@ -34,19 +34,19 @@ namespace MonkeyPaste.Avalonia {
         #region Drop Events
 
         private void DragEnter(object sender, DragEventArgs e) {
-            MpConsole.WriteLine("[DragEnter] PinTrayListBox: ");
+            //MpConsole.WriteLine("[DragEnter] PinTrayListBox: ");
             BindingContext.IsDragOverPinTray = true;
         }
 
         private void DragOver(object sender, DragEventArgs e) {
-            MpConsole.WriteLine("[DragOver] PinTrayListBox: ");
+            //MpConsole.WriteLine("[DragOver] PinTrayListBox: ");
             var ptr_lb = this.FindControl<ListBox>("PinTrayListBox");
             var ptr_mp = e.GetPosition(ptr_lb).ToPortablePoint();
             int drop_idx = ptr_lb.GetDropIdx(ptr_mp, Orientation.Horizontal);
 
             bool is_copy = e.KeyModifiers.HasFlag(KeyModifiers.Control);
             bool is_drop_valid = IsDropValid(e.Data, drop_idx, is_copy);
-            MpConsole.WriteLine("[DragOver] PinTrayListBox DropIdx: " + drop_idx + " IsCopy: " + is_copy + " IsValid: " + is_drop_valid);
+            //MpConsole.WriteLine("[DragOver] PinTrayListBox DropIdx: " + drop_idx + " IsCopy: " + is_copy + " IsValid: " + is_drop_valid);
             e.DragEffects = DragDropEffects.None;
             if (is_drop_valid) {
                 e.DragEffects = is_copy ? DragDropEffects.Copy : DragDropEffects.Move;
@@ -57,7 +57,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private void DragLeave(object sender, DragEventArgs e) {
-            MpConsole.WriteLine("[DragLeave] PinTrayListBox: ");
+            // MpConsole.WriteLine("[DragLeave] PinTrayListBox: ");
             ResetDrop();
         }
 
@@ -70,7 +70,7 @@ namespace MonkeyPaste.Avalonia {
 
             bool is_copy = e.KeyModifiers.HasFlag(KeyModifiers.Control);
             bool is_drop_valid = IsDropValid(e.Data, drop_idx, is_copy);
-            MpConsole.WriteLine("[Drop] PinTrayListBox DropIdx: " + drop_idx + " IsCopy: " + is_copy + " IsValid: " + is_drop_valid);
+            // MpConsole.WriteLine("[Drop] PinTrayListBox DropIdx: " + drop_idx + " IsCopy: " + is_copy + " IsValid: " + is_drop_valid);
 
             e.DragEffects = DragDropEffects.None;
             if (is_drop_valid) {
@@ -104,7 +104,7 @@ namespace MonkeyPaste.Avalonia {
         private bool IsDropValid(IDataObject avdo, int drop_idx, bool is_copy) {
             // called in DropExtension DragOver 
 
-            MpConsole.WriteLine("IsDropValid DropIdx: " + drop_idx);
+            //MpConsole.WriteLine("IsDropValid DropIdx: " + drop_idx);
             if (drop_idx < 0) {
                 return false;
             }
@@ -163,9 +163,11 @@ namespace MonkeyPaste.Avalonia {
                 Mp.Services.DataObjectHelperAsync
                 .ReadDragDropDataObjectAsync(avdo) as MpPortableDataObject;
 
+            bool from_ext = !avdo.ContainsInternalContentItem();
+
             var avdo_ci = await Mp.Services.CopyItemBuilder.BuildAsync(
                 pdo: mpdo,
-                force_ext_sources: false,
+                force_ext_sources: from_ext,
                 transType: MpTransactionType.Created);
 
             var drop_ctvm = await BindingContext.CreateClipTileViewModel(avdo_ci, -1);

@@ -25,11 +25,11 @@ namespace MonkeyPaste {
 
         public int MaximumUndoLimit {
             get {
-                return MpPrefViewModel.Instance.MaxUndoLimit; ;
+                return MpPrefViewModel.Instance.MaxUndoLimit;
             }
             set {
                 if (MaximumUndoLimit != value) {
-                    MpPrefViewModel.Instance.MaxUndoLimit = Math.Max(0, value);
+                    MpPrefViewModel.Instance.MaxUndoLimit = value;
                     OnPropertyChanged(nameof(MaximumUndoLimit));
                     TrimUndoList();
                 }
@@ -47,6 +47,9 @@ namespace MonkeyPaste {
             }
         }
 
+        public bool IsLimitless =>
+            MaximumUndoLimit < 0;
+
         public bool IsUndoRedoSuppressed {
             get {
                 return Mp.Services.FocusMonitor.IsSelfManagedHistoryControlFocused;
@@ -58,7 +61,9 @@ namespace MonkeyPaste {
 
         #region Constructors
 
-        private MpAvUndoManagerViewModel() : base(null) { }
+        private MpAvUndoManagerViewModel() : base(null) {
+        }
+
 
         #endregion
 
@@ -119,6 +124,9 @@ namespace MonkeyPaste {
         #region Private Methods
 
         private void TrimUndoList() {
+            if (IsLimitless) {
+                return;
+            }
             while (MaximumUndoLimit < UndoList.Count) {
                 UndoList.RemoveAt(0);
             }

@@ -228,6 +228,15 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public int SelectedItemIdx {
+            get => Items.IndexOf(SelectedItem);
+            set {
+                if (SelectedItemIdx != value) {
+                    SelectedItem = value < 0 || value >= Items.Count ? null : Items[value];
+                    OnPropertyChanged(nameof(SelectedItemIdx));
+                }
+            }
+        }
         public bool IsHovering { get; set; }
 
         public bool IsHandlerDropDownOpen { get; set; }

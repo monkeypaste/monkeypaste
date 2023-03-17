@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Media.Imaging;
+using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -101,19 +102,21 @@ namespace MonkeyPaste.Avalonia {
 
         protected override async void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpIcon i) {
-                var ivm = IconViewModels.FirstOrDefault(x => x.IconId == i.Id);
-                IsBusy = true;
+                Dispatcher.UIThread.Post(async () => {
+                    var ivm = IconViewModels.FirstOrDefault(x => x.IconId == i.Id);
+                    IsBusy = true;
 
-                if (ivm == null) {
-                    ivm = await CreateIconViewModel(i);
-                    IconViewModels.Add(ivm);
-                } else {
-                    await ivm.InitializeAsync(i);
-                }
-                while (ivm.IsBusy) {
-                    await Task.Delay(100);
-                }
-                IsBusy = false;
+                    if (ivm == null) {
+                        ivm = await CreateIconViewModel(i);
+                        IconViewModels.Add(ivm);
+                    } else {
+                        await ivm.InitializeAsync(i);
+                    }
+                    while (ivm.IsBusy) {
+                        await Task.Delay(100);
+                    }
+                    IsBusy = false;
+                });
             }
         }
 
@@ -170,6 +173,13 @@ namespace MonkeyPaste.Avalonia {
                 await img.WriteToDatabaseAsync();
             }
             await icon.CreateOrUpdateBorderAsync(forceHexColor: hexColor);
+
+            // wait for db handler
+            await Task.Delay(300);
+            while (IsAnyBusy) {
+                // wait for icon to be created or re-initialized
+                await Task.Delay(100);
+            }
             uivm.OnPropertyChanged(nameof(uivm.IconId));
         }
 
@@ -185,13 +195,12 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
-
                 var selectedImagePath = await Mp.Services.NativePathDialog
-                        .ShowFileDialogAsync($"Image", null, "png,gif,jpg,jpeg,bmp".Split(","));
+                        .ShowFileDialogAsync($"Image", null, FilePickerFileTypes.ImageAll);
 
                 MpAvMenuExtension.CloseMenu();
 
-                if (string.IsNullOrEmpty(selectedImagePath)) {
+                if (selectedImagePath.IsFile()) {
                     string imagePath = selectedImagePath;
                     var bmpSrc = new Bitmap(imagePath);
 

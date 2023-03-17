@@ -326,7 +326,7 @@ namespace MonkeyPaste.Avalonia {
             }
             set {
                 if (CurrentValue != value) {
-                    AddUndo(CurrentValue, value, $"{Label} Changed");
+                    //AddUndo(CurrentValue, value, $"{Label} Changed");
                     PresetValueModel.Value = value;
                     //HasModelChanged = true;
                     OnPropertyChanged(nameof(CurrentValue));
@@ -532,10 +532,14 @@ namespace MonkeyPaste.Avalonia {
                 return HasModelChanged;
             });
 
-        public ICommand SaveCurrentValueCommand => new MpCommand(
-            () => {
+        public ICommand SaveCurrentValueCommand => new MpCommand<object>(
+            (args) => {
                 SetLastValue(CurrentValue);
                 OnPropertyChanged(nameof(HasModelChanged));
+                if (args != null) {
+                    // skip write (for pref's at least)
+                    return;
+                }
                 Task.Run(async () => {
                     //IsBusy = true;
                     await PresetValueModel.WriteToDatabaseAsync();
@@ -543,7 +547,7 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 });
             },
-            () => {
+            (args) => {
                 return HasModelChanged;
             });
 

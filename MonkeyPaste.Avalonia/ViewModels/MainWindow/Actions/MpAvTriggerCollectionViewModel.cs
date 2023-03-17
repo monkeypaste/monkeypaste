@@ -240,11 +240,12 @@ namespace MonkeyPaste.Avalonia {
 
         public ObservableCollection<MpAvActionViewModelBase> Items { get; private set; } = new ObservableCollection<MpAvActionViewModelBase>();
 
-        public IEnumerable<MpAvTriggerActionViewModelBase> SortedTriggers =>
-            Items
-            .Where(x => x is MpAvTriggerActionViewModelBase)
-            .Cast<MpAvTriggerActionViewModelBase>()
-            .OrderBy(x => x.Label);
+        public ObservableCollection<MpAvTriggerActionViewModelBase> Triggers { get; private set; } = new ObservableCollection<MpAvTriggerActionViewModelBase>();
+        //public IEnumerable<MpAvTriggerActionViewModelBase> SortedTriggers =>
+        //    Items
+        //    .Where(x => x is MpAvTriggerActionViewModelBase)
+        //    .Cast<MpAvTriggerActionViewModelBase>()
+        //    .OrderBy(x => x.Label);
 
         public MpAvTriggerActionViewModelBase SelectedTrigger { get; set; }
         public MpAvActionViewModelBase FocusAction { get; set; }
@@ -269,11 +270,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsHorizontal =>
+            SidebarOrientation == Orientation.Horizontal;
+
         public bool IsDesignerWindowOpen { get; set; }
 
         public int SelectedTriggerIdx {
-            get => SortedTriggers.IndexOf(SelectedTrigger);
-            set => SelectedTrigger = SortedTriggers.ElementAtOrDefault(value);
+            get => Triggers.IndexOf(SelectedTrigger);
+            set => SelectedTrigger = Triggers.ElementAtOrDefault(value);
         }
         public bool IsAnyBusy {
             get {
@@ -380,7 +384,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public string GetUniqueTriggerName(string given_name) {
-            if (!SortedTriggers.Any(x => x.Label.ToLower() == given_name)) {
+            if (!Triggers.Any(x => x.Label.ToLower() == given_name)) {
                 return given_name;
             }
             int uniqueIdx = 1;
@@ -389,7 +393,7 @@ namespace MonkeyPaste.Avalonia {
                                         given_name.ToLower(),
                                         uniqueIdx);
 
-            while (SortedTriggers.Any(x => x.Label.ToLower() == testName)) {
+            while (Triggers.Any(x => x.Label.ToLower() == testName)) {
                 uniqueIdx++;
                 testName = string.Format(
                                         @"{0}{1}",
@@ -458,6 +462,7 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                 case nameof(FocusAction):
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
+                    OnPropertyChanged(nameof(SelectedTriggerIdx));
                     break;
                 case nameof(SelectedTrigger):
                     FocusAction = SelectedTrigger;
@@ -478,16 +483,31 @@ namespace MonkeyPaste.Avalonia {
 
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             OnPropertyChanged(nameof(Items));
-            OnPropertyChanged(nameof(SortedTriggers));
             Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsTrigger)));
             Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsActionDesignerVisible)));
-            //OnPropertyChanged(nameof(Triggers));
+
+            if (e.NewItems != null) {
+                foreach (MpAvActionViewModelBase avm in e.NewItems) {
+                    if (avm is MpAvTriggerActionViewModelBase tvmb &&
+                        !Triggers.Contains(tvmb)) {
+                        Triggers.Add(tvmb);
+                    }
+                }
+            }
+            if (e.OldItems != null) {
+                foreach (MpAvActionViewModelBase avm in e.OldItems) {
+                    if (avm is MpAvTriggerActionViewModelBase tvmb) {
+                        Triggers.Remove(tvmb);
+                    }
+                }
+            }
         }
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.SidebarItemSizeChanged:
                     OnPropertyChanged(nameof(SidebarOrientation));
+                    OnPropertyChanged(nameof(IsHorizontal));
                     break;
             }
         }

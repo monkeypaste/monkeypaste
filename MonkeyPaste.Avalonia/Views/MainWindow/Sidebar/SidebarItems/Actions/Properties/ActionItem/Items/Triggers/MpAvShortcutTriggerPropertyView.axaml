@@ -18,7 +18,6 @@
           ColumnDefinitions="0.3*,*">
         <TextBlock Grid.Row="0"
                    Grid.Column="0"
-                   Classes="actionProperty"
                    Text="Shortcut" />
         <Button Grid.Row="0"
                 Grid.Column="1"

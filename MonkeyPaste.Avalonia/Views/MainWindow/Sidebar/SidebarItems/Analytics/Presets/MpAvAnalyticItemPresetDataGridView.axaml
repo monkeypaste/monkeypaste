@@ -63,7 +63,7 @@
 
                                 <Border BorderThickness="0"
                                         Padding="3"
-                                        CornerRadius="0">
+                                        CornerRadius="5">
                                     <Button x:Name="PresetIcon"
                                             BorderThickness="0"
                                             CornerRadius="0"

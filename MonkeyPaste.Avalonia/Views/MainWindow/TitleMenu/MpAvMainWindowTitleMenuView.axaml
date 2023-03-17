@@ -78,11 +78,62 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <!--  RESIZER  -->
+        <Style Selector="Border.resizer">
+            <Setter Property="Cursor"
+                    Value="SizeNorthSouth" />
+            <Setter Property="Background"
+                    Value="{StaticResource HitTestableTransparent}" />
+        </Style>
+        <Style Selector="Border.resizer:pointerover">
+            <Setter Property="Background"
+                    Value="Yellow" />
+        </Style>
+
+        <Style Selector="Border.resizer.bottom, Border.resizer.top">
+            <Setter Property="Cursor"
+                    Value="SizeNorthSouth" />
+            <Setter Property="Width"
+                    Value="{StaticResource NaN}" />
+            <Setter Property="Height"
+                    Value="1" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Stretch" />
+        </Style>
+        <Style Selector="Border.resizer.left, Border.resizer.right">
+            <Setter Property="Cursor"
+                    Value="SizeWestEast" />
+            <Setter Property="Width"
+                    Value="1" />
+            <Setter Property="Height"
+                    Value="{StaticResource NaN}" />
+            <Setter Property="VerticalAlignment"
+                    Value="Stretch" />
+        </Style>
+
+        <Style Selector="Border.resizer.left">
+            <Setter Property="HorizontalAlignment"
+                    Value="Right" />
+        </Style>
+        <Style Selector="Border.resizer.right">
+            <Setter Property="HorizontalAlignment"
+                    Value="Left" />
+        </Style>
+
+        <Style Selector="Border.resizer.top">
+            <Setter Property="VerticalAlignment"
+                    Value="Bottom" />
+        </Style>
+        <Style Selector="Border.resizer.bottom">
+            <Setter Property="VerticalAlignment"
+                    Value="Top" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Grid x:Name="TitlePanel"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch">
-        <!--  Left Side  -->
+        <!--  LEFT  -->
 
         <StackPanel x:Name="LeftStackPanel"
                     Orientation="Horizontal"
@@ -117,18 +168,24 @@
             </ToggleButton>
         </StackPanel>
 
+        <!--  MIDDLE (DRAG HANDLE)  -->
         <Button x:Name="WindowOrientationHandleButton"
                 BorderThickness="0"
                 Cursor="SizeAll"
                 Classes="noBg noHoverBg outlineOver"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Stretch">
-            <Image Margin="5,0">
-                <Image.RenderTransform>
-                    <RotateTransform />
-                </Image.RenderTransform>
+                VerticalAlignment="Stretch"
+                Width="50">
+            <Button.RenderTransform>
+                <RotateTransform />
+            </Button.RenderTransform>
+            <Image HorizontalAlignment="Stretch"
+                   VerticalAlignment="Stretch"
+                   Margin="5,0">
             </Image>
         </Button>
+
+        <!--  RIGHT  -->
 
         <StackPanel x:Name="RightStackPanel"
                     Orientation="Horizontal"
@@ -230,5 +287,31 @@
             </Button>
         </StackPanel>
 
+        <!--  RESIZER  -->
+
+
+        <Border x:Name="MainWindowResizerBorder"
+                DataContext="{x:Static local:MpAvMainWindowViewModel.Instance}"
+                x:DataType="local:MpAvMainWindowViewModel"
+                Classes="resizer"
+                Classes.left="{Binding IsLeftOrientation}"
+                Classes.top="{Binding IsTopOrientation}"
+                Classes.right="{Binding IsRightOrientation}"
+                Classes.bottom="{Binding IsBottomOrientation}"
+                IsVisible="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                local:MpAvResizeExtension.MinHeight="{Binding MainWindowMinHeight}"
+                local:MpAvResizeExtension.MaxHeight="{Binding MainWindowMaxHeight}"
+                local:MpAvResizeExtension.MinWidth="{Binding MainWindowMinWidth}"
+                local:MpAvResizeExtension.MaxWidth="{Binding MainWindowMaxWidth}"
+                local:MpAvResizeExtension.BoundWidth="{Binding MainWindowWidth, Mode=TwoWay}"
+                local:MpAvResizeExtension.BoundHeight="{Binding MainWindowHeight, Mode=TwoWay}"
+                local:MpAvResizeExtension.DefaultWidth="{Binding MainWindowDefaultWidth}"
+                local:MpAvResizeExtension.DefaultHeight="{Binding MainWindowDefaultHeight}"
+                local:MpAvResizeExtension.CanResize="{Binding CanResize, Mode=TwoWay}"
+                local:MpAvResizeExtension.IsResizing="{Binding IsResizing, Mode=TwoWay}"
+                local:MpAvResizeExtension.XFactor="{Binding ResizeXFactor}"
+                local:MpAvResizeExtension.YFactor="{Binding ResizeYFactor}"
+                local:MpAvResizeExtension.GlobalResizeMessage="MainWindowSizeChanged"
+                local:MpAvResizeExtension.IsEnabled="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}, FallbackValue=False, TargetNullValue=False}" />
     </Grid>
 </local:MpAvUserControl>

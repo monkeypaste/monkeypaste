@@ -228,7 +228,9 @@
                     Classes.valid="{Binding IsSearchValid}"
                     Classes.expanded="{Binding IsExpanded}"
                     Classes.unexpanded="{Binding !IsExpanded}"
-                    Classes.expandAnimating="{Binding IsExpandAnimating}">
+                    Classes.expandAnimating="{Binding IsExpandAnimating}"
+                    local:MpAvPointerCommandExtension.IsEnabled="True"
+                    local:MpAvPointerCommandExtension.DragEnterCommand="{Binding ExpandFromDragCommand}">
                 <DockPanel LastChildFill="True">
 
                     <!--  Search Icon Dropdown Button  -->
@@ -383,6 +385,8 @@
                       Grid.Column="1"
                       VerticalAlignment="Stretch"
                       HorizontalAlignment="Stretch"
+                      local:MpAvPointerCommandExtension.IsEnabled="True"
+                      local:MpAvPointerCommandExtension.DragEnterCommand="{Binding ExpandCriteriaFromDragEnterCommand, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
                       IsEnabled="{Binding !IsCriteriaWindowOpen, Mode=OneWay, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
                       IsChecked="{Binding IsExpanded, Mode=TwoWay, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
                       Classes="noBg noHoverBg outlineOver"

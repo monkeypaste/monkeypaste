@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common {
     public static class MpFileIo {
+
+        static ReaderWriterLock locker = new ReaderWriterLock();
         public static async Task<string> ToFileAsync(
             this string fileData,
             string forceDir = "",
@@ -344,6 +346,7 @@ namespace MonkeyPaste.Common {
 
         public static void AppendTextToFile(string path, string textToAppend) {
             try {
+                locker.AcquireWriterLock(int.MaxValue);
                 if (!File.Exists(path)) {
                     // Create a file to write to.
                     using (var sw = File.CreateText(path)) {
@@ -360,6 +363,10 @@ namespace MonkeyPaste.Common {
             catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Error appending text '{textToAppend}' to path '{path}'");
                 MpConsole.WriteTraceLine($"With exception: {ex}");
+            }
+            finally {
+
+                locker.ReleaseWriterLock();
             }
         }
 
@@ -504,6 +511,7 @@ namespace MonkeyPaste.Common {
         }
 
         public static string WriteTextToFile(string filePath, string text, bool isTemporary) {
+            bool success = true;
             try {
                 if (filePath.ToLower().Contains(@".tmp")) {
                     string extension = string.Empty;
@@ -516,36 +524,43 @@ namespace MonkeyPaste.Common {
                     }
                     filePath = filePath.ToLower().Replace(@".tmp", extension);
                 }
-                using (var of = new StreamWriter(filePath)) {
-                    of.Write(text);
-                    of.Close();
-                    if (isTemporary && filePath.IsUnderTemporaryFolder()) {
-                        MpTempFileManager.AddTempFilePath(filePath);
-                    }
-                    return filePath;
-                }
+                locker.AcquireWriterLock(int.MaxValue);
+                File.WriteAllText(filePath, text);
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Error writing to path '{filePath}' with text '{text}'", ex);
-                return null;
+                success = false;
             }
+            finally {
+                locker.ReleaseWriterLock();
+            }
+            if (success && isTemporary && filePath.IsUnderTemporaryFolder()) {
+                MpTempFileManager.AddTempFilePath(filePath);
+            }
+            return filePath;
         }
 
         public static string WriteByteArrayToFile(string filePath, byte[] byteArray, bool isTemporary) {
+            bool success = true;
             try {
                 if (filePath.ToLower().Contains(@".tmp")) {
                     filePath = filePath.ToLower().Replace(@".tmp", @".png");
                 }
+                locker.AcquireWriterLock(int.MaxValue);
                 File.WriteAllBytes(filePath, byteArray);
-                if (isTemporary && filePath.IsUnderTemporaryFolder()) {
-                    MpTempFileManager.AddTempFilePath(filePath);
-                }
-                return filePath;
+
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Error writing to path {filePath} for byte array " + (byteArray == null ? "which is null" : "which is NOT null"), ex);
-                return null;
+                success = false;
             }
+            finally {
+                locker.ReleaseWriterLock();
+            }
+            if (success && isTemporary && filePath.IsUnderTemporaryFolder()) {
+                MpTempFileManager.AddTempFilePath(filePath);
+            }
+            return filePath;
         }
 
         public static string GetLnkTargetPath(string filepath) {

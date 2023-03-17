@@ -739,21 +739,23 @@ namespace MonkeyPaste.Avalonia {
             //double scrollBarSize_y = ScrollBarFixedAxisSize + (IsQueryVerticalScrollBarVisible ? 30 : 0);
             //_defaultQueryItemHeight = Math.Clamp(query_item_length - scrollBarSize_y, 0, MaxTileHeight);
 
-            double query_item_length = QueryTrayFixedDimensionLength * ZoomFactor;
-            double pin_item_length = PinTrayFixedDimensionLength * ZoomFactor;
-            if (ListOrientation == Orientation.Horizontal) {
-                _defaultQueryItemWidth = query_item_length - QueryTrayVerticalScrollBarWidth;
-                _defaultQueryItemHeight = QueryTrayFixedDimensionLength - QueryTrayHorizontalScrollBarHeight;
+            //double query_item_length = QueryTrayFixedDimensionLength * ZoomFactor;
+            //double pin_item_length = PinTrayFixedDimensionLength * ZoomFactor;
+            //if (ListOrientation == Orientation.Horizontal) {
+            //    _defaultQueryItemWidth = query_item_length - QueryTrayVerticalScrollBarWidth;
+            //    _defaultQueryItemHeight = QueryTrayFixedDimensionLength - QueryTrayHorizontalScrollBarHeight;
 
-                _defaultPinItemWidth = pin_item_length;
-                _defaultPinItemHeight = PinTrayFixedDimensionLength;
-            } else {
-                _defaultQueryItemWidth = QueryTrayFixedDimensionLength - QueryTrayVerticalScrollBarWidth;
-                _defaultQueryItemHeight = query_item_length - QueryTrayHorizontalScrollBarHeight;
+            //    _defaultPinItemWidth = pin_item_length;
+            //    _defaultPinItemHeight = PinTrayFixedDimensionLength;
+            //} else {
+            //    _defaultQueryItemWidth = QueryTrayFixedDimensionLength - QueryTrayVerticalScrollBarWidth;
+            //    _defaultQueryItemHeight = query_item_length - QueryTrayHorizontalScrollBarHeight;
 
-                _defaultPinItemWidth = PinTrayFixedDimensionLength;
-                _defaultPinItemHeight = pin_item_length;
-            }
+            //    _defaultPinItemWidth = PinTrayFixedDimensionLength;
+            //    _defaultPinItemHeight = pin_item_length;
+            //}
+            double s = DEFAULT_ITEM_SIZE * ZoomFactor;
+            _defaultQueryItemWidth = _defaultQueryItemHeight = _defaultPinItemWidth = _defaultPinItemHeight = s;
             OnPropertyChanged(nameof(DefaultQueryItemWidth));
             OnPropertyChanged(nameof(DefaultQueryItemHeight));
             OnPropertyChanged(nameof(DefaultPinItemWidth));
@@ -2024,6 +2026,13 @@ namespace MonkeyPaste.Avalonia {
 
                     OnPropertyChanged(nameof(IsQueryHorizontalScrollBarVisible));
                     OnPropertyChanged(nameof(IsQueryVerticalScrollBarVisible));
+                    break;
+                case nameof(ObservedQueryTrayScreenWidth):
+                case nameof(ObservedQueryTrayScreenHeight):
+                    if (LayoutType == MpClipTrayLayoutType.Stack) {
+                        break;
+                    }
+                    RefreshQueryTrayLayout();
                     break;
                 case nameof(ScrollOffsetX):
                 case nameof(ScrollOffsetY):

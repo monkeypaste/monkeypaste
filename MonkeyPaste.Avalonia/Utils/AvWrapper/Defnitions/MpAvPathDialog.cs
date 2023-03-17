@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvPathDialog : MpINativePathDialog {
-        public async Task<string> ShowFileDialogAsync(string title = "", string initDir = "", string[] filters = null, bool resolveShortcutPath = false) {
+        public async Task<string> ShowFileDialogAsync(string title = "", string initDir = "", object filters = null, bool resolveShortcutPath = false) {
             var result = await ShowFileOrFolderDialogAsync(false, title, initDir, filters, resolveShortcutPath);
             return result;
         }
@@ -19,8 +19,13 @@ namespace MonkeyPaste.Avalonia {
             return result;
         }
 
-        private async Task<string> ShowFileOrFolderDialogAsync(bool isFolder, string title, string initDir, string[] filters, bool resolveShortcutPath = false) {
+        private async Task<string> ShowFileOrFolderDialogAsync(bool isFolder, string title, string initDir, object filtersObj, bool resolveShortcutPath = false) {
             title = title == null ? $"Select {(isFolder ? "Folder" : "File")}" : title;
+            IReadOnlyList<FilePickerFileType> filters = filtersObj as IReadOnlyList<FilePickerFileType>;
+            if (filters == null) {
+                filters = new[] { FilePickerFileTypes.All };
+            }
+
             var storage_provider = GetStorageProvider();
             if (storage_provider == null) {
                 return null;
@@ -41,7 +46,7 @@ namespace MonkeyPaste.Avalonia {
                        new FilePickerOpenOptions() {
                            AllowMultiple = false,
                            Title = title,
-                           FileTypeFilter = filters == null ? null : filters.Select(x => new FilePickerFileType(x)).ToList(),
+                           FileTypeFilter = filters,
                            SuggestedStartLocation = start_location
                        });
             }

@@ -1,7 +1,6 @@
 ﻿<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvActionDesignerItemView"
                        xmlns="https://github.com/avaloniaui"
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                       
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:sys="clr-namespace:System;assembly=mscorlib"
@@ -11,8 +10,101 @@
                        x:TypeArguments="local:MpAvActionViewModelBase"
                        x:DataType="local:MpAvActionViewModelBase"
                        mc:Ignorable="d">
+    <local:MpAvUserControl.Styles>
+        <!--  DESIGNER ITEM BORDER  -->
+
+        <Style Selector="ContentControl#DesignerItemContentControl Border"
+               x:DataType="local:MpAvActionViewModelBase">
+            <Setter Property="BorderThickness"
+                    Value="1" />
+            <Setter Property="BorderBrush"
+                    Value="White" />
+            <Setter Property="CornerRadius"
+                    Value="5" />
+            <Setter Property="Width"
+                    Value="20" />
+            <Setter Property="Height"
+                    Value="20" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+        </Style>
+
+        <!--  DESIGNER ITEM SHAPE  -->
+
+        <Style Selector="ContentControl#DesignerItemContentControl :is(Shape)"
+               x:DataType="local:MpAvActionViewModelBase">
+            <Setter Property="Fill"
+                    Value="{Binding ActionBackgroundHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}" />
+        </Style>
+        <Style Selector="ContentControl#DesignerItemContentControl :is(Shape)"
+               x:DataType="local:MpAvActionViewModelBase">
+            <Setter Property="Stroke"
+                    Value="White" />
+            <Setter Property="Width"
+                    Value="{Binding Width}" />
+            <Setter Property="Height"
+                    Value="{Binding Height}" />
+            <Setter Property="StrokeThickness"
+                    Value="2.5" />
+        </Style>
+        <Style Selector="ContentControl#DesignerItemContentControl.selected :is(Shape)">
+            <Setter Property="Stroke"
+                    Value="{DynamicResource SelectedBorderBrush}" />
+        </Style>
+        <Style Selector="ContentControl#DesignerItemContentControl:pointerover :is(Shape)">
+            <Setter Property="Stroke"
+                    Value="{DynamicResource HoverDefaultBorderBrush}" />
+        </Style>
+        <Style Selector="ContentControl#DesignerItemContentControl.selected:pointerover :is(Shape)"
+               x:DataType="local:MpAvActionViewModelBase">
+            <Setter Property="Stroke"
+                    Value="{DynamicResource HoverSelectedBorderBrush}" />
+        </Style>
+
+        <!--  DESIGNER ITEM IMAGE  -->
+
+        <Style Selector="ContentControl#DesignerItemContentControl Image"
+               x:DataType="local:MpAvActionViewModelBase">
+            <Setter Property="Stretch"
+                    Value="UniformToFill" />
+            <Setter Property="IsHitTestVisible"
+                    Value="False" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Stretch" />
+            <Setter Property="VerticalAlignment"
+                    Value="Stretch" />
+            <!--<Setter Property="Margin"
+                    Value="12" />
+            <Setter Property="ClipToBounds"
+                    Value="False" />-->
+        </Style>
+        <Style Selector="ContentControl#DesignerItemContentControl:not(.valid) Image"
+               x:DataType="local:MpAvActionViewModelBase">
+            <Setter Property="Source"
+                    Value="{Binding IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+        </Style>
+        <Style Selector="ContentControl#DesignerItemContentControl.valid Image"
+               x:DataType="local:MpAvActionViewModelBase">
+            <Setter Property="Stretch"
+                    Value="Uniform" />
+            <Setter Property="Source">
+                <Setter.Value>
+                    <MultiBinding Converter="{x:Static local:MpAvMultiObjToContrastTintedBitmapConverter.Instance}">
+                        <Binding Path="IconBackgroundHexColor" />
+                        <Binding Path="IconResourceObj" />
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </local:MpAvUserControl.Styles>
     <Border HorizontalAlignment="Center"
             VerticalAlignment="Stretch"
+            local:MpAvPointerCommandExtension.IsEnabled="True"
+            local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
+            local:MpAvPointerCommandExtension.RightPressCommand="{Binding ShowAddChildContextMenuCommand}"
+            local:MpAvPointerCommandExtension.RightPressCommandParameter="{Binding $self}"
             local:MpAvBoundsObserverExtension.IsEnabled="True"
             local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedDesignerItemBounds, Mode=TwoWay}">
         <StackPanel Orientation="Vertical"
@@ -23,9 +115,6 @@
                             Classes.valid="{Binding IsValid}"
                             Width="{Binding Width}"
                             Height="{Binding Height}"
-                            local:MpAvMenuExtension.IsEnabled="True"
-                            local:MpAvMenuExtension.SelectOnRightClick="True"
-                            local:MpAvMenuExtension.SuppressMenuLeftClick="True"
                             local:MpAvIsHoveringExtension.IsEnabled="True"
                             local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
                             local:MpAvIsHoveringExtension.HoverCursor="ResizeAll"
@@ -58,80 +147,94 @@
                         <!--  Trigger Circle  -->
 
                         <DataTemplate x:Key="TriggerDesignerTemplate">
-                            <Grid>
-                                <Ellipse />
-                                <Image />
-                            </Grid>
+                            <Border>
+                                <Grid>
+                                    <Ellipse />
+                                    <Image />
+                                </Grid>
+                            </Border>
                         </DataTemplate>
 
                         <!--  Compare Diamond  -->
 
                         <DataTemplate x:Key="CompareDesignerTemplate">
-                            <Grid>
-                                <Polygon Points="0,25 25,0 50,25 25,50" />
-                                <Image />
-                            </Grid>
+                            <Border>
+                                <Grid>
+                                    <Polygon Points="0,25 25,0 50,25 25,50" />
+                                    <Image />
+                                </Grid>
+                            </Border>
                         </DataTemplate>
 
                         <!--  Analyze Box  -->
 
                         <DataTemplate x:Key="AnalyzeDesignerTemplate">
-                            <Grid>
-                                <Rectangle StrokeJoin="Round"
-                                           StrokeLineCap="Round" />
-                                <Image />
-                            </Grid>
+                            <Border>
+                                <Grid>
+                                    <Rectangle StrokeJoin="Round"
+                                               StrokeLineCap="Round" />
+                                    <Image />
+                                </Grid>
+                            </Border>
                         </DataTemplate>
 
                         <!--  Classify Triangle  -->
 
                         <DataTemplate x:Key="ClassifyDesignerTemplate">
-                            <Grid ClipToBounds="False">
-                                <Polygon Points="25,0 50,50 0,50" />
-                                <Image>
-                                    <Image.RenderTransform>
-                                        <TranslateTransform X="0"
-                                                            Y="10" />
-                                    </Image.RenderTransform>
-                                </Image>
-                            </Grid>
+                            <Border>
+                                <Grid ClipToBounds="False">
+                                    <Polygon Points="25,0 50,50 0,50" />
+                                    <Image>
+                                        <Image.RenderTransform>
+                                            <TranslateTransform X="0"
+                                                                Y="10" />
+                                        </Image.RenderTransform>
+                                    </Image>
+                                </Grid>
+                            </Border>
                         </DataTemplate>
 
                         <!--  Macro Box  -->
 
                         <DataTemplate x:Key="MacroDesignerTemplate">
-                            <Grid>
-                                <Rectangle StrokeJoin="Round"
-                                           StrokeLineCap="Round" />
-                                <Image />
-                            </Grid>
+                            <Border>
+                                <Grid>
+                                    <Rectangle StrokeJoin="Round"
+                                               StrokeLineCap="Round" />
+                                    <Image />
+                                </Grid>
+                            </Border>
                         </DataTemplate>
 
                         <!--  File Writer Box  -->
 
                         <DataTemplate x:Key="FileWriterDesignerTemplate">
-                            <Grid>
-                                <Rectangle StrokeJoin="Round"
-                                           StrokeLineCap="Round" />
-                                <Image />
-                            </Grid>
+                            <Border>
+                                <Grid>
+                                    <Rectangle StrokeJoin="Round"
+                                               StrokeLineCap="Round" />
+                                    <Image />
+                                </Grid>
+                            </Border>
                         </DataTemplate>
 
                         <!--  Timer Triangle  -->
 
                         <DataTemplate x:Key="TimerDesignerTemplate">
-                            <Grid ClipToBounds="False">
-                                <Polygon Points="25,0 50,50 0,50" />
-                                <Image Width="20"
-                                       Height="20"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center">
-                                    <Image.RenderTransform>
-                                        <TranslateTransform X="0"
-                                                            Y="10" />
-                                    </Image.RenderTransform>
-                                </Image>
-                            </Grid>
+                            <Border>
+                                <Grid ClipToBounds="False">
+                                    <Polygon Points="25,0 50,50 0,50" />
+                                    <Image Width="20"
+                                           Height="20"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center">
+                                        <Image.RenderTransform>
+                                            <TranslateTransform X="0"
+                                                                Y="10" />
+                                        </Image.RenderTransform>
+                                    </Image>
+                                </Grid>
+                            </Border>
                         </DataTemplate>
                     </local:MpAvActionDesignerItemTemplateSelector>
                 </ContentControl.DataTemplates>

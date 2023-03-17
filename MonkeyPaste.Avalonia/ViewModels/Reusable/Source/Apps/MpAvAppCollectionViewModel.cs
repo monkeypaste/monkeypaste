@@ -1,4 +1,5 @@
 ﻿
+using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using System;
@@ -310,7 +311,7 @@ namespace MonkeyPaste.Avalonia {
             async () => {
                 string appPath = await Mp.Services.NativePathDialog.ShowFileDialogAsync(
                     title: "Select application path",
-                    filters: MpFileIo.GetOsExecutableFileFilters().Split(","),
+                    filters: null,
                     resolveShortcutPath: true);
 
                 if (string.IsNullOrEmpty(appPath)) {

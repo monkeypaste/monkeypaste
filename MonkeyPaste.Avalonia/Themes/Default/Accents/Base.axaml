@@ -3,6 +3,8 @@
        xmlns:local="using:MonkeyPaste.Avalonia"
        xmlns:sys="clr-namespace:System;assembly=mscorlib">
     <Style.Resources>
+        <sys:Double x:Key="NaN">NaN</sys:Double>
+
         <sys:Double x:Key="GlobalBgOpacity_desktop">0.7</sys:Double>
         <sys:Double x:Key="GlobalBgOpacity_mobile">1.0</sys:Double>
         <sys:Double x:Key="GlobalBgOpacity">0.7</sys:Double>
@@ -19,25 +21,6 @@
         <SolidColorBrush x:Key="SemiTransparentTestBrush1" Color="Yellow" Opacity="0.5" />
         <SolidColorBrush x:Key="EnabledHighlightBrush">Lime</SolidColorBrush>
         <SolidColorBrush x:Key="DisabledHighlightBrush">Red</SolidColorBrush>
-
-        <!--<SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">
-            Transparent
-        </SolidColorBrush>
-        <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">
-            Transparent
-        </SolidColorBrush>
-        <SolidColorBrush x:Key="SystemControlHighlightListAccentHighBrush">
-            Transparent
-        </SolidColorBrush>
-        <SolidColorBrush x:Key="SystemControlHighlightListLowBrush">
-            Transparent
-        </SolidColorBrush>
-        <SolidColorBrush x:Key="SystemControlHighlightListMediumBrush">
-            Transparent
-        </SolidColorBrush>
-        <SolidColorBrush x:Key="SystemControlHighlightListHighBrush">
-            Transparent
-        </SolidColorBrush>-->
 
     </Style.Resources>
 </Style>

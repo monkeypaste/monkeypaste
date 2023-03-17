@@ -19,11 +19,6 @@
               Width="{Binding MainWindowWidth}"
               Height="{Binding MainWindowHeight}">
 
-            <!--  Title Menu  -->
-            <local:MpAvMainWindowTitleMenuView x:Name="MainWindowTitleView"
-                                               Grid.Row="0"
-                                               HorizontalAlignment="Stretch"
-                                               VerticalAlignment="Stretch" />
 
             <!--  Filter Menu  -->
             <local:MpAvFilterMenuView x:Name="FilterMenuView"
@@ -35,7 +30,6 @@
 
             <Grid x:Name="MainWindowTrayGrid"
                   Grid.Row="3"
-                  x:CompileBindings="False"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch">
                 <!--  SIDEBAR BUTTONS  -->
@@ -50,13 +44,15 @@
 
                 <!--  SELECTED SIDEBAR ITEM  -->
                 <Border x:Name="SelectedSidebarContainerBorder"
-                        x:CompileBindings="False"
+                        x:DataType="local:MpAvSidebarItemCollectionViewModel"
+                        DataContext="{x:Static local:MpAvSidebarItemCollectionViewModel.Instance}"
                         Background="{DynamicResource MainWindowBgBrush}"
                         Grid.Column="1"
-                        DataContext="{Binding LastSelectedItem, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch">
                     <ContentControl x:Name="SelectedSidebarContentControl"
+                                    x:DataType="pcl:MpISidebarItemViewModel"
+                                    DataContext="{Binding LastSelectedItem}"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Stretch"
                                     HorizontalContentAlignment="Stretch"
@@ -134,17 +130,12 @@
                 </Border>
             </Grid>
 
-            <!--  Resize Handle  -->
 
-            <local:MpAvMainWindowResizerView x:Name="MainWindowResizerView"
-                                             IsVisible="{Binding IsDesktop}"
-                                             ZIndex="1000"
-                                             Background="Transparent"
-                                             RenderTransformOrigin="0,0">
-                <local:MpAvMainWindowResizerView.RenderTransform>
-                    <TranslateTransform />
-                </local:MpAvMainWindowResizerView.RenderTransform>
-            </local:MpAvMainWindowResizerView>
+            <!--  Title Menu  -->
+            <local:MpAvMainWindowTitleMenuView x:Name="MainWindowTitleView"
+                                               Grid.Row="0"
+                                               HorizontalAlignment="Stretch"
+                                               VerticalAlignment="Stretch" />
         </Grid>
     </Canvas>
 </local:MpAvUserControl>

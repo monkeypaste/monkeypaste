@@ -33,7 +33,7 @@
                         <Border Classes="iconLabelComboBox"
                                 Grid.Row="2"
                                 Grid.Column="0">
-                            <ComboBox SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                            <ComboBox SelectedIndex="{Binding SelectedItemIdx, Mode=TwoWay}"
                                       Items="{Binding Items}">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
@@ -82,8 +82,7 @@
                                 <local:MpAvHandledClipboardFormatsItemPresetDataGridView Grid.Row="1"
                                                                                          Grid.Column="0"
                                                                                          Margin="0,5,0,0"
-                                                                                         VerticalAlignment="Top"
-                                                                                          />
+                                                                                         VerticalAlignment="Top" />
                             </StackPanel>
                         </Border>
                     </StackPanel>
@@ -109,8 +108,7 @@
                             <TransitioningContentControl.ContentTemplate>
                                 <DataTemplate DataType="local:MpAvClipboardFormatPresetViewModel">
                                     <local:MpAvPluginParameterListBoxView HorizontalAlignment="Stretch"
-                                                                          VerticalAlignment="Stretch"
-                                                                           />
+                                                                          VerticalAlignment="Stretch" />
                                 </DataTemplate>
                             </TransitioningContentControl.ContentTemplate>
                         </TransitioningContentControl>

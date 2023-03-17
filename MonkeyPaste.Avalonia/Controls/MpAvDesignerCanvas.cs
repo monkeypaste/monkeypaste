@@ -1,6 +1,7 @@
 ﻿
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Shapes;
 using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
@@ -8,6 +9,7 @@ using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -131,16 +133,29 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             foreach (MpAvActionViewModelBase avm in tavm.SelfAndAllDescendants) {
-                //MpPoint tail = new MpPoint(avm.X + (avm.Width / 2), avm.Y + (avm.Height / 2));
-                MpPoint tail = avm.ObservedDesignerItemBounds.Centroid();
-
                 var pavm = avm.ParentActionViewModel;
                 if (pavm == null) {
                     continue;
                 }
 
+                //MpPoint tail = new MpPoint(avm.X + (avm.Width / 2), avm.Y + (avm.Height / 2));
+                MpRect tail_rect = avm.ObservedDesignerItemBounds;
+                var tail_adv = this.GetVisualDescendants<MpAvActionDesignerItemView>().FirstOrDefault(x => x.DataContext == avm);
+                if (tail_adv != null && tail_adv.GetVisualDescendant<Shape>() is Shape tail_shape) {
+                    tail_rect = tail_shape.Bounds.ToPortableRect();
+                    tail_rect.Move(tail_shape.TranslatePoint(new Point(), this).Value.ToPortablePoint());
+                }
+
+                MpRect head_rect = pavm.ObservedDesignerItemBounds;
+                var head_adv = this.GetVisualDescendants<MpAvActionDesignerItemView>().FirstOrDefault(x => x.DataContext == pavm);
+                if (head_adv != null && head_adv.GetVisualDescendant<Shape>() is Shape head_shape) {
+                    head_rect = head_shape.Bounds.ToPortableRect();
+                    head_rect.Move(head_shape.TranslatePoint(new Point(), this).Value.ToPortablePoint());
+                }
+
                 //MpPoint head = new MpPoint(pavm.X + (pavm.Width / 2), pavm.Y + (pavm.Height / 2));
-                MpPoint head = pavm.ObservedDesignerItemBounds.Centroid();
+                MpPoint tail = tail_rect.Centroid();
+                MpPoint head = head_rect.Centroid();
 
                 var borderBrush = pavm.IsHovering ? TransitionLineHoverBorderBrush : TransitionLineDefaultBorderBrush;
                 var fillBrush = GetArrowFillBrush(pavm, avm, head, tail);

@@ -43,8 +43,6 @@ namespace MonkeyPaste {
         #endregion
 
         #region Statics
-        [JsonIgnore]
-        static ReaderWriterLock locker = new ReaderWriterLock();
 
         [JsonIgnore]
         private static MpPrefViewModel _instance;
@@ -53,7 +51,8 @@ namespace MonkeyPaste {
             _instance;
 
         [JsonIgnore]
-        public static string PreferencesPath => _prefPath;
+        public static string PreferencesPath =>
+            _prefPath;
 
         [JsonIgnore]
         public static string PreferencesPathBackup =>
@@ -577,40 +576,23 @@ namespace MonkeyPaste {
         }
 
         public void Save() {
-            //Mp.Services.MainThreadMarshal.RunOnMainThread(async () => {
-            //Task.Run(async () => {
-            //    while (IsSaving) {
-            //        await Task.Delay(100);
-            //    }
+            IsSaving = true;
 
-            //lock (_lock) {
+            var sw = Stopwatch.StartNew();
 
-            try {
-                locker.AcquireWriterLock(int.MaxValue);
-                IsSaving = true;
+            string prefStr = SerializeJsonObject();
 
-                var sw = Stopwatch.StartNew();
-
-                string prefStr = SerializeJsonObject();
-
-                if (IsSettingsEncrypted) {
-                    prefStr = MpEncryption.SimpleEncryptWithPassword(prefStr, GetPrefPassword());
-                }
-
-                MpFileIo.WriteTextToFile(PreferencesPath, prefStr, false);
-                // write backup after succesful save
-                MpFileIo.WriteTextToFile(PreferencesPathBackup, prefStr, false);
-
-                MpConsole.WriteLine("Preferences Updated Total Ms: " + sw.ElapsedMilliseconds);
-
-                IsSaving = false;
-            }
-            finally {
-                locker.ReleaseWriterLock();
+            if (IsSettingsEncrypted) {
+                prefStr = MpEncryption.SimpleEncryptWithPassword(prefStr, GetPrefPassword());
             }
 
-            //}
-            // }).FireAndForgetSafeAsync(this);
+            MpFileIo.WriteTextToFile(PreferencesPath, prefStr, false);
+            // write backup after succesful save
+            MpFileIo.WriteTextToFile(PreferencesPathBackup, prefStr, false);
+
+            MpConsole.WriteLine("Preferences Updated Total Ms: " + sw.ElapsedMilliseconds);
+
+            IsSaving = false;
         }
         #endregion
 

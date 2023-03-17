@@ -51,8 +51,6 @@
                     Value="{Binding !IsPlaceholder}" />
         </Style>
 
-
-
     </local:MpAvUserControl.Styles>
     <Grid x:Name="QueryTrayContainerGrid"
           Margin="0"
@@ -182,13 +180,10 @@
                     </ListBox.ItemsPanel>
                 </ListBox>
             </local:MpAvPagingScrollViewer>
-            <!--</local:MpAvNativeWebViewContainer>-->
         </Border>
 
-        <!--
-            IsBusy Overlay
-            IsVisible="{Binding IsRequerying}"
-        -->
+        <!--  BUSY OVERLAY  -->
+
         <Border x:Name="QueryTrayBusyOuterBorder"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
@@ -202,11 +197,6 @@
                     <Binding Path="IsAnyBusy" />
                 </MultiBinding>
             </Border.IsVisible>
-
-            <!--<local:MpAvBusySpinnerView HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       Width="70"
-                                       Height="70" />-->
             <Border x:Name="QueryTrayBusyInnerBorder"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
@@ -218,7 +208,7 @@
             </Border>
         </Border>
 
-        <!--  IsEmpty Overlay  -->
+        <!--  EMPTY OVERLAY  -->
 
         <Border x:Name="QueryTrayEmptyContainer"
                 HorizontalAlignment="Stretch"

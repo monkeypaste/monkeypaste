@@ -119,7 +119,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
         public MpAvSettingsViewModel() : base() {
-            MpPrefViewModel.Instance.PropertyChanged += Instance_PropertyChanged;
+            MpPrefViewModel.Instance.PropertyChanged += MpPrefViewModel_Instance_PropertyChanged;
             PropertyChanged += MpAvSettingsWindowViewModel_PropertyChanged;
             IsTabSelected = new ObservableCollection<bool>(Enumerable.Repeat(false, 6));
             IsTabSelected.CollectionChanged += IsTabSelected_CollectionChanged;
@@ -197,11 +197,11 @@ namespace MonkeyPaste.Avalonia {
                                 label = "Theme",
                                 values = new List<MpPluginParameterValueFormat>() {
                                     new MpPluginParameterValueFormat() {
-                                        isDefault = MpPrefViewModel.Instance.ShowInTaskSwitcher.ToString() == MpThemeType.Light.ToString(),
+                                        isDefault = MpPrefViewModel.Instance.CurrentThemeName.ToLower() == MpThemeType.Light.ToString().ToLower(),
                                         value = MpThemeType.Light.ToString()
                                     },
                                     new MpPluginParameterValueFormat() {
-                                        isDefault = MpPrefViewModel.Instance.ShowInTaskSwitcher.ToString() == MpThemeType.Dark.ToString(),
+                                        isDefault = MpPrefViewModel.Instance.CurrentThemeName.ToLower() == MpThemeType.Dark.ToString().ToLower(),
                                         value = MpThemeType.Dark.ToString()
                                     },
                                 }
@@ -215,6 +215,7 @@ namespace MonkeyPaste.Avalonia {
                                 values =
                                     FontManager.Current.GetInstalledFontFamilyNames(true)
                                     .Where(x=>!string.IsNullOrEmpty(x))
+                                    .OrderBy(x=>x)
                                     .Select(x=>new MpPluginParameterValueFormat() {
                                         isDefault = MpAvThemeViewModel.Instance.DefaultReadOnlyFontFamily.ToLower() == x.ToLower(),
                                         value = x
@@ -228,6 +229,7 @@ namespace MonkeyPaste.Avalonia {
                                 values =
                                     FontManager.Current.GetInstalledFontFamilyNames(true)
                                     .Where(x=>!string.IsNullOrEmpty(x))
+                                    .OrderBy(x=>x)
                                     .Select(x=>new MpPluginParameterValueFormat() {
                                         isDefault = MpAvThemeViewModel.Instance.DefaultEditableFontFamily.ToLower() == x.ToLower(),
                                         value = x
@@ -650,13 +652,27 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        private void Instance_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+        private void MpPrefViewModel_Instance_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(MpPrefViewModel.Instance.LoadOnLogin):
                     SetLoadOnLogin(MpPrefViewModel.Instance.LoadOnLogin);
                     break;
                 case nameof(MpPrefViewModel.Instance.UserLanguageCode):
                     SetLanguage(MpPrefViewModel.Instance.UserLanguageCode);
+                    break;
+                case nameof(MpPrefViewModel.Instance.MaxUndoLimit):
+                    MpAvUndoManagerViewModel.Instance.MaximumUndoLimit = MpPrefViewModel.Instance.MaxUndoLimit;
+                    break;
+                case nameof(MpPrefViewModel.Instance.NotificationSoundVolume):
+                    if (MpAvShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
+                        // ignore preview volume while sliding
+                        break;
+                    }
+                    Dispatcher.UIThread.Post(async () => {
+                        await MpAvSoundPlayerViewModel.Instance.UpdateVolumeCommand.ExecuteAsync();
+                        MpAvSoundPlayerViewModel.Instance.PlaySoundCommand.Execute(MpSoundNotificationType.Copy);
+                    });
+
                     break;
             }
             if (_reinitContentParams.Any(x => x.ToLower() == e.PropertyName.ToLower())) {

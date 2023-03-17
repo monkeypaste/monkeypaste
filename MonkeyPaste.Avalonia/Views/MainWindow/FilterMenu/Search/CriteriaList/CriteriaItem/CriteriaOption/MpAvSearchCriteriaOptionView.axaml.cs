@@ -1,6 +1,8 @@
 ﻿
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Markup.Xaml;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System.Linq;
 
@@ -10,44 +12,42 @@ namespace MonkeyPaste.Avalonia {
     /// </summary>
     public partial class MpAvSearchCriteriaOptionView : MpAvUserControl<MpAvSearchCriteriaOptionViewModel> {
         public MpAvSearchCriteriaOptionView() {
-            InitializeComponent();
-            var cocc = this.FindControl<ContentControl>("CriteriaOptionContentControl");
-            cocc.TemplateApplied += Cocc_TemplateApplied;
-        }
-
-
-        private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);
         }
 
-        private void Cocc_TemplateApplied(object sender, global::Avalonia.Controls.Primitives.TemplateAppliedEventArgs e) {
-            var cocc = this.FindControl<ContentControl>("CriteriaOptionContentControl");
-            if (cocc != null) {
-                var mvtb = cocc.GetVisualDescendants<TextBox>().FirstOrDefault(x => x.Name == "MatchValueTextBox");
-                if (mvtb != null) {
-                    mvtb.LostFocus += Mvtb_LostFocus;
-                }
 
-                var test = Mp.Services.PlatformResource.GetResource("DatePickerFlyoutPresenterHighlightHeight");
-                var test2 = Mp.Services.PlatformResource.GetResource("DatePickerFlyoutPresenterSpacerFill");
-                var test3 = Mp.Services.PlatformResource.GetResource("DatePickerFlyoutPresenterHighlightHeight");
-                var test4 = Mp.Services.PlatformResource.GetResource("DatePickerSpacerThemeWidth");
-
-                var mvdt = cocc.GetVisualDescendant<DatePicker>();
-                if (mvdt != null) {
-                    mvdt.PointerEntered += Mvdt_PointerEnter;
-                }
+        private void TextBox_AttachedToLogicalTree(object sender, global::Avalonia.LogicalTree.LogicalTreeAttachmentEventArgs e) {
+            if (sender is TextBox tb) {
+                InitDragDrop(tb);
             }
         }
 
-        private void Mvdt_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e) {
-            var dp = sender as DatePicker;
-            var test = dp.GetVisualDescendants<Control>();
-
+        #region Drop
+        private void InitDragDrop(TextBox tb) {
+            DragDrop.SetAllowDrop(tb, true);
+            tb.AddHandler(DragDrop.DragOverEvent, DragOver);
+            tb.AddHandler(DragDrop.DropEvent, Drop);
         }
 
-        private void Mvtb_LostFocus(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
-
+        private void DragOver(object sender, DragEventArgs e) {
+            //e.DragEffects = DragDropEffects.Default;
+            if (!e.Data.GetDataFormats().Contains(MpPortableDataFormats.Text)) {
+                e.DragEffects = DragDropEffects.None;
+            } else {
+                // override criteria sorting
+                e.Handled = true;
+            }
         }
+        private void Drop(object sender, DragEventArgs e) {
+            if (!e.Data.GetDataFormats().Contains(MpPortableDataFormats.Text)) {
+                e.DragEffects = DragDropEffects.None;
+                return;
+            }
+            if (sender is TextBox tb) {
+                tb.Text = e.Data.Get(MpPortableDataFormats.Text) as string;
+            }
+        }
+
+        #endregion
     }
 }
