@@ -139,14 +139,14 @@ namespace MonkeyPaste.Avalonia {
                         new MpMenuItemViewModel() {
                             Header = @"Cut",
                             IconResourceKey = "ScissorsImage",
-                            Command = CutOrCopySelectionFromContextMenuCommand,
+                            Command = CutSelectionFromContextMenuCommand,
                             CommandParameter = true,
-                            ShortcutArgs = new object[] { MpShortcutType.PasteHere },
+                            ShortcutArgs = new object[] { MpShortcutType.CutSelection },
                         },
                         new MpMenuItemViewModel() {
                             Header = @"Copy",
                             IconResourceKey = "CopyImage",
-                            Command = CutOrCopySelectionFromContextMenuCommand,
+                            Command = CopySelectionFromContextMenuCommand,
                             ShortcutArgs = new object[] { MpShortcutType.CopySelection },
                         },
                         new MpMenuItemViewModel() {
@@ -194,18 +194,11 @@ namespace MonkeyPaste.Avalonia {
                             ShortcutArgs = new object[] { MpShortcutType.EditContent },
                         },
                         new MpMenuItemViewModel() {
-                            Header = SelectedItem.IsPinned ? "Unstage":"Stage",
+                            Header = SelectedItem.IsPinned ? "Un-pin":"Pin",
                             AltNavIdx = 0,
                             IconResourceKey = "PinImage",
-                            Command = ToggleTileIsPinnedCommand,
-                            ShortcutArgs = new object[] { MpShortcutType.ToggleStaged },
-                        },
-                        new MpMenuItemViewModel() {
-                            Header = SelectedItem.IsPinned ? "Unstage":"Stage",
-                            AltNavIdx = 0,
-                            IconResourceKey = "PinImage",
-                            Command = ToggleTileIsPinnedCommand,
-                            ShortcutArgs = new object[] { MpShortcutType.ToggleStaged },
+                            Command = ToggleSelectedTileIsPinnedCommand,
+                            ShortcutArgs = new object[] { MpShortcutType.TogglePinned },
                         },
                         new MpMenuItemViewModel() {
                             IsSeparator = true
@@ -2563,9 +2556,13 @@ namespace MonkeyPaste.Avalonia {
             CleanupAfterPaste(ctvm, pi, mpdo);
             MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
         }
+        private async Task CutOrCopySelectionAsync(bool isCut) {
+            string keys = isCut ?
+            Mp.Services.PlatformShorcuts.CutKeys : Mp.Services.PlatformShorcuts.CopyKeys;
 
-
-
+            await Mp.Services.KeyStrokeSimulator
+            .SimulateKeyStrokeSequenceAsync(keys);
+        }
 
         #endregion
 
@@ -2810,6 +2807,11 @@ namespace MonkeyPaste.Avalonia {
                  UpdateEmptyPropertiesAsync().FireAndForgetSafeAsync(this);
              },
             (args) => args != null && args is MpAvClipTileViewModel ctvm && ctvm.IsPinned);
+
+        public ICommand ToggleSelectedTileIsPinnedCommand => new MpCommand(
+            () => {
+                ToggleTileIsPinnedCommand.Execute(SelectedItem);
+            });
 
         public ICommand ToggleTileIsPinnedCommand => new MpCommand<object>(
             (args) => {
@@ -3250,18 +3252,18 @@ namespace MonkeyPaste.Avalonia {
                 return canCopy;
             });
 
-        public ICommand CutOrCopySelectionFromContextMenuCommand => new MpCommand<object>(
-            (args) => {
-                bool isCut = false;
-                if (args is bool boolArg) {
-                    isCut = boolArg;
-                }
-                string keys = isCut ?
-                Mp.Services.PlatformShorcuts.CutKeys : Mp.Services.PlatformShorcuts.CopyKeys;
 
-                Mp.Services.KeyStrokeSimulator
-                .SimulateKeyStrokeSequenceAsync(keys)
-                .FireAndForgetSafeAsync(this);
+        public ICommand CutSelectionFromContextMenuCommand => new MpCommand<object>(
+            (args) => {
+                CutOrCopySelectionAsync(true).FireAndForgetSafeAsync(this);
+            },
+            (args) => {
+                return SelectedItem != null && SelectedItem.IsSubSelectionEnabled;
+            });
+
+        public ICommand CopySelectionFromContextMenuCommand => new MpCommand<object>(
+            (args) => {
+                CutOrCopySelectionAsync(false).FireAndForgetSafeAsync(this);
             },
             (args) => {
                 return SelectedItem != null && SelectedItem.IsSubSelectionEnabled;

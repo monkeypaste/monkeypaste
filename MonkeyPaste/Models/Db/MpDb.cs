@@ -758,7 +758,7 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
                  new string[] {"674bae7f-0a60-4f17-ac2c-81d5c6c3d879","Down", MpShortcutType.SelectNextRowItem.ToString(), MpRoutingType.Internal.ToString()},
                  new string[] {"b916ab44-d4bd-4d8b-ac4a-de947343bd5a","Up", MpShortcutType.SelectPreviousRowItem.ToString(), MpRoutingType.Internal.ToString()},
                  new string[] {"6487f6ff-da0c-475b-a2ae-ef1484233de0","Control+I", MpShortcutType.AssignShortcut.ToString(), MpRoutingType.Internal.ToString()},
-                 new string[] {"837e0c20-04b8-4211-ada0-3b4236da0821","Control+P", MpShortcutType.ChangeColor.ToString(), MpRoutingType.Internal.ToString()},
+                 new string[] {"837e0c20-04b8-4211-ada0-3b4236da0821","Control+M", MpShortcutType.ChangeColor.ToString(), MpRoutingType.Internal.ToString()},
                  new string[] {"118a2ca6-7021-47a0-8458-7ebc31094329","Control+Z", MpShortcutType.Undo.ToString(), MpRoutingType.Internal.ToString()},
                  new string[] {"3980efcc-933b-423f-9cad-09e455c6824a","Control+Y", MpShortcutType.Redo.ToString(), MpRoutingType.Internal.ToString()},
                  new string[] {"7a7580d1-4129-432d-a623-2fff0dc21408","Control+E", MpShortcutType.EditContent.ToString(), MpRoutingType.Internal.ToString()},
@@ -777,7 +777,7 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
                  new string[] {"d73204f5-fbed-4d87-9dca-6dfa8d8cba82","Control+K", MpShortcutType.ToggleFilterMenuVisible.ToString(), MpRoutingType.Internal.ToString()},
                  new string[] {"49f44a89-e381-4d6a-bf8c-1090eb443f17","Control+Q", MpShortcutType.ExitApplication.ToString(), MpRoutingType.Internal.ToString()},
                  new string[] { "31e0a078-e80b-4d31-b236-2a585d6352cf", "Control+,", MpShortcutType.ShowSettings.ToString(), MpRoutingType.Internal.ToString()},
-                 new string[] { "5143ed80-a50a-41b9-9979-5e00c084560d", "Control+P", MpShortcutType.ToggleStaged.ToString(), MpRoutingType.Internal.ToString()},
+                 new string[] { "5143ed80-a50a-41b9-9979-5e00c084560d", "Control+P", MpShortcutType.TogglePinned.ToString(), MpRoutingType.Internal.ToString()},
                  new string[] { "755a4d0e-d26a-42cf-89a3-6c5710bd2e4c", "Control+O", MpShortcutType.OpenContentInWindow.ToString(), MpRoutingType.Internal.ToString()},
             };
 

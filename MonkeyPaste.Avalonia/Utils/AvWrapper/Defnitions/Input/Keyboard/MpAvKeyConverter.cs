@@ -47,10 +47,14 @@ namespace MonkeyPaste.Avalonia {
                 keyList.Add(new List<T>());
                 foreach (var k in kl) {
                     T t_key = default(T);
-                    if (typeof(T) == typeof(KeyCode)) {
-                        t_key = (T)Convert.ChangeType(_globalConverter.ConvertStringToKey(k), Enum.GetUnderlyingType(typeof(T)));
-                    } else if (typeof(T) == typeof(Key)) {
-                        t_key = (T)Convert.ChangeType(_internalConverter.ConvertStringToKey(k), Enum.GetUnderlyingType(typeof(T)));
+                    if (typeof(T) == typeof(KeyCode) &&
+                        _globalConverter.ConvertStringToKey(k) is KeyCode gk &&
+                        gk != KeyCode.CharUndefined) {
+                        t_key = (T)Convert.ChangeType(gk, Enum.GetUnderlyingType(typeof(T)));
+                    } else if (typeof(T) == typeof(Key) &&
+                                _internalConverter.ConvertStringToKey(k) is Key ik &&
+                                ik != Key.None) {
+                        t_key = (T)Convert.ChangeType(ik, Enum.GetUnderlyingType(typeof(T)));
                     }
                     keyList[keyList.Count - 1].Add(t_key);
                 }

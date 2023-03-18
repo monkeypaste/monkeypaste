@@ -15,13 +15,23 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvPinTrayView">
     <local:MpAvUserControl.Styles>
-        
+
     </local:MpAvUserControl.Styles>
     <Border x:Name="PinTrayContainerBorder"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
         <Grid HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
+            <Border HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    IsHitTestVisible="False"
+                    Opacity="0.2">
+                <Border.Background>
+                    <ImageBrush DestinationRect="0 0 690 690"
+                                TileMode="Tile"
+                                Source="{Binding Source={StaticResource BurlapTextureImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                </Border.Background>
+            </Border>
             <ListBox x:Name="PinTrayListBox"
                      Classes="clipTileListBox"
                      Background="Transparent"

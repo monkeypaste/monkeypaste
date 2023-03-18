@@ -16,6 +16,19 @@
 
     <local:MpAvUserControl.Styles>
 
+        <!--  PIN TRAY  -->
+
+        <Style Selector="local|MpAvPinTrayView Border#PinTrayContainerBorder">
+            <Setter Property="Background"
+                    Value="{DynamicResource PinTrayBgBrush}" />
+            <Setter Property="BoxShadow"
+                    Value="inset 0 0 10 10 #46000000" />
+        </Style>
+        <Style Selector="local|MpAvPinTrayView.dragover Border#PinTrayContainerBorder">
+            <Setter Property="Background"
+                    Value="{DynamicResource PinTrayDragOverBgColor}" />
+        </Style>
+
         <!--  TRAY CURSOR  -->
 
         <Style Selector="Grid#ClipTrayContainerGrid.busy"

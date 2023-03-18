@@ -9,7 +9,7 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvAssignShortcutDialog : MpAvWindow {
 
-        public bool DialogResult { get; set; } = false;
+        //public bool DialogResult { get; set; } = false;
         public MpAvAssignShortcutDialog() {
             InitializeComponent();
 #if DEBUG

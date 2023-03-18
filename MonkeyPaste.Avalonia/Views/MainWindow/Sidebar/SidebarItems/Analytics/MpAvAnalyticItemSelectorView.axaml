@@ -22,7 +22,8 @@
                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                        ScrollViewer.VerticalScrollBarVisibility="Disabled">
                 <Border x:Name="AnalyzerPluginPresetContainerBorder"
-                        Width="350"
+                        Width="{Binding DefaultSelectorColumnVarDimLength, Mode=OneWay}"
+                        Margin="0,0,20,0"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top">
                     <StackPanel Orientation="Vertical">
@@ -66,10 +67,8 @@
                 </Border>
 
                 <Border x:Name="AnalyzerPluginParameterListBoxContainerBorder"
-                        HorizontalAlignment="Left"
+                        HorizontalAlignment="Stretch"
                         VerticalAlignment="Top"
-                        Margin="10,0,0,0"
-                        Width="350"
                         DataContext="{Binding SelectedPresetViewModel}">
                     <StackPanel Orientation="Vertical">
                         <Label Classes="h1"

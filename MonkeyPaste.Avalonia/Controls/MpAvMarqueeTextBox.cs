@@ -470,10 +470,9 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        //protected override void OnKeyDown(KeyEventArgs e) {
-        //    HandleKeyDown(e);
-        //    base.OnKeyDown(e);
-        //}
+        protected override void OnKeyDown(KeyEventArgs e) {
+            base.OnKeyDown(e);
+        }
 
         protected override void OnMeasureInvalidated() {
             base.OnMeasureInvalidated();

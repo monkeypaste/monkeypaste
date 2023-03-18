@@ -242,18 +242,20 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private List<List<Key>> _keyList = new List<List<Key>>();
+        private List<List<Key>> _keyList;
         public List<List<Key>> KeyList {
             get {
-                _keyList.Clear();
-                if (Shortcut == null) {
-                    return _keyList;
+                if (_keyList == null) {
+                    _keyList = new List<List<Key>>();
+                    if (Shortcut == null) {
+                        return _keyList;
+                    }
+                    Mp.Services.KeyConverter
+                        .ConvertStringToKeySequence<Key>(KeyString)
+                        .ForEach(x => _keyList.Add(x.ToList()));
                 }
-                Mp.Services.KeyConverter
-                    .ConvertStringToKeySequence<Key>(KeyString)
-                    .ForEach(x => _keyList.Add(x.ToList()));
 
-                return _keyList; //MpAvInternalKeyConverter.ConvertStringToKeySequence(KeyString);
+                return _keyList;
             }
         }
 
@@ -271,6 +273,8 @@ namespace MonkeyPaste.Avalonia {
             set {
                 if (Shortcut.KeyString != value) {
                     Shortcut.KeyString = value;
+                    // flag keylist to reset
+                    _keyList = null;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(KeyString));
                     OnPropertyChanged(nameof(KeyList));
@@ -400,27 +404,14 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        //public bool StartsWith(List<List<Key>> otherKeyList) {
-        //    if(otherKeyList == null || 
-        //       otherKeyList.Count == 0 || 
-        //       otherKeyList[0].Count == 0) {
-        //        return false;
-        //    }
-        //    for (int i = 0; i < otherKeyList.Count; i++) {
-        //        if(KeyList.Count <=i) {
-        //            return false;
-        //        }
-        //        for (int j = 0; j < otherKeyList[i].Count; j++) {
-        //            if(KeyList[i].Count <= j) {
-        //                return false;
-        //            }
-        //            if(KeyList[i][j] != otherKeyList[i][j]) {
-        //                return false;
-        //            }
-        //        }
-        //    }
-        //    return true;
-        //}
+        public bool IncludesKeyLiteral(string keyliteral) {
+            var keys = Mp.Services.KeyConverter.ConvertStringToKeySequence<Key>(keyliteral);
+            if (keys.FirstOrDefault() is IEnumerable<Key> combo &&
+                combo.FirstOrDefault() is Key key) {
+                return KeyList.Any(x => x.Any(y => y == key));
+            }
+            return false;
+        }
 
         public void PassKeysToForegroundWindow() {
             //MpHelpers.PassKeysListToWindow(MpProcessHelper.MpProcessManager.LastHandle,KeyList);

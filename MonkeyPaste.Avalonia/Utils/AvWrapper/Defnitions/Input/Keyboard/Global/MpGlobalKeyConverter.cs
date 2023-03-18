@@ -63,7 +63,8 @@ namespace MonkeyPaste.Avalonia {
                keyCodeObj is KeyCode keyCode) {
                 return keyCode;
             }
-            throw new Exception("unkown key: " + lks);
+            MpConsole.WriteLine($"Unhandled global key literal '{lks}'");
+            return KeyCode.CharUndefined;
         }
 
         public string GetKeyLiteral(KeyCode key) {

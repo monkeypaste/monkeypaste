@@ -102,13 +102,12 @@ namespace MonkeyPaste.Avalonia {
 
             MpMessenger.SendGlobal(MpMessageType.ShortcutAssignmentStarted);
 
-            await ascw.ShowDialog(MpAvWindowManager.MainWindow);
+            var result = await ascw.ShowChildDialogWithResultAsync(MpAvWindowManager.MainWindow);
 
             MpMessenger.SendGlobal(MpMessageType.ShortcutAssignmentEnded);
 
-            var assignResult = ascw.DialogResult;
             MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
-            if (assignResult == true) {
+            if (result is bool assignResult && assignResult) {
                 return ascwvm.KeyString;
             }
             return null;

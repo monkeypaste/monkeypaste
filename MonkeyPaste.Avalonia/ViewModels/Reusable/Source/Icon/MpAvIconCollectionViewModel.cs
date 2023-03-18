@@ -100,7 +100,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        protected override async void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
+        protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpIcon i) {
                 Dispatcher.UIThread.Post(async () => {
                     var ivm = IconViewModels.FirstOrDefault(x => x.IconId == i.Id);
@@ -154,7 +154,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task SetUserIconToCurrentHexColorAsync(string hexColor, MpIUserIconViewModel uivm) {
-            var bmpSrc = MpAvIconSourceObjToBitmapConverter.Instance.Convert("TextureImage", null, null, null) as Bitmap;
+            var bmpSrc = MpAvIconSourceObjToBitmapConverter.Instance.Convert("RoundedTextureImage", null, null, null) as Bitmap;
             bmpSrc = bmpSrc.Tint(hexColor);
             await SetUserIconImageAsync(uivm, bmpSrc, hexColor);
         }

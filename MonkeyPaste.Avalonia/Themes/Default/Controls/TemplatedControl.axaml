@@ -3,20 +3,9 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
     <Styles.Resources>
-        <!--<FontFamily x:Key="ContentControlThemeFontFamily">
-            Impact
-        </FontFamily>-->
     </Styles.Resources>
 
-    <Style Selector=":is(TemplatedControl).noBg /template/ ContentPresenter">
-        <Setter Property="Background"
-                Value="Transparent" />
-    </Style>
-    <Style Selector=":is(TemplatedControl).noHoverBg:pointerover /template/ ContentPresenter">
-        <Setter Property="Background"
-                Value="Transparent" />
-    </Style>
-
+    <!--  FONT THEME  -->
 
     <Style Selector=":is(TextBox)[IsReadOnly=false]">
         <Setter Property="FontFamily"
@@ -31,9 +20,19 @@
     <Style Selector=":is(TemplatedControl):not(:is(TextBox)[IsReadOnly=false])">
         <Setter Property="FontFamily"
                 Value="{Binding Source={DynamicResource DefaultReadOnlyFontFamily}, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />
-        <!--
-            Setter Property="FontFamily"
-            Value="{DynamicResource ContentControlThemeFontFamily}" />
-        -->
     </Style>
+    <Style Selector=":is(TemplatedControl).noBg /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="Transparent" />
+    </Style>
+    <Style Selector=":is(TemplatedControl).noHoverBg:pointerover /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="Transparent" />
+    </Style>
+
+    <Style Selector=":is(TemplatedControl).square">
+        <Setter Property="Width"
+                Value="{Binding $self.Bounds.Height}" />
+    </Style>
+
 </Styles>

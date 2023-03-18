@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Threading.Tasks;
@@ -16,45 +17,32 @@ namespace MonkeyPaste.Avalonia {
 
 
         public async Task<string> ShowCustomColorMenuAsync(string selectedColor, string title = null, MpIUserColorViewModel ucvm = null) {
-            string newColor = String.Empty;
-
-            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
-
-            //var cpw = new ColorPickerWindow(selectedColor.ToAvColor()) {
-            //    IsPaletteVisible = true,
-            //    Topmost = true,
-            //    Title = string.IsNullOrWhiteSpace(title) ? "Pick a color, any color" : title
-            //};
-            //var result = await cpw.ShowDialog(MpAvMainView.Instance);
-
 
             var cw = new MpAvWindow() {
-                Content = new MpAvColorPickerView() {
-                    SelectedHexColor = selectedColor
-                },
+                DataContext = ucvm,
+                Topmost = true,
                 Title = "Color Chooser".ToWindowTitleText(),
-                Width = 300,
-                Height = 300,
-                WindowState = WindowState.Normal,
+                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("ColorsImage", typeof(WindowIcon), null, null) as WindowIcon,
+                Width = 350,
+                Height = 475,
                 CanResize = false,
-                SystemDecorations = SystemDecorations.BorderOnly,
-                ShowInTaskbar = false
+                SystemDecorations = SystemDecorations.Full,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                Content = new MpAvColorPickerView(selectedColor)
             };
 
-            await cw.ShowDialog(MpAvWindowManager.MainWindow);
-            if (cw.Tag is string) {
-                newColor = cw.Tag.ToString();
+            var result = await cw.ShowChildDialogWithResultAsync(MpAvWindowManager.MainWindow);
+            Mp.Services.ContextMenuCloser.CloseMenu();
+
+            if (result is string newColor) {
                 if (ucvm != null) {
                     ucvm.UserHexColor = newColor;
                 }
+                return newColor;
             }
-            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
-            Mp.Services.ContextMenuCloser.CloseMenu();
 
-            return newColor;
+            return string.Empty;
         }
-        public string ShowCustomColorMenu(string selectedColor, string title = null, MpIUserColorViewModel ucvm = null) {
-            return ShowCustomColorMenuAsync(selectedColor, title, ucvm).Result;
-        }
+
     }
 }

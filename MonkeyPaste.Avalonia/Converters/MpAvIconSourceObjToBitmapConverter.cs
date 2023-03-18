@@ -44,7 +44,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
                 if (!string.IsNullOrEmpty(hex_color)) {
-                    string color_img_key = "TextureImage";
+                    string color_img_key = "RoundedTextureImage";
                     if (valParts.Length > 1) {
                         color_img_key = valParts.FirstOrDefault(x => x.Contains("Image"));
                     }

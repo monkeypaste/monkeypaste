@@ -177,7 +177,7 @@ namespace MonkeyPaste.Avalonia {
                 tovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
                 tovm.Label = labels[i];
                 switch ((MpRootOptionType)i) {
-                    case MpRootOptionType.Content:
+                    case MpRootOptionType.Clips:
                         tovm.ItemsOptionType = typeof(MpContentOptionType);
                         tovm.Items = GetContentOptionViewModel(tovm);
                         break;
@@ -438,7 +438,7 @@ namespace MonkeyPaste.Avalonia {
                 var ovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
                 ovm.Label = labels[i];
                 switch ((MpContentOptionType)i) {
-                    case MpContentOptionType.AnyText:
+                    case MpContentOptionType.Content:
                         ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
                         ovm.FilterValue = MpContentQueryBitFlags.Content;
                         ovm.ItemsOptionType = typeof(MpTextOptionType);

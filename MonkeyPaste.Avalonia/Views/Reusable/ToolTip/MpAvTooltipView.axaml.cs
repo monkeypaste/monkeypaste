@@ -87,14 +87,16 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
         public MpAvToolTipView() {
-            InitializeComponent();
+            AvaloniaXamlLoader.Load(this);
             this.AttachedToVisualTree += MpAvTooltipView_AttachedToVisualTree;
             this.DetachedFromVisualTree += MpAvTooltipView_DetachedFromVisualTree;
+            this.AttachedToLogicalTree += MpAvToolTipView_AttachedToLogicalTree;
             this.GetObservable(Control.IsVisibleProperty).Subscribe(value => OnVisibleChanged());
             if (MpAvWindowManager.MainWindow != null) {
                 MpAvWindowManager.MainWindow.GetObservable(Window.IsVisibleProperty).Subscribe(value => OnVisibleChanged());
             }
         }
+
 
         public void Init() {
             IsVisible = !string.IsNullOrEmpty(ToolTipContent);
@@ -118,17 +120,19 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        private void MpAvTooltipView_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
+        private void MpAvToolTipView_AttachedToLogicalTree(object sender, global::Avalonia.LogicalTree.LogicalTreeAttachmentEventArgs e) {
             if (GetHostControl() is Control host_control) {
                 host_control.PointerMoved += Host_control_PointerMoved;
             }
             if (GetPopupRoot() is PopupRoot pur) {
-                pur.IsHitTestVisible = false;
+                pur.GetVisualDescendants<Control>().ForEach(x => x.IsHitTestVisible = false);
+                pur.GetVisualDescendants<Control>().ForEach(x => x.Focusable = false);
                 pur.TransparencyLevelHint = WindowTransparencyLevel.Transparent;
                 pur.Background = Brushes.Transparent;
             }
-            if (GetHostControl() is Control c) {
-            }
+        }
+        private void MpAvTooltipView_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
+
         }
 
         private void Host_control_PointerMoved(object sender, global::Avalonia.Input.PointerEventArgs e) {
@@ -149,12 +153,10 @@ namespace MonkeyPaste.Avalonia {
         private void MpAvTooltipView_DetachedFromVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
             this.AttachedToVisualTree -= MpAvTooltipView_AttachedToVisualTree;
             this.DetachedFromVisualTree -= MpAvTooltipView_DetachedFromVisualTree;
+            this.AttachedToLogicalTree -= MpAvToolTipView_AttachedToLogicalTree;
             if (GetHostControl() is Control host_control) {
                 host_control.PointerMoved -= Host_control_PointerMoved;
             }
-        }
-        private void InitializeComponent() {
-            AvaloniaXamlLoader.Load(this);
         }
 
         #region Helpers

@@ -309,6 +309,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task PerformExternalOrPartialDropAsync(IDataObject avdo) {
+            bool from_ext = !avdo.ContainsInternalContentItem();
             MpPortableDataObject mpdo = await Mp.Services.DataObjectHelperAsync.ReadDragDropDataObjectAsync(avdo) as MpPortableDataObject;
 
             //int drag_ciid = -1;
@@ -322,7 +323,10 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
-            MpCopyItem drop_ci = await Mp.Services.CopyItemBuilder.BuildAsync(mpdo, transType: MpTransactionType.Created);//, drag_ciid);
+            MpCopyItem drop_ci = await Mp.Services.CopyItemBuilder.BuildAsync(
+                mpdo,
+                transType: MpTransactionType.Created,
+                force_ext_sources: from_ext);
 
             if (drop_ci == null) {
                 return;

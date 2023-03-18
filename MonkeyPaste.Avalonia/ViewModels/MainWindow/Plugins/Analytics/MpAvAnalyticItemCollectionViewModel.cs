@@ -41,16 +41,14 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpISidebarItemViewModel Implementation
-        private double _defaultSelectorColumnVarDimLength = 350;
-        private double _defaultParameterColumnVarDimLength = 450;
         public double DefaultSidebarWidth {
             get {
                 if (MpAvMainWindowViewModel.Instance.IsVerticalOrientation) {
                     return MpAvMainWindowViewModel.Instance.MainWindowWidth;
                 }
-                double w = _defaultSelectorColumnVarDimLength;
+                double w = DefaultSelectorColumnVarDimLength;
                 if (SelectedPresetViewModel != null) {
-                    w += _defaultParameterColumnVarDimLength;
+                    w += DefaultParameterColumnVarDimLength;
                 }
                 return w;
             }
@@ -60,7 +58,7 @@ namespace MonkeyPaste.Avalonia {
                 if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
                     return MpAvClipTrayViewModel.Instance.ObservedQueryTrayScreenHeight;
                 }
-                double h = _defaultSelectorColumnVarDimLength;
+                double h = DefaultSelectorColumnVarDimLength;
                 //if (SelectedPresetViewModel != null) {
                 //    h += _defaultParameterColumnVarDimLength;
                 //}
@@ -139,6 +137,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region Layout
 
+
+        public double DefaultSelectorColumnVarDimLength =>
+            400;
+
+        public double DefaultParameterColumnVarDimLength =>
+            450;
         #endregion
 
         #region Appearance

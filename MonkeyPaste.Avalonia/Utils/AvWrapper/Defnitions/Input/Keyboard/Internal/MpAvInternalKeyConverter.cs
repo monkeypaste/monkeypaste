@@ -6,26 +6,6 @@ using System.Text;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvInternalKeyConverter : MpIKeyConverter<Key> {
-
-        public List<List<Key>> ConvertStringToKeySequence(string keyStr) {
-            var keyList = new List<List<Key>>();
-            if (string.IsNullOrEmpty(keyStr)) {
-                return keyList;
-            }
-
-            var combos = keyStr.Split(new string[] { MpInputConstants.SEQUENCE_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var c in combos) {
-                var keys = c.Split(new string[] { MpInputConstants.COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
-                keyList.Add(new List<Key>());
-                foreach (var k in keys) {
-                    keyList[keyList.Count - 1].Add(ConvertStringToKey(k));
-                }
-            }
-            return keyList;
-        }
-
-
-
         public Key ConvertStringToKey(string keyStr) {
             if (keyStr.IsNullOrEmpty()) {
                 return Key.None;
@@ -86,10 +66,17 @@ namespace MonkeyPaste.Avalonia {
             if (lks == "caps lock") {
                 return Key.CapsLock;
             }
+            if (lks == "backspace") {
+                return Key.Back;
+            }
 
-            var kg = KeyGesture.Parse(lks);
+            if (Enum.TryParse(typeof(Key), lks, true, out object? keyObj) &&
+               keyObj is Key key) {
+                return key;
+            }
 
-            return (Key)Enum.Parse(typeof(Key), keyStr, true);
+            MpConsole.WriteLine($"Error parsing key literal '{lks}'");
+            return Key.None;
         }
 
         public string GetKeyLiteral(Key key) {

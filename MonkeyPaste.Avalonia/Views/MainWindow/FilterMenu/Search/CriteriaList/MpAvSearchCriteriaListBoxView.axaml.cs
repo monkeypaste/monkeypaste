@@ -69,6 +69,7 @@ namespace MonkeyPaste.Avalonia {
             int drag_idx = drag_vm.SortOrderIdx;
             int drop_idx = -1;
             for (int i = 0; i < sclb.ItemCount; i++) {
+                // NOTE maybe weird this uses screen points but wasn't working i think header is screwing stuff up
                 if (sclb.ContainerFromIndex(i) is ListBoxItem lbi) {
                     var go = lbi.PointToScreen(new Point()).ToPortablePoint(lbi.VisualPixelDensity());
                     var gb = lbi.Bounds.ToPortableRect();

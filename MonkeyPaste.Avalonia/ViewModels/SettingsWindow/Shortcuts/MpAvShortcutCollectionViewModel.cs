@@ -436,8 +436,8 @@ namespace MonkeyPaste.Avalonia {
                         case MpShortcutType.ToggleFilterMenuVisible:
                             shortcutCommand = MpAvMainWindowViewModel.Instance.ToggleFilterMenuVisibleCommand;
                             break;
-                        case MpShortcutType.ToggleStaged:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.ToggleTileIsPinnedCommand;
+                        case MpShortcutType.TogglePinned:
+                            shortcutCommand = MpAvClipTrayViewModel.Instance.ToggleSelectedTileIsPinnedCommand;
                             break;
                         case MpShortcutType.OpenContentInWindow:
                             shortcutCommand = MpAvClipTrayViewModel.Instance.OpenSelectedTileInWindowCommand;
@@ -538,7 +538,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            if (svm.RoutingType == MpRoutingType.Internal ||
+            if (//svm.RoutingType == MpRoutingType.Internal ||
                 svm.RoutingType == MpRoutingType.Bubble) {
                 await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(svm.KeyString);
             }
@@ -557,6 +557,7 @@ namespace MonkeyPaste.Avalonia {
             _suppressedKeys.Clear();
         }
 
+
         private int _downCount = 0;
         private void HandleGestureRouting_Down(string keyLiteral, object down_e) {
             _downCount++;
@@ -570,20 +571,21 @@ namespace MonkeyPaste.Avalonia {
                     .Where(x => !string.IsNullOrEmpty(x.KeyString))
                     .FirstOrDefault(x => x.KeyString.ToLower() == curGestureStr);
 
+                //bool is_mod = MpInputConstants.MOD_LITERALS.Any(x => x.ToLower() == keyLiteral.ToLower());
                 if (exactMatch == null) {
                     var startsWith_matches =
                         Items
-                        .Where(x => x.KeyString.ToLower().StartsWith(curGestureStr));
+                        .Where(x =>
+                            x.RoutingType == MpRoutingType.Override &&
+                            x.IncludesKeyLiteral(keyLiteral));
 
-                    if (startsWith_matches.Any(x => x.RoutingType == MpRoutingType.Override)) {
+                    if (startsWith_matches.Any()) {
                         _suppressedKeys.Add(keyLiteral);
-
                     }
                 } else if (exactMatch.RoutingType == MpRoutingType.Override) {
                     // NOTE SupressEvent will block key up from occuring so 
                     // override cmd's occur in down event
                     sharp_down.SuppressEvent = true;
-                    //PerformMatchedShortcutAsync(exactMatch).FireAndForgetSafeAsync(this);
                 }
 
             }

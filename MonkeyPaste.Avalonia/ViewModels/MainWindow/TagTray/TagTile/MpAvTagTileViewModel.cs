@@ -678,8 +678,9 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(ShortcutKeyString));
                 }
             } else if (e is MpTag t && t.Id == TagId) {
-                Dispatcher.UIThread.Post(() => {
-                    //await InitializeAsync(t);
+                Dispatcher.UIThread.Post(async () => {
+                    // stupid property changed null ref issue so trying to wait here?
+                    await Task.Delay(50);
                     OnPropertyChanged(nameof(TagName));
                     OnPropertyChanged(nameof(TagHexColor));
                     OnPropertyChanged(nameof(TagTextHexColor));

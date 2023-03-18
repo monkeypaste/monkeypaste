@@ -84,6 +84,7 @@
                     <DataTemplate x:Key="TriggerTemplate"
                                   x:DataType="local:MpAvTriggerActionViewModelBase">
                         <ToggleButton x:Name="ToggleEnableButton"
+                                      IsHitTestVisible="False"
                                       Margin="3,5"
                                       Padding="3"
                                       BorderThickness="0"

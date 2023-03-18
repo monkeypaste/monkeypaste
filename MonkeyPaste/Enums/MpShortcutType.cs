@@ -40,7 +40,7 @@
         ToggleMainWindowLocked,
         ToggleFilterMenuVisible,
         ShowSettings,
-        ToggleStaged,
+        TogglePinned,
         OpenContentInWindow,
         // CUT-OFF 
         MAX_APP_SHORTCUT,

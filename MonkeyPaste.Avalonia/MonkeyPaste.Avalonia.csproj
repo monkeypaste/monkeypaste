@@ -183,7 +183,6 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvNotificationWindow.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPagingScrollBar.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPagingScrollViewer.axaml" />
-    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPinTray.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvSideBarButtonGroup.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvSideBarItems.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvTagTile.axaml" />
@@ -245,6 +244,7 @@
     <None Remove="Assets\Images\close1.png" />
     <None Remove="Assets\Images\close2.png" />
     <None Remove="Assets\Images\cog.png" />
+    <None Remove="Assets\Images\colors.png" />
     <None Remove="Assets\Images\contact.png" />
     <None Remove="Assets\Images\copy.png" />
     <None Remove="Assets\Images\csv.png" />
@@ -335,6 +335,7 @@
     <None Remove="Assets\Images\reset.png" />
     <None Remove="Assets\Images\rightclick.png" />
     <None Remove="Assets\Images\robotclaw.png" />
+    <None Remove="Assets\Images\RoundedTexture.png" />
     <None Remove="Assets\Images\rtf.png" />
     <None Remove="Assets\Images\save.png" />
     <None Remove="Assets\Images\scales.png" />
@@ -581,6 +582,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\cog.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\colors.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\contact.png">
@@ -835,6 +839,9 @@
     <AvaloniaResource Include="Assets\Images\robotclaw.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\RoundedTexture.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\rtf.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -1047,7 +1054,6 @@
     <AvaloniaResource Include="Themes\Default\Controls\MpAvTooltip.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvNotificationWindow.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Button.axaml" />
-    <AvaloniaResource Include="Themes\Default\Controls\MpAvPinTray.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvPagingScrollBar.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Label.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\TextBox.axaml" />

@@ -167,7 +167,11 @@ namespace MonkeyPaste.Avalonia {
                     if (!MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked) {
                         MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
                         e.Cancel = true;
-                        w.Close();
+                        object dresult = null;
+                        if (w is MpAvWindow avw) {
+                            dresult = avw.DialogResult;
+                        }
+                        w.Close(dresult);
                         return;
                     }
                 }

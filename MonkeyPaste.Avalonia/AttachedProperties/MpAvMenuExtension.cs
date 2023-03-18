@@ -677,7 +677,6 @@ namespace MonkeyPaste.Avalonia {
             PopupAnchor anchor = PopupAnchor.None) {
             _cmInstance.Close();
 
-            offset = offset == null ? MpPoint.Zero : offset;
 
             if (mivm.SubItems == null || mivm.SubItems.Count == 0) {
                 _cmInstance.Items = new[] { mivm };
@@ -703,6 +702,10 @@ namespace MonkeyPaste.Avalonia {
             _cmInstance.HorizontalOffset = 0;
             _cmInstance.VerticalOffset = 0;
             if (_cmInstance.PlacementMode == PlacementMode.Pointer) {
+                if (offset == null) {
+                    var gmp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
+                    offset = control.PointToClient(gmp.ToAvPixelPoint(control.VisualPixelDensity())).ToPortablePoint();
+                }
                 _cmInstance.HorizontalOffset = offset.X;
                 _cmInstance.VerticalOffset = offset.Y;
             }
