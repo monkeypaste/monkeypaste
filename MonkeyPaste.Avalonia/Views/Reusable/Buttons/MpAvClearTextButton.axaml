@@ -23,11 +23,8 @@
                     Value="False" />
         </Style>
     </local:MpAvUserControl.Styles>
-    <Button Classes="noBg noHoverBg shakeOver"
+    <Button Classes="noBg noHoverBg"
             Command="{Binding Command, ElementName=ClearTextButton}">
-        <Button.RenderTransform>
-            <RotateTransform />
-        </Button.RenderTransform>
         <Grid x:Name="ClearTextContainerGrid"
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">

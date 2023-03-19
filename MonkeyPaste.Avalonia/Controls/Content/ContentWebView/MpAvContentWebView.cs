@@ -17,6 +17,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using Avalonia.Media.Imaging;
 #if DESKTOP
 
 using CefNet;
@@ -309,10 +310,12 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (forOle) {
-                if (ctvm.CopyItemType == MpCopyItemType.Image) {
-                    avdo.SetData(MpPortableDataFormats.AvPNG, ctvm.CopyItemData.ToAvBitmap().ToByteArray());
+                if (ctvm.CopyItemType == MpCopyItemType.Image &&
+                    ctvm.CopyItemData.ToAvBitmap() is Bitmap bmp) {
+
+                    avdo.SetData(MpPortableDataFormats.AvPNG, bmp.ToByteArray());
                     //var bmp = ctvm.CopyItemData.ToAvBitmap();
-                    //avdo.SetData(MpPortableDataFormats.Text, bmp.ToAsciiImage());
+                    avdo.SetData(MpPortableDataFormats.Text, bmp.ToAsciiImage());
                     //avdo.SetData(MpPortableDataFormats.AvHtml_bytes, bmp.ToRichHtmlImage());
                     // TODO add colorized ascii maybe as html and rtf!!
                 } else if (!ignore_ss) {

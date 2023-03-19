@@ -63,7 +63,7 @@
                                 <!--  FORMAT SELECTOR  -->
 
                                 <Border Classes="iconLabelComboBox">
-                                    <ComboBox SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                                    <ComboBox SelectedIndex="{Binding SelectedTitleSortedItemIdx, Mode=TwoWay}"
                                               Items="{Binding TitleSortedItems}">
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate>

@@ -15,7 +15,6 @@ namespace MonkeyPaste.Avalonia {
         MpIUserIconViewModel,
         MpILabelText,
         MpITreeItemViewModel,
-        MpISaveOrCancelableViewModel,
         MpAvIParameterCollectionViewModel {
 
         #region Interfaces

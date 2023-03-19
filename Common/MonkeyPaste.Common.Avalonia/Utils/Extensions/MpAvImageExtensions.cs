@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 //using MonkeyPaste.Common.Wpf;
 
 namespace MonkeyPaste.Common.Avalonia {
@@ -152,19 +153,19 @@ namespace MonkeyPaste.Common.Avalonia {
                     byte* bmpPtr = (byte*)lockedBitmap.Address;
                     int width = writeableBitmap.PixelSize.Width;
                     int height = writeableBitmap.PixelSize.Height;
-
-                    string outStr = string.Empty;
+                    var sb = new StringBuilder();
                     for (int row = 0; row < height; row++) {
                         for (int col = 0; col < width; col++) {
                             PixelColor c = pixels[col, row];
                             byte avg = (byte)((double)(c.Red + c.Green + c.Blue) / 3.0d);
                             PixelColor grayColor = new PixelColor() { Alpha = 255, Red = avg, Green = avg, Blue = avg };
                             int index = (int)((double)(grayColor.Red * 10) / 255.0d);
-                            outStr += asciiChars[index];
+                            sb.Append(asciiChars[index]);
                             bmpPtr = PutPixel(writeableBitmap, c, bmpPtr);
                         }
+                        sb.AppendLine();
                     }
-                    return outStr;
+                    return sb.ToString();
                 }
             }
         }

@@ -10,7 +10,8 @@
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800">
-    <local:MpAvUserControl.Styles>
+     <local:MpAvUserControl.Styles>
+        <!--  ROW BG  -->
         <Style Selector="DataGridRow:nth-child(odd)">
             <Setter Property="Background"
                     Value="Silver" />
@@ -19,15 +20,45 @@
             <Setter Property="Background"
                     Value="LightGray" />
         </Style>
-        <Style Selector="DataGridCell">
-            <Setter Property="ToolTip.Tip">
-                <Setter.Value>
-                    <Template>
-                        <local:MpAvToolTipView ToolTipText="{Binding $parent[DataGridColumn].Header}" />
-                    </Template>
-                </Setter.Value>
-            </Setter>
+
+        <!--  DATAGRID BUTTONS  -->
+        <Style Selector="DataGrid :is(Button)">
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
         </Style>
+
+        <!--  HOTKEY  -->
+        <Style Selector="Button#HotkeyButton Image">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource HotkeyImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+        </Style>
+        <Style Selector="Button#HotkeyButton.assigned Image">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource HotkeyActiveImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+        </Style>
+
+        <!--  EDIT  -->
+        <Style Selector="ToggleButton#EditToggleButton /template/ ContentPresenter">
+            <Setter Property="Background"
+                    Value="Transparent" />
+        </Style>
+        <Style Selector="ToggleButton#EditToggleButton:checked /template/ ContentPresenter">
+            <Setter Property="Background"
+                    Value="DarkTurquoise" />
+        </Style>
+
+        <!--  RESET/DELETE BUTTON  -->
+
+        <Style Selector="Button#ResetOrDeleteButton.canReset Image"
+               x:DataType="local:MpAvAnalyticItemPresetViewModel">
+            <Setter Property="Source"
+                    Value="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource ResetImage}}" />
+        </Style>
+        <Style Selector="Button#ResetOrDeleteButton:not(.canReset) Image">
+            <Setter Property="Source"
+                    Value="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource TrashCanImage}}" />
+        </Style>
+
     </local:MpAvUserControl.Styles>
     <Border CornerRadius="3"
             Margin="10,0"
@@ -151,21 +182,6 @@
                         </DataGridTemplateColumn>
 
                         <!--  IS ENABLED CHECKBOX  -->
-
-                        <!--<DataGridTemplateColumn Header="Enabled?"
-                                                Width="Auto">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate DataType="local:MpAvClipboardFormatPresetViewModel">
-                                    <CheckBox HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              IsChecked="{Binding IsEnabled, Mode=TwoWay}">
-                                        <ToolTip.Tip>
-                                            <local:MpAvToolTipView ToolTipText="Enabled?" />
-                                        </ToolTip.Tip>
-                                    </CheckBox>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>-->
                         <DataGridCheckBoxColumn Header="Enabled?"
                                                 Binding="{Binding IsEnabled, Mode=TwoWay}" />
 

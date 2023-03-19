@@ -155,7 +155,8 @@ namespace MonkeyPaste.Avalonia {
                 handle = Mp.Services.ProcessWatcher.ThisAppHandle;
             }
             if (handle == IntPtr.Zero) {
-                handle = Mp.Services.ProcessWatcher.GetParentHandleAtPoint(gmp);
+                var unscaled_gmp = gmp * pixelDensity;
+                handle = Mp.Services.ProcessWatcher.GetParentHandleAtPoint(unscaled_gmp);
             }
             if (handle == IntPtr.Zero) {
                 return null;

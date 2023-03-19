@@ -141,13 +141,10 @@
             <!--  Settings Toggle Button  -->
 
             <ToggleButton x:Name="SettingsToggleButton"
-                          Classes="noBg noHoverBg shakeOver"
+                          Classes="noBg noHoverBg"
                           Command="{Binding ShowSettingsWindowCommand, Source={x:Static local:MpAvSettingsViewModel.Instance}}"
                           IsChecked="{Binding IsVisible, Source={x:Static local:MpAvSettingsViewModel.Instance}, Mode=OneWay}"
                           ToolTip.ShowDelay="500">
-                <ToggleButton.RenderTransform>
-                    <RotateTransform />
-                </ToggleButton.RenderTransform>
                 <ToolTip.Tip>
                     <local:MpAvToolTipView ToolTipText="Settings" />
                 </ToolTip.Tip>
@@ -156,11 +153,7 @@
 
             <ToggleButton x:Name="LockToggleButton"
                           Command="{Binding ToggleMainWindowLockCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
-                          Classes="noBg noHoverBg shakeOver">
-
-                <ToggleButton.RenderTransform>
-                    <RotateTransform />
-                </ToggleButton.RenderTransform>
+                          Classes="noBg noHoverBg">
                 <ToolTip.Tip>
                     <local:MpAvToolTipView ToolTipText="Lock" />
                 </ToolTip.Tip>
@@ -227,12 +220,9 @@
             </Grid>
             <!--  Layout Toggle Button  -->
             <ToggleButton x:Name="GridLayoutToggleButton"
-                          Classes="noBg noHoverBg shakeOver"
+                          Classes="noBg noHoverBg"
                           IsChecked="{Binding IsGridLayout, Mode=TwoWay, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                           ToolTip.ShowDelay="0">
-                <ToggleButton.RenderTransform>
-                    <RotateTransform />
-                </ToggleButton.RenderTransform>
                 <Grid>
                     <PathIcon IsVisible="{Binding IsGridLayout, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                               Data="{StaticResource StackLayoutSvg}">
@@ -271,14 +261,10 @@
             <Button x:Name="MainWindowCycleOrientationCcwButton"
                     Command="{Binding CycleOrientationCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                     CommandParameter="CCW"
-                    Classes="noBg noHoverBg shakeOver"
+                    Classes="noBg noHoverBg"
                     local:MpAvPointerCommandExtension.IsEnabled="True"
                     local:MpAvPointerCommandExtension.RightPressCommand="{Binding CycleOrientationCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                     local:MpAvPointerCommandExtension.RightPressCommandParameter="CW">
-
-                <Button.RenderTransform>
-                    <RotateTransform />
-                </Button.RenderTransform>
                 <ToolTip.Tip>
                     <local:MpAvToolTipView ToolTipText="Cycle Orientation CCW" />
                 </ToolTip.Tip>

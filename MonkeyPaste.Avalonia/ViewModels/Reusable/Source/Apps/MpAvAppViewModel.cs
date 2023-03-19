@@ -56,6 +56,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsThisApp =>
+            Parent != null && Parent.ThisAppViewModel == this;
+
         public bool IsActiveProcess {
             get {
                 if (Parent == null) {

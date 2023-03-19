@@ -86,19 +86,21 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        //public int SelectedTitleSortedItemIdx {
-        //    get {
-        //        return TitleSortedItems.IndexOf(SelectedItem);
-        //    }
-        //    set {
-        //        if (SelectedTitleSortedItemIdx != value) {
-        //            SelectedItem = value >= 0 && value < Items.Count ?
-        //                TitleSortedItems.ElementAt(value) : null;
-        //            OnPropertyChanged(nameof(SelectedTitleSortedItemIdx));
-        //        }
-        //    }
+        public int SelectedTitleSortedItemIdx {
+            get {
+                return TitleSortedItems.IndexOf(SelectedItem);
+            }
+            set {
+                if (SelectedTitleSortedItemIdx != value) {
+                    SelectedItem = value >= 0 && value < Items.Count ?
+                        TitleSortedItems.ElementAt(value) : null;
+                    OnPropertyChanged(nameof(SelectedTitleSortedItemIdx));
+                }
+            }
 
-        //}
+        }
+
+
 
         #region Drag Drop
 

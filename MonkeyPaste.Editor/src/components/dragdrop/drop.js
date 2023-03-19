@@ -294,7 +294,7 @@ function onDragLeave(e) {
             // drag leave of block/inline element, ignore
             return;
         }
-        resetDrop(e.fromHost, false, true);
+        resetDrop(e.fromHost, true, false);
         log('drag canceled (pointer still in window)');
         onDragLeave_ntf();
         return rejectDrop(e);

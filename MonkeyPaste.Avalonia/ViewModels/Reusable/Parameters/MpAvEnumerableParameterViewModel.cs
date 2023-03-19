@@ -64,9 +64,9 @@ namespace MonkeyPaste.Avalonia {
                                              //SelectedItems.Difference(_lastSelectedValues).Count() > 0; //{
           {
             get {
-                var selected_vals = SelectedItems.Select(x => x.Value);
-                var last_vals = _lastSelectedValues.Select(x => x.Value);
-                return selected_vals.Difference(last_vals).Count() > 0;
+                var selected_vals = SelectedItems.Select(x => x.Value).ToList();
+                var last_vals = _lastSelectedValues.Select(x => x.Value).ToList();
+                return selected_vals.Difference(last_vals).ToList().Count > 0;
             }
         }
         public bool IsParameterDropDownOpen { get; set; }

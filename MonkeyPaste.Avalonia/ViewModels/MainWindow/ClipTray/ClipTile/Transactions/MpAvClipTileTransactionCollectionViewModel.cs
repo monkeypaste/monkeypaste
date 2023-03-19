@@ -175,6 +175,7 @@ namespace MonkeyPaste.Avalonia {
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
             if (e is MpCopyItemTransaction cit && cit.CopyItemId == CopyItemId) {
                 Dispatcher.UIThread.Post(async () => {
+
                     var cisvm = await CreateClipTileSourceViewModel(cit);
                     Transactions.Add(cisvm);
                     if (cit.TransactionType == MpTransactionType.Edited) {
@@ -186,8 +187,13 @@ namespace MonkeyPaste.Avalonia {
                     while (cisvm.IsAnyBusy) {
                         await Task.Delay(100);
                     }
-                    OpenTransactionPaneCommand.Execute(null);
-                    SelectedTransaction = cisvm;
+
+                    if (Parent != null) {
+                        Parent.DoShake = true;
+                    }
+
+                    //OpenTransactionPaneCommand.Execute(null);
+                    //SelectedTransaction = cisvm;
                 });
             }
         }

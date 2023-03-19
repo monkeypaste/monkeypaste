@@ -13,7 +13,7 @@
                        d:DesignHeight="52"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileTitleView">
     <local:MpAvUserControl.Styles>
-        <Style Selector="StackPanel#SourceIconContainerPanel:pointerover Image#ClipTileAppIconBorderImage">
+        <Style Selector="Button#ClipTileAppIconImageButton:pointerover Image#ClipTileAppIconBorderImage, Button#ClipTileAppIconImageButton.shake Image#ClipTileAppIconBorderImage">
             <Style.Animations>
                 <Animation Duration="0:0:0.3"
                            Easing="CubicEaseOut"
@@ -35,7 +35,7 @@
                 </Animation>
             </Style.Animations>
         </Style>
-        <Style Selector="StackPanel#SourceIconContainerPanel:not(:pointerover) Image#ClipTileAppIconBorderImage">
+        <Style Selector="Button#ClipTileAppIconImageButton:not(:pointerover) Image#ClipTileAppIconBorderImage,Button#ClipTileAppIconImageButton:not(.shake) Image#ClipTileAppIconBorderImage">
             <Style.Animations>
                 <Animation Duration="0:0:0.3"
                            Easing="CubicEaseOut"
@@ -158,6 +158,7 @@
                                   Margin="15,0,0,0"
                                   Padding="0"
                                   ClipToBounds="True"
+                                  MinWidth="50"
                                   ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                   ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                                   local:MpAvIsFocusedExtension.IsEnabled="{Binding IsMarqueeEnabled, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
@@ -219,7 +220,8 @@
                      VerticalAlignment="Stretch"
                      Margin="0,3,13,0" />-->
             <Button x:Name="ClipTileAppIconImageButton"
-                    Classes="noBg noHoverBg shakeOver"
+                    Classes="noBg noHoverBg"
+                    Classes.shake="{Binding DoShake}"
                     Width="{Binding Bounds.Height, ElementName=TitleContainerGrid}"
                     Command="{Binding TransactionCollectionViewModel.ToggleTransactionPaneOpenCommand}"
                     ClipToBounds="False"

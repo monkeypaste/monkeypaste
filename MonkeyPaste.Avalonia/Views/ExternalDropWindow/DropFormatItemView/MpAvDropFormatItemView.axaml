@@ -11,14 +11,34 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvDropFormatItemView">
-    <Border HorizontalAlignment="Stretch"
+    <local:MpAvUserControl.Styles>
+        <Style Selector="Border#OuterBorder">
+            <Setter Property="BorderBrush"
+                    Value="White" />
+        </Style>
+        <Style Selector="Border#OuterBorder:not(.itemEnabled)">
+            <Setter Property="BorderBrush"
+                    Value="Red" />
+        </Style>
+
+        <Style Selector="Border#OuterBorder TextBlock">
+            <Setter Property="Foreground"
+                    Value="White" />
+        </Style>
+        <Style Selector="Border#OuterBorder:not(.itemEnabled) TextBlock">
+            <Setter Property="Foreground"
+                    Value="Red" />
+        </Style>
+    </local:MpAvUserControl.Styles>
+    <Border x:Name="OuterBorder"
+            Classes.itemEnabled="{Binding IsEnabled}"
+            HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
+            Width="65"
             Height="65"
-            Margin="0,0,0,0"
             Background="Transparent"
             CornerRadius="5"
-            BorderThickness="1"
-            BorderBrush="{Binding DropItemBorderHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}">
+            BorderThickness="1">
         <Grid HorizontalAlignment="Stretch"
               IsHitTestVisible="False"
               DragDrop.AllowDrop="False"
@@ -49,7 +69,6 @@
 
             <TextBlock Grid.Row="1"
                        DragDrop.AllowDrop="False"
-                       Foreground="{Binding DropItemTitleHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
                        Text="{Binding Parent.Title}" />
         </Grid>
     </Border>

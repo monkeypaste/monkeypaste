@@ -396,6 +396,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool DoShake { get; set; }
+
         public bool IsResizerEnabled =>
             MpAvThemeViewModel.Instance.IsDesktop &&
             !IsPopOutVisible;
@@ -1756,6 +1758,18 @@ namespace MonkeyPaste.Avalonia {
                         PopInTileCommand.Execute(null);
                     }
                     break;
+                case nameof(DoShake):
+                    if (!DoShake) {
+                        break;
+                    }
+                    Dispatcher.UIThread.Post(async () => {
+                        var sw = Stopwatch.StartNew();
+                        while (sw.ElapsedMilliseconds < MpAvThemeViewModel.Instance.ShakeDurMs) {
+                            await Task.Delay(100);
+                        }
+                        DoShake = false;
+                    });
+                    break;
             }
         }
 
@@ -1952,6 +1966,7 @@ namespace MonkeyPaste.Avalonia {
                 //        popped_in_ctvm.IsSelected = true;
                 //    }
                 //}
+                MpAvPersistentClipTilePropertiesHelper.RemovePersistentSize_ById(ciid);
                 Parent.PinnedItems.Remove(this);
                 Parent.PinTileCommand.Execute(this);
             }

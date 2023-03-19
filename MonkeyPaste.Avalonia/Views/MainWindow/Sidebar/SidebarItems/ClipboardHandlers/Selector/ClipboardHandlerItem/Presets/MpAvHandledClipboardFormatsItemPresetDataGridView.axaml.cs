@@ -29,12 +29,16 @@ namespace MonkeyPaste.Avalonia {
             }
             BindingContext.PropertyChanged += BindingContext_PropertyChanged;
             BindingContext.Items.CollectionChanged += Items_CollectionChanged;
+            BindingContext.Items.ForEach(x => x.Items.CollectionChanged += Items_CollectionChanged);
             BindingContext.Items.ForEach(x => x.PropertyChanged += PresetVIewModel_PropertyChanged);
             RefreshDataGrid();
         }
 
         private void PresetVIewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             var aipvm = sender as MpAvClipboardHandlerItemViewModel;
+            if (aipvm == null) {
+                return;
+            }
             switch (e.PropertyName) {
                 case nameof(aipvm.PluginIconId):
                     RefreshDataGrid();
@@ -85,8 +89,9 @@ namespace MonkeyPaste.Avalonia {
                 }
                 pdg.ApplyTemplate();
                 double nh = 0;
-                if (BindingContext != null) {
-                    nh = BindingContext.Items.Count * pdg.RowHeight;
+                if (BindingContext != null &&
+                    BindingContext.SelectedItem != null) {
+                    nh = BindingContext.SelectedItem.Items.Count * pdg.RowHeight;
                 }
                 pdg.Height = nh;
                 pdg.InvalidateMeasure();

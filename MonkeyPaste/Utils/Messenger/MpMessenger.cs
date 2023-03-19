@@ -46,6 +46,7 @@ namespace MonkeyPaste {
 
         ItemDragBegin,
         ItemDragEnd,
+        ItemDragCanceled,
 
         DropOverTraysBegin,
         DropOverTraysEnd,

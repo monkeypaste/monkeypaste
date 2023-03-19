@@ -67,7 +67,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Model
 
-        public string ClipboardFormatType {
+        public string ClipboardFormat {
             get {
                 if (AppClipboardFormatInfo == null) {
                     return string.Empty;
@@ -75,10 +75,10 @@ namespace MonkeyPaste.Avalonia {
                 return AppClipboardFormatInfo.FormatType;
             }
             set {
-                if (ClipboardFormatType != value) {
+                if (ClipboardFormat != value) {
                     AppClipboardFormatInfo.FormatType = value;
                     HasModelChanged = true;
-                    OnPropertyChanged(nameof(ClipboardFormatType));
+                    OnPropertyChanged(nameof(ClipboardFormat));
                 }
             }
         }
@@ -168,6 +168,10 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                 case nameof(HasModelChanged):
                     if (HasModelChanged) {
+                        if (AppId < 0) {
+                            MpDebug.Break("Trying to set non-app specific clipboard format, ignoring");
+                            break;
+                        }
                         Task.Run(async () => {
                             await AppClipboardFormatInfo.WriteToDatabaseAsync();
                             HasModelChanged = false;

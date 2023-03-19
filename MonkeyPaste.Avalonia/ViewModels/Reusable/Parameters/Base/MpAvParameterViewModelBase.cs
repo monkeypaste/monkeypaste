@@ -477,21 +477,19 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAnalyticItemParameterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                //case nameof(CurrentValue):
-                //case nameof(LastValue):
                 case nameof(HasModelChanged):
                 case nameof(CurrentValue):
-
-                    if (Parent is MpISaveOrCancelableViewModel socvm) {
+                    MpISaveOrCancelableViewModel socvm = null;
+                    if (Parent is MpISaveOrCancelableViewModel) {
                         // analyzers
-                        socvm.OnPropertyChanged(nameof(socvm.CanSaveOrCancel));
-                    } else {
-                        // for action or clipboard handler parameters
-                        if (!IsBusy) {
-                            // ignore init changes
+                        socvm = Parent as MpISaveOrCancelableViewModel;
+                    } else if (Parent is MpAvHandledClipboardFormatViewModel hcfvm &&
+                        hcfvm.Items.FirstOrDefault(x => x.Items.Any(x => x.ParameterValueId == ParameterValueId)) is MpISaveOrCancelableViewModel whocares) {
+                        socvm = whocares;
+                    }
+                    if (socvm != null) {
 
-                            SaveCurrentValueCommand.Execute(null);
-                        }
+                        socvm.OnPropertyChanged(nameof(socvm.CanSaveOrCancel));
                     }
                     break;
                 case nameof(ValidationMessage):
@@ -548,7 +546,8 @@ namespace MonkeyPaste.Avalonia {
                 });
             },
             (args) => {
-                return HasModelChanged;
+                //return HasModelChanged;
+                return true;
             });
 
         #endregion

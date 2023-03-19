@@ -1,0 +1,135 @@
+<UserControl x:Class="MonkeyPaste.Avalonia.MpAvDropCompleteView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:local="using:MonkeyPaste.Avalonia"
+             x:DataType="local:MpAvExternalDropWindowViewModel"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="450"
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch">
+    <UserControl.Styles>
+        <Style Selector="Button#DoNotRememberDropInfoButton /template/ ContentPresenter">
+            <Setter Property="Background"
+                    Value="Crimson" />
+        </Style>
+        <Style Selector="Button#DoNotRememberDropInfoButton:pointerover /template/ ContentPresenter">
+            <Setter Property="Background"
+                    Value="Salmon" />
+        </Style>
+
+        <Style Selector="Button#RememberDropInfoButton Grid">
+            <Setter Property="Background"
+                    Value="LimeGreen" />
+        </Style>
+        <Style Selector="Button#RememberDropInfoButton:pointerover Grid">
+            <Setter Property="Background"
+                    Value="Green" />
+        </Style>
+        <Style Selector="Button#RememberDropInfoButton TextBlock">
+            <Setter Property="Foreground"
+                    Value="Black" />
+        </Style>
+        <Style Selector="Button#RememberDropInfoButton:pointerover TextBlock">
+            <Setter Property="Foreground"
+                    Value="Gold" />
+        </Style>
+    </UserControl.Styles>
+    <Grid x:Name="DropCompleteGrid"
+          Background="DimGray"
+          HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch"
+          RowDefinitions="Auto,100,50"
+          ColumnDefinitions="0.5*,0.5*">
+        <TextBlock Grid.Row="0"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="2"
+                   FontSize="18"
+                   Foreground="White"
+                   Padding="10"
+                   HorizontalAlignment="Stretch"
+                   VerticalAlignment="Stretch"
+                   TextAlignment="Center"
+                   TextWrapping="WrapWithOverflow">
+            Remember Drop Settings For:
+        </TextBlock>
+        <Image Grid.Row="1"
+               Grid.Column="0"
+               Margin="10"
+               Source="{Binding DropAppViewModel.IconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
+               Stretch="UniformToFill"
+               Width="{Binding $self.Bounds.Height}"
+               HorizontalAlignment="Right"
+               VerticalAlignment="Stretch" />
+        <TextBlock x:Name="FinishDropTextBlock"
+                   Grid.Row="1"
+                   Grid.Column="1"
+                   DockPanel.Dock="Right"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Center"
+                   TextAlignment="Left"
+                   TextWrapping="WrapWithOverflow"
+                   FontSize="16"
+                   Foreground="White"
+                   Text="{Binding DropAppViewModel.AppName}" />
+        <Button x:Name="DoNotRememberDropInfoButton"
+                Grid.Row="2"
+                Grid.Column="0"
+                Foreground="White"
+                Command="{Binding DoNotRememberDropInfoCommand}"
+                FontSize="16"
+                FontWeight="SemiBold"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch">
+            <TextBlock Text="NO" />
+        </Button>
+        <Button x:Name="RememberDropInfoButton"
+                Grid.Row="2"
+                Grid.Column="1"
+                Command="{Binding RememberDropInfoCommand}"
+                HorizontalContentAlignment="Stretch"
+                VerticalContentAlignment="Stretch"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch">
+            <Grid HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch">
+                <Rectangle x:Name="RememberTimeRectangle"
+                           Fill="Lime"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Stretch"
+                           MaxWidth="{Binding $parent[Button].Bounds.Width}"
+                           MinWidth="0">
+                    <Rectangle.Width>
+                        <MultiBinding Converter="{x:Static local:MpAvMultiSliderValueToLengthConverter.Instance}">
+                            <Binding>
+                                <Binding.Source>
+                                    <sys:Double>0</sys:Double>
+                                </Binding.Source>
+                            </Binding>
+                            <Binding>
+                                <Binding.Source>
+                                    <sys:Double>1</sys:Double>
+                                </Binding.Source>
+                            </Binding>
+                            <Binding Path="RememberProgress" />
+                            <Binding ElementName="RememberTimeRectangle"
+                                     Path="MaxWidth" />
+                        </MultiBinding>
+                    </Rectangle.Width>
+                </Rectangle>
+
+                <TextBlock HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontSize="16"
+                           FontWeight="SemiBold"
+                           TextAlignment="Center"
+                           Text="YES" />
+            </Grid>
+        </Button>
+    </Grid>
+</UserControl>

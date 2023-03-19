@@ -48,6 +48,9 @@ namespace MonkeyPaste.Avalonia {
         public double DefaultGridSplitterFixedDimensionLength_mobile =>
             GetThemeValue<double>(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength_mobile);
 
+        public int ShakeDurMs =>
+            500;
+
         #endregion
 
         public double GlobalBgOpacity {

@@ -54,13 +54,15 @@ namespace MonkeyPaste.Avalonia {
             ApplyClipboardPresetToDragDataAsync().FireAndForgetSafeAsync();
             var result = await DragDrop.DoDragDrop(pointerEventArgs, DragDataObject, allowedEffects);
 
+            MpConsole.WriteLine($"Content drop effect: '{result}'");
             // wait for possible dragEnd.wasCanceled == true msg
             await Task.Delay(300);
             if (result == DragDropEffects.None ||
                 dragSource.WasDragCanceled) {
                 // NOTE make sure to reset cancel property...
+                MpConsole.WriteLine($"Drag canceled: '{dragSource.WasDragCanceled}'");
+                MpMessenger.SendGlobal(MpMessageType.ItemDragCanceled);
                 dragSource.WasDragCanceled = false;
-                MpConsole.WriteLine("Drag canceled");
                 FinishDrag(result);
                 return;
             }
@@ -156,6 +158,7 @@ namespace MonkeyPaste.Avalonia {
         private static void FinishDrag(DragDropEffects? dropEffect) {
             ResetDragState();
             MpMessenger.SendGlobal(MpMessageType.ItemDragEnd);
+
 
         }
         private static void ResetDragState() {

@@ -244,7 +244,7 @@
                             Command="{Binding HandleSearchButtonClickCommand}"
                             CommandParameter="{Binding $self}"
                             local:MpAvMenuExtension.IsOpen="{Binding SearchFilterCollectionViewModel.IsPopupMenuOpen}"
-                            Classes="noBg noHoverBg shakeOver">
+                            Classes="noBg noHoverBg">
                         <ToolTip.Tip>
                             <local:MpAvToolTipView ToolTipText="{Binding SearchIconToolTipText}" />
                         </ToolTip.Tip>
@@ -391,11 +391,7 @@
                       IsChecked="{Binding IsExpanded, Mode=TwoWay, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
                       Classes="noBg noHoverBg outlineOver"
                       Classes.saved="{Binding IsSavedQuery, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}">
-            <Image Classes="shakeOver">
-                <Image.RenderTransform>
-                    <RotateTransform />
-                </Image.RenderTransform>
-            </Image>
+            <Image/>
         </ToggleButton>
         <!--</StackPanel>-->
     </Grid>

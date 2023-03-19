@@ -44,7 +44,7 @@
     </UserControl.Styles>
     <Button HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            Classes="optionsButton shakeOver"
+            Classes="optionsButton"
             Command="{Binding Command, ElementName=OptionsButton}"
             CommandParameter="{Binding CommandParameter, ElementName=OptionsButton}">
 

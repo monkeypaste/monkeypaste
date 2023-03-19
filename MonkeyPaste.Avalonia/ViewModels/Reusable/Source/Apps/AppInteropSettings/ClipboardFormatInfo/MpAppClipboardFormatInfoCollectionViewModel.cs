@@ -1,11 +1,14 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Threading;
+using MonkeyPaste.Common;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using static Org.BouncyCastle.Bcpg.Attr.ImageAttrib;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAppClipboardFormatInfoCollectionViewModel :
-        MpAvSelectorViewModelBase<MpAvAppViewModel, MpAppClipboardFormatInfoViewModel> {
+        MpViewModelBase<MpAvAppViewModel> {
         #region Private Variables
 
         //private static readonly MpClipboardFormatType[] _DefaultFormats = new MpClipboardFormatType[] {
@@ -17,12 +20,17 @@ namespace MonkeyPaste.Avalonia {
         //    MpClipboardFormatType.FileDrop
         //};
 
+
+        #endregion
+
+        #region Statics
         #endregion
 
         #region Properties
 
         #region View Models
 
+        public ObservableCollection<MpAppClipboardFormatInfoViewModel> Items { get; set; }
         //public ObservableCollection<MpAppClipboardFormatInfoViewModel> Items =>
         //    new ObservableCollection<MpAppClipboardFormatInfoViewModel>(
         //        Items.Where(x => !x.IsFormatIgnored).OrderByDescending(x=>x.Priority));
@@ -30,8 +38,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+        public bool IsEmpty =>
+            Items == null || Items.Count == 0;
 
-        public bool IsAnyBusy => IsBusy || base.Items.Any(x => x.IsBusy);
+        public bool IsAnyBusy => IsBusy || (Items != null && Items.Any(x => x.IsBusy));
 
         #endregion
 
@@ -47,21 +57,35 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task InitializeAsync(int appId) {
             IsBusy = true;
+            if (Items != null) {
+
+                Items.Clear();
+            }
 
             var overrideInfos = await MpDataModelProvider.GetAppClipboardFormatInfosByAppIdAsync(appId);
-            Items.Clear();
-            foreach (var format in MpPortableDataFormats.RegisteredFormats) {
-                if (overrideInfos.Any(x => x.FormatType == format)) {
-                    continue;
+            if (overrideInfos.Any()) {
+                if (Items == null) {
+                    Items = new ObservableCollection<MpAppClipboardFormatInfoViewModel>();
                 }
-
-                var defInfo = new MpAppClipboardFormatInfo() {
-                    AppId = appId,
-                    FormatType = format,
-                    IgnoreFormatValue = overrideInfos.Count
-                };
-                overrideInfos.Add(defInfo);
+            } else {
+                // no overrides null items
+                Items = null;
+                IsBusy = false;
+                return;
             }
+
+            //foreach (var format in MpPortableDataFormats.RegisteredFormats) {
+            //    if (overrideInfos.Any(x => x.FormatType == format)) {
+            //        continue;
+            //    }
+
+            //    var defInfo = new MpAppClipboardFormatInfo() {
+            //        AppId = appId,
+            //        FormatType = format,
+            //        IgnoreFormatValue = overrideInfos.Count
+            //    };
+            //    overrideInfos.Add(defInfo);
+            //}
 
             foreach (var ais in overrideInfos.OrderBy(x => x.IgnoreFormatValue)) {
                 var aisvm = await CreateAppClipboardFormatViewModel(ais);
@@ -85,9 +109,59 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Protected Methods
+
+        protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
+            if (e is MpAppClipboardFormatInfo acfi && Parent != null && Parent.AppId == acfi.AppId) {
+                Dispatcher.UIThread.Post(async () => {
+                    if (Items == null) {
+                        Items = new ObservableCollection<MpAppClipboardFormatInfoViewModel>();
+                    }
+                    var acfvm = Items.FirstOrDefault(x => x.ClipboardFormat == acfi.FormatType);
+                    if (acfvm == null) {
+                        acfvm = await CreateAppClipboardFormatViewModel(acfi);
+
+                        Items.Add(acfvm);
+                    } else {
+                        await acfvm.InitializeAsync(acfi);
+                    }
+                });
+            }
+        }
+        protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
+            if (e is MpAppClipboardFormatInfo acfi && Parent != null && Parent.AppId == acfi.AppId) {
+                Dispatcher.UIThread.Post(async () => {
+                    if (Items == null) {
+                        MpDebug.Break("App clipboard format error, out of sync w/ db");
+                        Items = new ObservableCollection<MpAppClipboardFormatInfoViewModel>();
+                    }
+                    var acfvm = Items.FirstOrDefault(x => x.AppInteropSettingId == acfi.Id);
+                    if (acfvm == null) {
+                        MpDebug.Break("App clipboard format error, out of sync w/ db");
+                    } else {
+                        await acfvm.InitializeAsync(acfi);
+                    }
+                });
+            }
+        }
+
+        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+            if (e is MpAppClipboardFormatInfo acfi && Parent != null && Parent.AppId == acfi.AppId) {
+                Dispatcher.UIThread.Post(() => {
+                    if (Items == null) {
+                        MpDebug.Break("App clipboard format error, out of sync w/ db");
+                        return;
+                    }
+                    var acfvm = Items.FirstOrDefault(x => x.AppInteropSettingId == acfi.Id);
+                    Items.Remove(acfvm);
+                });
+            }
+        }
+        #endregion
+
         #region Commands
 
-        public ICommand DeleteClipboardFormatTypeCommand => new MpCommand<object>(
+        public ICommand DeleteClipboardFormatTypeCommand => new MpAsyncCommand<object>(
             async (cfaisvmArg) => {
                 var cfaisvm = cfaisvmArg as MpAppClipboardFormatInfoViewModel;
                 if (cfaisvm == null) {
@@ -95,7 +169,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 IsBusy = true;
 
-                base.Items.Remove(cfaisvm);
+                Items.Remove(cfaisvm);
 
                 await cfaisvm.AppClipboardFormatInfo.DeleteFromDatabaseAsync();
 
@@ -103,7 +177,7 @@ namespace MonkeyPaste.Avalonia {
 
                 IsBusy = false;
 
-            });
+            }, (args) => !IsEmpty);
 
         public ICommand AddClipboardFormatTypeCommand => new MpCommand(
             async () => {
@@ -113,7 +187,10 @@ namespace MonkeyPaste.Avalonia {
                     appId: Parent.AppId);
 
                 var cfaisvm = await CreateAppClipboardFormatViewModel(cfais);
-                base.Items.Add(cfaisvm);
+                if (Items == null) {
+                    Items = new ObservableCollection<MpAppClipboardFormatInfoViewModel>();
+                }
+                Items.Add(cfaisvm);
 
                 while (cfaisvm.IsBusy) {
                     await Task.Delay(100);

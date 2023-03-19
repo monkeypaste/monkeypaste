@@ -37,14 +37,9 @@
                     HorizontalAlignment="Center"
                     IsVisible="{Binding IsPendingQuery}"
                     Width="{Binding $self.Bounds.Height}"
-                    Classes="noBg noHoverBg addRemoveBtn shakeOver outline"
+                    Classes="noBg noHoverBg addRemoveBtn outline"
                     Command="{Binding RejectPendingCriteriaItemsCommand}">
-                <Image Classes="shakeOver"
-                       Source="{Binding ., Source={StaticResource MinusImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}">
-                    <Image.RenderTransform>
-                        <RotateTransform />
-                    </Image.RenderTransform>
-                </Image>
+                <Image Source="{Binding ., Source={StaticResource MinusImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
             </Button>
 
             <!--  POP OUT WINDOW BUTTON  -->

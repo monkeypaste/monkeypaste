@@ -220,7 +220,7 @@ namespace MonkeyPaste.Common {
 
         #region Dnd Event Handlers
         private static void DragOver(object sender, DragEventArgs e) {
-            MpConsole.WriteLine("[DragOver] Dnd Widget Window Cur Formats: " + String.Join(Environment.NewLine, e.Data.GetDataFormats()));
+            //MpConsole.WriteLine("[DragOver] Dnd Widget Window Cur Formats: " + String.Join(Environment.NewLine, e.Data.GetDataFormats()));
             e.DragEffects = DragDropEffects.None;
             var ic = sender as ItemsControl;
             ic.AutoScrollItemsControl(e);
@@ -340,7 +340,7 @@ namespace MonkeyPaste.Common {
 
             if (performScroll) {
                 sv.ScrollByPointDelta(scroll_delta);
-                MpConsole.WriteLine($"Auto-scroll delta: '{scroll_delta}'");
+                //MpConsole.WriteLine($"Auto-scroll delta: '{scroll_delta}'");
             }
             return scroll_delta;
         }
