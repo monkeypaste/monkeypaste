@@ -6,6 +6,7 @@ namespace MonkeyPaste.Avalonia {
 
     public class MpAvShortcutTriggerViewModel :
         MpAvTriggerActionViewModelBase,
+
         MpIApplicationCommandCollectionViewModel {
 
         #region Constants
@@ -29,6 +30,7 @@ namespace MonkeyPaste.Avalonia {
             };
 
         #endregion
+
 
         #endregion
 
@@ -64,8 +66,9 @@ namespace MonkeyPaste.Avalonia {
         public MpAvShortcutViewModel ShortcutViewModel {
             get {
                 if (ArgLookup.TryGetValue(CURRENT_SHORTCUT_PARAM_ID, out var param_vm) &&
-                    param_vm is MpAvShortcutRecorderParameterViewModel scpvm) {
-                    return scpvm.ShortcutViewModel;
+                    param_vm is MpAvShortcutRecorderParameterViewModel scpvm &&
+                    MpAvShortcutCollectionViewModel.Instance.GetViewModelCommandShortcut(scpvm) is MpAvShortcutViewModel svm) {
+                    return svm;
                 }
                 return null;
             }

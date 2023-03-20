@@ -9,6 +9,14 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
         #endregion
 
+        #region MpAvIShortcutCommandViewModel Implementation
+
+        public MpShortcutType ShortcutType { get; }
+        public string KeyString =>
+            MpAvShortcutCollectionViewModel.Instance.GetViewModelCommandShortcutKeyString(this);
+        public ICommand ShortcutCommand { get; }
+        public object ShortcutCommandParameter { get; }
+        #endregion
         #region Properties
 
         #region View Models
@@ -17,59 +25,9 @@ namespace MonkeyPaste.Avalonia {
         #region Appearance
         #endregion
 
-        #region MpAvIShortcutCommandViewModel Implementation
-
-        public ICommand AssignCommand => new MpAsyncCommand(
-            async () => {
-
-                ICommand cmd = null;
-                object cmdParam = null;
-                if (Parent is MpAvShortcutTriggerViewModel sctvm) {
-                    cmd = MpAvTriggerCollectionViewModel.Instance.InvokeActionCommand;
-                    cmdParam = sctvm.ActionId;
-                }
-                await MpAvShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
-                    shortcutType: MpShortcutType.InvokeAction,
-                    title: $"Trigger {Label} Action",
-                    command: cmd,
-                    commandParameter: cmdParam.ToString(),
-                    keys: ShortcutKeyString);
-
-                OnPropertyChanged(nameof(ShortcutViewModel));
-
-                OnPropertyChanged(nameof(ShortcutKeyString));
-
-
-                if (ShortcutViewModel != null) {
-                    ShortcutViewModel.OnPropertyChanged(nameof(ShortcutViewModel.KeyItems));
-                }
-            });
-
-        public MpShortcutType ShortcutType {
-            get {
-                if (Parent is MpAvShortcutTriggerViewModel sctvm) {
-                    return MpShortcutType.InvokeAction;
-                }
-                return MpShortcutType.None;
-            }
-        }
-        public MpAvShortcutViewModel ShortcutViewModel {
-            get {
-                if (Parent is MpAvShortcutTriggerViewModel sctvm) {
-                    return
-                        MpAvShortcutCollectionViewModel.Instance.Items
-                            .FirstOrDefault(x => x.CommandParameter == sctvm.ActionId.ToString() && x.ShortcutType == MpShortcutType.InvokeAction);
-                }
-                return null;
-            }
-        }
-        public string ShortcutKeyString => ShortcutViewModel == null ? string.Empty : ShortcutViewModel.KeyString;
-
-        #endregion
-
         #region Model
 
-        #endregion        
+        #endregion
 
         #endregion
 
@@ -77,7 +35,15 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvShortcutRecorderParameterViewModel() : base(null) { }
 
-        public MpAvShortcutRecorderParameterViewModel(MpViewModelBase parent) : base(parent) { }
+        public MpAvShortcutRecorderParameterViewModel(MpViewModelBase parent) : base(parent) {
+            if (parent is MpAvShortcutTriggerViewModel stvm) {
+
+                ShortcutType = MpShortcutType.InvokeAction;
+                ShortcutCommand = MpAvTriggerCollectionViewModel.Instance.InvokeActionCommand;
+                ShortcutCommandParameter = stvm.ActionId;
+            }
+
+        }
 
         #endregion
 
@@ -100,6 +66,7 @@ namespace MonkeyPaste.Avalonia {
 
             IsBusy = false;
         }
+
 
 
 

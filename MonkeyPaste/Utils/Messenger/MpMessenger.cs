@@ -100,6 +100,8 @@ namespace MonkeyPaste {
 
         ChildWindowClosed,
 
+        SettingsWindowOpened,
+
         AdvancedSearchExpandedChanged,
 
         TagSelectionChanged,

@@ -13,6 +13,46 @@
                        x:Name="ShortcutView"
                        x:Class="MonkeyPaste.Avalonia.MpAvShortcutView">
     <local:MpAvUserControl.Styles>
+        <!--  - RECORD/ KEYGROUP TOGGLE  -->
+        <Style Selector="Grid#ContainerGrid.active ItemsControl#ShortcutListBox">
+            <Setter Property="IsVisible"
+                    Value="True" />
+        </Style>
+
+        <Style Selector="Grid#ContainerGrid:not(.active) ItemsControl#ShortcutListBox">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+
+        <Style Selector="Grid#ContainerGrid.active TextBlock#EmptyTextBlock">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+
+        <Style Selector="Grid#ContainerGrid:not(.active) TextBlock#EmptyTextBlock">
+            <Setter Property="IsVisible"
+                    Value="True" />
+        </Style>
+
+        <Style Selector="Grid#ContainerGrid Button#RecordButton">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+
+        <Style Selector="Grid#ContainerGrid:pointerover ItemsControl#ShortcutListBox">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+        <Style Selector="Grid#ContainerGrid:pointerover TextBlock#EmptyTextBlock">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+        <Style Selector="Grid#ContainerGrid:pointerover Button#RecordButton">
+            <Setter Property="IsVisible"
+                    Value="True" />
+        </Style>
+
+        <!--  RECORD ANIMATION  -->
         <Style Selector="Button#RecordButton:pointerover /template/ ContentPresenter">
             <Setter Property="Background"
                     Value="Silver" />
@@ -50,21 +90,19 @@
                 </Animation>
             </Style.Animations>
         </Style>
-        <Style Selector="ItemsControl#ShortcutListBox Label.comboLabel">
-            <!--  Hide plus after last combo  -->
-            <Setter Property="IsVisible"
-                    Value="True" />
-        </Style>
-        <Style Selector="ItemsControl#ShortcutListBox:not(.multi) Label.comboLabel, ItemsControl#ShortcutListBox.multi local|MpAvShortcutKeyGroupView:nth-last-child()  Label.comboLabel">
-            <!--  Hide plus when 1 combo (nth doesn't work)  -->
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>
 
     </local:MpAvUserControl.Styles>
-    <Grid>
+    <Grid x:Name="ContainerGrid"
+          Background="{StaticResource HitTestableTransparent}"
+          Classes.active="{Binding KeyGroups, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
+        <TextBlock x:Name="EmptyTextBlock"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   FontWeight="SemiBold"
+                   FontStyle="Oblique"
+                   Foreground="DimGray"
+                   Text="{Binding EmptyText, ElementName=ShortcutView}" />
         <ItemsControl x:Name="ShortcutListBox"
-                      Classes.multi="{Binding KeyGroups, Converter={x:Static local:MpAvCollectionToIsMultipleBoolConverter.Instance}}"
                       Background="Transparent"
                       BorderThickness="0"
                       HorizontalAlignment="Center"
@@ -75,8 +113,15 @@
             </ItemsControl.IsVisible>
             <ItemsControl.Resources>
                 <Thickness x:Key="ListBoxItemPadding">
-                    0,0,0,0
+                    5,0,5,0
                 </Thickness>
+                <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">Transparent</SolidColorBrush>
+                <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">Transparent</SolidColorBrush>
+                <SolidColorBrush x:Key="SystemControlHighlightListAccentHighBrush">Transparent</SolidColorBrush>
+                <SolidColorBrush x:Key="SystemControlHighlightListLowBrush">Transparent</SolidColorBrush>
+                <SolidColorBrush x:Key="SystemControlHighlightListMediumBrush">Transparent</SolidColorBrush>
+                <SolidColorBrush x:Key="SystemControlHighlightListHighBrush">Transparent</SolidColorBrush>
+
             </ItemsControl.Resources>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -88,13 +133,19 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <local:MpAvShortcutKeyGroupView Margin="5,0,5,0"
-                                                     />
+                    <Grid ColumnDefinitions="Auto,*">
+                        <TextBlock Grid.Column="0"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   Margin="5,0"
+                                   Text="+"
+                                   IsVisible="{Binding SortIdx, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}" />
+                        <local:MpAvShortcutKeyGroupView Grid.Column="1" />
+                    </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
         <Button x:Name="RecordButton"
-                IsVisible="False"
                 Margin="3"
                 Padding="0,2"
                 Command="{Binding RecordCommand, ElementName=ShortcutView}"

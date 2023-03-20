@@ -8,8 +8,6 @@
                 Value="Hand" />
     </Style>
     <Style Selector=":is(Button).defaultButton /template/ ContentPresenter">
-        <Setter Property="Background"
-                Value="Beige" />
         <Setter Property="CornerRadius"
                 Value="5" />
         <Setter Property="BorderThickness"
@@ -18,27 +16,27 @@
                 Value="DimGray" />
         <Setter Property="Padding"
                 Value="5,3" />
-    </Style>
-    <Style Selector=":is(Button).defaultButton /template/ ContentPresenter">
-        <Setter Property="Background"
-                Value="Beige" />
         <Setter Property="Foreground"
                 Value="Black" />
-        <Setter Property="CornerRadius"
-                Value="5" />
-        <Setter Property="BorderThickness"
-                Value="1" />
-        <Setter Property="BorderBrush"
-                Value="DimGray" />
-        <Setter Property="Padding"
-                Value="5,3" />
     </Style>
+
+    <Style Selector=":is(Button).defaultButton:not(.severe) /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="Beige" />
+
+    </Style>
+    <Style Selector=":is(Button).severe /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="Salmon" />
+    </Style>
+
     <Style Selector=":is(Button).defaultButton:disabled /template/ ContentPresenter">
         <Setter Property="Background"
                 Value="Silver" />
         <Setter Property="Cursor"
                 Value="Arrow" />
     </Style>
+
     <Style Selector=":is(Button).textOnlyButton /template/ ContentPresenter">
         <Setter Property="Padding"
                 Value="10,3" />
@@ -46,8 +44,17 @@
     <Style Selector=":is(Button):pointerover.defaultButton /template/ ContentPresenter">
         <Setter Property="BorderBrush"
                 Value="Yellow" />
+    </Style>
+
+    <Style Selector=":is(Button):pointerover.defaultButton:not(.severe) /template/ ContentPresenter">
         <Setter Property="Background"
                 Value="Silver" />
+
+    </Style>
+    <Style Selector=":is(Button):pointerover.defaultButton.severe /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="Crimson" />
+
     </Style>
     <Style Selector=":is(Button).outline /template/ ContentPresenter">
         <Setter Property="BorderThickness"
@@ -75,9 +82,9 @@
         <Setter Property="FontWeight"
                 Value="SemiBold" />
     </Style>
-    <Style Selector=":is(Button).iconTextButton TextBlock">
+    <Style Selector=":is(Button).iconTextButton TextBlock, :is(Button).iconTextButton Image">
         <Setter Property="Margin"
-                Value="10,0,0,0" />
+                Value="5,0" />
     </Style>
     <Style Selector=":is(Button).defaultButton Image">
         <Setter Property="Width"

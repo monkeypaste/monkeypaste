@@ -168,6 +168,21 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+
+        #region MpAvIShortcutCommandViewModel Implementation
+
+        public MpShortcutType ShortcutType =>
+            MpShortcutType.AnalyzeCopyItemWithPreset;
+        public string KeyString =>
+            MpAvShortcutCollectionViewModel.Instance.GetViewModelCommandShortcutKeyString(this);
+
+        public object ShortcutCommandParameter =>
+            AnalyticItemPresetId;
+        ICommand MpAvIShortcutCommandViewModel.ShortcutCommand =>
+            Parent == null ? null : Parent.ExecuteAnalysisCommand;
+
+        #endregion
+
         #endregion
 
         #region Properties
@@ -211,9 +226,9 @@ namespace MonkeyPaste.Avalonia {
         #region State
 
         public string ShortcutTooltipText =>
-            string.IsNullOrEmpty(ShortcutKeyString) ?
+            string.IsNullOrEmpty(KeyString) ?
                 $"Assign shortcut to '{Label}'" :
-                ShortcutKeyString;
+                KeyString;
 
         public bool HasAnyParameterValueChange => Items.Any(x => x.HasModelChanged);
         public bool IsLabelTextBoxFocused { get; set; } = false;
@@ -382,31 +397,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpAvIShortcutCommandViewModel Implementation
-
-        public MpShortcutType ShortcutType => MpShortcutType.AnalyzeCopyItemWithPreset;
-
-        public MpAvShortcutViewModel ShortcutViewModel {
-            get {
-                if (Parent == null || Preset == null) {
-                    return null;
-                }
-                var scvm = MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.CommandParameter == Preset.Id.ToString() && x.ShortcutType == ShortcutType);
-
-                if (scvm == null) {
-                    scvm = new MpAvShortcutViewModel(MpAvShortcutCollectionViewModel.Instance);
-                }
-
-                return scvm;
-            }
-        }
-
-        public string ShortcutKeyString => ShortcutViewModel.KeyString;
-
-        public ICommand AssignCommand => AssignHotkeyCommand;
-
-        #endregion
-
         #endregion
 
         #region Constructors
@@ -468,7 +458,6 @@ namespace MonkeyPaste.Avalonia {
             }
 
             OnPropertyChanged(nameof(ShortcutTooltipText));
-            OnPropertyChanged(nameof(ShortcutViewModel));
             OnPropertyChanged(nameof(Items));
             Items.ForEach(x => x.Validate());
             HasModelChanged = false;
@@ -501,7 +490,7 @@ namespace MonkeyPaste.Avalonia {
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
                 if (sc.CommandParameter == AnalyticItemPresetId.ToString() && sc.ShortcutType == ShortcutType) {
-                    OnPropertyChanged(nameof(ShortcutKeyString));
+                    OnPropertyChanged(nameof(KeyString));
                 }
             }
         }
@@ -509,7 +498,7 @@ namespace MonkeyPaste.Avalonia {
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
                 if (sc.CommandParameter == AnalyticItemPresetId.ToString() && sc.ShortcutType == ShortcutType) {
-                    OnPropertyChanged(nameof(ShortcutKeyString));
+                    OnPropertyChanged(nameof(KeyString));
                 }
             }
         }
@@ -517,7 +506,7 @@ namespace MonkeyPaste.Avalonia {
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc) {
                 if (sc.CommandParameter == AnalyticItemPresetId.ToString() && sc.ShortcutType == ShortcutType) {
-                    OnPropertyChanged(nameof(ShortcutKeyString));
+                    OnPropertyChanged(nameof(KeyString));
                 }
             }
         }
@@ -578,33 +567,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
-
-        //public ICommand ManagePresetCommand => new MpCommand(
-        //    () => {
-        //        Parent.Items.ForEach(x => x.IsSelected = x == this);
-        //        Parent.Items.ForEach(x => x.IsEditingParameters = x == this);
-        //        Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
-        //    }, !IsEditingParameters && !Parent.IsAnyEditingParameters);
-
-        public ICommand AssignHotkeyCommand => new MpAsyncCommand(
-            async () => {
-                await MpAvShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
-                    $"Use {Label} Analyzer",
-                    MpAvClipTrayViewModel.Instance.AnalyzeSelectedItemCommand,
-                    MpShortcutType.AnalyzeCopyItemWithPreset,
-                    Preset.Id.ToString(),
-                    ShortcutKeyString);
-
-                OnPropertyChanged(nameof(ShortcutViewModel));
-
-                OnPropertyChanged(nameof(ShortcutKeyString));
-
-
-                if (ShortcutViewModel != null) {
-                    ShortcutViewModel.OnPropertyChanged(nameof(ShortcutViewModel.KeyItems));
-                }
-            });
-
         public ICommand ToggleEditLabelCommand => new MpCommand(
             () => {
                 IsLabelReadOnly = !IsLabelReadOnly;

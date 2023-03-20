@@ -227,27 +227,27 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public async Task<string> RegisterViewModelShortcutAsync(
-            string title,
-            ICommand command,
-            MpShortcutType shortcutType,
-            string commandParameter,
-            string keys) {
-            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
-            string shortcutKeyString = await MpAvAssignShortcutViewModel.ShowAssignShortcutDialog(title, keys, command, commandParameter);
+        public async Task<string> CreateOrUpdateViewModelShortcutAsync(
+            MpAvIShortcutCommandViewModel iscvm,
+            object iconResourceObj = null) {
 
+            string keys = null;
+            ICommand command = iscvm.ShortcutCommand;
+            string commandParameter = iscvm.ShortcutCommandParameter.ToStringOrDefault();
+            MpShortcutType shortcutType = iscvm.ShortcutType;
             MpAvShortcutViewModel scvm = null;
-            if ((int)shortcutType < MpShortcut.MIN_USER_SHORTCUT_TYPE) {
-                // for non-custom shortcuts check shortcut type
-                scvm = Items.FirstOrDefault(x => x.ShortcutType == shortcutType);
-            } else {
-                scvm = Items.FirstOrDefault(x => x.CommandParameter == commandParameter && x.ShortcutType == shortcutType);
+            if (GetViewModelCommandShortcutId(iscvm) is int sid && Items.FirstOrDefault(x => x.ShortcutId == sid) is MpAvShortcutViewModel svm) {
+                scvm = svm;
+                keys = svm.KeyString;
             }
-            //if ((int)shortcutType < (int)MpShortcutType.CustomMinimum) {
-            //    scvm = Shortcuts.FirstOrDefault(x => x.Command == command && (int)x.CommandId == commandId);
-            //} else {
-            //    scvm = Shortcuts.FirstOrDefault(x => x.CommandId == (int)commandId && x.ShortcutType == shortcutType && );
-            //}
+            string title = await iscvm.ShortcutType.GetShortcutTitleAsync(iscvm);
+
+            string shortcutKeyString = await MpAvAssignShortcutViewModel.ShowAssignShortcutDialog(
+                title,
+                keys,
+                scvm == null ? 0 : scvm.ShortcutId,
+                MpShortcutAssignmentType.InternalOrGlobalCommand,
+                iconResourceObj);
 
             if (shortcutKeyString == null) {
                 //if assignment was canceled ignore but reset skl
@@ -273,7 +273,6 @@ namespace MonkeyPaste.Avalonia {
                     MpShortcutType.PasteCopyItem ? MpRoutingType.Bubble : MpRoutingType.Internal;
                 //copyitem direct, tag internal, analyzer internal
                 var sc = await MpShortcut.CreateAsync(
-                    shortcutLabel: title,
                     keyString: shortcutKeyString,
                     routeType: routingType,
                     shortcutType: shortcutType,
@@ -284,12 +283,41 @@ namespace MonkeyPaste.Avalonia {
                 //if shorcut updated
                 scvm.KeyString = shortcutKeyString;
 
-                await scvm.InitializeAsync(scvm.Shortcut, scvm.Command);
+                await scvm.InitializeAsync(scvm.Shortcut, scvm.ShortcutCommand);
             }
-            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
+
             return shortcutKeyString;
         }
 
+        public int GetViewModelCommandShortcutId(MpAvIShortcutCommandViewModel scvm) {
+            if (GetViewModelCommandShortcut(scvm) is MpAvShortcutViewModel svm) {
+                return svm.ShortcutId;
+            }
+            return 0;
+        }
+        public string GetViewModelCommandShortcutKeyString(MpAvIShortcutCommandViewModel scvm) {
+            if (GetViewModelCommandShortcut(scvm) is MpAvShortcutViewModel svm) {
+                return svm.KeyString;
+            }
+            return string.Empty;
+        }
+
+        public MpAvShortcutViewModel GetViewModelCommandShortcut(MpAvIShortcutCommandViewModel scvm) {
+            if (scvm is MpAvShortcutViewModel svm) {
+                return svm;
+            }
+
+            var matches = Items
+                .Where(x => x.Shortcut.IsShortcutCommand(scvm));
+
+            if (matches.FirstOrDefault() is MpAvShortcutViewModel match) {
+                if (matches.Count() > 1) {
+                    MpDebug.Break("Shortcut error, duplicate equality detected");
+                }
+                return match;
+            }
+            return null;
+        }
         #endregion
 
         #region Protected Methods
@@ -377,7 +405,7 @@ namespace MonkeyPaste.Avalonia {
                             shortcutCommand = MpAvClipTrayViewModel.Instance.SelectPreviousRowItemCommand;
                             break;
                         case MpShortcutType.AssignShortcut:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.AssignHotkeyCommand;
+                            shortcutCommand = MpAvClipTrayViewModel.Instance.AssignShortcutToSelectedItemCommand;
                             break;
                         case MpShortcutType.ChangeColor:
                             shortcutCommand = MpAvClipTrayViewModel.Instance.ChangeSelectedClipsColorCommand;
@@ -481,6 +509,11 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case MpMessageType.ShortcutAssignmentEnded:
                     IsShortcutsEnabled = true;
+                    break;
+                case MpMessageType.SettingsWindowOpened:
+                    Dispatcher.UIThread.Post(() => {
+                        Task.WhenAll(Items.Where(x => x.IsCustom).Select(x => x.SetShortcutNameAsync())).FireAndForgetSafeAsync(this);
+                    });
                     break;
             }
         }
@@ -1000,29 +1033,32 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ShowAssignShortcutDialogCommand => new MpCommand<object>(
             async (args) => {
-                if (args is MpICustomShortcutCommandViewModel cscvm) {
-                    string param = MpShortcut.IsUserDefinedShortcut(cscvm.ShortcutType) ? cscvm.ModelId.ToString() : null;
-                    string shortcutKeyString = await MpDataModelProvider.GetShortcutKeystringAsync(cscvm.ShortcutType.ToString(), param);
-
-                    await RegisterViewModelShortcutAsync(
-                        cscvm.ShortcutLabel,
-                        cscvm.ShortcutCommand,
-                        cscvm.ShortcutType,
-                        cscvm.ModelId.ToString(),
-                        shortcutKeyString);
-                } else if (args is MpAvShortcutViewModel scvm) {
-                    await RegisterViewModelShortcutAsync(
-                        scvm.ShortcutDisplayName,
-                        scvm.Command,
-                        scvm.ShortcutType,
-                        scvm.CommandParameter,
-                        scvm.KeyString);
+                if (args is MpAvIShortcutCommandViewModel scvm) {
+                    await CreateOrUpdateViewModelShortcutAsync(scvm);
                 }
+                //if (args is MpICustomShortcutCommandViewModel cscvm) {
+                //    string param = MpShortcut.IsUserDefinedShortcut(cscvm.ShortcutType) ? cscvm.ModelId.ToString() : null;
+                //    string shortcutKeyString = await MpDataModelProvider.GetShortcutKeystringAsync(cscvm.ShortcutType.ToString(), param);
+
+                //    await CreateOrUpdateViewModelShortcutAsync(
+                //        cscvm.ShortcutLabel,
+                //        cscvm.ShortcutCommand,
+                //        cscvm.ShortcutType,
+                //        cscvm.ModelId.ToString(),
+                //        shortcutKeyString);
+                //} else if (args is MpAvShortcutViewModel scvm) {
+                //    await CreateOrUpdateViewModelShortcutAsync(
+                //        scvm.ShortcutDisplayName,
+                //        scvm.Command,
+                //        scvm.ShortcutType,
+                //        scvm.CommandParameter,
+                //        scvm.KeyString);
+                //}
 
 
-                if (args is MpViewModelBase vmb) {
-                    vmb.OnPropertyChanged(nameof(vmb.SelfBindingRef));
-                }
+                //if (args is MpViewModelBase vmb) {
+                //    vmb.OnPropertyChanged(nameof(vmb.SelfBindingRef));
+                //}
             });
 
         public ICommand DeleteShortcutCommand => new MpCommand<object>(
@@ -1040,7 +1076,7 @@ namespace MonkeyPaste.Avalonia {
 
                 var scvm = args as MpAvShortcutViewModel;
                 scvm.KeyString = scvm.Shortcut.DefaultKeyString;
-                await scvm.InitializeAsync(scvm.Shortcut, scvm.Command);
+                await scvm.InitializeAsync(scvm.Shortcut, scvm.ShortcutCommand);
                 await scvm.Shortcut.WriteToDatabaseAsync();
             }, (args) => args is MpAvShortcutViewModel svm && !string.IsNullOrEmpty(svm.DefaultKeyString));
 

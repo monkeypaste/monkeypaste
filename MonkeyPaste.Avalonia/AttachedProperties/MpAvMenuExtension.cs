@@ -251,7 +251,7 @@ namespace MonkeyPaste.Avalonia {
                 pumvm.IsPopupMenuOpen = is_open;
             }
             SetIsOpen(control, is_open);
-            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = is_open;
+            // MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = is_open;
             //if (is_open) {
             //    openSubMenuItems.AddRange(_cmInstance.ItemContainerGenerator.Containers.Where(x=>x.ContainerControl is MenuItem).Select(x=>x.ContainerControl).Cast<MenuItem>());
             //}else 

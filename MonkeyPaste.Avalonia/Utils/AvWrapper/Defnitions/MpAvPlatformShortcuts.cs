@@ -13,9 +13,9 @@ namespace MonkeyPaste.Avalonia {
                 MpInputConstants.META_KEY_LITERAL :
                 MpInputConstants.CONTROL_KEY_LITERAL;
 
-            CutKeys = $"{opKey}+X";
-            CopyKeys = $"{opKey}+C";
-            PasteKeys = $"{opKey}+V";
+            CutKeys = $"{opKey}+x";
+            CopyKeys = $"{opKey}+c";
+            PasteKeys = $"{opKey}+v";
         }
     }
 }

@@ -24,33 +24,15 @@
     <StackPanel Orientation="Vertical"
                 Margin="0,20,0,0"
                 Spacing="20">
-
-        <local:MpAvShortcutDataGridView DataContext="{Binding FilteredItems}" />
-
-        <Button Classes="defaultButton textOnlyButton"
-                Content="Reset All Shortcuts"
+        <Button Classes="defaultButton iconTextButton severe"
                 Command="{Binding ResetAllShortcuts}"
-                HorizontalAlignment="Right" />
-        <!--<Expander ExpandDirection="Down">
-            <Expander.Header>
-                <StackPanel Orientation="Vertical">
-                    <Label Classes="h1"
-                           Content="Custom" />
-                    <Border Classes="labelUnderline" />
-                </StackPanel>
-            </Expander.Header>
-            <local:MpAvShortcutDataGridView DataContext="{Binding CustomShortcuts}" />
-        </Expander>
-        <Expander ExpandDirection="Down"
-                  IsExpanded="True">
-            <Expander.Header>
-                <StackPanel Orientation="Vertical">
-                    <Label Classes="h1"
-                           Content="Application" />
-                    <Border Classes="labelUnderline" />
-                </StackPanel>
-            </Expander.Header>
-            <local:MpAvShortcutDataGridView DataContext="{Binding ApplicationShortcuts}" />
-        </Expander>-->
+                HorizontalAlignment="Left">
+            <DockPanel>
+                <Image DockPanel.Dock="Left"
+                       Source="{Binding Source={StaticResource DeleteImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                <TextBlock Text="Reset All Shortcuts" />
+            </DockPanel>
+        </Button>
+        <local:MpAvShortcutDataGridView DataContext="{Binding FilteredItems}" />
     </StackPanel>
 </local:MpAvUserControl>

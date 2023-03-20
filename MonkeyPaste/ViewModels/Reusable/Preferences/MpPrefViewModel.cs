@@ -61,6 +61,7 @@ namespace MonkeyPaste {
         #endregion
 
         #region Interfaces
+
         #region MpIUserProvidedFileExts Implementation
         string MpIUserProvidedFileExts.UserDefineExtPsv =>
             UserDefinedFileExtensionsPsv;
@@ -369,7 +370,8 @@ namespace MonkeyPaste {
         public double NotificationSoundVolume { get; set; } = 0;
         public bool ShowInTaskbar { get; set; } = true;
         public bool ShowInTaskSwitcher { get; set; } = true;
-        public bool ShowMainWindowOnDragToScreenTop { get; set; } = true;
+
+        public bool AnimateMainWindow { get; set; } = true;
 
         public string DefaultReadOnlyFontFamily { get; set; } = "Segoe UI";
         public string DefaultEditableFontFamily { get; set; } = "Arial";
@@ -432,9 +434,10 @@ namespace MonkeyPaste {
         #endregion
 
         #region Shortcuts
+        public bool ShowExternalDropWidget { get; set; } = true;
 
+        public bool ShowMainWindowOnDragToScreenTop { get; set; } = true;
         public bool DoShowMainWindowWithMouseEdgeAndScrollDelta { get; set; } = true;
-        public bool DoShowMainWindowWithMouseEdge { get; set; } = true;
         public string MainWindowShowBehaviorType { get; set; } = MpMainWindowShowBehaviorType.Primary.ToString();
 
         #endregion

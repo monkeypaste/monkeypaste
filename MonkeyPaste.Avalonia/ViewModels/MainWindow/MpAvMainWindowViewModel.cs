@@ -68,7 +68,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIIsAnimatedDeactiveWindowViewModel Implementation
         bool MpIIsAnimatedWindowViewModel.IsAnimated =>
-            AnimateHideWindow;
+            AnimateShowWindow;
         bool MpIIsAnimatedWindowViewModel.IsAnimating { get; set; }
         bool MpIIsAnimatedWindowViewModel.IsComplete =>
             !IsMainWindowAnimating();//!IsMainWindowClosing && !IsMainWindowOpen;
@@ -413,9 +413,9 @@ namespace MonkeyPaste.Avalonia {
         }
         public string ShowOrHideLabel => IsMainWindowOpen ? "Hide" : "Show";
         public string ShowOrHideIconResourceKey => IsMainWindowOpen ? "ClosedEyeImage" : "OpenEyeImage";
-        public bool AnimateShowWindow { get; set; } = true;
-        public bool AnimateHideWindow { get; set; } = true;
-
+        public bool AnimateShowWindow =>
+            Mp.Services.PlatformInfo.IsDesktop &&
+            MpPrefViewModel.Instance.AnimateMainWindow;
         public DateTime? LastDecreasedFocusLevelDateTime { get; set; }
         public bool IsAnyItemDragging {
             get {
@@ -474,8 +474,6 @@ namespace MonkeyPaste.Avalonia {
         public bool IsAnyNotificationActivating { get; set; }
 
         public bool IsAnyDropDownOpen { get; set; }
-
-        public bool IsAnyDialogOpen { get; set; } = false;
 
         public bool IsMainWindowActive { get; set; }
 
@@ -586,10 +584,6 @@ namespace MonkeyPaste.Avalonia {
             MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseClicked += Instance_OnGlobalMouseClicked;
             MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseWheelScroll += Instance_OnGlobalMouseWheelScroll;
 
-            if (!Mp.Services.PlatformInfo.IsDesktop) {
-                AnimateShowWindow = false;
-                AnimateHideWindow = false;
-            }
             App.MainView.DataContext = this;
 
             MpMessenger.SendGlobal(MpMessageType.MainWindowSizeChanged);
@@ -1007,14 +1001,6 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
                 bool isShowingMainWindow = false;
-                if (MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdge &&
-                    !MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
-                    if (gmp.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight) {
-                        // show mw when mouse is within hit zone regardless of buttons or scroll delta (probably a weird pref context) 
-                        ShowMainWindowCommand.Execute(null);
-                        isShowingMainWindow = true;
-                    }
-                }
 
                 if (!isShowingMainWindow &&
                     MpPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop) {
@@ -1092,7 +1078,7 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine("Closing Main WIndow");
                 IsMainWindowClosing = true;
                 //}
-                if (AnimateHideWindow) {
+                if (AnimateShowWindow) {
                     await AnimateMainWindowAsync(MainWindowClosedScreenRect);
                 }
                 FinishMainWindowHide();
@@ -1114,10 +1100,12 @@ namespace MonkeyPaste.Avalonia {
                         (c.GetVisualAncestor<TextBox>() is TextBox tb && !tb.IsReadOnly)
                     );
 
+                bool isModalOpen = MpAvWindowManager.AllWindows.Any(x => x.IsActive && (x.DataContext is MpIWindowViewModel && (x.DataContext as MpIWindowViewModel).WindowType == MpWindowType.Modal));
                 bool canHide = !IsMainWindowLocked &&
                           !IsAnyDropDownOpen &&
                           !IsMainWindowInitiallyOpening &&
-                          !IsAnyDialogOpen &&
+                            //!IsAnyDialogOpen &&
+                            !isModalOpen &&
                             !isInputFocused &&
                           !IsAnyItemDragging &&
                           !IsAnyNotificationActivating &&

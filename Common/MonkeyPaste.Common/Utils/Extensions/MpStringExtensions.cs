@@ -79,6 +79,9 @@ namespace MonkeyPaste.Common {
 
         #region Converters
 
+        public static string ToStringOrDefault(this object obj) {
+            return obj == null ? null : obj.ToString();
+        }
         public static string ToFileSystemUriFromPath(this string path) {
             try {
                 return new Uri(path, UriKind.Absolute).AbsoluteUri;

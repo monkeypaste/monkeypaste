@@ -3278,7 +3278,7 @@ namespace MonkeyPaste.Avalonia {
                 PasteClipTileAsync(SelectedItem).FireAndForgetSafeAsync();
             },
             (args) => {
-                return MpAvMainWindowViewModel.Instance.IsAnyDialogOpen == false &&
+                return //MpAvMainWindowViewModel.Instance.IsAnyDialogOpen == false &&
                     SelectedItem != null &&
                     MpAvMainWindowViewModel.Instance.IsMainWindowActive &&
                     !MpAvMainWindowViewModel.Instance.IsAnyMainWindowTextBoxFocused &&
@@ -3384,7 +3384,7 @@ namespace MonkeyPaste.Avalonia {
                 IsBusy = false;
             },
             () => {
-                return MpAvMainWindowViewModel.Instance.IsAnyDialogOpen == false &&
+                return //MpAvMainWindowViewModel.Instance.IsAnyDialogOpen == false &&
                         MpAvMainWindowViewModel.Instance.IsMainWindowActive &&
                         SelectedModels.Count > 0 &&
                         !IsAnyEditingClipTile &&
@@ -3422,7 +3422,7 @@ namespace MonkeyPaste.Avalonia {
                 return true;
             });
 
-        public ICommand AssignHotkeyCommand => new MpCommand(
+        public ICommand AssignShortcutToSelectedItemCommand => new MpCommand(
             () => {
                 MpAvShortcutCollectionViewModel.Instance
                 .ShowAssignShortcutDialogCommand.Execute(SelectedItem);

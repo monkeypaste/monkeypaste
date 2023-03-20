@@ -117,11 +117,6 @@ namespace MonkeyPaste.Avalonia {
             FrameworkShutdown?.Invoke(this, EventArgs.Empty);
         }
 
-        private void RootIcon_Clicked(object sender, EventArgs e) {
-            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = DateTime.Now - MpAvShortcutCollectionViewModel.Instance.LastRightClickDateTime < TimeSpan.FromMilliseconds(1000);
-
-        }
-
         private void ReportCommandLineArgs(string[] args) {
             Console.WriteLine("Program args: ");
             Console.Write(string.Join(Environment.NewLine, args));

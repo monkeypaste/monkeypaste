@@ -5,7 +5,7 @@
     //    Dialog
     //}
 
-    public interface MpIWantsTopmostWindowViewModel : MpIViewModel {
+    public interface MpIWantsTopmostWindowViewModel : MpIWindowViewModel {
         bool WantsTopmost { get; }
     }
 }

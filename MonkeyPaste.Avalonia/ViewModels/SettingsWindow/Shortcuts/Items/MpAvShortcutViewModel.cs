@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
@@ -34,12 +35,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpAvIShortcutCommandViewModel Implementation
 
-        public ICommand AssignCommand => new MpCommand(() => {
-            Parent.ShowAssignShortcutDialogCommand.Execute(this);
-        });
+        // NOTE since shortcut represents application commands and has a unique shortcut type
+        // its parameter is always null
+        public object ShortcutCommandParameter =>
+            CommandParameter;
 
-        public MpAvShortcutViewModel ShortcutViewModel => this;
-        public string ShortcutKeyString => KeyString;
 
         #endregion
 
@@ -57,29 +57,8 @@ namespace MonkeyPaste.Avalonia {
 
         public ObservableCollection<MpAvShortcutKeyGroupViewModel> KeyGroups =>
             new ObservableCollection<MpAvShortcutKeyGroupViewModel>(KeyItems);
-        public IEnumerable<MpAvShortcutKeyGroupViewModel> KeyItems {
-            get {
-                var keyItems = new List<MpAvShortcutKeyGroupViewModel>();
-                var combos = KeyString.Split(new String[] { MpInputConstants.SEQUENCE_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
-                int maxComboIdx = combos.Length - 1;
-                for (int comboIdx = 0; comboIdx < combos.Length; comboIdx++) {
-                    string combo = combos[comboIdx];
-                    var comboGroup = new MpAvShortcutKeyGroupViewModel();
-                    var keys = combo.Split(new String[] { MpInputConstants.COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
-                    for (int keyIdx = 0; keyIdx < keys.Length; keyIdx++) {
-                        string key = keys[keyIdx];
-
-                        var skvm = new MpAvShortcutKeyViewModel() {
-                            KeyStr = key,
-                        };
-                        comboGroup.Items.Add(skvm);
-                    }
-                    comboGroup.IsPlusVisible = maxComboIdx > 0 && comboIdx < maxComboIdx;
-                    keyItems.Add(comboGroup);
-                }
-                return keyItems;
-            }
-        }
+        public IEnumerable<MpAvShortcutKeyGroupViewModel> KeyItems =>
+            KeyString.ToKeyItems();
 
         private ObservableCollection<string> _routingTypes = null;
         public ObservableCollection<string> RoutingTypes {
@@ -110,7 +89,7 @@ namespace MonkeyPaste.Avalonia {
                 return (int)ShortcutType >= MpShortcut.MIN_USER_SHORTCUT_TYPE;
             }
         }
-        public ICommand Command { get; set; }
+        public ICommand ShortcutCommand { get; set; }
 
         public IDisposable KeysObservable { get; set; }
 
@@ -121,7 +100,7 @@ namespace MonkeyPaste.Avalonia {
             IsCustom;
 
         public bool CanReset =>
-            !IsCustom && ShortcutKeyString != DefaultKeyString;
+            !IsCustom && KeyString != DefaultKeyString;
 
         public bool CanDeleteOrReset =>
             CanDelete || CanReset;
@@ -129,6 +108,8 @@ namespace MonkeyPaste.Avalonia {
         public bool IsNew =>
             ShortcutId == 0;
 
+
+        public string ShortcutDisplayName { get; private set; }
         public MpShortcutType ShortcutType {
             get {
                 if (Shortcut == null) {
@@ -282,21 +263,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public string ShortcutDisplayName {
-            get {
-                if (Shortcut == null) {
-                    return string.Empty;
-                }
-                return Shortcut.ShortcutLabel;
-            }
-            set {
-                if (Shortcut != null && Shortcut.ShortcutLabel != value) {
-                    Shortcut.ShortcutLabel = value;
-                    HasModelChanged = true;
-                    OnPropertyChanged(nameof(ShortcutDisplayName));
-                }
-            }
-        }
 
         public MpRoutingType RoutingType {
             get {
@@ -376,7 +342,9 @@ namespace MonkeyPaste.Avalonia {
             await Task.Delay(1);
 
             Shortcut = s;
-            Command = command;
+            ShortcutCommand = command;
+
+            await SetShortcutNameAsync();
 
             OnPropertyChanged(nameof(IsGlobalShortcut));
             OnPropertyChanged(nameof(KeyItems));
@@ -433,38 +401,49 @@ namespace MonkeyPaste.Avalonia {
         public override string ToString() {
             return $"{ShortcutType} - '{KeyString}'";
         }
+
+
+        public async Task SetShortcutNameAsync() {
+            Dispatcher.UIThread.CheckAccess();
+            ShortcutDisplayName = await ShortcutType.GetShortcutTitleAsync(CommandParameter);
+        }
         #endregion
 
         #region Protected Methods
 
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
-            bool wasChanged = false;
-            if (int.TryParse(CommandParameter, out int cmd_param_int)) {
-                if (e is MpCopyItem ci) {
-                    if (ShortcutType == MpShortcutType.PasteCopyItem &&
-                        cmd_param_int == ci.Id) {
-                        ShortcutDisplayName = $"Paste {ci.Title}";
-                        wasChanged = true;
-                    }
-                } else if (e is MpTag t) {
-                    if (ShortcutType == MpShortcutType.SelectTag &&
-                        cmd_param_int == t.Id) {
-                        ShortcutDisplayName = $"Select {t.TagName}";
-                        wasChanged = true;
-                    }
-                } else if (e is MpPluginPreset aip) {
-                    if (ShortcutType == MpShortcutType.AnalyzeCopyItemWithPreset &&
-                        cmd_param_int == aip.Id) {
-                        ShortcutDisplayName = $"User {aip.Label} analyzer";
-                        wasChanged = true;
-                    }
-                }
-            }
+            //bool wasChanged = false;
+            //if (int.TryParse(CommandParameter, out int cmd_param_int)) {
+            //    if (e is MpCopyItem ci) {
+            //        if (ShortcutType == MpShortcutType.PasteCopyItem &&
+            //            cmd_param_int == ci.Id) {
+            //            ShortcutDisplayName = $"Paste {ci.Title}";
+            //            wasChanged = true;
+            //        }
+            //    } else if (e is MpTag t) {
+            //        if (ShortcutType == MpShortcutType.SelectTag &&
+            //            cmd_param_int == t.Id) {
+            //            ShortcutDisplayName = $"Select {t.TagName}";
+            //            wasChanged = true;
+            //        }
+            //    } else if (e is MpPluginPreset aip) {
+            //        if (ShortcutType == MpShortcutType.AnalyzeCopyItemWithPreset &&
+            //            cmd_param_int == aip.Id) {
+            //            ShortcutDisplayName = $"User {aip.Label} analyzer";
+            //            wasChanged = true;
+            //        }
+            //    }
+            //}
 
-            if (wasChanged) {
-                Task.Run(async () => {
-                    await Shortcut.WriteToDatabaseAsync();
-                });
+            //if (wasChanged) {
+            //    Task.Run(async () => {
+            //        await Shortcut.WriteToDatabaseAsync();
+            //    });
+            //}
+            if (IsModelAffectThisShortcut(e)) {
+                Dispatcher.UIThread.Post(() => {
+                    SetShortcutNameAsync().FireAndForgetSafeAsync(this);
+                }, DispatcherPriority.Background);
             }
         }
 
@@ -509,12 +488,36 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+
+        private bool IsModelAffectThisShortcut(MpDbModelBase model) {
+            if (model.GetType() == GetShortcutCommandType()) {
+                if (IsCustom) {
+                    return model.Id.ToString() == CommandParameter;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        private Type GetShortcutCommandType() {
+            switch (ShortcutType) {
+                case MpShortcutType.PasteCopyItem:
+                    return typeof(MpCopyItem);
+                case MpShortcutType.SelectTag:
+                    return typeof(MpTag);
+                case MpShortcutType.AnalyzeCopyItemWithPreset:
+                    return typeof(MpPluginPreset);
+                case MpShortcutType.InvokeAction:
+                    return typeof(MpAction);
+            }
+            return typeof(MpShortcut);
+        }
         #endregion
 
         #region Commands
         public ICommand PerformShortcutCommand => new MpCommand(
             () => {
-                Command?.Execute(CommandParameter);
+                ShortcutCommand?.Execute(CommandParameter);
 
                 if (ShortcutType == MpShortcutType.AnalyzeCopyItemWithPreset) {
                     //var aipvm = MpAvAnalyticItemCollectionViewModel.Instance.GetPresetViewModelById(CommandId);
@@ -566,7 +569,6 @@ namespace MonkeyPaste.Avalonia {
                 if (!canPerformShortcut) {
                     MpConsole.WriteLine($"IsGlobalShortcut: " + IsGlobalShortcut);
                     MpConsole.WriteLine($"IsMainWindowActive: " + mwvm.IsMainWindowActive);
-                    MpConsole.WriteLine($"IsShowingDialog: " + mwvm.IsAnyDialogOpen);
                     MpConsole.WriteLine($"IsAnyItemDragging: " + mwvm.IsAnyItemDragging);
                     MpConsole.WriteLine($"IsAnyTextBoxFocused: " + mwvm.IsAnyMainWindowTextBoxFocused, false, true);
                 }

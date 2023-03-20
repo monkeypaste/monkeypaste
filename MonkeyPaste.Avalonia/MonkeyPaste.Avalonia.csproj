@@ -59,6 +59,7 @@
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\Plugins\_Base\**" />
+    <AvaloniaXaml Remove="ViewModels\SettingsWindow\Preferences\**" />
     <AvaloniaXaml Remove="ViewModels\SettingsWindow\Sound\Groups\**" />
     <AvaloniaXaml Remove="ViewModels\SettingsWindow\Sound\Notifications\**" />
     <AvaloniaXaml Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
@@ -66,6 +67,7 @@
     <AvaloniaXaml Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
     <AvaloniaXaml Remove="Views\MainWindow\ResizeHandle\**" />
     <AvaloniaXaml Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
+    <AvaloniaXaml Remove="Views\Reusable\ShortcutWindow\ShortcutPanel\AssignableShortcut\**" />
     <Compile Remove="Assets\Images\MpRichTextBox\**" />
     <Compile Remove="Assets\Images\resize_backup\**" />
     <Compile Remove="Assets\Images\Tests\**" />
@@ -83,6 +85,7 @@
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
     <Compile Remove="ViewModels\MainWindow\Plugins\_Base\**" />
+    <Compile Remove="ViewModels\SettingsWindow\Preferences\**" />
     <Compile Remove="ViewModels\SettingsWindow\Sound\Groups\**" />
     <Compile Remove="ViewModels\SettingsWindow\Sound\Notifications\**" />
     <Compile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
@@ -90,6 +93,7 @@
     <Compile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
     <Compile Remove="Views\MainWindow\ResizeHandle\**" />
     <Compile Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
+    <Compile Remove="Views\Reusable\ShortcutWindow\ShortcutPanel\AssignableShortcut\**" />
     <EmbeddedResource Remove="Assets\Images\MpRichTextBox\**" />
     <EmbeddedResource Remove="Assets\Images\resize_backup\**" />
     <EmbeddedResource Remove="Assets\Images\Tests\**" />
@@ -107,6 +111,7 @@
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\Plugins\_Base\**" />
+    <EmbeddedResource Remove="ViewModels\SettingsWindow\Preferences\**" />
     <EmbeddedResource Remove="ViewModels\SettingsWindow\Sound\Groups\**" />
     <EmbeddedResource Remove="ViewModels\SettingsWindow\Sound\Notifications\**" />
     <EmbeddedResource Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
@@ -114,6 +119,7 @@
     <EmbeddedResource Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
     <EmbeddedResource Remove="Views\MainWindow\ResizeHandle\**" />
     <EmbeddedResource Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
+    <EmbeddedResource Remove="Views\Reusable\ShortcutWindow\ShortcutPanel\AssignableShortcut\**" />
     <JavaSourceJar Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <None Remove="Assets\Images\MpRichTextBox\**" />
     <None Remove="Assets\Images\resize_backup\**" />
@@ -132,6 +138,7 @@
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
     <None Remove="ViewModels\MainWindow\Plugins\_Base\**" />
+    <None Remove="ViewModels\SettingsWindow\Preferences\**" />
     <None Remove="ViewModels\SettingsWindow\Sound\Groups\**" />
     <None Remove="ViewModels\SettingsWindow\Sound\Notifications\**" />
     <None Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
@@ -139,6 +146,7 @@
     <None Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
     <None Remove="Views\MainWindow\ResizeHandle\**" />
     <None Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
+    <None Remove="Views\Reusable\ShortcutWindow\ShortcutPanel\AssignableShortcut\**" />
     <Page Remove="Assets\Images\MpRichTextBox\**" />
     <Page Remove="Assets\Images\resize_backup\**" />
     <Page Remove="Assets\Images\Tests\**" />
@@ -155,12 +163,14 @@
     <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
     <Page Remove="ViewModels\MainWindow\Plugins\_Base\**" />
+    <Page Remove="ViewModels\SettingsWindow\Preferences\**" />
     <Page Remove="ViewModels\SettingsWindow\Sound\Groups\**" />
     <Page Remove="ViewModels\SettingsWindow\Sound\Notifications\**" />
     <Page Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\Cef\**" />
     <Page Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
     <Page Remove="Views\MainWindow\ResizeHandle\**" />
     <Page Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
+    <Page Remove="Views\Reusable\ShortcutWindow\ShortcutPanel\AssignableShortcut\**" />
     <ProguardConfiguration Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <TransformFile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <AndroidAsset Remove="Assets\Images\burlap.png" />
@@ -177,7 +187,6 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\Label.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ListBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Border.axaml" />
-    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvAssignShortcutWindow.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvClipTile.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMarqueeTextBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvNotificationWindow.axaml" />
@@ -1041,7 +1050,6 @@
     <AvaloniaResource Include="Themes\Default\Controls\Animations\Shake.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Dnd\Dnd.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ListBox.axaml" />
-    <AvaloniaResource Include="Themes\Default\Controls\MpAvAssignShortcutWindow.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvPagingScrollViewer.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvTagTile.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\TemplatedControl.axaml" />
@@ -1233,9 +1241,6 @@
     </Compile>
     <Compile Update="Views\Reusable\ShortcutWindow\MpAvAssignShortcutDialog.axaml.cs">
       <DependentUpon>MpAvAssignShortcutDialog.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Reusable\ShortcutWindow\ShortcutPanel\AssignableShortcut\MpAvAssignableShortcutView.axaml.cs">
-      <DependentUpon>MpAvAssignableShortcutView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Reusable\ShortcutWindow\ShortcutPanel\KeyGroup\Key\MpAvShortcutKeyView.axaml.cs">
       <DependentUpon>MpAvShortcutKeyView.axaml</DependentUpon>

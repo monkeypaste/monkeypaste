@@ -1,4 +1,5 @@
 ﻿
+using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -10,8 +11,14 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
+    public enum MpShortcutAssignmentType {
+        InternalOrGlobalCommand,
+        AppPaste
+    }
+
     public class MpAvAssignShortcutViewModel :
         MpViewModelBase,
+        MpIWantsTopmostWindowViewModel,
         MpAvIKeyGestureViewModel {
         #region Static Variables
         #endregion
@@ -20,48 +27,50 @@ namespace MonkeyPaste.Avalonia {
 
         private MpKeyGestureHelper _gestureHelper;
 
-        private ICommand _assigningCommand = null;
-        private string _commandParameter;
+        private int _curShortcutId = 0;
+        #endregion
+
+        #region Interfaces
+
+        bool MpIWantsTopmostWindowViewModel.WantsTopmost =>
+            true;
+
+        MpWindowType MpIWindowViewModel.WindowType =>
+            MpWindowType.Modal;
+
         #endregion
 
         #region Properties
 
-        //public List<List<Key>> KeyList { get; set; } = new List<List<Key>>();
+        #region View Models
         public ObservableCollection<MpAvShortcutKeyGroupViewModel> KeyGroups =>
             new ObservableCollection<MpAvShortcutKeyGroupViewModel>(KeyItems);
 
-        public IEnumerable<MpAvShortcutKeyGroupViewModel> KeyItems {
-            get {
-                var keyItems = new List<MpAvShortcutKeyGroupViewModel>();
-                if (KeyString == null) {
-                    return keyItems;
-                }
-                var combos = KeyString.SplitNoEmpty(MpInputConstants.SEQUENCE_SEPARATOR);
-                int maxComboIdx = combos.Length - 1;
-                for (int comboIdx = 0; comboIdx < combos.Length; comboIdx++) {
-                    string combo = combos[comboIdx];
-                    var comboGroup = new MpAvShortcutKeyGroupViewModel();
-                    var keys = combo.SplitNoEmpty(MpInputConstants.COMBO_SEPARATOR);
-
-                    for (int keyIdx = 0; keyIdx < keys.Length; keyIdx++) {
-                        string key = keys[keyIdx];
-                        var skvm = new MpAvShortcutKeyViewModel() {
-                            KeyStr = key
-                        };
-                        comboGroup.Items.Add(skvm);
-                    }
-                    comboGroup.IsPlusVisible = maxComboIdx > 0 && comboIdx < maxComboIdx;
-                    keyItems.Add(comboGroup);
-                }
-                return keyItems;
-            }
-        }
+        public IEnumerable<MpAvShortcutKeyGroupViewModel> KeyItems =>
+            KeyString.ToKeyItems();
 
         public MpAvShortcutViewModel DuplicatedShortcutViewModel { get; set; }
+        #endregion
+
+        #region State
+
+        public MpShortcutAssignmentType AssignmentType { get; set; }
+        public bool IsEmpty => string.IsNullOrEmpty(KeyString);
+
+        public bool IsSequence =>
+            KeyString != null && KeyString.Contains(MpInputConstants.SEQUENCE_SEPARATOR);
+        public string WarningString { get; set; }
+        public string WarningString2 { get; set; }
+        #endregion
+
+        #region Appearance
 
         public string ShortcutDisplayName { get; set; }
 
-        public bool IsEmpty => string.IsNullOrEmpty(KeyString);
+        public object IconResourceObj { get; set; }
+        #endregion
+
+        #region Model
 
         private string _keyString = string.Empty;
         public string KeyString {
@@ -77,36 +86,32 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public bool IsSequence =>
-            KeyString != null && KeyString.Contains(MpInputConstants.SEQUENCE_SEPARATOR);
-
-
-        public string WarningString { get; set; }
-        public string WarningString2 { get; set; }
-
-
         #endregion
-
-        #region Events
-
-        public event EventHandler OnClear;
 
         #endregion
 
         #region Static Methods
-        public static async Task<string> ShowAssignShortcutDialog(string shortcutName, string keys, ICommand command, string commandParameter) {
-            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
+        public static async Task<string> ShowAssignShortcutDialog(
+            string shortcutName,
+            string keys,
+            int curShortcutId,
+            MpShortcutAssignmentType assignmentType = MpShortcutAssignmentType.InternalOrGlobalCommand,
+            object iconResourceObj = null,
+            Window owner = null) {
             var ascw = new MpAvAssignShortcutDialog();
-            var ascwvm = new MpAvAssignShortcutViewModel(shortcutName, keys, command, commandParameter);
+            var ascwvm = new MpAvAssignShortcutViewModel(shortcutName, keys, curShortcutId, assignmentType, iconResourceObj);
             ascw.DataContext = ascwvm;
 
             MpMessenger.SendGlobal(MpMessageType.ShortcutAssignmentStarted);
 
-            var result = await ascw.ShowChildDialogWithResultAsync(MpAvWindowManager.MainWindow);
+            var result = await ascw.ShowChildDialogWithResultAsync(owner);
 
             MpMessenger.SendGlobal(MpMessageType.ShortcutAssignmentEnded);
 
-            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
+            if (owner is Window w) {
+                w.Activate();
+                w.Focus();
+            }
             if (result is bool assignResult && assignResult) {
                 return ascwvm.KeyString;
             }
@@ -115,22 +120,26 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constructors
-        public MpAvAssignShortcutViewModel() : this(string.Empty, string.Empty, null, string.Empty) { }
+        public MpAvAssignShortcutViewModel() : this(string.Empty, string.Empty, 0, MpShortcutAssignmentType.InternalOrGlobalCommand, null) { }
 
-        private MpAvAssignShortcutViewModel(string shortcutName, string keyString, ICommand command, string commandParameter) : base(null) {
+        private MpAvAssignShortcutViewModel(
+            string shortcutName,
+            string keyString,
+            int curShortcutId,
+            MpShortcutAssignmentType assignmentType,
+            object iconResourceObj) : base(null) {
             PropertyChanged += MpAssignShortcutModalWindowViewModel_PropertyChanged;
 
-            _assigningCommand = command;
-            _commandParameter = commandParameter;
+            _curShortcutId = curShortcutId;
             KeyString = keyString;
             ShortcutDisplayName = shortcutName;
-
+            IconResourceObj = iconResourceObj;
+            AssignmentType = assignmentType;
             OnPropertyChanged(nameof(KeyString));
             OnPropertyChanged(nameof(KeyItems));
 
 
             _gestureHelper = new MpKeyGestureHelper();
-            //KeysString = keysList;
         }
 
         private void MpAssignShortcutModalWindowViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
@@ -142,7 +151,6 @@ namespace MonkeyPaste.Avalonia {
                     Validate();
                     break;
                 case nameof(KeyItems):
-
                     OnPropertyChanged(nameof(KeyGroups));
                     break;
 
@@ -152,10 +160,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
-
-        private void _windowRef_Closed(object sender, EventArgs e) {
-            MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
-        }
 
         #endregion
 
@@ -170,11 +174,20 @@ namespace MonkeyPaste.Avalonia {
                 return true;
             }
 
+            switch (AssignmentType) {
+                case MpShortcutAssignmentType.InternalOrGlobalCommand:
+                    return ValidateCommandShortcut();
+                case MpShortcutAssignmentType.AppPaste:
+                    return ValidateAppPasteShortcut();
+            }
+            return true;
+        }
+
+        private bool ValidateCommandShortcut() {
             //iterate over ALL shortcuts
             string assign_keystr = KeyString.ToLower();
             foreach (var scvm in MpAvShortcutCollectionViewModel.Instance.Items) {
-                if ((scvm.Command == _assigningCommand && scvm.CommandParameter == _commandParameter) ||
-                    //scvm.KeyList.Count != KeyItems.Count() ||
+                if (scvm.ShortcutId == _curShortcutId ||
                     scvm.KeyList.Count == 0) {
                     //ignore same, empty or shortcut w/ different key counts
                     continue;
@@ -200,6 +213,14 @@ namespace MonkeyPaste.Avalonia {
             return true;
         }
 
+        private bool ValidateAppPasteShortcut() {
+            if (KeyString.ToLower() == Mp.Services.PlatformShorcuts.PasteKeys.ToLower()) {
+                WarningString = $"This is the default paste shortcut for the '{Mp.Services.PlatformInfo.OsType}' platform. It does not need to be set.";
+                return false;
+            }
+            return true;
+        }
+
         #endregion
 
         #region Commands
@@ -208,23 +229,13 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 KeyString = String.Empty;
                 OnPropertyChanged(nameof(KeyItems));
-                //_gestureHelper.Reset();
                 Validate();
                 OnPropertyChanged(nameof(KeyString));
-                OnClear?.Invoke(this, null);
             });
 
         public ICommand OkCommand => new MpCommand(
             async () => {
                 if (DuplicatedShortcutViewModel != null) {
-                    //if (DuplicatedShortcutViewModel.IsCustom()) {
-                    //    if (DuplicatedShortcutViewModel.CopyItemId > 0) {
-                    //        //clear input gesture text
-                    //        MpAvClipTrayViewModel.Instance.GetContentItemViewModelById(DuplicatedShortcutViewModel.CopyItemId).ShortcutKeyString = string.Empty;
-                    //    } else {
-                    //        MpAvTagTrayViewModel.Instance.Items.Where(x => x.Tag.Id == DuplicatedShortcutViewModel.TagId).ToList()[0].ShortcutKeyString = string.Empty;
-                    //    }
-                    //}
                     DuplicatedShortcutViewModel.KeyString = string.Empty;
                     await DuplicatedShortcutViewModel.Shortcut.WriteToDatabaseAsync();
                     DuplicatedShortcutViewModel.Unregister();

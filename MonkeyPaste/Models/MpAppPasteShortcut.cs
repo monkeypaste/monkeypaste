@@ -16,31 +16,19 @@ namespace MonkeyPaste {
         [Column("fk_MpAppId")]
         public int AppId { get; set; }
 
-        public string PasteCmdKeyString { get; set; } = "Control+V";
-
-        [Column("b_EnterAfterPaste")]
-        public int EnterAfterPasteVal { get; set; }
+        public string PasteCmdKeyString { get; set; } = string.Empty;
 
         #endregion
 
         #region Properties
-
-        [Ignore]
-        public bool EnterAfterPaste {
-            get => EnterAfterPasteVal == 1;
-            set => EnterAfterPasteVal = value ? 1 : 0;
-        }
-
         #endregion
 
         public static async Task<MpAppPasteShortcut> CreateAsync(
             int appId = 0,
-            string pasteCmdKeyString = "Control+V",
-            bool enterAfterPaste = false) {
+            string pasteCmdKeyString = "") {
             var aps = new MpAppPasteShortcut() {
                 Guid = System.Guid.NewGuid().ToString(),
                 AppId = appId,
-                EnterAfterPaste = enterAfterPaste,
                 PasteCmdKeyString = pasteCmdKeyString
             };
 

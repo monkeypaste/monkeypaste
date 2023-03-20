@@ -2,9 +2,19 @@
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvShortcutKeyGroupViewModel : MpViewModelBase {
+        #region Properties
+
+        #region View Models
         public ObservableCollection<MpAvShortcutKeyViewModel> Items { get; set; } = new ObservableCollection<MpAvShortcutKeyViewModel>();
 
-        public bool IsPlusVisible { get; set; } = false;
+        #endregion
+
+        #region State
+        public int SortIdx { get; set; }
+
+        #endregion
+
+        #endregion
         public MpAvShortcutKeyGroupViewModel() { }
     }
 }

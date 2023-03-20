@@ -54,7 +54,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand SelectFileSystemPathCommand => new MpAsyncCommand(
             async () => {
                 string initDir = CurrentValue;
-                MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
+                //MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
 
                 string result = null;
                 if (IsDirectoryChooser) {
@@ -69,7 +69,7 @@ namespace MonkeyPaste.Avalonia {
                     CurrentValue = result;
                 }
 
-                MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
+                //MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
             });
 
         #endregion

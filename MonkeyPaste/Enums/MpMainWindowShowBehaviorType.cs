@@ -2,6 +2,6 @@
     public enum MpMainWindowShowBehaviorType {
         Primary,
         Mouse,
-        All
+        Active
     };
 }

@@ -80,9 +80,15 @@ namespace MonkeyPaste.Avalonia {
         public MpAvSettingsFrameViewModel HistoryFrame { get; set; }
         public MpAvSettingsFrameViewModel SystemFrame { get; set; }
 
+        public MpAvSettingsFrameViewModel InteropFrame { get; set; }
         #endregion
 
-        #endregion        
+        #region Shortcuts
+
+
+        #endregion
+
+        #endregion
 
         #region State
 
@@ -155,21 +161,7 @@ namespace MonkeyPaste.Avalonia {
                                     },
                                 }
 
-                            },
-                            //new MpParameterFormat() {
-                            //    paramId = nameof(MpButtonCommandPrefType.AccountClick),
-                            //    isVisible = 
-                            //    controlType = MpParameterControlType.Button,
-                            //    isReadOnly = true,
-                            //    label = "Account",
-                            //    values =new List<MpPluginParameterValueFormat>() {
-                            //        new MpPluginParameterValueFormat() {
-                            //            isDefault = true,
-                            //            value = string.IsNullOrEmpty(MpPrefViewModel.Instance.UserEmail)
-                            //        },
-                            //    }
-
-                            //}
+                            }
                         }
                     }
                 }
@@ -297,6 +289,18 @@ namespace MonkeyPaste.Avalonia {
                                     new MpPluginParameterValueFormat() {
                                         isDefault = true,
                                         value = MpPrefViewModel.Instance.ShowInTaskSwitcher.ToString()
+                                    }
+                                }
+                            },
+                            new MpParameterFormat() {
+                                paramId = nameof(MpPrefViewModel.Instance.AnimateMainWindow),
+                                controlType = MpParameterControlType.CheckBox,
+                                unitType = MpParameterValueUnitType.Bool,
+                                label = "Animate Window",
+                                values = new List<MpPluginParameterValueFormat>() {
+                                    new MpPluginParameterValueFormat() {
+                                        isDefault = true,
+                                        value = MpPrefViewModel.Instance.AnimateMainWindow.ToString()
                                     }
                                 }
                             },
@@ -612,7 +616,77 @@ namespace MonkeyPaste.Avalonia {
 
             #endregion
 
+            #region Interop
+
+            InteropFrame = new MpAvSettingsFrameViewModel() {
+                TabType = MpSettingsTabType.Preferences,
+                SortOrderIdx = 1,
+                LabelText = "Input",
+                PluginFormat = new MpPluginFormat() {
+                    headless = new MpHeadlessPluginFormat() {
+                        parameters = new List<MpParameterFormat>() {
+                            new MpParameterFormat() {
+                                paramId = nameof(MpPrefViewModel.Instance.ShowExternalDropWidget),
+                                description = "The drop widget is a floating menu showing while drag and dropping out of Monkey Paste that allows on-demand format conversion onto your drop target by hovering on or off of currently available formats. <b>Be aware conversion may not be an acceptable format for the target application so do not select 'YES' and remember the settings!</b>",
+                                controlType = MpParameterControlType.CheckBox,
+                                unitType = MpParameterValueUnitType.Bool,
+                                label = "Drop Widget",
+                                values =new List<MpPluginParameterValueFormat>() {
+                                    new MpPluginParameterValueFormat() {
+                                        isDefault = true,
+                                        value = MpPrefViewModel.Instance.ShowExternalDropWidget.ToString()
+                                    },
+                                }
+                            },
+                            new MpParameterFormat() {
+                                paramId = nameof(MpPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop),
+                                description = "This helps fluidly allow dropping data into Monkey paste from another application without extra fumbling with window placement by dragging data to the top of the screen which will activate Monkey Paste and allow drop.",
+                                controlType = MpParameterControlType.CheckBox,
+                                unitType = MpParameterValueUnitType.Bool,
+                                label = "Show on drag to top of screen",
+                                values =new List<MpPluginParameterValueFormat>() {
+                                    new MpPluginParameterValueFormat() {
+                                        isDefault = true,
+                                        value = MpPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop.ToString()
+                                    },
+                                }
+                            },
+                            new MpParameterFormat() {
+                                paramId = nameof(MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta),
+                                description = "Monkey Paste will be revealed by performing a scroll gesture on the top edge of your monitor",
+                                controlType = MpParameterControlType.CheckBox,
+                                unitType = MpParameterValueUnitType.Bool,
+                                label = "Show on top screen scroll",
+                                values =new List<MpPluginParameterValueFormat>() {
+                                    new MpPluginParameterValueFormat() {
+                                        isDefault = true,
+                                        value = MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta.ToString()
+                                    },
+                                }
+                            },
+                            new MpParameterFormat() {
+                                paramId = nameof(MpPrefViewModel.Instance.MainWindowShowBehaviorType),
+                                controlType = MpParameterControlType.ComboBox,
+                                unitType = MpParameterValueUnitType.PlainText,
+                                label = "Show Behavior",
+                                values =
+                                    Enum.GetNames(typeof(MpMainWindowShowBehaviorType))
+                                    .Select(x=> new MpPluginParameterValueFormat() {
+                                        isDefault = MpPrefViewModel.Instance.MainWindowShowBehaviorType.ToLower() == x,
+                                        value = x
+                                    }).ToList()
+                            }
+                        }
+                    }
+                }
+            };
+
+            Items.Add(InteropFrame);
+
             #endregion
+
+            #endregion
+
 
             foreach (var fvm in Items) {
                 fvm.Items = await Task.WhenAll(
@@ -790,6 +864,8 @@ namespace MonkeyPaste.Avalonia {
                     };
                     sw.Opened += Sw_Opened;
                     sw.ShowChild();
+
+                    MpMessenger.SendGlobal(MpMessageType.SettingsWindowOpened);
                 }
             }, (args) => !IsVisible);
 

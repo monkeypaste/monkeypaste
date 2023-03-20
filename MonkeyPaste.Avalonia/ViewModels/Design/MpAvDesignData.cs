@@ -14,7 +14,6 @@ namespace MonkeyPaste.Avalonia {
                         DefaultKeyString = "Control+S",
                         KeyString = "Control+S",
                         RoutingType = MpRoutingType.Bubble,
-                        ShortcutLabel = "Test Label 1",
                         ShortcutType = MpShortcutType.ToggleMainWindow
                     }
                 },
@@ -23,7 +22,6 @@ namespace MonkeyPaste.Avalonia {
                         DefaultKeyString = "Control+F5|Control+F4",
                         KeyString = "Control+F5|Control+F4",
                         RoutingType = MpRoutingType.Bubble,
-                        ShortcutLabel = "Sequence Test Label 2",
                         ShortcutType = MpShortcutType.ToggleMainWindowLocked
                     }
                 }

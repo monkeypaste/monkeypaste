@@ -12,6 +12,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvWindow : Window, IStyleable {
 
         #region Private Variables
+        private const string NO_RESULT_OBJ = "sdoifjdsfjnlkwe2423";
         #endregion
 
         #region Constants
@@ -29,6 +30,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
+
         public object DialogResult { get; set; }
         #endregion
 
@@ -56,7 +58,34 @@ namespace MonkeyPaste.Avalonia {
                 Show(owner);
             }
         }
+        public async Task<object> ShowChildWithResultAsync(Window owner = null) {
+            SilentLockMainWindowCheck();
 
+            object result = NO_RESULT_OBJ;
+
+            EventHandler close_handler = null;
+            close_handler = (s, e) => {
+                if (s is MpAvWindow w) {
+                    result = w.DialogResult;
+                    return;
+                }
+                result = null;
+            };
+
+            if (owner == null) {
+                Show();
+            } else {
+                Show(owner);
+            }
+            while (true) {
+                if (result is string resultStr &&
+                    resultStr == NO_RESULT_OBJ) {
+                    await Task.Delay(100);
+                }
+                break;
+            }
+            return result;
+        }
         public async Task ShowChildDialogAsync(Window owner = null) {
             SilentLockMainWindowCheck();
             await ShowDialog(owner ?? MpAvWindowManager.MainWindow);

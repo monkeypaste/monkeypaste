@@ -23,7 +23,8 @@ namespace MonkeyPaste.Avalonia {
         MpISelectorItemViewModel,
         MpIChildWindowViewModel,
         MpIDisposableObject,
-        MpICustomShortcutCommandViewModel,
+        //MpICustomShortcutCommandViewModel,
+        MpAvIShortcutCommandViewModel,
         MpIScrollIntoView,
         MpIUserColorViewModel,
         MpIHoverableViewModel,
@@ -127,13 +128,17 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpIShortcutCommandViewModel Implementation
+        #region MpAvIShortcutCommandViewModel Implementation
 
-        public MpShortcutType ShortcutType => MpShortcutType.PasteCopyItem;
-        public string ShortcutLabel => "Paste " + CopyItemTitle;
-        public int ModelId => CopyItemId;
-        public ICommand ShortcutCommand => Parent == null ? null : Parent.PasteCopyItemByIdCommand;
-        public object ShortcutCommandParameter => CopyItemId;
+        public MpShortcutType ShortcutType =>
+            MpShortcutType.PasteCopyItem;
+        public string KeyString =>
+            MpAvShortcutCollectionViewModel.Instance.GetViewModelCommandShortcutKeyString(this);
+
+        public object ShortcutCommandParameter =>
+            CopyItemId;
+        ICommand MpAvIShortcutCommandViewModel.ShortcutCommand =>
+            Parent == null ? null : Parent.PasteCopyItemByIdCommand;
 
         #endregion
 
@@ -396,6 +401,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public string ShortcutTooltipText =>
+            string.IsNullOrEmpty(KeyString) ? $"Assign Global Paste Shortcut for '{CopyItemTitle}'" : KeyString;
         public bool DoShake { get; set; }
 
         public bool IsResizerEnabled =>
@@ -1064,6 +1071,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(Prev));
             OnPropertyChanged(nameof(CopyItemId));
             OnPropertyChanged(nameof(IsAnyBusy));
+            OnPropertyChanged(nameof(KeyString));
 
             //MpMessenger.Send<MpMessageType>(MpMessageType.ContentItemsChanged, this);
 
@@ -1418,10 +1426,8 @@ namespace MonkeyPaste.Avalonia {
         #region DB Overrides
 
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
-            if (e is MpShortcut sc) {
-                if (sc.CommandParameter == CopyItemId.ToString() && sc.ShortcutType == ShortcutType) {
-                    OnPropertyChanged(nameof(SelfBindingRef));
-                }
+            if (e is MpShortcut sc && sc.IsShortcutCommand(this)) {
+                OnPropertyChanged(nameof(KeyString));
             } else if (e is MpCopyItemAnnotation cia && cia.CopyItemId == CopyItemId) {
                 Dispatcher.UIThread.Post(async () => {
                     await InitializeAsync(CopyItem);
@@ -1435,10 +1441,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
-            if (e is MpShortcut sc) {
-                if (sc.CommandParameter == CopyItemId.ToString() && sc.ShortcutType == ShortcutType) {
-                    OnPropertyChanged(nameof(SelfBindingRef));
-                }
+            if (e is MpShortcut sc && sc.IsShortcutCommand(this)) {
+                OnPropertyChanged(nameof(KeyString));
             } else if (e is MpCopyItem ci && ci.Id == CopyItemId) {
                 if (HasModelChanged) {
                     // this means the model has been updated from the view model so ignore
@@ -1456,7 +1460,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            if (e is MpCopyItem ci && CopyItemId == ci.Id) {
+            if (e is MpShortcut sc && sc.IsShortcutCommand(this)) {
+                OnPropertyChanged(nameof(KeyString));
+            } else if (e is MpCopyItem ci && CopyItemId == ci.Id) {
 
             }
         }
@@ -1485,6 +1491,7 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsHovering):
                     // refresh busy
                     OnPropertyChanged(nameof(IsAnyBusy));
+
 
                     Parent.OnPropertyChanged(nameof(Parent.CanScroll));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyHovering));
@@ -1994,6 +2001,7 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 return CanEdit;
             });
+
         #endregion
     }
 }

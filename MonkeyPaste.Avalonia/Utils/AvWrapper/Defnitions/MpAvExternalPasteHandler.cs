@@ -36,7 +36,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIExternalPasteHandler Implementation
 
-        async Task<bool> MpIExternalPasteHandler.PasteDataObjectAsync(MpPortableDataObject mpdo, MpPortableProcessInfo processInfo) {
+        async Task<bool> MpIExternalPasteHandler.PasteDataObjectAsync(
+            MpPortableDataObject mpdo, MpPortableProcessInfo processInfo) {
             if (processInfo == null) {
                 // shouldn't happen
                 //Debugger.Break();
@@ -51,16 +52,16 @@ namespace MonkeyPaste.Avalonia {
                 // NOTE needs to have non-zero handle when complete
             }
 
-            string pasteCmd = "Control+v";
-            bool finishWithEnter = false;
-            var custom_paste_app_vm = MpAvAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppPath.ToLower() == processInfo.ProcessPath.ToLower() && x.PasteShortcutViewModel != null);
+            string pasteCmd = Mp.Services.PlatformShorcuts.PasteKeys;
+            var custom_paste_app_vm =
+                MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(processInfo);
+            //MpAvAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppPath.ToLower() == processInfo.ProcessPath.ToLower() && x.PasteShortcutViewModel != null);
 
             if (custom_paste_app_vm != null) {
                 pasteCmd = custom_paste_app_vm.PasteShortcutViewModel.PasteCmdKeyString;
-                finishWithEnter = custom_paste_app_vm.PasteShortcutViewModel.EnterAfterPaste;
             }
 
-            bool success = await PasteDataObjectAsync_internal_async(mpdo, pasteToHandle, pasteCmd, finishWithEnter);
+            bool success = await PasteDataObjectAsync_internal_async(mpdo, pasteToHandle, pasteCmd);
             return success;
         }
 
@@ -68,8 +69,7 @@ namespace MonkeyPaste.Avalonia {
         private async Task<bool> PasteDataObjectAsync_internal_async(
             MpPortableDataObject mpdo,
             IntPtr pasteToHandle,
-            string pasteCmdKeyString,
-            bool finishWithEnterKey) {
+            string pasteCmdKeyString) {
             if (pasteToHandle == IntPtr.Zero) {
                 // somethings terribly wrong
                 Debugger.Break();
@@ -98,10 +98,6 @@ namespace MonkeyPaste.Avalonia {
 
             // SIMULATE PASTE CMD
             await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(pasteCmdKeyString);
-
-            if (finishWithEnterKey) {
-                await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(MpInputConstants.ENTER_KEY_LITERAL);
-            }
 
             //await Task.Delay(300);
 

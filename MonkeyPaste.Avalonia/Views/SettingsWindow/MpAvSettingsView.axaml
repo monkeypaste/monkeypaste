@@ -290,8 +290,8 @@
             <!--  FILTER TEXTBOX  -->
             <Border Grid.Row="1"
                     Grid.ColumnSpan="6"
-                    MinHeight="40"
-                    Margin="0,10,0,0"
+                    MinHeight="50"
+                    Margin="0,10,0,10"
                     Padding="6"
                     Background="Transparent">
                 <TextBox Grid.Row="1"

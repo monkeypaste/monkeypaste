@@ -8,7 +8,6 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     public class MpAvAppViewModel :
         MpViewModelBase<MpAvAppCollectionViewModel>,
-        MpISelectableViewModel,
         MpIHoverableViewModel,
         MpIFilterMatch,
         MpIIsValueEqual<MpAvAppViewModel>
@@ -47,7 +46,7 @@ namespace MonkeyPaste.Avalonia {
         #region View Models
         public MpAppClipboardFormatInfoCollectionViewModel ClipboardFormatInfos { get; set; }
 
-        public MpPasteShortcutViewModel PasteShortcutViewModel { get; set; }
+        public MpAvPasteShortcutViewModel PasteShortcutViewModel { get; set; }
         #endregion
 
         #region Appearance
@@ -68,7 +67,14 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public bool IsSelected { get; set; }
+        public bool IsSelected {
+            get {
+                if (Parent == null) {
+                    return false;
+                }
+                return Parent.SelectedItem == this;
+            }
+        }
 
         public DateTime LastSelectedDateTime { get; set; }
 
@@ -173,7 +179,7 @@ namespace MonkeyPaste.Avalonia {
 
             MpAppPasteShortcut aps = await MpDataModelProvider.GetAppPasteShortcutAsync(AppId);
             if (aps != null) {
-                PasteShortcutViewModel = new MpPasteShortcutViewModel(this);
+                PasteShortcutViewModel = new MpAvPasteShortcutViewModel(this);
                 await PasteShortcutViewModel.InitializeAsync(aps);
             }
 
@@ -237,7 +243,7 @@ namespace MonkeyPaste.Avalonia {
                             PasteShortcutViewModel.OnPropertyChanged(nameof(PasteShortcutViewModel.PasteCmdKeyString));
                         }
 
-                        Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
+                        //Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
                         //CollectionViewSource.GetDefaultView(ClipboardFormatInfos.Items).Refresh();
                         ClipboardFormatInfos.OnPropertyChanged(nameof(ClipboardFormatInfos.Items));
                     }
@@ -267,6 +273,20 @@ namespace MonkeyPaste.Avalonia {
                         IsRejected = false;
                     }
                 }
+            });
+
+
+
+        public ICommand AssignPasteShortcutCommand => new MpCommand(
+            () => {
+                if (PasteShortcutViewModel == null) {
+                    PasteShortcutViewModel = new MpAvPasteShortcutViewModel(this) {
+                        PasteShortcut = new MpAppPasteShortcut() {
+                            AppId = AppId
+                        }
+                    };
+                }
+                PasteShortcutViewModel.ShowAssignDialogAsync().FireAndForgetSafeAsync(this);
             });
 
         #endregion

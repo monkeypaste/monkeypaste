@@ -17,7 +17,7 @@ namespace MonkeyPaste.Avalonia {
     }
 
     public class MpAvAppCollectionViewModel :
-        MpAvSelectorViewModelBase<object, MpAvAppViewModel>,
+        MpViewModelBase<MpAvAppViewModel>,
         MpIAsyncSingletonViewModel<MpAvAppCollectionViewModel> {
         #region Private Variables
         #endregion
@@ -25,6 +25,7 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region View Models
+        public ObservableCollection<MpAvAppViewModel> Items { get; set; } = new ObservableCollection<MpAvAppViewModel>();
 
         public IEnumerable<MpAvAppViewModel> FilteredItems =>
             Items
@@ -43,6 +44,8 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
+
+        public MpAvAppViewModel SelectedItem { get; set; }
         #endregion
 
         #region State
@@ -95,7 +98,7 @@ namespace MonkeyPaste.Avalonia {
                 OnPropertyChanged(nameof(Items));
 
                 if (Items.Count > 0) {
-                    Items[0].IsSelected = true;
+                    SelectedItem = Items[0];
                 }
 
                 ValidateAppViewModels();
@@ -197,6 +200,7 @@ namespace MonkeyPaste.Avalonia {
                         //CollectionViewSource.GetDefaultView(SelectedItem.ClipboardFormatInfos.Items).Refresh();
                         SelectedItem.ClipboardFormatInfos.OnPropertyChanged(nameof(SelectedItem.ClipboardFormatInfos.Items));
                     }
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
                     break;
                 case nameof(LastActiveAppViewModel):
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsActiveProcess)));

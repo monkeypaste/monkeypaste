@@ -55,7 +55,7 @@
                       CanUserSortColumns="False"
                       Focusable="True"
                       Items="{Binding}"
-                      IsReadOnly="True"
+                      IsReadOnly="False"
                       AutoGenerateColumns="False">
                 <DataGrid.Columns>
                     <!--  APP/GLOBAL LABEL  -->
@@ -101,7 +101,8 @@
                                                         Margin="5"
                                                         HorizontalAlignment="Center"
                                                         local:MpAvPointerCommandExtension.IsEnabled="True"
-                                                        local:MpAvPointerCommandExtension.LeftPressCommand="{Binding AssignCommand}"
+                                                        local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ShowAssignShortcutDialogCommand, Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}"
+                                                        local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding}"
                                                         local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
                                                         RecordCommand="{Binding AssignCommand}" />
                             </DataTemplate>

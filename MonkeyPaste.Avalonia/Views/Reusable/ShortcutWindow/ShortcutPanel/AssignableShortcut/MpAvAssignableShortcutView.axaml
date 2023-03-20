@@ -12,6 +12,19 @@
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800">
+    <local:MpAvUserControl.Styles>
+        <Style Selector="local|MpAvShortcutKeyGroupView">
+            <Setter Property="MinHeight"
+                    Value="25" />
+
+        </Style>
+
+        <Style Selector="local|MpAvShortcutKeyGroupView TextBlock">
+            <Setter Property="FontSize"
+                    Value="12" />
+
+        </Style>
+    </local:MpAvUserControl.Styles>
     <Button Grid.Row="0"
             Grid.Column="1"
             Classes="arg1"

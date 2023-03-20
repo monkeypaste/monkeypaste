@@ -254,12 +254,12 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand SelectFileSystemPathCommand => new MpAsyncCommand(
             async () => {
-                MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
+                //MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
 
                 var selectedDir = await Mp.Services.NativePathDialog
                         .ShowFolderDialogAsync($"Select Folder", FileSystemPath);
 
-                MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
+                //MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
 
                 FileSystemPath = selectedDir;
             });

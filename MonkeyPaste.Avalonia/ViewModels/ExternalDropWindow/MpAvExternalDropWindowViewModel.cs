@@ -65,7 +65,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        public bool IsDropWidgetEnabled { get; set; } = true;
+        public bool IsDropWidgetEnabled =>
+            Mp.Services.PlatformInfo.IsDesktop &&
+            MpPrefViewModel.Instance.ShowExternalDropWidget;
 
         public bool HasUserToggledAnyHandlers { get; set; } = false;
         public double TotalRememberWaitTimeS =>
@@ -86,10 +88,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         public MpAvExternalDropWindowViewModel() : base(null) {
-            if (!IsDropWidgetEnabled) {
-                return;
-            }
-            PropertyChanged += MpAvExternalDropWindowViewModel_PropertyChanged;
             MpMessenger.RegisterGlobal(ReceivedGlobalMessega);
         }
 
@@ -103,11 +101,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private void MpAvExternalDropWindowViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            //switch (e.PropertyName) {
-            //    case nameof(IsDrop)
-            //}
-        }
         private void ReceivedGlobalMessega(MpMessageType msg) {
             if (!IsDropWidgetEnabled) {
                 return;

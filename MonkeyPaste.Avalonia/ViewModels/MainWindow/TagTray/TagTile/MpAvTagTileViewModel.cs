@@ -134,7 +134,8 @@ namespace MonkeyPaste.Avalonia {
                             Header = "Assign Hotkey",
                             AltNavIdx = 0,
                             IconResourceKey = Mp.Services.PlatformResource.GetResource("HotkeyImage") as string,
-                            Command = AssignHotkeyCommand,
+                            Command = MpAvShortcutCollectionViewModel.Instance.ShowAssignShortcutDialogCommand,
+                            CommandParameter = this,
                             ShortcutArgs = new object[] { MpShortcutType.SelectTag, TagId },
                         },
                         new MpMenuItemViewModel() {
@@ -196,26 +197,15 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpAvIShortcutCommandViewModel Implementation
 
-        public MpShortcutType ShortcutType => MpShortcutType.SelectTag;
+        public MpShortcutType ShortcutType =>
+            MpShortcutType.SelectTag;
+        public string KeyString =>
+            MpAvShortcutCollectionViewModel.Instance.GetViewModelCommandShortcutKeyString(this);
 
-        public MpAvShortcutViewModel ShortcutViewModel {
-            get {
-                if (Parent == null || Tag == null) {
-                    return null;
-                }
-                var scvm = MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.CommandParameter == TagId.ToString() && x.ShortcutType == ShortcutType);
-
-                if (scvm == null) {
-                    scvm = new MpAvShortcutViewModel(MpAvShortcutCollectionViewModel.Instance);
-                }
-
-                return scvm;
-            }
-        }
-
-        public string ShortcutKeyString => ShortcutViewModel.KeyString;
-
-        public ICommand AssignCommand => AssignHotkeyCommand;
+        public object ShortcutCommandParameter =>
+            TagId;
+        ICommand MpAvIShortcutCommandViewModel.ShortcutCommand =>
+            Parent == null ? null : Parent.SelectTagCommand;
 
         #endregion
 
@@ -661,10 +651,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Db Events
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
-            if (e is MpShortcut sc) {
-                if (sc.CommandParameter == TagId.ToString() && sc.ShortcutType == ShortcutType) {
-                    OnPropertyChanged(nameof(ShortcutKeyString));
-                }
+            if (e is MpShortcut sc && sc.IsShortcutCommand(this)) {
+                OnPropertyChanged(nameof(KeyString));
             } else if (e is MpCopyItem && IsAllTag) {
                 Dispatcher.UIThread.Post(() => {
                     TagClipCount++;
@@ -673,10 +661,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
-            if (e is MpShortcut sc) {
-                if (sc.CommandParameter == TagId.ToString() && sc.ShortcutType == ShortcutType) {
-                    OnPropertyChanged(nameof(ShortcutKeyString));
-                }
+            if (e is MpShortcut sc && sc.IsShortcutCommand(this)) {
+                OnPropertyChanged(nameof(KeyString));
             } else if (e is MpTag t && t.Id == TagId) {
                 Dispatcher.UIThread.Post(async () => {
                     // stupid property changed null ref issue so trying to wait here?
@@ -689,10 +675,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            if (e is MpShortcut sc) {
-                if (sc.CommandParameter == TagId.ToString() && sc.ShortcutType == ShortcutType) {
-                    OnPropertyChanged(nameof(ShortcutKeyString));
-                }
+            if (e is MpShortcut sc && sc.IsShortcutCommand(this)) {
+                OnPropertyChanged(nameof(KeyString));
             } else if (e is MpCopyItemTag cit && cit.TagId == TagId) {
                 UnlinkCopyItemCommand.Execute(cit.CopyItemId);
             } else if (e is MpCopyItem && IsAllTag) {
@@ -1069,16 +1053,6 @@ namespace MonkeyPaste.Avalonia {
                 return IsTagNameReadOnly;
             });
 
-        public ICommand AssignHotkeyCommand => new MpCommand(
-            async () => {
-                await MpAvShortcutCollectionViewModel.Instance.RegisterViewModelShortcutAsync(
-                            $"Select '{TagName}' Collection",
-                            Parent.SelectTagCommand,
-                            ShortcutType,
-                            TagId.ToString(),
-                            ShortcutKeyString);
-                OnPropertyChanged(nameof(ShortcutKeyString));
-            }, () => CanHotkey);
 
         public ICommand ChangeColorCommand => new MpCommand<object>(
             (args) => {

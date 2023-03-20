@@ -270,7 +270,8 @@ namespace MonkeyPaste.Avalonia {
 
         private static Window GetMostSignificantTopmostWindow() {
             return AllWindows
-                .Where(x => (x.DataContext is MpIWantsTopmostWindowViewModel) && (x.DataContext as MpIWantsTopmostWindowViewModel).WantsTopmost)
+                .Where(x => x.DataContext is MpIWantsTopmostWindowViewModel)
+                .Where(x => (x.DataContext as MpIWantsTopmostWindowViewModel).WantsTopmost)
                 .OrderByDescending(x => (int)(x.DataContext as MpIWindowViewModel).WindowType)
                 .FirstOrDefault();
         }

@@ -8,23 +8,24 @@ namespace MonkeyPaste.Avalonia {
     }
 
     public interface MpAvIShortcutCommandViewModel : MpIViewModel {
-        ICommand AssignCommand { get; }
+        //ICommand AssignCommand { get; }
         MpShortcutType ShortcutType { get; }
-        MpAvShortcutViewModel ShortcutViewModel { get; }
-        string ShortcutKeyString { get; }
-    }
-
-    public interface MpICustomShortcutCommandViewModel : MpIViewModel {
-        string ShortcutLabel { get; }
-        MpShortcutType ShortcutType { get; }
-
-        int ModelId { get; }
-
+        //int ShortcutId { get; }
+        string KeyString { get; }
+        //MpAvShortcutViewModel ShortcutViewModel { get; }
+        //string ShortcutKeyString { get; }
         ICommand ShortcutCommand { get; }
         object ShortcutCommandParameter { get; }
     }
 
-    public interface MpIShortcutCommandCollectionViewModel : MpIViewModel {
-        IEnumerable<MpAvIShortcutCommandViewModel> ShortcutCommands { get; }
-    }
+    //public interface MpICustomShortcutCommandViewModel : MpIViewModel {
+    //    string ShortcutLabel { get; }
+    //    MpShortcutType ShortcutType { get; }
+
+    //    int ModelId { get; }
+
+    //    ICommand ShortcutCommand { get; }
+    //    object ShortcutCommandParameter { get; }
+    //}
+
 }

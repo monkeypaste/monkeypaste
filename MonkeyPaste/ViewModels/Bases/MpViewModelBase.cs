@@ -54,9 +54,6 @@ namespace MonkeyPaste {
         public virtual object ParentObj { get; set; }
 
         [JsonIgnore]
-        public virtual MpViewModelBase SelfBindingRef => this;
-
-        [JsonIgnore]
         public bool IsBusy { get; set; }
 
         [JsonIgnore]

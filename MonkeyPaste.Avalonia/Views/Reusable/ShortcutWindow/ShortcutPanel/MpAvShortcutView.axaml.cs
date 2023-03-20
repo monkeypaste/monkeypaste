@@ -8,6 +8,27 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvShortcutView : MpAvUserControl<MpAvIKeyGestureViewModel> {
 
+        #region EmptyText Property
+
+        private string _EmptyText = null;
+
+        public static readonly DirectProperty<MpAvShortcutView, string> EmptyTextProperty =
+            AvaloniaProperty.RegisterDirect<MpAvShortcutView, string>
+            (
+                nameof(EmptyText),
+                o => o.EmptyText,
+                (o, v) => o.EmptyText = v
+            );
+
+        public string EmptyText {
+            get => _EmptyText;
+            set {
+                SetAndRaise(EmptyTextProperty, ref _EmptyText, value);
+            }
+        }
+
+        #endregion
+
         #region RecordCommandParameter Property
 
         private object _RecordCommandParameter = null;

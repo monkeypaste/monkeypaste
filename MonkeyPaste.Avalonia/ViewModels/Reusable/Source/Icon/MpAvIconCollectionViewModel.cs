@@ -194,7 +194,7 @@ namespace MonkeyPaste.Avalonia {
                     throw new Exception("SelectImagePathCommand require MpIUserIconViewModel argument");
                 }
 
-                MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
+                //MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
                 var selectedImagePath = await Mp.Services.NativePathDialog
                         .ShowFileDialogAsync($"Image", null, FilePickerFileTypes.ImageAll);
 
@@ -207,7 +207,7 @@ namespace MonkeyPaste.Avalonia {
                     await SetUserIconImageAsync(uivm, bmpSrc, null);
 
                 }
-                MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
+                //MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
             });
 
         public ICommand ChangeIconCommand => new MpCommand<object>(

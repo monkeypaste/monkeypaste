@@ -42,6 +42,10 @@
             <Setter Property="Foreground"
                     Value="AntiqueWhite" />
         </Style>
+        <Style Selector="PathIcon.activeHotkey">
+            <Setter Property="Foreground"
+                    Value="Red" />
+        </Style>
 
         <Style Selector="ToggleButton:checked PathIcon">
             <Setter Property="Foreground"
@@ -90,8 +94,14 @@
                 VerticalAlignment="Bottom"
                 local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ShowAssignShortcutDialogCommand, Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}"
                 local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding}">
+            <ToolTip.Tip>
+                <local:MpAvToolTipView ToolTipText="{Binding ShortcutTooltipText}" />
+
+            </ToolTip.Tip>
+
             <PathIcon HorizontalAlignment="Right"
                       VerticalAlignment="Top"
+                      Classes.activeHotkey="{Binding KeyString, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                       Data="{StaticResource ControllerOutlineSvg}" />
         </Button>
 

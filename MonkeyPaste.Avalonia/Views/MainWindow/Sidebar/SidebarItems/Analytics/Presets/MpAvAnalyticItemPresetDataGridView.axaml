@@ -216,9 +216,9 @@
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
                                 <Button x:Name="HotkeyButton"
                                         Classes="defaultButton noBg noHoverBg outlineOver square"
-                                        Classes.assigned="{Binding ShortcutKeyString, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                        Classes.assigned="{Binding KeyString, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                         local:MpAvPointerCommandExtension.IsEnabled="True"
-                                        local:MpAvPointerCommandExtension.LeftPressCommand="{Binding AssignHotkeyCommand}">
+                                        local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ShowAssignShortcutDialogCommand, Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}">
                                     <ToolTip.Tip>
                                         <local:MpAvToolTipView ToolTipText="{Binding ShortcutTooltipText}" />
                                     </ToolTip.Tip>

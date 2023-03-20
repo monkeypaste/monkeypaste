@@ -192,12 +192,12 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand SelectFileSystemPathCommand => new MpAsyncCommand(
             async () => {
-                MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
+                //MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
 
                 var selectedDir = await Mp.Services.NativePathDialog
                         .ShowFolderDialogAsync($"Select Folder", FolderPath);
 
-                MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
+                //MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
 
                 bool wasEnabled = IsEnabled.IsTrue();
                 // remove old watcher
