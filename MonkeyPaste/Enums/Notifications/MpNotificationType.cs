@@ -29,6 +29,7 @@
         ModalContentFormatDegradation,
         ModalYesNoCancelMessageBox,
         ModalOkCancelMessageBox,
+        ModalOkMessageBox,
         ModalTextBoxOkCancelMessageBox,
 
         // Append Tile

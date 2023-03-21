@@ -24,6 +24,7 @@ namespace MonkeyPaste {
                 case MpNotificationType.Loader:
                     return MpNotificationLayoutType.Loader;
                 case MpNotificationType.ModalOkCancelMessageBox:
+                case MpNotificationType.ModalOkMessageBox:
                 case MpNotificationType.ModalYesNoCancelMessageBox:
                 case MpNotificationType.ModalContentFormatDegradation:
                 case MpNotificationType.ModalTextBoxOkCancelMessageBox:
@@ -58,6 +59,8 @@ namespace MonkeyPaste {
                 case MpNotificationType.ModalOkCancelMessageBox:
                 case MpNotificationType.ModalContentFormatDegradation:
                     return MpNotificationButtonsType.OkCancel;
+                case MpNotificationType.ModalOkMessageBox:
+                    return MpNotificationButtonsType.Ok;
                 default:
                     MpNotificationLayoutType layoutType = GetLayoutTypeFromNotificationType(ndt);
                     switch (layoutType) {
@@ -78,6 +81,7 @@ namespace MonkeyPaste {
             switch (ndt) {
                 case MpNotificationType.ModalYesNoCancelMessageBox:
                 case MpNotificationType.ModalOkCancelMessageBox:
+                case MpNotificationType.ModalOkMessageBox:
                 case MpNotificationType.ModalContentFormatDegradation:
                 case MpNotificationType.ModalTextBoxOkCancelMessageBox:
                     return MpNotificationPlacementType.ModalAnchor;
@@ -90,6 +94,7 @@ namespace MonkeyPaste {
             switch (ndt) {
                 case MpNotificationType.ModalYesNoCancelMessageBox:
                 case MpNotificationType.ModalOkCancelMessageBox:
+                case MpNotificationType.ModalOkMessageBox:
                 case MpNotificationType.ModalContentFormatDegradation:
                 case MpNotificationType.ModalTextBoxOkCancelMessageBox:
                     return true;
@@ -104,7 +109,7 @@ namespace MonkeyPaste {
 
         #region MpIWantsTopmostWindowViewModel Implementation
 
-        bool MpIWantsTopmostWindowViewModel.WantsTopmost =>
+        public bool WantsTopmost =>
             true;
 
         #endregion

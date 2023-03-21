@@ -93,8 +93,11 @@ namespace MonkeyPaste.Avalonia {
         public IEnumerable<MpAvShortcutViewModel> CustomShortcuts =>
             FilteredItems.Where(x => x.IsCustom);
 
-        public IEnumerable<MpAvShortcutViewModel> ApplicationShortcuts =>
-            FilteredItems.Where(x => !x.IsCustom);
+        public IEnumerable<MpAvShortcutViewModel> InternalApplicationShortcuts =>
+            FilteredItems.Where(x => !x.IsCustom && !x.IsGlobalShortcut);
+
+        public IEnumerable<MpAvShortcutViewModel> GlobalApplicationShortcuts =>
+            FilteredItems.Where(x => !x.IsCustom && x.IsGlobalShortcut);
 
         #endregion
 
@@ -205,7 +208,7 @@ namespace MonkeyPaste.Avalonia {
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             OnPropertyChanged(nameof(Items));
             OnPropertyChanged(nameof(FilteredItems));
-            OnPropertyChanged(nameof(ApplicationShortcuts));
+            OnPropertyChanged(nameof(InternalApplicationShortcuts));
             OnPropertyChanged(nameof(CustomShortcuts));
         }
 
@@ -492,7 +495,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.SettingsFilterTextChanged:
                     OnPropertyChanged(nameof(FilteredItems));
                     OnPropertyChanged(nameof(CustomShortcuts));
-                    OnPropertyChanged(nameof(ApplicationShortcuts));
+                    OnPropertyChanged(nameof(InternalApplicationShortcuts));
                     break;
                 case MpMessageType.MainWindowLoadComplete: {
                         StartInputListener();

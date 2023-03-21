@@ -1,4 +1,6 @@
-﻿using SQLite;
+﻿using MonkeyPaste.Common;
+using SQLite;
+using System;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
@@ -26,6 +28,15 @@ namespace MonkeyPaste {
         public static async Task<MpAppPasteShortcut> CreateAsync(
             int appId = 0,
             string pasteCmdKeyString = "") {
+            if (appId == 0) {
+                throw new Exception("Must have appid");
+            }
+            var dupCheck = await MpDataModelProvider.GetAppPasteShortcutAsync(appId);
+            if (dupCheck != null) {
+                dupCheck.PasteCmdKeyString = pasteCmdKeyString;
+                await dupCheck.WriteToDatabaseAsync();
+                return dupCheck;
+            }
             var aps = new MpAppPasteShortcut() {
                 Guid = System.Guid.NewGuid().ToString(),
                 AppId = appId,
@@ -36,6 +47,17 @@ namespace MonkeyPaste {
             return aps;
         }
         public MpAppPasteShortcut() { }
+
+
+        public override async Task WriteToDatabaseAsync() {
+            if (string.IsNullOrWhiteSpace(PasteCmdKeyString)) {
+                MpDebug.Break("Null assignment error");
+            }
+            if (PasteCmdKeyString.ToLower() == Mp.Services.PlatformShorcuts.PasteKeys.ToLower()) {
+                MpDebug.Break("Redundant assignment error");
+            }
+            await base.WriteToDatabaseAsync();
+        }
 
     }
 }

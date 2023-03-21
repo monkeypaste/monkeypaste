@@ -86,7 +86,7 @@
                     VerticalAlignment="Stretch"
                     IsHitTestVisible="False"
                     IsVisible="{Binding InternalPinnedItems, ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                    Padding="10"
+                    Padding="20"
                     Background="Transparent">
                 <TextBlock HorizontalAlignment="Center"
                            VerticalAlignment="Center"

@@ -8,6 +8,8 @@
                 Value="Hand" />
     </Style>
     <Style Selector=":is(Button).defaultButton /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="Beige" />
         <Setter Property="CornerRadius"
                 Value="5" />
         <Setter Property="BorderThickness"
@@ -20,15 +22,6 @@
                 Value="Black" />
     </Style>
 
-    <Style Selector=":is(Button).defaultButton:not(.severe) /template/ ContentPresenter">
-        <Setter Property="Background"
-                Value="Beige" />
-
-    </Style>
-    <Style Selector=":is(Button).severe /template/ ContentPresenter">
-        <Setter Property="Background"
-                Value="Salmon" />
-    </Style>
 
     <Style Selector=":is(Button).defaultButton:disabled /template/ ContentPresenter">
         <Setter Property="Background"
@@ -53,7 +46,7 @@
     </Style>
     <Style Selector=":is(Button):pointerover.defaultButton.severe /template/ ContentPresenter">
         <Setter Property="Background"
-                Value="Crimson" />
+                Value="Salmon" />
 
     </Style>
     <Style Selector=":is(Button).outline /template/ ContentPresenter">

@@ -856,7 +856,7 @@ namespace MonkeyPaste.Avalonia {
                         Height = 500,
                         Topmost = true,
                         Title = "Settings".ToWindowTitleText(),
-                        Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("CogIcon", null, null, null) as WindowIcon,
+                        Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("CogColorImage", typeof(WindowIcon), null, null) as WindowIcon,
                         WindowStartupLocation = WindowStartupLocation.CenterScreen,
                         WindowState = WindowState.Normal,
                         DataContext = this,

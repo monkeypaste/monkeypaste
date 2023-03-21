@@ -1,4 +1,6 @@
 ﻿
+using Avalonia.Controls;
+using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
@@ -30,6 +32,10 @@ namespace MonkeyPaste.Avalonia {
         public IEnumerable<MpAvAppViewModel> FilteredItems =>
             Items
             .Where(x => (x as MpIFilterMatch).IsMatch(MpAvSettingsViewModel.Instance.FilterText));
+
+        public IEnumerable<MpAvAppViewModel> CustomPasteItems =>
+            FilteredItems
+            .Where(x => !string.IsNullOrEmpty(x.PasteShortcutViewModel.PasteCmdKeyString));
 
         public MpAvAppViewModel ThisAppViewModel =>
             Items.FirstOrDefault(x => x.AppId == MpDefaultDataModelTools.ThisAppId);
@@ -184,10 +190,35 @@ namespace MonkeyPaste.Avalonia {
                     IsBusy = false;
                     MpConsole.WriteLine($"App w/ id: '{a.Id}' added to collection.");
                 });
+            } else if (e is MpAppPasteShortcut apsc &&
+                Items.FirstOrDefault(x => x.AppId == apsc.AppId) is MpAvAppViewModel avm) {
+                Dispatcher.UIThread.Post(() => {
+                    OnPropertyChanged(nameof(CustomPasteItems));
+                });
             }
         }
 
+        protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
+            if (e is MpAppPasteShortcut apsc &&
+                Items.FirstOrDefault(x => x.AppId == apsc.AppId) is MpAvAppViewModel avm) {
+                Dispatcher.UIThread.Post(() => {
+                    OnPropertyChanged(nameof(CustomPasteItems));
+                });
+            }
+        }
 
+        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+            if (e is MpApp a && Items.FirstOrDefault(x => x.AppId == a.Id) is MpAvAppViewModel avm) {
+                Dispatcher.UIThread.Post(() => {
+                    Items.Remove(avm);
+                });
+            } else if (e is MpAppPasteShortcut apsc &&
+                Items.FirstOrDefault(x => x.AppId == apsc.AppId) is MpAvAppViewModel shortcut_avm) {
+                Dispatcher.UIThread.Post(() => {
+                    OnPropertyChanged(nameof(CustomPasteItems));
+                });
+            }
+        }
         #endregion
 
         #region Private Methods
@@ -196,8 +227,6 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(SelectedItem):
                     if (SelectedItem != null) {
                         SelectedItem.OnPropertyChanged(nameof(SelectedItem.IconId));
-
-                        //CollectionViewSource.GetDefaultView(SelectedItem.ClipboardFormatInfos.Items).Refresh();
                         SelectedItem.ClipboardFormatInfos.OnPropertyChanged(nameof(SelectedItem.ClipboardFormatInfos.Items));
                     }
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
@@ -209,6 +238,8 @@ namespace MonkeyPaste.Avalonia {
         }
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             OnPropertyChanged(nameof(Items));
+            OnPropertyChanged(nameof(FilteredItems));
+            OnPropertyChanged(nameof(CustomPasteItems));
         }
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
@@ -308,36 +339,106 @@ namespace MonkeyPaste.Avalonia {
 
         }
 
-        #endregion
-
-        #region Commands
-
-        public ICommand AddAppCommand => new MpAsyncCommand(
-            async () => {
-                string appPath = await Mp.Services.NativePathDialog.ShowFileDialogAsync(
+        private async Task<MpAvAppViewModel> AddOrSelectAppFromFileDialogAsync() {
+            string appPath = await Mp.Services.NativePathDialog.ShowFileDialogAsync(
                     title: "Select application path",
                     filters: null,
                     resolveShortcutPath: true);
 
-                if (string.IsNullOrEmpty(appPath)) {
+            if (string.IsNullOrEmpty(appPath)) {
+                return null;
+            }
+            var pi = new MpPortableProcessInfo() { ProcessPath = appPath };
+            var avm = GetAppByProcessInfo(pi);
+            if (avm == null) {
+                var app = await Mp.Services.AppBuilder.CreateAsync(pi);
+                while (avm == null) {
+                    avm = Items.FirstOrDefault(x => x.AppPath.ToLower() == appPath.ToLower());
+                    await Task.Delay(300);
+                }
+                avm.IsNew = true;
+            } else {
+                await Mp.Services.NativeMessageBox.ShowOkMessageBoxAsync(
+                        title: "Duplicate",
+                        message: $"App at path '{appPath}' already exists",
+                        iconResourceObj: "WarningImage");
+            }
+            return avm;
+        }
+        #endregion
+
+        #region Commands
+
+        public MpIAsyncCommand AddAppCommand => new MpAsyncCommand(
+            async () => {
+                var avm = await AddOrSelectAppFromFileDialogAsync();
+                if (avm == null) {
                     return;
                 }
-                var pi = new MpPortableProcessInfo() { ProcessPath = appPath };
-                var avm = GetAppByProcessInfo(pi);
+
+                SelectAppCommand.Execute(avm);
+            });
+
+        public ICommand AddAppWithAssignPasteShortcutCommand => new MpAsyncCommand(
+            async () => {
+                var avm = await AddOrSelectAppFromFileDialogAsync();
                 if (avm == null) {
-                    var app = await Mp.Services.AppBuilder.CreateAsync(pi);
-                    while (avm == null) {
-                        avm = Items.FirstOrDefault(x => x.AppPath.ToLower() == appPath.ToLower());
-                        await Task.Delay(300);
+                    // canceled app chooser dialg
+                    return;
+                }
+                SelectAppCommand.Execute(avm);
+
+                var assign_result = await avm.PasteShortcutViewModel.ShowAssignDialogAsync();
+                if (!assign_result) {
+                    //assign canceled
+                    if (avm.IsNew) {
+                        // remove new app if assignment was canceled
+                        await avm.App.DeleteFromDatabaseAsync();
                     }
-                } else {
-                    MpNotificationBuilder.ShowMessageAsync(
-                            title: "Duplicate",
-                            body: $"App at path '{appPath}' already exists",
-                            msgType: MpNotificationType.Message).FireAndForgetSafeAsync(this);
+                }
+            });
+
+        public ICommand SelectAppCommand => new MpCommand<object>(
+            (args) => {
+                int appId = 0;
+                if (args is int) {
+                    appId = (int)args;
+                } else if (args is MpAvAppViewModel avm) {
+                    appId = avm.AppId;
                 }
 
-                SelectedItem = avm;
+                if (appId <= 0) {
+                    return;
+                }
+                SelectedItem = Items.FirstOrDefault(x => x.AppId == appId);
+            });
+        public ICommand ShowAppSelectorFlyoutCommand => new MpCommand<object>(
+            (args) => {
+                var appFlyout = new MenuFlyout() {
+                    Items =
+                        Items
+                        .Where(x => !CustomPasteItems.Contains(x))
+                        .OrderBy(x => x.AppName)
+                        .Select(x => new MenuItem() {
+                            Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert(x.IconId, null, null, null) as Bitmap,
+                            //new Image() {
+                            //    Source = MpAvIconSourceObjToBitmapConverter.Instance.Convert(x.IconId,null,null,null) as Bitmap
+                            //},
+                            Header = x.AppName,
+                            Command = x.AssignPasteShortcutCommand
+                        }).AsEnumerable<object>()
+                        .Union(new object[] {
+                            new Separator(),
+                            new MenuItem() {
+                                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("Dots1x3Image", null, null, null) as Bitmap,
+                                Header = "Add App",
+                                Command = AddAppWithAssignPasteShortcutCommand
+                            }
+                        })
+                };
+                var ddb = args as DropDownButton;
+                Flyout.SetAttachedFlyout(ddb, appFlyout);
+                Flyout.ShowAttachedFlyout(ddb);
             });
 
         #endregion

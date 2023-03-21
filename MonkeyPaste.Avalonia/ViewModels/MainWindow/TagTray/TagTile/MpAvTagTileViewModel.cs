@@ -275,7 +275,7 @@ namespace MonkeyPaste.Avalonia {
         public bool CanPin =>
             !IsGroupTag;
 
-        public bool CanMove =>
+        public bool CanTreeMove =>
             !IsRootGroupTag && !IsAllTag && !IsHelpTag;
 
         public bool CanHotkey =>

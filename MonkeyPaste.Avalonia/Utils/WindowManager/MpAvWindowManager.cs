@@ -149,14 +149,8 @@ namespace MonkeyPaste.Avalonia {
                 if (w.DataContext is MpIChildWindowViewModel cwvm) {
                     cwvm.IsOpen = true;
                 }
-                if (w.DataContext is MpIWantsTopmostWindowViewModel tmwvm &&
-                    tmwvm.WantsTopmost) {
-                    w.Topmost = true;
-                }
-                if (w.DataContext is MpIIsAnimatedWindowViewModel adwvm &&
-                    adwvm.IsAnimated) {
-                    w.Topmost = true;
-                }
+                UpdateTopmost();
+                w.Activate();
             }
         }
 
@@ -261,20 +255,14 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            var topmost_w = GetMostSignificantTopmostWindow();
-            if (topmost_w == null) {
-                return;
-            }
-            topmost_w.Topmost = true;
+            var priority_ordered_topmost_wl = AllWindows
+                .Where(x => x.WantsTopmost)
+                .OrderByDescending(x => (int)(x.DataContext as MpIWindowViewModel).WindowType);
+
+            priority_ordered_topmost_wl
+                .ForEach((x, idx) => x.Topmost = idx == 0);
         }
 
-        private static Window GetMostSignificantTopmostWindow() {
-            return AllWindows
-                .Where(x => x.DataContext is MpIWantsTopmostWindowViewModel)
-                .Where(x => (x.DataContext as MpIWantsTopmostWindowViewModel).WantsTopmost)
-                .OrderByDescending(x => (int)(x.DataContext as MpIWindowViewModel).WindowType)
-                .FirstOrDefault();
-        }
 
         private static async Task ShowWhileAnimatingAsync(Window w) {
             if (w.DataContext is MpIIsAnimatedWindowViewModel adwvm) {

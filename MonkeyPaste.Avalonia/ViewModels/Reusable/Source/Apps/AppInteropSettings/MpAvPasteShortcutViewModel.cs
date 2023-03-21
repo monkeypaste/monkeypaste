@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Threading;
+using MonkeyPaste.Common;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -28,7 +29,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Model
 
-        // Arg2
         public string PasteCmdKeyString {
             get {
                 if (PasteShortcut == null) {
@@ -38,6 +38,12 @@ namespace MonkeyPaste.Avalonia {
             }
             set {
                 if (PasteCmdKeyString != value) {
+                    if (PasteShortcut == null) {
+                        PasteShortcut = new MpAppPasteShortcut() {
+                            Guid = System.Guid.NewGuid().ToString(),
+                            AppId = Parent == null ? 0 : Parent.AppId,
+                        };
+                    }
                     PasteShortcut.PasteCmdKeyString = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(PasteCmdKeyString));
@@ -84,9 +90,10 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
-        public async Task ShowAssignDialogAsync() {
+        public async Task<bool> ShowAssignDialogAsync() {
+            // returns false if canceled or unattached
             if (Parent == null) {
-                return;
+                return false;
             }
             string shortcutKeyString = await MpAvAssignShortcutViewModel.ShowAssignShortcutDialog(
                     $"Record paste shortcut for '{Parent.AppName}'",
@@ -97,19 +104,15 @@ namespace MonkeyPaste.Avalonia {
 
             if (shortcutKeyString == null) {
                 // canceled
-                return;
+                return false;
             }
-            if (shortcutKeyString == string.Empty ||
-                shortcutKeyString.ToLower() == Mp.Services.PlatformShorcuts.PasteKeys.ToLower()) {
-                // cleared or os default
-                if (PasteShortcut.Id > 0) {
-                    await PasteShortcut.DeleteFromDatabaseAsync();
-                }
-                InitializeAsync(null).FireAndForgetSafeAsync(this);
-                return;
-            }
+
             PasteCmdKeyString = shortcutKeyString;
-            InitializeAsync(PasteShortcut).FireAndForgetSafeAsync(this);
+            while (IsBusy) {
+                await Task.Delay(100);
+            }
+            await InitializeAsync(PasteShortcut);
+            return true;
         }
         #endregion
 
@@ -120,24 +123,33 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                 case nameof(HasModelChanged):
                     if (HasModelChanged) {
-                        Task.Run(async () => {
-                            await PasteShortcut.WriteToDatabaseAsync();
+                        Dispatcher.UIThread.Post(async () => {
+                            IsBusy = true;
+
+                            if (string.IsNullOrWhiteSpace(PasteCmdKeyString) ||
+                                PasteCmdKeyString.ToLower() == Mp.Services.PlatformShorcuts.PasteKeys.ToLower()) {
+                                if (PasteShortcut.AppId > 0) {
+                                    await PasteShortcut.DeleteFromDatabaseAsync();
+                                }
+                            } else {
+                                await PasteShortcut.WriteToDatabaseAsync();
+                            }
                             HasModelChanged = false;
+                            IsBusy = false;
+
                         });
                     }
                     break;
             }
         }
 
-
-
         #endregion
 
         #region Commands
-        //public ICommand AssignPasteShortcutCommand => new MpCommand(
-        //    () => {
-        //        ShowAssignDialogAsync().FireAndForgetSafeAsync(this);
-        //    });
+        public ICommand AssignPasteShortcutCommand => new MpCommand(
+            () => {
+                ShowAssignDialogAsync().FireAndForgetSafeAsync(this);
+            });
         #endregion
     }
 }

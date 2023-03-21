@@ -807,6 +807,10 @@ namespace MonkeyPaste.Avalonia {
             IsMainWindowOpen = true;
             IsMainWindowOpening = false;
 
+            MpAvWindowManager.AllWindows
+                .Where(x => x.WindowType == MpWindowType.Modal && (x.WindowState == WindowState.Minimized || !x.IsVisible))
+                .ForEach(x => x.ShowChild());
+
             MpConsole.WriteLine("SHOW WINDOW DONE");
         }
 

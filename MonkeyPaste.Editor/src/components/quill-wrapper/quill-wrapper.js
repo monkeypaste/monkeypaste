@@ -27,7 +27,7 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 			userOnly: false,
 			maxStack: MaxUndoLimit < 0 ? Number.MAX_SAFE_INTEGER : MaxUndoLimit
 		},
-		//syntax: true,
+		syntax: false,
 		modules: {
 			toolbar: toolbarId,
 			//table: !UseBetterTable,

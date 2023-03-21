@@ -32,6 +32,25 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         public object DialogResult { get; set; }
+
+        public MpWindowType WindowType {
+            get {
+                if (DataContext is MpIWindowViewModel cwvm) {
+                    return cwvm.WindowType;
+                }
+                return MpWindowType.None;
+            }
+        }
+
+        public bool WantsTopmost {
+            get {
+                if (DataContext is MpIWantsTopmostWindowViewModel tmwvm) {
+                    return tmwvm.WantsTopmost;
+                }
+                return false;
+            }
+        }
+
         #endregion
 
         #region Constructors

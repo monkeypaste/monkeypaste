@@ -44,11 +44,7 @@
                     Value="{Binding Source={StaticResource DeleteImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </Style>
     </UserControl.Styles>
-    <local:MpAvClipBorder CornerRadius="10"
-                          BorderBrush="Black"
-                          Background="Blue"
-                          BorderThickness="1"
-                          Padding="15">
+    <local:MpAvClipBorder Classes="filterDataGridContainer">
         <Grid>
             <DataGrid x:Name="ShortcutDatagrid"
                       IsVisible="{Binding ., Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
@@ -61,13 +57,11 @@
                     <!--  APP/GLOBAL LABEL  -->
                     <DataGridTextColumn Header="Type"
                                         Width="100"
+                                        IsVisible="False"
                                         Binding="{Binding ShortcutTypeName}" />
 
                     <!--  SHORTCUT TYPE LABEL  -->
-                    <!--<DataGridTextColumn Header="Action"
-                                    CanUserResize="True"
-                                    Width="*"
-                                    Binding="{Binding ShortcutDisplayName}" />-->
+
                     <DataGridTemplateColumn Header="Action"
                                             CanUserResize="True"
                                             Width="*">
@@ -82,7 +76,9 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
+
                     <!--  GESTURE VIEW  -->
+
                     <DataGridTemplateColumn Width="150"
                                             CanUserResize="True"
                                             SortMemberPath="KeyString">
@@ -162,12 +158,8 @@
                 </DataGrid.Columns>
             </DataGrid>
             <TextBlock IsVisible="{Binding ., ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       FontStyle="Italic"
-                       Foreground="Silver"
-                       FontSize="16"
-                       Text="No custom shortcuts available" />
+                       Classes="emptyTextBlock"
+                       Text="No results available" />
         </Grid>
 
     </local:MpAvClipBorder>

@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Diagnostics;
@@ -22,6 +23,40 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #region Properties
+
+        #region ButtonClickCommand AvaloniaProperty
+        public static ICommand GetButtonClickCommand(AvaloniaObject obj) {
+            return obj.GetValue(ButtonClickCommandProperty);
+        }
+
+        public static void SetButtonClickCommand(AvaloniaObject obj, ICommand value) {
+            obj.SetValue(ButtonClickCommandProperty, value);
+        }
+
+        public static readonly AttachedProperty<ICommand> ButtonClickCommandProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, ICommand>(
+                "ButtonClickCommand",
+                null,
+                false);
+
+        #endregion
+
+        #region ButtonClickCommandParameter AvaloniaProperty
+        public static object GetButtonClickCommandParameter(AvaloniaObject obj) {
+            return obj.GetValue(ButtonClickCommandParameterProperty);
+        }
+
+        public static void SetButtonClickCommandParameter(AvaloniaObject obj, object value) {
+            obj.SetValue(ButtonClickCommandParameterProperty, value);
+        }
+
+        public static readonly AttachedProperty<object> ButtonClickCommandParameterProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, object>(
+                "ButtonClickCommandParameter",
+                null,
+                false);
+
+        #endregion
 
         #region LeftPressCommand AvaloniaProperty
         public static ICommand GetLeftPressCommand(AvaloniaObject obj) {
@@ -52,6 +87,40 @@ namespace MonkeyPaste.Avalonia {
         public static readonly AttachedProperty<object> LeftPressCommandParameterProperty =
             AvaloniaProperty.RegisterAttached<object, Control, object>(
                 "LeftPressCommandParameter",
+                null,
+                false);
+
+        #endregion
+
+        #region LeftReleaseCommand AvaloniaProperty
+        public static ICommand GetLeftReleaseCommand(AvaloniaObject obj) {
+            return obj.GetValue(LeftReleaseCommandProperty);
+        }
+
+        public static void SetLeftReleaseCommand(AvaloniaObject obj, ICommand value) {
+            obj.SetValue(LeftReleaseCommandProperty, value);
+        }
+
+        public static readonly AttachedProperty<ICommand> LeftReleaseCommandProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, ICommand>(
+                "LeftReleaseCommand",
+                null,
+                false);
+
+        #endregion
+
+        #region LeftReleaseCommandParameter AvaloniaProperty
+        public static object GetLeftReleaseCommandParameter(AvaloniaObject obj) {
+            return obj.GetValue(LeftReleaseCommandParameterProperty);
+        }
+
+        public static void SetLeftReleaseCommandParameter(AvaloniaObject obj, object value) {
+            obj.SetValue(LeftReleaseCommandParameterProperty, value);
+        }
+
+        public static readonly AttachedProperty<object> LeftReleaseCommandParameterProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, object>(
+                "LeftReleaseCommandParameter",
                 null,
                 false);
 
@@ -225,20 +294,19 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region IsPressEventHandled AvaloniaProperty
-        public static bool GetIsPressEventHandled(AvaloniaObject obj) {
-            return obj.GetValue(IsPressEventHandledProperty);
+        #region IsEventHandled AvaloniaProperty
+        public static bool GetIsEventHandled(AvaloniaObject obj) {
+            return obj.GetValue(IsEventHandledProperty);
         }
 
-        public static void SetIsPressEventHandled(AvaloniaObject obj, bool value) {
-            obj.SetValue(IsPressEventHandledProperty, value);
+        public static void SetIsEventHandled(AvaloniaObject obj, bool value) {
+            obj.SetValue(IsEventHandledProperty, value);
         }
 
-        public static readonly AttachedProperty<bool> IsPressEventHandledProperty =
+        public static readonly AttachedProperty<bool> IsEventHandledProperty =
             AvaloniaProperty.RegisterAttached<object, Control, bool>(
-                "IsPressEventHandled",
-                true,
-                false);
+                "IsEventHandled",
+                true);
 
         #endregion
 
@@ -297,14 +365,38 @@ namespace MonkeyPaste.Avalonia {
 
         private static void EnabledControl_AttachedToVisualHandler(object s, VisualTreeAttachmentEventArgs? e) {
             if (s is Control control) {
-                if (control is Button b && GetLeftPressCommand(control) is ICommand leftPressCommand) {
-                    // NOTE pointerpress is swallowed by button unless tunneled, may need for other controls too...
-                    b.AddHandler(Button.PointerPressedEvent, Control_PointerPressed, RoutingStrategies.Tunnel);
+                bool has_any_press =
+                    GetLeftPressCommand(control) != null ||
+                    GetRightPressCommand(control) != null ||
+                    GetDoubleLeftPressCommand(control) != null ||
+                    (GetHoldingCommand(control) != null && GetIsHoldingEnabled(control));
+
+
+                if (has_any_press) {
+                    if (control is Button b && GetLeftPressCommand(control) != null) {
+                        // NOTE pointerpress is swallowed by button unless tunneled, may need for other controls too...
+                        b.AddHandler(Button.PointerPressedEvent, Control_PointerPressed, RoutingStrategies.Tunnel);
+                    }
+                    control.AddHandler(Control.PointerPressedEvent, Control_PointerPressed, GetRoutingStrategy(control));
+
+                    if (GetHoldingCommand(control) != null &&
+                        GetIsHoldingEnabled(control)) {
+                        control.AddHandler(Control.HoldingEvent, Control_Holding, RoutingStrategies.Tunnel);
+                    }
                 }
-                control.AddHandler(Control.PointerPressedEvent, Control_PointerPressed, GetRoutingStrategy(control));
-                if (GetHoldingCommand(control) != null && GetIsHoldingEnabled(control)) {
-                    control.AddHandler(Control.HoldingEvent, Control_Holding, RoutingStrategies.Tunnel);
+
+                if (GetLeftReleaseCommand(control) != null) {
+                    control.AddHandler(Control.PointerReleasedEvent, Control_PointerReleased, GetRoutingStrategy(control));
                 }
+
+                if (GetButtonClickCommand(control) != null) {
+                    if (control is Button button) {
+                        button.AddHandler(Button.ClickEvent, Button_Click, GetRoutingStrategy(control));
+                    } else {
+                        MpDebug.Break("Error must be attached to button");
+                    }
+                }
+
                 if (GetDragEnterCommand(control) != null) {
                     EnableDragEnter(control);
                 }
@@ -391,7 +483,7 @@ namespace MonkeyPaste.Avalonia {
                                     if (cmd != null &&
                                         cmd.CanExecute(param)) {
                                         cmd.Execute(param);
-                                        e.Handled = GetIsPressEventHandled(control);
+                                        e.Handled = GetIsEventHandled(control);
                                     }
                                     return;
                                 }
@@ -411,15 +503,24 @@ namespace MonkeyPaste.Avalonia {
             }
             if (cmd != null && cmd.CanExecute(param)) {
                 cmd.Execute(param);
-                e.Handled = GetIsPressEventHandled(control);
+                e.Handled = GetIsEventHandled(control);
             }
         }
 
+
+        private static void Button_Click(object sender, RoutedEventArgs e) {
+            throw new NotImplementedException();
+        }
+
+        private static void Control_PointerReleased(object sender, PointerReleasedEventArgs e) {
+            if (sender is Control control &&
+                GetLeftReleaseCommand(control) is ICommand cmd) {
+                cmd.Execute(GetLeftReleaseCommandParameter(control));
+                e.Handled = GetIsEventHandled(control);
+            }
+        }
         private static void Control_Holding(object sender, HoldingRoutedEventArgs e) {
-            //if (sender is Control c &&
-            //    GetHoldingCommand(c) is ICommand cmd) {
-            //    cmd.Execute(GetHoldingCommandParameter(c));
-            //}
+            // handled manually in press
             e.Handled = true;
         }
 

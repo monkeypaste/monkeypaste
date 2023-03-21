@@ -8,31 +8,190 @@
                        xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:pcl="using:MonkeyPaste"
-                       d:DataContext="{x:Static local:MpAvDesignData.ShortcutCollection}"
                        x:TypeArguments="local:MpAvShortcutCollectionViewModel"
                        x:DataType="local:MpAvShortcutCollectionViewModel"
                        x:CompileBindings="True"
                        DataContext="{x:Static local:MpAvShortcutCollectionViewModel.Instance}"
                        x:Class="MonkeyPaste.Avalonia.MpAvShortcutsView">
     <local:MpAvUserControl.Resources>
-        <SolidColorBrush x:Key="ExpanderContentBackground" Color="Transparent" />
-        <SolidColorBrush x:Key="ExpanderHeaderBackground" Color="Transparent" />
-        <SolidColorBrush x:Key="ExpanderHeaderBackgroundPointerOver" Color="Transparent" />
         <sys:String x:Key="GestureInfoHtml">Gesture info here</sys:String>
         <sys:String x:Key="RoutingInfoHtml">&lt;ul&gt;	&lt;li&gt;		&lt;b&gt;Internal&lt;/b&gt; In app shortcuts, are not globally enabled&lt;/li&gt;	&lt;li&gt;		&lt;b&gt;Direct&lt;/b&gt; Gesture will &lt;b&gt;			&lt;i&gt;override&lt;/i&gt;		&lt;/b&gt; the input, ie. it will &lt;b&gt;&lt;span style=&quot;foreground: #FF0000&quot;&gt;not&lt;/span&gt;&lt;/b&gt; be received by active application. &lt;/li&gt;	&lt;li&gt;		&lt;b&gt;Bubble&lt;/b&gt; Gesture will execute &lt;b&gt;			&lt;i&gt;after&lt;/i&gt;		&lt;/b&gt; active application &lt;/li&gt;	&lt;li&gt;		&lt;b&gt;Tunnel&lt;/b&gt; Gesture will execute &lt;b&gt;			&lt;i&gt;before&lt;/i&gt;		&lt;/b&gt; active application &lt;/li&gt;&lt;/ul&gt;</sys:String>
     </local:MpAvUserControl.Resources>
     <StackPanel Orientation="Vertical"
                 Margin="0,20,0,0"
                 Spacing="20">
-        <Button Classes="defaultButton iconTextButton severe"
+
+        <!--  RESET ALL SHORTCUTS  -->
+
+        <Button Classes="defaultButton textOnlyButton severe"
                 Command="{Binding ResetAllShortcuts}"
-                HorizontalAlignment="Left">
-            <DockPanel>
-                <Image DockPanel.Dock="Left"
-                       Source="{Binding Source={StaticResource DeleteImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                <TextBlock Text="Reset All Shortcuts" />
-            </DockPanel>
-        </Button>
-        <local:MpAvShortcutDataGridView DataContext="{Binding FilteredItems}" />
+                HorizontalAlignment="Left"
+                Content="Reset All Shortcuts" />
+
+        <!--  USER-DEFINED SHORTCUTS  -->
+
+        <Expander>
+            <Expander.Header>
+                <StackPanel>
+                    <Label Classes="h1 dark"
+                           Content="User-Defined" />
+                    <Border Classes="labelUnderline_long dark" />
+                </StackPanel>
+            </Expander.Header>
+            <Expander.Content>
+                <local:MpAvShortcutDataGridView DataContext="{Binding CustomShortcuts}" />
+            </Expander.Content>
+        </Expander>
+
+        <!--  APPLICATION SHORTCUTS  -->
+
+        <Expander>
+            <Expander.Header>
+                <StackPanel>
+                    <Label Classes="h1 dark"
+                           Content="Application" />
+                    <Border Classes="labelUnderline_long dark" />
+                </StackPanel>
+            </Expander.Header>
+            <Expander.Content>
+                <StackPanel>
+                    <Expander>
+                        <Expander.Header>
+                            <StackPanel>
+                                <Label Classes="h1 dark"
+                                       Content="Internal" />
+                                <Border Classes="labelUnderline_long dark" />
+                            </StackPanel>
+                        </Expander.Header>
+                        <Expander.Content>
+                            <local:MpAvShortcutDataGridView DataContext="{Binding InternalApplicationShortcuts}" />
+                        </Expander.Content>
+                    </Expander>
+                    <Expander>
+                        <Expander.Header>
+                            <StackPanel>
+                                <Label Classes="h1 dark"
+                                       Content="Global" />
+                                <Border Classes="labelUnderline_long dark" />
+                            </StackPanel>
+                        </Expander.Header>
+                        <Expander.Content>
+                            <local:MpAvShortcutDataGridView DataContext="{Binding GlobalApplicationShortcuts}" />
+                        </Expander.Content>
+                    </Expander>
+                </StackPanel>
+            </Expander.Content>
+        </Expander>
+
+        <!--  PASTE INTEROP SHORTCUTS  -->
+
+        <Expander DataContext="{x:Static local:MpAvAppCollectionViewModel.Instance}"
+                  x:DataType="local:MpAvAppCollectionViewModel">
+            <Expander.Header>
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Classes="h1 dark"
+                               Content="Custom Paste Commands" />
+                        <local:MpAvToolTipInfoHintView ToolTipText="#warning# Source url recognition is dependant on the host applications clipboard support so rejection is not guaranteed :(" />
+                    </StackPanel>
+                    <Border Classes="labelUnderline_long dark" />
+                </StackPanel>
+            </Expander.Header>
+            <Expander.Content>
+                <StackPanel>
+
+                    <!--  PASTE SHORTCUT DATAGRID  -->
+
+                    <local:MpAvClipBorder Classes="filterDataGridContainer">
+                        <Grid>
+                            <DataGrid x:Name="ShortcutDatagrid"
+                                      IsVisible="{Binding CustomPasteItems, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                      CanUserSortColumns="True"
+                                      Focusable="True"
+                                      Items="{Binding CustomPasteItems}"
+                                      IsReadOnly="False"
+                                      AutoGenerateColumns="False">
+                                <DataGrid.Columns>
+
+                                    <!--  APP ICON  -->
+
+                                    <DataGridTemplateColumn Width="30">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Image Width="15"
+                                                       Height="15"
+                                                       Source="{Binding IconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <!--  APP NAME  -->
+                                    <DataGridTemplateColumn Header="Name"
+                                                            CanUserSort="True"
+                                                            SortMemberPath="AppName"
+                                                            CanUserResize="True"
+                                                            Width="*">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Grid Classes="marqueeContainer">
+                                                    <local:MpAvMarqueeTextBox EditOnFocus="False"
+                                                                              DropShadowBrush="Transparent"
+                                                                              ReadOnlyForeground="Black"
+                                                                              SelectViewModelOnFocus="False"
+                                                                              Text="{Binding AppName}" />
+                                                </Grid>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+
+                                    <!--  PASTE GESTURE VIEW  -->
+                                    <DataGridTemplateColumn Width="130">
+                                        <DataGridTemplateColumn.HeaderTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal"
+                                                            Spacing="5">
+                                                    <TextBlock Text="Paste Shortcut" />
+                                                    <local:MpAvToolTipInfoHintView ToolTipText="#p#Monkey Paste uses keyboard automation to perform external pasting and some applications (like a console or shell for example) may have a non-default paste shortcut. To ensure proper interoperability record that short cut for the esoteric application here.#p##p#Along with pasting into the application, this shortcut will be needed to track usage statistics (only for delights, not shared)" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.HeaderTemplate>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Border DataContext="{Binding PasteShortcutViewModel}">
+                                                    <local:MpAvShortcutView Background="Transparent"
+                                                                            Margin="5"
+                                                                            HorizontalAlignment="Center"
+                                                                            local:MpAvPointerCommandExtension.IsEnabled="True"
+                                                                            local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ShowAssignShortcutDialogCommand, Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}"
+                                                                            local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding}"
+                                                                            local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
+                                                                            RecordCommand="{Binding AssignPasteShortcutCommand}" />
+                                                </Border>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <TextBlock IsVisible="{Binding CustomPasteItems, ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                       Classes="emptyTextBlock"
+                                       Text="No results available" />
+                        </Grid>
+                    </local:MpAvClipBorder>
+
+                    <!--  ADD PASTE SHORTCUT BUTTON  -->
+                    <DropDownButton HorizontalAlignment="Right"
+                                    Classes="dataGridAddButton"
+                                    Command="{Binding ShowAppSelectorFlyoutCommand}"
+                                    CommandParameter="{Binding $self}">
+                        <DockPanel>
+                            <Image DockPanel.Dock="Left"
+                                   Source="{Binding Source={StaticResource AddImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                            <Label Content="Add Application" />
+                        </DockPanel>
+                    </DropDownButton>
+                </StackPanel>
+            </Expander.Content>
+        </Expander>
     </StackPanel>
 </local:MpAvUserControl>

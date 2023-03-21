@@ -4,6 +4,14 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvMessageBox : MpINativeMessageBox {
+        public async Task ShowOkMessageBoxAsync(string title, string message, object anchor = null, object iconResourceObj = null) {
+            await MpNotificationBuilder.ShowNotificationAsync(
+                                    notificationType: MpNotificationType.ModalOkMessageBox,
+                                    title: title,
+                                    body: message,
+                                    iconSourceObj: iconResourceObj,
+                                    anchor: anchor);
+        }
         public async Task<bool> ShowOkCancelMessageBoxAsync(string title, string message, object anchor = null, object iconResourceObj = null) {
             var result = await MpNotificationBuilder.ShowNotificationAsync(
                                     notificationType: MpNotificationType.ModalOkCancelMessageBox,

@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/Button.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/ButtonBase.axaml" />
+    <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/Border.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/ComboBox.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/ComboBoxItem.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/GridSplitter.axaml" />
@@ -14,7 +15,6 @@
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/MpAvPagingScrollBar.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/MpAvPagingScrollViewer.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/MpAvSideBarButtonGroup.axaml" />
-    <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/MpAvSideBarItems.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/MpAvTagTile.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/MpAvTooltip.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/TemplatedControl.axaml" />

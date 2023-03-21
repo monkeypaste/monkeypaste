@@ -5,7 +5,7 @@
 }
 
 div.ql-code-block-container, div.ql-code-block {
-    background-color: rgba(0,0,0,var(--editableopacity)) !important;
+    background-color: inherit !important;
 }
 
 

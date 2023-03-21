@@ -133,4 +133,5 @@
     <sys:String x:Key="ColorsImage">avares://MonkeyPaste.Avalonia/Assets/Images/colors.png</sys:String>
     <sys:String x:Key="CloseImage2">avares://MonkeyPaste.Avalonia/Assets/Images/delete2.png</sys:String>
     <sys:String x:Key="CloseOverImage2">avares://MonkeyPaste.Avalonia/Assets/Images/delete.png</sys:String>
+    <sys:String x:Key="CogColorImage">avares://MonkeyPaste.Avalonia/Assets/Images/cogcolor.png</sys:String>
 </ResourceDictionary>

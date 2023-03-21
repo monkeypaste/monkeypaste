@@ -30,6 +30,10 @@ namespace MonkeyPaste.Avalonia {
         private int _curShortcutId = 0;
         #endregion
 
+        #region Statics
+
+        #endregion
+
         #region Interfaces
 
         bool MpIWantsTopmostWindowViewModel.WantsTopmost =>
@@ -105,6 +109,7 @@ namespace MonkeyPaste.Avalonia {
             MpMessenger.SendGlobal(MpMessageType.ShortcutAssignmentStarted);
 
             var result = await ascw.ShowChildDialogWithResultAsync(owner);
+
 
             MpMessenger.SendGlobal(MpMessageType.ShortcutAssignmentEnded);
 
@@ -227,6 +232,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ClearCommand => new MpCommand(
             () => {
+                _gestureHelper.ClearCurrentGesture();
                 KeyString = String.Empty;
                 OnPropertyChanged(nameof(KeyItems));
                 Validate();
