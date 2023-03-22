@@ -106,6 +106,10 @@ namespace MonkeyPaste {
             await base.InitializeAsync(nf);
 
             switch (ButtonsType) {
+                case MpNotificationButtonsType.YesNo:
+                    ShowYesButton = true;
+                    ShowNoButton = true;
+                    break;
                 case MpNotificationButtonsType.YesNoCancel:
                     ShowYesButton = true;
                     ShowNoButton = true;

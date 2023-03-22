@@ -94,7 +94,7 @@ namespace MonkeyPaste.Avalonia {
         public IDisposable KeysObservable { get; set; }
 
         public bool IsGlobalShortcut =>
-            RoutingType != MpRoutingType.None && RoutingType != MpRoutingType.Internal;
+            ShortcutType.IsGlobal();
 
         public bool CanDelete =>
             IsCustom;
@@ -484,6 +484,9 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(IsBusy):
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyBusy));
+                    break;
+                case nameof(ShortcutType):
+                    OnPropertyChanged(nameof(IsGlobalShortcut));
                     break;
             }
         }

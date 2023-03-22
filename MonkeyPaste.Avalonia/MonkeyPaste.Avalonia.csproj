@@ -1242,8 +1242,8 @@
     <Compile Update="Views\Reusable\Notifications\Toast\_Window\MpAvNotificationWindow.axaml.cs">
       <DependentUpon>MpAvNotificationWindow.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\Reusable\ShortcutWindow\MpAvAssignShortcutDialog.axaml.cs">
-      <DependentUpon>MpAvAssignShortcutDialog.axaml</DependentUpon>
+    <Compile Update="Views\Reusable\ShortcutWindow\MpAvAssignShortcutView.axaml.cs">
+      <DependentUpon>MpAvAssignShortcutView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Reusable\ShortcutWindow\ShortcutPanel\KeyGroup\Key\MpAvShortcutKeyView.axaml.cs">
       <DependentUpon>MpAvShortcutKeyView.axaml</DependentUpon>

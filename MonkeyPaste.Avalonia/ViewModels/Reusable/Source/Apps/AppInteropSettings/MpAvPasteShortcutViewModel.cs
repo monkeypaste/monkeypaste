@@ -2,6 +2,7 @@
 using MonkeyPaste.Common;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -18,7 +19,6 @@ namespace MonkeyPaste.Avalonia {
 
         private ObservableCollection<MpAvShortcutKeyGroupViewModel> _keyGroups;
         public ObservableCollection<MpAvShortcutKeyGroupViewModel> KeyGroups =>
-           // new ObservableCollection<MpAvShortcutKeyGroupViewModel>(PasteCmdKeyString.ToKeyItems());
            _keyGroups;
 
         #endregion
@@ -27,8 +27,30 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
+        #region State
+
+        public bool HasPasteShortcut =>
+            !string.IsNullOrEmpty(PasteCmdKeyString) && PasteShortcutId > 0;
+        #endregion
+
         #region Model
 
+        public int PasteShortcutId {
+            get {
+                if (PasteShortcut == null) {
+                    return 0;
+                }
+                return PasteShortcut.Id;
+            }
+        }
+        public int AppId {
+            get {
+                if (PasteShortcut == null) {
+                    return 0;
+                }
+                return PasteShortcut.AppId;
+            }
+        }
         public string PasteCmdKeyString {
             get {
                 if (PasteShortcut == null) {
@@ -128,7 +150,7 @@ namespace MonkeyPaste.Avalonia {
 
                             if (string.IsNullOrWhiteSpace(PasteCmdKeyString) ||
                                 PasteCmdKeyString.ToLower() == Mp.Services.PlatformShorcuts.PasteKeys.ToLower()) {
-                                if (PasteShortcut.AppId > 0) {
+                                if (AppId > 0) {
                                     await PasteShortcut.DeleteFromDatabaseAsync();
                                 }
                             } else {
@@ -140,16 +162,32 @@ namespace MonkeyPaste.Avalonia {
                         });
                     }
                     break;
+                case nameof(KeyGroups):
+                    Parent.OnPropertyChanged(nameof(KeyGroups));
+                    break;
             }
         }
 
         #endregion
 
         #region Commands
-        public ICommand AssignPasteShortcutCommand => new MpCommand(
-            () => {
-                ShowAssignDialogAsync().FireAndForgetSafeAsync(this);
-            });
+        //public ICommand AssignPasteShortcutCommand => new MpCommand(
+        //    () => {
+        //        ShowAssignDialogAsync().FireAndForgetSafeAsync(this);
+        //    });
+
+        //public ICommand DeletePasteShortcutCommand => new MpAsyncCommand(
+        //    async () => {
+        //        var result = await Mp.Services.NativeMessageBox.ShowYesNoCancelMessageBoxAsync(
+        //            title: $"Confirm",
+        //            message: $"Are you sure want to remove the paste shortcut for '{Parent.AppName}'",
+        //            iconResourceObj: Parent.IconId);
+        //        if (result.IsNull()) {
+        //            // canceled
+        //            return;
+        //        }
+        //        PasteCmdKeyString = null;
+        //    });
         #endregion
     }
 }

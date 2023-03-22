@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
+using MonkeyPaste.Common;
 using PropertyChanged;
 using System;
 using System.Collections.Generic;
@@ -55,11 +56,6 @@ namespace MonkeyPaste.Avalonia {
 
 
         public void HideNotification(MpNotificationViewModelBase nvmb) {
-            //if (nvmb is MpUserActionNotificationViewModel uanvm) {
-            //    FinishClose(wl[0]);
-            //    return;
-            //}
-            // this triggers fade out which ends w/ IsVisible=false
             nvmb.IsClosing = true;
         }
 
@@ -172,15 +168,24 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (nvmb.IsModal) {
-                bool wasLocked = MpAvMainWindowViewModel.Instance.IsMainWindowLocked;
-                if (!wasLocked) {
-                    MpAvMainWindowViewModel.Instance.ToggleMainWindowLockCommand.Execute(null);
-                }
+                //bool wasLocked = MpAvMainWindowViewModel.Instance.IsMainWindowLocked;
+                //if (!wasLocked) {
+                //    MpAvMainWindowViewModel.Instance.ToggleMainWindowLockCommand.Execute(null);
+                //}
+                //if (MpAvWindowManager.ActiveWindow is Window w) {
+                //    if (nw is MpAvWindow cw) {
+                //        cw.ShowChildDialogAsync(w).FireAndForgetSafeAsync();
+                //    } else {
 
+                //        nw.Show(w);
+                //    }
+                //} else {
+                //    nw.Show();
+                //}
                 nw.Show();
-                if (!wasLocked) {
-                    MpAvMainWindowViewModel.Instance.ToggleMainWindowLockCommand.Execute(null);
-                }
+                //if (!wasLocked) {
+                //    MpAvMainWindowViewModel.Instance.ToggleMainWindowLockCommand.Execute(null);
+                //}
             } else {
                 nw.Show();
             }
@@ -192,7 +197,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void FinishClose(Window w) {
-            //var nvmb = w.DataContext as MpNotificationViewModelBase;
             if (w is MpAvLoaderNotificationWindow) {
                 // ignore so bootstrapper can swap main window
             } else if (w == MpAvAppendNotificationWindow.Instance) {

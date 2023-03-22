@@ -20,6 +20,7 @@
         MinHeight="50"
         SizeToContent="Height"
         ShowInTaskbar="False"
+        Topmost="True"
         WindowState="Normal"
         SystemDecorations="None"
         TransparencyLevelHint="Transparent"

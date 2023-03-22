@@ -103,13 +103,14 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <CheckBox local:MpAvPointerCommandExtension.IsEnabled="{Binding IsSelected}"
-                                                  local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ToggleIsRejectedCommand}"
+                                                  local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ToggleIsRejectedCommand, Source={x:Static local:MpAvAppCollectionViewModel.Instance}}"
+                                                  local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding .}"
                                                   IsChecked="{Binding IsRejected, Mode=OneWay}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
 
-                           
+
                         </DataGrid.Columns>
                     </DataGrid>
 
@@ -194,7 +195,7 @@
                                     <StackPanel Orientation="Horizontal"
                                                 Spacing="5">
                                         <TextBlock Text="Exclude Url?" />
-                                        
+
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.HeaderTemplate>

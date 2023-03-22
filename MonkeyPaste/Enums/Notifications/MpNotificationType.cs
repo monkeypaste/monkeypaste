@@ -28,6 +28,7 @@
 
         ModalContentFormatDegradation,
         ModalYesNoCancelMessageBox,
+        ModalYesNoMessageBox,
         ModalOkCancelMessageBox,
         ModalOkMessageBox,
         ModalTextBoxOkCancelMessageBox,

@@ -117,5 +117,23 @@ namespace MonkeyPaste.Avalonia {
 
             return string.Format(template, title_arg);
         }
+
+        public static bool IsGlobal(this MpShortcutType st) {
+            switch (st) {
+                // APPLICATION
+                case MpShortcutType.ToggleMainWindow:
+                case MpShortcutType.ToggleAppendMode:
+                case MpShortcutType.ToggleAppendLineMode:
+                case MpShortcutType.ToggleAutoCopyMode:
+                case MpShortcutType.ToggleRightClickPasteMode:
+                case MpShortcutType.ToggleListenToClipboard:
+                // USER
+                case MpShortcutType.PasteCopyItem:
+                case MpShortcutType.InvokeAction:
+                    return true;
+                default:
+                    return false;
+            }
+        }
     }
 }

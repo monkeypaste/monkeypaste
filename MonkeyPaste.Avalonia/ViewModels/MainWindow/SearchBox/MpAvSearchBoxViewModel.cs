@@ -6,6 +6,7 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -249,6 +250,13 @@ namespace MonkeyPaste.Avalonia {
                         if (!HasText) {
                             SearchText = string.Empty;
                         }
+
+                        Dispatcher.UIThread.Post(async () => {
+                            var result = await Mp.Services.NativeMessageBox.ShowYesNoCancelMessageBoxAsync(
+                                title: $"Remove associated clips?",
+                                message: $"Would you also like to remove all clips from Test'",
+                                iconResourceObj: "WarningImage");
+                        });
                     } else {
 
                         if (HasText) {

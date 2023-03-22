@@ -1,6 +1,8 @@
 ﻿
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
+using Avalonia.Threading;
+using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
@@ -8,17 +10,21 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Controls.Ribbon.Primitives;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public enum MpShortcutAssignmentType {
-        InternalOrGlobalCommand,
+        InternalCommand,
+        GlobalCommand,
         AppPaste
     }
 
     public class MpAvAssignShortcutViewModel :
         MpViewModelBase,
         MpIWantsTopmostWindowViewModel,
+        MpIActiveWindowViewModel,
+        MpIChildWindowViewModel,
         MpAvIKeyGestureViewModel {
         #region Static Variables
         #endregion
@@ -31,6 +37,42 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
+        public static async Task<string> ShowAssignShortcutDialog(
+            string shortcutName,
+            string keys,
+            int curShortcutId,
+            MpShortcutAssignmentType assignmentType = MpShortcutAssignmentType.InternalCommand,
+            object iconResourceObj = null,
+            Window owner = null) {
+            var ascw = new MpAvWindow() {
+                DataContext = new MpAvAssignShortcutViewModel(shortcutName, keys, curShortcutId, assignmentType, iconResourceObj),
+                Height = 300,
+                MinWidth = 400,
+                SizeToContent = SizeToContent.Width,
+                ShowInTaskbar = false,
+                Topmost = true,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("KeyboardImage", typeof(WindowIcon), null, null) as WindowIcon,
+                Title = "Assign Shortcut".ToWindowTitleText(),
+                Classes = new Classes("assignWindow", "fadeIn"),
+                Content = new MpAvAssignShortcutView()
+            };
+            MpMessenger.SendGlobal(MpMessageType.ShortcutAssignmentStarted);
+
+            var result = await ascw.ShowChildDialogWithResultAsync(owner);
+
+            MpMessenger.SendGlobal(MpMessageType.ShortcutAssignmentEnded);
+
+            if (owner is Window w) {
+                w.Activate();
+                w.Focus();
+            }
+            if (result is bool assignResult && assignResult && ascw.DataContext is MpAvAssignShortcutViewModel ascwvm) {
+                return ascwvm.KeyString;
+            }
+            return null;
+        }
+
 
         #endregion
 
@@ -41,6 +83,10 @@ namespace MonkeyPaste.Avalonia {
 
         MpWindowType MpIWindowViewModel.WindowType =>
             MpWindowType.Modal;
+
+        public bool IsOpen { get; set; }
+
+        public bool IsActive { get; set; }
 
         #endregion
 
@@ -58,8 +104,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsGlobal =>
+            AssignmentType == MpShortcutAssignmentType.GlobalCommand;
+
         public MpShortcutAssignmentType AssignmentType { get; set; }
-        public bool IsEmpty => string.IsNullOrEmpty(KeyString);
+        public bool IsEmpty =>
+            string.IsNullOrEmpty(KeyString);
 
         public bool IsSequence =>
             KeyString != null && KeyString.Contains(MpInputConstants.SEQUENCE_SEPARATOR);
@@ -94,38 +144,8 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region Static Methods
-        public static async Task<string> ShowAssignShortcutDialog(
-            string shortcutName,
-            string keys,
-            int curShortcutId,
-            MpShortcutAssignmentType assignmentType = MpShortcutAssignmentType.InternalOrGlobalCommand,
-            object iconResourceObj = null,
-            Window owner = null) {
-            var ascw = new MpAvAssignShortcutDialog();
-            var ascwvm = new MpAvAssignShortcutViewModel(shortcutName, keys, curShortcutId, assignmentType, iconResourceObj);
-            ascw.DataContext = ascwvm;
-
-            MpMessenger.SendGlobal(MpMessageType.ShortcutAssignmentStarted);
-
-            var result = await ascw.ShowChildDialogWithResultAsync(owner);
-
-
-            MpMessenger.SendGlobal(MpMessageType.ShortcutAssignmentEnded);
-
-            if (owner is Window w) {
-                w.Activate();
-                w.Focus();
-            }
-            if (result is bool assignResult && assignResult) {
-                return ascwvm.KeyString;
-            }
-            return null;
-        }
-        #endregion
-
         #region Constructors
-        public MpAvAssignShortcutViewModel() : this(string.Empty, string.Empty, 0, MpShortcutAssignmentType.InternalOrGlobalCommand, null) { }
+        public MpAvAssignShortcutViewModel() : this(string.Empty, string.Empty, 0, MpShortcutAssignmentType.InternalCommand, null) { }
 
         private MpAvAssignShortcutViewModel(
             string shortcutName,
@@ -136,16 +156,21 @@ namespace MonkeyPaste.Avalonia {
             PropertyChanged += MpAssignShortcutModalWindowViewModel_PropertyChanged;
 
             _curShortcutId = curShortcutId;
+            _gestureHelper = new MpKeyGestureHelper();
             KeyString = keyString;
             ShortcutDisplayName = shortcutName;
             IconResourceObj = iconResourceObj;
             AssignmentType = assignmentType;
             OnPropertyChanged(nameof(KeyString));
             OnPropertyChanged(nameof(KeyItems));
-
-
-            _gestureHelper = new MpKeyGestureHelper();
         }
+        #endregion
+
+        #region Public Methods
+
+        #endregion
+
+        #region Private Methods        
 
         private void MpAssignShortcutModalWindowViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
@@ -158,18 +183,16 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(KeyItems):
                     OnPropertyChanged(nameof(KeyGroups));
                     break;
+                case nameof(IsOpen):
+                    if (IsOpen) {
+                        StartKeyListener();
+                    } else {
+                        StopKeyListener();
+                    }
+                    break;
 
             }
         }
-
-        #endregion
-
-        #region Public Methods
-
-        #endregion
-
-        #region Private Methods        
-
         private bool Validate() {
             //when KeysString changes check full system for duplicates, ignoring order of combinations
             WarningString = string.Empty;
@@ -180,7 +203,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             switch (AssignmentType) {
-                case MpShortcutAssignmentType.InternalOrGlobalCommand:
+                case MpShortcutAssignmentType.InternalCommand:
                     return ValidateCommandShortcut();
                 case MpShortcutAssignmentType.AppPaste:
                     return ValidateAppPasteShortcut();
@@ -226,9 +249,65 @@ namespace MonkeyPaste.Avalonia {
             return true;
         }
 
+        private void StartKeyListener() {
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed += Instance_OnGlobalKeyPressed;
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased += Instance_OnGlobalKeyReleased;
+        }
+
+        private void StopKeyListener() {
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed -= Instance_OnGlobalKeyPressed;
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased -= Instance_OnGlobalKeyReleased;
+        }
+        private void Instance_OnGlobalKeyPressed(object sender, string keyStr) {
+            Dispatcher.UIThread.Post(() => {
+                if (!IsActive) {
+                    return;
+                }
+                AddKeyDownCommand.Execute(keyStr);
+            });
+        }
+        private void Instance_OnGlobalKeyReleased(object sender, string keyStr) {
+            Dispatcher.UIThread.Post(() => {
+                if (!IsActive) {
+                    return;
+                }
+                RemoveKeyDownCommand.Execute(keyStr);
+            });
+
+        }
+
         #endregion
 
         #region Commands
+
+
+        public ICommand OkCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                if (DuplicatedShortcutViewModel != null) {
+                    DuplicatedShortcutViewModel.KeyString = string.Empty;
+                    await DuplicatedShortcutViewModel.Shortcut.WriteToDatabaseAsync();
+                    DuplicatedShortcutViewModel.Unregister();
+                }
+                if (args is Control c &&
+                    c.GetVisualRoot() is MpAvWindow w) {
+                    w.DialogResult = true;
+                    w.Close();
+                }
+            });
+
+        public ICommand CancelCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                if (DuplicatedShortcutViewModel != null) {
+                    DuplicatedShortcutViewModel.KeyString = string.Empty;
+                    await DuplicatedShortcutViewModel.Shortcut.WriteToDatabaseAsync();
+                    DuplicatedShortcutViewModel.Unregister();
+                }
+                if (args is Control c &&
+                    c.GetVisualRoot() is MpAvWindow w) {
+                    w.DialogResult = false;
+                    w.Close();
+                }
+            });
 
         public ICommand ClearCommand => new MpCommand(
             () => {
@@ -238,16 +317,6 @@ namespace MonkeyPaste.Avalonia {
                 Validate();
                 OnPropertyChanged(nameof(KeyString));
             });
-
-        public ICommand OkCommand => new MpCommand(
-            async () => {
-                if (DuplicatedShortcutViewModel != null) {
-                    DuplicatedShortcutViewModel.KeyString = string.Empty;
-                    await DuplicatedShortcutViewModel.Shortcut.WriteToDatabaseAsync();
-                    DuplicatedShortcutViewModel.Unregister();
-                }
-            });
-
         public ICommand AddKeyDownCommand => new MpCommand<string>(
             (args) => {
                 _gestureHelper.AddKeyDown(args as string);

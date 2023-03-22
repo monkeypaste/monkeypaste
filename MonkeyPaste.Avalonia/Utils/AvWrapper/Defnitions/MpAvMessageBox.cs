@@ -30,6 +30,16 @@ namespace MonkeyPaste.Avalonia {
             }
             return false;
         }
+        public async Task<bool> ShowYesNoMessageBoxAsync(string title, string message, object anchor = null, object iconResourceObj = null) {
+            var result = await MpNotificationBuilder.ShowNotificationAsync(
+                                    notificationType: MpNotificationType.ModalYesNoMessageBox,
+                                    title: title,
+                                    body: message,
+                                    iconSourceObj: iconResourceObj,
+                                    anchor: anchor);
+
+            return result == MpNotificationDialogResultType.Yes;
+        }
 
         public async Task<bool?> ShowYesNoCancelMessageBoxAsync(string title, string message, object anchor = null, object iconResourceObj = null) {
             var result = await MpNotificationBuilder.ShowNotificationAsync(

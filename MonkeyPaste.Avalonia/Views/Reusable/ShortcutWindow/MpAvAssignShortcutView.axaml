@@ -1,23 +1,24 @@
-<local:MpAvWindow xmlns="https://github.com/avaloniaui"
-                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                  mc:Ignorable="d"
-                  d:DesignWidth="800"
-                  d:DesignHeight="450"
-                  xmlns:local="using:MonkeyPaste.Avalonia"
-                  Height="300"
-                  Width="400"
-                  SizeToContent="Width"
-                  ShowInTaskbar="False"
-                  Topmost="True"
-                  Classes="assignWindow fadeIn"
-                  WindowStartupLocation="CenterScreen"
-                  x:DataType="local:MpAvAssignShortcutViewModel"
-                  x:CompileBindings="True"
-                  x:Class="MonkeyPaste.Avalonia.MpAvAssignShortcutDialog"
-                  Title="Assign Shortcut">
-    <local:MpAvWindow.Styles>
+<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvAssignShortcutView"
+                       xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:dd="clr-namespace:MonkeyPaste.Avalonia;assembly=MonkeyPaste.Avalonia"
+                       d:DataContext="{x:Static dd:MpAvDesignData.AssignShortcutViewModel}"
+                       Background="White"
+                       mc:Ignorable="d"
+                       d:DesignWidth="400"
+                       d:DesignHeight="300">
+    <!--
+        xmlns:dd="using:MonkeyPaste.Avalonia.Design"
+        
+        xmlns:dd="clr-namespace:MonkeyPaste.Avalonia.Design;assembly=MonkeyPaste.Avalonia.Desktop"
+    -->
+    <!--<Design.DataContext>
+        <dd:MpAvAssignShortcutViewModel />
+    </Design.DataContext>-->
+    <local:MpAvUserControl.Styles>
         <!--  MSG  -->
         <Style Selector="Border.msg">
             <Setter Property="Margin"
@@ -76,7 +77,6 @@
         <Style Selector="Border.msg.warning Image">
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource WarningImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-
         </Style>
 
         <Style Selector="local|MpAvShortcutKeyGroupView">
@@ -90,25 +90,40 @@
                     Value="16" />
 
         </Style>
-    </local:MpAvWindow.Styles>
+    </local:MpAvUserControl.Styles>
     <Grid RowDefinitions="Auto,*,Auto,Auto,50">
-        <Border Grid.Row="0"
-                Classes="msg info">
-            <Grid ColumnDefinitions="Auto,*">
-                <local:MpAvClipBorder Grid.Column="0"
-                                      IsVisible="{Binding IconResourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                                      CornerRadius="10"
-                                      Margin="3"
-                                      BorderThickness="3"
-                                      BorderBrush="White">
-                    <Image Source="{Binding IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                </local:MpAvClipBorder>
-                <TextBlock Grid.Column="1"
-                           FontStyle="Normal"
-                           Foreground="Black"
-                           Text="{Binding ShortcutDisplayName}" />
-            </Grid>
-
+        <Border Grid.Row="0">
+            <StackPanel>
+                <Grid ColumnDefinitions="Auto,*">
+                    <local:MpAvClipBorder Grid.Column="0"
+                                          IsVisible="{Binding IconResourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                          CornerRadius="10"
+                                          Margin="3"
+                                          BorderThickness="3"
+                                          BorderBrush="White">
+                        <Image Source="{Binding IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                    </local:MpAvClipBorder>
+                    <TextBlock Grid.Column="1"
+                               HorizontalAlignment="Stretch"
+                               VerticalAlignment="Center"
+                               TextAlignment="Center"
+                               TextDecorations="Underline"
+                               FontStyle="Normal"
+                               Foreground="Black"
+                               FontWeight="Bold"
+                               FontSize="24"
+                               MaxWidth="200"
+                               TextWrapping="WrapWithOverflow"
+                               Text="{Binding ShortcutDisplayName}" />
+                </Grid>
+                <Border IsVisible="{Binding IsGlobal}"
+                        Classes="msg info">
+                    <DockPanel>
+                        <Image DockPanel.Dock="Left" />
+                        <TextBlock Text="This is a global shortcut! That means it will attempt to execute whenever it is performed. Try to make it unique enough to not conflict with shortcuts from other applications." />
+                    </DockPanel>
+                </Border>
+            </StackPanel>
         </Border>
         <Border Grid.Row="1"
                 CornerRadius="10"
@@ -159,16 +174,16 @@
                 </Style>
             </StackPanel.Styles>
             <Button Classes="defaultButton textOnlyButton"
-                    IsCancel="True"
-                    Click="Cancel_Click"
+                    Command="{Binding CancelCommand}"
+                    CommandParameter="{Binding $self}"
                     Content="Cancel" />
             <Button Classes="defaultButton textOnlyButton"
                     Command="{Binding ClearCommand}"
                     Content="Clear" />
             <Button Classes="defaultButton textOnlyButton"
                     Content="Ok"
-                    IsDefault="True"
-                    Click="Ok_Click" />
+                    Command="{Binding OkCommand}"
+                    CommandParameter="{Binding $self}" />
         </StackPanel>
     </Grid>
-</local:MpAvWindow>
+</local:MpAvUserControl>

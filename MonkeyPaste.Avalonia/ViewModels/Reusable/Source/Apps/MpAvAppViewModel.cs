@@ -1,6 +1,7 @@
 ﻿using Avalonia.Threading;
 using MonkeyPaste.Common;
 using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -10,6 +11,7 @@ namespace MonkeyPaste.Avalonia {
         MpViewModelBase<MpAvAppCollectionViewModel>,
         MpIHoverableViewModel,
         MpIFilterMatch,
+        MpAvIKeyGestureViewModel,
         MpIIsValueEqual<MpAvAppViewModel>
         //MpISourceItemViewModel 
         {
@@ -37,6 +39,12 @@ namespace MonkeyPaste.Avalonia {
                 AppPath.ToLower() == oavm.AppPath.ToLower() &&
                 UserDeviceId == oavm.UserDeviceId;
         }
+        #endregion
+
+        #region MpAvIKeyGestureViewModel Implementation
+        public ObservableCollection<MpAvShortcutKeyGroupViewModel> KeyGroups =>
+           PasteShortcutViewModel.KeyGroups;
+
         #endregion
 
         #endregion
@@ -189,6 +197,8 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
+            OnPropertyChanged(nameof(KeyGroups));
+
             IsBusy = false;
         }
 
@@ -262,22 +272,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public ICommand ToggleIsRejectedCommand => new MpAsyncCommand(
-            async () => {
-                IsRejected = !IsRejected;
-                if (IsRejected) {
-                    bool was_confirmed = await VerifyRejectAsync();
-                    if (!was_confirmed) {
-                        // canceled from delete content msgbox
-                        IsRejected = false;
-                    }
-                }
-            });
 
-        public ICommand AssignPasteShortcutCommand => new MpCommand(
-            () => {
-                PasteShortcutViewModel.AssignPasteShortcutCommand.Execute(null);
-            });
+
+
+        //public ICommand AssignPasteShortcutCommand => new MpCommand(
+        //   () => {
+        //       ShowAssignDialogAsync().FireAndForgetSafeAsync(this);
+        //   });
+
 
         #endregion
     }

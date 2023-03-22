@@ -36,7 +36,7 @@ namespace MonkeyPaste.Avalonia {
             // ignore drag check when not selected, 
             // to pass input to select tag
             // }
-            bool ended = false;
+            //bool ended = false;
             this.DragCheckAndStart(e,
                 start: async (start_e) => {
                     //while (Mp.Services.Query.IsQuerying) {
@@ -64,7 +64,7 @@ namespace MonkeyPaste.Avalonia {
                 move: null,
                 end: (end_e) => {
 
-                    ended = true;
+                    //ended = true;
                 });
         }
 

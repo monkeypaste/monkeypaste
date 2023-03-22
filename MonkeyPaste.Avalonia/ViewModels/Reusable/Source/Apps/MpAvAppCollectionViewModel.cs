@@ -1,5 +1,6 @@
 ﻿
 using Avalonia.Controls;
+using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
@@ -35,7 +36,7 @@ namespace MonkeyPaste.Avalonia {
 
         public IEnumerable<MpAvAppViewModel> CustomPasteItems =>
             FilteredItems
-            .Where(x => !string.IsNullOrEmpty(x.PasteShortcutViewModel.PasteCmdKeyString));
+            .Where(x => x.PasteShortcutViewModel.HasPasteShortcut);
 
         public MpAvAppViewModel ThisAppViewModel =>
             Items.FirstOrDefault(x => x.AppId == MpDefaultDataModelTools.ThisAppId);
@@ -234,6 +235,9 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(LastActiveAppViewModel):
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsActiveProcess)));
                     break;
+                case nameof(CustomPasteItems):
+                    MpAvDataGridRefreshExtension.RefreshDataGrid(this);
+                    break;
             }
         }
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
@@ -417,20 +421,25 @@ namespace MonkeyPaste.Avalonia {
                 var appFlyout = new MenuFlyout() {
                     Items =
                         Items
-                        .Where(x => !CustomPasteItems.Contains(x))
+                        .Where(x => !CustomPasteItems.Contains(x) && !string.IsNullOrWhiteSpace(x.AppName))
                         .OrderBy(x => x.AppName)
                         .Select(x => new MenuItem() {
-                            Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert(x.IconId, null, null, null) as Bitmap,
-                            //new Image() {
-                            //    Source = MpAvIconSourceObjToBitmapConverter.Instance.Convert(x.IconId,null,null,null) as Bitmap
-                            //},
+                            Icon = new Image() {
+                                Source = MpAvIconSourceObjToBitmapConverter.Instance.Convert(x.IconId, null, null, null) as Bitmap
+                            },
                             Header = x.AppName,
-                            Command = x.AssignPasteShortcutCommand
+                            Command = AssignPasteShortcutCommand,
+                            CommandParameter = x
                         }).AsEnumerable<object>()
                         .Union(new object[] {
                             new Separator(),
                             new MenuItem() {
-                                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("Dots1x3Image", null, null, null) as Bitmap,
+                                Icon = new Image() {
+                                    Source = MpAvIconSourceObjToBitmapConverter.Instance.Convert("Dots1x3Image", null, null, null) as Bitmap,
+                                    RenderTransform = new RotateTransform() {
+                                        Angle = 90
+                                    }
+                                },
                                 Header = "Add App",
                                 Command = AddAppWithAssignPasteShortcutCommand
                             }
@@ -441,6 +450,47 @@ namespace MonkeyPaste.Avalonia {
                 Flyout.ShowAttachedFlyout(ddb);
             });
 
+        public ICommand DeletePasteShortcutCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                var avm = args as MpAvAppViewModel;
+                if (avm == null) {
+                    return;
+                }
+                var result = await Mp.Services.NativeMessageBox.ShowYesNoMessageBoxAsync(
+                    title: $"Confirm",
+                    message: $"Are you sure want to remove the paste shortcut for '{avm.AppName}'",
+                    iconResourceObj: avm.IconId);
+                if (!result) {
+                    // canceled
+                    return;
+                }
+                avm.PasteShortcutViewModel.PasteCmdKeyString = null;
+            });
+
+        public ICommand AssignPasteShortcutCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                var avm = args as MpAvAppViewModel;
+                if (avm == null) {
+                    return;
+                }
+                await avm.PasteShortcutViewModel.ShowAssignDialogAsync();
+            });
+
+        public ICommand ToggleIsRejectedCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                var avm = args as MpAvAppViewModel;
+                if (avm == null) {
+                    return;
+                }
+                avm.IsRejected = !avm.IsRejected;
+                if (avm.IsRejected) {
+                    bool was_confirmed = await avm.VerifyRejectAsync();
+                    if (!was_confirmed) {
+                        // canceled from delete content msgbox
+                        avm.IsRejected = false;
+                    }
+                }
+            });
         #endregion
     }
 }

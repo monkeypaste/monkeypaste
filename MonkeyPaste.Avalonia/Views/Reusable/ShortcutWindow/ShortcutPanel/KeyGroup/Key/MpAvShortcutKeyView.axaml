@@ -22,6 +22,7 @@
         <TextBlock HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    Foreground="Black"
+                   Padding="3,0"
                    Text="{Binding KeyStr, Converter={x:Static local:MpAvEnumToKeyLiteralConverter.Instance}, ConverterParameter=label}"
                    FontWeight="Bold" />
     </Border>

@@ -48,7 +48,7 @@
         <Grid>
             <DataGrid x:Name="ShortcutDatagrid"
                       IsVisible="{Binding ., Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                      CanUserSortColumns="False"
+                      CanUserSortColumns="True"
                       Focusable="True"
                       Items="{Binding}"
                       IsReadOnly="False"
@@ -57,6 +57,8 @@
                     <!--  APP/GLOBAL LABEL  -->
                     <DataGridTextColumn Header="Type"
                                         Width="100"
+                                        CanUserSort="True"
+                                        SortMemberPath="ShortcutTypeName"
                                         IsVisible="False"
                                         Binding="{Binding ShortcutTypeName}" />
 
@@ -64,7 +66,7 @@
 
                     <DataGridTemplateColumn Header="Action"
                                             CanUserResize="True"
-                                            Width="*">
+                                            Width="200">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid Classes="marqueeContainer">
@@ -77,37 +79,9 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <!--  GESTURE VIEW  -->
-
-                    <DataGridTemplateColumn Width="150"
-                                            CanUserResize="True"
-                                            SortMemberPath="KeyString">
-                        <DataGridTemplateColumn.HeaderTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal"
-                                            Spacing="5">
-                                    <TextBlock Text="Shortcut" />
-                                    <local:MpAvToolTipInfoHintView ToolTipHtml="{StaticResource GestureInfoHtml}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.HeaderTemplate>
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <local:MpAvShortcutView Background="Transparent"
-                                                        Margin="5"
-                                                        HorizontalAlignment="Center"
-                                                        local:MpAvPointerCommandExtension.IsEnabled="True"
-                                                        local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ShowAssignShortcutDialogCommand, Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}"
-                                                        local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding}"
-                                                        local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
-                                                        RecordCommand="{Binding AssignCommand}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-
                     <!--  ROUTING TYPE  -->
                     <DataGridTemplateColumn Width="100"
-                                            CanUserResize="False"
+                                            CanUserSort="True"
                                             SortMemberPath="RoutingType">
                         <DataGridTemplateColumn.HeaderTemplate>
                             <DataTemplate>
@@ -134,6 +108,37 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
+                    <!--  GESTURE VIEW  -->
+
+                    <DataGridTemplateColumn Width="*"
+                                            CanUserResize="True"
+                                            SortMemberPath="KeyString">
+                        <DataGridTemplateColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal"
+                                            Spacing="5">
+                                    <TextBlock Text="Shortcut" />
+                                    <local:MpAvToolTipInfoHintView ToolTipHtml="{StaticResource GestureInfoHtml}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.HeaderTemplate>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <local:MpAvShortcutView Background="Transparent"
+                                                        Margin="5"
+                                                        HorizontalAlignment="Stretch"
+                                                        VerticalAlignment="Stretch"
+                                                        HorizontalContentAlignment="Center"
+                                                        VerticalContentAlignment="Center"
+                                                        local:MpAvPointerCommandExtension.IsEnabled="True"
+                                                        local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ShowAssignShortcutDialogCommand, Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}"
+                                                        local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding}"
+                                                        local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
+                                                        RecordCommand="{Binding AssignCommand}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
 
                     <!--  RESET/DELETE BUTTON  -->
                     <DataGridTemplateColumn Width="50"

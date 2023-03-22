@@ -249,7 +249,7 @@ namespace MonkeyPaste.Avalonia {
                 title,
                 keys,
                 scvm == null ? 0 : scvm.ShortcutId,
-                MpShortcutAssignmentType.InternalOrGlobalCommand,
+                shortcutType.IsGlobal() ? MpShortcutAssignmentType.GlobalCommand : MpShortcutAssignmentType.InternalCommand,
                 iconResourceObj);
 
             if (shortcutKeyString == null) {

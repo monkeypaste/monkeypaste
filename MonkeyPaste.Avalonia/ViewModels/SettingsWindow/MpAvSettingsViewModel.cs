@@ -17,7 +17,8 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     public class MpAvSettingsViewModel :
         MpViewModelBase,
-        MpIChildWindowViewModel {
+        MpIChildWindowViewModel,
+        MpIActiveWindowViewModel {
         #region Private Variables
 
         private string[] _reinitContentParams = new string[] {
@@ -43,10 +44,12 @@ namespace MonkeyPaste.Avalonia {
         public MpWindowType WindowType =>
             MpWindowType.Main;
 
-        bool MpIChildWindowViewModel.IsOpen {
-            get => IsVisible;
-            set => IsVisible = value;
-        }
+        public bool IsOpen { get; set; }
+
+        #endregion
+
+        #region MpIActiveWindowViewModel Implementation
+        public bool IsActive { get; set; }
 
         #endregion
 
@@ -94,7 +97,6 @@ namespace MonkeyPaste.Avalonia {
 
         public string FilterText { get; set; }
 
-        public bool IsVisible { get; set; } = false;
 
         public int SelectedTabIdx {
             get {
@@ -712,20 +714,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private void MpAvSettingsWindowViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-
-            switch (e.PropertyName) {
-                case nameof(FilterText):
-                    MpMessenger.SendGlobal(MpMessageType.SettingsFilterTextChanged);
-                    if (FilterText.StartsWith("#")) {
-                        var test = MpAvWindowManager.FindByHashCode(FilterText);
-                    }
-
-                    break;
-            }
-        }
-
-
+        #region Pref Handling
         private void MpPrefViewModel_Instance_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(MpPrefViewModel.Instance.LoadOnLogin):
@@ -783,6 +772,26 @@ namespace MonkeyPaste.Avalonia {
             MpConsole.WriteLine("App " + appName + " with path " + appPath + " has load on login set to: " + loadOnLogin);
         }
 
+        #endregion
+        private void MpAvSettingsWindowViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+
+            switch (e.PropertyName) {
+                case nameof(FilterText):
+                    MpMessenger.SendGlobal(MpMessageType.SettingsFilterTextChanged);
+                    if (FilterText.StartsWith("#")) {
+                        var test = MpAvWindowManager.FindByHashCode(FilterText);
+                    }
+
+                    break;
+                case nameof(IsOpen):
+                    MpConsole.WriteLine($"Settings window: {(IsOpen ? "OPEN" : "CLOSED")}");
+                    break;
+
+                case nameof(IsActive):
+                    MpConsole.WriteLine($"Settings window: {(IsActive ? "ACTIVE" : "INACTIVE")}");
+                    break;
+            }
+        }
 
         private void Sw_Opened(object sender, EventArgs e) {
             var sw = sender as Window;
@@ -823,12 +832,12 @@ namespace MonkeyPaste.Avalonia {
             });
         public ICommand SaveSettingsCommand => new MpCommand(
             () => {
-                IsVisible = false;
+                IsOpen = false;
             });
 
         public ICommand CancelSettingsCommand => new MpCommand(
             () => {
-                IsVisible = false;
+                IsOpen = false;
             });
         public ICommand SelectTabCommand => new MpCommand<object>(
             (args) => {
@@ -845,9 +854,21 @@ namespace MonkeyPaste.Avalonia {
                 SelectedTabIdx = tab_idx;
             });
 
+        public ICommand ToggleShowSettingsWindowCommand => new MpCommand<object>(
+            (args) => {
+                if (IsOpen) {
+                    IsOpen = false;
+                    return;
+                }
+                ShowSettingsWindowCommand.Execute(null);
+            });
         public ICommand ShowSettingsWindowCommand => new MpCommand<object>(
             (args) => {
                 SelectTabCommand.Execute(args);
+                if (IsOpen) {
+                    IsActive = true;
+                    return;
+                }
                 if (Mp.Services.PlatformInfo.IsDesktop) {
                     var sw = new MpAvWindow() {
                         Classes = new Classes("fadeIn"),
@@ -867,7 +888,7 @@ namespace MonkeyPaste.Avalonia {
 
                     MpMessenger.SendGlobal(MpMessageType.SettingsWindowOpened);
                 }
-            }, (args) => !IsVisible);
+            });
 
 
         public ICommand ButtonParameterClickCommand => new MpAsyncCommand<object>(

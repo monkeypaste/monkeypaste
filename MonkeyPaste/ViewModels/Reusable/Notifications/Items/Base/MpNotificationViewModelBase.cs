@@ -26,6 +26,7 @@ namespace MonkeyPaste {
                 case MpNotificationType.ModalOkCancelMessageBox:
                 case MpNotificationType.ModalOkMessageBox:
                 case MpNotificationType.ModalYesNoCancelMessageBox:
+                case MpNotificationType.ModalYesNoMessageBox:
                 case MpNotificationType.ModalContentFormatDegradation:
                 case MpNotificationType.ModalTextBoxOkCancelMessageBox:
                 case MpNotificationType.InvalidPlugin:
@@ -54,6 +55,8 @@ namespace MonkeyPaste {
             switch (ndt) {
                 case MpNotificationType.ModalYesNoCancelMessageBox:
                     return MpNotificationButtonsType.YesNoCancel;
+                case MpNotificationType.ModalYesNoMessageBox:
+                    return MpNotificationButtonsType.YesNo;
                 case MpNotificationType.ModalTextBoxOkCancelMessageBox:
                     return MpNotificationButtonsType.TextBoxOkCancel;
                 case MpNotificationType.ModalOkCancelMessageBox:
@@ -80,6 +83,7 @@ namespace MonkeyPaste {
         public static MpNotificationPlacementType GetNotificationPlacementType(MpNotificationType ndt) {
             switch (ndt) {
                 case MpNotificationType.ModalYesNoCancelMessageBox:
+                case MpNotificationType.ModalYesNoMessageBox:
                 case MpNotificationType.ModalOkCancelMessageBox:
                 case MpNotificationType.ModalOkMessageBox:
                 case MpNotificationType.ModalContentFormatDegradation:
@@ -92,6 +96,7 @@ namespace MonkeyPaste {
 
         public static bool IsNotificationTypeModal(MpNotificationType ndt) {
             switch (ndt) {
+                case MpNotificationType.ModalYesNoMessageBox:
                 case MpNotificationType.ModalYesNoCancelMessageBox:
                 case MpNotificationType.ModalOkCancelMessageBox:
                 case MpNotificationType.ModalOkMessageBox:
@@ -390,18 +395,12 @@ namespace MonkeyPaste {
 
         #region Protected Methods
         protected void ShowBalloon() {
-            //_nbv.ShowWindow(nvmb);
-            //IsVisible = true;
             Mp.Services.NotificationManager.ShowNotification(this);
 
         }
 
         protected void HideBalloon() {
-            //_nbv.HideWindow(nvmb);
             Mp.Services.NotificationManager.HideNotification(this);
-            //Parent.RemoveNotificationCommand.Execute(this);
-            //Notifications.Remove(nvmb);
-            //IsVisible = false;
         }
 
         #endregion

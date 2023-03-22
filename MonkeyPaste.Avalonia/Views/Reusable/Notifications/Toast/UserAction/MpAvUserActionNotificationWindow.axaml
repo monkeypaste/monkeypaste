@@ -20,6 +20,7 @@
         SizeToContent="Height"
         ShowInTaskbar="False"
         WindowState="Normal"
+        Topmost="True"
         SystemDecorations="None"
         TransparencyLevelHint="Transparent"
         Background="Transparent"
@@ -38,6 +39,7 @@
               RowDefinitions="Auto,Auto,Auto,Auto,0.6*">
             <!--  ICON  -->
             <Image Grid.Row="0"
+                   Grid.RowSpan="2"
                    Grid.Column="0"
                    Width="64"
                    Height="64"
@@ -54,9 +56,7 @@
                         Orientation="Vertical"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Top">
-                <TextBlock Grid.Row="0"
-                           Grid.Column="1"
-                           VerticalAlignment="Top"
+                <TextBlock VerticalAlignment="Top"
                            HorizontalAlignment="Stretch"
                            TextAlignment="Left"
                            FontSize="24"
@@ -67,9 +67,7 @@
 
                 <!--  TITLE UNDERLINE  -->
 
-                <Border Grid.Row="0"
-                        Grid.Column="1"
-                        VerticalAlignment="Top"
+                <Border VerticalAlignment="Top"
                         HorizontalAlignment="Stretch"
                         Classes="labelUnderline labelUnderline_long"
                         BorderThickness="0" />

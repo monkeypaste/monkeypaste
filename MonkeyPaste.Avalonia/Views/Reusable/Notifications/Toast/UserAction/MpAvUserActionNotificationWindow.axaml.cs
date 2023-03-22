@@ -9,19 +9,23 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvUserActionNotificationWindow : MpAvWindow {
 
         public MpUserActionNotificationViewModel BindingContext => DataContext as MpUserActionNotificationViewModel;
-        public MpAvUserActionNotificationWindow() {
-            InitializeComponent();
+
+        public MpAvUserActionNotificationWindow() : base() {
+            Init();
+        }
+        public MpAvUserActionNotificationWindow(Window owner) : base(owner) {
+            Init();
+        }
+
+        private void Init() {
+
+            AvaloniaXamlLoader.Load(this);
 #if DEBUG
             this.AttachDevTools();
 #endif
 
             var retry_btn = this.FindControl<Button>("RetryButton");
             retry_btn.PointerReleased += Retry_btn_PointerReleased;
-        }
-
-
-        private void InitializeComponent() {
-            AvaloniaXamlLoader.Load(this);
         }
         private void Retry_btn_PointerReleased(object sender, global::Avalonia.Input.PointerReleasedEventArgs e) {
             this.GetVisualAncestor<Window>().Close();

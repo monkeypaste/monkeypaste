@@ -62,7 +62,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         public App() {
-            //DataContext = MpAvSystemTrayViewModel.Instance;
             if (_instance != null) {
                 MpDebug.Break();
             }

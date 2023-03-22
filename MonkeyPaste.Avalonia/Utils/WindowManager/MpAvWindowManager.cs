@@ -23,6 +23,9 @@ namespace MonkeyPaste.Avalonia {
         public static MpAvWindow MainWindow =>
             AllWindows.FirstOrDefault(x => x is MpAvMainWindow);
 
+        public static MpAvWindow ActiveWindow =>
+            AllWindows.FirstOrDefault(x => x.IsActive);
+
 
         #endregion
 
@@ -50,6 +53,19 @@ namespace MonkeyPaste.Avalonia {
                 var result = w.FindVisualDescendantWithHashCode(code, true);
                 if (result != null) {
                     return result;
+                }
+            }
+            return null;
+        }
+
+        public static MpAvWindow LocateWindow(object dataContext) {
+            if (AllWindows.FirstOrDefault(x => x.DataContext == dataContext) is MpAvWindow w) {
+                return w;
+            }
+            // search whole tree
+            foreach (var cw in AllWindows) {
+                if (cw.GetVisualDescendants<Control>().Any(x => x.DataContext == dataContext)) {
+                    return cw;
                 }
             }
             return null;
@@ -109,7 +125,9 @@ namespace MonkeyPaste.Avalonia {
                     var cw = AllWindows.FirstOrDefault(x => x.DataContext == sender);
                     if (cw != null) {
                         if (cwvm.IsOpen) {
-                            // open isn't needed anywhere
+                            if (!cw.IsActive) {
+                                cw.Show();
+                            }
                         } else {
                             cw.Close();
                         }
@@ -150,7 +168,9 @@ namespace MonkeyPaste.Avalonia {
                     cwvm.IsOpen = true;
                 }
                 UpdateTopmost();
-                w.Activate();
+                //w.Activate();
+                //w.Focus();
+
             }
         }
 
@@ -250,6 +270,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void UpdateTopmost() {
+            return;
             if (AllWindows.Any(x => x is MpIIsAnimatedWindowViewModel && (x as MpIIsAnimatedWindowViewModel).IsAnimating)) {
                 // ignore update while animating out
                 return;

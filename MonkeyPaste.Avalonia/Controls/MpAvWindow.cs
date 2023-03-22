@@ -55,21 +55,17 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         public MpAvWindow() : base() {
-#if DEBUG
-            this.AttachDevTools();
-#endif
-            MpAvWindowManager.AllWindows.Add(this);
-            this.Closed += MpAvWindow_Closed;
+            Init();
         }
-        private void MpAvWindow_Closed(object sender, EventArgs e) {
-            MpAvWindowManager.AllWindows.Remove(this);
-            this.Closed -= MpAvWindow_Closed;
+
+        public MpAvWindow(Window owner) : base(owner.PlatformImpl) {
+            Init();
         }
         #endregion
 
         #region Public Methods
         public void ShowChild(Window owner = null) {
-            SilentLockMainWindowCheck();
+            SilentLockMainWindowCheck(owner);
 
             if (owner == null) {
                 Show();
@@ -78,7 +74,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         public async Task<object> ShowChildWithResultAsync(Window owner = null) {
-            SilentLockMainWindowCheck();
+            SilentLockMainWindowCheck(owner);
 
             object result = NO_RESULT_OBJ;
 
@@ -106,17 +102,20 @@ namespace MonkeyPaste.Avalonia {
             return result;
         }
         public async Task ShowChildDialogAsync(Window owner = null) {
-            SilentLockMainWindowCheck();
+            SilentLockMainWindowCheck(owner);
             await ShowDialog(owner ?? MpAvWindowManager.MainWindow);
         }
 
         public async Task<object> ShowChildDialogWithResultAsync(Window owner = null) {
-            SilentLockMainWindowCheck();
+            SilentLockMainWindowCheck(owner);
 
             var result = await ShowDialog<object>(owner ?? MpAvWindowManager.MainWindow);
             return result;
         }
 
+        public override string ToString() {
+            return $"MpAvWindow = '{this.Title}'";
+        }
 
         #endregion
 
@@ -124,8 +123,21 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
-
-        private void SilentLockMainWindowCheck() {
+        private void Init() {
+#if DEBUG
+            this.AttachDevTools();
+#endif
+            MpAvWindowManager.AllWindows.Add(this);
+            this.Closed += MpAvWindow_Closed;
+        }
+        private void MpAvWindow_Closed(object sender, EventArgs e) {
+            MpAvWindowManager.AllWindows.Remove(this);
+            this.Closed -= MpAvWindow_Closed;
+        }
+        private void SilentLockMainWindowCheck(Window owner) {
+            if (owner != null && owner is not MpAvMainWindow) {
+                return;
+            }
             if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen &&
                 !MpAvMainWindowViewModel.Instance.IsMainWindowLocked) {
 

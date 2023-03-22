@@ -45,7 +45,11 @@ namespace MonkeyPaste.Avalonia {
                     _instance = mv;
                 }
                 if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
+                    var loader_window = desktop.MainWindow;
                     desktop.MainWindow = mw;
+                    if (loader_window != null) {
+                        loader_window.Close();
+                    }
                 }
                 //MpAvWindowManager.MainWindow = mw;
                 if (MpAvWindowManager.MainWindow == null) {

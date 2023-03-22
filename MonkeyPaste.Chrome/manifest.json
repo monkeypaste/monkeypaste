@@ -1,0 +1,13 @@
+{
+  "name": "My Extension",
+  "description": "A simple example extension",
+  "version": "1.0",
+  "permissions": [
+    "nativeMessaging",
+    "runtime"
+  ],
+  "background": {
+    "scripts": [ "background.js" ]
+  },
+  "manifest_version": 2
+}

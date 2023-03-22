@@ -42,6 +42,7 @@
         //loadEditorGlobals();
         const HTML_CONVERTER_PARAMS = "converter=true";
         const APPEND_NOTIFIER_PARAMS = "append_notifier=true";
+        const AUTO_TEST = "auto_test";
 
         var UseQuill2 = true;
         var UseBetterTable = true;
@@ -53,6 +54,13 @@
             UseBetterTable = true;
             UseQuill2 = true;
         }
+
+        if (window.location.search.toLowerCase().endsWith(AUTO_TEST.toLowerCase())) {
+            window.addEventListener('load', function () {
+                init_test();
+            })
+        }
+
     </script>
 
     <link rel="icon" type="image/x-icon" href="images/icons/monkey.ico" />

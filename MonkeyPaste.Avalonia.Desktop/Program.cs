@@ -12,7 +12,6 @@ namespace MonkeyPaste.Avalonia {
         [STAThread]
         public static void Main(string[] args) {
             try {
-
                 App.Args = args ?? new string[] { };
                 BuildAvaloniaApp()
                 //.StartWithClassicDesktopLifetime(args);
