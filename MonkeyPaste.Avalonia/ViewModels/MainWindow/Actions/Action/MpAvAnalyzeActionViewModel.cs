@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Controls.Shapes;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
 using System.Linq;
@@ -110,7 +111,7 @@ namespace MonkeyPaste.Avalonia {
         #region Public Overrides
 
         public override async Task PerformActionAsync(object arg) {
-            if (!CanPerformAction(arg)) {
+            if (!ValidateStartAction(arg)) {
                 return;
             }
 

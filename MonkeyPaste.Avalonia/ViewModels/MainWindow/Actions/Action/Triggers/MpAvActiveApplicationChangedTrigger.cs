@@ -125,7 +125,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public override async Task PerformActionAsync(object arg) {
-            if (!base.CanPerformAction(arg)) {
+            if (!base.ValidateStartAction(arg)) {
                 return;
             }
             if (arg is MpPortableProcessInfo ppi) {

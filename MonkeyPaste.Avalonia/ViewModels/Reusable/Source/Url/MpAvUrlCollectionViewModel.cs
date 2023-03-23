@@ -9,8 +9,7 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvUrlCollectionViewModel :
-        MpAvSelectorViewModelBase<object, MpAvUrlViewModel>,
-        MpIAsyncSingletonViewModel<MpAvUrlCollectionViewModel> {
+        MpAvSelectorViewModelBase<object, MpAvUrlViewModel> {
         #region Statics
 
         private static MpAvUrlCollectionViewModel _instance;

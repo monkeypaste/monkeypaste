@@ -10,14 +10,6 @@
                        mc:Ignorable="d"
                        d:DesignWidth="400"
                        d:DesignHeight="300">
-    <!--
-        xmlns:dd="using:MonkeyPaste.Avalonia.Design"
-        
-        xmlns:dd="clr-namespace:MonkeyPaste.Avalonia.Design;assembly=MonkeyPaste.Avalonia.Desktop"
-    -->
-    <!--<Design.DataContext>
-        <dd:MpAvAssignShortcutViewModel />
-    </Design.DataContext>-->
     <local:MpAvUserControl.Styles>
         <!--  MSG  -->
         <Style Selector="Border.msg">
@@ -48,9 +40,16 @@
                     Value="Center" />
         </Style>
 
-        <Style Selector="Border.msg TextBlock">
+        <Style Selector="Border.msg.warning TextBlock">
             <Setter Property="Foreground"
                     Value="AntiqueWhite" />
+        </Style>
+
+        <Style Selector="Border.msg.info TextBlock">
+            <Setter Property="Foreground"
+                    Value="Black" />
+        </Style>
+        <Style Selector="Border.msg TextBlock">
             <Setter Property="FontSize"
                     Value="14" />
             <Setter Property="FontStyle"
@@ -94,7 +93,8 @@
     <Grid RowDefinitions="Auto,*,Auto,Auto,50">
         <Border Grid.Row="0">
             <StackPanel>
-                <Grid ColumnDefinitions="Auto,*">
+                <Grid ColumnDefinitions="Auto,*"
+                      RowDefinitions="*,Auto">
                     <local:MpAvClipBorder Grid.Column="0"
                                           IsVisible="{Binding IconResourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                           CornerRadius="10"
@@ -111,18 +111,23 @@
                                FontStyle="Normal"
                                Foreground="Black"
                                FontWeight="Bold"
+                               Margin="15,15,15,5"
                                FontSize="24"
-                               MaxWidth="200"
                                TextWrapping="WrapWithOverflow"
                                Text="{Binding ShortcutDisplayName}" />
                 </Grid>
-                <Border IsVisible="{Binding IsGlobal}"
-                        Classes="msg info">
-                    <DockPanel>
-                        <Image DockPanel.Dock="Left" />
-                        <TextBlock Text="This is a global shortcut! That means it will attempt to execute whenever it is performed. Try to make it unique enough to not conflict with shortcuts from other applications." />
-                    </DockPanel>
-                </Border>
+                <StackPanel Orientation="Horizontal"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2"
+                            HorizontalAlignment="Center">
+                    <local:MpAvToolTipInfoHintView ToolTipText="This is a global shortcut! That means it will attempt to execute whenever it is performed. Try to make it unique enough to not conflict with shortcuts from other applications." />
+                    <TextBlock FontSize="16"
+                               Margin="5,0,0,0"
+                               FontWeight="SemiBold"
+                               Text="Global" />
+
+                </StackPanel>
             </StackPanel>
         </Border>
         <Border Grid.Row="1"

@@ -47,7 +47,7 @@ namespace MonkeyPaste.Common {
             @"^(?:[\w]\:|\\)(\\[a-zA-Z_\-\s0-9\.()~!@#$%^&=+';,{}\[\]]+)+(\.("+KnownFileExtensions+@")|(\\|\w))$",
             
             //WebLink ( NOTE for '"https://url.com"' this includes the last '"' in the match )
-            @"(?:https?://|www\.)\S+", 
+            @"(https?://|www|https?://www).\S+", 
             //@"[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)",
             
             //Email

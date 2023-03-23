@@ -300,7 +300,7 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public override async Task PerformActionAsync(object arg) {
-            if (!CanPerformAction(arg)) {
+            if (!ValidateStartAction(arg)) {
                 return;
             }
             MpAvActionOutput ao = GetInput(arg);

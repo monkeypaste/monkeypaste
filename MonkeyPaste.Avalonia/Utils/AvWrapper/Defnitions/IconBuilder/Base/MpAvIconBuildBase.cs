@@ -13,7 +13,9 @@ namespace MonkeyPaste.Avalonia {
             bool suppressWrite = false) {
             var icon = await MpIcon.CreateAsync(
                 iconImgBase64: iconBase64,
-                createBorder: createBorder);
+                createBorder: createBorder,
+                allowDup: allowDup,
+                suppressWrite: suppressWrite);
 
             return icon;
         }

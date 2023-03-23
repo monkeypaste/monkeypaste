@@ -1,7 +1,7 @@
 ﻿#if DESKTOP
 #endif
 
-namespace MonkeyPaste.Avalonia {
+namespace MonkeyPaste {
     public interface MpIWebView : MpIHasDataContext {
         void ExecuteJavascript(string script);
     }

@@ -121,7 +121,7 @@ namespace MonkeyPaste.Avalonia {
         #region MpIActionPluginComponent Implementation
         Task MpIActionPluginComponent.PerformActionAsync(object arg) => PerformActionAsync(arg);
 
-        bool MpIActionPluginComponent.CanPerformAction(object arg) => CanPerformAction(arg);
+        bool MpIActionPluginComponent.CanPerformAction(object arg) => ValidateStartAction(arg);
 
         Task MpIActionPluginComponent.ValidateActionAsync() => ValidateActionAsync();
 
@@ -447,6 +447,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsDragOver { get; set; }
         public bool HasArgsChanged { get; set; }
         public string FullName {
             get {
@@ -488,7 +489,10 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public bool IsPerformingActionFromCommand { get; set; } = false;
+        public bool IsPerformingAction { get; set; } = false;
+
+        public bool IsSelfOrAnyDescendantPerformingAction =>
+            SelfAndAllDescendants.Any(x => x.IsPerformingAction);
 
         public bool IsTriggerEnabled => RootTriggerActionViewModel.IsEnabled.IsTrue();
 
@@ -893,11 +897,11 @@ namespace MonkeyPaste.Avalonia {
             Task.Run(() => PerformActionAsync(args).FireAndForgetSafeAsync(this));
         }
 
-
         public virtual async Task PerformActionAsync(object arg) {
-            if (!CanPerformAction(arg)) {
+            if (!ValidateStartAction(arg)) {
                 return;
             }
+
 
             if (arg is MpAvActionOutput ao) {
                 MpConsole.WriteLine("");
@@ -912,6 +916,12 @@ namespace MonkeyPaste.Avalonia {
 
         protected virtual void NotifyActionComplete(object outputArg) {
             OnActionComplete?.Invoke(this, outputArg);
+            Dispatcher.UIThread.Post(async () => {
+                // wait briefly for children to start before flagging as done
+                await Task.Delay(300);
+
+                IsPerformingAction = false;
+            });
 
         }
 
@@ -983,11 +993,13 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        protected virtual bool CanPerformAction(object arg) {
+        protected virtual bool ValidateStartAction(object arg) {
+            bool can_start = true;
             if (!IsValid || !IsTriggerEnabled) {
-                return false;
+                can_start = false;
             }
-            return true;
+            IsPerformingAction = can_start;
+            return IsPerformingAction;
         }
 
         protected void ResetArgs(params object[] argNums) {
@@ -1199,7 +1211,34 @@ namespace MonkeyPaste.Avalonia {
         //}
         #endregion
 
+        private async Task<MpCopyItem> GetPrimaryCopyItemToProcessAsync() {
+            MpCopyItem ci = null;
+            var ctrvm = MpAvClipTrayViewModel.Instance;
+            while (ctrvm.IsAddingClipboardItem) {
+                // wait for any new item to be logged
+                await Task.Delay(100);
+            }
+            if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
+                // when mw open assume user will select item before issuing cmd,
+                // if none selected grab most recent pinned item as fallback
+                if (ctrvm.SelectedItem == null) {
+                    var newest_ctvm = ctrvm.PinnedItems.OrderByDescending(x => x.CopyItemCreatedDateTime).FirstOrDefault();
+                    if (newest_ctvm != null) {
+                        ci = newest_ctvm.CopyItem;
+                    }
+                } else {
+                    ci = ctrvm.SelectedItem.CopyItem;
+                }
+
+            } else {
+                // select most recently copied item
+                ci = ctrvm.PendingNewModels.OrderByDescending(x => x.CopyDateTime).FirstOrDefault();
+            }
+            return ci;
+        }
+
         #endregion
+
 
         #region Commands
 
@@ -1247,41 +1286,23 @@ namespace MonkeyPaste.Avalonia {
             HasModelChanged = true;
         });
 
-        public ICommand InvokeThisActionCommand => new MpAsyncCommand(
-            async () => {
-                IsPerformingActionFromCommand = true;
+        public ICommand InvokeThisActionCommand => new MpAsyncCommand<object>(
+            async (args) => {
                 await Task.Delay(300);
-                var ctrvm = MpAvClipTrayViewModel.Instance;
-                while (ctrvm.IsAddingClipboardItem) {
-                    // wait for any new item to be logged
-                    await Task.Delay(100);
-                }
                 MpCopyItem ci = null;
-                if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
-                    // when mw open assume user will select item before issuing cmd,
-                    // if none selected grab most recent pinned item as fallback
-                    if (ctrvm.SelectedItem == null) {
-                        var newest_ctvm = ctrvm.PinnedItems.OrderByDescending(x => x.CopyItemCreatedDateTime).FirstOrDefault();
-                        if (newest_ctvm != null) {
-                            ci = newest_ctvm.CopyItem;
-                        }
-                    } else {
-                        ci = ctrvm.SelectedItem.CopyItem;
-                    }
-
+                if (args is MpCopyItem arg_ci) {
+                    ci = arg_ci;
                 } else {
-                    // select most recently copied item
-                    ci = ctrvm.PendingNewModels.OrderByDescending(x => x.CopyDateTime).FirstOrDefault();
+                    ci = await GetPrimaryCopyItemToProcessAsync();
                 }
+
                 if (ci == null) {
                     // no item could be selected so ignore shortcut trigger
-                    IsPerformingActionFromCommand = false;
                     return;
                 }
 
                 var ao = GetInput(ci);
                 await PerformActionAsync(ao);
-                IsPerformingActionFromCommand = false;
             });
 
 

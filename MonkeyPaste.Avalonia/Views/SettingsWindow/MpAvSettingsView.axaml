@@ -152,7 +152,7 @@
             <Setter Property="CornerRadius"
                     Value="10" />
             <Setter Property="Margin"
-                    Value="10,10,20,10" />
+                    Value="10,0,20,0" />
         </Style>
 
         <Style Selector="Expander Border.labelUnderline_long, Expander Border.labelUnderline">
@@ -261,11 +261,6 @@
         <!--  DATAGRID COMBOBOXES  -->
 
         <Style Selector="DataGrid ComboBox">
-
-            <Setter Property="Background"
-                    Value="Orange" />
-            <Setter Property="Foreground"
-                    Value="Brown" />
             <Setter Property="VerticalAlignment"
                     Value="Center" />
         </Style>
@@ -393,21 +388,9 @@
             <Button x:Name="ResetButton"
                     Classes="defaultButton textOnlyButton footer"
                     DockPanel.Dock="Left"
-                    Command="{Binding ResetSettingsCommand}"
-                    Content="Reset All" />
-            <!--<StackPanel DockPanel.Dock="Right"
-                        HorizontalAlignment="Right"
-                        Orientation="Horizontal">
-                <Button x:Name="SaveButton"
-                        Classes="defaultButton textOnlyButton footer"
-                        IsDefault="True"
-                        Command="{Binding SaveSettingsCommand}"
-                        Content="Save" />
-                <Button x:Name="CancelButton"
-                        Classes="defaultButton textOnlyButton footer"
-                        Command="{Binding CancelSettingsCommand}"
-                        Content="Cancel" />
-            </StackPanel>-->
+                    Command="{Binding ResetSettingsCommand}">
+                <TextBlock Text="Reset All" />
+            </Button>
         </DockPanel>
 
         <!--  Content  -->

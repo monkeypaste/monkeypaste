@@ -17,16 +17,20 @@
         <sys:String x:Key="GestureInfoHtml">Gesture info here</sys:String>
         <sys:String x:Key="RoutingInfoHtml">&lt;ul&gt;	&lt;li&gt;		&lt;b&gt;Internal&lt;/b&gt; In app shortcuts, are not globally enabled&lt;/li&gt;	&lt;li&gt;		&lt;b&gt;Direct&lt;/b&gt; Gesture will &lt;b&gt;			&lt;i&gt;override&lt;/i&gt;		&lt;/b&gt; the input, ie. it will &lt;b&gt;&lt;span style=&quot;foreground: #FF0000&quot;&gt;not&lt;/span&gt;&lt;/b&gt; be received by active application. &lt;/li&gt;	&lt;li&gt;		&lt;b&gt;Bubble&lt;/b&gt; Gesture will execute &lt;b&gt;			&lt;i&gt;after&lt;/i&gt;		&lt;/b&gt; active application &lt;/li&gt;	&lt;li&gt;		&lt;b&gt;Tunnel&lt;/b&gt; Gesture will execute &lt;b&gt;			&lt;i&gt;before&lt;/i&gt;		&lt;/b&gt; active application &lt;/li&gt;&lt;/ul&gt;</sys:String>
     </local:MpAvUserControl.Resources>
+    <local:MpAvUserControl.Styles>
+    </local:MpAvUserControl.Styles>
     <StackPanel Orientation="Vertical"
                 Margin="0,20,0,0"
-                Spacing="20">
+                Spacing="10">
 
         <!--  RESET ALL SHORTCUTS  -->
 
         <Button Classes="defaultButton textOnlyButton severe"
                 Command="{Binding ResetAllShortcuts}"
-                HorizontalAlignment="Left"
-                Content="Reset All Shortcuts" />
+                HorizontalAlignment="Right"
+                Margin="0,0,20,0">
+            <TextBlock Text="Reset All Shortcuts" />
+        </Button>
 
         <!--  USER-DEFINED SHORTCUTS  -->
 
@@ -52,7 +56,7 @@
                 </StackPanel>
             </Expander.Header>
             <Expander.Content>
-                <StackPanel>
+                <StackPanel Spacing="10">
                     <Expander>
                         <Expander.Header>
                             <StackPanel>
@@ -155,18 +159,14 @@
                                         </DataGridTemplateColumn.HeaderTemplate>
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <!--<Border DataContext="{Binding PasteShortcutViewModel}">-->
                                                 <local:MpAvShortcutView Background="Transparent"
                                                                         Margin="5"
                                                                         HorizontalAlignment="Stretch"
                                                                         VerticalAlignment="Stretch"
                                                                         HorizontalContentAlignment="Center"
                                                                         VerticalContentAlignment="Center"
-                                                                        local:MpAvPointerCommandExtension.IsEnabled="True"
-                                                                        local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
-                                                                        local:MpAvPointerCommandExtension.LeftPressCommand="{Binding AssignPasteShortcutCommand, Source={x:Static local:MpAvAppCollectionViewModel.Instance}}"
-                                                                        local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding}" />
-                                                <!--</Border>-->
+                                                                        RecordCommand="{Binding AssignPasteShortcutCommand, Source={x:Static local:MpAvAppCollectionViewModel.Instance}}"
+                                                                        RecordCommandParameter="{Binding}" />
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
@@ -200,15 +200,13 @@
 
                     <!--  ADD PASTE SHORTCUT BUTTON  -->
                     <DropDownButton HorizontalAlignment="Right"
-                                    Classes="dataGridAddButton"
+                                    Classes="dataGridAddButton defaultButton iconTextButton"
                                     Command="{Binding ShowAppSelectorFlyoutCommand}"
                                     CommandParameter="{Binding $self}">
                         <DockPanel>
                             <Image DockPanel.Dock="Left"
-                                   Width="20"
-                                   Height="20"
                                    Source="{Binding Source={StaticResource AddImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                            <Label Content="Add" />
+                            <TextBlock Text="Add" />
                         </DockPanel>
                     </DropDownButton>
                 </StackPanel>

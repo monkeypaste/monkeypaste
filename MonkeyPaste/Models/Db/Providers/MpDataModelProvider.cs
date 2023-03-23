@@ -504,7 +504,11 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public static async Task<int> GetTotalCopyItemCountForTagAndAllDescendantsAsync(int ciid) {
+        public static async Task<int> GetTotalCopyItemCountForTagAndAllDescendantsAsync(int tid) {
+            if (tid == MpTag.AllTagId) {
+                return await GetTotalCopyItemCountAsync();
+            }
+
             string query = string.Format(
                 @"WITH RECURSIVE
                       tag_descendant(n) AS (
@@ -515,8 +519,29 @@ namespace MonkeyPaste {
                       )
                     SELECT COUNT(DISTINCT fk_MpCopyItemId) FROM MpCopyItemTag WHERE fk_MpTagId IN
                     (SELECT {0} UNION ALL SELECT MpTag.pk_MpTagId FROM MpTag
-                     WHERE fk_ParentTagId IN tag_descendant AND fk_ParentTagId > 0);", ciid);
-            var result = await MpDb.QueryScalarAsync<int>(query, ciid);
+                     WHERE fk_ParentTagId IN tag_descendant AND fk_ParentTagId > 0);", tid);
+            var result = await MpDb.QueryScalarAsync<int>(query, tid);
+            return result;
+        }
+
+        public static async Task<List<MpCopyItem>> GetAllCopyItemsForTagAndAllDescendantsAsync(int tid) {
+            if (tid == MpTag.AllTagId) {
+                return await GetItemsAsync<MpCopyItem>();
+            }
+
+            string query = string.Format(
+                @"SELECT * FROM MpCopyItem WHERE pk_MpCopyItemId IN(
+                    WITH RECURSIVE
+                      tag_descendant(n) AS (
+                        VALUES({0})
+                        UNION 
+                        SELECT MpTag.pk_MpTagId FROM MpTag, tag_descendant
+                         WHERE fk_ParentTagId=tag_descendant.n
+                      )
+                    SELECT DISTINCT fk_MpCopyItemId FROM MpCopyItemTag WHERE fk_MpTagId IN
+                    (SELECT {0} UNION ALL SELECT MpTag.pk_MpTagId FROM MpTag
+                     WHERE fk_ParentTagId IN tag_descendant AND fk_ParentTagId > 0))", tid);
+            var result = await MpDb.QueryAsync<MpCopyItem>(query, tid);
             return result;
         }
 

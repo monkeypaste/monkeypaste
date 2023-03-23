@@ -49,7 +49,6 @@
             <DataGrid x:Name="ShortcutDatagrid"
                       IsVisible="{Binding ., Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                       CanUserSortColumns="True"
-                      Focusable="True"
                       Items="{Binding}"
                       IsReadOnly="False"
                       AutoGenerateColumns="False">
@@ -130,11 +129,8 @@
                                                         VerticalAlignment="Stretch"
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
-                                                        local:MpAvPointerCommandExtension.IsEnabled="True"
-                                                        local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ShowAssignShortcutDialogCommand, Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}"
-                                                        local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding}"
-                                                        local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
-                                                        RecordCommand="{Binding AssignCommand}" />
+                                                        RecordCommand="{Binding ShowAssignShortcutDialogCommand, Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}"
+                                                        RecordCommandParameter="{Binding}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

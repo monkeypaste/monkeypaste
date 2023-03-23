@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     public class MpMasterTemplateModelCollectionViewModel :
         MpViewModelBase,
-        MpIMenuItemViewModel,
-        MpIAsyncSingletonViewModel<MpMasterTemplateModelCollectionViewModel> {
+        MpIMenuItemViewModel {
         #region Private Variables
 
         #endregion

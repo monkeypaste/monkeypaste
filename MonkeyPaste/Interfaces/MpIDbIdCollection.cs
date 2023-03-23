@@ -1,4 +1,4 @@
-﻿namespace MonkeyPaste.Avalonia {
+﻿namespace MonkeyPaste {
     public interface MpIDbIdCollection {
         int GetItemId(int queryIdx);
         int GetItemOffsetIdx(int itemId);

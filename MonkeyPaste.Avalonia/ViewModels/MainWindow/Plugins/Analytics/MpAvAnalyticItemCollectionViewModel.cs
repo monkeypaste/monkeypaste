@@ -12,7 +12,6 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvAnalyticItemCollectionViewModel :
         MpAvTreeSelectorViewModelBase<object, MpAvAnalyticItemViewModel>,
         MpIMenuItemViewModel,
-        MpIAsyncSingletonViewModel<MpAvAnalyticItemCollectionViewModel>,
         MpIAsyncComboBoxViewModel,
         MpISidebarItemViewModel,
         MpIPopupMenuPicker {

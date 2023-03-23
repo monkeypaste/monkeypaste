@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using PropertyChanged;
 using System.Windows.Input;
@@ -77,6 +78,16 @@ namespace MonkeyPaste.Avalonia {
             AvaloniaXamlLoader.Load(this);
             this.PointerEntered += MpAvShortcutView_PointerEntered;
             this.PointerExited += MpAvShortcutView_PointerExited;
+
+            var rb = this.FindControl<Control>("RecordButton");
+            rb.AddHandler(PointerReleasedEvent, Rb_PointerPressed, RoutingStrategies.Tunnel);
+        }
+
+        private void Rb_PointerPressed(object sender, global::Avalonia.Input.PointerReleasedEventArgs e) {
+            if (!CanRecord) {
+                return;
+            }
+            RecordCommand.Execute(RecordCommandParameter);
         }
 
         private void MpAvShortcutView_PointerExited(object sender, global::Avalonia.Input.PointerEventArgs e) {

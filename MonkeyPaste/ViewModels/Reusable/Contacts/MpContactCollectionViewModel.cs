@@ -4,8 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public class MpContactCollectionViewModel : MpSelectorViewModelBase<object, MpContactViewModel>,
-        MpIAsyncSingletonViewModel<MpContactCollectionViewModel> {
+    public class MpContactCollectionViewModel : MpSelectorViewModelBase<object, MpContactViewModel> {
 
         #region Statics
 

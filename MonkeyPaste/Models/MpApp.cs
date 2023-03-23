@@ -128,9 +128,8 @@ namespace MonkeyPaste {
             if (iconId == 0) {
                 string iconImgBase64 = Mp.Services.IconBuilder.GetApplicationIconBase64(appPath);
 
-                var icon = await MpIcon.CreateAsync(
-                        iconImgBase64: iconImgBase64,
-                        createBorder: true,
+                var icon = await Mp.Services.IconBuilder.CreateAsync(
+                        iconBase64: iconImgBase64,
                         suppressWrite: suppressWrite);
                 iconId = icon.Id;
             }

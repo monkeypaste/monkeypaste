@@ -3796,6 +3796,13 @@ namespace MonkeyPaste.Avalonia {
                 AppendData = append_data_str;
             });
 
+        public ICommand ShowAppendDevToolsCommand => new MpCommand(
+            () => {
+                if (MpAvAppendNotificationWindow.Instance == null) {
+                    return;
+                }
+                MpAvAppendNotificationWindow.Instance.ShowNotifierDevToolsCommand.Execute(null);
+            });
         #endregion
 
 

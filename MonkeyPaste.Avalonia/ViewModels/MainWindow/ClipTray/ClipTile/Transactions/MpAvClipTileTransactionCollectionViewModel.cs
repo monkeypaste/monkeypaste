@@ -177,7 +177,6 @@ namespace MonkeyPaste.Avalonia {
                 Dispatcher.UIThread.Post(async () => {
 
                     var cisvm = await CreateClipTileSourceViewModel(cit);
-                    Transactions.Add(cisvm);
                     if (cit.TransactionType == MpTransactionType.Edited) {
                         // since source is editor content doesn't need up 
                         // TODO this should only be temporary, need a better way to 
@@ -191,6 +190,8 @@ namespace MonkeyPaste.Avalonia {
                     if (Parent != null) {
                         Parent.DoShake = true;
                     }
+
+                    ApplyTransaction(cisvm);
 
                     //OpenTransactionPaneCommand.Execute(null);
                     //SelectedTransaction = cisvm;
@@ -244,18 +245,21 @@ namespace MonkeyPaste.Avalonia {
             //    tivm.TransactionType == MpTransactionType.Created) {
             //    return;
             //}
+            if (Transactions.All(x => x.TransactionId != tivm.TransactionId)) {
+                Transactions.Add(tivm);
+            }
 
-            //if (Parent.GetContentView() is MpIContentView cv) {
-            //    MpJsonObject updateObj = null;
-            //    updateObj = tivm.GetTransactionDelta();
-            //    if (updateObj == null) {
-            //        updateObj = tivm.GetTransactionAnnotation();
-            //    }
-            //    if (updateObj == null) {
-            //        return;
-            //    }
-            //    cv.UpdateContentAsync(updateObj).FireAndForgetSafeAsync(this);
-            //}
+            if (Parent.GetContentView() is MpIContentView cv) {
+                MpJsonObject updateObj = null;
+                updateObj = tivm.GetTransactionDelta();
+                if (updateObj == null) {
+                    updateObj = tivm.GetTransactionAnnotation();
+                }
+                if (updateObj == null) {
+                    return;
+                }
+                cv.UpdateContentAsync(updateObj).FireAndForgetSafeAsync(this);
+            }
         }
 
         private void Transactions_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {

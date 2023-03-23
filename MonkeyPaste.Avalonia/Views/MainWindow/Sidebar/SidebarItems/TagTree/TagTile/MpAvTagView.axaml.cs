@@ -69,12 +69,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void MpAvTagView_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
-            var drop_control = this;
-            DragDrop.SetAllowDrop(drop_control, true);
-            drop_control.AddHandler(DragDrop.DragEnterEvent, DragEnter);
-            drop_control.AddHandler(DragDrop.DragOverEvent, DragOver);
-            drop_control.AddHandler(DragDrop.DragLeaveEvent, DragLeave);
-            drop_control.AddHandler(DragDrop.DropEvent, Drop);
+            InitDnd();
         }
 
         private void TagNameTextBox_KeyDown(object sender, global::Avalonia.Input.KeyEventArgs e) {
@@ -103,6 +98,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region Drop
 
+        private void InitDnd() {
+            var drop_control = this;
+            DragDrop.SetAllowDrop(drop_control, true);
+            drop_control.AddHandler(DragDrop.DragEnterEvent, DragEnter);
+            drop_control.AddHandler(DragDrop.DragOverEvent, DragOver);
+            drop_control.AddHandler(DragDrop.DragLeaveEvent, DragLeave);
+            drop_control.AddHandler(DragDrop.DropEvent, Drop);
+        }
         #region Drop Events
 
         private void DragEnter(object sender, DragEventArgs e) {
@@ -212,7 +215,7 @@ namespace MonkeyPaste.Avalonia {
                 // CONTENT DROP
 
                 BindingContext.IsBusy = true;
-                bool is_internal = e.Data.ContainsInternalContentItem();
+                bool is_internal = e.Data.ContainsFullContentItem();
                 if (is_internal) {
                     // Internal Drop
                     await PerformTileDropAsync(e.Data, is_copy);
@@ -264,7 +267,7 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             }
 
-            bool is_internal = avdo.ContainsInternalContentItem();
+            bool is_internal = avdo.ContainsFullContentItem();
             if (!is_copy && is_internal) {
                 // invalidate tile drag if tag is already linked to copy item and its not a copy operation
                 string drop_ctvm_pub_handle = avdo.Get(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT) as string;
@@ -314,24 +317,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task PerformExternalOrPartialDropAsync(IDataObject avdo) {
-            bool from_ext = !avdo.ContainsInternalContentItem();
-            MpPortableDataObject mpdo = await Mp.Services.DataObjectHelperAsync.ReadDragDropDataObjectAsync(avdo) as MpPortableDataObject;
-
-            //int drag_ciid = -1;
-            string drag_ctvm_pub_handle = mpdo.GetData(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT) as string;
-            if (!string.IsNullOrEmpty(drag_ctvm_pub_handle)) {
-                var drag_ctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle == drag_ctvm_pub_handle);
-                if (drag_ctvm != null) {
-                    // tile sub-selection drop
-
-                    mpdo.SetData(MpPortableDataFormats.LinuxUriList, new string[] { Mp.Services.SourceRefBuilder.ConvertToRefUrl(drag_ctvm.CopyItem) });
-                }
-            }
-
-            MpCopyItem drop_ci = await Mp.Services.CopyItemBuilder.BuildAsync(
-                mpdo,
-                transType: MpTransactionType.Created,
-                force_ext_sources: from_ext);
+            var drop_ci = avdo.ToCopyItemAsync();
 
             if (drop_ci == null) {
                 return;

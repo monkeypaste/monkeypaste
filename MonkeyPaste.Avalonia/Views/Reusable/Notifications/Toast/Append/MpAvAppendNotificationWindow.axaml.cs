@@ -47,7 +47,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         public MpAvAppendNotificationWindow() : base() {
-            InitializeComponent();
+            AvaloniaXamlLoader.Load(this);
 #if DEBUG
             this.AttachDevTools();
 #endif
@@ -59,9 +59,6 @@ namespace MonkeyPaste.Avalonia {
 
 
         #endregion
-        private void InitializeComponent() {
-            AvaloniaXamlLoader.Load(this);
-        }
 
         public ICommand ShowNotifierDevToolsCommand => new MpCommand(
             () => {

@@ -7,9 +7,7 @@
         <Setter Property="Cursor"
                 Value="Hand" />
     </Style>
-    <Style Selector=":is(Button).defaultButton /template/ ContentPresenter">
-        <Setter Property="Background"
-                Value="Beige" />
+    <Style Selector="DropDownButton.defaultButton">
         <Setter Property="CornerRadius"
                 Value="5" />
         <Setter Property="BorderThickness"
@@ -18,6 +16,28 @@
                 Value="DimGray" />
         <Setter Property="Padding"
                 Value="5,3" />
+        <Setter Property="Background"
+                Value="Beige" />
+    </Style>
+
+    <Style Selector="DropDownButton.defaultButton /template/ Border#RootBorder">
+        <Setter Property="Padding"
+                Value="1" />
+    </Style>
+
+    <Style Selector=":is(Button):not(DropDownButton).defaultButton /template/ ContentPresenter">
+        <Setter Property="CornerRadius"
+                Value="5" />
+        <Setter Property="BorderThickness"
+                Value="1" />
+        <Setter Property="BorderBrush"
+                Value="DimGray" />
+        <Setter Property="Padding"
+                Value="5,3" />
+    </Style>
+    <Style Selector=":is(Button).defaultButton /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="Beige" />
         <Setter Property="Foreground"
                 Value="Black" />
     </Style>
@@ -34,7 +54,25 @@
         <Setter Property="Padding"
                 Value="10,3" />
     </Style>
-    <Style Selector=":is(Button):pointerover.defaultButton /template/ ContentPresenter">
+    <Style Selector="DropDownButton:pointerover.defaultButton">
+        <Setter Property="BorderBrush"
+                Value="Yellow" />
+        <Setter Property="Background"
+                Value="Silver" />
+    </Style>
+    <Style Selector="DropDownButton:pointerover.defaultButton /template/ Border#RootBorder">
+        <Setter Property="BorderBrush"
+                Value="Yellow" />
+        <Setter Property="Background"
+                Value="Silver" />
+    </Style>
+
+    <Style Selector="DropDownButton:pointerover /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="Silver" />
+    </Style>
+
+    <Style Selector=":is(Button):pointerover.defaultButton:not(DropDownButton) /template/ ContentPresenter">
         <Setter Property="BorderBrush"
                 Value="Yellow" />
     </Style>

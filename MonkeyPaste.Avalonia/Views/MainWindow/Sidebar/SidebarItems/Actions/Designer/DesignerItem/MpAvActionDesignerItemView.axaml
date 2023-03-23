@@ -33,12 +33,8 @@
 
         <!--  DESIGNER ITEM SHAPE  -->
 
-        <Style Selector="ContentControl#DesignerItemContentControl :is(Shape)"
-               x:DataType="local:MpAvActionViewModelBase">
-            <Setter Property="Fill"
-                    Value="{Binding ActionBackgroundHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}" />
-        </Style>
-        <Style Selector="ContentControl#DesignerItemContentControl :is(Shape)"
+
+        <Style Selector="Border#OuterContainer ContentControl#DesignerItemContentControl :is(Shape)"
                x:DataType="local:MpAvActionViewModelBase">
             <Setter Property="Stroke"
                     Value="White" />
@@ -48,17 +44,39 @@
                     Value="{Binding Height}" />
             <Setter Property="StrokeThickness"
                     Value="2.5" />
+            <Setter Property="StrokeDashArray"
+                    Value="{x:Null}" />
+            <Setter Property="StrokeDashOffset"
+                    Value="0" />
+
+            <Setter Property="Fill">
+                <Setter.Value>
+                    <MultiBinding Converter="{x:Static local:MpAvMultiObjToContrastColorConverter.Instance}">
+                        <Binding Path="ActionBackgroundHexColor" />
+                        <Binding Path="IconResourceObj" />
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
         </Style>
-        <Style Selector="ContentControl#DesignerItemContentControl.selected :is(Shape)">
+
+        <Style Selector="Border#OuterContainer.dragOver ContentControl#DesignerItemContentControl :is(Shape)">
+            <Setter Property="StrokeDashArray"
+                    Value="2,2" />
+            <Setter Property="StrokeDashOffset"
+                    Value="2" />
+            <Setter Property="Stroke"
+                    Value="{DynamicResource DragIntoBrush}" />
+        </Style>
+
+        <Style Selector="Border#OuterContainer:not(.dragOver) ContentControl#DesignerItemContentControl.selected :is(Shape)">
             <Setter Property="Stroke"
                     Value="{DynamicResource SelectedBorderBrush}" />
         </Style>
-        <Style Selector="ContentControl#DesignerItemContentControl:pointerover :is(Shape)">
+        <Style Selector="Border#OuterContainer:not(.dragOver) ContentControl#DesignerItemContentControl:pointerover :is(Shape)">
             <Setter Property="Stroke"
                     Value="{DynamicResource HoverDefaultBorderBrush}" />
         </Style>
-        <Style Selector="ContentControl#DesignerItemContentControl.selected:pointerover :is(Shape)"
-               x:DataType="local:MpAvActionViewModelBase">
+        <Style Selector="Border#OuterContainer:not(.dragOver) ContentControl#DesignerItemContentControl.selected:pointerover :is(Shape)">
             <Setter Property="Stroke"
                     Value="{DynamicResource HoverSelectedBorderBrush}" />
         </Style>
@@ -75,10 +93,6 @@
                     Value="Stretch" />
             <Setter Property="VerticalAlignment"
                     Value="Stretch" />
-            <!--<Setter Property="Margin"
-                    Value="12" />
-            <Setter Property="ClipToBounds"
-                    Value="False" />-->
         </Style>
         <Style Selector="ContentControl#DesignerItemContentControl:not(.valid) Image"
                x:DataType="local:MpAvActionViewModelBase">
@@ -99,8 +113,10 @@
             </Setter>
         </Style>
     </local:MpAvUserControl.Styles>
-    <Border HorizontalAlignment="Center"
+    <Border x:Name="OuterContainer"
+            HorizontalAlignment="Center"
             VerticalAlignment="Stretch"
+            Classes.dragOver="{Binding IsDragOver}"
             local:MpAvPointerCommandExtension.IsEnabled="True"
             local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
             local:MpAvPointerCommandExtension.RightPressCommand="{Binding ShowAddChildContextMenuCommand}"

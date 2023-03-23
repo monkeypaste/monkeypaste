@@ -49,11 +49,11 @@ function initLinkMatcher() {
         if (node.hasAttribute('style')) {
             let bg = getElementComputedStyleProp(node, 'background-color');
             if (bg) {
-                bg = cleanHexColor(bg);
+                bg = cleanHexColor(bg,1,true);
             }
             let fg = getElementComputedStyleProp(node, 'color');
             if (fg) {
-                fg = cleanHexColor(fg);
+                fg = cleanHexColor(fg,1,true);
             }
 
             log('link text: ' + node.innerText + ' bg: ' + bg + ' fg: ' + fg);
@@ -95,7 +95,7 @@ function initLinkMatcher() {
                     }
                 }
             }
-            //LinkTypeAttrb.add(node, link_type);
+            LinkTypeAttrb.add(node, link_type);
         } else {
             log('no type class for link, classes: ' + node.getAttribute('class'));
         }

@@ -1,6 +1,5 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Layout;
-using Avalonia.Platform;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
@@ -52,15 +51,7 @@ namespace MonkeyPaste.Avalonia {
 
 
             if (Mp.Services.PlatformInfo.IsDesktop) {
-                var quillWindow = new MpAvWindow() {
-                    Width = 0,
-                    Height = 0,
-                    Opacity = 0,
-                    TransparencyLevelHint = WindowTransparencyLevel.Transparent,
-                    ShowInTaskbar = false,
-                    ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome,
-                    SystemDecorations = SystemDecorations.None
-                };
+                var quillWindow = new MpAvHiddenWindow();
 
                 quillWindow.Content = ConverterWebView;
                 ConverterWebView.AttachedToVisualTree += (s, e) => {

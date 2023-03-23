@@ -10,47 +10,10 @@
                        x:DataType="local:MpAvIKeyGestureViewModel"
                        x:CompileBindings="False"
                        mc:Ignorable="d"
+                       Classes.active="{Binding KeyGroups, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                        x:Name="ShortcutView"
                        x:Class="MonkeyPaste.Avalonia.MpAvShortcutView">
     <local:MpAvUserControl.Styles>
-        <!--  - RECORD/ KEYGROUP TOGGLE  -->
-        <Style Selector="Grid#ContainerGrid.active ItemsControl#ShortcutListBox">
-            <Setter Property="IsVisible"
-                    Value="True" />
-        </Style>
-
-        <Style Selector="Grid#ContainerGrid:not(.active) ItemsControl#ShortcutListBox">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>
-
-        <Style Selector="Grid#ContainerGrid.active TextBlock#EmptyTextBlock">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>
-
-        <Style Selector="Grid#ContainerGrid:not(.active) TextBlock#EmptyTextBlock">
-            <Setter Property="IsVisible"
-                    Value="True" />
-        </Style>
-
-        <Style Selector="Grid#ContainerGrid Button#RecordButton">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>
-
-        <Style Selector="Grid#ContainerGrid:pointerover ItemsControl#ShortcutListBox">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>
-        <Style Selector="Grid#ContainerGrid:pointerover TextBlock#EmptyTextBlock">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>
-        <Style Selector="Grid#ContainerGrid:pointerover Button#RecordButton">
-            <Setter Property="IsVisible"
-                    Value="True" />
-        </Style>
 
         <!--  RECORD ANIMATION  -->
         <Style Selector="Button#RecordButton:pointerover /template/ ContentPresenter">
@@ -93,8 +56,9 @@
 
     </local:MpAvUserControl.Styles>
     <Grid x:Name="ContainerGrid"
-          Background="{StaticResource HitTestableTransparent}"
-          Classes.active="{Binding KeyGroups, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
+          HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch"
+          Background="{StaticResource HitTestableTransparent}">
         <TextBlock x:Name="EmptyTextBlock"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
@@ -148,14 +112,13 @@
         <Button x:Name="RecordButton"
                 Margin="3"
                 Padding="0,2"
-                Command="{Binding RecordCommand, ElementName=ShortcutView}"
-                CommandParameter="{Binding RecordCommandParameter, ElementName=ShortcutView}"
                 HorizontalAlignment="Stretch"
                 Background="Silver"
                 BorderBrush="DimGray"
                 BorderThickness="1.5"
                 CornerRadius="12">
-            <DockPanel HorizontalAlignment="Center"
+            <DockPanel IsHitTestVisible="False"
+                       HorizontalAlignment="Center"
                        Classes.alt="{Binding IsVisible, ElementName=RecCircle}">
                 <Ellipse x:Name="RecCircle"
                          DockPanel.Dock="Left"

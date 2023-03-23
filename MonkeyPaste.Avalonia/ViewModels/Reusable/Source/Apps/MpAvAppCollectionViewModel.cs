@@ -20,8 +20,7 @@ namespace MonkeyPaste.Avalonia {
     }
 
     public class MpAvAppCollectionViewModel :
-        MpViewModelBase<MpAvAppViewModel>,
-        MpIAsyncSingletonViewModel<MpAvAppCollectionViewModel> {
+        MpViewModelBase<MpAvAppViewModel> {
         #region Private Variables
         #endregion
 

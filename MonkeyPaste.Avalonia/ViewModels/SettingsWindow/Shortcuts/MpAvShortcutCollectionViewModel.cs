@@ -16,6 +16,7 @@ using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using FocusManager = Avalonia.Input.FocusManager;
 using KeyEventArgs = Avalonia.Input.KeyEventArgs;
 
 
@@ -1034,34 +1035,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public ICommand ShowAssignShortcutDialogCommand => new MpCommand<object>(
+        public ICommand ShowAssignShortcutDialogCommand => new MpAsyncCommand<object>(
             async (args) => {
                 if (args is MpAvIShortcutCommandViewModel scvm) {
                     await CreateOrUpdateViewModelShortcutAsync(scvm);
                 }
-                //if (args is MpICustomShortcutCommandViewModel cscvm) {
-                //    string param = MpShortcut.IsUserDefinedShortcut(cscvm.ShortcutType) ? cscvm.ModelId.ToString() : null;
-                //    string shortcutKeyString = await MpDataModelProvider.GetShortcutKeystringAsync(cscvm.ShortcutType.ToString(), param);
-
-                //    await CreateOrUpdateViewModelShortcutAsync(
-                //        cscvm.ShortcutLabel,
-                //        cscvm.ShortcutCommand,
-                //        cscvm.ShortcutType,
-                //        cscvm.ModelId.ToString(),
-                //        shortcutKeyString);
-                //} else if (args is MpAvShortcutViewModel scvm) {
-                //    await CreateOrUpdateViewModelShortcutAsync(
-                //        scvm.ShortcutDisplayName,
-                //        scvm.Command,
-                //        scvm.ShortcutType,
-                //        scvm.CommandParameter,
-                //        scvm.KeyString);
-                //}
-
-
-                //if (args is MpViewModelBase vmb) {
-                //    vmb.OnPropertyChanged(nameof(vmb.SelfBindingRef));
-                //}
             });
 
         public ICommand DeleteShortcutCommand => new MpCommand<object>(

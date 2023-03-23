@@ -13,7 +13,6 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     public class MpAvIconCollectionViewModel :
         MpViewModelBase,
-        MpIAsyncSingletonViewModel<MpAvIconCollectionViewModel>,
         MpIUserColorViewModel {
         #region Private Variables
 
@@ -163,9 +162,7 @@ namespace MonkeyPaste.Avalonia {
             MpIcon icon = await MpDataModelProvider.GetItemAsync<MpIcon>(uivm.IconId);
             if (icon == null) {
                 // likely means its current icon is a default reference to a parent
-                icon = await MpIcon.CreateAsync(
-                    iconImgBase64: bmpSrc.ToBase64String(),
-                    createBorder: false);
+                icon = await Mp.Services.IconBuilder.CreateAsync(bmpSrc.ToBase64String(), createBorder: false);
                 uivm.IconId = icon.Id;
             } else {
                 var img = await MpDataModelProvider.GetItemAsync<MpDbImage>(icon.IconImageId);

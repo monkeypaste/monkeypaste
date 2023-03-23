@@ -4,10 +4,11 @@
         xmlns:local="using:MonkeyPaste.Avalonia">
     <Styles.Resources>
         <sys:String x:Key="DropDashArrayStr">6,1</sys:String>
+        <Color x:Key="DragIntoColor">Orange</Color>
         <SolidColorBrush x:Key="DragSourceBrush">Blue</SolidColorBrush>
         <SolidColorBrush x:Key="DragMoveBrush">Cyan</SolidColorBrush>
         <SolidColorBrush x:Key="DragCopyBrush">Magenta</SolidColorBrush>
-        <SolidColorBrush x:Key="DragIntoBrush">Lime</SolidColorBrush>
+        <SolidColorBrush x:Key="DragIntoBrush" Color="{DynamicResource DragIntoColor}" />
         <SolidColorBrush x:Key="DragInvalidBrush">Red</SolidColorBrush>
     </Styles.Resources>
     <Style Selector="Border.dropLine">

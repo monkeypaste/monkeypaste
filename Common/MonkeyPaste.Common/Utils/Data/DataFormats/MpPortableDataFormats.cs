@@ -120,6 +120,22 @@ namespace MonkeyPaste.Common {
         public const string INTERNAL_DATA_OBJECT_FORMAT = "Mp Internal Data Object Format";
         #endregion
 
+        #region Statics
+
+        public static string[] InternalFormats = new string[] {
+            INTERNAL_SOURCE_URI_LIST_FORMAT,
+            INTERNAL_CONTENT_HANDLE_FORMAT,
+            INTERNAL_CONTENT_TITLE_FORMAT,
+            INTERNAL_CONTENT_ROI_FORMAT,
+            INTERNAL_CONTENT_ANNOTATION_FORMAT,
+            INTERNAL_CONTENT_DELTA_FORMAT,
+            INTERNAL_PARAMETER_REQUEST_FORMAT,
+            INTERNAL_SEARCH_CRITERIA_ITEM_FORMAT,
+            INTERNAL_TAG_ITEM_FORMAT,
+            INTERNAL_DATA_OBJECT_FORMAT
+        };
+        #endregion
+
         #region Properties
 
         public static IEnumerable<string> RegisteredFormats => _formatLookup.Select(x => x.Value.Name);

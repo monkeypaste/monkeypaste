@@ -6,6 +6,7 @@ using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using static TheArtOfDev.HtmlRenderer.Adapters.RGraphicsPath;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -64,6 +65,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
+
         public void ShowChild(Window owner = null) {
             SilentLockMainWindowCheck(owner);
 

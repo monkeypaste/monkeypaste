@@ -30,7 +30,8 @@
                  StrokeThickness="1"
                  Stroke="White"
                  Fill="Blue" />
-        <TextBlock Foreground="White"
+        <TextBlock Classes="hint"
+                   Foreground="White"
                    FontSize="10"
                    FontWeight="SemiBold"
                    TextAlignment="Center"

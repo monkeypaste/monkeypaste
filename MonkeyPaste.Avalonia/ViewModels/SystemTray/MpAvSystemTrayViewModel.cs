@@ -9,8 +9,7 @@ using Application = Avalonia.Application;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvSystemTrayViewModel :
-        MpViewModelBase,
-        MpIAsyncSingletonViewModel<MpAvSystemTrayViewModel> {
+        MpViewModelBase {
 
         #region Private Variables
         #endregion
@@ -109,7 +108,7 @@ namespace MonkeyPaste.Avalonia {
                         },
                         new MpMenuItemViewModel() {
                             Header = "Show Notifier DevTools",
-                            Command = MpAvAppendNotificationWindow.Instance.ShowNotifierDevToolsCommand
+                            Command = MpAvClipTrayViewModel.Instance.ShowAppendDevToolsCommand
                         },
 #endif
                         new MpMenuItemViewModel() {IsSeparator = true},

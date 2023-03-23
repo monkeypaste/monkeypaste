@@ -147,7 +147,7 @@ namespace MonkeyPaste.Avalonia {
         #region Public Overrides
 
         public override async Task PerformActionAsync(object arg) {
-            if (!CanPerformAction(arg)) {
+            if (!ValidateStartAction(arg)) {
                 return;
             }
 

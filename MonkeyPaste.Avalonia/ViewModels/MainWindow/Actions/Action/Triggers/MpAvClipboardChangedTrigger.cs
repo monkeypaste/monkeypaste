@@ -54,12 +54,17 @@ namespace MonkeyPaste.Avalonia {
             Mp.Services.ClipboardMonitor.StopMonitor();
         }
 
-        protected override bool CanPerformAction(object arg) {
-            return !MpAvClipTrayViewModel.Instance.IsAppPaused;
+        protected override bool ValidateStartAction(object arg) {
+            bool can_start = base.ValidateStartAction(arg);
+            if (can_start) {
+                can_start = !MpAvClipTrayViewModel.Instance.IsAppPaused;
+            }
+            IsPerformingAction = can_start;
+            return IsPerformingAction;
         }
 
         public override async Task PerformActionAsync(object arg) {
-            if (!base.CanPerformAction(arg)) {
+            if (!base.ValidateStartAction(arg)) {
                 return;
             }
             if (arg is MpPortableDataObject mpdo) {

@@ -115,8 +115,8 @@ namespace MonkeyPaste.Avalonia {
             MpAvClipTrayViewModel.Instance.UnregisterActionComponent(this);
         }
 
-        protected override bool CanPerformAction(object arg) {
-            if (!base.CanPerformAction(arg)) {
+        protected override bool ValidateStartAction(object arg) {
+            if (!base.ValidateStartAction(arg)) {
                 return false;
             }
             if (AddedContentType == MpCopyItemType.None) {

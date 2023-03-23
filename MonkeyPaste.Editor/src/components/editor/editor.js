@@ -106,7 +106,7 @@ function isAllSelected() {
 	}
 	// NOTE doc length is never 0 and there's always an extra unselectable \n character at end so minus 1 for length to check here
 	let doc_len = getDocLength() - 1;
-	let sel = getEditorSelection_safe();
+	let sel = getDocSelection();
 	let result = sel.index == 0 && sel.length == doc_len;
 	return result;
 }

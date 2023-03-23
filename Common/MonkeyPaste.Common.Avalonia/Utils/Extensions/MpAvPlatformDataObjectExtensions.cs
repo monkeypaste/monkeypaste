@@ -122,11 +122,11 @@ namespace MonkeyPaste.Common.Avalonia {
             return result;
         }
 
-        public static bool ContainsInternalContentItem(this IDataObject ido) {
+        public static bool ContainsFullContentItem(this IDataObject ido) {
             if (ido == null) {
                 return false;
             }
-            return ido.GetDataFormats().Contains(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT);
+            return ido.Contains(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT);
         }
     }
 }

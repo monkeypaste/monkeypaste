@@ -1,5 +1,4 @@
-﻿using MonkeyPaste.Avalonia;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

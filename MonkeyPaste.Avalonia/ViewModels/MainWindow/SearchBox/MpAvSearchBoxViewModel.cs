@@ -14,7 +14,6 @@ using FocusManager = Avalonia.Input.FocusManager;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvSearchBoxViewModel : MpViewModelBase,
-        MpIAsyncSingletonViewModel<MpAvSearchBoxViewModel>,
         MpIExpandableViewModel {
         #region Private Variables
         #endregion

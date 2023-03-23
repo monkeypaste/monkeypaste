@@ -267,7 +267,7 @@ function applyDelta(delta, source = 'api') {
 	if (other_ops.length > 0) {
 		quill.updateContents(other_ops, source);
 		quill.update();
-}
+	}
 
 	for (var i = 0; i < format_ops.length; i++) {
 		const fop = format_ops[i];

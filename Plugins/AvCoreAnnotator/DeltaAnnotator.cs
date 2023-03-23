@@ -79,7 +79,7 @@ namespace AvCoreAnnotator {
             if (annotationRegExType == MpRegExType.HexColor) {
                 var color = new MpColor(match);
                 attr.background = color.ToHex(true);
-                attr.color = attr.background.IsHexStringBright() ? MpSystemColors.Black : MpSystemColors.White;
+                attr.color = attr.background.IsHexStringBright() ? "#000000" : "#FFFFFF";
             }
             return attr;
         }

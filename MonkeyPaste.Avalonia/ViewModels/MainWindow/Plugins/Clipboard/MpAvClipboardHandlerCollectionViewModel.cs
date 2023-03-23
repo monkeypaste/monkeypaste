@@ -16,7 +16,6 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvClipboardHandlerCollectionViewModel :
         MpAvTreeSelectorViewModelBase<object, MpAvClipboardHandlerItemViewModel>,
         MpIMenuItemViewModel,
-        MpIAsyncSingletonViewModel<MpAvClipboardHandlerCollectionViewModel>,
         MpISidebarItemViewModel,
         MpIAsyncComboBoxViewModel,
         MpIClipboardFormatDataHandlers,
@@ -442,6 +441,7 @@ namespace MonkeyPaste.Avalonia {
             // pre-pass data object and remove disabled formats
             var formatsToRemove =
                 ido.GetAllDataFormats()
+                .Where(x => !MpPortableDataFormats.InternalFormats.Contains(x))
                 .Where(x => EnabledWriters.All(y => y.ClipboardFormat.clipboardName != x))
                 .Select(x => x);
 

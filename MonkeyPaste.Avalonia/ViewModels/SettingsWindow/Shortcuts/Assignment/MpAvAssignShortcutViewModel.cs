@@ -46,9 +46,9 @@ namespace MonkeyPaste.Avalonia {
             Window owner = null) {
             var ascw = new MpAvWindow() {
                 DataContext = new MpAvAssignShortcutViewModel(shortcutName, keys, curShortcutId, assignmentType, iconResourceObj),
-                Height = 300,
+                MinHeight = 300,
                 MinWidth = 400,
-                SizeToContent = SizeToContent.Width,
+                SizeToContent = SizeToContent.WidthAndHeight,
                 ShowInTaskbar = false,
                 Topmost = true,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,

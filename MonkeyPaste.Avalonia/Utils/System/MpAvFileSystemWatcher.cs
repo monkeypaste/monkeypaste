@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvFileSystemWatcher :
-        MpIAsyncSingletonViewModel<MpAvFileSystemWatcher>,
         IDisposable,
         MpIActionComponent {
         #region Private Variables
