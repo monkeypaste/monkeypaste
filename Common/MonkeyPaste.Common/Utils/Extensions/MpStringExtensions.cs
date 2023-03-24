@@ -28,6 +28,9 @@ namespace MonkeyPaste.Common {
 
         #region Encoding Extensions
         public static string ToDecodedString(this byte[] bytes, Encoding enc = null, bool stripNulls = false) {
+            if (bytes == null || bytes.Length == 0) {
+                return string.Empty;
+            }
             // TODO should use local encoding here
             string out_str;
             if (enc == null) {

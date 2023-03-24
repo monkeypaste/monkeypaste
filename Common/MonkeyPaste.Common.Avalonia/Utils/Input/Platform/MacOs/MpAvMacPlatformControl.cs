@@ -1,3 +1,4 @@
+#if MAC
 using Avalonia.Platform;
 using Avalonia.Threading;
 using MonoMac.Foundation;
@@ -21,3 +22,4 @@ namespace MonkeyPaste.Common.Avalonia {
         }
     }
 }
+#endif

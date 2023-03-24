@@ -766,10 +766,13 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 rk.DeleteValue(appName, false);
             }
+#else
+            // TODO add other os'
+            loadOnLogin = false;
 #endif
             MpPrefViewModel.Instance.LoadOnLogin = loadOnLogin;
 
-            MpConsole.WriteLine("App " + appName + " with path " + appPath + " has load on login set to: " + loadOnLogin);
+            MpConsole.WriteLine($"Load At Login: {(loadOnLogin ? "ON" : "OFF")}");
         }
 
         #endregion

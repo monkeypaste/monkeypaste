@@ -1,4 +1,6 @@
-﻿using CefNet;
+﻿#if DESKTOP
+
+using CefNet;
 using System;
 
 namespace MonkeyPaste.Avalonia {
@@ -28,3 +30,4 @@ namespace MonkeyPaste.Avalonia {
         }
     }
 }
+#endif

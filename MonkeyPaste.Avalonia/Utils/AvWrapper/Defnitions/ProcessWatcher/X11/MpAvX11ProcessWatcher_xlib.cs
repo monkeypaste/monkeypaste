@@ -1,4 +1,6 @@
-﻿using MonkeyPaste.Common;
+﻿#if LINUX
+
+using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -116,3 +118,4 @@ namespace MonkeyPaste.Avalonia {
 
 
 }
+#endif

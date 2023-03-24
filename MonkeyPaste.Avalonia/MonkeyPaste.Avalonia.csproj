@@ -5,39 +5,21 @@
     <Nullable>disable</Nullable>
     <TrimMode>copyused</TrimMode>
     <WarningLevel>4</WarningLevel>
-    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <!--<BuiltInComInteropSupport>true</BuiltInComInteropSupport>-->
     <TargetFramework>$(MainTargetFramework)</TargetFramework>
-     <!--<RunPostBuildEvent>Always</RunPostBuildEvent>-->
-     <!--<DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>-->
   </PropertyGroup>
-  <!--<ItemGroup>
-    <KnownFrameworkReference Update="Microsoft.WindowsDesktop.App.WPF" IsWindowsOnly="false" />
-  </ItemGroup>-->
   
   <PropertyGroup Condition="'$(BuildOs)' == 'WINDOWS'">  
     <UseWPF>True</UseWPF>
   </PropertyGroup>
 
-   <PropertyGroup Condition="'$(BuildOs)' == 'LINUX'">  
-    <DefineConstants>LINUX;</DefineConstants>
-  </PropertyGroup>
-
-
-  <!--<ItemGroup Condition="$(IsDesktop) == 'true'">-->
-  <ItemGroup>
-    <Reference Include="CefNet">
-      <HintPath>..\..\..\..\Desktop\DotNetExamples\cefnet11\CefNet\CefNet.Avalonia\bin\Debug\net6.0\CefNet.dll</HintPath>
-    </Reference>
-    <Reference Include="CefNet.Avalonia">
-      <HintPath>..\..\..\..\Desktop\DotNetExamples\cefnet11\CefNet\CefNet.Avalonia\bin\Debug\net6.0\CefNet.Avalonia.dll</HintPath>
-    </Reference>
-  </ItemGroup>
 
   <PropertyGroup>
     <NoWarn>CS8632</NoWarn>
     <NoWarn>CS8073</NoWarn>
     <NoWarn>$(NoWarn),IDE1006</NoWarn>
   </PropertyGroup>
+  
   <ItemGroup>
     <AndroidJavaSource Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <AndroidLibrary Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
@@ -1094,28 +1076,10 @@
     </AvaloniaResource>
   </ItemGroup>
   <ItemGroup>
-    <!--This helps with theme dll-s trimming.
-	If you will publish your application in self-contained mode with p:PublishTrimmed=true and it will use Fluent theme Default theme will be trimmed from the output and vice versa.
-	https://github.com/AvaloniaUI/Avalonia/issues/5593 -->
     <TrimmableAssembly Include="Avalonia.Themes.Fluent" />
     <TrimmableAssembly Include="Avalonia.Themes.Default" />
   </ItemGroup>
-  <ItemGroup>
-    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <PackageReference Include="Avalonia" Version="11.0.0-preview5" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.0-preview5" />
-    <PackageReference Include="Avalonia.Desktop" Version="11.0.0-preview5" />
-    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.0-preview5" />
-    <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.0-preview5" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-preview5" />
-    <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.0-preview5" />
-    <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.0-preview5" />
-    <PackageReference Include="NetCoreAudio" Version="1.7.0" />
-    <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
-    <PackageReference Include="System.Management" Version="8.0.0-preview.1.23110.8" />
-    <PackageReference Include="System.Speech" Version="7.0.0" />
-    <PackageReference Include="XamlNameReferenceGenerator" Version="1.6.1" />
-  </ItemGroup>
+  
   <ItemGroup>
     <Folder Include="Themes\Default\Assets\" />
     <Folder Include="Themes\Default\DensityStyles\" />
@@ -1128,13 +1092,7 @@
     <Folder Include="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Transactions\Items\" />
     <Folder Include="Views\MainWindow\ClipTrayContainer\PinTray\" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Common\MonkeyPaste.Common.Avalonia\MonkeyPaste.Common.Avalonia.csproj" />
-    <ProjectReference Include="..\Common\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
-    <ProjectReference Include="..\Common\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
-    <ProjectReference Include="..\MonkeyPaste\MonkeyPaste.csproj" />
-    <ProjectReference Include="..\_build\_build.csproj" />
-  </ItemGroup>
+  
   
   <ItemGroup>
     <Compile Update="Views\ExternalDropWindow\DropComplete\MpAvDropCompleteView.axaml.cs">
@@ -1318,16 +1276,55 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+
+  <ItemGroup Condition="$(IsDesktop) == 'true'">
+    <Reference Include="CefNet">
+      <HintPath>..\..\..\..\Desktop\DotNetExamples\cefnet11\CefNet\CefNet.Avalonia\bin\Debug\net6.0\CefNet.dll</HintPath>
+    </Reference>
+    <Reference Include="CefNet.Avalonia">
+      <HintPath>..\..\..\..\Desktop\DotNetExamples\cefnet11\CefNet\CefNet.Avalonia\bin\Debug\net6.0\CefNet.Avalonia.dll</HintPath>
+    </Reference>
+  </ItemGroup>
   
+  <ItemGroup>
+    <ProjectReference Include="..\Common\MonkeyPaste.Common.Avalonia\MonkeyPaste.Common.Avalonia.csproj" />
+    <ProjectReference Include="..\Common\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
+    <ProjectReference Include="..\Common\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
+    <ProjectReference Include="..\MonkeyPaste\MonkeyPaste.csproj" />
+    <ProjectReference Include="..\_build\_build.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.0.0-preview5" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.0-preview5" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.0-preview5" />
+    <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.0-preview5" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0-preview5" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-preview5" />
+    <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.0-preview5" />
+    <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.0-preview5" />
+    <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
+    <PackageReference Include="System.Management" Version="7.0.0" />
+    <PackageReference Include="NetCoreAudio" Version="1.7.0" />
+    <PackageReference Include="System.Speech" Version="7.0.0" />
+    <PackageReference Include="XamlNameReferenceGenerator" Version="1.6.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition="$(IsDesktop) == 'true'">
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.0-preview5" />
+  </ItemGroup>
   
   <ItemGroup Condition="'$(BuildOs)' == 'LINUX'">
-    
+    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\Mac\**" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\Windows\**" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\**" />
-    
+    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\**" />    
   </ItemGroup>
   
   <ItemGroup Condition="'$(BuildOs)' == 'MAC'">
+    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\Windows\**" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\X11\**" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\**" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\X11\**" />
   </ItemGroup>
@@ -1335,6 +1332,15 @@
   <ItemGroup Condition="'$(BuildOs)' == 'WINDOWS'">
     <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\X11\**" />
     <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\Mac\**" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\X11\**" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\**" />
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(BuildOs)' == 'BROWSER'">
+    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\Windows\**" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\X11\**" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\Mac\**" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\**" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\X11\**" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\**" />
   </ItemGroup>

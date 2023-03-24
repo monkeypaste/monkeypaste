@@ -10,7 +10,7 @@ namespace MonkeyPaste.Avalonia {
         public static readonly MpAvStringToFontFamilyConverter Instance = new();
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-
+#if DESKTOP
             if (value is DynamicResourceExtension dre) {
                 value = Mp.Services.PlatformResource.GetResource(dre.ResourceKey.ToString()) as string;
             }
@@ -25,6 +25,7 @@ namespace MonkeyPaste.Avalonia {
                     MpConsole.WriteTraceLine($"Error converting str '{valueStr}' to font family", ex);
                 }
             }
+#endif
             return FontFamily.Default;
         }
 

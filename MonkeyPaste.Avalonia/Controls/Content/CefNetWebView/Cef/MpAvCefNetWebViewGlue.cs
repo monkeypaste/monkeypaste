@@ -1,4 +1,6 @@
-﻿using Avalonia.Input;
+﻿#if DESKTOP
+
+using Avalonia.Input;
 using Avalonia.Threading;
 using CefNet;
 using CefNet.Avalonia;
@@ -70,3 +72,5 @@ namespace MonkeyPaste.Avalonia {
         }
     }
 }
+
+#endif

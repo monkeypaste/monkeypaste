@@ -31,12 +31,12 @@ namespace AvCoreAnnotator {
             content_pt = content_pt.Replace(Environment.NewLine, "\n");
             var formats = new List<MpRegExType>();
             for (int i = 3; i < Enum.GetValues(typeof(AvAnnnotaterParameterType)).Length; i++) {
-                if(req.GetRequestParamBoolValue(i)) {
+                if (req.GetRequestParamBoolValue(i)) {
                     formats.Add((MpRegExType)i - 2);
                 }
             }
             MpQuillDelta delta = DeltaAnnotator.Annotate(content_pt, formats);
-            MpConsole.WriteLine($"annotation Count: {delta.ops.Count} types: {string.Join(",",delta.ops.Select(x=>x.attributes.linkType))}");
+            MpConsole.WriteLine($"annotation Count: {delta.ops.Count} types: {string.Join(",", delta.ops.Select(x => x.attributes.linkType))}");
 
             if (delta.ops.Count > 0) {
                 // content was annotated, return it as dataobjectitem

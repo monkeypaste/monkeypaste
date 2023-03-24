@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
+
 namespace MonkeyPaste.Avalonia {
     public enum MpSoundGroupType {
         None = 0,
@@ -34,7 +35,9 @@ namespace MonkeyPaste.Avalonia {
 
     public class MpAvSoundPlayerViewModel : MpViewModelBase {
         #region Private Variables
+
         private Player _player;
+
         //private SoundPlayer _soundPlayer = null;
         private Dictionary<MpSoundNotificationType, string> _soundPathLookup = new Dictionary<MpSoundNotificationType, string>();
         #endregion
@@ -55,6 +58,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsOsSupported =>
+            !OperatingSystem.IsBrowser();
         public int SelectedItemIdx {
             get => (int)SelectedSoundGroup;
             set {
@@ -74,9 +79,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-
-
         public MpAvSoundPlayerViewModel() : base(null) {
+            if (!IsOsSupported) {
+                return;
+            }
             PropertyChanged += MpSoundPlayerGroupCollectionViewModel_PropertyChanged;
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }
@@ -85,7 +91,12 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task InitializeAsync() {
+            if (!IsOsSupported) {
+                return;
+            }
+
             IsBusy = true;
+
             if (_player == null) {
                 _player = new Player();
                 await UpdateVolumeCommand.ExecuteAsync();
@@ -134,6 +145,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             IsBusy = false;
+
         }
 
         #endregion
@@ -191,12 +203,15 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIAsyncCommand UpdateVolumeCommand => new MpAsyncCommand(
             async () => {
+
                 byte volume = (byte)((double)byte.MaxValue * MpPrefViewModel.Instance.NotificationSoundVolume);
                 await _player.SetVolume(volume);
-            });
+
+            }, () => IsOsSupported);
 
         public ICommand PlaySoundCommand => new MpAsyncCommand<object>(
             async (args) => {
+
                 MpSoundNotificationType snt = (MpSoundNotificationType)args;
                 if (!_soundPathLookup.ContainsKey(snt)) {
                     MpConsole.WriteLine($"Missing sound resource for ntf type: '{snt}'. Maybe intentional if path was too long, due to MCI (windows) limitation.");
@@ -207,8 +222,11 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(100);
                 }
                 await _player.Play(_soundPathLookup[snt]);
+
             }, (args) => {
-                return args is MpSoundNotificationType && SelectedSoundGroup != MpSoundGroupType.None;
+                return
+                    IsOsSupported &&
+                    args is MpSoundNotificationType && SelectedSoundGroup != MpSoundGroupType.None;
             });
 
 
@@ -226,7 +244,10 @@ namespace MonkeyPaste.Avalonia {
             GetShortPathName(path, shortPath, MAX_PATH);
             return shortPath.ToString();
         }
+#else
+        const int MAX_PATH = int.MaxValue;
 #endif
+
         #endregion
     }
 

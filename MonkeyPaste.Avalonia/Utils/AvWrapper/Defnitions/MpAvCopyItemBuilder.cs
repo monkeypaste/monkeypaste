@@ -33,9 +33,9 @@ namespace MonkeyPaste.Avalonia {
 
             await NormalizePlatformFormatsAsync(mpdo);
 
-            var refs = await Mp.Services.SourceRefBuilder.GatherSourceRefsAsync(mpdo, force_ext_sources);
+            var refs = await Mp.Services.SourceRefTools.GatherSourceRefsAsync(mpdo, force_ext_sources);
 
-            if (Mp.Services.SourceRefBuilder.IsAnySourceRejected(refs)) {
+            if (Mp.Services.SourceRefTools.IsAnySourceRejected(refs)) {
                 return null;
             }
             Tuple<MpCopyItemType, string, string> data_tuple = await DecodeContentDataAsync(mpdo);
@@ -54,6 +54,8 @@ namespace MonkeyPaste.Avalonia {
             string itemDelta = data_tuple.Item3;
             string default_title = GetDefaultItemTitle(itemType, mpdo);
             string data_format = GetPreferredContentType(itemType);
+
+
             var ci = await MpCopyItem.CreateAsync(
                 dataObjectId: dobj.Id,
                 title: default_title,
@@ -62,7 +64,7 @@ namespace MonkeyPaste.Avalonia {
                 itemType: itemType,
                 suppressWrite: suppressWrite);
 
-            List<string> ref_urls = refs.Select(x => Mp.Services.SourceRefBuilder.ConvertToRefUrl(x)).ToList();
+            List<string> ref_urls = refs.Select(x => Mp.Services.SourceRefTools.ConvertToRefUrl(x)).ToList();
             if (mpdo.TryGetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, out IEnumerable<string> urls)) {
                 var urlList = urls.ToList();
                 for (int i = 0; i < ref_urls.Count; i++) {

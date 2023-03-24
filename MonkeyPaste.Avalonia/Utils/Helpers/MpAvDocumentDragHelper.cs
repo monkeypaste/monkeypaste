@@ -73,9 +73,9 @@ namespace MonkeyPaste.Avalonia {
                 string drop_app_url = null;
                 if (Mp.Services.ProcessWatcher.LastProcessInfo is MpPortableProcessInfo drop_pi &&
                     MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(drop_pi) is MpAvAppViewModel drop_avm) {
-                    drop_app_url = Mp.Services.SourceRefBuilder.ConvertToRefUrl(drop_avm.App);
+                    drop_app_url = Mp.Services.SourceRefTools.ConvertToRefUrl(drop_avm.App);
                 } else {
-                    drop_app_url = Mp.Services.SourceRefBuilder.ConvertToRefUrl(
+                    drop_app_url = Mp.Services.SourceRefTools.ConvertToRefUrl(
                         MpAvAppCollectionViewModel.Instance.ThisAppViewModel.App);
                 }
                 if (string.IsNullOrEmpty(drop_app_url)) {

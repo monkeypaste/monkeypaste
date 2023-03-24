@@ -69,6 +69,24 @@ namespace MonkeyPaste.Common {
 
         #endregion
 
+
+        #region Constructors
+
+        public MpPortableDataObject() {
+            DataFormatLookup = new Dictionary<MpPortableDataFormat, object>();
+        }
+        public MpPortableDataObject(string format, object data) : this() {
+            SetData(format, data);
+        }
+        public MpPortableDataObject(Dictionary<string, object> formatDataLookup, bool caseSensitive = true) : this() {
+            if (formatDataLookup != null) {
+                formatDataLookup.ForEach(x => SetData(x.Key, x.Value));
+            }
+        }
+        #endregion
+
+        #region Public Methods
+
         public bool ContainsData(string format) {
             return GetData(format) != null;
         }
@@ -90,7 +108,7 @@ namespace MonkeyPaste.Common {
             }
             if (DataFormatLookup.TryGetValue(pdf, out object tmp)) {
                 data = tmp;
-                return true;
+                return data != null;
             }
             return false;
         }
@@ -98,7 +116,7 @@ namespace MonkeyPaste.Common {
             if (TryGetData(format, out object dataObj)) {
                 if (dataObj is T) {
                     data = dataObj as T;
-                    return true;
+                    return data != default(T);
                 }
             }
             data = default;
@@ -113,17 +131,6 @@ namespace MonkeyPaste.Common {
             DataFormatLookup.AddOrReplace(pdf, data);
         }
 
-        public MpPortableDataObject() {
-            DataFormatLookup = new Dictionary<MpPortableDataFormat, object>();
-        }
-        public MpPortableDataObject(string format, object data) : this() {
-            SetData(format, data);
-        }
-        public MpPortableDataObject(Dictionary<string, object> formatDataLookup, bool caseSensitive = true) : this() {
-            if (formatDataLookup != null) {
-                formatDataLookup.ForEach(x => SetData(x.Key, x.Value));
-            }
-        }
 
         public string SerializeData() {
             return MpJsonConverter.SerializeObject(DataFormatLookup.ToDictionary(x => x.Key.Name, x => (object)x.Value));
@@ -137,5 +144,7 @@ namespace MonkeyPaste.Common {
             }
             return sb.ToString();
         }
+
+        #endregion
     }
 }

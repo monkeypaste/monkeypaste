@@ -54,9 +54,9 @@ namespace MonkeyPaste.Avalonia {
             _sw.Stop();
         }
         protected override void CreateLoaderItems() {
-            if (Mp.Services.PlatformInfo.IsDesktop) {
-                BaseItems.Add(new MpBootstrappedItemViewModel(this, typeof(MpAvCefNetApplication)));
-            }
+#if DESKTOP
+            BaseItems.Add(new MpBootstrappedItemViewModel(this, typeof(MpAvCefNetApplication)));
+#endif
 
             CoreItems.AddRange(
                new List<MpBootstrappedItemViewModel>() {

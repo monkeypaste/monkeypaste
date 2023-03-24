@@ -1,4 +1,5 @@
-﻿using MonoMac.AppKit;
+﻿#if MAC
+using MonoMac.AppKit;
 using System;
 using System.IO;
 
@@ -40,3 +41,4 @@ namespace MonkeyPaste.Common.Avalonia {
         #endregion
     }
 }
+#endif

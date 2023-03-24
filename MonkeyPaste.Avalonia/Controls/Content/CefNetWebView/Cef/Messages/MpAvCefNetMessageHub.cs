@@ -1,4 +1,6 @@
-﻿using CefNet;
+﻿#if DESKTOP
+
+using CefNet;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvCefNetMessageHub {
@@ -38,3 +40,5 @@ namespace MonkeyPaste.Avalonia {
         #endregion
     }
 }
+
+#endif

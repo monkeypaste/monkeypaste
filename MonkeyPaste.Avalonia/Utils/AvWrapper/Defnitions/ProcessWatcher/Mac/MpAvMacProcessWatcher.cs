@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿#if MAC
+using MonkeyPaste.Common;
 using MonoMac.AppKit;
 using System;
 using System.Collections.Concurrent;
@@ -162,3 +163,4 @@ namespace MonkeyPaste.Avalonia {
     }
 }
 
+#endif

@@ -583,14 +583,15 @@ namespace MonkeyPaste.Common {
         }
 
         public static bool HasProperty(this object obj, string propertyPath) {
-            try {
-                object test = GetPropertyValue(obj, propertyPath, null, false);
-                return true;
-            }
-            catch (MpReflectionException ex) {
-                MpConsole.WriteTraceLine(string.Empty, ex);
-                return false;
-            }
+            return obj.GetType().GetProperties().Any(x => x.Name == propertyPath);
+            //try {
+            //    object test = GetPropertyValue(obj, propertyPath, null, false);
+            //    return true;
+            //}
+            //catch (MpReflectionException ex) {
+            //    MpConsole.WriteTraceLine(string.Empty, ex);
+            //    return false;
+            //}
         }
 
         public static object GetPropertyValue(this object obj, string propertyPath, object[] index = null, bool safe = true) {

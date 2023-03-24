@@ -149,10 +149,9 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 Dispatcher.UIThread.Post(async () => {
                     MpConsole.WriteLine("ExitApplicationCommand begin");
-
-                    //MpAvMainView.Instance.Close();
-                    //MpAvMainWindowViewModel.Instance.Dispose();
+#if DESKTOP
                     MpAvCefNetApplication.ShutdownCefNet();
+#endif
                     await Task.Delay(3000);
 
                     MpConsole.WriteLine("CefNet Shutdown Complete");

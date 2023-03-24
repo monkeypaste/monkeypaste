@@ -1,4 +1,5 @@
-﻿using MonoMac.AppKit;
+﻿#if MAC
+using MonoMac.AppKit;
 
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvMacHelpers {
@@ -13,4 +14,4 @@ namespace MonkeyPaste.Common.Avalonia {
         }
     }
 }
-
+#endif

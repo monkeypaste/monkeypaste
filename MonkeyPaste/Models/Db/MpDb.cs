@@ -60,7 +60,20 @@ namespace MonkeyPaste {
         public static async Task InitAsync() {
             var sw = new Stopwatch();
             sw.Start();
-            await InitDbAsync();
+
+            bool isNewDb = await InitDbConnectionAsync(Mp.Services.DbInfo, true);
+
+            await InitTablesAsync();
+
+            if (isNewDb) {
+                await MpDefaultDataModelTools.CreateAsync(MpPrefViewModel.Instance.ThisDeviceGuid);
+                await CreateViewsAsync();
+                await InitDefaultDataAsync();
+
+                await CreateTestDataAsync();
+            } else {
+                await MpDefaultDataModelTools.InitializeAsync();
+            }
             IsLoaded = true;
             sw.Stop();
             MpConsole.WriteLine($"Db loading: {sw.ElapsedMilliseconds} ms");
@@ -332,21 +345,6 @@ namespace MonkeyPaste {
 
         #region Private Methods  
 
-        private static async Task InitDbAsync() {
-            bool isNewDb = await InitDbConnectionAsync(Mp.Services.DbInfo, true);
-
-            await InitTablesAsync();
-
-            if (isNewDb) {
-                await MpDefaultDataModelTools.CreateAsync(MpPrefViewModel.Instance.ThisDeviceGuid);
-                await CreateViewsAsync();
-                await InitDefaultDataAsync();
-
-                await CreateTestDataAsync();
-            } else {
-                await MpDefaultDataModelTools.InitializeAsync();
-            }
-        }
         public static async Task<bool> InitDbConnectionAsync(MpIDbInfo dbInfo, bool allowCreate) {
             string dbPath = dbInfo.DbPath;
             bool isNewDb = !File.Exists(dbPath);
@@ -609,14 +607,18 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
         }
 
         private static async Task InitDefaultDataAsync() {
-            // NOTE! MpTag.AllTagId needs to be changed to 1 not 2 since recent was removed
+            await InitDefaultTagsAsync();
+            await InitDefaultShortcutsAsync();
 
+            MpConsole.WriteLine(@"Created all default tables");
+        }
+
+        private static async Task InitDefaultTagsAsync() {
             bool tracked = true;
             bool synced = true;
 
-            #region Tags
             var default_tags = new object[] {
-                new object[] { "df388ecd-f717-4905-a35c-a8491da9c0e3", "All", MpSystemColors.blue1, 0,0, tracked,synced, 0, MpTagType.Link},
+                new object[] { "df388ecd-f717-4905-a35c-a8491da9c0e3", "All", MpSystemColors.blue1, 0,-1, tracked,synced, 0, MpTagType.Link},
                 new object[] { "54b61353-b031-4029-9bda-07f7ca55c123", "Favorites", MpSystemColors.yellow1, 0,-1,tracked,synced, MpTag.AllTagId, MpTagType.Link},
                 new object[] { "e62b8e5d-52a6-46f1-ac51-8f446916dd85", "Searches", MpSystemColors.forestgreen, 1,-1,tracked,synced, 0, MpTagType.Group},
                 new object[] { "a0567976-dba6-48fc-9a7d-cbd306a4eaf3", "Help", MpSystemColors.orange1, 2,1,tracked,synced, 0, MpTagType.Link},
@@ -634,87 +636,128 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
                     parentTagId: (int)t[7],
                     tagType: (MpTagType)t[8]);
             }
+            await InitDefaultQueryTagsAsync();
+        }
+
+        private static async Task InitDefaultQueryTagsAsync() {
+            // NOTE seperate so it can be reset
+
+            #region Recent
+
+            var recent_tag = await MpTag.CreateAsync(
+                    tagName: "Recent",
+                    hexColor: MpSystemColors.pink,
+                    parentTagId: MpTag.RootGroupTagId,
+                    sortType: MpContentSortType.CopyDateTime,
+                    isSortDescending: true,
+                    tagType: MpTagType.Query);
+
+            var recent_tag_simple_cri = await MpSearchCriteriaItem.CreateAsync(
+                tagId: recent_tag.Id,
+                sortOrderIdx: 0,
+                joinType: MpLogicalQueryType.And,
+                queryType: MpQueryType.Simple,
+                options:
+                    ((long)(
+                    MpContentQueryBitFlags.Content |
+                    MpContentQueryBitFlags.TextType |
+                    MpContentQueryBitFlags.ImageType |
+                    MpContentQueryBitFlags.FileType)).ToString());
+
+            var recent_tag_datetime_cri = await MpSearchCriteriaItem.CreateAsync(
+                tagId: recent_tag.Id,
+                sortOrderIdx: 1,
+                joinType: MpLogicalQueryType.And,
+                queryType: MpQueryType.Advanced,
+                options:
+                    string.Join(
+                        ",",
+                        new[] {
+                            (int)MpRootOptionType.DateOrTime, //5
+                            (int)MpDateTimeTypeOptionType.Created, //1
+                            (int)MpDateTimeOptionType.After, //3 
+                            (int)MpDateAfterUnitType.Yesterday} //1
+                        .Select(x => x.ToString())),
+                matchValue: 0.ToString());
 
             #endregion
 
-            #region Shortcuts
+            #region Item Types
 
-            await InitDefaultShortcutsAsync();
+            var item_type_group_tag = await MpTag.CreateAsync(
+                    tagName: "Formats",
+                    hexColor: MpColorHelpers.GetRandomHexColor(),
+                    parentTagId: MpTag.RootGroupTagId,
+                    tagType: MpTagType.Group);
+
+            #region Text
+
+            var text_type_tag = await MpTag.CreateAsync(
+                    tagName: "Text",
+                    hexColor: MpColorHelpers.GetRandomHexColor(),
+                    parentTagId: item_type_group_tag.Id,
+                    sortType: MpContentSortType.CopyDateTime,
+                    isSortDescending: true,
+                    tagType: MpTagType.Query);
+
+            var text_type_tag_simple_cri = await MpSearchCriteriaItem.CreateAsync(
+                tagId: text_type_tag.Id,
+                sortOrderIdx: 0,
+                joinType: MpLogicalQueryType.Or,
+                queryType: MpQueryType.Simple,
+                options:
+                    ((long)(
+                    MpContentQueryBitFlags.TextType)).ToString());
 
             #endregion
 
-            await InitHelpContentAsync();
-            await InitQueryTagsAsync();
+            #region Image
 
-            MpConsole.WriteLine(@"Created all default tables");
+            var image_type_tag = await MpTag.CreateAsync(
+                    tagName: "Image",
+                    hexColor: MpColorHelpers.GetRandomHexColor(),
+                    parentTagId: item_type_group_tag.Id,
+                    sortType: MpContentSortType.CopyDateTime,
+                    isSortDescending: true,
+                    tagType: MpTagType.Query);
+
+            var image_type_tag_simple_cri = await MpSearchCriteriaItem.CreateAsync(
+                tagId: image_type_tag.Id,
+                sortOrderIdx: 0,
+                joinType: MpLogicalQueryType.Or,
+                queryType: MpQueryType.Simple,
+                options:
+                    ((long)(
+                    MpContentQueryBitFlags.ImageType)).ToString());
+
+            #endregion
+
+            #region Files
+
+            var file_type_tag = await MpTag.CreateAsync(
+                    tagName: "Files",
+                    hexColor: MpColorHelpers.GetRandomHexColor(),
+                    parentTagId: item_type_group_tag.Id,
+                    sortType: MpContentSortType.CopyDateTime,
+                    isSortDescending: true,
+                    tagType: MpTagType.Query);
+
+            var file_type_tag_simple_cri = await MpSearchCriteriaItem.CreateAsync(
+                tagId: file_type_tag.Id,
+                sortOrderIdx: 0,
+                joinType: MpLogicalQueryType.Or,
+                queryType: MpQueryType.Simple,
+                options:
+                    ((long)(
+                    MpContentQueryBitFlags.FileType)).ToString());
+
+            #endregion
+
+            #endregion
         }
 
-        private static async Task InitQueryTagsAsync() {
-            await Task.Delay(1);
-        }
-        private static async Task InitHelpContentAsync() {
-            // NOTE called in clip tray init when initial startup is flagged
-
-            var helpContentDefinitions = new List<string[]> {
-                new string[] {
-                    "Welcome to the jungle!",
-                    "<h1>Monkey paste is the <b>best</b> am I <i>right</i>?!</h1>"
-                },
-                new string[] {
-                    "Help Test 1",
-                    "<h1>Here at Monkey paste we earn our bananas by aiding you with business logic automation</h1>"
-                }
-            };
-
-            var thisApp = await MpDataModelProvider.GetItemAsync<MpApp>(MpDefaultDataModelTools.ThisAppId);
-            var thisAppRef = Mp.Services.SourceRefBuilder.ConvertToRefUrl(thisApp);
-
-            var hci_idl = new List<int>();
-            foreach (var hcd in helpContentDefinitions) {
-                var hci_mpdo = new MpPortableDataObject() {
-                    DataFormatLookup = new Dictionary<MpPortableDataFormat, object>() {
-                            {
-                                MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT),
-                                hcd[0]
-                            },
-                            {
-                                MpPortableDataFormats.GetDataFormat(MpPortableDataFormats.CefHtml),
-                                hcd[1]
-                            }
-                        }
-                };
-
-                //var hci_do = await MpDataObject.CreateAsync(pdo: hci_mpdo);
-
-                //var hci = await MpCopyItem.CreateAsync(
-                //    title: hcd[0],
-                //    data: hcd[1],
-                //    dataObjectId: hci_do.Id);
-
-                //await MpPlatform.Services.TransactionBuilder.ReportTransactionAsync(
-                //            copyItemId: hci.Id,
-                //            reqType: MpJsonMessageFormatType.DataObject,
-                //            req: hci_mpdo.SerializeData(),
-                //            respType: MpJsonMessageFormatType.None,
-                //            resp: null,
-                //            ref_urls: new[] { thisAppRef },
-                //            transType: MpTransactionType.Created);
-
-                var hci = await Mp.Services.CopyItemBuilder.BuildAsync(
-                    pdo: hci_mpdo,
-                    transType: MpTransactionType.System,
-                    force_ext_sources: false);
-
-                hci_idl.Add(hci.Id);
-            }
-
-            await Task.WhenAll(hci_idl.Select((x, idx) => MpCopyItemTag.CreateAsync(
-                tagId: MpTag.HelpTagId,
-                copyItemId: x,
-                sortIdx: idx)));
-        }
         private static async Task CreateTestDataAsync() {
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 3; i++) {
                 var mpdo = new MpPortableDataObject(MpPortableDataFormats.Text, $"This is test {i}.");
                 await Mp.Services.CopyItemBuilder.BuildAsync(
                     pdo: mpdo,

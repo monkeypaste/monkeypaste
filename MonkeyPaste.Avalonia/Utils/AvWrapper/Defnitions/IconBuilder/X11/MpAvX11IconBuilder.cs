@@ -1,4 +1,6 @@
-﻿using MonkeyPaste.Common;
+﻿#if LINUX
+
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
@@ -39,4 +41,4 @@ namespace MonkeyPaste.Avalonia {
         }
     }
 }
-
+#endif

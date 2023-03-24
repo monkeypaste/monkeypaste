@@ -67,7 +67,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileConverter", "Plugins\Fi
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "MonkeyPaste.Chrome", "MonkeyPaste.Chrome\MonkeyPaste.Chrome.esproj", "{C81793DD-FD0C-4C2F-BA62-1FF2F8CF9E42}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonkeyPaste.Console", "MonkeyPaste.Console\MonkeyPaste.Console.csproj", "{19E80B09-F1D7-46BF-8B6A-5D838429C7A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonkeyPaste.Console", "MonkeyPaste.Console\MonkeyPaste.Console.csproj", "{19E80B09-F1D7-46BF-8B6A-5D838429C7A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

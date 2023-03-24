@@ -3,7 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Media;
 using Avalonia.Threading;
-using CefNet.CApi;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;

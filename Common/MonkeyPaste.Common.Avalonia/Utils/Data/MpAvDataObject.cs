@@ -127,9 +127,7 @@ namespace MonkeyPaste.Common.Avalonia {
 
         // private  uint CF_BITMAP = 0;
         public void SetBitmap(byte[] bytes) {
-            if (!OperatingSystem.IsWindows()) {
-                return;
-            }
+#if WINDOWS
             //if(CF_BITMAP == 0) {
             //    CF_BITMAP = WinApi.RegisterClipboardFormatA("Bitmap");
             //}
@@ -183,10 +181,9 @@ namespace MonkeyPaste.Common.Avalonia {
 
             }
             finally {
-#if WINDOWS
                 WinApi.CloseClipboard();
-#endif
             }
+#endif
         }
 
         [DllImport("user32.dll")]

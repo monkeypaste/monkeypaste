@@ -1,4 +1,6 @@
-﻿using Avalonia;
+﻿#if MAC
+
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform;
 using Avalonia.Threading;
@@ -55,3 +57,4 @@ namespace MonkeyPaste.Avalonia {
     }
 }
 
+#endif

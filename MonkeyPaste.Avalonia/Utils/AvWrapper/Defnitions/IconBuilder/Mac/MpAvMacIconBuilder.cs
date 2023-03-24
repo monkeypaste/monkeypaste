@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common.Avalonia;
+﻿#if MAC
+using MonkeyPaste.Common.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvMacIconBuilder : MpAvIconBuildBase {
@@ -14,3 +15,4 @@ namespace MonkeyPaste.Avalonia {
     }
 }
 
+#endif

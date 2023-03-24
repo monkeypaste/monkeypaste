@@ -70,17 +70,12 @@ namespace MonkeyPaste.Avalonia {
                 ResetDrop();
                 return;
             }
-            var test = e.Data.GetAllDataFormats();
 
             List<MpCopyItem> drop_cil = new List<MpCopyItem>();
-            if (e.Data.ContainsFullContentItem()) {
-                string drop_ctvm_pub_handle = e.Data.Get(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT) as string;
-                var drop_ctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle == drop_ctvm_pub_handle);
-                if (drop_ctvm != null) {
-                    drop_cil.Add(drop_ctvm.CopyItem);
-                }
-            } else if (e.Data.Contains(MpPortableDataFormats.INTERNAL_TAG_ITEM_FORMAT) &&
-                        e.Data.Get(MpPortableDataFormats.INTERNAL_TAG_ITEM_FORMAT) is MpAvTagTileViewModel ttvm) {
+            if (e.Data.TryGetSourceRefIdBySourceType(MpTransactionSourceType.CopyItem, out int ciid) &&
+                MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.CopyItemId == ciid) is MpAvClipTileViewModel drop_ctvm) {
+                drop_cil.Add(drop_ctvm.CopyItem);
+            } else if (e.Data.TryGetDragTagViewModel(out MpAvTagTileViewModel ttvm)) {
                 drop_cil = await MpDataModelProvider.GetAllCopyItemsForTagAndAllDescendantsAsync(ttvm.TagId);
             } else {
                 var ext_ci = await e.Data.ToCopyItemAsync();

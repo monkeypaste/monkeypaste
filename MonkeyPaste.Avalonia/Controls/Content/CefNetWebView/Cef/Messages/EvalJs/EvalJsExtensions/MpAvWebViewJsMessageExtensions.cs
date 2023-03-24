@@ -1,4 +1,6 @@
-﻿using Avalonia.Threading;
+﻿#if DESKTOP
+
+using Avalonia.Threading;
 using CefNet;
 using CefNet.Avalonia;
 using MonkeyPaste.Common;
@@ -218,3 +220,4 @@ namespace MonkeyPaste.Avalonia {
         #endregion
     }
 }
+#endif

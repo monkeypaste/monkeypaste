@@ -78,11 +78,15 @@ namespace MonkeyPaste.Avalonia {
                 //if(OperatingSystem.IsLinux()) {
 
                 //}
-                if (OperatingSystem.IsAndroid()) {
-                    string uri = System.IO.Path.Combine(Mp.Services.PlatformInfo.StorageDir, "MonkeyPaste.Editor", "index.html").ToFileSystemUriFromPath();
-                    return uri;
-                }
-                return MpAvCefNetApplication.GetEditorPath().ToFileSystemUriFromPath();
+                string uri;
+
+#if DESKTOP
+
+                uri = MpAvCefNetApplication.GetEditorPath().ToFileSystemUriFromPath();
+#else
+                uri = System.IO.Path.Combine(Mp.Services.PlatformInfo.StorageDir, "MonkeyPaste.Editor", "index.html").ToFileSystemUriFromPath();
+#endif
+                return uri;
             }
         }
 
@@ -1627,7 +1631,7 @@ namespace MonkeyPaste.Avalonia {
             OnScrollToHomeRequest?.Invoke(this, null);
         }
 
-        #endregion      
+        #endregion
 
         public void ClearClipEditing() {
             foreach (var ctvm in Items) {
@@ -1728,7 +1732,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             Dispatcher.UIThread.Post(async () => {
-                await AddItemFromClipboard(mpdo);
+                await AddItemFromDataObjectAsync(mpdo);
             });
         }
 
@@ -1796,7 +1800,7 @@ namespace MonkeyPaste.Avalonia {
                 // we're f'd
                 Debugger.Break();
             } else {
-                pasted_app_url = Mp.Services.SourceRefBuilder.ConvertToRefUrl(avm.App);
+                pasted_app_url = Mp.Services.SourceRefTools.ConvertToRefUrl(avm.App);
             }
             if (string.IsNullOrEmpty(pasted_app_url)) {
                 // f'd
@@ -2454,10 +2458,10 @@ namespace MonkeyPaste.Avalonia {
             IsArrowSelecting = false;
         }
 
-        private async Task AddItemFromClipboard(MpPortableDataObject cd) {
-            if (IsAddingClipboardItem) {
-                MpConsole.WriteLine("Warning! New Clipboard item detected while already adding one (seems to only occur internally). Ignoring this one.");
-                return;
+        private async Task AddItemFromDataObjectAsync(MpPortableDataObject cd) {
+            while (IsAddingClipboardItem) {
+                await Task.Delay(100);
+                MpConsole.WriteLine("waiting to add item to cliptray...");
             }
 
             IsAddingClipboardItem = true;
@@ -2466,32 +2470,17 @@ namespace MonkeyPaste.Avalonia {
                 pdo: cd,
                 transType: MpTransactionType.Created);
 
-            if (newCopyItem == null || newCopyItem.Id < 1) {
-                //this occurs if the copy item is not a known format or app init
-                MpConsole.WriteTraceLine("Unable to create copy item from clipboard!");
-                IsAddingClipboardItem = false;
-                return;
-            }
-
-            if (MpPrefViewModel.Instance.NotificationDoCopySound) {
-                //MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
-            }
-            if (MpPrefViewModel.Instance.IsTrialExpired) {
-                MpNotificationBuilder.ShowMessageAsync(
-                    title: "Trial Expired",
-                    body: "Please update your membership to use Monkey Paste",
-                    msgType: MpNotificationType.TrialExpired,
-                    iconSourceObj: MpPrefViewModel.Instance.AbsoluteResourcesPath + @"/Images/monkey (2).png")
-                    .FireAndForgetSafeAsync(this);
-            }
-
-
             await AddUpdateOrAppendCopyItemAsync(newCopyItem);
 
             IsAddingClipboardItem = false;
         }
 
         private async Task AddUpdateOrAppendCopyItemAsync(MpCopyItem ci, int force_pin_idx = 0) {
+            if (ci == null) {
+                MpConsole.WriteLine("Could not built copyitem, cannot add");
+                OnCopyItemAdd?.Invoke(this, null);
+                return;
+            }
             if (ci.WasDupOnCreate) {
                 //item is a duplicate
                 MpConsole.WriteLine("Duplicate item detected, incrementing copy count and updating copydatetime");
@@ -2507,21 +2496,18 @@ namespace MonkeyPaste.Avalonia {
             bool wasAppended = false;
             if (IsAnyAppendMode) {
                 wasAppended = await UpdateAppendModeAsync(ci);
-
             }
+
+            MpCopyItem arg_ci = ci;
             if (wasAppended) {
                 MpMessenger.SendGlobal(MpMessageType.AppendBufferChanged);
+                arg_ci = null;
             } else {
                 MpMessenger.SendGlobal(MpMessageType.ContentAdded);
-                //if (!MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
-                //    MpAvTagTrayViewModel.Instance.AllTagViewModel.LinkCopyItemCommand.Execute(ci.Id);
-                //}
                 AddNewItemsCommand.Execute(null);
-                OnCopyItemAdd?.Invoke(this, ci);
             }
+            OnCopyItemAdd?.Invoke(this, arg_ci);
         }
-
-
 
         private async Task PasteClipTileAsync(MpAvClipTileViewModel ctvm) {
             MpPortableDataObject mpdo = null;
@@ -2862,6 +2848,7 @@ namespace MonkeyPaste.Avalonia {
 
                 IsBusy = false;
             }, () => SelectedItem != null);
+
 
         public ICommand AddNewItemsCommand => new MpAsyncCommand<object>(
             async (tagDropCopyItemOnlyArg) => {
@@ -3483,9 +3470,6 @@ namespace MonkeyPaste.Avalonia {
                     analyticItemVm.OnAnalysisCompleted -= analysisCompleteHandler;
                     AllItems.FirstOrDefault(x => x.CopyItemId == selected_ciid).IsBusy = false;
 
-                    if (e == null) {
-                        return;
-                    }
                     AddUpdateOrAppendCopyItemAsync(e).FireAndForgetSafeAsync();
                 };
 

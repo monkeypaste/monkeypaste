@@ -2,7 +2,6 @@
 using Avalonia.Controls;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
-using CefNet;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
@@ -259,7 +258,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-
         private static void DetachWindowViewModelHandlers(Window w) {
             if (w.DataContext is MpIWantsTopmostWindowViewModel tmwvm) {
                 tmwvm.PropertyChanged -= TopmostWindowViewModel_PropertyChanged;
@@ -271,17 +269,17 @@ namespace MonkeyPaste.Avalonia {
 
         private static void UpdateTopmost() {
             return;
-            if (AllWindows.Any(x => x is MpIIsAnimatedWindowViewModel && (x as MpIIsAnimatedWindowViewModel).IsAnimating)) {
-                // ignore update while animating out
-                return;
-            }
+            //if (AllWindows.Any(x => x is MpIIsAnimatedWindowViewModel && (x as MpIIsAnimatedWindowViewModel).IsAnimating)) {
+            //    // ignore update while animating out
+            //    return;
+            //}
 
-            var priority_ordered_topmost_wl = AllWindows
-                .Where(x => x.WantsTopmost)
-                .OrderByDescending(x => (int)(x.DataContext as MpIWindowViewModel).WindowType);
+            //var priority_ordered_topmost_wl = AllWindows
+            //    .Where(x => x.WantsTopmost)
+            //    .OrderByDescending(x => (int)(x.DataContext as MpIWindowViewModel).WindowType);
 
-            priority_ordered_topmost_wl
-                .ForEach((x, idx) => x.Topmost = idx == 0);
+            //priority_ordered_topmost_wl
+            //    .ForEach((x, idx) => x.Topmost = idx == 0);
         }
 
 

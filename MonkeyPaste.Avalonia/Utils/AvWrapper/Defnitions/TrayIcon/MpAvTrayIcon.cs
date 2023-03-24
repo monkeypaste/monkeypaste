@@ -6,11 +6,9 @@ namespace MonkeyPaste.Avalonia {
         public MpITrayIcon TrayIcon { get; }
 
         public MpAvTrayIcon() {
-            if (OperatingSystem.IsMacOS()) {
-                TrayIcon = new MpAvMacTrayIcon();
-            } else if (OperatingSystem.IsWindows()) {
-
-            }
+#if MAC
+         TrayIcon = new MpAvMacTrayIcon();
+#endif
         }
     }
 }

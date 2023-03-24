@@ -13,6 +13,8 @@ namespace MonkeyPaste.Avalonia {
             Watcher = new MpAvMacProcessWatcher();
 #elif ANDROID
             Watcher = new MpAvAndroidProcessWatcher();
+#elif BROWSER
+            Watcher = new MpAvAndroidProcessWatcher();
 #endif
         }
     }

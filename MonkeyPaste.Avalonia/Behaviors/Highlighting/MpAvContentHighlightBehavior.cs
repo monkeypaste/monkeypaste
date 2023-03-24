@@ -48,7 +48,7 @@ namespace MonkeyPaste.Avalonia {
             if (ContentRange != null &&
                 ContentRange.Document is MpAvContentWebView wv) {
                 if (SelectedIdx < 0) {
-                    wv.ExecuteJavascript($"deactivateFindReplace_ext()");
+                    wv.SendMessage($"deactivateFindReplace_ext()");
                     return;
                 }
 
@@ -56,7 +56,7 @@ namespace MonkeyPaste.Avalonia {
                     isAbsoluteOffset = true,
                     curIdxOffset = SelectedIdx
                 };
-                wv.ExecuteJavascript($"activateFindReplace_ext('{msg.SerializeJsonObjectToBase64()}')");
+                wv.SendMessage($"activateFindReplace_ext('{msg.SerializeJsonObjectToBase64()}')");
             }
         }
         public override void ClearHighlighting() {
@@ -64,7 +64,7 @@ namespace MonkeyPaste.Avalonia {
             if (ContentRange != null &&
                 ContentRange.Document is MpAvContentWebView wv) {
 
-                wv.ExecuteJavascript($"deactivateFindReplace_ext()");
+                wv.SendMessage($"deactivateFindReplace_ext()");
                 wv.PerformLoadContentRequestAsync().FireAndForgetSafeAsync();
             }
         }

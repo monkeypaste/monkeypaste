@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls.Platform;
+﻿#if MAC
+using Avalonia.Controls.Platform;
 using MonoMac.AppKit;
 using System;
 
@@ -19,3 +20,4 @@ namespace MonkeyPaste.Common.Avalonia {
         }
     }
 }
+#endif

@@ -1,4 +1,5 @@
-﻿//using Avalonia.Media.Imaging;
+﻿#if WINDOWS
+
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 
@@ -20,3 +21,4 @@ namespace MonkeyPaste.Avalonia {
         #endregion
     }
 }
+#endif

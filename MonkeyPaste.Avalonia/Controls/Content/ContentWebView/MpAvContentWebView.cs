@@ -340,18 +340,8 @@ namespace MonkeyPaste.Avalonia {
                         new List<string>() { ctvm_fp });
                 }
 
-                bool add_tile_data = ctvm.CopyItemType != MpCopyItemType.Text || contentDataResp.isAllContent;
-                if (add_tile_data) {
-                    avdo.SetData(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT, ctvm.PublicHandle);
-                }
-                //avdo.SetData(MpPortableDataFormats.CefAsciiUrl, MpPlatformWrapper.Services.SourceRefBuilder.ToUrlAsciiBytes(ctvm.CopyItem));
-
-                List<string> uri_list = new List<string>();
-                if (avdo.TryGetData<IEnumerable<string>>(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, out var uris)) {
-                    uri_list = uris.ToList();
-                }
-                uri_list.Add(Mp.Services.SourceRefBuilder.ConvertToRefUrl(ctvm.CopyItem));
-                avdo.SetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, uri_list);
+                bool is_full_content = ctvm.CopyItemType != MpCopyItemType.Text || contentDataResp.isAllContent;
+                avdo.AddContentReferences(ctvm.CopyItem, is_full_content);
             }
 
 
@@ -1115,8 +1105,8 @@ namespace MonkeyPaste.Avalonia {
 
             IEnumerable<string> refs = null;
             if (req_mpdo != null) {
-                var other_refs = await Mp.Services.SourceRefBuilder.GatherSourceRefsAsync(req_mpdo);
-                refs = other_refs.Select(x => Mp.Services.SourceRefBuilder.ConvertToRefUrl(x));
+                var other_refs = await Mp.Services.SourceRefTools.GatherSourceRefsAsync(req_mpdo);
+                refs = other_refs.Select(x => Mp.Services.SourceRefTools.ConvertToRefUrl(x));
             }
             MpTransactionType transType = dataTransferCompleted_ntf.transferLabel.ToEnum<MpTransactionType>();
 

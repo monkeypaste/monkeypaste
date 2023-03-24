@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+    <title>Editor</title>
+
+    <script type="text/javascript">
+        //initExceptionHandler();
+        //window.onerror = function (msg, url, line, column, error) {
+
+        //    line = parseInt(line);
+        //    column = parseInt(column);
+
+        //    console.log('');
+        //    console.log('exception! ');
+        //    console.log('Msg: ' + msg);
+        //    console.log('URL: ' + url);
+        //    console.log('Line: ' + line);
+        //    console.log('');
+
+        //    let msg = {
+        //        msg: msg,
+        //        url: url,
+        //        lineNum: line,
+        //        colNum: col,
+        //        errorObjJsonStr: JSON.stringify(error)
+        //    };
+        //    let msgStr = window.btoa(unescape(encodeURIComponent(JSON.stringify(msg))));
+        //    if (typeof onException_ntf === 'function' &&
+        //        typeof notifyException === 'function') {
+        //        // output 'MpQuillExceptionMessage'
+        //        notifyException(msgStr);
+        //    } else {
+        //        console.log('exception, host not initialized');
+        //        console.table(msg);
+        //    }
+        //}
+    </script>
+    <script type="text/javascript">      
+
+        //loadEditorGlobals();
+        const HTML_CONVERTER_PARAMS = "converter=true";
+        const APPEND_NOTIFIER_PARAMS = "append_notifier=true";
+        const AUTO_TEST = "auto_test";
+
+        var UseQuill2 = true;
+        var UseBetterTable = true;
+
+        if (window.location.search.toLowerCase().endsWith(HTML_CONVERTER_PARAMS.toLowerCase())) {
+            // this is the case for converter which uses 1.3.6
+            // because it doesn't have that whitespace exclusion bug between spans
+            // it doesn't need the quill tables because it converts plain html which doesn't rely on better table
+            UseBetterTable = true;
+            UseQuill2 = true;
+        }
+
+        if (window.location.search.toLowerCase().endsWith(AUTO_TEST.toLowerCase())) {
+            window.addEventListener('load', function () {
+                init_test();
+            })
+        }
+
+    </script>
+
+    <link rel="icon" type="image/x-icon" href="images/icons/monkey.ico" />
+    <!--<link href="https://cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet">-->
+    <link href="lib/Quill/quill.snow.css" rel="stylesheet" />
+
+    <link href="lib/jquery-context-menus/dist/context-menu.min.css" rel="stylesheet" />
+
+    <!--<link href="lib/HighlightJs/github.min.css" rel="stylesheet" />-->
+    <!--<link href="lib/HighlightJs/monokai-sublime.min.css" rel="stylesheet" />-->
+
+    <script type="text/javascript">
+        //loadVariableStyles();
+        if (UseQuill2 && UseBetterTable) {
+            //document.write('<link href="lib/Quill-Better-Table/quill-better-table.css" rel="stylesheet" type="text/css" />');
+            document.write('<link href="node_modules/quill-better-table/dist/quill-better-table.css" rel="stylesheet" type="text/css" />');
+            console.log('quill-better-table.css loaded');
+            //addStyle(`${REL_EXTERNAL_ROOT_DIR}/quill-better-table/dist/quill-better-table.css`);
+        }
+    </script>
+
+    <link href="lib/katex/katex.min.css" rel="stylesheet" />
+
+    <!--<link href="lib/font-awesome/fontawesome-free-6.1.1-web/css/all.css" rel="stylesheet" />-->
+
+    <link href="src/components/main/main-style.css" rel="stylesheet" />
+    <link href="src/components/color/color-palette-style.css" rel="stylesheet" />
+    <link href="src/components/quill-wrapper/quill-style.css" rel="stylesheet" />
+    <link href="src/components/editor/editor-style.css" rel="stylesheet" />
+    <link href="src/components/dragdrop/drag-drop-style.css" rel="stylesheet" />
+
+    <link href="src/components/template/template-style.css" rel="stylesheet" />
+    <link href="src/components/template/toolbar/edit/edit-template-toolbar-style.css" rel="stylesheet" />
+    <link href="src/components/template/toolbar/paste/paste-template-toolbar-items-style.css" rel="stylesheet" />
+    <link href="src/components/template/toolbar/paste/selector/paste-toolbar-template-selector-style.css" rel="stylesheet" />
+
+    <link href="src/components/content/content-style.css" rel="stylesheet" />
+    <link href="src/components/content/content-file-list/content-file-list-style.css" rel="stylesheet" />
+    <link href="src/components/content/content-image/content-image-style.css" rel="stylesheet" />
+    <link href="src/components/annotations/annotations-style.css" rel="stylesheet" />
+    <link href="src/components/paste-toolbar/paste-toolbar-style.css" rel="stylesheet" />
+    <!--<link href="src/components/content/ext-content-source-blot/ext-content-source-blot.css" rel="stylesheet" />-->
+    <!--<link href="src/components/experiments/fade-across.css" rel="stylesheet" />-->
+
+    <link href="src/components/overlay/overlay-style.css" rel="stylesheet" />
+
+    <link href="src/components/list/list-style.css" rel="stylesheet" />
+
+    <link href="src/components/findreplace/find-replace-style.css" rel="stylesheet" />
+
+    <link href="src/components/append/append-style.css" rel="stylesheet" />
+    <link href="src/components/append/toolbar/append-toolbar-item-style.css" rel="stylesheet" />
+
+    <link href="src/components/table/table-style.css" rel="stylesheet" />
+    <link href="src/components/table/toolbar/create-table-style.css" rel="stylesheet" />
+
+    <link href="src/components/common/toolbar/common-toolbar-style.css" rel="stylesheet" />
+
+    <!-- EXTERNAL APIS -->
+
+    <script src="src/components/messages/messages_ntf.js"></script>
+    <script src="src/components/util/debug.js"></script>
+    <script type="text/javascript">
+        //loadLifeCycleHandlers();
+        document.addEventListener('DOMContentLoaded', (e) => {
+            //init_test();
+            onDomLoaded_ntf();
+        });
+
+        window.onbeforeunload = function (e) {
+            //if (!isRunningInHost()) {
+            //    return;
+            //}
+
+            //alert('Are you sure you want to leave?');
+            console.log('unload rejected');
+            e.preventDefault();
+            e.stopPropagation
+            return false;
+        };
+    </script>
+
+    <!--<script src="lib/HighlightJs/highlight.min.js"></script>-->
+    <!--<script src="lib/HighlightJs/xml.min.js"></script>-->
+
+    <!--<script src="lib/quill-delta-to-html/dist/browser/QuillDeltaToHtmlConverter.bundle.js"></script>-->
+    <script type="text/javascript">
+        //loadVariableExternalScripts();
+        if (UseQuill2) {
+            //document.write('<script src="https://cdn.quilljs.com/2.0.0-dev.4/quill.js"><\/script>');
+            //document.write('<script src="lib/Quill/quill.min.js"><\/script>');
+            document.write('<script src="node_modules/quilldev2/dist/quill.js"><\/script>');
+            console.log('quill 2.0.0-dev3 loaded');
+            //addScript(`${REL_EXTERNAL_ROOT_DIR}/quilldev2/dist/quill.js`);
+            if (UseBetterTable) {
+                //document.write('<script src="lib/Quill-Better-Table/quill-better-table.min.js"><\/script>');
+                document.write('<script src="node_modules/quill-better-table/dist/quill-better-table.js"><\/script>');
+
+                //addScript(`${REL_EXTERNAL_ROOT_DIR}/quill-better-table/dist/quill-better-table.js`);
+                console.log('quill-better-table loaded')
+            }
+        } else {
+            //document.write('<script src="https://cdn.quilljs.com/1.3.7/quill.js"><\/script>');
+            document.write('<script src="node_modules/quill/dist/quill.min.js"><\/script>');
+            console.log('quill 1.3.7 loaded');
+            //addScript(`${REL_EXTERNAL_ROOT_DIR}/quill/dist/quill.min.js`);
+        }
+    </script>
+
+    <script src="node_modules/quill-delta-to-html/dist/browser/QuillDeltaToHtmlConverter.bundle.js"></script>
+    <script src="lib/jquery/jquery.min.js"></script>
+    <script src="lib/DateFormatter/jquery.dateFormat.js"></script>
+    <script src="lib/jquery-context-menus/src/context-menu.js"></script>
+
+    <script src="lib/DynamicQuillTools/DynamicQuillTools.js"></script>
+
+    <script src="lib/katex/katex.min.js"></script>
+
+    <script src="lib/html2canvas/html2canvas.min.js"></script>
+
+    <!--<script src="lib/font-awesome/fontawesome-free-6.1.1-web/all.min.js"></script>-->
+
+
+    <script src="src/components/svg/svgloader.js"></script>
+    <script src="src/components/append/append.js"></script>
+    <script src="src/components/append/toolbar/append-toolbar-items.js"></script>
+
+    <script src="src/components/cursor/cursor.js"></script>
+
+    <script src="src/components/util/helpers.js"></script>
+    <script src="src/components/util/resize.js"></script>
+    <script src="src/components/util/math.js"></script>
+    <script src="src/components/util/graphics/polygon.js"></script>
+    <script src="src/components/util/graphics/line.js"></script>
+    <script src="src/components/util/graphics/rect.js"></script>
+    <script src="src/components/util/graphics/point.js"></script>
+    <script src="src/components/util/graphics/roundedRect.js"></script>
+    <script src="src/components/converter/converter.js"></script>
+
+    <script src="src/components/messages/messenger.js"></script>
+    <script src="src/components/messages/messages_ext.js"></script>
+    <script src="src/components/messages/messages_get.js"></script>
+
+    <script src="src/components/template/template.js"></script>
+    <script src="src/components/template/blots/templateEmbedBlot.js"></script>
+    <script src="src/components/template/toolbar/create/createTemplateToolbarItem.js"></script>
+    <script src="src/components/template/toolbar/edit/editTemplateToolbar.js"></script>
+    <script src="src/components/template/toolbar/paste/pasteTemplateToolbarItems.js"></script>
+    <script src="src/components/template/toolbar/paste/selector/pasteTemplateFocusSelector.js"></script>
+    <script src="src/components/template/toolbar/paste/pastevalue/pasteTemplateValue.js"></script>
+
+    <script src="src/components/template/types/contacts/contacts.js"></script>
+
+    <script src="src/components/color/colorpalette.js"></script>
+    <script src="src/components/color/colordata.js"></script>
+    <script src="src/components/color/color.js"></script>
+
+    <script src="src/components/content/content.js"></script>
+    <script src="src/components/content/content-text/content-text.js"></script>
+    <script src="src/components/content/content-file-list/content-file-list.js"></script>
+    <script src="src/components/content/content-image/content-image.js"></script>
+    <script src="src/components/annotations/annotations.js"></script>
+    <script src="src/components/paste-toolbar/pastetoolbar.js"></script>
+    <script src="src/components/paste-toolbar/popup/paste-button-popup.js"></script>
+    <!--<script src="src/components/content/ext-content-source-blot/ext-content-source-blot.js"></script>-->
+
+    <script src="src/components/list/list.js"></script>
+    <script src="src/components/list/bullets/checkable/checkablelist.js"></script>
+    <script src="src/components/list/bullets/ordered/orderedlist.js"></script>
+    <script src="src/components/list/bullets/disc/disclist.js"></script>
+
+    <script src="src/components/common/toolbar/commonToolbar.js"></script>
+
+    <script src="src/components/font/fontFamilyLookup.js"></script>
+    <script src="src/components/font/fontFamily.js"></script>
+    <script src="src/components/font/fontSize.js"></script>
+    <script src="src/components/font/fontcolor.js"></script>
+
+    <script src="src/components/clipboard/clipboard.js"></script>
+
+    <script src="src/components/dragdrop/drag.js"></script>
+    <script src="src/components/dragdrop/drop.js"></script>
+    <script src="src/components/dragdrop/debouncer/dragover-debouncer.js"></script>
+
+    <script src="src/components/scroll/scroll.js"></script>
+    <script src="src/components/scroll/autoscroll/autoscroll.js"></script>
+
+    <script src="src/components/datatransfer/datatransfer.js"></script>
+    <script src="src/components/datatransfer/htmlfragment.js"></script>
+
+    <script src="src/components/table/table.js"></script>
+    <script src="src/components/table/toolbar/createTableToolbarButton.js"></script>
+
+    <script src="src/components/link/link.js"></script>
+    <script src="src/components/align/align.js"></script>
+
+    <script src="src/components/overlay/overlay.js"></script>
+
+    <script src="src/components/selection/selection.js"></script>
+    <script src="src/components/selection/fancy-selection/fancy-selection.js"></script>
+
+    <script src="src/components/window/window.js"></script>
+
+    <script src="src/components/input/keyboard.js"></script>
+    <script src="src/components/input/mouse.js"></script>
+    <script src="src/components/input/input.js"></script>
+
+    <script src="src/components/quill-wrapper/quill-wrapper.js"></script>
+    <script src="src/components/quill-wrapper/toolbar/quill-toolbar.js"></script>
+    <script src="src/components/quill-wrapper/quill-tooltip/quill-tooltip-wrapper.js"></script>
+
+    <script src="src/components/findreplace/findreplace.js"></script>
+
+    <script src="src/components/delta/delta-wrapper.js"></script>
+    <script src="src/components/history/history.js"></script>
+
+    <script src="src/components/editor/editor.js"></script>
+    <script src="src/components/main/main.js"></script>
+</head>
+<body>
+    <!-- EDITOR TOOLBAR -->
+    <div id="editorToolbar" class="hidden">
+        <!-- FONT SIZE -->
+        <select class="ql-size">
+            <option value="8px" />
+            <option value="9px" />
+            <option value="10px" />
+            <option value="12px" />
+            <option value="14px" />
+            <option value="16px" />
+            <option value="20px" />
+            <option value="24px" />
+            <option value="32px" />
+            <option value="42px" />
+            <option value="54px" />
+            <option value="68px" />
+            <option value="84px" />
+            <option value="98px" />
+        </select>
+        <div class="toolbar-separator"></div>
+        <!-- FONT FAMILY -->
+        <select class="ql-font"></select>
+
+        <div class="toolbar-separator"></div>
+
+        <!-- CREATE TEMPLATE -->
+        <button id="createTemplateToolbarButton"></button>
+        <div class="toolbar-separator"></div>
+
+        <!-- FG/BG COLOR -->
+        <button id="fontColorToolbarButton"></button>
+        <button id="fontBackgroundToolbarButton"></button>
+
+        <div class="toolbar-separator"></div>
+
+        <!-- BOLD -->
+        <button class="ql-bold"></button>
+
+        <!-- ITALIC-->
+        <button class="ql-italic"></button>
+
+        <div class="toolbar-separator"></div>
+
+
+        <!-- INDENT -->
+        <button class="ql-indent" value="-1"></button>
+        <button class="ql-indent" value="+1"></button>
+
+        <div class="toolbar-separator"></div>
+
+        <!-- ALIGN -->
+        <button id="alignEditorToolbarButton"></button>
+
+        <div class="toolbar-separator"></div>
+
+        <!-- CREATE TABLE -->
+        <span id="createTableToolbarButton" class="ql-Table-Input ql-picker">
+            <span id="createTableToolbarButtonLabel" class="ql-picker-label"></span>
+            <span id="createTableToolbarButtonOptionsContainer" class="ql-picker-options hidden"></span>
+        </span>
+
+        <div class="toolbar-separator"></div>
+
+        <!-- BLOCK QUOTE-->
+        <button class="ql-blockquote hidden"></button>
+
+        <!-- CODE BLOCK -->
+        <button class="ql-code-block hidden"></button>
+
+        <div class="toolbar-separator hidden"></div>
+
+        <!-- LIST -->
+        <button id="orderedListToolbarButton" class="ql-list" value="ordered"></button>
+        <button id="discListToolbarButton" class="ql-list" value="bullet"></button>
+        <button id="checkListToolbarButton" class="ql-list" value="check"></button>
+
+
+        <div class="toolbar-separator"></div>
+
+        <!-- SUB/SUPER SCRIPT -->
+        <button class="ql-script hidden" value="sub"></button>
+        <button class="ql-script hidden" value="super"></button>
+
+
+        <div class="toolbar-separator hidden"></div>
+
+        <!-- FLOW DIRECTION -->
+        <button class="ql-direction hidden" value="rtl"></button>
+
+        <div class="toolbar-separator"></div>
+
+        <!-- LINK -->
+        <button id="linkEditorToolbarButton" class="ql-link"></button>
+        <button class="ql-image"></button>
+        <button class="ql-video"></button>
+        <!--<button class="ql-formula"></button>-->
+
+
+
+        <div class="toolbar-separator"></div>
+        <!-- FIND/REPLACE -->
+        <button id="findReplaceToolbarButton" class="right-align"></button>
+    </div>
+
+    <!-- FIND/REPLACE TOOLBAR -->
+    <div id="findReplaceToolbar" class="top-align hidden">
+        <form>
+            <label for="findInput">Find:</label>
+            <input type="text" id="findInput" name="findInput" spellcheck="false">
+
+            <input type="radio" id="isFindInput" name="findOrReplace">
+            <label for="isFindInput">Find</label>
+            <input type="radio" id="isReplaceInput" name="findOrReplace">
+            <label for="isReplaceInput">Replace</label><br>
+
+            <label for="replaceInput" id="replaceInputLabel" class="is-replace">Replace:</label>
+            <input type="text" id="replaceInput" name="replaceInput" class="is-replace"><br />
+
+            <input type="checkbox" id="matchCaseInput" name="matchCaseInput">
+            <label for="matchCaseInput"> Match Case</label><br>
+
+            <input type="checkbox" id="wholeWordInput" name="wholeWordInput">
+            <label for="wholeWordInput"> Whole Word</label><br>
+
+            <input type="checkbox" id="useRegexInput" name="useRegexInput">
+            <label for="useRegexInput"> Regular Expression</label>
+        </form>
+        <div id="findReplaceButtonContainer" class="right-align">
+            <button id="closeFindReplaceToolbarButton">X</button>
+            <button id="findReplacePreviousButton" type="button">
+                <i></i>
+            </button>
+            <button id="findReplaceNextButton" type="button">
+                <i></i>
+            </button>
+            <button id="replaceButton" type="button" class="is-replace">
+                Replace
+            </button>
+            <button id="replaceAllButton" type="button" class="is-replace">
+                Replace All
+            </button>
+        </div>
+        <div class="resizer resizer-b"></div>
+    </div>
+
+    <!-- EDITOR CONTAINER -->
+    <div id='editor' draggable="false" class="no-select"></div>
+
+    <!-- EDIT TEMPLATE TOOLBAR -->
+    <div id="editTemplateToolbar"
+         class="common-toolbar edit-template-toolbar bottom-align hidden">
+        <div class="resizer resizer-t"></div>
+        <div id="templateColorBox"></div>
+        <textarea id="templateNameTextArea"
+                  rows="1"
+                  cols="20"
+                  spellcheck="false"
+                  placeholder="Template Name"></textarea>
+        <textarea id="templateDetailTextArea"
+                  rows="1"
+                  cols="20"
+                  spellcheck="false"
+                  placeholder="Enter Details"></textarea>
+        <div class="info-marker">
+            <i class="fa-solid fa-circle-info"></i>
+            <div class="info-tooltip">
+                <ul dir="auto" class="tooltiptext">
+                    <li>yy = short year</li>
+                    <li>yyyy = long year</li>
+                    <li>M = month (1-12)</li>
+                    <li>MM = month (01-12)</li>
+                    <li>MMM = month abbreviation (Jan, Feb ... Dec)</li>
+                    <li>MMMM = long month (January, February ... December)</li>
+                    <li>d = day (1 - 31)</li>
+                    <li>dd = day (01 - 31)</li>
+                    <li>ddd = day of the week in words (Monday, Tuesday ... Sunday)</li>
+                    <li>E = short day of the week in words (Mon, Tue ... Sun)</li>
+                    <li>D - Ordinal day (1st, 2nd, 3rd, 21st, 22nd, 23rd, 31st, 4th...)</li>
+                    <li>h = hour in am/pm (0-12)</li>
+                    <li>hh = hour in am/pm (00-12)</li>
+                    <li>H = hour in day (0-23)</li>
+                    <li>HH = hour in day (00-23)</li>
+                    <li>mm = minute</li>
+                    <li>ss = second</li>
+                    <li>SSS = milliseconds</li>
+                    <li>a = AM/PM marker</li>
+                    <li>p = a.m./p.m. marker</li>
+                </ul>
+            </div>
+        </div>
+
+        <button id="editTemplateDeleteButton" class="right-align" type="button">
+            <span>DELETE</span>
+        </button>
+    </div>
+
+    <!-- PASTE TOOLBAR -->
+    <div id="pasteToolbar"
+         class="common-toolbar paste-toolbar bottom-align hidden">
+        <div class="resizer resizer-t"></div>
+        <!-- SELECTOR -->
+        <div id="pasteTemplateToolbarMenuSelectorDiv"
+             class="paste-template-item">
+            <div id="selectedPasteTemplateOptionDiv"></div>
+            <div id="pasteTemplateToolbarMenuSelectorArrowDiv"></div>
+        </div>
+        <!-- PASTE VALUE TEXT AREA-->
+        <textarea id="templatePasteValueTextArea"
+                  class="paste-template-item"
+                  rows="1"
+                  cols="20"
+                  tabindex="1"
+                  spellcheck="false"
+                  placeholder="Enter paste text..."></textarea>
+        <!-- CLEAR BUTTON -->
+        <button id="clearAllTemplateTextButton"
+                class="paste-template-item"
+                tabindex="2">
+            <i></i><span>CLEAR ALL</span>
+        </button>
+        <!-- PREV BUTTON -->
+        <button id="previousTemplateButton"
+                class="paste-template-item"
+                tabindex="3">
+            <i></i>
+        </button>
+        <!-- NEXT BUTTON -->
+        <button id="nextTemplateButton"
+                class="paste-template-item"
+                tabindex="4">
+            <i></i>
+        </button>
+        <!-- EDIT BUTTON -->
+        <button id="pasteEditFocusTemplateButton"
+                class="paste-template-item"
+                tabindex="5">
+            <i></i><span>Edit</span>
+        </button>
+        <!-- PASTE BUTTON/MODE CONTAINER -->
+        <div id="pasteButtonAndModeContainer"
+             class="right-align">
+
+            <!-- APPEND STATE CONTAINER -->
+            <div id="pasteAppendToolbarLabelContainer">
+                <!-- APPEND MANUAL LABEL -->
+                <span id="pasteAppendIsManualToolbarLabel">MANUAL</span>
+                <!-- APPEND MODE LABEL -->
+                <span id="pasteAppendToolbarLabel"></span>
+            </div>
+
+            <!-- PASTE BUTTON -->
+            <button id="pasteButton"
+                    tabindex="6">
+                <i></i><span>PASTE</span>
+            </button>
+            <div class="toolbar-separator"></div>
+
+            <!-- PASTE BUTTON POPUP -->
+            <button id="pasteButtonPopupExpander"
+                    tabindex="7">
+                <span id="pasteButtonPopupExpanderLabel"></span>
+            </button>
+        </div>
+    </div>
+
+    <!-- POP UPS -->
+
+    <div id="pasteOptionsDiv"
+         class="paste-template-item"></div>
+    <div id="colorPaletteContainer"
+         class="ql-toolbar-template-context-menu"></div>
+    <!--<div class="ql-tooltip ql-hidden"></div>-->
+    <!-- OVERLAYS -->
+    <canvas id="overlayCanvas"></canvas>
+    <div id="annotationRoiOverlay" class="no-hit-test"></div>
+    <div id="annotationTooltip" class="no-hit-test"></div>
+    <div id="dragOverlay" draggable="true"></div>
+
+</body>
+</html>

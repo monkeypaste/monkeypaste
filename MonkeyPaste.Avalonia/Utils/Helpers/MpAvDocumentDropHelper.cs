@@ -46,6 +46,21 @@ namespace MonkeyPaste.Avalonia {
             return req_mpdo;
         }
 
+        public static string ToDataFormat(this MpJsonMessageFormatType jmft) {
+            switch (jmft) {
+                case MpJsonMessageFormatType.Annotation:
+                    return MpPortableDataFormats.INTERNAL_CONTENT_ANNOTATION_FORMAT;
+                case MpJsonMessageFormatType.ParameterRequest:
+                    return MpPortableDataFormats.INTERNAL_PARAMETER_REQUEST_FORMAT;
+                case MpJsonMessageFormatType.Delta:
+                    return MpPortableDataFormats.INTERNAL_CONTENT_DELTA_FORMAT;
+                case MpJsonMessageFormatType.DataObject:
+                    return MpPortableDataFormats.INTERNAL_DATA_OBJECT_FORMAT;
+                case MpJsonMessageFormatType.Error:
+                default:
+                    return MpPortableDataFormats.Text;
+            }
+        }
         public static string ToJsDropEffects(this DragDropEffects dde) {
             if (dde.HasFlag(DragDropEffects.Copy)) {
                 return DragDropEffects.Copy.ToString().ToLower();

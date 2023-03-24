@@ -42,6 +42,9 @@ namespace MonkeyPaste.Avalonia {
                 if (OperatingSystem.IsAndroid()) {
                     return Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
                 }
+                if (OperatingSystem.IsBrowser()) {
+                    return @"/tmp";
+                }
                 return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             }
         }
@@ -137,16 +140,21 @@ namespace MonkeyPaste.Avalonia {
         private string GetExecutableExt() {
             if (OsType == MpUserDeviceType.Windows) {
                 return ".exe";
-            } else if (OsType == MpUserDeviceType.Android) {
+            }
+            if (OsType == MpUserDeviceType.Android) {
                 // NOTE this may need OsVersionInfo too
                 return ".apk";
-            } else if (OsType == MpUserDeviceType.Mac) {
+            }
+            if (OsType == MpUserDeviceType.Mac) {
                 return @"/";
-            } else if (OsType == MpUserDeviceType.Linux) {
+            }
+            if (OsType == MpUserDeviceType.Linux) {
                 // TODO this is a place OsVersionInfo will be needed
                 return @".deb";
             }
-
+            if (OsType == MpUserDeviceType.Browser) {
+                return string.Empty;
+            }
             // add
             MpDebug.Break("missing executable exit");
             return null;

@@ -78,7 +78,7 @@ namespace MonkeyPaste.Avalonia {
                 BindingContext.IsPinTrayBusy = true;
 
                 e.DragEffects = is_copy ? DragDropEffects.Copy : DragDropEffects.Move;
-                bool is_internal = e.Data.ContainsFullContentItem();
+                bool is_internal = e.Data.ContainsContentRef();
                 if (is_internal) {
                     // Internal Drop
                     await PerformTileDropAsync(drop_idx, e.Data, is_copy);
@@ -119,7 +119,7 @@ namespace MonkeyPaste.Avalonia {
             int drag_pctvm_idx = BindingContext.PinnedItems.IndexOf(drag_pctvm);
 
             bool is_drop_onto_same_idx = drop_idx == drag_pctvm_idx || drop_idx == drag_pctvm_idx + 1;
-            bool is_internal = avdo.ContainsFullContentItem();
+            bool is_internal = avdo.ContainsContentRef();
             bool is_partial_drop = !is_internal;
 
             if (!is_copy && !is_partial_drop && is_drop_onto_same_idx) {
@@ -164,7 +164,7 @@ namespace MonkeyPaste.Avalonia {
                 Mp.Services.DataObjectHelperAsync
                 .ReadDragDropDataObjectAsync(avdo) as MpPortableDataObject;
 
-            bool from_ext = !avdo.ContainsFullContentItem();
+            bool from_ext = !avdo.ContainsContentRef();
 
             var avdo_ci = await Mp.Services.CopyItemBuilder.BuildAsync(
                 pdo: mpdo,

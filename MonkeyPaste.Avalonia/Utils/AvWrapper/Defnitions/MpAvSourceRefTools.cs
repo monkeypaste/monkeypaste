@@ -1,4 +1,6 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Input;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvSourceRefBuilder : MpISourceRefBuilder {
+    public class MpAvSourceRefTools : MpISourceRefTools {
         public const string INTERNAL_SOURCE_DOMAIN = "https://localhost";
 
         public async Task<MpISourceRef> FetchOrCreateSourceAsync(string sourceUrl) {
@@ -30,22 +32,37 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
 
-            if (!sourceUrl.StartsWith(INTERNAL_SOURCE_DOMAIN.ToLower())) {
+            var ref_tuple = ParseUriForSourceRef(sourceUrl);
+
+            if (ref_tuple == null ||
+                ref_tuple.Item1 == MpTransactionSourceType.None ||
+                ref_tuple.Item2 < 1) {
                 // add or fetch external url
                 var url = await Mp.Services.UrlBuilder.CreateAsync(sourceUrl);
                 return url;
             }
-            if (!sourceUrl.Contains("?")) {
+
+            var result = await MpDataModelProvider.GetSourceRefBySourceypeAndSourceIdAsync(ref_tuple.Item1, ref_tuple.Item2);
+            return result;
+        }
+
+
+        public Tuple<MpTransactionSourceType, int> ParseUriForSourceRef(string uri) {
+            Tuple<MpTransactionSourceType, int> no_match_result = new Tuple<MpTransactionSourceType, int>(MpTransactionSourceType.None, 0);
+            if (!uri.StartsWith(INTERNAL_SOURCE_DOMAIN.ToLower())) {
+                return no_match_result;
+            }
+            if (!uri.Contains("?")) {
                 // internal url should have params, is it malformed?
                 Debugger.Break();
-                return null;
+                return no_match_result;
             }
             // convert internal source ref to ci,app or url
-            string ref_param_str = sourceUrl.SplitNoEmpty("?")[1];
+            string ref_param_str = uri.SplitNoEmpty("?")[1];
             if (string.IsNullOrWhiteSpace(ref_param_str)) {
                 // internal url should have params, is it malformed?
                 Debugger.Break();
-                return null;
+                return no_match_result;
             }
 
             var param_lookup =
@@ -58,37 +75,27 @@ namespace MonkeyPaste.Avalonia {
             if (!param_lookup.ContainsKey("type")) {
                 // whats the parameters?
                 Debugger.Break();
-                return null;
+                return no_match_result;
             }
             MpTransactionSourceType source_type = param_lookup["type"].ToEnum<MpTransactionSourceType>();
             int source_id = param_lookup.ContainsKey("id") ? int.Parse(param_lookup["id"]) : 0;
-            string ci_public_handle = param_lookup.ContainsKey("handle") ? param_lookup["handle"] : null;
 
-            if (source_id < 1 && string.IsNullOrWhiteSpace(ci_public_handle)) {
-                if (source_type == MpTransactionSourceType.UserDevice) {
+            if (source_id == 0) {
+                if (source_type == MpTransactionSourceType.CopyItem) {
+                    string ci_public_handle = param_lookup.ContainsKey("handle") ? param_lookup["handle"] : null;
+
+                    if (MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle == ci_public_handle) is MpAvClipTileViewModel ctvm) {
+                        // resolve public handle
+                        source_id = ctvm.CopyItemId;
+                    }
+                } else if (source_type == MpTransactionSourceType.UserDevice) {
                     // editor->read-only, use current userDeviceId
                     source_id = MpDefaultDataModelTools.ThisUserDeviceId;
                 } else {
-                    // missing locator
-                    Debugger.Break();
-                    return null;
+                    return no_match_result;
                 }
             }
-            if (source_type == MpTransactionSourceType.CopyItem &&
-                !string.IsNullOrWhiteSpace(ci_public_handle)) {
-                // resolve publicHandle to ciid
-
-                var ctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle.ToLower() == ci_public_handle.ToLower());
-                if (ctvm == null) {
-                    // how did it get the ref?
-                    Debugger.Break();
-                    return null;
-                }
-                source_id = ctvm.CopyItemId;
-            }
-
-            var result = await MpDataModelProvider.GetSourceRefBySourceypeAndSourceIdAsync(source_type, source_id);
-            return result;
+            return new Tuple<MpTransactionSourceType, int>(source_type, source_id);
         }
 
         public async Task<List<MpTransactionSource>> AddTransactionSourcesAsync(
@@ -110,30 +117,35 @@ namespace MonkeyPaste.Avalonia {
             return sources;
         }
 
-        public async Task<IEnumerable<MpISourceRef>> GatherSourceRefsAsync(MpPortableDataObject mpdo, bool forceExtSources = false) {
+        public async Task<IEnumerable<MpISourceRef>> GatherSourceRefsAsync(object mpOrAvDataObj, bool forceExtSources = false) {
+            MpAvDataObject avdo = null;
+            if (mpOrAvDataObj is IDataObject ido) {
+                avdo = ido.ToPlatformDataObject();
+            }
+            if (avdo == null) {
+                avdo = new MpAvDataObject();
+            }
 
             List<MpISourceRef> refs = new List<MpISourceRef>();
-            if (mpdo.TryGetData(MpPortableDataFormats.CefAsciiUrl, out byte[] urlBytes) &&
+            if (avdo.TryGetData(MpPortableDataFormats.CefAsciiUrl, out byte[] urlBytes) &&
                 urlBytes.ToDecodedString(Encoding.ASCII, true) is string urlRef &&
                 Uri.IsWellFormedUriString(urlRef, UriKind.Absolute)) {
 
-                MpISourceRef sr = await Mp.Services.SourceRefBuilder.FetchOrCreateSourceAsync(urlRef);
+                MpISourceRef sr = await Mp.Services.SourceRefTools.FetchOrCreateSourceAsync(urlRef);
                 if (sr != null) {
                     // occurs on sub-selection drop onto pintray or tag
                     refs.Add(sr);
                 }
             }
-            IEnumerable<string> uri_strings = mpdo.GetUriList();
-
-            if (uri_strings != null) {
+            if (avdo.TryGetUriList(out List<string> uri_strings)) {
                 var list_refs = await Task.WhenAll(
-                    uri_strings.Select(x => Mp.Services.SourceRefBuilder.FetchOrCreateSourceAsync(x)));
+                    uri_strings.Select(x => Mp.Services.SourceRefTools.FetchOrCreateSourceAsync(x)));
                 refs.AddRange(list_refs);
             }
 
             if (refs.Count == 0 || forceExtSources) {
                 // external ole create
-                var ext_refs = await GatherExternalSourceRefsAsync(mpdo);
+                var ext_refs = await GatherExternalSourceRefsAsync(avdo);
                 if (ext_refs != null && ext_refs.Count() > 0) {
                     // NOTE ensure ext is in front so if url is present it is written first
                     refs.InsertRange(0, ext_refs);
@@ -147,7 +159,7 @@ namespace MonkeyPaste.Avalonia {
             return refs;
         }
 
-        private async Task<IEnumerable<MpISourceRef>> GatherExternalSourceRefsAsync(MpPortableDataObject mpdo) {
+        private async Task<IEnumerable<MpISourceRef>> GatherExternalSourceRefsAsync(MpAvDataObject avdo) {
             var last_pinfo = Mp.Services.ProcessWatcher.LastProcessInfo;
 
             //if(OperatingSystem.IsLinux()) {
@@ -167,7 +179,7 @@ namespace MonkeyPaste.Avalonia {
             var app = await Mp.Services.AppBuilder.CreateAsync(last_pinfo);
 
             MpUrl url = null;
-            string source_url = MpAvHtmlClipboardData.FindSourceUrl(mpdo);
+            string source_url = MpAvHtmlClipboardData.FindSourceUrl(avdo);
             if (!string.IsNullOrWhiteSpace(source_url)) {
                 url = await Mp.Services.UrlBuilder.CreateAsync(
                     url: source_url,
@@ -184,6 +196,7 @@ namespace MonkeyPaste.Avalonia {
             }
             return ext_refs;
         }
+
 
         public bool IsAnySourceRejected(IEnumerable<MpISourceRef> refs) {
             foreach (var source_ref in refs) {

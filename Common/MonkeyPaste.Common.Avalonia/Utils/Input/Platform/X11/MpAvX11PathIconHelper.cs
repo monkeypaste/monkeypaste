@@ -1,4 +1,6 @@
-﻿using GLib;
+﻿#if LINUX
+
+using GLib;
 using Gtk;
 using System;
 using System.Runtime.InteropServices;
@@ -14,69 +16,70 @@ namespace MonkeyPaste.Common.Avalonia {
         #endregion
 
         #region Path Icon
-        /* --from handle---
-            #define WNCK_I_KNOW_THIS_IS_UNSTABLE = 1
+        
+//        --from handle---
+//#define WNCK_I_KNOW_THIS_IS_UNSTABLE = 1
 
-            #include <libwnck/libwnck.h>
+//        #include <libwnck/libwnck.h>
 
-            int main(int argc,
-             char **argv) {
-            WnckScreen *screen;
+//            int main(int argc,
+//             char **argv) {
+//            WnckScreen *screen;
 
-            gdk_init(&argc, &argv);
+//            gdk_init(&argc, &argv);
 
-            screen = wnck_screen_get_default();
+//            screen = wnck_screen_get_default();
 
-            wnck_screen_force_update(screen);
+//            wnck_screen_force_update(screen);
 
-            auto win = wnck_window_get(127926341); // 127926341 is window id, it can be get by linux cli xdotool or wmctrl or other many clis
-            GdkPixbuf *r = wnck_window_get_icon(win);
-            GError *err = NULL;
-            gdk_pixbuf_save(r, "/tmp/prpr.png", "png", &err, "quality", "100", NULL);
-            return 0;
-            }
+//            auto win = wnck_window_get(127926341); // 127926341 is window id, it can be get by linux cli xdotool or wmctrl or other many clis
+//            GdkPixbuf *r = wnck_window_get_icon(win);
+//            GError *err = NULL;
+//            gdk_pixbuf_save(r, "/tmp/prpr.png", "png", &err, "quality", "100", NULL);
+//            return 0;
+//            }
 
-            -- from file path (icon file path)
+//            -- from file path (icon file path)
 
-            import gi
-            gi.require_version('Gtk', '3.0')
-            from gi.repository import Gio as gio
-            from gi.repository import Gtk as gtk
-            import os
+//            import gi
+//            gi.require_version('Gtk', '3.0')
+//            from gi.repository import Gio as gio
+//            from gi.repository import Gtk as gtk
+//            import os
 
-            def get_icon_filename(filename,size):
-                #final_filename = "default_icon.png"
-                final_filename = ""
-                if os.path.isfile(filename):
-                    # Get the icon name
-                    file = gio.File.new_for_path(filename)
-                    file_info = file.query_info('standard::icon',0)
-                    file_icon = file_info.get_icon().get_names()[0]
-                    # Get the icon file path
-                    icon_theme = gtk.IconTheme.get_default()
-                    icon_filename = icon_theme.lookup_icon(file_icon, size, 0)
-                    if icon_filename != None:
-                        final_filename = icon_filename.get_filename()
+//            def get_icon_filename(filename,size):
+//# final_filename = "default_icon.png"
+//                final_filename = ""
+//                if os.path.isfile(filename):
+//# Get the icon name
+//                    file = gio.File.new_for_path(filename)
+//                    file_info = file.query_info('standard::icon',0)
+//                    file_icon = file_info.get_icon().get_names()[0]
+//# Get the icon file path
+//                    icon_theme = gtk.IconTheme.get_default()
+//                    icon_filename = icon_theme.lookup_icon(file_icon, size, 0)
+//                    if icon_filename != None:
+//                        final_filename = icon_filename.get_filename()
 
-                return final_filename
+//                return final_filename
 
 
-            print(get_icon_filename("/home/newtron/Desktop/counter.desktop",48))\
+//            print(get_icon_filename("/home/newtron/Desktop/counter.desktop",48))\
             
 
-            c++
+//            c++
 
-            Glib::RefPtr<Gdk::Pixbuf> Info::getPixbuf(File *f) {
-            //File is a custom class
-            static Glib::RefPtr<Gtk::IconTheme> iconTheme = Gtk::IconTheme::get_default();
-            Glib::ustring sPath = Glib::build_filename(f->getDirPath(), f->getName());
-            Glib::RefPtr<Gio::File> gioFile = Gio::File::create_for_path(sPath);
-            Glib::RefPtr<Gio::FileInfo> info = gioFile->query_info();
-            Glib::RefPtr<Gio::Icon> icon = info->get_icon();
-            //getIconSize() a custom function returning the desired size
-            Gtk::IconInfo iconInfo = iconTheme->lookup_icon(icon, getIconSize(), Gtk::ICON_LOOKUP_USE_BUILTIN);
-            return iconInfo.load_icon();
-        */
+//            Glib::RefPtr<Gdk::Pixbuf> Info::getPixbuf(File *f) {
+//            //File is a custom class
+//            static Glib::RefPtr<Gtk::IconTheme> iconTheme = Gtk::IconTheme::get_default();
+//            Glib::ustring sPath = Glib::build_filename(f->getDirPath(), f->getName());
+//            Glib::RefPtr<Gio::File> gioFile = Gio::File::create_for_path(sPath);
+//            Glib::RefPtr<Gio::FileInfo> info = gioFile->query_info();
+//            Glib::RefPtr<Gio::Icon> icon = info->get_icon();
+//            //getIconSize() a custom function returning the desired size
+//            Gtk::IconInfo iconInfo = iconTheme->lookup_icon(icon, getIconSize(), Gtk::ICON_LOOKUP_USE_BUILTIN);
+//            return iconInfo.load_icon();
+        
 
         public static string GetIconBase64FromX11Path(string path, string pathType, int iconSize = 48) {
             //return null;
@@ -186,3 +189,4 @@ namespace MonkeyPaste.Common.Avalonia {
         #endregion
     }
 }
+#endif
