@@ -135,6 +135,20 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public virtual string EditorPath {
+            get {
+                // TODO need to alter this path in production
+                if (IsDesktop) {
+                    string solution_path = MpCommonHelpers.GetSolutionDir();
+                    return Path.Combine(solution_path, "MonkeyPaste.Avalonia.Web", "AppBundle", "Editor", "index.html");
+                }
+                if (OsType == MpUserDeviceType.Browser) {
+                    return Path.Combine("Editor", "index.html");
+                }
+                return Path.Combine(StorageDir, "Editor", "index.html");
+            }
+        }
+
         #region Private Methods
 
         private string GetExecutableExt() {

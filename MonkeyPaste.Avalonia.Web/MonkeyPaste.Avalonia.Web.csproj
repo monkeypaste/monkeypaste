@@ -12,7 +12,88 @@
 
   <ItemGroup>
     <WasmExtraFilesToDeploy Include="AppBundle\**" />
-    <WasmExtraFilesToDeploy Include="$(EditorDir)\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaXaml Remove="AppBundle\Editor\lib\DateFormatter\**" />
+    <AvaloniaXaml Remove="AppBundle\Editor\lib\DynamicQuillTools\**" />
+    <AvaloniaXaml Remove="AppBundle\Editor\lib\font-awesome\**" />
+    <AvaloniaXaml Remove="AppBundle\Editor\lib\HighlightJs\**" />
+    <AvaloniaXaml Remove="AppBundle\Editor\lib\html2canvas\**" />
+    <AvaloniaXaml Remove="AppBundle\Editor\lib\jquery-context-menus\**" />
+    <AvaloniaXaml Remove="AppBundle\Editor\lib\jquery\**" />
+    <AvaloniaXaml Remove="AppBundle\Editor\lib\katex\**" />
+    <AvaloniaXaml Remove="AppBundle\Editor\lib\Quill-Better-Table\**" />
+    <AvaloniaXaml Remove="AppBundle\Editor\lib\Quill-Html-Edit-Button\**" />
+    <AvaloniaXaml Remove="AppBundle\Editor\lib\Quill\**" />
+    <AvaloniaXaml Remove="AppBundle\Editor\node_modules\**" />
+    <AvaloniaXaml Remove="AppBundle\Editor\src\components\svg\assets\**" />
+    <AvaloniaXaml Remove="AppBundle\Editor\src\components\template\blots\1.0\**" />
+    <AvaloniaXaml Remove="AppBundle\Editor\src\components\template\blots\2.0\**" />
+    <Compile Remove="AppBundle\Editor\lib\DateFormatter\**" />
+    <Compile Remove="AppBundle\Editor\lib\DynamicQuillTools\**" />
+    <Compile Remove="AppBundle\Editor\lib\font-awesome\**" />
+    <Compile Remove="AppBundle\Editor\lib\HighlightJs\**" />
+    <Compile Remove="AppBundle\Editor\lib\html2canvas\**" />
+    <Compile Remove="AppBundle\Editor\lib\jquery-context-menus\**" />
+    <Compile Remove="AppBundle\Editor\lib\jquery\**" />
+    <Compile Remove="AppBundle\Editor\lib\katex\**" />
+    <Compile Remove="AppBundle\Editor\lib\Quill-Better-Table\**" />
+    <Compile Remove="AppBundle\Editor\lib\Quill-Html-Edit-Button\**" />
+    <Compile Remove="AppBundle\Editor\lib\Quill\**" />
+    <Compile Remove="AppBundle\Editor\node_modules\**" />
+    <Compile Remove="AppBundle\Editor\src\components\svg\assets\**" />
+    <Compile Remove="AppBundle\Editor\src\components\template\blots\1.0\**" />
+    <Compile Remove="AppBundle\Editor\src\components\template\blots\2.0\**" />
+    <EmbeddedResource Remove="AppBundle\Editor\lib\DateFormatter\**" />
+    <EmbeddedResource Remove="AppBundle\Editor\lib\DynamicQuillTools\**" />
+    <EmbeddedResource Remove="AppBundle\Editor\lib\font-awesome\**" />
+    <EmbeddedResource Remove="AppBundle\Editor\lib\HighlightJs\**" />
+    <EmbeddedResource Remove="AppBundle\Editor\lib\html2canvas\**" />
+    <EmbeddedResource Remove="AppBundle\Editor\lib\jquery-context-menus\**" />
+    <EmbeddedResource Remove="AppBundle\Editor\lib\jquery\**" />
+    <EmbeddedResource Remove="AppBundle\Editor\lib\katex\**" />
+    <EmbeddedResource Remove="AppBundle\Editor\lib\Quill-Better-Table\**" />
+    <EmbeddedResource Remove="AppBundle\Editor\lib\Quill-Html-Edit-Button\**" />
+    <EmbeddedResource Remove="AppBundle\Editor\lib\Quill\**" />
+    <EmbeddedResource Remove="AppBundle\Editor\node_modules\**" />
+    <EmbeddedResource Remove="AppBundle\Editor\src\components\svg\assets\**" />
+    <EmbeddedResource Remove="AppBundle\Editor\src\components\template\blots\1.0\**" />
+    <EmbeddedResource Remove="AppBundle\Editor\src\components\template\blots\2.0\**" />
+    <None Remove="AppBundle\Editor\lib\DateFormatter\**" />
+    <None Remove="AppBundle\Editor\lib\DynamicQuillTools\**" />
+    <None Remove="AppBundle\Editor\lib\font-awesome\**" />
+    <None Remove="AppBundle\Editor\lib\HighlightJs\**" />
+    <None Remove="AppBundle\Editor\lib\html2canvas\**" />
+    <None Remove="AppBundle\Editor\lib\jquery-context-menus\**" />
+    <None Remove="AppBundle\Editor\lib\jquery\**" />
+    <None Remove="AppBundle\Editor\lib\katex\**" />
+    <None Remove="AppBundle\Editor\lib\Quill-Better-Table\**" />
+    <None Remove="AppBundle\Editor\lib\Quill-Html-Edit-Button\**" />
+    <None Remove="AppBundle\Editor\lib\Quill\**" />
+    <None Remove="AppBundle\Editor\node_modules\**" />
+    <None Remove="AppBundle\Editor\src\components\svg\assets\**" />
+    <None Remove="AppBundle\Editor\src\components\template\blots\1.0\**" />
+    <None Remove="AppBundle\Editor\src\components\template\blots\2.0\**" />
+    <WasmExtraFilesToDeploy Remove="AppBundle\Editor\lib\DateFormatter\**" />
+    <WasmExtraFilesToDeploy Remove="AppBundle\Editor\lib\DynamicQuillTools\**" />
+    <WasmExtraFilesToDeploy Remove="AppBundle\Editor\lib\font-awesome\**" />
+    <WasmExtraFilesToDeploy Remove="AppBundle\Editor\lib\HighlightJs\**" />
+    <WasmExtraFilesToDeploy Remove="AppBundle\Editor\lib\html2canvas\**" />
+    <WasmExtraFilesToDeploy Remove="AppBundle\Editor\lib\jquery-context-menus\**" />
+    <WasmExtraFilesToDeploy Remove="AppBundle\Editor\lib\jquery\**" />
+    <WasmExtraFilesToDeploy Remove="AppBundle\Editor\lib\katex\**" />
+    <WasmExtraFilesToDeploy Remove="AppBundle\Editor\lib\Quill-Better-Table\**" />
+    <WasmExtraFilesToDeploy Remove="AppBundle\Editor\lib\Quill-Html-Edit-Button\**" />
+    <WasmExtraFilesToDeploy Remove="AppBundle\Editor\lib\Quill\**" />
+    <WasmExtraFilesToDeploy Remove="AppBundle\Editor\node_modules\**" />
+    <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\svg\assets\**" />
+    <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\template\blots\1.0\**" />
+    <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\template\blots\2.0\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\messages\messages_ext_ntf.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,6 +112,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="AppBundle\Editor\images\svg\" />
+    <Folder Include="AppBundle\Editor\lib\" />
     <Folder Include="Util\Extensions\" />
     <Folder Include="Util\Helpers\" />
     <Folder Include="Util\System\AvBrWrapper\" />

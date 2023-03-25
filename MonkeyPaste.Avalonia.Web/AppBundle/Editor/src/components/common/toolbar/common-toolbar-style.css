@@ -1,0 +1,77 @@
+﻿#editorToolbar {
+    background-color: var(--editortoolbarbgcolor);
+    border-color: var(--editortoolbarsepbgcolor);
+}
+
+.toolbar-separator {
+    width: 1px;
+    height: 25px;
+    background-color: var(--editortoolbarsepbgcolor);
+    display: inline-block;
+    float: left;
+}
+
+.common-toolbar {
+    display: flex;
+    flex-wrap: nowrap;
+    min-height: 40px;
+    bottom: 0;
+    width: 100%;
+    box-sizing: border-box;
+    align-items: center;
+    flex-grow: 1;
+    /*transition: 1s;*/
+    border: solid black;
+    border-width: 0.5px 0 0 0;
+}
+
+    .common-toolbar > div,
+    .common-toolbar > textarea,
+    .common-toolbar > button {
+        display: inline-flex;
+    }
+
+
+input[type=button] {
+    border-width: 0;
+}
+/* Resizer */
+
+.resizer {
+    /* All resizers are positioned absolutely inside the element */
+    position: absolute;
+}
+
+/* Placed at the top side */
+.resizer-t {
+    top: 0;
+    cursor: row-resize;
+    height: 5px;
+    left: 0;
+    width: 100%;
+}
+
+.resizer-b {
+    bottom: 0;
+    cursor: row-resize;
+    height: 5px;
+    left: 0;
+    width: 100%;
+}
+
+.resize-x-handle-flip {
+    transform: rotateX(180deg);
+    resize: horizontal;
+    overflow: auto;
+    width: 200px;
+    background: lightcyan;
+}
+
+.x-text-flip-back {
+    transform: rotateX(180deg);
+}
+.vertical-scroll {
+    min-height: 20px;
+    resize: vertical;
+    overflow: auto;
+}

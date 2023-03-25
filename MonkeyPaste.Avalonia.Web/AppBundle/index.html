@@ -11,6 +11,25 @@
     <link rel="modulepreload" href="./avalonia.js" />
     <link rel="stylesheet" href="./app.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <script type="text/javascript">
+
+        function getEditorIframeElementByHostGuid(hostGuid) {
+            return document.getElementById(hostGuid);
+        }
+
+        function sendMessage(hostGuid,msg) {
+            if (!msg) {
+                return;
+            }
+            let editor_elm = getEditorIframeElementByHostGuid(hostGuid);
+            if (!editor_elm) {
+                return;
+            }
+            editor_elm.contentWindow.postMessage(msg);
+            console.log('msg to editor: '+msg)
+        }
+
+    </script>
 </head>
 
 <body style="margin: 0px; overflow: hidden">

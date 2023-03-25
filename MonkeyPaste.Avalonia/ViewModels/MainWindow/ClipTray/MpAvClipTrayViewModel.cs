@@ -78,14 +78,21 @@ namespace MonkeyPaste.Avalonia {
                 //if(OperatingSystem.IsLinux()) {
 
                 //}
+                //                string uri;
+
+                //#if DESKTOP
+
+                //uri = MpAvCefNetApplication.GetEditorPath().ToFileSystemUriFromPath();
+                //#else
+                //                uri = System.IO.Path.Combine(Mp.Services.PlatformInfo.StorageDir, "MonkeyPaste.Editor", "index.html").ToFileSystemUriFromPath();
+                //#endif
+                //                return uri;
                 string uri;
-
-#if DESKTOP
-
-                uri = MpAvCefNetApplication.GetEditorPath().ToFileSystemUriFromPath();
-#else
-                uri = System.IO.Path.Combine(Mp.Services.PlatformInfo.StorageDir, "MonkeyPaste.Editor", "index.html").ToFileSystemUriFromPath();
-#endif
+                if (OperatingSystem.IsBrowser()) {
+                    uri = Mp.Services.PlatformInfo.EditorPath;
+                } else {
+                    uri = Mp.Services.PlatformInfo.EditorPath.ToFileSystemUriFromPath();
+                }
                 return uri;
             }
         }

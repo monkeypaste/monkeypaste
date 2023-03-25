@@ -1,0 +1,18 @@
+﻿.ql-content-embed-blot {
+    display: inline-flex;
+    text-decoration: none;
+    border-radius: 3px;
+    transition: .4s;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.ql-content-embed-blot:hover {
+    padding: 3px;
+    transition: .4s;
+    background-color: cyan;
+}
+
+a {
+    user-select: auto;
+}

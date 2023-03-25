@@ -18,35 +18,24 @@ namespace MonkeyPaste.Avalonia.Web {
 
         #region MpAvINativeControlBuilder Implementation
         public IPlatformHandle Build(IPlatformHandle parent, Func<IPlatformHandle> createDefault, MpIWebViewHost host) {
-            //var parentContext = (parent as AndroidViewControlHandle)?.View.Context
-            //    ?? global::Android.App.Application.Context;
-
-            //var webView = new MpAvAdWebView(parentContext, host);
-
-            //return new MpAvAdAndroidViewControlHandle(webView);
-
-
-
-
             var iframe = EmbedInterop.CreateElement("iframe");
-            //iframe.SetProperty("src", "https://www.youtube.com/embed/kZCIporjJ70");
-            iframe.SetProperty("src", "editor_index.html?auto_test");
+            iframe.SetProperty("id", host.HostGuid);
+            iframe.SetProperty("class", "editor-iframe");
+            iframe.SetProperty("src", "Editor/index.html?auto_test");
             iframe.SetProperty("crossorigin", true);
             iframe.SetProperty("credentialless", true);
 
             return new JSObjectControlHandle(iframe);
-            //return null;
         }
         #endregion
 
         #region MpAvIWebViewInterop Implementation
 
         public void SendMessage(MpAvIPlatformHandleHost nwvh, string msg) {
-            //if (nwvh.PlatformHandle is AndroidViewControlHandle avch &&
-            //    avch.View is WebView wv) {
-            //    wv.EvaluateJavascript(msg, null);
-            //    return;
-            //}
+            if (nwvh is MpIWebViewHost wvh) {
+                EmbedInterop.SendMessage(wvh.HostGuid, msg);
+                return;
+            }
             //MpDebug.Break("look at props to find web view");
             // EmbedInterop.
         }
@@ -79,12 +68,11 @@ namespace MonkeyPaste.Avalonia.Web {
             return string.Empty;
         }
 
-        public static void ReceiveMessage(string bindingName, string msg) {
+
+        public void ReceiveMessage(string bindingName, string msg) {
+
             MpConsole.WriteLine($"Received '{bindingName}' w/ data: '{msg}'");
         }
-
-        void MpAvIWebViewInterop.ReceiveMessage(string bindingName, string msg) { }//=>
-                                                                                   //MpAvAdWebViewBuilder.ReceiveMessage(bindingName, msg);
 
         public void Bind(MpIWebViewBindable handler) {
             //if (handler is MpAvIPlatformHandleHost phh &&
@@ -117,7 +105,8 @@ namespace MonkeyPaste.Avalonia.Web {
         [JSImport("globalThis.document.createElement")]
         public static partial JSObject CreateElement(string tagName);
 
-        [JSImport("addAppButton", "embed.js")]
-        public static partial void AddAppButton(JSObject parentObject);
+
+        [JSImport("globalThis.sendMessage")]
+        public static partial JSObject SendMessage(string hostGuid, string msg);
     }
 }

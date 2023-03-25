@@ -48,7 +48,7 @@ namespace MonkeyPaste {
 
     }
 
-    public class MpQuillContentDataRequestMessage : MpJsonObject {
+    public class MpQuillContentDataObjectRequestMessage : MpJsonObject {
         public List<string> formats { get; set; }
 
         public bool forOle { get; set; }
@@ -235,7 +235,7 @@ namespace MonkeyPaste {
         public string format { get; set; }
         public string data { get; set; }
     }
-    public class MpQuillContentDataResponseMessage : MpJsonObject {
+    public class MpQuillContentDataObjectResponseMessage : MpJsonObject {
         public List<MpQuillHostDataItemFragment> dataItems { get; set; }
         public bool isAllContent { get; set; }
         public bool isNoneSelected { get; set; }

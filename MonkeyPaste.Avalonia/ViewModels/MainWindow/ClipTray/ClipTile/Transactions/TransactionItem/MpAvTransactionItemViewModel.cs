@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Threading;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
@@ -125,6 +126,13 @@ namespace MonkeyPaste.Avalonia {
                 return Parent.Parent.CopyItemId;
             }
         }
+
+        public bool IsAppliableTransaction =>
+            TransactionType == MpTransactionType.Analyzed;
+
+        public bool HasTransactionBeenApplied =>
+            !IsAppliableTransaction || AppliedDateTime.HasValue;
+
         #endregion
 
         #region Model
@@ -189,6 +197,22 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
+        public DateTime? AppliedDateTime {
+            get {
+                if (Transaction == null) {
+                    return null;
+                }
+                return Transaction.AppliedDateTime;
+            }
+            set {
+                if (AppliedDateTime != value) {
+                    Transaction.AppliedDateTime = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(AppliedDateTime));
+                }
+            }
+        }
+
         public DateTime TransactionDateTime {
             get {
                 if (Transaction == null) {
@@ -214,7 +238,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvTransactionItemViewModel(MpAvClipTileTransactionCollectionViewModel parent) : base(parent) { }
+        public MpAvTransactionItemViewModel(MpAvClipTileTransactionCollectionViewModel parent) : base(parent) {
+            PropertyChanged += MpAvTransactionItemViewModel_PropertyChanged;
+        }
+
 
         #endregion
 
@@ -276,6 +303,21 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
+        private void MpAvTransactionItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(HasModelChanged):
+                    if (!HasModelChanged) {
+                        break;
+                    }
+                    Dispatcher.UIThread.Post(async () => {
+                        IsBusy = true;
+                        await Transaction.WriteToDatabaseAsync();
+                        IsBusy = false;
+                        HasModelChanged = false;
+                    });
+                    break;
+            }
+        }
 
         public async Task<MpAvTransactionSourceViewModelBase> CreateSourceViewModelAsync(MpTransactionSource ts) {
             MpAvTransactionSourceViewModelBase tsvm = null;

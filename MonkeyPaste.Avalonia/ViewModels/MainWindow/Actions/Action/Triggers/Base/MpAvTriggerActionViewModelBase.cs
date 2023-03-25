@@ -15,6 +15,7 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
 
         private bool _isShowEnabledChangedNotification = false;
+        private bool _isRuntimeEnabled = false;
 
         #endregion
 
@@ -292,7 +293,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 EnableOrDisableTrigger(true);
             }, () => {
-                return IsEnabled.IsFalse();
+                return IsEnabled.IsFalse() || (Parent != null && Parent.IsRestoringEnabled && IsEnabled.IsTrue());
             });
 
         public ICommand DisableTriggerCommand => new MpAsyncCommand(

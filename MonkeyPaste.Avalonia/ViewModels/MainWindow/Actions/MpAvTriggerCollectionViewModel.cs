@@ -287,6 +287,8 @@ namespace MonkeyPaste.Avalonia {
                 return Items.Any(x => x.IsAnyBusy);
             }
         }
+
+        public bool IsRestoringEnabled { get; private set; } = false;
         #endregion
 
         #endregion
@@ -369,6 +371,8 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task RestoreAllEnabled() {
             // NOTE this is only called on init and needs to wait for dependant vm's to load so wait here
+            IsRestoringEnabled = true;
+
             var enabled_triggers =
             Items
             .Where(x => x is MpAvTriggerActionViewModelBase)
@@ -381,6 +385,7 @@ namespace MonkeyPaste.Avalonia {
             while (Items.Any(x => x.IsAnyBusy)) {
                 await Task.Delay(100);
             }
+            IsRestoringEnabled = false;
         }
 
         public string GetUniqueTriggerName(string given_name) {

@@ -1,0 +1,15 @@
+﻿.create-table-item {
+    background-color: silver !important;
+    width: 15px;
+    height: 15px;
+    transition: 0.4s;
+}
+
+.create-table-item-included {
+    background-color: lightblue !important;
+}
+
+#createTableToolbarButtonOptionsContainer {
+    max-width: 170px;
+    max-height: 170px !important;
+}

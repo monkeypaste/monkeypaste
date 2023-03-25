@@ -20,7 +20,7 @@ namespace MonkeyPaste.Common {
         Is_NOT_Number,
         StartsWithWindowsStyleDirectory,
         ContainsInvalidFileNameChar,
-        EncodedHtmlEntity
+        HexEncodedHtmlEntity
         // HtmlTag
     }
 
@@ -44,10 +44,12 @@ namespace MonkeyPaste.Common {
             string.Empty,
             
             //File or folder path
-            @"^(?:[\w]\:|\\)(\\[a-zA-Z_\-\s0-9\.()~!@#$%^&=+';,{}\[\]]+)+(\.("+KnownFileExtensions+@")|(\\|\w))$",
+            "(?:\\/|[a-zA-Z]:\\\\)(?:[\\w\\-]+(?:\\/|\\\\))*[\\w\\-]+(?:\\.[\\w]+)?",
+            //@"^(?:[\w]\:|\\)(\\[a-zA-Z_\-\s0-9\.()~!@#$%^&=+';,{}\[\]]+)+(\.("+KnownFileExtensions+@")|(\\|\w))$",
             
             //WebLink ( NOTE for '"https://url.com"' this includes the last '"' in the match )
-            @"(https?://|www|https?://www).\S+", 
+            @"(https?://|www|https?://www|file://).\S+",
+            //@"(https?://|www|https?://www).\S+", 
             //@"[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)",
             
             //Email
@@ -63,8 +65,8 @@ namespace MonkeyPaste.Common {
             @"#([0-9]|[a-fA-F]){8}|#([0-9]|[a-fA-F]){6}",
             
             //StreetAddress
-            @"\d+[ ](?:[A-Za-z0-9.-]+[ ]?)+(?:Avenue|Lane|Road|Boulevard|Drive|Street|Ave|Dr|Rd|Blvd|Ln|St)\.?,\s(?:[A-Z][a-z.-]+[ ]?)+ \b\d{5}(?:-\d{4})?\b",                
-            
+            @"\d+\s+((\w+\.?\s+)*\w+)?\s*(street|st|avenue|ave|road|rd|boulevard|blvd|way|drive|dr|court|ct|circle|cir|lane|ln|place|plaza|pl)\.?\s+(north|n|south|s|east|e|west|w)?\s*,?\s*(suite|ste|apartment|apt)?\.?\s*[a-zA-Z0-9\s]+\s*,?\s*[a-zA-Z]{2}\s+\d{5}(-\d{4})?",
+            //@"\d+[ ](?:[A-Za-z0-9.-]+[ ]?)+(?:Avenue|Lane|Road|Boulevard|Drive|Street|Ave|Dr|Rd|Blvd|Ln|St)\.?,\s(?:[A-Z][a-z.-]+[ ]?)+ \b\d{5}(?:-\d{4})?\b",
             //Guid
             @"[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}",
             
@@ -89,7 +91,8 @@ namespace MonkeyPaste.Common {
             @"["+Regex.Escape(InvalidFileNameChars)+"]",
 
             //EncodedHtmlEntity
-            @"&#?[a-zA-Z0-9]*;"
+            @"&(#)?([a-zA-Z0-9]*);"
+            //@"&#?[a-zA-Z0-9]*;"
         };
 
         private static Dictionary<MpRegExType, Regex> _regExLookup;

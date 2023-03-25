@@ -1,0 +1,95 @@
+
+.template-blot {
+    display: inline;
+    text-decoration: none;
+    border-radius: 8px;
+    cursor: pointer;
+    z-index: 0;
+    padding-left: 3px;
+    padding-right: 3px;
+    border: 2px solid transparent;
+}
+
+    .template-blot:hover > span {
+        color: var(--hovercolor) !important;
+    }
+
+    .template-blot:hover {
+        border-color: var(--pastetoolbarbuttoncolor);
+    }
+
+/*
+    Template Display Value Color States
+    - def_fg_color: contrast_bg_color
+
+    1. No-Select : transparent
+    2. Sub-Select, Editor focused, not selector item: def_fg_color
+    3. Sub-Select, Editor focused, not at insert: def_fg_color
+    4. Sub-Select, Editor focused, any at insert: insertselectcolor
+    5. Sub-Select, Paste Toolbar focused template: selectedcolor
+    6. Sub-Select, Edit Toolbar focused template: focuscolor
+    7. Sub-Select, any hover not delete hover: hovercolor
+    8. Sub-Select, any delete hover: focuscolor
+
+*/
+#editor.no-select .template-blot {
+    /*color:*/ 
+}
+
+#editor:not(.no-select) .ql-editor.focused .template-blot.template-blot-at-insert > span {
+    color: var(--focuscolor) !important;
+}
+#editor:not(.no-select) .ql-editor .template-blot.focused > span {
+    color: var(--selectedcolor) !important;
+}
+
+#editor:not(.no-select) .template-blot:hover {
+    color: var(--hovercolor) !important;
+}
+
+/*#editor:not(.no-select) .template-blot-at-insert > span {
+    color: var(--insertselectcolor) !important;
+}*/
+
+.delete-template-button {
+    padding: 1px;
+    margin-left: 10px;
+    cursor: pointer;
+    width: 10px !important;
+    height: 10px !important;
+}
+
+    
+    .delete-template-button:hover .ql-fill {
+        fill: red !important;
+    }
+
+
+.template-blot-selected-overlay {
+    background-image: linear-gradient(0deg, var(--selbgcolor), var(--selbgcolor));
+}
+
+.template-blot .svg-icon {
+    width: 10px !important;
+    height: 10px !important;
+    margin-left: 1px;
+    padding: 1px;
+}
+
+.template-label {
+    margin: 0 10px 0 5px;
+}
+
+.template-blot-sub-selected {
+}
+
+.template-blot-display-key-down {
+    display: inline-flex;
+    transform: scale(1.1);
+}
+
+.template-blot-display-key-up {
+    display: inline;
+    transform: scale(1);
+}
+

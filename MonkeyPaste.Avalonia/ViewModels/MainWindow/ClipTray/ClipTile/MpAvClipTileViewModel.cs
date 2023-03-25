@@ -1819,8 +1819,10 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand EnableSubSelectionCommand => new MpCommand(
             () => {
-                IsSubSelectionEnabled = !IsSubSelectionEnabled;
-            }, () => IsContentReadOnly);
+                IsSubSelectionEnabled = true;
+            }, () => {
+                return !IsSubSelectionEnabled;
+            });
 
         public ICommand ChangeColorCommand => new MpCommand<string>(
             (b) => {

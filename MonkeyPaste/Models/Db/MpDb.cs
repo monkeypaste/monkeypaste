@@ -640,7 +640,7 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
         }
 
         private static async Task InitDefaultQueryTagsAsync() {
-            // NOTE seperate so it can be reset
+            // NOTE seperate from tags so it can be reset
 
             #region Recent
 

@@ -4,7 +4,10 @@ using System;
 namespace MonkeyPaste.Common {
     public static class MpRichHtmlToPlainTextConverter {
         public static string Convert(string html, string envNewLine = null) {
-            string pt = FormatLineBreaks(html, envNewLine).DecodeSpecialHtmlEntities();
+            string pt = FormatLineBreaks(html, envNewLine)
+                .DecodeSpecialHtmlEntities();
+            pt = pt
+                .DecodeHtmlHexCharacters();
             return pt;
         }
 

@@ -160,6 +160,10 @@ namespace MonkeyPaste.Avalonia {
             while (Transactions.Any(x => x.IsAnyBusy)) {
                 await Task.Delay(100);
             }
+
+            var trans_to_apply = Transactions.Where(x => !x.HasTransactionBeenApplied);
+            await Task.WhenAll(trans_to_apply.Select(x => ApplyTransactionAsync(x)));
+
             OnPropertyChanged(nameof(Transactions));
             OnPropertyChanged(nameof(PrimaryItem));
             OnPropertyChanged(nameof(SortedMessages));
@@ -175,14 +179,7 @@ namespace MonkeyPaste.Avalonia {
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
             if (e is MpCopyItemTransaction cit && cit.CopyItemId == CopyItemId) {
                 Dispatcher.UIThread.Post(async () => {
-
                     var cisvm = await CreateClipTileSourceViewModel(cit);
-                    if (cit.TransactionType == MpTransactionType.Edited) {
-                        // since source is editor content doesn't need up 
-                        // TODO this should only be temporary, need a better way to 
-                        // react/interpret transactions
-                        return;
-                    }
                     while (cisvm.IsAnyBusy) {
                         await Task.Delay(100);
                     }
@@ -191,7 +188,7 @@ namespace MonkeyPaste.Avalonia {
                         Parent.DoShake = true;
                     }
 
-                    ApplyTransaction(cisvm);
+                    ApplyTransactionAsync(cisvm).FireAndForgetSafeAsync(this);
 
                     //OpenTransactionPaneCommand.Execute(null);
                     //SelectedTransaction = cisvm;
@@ -232,12 +229,12 @@ namespace MonkeyPaste.Avalonia {
                     Parent.OnPropertyChanged(nameof(Parent.IconResourceObj));
                     break;
                 case nameof(SelectedTransaction):
-                    ApplyTransaction(SelectedTransaction);
+                    ApplyTransactionAsync(SelectedTransaction).FireAndForgetSafeAsync(this);
                     break;
             }
         }
 
-        private void ApplyTransaction(MpAvTransactionItemViewModel tivm) {
+        private async Task ApplyTransactionAsync(MpAvTransactionItemViewModel tivm) {
             //if (tivm == null ||
             //    tivm.TransactionType == MpTransactionType.Pasted ||
             //    tivm.TransactionType == MpTransactionType.Edited ||
@@ -245,6 +242,10 @@ namespace MonkeyPaste.Avalonia {
             //    tivm.TransactionType == MpTransactionType.Created) {
             //    return;
             //}
+            if (tivm.HasTransactionBeenApplied) {
+                MpDebug.Break("transaction already applied, why again? (rolling back not built yet)");
+                return;
+            }
             if (Transactions.All(x => x.TransactionId != tivm.TransactionId)) {
                 Transactions.Add(tivm);
             }
@@ -258,7 +259,11 @@ namespace MonkeyPaste.Avalonia {
                 if (updateObj == null) {
                     return;
                 }
-                cv.UpdateContentAsync(updateObj).FireAndForgetSafeAsync(this);
+                bool success = await cv.UpdateContentAsync(updateObj);
+                if (success) {
+                    tivm.AppliedDateTime = DateTime.Now;
+
+                }
             }
         }
 

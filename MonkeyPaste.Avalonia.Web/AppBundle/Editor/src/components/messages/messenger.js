@@ -1,0 +1,95 @@
+// #region Globals
+
+const DOT_NET_MSG_METHOD_NAME = "ReceiveMessage";
+
+// #endregion Globals
+
+// #region Life Cycle
+
+// #endregion Life Cycle
+
+// #region Getters
+
+function getDotNetModuleName() {
+	if (EnvName == AndroidEnv) {
+		return "MonkeyPaste.Avalonia.Android";
+	}
+	onShowDebugger_ntf("unknown env", true);
+}
+
+// #endregion Getters
+
+// #region Setters
+
+// #endregion Setters
+
+// #region State
+
+function isRunningOnHost() {
+	return isRunningOnCef() || isRunningOnXam();
+}
+
+function isRunningOnCef() {
+	return typeof window['notifyLoadComplete'] === 'function';
+}
+
+function isRunningOnXam() {
+	return typeof window['CSharp'] === 'object';
+}
+
+function isRunningInIframe() {
+	return window.parent != window;
+}
+
+function isDesktop() {
+	return
+		EnvName == WindowsEnv ||
+		EnvName == LinuxEnv ||
+		EnvName == MacEnv;
+}
+
+// #endregion State
+
+// #region Actions
+
+function sendMessage(fn, msg) {
+	if (isRunningOnCef()) {
+		window[fn](msg);
+		return;
+	}
+	if (isRunningOnXam()) {
+		CSharp.InvokeMethod(fn, msg);
+		return;
+	}
+	if (isRunningInIframe()) {
+		window.parent.postMessage(fn, msg);
+		return;
+	}
+
+	log("can't send message. type '" + fn + "' data '" + msg + "'");	
+}
+// #endregion Actions
+
+// #region Event Handlers
+
+window.addEventListener("message", receiveWindowMessage, false);
+
+function receiveWindowMessage(wmsg) {
+	if (!isNullOrUndefined(wmsg)) {
+		return;
+	}
+	log('editor recvd window msg: ' + wmsg);
+
+	const wmsg_parts = wmsg.split('(');
+	if (wmsg_parts.length < 2) {
+		log('bad msg format, not function call');
+		return;
+	}
+
+	const fn = wmsg_parts[0];
+	const msg = wmsg_parts[1].split(')')[0];
+	window[fn](msg);
+}
+
+
+// #endregion Event Handlers

@@ -47,6 +47,7 @@ namespace MonkeyPaste.Avalonia {
 
     public interface MpIEmbedHost { }
     public interface MpIWebViewHost : MpIEmbedHost {
+        string HostGuid { get; }
         void Render();
         MpAvIWebViewBindingResponseHandler BindingHandler { get; }
     }
@@ -59,9 +60,8 @@ namespace MonkeyPaste.Avalonia {
         MpIAsyncJsEvalTracker,
         MpAvIPlatformHandleHost,
         MpIHasDevTools {
-
-
         #region Private Variable
+        private string _webViewGuid;
         #endregion
 
         #region Constants
@@ -80,6 +80,15 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpIWebViewHost Implementation
+
+        string MpIWebViewHost.HostGuid {
+            get {
+                if (string.IsNullOrEmpty(_webViewGuid)) {
+                    _webViewGuid = System.Guid.NewGuid().ToString();
+                }
+                return _webViewGuid;
+            }
+        }
         void MpIWebViewHost.Render() {
             Dispatcher.UIThread.Post(this.InvalidateVisual);
         }

@@ -24,9 +24,9 @@ namespace MonkeyPaste {
         void SendMessage(string msgJsonBase64Str);
     }
 
-    public interface MpIAyncJsonMessenger {
-        Task<string> SendMessageAsync(string msgJsonBase64Str);
-    }
+    //public interface MpIAyncJsonMessenger {
+    //    Task<string> SendMessageAsync(string msgJsonBase64Str);
+    //}
 
     public interface MpIPlainHtmlConverterView : MpIJsonMessenger, MpIHasDevTools, MpIPlatformView {
 
@@ -37,7 +37,7 @@ namespace MonkeyPaste {
         bool IsSubSelectable { get; }
         Task LoadContentAsync();
         Task ReloadAsync();
-        Task UpdateContentAsync(MpJsonObject contentJsonObj);
+        Task<bool> UpdateContentAsync(MpJsonObject contentJsonObj);
 
     }
 }

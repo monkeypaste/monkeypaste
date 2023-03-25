@@ -14,6 +14,8 @@
         bool IsTouchInputEnabled { get; }
         string OsShortName { get; }
 
+        string EditorPath { get; }
+
         MpUserDeviceType OsType { get; }
     }
 }

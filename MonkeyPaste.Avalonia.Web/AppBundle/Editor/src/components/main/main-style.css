@@ -1,0 +1,171 @@
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    --noselectbgcolor: rgba(0,0,0,0);
+    --subselecteditorbgcolor: rgba(189, 188, 188,var(--editableopacity));
+    --editableeditorbgcolor: rgba(255, 248, 220,var(--editableopacity));
+    --editableeditorbgcolor_opaque: rgb(255, 248, 220);
+    --editortoolbarbgcolor: white;
+    --editortoolbarsepbgcolor: silver;
+    --editortoolbarbuttoncolor: dimgray;
+    --defcontentfgcolor: black;
+    --selbgcolor: lightblue;
+    --selfgcolor: black;
+    --inactivematchbgcolor: yellow;
+    --activematchbgcolor: lime;
+    --caretcolor: black;
+    --hovercolor: yellow;
+    --opthovercolor: lightblue;
+    --optselectcolor: lightgreen;
+    --focuscolor: red;
+    --selectedcolor: lime;
+    --insertselectcolor: darkorange;
+    --editableopacity: 0.5;
+    --defaultopacity: 0.0;
+    --highlightopacity: 0.5;
+    --defaultFontFamily: Helvetica;
+    --defaultFontSize: 12px;
+    --pastetemplatebgcolor: teal;
+    --pastetoolbarbuttoncolor: dodgerblue;
+    --edittemplatebgcolor: palegreen;
+    margin: 0px;
+    padding: 0px;
+    font-family: var(--defaultFontFamily);
+    overflow: hidden;
+    cursor: default;
+    background-color: transparent;
+    /*white-space: pre-wrap;*/
+}
+
+::selection {
+    background-color: var(--selbgcolor);
+    color: var(--selfgcolor);
+}
+
+.hidden {
+    display: none !important;
+}
+
+.top-align {
+    position: fixed;
+    top: 0px;
+}
+
+.bottom-align {
+    position: fixed;
+    bottom: 0px;
+}
+
+.right-align {
+    position: fixed;
+    right: 0px;
+}
+
+.left-align {
+    position: fixed;
+    left: 0px;
+}
+.no-hit-test {
+    pointer-events: none;
+}
+.hit-testable {
+    pointer-events: all;
+}
+
+textarea {
+    font-size: 14px;
+    resize: none;
+    border-width: 1px;
+    border-color: white;
+    font-family: var(--defaultFontFamily);
+    border-radius: 3px;
+    margin: 12px;
+    padding: 8px;
+    background-color: var(--editableeditorbgcolor_opaque);
+    color: var(--defcontentfgcolor);
+}
+    textarea:focus {
+        border-color: black;
+        outline: 0px solid transparent !important;
+    }
+
+    textarea::placeholder {
+        color: silver;
+        font-style: italic;
+        font-family: var(--defaultFontFamily);
+    }
+
+
+.disabled {
+    background-color: dimgray !important;
+    opacity: 0.5;
+    color: silver !important;
+    cursor: not-allowed !important;
+    border-color: darkgray !important;
+    user-select: none !important;
+}
+
+button {
+    padding: 5px;
+    margin: 0 5px;
+    text-decoration: none;
+    font-size: 10px;
+    border-radius: 5px;
+    border: solid var(--editableeditorbgcolor_opaque) 1px;
+    transition: .4s;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+    button:hover:not(.disabled),
+    button:focus:not(.disabled) {
+        transition: .4s;
+        border-color: yellow;
+        cursor: pointer;
+    }
+
+    button:focus {
+        outline: 0px solid transparent !important;
+    }
+
+.fa-solid {
+    margin-right: 5px;
+}
+
+.svg-icon {
+    width: 18px;
+    height: 18px;
+    margin-right: 3px;
+}
+
+/* ENDLESS ROTATE */
+.rotate {
+    animation: rotate 1.5s linear infinite;
+}
+
+@keyframes rotate {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.contrast-bg {
+    color: inherit !important;
+    background: inherit;
+    -webkit-background-clip: text;
+    background-clip: text;
+    filter: invert(1) grayscale(1);
+    -webkit-filter: invert(1) grayscale(1);
+    /* mix-blend-mode: difference;*/
+}
+
+.unavailable-text {
+    text-decoration: line-through;
+}
+
+/* override superCm so they aren't so tall */
+.context-menu-option {
+    padding: 1px 30px 1px 15px !important;
+}

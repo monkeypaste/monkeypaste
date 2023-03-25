@@ -163,7 +163,7 @@ namespace MonkeyPaste.Common.Wpf {
             // since there's encoded entities will need return a container node (span)
             HtmlNode span_node = _htmlDoc.CreateElement("span");
             int cur_idx = 0;
-            Match m = MpRegEx.RegExLookup[MpRegExType.EncodedHtmlEntity].Match(r.Text);
+            Match m = MpRegEx.RegExLookup[MpRegExType.HexEncodedHtmlEntity].Match(r.Text);
             while (m.Success) {
                 int match_idx = r.Text.Substring(cur_idx).IndexOf(m.Value);
 
@@ -186,7 +186,7 @@ namespace MonkeyPaste.Common.Wpf {
 
                 cur_idx += match_idx + m.Value.Length;
                 string test = r.Text.Substring(cur_idx);
-                m = MpRegEx.RegExLookup[MpRegExType.EncodedHtmlEntity].Match(r.Text.Substring(cur_idx));
+                m = MpRegEx.RegExLookup[MpRegExType.HexEncodedHtmlEntity].Match(r.Text.Substring(cur_idx));
             }
             if (cur_idx < r.Text.Length) {
                 // create trailing run after encoded special entities

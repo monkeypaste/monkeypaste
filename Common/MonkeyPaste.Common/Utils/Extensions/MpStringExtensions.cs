@@ -583,8 +583,8 @@ namespace MonkeyPaste.Common {
 
         public static Dictionary<char, string> HtmlEntityLookup =>
             new Dictionary<char, string>() {
-                {' ',"&nbsp;" },
                 {'&',"&amp;" },
+                {' ',"&nbsp;" },
                 {'\"',"&quot;" },
                 {'\'',"&apos;" },
                 {'>',"&gt;" },
@@ -597,6 +597,8 @@ namespace MonkeyPaste.Common {
                 {'™',"&trade;" },
                 {'<',"&lt;" }
             };
+
+
         public static string EncodeSpecialHtmlEntities(this string str) {
             foreach (var pattern in HtmlEntityLookup) {
                 str = str.Replace(pattern.Key.ToString(), pattern.Value);
@@ -611,12 +613,40 @@ namespace MonkeyPaste.Common {
             return str;
         }
 
+        public static string DecodeHtmlHexCharacters(this string html) {
+            //var replacements = new Dictionary<string, string>();
+            ////var regex = new Regex("(&[a-zA-Z]{2,11};)");
+            //var regex = MpRegEx.RegExLookup[MpRegExType.HexEncodedHtmlEntity];
+            //foreach (Match match in regex.Matches(str)) {
+            //    if (!replacements.ContainsKey(match.Value)) {
+            //        var unicode = HttpUtility.HtmlDecode(match.Value);
+            //        if (unicode.Length == 1) {
+            //            replacements.Add(match.Value, string.Concat("&#", Convert.ToInt32(unicode[0]), ";"));
+            //        }
+            //    }
+            //}
+            //foreach (var replacement in replacements) {
+            //    str = str.Replace(replacement.Key, replacement.Value);
+            //}
+            //return str;
+            if (html.IsNullOrEmpty()) {
+                return html;
+            }
+            //var regex = MpRegEx.RegExLookup[MpRegExType.HexEncodedHtmlEntity];
+            //return regex.Replace(
+            //    html,
+            //    x => x.Groups[1].Value == "#" ?
+            //        ((char)int.Parse(x.Groups[2].Value)).ToString() :
+            //        WebUtility.HtmlDecode(x.Groups[0].Value));
+            return WebUtility.HtmlDecode(html);
+        }
+
         public static bool ContainsSpecialHtmlEntities(this string str) {
             return HtmlEntityLookup.Any(x => str.Contains(x.Key));
         }
 
         public static bool ContainsEncodedSpecialHtmlEntities(this string str) {
-            return MpRegEx.RegExLookup[MpRegExType.EncodedHtmlEntity].IsMatch(str);
+            return MpRegEx.RegExLookup[MpRegExType.HexEncodedHtmlEntity].IsMatch(str);
         }
 
         public static string EscapeMenuItemHeader(this string str, int altNavIdx = -1) {

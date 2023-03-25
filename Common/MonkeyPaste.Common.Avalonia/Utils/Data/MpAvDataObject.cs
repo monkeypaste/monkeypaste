@@ -8,6 +8,8 @@ using System.Runtime.InteropServices;
 
 #if WINDOWS
 using MonkeyPaste.Common.Wpf;
+using static MonkeyPaste.Common.Avalonia.MpAvDataObjectPInvokes;
+
 #endif
 
 namespace MonkeyPaste.Common.Avalonia {
@@ -97,19 +99,19 @@ namespace MonkeyPaste.Common.Avalonia {
                     SetData(MpPortableDataFormats.AvFileNames, gn_files);
                 }
             } else if (OperatingSystem.IsWindows()) {
-                if (ContainsData(MpPortableDataFormats.AvPNG) &&
-                    GetData(MpPortableDataFormats.AvPNG) is string png64) {
-                    //SetData(MpPortableDataFormats.AvPNG, png64.ToBytesFromBase64String());
-                }
-                if (ContainsData(MpPortableDataFormats.AvPNG) &&
-                    GetData(MpPortableDataFormats.AvPNG) is byte[] pngBytes) {
-                    //#if WINDOWS
-                    //                    //SetData(MpPortableDataFormats.WinBitmap, pngBytes);
-                    //                    //SetData(MpPortableDataFormats.WinDib, pngBytes);
-                    //                    SetBitmap(pngBytes);
-                    //#endif
+                //if (ContainsData(MpPortableDataFormats.AvPNG) &&
+                //    GetData(MpPortableDataFormats.AvPNG) is string png64) {
+                //    //SetData(MpPortableDataFormats.AvPNG, png64.ToBytesFromBase64String());
+                //}
+                //if (ContainsData(MpPortableDataFormats.AvPNG) &&
+                //    GetData(MpPortableDataFormats.AvPNG) is byte[] pngBytes) {
+                //    //#if WINDOWS
+                //    //                    //SetData(MpPortableDataFormats.WinBitmap, pngBytes);
+                //    //                    //SetData(MpPortableDataFormats.WinDib, pngBytes);
+                //    //                    SetBitmap(pngBytes);
+                //    //#endif
 
-                }
+                //}
                 if (ContainsData(MpPortableDataFormats.CefHtml) &&
                     !ContainsData(MpPortableDataFormats.AvRtf_bytes) &&
                     GetData(MpPortableDataFormats.CefHtml) is string htmlStr) {
@@ -127,6 +129,9 @@ namespace MonkeyPaste.Common.Avalonia {
 
         // private  uint CF_BITMAP = 0;
         public void SetBitmap(byte[] bytes) {
+            if (!OperatingSystem.IsWindows()) {
+                return;
+            }
 #if WINDOWS
             //if(CF_BITMAP == 0) {
             //    CF_BITMAP = WinApi.RegisterClipboardFormatA("Bitmap");
@@ -186,34 +191,7 @@ namespace MonkeyPaste.Common.Avalonia {
 #endif
         }
 
-        [DllImport("user32.dll")]
-        static extern IntPtr SetClipboardData(uint uFormat, IntPtr hMem);
 
-        [DllImport("user32.dll", ExactSpelling = true)]
-        public static extern IntPtr GetDC(IntPtr hWnd);
-
-
-        [DllImport("gdi32.dll", ExactSpelling = true)]
-        public static extern IntPtr CreateCompatibleDC(IntPtr hDC);
-
-
-        [DllImport("gdi32.dll", ExactSpelling = true)]
-        public static extern IntPtr CreateCompatibleBitmap(IntPtr hdc, int cx, int cy);
-
-        [DllImport("gdi32.dll", SetLastError = true, ExactSpelling = true)]
-        public static extern IntPtr SelectObject(IntPtr hdc, IntPtr h);
-
-        [DllImport("gdi32.dll", SetLastError = true, ExactSpelling = true)]
-        public static extern bool BitBlt(
-            IntPtr hdc,
-            int x,
-            int y,
-            int cx,
-            int cy,
-            IntPtr hdcSrc,
-            int x1,
-            int y1,
-            uint rop);
 
         #region Avalonia.Input.IDataObject Implementation
 
@@ -244,5 +222,37 @@ namespace MonkeyPaste.Common.Avalonia {
 
         #endregion
 
+    }
+
+    internal static partial class MpAvDataObjectPInvokes {
+        [LibraryImport("user32.dll")]
+        public static partial IntPtr SetClipboardData(uint uFormat, IntPtr hMem);
+
+        [LibraryImport("user32.dll")]
+        public static partial IntPtr GetDC(IntPtr hWnd);
+
+
+        [LibraryImport("gdi32.dll")]
+        public static partial IntPtr CreateCompatibleDC(IntPtr hDC);
+
+
+        [LibraryImport("gdi32.dll")]//, ExactSpelling = true)]
+        public static partial IntPtr CreateCompatibleBitmap(IntPtr hdc, int cx, int cy);
+
+        [LibraryImport("gdi32.dll", SetLastError = true)]
+        public static partial IntPtr SelectObject(IntPtr hdc, IntPtr h);
+
+        [LibraryImport("gdi32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static partial bool BitBlt(
+            IntPtr hdc,
+            int x,
+            int y,
+            int cx,
+            int cy,
+            IntPtr hdcSrc,
+            int x1,
+            int y1,
+            uint rop);
     }
 }

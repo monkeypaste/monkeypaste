@@ -1,0 +1,120 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Super Context Menu jQuery Plugin Demo</title>
+<link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="dist/context-menu.min.css" rel="stylesheet" type="text/css">
+<style>
+body { font-family: 'Roboto Condensed'; }
+h1 { margin-top: 150px; text-align: center; }
+.demo { width:600px; height:600px; background-color:#222; line-height: 600px; text-align: center; color: #fff; margin:30px auto}
+</style>
+</head>
+
+<body>
+  <div id="jquery-script-menu">
+<div class="jquery-script-center">
+<ul>
+<li><a href="https://www.jqueryscript.net/menu/Context-Menu-Plugin-jQuery-superContextMenu.html">Download This Plugin</a></li>
+<li><a href="https://www.jqueryscript.net/">Back To jQueryScript.Net</a></li>
+</ul>
+<div class="jquery-script-clear"></div>
+</div>
+</div>
+  <h1>Super Context Menu jQuery Plugin Demo</h1>
+<div class="demo">
+  Right Click Me
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="dist/context-menu.min.js"></script>
+<script>
+  var myMenu = [{
+
+    // Menu Icon.
+    // This example uses Font Awesome Iconic Font.
+    icon: 'fa fa-home',
+
+    // Menu Label
+    label: 'Homepage',
+
+    // Callback
+    action: function(option, contextMenuIndex, optionIndex) {},
+
+    // An array of submenu objects
+    submenu: null,
+
+    // is disabled?
+    disabled: false   //Disabled status of the option
+  },
+  {
+    icon: 'fa fa-user',
+    label: 'Profile',
+    action: function(option, contextMenuIndex, optionIndex) {},
+    submenu: null,
+    disabled: false
+  },
+  {
+    icon: 'fa fa-envelope',
+    label: 'Contact',
+    action: function(option, contextMenuIndex, optionIndex) {},
+    submenu: null,
+    disabled: false
+  },
+  {
+    //Menu separator
+    separator: true
+  },
+  {
+    icon: 'fa fa-share',
+    label: 'Social Share',
+    action: function(option, contextMenuIndex, optionIndex) {},
+    submenu: [{ // sub menus
+      icon: 'fa fa-facebook',
+      label: 'Facebook',
+      action: function(option, contextMenuIndex, optionIndex) {},
+      submenu: null,
+      disabled: false
+    },
+    {
+      icon: 'fa fa-twitter',
+      label: 'Twitter',
+      action: function(option, contextMenuIndex, optionIndex) {},
+      submenu: null,
+      disabled: false
+    },
+    {
+      icon: 'fa fa-google-plus',
+      label: 'Google Plus',
+      action: function(option, contextMenuIndex, optionIndex) {},
+      submenu: null,
+      disabled: false
+    }],
+    disabled: false
+  },
+];
+$('.demo').on('contextmenu', function(e) {
+  e.preventDefault();
+  superCm.createMenu(myMenu, e);
+});
+</script>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36251023-1']);
+  _gaq.push(['_setDomainName', 'jqueryscript.net']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+</html>

@@ -6,7 +6,7 @@
   <!-- IOS - net7.0-ios-->
   
   <PropertyGroup>
-    <BuildOs>BROWSER</BuildOs>
+    <BuildOs>WINDOWS</BuildOs>
   </PropertyGroup>
   
   <PropertyGroup Condition="$(BuildOs) == 'WINDOWS'">
@@ -55,8 +55,6 @@
     <MainTargetDir>$(MainProjectDir)\bin\Debug\$(MainTargetFramework)</MainTargetDir>
     <PluginTargetDir>$(MainTargetDir)\Plugins</PluginTargetDir>
     <UiProjectDir>$(SolutionDir)\MonkeyPaste.Avalonia</UiProjectDir>
-    <EditorDir>$(SolutionDir)\MonkeyPaste.Editor</EditorDir>
-    <EditorIndexDir>$(EditorDir)\src</EditorIndexDir>
   </PropertyGroup>
 
 

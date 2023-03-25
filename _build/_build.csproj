@@ -13,5 +13,6 @@
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(BuildOs)' == 'ANDROID'">
     <Exec Command="call $(ProjectDir)scripts\android\adb_wake.bat" />
     <Exec Command="call $(ProjectDir)scripts\android\adb_kill_mpav.bat $(AndroidPackageName)" />
+    <Exec Command="call $(ProjectDir)scripts\android\adb_editor_to_android.bat" />
   </Target>
 </Project>

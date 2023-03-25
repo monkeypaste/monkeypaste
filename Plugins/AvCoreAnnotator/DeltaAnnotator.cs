@@ -55,18 +55,18 @@ namespace AvCoreAnnotator {
             Regex regex = MpRegEx.RegExLookup[annotationRegExType];
             MatchCollection mc = regex.Matches(pt);
             foreach (Match m in mc) {
-                foreach (Group mg in m.Groups) {
-                    foreach (Capture c in mg.Captures) {
-                        MpConsole.WriteLine($"Annotation match: Type: {annotationRegExType} Value: {c.Value}");
+                //foreach (Group mg in m.Groups) {
+                //    foreach (Capture c in mg.Captures) {
+                MpConsole.WriteLine($"Annotation match: Type: {annotationRegExType} Value: {m.Value} Idx: {m.Index} Length: {m.Length}");
 
-                        Op op = new Op() {
-                            format = new DeltaRange() { index = c.Index, length = c.Length },
-                            attributes = GetLinkAttributes(annotationRegExType, c.Value)
-                        };
+                Op op = new Op() {
+                    format = new DeltaRange() { index = m.Index, length = m.Length },
+                    attributes = GetLinkAttributes(annotationRegExType, m.Value)
+                };
 
-                        delta.ops.Add(op);
-                    }
-                }
+                delta.ops.Add(op);
+                //    }
+                //}
             }
             return delta;
         }
@@ -96,6 +96,9 @@ namespace AvCoreAnnotator {
                 case MpRegExType.FileOrFolder:
                     if (Uri.IsWellFormedUriString(match, UriKind.Absolute)) {
                         href_value = new Uri(match).AbsoluteUri;
+                    } else if (match.ToFileSystemUriFromPath() is string path_uri &&
+                        Uri.IsWellFormedUriString(path_uri, UriKind.Absolute)) {
+                        href_value = path_uri;
                     } else {
                         href_value = string.Empty;
                     }

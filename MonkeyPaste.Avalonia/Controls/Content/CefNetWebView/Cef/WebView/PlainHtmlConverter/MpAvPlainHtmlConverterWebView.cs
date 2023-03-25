@@ -1,15 +1,16 @@
 ﻿using Avalonia.LogicalTree;
+using MonkeyPaste.Common;
 using PropertyChanged;
 using System;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public class MpAvPlainHtmlConverterWebView :
-        //MpAvCefNetWebView,
         MpAvContentWebView,
         MpIPlainHtmlConverterView {
         #region Private Variables
 
+        private MpQuillConvertPlainHtmlToQuillHtmlResponseMessage _lastPlainHtmlConvertedResp = null;
         #endregion
 
         #region Statics
@@ -33,6 +34,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
         public override string ContentUrl => base.ContentUrl + $"?{HTML_CONVERTER_PARAMS}";
+
+        public MpQuillConvertPlainHtmlToQuillHtmlResponseMessage LastPlainHtmlResp {
+            get => _lastPlainHtmlConvertedResp;
+            set => _lastPlainHtmlConvertedResp = value;
+        }
+
         #endregion
 
         #region Constructors
@@ -45,6 +52,17 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
+        public override void HandleBindingNotification(MpAvEditorBindingFunctionType notificationType, string msgJsonBase64Str) {
+            base.HandleBindingNotification(notificationType, msgJsonBase64Str);
+            switch (notificationType) {
+                case MpAvEditorBindingFunctionType.notifyPlainHtmlConverted:
+                    var ntf = MpJsonConverter.DeserializeBase64Object<MpQuillConvertPlainHtmlToQuillHtmlResponseMessage>(msgJsonBase64Str);
+                    if (ntf is MpQuillConvertPlainHtmlToQuillHtmlResponseMessage plainHtmlResp) {
+                        _lastPlainHtmlConvertedResp = plainHtmlResp;
+                    }
+                    break;
+            }
+        }
         #endregion
 
         #region Protected Methods

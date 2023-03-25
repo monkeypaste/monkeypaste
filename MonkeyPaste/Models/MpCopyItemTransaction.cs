@@ -52,6 +52,7 @@ namespace MonkeyPaste {
         [Column("fk_MpUserDeviceId")]
         public int TransactionUserDeviceId { get; set; }
 
+        public DateTime? AppliedDateTime { get; set; } = null;
         public DateTime TransactionDateTime { get; set; }
 
         #endregion

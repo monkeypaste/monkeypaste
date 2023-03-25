@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Browser;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using MonkeyPaste.Avalonia;
 using MonkeyPaste.Avalonia.Web;
 using System.Runtime.Versioning;
