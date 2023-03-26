@@ -128,6 +128,10 @@
         document.addEventListener('DOMContentLoaded', (e) => {
             //init_test();
             onDomLoaded_ntf();
+
+            document.getElementById('testIframe').addEventListener('load', (e) => {
+                debugger;
+            });
         });
 
         window.onbeforeunload = function (e) {
@@ -141,6 +145,7 @@
             e.stopPropagation
             return false;
         };
+
     </script>
 
     <!--<script src="lib/HighlightJs/highlight.min.js"></script>-->
@@ -559,6 +564,6 @@
     <div id="annotationRoiOverlay" class="no-hit-test"></div>
     <div id="annotationTooltip" class="no-hit-test"></div>
     <div id="dragOverlay" draggable="true"></div>
-
+    <iframe id="testIframe" src="https://www.youtube.com/embed/kZCIporjJ70" crossorigin="true" credentialless="true"></iframe>
 </body>
 </html>

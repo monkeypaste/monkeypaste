@@ -10,13 +10,6 @@ const DOT_NET_MSG_METHOD_NAME = "ReceiveMessage";
 
 // #region Getters
 
-function getDotNetModuleName() {
-	if (EnvName == AndroidEnv) {
-		return "MonkeyPaste.Avalonia.Android";
-	}
-	onShowDebugger_ntf("unknown env", true);
-}
-
 // #endregion Getters
 
 // #region Setters
@@ -62,7 +55,12 @@ function sendMessage(fn, msg) {
 		return;
 	}
 	if (isRunningInIframe()) {
-		window.parent.postMessage(fn, msg);
+		const msg_packet = {
+			guid: 'tbd',
+			type: fn,
+			data: msg
+		};
+		window.parent.postMessage(msg_packet);
 		return;
 	}
 
@@ -72,15 +70,15 @@ function sendMessage(fn, msg) {
 
 // #region Event Handlers
 
-window.addEventListener("message", receiveWindowMessage, false);
+window.addEventListener("message", receivedWindowMessage, false);
 
-function receiveWindowMessage(wmsg) {
-	if (!isNullOrUndefined(wmsg)) {
+function receivedWindowMessage(e) {
+	if (!isNullOrUndefined(e)) {
 		return;
 	}
-	log('editor recvd window msg: ' + wmsg);
+	log('editor recvd window msg: ' + e);
 
-	const wmsg_parts = wmsg.split('(');
+	const wmsg_parts = e.split('(');
 	if (wmsg_parts.length < 2) {
 		log('bad msg format, not function call');
 		return;

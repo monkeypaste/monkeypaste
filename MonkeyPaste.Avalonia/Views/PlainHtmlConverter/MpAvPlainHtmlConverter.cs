@@ -72,9 +72,9 @@ namespace MonkeyPaste.Avalonia {
             }
 
             MpConsole.WriteLine("Waiting for Html converter to initialize...");
-            while (!ConverterWebView.IsEditorInitialized) {
-                await Task.Delay(100);
-            }
+            //while (!ConverterWebView.IsEditorInitialized) {
+            //    await Task.Delay(100);
+            //}
             MpConsole.WriteLine("Html converter initialized");
 
 

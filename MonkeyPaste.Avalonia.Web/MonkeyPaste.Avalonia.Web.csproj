@@ -3,6 +3,9 @@
     <TargetFramework>net7.0</TargetFramework>
     <OutputType>Exe</OutputType>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <MSBuildEnableWorkloadResolver>true</MSBuildEnableWorkloadResolver>
+    <WasmBuildNative>true</WasmBuildNative>
+    <EmccFlags>-sVERBOSE -sERROR_ON_UNDEFINED_SYMBOLS=0</EmccFlags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(BuildOs)' == 'BROWSER'">
@@ -94,6 +97,7 @@
 
   <ItemGroup>
     <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\messages\messages_ext_ntf.js" />
+    <WasmExtraFilesToDeploy Remove="AppBundle\embed.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -116,6 +120,5 @@
     <Folder Include="AppBundle\Editor\lib\" />
     <Folder Include="Util\Extensions\" />
     <Folder Include="Util\Helpers\" />
-    <Folder Include="Util\System\AvBrWrapper\" />
   </ItemGroup>
 </Project>

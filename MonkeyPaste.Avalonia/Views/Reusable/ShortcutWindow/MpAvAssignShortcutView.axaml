@@ -116,7 +116,8 @@
                                TextWrapping="WrapWithOverflow"
                                Text="{Binding ShortcutDisplayName}" />
                 </Grid>
-                <StackPanel Orientation="Horizontal"
+                <StackPanel IsVisible="{Binding IsGlobal}"
+                            Orientation="Horizontal"
                             Grid.Row="1"
                             Grid.Column="0"
                             Grid.ColumnSpan="2"

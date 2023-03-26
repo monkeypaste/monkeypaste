@@ -51,33 +51,6 @@ public class MpAvAdWebViewBuilder :
         MpDebug.Break("look at props to find web view");
     }
 
-    public async Task<string> SendMessageAsync(MpAvIPlatformHandleHost nwvh, string msg) {
-        if (nwvh.PlatformHandle is AndroidViewControlHandle avch &&
-            avch.View is WebView wv) {
-
-            MpAvAdMessageCallback mc = new MpAvAdMessageCallback();
-
-            wv.EvaluateJavascript(msg, mc);
-            if (nwvh is MpIAsyncJsEvalTracker jset) {
-                jset.PendingEvals++;
-            }
-            var sw = Stopwatch.StartNew();
-
-            while (mc.Result == null) {
-                await Task.Delay(100);
-                if (sw.ElapsedMilliseconds > 10_000) {
-                    MpDebug.Break($"Async js timeout for msg '{msg}'");
-                }
-            }
-            if (nwvh is MpIAsyncJsEvalTracker jset2) {
-                jset2.PendingEvals--;
-            }
-            return mc.Result;
-        }
-        MpDebug.Break("look at props to find web view");
-        return string.Empty;
-    }
-
     public static void ReceiveMessage(string bindingName, string msg) {
         MpConsole.WriteLine($"Received '{bindingName}' w/ data: '{msg}'");
     }
@@ -106,13 +79,6 @@ public class MpAvAdWebViewBuilder :
             // TODO add detach when unload here?
         }
     }
-    internal class MpAvAdMessageCallback : Java.Lang.Object, IValueCallback {
-        public string Result { get; private set; }
-        public void OnReceiveValue(Java.Lang.Object value) {
-            Result = value.ToString();
-        }
-    }
-
 
     #endregion
 

@@ -15,7 +15,6 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
 
         private bool _isShowEnabledChangedNotification = false;
-        private bool _isRuntimeEnabled = false;
 
         #endregion
 

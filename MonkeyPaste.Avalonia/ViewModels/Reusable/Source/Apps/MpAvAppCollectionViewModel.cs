@@ -424,6 +424,8 @@ namespace MonkeyPaste.Avalonia {
                         .OrderBy(x => x.AppName)
                         .Select(x => new MenuItem() {
                             Icon = new Image() {
+                                Width = 20,
+                                Height = 20,
                                 Source = MpAvIconSourceObjToBitmapConverter.Instance.Convert(x.IconId, null, null, null) as Bitmap
                             },
                             Header = x.AppName,
@@ -434,7 +436,7 @@ namespace MonkeyPaste.Avalonia {
                             new Separator(),
                             new MenuItem() {
                                 Icon = new Image() {
-                                    Source = MpAvIconSourceObjToBitmapConverter.Instance.Convert("Dots1x3Image", null, null, null) as Bitmap,
+                                    Source = MpAvIconSourceObjToBitmapConverter.Instance.Convert("Dots3x1Image", null, null, null) as Bitmap,
                                     RenderTransform = new RotateTransform() {
                                         Angle = 90
                                     }

@@ -1,6 +1,9 @@
 ﻿using Avalonia.Browser;
+using Avalonia.Controls;
 using Avalonia.Platform;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,19 +15,45 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia.Web {
     public class MpAvBrWebViewBuilder :
         MpAvINativeControlBuilder,
+        MpIJsImporter,
         MpAvIWebViewInterop {
-
+        private object embed;
+        private Dictionary<string, JSObject> _hostIframeLookup = new Dictionary<string, JSObject>();
         #region Interfaces
 
+        async Task MpIJsImporter.ImportAllAsync() {
+            await JSHost.ImportAsync("embed.js", "./embed.js");
+        }
         #region MpAvINativeControlBuilder Implementation
         public IPlatformHandle Build(IPlatformHandle parent, Func<IPlatformHandle> createDefault, MpIWebViewHost host) {
-            var iframe = EmbedInterop.CreateElement("iframe");
-            iframe.SetProperty("id", host.HostGuid);
-            iframe.SetProperty("class", "editor-iframe");
-            iframe.SetProperty("src", "Editor/index.html?auto_test");
-            iframe.SetProperty("crossorigin", true);
-            iframe.SetProperty("credentialless", true);
 
+            //var iframe = EmbedInterop.CreateElement("iframe");
+            //iframe.SetProperty("id", host.HostGuid);
+            //if (host is MpAvPlainHtmlConverterWebView) {
+            //    iframe.SetProperty("src", "Editor/index.html?converter=true");
+            //} else {
+            //    iframe.SetProperty("src", "Editor/index.html");
+            //}
+
+            //iframe.SetProperty("crossorigin", true);
+            //iframe.SetProperty("credentialless", true);
+
+            string url = "Editor/index.html";
+            if (host is MpAvPlainHtmlConverterWebView) {
+                url += "?converter=true";
+            }
+
+            //if (embed == null) {
+            //    var defaultHandle = (JSObjectControlHandle)createDefault();
+            //    _ = JSHost.ImportAsync("embed.js", "./embed.js").ContinueWith(_ => {
+            //        EmbedInterop.CreateIframe(host.HostGuid, url);
+            //    });
+            //    embed = "poop";
+            //    return defaultHandle;
+            //}
+            var iframe = EmbedInterop.CreateIframe(host.HostGuid, url);
+
+            _hostIframeLookup.AddOrReplace(host.HostGuid, iframe);
             return new JSObjectControlHandle(iframe);
         }
         #endregion
@@ -32,42 +61,16 @@ namespace MonkeyPaste.Avalonia.Web {
         #region MpAvIWebViewInterop Implementation
 
         public void SendMessage(MpAvIPlatformHandleHost nwvh, string msg) {
-            if (nwvh is MpIWebViewHost wvh) {
-                EmbedInterop.SendMessage(wvh.HostGuid, msg);
+            if (nwvh is MpIWebViewHost wvh &&
+                _hostIframeLookup.TryGetValue(wvh.HostGuid, out JSObject iframe)) {
+                EmbedInterop.SendMessageToIframe(iframe, msg);
                 return;
+            } else {
+                MpConsole.WriteLine($"Cannot send msg, iframe not found for host '{nwvh}'");
             }
             //MpDebug.Break("look at props to find web view");
             // EmbedInterop.
         }
-
-        public async Task<string> SendMessageAsync(MpAvIPlatformHandleHost nwvh, string msg) {
-            //if (nwvh.PlatformHandle is AndroidViewControlHandle avch &&
-            //    avch.View is WebView wv) {
-
-            //    MpAvAdMessageCallback mc = new MpAvAdMessageCallback();
-
-            //    wv.EvaluateJavascript(msg, mc);
-            //    if (nwvh is MpIAsyncJsEvalTracker jset) {
-            //        jset.PendingEvals++;
-            //    }
-            //    var sw = Stopwatch.StartNew();
-
-            //    while (mc.Result == null) {
-            //        await Task.Delay(100);
-            //        if (sw.ElapsedMilliseconds > 10_000) {
-            //            MpDebug.Break($"Async js timeout for msg '{msg}'");
-            //        }
-            //    }
-            //    if (nwvh is MpIAsyncJsEvalTracker jset2) {
-            //        jset2.PendingEvals--;
-            //    }
-            //    return mc.Result;
-            //}
-            //MpDebug.Break("look at props to find web view");
-            await Task.Delay(1);
-            return string.Empty;
-        }
-
 
         public void ReceiveMessage(string bindingName, string msg) {
 
@@ -75,25 +78,19 @@ namespace MonkeyPaste.Avalonia.Web {
         }
 
         public void Bind(MpIWebViewBindable handler) {
-            //if (handler is MpAvIPlatformHandleHost phh &&
-            //    phh.PlatformHandle is AndroidViewControlHandle avch &&
-            //    avch.View is MpAvAdWebView wv &&
-            //    wv is MpIWebViewNavigator wvn &&
-            //    wv is MpIOffscreenRenderSource osrs) {
+            if (handler is MpAvNativeWebViewHost wvn) {
 
-            //    EventHandler<string> navReg = (s, e) => {
-            //        wvn.Navigate(e);
-            //    };
-            //    EventHandler<string> navResp = (s, e) => {
-            //        handler.OnNavigated(e);
-            //    };
+                EventHandler<string> navReg = (s, e) => {
+                    if (_hostIframeLookup.TryGetValue(wvn.HostGuid, out JSObject iframe)) {
+                        EmbedInterop.NavigateIframe(iframe, e);
+                    }
+                };
 
-            //    handler.OnNavigateRequest += navReg;
+                handler.OnNavigateRequest += navReg;
 
-            //    wv.Navigated += navResp;
 
-            //    // TODO add detach when unload here?
-            //}
+                // TODO add detach when unload here?
+            }
         }
 
         #endregion
@@ -101,12 +98,44 @@ namespace MonkeyPaste.Avalonia.Web {
         #endregion
     }
 
-    internal static partial class EmbedInterop {
+    public static partial class EmbedInterop {
         [JSImport("globalThis.document.createElement")]
         public static partial JSObject CreateElement(string tagName);
 
+        [JSImport("createIframe", "embed.js")]
+        public static partial JSObject CreateIframe(string hostGuid, string srcUrl);
 
-        [JSImport("globalThis.sendMessage")]
-        public static partial JSObject SendMessage(string hostGuid, string msg);
+
+        [JSImport("sendMessageToIframe,\"embed.js\"")]
+        public static partial JSObject SendMessageToIframe(JSObject iframe, string msg);
+
+        [JSExport]
+        public static void receiveMessageFromIframe(string hostGuid, string fn, string msg) {
+            if (App.MainView is Control c &&
+                c.GetVisualDescendants<MpAvNativeWebViewHost>() is IEnumerable<MpAvNativeWebViewHost> nwvhl &&
+                nwvhl.Cast<MpIWebViewHost>()
+                .FirstOrDefault(x => x.HostGuid.ToLower() == hostGuid) is MpIWebViewHost wvh) {
+                Dispatcher.UIThread.Post(() => {
+                    wvh.BindingHandler.HandleBindingNotification(fn.ToEnum<MpAvEditorBindingFunctionType>(), msg);
+                });
+            }
+        }
+
+        [JSImport("navigateIframe", "embed.js")]
+        public static partial JSObject NavigateIframe(JSObject iframe, string url);
+
+        [JSExport]
+        public static void iframeNavigated(string hostGuid, string url) {
+            if (App.MainView is Control c &&
+                c.GetVisualDescendants<MpAvNativeWebViewHost>() is IEnumerable<MpAvNativeWebViewHost> nwvhl &&
+                nwvhl.Cast<MpIWebViewHost>()
+                .FirstOrDefault(x => x.HostGuid.ToLower() == hostGuid) is MpIWebViewHost wvh) {
+                Dispatcher.UIThread.Post(() => {
+                    if (wvh is MpIWebViewBindable wvb) {
+                        wvb.OnNavigated(url);
+                    }
+                });
+            }
+        }
     }
 }

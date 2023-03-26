@@ -13,6 +13,7 @@ namespace MonkeyPaste {
         #region Interfaces
 
         #region MpIDeviceWrapper Implementation
+        public MpIJsImporter JsImporter { get; protected set; }
         public abstract MpIPlatformInfo PlatformInfo { get; set; }
         public abstract MpIPlatformScreenInfoCollection ScreenInfoCollection { get; set; }
 
@@ -22,6 +23,7 @@ namespace MonkeyPaste {
         #region Public Methods
 
         public abstract void CreateDeviceInstance(object args);
+
 
         #endregion
 

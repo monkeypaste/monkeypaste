@@ -131,7 +131,7 @@
                         Classes="defaultButton outline outlineOver addRemoveBtn noBg noHoverBg"
                         IsVisible="{Binding !IsJoinPanelVisible}"
                         Command="{Binding SelectCustomNextJoinTypeCommand}">
-                    <Image Source="{Binding ., Source={StaticResource Dots1x3Image}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                    <Image Source="{Binding ., Source={StaticResource Dots3x1Image}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                 </Button>
             </Grid>
 

@@ -89,17 +89,7 @@ namespace MonkeyPaste.Avalonia {
                 await bootstrapper.CreatePlatformAsync(startup_datetime);
                 await bootstrapper.InitAsync();
             } else if (ApplicationLifetime is ISingleViewApplicationLifetime mobile) {
-                //if (OperatingSystem.IsBrowser()) {
-                //    mobile.MainView = new TextBlock() {
-                //        Text = "SUP!",
-                //        TextAlignment = TextAlignment.Center,
-                //        Background = Brushes.Blue,
-                //        Foreground = Brushes.White,
-                //        HorizontalAlignment = HorizontalAlignment.Stretch,
-                //        VerticalAlignment = VerticalAlignment.Center
-                //    };
-                //    return;
-                //}
+
                 var bootstrapper = new MpAvBootstrapperViewModel();
                 await bootstrapper.CreatePlatformAsync(startup_datetime);
                 bootstrapper.InitAsync().FireAndForgetSafeAsync();

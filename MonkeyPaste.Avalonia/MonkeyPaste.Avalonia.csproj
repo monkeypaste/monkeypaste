@@ -248,10 +248,10 @@
     <None Remove="Assets\Images\desc_gray.png" />
     <None Remove="Assets\Images\desc_white.png" />
     <None Remove="Assets\Images\dots.png" />
-    <None Remove="Assets\Images\dots_1x3.png" />
     <None Remove="Assets\Images\dots_2x10.png" />
     <None Remove="Assets\Images\dots_2x2.png" />
     <None Remove="Assets\Images\dots_2x5.png" />
+    <None Remove="Assets\Images\dots_3x1.png" />
     <None Remove="Assets\Images\doubleSidedArrow.png" />
     <None Remove="Assets\Images\doubleSidedArrow2.png" />
     <None Remove="Assets\Images\down_black.png" />
@@ -615,7 +615,7 @@
     <AvaloniaResource Include="Assets\Images\desc_white.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\dots_1x3.png">
+    <AvaloniaResource Include="Assets\Images\dots_3x1.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\dots_2x10.png">

@@ -583,6 +583,10 @@ namespace MonkeyPaste.Avalonia {
             SetupMainWindowSize();
             SetMainWindowRect(MainWindowClosedScreenRect);
 
+            MpConsole.WriteLine($"MainWindow rect '{MainWindowScreen}'");
+            MpConsole.WriteLine($"MainWindow closed rect '{MainWindowClosedScreenRect}'");
+            MpConsole.WriteLine($"MainWindow opened rect '{MainWindowOpenedScreenRect}'");
+
             ShowMainWindowCommand.Execute(null);
 
             // Need to delay or resizer thinks bounds are empty on initial show

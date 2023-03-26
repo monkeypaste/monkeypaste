@@ -18,7 +18,6 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
     public interface MpAvIWebViewInterop {
         void SendMessage(MpAvIPlatformHandleHost nwvh, string msg);
-        Task<string> SendMessageAsync(MpAvIPlatformHandleHost nwvh, string msg);
 
         void ReceiveMessage(string bindingName, string msg);
 
@@ -81,7 +80,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIWebViewHost Implementation
 
-        string MpIWebViewHost.HostGuid {
+        public string HostGuid {
             get {
                 if (string.IsNullOrEmpty(_webViewGuid)) {
                     _webViewGuid = System.Guid.NewGuid().ToString();
