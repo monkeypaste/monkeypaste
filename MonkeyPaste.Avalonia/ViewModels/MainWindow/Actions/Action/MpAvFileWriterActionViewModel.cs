@@ -173,7 +173,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region Protected Methods
         protected override async Task ValidateActionAsync() {
-            await Task.Delay(1);
+            await base.ValidateActionAsync();
+            if (!IsValid) {
+                return;
+            }
             if (string.IsNullOrWhiteSpace(FileSystemPath)) {
                 ValidationText = $"File Writer Path for Action '{FullName}' not set";
                 ShowValidationNotification(1);

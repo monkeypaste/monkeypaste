@@ -477,6 +477,8 @@ namespace MonkeyPaste {
         public string MainWindowOrientation { get; set; }
 #if DESKTOP
         = MpMainWindowOrientationType.Bottom.ToString();
+#elif BROWSER
+        = MpMainWindowOrientationType.Bottom.ToString();
 #else
         = MpMainWindowOrientationType.Left.ToString();
 #endif

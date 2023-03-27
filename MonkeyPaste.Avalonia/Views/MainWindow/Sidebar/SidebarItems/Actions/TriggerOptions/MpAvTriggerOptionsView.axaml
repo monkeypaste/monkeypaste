@@ -90,7 +90,7 @@
         <ToggleSwitch Grid.Column="0"
                       Foreground="White"
                       IsThreeState="True"
-                      IsChecked="{Binding IsEnabled, Mode=OneWay}"
+                      IsChecked="{Binding IsTriggerEnabled, Mode=OneWay}"
                       Command="{Binding ToggleTriggerEnabledCommand}"
                       IsEnabled="{Binding IsAllValid}" />
 

@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common.Plugin;
+﻿using Avalonia.Threading;
+using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -89,11 +90,16 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Overrides
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpTag t && t.Id == TagId) {
-                Task.Run(ValidateActionAsync);
+                Dispatcher.UIThread.Post(async () => {
+                    await ValidateActionAsync();
+                });
             }
         }
         protected override async Task ValidateActionAsync() {
-            await Task.Delay(1);
+            await base.ValidateActionAsync();
+            if (!IsValid) {
+                return;
+            }
             if (TagId == 0) {
                 ValidationText = $"No Collection selected for Classifier '{FullName}'";
             } else {

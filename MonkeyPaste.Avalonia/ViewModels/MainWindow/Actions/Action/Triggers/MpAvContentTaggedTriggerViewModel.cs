@@ -86,7 +86,10 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         protected override async Task ValidateActionAsync() {
-            await Task.Delay(1);
+            await base.ValidateActionAsync();
+            if (!IsValid) {
+                return;
+            }
             if (TagId == 0) {
                 ValidationText = $"No Collection selected for Classify Trigger '{FullName}'";
             } else {

@@ -43,7 +43,7 @@ namespace MonkeyPaste {
         None = 0,
         Classify,  //tagid
         Analyze,   //analyticItemPresetId
-        Compare,   //MatcherTypeEnumId
+        Conditional,   //MatcherTypeEnumId
         Trigger,    //TriggerTypeEnumId 
         Repeater,
         FileWriter,

@@ -9,17 +9,17 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvComparisionMatch {
+    public class MpAvConditionalMatch {
         public string Text { get; private set; } = string.Empty;
         public int Offset { get; private set; } = -1;
         public int Length { get; private set; } = 0;
 
-        public MpAvComparisionMatch(int offset, int length) {
+        public MpAvConditionalMatch(int offset, int length) {
             Offset = offset;
             Length = length;
         }
 
-        public MpAvComparisionMatch(string text, int offset, int length) : this(offset, length) {
+        public MpAvConditionalMatch(string text, int offset, int length) : this(offset, length) {
             Text = text;
         }
 
@@ -28,7 +28,7 @@ namespace MonkeyPaste.Avalonia {
         }
     }
 
-    public class MpAvCompareActionViewModelBase : MpAvActionViewModelBase {
+    public class MpAvConditionalActionViewModel : MpAvActionViewModelBase {
         #region Private Variables
         #endregion
 
@@ -291,7 +291,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvCompareActionViewModelBase(MpAvTriggerCollectionViewModel parent) : base(parent) {
+        public MpAvConditionalActionViewModel(MpAvTriggerCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpCompareActionViewModel_PropertyChanged;
         }
 
@@ -332,8 +332,22 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Overrides
 
         protected override async Task ValidateActionAsync() {
+            await base.ValidateActionAsync();
+            if (!IsValid) {
+                return;
+            }
+            int focus_arg_num = 0;
             // TODO compare validation will only be needed for last output but not sure, need use case
-            await Task.Delay(1);
+            if (!CompareData.IsNullEmptyWhitespaceOrAlphaNumeric()) {
+                var cdpvm = ArgLookup[COMPARE_TEXT_PARAM_ID];
+                cdpvm.ValidationMessage = "Compare Value can only be letters, numbers or spaces";
+                cdpvm.OnPropertyChanged(nameof(cdpvm.IsValid));
+                ValidationText = cdpvm.ValidationMessage;
+                focus_arg_num = ActionArgs.IndexOf(cdpvm);
+            }
+            if (!IsValid) {
+                ShowValidationNotification(focus_arg_num);
+            }
         }
         #endregion
 
@@ -385,7 +399,7 @@ namespace MonkeyPaste.Avalonia {
             return null;
         }
 
-        private List<MpAvComparisionMatch> GetMatches(string compareStr) {
+        private List<MpAvConditionalMatch> GetMatches(string compareStr) {
             object compareObj = null;
             if (compareStr.IsStringRichText()) {
                 //compareObj = compareStr.ToFlowDocument();
@@ -393,7 +407,7 @@ namespace MonkeyPaste.Avalonia {
                 compareObj = compareStr;
             }
 
-            var matches = new List<MpAvComparisionMatch>();
+            var matches = new List<MpAvConditionalMatch>();
             int idx = 0;
             switch (ComparisonOperatorType) {
                 case MpComparisonOperatorType.Contains:
@@ -428,7 +442,7 @@ namespace MonkeyPaste.Avalonia {
             return matches;
         }
 
-        private MpAvComparisionMatch GetMatch(object compareObj, string matchStr, int idx = 0) {
+        private MpAvConditionalMatch GetMatch(object compareObj, string matchStr, int idx = 0) {
             bool isCaseSensitive = IsCaseSensitive;
             string compareData = matchStr;
             if (compareData == null) {
@@ -451,22 +465,22 @@ namespace MonkeyPaste.Avalonia {
                     case MpComparisonOperatorType.Regex:
                     case MpComparisonOperatorType.Contains:
                         if (compareStr.Contains(compareData)) {
-                            return new MpAvComparisionMatch(compareData, compareStr.IndexOf(compareData) + idx, compareData.Length);
+                            return new MpAvConditionalMatch(compareData, compareStr.IndexOf(compareData) + idx, compareData.Length);
                         }
                         break;
                     case MpComparisonOperatorType.Exact:
                         if (compareStr.Equals(compareData)) {
-                            return new MpAvComparisionMatch(compareData, 0, compareData.Length);
+                            return new MpAvConditionalMatch(compareData, 0, compareData.Length);
                         }
                         break;
                     case MpComparisonOperatorType.BeginsWith:
                         if (compareStr.StartsWith(compareData)) {
-                            return new MpAvComparisionMatch(compareData, 0, compareData.Length);
+                            return new MpAvConditionalMatch(compareData, 0, compareData.Length);
                         }
                         break;
                     case MpComparisonOperatorType.EndsWith:
                         if (compareStr.EndsWith(compareData)) {
-                            return new MpAvComparisionMatch(compareData, compareStr.Length - compareData.Length, compareData.Length);
+                            return new MpAvConditionalMatch(compareData, compareStr.Length - compareData.Length, compareData.Length);
                         }
                         break;
                 }

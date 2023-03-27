@@ -58,6 +58,9 @@ namespace MonkeyPaste.Avalonia {
             if (lks == "PageDown") {
                 return KeyCode.VcPageDown;
             }
+            if (lks == "caps lock") {
+                return KeyCode.VcCapsLock;
+            }
 
             if (Enum.TryParse(typeof(KeyCode), keyStr.StartsWith("Vc") ? keyStr : "Vc" + keyStr.ToUpper(), true, out object? keyCodeObj) &&
                keyCodeObj is KeyCode keyCode) {

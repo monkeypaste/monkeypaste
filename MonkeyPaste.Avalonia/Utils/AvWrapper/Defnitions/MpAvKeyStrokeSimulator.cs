@@ -32,7 +32,7 @@ namespace MonkeyPaste.Avalonia {
                 foreach (var key in combo) {
                     UioHookResult result = _eventSimulator.SimulateKeyPress(key);
                     if (result != UioHookResult.Success) {
-                        throw new Exception($"Error pressing key: '{key}' in seq: '{keystr}' error: '{result}'");
+                        MpDebug.Break($"Error pressing key: '{key}' in seq: '{keystr}' error: '{result}'");
                         //return false;
                     }
                 }
@@ -40,7 +40,7 @@ namespace MonkeyPaste.Avalonia {
                 foreach (var key in combo) {
                     UioHookResult result = _eventSimulator.SimulateKeyRelease(key);
                     if (result != UioHookResult.Success) {
-                        throw new Exception($"Error releasing key: '{key}' in seq: '{keystr}' error: '{result}'");
+                        MpDebug.Break($"Error releasing key: '{key}' in seq: '{keystr}' error: '{result}'");
                         //return false;
                     }
                 }

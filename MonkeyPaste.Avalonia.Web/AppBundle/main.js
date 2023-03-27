@@ -9,9 +9,13 @@ const dotnetRuntime = await dotnet
     .withApplicationArgumentsFromQuery()
     .create();
 
+
+
 await registerAvaloniaModule(dotnetRuntime);
 
 const config = dotnetRuntime.getConfig();
+
+//export dotnetRuntime;
 
 await dotnetRuntime.runMainAndExit(config.mainAssemblyName, [window.location.search]);
 

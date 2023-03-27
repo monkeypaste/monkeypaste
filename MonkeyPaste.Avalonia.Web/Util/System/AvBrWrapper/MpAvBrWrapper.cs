@@ -22,11 +22,14 @@ namespace MonkeyPaste.Avalonia.Web {
         #region Public Methods
 
         public override void CreateDeviceInstance(object args) {
+            _instance = this;
+        }
+        public override async Task InitAsync(object args) {
             PlatformInfo = new MpAvBrPlatformInfo();
             JsImporter = MpAvNativeWebViewHost.Implementation as MpIJsImporter;
+            await JsImporter.ImportAllAsync();
             ScreenInfoCollection = new MpAvBrScreenInfoCollection(new[] { new MpAvBrScreenInfo() });
 
-            _instance = this;
         }
         #endregion
     }

@@ -126,7 +126,36 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsHovering { get; set; } = false;
 
-        public bool IsSelected { get; set; } = false;
+        public bool IsSelected {
+            get {
+                if (Parent == null) {
+                    return false;
+                }
+                if (Parent.IsMultiValue) {
+                    return Parent.SelectedItems.Contains(this);
+                }
+                return Parent.SelectedItem == this;
+            }
+            set {
+                if (IsSelected != value) {
+                    if (Parent.IsMultiValue) {
+                        if (value) {
+                            Parent.SelectedItems.Add(this);
+                        } else {
+                            Parent.SelectedItems.Remove(this);
+                        }
+                    } else {
+                        if (value) {
+                            Parent.SelectedItem = this;
+                        } else {
+                            Parent.SelectedItem = null;
+                        }
+                    }
+                    OnPropertyChanged(nameof(IsSelected));
+                }
+            }
+
+        }
 
         public int ValueIdx { get; set; } = 0;
 
@@ -204,6 +233,10 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsSelected):
                     if (IsBusy || Parent.IsBusy) {
                         return;
+                    }
+                    if (Parent.ControlType == MpParameterControlType.ComboBox) {
+                        // workaround since using selectedIdx cause of selection bug
+                        break;
                     }
 
                     Parent.OnPropertyChanged(nameof(Parent.SelectedItem));

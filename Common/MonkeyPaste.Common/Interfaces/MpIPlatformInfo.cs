@@ -11,6 +11,8 @@
 
         string StorageDir { get; }
         bool IsDesktop { get; }
+        bool IsMobile { get; }
+        bool IsBrowser { get; }
         bool IsTouchInputEnabled { get; }
         string OsShortName { get; }
 

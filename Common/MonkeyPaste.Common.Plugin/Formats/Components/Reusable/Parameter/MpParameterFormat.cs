@@ -105,7 +105,8 @@ namespace MonkeyPaste.Common.Plugin {
         //TextBox
         public int maxLength { get; set; } = int.MaxValue;
         public int minLength { get; set; } = 0;
-        public string illegalCharacters { get; set; } = null;
+        public string pattern { get; set; } = string.Empty;
+        public string patternInfo { get; set; } = string.Empty;
 
         //Slider
         public double minimum { get; set; } = double.MinValue;
@@ -115,11 +116,16 @@ namespace MonkeyPaste.Common.Plugin {
         public List<MpPluginParameterValueFormat> values { get; set; } = new List<MpPluginParameterValueFormat>();
 
         public static MpCsvFormatProperties GetControlCsvProps(MpParameterControlType controlType) {
-            return controlType == MpParameterControlType.MultiSelectList ||
-                            controlType == MpParameterControlType.EditableList ?
-                                MpCsvFormatProperties.DefaultBase64Value : MpCsvFormatProperties.Default;
+            return IsControlTypeMultiValue(controlType) ?
+                MpCsvFormatProperties.DefaultBase64Value :
+                MpCsvFormatProperties.Default;
         }
 
+        public static bool IsControlTypeMultiValue(MpParameterControlType controlType) {
+            return
+                controlType == MpParameterControlType.MultiSelectList ||
+                controlType == MpParameterControlType.EditableList;
+        }
         public static bool IsControlCsvValue(MpParameterControlType controlType) {
             return GetControlCsvProps(controlType).IsValueBase64;
         }
@@ -129,6 +135,10 @@ namespace MonkeyPaste.Common.Plugin {
 
         [JsonIgnore]
         public MpCsvFormatProperties CsvProps => GetControlCsvProps(controlType);
+
+        [JsonIgnore]
+        public bool IsMultiValue =>
+            IsControlTypeMultiValue(controlType);
     }
 
 

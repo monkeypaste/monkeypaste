@@ -1,5 +1,8 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Layout;
+using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
@@ -43,6 +46,13 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             IsBusy = true;
+            if (OperatingSystem.IsBrowser()) {
+                await MpDeviceWrapper.Instance.JsImporter.ImportAllAsync();
+                if (Application.Current.ApplicationLifetime is ISingleViewApplicationLifetime mobile
+                        && mobile.MainView != null) {
+                    Mp.Services.ScreenInfoCollection = new MpAvScreenInfoCollectionBase(new[] { new MpAvDesktopScreenInfo(mobile.MainView.GetVisualRoot().AsScreen()) });
+                }
+            }
 
             ConverterWebView = new MpAvPlainHtmlConverterWebView() {
                 HorizontalAlignment = HorizontalAlignment.Stretch,

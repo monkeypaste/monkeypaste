@@ -7,9 +7,11 @@ using System.Reflection;
 namespace MonkeyPaste.Avalonia {
     public enum MpThemeResourceKey {
         GlobalBgOpacity_desktop,
+        GlobalBgOpacity_browser,
         GlobalBgOpacity_mobile,
         GlobalBgOpacity,
         DefaultGridSplitterFixedDimensionLength_desktop,
+        DefaultGridSplitterFixedDimensionLength_browser,
         DefaultGridSplitterFixedDimensionLength_mobile,
         DefaultGridSplitterFixedDimensionLength,
         DefaultEditableFontFamily,
@@ -37,16 +39,6 @@ namespace MonkeyPaste.Avalonia {
         #region Appearance
 
         #region Fixed Resources
-
-        public double GlobalBgOpacity_desktop =>
-            GetThemeValue<double>(MpThemeResourceKey.GlobalBgOpacity_desktop);
-        public double GlobalBgOpacity_mobile =>
-            GetThemeValue<double>(MpThemeResourceKey.GlobalBgOpacity_mobile);
-
-        public double DefaultGridSplitterFixedDimensionLength_desktop =>
-            GetThemeValue<double>(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength_desktop);
-        public double DefaultGridSplitterFixedDimensionLength_mobile =>
-            GetThemeValue<double>(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength_mobile);
 
         public int ShakeDurMs =>
             500;
@@ -104,6 +96,16 @@ namespace MonkeyPaste.Avalonia {
             Mp.Services.PlatformInfo != null &&
             Mp.Services.PlatformInfo.IsDesktop;
 
+        public bool IsMobile =>
+            Mp.Services != null &&
+            Mp.Services.PlatformInfo != null &&
+            Mp.Services.PlatformInfo.IsMobile;
+
+        public bool IsBrowser =>
+            Mp.Services != null &&
+            Mp.Services.PlatformInfo != null &&
+            Mp.Services.PlatformInfo.IsBrowser;
+
         #endregion
 
         #endregion
@@ -113,11 +115,14 @@ namespace MonkeyPaste.Avalonia {
             MpPrefViewModel.Instance.PropertyChanged += PrefViewModel_Instance_PropertyChanged;
             PropertyChanged += MpAvThemeViewModel_PropertyChanged;
 #if DESKTOP
-            GlobalBgOpacity = GlobalBgOpacity_desktop;
-            DefaultGridSplitterFixedDimensionLength = DefaultGridSplitterFixedDimensionLength_desktop;
+            GlobalBgOpacity = GetThemeValue<double>(MpThemeResourceKey.GlobalBgOpacity_desktop);;
+            DefaultGridSplitterFixedDimensionLength = GetThemeValue<double>(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength_desktop);
+#elif BROWSER
+            GlobalBgOpacity = GetThemeValue<double>(MpThemeResourceKey.GlobalBgOpacity_browser); ;
+            DefaultGridSplitterFixedDimensionLength = GetThemeValue<double>(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength_browser);
 #else
-            GlobalBgOpacity = GlobalBgOpacity_mobile;
-            DefaultGridSplitterFixedDimensionLength = DefaultGridSplitterFixedDimensionLength_mobile;
+            GlobalBgOpacity = GetThemeValue<double>(MpThemeResourceKey.GlobalBgOpacity_mobile); ;
+            DefaultGridSplitterFixedDimensionLength = GetThemeValue<double>(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength_mobile);
 #endif
 
             SyncThemePrefs();

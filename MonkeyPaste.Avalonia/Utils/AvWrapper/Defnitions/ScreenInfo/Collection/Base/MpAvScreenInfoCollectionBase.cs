@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace MonkeyPaste.Avalonia {
-    public abstract class MpAvScreenInfoCollectionBase : MpIPlatformScreenInfoCollection {
+    public class MpAvScreenInfoCollectionBase : MpIPlatformScreenInfoCollection {
 
         public ObservableCollection<MpIPlatformScreenInfo> Screens { get; protected set; }
 

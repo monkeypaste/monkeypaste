@@ -14,7 +14,7 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvContentWebViewContainer">
     <local:MpAvContentWebView x:Name="ContentWebView"
                               Focusable="{Binding IsSubSelectionEnabled}"
-                              local:MpAvReceivesEventsExtension.IsEnabled="{Binding !IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                              local:MpAvReceivesEventsExtension.IsEnabled="{Binding IsMobile, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                               ContentId="{Binding CopyItemId, Mode=OneWay}"
                               IsEditorLoaded="{Binding IsEditorLoaded, Mode=TwoWay}"
                               IsContentResizing="{Binding IsResizing}"

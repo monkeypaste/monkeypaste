@@ -236,12 +236,20 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public string IllegalCharacters {
+        public string Pattern {
             get {
                 if (ParameterFormat == null) {
                     return null;
                 }
-                return ParameterFormat.illegalCharacters;
+                return ParameterFormat.pattern;
+            }
+        }
+        public string PatternInfo {
+            get {
+                if (ParameterFormat == null) {
+                    return null;
+                }
+                return ParameterFormat.patternInfo;
             }
         }
         //Slider
@@ -376,6 +384,11 @@ namespace MonkeyPaste.Avalonia {
                 return ParameterFormat.label;
             }
         }
+
+        public bool IsMultiValue =>
+            ParameterFormat == null ?
+                false :
+                ParameterFormat.IsMultiValue;
 
         public MpParameterControlType ControlType {
             get {

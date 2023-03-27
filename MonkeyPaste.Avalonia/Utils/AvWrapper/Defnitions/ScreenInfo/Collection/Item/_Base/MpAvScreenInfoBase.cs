@@ -12,5 +12,9 @@ namespace MonkeyPaste.Avalonia {
 
         public virtual void Rotate(double angle) {
         }
+
+        public override string ToString() {
+            return $"Bounds: '{Bounds}' WorkArea: '{WorkArea}' Scaling: '{Scaling}' IsPrimary: '{IsPrimary}'";
+        }
     }
 }

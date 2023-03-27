@@ -13,8 +13,7 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvPopupMenuSelector">
     <local:MpAvUserControl.Resources>
-        <SolidColorBrush x:Key="ButtonBorderBrushPointerOver"
-                         Color="{DynamicResource HoverDefaultBorderColor}" />
+        <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="{DynamicResource HoverDefaultBorderColor}" />
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
         <!--  HOVER BRUSHES  -->
@@ -92,6 +91,7 @@
                     <local:MpAvMarqueeTextBox Padding="3"
                                               Margin="7,3,0,0"
                                               MinWidth="100"
+                                              EditOnFocus="False"
                                               IsReadOnly="True"
                                               ReadOnlyForeground="White"
                                               DropShadowBrush="Black"

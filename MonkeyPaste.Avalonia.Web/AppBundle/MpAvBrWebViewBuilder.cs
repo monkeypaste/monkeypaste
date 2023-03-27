@@ -7,6 +7,7 @@ using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.JavaScript;
 using System.Text;
@@ -17,40 +18,29 @@ namespace MonkeyPaste.Avalonia.Web {
         MpAvINativeControlBuilder,
         MpIJsImporter,
         MpAvIWebViewInterop {
-        private object embed;
+        //private object embed;
         private Dictionary<string, JSObject> _hostIframeLookup = new Dictionary<string, JSObject>();
         #region Interfaces
 
         async Task MpIJsImporter.ImportAllAsync() {
             await JSHost.ImportAsync("embed.js", "./embed.js");
+            //string editor_path = @"C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia.Web\AppBundle\Editor\";
+
+            //var efl = Directory.EnumerateFiles(editor_path);
+            //foreach (var fp in efl) {
+            //    string mod_url = "./" + fp
+            //        .Replace(@"C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia.Web\AppBundle\", string.Empty);
+            //    await JSHost.ImportAsync(Path.GetFileName(fp), mod_url);
+            //    MpConsole.WriteLine($"imported mod name: '{Path.GetFileName(fp)}' mod url: '{mod_url}'");
+            //}
+
         }
         #region MpAvINativeControlBuilder Implementation
         public IPlatformHandle Build(IPlatformHandle parent, Func<IPlatformHandle> createDefault, MpIWebViewHost host) {
-
-            //var iframe = EmbedInterop.CreateElement("iframe");
-            //iframe.SetProperty("id", host.HostGuid);
-            //if (host is MpAvPlainHtmlConverterWebView) {
-            //    iframe.SetProperty("src", "Editor/index.html?converter=true");
-            //} else {
-            //    iframe.SetProperty("src", "Editor/index.html");
-            //}
-
-            //iframe.SetProperty("crossorigin", true);
-            //iframe.SetProperty("credentialless", true);
-
-            string url = "Editor/index.html";
+            string url = @"file:///C:/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste.Avalonia.Web/AppBundle/Editor/index.html";
             if (host is MpAvPlainHtmlConverterWebView) {
                 url += "?converter=true";
             }
-
-            //if (embed == null) {
-            //    var defaultHandle = (JSObjectControlHandle)createDefault();
-            //    _ = JSHost.ImportAsync("embed.js", "./embed.js").ContinueWith(_ => {
-            //        EmbedInterop.CreateIframe(host.HostGuid, url);
-            //    });
-            //    embed = "poop";
-            //    return defaultHandle;
-            //}
             var iframe = EmbedInterop.CreateIframe(host.HostGuid, url);
 
             _hostIframeLookup.AddOrReplace(host.HostGuid, iframe);
@@ -68,8 +58,6 @@ namespace MonkeyPaste.Avalonia.Web {
             } else {
                 MpConsole.WriteLine($"Cannot send msg, iframe not found for host '{nwvh}'");
             }
-            //MpDebug.Break("look at props to find web view");
-            // EmbedInterop.
         }
 
         public void ReceiveMessage(string bindingName, string msg) {
@@ -99,14 +87,16 @@ namespace MonkeyPaste.Avalonia.Web {
     }
 
     public static partial class EmbedInterop {
+        public const string EMBED_PATH = "embed.js";
+
         [JSImport("globalThis.document.createElement")]
         public static partial JSObject CreateElement(string tagName);
 
-        [JSImport("createIframe", "embed.js")]
+        [JSImport("createIframe", EMBED_PATH)]
         public static partial JSObject CreateIframe(string hostGuid, string srcUrl);
 
 
-        [JSImport("sendMessageToIframe,\"embed.js\"")]
+        [JSImport("sendMessageToIframe", EMBED_PATH)]
         public static partial JSObject SendMessageToIframe(JSObject iframe, string msg);
 
         [JSExport]
@@ -118,10 +108,12 @@ namespace MonkeyPaste.Avalonia.Web {
                 Dispatcher.UIThread.Post(() => {
                     wvh.BindingHandler.HandleBindingNotification(fn.ToEnum<MpAvEditorBindingFunctionType>(), msg);
                 });
+            } else {
+                MpConsole.WriteLine($"[HOST] Cannot receive iframe msg type '{fn}' msg '{msg}'. Cannot find hostGuid '{hostGuid}' ");
             }
         }
 
-        [JSImport("navigateIframe", "embed.js")]
+        [JSImport("navigateIframe", EMBED_PATH)]
         public static partial JSObject NavigateIframe(JSObject iframe, string url);
 
         [JSExport]
@@ -135,7 +127,12 @@ namespace MonkeyPaste.Avalonia.Web {
                         wvb.OnNavigated(url);
                     }
                 });
+            } else {
+                MpConsole.WriteLine($"[HOST] Cannot notify iframe navigated to url '{url}'. Cannot find hostGuid '{hostGuid}' ");
             }
         }
+
+        [JSImport("getWindow", EMBED_PATH)]
+        public static partial JSObject GetWindow();
     }
 }

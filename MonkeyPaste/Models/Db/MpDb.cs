@@ -618,9 +618,9 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
             bool synced = true;
 
             var default_tags = new object[] {
-                new object[] { "df388ecd-f717-4905-a35c-a8491da9c0e3", "All", MpSystemColors.blue1, 0,-1, tracked,synced, 0, MpTagType.Link},
+                new object[] { "df388ecd-f717-4905-a35c-a8491da9c0e3", "Collections", MpSystemColors.blue1, 0,-1, tracked,synced, 0, MpTagType.Link},
                 new object[] { "54b61353-b031-4029-9bda-07f7ca55c123", "Favorites", MpSystemColors.yellow1, 0,-1,tracked,synced, MpTag.AllTagId, MpTagType.Link},
-                new object[] { "e62b8e5d-52a6-46f1-ac51-8f446916dd85", "Searches", MpSystemColors.forestgreen, 1,-1,tracked,synced, 0, MpTagType.Group},
+                new object[] { "e62b8e5d-52a6-46f1-ac51-8f446916dd85", "Filters", MpSystemColors.forestgreen, 1,-1,tracked,synced, 0, MpTagType.Group},
                 new object[] { "a0567976-dba6-48fc-9a7d-cbd306a4eaf3", "Help", MpSystemColors.orange1, 2,1,tracked,synced, 0, MpTagType.Link},
             };
             for (int i = 0; i < default_tags.Length; i++) {

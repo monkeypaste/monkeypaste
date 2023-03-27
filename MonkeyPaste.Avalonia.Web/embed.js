@@ -1,15 +1,16 @@
-﻿import { dotnetRuntime } from './main.js';
+﻿//import { dotnetRuntime } from './main.js';
 
-function createIframe(hostGuid, srcUrl) {
+export function createIframe(hostGuid, srcUrl) {
     var iframe_elm = globalThis.document.createElement('iframe');
 
     iframe_elm.addEventListener('load', onIframeLoaded);
 
     iframe_elm.id = hostGuid;
-    //iframe_elm.setAttribute('src', 'Editor/index.html?auto_test');
     iframe_elm.setAttribute('src', srcUrl);
     iframe_elm.setAttribute('crossorigin', true);
     iframe_elm.setAttribute('credentialless', true);
+
+    console.log('created iframe src url "' + srcUrl + '" for host guid "' + hostGuid + '"');
 
     return iframe_elm;
 }
@@ -17,10 +18,10 @@ function onIframeLoaded(e) {
     onIframeNavigated(e.srcElement.id, e.srcElement.getAttribute('src'));
 }
 
-function navigateIframe(iframe_elm, url) {
+export function navigateIframe(iframe_elm, url) {
     //let iframe_elm = getEditorIframeElementByHostGuid(hostGuid);
     if (!iframe_elm) {
-        console.log('no iframe found for guid: ' + hostGuid + ' cannot set url ' + url);
+        console.log('iframe null cannot set src "' + url+'"');
         return;
     }
     iframe_elm.setAttribute('src', url);
@@ -31,15 +32,16 @@ function getEditorIframeElementByHostGuid(hostGuid) {
     return globalThis.document.getElementById(hostGuid);
 }
 
-function sendMessageToIframe(editor_elm, msg) {
+export function sendMessageToIframe(iframe_elm, msg) {
     if (!msg) {
         return;
     }
     //let editor_elm = getEditorIframeElementByHostGuid(hostGuid);
-    if (!editor_elm) {
+    if (!iframe_elm) {
+        console.log('iframe null cannot send msg "' + msg+'"');
         return;
     }
-    editor_elm.contentWindow.postMessage(msg);
+    iframe_elm.contentWindow.postMessage(msg);
     console.log('msg to editor: ' + msg)
 }
 
@@ -51,14 +53,19 @@ function onReceivedIframeMessage(e) {
 }
 
 export async function onIframeNavigated(hostGuid, url) {
-    const { getAssemblyExports } = dotnetRuntime;//await getDotnetRuntime(0);
+    const { getAssemblyExports } = await globalThis.getDotnetRuntime(0);
     var exports = await getAssemblyExports("MonkeyPaste.Avalonia.Web.dll");
     exports.MonkeyPaste.Avalonia.Web.EmbedInterop.iframeNavigated(hostGuid, url);
 }
 
 export async function sendMessageToHost(hostGuid, fn, msg) {
-    const { getAssemblyExports } = dotnetRuntime;//await getDotnetRuntime(0);
+    const { getAssemblyExports } = await globalThis.getDotnetRuntime(0);
     var exports = await getAssemblyExports("MonkeyPaste.Avalonia.Web.dll");
 
     exports.MonkeyPaste.Avalonia.Web.EmbedInterop.receiveMessageFromIframe(hostGuid, fn, msg);
+}
+
+export function getWindow() {
+    //let result = `${globalThis.window.innerWidth},${globalThis.window.innerHeight}`;
+    return globalThis.window;
 }

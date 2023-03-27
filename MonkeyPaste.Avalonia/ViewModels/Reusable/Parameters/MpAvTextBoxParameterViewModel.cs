@@ -3,6 +3,7 @@ using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -150,10 +151,8 @@ namespace MonkeyPaste.Avalonia {
                 ValidationMessage = $"{Label} must be at least {MinLength} characters";
             } else if (CurrentValue.Length > MaxLength) {
                 ValidationMessage = $"{Label} can only be {MaxLength} characters";
-            } else if (IllegalCharacters != null && CurrentValue
-                        .Split(new string[] { string.Empty }, StringSplitOptions.None)
-                        .Any(x => IllegalCharacters.Contains(x))) {
-                ValidationMessage = $"{Label} cannot contain {ParameterFormat.illegalCharacters} characters";
+            } else if (!string.IsNullOrEmpty(Pattern) && !Regex.IsMatch(CurrentValue, Pattern)) {
+                ValidationMessage = $"{Label} is invalid: Conditions are: '{PatternInfo}'";
             } else {
                 ValidationMessage = string.Empty;
             }

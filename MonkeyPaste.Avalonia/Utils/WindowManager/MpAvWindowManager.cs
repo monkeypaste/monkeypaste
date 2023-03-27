@@ -268,18 +268,19 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void UpdateTopmost() {
-            return;
-            //if (AllWindows.Any(x => x is MpIIsAnimatedWindowViewModel && (x as MpIIsAnimatedWindowViewModel).IsAnimating)) {
-            //    // ignore update while animating out
-            //    return;
-            //}
+            Dispatcher.UIThread.Post(() => {
+                if (AllWindows.Any(x => x is MpIIsAnimatedWindowViewModel && (x as MpIIsAnimatedWindowViewModel).IsAnimating)) {
+                    // ignore update while animating out
+                    return;
+                }
 
-            //var priority_ordered_topmost_wl = AllWindows
-            //    .Where(x => x.WantsTopmost)
-            //    .OrderByDescending(x => (int)(x.DataContext as MpIWindowViewModel).WindowType);
+                var priority_ordered_topmost_wl = AllWindows
+                    .Where(x => x.WantsTopmost)
+                    .OrderByDescending(x => (int)(x.DataContext as MpIWindowViewModel).WindowType);
 
-            //priority_ordered_topmost_wl
-            //    .ForEach((x, idx) => x.Topmost = idx == 0);
+                priority_ordered_topmost_wl
+                    .ForEach((x, idx) => x.Topmost = idx == 0);
+            });
         }
 
 

@@ -656,7 +656,10 @@ namespace MonkeyPaste.Avalonia {
                 OnPropertyChanged(nameof(FocusAction));
 
                 if (focusArgNum > 0) {
-
+                    // this should only occur from clicking 'fix' ntf button
+                    if (!MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
+                        MpAvMainWindowViewModel.Instance.ShowMainWindowCommand.Execute(null);
+                    }
                     MpAvSidebarItemCollectionViewModel.Instance.SelectSidebarItemCommand.Execute(this);
                 }
 

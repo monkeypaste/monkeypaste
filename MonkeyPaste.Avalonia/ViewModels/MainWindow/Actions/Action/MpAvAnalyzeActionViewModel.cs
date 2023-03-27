@@ -161,7 +161,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected override async Task ValidateActionAsync() {
-            await Task.Delay(1);
+            await base.ValidateActionAsync();
+            if (!IsValid) {
+                return;
+            }
 
             if (AnalyticItemPresetId == 0) {
                 ValidationText = $"No analyzer selection for action '{FullName}'";

@@ -151,6 +151,7 @@ namespace MonkeyPaste.Avalonia {
         #region State
 
         public bool IsAllValid => IsValid && AllDescendants.All(x => x.IsValid);
+
         #endregion
 
         #region Model       
@@ -265,6 +266,7 @@ namespace MonkeyPaste.Avalonia {
                         Parent.OnPropertyChanged(nameof(Parent.IsAnyBusy));
                     }
                     break;
+
             }
         }
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
@@ -287,7 +289,8 @@ namespace MonkeyPaste.Avalonia {
         public ICommand EnableTriggerCommand => new MpAsyncCommand(
             async () => {
                 await ValidateActionAsync();
-                if (!IsValid) {
+                if (!IsAllValid) {
+                    OnPropertyChanged(nameof(IsTriggerEnabled));
                     return;
                 }
                 EnableOrDisableTrigger(true);

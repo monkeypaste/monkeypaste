@@ -521,6 +521,11 @@ namespace MonkeyPaste.Avalonia {
 
                     }
                     _mainWindowScreen = Mp.Services.ScreenInfoCollection.Screens.ElementAt(MainWindowMonitorIdx);
+                    if (_mainWindowScreen == null &&
+                        Application.Current.ApplicationLifetime is ISingleViewApplicationLifetime browser
+                        && browser.MainView != null) {
+                        _mainWindowScreen = new MpAvDesktopScreenInfo(browser.MainView.GetVisualRoot().AsScreen());
+                    }
                 }
                 return _mainWindowScreen;
             }

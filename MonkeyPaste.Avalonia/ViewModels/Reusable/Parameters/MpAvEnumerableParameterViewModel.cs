@@ -19,42 +19,44 @@ namespace MonkeyPaste.Avalonia {
 
         public virtual ObservableCollection<MpAvEnumerableParameterValueViewModel> Items { get; set; } = new ObservableCollection<MpAvEnumerableParameterValueViewModel>();
 
-        public virtual MpAvEnumerableParameterValueViewModel SelectedItem {
-            get => Items.FirstOrDefault(x => x.IsSelected);
-            set {
-                if (SelectedItem != value) {
-                    if (value == null) {
-                        Items.ForEach(x => x.IsSelected = false);
-                    } else {
-                        Items.ForEach(x => x.IsSelected = x.ValueIdx == value.ValueIdx);
-                    }
-                    OnPropertyChanged(nameof(SelectedItems));
-                    OnPropertyChanged(nameof(SelectedItem));
-                    OnPropertyChanged(nameof(CurrentValue));
-                }
-            }
-        }
-        public virtual IList<MpAvEnumerableParameterValueViewModel> SelectedItems {
-            get {
-                if (ControlType == MpParameterControlType.EditableList) {
-                    return Items;
-                }
-                return Items.Where(x => x.IsSelected).ToList();
-            }
-            set {
-                if (SelectedItems != value) {
-                    if (value == null) {
-                        Items.ForEach(x => x.IsSelected = false);
-                    } else {
-                        Items.ForEach(x => x.IsSelected = value.Contains(x));
-                    }
+        public virtual MpAvEnumerableParameterValueViewModel SelectedItem { get; set; }
+        //public virtual MpAvEnumerableParameterValueViewModel SelectedItem {
+        //    get => Items.FirstOrDefault(x => x.IsSelected);
+        //    set {
+        //        if (SelectedItem != value) {
+        //            if (value == null) {
+        //                Items.ForEach(x => x.IsSelected = false);
+        //            } else {
+        //                Items.ForEach(x => x.IsSelected = x.ValueIdx == value.ValueIdx);
+        //            }
+        //            OnPropertyChanged(nameof(SelectedItems));
+        //            OnPropertyChanged(nameof(SelectedItem));
+        //            OnPropertyChanged(nameof(CurrentValue));
+        //        }
+        //    }
+        //}
+        public virtual ObservableCollection<MpAvEnumerableParameterValueViewModel> SelectedItems { get; set; } = new ObservableCollection<MpAvEnumerableParameterValueViewModel>();
+        //public virtual IList<MpAvEnumerableParameterValueViewModel> SelectedItems {
+        //    get {
+        //        if (ControlType == MpParameterControlType.EditableList) {
+        //            return Items;
+        //        }
+        //        return Items.Where(x => x.IsSelected).ToList();
+        //    }
+        //    set {
+        //        if (SelectedItems != value) {
+        //            if (value == null) {
+        //                Items.ForEach(x => x.IsSelected = false);
+        //            } else {
+        //                Items.ForEach(x => x.IsSelected = value.Contains(x));
+        //            }
 
-                    OnPropertyChanged(nameof(SelectedItems));
-                    OnPropertyChanged(nameof(SelectedItem));
-                    OnPropertyChanged(nameof(CurrentValue));
-                }
-            }
-        }
+        //            OnPropertyChanged(nameof(SelectedItems));
+        //            OnPropertyChanged(nameof(SelectedItem));
+        //            OnPropertyChanged(nameof(CurrentValue));
+        //        }
+        //    }
+        //}
 
         #endregion
 
@@ -64,9 +66,20 @@ namespace MonkeyPaste.Avalonia {
                                              //SelectedItems.Difference(_lastSelectedValues).Count() > 0; //{
           {
             get {
-                var selected_vals = SelectedItems.Select(x => x.Value).ToList();
-                var last_vals = _lastSelectedValues.Select(x => x.Value).ToList();
-                return selected_vals.Difference(last_vals).ToList().Count > 0;
+                if (IsParameterDropDownOpen) {
+                    return false;
+                }
+                var selected_vals = SelectedItems.Select(x => x.Value);
+                var last_vals = _lastSelectedValues.Select(x => x.Value);
+                if (selected_vals.Count() != last_vals.Count()) {
+                    // HACK attempt to work around SelectedItem comboBox bug
+                    return true;
+                }
+                var diffs = selected_vals.Difference(last_vals);
+                if (diffs.Any()) {
+                    return true;
+                }
+                return false;
             }
         }
         public bool IsParameterDropDownOpen { get; set; }
@@ -217,7 +230,8 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void RestoreLastValue() {
             if (_lastSelectedValues is IEnumerable<MpAvEnumerableParameterValueViewModel> val_vml) {
-                SelectedItems = val_vml.ToList();
+                SelectedItems.Clear();
+                SelectedItems.AddRange(val_vml);//= new // val_vml.ToList();
             } else {
                 SelectedItems.Clear();
             }

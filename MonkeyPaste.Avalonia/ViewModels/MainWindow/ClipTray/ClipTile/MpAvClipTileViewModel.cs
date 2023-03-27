@@ -406,7 +406,7 @@ namespace MonkeyPaste.Avalonia {
         public bool DoShake { get; set; }
 
         public bool IsResizerEnabled =>
-            MpAvThemeViewModel.Instance.IsDesktop &&
+            //MpAvThemeViewModel.Instance.IsDesktop &&
             !IsPopOutVisible;
 
         public bool IsPopOutVisible { get; set; }

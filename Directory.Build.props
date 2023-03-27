@@ -6,7 +6,7 @@
   <!-- IOS - net7.0-ios-->
   
   <PropertyGroup>
-    <BuildOs>BROWSER</BuildOs>
+    <BuildOs>WINDOWS</BuildOs>
   </PropertyGroup>
   
   <PropertyGroup Condition="$(BuildOs) == 'WINDOWS'">
@@ -38,7 +38,7 @@
   
   <PropertyGroup Condition="$(BuildOs) == 'ANDROID'">
     <MainTargetFramework>net7.0-android</MainTargetFramework>
-    <DefineConstants>ANDROID;</DefineConstants>
+    <DefineConstants>MOBILE;ANDROID;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.Android</MainProjectName>
     <AndroidPackageName>com.CompanyName.MonkeyPaste.Avalonia</AndroidPackageName>
     <AndroidInternalStorageDir>/data/user/0/$(AndroidPackageName)/files</AndroidInternalStorageDir>
@@ -46,7 +46,7 @@
 
   <PropertyGroup Condition="$(BuildOs) == 'IOS'">
     <MainTargetFramework>net7.0-ios</MainTargetFramework>
-    <DefineConstants>IOS;</DefineConstants>
+    <DefineConstants>MOBILE;IOS;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.iOS</MainProjectName>
   </PropertyGroup>
   

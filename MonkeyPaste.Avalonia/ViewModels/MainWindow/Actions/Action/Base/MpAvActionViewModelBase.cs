@@ -64,7 +64,7 @@ namespace MonkeyPaste.Avalonia {
                         return "BrainImage";
                     case MpActionType.Classify:
                         return "PinToCollectionImage";
-                    case MpActionType.Compare:
+                    case MpActionType.Conditional:
                         return "ScalesImage";
                     case MpActionType.Repeater:
                         return "AlarmClockImage";
@@ -87,7 +87,7 @@ namespace MonkeyPaste.Avalonia {
                     return MpSystemColors.magenta;
                 case MpActionType.Classify:
                     return MpSystemColors.tomato1;
-                case MpActionType.Compare:
+                case MpActionType.Conditional:
                     return MpSystemColors.darkturquoise;
                 case MpActionType.Repeater:
                     return MpSystemColors.steelblue;
@@ -194,11 +194,15 @@ namespace MonkeyPaste.Avalonia {
         public bool CanSaveOrCancel {
             get {
                 var toSave_pvml = ActionArgs.Where(x => x.HasModelChanged);
+                bool has_changed = toSave_pvml.Any();
                 toSave_pvml.ForEach(x => x.SaveCurrentValueCommand.Execute(null));
-                bool result = ActionArgs.Any(x => x.HasModelChanged);
-                if (toSave_pvml.Any()) {
-                    OnPropertyChanged(nameof(ActionArgs));
+                if (has_changed) {
+                    HasArgsChanged = true;
                 }
+                //bool result = ActionArgs.Any(x => x.HasModelChanged);
+                //if (toSave_pvml.Any()) {
+                //    OnPropertyChanged(nameof(ActionArgs));
+                //}
                 return false;
             }
         }
@@ -265,7 +269,7 @@ namespace MonkeyPaste.Avalonia {
                     toolTipStr = "Analyzer - Processes triggered content or previous action output using a selected plugin.";
                 } else if (this is MpAvClassifyActionViewModel) {
                     toolTipStr = "Classifier - Automatically adds triggered content to the selected collection.";
-                } else if (this is MpAvCompareActionViewModelBase) {
+                } else if (this is MpAvConditionalActionViewModel) {
                     toolTipStr = "Comparer - Parses content or previous action output for text. When text is found, the output is ranges where those conditions were met. When comparision fails, no subsequent actions will be evaluated.";
                 } else if (this is MpAvFileWriterActionViewModel) {
                     toolTipStr = "File Writer - Saves content to the selected folder.";
@@ -472,7 +476,8 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsActionTextBoxFocused { get; set; } = false;
 
-        public bool IsValid => string.IsNullOrEmpty(ValidationText);
+        public bool IsValid =>
+            string.IsNullOrEmpty(ValidationText);
 
         private string _validationText;
         public string ValidationText {
@@ -845,8 +850,8 @@ namespace MonkeyPaste.Avalonia {
                 case MpActionType.Classify:
                     avm = new MpAvClassifyActionViewModel(Parent);
                     break;
-                case MpActionType.Compare:
-                    avm = new MpAvCompareActionViewModelBase(Parent);
+                case MpActionType.Conditional:
+                    avm = new MpAvConditionalActionViewModel(Parent);
                     break;
                 case MpActionType.Repeater:
                     avm = new MpAvRepeaterActionViewModel(Parent);
@@ -865,7 +870,7 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task<MpAvParameterViewModelBase> CreateActionParameterViewModel(MpParameterValue pppv) {
             var naipvm = await MpAvPluginParameterBuilder.CreateParameterViewModelAsync(pppv, this);
-            naipvm.OnValidate += ActionParam_OnValidate;
+            //naipvm.OnValidate += ActionParam_OnValidate;
 
             return naipvm;
         }
@@ -988,8 +993,20 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected virtual async Task ValidateActionAsync() {
-            // is always valid
-            await Task.Delay(1);
+            // clear validation
+            ValidationText = string.Empty;
+            foreach (var param in ActionArgs) {
+                if (!param.Validate()) {
+                    // when any parameter is invalid halt any further validation
+                    // and by convention inheritor will halt as well
+                    ValidationText = param.ValidationMessage;
+                    ShowValidationNotification();
+                    return;
+                }
+            }
+            //validate children
+            await Task.WhenAll(Children.Select(x => x.ValidateActionAsync()));
+            // let inheritors perform validation...
         }
 
 
@@ -1052,6 +1069,7 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsSelected):
                     if (IsSelected) {
                         Parent.SelectActionCommand.Execute(this);
+                        LastSelectedDateTime = DateTime.Now;
                     }
                     OnPropertyChanged(nameof(IsTrigger));
 

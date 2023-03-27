@@ -17,18 +17,26 @@ namespace MonkeyPaste.Avalonia.Web {
             true;
 
         public MpAvBrScreenInfo() {
-            if (AvApplication.Current is ISingleViewApplicationLifetime mobile &&
-                mobile.MainView.GetVisualRoot() is IRenderRoot rr) {
-                Scaling = 1;
-                Bounds = new MpRect(MpPoint.Zero, rr.ClientSize.ToPortableSize());
-                WorkArea = Bounds;
-                IsPrimary = true;
-            } else {
-                Scaling = 2.25;
-                Bounds = new MpRect(MpPoint.Zero, new MpSize(3840, 2160));
-                WorkArea = Bounds;
-                IsPrimary = true;
-            }
+            var win = EmbedInterop.GetWindow();
+            Scaling = win.GetPropertyAsDouble("devicePixelRatio");
+
+            Bounds = new MpRect(MpPoint.Zero, new MpSize(win.GetPropertyAsDouble("innerWidth"), win.GetPropertyAsDouble("innerHeight")));
+            WorkArea = Bounds;
+            IsPrimary = true;
+
+            MpConsole.WriteLine(this.ToString());
+            //if (AvApplication.Current is ISingleViewApplicationLifetime mobile &&
+            //    mobile.MainView.GetVisualRoot() is IRenderRoot rr) {
+            //    Scaling = 1;
+            //    Bounds = new MpRect(MpPoint.Zero, rr.ClientSize.ToPortableSize());
+            //    WorkArea = Bounds;
+            //    IsPrimary = true;
+            //} else {
+            //    Scaling = 2.25;
+            //    Bounds = new MpRect(MpPoint.Zero, new MpSize(3840, 2160));
+            //    WorkArea = Bounds;
+            //    IsPrimary = true;
+            //}
         }
     }
 }

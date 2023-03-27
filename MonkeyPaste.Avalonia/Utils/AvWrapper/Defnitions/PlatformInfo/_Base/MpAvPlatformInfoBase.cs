@@ -78,6 +78,13 @@ namespace MonkeyPaste.Avalonia {
             OperatingSystem.IsMacOS() ||
             OperatingSystem.IsLinux();
 
+
+        public bool IsMobile =>
+            OperatingSystem.IsIOS() ||
+            OperatingSystem.IsAndroid();
+        public bool IsBrowser =>
+            OperatingSystem.IsBrowser();
+
         public abstract bool IsTouchInputEnabled { get; }
         public virtual string OsFileManagerPath {
             get {
@@ -173,6 +180,7 @@ namespace MonkeyPaste.Avalonia {
             MpDebug.Break("missing executable exit");
             return null;
         }
+
         #endregion
     }
 }

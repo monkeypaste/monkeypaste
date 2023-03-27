@@ -185,6 +185,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected override async Task ValidateActionAsync() {
+            await base.ValidateActionAsync();
+            if (!IsValid) {
+                return;
+            }
             //if (!IsValid) {
             //    return IsValid;
             //}

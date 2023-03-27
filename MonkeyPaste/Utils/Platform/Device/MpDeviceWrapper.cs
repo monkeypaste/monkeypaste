@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Common;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public abstract class MpDeviceWrapper : MpIDeviceWrapper {
@@ -24,6 +25,7 @@ namespace MonkeyPaste {
 
         public abstract void CreateDeviceInstance(object args);
 
+        public virtual async Task InitAsync(object args) { await Task.Delay(1); }
 
         #endregion
 

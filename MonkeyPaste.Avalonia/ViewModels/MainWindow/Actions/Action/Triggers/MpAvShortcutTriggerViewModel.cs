@@ -89,7 +89,10 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
 
         protected override async Task ValidateActionAsync() {
-            await Task.Delay(1);
+            await base.ValidateActionAsync();
+            if (!IsValid) {
+                return;
+            }
             if (ShortcutViewModel == null) {
                 ValidationText = $"Shortcut for Trigger '{FullName}' not found";
             } else {

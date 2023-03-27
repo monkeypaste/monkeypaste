@@ -74,7 +74,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected override async Task ValidateActionAsync() {
-            await Task.Delay(1);
+            await base.ValidateActionAsync();
+            if (!IsValid) {
+                return;
+            }
             if (string.IsNullOrEmpty(FolderPath)) {
                 ValidationText = $"No folder specified for trigger action '{FullName}'";
             } else if (!FolderPath.IsDirectory()) {
