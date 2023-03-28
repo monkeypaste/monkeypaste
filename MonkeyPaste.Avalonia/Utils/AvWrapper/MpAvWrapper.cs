@@ -30,6 +30,8 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        public MpIColorQueryTools ColorQueryTools { get; set; }
+
         public MpIKeyConverterHub KeyConverter { get; set; }
         public MpIKeyStrokeSimulator KeyStrokeSimulator { get; set; }
         public MpINativePathDialog NativePathDialog { get; set; }
@@ -115,6 +117,7 @@ namespace MonkeyPaste.Avalonia {
 
             await MpPrefViewModel.InitAsync(prefPath, DbInfo, PlatformInfo);
 
+            ColorQueryTools = new MpAvColorQueryTools();
             NativePathDialog = new MpAvPathDialog();
             UserProvidedFileExts = MpPrefViewModel.Instance;
             Query = MpAvQueryViewModel.Parse(MpPrefViewModel.Instance.LastQueryInfoJson);

@@ -9,7 +9,18 @@
                        d:DesignHeight="450"
                        d:DesignWidth="800">
     <local:MpAvUserControl.Styles>
-
+        <Style Selector="StackPanel.compositeTextBoxContainer TextBox">
+            <Setter Property="MinWidth"
+                    Value="50" />
+            <Setter Property="Margin"
+                    Value="1" />
+        </Style>
+        <Style Selector="StackPanel.compositeTextBoxContainer Label">
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="FontWeight"
+                    Value="SemiBold" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <ContentControl x:Name="CriteriaOptionContentControl"
                     Margin="0,3"
@@ -51,7 +62,37 @@
                         <TextBox x:Name="MatchValueTextBox"
                                  Watermark="Enter search term..."
                                  Classes.valid="{Binding IsValid}"
-                                 AttachedToLogicalTree="TextBox_AttachedToLogicalTree"
+                                 local:MpAvTextControlDropExtension.IsEnabled="True"
+                                 local:MpAvTextControlDropExtension.IsDragOverHandled="True"
+                                 local:MpAvDelayedTextChangedExtension.IsEnabled="True"
+                                 local:MpAvDelayedTextChangedExtension.DelayMs="500"
+                                 local:MpAvDelayedTextChangedExtension.Text="{Binding Value, Mode=TwoWay}" />
+                    </DockPanel>
+                </DataTemplate>
+
+                <!--  HEXCOLOR  -->
+                <DataTemplate x:Key="HexOptionTemplate"
+                              DataType="local:MpAvSearchCriteriaOptionViewModel">
+                    <DockPanel LastChildFill="True">
+
+                        <!--  Color picker  -->
+                        <Button x:Name="ColorPickerButton"
+                                DockPanel.Dock="Right"
+                                Command="{Binding ShowColorPickerCommand}"
+                                CommandParameter="{Binding $self}"
+                                Margin="5,0,0,0">
+                            <Image Width="15"
+                                   Height="15"
+                                   Source="{Binding Source={StaticResource ColorsImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                        </Button>
+
+                        <!--  TEXTBOX BORDER  -->
+
+                        <TextBox x:Name="MatchValueTextBox"
+                                 Watermark="Enter hex color..."
+                                 Classes.valid="{Binding IsValid}"
+                                 local:MpAvTextControlDropExtension.IsEnabled="True"
+                                 local:MpAvTextControlDropExtension.IsDragOverHandled="True"
                                  local:MpAvDelayedTextChangedExtension.IsEnabled="True"
                                  local:MpAvDelayedTextChangedExtension.DelayMs="500"
                                  local:MpAvDelayedTextChangedExtension.Text="{Binding Value, Mode=TwoWay}" />
@@ -59,36 +100,66 @@
                 </DataTemplate>
                 <DataTemplate x:Key="RGBAOptionTemplate"
                               DataType="local:MpAvSearchCriteriaOptionViewModel">
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal"
+                                Classes="compositeTextBoxContainer">
+
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="A" />
+                            <TextBox Classes.valid="{Binding IsValid4}"
+                                     local:MpAvTextControlDropExtension.IsEnabled="True"
+                                     local:MpAvTextControlDropExtension.IsDragOverHandled="True"
+                                     Text="{Binding Value4, Mode=TwoWay}" />
+                        </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="R" />
-                            <TextBox Classes="compositeTextBox"
-                                     Classes.valid="{Binding IsValid1}"
-                                     AttachedToLogicalTree="TextBox_AttachedToLogicalTree"
+                            <TextBox Classes.valid="{Binding IsValid1}"
+                                     local:MpAvTextControlDropExtension.IsEnabled="True"
+                                     local:MpAvTextControlDropExtension.IsDragOverHandled="True"
                                      Text="{Binding Value1, Mode=TwoWay}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="G" />
-                            <TextBox Classes="compositeTextBox"
-                                     Classes.valid="{Binding IsValid2}"
-                                     AttachedToLogicalTree="TextBox_AttachedToLogicalTree"
+                            <TextBox Classes.valid="{Binding IsValid2}"
+                                     local:MpAvTextControlDropExtension.IsEnabled="True"
+                                     local:MpAvTextControlDropExtension.IsDragOverHandled="True"
                                      Text="{Binding Value2, Mode=TwoWay}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="B" />
-                            <TextBox Classes="compositeTextBox"
-                                     Classes.valid="{Binding IsValid3}"
-                                     AttachedToLogicalTree="TextBox_AttachedToLogicalTree"
+                            <TextBox Classes.valid="{Binding IsValid3}"
+                                     local:MpAvTextControlDropExtension.IsEnabled="True"
+                                     local:MpAvTextControlDropExtension.IsDragOverHandled="True"
                                      Text="{Binding Value3, Mode=TwoWay}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <Label Content="A" />
-                            <TextBox Classes="compositeTextBox"
-                                     Classes.valid="{Binding IsValid4}"
-                                     AttachedToLogicalTree="TextBox_AttachedToLogicalTree"
-                                     Text="{Binding Value4, Mode=TwoWay}" />
+                            <!--  Color picker  -->
+                            <Button x:Name="ColorPickerButton"
+                                    Command="{Binding ShowColorPickerCommand}"
+                                    CommandParameter="{Binding $self}"
+                                    Margin="5,0,0,0">
+                                <Image Width="15"
+                                       Height="15"
+                                       Source="{Binding Source={StaticResource ColorsImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                            </Button>
                         </StackPanel>
                     </StackPanel>
+                </DataTemplate>
+                <DataTemplate x:Key="UnitDecimalOptionTemplate"
+                              DataType="local:MpAvSearchCriteriaOptionViewModel">
+                    <Grid ColumnDefinitions="Auto,*"
+                          Margin="7,0,0,0">
+                        <Label Content="Distance"
+                               Grid.Column="0"
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center" />
+                        <!--<local:MpAvSliderParameterView Width="100"
+                                                       Height="30"
+                                                       Grid.Column="1" />-->
+                        <TextBox Classes.valid="{Binding IsValid}"
+                                 local:MpAvTextControlDropExtension.IsEnabled="True"
+                                 local:MpAvTextControlDropExtension.IsDragOverHandled="True"
+                                 Text="{Binding Value, Mode=TwoWay}" />
+                    </Grid>
                 </DataTemplate>
                 <DataTemplate x:Key="DateOptionTemplate"
                               DataType="local:MpAvSearchCriteriaOptionViewModel">

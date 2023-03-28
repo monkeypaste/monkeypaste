@@ -341,6 +341,7 @@
                                      DragDrop.AllowDrop="True"
                                      VerticalAlignment="Stretch"
                                      HorizontalAlignment="Stretch"
+                                     local:MpAvTextControlDropExtension.IsEnabled="True"
                                      local:MpAvIsFocusedExtension.IsEnabled="True"
                                      local:MpAvIsFocusedExtension.IsFocused="{Binding IsTextBoxFocused, Mode=TwoWay}"
                                      local:MpAvIsHoveringExtension.IsEnabled="True"
@@ -391,7 +392,7 @@
                       IsChecked="{Binding IsExpanded, Mode=TwoWay, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
                       Classes="noBg noHoverBg outlineOver"
                       Classes.saved="{Binding IsSavedQuery, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}">
-            <Image/>
+            <Image />
         </ToggleButton>
         <!--</StackPanel>-->
     </Grid>

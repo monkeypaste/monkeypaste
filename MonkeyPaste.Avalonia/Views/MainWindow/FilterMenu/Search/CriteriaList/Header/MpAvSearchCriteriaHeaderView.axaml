@@ -19,18 +19,27 @@
                     Orientation="Horizontal"
                     Margin="0,0,30,0">
 
-            <!--  SAVE BUTTON  -->
-            <Button x:Name="SaveSearchButton"
+            <!--  New BUTTON  -->
+            <Button x:Name="DuplicateAdvSearchButton"
                     Classes="defaultButton textOnlyButton outline outlineOver"
-                    IsVisible="{Binding IsPendingQuery}"
-                    Command="{Binding SavePendingQueryCommand}"
+                    IsVisible="{Binding IsSavedQuery}"
+                    Command="{Binding DuplicateQueryCommand}"
+                    Margin="0,0,5,0">
+                <TextBlock Text="New..." />
+            </Button>
+
+            <!--  SAVE BUTTON  -->
+            <Button x:Name="SaveAdvSearchButton"
+                    Classes="defaultButton textOnlyButton outline outlineOver"
+                    IsVisible="{Binding CanSave}"
+                    Command="{Binding SaveQueryCommand}"
                     Margin="0,0,5,0">
                 <TextBlock Text="Save" />
             </Button>
 
             <!--  ADVANCED SEARCH TOGGLE BUTTON  -->
 
-            <Button x:Name="DeleteSearchButton"
+            <Button x:Name="DeleteAdvSearchButton"
                     Margin="5,5,5,5"
                     BorderThickness="0"
                     VerticalAlignment="Stretch"

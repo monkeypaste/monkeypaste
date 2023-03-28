@@ -28,6 +28,12 @@ namespace MonkeyPaste.Avalonia {
                     return 0;
                 }
             }
+            set {
+                if (SliderValue != value) {
+                    CurrentValue = value.ToStringOrDefault();
+                    OnPropertyChanged(nameof(SliderValue));
+                }
+            }
         }
         public double MinValue => Minimum;
         public double MaxValue => Maximum;

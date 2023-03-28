@@ -40,7 +40,7 @@ namespace MonkeyPaste.Avalonia {
                 if (string.IsNullOrEmpty(hex_color)) {
                     string named_color = valParts.FirstOrDefault(x => x.IsStringNamedColor());
                     if (!string.IsNullOrEmpty(named_color)) {
-                        hex_color = MpSystemColors.ConvertFromString(named_color);
+                        hex_color = MpColorHelpers.ParseHexFromString(named_color);
                     }
                 }
                 if (!string.IsNullOrEmpty(hex_color)) {

@@ -163,6 +163,7 @@ namespace MonkeyPaste {
             string mv = qi.MatchValue.CaseFormat(true);
             arg_filters.AddRange(qf.GetStringMatchOps(mv));
             arg_filters.AddRange(qf.GetDateTimeMatchOps(mv));
+            arg_filters.AddRange(qf.GetColorMatchOps(mv));
 
             return arg_filters;
         }
@@ -200,6 +201,36 @@ namespace MonkeyPaste {
                     ops.Add(new Tuple<string, List<object>>(strFilter, new[] { strParam }.ToList()));
                 }
             }
+            return ops;
+        }
+
+        #endregion
+
+        #region Color Match
+        private static IEnumerable<Tuple<string, List<object>>> GetColorMatchOps(
+            this MpContentQueryBitFlags qf,
+            string mv) {
+            var ops = new List<Tuple<string, List<object>>>();
+            if (!qf.HasFlag(MpContentQueryBitFlags.Hex) && !qf.HasFlag(MpContentQueryBitFlags.Rgba)) {
+                return ops;
+            }
+            // PIXELCOUNT(ImageBase64,'<mv>')
+            var mv_parts = mv.SplitNoEmpty(",").ToList();
+            if (mv_parts.Count == 0) {
+                return ops;
+            }
+            if (mv_parts.Count < 2) {
+                // when no dist has been provided treat as exact
+                mv_parts.Add("0");
+            }
+            if (qf.HasFlag(MpContentQueryBitFlags.Rgba)) {
+                // decode base64 csv
+                mv = $"({string.Join(",", mv_parts[0].ToListFromCsv(MpCsvFormatProperties.DefaultBase64Value))})";
+            } else {
+                mv = mv_parts[0];
+            }
+            mv += "," + mv_parts[1];
+            ops.Add(new Tuple<string, List<object>>($"PIXELCOUNT(?,ItemData) > 0", new object[] { mv }.ToList()));
             return ops;
         }
 

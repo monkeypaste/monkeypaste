@@ -33,9 +33,6 @@ namespace MonkeyPaste.Common {
         WholeWord = 16384,
         DeviceType = 32768,
         DeviceName = 65536,
-        //MatchValue = 131072,
-        //DateTime = 262_144,
-        //DateTimeRange = 524_288,
 
         Matches = 1_048_576,
         Contains = 2_097_152,
@@ -47,6 +44,12 @@ namespace MonkeyPaste.Common {
 
         Hex = 67_108_864,
         Rgba = 134_217_728,
+        ColorDistance = 4_398_046_511_104,
+
+        //Equals = 131072,
+        //GreaterThan = 262_144,
+        //LessThan = 524_288,
+        //IsNot = 2_199_023_255_552,
 
         Exactly = 268_435_456,
         Before = 536_870_912,
@@ -65,8 +68,6 @@ namespace MonkeyPaste.Common {
 
         Hours = 549_755_813_888,
         Days = 1_099_511_627_776,
-        //Weeks = 2_199_023_255_552,
-        //Months = 4_398_046_511_104,
         //Years = 8_796_093_022_208, //45 8796093022208
 
         And = 17_592_186_044_416,

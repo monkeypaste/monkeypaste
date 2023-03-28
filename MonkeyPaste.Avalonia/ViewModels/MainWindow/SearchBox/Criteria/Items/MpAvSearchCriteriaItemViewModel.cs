@@ -125,6 +125,9 @@ namespace MonkeyPaste.Avalonia {
         public MpAvSearchCriteriaOptionViewModel LeafValueOptionViewModel =>
             SelectedOptionPath.FirstOrDefault(x => x.IsValueOption);
 
+        public IEnumerable<MpAvSearchCriteriaOptionViewModel> ValueOptionViewModels =>
+            SelectedOptionPath.Where(x => x.IsValueOption);
+
         private ObservableCollection<MpAvSearchCriteriaOptionViewModel> _items;
         public ObservableCollection<MpAvSearchCriteriaOptionViewModel> Items {
             get {
@@ -136,7 +139,7 @@ namespace MonkeyPaste.Avalonia {
                 while (node != null) {
                     _items.Add(node);
                     int selIdx = node.Items.IndexOf(node.SelectedItem);
-                    if (selIdx <= 0 || !node.HasChildren) {
+                    if ((selIdx <= 0 && !node.IsRootMultiValueOption) || !node.HasChildren) {
                         break;
                     }
                     node = node.SelectedItem;
@@ -270,13 +273,22 @@ namespace MonkeyPaste.Avalonia {
             for (int i = 0; i < labels.Length; i++) {
                 var ovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
                 ovm.Label = labels[i];
+                ovm.Items = new ObservableCollection<MpAvSearchCriteriaOptionViewModel>(new[] {
+                    new MpAvSearchCriteriaOptionViewModel(this,ovm) {
+                        Label = "Distance",
+                        UnitType = MpSearchCriteriaUnitFlags.UnitDecimal,
+                        FilterValue = MpContentQueryBitFlags.ColorDistance,
+                        IsSelected = true
+                    }
+                });
+                ovm.SelectedItem = ovm.Items[0];
                 switch ((MpColorOptionType)i) {
                     case MpColorOptionType.Hex:
                         ovm.UnitType = MpSearchCriteriaUnitFlags.Hex;
                         ovm.FilterValue = MpContentQueryBitFlags.Hex;
                         break;
                     case MpColorOptionType.RGBA:
-                        ovm.UnitType = MpSearchCriteriaUnitFlags.ByteX4 | MpSearchCriteriaUnitFlags.UnitDecimalX4;
+                        ovm.UnitType = MpSearchCriteriaUnitFlags.Rgba;
                         ovm.FilterValue = MpContentQueryBitFlags.Rgba;
                         break;
                 }
@@ -875,6 +887,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool HasMultiValues =>
+            ValueOptionViewModels.Count() > 1;
+
         public bool HasCriteriaChanged { get; set; } = false;
         public bool IsDragging { get; set; }
         public bool IsDragOverTop { get; set; }
@@ -1089,6 +1104,8 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task InitializeAsync(MpSearchCriteriaItem sci) {
             IsBusy = true;
+            IgnoreHasModelChanged = true;
+
             await Task.Delay(1);
 
             if (sci == null) {
@@ -1110,9 +1127,28 @@ namespace MonkeyPaste.Avalonia {
                 cur_opt = cur_opt.SelectedItem;
             }
             if (LeafValueOptionViewModel != null) {
-                LeafValueOptionViewModel.Value = MatchValue;
-                LeafValueOptionViewModel.IsChecked = IsCaseSensitive;
-                LeafValueOptionViewModel.IsChecked2 = IsWholeWord;
+                if (HasMultiValues) {
+                    // hex or rgba
+                    var match_parts = MatchValue.SplitNoEmpty(",");
+                    if (match_parts.Any()) {
+                        var hex_or_rga_vm = Items.FirstOrDefault(x => x.UnitType == MpSearchCriteriaUnitFlags.Hex || x.UnitType == MpSearchCriteriaUnitFlags.Rgba);
+                        if (hex_or_rga_vm.UnitType == MpSearchCriteriaUnitFlags.Rgba) {
+                            hex_or_rga_vm.Values = match_parts.First().ToListFromCsv(MpCsvFormatProperties.DefaultBase64Value).ToArray();
+                        } else {
+                            hex_or_rga_vm.Value = match_parts.First();
+                        }
+                        if (match_parts.Count() > 1) {
+                            var dist_vm = Items.FirstOrDefault(x => x.UnitType == MpSearchCriteriaUnitFlags.UnitDecimal);
+                            dist_vm.Value = match_parts.Last();
+                        }
+                    }
+
+                } else {
+                    LeafValueOptionViewModel.Value = MatchValue;
+                    LeafValueOptionViewModel.IsChecked = IsCaseSensitive;
+                    LeafValueOptionViewModel.IsChecked2 = IsWholeWord;
+                }
+
             }
 
             OnPropertyChanged(nameof(Items));
@@ -1128,7 +1164,7 @@ namespace MonkeyPaste.Avalonia {
                 // don't notify during load
                 return;
             }
-            IgnoreHasModelChanged = true;
+            //IgnoreHasModelChanged = true;
 
             SearchOptions =
                 string.Join(",", SelectedOptionPath.Where(x => x.SelectedItemIdx >= 0).Select(x => x.SelectedItemIdx));
@@ -1137,12 +1173,30 @@ namespace MonkeyPaste.Avalonia {
                 IsCaseSensitive = false;
                 IsWholeWord = false;
             } else {
-                MatchValue = LeafValueOptionViewModel.Value;
-                IsCaseSensitive = LeafValueOptionViewModel.IsChecked;
-                IsWholeWord = LeafValueOptionViewModel.IsChecked2;
+                // reset to default
+                MatchValue = null;
+                IsCaseSensitive = false;
+                IsWholeWord = false;
+
+                if (HasMultiValues) {
+                    // hex or rgba
+                    var hex_or_rga_vm = Items.FirstOrDefault(x => x.UnitType == MpSearchCriteriaUnitFlags.Hex || x.UnitType == MpSearchCriteriaUnitFlags.Rgba);
+                    if (hex_or_rga_vm != null) {
+                        MatchValue = hex_or_rga_vm.Value;
+                        var dist_vm = Items.FirstOrDefault(x => x.UnitType == MpSearchCriteriaUnitFlags.UnitDecimal);
+                        if (dist_vm != null) {
+                            MatchValue += $",{dist_vm.Value}";
+                        }
+                    }
+                } else {
+                    MatchValue = LeafValueOptionViewModel.Value;
+                    IsCaseSensitive = LeafValueOptionViewModel.IsChecked;
+                    IsWholeWord = LeafValueOptionViewModel.IsChecked2;
+                }
+
             }
 
-            IgnoreHasModelChanged = false;
+            //IgnoreHasModelChanged = false;
 
             // flag criteria changed for refresh query
             HasCriteriaChanged = true;
@@ -1222,6 +1276,12 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(SortOrderIdx):
                     // update tail to hide simple OR join
                     OnPropertyChanged(nameof(IsJoinPanelVisible));
+                    break;
+                case nameof(HasCriteriaChanged):
+                    if (Parent == null) {
+                        break;
+                    }
+                    Parent.OnPropertyChanged(nameof(Parent.HasAnyCriteriaChanged));
                     break;
             }
         }

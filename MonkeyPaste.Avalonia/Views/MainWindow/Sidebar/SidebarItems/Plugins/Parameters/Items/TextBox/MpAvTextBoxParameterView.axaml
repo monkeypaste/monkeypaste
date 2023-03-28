@@ -28,6 +28,7 @@
             </Button>
             <TextBox x:Name="ParameterTextBox"
                      local:MpAvIsFocusedExtension.IsEnabled="True"
+                     local:MpAvTextControlDropExtension.IsEnabled="True"
                      IsReadOnly="{Binding IsReadOnly, Mode=OneWay}"
                      Watermark="{Binding Placeholder}"
                      SelectionStart="{Binding SelectionStart, Mode=TwoWay}"

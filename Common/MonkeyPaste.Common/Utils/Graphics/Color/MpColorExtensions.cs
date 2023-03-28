@@ -18,13 +18,25 @@ namespace MonkeyPaste.Common {
             c.A = (byte)(255.0 * opacity);
             return c.ToHex();
         }
+        public static double ColorDistance2(this MpColor e1, MpColor e2) {
+            return ColorDistance2(e1.ToPixelColor(), e2.ToPixelColor());
+        }
 
+        private static double MAX_EUCLID_COLOR_DIST = 441.67295593;
+        public static double ColorDistance2(this PixelColor e1, PixelColor e2) {
+            return Math.Sqrt(/*Math.Pow(e2.Alpha - e1.Alpha, 2) + */ Math.Pow((double)(e2.Red - e1.Red), 2) + Math.Pow((double)(e2.Green - e1.Green), 2) + Math.Pow((double)(e2.Blue - e1.Blue), 2)) / MAX_EUCLID_COLOR_DIST;
+        }
         public static double ColorDistance(this MpColor e1, MpColor e2) {
+            return ColorDistance(e1.ToPixelColor(), e2.ToPixelColor());
+        }
+
+
+        public static double ColorDistance(this PixelColor e1, PixelColor e2) {
             //distance between 0 and 1 (tested by checking between black and white where distance is 1)
-            long rmean = ((long)(e1.R) + (long)(e2.R)) / 2;
-            long r = (long)(e1.R) - (long)(e2.R);
-            long g = (long)(e1.G) - (long)(e2.G);
-            long b = (long)(e1.B) - (long)(e2.B);
+            long rmean = ((long)(e1.Red) + (long)(e2.Red)) / 2;
+            long r = (long)(e1.Red) - (long)(e2.Red);
+            long g = (long)(e1.Green) - (long)(e2.Green);
+            long b = (long)(e1.Blue) - (long)(e2.Blue);
             double max = 764.83331517396655; // changed last digit from 3 to 5 :)
             double d = Math.Sqrt((((512 + rmean) * r * r) >> 8) + 4 * g * g + (((767 - rmean) * b * b) >> 8));
             return d / max;

@@ -1,10 +1,13 @@
-﻿namespace MonkeyPaste.Avalonia {
-    /// <summary>
-    /// Interaction logic for MpListBoxParameterView.xaml
-    /// </summary>
+﻿using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Markup.Xaml;
+using MonkeyPaste.Common;
+
+namespace MonkeyPaste.Avalonia {
     public partial class MpAvTextBoxParameterView : MpAvUserControl<MpAvTextBoxParameterViewModel> {
         public MpAvTextBoxParameterView() {
-            InitializeComponent();
+            AvaloniaXamlLoader.Load(this);
         }
+
     }
 }

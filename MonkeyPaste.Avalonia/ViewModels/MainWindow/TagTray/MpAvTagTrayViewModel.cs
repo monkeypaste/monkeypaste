@@ -444,6 +444,48 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
+        public MpIAsyncCommand<object> SelectTagAndBringIntoTreeViewCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                MpAvTagTileViewModel ttvm_to_select = null;
+                if (args is MpAvTagTileViewModel) {
+                    ttvm_to_select = args as MpAvTagTileViewModel;
+                } else if (args is int tagId) {
+                    ttvm_to_select = Items.FirstOrDefault(x => x.TagId == tagId);
+                }
+                if (ttvm_to_select == null) {
+                    return;
+                }
+                if (MpAvSearchCriteriaItemCollectionViewModel.Instance.IsCriteriaWindowOpen &&
+                    !MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
+                    // when saving from float window show mw to rename/confirm new query tag
+                    if (!MpAvMainWindowViewModel.Instance.ShowMainWindowCommand.CanExecute(null)) {
+                        // why not?
+                        MpDebug.Break();
+                    } else {
+                        MpAvMainWindowViewModel.Instance.ShowMainWindowCommand.Execute(null);
+                        while (!MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
+                            await Task.Delay(100);
+                        }
+                    }
+                }
+                // NOTE this should only occur for new searches, onced created saving is by HasModelChanged
+                var ttrvm = MpAvTagTrayViewModel.Instance;
+                int waitTimeMs = MpAvSidebarItemCollectionViewModel.Instance.SelectedItem == ttrvm ? 0 : 500;
+                MpAvSidebarItemCollectionViewModel.Instance.SelectSidebarItemCommand.Execute(ttrvm);
+                // wait for panel open
+                await Task.Delay(waitTimeMs);
+
+                if (ttrvm.SelectedItem.IsNotGroupTag) {
+                    // NOTE when non-group tag selected 
+                    // select root group automatically
+                    // this shouldn't affect the current query cause its a group tag
+
+                    ttrvm.SelectTagCommand.Execute(ttvm_to_select);
+                    while (ttrvm.IsSelecting) {
+                        await Task.Delay(100);
+                    }
+                }
+            });
         public ICommand ToggleTileIsPinnedCommand => new MpCommand<object>(
             (args) => {
                 var ttvm = args as MpAvTagTileViewModel;

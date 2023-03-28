@@ -109,6 +109,9 @@ namespace MonkeyPaste.Avalonia {
         public bool IsPendingQuery =>
             !IsSavedQuery && HasCriteriaItems;
 
+        public bool CanSave =>
+            IsPendingQuery || HasAnyCriteriaChanged;
+
         #endregion
 
         #region Layout
@@ -423,6 +426,7 @@ namespace MonkeyPaste.Avalonia {
             }
             return pending_tag.Id;
         }
+
         #endregion
 
         #region Commands
@@ -468,37 +472,47 @@ namespace MonkeyPaste.Avalonia {
             },
             (args) => args is MpAvSearchCriteriaItemViewModel);
 
+        public ICommand DuplicateQueryCommand => new MpAsyncCommand(
+            async () => {
+                var qttvm = MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == QueryTagId);
+                if (qttvm == null) {
+                    return;
+                }
+                await qttvm.MoveOrCopyThisTagCommand.ExecuteAsync(new object[] { qttvm.ParentTagId, -1, true });
+
+                var dup_ttvm = qttvm.ParentTreeItem.SortedItems.Last();
+                await MpAvTagTrayViewModel.Instance.SelectTagAndBringIntoTreeViewCommand.ExecuteAsync(dup_ttvm);
+
+
+                await Task.Delay(300);
+                MpAvTagTrayViewModel.Instance.SelectedItem.RenameTagCommand.Execute(null);
+            }, () => {
+                return IsSavedQuery;
+            });
+        public ICommand SaveQueryCommand => new MpAsyncCommand(
+            async () => {
+                if (IsPendingQuery) {
+                    SavePendingQueryCommand.Execute(null);
+                    return;
+                }
+                Items.ForEach(x => x.IgnoreHasModelChanged = false);
+                await Task.Delay(100);
+                while (IsAnyBusy) {
+                    await Task.Delay(100);
+                }
+                Items.ForEach(x => x.IgnoreHasModelChanged = true);
+            }, () => {
+                if (IsPendingQuery) {
+                    return true;
+                }
+                return HasAnyCriteriaChanged;
+            });
+
         public ICommand SavePendingQueryCommand => new MpAsyncCommand(
             async () => {
-                if (IsCriteriaWindowOpen && !MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
-                    // when saving from float window show mw to rename/confirm new query tag
-                    if (!MpAvMainWindowViewModel.Instance.ShowMainWindowCommand.CanExecute(null)) {
-                        // why not?
-                        MpDebug.Break();
-                    } else {
-                        MpAvMainWindowViewModel.Instance.ShowMainWindowCommand.Execute(null);
-                        while (!MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
-                            await Task.Delay(100);
-                        }
-                    }
-                }
-                // NOTE this should only occur for new searches, onced created saving is by HasModelChanged
                 var ttrvm = MpAvTagTrayViewModel.Instance;
-                int waitTimeMs = MpAvSidebarItemCollectionViewModel.Instance.SelectedItem == ttrvm ? 0 : 500;
-                MpAvSidebarItemCollectionViewModel.Instance.SelectSidebarItemCommand.Execute(ttrvm);
-                // wait for panel open
-                await Task.Delay(waitTimeMs);
-
-                if (ttrvm.SelectedItem.IsNotGroupTag) {
-                    // NOTE when non-group tag selected 
-                    // select root group automatically
-                    // this shouldn't affect the current query cause its a group tag
-
-                    ttrvm.SelectTagCommand.Execute(ttrvm.RootGroupTagViewModel);
-                    while (ttrvm.IsSelecting) {
-                        await Task.Delay(100);
-                    }
-                }
+                await ttrvm.SelectTagAndBringIntoTreeViewCommand.ExecuteAsync(
+                    MpTag.RootGroupTagId);
 
                 int new_query_tag_id = await ConvertPendingToQueryTagAsync();
 

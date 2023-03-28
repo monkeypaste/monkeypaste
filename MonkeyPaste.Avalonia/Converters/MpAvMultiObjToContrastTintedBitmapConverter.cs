@@ -16,7 +16,7 @@ namespace MonkeyPaste.Avalonia {
                 object bg_hex_obj = values.FirstOrDefault(x => x is string valStr && (valStr.IsStringHexColor() || valStr.IsStringNamedColor()));
                 string bg_hex_str = null;
                 if (bg_hex_obj != null && bg_hex_obj.ToString().IsStringNamedColor()) {
-                    bg_hex_str = MpSystemColors.ConvertFromString(bg_hex_obj.ToString());
+                    bg_hex_str = MpColorHelpers.ParseHexFromString(bg_hex_obj.ToString());
                 } else if (bg_hex_obj != null) {
                     bg_hex_str = bg_hex_obj.ToString();
                 }

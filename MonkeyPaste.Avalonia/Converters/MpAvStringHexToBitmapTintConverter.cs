@@ -21,12 +21,12 @@ namespace MonkeyPaste.Avalonia {
             string hex = null;
             if (parameter is string paramStr) {
                 if (paramStr.Contains("|")) {
-                    hex = MpSystemColors.ConvertFromString(paramStr.SplitNoEmpty("|")[0]);
-                    imgResourceObj = MpSystemColors.ConvertFromString(paramStr.SplitNoEmpty("|")[1]);
+                    hex = MpColorHelpers.ParseHexFromString(paramStr.SplitNoEmpty("|")[0]);
+                    imgResourceObj = MpColorHelpers.ParseHexFromString(paramStr.SplitNoEmpty("|")[1]);
                 } else if (paramStr.IsStringImageResourcePathOrKey()) {
                     imgResourceObj = paramStr;
                 } else {
-                    hex = MpSystemColors.ConvertFromString(paramStr, null);
+                    hex = MpColorHelpers.ParseHexFromString(paramStr, null);
                 }
             }
 
@@ -37,7 +37,7 @@ namespace MonkeyPaste.Avalonia {
                 if (valStr.IsStringImageResourcePathOrKey()) {
                     imgResourceObj = valStr;
                 } else {
-                    hex = MpSystemColors.ConvertFromString(valStr, null);
+                    hex = MpColorHelpers.ParseHexFromString(valStr, null);
                 }
             }
             if (hex == null) {

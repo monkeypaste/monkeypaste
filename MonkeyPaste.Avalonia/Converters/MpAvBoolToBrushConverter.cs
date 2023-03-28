@@ -26,7 +26,7 @@ namespace MonkeyPaste.Avalonia {
                 brushHexOrNamedColorStr = boolVal ? brushHexParts[0] : brushHexParts[1];
             }
 
-            return MpSystemColors.ConvertFromString(brushHexOrNamedColorStr).ToAvBrush();
+            return MpColorHelpers.ParseHexFromString(brushHexOrNamedColorStr).ToAvBrush();
         }
 
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) {

@@ -9,13 +9,6 @@ using System.Text;
 //using MonkeyPaste.Common.Wpf;
 
 namespace MonkeyPaste.Common.Avalonia {
-    [StructLayout(LayoutKind.Sequential)]
-    public struct PixelColor {
-        public byte Blue;
-        public byte Green;
-        public byte Red;
-        public byte Alpha;
-    }
 
     public static class MpAvImageExtensions {
         #region Converters        
@@ -173,6 +166,24 @@ namespace MonkeyPaste.Common.Avalonia {
         #endregion
 
         #region Operations
+
+        public static int GetPixelColorCount(this Bitmap bmpSource, MpColor color, double max_dist) {
+            int count = 0;
+            PixelColor match_color = color.ToPixelColor();
+
+            var pixels = GetPixels(bmpSource);
+            for (int x = 0; x < bmpSource.PixelSize.Width; x++) {
+                for (int y = 0; y < bmpSource.PixelSize.Height; y++) {
+                    PixelColor currentColor = pixels[x, y];
+                    if (match_color.ColorDistance(currentColor) <= max_dist) {
+                        count++;
+                    }
+                }
+            }
+
+            //order the list from most used to least used before returning
+            return count;
+        }
 
         public static List<KeyValuePair<PixelColor, int>> GetStatistics(this Bitmap bmpSource) {
             var countDictionary = new Dictionary<PixelColor, int>();

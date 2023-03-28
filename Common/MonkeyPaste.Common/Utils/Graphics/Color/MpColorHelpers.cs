@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 
 namespace MonkeyPaste.Common {
 
@@ -10,6 +11,53 @@ namespace MonkeyPaste.Common {
             return "#" + BitConverter.ToString(argb).Replace("-", "");
         }
 
+        public static string ParseHexFromString(string hexChannelsOrNamedColorStr, string fallBack = "#00000000", bool includeAlpha = true) {
+            if (string.IsNullOrWhiteSpace(hexChannelsOrNamedColorStr)) {
+                return fallBack;
+            }
+            if (hexChannelsOrNamedColorStr.IsStringHexColor()) {
+                return hexChannelsOrNamedColorStr;
+            }
+            if (hexChannelsOrNamedColorStr.Contains(",") &&
+                hexChannelsOrNamedColorStr.Replace("(", string.Empty).Replace(")", string.Empty) is string cleanStr &&
+                cleanStr.SplitNoEmpty(",") is string[] colorParts &&
+                (colorParts.Length == 3 || colorParts.Length == 4)) {
+                // NOTE presumes color is 3-4 decimal elements from 0.0-1.0 or 3-4 int elements from 0-255
+                // channels should be in ARGB format
+                try {
+                    byte[] argb_channels = null;
+                    if (colorParts.Any(x => x.Contains("."))) {
+                        // normalized decimal color
+
+                        argb_channels = colorParts.Select(x => (byte)(double.Parse(x) * 255)).ToArray();
+                    } else {
+                        // byte color
+                        argb_channels = colorParts.Select(x => byte.Parse(x)).ToArray();
+                    }
+                    return new MpColor(argb_channels).ToHex();
+
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"error converting string to color '{hexChannelsOrNamedColorStr}'", ex);
+                    return fallBack;
+                }
+
+            }
+            var hexColorPropInfo = typeof(MpSystemColors)
+                .GetProperties()
+                .FirstOrDefault(x => x.Name.ToLower() == hexChannelsOrNamedColorStr.ToLower());
+
+            if (hexColorPropInfo == null) {
+                hexColorPropInfo = typeof(MpSystemColors)
+                .GetProperties()
+                .FirstOrDefault(x => x.Name.ToLower().StartsWith(hexChannelsOrNamedColorStr.ToLower()));
+            }
+            if (hexColorPropInfo == null) {
+                MpConsole.WriteTraceLine($"Color named {hexChannelsOrNamedColorStr} not found, returning {fallBack}");
+                return fallBack;
+            }
+            return hexColorPropInfo.GetValue(null, null) as string;
+        }
         public static byte[] GetHexColorBytes(string hexString) {
             if (!hexString.IsStringHexColor()) {
                 throw new Exception("Not hex color");

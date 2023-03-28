@@ -530,7 +530,7 @@ namespace MonkeyPaste.Common.Wpf {
                         if (string.IsNullOrWhiteSpace(colorName)) {
                             return defaultBrush;
                         }
-                        hex = MpSystemColors.ConvertFromString(colorName.Trim(), defaultBrush.ToHex());
+                        hex = MpColorHelpers.ParseHexFromString(colorName.Trim(), defaultBrush.ToHex());
                         if (string.IsNullOrWhiteSpace(hex) || !hex.IsStringHexColor()) {
                             return defaultBrush;
                         }

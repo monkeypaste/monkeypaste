@@ -1,13 +1,18 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Controls;
+using MonkeyPaste.Common;
+using MonoMac.Darwin;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvSearchCriteriaOptionViewModel :
         MpViewModelBase<MpAvSearchCriteriaOptionViewModel>,
+        MpISliderViewModel,
         MpITreeItemViewModel,
         MpIHoverableViewModel {
         #region Private Variables
@@ -15,6 +20,34 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+        #region MpISliderViewModel Implementation
+
+        public double SliderValue {
+            get {
+                if (string.IsNullOrWhiteSpace(Value)) {
+                    Value = "1".ToString();
+                }
+                try {
+                    return double.Parse(Value);
+                }
+                catch {
+                    return 1;
+                }
+            }
+            set {
+                if (SliderValue != value) {
+                    Value = SliderValue.ToString();
+                }
+            }
+        }
+        public double MinValue =>
+            0;
+        public double MaxValue =>
+            1;
+        public int Precision =>
+            3;
+        #endregion
 
         #region MpIHoverableViewModel Implementation
 
@@ -57,6 +90,9 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsValueOption =>
             !UnitType.HasFlag(MpSearchCriteriaUnitFlags.Enumerable);
+
+        public bool IsRootMultiValueOption =>
+            IsValueOption && Items.Count > 0;
 
         public int SelectedItemIdx {
             get {
@@ -211,6 +247,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
+
         #endregion
 
         private string _value;
@@ -221,6 +258,7 @@ namespace MonkeyPaste.Avalonia {
                         return string.Empty;
                     }
                     return Values.ToCsv(MpCsvFormatProperties.DefaultBase64Value);
+                    //return $"({Value1},{Value2},{Value3},{Value4})";
                 }
                 return _value;
             }
@@ -274,6 +312,9 @@ namespace MonkeyPaste.Avalonia {
                     HostCriteriaItem.OnPropertyChanged(nameof(HostCriteriaItem.Items));
                     HostCriteriaItem.OnPropertyChanged(nameof(HostCriteriaItem.IsInputVisible));
                     OnPropertyChanged(nameof(Value));
+                    if (!IsSelected && IsRootMultiValueOption) {
+                        SelectedItem = null;
+                    }
                     break;
                 case nameof(Value1):
                 case nameof(Value2):
@@ -285,6 +326,10 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(Value):
                 case nameof(IsChecked):
                 case nameof(IsChecked2):
+                    if (IsRootMultiValueOption) {
+                        SelectedItem = Items[0];
+                    }
+
                     if (HostCriteriaItem == null || IsBusy) {
                         // should only be busy during initial load 
                         // where collection handles ntf from adv search opened msg
@@ -294,6 +339,7 @@ namespace MonkeyPaste.Avalonia {
                         // only notify when values are valid
                         HostCriteriaItem.NotifyValueChanged(this);
                     }
+
 
                     break;
                 case nameof(IsBusy):
@@ -385,7 +431,33 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(SelectedItemIdx));
         }
 
+        #endregion
 
+
+        #region Commands 
+
+        public ICommand ShowColorPickerCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                string selected_color = Value;
+                if (FilterValue.HasFlag(MpContentQueryBitFlags.Rgba)) {
+                    selected_color = MpColorHelpers.ParseHexFromString(
+                        $"({string.Join(",", Values)})");
+                }
+                var result = await Mp.Services.CustomColorChooserMenuAsync.ShowCustomColorMenuAsync(
+                    selectedColor: selected_color,
+                    "Pick Match color");
+
+                if (result == null) {
+                    // cancel
+                    return;
+                }
+                if (FilterValue.HasFlag(MpContentQueryBitFlags.Rgba)) {
+                    var c = new MpColor(result);
+                    Values = c.Channels.Select(x => x.ToString()).ToArray();
+                } else {
+                    Value = result;
+                }
+            });
         #endregion
     }
 }

@@ -21,11 +21,15 @@ namespace MonkeyPaste.Avalonia {
                 key = "EnumerableOptionTemplate";
             }
             if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.Hex)) {
-                key = "TextOptionTemplate";
+                key = "HexOptionTemplate";
             }
-            if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.ByteX4) ||
+            if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.Rgba) ||
                 scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.UnitDecimalX4)) {
                 key = "RGBAOptionTemplate";
+            }
+
+            if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.UnitDecimal)) {
+                key = "UnitDecimalOptionTemplate";
             }
             if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.Text) ||
                 scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.Decimal)) {

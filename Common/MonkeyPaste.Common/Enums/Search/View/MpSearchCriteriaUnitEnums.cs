@@ -8,8 +8,9 @@ namespace MonkeyPaste.Common {
         Text = 1,
         Hex = 512,
         Integer = 2,
-        ByteX4 = 1024,
+        Rgba = 1024,
         Decimal = 256,
+        UnitDecimal = 32768,
         UnitDecimalX4 = 2048,
         DateTime = 128,
         TimeSpan = 8,
@@ -24,7 +25,7 @@ namespace MonkeyPaste.Common {
         public static bool IsUnsignedNumeric(this MpSearchCriteriaUnitFlags scuf) {
             return
                 scuf.HasFlag(MpSearchCriteriaUnitFlags.Integer) ||
-                scuf.HasFlag(MpSearchCriteriaUnitFlags.ByteX4) ||
+                scuf.HasFlag(MpSearchCriteriaUnitFlags.Rgba) ||
                 scuf.HasFlag(MpSearchCriteriaUnitFlags.UnitDecimalX4) ||
                 scuf.HasFlag(MpSearchCriteriaUnitFlags.Decimal);
         }
@@ -37,7 +38,7 @@ namespace MonkeyPaste.Common {
             if (scuf.HasFlag(MpSearchCriteriaUnitFlags.UnitDecimalX4)) {
                 return new Tuple<double, double>(0, 1);
             }
-            if (scuf.HasFlag(MpSearchCriteriaUnitFlags.ByteX4)) {
+            if (scuf.HasFlag(MpSearchCriteriaUnitFlags.Rgba)) {
                 return new Tuple<double, double>(0, 255);
             }
             if (scuf.HasFlag(MpSearchCriteriaUnitFlags.Integer)) {

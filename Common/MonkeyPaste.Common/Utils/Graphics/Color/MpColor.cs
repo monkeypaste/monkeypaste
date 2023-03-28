@@ -25,12 +25,17 @@ namespace MonkeyPaste.Common {
             set => Channels[3] = value;
         }
 
-        public MpColor(string hexOrNamedColorStr) {
-            string hex = MpSystemColors.ConvertFromString(hexOrNamedColorStr, "#FF000000");
+        public MpColor(string hexRgbaOrNamedColorStr) {
+            string hex = MpColorHelpers.ParseHexFromString(hexRgbaOrNamedColorStr, "#FF000000");
             Channels = MpColorHelpers.GetHexColorBytes(hex);
         }
-        public MpColor(byte[] channels) {
-            Channels = channels;
+        public MpColor(byte[] argb_channels) {
+            Channels =
+                argb_channels == null ?
+                    new byte[] { 0, 0, 0, 0 } :
+                    argb_channels.Length == 3 ?
+                        new byte[] { 255, argb_channels[0], argb_channels[1], argb_channels[2] } :
+                        argb_channels;
         }
         public MpColor(byte r, byte g, byte b) {
             Channels = new byte[] { 255, r, g, b };
@@ -56,6 +61,10 @@ namespace MonkeyPaste.Common {
 
         public override string ToString() {
             return ToHex();
+        }
+
+        public PixelColor ToPixelColor() {
+            return new PixelColor() { Alpha = A, Red = R, Green = G, Blue = B };
         }
 
         public string ToReadableString() {

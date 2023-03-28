@@ -75,6 +75,45 @@ namespace MonkeyPaste {
                 await MpDefaultDataModelTools.InitializeAsync();
             }
             IsLoaded = true;
+
+            string hexmatch = "#af6e5a";
+            string hexmatch2 = "#00ff00";
+
+            string query = $"SELECT PIXELCOUNT(?,ImageBase64) FROM MpDbImage WHERE pk_MpDbImageId=1";
+            var result = await MpDb.QueryScalarAsync<int>(query, "#af6e5a,0");
+
+            var db_img = await MpDataModelProvider.GetItemAsync<MpDbImage>(1);
+            int hex_exact_test = Mp.Services.ColorQueryTools.ColorPixelCount(db_img.ImageBase64, hexmatch, 0);
+            int hex_fuzzy_test = Mp.Services.ColorQueryTools.ColorPixelCount(db_img.ImageBase64, hexmatch, 10 / 255);
+            int hex_open_test = Mp.Services.ColorQueryTools.ColorPixelCount(db_img.ImageBase64, hexmatch, 255 / 255);
+
+            int hex_exact_test2 = Mp.Services.ColorQueryTools.ColorPixelCount(db_img.ImageBase64, hexmatch2, 0);
+            int hex_fuzzy_test2 = Mp.Services.ColorQueryTools.ColorPixelCount(db_img.ImageBase64, hexmatch2, 10 / 255);
+            int hex_open_test2 = Mp.Services.ColorQueryTools.ColorPixelCount(db_img.ImageBase64, hexmatch2, 255 / 255);
+
+            var parse1 = ParseColorAndDistance(hexmatch);
+            var parse2 = ParseColorAndDistance(hexmatch + ",0.3");
+            var parse3 = ParseColorAndDistance("(175,110,90)");
+            var parse4 = ParseColorAndDistance("(175,110,90),0.55");
+            var parse5 = ParseColorAndDistance("(0.3,0.1,0.8),0.55");
+            var parse6 = ParseColorAndDistance("(0.8,0.3,0.1,0.8),0.55");
+
+            var red = new MpColor("red");
+            var pink = new MpColor("salmon");
+            var test = red.ColorDistance(pink);
+            var test3 = red.ColorDistance2(pink);
+
+            var green = new MpColor("green");
+            var fgreen = new MpColor("forestgreen");
+            var test5 = red.ColorDistance(green);
+            var test7 = green.ColorDistance2(fgreen);
+
+
+            var b = new MpColor("black");
+            var w = new MpColor("white");
+            var test2 = b.ColorDistance(w);
+            var test4 = b.ColorDistance2(w);
+
             sw.Stop();
             MpConsole.WriteLine($"Db loading: {sw.ElapsedMilliseconds} ms");
         }
@@ -390,6 +429,8 @@ namespace MonkeyPaste {
                     _connectionAsync = new SQLiteAsyncConnection(GetConnectionString(dbPath)) { Trace = true };
                     raw.sqlite3_create_function(_connectionAsync.GetConnection().Handle, "REGEXP", 2, null, MatchRegex);
 
+                    raw.sqlite3_create_function(_connectionAsync.GetConnection().Handle, "PIXELCOUNT", 2, null, PixelColorCount);
+
                     if (UseWAL) {
                         await _connectionAsync.EnableWriteAheadLoggingAsync();
                     }
@@ -410,7 +451,7 @@ namespace MonkeyPaste {
                 try {
                     _connection = new SQLiteConnection(GetConnectionString(dbPath)) { Trace = true };
                     raw.sqlite3_create_function(_connection.Handle, "REGEXP", 2, null, MatchRegex);
-
+                    raw.sqlite3_create_function(_connection.Handle, "PIXELCOUNT", 2, null, PixelColorCount);
                     if (UseWAL) {
                         _connection.EnableWriteAheadLogging();
                     }
@@ -493,6 +534,61 @@ namespace MonkeyPaste {
             }
         }
 
+        private static void PixelColorCount(sqlite3_context ctx, object user_data, sqlite3_value[] args) {
+            int count = 0;
+            string color_str = raw.sqlite3_value_text(args[0]).utf8_to_string();
+            if (string.IsNullOrEmpty(color_str)) {
+                raw.sqlite3_result_int(ctx, count);
+                return;
+            }
+
+            string base64Str = raw.sqlite3_value_text(args[1]).utf8_to_string();
+            if (string.IsNullOrEmpty(base64Str)) {
+                raw.sqlite3_result_int(ctx, count);
+                return;
+            }
+            var color_dist_tup = ParseColorAndDistance(color_str);
+            color_str = color_dist_tup.Item1;
+            double max_dist = color_dist_tup.Item2;
+
+
+            count = Mp.Services.ColorQueryTools.ColorPixelCount(base64Str, color_str, max_dist);
+            raw.sqlite3_result_int(ctx, count);
+        }
+        private static Tuple<string, double> ParseColorAndDistance(string color_str) {
+            double max_dist = 0;
+            if (color_str.Contains(",")) {
+                if (color_str.StartsWith("(")) {
+                    // channel str
+                    if (color_str.EndsWith(")")) {
+                        // no distance 
+                    } else if (color_str.Contains("),")) {
+                        try {
+                            var channel_dist_parts = color_str.SplitNoEmpty("),");
+                            color_str = color_str.Substring(0, channel_dist_parts[0].Length + 1);
+                            max_dist = double.Parse(channel_dist_parts[1]);
+                        }
+                        catch (Exception ex) {
+                            MpConsole.WriteTraceLine($"Error parsing color distance from color str '{color_str}'", ex);
+                        }
+                    } else {
+                        MpDebug.Break($"Whats this color str? '{color_str}'");
+                    }
+                } else {
+                    // hex or named color
+                    try {
+                        var hex_parts = color_str.SplitNoEmpty(",");
+                        color_str = hex_parts[0];
+                        max_dist = double.Parse(hex_parts[1]);
+                    }
+                    catch (Exception ex) {
+                        MpConsole.WriteTraceLine($"Error parsing color distance from color str '{color_str}'", ex);
+                    }
+                }
+            }
+            return new Tuple<string, double>(color_str, max_dist);
+        }
+
         private static async Task InitTablesAsync() {
             await _connectionAsync.CreateTableAsync<MpAction>();
             await _connectionAsync.CreateTableAsync<MpParameterValue>();
@@ -523,6 +619,7 @@ namespace MonkeyPaste {
 
         private static async Task CreateViewsAsync() {
             await _connectionAsync.ExecuteAsync(@"
+DROP VIEW ""main"".""MpContentQueryView"";
 CREATE VIEW MpContentQueryView as
 SELECT 
 	pk_MpCopyItemId as RootId,
@@ -593,6 +690,9 @@ SELECT
 		when MpCopyItem.e_MpCopyItemType == 'Text' or MpCopyItem.e_MpCopyItemType == 'FileList'
 			then 
 				(select ItemData from MpDataObjectItem where fk_MpDataObjectId = MpCopyItem.fk_MpDataObjectId limit 1)
+		when MpCopyItem.e_MpCopyItemType == 'Image'
+			then 
+				ItemData
 		else NULL
 	end as ItemData,
 	CopyDateTime,
