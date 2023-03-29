@@ -11,7 +11,7 @@ namespace MonkeyPaste.Common {
         Rgba = 1024,
         Decimal = 256,
         UnitDecimal = 32768,
-        UnitDecimalX4 = 2048,
+        //UnitDecimalX4 = 2048,
         DateTime = 128,
         TimeSpan = 8,
         Enumerable = 16,
@@ -26,7 +26,6 @@ namespace MonkeyPaste.Common {
             return
                 scuf.HasFlag(MpSearchCriteriaUnitFlags.Integer) ||
                 scuf.HasFlag(MpSearchCriteriaUnitFlags.Rgba) ||
-                scuf.HasFlag(MpSearchCriteriaUnitFlags.UnitDecimalX4) ||
                 scuf.HasFlag(MpSearchCriteriaUnitFlags.Decimal);
         }
         public static Tuple<double, double> GetNumericBounds(this MpSearchCriteriaUnitFlags scuf) {
@@ -34,10 +33,6 @@ namespace MonkeyPaste.Common {
                 return null;
             }
             // NOTE order from smallest to largest
-
-            if (scuf.HasFlag(MpSearchCriteriaUnitFlags.UnitDecimalX4)) {
-                return new Tuple<double, double>(0, 1);
-            }
             if (scuf.HasFlag(MpSearchCriteriaUnitFlags.Rgba)) {
                 return new Tuple<double, double>(0, 255);
             }

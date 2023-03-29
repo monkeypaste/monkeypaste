@@ -46,21 +46,44 @@
                               DataType="local:MpAvSearchCriteriaOptionViewModel">
                     <DockPanel LastChildFill="True">
 
-                        <!--  WHOLE WORD / CASE SENSITIVE CHECKBOX  -->
-                        <StackPanel Orientation="Horizontal"
-                                    DockPanel.Dock="Right"
-                                    IsVisible="{Binding IsCheckable}">
+                        <!--  TEXT OPTIONS PANEL  -->
 
+                        <StackPanel Orientation="Horizontal"
+                                    DockPanel.Dock="Right">
+                            <!--  UNIT LABEL  -->
+                            <Label IsVisible="{Binding UnitLabel, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                   Content="{Binding UnitLabel}"
+                                   FontSize="10"
+                                   VerticalAlignment="Center" />
+
+                            <!--  CASE SENSITIVE CHECKBOX  -->
                             <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                                      IsVisible="{Binding IsCheckable}"
                                       Content="Case Sensitive" />
+                            <!--  WHOLE WORD CHECKBOX  -->
                             <CheckBox IsChecked="{Binding IsChecked2, Mode=TwoWay}"
+                                      IsVisible="{Binding IsCheckable}"
                                       Content="Whole Word" />
+
+                            <!--  Color picker  -->
+                            <Button x:Name="ColorPickerButton"
+                                    DockPanel.Dock="Right"
+                                    IsVisible="{Binding IsColorOption}"
+                                    Command="{Binding ShowColorPickerCommand}"
+                                    CommandParameter="{Binding $self}"
+                                    Margin="5,0,0,0">
+                                <Image Width="15"
+                                       Height="15"
+                                       Source="{Binding Source={StaticResource ColorsImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                            </Button>
+
                         </StackPanel>
 
+
                         <!--  TEXTBOX BORDER  -->
 
                         <TextBox x:Name="MatchValueTextBox"
-                                 Watermark="Enter search term..."
+                                 Watermark="{Binding Label, StringFormat='\{0\}...'}"
                                  Classes.valid="{Binding IsValid}"
                                  local:MpAvTextControlDropExtension.IsEnabled="True"
                                  local:MpAvTextControlDropExtension.IsDragOverHandled="True"
@@ -70,34 +93,8 @@
                     </DockPanel>
                 </DataTemplate>
 
-                <!--  HEXCOLOR  -->
-                <DataTemplate x:Key="HexOptionTemplate"
-                              DataType="local:MpAvSearchCriteriaOptionViewModel">
-                    <DockPanel LastChildFill="True">
+                <!--  RGBA CHANNELS  -->
 
-                        <!--  Color picker  -->
-                        <Button x:Name="ColorPickerButton"
-                                DockPanel.Dock="Right"
-                                Command="{Binding ShowColorPickerCommand}"
-                                CommandParameter="{Binding $self}"
-                                Margin="5,0,0,0">
-                            <Image Width="15"
-                                   Height="15"
-                                   Source="{Binding Source={StaticResource ColorsImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                        </Button>
-
-                        <!--  TEXTBOX BORDER  -->
-
-                        <TextBox x:Name="MatchValueTextBox"
-                                 Watermark="Enter hex color..."
-                                 Classes.valid="{Binding IsValid}"
-                                 local:MpAvTextControlDropExtension.IsEnabled="True"
-                                 local:MpAvTextControlDropExtension.IsDragOverHandled="True"
-                                 local:MpAvDelayedTextChangedExtension.IsEnabled="True"
-                                 local:MpAvDelayedTextChangedExtension.DelayMs="500"
-                                 local:MpAvDelayedTextChangedExtension.Text="{Binding Value, Mode=TwoWay}" />
-                    </DockPanel>
-                </DataTemplate>
                 <DataTemplate x:Key="RGBAOptionTemplate"
                               DataType="local:MpAvSearchCriteriaOptionViewModel">
                     <StackPanel Orientation="Horizontal"
@@ -105,28 +102,28 @@
 
                         <StackPanel Orientation="Horizontal">
                             <Label Content="A" />
-                            <TextBox Classes.valid="{Binding IsValid4}"
+                            <TextBox Classes.valid="{Binding IsValid1}"
                                      local:MpAvTextControlDropExtension.IsEnabled="True"
                                      local:MpAvTextControlDropExtension.IsDragOverHandled="True"
                                      Text="{Binding Value4, Mode=TwoWay}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="R" />
-                            <TextBox Classes.valid="{Binding IsValid1}"
+                            <TextBox Classes.valid="{Binding IsValid2}"
                                      local:MpAvTextControlDropExtension.IsEnabled="True"
                                      local:MpAvTextControlDropExtension.IsDragOverHandled="True"
                                      Text="{Binding Value1, Mode=TwoWay}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="G" />
-                            <TextBox Classes.valid="{Binding IsValid2}"
+                            <TextBox Classes.valid="{Binding IsValid3}"
                                      local:MpAvTextControlDropExtension.IsEnabled="True"
                                      local:MpAvTextControlDropExtension.IsDragOverHandled="True"
                                      Text="{Binding Value2, Mode=TwoWay}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="B" />
-                            <TextBox Classes.valid="{Binding IsValid3}"
+                            <TextBox Classes.valid="{Binding IsValid4}"
                                      local:MpAvTextControlDropExtension.IsEnabled="True"
                                      local:MpAvTextControlDropExtension.IsDragOverHandled="True"
                                      Text="{Binding Value3, Mode=TwoWay}" />
@@ -144,23 +141,56 @@
                         </StackPanel>
                     </StackPanel>
                 </DataTemplate>
+
+                <!--  DISTANCE SLIDER  -->
                 <DataTemplate x:Key="UnitDecimalOptionTemplate"
                               DataType="local:MpAvSearchCriteriaOptionViewModel">
-                    <Grid ColumnDefinitions="Auto,*"
-                          Margin="7,0,0,0">
-                        <Label Content="Distance"
-                               Grid.Column="0"
+                    <DockPanel>
+                        <StackPanel Orientation="Horizontal"
+                                    DockPanel.Dock="Left"
+                                    Margin="7,0,5,0">
+                            <Label Content="Threshold"
+                                   FontWeight="SemiBold"
+                                   VerticalAlignment="Center" />
+                            <local:MpAvToolTipInfoHintView ToolTipText="Thresholds above 0 will provide fuzzy color matching using Euclidean distance in the RGBA colorspace. For example, if red (#FF0000) is the search term and black (#000000) is a pixel in an image then the color distance will be 255. Black to white distance is the maximum possible at 510, including an alpha channel" />
+
+                        </StackPanel>
+
+                        <Label Content="{Binding SliderValue, StringFormat='\{0\} (∆E)'}"
+                               DockPanel.Dock="Right"
                                FontWeight="SemiBold"
                                VerticalAlignment="Center" />
-                        <!--<local:MpAvSliderParameterView Width="100"
+                        <local:MpAvSliderParameterView Width="100"
                                                        Height="30"
-                                                       Grid.Column="1" />-->
-                        <TextBox Classes.valid="{Binding IsValid}"
+                                                       Background="Silver"
+                                                       IsSliding="{Binding IsValueChanging, Mode=TwoWay}" />
+                        <!--<TextBox Classes.valid="{Binding IsValid}"
                                  local:MpAvTextControlDropExtension.IsEnabled="True"
                                  local:MpAvTextControlDropExtension.IsDragOverHandled="True"
-                                 Text="{Binding Value, Mode=TwoWay}" />
-                    </Grid>
+                                 Text="{Binding Value, Mode=TwoWay}" />-->
+                        <!--<Slider x:Name="DistanceSlider"
+                                Value="{Binding SliderValue, Mode=TwoWay}"
+                                Minimum="0"
+                                Maximum="255"
+                                Width="150">
+                            <Slider.Styles>
+                                <Style Selector="Slider /template/ Thumb">
+                                    <Setter Property="ToolTip.Tip"
+                                            Value="{Binding $parent[Slider].Value, Mode=OneWay, StringFormat='Value \{0:f\}'}" />
+                                    <Setter Property="ToolTip.Placement"
+                                            Value="Top" />
+                                    <Setter Property="ToolTip.VerticalOffset"
+                                            Value="-10" />
+                                    <Setter Property="ToolTip.HorizontalOffset"
+                                            Value="-30" />
+                                </Style>
+                            </Slider.Styles>
+                        </Slider>-->
+                    </DockPanel>
                 </DataTemplate>
+
+                <!--  DATE PICKER  -->
+
                 <DataTemplate x:Key="DateOptionTemplate"
                               DataType="local:MpAvSearchCriteriaOptionViewModel">
                     <DatePicker Width="300"

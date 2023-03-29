@@ -1,6 +1,7 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="FolderSolidImage">avares://MonkeyPaste.Avalonia/Assets/Images/foldersolid.png</sys:String>
     <sys:String x:Key="GlobalImage">avares://MonkeyPaste.Avalonia/Assets/Images/global.png</sys:String>
     <sys:String x:Key="InfoImage">avares://MonkeyPaste.Avalonia/Assets/Images/info.png</sys:String>
     <sys:String x:Key="NewWindowImage">avares://MonkeyPaste.Avalonia/Assets/Images/newwindow.png</sys:String>

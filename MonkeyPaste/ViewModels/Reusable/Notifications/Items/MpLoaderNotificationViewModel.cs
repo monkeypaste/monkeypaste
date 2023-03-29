@@ -47,12 +47,12 @@ namespace MonkeyPaste {
             }
         }
 
-        public MpIProgressLoader ProgressLoader {
+        public MpIProgressLoaderViewModel ProgressLoader {
             get {
                 if (NotificationFormat == null) {
                     return null;
                 }
-                return NotificationFormat.OtherArgs as MpIProgressLoader;
+                return NotificationFormat.OtherArgs as MpIProgressLoaderViewModel;
             }
         }
 

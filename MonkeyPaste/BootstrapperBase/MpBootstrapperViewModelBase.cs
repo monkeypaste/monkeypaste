@@ -12,7 +12,7 @@ namespace MonkeyPaste {
     public abstract class MpBootstrapperViewModelBase :
         MpViewModelBase,
         MpIStartupState,
-        MpIProgressLoader,
+        MpIProgressLoaderViewModel,
         MpIStartupObjectLocator {
         #region Private Variables
 
@@ -38,7 +38,7 @@ namespace MonkeyPaste {
 
         #endregion
 
-        #region MpIProgressLoader Implementation
+        #region MpIProgressLoaderViewModel Implementation
 
         public string IconResourceKey =>
             MpBase64Images.AppIcon;

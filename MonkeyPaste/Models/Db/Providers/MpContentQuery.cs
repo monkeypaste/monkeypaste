@@ -164,6 +164,7 @@ namespace MonkeyPaste {
             arg_filters.AddRange(qf.GetStringMatchOps(mv));
             arg_filters.AddRange(qf.GetDateTimeMatchOps(mv));
             arg_filters.AddRange(qf.GetColorMatchOps(mv));
+            arg_filters.AddRange(qf.GetDimensionOps(mv));
 
             return arg_filters;
         }
@@ -206,6 +207,27 @@ namespace MonkeyPaste {
 
         #endregion
 
+        #region Dimension Match
+        private static IEnumerable<Tuple<string, List<object>>> GetDimensionOps(
+            this MpContentQueryBitFlags qf,
+            string mv) {
+            var ops = new List<Tuple<string, List<object>>>();
+            int dim = -1;
+            if (string.IsNullOrWhiteSpace(mv) ||
+                !int.TryParse(mv, out dim)) {
+                return ops;
+            }
+            if (qf.HasFlag(MpContentQueryBitFlags.Width)) {
+                ops.Add(new Tuple<string, List<object>>($"ItemSize1 = ?", new object[] { dim }.ToList()));
+            }
+            if (qf.HasFlag(MpContentQueryBitFlags.Height)) {
+                ops.Add(new Tuple<string, List<object>>($"ItemSize2 = ?", new object[] { dim }.ToList()));
+            }
+            return ops;
+        }
+
+        #endregion
+
         #region Color Match
         private static IEnumerable<Tuple<string, List<object>>> GetColorMatchOps(
             this MpContentQueryBitFlags qf,
@@ -230,7 +252,7 @@ namespace MonkeyPaste {
                 mv = mv_parts[0];
             }
             mv += "," + mv_parts[1];
-            ops.Add(new Tuple<string, List<object>>($"PIXELCOUNT(?,ItemData) > 0", new object[] { mv }.ToList()));
+            ops.Add(new Tuple<string, List<object>>($"PIXELCOUNT(?,ItemImageData) > 0", new object[] { mv }.ToList()));
             return ops;
         }
 

@@ -66,6 +66,7 @@ namespace MonkeyPaste.Common {
                 hexString = hexString.Replace("#", string.Empty);
             }
 
+
             int x = hexString.Length == 8 ? 2 : 0;
             byte a = x > 0 ? byte.Parse(hexString.Substring(0, 2), NumberStyles.AllowHexSpecifier) : (byte)255;
             byte r = byte.Parse(hexString.Substring(x, 2), NumberStyles.AllowHexSpecifier);

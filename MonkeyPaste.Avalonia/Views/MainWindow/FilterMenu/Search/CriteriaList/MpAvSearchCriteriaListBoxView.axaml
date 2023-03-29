@@ -30,7 +30,7 @@
         <!--  CRITIERA LISTBOX ITEM & HEADER  -->
         <Style Selector="ListBoxItem">
             <Setter Property="HorizontalContentAlignment"
-                    Value="Left" />
+                    Value="Stretch" />
             <Setter Property="VerticalContentAlignment"
                     Value="Stretch" />
             <Setter Property="HorizontalAlignment"
@@ -63,8 +63,6 @@
 
         <Style Selector="ListBox.criteriaList > ListBoxItem"
                x:DataType="local:MpAvSearchCriteriaItemViewModel">
-            <Setter Property="Width"
-                    Value="{Binding $parent[ListBox].Bounds.Width}" />
             <Setter Property="local:MpAvIsHoveringExtension.IsEnabled"
                     Value="True" />
             <Setter Property="Height"
@@ -266,19 +264,16 @@
         </Style>-->
     </local:MpAvUserControl.Styles>
     <ScrollViewer x:Name="SearchCriteriaContainerScrollViewer"
-                  MaxHeight="{Binding MaxSearchCriteriaViewHeight}"
-                  VerticalAlignment="Top"
+                  VerticalAlignment="Stretch"
                   VerticalContentAlignment="Stretch"
                   HorizontalAlignment="Stretch"
                   HorizontalScrollBarVisibility="Auto"
                   VerticalScrollBarVisibility="Auto">
         <Grid RowDefinitions="Auto,*"
               HorizontalAlignment="Stretch"
-              VerticalAlignment="Stretch"
-              Width="{Binding $parent[local:MpAvSearchCriteriaListBoxView].Bounds.Width}">
+              VerticalAlignment="Stretch">
             <local:MpAvSearchCriteriaHeaderView Grid.Row="0"
-                                                Height="{Binding BoundHeaderHeight, Mode=TwoWay}"
-                                                Background="{DynamicResource SearchCriteriaRowBgBrush1}"
+                                                Padding="5"
                                                 HorizontalAlignment="Stretch"
                                                 VerticalAlignment="Stretch" />
             <ListBox x:Name="SearchCriteriaListBox"
@@ -294,8 +289,6 @@
                      SelectionMode="Single"
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch"
-                     MinHeight="{Binding MaxSearchCriteriaListBoxHeight}"
-                     Width="{Binding $parent[local:MpAvSearchCriteriaListBoxView].Bounds.Width}"
                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
                      ScrollViewer.HorizontalScrollBarVisibility="Hidden">
                 <ListBox.Resources>
@@ -308,7 +301,8 @@
                 </ListBox.Resources>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Grid Width="{Binding $parent[ListBoxItem].Bounds.Width}">
+                        <Grid HorizontalAlignment="Stretch"
+                              VerticalAlignment="Stretch">
                             <local:MpAvSearchCriteriaItemView HorizontalAlignment="Stretch" />
                             <Border x:Name="SortDropBorder_top"
                                     Classes="dropLine top"

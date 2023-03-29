@@ -22,7 +22,7 @@ namespace MonkeyPaste.Common {
             return ColorDistance2(e1.ToPixelColor(), e2.ToPixelColor());
         }
 
-        private static double MAX_EUCLID_COLOR_DIST = 441.67295593;
+        public static double MAX_EUCLID_COLOR_DIST = 510; //sqrt(255^2 * 4)
         public static double ColorDistance2(this PixelColor e1, PixelColor e2) {
             return Math.Sqrt(/*Math.Pow(e2.Alpha - e1.Alpha, 2) + */ Math.Pow((double)(e2.Red - e1.Red), 2) + Math.Pow((double)(e2.Green - e1.Green), 2) + Math.Pow((double)(e2.Blue - e1.Blue), 2)) / MAX_EUCLID_COLOR_DIST;
         }

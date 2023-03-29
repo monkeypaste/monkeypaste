@@ -1,0 +1,57 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="using:MonkeyPaste.Avalonia">
+    <Style Selector="Border.paramBorder">
+        <Setter Property="Margin"
+                Value="10,2" />
+        <Setter Property="HorizontalAlignment"
+                Value="Stretch" />
+        <Setter Property="CornerRadius"
+                Value="2" />
+        <Setter Property="BorderThickness"
+                Value="1" />
+        <Setter Property="BorderBrush"
+                Value="Transparent" />
+    </Style>
+    <Style Selector="Border.paramBorder Button">
+        <Setter Property="Margin"
+                Value="10,2" />
+        <Setter Property="HorizontalAlignment"
+                Value="Stretch" />
+        <Setter Property="CornerRadius"
+                Value="2" />
+        <Setter Property="BorderThickness"
+                Value="1" />
+        <Setter Property="BorderBrush"
+                Value="Transparent" />
+    </Style>
+    <Style Selector="Border.paramBorder.sliderBorder">
+        <Setter Property="BorderBrush"
+                Value="Black" />
+        <Setter Property="Background"
+                Value="{StaticResource HitTestableTransparent}" />
+    </Style>
+    <Style Selector="Border.paramBorder:not(.sliderBorder) TextBox">
+        <Setter Property="BorderBrush"
+                Value="Black" />
+        <Setter Property="BorderThickness"
+                Value="1" />
+        <Setter Property="Padding"
+                Value="5" />
+        <Setter Property="Margin"
+                Value="3,0,0,0" />
+        <Setter Property="FontSize"
+                Value="12" />
+        <Setter Property="HorizontalAlignment"
+                Value="Stretch" />
+    </Style>
+    <Style Selector="Border.paramBorder.sliderBorder:pointerover">
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource HoverDefaultBorderBrush}" />
+    </Style>
+    <Style Selector="local|MpAvPluginParameterItemView.invalid Border.paramBorder">
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource DefaultInvalidBrush}" />
+    </Style>
+</Styles>

@@ -53,8 +53,6 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-
-
         public void HideNotification(MpNotificationViewModelBase nvmb) {
             nvmb.IsClosing = true;
         }

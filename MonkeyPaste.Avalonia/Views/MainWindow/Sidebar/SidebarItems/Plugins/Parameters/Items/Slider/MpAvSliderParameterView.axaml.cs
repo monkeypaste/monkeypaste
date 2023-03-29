@@ -11,8 +11,33 @@ namespace MonkeyPaste.Avalonia {
 
     public partial class MpAvSliderParameterView : MpAvUserControl<MpISliderViewModel> {
         private MpPoint _lastMousePosition;
-        private bool _isSliding = false;
         private double _oldVal = 0;
+
+        #region Properties
+
+        #region IsSliding Property
+
+        private bool _isSliding = false;
+
+        public static readonly DirectProperty<MpAvSliderParameterView, bool> IsSlidingProperty =
+            AvaloniaProperty.RegisterDirect<MpAvSliderParameterView, bool>
+            (
+                nameof(IsSliding),
+                o => o.IsSliding,
+                (o, v) => o.IsSliding = v,
+                false
+            );
+
+        public bool IsSliding {
+            get => _isSliding;
+            set {
+                SetAndRaise(IsSlidingProperty, ref _isSliding, value);
+            }
+        }
+
+        #endregion
+
+        #endregion
 
         public MpAvSliderParameterView() {
             InitializeComponent();
@@ -40,7 +65,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void Sb_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
 
-            Dispatcher.UIThread.Post(async () => {
+            Dispatcher.UIThread.Post((Action)(async () => {
                 if (!IsEnabled) {
                     return;
                 }
@@ -58,8 +83,8 @@ namespace MonkeyPaste.Avalonia {
                 await svtb.TryKillFocusAsync();
 
                 e.Pointer.Capture(sb);
-                _isSliding = e.Pointer.Captured != null;
-                if (_isSliding) {
+                IsSliding = e.Pointer.Captured != null;
+                if (IsSliding) {
                     _lastMousePosition = new MpPoint(mp.X, mp.Y); // mp.ToPortablePoint();
 
                     e.Handled = true;
@@ -67,24 +92,26 @@ namespace MonkeyPaste.Avalonia {
                     if (sbr.Contains(mp)) {
                         double newWidth = mp.X;
                         double widthPercent = newWidth / sb.Bounds.Width;
-                        double newValue = ((BindingContext.MaxValue - BindingContext.MinValue) * widthPercent) + BindingContext.MinValue;
-                        BindingContext.SliderValue = Math.Round(newValue, BindingContext.Precision);
+                        if (BindingContext != null) {
+                            double newValue = ((BindingContext.MaxValue - BindingContext.MinValue) * widthPercent) + BindingContext.MinValue;
+                            BindingContext.SliderValue = Math.Round(newValue, BindingContext.Precision);
+                        }
                     }
                     UpdateRectWidth();
                 }
-            });
+            }));
 
         }
 
 
         private void Sb_PointerMoved(object sender, global::Avalonia.Input.PointerEventArgs e) {
-            if (!_isSliding) {
+            if (!IsSliding) {
                 return;
             }
             var sb = sender as Control;
 
             if (e.Pointer.Captured == null) {
-                _isSliding = false;
+                IsSliding = false;
                 return;
             }
             double newWidth;
@@ -112,9 +139,9 @@ namespace MonkeyPaste.Avalonia {
         private void Sb_PointerReleased(object sender, global::Avalonia.Input.PointerReleasedEventArgs e) {
 
             var sb = sender as Control;
-            if (_isSliding) {
+            if (IsSliding) {
                 //SliderValueTextBox.IsHitTestVisible = true;
-                _isSliding = false;
+                IsSliding = false;
                 _lastMousePosition = new MpPoint();
                 if (e.Pointer.Captured != null) {
                     e.Pointer.Capture(null);

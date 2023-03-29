@@ -25,28 +25,31 @@ namespace MonkeyPaste.Avalonia {
 
         public double SliderValue {
             get {
+                // NOTE presuming this is only needed for color distance
+                // and unit value is scaled to 0-255
                 if (string.IsNullOrWhiteSpace(Value)) {
-                    Value = "1".ToString();
+                    Value = "0";
                 }
                 try {
-                    return double.Parse(Value);
+                    double unit_val = double.Parse(Value);
+                    return Math.Round(unit_val * byte.MaxValue);
                 }
                 catch {
-                    return 1;
+                    return 0;
                 }
             }
             set {
                 if (SliderValue != value) {
-                    Value = SliderValue.ToString();
+                    Value = (value / byte.MaxValue).ToString();
                 }
             }
         }
         public double MinValue =>
             0;
         public double MaxValue =>
-            1;
+            MpColorExtensions.MAX_EUCLID_COLOR_DIST;
         public int Precision =>
-            3;
+            0;
         #endregion
 
         #region MpIHoverableViewModel Implementation
@@ -87,6 +90,11 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
+        public bool IsValueChanging { get; set; }
+        public bool IsColorOption =>
+            FilterValue.HasFlag(MpContentQueryBitFlags.Rgba) ||
+            FilterValue.HasFlag(MpContentQueryBitFlags.Hex);
 
         public bool IsValueOption =>
             !UnitType.HasFlag(MpSearchCriteriaUnitFlags.Enumerable);
@@ -184,6 +192,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string Label { get; set; }
 
+        public string UnitLabel { get; set; }
         public string ValidationText { get; set; }
 
         #endregion
@@ -291,9 +300,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvSearchCriteriaOptionViewModel() : base(null) { }
+        public MpAvSearchCriteriaOptionViewModel() : this(null, null) { }
 
         public MpAvSearchCriteriaOptionViewModel(MpAvSearchCriteriaItemViewModel host, MpAvSearchCriteriaOptionViewModel parent) : base(parent) {
+            // NOTE IsBusy defaults to true since opt doesn't have InitAsync
+            //IsBusy = true;
             PropertyChanged += MpSearchParameterViewModel_PropertyChanged;
             Items.CollectionChanged += Items_CollectionChanged;
             HostCriteriaItem = host;
@@ -307,13 +318,24 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                 case nameof(SelectedItem):
                     Items.ForEach(x => x.IsSelected = x == SelectedItem);
+                    if (HostCriteriaItem == null ||
+                        HostCriteriaItem.IsBusy ||
+                        IsBusy) {
+                        break;
+                    }
+                    HostCriteriaItem.NotifyOptionOrValueChanged(this);
                     break;
                 case nameof(IsSelected):
                     HostCriteriaItem.OnPropertyChanged(nameof(HostCriteriaItem.Items));
                     HostCriteriaItem.OnPropertyChanged(nameof(HostCriteriaItem.IsInputVisible));
                     OnPropertyChanged(nameof(Value));
-                    if (!IsSelected && IsRootMultiValueOption) {
-                        SelectedItem = null;
+                    if (!IsSelected) {
+                        if (IsRootMultiValueOption) {
+                            SelectedItem = null;
+                        } else {
+                            Value = null;
+                        }
+
                     }
                     break;
                 case nameof(Value1):
@@ -326,6 +348,10 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(Value):
                 case nameof(IsChecked):
                 case nameof(IsChecked2):
+                case nameof(IsValueChanging):
+                    if (!IsSelected) {
+                        break;
+                    }
                     if (IsRootMultiValueOption) {
                         SelectedItem = Items[0];
                     }
@@ -335,9 +361,9 @@ namespace MonkeyPaste.Avalonia {
                         // where collection handles ntf from adv search opened msg
                         break;
                     }
-                    if (Validate()) {
+                    if (Validate() && !IsValueChanging) {
                         // only notify when values are valid
-                        HostCriteriaItem.NotifyValueChanged(this);
+                        HostCriteriaItem.NotifyOptionOrValueChanged(this);
                     }
 
 

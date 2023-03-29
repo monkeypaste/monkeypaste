@@ -21,6 +21,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Variable
         //private Window _criteriaWindow;
+        private Tuple<int, int>[] _lastSaveCriteriaItemIdAndSortLookup;
+
         #endregion
 
         #region Constants
@@ -87,10 +89,31 @@ namespace MonkeyPaste.Avalonia {
         public bool IsCriteriaWindowOpen { get; set; }
         //public bool IsCriteriaWindowOpen => _criteriaWindow != null;//{ get; set; }
 
-        public bool HasAnyCriteriaChanged {
-            get => Items.Any(x => x.HasCriteriaChanged);
-            set => Items.ForEach(x => x.HasCriteriaChanged = value);
+        public bool HasAnyCriteriaModelChanged =>
+            Items.Any(x => x.HasModelChanged);
+
+        public bool HasSearchChanged {
+            get {
+                if (_lastSaveCriteriaItemIdAndSortLookup == null) {
+                    // should only be null before init
+                    return false;
+                }
+                var cur = GetCurrentSearchItemSaveCheckState();
+                if (cur.Length != _lastSaveCriteriaItemIdAndSortLookup.Length) {
+                    return true;
+                }
+                for (int i = 0; i < cur.Length; i++) {
+                    var cur_i = cur[i];
+                    var last_i = _lastSaveCriteriaItemIdAndSortLookup[i];
+                    if (cur_i.Item1 != last_i.Item1 ||
+                        cur_i.Item2 != last_i.Item2) {
+                        return true;
+                    }
+                }
+                return false;
+            }
         }
+
 
         public bool IsAllCriteriaEmpty =>
             Items.All(x => x.IsEmptyCriteria);
@@ -110,7 +133,9 @@ namespace MonkeyPaste.Avalonia {
             !IsSavedQuery && HasCriteriaItems;
 
         public bool CanSave =>
-            IsPendingQuery || HasAnyCriteriaChanged;
+            IsPendingQuery ||
+            HasAnyCriteriaModelChanged ||
+            HasSearchChanged;
 
         #endregion
 
@@ -122,38 +147,7 @@ namespace MonkeyPaste.Avalonia {
             60;
         public double HeaderHeight =>
             40;
-        public double BoundHeaderHeight { get; set; }
 
-        public double BoundCriteriaListViewScreenHeight { get; set; }
-        public double BoundCriteriaListBoxScreenHeight =>
-            Math.Max(0, BoundCriteriaListViewScreenHeight - BoundHeaderHeight);
-
-        public double MaxSearchCriteriaRowHeight =>
-            IsCriteriaWindowOpen ? 0 : MaxSearchCriteriaViewHeight;
-
-        public double MaxSearchCriteriaListBoxHeight =>
-            Math.Max(0, MaxSearchCriteriaViewHeight - BoundHeaderHeight);
-        public double MaxSearchCriteriaViewHeight {
-            get {
-                if (!IsAdvSearchActive) {
-                    return 0;
-                }
-                double h = 0;
-                if (true) {
-                    // HEADER + BORDER
-                    h +=
-                        BoundHeaderHeight +
-                            MpAvSearchCriteriaItemViewModel.CRITERIA_ITEM_BORDER_THICKNESS.Top +
-                            MpAvSearchCriteriaItemViewModel.CRITERIA_ITEM_BORDER_THICKNESS.Bottom;
-                }
-                // ITEMS W/WO JOIN HEADER + BORDER
-                h += Items.Sum(x => x.CriteriaItemHeight) +
-                Items.Sum(x =>
-                    MpAvSearchCriteriaItemViewModel.CRITERIA_ITEM_BORDER_THICKNESS.Top +
-                    MpAvSearchCriteriaItemViewModel.CRITERIA_ITEM_BORDER_THICKNESS.Bottom);
-                return Math.Max(0, h);
-            }
-        }
 
         #endregion
 
@@ -171,22 +165,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constructors
-        //public MpAvSearchCriteriaItemCollectionViewModel(int startupQueryTagId) : this() {
-        //    // NOTE only called BEFORE bootstrap in MpAvQueryInfoViewModel.Parse when json is an int (QueryTagId)
-        //    _instance = this;
-
-        //    if (startupQueryTagId == 0) {
-        //        return;
-        //    }
-        //    if(startupQueryTagId < 0) {
-        //        // shutdown was a pending query
-        //        PendingQueryTagId = -startupQueryTagId;
-        //    } else {
-        //        // shutdown was a saved query
-        //        CurrentQueryTagId = startupQueryTagId;
-        //    }
-        //}
-
         public MpAvSearchCriteriaItemCollectionViewModel() : base(null) {
             PropertyChanged += MpAvSearchCriteriaItemCollectionViewModel_PropertyChanged;
             Items.CollectionChanged += Items_CollectionChanged;
@@ -245,7 +223,10 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
+            ResetLastStateToCurrent();
             IsBusy = false;
+
+
 
 
             if (IsSavedQuery) {
@@ -307,20 +288,14 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(CurrentQueryTagViewModel));
                     break;
                 case nameof(IsCriteriaWindowOpen):
-
-                    OnPropertyChanged(nameof(MaxSearchCriteriaViewHeight));
-                    OnPropertyChanged(nameof(MaxSearchCriteriaListBoxHeight));
-                    //if (IsCriteriaWindowOpen) {
-                    //    IsExpanded = false;
-                    //} else {
-                    //    // force remeasure 
-                    //    SetIsExpandedAsync(false).FireAndForgetSafeAsync();
-                    //}
                     IsExpanded = false;
                     break;
                 case nameof(IsExpanded):
                     MpMessenger.SendGlobal(MpMessageType.AdvancedSearchExpandedChanged);
                     AnimateAdvSearchMenuAsync(IsExpanded).FireAndForgetSafeAsync(this);
+                    break;
+                case nameof(HasAnyCriteriaModelChanged):
+                    OnPropertyChanged(nameof(CanSave));
                     break;
             }
         }
@@ -329,9 +304,19 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(Items));
             OnPropertyChanged(nameof(SortedItems));
             OnPropertyChanged(nameof(HasCriteriaItems));
-            OnPropertyChanged(nameof(MaxSearchCriteriaViewHeight));
+            OnPropertyChanged(nameof(HasSearchChanged));
 
             UpdateCriteriaSortOrderAsync().FireAndForgetSafeAsync(this);
+        }
+
+        private Tuple<int, int>[] GetCurrentSearchItemSaveCheckState() {
+            return
+                Items.Select(x => new Tuple<int, int>(x.SearchCriteriaItemId, x.SortOrderIdx)).ToArray();
+        }
+        private void ResetLastStateToCurrent() {
+            _lastSaveCriteriaItemIdAndSortLookup = GetCurrentSearchItemSaveCheckState();
+
+            OnPropertyChanged(nameof(CanSave));
         }
 
         private async Task AnimateAdvSearchMenuAsync(bool isExpanding) {
@@ -343,51 +328,18 @@ namespace MonkeyPaste.Avalonia {
                 double default_visible_row_count = 2d;
                 double delta_open_height = DefaultCriteriaRowHeight * default_visible_row_count;
 
-                BoundHeaderHeight = HeaderHeight;
-                BoundCriteriaListViewScreenHeight = delta_open_height;
-
                 //MpAvResizeExtension.ResizeByDelta(MpAvSearchCriteriaListBoxView.Instance, 0, delta_open_height, false);
                 OnPropertyChanged(nameof(IsPendingQuery));
-                OnPropertyChanged(nameof(BoundCriteriaListBoxScreenHeight));
                 Items.ForEach(x => x.Items.ForEach(y => y.OnPropertyChanged(nameof(y.SelectedItemIdx))));
-                OnPropertyChanged(nameof(MaxSearchCriteriaListBoxHeight));
-                OnPropertyChanged(nameof(MaxSearchCriteriaRowHeight));
-                OnPropertyChanged(nameof(MaxSearchCriteriaViewHeight));
             } else {
                 if (IsPendingQuery && IsAllCriteriaEmpty && !IsCriteriaWindowOpen) {
                     // discard pending if nothing changed
                     await InitializeAsync(0, false);
                 }
-
-                double delta_close_height = -BoundCriteriaListViewScreenHeight;
-                BoundCriteriaListViewScreenHeight = 0;
                 //MpAvResizeExtension.ResizeByDelta(MpAvMainView.Instance, 0, delta_close_height, false);                    
 
             }
         }
-
-        //private async Task SetIsExpandedAsync(bool newExpandedValue) {
-        //    if (newExpandedValue) {
-        //        if (!IsAdvSearchActive) {
-        //            // plus on search box toggled to checked
-        //            await InitializeAsync(0, true);
-        //            while (!Mp.Services.Query.CanRequery) {
-        //                await Task.Delay(100);
-        //            }
-        //        }
-        //        _isExpanded = true;
-        //    } else {
-        //        if (IsPendingQuery && IsAllCriteriaEmpty) {
-        //            // discard pending if nothing changed
-        //            await InitializeAsync(0, false);
-        //        }
-        //        _isExpanded = false;
-        //    }
-        //    OnPropertyChanged(nameof(IsExpanded));
-        //    MpMessenger.SendGlobal(IsExpanded ? MpMessageType.AdvancedSearchExpanded : MpMessageType.AdvancedSearchUnexpanded);
-
-        //}
-
         private async Task UpdateCriteriaSortOrderAsync(bool fromModel = false) {
             if (fromModel) {
                 Items.Sort(x => x.SortOrderIdx);
@@ -478,7 +430,7 @@ namespace MonkeyPaste.Avalonia {
                 if (qttvm == null) {
                     return;
                 }
-                await qttvm.MoveOrCopyThisTagCommand.ExecuteAsync(new object[] { qttvm.ParentTagId, -1, true });
+                await qttvm.MoveOrCopyThisTagCommand.ExecuteAsync(new object[] { qttvm.ParentTagId, -1, false, true });
 
                 var dup_ttvm = qttvm.ParentTreeItem.SortedItems.Last();
                 await MpAvTagTrayViewModel.Instance.SelectTagAndBringIntoTreeViewCommand.ExecuteAsync(dup_ttvm);
@@ -489,6 +441,7 @@ namespace MonkeyPaste.Avalonia {
             }, () => {
                 return IsSavedQuery;
             });
+
         public ICommand SaveQueryCommand => new MpAsyncCommand(
             async () => {
                 if (IsPendingQuery) {
@@ -501,11 +454,6 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(100);
                 }
                 Items.ForEach(x => x.IgnoreHasModelChanged = true);
-            }, () => {
-                if (IsPendingQuery) {
-                    return true;
-                }
-                return HasAnyCriteriaChanged;
             });
 
         public ICommand SavePendingQueryCommand => new MpAsyncCommand(
@@ -573,7 +521,7 @@ namespace MonkeyPaste.Avalonia {
                 if (Mp.Services.PlatformInfo.IsDesktop) {
                     Items.ForEach(x => x.LogPropertyChangedEvents = true);
                     var _criteriaWindow = new MpAvWindow() {
-                        Width = 1100,
+                        SizeToContent = SizeToContent.Width,
                         Height = 300,
                         DataContext = this,
                         ShowInTaskbar = true,

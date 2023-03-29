@@ -256,10 +256,10 @@ namespace MonkeyPaste.Avalonia {
                 hasChanged = true;
             }
             if (Next != null &&
-                MpAvSearchCriteriaItemCollectionViewModel.Instance.HasAnyCriteriaChanged) {
+                MpAvSearchCriteriaItemCollectionViewModel.Instance.HasAnyCriteriaModelChanged) {
                 // NOTE always check criteria to unset change
                 hasChanged = true;
-                MpAvSearchCriteriaItemCollectionViewModel.Instance.HasAnyCriteriaChanged = false;
+                //MpAvSearchCriteriaItemCollectionViewModel.Instance.Items.ForEach(x => x.HasModelChanged = false);
             }
 
             IsDescending = MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending;

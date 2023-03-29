@@ -12,6 +12,7 @@
                        mc:Ignorable="d"
                        x:Class="MonkeyPaste.Avalonia.MpAvTagView">
     <local:MpAvUserControl.Styles>
+        <!--  DEFAULTS  -->
         <Style Selector="Border#TagNameBorder">
             <Setter Property="Background"
                     Value="{DynamicResource TagTileBgColor}" />
@@ -22,6 +23,11 @@
             <Setter Property="BorderDashOffset"
                     Value="0" />
         </Style>
+        <Style Selector="Border#TagCountContainer">
+            <Setter Property="BoxShadow"
+                    Value="0 0 black" />
+        </Style>
+        <!--  OUTER BORDER SELECTION  -->
         <Style Selector="Border#TagNameBorder.isselected">
             <Setter Property="Background"
                     Value="{DynamicResource TagTileSelectedBgColor}" />
@@ -35,6 +41,7 @@
                     Value="{DynamicResource TagTileContextFocusBorderColor}" />
         </Style>
 
+        <!--  DND  -->
         <Style Selector="Border#TagNameBorder.drag">
             <Setter Property="BorderBrush"
                     Value="{DynamicResource DragSourceBrush}" />
@@ -53,6 +60,38 @@
             <Setter Property="BorderBrush"
                     Value="{DynamicResource DragInvalidBrush}" />
         </Style>
+
+        <!--  COUNT BORDER  -->
+        <Style Selector="Border#TagNameBorder.isselected Border#TagCountContainer">
+            <Setter Property="BoxShadow"
+                    Value="1 1 3 black" />
+        </Style>
+
+        <!--  PSEUDO TAG COUNT PLACEHOLDER IMAGE  -->
+        <Style Selector="Image.isquery"
+               x:DataType="local:MpAvTagTileViewModel">
+            <Setter Property="Source">
+                <Setter.Value>
+                    <MultiBinding Converter="{x:Static local:MpAvMultiObjToContrastTintedBitmapConverter.Instance}">
+                        <Binding Path="TagHexColor" />
+                        <Binding Source="{StaticResource FilterImage}" />
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style Selector="Image.isgroup"
+               x:DataType="local:MpAvTagTileViewModel">
+            <Setter Property="Source">
+                <Setter.Value>
+                    <MultiBinding Converter="{x:Static local:MpAvMultiObjToContrastTintedBitmapConverter.Instance}">
+                        <Binding Path="TagHexColor" />
+                        <Binding Source="{StaticResource FolderSolidImage}" />
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
     </local:MpAvUserControl.Styles>
     <Grid x:Name="TagViewContainerGrid"
           local:MpAvIsHoveringExtension.IsEnabled="True"
@@ -83,7 +122,6 @@
                 MinHeight="20"
                 Classes.drag="{Binding IsDragging}"
                 Classes.islinked="{Binding IsLinkedToSelectedClipTile}"
-                Classes.isgroup="{Binding IsGroupTag}"
                 Classes.isselected="{Binding IsSelected}"
                 Classes.dragover="{Binding IsContentDragOverTag}"
                 Classes.dragover_invalid="{Binding !IsContentDragOverTagValid}"
@@ -97,26 +135,63 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <!--  Tag Count Box  -->
-                    <Border CornerRadius="5"
+                    <Border x:Name="TagCountContainer"
+                            CornerRadius="5"
                             Grid.Column="0"
                             MinWidth="{Binding $self.Bounds.Height}"
                             MinHeight="20"
                             Margin="1"
                             Padding="4,1"
-                            BorderThickness="0"
+                            BorderThickness="1.5"
+                            BorderBrush="{Binding $self.Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}"
                             Background="{Binding TagHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}">
                         <Grid x:Name="CountContainer">
                             <TextBlock x:Name="TagCountTextBlock"
-                                       IsVisible="{Binding !IsBusy}"
                                        Background="Transparent"
-                                       VerticalAlignment="Center"
-                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Stretch"
+                                       HorizontalAlignment="Stretch"
+                                       TextAlignment="Center"
                                        Text="{Binding TagClipCount, Converter={x:Static local:MpAvNullableToStringConverter.Instance}}"
-                                       Foreground="{Binding $parent[Border].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
-                            <local:MpAvBusySpinnerView HorizontalAlignment="Stretch"
+                                       Foreground="{Binding $parent[Border].BorderBrush}">
+                                <TextBlock.IsVisible>
+                                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                        <Binding Path="TagClipCount"
+                                                 Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}"
+                                                 ConverterParameter="allowzero" />
+                                        <Binding Path="!IsVisible"
+                                                 ElementName="TagCountBusySpinner" />
+                                    </MultiBinding>
+
+                                </TextBlock.IsVisible>
+                            </TextBlock>
+                            <Image x:Name="PseudoTagPlaceholderImage"
+                                   Classes.isgroup="{Binding IsGroupTag}"
+                                   Classes.isquery="{Binding IsQueryTag}"
+                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Stretch"
+                                   Stretch="UniformToFill"
+                                   Margin="1">
+                                <Image.IsVisible>
+                                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                        <Binding Path="!IsVisible"
+                                                 ElementName="TagCountTextBlock" />
+                                        <Binding Path="!IsVisible"
+                                                 ElementName="TagCountBusySpinner" />
+                                    </MultiBinding>
+                                </Image.IsVisible>
+                            </Image>
+                            <local:MpAvBusySpinnerView x:Name="TagCountBusySpinner"
+                                                       HorizontalAlignment="Stretch"
                                                        VerticalAlignment="Stretch"
-                                                       Cursor="Wait"
-                                                       IsVisible="{Binding IsBusy}" />
+                                                       Cursor="Wait">
+                                <local:MpAvBusySpinnerView.IsVisible>
+                                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                        <Binding Path="IsSelected" />
+                                        <Binding Path="IsQuerying"
+                                                 Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
+                                    </MultiBinding>
+                                </local:MpAvBusySpinnerView.IsVisible>
+                            </local:MpAvBusySpinnerView>
                         </Grid>
                     </Border>
                     <!--  Tag Name TextBox/ Marquee  -->

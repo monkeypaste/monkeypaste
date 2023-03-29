@@ -162,6 +162,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\Animations\Shake.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Button.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ButtonBase.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\CheckBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ComboBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ComboBoxItem.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Dnd\Dnd.axaml" />
@@ -174,6 +175,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvNotificationWindow.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPagingScrollBar.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPagingScrollViewer.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvParameterItem.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvShortcut.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvTagTile.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvTooltip.axaml" />
@@ -271,6 +273,7 @@
     <None Remove="Assets\Images\fileSystemEvent.png" />
     <None Remove="Assets\Images\filter.png" />
     <None Remove="Assets\Images\folder.png" />
+    <None Remove="Assets\Images\foldersolid.png" />
     <None Remove="Assets\Images\forward_black.png" />
     <None Remove="Assets\Images\frame_grip.png" />
     <None Remove="Assets\Images\frame_grip_org.png" />
@@ -678,6 +681,9 @@
     <AvaloniaResource Include="Assets\Images\folder.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\foldersolid.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\forward_black.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -1041,6 +1047,8 @@
     <AvaloniaResource Include="Themes\Default\Controls\ListBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvPagingScrollViewer.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Border.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\CheckBox.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\MpAvParameterItem.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvShortcut.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvTagTile.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\TemplatedControl.axaml" />

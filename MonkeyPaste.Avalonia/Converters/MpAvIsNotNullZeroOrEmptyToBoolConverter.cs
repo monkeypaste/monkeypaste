@@ -11,8 +11,18 @@ namespace MonkeyPaste.Avalonia {
 
         public object Convert(object value, Type targetType, object? parameter, CultureInfo culture) {
             bool flip = false;
-            if (parameter is string paramStr && paramStr.ToLower() == "flip") {
-                flip = true;
+            bool allow_zero = false;
+            if (parameter is string paramStr) {
+                if (paramStr.ToLower() == "flip") {
+                    flip = true;
+                } else if (paramStr.ToLower() == "allowzero") {
+                    allow_zero = true;
+                }
+
+            }
+            if (allow_zero && value is int?) {
+                bool is_null = !(value as int?).HasValue;
+                return is_null ? flip : !flip;
             }
             if (value is int intVal) {
                 return intVal <= 0 ? flip : !flip;

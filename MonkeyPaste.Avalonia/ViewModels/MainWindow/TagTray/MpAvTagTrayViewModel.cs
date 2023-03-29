@@ -546,6 +546,7 @@ namespace MonkeyPaste.Avalonia {
 
                 if (SelectedItem != null) {
                     SelectedItem.AllAncestors.ForEach(x => x.IsExpanded = true);
+                    SelectedItem.BringIntoTreeViewCommand.Execute(null);
                 }
 
                 MpMessenger.SendGlobal(MpMessageType.TagSelectionChanged);
@@ -555,9 +556,6 @@ namespace MonkeyPaste.Avalonia {
                     Mp.Services.Query.NotifyQueryChanged();
                     // wait for query to execute
                     await Task.Delay(300);
-                    //while (!Mp.Services.Query.CanRequery) {
-                    //    await Task.Delay(100);
-                    //}
                     while (MpAvClipTrayViewModel.Instance.IsAnyBusy) {
                         await Task.Delay(100);
                     }

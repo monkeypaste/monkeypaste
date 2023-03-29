@@ -779,11 +779,12 @@ namespace MonkeyPaste.Avalonia {
             if (!this.IsVisible) {
                 return 0;
             }
-            if (this.MaxWidth.HasValue()) {
-                return this.MaxWidth;
-            }
+
             if (this.Bounds.Width.HasValue()) {
                 return this.Bounds.Width;
+            }
+            if (this.MaxWidth.HasValue()) {
+                return this.MaxWidth;
             }
             return 100;
         }

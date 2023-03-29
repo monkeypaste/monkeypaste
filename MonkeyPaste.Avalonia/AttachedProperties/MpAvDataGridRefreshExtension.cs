@@ -62,7 +62,7 @@ namespace MonkeyPaste.Avalonia {
                 _enabledGrids
                 .FirstOrDefault(x => x.DataContext == dataContext);
             if (pdg == null) {
-                MpConsole.WriteLine($"DataGrid not found for '{dataContext}' cannot refresh");
+                //MpConsole.WriteLine($"DataGrid not found for '{dataContext}' cannot refresh");
                 return;
             }
             // BUG can't get dataGrid to resize w/ row changes so hardsetting height (RowHeight=40)

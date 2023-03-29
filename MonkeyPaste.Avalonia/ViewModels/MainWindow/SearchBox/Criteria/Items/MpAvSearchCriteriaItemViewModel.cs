@@ -14,6 +14,9 @@ namespace MonkeyPaste.Avalonia {
         MpViewModelBase<MpAvSearchCriteriaItemCollectionViewModel>,
         MpIQueryInfo {
         #region Private Variables       
+
+        private MpSearchCriteriaItem _lastSavedCriteria;
+
         #endregion
 
         #region Constants
@@ -306,6 +309,7 @@ namespace MonkeyPaste.Avalonia {
             for (int i = 0; i < labels.Length; i++) {
                 var tovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
                 tovm.Label = labels[i];
+                tovm.UnitLabel = "px";
                 tovm.UnitType = MpSearchCriteriaUnitFlags.Integer;
                 switch ((MpDimensionOptionType)i) {
                     case MpDimensionOptionType.Width:
@@ -890,7 +894,6 @@ namespace MonkeyPaste.Avalonia {
         public bool HasMultiValues =>
             ValueOptionViewModels.Count() > 1;
 
-        public bool HasCriteriaChanged { get; set; } = false;
         public bool IsDragging { get; set; }
         public bool IsDragOverTop { get; set; }
         public bool IsDragOverBottom { get; set; }
@@ -1153,55 +1156,33 @@ namespace MonkeyPaste.Avalonia {
 
             OnPropertyChanged(nameof(Items));
             OnPropertyChanged(nameof(SelectedJoinTypeIdx));
+            _lastSavedCriteria = SearchCriteriaItem;
 
             IsBusy = false;
         }
 
-        public void NotifyValueChanged(MpAvSearchCriteriaOptionViewModel ovm) {
+        public void NotifyOptionOrValueChanged(MpAvSearchCriteriaOptionViewModel ovm) {
             if (Parent == null ||
                 IsBusy ||
                 Parent.IsBusy) {
                 // don't notify during load
                 return;
             }
-            //IgnoreHasModelChanged = true;
 
-            SearchOptions =
-                string.Join(",", SelectedOptionPath.Where(x => x.SelectedItemIdx >= 0).Select(x => x.SelectedItemIdx));
-            if (LeafValueOptionViewModel == null) {
-                MatchValue = null;
-                IsCaseSensitive = false;
-                IsWholeWord = false;
-            } else {
-                // reset to default
-                MatchValue = null;
-                IsCaseSensitive = false;
-                IsWholeWord = false;
+            // NOTE this is pretty confusing but criteria must
+            // be updated to query but still know that its unsaved
+            // so only set HasModelChanged when then save is done manually from 
+            // save button cmd which unflags HasModelChanged
+            bool needs_requery = HasCriteriaStateChanged();
 
-                if (HasMultiValues) {
-                    // hex or rgba
-                    var hex_or_rga_vm = Items.FirstOrDefault(x => x.UnitType == MpSearchCriteriaUnitFlags.Hex || x.UnitType == MpSearchCriteriaUnitFlags.Rgba);
-                    if (hex_or_rga_vm != null) {
-                        MatchValue = hex_or_rga_vm.Value;
-                        var dist_vm = Items.FirstOrDefault(x => x.UnitType == MpSearchCriteriaUnitFlags.UnitDecimal);
-                        if (dist_vm != null) {
-                            MatchValue += $",{dist_vm.Value}";
-                        }
-                    }
-                } else {
-                    MatchValue = LeafValueOptionViewModel.Value;
-                    IsCaseSensitive = LeafValueOptionViewModel.IsChecked;
-                    IsWholeWord = LeafValueOptionViewModel.IsChecked2;
-                }
-
+            if (!HasModelChanged) {
+                // flag criteria changed for refresh query
+                HasModelChanged = needs_requery;
             }
 
-            //IgnoreHasModelChanged = false;
 
-            // flag criteria changed for refresh query
-            HasCriteriaChanged = true;
-            if (ovm == null || ovm.IsValueOption) {
-                // ovm is null when join type changes
+            if (needs_requery) { // && (ovm == null || ovm.IsValueOption)) {
+                SetModelToCurrent();
                 Mp.Services.Query.NotifyQueryChanged(true);
             }
         }
@@ -1227,6 +1208,10 @@ namespace MonkeyPaste.Avalonia {
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyDragging));
                     break;
                 case nameof(HasModelChanged):
+                    if (Parent != null) {
+                        Parent.OnPropertyChanged(nameof(Parent.HasAnyCriteriaModelChanged));
+                    }
+
                     if (HasModelChanged) {
                         if (IgnoreHasModelChanged) {
                             break;
@@ -1236,10 +1221,12 @@ namespace MonkeyPaste.Avalonia {
                             // QueryTagId is set in convertPending
                             break;
                         }
-                        Task.Run(async () => {
+                        Dispatcher.UIThread.Post(async () => {
                             IsBusy = true;
+                            SetModelToCurrent();
                             await SearchCriteriaItem.WriteToDatabaseAsync();
                             HasModelChanged = false;
+                            _lastSavedCriteria = SearchCriteriaItem;
                             IsBusy = false;
                         });
                     }
@@ -1258,31 +1245,101 @@ namespace MonkeyPaste.Avalonia {
                             while (HasModelChanged) {
                                 await Task.Delay(100);
                             }
-                            NotifyValueChanged(null);
+                            NotifyOptionOrValueChanged(null);
                         });
                         return;
                     }
-                    NotifyValueChanged(null);
+                    NotifyOptionOrValueChanged(null);
                     break;
                 case nameof(IsJoinPanelVisible):
                     OnPropertyChanged(nameof(CriteriaItemHeight));
-                    break;
-                case nameof(CriteriaItemHeight):
-                    if (Parent == null) {
-                        break;
-                    }
-                    Parent.OnPropertyChanged(nameof(Parent.MaxSearchCriteriaViewHeight));
                     break;
                 case nameof(SortOrderIdx):
                     // update tail to hide simple OR join
                     OnPropertyChanged(nameof(IsJoinPanelVisible));
                     break;
-                case nameof(HasCriteriaChanged):
-                    if (Parent == null) {
-                        break;
+            }
+        }
+
+        private bool HasCriteriaStateChanged() {
+            var cur = GetCurrentItemState();
+            if (SearchCriteriaItem == null) {
+                return true;
+            }
+            return !cur.IsValueEqual(_lastSavedCriteria);
+        }
+        private MpSearchCriteriaItem GetCurrentItemState() {
+            var sci = new MpSearchCriteriaItem() {
+                Id = SearchCriteriaItemId,
+                QueryTagId = QueryTagId,
+                Guid = SearchCriteriaItem == null ? System.Guid.NewGuid().ToString() : SearchCriteriaItem.Guid,
+                Options =
+                    string.Join(",", SelectedOptionPath.Where(x => x.SelectedItemIdx >= 0).Select(x => x.SelectedItemIdx)),
+                SortOrderIdx = SortOrderIdx,
+                QueryType = QueryType,
+                JoinType = JoinType
+            };
+
+            if (LeafValueOptionViewModel == null) {
+                sci.MatchValue = null;
+                sci.IsCaseSensitive = false;
+                sci.IsWholeWord = false;
+            } else {
+                // reset to default
+                sci.MatchValue = null;
+                sci.IsCaseSensitive = false;
+                sci.IsWholeWord = false;
+
+                if (HasMultiValues) {
+                    // hex or rgba
+                    var hex_or_rga_vm =
+                        Items.FirstOrDefault(x => x.UnitType == MpSearchCriteriaUnitFlags.Hex || x.UnitType == MpSearchCriteriaUnitFlags.Rgba);
+                    if (hex_or_rga_vm != null) {
+                        sci.MatchValue = hex_or_rga_vm.Value;
+                        var dist_vm = Items.FirstOrDefault(x => x.UnitType == MpSearchCriteriaUnitFlags.UnitDecimal);
+                        if (dist_vm != null) {
+                            sci.MatchValue += $",{dist_vm.Value}";
+                        }
                     }
-                    Parent.OnPropertyChanged(nameof(Parent.HasAnyCriteriaChanged));
-                    break;
+                } else {
+                    sci.MatchValue = LeafValueOptionViewModel.Value;
+                    sci.IsCaseSensitive = LeafValueOptionViewModel.IsChecked;
+                    sci.IsWholeWord = LeafValueOptionViewModel.IsChecked2;
+                }
+            }
+            return sci;
+        }
+
+        public void SetModelToCurrent() {
+            SearchOptions =
+                   string.Join(",", SelectedOptionPath.Where(x => x.SelectedItemIdx >= 0).Select(x => x.SelectedItemIdx));
+
+            if (LeafValueOptionViewModel == null) {
+                MatchValue = null;
+                IsCaseSensitive = false;
+                IsWholeWord = false;
+            } else {
+                // reset to default
+                MatchValue = null;
+                IsCaseSensitive = false;
+                IsWholeWord = false;
+
+                if (HasMultiValues) {
+                    // hex or rgba
+                    var hex_or_rga_vm =
+                        Items.FirstOrDefault(x => x.UnitType == MpSearchCriteriaUnitFlags.Hex || x.UnitType == MpSearchCriteriaUnitFlags.Rgba);
+                    if (hex_or_rga_vm != null) {
+                        MatchValue = hex_or_rga_vm.Value;
+                        var dist_vm = Items.FirstOrDefault(x => x.UnitType == MpSearchCriteriaUnitFlags.UnitDecimal);
+                        if (dist_vm != null) {
+                            MatchValue += $",{dist_vm.Value}";
+                        }
+                    }
+                } else {
+                    MatchValue = LeafValueOptionViewModel.Value;
+                    IsCaseSensitive = LeafValueOptionViewModel.IsChecked;
+                    IsWholeWord = LeafValueOptionViewModel.IsChecked2;
+                }
             }
         }
         #endregion

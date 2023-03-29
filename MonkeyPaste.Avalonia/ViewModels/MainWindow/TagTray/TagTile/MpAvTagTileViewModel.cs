@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -576,6 +577,8 @@ namespace MonkeyPaste.Avalonia {
 
             OnPropertyChanged(nameof(Items));
             OnPropertyChanged(nameof(IsTagNameReadOnly));
+            OnPropertyChanged(nameof(IsGroupTag));
+            OnPropertyChanged(nameof(IsQueryTag));
 
             if (Parent.Items.All(x => x.TagId != TagId)) {
                 // if not pinned item add to flat list
@@ -1053,6 +1056,23 @@ namespace MonkeyPaste.Avalonia {
                 return IsTagNameReadOnly;
             });
 
+        public ICommand BringIntoTreeViewCommand => new MpCommand(
+            () => {
+                Dispatcher.UIThread.Post(async () => {
+                    TreeViewItem ttvi = null;
+                    while (ttvi == null) {
+                        if (App.MainView is Control mv &&
+                            mv.GetVisualDescendant<MpAvTagTreeView>() is MpAvTagTreeView ttrv &&
+                            ttrv.GetVisualDescendants<TreeViewItem>() is IEnumerable<TreeViewItem> tvil &&
+                            tvil.FirstOrDefault(x => x.DataContext == this) is TreeViewItem tvi) {
+                            ttvi = tvi;
+                        } else {
+                            await Task.Delay(100);
+                        }
+                    }
+                    ttvi.BringIntoView();
+                });
+            });
 
         public ICommand ChangeColorCommand => new MpCommand<object>(
             (args) => {
@@ -1255,7 +1275,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIAsyncCommand<object> MoveOrCopyThisTagCommand => new MpAsyncCommand<object>(
             async (args) => {
-                // args = [new_parent_tag_id, sort_idx ( < 0 is pin idx), is_copy]
+                // args = [new_parent_tag_id, sort_idx, is_pinning, is_copy]
                 var argParts = args as object[];
 
                 int old_parent_tag_id = ParentTagId;
@@ -1321,6 +1341,10 @@ namespace MonkeyPaste.Avalonia {
                 // add to new parent 
                 var new_parent_vm = Parent.Items.FirstOrDefault(x => x.TagId == new_parent_tag_id);
                 ParentTagId = new_parent_tag_id;
+                if (new_sort_idx < 0) {
+                    // negative sort implies end of list
+                    new_sort_idx = new_parent_vm.Items.Count;
+                }
                 TreeSortIdx = new_sort_idx;
                 new_parent_vm.Items.Add(this);
                 // update sort order using tree sort idx as primary sort then by if its this item

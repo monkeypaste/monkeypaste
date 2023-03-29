@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
@@ -29,37 +30,23 @@ namespace MonkeyPaste.Avalonia {
             }
             Instance = this;
 
-            InitializeComponent();
+            AvaloniaXamlLoader.Load(this);
 
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
 
-            var advSearchSplitter = this.FindControl<GridSplitter>("AdvancedSearchSplitter");
-            advSearchSplitter.DragCompleted += AdvSearchSplitter_DragCompleted;
-
-            var scv = this.FindControl<Control>("SearchDetailView");
-            scv.EffectiveViewportChanged += Scv_EffectiveViewportChanged;
+            //var advSearchSplitter = this.FindControl<GridSplitter>("AdvancedSearchSplitter");
+            //advSearchSplitter.DragDelta += AdvSearchSplitter_DragDelta;
+            //advSearchSplitter.AddHandler(GridSplitter.DragDeltaEvent, AdvSearchSplitter_DragDelta, RoutingStrategies.Tunnel);
         }
 
-
-        private void Scv_EffectiveViewportChanged(object sender, EffectiveViewportChangedEventArgs e) {
-            //Dispatcher.UIThread.Post(async () => {
-            //    // BUG not sure why but when adv query row height changes
-            //    // all tiles location goes to 0, maybe a x/y distance property
-            //    // thats changing, i really don't know but this waits a second then updates
-            //    await Task.Delay(300);
-
-            //    MpAvClipTrayViewModel.Instance.RefreshQueryTrayLayout();
-            //});
-        }
-        private void AdvSearchSplitter_DragCompleted(object sender, VectorEventArgs e) {
-            var scicvm = MpAvSearchCriteriaItemCollectionViewModel.Instance;
-            double nh = scicvm.BoundCriteriaListViewScreenHeight + e.Vector.ToPortablePoint().Y;
-            scicvm.BoundCriteriaListViewScreenHeight = Math.Min(nh, scicvm.MaxSearchCriteriaViewHeight);
-        }
-
-
-        private void InitializeComponent() {
-            AvaloniaXamlLoader.Load(this);
+        private void AdvSearchSplitter_DragDelta(object sender, VectorEventArgs e) {
+            var gs = sender as GridSplitter;
+            var pg = gs.Parent as Grid;
+            var pg_r0_def = pg.RowDefinitions[0];
+            var sc_sv = this.FindControl<MpAvSearchCriteriaListBoxView>("SearchCriteriaView").FindControl<ScrollViewer>("SearchCriteriaContainerScrollViewer");
+            if (pg_r0_def.ActualHeight >= sc_sv.Extent.Height) {
+                e.Handled = true;
+            }
         }
 
         private void ReceivedGlobalMessage(MpMessageType msg) {

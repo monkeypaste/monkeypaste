@@ -689,12 +689,15 @@ SELECT
 	case 
 		when MpCopyItem.e_MpCopyItemType == 'Text' or MpCopyItem.e_MpCopyItemType == 'FileList'
 			then 
-				(select ItemData from MpDataObjectItem where fk_MpDataObjectId = MpCopyItem.fk_MpDataObjectId limit 1)
+				(select ItemData from MpDataObjectItem where fk_MpDataObjectId = MpCopyItem.fk_MpDataObjectId limit 1)		
+		else NULL
+	end as ItemData,
+	CASE
 		when MpCopyItem.e_MpCopyItemType == 'Image'
 			then 
 				ItemData
 		else NULL
-	end as ItemData,
+	end as ItemImageData,
 	CopyDateTime,
 	CopyCount,
 	PasteCount,

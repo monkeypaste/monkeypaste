@@ -13,13 +13,12 @@ namespace MonkeyPaste.Avalonia {
 
         public MpLoaderNotificationViewModel BindingContext => DataContext as MpLoaderNotificationViewModel;
         public MpAvLoaderNotificationWindow() {
-            InitializeComponent();
+            AvaloniaXamlLoader.Load(this);
 #if DEBUG
             this.AttachDevTools();
 #endif
 
             this.GetObservable(Window.IsVisibleProperty).Subscribe(value => OnIsVisibleChanged());
-            //this.Opened += MpAvLoaderNotificationWindow_Opened;
         }
 
         private void OnIsVisibleChanged() {
@@ -46,11 +45,6 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 BindingContext.ProgressLoader.FinishLoaderAsync().FireAndForgetSafeAsync(BindingContext);
             }
-        }
-
-
-        private void InitializeComponent() {
-            AvaloniaXamlLoader.Load(this);
         }
     }
 }

@@ -8,6 +8,7 @@ namespace MonkeyPaste {
     [Table("MpSearchCriteriaItem")]
     public class MpSearchCriteriaItem :
         MpDbModelBase,
+        MpIIsValueEqual<MpSearchCriteriaItem>,
         MpIClonableDbModel<MpSearchCriteriaItem> {
         #region Constants
 
@@ -16,6 +17,24 @@ namespace MonkeyPaste {
         #endregion
 
         #region Interfaces
+
+        #region MpIIsValueEqual Implementation
+
+        public bool IsValueEqual(MpSearchCriteriaItem other) {
+            if (other == null) {
+                return false;
+            }
+            return
+                QueryTagId == other.QueryTagId &&
+                SortOrderIdx == other.SortOrderIdx &&
+                QueryType == other.QueryType &&
+                JoinType == other.JoinType &&
+                Options == other.Options &&
+                MatchValue == other.MatchValue &&
+                IsCaseSensitive == other.IsCaseSensitive &&
+                IsWholeWord == other.IsWholeWord;
+        }
+        #endregion
 
         #region MpIClonableDbModel Implementation
 

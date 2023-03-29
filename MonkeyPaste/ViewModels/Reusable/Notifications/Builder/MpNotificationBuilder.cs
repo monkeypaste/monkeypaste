@@ -61,7 +61,7 @@ namespace MonkeyPaste {
                 iconSourceObj: iconSourceObj);
         }
 
-        public static async Task<MpNotificationDialogResultType> ShowLoaderNotificationAsync(MpIProgressLoader loader) {
+        public static async Task<MpNotificationDialogResultType> ShowLoaderNotificationAsync(MpIProgressLoaderViewModel loader) {
             var result = await ShowNotificationAsync(
                 title: loader.Title,
                 notificationType: MpNotificationType.Loader,
@@ -80,7 +80,7 @@ namespace MonkeyPaste {
             object anchor = null,
             ICommand fixCommand = null,
             object fixCommandArgs = null,
-            MpIProgressLoader loader = null) {
+            MpIProgressLoaderViewModel loader = null) {
             if (body == null) {
                 body = string.Empty;
             }

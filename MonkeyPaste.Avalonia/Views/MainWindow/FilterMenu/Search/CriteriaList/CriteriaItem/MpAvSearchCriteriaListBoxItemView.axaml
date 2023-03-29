@@ -102,6 +102,7 @@
             <Grid x:Name="CriteriaRowButtonsContainer"
                   IsVisible="{Binding $parent[ListBoxItem].IsPointerOver}"
                   DockPanel.Dock="Right"
+                  MinWidth="90"
                   ColumnDefinitions="30,30,30">
 
                 <!--  ADD ITEM BUTTON  -->

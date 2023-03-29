@@ -8,7 +8,7 @@ using System.Globalization;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvStringHexToBitmapTintConverter : IValueConverter {
-        private static bool IS_DYNAMIC_TINT_ENABLED = false;
+        private static bool IS_DYNAMIC_TINT_ENABLED = true;
 
         public static readonly MpAvStringHexToBitmapTintConverter Instance = new();
 

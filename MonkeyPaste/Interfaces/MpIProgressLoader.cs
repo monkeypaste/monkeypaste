@@ -19,7 +19,7 @@ namespace MonkeyPaste {
         double PercentLoaded { get; }
     }
 
-    public interface MpIProgressLoader : MpIProgressIndicatorViewModel, MpINotification {
+    public interface MpIProgressLoaderViewModel : MpIProgressIndicatorViewModel, MpINotification {
         Task BeginLoaderAsync();
         Task FinishLoaderAsync();
     }

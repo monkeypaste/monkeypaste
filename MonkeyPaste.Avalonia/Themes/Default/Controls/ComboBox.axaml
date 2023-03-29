@@ -4,6 +4,7 @@
         xmlns:local="using:MonkeyPaste.Avalonia">
     <Styles.Resources>
         <Thickness x:Key="ComboBoxPadding">12,0,0,0</Thickness>
+        <SolidColorBrush x:Key="ComboBoxForeground" Color="White" />
     </Styles.Resources>
     <Style Selector="Border.iconLabelComboBox">
         <Setter Property="BorderThickness"

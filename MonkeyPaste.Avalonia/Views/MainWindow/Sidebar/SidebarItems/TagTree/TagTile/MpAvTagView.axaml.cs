@@ -29,7 +29,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void MpAvTagView_PointerPressed(object sender, PointerPressedEventArgs e) {
-            if (!e.IsLeftPress(sender as Visual)) {
+            if (!e.IsLeftPress(sender as Visual) ||
+                (BindingContext != null && !BindingContext.IsTagNameReadOnly)) {
                 return;
             }
             //if (!BindingContext.IsSelected) {

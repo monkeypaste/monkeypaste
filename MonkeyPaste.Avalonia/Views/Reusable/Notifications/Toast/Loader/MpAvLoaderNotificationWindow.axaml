@@ -46,6 +46,8 @@
                    VerticalAlignment="Top"
                    Margin="10,5,0,0" />
             <Grid Grid.Column="1"
+                  x:DataType="pcl:MpIProgressLoaderViewModel"
+                  DataContext="{Binding ProgressLoader}"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch"
                   RowDefinitions="0.2*,0.3*,0.1*">
@@ -56,7 +58,7 @@
                            HorizontalAlignment="Left"
                            Foreground="White"
                            FontWeight="SemiBold"
-                           Text="{Binding ProgressLoader.Title}" />
+                           Text="{Binding Title}" />
                 <Border Grid.Row="0"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Bottom"
@@ -69,7 +71,6 @@
                 <Border x:Name="ProgressBarContainer"
                         CornerRadius="5"
                         Grid.Row="1"
-                        local:MpAvSizeObserverExtension.IsEnabled="True"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center"
                         Height="30"
@@ -86,9 +87,9 @@
                                  Orientation="Horizontal"
                                  HorizontalAlignment="Stretch"
                                  VerticalAlignment="Stretch"
-                                 Value="{Binding ValueLoaded}"
+                                 Value="{Binding PercentLoaded}"
                                  Minimum="0"
-                                 Maximum="100" />
+                                 Maximum="1" />
                 </Border>
                 <TextBlock x:Name="ProgressInfoBlock"
                            Grid.Row="2"
@@ -97,7 +98,7 @@
                            HorizontalAlignment="Right"
                            FontSize="10"
                            Foreground="Cyan"
-                           Text="{Binding ProgressLoader.Body}" />
+                           Text="{Binding Body}" />
             </Grid>
 
             <local:MpAvOptionsButton Grid.Column="1"

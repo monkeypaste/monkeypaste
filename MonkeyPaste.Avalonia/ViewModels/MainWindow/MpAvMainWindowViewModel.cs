@@ -114,13 +114,13 @@ namespace MonkeyPaste.Avalonia {
                 if (IsVerticalOrientation) {
                     return MainWindowHeight -
                         //MpAvMainWindowTitleMenuViewModel.Instance.TitleMenuHeight -
-                        MpAvSearchCriteriaItemCollectionViewModel.Instance.BoundCriteriaListViewScreenHeight -
+                        //MpAvSearchCriteriaItemCollectionViewModel.Instance.BoundCriteriaListViewScreenHeight -
                         MpAvFilterMenuViewModel.Instance.FilterMenuHeight -
                         MpAvSidebarItemCollectionViewModel.Instance.ButtonGroupFixedDimensionLength;
                 }
                 return MainWindowHeight -
                         MpAvMainWindowTitleMenuViewModel.Instance.TitleMenuHeight -
-                        MpAvSearchCriteriaItemCollectionViewModel.Instance.BoundCriteriaListViewScreenHeight -
+                        //MpAvSearchCriteriaItemCollectionViewModel.Instance.BoundCriteriaListViewScreenHeight -
                         MpAvFilterMenuViewModel.Instance.FilterMenuHeight;
             }
         }

@@ -14,17 +14,13 @@ namespace MonkeyPaste.Avalonia {
             string key = null;
             var scovm = param as MpAvSearchCriteriaOptionViewModel;
             if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.EnumerableValue)) {
-                //key = "EmptyOptionTemplate";
                 key = null;
             }
             if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.Enumerable)) {
                 key = "EnumerableOptionTemplate";
             }
-            if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.Hex)) {
-                key = "HexOptionTemplate";
-            }
-            if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.Rgba) ||
-                scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.UnitDecimalX4)) {
+
+            if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.Rgba)) {
                 key = "RGBAOptionTemplate";
             }
 
@@ -32,7 +28,9 @@ namespace MonkeyPaste.Avalonia {
                 key = "UnitDecimalOptionTemplate";
             }
             if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.Text) ||
-                scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.Decimal)) {
+                scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.Decimal) ||
+                scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.Integer) ||
+                scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.Hex)) {
                 key = "TextOptionTemplate";
             }
             if (scovm.UnitType.HasFlag(MpSearchCriteriaUnitFlags.DateTime)) {
