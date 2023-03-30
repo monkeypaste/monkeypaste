@@ -10,21 +10,31 @@ namespace MonkeyPaste.Avalonia {
         None = 0,
         Collection,
         Action,
-        Analyzer
+        Analyzer,
+        ContentPropertyPath
     };
 
     public class MpAvComponentPickerParameterViewModel :
         MpAvParameterViewModelBase,
-        MpIPopupSelectorMenu {
+        MpIPopupSelectorMenuViewModel {
         #region Private Variables
 
         #endregion
 
-        #region MpIPopupSelectorMenu Implementation
+        #region MpIPopupSelectorMenuViewModel Implementation
 
         public bool IsOpen { get; set; }
-        public MpMenuItemViewModel PopupMenu =>
-            ComponentPicker == null ? null : ComponentPicker.GetMenu(SelectComponentCommand, null, new int[] { ComponentId }, true);
+        public MpMenuItemViewModel PopupMenu {
+            get {
+                if (Selector == this) {
+                    return ComponentPicker == null ? null : ComponentPicker.GetMenu(SelectComponentCommand, null, new int[] { ComponentId }, true);
+                }
+                if (Selector is MpMenuItemHostViewModel mihvm) {
+                    return mihvm.PopupMenu;
+                }
+                return null;
+            }
+        }
 
         public object SelectedIconResourceObj =>
             ComponentId == 0 ?
@@ -44,8 +54,35 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public MpMenuItemViewModel SelectedComponentMenuItemViewModel =>
-            SelectedComponentPicker == null ? null : SelectedComponentPicker.GetMenu(null, null, new List<int>() { }, false);
+        public MpMenuItemViewModel SelectedComponentMenuItemViewModel {
+            get {
+                if (Selector == this) {
+                    return SelectedComponentPicker == null ? null : SelectedComponentPicker.GetMenu(null, null, new List<int>() { }, false);
+                }
+                if (Selector is MpMenuItemHostViewModel mihvm) {
+                    return mihvm.FindItemByIdentifier((MpContentQueryPropertyPathType)ComponentId, null);
+                }
+                return null;
+            }
+        }
+
+
+        private MpIPopupSelectorMenuViewModel _selector;
+        public MpIPopupSelectorMenuViewModel Selector {
+            get {
+                if (ComponentType == MpSelectableComponentType.ContentPropertyPath) {
+                    if (_selector == null) {
+                        _selector = new MpMenuItemHostViewModel(
+                            MpContentQueryPropertyPathHelpers.GetContentPropertyRootMenu(
+                                SelectComponentCommand,
+                                IsActionParameter ? null : new[] { MpContentQueryPropertyPathType.LastOutput }),
+                            (MpContentQueryPropertyPathType)ComponentId);
+                    }
+                    return _selector;
+                }
+                return this;
+            }
+        }
 
         #endregion
 
@@ -59,6 +96,8 @@ namespace MonkeyPaste.Avalonia {
                     "BoltImage",
                 MpSelectableComponentType.Analyzer =>
                     "BrainImage",
+                MpSelectableComponentType.ContentPropertyPath =>
+                    "GraphImage",
                 _ =>
                     "QuestionMarkImage",
             };
@@ -97,6 +136,8 @@ namespace MonkeyPaste.Avalonia {
                    MpSelectableComponentType.Action,
                MpParameterValueUnitType.AnalyzerComponentId =>
                    MpSelectableComponentType.Analyzer,
+               MpParameterValueUnitType.ContentPropertyPathTypeComponentId =>
+                   MpSelectableComponentType.ContentPropertyPath,
                _ => MpSelectableComponentType.None
            };
 

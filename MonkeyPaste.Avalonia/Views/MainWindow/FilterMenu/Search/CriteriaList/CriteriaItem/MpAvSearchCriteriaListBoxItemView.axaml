@@ -6,6 +6,7 @@
                        x:TypeArguments="local:MpAvSearchCriteriaItemViewModel"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:pcl="using:MonkeyPaste"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        x:DataType="local:MpAvSearchCriteriaItemViewModel"
                        x:CompileBindings="True"
                        mc:Ignorable="d"
@@ -47,7 +48,8 @@
                     Value="20,0,0,0" />
         </Style>
     </local:MpAvUserControl.Styles>
-    <Grid ColumnDefinitions="Auto,*">
+    <Grid x:Name="CriteriaItemContainerGrid"
+          ColumnDefinitions="Auto,*">
 
         <!--  SORT DRAG BUTTON  -->
 
@@ -84,13 +86,13 @@
                         Orientation="Horizontal"
                         HorizontalAlignment="Left"
                         IsVisible="{Binding IsJoinPanelVisible}">
-                <ComboBox Classes="criteriaComboBox"
-                          IsDropDownOpen="{Binding IsJoinDropDownOpen}"
+                <ComboBox Classes="criteriaComboBox joinComboBox"
                           Items="{Binding JoinTypeLabels}"
                           SelectedIndex="{Binding SelectedJoinTypeIdx, Mode=TwoWay}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding}" />
+                            <TextBlock x:DataType="sys:String"
+                                       Text="{Binding}" />
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
@@ -100,9 +102,7 @@
             </StackPanel>
 
             <Grid x:Name="CriteriaRowButtonsContainer"
-                  IsVisible="{Binding $parent[ListBoxItem].IsPointerOver}"
                   DockPanel.Dock="Right"
-                  MinWidth="90"
                   ColumnDefinitions="30,30,30">
 
                 <!--  ADD ITEM BUTTON  -->
@@ -119,7 +119,6 @@
                 <Button x:Name="RemoveCriteriaItemButton"
                         Grid.Column="1"
                         Classes="defaultButton outline outlineOver addRemoveBtn removeBtn noBg noHoverBg"
-                        IsVisible="{Binding CanRemoveOrSortThisCriteriaItem}"
                         Command="{Binding RemoveThisCriteriaItemCommand}">
                     <Image Source="{Binding ., Source={StaticResource MinusImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                 </Button>

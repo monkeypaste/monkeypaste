@@ -93,7 +93,6 @@ namespace MonkeyPaste {
                 case MpContentQueryPropertyPathType.None:
                 case MpContentQueryPropertyPathType.LastOutput:
                     return null;
-                case MpContentQueryPropertyPathType.ItemRefUrl:
                 case MpContentQueryPropertyPathType.ItemData:
                 case MpContentQueryPropertyPathType.ItemType:
                 case MpContentQueryPropertyPathType.Title:

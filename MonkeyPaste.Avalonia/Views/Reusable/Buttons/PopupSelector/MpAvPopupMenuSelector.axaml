@@ -6,7 +6,7 @@
                        xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:pcl="using:MonkeyPaste"
-                       x:DataType="pcl:MpIPopupSelectorMenu"
+                       x:DataType="pcl:MpIPopupSelectorMenuViewModel"
                        x:CompileBindings="True"
                        mc:Ignorable="d"
                        d:DesignWidth="800"
@@ -85,12 +85,14 @@
                     CornerRadius="3"
                     Background="Transparent">
                 <DockPanel LastChildFill="True">
-                    <Image Height="25"
+                    <Image x:Name="PopupImage"
+                           Height="25"
                            Width="25"
                            Source="{Binding SelectedIconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                     <local:MpAvMarqueeTextBox Padding="3"
+                                              MinWidth="120"
+                                              
                                               Margin="7,3,0,0"
-                                              MinWidth="100"
                                               EditOnFocus="False"
                                               IsReadOnly="True"
                                               ReadOnlyForeground="White"
@@ -98,7 +100,7 @@
                                               VerticalAlignment="Stretch"
                                               HorizontalAlignment="Left"
                                               FontSize="14"
-                                              Text="{Binding SelectedLabel}" />
+                                              Text="{Binding SelectedLabel}"/>
                 </DockPanel>
             </Border>
         </DockPanel>

@@ -23,9 +23,9 @@ namespace MonkeyPaste {
         BeginsWith,
         EndsWith,
         Regex,
-        Automatic,
-        Wildcard,
-        Lexical // like azure cognitive search?
+        //Automatic,
+        //Wildcard,
+        //Lexical // like azure cognitive search?
     }
 
     public enum MpTriggerType {

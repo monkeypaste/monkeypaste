@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste.Avalonia\MonkeyPaste.Avalonia.csproj" />
+    <ProjectReference Include="..\_build\_build.csproj" />
   </ItemGroup>
 
   <ItemGroup>

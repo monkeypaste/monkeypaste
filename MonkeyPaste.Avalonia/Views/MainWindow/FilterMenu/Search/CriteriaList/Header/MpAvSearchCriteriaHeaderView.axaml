@@ -15,9 +15,8 @@
     <local:MpAvUserControl.Styles>
     </local:MpAvUserControl.Styles>
     <DockPanel LastChildFill="False">
-        <StackPanel DockPanel.Dock="Right"
+        <StackPanel DockPanel.Dock="Left"
                     Orientation="Horizontal"
-                    Margin="0,0,30,0"
                     Spacing="5">
 
             <!--  New BUTTON  -->

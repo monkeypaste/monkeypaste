@@ -914,7 +914,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public bool IsJoinDropDownOpen { get; set; }
         public bool CanRemoveOrSortThisCriteriaItem {
             get {
                 if (Parent == null) {
@@ -1169,19 +1168,13 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            // NOTE this is pretty confusing but criteria must
-            // be updated to query but still know that its unsaved
-            // so only set HasModelChanged when then save is done manually from 
-            // save button cmd which unflags HasModelChanged
-            bool needs_requery = HasCriteriaStateChanged();
-
             if (!HasModelChanged) {
-                // flag criteria changed for refresh query
-                HasModelChanged = needs_requery;
+                // only eval if false (is reset manually by save cmd)
+                HasModelChanged = HasCriteriaStateChanged();
             }
 
-
-            if (needs_requery) { // && (ovm == null || ovm.IsValueOption)) {
+            if (HasModelChanged) {
+                // whenever its changed requery on subsequent changes
                 SetModelToCurrent();
                 Mp.Services.Query.NotifyQueryChanged(true);
             }
@@ -1231,25 +1224,9 @@ namespace MonkeyPaste.Avalonia {
                         });
                     }
                     break;
-                case nameof(IsJoinDropDownOpen):
-                    OnPropertyChanged(nameof(IsJoinPanelVisible));
-                    //OnPropertyChanged(nameof(JoinType));
-                    break;
                 case nameof(JoinType):
-                    if (HasModelChanged && !IgnoreHasModelChanged) {
-                        // NOTE when join type changes it'll create a race
-                        // condition for IsBusy if its writing to db
-                        // so notify will reject because model is updating
-                        // so wait until model is written to notify
-                        Dispatcher.UIThread.Post(async () => {
-                            while (HasModelChanged) {
-                                await Task.Delay(100);
-                            }
-                            NotifyOptionOrValueChanged(null);
-                        });
-                        return;
-                    }
                     NotifyOptionOrValueChanged(null);
+                    OnPropertyChanged(nameof(IsJoinPanelVisible));
                     break;
                 case nameof(IsJoinPanelVisible):
                     OnPropertyChanged(nameof(CriteriaItemHeight));
@@ -1267,6 +1244,19 @@ namespace MonkeyPaste.Avalonia {
                 return true;
             }
             return !cur.IsValueEqual(_lastSavedCriteria);
+        }
+
+        private async Task ClearThisItemAsync() {
+            if (SearchCriteriaItem == null) {
+                return;
+            }
+            SearchCriteriaItem.Options = string.Empty;
+            SearchCriteriaItem.MatchValue = string.Empty;
+            SearchCriteriaItem.MatchValue = null;
+            SearchCriteriaItem.IsCaseSensitive = false;
+            SearchCriteriaItem.IsWholeWord = false;
+            await SearchCriteriaItem.WriteToDatabaseAsync();
+            await InitializeAsync(SearchCriteriaItem);
         }
         private MpSearchCriteriaItem GetCurrentItemState() {
             var sci = new MpSearchCriteriaItem() {
@@ -1358,8 +1348,14 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand RemoveThisCriteriaItemCommand => new MpCommand(
             () => {
+                if (!CanRemoveOrSortThisCriteriaItem) {
+                    // NOTE since there's no way to add a row if all rows are gone, just
+                    // clear it if its the last row, no different behaviorly
+                    ClearThisItemAsync().FireAndForgetSafeAsync(this);
+                    return;
+                }
                 Parent.RemoveSearchCriteriaItemCommand.Execute(this);
-            }, () => CanRemoveOrSortThisCriteriaItem);
+            });
 
         #endregion
     }

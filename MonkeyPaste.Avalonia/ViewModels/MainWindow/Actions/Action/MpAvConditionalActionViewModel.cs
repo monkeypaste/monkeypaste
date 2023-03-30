@@ -51,35 +51,26 @@ namespace MonkeyPaste.Avalonia {
                     _actionComponentFormat = new MpHeadlessPluginFormat() {
                         parameters = new List<MpParameterFormat>() {
                             new MpParameterFormat() {
-                                label = "Property",
-                                controlType = MpParameterControlType.ComboBox,
-                                unitType = MpParameterValueUnitType.PlainText,
+                                label = "Input Property",
+                                controlType = MpParameterControlType.ComponentPicker,
+                                unitType = MpParameterValueUnitType.ContentPropertyPathTypeComponentId,
                                 isRequired = true,
                                 paramId = SELECTED_COMPARE_PATH_PARAM_ID,
-                                description = "",
-                                values =
-                                    typeof(MpContentQueryPropertyPathType)
-                                    .GetEnumNames()
-                                    .Select(x=>
-                                        new MpPluginParameterValueFormat() {
-                                            label = x.ToLabel(),
-                                            value = x
-                                        }
-                                    ).ToList()
+                                description = "What's evaluated for this condition in the action chain. All values come from the initial input to the trigger, except for 'Last Output'. 'Last Output' will scrape the previous action's output with this condition. So for example if the previous action was an image object detector on a picture of a cat, the output to be compared here in that case would be the word 'cat'. In practice however the output will be JSON or XML annotation markup where these other properties can be used to isolate the comparision data for this condition.",
                             },new MpParameterFormat() {
-                                label = "Filter",
+                                label = "Input Filter",
                                 controlType = MpParameterControlType.TextBox,
                                 unitType = MpParameterValueUnitType.PlainTextContentQuery,
                                 isRequired = false,
                                 paramId = COMPARE_FILTER_TEXT_PARAM_ID,
-                                description = ""
+                                description = "An optional JSONPath query that will be applied to the selected 'Input Property' before the condition is evaluated."
                             },new MpParameterFormat() {
                                 label = "Operation",
                                 controlType = MpParameterControlType.ComboBox,
                                 unitType = MpParameterValueUnitType.PlainText,
                                 isRequired = true,
                                 paramId = SELECTED_COMPARE_OP_PARAM_ID,
-                                description = "",
+                                description = "All true or false operations where child actions will only execute if the result is true.",
                                 values =
                                     typeof(MpComparisonOperatorType)
                                     .GetEnumNames()
@@ -94,15 +85,14 @@ namespace MonkeyPaste.Avalonia {
                                 controlType = MpParameterControlType.CheckBox,
                                 unitType = MpParameterValueUnitType.Bool,
                                 isRequired = false,
-                                paramId = IS_CASE_SENSITIVE_PARAM_ID,
-                                description = ""
+                                paramId = IS_CASE_SENSITIVE_PARAM_ID
                             },new MpParameterFormat() {
-                                label = "Data",
+                                label = "Condition Data",
                                 controlType = MpParameterControlType.TextBox,
                                 unitType = MpParameterValueUnitType.PlainTextContentQuery,
                                 isRequired = false,
                                 paramId = COMPARE_TEXT_PARAM_ID,
-                                description = ""
+                                description = "This can be static text to compare with the input and/or include selected properties (via the filter button) will be substituted when the condition is evaluated."
                             }
                         }
                     };

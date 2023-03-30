@@ -288,7 +288,16 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(CurrentQueryTagViewModel));
                     break;
                 case nameof(IsCriteriaWindowOpen):
-                    IsExpanded = false;
+                    if (IsCriteriaWindowOpen) {
+                        IsExpanded = false;
+                    } else if (IsExpanded && this is MpIChildWindowViewModel cwvm) {
+                        // when close button on search expander is clicked IsExpanded=true
+                        // so this is only called when closed from the window x button
+                        cwvm.IsOpen = false;
+                        cwvm.OnPropertyChanged(nameof(cwvm.IsOpen));
+                    }
+
+
                     break;
                 case nameof(IsExpanded):
                     MpMessenger.SendGlobal(MpMessageType.AdvancedSearchExpandedChanged);
@@ -324,6 +333,8 @@ namespace MonkeyPaste.Avalonia {
                 if (!IsAdvSearchActive) {
                     // plus on search box toggled to checked
                     await InitializeAsync(0, true);
+                } else if (IsCriteriaWindowOpen) {
+                    IsCriteriaWindowOpen = false;
                 }
                 double default_visible_row_count = 2d;
                 double delta_open_height = DefaultCriteriaRowHeight * default_visible_row_count;
@@ -522,10 +533,11 @@ namespace MonkeyPaste.Avalonia {
                     Items.ForEach(x => x.LogPropertyChangedEvents = true);
                     var _criteriaWindow = new MpAvWindow() {
                         SizeToContent = SizeToContent.Width,
+                        MinWidth = 800,
                         Height = 300,
                         DataContext = this,
                         ShowInTaskbar = true,
-                        Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", null, null, null) as WindowIcon,
+                        Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("BinocularsImage", typeof(WindowIcon), null, null) as WindowIcon,
                         WindowStartupLocation = WindowStartupLocation.CenterScreen,
                         Content = new Border() {
                             Padding = new Thickness(3),
@@ -537,13 +549,6 @@ namespace MonkeyPaste.Avalonia {
                         Topmost = true,
                         Padding = new Thickness(10)
                     };
-
-                    //_criteriaWindow.Bind(
-                    //    Window.DataContextProperty,
-                    //    new Binding() {
-                    //        Source = this,
-                    //        Path = nameof(CurrentQueryTagViewModel)
-                    //    });
 
                     _criteriaWindow.Bind(
                         Window.TitleProperty,

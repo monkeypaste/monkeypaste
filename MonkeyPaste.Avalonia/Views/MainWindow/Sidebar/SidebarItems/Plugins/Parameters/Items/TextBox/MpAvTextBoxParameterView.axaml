@@ -14,17 +14,10 @@
     <Border Classes="paramBorder">
         <DockPanel>
             <Button DockPanel.Dock="Right"
-                    Classes="noBg noHoverBg outline outlineOver"
-                    BorderThickness="1"
-                    CornerRadius="3"
-                    Cursor="Hand"
-                    Margin="5"
+                    Classes="defaultButton noBg noHoverBg outline outlineOver"
                     IsVisible="{Binding IsContentQuery}"
                     local:MpAvMenuExtension.IsEnabled="True">
-                <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource FilterImage}}"
-                       Stretch="Uniform"
-                       Width="10"
-                       Height="10" />
+                <Image Source="{Binding ., Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=white, Source={StaticResource FilterImage}}" />
             </Button>
             <TextBox x:Name="ParameterTextBox"
                      local:MpAvIsFocusedExtension.IsEnabled="True"

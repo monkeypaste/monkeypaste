@@ -56,7 +56,9 @@ namespace MonkeyPaste.Common {
             }
             return MpColorHelpers.ColorFromHsv(new_hue, s, v).ToHex();
         }
-
+        public static string ToContrastForegoundColor(this string hex) {
+            return hex.IsHexStringBright() ? MpSystemColors.Black : MpSystemColors.White;
+        }
         public static string ToContrastHexColor(this string hex) {
 
             return ShiftHexColorHue(hex, 180);

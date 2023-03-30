@@ -1,5 +1,5 @@
 ﻿namespace MonkeyPaste {
-    public interface MpIPopupSelectorMenu {
+    public interface MpIPopupSelectorMenuViewModel : MpIViewModel {
         bool IsOpen { get; set; }
         MpMenuItemViewModel PopupMenu { get; }
         //MpMenuItemViewModel SelectedMenuItem { get; }

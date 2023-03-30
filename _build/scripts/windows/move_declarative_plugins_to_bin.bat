@@ -1,2 +1,2 @@
-xcopy /e /k /h /i /y "C:\Users\tkefauver\Source\Repos\MonkeyPaste\Plugins\Declarative" "C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia.Desktop\bin\Debug\net7.0-windows\Plugins\Declarative" 
+xcopy /e /k /h /i /y /F "%1\Declarative" "%2\Declarative" 
 exit 0

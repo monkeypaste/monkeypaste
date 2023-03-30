@@ -473,7 +473,7 @@ namespace MonkeyPaste.Avalonia {
                     selectedColor: selected_color,
                     "Pick Match color");
 
-                if (result == null) {
+                if (string.IsNullOrEmpty(result)) {
                     // cancel
                     return;
                 }

@@ -19,7 +19,25 @@ namespace MonkeyPaste.Avalonia {
 
         public virtual ObservableCollection<MpAvEnumerableParameterValueViewModel> Items { get; set; } = new ObservableCollection<MpAvEnumerableParameterValueViewModel>();
 
-        public virtual MpAvEnumerableParameterValueViewModel SelectedItem { get; set; }
+        private MpAvEnumerableParameterValueViewModel _selectedItem;
+        public virtual MpAvEnumerableParameterValueViewModel SelectedItem {
+            get {
+                if (IsMultiValue) {
+                    return SelectedItems.FirstOrDefault();
+                }
+                return _selectedItem;
+            }
+            set {
+                if (IsMultiValue) {
+                    MpDebug.Break("Need to set items not item, this is multivalue");
+                    return;
+                }
+                if (SelectedItem != value) {
+                    _selectedItem = value;
+                    OnPropertyChanged(nameof(SelectedItem));
+                }
+            }
+        }
         //public virtual MpAvEnumerableParameterValueViewModel SelectedItem {
         //    get => Items.FirstOrDefault(x => x.IsSelected);
         //    set {
@@ -34,8 +52,24 @@ namespace MonkeyPaste.Avalonia {
         //            OnPropertyChanged(nameof(CurrentValue));
         //        }
         //    }
-        //}
-        public virtual ObservableCollection<MpAvEnumerableParameterValueViewModel> SelectedItems { get; set; } = new ObservableCollection<MpAvEnumerableParameterValueViewModel>();
+
+        private ObservableCollection<MpAvEnumerableParameterValueViewModel> _selectedItems;
+        public virtual ObservableCollection<MpAvEnumerableParameterValueViewModel> SelectedItems {
+            get {
+                if (_selectedItems == null) {
+                    _selectedItems = new ObservableCollection<MpAvEnumerableParameterValueViewModel>();
+                }
+                if (!IsMultiValue) {
+                    if (!_selectedItems.Contains(SelectedItem)) {
+                        _selectedItems.Clear();
+                        if (SelectedItem != null) {
+                            _selectedItems.Add(SelectedItem);
+                        }
+                    }
+                }
+                return _selectedItems;
+            }
+        }
         //public virtual IList<MpAvEnumerableParameterValueViewModel> SelectedItems {
         //    get {
         //        if (ControlType == MpParameterControlType.EditableList) {
@@ -135,21 +169,23 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
+
         #endregion
 
         #region Public Methods
 
         public override async Task InitializeAsync(MpParameterValue aipv) {
             IsBusy = true;
-
-            if (aipv.ParamId == "DefaultEditableFontFamily") {
-
-            }
-
             await base.InitializeAsync(aipv);
-
+            if (_selectedItems == null) {
+                // only do on first init, needs model so can't be in constructor
+                SelectedItems.CollectionChanged += SelectedItems_CollectionChanged;
+            }
             Items.Clear();
 
+            if (aipv.ParameterHostId == 30 && aipv.ParamId == "1") {
+
+            }
 
             List<string> selectedValues = new List<string>();
 
@@ -168,15 +204,20 @@ namespace MonkeyPaste.Avalonia {
                 Items.Add(naipvvm);
             }
 
+            // NOTE this secondary add is very editable lists where values wouldn't be found in parameter format..
             // reverse selected values to retain order (valueIdx increment maybe unnecessary, don't remember why its necessary but this retains order)
             selectedValues.Reverse();
             foreach (var selectValueStr in selectedValues) {
+                if (ControlType != MpParameterControlType.EditableList) {
+                    MpDebug.Break("whys this goin down?");
+                }
                 // for new values add them to front of Items
                 Items.ForEach(x => x.ValueIdx++);
                 //for new values from preset add and select
                 var nsaipvvm = await CreateAnalyticItemParameterValueViewModel(0, selectValueStr, selectValueStr, true);
                 Items.Insert(0, nsaipvvm);
             }
+
 
             if (Items.All(x => x.IsSelected == false) && Items.Count > 0) {
                 Items[0].IsSelected = true;
@@ -243,6 +284,10 @@ namespace MonkeyPaste.Avalonia {
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             //OnPropertyChanged(nameof(CurrentValue));
             //HasModelChanged = true;
+        }
+
+        private void SelectedItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            OnPropertyChanged(nameof(SelectedItem));
         }
         private void MpEnumerableParameterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {

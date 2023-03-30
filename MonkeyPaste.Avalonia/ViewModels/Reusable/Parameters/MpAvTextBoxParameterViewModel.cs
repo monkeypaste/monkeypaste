@@ -21,27 +21,31 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpIPopupMenuViewModel Implementation
-        public MpMenuItemViewModel PopupMenuViewModel {
-            get {
-                var tmivml = new List<MpMenuItemViewModel>();
-                var propertyPathLabels = typeof(MpContentQueryPropertyPathType).EnumToLabels();
-                for (int i = 0; i < propertyPathLabels.Length; i++) {
-                    var ppt = (MpContentQueryPropertyPathType)i;
-                    var mivm = new MpMenuItemViewModel() {
-                        Header = propertyPathLabels[i],
-                        Command = AddContentPropertyPathCommand,
-                        CommandParameter = ppt
-                    };
-                    if (ppt == MpContentQueryPropertyPathType.None || (ppt == MpContentQueryPropertyPathType.LastOutput && !IsActionParameter)) {
-                        mivm.IsVisible = false;
-                    }
-                    tmivml.Add(mivm);
-                }
-                return new MpMenuItemViewModel() {
-                    SubItems = tmivml
-                };
-            }
-        }
+        //public MpMenuItemViewModel PopupMenuViewModel {
+        //    get {
+        //        var tmivml = new List<MpMenuItemViewModel>();
+        //        var propertyPathLabels = typeof(MpContentQueryPropertyPathType).EnumToLabels();
+        //        for (int i = 0; i < propertyPathLabels.Length; i++) {
+        //            var ppt = (MpContentQueryPropertyPathType)i;
+        //            var mivm = new MpMenuItemViewModel() {
+        //                Header = propertyPathLabels[i],
+        //                Command = AddContentPropertyPathCommand,
+        //                CommandParameter = ppt
+        //            };
+        //            if (ppt == MpContentQueryPropertyPathType.None || (ppt == MpContentQueryPropertyPathType.LastOutput && !IsActionParameter)) {
+        //                mivm.IsVisible = false;
+        //            }
+        //            tmivml.Add(mivm);
+        //        }
+        //        return new MpMenuItemViewModel() {
+        //            SubItems = tmivml
+        //        };
+        //    }
+        //}
+        public MpMenuItemViewModel PopupMenuViewModel =>
+            MpContentQueryPropertyPathHelpers.GetContentPropertyRootMenu(
+                AddContentPropertyPathCommand,
+                IsActionParameter ? null : new[] { MpContentQueryPropertyPathType.LastOutput });
 
         public bool IsPopupMenuOpen { get; set; }
 
@@ -199,7 +203,12 @@ namespace MonkeyPaste.Avalonia {
                 }
                 var cppt = (MpContentQueryPropertyPathType)args;
                 if (cppt == MpContentQueryPropertyPathType.None) {
-                    return;
+                    if (args is int intArg) {
+                        cppt = (MpContentQueryPropertyPathType)intArg;
+                    }
+                    if (cppt == MpContentQueryPropertyPathType.None) {
+                        return;
+                    }
                 }
 
                 string pathStr = string.Format(@"{{{0}}}", cppt.ToString());

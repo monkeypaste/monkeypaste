@@ -53,6 +53,7 @@
   <PropertyGroup>
     <MainProjectDir>$(SolutionDir)\$(MainProjectName)</MainProjectDir>
     <MainTargetDir>$(MainProjectDir)\bin\Debug\$(MainTargetFramework)</MainTargetDir>
+    <PluginSourceDir>$(SolutionDir)\Plugins</PluginSourceDir>
     <PluginTargetDir>$(MainTargetDir)\Plugins</PluginTargetDir>
     <UiProjectDir>$(SolutionDir)\MonkeyPaste.Avalonia</UiProjectDir>
   </PropertyGroup>

@@ -1,6 +1,15 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="CloseWindowImage">avares://MonkeyPaste.Avalonia/Assets/Images/closewindow.png</sys:String>
+    <sys:String x:Key="GraphImage">avares://MonkeyPaste.Avalonia/Assets/Images/graph.png</sys:String>
+    <sys:String x:Key="StarYellowImage">avares://MonkeyPaste.Avalonia/Assets/Images/staryellow.png</sys:String>
+    <sys:String x:Key="SpreadsheetImage">avares://MonkeyPaste.Avalonia/Assets/Images/spreadsheet.png</sys:String>
+    <sys:String x:Key="GlobeImage">avares://MonkeyPaste.Avalonia/Assets/Images/global.png</sys:String>
+    <sys:String x:Key="DeviceImage">avares://MonkeyPaste.Avalonia/Assets/Images/device.png</sys:String>
+    <sys:String x:Key="AppStoreImage">avares://MonkeyPaste.Avalonia/Assets/Images/appstore.png</sys:String>
+    <sys:String x:Key="StarSolidImage">avares://MonkeyPaste.Avalonia/Assets/Images/starsolid.png</sys:String>
+    <sys:String x:Key="StarOutlineImage">avares://MonkeyPaste.Avalonia/Assets/Images/staroutline.png</sys:String>
     <sys:String x:Key="FolderSolidImage">avares://MonkeyPaste.Avalonia/Assets/Images/foldersolid.png</sys:String>
     <sys:String x:Key="GlobalImage">avares://MonkeyPaste.Avalonia/Assets/Images/global.png</sys:String>
     <sys:String x:Key="InfoImage">avares://MonkeyPaste.Avalonia/Assets/Images/info.png</sys:String>

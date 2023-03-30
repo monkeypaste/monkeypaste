@@ -118,7 +118,7 @@ namespace MonkeyPaste {
         }
 
         public static async Task<string> ReadUrlAsString(string url) {
-            if (!IsValidUrl(url)) {
+            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute)) {//if (!IsValidUrl(url)) {
                 return string.Empty;
             }
             try {

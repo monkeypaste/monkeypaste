@@ -8,6 +8,9 @@
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800">
+    <local:MpAvUserControl.Resources>
+        <SolidColorBrush x:Key="TextControlBorderBrushPointerOver">Transparent</SolidColorBrush>
+    </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
         <Style Selector="StackPanel.compositeTextBoxContainer TextBox">
             <Setter Property="MinWidth"
@@ -20,6 +23,17 @@
                     Value="Center" />
             <Setter Property="FontWeight"
                     Value="SemiBold" />
+        </Style>
+      <Style Selector="TextBox.colorTextBox">        
+            <Setter Property="Foreground"
+                    Value="{Binding Value, Converter={x:Static local:MpAvStringHexToContrastBrushConverter.Instance}}" />
+      </Style>
+      
+        <Style Selector="TextBox.colorTextBox /template/ Border#PART_BorderElement"
+               x:DataType="local:MpAvSearchCriteriaOptionViewModel">
+            <Setter Property="Background"
+                    Value="{Binding Value, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}, ConverterParameter=#FFFFFF}" />
+
         </Style>
     </local:MpAvUserControl.Styles>
     <ContentControl x:Name="CriteriaOptionContentControl"
@@ -85,6 +99,7 @@
                         <TextBox x:Name="MatchValueTextBox"
                                  Watermark="{Binding Label, StringFormat='\{0\}...'}"
                                  Classes.valid="{Binding IsValid}"
+                                 Classes.colorTextBox="{Binding IsColorOption}"
                                  local:MpAvTextControlDropExtension.IsEnabled="True"
                                  local:MpAvTextControlDropExtension.IsDragOverHandled="True"
                                  local:MpAvDelayedTextChangedExtension.IsEnabled="True"
@@ -103,6 +118,7 @@
                         <StackPanel Orientation="Horizontal">
                             <Label Content="A" />
                             <TextBox Classes.valid="{Binding IsValid1}"
+                                     Classes="colorTextBox"
                                      local:MpAvTextControlDropExtension.IsEnabled="True"
                                      local:MpAvTextControlDropExtension.IsDragOverHandled="True"
                                      Text="{Binding Value4, Mode=TwoWay}" />
@@ -110,6 +126,7 @@
                         <StackPanel Orientation="Horizontal">
                             <Label Content="R" />
                             <TextBox Classes.valid="{Binding IsValid2}"
+                                     Classes="colorTextBox"
                                      local:MpAvTextControlDropExtension.IsEnabled="True"
                                      local:MpAvTextControlDropExtension.IsDragOverHandled="True"
                                      Text="{Binding Value1, Mode=TwoWay}" />
@@ -117,6 +134,7 @@
                         <StackPanel Orientation="Horizontal">
                             <Label Content="G" />
                             <TextBox Classes.valid="{Binding IsValid3}"
+                                     Classes="colorTextBox"
                                      local:MpAvTextControlDropExtension.IsEnabled="True"
                                      local:MpAvTextControlDropExtension.IsDragOverHandled="True"
                                      Text="{Binding Value2, Mode=TwoWay}" />
@@ -124,6 +142,7 @@
                         <StackPanel Orientation="Horizontal">
                             <Label Content="B" />
                             <TextBox Classes.valid="{Binding IsValid4}"
+                                     Classes="colorTextBox"
                                      local:MpAvTextControlDropExtension.IsEnabled="True"
                                      local:MpAvTextControlDropExtension.IsDragOverHandled="True"
                                      Text="{Binding Value3, Mode=TwoWay}" />
@@ -163,29 +182,8 @@
                         <local:MpAvSliderParameterView Width="100"
                                                        Height="30"
                                                        Background="Silver"
+                                                       HasTextInput="False"
                                                        IsSliding="{Binding IsValueChanging, Mode=TwoWay}" />
-                        <!--<TextBox Classes.valid="{Binding IsValid}"
-                                 local:MpAvTextControlDropExtension.IsEnabled="True"
-                                 local:MpAvTextControlDropExtension.IsDragOverHandled="True"
-                                 Text="{Binding Value, Mode=TwoWay}" />-->
-                        <!--<Slider x:Name="DistanceSlider"
-                                Value="{Binding SliderValue, Mode=TwoWay}"
-                                Minimum="0"
-                                Maximum="255"
-                                Width="150">
-                            <Slider.Styles>
-                                <Style Selector="Slider /template/ Thumb">
-                                    <Setter Property="ToolTip.Tip"
-                                            Value="{Binding $parent[Slider].Value, Mode=OneWay, StringFormat='Value \{0:f\}'}" />
-                                    <Setter Property="ToolTip.Placement"
-                                            Value="Top" />
-                                    <Setter Property="ToolTip.VerticalOffset"
-                                            Value="-10" />
-                                    <Setter Property="ToolTip.HorizontalOffset"
-                                            Value="-30" />
-                                </Style>
-                            </Slider.Styles>
-                        </Slider>-->
                     </DockPanel>
                 </DataTemplate>
 

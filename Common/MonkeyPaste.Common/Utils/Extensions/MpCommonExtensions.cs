@@ -584,59 +584,19 @@ namespace MonkeyPaste.Common {
 
         public static bool HasProperty(this object obj, string propertyPath) {
             return obj.GetType().GetProperties().Any(x => x.Name == propertyPath);
-            //try {
-            //    object test = GetPropertyValue(obj, propertyPath, null, false);
-            //    return true;
-            //}
-            //catch (MpReflectionException ex) {
-            //    MpConsole.WriteTraceLine(string.Empty, ex);
-            //    return false;
-            //}
         }
 
         public static object GetPropertyValue(this object obj, string propertyPath, object[] index = null, bool safe = true) {
-            object propObj = obj;
-            PropertyInfo propInfo = null;
-            var propPathParts = propertyPath.SplitNoEmpty(".");
-            for (int i = 0; i < propPathParts.Length; i++) {
-                string propPathPart = propPathParts[i];
-
-                if (propObj == null) {
-                    throw new MpReflectionException($"Child Object {propPathPart} on path {propertyPath} not found on object: {obj.GetType()}");
-                }
-                Type objType = propObj.GetType();
-                propInfo = objType.GetProperty(propPathPart);
-                if (propObj == null) {
-                    throw new MpReflectionException($"Property {propPathPart} not found on object");
-                }
-
-                if (propInfo == null) {
-                    if (safe) {
-                        //this breaks when combining static/dynamic content parameters for http requests
-                        //but returning the path is intended flow
-                        return propertyPath;
-                    }
-                    throw new MpReflectionException($"Property {propPathPart} not found on object");
-                }
-                propInfo.GetValue(propObj);
-
-                if (i < propPathParts.Length - 1) {
-                    propObj = propInfo.GetValue(propObj);
-                }
+            if (obj == null) {
+                return null;
             }
-            try {
-                return propInfo.GetValue(propObj, index);
+            var prop_info = obj.GetType().GetProperties().FirstOrDefault(x => x.Name == propertyPath);
+            if (prop_info == null) {
+                return null;
             }
-            catch (Exception ex) {
-                MpConsole.WriteTraceLine(ex);
-                return propertyPath;
-            }
+            return prop_info.GetValue(obj);
         }
 
-        public static T GetPropertyValue<T>(this object obj, string propertyPath, object[] index = null)
-            where T : class {
-            return obj.GetPropertyValue(propertyPath, index) as T;
-        }
 
         public static void SetPropertyValue(this object obj, string propertyPath, object newValue) {
             PropertyInfo propertyInfo = obj.GetType().GetProperty(propertyPath);

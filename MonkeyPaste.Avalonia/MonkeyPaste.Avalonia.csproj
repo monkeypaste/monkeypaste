@@ -205,6 +205,7 @@
     <None Remove="Assets\Images\alarmClock.png" />
     <None Remove="Assets\Images\append.png" />
     <None Remove="Assets\Images\appendline.png" />
+    <None Remove="Assets\Images\appstore.png" />
     <None Remove="Assets\Images\asc.png" />
     <None Remove="Assets\Images\asc_black.png" />
     <None Remove="Assets\Images\asc_gray.png" />
@@ -235,6 +236,7 @@
     <None Remove="Assets\Images\Close.png" />
     <None Remove="Assets\Images\close1.png" />
     <None Remove="Assets\Images\close2.png" />
+    <None Remove="Assets\Images\closewindow.png" />
     <None Remove="Assets\Images\cog.png" />
     <None Remove="Assets\Images\cogcolor.png" />
     <None Remove="Assets\Images\colors.png" />
@@ -249,6 +251,7 @@
     <None Remove="Assets\Images\desc_black.png" />
     <None Remove="Assets\Images\desc_gray.png" />
     <None Remove="Assets\Images\desc_white.png" />
+    <None Remove="Assets\Images\device.png" />
     <None Remove="Assets\Images\dots.png" />
     <None Remove="Assets\Images\dots_2x10.png" />
     <None Remove="Assets\Images\dots_2x2.png" />
@@ -280,6 +283,7 @@
     <None Remove="Assets\Images\global.png" />
     <None Remove="Assets\Images\googleIcon.png" />
     <None Remove="Assets\Images\google_signin.png" />
+    <None Remove="Assets\Images\graph.png" />
     <None Remove="Assets\Images\help.png" />
     <None Remove="Assets\Images\highlighter.png" />
     <None Remove="Assets\Images\hotkey.png" />
@@ -347,8 +351,9 @@
     <None Remove="Assets\Images\speak.png" />
     <None Remove="Assets\Images\spellcheck.png" />
     <None Remove="Assets\Images\spreadsheet.png" />
-    <None Remove="Assets\Images\star_filled.png" />
-    <None Remove="Assets\Images\star_outline.png" />
+    <None Remove="Assets\Images\staroutline.png" />
+    <None Remove="Assets\Images\starsolid.png" />
+    <None Remove="Assets\Images\staryellow.png" />
     <None Remove="Assets\Images\tag.png" />
     <None Remove="Assets\Images\text.png" />
     <None Remove="Assets\Images\Texture.bmp" />
@@ -447,6 +452,17 @@
     <None Remove="Settings.settings" />
   </ItemGroup>
   <ItemGroup>
+    <AvaloniaResource Include="Assets\Images\closewindow.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\graph.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\staryellow.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+  </ItemGroup>
+  <ItemGroup>
     <AvaloniaResource Include="Assets\Cursors\copy.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -487,6 +503,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\appendline.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\appstore.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\asc.png">
@@ -616,6 +635,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\desc_white.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\device.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\dots_3x1.png">
@@ -894,10 +916,10 @@
     <AvaloniaResource Include="Assets\Images\spreadsheet.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\star_filled.png">
+    <AvaloniaResource Include="Assets\Images\staroutline.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\star_outline.png">
+    <AvaloniaResource Include="Assets\Images\starsolid.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\tag.png">

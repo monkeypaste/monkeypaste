@@ -1,4 +1,5 @@
 ﻿using Avalonia.Media;
+using Avalonia.Media.Immutable;
 using System;
 using System.Diagnostics;
 
@@ -79,6 +80,9 @@ namespace MonkeyPaste.Common.Avalonia {
         public static string ToHex(this IBrush b) {
             if (b is Brush brush) {
                 return brush.ToHex();
+            }
+            if (b is ImmutableSolidColorBrush iscb) {
+                return iscb.Color.ToPortableColor().ToHex();
             }
             // what type is it?
             Debugger.Break();

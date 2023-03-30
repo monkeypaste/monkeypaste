@@ -162,9 +162,9 @@
                     VerticalAlignment="Center"
                     Width="70"
                     Height="70">
-                <local:MpAvProgressSpinnerView x:Name="QueryTrayBusySpinner"
-                                               HorizontalAlignment="Stretch"
-                                               VerticalAlignment="Stretch" />
+                <local:MpAvBusySpinnerView x:Name="QueryTrayBusySpinner"
+                                           HorizontalAlignment="Stretch"
+                                           VerticalAlignment="Stretch" />
             </Border>
         </Border>
 

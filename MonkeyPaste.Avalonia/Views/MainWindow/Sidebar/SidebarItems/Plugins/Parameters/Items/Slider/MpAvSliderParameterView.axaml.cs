@@ -37,6 +37,28 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region HasTextInput Property
+
+        private bool _hasTextInput = true;
+
+        public static readonly DirectProperty<MpAvSliderParameterView, bool> HasTextInputProperty =
+            AvaloniaProperty.RegisterDirect<MpAvSliderParameterView, bool>
+            (
+                nameof(HasTextInput),
+                o => o.HasTextInput,
+                (o, v) => o.HasTextInput = v,
+                true
+            );
+
+        public bool HasTextInput {
+            get => _hasTextInput;
+            set {
+                SetAndRaise(HasTextInputProperty, ref _hasTextInput, value);
+            }
+        }
+
+        #endregion
+
         #endregion
 
         public MpAvSliderParameterView() {
@@ -48,11 +70,26 @@ namespace MonkeyPaste.Avalonia {
             sb.PointerReleased += Sb_PointerReleased;
             sb.PointerMoved += Sb_PointerMoved;
 
-            var svtb = this.FindControl<TextBox>("SliderValueTextBox");
-            svtb.GotFocus += Svtb_GotFocus;
-            svtb.LostFocus += Svtb_LostFocus;
-            svtb.AddHandler(KeyDownEvent, Svtb_KeyDown, RoutingStrategies.Tunnel);
-            svtb.GetObservable(TextBox.TextProperty).Subscribe(value => OnSliderTextChanged());
+            this.GetObservable(MpAvSliderParameterView.HasTextInputProperty).Subscribe(value => OnHasTextInputChanged());
+
+
+        }
+
+        private void OnHasTextInputChanged() {
+            if (HasTextInput) {
+                var svtb = this.FindControl<TextBox>("SliderValueTextBox");
+                svtb.IsVisible = true;
+                svtb.GotFocus += Svtb_GotFocus;
+                svtb.LostFocus += Svtb_LostFocus;
+                svtb.AddHandler(KeyDownEvent, Svtb_KeyDown, RoutingStrategies.Tunnel);
+                svtb.GetObservable(TextBox.TextProperty).Subscribe(value => OnSliderTextChanged());
+            } else {
+                var svtb = this.FindControl<TextBox>("SliderValueTextBox");
+                svtb.IsVisible = false;
+                svtb.GotFocus -= Svtb_GotFocus;
+                svtb.LostFocus -= Svtb_LostFocus;
+                svtb.RemoveHandler(KeyDownEvent, Svtb_KeyDown);
+            }
         }
 
         private void OnSliderTextChanged() {
@@ -76,7 +113,7 @@ namespace MonkeyPaste.Avalonia {
 
                 var mp = e.GetPosition(sb);
 
-                if (tbr.Contains(mp)) {
+                if (tbr.Contains(mp) && HasTextInput) {
                     return;
                 }
 
@@ -132,15 +169,12 @@ namespace MonkeyPaste.Avalonia {
             double newValue = ((BindingContext.MaxValue - BindingContext.MinValue) * widthPercent) + BindingContext.MinValue;
             BindingContext.SliderValue = Math.Round(newValue, BindingContext.Precision);
 
-            _lastMousePosition = new MpPoint(mp.X, mp.Y); //mp.ToPortablePoint();
+            _lastMousePosition = new MpPoint(mp.X, mp.Y);
             UpdateRectWidth();
         }
 
         private void Sb_PointerReleased(object sender, global::Avalonia.Input.PointerReleasedEventArgs e) {
-
-            var sb = sender as Control;
             if (IsSliding) {
-                //SliderValueTextBox.IsHitTestVisible = true;
                 IsSliding = false;
                 _lastMousePosition = new MpPoint();
                 if (e.Pointer.Captured != null) {

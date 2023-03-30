@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Common;
+using Org.BouncyCastle.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,6 +45,48 @@ namespace MonkeyPaste {
         lorIconMenuItem,
 
     }
+    public class MpMenuItemHostViewModel : MpViewModelBase, MpIPopupSelectorMenuViewModel {
+        #region Interfaces
+
+        public bool IsOpen { get; set; }
+        public MpMenuItemViewModel PopupMenu { get; }
+        public object SelectedIconResourceObj { get; }
+        public string SelectedLabel { get; }
+
+
+        #endregion
+
+        public MpMenuItemHostViewModel() : this(null, null) { }
+        public MpMenuItemHostViewModel(MpMenuItemViewModel root_mivm, object selected_identifier) {
+            PopupMenu = root_mivm;
+            var sel_mivm = FindItemByIdentifier(selected_identifier, null);
+            if (sel_mivm != null) {
+                SelectedIconResourceObj = sel_mivm.IconSourceObj;
+                SelectedLabel = sel_mivm.Header;
+            }
+        }
+
+        public MpMenuItemViewModel FindItemByIdentifier(object identifier, MpMenuItemViewModel cur_mivm) {
+            if (identifier == null) {
+                return null;
+            }
+            cur_mivm = cur_mivm ?? PopupMenu;
+            if (cur_mivm == null) {
+                return null;
+            }
+            if (cur_mivm.Identifier == identifier) {
+                return cur_mivm;
+            }
+            if (cur_mivm.SubItems == null) {
+                return null;
+            }
+            return
+                cur_mivm.SubItems
+                .FirstOrDefault(x => FindItemByIdentifier(identifier, x) != null);
+
+        }
+
+    }
     public class MpMenuItemViewModel : MpViewModelBase {
         #region Constants
 
@@ -69,6 +112,9 @@ namespace MonkeyPaste {
 
         #endregion
 
+        #region Interfaces
+
+        #endregion
 
         #region Properties
 
@@ -116,6 +162,25 @@ namespace MonkeyPaste {
             }
         }
 
+        #endregion
+
+        #region Identifier
+
+        private object _identifier;
+        public object Identifier {
+            get {
+                if (_identifier == null) {
+                    return CommandParameter;
+                }
+                return _identifier;
+            }
+            set {
+                if (Identifier != value) {
+                    _identifier = value;
+                    OnPropertyChanged(nameof(Identifier));
+                }
+            }
+        }
         #endregion
 
         #region Header
@@ -206,10 +271,37 @@ namespace MonkeyPaste {
 
         #region Commands
 
+        private ICommand _command;
+        public ICommand Command {
+            get {
+                if (CommandSrcObj != null) {
+                    return CommandParamSrcObj.GetPropertyValue(CommandPath) as ICommand;
+                }
+                return _command;
+            }
+            set {
+                if (Command != value) {
+                    _command = value;
+                    OnPropertyChanged(nameof(Command));
+                }
+            }
+        }
 
-        public ICommand Command { get; set; }
-
-        public object CommandParameter { get; set; }
+        private object _commandParameter;
+        public object CommandParameter {
+            get {
+                if (CommandParamSrcObj != null) {
+                    return CommandParamSrcObj.GetPropertyValue(CommandParamPropPath);
+                }
+                return _commandParameter;
+            }
+            set {
+                if (CommandParameter != value) {
+                    _commandParameter = value;
+                    OnPropertyChanged(nameof(CommandParameter));
+                }
+            }
+        }
 
         #endregion
 

@@ -105,6 +105,7 @@ namespace MonkeyPaste.Avalonia {
                     case MpParameterValueUnitType.ActionComponentId:
                     case MpParameterValueUnitType.CollectionComponentId:
                     case MpParameterValueUnitType.AnalyzerComponentId:
+                    case MpParameterValueUnitType.ContentPropertyPathTypeComponentId:
                     case MpParameterValueUnitType.Integer:
                         return IntValue;
                     case MpParameterValueUnitType.Decimal:
@@ -123,7 +124,7 @@ namespace MonkeyPaste.Avalonia {
 
         public double DoubleValue {
             get {
-                if (string.IsNullOrWhiteSpace(CurrentValue)) {
+                if (string.IsNullOrWhiteSpace(CurrentValue) || CurrentValue.ToCharArray().Any(x => !char.IsNumber(x))) {
                     return 0;
                 }
                 try {
@@ -145,7 +146,7 @@ namespace MonkeyPaste.Avalonia {
 
         public int IntValue {
             get {
-                if (string.IsNullOrWhiteSpace(CurrentValue)) {
+                if (string.IsNullOrWhiteSpace(CurrentValue) || CurrentValue.ToCharArray().Any(x => !char.IsNumber(x))) {
                     return 0;
                 }
                 try {

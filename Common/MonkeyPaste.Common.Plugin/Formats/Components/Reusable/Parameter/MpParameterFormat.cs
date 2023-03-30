@@ -38,7 +38,8 @@ namespace MonkeyPaste.Common.Plugin {
         DelimitedPlainText,
         CollectionComponentId,
         ActionComponentId,
-        AnalyzerComponentId
+        AnalyzerComponentId,
+        ContentPropertyPathTypeComponentId
     }
 
     public interface MpIParamterValueProvider {

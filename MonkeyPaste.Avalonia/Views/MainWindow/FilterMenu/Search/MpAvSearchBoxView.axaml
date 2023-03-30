@@ -194,11 +194,18 @@
 
         <!--  CONVERT SIMPLE/ TOGGLE EXPAND ADV BUTTON  -->
         <!--  UNCHECKED  -->
-        <Style Selector="ToggleButton#ConvertToAdvancedSearchToggleButton:unchecked:not(.saved) Image">
+        <Style Selector="ToggleButton#ConvertToAdvancedSearchToggleButton:unchecked:not(.saved):not(.popout) Image">
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource PlusSolidImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=white}" />
         </Style>
-        <Style Selector="ToggleButton#ConvertToAdvancedSearchToggleButton:unchecked.saved Image">
+
+        <Style Selector="ToggleButton#ConvertToAdvancedSearchToggleButton:unchecked.popout Image">
+            <Setter Property="Margin"
+                    Value="3" />
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource CloseWindowImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=white}" />
+        </Style>
+        <Style Selector="ToggleButton#ConvertToAdvancedSearchToggleButton:unchecked:not(.popout).saved Image">
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource EdgeArrowDownImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=white}" />
         </Style>
@@ -388,9 +395,9 @@
                       HorizontalAlignment="Stretch"
                       local:MpAvPointerCommandExtension.IsEnabled="True"
                       local:MpAvPointerCommandExtension.DragEnterCommand="{Binding ExpandCriteriaFromDragEnterCommand, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
-                      IsEnabled="{Binding !IsCriteriaWindowOpen, Mode=OneWay, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
                       IsChecked="{Binding IsExpanded, Mode=TwoWay, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
                       Classes="noBg noHoverBg outlineOver"
+                      Classes.popout="{Binding IsCriteriaWindowOpen, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
                       Classes.saved="{Binding IsSavedQuery, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}">
             <Image />
         </ToggleButton>

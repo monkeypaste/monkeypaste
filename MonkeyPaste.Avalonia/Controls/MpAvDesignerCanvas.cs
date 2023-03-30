@@ -133,27 +133,16 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             foreach (MpAvActionViewModelBase avm in tavm.SelfAndAllDescendants) {
+                DrawActionShadow(dc, avm);
+
                 var pavm = avm.ParentActionViewModel;
                 if (pavm == null) {
                     continue;
                 }
 
-                //MpPoint tail = new MpPoint(avm.X + (avm.Width / 2), avm.Y + (avm.Height / 2));
-                MpRect tail_rect = avm.ObservedDesignerItemBounds;
-                var tail_adv = this.GetVisualDescendants<MpAvActionDesignerItemView>().FirstOrDefault(x => x.DataContext == avm);
-                if (tail_adv != null && tail_adv.GetVisualDescendant<Shape>() is Shape tail_shape) {
-                    tail_rect = tail_shape.Bounds.ToPortableRect();
-                    tail_rect.Move(tail_shape.TranslatePoint(new Point(), this).Value.ToPortablePoint());
-                }
+                MpRect tail_rect = GetTranslatedActionShapeRect(avm);
+                MpRect head_rect = GetTranslatedActionShapeRect(pavm);
 
-                MpRect head_rect = pavm.ObservedDesignerItemBounds;
-                var head_adv = this.GetVisualDescendants<MpAvActionDesignerItemView>().FirstOrDefault(x => x.DataContext == pavm);
-                if (head_adv != null && head_adv.GetVisualDescendant<Shape>() is Shape head_shape) {
-                    head_rect = head_shape.Bounds.ToPortableRect();
-                    head_rect.Move(head_shape.TranslatePoint(new Point(), this).Value.ToPortablePoint());
-                }
-
-                //MpPoint head = new MpPoint(pavm.X + (pavm.Width / 2), pavm.Y + (pavm.Height / 2));
                 MpPoint tail = tail_rect.Centroid();
                 MpPoint head = head_rect.Centroid();
 
@@ -164,6 +153,55 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private Shape GetActionShape(MpAvActionViewModelBase avm) {
+            var adv = this.GetVisualDescendants<MpAvActionDesignerItemView>().FirstOrDefault(x => x.DataContext == avm);
+            if (adv != null && adv.GetVisualDescendant<Shape>() is Shape avm_shape) {
+                return avm_shape;
+            }
+            return null;
+        }
+        private MpRect GetTranslatedActionShapeRect(MpAvActionViewModelBase avm) {
+            if (GetActionShape(avm) is Shape s) {
+                var s_rect = s.Bounds.ToPortableRect();
+                s_rect.Move(s.TranslatePoint(new Point(), this).Value.ToPortablePoint());
+                return s_rect;
+            }
+            return MpRect.Empty;
+        }
+        private void DrawActionShadow(DrawingContext ctx, MpAvActionViewModelBase avm) {
+            MpPoint offset = new MpPoint(3, 3);
+            double scale = 1;
+            var origin = GetTranslatedActionShapeRect(avm).Location + offset;
+
+            IBrush shadow_brush = new SolidColorBrush(Colors.Black, 0.1);
+
+            Shape s = GetActionShape(avm);
+            if (s is Ellipse el) {
+                var r = el.Bounds.Size.ToPortableSize().ToPortablePoint() * 0.5;
+                var center = origin + r;
+                using (ctx.PushPostTransform(Matrix.CreateScale(scale, scale) *
+                    Matrix.CreateTranslation(center.X, center.Y))) {
+                    ctx.DrawEllipse(shadow_brush, new Pen(Brushes.Transparent), new Point(), r.X, r.Y);
+                }
+            } else if (s is Polygon pg) {
+                using (ctx.PushPostTransform(
+                    Matrix.CreateScale(scale, scale) *
+                    Matrix.CreateTranslation(origin.X, origin.Y))) {
+                    ctx.DrawGeometry(shadow_brush, new Pen(Brushes.Transparent), GetPointGeometry(pg.Points));
+                }
+            } else if (s is Rectangle r) {
+                using (ctx.PushPostTransform(
+                    Matrix.CreateScale(scale, scale) *
+                    Matrix.CreateTranslation(origin.X, origin.Y))) {
+                    var rect = r.Bounds.ToPortableRect();
+                    rect.Move(MpPoint.Zero);
+                    ctx.DrawRectangle(shadow_brush, new Pen(Brushes.Transparent), rect.ToAvRect());
+                }
+            } else {
+                MpDebug.Break($"Unhandled shape type '{s.GetType()}'");
+            }
+
+        }
         private IBrush GetArrowFillBrush(MpAvActionViewModelBase pavm, MpAvActionViewModelBase avm, MpPoint pp, MpPoint p) {
             Color enabled_color = TransitionLineEnabledFillBrush.GetColor();
             Color disabled_color = TransitionLineDisabledFillBrush.GetColor();
@@ -269,7 +307,21 @@ namespace MonkeyPaste.Avalonia {
             dc.DrawGeometry(
                 fillBrush,
                 new Pen(borderBrush, TransitionLineThickness),
-                streamGeometry);
+                GetPointGeometry(pc.Select(x => x.ToAvPoint())));
+        }
+
+        private StreamGeometry GetPointGeometry(IEnumerable<Point> points) {
+            StreamGeometry streamGeometry = new StreamGeometry();
+            if (points == null || !points.Any()) {
+                return streamGeometry;
+            }
+            using (StreamGeometryContext geometryContext = streamGeometry.Open()) {
+                geometryContext.BeginFigure(points.Last(), true);
+                points.ForEach(x => geometryContext.LineTo(x));
+                geometryContext.EndFigure(true);
+            }
+
+            return streamGeometry;
         }
     }
 }
