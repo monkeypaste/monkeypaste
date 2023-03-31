@@ -21,7 +21,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Bootstrapped Services (incomplete)
 
-        public MpIContentQueryTools ContentQueryTools { get; set; }
+        public MpIContentQueryPage ContentQueryTools { get; set; }
         public MpITagQueryTools TagQueryTools { get; set; }
         public MpIStartupObjectLocator StartupObjectLocator { get; set; }
 

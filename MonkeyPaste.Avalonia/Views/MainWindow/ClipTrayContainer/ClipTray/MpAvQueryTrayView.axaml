@@ -60,7 +60,34 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!--  QUERY TRAY  -->
+
+        <!--  BUSY OVERLAY  -->
+
+        <Border x:Name="QueryTrayBusyOuterBorder"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Grid.Row="1">
+            <Border.IsVisible>
+                <MultiBinding Converter="{x:Static local:MpAvMultiBoolConverter.Instance}"
+                              ConverterParameter="AND">
+                    <Binding Path="QueryItems"
+                             Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}"
+                             ConverterParameter="flip" />
+                    <Binding Path="IsAnyBusy" />
+                </MultiBinding>
+            </Border.IsVisible>
+            <Border x:Name="QueryTrayBusyInnerBorder"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Width="70"
+                    Height="70">
+                <local:MpAvBusySpinnerView x:Name="QueryTrayBusySpinner"
+                                           HorizontalAlignment="Stretch"
+                                           VerticalAlignment="Stretch" />
+            </Border>
+        </Border>
+
+      <!--  QUERY TRAY  -->
         <Border x:Name="QueryTrayContainerBorder"
                 Grid.Row="0"
                 Grid.RowSpan="2"
@@ -140,32 +167,6 @@
                     </ListBox.ItemsPanel>
                 </ListBox>
             </local:MpAvPagingScrollViewer>
-        </Border>
-
-        <!--  BUSY OVERLAY  -->
-
-        <Border x:Name="QueryTrayBusyOuterBorder"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
-                Grid.Row="1">
-            <Border.IsVisible>
-                <MultiBinding Converter="{x:Static local:MpAvMultiBoolConverter.Instance}"
-                              ConverterParameter="AND">
-                    <Binding Path="QueryItems"
-                             Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}"
-                             ConverterParameter="flip" />
-                    <Binding Path="IsAnyBusy" />
-                </MultiBinding>
-            </Border.IsVisible>
-            <Border x:Name="QueryTrayBusyInnerBorder"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Width="70"
-                    Height="70">
-                <local:MpAvBusySpinnerView x:Name="QueryTrayBusySpinner"
-                                           HorizontalAlignment="Stretch"
-                                           VerticalAlignment="Stretch" />
-            </Border>
         </Border>
 
         <!--  EMPTY OVERLAY  -->

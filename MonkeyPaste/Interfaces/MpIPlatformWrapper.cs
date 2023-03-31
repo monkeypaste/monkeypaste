@@ -20,7 +20,7 @@ namespace MonkeyPaste {
         MpIDbInfo DbInfo { get; set; }
         MpIQueryResultProvider Query { get; set; }
 
-        MpIContentQueryTools ContentQueryTools { get; set; }
+        MpIContentQueryPage ContentQueryTools { get; set; }
         MpITagQueryTools TagQueryTools { get; set; }
         MpIApplicationCommandManager AppCommandManager { get; set; }
         MpIIconBuilder IconBuilder { get; set; }

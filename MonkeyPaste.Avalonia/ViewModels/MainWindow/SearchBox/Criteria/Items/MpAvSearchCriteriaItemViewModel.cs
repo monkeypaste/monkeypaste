@@ -252,8 +252,9 @@ namespace MonkeyPaste.Avalonia {
             return new ObservableCollection<MpAvSearchCriteriaOptionViewModel>(tovml);
         }
 
-        public ObservableCollection<MpAvSearchCriteriaOptionViewModel> GetNumberOptionViewModel(MpAvSearchCriteriaOptionViewModel parent) {
+        public ObservableCollection<MpAvSearchCriteriaOptionViewModel> GetNumberOptionViewModel(MpAvSearchCriteriaOptionViewModel parent, MpSearchCriteriaUnitFlags numUnit) {
             // PATH: /Root/DateOrTime/*/WithinLast/*/
+            // PATH: /Root/Clips/Type Specific/Image/Dimension/*/
 
             var novml = new List<MpAvSearchCriteriaOptionViewModel>();
             string[] labels = typeof(MpNumberOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
@@ -261,7 +262,21 @@ namespace MonkeyPaste.Avalonia {
             for (int i = 0; i < labels.Length; i++) {
                 var tovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
                 tovm.Label = labels[i];
-                tovm.UnitType = MpSearchCriteriaUnitFlags.Decimal;
+                tovm.UnitType = numUnit;
+                switch ((MpNumberOptionType)i) {
+                    case MpNumberOptionType.Equals:
+                        tovm.FilterValue = MpContentQueryBitFlags.Equals;
+                        break;
+                    case MpNumberOptionType.LessThan:
+                        tovm.FilterValue = MpContentQueryBitFlags.LessThan;
+                        break;
+                    case MpNumberOptionType.GreaterThan:
+                        tovm.FilterValue = MpContentQueryBitFlags.GreaterThan;
+                        break;
+                    case MpNumberOptionType.IsNot:
+                        tovm.FilterValue = MpContentQueryBitFlags.IsNot;
+                        break;
+                }
                 novml.Add(tovm);
             }
             return new ObservableCollection<MpAvSearchCriteriaOptionViewModel>(novml);
@@ -309,8 +324,10 @@ namespace MonkeyPaste.Avalonia {
             for (int i = 0; i < labels.Length; i++) {
                 var tovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
                 tovm.Label = labels[i];
-                tovm.UnitLabel = "px";
-                tovm.UnitType = MpSearchCriteriaUnitFlags.Integer;
+                tovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
+                tovm.ItemsOptionType = typeof(MpNumberOptionType);
+                tovm.Items = GetNumberOptionViewModel(tovm, MpSearchCriteriaUnitFlags.Integer);
+                tovm.Items.ForEach(x => x.UnitLabel = "px");
                 switch ((MpDimensionOptionType)i) {
                     case MpDimensionOptionType.Width:
                         tovm.FilterValue = MpContentQueryBitFlags.Width;
@@ -844,7 +861,7 @@ namespace MonkeyPaste.Avalonia {
                 tovm.Label = labels[i];
                 tovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
                 tovm.ItemsOptionType = typeof(MpNumberOptionType);
-                tovm.Items = GetNumberOptionViewModel(tovm);
+                tovm.Items = GetNumberOptionViewModel(tovm, MpSearchCriteriaUnitFlags.Decimal);
                 switch ((MpTimeSpanWithinUnitType)i) {
                     case MpTimeSpanWithinUnitType.Hours:
                         tovm.FilterValue = MpContentQueryBitFlags.Hours;
@@ -1173,7 +1190,7 @@ namespace MonkeyPaste.Avalonia {
                 HasModelChanged = HasCriteriaStateChanged();
             }
 
-            if (HasModelChanged) {
+            if (ovm == null || ovm.IsValueOption) {
                 // whenever its changed requery on subsequent changes
                 SetModelToCurrent();
                 Mp.Services.Query.NotifyQueryChanged(true);

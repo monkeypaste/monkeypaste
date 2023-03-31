@@ -14,6 +14,9 @@ function loadImageContent(itemDataStr) {
 	enableReadOnly();
 	disableSubSelection();
 
+	ContentImageWidth = -1;
+	ContentImageHeight = -1;
+
 	let img = document.createElement('img');
 	img.classList.add('content-image');
 	img.setAttribute('src', `data:image/png;base64,${itemDataStr}`);	
@@ -44,37 +47,39 @@ function getContentImageElement() {
 }
 
 function getImageContentWidth() {
-	// TODO need to test still if images are being scaled on copy but definitely need to calculate differently
-	return getContentWidth();
+	if (ContentImageWidth < 0) {
+		log('WARNING! image size not populated, using fallback width...');
+		return getContentWidth();
+	}
+	return ContentImageWidth;
 }
 function getImageContentHeight() {
-	return getContentHeight();
-}
-
-function getContentImageDataSize() {
-	if (ContentImageWidth == -1 &&
-		ContentImageHeight == -1) {
-		ContentImageWidth = 0;
-		ContentImageHeight = 0;
-
-		let tmp = document.createElement('img');
-		tmp.onload = function (e) {
-			ContentImageWidth = tmp.width;
-			ContentImageHeight = tmp.height;
-			//document.body.removeChild(tmp);
-			log('img size w: ' + ContentImageWidth + ' h: ' + ContentImageHeight);
-		}
-		tmp.setAttribute('src', 'data:image/png;base64,' + getContentData());
-		//document.body.appendChild(tmp);
+	if (ContentImageHeight < 0) {
+		log('WARNING! image size not populated, using fallback height...');
+		return getContentHeight();
 	}
-	// avoid divide by zero
-	return {
-		width: Math.max(1,ContentImageWidth),
-		height: Math.max(1,ContentImageHeight)
-	};
+	return ContentImageHeight;
 }
-function getImageDataHeight() {
-	return getContentHeight();
+
+function populateContentImageDataSize(annotationsJsonStr) {
+	if (ContentImageWidth >= 0 &&
+		ContentImageHeight >= 0) {
+		log('image size already populated, ignoring request');
+		return;
+	}
+
+	ContentImageWidth = 0;
+	ContentImageHeight = 0;
+
+	let tmp = document.createElement('img');
+	tmp.onload = function (e) {
+		ContentImageWidth = tmp.width;
+		ContentImageHeight = tmp.height;
+
+		loadAnnotations(annotationsJsonStr);
+		log('img size w: ' + ContentImageWidth + ' h: ' + ContentImageHeight);
+	}
+	tmp.setAttribute('src', 'data:image/png;base64,' + getContentData());
 }
 
 function getImageContentData() {

@@ -187,7 +187,7 @@
                                 <local:MpAvBusySpinnerView.IsVisible>
                                     <MultiBinding Converter="{x:Static BoolConverters.And}">
                                         <Binding Path="IsSelected" />
-                                        <Binding Path="IsQuerying"
+                                        <Binding Path="IsBusy"
                                                  Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
                                     </MultiBinding>
                                 </local:MpAvBusySpinnerView.IsVisible>

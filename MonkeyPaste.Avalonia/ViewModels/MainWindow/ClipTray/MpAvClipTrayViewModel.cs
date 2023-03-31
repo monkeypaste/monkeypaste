@@ -29,7 +29,7 @@ namespace MonkeyPaste.Avalonia {
         MpIActionComponent,
         MpIBoundSizeViewModel,
         MpIContextMenuViewModel,
-        MpIContentQueryTools,
+        MpIContentQueryPage,
         MpIProgressIndicatorViewModel {
         #region Private Variables
 
@@ -119,8 +119,18 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIContentQueryTools Implementation
 
-        IEnumerable<int> MpIContentQueryTools.GetOmittedContentIds() =>
+        IEnumerable<int> MpIContentQueryPage.GetOmittedContentIds() =>
             PinnedItems.Select(x => x.CopyItemId);
+        int MpIContentQueryPage.Offset =>
+            HeadQueryIdx;
+
+        int MpIContentQueryPage.Limit =>
+            TailQueryIdx;
+
+        IEnumerable<int> MpIContentQueryPage.ContentIds =>
+            QueryItems
+            .OrderBy(x => x.QueryOffsetIdx)
+            .Select(x => x.CopyItemId);
 
         #endregion
 
@@ -147,6 +157,16 @@ namespace MonkeyPaste.Avalonia {
                 var tagItems = MpAvTagTrayViewModel.Instance.AllTagViewModel.ContentMenuItemViewModel.SubItems;
                 return new MpMenuItemViewModel() {
                     SubItems = new List<MpMenuItemViewModel>() {
+                        new MpMenuItemViewModel() {
+                            Header = @"Show Dev Tools",
+                            Command = ShowDevToolsCommand,
+                            IsVisible =
+#if DEBUG
+                            true,
+#else
+                            false,
+#endif
+                        },
                         new MpMenuItemViewModel() {
                             Header = @"Cut",
                             IconResourceKey = "ScissorsImage",
@@ -593,9 +613,8 @@ namespace MonkeyPaste.Avalonia {
             UpdateDefaultItemSize();
 
             for (int i = startIdx; i <= queryOffsetIdx; i++) {
-                int tileId = Mp.Services.Query.PageTools.GetItemId(i);
                 MpSize tile_size = new MpSize(DefaultQueryItemWidth, DefaultQueryItemHeight);
-                if (MpAvPersistentClipTilePropertiesHelper.TryGetByPersistentSize_ById(tileId, out double uniqueSize)) {
+                if (MpAvPersistentClipTilePropertiesHelper.TryGetUniqueWidth_ByOffsetIdx(i, out double uniqueSize)) {
                     tile_size.Width = uniqueSize;
                 }
 
@@ -884,10 +903,7 @@ namespace MonkeyPaste.Avalonia {
         public int PersistantSelectedItemId {
             get {
                 if (SelectedItem == null) {
-                    if (MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Count == 0) {
-                        return -1;
-                    }
-                    return MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels[0].Id;
+                    return MpAvPersistentClipTilePropertiesHelper.GetPersistentSelectedItemId();
                 }
                 return SelectedItem.CopyItemId;
             }
@@ -1678,7 +1694,7 @@ namespace MonkeyPaste.Avalonia {
                 ctvm.ClearSelection();
             }
 
-            MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Clear();
+            MpAvPersistentClipTilePropertiesHelper.ClearPersistentSelection();
             //}));
         }
         public void ClearAllSelection(bool clearEditing = true) {
@@ -1773,13 +1789,14 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels = new List<MpCopyItem>() { ctvm.CopyItem };
+            MpAvPersistentClipTilePropertiesHelper.SetPersistentSelectedItem(ctvm.CopyItemId, ctvm.QueryOffsetIdx);
         }
 
         public void RestoreSelectionState(MpAvClipTileViewModel tile) {
-            var prevSelectedItems = MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels
-                                        .Where(y => y.Id == tile.CopyItemId).ToList();
-            if (prevSelectedItems.Count == 0) {
+            //var prevSelectedItems = MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels
+            //                            .Where(y => y.Id == tile.CopyItemId).ToList();
+            //if (prevSelectedItems.Count == 0) {
+            if (MpAvPersistentClipTilePropertiesHelper.GetPersistentSelectedItemId() == tile.CopyItemId) {
                 tile.ClearSelection();
                 return;
             }
@@ -1858,8 +1875,7 @@ namespace MonkeyPaste.Avalonia {
 
                     DeactivateAppendModeAsync().FireAndForgetSafeAsync();
                 }
-                MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Remove(ci);
-                MpAvPersistentClipTilePropertiesHelper.RemovePersistentSize_ById(ci.Id);
+                MpAvPersistentClipTilePropertiesHelper.RemoveProps(ci.Id);
 
                 Mp.Services.Query.PageTools.RemoveItemId(ci.Id);
                 //MpDataModelProvider.AvailableQueryCopyItemIds.Remove(ci.Id);
@@ -2315,53 +2331,73 @@ namespace MonkeyPaste.Avalonia {
             if (checkHi) {
                 int hi_thresholdQueryIdx = Math.Max(0, TailQueryIdx - RemainingItemsCountThreshold);
 
-                MpAvClipTileViewModel hi_ctvm = VisibleItems.Count() == 0 ? null : VisibleItems.Aggregate((a, b) => a.TrayX > b.TrayX ? a : b);
+                MpAvClipTileViewModel hi_ctvm = VisibleItems.Count() == 0 ? null : VisibleItems.Aggregate((a, b) => (isScrollHorizontal ? a.TrayX > b.TrayX : a.TrayY > b.TrayY) ? a : b);
                 //var hi_ctvm = Items.FirstOrDefault(x => x.QueryOffsetIdx == hi_thresholdQueryIdx);
                 if (hi_ctvm == null) {
                     // Debugger.Break();
+                    //QueryCommand.Execute(true);
+                    PerformLoadMore(true);
+                    return;
                 }
                 //double hi_diff = isScrollHorizontal ?
                 //                    hi_ctvm.TrayRect.Right - ScrollOffsetX - ObservedQueryTrayScreenWidth :
                 //                    hi_ctvm.TrayRect.Bottom - ScrollOffsetY - ObservedQueryTrayScreenHeight;
                 //bool addMoreToTail = hi_diff < 0;
-                //bool addMoreToTail = ScreenRect.Contains(hi_ctvm.ScreenRect.BottomRight);
-                bool addMoreToTail = hi_ctvm == null || hi_ctvm.QueryOffsetIdx >= hi_thresholdQueryIdx;
-                if (addMoreToTail) {
+                bool addMoreToTail = QueryTrayScreenRect.Contains(hi_ctvm.ScreenRect.BottomRight);
+                bool addMoreToTail2 = hi_ctvm == null || hi_ctvm.QueryOffsetIdx >= hi_thresholdQueryIdx;
+                if (addMoreToTail || addMoreToTail2) {
                     //MpConsole.WriteLine("Load more to tail");
                     // when right (horizontal scroll) or bottom (vertical scroll) of high threshold tile is within viewport
-                    QueryCommand.Execute(true);
+                    //QueryCommand.Execute(true);
                     //if (!isLessZoom) {
                     //    return;
                     //}
+                    PerformLoadMore(true);
                     return;
                 }
             }
             if (checkLo) {
                 int lo_thresholdQueryIdx = Math.Max(0, HeadQueryIdx + RemainingItemsCountThreshold);
-                MpAvClipTileViewModel lo_ctvm = VisibleItems.Count() == 0 ? null : VisibleItems.Aggregate((a, b) => a.TrayX < b.TrayX ? a : b);
+                MpAvClipTileViewModel lo_ctvm = VisibleItems.Count() == 0 ? null : VisibleItems.Aggregate((a, b) => (isScrollHorizontal ? a.TrayX < b.TrayX : a.TrayY < b.TrayY) ? a : b);
                 //var lo_ctvm = Items.FirstOrDefault(x => x.QueryOffsetIdx == lo_thresholdQueryIdx);
                 if (lo_ctvm == null) {
                     //Debugger.Break();
+                    //QueryCommand.Execute(false);
+                    PerformLoadMore(false);
+                    return;
                 }
-                bool addMoreToHead = lo_ctvm == null || lo_ctvm.QueryOffsetIdx <= lo_thresholdQueryIdx;
                 //double lo_diff = isScrollHorizontal ?
                 //                    lo_ctvm.TrayRect.Right - ScrollOffsetX :
                 //                    lo_ctvm.TrayRect.Top - ScrollOffsetY;
                 //bool addMoreToHead = lo_diff > 0;
-                //bool addMoreToHead = ScreenRect.Contains(lo_ctvm.ScreenRect.TopLeft);
+                bool addMoreToHead = QueryTrayScreenRect.Contains(lo_ctvm.ScreenRect.TopLeft);
+                bool addMoreToHead2 = lo_ctvm == null || lo_ctvm.QueryOffsetIdx <= lo_thresholdQueryIdx;
 
-                if (addMoreToHead) {
+                if (addMoreToHead || addMoreToHead2) {
                     //MpConsole.WriteLine("Load more to head");
                     // when right (horizontal scroll) or bottom (vertical scroll) of high threshold tile is within viewport
-                    QueryCommand.Execute(false);
+                    //QueryCommand.Execute(false);
                     //if (!isLessZoom) {
                     //    return;
                     //}
+                    PerformLoadMore(false);
                     return;
                 }
             }
         }
 
+        private void PerformLoadMore(bool isHi) {
+            if (QueryCommand.CanExecute(isHi)) {
+                QueryCommand.Execute(isHi);
+                return;
+            }
+            //Dispatcher.UIThread.Post(async () => {
+            //    while (!QueryCommand.CanExecute(isHi)) {
+            //        await Task.Delay(100);
+            //    }
+            //    QueryCommand.Execute(isHi);
+            //});
+        }
         private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
             UpdateEmptyPropertiesAsync().FireAndForgetSafeAsync();
             if (e.OldItems != null) {
@@ -2569,13 +2605,17 @@ namespace MonkeyPaste.Avalonia {
                     ctvm = args as MpAvClipTileViewModel;
                 } else if (args is object[] argParts) {
                     ctvm = argParts[0] as MpAvClipTileViewModel;
-                    prevOffsetRect = argParts[1] as MpRect;
+                    if (argParts[1] is MpAvClipTileViewModel prev_ctvm) {
+                        prevOffsetRect = prev_ctvm.TrayRect;
+                    }
+
                 }
                 if (ctvm == null) {
                     return;
                 }
                 var trayRect = FindTileRect(ctvm.QueryOffsetIdx, prevOffsetRect);
-                ctvm.TrayLocation = trayRect.Location;
+                ctvm.TrayY = trayRect.Location.Y;
+                ctvm.TrayX = trayRect.Location.X;
             });
 
         public ICommand ToggleLayoutTypeCommand => new MpCommand(
@@ -2924,8 +2964,6 @@ namespace MonkeyPaste.Avalonia {
                 Dispatcher.UIThread.VerifyAccess();
                 _canQuery = false;
                 //Dispatcher.UIThread.Post(async () => {
-                IsBusy = true;
-                IsQuerying = true;
                 var sw = new Stopwatch();
                 sw.Start();
 
@@ -2949,6 +2987,8 @@ namespace MonkeyPaste.Avalonia {
 
                 #region TotalCount Query & Offset Calc
 
+                IsBusy = !isLoadMore;
+                IsQuerying = true;
                 if (isSubQuery) {
                     // sub-query of visual, data-specific or incremental offset 
 
@@ -3056,9 +3096,9 @@ namespace MonkeyPaste.Avalonia {
                 #region Fetch Data & Create Init Tasks
 
                 var cil = await Mp.Services.Query
-                    .FetchItemsByQueryIdxListAsync(
-                    fetchQueryIdxList, new int[] { });// Items.Where(x=>x.CopyItemId > 0).Select(x=>x.CopyItemId));
-                                                      //since tiles watch for their model changes, remove any items
+                    .FetchPageAsync(loadOffsetIdx, loadCount);
+                // fetchQueryIdxList, new int[] { });// Items.Where(x=>x.CopyItemId > 0).Select(x=>x.CopyItemId));
+                //since tiles watch for their model changes, remove any items
 
                 //var recycle_order_items = Items.OrderByDescending(x => x.RecyclePriority).ToList();
                 //var recycle_idxs = GetLoadItemIdxs(isLoadMore ? isLoadMoreTail : null, cil.Count);
@@ -3086,7 +3126,7 @@ namespace MonkeyPaste.Avalonia {
                         cur_ctvm.ClearSelection();
                     }
                     bool needsRestore = false;
-                    if (isSubQuery && MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Any(x => x.Id == cil[i].Id)) {
+                    if (isSubQuery && MpAvPersistentClipTilePropertiesHelper.GetPersistentSelectedItemId() == cil[i].Id) {
                         needsRestore = true;
                     }
                     initTasks.Add(cur_ctvm.InitializeAsync(cil[i], fetchQueryIdxList[i], needsRestore));
@@ -3138,7 +3178,7 @@ namespace MonkeyPaste.Avalonia {
                     MpMessenger.SendGlobal(MpMessageType.RequeryCompleted);
 
                     if (SelectedItem == null &&
-                        MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Count == 0 &&
+                        !MpAvPersistentClipTilePropertiesHelper.HasPersistenSelection() &&
                         Mp.Services.Query.TotalAvailableItemsInQuery > 0) {
                         Dispatcher.UIThread.Post(async () => {
                             while (IsAnyBusy) {
@@ -3211,10 +3251,10 @@ namespace MonkeyPaste.Avalonia {
         }
         public ICommand SearchWebCommand => new MpCommand<object>(
             (args) => {
-                string pt = string.Join(
-                            Environment.NewLine,
-                            MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Select(x => Mp.Services.StringTools.ToPlainText(x.ItemData)));
-
+                //string pt = string.Join(
+                //            Environment.NewLine,
+                //            MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Select(x => Mp.Services.StringTools.ToPlainText(x.ItemData)));
+                string pt = Mp.Services.StringTools.ToPlainText(SelectedItem.CopyItemData);
                 //MpHelpers.OpenUrl(args.ToString() + Uri.EscapeDataString(pt));
             }, (args) => args != null && args is string);
 
@@ -3793,6 +3833,13 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
                 MpAvAppendNotificationWindow.Instance.ShowNotifierDevToolsCommand.Execute(null);
+            });
+
+        public ICommand ShowDevToolsCommand => new MpCommand(
+            () => {
+                if (SelectedItem != null && SelectedItem.GetContentView() is MpAvContentWebView wv) {
+                    wv.ShowDevTools();
+                }
             });
         #endregion
 

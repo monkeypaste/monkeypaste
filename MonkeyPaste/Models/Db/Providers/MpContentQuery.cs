@@ -1,5 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -9,7 +10,20 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     public static class MpContentQuery {
         private static MpIQueryInfo _cur_qi;
-        public static async Task<List<int>> QueryAllAsync(MpIQueryInfo head_qi) {
+
+        public static async Task<int> QueryForTotalCountAsync(MpIQueryInfo head_qi, IEnumerable<int> idsToOmit) {
+            object result = await PeformQueryAsync_internal(head_qi, -1, -1, idsToOmit);
+            return (int)result;
+        }
+
+        public static async Task<List<MpCopyItem>> FetchItemsAsync(MpIQueryInfo head_qi, int offset, int limit, IEnumerable<int> idsToOmit) {
+            object result = await PeformQueryAsync_internal(head_qi, offset, limit, idsToOmit);
+            return result as List<MpCopyItem>;
+        }
+
+
+
+        private static async Task<object> PeformQueryAsync_internal(MpIQueryInfo head_qi, int offset, int limit, IEnumerable<int> ci_idsToOmit) {
             // Item1 = Param Query
             // Item2 = INTERSECT|UNION|EXCEPT
             // Item3 = Params
@@ -27,7 +41,7 @@ namespace MonkeyPaste {
                     qi_tag_ids = Mp.Services.TagQueryTools.GetSelfAndAllDescendantsTagIds(qi.TagId);
                 }
 
-                sub_queries.Add(GetContentQuery(qi, qi_tag_ids, idx++));
+                sub_queries.Add(GetContentQuery(qi, qi_tag_ids, ci_idsToOmit, idx++));
             }
             _cur_qi = null;
 
@@ -40,26 +54,36 @@ namespace MonkeyPaste {
                     sb.AppendLine(sub_queries[i + 1].Item2);
                 }
             }
-            sb.AppendLine($"ORDER BY {head_qi.GetSortField()} {head_qi.GetSortDirection()}");
+            string orderBy_clause = $"ORDER BY {head_qi.GetSortField()} {head_qi.GetSortDirection()}";
+            sb.AppendLine(orderBy_clause);
 
-            string query = $"SELECT RootId FROM({sb})";
-            var result = await MpDb.QueryScalarsAsync<int>(query, sub_queries.SelectMany(x => x.Item3).ToArray());
+            if (offset < 0) {
+                // total count query
+                string count_query = $"SELECT COUNT(RootId) FROM({sb})";
+                int total_count = await MpDb.QueryScalarAsync<int>(count_query, sub_queries.SelectMany(x => x.Item3).ToArray());
+                return total_count;
+            }
 
+            string inner_query = $"SELECT RootId,{head_qi.GetSortField()} FROM ({sb}) {orderBy_clause}";
+            string fetch_query = $"SELECT * FROM MpCopyItem WHERE pk_MpCopyItemId IN (SELECT RootId FROM ({inner_query})) {orderBy_clause} LIMIT {limit} OFFSET {offset}";
+            var args = sub_queries.SelectMany(x => x.Item3).ToArray();
+            MpConsole.WriteLine($"Current DataModel Query: ");
+            MpConsole.WriteLine(MpDb.GetParameterizedQueryString(fetch_query, args));
+            var result = await MpDb.QueryAsync<MpCopyItem>(fetch_query, args);
 
-            IEnumerable<int> ci_idsToOmit =
-                Mp.Services.ContentQueryTools.GetOmittedContentIds();
-
-            return result.Where(x => !ci_idsToOmit.Contains(x)).Distinct().ToList();
+            //string query = $"SELECT RootId FROM({sb})";
+            //var result = await MpDb.QueryScalarsAsync<int>(query, sub_queries.SelectMany(x => x.Item3).ToArray());
+            //return result.Where(x => !ci_idsToOmit.Contains(x)).Distinct().ToList();
+            return result;
         }
 
-        private static Tuple<string, string, List<object>> GetContentQuery(MpIQueryInfo qi, IEnumerable<int> tagIds, int idx) {
+        private static Tuple<string, string, List<object>> GetContentQuery(MpIQueryInfo qi, IEnumerable<int> tagIds, IEnumerable<int> ci_idsToOmit, int idx) {
 
             // Item1 = INTERSECT|UNION|EXCEPT
             // Item2 = Param Query
             // Item3 = Params
 
-            string qi_root_id_query_str = ConvertQueryToSql(qi, tagIds, out var args);
-            MpConsole.WriteLine($"Current DataModel Query ({idx}): " + MpDb.GetParameterizedQueryString(qi_root_id_query_str, args));
+            string qi_root_id_query_str = ConvertQueryToSql(qi, tagIds, ci_idsToOmit, out var args);
 
             string join =
                 qi.JoinType == MpLogicalQueryType.Or ?
@@ -76,7 +100,7 @@ namespace MonkeyPaste {
         }
 
 
-        private static string ConvertQueryToSql(MpIQueryInfo qi, IEnumerable<int> tagIds, out object[] args) {
+        private static string ConvertQueryToSql(MpIQueryInfo qi, IEnumerable<int> tagIds, IEnumerable<int> ci_idsToOmit, out object[] args) {
             MpContentQueryBitFlags qf = qi.QueryFlags;
             List<string> types = new List<string>();
             List<string> filters = new List<string>();
@@ -133,6 +157,9 @@ namespace MonkeyPaste {
             }
             if (types.Count > 0) {
                 whereClause = AddWhereCondition(whereClause, @$"({string.Join(" OR ", types)})");
+            }
+            if (ci_idsToOmit != null && ci_idsToOmit.Any()) {
+                whereClause = AddWhereCondition(whereClause, $"({string.Join(" AND ", ci_idsToOmit.Select(x => $"RootId != {x}"))})");
             }
 
             // SELECT GEN
@@ -217,11 +244,12 @@ namespace MonkeyPaste {
                 !int.TryParse(mv, out dim)) {
                 return ops;
             }
+            string op = qf.GetNumericOperator();
             if (qf.HasFlag(MpContentQueryBitFlags.Width)) {
-                ops.Add(new Tuple<string, List<object>>($"ItemSize1 = ?", new object[] { dim }.ToList()));
+                ops.Add(new Tuple<string, List<object>>($"ItemSize1 {op} ?", new object[] { dim }.ToList()));
             }
             if (qf.HasFlag(MpContentQueryBitFlags.Height)) {
-                ops.Add(new Tuple<string, List<object>>($"ItemSize2 = ?", new object[] { dim }.ToList()));
+                ops.Add(new Tuple<string, List<object>>($"ItemSize2 {op} ?", new object[] { dim }.ToList()));
             }
             return ops;
         }

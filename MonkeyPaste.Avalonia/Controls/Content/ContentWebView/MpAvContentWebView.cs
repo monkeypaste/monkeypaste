@@ -68,7 +68,8 @@ namespace MonkeyPaste.Avalonia {
         notifyShowDebugger,
         notifyDataObjectResponse,
         notifyReadOnlyEnabledFromHost,
-        notifyPlainHtmlConverted
+        notifyPlainHtmlConverted,
+        notifyScrollBarVisibilityChanged
     }
     [DoNotNotify]
     public class MpAvContentWebView :
@@ -406,7 +407,6 @@ namespace MonkeyPaste.Avalonia {
                     if (ntf is MpQuillEditorContentChangedMessage loadComplete_ntf) {
                         IsEditorLoaded = true;
                         ProcessContentChangedMessage(loadComplete_ntf);
-                        //OnAppendModeStateChanged("editor");
                     }
                     break;
 
@@ -418,7 +418,7 @@ namespace MonkeyPaste.Avalonia {
                     ntf = MpJsonConverter.DeserializeBase64Object<MpQuillDisableReadOnlyResponseMessage>(msgJsonBase64Str);
                     if (ntf is MpQuillDisableReadOnlyResponseMessage disableReadOnlyMsg) {
                         ctvm.IsContentReadOnly = false;
-                        ctvm.UnconstrainedContentDimensions = new MpSize(disableReadOnlyMsg.editorWidth, disableReadOnlyMsg.editorHeight);
+                        //ctvm.UnconstrainedContentDimensions = new MpSize(disableReadOnlyMsg.editorWidth, disableReadOnlyMsg.editorHeight);
                     }
                     break;
                 case MpAvEditorBindingFunctionType.notifyReadOnlyEnabled:
@@ -458,6 +458,17 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
 
+                #endregion
+
+                #region LAYOUT
+
+                case MpAvEditorBindingFunctionType.notifyScrollBarVisibilityChanged:
+                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillScrollBarVisibilityChangedNotification>(msgJsonBase64Str);
+                    if (ntf is MpQuillScrollBarVisibilityChangedNotification scrollbarVisibleMsg) {
+                        //BindingContext.IsHorizontalScrollbarVisibile = scrollbarVisibleMsg.isScrollBarXVisible;
+                        //BindingContext.IsVerticalScrollbarVisibile = scrollbarVisibleMsg.isScrollBarYVisible;
+                    }
+                    break;
                 #endregion
 
                 #region SELECTION
@@ -1110,6 +1121,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void ProcessContentChangedMessage(MpQuillEditorContentChangedMessage contentChanged_ntf) {
+            if (BindingContext == null ||
+                (BindingContext.IsPlaceholder &&
+                !BindingContext.IsPinned)) {
+                return;
+            }
             bool is_reload = BindingContext.PublicHandle == _lastLoadedContentHandle;
             _lastLoadedContentHandle = BindingContext.PublicHandle;
 
@@ -1128,34 +1144,45 @@ namespace MonkeyPaste.Avalonia {
                 ProcessDataTransferCompleteResponse(dtcn).FireAndForgetSafeAsync(BindingContext);
             }
 
-            bool hasSizeChanged = false;
-            if (contentChanged_ntf.length > 0 &&
-                BindingContext.CharCount != contentChanged_ntf.length) {
-                hasSizeChanged = true;
-                BindingContext.CharCount = contentChanged_ntf.length;
-            }
-            if (contentChanged_ntf.lines > 0 &&
-                BindingContext.LineCount != contentChanged_ntf.lines) {
-                hasSizeChanged = true;
-                BindingContext.LineCount = contentChanged_ntf.lines;
-            }
-            if (hasSizeChanged) {
-                BindingContext.CopyItemSize = new MpSize(BindingContext.CharCount, BindingContext.LineCount);
+            if (contentChanged_ntf.itemSize1 >= 0 &&
+                contentChanged_ntf.itemSize2 >= 0) {
+                BindingContext.CopyItemSize1 = contentChanged_ntf.itemSize1;
+                BindingContext.CopyItemSize2 = contentChanged_ntf.itemSize2;
             }
 
+            //bool hasSizeChanged = false;
+            //switch (BindingContext.CopyItemType) {
+            //    case MpCopyItemType.Text:
+
+            //        break;
+            //}
+            //if (contentChanged_ntf.itemSize1 > 0 &&
+            //    BindingContext.CharCount != contentChanged_ntf.itemSize1) {
+            //    hasSizeChanged = true;
+            //    BindingContext.CharCount = contentChanged_ntf.itemSize1;
+            //}
+            //if (contentChanged_ntf.itemSize2 > 0 &&
+            //    BindingContext.LineCount != contentChanged_ntf.itemSize2) {
+            //    hasSizeChanged = true;
+            //    BindingContext.LineCount = contentChanged_ntf.itemSize2;
+            //}
+            //if (hasSizeChanged) {
+            //    BindingContext.CopyItemSize = new MpSize(BindingContext.CharCount, BindingContext.LineCount);
+            //}
+
+            //if (contentChanged_ntf.editorHeight > 0 &&
+            //    contentChanged_ntf.editorHeight > 0) {
+            //    var new_size = new MpSize(contentChanged_ntf.editorWidth, contentChanged_ntf.editorHeight);
+            //    if (!new_size.IsValueEqual(BindingContext.UnconstrainedContentDimensions)) {
+            //        BindingContext.UnconstrainedContentDimensions = new_size;
+            //    }
+            //}
             if (contentChanged_ntf.itemData != null) {
                 if (contentChanged_ntf.itemData.IsEmptyRichHtmlString()) {
                     // data's getting reset again
                     MpDebug.Break();
                 }
                 BindingContext.CopyItemData = contentChanged_ntf.itemData;
-            }
-            if (contentChanged_ntf.editorHeight > 0 &&
-                contentChanged_ntf.editorHeight > 0) {
-                var new_size = new MpSize(contentChanged_ntf.editorWidth, contentChanged_ntf.editorHeight);
-                if (!new_size.IsValueEqual(BindingContext.UnconstrainedContentDimensions)) {
-                    BindingContext.UnconstrainedContentDimensions = new_size;
-                }
             }
             BindingContext.HasTemplates = contentChanged_ntf.hasTemplates;
 

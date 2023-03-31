@@ -335,12 +335,12 @@ namespace MonkeyPaste.Avalonia {
                     .Where(x => x != null && x.DataContext != null && x.DataContext is MpAvClipTileViewModel)
                     .Select(x => x.DataContext)
                     .Cast<MpAvClipTileViewModel>()
-                    .Sum(x => x.TrayRect.Width);
+                    .Sum(x => x.BoundWidth);
             added_size.Height = containers
                     .Where(x => x != null && x.DataContext != null && x.DataContext is MpAvClipTileViewModel)
                     .Select(x => x.DataContext)
                     .Cast<MpAvClipTileViewModel>()
-                    .Sum(x => x.TrayRect.Height);
+                    .Sum(x => x.BoundHeight);
 
             var gs = this.GetVisualAncestor<MpAvClipTrayContainerView>().FindControl<GridSplitter>("ClipTraySplitter");
             var gs_grid = this.GetVisualAncestor<MpAvClipTrayContainerView>().FindControl<Grid>("ClipTrayContainerGrid");

@@ -54,17 +54,20 @@ function loadContent(
 	}
 	IsFindReplaceInactive = true;
 
-	//let contentBg_rgba = getContentBg(contentData);
-
 	loadContentData(contentData);
-	loadAnnotations(annotationsJsonStr);
-	//getEditorElement().style.backgroundColor = rgbaToCssColor(contentBg_rgba);
-	
+
 	quill.update();
 	if (ContentItemType != 'Text') {
 		quill.enable(false);
 	}
 
+	if (ContentItemType == 'Image') {
+		// NOTE pass annotations so load after image dimensions are known
+		populateContentImageDataSize(annotationsJsonStr);
+	} else {
+		loadAnnotations(annotationsJsonStr);
+	}
+	
 	loadFindReplace(searches);
 
 	if (sel_to_restore != null) {
@@ -102,8 +105,8 @@ function getContentAsMessage() {
 		editorWidth: getEditorWidth(),
 		editorHeight: getEditorHeight(),
 		itemData: getContentData(),
-		length: parseInt_safe(getContentWidthByType()),
-		lines: parseInt_safe(getContentHeightByType()),
+		itemSize1: parseInt_safe(getContentWidthByType()),
+		itemSize2: parseInt_safe(getContentHeightByType()),
 		hasTemplates: hasTemplates()
 	};
 }

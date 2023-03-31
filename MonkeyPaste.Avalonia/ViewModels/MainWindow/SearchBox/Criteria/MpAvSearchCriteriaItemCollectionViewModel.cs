@@ -512,6 +512,9 @@ namespace MonkeyPaste.Avalonia {
                 // all until selected tag is changed
                 InitializeAsync(queryTagId, false).FireAndForgetSafeAsync(this);
             }, (args) => {
+                if (IsPendingQuery) {
+                    return false;
+                }
                 if (args is int tagId) {
                     if (tagId == QueryTagId) {
                         return false;
@@ -533,7 +536,7 @@ namespace MonkeyPaste.Avalonia {
                     Items.ForEach(x => x.LogPropertyChangedEvents = true);
                     var _criteriaWindow = new MpAvWindow() {
                         SizeToContent = SizeToContent.Width,
-                        MinWidth = 800,
+                        MinWidth = 1100,
                         Height = 300,
                         DataContext = this,
                         ShowInTaskbar = true,
@@ -583,6 +586,10 @@ namespace MonkeyPaste.Avalonia {
                 return !IsCriteriaWindowOpen;
             }, new[] { this });
 
+        public ICommand RefreshSearchCommand => new MpCommand(
+            () => {
+                Mp.Services.Query.NotifyQueryChanged(true);
+            });
         #endregion
     }
 }

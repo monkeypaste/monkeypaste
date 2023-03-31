@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 
 namespace MonkeyPaste {
-    public interface MpIContentQueryTools {
+    public interface MpIContentQueryPage {
         IEnumerable<int> GetOmittedContentIds();
+        int Offset { get; }
+        int Limit { get; }
+        IEnumerable<int> ContentIds { get; }
     }
 
     public interface MpITagQueryTools {

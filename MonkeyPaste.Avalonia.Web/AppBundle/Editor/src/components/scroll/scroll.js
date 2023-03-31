@@ -2,6 +2,9 @@
 
 var SuppressNextEditorScrollChangedNotification = false;
 
+var LastScrollBarXIsVisible = false;
+var LastScrollBarYIsVisible = false;
+
 // #endregion Globals
 
 // #region Life Cycle
@@ -49,6 +52,9 @@ function didEditorScrollChange(old_scroll, new_scroll) {
     return old_scroll.left != new_scroll.left || old_scroll.top != new_scroll.top;
 }
 
+function isScrollBarXVisible() {
+    return getEditorContainerElement().scrollWidth > getEditorContainerElement().clientWidth;
+}
 function isScrollBarYVisible() {
     return getEditorContainerElement().scrollHeight > getEditorContainerElement().clientHeight;
 }
@@ -138,6 +144,18 @@ function scrollToHome() {
 
 function scrollToEnd() {
     getEditorContainerElement().scrollTop = getEditorElement().offsetHeight;
+}
+
+function updateScrollBarSizeAndPositions() {
+    const cur_x = isScrollBarXVisible();
+    const cur_y = isScrollBarYVisible();
+    if (cur_x != LastScrollBarXIsVisible ||
+        cur_y != LastScrollBarYIsVisible) {
+        onScrollBarVisibilityChanged_ntf(cur_x, cur_y);
+
+    }
+    LastScrollBarXIsVisible = cur_x;
+    LastScrollBarYIsVisible = cur_y;
 }
 
 // #endregion Actions

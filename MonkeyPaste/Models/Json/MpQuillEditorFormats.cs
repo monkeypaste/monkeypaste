@@ -79,14 +79,18 @@ namespace MonkeyPaste {
         public double editorWidth { get; set; }
         public double editorHeight { get; set; }
     }
+    public class MpQuillScrollBarVisibilityChangedNotification : MpJsonObject {
+        public bool isScrollBarXVisible { get; set; }
+        public bool isScrollBarYVisible { get; set; }
+    }
 
     public class MpQuillEditorContentChangedMessage : MpJsonObject {
         public string itemData { get; set; }
 
         public double editorWidth { get; set; }
         public double editorHeight { get; set; }
-        public int length { get; set; }
-        public int lines { get; set; }
+        public int itemSize1 { get; set; } = -1;
+        public int itemSize2 { get; set; } = -1;
 
         public bool hasTemplates { get; set; }
 

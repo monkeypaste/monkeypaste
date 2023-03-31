@@ -46,10 +46,10 @@ namespace MonkeyPaste.Common {
         Rgba = 134_217_728,
         ColorDistance = 4_398_046_511_104,
 
-        //Equals = 131072,
-        //GreaterThan = 262_144,
-        //LessThan = 524_288,
-        //IsNot = 2_199_023_255_552,
+        Equals = 131072,
+        GreaterThan = 262_144,
+        LessThan = 524_288,
+        IsNot = 2_199_023_255_552,
 
         Exactly = 268_435_456,
         Before = 536_870_912,
@@ -151,6 +151,21 @@ namespace MonkeyPaste.Common {
 
         #region Filter Helpers
 
+        public static string GetNumericOperator(this MpContentQueryBitFlags qf) {
+            if (qf.HasFlag(MpContentQueryBitFlags.LessThan)) {
+                return "<";
+            }
+            if (qf.HasFlag(MpContentQueryBitFlags.GreaterThan)) {
+                return ">";
+            }
+            if (qf.HasFlag(MpContentQueryBitFlags.IsNot)) {
+                return "!=";
+            }
+            if (qf.HasFlag(MpContentQueryBitFlags.Equals)) {
+                return "=";
+            }
+            return string.Empty;
+        }
         public static string ToViewFieldName(this MpContentQueryBitFlags f) {
             switch (f) {
                 case MpContentQueryBitFlags.Content:

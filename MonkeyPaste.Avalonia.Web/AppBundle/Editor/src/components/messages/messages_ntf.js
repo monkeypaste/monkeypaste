@@ -41,6 +41,16 @@ function onContentChanged_ntf() {
 	sendMessage('notifyContentChanged', msgStr);
 }
 
+function onScrollBarVisibilityChanged_ntf(x_visible, y_visible) {
+	// output 'MpQuillScrollBarVisibilityChangedNotification'
+	const msg = {
+		isScrollBarXVisible: x_visible,
+		isScrollBarYVisible: y_visible
+	};
+	const msgStr = toBase64FromJsonObj(msg);
+	sendMessage('notifyScrollBarVisibilityChanged', msgStr);
+}
+
 function onDropCompleted_ntf() {
 	sendMessage('notifyDropCompleted', '');
 }

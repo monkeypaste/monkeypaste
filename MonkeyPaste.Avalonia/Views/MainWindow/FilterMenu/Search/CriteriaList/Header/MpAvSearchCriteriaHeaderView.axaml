@@ -19,6 +19,24 @@
                     Orientation="Horizontal"
                     Spacing="5">
 
+
+            <!--  REFRESH QUERY BUTTON  -->
+
+            <Button x:Name="RefreshSearchButton"
+                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Center"
+                    Width="{Binding $self.Bounds.Height}"
+                    Classes="defaultButton outline outlineOver outline outlineOver"
+                    IsEnabled="{Binding !IsQuerying, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                    Command="{Binding RefreshSearchCommand}">
+                <Grid>
+                    <Image IsVisible="{Binding $parent.IsEnabled}"
+                           Source="{Binding ., Source={StaticResource ResetImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                    <local:MpAvBusySpinnerView IsVisible="{Binding !$parent.IsEnabled}"
+                                               HorizontalAlignment="Stretch"
+                                               VerticalAlignment="Stretch" />
+                </Grid>
+            </Button>
             <!--  New BUTTON  -->
             <Button x:Name="DuplicateAdvSearchButton"
                     Classes="defaultButton textOnlyButton outline outlineOver"
