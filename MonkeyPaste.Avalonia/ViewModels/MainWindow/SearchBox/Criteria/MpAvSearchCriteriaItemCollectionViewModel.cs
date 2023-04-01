@@ -87,7 +87,6 @@ namespace MonkeyPaste.Avalonia {
         public bool IsAnyDragging =>
             Items.Any(x => x.IsDragging);
         public bool IsCriteriaWindowOpen { get; set; }
-        //public bool IsCriteriaWindowOpen => _criteriaWindow != null;//{ get; set; }
 
         public bool HasAnyCriteriaModelChanged =>
             Items.Any(x => x.HasModelChanged);

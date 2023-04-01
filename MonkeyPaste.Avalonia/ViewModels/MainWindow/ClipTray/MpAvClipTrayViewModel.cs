@@ -864,7 +864,10 @@ namespace MonkeyPaste.Avalonia {
         public ObservableCollection<MpAvClipTileViewModel> PinnedItems { get; set; } = new ObservableCollection<MpAvClipTileViewModel>();
 
         public IEnumerable<MpAvClipTileViewModel> InternalPinnedItems =>
-            PinnedItems.Where(x => !x.IsPopOutVisible && !x.IsAppendNotifier);
+            PinnedItems
+            .Where(x => !x.IsPopOutVisible && !x.IsAppendNotifier)
+            .Take(MpPrefViewModel.Instance.MaxStagedClipCount);
+
         public MpAvClipTileViewModel ModalClipTileViewModel { get; private set; }
 
         public MpAvClipTileViewModel AppendClipTileViewModel =>

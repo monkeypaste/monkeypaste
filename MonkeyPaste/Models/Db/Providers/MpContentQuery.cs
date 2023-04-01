@@ -207,6 +207,8 @@ namespace MonkeyPaste {
                 case "LastPasteDateTime":
                 case "UsageScore":
                 case "TransactionDateTime":
+                case "ItemSize1":
+                case "ItemSize2":
                     return true;
                 default:
                     return false;
@@ -280,7 +282,13 @@ namespace MonkeyPaste {
                 mv = mv_parts[0];
             }
             mv += "," + mv_parts[1];
-            ops.Add(new Tuple<string, List<object>>($"PIXELCOUNT(?,ItemImageData) > 0", new object[] { mv }.ToList()));
+
+            if (qf.HasFlag(MpContentQueryBitFlags.ItemColor)) {
+                ops.Add(new Tuple<string, List<object>>($"HEXMATCH(?,ItemColor) = 0", new object[] { mv }.ToList()));
+            } else {
+                ops.Add(new Tuple<string, List<object>>($"PIXELCOUNT(?,ItemImageData) > 0", new object[] { mv }.ToList()));
+            }
+
             return ops;
         }
 

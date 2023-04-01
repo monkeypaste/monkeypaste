@@ -722,9 +722,6 @@ namespace MonkeyPaste.Avalonia {
                 //control.ContextMenu = _cmInstance;
                 //control.ContextMenu.Open();
                 //_cmInstance.Open(App.MainView as Control);
-                _cmInstance.PointerPressed += (s, e) => {
-
-                };
 
                 _cmInstance.HorizontalOffset = 0;
                 _cmInstance.VerticalOffset = 0;

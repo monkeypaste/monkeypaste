@@ -27,6 +27,14 @@ namespace MonkeyPaste.Avalonia {
             ido.GetAllDataFormats().ForEach(x => avdo.Set(x, ido.Get(x)));
             return avdo;
         }
+
+        public static void CreatePseudoFileEntry(this IDataObject ido) {
+            if (ido.GetAllDataFormats().Contains(MpPortableDataFormats.AvFileNames)) {
+                // file exists, ignore pseudo file
+                return;
+            }
+
+        }
         #endregion
 
         #region Source Refs
@@ -114,6 +122,8 @@ namespace MonkeyPaste.Avalonia {
             if (!isFullContentReference) {
                 ido.Set(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT, ci.PublicHandle);
             }
+            ido.Set(MpPortableDataFormats.INTERNAL_CONTENT_TYPE_FORMAT, ci.ItemType.ToString());
+            ido.Set(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT, ci.Title);
         }
 
         public static bool ContainsContentRef(this IDataObject ido) {

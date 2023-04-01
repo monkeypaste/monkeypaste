@@ -13,7 +13,7 @@ namespace MonkeyPaste.Common {
     public enum MpRootOptionType {
         None = 0,
         Clips,
-        ContentType,
+        Type,
         Collection,
         Source,
         DateOrTime
@@ -24,7 +24,8 @@ namespace MonkeyPaste.Common {
         Content,
         TypeSpecific,
         Title,
-        Annotation
+        Annotation,
+        Color
     }
 
     public enum MpContentTypeOptionType {

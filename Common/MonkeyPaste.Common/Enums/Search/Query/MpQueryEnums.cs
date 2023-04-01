@@ -34,6 +34,8 @@ namespace MonkeyPaste.Common {
         DeviceType = 32768,
         DeviceName = 65536,
 
+        ItemColor = 8_796_093_022_208,
+
         Matches = 1_048_576,
         Contains = 2_097_152,
         BeginsWith = 4_194_304,
@@ -68,7 +70,6 @@ namespace MonkeyPaste.Common {
 
         Hours = 549_755_813_888,
         Days = 1_099_511_627_776,
-        //Years = 8_796_093_022_208, //45 8796093022208
 
         And = 17_592_186_044_416,
         Or = 35_184_372_088_832,

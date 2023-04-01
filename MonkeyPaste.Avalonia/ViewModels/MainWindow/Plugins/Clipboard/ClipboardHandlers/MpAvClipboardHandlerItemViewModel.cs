@@ -17,8 +17,6 @@ namespace MonkeyPaste.Avalonia {
         MpIBoxViewModel {
 
         #region Private
-
-
         #endregion
 
         #region Interfaces
@@ -99,8 +97,6 @@ namespace MonkeyPaste.Avalonia {
             }
 
         }
-
-
 
         #region Drag Drop
 

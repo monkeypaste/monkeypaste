@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿using HtmlAgilityPack;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 #if WINDOWS
 
@@ -15,6 +16,11 @@ namespace MonkeyPaste.Avalonia {
 #endif
             }
             return text.ToPlainText(source_format);
+        }
+        public string ToHtml(string text) {
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(text);
+            return doc.DocumentNode.OuterHtml;
         }
 
         public string ToRichText(string text) {

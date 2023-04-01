@@ -267,11 +267,6 @@ namespace MonkeyPaste.Avalonia {
             }
 
             HandledFormatIconId = await MpAvPluginIconLocator.LocatePluginIconIdAsync(this, ClipboardPluginFormat.iconUri);
-
-
-
-            //var presets = await PreparePresetModelsAsync();
-
             var presets = await MpAvPluginPresetLocator.LocatePresetsAsync(this, IsCoreHandler);
 
 
@@ -329,13 +324,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public bool IsDataObjectValid(MpPortableDataObject pdo) {
-            //if(pdo.DataFormatLookup.ContainsKey(HandledFormat)) {
-            //    if(HandledFormat == MpClipboardFormatType.Custom) {
-            //        return pdo.GetCustomData(ClipboardPluginFormat.clipboardName) != null;
-            //    }
-            //    return true;
-            //}
-            //return false;
             return pdo.ContainsData(HandledFormat);
         }
 

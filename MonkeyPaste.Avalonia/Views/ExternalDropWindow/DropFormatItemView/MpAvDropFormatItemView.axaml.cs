@@ -10,7 +10,7 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvDropFormatItemView : MpAvUserControl<MpAvClipboardFormatPresetViewModel> {
 
         public MpAvDropFormatItemView() {
-            InitializeComponent();
+            AvaloniaXamlLoader.Load(this);
 
             DragDrop.SetAllowDrop(this, true);
             this.AddHandler(DragDrop.DragEnterEvent, DragEnter);
@@ -20,11 +20,6 @@ namespace MonkeyPaste.Avalonia {
 
             this.GetVisualDescendants<Control>(false).ForEach(x => DragDrop.SetAllowDrop(x, false));
         }
-
-        private void InitializeComponent() {
-            AvaloniaXamlLoader.Load(this);
-        }
-
 
         #region Drop
 
@@ -40,26 +35,26 @@ namespace MonkeyPaste.Avalonia {
 
             MpAvExternalDropWindowViewModel.Instance.HasUserToggledAnyHandlers = true;
 
-            MpConsole.WriteLine("[DragEnter] Source: " + e.Source);
+            //MpConsole.WriteLine("[DragEnter] Source: " + e.Source);
             if (BindingContext.IsDropItemHovering || e.Source is not Border) {
                 // false drag enter, ignore
                 return;
             }
             BindingContext.IsDropItemHovering = true;
 
-            MpConsole.WriteLine("[DragEnter] ClipboardFormat: " + BindingContext);
+            //MpConsole.WriteLine("[DragEnter] ClipboardFormat: " + BindingContext);
             BindingContext.TogglePresetIsEnabledCommand.Execute(null);
         }
 
         private void DragOver(object sender, DragEventArgs e) {
-            MpConsole.WriteLine("[DragOver] ClipboardFormat: " + BindingContext);
+            //MpConsole.WriteLine("[DragOver] ClipboardFormat: " + BindingContext);
 
             e.DragEffects = DragDropEffects.Link;
             //this.GetVisualAncestor<MpAvExternalDropWindow>().AutoScrollListBox(e);
 
         }
         private void DragLeave(object sender, RoutedEventArgs e) {
-            MpConsole.WriteLine("[DragLeave] Source: " + e.Source);
+            //MpConsole.WriteLine("[DragLeave] Source: " + e.Source);
             // if (e.Source is Border ) {
             // assume its the container border, false readings from internal textblock
 
@@ -71,7 +66,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void Drop(object sender, DragEventArgs e) {
-            MpConsole.WriteLine("[Drop] ClipboardFormat: " + BindingContext);
+            //MpConsole.WriteLine("[Drop] ClipboardFormat: " + BindingContext);
             e.DragEffects = DragDropEffects.None;
         }
 

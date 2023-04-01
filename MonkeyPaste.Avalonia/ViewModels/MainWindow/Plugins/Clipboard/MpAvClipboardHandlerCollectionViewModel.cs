@@ -100,14 +100,6 @@ namespace MonkeyPaste.Avalonia {
 
         bool MpIPlatformDataObjectHelperAsync.IsOleBusy => IsBusy;
 
-        async Task<object> MpIPlatformDataObjectHelperAsync.WriteDragDropDataObject(object idoObj) {
-            if (idoObj is IDataObject ido) {
-                object pdo = await WriteClipboardOrDropObjectAsync(ido, false, false);
-                return pdo;
-            }
-            return null;
-        }
-
         async Task MpIPlatformDataObjectHelperAsync.SetPlatformClipboardAsync(object idoObj, bool ignoreClipboardChange) {
             if (idoObj is IDataObject ido) {
                 await WriteClipboardOrDropObjectAsync(ido, true, ignoreClipboardChange);
@@ -138,6 +130,13 @@ namespace MonkeyPaste.Avalonia {
                 var temp = await WriteClipboardOrDropObjectAsync(sido, false, false);
                 if (temp is IDataObject temp_ido) {
                     tido.CopyFrom(temp_ido);
+                    if (tido.Contains(MpPortableDataFormats.AvFileNames) &&
+                        tido.Get(MpPortableDataFormats.AvFileNames) is IEnumerable<string> fnl) {
+                        MpConsole.WriteLine($"dnd obj updated. target fns:");
+                        fnl.ForEach(x => MpConsole.WriteLine(x));
+                    }
+
+
                 }
             } else {
                 // need to cast or whats goin on here?

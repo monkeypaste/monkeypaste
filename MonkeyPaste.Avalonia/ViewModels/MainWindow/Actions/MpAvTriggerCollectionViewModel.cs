@@ -312,9 +312,11 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitAsync() {
             IsBusy = true;
 
-            MpConsole.WriteLine("Action Collectoin Init!");
-
             Items.Clear();
+
+            if (MpDb.IsInitialDbCreate) {
+                await CreateDefaultTriggersCommand.ExecuteAsync();
+            }
             var tal = await MpDataModelProvider.GetAllTriggerActionsAsync();
 
             foreach (var ta in tal) {
@@ -322,13 +324,10 @@ namespace MonkeyPaste.Avalonia {
             }
 
             while (Items.Any(x => x.IsAnyBusy)) {
-                // wait for all action trees to initialize before enabling
                 await Task.Delay(100);
             }
-
             Items.ForEach(x => x.OnPropertyChanged(nameof(x.ParentActionViewModel)));
             OnPropertyChanged(nameof(Items));
-            //OnPropertyChanged(nameof(Triggers));
 
             await RestoreAllEnabled();
 
@@ -520,6 +519,54 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
+        public MpIAsyncCommand CreateDefaultTriggersCommand => new MpAsyncCommand(
+            async () => {
+                // NOTE this must be called after analyzer collection has initialized
+
+                #region Annotate new text
+
+                MpAction annotate_trigger_action = await MpAction.CreateAsync(
+                         label: "Annotate New Text Trigger",
+                         actionType: MpActionType.Trigger,
+                         sortOrderIdx: 0,
+                         arg2: "True",
+                         arg3: ((int)MpTriggerType.ContentAdded).ToString(),
+                         location: DefaultDesignerItemLocationLocation);
+
+                var annotate_trigger_action_text_type_param = await MpParameterValue.CreateAsync(
+                    hostType: MpParameterHostType.Action,
+                    hostId: annotate_trigger_action.Id,
+                    paramId: MpAvContentAddTriggerViewModel.CONTENT_TYPE_PARAM_ID.ToString(),
+                    value: MpCopyItemType.Text.ToString());
+
+
+                MpAction annotate_analyze_action = await MpAction.CreateAsync(
+                         label: "Analyze with Annotator",
+                         actionType: MpActionType.Analyze,
+                         parentId: annotate_trigger_action.Id,
+                         sortOrderIdx: 0,
+                         location: DefaultDesignerItemLocationLocation + new MpPoint(DesignerItemDiameter, 0));
+
+
+                int def_annotate_preset_id = 0;
+                if (MpAvAnalyticItemCollectionViewModel
+                    .Instance
+                    .AllPresets
+                    .FirstOrDefault(x => x.PresetGuid == MpPrefViewModel.Instance.CoreAnnotatorGuid) is MpAvAnalyticItemPresetViewModel aipvm) {
+                    def_annotate_preset_id = aipvm.AnalyticItemPresetId;
+                }
+                if (def_annotate_preset_id == 0) {
+                    MpDebug.Break("Warning creating Default annotate trigger, can't find default annotator :( But creating anyways which should notify user somethings wrong");
+                }
+
+                var annotate_analyze_action_def_annotator_preset_param = await MpParameterValue.CreateAsync(
+                    hostType: MpParameterHostType.Action,
+                    hostId: annotate_analyze_action.Id,
+                    paramId: MpAvAnalyzeActionViewModel.SELECTED_ANALYZER_PARAM_ID.ToString(),
+                    value: def_annotate_preset_id.ToString());
+
+                #endregion
+            });
         public ICommand ShowTriggerSelectorMenuCommand => new MpCommand<object>(
              (args) => {
                  var control = args as Control;
@@ -545,11 +592,9 @@ namespace MonkeyPaste.Avalonia {
                  while (new_trigger_vm.IsBusy) {
                      await Task.Delay(100);
                  }
-                 //Items.Add(new_trigger_vm);
 
                  await Task.Delay(300);
 
-                 //SelectActionCommand.Execute(new_trigger_vm);
                  OnPropertyChanged(nameof(Items));
 
                  bool was_empty = SelectedTrigger == null;
@@ -558,7 +603,6 @@ namespace MonkeyPaste.Avalonia {
                  OnPropertyChanged(nameof(SelectedTrigger));
 
                  await Task.Delay(300);
-                 //OnPropertyChanged(nameof(Triggers));
                  ResetDesignerViewCommand.Execute(null);
 
                  if (was_empty) {

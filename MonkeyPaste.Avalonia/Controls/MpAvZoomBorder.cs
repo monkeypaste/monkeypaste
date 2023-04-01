@@ -1,13 +1,17 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -255,12 +259,12 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        //private TranslateTransform GetTranslateTransform(IControl element) {
+        //private TranslateTransform GetTranslateTransform(Control element) {
         //    return (TranslateTransform)((TransformGroup)element.RenderTransform)
         //      .Children.First(tr => tr is TranslateTransform);
         //}
 
-        //private ScaleTransform GetScaleTransform(IControl element) {
+        //private ScaleTransform GetScaleTransform(Control element) {
         //    return (ScaleTransform)((TransformGroup)element.RenderTransform)
         //      .Children.First(tr => tr is ScaleTransform);
         //}

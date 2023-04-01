@@ -220,12 +220,10 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(IsExpandAdvancedSearchButtonVisible));
                     break;
                 case MpMessageType.AdvancedSearchExpandedChanged:
-                //case MpMessageType.AdvancedSearchExpanded:
                 case MpMessageType.SearchCriteriaItemsChanged:
                 case MpMessageType.TagSelectionChanged:
                     OnPropertyChanged(nameof(IsExpandAdvancedSearchButtonVisible));
                     break;
-
             }
         }
 
@@ -251,9 +249,7 @@ namespace MonkeyPaste.Avalonia {
                         }
                     } else {
 
-                        if (HasText) {
-                            //MpAvThemeViewModel.Instance.GlobalBgOpacity = double.Parse(SearchText);
-                        } else if (!SearchFilterCollectionViewModel.IsPopupMenuOpen && !HasText) {
+                        if (!SearchFilterCollectionViewModel.IsPopupMenuOpen && !HasText) {
                             // IsExpanded = false;
 
                             WaitForUnexpandAsync().FireAndForgetSafeAsync(this);
@@ -315,7 +311,7 @@ namespace MonkeyPaste.Avalonia {
             }
             DateTime? no_focus_start_dt = null;
             while (true) {
-                if (!IsExpanded || HasText || IsMultipleMatches) {
+                if (!IsExpanded || HasText || IsMultipleMatches || SearchFilterCollectionViewModel.IsPopupMenuOpen) {
                     return;
                 }
                 if (FocusManager.Instance.Current == null) {
@@ -341,7 +337,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public ICommand HandleSearchButtonClickCommand => new MpCommand<object>(
+        public ICommand HandleSearchFilterButtonClickCommand => new MpCommand<object>(
             (args) => {
                 if (!IsExpanded) {
                     ToggleIsSearchBoxExpandedCommand.Execute(null);

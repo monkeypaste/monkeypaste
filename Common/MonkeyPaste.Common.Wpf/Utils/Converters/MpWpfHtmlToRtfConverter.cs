@@ -141,7 +141,8 @@ namespace MonkeyPaste.Common.Wpf {
             TextElement te = null;
             switch (n.Name) {
                 case "#text":
-                    te = new Run(n.InnerText);
+
+                    te = new Run(n.InnerText.DecodeSpecialHtmlEntities().DecodeHtmlHexCharacters());
                     break;
                 case "img":
                     var ic = new InlineUIContainer();

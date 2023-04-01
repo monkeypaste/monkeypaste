@@ -51,7 +51,7 @@ namespace MonkeyPaste.Avalonia {
             DragDataObject = SourceDataObject.Clone();
             MpMessenger.SendGlobal(MpMessageType.ItemDragBegin);
 
-            ApplyClipboardPresetToDragDataAsync().FireAndForgetSafeAsync();
+            ApplyClipboardPresetOrSourceUpdateToDragDataAsync().FireAndForgetSafeAsync();
             var result = await DragDrop.DoDragDrop(pointerEventArgs, DragDataObject, allowedEffects);
 
             MpConsole.WriteLine($"Content drop effect: '{result}'");
@@ -99,30 +99,40 @@ namespace MonkeyPaste.Avalonia {
 
             MpConsole.WriteLine("Cef Drag Result: " + result);
         }
+        static int call_count = 0;
+        public static async Task ApplyClipboardPresetOrSourceUpdateToDragDataAsync() {
+            if (_dragSource == null) {
+                // no drag in progress
+                return;
+            }
+            await Task.Delay(100);
 
-        #endregion
+            call_count++;
+            if (call_count > 5) {
 
-        #region Private Methods
-
-        //private static void ReceivedGlobalMessage(MpMessageType msg) {
-        //    switch(msg) {
-        //        case MpMessageType.ItemDragBegin:
-        //        case MpMessageType.ClipboardPresetsChanged:
-        //            ApplyClipboardPresetToDragDataAsync().FireAndForgetSafeAsync();
-        //            break;
-        //        case MpMessageType.ItemDragEnd:
-        //            ResetDragState();
-        //            break;
-        //    }
-        //}
-
-        private static async Task ApplyClipboardPresetToDragDataAsync() {
+            }
             // seems excessive...but ultimately all ole pref's come
             // from plugins so pass everthing through cb plugin system just like writing to clipboard
             await Mp.Services.DataObjectHelperAsync
                 .UpdateDragDropDataObjectAsync(SourceDataObject, DragDataObject);
 
         }
+        #endregion
+
+        #region Private Methods
+
+        private static void ReceivedGlobalMessage(MpMessageType msg) {
+            switch (msg) {
+                //case MpMessageType.ItemDragBegin:
+                case MpMessageType.ClipboardPresetsChanged:
+                    ApplyClipboardPresetOrSourceUpdateToDragDataAsync().FireAndForgetSafeAsync();
+                    break;
+                    //case MpMessageType.ItemDragEnd:
+                    //    ResetDragState();
+                    //    break;
+            }
+        }
+
 
 
         private static void OnGlobalKeyPrssedOrReleasedHandler(object sender, string key) {
@@ -142,14 +152,14 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void HookDragEvents() {
-            //MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
             MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed += OnGlobalKeyPrssedOrReleasedHandler;
             MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased += OnGlobalKeyPrssedOrReleasedHandler;
 
         }
 
         private static void UnhookDragEvents() {
-            //MpMessenger.UnregisterGlobal(ReceivedGlobalMessage);
+            MpMessenger.UnregisterGlobal(ReceivedGlobalMessage);
             MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyPressed -= OnGlobalKeyPrssedOrReleasedHandler;
             MpAvShortcutCollectionViewModel.Instance.OnGlobalKeyReleased -= OnGlobalKeyPrssedOrReleasedHandler;
 

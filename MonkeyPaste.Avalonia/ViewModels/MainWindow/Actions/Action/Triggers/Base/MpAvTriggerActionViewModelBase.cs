@@ -18,7 +18,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
         #region MpIParameterHost Overrides
 
         private MpHeadlessPluginFormat _actionComponentFormat;
@@ -150,7 +149,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        public bool IsAllValid => IsValid && AllDescendants.All(x => x.IsValid);
+        public bool IsAllValid =>
+            IsValid && AllDescendants.All(x => x.IsValid);
 
         #endregion
 

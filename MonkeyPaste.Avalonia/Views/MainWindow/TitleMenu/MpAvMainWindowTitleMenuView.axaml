@@ -13,6 +13,9 @@
                        d:DesignWidth="800"
                        d:DesignHeight="30"
                        x:Class="MonkeyPaste.Avalonia.MpAvMainWindowTitleMenuView">
+    <local:MpAvUserControl.Resources>
+        <sys:Double x:Key="ResizerLength">3</sys:Double>
+    </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
         <!--  BUTTONS  -->
 
@@ -97,7 +100,7 @@
             <Setter Property="Width"
                     Value="{StaticResource NaN}" />
             <Setter Property="Height"
-                    Value="1" />
+                    Value="{StaticResource ResizerLength}" />
             <Setter Property="HorizontalAlignment"
                     Value="Stretch" />
         </Style>
@@ -105,7 +108,7 @@
             <Setter Property="Cursor"
                     Value="SizeWestEast" />
             <Setter Property="Width"
-                    Value="1" />
+                    Value="{StaticResource ResizerLength}" />
             <Setter Property="Height"
                     Value="{StaticResource NaN}" />
             <Setter Property="VerticalAlignment"

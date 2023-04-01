@@ -56,7 +56,8 @@ namespace MonkeyPaste.Common {
             INTERNAL_CONTENT_DELTA_FORMAT,
             INTERNAL_PARAMETER_REQUEST_FORMAT,
             INTERNAL_SEARCH_CRITERIA_ITEM_FORMAT,
-            INTERNAL_TAG_ITEM_FORMAT
+            INTERNAL_TAG_ITEM_FORMAT,
+            INTERNAL_CONTENT_TYPE_FORMAT
         };
 
         private static Dictionary<int, MpPortableDataFormat> _formatLookup = new Dictionary<int, MpPortableDataFormat>();
@@ -107,6 +108,7 @@ namespace MonkeyPaste.Common {
         public const string INTERNAL_SOURCE_URI_LIST_FORMAT = LinuxUriList;
 
         public const string INTERNAL_CONTENT_HANDLE_FORMAT = "Mp Internal Content";
+        public const string INTERNAL_CONTENT_TYPE_FORMAT = "Mp Internal Content Type";
         public const string INTERNAL_CONTENT_TITLE_FORMAT = "Mp Internal Content Title";
 
         public const string INTERNAL_CONTENT_ROI_FORMAT = "Mp Internal Content Roi";
@@ -132,7 +134,8 @@ namespace MonkeyPaste.Common {
             INTERNAL_PARAMETER_REQUEST_FORMAT,
             INTERNAL_SEARCH_CRITERIA_ITEM_FORMAT,
             INTERNAL_TAG_ITEM_FORMAT,
-            INTERNAL_DATA_OBJECT_FORMAT
+            INTERNAL_DATA_OBJECT_FORMAT,
+            INTERNAL_CONTENT_TYPE_FORMAT
         };
         #endregion
 

@@ -13,5 +13,20 @@ namespace MonkeyPaste.Avalonia {
             }
             return count;
         }
+        public bool IsHexColorMatch(string hexFieldStr, string colorStr, double max_dist = 0) {
+            if (string.IsNullOrEmpty(hexFieldStr)) {
+                return false;
+            }
+            if (string.IsNullOrEmpty(colorStr)) {
+                // return true when no match value provided
+                return true;
+            }
+            var field_color = new MpColor(hexFieldStr).ToPixelColor();
+            var match_color = new MpColor(colorStr).ToPixelColor();
+            if (match_color.ColorDistance(field_color) <= max_dist) {
+                return true;
+            }
+            return false;
+        }
     }
 }

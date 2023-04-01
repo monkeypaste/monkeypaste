@@ -248,7 +248,7 @@
                             VerticalAlignment="Stretch"
                             MinWidth="{StaticResource SearchIconSize}"
                             MinHeight="{StaticResource SearchIconSize}"
-                            Command="{Binding HandleSearchButtonClickCommand}"
+                            Command="{Binding HandleSearchFilterButtonClickCommand}"
                             CommandParameter="{Binding $self}"
                             local:MpAvMenuExtension.IsOpen="{Binding SearchFilterCollectionViewModel.IsPopupMenuOpen}"
                             Classes="noBg noHoverBg">

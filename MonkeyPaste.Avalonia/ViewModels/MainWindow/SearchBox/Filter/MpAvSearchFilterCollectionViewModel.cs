@@ -2,6 +2,7 @@
 using MonkeyPaste.Common;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvSearchFilterCollectionViewModel :
@@ -160,12 +161,12 @@ namespace MonkeyPaste.Avalonia {
         public void Init() {
             OnPropertyChanged(nameof(Filters));
 
+            MpMessenger.RegisterGlobal(ReceiveGlobalMessage);
             foreach (var sfvm in Filters.Where(x => !x.IsSeperator)) {
                 sfvm.PropertyChanged += Sfvm_PropertyChanged;
             }
         }
         #endregion
-
         #region Private Methods
 
         private void MpAvSearchFilterCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
@@ -193,7 +194,18 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
         }
+        private void ReceiveGlobalMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.TagSelectionChanged:
+                    var sttvm = MpAvTagTrayViewModel.Instance.SelectedItem;
+                    if (sttvm != null &&
+                        sttvm.IsQueryTag) {
+                        ResetFiltersToDefaultCommand.Execute(null);
+                    }
+                    break;
 
+            }
+        }
         private void ValidateFilters(MpAvSearchFilterViewModel change_fvm) {
             bool needsUpdate = false;
             if (change_fvm.FilterType.HasFlag(MpContentQueryBitFlags.Regex)) {
@@ -249,6 +261,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
+        public ICommand ResetFiltersToDefaultCommand => new MpCommand(
+            () => {
+                Filters.ForEach(x => x.IsChecked = DefaultFilters.HasFlag(x.FilterType));
+            });
         #endregion
     }
 }

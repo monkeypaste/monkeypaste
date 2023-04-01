@@ -43,8 +43,7 @@ namespace MonkeyPaste.Common {
                 } else if (forceExt.ToLower().Equals("csv")) {
                     fileData = MpCommonTools.Services.StringTools.ToCsv(fileData);
                 } else if (forceExt.ToLower().Equals("html")) {
-                    // add to string tools
-                    Debugger.Break();
+                    fileData = MpCommonTools.Services.StringTools.ToHtml(fileData);
                 }
             }
 

@@ -737,6 +737,9 @@ namespace MonkeyPaste.Avalonia {
                     });
 
                     break;
+                case nameof(MpPrefViewModel.Instance.MaxStagedClipCount):
+                    MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.InternalPinnedItems));
+                    break;
             }
             if (_reinitContentParams.Any(x => x.ToLower() == e.PropertyName.ToLower())) {
                 Task.WhenAll(MpAvClipTrayViewModel.Instance.AllActiveItems

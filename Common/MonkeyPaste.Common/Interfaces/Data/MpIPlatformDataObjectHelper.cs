@@ -4,7 +4,6 @@ namespace MonkeyPaste.Common {
     public interface MpIPlatformDataObjectHelperAsync {
         bool IsOleBusy { get; }
         Task<object> ReadDragDropDataObjectAsync(object idoObj);
-        Task<object> WriteDragDropDataObject(object idoObj);
         Task SetPlatformClipboardAsync(object idoObj, bool ignoreClipboardChange);
         Task<object> GetPlatformClipboardDataObjectAsync(bool ignorePlugins);
 

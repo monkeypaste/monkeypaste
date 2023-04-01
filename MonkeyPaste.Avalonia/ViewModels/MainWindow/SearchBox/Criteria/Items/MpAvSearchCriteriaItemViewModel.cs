@@ -199,7 +199,7 @@ namespace MonkeyPaste.Avalonia {
                         tovm.ItemsOptionType = typeof(MpDateTimeTypeOptionType);
                         tovm.Items = GetDateTimeTypeOptionViewModel(tovm);
                         break;
-                    case MpRootOptionType.ContentType:
+                    case MpRootOptionType.Type:
                         tovm.ItemsOptionType = typeof(MpContentTypeOptionType);
                         tovm.Items = GetContentTypeOptionViewModel(tovm);
                         break;
@@ -493,6 +493,12 @@ namespace MonkeyPaste.Avalonia {
                         ovm.FilterValue = MpContentQueryBitFlags.Annotations;
                         ovm.ItemsOptionType = typeof(MpTextOptionType);
                         ovm.Items = GetTextOptionViewModel(ovm);
+                        break;
+                    case MpContentOptionType.Color:
+                        ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
+                        ovm.FilterValue = MpContentQueryBitFlags.ItemColor;
+                        ovm.ItemsOptionType = typeof(MpColorOptionType);
+                        ovm.Items = GetColorOptionViewModel(ovm);
                         break;
                 }
                 iovml.Add(ovm);
