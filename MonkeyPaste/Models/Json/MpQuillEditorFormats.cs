@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Common;
+using Org.BouncyCastle.Asn1.Crmf;
 using System;
 using System.Collections.Generic;
 
@@ -187,6 +188,7 @@ namespace MonkeyPaste {
 
     public class MpQuillNavigateUriRequestNotification : MpJsonObject {
         public string uri { get; set; }
+        public string linkType { get; set; }
         public List<string> modKeys { get; set; }
     }
 

@@ -1011,6 +1011,9 @@ namespace MonkeyPaste.Avalonia {
 
 
         protected virtual bool ValidateStartAction(object arg) {
+            if (arg == null) {
+                return false;
+            }
             bool can_start = true;
             if (!IsValid || !IsTriggerEnabled) {
                 can_start = false;

@@ -141,7 +141,9 @@ namespace MonkeyPaste.Common.Wpf {
             TextElement te = null;
             switch (n.Name) {
                 case "#text":
-
+                    // TODO should probably check parent node classes and avoid 
+                    // decoding when code element or code class? For encoded html
+                    // entities IN the text edge case..
                     te = new Run(n.InnerText.DecodeSpecialHtmlEntities().DecodeHtmlHexCharacters());
                     break;
                 case "img":

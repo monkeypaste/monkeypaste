@@ -23,6 +23,9 @@ function getHexChannelStrPart(val, multiplier = 1) {
 }
 
 function getRandomColor() {
+    // BUG random doesn't work first time so just calling it to get random value
+    Math.random();
+
     var letters = '0123456789ABCDEF';
     var color = '#';
     for (var i = 0; i < 6; i++) {
@@ -86,6 +89,9 @@ function isHexColorStr(str) {
 }
 function isBright(hex_or_color_name_or_rgb_or_rgba, brightThreshold = 150) {
     var rgb = parseRgba(hex_or_color_name_or_rgb_or_rgba);
+    if (rgb.a < brightThreshold) {
+        return true;
+    }
     var grayVal = Math.sqrt(
         rgb.r * rgb.r * .299 +
         rgb.g * rgb.g * .587 +
@@ -177,10 +183,10 @@ function hexToRgba(hexStr) {
     }
     let x = hexStr.length == 8 ? 2 : 0;
 
-    let a = x > 0 ? parseInt(hexStr.substring(0, 2), 16) : 1;
-    let r = parseInt(substringByLength(hexStr, x, 2), 16);
-    let g = parseInt(substringByLength(hexStr, x + 2, 2), 16);
-    let b = parseInt(substringByLength(hexStr, x + 4, 2), 16);
+    let r = parseInt(substringByLength(hexStr, 0, 2), 16);
+    let g = parseInt(substringByLength(hexStr, 2, 2), 16);
+    let b = parseInt(substringByLength(hexStr, 4, 2), 16);
+    let a = hexStr.length == 8 ? parseInt(substringByLength(hexStr,6, 2), 16) / 255 : 1;
 
     return { r: r, g: g, b: b, a: a };
 }
@@ -192,10 +198,45 @@ function rgbaToHex(rgba, ignoreAlpha = true) {
     hex += getHexChannelStrPart(rgba.b);
 
     if (!ignoreAlpha && !isNullOrUndefined(rgba.a)) {
-        // BUG when a is 0 
         hex += getHexChannelStrPart(rgba.a, 255);
     }
     return hex;
+}
+
+function dotnetHexToCssHex(dotnet_hex) {
+    // NOTE dotnet alpha [1],[2]
+    if (isNullOrEmpty(dotnet_hex)) {
+        return dotnet_hex;
+    }
+    if (!dotnet_hex.startsWith('#')) {
+        dotnet_hex = '#' + dotnet_hex;
+    }
+    if (dotnet_hex.length <= 7) {
+        // no transparency
+        return dotnet_hex;
+    }
+    let alpha_str = dotnet_hex[1] + dotnet_hex[2];
+    let color_str = substringByLength(dotnet_hex, 3, 6);
+    const css_hex = '#' + color_str + alpha_str;
+    return css_hex;
+}
+
+function cssHexToDotNetHex(css_hex) {
+    // NOTE css alpha [7] [8]
+    if (isNullOrEmpty(css_hex)) {
+        return css_hex;
+    }
+    if (!css_hex.startsWith('#')) {
+        css_hex = '#' + css_hex;
+    }
+    if (css_hex.length <= 7) {
+        // no transparency
+        return css_hex;
+    }
+    let alpha_str = css_hex[7] + css_hex[8];
+    let color_str = substringByLength(css_hex, 1, 6);
+    const dotnet_hex = '#' + alpha_str + color_str;
+    return dotnet_hex;
 }
 
 function hexToRgb(hex) {

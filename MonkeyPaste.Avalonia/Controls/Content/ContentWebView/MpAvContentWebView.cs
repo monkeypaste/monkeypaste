@@ -683,7 +683,8 @@ namespace MonkeyPaste.Avalonia {
                 case MpAvEditorBindingFunctionType.notifyNavigateUriRequested:
                     ntf = MpJsonConverter.DeserializeBase64Object<MpQuillNavigateUriRequestNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillNavigateUriRequestNotification navUriReq) {
-                        var uri = new Uri(HttpUtility.HtmlDecode(navUriReq.uri), UriKind.Absolute);
+                        string uri_str = HttpUtility.HtmlDecode(navUriReq.uri);
+                        var uri = new Uri(uri_str, UriKind.Absolute);
                         MpAvUriNavigator.NavigateToUri(uri);
                     }
                     break;

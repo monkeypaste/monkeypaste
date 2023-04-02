@@ -171,7 +171,14 @@ function onLinkClick(e) {
     }
     e.preventDefault();
     e.stopPropagation();
-    onNavigateUriRequested_ntf(e.currentTarget.href, down_mod_keys);
+
+    let link_type = 'unknown';
+    let link_type_vals = Array.from(e.currentTarget.classList).filter(x => !isNullOrEmpty(x) && x.startsWith('link-type'));
+    if (link_type_vals && link_type_vals.length > 0) {
+        link_type = link_type_vals[0].replace('link-type-', '');
+    }
+
+    onNavigateUriRequested_ntf(e.currentTarget.href, link_type, down_mod_keys);
     return false;
 }
 

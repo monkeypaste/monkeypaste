@@ -4,5 +4,7 @@
         string ToRichText(string text);
         string ToHtml(string text);
         string ToCsv(string text);
+
+        string DetectStringFileExt(string text);
     }
 }

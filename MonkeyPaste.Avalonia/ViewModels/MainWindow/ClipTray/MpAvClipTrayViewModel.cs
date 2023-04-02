@@ -3844,6 +3844,7 @@ namespace MonkeyPaste.Avalonia {
                     wv.ShowDevTools();
                 }
             });
+
         #endregion
 
 
@@ -3864,37 +3865,6 @@ namespace MonkeyPaste.Avalonia {
         //    () => {
         //        return !IsAnyEditingClipTile && SelectedItem != null;
         //    });
-
-
-        //new MpMenuItemViewModel() {
-        //    Header = "Merge",
-        //                            AltNavIdx = 0,
-        //                            IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("MergeImage") as string,
-        //                            Command = MergeSelectedClipsCommand,
-        //                            ShortcutArgs = new object[] { MpShortcutType.MergeSelectedItems },
-        //                        },
-        //                        new MpMenuItemViewModel() {
-        //    Header = "To Email",
-        //                            AltNavIdx = 3,
-        //                            IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("EmailImage") as string,
-        //                            Command = SendToEmailCommand,
-        //                            ShortcutArgs = new object[] { MpShortcutType.SendToEmail },
-        //                        },
-        //                        new MpMenuItemViewModel() {
-        //    Header = "To Qr Code",
-        //                            AltNavIdx = 3,
-        //                            IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("QrImage") as string,
-        //                            Command = CreateQrCodeFromSelectedClipsCommand,
-        //                            ShortcutArgs = new object[] { MpShortcutType.CreateQrCode },
-        //                        },
-        //                        new MpMenuItemViewModel() {
-        //    Header = "To Audio",
-        //                            AltNavIdx = 3,
-        //                            IconResourceKey = MpPlatformWrapper.Services.PlatformResource.GetResource("SpeakImage") as string,
-        //                            Command = SpeakSelectedClipsCommand,
-        //                            ShortcutArgs = new object[] { MpShortcutType.SpeakSelectedItem },
-        //                        },
-
 
         #endregion
     }

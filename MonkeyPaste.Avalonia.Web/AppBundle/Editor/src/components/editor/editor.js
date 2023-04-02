@@ -382,6 +382,8 @@ function onEditorTextChanged(delta, oldDelta, source) {
 		updateTemplatesAfterTextChanged();
 	}
 
+	loadLinkHandlers();
+
 	if (!SuppressTextChangedNtf) {
 		onContentChanged_ntf();
 	}

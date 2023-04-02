@@ -18,6 +18,12 @@
         border: solid 1px yellow;
     }
 
-.color-palette-item-selected {
+.color-palette-item-selected:not(:hover) {
     border-color: black !important;
 }
+
+.custom-color-palette-item span {
+    display: block;
+    transform: translate(4px,-4px);
+}
+

@@ -125,7 +125,11 @@ namespace MonkeyPaste.Avalonia {
             MpContentQueryBitFlags.ImageType |
             MpContentQueryBitFlags.FileType |
             MpContentQueryBitFlags.Title |
-            MpContentQueryBitFlags.Content;
+            MpContentQueryBitFlags.Content |
+            MpContentQueryBitFlags.Url |
+            MpContentQueryBitFlags.AppPath |
+            MpContentQueryBitFlags.AppName |
+            MpContentQueryBitFlags.Annotations;
 
         public MpContentQueryBitFlags FilterType {
             get {
@@ -199,7 +203,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.TagSelectionChanged:
                     var sttvm = MpAvTagTrayViewModel.Instance.SelectedItem;
                     if (sttvm != null &&
-                        sttvm.IsQueryTag) {
+                        sttvm.IsLinkTag) {
                         ResetFiltersToDefaultCommand.Execute(null);
                     }
                     break;

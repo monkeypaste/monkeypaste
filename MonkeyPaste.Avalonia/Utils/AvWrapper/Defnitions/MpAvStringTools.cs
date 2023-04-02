@@ -39,5 +39,25 @@ namespace MonkeyPaste.Avalonia {
             // return unaltered text
             return text;
         }
+        public string DetectStringFileExt(string str) {
+            if (string.IsNullOrEmpty(str)) {
+                return "txt";
+            }
+            if (str.IsStringRichText()) {
+                return "rtf";
+            }
+            if (str.IsStringBase64()) {
+                return "png";
+            } /*else if (fileData.IsStringCsv()) {
+                    return "csv";
+                }*/
+            if (str.IsStringRichHtml()) {
+                return "html";
+            }
+            if (!str.IsFileOrDirectory()) {
+                return "txt";
+            }
+            return "txt";
+        }
     }
 }

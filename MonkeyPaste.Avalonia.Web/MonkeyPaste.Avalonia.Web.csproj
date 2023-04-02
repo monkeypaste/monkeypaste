@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <WasmExtraFilesToDeploy Include="AppBundle\**" />
+    <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\font\font-toolbar-items-style.css" />
     <WasmExtraFilesToDeploy Include="embed.js" />
   </ItemGroup>
 

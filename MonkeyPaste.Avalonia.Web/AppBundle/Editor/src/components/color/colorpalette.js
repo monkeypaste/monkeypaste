@@ -5,6 +5,8 @@ var ColorPaletteAnchorResultCallback = null;
 const COLOR_PALETTE_ROW_COUNT = 5;
 const COLOR_PALETTE_COL_COUNT = 14;
 
+var IsCustomColorPaletteOpen = false;
+
 // #endregion Globals
 
 // #region Life Cycle
@@ -76,10 +78,13 @@ function showColorPaletteMenu(
 }
 
 function hideColorPaletteMenu() {
-    ColorPaletteAnchorElement = null;
     getColorPaletteContainerElement().classList.add('hidden');
-
     window.removeEventListener('click', onWindowClickWithColorPaletteOpen);
+    if (IsCustomColorPaletteOpen) {
+        // preserve anchor element when custom is open, palette gets closed on outside click
+        return;
+    }
+    ColorPaletteAnchorElement = null;
 }
 // #endregion Life Cycle
 
@@ -96,6 +101,9 @@ function getColorPaletteHtml(sel_color) {
     let paletteHtml = '<table>';
     let wasSelColorFound = false;
 
+    // NOTE need to strip transparency if on sel color or won't compare right
+    const palette_sel_color = isNullOrEmpty(sel_color) ? null : cleanHexColor(sel_color, null, true);
+
     for (var r = 0; r < rc; r++) {
         paletteHtml += '<tr>';
         for (var c = 0; c < cc; c++) {
@@ -103,26 +111,32 @@ function getColorPaletteHtml(sel_color) {
             let is_selected = false;
             let item_class = 'color-palette-item';
             if (sel_color) {
-                if (c.toLowerCase() == sel_color.toLowerCase() ||
+                if (c.toLowerCase() == palette_sel_color.toLowerCase() ||
                     (idx == ContentColors.length - 1 && !wasSelColorFound)) {
+                    // when this is the selected palette item and its not
+                    // the custom palette item
                     item_class += ' color-palette-item-selected';
                     is_selected = true;
+                    wasSelColorFound = true;
                 }
             }
             let item_style = '';
+            let item_inner_html = '';
             if (idx == ContentColors.length - 1) {
+                // custom br pallete item
+                item_inner_html = `<span>+</span>`;
                 c = sel_color;
-                item_class += ' color-palette-item custom-color-palette-item';
-                item_style = `background-color: transparent;`;
+                item_class += ' custom-color-palette-item';
                 if (is_selected) {
-                    item_style += `color: ${c};`;
+                    item_style = `background-color: ${c};color: ${getContrastHexColor(c)}`;
                 } else {
-                    item_style += `color: black`;
+                    item_style = `background-color: white; color: black`;
                 }
             } else {
-                item_style = 'background-color: ' + c + ';';
+                item_style = `background-color: ${c};`;
             }
-            let item = `<td><a href="javascript:void(0);"><div class="${item_class}" style="${item_style}" >+</div></a></td>`;
+
+            let item = `<td><a href="javascript:void(0);"><div class="${item_class}" style="${item_style}">${item_inner_html}</div></a></td>`;
             paletteHtml += item;
             idx++;
         }
@@ -143,6 +157,7 @@ function isShowingColorPaletteMenu() {
 }
 
 function resetColorPaletteState() {
+    IsCustomColorPaletteOpen = false;
     ColorPaletteAnchorResultCallback = null;
     ColorPaletteAnchorElement = null;
 }
@@ -151,14 +166,10 @@ function resetColorPaletteState() {
 
 // #region Actions
 
-
-
-function processCustomColorResult(resultStr) {
-    alert('Custom Color result: ' + resultStr);
-    if (ColorPaletteAnchorResultCallback == null) {
-        debugger;
-	}
-    ColorPaletteAnchorResultCallback(resultStr);
+function processCustomColorResult(dotnetHexResult) {
+    const css_hex = dotnetHexToCssHex(dotnetHexResult);
+    ColorPaletteAnchorResultCallback(css_hex);
+    resetColorPaletteState();
 }
 
 
@@ -170,12 +181,12 @@ function onCustomColorPaletteItemClick(e, orgCallbackHandler) {
     // TODO this should be a binding to host to show color chooser and there should be a ext msg that's returned w/ hex color
     if (e.originalColorStr === undefined) {
         debugger;
-	}
-    alert('yo homey. orig: ' + e.originalColorStr);
-
+    }
+    IsCustomColorPaletteOpen = true;
     // NOTE storing org callback here so custom selection is handled fluidly w/ original request
     ColorPaletteAnchorResultCallback = orgCallbackHandler;
-    onShowCustomColorPicker_ntf(e.originalColorStr);
+    const dotnet_hex = cssHexToDotNetHex(e.originalColorStr);
+    onShowCustomColorPicker_ntf(dotnet_hex);
 }
 
 function onWindowClickWithColorPaletteOpen(e) {

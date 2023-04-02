@@ -171,20 +171,25 @@ function onInitComplete_ntf() {
 	sendMessage('notifyInitComplete', '');
 }
 
-function onShowCustomColorPicker_ntf(hexStr,title) {
+function onShowCustomColorPicker_ntf(dotnetHexStr,title) {
 	// output 'MpQuillShowCustomColorPickerNotification'
 	let msg = {
-		currentHexColor: hexStr,
+		currentHexColor: dotnetHexStr,
 		pickerTitle: title
 	};
 	let msgStr = toBase64FromJsonObj(msg);
 	sendMessage('notifyShowCustomColorPicker', msgStr);
+
+	if (!isRunningOnHost()) {
+		processCustomColorResult(getRandomColor());
+	}
 }
 
-function onNavigateUriRequested_ntf(navUri, curModKeys) {
+function onNavigateUriRequested_ntf(navUri,uriType, curModKeys) {
 	// output 'MpQuillNavigateUriRequestNotification'
 	let msg = {
 		uri: navUri,
+		linkType: uriType,
 		modKeys: curModKeys
 	};
 	let msgStr = toBase64FromJsonObj(msg);
