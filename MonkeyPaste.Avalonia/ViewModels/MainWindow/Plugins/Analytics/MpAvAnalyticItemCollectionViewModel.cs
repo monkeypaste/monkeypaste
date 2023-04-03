@@ -295,6 +295,22 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
+
+        public ICommand ApplyCoreAnnotatorCommand => new MpCommand<object>(
+            (args) => {
+                var ctvm = args as MpAvClipTileViewModel;
+                if (ctvm == null) {
+                    return;
+                }
+
+                var core_aipvm = AllPresets
+                    .FirstOrDefault(x => x.PresetGuid == MpPrefViewModel.Instance.CoreAnnotatorDefaultPresetGuid);
+
+                if (core_aipvm == null) {
+                    return;
+                }
+                core_aipvm.Parent.ExecuteAnalysisCommand.Execute(new object[] { core_aipvm, ctvm.CopyItem });
+            });
         #endregion
     }
 }

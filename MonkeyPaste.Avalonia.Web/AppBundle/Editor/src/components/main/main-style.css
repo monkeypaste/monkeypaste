@@ -30,6 +30,9 @@ body {
     --pastetemplatebgcolor: teal;
     --pastetoolbarbuttoncolor: dodgerblue;
     --edittemplatebgcolor: palegreen;
+    --tooltipbgcolor: khaki;
+    --tooltipbordercolor: darkkhaki;
+    --tooltipfgcolor: black;
     margin: 0px;
     padding: 0px;
     font-family: var(--defaultFontFamily);
@@ -130,9 +133,6 @@ button {
         outline: 0px solid transparent !important;
     }
 
-.fa-solid {
-    margin-right: 5px;
-}
 
 .svg-icon {
     width: 18px;

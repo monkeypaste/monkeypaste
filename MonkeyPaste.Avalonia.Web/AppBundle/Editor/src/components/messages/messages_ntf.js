@@ -185,11 +185,13 @@ function onShowCustomColorPicker_ntf(dotnetHexStr,title) {
 	}
 }
 
-function onNavigateUriRequested_ntf(navUri,uriType, curModKeys) {
+function onNavigateUriRequested_ntf(navUri,uriType,docIdx, elmText, curModKeys) {
 	// output 'MpQuillNavigateUriRequestNotification'
 	let msg = {
 		uri: navUri,
+		linkDocIdx: docIdx,
 		linkType: uriType,
+		linkText: elmText,
 		modKeys: curModKeys
 	};
 	let msgStr = toBase64FromJsonObj(msg);

@@ -29,7 +29,8 @@
             "value": "{ItemData}"
           }
         ]
-      },{
+      },
+      {
         "label": "Content to Annotate (Plain Text)",
         "description": "This assumes content is already internally preprocessed rich html format",
         "controlType": "TextBox",
@@ -131,6 +132,43 @@
           {
             "value": "true",
             "isDefault": true
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "guid": "a9fa2fbf-025d-4ced-a23b-234085b5ac5f",
+        "label": "Default Annotator",
+        "description": "All text annotations are enabled",
+        "values": [
+          {
+            "paramId": 3,
+            "value": "true"
+          },
+          {
+            "paramId": 4,
+            "value": "true"
+          },
+          {
+            "paramId": 5,
+            "value": "true"
+          },
+          {
+            "paramId": 6,
+            "value": "true"
+          },
+          {
+            "paramId": 7,
+            "value": "true"
+          },
+          {
+            "paramId": 8,
+            "value": "true"
+          },
+          {
+            "paramId": 9,
+            "value": "true"
           }
         ]
       }

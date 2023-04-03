@@ -92,6 +92,7 @@
     <link href="src/components/quill-wrapper/quill-style.css" rel="stylesheet" />
     <link href="src/components/editor/editor-style.css" rel="stylesheet" />
     <link href="src/components/dragdrop/drag-drop-style.css" rel="stylesheet" />
+    <link href="src/components/tooltip/tooltip-style.css" rel="stylesheet" />
 
     <link href="src/components/template/template-style.css" rel="stylesheet" />
     <link href="src/components/template/toolbar/edit/edit-template-toolbar-style.css" rel="stylesheet" />
@@ -278,6 +279,8 @@
     <script src="src/components/findreplace/findreplace.js"></script>
 
     <script src="src/components/delta/delta-wrapper.js"></script>
+    <script src="src/components/tooltip/tooltip.js"></script>
+
     <script src="src/components/history/history.js"></script>
 
     <script src="src/components/editor/editor.js"></script>
@@ -376,7 +379,7 @@
         <div class="toolbar-separator"></div>
 
         <!-- LINK -->
-        <button id="linkEditorToolbarButton" class="ql-link"></button>
+        <button id="linkEditorToolbarButton"></button>
         <button class="ql-image"></button>
         <button class="ql-video"></button>
         <!--<button class="ql-formula"></button>-->
@@ -447,31 +450,29 @@
                   cols="20"
                   spellcheck="false"
                   placeholder="Enter Details"></textarea>
-        <div class="info-marker">
-            <i class="fa-solid fa-circle-info"></i>
-            <div class="info-tooltip">
-                <ul dir="auto" class="tooltiptext">
-                    <li>yy = short year</li>
-                    <li>yyyy = long year</li>
-                    <li>M = month (1-12)</li>
-                    <li>MM = month (01-12)</li>
-                    <li>MMM = month abbreviation (Jan, Feb ... Dec)</li>
-                    <li>MMMM = long month (January, February ... December)</li>
-                    <li>d = day (1 - 31)</li>
-                    <li>dd = day (01 - 31)</li>
-                    <li>ddd = day of the week in words (Monday, Tuesday ... Sunday)</li>
-                    <li>E = short day of the week in words (Mon, Tue ... Sun)</li>
-                    <li>D - Ordinal day (1st, 2nd, 3rd, 21st, 22nd, 23rd, 31st, 4th...)</li>
-                    <li>h = hour in am/pm (0-12)</li>
-                    <li>hh = hour in am/pm (00-12)</li>
-                    <li>H = hour in day (0-23)</li>
-                    <li>HH = hour in day (00-23)</li>
-                    <li>mm = minute</li>
-                    <li>ss = second</li>
-                    <li>SSS = milliseconds</li>
-                    <li>a = AM/PM marker</li>
-                    <li>p = a.m./p.m. marker</li>
-                </ul>
+        <div class="tooltip-hint-container tooltip">
+            <!--<span class="tooltiptext">Tooltip text</span>-->
+            <div class="tooltip-block-container tooltiptext">
+                <p>yy = short year</p>
+                <p>yyyy = long year</p>
+                <p>M = month (1-12)</p>
+                <p>MM = month (01-12)</p>
+                <p>MMM = month abbreviation (Jan, Feb ... Dec)</p>
+                <p>MMMM = long month (January, February ... December)</p>
+                <p>d = day (1 - 31)</p>
+                <p>dd = day (01 - 31)</p>
+                <p>ddd = day of the week in words (Monday, Tuesday ... Sunday)</p>
+                <p>E = short day of the week in words (Mon, Tue ... Sun)</p>
+                <p>D - Ordinal day (1st, 2nd, 3rd, 21st, 22nd, 23rd, 31st, 4th...)</p>
+                <p>h = hour in am/pm (0-12)</p>
+                <p>hh = hour in am/pm (00-12)</p>
+                <p>H = hour in day (0-23)</p>
+                <p>HH = hour in day (00-23)</p>
+                <p>mm = minute</p>
+                <p>ss = second</p>
+                <p>SSS = milliseconds</p>
+                <p>a = AM/PM marker</p>
+                <p>p = a.m./p.m. marker</p>
             </div>
         </div>
 
@@ -556,11 +557,11 @@
     <div id="colorPaletteContainer"
          class="ql-toolbar-template-context-menu"></div>
 
-    <!--<div class="ql-tooltip ql-hidden"></div>-->
     <!-- OVERLAYS -->
     <canvas id="overlayCanvas"></canvas>
     <div id="annotationRoiOverlay" class="no-hit-test"></div>
     <div id="annotationTooltip" class="no-hit-test"></div>
     <div id="dragOverlay" draggable="true"></div>
+    <div id="tooltipOverlay" class="tooltip-overlay tooltiptext hidden"></div>
 </body>
 </html>

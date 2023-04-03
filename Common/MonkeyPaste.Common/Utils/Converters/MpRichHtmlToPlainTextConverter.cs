@@ -19,7 +19,7 @@ namespace MonkeyPaste.Common {
             foreach (HtmlNode node in doc.DocumentNode.SafeSelectNodes("//br")) {
                 node.ParentNode.ReplaceChild(doc.CreateTextNode(envNewLine), node);
             }
-            return doc.DocumentNode.InnerText.Trim();
+            return doc.DocumentNode.InnerText;
         }
 
         //here's the extension method I use

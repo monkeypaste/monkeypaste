@@ -188,6 +188,7 @@ namespace MonkeyPaste {
         // This is used to discern core cb handler so it is automatically enabled on first startup (not the typical workflow)
         public string CoreClipboardHandlerGuid => "cf2ec03f-9edd-45e9-a605-2a2df71e03bd";
         public string CoreAnnotatorGuid => "ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31";
+        public string CoreAnnotatorDefaultPresetGuid => "a9fa2fbf-025d-4ced-a23b-234085b5ac5f";
 
         #region Drag & Drop
         public string CompositeItemDragDropFormatName {

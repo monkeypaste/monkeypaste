@@ -683,6 +683,42 @@ namespace MonkeyPaste.Avalonia {
                 case MpAvEditorBindingFunctionType.notifyNavigateUriRequested:
                     ntf = MpJsonConverter.DeserializeBase64Object<MpQuillNavigateUriRequestNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillNavigateUriRequestNotification navUriReq) {
+                        if (navUriReq.linkType == "hexcolor") {
+                            Dispatcher.UIThread.Post(async () => {
+                                string hex = navUriReq.linkText;
+                                string result_hex = await Mp.Services.CustomColorChooserMenuAsync
+                                    .ShowCustomColorMenuAsync(
+                                        selectedColor: hex,
+                                        title: "Editor color");
+
+                                if (string.IsNullOrEmpty(result_hex)) {
+                                    return;
+                                }
+
+                                var hex_delta = new MpQuillDelta() {
+                                    ops = new List<Op>() {
+                                        new Op() {
+                                            retain = navUriReq.linkDocIdx
+                                        },
+                                        new Op() {
+                                            delete = navUriReq.linkText.Length
+                                        },
+                                        new Op() {
+                                            insert = result_hex
+                                        }
+                                    }
+                                };
+                                if (this is MpIContentView cv) {
+                                    await cv.UpdateContentAsync(hex_delta);
+
+                                }
+                                // wait for delta to updated in editor
+                                await Task.Delay(500);
+                                // re-annotate with new 
+                                MpAvAnalyticItemCollectionViewModel.Instance
+                                .ApplyCoreAnnotatorCommand.Execute(BindingContext);
+                            });
+                        }
                         string uri_str = HttpUtility.HtmlDecode(navUriReq.uri);
                         var uri = new Uri(uri_str, UriKind.Absolute);
                         MpAvUriNavigator.NavigateToUri(uri);

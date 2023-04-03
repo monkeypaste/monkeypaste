@@ -466,6 +466,10 @@ namespace MonkeyPaste {
             bool isAnySelected = false;
             var colors = new List<MpMenuItemViewModel>();
             string selectedHexStr = ucvm.UserHexColor == null ? string.Empty : ucvm.UserHexColor;
+            if (selectedHexStr.Length == 7) {
+                // add alpha for matching
+                selectedHexStr = $"#FF{selectedHexStr.Substring(1)}";
+            }
             for (int i = 0; i < MpSystemColors.ContentColors.Count; i++) {
                 string cc = MpSystemColors.ContentColors[i].ToUpper();
                 bool isCustom = i == MpSystemColors.ContentColors.Count - 1;

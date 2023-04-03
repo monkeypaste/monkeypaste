@@ -26,10 +26,10 @@
 .edit-template-toolbar:not(.template-with-detail-layout) > #templateNameTextArea {
     width: 75%;
 }
-.edit-template-toolbar.template-with-detail-layout > .info-marker {
+.edit-template-toolbar.template-with-detail-layout > .tooltip-hint-container {
     /*display: inline-flex;*/
 }
-.edit-template-toolbar:not(.template-with-detail-layout) > .info-marker {
+.edit-template-toolbar:not(.template-with-detail-layout) > .tooltip-hint-container {
     display: none;
 }
 

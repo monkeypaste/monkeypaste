@@ -17,6 +17,8 @@
   <ItemGroup>
     <WasmExtraFilesToDeploy Include="AppBundle\**" />
     <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\font\font-toolbar-items-style.css" />
+    <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\tooltip\tooltip-style.css" />
+    <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\tooltip\tooltip.js" />
     <WasmExtraFilesToDeploy Include="embed.js" />
   </ItemGroup>
 

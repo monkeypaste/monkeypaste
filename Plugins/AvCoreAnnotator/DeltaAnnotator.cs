@@ -87,8 +87,9 @@ namespace AvCoreAnnotator {
             string href_value;
             switch (annotationRegExType) {
                 case MpRegExType.HexColor:
-                    var c = new MpColor(match);
-                    href_value = $"https://www.htmlcsscolor.com/hex/{c.ToHex(true).ToUpper().Replace("#", string.Empty)}";
+                    href_value = "javascript:;";
+                    //var c = new MpColor(match);
+                    //href_value = $"https://www.htmlcsscolor.com/hex/{c.ToHex(true).ToUpper().Replace("#", string.Empty)}";
                     break;
                 case MpRegExType.Email:
                     href_value = $"mailto:{match}";

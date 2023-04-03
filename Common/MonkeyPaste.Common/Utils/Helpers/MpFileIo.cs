@@ -60,7 +60,12 @@ namespace MonkeyPaste.Common {
 
                 if (!string.IsNullOrEmpty(forceExt)) {
                     string tfe = Path.GetExtension(tfp);
-                    ofp = ofp.Replace(tfe, "." + forceExt.Replace(".", string.Empty));
+                    if (string.IsNullOrEmpty(tfe)) {
+                        ofp += $".{forceExt}";
+                    } else {
+                        ofp = ofp.Replace(tfe, "." + forceExt.Replace(".", string.Empty));
+                    }
+
                 }
 
                 if (!string.IsNullOrEmpty(forceDir)) {

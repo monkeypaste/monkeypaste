@@ -16,24 +16,30 @@ namespace MonkeyPaste.Avalonia {
 
 
         #endregion
-        public MpAvColorPickerView() {
+        public MpAvColorPickerView() : this(null) {
+        }
+        public MpAvColorPickerView(string selHexColor) : base() {
             AvaloniaXamlLoader.Load(this);
 
             var cancelbtn = this.GetControl<Button>("CancelButton");
             cancelbtn.Click += Cancelbtn_Click;
             var okbtn = this.GetControl<Button>("OkButton");
             okbtn.Click += Okbtn_Click;
-        }
-        public MpAvColorPickerView(string selHexColor) : this() {
+
             var cp = this.FindControl<ColorView>("Picker");
+            // NOTE hiding alpha when no selected or selected isn't 4 channel
+            cp.IsAlphaEnabled = selHexColor == null ? false : selHexColor.Length == 9;
+            cp.IsAlphaVisible = cp.IsAlphaVisible;
             cp.Color = string.IsNullOrEmpty(selHexColor) ?
-                MpColorHelpers.GetRandomHexColor().ToAvColor() :
+                //get
+                MpColorHelpers.GetRandomHexColor().ToPortableColor().ToHex(true).ToAvColor() :
                 selHexColor.ToAvColor();
         }
 
         private void Okbtn_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
             if (this.GetVisualRoot() is MpAvWindow w) {
-                w.DialogResult = this.FindControl<ColorView>("Picker").Color.ToPortableColor().ToHex();
+                var cp = this.FindControl<ColorView>("Picker");
+                w.DialogResult = cp.Color.ToPortableColor().ToHex(!cp.IsAlphaEnabled);
                 w.Close();
             }
         }

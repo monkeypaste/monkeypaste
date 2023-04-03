@@ -106,7 +106,7 @@ function createFileList() {
 			'</p></td>' +
 			'<td class="file-list-cell" data-row="' + row_id + '" rowspan="1" colspan="1">' +
 			'<p class="qlbt-cell-line ql-align-right" data-row="' + row_id + '" data-cell="' + getTableItemIdentifier('cell') + '" data-rowspan="1" data-colspan="1">' +
-			`<a class="file-list-path ql-font-consolas ql-align-right" href="${getPathUri(fp)}">${formatFilePathDisplayValue(fp)}</a>` +
+			`<a class="link-type-fileorfolder file-list-path ql-font-consolas ql-align-right" href="${getPathUri(fp)}">${formatFilePathDisplayValue(fp)}</a>` +
 			'</p></td>';
 		file_list_tbody_inner_html += file_item_tr_outer_html;
 

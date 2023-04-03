@@ -97,7 +97,7 @@ function stopClipboardHandler() {
 
 function onCut(e) {
     onSetClipboardRequested_ntf();
-
+    let sel = getDocSelection();
     if (ContentItemType == 'Text') {
         setTextInRange(sel, '');
     } else {

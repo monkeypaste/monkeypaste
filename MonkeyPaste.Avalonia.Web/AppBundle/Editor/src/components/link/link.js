@@ -1,6 +1,8 @@
 // #region Globals
 
-const RequiredNavigateUriModKeys = [];
+const RequiredNavigateUriModKeys = [
+    //'Control'
+];
 
 const LinkTypes = [
     'fileorfolder',
@@ -21,6 +23,7 @@ function initLinks() {
     initLinkClassAttributes();
     initLinkMatcher();
     addClickOrKeyClickEventListener(getLinkEditorToolbarItemElement(), onLinkToolbarItemClick);
+    getLinkEditorToolbarItemElement().innerHTML = getSvgHtml('link',null,false);
 }
 
 function initLinkClassAttributes() {
@@ -108,7 +111,13 @@ function loadLinkHandlers() {
     for (var i = 0; i < a_elms.length; i++) {
         let a_elm = a_elms[i];
         a_elm.addEventListener('click', onLinkClick, true);
-	}
+        a_elm.addEventListener('pointerenter', onLinkPointerEnter, true);
+        a_elm.addEventListener('pointerleave', onLinkPointerLeave, true);
+
+        if (link_elm.getAttribute('href') == 'about:blank') {
+            link_elm.setAttribute('href', 'javascript:;');
+        }
+    }
 }
 // #endregion Life Cycle
 
@@ -118,27 +127,89 @@ function getLinkEditorToolbarItemElement() {
     return document.getElementById('linkEditorToolbarButton');
 }
 
+function getLinkToolbarPopupContainerElement() {
+    let tooltip_elms = Array.from(document.querySelectorAll('.ql-tooltip.ql-editing'));
+    for (var i = 0; i < tooltip_elms.length; i++) {
+        if (tooltip_elms[i].getAttribute('data-mode') == 'link') {
+            return tooltip_elms[i];
+        }
+    }
+    return null;
+}
+
+function getLinkToolbarPopupSaveButtonElement() {
+    let link_tooltip_container_elm = getLinkToolbarPopupContainerElement();
+    if (!link_tooltip_container_elm) {
+        return null;
+    }
+
+    return Array.from(link_tooltip_container_elm.querySelectorAll('.ql-action'))[0];
+}
+
+function getLinkToolbarPopupTextInputElement() {
+    let link_tooltip_container_elm = getLinkToolbarPopupContainerElement();
+    if (!link_tooltip_container_elm) {
+        return null;
+    }
+
+    return Array.from(link_tooltip_container_elm.querySelectorAll('input'))[0];
+}
+
 // #endregion Getters
 
 // #region Setters
-
 // #endregion Setters
 
 // #region State
-
-
 // #endregion State
 
 // #region Actions
+
 function showLinkPopupForSelection() {
     const sel = getDocSelection();
-    let preview_text = '';
-    if (sel.length > 0) {
-        preview_text = getText(sel);
+
+    // pre-exisiting link
+
+    let link_input_val = null;
+    let sel_format = getFormatAtDocIdx(sel.index);
+    if (!isNullOrUndefined(sel_format.link)) {
+        // when link in selection adjust range to link
+        let sel_elm = getElementAtDocIdx(sel.index);
+        if (sel_elm.nodeType == 3) {
+            sel_elm = sel_elm.parentNode;
+        }
+        let link_doc_range = getElementDocRange(sel_elm);
+        setDocSelection(link_doc_range.index, link_doc_range.length, 'silent');
+        link_input_val = sel_elm.getAttribute('href');
     }
-    quill.theme.tooltip.edit('link', preview_text);
+
+    quill.theme.tooltip.edit('link', '');
     positionTooltipToDocRange(sel);
     getEditorElement().addEventListener('focus', onLinkPopupClose);
+
+    getLinkToolbarPopupContainerElement().classList.add('ql-preview-override');
+    // link input
+    let link_input_elm = getLinkToolbarPopupTextInputElement();
+    if (link_input_elm) {
+        link_input_elm.setAttribute('draggable', false);
+        link_input_elm.setAttribute('placeholder', 'Enter url...');
+        link_input_elm.addEventListener('keydown', onLinkPopupKeyDown, true);
+        link_input_elm.value = link_input_val;
+    }
+
+    // link save
+    let link_save_button_elm = getLinkToolbarPopupSaveButtonElement();
+    if (link_save_button_elm) {
+        link_save_button_elm.addEventListener('click', onLinkPopupSaveClick, true);
+    }    
+}
+
+function hideLinkPopup() {
+    let link_popup_elm = getLinkToolbarPopupContainerElement();
+    if (link_popup_elm) {
+        link_popup_elm.classList.add('ql-hidden');
+        link_popup_elm.classList.remove('ql-preview-override');
+    }
 }
 
 function convertLinkElementToHostNav(a_elm) {
@@ -165,20 +236,29 @@ function onLinkClick(e) {
         return;
     }
     let down_mod_keys = getDownModKeys(e);
+    e.preventDefault();
+    e.stopPropagation();
+
     let can_nav = RequiredNavigateUriModKeys.every(x => down_mod_keys.includes(x));
     if (!can_nav) {
         return;
     }
-    e.preventDefault();
-    e.stopPropagation();
-
     let link_type = 'unknown';
     let link_type_vals = Array.from(e.currentTarget.classList).filter(x => !isNullOrEmpty(x) && x.startsWith('link-type'));
     if (link_type_vals && link_type_vals.length > 0) {
         link_type = link_type_vals[0].replace('link-type-', '');
     }
 
-    onNavigateUriRequested_ntf(e.currentTarget.href, link_type, down_mod_keys);
+    let link_elm = e.currentTarget;
+    if (link_elm.nodeType == 3) {
+        link_elm = link_elm.parentNode;
+    }
+    if (link_elm.getAttribute('href') == 'about:blank') {
+        link_elm.setAttribute('href', 'javascript:;');
+    }
+    let link_doc_range = getElementDocRange(link_elm);
+
+    onNavigateUriRequested_ntf(e.currentTarget.href, link_type, link_doc_range.index, e.currentTarget.innerText, down_mod_keys);
     return false;
 }
 
@@ -204,6 +284,65 @@ function onLinkToolbarItemClick(e) {
     return false;
 }
 
+function onLinkPopupKeyDown(e) {
+    if (e.key == 'Enter') {
+        e.preventDefault();
+        e.stopPropagation();
+        onLinkPopupSaveClick(e);
+        return;
+    }
+    if (e.key == 'Escape') {
+        hideLinkPopup();
+        return;
+    }
+}
+
+function onLinkPopupSaveClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    let link_popup_input_elm = getLinkToolbarPopupTextInputElement();
+    if (link_popup_input_elm) {
+        let link_href = link_popup_input_elm.value;
+        let link_format = {
+            link: link_href,
+            linkType: 'uri'
+        };
+        let sel = getDocSelection();
+        if (!sel) {
+            sel = { index: 0, length: 0 };
+        }
+
+        if (sel.length == 0) {
+            insertText(sel.index, link_href, link_format);
+        } else {
+            quill.formatText(sel.index, sel.length, link_format);
+        }        
+    }
+    hideLinkPopup();
+}
+
+function onLinkPointerEnter(e) {
+    if (!isSubSelectionEnabled()) {
+        return;
+    }
+    let a_elm = e.currentTarget;
+    let mod_key_text = '';
+    if (RequiredNavigateUriModKeys.length > 0) {
+        mod_key_text = `[+ ${RequiredNavigateUriModKeys.join(' ')}]`;
+    }
+    let link_action_text = '';
+    if (a_elm.classList.contains('link-type-hexcolor')) {
+        link_action_text = `edit '<em>${a_elm.innerHTML}</em>'`;
+    } else {
+        link_action_text = `goto '<em>${a_elm.getAttribute('href')}</em>'`;
+    }
+    showOverlayTooltip(a_elm, `Click${mod_key_text} to ${link_action_text}`);
+}
+
+function onLinkPointerLeave(e) {
+    hideOverlayTooltip();
+}
 function onLinkPopupClose(e) {
     loadLinkHandlers();
 }
