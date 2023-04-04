@@ -16,7 +16,10 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public class MpHighlightSelectorBehavior : Behavior<MpAvClipTileView> {
+
         #region Properties
+
+        #region Behaviors
 
         List<MpIHighlightRegion> _items = new List<MpIHighlightRegion>();
         List<MpIHighlightRegion> Items =>
@@ -32,7 +35,23 @@ namespace MonkeyPaste.Avalonia {
             _selectedHighlighterIdx >= 0 && _selectedHighlighterIdx < Items.Count ?
             Items[_selectedHighlighterIdx] :
             null;
+        #endregion
 
+        #region State
+        bool IsHighlightDataAvailable {
+            get {
+                var qi = MpAvQueryViewModel.Instance as MpIQueryInfo;
+                while (qi != null) {
+                    if (qi.QueryFlags.HasStringMatchFilterFlag() &&
+                         !string.IsNullOrEmpty(qi.MatchValue)) {
+                        // there's something to highlight
+                        return true;
+                    }
+                    qi = qi.Next;
+                }
+                return false;
+            }
+        }
         int SelectedMatchIdx =>
             SelectedItem == null ? -1 : SelectedItem.SelectedIdx;
 
@@ -40,6 +59,8 @@ namespace MonkeyPaste.Avalonia {
 
         bool IsActive =>
             Items.Any(x => x.MatchCount > 0);
+
+        #endregion
 
         #endregion
 
@@ -123,6 +144,12 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         private async Task PerformHighlighting() {
+            if (!IsHighlightDataAvailable) {
+                // avoid long running task on content webview which reloads content
+                // when no search info provides highlighting
+                return;
+            }
+
             if (AssociatedObject != null &&
                 AssociatedObject.BindingContext != null) {
                 while (true) {

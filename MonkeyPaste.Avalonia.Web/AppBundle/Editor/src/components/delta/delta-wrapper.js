@@ -265,7 +265,7 @@ function applyDelta(delta, source = 'api') {
 
 	if (other_ops.length > 0) {
 		quill.updateContents(other_ops, source);
-		quill.update();
+		updateQuill();
 	}
 
 	for (var i = 0; i < format_ops.length; i++) {
@@ -273,7 +273,7 @@ function applyDelta(delta, source = 'api') {
 		quill.formatText(fop.format.index, fop.format.length, fop.attributes, source);
 	}
 
-	quill.update();
+	updateQuill();
 }
 // #endregion Actions
 

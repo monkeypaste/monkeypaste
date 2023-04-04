@@ -50,7 +50,7 @@ class TemplatePadBlot extends Parchment.EmbedBlot {
 
 function registerTemplatePadAttribute() {
     const Parchment = Quill.imports.parchment;
-    let suppressWarning = false;
+    let suppressWarning = true;
     let config = {
         scope: Parchment.Scope.INLINE,
     };

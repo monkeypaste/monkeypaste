@@ -98,12 +98,6 @@ namespace MonkeyPaste.Avalonia {
 
         }
 
-        #region Drag Drop
-
-        public bool IsDraggingToExternal { get; set; }
-
-        #endregion
-
         #endregion
 
         #region Model

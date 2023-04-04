@@ -57,7 +57,7 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 	log(dataStr);
 
 	setRootHtml('');
-	quill.update();
+	updateQuill();
 
 	let qhtml = '';
 	let formatted_delta = '';
@@ -69,7 +69,7 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 		const raw_delta = convertHtmlToDelta(dataStr);
 		setContents(raw_delta);
 
-		quill.update();
+		updateQuill();
 		qhtml = getHtml();
 		// NOTE this maybe only necessary on windows
 		//qhtml = fixHtmlBug1(qhtml);

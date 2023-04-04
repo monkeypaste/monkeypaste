@@ -105,7 +105,6 @@ namespace MonkeyPaste.Avalonia {
                 // no drag in progress
                 return;
             }
-            await Task.Delay(100);
 
             call_count++;
             if (call_count > 5) {
@@ -115,7 +114,6 @@ namespace MonkeyPaste.Avalonia {
             // from plugins so pass everthing through cb plugin system just like writing to clipboard
             await Mp.Services.DataObjectHelperAsync
                 .UpdateDragDropDataObjectAsync(SourceDataObject, DragDataObject);
-
         }
         #endregion
 

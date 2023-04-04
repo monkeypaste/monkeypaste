@@ -346,6 +346,10 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsSelected):
                     if (IsSelected) {
                         LastSelectedDateTime = DateTime.Now;
+                        if (SelectedItem != null) {
+                            // only scroll selected into view when tag tree is loaded
+                            SelectedItem.BringIntoTreeViewCommand.Execute(null);
+                        }
                     }
                     break;
                 case nameof(Items):

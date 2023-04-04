@@ -298,19 +298,13 @@ namespace MonkeyPaste.Avalonia {
             bool ignore_ss = true;
             if (ctvm.CopyItemType != MpCopyItemType.Image &&
                 contentDataReq.formats.Contains(MpPortableDataFormats.AvPNG)) {
-                //ignore_ss = false;
+                ignore_ss = false;
             }
             if (ignore_ss) {
                 contentDataReq.formats.Remove(MpPortableDataFormats.AvPNG);
                 contentDataReq.formats.Remove(MpPortableDataFormats.WinBitmap);
                 contentDataReq.formats.Remove(MpPortableDataFormats.WinDib);
             }
-
-
-            //var contentDataRespStr =
-            //    await SendMessageAsync($"contentDataObjectRequest_ext_ntf('{contentDataReq.SerializeJsonObjectToBase64()}')");
-            //MpQuillContentDataObjectResponseMessage contentDataResp =
-            //    MpJsonConverter.DeserializeBase64Object<MpQuillContentDataObjectResponseMessage>(contentDataRespStr);
 
             _lastDataObjectResp = null;
             SendMessage($"contentDataObjectRequest_ext_ntf('{contentDataReq.SerializeJsonObjectToBase64()}')");
@@ -337,9 +331,11 @@ namespace MonkeyPaste.Avalonia {
 
                     avdo.SetData(MpPortableDataFormats.AvPNG, bmp.ToByteArray());
                     avdo.SetData(MpPortableDataFormats.Text, bmp.ToAsciiImage());
-                    //avdo.SetData(MpPortableDataFormats.AvHtml_bytes, bmp.ToRichHtmlImage());
                     // TODO add colorized ascii maybe as html and rtf!!
                 } else if (!ignore_ss) {
+
+                    avdo.SetData(MpPortableDataFormats.AvPNG, "IMG PLACEHOLDER".ToBytesFromString());
+
                     Dispatcher.UIThread.Post(async () => {
                         int ss_timeout = 5_000;
                         var ss_sw = Stopwatch.StartNew();
@@ -360,9 +356,9 @@ namespace MonkeyPaste.Avalonia {
                             }
                         }
 
-                        //MpAvDocumentDragHelper.SourceDataObject.Set(MpPortableDataFormats.AvPNG, _contentScreenShotBase64_ntf.ToBytesFromBase64String());
-                        //MpAvDocumentDragHelper.ApplyClipboardPresetOrSourceUpdateToDragDataAsync().FireAndForgetSafeAsync();
-                        //MpConsole.WriteLine("Screen shot applied to dataobject");
+                        MpAvDocumentDragHelper.SourceDataObject.Set(MpPortableDataFormats.AvPNG, _contentScreenShotBase64_ntf.ToBytesFromBase64String());
+                        MpAvDocumentDragHelper.ApplyClipboardPresetOrSourceUpdateToDragDataAsync().FireAndForgetSafeAsync();
+                        MpConsole.WriteLine("Screen shot applied to dataobject");
                     });
 
                 }
@@ -372,7 +368,7 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     // NOTE setting dummy file so OLE system sees format on clipboard, actual
                     // data is overwritten in core clipboard handler
-                    avdo.SetData(MpPortableDataFormats.AvFileNames, new List<string>() { "HEY COOL GUY" });
+                    avdo.SetData(MpPortableDataFormats.AvFileNames, new[] { "HEY COOL GUY" });
 
                     //if (!ignore_pseudo_file) {
                     //    // js doesn't set file stuff for non-files
@@ -872,7 +868,9 @@ namespace MonkeyPaste.Avalonia {
         protected override WebViewGlue CreateWebViewGlue() {
             return new MpAvCefNetWebViewGlue(this);
         }
+
 #endif
+
         #endregion
 
         #region Private Methods
@@ -917,6 +915,7 @@ namespace MonkeyPaste.Avalonia {
             // pin/unpin ops (especially unpinall)
             _locatedDateTime = DateTime.Now;
             _AllWebViews.Add(this);
+
         }
 
         private void MpAvCefNetWebView_PointerPressed(object sender, PointerPressedEventArgs e) {
@@ -961,9 +960,7 @@ namespace MonkeyPaste.Avalonia {
                 x => x.IsEditorInitialized,
                 (x, o) => x.IsEditorInitialized = o);
 
-        protected virtual void OnIsEditorInitializedChanged() {
-
-        }
+        protected virtual void OnIsEditorInitializedChanged() { }
         #endregion
 
         #region IsDomLoaded Property

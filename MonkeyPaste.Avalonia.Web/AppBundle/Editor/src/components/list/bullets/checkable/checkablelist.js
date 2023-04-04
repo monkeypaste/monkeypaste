@@ -101,7 +101,7 @@ function onEditorClickForCheckableListItem(e) {
 		}
 		// when check is toggled quill doesn't emit text change until selection change
 		// so force update
-		quill.update();
+		updateQuill();
 	}
 }
 

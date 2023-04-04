@@ -32,33 +32,30 @@ namespace MonkeyPaste.Avalonia {
                 Dispatcher.UIThread.Post(() => DragEnter(sender, e));
                 return;
             }
+            if (!IsDragValid(sender, e)) {
+                return;
+            }
 
             MpAvExternalDropWindowViewModel.Instance.HasUserToggledAnyHandlers = true;
 
-            //MpConsole.WriteLine("[DragEnter] Source: " + e.Source);
             if (BindingContext.IsDropItemHovering || e.Source is not Border) {
                 // false drag enter, ignore
                 return;
             }
             BindingContext.IsDropItemHovering = true;
 
-            //MpConsole.WriteLine("[DragEnter] ClipboardFormat: " + BindingContext);
             BindingContext.TogglePresetIsEnabledCommand.Execute(null);
         }
 
         private void DragOver(object sender, DragEventArgs e) {
-            //MpConsole.WriteLine("[DragOver] ClipboardFormat: " + BindingContext);
-
+            e.DragEffects = DragDropEffects.None;
+            if (!IsDragValid(sender, e)) {
+                return;
+            }
             e.DragEffects = DragDropEffects.Link;
-            //this.GetVisualAncestor<MpAvExternalDropWindow>().AutoScrollListBox(e);
-
         }
         private void DragLeave(object sender, RoutedEventArgs e) {
-            //MpConsole.WriteLine("[DragLeave] Source: " + e.Source);
-            // if (e.Source is Border ) {
             // assume its the container border, false readings from internal textblock
-
-            //    }
             if (e.Source is Border) {
                 BindingContext.IsDropItemHovering = false;
             }
@@ -70,6 +67,14 @@ namespace MonkeyPaste.Avalonia {
             e.DragEffects = DragDropEffects.None;
         }
 
+        private bool IsDragValid(object sender, DragEventArgs e) {
+            //if (BindingContext == null ||
+            //    !BindingContext.IsFormatOnSourceDragObject) {
+            //    // ignore dnd events when format not on drag object
+            //    return false;
+            //}
+            return true;
+        }
         #endregion
 
         #endregion

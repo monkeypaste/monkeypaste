@@ -16,7 +16,14 @@
 
   <ItemGroup>
     <WasmExtraFilesToDeploy Include="AppBundle\**" />
+    <AvaloniaXaml Remove="AppBundle\Editor\lib\**" />
+    <Compile Remove="AppBundle\Editor\lib\**" />
+    <EmbeddedResource Remove="AppBundle\Editor\lib\**" />
+    <None Remove="AppBundle\Editor\lib\**" />
+    <WasmExtraFilesToDeploy Remove="AppBundle\Editor\lib\**" />
+    <None Remove="AppBundle\Editor\src\components\template\blots\2.0\templatePadAttribute.js" />
     <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\font\font-toolbar-items-style.css" />
+    <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\main\editor_tester.js" />
     <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\tooltip\tooltip-style.css" />
     <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\tooltip\tooltip.js" />
     <WasmExtraFilesToDeploy Include="embed.js" />

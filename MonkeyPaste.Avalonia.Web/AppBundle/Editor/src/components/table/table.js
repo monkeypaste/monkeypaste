@@ -57,7 +57,7 @@ function getTableCsv(format, csvProps, encodeTemplates = false) {
     let was_enabled = quill.isEnabled();
     if (!was_enabled) {
         quill.enable(true);
-        quill.update();
+        updateQuill();
     }
     let csv_output = '';
 

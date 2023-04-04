@@ -12,24 +12,22 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvDropFormatItemView">
     <local:MpAvUserControl.Styles>
-        <Style Selector="Border#OuterBorder">
+        <!--<Style Selector="Border#OuterBorder.itemEnabled.itemAvailable">-->
+        <Style Selector="Border#OuterBorder.itemEnabled">
             <Setter Property="BorderBrush"
                     Value="White" />
         </Style>
+        <!--<Style Selector="Border#OuterBorder:not(.itemEnabled).itemAvailable">-->
         <Style Selector="Border#OuterBorder:not(.itemEnabled)">
             <Setter Property="BorderBrush"
                     Value="Red" />
         </Style>
-
-        <Style Selector="Border#OuterBorder TextBlock">
-            <Setter Property="Foreground"
-                    Value="White" />
-        </Style>
-        <Style Selector="Border#OuterBorder:not(.itemEnabled) TextBlock">
-            <Setter Property="Foreground"
-                    Value="Red" />
-        </Style>
+        <!--<Style Selector="Border#OuterBorder:not(.itemAvailable)">
+            <Setter Property="BorderBrush"
+                    Value="Black" />
+        </Style>-->
     </local:MpAvUserControl.Styles>
+    <!--  Classes.itemAvailable="{Binding IsFormatOnSourceDragObject}"  -->
     <Border x:Name="OuterBorder"
             Classes.itemEnabled="{Binding IsEnabled}"
             HorizontalAlignment="Stretch"
@@ -69,6 +67,7 @@
 
             <TextBlock Grid.Row="1"
                        DragDrop.AllowDrop="False"
+                       Foreground="{Binding $parent[Border].BorderBrush}"
                        Text="{Binding Parent.Title}" />
         </Grid>
     </Border>

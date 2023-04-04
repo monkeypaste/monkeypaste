@@ -56,7 +56,7 @@ function loadContent(
 
 	loadContentData(contentData);
 
-	quill.update();
+	updateQuill();
 	if (ContentItemType != 'Text') {
 		quill.enable(false);
 	}
@@ -75,14 +75,14 @@ function loadContent(
 		setDocSelection(sel_to_restore)
 	}
 	updateAllElements();
-	quill.update();
+	updateQuill();
 	onContentLoaded_ntf(getContentAsMessage());
 	log('Editor loaded');
 }
 
 function initContentClassAttributes() {
 	const Parchment = Quill.imports.parchment;
-	let suppressWarning = false;
+	let suppressWarning = true;
 	let config = {
 		scope: Parchment.Scope.ANY,
 	};
@@ -100,7 +100,7 @@ function getContentHandle() {
 }
 
 function getContentAsMessage() {
-	quill.update();
+	updateQuill();
 	return {
 		editorWidth: getEditorWidth(),
 		editorHeight: getEditorHeight(),
@@ -268,7 +268,7 @@ function canDisableReadOnly() {
 // #region Actions
 
 function convertContentToFormats(isForOle, formats) {
-	quill.update();
+	updateQuill();
 	let items = null;
 	if (ContentItemType == 'Text') {
 		items = convertTextContentToFormats(isForOle, formats);

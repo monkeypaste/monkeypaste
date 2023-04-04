@@ -85,14 +85,14 @@ namespace MonkeyPaste.Avalonia {
                 desktop.Startup += Startup;
                 desktop.Exit += Exit;
 
-                var bootstrapper = new MpAvBootstrapperViewModel();
+                var bootstrapper = new MpAvLoaderViewModel();
                 await bootstrapper.CreatePlatformAsync(startup_datetime);
                 await bootstrapper.InitAsync();
             } else if (ApplicationLifetime is ISingleViewApplicationLifetime mobile) {
                 if (MpDeviceWrapper.Instance != null) {
                     await MpDeviceWrapper.Instance.InitAsync(null);
                 }
-                var bootstrapper = new MpAvBootstrapperViewModel();
+                var bootstrapper = new MpAvLoaderViewModel();
                 await bootstrapper.CreatePlatformAsync(startup_datetime);
                 bootstrapper.InitAsync().FireAndForgetSafeAsync();
 

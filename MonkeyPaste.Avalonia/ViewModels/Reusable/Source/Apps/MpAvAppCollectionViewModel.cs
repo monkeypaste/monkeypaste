@@ -171,7 +171,7 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
             string handle_path = Mp.Services.ProcessWatcher.GetProcessPath(handle);
-            MpConsole.WriteLine("Drop Path: " + handle_path, true, true);
+            //MpConsole.WriteLine("Drop Path: " + handle_path, true, true);
             // TODO need to filter by current device here
             return Items.FirstOrDefault(x => x.AppPath.ToLower() == handle_path.ToLower());
         }

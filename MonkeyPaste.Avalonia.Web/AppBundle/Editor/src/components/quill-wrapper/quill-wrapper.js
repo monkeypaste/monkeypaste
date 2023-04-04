@@ -59,7 +59,7 @@ function getSelectedText(encodeTemplates = false) {
 }
 
 function getText(range, for_ole = false) {
-	//quill.update();
+	//updateQuill();
 	range = range == null ? { index: 0, length: getDocLength() } : range;
 	let text = '';
 	if (IsLoaded && for_ole) {
@@ -255,6 +255,13 @@ function trimQuillTrailingLineEndFromText(textStr) {
 		return substringByLength(textStr, 0, textStr.length - 1);
 	}
 	return textStr;
+}
+
+function updateQuill() {
+	if (!quill) {
+		return;
+	}
+	quill.update();
 }
 // #endregion Actions
 

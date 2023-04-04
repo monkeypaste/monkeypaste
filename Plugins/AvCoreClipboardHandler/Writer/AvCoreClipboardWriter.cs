@@ -140,16 +140,16 @@ namespace AvCoreClipboardHandler {
         #region File Pre-Processor
         private static async Task<object> PreProcessFileFormatAsync(IDataObject ido) {
             string fn = null;
-            if (ido.Contains(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT)) {
-                fn = ido.Get(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT) as string;
+            if (ido.TryGetData<string>(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT, out string title)) {
+                fn = title;
             }
             if (string.IsNullOrWhiteSpace(fn)) {
                 fn = "untitled";
             }
 
             string source_type = null;
-            if (ido.Contains(MpPortableDataFormats.INTERNAL_CONTENT_TYPE_FORMAT)) {
-                source_type = ido.Get(MpPortableDataFormats.INTERNAL_CONTENT_TYPE_FORMAT) as string;
+            if (ido.TryGetData(MpPortableDataFormats.INTERNAL_CONTENT_TYPE_FORMAT, out string itemType)) {
+                source_type = itemType;
             }
             if (source_type == null) {
                 source_type = "text";
@@ -165,28 +165,22 @@ namespace AvCoreClipboardHandler {
 
             if (source_type == "text") {
                 string pref_text_format = GetPreferredTextFileFormat(ido);
-                if (!string.IsNullOrEmpty(pref_text_format) &&
-                    GetTextFileData(ido, pref_text_format) is string text &&
-                    !string.IsNullOrEmpty(text)) {
+                if (ido.TryGetData(pref_text_format, out string text)) {
                     data_to_write = text;
                     fe = GetTextFileFormatExt(pref_text_format);
-                } else if (ido.Contains(MpPortableDataFormats.AvPNG) &&
-                    ido.Get(MpPortableDataFormats.AvPNG) is byte[] imgBytes &&
+                } else if (ido.TryGetData(MpPortableDataFormats.AvPNG, out byte[] imgBytes) &&
                     imgBytes.ToBase64String() is string imgStr) {
                     data_to_write = imgStr;
                     fe = "png";
                 }
             } else if (source_type == "image") {
-                if (ido.Contains(MpPortableDataFormats.AvPNG) &&
-                    ido.Get(MpPortableDataFormats.AvPNG) is byte[] imgBytes &&
-                    imgBytes.Length > 0 &&
+                if (ido.TryGetData(MpPortableDataFormats.AvPNG, out byte[] imgBytes) &&
                     imgBytes.ToBase64String() is string imgStr) {
                     data_to_write = imgStr;
                     fe = "png";
                 } else {
                     string pref_text_format = GetPreferredTextFileFormat(ido);
-                    if (!string.IsNullOrEmpty(pref_text_format) &&
-                        GetTextFileData(ido, pref_text_format) is string text) {
+                    if (ido.TryGetData(pref_text_format, out string text)) {
                         data_to_write = text;
                         fe = GetTextFileFormatExt(pref_text_format);
                     }
@@ -199,7 +193,7 @@ namespace AvCoreClipboardHandler {
                                 forceNamePrefix: fn,
                                 forceExt: fe,
                                 isTemporary: true);
-            return new List<string> { output_path };
+            return new[] { output_path };
         }
         private static int GetWriterPriority(string format) {
             if (format == MpPortableDataFormats.AvFileNames) {
@@ -245,17 +239,9 @@ namespace AvCoreClipboardHandler {
             return null;
         }
 
-        private static string GetTextFileData(IDataObject ido, string format) {
-            if (format == MpPortableDataFormats.AvRtf_bytes &&
-                ido.Get(MpPortableDataFormats.AvRtf_bytes) is byte[] rtfBytes &&
-                rtfBytes.ToDecodedString() is string rtfStr) {
-                return rtfStr;
-            }
-            if (ido.Get(format) is string dataStr) {
-                return dataStr;
-            }
-            return null;
-        }
+        #endregion
+
+        #region Windows Image Post-processor
 
         #endregion
     }

@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
+using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
@@ -22,8 +23,11 @@ namespace MonkeyPaste.Avalonia {
         MpIHoverableViewModel {
         #region Private Variables
 
+        private MpAvWindow _dropWidgetWindow;
+        private MpAvWindow _dropCompleteWindow;
+
         private bool _wasHiddenOrCanceled = false;
-        private Dictionary<int, bool> _preShowPresetState { get; set; } = new Dictionary<int, bool>();
+        private Dictionary<string, bool> _preShowPresetState { get; set; } = new Dictionary<string, bool>();
         private DispatcherTimer _curDropTargetTimer { get; set; }
         private MpPoint _lastGlobalMousePoint { get; set; } // debouncer
         #endregion
@@ -61,6 +65,7 @@ namespace MonkeyPaste.Avalonia {
         #region View Models
 
         public MpAvAppViewModel DropAppViewModel { get; set; }
+
         #endregion
 
         #region State
@@ -77,19 +82,28 @@ namespace MonkeyPaste.Avalonia {
         public double RememberProgress =>
             (TotalRememberWaitTimeS - RememberSecondsRemaining) / TotalRememberWaitTimeS;
 
-        public bool IsShowingDropWindow { get; private set; } = false;
-        public bool IsShowingFinishMenu { get; private set; } = false;
+        public bool IsShowingDropWindow =>
+            _dropWidgetWindow != null;
+        public bool IsShowingFinishMenu =>
+            _dropCompleteWindow != null;
+
         #endregion
 
         #region Model
 
+        public IDataObject DragDataObject =>
+            MpAvDocumentDragHelper.DragDataObject;
+
         #endregion
+
         #endregion
 
         #region Constructors
         public MpAvExternalDropWindowViewModel() : base(null) {
             MpMessenger.RegisterGlobal(ReceivedGlobalMessega);
+            PropertyChanged += MpAvExternalDropWindowViewModel_PropertyChanged;
         }
+
 
         #endregion
 
@@ -101,6 +115,23 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
+        private void MpAvExternalDropWindowViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(IsOpen):
+                    if (IsOpen) {
+                        break;
+                    }
+                    if (_dropWidgetWindow != null) {
+                        _dropWidgetWindow = null;
+                    } else if (_dropCompleteWindow != null) {
+                        _dropCompleteWindow = null;
+                    }
+
+                    OnPropertyChanged(nameof(IsShowingFinishMenu));
+                    OnPropertyChanged(nameof(IsShowingFinishMenu));
+                    break;
+            }
+        }
         private void ReceivedGlobalMessega(MpMessageType msg) {
             if (!IsDropWidgetEnabled) {
                 return;
@@ -125,22 +156,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        private void SetDropWindowPosition(Window w) {
-            MpPoint w_origin = MpPoint.Zero;
-            var screen_bounds = MpAvMainWindowViewModel.Instance.MainWindowScreen.Bounds;
-            // TODO orient this base on mainwindow orientation
-            switch (MpAvMainWindowViewModel.Instance.MainWindowOrientationType) {
-                case MpMainWindowOrientationType.Bottom:
-                    w_origin = screen_bounds.TopLeft + new MpPoint(10, 10);
-                    break;
-            }
-            w.Position = w_origin.ToAvPixelPoint(MpAvMainWindowViewModel.Instance.MainWindowScreen.Scaling);
-        }
+        #region Preset State
 
-        private Dictionary<int, bool> GetFormatPresetState() {
+        private Dictionary<string, bool> GetFormatPresetState() {
             return
               MpAvClipboardHandlerCollectionViewModel.Instance.AllAvailableWriterPresets
-              .ToDictionary(kvp => kvp.PresetId, kvp => kvp.IsEnabled);
+              .ToDictionary(kvp => kvp.ClipboardFormat.clipboardName, kvp => kvp.IsEnabled);
 
         }
 
@@ -161,13 +182,23 @@ namespace MonkeyPaste.Avalonia {
                     ignoreFormat: !preset_vm.IsEnabled);
             }
         }
-        private bool HasPresetsChanged() {
-            foreach (var wp in MpAvClipboardHandlerCollectionViewModel.Instance.AllAvailableWriterPresets) {
-                if (_preShowPresetState[wp.PresetId] != wp.IsEnabled) {
-                    return true;
-                }
+        private bool DidPresetsChange(MpAvAppViewModel avm) {
+            if (avm == null || avm.IsThisApp) {
+                return false;
             }
-            return false;
+
+            var cur_preset_state = GetFormatPresetState();
+            bool is_default = _preShowPresetState.Difference(cur_preset_state).Count() == 0;
+
+            if (!avm.ClipboardFormatInfos.Items.Any() && is_default) {
+                // no custom app settings, default toggles
+                return false;
+            }
+            // compare cur preset state to db of app
+            var avm_preset_state = avm.ClipboardFormatInfos.Items
+                .ToDictionary(x => x.ClipboardFormat, x => !x.IgnoreFormat);
+
+            return avm_preset_state.Difference(cur_preset_state).Any();
         }
         private void RestoreFormatPresetState() {
             if (_preShowPresetState == null || _preShowPresetState.Count == 0) {
@@ -175,9 +206,12 @@ namespace MonkeyPaste.Avalonia {
             }
 
             MpAvClipboardHandlerCollectionViewModel.Instance.AllAvailableWriterPresets
-                .ForEach(x => x.IsEnabled = _preShowPresetState[x.PresetId]);
+                .ForEach(x => x.IsEnabled = _preShowPresetState[x.ClipboardFormat.clipboardName]);
         }
 
+        #endregion
+
+        #region Drop Target Listener
         private void StartDropTargetListener() {
             if (_curDropTargetTimer == null) {
                 _curDropTargetTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(100) };
@@ -205,11 +239,63 @@ namespace MonkeyPaste.Avalonia {
                 StopDropTargetListener();
             }
             var gmp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
-            UpdateDropAppViewModelCommand.Execute(gmp);
+            UpdateDropApp(gmp);
         }
 
+        private void UpdateDropApp(MpPoint gmp) {
+            if (IsShowingFinishMenu || gmp == null) {
+                return;
+            }
+            if (_lastGlobalMousePoint != null &&
+                        gmp.Distance(_lastGlobalMousePoint) < MpAvShortcutCollectionViewModel.MIN_GLOBAL_DRAG_DIST) {
+                // debounce (window handle from point is expensive)
+                return;
+            }
+
+            _lastGlobalMousePoint = gmp;
+            // TODO? may need to account for multiple screens in process watcher
+
+            var result = MpAvAppCollectionViewModel.Instance.GetAppViewModelFromScreenPoint(gmp, MpAvMainWindowViewModel.Instance.MainWindowScreen.Scaling);
+            if (result != null &&
+                !result.IsThisApp) {
+                bool is_same_drop_target = DropAppViewModel != null && result.AppId == DropAppViewModel.AppId;
+                if (is_same_drop_target) {
+                    return;
+                }
+                DropAppViewModel = result;
+                if (HasUserToggledAnyHandlers) {
+                    // NOTE when user toggles format the change needs to stick and for rest
+                    // of drag app overrides need to be ignored or their toggle maybe lost
+                    return;
+                }
+
+                // only execute from here if any format list item was toggled or drop target has changed
+                // so presets match current widget state 
+                if (DropAppViewModel.ClipboardFormatInfos is MpAppClipboardFormatInfoCollectionViewModel cfic && !cfic.IsEmpty) {
+                    foreach (var cfivm in cfic.Items) {
+                        // get preset for app specified format
+                        var wpvm =
+                        MpAvClipboardHandlerCollectionViewModel.Instance
+                            .AllAvailableWriterPresets
+                            .FirstOrDefault(x => x.ClipboardFormat.clipboardName == cfivm.ClipboardFormat);
+                        if (wpvm == null) {
+                            continue;
+                        }
+                        wpvm.IsEnabled = !cfivm.IgnoreFormat;
+                    }
+                } else if (!is_same_drop_target) {
+                    // no overrides, reset to default
+                    RestoreFormatPresetState();
+                }
+            }
+        }
+
+        #endregion
+
+        #region Window Openers
+
         private void OpenDropWindow() {
-            var dw = new MpAvWindow() {
+            _dropWidgetWindow = new MpAvWindow() {
                 Width = 300,
                 MaxWidth = 300,
                 MinHeight = 75,
@@ -224,14 +310,17 @@ namespace MonkeyPaste.Avalonia {
                 DataContext = this,
                 Content = new MpAvExternalDropView()
             };
-            dw.GetObservable(Window.IsVisibleProperty).Subscribe(value => SetDropWindowPosition(dw));
+            _dropWidgetWindow.GetObservable(Window.IsVisibleProperty).Subscribe(value => SetDropWindowPosition(_dropWidgetWindow));
 
-            dw.ShowChild();
-            IsShowingDropWindow = true;
+            _dropWidgetWindow.ShowChild();
+            OnPropertyChanged(nameof(IsShowingDropWindow));
         }
 
         private void OpenDropCompleteWindow() {
-            var dcw = new MpAvWindow() {
+            if (_wasHiddenOrCanceled) {
+                return;
+            }
+            _dropCompleteWindow = new MpAvWindow() {
                 Width = 300,
                 MinHeight = 10,
                 SizeToContent = SizeToContent.Height,
@@ -243,19 +332,38 @@ namespace MonkeyPaste.Avalonia {
                 DataContext = this,
                 Content = new MpAvDropCompleteView()
             };
-            dcw.GetObservable(Window.IsVisibleProperty).Subscribe(value => SetDropWindowPosition(dcw));
+            _dropCompleteWindow.GetObservable(Window.IsVisibleProperty).Subscribe(value => SetDropWindowPosition(_dropCompleteWindow));
 
-            dcw.ShowChild();
-            IsShowingFinishMenu = true;
+            _dropCompleteWindow.ShowChild();
+            OnPropertyChanged(nameof(IsShowingFinishMenu));
         }
+
+        private void SetDropWindowPosition(Window w) {
+            if (w == null) {
+                return;
+            }
+            MpPoint w_origin = MpPoint.Zero;
+            var screen_bounds = MpAvMainWindowViewModel.Instance.MainWindowScreen.Bounds;
+            // TODO orient this base on mainwindow orientation
+            switch (MpAvMainWindowViewModel.Instance.MainWindowOrientationType) {
+                case MpMainWindowOrientationType.Bottom:
+                    w_origin = screen_bounds.TopLeft + new MpPoint(10, 10);
+                    break;
+            }
+            w.Position = w_origin.ToAvPixelPoint(MpAvMainWindowViewModel.Instance.MainWindowScreen.Scaling);
+        }
+        #endregion
 
         private void Reset() {
             _wasHiddenOrCanceled = false;
             _lastGlobalMousePoint = null;
 
-            IsShowingFinishMenu = false;
-            IsShowingDropWindow = false;
             IsOpen = false;
+            _dropWidgetWindow = null;
+            _dropCompleteWindow = null;
+
+            OnPropertyChanged(nameof(IsShowingFinishMenu));
+            OnPropertyChanged(nameof(IsShowingFinishMenu));
             HasUserToggledAnyHandlers = false;
 
             _preShowPresetState.Clear();
@@ -277,86 +385,18 @@ namespace MonkeyPaste.Avalonia {
                 return !IsShowingDropWindow;
             });
 
-        public ICommand UpdateDropAppViewModelCommand => new MpCommand<object>(
-            (drop_gmp_arg) => {
-                var gmp = drop_gmp_arg as MpPoint;
-                if (gmp == null) {
-                    return;
-                }
-
-                // TODO? may need to account for multiple screens in process watcher
-
-                var result = MpAvAppCollectionViewModel.Instance.GetAppViewModelFromScreenPoint(gmp, MpAvMainWindowViewModel.Instance.MainWindowScreen.Scaling);
-                if (result != null &&
-                    !result.IsThisApp) {
-                    bool is_same_drop_target = DropAppViewModel != null && result.AppId == DropAppViewModel.AppId;
-                    if (is_same_drop_target) {
-                        return;
-                    }
-                    DropAppViewModel = result;
-                    if (HasUserToggledAnyHandlers) {
-                        // NOTE when user toggles format the change needs to stick and for rest
-                        // of drag app overrides need to be ignored or their toggle maybe lost
-                        return;
-                    }
-
-                    // only execute from here if any format list item was toggled or drop target has changed
-                    // so presets match current widget state 
-                    if (DropAppViewModel.ClipboardFormatInfos is MpAppClipboardFormatInfoCollectionViewModel cfic && !cfic.IsEmpty) {
-                        foreach (var cfivm in cfic.Items) {
-                            // get preset for app specified format
-                            var wpvm =
-                            MpAvClipboardHandlerCollectionViewModel.Instance
-                                .AllAvailableWriterPresets
-                                .FirstOrDefault(x => x.ClipboardFormat.clipboardName == cfivm.ClipboardFormat);
-                            if (wpvm == null) {
-                                continue;
-                            }
-                            wpvm.IsEnabled = !cfivm.IgnoreFormat;
-                        }
-                    } else if (!is_same_drop_target) {
-                        // no overrides, reset to default
-                        RestoreFormatPresetState();
-                    }
-                }
-            }, (drop_gmp_arg) => {
-                var gmp = drop_gmp_arg as MpPoint;
-                if (drop_gmp_arg is not MpPoint) {
-                    return false;
-                }
-                bool canUpdate = !IsShowingFinishMenu && IsDropWidgetEnabled;
-                if (!canUpdate) {
-                    return false;
-                }
-                if (_lastGlobalMousePoint != null &&
-                            gmp.Distance(_lastGlobalMousePoint) < MpAvShortcutCollectionViewModel.MIN_GLOBAL_DRAG_DIST) {
-                    // debounce (window handle from point is expensive)
-                    return false;
-                }
-
-                _lastGlobalMousePoint = gmp;
-                return true;
-            });
-
         public ICommand ShowFinishDropMenuCommand => new MpAsyncCommand<object>(
             async (drop_gmp_arg) => {
                 StopDropTargetListener();
 
                 IsOpen = false;
-                IsShowingDropWindow = false;
 
-                var test = Mp.Services.DropProcessWatcher.DropProcess;
-                MpConsole.WriteLine($"Drop process: '{test}'");
-
-                var test2 = Mp.Services.ProcessWatcher.LastProcessInfo;
-                MpConsole.WriteLine($"Drop process2: '{test}'");
-
-                if (DropAppViewModel == null ||
-                    !HasPresetsChanged() ||
-                    DropAppViewModel.IsThisApp) {
+                bool show_finish_menu = DidPresetsChange(DropAppViewModel);
+                if (!show_finish_menu) {
                     DoNotRememberDropInfoCommand.Execute(null);
                     return;
                 }
+
                 OpenDropCompleteWindow();
 
                 await Task.Delay(300);
@@ -364,6 +404,13 @@ namespace MonkeyPaste.Avalonia {
                 var sw = Stopwatch.StartNew();
                 while (true) {
                     RememberSecondsRemaining = TotalRememberWaitTimeS - sw.Elapsed.TotalSeconds;
+                    while (IsHovering) {
+                        if (!IsShowingFinishMenu) {
+                            break;
+                        }
+                        RememberSecondsRemaining = TotalRememberWaitTimeS;
+                        await Task.Delay(100);
+                    }
                     if (!IsShowingFinishMenu) {
                         break;
                     }
@@ -371,25 +418,16 @@ namespace MonkeyPaste.Avalonia {
                         RememberDropInfoCommand.Execute(null);
                         break;
                     }
-                    while (IsHovering) {
-                        if (!IsShowingDropWindow) {
-                            break;
-                        }
-                        RememberSecondsRemaining = TotalRememberWaitTimeS;
-                        await Task.Delay(100);
-                    }
                     OnPropertyChanged(nameof(RememberProgress));
                     await Task.Delay(100);
                 }
-
-                RestoreFormatPresetState();
-                Reset();
             }, (drop_gmp_arg) => {
                 return !IsShowingFinishMenu && !_wasHiddenOrCanceled;
             });
 
         public ICommand RememberDropInfoCommand => new MpAsyncCommand(
             async () => {
+                // NOTE cmd for 'Yes' in DropCompleteView
                 await SaveAppPresetFormatStateAsync();
                 RestoreFormatPresetState();
                 Reset();
@@ -397,6 +435,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand DoNotRememberDropInfoCommand => new MpCommand(
             () => {
+                // NOTE cmd for 'No' in DropCompleteView
                 RestoreFormatPresetState();
                 Reset();
             });

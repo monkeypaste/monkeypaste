@@ -128,6 +128,27 @@ namespace MonkeyPaste.Common {
             if (pdf == null) {
                 throw new MpUnregisteredDataFormatException($"Format {format} is not registered");
             }
+            if (format == MpPortableDataFormats.AvFileNames &&
+                TryGetData(format, out IEnumerable<string> curFileNames) &&
+                data is IEnumerable<string> newFileNames &&
+                newFileNames.ToArray() is string[] newFileArr) {
+                if (curFileNames is string[] curFileArr &&
+                    curFileArr.Length == newFileArr.Length) {
+                    MpConsole.WriteLine("File names updated", true);
+                    MpConsole.WriteLine($"Old: {string.Join(Environment.NewLine, curFileNames)}");
+                    MpConsole.WriteLine($"New: {string.Join(Environment.NewLine, newFileNames)}", false, true);
+
+                    for (int i = 0; i < curFileArr.Length; i++) {
+                        MpConsole.WriteLine("Old: " + curFileArr[i]);
+                        curFileArr[i] = newFileArr[i];
+                        MpConsole.WriteLine("New: " + curFileArr[i]);
+                    }
+                    return;
+                } else {
+
+                    MpConsole.WriteLine("FILENAMES ISN'T A LIST");
+                }
+            }
             DataFormatLookup.AddOrReplace(pdf, data);
         }
 

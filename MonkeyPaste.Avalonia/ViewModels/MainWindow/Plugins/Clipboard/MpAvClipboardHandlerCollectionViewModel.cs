@@ -126,18 +126,18 @@ namespace MonkeyPaste.Avalonia {
             // NOTE DO NOT re-instantiate target haven't tested but I imagine the reference must persist that which was given to .DoDragDrop in StartDragging
             if (source is IDataObject sido &&
                 target is IDataObject tido) {
-
-                var temp = await WriteClipboardOrDropObjectAsync(sido, false, false);
+                var source_clone = sido.Clone();
+                var temp = await WriteClipboardOrDropObjectAsync(source_clone, false, false);
                 if (temp is IDataObject temp_ido) {
                     tido.CopyFrom(temp_ido);
-                    if (tido.Contains(MpPortableDataFormats.AvFileNames) &&
-                        tido.Get(MpPortableDataFormats.AvFileNames) is IEnumerable<string> fnl) {
+                    if (tido.TryGetData(MpPortableDataFormats.AvFileNames, out IEnumerable<string> fnl)) {
                         MpConsole.WriteLine($"dnd obj updated. target fns:");
                         fnl.ForEach(x => MpConsole.WriteLine(x));
                     }
 
-
                 }
+                //target = temp;
+                //return temp;
             } else {
                 // need to cast or whats goin on here?
                 Debugger.Break();
@@ -257,6 +257,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvClipboardHandlerCollectionViewModel() : base(null) {
             PropertyChanged += MpClipboardHandlerCollectionViewModel_PropertyChanged;
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }
 
 
@@ -323,19 +324,12 @@ namespace MonkeyPaste.Avalonia {
             return aivm;
         }
 
-        private void ReceivedDragDropManagerMessage(MpMessageType msg) {
+        private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
-                case MpMessageType.ExternalDragBegin:
-                    if (SelectedItem == null) {
-                        Debugger.Break();
-                    }
-                    SelectedItem.IsDraggingToExternal = true;
-                    break;
-                case MpMessageType.ExternalDragEnd:
-                    if (SelectedItem == null) {
-                        Debugger.Break();
-                    }
-                    SelectedItem.IsDraggingToExternal = false;
+                case MpMessageType.ItemDragBegin:
+
+                    // Update preset availability
+                    EnabledWriters.ForEach(x => x.OnPropertyChanged(nameof(x.IsFormatOnSourceDragObject)));
                     break;
             }
         }
@@ -444,10 +438,10 @@ namespace MonkeyPaste.Avalonia {
                 .Where(x => EnabledWriters.All(y => y.ClipboardFormat.clipboardName != x))
                 .Select(x => x);
 
-            MpConsole.WriteLine($"Unrecognized clipboard formats found writing to clipboard: {string.Join(",", formatsToRemove)}");
-
-            formatsToRemove.ForEach(x => ido.TryRemove(x));
-
+            if (formatsToRemove.Any()) {
+                MpConsole.WriteLine($"Unrecognized clipboard formats found writing to clipboard: {string.Join(",", formatsToRemove)}");
+                formatsToRemove.ForEach(x => ido.TryRemove(x));
+            }
 
             var dobj = new MpAvDataObject();
 

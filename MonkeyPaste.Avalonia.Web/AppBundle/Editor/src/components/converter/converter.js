@@ -57,7 +57,7 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 	log(dataStr);
 
 	setRootHtml('');
-	quill.update();
+	updateQuill();
 
 	let qhtml = '';
 	let formatted_delta = '';
@@ -66,13 +66,13 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 	if (formatType == 'text') {
 		let encoded_pt = encodeHtmlSpecialEntities(dataStr);
 		insertText(0, encoded_pt, 'silent');
-		quill.update();
+		updateQuill();
 		qhtml = getHtml();
 	} else if (formatType == 'rtf2html') {
 		const raw_delta = convertHtmlToDelta(dataStr);
 		setContents(raw_delta);
 
-		quill.update();
+		updateQuill();
 		qhtml = getHtml();
 		qhtml = forceHtmlBgOpacity(qhtml, bgOpacity);
 

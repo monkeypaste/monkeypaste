@@ -608,7 +608,7 @@ function isDocIdxAtTemplateInsert(doc_idx, telm) {
 // #region Actions
 
 function loadTemplates() {
-    quill.update();
+    updateQuill();
     resetEditTemplateToolbar();
     let telml = getTemplateElements();
     for (var i = 0; i < telml.length; i++) {
@@ -805,7 +805,7 @@ function updateTemplatesAfterSelectionChange() {
         // needs adjustment
         setDocSelection(adj_range.index, adj_range.length, 'silent');
         sel_range = adj_range;
-        quill.update();
+        updateQuill();
     }
     let all_t_doc_idxs = getAllTemplateDocIdxs();
     for (var i = 0; i < all_t_doc_idxs.length; i++) {

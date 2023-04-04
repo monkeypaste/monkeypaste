@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvInternalDataObjectExtensions {
+
         #region Editor/Json Helpers
 
         #endregion

@@ -28,7 +28,7 @@ function initLinks() {
 
 function initLinkClassAttributes() {
     const Parchment = Quill.imports.parchment;
-    let suppressWarning = false;
+    let suppressWarning = true;
     let config = {
         scope: Parchment.Scope.INLINE,
     };
@@ -109,10 +109,10 @@ function initLinkMatcher() {
 function loadLinkHandlers() {
     let a_elms = Array.from(getEditorElement().querySelectorAll('a'));
     for (var i = 0; i < a_elms.length; i++) {
-        let a_elm = a_elms[i];
-        a_elm.addEventListener('click', onLinkClick, true);
-        a_elm.addEventListener('pointerenter', onLinkPointerEnter, true);
-        a_elm.addEventListener('pointerleave', onLinkPointerLeave, true);
+        let link_elm = a_elms[i];
+        link_elm.addEventListener('click', onLinkClick, true);
+        link_elm.addEventListener('pointerenter', onLinkPointerEnter, true);
+        link_elm.addEventListener('pointerleave', onLinkPointerLeave, true);
 
         if (link_elm.getAttribute('href') == 'about:blank') {
             link_elm.setAttribute('href', 'javascript:;');

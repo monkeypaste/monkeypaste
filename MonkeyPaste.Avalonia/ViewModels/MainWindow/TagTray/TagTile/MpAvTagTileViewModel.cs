@@ -1072,6 +1072,9 @@ namespace MonkeyPaste.Avalonia {
                     }
                     ttvi.BringIntoView();
                 });
+            }, () => {
+                // only bring into view when sidebar is tag tree
+                return MpAvTagTrayViewModel.Instance.IsSelected;
             });
 
         public ICommand ChangeColorCommand => new MpCommand<object>(
