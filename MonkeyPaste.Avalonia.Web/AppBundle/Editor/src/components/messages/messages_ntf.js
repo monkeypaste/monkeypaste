@@ -136,11 +136,10 @@ function onException_ntf(exMsg, exUrl, exLine, exCol, exErrorObj) {
 	sendMessage('notifyException', msgStr);
 } 
 
-async function onCreateContentScreenShot_ntf(sel) {
+function onCreateContentScreenShot_ntf(ss_base64) {
 	// output 'MpQuillContentScreenShotNotificationMessage'
-	let result = await getContentImageBase64Async(sel);
 	let msg = {
-		contentScreenShotBase64: result
+		contentScreenShotBase64: ss_base64
 	};
 	let msgStr = toBase64FromJsonObj(msg);
 	sendMessage('notifyContentScreenShot', msgStr);

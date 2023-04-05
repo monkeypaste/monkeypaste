@@ -79,16 +79,28 @@ namespace MonkeyPaste.Common.Avalonia {
                 if (string.IsNullOrEmpty(idoStr)) {
                     return false;
                 }
+                if (idoStr == MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT) {
+                    // any string (or yet-to-be encoded) format not available yet
+                    return false;
+                }
             }
             if (ido.Get(format) is IEnumerable<string> idoStrs) {
                 was_checked = true;
                 if (!idoStrs.Any()) {
                     return false;
                 }
+                if (idoStrs.All(x => x == MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT)) {
+                    // any string list (file or uri) not available yet
+                    return false;
+                }
             }
             if (ido.Get(format) is byte[] idoBytes) {
                 was_checked = true;
                 if (idoBytes.Length == 0) {
+                    return false;
+                }
+                if (idoBytes.ToDecodedString() == MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT) {
+                    // image not available yet
                     return false;
                 }
             }
@@ -128,18 +140,6 @@ namespace MonkeyPaste.Common.Avalonia {
                 // clear all target data not found in source
                 target_ido.Set(tf_to_clear, null);
             }
-
-            //var format_diff = target_ido.GetAllDataFormats().Difference(source_ido.GetAllDataFormats());
-            //if (format_diff.Count() > 0 && target_ido is DataObject) {
-            //    // NOTE can't remove from sys dataobject
-            //    Debugger.Break();
-            //}
-            //if (target_ido is DataObject sysdo) {
-            //    source_ido.GetAllDataFormats().ForEach(x => sysdo.Set(x, source_ido.GetAllowFiles(x)));
-            //} else if (target_ido is MpPortableDataObject mpdo) {
-            //    mpdo.DataFormatLookup.Clear();
-            //    source_ido.GetAllDataFormats().ForEach(x => mpdo.SetData(x, source_ido.Get(x)));
-            //}
         }
 
         public static bool TryGetData(this IDataObject ido, string format, out object data) {

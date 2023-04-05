@@ -79,6 +79,9 @@ namespace AvCoreClipboardHandler {
                 write_output.Set(write_format, data);
             }
 
+            PostProcessImage(write_output);
+
+
             if (request.writeToClipboard) {
                 //await Util.WaitForClipboard();
                 await Application.Current.Clipboard.SetDataObjectSafeAsync(write_output);
@@ -243,6 +246,18 @@ namespace AvCoreClipboardHandler {
 
         #region Windows Image Post-processor
 
+        private static void PostProcessImage(IDataObject ido) {
+#if WINDOWS
+            if (ido.TryGetData(MpPortableDataFormats.AvPNG, out byte[] pngBytes)) {
+                object dib = MonkeyPaste.Common.Wpf.MpWpfClipoardImageHelper.GetWpfDib(pngBytes);
+                ido.Set(MpPortableDataFormats.WinDib, dib);
+
+                object bmp = MonkeyPaste.Common.Wpf.MpWpfClipoardImageHelper.GetSysDrawingBitmap(pngBytes);
+                ido.Set(MpPortableDataFormats.WinBitmap, bmp);
+            }
+
+#endif
+        }
         #endregion
     }
 }

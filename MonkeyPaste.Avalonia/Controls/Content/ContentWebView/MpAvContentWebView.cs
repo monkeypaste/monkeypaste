@@ -334,7 +334,7 @@ namespace MonkeyPaste.Avalonia {
                     // TODO add colorized ascii maybe as html and rtf!!
                 } else if (!ignore_ss) {
 
-                    avdo.SetData(MpPortableDataFormats.AvPNG, "IMG PLACEHOLDER".ToBytesFromString());
+                    avdo.SetData(MpPortableDataFormats.AvPNG, MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT.ToBytesFromString());
 
                     Dispatcher.UIThread.Post(async () => {
                         int ss_timeout = 5_000;
@@ -368,7 +368,7 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     // NOTE setting dummy file so OLE system sees format on clipboard, actual
                     // data is overwritten in core clipboard handler
-                    avdo.SetData(MpPortableDataFormats.AvFileNames, new[] { "HEY COOL GUY" });
+                    avdo.SetData(MpPortableDataFormats.AvFileNames, new[] { MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT });
 
                     //if (!ignore_pseudo_file) {
                     //    // js doesn't set file stuff for non-files

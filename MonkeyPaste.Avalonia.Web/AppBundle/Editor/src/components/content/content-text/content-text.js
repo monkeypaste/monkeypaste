@@ -174,7 +174,7 @@ function getDocLength(omitTrailingLineEnd = false) {
 	return len;
 }
 
-function getCharacterRect(docIdx, isWindowOrigin = true, inflateToLineRect = true) {
+function getCharacterRect(docIdx, isWindowOrigin = true, inflateToLineRect = true, inflateEmptyRange = true) {
 	docIdx = parseInt(docIdx);
 	if (isNaN(docIdx)) {
 		return cleanRect();
@@ -188,8 +188,8 @@ function getCharacterRect(docIdx, isWindowOrigin = true, inflateToLineRect = tru
 	//		return cleanRect(doc_idx_t_elm.getBoundingClientRect());
 	//	}
 	//}
-
-	let docIdx_rect = quill.getBounds(docIdx, 1);
+	let len = inflateEmptyRange ? 1:0
+	let docIdx_rect = quill.getBounds(docIdx, len);
 
 	if (isWindowOrigin) {
 		docIdx_rect = editorToScreenRect(docIdx_rect);
@@ -241,7 +241,7 @@ function getLineRect(lineIdx, snapToEditor = true) {
 	return line_rect;
 }
 
-function getRangeRects(range, isWindowOrigin = true, inflateToLineHeight = true) {
+function getRangeRects(range, isWindowOrigin = true, inflateToLineHeight = true, inflateEmptyRange = true) {
 	range = cleanDocRange(range);
 
 	let range_rects = [];
@@ -249,14 +249,14 @@ function getRangeRects(range, isWindowOrigin = true, inflateToLineHeight = true)
 		return range_rects;
 	}
 	if (range.length == 0) {
-		let caret_rect = getCharacterRect(range.index, isWindowOrigin, inflateToLineHeight);
+		let caret_rect = getCharacterRect(range.index, isWindowOrigin, inflateToLineHeight, inflateEmptyRange);
 		range_rects.push(caret_rect);
 		return range_rects;
 	}
 
 	let cur_line_rect = null;
 	for (var i = range.index; i < range.index + range.length; i++) {
-		let cur_idx_rect = getCharacterRect(i, isWindowOrigin, inflateToLineHeight);
+		let cur_idx_rect = getCharacterRect(i, isWindowOrigin, inflateToLineHeight, inflateEmptyRange);
 
 		let is_cur_idx_wrapped = false;
 		if (cur_line_rect == null) {
@@ -589,7 +589,6 @@ function getElementDocRange(elm) {
 	};
 }
 
-
 function getDefaultLineHeight() {
 	let editor_height = getElementLineHeight(getEditorElement());
 	return editor_height;
@@ -612,6 +611,46 @@ function getElementLineHeight(elm) {
 	let float_val = parseFloat(attrb_val);
 	return float_val;
 }
+
+function getDocRangeLineRanges(docRange) {
+	let line_ranges = [];
+	let cur_line_doc_range = null;
+	for (var i = 0; i < docRange.length; i++) {
+		let doc_idx = docRange.index + i;
+		if (cur_line_doc_range == null) {
+			// new line
+			cur_line_doc_range = { index: doc_idx, length: 1 };
+		} else {
+			// continue along line
+			cur_line_doc_range.length++;
+		}
+		if (isDocIdxLineEnd(doc_idx) || i == docRange.length - 1) {
+			line_ranges.push(cur_line_doc_range);
+			cur_line_doc_range = null;
+		}
+	}
+	return line_ranges;
+}
+
+function getDocRangeLineIntersectRanges(docRange) {
+	// get pre range
+	let pre_range_start_doc_idx = getLineStartDocIdx(docRange.index);
+	let post_range_end_doc_idx = getLineEndDocIdx(docRange.index + docRange.length);
+	return [
+		//pre
+		{
+			index: pre_range_start_doc_idx,
+			length: docRange.index - pre_range_start_doc_idx
+		},
+		//post
+		{
+			index: docRange.index + docRange.length,
+			length: post_range_end_doc_idx - (docRange.index + docRange.length)
+		}
+	]
+}
+
+
 // #endregion Getters
 
 // #region Setters
@@ -737,15 +776,15 @@ function convertTextContentToFormats(isForOle, formats) {
 	let sel = getDocSelection(isForOle);
 	let items = [];
 	for (var i = 0; i < formats.length; i++) {
-		let format = formats[i];
+		let lwc_format = formats[i].toLowerCase();
 		let data = null;
-		if (isHtmlFormat(format)) {
+		if (isHtmlFormat(lwc_format)) {
 			data = getHtml(sel);
-			if (format.toLowerCase() == 'html format') {
+			if (lwc_format == 'html format') {
 				// NOTE web html doesn't use fragment format
 				data = createHtmlClipboardFragment(data);
 			}
-		} else if (isPlainTextFormat(format)) {
+		} else if (isPlainTextFormat(lwc_format)) {
 			if (isContentATable()) {
 				data = getTableCsv('Text', null, isForOle);
 			} else {
@@ -754,20 +793,23 @@ function convertTextContentToFormats(isForOle, formats) {
 			if (isForOle && isDocEndInRange(sel)) {
 				data = trimQuillTrailingLineEndFromText(data);
 			}
-		} else if (isCsvFormat(format) && isContentATable()) {
+		} else if (isCsvFormat(lwc_format) && isContentATable()) {
 			// TODO figure out handling table selectinn logic and check here 
 			data = getTableCsv('Text', null, isForOle);
-		} else if (isImageFormat(format)) {
+		} else if (isImageFormat(lwc_format)) {
 			// trigger async screenshot notification where host needs 
 			// to null and wait for value to avoid async issues
-			onCreateContentScreenShot_ntf(sel);
-			data = 'pending...';
+			getContentImageBase64Async(sel)
+				.then((result) => {
+					onCreateContentScreenShot_ntf(result);
+				});
+			data = PLACEHOLDER_DATAOBJECT_TEXT;
 		} 
 		if (!data || data == '') {
 			continue;
 		} 
 		let item = {
-			format: format,
+			format: lwc_format,
 			data: data
 		};
 		items.push(item);

@@ -194,15 +194,6 @@ function getContentHeight() {
 	return parseFloat(bounds.height);
 }
 
-async function getContentImageBase64Async(sel) {
-	let sel_rects = null;
-	if (sel) {
-		sel_rects = getRangeRects(sel, false);
-	}
-	let base64Str = await getBase64ScreenshotOfElementAsync(getEditorContainerElement(), sel_rects);
-
-	return base64Str;
-}
 
 function getContentWidthByType() {
 	if (ContentItemType == 'Text') {

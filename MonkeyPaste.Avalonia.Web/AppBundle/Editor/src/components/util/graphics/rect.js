@@ -125,6 +125,15 @@ function rectsUnion(rects) {
     return union_rect;
 }
 
+function clampRect(rect, clamp_rect) {
+    // restri
+    rect.left = clamp(rect.left, clamp_rect.left, clamp_rect.right);
+    rect.right = clamp(rect.right, clamp_rect.left, clamp_rect.right);
+    rect.top = clamp(rect.top, clamp_rect.top, clamp_rect.bottom);
+    rect.bottom = clamp(rect.bottom, clamp_rect.top, clamp_rect.bottom);
+    return cleanRect(rect);
+}
+
 function parsePointFromSides(rect, sides) {
     let p = { x: 0, y: 0 };
     if (!sides) {

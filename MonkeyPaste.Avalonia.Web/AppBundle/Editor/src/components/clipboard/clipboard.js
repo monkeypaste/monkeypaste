@@ -19,6 +19,8 @@ const CEF_CB_DATA_FORMATS = [
     'application/octet-stream',
 ];
 
+const PLACEHOLDER_DATAOBJECT_TEXT = '3acaaed7-862d-47f5-8614-3259d40fce4d';
+
 
 // #endregion Globals
 
@@ -40,39 +42,39 @@ function initClipboard() {
 // #region State
 
 
-function isHtmlFormat(format) {
-    return format.toLowerCase() == 'html format' || format == 'text/html';
+function isHtmlFormat(lwc_format) {
+    return lwc_format == 'html format' || lwc_format == 'text/html';
 }
 
-function isUri(format) {
-    return format.toLowerCase() == 'html format' || format == 'text/html';
+function isUri(lwc_format) {
+    return lwc_format == 'html format' || lwc_format == 'text/html';
 }
 
-function isPlainTextFormat(format) {
-    return format.toLowerCase() == 'text' ||
-        format.toLowerCase() == 'unicode' ||
-        format.toLowerCase() == 'oemtext' ||
-            format == 'text/plain';
+function isPlainTextFormat(lwc_format) {
+    return lwc_format == 'text' ||
+        lwc_format == 'unicode' ||
+        lwc_format == 'oemtext' ||
+            lwc_format == 'text/plain';
 }
-function isCsvFormat(format) {
-    return format.toLowerCase() == 'csv' || format == 'text/csv';
+function isCsvFormat(lwc_format) {
+    return lwc_format == 'csv' || lwc_format == 'text/csv';
 }
 
-function isImageFormat(format) {
+function isImageFormat(lwc_format) {
     return
-        format.toLowerCase() == 'png' ||
-        format.toLowerCase() == 'bitmap' ||
-        format.toLowerCase() == 'deviceindependentbitmap' ||
-        format.startsWith('image/');
+        lwc_format == 'png' ||
+        lwc_format == 'bitmap' ||
+        lwc_format == 'deviceindependentbitmap' ||
+        lwc_format.startsWith('image/');
 }
 
-function isFileListFormat(format) {
+function isFileListFormat(lwc_format) {
     // NOTE files aren't in dataTransfer.items so no mime type equivalent
-    return format.toLowerCase() == 'filenames';
+    return lwc_format == 'filenames';
 }
 
-function isInternalClipTileFormat(format) {
-    return format.toLowerCase() == "mp internal content";
+function isInternalClipTileFormat(lwc_format) {
+    return lwc_format == "mp internal content";
 }
 
 // #endregion State

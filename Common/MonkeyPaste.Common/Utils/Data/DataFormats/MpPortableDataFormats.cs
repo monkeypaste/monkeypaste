@@ -120,6 +120,8 @@ namespace MonkeyPaste.Common {
 
         // NOTE data object is not registered and only used to merge data objects
         public const string INTERNAL_DATA_OBJECT_FORMAT = "Mp Internal Data Object Format";
+
+        public const string PLACEHOLDER_DATAOBJECT_TEXT = "3acaaed7-862d-47f5-8614-3259d40fce4d";
         #endregion
 
         #region Statics

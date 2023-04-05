@@ -252,7 +252,7 @@ function cleanHexColor(rgb_Or_rgba_Or_colorName_Or_hex_Str, forcedOpacity, ignor
 
 function cleanColor(rgb_Or_rgba_Or_colorName_Or_hex_Str, forcedOpacity, outputType = 'rgbaObj') {
     let color = parseRgba(rgb_Or_rgba_Or_colorName_Or_hex_Str);
-    if (forcedOpacity !== undefined && forcedOpacity != null) {
+    if (!isNullOrUndefined(forcedOpacity)) {
         color.a = forcedOpacity;
     }
     if (outputType == 'rgbaObj') {
@@ -265,6 +265,19 @@ function cleanColor(rgb_Or_rgba_Or_colorName_Or_hex_Str, forcedOpacity, outputTy
         return rgbaToHex()
     }
     return color;
+}
+
+function findElementBackgroundColor(elm,fallback) {
+    // NOTE iterates over elment ancestors until non-transparent bg is found
+    let cur_elm = elm;    
+    while (cur_elm != null) {
+        let cur_bg = cleanColor(getElementComputedStyleProp(cur_elm, 'background-color'), null, 'rgbaObj');
+        if (cur_bg.a > 0) {
+            return cleanColor(cur_bg,null, 'rgbaStyle');
+        }
+        cur_elm = cur_elm.parentNode;
+    }
+    return isNullOrUndefined(fallback) ? 'rgba(255,255,255,1)' : fallback;
 }
 
 function rgbaToCssColor(rgba) {

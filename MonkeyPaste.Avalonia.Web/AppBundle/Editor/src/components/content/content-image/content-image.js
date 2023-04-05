@@ -119,26 +119,26 @@ function convertImageContentToFormats(isForOle, formats) {
 	// NOTE (at least currently) selection is ignored for file items
 	let items = [];
 	for (var i = 0; i < formats.length; i++) {
-		let format = formats[i];
+		let lwc_format = formats[i].toLowerCase();
 		let data = null;
-		if (isHtmlFormat(format)) {
+		if (isHtmlFormat(lwc_format)) {
 			data = getHtml();
-			if (format.toLowerCase() == 'html format') {
+			if (lwc_format == 'html format') {
 				// NOTE web html doesn't use fragment format
 				data = createHtmlClipboardFragment(data);
 			} 
-		} else if (isPlainTextFormat(format)) {
+		} else if (isPlainTextFormat(lwc_format)) {
 			// handled by host
-		} else if (isImageFormat(format)) {
+		} else if (isImageFormat(lwc_format)) {
 			// handled by host
-		} else if (isCsvFormat(format)) {
+		} else if (isCsvFormat(lwc_format)) {
 			// handled by host
 		}
 		if (!data || data == '') {
 			continue;
 		}
 		let item = {
-			format: format,
+			format: lwc_format,
 			data: data
 		};
 		items.push(item);
