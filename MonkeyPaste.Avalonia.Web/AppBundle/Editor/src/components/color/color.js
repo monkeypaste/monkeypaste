@@ -269,8 +269,8 @@ function cleanColor(rgb_Or_rgba_Or_colorName_Or_hex_Str, forcedOpacity, outputTy
 
 function findElementBackgroundColor(elm,fallback) {
     // NOTE iterates over elment ancestors until non-transparent bg is found
-    let cur_elm = elm;    
-    while (cur_elm != null) {
+    let cur_elm = elm;
+    while (cur_elm != null && cur_elm != document) {
         let cur_bg = cleanColor(getElementComputedStyleProp(cur_elm, 'background-color'), null, 'rgbaObj');
         if (cur_bg.a > 0) {
             return cleanColor(cur_bg,null, 'rgbaStyle');

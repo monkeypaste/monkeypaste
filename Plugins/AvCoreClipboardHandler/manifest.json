@@ -378,6 +378,7 @@
       {
         "handlerGuid": "826c32fa-b3ae-46f3-9495-eb1f476b0b1e",
         "iconUri": "text.png",
+        "description": "A web compatibility format that maybe needed on a variety of platforms with varying Web Browsers. Output will match standard 'Text' format.",
         "displayName": "Text (web)",
         "clipboardName": "text/plain",
         "parameters": [
@@ -415,6 +416,7 @@
       {
         "handlerGuid": "ac15a058-dae6-4a66-9700-c415fd5b89f9",
         "displayName": "Rtf",
+        "description": "Rich Text Format is a Microsoft-based format which maybe required for formatted text output in certain legacy applications on a variety of platforms.",
         "iconUri": "rtf.png",
         "clipboardName": "Rich Text Format",
         "parameters": [
@@ -489,6 +491,7 @@
       {
         "handlerGuid": "46fc39af-982d-4c47-8a6b-7b6e074c45d8",
         "displayName": "Html (web)",
+        "description": "A web compatibility format that maybe needed on a variety of platforms with varying Web Browsers. Output will match standard 'HTML' format.",
         "iconUri": "html.png",
         "clipboardName": "text/html",
         "parameters": [
@@ -525,7 +528,8 @@
       },
       {
         "handlerGuid": "95ed025a-fde5-4b51-8be4-32dcebeb1f15",
-        "displayName": "Html (url)",
+        "displayName": "Url (moz)",
+        "description": "A mozilla (Firefox) format used for source Url tracking. Typically only required on some Linux platforms.",
         "iconUri": "html.png",
         "clipboardName": "text/x-moz-url-priv",
         "parameters": [
@@ -623,6 +627,12 @@
         "displayName": "File (Gnome)",
         "iconUri": "folder.png",
         "clipboardName": "x-special/gnome-copied-files",
+        "dependencies": [
+          {
+            "name": "Linux",
+            "minVersion": "0"
+          }
+        ],
         "parameters": [
           {
             "label": "Ignore",
@@ -649,6 +659,7 @@
       {
         "handlerGuid": "10ab62ae-89fa-4445-895d-b4e5463e6df0",
         "displayName": "Csv",
+        "description":  "Used for tabular (spreadsheet) data",
         "iconUri": "csv.png",
         "clipboardName": "Csv",
         "parameters": [

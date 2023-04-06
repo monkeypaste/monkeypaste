@@ -11,9 +11,16 @@ namespace MonkeyPaste.Common.Avalonia {
                 return null;
             }
             List<string> formats = ido.GetDataFormats().ToList();
-            if (ido.GetFileNames() is IEnumerable<string> fps &&
-                fps.Count() > 0) {
-                formats.Add(MpPortableDataFormats.AvFileNames);
+            if (ido.GetFileNames() is IEnumerable<string> fps) {
+                // only inlcude file names if present
+                if (fps.Count() > 0) {
+                    if (!formats.Contains(MpPortableDataFormats.AvFileNames)) {
+                        formats.Add(MpPortableDataFormats.AvFileNames);
+                    }
+                } else {
+                    formats.Remove(MpPortableDataFormats.AvFileNames);
+                }
+
             }
             // return non-null (workaround since sysdo can't remove)
             return formats.Where(x => ido.Get(x) != null);
@@ -48,17 +55,50 @@ namespace MonkeyPaste.Common.Avalonia {
             for (int i = 0; i < string_lists_to_clone.Length; i++) {
                 string sltc = string_lists_to_clone[i];
                 if (ido_source.Get(sltc) is string[] source_stringArr) {
-                    var cloned_str_list = new string[source_stringArr.Length];
-                    for (int j = 0; j < source_stringArr.Length; j++) {
-                        cloned_str_list[j] = source_stringArr[j];
-                    }
+                    var cloned_str_arr = new string[source_stringArr.Length];
+                    source_stringArr.CopyTo(cloned_str_arr, 0);
+
                     availableFormats.Remove(sltc);
-                    cavdo.Set(sltc, cloned_str_list);
+                    cavdo.Set(sltc, cloned_str_arr);
+                } else if (ido_source.Get(sltc) is byte[] source_byteArr) {
+                    var cloned_byte_arr = new byte[source_byteArr.Length];
+                    source_byteArr.CopyTo(cloned_byte_arr, 0);
+                    availableFormats.Remove(sltc);
+                    cavdo.Set(sltc, cloned_byte_arr);
                 }
 
             }
             availableFormats.ForEach(x => cavdo.SetData(x, ido_source.GetAllowFiles(x)));
             return cavdo;
+        }
+        public static IEnumerable<string> GetPlaceholderFormats(this IDataObject ido) {
+            List<string> phfl = new List<string>();
+            if (ido == null) {
+                return phfl;
+            }
+            var available_formats = ido.GetAllDataFormats();
+            foreach (var f in available_formats) {
+                object f_data = ido.Get(f);
+                if (f_data is string dataStr &&
+                    dataStr == MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT) {
+                    phfl.Add(f);
+                    continue;
+                }
+                if (f_data is IEnumerable<string> dl &&
+                    dl.Any(x => x == MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT)) {
+                    phfl.Add(f);
+                    continue;
+                }
+                if (f_data is byte[] dataBytes &&
+                    dataBytes.ToDecodedString() == MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT) {
+                    phfl.Add(f);
+                    continue;
+                }
+            }
+            return phfl;
+        }
+        public static bool IsAnyPlaceholderData(this IDataObject ido) {
+            return ido.GetPlaceholderFormats().Count() > 0;
         }
 
         public static bool ContainsData(this IDataObject ido, string format) {

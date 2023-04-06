@@ -39,20 +39,20 @@ namespace MonkeyPaste.Common.Avalonia {
                 }
             }
         }
-        public static byte[] ToByteArray(this Bitmap bmp) {
+        public static byte[] ToByteArray(this Bitmap bmp, int quality = 100) {
             using (var stream = new MemoryStream()) {
-                bmp.Save(stream);
+                bmp.Save(stream, quality);
                 return stream.ToArray();
             }
         }
 
-        public static string ToBase64String(this Bitmap bmp) {
-            return Convert.ToBase64String(bmp.ToByteArray());
+        public static string ToBase64String(this Bitmap bmp, int quality = 100) {
+            return Convert.ToBase64String(bmp.ToByteArray(quality));
         }
 
-        public static Bitmap ToAvBitmap(this WriteableBitmap wbmp) {
+        public static Bitmap ToAvBitmap(this WriteableBitmap wbmp, int quality = 100) {
             using (var outStream = new MemoryStream()) {
-                wbmp.Save(outStream);
+                wbmp.Save(outStream, quality);
                 outStream.Seek(0, SeekOrigin.Begin);
                 var outBmp = new Bitmap(outStream);
                 return outBmp;
@@ -73,7 +73,7 @@ namespace MonkeyPaste.Common.Avalonia {
 
         #region Effects
 
-        public static unsafe Bitmap? Tint(this Bitmap bmp, string hexColor, bool retainAlpha = true) {
+        public static unsafe Bitmap? Tint(this Bitmap bmp, string hexColor, bool retainAlpha = true, int quality = 100) {
             var tint = hexColor.ToAvColor();
             var tintPixelColor = new PixelColor { Alpha = tint.A, Red = tint.R, Green = tint.G, Blue = tint.B };
             if (tintPixelColor.Alpha == 0) {
@@ -105,7 +105,7 @@ namespace MonkeyPaste.Common.Avalonia {
                         }
                     }
                 }
-                return writeableBitmap.ToAvBitmap();
+                return writeableBitmap.ToAvBitmap(quality);
             }
         }
 

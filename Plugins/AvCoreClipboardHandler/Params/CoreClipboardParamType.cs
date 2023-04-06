@@ -59,6 +59,8 @@
         R_Ignore_Url, // 36
 
         W_UriList, // 37
-        R_UriList // 38
+        R_UriList, // 38
+
+        W_Ignore_Bitmap, //39
     }
 }

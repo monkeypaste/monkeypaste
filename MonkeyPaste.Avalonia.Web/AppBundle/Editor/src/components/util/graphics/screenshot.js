@@ -11,7 +11,7 @@
 async function testScreenshot(sel) {
     var gapped_base64Str = null;
 
-    getContentImageBase64Async(sel)
+    getDocRangeAsImageAsync(sel)
         .then((result) => {
             gapped_base64Str = result;
         });
@@ -22,24 +22,21 @@ async function testScreenshot(sel) {
     log(gapped_base64Str);
 }
 
-async function getContentImageBase64Async(sel) {
-    let sel_rects = null;
-    if (sel) {
-        sel_rects = getRangeRects(sel, false);
-    }
-    var base64Str = await getBase64ScreenshotOfElementAsync(getEditorContainerElement(), sel_rects, sel);
-    return base64Str;
-}
-
-async function getBase64ScreenshotOfElementAsync(element, crop_rects, sel) {
+async function getDocRangeAsImageAsync(sel) {
     // from https://stackoverflow.com/a/41585230/105028
+    let crop_rects = null;
+    if (sel) {
+        crop_rects = getRangeRects(sel, false);
+    }
+    let editor_elm = getEditorContainerElement();
+
     let base64Str = null;
 
-    let bgColor = findElementBackgroundColor(element, 'white');
+    let bgColor = findElementBackgroundColor(editor_elm, 'white');
 
-    let oldWidth = element.style.width;
-    let oldHeight = element.style.height;
-    let oldOverflow = element.style.overflow;
+    let oldWidth = editor_elm.style.width;
+    let oldHeight = editor_elm.style.height;
+    let oldOverflow = editor_elm.style.overflow;
 
     //let oldScrollX = window.scrollX;
     //let oldScrollY = window.scrollY;
@@ -61,11 +58,11 @@ async function getBase64ScreenshotOfElementAsync(element, crop_rects, sel) {
         h2c_options.height = total_rect.height;
     }
 
-    element.style.width = 'auto';
-    element.style.height = 'auto';
-    element.style.overflow = 'visible';
+    editor_elm.style.width = 'auto';
+    editor_elm.style.height = 'auto';
+    editor_elm.style.overflow = 'visible';
 
-    html2canvas(element, h2c_options)
+    html2canvas(editor_elm, h2c_options)
         .then(imgCanvas => {
             var imgSrcVal = null;
             if (crop_rects && crop_rects.length > 1) {
@@ -104,9 +101,9 @@ async function getBase64ScreenshotOfElementAsync(element, crop_rects, sel) {
             } 
             imgSrcVal = imgCanvas.toDataURL("image/png");
             base64Str = imgSrcVal.replace("data:image/png;base64,", "").replace("data:,","");
-            element.style.width = oldWidth;
-            element.style.height = oldHeight;
-            element.style.overflow = oldOverflow;
+            editor_elm.style.width = oldWidth;
+            editor_elm.style.height = oldHeight;
+            editor_elm.style.overflow = oldOverflow;
 
             //log('oldScrollX ', oldScrollX, ' newScrollX ', window.scrollX);
             //log('oldScrollY ', oldScrollY, ' newScrollY ', window.scrollY);
@@ -132,37 +129,6 @@ async function getBase64ScreenshotOfElementAsync(element, crop_rects, sel) {
 // #endregion State
 
 // #region Actions
-
-async function fixRangeGapsAsync(imgCanvas, gapped_base64Str, sel) {
-    var total_img = new Image;
-    var ungapped_base64Str = null;
-
-    total_img.onload = function () {
-        var pre = this.src;
-
-        let ctx = getOverlayContext();
-        ctx.fillStyle = bgColor;
-        let gap_ranges = getDocRangeLineIntersectRanges(sel);
-        for (var i = 0; i < gap_ranges.length; i++) {
-            // NOTE each range should always only have 1 rect
-            let gap_rect = getRangeRects(gap_ranges[i])[0];
-            ctx.fillRect(this, gap_rect.left, gap_rect.top, gap_rect.width, gap_rect.height);
-        }
-        var post = this.src;
-
-        if (pre == post) {
-            log('SAME');
-        } else {
-            log('CHANGED');
-        }
-        ungapped_base64Str = post;
-    };
-    total_img.src = "data:image/png;base64," + gapped_base64Str;
-
-    while (ungapped_base64Str == null) {
-        await delay(100);
-    }
-}
 
 
 function cropCanvas2Canvas(imgCanvas, crop_rects, h2c_options, sel) {

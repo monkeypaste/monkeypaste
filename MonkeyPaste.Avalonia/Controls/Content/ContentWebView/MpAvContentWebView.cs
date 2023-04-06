@@ -18,6 +18,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using Org.BouncyCastle.Utilities;
 #if DESKTOP
 
 using CefNet;
@@ -333,7 +334,6 @@ namespace MonkeyPaste.Avalonia {
                     avdo.SetData(MpPortableDataFormats.Text, bmp.ToAsciiImage());
                     // TODO add colorized ascii maybe as html and rtf!!
                 } else if (!ignore_ss) {
-
                     avdo.SetData(MpPortableDataFormats.AvPNG, MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT.ToBytesFromString());
 
                     Dispatcher.UIThread.Post(async () => {
@@ -355,10 +355,19 @@ namespace MonkeyPaste.Avalonia {
                                 return;
                             }
                         }
+                        if (_contentScreenShotBase64_ntf.ToBytesFromBase64String() is byte[] ss_bytes) {
+                            if (MpAvDocumentDragHelper.SourceDataObject != null) {
+                                MpAvDocumentDragHelper.SourceDataObject.Set(MpPortableDataFormats.AvPNG, ss_bytes);
+                            }
+                            if (MpAvDocumentDragHelper.DragDataObject != null) {
+                                MpAvDocumentDragHelper.DragDataObject.Set(MpPortableDataFormats.AvPNG, ss_bytes);
+                            }
 
-                        MpAvDocumentDragHelper.SourceDataObject.Set(MpPortableDataFormats.AvPNG, _contentScreenShotBase64_ntf.ToBytesFromBase64String());
-                        MpAvDocumentDragHelper.ApplyClipboardPresetOrSourceUpdateToDragDataAsync().FireAndForgetSafeAsync();
-                        MpConsole.WriteLine("Screen shot applied to dataobject");
+                            await MpAvDocumentDragHelper.ApplyClipboardPresetOrSourceUpdateToDragDataAsync();
+                            MpConsole.WriteLine("Screen shot applied to dataobject");
+                        }
+
+
                     });
 
                 }

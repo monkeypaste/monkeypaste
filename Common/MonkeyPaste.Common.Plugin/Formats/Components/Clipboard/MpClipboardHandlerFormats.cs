@@ -18,12 +18,10 @@ namespace MonkeyPaste.Common.Plugin {
         public string clipboardName { get; set; }
 
         public string description { get; set; }
+        public List<MpPluginDependency> dependencies { get; set; }
     }
 
     public class MpClipboardReaderRequest : MpPluginRequestFormatBase {
-        public bool isAvalonia { get; set; } = false;
-        public string platform { get; set; }
-        public int mainWindowImplicitHandle { get; set; }
         public List<string> readFormats { get; set; }
 
         public bool ignoreParams { get; set; }

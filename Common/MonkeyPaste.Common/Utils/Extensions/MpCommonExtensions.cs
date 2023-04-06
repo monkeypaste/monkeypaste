@@ -15,6 +15,27 @@ namespace MonkeyPaste.Common {
 
         #region Collections
 
+        public static void RemoveNullsInPlace(this object[] fpArr) {
+            if (fpArr == null) {
+                return;
+            }
+            // NOTE removing omitted file paths IN PLACE so ref persists
+
+            for (int i = 0; i < fpArr.Length; i++) {
+                // shift all nulls to end of list
+                if (fpArr[i] != null) {
+                    continue;
+                }
+                for (int j = i; j < fpArr.Length - 1; j++) {
+                    // shift null to end 
+                    fpArr[j] = fpArr[j + 1];
+                }
+            }
+
+            //Resize array, removing empties
+            Array.Resize(ref fpArr, fpArr.Where(x => x != null).Count());
+        }
+
         public static IEnumerable<(T item, int index)> WithIndex<T>(this IEnumerable<T> source) {
             // from https://thomaslevesque.com/2019/11/18/using-foreach-with-index-in-c/
             return source.Select((item, index) => (item, index));
@@ -605,6 +626,134 @@ namespace MonkeyPaste.Common {
                 object safeValue = (newValue == null) ? null : Convert.ChangeType(newValue, t);
                 propertyInfo.SetValue(obj, safeValue, null);
             }
+        }
+        #endregion
+
+        #region Object
+
+        public static int ParseOrConvertToInt(this object obj, object fallback = null) {
+            if (obj == null) {
+                if (obj == fallback) {
+                    return 0;
+                }
+                return fallback.ParseOrConvertToInt(fallback);
+            }
+            if (obj == fallback) {
+                if (fallback == null) {
+                    return 0;
+                }
+            }
+            if (obj is int intObj) {
+                return intObj;
+            }
+            if (obj is double dblObj) {
+                return (int)dblObj;
+            }
+            if (obj is float fltObj) {
+                return (int)fltObj;
+            }
+            if (obj is byte byteObj) {
+                return (int)byteObj;
+            }
+            if (obj is bool boolObj) {
+                return boolObj ? 1 : 0;
+            }
+            if (obj is string strObj) {
+                try {
+                    return int.Parse(strObj);
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Error parsing int from '{strObj}'", ex);
+                    if (obj == fallback) {
+                        return 0;
+                    }
+                    return fallback.ParseOrConvertToInt(fallback);
+                }
+            }
+
+            MpDebug.Break($"Unknown obj type '{obj.GetType()}', cannot convert int. Returning 0");
+            return 0;
+        }
+
+        public static double ParseOrConvertToDouble(this object obj, object fallback = null) {
+            if (obj == null) {
+                if (obj == fallback) {
+                    return 0;
+                }
+                return fallback.ParseOrConvertToDouble(fallback);
+            }
+            if (obj == fallback) {
+                if (fallback == null) {
+                    return 0;
+                }
+            }
+            if (obj is double dblObj) {
+                return dblObj;
+            }
+            if (obj is float fltObj) {
+                return (double)fltObj;
+            }
+
+            if (obj is int intObj) {
+                return (double)intObj;
+            }
+
+            if (obj is byte byteObj) {
+                return (double)byteObj;
+            }
+            if (obj is bool boolObj) {
+                return boolObj ? 1 : 0;
+            }
+            if (obj is string strObj) {
+                try {
+                    return double.Parse(strObj);
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Error parsing double from '{strObj}'", ex);
+                    if (obj == fallback) {
+                        return 0;
+                    }
+                    return fallback.ParseOrConvertToDouble(fallback);
+                }
+            }
+
+            MpDebug.Break($"Unknown obj type '{obj.GetType()}', cannot convert double. Returning 0");
+            return 0;
+        }
+
+        public static bool ParseOrConvertToBool(this object obj, object fallback = null) {
+            if (obj == null) {
+                if (obj == fallback) {
+                    return false;
+                }
+                return fallback.ParseOrConvertToBool(fallback);
+            }
+            if (obj == fallback) {
+                if (fallback == null) {
+                    return false;
+                }
+            }
+            if (obj is bool boolObj) {
+                return boolObj;
+            }
+            if (obj is string strObj) {
+                if (strObj == "0" || strObj == "1") {
+                    return obj.ParseOrConvertToInt(fallback) == 1;
+                }
+                try {
+                    return bool.Parse(strObj);
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Error parsing bool from '{strObj}'", ex);
+                    if (obj == fallback) {
+                        return false;
+                    }
+                    return fallback.ParseOrConvertToBool(fallback);
+                }
+            }
+
+            MpDebug.Break($"Unknown obj type '{obj.GetType()}', cannot convert bool. Returning 0");
+            return false;
         }
         #endregion
     }

@@ -43,38 +43,56 @@ function initClipboard() {
 
 
 function isHtmlFormat(lwc_format) {
-    return lwc_format == 'html format' || lwc_format == 'text/html';
+    const result =
+        lwc_format == 'html format' ||
+        lwc_format == 'text/html';
+    return result;
 }
 
 function isUri(lwc_format) {
-    return lwc_format == 'html format' || lwc_format == 'text/html';
+    const result =
+        lwc_format == 'html format' ||
+        lwc_format == 'text/html';
+    return result;
 }
 
 function isPlainTextFormat(lwc_format) {
-    return lwc_format == 'text' ||
+    const result =
+        lwc_format == 'text' ||
         lwc_format == 'unicode' ||
         lwc_format == 'oemtext' ||
-            lwc_format == 'text/plain';
+        lwc_format == 'text/plain';
+
+    return result;
 }
 function isCsvFormat(lwc_format) {
-    return lwc_format == 'csv' || lwc_format == 'text/csv';
+    const result =
+        lwc_format == 'csv' ||
+        lwc_format == 'text/csv';
+    return result;
 }
 
 function isImageFormat(lwc_format) {
-    return
+    const result = 
         lwc_format == 'png' ||
         lwc_format == 'bitmap' ||
         lwc_format == 'deviceindependentbitmap' ||
         lwc_format.startsWith('image/');
+
+    return result;
 }
 
 function isFileListFormat(lwc_format) {
     // NOTE files aren't in dataTransfer.items so no mime type equivalent
-    return lwc_format == 'filenames';
+    const result =
+        lwc_format == 'filenames';
+    return result;
 }
 
 function isInternalClipTileFormat(lwc_format) {
-    return lwc_format == "mp internal content";
+    const result =
+        lwc_format == "mp internal content";
+    return result;
 }
 
 // #endregion State

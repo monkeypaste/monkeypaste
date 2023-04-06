@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 
@@ -126,28 +127,36 @@ namespace MonkeyPaste.Common {
         public virtual void SetData(string format, object data) {
             var pdf = MpPortableDataFormats.GetDataFormat(format);
             if (pdf == null) {
-                throw new MpUnregisteredDataFormatException($"Format {format} is not registered");
+                //throw new MpUnregisteredDataFormatException($"Format {format} is not registered");
+                MpConsole.WriteLine($"Warning! '{format}' data object format not registered at startup deteced. Attempting to add now..");
+                pdf = MpPortableDataFormats.RegisterDataFormat(format);
+                if (pdf == null) {
+                    throw new MpUnregisteredDataFormatException($"Format {format} cannot be registered");
+                }
             }
-            if (format == MpPortableDataFormats.AvFileNames &&
-                TryGetData(format, out IEnumerable<string> curFileNames) &&
-                data is IEnumerable<string> newFileNames &&
-                newFileNames.ToArray() is string[] newFileArr) {
-                if (curFileNames is string[] curFileArr &&
-                    curFileArr.Length == newFileArr.Length) {
-                    MpConsole.WriteLine("File names updated", true);
-                    MpConsole.WriteLine($"Old: {string.Join(Environment.NewLine, curFileNames)}");
-                    MpConsole.WriteLine($"New: {string.Join(Environment.NewLine, newFileNames)}", false, true);
-
-                    for (int i = 0; i < curFileArr.Length; i++) {
-                        MpConsole.WriteLine("Old: " + curFileArr[i]);
-                        curFileArr[i] = newFileArr[i];
-                        MpConsole.WriteLine("New: " + curFileArr[i]);
-                    }
+            if (data is IEnumerable<string> newStringList &&
+                TryGetData(format, out IEnumerable<string> curStringList) &&
+                //newStringList.Difference(curStringList).Count() > 0 &&
+                newStringList.ToArray() is string[] newStrArr) {
+                if (curStringList is string[] curStrArr) {
+                    MpConsole.WriteLine($"String list ({format}) updated", true);
+                    MpConsole.WriteLine($"Old: {string.Join(Environment.NewLine, curStringList)}");
+                    MpConsole.WriteLine($"New: {string.Join(Environment.NewLine, newStringList)}", false, true);
+                    // update string list IN PLACE
+                    Array.Resize(ref curStrArr, newStrArr.Length);
+                    newStrArr.CopyTo(curStrArr, 0);
                     return;
                 } else {
 
                     MpConsole.WriteLine("FILENAMES ISN'T A LIST");
                 }
+            } else if (data is byte[] newBytes &&
+                        TryGetData(format, out byte[] curBytes) &&
+                        !curBytes.SequenceEqual(newBytes)) {
+                // update image IN PLACE
+                Array.Resize(ref curBytes, newBytes.Length);
+                newBytes.CopyTo(curBytes, 0);
+                return;
             }
             DataFormatLookup.AddOrReplace(pdf, data);
         }

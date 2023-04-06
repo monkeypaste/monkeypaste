@@ -15,58 +15,95 @@
                        local:MpAvIsHoveringExtension.IsEnabled="True"
                        local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
     <local:MpAvUserControl.Styles>
+        <!--<Style Selector="Border#DropMenuBorderContainer.dragInit ListBox#DropItemListBox">
+            <Setter Property="Opacity"
+                    Value="0" />
+        </Style>
+        <Style Selector="Border#DropMenuBorderContainer ListBox#DropItemListBox">
+            <Setter Property="Opacity"
+                    Value="1" />
+        </Style>-->
     </local:MpAvUserControl.Styles>
-    <Border x:Name="DumbParentBorder"
+    <Border x:Name="DropMenuBorderContainer"
+            Classes.dragInit="{Binding IsDragObjectInitializing}"
             HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch">
-        <Border x:Name="DropMenuBorderContainer"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
-                CornerRadius="5"
-                BorderThickness="1"
-                BorderBrush="Black">
-            <Border.Background>
-                <SolidColorBrush Color="DimGray" Opacity="0.85" />
-            </Border.Background>
-            <Grid HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch"
-                  RowDefinitions="Auto,*">
-                <Border x:Name="HideDropMenuBorder"
-                        Background="Transparent"
-                        Grid.Row="0"
-                        Width="20"
-                        Height="20"
-                        Margin="3"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Top">
-                    <Image Source="{Binding Source={StaticResource CloseImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                </Border>
-                <ListBox x:Name="DropItemListBox"
-                         Grid.Row="1"
-                         DataContext="{x:Static local:MpAvClipboardHandlerCollectionViewModel.Instance}"
-                         Background="Transparent"
-                         BorderBrush="Transparent"
-                         HorizontalAlignment="Left"
-                         VerticalAlignment="Top"
-                         SelectionMode="Toggle"
-                         ScrollViewer.VerticalScrollBarVisibility="Auto"
-                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                         Items="{Binding AllAvailableWriterPresets}">
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel HorizontalAlignment="Stretch"
-                                       VerticalAlignment="Stretch" />
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <local:MpAvDropFormatItemView Classes="square"
-                                                          HorizontalAlignment="Stretch"
-                                                          VerticalAlignment="Stretch" />
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+            VerticalAlignment="Stretch"
+            CornerRadius="5"
+            BorderThickness="1"
+            BorderBrush="Black">
+        <Border.Background>
+            <SolidColorBrush Color="DimGray" Opacity="0.85" />
+        </Border.Background>
+        <Grid HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch"
+              RowDefinitions="Auto,*">
+            <Grid ColumnDefinitions="0.5*,0.5*"
+                  Grid.Row="0"
+                  HorizontalAlignment="Center">
+                <Image Grid.Column="0"
+                       Margin="10"
+                       Height="30"
+                       Source="{Binding DropAppViewModel.IconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
+                       Stretch="UniformToFill"
+                       Width="{Binding $self.Bounds.Height}"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Stretch" />
+                <TextBlock x:Name="FinishDropTextBlock"
+                           Grid.Column="1"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           TextAlignment="Left"
+                           TextWrapping="WrapWithOverflow"
+                           FontSize="16"
+                           Foreground="White"
+                           Text="{Binding DropAppViewModel.AppName}" />
+
             </Grid>
-        </Border>
+            <Border x:Name="HideDropMenuBorder"
+                    Background="Transparent"
+                    Grid.Row="0"
+                    Width="20"
+                    Height="20"
+                    Margin="3"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top">
+                <Image Source="{Binding Source={StaticResource CloseImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+            </Border>
+            <ListBox x:Name="DropItemListBox"
+                     Grid.Row="1"
+                     DataContext="{x:Static local:MpAvClipboardHandlerCollectionViewModel.Instance}"
+                     Background="Transparent"
+                     BorderBrush="Transparent"
+                     HorizontalAlignment="Left"
+                     VerticalAlignment="Top"
+                     SelectionMode="Toggle"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     Items="{Binding AllAvailableWriterPresets}">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Stretch" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <local:MpAvDropFormatItemView Classes="square"
+                                                      HorizontalAlignment="Stretch"
+                                                      VerticalAlignment="Stretch" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <!--<Border Grid.Row="0"
+                    Grid.RowSpan="2"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    IsVisible="{Binding IsDragObjectInitializing}">
+                <local:MpAvBusySpinnerView HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Width="70"
+                                           Height="70" />
+            </Border>-->
+        </Grid>
     </Border>
 </local:MpAvUserControl>

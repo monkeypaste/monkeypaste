@@ -39,10 +39,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Util\" />
-  </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <ItemGroup>
       <BuildFiles Include="$(TargetDir)\*.*" />

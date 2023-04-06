@@ -376,9 +376,6 @@ namespace MonkeyPaste.Avalonia {
             foreach (var read_component in EnabledReaderComponents) {
                 var reader_request = new MpClipboardReaderRequest() {
                     ignoreParams = ignorePlugins,
-                    isAvalonia = true,
-                    mainWindowImplicitHandle = Mp.Services.ProcessWatcher.ThisAppHandle.ToInt32(),
-                    platform = Mp.Services.PlatformInfo.OsType.ToString(),
                     readFormats =
                         EnabledReaders
                         .Where(x => x.Parent.ClipboardPluginComponent == read_component)
@@ -480,8 +477,8 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
-            MpConsole.WriteLine("Data written to " + (writeToClipboard ? "CLIPBOARD" : "DATAOBJECT") + ":");
-            dobj.GetAllDataFormats().ForEach(x => MpConsole.WriteLine("Format: " + x));
+            //MpConsole.WriteLine("Data written to " + (writeToClipboard ? "CLIPBOARD" : "DATAOBJECT") + ":");
+            //dobj.GetAllDataFormats().ForEach(x => MpConsole.WriteLine("Format: " + x));
 
             if (ignoreClipboardChange) {
                 Mp.Services.ClipboardMonitor.StartMonitor();

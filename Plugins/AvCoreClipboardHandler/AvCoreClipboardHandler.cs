@@ -10,8 +10,6 @@ namespace AvCoreClipboardHandler {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
 
-
-
         #region Private Variables
         #endregion
 

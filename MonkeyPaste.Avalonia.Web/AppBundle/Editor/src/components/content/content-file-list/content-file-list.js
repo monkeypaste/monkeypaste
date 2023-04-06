@@ -151,7 +151,7 @@ function convertFileListContentToFormats(isForOle, formats) {
 		} else if (isImageFormat(lwc_format)) {
 			// trigger async screenshot notification where host needs 
 			// to null and wait for value to avoid async issues
-			getContentImageBase64Async(sel)
+			getDocRangeAsImageAsync(sel)
 				.then((result) => {
 					onCreateContentScreenShot_ntf(result);
 				});

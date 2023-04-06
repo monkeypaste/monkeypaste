@@ -397,7 +397,7 @@ namespace MonkeyPaste.Avalonia {
         private void MpClipboardFormatPresetViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsEnabled):
-                    MpConsole.WriteLine($"Format '{ClipboardFormat.clipboardName}': {IsEnabled}");
+                    //MpConsole.WriteLine($"Format '{ClipboardFormat.clipboardName}': {IsEnabled}");
                     // this msg is used by dnd helper to update current drag dataobject if dnd in process
                     MpMessenger.SendGlobal(MpMessageType.ClipboardPresetsChanged);
                     break;

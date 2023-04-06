@@ -6,20 +6,14 @@ using MonkeyPaste.Common.Plugin;
 
 namespace AvCoreClipboardHandler {
     public static class AvCoreClipboardWriter {
-        // manifest writer formats (NOTE not used but to keep track of references)
-        public static string[] AvWriterFormats = new string[]{
-            MpPortableDataFormats.Text,
-            MpPortableDataFormats.CefText,
-            MpPortableDataFormats.AvRtf_bytes,
-            MpPortableDataFormats.AvHtml_bytes,
-            MpPortableDataFormats.CefHtml,
-            MpPortableDataFormats.LinuxSourceUrl,
-            MpPortableDataFormats.AvPNG,
-            MpPortableDataFormats.AvFileNames,
-            MpPortableDataFormats.LinuxGnomeFiles, // only needed for write
-            MpPortableDataFormats.AvCsv,
-            MpPortableDataFormats.LinuxUriList
-        };
+        #region Private Variables
+
+        private static string _cur_img_ext = "png";
+        private static int _cur_img_quality = 100;
+
+        #endregion
+
+        #region Public Methods
 
         public static async Task<MpClipboardWriterResponse> PerformWriteRequestAsync(MpClipboardWriterRequest request) {
             if (request == null) {
@@ -60,6 +54,7 @@ namespace AvCoreClipboardHandler {
                 } else {
                     data = write_output.Get(write_format);
                 }
+
                 foreach (var param in request.items) {
                     data = ProcessWriterParam(param, write_format, data, out var ex, out var param_nfl);
                     if (ex != null) {
@@ -79,7 +74,8 @@ namespace AvCoreClipboardHandler {
                 write_output.Set(write_format, data);
             }
 
-            PostProcessImage(write_output);
+            // NOTE not sure if this is needed omitted for now
+            //PostProcessImage(write_output);
 
 
             if (request.writeToClipboard) {
@@ -95,13 +91,16 @@ namespace AvCoreClipboardHandler {
             };
         }
 
+
+        #endregion
         private static object ProcessWriterParam(MpParameterRequestItemFormat pkvp, string format, object data, out Exception ex, out List<MpPluginUserNotificationFormat> nfl) {
             ex = null;
             nfl = null;
-            if (data == null) {
+            if (data == null || pkvp == null) {
                 // already omitted
-                return null;
+                return data;
             }
+            string paramVal = pkvp.value;
             try {
                 CoreClipboardParamType paramType = (CoreClipboardParamType)Convert.ToInt32(pkvp.paramId);
                 switch (format) {
@@ -109,7 +108,7 @@ namespace AvCoreClipboardHandler {
                         switch (paramType) {
                             case CoreClipboardParamType.W_MaxCharCount_Text:
                                 if (data is string text) {
-                                    int max_length = int.Parse(pkvp.value);
+                                    int max_length = paramVal.ParseOrConvertToInt(int.MaxValue);
                                     if (text.Length > max_length) {
                                         nfl = new List<MpPluginUserNotificationFormat>() {
                                             Util.CreateNotification(
@@ -127,6 +126,35 @@ namespace AvCoreClipboardHandler {
                                 break;
                         }
                         break;
+                    case MpPortableDataFormats.AvPNG:
+                        switch (paramType) {
+                            case CoreClipboardParamType.W_Format_Image:
+
+                                if (!string.IsNullOrWhiteSpace(paramVal)) {
+                                    // NOTE used for file creation
+                                    _cur_img_ext = paramVal;
+                                }
+                                break;
+                            case CoreClipboardParamType.W_Ignore_Image:
+                                data = null;
+                                break;
+                        }
+                        break;
+                    case MpPortableDataFormats.AvFileNames:
+                        switch (paramType) {
+                            case CoreClipboardParamType.W_IgnoreAll_FileDrop:
+                                data = null;
+                                break;
+                        }
+                        break;
+
+                    case MpPortableDataFormats.LinuxGnomeFiles:
+                        switch (paramType) {
+                            case CoreClipboardParamType.W_IgnoreAll_FileDrop_Linux:
+                                data = null;
+                                break;
+                        }
+                        break;
                     default:
                         // TODO process other types
 
@@ -139,6 +167,8 @@ namespace AvCoreClipboardHandler {
             }
             return data;
         }
+
+        #region Private Methods
 
         #region File Pre-Processor
         private static async Task<object> PreProcessFileFormatAsync(IDataObject ido) {
@@ -169,21 +199,25 @@ namespace AvCoreClipboardHandler {
             if (source_type == "text") {
                 string pref_text_format = GetPreferredTextFileFormat(ido);
                 if (ido.TryGetData(pref_text_format, out string text)) {
+                    // text as text
                     data_to_write = text;
                     fe = GetTextFileFormatExt(pref_text_format);
                 } else if (ido.TryGetData(MpPortableDataFormats.AvPNG, out byte[] imgBytes) &&
                     imgBytes.ToBase64String() is string imgStr) {
+                    // text as image
                     data_to_write = imgStr;
-                    fe = "png";
+                    fe = _cur_img_ext;
                 }
             } else if (source_type == "image") {
                 if (ido.TryGetData(MpPortableDataFormats.AvPNG, out byte[] imgBytes) &&
                     imgBytes.ToBase64String() is string imgStr) {
+                    // image as image
                     data_to_write = imgStr;
-                    fe = "png";
+                    fe = _cur_img_ext;
                 } else {
                     string pref_text_format = GetPreferredTextFileFormat(ido);
                     if (ido.TryGetData(pref_text_format, out string text)) {
+                        // image as text
                         data_to_write = text;
                         fe = GetTextFileFormatExt(pref_text_format);
                     }
@@ -205,7 +239,6 @@ namespace AvCoreClipboardHandler {
             }
             return 0;
         }
-
         private static string GetPreferredTextFileFormat(IDataObject ido) {
             if (ido.Contains(MpPortableDataFormats.AvCsv) &&
                 ido.Get(MpPortableDataFormats.AvCsv) != null) {
@@ -225,7 +258,6 @@ namespace AvCoreClipboardHandler {
             }
             return null;
         }
-
         private static string GetTextFileFormatExt(string format) {
             if (format == MpPortableDataFormats.AvCsv) {
                 return "csv";
@@ -258,6 +290,8 @@ namespace AvCoreClipboardHandler {
 
 #endif
         }
+        #endregion
+
         #endregion
     }
 }

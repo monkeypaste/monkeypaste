@@ -143,7 +143,8 @@ namespace MonkeyPaste.Common {
 
         #region Properties
 
-        public static IEnumerable<string> RegisteredFormats => _formatLookup.Select(x => x.Value.Name);
+        public static IEnumerable<string> RegisteredFormats =>
+            _formatLookup.Select(x => x.Value.Name);
 
         #endregion
 

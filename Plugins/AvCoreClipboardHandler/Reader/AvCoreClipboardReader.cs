@@ -8,20 +8,12 @@ using System.Text;
 
 namespace AvCoreClipboardHandler {
     public static class AvCoreClipboardReader {
+        #region Private Variables
 
-        // manifest reader formats (NOTE not used but to keep track of references)
-        public static string[] _AvReaderFormats = new string[]{
-            MpPortableDataFormats.Text,
-            MpPortableDataFormats.CefText,
-            MpPortableDataFormats.AvRtf_bytes,
-            MpPortableDataFormats.AvHtml_bytes,
-            MpPortableDataFormats.CefHtml,
-            MpPortableDataFormats.LinuxSourceUrl,
-            MpPortableDataFormats.AvPNG,
-            MpPortableDataFormats.AvFileNames,
-            MpPortableDataFormats.AvCsv,
-            MpPortableDataFormats.LinuxUriList
-        };
+        #endregion
+
+        #region Public Methods
+
         public static async Task<MpClipboardReaderResponse> ProcessReadRequestAsync(MpClipboardReaderRequest request, int retryCount = 10) {
             IDataObject avdo = null;
             IEnumerable<string> availableFormats = null;
@@ -87,6 +79,9 @@ namespace AvCoreClipboardHandler {
             };
         }
 
+        #endregion
+
+        #region Private Methods
 
         private static async Task<object> ReadDataObjectFormat(string format, IDataObject avdo) {
             object dataObj;
@@ -127,7 +122,6 @@ namespace AvCoreClipboardHandler {
             return dataStr;
         }
 
-
         private static object ProcessReaderParam(
             MpParameterRequestItemFormat pkvp,
             string format,
@@ -136,21 +130,21 @@ namespace AvCoreClipboardHandler {
             out List<MpPluginUserNotificationFormat> nfl) {
             ex = null;
             nfl = null;
-            if (data == null) {
+            if (data == null || pkvp == null) {
                 // already omitted
-                return null;
+                return data;
             }
+            string paramVal = pkvp.value;
             try {
                 // NOTE by internal convention 'paramId' is an int.
                 // plugin creator has to manage mapping internally
                 CoreClipboardParamType paramType = (CoreClipboardParamType)Convert.ToInt32(pkvp.paramId);
                 switch (format) {
                     case MpPortableDataFormats.AvRtf_bytes:
-
                         switch (paramType) {
                             case CoreClipboardParamType.R_MaxCharCount_Rtf:
                                 if (data is string rtf) {
-                                    int max_length = int.Parse(pkvp.value);
+                                    int max_length = int.Parse(paramVal);
                                     if (rtf.Length > max_length) {
                                         nfl = new List<MpPluginUserNotificationFormat>() {
                                             Util.CreateNotification(
@@ -164,15 +158,9 @@ namespace AvCoreClipboardHandler {
                                 }
                                 break;
                             case CoreClipboardParamType.R_Ignore_Rtf:
-                                bool ignoreRtf = bool.Parse(pkvp.value);
+                                bool ignoreRtf = bool.Parse(paramVal);
                                 if (ignoreRtf) {
-                                    nfl = new List<MpPluginUserNotificationFormat>() {
-                                        Util.CreateNotification(
-                                            MpPluginNotificationType.PluginResponseWarning,
-                                            "Format Ignored",
-                                            $"{format} Format is flagged as 'ignored'",
-                                            "CoreClipboardWriter")
-                                    };
+                                    AddIgnoreNotification(ref nfl, format);
                                     data = null;
 
                                 } else {
@@ -185,7 +173,7 @@ namespace AvCoreClipboardHandler {
                         switch (paramType) {
                             case CoreClipboardParamType.R_MaxCharCount_Text:
                                 if (data is string text) {
-                                    int max_length = int.Parse(pkvp.value);
+                                    int max_length = int.Parse(paramVal);
                                     if (text.Length > max_length) {
                                         nfl = new List<MpPluginUserNotificationFormat>() {
                                             Util.CreateNotification(
@@ -199,15 +187,9 @@ namespace AvCoreClipboardHandler {
                                 }
                                 break;
                             case CoreClipboardParamType.R_Ignore_Text:
-                                bool ignoreText = bool.Parse(pkvp.value);
+                                bool ignoreText = bool.Parse(paramVal);
                                 if (ignoreText) {
-                                    nfl = new List<MpPluginUserNotificationFormat>() {
-                                        Util.CreateNotification(
-                                            MpPluginNotificationType.PluginResponseWarning,
-                                            "Format Ignored",
-                                            $"Text Format is flagged as 'ignored'",
-                                            "CoreClipboardWriter")
-                                    };
+                                    AddIgnoreNotification(ref nfl, format);
                                     data = null;
 
                                 } else {
@@ -219,6 +201,44 @@ namespace AvCoreClipboardHandler {
                                     //        "CoreClipboardWriter")
                                     //};
                                     return data;
+                                }
+                                break;
+                        }
+                        break;
+                    case MpPortableDataFormats.AvPNG:
+                        switch (paramType) {
+                            case CoreClipboardParamType.R_Ignore_Image:
+                                data = null;
+                                break;
+                        }
+                        break;
+
+                    case MpPortableDataFormats.AvFileNames:
+                        switch (paramType) {
+                            case CoreClipboardParamType.R_IgnoreAll_FileDrop:
+                                data = null;
+                                AddIgnoreNotification(ref nfl, format);
+                                break;
+                            case CoreClipboardParamType.R_IgnoredExt_FileDrop:
+                                if (!string.IsNullOrWhiteSpace(paramVal) &&
+                                    paramVal.ToListFromCsv(MpCsvFormatProperties.DefaultBase64Value) is List<string> iel &&
+                                    data is IEnumerable<string> fpl) {
+                                    // null ignored exts
+                                    fpl.Where(x => iel.Any(y => x.ToLower().EndsWith(y.ToLower())))
+                                        .ForEach(x => x = null);
+                                    if (fpl.All(x => x == null)) {
+                                        // all omitted remove format
+                                        data = null;
+                                        break;
+                                    }
+                                    if (fpl is string[] fpArr) {
+
+                                        fpArr.RemoveNullsInPlace();
+                                        // pretty sure setting this isn't necessary but jic
+                                        data = fpArr;
+                                    } else {
+                                        MpDebug.Break("Files is NOT an array!");
+                                    }
                                 }
                                 break;
                         }
@@ -235,5 +255,17 @@ namespace AvCoreClipboardHandler {
             }
             return data;
         }
+
+        private static void AddIgnoreNotification(ref List<MpPluginUserNotificationFormat> nfl, string format) {
+            if (nfl == null) {
+                nfl = new List<MpPluginUserNotificationFormat>();
+            }
+            nfl.Add(Util.CreateNotification(
+                MpPluginNotificationType.PluginResponseWarning,
+                "Format Ignored",
+                $"{format} Format is flagged as 'ignored'",
+                "CoreClipboardWriter"));
+        }
+        #endregion
     }
 }

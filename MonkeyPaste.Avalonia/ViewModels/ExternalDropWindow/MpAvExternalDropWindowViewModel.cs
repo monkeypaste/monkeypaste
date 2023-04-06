@@ -87,6 +87,18 @@ namespace MonkeyPaste.Avalonia {
         public bool IsShowingFinishMenu =>
             _dropCompleteWindow != null;
 
+        public bool IsDragObjectInitializing {
+            get {
+                var dobj = MpAvDocumentDragHelper.DragDataObject;
+                if (dobj == null) {
+                    return false;
+                }
+                var phl = dobj.GetPlaceholderFormats();
+                MpConsole.WriteLine($"Placeholder formats: {string.Join(",", phl)}");
+                return dobj.IsAnyPlaceholderData();
+            }
+        }
+
         #endregion
 
         #region Model
@@ -129,6 +141,9 @@ namespace MonkeyPaste.Avalonia {
 
                     OnPropertyChanged(nameof(IsShowingFinishMenu));
                     OnPropertyChanged(nameof(IsShowingFinishMenu));
+                    break;
+                case nameof(IsHovering):
+
                     break;
             }
         }
@@ -190,6 +205,10 @@ namespace MonkeyPaste.Avalonia {
             var cur_preset_state = GetFormatPresetState();
             bool is_default = _preShowPresetState.Difference(cur_preset_state).Count() == 0;
 
+            if (avm.ClipboardFormatInfos.Items == null) {
+                return !is_default;
+            }
+
             if (!avm.ClipboardFormatInfos.Items.Any() && is_default) {
                 // no custom app settings, default toggles
                 return false;
@@ -238,6 +257,8 @@ namespace MonkeyPaste.Avalonia {
             if (!MpAvShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
                 StopDropTargetListener();
             }
+            OnPropertyChanged(nameof(IsDragObjectInitializing));
+
             var gmp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
             UpdateDropApp(gmp);
         }
