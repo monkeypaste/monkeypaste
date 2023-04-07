@@ -307,7 +307,7 @@ function enableSubSelection(fromHost = false) {
 
 function disableSubSelection(fromHost = false) {
 	if (!canDisableSubSelection()) {
-		log('disableSubSelection ignored, this is appender or appendee. fromHost: ' + fromHost);
+		log('disableSubSelection ignored, drop in progress or this is appender or appendee. fromHost: ' + fromHost);
 		if (fromHost) {
 			// notify host sub-selection canceled
 			onSubSelectionEnabledChanged_ntf(isSubSelectionEnabled());

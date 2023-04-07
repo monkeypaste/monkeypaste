@@ -89,7 +89,8 @@ namespace MonkeyPaste.Avalonia {
                     MpAvMainWindowViewModel.Instance.FinishMainWindowHide();
                 }
 
-            } else if (MpAvAppendNotificationWindow.Instance.IsActive) {
+            } else if (MpAvAppendNotificationWindow.Instance != null &&
+                        MpAvAppendNotificationWindow.Instance.IsActive) {
                 IntPtr lastActive = Mp.Services.ProcessWatcher.SetActiveProcess(pasteToHandle);
                 //MpAvNotificationWindowManager.Instance.HideNotification(MpAppendNotificationViewModel.Instance);
             } else {

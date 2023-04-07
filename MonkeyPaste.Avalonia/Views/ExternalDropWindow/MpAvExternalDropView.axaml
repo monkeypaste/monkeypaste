@@ -59,7 +59,11 @@
                            Text="{Binding DropAppViewModel.AppName}" />
 
             </Grid>
-            <Border x:Name="HideDropMenuBorder"
+            <Button x:Name="HideDropMenuBorder"
+                    Classes="noBg noHoverBg square"
+                    local:MpAvPointerCommandExtension.IsEnabled="True"
+                    local:MpAvPointerCommandExtension.DragEnterCommand="{Binding CancelDropWidgetCommand}"
+                    local:MpAvPointerCommandExtension.DragEnterCommandParameter="{Binding $self}"
                     Background="Transparent"
                     Grid.Row="0"
                     Width="20"
@@ -67,8 +71,12 @@
                     Margin="3"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top">
+
+                <ToolTip.Tip>
+                    <local:MpAvToolTipView ToolTipText="{Binding DragInfo}" />
+                </ToolTip.Tip>
                 <Image Source="{Binding Source={StaticResource CloseImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-            </Border>
+            </Button>
             <ListBox x:Name="DropItemListBox"
                      Grid.Row="1"
                      DataContext="{x:Static local:MpAvClipboardHandlerCollectionViewModel.Instance}"

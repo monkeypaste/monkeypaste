@@ -218,9 +218,14 @@ function onDragOver(e) {
     
 
     if (!isDropping()) {
-        // IsDropping won't be set to true when its dragOverlay ie. can't drop whole tile on itself.
-        log('onDragOver called but not dropping, returning false');
-        return rejectDrop(e);
+        if (isDragging()) {
+            // IsDropping won't be set to true when its dragOverlay ie. can't drop whole tile on itself.
+            log('onDragOver called but not dropping, returning false');
+            return rejectDrop(e);
+
+        } else {
+            onDragEnter(e);
+        }
     }
     if (e.target.id == 'dragOverlay') {
         debugger;
@@ -289,15 +294,16 @@ function onDragLeave(e) {
 
     let editor_rect = getEditorContainerRect();
     if (isPointInRect(editor_rect, WindowMouseLoc)) {
+        return;
 
-        if (!DropItemElms.includes(e.target)) {
-            // drag leave of block/inline element, ignore
-            return;
-        }
-        resetDrop(e.fromHost, true, false);
-        log('drag canceled (pointer still in window)');
-        onDragLeave_ntf();
-        return rejectDrop(e);
+        //if (!DropItemElms.includes(e.target)) {
+        //    // drag leave of block/inline element, ignore
+        //    return;
+        //}
+        //resetDrop(e.fromHost, true, false);
+        //log('drag canceled (pointer still in window)');
+        //onDragLeave_ntf();
+        //return rejectDrop(e);
     }
 
     log('drag leave');

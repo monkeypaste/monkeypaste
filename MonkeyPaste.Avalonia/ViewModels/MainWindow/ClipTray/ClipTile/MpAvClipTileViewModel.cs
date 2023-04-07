@@ -1909,7 +1909,7 @@ namespace MonkeyPaste.Avalonia {
                     Debugger.Break();
                     return;
                 }
-                var mpdo = await ds.GetDataObjectAsync(true);
+                var mpdo = await ds.GetDataObjectAsync();
                 if (mpdo == null) {
                     // is none selected?
                     Debugger.Break();

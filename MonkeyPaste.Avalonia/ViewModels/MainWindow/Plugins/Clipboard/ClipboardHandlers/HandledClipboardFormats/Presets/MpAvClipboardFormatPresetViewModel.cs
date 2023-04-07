@@ -136,6 +136,15 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public bool IsFormatPlaceholderOnTargetDragObject {
+            get {
+                if (MpAvDocumentDragHelper.DragDataObject == null) {
+                    return false;
+                }
+                return MpAvDocumentDragHelper.DragDataObject.ContainsPlaceholderFormat(ClipboardFormat.clipboardName);
+            }
+        }
+
         #endregion
 
         #region Model

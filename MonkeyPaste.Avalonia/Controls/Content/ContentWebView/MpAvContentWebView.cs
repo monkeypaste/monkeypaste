@@ -272,7 +272,7 @@ namespace MonkeyPaste.Avalonia {
             SendMessage($"updateModifierKeysFromHost_ext('{modKeyMsg.SerializeJsonObjectToBase64()}')");
         }
 
-        public async Task<MpAvDataObject> GetDataObjectAsync(bool forOle, string[] formats = null) {
+        public async Task<MpAvDataObject> GetDataObjectAsync(string[] formats = null) {
             if (BindingContext == null) {
                 MpDebug.Break();
                 return new MpAvDataObject();
@@ -282,7 +282,7 @@ namespace MonkeyPaste.Avalonia {
             _contentScreenShotBase64_ntf = null;
 
             var contentDataReq = new MpQuillContentDataObjectRequestMessage() {
-                forOle = forOle
+                forOle = true
             };
 
             // NOTE when file is on clipboard pasting into tile removes all other formats besides file
@@ -325,77 +325,65 @@ namespace MonkeyPaste.Avalonia {
             foreach (var di in contentDataResp.dataItems) {
                 avdo.SetData(di.format, di.data);
             }
+            if (ctvm.CopyItemType == MpCopyItemType.FileList) {
+                avdo.SetData(MpPortableDataFormats.AvFileNames, ctvm.CopyItemData.SplitNoEmpty(MpCopyItem.FileItemSplitter));
+            } else {
+                // NOTE setting dummy file so OLE system sees format on clipboard, actual
+                // data is overwritten in core clipboard handler
+                avdo.SetData(MpPortableDataFormats.AvFileNames, new[] { MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT });
 
-            if (forOle) {
-                if (ctvm.CopyItemType == MpCopyItemType.Image &&
+                //if (!ignore_pseudo_file) {
+                //    // js doesn't set file stuff for non-files
+                //    string ctvm_fp = await ctvm.CopyItemData.ToFileAsync(
+                //                forceNamePrefix: ctvm.CopyItemTitle,
+                //                forceExt: ctvm.CopyItemType == MpCopyItemType.Image ? "png" : "txt",
+                //                isTemporary: true);
+                //    avdo.SetData(
+                //        MpPortableDataFormats.AvFileNames,
+                //        new List<string>() { ctvm_fp });
+                //}
+            }
+
+            bool is_full_content = ctvm.CopyItemType != MpCopyItemType.Text || contentDataResp.isAllContent;
+            avdo.AddContentReferences(ctvm.CopyItem, is_full_content);
+
+
+            if (ctvm.CopyItemType == MpCopyItemType.Image &&
                     ctvm.CopyItemData.ToAvBitmap() is Bitmap bmp) {
 
-                    avdo.SetData(MpPortableDataFormats.AvPNG, bmp.ToByteArray());
-                    avdo.SetData(MpPortableDataFormats.Text, bmp.ToAsciiImage());
-                    // TODO add colorized ascii maybe as html and rtf!!
-                } else if (!ignore_ss) {
-                    avdo.SetData(MpPortableDataFormats.AvPNG, MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT.ToBytesFromString());
+                avdo.SetData(MpPortableDataFormats.AvPNG, bmp.ToByteArray());
+                avdo.SetData(MpPortableDataFormats.Text, bmp.ToAsciiImage());
+                // TODO add colorized ascii maybe as html and rtf!!
+            } else if (!ignore_ss) {
+                avdo.SetData(MpPortableDataFormats.AvPNG, MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT.ToBytesFromString());
 
-                    Dispatcher.UIThread.Post(async () => {
-                        int ss_timeout = 5_000;
-                        var ss_sw = Stopwatch.StartNew();
-                        // screen shot is async and js notifies w/ base64 property here
-                        while (_contentScreenShotBase64_ntf == null) {
-                            await Task.Delay(100);
-                            if (ss_sw.ElapsedMilliseconds >= ss_timeout) {
-                                MpConsole.WriteLine("screen shot timed out :(");
-                                return;
-                            }
+                Dispatcher.UIThread.Post(async () => {
+                    bool timed_out = false;
+                    int ss_timeout = 15_000;
+                    var ss_sw = Stopwatch.StartNew();
+                    // screen shot is async and js notifies w/ base64 property here
+                    while (_contentScreenShotBase64_ntf == null) {
+                        await Task.Delay(100);
+                        if (ss_sw.ElapsedMilliseconds >= ss_timeout) {
+                            MpConsole.WriteLine("screen shot timed out :(");
+                            timed_out = true;
+                            break;
                         }
-                        ss_sw.Restart();
-                        while (MpAvDocumentDragHelper.SourceDataObject == null) {
-                            await Task.Delay(100);
-                            if (ss_sw.ElapsedMilliseconds >= ss_timeout) {
-                                MpConsole.WriteLine("screen shot timed out :(");
-                                return;
-                            }
-                        }
+                    }
+                    if (!timed_out) {
                         if (_contentScreenShotBase64_ntf.ToBytesFromBase64String() is byte[] ss_bytes) {
-                            if (MpAvDocumentDragHelper.SourceDataObject != null) {
-                                MpAvDocumentDragHelper.SourceDataObject.Set(MpPortableDataFormats.AvPNG, ss_bytes);
-                            }
-                            if (MpAvDocumentDragHelper.DragDataObject != null) {
-                                MpAvDocumentDragHelper.DragDataObject.Set(MpPortableDataFormats.AvPNG, ss_bytes);
-                            }
 
-                            await MpAvDocumentDragHelper.ApplyClipboardPresetOrSourceUpdateToDragDataAsync();
-                            MpConsole.WriteLine("Screen shot applied to dataobject");
+                            MpConsole.WriteLine("screen shot set. byte count: " + ss_bytes.Length);
+                            avdo.Set(MpPortableDataFormats.AvPNG, ss_bytes);
                         }
-
-
-                    });
-
-                }
-
-                if (ctvm.CopyItemType == MpCopyItemType.FileList) {
-                    avdo.SetData(MpPortableDataFormats.AvFileNames, ctvm.CopyItemData.SplitNoEmpty(MpCopyItem.FileItemSplitter));
-                } else {
-                    // NOTE setting dummy file so OLE system sees format on clipboard, actual
-                    // data is overwritten in core clipboard handler
-                    avdo.SetData(MpPortableDataFormats.AvFileNames, new[] { MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT });
-
-                    //if (!ignore_pseudo_file) {
-                    //    // js doesn't set file stuff for non-files
-                    //    string ctvm_fp = await ctvm.CopyItemData.ToFileAsync(
-                    //                forceNamePrefix: ctvm.CopyItemTitle,
-                    //                forceExt: ctvm.CopyItemType == MpCopyItemType.Image ? "png" : "txt",
-                    //                isTemporary: true);
-                    //    avdo.SetData(
-                    //        MpPortableDataFormats.AvFileNames,
-                    //        new List<string>() { ctvm_fp });
-                    //}
-                }
-
-                bool is_full_content = ctvm.CopyItemType != MpCopyItemType.Text || contentDataResp.isAllContent;
-                avdo.AddContentReferences(ctvm.CopyItem, is_full_content);
+                    }
+                });
             }
 
             avdo.MapAllPseudoFormats();
+            // remove all empty formats (workaround for cefnet bug w/ empty asciiUrl
+            avdo.DataFormatLookup.Where(x => x.Value == null)
+                .ForEach(x => avdo.DataFormatLookup.Remove(x.Key));
             return avdo;
         }
         public bool IsCurrentDropTarget => BindingContext == null ? false : BindingContext.IsDropOverTile;
@@ -1413,7 +1401,8 @@ namespace MonkeyPaste.Avalonia {
         private async void OnIsContentSubSelectableChanged() {
             if (BindingContext == null ||
                 !IsEditorLoaded ||
-                !IsContentReadOnly) {
+                !IsContentReadOnly ||
+                MpAvDocumentDragHelper.DragDataObject != null) {
                 return;
             }
 

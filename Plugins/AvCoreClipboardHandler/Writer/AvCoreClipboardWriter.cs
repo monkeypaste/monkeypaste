@@ -122,7 +122,10 @@ namespace AvCoreClipboardHandler {
                                 }
                                 break;
                             case CoreClipboardParamType.W_Ignore_Text:
-                                data = null;
+                                if (paramVal.ParseOrConvertToBool(false) is bool textImg &&
+                                    textImg) {
+                                    data = null;
+                                }
                                 break;
                         }
                         break;
@@ -136,14 +139,20 @@ namespace AvCoreClipboardHandler {
                                 }
                                 break;
                             case CoreClipboardParamType.W_Ignore_Image:
-                                data = null;
+                                if (paramVal.ParseOrConvertToBool(false) is bool ignImg &&
+                                    ignImg) {
+                                    data = null;
+                                }
                                 break;
                         }
                         break;
                     case MpPortableDataFormats.AvFileNames:
                         switch (paramType) {
                             case CoreClipboardParamType.W_IgnoreAll_FileDrop:
-                                data = null;
+                                if (paramVal.ParseOrConvertToBool(false) is bool ignFiles &&
+                                    ignFiles) {
+                                    data = null;
+                                }
                                 break;
                         }
                         break;
@@ -151,7 +160,10 @@ namespace AvCoreClipboardHandler {
                     case MpPortableDataFormats.LinuxGnomeFiles:
                         switch (paramType) {
                             case CoreClipboardParamType.W_IgnoreAll_FileDrop_Linux:
-                                data = null;
+                                if (paramVal.ParseOrConvertToBool(false) is bool linuxFilesImg &&
+                                    linuxFilesImg) {
+                                    data = null;
+                                }
                                 break;
                         }
                         break;
@@ -240,20 +252,16 @@ namespace AvCoreClipboardHandler {
             return 0;
         }
         private static string GetPreferredTextFileFormat(IDataObject ido) {
-            if (ido.Contains(MpPortableDataFormats.AvCsv) &&
-                ido.Get(MpPortableDataFormats.AvCsv) != null) {
+            if (ido.ContainsData(MpPortableDataFormats.AvCsv)) {
                 return MpPortableDataFormats.AvCsv;
             }
-            if (ido.Contains(MpPortableDataFormats.Text) &&
-                ido.Get(MpPortableDataFormats.Text) != null) {
+            if (ido.ContainsData(MpPortableDataFormats.Text)) {
                 return MpPortableDataFormats.Text;
             }
-            if (ido.Contains(MpPortableDataFormats.CefHtml) &&
-                ido.Get(MpPortableDataFormats.CefHtml) != null) {
+            if (ido.ContainsData(MpPortableDataFormats.CefHtml)) {
                 return MpPortableDataFormats.CefHtml;
             }
-            if (ido.Contains(MpPortableDataFormats.AvRtf_bytes) &&
-                ido.Get(MpPortableDataFormats.AvRtf_bytes) != null) {
+            if (ido.ContainsData(MpPortableDataFormats.AvRtf_bytes)) {
                 return MpPortableDataFormats.AvRtf_bytes;
             }
             return null;

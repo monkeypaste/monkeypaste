@@ -248,6 +248,9 @@ function canDisableSubSelection() {
 	if (isAnyAppendEnabled()) {
 		return false;
 	}
+	if (isDropping()) {
+		return false;
+	}
 	return true;
 }
 

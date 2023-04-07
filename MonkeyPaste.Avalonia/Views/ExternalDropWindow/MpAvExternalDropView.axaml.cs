@@ -19,8 +19,8 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvExternalDropView() : base() {
             AvaloniaXamlLoader.Load(this);
-            var hdmb = this.FindControl<Border>("HideDropMenuBorder");
-            hdmb.AddHandler(DragDrop.DragOverEvent, OnHideOver);
+            //var hdmb = this.FindControl<Border>("HideDropMenuBorder");
+            //hdmb.AddHandler(DragDrop.DragOverEvent, OnHideOver);
 
             var dilb = this.FindControl<ListBox>("DropItemListBox");
             dilb.EnableItemsControlAutoScroll();

@@ -8,7 +8,7 @@ namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvPlatformDataObjectExtensions {
         public static IEnumerable<string> GetAllDataFormats(this IDataObject ido) {
             if (ido == null) {
-                return null;
+                return new string[] { };
             }
             List<string> formats = ido.GetDataFormats().ToList();
             if (ido.GetFileNames() is IEnumerable<string> fps) {
@@ -56,7 +56,10 @@ namespace MonkeyPaste.Common.Avalonia {
                 string sltc = string_lists_to_clone[i];
                 if (ido_source.Get(sltc) is string[] source_stringArr) {
                     var cloned_str_arr = new string[source_stringArr.Length];
-                    source_stringArr.CopyTo(cloned_str_arr, 0);
+                    //source_stringArr.CopyTo(cloned_str_arr, 0);
+                    for (int j = 0; j < cloned_str_arr.Length; j++) {
+                        cloned_str_arr[j] = source_stringArr[j];
+                    }
 
                     availableFormats.Remove(sltc);
                     cavdo.Set(sltc, cloned_str_arr);
@@ -71,34 +74,51 @@ namespace MonkeyPaste.Common.Avalonia {
             availableFormats.ForEach(x => cavdo.SetData(x, ido_source.GetAllowFiles(x)));
             return cavdo;
         }
+
+        public static bool ContainsPlaceholderFormat(this IDataObject ido, string format) {
+            object f_data = ido.Get(format);
+            if (f_data == null) {
+                return false;
+            }
+            if (f_data is string dataStr &&
+                dataStr == MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT) {
+                return true;
+            }
+            if (f_data is IEnumerable<string> dl &&
+                dl.Any(x => x == MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT)) {
+                return true;
+            }
+            if (f_data is byte[] dataBytes &&
+                dataBytes.ToDecodedString() == MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT) {
+                return true;
+            }
+            return false;
+        }
         public static IEnumerable<string> GetPlaceholderFormats(this IDataObject ido) {
-            List<string> phfl = new List<string>();
-            if (ido == null) {
-                return phfl;
-            }
-            var available_formats = ido.GetAllDataFormats();
-            foreach (var f in available_formats) {
-                object f_data = ido.Get(f);
-                if (f_data is string dataStr &&
-                    dataStr == MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT) {
-                    phfl.Add(f);
-                    continue;
-                }
-                if (f_data is IEnumerable<string> dl &&
-                    dl.Any(x => x == MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT)) {
-                    phfl.Add(f);
-                    continue;
-                }
-                if (f_data is byte[] dataBytes &&
-                    dataBytes.ToDecodedString() == MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT) {
-                    phfl.Add(f);
-                    continue;
-                }
-            }
-            return phfl;
+            return
+                ido
+                .GetAllDataFormats()
+                .Where(x => ido.ContainsPlaceholderFormat(x));
         }
         public static bool IsAnyPlaceholderData(this IDataObject ido) {
             return ido.GetPlaceholderFormats().Count() > 0;
+        }
+
+        public static object GetFormatPlaceholderData(string format) {
+            if (MpPortableDataFormats.InternalFormats.Contains(format) &&
+                format != MpPortableDataFormats.CefAsciiUrl) {
+                return null;
+            }
+            switch (format) {
+                case MpPortableDataFormats.AvPNG:
+                case MpPortableDataFormats.CefAsciiUrl:
+                    return MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT.ToBytesFromString();
+                case MpPortableDataFormats.AvFileNames:
+                case MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT:
+                    return new string[] { MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT };
+                default:
+                    return MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT;
+            }
         }
 
         public static bool ContainsData(this IDataObject ido, string format) {
@@ -108,7 +128,10 @@ namespace MonkeyPaste.Common.Avalonia {
             // removed (in WriteClipboardOrDropObjectAsync)
             // just nulled out this checks if format actually has data
 
-            if (ido == null || string.IsNullOrEmpty(format) || !ido.Contains(format)) {
+            if (ido == null ||
+                string.IsNullOrEmpty(format) ||
+                !ido.Contains(format) ||
+                ido.ContainsPlaceholderFormat(format)) {
                 return false;
             }
 
@@ -119,28 +142,16 @@ namespace MonkeyPaste.Common.Avalonia {
                 if (string.IsNullOrEmpty(idoStr)) {
                     return false;
                 }
-                if (idoStr == MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT) {
-                    // any string (or yet-to-be encoded) format not available yet
-                    return false;
-                }
             }
             if (ido.Get(format) is IEnumerable<string> idoStrs) {
                 was_checked = true;
                 if (!idoStrs.Any()) {
                     return false;
                 }
-                if (idoStrs.All(x => x == MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT)) {
-                    // any string list (file or uri) not available yet
-                    return false;
-                }
             }
             if (ido.Get(format) is byte[] idoBytes) {
                 was_checked = true;
                 if (idoBytes.Length == 0) {
-                    return false;
-                }
-                if (idoBytes.ToDecodedString() == MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT) {
-                    // image not available yet
                     return false;
                 }
             }
@@ -153,28 +164,28 @@ namespace MonkeyPaste.Common.Avalonia {
             return true;
         }
 
-        public static void CopyFrom(this IDataObject target_ido, IDataObject source_ido) {
+        public static void CopyTo(this IDataObject source_ido, IDataObject target_ido) {
             if (target_ido == null || source_ido == null) {
                 return;
             }
             var sfl = source_ido.GetAllDataFormats();
-            foreach (var sf in sfl) {
-                // set all target items to available source items
-                if (sf == MpPortableDataFormats.AvFileNames &&
-                    source_ido.Get(sf) is string[] sourceFileArr &&
-                    target_ido.Get(sf) is string[] targetFileArr) {
-                    // retain file item array object, only up entries or null if new is less (edge case)
-                    for (int i = 0; i < targetFileArr.Length; i++) {
-                        if (i >= sourceFileArr.Length) {
-                            targetFileArr[i] = null;
-                            continue;
-                        }
-                        targetFileArr[i] = sourceFileArr[i];
-                    }
-                    continue;
-                }
-                target_ido.Set(sf, source_ido.Get(sf));
-            }
+            //foreach (var sf in sfl) {
+            //    // set all target items to available source items
+            //    if (source_ido.Get(sf) is string[] sourceFileArr &&
+            //        target_ido.Get(sf) is string[] targetFileArr) {
+            //        // retain file item array object, only up entries or null if new is less (edge case)
+            //        for (int i = 0; i < targetFileArr.Length; i++) {
+            //            if (i >= sourceFileArr.Length) {
+            //                targetFileArr[i] = null;
+            //                continue;
+            //            }
+            //            targetFileArr[i] = sourceFileArr[i];
+            //        }
+            //        continue;
+            //    }
+            //    target_ido.Set(sf, source_ido.Get(sf));
+            //}
+            sfl.ForEach(x => target_ido.Set(x, source_ido.Get(x)));
             var tfl_to_clear = target_ido.GetAllDataFormats().Where(x => !sfl.Contains(x));
             foreach (var tf_to_clear in tfl_to_clear) {
                 // clear all target data not found in source

@@ -2566,7 +2566,7 @@ namespace MonkeyPaste.Avalonia {
                     mpdo = ctvm.CopyItem.ToPortableDataObject();
                 }
             } else if (cv is MpAvIDragSource ds) {
-                mpdo = await ds.GetDataObjectAsync(true);
+                mpdo = await ds.GetDataObjectAsync();
             }
             MpPortableProcessInfo pi = null;
             if (mpdo == null) {

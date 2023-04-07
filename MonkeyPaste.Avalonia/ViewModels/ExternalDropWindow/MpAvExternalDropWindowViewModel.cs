@@ -93,12 +93,18 @@ namespace MonkeyPaste.Avalonia {
                 if (dobj == null) {
                     return false;
                 }
-                var phl = dobj.GetPlaceholderFormats();
-                MpConsole.WriteLine($"Placeholder formats: {string.Join(",", phl)}");
                 return dobj.IsAnyPlaceholderData();
             }
         }
 
+        public string DragInfo {
+            get {
+                if (MpAvDocumentDragHelper.DragDataObject == null) {
+                    return "NO DRAG OBJECT";
+                }
+                return MpAvDocumentDragHelper.DragDataObject.ToString();
+            }
+        }
         #endregion
 
         #region Model
@@ -153,6 +159,7 @@ namespace MonkeyPaste.Avalonia {
             }
             switch (msg) {
                 case MpMessageType.ItemDragBegin:
+
                     ShowDropWindowCommand.Execute(null);
                     break;
                 case MpMessageType.ItemDragCanceled:
@@ -258,6 +265,9 @@ namespace MonkeyPaste.Avalonia {
                 StopDropTargetListener();
             }
             OnPropertyChanged(nameof(IsDragObjectInitializing));
+            MpAvClipboardHandlerCollectionViewModel.Instance
+                .AllAvailableWriterPresets
+                .ForEach(x => x.OnPropertyChanged(nameof(x.IsFormatPlaceholderOnTargetDragObject)));
 
             var gmp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
             UpdateDropApp(gmp);
@@ -360,8 +370,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void SetDropWindowPosition(Window w) {
-            if (w == null) {
+            if (w == null ||
+                !w.IsVisible) {
                 return;
+            }
+            if (w == _dropWidgetWindow) {
+                MpMessenger.SendGlobal(MpMessageType.DropWidgetOpened);
             }
             MpPoint w_origin = MpPoint.Zero;
             var screen_bounds = MpAvMainWindowViewModel.Instance.MainWindowScreen.Bounds;
@@ -461,8 +475,15 @@ namespace MonkeyPaste.Avalonia {
                 Reset();
             });
 
-        public ICommand CancelDropWidgetCommand => new MpCommand(
-            () => {
+        public ICommand CancelDropWidgetCommand => new MpCommand<object>(
+            (args) => {
+                if (args is Control c) {
+                    if (ToolTip.GetTip(c) is ToolTip tt) {
+                        tt.IsVisible = true;
+                    }
+                    // drag over
+                    return;
+                }
                 _wasHiddenOrCanceled = true;
                 MpConsole.WriteLine("Drop canceled");
                 IsOpen = false;

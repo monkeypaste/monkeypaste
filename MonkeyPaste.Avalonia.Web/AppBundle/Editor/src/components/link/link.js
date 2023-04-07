@@ -323,7 +323,8 @@ function onLinkPopupSaveClick(e) {
 }
 
 function onLinkPointerEnter(e) {
-    if (!isSubSelectionEnabled()) {
+    if (!isSubSelectionEnabled() ||
+        WindowMouseDownLoc != null) {
         return;
     }
     let a_elm = e.currentTarget;

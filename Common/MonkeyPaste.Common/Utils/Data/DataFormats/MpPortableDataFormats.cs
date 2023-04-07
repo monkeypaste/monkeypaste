@@ -19,11 +19,11 @@ namespace MonkeyPaste.Common {
             XamlPackage,
             //Html,
             AvCsv,
-            Unicode,
-            OemText,
+            //Unicode,
+            //OemText,
             //FileDrop,
-            WinBitmap,
-            WinDib,
+            //WinBitmap,
+            //WinDib,
 
             // linux
 

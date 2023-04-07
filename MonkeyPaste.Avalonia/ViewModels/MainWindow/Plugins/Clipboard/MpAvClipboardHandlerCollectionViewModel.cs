@@ -106,6 +106,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+
         async Task<object> MpIPlatformDataObjectHelperAsync.ReadDragDropDataObjectAsync(object idoObj) {
             if (idoObj is IDataObject ido) {
                 var drag_pi = Mp.Services.DragProcessWatcher.DragProcess;
@@ -119,7 +120,13 @@ namespace MonkeyPaste.Avalonia {
             var pdo = await ReadClipboardOrDropObjectAsync(null, null, ignorePlugins);
             return pdo;
         }
-
+        async Task<object> MpIPlatformDataObjectHelperAsync.ProcessDragDropDataObjectAsync(object idoObj) {
+            if (idoObj is IDataObject ido) {
+                var result = await WriteClipboardOrDropObjectAsync(ido, false, false);
+                return result;
+            }
+            return null;
+        }
         async Task MpIPlatformDataObjectHelperAsync.UpdateDragDropDataObjectAsync(object source, object target) {
             // NOTE this is called during a drag drop when user toggles a format preset
             // source should be the initial output of ContentView dataObject and should have the highest fidelity of data on it for conversions
@@ -129,7 +136,8 @@ namespace MonkeyPaste.Avalonia {
                 var source_clone = sido.Clone();
                 var temp = await WriteClipboardOrDropObjectAsync(source_clone, false, false);
                 if (temp is IDataObject temp_ido) {
-                    tido.CopyFrom(temp_ido);
+
+                    temp_ido.CopyTo(tido);
                     if (tido.TryGetData(MpPortableDataFormats.AvFileNames, out IEnumerable<string> fnl)) {
                         MpConsole.WriteLine($"dnd obj updated. target fns:");
                         fnl.ForEach(x => MpConsole.WriteLine(x));

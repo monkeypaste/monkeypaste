@@ -164,9 +164,10 @@ function updateScrollBarSizeAndPositions() {
 
 
 function onEditorContainerScroll(e) {
-    //   if (isShowingFindReplaceToolbar()) {
-    //       updateFindReplaceRangeRects();
-    //   } else if (BlurredSelectionRects) {
+    updateFindReplaceRangeRects();
+    //if (isShowingFindReplaceToolbar()) {
+        
+    //} //else if (BlurredSelectionRects) {
     //       // TODO update these guys
     //}
 

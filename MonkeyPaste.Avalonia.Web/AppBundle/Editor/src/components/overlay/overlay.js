@@ -40,14 +40,18 @@ function getPreviewLines(drop_idx, block_state) {
         return [];
     }
 
-    let block_line_offset = 3.0;
+    let block_line_offset = 0;// 3.0;
     let editor_rect = getEditorContainerRect(false);
     //let editor_rect = getWindowRect();
 
     let line_start_idx = getLineStartDocIdx(drop_idx);
     let line_start_rect = getCharacterRect(line_start_idx);
+    //if (line_start_idx == 0) {
+    //    line_start_rect.top += 3;
+    //    line_start_rect.bottom += 3;
+    //}
     let pre_y = line_start_rect.top - block_line_offset;
-    let pre_line = { x1: 0, y1: pre_y, x2: editor_rect.width, y2: pre_y };
+    let pre_line = { x1: 0, y1: Math.max(0,pre_y), x2: editor_rect.width, y2: Math.max(0,pre_y) };
 
     let line_end_idx = getLineEndDocIdx(drop_idx);
     let line_end_rect = getCharacterRect(line_end_idx);
@@ -112,15 +116,6 @@ function updateOverlayBounds() {
 }
 
 // #region Draws
-
-function drawHighlighting(ctx, forceColor) {
-    if (HighlightRects) {
-        for (var i = 0; i < HighlightRects.length; i++) {
-            let hl_color = forceColor ? forceColor : i == SelectedHighlightRectIdx ? 'rgba(255,0,0,50)' : 'rgba(0,255,255,50)';
-            drawRect(ctx, HighlightRects[i], hl_color, 'transparent');
-        }
-    }
-}
 
 function drawDropPreview(ctx, color = 'red', thickness = 1.0, line_style = [5, 5]) {
     if (isDragCopy()) {
@@ -188,20 +183,21 @@ function drawTextSelection(ctx) {
         let scroll_x = getEditorContainerElement().scrollLeft;
 
         let active_rect_range_kvp = CurFindReplaceDocRangeRectIdxLookup[CurFindReplaceDocRangeIdx];
-        CurFindReplaceDocRangesRects.forEach((cur_rect, rect_idx) => {
+        for (var i = 0; i < CurFindReplaceDocRangesRects.length; i++) {
+            let cur_rect = CurFindReplaceDocRangesRects[i];
             let adj_rect = cleanRect(cur_rect);
             let is_active = false;
-            if (rect_idx >= active_rect_range_kvp[0] &&
-                rect_idx <= active_rect_range_kvp[1]) {
+            if (i >= active_rect_range_kvp[0] &&
+                i <= active_rect_range_kvp[1]) {
                 is_active = true;
             }
             adj_rect = applyRangeRectStyle(is_active, adj_rect);
-            adj_rect.left -= scroll_x;
-            adj_rect.right -= scroll_x;
-            adj_rect.top -= scroll_y;
-            adj_rect.bottom -= scroll_y;
+            //adj_rect.left -= scroll_x;
+            //adj_rect.right -= scroll_x;
+            //adj_rect.top -= scroll_y;
+            //adj_rect.bottom -= scroll_y;
             drawRect(ctx, adj_rect);//, cur_bg_color, sel_fg_color, 0.5, 125 / 255);
-        });
+        }
     } else if (BlurredSelectionRects) {
         let scroll_y = getEditorContainerElement().scrollTop;
 
@@ -274,10 +270,6 @@ function drawOverlay() {
 
     if (hasAnnotations()) {
         drawAnnotations(ctx);
-    }
-
-    if (IsHighlightingVisible) {
-        drawHighlighting(ctx);
     }
 
     if (isDropping()) {

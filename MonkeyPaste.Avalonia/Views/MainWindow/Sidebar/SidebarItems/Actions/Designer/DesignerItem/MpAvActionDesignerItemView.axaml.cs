@@ -55,7 +55,7 @@ namespace MonkeyPaste.Avalonia {
             e.DragEffects =
                 is_valid ?
                     DragDropEffects.Move : DragDropEffects.None;
-            MpConsole.WriteLine($"[DragOver] TagTile: '{e.DragEffects}'");
+            //MpConsole.WriteLine($"[DragOver] TagTile: '{e.DragEffects}'");
 
         }
 

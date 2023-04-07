@@ -34,12 +34,12 @@ div.ql-code-block-container, div.ql-code-block {
     }
 
 .show-scrollbars {
-    overflow: auto;
+    overflow: auto !important;
     scroll-behavior: smooth;
 }
 
 .hide-scrollbars {
-    overflow: hidden;
+    overflow: hidden !important;
 }
 
 .sub-select {

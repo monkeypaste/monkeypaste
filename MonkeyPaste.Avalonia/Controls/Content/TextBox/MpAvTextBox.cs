@@ -32,12 +32,8 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region Overrides
-        Type IStyleable.StyleKey => typeof(TextBox);
+        #region Interfaces
 
-        #endregion
-
-        #region Properties
 
 
         #region MpAvIDragSource Implementation
@@ -54,11 +50,20 @@ namespace MonkeyPaste.Avalonia {
             throw new NotImplementedException();
         }
 
-        public Task<MpAvDataObject> GetDataObjectAsync(bool forOle, string[] formats = null) {
+        public Task<MpAvDataObject> GetDataObjectAsync(string[] formats = null) {
             throw new NotImplementedException();
         }
 
         #endregion
+        #endregion
+
+        #region Overrides
+        Type IStyleable.StyleKey => typeof(TextBox);
+
+        #endregion
+
+        #region Properties
+
 
         #endregion
 

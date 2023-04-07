@@ -57,14 +57,18 @@
                             Value="Transparent" />
                 </Style>
             </Grid.Styles>
-            <Image Grid.Row="0"
-                   DragDrop.AllowDrop="False"
-                   Width="30"
-                   Height="30"
-                   Margin="5"
-                   Stretch="Fill"
-                   Source="{Binding IconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-
+            <Grid Grid.Row="0"
+                  Width="30"
+                  Height="30"
+                  Margin="5">
+                <Image DragDrop.AllowDrop="False"
+                       IsVisible="{Binding !IsFormatPlaceholderOnTargetDragObject}"
+                       Stretch="Fill"
+                       Source="{Binding IconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                <local:MpAvBusySpinnerView IsVisible="{Binding IsFormatPlaceholderOnTargetDragObject}"
+                                           HorizontalAlignment="Stretch"
+                                           VerticalAlignment="Stretch" />
+            </Grid>
             <TextBlock Grid.Row="1"
                        DragDrop.AllowDrop="False"
                        Foreground="{Binding $parent[Border].BorderBrush}"

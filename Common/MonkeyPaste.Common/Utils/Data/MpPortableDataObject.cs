@@ -127,35 +127,38 @@ namespace MonkeyPaste.Common {
         public virtual void SetData(string format, object data) {
             var pdf = MpPortableDataFormats.GetDataFormat(format);
             if (pdf == null) {
-                //throw new MpUnregisteredDataFormatException($"Format {format} is not registered");
-                MpConsole.WriteLine($"Warning! '{format}' data object format not registered at startup deteced. Attempting to add now..");
-                pdf = MpPortableDataFormats.RegisterDataFormat(format);
-                if (pdf == null) {
-                    throw new MpUnregisteredDataFormatException($"Format {format} cannot be registered");
-                }
+                throw new MpUnregisteredDataFormatException($"Format {format} is not registered");
+                //MpConsole.WriteLine($"Warning! '{format}' data object format not registered at startup deteced. Attempting to add now..");
+                //pdf = MpPortableDataFormats.RegisterDataFormat(format);
+                //if (pdf == null) {
+                //    throw new MpUnregisteredDataFormatException($"Format {format} cannot be registered");
+                //}
             }
-            if (data is IEnumerable<string> newStringList &&
-                TryGetData(format, out IEnumerable<string> curStringList) &&
-                //newStringList.Difference(curStringList).Count() > 0 &&
-                newStringList.ToArray() is string[] newStrArr) {
-                if (curStringList is string[] curStrArr) {
-                    MpConsole.WriteLine($"String list ({format}) updated", true);
-                    MpConsole.WriteLine($"Old: {string.Join(Environment.NewLine, curStringList)}");
-                    MpConsole.WriteLine($"New: {string.Join(Environment.NewLine, newStringList)}", false, true);
-                    // update string list IN PLACE
-                    Array.Resize(ref curStrArr, newStrArr.Length);
-                    newStrArr.CopyTo(curStrArr, 0);
-                    return;
-                } else {
 
-                    MpConsole.WriteLine("FILENAMES ISN'T A LIST");
+            if (data is string[] newStrArr &&
+                TryGetData(format, out string[] curStrArr) &&
+                    newStrArr.Any(x => !curStrArr.Contains(x))) {
+                MpConsole.WriteLine($"String list ({format}) updated", true);
+                MpConsole.WriteLine($"Old: {string.Join(Environment.NewLine, curStrArr)}");
+                MpConsole.WriteLine($"New: {string.Join(Environment.NewLine, newStrArr)}", false, true);
+
+                // update string list IN PLACE
+                Array.Resize(ref curStrArr, newStrArr.Length);
+                //newStrArr.CopyTo(curStrArr, 0);
+                for (int i = 0; i < curStrArr.Length; i++) {
+                    curStrArr[i] = newStrArr[i];
                 }
+                return;
             } else if (data is byte[] newBytes &&
-                        TryGetData(format, out byte[] curBytes) &&
+                       TryGetData(format, out byte[] curBytes) &&
                         !curBytes.SequenceEqual(newBytes)) {
                 // update image IN PLACE
+                if (curBytes.ToDecodedString() == MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT) {
+                    MpConsole.WriteLine($"place holder for {format} replaced with '{newBytes.ToDecodedString()}'");
+                }
                 Array.Resize(ref curBytes, newBytes.Length);
                 newBytes.CopyTo(curBytes, 0);
+                DataFormatLookup[pdf] = curBytes;
                 return;
             }
             DataFormatLookup.AddOrReplace(pdf, data);
@@ -168,10 +171,17 @@ namespace MonkeyPaste.Common {
 
         public override string ToString() {
             var sb = new StringBuilder();
+            sb.AppendLine("-------------------------------------------------");
             foreach (var kvp in DataFormatLookup) {
                 sb.AppendLine($"Format '{kvp.Key.Name}':");
-                sb.AppendLine($"'{kvp.Value.ToString()}'");
+                if (kvp.Value is IEnumerable<object> objl) {
+                    objl.ForEach(x => sb.AppendLine(x.ToString()));
+                } else {
+                    sb.AppendLine($"'{kvp.Value.ToString()}'");
+                }
+
             }
+            sb.AppendLine("-------------------------------------------------");
             return sb.ToString();
         }
 

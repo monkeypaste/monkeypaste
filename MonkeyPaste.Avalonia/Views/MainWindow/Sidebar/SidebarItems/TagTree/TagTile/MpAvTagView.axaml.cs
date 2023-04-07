@@ -139,7 +139,7 @@ namespace MonkeyPaste.Avalonia {
                 is_copy ? DragDropEffects.Copy :
                 is_valid ?
                     DragDropEffects.Move : DragDropEffects.None;
-            MpConsole.WriteLine($"[DragOver] TagTile: '{e.DragEffects}'");
+            //MpConsole.WriteLine($"[DragOver] TagTile: '{e.DragEffects}'");
 
             if (!e.Data.Contains(MpPortableDataFormats.INTERNAL_TAG_ITEM_FORMAT)) {
                 return;

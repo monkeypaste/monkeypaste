@@ -187,8 +187,8 @@ namespace AvCoreClipboardHandler {
                                 }
                                 break;
                             case CoreClipboardParamType.R_Ignore_Text:
-                                bool ignoreText = bool.Parse(paramVal);
-                                if (ignoreText) {
+                                if (paramVal.ParseOrConvertToBool(false) is bool ignText &&
+                                    ignText) {
                                     AddIgnoreNotification(ref nfl, format);
                                     data = null;
 
@@ -208,7 +208,10 @@ namespace AvCoreClipboardHandler {
                     case MpPortableDataFormats.AvPNG:
                         switch (paramType) {
                             case CoreClipboardParamType.R_Ignore_Image:
-                                data = null;
+                                if (paramVal.ParseOrConvertToBool(false) is bool ignImg &&
+                                    ignImg) {
+                                    data = null;
+                                }
                                 break;
                         }
                         break;
@@ -223,8 +226,10 @@ namespace AvCoreClipboardHandler {
                                 if (!string.IsNullOrWhiteSpace(paramVal) &&
                                     paramVal.ToListFromCsv(MpCsvFormatProperties.DefaultBase64Value) is List<string> iel &&
                                     data is IEnumerable<string> fpl) {
+                                    var files_to_ignore = fpl.Where(x => iel.Any(y => x.ToLower().EndsWith(y.ToLower())));
+                                    MpConsole.WriteLine($"Clipboard or drag File rejected by extension: {string.Join(Environment.NewLine, files_to_ignore)}");
                                     // null ignored exts
-                                    fpl.Where(x => iel.Any(y => x.ToLower().EndsWith(y.ToLower())))
+                                    files_to_ignore
                                         .ForEach(x => x = null);
                                     if (fpl.All(x => x == null)) {
                                         // all omitted remove format
