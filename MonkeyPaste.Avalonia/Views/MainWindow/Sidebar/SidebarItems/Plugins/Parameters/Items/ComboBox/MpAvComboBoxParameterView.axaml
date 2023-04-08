@@ -5,20 +5,20 @@
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:pcl="using:MonkeyPaste"
-                       x:TypeArguments="local:MpAvEnumerableParameterViewModel"
-                       x:DataType="local:MpAvEnumerableParameterViewModel"
+                       x:TypeArguments="local:MpAvSingleEnumerableParameterViewModel"
+                       x:DataType="local:MpAvSingleEnumerableParameterViewModel"
                        x:CompileBindings="True"
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800">
     <local:MpAvUserControl.Styles>
         <Style Selector="ComboBox.fontChooser"
-               x:DataType="local:MpAvEnumerableParameterViewModel">
+               x:DataType="local:MpAvSingleEnumerableParameterViewModel">
             <Setter Property="FontFamily"
                     Value="{Binding SelectedValue, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />
         </Style>
         <Style Selector="ComboBox.fontChooser ComboBoxItem TextBlock"
-               x:DataType="local:MpAvEnumerableParameterViewModel">
+               x:DataType="local:MpAvSingleEnumerableParameterViewModel">
             <Setter Property="FontFamily"
                     Value="{Binding $self.Text, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />
         </Style>

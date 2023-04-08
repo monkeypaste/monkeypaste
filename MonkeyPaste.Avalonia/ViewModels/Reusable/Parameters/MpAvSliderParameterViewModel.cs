@@ -64,7 +64,9 @@ namespace MonkeyPaste.Avalonia {
         public MpAvSliderParameterViewModel() : base(null) { }
 
         public MpAvSliderParameterViewModel(MpViewModelBase parent) : base(parent) {
+            PropertyChanged += MpAvSliderParameterViewModel_PropertyChanged;
         }
+
 
 
         #endregion
@@ -77,6 +79,7 @@ namespace MonkeyPaste.Avalonia {
             await base.InitializeAsync(aipv);
 
             OnPropertyChanged(nameof(CurrentValue));
+            OnPropertyChanged(nameof(CurrentTypedValue));
             OnPropertyChanged(nameof(MinValue));
             OnPropertyChanged(nameof(MaxValue));
             OnPropertyChanged(nameof(SliderValue));
@@ -90,6 +93,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
+        private void MpAvSliderParameterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(SliderValue):
+                    OnPropertyChanged(nameof(CurrentTypedValue));
+                    break;
+            }
+        }
         private object GetClampedValue(string value) {
             try {
                 switch (UnitType) {

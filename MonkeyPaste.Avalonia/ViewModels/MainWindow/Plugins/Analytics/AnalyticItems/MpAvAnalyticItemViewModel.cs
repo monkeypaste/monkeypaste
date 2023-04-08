@@ -754,7 +754,7 @@ namespace MonkeyPaste.Avalonia {
             },
             (presetVmArg) => {
                 if (presetVmArg is MpAvAnalyticItemPresetViewModel aipvm &&
-                     !aipvm.IsManifestPreset) {
+                     aipvm.CanDelete) {
                     return true;
                 }
                 return false;
@@ -782,7 +782,7 @@ namespace MonkeyPaste.Avalonia {
             },
             (presetVmArg) => {
                 if (presetVmArg is MpAvAnalyticItemPresetViewModel aipvm &&
-                     aipvm.IsManifestPreset) {
+                     !aipvm.CanDelete) {
                     return true;
                 }
                 return false;

@@ -22,6 +22,10 @@ namespace MonkeyPaste.Avalonia {
             if (ref_url_arg_tuples == null || ref_url_arg_tuples.Count() == 0) {
                 throw new Exception("Must provide transaction references");
             }
+            req = null;
+            if (transactionType != MpTransactionType.Analyzed) {
+                resp = null;
+            }
             var cit = await MpCopyItemTransaction.CreateAsync(
                             copyItemId: copyItemId,
                             reqMsgType: reqType,

@@ -545,14 +545,14 @@ namespace MonkeyPaste.Avalonia {
                          actionType: MpActionType.Analyze,
                          parentId: annotate_trigger_action.Id,
                          sortOrderIdx: 0,
-                         location: DefaultDesignerItemLocationLocation + new MpPoint(DesignerItemDiameter, 0));
+                         location: DefaultDesignerItemLocationLocation + new MpPoint(DesignerItemDiameter * 3, 0));
 
 
                 int def_annotate_preset_id = 0;
                 if (MpAvAnalyticItemCollectionViewModel
                     .Instance
                     .AllPresets
-                    .FirstOrDefault(x => x.PresetGuid == MpPrefViewModel.Instance.CoreAnnotatorGuid) is MpAvAnalyticItemPresetViewModel aipvm) {
+                    .FirstOrDefault(x => x.PresetGuid == MpPrefViewModel.Instance.CoreAnnotatorDefaultPresetGuid) is MpAvAnalyticItemPresetViewModel aipvm) {
                     def_annotate_preset_id = aipvm.AnalyticItemPresetId;
                 }
                 if (def_annotate_preset_id == 0) {

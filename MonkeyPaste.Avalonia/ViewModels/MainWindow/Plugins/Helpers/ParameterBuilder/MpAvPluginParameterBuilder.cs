@@ -35,11 +35,15 @@ namespace MonkeyPaste.Avalonia {
 
 
             switch (controlType) {
-                case MpParameterControlType.List:
                 case MpParameterControlType.MultiSelectList:
+                    naipvm = new MpAvMultiEnumerableParameterViewModel(parent);
+                    break;
                 case MpParameterControlType.EditableList:
+                    naipvm = new MpAvEditableEnumerableParameterViewModel(parent);
+                    break;
+                case MpParameterControlType.List:
                 case MpParameterControlType.ComboBox:
-                    naipvm = new MpAvEnumerableParameterViewModel(parent);
+                    naipvm = new MpAvSingleEnumerableParameterViewModel(parent);
                     break;
                 case MpParameterControlType.PasswordBox:
                 case MpParameterControlType.TextBox:

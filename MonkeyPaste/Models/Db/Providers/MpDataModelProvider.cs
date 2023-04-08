@@ -730,10 +730,15 @@ namespace MonkeyPaste {
 
         #region MpSearchCriteriaItem
 
-
         public static async Task<List<MpSearchCriteriaItem>> GetCriteriaItemsByTagId(int tid) {
             string query = "select * from MpSearchCriteriaItem where fk_MpTagId=?";
             var result = await MpDb.QueryAsync<MpSearchCriteriaItem>(query, tid);
+            return result;
+        }
+
+        public static async Task<int> GetCriteriaItemCountByTagId(int tid) {
+            string query = "select COUNT(pk_MpSearchCriteriaItemId) from MpSearchCriteriaItem where fk_MpTagId=?";
+            var result = await MpDb.QueryScalarAsync<int>(query, tid);
             return result;
         }
 

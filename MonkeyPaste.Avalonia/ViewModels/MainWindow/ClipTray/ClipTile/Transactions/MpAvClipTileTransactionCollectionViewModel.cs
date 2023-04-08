@@ -162,7 +162,8 @@ namespace MonkeyPaste.Avalonia {
             }
 
             var trans_to_apply = Transactions.Where(x => !x.HasTransactionBeenApplied);
-            await Task.WhenAll(trans_to_apply.Select(x => ApplyTransactionAsync(x)));
+            Task.WhenAll(trans_to_apply.Select(x => ApplyTransactionAsync(x)))
+                .FireAndForgetSafeAsync(this);
 
             OnPropertyChanged(nameof(Transactions));
             OnPropertyChanged(nameof(PrimaryItem));
@@ -248,6 +249,9 @@ namespace MonkeyPaste.Avalonia {
             }
             if (Transactions.All(x => x.TransactionId != tivm.TransactionId)) {
                 Transactions.Add(tivm);
+            }
+            while (!Parent.IsEditorLoaded) {
+                await Task.Delay(100);
             }
 
             if (Parent.GetContentView() is MpIContentView cv) {

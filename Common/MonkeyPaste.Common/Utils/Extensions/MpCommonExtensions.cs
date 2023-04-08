@@ -660,7 +660,7 @@ namespace MonkeyPaste.Common {
             }
             if (obj is string strObj) {
                 try {
-                    return int.Parse(strObj);
+                    return (int)double.Parse(strObj);
                 }
                 catch (Exception ex) {
                     MpConsole.WriteTraceLine($"Error parsing int from '{strObj}'", ex);

@@ -116,9 +116,6 @@ namespace MonkeyPaste {
 
                 CopyItemId = copyItemId,
 
-                //TransactionType = transType,
-                //TransactionObjId = transObjId,
-
                 RequestMessageType = reqMsgType,
                 RequestMessageJson = reqMsgJsonStr,
 

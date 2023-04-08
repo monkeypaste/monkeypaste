@@ -140,6 +140,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand SaveCommand => new MpCommand(
             () => {
                 Items.ForEach(x => x.SaveCurrentValueCommand.Execute(null));
+                OnPropertyChanged(nameof(CanSaveOrCancel));
             },
             () => {
                 return CanSaveOrCancel;
@@ -147,6 +148,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand CancelCommand => new MpCommand(
             () => {
                 Items.ForEach(x => x.RestoreLastValueCommand.Execute(null));
+                OnPropertyChanged(nameof(CanSaveOrCancel));
             },
             () => {
                 return CanSaveOrCancel;
@@ -220,7 +222,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
-        public string ResetOrDeleteLabel => $"{(IsManifestPreset ? "Reset" : "Delete")} '{Label}'";
+        public string ResetOrDeleteLabel => $"{(CanDelete ? "Delete" : "Reset")} '{Label}'";
         #endregion
 
         #region State
@@ -240,6 +242,22 @@ namespace MonkeyPaste.Avalonia {
                 Parent.AnalyzerComponentFormat.presets != null &&
                     Parent.AnalyzerComponentFormat.presets.Any(x => x.guid == PresetGuid);
 
+        public bool IsGeneratedDefaultPreset {
+            get {
+                if (Parent == null) {
+                    return false;
+                }
+                if (Parent.Items.Any(x => x.IsManifestPreset)) {
+                    // default won't be generated if plugin comes w/ presets
+                    return false;
+                }
+                // lowest id will be generated preset
+                return Parent.Items.OrderBy(x => x.AnalyticItemPresetId).FirstOrDefault() == this;
+            }
+        }
+
+        public bool CanDelete =>
+            !IsManifestPreset && !IsGeneratedDefaultPreset;
 
         #endregion
 
@@ -527,8 +545,8 @@ namespace MonkeyPaste.Avalonia {
                             Parent.SelectedItem = this;
                         }
 
-                        Items.Where(x => x is MpAvEnumerableParameterViewModel)
-                            .Cast<MpAvEnumerableParameterViewModel>()
+                        Items.Where(x => x is MpAvEnumerableParameterViewModelBase)
+                            .Cast<MpAvEnumerableParameterViewModelBase>()
                            .SelectMany(x => x.Items)
                            .ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
 

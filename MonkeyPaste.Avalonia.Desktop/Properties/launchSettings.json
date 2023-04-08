@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "MonkeyPaste.Avalonia.Desktop": {
+      "commandName": "Project"
+    },
+    "Reset": {
+      "commandName": "Project",
+      "commandLineArgs": "resetdata"
+    }
+  }
+}

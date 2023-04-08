@@ -224,7 +224,7 @@ namespace MonkeyPaste.Avalonia {
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Error converting simple search opts to flags. Opts '{simp_ci.Options}'. Setting to default.", ex);
-                QueryFlags = MpAvSearchBoxViewModel.Instance.SearchFilterCollectionViewModel.DefaultFilters;
+                QueryFlags = MpSearchCriteriaItem.DefaultSimpleFilters;
             }
             RestoreProviderValues();
             _isRestoringAdvancedValues = false;

@@ -2,7 +2,7 @@
     /// <summary>
     /// Interaction logic for MpListBoxParameterView.xaml
     /// </summary>
-    public partial class MpAvComboBoxParameterView : MpAvUserControl<MpAvEnumerableParameterViewModel> {
+    public partial class MpAvComboBoxParameterView : MpAvUserControl<MpAvSingleEnumerableParameterViewModel> {
         public MpAvComboBoxParameterView() {
             InitializeComponent();
         }

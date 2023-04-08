@@ -80,9 +80,7 @@
                         <Binding Path="MaxValue"
                                  FallbackValue="0"
                                  TargetNullValue="0" />
-                        <Binding Path="SliderValue"
-                                 FallbackValue="0"
-                                 TargetNullValue="0" />
+                        <Binding Path="SliderValue"/>
                         <Binding ElementName="SliderValueRectangle"
                                  Path="MaxWidth"
                                  FallbackValue="0"

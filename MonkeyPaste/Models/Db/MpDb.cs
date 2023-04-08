@@ -604,7 +604,6 @@ namespace MonkeyPaste {
 
         private static async Task CreateViewsAsync() {
             await _connectionAsync.ExecuteAsync(@"
-DROP VIEW ""main"".""MpContentQueryView"";
 CREATE VIEW MpContentQueryView as
 SELECT 
 	pk_MpCopyItemId as RootId,
@@ -779,6 +778,8 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
                     parentTagId: MpTag.RootGroupTagId,
                     tagType: MpTagType.Group);
 
+
+
             #region Text
 
             var text_type_tag = await MpTag.CreateAsync(
@@ -789,14 +790,21 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
                     isSortDescending: true,
                     tagType: MpTagType.Query);
 
-            var text_type_tag_simple_cri = await MpSearchCriteriaItem.CreateAsync(
+
+            var text_def_simple_cri = await MpSearchCriteriaItem.CreateAsync(
                 tagId: text_type_tag.Id,
-                sortOrderIdx: 0,
-                joinType: MpLogicalQueryType.Or,
                 queryType: MpQueryType.Simple,
                 options:
-                    ((long)(
-                    MpContentQueryBitFlags.TextType)).ToString());
+                    ((long)(MpSearchCriteriaItem.DefaultSimpleFilters)).ToString());
+
+            var text_type_tag_cri = await MpSearchCriteriaItem.CreateAsync(
+                tagId: text_type_tag.Id,
+                queryType: MpQueryType.Advanced,
+                options:
+                    string.Join(",",
+                    new[] {
+                            (int)MpRootOptionType.Type,
+                            (int)MpContentTypeOptionType.Text }));
 
             #endregion
 
@@ -810,14 +818,21 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
                     isSortDescending: true,
                     tagType: MpTagType.Query);
 
-            var image_type_tag_simple_cri = await MpSearchCriteriaItem.CreateAsync(
+
+            var image_def_simple_cri = await MpSearchCriteriaItem.CreateAsync(
                 tagId: image_type_tag.Id,
-                sortOrderIdx: 0,
-                joinType: MpLogicalQueryType.Or,
                 queryType: MpQueryType.Simple,
                 options:
-                    ((long)(
-                    MpContentQueryBitFlags.ImageType)).ToString());
+                    ((long)(MpSearchCriteriaItem.DefaultSimpleFilters)).ToString());
+
+            var image_type_tag_cri = await MpSearchCriteriaItem.CreateAsync(
+                tagId: image_type_tag.Id,
+                queryType: MpQueryType.Advanced,
+                options:
+                    string.Join(",",
+                    new[] {
+                            (int)MpRootOptionType.Type,
+                            (int)MpContentTypeOptionType.Image }));
 
             #endregion
 
@@ -831,14 +846,21 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
                     isSortDescending: true,
                     tagType: MpTagType.Query);
 
-            var file_type_tag_simple_cri = await MpSearchCriteriaItem.CreateAsync(
+
+            var file_def_simple_cri = await MpSearchCriteriaItem.CreateAsync(
                 tagId: file_type_tag.Id,
-                sortOrderIdx: 0,
-                joinType: MpLogicalQueryType.Or,
                 queryType: MpQueryType.Simple,
                 options:
-                    ((long)(
-                    MpContentQueryBitFlags.FileType)).ToString());
+                    ((long)(MpSearchCriteriaItem.DefaultSimpleFilters)).ToString());
+
+            var file_type_tag_cri = await MpSearchCriteriaItem.CreateAsync(
+                tagId: file_type_tag.Id,
+                queryType: MpQueryType.Advanced,
+                options:
+                    string.Join(",",
+                    new[] {
+                            (int)MpRootOptionType.Type,
+                            (int)MpContentTypeOptionType.Files }));
 
             #endregion
 

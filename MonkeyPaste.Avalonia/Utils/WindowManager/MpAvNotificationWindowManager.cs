@@ -200,7 +200,12 @@ namespace MonkeyPaste.Avalonia {
             } else if (w == MpAvAppendNotificationWindow.Instance) {
                 w.Hide();
             } else {
-                w.Close();
+                try {
+                    w.Close();
+                }
+                catch (NullReferenceException nex) {
+                    MpConsole.WriteTraceLine($"Close window exception ({w.DataContext})", nex);
+                }
             }
             _windows.Remove(w);
         }

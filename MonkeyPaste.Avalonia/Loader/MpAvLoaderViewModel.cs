@@ -88,7 +88,6 @@ namespace MonkeyPaste.Avalonia {
                     new MpLoaderItemViewModel(this,typeof(MpDataModelProvider)),
                     new MpLoaderItemViewModel(this,typeof(MpAvTriggerCollectionViewModel)),
                     new MpLoaderItemViewModel(this,typeof(MpAvExternalDropWindowViewModel)),
-                   // new MpBootstrappedItemViewModel(this,typeof(MpAvFilterMenuViewModel))
                });
 
             if (Mp.Services.PlatformInfo.IsDesktop) {

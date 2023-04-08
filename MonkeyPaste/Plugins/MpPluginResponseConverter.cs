@@ -21,8 +21,8 @@ namespace MonkeyPaste {
             MpPluginFormat pluginFormat,
             MpAnalyzerTransaction trans,
             MpCopyItem sourceCopyItem,
-            object sourceHandler, bool suppressWrite = false) {
-
+            object sourceHandler,
+            bool suppressWrite = false) {
 
             if (trans != null &&
                 trans.Response != null &&

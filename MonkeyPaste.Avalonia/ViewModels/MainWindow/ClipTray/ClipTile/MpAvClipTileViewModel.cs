@@ -1183,6 +1183,10 @@ namespace MonkeyPaste.Avalonia {
                 });
 
             if (_popoutWindow.Content is Control c) {
+                if (c is MpIContentView cv) {
+                    _contentView = cv;
+                }
+
                 c.Bind(
                     MpAvIsHoveringExtension.IsHoveringProperty,
                     new Binding() {
@@ -1192,6 +1196,7 @@ namespace MonkeyPaste.Avalonia {
                     });
                 MpAvIsHoveringExtension.SetIsEnabled(c, true);
             }
+
 
             _popoutWindow.ShowChild();
 
@@ -1960,21 +1965,7 @@ namespace MonkeyPaste.Avalonia {
             int ciid = CopyItemId;
 
             if (Parent != null) {
-                //MpAvPersistentClipTilePropertiesHelper.AddOrReplacePersistentSize_ById
-                //Parent.QueryCommand.Execute(string.Empty);
-                //if (_wasPopoutPinned) {
-                //    Parent.PinTileCommand.Execute(this);
-                //} else {
-                //    Parent.QueryCommand.Execute(string.Empty);
-                //    while (Parent.IsQuerying) {
-                //        await Task.Delay(100);
-                //    }
-                //    //wait a little longer
-                //    await Task.Delay(300);
-                //    if (Parent.Items.FirstOrDefault(x => x.CopyItemId == ciid) is MpAvClipTileViewModel popped_in_ctvm) {
-                //        popped_in_ctvm.IsSelected = true;
-                //    }
-                //}
+                _contentView = null;
                 MpAvPersistentClipTilePropertiesHelper.RemovePersistentSize_ById(ciid, QueryOffsetIdx);
                 Parent.PinnedItems.Remove(this);
                 Parent.PinTileCommand.Execute(this);

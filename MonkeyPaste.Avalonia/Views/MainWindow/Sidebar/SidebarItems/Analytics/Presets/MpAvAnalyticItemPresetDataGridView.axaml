@@ -306,7 +306,7 @@
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
                                 <Button x:Name="ResetOrDeleteButton"
                                         Classes="defaultButton noBg noHoverBg outlineOver square"
-                                        Classes.canReset="{Binding IsManifestPreset}"
+                                        Classes.canReset="{Binding !CanDelete}"
                                         IsEnabled="{Binding !Parent.IsBusy}"
                                         local:MpAvPointerCommandExtension.IsEnabled="True"
                                         local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ResetOrDeleteThisPresetCommand}">

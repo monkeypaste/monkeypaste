@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvEnumerableParameterValueViewModel :
-        MpViewModelBase<MpAvEnumerableParameterViewModel>,
+        MpViewModelBase<MpAvEnumerableParameterViewModelBase>,
         MpIPopupMenuViewModel,
         MpIContentQueryTextBoxViewModel {
         #region Private Variables
@@ -45,14 +45,11 @@ namespace MonkeyPaste.Avalonia {
                 Value = Value.Remove(SelectionStart, SelectionLength).Insert(SelectionStart, pathStr);
             });
 
-        public ICommand ClearQueryCommand {
-            get {
-                if (Parent == null) {
-                    return null;
-                }
-                return Parent.RemoveValueCommand;
+        public ICommand ClearQueryCommand => new MpCommand(() => {
+            if (Parent is MpAvEditableEnumerableParameterViewModel epvm) {
+                epvm.RemoveValueCommand.Execute(this);
             }
-        }
+        });
         bool MpIContentQueryTextBoxViewModel.IsPathSelectorPopupOpen { get; set; }
         #endregion
 
@@ -136,36 +133,37 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsHovering { get; set; } = false;
 
-        public bool IsSelected {
-            get {
-                if (Parent == null) {
-                    return false;
-                }
-                if (Parent.IsMultiValue) {
-                    return Parent.SelectedItems.Contains(this);
-                }
-                return Parent.SelectedItem == this;
-            }
-            set {
-                if (IsSelected != value) {
-                    if (Parent.IsMultiValue) {
-                        if (value) {
-                            Parent.SelectedItems.Add(this);
-                        } else {
-                            Parent.SelectedItems.Remove(this);
-                        }
-                    } else {
-                        if (value) {
-                            Parent.SelectedItem = this;
-                        } else {
-                            Parent.SelectedItem = null;
-                        }
-                    }
-                    OnPropertyChanged(nameof(IsSelected));
-                }
-            }
-
-        }
+        //public bool IsSelected {
+        //    get {
+        //        if (Parent == null) {
+        //            return false;
+        //        }
+        //        if (Parent.IsMultiValue) {
+        //            return Parent.SelectedItems.Contains(this);
+        //        }
+        //        return Parent.SelectedItem == this;
+        //    }
+        //    set {
+        //        if (IsSelected != value) {
+        //            if (Parent.IsMultiValue) {
+        //                if (value) {
+        //                    Parent.SelectedItems.Add(this);
+        //                } else {
+        //                    Parent.SelectedItems.Remove(this);
+        //                }
+        //            } else {
+        //                if (value) {
+        //                    Parent.SelectedItem = this;
+        //                } else {
+        //                    Parent.SelectedItem = null;
+        //                }
+        //            }
+        //            OnPropertyChanged(nameof(IsSelected));
+        //        }
+        //    }
+        //}
+        public bool IsSelected =>
+            Parent == null ? false : Parent.Selection.SelectedItems.Contains(this);
 
         public int ValueIdx { get; set; } = 0;
 
@@ -208,7 +206,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvEnumerableParameterValueViewModel() : this(null) { }
 
-        public MpAvEnumerableParameterValueViewModel(MpAvEnumerableParameterViewModel parent) : base(parent) {
+        public MpAvEnumerableParameterValueViewModel(MpAvEnumerableParameterViewModelBase parent) : base(parent) {
             PropertyChanged += MpAnalyticItemParameterValueViewModel_PropertyChanged;
         }
 
@@ -216,7 +214,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public async Task InitializeAsync(int idx, string label, string value, bool isSelected) {
+        public async Task InitializeAsync(int idx, string label, string value) {
             IsBusy = true;
 
             await Task.Delay(1);
@@ -224,7 +222,6 @@ namespace MonkeyPaste.Avalonia {
             ValueIdx = idx;
             Label = label;
             Value = value;
-            IsSelected = isSelected;
 
             IsBusy = false;
         }
@@ -244,21 +241,28 @@ namespace MonkeyPaste.Avalonia {
                     if (IsBusy || Parent.IsBusy) {
                         return;
                     }
-                    if (Parent.ControlType == MpParameterControlType.ComboBox) {
-                        // workaround since using selectedIdx cause of selection bug
-                        break;
+                    //if (Parent.ControlType == MpParameterControlType.ComboBox) {
+                    //    // workaround since using selectedIdx cause of selection bug
+                    //    break;
+                    //}
+                    if (IsSelected) {
+
+                    } else {
+
                     }
 
-                    Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
-                    Parent.OnPropertyChanged(nameof(Parent.SelectedItems));
+                    //Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
+                    //Parent.OnPropertyChanged(nameof(Parent.SelectedItems));
+                    //Parent.OnPropertyChanged(nameof(Parent.CurrentValue));
+                    //Parent.CurrentValue = Parent.SelectedItems.Select(x => x.Value).ToList().ToCsv(CsvProperties);
                     Parent.OnPropertyChanged(nameof(Parent.CurrentValue));
-                    Parent.CurrentValue = Parent.SelectedItems.Select(x => x.Value).ToList().ToCsv(CsvProperties);
                     break;
                 case nameof(Value):
                     if (Parent == null) {
                         break;
                     }
-                    Parent.CurrentValue = Parent.SelectedItems.Select(x => x.Value).ToList().ToCsv(CsvProperties);
+                    Parent.OnPropertyChanged(nameof(Parent.CurrentValue));
+                    //Parent.CurrentValue = Parent.SelectedItems.Select(x => x.Value).ToList().ToCsv(CsvProperties);
                     dynamic pp = Parent.Parent;
                     Parent.Parent.OnPropertyChanged(nameof(pp.IsAllValid));
                     break;

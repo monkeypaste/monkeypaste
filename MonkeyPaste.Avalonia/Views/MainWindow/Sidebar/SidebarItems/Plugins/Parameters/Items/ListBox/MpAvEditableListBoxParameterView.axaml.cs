@@ -4,7 +4,7 @@ namespace MonkeyPaste.Avalonia {
     /// <summary>
     /// Interaction logic for MpListBoxParameterView.xaml
     /// </summary>
-    public partial class MpAvEditableListBoxParameterView : MpAvUserControl<MpAvEnumerableParameterViewModel> {
+    public partial class MpAvEditableListBoxParameterView : MpAvUserControl<MpAvEditableEnumerableParameterViewModel> {
         public MpAvEditableListBoxParameterView() {
             InitializeComponent();
             var el = this.FindControl<ListBox>("EditableList");

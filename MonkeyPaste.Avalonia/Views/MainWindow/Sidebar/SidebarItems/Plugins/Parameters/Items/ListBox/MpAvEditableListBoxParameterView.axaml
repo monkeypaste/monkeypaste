@@ -5,8 +5,8 @@
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:pcl="using:MonkeyPaste"
-                       x:TypeArguments="local:MpAvEnumerableParameterViewModel"
-                       x:DataType="local:MpAvEnumerableParameterViewModel"
+                       x:TypeArguments="local:MpAvEditableEnumerableParameterViewModel"
+                       x:DataType="local:MpAvEditableEnumerableParameterViewModel"
                        x:CompileBindings="True"
                        mc:Ignorable="d"
                        d:DesignHeight="450"
@@ -21,7 +21,7 @@
                      Background="Transparent"
                      HorizontalAlignment="Stretch"
                      Items="{Binding Items}"
-                     SelectedItem="{Binding SelectedItem}"
+                     Selection="{Binding Selection}"
                      SelectionMode="Single"
                      Margin="10,0"
                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
@@ -30,7 +30,6 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <local:MpAvContentQueryTextBoxView Background="Transparent"
-                                                           
                                                            BorderBrush="{Binding BorderBrush, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}" />
                     </DataTemplate>
                 </ListBox.ItemTemplate>

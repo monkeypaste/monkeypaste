@@ -5,8 +5,8 @@
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:pcl="using:MonkeyPaste"
-                       x:TypeArguments="local:MpAvEnumerableParameterViewModel"
-                       x:DataType="local:MpAvEnumerableParameterViewModel"
+                       x:TypeArguments="local:MpAvMultiEnumerableParameterViewModel"
+                       x:DataType="local:MpAvMultiEnumerableParameterViewModel"
                        x:CompileBindings="True"
                        mc:Ignorable="d"
                        d:DesignHeight="450"
@@ -20,6 +20,7 @@
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Stretch"
                  Items="{Binding Items}"
+                 Selection="{Binding Selection}"
                  SelectionMode="Multiple,Toggle"
                  Margin="0"
                  Padding="0"
@@ -37,9 +38,12 @@
                     <Setter Property="HorizontalAlignment"
                             Value="Stretch" />
                     <!--<Setter Property="IsSelected"
-                            Value="{Binding IsSelected, Mode=TwoWay}" />-->
+                            Value="{Binding IsSelected, Mode=OneWay}" />-->
                     <Setter Property="Cursor"
                             Value="Hand" />
+                </Style>
+
+                <Style Selector="ListBoxItem:selected">
                 </Style>
             </ListBox.Styles>
             <ListBox.ItemTemplate>

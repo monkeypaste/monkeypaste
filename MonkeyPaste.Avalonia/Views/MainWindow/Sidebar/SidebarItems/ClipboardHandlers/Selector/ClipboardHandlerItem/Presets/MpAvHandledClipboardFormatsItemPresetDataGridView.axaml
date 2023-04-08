@@ -10,7 +10,7 @@
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800">
-     <local:MpAvUserControl.Styles>
+    <local:MpAvUserControl.Styles>
         <!--  ROW BG  -->
         <Style Selector="DataGridRow:nth-child(odd)">
             <Setter Property="Background"
@@ -96,14 +96,13 @@
                                 <DataTemplate DataType="local:MpAvClipboardFormatPresetViewModel">
 
                                     <Border BorderThickness="0"
-                                                          Padding="3"
-                                                          CornerRadius="0">
+                                            Padding="3"
+                                            CornerRadius="0">
                                         <Button x:Name="PresetIcon"
                                                 BorderThickness="0"
                                                 CornerRadius="0"
                                                 Cursor="Hand"
                                                 Background="Transparent"
-                                                
                                                 Command="{Binding ChangeIconCommand, Source={x:Static local:MpAvIconCollectionViewModel.Instance}}"
                                                 CommandParameter="{Binding $self}">
                                             <Image Width="20"

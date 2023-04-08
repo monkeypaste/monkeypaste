@@ -56,7 +56,11 @@ namespace MonkeyPaste {
 
         #endregion
 
+        #region Statics
+        #endregion
+
         #region Columns
+
         [PrimaryKey, AutoIncrement]
         [Column("pk_MpSearchCriteriaItemId")]
         public override int Id { get; set; }
@@ -125,6 +129,17 @@ namespace MonkeyPaste {
 
         #region Statics
 
+        public static MpContentQueryBitFlags DefaultSimpleFilters =>
+            MpContentQueryBitFlags.TextType |
+            MpContentQueryBitFlags.ImageType |
+            MpContentQueryBitFlags.FileType |
+            MpContentQueryBitFlags.Title |
+            MpContentQueryBitFlags.Content |
+            MpContentQueryBitFlags.Url |
+            MpContentQueryBitFlags.AppPath |
+            MpContentQueryBitFlags.AppName |
+            MpContentQueryBitFlags.Annotations;
+
         public static async Task<MpSearchCriteriaItem> CreateAsync(
             string guid = "",
             int tagId = 0,
@@ -141,6 +156,11 @@ namespace MonkeyPaste {
             }
             if (queryType == MpQueryType.None) {
                 throw new Exception("Must have query type");
+            }
+            if (sortOrderIdx < 0 && queryType == MpQueryType.Advanced) {
+                // NOTE simple is always at the top and should have -1 sort since its 
+                // not managed in adv collection
+                sortOrderIdx = await MpDataModelProvider.GetCriteriaItemCountByTagId(tagId);
             }
             var sci = new MpSearchCriteriaItem() {
                 SearchCriteriaItemGuid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid() : System.Guid.Parse(guid),

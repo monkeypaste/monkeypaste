@@ -68,28 +68,28 @@
                         <!--  MultiSelect ListBox Parameter  -->
 
                         <DataTemplate x:Key="MultiSelectListParameterTemplate"
-                                      DataType="local:MpAvEnumerableParameterViewModel">
+                                      DataType="local:MpAvMultiEnumerableParameterViewModel">
                             <local:MpAvMultiSelectListBoxParameterView />
                         </DataTemplate>
 
                         <!--  Single Select ListBox Parameter  -->
 
                         <DataTemplate x:Key="ListParameterTemplate"
-                                      DataType="local:MpAvEnumerableParameterViewModel">
+                                      DataType="local:MpAvSingleEnumerableParameterViewModel">
                             <local:MpAvSingleSelectListBoxParameterView />
                         </DataTemplate>
 
                         <!--  Editable ListBox Parameter  -->
 
                         <DataTemplate x:Key="EditableListParameterTemplate"
-                                      DataType="local:MpAvEnumerableParameterViewModel">
+                                      DataType="local:MpAvEditableEnumerableParameterViewModel">
                             <local:MpAvEditableListBoxParameterView />
                         </DataTemplate>
 
                         <!--  ComboBox Parameter  -->
 
                         <DataTemplate x:Key="ComboBoxParameterTemplate"
-                                      DataType="local:MpAvEnumerableParameterViewModel">
+                                      DataType="local:MpAvSingleEnumerableParameterViewModel">
                             <local:MpAvComboBoxParameterView />
                         </DataTemplate>
 

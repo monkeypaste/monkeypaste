@@ -16,7 +16,7 @@ namespace MonkeyPaste.Avalonia {
         MpIHoverableViewModel,
         MpITooltipInfoViewModel {
         #region Private Variables
-        private string _lastValue;
+        protected string _lastValue;
         #endregion
 
         #region Interfaces
@@ -124,16 +124,17 @@ namespace MonkeyPaste.Avalonia {
 
         public double DoubleValue {
             get {
-                if (string.IsNullOrWhiteSpace(CurrentValue) || CurrentValue.ToCharArray().Any(x => !char.IsNumber(x))) {
-                    return 0;
-                }
-                try {
-                    return Convert.ToDouble(CurrentValue);
-                }
-                catch (Exception ex) {
-                    MpConsole.WriteTraceLine("Cannot convert " + CurrentValue + " to double ", ex);
-                    return 0;
-                }
+                //if (string.IsNullOrWhiteSpace(CurrentValue) || CurrentValue.ToCharArray().Any(x => !char.IsNumber(x))) {
+                //    return 0;
+                //}
+                //try {
+                //    return Convert.ToDouble(CurrentValue);
+                //}
+                //catch (Exception ex) {
+                //    MpConsole.WriteTraceLine("Cannot convert " + CurrentValue + " to double ", ex);
+                //    return 0;
+                //}
+                return CurrentValue.ParseOrConvertToDouble(0);
             }
             set {
                 if (DoubleValue != value) {
@@ -146,16 +147,17 @@ namespace MonkeyPaste.Avalonia {
 
         public int IntValue {
             get {
-                if (string.IsNullOrWhiteSpace(CurrentValue) || CurrentValue.ToCharArray().Any(x => !char.IsNumber(x))) {
-                    return 0;
-                }
-                try {
-                    return Convert.ToInt32(DoubleValue);
-                }
-                catch (Exception ex) {
-                    MpConsole.WriteTraceLine("Cannot convert " + CurrentValue + " to int ", ex);
-                    return 0;
-                }
+                return CurrentValue.ParseOrConvertToInt(0);
+                //if (string.IsNullOrWhiteSpace(CurrentValue) || CurrentValue.ToCharArray().Any(x => !char.IsNumber(x))) {
+                //    return 0;
+                //}
+                //try {
+                //    return Convert.ToInt32(DoubleValue);
+                //}
+                //catch (Exception ex) {
+                //    MpConsole.WriteTraceLine("Cannot convert " + CurrentValue + " to int ", ex);
+                //    return 0;
+                //}
             }
             set {
                 if (IntValue != value) {
@@ -168,13 +170,14 @@ namespace MonkeyPaste.Avalonia {
 
         public bool BoolValue {
             get {
-                if (string.IsNullOrWhiteSpace(CurrentValue)) {
-                    return false;
-                }
-                //if (CurrentValue.ToLower() != "false" && CurrentValue.ToLower() != "true") {
-                //    throw new Exception("Cannot convert value " + CurrentValue + " to boolean");
+                //if (string.IsNullOrWhiteSpace(CurrentValue)) {
+                //    return false;
                 //}
-                return CurrentValue.ToLower() == "true" || CurrentValue.ToLower() == "1";
+                ////if (CurrentValue.ToLower() != "false" && CurrentValue.ToLower() != "true") {
+                ////    throw new Exception("Cannot convert value " + CurrentValue + " to boolean");
+                ////}
+                //return CurrentValue.ToLower() == "true" || CurrentValue.ToLower() == "1";
+                return CurrentValue.ParseOrConvertToBool(false);
             }
             set {
                 if (BoolValue != value) {
@@ -476,20 +479,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Protected Methods
-
-        protected virtual void SetLastValue(object value) {
-            _lastValue = value == null ? null : value.ToString();
-        }
-
-        protected virtual void RestoreLastValue() {
-            CurrentValue = _lastValue;
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        private void MpAnalyticItemParameterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+        protected virtual void MpAnalyticItemParameterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(HasModelChanged):
                 case nameof(CurrentValue):
@@ -521,6 +511,19 @@ namespace MonkeyPaste.Avalonia {
             }
             //Validate();
         }
+        protected virtual void SetLastValue(object value) {
+            _lastValue = value == null ? null : value.ToString();
+        }
+
+        protected virtual void RestoreLastValue() {
+            CurrentValue = _lastValue;
+        }
+
+        #endregion
+
+        #region Private Methods
+
+
 
         protected virtual void MpAnalyticItemParameterValueViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             bool is_core_loaded = Mp.Services != null &&

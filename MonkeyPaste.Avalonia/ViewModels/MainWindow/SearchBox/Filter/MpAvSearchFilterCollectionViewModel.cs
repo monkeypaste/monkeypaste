@@ -120,17 +120,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        public MpContentQueryBitFlags DefaultFilters =>
-            MpContentQueryBitFlags.TextType |
-            MpContentQueryBitFlags.ImageType |
-            MpContentQueryBitFlags.FileType |
-            MpContentQueryBitFlags.Title |
-            MpContentQueryBitFlags.Content |
-            MpContentQueryBitFlags.Url |
-            MpContentQueryBitFlags.AppPath |
-            MpContentQueryBitFlags.AppName |
-            MpContentQueryBitFlags.Annotations;
-
         public MpContentQueryBitFlags FilterType {
             get {
                 MpContentQueryBitFlags ft = MpContentQueryBitFlags.None;
@@ -267,7 +256,7 @@ namespace MonkeyPaste.Avalonia {
         #region Commands
         public ICommand ResetFiltersToDefaultCommand => new MpCommand(
             () => {
-                Filters.ForEach(x => x.IsChecked = DefaultFilters.HasFlag(x.FilterType));
+                Filters.ForEach(x => x.IsChecked = MpSearchCriteriaItem.DefaultSimpleFilters.HasFlag(x.FilterType));
             });
         #endregion
     }
