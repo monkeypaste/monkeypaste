@@ -25,8 +25,9 @@ namespace MonkeyPaste.Common {
             set => Channels[3] = value;
         }
 
-        public MpColor(string hexRgbaOrNamedColorStr) {
-            string hex = MpColorHelpers.ParseHexFromString(hexRgbaOrNamedColorStr, "#FF000000");
+        public MpColor(string hexRgbaOrNamedColorStr, string fallback = default) {
+            fallback = fallback == default ? "#FF000000" : fallback;
+            string hex = MpColorHelpers.ParseHexFromString(hexRgbaOrNamedColorStr, fallback);
             Channels = MpColorHelpers.GetHexColorBytes(hex);
         }
         public MpColor(byte[] argb_channels) {

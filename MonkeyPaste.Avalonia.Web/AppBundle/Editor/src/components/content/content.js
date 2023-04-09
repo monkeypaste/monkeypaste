@@ -238,7 +238,8 @@ function isContentEmpty() {
 }
 
 function canEnableSubSelection() {
-	return ContentItemType != 'Image';
+	//return ContentItemType != 'Image';
+	return true;
 }
 
 function canDisableSubSelection() {

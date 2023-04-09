@@ -9,13 +9,19 @@ namespace MonkeyPaste.Avalonia {
         public static readonly MpAvStringBase64ToBitmapConverter Instance = new();
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
-            double scale = 1.0d;
             if (value is string valStr) {
-                if (parameter is string paramStr && double.TryParse(paramStr, out scale)) {
-
-                }
                 if (valStr.IsStringBase64()) {
-                    return valStr.ToAvBitmap(scale);
+                    double scale = 1.0d;
+                    string tint_color = null;
+                    if (parameter is string paramStr &&
+                        !string.IsNullOrEmpty(paramStr)) {
+                        if (paramStr.IsStringHexOrNamedColor()) {
+                            tint_color = paramStr;
+                        } else if (double.TryParse(paramStr, out scale)) {
+
+                        }
+                    }
+                    return valStr.ToAvBitmap(scale, tint_color);
                 }
             }
             return null;

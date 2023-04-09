@@ -13,6 +13,11 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpAvITransactionNodeViewModel Implementation
+        public MpAvClipTileViewModel HostClipTileViewModel =>
+            Parent == null || Parent.Parent == null ?
+                null :
+                Parent.Parent.Parent;
+
         public virtual object Body => Json;
         object MpAvITransactionNodeViewModel.TransactionModel => Parent.Transaction;
         public bool IsExpanded { get; set; }

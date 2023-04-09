@@ -5,11 +5,13 @@ using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
+
     public interface MpAvITransactionNodeViewModel :
         MpITreeItemViewModel,
         MpISelectableViewModel,
@@ -21,15 +23,38 @@ namespace MonkeyPaste.Avalonia {
         MpIAsyncCollectionObject {
         object TransactionModel { get; }
         object Body { get; }
+        MpAvClipTileViewModel HostClipTileViewModel { get; }
     }
 
     public class MpAvClipTileTransactionCollectionViewModel :
-        MpViewModelBase<MpAvClipTileViewModel> {
+        MpViewModelBase<MpAvClipTileViewModel>, MpIContextMenuViewModel {
         #region Private Variables
 
         #endregion
 
         #region Statics
+        #endregion
+
+        #region Interfaces
+
+        #region MpIContextMenuItemViewModel Implementation
+
+        public MpMenuItemViewModel ContextMenuViewModel {
+            get {
+                //if (SelectedItem == null) {
+                //    return new MpMenuItemViewModel();
+                //}
+                return new MpMenuItemViewModel() {
+                    Header = "Transactions",
+                    IconResourceKey = "EggImage",
+                    SubItems = SortedMessages.Select(x => x.ContextMenuItemViewModel).ToList()
+                };
+            }
+        }
+
+        public bool IsContextMenuOpen { get; set; }
+        #endregion
+
         #endregion
 
         #region Properties
@@ -58,23 +83,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpIContextMenuItemViewModel Implementation
-
-        public MpMenuItemViewModel ContextMenuViewModel {
-            get {
-                //if (SelectedItem == null) {
-                //    return new MpMenuItemViewModel();
-                //}
-                return new MpMenuItemViewModel() {
-                    Header = "Transactions",
-                    IconResourceKey = "EggImage",
-                    SubItems = SortedMessages.Select(x => x.ContextMenuItemViewModel).ToList()
-                };
-            }
-        }
-
-        public bool IsContextMenuOpen { get; set; }
-        #endregion
 
         #region Layout
 
@@ -109,11 +117,14 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-
+        public bool DoShake { get; set; }
         public bool IsViewByTransaction { get; set; } = false;
         public bool IsSortDescending { get; set; } = true;
         public bool IsTransactionPaneOpen { get; set; } = false;
         public bool IsAnyBusy => IsBusy || Transactions.Any(x => x.IsBusy);
+
+        public bool IsAnyAnalysisTransaction =>
+            Transactions.Any(x => x.IsAnalysisTransaction);
 
         #endregion
 
@@ -140,8 +151,6 @@ namespace MonkeyPaste.Avalonia {
             Transactions.CollectionChanged += Transactions_CollectionChanged;
         }
 
-
-
         #endregion
 
         #region Public Methods
@@ -153,7 +162,7 @@ namespace MonkeyPaste.Avalonia {
 
             var ci_transactions = await MpDataModelProvider.GetCopyItemTransactionsByCopyItemIdAsync(copyItemId);
             foreach (var cit in ci_transactions.OrderByDescending(x => x.TransactionDateTime)) {
-                var cisvm = await CreateClipTileSourceViewModel(cit);
+                var cisvm = await CreateTransactionItemViewModelAsync(cit);
                 Transactions.Add(cisvm);
             }
 
@@ -180,14 +189,12 @@ namespace MonkeyPaste.Avalonia {
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
             if (e is MpCopyItemTransaction cit && cit.CopyItemId == CopyItemId) {
                 Dispatcher.UIThread.Post(async () => {
-                    var cisvm = await CreateClipTileSourceViewModel(cit);
+                    var cisvm = await CreateTransactionItemViewModelAsync(cit);
                     while (cisvm.IsAnyBusy) {
                         await Task.Delay(100);
                     }
 
-                    if (Parent != null) {
-                        Parent.DoShake = true;
-                    }
+                    DoShake = true;
 
                     ApplyTransactionAsync(cisvm).FireAndForgetSafeAsync(this);
 
@@ -202,7 +209,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private async Task<MpAvTransactionItemViewModel> CreateClipTileSourceViewModel(MpCopyItemTransaction cit) {
+        private async Task<MpAvTransactionItemViewModel> CreateTransactionItemViewModelAsync(MpCopyItemTransaction cit) {
             var cisvm = new MpAvTransactionItemViewModel(this);
             await cisvm.InitializeAsync(cit);
             return cisvm;
@@ -232,6 +239,19 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(SelectedTransaction):
                     ApplyTransactionAsync(SelectedTransaction).FireAndForgetSafeAsync(this);
                     break;
+
+                case nameof(DoShake):
+                    if (!DoShake) {
+                        break;
+                    }
+                    Dispatcher.UIThread.Post(async () => {
+                        var sw = Stopwatch.StartNew();
+                        while (sw.ElapsedMilliseconds < MpAvThemeViewModel.Instance.ShakeDurMs) {
+                            await Task.Delay(100);
+                        }
+                        DoShake = false;
+                    });
+                    break;
             }
         }
 
@@ -250,6 +270,11 @@ namespace MonkeyPaste.Avalonia {
             if (Transactions.All(x => x.TransactionId != tivm.TransactionId)) {
                 Transactions.Add(tivm);
             }
+            if (tivm.IsRunTimeAppliableTransaction &&
+                !IsTransactionPaneOpen) {
+                // only apply runtime transaction once opened
+                return;
+            }
             while (!Parent.IsEditorLoaded) {
                 await Task.Delay(100);
             }
@@ -264,7 +289,7 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
                 bool success = await cv.UpdateContentAsync(updateObj);
-                if (success) {
+                if (success && tivm.IsOneTimeAppliableTransaction) {
                     tivm.AppliedDateTime = DateTime.Now;
 
                 }
@@ -274,6 +299,7 @@ namespace MonkeyPaste.Avalonia {
         private void Transactions_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             OnPropertyChanged(nameof(Transactions));
             OnPropertyChanged(nameof(SortedTransactions));
+            OnPropertyChanged(nameof(IsAnyAnalysisTransaction));
         }
         private void SetTransactionViewGridLength(GridLength gl) {
             if (Parent.GetContentView() is Control Control &&
@@ -314,13 +340,15 @@ namespace MonkeyPaste.Avalonia {
                                 return;
                             }
                             Parent.Parent.RefreshQueryTrayLayout();
+                            Parent.EnableSubSelectionCommand.Execute(null);
+
                         });
                 });
             }, () => {
                 // just ignoring now
 
-                //return Parent != null && !IsTransactionPaneOpen;
-                return false;
+                return Parent != null && !IsTransactionPaneOpen;
+                //return false;
 
             });
 

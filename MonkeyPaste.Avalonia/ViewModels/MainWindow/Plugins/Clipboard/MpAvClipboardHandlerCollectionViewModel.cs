@@ -183,6 +183,8 @@ namespace MonkeyPaste.Avalonia {
         public IEnumerable<MpAvClipboardFormatPresetViewModel> EnabledReaders => EnabledFormats.Where(x => x.IsReader);
         public IEnumerable<MpAvClipboardFormatPresetViewModel> EnabledWriters => EnabledFormats.Where(x => x.IsWriter);
 
+        public IEnumerable<MpAvClipboardFormatPresetViewModel> SortedAvailableEnabledWriters =>
+            AllAvailableWriterPresets.OrderBy(x => x.ClipboardFormat.sortOrderIdx);
         public IEnumerable<MpAvClipboardFormatPresetViewModel> AllAvailableWriterPresets {
             get {
                 var aawpl = new List<MpAvClipboardFormatPresetViewModel>();

@@ -13,7 +13,7 @@ namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvImageExtensions {
         #region Converters        
 
-        public static Bitmap? ToAvBitmap(this string base64Str, double scale = 1.0) {
+        public static Bitmap? ToAvBitmap(this string base64Str, double scale = 1.0, string tint_hex_color = "") {
             if (!base64Str.IsStringBase64()) {
                 return null;
             }
@@ -21,6 +21,9 @@ namespace MonkeyPaste.Common.Avalonia {
             var bmp = bytes.ToAvBitmap();
             if (bmp == null) {
                 return null;
+            }
+            if (!string.IsNullOrEmpty(tint_hex_color)) {
+                bmp = bmp.Tint(tint_hex_color);
             }
             if (scale == 1.0) {
                 return bmp;

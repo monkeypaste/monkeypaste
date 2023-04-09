@@ -77,12 +77,8 @@ function updateContents_ext(updateContentsReqStr_base64) {
 	delta = new Delta(delta);
 	applyDelta(delta);
 
-	loadAnnotations(req.annotationFragmentStr);
+	loadAnnotations(req.annotationFragmentStr, true);
 }
-
-
-
-
 
 function disableReadOnly_ext(disableReadOnlyReqStrOrObj) {
 	// input MpQuillDisableReadOnlyRequestMessage

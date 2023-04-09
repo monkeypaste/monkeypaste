@@ -15,16 +15,13 @@ namespace MonkeyPaste.Common.Avalonia {
             MpDebug.Break("Unsupported brush type for color");
             return MpColorHelpers.GetRandomHexColor().ToAvColor();
         }
-        public static Color ToAvColor(this string hexColor) {
-            if (!hexColor.IsStringHexColor()) {
-                return Colors.Transparent;
-            }
-            var c = new MpColor(hexColor);
+        public static Color ToAvColor(this string hexOrNamedColor, string fallback = default) {
+            var c = new MpColor(hexOrNamedColor, fallback);
             return c.ToAvColor();
         }
 
-        public static Brush ToAvBrush(this string hexColor) {
-            return new SolidColorBrush(hexColor.ToAvColor());
+        public static Brush ToAvBrush(this string hexOrNamedColor, string fallback = default) {
+            return new SolidColorBrush(hexOrNamedColor.ToAvColor(fallback));
         }
 
         public static Pen ToAvPen(

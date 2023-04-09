@@ -4,7 +4,7 @@ using Avalonia.Metadata;
 using System.Collections.Generic;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvAnnotationItemTemplateSelector : IDataTemplate {
+    public class MpAvTransactionNodeDetailTemplateSelector : IDataTemplate {
         [Content]
         public Dictionary<string, IDataTemplate> AvailableTemplates { get; } = new Dictionary<string, IDataTemplate>();
 
@@ -18,13 +18,14 @@ namespace MonkeyPaste.Avalonia {
         //}
 
         public bool Match(object data) {
-            return data is MpViewModelBase;
+            //return data is MpViewModelBase;
+            return true;
         }
 
         Control ITemplate<object, Control>.Build(object param) {
-            string key = "PlainTextMessageTemplate";
-            if (param is MpAvParameterRequestMessageViewModel prmvm) {
-                key = "ParameterRequestMessageTemplate";
+            string key = "EmptyDetailTemplate";
+            if (param is MpAvAnnotationItemViewModel iaivm) {
+                key = "AnnotationItemDetailTemplate";
             }
 
             return AvailableTemplates[key].Build(param);

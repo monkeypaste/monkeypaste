@@ -11,10 +11,7 @@ var HoverAnnotationGuid = null;
 function initAnnotations() {
 
 }
-
-
-
-function loadAnnotations(annotationsObjOrJsonStr) {
+function loadAnnotations(annotationsObjOrJsonStr, fromHost = false) {
 	resetAnnotations();
 
 	if (isNullOrEmpty(annotationsObjOrJsonStr)) {
@@ -30,14 +27,10 @@ function loadAnnotations(annotationsObjOrJsonStr) {
 
 	for (var i = 0; i < root_annotations.length; i++) {
 		let annotation_obj = root_annotations[i];
-		//let actual_size = null;
-		//if (annotation_obj.type == 'RootAnnotation') {
-		//	actual_size = getRectSize(cleanRect(annotation_obj));
-		//}
-		//createAnnotation(annotation_obj, null, actual_size);
 		RootAnnotations.push(annotation_obj);
 	}
-	drawOverlay();
+
+	showAnnotations();
 }
 
 
@@ -336,10 +329,9 @@ function selectAnnotation(ann_or_annGuid, fromHost = false) {
 
 	SelectedAnnotationGuid = ann_guid;
 	drawOverlay();
-	if (fromHost) {
-		return;
+	if (!fromHost) {
+		onAnnotationSelected_ntf(SelectedAnnotationGuid);
 	}
-	onAnnotationSelected_ntf(SelectedAnnotationGuid);
 }
 
 function hoverAnnotation(ann_or_annGuid, fromHost = false) {
@@ -355,7 +347,25 @@ function hoverAnnotation(ann_or_annGuid, fromHost = false) {
 	if (fromHost) {
 		return;
 	}
+}
 
+function hideAnnotations() {
+	if (!hasAnnotations()) {
+		return;
+	}
+
+	selectAnnotation(null);
+	drawOverlay();
+}
+
+function showAnnotations(fromHost = false) {
+	if (!hasAnnotations()) {
+		return;
+	}
+	if (isNullOrUndefined(SelectedAnnotationGuid)) {
+		selectAnnotation(RootAnnotations[0].guid, fromHost);
+	}
+	drawOverlay();
 }
 
 // #endregion Actions
@@ -377,6 +387,9 @@ function onAnnotationWindowPointerClick(e) {
 		return;
 	}
 	let hit_ann = findAnnotationUnderWindowPoint(WindowMouseLoc);
+	if (isNullOrUndefined(hit_ann)) {
+		return;
+	}
 	selectAnnotation(hit_ann);
 }
 

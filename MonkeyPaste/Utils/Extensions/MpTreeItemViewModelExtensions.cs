@@ -6,6 +6,9 @@ namespace MonkeyPaste {
 
         public static IEnumerable<MpITreeItemViewModel> AllDescendants(this MpITreeItemViewModel tivm) {
             var activml = new List<MpITreeItemViewModel>();
+            if (tivm == null || tivm.Children == null) {
+                return activml;
+            }
             foreach (MpITreeItemViewModel c in tivm.Children) {
                 activml.Add(c);
                 var ccl = c.AllDescendants();

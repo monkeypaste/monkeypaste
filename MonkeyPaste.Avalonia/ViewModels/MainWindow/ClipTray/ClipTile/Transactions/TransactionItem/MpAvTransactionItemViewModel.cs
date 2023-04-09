@@ -9,6 +9,12 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
+
+    public enum MpTransactionTabType {
+        Source,
+        Request,
+        Response
+    }
     public class MpAvTransactionItemViewModel :
         MpViewModelBase<MpAvClipTileTransactionCollectionViewModel>,
         MpAvITransactionNodeViewModel {
@@ -16,7 +22,10 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpAvITransactionNodeViewModel Implementation
-
+        public MpAvClipTileViewModel HostClipTileViewModel =>
+            Parent == null ?
+                null :
+                Parent.Parent;
         public object Body => "Empty TransactionItem Body";
         public bool IsExpanded { get; set; }
         public MpITreeItemViewModel ParentTreeItem => null;
@@ -91,6 +100,15 @@ namespace MonkeyPaste.Avalonia {
         public MpAvTransactionMessageViewModelBase Response { get; set; }
 
         public MpAvDataObjectViewModel DataObjectViewModel { get; private set; }
+
+        public MpAvITransactionNodeViewModel FocusNode {
+            get {
+                if (Response is MpAvAnnotationMessageViewModel amvm) {
+                    return amvm.SelectedItem;
+                }
+                return this;
+            }
+        }
         #endregion
 
         #region Appearance
@@ -115,7 +133,20 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsHovering { get; set; }
 
-        public bool IsSelected { get; set; }
+        public bool IsSelected {
+            get {
+                if (Parent == null) {
+                    return false;
+                }
+                return Parent.SelectedTransaction == this;
+            }
+            set {
+                if (IsSelected != value && Parent != null && value) {
+                    Parent.SelectedTransaction = this;
+                    OnPropertyChanged(nameof(IsSelected));
+                }
+            }
+        }
         public DateTime LastSelectedDateTime { get; set; }
 
         public int HostCopyItemId {
@@ -127,11 +158,38 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public int SelectedTabIndex { get; set; }
+        public MpTransactionTabType SelectedTabType =>
+            (MpTransactionTabType)SelectedTabIndex;
+
+
+        public bool IsAnalysisTransaction =>
+            Items.Any(x => x is MpAvAnnotationMessageViewModel || x is MpAvParameterRequestMessageViewModel);
+
         public bool IsAppliableTransaction =>
             TransactionType == MpTransactionType.Analyzed;
 
-        public bool HasTransactionBeenApplied =>
-            !IsAppliableTransaction || AppliedDateTime.HasValue;
+        public bool IsOneTimeAppliableTransaction =>
+            Response is MpAvDeltaMessageViewModel;
+
+        public bool IsRunTimeAppliableTransaction =>
+            Response is MpAvAnnotationMessageViewModel;
+
+        public bool HasTransactionBeenApplied {
+            get {
+                if (!IsAppliableTransaction) {
+                    return true;
+                }
+                if (IsOneTimeAppliableTransaction) {
+                    return AppliedDateTime.HasValue;
+                }
+                if (IsSelected &&
+                    Response is MpAvAnnotationMessageViewModel amvm) {
+                    return amvm.SelectedItem != null;
+                }
+                return false;
+            }
+        }
 
         #endregion
 
@@ -305,6 +363,11 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvTransactionItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
+                case nameof(IsSelected):
+                    if (IsSelected) {
+                        LastSelectedDateTime = DateTime.Now;
+                    }
+                    break;
                 case nameof(HasModelChanged):
                     if (!HasModelChanged) {
                         break;
@@ -319,31 +382,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public async Task<MpAvTransactionSourceViewModelBase> CreateSourceViewModelAsync(MpTransactionSource ts) {
-            MpAvTransactionSourceViewModelBase tsvm = null;
-            switch (ts.CopyItemSourceType) {
-                case MpTransactionSourceType.AnalyzerPreset:
-                    tsvm = new MpAvAnalyzerSourceViewModel(this);
-                    break;
-                case MpTransactionSourceType.App:
-                    tsvm = new MpAvAppSourceViewModel(this);
-                    break;
-                case MpTransactionSourceType.Url:
-                    tsvm = new MpAvUrlSourceViewModel(this);
-                    break;
-                case MpTransactionSourceType.CopyItem:
-                    tsvm = new MpAvCopyItemSourceViewModel(this);
-                    break;
-                case MpTransactionSourceType.UserDevice:
-                    tsvm = new MpAvUserDeviceSourceViewModel(this);
-                    break;
-                default:
-                    throw new Exception("Source Type must be defined");
-            }
-            await tsvm.InitializeAsync(ts);
-            return tsvm;
-        }
-
         public async Task<MpAvTransactionMessageViewModelBase> CreateMessageViewModelAsync(MpJsonMessageFormatType jsonFormat, string json, MpAvITransactionNodeViewModel parentAnnotation) {
             if (string.IsNullOrEmpty(json)) {
                 return null;
@@ -351,6 +389,7 @@ namespace MonkeyPaste.Avalonia {
             MpAvTransactionMessageViewModelBase cttimvmb = null;
             switch (jsonFormat) {
                 case MpJsonMessageFormatType.DataObject:
+                    // scan data object for annotation or delta, then recall this method with message data
                     var mpdo = MpPortableDataObject.Parse(json);
                     if (mpdo.TryGetData(MpPortableDataFormats.INTERNAL_CONTENT_ANNOTATION_FORMAT, out string ann_json)) {
                         cttimvmb = await CreateMessageViewModelAsync(MpJsonMessageFormatType.Annotation, ann_json, this);
@@ -377,7 +416,31 @@ namespace MonkeyPaste.Avalonia {
             }
             await cttimvmb.InitializeAsync(json, parentAnnotation);
             return cttimvmb;
+        }
 
+        public async Task<MpAvTransactionSourceViewModelBase> CreateSourceViewModelAsync(MpTransactionSource ts) {
+            MpAvTransactionSourceViewModelBase tsvm = null;
+            switch (ts.CopyItemSourceType) {
+                case MpTransactionSourceType.AnalyzerPreset:
+                    tsvm = new MpAvAnalyzerSourceViewModel(this);
+                    break;
+                case MpTransactionSourceType.App:
+                    tsvm = new MpAvAppSourceViewModel(this);
+                    break;
+                case MpTransactionSourceType.Url:
+                    tsvm = new MpAvUrlSourceViewModel(this);
+                    break;
+                case MpTransactionSourceType.CopyItem:
+                    tsvm = new MpAvCopyItemSourceViewModel(this);
+                    break;
+                case MpTransactionSourceType.UserDevice:
+                    tsvm = new MpAvUserDeviceSourceViewModel(this);
+                    break;
+                default:
+                    throw new Exception("Source Type must be defined");
+            }
+            await tsvm.InitializeAsync(ts);
+            return tsvm;
         }
         #endregion
 
@@ -395,6 +458,10 @@ namespace MonkeyPaste.Avalonia {
                                 .Cast<MpAvAnnotationItemViewModel>().FirstOrDefault(x => x.AnnotationGuid == argStr);
 
                             iamvm.SelectedItem = to_select;
+                            if (!IsSelected) {
+                                IsSelected = true;
+                            }
+
                         }
                     }
                 }

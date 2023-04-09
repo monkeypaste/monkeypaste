@@ -22,7 +22,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
-        #region MpAvITransactionNodeViewModel Implementation
+        #region MpIClampedValue Implementation
 
         double MpIClampedValue.min => AnnotationMinScore;
         double MpIClampedValue.max => AnnotationMaxScore;
@@ -31,6 +31,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpAvITransactionNodeViewModel Implementation
+        public MpAvClipTileViewModel HostClipTileViewModel =>
+            Parent == null || Parent.Parent == null || Parent.Parent.Parent == null ?
+                null :
+                Parent.Parent.Parent.Parent;
         public object TransactionModel { get; }
         public object Body { get; }
         public bool IsExpanded { get; set; }
@@ -39,12 +43,12 @@ namespace MonkeyPaste.Avalonia {
         public bool IsSelected {
             get {
                 if (Parent is MpAvAnnotationMessageViewModel iamvm) {
-                    return iamvm.SelectedItemGuid == AnnotationGuid;
+                    return iamvm.SelectedItem == this;
                 }
                 return false;
             }
             set {
-                if (Parent != null && Parent.Parent != null) {
+                if (value && IsSelected != value && Parent != null && Parent.Parent != null) {
                     Parent.Parent.SelectChildCommand.Execute(AnnotationGuid);
                     OnPropertyChanged(nameof(IsSelected));
                 }
@@ -131,9 +135,6 @@ namespace MonkeyPaste.Avalonia {
             PropertyChanged += MpAvAnnotationItemViewModel_PropertyChanged;
             Items.CollectionChanged += Items_CollectionChanged;
         }
-
-
-
         #endregion
 
         #region Public Methods

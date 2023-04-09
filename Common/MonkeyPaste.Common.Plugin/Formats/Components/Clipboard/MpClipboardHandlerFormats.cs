@@ -14,11 +14,14 @@ namespace MonkeyPaste.Common.Plugin {
         public string iconUri { get; set; }
         public string handlerGuid { get; set; }
 
+
         public string displayName { get; set; }
         public string clipboardName { get; set; }
 
         public string description { get; set; }
         public List<MpPluginDependency> dependencies { get; set; }
+
+        public int sortOrderIdx { get; set; }
     }
 
     public class MpClipboardReaderRequest : MpPluginRequestFormatBase {

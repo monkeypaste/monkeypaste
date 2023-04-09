@@ -17,7 +17,7 @@ namespace MonkeyPaste.Avalonia {
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
             double scale = 1.0d;
-            List<string> paramParts = parameter == null ? new List<string>() : parameter.ToString().Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            List<string> paramParts = parameter == null ? new List<string>() : parameter.ToString().SplitNoEmpty("|").ToList();
             bool isFilePathIcon = paramParts.Any(x => x.ToLower() == "pathicon");
 
             if (value is int iconId) {
@@ -27,7 +27,8 @@ namespace MonkeyPaste.Avalonia {
                     return null;
                 }
                 if (paramParts.Contains("border")) {
-                    return new MpAvStringBase64ToBitmapConverter().Convert(ivm.IconBorderBase64, null, scale.ToString(), CultureInfo.CurrentCulture);
+                    string border_tint = paramParts.FirstOrDefault(x => x != "border");
+                    return new MpAvStringBase64ToBitmapConverter().Convert(ivm.IconBorderBase64, null, border_tint, CultureInfo.CurrentCulture);
                 }
                 return new MpAvStringBase64ToBitmapConverter().Convert(ivm.IconBase64, null, scale.ToString(), CultureInfo.CurrentCulture);
             }

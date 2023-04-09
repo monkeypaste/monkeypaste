@@ -232,10 +232,6 @@ function drawCaret(ctx, sel, caret_width = 1.0, caret_opacity = 1) {
     drawLine(ctx, caret_line, caret_color, caret_width);
 }
 
-function drawTest() {
-    let test_rect = getEditorContainerRect();
-    drawRect(getOverlayContext(), test_rect, 'black', 'black', 0, 1);
-}
 
 function drawAnnotations(ctx) {
     if (!hasAnnotations(ctx)) {
@@ -254,6 +250,14 @@ function drawAnnotation(ctx, ann) {
         return;
     }
     drawRect(ctx, annotation_rect);
+}
+
+function drawTest() {
+    updateOverlayBounds();
+
+    let test_rect = getEditorContainerRect();
+    test_rect = inflateRect(test_rect, 30, 30, -30, -30);
+    drawRect(getOverlayContext(), test_rect, 'black', 'black', 0, 1);
 }
 
 function clearOverlay(ctx) {

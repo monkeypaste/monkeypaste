@@ -461,7 +461,7 @@ namespace MonkeyPaste.Common {
             "olivedrab1",
             "olivedrab2",
             "olivedrab4",
-            "orange1",
+            "orange",
             "orange2",
             "orange3",
             "orange4",

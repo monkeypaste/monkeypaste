@@ -57,8 +57,6 @@ namespace MonkeyPaste.Avalonia {
             PropertyChanged += MpAvAnnotationMessageViewModel_PropertyChanged;
         }
 
-
-
         #endregion
 
         #region Public Methods
@@ -95,21 +93,24 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvAnnotationMessageViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
+
                 case nameof(SelectedItem):
                     if (RootAnnotationViewModel != null) {
                         var all_anns = RootAnnotationViewModel
                             .SelfAndAllDescendants();
                         all_anns
                             .Cast<MpAvAnnotationItemViewModel>()
-                            .ForEach(x => x.IsSelected = x.AnnotationGuid == SelectedItemGuid);
+                            //.ForEach(x => x.IsSelected = x.AnnotationGuid == SelectedItemGuid);
+                            .ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
+                    }
+                    if (Parent != null) {
+                        Parent.OnPropertyChanged(nameof(Parent.FocusNode));
                     }
 
-                    if (Parent == null ||
-                        Parent.Parent == null ||
-                        Parent.Parent.Parent == null) {
+                    if (HostClipTileViewModel == null) {
                         break;
                     }
-                    var ctvm = Parent.Parent.Parent;
+                    var ctvm = HostClipTileViewModel;
                     if (ctvm.GetContentView() is MpIContentView cv) {
                         var msg = new MpQuillAnnotationSelectedMessage() {
                             annotationGuid = SelectedItemGuid

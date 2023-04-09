@@ -806,12 +806,6 @@ namespace MonkeyPaste.Common {
             }
             return MpRegEx.RegExLookup[MpRegExType.HexColor].IsMatch(str);
         }
-        public static bool IsStringGuid(this string str) {
-            if (string.IsNullOrWhiteSpace(str)) {
-                return false;
-            }
-            return MpRegEx.RegExLookup[MpRegExType.Guid].IsMatch(str);
-        }
 
         public static bool IsStringNamedColor(this string str) {
             if (string.IsNullOrWhiteSpace(str)) {
@@ -819,6 +813,16 @@ namespace MonkeyPaste.Common {
             }
             return MpSystemColors.X11ColorNames.Contains(str.ToLower());
         }
+        public static bool IsStringHexOrNamedColor(this string str) {
+            return str.IsStringHexColor() || str.IsStringNamedColor();
+        }
+        public static bool IsStringGuid(this string str) {
+            if (string.IsNullOrWhiteSpace(str)) {
+                return false;
+            }
+            return MpRegEx.RegExLookup[MpRegExType.Guid].IsMatch(str);
+        }
+
 
         public static string NamedColorToHex(this string str) {
             if (!IsStringNamedColor(str)) {

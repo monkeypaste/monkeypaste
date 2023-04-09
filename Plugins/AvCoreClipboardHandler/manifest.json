@@ -342,6 +342,7 @@
         "handlerGuid": "fc932676-f688-4f0c-a558-9918241397db",
         "iconUri": "text.png",
         "displayName": "Text",
+        "sortOrderIdx": 0,
         "clipboardName": "Text",
         "parameters": [
           {
@@ -378,6 +379,7 @@
       {
         "handlerGuid": "826c32fa-b3ae-46f3-9495-eb1f476b0b1e",
         "iconUri": "text.png",
+        "sortOrderIdx": 100,
         "description": "A web compatibility format that maybe needed on a variety of platforms with varying Web Browsers. Output will match standard 'Text' format.",
         "displayName": "Text (web)",
         "clipboardName": "text/plain",
@@ -416,6 +418,7 @@
       {
         "handlerGuid": "ac15a058-dae6-4a66-9700-c415fd5b89f9",
         "displayName": "Rtf",
+        "sortOrderIdx": 4,
         "description": "Rich Text Format is a Microsoft-based format which maybe required for formatted text output in certain legacy applications on a variety of platforms.",
         "iconUri": "rtf.png",
         "clipboardName": "Rich Text Format",
@@ -454,6 +457,7 @@
       {
         "handlerGuid": "825e4325-908f-48c5-94a1-53eb9af4c470",
         "displayName": "Html",
+        "sortOrderIdx": 5,
         "iconUri": "html.png",
         "clipboardName": "HTML Format",
         "parameters": [
@@ -491,6 +495,7 @@
       {
         "handlerGuid": "46fc39af-982d-4c47-8a6b-7b6e074c45d8",
         "displayName": "Html (web)",
+        "sortOrderIdx": 100,
         "description": "A web compatibility format that maybe needed on a variety of platforms with varying Web Browsers. Output will match standard 'HTML' format.",
         "iconUri": "html.png",
         "clipboardName": "text/html",
@@ -529,6 +534,7 @@
       {
         "handlerGuid": "95ed025a-fde5-4b51-8be4-32dcebeb1f15",
         "displayName": "Url (moz)",
+        "sortOrderIdx": 100,
         "description": "A mozilla (Firefox) format used for source Url tracking. Typically only required on some Linux platforms.",
         "iconUri": "html.png",
         "clipboardName": "text/x-moz-url-priv",
@@ -551,6 +557,7 @@
       {
         "handlerGuid": "57f363e9-b478-46e7-a39b-4b143c3d3e7d",
         "displayName": "Image",
+        "sortOrderIdx": 1,
         "iconUri": "bitmap.png",
         "clipboardName": "PNG",
         "parameters": [
@@ -597,6 +604,7 @@
       {
         "handlerGuid": "e05ed3da-3b2a-4339-8524-2ea339c0856b",
         "displayName": "File",
+        "sortOrderIdx": 2,
         "iconUri": "folder.png",
         "clipboardName": "FileNames",
         "parameters": [
@@ -625,6 +633,7 @@
       {
         "handlerGuid": "fd8c2fd9-87c9-4e43-97df-0cca111c69ae",
         "displayName": "File (Gnome)",
+        "sortOrderIdx": 100,
         "iconUri": "folder.png",
         "clipboardName": "x-special/gnome-copied-files",
         "dependencies": [
@@ -659,7 +668,8 @@
       {
         "handlerGuid": "10ab62ae-89fa-4445-895d-b4e5463e6df0",
         "displayName": "Csv",
-        "description":  "Used for tabular (spreadsheet) data",
+        "sortOrderIdx": 3,
+        "description": "Used for tabular (spreadsheet) data",
         "iconUri": "csv.png",
         "clipboardName": "Csv",
         "parameters": [
@@ -681,6 +691,7 @@
       {
         "handlerGuid": "e36f1993-4865-4043-a517-0e2c31de042e",
         "displayName": "Url",
+        "sortOrderIdx": 100,
         "iconUri": "html.png",
         "clipboardName": "UniformResourceLocator",
         "parameters": [
@@ -702,6 +713,7 @@
       {
         "handlerGuid": "8341287f-c987-4ec0-98f3-66e381a3fa56",
         "displayName": "Uri List",
+        "sortOrderIdx": 100,
         "iconUri": "html.png",
         "clipboardName": "text/uri-list",
         "parameters": [

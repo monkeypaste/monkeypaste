@@ -389,7 +389,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string ShortcutTooltipText =>
             string.IsNullOrEmpty(KeyString) ? $"Assign Global Paste Shortcut for '{CopyItemTitle}'" : KeyString;
-        public bool DoShake { get; set; }
+
 
         public bool IsResizerEnabled =>
             //MpAvThemeViewModel.Instance.IsDesktop &&
@@ -1769,18 +1769,6 @@ namespace MonkeyPaste.Avalonia {
                     if (!IsPopOutVisible) {
                         PopInTileCommand.Execute(null);
                     }
-                    break;
-                case nameof(DoShake):
-                    if (!DoShake) {
-                        break;
-                    }
-                    Dispatcher.UIThread.Post(async () => {
-                        var sw = Stopwatch.StartNew();
-                        while (sw.ElapsedMilliseconds < MpAvThemeViewModel.Instance.ShakeDurMs) {
-                            await Task.Delay(100);
-                        }
-                        DoShake = false;
-                    });
                     break;
             }
         }

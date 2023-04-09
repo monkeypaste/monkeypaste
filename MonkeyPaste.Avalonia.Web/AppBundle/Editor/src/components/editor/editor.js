@@ -282,10 +282,6 @@ function enableSubSelection(fromHost = false) {
 		log('enableSubSelection ignored, content is an image. fromHost: ' + fromHost);
 		return;
 	}
-	//if (isSubSelectionEnabled()) {
-	//	log('enableSubSelection ignored, already sub-selectable. fromHost: ' + fromHost);
-	//	return;
-	//}
 
 	getEditorContainerElement().classList.remove('no-select');
 	getEditorContainerElement().classList.add('sub-select');
@@ -295,6 +291,7 @@ function enableSubSelection(fromHost = false) {
 	disableDragOverlay();
 	enableTemplateSubSelection();
 	showPasteToolbar();
+	showAnnotations();
 	updateAllElements();
 
 	drawOverlay();
@@ -328,7 +325,7 @@ function disableSubSelection(fromHost = false) {
 	scrollToHome();
 	hideAllScrollbars();
 	enableDragOverlay();
-
+	hideAnnotations();
 	hidePasteToolbar();
 
 	updateAllElements();

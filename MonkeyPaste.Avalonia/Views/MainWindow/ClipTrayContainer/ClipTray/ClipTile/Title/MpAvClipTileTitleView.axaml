@@ -12,6 +12,9 @@
                        d:DesignWidth="260"
                        d:DesignHeight="52"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileTitleView">
+    <local:MpAvUserControl.Resources>
+        <sys:Double x:Key="IconBorderMaxScale">1.1</sys:Double>
+    </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
         <Style Selector="Button#ClipTileAppIconImageButton:pointerover Image#ClipTileAppIconBorderImage, Button#ClipTileAppIconImageButton.shake Image#ClipTileAppIconBorderImage">
             <Style.Animations>
@@ -28,9 +31,9 @@
                     </KeyFrame>
                     <KeyFrame Cue="100%">
                         <Setter Property="ScaleTransform.ScaleX"
-                                Value="1.1" />
+                                Value="{StaticResource IconBorderMaxScale}" />
                         <Setter Property="ScaleTransform.ScaleY"
-                                Value="1.1" />
+                                Value="{StaticResource IconBorderMaxScale}" />
                     </KeyFrame>
                 </Animation>
             </Style.Animations>
@@ -42,9 +45,9 @@
                            FillMode="Forward">
                     <KeyFrame Cue="0%">
                         <Setter Property="ScaleTransform.ScaleX"
-                                Value="1.1" />
+                                Value="{StaticResource IconBorderMaxScale}" />
                         <Setter Property="ScaleTransform.ScaleY"
-                                Value="1.1" />
+                                Value="{StaticResource IconBorderMaxScale}" />
                     </KeyFrame>
                     <KeyFrame Cue="100%">
                         <Setter Property="IsVisible"
@@ -220,10 +223,12 @@
                      VerticalAlignment="Stretch"
                      Margin="0,3,13,0" />-->
             <Button x:Name="ClipTileAppIconImageButton"
+                    x:DataType="local:MpAvClipTileTransactionCollectionViewModel"
+                    DataContext="{Binding TransactionCollectionViewModel}"
                     Classes="noBg noHoverBg"
                     Classes.shake="{Binding DoShake}"
                     Width="{Binding Bounds.Height, ElementName=TitleContainerGrid}"
-                    Command="{Binding TransactionCollectionViewModel.ToggleTransactionPaneOpenCommand}"
+                    Command="{Binding ToggleTransactionPaneOpenCommand}"
                     ClipToBounds="False"
                     BorderThickness="0"
                     HorizontalAlignment="Stretch"
@@ -240,15 +245,29 @@
                 </Button.RenderTransform>
 
                 <Grid>
-                    <Image x:Name="ClipTileAppIconBorderImage"
+                    <Image x:Name="HasAnalysisBorderImage"
                            IsHitTestVisible="False"
-                           Source="{Binding IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, ConverterParameter=border}"
+                           IsVisible="{Binding IsAnyAnalysisTransaction}"
+                           Source="{Binding PrimaryItem.IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, ConverterParameter=border|orange}"
                            Stretch="UniformToFill"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch">
                         <Image.RenderTransform>
                             <TransformGroup>
-
+                                <ScaleTransform ScaleX="{StaticResource IconBorderMaxScale}"
+                                                ScaleY="{StaticResource IconBorderMaxScale}" />
+                                <RotateTransform />
+                            </TransformGroup>
+                        </Image.RenderTransform>
+                    </Image>
+                    <Image x:Name="ClipTileAppIconBorderImage"
+                           IsHitTestVisible="False"
+                           Source="{Binding PrimaryItem.IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, ConverterParameter=border}"
+                           Stretch="UniformToFill"
+                           HorizontalAlignment="Stretch"
+                           VerticalAlignment="Stretch">
+                        <Image.RenderTransform>
+                            <TransformGroup>
                                 <ScaleTransform />
                                 <RotateTransform />
                             </TransformGroup>
@@ -256,7 +275,7 @@
                     </Image>
                     <Image x:Name="ClipTileAppIconImage"
                            IsHitTestVisible="False"
-                           Source="{Binding IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
+                           Source="{Binding PrimaryItem.IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
                            Stretch="UniformToFill"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch">

@@ -1,6 +1,6 @@
 ﻿// #region Globals
 
-var IsHostFocused = false;
+var IsHostFocused = null;
 // #endregion Globals
 
 // #region Life Cycle
@@ -36,7 +36,16 @@ function setInputFocusable(isInputFocused) {
 // #region State
 
 function isWindowFocused() {
-	return document.hasFocus() && IsHostFocused;
+	if (!isRunningInHost()) {
+		return true;
+	}
+	if (document.hasFocus()) {
+		if (IsHostFocused == null) {
+			return true;
+		}
+		return IsHostFocused;
+	}
+	return false;
 }
 // #endregion State
 

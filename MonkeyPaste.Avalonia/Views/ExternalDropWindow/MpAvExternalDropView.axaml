@@ -87,7 +87,7 @@
                      SelectionMode="Toggle"
                      ScrollViewer.VerticalScrollBarVisibility="Auto"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                     Items="{Binding AllAvailableWriterPresets}">
+                     Items="{Binding SortedAvailableEnabledWriters}">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel HorizontalAlignment="Stretch"
