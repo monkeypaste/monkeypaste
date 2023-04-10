@@ -14,7 +14,7 @@ namespace MonkeyPaste.Common {
     }
 
     [Flags]
-    public enum MpContentQueryBitFlags : Int64 {
+    public enum MpContentQueryBitFlags : long {
         None = 0,
         CaseSensitive = 1,
         Title = 2,

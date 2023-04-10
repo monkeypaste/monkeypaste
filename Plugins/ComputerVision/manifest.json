@@ -129,20 +129,6 @@
             "value": "{ItemData}"
           }
         ]
-      },
-      {
-        "label": "TEST",
-        "description": "The image to describe",
-        "controlType": "TextBox",
-        "unitType": "PlainTextContentQuery",
-        "isRequired": true,
-        "isVisible": false,
-        "paramId": 6,
-        "values": [
-          {
-            "value": "{ItemData}"
-          }
-        ]
       }
     ]
   }

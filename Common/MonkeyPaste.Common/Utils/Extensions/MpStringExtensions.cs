@@ -436,32 +436,7 @@ namespace MonkeyPaste.Common {
             return null;
         }
 
-        public static async Task<string> ToBase64FromRichHtmlImageString(this string htmlStr, string fallbackBase64Str = null, int timeoutMs = 5000) {
-            fallbackBase64Str = fallbackBase64Str == null ? string.Empty : fallbackBase64Str;
-            if (!htmlStr.IsStringRichHtmlImage()) {
-                return fallbackBase64Str;
-            }
-            var htmlDoc = new HtmlDocument();
-            var imgNode = htmlDoc.DocumentNode.FirstChild.FirstChild;
-            if (imgNode.Name.ToLower() != "img") {
-                // what is the string how'd it happen?
-                MpDebug.Break();
-                return fallbackBase64Str;
-            }
-            string srcAttrVal = imgNode.GetAttributeValue("src", string.Empty);
-            int base64_token_idx = srcAttrVal.IndexOf("data:image/png;base64,");
-            if (base64_token_idx >= 0) {
-                return srcAttrVal.Substring(base64_token_idx + 1).Trim();
-            }
-            if (srcAttrVal.IsStringUrl()) {
-                var src_bytes = await srcAttrVal.ReadUriBytesAsync(timeoutMs);
-                if (src_bytes == null || src_bytes.Length == 0) {
-                    return fallbackBase64Str;
-                }
-                return src_bytes.ToBase64String();
-            }
-            return fallbackBase64Str;
-        }
+
 
 
 

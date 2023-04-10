@@ -94,14 +94,16 @@ function getAnnotationRectStyle(ann) {
 	let _fillOpacity = 0.25;
 	let _strokeWidth = 2;
 
-	if (ann.guid == HoverAnnotationGuid) {
-		if (ann.guid == SelectedAnnotationGuid) {
+	let is_hover_or_desc = isSelfOrDescendantAnnotationByGuid(ann, HoverAnnotationGuid);
+	let is_sel_or_desc = isSelfOrDescendantAnnotationByGuid(ann, SelectedAnnotationGuid);
+	if (is_hover_or_desc) {
+		if (is_sel_or_desc) {
 			_stroke = 'lime';
 		} else {
 			_stroke = 'yellow';
 		}
 		_fillOpacity = 0.5;
-	} else if (ann.guid == SelectedAnnotationGuid) {
+	} else if (is_sel_or_desc) {
 		_stroke = 'red'
 	}
 
@@ -219,6 +221,24 @@ function isParentAnnotation(ann) {
 	return result;
 }
 
+function isSelfOrDescendantAnnotationByGuid(ann, parent_ann_guid) {
+	if (isNullOrEmpty(parent_ann_guid) ||
+		isNullOrUndefined(ann)) {
+		return false;
+	}
+	if (ann.guid == parent_ann_guid) {
+		return true;
+	}
+	let cur_parent = getParentAnnotation(ann);
+	while (cur_parent != null) {
+		if (cur_parent.guid == parent_ann_guid) {
+			return true;
+		}
+		cur_parent = getParentAnnotation(cur_parent);
+	}
+	return false;
+}
+
 function isRoiAnnotation(ann) {
 	return isRect(ann);
 }
@@ -285,7 +305,9 @@ function findAnnotationByGuid(ann_guid, cur_ann) {
 			}
 		}
 	}
-	if (cur_ann.guid == ann_guid) {
+	if (cur_ann &&
+		!isNullOrUndefined(cur_ann.guid) &&
+		cur_ann.guid == ann_guid) {
 		return cur_ann;
 	}
 	if (!isParentAnnotation(cur_ann)) {

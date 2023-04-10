@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common.Plugin;
+﻿using Avalonia.Threading;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -71,6 +72,20 @@ namespace MonkeyPaste.Avalonia {
         #region View Models
 
         public ObservableCollection<MpAvAnnotationItemViewModel> Items { get; private set; } = new ObservableCollection<MpAvAnnotationItemViewModel>();
+        #endregion
+
+        #region State
+
+        public double ScorePercent {
+            get {
+                double length = AnnotationMaxScore - AnnotationMinScore;
+                double percent = (AnnotationScore - AnnotationMinScore) / length;
+                return percent;
+            }
+        }
+
+        public double CurScorePercent { get; set; }
+
         #endregion
 
         #region Model
@@ -182,7 +197,16 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                 case nameof(IsSelected):
                     if (IsSelected) {
-                        IsExpanded = true;
+                        //IsExpanded = true;
+                        Dispatcher.UIThread.Post(async () => {
+                            CurScorePercent = 0;
+                            double percent_v = 0.05;
+                            while (CurScorePercent < ScorePercent) {
+                                CurScorePercent += percent_v;
+                                await Task.Delay(30);
+                            }
+                            CurScorePercent = ScorePercent;
+                        });
                     }
                     break;
             }

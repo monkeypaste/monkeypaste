@@ -287,7 +287,7 @@ namespace MonkeyPaste.Avalonia {
 
             // NOTE when file is on clipboard pasting into tile removes all other formats besides file
             // and pseudo files are only needed for dnd comptaibility so its gewd
-            bool ignore_pseudo_file = false;
+            //bool ignore_pseudo_file = false;
             if (formats == null) {
                 // NOTE important that ALL data formats are on clipboard for drag source obj to process 
                 contentDataReq.formats = MpPortableDataFormats.RegisteredFormats.ToList();

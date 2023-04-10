@@ -263,7 +263,8 @@ namespace MonkeyPaste.Avalonia {
             //    tivm.TransactionType == MpTransactionType.Created) {
             //    return;
             //}
-            if (tivm.HasTransactionBeenApplied) {
+            if (tivm == null ||
+                tivm.HasTransactionBeenApplied) {
                 //MpDebug.Break("transaction already applied, why again? (rolling back not built yet)");
                 return;
             }

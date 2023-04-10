@@ -5,6 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace MonkeyPaste.Common.Plugin {
+    [Flags]
+    public enum MpAnnotationType : long {
+        None = 0,
+    }
     public class MpAnnotationJsonConverter : JsonConverter {
         public override bool CanConvert(Type objectType) {
             return (objectType == typeof(MpAnnotationNodeFormat));

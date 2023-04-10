@@ -803,6 +803,12 @@ namespace MonkeyPaste.Avalonia {
             IsMainWindowLoading = false;
             IsMainWindowOpen = true;
             IsMainWindowOpening = false;
+            if (!IsMainWindowActive &&
+                !MpAvWindowManager.AllWindows.Any(x => x.DataContext != this && x.IsActive)) {
+                // when mw is shown and not active it doesn't hide or receive input until activated
+                MpAvWindowManager.MainWindow.Activate();
+            }
+
 
             MpConsole.WriteLine("SHOW WINDOW DONE");
         }

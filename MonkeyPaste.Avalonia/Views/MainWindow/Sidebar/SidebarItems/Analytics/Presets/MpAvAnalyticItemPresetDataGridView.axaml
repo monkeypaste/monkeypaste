@@ -51,12 +51,12 @@
 
         <!--  RESET/DELETE BUTTON  -->
 
-        <Style Selector="Button#ResetOrDeleteButton.canReset Image"
+        <Style Selector="Button#ResetOrDeleteButton:not(.canDelete) Image"
                x:DataType="local:MpAvAnalyticItemPresetViewModel">
             <Setter Property="Source"
                     Value="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource ResetImage}}" />
         </Style>
-        <Style Selector="Button#ResetOrDeleteButton:not(.canReset) Image">
+        <Style Selector="Button#ResetOrDeleteButton.canDelete Image">
             <Setter Property="Source"
                     Value="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource TrashCanImage}}" />
         </Style>
@@ -236,8 +236,7 @@
                                 <Button Classes="defaultButton noBg noHoverBg outlineOver square"
                                         IsEnabled="{Binding !Parent.IsBusy}"
                                         local:MpAvPointerCommandExtension.IsEnabled="True"
-                                        local:MpAvPointerCommandExtension.LeftPressCommand="{Binding AnalyzeSelectedItemCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
-                                        local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding AnalyticItemPresetId}">
+                                        local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ExecutePresetAnalysisOnSelectedContentCommand}">
                                     <Grid DataContext="{Binding Parent}"
                                           x:DataType="local:MpAvAnalyticItemViewModel">
                                         <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource NoEntryImage}}">
@@ -277,7 +276,8 @@
                                             Header="Clone">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
-                                <Button Classes="defaultButton noBg noHoverBg outlineOver square"
+                                <Button x:Name="DuplicateButton"
+                                        Classes="defaultButton noBg noHoverBg outlineOver square"
                                         IsEnabled="{Binding !Parent.IsBusy}"
                                         local:MpAvPointerCommandExtension.IsEnabled="True"
                                         local:MpAvPointerCommandExtension.LeftPressCommand="{Binding DuplicateThisPresetCommand}">
@@ -304,14 +304,20 @@
                                             Width="40">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
+                                <!--  NOTE cmd parameter set to req format in trans style, null in sidebar  -->
                                 <Button x:Name="ResetOrDeleteButton"
                                         Classes="defaultButton noBg noHoverBg outlineOver square"
-                                        Classes.canReset="{Binding !CanDelete}"
                                         IsEnabled="{Binding !Parent.IsBusy}"
                                         local:MpAvPointerCommandExtension.IsEnabled="True"
                                         local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ResetOrDeleteThisPresetCommand}">
+                                    <Classes.canDelete>
+                                        <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                            <Binding Path="!IsManifestPreset" />
+                                            <Binding Path="!IsGeneratedDefaultPreset" />
+                                        </MultiBinding>
+                                    </Classes.canDelete>
                                     <ToolTip.Tip>
-                                        <local:MpAvToolTipView ToolTipText="{Binding ResetOrDeleteLabel}" />
+                                        <local:MpAvToolTipView ToolTipText="Reset or Delete" />
                                     </ToolTip.Tip>
                                     <Grid DataContext="{Binding Parent}"
                                           x:DataType="local:MpAvAnalyticItemViewModel">

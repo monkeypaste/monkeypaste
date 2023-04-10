@@ -101,6 +101,13 @@
                         Value="{Binding TransactionDateTime, Converter={x:Static local:MpAvDateTimeToStringConverter.Instance}}" />
             </Style>-->
         </Grid.Styles>
+        <!--<Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"
+                           MinHeight="" />
+        </Grid.RowDefinitions>-->
         <DockPanel Grid.Row="0"
                    LastChildFill="True"
                    HorizontalAlignment="Stretch"
@@ -168,7 +175,7 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <!--  SELECTED TRANACTION TABS  -->
+        <!--  SELECTED TRANSACTION TABS  -->
         <TabControl Grid.Row="2"
                     DataContext="{Binding SelectedTransaction}"
                     SelectedIndex="{Binding SelectedTabIndex, Mode=TwoWay}"
@@ -177,7 +184,7 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Top"
                     TabStripPlacement="Top">
-            <TabControl.MaxHeight>
+            <!--<TabControl.MaxHeight>
                 <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
                               ConverterParameter="/">
                     <Binding Path="Bounds.Height"
@@ -188,7 +195,7 @@
                         </Binding.Source>
                     </Binding>
                 </MultiBinding>
-            </TabControl.MaxHeight>
+            </TabControl.MaxHeight>-->
 
             <!--  SOURCE TAB  -->
 
@@ -223,6 +230,7 @@
                                                        Classes="square"
                                                        Height="20" />
                                                 <TextBlock MinHeight="15"
+                                                           Margin="5,0,0,0"
                                                            TextWrapping="Wrap"
                                                            Text="{Binding LabelText}" />
                                             </DockPanel>
@@ -230,9 +238,31 @@
 
                                         <DataTemplate x:Key="AnalyzerSourceTemplate"
                                                       x:DataType="local:MpAvAnalyzerSourceViewModel">
-                                            <local:MpAvPluginParameterListBoxView HorizontalAlignment="Stretch"
-                                                                                  VerticalAlignment="Stretch"
-                                                                                  DataContext="{Binding PresetViewModel}" />
+                                            <Grid x:Name="TransAnalyzerSourceContainer"
+                                                  x:CompileBindings="False"
+                                                  RowDefinitions="Auto,*">
+                                                <StackPanel DataContext="{Binding PresetViewModel}"
+                                                            Orientation="Horizontal"
+                                                            Spacing="10">
+                                                    <Button Classes="defaultButton iconTextButton"
+                                                            Command="{Binding ExecutePresetAnalysisOnSelectedContentCommand}">
+                                                        <DockPanel>
+                                                            <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource ExecuteImage}}" />
+                                                            <TextBlock Text="Analyze" />
+                                                        </DockPanel>
+                                                    </Button>
+                                                    <Button Classes="defaultButton outline outlineOver"
+                                                            Command="{Binding ResetOrDeleteThisPresetCommand}"
+                                                            CommandParameter="{Binding DataContext.ParameterReqFormat, ElementName=TransAnalyzerSourceContainer}">
+                                                        <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource ResetImage}}" />
+
+                                                    </Button>
+                                                </StackPanel>
+                                                <local:MpAvPluginParameterListBoxView Grid.Row="1"
+                                                                                      DataContext="{Binding PresetViewModel}"
+                                                                                      HorizontalAlignment="Stretch"
+                                                                                      VerticalAlignment="Stretch" />
+                                            </Grid>
                                         </DataTemplate>
                                     </local:MpAvTransactionSourceTemplateSelector>
                                 </ContentControl.DataTemplates>
@@ -245,7 +275,7 @@
             <!--  INPUT TAB  -->
 
             <TabItem Header="Input"
-                     x:DataType="local:MpAvTransactionMessageViewModelBase"
+                     x:DataType="local:MpAvTransactionItemViewModel"
                      IsVisible="{Binding ., Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                      DataContext="{Binding Request}">
 
@@ -258,8 +288,8 @@
 
             <TabItem Header="Output"
                      IsVisible="{Binding Response, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
-                <StackPanel x:DataType="local:MpAvTransactionMessageViewModelBase"
-                            DataContext="{Binding Response}">
+                <Grid x:DataType="local:MpAvTransactionMessageViewModelBase"
+                      DataContext="{Binding Response}">
                     <ContentControl Content="{Binding}">
                         <ContentControl.DataTemplates>
                             <local:MpAvTransactionMessageBodyTemplateSelector>
@@ -271,11 +301,32 @@
                                 </DataTemplate>
                                 <DataTemplate x:Key="ParameterRequestMessageTemplate"
                                               x:DataType="local:MpAvParameterRequestMessageViewModel">
-                                    <local:MpAvPluginParameterListBoxView HorizontalAlignment="Stretch"
-                                                                          VerticalAlignment="Stretch"
-                                                                          IsHitTestVisible="False"
-                                                                          IsEnabled="False"
-                                                                          DataContext="{Binding PresetViewModel}" />
+                                    <Grid x:Name="TransAnalyzerReqContainer"
+                                          x:CompileBindings="False"
+                                          DataContext="{Binding PresetViewModel}"
+                                          RowDefinitions="Auto,*">
+                                        <StackPanel DataContext="{Binding PresetViewModel}"
+                                                    Orientation="Horizontal"
+                                                    Spacing="10">
+                                            <Button Classes="defaultButton iconTextButton"
+                                                    Command="{Binding ExecutePresetAnalysisOnSelectedContentCommand}">
+                                                <DockPanel>
+                                                    <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource ExecuteImage}}" />
+                                                    <TextBlock Text="Analyze" />
+                                                </DockPanel>
+                                            </Button>
+                                            <Button Classes="defaultButton outline outlineOver"
+                                                    Command="{Binding ResetOrDeleteThisPresetCommand}"
+                                                    CommandParameter="{Binding DataContext.ParameterReqFormat, ElementName=TransAnalyzerReqContainer}">
+                                                <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource ResetImage}}" />
+
+                                            </Button>
+                                        </StackPanel>
+                                        <local:MpAvPluginParameterListBoxView Grid.Row="1"
+                                                                              HorizontalAlignment="Stretch"
+                                                                              VerticalAlignment="Stretch" />
+                                    </Grid>
+
                                 </DataTemplate>
 
                                 <DataTemplate x:Key="AnnotationMessageTemplate"
@@ -314,7 +365,7 @@
                             </local:MpAvTransactionMessageBodyTemplateSelector>
                         </ContentControl.DataTemplates>
                     </ContentControl>
-                </StackPanel>
+                </Grid>
             </TabItem>
         </TabControl>
 
@@ -331,6 +382,8 @@
         <Border x:Name="FocusDetailOuterBorder"
                 Grid.Row="3"
                 Margin="5,3"
+                BorderThickness="0,1,0,0"
+                BorderBrush="Black"
                 MaxWidth="{Binding Bounds.Width, ElementName=TransactionListBox}"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Top"
@@ -342,11 +395,24 @@
 
                             <DataTemplate x:Key="AnnotationItemDetailTemplate"
                                           x:DataType="local:MpAvAnnotationItemViewModel">
-                                <Grid RowDefinitions="Auto,Auto">
+                                <Grid RowDefinitions="Auto,Auto,Auto">
                                     <TextBlock Grid.Row="0"
                                                Text="{Binding AnnotationType, StringFormat='Type: {0}'}" />
-                                    <TextBlock Grid.Row="1"
-                                               Text="{Binding AnnotationScore, StringFormat='Score: {0}'}" />
+                                    <local:MpAvProgressSpinner Grid.Row="1"
+                                                               Width="30"
+                                                               Height="30"
+                                                               ArcWidth="3"
+                                                               PercentBrush="Lime"
+                                                               IsVisible="{Binding AnnotationScore, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                                               RingBrush="Red"
+                                                               HorizontalAlignment="Left"
+                                                               VerticalAlignment="Center"
+                                                               Percent="{Binding CurScorePercent}" />
+
+                                    <!--<TextBlock Grid.Row="1"
+                                               Text="{Binding AnnotationScore, StringFormat='Score: {0}'}" />-->
+                                    <TextBlock Grid.Row="2"
+                                               Text="{Binding Body}" />
                                 </Grid>
                             </DataTemplate>
 

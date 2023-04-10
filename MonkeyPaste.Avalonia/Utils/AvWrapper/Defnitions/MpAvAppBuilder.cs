@@ -33,17 +33,8 @@ namespace MonkeyPaste.Avalonia {
                 var this_app_fallback = await MpDataModelProvider.GetItemAsync<MpApp>(MpDefaultDataModelTools.ThisAppId);
                 return this_app_fallback;
             }
-
             // GET APP NAME
-            if (string.IsNullOrWhiteSpace(pi.MainWindowTitle)) {
-                if (pi.Handle == IntPtr.Zero) {
-                    appName = Path.GetFileNameWithoutExtension(pi.ProcessPath);
-                } else {
-                    appName = Mp.Services.ProcessWatcher.GetProcessApplicationName(pi.Handle);
-                }
-            } else {
-                appName = Mp.Services.ProcessWatcher.ParseTitleForApplicationName(pi.MainWindowTitle);
-            }
+            appName = Mp.Services.ProcessWatcher.GetProcessApplicationName(pi.Handle);
 
             // GET APP ICON
             iconBase64 =

@@ -600,12 +600,11 @@ namespace MonkeyPaste.Avalonia {
                 MpAvAnalyticItemPresetViewModel targetAnalyzer = null;
                 bool isUserExecutedAnalysis = true;
 
-                if (args != null && args is object[] argParts) {
+                if (args is object[] argParts) {
                     isUserExecutedAnalysis = false;
-                    // when analyzer is triggered from action not user selection 
-                    //suppressCreateItem = true;
                     targetAnalyzer = argParts[0] as MpAvAnalyticItemPresetViewModel;
                     if (argParts[1] is string) {
+                        // when analyzer is triggered from action not user selection 
                         suppressWrite = true;
                         sourceCopyItem = await MpCopyItem.CreateAsync(
                                                             data: argParts[1] as string,
@@ -742,6 +741,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand DeletePresetCommand => new MpAsyncCommand<object>(
             async (presetVmArg) => {
+                // NOTE delete will never get trnasaction type of parameter so it can be ignored
                 IsBusy = true;
 
                 var presetVm = presetVmArg as MpAvAnalyticItemPresetViewModel;
@@ -754,8 +754,11 @@ namespace MonkeyPaste.Avalonia {
             },
             (presetVmArg) => {
                 if (presetVmArg is MpAvAnalyticItemPresetViewModel aipvm &&
-                     aipvm.CanDelete) {
+                     aipvm.CanDelete(null)) {
                     return true;
+                } else if (presetVmArg is object[] argParts &&
+                        argParts[0] is MpAvAnalyticItemPresetViewModel trans_aipvm) {
+                    return trans_aipvm.CanDelete(argParts[1]);
                 }
                 return false;
             });
@@ -763,10 +766,27 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ResetPresetCommand => new MpAsyncCommand<object>(
             async (presetVmArg) => {
                 IsBusy = true;
-                var aipvm = presetVmArg as MpAvAnalyticItemPresetViewModel;
 
+                MpAvAnalyticItemPresetViewModel aipvm = null;
+                if (presetVmArg is MpAvAnalyticItemPresetViewModel arg_vm) {
+                    aipvm = arg_vm;
+                } else if (presetVmArg is object[] argParts &&
+                        argParts[0] is MpAvAnalyticItemPresetViewModel trans_aipvm) {
+                    aipvm = trans_aipvm;
+                    if (argParts[1] is MpAnalyzerPluginRequestFormat aprf) {
+                        // loop through req settings and set preset to those values
+                        foreach (var req_kvp in aprf.items) {
+                            if (aipvm.Items.FirstOrDefault(x => x.ParamId == req_kvp.paramId) is MpAvParameterViewModelBase pvm) {
+                                pvm.CurrentValue = req_kvp.value;
+                            } else {
+                                MpConsole.WriteLine($"Param req item id '{req_kvp.paramId}' w/ value '{req_kvp.value}' not found on preset '{aipvm}'");
+                            }
+                        }
+                        IsBusy = false;
+                        return;
+                    }
+                }
                 // recreate default preset record (name, icon, etc.)
-                //var defaultPresetModel = await CreateDefaultPresetModelAsync(defvm.AnalyticItemPresetId);
                 var defaultPresetModel = await MpAvPluginPresetLocator.CreateOrResetManifestPresetModelAsync(
                     this, aipvm.PresetGuid, Items.IndexOf(aipvm));
 
@@ -782,20 +802,21 @@ namespace MonkeyPaste.Avalonia {
             },
             (presetVmArg) => {
                 if (presetVmArg is MpAvAnalyticItemPresetViewModel aipvm &&
-                     !aipvm.CanDelete) {
+                     !aipvm.CanDelete(null)) {
                     return true;
+                } else if (presetVmArg is object[] argParts &&
+                        argParts[0] is MpAvAnalyticItemPresetViewModel trans_aipvm) {
+                    return !trans_aipvm.CanDelete(argParts[1]);
                 }
                 return false;
             });
         public ICommand ResetOrDeletePresetCommand => new MpCommand<object>(
-            (presetVmArg) => {
-                if (ResetPresetCommand.CanExecute(presetVmArg)) {
-                    ResetPresetCommand.Execute(presetVmArg);
+            (args) => {
+                if (ResetPresetCommand.CanExecute(args)) {
+                    ResetPresetCommand.Execute(args);
                 } else {
-                    DeletePresetCommand.Execute(presetVmArg);
+                    DeletePresetCommand.Execute(args);
                 }
-            }, (presetVmArg) => {
-                return presetVmArg is MpAvAnalyticItemPresetViewModel;
             });
         public ICommand ShiftPresetCommand => new MpCommand<object>(
             // [0] = new_idx [1] = presetvm

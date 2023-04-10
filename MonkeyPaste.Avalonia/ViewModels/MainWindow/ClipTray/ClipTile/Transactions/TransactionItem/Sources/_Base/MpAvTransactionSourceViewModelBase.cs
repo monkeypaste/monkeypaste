@@ -25,7 +25,7 @@ namespace MonkeyPaste.Avalonia {
         public MpITreeItemViewModel ParentTreeItem { get; protected set; }
         public IEnumerable<MpITreeItemViewModel> Children => Items;
         public virtual string LabelText =>
-            SourceRef == null ? "Unlabled Source Ref" : SourceRef.LabelText;
+            SourceRef == null ? "Unlabled Source Ref" : string.IsNullOrEmpty(SourceRef.LabelText) ? "Untitled" : SourceRef.LabelText;
         public object ComparableSortValue => ParentTreeItem == null ? 0 : ParentTreeItem.Children.IndexOf(this);
         public virtual object IconSourceObj => SourceIconObj;
 

@@ -42,10 +42,88 @@ namespace MonkeyPaste.Avalonia {
             set => SetAndRaise(PercentProperty, ref _percent, value);
         }
 
-        public static readonly StyledProperty<double> PercentProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, double>(
+        public static readonly DirectProperty<MpAvProgressSpinner, double> PercentProperty =
+            AvaloniaProperty.RegisterDirect<MpAvProgressSpinner, double>
+            (
                 nameof(Percent),
-                0);
+                o => o.Percent,
+                (o, v) => o.Percent = v,
+                0
+            );
+
+        #endregion
+
+        #region ArcWidth AvaloniaProperty
+        private double _ArcWidth = 7;
+        public double ArcWidth {
+            get => _ArcWidth;
+            set => SetAndRaise(ArcWidthProperty, ref _ArcWidth, value);
+        }
+
+        public static readonly DirectProperty<MpAvProgressSpinner, double> ArcWidthProperty =
+            AvaloniaProperty.RegisterDirect<MpAvProgressSpinner, double>
+            (
+                nameof(ArcWidth),
+                o => o.ArcWidth,
+                (o, v) => o.ArcWidth = v,
+                7
+            );
+
+        #endregion
+
+        #region ZeroAngle AvaloniaProperty
+        private double _ZeroAngle = 0;
+        public double ZeroAngle {
+            get => _ZeroAngle;
+            set => SetAndRaise(ZeroAngleProperty, ref _ZeroAngle, value);
+        }
+
+        public static readonly DirectProperty<MpAvProgressSpinner, double> ZeroAngleProperty =
+            AvaloniaProperty.RegisterDirect<MpAvProgressSpinner, double>
+            (
+                nameof(ZeroAngle),
+                o => o.ZeroAngle,
+                (o, v) => o.ZeroAngle = v,
+                0
+            );
+
+        #endregion
+
+        #region PercentBrush AvaloniaProperty
+
+        private IBrush _PercentBrush = Brushes.Silver;
+        public IBrush PercentBrush {
+            get => _PercentBrush;
+            set => SetAndRaise(PercentBrushProperty, ref _PercentBrush, value);
+        }
+
+        public static readonly DirectProperty<MpAvProgressSpinner, IBrush> PercentBrushProperty =
+            AvaloniaProperty.RegisterDirect<MpAvProgressSpinner, IBrush>
+            (
+                nameof(PercentBrush),
+                o => o.PercentBrush,
+                (o, v) => o.PercentBrush = v,
+                Brushes.Silver
+            );
+
+        #endregion
+
+        #region RingBrush AvaloniaProperty
+
+        private IBrush _RingBrush = Brushes.DimGray;
+        public IBrush RingBrush {
+            get => _RingBrush;
+            set => SetAndRaise(RingBrushProperty, ref _RingBrush, value);
+        }
+
+        public static readonly DirectProperty<MpAvProgressSpinner, IBrush> RingBrushProperty =
+            AvaloniaProperty.RegisterDirect<MpAvProgressSpinner, IBrush>
+            (
+                nameof(RingBrush),
+                o => o.RingBrush,
+                (o, v) => o.RingBrush = v,
+                Brushes.DimGray
+            );
 
         #endregion
 
@@ -65,18 +143,17 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             base.Render(context);
-            double arc_width = 7;
+            double arc_width = ArcWidth;
             double w = Bounds.Width;
             double h = Bounds.Height;
             double d = Math.Min(w, h) - (arc_width * 2);
             double cx = w / 2;
             double cy = h / 2;
-
             double r = d / 2;
 
             context.DrawEllipse(
                 brush: Brushes.Transparent,
-                pen: new Pen(Brushes.Silver, arc_width),
+                pen: new Pen(RingBrush, arc_width),
                 center: new Point(cx, cy),
                 radiusX: r,
                 radiusY: r);
@@ -96,13 +173,13 @@ namespace MonkeyPaste.Avalonia {
 
             using (var gc = pg.Open()) {
                 gc.BeginFigure(p0, true);
-                gc.ArcTo(p1, new Size(r, r), 0, !isLarge, SweepDirection.Clockwise);
+                gc.ArcTo(p1, new Size(r, r), 0, isLarge, SweepDirection.Clockwise);
                 gc.EndFigure(false);
             }
 
             context.DrawGeometry(
                 brush: Brushes.Transparent,
-                pen: new Pen(Brushes.DimGray, arc_width),
+                pen: new Pen(PercentBrush, arc_width),
                 pg);
         }
 

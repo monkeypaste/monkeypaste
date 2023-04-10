@@ -222,7 +222,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
-        public string ResetOrDeleteLabel => $"{(CanDelete ? "Delete" : "Reset")} '{Label}'";
+        //public string ResetOrDeleteLabel => $"{(CanDelete ? "Delete" : "Reset")} '{Label}'";
         #endregion
 
         #region State
@@ -255,9 +255,6 @@ namespace MonkeyPaste.Avalonia {
                 return Parent.Items.OrderBy(x => x.AnalyticItemPresetId).FirstOrDefault() == this;
             }
         }
-
-        public bool CanDelete =>
-            !IsManifestPreset && !IsGeneratedDefaultPreset;
 
         #endregion
 
@@ -489,6 +486,12 @@ namespace MonkeyPaste.Avalonia {
             return naipvm;
         }
 
+        public bool CanDelete(object args) {
+            if (args == null) {
+                return !IsManifestPreset && !IsGeneratedDefaultPreset;
+            }
+            return false;
+        }
         #endregion
 
         #region Protected Methods
@@ -582,6 +585,7 @@ namespace MonkeyPaste.Avalonia {
             await Task.Delay(1);
             return aip;
         }
+
         #endregion
 
         #region Commands
@@ -600,12 +604,43 @@ namespace MonkeyPaste.Avalonia {
                 IsLabelReadOnly = !IsLabelReadOnly;
             });
 
-        public ICommand ResetOrDeleteThisPresetCommand => new MpCommand(
+        public ICommand ExecutePresetAnalysisOnSelectedContentCommand => new MpCommand(
             () => {
+                Parent.ExecuteAnalysisCommand.Execute(this);
+
+            }, () => {
                 if (Parent == null) {
-                    return;
+                    return false;
                 }
-                Parent.ResetOrDeletePresetCommand.Execute(this);
+                return Parent.ExecuteAnalysisCommand.CanExecute(this);
+            });
+        public ICommand ResetThisPresetCommand => new MpCommand(
+            () => {
+                Parent.ResetPresetCommand.Execute(this);
+            }, () => {
+                if (Parent == null) {
+                    return false;
+                }
+                return Parent.ResetPresetCommand.CanExecute(this);
+            });
+
+        public ICommand DeleteThisPresetCommand => new MpCommand(
+            () => {
+                Parent.DeletePresetCommand.Execute(this);
+            }, () => {
+                if (Parent == null) {
+                    return false;
+                }
+                return Parent.DeletePresetCommand.CanExecute(this);
+            });
+
+        public ICommand ResetOrDeleteThisPresetCommand => new MpCommand<object>(
+            (args) => {
+                if (args == null) {
+                    // called from sidebar preset grid
+                    Parent.ResetOrDeletePresetCommand.Execute(this);
+                }
+                Parent.ResetOrDeletePresetCommand.Execute(new object[] { this, args });
             });
 
         public ICommand DuplicateThisPresetCommand => new MpCommand(

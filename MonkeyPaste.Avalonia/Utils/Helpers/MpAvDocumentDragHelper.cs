@@ -116,10 +116,6 @@ namespace MonkeyPaste.Avalonia {
 
         }
 
-        private static void PerformDrag() {
-
-        }
-        static int call_count = 0;
         public static async Task ApplyClipboardPresetOrSourceUpdateToDragDataAsync() {
             if (SourceDataObject == null || DragDataObject == null) {
                 // no drag in progress

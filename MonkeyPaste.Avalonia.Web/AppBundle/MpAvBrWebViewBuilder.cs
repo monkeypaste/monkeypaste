@@ -19,11 +19,17 @@ namespace MonkeyPaste.Avalonia.Web {
         MpIJsImporter,
         MpAvIWebViewInterop {
         //private object embed;
-        private Dictionary<string, JSObject> _hostIframeLookup = new Dictionary<string, JSObject>();
+#if BROWSER
+        private Dictionary<string, JSObject> _hostIframeLookup = new(); 
+#endif
         #region Interfaces
 
         async Task MpIJsImporter.ImportAllAsync() {
-            await JSHost.ImportAsync("embed.js", "./embed.js");
+#if BROWSER
+            await JSHost.ImportAsync("embed.js", "./embed.js"); 
+#else
+            await Task.Delay(1);
+#endif
             //string editor_path = @"C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia.Web\AppBundle\Editor\";
 
             //var efl = Directory.EnumerateFiles(editor_path);
@@ -33,10 +39,10 @@ namespace MonkeyPaste.Avalonia.Web {
             //    await JSHost.ImportAsync(Path.GetFileName(fp), mod_url);
             //    MpConsole.WriteLine($"imported mod name: '{Path.GetFileName(fp)}' mod url: '{mod_url}'");
             //}
-
         }
         #region MpAvINativeControlBuilder Implementation
         public IPlatformHandle Build(IPlatformHandle parent, Func<IPlatformHandle> createDefault, MpIWebViewHost host) {
+#if BROWSER
             string url = @"file:///C:/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste.Avalonia.Web/AppBundle/Editor/index.html";
             if (host is MpAvPlainHtmlConverterWebView) {
                 url += "?converter=true";
@@ -44,20 +50,25 @@ namespace MonkeyPaste.Avalonia.Web {
             var iframe = EmbedInterop.CreateIframe(host.HostGuid, url);
 
             _hostIframeLookup.AddOrReplace(host.HostGuid, iframe);
-            return new JSObjectControlHandle(iframe);
+            return new JSObjectControlHandle(iframe); 
+#else
+            return null;
+#endif
         }
         #endregion
 
         #region MpAvIWebViewInterop Implementation
 
         public void SendMessage(MpAvIPlatformHandleHost nwvh, string msg) {
+#if BROWSER
             if (nwvh is MpIWebViewHost wvh &&
-                _hostIframeLookup.TryGetValue(wvh.HostGuid, out JSObject iframe)) {
-                EmbedInterop.SendMessageToIframe(iframe, msg);
+                 _hostIframeLookup.TryGetValue(wvh.HostGuid, out JSObject iframe)) {
+                EmbedInterop.SendMessageToIframe(iframe, msg); 
                 return;
-            } else {
+        } else {
                 MpConsole.WriteLine($"Cannot send msg, iframe not found for host '{nwvh}'");
             }
+#endif
         }
 
         public void ReceiveMessage(string bindingName, string msg) {
@@ -69,9 +80,11 @@ namespace MonkeyPaste.Avalonia.Web {
             if (handler is MpAvNativeWebViewHost wvn) {
 
                 EventHandler<string> navReg = (s, e) => {
+#if BROWSER
                     if (_hostIframeLookup.TryGetValue(wvn.HostGuid, out JSObject iframe)) {
                         EmbedInterop.NavigateIframe(iframe, e);
                     }
+#endif
                 };
 
                 handler.OnNavigateRequest += navReg;
@@ -98,8 +111,9 @@ namespace MonkeyPaste.Avalonia.Web {
 
         [JSImport("sendMessageToIframe", EMBED_PATH)]
         public static partial JSObject SendMessageToIframe(JSObject iframe, string msg);
-
+#if BROWSER
         [JSExport]
+#endif
         public static void receiveMessageFromIframe(string hostGuid, string fn, string msg) {
             if (App.MainView is Control c &&
                 c.GetVisualDescendants<MpAvNativeWebViewHost>() is IEnumerable<MpAvNativeWebViewHost> nwvhl &&
@@ -115,8 +129,9 @@ namespace MonkeyPaste.Avalonia.Web {
 
         [JSImport("navigateIframe", EMBED_PATH)]
         public static partial JSObject NavigateIframe(JSObject iframe, string url);
-
+#if BROWSER
         [JSExport]
+#endif
         public static void iframeNavigated(string hostGuid, string url) {
             if (App.MainView is Control c &&
                 c.GetVisualDescendants<MpAvNativeWebViewHost>() is IEnumerable<MpAvNativeWebViewHost> nwvhl &&

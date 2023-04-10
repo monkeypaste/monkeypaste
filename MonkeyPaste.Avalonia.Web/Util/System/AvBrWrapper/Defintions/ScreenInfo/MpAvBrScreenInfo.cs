@@ -17,6 +17,7 @@ namespace MonkeyPaste.Avalonia.Web {
             true;
 
         public MpAvBrScreenInfo() {
+#if BROWSER
             var win = EmbedInterop.GetWindow();
             Scaling = win.GetPropertyAsDouble("devicePixelRatio");
 
@@ -37,6 +38,7 @@ namespace MonkeyPaste.Avalonia.Web {
             //    WorkArea = Bounds;
             //    IsPrimary = true;
             //}
+#endif
         }
     }
 }

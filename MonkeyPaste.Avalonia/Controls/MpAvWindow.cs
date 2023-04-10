@@ -56,10 +56,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         public MpAvWindow() : base() {
+            Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", null, null, null) as WindowIcon;
+
             Init();
         }
 
         public MpAvWindow(Window owner) : base(owner.PlatformImpl) {
+            Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", null, null, null) as WindowIcon;
+
             Init();
         }
         #endregion

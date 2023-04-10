@@ -6,6 +6,14 @@
   <!-- IOS - net7.0-ios-->
   
   <PropertyGroup>
+    <ApplicationName>Monkey Paste</ApplicationName>
+    <ApplicationAuthor>Tommy K</ApplicationAuthor>
+    <ApplicationVersionMajor>0.1</ApplicationVersionMajor>
+    <ApplicationVersionMinor>0.1</ApplicationVersionMinor>
+    <ApplicationVersion>$(ApplicationVersionMajor)$(ApplicationVersionMinor)</ApplicationVersion>
+  </PropertyGroup>
+    
+  <PropertyGroup>
     <BuildOs>WINDOWS</BuildOs>
   </PropertyGroup>
   

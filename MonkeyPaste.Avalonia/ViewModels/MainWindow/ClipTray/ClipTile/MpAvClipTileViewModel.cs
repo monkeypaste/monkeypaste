@@ -1151,7 +1151,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void OpenPopOutWindow() {
-            var _popoutWindow = new MpAvWindow() {
+            var pow = new MpAvWindow() {
                 Width = 500,
                 Height = 500,
                 DataContext = this,
@@ -1163,7 +1163,7 @@ namespace MonkeyPaste.Avalonia {
                 Padding = new Thickness(10)
             };
 
-            _popoutWindow.Bind(
+            pow.Bind(
                 Window.TitleProperty,
                 new Binding() {
                     Source = this,
@@ -1171,7 +1171,7 @@ namespace MonkeyPaste.Avalonia {
                     Converter = MpAvStringToWindowTitleConverter.Instance
                 });
 
-            _popoutWindow.Bind(
+            pow.Bind(
                 Window.BackgroundProperty,
                 new Binding() {
                     Source = this,
@@ -1182,7 +1182,7 @@ namespace MonkeyPaste.Avalonia {
                     FallbackValue = MpSystemColors.darkviolet
                 });
 
-            if (_popoutWindow.Content is Control c) {
+            if (pow.Content is Control c) {
                 if (c is MpIContentView cv) {
                     _contentView = cv;
                 }
@@ -1197,8 +1197,18 @@ namespace MonkeyPaste.Avalonia {
                 MpAvIsHoveringExtension.SetIsEnabled(c, true);
             }
 
+            EventHandler activate_handler = (s, e) => {
+                IsSelected = true;
+            };
+            EventHandler close_handler = null;
+            close_handler = (s, e) => {
+                pow.Activated -= activate_handler;
+                pow.Closed -= close_handler;
+            };
+            pow.Activated += activate_handler;
+            pow.Closed += close_handler;
 
-            _popoutWindow.ShowChild();
+            pow.ShowChild();
 
             OnPropertyChanged(nameof(IsPopOutVisible));
             OnPropertyChanged(nameof(IsResizerEnabled));

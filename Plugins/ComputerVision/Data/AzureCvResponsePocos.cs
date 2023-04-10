@@ -8,16 +8,16 @@ namespace ComputerVision {
         public List<Category> categories { get; set; }
         public List<Tag> tags { get; set; }
         public List<VisionObject> objects { get; set; }
-
-        // TODO implement these:
         public Adult adult { get; set; }
         public Description description { get; set; }
-        public string requestId { get; set; }
         public Metadata metadata { get; set; }
-        public string modelVersion { get; set; }
         public List<Face> faces { get; set; }
         public Color color { get; set; }
         public ImageType imageType { get; set; }
+
+        // TODO implement these:
+        public string requestId { get; set; }
+        public string modelVersion { get; set; }
     }
     public class Adult {
         public bool isAdultContent { get; set; }
@@ -105,11 +105,16 @@ namespace ComputerVision {
         public int h { get; set; }
     }
 
-    
-
     public class Tag {
         public string name { get; set; }
         public double confidence { get; set; }
+    }
+
+    public enum ImageClipArtType {
+        NonClipArt = 0,
+        Ambiguous,
+        NormalClipArt,
+        GoodClipArt
     }
 
 

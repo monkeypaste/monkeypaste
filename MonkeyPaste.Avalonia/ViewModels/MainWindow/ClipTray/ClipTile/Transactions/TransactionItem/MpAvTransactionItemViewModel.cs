@@ -454,7 +454,7 @@ namespace MonkeyPaste.Avalonia {
                         if (Response is MpAvAnnotationMessageViewModel iamvm) {
                             // this only comes from editor
                             var to_select =
-                                iamvm.SelectedItem.AllDescendants()
+                                iamvm.RootAnnotationViewModel.SelfAndAllDescendants()
                                 .Cast<MpAvAnnotationItemViewModel>().FirstOrDefault(x => x.AnnotationGuid == argStr);
 
                             iamvm.SelectedItem = to_select;

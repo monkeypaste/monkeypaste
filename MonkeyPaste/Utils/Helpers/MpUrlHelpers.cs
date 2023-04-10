@@ -44,7 +44,7 @@ namespace MonkeyPaste {
 
             url_props.IconBase64 = await GetUrlFavIconAsync(url_props.FullyFormattedUriStr);
             if (string.IsNullOrEmpty(url_props.IconBase64)) {
-                // use EXTREME fallback to find favicon
+                // use EXTREME fallback to find favicon (& title if found)
                 if (url_doc != null &&
                 url_doc.DocumentNode.SelectSingleNode("//head") is HtmlNode headNode) {
                     if (headNode.ChildNodes.FirstOrDefault(x => x.Name.ToLower() == "title") is HtmlNode titleNode) {
