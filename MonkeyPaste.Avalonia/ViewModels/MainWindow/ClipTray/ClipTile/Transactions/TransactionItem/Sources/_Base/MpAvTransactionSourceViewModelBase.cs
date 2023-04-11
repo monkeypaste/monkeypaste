@@ -19,15 +19,27 @@ namespace MonkeyPaste.Avalonia {
             Parent == null || Parent.Parent == null ?
                 null :
                 Parent.Parent.Parent;
-        public virtual object Body { get; }
-        object MpAvITransactionNodeViewModel.TransactionModel => Parent.Transaction;
         public bool IsExpanded { get; set; }
         public MpITreeItemViewModel ParentTreeItem { get; protected set; }
         public IEnumerable<MpITreeItemViewModel> Children => Items;
-        public virtual string LabelText =>
-            SourceRef == null ? "Unlabled Source Ref" : string.IsNullOrEmpty(SourceRef.LabelText) ? "Untitled" : SourceRef.LabelText;
         public object ComparableSortValue => ParentTreeItem == null ? 0 : ParentTreeItem.Children.IndexOf(this);
-        public virtual object IconSourceObj => SourceIconObj;
+        public virtual object IconSourceObj {
+            get {
+                if (SourceRef is MpIIconResource dbi && dbi.IconResourceObj != null) {
+                    return dbi.IconResourceObj;
+                }
+                return MpDefaultDataModelTools.ThisAppIconId;
+            }
+        }
+        public virtual string LabelText =>
+           SourceRef == null ?
+                "Unlabled Source Ref" :
+                string.IsNullOrEmpty(SourceRef.LabelText) ?
+                    "Untitled" :
+                    SourceRef.LabelText;
+
+        public virtual string Body =>
+            SourceUri;
 
         #region MpIMenuItemViewModel Implementation
 
@@ -37,7 +49,7 @@ namespace MonkeyPaste.Avalonia {
                     return new MpMenuItemViewModel();
                 }
                 return new MpMenuItemViewModel() {
-                    IconSourceObj = SourceIconObj,
+                    IconSourceObj = IconSourceObj,
                     Header = SourceLabel,
                     SubItems = new List<MpMenuItemViewModel>() {
                         new MpMenuItemViewModel() {
@@ -92,14 +104,6 @@ namespace MonkeyPaste.Avalonia {
         #region Model
 
         #region MpISourceRef Sub-Model
-        public object SourceIconObj {
-            get {
-                if (SourceRef is MpIIconResource dbi && dbi.IconResourceObj != null) {
-                    return dbi.IconResourceObj;
-                }
-                return MpDefaultDataModelTools.ThisAppIconId;
-            }
-        }
 
         public string SourceLabel {
             get {

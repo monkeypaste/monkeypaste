@@ -83,15 +83,20 @@ namespace MonkeyPaste.Avalonia {
 
         #region ReadOnlyForeground AvaloniaProperty
 
-        private static IBrush _defReadOnlyForeground = Brushes.White;
+        private static IBrush _readOnlyForeground = Brushes.White;
         public IBrush ReadOnlyForeground {
-            get => GetValue(ReadOnlyForegroundProperty);
-            set => SetValue(ReadOnlyForegroundProperty, value); //SetAndRaise(ReadOnlyForegroundProperty, ref _readOnlyForeground, value);
+            get => _readOnlyForeground;
+            set => SetAndRaise(ReadOnlyForegroundProperty, ref _readOnlyForeground, value);
         }
 
-        public static readonly StyledProperty<IBrush> ReadOnlyForegroundProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, IBrush>(nameof(ReadOnlyForeground), _defReadOnlyForeground);
-
+        public static readonly DirectProperty<MpAvMarqueeTextBox, IBrush> ReadOnlyForegroundProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, IBrush>
+            (
+                nameof(ReadOnlyForeground),
+                o => o.ReadOnlyForeground,
+                (o, v) => o.ReadOnlyForeground = v,
+                Brushes.White
+            );
 
         #endregion
 
@@ -103,9 +108,14 @@ namespace MonkeyPaste.Avalonia {
             set => SetAndRaise(ReadOnlyBackgroundProperty, ref _readOnlyBackground, value);
         }
 
-        public static readonly StyledProperty<IBrush> ReadOnlyBackgroundProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, IBrush>(nameof(ReadOnlyBackground), Brushes.Transparent);
-
+        public static readonly DirectProperty<MpAvMarqueeTextBox, IBrush> ReadOnlyBackgroundProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, IBrush>
+            (
+                nameof(ReadOnlyBackground),
+                o => o.ReadOnlyBackground,
+                (o, v) => o.ReadOnlyBackground = v,
+                Brushes.Transparent
+            );
         #endregion
 
         #region EditableForeground AvaloniaProperty
@@ -116,8 +126,14 @@ namespace MonkeyPaste.Avalonia {
             set => SetAndRaise(EditableForegroundProperty, ref _editableForeground, value);
         }
 
-        public static readonly StyledProperty<IBrush> EditableForegroundProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, IBrush>(nameof(EditableForeground), Brushes.Black);
+        public static readonly DirectProperty<MpAvMarqueeTextBox, IBrush> EditableForegroundProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, IBrush>
+            (
+                nameof(EditableForeground),
+                o => o.EditableForeground,
+                (o, v) => o.EditableForeground = v,
+                Brushes.Black
+            );
 
         #endregion
 
@@ -129,8 +145,14 @@ namespace MonkeyPaste.Avalonia {
             set => SetAndRaise(EditableBackgroundProperty, ref _editableBackground, value);
         }
 
-        public static readonly StyledProperty<IBrush> EditableBackgroundProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, IBrush>(nameof(EditableBackground), Brushes.White);
+        public static readonly DirectProperty<MpAvMarqueeTextBox, IBrush> EditableBackgroundProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, IBrush>
+            (
+                nameof(EditableBackground),
+                o => o.EditableBackground,
+                (o, v) => o.EditableBackground = v,
+                Brushes.White
+            );
 
         #endregion
 
@@ -142,9 +164,14 @@ namespace MonkeyPaste.Avalonia {
             set => SetAndRaise(DropShadowOffsetProperty, ref _dropShadowOffset, value);
         }
 
-        public static readonly StyledProperty<Point> DropShadowOffsetProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, Point>(nameof(DropShadowOffset), new Point(1, 1));
-
+        public static readonly DirectProperty<MpAvMarqueeTextBox, Point> DropShadowOffsetProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, Point>
+            (
+                nameof(DropShadowOffset),
+                o => o.DropShadowOffset,
+                (o, v) => o.DropShadowOffset = v,
+                new Point(1, 1)
+            );
         #endregion
 
         #region DropShadowBrush AvaloniaProperty
@@ -155,9 +182,14 @@ namespace MonkeyPaste.Avalonia {
             set => SetAndRaise(DropShadowBrushProperty, ref _dropShadowBrush, value);
         }
 
-        public static readonly StyledProperty<IBrush> DropShadowBrushProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, IBrush>(nameof(DropShadowBrush), Brushes.Black);
-
+        public static readonly DirectProperty<MpAvMarqueeTextBox, IBrush> DropShadowBrushProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, IBrush>
+            (
+                nameof(DropShadowBrush),
+                o => o.DropShadowBrush,
+                (o, v) => o.DropShadowBrush = v,
+                Brushes.Black
+            );
         #endregion
 
         #region TailPadding AvaloniaProperty
@@ -168,9 +200,14 @@ namespace MonkeyPaste.Avalonia {
             set => SetAndRaise(TailPaddingProperty, ref _tailPadding, value);
         }
 
-        public static readonly StyledProperty<double> TailPaddingProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, double>(nameof(TailPadding), 30.0d);
-
+        public static readonly DirectProperty<MpAvMarqueeTextBox, double> TailPaddingProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, double>
+            (
+                nameof(TailPadding),
+                o => o.TailPadding,
+                (o, v) => o.TailPadding = v,
+                30.0d
+            );
         #endregion
 
         #region MaxVelocity AvaloniaProperty
@@ -181,8 +218,14 @@ namespace MonkeyPaste.Avalonia {
             set => SetAndRaise(MaxVelocityProperty, ref _maxVelocity, value);
         }
 
-        public static readonly StyledProperty<double> MaxVelocityProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, double>(nameof(MaxVelocity), -3.0d);
+        public static readonly DirectProperty<MpAvMarqueeTextBox, double> MaxVelocityProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, double>
+            (
+                nameof(MaxVelocity),
+                o => o.MaxVelocity,
+                (o, v) => o.MaxVelocity = v,
+                -3.0d
+            );
 
         #endregion
 
@@ -193,9 +236,14 @@ namespace MonkeyPaste.Avalonia {
             set => SetAndRaise(TotalLoopWaitMsProperty, ref _totalLoopWaitMs, value);
         }
 
-        public static readonly StyledProperty<int> TotalLoopWaitMsProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, int>(nameof(TotalLoopWaitMs), 1000);
-
+        public static readonly DirectProperty<MpAvMarqueeTextBox, int> TotalLoopWaitMsProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, int>
+            (
+                nameof(TotalLoopWaitMs),
+                o => o.TotalLoopWaitMs,
+                (o, v) => o.TotalLoopWaitMs = v,
+                1000
+            );
         #endregion
 
         #region EditOnFocus AvaloniaProperty
@@ -206,8 +254,14 @@ namespace MonkeyPaste.Avalonia {
             set => SetAndRaise(EditOnFocusProperty, ref _editOnFocus, value);
         }
 
-        public static readonly StyledProperty<bool> EditOnFocusProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, bool>(nameof(EditOnFocus), true);
+        public static readonly DirectProperty<MpAvMarqueeTextBox, bool> EditOnFocusProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, bool>
+            (
+                nameof(EditOnFocus),
+                o => o.EditOnFocus,
+                (o, v) => o.EditOnFocus = v,
+                true
+            );
 
         #endregion
 
@@ -219,9 +273,14 @@ namespace MonkeyPaste.Avalonia {
             set => SetAndRaise(EnableReadOnlyOnLostFocusProperty, ref _enableReadOnlyOnLostFocus, value);
         }
 
-        public static readonly StyledProperty<bool> EnableReadOnlyOnLostFocusProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, bool>(nameof(EnableReadOnlyOnLostFocus), true);
-
+        public static readonly DirectProperty<MpAvMarqueeTextBox, bool> EnableReadOnlyOnLostFocusProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, bool>
+            (
+                nameof(EnableReadOnlyOnLostFocus),
+                o => o.EnableReadOnlyOnLostFocus,
+                (o, v) => o.EnableReadOnlyOnLostFocus = v,
+                true
+            );
         #endregion
 
         #region BeginEditCommand AvaloniaProperty
@@ -232,9 +291,14 @@ namespace MonkeyPaste.Avalonia {
             set => SetAndRaise(BeginEditCommandProperty, ref _beginEditCommand, value);
         }
 
-        public static readonly StyledProperty<ICommand> BeginEditCommandProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, ICommand>(nameof(BeginEditCommand), null);
-
+        public static readonly DirectProperty<MpAvMarqueeTextBox, ICommand> BeginEditCommandProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, ICommand>
+            (
+                nameof(BeginEditCommand),
+                o => o.BeginEditCommand,
+                (o, v) => o.BeginEditCommand = v,
+                null
+            );
         #endregion
 
         #region EndEditCommand AvaloniaProperty
@@ -245,9 +309,14 @@ namespace MonkeyPaste.Avalonia {
             set => SetAndRaise(EndEditCommandProperty, ref _endEditCommand, value);
         }
 
-        public static readonly StyledProperty<ICommand> EndEditCommandProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, ICommand>(nameof(EndEditCommand), null);
-
+        public static readonly DirectProperty<MpAvMarqueeTextBox, ICommand> EndEditCommandProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, ICommand>
+            (
+                nameof(EndEditCommand),
+                o => o.EndEditCommand,
+                (o, v) => o.EndEditCommand = v,
+                null
+            );
         #endregion
 
         #region CancelEditCommand AvaloniaProperty
@@ -257,9 +326,14 @@ namespace MonkeyPaste.Avalonia {
             set => SetAndRaise(CancelEditCommandProperty, ref _cancelEditCommand, value);
         }
 
-        public static readonly StyledProperty<ICommand> CancelEditCommandProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, ICommand>(nameof(CancelEditCommand), null);
-
+        public static readonly DirectProperty<MpAvMarqueeTextBox, ICommand> CancelEditCommandProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, ICommand>
+            (
+                nameof(CancelEditCommand),
+                o => o.CancelEditCommand,
+                (o, v) => o.CancelEditCommand = v,
+                null
+            );
         #endregion
 
         #region IsMarqueeEnabled AvaloniaProperty
@@ -269,9 +343,14 @@ namespace MonkeyPaste.Avalonia {
             set => SetAndRaise(IsMarqueeEnabledProperty, ref _isMarqueeEnabled, value);
         }
 
-        public static readonly StyledProperty<bool> IsMarqueeEnabledProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, bool>(nameof(IsMarqueeEnabled), true);
-
+        public static readonly DirectProperty<MpAvMarqueeTextBox, bool> IsMarqueeEnabledProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, bool>
+            (
+                nameof(IsMarqueeEnabled),
+                o => o.IsMarqueeEnabled,
+                (o, v) => o.IsMarqueeEnabled = v,
+                true
+            );
         #endregion
 
         #region AutoMarquee AvaloniaProperty
@@ -281,9 +360,14 @@ namespace MonkeyPaste.Avalonia {
             set => SetAndRaise(AutoMarqueeProperty, ref _autoMarquee, value);
         }
 
-        public static readonly StyledProperty<bool> AutoMarqueeProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, bool>(nameof(AutoMarquee), false);
-
+        public static readonly DirectProperty<MpAvMarqueeTextBox, bool> AutoMarqueeProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, bool>
+            (
+                nameof(AutoMarquee),
+                o => o.AutoMarquee,
+                (o, v) => o.AutoMarquee = v,
+                false
+            );
         #endregion
 
         #region FocusOnDisableReadOnly AvaloniaProperty
@@ -293,9 +377,14 @@ namespace MonkeyPaste.Avalonia {
             set => SetAndRaise(FocusOnDisableReadOnlyProperty, ref _focusOnDisableReadOnly, value);
         }
 
-        public static readonly StyledProperty<bool> FocusOnDisableReadOnlyProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, bool>(nameof(FocusOnDisableReadOnly), false);
-
+        public static readonly DirectProperty<MpAvMarqueeTextBox, bool> FocusOnDisableReadOnlyProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, bool>
+            (
+                nameof(FocusOnDisableReadOnly),
+                o => o.FocusOnDisableReadOnly,
+                (o, v) => o.FocusOnDisableReadOnly = v,
+                false
+            );
         #endregion
 
         #region SelectViewModelOnFocus AvaloniaProperty
@@ -305,104 +394,153 @@ namespace MonkeyPaste.Avalonia {
             set => SetAndRaise(SelectViewModelOnFocusProperty, ref _selectViewModelOnFocus, value);
         }
 
-        public static readonly StyledProperty<bool> SelectViewModelOnFocusProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, bool>(nameof(SelectViewModelOnFocus), true);
-
+        public static readonly DirectProperty<MpAvMarqueeTextBox, bool> SelectViewModelOnFocusProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, bool>
+            (
+                nameof(SelectViewModelOnFocus),
+                o => o.SelectViewModelOnFocus,
+                (o, v) => o.SelectViewModelOnFocus = v,
+                true
+            );
         #endregion
 
         #region HoverBrush AvaloniaProperty
+        private IBrush _hoverBrush = null;
         public IBrush HoverBrush {
-            get => GetValue(HoverBrushProperty);
-            set => SetValue(HoverBrushProperty, value);
+            get => _hoverBrush;
+            set => SetAndRaise(HoverBrushProperty, ref _hoverBrush, value);
         }
 
-        public static readonly StyledProperty<IBrush> HoverBrushProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, IBrush>(nameof(HoverBrush));
-
+        public static readonly DirectProperty<MpAvMarqueeTextBox, IBrush> HoverBrushProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, IBrush>
+            (
+                nameof(HoverBrush),
+                o => o.HoverBrush,
+                (o, v) => o.HoverBrush = v,
+                null
+            );
         #endregion
 
         #region NavigateUri AvaloniaProperty
+        private string _navigateUri = null;
         public string NavigateUri {
-            get => GetValue(NavigateUriProperty);
-            set => SetValue(NavigateUriProperty, value);
+            get => _navigateUri;
+            set => SetAndRaise(NavigateUriProperty, ref _navigateUri, value);
         }
 
-        public static readonly StyledProperty<string> NavigateUriProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, string>(nameof(NavigateUri));
-
+        public static readonly DirectProperty<MpAvMarqueeTextBox, string> NavigateUriProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, string>
+            (
+                nameof(NavigateUri),
+                o => o.NavigateUri,
+                (o, v) => o.NavigateUri = v,
+                null
+            );
         #endregion
 
         #region NavigateUriCommand AvaloniaProperty
+        private ICommand _navigateUriCommand = null;
         public ICommand NavigateUriCommand {
-            get => GetValue(NavigateUriCommandProperty);
-            set => SetValue(NavigateUriCommandProperty, value);
+            get => _navigateUriCommand;
+            set => SetAndRaise(NavigateUriCommandProperty, ref _navigateUriCommand, value);
         }
 
-        public static readonly StyledProperty<ICommand> NavigateUriCommandProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, ICommand>(nameof(NavigateUriCommand));
-
+        public static readonly DirectProperty<MpAvMarqueeTextBox, ICommand> NavigateUriCommandProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, ICommand>
+            (
+                nameof(NavigateUriCommand),
+                o => o.NavigateUriCommand,
+                (o, v) => o.NavigateUriCommand = v,
+                null
+            );
         #endregion
 
         #region NavigateUriCommandParameter AvaloniaProperty
+        private object _navigateUriCommandParameter = null;
         public object NavigateUriCommandParameter {
-            get => GetValue(NavigateUriCommandParameterProperty);
-            set => SetValue(NavigateUriCommandParameterProperty, value);
+            get => _navigateUriCommandParameter;
+            set => SetAndRaise(NavigateUriCommandParameterProperty, ref _navigateUriCommandParameter, value);
         }
 
-        public static readonly StyledProperty<object> NavigateUriCommandParameterProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, object>(nameof(NavigateUriCommandParameter));
-
+        public static readonly DirectProperty<MpAvMarqueeTextBox, object> NavigateUriCommandParameterProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, object>
+            (
+                nameof(NavigateUriCommandParameter),
+                o => o.NavigateUriCommandParameter,
+                (o, v) => o.NavigateUriCommandParameter = v,
+                null
+            );
         #endregion
 
         #region Highlighting
 
         #region HighlightRanges AvaloniaProperty
         // FORMAT [index,count]
-
+        private ObservableCollection<MpTextRange> _highlightRanges;
         public ObservableCollection<MpTextRange> HighlightRanges {
-            get => GetValue(HighlightRangesProperty);
-            set => SetValue(HighlightRangesProperty, value);
+            get => _highlightRanges;
+            set => SetAndRaise(HighlightRangesProperty, ref _highlightRanges, value);
         }
 
-        public static readonly StyledProperty<ObservableCollection<MpTextRange>> HighlightRangesProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, ObservableCollection<MpTextRange>>(nameof(HighlightRanges), null);
-
+        public static readonly DirectProperty<MpAvMarqueeTextBox, ObservableCollection<MpTextRange>> HighlightRangesProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, ObservableCollection<MpTextRange>>
+            (
+                nameof(HighlightRanges),
+                o => o.HighlightRanges,
+                (o, v) => o.HighlightRanges = v,
+                null
+            );
         #endregion
 
         #region ActiveHighlightIdx AvaloniaProperty
-
+        private int? _activeHighlightIdx = null;
         public int? ActiveHighlightIdx {
-            get => GetValue(ActiveHighlightIdxProperty);
-            set => SetValue(ActiveHighlightIdxProperty, value);
+            get => _activeHighlightIdx;
+            set => SetAndRaise(ActiveHighlightIdxProperty, ref _activeHighlightIdx, value);
         }
 
-        public static readonly StyledProperty<int?> ActiveHighlightIdxProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, int?>(nameof(ActiveHighlightIdx), null);
-
+        public static readonly DirectProperty<MpAvMarqueeTextBox, int?> ActiveHighlightIdxProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, int?>
+            (
+                nameof(ActiveHighlightIdx),
+                o => o.ActiveHighlightIdx,
+                (o, v) => o.ActiveHighlightIdx = v,
+                null
+            );
         #endregion
 
         #region ActiveHighlightBrush AvaloniaProperty
-
+        private IBrush _activeHighlightBrush = Brushes.Lime;
         public IBrush ActiveHighlightBrush {
-            get => GetValue(ActiveHighlightBrushProperty);
-            set => SetValue(ActiveHighlightBrushProperty, value);
+            get => _activeHighlightBrush;
+            set => SetAndRaise(ActiveHighlightBrushProperty, ref _activeHighlightBrush, value);
         }
 
-        public static readonly StyledProperty<IBrush> ActiveHighlightBrushProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, IBrush>(nameof(ActiveHighlightBrush), Brushes.Lime);
-
+        public static readonly DirectProperty<MpAvMarqueeTextBox, IBrush> ActiveHighlightBrushProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, IBrush>
+            (
+                nameof(ActiveHighlightBrush),
+                o => o.ActiveHighlightBrush,
+                (o, v) => o.ActiveHighlightBrush = v,
+                Brushes.Lime
+            );
         #endregion
 
         #region InactiveHighlightBrush AvaloniaProperty
-
+        private IBrush _inactiveHighlightBrush = Brushes.Gold;
         public IBrush InactiveHighlightBrush {
-            get => GetValue(InactiveHighlightBrushProperty);
-            set => SetValue(InactiveHighlightBrushProperty, value);
+            get => _inactiveHighlightBrush;
+            set => SetAndRaise(InactiveHighlightBrushProperty, ref _inactiveHighlightBrush, value);
         }
 
-        public static readonly StyledProperty<IBrush> InactiveHighlightBrushProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, IBrush>(nameof(InactiveHighlightBrush), Brushes.Gold);
-
+        public static readonly DirectProperty<MpAvMarqueeTextBox, IBrush> InactiveHighlightBrushProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, IBrush>
+            (
+                nameof(InactiveHighlightBrush),
+                o => o.InactiveHighlightBrush,
+                (o, v) => o.InactiveHighlightBrush = v,
+                Brushes.Gold
+            );
         #endregion
 
         #endregion

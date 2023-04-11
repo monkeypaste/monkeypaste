@@ -217,7 +217,8 @@ namespace MonkeyPaste.Avalonia {
         #region View Models
 
         public IEnumerable<MpAvTagTileViewModel> SortedItems =>
-            Items.OrderBy(x => x.TreeSortIdx);
+            Items.OrderBy(x => x.TreeSortIdx)
+            .ToList();
 
         public MpMenuItemViewModel AddChildPopupMenuItemViewModel {
             get {

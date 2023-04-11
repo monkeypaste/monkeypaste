@@ -92,7 +92,7 @@ namespace MonkeyPaste.Common {
         public const string AvCsv = "Csv";
         public const string AvRtf_bytes = "Rich Text Format";
         public const string AvHtml_bytes = "HTML Format";
-        public const string AvFileNames = "FileNames";
+        public const string AvFileNames = "Files";
         public const string AvPNG = "PNG";
 
         // Cef Formats

@@ -4,6 +4,7 @@
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <Nullable>disable</Nullable>
     <TrimMode>copyused</TrimMode>
+     <AvaloniaNameGeneratorIsEnabled>false</AvaloniaNameGeneratorIsEnabled>
     <WarningLevel>4</WarningLevel>
     <!--<BuiltInComInteropSupport>true</BuiltInComInteropSupport>-->
     <TargetFramework>$(MainTargetFramework)</TargetFramework>
@@ -219,6 +220,7 @@
     <None Remove="Assets\Images\bitmap.png" />
     <None Remove="Assets\Images\bolt.png" />
     <None Remove="Assets\Images\bothclick.png" />
+    <None Remove="Assets\Images\boxcorners.png" />
     <None Remove="Assets\Images\brain.png" />
     <None Remove="Assets\Images\brainwhite.png" />
     <None Remove="Assets\Images\bringToFront.png" />
@@ -269,6 +271,7 @@
     <None Remove="Assets\Images\egg.png" />
     <None Remove="Assets\Images\ellipses.png" />
     <None Remove="Assets\Images\email.png" />
+    <None Remove="Assets\Images\equation.png" />
     <None Remove="Assets\Images\error.png" />
     <None Remove="Assets\Images\execute.png" />
     <None Remove="Assets\Images\eye.png" />
@@ -276,6 +279,7 @@
     <None Remove="Assets\Images\fileSystemEvent.png" />
     <None Remove="Assets\Images\filter.png" />
     <None Remove="Assets\Images\folder.png" />
+    <None Remove="Assets\Images\folderoutline.png" />
     <None Remove="Assets\Images\foldersolid.png" />
     <None Remove="Assets\Images\forward_black.png" />
     <None Remove="Assets\Images\frame_grip.png" />
@@ -315,6 +319,7 @@
     <None Remove="Assets\Images\newwindow.png" />
     <None Remove="Assets\Images\noentry.png" />
     <None Remove="Assets\Images\noneclick.png" />
+    <None Remove="Assets\Images\object.png" />
     <None Remove="Assets\Images\paste.png" />
     <None Remove="Assets\Images\pause.png" />
     <None Remove="Assets\Images\pin.png" />
@@ -322,6 +327,7 @@
     <None Remove="Assets\Images\pindownover.png" />
     <None Remove="Assets\Images\Pinned.png" />
     <None Remove="Assets\Images\pinover.png" />
+    <None Remove="Assets\Images\plaintext.png" />
     <None Remove="Assets\Images\play.png" />
     <None Remove="Assets\Images\Preferences.png" />
     <None Remove="Assets\Images\qr.png" />
@@ -429,6 +435,7 @@
     <Compile Remove="AttachedProperties\MpAvTextSelectionExtension.cs" />
     <Compile Remove="Behaviors\MpAvMoveBehavior.cs" />
     <Compile Remove="Controls\Content\CefNetWebView\Cef\WebView\MpAvCefNetWebView.cs" />
+    <Compile Remove="Controls\MpAvClipBorder.cs" />
     <Compile Remove="Program.cs" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\MpAvWin32ProcessWatcher2.cs" />
     <Compile Remove="Utils\Input\Mouse\MpAvMouseHook_Win32.cs" />
@@ -452,10 +459,25 @@
     <None Remove="Settings.settings" />
   </ItemGroup>
   <ItemGroup>
+    <AvaloniaResource Include="Assets\Images\boxcorners.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\closewindow.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\equation.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\folderoutline.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\graph.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\object.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\plaintext.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\staryellow.png">
@@ -1326,23 +1348,22 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.0.0-preview5" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.0-preview5" />
-    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.0-preview5" />
+    <PackageReference Include="Avalonia" Version="11.0.0-preview6" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.0-preview6" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.0-preview6" />
     <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.0-preview5" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0-preview5" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-preview5" />
-    <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.0-preview5" />
-    <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.0-preview5" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0-preview6" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-preview6" />
+    <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.0-preview6" />
+    <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.0-preview6" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
     <PackageReference Include="System.Management" Version="7.0.0" />
     <PackageReference Include="NetCoreAudio" Version="1.7.0" />
     <PackageReference Include="System.Speech" Version="7.0.0" />
-    <PackageReference Include="XamlNameReferenceGenerator" Version="1.6.1" />
   </ItemGroup>
 
   <ItemGroup Condition="$(IsDesktop) == 'true'">
-    <PackageReference Include="Avalonia.Desktop" Version="11.0.0-preview5" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.0-preview6" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(BuildOs)' == 'LINUX'">

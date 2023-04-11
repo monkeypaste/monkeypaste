@@ -95,14 +95,14 @@
             <StackPanel>
                 <Grid ColumnDefinitions="Auto,*"
                       RowDefinitions="*,Auto">
-                    <local:MpAvClipBorder Grid.Column="0"
+                    <Border Grid.Column="0"
                                           IsVisible="{Binding IconResourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                           CornerRadius="10"
                                           Margin="3"
                                           BorderThickness="3"
                                           BorderBrush="White">
                         <Image Source="{Binding IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                    </local:MpAvClipBorder>
+                    </Border>
                     <TextBlock Grid.Column="1"
                                HorizontalAlignment="Stretch"
                                VerticalAlignment="Center"

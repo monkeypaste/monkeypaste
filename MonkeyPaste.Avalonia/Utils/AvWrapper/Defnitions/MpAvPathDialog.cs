@@ -69,7 +69,7 @@ namespace MonkeyPaste.Avalonia {
             }
             IStorageFolder? start_location = null;
             if (!string.IsNullOrEmpty(initDir)) {
-                start_location = await GetStorageProvider().TryGetFolderFromPath(initDir);
+                start_location = await GetStorageProvider().TryGetFolderFromPathAsync(initDir);
             }
             return start_location;
         }

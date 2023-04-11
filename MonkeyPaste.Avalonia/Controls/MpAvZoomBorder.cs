@@ -15,7 +15,7 @@ using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public class MpAvZoomBorder : Border {
+    public class MpAvZoomBorder : UserControl {
         // from https://stackoverflow.com/a/6782715/105028
         #region Private Variables
         private DispatcherTimer _renderTimer = null;
@@ -33,6 +33,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
+
+        public Control Child =>
+            Content as Control;
 
         #region DesignerItem AvaloniaProperty
         public MpIDesignerSettingsViewModel DesignerItem => DataContext as MpIDesignerSettingsViewModel;
@@ -99,14 +102,14 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public void Initialize(Control element) {
-            this.Child = element;
-            if (Child != null) {
-                Child.PointerWheelChanged += child_MouseWheel;
-                Child.PointerPressed += child_PreviewMouseLeftButtonDown;
-                Child.PointerReleased += child_MouseLeftButtonUp;
-                Child.PointerMoved += child_MouseMove;
-                //Child.PreviewMouseRightButtonDown += child_PreviewMouseRightButtonDown;
-            }
+            //this.Child = element;
+            //if (Child != null) {
+            //    Child.PointerWheelChanged += child_MouseWheel;
+            //    Child.PointerPressed += child_PreviewMouseLeftButtonDown;
+            //    Child.PointerReleased += child_MouseLeftButtonUp;
+            //    Child.PointerMoved += child_MouseMove;
+            //    //Child.PreviewMouseRightButtonDown += child_PreviewMouseRightButtonDown;
+            //}
         }
 
         protected override void OnPointerPressed(PointerPressedEventArgs e) {

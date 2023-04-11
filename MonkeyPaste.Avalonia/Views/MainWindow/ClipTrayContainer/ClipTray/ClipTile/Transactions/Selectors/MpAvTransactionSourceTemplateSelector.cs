@@ -13,7 +13,10 @@ namespace MonkeyPaste.Avalonia {
             if (param is MpAvAnalyzerSourceViewModel) {
                 key = "AnalyzerSourceTemplate";
             }
-
+            if (param is MpAvITransactionNodeViewModel tnvm &&
+                tnvm.HostClipTileViewModel.TransactionCollectionViewModel.IsPlainTextView) {
+                key = "PlainTextSourceTemplate";
+            }
             return AvailableTemplates[key].Build(param);
         }
 

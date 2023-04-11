@@ -1,4 +1,5 @@
 ﻿using Avalonia.Input;
+using Avalonia.Platform.Storage;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,7 +12,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 return new string[] { };
             }
             List<string> formats = ido.GetDataFormats().ToList();
-            if (ido.GetFileNames() is IEnumerable<string> fps) {
+            if (ido.GetFiles() is IEnumerable<object> fps) {
                 // only inlcude file names if present
                 if (fps.Count() > 0) {
                     if (!formats.Contains(MpPortableDataFormats.AvFileNames)) {
@@ -26,6 +27,14 @@ namespace MonkeyPaste.Common.Avalonia {
             return formats.Where(x => ido.Get(x) != null);
         }
 
+        public static IEnumerable<string> GetFilesAsPaths(this IDataObject dataObject) {
+            return (dataObject.Get(MpPortableDataFormats.AvFileNames) as IEnumerable<string>)
+                ?? dataObject.GetFiles()?
+                .Select(f => f.TryGetLocalPath())
+                .Where(p => !string.IsNullOrEmpty(p))
+                .OfType<string>();
+        }
+
         public static object GetAllowFiles(this IDataObject ido, string format) {
             if (ido == null) {
                 return null;
@@ -36,7 +45,7 @@ namespace MonkeyPaste.Common.Avalonia {
             if (format != MpPortableDataFormats.AvFileNames) {
                 return null;
             }
-            if (ido.GetFileNames() is IEnumerable<string> fpl &&
+            if (ido.GetFiles() is IEnumerable<object> fpl &&
                 fpl.Count() > 0) {
                 return fpl;
             }

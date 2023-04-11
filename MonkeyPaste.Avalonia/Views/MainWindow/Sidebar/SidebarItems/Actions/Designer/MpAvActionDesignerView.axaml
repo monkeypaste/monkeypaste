@@ -43,9 +43,9 @@
 
         <Style Selector="ListBox.actionDesigner ListBoxItem"
                x:DataType="local:MpAvActionViewModelBase">
-            <Setter Property="Canvas.Left"
+            <Setter Property="local:MpAvCanvas.Left"
                     Value="{Binding X, Mode=TwoWay}" />
-            <Setter Property="Canvas.Top"
+            <Setter Property="local:MpAvCanvas.Top"
                     Value="{Binding Y, Mode=TwoWay}" />
             <Setter Property="IsVisible"
                     Value="{Binding IsActionDesignerVisible}" />
@@ -144,10 +144,13 @@
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <local:MpAvDesignerCanvas x:Name="ActionDesignerCanvas"
+                                                      Background="{StaticResource HitTestableTransparent}"
                                                       ClipToBounds="False"
                                                       TipLength="20"
                                                       TipWidth="10"
                                                       TailWidth="3"
+                                                      HorizontalAlignment="Stretch"
+                                                      VerticalAlignment="Stretch"
                                                       RenderTransformOrigin="0.5,0.5"
                                                       WarningBrush1="{DynamicResource DefaultWarningBrush1}"
                                                       WarningBrush2="{DynamicResource DefaultWarningBrush2}"
@@ -159,6 +162,7 @@
                                                       local:MpAvBoundsObserverExtension.ToScreen="True"
                                                       local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedDesignerBounds, Mode=TwoWay}"
                                                       TransitionLineThickness="1">
+
                                 <local:MpAvDesignerCanvas.RenderTransform>
                                     <TransformGroup>
                                         <ScaleTransform ScaleX="{Binding Scale, Mode=TwoWay, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}"

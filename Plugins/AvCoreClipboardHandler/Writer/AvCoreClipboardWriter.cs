@@ -9,7 +9,7 @@ namespace AvCoreClipboardHandler {
         #region Private Variables
 
         private static string _cur_img_ext = "png";
-        private static int _cur_img_quality = 100;
+        //private static int _cur_img_quality = 100;
 
         #endregion
 

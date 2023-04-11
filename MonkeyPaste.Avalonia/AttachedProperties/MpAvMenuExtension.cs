@@ -485,7 +485,7 @@ namespace MonkeyPaste.Avalonia {
                         InputGesture = inputGesture,
                         DataContext = mivm,
                         Icon = CreateIcon(mivm),
-                        Items = mivm.SubItems == null ? null : mivm.SubItems.Where(x => x != null && x.IsVisible).Select(x => CreateMenuItem(x))
+                        ItemsSource = mivm.SubItems == null ? null : mivm.SubItems.Where(x => x != null && x.IsVisible).Select(x => CreateMenuItem(x))
                     };
 
                     mi.PointerEntered += MenuItem_PointerEnter;
@@ -679,14 +679,14 @@ namespace MonkeyPaste.Avalonia {
 
 
             if (mivm.SubItems == null || mivm.SubItems.Count == 0) {
-                _cmInstance.Items = new[] { mivm };
+                _cmInstance.ItemsSource = new[] { mivm };
             } else {
-                _cmInstance.Items = mivm.SubItems.Where(x => x != null && x.IsVisible).Select(x => CreateMenuItem(x));
+                _cmInstance.ItemsSource = mivm.SubItems.Where(x => x != null && x.IsVisible).Select(x => CreateMenuItem(x));
             }
 
             _cmInstance.DataContext = mivm;
             _cmInstance.PlacementTarget = control;
-            _cmInstance.PlacementMode = placement;
+            _cmInstance.Placement = placement;
             _cmInstance.PlacementAnchor = anchor;
             if (_cmInstance.PlacementAnchor == PopupAnchor.None) {
                 switch (MpAvMainWindowViewModel.Instance.MainWindowOrientationType) {
@@ -701,7 +701,7 @@ namespace MonkeyPaste.Avalonia {
             }
             _cmInstance.HorizontalOffset = 0;
             _cmInstance.VerticalOffset = 0;
-            if (_cmInstance.PlacementMode == PlacementMode.Pointer) {
+            if (_cmInstance.Placement == PlacementMode.Pointer) {
                 if (offset == null) {
                     var gmp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
                     offset = control.PointToClient(gmp.ToAvPixelPoint(control.VisualPixelDensity())).ToPortablePoint();

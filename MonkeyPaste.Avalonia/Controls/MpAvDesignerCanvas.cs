@@ -2,18 +2,21 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
+using Avalonia.LogicalTree;
 using Avalonia.Media;
+using Avalonia.Metadata;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public class MpAvDesignerCanvas : Canvas {
+    public class MpAvDesignerCanvas : MpAvCanvas {
         #region Private Variables
 
         private DispatcherTimer _timer;
@@ -179,18 +182,18 @@ namespace MonkeyPaste.Avalonia {
             if (s is Ellipse el) {
                 var r = el.Bounds.Size.ToPortableSize().ToPortablePoint() * 0.5;
                 var center = origin + r;
-                using (ctx.PushPostTransform(Matrix.CreateScale(scale, scale) *
+                using (ctx.PushTransform(Matrix.CreateScale(scale, scale) *
                     Matrix.CreateTranslation(center.X, center.Y))) {
                     ctx.DrawEllipse(shadow_brush, new Pen(Brushes.Transparent), new Point(), r.X, r.Y);
                 }
             } else if (s is Polygon pg) {
-                using (ctx.PushPostTransform(
+                using (ctx.PushTransform(
                     Matrix.CreateScale(scale, scale) *
                     Matrix.CreateTranslation(origin.X, origin.Y))) {
                     ctx.DrawGeometry(shadow_brush, new Pen(Brushes.Transparent), GetPointGeometry(pg.Points));
                 }
             } else if (s is Rectangle r) {
-                using (ctx.PushPostTransform(
+                using (ctx.PushTransform(
                     Matrix.CreateScale(scale, scale) *
                     Matrix.CreateTranslation(origin.X, origin.Y))) {
                     var rect = r.Bounds.ToPortableRect();
@@ -260,7 +263,17 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void _timer_Tick(object sender, EventArgs e) {
-            InvalidateVisual();
+            //if (this.Parent is MpAvCanvas canvas) {
+            //    if (Width != canvas.Bounds.Width) {
+            //        Width = canvas.Bounds.Width;
+            //    }
+            //    if (Height != canvas.Bounds.Height) {
+            //        Height = canvas.Bounds.Height;
+            //    }
+
+            //    Dispatcher.UIThread.Post(InvalidateVisual);
+            //}
+            Dispatcher.UIThread.Post(InvalidateVisual);
         }
 
         private void DrawArrow(
@@ -324,4 +337,6 @@ namespace MonkeyPaste.Avalonia {
             return streamGeometry;
         }
     }
+
+
 }

@@ -203,18 +203,18 @@ namespace MonkeyPaste.Common.Avalonia {
             return ContainsData(dataFormat);
         }
 
-        string IDataObject.GetText() {
-            return GetData(MpPortableDataFormats.Text) as string;
-        }
+        //string IDataObject.GetText() {
+        //    return GetData(MpPortableDataFormats.Text) as string;
+        //}
 
-        IEnumerable<string> IDataObject.GetFileNames() {
+        //IEnumerable<string> IDataObject.GetFileNames() {
 
-            if (GetData(MpPortableDataFormats.AvFileNames) is IEnumerable<string> files) {
-                return files;
-            }
+        //    if (GetData(MpPortableDataFormats.AvFileNames) is IEnumerable<string> files) {
+        //        return files;
+        //    }
 
-            return null;
-        }
+        //    return null;
+        //}
 
         object IDataObject.Get(string dataFormat) {
             return GetData(dataFormat);

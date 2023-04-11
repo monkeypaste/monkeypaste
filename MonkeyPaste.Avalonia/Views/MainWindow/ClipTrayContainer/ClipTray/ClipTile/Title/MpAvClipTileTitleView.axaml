@@ -248,7 +248,7 @@
                     <Image x:Name="HasAnalysisBorderImage"
                            IsHitTestVisible="False"
                            IsVisible="{Binding IsAnyAnalysisTransaction}"
-                           Source="{Binding PrimaryItem.IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, ConverterParameter=border|orange}"
+                           Source="{Binding CreateTransaction.IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, ConverterParameter=border|orange}"
                            Stretch="UniformToFill"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch">
@@ -262,7 +262,7 @@
                     </Image>
                     <Image x:Name="ClipTileAppIconBorderImage"
                            IsHitTestVisible="False"
-                           Source="{Binding PrimaryItem.IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, ConverterParameter=border}"
+                           Source="{Binding CreateTransaction.IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, ConverterParameter=border}"
                            Stretch="UniformToFill"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch">
@@ -275,7 +275,7 @@
                     </Image>
                     <Image x:Name="ClipTileAppIconImage"
                            IsHitTestVisible="False"
-                           Source="{Binding PrimaryItem.IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
+                           Source="{Binding CreateTransaction.IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
                            Stretch="UniformToFill"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch">

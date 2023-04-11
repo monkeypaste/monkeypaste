@@ -17,6 +17,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+        public override IEnumerable<MpITreeItemViewModel> Children =>
+            RootItems;
         #endregion
 
         #region Properties

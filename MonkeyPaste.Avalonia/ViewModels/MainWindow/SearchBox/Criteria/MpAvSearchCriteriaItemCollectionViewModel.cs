@@ -72,7 +72,7 @@ namespace MonkeyPaste.Avalonia {
         public ObservableCollection<MpAvSearchCriteriaItemViewModel> Items { get; set; } = new ObservableCollection<MpAvSearchCriteriaItemViewModel>();
 
         public IEnumerable<MpAvSearchCriteriaItemViewModel> SortedItems =>
-            Items.OrderBy(x => x.SortOrderIdx);
+            Items.OrderBy(x => x.SortOrderIdx).ToList();
 
         public MpAvSearchCriteriaItemViewModel HeadItem =>
             SortedItems.FirstOrDefault();

@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
+    public interface MpIPlainTextViewModel : MpIViewModel {
+        string PlainText { get; }
+    }
 
     public interface MpAvITransactionNodeViewModel :
         MpITreeItemViewModel,
@@ -21,8 +24,7 @@ namespace MonkeyPaste.Avalonia {
         MpIHasIconSourceObjViewModel,
         MpIMenuItemViewModel,
         MpIAsyncCollectionObject {
-        object TransactionModel { get; }
-        object Body { get; }
+        string Body { get; }
         MpAvClipTileViewModel HostClipTileViewModel { get; }
     }
 
@@ -64,25 +66,24 @@ namespace MonkeyPaste.Avalonia {
         public ObservableCollection<MpAvTransactionItemViewModel> Transactions { get; set; } = new ObservableCollection<MpAvTransactionItemViewModel>();
         public IEnumerable<MpAvTransactionItemViewModel> SortedTransactions =>
             IsSortDescending ?
-                Transactions.OrderByDescending(x => x.TransactionDateTime) :
-                Transactions.OrderBy(x => x.TransactionDateTime);
+                Transactions.OrderByDescending(x => x.TransactionDateTime).ToList() :
+                Transactions.OrderBy(x => x.TransactionDateTime).ToList();
         public MpAvTransactionItemViewModel SelectedTransaction { get; set; }
 
         public MpAvTransactionItemViewModel MostRecentTransaction =>
             Transactions.OrderByDescending(x => x.TransactionDateTime).FirstOrDefault();
 
         public IEnumerable<MpAvTransactionMessageViewModelBase> Messages =>
-            Transactions.SelectMany(x => x.Items);
+            Transactions.SelectMany(x => x.Messages).ToList();
 
         public IEnumerable<MpAvTransactionMessageViewModelBase> SortedMessages =>
             Messages
-            .OrderByDescending(x => x.ComparableSortValue);
+            .OrderByDescending(x => x.ComparableSortValue).ToList();
 
-        public MpAvITransactionNodeViewModel PrimaryItem =>
+        public MpAvTransactionItemViewModel CreateTransaction =>
             Transactions.OrderBy(x => x.TransactionDateTime).FirstOrDefault();
 
         #endregion
-
 
         #region Layout
 
@@ -118,7 +119,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
         public bool DoShake { get; set; }
-        public bool IsViewByTransaction { get; set; } = false;
+        public bool IsPlainTextView { get; set; } = false;
         public bool IsSortDescending { get; set; } = true;
         public bool IsTransactionPaneOpen { get; set; } = false;
         public bool IsAnyBusy => IsBusy || Transactions.Any(x => x.IsBusy);
@@ -175,7 +176,7 @@ namespace MonkeyPaste.Avalonia {
                 .FireAndForgetSafeAsync(this);
 
             OnPropertyChanged(nameof(Transactions));
-            OnPropertyChanged(nameof(PrimaryItem));
+            OnPropertyChanged(nameof(CreateTransaction));
             OnPropertyChanged(nameof(SortedMessages));
 
             IsBusy = false;
@@ -230,7 +231,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     Parent.OnPropertyChanged(nameof(Parent.IsTitleVisible));
                     break;
-                case nameof(PrimaryItem):
+                case nameof(CreateTransaction):
                     if (Parent == null) {
                         break;
                     }
@@ -239,7 +240,6 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(SelectedTransaction):
                     ApplyTransactionAsync(SelectedTransaction).FireAndForgetSafeAsync(this);
                     break;
-
                 case nameof(DoShake):
                     if (!DoShake) {
                         break;
@@ -263,14 +263,19 @@ namespace MonkeyPaste.Avalonia {
             //    tivm.TransactionType == MpTransactionType.Created) {
             //    return;
             //}
-            if (tivm == null ||
-                tivm.HasTransactionBeenApplied) {
-                //MpDebug.Break("transaction already applied, why again? (rolling back not built yet)");
+            if (tivm == null) {
                 return;
             }
             if (Transactions.All(x => x.TransactionId != tivm.TransactionId)) {
                 Transactions.Add(tivm);
             }
+            Transactions.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
+
+            if (tivm.HasTransactionBeenApplied) {
+                //MpDebug.Break("transaction already applied, why again? (rolling back not built yet)");
+                return;
+            }
+
             if (tivm.IsRunTimeAppliableTransaction &&
                 !IsTransactionPaneOpen) {
                 // only apply runtime transaction once opened
@@ -340,7 +345,13 @@ namespace MonkeyPaste.Avalonia {
                             if (Parent.IsPinned) {
                                 return;
                             }
-                            Parent.Parent.RefreshQueryTrayLayout();
+                            if (SelectedTransaction == null) {
+                                SelectedTransaction = CreateTransaction;
+                            }
+                            if (!Parent.IsPopOutVisible) {
+                                Parent.Parent.RefreshQueryTrayLayout();
+                            }
+
                             Parent.EnableSubSelectionCommand.Execute(null);
 
                         });
@@ -412,6 +423,19 @@ namespace MonkeyPaste.Avalonia {
         public ICommand RemoveMostRecentTransactionCommand => new MpCommand(
             () => {
                 RemoveTransactionCommand.Execute(MostRecentTransaction);
+            });
+
+        public ICommand TogglePlainTextCommand => new MpCommand<object>(
+            (args) => {
+                IsPlainTextView = !IsPlainTextView;
+
+                if (args is Control c &&
+                    c.GetVisualAncestor<MpAvClipTileTransactionPaneView>() is MpAvClipTileTransactionPaneView tpv &&
+                    tpv.GetVisualDescendants<ContentControl>() is IEnumerable<ContentControl> ccl &&
+                    tpv.Content is Grid rootGrid) {
+                    rootGrid.DataContext = null;
+                    rootGrid.DataContext = this;
+                }
             });
         #endregion
     }

@@ -16,6 +16,10 @@ namespace MonkeyPaste.Avalonia {
                 key = "AnnotationMessageTemplate";
             }
 
+            if (param is MpAvITransactionNodeViewModel tnvm &&
+                tnvm.HostClipTileViewModel.TransactionCollectionViewModel.IsPlainTextView) {
+                key = "PlainTextMessageTemplate";
+            }
             return AvailableTemplates[key].Build(param);
         }
 

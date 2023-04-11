@@ -102,9 +102,9 @@ namespace MonkeyPaste.Avalonia {
             IsVisible = !string.IsNullOrEmpty(ToolTipContent);
             if (IsVisible) {
                 var tb = this.FindControl<Control>("ToolTipTextBlock");
-                var hl = this.FindControl<Control>("ToolTipHtmlPanel");
                 tb.IsVisible = !string.IsNullOrEmpty(ToolTipText);
-                hl.IsVisible = !string.IsNullOrEmpty(ToolTipHtml);
+                //var hl = this.FindControl<Control>("ToolTipHtmlPanel");
+                //hl.IsVisible = !string.IsNullOrEmpty(ToolTipHtml);
             }
         }
 

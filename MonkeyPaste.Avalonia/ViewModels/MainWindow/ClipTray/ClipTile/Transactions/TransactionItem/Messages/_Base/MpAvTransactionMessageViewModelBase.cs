@@ -6,6 +6,10 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
+    public enum MpTransactionMessageType {
+        Request,
+        Response
+    }
     public abstract class MpAvTransactionMessageViewModelBase :
         MpViewModelBase<MpAvTransactionItemViewModel>,
         MpAvITransactionNodeViewModel {
@@ -18,11 +22,10 @@ namespace MonkeyPaste.Avalonia {
                 null :
                 Parent.Parent.Parent;
 
-        public virtual object Body => Json;
-        object MpAvITransactionNodeViewModel.TransactionModel => Parent.Transaction;
+        public virtual string Body => Json;
         public bool IsExpanded { get; set; }
         public MpITreeItemViewModel ParentTreeItem { get; protected set; }
-        public IEnumerable<MpITreeItemViewModel> Children => Sources;
+        public virtual IEnumerable<MpITreeItemViewModel> Children => Sources;
         public abstract string LabelText { get; }
         public object ComparableSortValue => ParentTreeItem == null ? 0 : ParentTreeItem.Children.IndexOf(this);
         public object IconSourceObj {
@@ -63,6 +66,7 @@ namespace MonkeyPaste.Avalonia {
 
         public virtual object IconResourceObj { get; set; }
         #endregion
+
         #region State
         public virtual bool IsAnyBusy => IsBusy || (Sources != null && Sources.Cast<MpAvTransactionMessageViewModelBase>().Any(x => x.IsAnyBusy));
         public bool IsHovering { get; set; }
@@ -70,6 +74,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsSelected { get; set; }
         public DateTime LastSelectedDateTime { get; set; }
 
+        public MpTransactionMessageType TransactionMessageType { get; set; }
         #endregion
 
         #region Model

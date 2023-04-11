@@ -5,26 +5,32 @@
     <Styles.Resources>
         <Thickness x:Key="ButtonPadding">0,0,0,0</Thickness>
     </Styles.Resources>
-    <Style Selector="Button.hoverOutline">
-        <Setter Property="Background"
-                Value="Transparent" />
-        <Setter Property="HorizontalContentAlignment"
-                Value="Center" />
-        <Setter Property="VerticalContentAlignment"
-                Value="Center" />
-    </Style>
-    <Style Selector="Button.hoverOutline /template/ ContentPresenter">
+    <Style Selector="Button.link">
+        <Setter Property="Foreground"
+                Value="Blue" />
+        <Setter Property="Padding"
+                Value="0" />
+        <Setter Property="Cursor"
+                Value="Hand" />
         <Setter Property="BorderThickness"
-                Value="1" />
-        <Setter Property="BorderBrush"
-                Value="Transparent" />
+                Value="0" />
         <Setter Property="Background"
                 Value="Transparent" />
-        <Setter Property="CornerRadius"
-                Value="5" />
-    </Style>
-    <Style Selector="Button.hoverOutline:pointerover /template/ ContentPresenter">
-        <Setter Property="BorderBrush"
-                Value="Black" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <ContentPresenter Content="{TemplateBinding Content}">
+                    <ContentPresenter.Styles>
+                        <Style Selector="TextBlock">
+                            <Setter Property="Foreground"
+                                    Value="{TemplateBinding Foreground}" />
+                            <Setter Property="FontSize"
+                                    Value="{TemplateBinding FontSize}" />
+                            <Setter Property="TextDecorations"
+                                    Value="Underline" />
+                        </Style>
+                    </ContentPresenter.Styles>
+                </ContentPresenter>
+            </ControlTemplate>
+        </Setter>
     </Style>
 </Styles>

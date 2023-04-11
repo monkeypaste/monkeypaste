@@ -951,9 +951,9 @@ namespace MonkeyPaste.Avalonia {
                     FileItemCollectionViewModel.Items.Count > 0) {
                     return FileItemCollectionViewModel.Items.FirstOrDefault().IconBase64;
                 }
-                return TransactionCollectionViewModel.PrimaryItem == null ?
+                return TransactionCollectionViewModel.CreateTransaction == null ?
                             MpDefaultDataModelTools.ThisAppIconId :
-                            TransactionCollectionViewModel.PrimaryItem.IconSourceObj;
+                            TransactionCollectionViewModel.CreateTransaction.IconSourceObj;
             }
         }
 

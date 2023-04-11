@@ -84,4 +84,9 @@
         <Setter Property="Background"
                 Value="{StaticResource UnderlineFadeOutBrush_long_dark}" />
     </Style>
+
+    <Style Selector="Border.roundedTextBoxContainer:focus-within">
+        <Setter Property="BorderBrush"
+                Value="Gray" />
+    </Style>
 </Styles>

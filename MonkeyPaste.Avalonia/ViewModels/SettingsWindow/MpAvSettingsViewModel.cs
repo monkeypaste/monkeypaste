@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
+using Avalonia.Platform;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -207,7 +208,8 @@ namespace MonkeyPaste.Avalonia {
                                 label = "UI Font Family",
                                 description = "Requires restart :(",
                                 values =
-                                    FontManager.Current.GetInstalledFontFamilyNames(true)
+                                    //FontManager.Current.GetInstalledFontFamilyNames(true)
+                                    (AvaloniaLocator.Current.GetRequiredService<IFontManagerImpl>()).GetInstalledFontFamilyNames(true)
                                     .Where(x=>!string.IsNullOrEmpty(x))
                                     .OrderBy(x=>x)
                                     .Select(x=>new MpPluginParameterValueFormat() {
@@ -221,7 +223,8 @@ namespace MonkeyPaste.Avalonia {
                                 unitType = MpParameterValueUnitType.PlainText,
                                 label = "Content Font Family",
                                 values =
-                                    FontManager.Current.GetInstalledFontFamilyNames(true)
+                                    //FontManager.Current.GetInstalledFontFamilyNames(true)
+                                    (AvaloniaLocator.Current.GetRequiredService<IFontManagerImpl>()).GetInstalledFontFamilyNames(true)
                                     .Where(x=>!string.IsNullOrEmpty(x))
                                     .OrderBy(x=>x)
                                     .Select(x=>new MpPluginParameterValueFormat() {

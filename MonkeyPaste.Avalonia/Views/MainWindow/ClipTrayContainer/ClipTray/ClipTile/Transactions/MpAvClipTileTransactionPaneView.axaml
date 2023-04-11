@@ -12,7 +12,14 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileTransactionPaneView">
+    <local:MpAvUserControl.Styles>
+        <Style Selector="Grid#TransactionContainerGrid.plainText Border#FocusDetailOuterBorder">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+    </local:MpAvUserControl.Styles>
     <Grid x:Name="TransactionContainerGrid"
+          Classes.plainText="{Binding IsPlainTextView}"
           RowDefinitions="30,*,Auto, Auto"
           Margin="1"
           HorizontalAlignment="Stretch">
@@ -22,8 +29,8 @@
                         Value="0" />-->
             </Style>
             <Style Selector="TreeViewItem:empty /template/ Panel#PART_ExpandCollapseChevronContainer">
-                <Setter Property="IsVisible"
-                        Value="False" />
+                <!--<Setter Property="IsVisible"
+                        Value="False" />-->
             </Style>
             <Style Selector="TreeViewItem"
                    x:DataType="local:MpAvITransactionNodeViewModel">
@@ -126,6 +133,20 @@
                     </Image.RenderTransform>
                 </Image>
             </Button>
+
+            <ToggleButton x:Name="PlainTextToggleButton"
+                          DockPanel.Dock="Right"
+                          Classes="defaultButton outline outlineOver"
+                          Command="{Binding TogglePlainTextCommand}"
+                          CommandParameter="{Binding $self}"
+                          IsChecked="{Binding IsPlainTextView, Mode=OneWay}">
+                <ToolTip.Tip>
+                    <local:MpAvToolTipView ToolTipText="Plain Text" />
+                </ToolTip.Tip>
+                <Image Width="20"
+                       Height="20"
+                       Source="{Binding Source={StaticResource PlainTextImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+            </ToggleButton>
             <TextBlock Text="Transactions"
                        VerticalAlignment="Center" />
         </DockPanel>
@@ -166,10 +187,6 @@
                                        TextAlignment="Left"
                                        Text="{Binding LabelText}" />
                         </Grid>
-                        <Grid x:Name="TransactionItemGrid_right"
-                              DockPanel.Dock="Right">
-                            <!--  TODO Add TransactionView Toggle button here (or options context button)  -->
-                        </Grid>
                     </DockPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
@@ -180,22 +197,9 @@
                     DataContext="{Binding SelectedTransaction}"
                     SelectedIndex="{Binding SelectedTabIndex, Mode=TwoWay}"
                     IsVisible="{Binding ., Converter={x:Static ObjectConverters.IsNotNull}}"
-                    MaxWidth="{Binding Bounds.Width, ElementName=TransactionListBox}"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Top"
                     TabStripPlacement="Top">
-            <!--<TabControl.MaxHeight>
-                <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
-                              ConverterParameter="/">
-                    <Binding Path="Bounds.Height"
-                             ElementName="TransactionContainerGrid" />
-                    <Binding>
-                        <Binding.Source>
-                            <sys:Double>2</sys:Double>
-                        </Binding.Source>
-                    </Binding>
-                </MultiBinding>
-            </TabControl.MaxHeight>-->
 
             <!--  SOURCE TAB  -->
 
@@ -205,6 +209,7 @@
                          MaxWidth="{Binding Bounds.Width, ElementName=TransactionListBox}"
                          HorizontalAlignment="Stretch"
                          VerticalAlignment="Top"
+                         SelectionMode="Single,AlwaysSelected"
                          Items="{Binding Sources}">
                     <ListBox.Styles>
                         <Style Selector="ListBoxItem">
@@ -216,6 +221,11 @@
                                     Value="1" />
                             <Setter Property="BorderBrush"
                                     Value="DimGray" />
+                        </Style>
+                        <Style Selector="ListBoxItem"
+                               x:DataType="pcl:MpISelectableViewModel">
+                            <Setter Property="IsSelected"
+                                    Value="{Binding IsSelected, Mode=TwoWay}" />
                         </Style>
                     </ListBox.Styles>
                     <ListBox.ItemTemplate>
@@ -259,6 +269,7 @@
                                                     </Button>
                                                 </StackPanel>
                                                 <local:MpAvPluginParameterListBoxView Grid.Row="1"
+                                                                                      Background="DimGray"
                                                                                       DataContext="{Binding PresetViewModel}"
                                                                                       HorizontalAlignment="Stretch"
                                                                                       VerticalAlignment="Stretch" />
@@ -293,12 +304,16 @@
                     <ContentControl Content="{Binding}">
                         <ContentControl.DataTemplates>
                             <local:MpAvTransactionMessageBodyTemplateSelector>
+                                <!--  PLAIN TEXT TEMPLATE  -->
                                 <DataTemplate x:Key="PlainTextMessageTemplate"
-                                              x:DataType="local:MpAvTransactionMessageViewModelBase">
+                                              x:DataType="local:MpIPlainTextViewModel">
                                     <TextBlock MinHeight="15"
                                                TextWrapping="Wrap"
-                                               Text="{Binding Body}" />
+                                               Text="{Binding PlainText}" />
                                 </DataTemplate>
+
+                                <!--  ANALYZE TOOLBOX  -->
+
                                 <DataTemplate x:Key="ParameterRequestMessageTemplate"
                                               x:DataType="local:MpAvParameterRequestMessageViewModel">
                                     <Grid x:Name="TransAnalyzerReqContainer"
@@ -308,6 +323,8 @@
                                         <StackPanel DataContext="{Binding PresetViewModel}"
                                                     Orientation="Horizontal"
                                                     Spacing="10">
+                                            <!--  EXECUTE ANALYSIS BUTTON  -->
+
                                             <Button Classes="defaultButton iconTextButton"
                                                     Command="{Binding ExecutePresetAnalysisOnSelectedContentCommand}">
                                                 <DockPanel>
@@ -315,6 +332,8 @@
                                                     <TextBlock Text="Analyze" />
                                                 </DockPanel>
                                             </Button>
+
+                                            <!--  RESET PARAM BUTTON  -->
                                             <Button Classes="defaultButton outline outlineOver"
                                                     Command="{Binding ResetOrDeleteThisPresetCommand}"
                                                     CommandParameter="{Binding DataContext.ParameterReqFormat, ElementName=TransAnalyzerReqContainer}">
@@ -328,6 +347,8 @@
                                     </Grid>
 
                                 </DataTemplate>
+
+                                <!--  ANNOTATION TREE  -->
 
                                 <DataTemplate x:Key="AnnotationMessageTemplate"
                                               x:DataType="local:MpAvAnnotationMessageViewModel">
@@ -345,10 +366,11 @@
                                         <TreeView.ItemTemplate>
                                             <TreeDataTemplate x:DataType="local:MpAvITransactionNodeViewModel"
                                                               ItemsSource="{Binding Children}">
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Image VerticalAlignment="Stretch"
-                                                           Margin="2"
-                                                           Width="{Binding $self.Bounds.Height}"
+                                                <DockPanel>
+                                                    <Image DockPanel.Dock="Left"
+                                                           VerticalAlignment="Center"
+                                                           Width="15"
+                                                           Height="15"
                                                            Source="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}}" />
                                                     <TextBlock Foreground="Black"
                                                                Margin="5,0,0,0"
@@ -356,7 +378,7 @@
                                                                HorizontalAlignment="Left"
                                                                TextAlignment="Left"
                                                                Text="{Binding LabelText}" />
-                                                </StackPanel>
+                                                </DockPanel>
 
                                             </TreeDataTemplate>
                                         </TreeView.ItemTemplate>

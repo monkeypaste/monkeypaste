@@ -7,9 +7,11 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Transformation;
 using Avalonia.Platform;
+using Avalonia.Platform.Storage;
 using Avalonia.Rendering;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
+using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -20,6 +22,24 @@ using static Avalonia.VisualExtensions;
 
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvCommonExtensions {
+        #region Storage
+
+        public static async Task<IStorageItem> ToFileOrFolderStorageItemAsync(this string path) {
+            if (!path.IsFileOrDirectory()) {
+                return null;
+            }
+            IStorageItem si = null;
+            if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime cl &&
+                cl.MainWindow is Window w) {
+                if (path.IsFile()) {
+                    si = await w.StorageProvider.TryGetFileFromPathAsync(path);
+                } else {
+                    si = await w.StorageProvider.TryGetFolderFromPathAsync(path);
+                }
+            }
+            return si;
+        }
+        #endregion
 
         #region Environment
 

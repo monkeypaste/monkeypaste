@@ -55,7 +55,7 @@ function convertDataTransferToHostDataItems(dt) {
         let hostFormat = dt.types[i];
         if (hostFormat.toLowerCase() == 'files') {
             //debugger;
-            hostFormat = 'FileNames';
+            hostFormat = 'Files';
         }
         let di = {
             format: hostFormat,

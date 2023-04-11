@@ -242,7 +242,7 @@
         "handlerGuid": "bb997630-985a-420e-808f-60e31625c06f",
         "displayName": "Files",
         "iconUri": "folder.png",
-        "clipboardName": "FileNames",
+        "clipboardName": "Files",
         "parameters": [
           {
             "label": "Ignore",
@@ -606,7 +606,7 @@
         "displayName": "File",
         "sortOrderIdx": 2,
         "iconUri": "folder.png",
-        "clipboardName": "FileNames",
+        "clipboardName": "Files",
         "parameters": [
           {
             "label": "Ignore",

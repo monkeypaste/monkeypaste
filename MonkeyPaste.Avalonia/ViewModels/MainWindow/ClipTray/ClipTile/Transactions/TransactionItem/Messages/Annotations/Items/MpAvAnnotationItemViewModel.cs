@@ -19,6 +19,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
+        private static MpAvAnnotationItemViewModel _LastSelectedItem;
         #endregion
 
         #region Interfaces
@@ -36,8 +37,6 @@ namespace MonkeyPaste.Avalonia {
             Parent == null || Parent.Parent == null || Parent.Parent.Parent == null ?
                 null :
                 Parent.Parent.Parent.Parent;
-        public object TransactionModel { get; }
-        public object Body { get; }
         public bool IsExpanded { get; set; }
         public MpITreeItemViewModel ParentTreeItem { get; private set; }
         public IEnumerable<MpITreeItemViewModel> Children => Items;
@@ -57,11 +56,30 @@ namespace MonkeyPaste.Avalonia {
         }
         public DateTime LastSelectedDateTime { get; set; }
         public bool IsHovering { get; set; }
-        public string LabelText => AnnotationLabel;
-        public object ComparableSortValue { get; }
-        public object IconSourceObj { get; }
-        public MpMenuItemViewModel ContextMenuItemViewModel { get; }
-        public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsAnyBusy);
+        public string Body =>
+            AnnotationBody;
+        public string LabelText =>
+            AnnotationLabel;
+        public object ComparableSortValue =>
+            AnnotationLabel;
+        public object IconSourceObj {
+            get {
+                if (Children != null && Children.Any()) {
+                    return "FolderOutlineImage";
+                }
+                if (this is MpAvImageAnnotationItemViewModel) {
+                    return "BoxCornersImage";
+                }
+                if (AnnotationScore > 0) {
+                    return "EquationImage";
+                }
+                return "ObjectImage";
+            }
+        }
+        public MpMenuItemViewModel ContextMenuItemViewModel =>
+            null;
+        public bool IsAnyBusy =>
+            IsBusy || Items.Any(x => x.IsAnyBusy);
 
         #endregion
 
@@ -120,6 +138,14 @@ namespace MonkeyPaste.Avalonia {
                     return null;
                 }
                 return Annotation.type;
+            }
+        }
+        public string AnnotationBody {
+            get {
+                if (Annotation == null) {
+                    return null;
+                }
+                return Annotation.body;
             }
         }
         public string AnnotationLabel {
@@ -199,8 +225,10 @@ namespace MonkeyPaste.Avalonia {
                     if (IsSelected) {
                         //IsExpanded = true;
                         Dispatcher.UIThread.Post(async () => {
-                            CurScorePercent = 0;
-                            double percent_v = 0.05;
+                            // animate score from last selected percent
+                            CurScorePercent = _LastSelectedItem == null ? 0 : _LastSelectedItem.CurScorePercent;
+                            _LastSelectedItem = this;
+                            double percent_v = 0.05 * (CurScorePercent < ScorePercent ? 1 : -1);
                             while (CurScorePercent < ScorePercent) {
                                 CurScorePercent += percent_v;
                                 await Task.Delay(30);

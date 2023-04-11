@@ -102,7 +102,7 @@
 
                     <!--  PASTE SHORTCUT DATAGRID  -->
 
-                    <local:MpAvClipBorder Classes="filterDataGridContainer">
+                    <Border Classes="filterDataGridContainer">
                         <Grid>
                             <DataGrid x:Name="ShortcutDatagrid"
                                       local:MpAvDataGridRefreshExtension.IsEnabled="True"
@@ -196,7 +196,7 @@
                                        Classes="emptyTextBlock"
                                        Text="No results available" />
                         </Grid>
-                    </local:MpAvClipBorder>
+                    </Border>
 
                     <!--  ADD PASTE SHORTCUT BUTTON  -->
                     <DropDownButton HorizontalAlignment="Right"

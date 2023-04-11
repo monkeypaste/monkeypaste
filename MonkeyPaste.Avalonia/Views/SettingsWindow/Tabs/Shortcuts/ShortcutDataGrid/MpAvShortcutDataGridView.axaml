@@ -44,7 +44,7 @@
                     Value="{Binding Source={StaticResource DeleteImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </Style>
     </UserControl.Styles>
-    <local:MpAvClipBorder Classes="filterDataGridContainer">
+    <Border Classes="filterDataGridContainer">
         <Grid>
             <DataGrid x:Name="ShortcutDatagrid"
                       IsVisible="{Binding ., Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
@@ -163,5 +163,5 @@
                        Text="No results available" />
         </Grid>
 
-    </local:MpAvClipBorder>
+    </Border>
 </UserControl>

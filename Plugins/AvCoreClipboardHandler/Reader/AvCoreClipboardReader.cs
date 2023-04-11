@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Input;
+using Avalonia.Platform.Storage;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
@@ -84,15 +85,15 @@ namespace AvCoreClipboardHandler {
         #region Private Methods
 
         private static async Task<object> ReadDataObjectFormat(string format, IDataObject avdo) {
-            object dataObj;
+            object format_data = null;
 
             if (avdo == null) {
                 //await Util.WaitForClipboard();
-                dataObj = await Application.Current.Clipboard.GetDataSafeAsync(format);
+                format_data = await Application.Current.Clipboard.GetDataSafeAsync(format);
                 if (OperatingSystem.IsWindows() &&
-                    format == MpPortableDataFormats.AvHtml_bytes && dataObj is byte[] htmlBytes) {
+                    format == MpPortableDataFormats.AvHtml_bytes && format_data is byte[] htmlBytes) {
                     var detected_encoding = htmlBytes.DetectTextEncoding(out string detected_text);
-                    dataObj = Encoding.UTF8.GetBytes(detected_text);
+                    format_data = Encoding.UTF8.GetBytes(detected_text);
                     if (detected_text.Contains("Â")) {
                         Debugger.Break();
                     }
@@ -100,24 +101,27 @@ namespace AvCoreClipboardHandler {
                 //Util.CloseClipboard();
 
             } else {
-                if (format == "FileNames") {
-                    if (avdo.GetFileNames() == null) {
-                        return String.Empty;
+                if (format == MpPortableDataFormats.AvFileNames) {
+                    if (avdo.GetFilesAsPaths() is IEnumerable<string> paths &&
+                        paths.Any()) {
+                        format_data = paths;
                     }
-                    dataObj = avdo.GetFileNames();
                 } else {
-                    dataObj = avdo.Get(format);
+                    format_data = avdo.Get(format);
                 }
             }
             string dataStr = null;
 
-            if (dataObj is string) {
-                dataStr = dataObj as string;
-            } else if (dataObj is IEnumerable<string> strArr) {
+            if (format_data is string) {
+                dataStr = format_data as string;
+            } else if (format_data is IEnumerable<string> strArr) {
                 // should only happen for files
                 dataStr = string.Join(Environment.NewLine, strArr);
-            } else if (dataObj is byte[] bytes) {
+            } else if (format_data is byte[] bytes) {
                 return bytes;
+            } else if (format_data is IEnumerable<IStorageItem> paths &&
+                paths.Select(x => x.TryGetLocalPath()) is IEnumerable<string> pl) {
+                dataStr = string.Join(Environment.NewLine, pl);
             }
             return dataStr;
         }
@@ -158,8 +162,8 @@ namespace AvCoreClipboardHandler {
                                 }
                                 break;
                             case CoreClipboardParamType.R_Ignore_Rtf:
-                                bool ignoreRtf = bool.Parse(paramVal);
-                                if (ignoreRtf) {
+                                if (paramVal.ParseOrConvertToBool(false) is bool ignoreRtf &&
+                                    ignoreRtf) {
                                     AddIgnoreNotification(ref nfl, format);
                                     data = null;
 
@@ -219,8 +223,12 @@ namespace AvCoreClipboardHandler {
                     case MpPortableDataFormats.AvFileNames:
                         switch (paramType) {
                             case CoreClipboardParamType.R_IgnoreAll_FileDrop:
-                                data = null;
-                                AddIgnoreNotification(ref nfl, format);
+                                if (paramVal.ParseOrConvertToBool(false) is bool ignore_fd &&
+                                    ignore_fd) {
+
+                                    data = null;
+                                    AddIgnoreNotification(ref nfl, format);
+                                }
                                 break;
                             case CoreClipboardParamType.R_IgnoredExt_FileDrop:
                                 if (!string.IsNullOrWhiteSpace(paramVal) &&

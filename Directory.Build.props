@@ -4,6 +4,10 @@
   <!-- LINUX,MAC,BROWSER - net7.0-->
   <!-- ANDROID - net7.0-android-->
   <!-- IOS - net7.0-ios-->
+
+  <PropertyGroup>
+    <BuildOs>WINDOWS</BuildOs>
+  </PropertyGroup>
   
   <PropertyGroup>
     <ApplicationName>Monkey Paste</ApplicationName>
@@ -13,9 +17,6 @@
     <ApplicationVersion>$(ApplicationVersionMajor)$(ApplicationVersionMinor)</ApplicationVersion>
   </PropertyGroup>
     
-  <PropertyGroup>
-    <BuildOs>WINDOWS</BuildOs>
-  </PropertyGroup>
   
   <PropertyGroup Condition="$(BuildOs) == 'WINDOWS'">
     <MainTargetFramework>net7.0-windows</MainTargetFramework>

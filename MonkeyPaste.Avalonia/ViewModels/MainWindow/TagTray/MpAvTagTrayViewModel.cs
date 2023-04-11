@@ -133,7 +133,9 @@ namespace MonkeyPaste.Avalonia {
             .FirstOrDefault();
 
         public IEnumerable<MpAvTagTileViewModel> PinnedItems =>
-            Items.Where(x => x.IsModelPinned).OrderBy(x => x.PinSortIdx);
+            Items
+            .Where(x => x.IsModelPinned).OrderBy(x => x.PinSortIdx)
+            .ToList();
 
         public MpAvTagTileViewModel SelectedPinnedItem {
             get => PinnedItems.FirstOrDefault(x => x.IsSelected);
@@ -145,7 +147,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public IEnumerable<MpAvTagTileViewModel> RootItems =>
-            Items.Where(x => x.ParentTagId == 0);
+            Items
+            .Where(x => x.ParentTagId == 0)
+            .ToList();
 
         public MpAvTagTileViewModel AllTagViewModel { get; set; }
         public MpAvTagTileViewModel RootGroupTagViewModel { get; set; }
