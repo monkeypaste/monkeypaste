@@ -1961,7 +1961,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand PopInTileCommand => new MpCommand(() => {
             int ciid = CopyItemId;
-
+            TransactionCollectionViewModel.CloseTransactionPaneCommand.Execute(null);
             if (Parent != null) {
                 _contentView = null;
                 MpAvPersistentClipTilePropertiesHelper.RemovePersistentSize_ById(ciid, QueryOffsetIdx);

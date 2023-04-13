@@ -14,6 +14,7 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public enum MpShortcutAssignmentType {
+        None,
         InternalCommand,
         GlobalCommand,
         AppPaste

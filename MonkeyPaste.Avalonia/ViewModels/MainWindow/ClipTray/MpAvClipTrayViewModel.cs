@@ -2524,7 +2524,7 @@ namespace MonkeyPaste.Avalonia {
 
         private async Task AddUpdateOrAppendCopyItemAsync(MpCopyItem ci, int force_pin_idx = 0) {
             if (ci == null) {
-                MpConsole.WriteLine("Could not built copyitem, cannot add");
+                MpConsole.WriteLine("Could not build copyitem, cannot add");
                 OnCopyItemAdd?.Invoke(this, null);
                 return;
             }

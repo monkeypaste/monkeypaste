@@ -455,6 +455,7 @@ namespace MonkeyPaste.Avalonia {
                 control = rc.ResizerControl;
             }
             if (control == null) {
+                onComplete?.Invoke();
                 return;
             }
             double zeta, omega, fps;

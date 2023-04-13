@@ -61,7 +61,7 @@ function getImageContentHeight() {
 	return ContentImageHeight;
 }
 
-function populateContentImageDataSize(annotationsJsonStr) {
+function populateContentImageDataSize(annotationsJsonStr, is_reload) {
 	if (ContentImageWidth >= 0 &&
 		ContentImageHeight >= 0) {
 		log('image size already populated, ignoring request');

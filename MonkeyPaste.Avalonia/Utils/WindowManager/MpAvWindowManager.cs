@@ -189,6 +189,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
 
+                // workaround for https://github.com/AvaloniaUI/Avalonia/pull/10951
                 w.GetVisualDescendants()
                     .Where(x => x is MpIOverrideRender)
                     .Cast<MpIOverrideRender>()

@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Shapes;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
@@ -15,10 +16,10 @@ using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public class MpAvZoomBorder : UserControl {
+    public class MpAvZoomBorder : UserControl, MpIOverrideRender {
         // from https://stackoverflow.com/a/6782715/105028
         #region Private Variables
-        private DispatcherTimer _renderTimer = null;
+        private DispatcherTimer _render_timer = null;
 
         private MpPoint mp_start;
 
@@ -29,6 +30,12 @@ namespace MonkeyPaste.Avalonia {
             //IsEnabledProperty.Changed.AddClassHandler<MpAvZoomBorder>((x, y) => HandleDesignerItemChanged(x, y));
         }
         public static bool IsTranslating { get; private set; } = false;
+
+        #endregion
+
+        #region Interfaces
+
+        public bool IgnoreRender { get; set; }
 
         #endregion
 
@@ -86,7 +93,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Bg Grid Properties
 
-
         public IBrush GridLineBrush { get; set; } = Brushes.LightBlue;
         public double GridLineThickness { get; set; } = 1;
 
@@ -97,21 +103,166 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Arrow Properties
+
+        #region Appearance
+
+        #region WarningBrush1 Property
+        public IBrush WarningBrush1 {
+            get { return (IBrush)GetValue(WarningBrush1Property); }
+            set { SetValue(WarningBrush1Property, value); }
+        }
+
+        public static readonly AttachedProperty<IBrush> WarningBrush1Property =
+            AvaloniaProperty.RegisterAttached<object, Control, IBrush>(
+                "WarningBrush1",
+                Brushes.Yellow,
+                false);
+        #endregion
+
+        #region WarningBrush2 Property
+        public IBrush WarningBrush2 {
+            get { return (IBrush)GetValue(WarningBrush2Property); }
+            set { SetValue(WarningBrush2Property, value); }
+        }
+
+        public static readonly AttachedProperty<IBrush> WarningBrush2Property =
+            AvaloniaProperty.RegisterAttached<object, Control, IBrush>(
+                "WarningBrush2",
+                Brushes.Black,
+                false);
+        #endregion
+
+        #region TransitionLineDefaultBorderBrush Property
+        public IBrush TransitionLineDefaultBorderBrush {
+            get { return (IBrush)GetValue(TransitionLineDefaultBorderBrushProperty); }
+            set { SetValue(TransitionLineDefaultBorderBrushProperty, value); }
+        }
+
+        public static readonly AttachedProperty<IBrush> TransitionLineDefaultBorderBrushProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, IBrush>(
+                "TransitionLineDefaultBorderBrush",
+                Brushes.White,
+                false);
+        #endregion
+
+        #region TransitionLineHoverBorderBrush Property
+        public IBrush TransitionLineHoverBorderBrush {
+            get { return (IBrush)GetValue(TransitionLineHoverBorderBrushProperty); }
+            set { SetValue(TransitionLineHoverBorderBrushProperty, value); }
+        }
+
+        public static readonly AttachedProperty<IBrush> TransitionLineHoverBorderBrushProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, IBrush>(
+                "TransitionLineHoverBorderBrush",
+                Brushes.Yellow,
+                false);
+        #endregion
+
+        #region TransitionLineDisabledFillBrush Property
+        public IBrush TransitionLineDisabledFillBrush {
+            get { return (IBrush)GetValue(TransitionLineDisabledFillBrushProperty); }
+            set { SetValue(TransitionLineDisabledFillBrushProperty, value); }
+        }
+
+        public static readonly AttachedProperty<IBrush> TransitionLineDisabledFillBrushProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, IBrush>(
+                "TransitionLineDisabledFillBrush",
+                Brushes.Red,
+                false);
+        #endregion
+
+        #region TransitionLineEnabledFillBrush Property
+        public IBrush TransitionLineEnabledFillBrush {
+            get { return GetValue(TransitionLineEnabledFillBrushProperty); }
+            set { SetValue(TransitionLineEnabledFillBrushProperty, value); }
+        }
+
+        public static readonly AttachedProperty<IBrush> TransitionLineEnabledFillBrushProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, IBrush>(
+                "TransitionLineEnabledFillBrush",
+                Brushes.Green,
+                false);
+        #endregion
+
+        #endregion
+
+        #region Layout
+        public double TransitionLineThickness { get; set; } = 1;
+        public double TipWidth { get; set; } = 10;
+        public double TipLength { get; set; } = 20;
+        public double TailWidth { get; set; } = 5;
+        #endregion
+
+        #endregion
+
         #endregion
 
         #region Public Methods
 
-        public void Initialize(Control element) {
-            //this.Child = element;
-            //if (Child != null) {
-            //    Child.PointerWheelChanged += child_MouseWheel;
-            //    Child.PointerPressed += child_PreviewMouseLeftButtonDown;
-            //    Child.PointerReleased += child_MouseLeftButtonUp;
-            //    Child.PointerMoved += child_MouseMove;
-            //    //Child.PreviewMouseRightButtonDown += child_PreviewMouseRightButtonDown;
-            //}
+        public override void Render(DrawingContext ctx) {
+            if (IgnoreRender) {
+                return;
+            }
+
+            base.Render(ctx);
+            if (ShowGrid) {
+                DrawGrid(ctx);
+            }
+            if (DesignerItem == null) {
+                return;
+            }
+
+            DrawItemEffects(ctx);
         }
 
+        public void Reset() {
+            if (DesignerItem == null) {
+                return;
+            }
+
+            DesignerItem.Scale = 1.0d;
+            DesignerItem.TranslateOffsetX = 0;
+            DesignerItem.TranslateOffsetY = 0;
+        }
+
+        public void Zoom(double scaleDelta, MpPoint relative_anchor) {
+            if (DesignerItem == null) {
+                return;
+            }
+            double scale = DesignerItem.Scale;
+
+            if (scale < MinScale) {
+                return;
+            }
+            scale += scaleDelta;
+            double zoomCorrected = scaleDelta * scale;
+            scale += zoomCorrected;
+
+            DesignerItem.Scale = Math.Min(MaxScale, Math.Max(MinScale, scale));
+
+            var t = new MpPoint(DesignerItem.TranslateOffsetX, DesignerItem.TranslateOffsetY) * scale;
+            //MpPoint abs = (relative_anchor * scale) + t;
+            //t = abs - relative_anchor * scale;
+            DesignerItem.TranslateOffsetX = t.X;
+            DesignerItem.TranslateOffsetY = t.Y;
+
+            if (DataContext is MpAvTriggerCollectionViewModel acvm) {
+                acvm.HasModelChanged = true;
+            }
+        }
+        public void TranslateOrigin(double x, double y) {
+            if (DesignerItem == null) {
+                return;
+            }
+            // NOTE to be used by DesignerItem Drop Behavior
+            DesignerItem.TranslateOffsetX -= x;
+            DesignerItem.TranslateOffsetY -= y;
+        }
+
+        #endregion
+
+        #region Protected Methods
         protected override void OnPointerPressed(PointerPressedEventArgs e) {
             base.OnPointerPressed(e);
             e.Handled = true;
@@ -128,76 +279,26 @@ namespace MonkeyPaste.Avalonia {
             e.Handled = true;
             child_MouseMove(Child, e);
         }
-        public void Reset() {
-            if (DesignerItem == null) {
-                return;
+
+        protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
+            base.OnAttachedToVisualTree(e);
+            if (_render_timer == null) {
+                _render_timer = new DispatcherTimer();
+                _render_timer.Interval = TimeSpan.FromMilliseconds(50);
+                _render_timer.Tick += (s, e) => {
+                    Dispatcher.UIThread.Post(InvalidateVisual);
+                };
             }
 
-            DesignerItem.Scale = 1.0d;
-            DesignerItem.TranslateOffsetX = 0;
-            DesignerItem.TranslateOffsetY = 0;
+            _render_timer.Start();
         }
 
-        public void Zoom(double scaleDelta, MpPoint relative_anchor) {
-            if (DesignerItem == null) {
+        protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e) {
+            base.OnDetachedFromVisualTree(e);
+            if (_render_timer == null) {
                 return;
             }
-            double scale = DesignerItem.Scale;
-            double tx = DesignerItem.TranslateOffsetX;
-            double ty = DesignerItem.TranslateOffsetY;
-
-            if (scale < MinScale) {
-                return;
-            }
-            scale += scaleDelta;
-
-            double absolute;
-            double absoluteY;
-
-            absolute = relative_anchor.X * scale + tx;
-            absoluteY = relative_anchor.Y * scale + ty;
-
-            tx = absolute - relative_anchor.X * scale;
-            ty = absoluteY - relative_anchor.Y * scale;
-
-            double zoomCorrected = scaleDelta * scale;
-            scale += zoomCorrected;
-
-            DesignerItem.Scale = Math.Min(MaxScale, Math.Max(MinScale, scale));
-            DesignerItem.TranslateOffsetX = tx;
-            DesignerItem.TranslateOffsetY = ty;
-
-            if (DataContext is MpAvTriggerCollectionViewModel acvm) {
-                acvm.HasModelChanged = true;
-            }
-        }
-        public void TranslateOrigin(double x, double y) {
-            if (DesignerItem == null) {
-                return;
-            }
-            // NOTE to be used by DesignerItem Drop Behavior
-            //var tt = GetTranslateTransform(Child);
-            DesignerItem.TranslateOffsetX -= x;
-            DesignerItem.TranslateOffsetY -= y;
-        }
-
-        #endregion
-
-        #region Protected Methods
-
-        public override void Render(DrawingContext dc) {
-            base.Render(dc);
-
-            if (_renderTimer == null) {
-                _renderTimer = new DispatcherTimer();
-                _renderTimer.Interval = TimeSpan.FromMilliseconds(50);
-                _renderTimer.Tick += (s, e) => InvalidateVisual();
-
-                _renderTimer.Start();
-            }
-            if (ShowGrid) {
-                DrawGrid(dc);
-            }
+            _render_timer.Stop();
         }
 
         protected override void OnPointerWheelChanged(PointerWheelEventArgs e) {
@@ -262,16 +363,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        //private TranslateTransform GetTranslateTransform(Control element) {
-        //    return (TranslateTransform)((TransformGroup)element.RenderTransform)
-        //      .Children.First(tr => tr is TranslateTransform);
-        //}
-
-        //private ScaleTransform GetScaleTransform(Control element) {
-        //    return (ScaleTransform)((TransformGroup)element.RenderTransform)
-        //      .Children.First(tr => tr is ScaleTransform);
-        //}
-
+        #region Grid Rendering
         private void DrawGrid(DrawingContext dc) {
             if (DesignerItem == null) {
                 return;
@@ -375,6 +467,220 @@ namespace MonkeyPaste.Avalonia {
 
             dc.DrawLine(p, p1.ToAvPoint(), p2.ToAvPoint());
         }
+
+        #endregion
+
+        #region Arrow Rendering
+
+        private void DrawItemEffects(DrawingContext dc) {
+
+            MpAvTriggerActionViewModelBase tavm = null;
+            if (DataContext is MpAvTriggerCollectionViewModel tcvm) {
+                tavm = tcvm.SelectedTrigger;
+            }
+            if (tavm == null) {
+                return;
+            }
+            foreach (MpAvActionViewModelBase avm in tavm.SelfAndAllDescendants) {
+                DrawActionShadow(dc, avm);
+
+                var pavm = avm.ParentActionViewModel;
+                if (pavm == null) {
+                    // trigger has no arrow
+                    continue;
+                }
+
+                MpRect cur_rect = GetTranslatedActionShapeRect(avm);
+                MpRect parent_rect = GetTranslatedActionShapeRect(pavm);
+
+                MpPoint tail = cur_rect.Centroid();
+                MpPoint head = parent_rect.Centroid();
+
+                var borderBrush = pavm.IsHovering ? TransitionLineHoverBorderBrush : TransitionLineDefaultBorderBrush;
+                var fillBrush = GetArrowFillBrush(pavm, avm, head, tail);
+
+                double end_adjust = Math.Sqrt(Math.Pow(avm.Width / 2, 2) + Math.Pow(avm.Height / 2, 2));
+                DrawArrow(dc, head, tail, end_adjust, borderBrush, fillBrush);
+            }
+        }
+
+        private Shape GetActionShape(MpAvActionViewModelBase avm) {
+            if (this.GetVisualDescendant<ListBox>() is ListBox lb &&
+                lb.ContainerFromItem(avm) is ListBoxItem lbi) {
+                if (lbi.GetVisualDescendant<Shape>() is Shape avm_shape) {
+                    return avm_shape;
+                }
+            }
+            return null;
+        }
+        private MpRect GetTranslatedActionShapeRect(MpAvActionViewModelBase avm) {
+            if (this.GetVisualDescendant<ListBox>() is ListBox lb &&
+                GetActionShape(avm) is Shape s) {
+                var s_rect = s.Bounds.ToPortableRect();
+                var s_center = s.TranslatePoint(new Point(/*s.Bounds.Width / 2, s.Bounds.Height / 2*/), lb).Value.ToPortablePoint();
+                s_center /= DesignerItem.Scale;
+                s_rect.Move(s_center);
+                return s_rect;
+            }
+            return MpRect.Empty;
+        }
+        private void DrawActionShadow(DrawingContext ctx, MpAvActionViewModelBase avm) {
+            double scale = avm.Parent.Scale;
+            MpPoint shadow_offset = new MpPoint(3, 3);// * scale;
+            MpRect shape_rect = GetTranslatedActionShapeRect(avm);
+
+            IBrush shadow_brush = new SolidColorBrush(Colors.Black, 0.1);
+
+            Shape s = GetActionShape(avm);
+            if (s == null) {
+                return;
+            }
+            if (s is Ellipse el) {
+                var r = el.Bounds.Size.ToPortableSize().ToPortablePoint() * 0.5;
+                var center = shape_rect.Centroid() + shadow_offset;
+                using (ctx.PushTransform(
+                    Matrix.CreateScale(scale, scale) //*
+                                                     //Matrix.CreateTranslation(center.X, center.Y)
+                    )) {
+                    //ctx.DrawEllipse(shadow_brush, new Pen(Brushes.Transparent), center.ToAvPoint(), r.X, r.Y);
+                    ctx.DrawEllipse(shadow_brush, new Pen(Brushes.Transparent), center.ToAvPoint(), r.X, r.Y);
+                }
+            } else if (s is Polygon pg) {
+                using (ctx.PushTransform(
+                    Matrix.CreateScale(scale, scale) //*
+                                                     //Matrix.CreateTranslation(origin.X, origin.Y)
+                    )) {
+
+                    var pg_trans = (pg.Bounds.ToPortableRect().Location + shape_rect.TopLeft + shadow_offset).ToAvPoint();
+                    ctx.DrawGeometry(shadow_brush, new Pen(Brushes.Transparent), GetPointGeometry(pg.Points, pg_trans));
+                }
+            } else if (s is Rectangle r) {
+                using (ctx.PushTransform(
+                    Matrix.CreateScale(scale, scale) //*
+                                                     //Matrix.CreateTranslation(origin.X, origin.Y)
+                    )) {
+                    //var rect = r.Bounds.ToPortableRect();
+                    //rect.Move(origin);
+                    //rect.Size.Width *= scale;
+                    //rect.Size.Height *= scale;
+                    var tl = shape_rect.TopLeft + shadow_offset;
+                    ctx.DrawRectangle(shadow_brush, new Pen(Brushes.Transparent), new Rect(tl.ToAvPoint(), r.Bounds.Size));
+                }
+            } else {
+                MpDebug.Break($"Unhandled shape type '{s.GetType()}'");
+            }
+
+        }
+        private IBrush GetArrowFillBrush(MpAvActionViewModelBase pavm, MpAvActionViewModelBase avm, MpPoint pp, MpPoint p) {
+            Color enabled_color = TransitionLineEnabledFillBrush.GetColor();
+            Color disabled_color = TransitionLineDisabledFillBrush.GetColor();
+            Color warning_color1 = WarningBrush1.GetColor();
+            Color warning_color2 = WarningBrush2.GetColor();
+
+            var parent_color = pavm.IsTriggerEnabled ? enabled_color : disabled_color;
+            var cur_color = avm.IsTriggerEnabled ? enabled_color : disabled_color;
+
+            var fillBrush = new LinearGradientBrush() {
+                GradientStops = new GradientStops(),
+                StartPoint = new RelativePoint(pp.ToAvPoint(), RelativeUnit.Absolute),
+                EndPoint = new RelativePoint(p.ToAvPoint(), RelativeUnit.Absolute)
+            };
+
+            if (pavm.IsValid) {
+                fillBrush.GradientStops.Add(new GradientStop(parent_color, 0));
+                fillBrush.GradientStops.Add(new GradientStop(parent_color, 0.45d));
+            } else {
+                fillBrush.GradientStops.AddRange(GetGradientStripes(warning_color1, warning_color2, 0, 0.5, 7));
+            }
+
+            if (avm.IsValid) {
+                fillBrush.GradientStops.Add(new GradientStop(cur_color, 0.55d));
+                fillBrush.GradientStops.Add(new GradientStop(cur_color, 1.0d));
+            } else {
+                fillBrush.GradientStops.AddRange(GetGradientStripes(warning_color1, warning_color2, 0.5, 1, 7));
+            }
+
+            return fillBrush;
+        }
+
+        private IEnumerable<GradientStop> GetGradientStripes(
+            Color color1, Color color2, double start_offset, double end_offset, int count) {
+            int altVal = 0;
+            double offset_step = (end_offset - start_offset) / count;
+            for (double cur_offset = start_offset; cur_offset < end_offset; cur_offset += offset_step) {
+                Color cur_color = (altVal++ % 2) == 0 ? color1 : color2;
+                yield return new GradientStop(cur_color, cur_offset);
+                yield return new GradientStop(cur_color, cur_offset + offset_step);
+            }
+        }
+
+        private void DrawArrow(
+            DrawingContext ctx,
+            MpPoint startPoint,
+            MpPoint endPoint,
+            double dw,
+            IBrush borderBrush,
+            IBrush fillBrush) {
+            MpPoint direction = endPoint - startPoint;
+
+            MpPoint normalizedDirection = direction;
+            normalizedDirection.Normalize();
+
+            startPoint += normalizedDirection * dw;
+            endPoint -= normalizedDirection * dw;
+
+            MpPoint normalizedlineWidenVector = new MpPoint(-normalizedDirection.Y, normalizedDirection.X); // Rotate by 90 degrees
+            MpPoint lineWidenVector = normalizedlineWidenVector * TailWidth;
+
+            // Adjust arrow thickness for very thick lines
+            MpPoint arrowWidthVector = normalizedlineWidenVector * TipWidth;
+
+            var pc = new List<MpPoint>();
+
+            MpPoint endArrowCenterPosition = endPoint - (normalizedDirection * TipLength);
+
+            // Start with tip of the arrow
+            pc.Add(endArrowCenterPosition + arrowWidthVector);
+            pc.Add(endArrowCenterPosition + lineWidenVector);
+            pc.Add(startPoint + lineWidenVector);
+            pc.Add(startPoint - lineWidenVector);
+            pc.Add(endArrowCenterPosition - lineWidenVector);
+            pc.Add(endArrowCenterPosition - arrowWidthVector);
+            pc.Add(endPoint);
+
+            StreamGeometry streamGeometry = new StreamGeometry();
+            using (StreamGeometryContext geometryContext = streamGeometry.Open()) {
+                geometryContext.BeginFigure(endPoint.ToAvPoint(), true);
+                pc.ForEach(x => geometryContext.LineTo(x.ToAvPoint()));
+                geometryContext.EndFigure(true);
+            }
+
+            double scale = DesignerItem.Scale;
+            using (ctx.PushTransform(
+                    Matrix.CreateScale(scale, scale))) {
+                ctx.DrawGeometry(
+                    fillBrush,
+                    new Pen(borderBrush, TransitionLineThickness),
+                    GetPointGeometry(pc.Select(x => x.ToAvPoint()), new Point()));
+            }
+
+        }
+
+        private StreamGeometry GetPointGeometry(IEnumerable<Point> points, Point offset) {
+            StreamGeometry streamGeometry = new StreamGeometry();
+            if (points == null || !points.Any()) {
+                return streamGeometry;
+            }
+            using (StreamGeometryContext geometryContext = streamGeometry.Open()) {
+                geometryContext.BeginFigure(points.Last() + offset, true);
+                points.ForEach(x => geometryContext.LineTo(x + offset));
+                geometryContext.EndFigure(true);
+            }
+
+            return streamGeometry;
+        }
+
+        #endregion
 
         #endregion
 

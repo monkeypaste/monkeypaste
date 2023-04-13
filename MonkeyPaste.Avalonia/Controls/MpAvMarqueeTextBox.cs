@@ -421,24 +421,8 @@ namespace MonkeyPaste.Avalonia {
             );
         #endregion
 
-        #region NavigateUri AvaloniaProperty
-        private string _navigateUri = null;
-        public string NavigateUri {
-            get => _navigateUri;
-            set => SetAndRaise(NavigateUriProperty, ref _navigateUri, value);
-        }
-
-        public static readonly DirectProperty<MpAvMarqueeTextBox, string> NavigateUriProperty =
-            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, string>
-            (
-                nameof(NavigateUri),
-                o => o.NavigateUri,
-                (o, v) => o.NavigateUri = v,
-                null
-            );
-        #endregion
-
         #region NavigateUriCommand AvaloniaProperty
+
         private ICommand _navigateUriCommand = null;
         public ICommand NavigateUriCommand {
             get => _navigateUriCommand;
@@ -469,6 +453,23 @@ namespace MonkeyPaste.Avalonia {
                 o => o.NavigateUriCommandParameter,
                 (o, v) => o.NavigateUriCommandParameter = v,
                 null
+            );
+        #endregion
+
+        #region NavigateUriRequiredKeyString AvaloniaProperty
+        private string _NavigateUriRequiredKeyString = "Control";
+        public string NavigateUriRequiredKeyString {
+            get => _NavigateUriRequiredKeyString;
+            set => SetAndRaise(NavigateUriRequiredKeyStringProperty, ref _NavigateUriRequiredKeyString, value);
+        }
+
+        public static readonly DirectProperty<MpAvMarqueeTextBox, string> NavigateUriRequiredKeyStringProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, string>
+            (
+                nameof(NavigateUriRequiredKeyString),
+                o => o.NavigateUriRequiredKeyString,
+                (o, v) => o.NavigateUriRequiredKeyString = v,
+                "Control"
             );
         #endregion
 
@@ -618,8 +619,21 @@ namespace MonkeyPaste.Avalonia {
         }
         protected override void OnPointerEntered(PointerEventArgs e) {
             base.OnPointerEntered(e);
-            if (NavigateUri != null && IsReadOnly) {
-                this.Cursor = new Cursor(StandardCursorType.Hand);
+            if (NavigateUriCommand != null &&
+                IsReadOnly) {
+                if (NavigateUriCommand.CanExecute(NavigateUriCommandParameter)) {
+                    this.Cursor = new Cursor(StandardCursorType.Hand);
+                    string tt_prefix = string.IsNullOrEmpty(NavigateUriRequiredKeyString) ?
+                        string.Empty :
+                        $"[{NavigateUriRequiredKeyString}] + ";
+                    string tt_text = $"{tt_prefix}Click to follow...";
+                    ToolTip.SetTip(this, new MpAvToolTipView() {
+                        ToolTipText = tt_text
+                    });
+                } else {
+                    this.Cursor = new Cursor(StandardCursorType.No);
+                }
+
                 Dispatcher.UIThread.Post(this.InvalidateVisual);
             }
             _tb_mp = e.GetClientMousePoint(this);
@@ -627,23 +641,30 @@ namespace MonkeyPaste.Avalonia {
         }
         protected override void OnPointerPressed(PointerPressedEventArgs e) {
             base.OnPointerPressed(e);
-            if (DataContext is MpIConditionalSelectableViewModel csvm &&
-                !csvm.CanSelect) {
-                return;
-            }
+
             if (DataContext is MpISelectableViewModel svm) {
-                svm.IsSelected = true;
+                if (svm is MpIConditionalSelectableViewModel csvm && csvm.CanSelect ||
+                    svm is not MpIConditionalSelectableViewModel) {
+                    svm.IsSelected = true;
+                }
             }
-            if (NavigateUri != null &&
-                IsReadOnly &&
-                e.KeyModifiers.HasFlag(KeyModifiers.Control)) {
-                NavigateUriCommand?.Execute(NavigateUriCommandParameter);
+
+            if (NavigateUriCommand != null &&
+                IsReadOnly) {
+                var req_keys =
+                    Mp.Services.KeyConverter.ConvertStringToKeySequence<Key>(NavigateUriRequiredKeyString);
+                if (e.KeyModifiers.HasAllFlags(req_keys.ToAvKeyModifiers())) {
+                    NavigateUriCommand?.Execute(NavigateUriCommandParameter);
+                } else {
+                    MpConsole.WriteLine($"Cannot exec nav cmd w/ param '{NavigateUriCommandParameter}'. Mods '{NavigateUriRequiredKeyString}' not pressed.");
+                }
+
             }
         }
         protected override void OnPointerExited(PointerEventArgs e) {
             base.OnPointerExited(e);
-            if (NavigateUri != null && IsReadOnly) {
-                this.Cursor = Cursor.Default;
+            this.Cursor = Cursor.Default;
+            if (NavigateUriCommand != null && IsReadOnly) {
                 Dispatcher.UIThread.Post(this.InvalidateVisual);
             }
             _tb_mp = null;
@@ -662,6 +683,7 @@ namespace MonkeyPaste.Avalonia {
                 SetValue(IsReadOnlyProperty, true);
             }
         }
+
         private void OnIsReadOnlyChanged() {
             Dispatcher.UIThread.Post(async () => {
                 SetTextBoxIsVisible(!IsReadOnly);
@@ -801,7 +823,7 @@ namespace MonkeyPaste.Avalonia {
             if (IsPointerOver) {
                 if (HoverBrush != null) {
                     fg = HoverBrush;
-                } else if (NavigateUri != null) {
+                } else if (NavigateUriCommand != null) {
                     fg = _defNavUriBrush;
                 }
             }
@@ -1035,7 +1057,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             _ft = this.ToFormattedText();
-            if (NavigateUri != null) {
+            if (NavigateUriCommand != null) {
                 _ft.SetTextDecorations(TextDecorations.Underline);
             }
             ftSize = new MpSize(_ft.Width + TailPadding, _ft.Height);

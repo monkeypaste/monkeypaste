@@ -37,7 +37,7 @@ namespace MonkeyPaste.Avalonia {
             if (sc == null || scvm == null) {
                 return false;
             }
-            return sc.ShortcutType == scvm.ShortcutType && sc.CommandParameter == scvm.ShortcutCommandParameter.ToString();
+            return sc.ShortcutType == scvm.ShortcutType && sc.CommandParameter == scvm.ShortcutCommandParameter.ToStringOrDefault();
         }
 
         public static async Task<string> GetShortcutTitleAsync(this MpShortcutType st, object arg) {
@@ -102,7 +102,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
 
-                case MpShortcutType.InvokeAction:
+                case MpShortcutType.InvokeTrigger:
                     template = "Run '{0}' Trigger";
                     var a = await MpDataModelProvider.GetItemAsync<MpAction>(id);
                     if (a != null) {
@@ -128,7 +128,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpShortcutType.ToggleListenToClipboard:
                 // USER
                 case MpShortcutType.PasteCopyItem:
-                case MpShortcutType.InvokeAction:
+                case MpShortcutType.InvokeTrigger:
                     return true;
                 default:
                     return false;

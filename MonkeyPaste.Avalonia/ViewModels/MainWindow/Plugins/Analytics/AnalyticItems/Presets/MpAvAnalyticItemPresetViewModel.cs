@@ -126,7 +126,7 @@ namespace MonkeyPaste.Avalonia {
         #region MpAvIParameterCollectionViewModel Implementation
 
         IEnumerable<MpAvParameterViewModelBase> MpAvIParameterCollectionViewModel.Items =>
-            VisibleItems;
+            VisibleItems.ToList();
 
         MpAvParameterViewModelBase
             MpAvIParameterCollectionViewModel.SelectedItem {

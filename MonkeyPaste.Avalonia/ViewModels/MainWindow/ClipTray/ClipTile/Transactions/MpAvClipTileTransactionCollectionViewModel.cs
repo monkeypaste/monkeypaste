@@ -330,6 +330,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand OpenTransactionPaneCommand => new MpCommand(
             () => {
                 IsTransactionPaneOpen = true;
+
                 OnPropertyChanged(nameof(MaxWidth));
                 //BoundWidth = DefaultTransactionPanelLength;
                 //BoundHeight = Parent.BoundHeight;
@@ -342,9 +343,6 @@ namespace MonkeyPaste.Avalonia {
                         Parent.GetContentView() as Control,
                         nw, nh,
                         () => {
-                            if (Parent.IsPinned) {
-                                return;
-                            }
                             if (SelectedTransaction == null) {
                                 SelectedTransaction = CreateTransaction;
                             }
@@ -437,6 +435,34 @@ namespace MonkeyPaste.Avalonia {
                     rootGrid.DataContext = this;
                 }
             });
+
+
+        public ICommand SelectChildCommand => new MpCommand<object>(
+            (args) => {
+                // this only comes from editor for ann atm
+                if (args is string argStr) {
+                    if (argStr.IsStringGuid()) {
+                        var to_select =
+                            Messages
+                                .OfType<MpAvAnnotationMessageViewModel>()
+                                .SelectMany(x => x.RootAnnotationViewModel.SelfAndAllDescendants().Cast<MpAvAnnotationItemViewModel>())
+                                .FirstOrDefault(x => x.AnnotationGuid == argStr);
+
+                        if (to_select != null &&
+                            to_select.Parent is MpAvAnnotationMessageViewModel ann_msg) {
+                            ann_msg.SelectedItem = to_select;
+                            if (!ann_msg.IsSelected) {
+                                ann_msg.IsSelected = true;
+                            }
+                            if (SelectedTransaction != ann_msg.Parent) {
+                                SelectedTransaction = ann_msg.Parent;
+                            }
+                        }
+                    }
+                }
+            }) {
+
+        };
         #endregion
     }
 }

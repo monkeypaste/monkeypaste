@@ -149,6 +149,24 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region RelativeTo Property
+        public static Visual GetRelativeTo(AvaloniaObject obj) {
+            return obj.GetValue(RelativeToProperty);
+        }
+
+        public static void SetRelativeTo(AvaloniaObject obj, Visual value) {
+            obj.SetValue(RelativeToProperty, value);
+        }
+
+        public static readonly AttachedProperty<Visual>
+            RelativeToProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, Visual>(
+            "RelativeTo",
+            null,
+            false, BindingMode.TwoWay);
+
+        #endregion
+
         #region IsEnabled Property
         public static bool GetIsEnabled(AvaloniaObject obj) {
             return obj.GetValue(IsEnabledProperty);
@@ -272,14 +290,15 @@ namespace MonkeyPaste.Avalonia {
                     FinishMove(control);
                 }
 
-                Control relativeTo = control.GetVisualAncestor<MpAvDesignerCanvas>(); //MpAvMainView.Instance;
+                Visual relativeTo = GetRelativeTo(control) ?? control;
                 var mwmp = e.GetPosition(relativeTo).ToPortablePoint();
 
                 MpPoint delta = mwmp - _lastMousePosition;
 
                 // NOTE must transform mouse delta from designer canvas scaling
-                //delta.X *= 1 / avmb.RootTriggerActionViewModel.Scale;
-                //delta.Y *= 1 / avmb.RootTriggerActionViewModel.Scale;
+                //delta.X *= 1 / avmb.Parent.Scale;
+                //delta.Y *= 1 / avmb.Parent.Scale;
+                delta /= avmb.Parent.Scale;
 
                 Move(control, delta.X, delta.Y);
 
@@ -299,7 +318,7 @@ namespace MonkeyPaste.Avalonia {
                 if (MpAvZoomBorder.IsTranslating) {
                     return;
                 }
-                Control relativeTo = control.GetVisualAncestor<MpAvDesignerCanvas>(); //MpAvMainView.Instance;
+                Visual relativeTo = GetRelativeTo(control) ?? control;
 
                 _mouseDownPosition = e.GetPosition(relativeTo).ToPortablePoint();
                 _lastMousePosition = _mouseDownPosition;

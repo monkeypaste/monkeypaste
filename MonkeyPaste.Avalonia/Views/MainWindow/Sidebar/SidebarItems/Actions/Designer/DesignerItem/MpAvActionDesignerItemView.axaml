@@ -140,6 +140,7 @@
                             local:MpAvMoveExtension.BeginMoveCommand="{Binding Parent.SelectActionCommand}"
                             local:MpAvMoveExtension.BeginMoveCommandParameter="{Binding .}"
                             local:MpAvMoveExtension.FinishMoveCommand="{Binding FinishMoveCommand}"
+                            local:MpAvMoveExtension.RelativeTo="{Binding $parent[local:MpAvZoomBorder]}"
                             ClipToBounds="False"
                             Background="Transparent"
                             Content="{Binding}">
@@ -159,6 +160,28 @@
                         <!--  Conditional Diamond  -->
 
                         <DataTemplate x:Key="ConditionalDesignerTemplate">
+                            <Grid>
+                                <Polygon Points="0,25 25,0 50,25 25,50" />
+                                <Border x:Name="DesignerIconContainer">
+                                    <Image />
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+
+                        <!--  AddFromClipboard Diamond  -->
+
+                        <DataTemplate x:Key="AddFromClipboardDesignerTemplate">
+                            <Grid>
+                                <Polygon Points="0,25 25,0 50,25 25,50" />
+                                <Border x:Name="DesignerIconContainer">
+                                    <Image />
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+
+                        <!--  Delay Diamond  -->
+
+                        <DataTemplate x:Key="DelayDesignerTemplate">
                             <Grid>
                                 <Polygon Points="0,25 25,0 50,25 25,50" />
                                 <Border x:Name="DesignerIconContainer">
@@ -220,6 +243,23 @@
                                 </Border>
                             </Grid>
                         </DataTemplate>
+
+                        <!--  KeySimulator Triangle  -->
+
+                        <DataTemplate x:Key="KeySimulatorDesignerTemplate">
+                            <Grid ClipToBounds="False">
+                                <Polygon Points="25,0 50,50 0,50" />
+
+                                <Border x:Name="DesignerIconContainer">
+                                    <Border.RenderTransform>
+                                        <TranslateTransform X="0"
+                                                            Y="10" />
+                                    </Border.RenderTransform>
+                                    <Image />
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+
                         <!--  Timer Triangle  -->
 
                         <DataTemplate x:Key="TimerDesignerTemplate">

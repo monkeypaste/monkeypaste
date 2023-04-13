@@ -47,6 +47,9 @@ namespace MonkeyPaste {
         Trigger,    //TriggerTypeEnumId 
         Repeater,
         FileWriter,
+        AddFromClipboard,
+        KeySimulator,
+        Delay
     }
 
     public class MpAction : MpDbModelBase, MpIClonableDbModel<MpAction> {

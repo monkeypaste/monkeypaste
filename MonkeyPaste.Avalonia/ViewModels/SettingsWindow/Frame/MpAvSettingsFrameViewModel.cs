@@ -54,7 +54,8 @@ namespace MonkeyPaste.Avalonia {
 
 
         #region MpAvIParameterCollectionViewModel Implementation
-        public IEnumerable<MpAvParameterViewModelBase> Items { get; set; }
+        IEnumerable<MpAvParameterViewModelBase> MpAvIParameterCollectionViewModel.Items =>
+            Items;
         public MpAvParameterViewModelBase SelectedItem { get; set; }
         public ICommand SaveCommand =>
             MpAvSettingsViewModel.Instance.SaveSettingsCommand;
@@ -68,6 +69,11 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
+        #region View Models
+
+
+        public IList<MpAvParameterViewModelBase> Items { get; set; }
+        #endregion
         #region State
 
         public MpSettingsTabType TabType { get; set; }

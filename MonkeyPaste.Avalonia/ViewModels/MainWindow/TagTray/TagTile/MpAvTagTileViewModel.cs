@@ -275,7 +275,7 @@ namespace MonkeyPaste.Avalonia {
             IsTagNameReadOnly;
 
         public bool CanPin =>
-            !IsGroupTag;
+            true;//!IsGroupTag;
 
         public bool CanTreeMove =>
             !IsRootGroupTag && !IsAllTag && !IsHelpTag;
@@ -1050,10 +1050,17 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public ICommand SelectTagCommand => new MpCommand(
-            () => {
-                Parent.SelectTagCommand.Execute(this);
-            }, () => {
+        public ICommand SelectThisTagCommand => new MpCommand<object>(
+            (args) => {
+                if (IsGroupTag &&
+                    args is Control c &&
+                    c.GetVisualAncestor<MpAvTagView>() is MpAvTagView tv &&
+                    tv.IsPinTrayTagView()) {
+                    ShowPinnedGroupChildSelectorContextMenuCommand.Execute(args);
+                    return;
+                }
+                Parent.SelectTagCommand.Execute(TagId);
+            }, (args) => {
                 return IsTagNameReadOnly;
             });
 
@@ -1275,6 +1282,40 @@ namespace MonkeyPaste.Avalonia {
             },
             (args) => {
                 return IsTagNameReadOnly;
+            });
+
+        public ICommand ShowPinnedGroupChildSelectorContextMenuCommand => new MpCommand<object>(
+            (args) => {
+
+                //if (IsContextMenuOpen) {
+                //    // toggle menu closed
+                //    MpAvMenuExtension.CloseMenu();
+                //    //IsContextMenuOpen = false;
+                //    Parent.IsSelecting = false;
+                //    return;
+                //}
+
+                //Parent.IsSelecting = true;
+                var child_mivm = new MpMenuItemViewModel() {
+                    ParentObj = this,
+                    SubItems = Items.Select(x => x.GetMenu(x.SelectThisTagCommand, null, new[] { Parent.SelectedItemId }, true)).ToList()
+                };
+
+                var control = args as Control;
+                if (control == null) {
+                    return;
+                }
+                MpAvMenuExtension.ShowMenu(
+                    control,
+                    child_mivm,
+                    hideOnClick: true);
+            },
+            (args) => {
+                if (args is not Control ||
+                    !IsGroupTag) {
+                    return false;
+                }
+                return true;
             });
 
         public MpIAsyncCommand<object> MoveOrCopyThisTagCommand => new MpAsyncCommand<object>(

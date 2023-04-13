@@ -6,6 +6,7 @@ using Avalonia.LogicalTree;
 using Avalonia.Media;
 using Avalonia.Metadata;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
@@ -16,10 +17,16 @@ using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public class MpAvDesignerCanvas : MpAvCanvas {
+    public class MpAvDesignerCanvasListBox : ListBox, MpIOverrideRender {
         #region Private Variables
 
         private DispatcherTimer _timer;
+
+        #endregion
+
+        #region Interfaces
+
+        public bool IgnoreRender { get; set; }
 
         #endregion
 
@@ -116,16 +123,16 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        public override void EndInit() {
-            base.EndInit();
+        #region Constructors
 
-            _timer = new DispatcherTimer();
-            _timer.Interval = TimeSpan.FromMilliseconds(50);
-            _timer.Tick += _timer_Tick;
+        #endregion
 
-            _timer.Start();
-        }
+        #region Public Methods
+
         public override void Render(DrawingContext dc) {
+            if (IgnoreRender) {
+                return;
+            }
             base.Render(dc);
 
             MpAvTriggerActionViewModelBase tavm = null;
@@ -140,6 +147,7 @@ namespace MonkeyPaste.Avalonia {
 
                 var pavm = avm.ParentActionViewModel;
                 if (pavm == null) {
+                    // trigger has no arrow
                     continue;
                 }
 
@@ -156,9 +164,35 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        #endregion
+
+        #region Protected Methods
+
+        protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
+            base.OnAttachedToVisualTree(e);
+            if (_timer == null) {
+                _timer = new DispatcherTimer();
+                _timer.Interval = TimeSpan.FromMilliseconds(50);
+                _timer.Tick += _timer_Tick;
+            }
+
+            _timer.Start();
+        }
+
+        protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e) {
+            base.OnDetachedFromVisualTree(e);
+            if (_timer == null) {
+                return;
+            }
+            _timer.Stop();
+        }
+        #endregion
+
+        #region Private Methods
+
         private Shape GetActionShape(MpAvActionViewModelBase avm) {
-            var adv = this.GetVisualDescendants<MpAvActionDesignerItemView>().FirstOrDefault(x => x.DataContext == avm);
-            if (adv != null && adv.GetVisualDescendant<Shape>() is Shape avm_shape) {
+            var lbi = this.ContainerFromItem(avm);
+            if (lbi != null && lbi.GetVisualDescendant<Shape>() is Shape avm_shape) {
                 return avm_shape;
             }
             return null;
@@ -179,6 +213,9 @@ namespace MonkeyPaste.Avalonia {
             IBrush shadow_brush = new SolidColorBrush(Colors.Black, 0.1);
 
             Shape s = GetActionShape(avm);
+            if (s == null) {
+                return;
+            }
             if (s is Ellipse el) {
                 var r = el.Bounds.Size.ToPortableSize().ToPortablePoint() * 0.5;
                 var center = origin + r;
@@ -336,6 +373,8 @@ namespace MonkeyPaste.Avalonia {
 
             return streamGeometry;
         }
+
+        #endregion
     }
 
 

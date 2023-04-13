@@ -183,7 +183,7 @@ namespace MonkeyPaste.Avalonia {
         public int LastActiveId =>
             LastSelectedActiveItem == null ? 0 : LastSelectedActiveItem.TagId;
 
-        public bool IsSelecting { get; private set; } = false;
+        public bool IsSelecting { get; set; } = false;
         //public bool IsNavButtonsVisible => MpAvMainWindowViewModel.Instance.IsHorizontalOrientation && 
         //                                    TagTrayTotalWidth > MaxTagTrayScreenWidth;
         public bool IsNavButtonsVisible { get; private set; } = false;
@@ -343,6 +343,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #endregion
+
         #region Private Methods
 
         private void MpTagTrayViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {

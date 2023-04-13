@@ -49,7 +49,7 @@ namespace MonkeyPaste.Avalonia {
             }
             set {
                 if (value && IsSelected != value && Parent != null && Parent.Parent != null) {
-                    Parent.Parent.SelectChildCommand.Execute(AnnotationGuid);
+                    Parent.Parent.Parent.SelectChildCommand.Execute(AnnotationGuid);
                     OnPropertyChanged(nameof(IsSelected));
                 }
             }
@@ -184,7 +184,7 @@ namespace MonkeyPaste.Avalonia {
             bool wasBusy = IsBusy;
             IsBusy = true;
 
-            ParentTreeItem = parentTreeItem;
+            ParentTreeItem = parentTreeItem ?? Parent as MpITreeItemViewModel;
             Annotation = ianf;
 
             Items.Clear();
@@ -229,7 +229,7 @@ namespace MonkeyPaste.Avalonia {
                             CurScorePercent = _LastSelectedItem == null ? 0 : _LastSelectedItem.CurScorePercent;
                             _LastSelectedItem = this;
                             double percent_v = 0.05 * (CurScorePercent < ScorePercent ? 1 : -1);
-                            while (CurScorePercent < ScorePercent) {
+                            while (Math.Abs(CurScorePercent - ScorePercent) > Math.Abs(percent_v * 2)) {
                                 CurScorePercent += percent_v;
                                 await Task.Delay(30);
                             }

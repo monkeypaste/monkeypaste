@@ -20,7 +20,7 @@
         <local:MpHighlightSelectorBehavior />
     </Interaction.Behaviors>
     <local:MpAvUserControl.Styles>
-        <Style Selector="Border#ClipTileContainerBorder.IsAnyBusy">
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.IsAnyBusy">
             <Setter Property="Cursor"
                     Value="Wait" />
         </Style>
@@ -56,10 +56,9 @@
     -->
     <!--
     -->
-    <Border x:Name="ClipTileContainerBorder"
+    <local:MpAvClipBorder x:Name="ClipTileContainerBorder"
                           ClipToBounds="True"
                           HorizontalAlignment="Stretch"
-                          Classes.TileBorder="True"
                           Classes.TileHover="{Binding IsHovering}"
                           Classes.CanResize="{Binding CanResize}"
                           Classes.IsResizing="{Binding IsResizing}"
@@ -242,5 +241,5 @@
                 </Viewbox>
             </Border>
         </Grid>
-    </Border>
+    </local:MpAvClipBorder>
 </local:MpAvUserControl>

@@ -108,13 +108,6 @@
                         Value="{Binding TransactionDateTime, Converter={x:Static local:MpAvDateTimeToStringConverter.Instance}}" />
             </Style>-->
         </Grid.Styles>
-        <!--<Grid.RowDefinitions>
-            <RowDefinition Height="30" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto"
-                           MinHeight="" />
-        </Grid.RowDefinitions>-->
         <DockPanel Grid.Row="0"
                    LastChildFill="True"
                    HorizontalAlignment="Stretch"
@@ -209,23 +202,19 @@
                          MaxWidth="{Binding Bounds.Width, ElementName=TransactionListBox}"
                          HorizontalAlignment="Stretch"
                          VerticalAlignment="Top"
-                         SelectionMode="Single,AlwaysSelected"
+                         SelectionMode="Single"
+                         SelectedItem="{Binding SelectedSource, Mode=TwoWay}"
                          Items="{Binding Sources}">
                     <ListBox.Styles>
                         <Style Selector="ListBoxItem">
                             <Setter Property="HorizontalContentAlignment"
-                                    Value="Left" />
+                                    Value="Stretch" />
                             <Setter Property="VerticalContentAlignment"
                                     Value="Top" />
                             <Setter Property="BorderThickness"
                                     Value="1" />
                             <Setter Property="BorderBrush"
                                     Value="DimGray" />
-                        </Style>
-                        <Style Selector="ListBoxItem"
-                               x:DataType="pcl:MpISelectableViewModel">
-                            <Setter Property="IsSelected"
-                                    Value="{Binding IsSelected, Mode=TwoWay}" />
                         </Style>
                     </ListBox.Styles>
                     <ListBox.ItemTemplate>
@@ -248,31 +237,39 @@
 
                                         <DataTemplate x:Key="AnalyzerSourceTemplate"
                                                       x:DataType="local:MpAvAnalyzerSourceViewModel">
-                                            <Grid x:Name="TransAnalyzerSourceContainer"
-                                                  x:CompileBindings="False"
-                                                  RowDefinitions="Auto,*">
-                                                <StackPanel DataContext="{Binding PresetViewModel}"
-                                                            Orientation="Horizontal"
-                                                            Spacing="10">
-                                                    <Button Classes="defaultButton iconTextButton"
-                                                            Command="{Binding ExecutePresetAnalysisOnSelectedContentCommand}">
-                                                        <DockPanel>
-                                                            <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource ExecuteImage}}" />
-                                                            <TextBlock Text="Analyze" />
-                                                        </DockPanel>
-                                                    </Button>
-                                                    <Button Classes="defaultButton outline outlineOver"
-                                                            Command="{Binding ResetOrDeleteThisPresetCommand}"
-                                                            CommandParameter="{Binding DataContext.ParameterReqFormat, ElementName=TransAnalyzerSourceContainer}">
-                                                        <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource ResetImage}}" />
+                                            <Grid>
 
-                                                    </Button>
-                                                </StackPanel>
-                                                <local:MpAvPluginParameterListBoxView Grid.Row="1"
-                                                                                      Background="DimGray"
-                                                                                      DataContext="{Binding PresetViewModel}"
-                                                                                      HorizontalAlignment="Stretch"
-                                                                                      VerticalAlignment="Stretch" />
+                                                <Grid x:Name="TransAnalyzerSourceContainer"
+                                                      IsVisible="{Binding PresetViewModel, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                                      RowDefinitions="Auto,*">
+                                                    <StackPanel Orientation="Horizontal"
+                                                                Spacing="10">
+                                                        <Button Classes="defaultButton iconTextButton"
+                                                                Command="{Binding PresetViewModel.ExecutePresetAnalysisOnSelectedContentCommand}">
+                                                            <DockPanel>
+                                                                <Image Source="{Binding Source={StaticResource ExecuteImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                                                                <TextBlock Text="Analyze" />
+                                                            </DockPanel>
+                                                        </Button>
+                                                        <Button Classes="defaultButton outline outlineOver"
+                                                                Command="{Binding PresetViewModel.ResetOrDeleteThisPresetCommand}"
+                                                                CommandParameter="{Binding ParameterReqFormat}">
+                                                            <Image Source="{Binding Source={StaticResource ResetImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+
+                                                        </Button>
+                                                    </StackPanel>
+                                                    <local:MpAvPluginParameterListBoxView Grid.Row="1"
+                                                                                          DataContext="{Binding PresetViewModel}"
+                                                                                          Background="DimGray"
+                                                                                          HorizontalAlignment="Stretch"
+                                                                                          VerticalAlignment="Stretch" />
+                                                </Grid>
+                                                <TextBlock Classes="disabled"
+                                                           IsVisible="{Binding PresetViewModel, ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"
+                                                           TextAlignment="Center"
+                                                           Text="Analyzer not found" />
                                             </Grid>
                                         </DataTemplate>
                                     </local:MpAvTransactionSourceTemplateSelector>
@@ -354,7 +351,7 @@
                                               x:DataType="local:MpAvAnnotationMessageViewModel">
                                     <TreeView Grid.Row="0"
                                               Items="{Binding RootItems}"
-                                              SelectionMode="Single, AlwaysSelected"
+                                              SelectionMode="Single"
                                               SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                                               HorizontalAlignment="Stretch"
                                               VerticalAlignment="Stretch">
@@ -404,6 +401,7 @@
         <Border x:Name="FocusDetailOuterBorder"
                 Grid.Row="3"
                 Margin="5,3"
+                Padding="3"
                 BorderThickness="0,1,0,0"
                 BorderBrush="Black"
                 MaxWidth="{Binding Bounds.Width, ElementName=TransactionListBox}"
@@ -438,6 +436,27 @@
                                 </Grid>
                             </DataTemplate>
 
+                            <DataTemplate x:Key="TransactionSourceDetailTemplate"
+                                          x:DataType="local:MpAvTransactionSourceViewModelBase">
+                                <DockPanel>
+                                    <Image DockPanel.Dock="Left"
+                                           Width="10"
+                                           Height="10"
+                                           VerticalAlignment="Center"
+                                           Margin="5,0,0,0"
+                                           Source="{Binding Source={StaticResource NewWindowImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                                    <local:MpAvMarqueeTextBox IsReadOnly="True"
+                                                              DropShadowBrush="Transparent"
+                                                              ReadOnlyForeground="Black"
+                                                              VerticalAlignment="Center"
+                                                              Margin="5,0"
+                                                              EditOnFocus="False"
+                                                              Text="{Binding DetailUriLabel}"
+                                                              NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
+                                                              NavigateUriCommandParameter="{Binding SourceUri}"
+                                                              NavigateUriRequiredKeyString="" />
+                                </DockPanel>
+                            </DataTemplate>
                             <DataTemplate x:Key="EmptyDetailTemplate">
                                 <TextBlock Text="No details available" />
                             </DataTemplate>

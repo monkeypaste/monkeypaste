@@ -67,9 +67,15 @@ namespace MonkeyPaste.Avalonia {
                     case MpActionType.Conditional:
                         return "ScalesImage";
                     case MpActionType.Repeater:
-                        return "AlarmClockImage";
+                        return "ResetImage";
                     case MpActionType.FileWriter:
                         return "FolderEventImage";
+                    case MpActionType.AddFromClipboard:
+                        return "ClipboardImage";
+                    case MpActionType.KeySimulator:
+                        return "KeyboardImage";
+                    case MpActionType.Delay:
+                        return "AlarmClockImage";
                 }
             }
             // whats params?
@@ -87,12 +93,18 @@ namespace MonkeyPaste.Avalonia {
                     return MpSystemColors.magenta;
                 case MpActionType.Classify:
                     return MpSystemColors.tomato1;
+                case MpActionType.AddFromClipboard:
+                    return MpSystemColors.olivedrab;
                 case MpActionType.Conditional:
                     return MpSystemColors.darkturquoise;
                 case MpActionType.Repeater:
                     return MpSystemColors.steelblue;
                 case MpActionType.FileWriter:
                     return MpSystemColors.forestgreen;
+                case MpActionType.KeySimulator:
+                    return MpSystemColors.plum3;
+                case MpActionType.Delay:
+                    return MpSystemColors.gray53;
                 default:
                     throw new Exception($"Unknow action type: '{actionType}'");
             }
@@ -151,7 +163,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpAvIParameterCollectionViewModel Implementation
 
-        IEnumerable<MpAvParameterViewModelBase> MpAvIParameterCollectionViewModel.Items => ActionArgs;
+        IEnumerable<MpAvParameterViewModelBase> MpAvIParameterCollectionViewModel.Items =>
+            ActionArgs.ToList();
         MpAvParameterViewModelBase MpAvIParameterCollectionViewModel.SelectedItem { get; set; }
 
         #region MpISaveOrCancelableViewModel Implementation
@@ -281,6 +294,8 @@ namespace MonkeyPaste.Avalonia {
                     toolTipStr = "Folder Changed - Triggered when a file is added to the selected directory (or subdirectory if checked)";
                 } else if (this is MpAvShortcutTriggerViewModel) {
                     toolTipStr = "Shortcut - Triggered when the recorded shortcut is pressed at anytime with the current clipboard";
+                } else if (this is MpAvAddFromClipboardActionViewModel) {
+                    toolTipStr = "Create from Clipboard - Creates a new content item from the current clipboard at the time of execution. Note that any incoming output to this action will be overwritten by the new clipboard content. ";
                 }
 
                 return toolTipStr;
@@ -337,6 +352,27 @@ namespace MonkeyPaste.Avalonia {
                                         IconResourceKey = GetDefaultActionIconResourceKey(x),
                                         Command = AddChildActionCommand,
                                         CommandParameter = x
+                                    }).ToList()
+                        },
+                        new MpMenuItemViewModel() {
+                            IsSeparator = true,
+                            IsVisible = RootTriggerActionViewModel != this,
+                        },
+                        new MpMenuItemViewModel() {
+                            Header = "Move",
+                            IconResourceKey = "ChainImage",
+                            IsVisible = RootTriggerActionViewModel != this,
+                            SubItems =
+                                RootTriggerActionViewModel.SelfAndAllDescendants
+                                .Where(x=>
+                                        !SelfAndAllDescendants.Contains(x) &&
+                                        x != ParentActionViewModel)
+                                .Select(x =>
+                                    new MpMenuItemViewModel() {
+                                        Header = x.Label,
+                                        IconSourceObj = x.IconResourceObj,
+                                        Command = ChangeParentCommand,
+                                        CommandParameter = x.ActionId
                                     }).ToList()
                         },
                         new MpMenuItemViewModel() {
@@ -450,6 +486,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
+        public virtual bool AllowNullArg =>
+            false;
 
         public bool IsDragOver { get; set; }
         public bool HasArgsChanged { get; set; }
@@ -856,9 +895,21 @@ namespace MonkeyPaste.Avalonia {
                 case MpActionType.Repeater:
                     avm = new MpAvRepeaterActionViewModel(Parent);
                     break;
+                case MpActionType.AddFromClipboard:
+                    avm = new MpAvAddFromClipboardActionViewModel(Parent);
+                    break;
                 case MpActionType.FileWriter:
                     avm = new MpAvFileWriterActionViewModel(Parent);
                     break;
+                case MpActionType.KeySimulator:
+                    avm = new MpAvKeySimulatorActionViewModel(Parent);
+                    break;
+                case MpActionType.Delay:
+                    avm = new MpAvDelayActionViewModel(Parent);
+                    break;
+                default:
+                    MpDebug.Break($"Unhandled action type '{a.ActionType}'");
+                    return null;
             }
             //avm.ParentTreeItem = this;
             OnActionComplete += avm.OnActionInvoked;
@@ -981,6 +1032,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected virtual MpAvActionOutput GetInput(object arg) {
+            if (arg == null && AllowNullArg) {
+                if (this is MpAvTriggerActionViewModelBase) {
+                    return new MpAvTriggerInput();
+                }
+            }
             if (arg is MpCopyItem ci) {
                 // NOTE this should only happen for triggers
                 return new MpAvTriggerInput() {
@@ -1011,7 +1067,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         protected virtual bool ValidateStartAction(object arg) {
-            if (arg == null) {
+            if (arg == null && !AllowNullArg) {
                 return false;
             }
             bool can_start = true;
@@ -1313,15 +1369,13 @@ namespace MonkeyPaste.Avalonia {
                 MpCopyItem ci = null;
                 if (args is MpCopyItem arg_ci) {
                     ci = arg_ci;
-                } else {
+                } else if (!AllowNullArg) {
                     ci = await GetPrimaryCopyItemToProcessAsync();
+                    if (ci == null) {
+                        // no item could be selected so ignore shortcut trigger
+                        return;
+                    }
                 }
-
-                if (ci == null) {
-                    // no item could be selected so ignore shortcut trigger
-                    return;
-                }
-
                 var ao = GetInput(ci);
                 await PerformActionAsync(ao);
             });
@@ -1335,6 +1389,33 @@ namespace MonkeyPaste.Avalonia {
                     selectOnRightClick: true);
             });
 
+        public ICommand ChangeParentCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                int new_parent_id = 0;
+                if (args is int) {
+                    new_parent_id = (int)args;
+                } else if (args is MpAvActionViewModelBase npavm) {
+                    new_parent_id = npavm.ActionId;
+                }
+                if (new_parent_id == 0 ||
+                    new_parent_id == ActionId) {
+                    return;
+                }
+                ParentActionId = new_parent_id;
+
+                await Task.Delay(50);
+                while (IsBusy) {
+                    await Task.Delay(100);
+                }
+
+                await RootTriggerActionViewModel.InitializeAsync(RootTriggerActionViewModel.Action);
+            }, (args) => {
+                if (args == null ||
+                    this is MpAvTriggerActionViewModelBase) {
+                    return false;
+                }
+                return true;
+            });
 
         #endregion
     }

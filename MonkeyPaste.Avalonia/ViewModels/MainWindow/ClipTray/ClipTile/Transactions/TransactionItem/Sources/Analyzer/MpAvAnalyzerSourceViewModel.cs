@@ -23,7 +23,6 @@ namespace MonkeyPaste.Avalonia {
         #region Model
 
         public MpPluginRequestFormatBase ParameterReqFormat { get; private set; }
-        public int PresetId { get; private set; }
 
         #endregion
 

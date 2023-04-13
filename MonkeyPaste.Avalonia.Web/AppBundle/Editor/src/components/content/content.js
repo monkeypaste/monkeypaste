@@ -24,7 +24,12 @@ function loadContent(
 	isAppendMode,
 	annotationsJsonStr) {
 	let is_reload = contentHandle == ContentHandle;
-	if (!is_reload) {
+	let was_sub_sel_enabled = null;
+	let was_editable = null;
+	if (is_reload) {
+		was_sub_sel_enabled = isSubSelectionEnabled();
+		was_editable = !isReadOnly();
+	} else {
 		// when actually a new item and not reload
 		quill.history.clear();
 	}
@@ -46,6 +51,7 @@ function loadContent(
 		enableReadOnly();
 		disableSubSelection();	
 		resetContent();
+		resetAnnotations();
 	}
 
 
@@ -74,10 +80,26 @@ function loadContent(
 		sel_to_restore = cleanDocRange(sel_to_restore);
 		setDocSelection(sel_to_restore)
 	}
+
 	updateAllElements();
 	updateQuill();
 	onContentLoaded_ntf(getContentAsMessage());
-	log('Editor loaded');
+
+
+	//retain focus state on reload
+	if (was_sub_sel_enabled != null && was_sub_sel_enabled) {
+		enableSubSelection();
+	}
+	if (was_editable != null && was_editable) {
+		disableReadOnly();
+	}
+	if (is_reload) {
+
+		log('Editor re-loaded');
+	} else {
+
+		log('Editor loaded');
+	}
 }
 
 function initContentClassAttributes() {

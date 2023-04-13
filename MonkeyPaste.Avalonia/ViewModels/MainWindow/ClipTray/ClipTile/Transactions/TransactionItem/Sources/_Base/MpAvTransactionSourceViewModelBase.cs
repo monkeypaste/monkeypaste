@@ -69,7 +69,8 @@ namespace MonkeyPaste.Avalonia {
                             Header = $"Goto '{SourceUri}'",
                             AltNavIdx = 5,
                             IconResourceKey = "Execute",
-                            Command = GotoSourceCommand
+                            Command = MpAvUriNavigator.Instance.NavigateToUriCommand,
+                            CommandParameter = SourceUri
                         }
                     }
                 };
@@ -90,13 +91,42 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Appearance
+
+        public string DetailUriLabel {
+            get {
+                if (this is MpAvAppSourceViewModel) {
+                    return "Show Folder";
+                }
+
+                return "Open";
+            }
+        }
+
+        #endregion
+
         #region State
         public bool IsAnyBusy =>
             IsBusy ||
             (Items != null && Items.Cast<MpAvTransactionSourceViewModelBase>().Any(x => x.IsAnyBusy));
         public bool IsHovering { get; set; }
 
-        public bool IsSelected { get; set; }
+        public bool IsSelected {
+            get {
+                if (Parent == null) {
+                    return false;
+                }
+                return Parent.SelectedSource == this;
+            }
+            set {
+                if (IsSelected != value) {
+                    if (value && Parent != null) {
+                        Parent.SelectedSource = this;
+                        OnPropertyChanged(nameof(IsSelected));
+                    }
+                }
+            }
+        }
         public DateTime LastSelectedDateTime { get; set; }
 
         #endregion
@@ -179,13 +209,17 @@ namespace MonkeyPaste.Avalonia {
         public MpTransactionSource TransactionSource { get; set; }
 
         #endregion
+
         #endregion
 
         #endregion
 
         #region Constructors
 
-        public MpAvTransactionSourceViewModelBase(MpAvTransactionItemViewModel parent) : base(parent) { }
+        public MpAvTransactionSourceViewModelBase(MpAvTransactionItemViewModel parent) : base(parent) {
+            //PropertyChanged += MpAvTransactionSourceViewModelBase_PropertyChanged;
+        }
+
 
         #endregion
 
@@ -201,6 +235,19 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = wasBusy;
         }
 
+        #endregion
+
+        #region Private Methods
+        private void MpAvTransactionSourceViewModelBase_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(IsSelected):
+                    if (Parent == null) {
+                        break;
+                    }
+                    Parent.OnPropertyChanged(nameof(Parent.FocusNode));
+                    break;
+            }
+        }
         #endregion
 
         #region Commands
@@ -238,11 +285,6 @@ namespace MonkeyPaste.Avalonia {
                 //await uvm.RejectUrlOrDomain(true);
             });
 
-        public ICommand GotoSourceCommand => new MpCommand(
-            () => {
-                // open uri here]
-                MpAvUriNavigator.NavigateToUri(new Uri(SourceUri));
-            }, () => Uri.IsWellFormedUriString(SourceUri, UriKind.Absolute));
         #endregion
     }
 }

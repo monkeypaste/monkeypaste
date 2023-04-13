@@ -14,7 +14,7 @@
 
         <!--  DESIGNER LISTBOX  -->
 
-        <Style Selector="ListBox.actionDesigner">
+        <Style Selector=":is(ListBox).actionDesigner">
             <Setter Property="BorderThickness"
                     Value="0" />
             <Setter Property="Background"
@@ -29,11 +29,11 @@
                     Value="Disabled" />
         </Style>
 
-        <Style Selector="ListBox.actionDesigner /template/ ScrollViewer">
+        <Style Selector=":is(ListBox).actionDesigner /template/ ScrollViewer">
             <Setter Property="ClipToBounds"
                     Value="False" />
         </Style>
-        <Style Selector="ListBox.actionDesigner /template/ ScrollViewer /template/ ScrollContentPresenter">
+        <Style Selector=":is(ListBox).actionDesigner /template/ ScrollViewer /template/ ScrollContentPresenter">
             <Setter Property="ClipToBounds"
                     Value="False" />
         </Style>
@@ -41,11 +41,11 @@
 
         <!--  DESIGNER ITEM  -->
 
-        <Style Selector="ListBox.actionDesigner ListBoxItem"
+        <Style Selector=":is(ListBox).actionDesigner ListBoxItem"
                x:DataType="local:MpAvActionViewModelBase">
-            <Setter Property="local:MpAvCanvas.Left"
+            <Setter Property="Canvas.Left"
                     Value="{Binding X, Mode=TwoWay}" />
-            <Setter Property="local:MpAvCanvas.Top"
+            <Setter Property="Canvas.Top"
                     Value="{Binding Y, Mode=TwoWay}" />
             <Setter Property="IsVisible"
                     Value="{Binding IsActionDesignerVisible}" />
@@ -126,7 +126,21 @@
                                   GridLineThickness="0.5"
                                   GridLineSpacing="50"
                                   OriginBrush="Chocolate"
-                                  GridLineBrush="BurlyWood">
+                                  GridLineBrush="BurlyWood"
+                                  TipLength="20"
+                                  TipWidth="10"
+                                  TailWidth="3"
+                                  RenderTransformOrigin="0.5,0.5"
+                                  WarningBrush1="{DynamicResource DefaultWarningBrush1}"
+                                  WarningBrush2="{DynamicResource DefaultWarningBrush2}"
+                                  TransitionLineDefaultBorderBrush="{DynamicResource DefaultIconButtonBrush}"
+                                  TransitionLineHoverBorderBrush="{DynamicResource HoverDefaultBorderBrush}"
+                                  TransitionLineDisabledFillBrush="{DynamicResource DisabledHighlightBrush}"
+                                  TransitionLineEnabledFillBrush="{DynamicResource EnabledHighlightBrush}"
+                                  local:MpAvBoundsObserverExtension.IsEnabled="True"
+                                  local:MpAvBoundsObserverExtension.ToScreen="True"
+                                  local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedDesignerBounds, Mode=TwoWay}"
+                                  TransitionLineThickness="1">
                 <ListBox x:Name="ActionDesignerListBox"
                          HorizontalAlignment="Stretch"
                          VerticalAlignment="Stretch"
@@ -143,35 +157,18 @@
                     </ListBox.Resources>
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <local:MpAvDesignerCanvas x:Name="ActionDesignerCanvas"
-                                                      Background="{StaticResource HitTestableTransparent}"
-                                                      ClipToBounds="False"
-                                                      TipLength="20"
-                                                      TipWidth="10"
-                                                      TailWidth="3"
-                                                      HorizontalAlignment="Stretch"
-                                                      VerticalAlignment="Stretch"
-                                                      RenderTransformOrigin="0.5,0.5"
-                                                      WarningBrush1="{DynamicResource DefaultWarningBrush1}"
-                                                      WarningBrush2="{DynamicResource DefaultWarningBrush2}"
-                                                      TransitionLineDefaultBorderBrush="{DynamicResource DefaultIconButtonBrush}"
-                                                      TransitionLineHoverBorderBrush="{DynamicResource HoverDefaultBorderBrush}"
-                                                      TransitionLineDisabledFillBrush="{DynamicResource DisabledHighlightBrush}"
-                                                      TransitionLineEnabledFillBrush="{DynamicResource EnabledHighlightBrush}"
-                                                      local:MpAvBoundsObserverExtension.IsEnabled="True"
-                                                      local:MpAvBoundsObserverExtension.ToScreen="True"
-                                                      local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedDesignerBounds, Mode=TwoWay}"
-                                                      TransitionLineThickness="1">
-
-                                <local:MpAvDesignerCanvas.RenderTransform>
+                            <Canvas x:Name="ActionDesignerCanvas"
+                                    Background="{StaticResource HitTestableTransparent}"
+                                    ClipToBounds="False">
+                                <Canvas.RenderTransform>
                                     <TransformGroup>
                                         <ScaleTransform ScaleX="{Binding Scale, Mode=TwoWay, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}"
                                                         ScaleY="{Binding Scale, Mode=TwoWay, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}" />
                                         <TranslateTransform X="{Binding TranslateOffsetX, Mode=TwoWay, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}"
                                                             Y="{Binding TranslateOffsetY, Mode=TwoWay, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}" />
                                     </TransformGroup>
-                                </local:MpAvDesignerCanvas.RenderTransform>
-                            </local:MpAvDesignerCanvas>
+                                </Canvas.RenderTransform>
+                            </Canvas>
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>

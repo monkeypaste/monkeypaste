@@ -81,13 +81,13 @@ namespace MonkeyPaste.Avalonia {
                     new MpLoaderItemViewModel(this,typeof(MpAvAnalyticItemCollectionViewModel)),
                     new MpLoaderItemViewModel(this,typeof(MpAvSettingsViewModel)),
                     new MpLoaderItemViewModel(this,typeof(MpAvClipTrayViewModel)),
-                    new MpLoaderItemViewModel(this,typeof(MpAvShortcutCollectionViewModel)),
                     new MpLoaderItemViewModel(this,typeof(MpAvDragProcessWatcher)),
                     new MpLoaderItemViewModel(this,typeof(MpAvTagTrayViewModel)),
                     new MpLoaderItemViewModel(this,typeof(MpAvExternalPasteHandler)),
                     new MpLoaderItemViewModel(this,typeof(MpDataModelProvider)),
                     new MpLoaderItemViewModel(this,typeof(MpAvTriggerCollectionViewModel)),
                     new MpLoaderItemViewModel(this,typeof(MpAvExternalDropWindowViewModel)),
+                    new MpLoaderItemViewModel(this,typeof(MpAvShortcutCollectionViewModel)),
                });
 
             if (Mp.Services.PlatformInfo.IsDesktop) {

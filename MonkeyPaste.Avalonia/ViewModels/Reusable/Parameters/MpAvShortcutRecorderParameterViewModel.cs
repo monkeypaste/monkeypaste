@@ -1,22 +1,52 @@
-﻿using System.Linq;
+﻿using MonkeyPaste.Common.Plugin;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvShortcutRecorderParameterViewModel :
-        MpAvParameterViewModelBase, MpAvIShortcutCommandViewModel {
+        MpAvParameterViewModelBase,
+        MpAvIKeyGestureViewModel,
+        MpAvIShortcutCommandViewModel {
         #region Private Variables
         #endregion
 
+        #region MpAvIKeyGestureViewModel Implementation
+
+        public ObservableCollection<MpAvShortcutKeyGroupViewModel> KeyGroups =>
+            new ObservableCollection<MpAvShortcutKeyGroupViewModel>(KeyString.ToKeyItems());
+
+        #endregion
         #region MpAvIShortcutCommandViewModel Implementation
 
-        public MpShortcutType ShortcutType { get; }
-        public string KeyString =>
-            MpAvShortcutCollectionViewModel.Instance.GetViewModelCommandShortcutKeyString(this);
-        public ICommand ShortcutCommand { get; }
-        public object ShortcutCommandParameter { get; }
+        public MpShortcutType ShortcutType { get; set; }
+
+        private string _keyStr;
+        public string KeyString {
+            get {
+                if (!string.IsNullOrEmpty(_keyStr)) {
+                    return _keyStr;
+                }
+                return MpAvShortcutCollectionViewModel.Instance.GetViewModelCommandShortcutKeyString(this);
+            }
+            set {
+                if (KeyString != value) {
+                    _keyStr = value;
+                    if (UnitType == MpParameterValueUnitType.PlainText &&
+                        CurrentValue != _keyStr) {
+                        // persist new keystring
+                        CurrentValue = _keyStr;
+                    }
+                    OnPropertyChanged(nameof(KeyString));
+                }
+            }
+        }
+        public ICommand ShortcutCommand { get; set; }
+        public object ShortcutCommandParameter { get; set; }
         #endregion
+
         #region Properties
 
         #region View Models
@@ -35,41 +65,23 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvShortcutRecorderParameterViewModel() : base(null) { }
 
-        public MpAvShortcutRecorderParameterViewModel(MpViewModelBase parent) : base(parent) {
-            if (parent is MpAvShortcutTriggerViewModel stvm) {
+        public MpAvShortcutRecorderParameterViewModel(MpViewModelBase parent) : base(parent) { }
 
-                ShortcutType = MpShortcutType.InvokeAction;
-                ShortcutCommand = MpAvTriggerCollectionViewModel.Instance.InvokeActionCommand;
-                ShortcutCommandParameter = stvm.ActionId;
-            }
-
-        }
 
         #endregion
 
         #region Public Methods
-
         public override async Task InitializeAsync(MpParameterValue aipv) {
             IsBusy = true;
 
             await base.InitializeAsync(aipv);
 
-            OnPropertyChanged(nameof(CurrentValue));
-            if (this is MpISliderViewModel svm) {
-                svm.OnPropertyChanged(nameof(svm.MinValue));
-                svm.OnPropertyChanged(nameof(svm.MaxValue));
-                svm.OnPropertyChanged(nameof(svm.SliderValue));
-
+            if (Parent is MpAvKeySimulatorActionViewModel) {
+                KeyString = CurrentValue;
             }
-
-            await Task.Delay(1);
 
             IsBusy = false;
         }
-
-
-
-
 
 
         #endregion

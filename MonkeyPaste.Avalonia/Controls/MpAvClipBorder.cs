@@ -1,26 +1,28 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
+using Avalonia.Metadata;
 using Avalonia.Styling;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 using PropertyChanged;
 using System;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public class MpAvClipBorder : Border, IStyleable, MpIOverrideRender {
+    public class MpAvClipBorder : UserControl, MpIOverrideRender { //}, IStyleable {
 
         #region Private Variables
 
-        private Geometry clipGeometry = null;
-        private object oldClip;
+        private Geometry _clipGeometry = null;
+        private object _oldClip;
 
         #endregion
 
         #region Interfaces
 
         #region IStyleable Implementation
-        Type IStyleable.StyleKey => typeof(Border);
+        //Type IStyleable.StyleKey => typeof(MpAvClipBorder);
         #endregion
 
         #region MpIOverrideRender Implementation
@@ -37,44 +39,69 @@ namespace MonkeyPaste.Avalonia {
             base.Render(context);
         }
 
-        public new Control? Child {
+
+        public new object? Content {
             get {
-                return base.Child;
+                return base.Content;
             }
             set {
-                if (this.Child != value) {
-                    if (this.Child != null) {
+                if (this.Content != value) {
+                    if (this.Content is Control child) {
                         // Restore original clipping of the old child
-                        this.Child.SetValue(Control.ClipProperty, oldClip);
+                        child.SetValue(Control.ClipProperty, _oldClip);
                     }
 
-                    if (value != null) {
+                    if (value is Control new_child) {
                         // Store the current clipping of the new child
-                        oldClip = value.GetValue(Control.ClipProperty);
+                        _oldClip = new_child.GetValue(Control.ClipProperty);
                     } else {
                         // If we dont set it to null we could leak a Geometry object
-                        oldClip = null;
+                        _oldClip = null;
                     }
 
-                    base.Child = value;
+                    base.Content = value;
                 }
             }
         }
+
+        //[Content]
+        //public new Control? Child {
+        //    get {
+        //        return base.Child;
+        //    }
+        //    set {
+        //        if (this.Child != value) {
+        //            if (this.Child != null) {
+        //                // Restore original clipping of the old child
+        //                this.Child.SetValue(Control.ClipProperty, _oldClip);
+        //            }
+
+        //            if (value != null) {
+        //                // Store the current clipping of the new child
+        //                _oldClip = value.GetValue(Control.ClipProperty);
+        //            } else {
+        //                // If we dont set it to null we could leak a Geometry object
+        //                _oldClip = null;
+        //            }
+
+        //            base.Child = value;
+        //        }
+        //    }
+        //}
         protected override Size ArrangeOverride(Size finalSize) {
             return base.ArrangeOverride(finalSize);
         }
 
         protected virtual void OnApplyChildClip() {
-            Control? child = this.Child;
-            if (child != null) {
+            if (this.Content is Control Child) {
                 // Get the geometry of a rounded rectangle border based on the BorderThickness and CornerRadius
-                clipGeometry = GeometryHelper.GetRoundRectangle(
+                _clipGeometry = GeometryHelper.GetRoundRectangle(
                     new Rect(Child.Bounds.Size), this.BorderThickness, this.CornerRadius);
 
                 //clipGeometry.Freeze();
                 //child.Clip = clipGeometry;
 
-                Dispatcher.UIThread.Post(() => { child.Clip = clipGeometry; });
+                Dispatcher.UIThread.Post(() => { Child.Clip = _clipGeometry; });
             }
         }
     }

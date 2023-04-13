@@ -435,10 +435,10 @@
     <Compile Remove="AttachedProperties\MpAvTextSelectionExtension.cs" />
     <Compile Remove="Behaviors\MpAvMoveBehavior.cs" />
     <Compile Remove="Controls\Content\CefNetWebView\Cef\WebView\MpAvCefNetWebView.cs" />
-    <Compile Remove="Controls\MpAvClipBorder.cs" />
     <Compile Remove="Program.cs" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\MpAvWin32ProcessWatcher2.cs" />
     <Compile Remove="Utils\Input\Mouse\MpAvMouseHook_Win32.cs" />
+    <Compile Remove="Utils\Input\MpAvKeyGestureHelper_old.cs" />
     <Compile Remove="Utils\WindowManager\Helpers\MpAvTopmostSelector.cs" />
     <Compile Remove="ViewModels\MainWindow\Actions\Action\Triggers\MpAvTimerTriggerViewModel.cs" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\MpAvClipTrayCollectionViewModel.cs" />

@@ -499,7 +499,6 @@ namespace MonkeyPaste.Avalonia {
                     if (ntf is MpQuillAnnotationSelectedMessage annSelectedMsg) {
                         BindingContext
                             .TransactionCollectionViewModel
-                            .SelectedTransaction
                             .SelectChildCommand.Execute(annSelectedMsg.annotationGuid);
                     }
                     break;
@@ -713,8 +712,7 @@ namespace MonkeyPaste.Avalonia {
                             });
                         }
                         string uri_str = HttpUtility.HtmlDecode(navUriReq.uri);
-                        var uri = new Uri(uri_str, UriKind.Absolute);
-                        MpAvUriNavigator.NavigateToUri(uri);
+                        MpAvUriNavigator.Instance.NavigateToUriCommand.Execute(uri_str);
                     }
                     break;
                 case MpAvEditorBindingFunctionType.notifyInternalContextMenuIsVisibleChanged:

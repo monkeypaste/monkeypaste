@@ -467,6 +467,11 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(FocusAction):
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
                     OnPropertyChanged(nameof(SelectedTriggerIdx));
+                    if (FocusAction != null) {
+                        // ntf popout window bindings of changes
+                        FocusAction.OnPropertyChanged(nameof(FocusAction.ActionBackgroundHexColor));
+                        FocusAction.OnPropertyChanged(nameof(FocusAction.Label));
+                    }
                     break;
                 case nameof(SelectedTrigger):
                     FocusAction = SelectedTrigger;

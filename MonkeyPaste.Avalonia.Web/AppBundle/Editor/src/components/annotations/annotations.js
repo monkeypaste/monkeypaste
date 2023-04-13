@@ -11,23 +11,38 @@ var HoverAnnotationGuid = null;
 function initAnnotations() {
 
 }
-function loadAnnotations(annotationsObjOrJsonStr, fromHost = false) {
-	resetAnnotations();
-
+function loadAnnotations(annotationsObjOrJsonStr) {
 	if (isNullOrEmpty(annotationsObjOrJsonStr)) {
 		return;
 	}
-	let root_annotations = toJsonObjFromBase64Str(annotationsObjOrJsonStr);
-	if (!root_annotations) {
+	let root_annotations_to_load = toJsonObjFromBase64Str(annotationsObjOrJsonStr);
+	if (!root_annotations_to_load) {
 		return;
 	}
-	if (!Array.isArray(root_annotations)) {
-		root_annotations = [root_annotations];
+	if (!Array.isArray(root_annotations_to_load)) {
+		root_annotations_to_load = [root_annotations_to_load];
 	}
 
-	for (var i = 0; i < root_annotations.length; i++) {
-		let annotation_obj = root_annotations[i];
-		RootAnnotations.push(annotation_obj);
+	for (var i = 0; i < root_annotations_to_load.length; i++) {
+		let annotation_obj = root_annotations_to_load[i];
+		if (!annotation_obj) {
+			continue;
+		}
+		let cur_root_ann = findAnnotationByGuid(annotation_obj.guid);
+		if (cur_root_ann) {
+			log('warning! loading existing ann ' + annotation_obj.guid + ' orig will be replaced.');
+			// annotation already exists, replate item
+			let cur_root_ann_idx = RootAnnotations.indexOf(cur_root_ann);
+			if (cur_root_ann_idx < 0 || cur_root_ann_idx >= RootAnnotations.length) {
+				//prob w/ index of...
+				debugger;
+				continue;
+			}
+			RootAnnotations[cur_root_ann_idx] = annotation_obj;
+		} else {
+			RootAnnotations.push(annotation_obj);
+		}
+		
 	}
 
 	showAnnotations();

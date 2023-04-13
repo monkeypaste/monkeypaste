@@ -688,17 +688,17 @@ namespace MonkeyPaste.Avalonia {
             _cmInstance.PlacementTarget = control;
             _cmInstance.Placement = placement;
             _cmInstance.PlacementAnchor = anchor;
-            if (_cmInstance.PlacementAnchor == PopupAnchor.None) {
-                switch (MpAvMainWindowViewModel.Instance.MainWindowOrientationType) {
-                    case MpMainWindowOrientationType.Bottom:
-                        _cmInstance.PlacementAnchor = PopupAnchor.BottomLeft;
-                        break;
-                    default:
-                        _cmInstance.PlacementAnchor = PopupAnchor.TopLeft;
-                        break;
+            //if (_cmInstance.PlacementAnchor == PopupAnchor.None) {
+            //    switch (MpAvMainWindowViewModel.Instance.MainWindowOrientationType) {
+            //        case MpMainWindowOrientationType.Bottom:
+            //            _cmInstance.PlacementAnchor = PopupAnchor.BottomLeft;
+            //            break;
+            //        default:
+            //            _cmInstance.PlacementAnchor = PopupAnchor.TopLeft;
+            //            break;
 
-                }
-            }
+            //    }
+            //}
             _cmInstance.HorizontalOffset = 0;
             _cmInstance.VerticalOffset = 0;
             if (_cmInstance.Placement == PlacementMode.Pointer) {

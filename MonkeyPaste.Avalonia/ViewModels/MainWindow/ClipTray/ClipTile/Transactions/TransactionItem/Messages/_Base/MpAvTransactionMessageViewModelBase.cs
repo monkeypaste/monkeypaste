@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,7 +25,26 @@ namespace MonkeyPaste.Avalonia {
 
         public virtual string Body => Json;
         public bool IsExpanded { get; set; }
-        public MpITreeItemViewModel ParentTreeItem { get; protected set; }
+
+        private MpITreeItemViewModel _parentTreeItem;
+        public MpITreeItemViewModel ParentTreeItem {
+            get {
+                if (_parentTreeItem == this) {
+                    Debugger.Break();
+                }
+                return _parentTreeItem ?? Parent;
+            }
+            protected set {
+                if (ParentTreeItem != value) {
+                    if (value == this) {
+                        Debugger.Break();
+                    }
+                    _parentTreeItem = value;
+                    OnPropertyChanged(nameof(ParentTreeItem));
+                }
+            }
+        }
+
         public virtual IEnumerable<MpITreeItemViewModel> Children => Sources;
         public abstract string LabelText { get; }
         public object ComparableSortValue => ParentTreeItem == null ? 0 : ParentTreeItem.Children.IndexOf(this);

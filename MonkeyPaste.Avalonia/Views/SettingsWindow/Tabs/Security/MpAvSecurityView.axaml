@@ -90,7 +90,8 @@
                                             <local:MpAvMarqueeTextBox EditOnFocus="False"
                                                                       DropShadowBrush="Transparent"
                                                                       ReadOnlyForeground="Black"
-                                                                      NavigateUri="{Binding AppPath, Converter={x:Static local:MpAvFileToFolderPathConverter.Instance}}"
+                                                                      NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
+                                                                      NavigateUriCommandParameter="{Binding AppPath, Converter={x:Static local:MpAvFileToFolderPathConverter.Instance}}"
                                                                       Text="{Binding AppPath}" />
                                         </Grid>
                                     </DataTemplate>
@@ -165,8 +166,8 @@
                                         <local:MpAvMarqueeTextBox EditOnFocus="False"
                                                                   DropShadowBrush="Transparent"
                                                                   ReadOnlyForeground="Black"
-                                                                  NavigateUri="{Binding UrlPath}"
-                                                                  Text="{Binding UrlPath}" />
+                                                                  NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
+                                                                  NavigateUriCommandParameter="{Binding UrlPath}" />
                                     </Grid>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>

@@ -631,50 +631,6 @@ namespace MonkeyPaste.Common {
 
         #region Object
 
-        public static int ParseOrConvertToInt(this object obj, object fallback = null) {
-            if (obj == null) {
-                if (obj == fallback) {
-                    return 0;
-                }
-                return fallback.ParseOrConvertToInt(fallback);
-            }
-            if (obj == fallback) {
-                if (fallback == null) {
-                    return 0;
-                }
-            }
-            if (obj is int intObj) {
-                return intObj;
-            }
-            if (obj is double dblObj) {
-                return (int)dblObj;
-            }
-            if (obj is float fltObj) {
-                return (int)fltObj;
-            }
-            if (obj is byte byteObj) {
-                return (int)byteObj;
-            }
-            if (obj is bool boolObj) {
-                return boolObj ? 1 : 0;
-            }
-            if (obj is string strObj) {
-                try {
-                    return (int)double.Parse(strObj);
-                }
-                catch (Exception ex) {
-                    MpConsole.WriteTraceLine($"Error parsing int from '{strObj}'", ex);
-                    if (obj == fallback) {
-                        return 0;
-                    }
-                    return fallback.ParseOrConvertToInt(fallback);
-                }
-            }
-
-            MpDebug.Break($"Unknown obj type '{obj.GetType()}', cannot convert int. Returning 0");
-            return 0;
-        }
-
         public static double ParseOrConvertToDouble(this object obj, object fallback = null) {
             if (obj == null) {
                 if (obj == fallback) {
@@ -705,6 +661,12 @@ namespace MonkeyPaste.Common {
                 return boolObj ? 1 : 0;
             }
             if (obj is string strObj) {
+                if (string.IsNullOrEmpty(strObj)) {
+                    if (obj == fallback) {
+                        return 0;
+                    }
+                    return fallback.ParseOrConvertToDouble(fallback);
+                }
                 try {
                     return double.Parse(strObj);
                 }
@@ -720,6 +682,41 @@ namespace MonkeyPaste.Common {
             MpDebug.Break($"Unknown obj type '{obj.GetType()}', cannot convert double. Returning 0");
             return 0;
         }
+        public static int ParseOrConvertToInt(this object obj, object fallback = null) {
+            if (obj == null) {
+                if (obj == fallback) {
+                    return 0;
+                }
+                return fallback.ParseOrConvertToInt(fallback);
+            }
+            if (obj == fallback) {
+                if (fallback == null) {
+                    return 0;
+                }
+            }
+            if (obj is int intObj) {
+                return intObj;
+            }
+            if (obj is double dblObj) {
+                return (int)dblObj;
+            }
+            if (obj is float fltObj) {
+                return (int)fltObj;
+            }
+            if (obj is byte byteObj) {
+                return (int)byteObj;
+            }
+            if (obj is bool boolObj) {
+                return boolObj ? 1 : 0;
+            }
+            if (obj is string strObj) {
+                return (int)obj.ParseOrConvertToDouble(fallback);
+            }
+
+            MpDebug.Break($"Unknown obj type '{obj.GetType()}', cannot convert int. Returning 0");
+            return 0;
+        }
+
 
         public static bool ParseOrConvertToBool(this object obj, object fallback = null) {
             if (obj == null) {
@@ -737,8 +734,17 @@ namespace MonkeyPaste.Common {
                 return boolObj;
             }
             if (obj is string strObj) {
-                if (strObj == "0" || strObj == "1") {
-                    return obj.ParseOrConvertToInt(fallback) == 1;
+                if (string.IsNullOrEmpty(strObj)) {
+                    if (obj == fallback) {
+                        return false;
+                    }
+                    return fallback.ParseOrConvertToBool(fallback);
+                }
+                if (strObj == "0") {
+                    return false;
+                }
+                if (strObj == "1") {
+                    return true;
                 }
                 try {
                     return bool.Parse(strObj);

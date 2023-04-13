@@ -2,6 +2,8 @@
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Styling;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
 
@@ -181,6 +183,17 @@ namespace MonkeyPaste.Avalonia {
                 brush: Brushes.Transparent,
                 pen: new Pen(PercentBrush, arc_width),
                 pg);
+
+            string percent_label = ((int)Math.Clamp(Percent * 100, 0, 100)).ToString();
+            double fs = Math.Max(7, d / (double)percent_label.Length);
+            var ft = percent_label.ToFormattedText(
+                    fontSize: fs,
+                    foreground: Brushes.Black,
+                    textAlignment: TextAlignment.Center);
+            var tl = c.ToPortablePoint() - (new MpPoint(ft.Width, ft.Height) * 0.5);
+            context.DrawText(
+                ft,
+                tl.ToAvPoint());
         }
 
     }

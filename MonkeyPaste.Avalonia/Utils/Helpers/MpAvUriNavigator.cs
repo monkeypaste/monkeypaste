@@ -1,10 +1,45 @@
 ﻿using MonkeyPaste.Common;
 using System;
 using System.Diagnostics;
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public static class MpAvUriNavigator {
-        public static void NavigateToUri(Uri uri) {
+    public class MpAvUriNavigator : MpViewModelBase {
+        #region Private Variables
+        #endregion
+
+        #region Constants
+        #endregion
+
+        #region Statics
+        private static MpAvUriNavigator _instance;
+        public static MpAvUriNavigator Instance => _instance ?? (_instance = new MpAvUriNavigator());
+        #endregion
+
+        #region Interfaces
+        #endregion
+
+        #region Properties
+        #endregion
+
+        #region Constructors
+        public MpAvUriNavigator() : base(null) { }
+        #endregion
+
+        #region Public Methods
+
+
+        #endregion
+
+        #region Protected Methods
+        #endregion
+
+        #region Private Methods
+
+        private void NavigateToUri(Uri uri) {
+            if (uri == null) {
+                return;
+            }
             if (uri.Scheme == Uri.UriSchemeFile) {
                 NavigateToPath(uri.LocalPath);
                 return;
@@ -22,7 +57,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public static void NavigateToPath(string path, bool useFileBrowser = true) {
+        private void NavigateToPath(string path, bool useFileBrowser = true) {
             if (path.IsFile() && useFileBrowser) {
                 path = path.FindParentDirectory();
             }
@@ -49,5 +84,27 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
+        #endregion
+
+        #region Commands
+
+        public ICommand NavigateToUriCommand => new MpCommand<object>(
+            (args) => {
+                Uri uri = null;
+                if (args is Uri) {
+                    uri = args as Uri;
+                } else if (args is string argStr) {
+                    if (!Uri.IsWellFormedUriString(argStr, UriKind.Absolute) &&
+                        argStr.IsFileOrDirectory()) {
+                        argStr = argStr.ToFileSystemUriFromPath();
+                    }
+                    if (Uri.IsWellFormedUriString(argStr, UriKind.Absolute)) {
+                        uri = new Uri(argStr, UriKind.Absolute);
+                    }
+                }
+                NavigateToUri(uri);
+            });
+        #endregion
+
     }
 }

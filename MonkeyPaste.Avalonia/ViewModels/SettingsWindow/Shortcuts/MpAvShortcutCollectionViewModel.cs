@@ -250,8 +250,16 @@ namespace MonkeyPaste.Avalonia {
                 title,
                 keys,
                 scvm == null ? 0 : scvm.ShortcutId,
-                shortcutType.IsGlobal() ? MpShortcutAssignmentType.GlobalCommand : MpShortcutAssignmentType.InternalCommand,
+                shortcutType == MpShortcutType.None ?
+                    MpShortcutAssignmentType.None :
+                    shortcutType.IsGlobal() ?
+                        MpShortcutAssignmentType.GlobalCommand :
+                        MpShortcutAssignmentType.InternalCommand,
                 iconResourceObj);
+            if (shortcutType == MpShortcutType.None) {
+                // presume this is just a key recorer request
+                return shortcutKeyString;
+            }
 
             if (shortcutKeyString == null) {
                 //if assignment was canceled ignore but reset skl
@@ -481,7 +489,7 @@ namespace MonkeyPaste.Avalonia {
                                 shortcutCommand = MpAvTagTrayViewModel.Instance.SelectTagCommand;
                             } else if (sc.ShortcutType == MpShortcutType.AnalyzeCopyItemWithPreset) {
                                 shortcutCommand = MpAvClipTrayViewModel.Instance.AnalyzeSelectedItemCommand;
-                            } else if (sc.ShortcutType == MpShortcutType.InvokeAction) {
+                            } else if (sc.ShortcutType == MpShortcutType.InvokeTrigger) {
                                 shortcutCommand = MpAvTriggerCollectionViewModel.Instance.InvokeActionCommand;
                             }
                             break;
@@ -1038,7 +1046,13 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ShowAssignShortcutDialogCommand => new MpAsyncCommand<object>(
             async (args) => {
                 if (args is MpAvIShortcutCommandViewModel scvm) {
-                    await CreateOrUpdateViewModelShortcutAsync(scvm);
+                    string result = await CreateOrUpdateViewModelShortcutAsync(scvm);
+                    if (args is MpAvShortcutRecorderParameterViewModel scpvm &&
+                        scpvm.Parent is MpAvKeySimulatorActionViewModel ksavm) {
+                        // handle special case for input and hard-assign
+                        // param's keystring once sure parent is key simulator
+                        scpvm.KeyString = result;
+                    }
                 }
             });
 

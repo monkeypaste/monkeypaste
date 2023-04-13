@@ -99,7 +99,8 @@
           local:MpAvIsHoveringExtension.HoverCursor="Hand"
           local:MpAvPointerCommandExtension.IsEnabled="True"
           local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
-          local:MpAvPointerCommandExtension.LeftPressCommand="{Binding SelectTagCommand}"
+          local:MpAvPointerCommandExtension.LeftPressCommand="{Binding SelectThisTagCommand}"
+          local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding $self}"
           local:MpAvPointerCommandExtension.RightPressCommand="{Binding ShowContextMenuCommand}"
           local:MpAvPointerCommandExtension.RightPressCommandParameter="{Binding $self}"
           local:MpAvPointerCommandExtension.DoubleLeftPressCommand="{Binding RenameTagCommand}"
@@ -165,6 +166,7 @@
                                 </TextBlock.IsVisible>
                             </TextBlock>
                             <Image x:Name="PseudoTagPlaceholderImage"
+                                   Classes="square"
                                    Classes.isgroup="{Binding IsGroupTag}"
                                    Classes.isquery="{Binding IsQueryTag}"
                                    HorizontalAlignment="Stretch"

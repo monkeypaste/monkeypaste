@@ -14,12 +14,14 @@ using Key = Avalonia.Input.Key;
 namespace MonkeyPaste.Avalonia {
 
     public class MpAvShortcutViewModel : MpViewModelBase<MpAvShortcutCollectionViewModel>,
-        MpIActionComponent,
+        //MpIActionComponent,
         MpIFilterMatch,
         MpAvIShortcutCommandViewModel,
         MpAvIKeyGestureViewModel,
         MpISelectableViewModel {
+
         #region Interfaces
+
         #region MpIFilterMatch Implementation
         bool MpIFilterMatch.IsMatch(string filter) {
             if (string.IsNullOrEmpty(filter)) {
@@ -351,17 +353,17 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(IsEmpty));
         }
 
-        public void RegisterActionComponent(MpIInvokableAction mvm) {
-            //by design this only can occur for shortcuts with a selected item as its context
+        //public void RegisterActionComponent(MpIInvokableAction mvm) {
+        //    //by design this only can occur for shortcuts with a selected item as its context
 
-            OnShortcutExecuted += mvm.OnActionInvoked;
-            MpConsole.WriteLine($"ClipTray Registered {mvm.Label} matcher");
-        }
+        //    OnShortcutExecuted += mvm.OnActionInvoked;
+        //    MpConsole.WriteLine($"ClipTray Registered {mvm.Label} matcher");
+        //}
 
-        public void UnregisterActionComponent(MpIInvokableAction mvm) {
-            OnShortcutExecuted -= mvm.OnActionInvoked;
-            MpConsole.WriteLine($"Matcher {mvm.Label} Unregistered from OnShortcutExecuted");
-        }
+        //public void UnregisterActionComponent(MpIInvokableAction mvm) {
+        //    OnShortcutExecuted -= mvm.OnActionInvoked;
+        //    MpConsole.WriteLine($"Matcher {mvm.Label} Unregistered from OnShortcutExecuted");
+        //}
 
         public void Unregister() {
             if (KeysObservable != null) {
@@ -510,7 +512,7 @@ namespace MonkeyPaste.Avalonia {
                     return typeof(MpTag);
                 case MpShortcutType.AnalyzeCopyItemWithPreset:
                     return typeof(MpPluginPreset);
-                case MpShortcutType.InvokeAction:
+                case MpShortcutType.InvokeTrigger:
                     return typeof(MpAction);
             }
             return typeof(MpShortcut);

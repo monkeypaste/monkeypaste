@@ -14,6 +14,7 @@ using System.Runtime.Versioning;
 
 internal partial class Program {
     private static void Main(string[] args) {
+#if BROWSER
         new MpAvBrWrapper().CreateDeviceInstance(null);
 
         BuildAvaloniaApp()
@@ -23,6 +24,7 @@ internal partial class Program {
                 //dw.CreateDeviceInstance(null);
                 //await dw.JsImporter.ImportAllAsync();
             }).SetupBrowserApp("out");
+#endif
     }
     public static AppBuilder BuildAvaloniaApp()
         => AppBuilder.Configure<App>();

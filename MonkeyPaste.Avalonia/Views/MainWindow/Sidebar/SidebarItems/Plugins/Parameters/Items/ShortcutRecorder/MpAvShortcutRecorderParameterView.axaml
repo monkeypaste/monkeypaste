@@ -11,6 +11,9 @@
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800">
-    <!--<local:MpAvAssignableShortcutView />-->
-    <local:MpAvShortcutView />
+    <Border Classes="paramBorder">
+        <local:MpAvShortcutView EmptyText="None Set"
+                                RecordCommand="{Binding ShowAssignShortcutDialogCommand, Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}"
+                                RecordCommandParameter="{Binding}" />
+    </Border>
 </local:MpAvUserControl>

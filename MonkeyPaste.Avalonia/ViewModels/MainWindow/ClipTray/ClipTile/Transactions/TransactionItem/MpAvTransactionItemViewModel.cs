@@ -1,5 +1,7 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Controls;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
@@ -18,6 +20,9 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvTransactionItemViewModel :
         MpViewModelBase<MpAvClipTileTransactionCollectionViewModel>,
         MpAvITransactionNodeViewModel {
+        #region Private Variables
+        private bool _isBringingIntoView = false;
+        #endregion
 
         #region Interfaces
 
@@ -92,29 +97,17 @@ namespace MonkeyPaste.Avalonia {
         public ObservableCollection<MpAvITransactionNodeViewModel> Items { get; private set; } = new ObservableCollection<MpAvITransactionNodeViewModel>();
 
         public IEnumerable<MpAvTransactionSourceViewModelBase> Sources =>
-            Items.Where(x => x is MpAvTransactionSourceViewModelBase).Cast<MpAvTransactionSourceViewModelBase>();
+            Items.OfType<MpAvTransactionSourceViewModelBase>().ToList();
         public IEnumerable<MpAvTransactionMessageViewModelBase> Messages =>
 
-            Items.Where(x => x is MpAvTransactionMessageViewModelBase).Cast<MpAvTransactionMessageViewModelBase>();
+            Items.OfType<MpAvTransactionMessageViewModelBase>();
 
-        public MpAvTransactionMessageViewModelBase Request {
-            get {
-                if (Items.FirstOrDefault(x => x is MpAvTransactionMessageViewModelBase) is MpAvTransactionMessageViewModelBase tmvm &&
-                    tmvm.TransactionMessageType == MpTransactionMessageType.Request) {
-                    return tmvm;
-                }
-                return null;
-            }
-        }
-        public MpAvTransactionMessageViewModelBase Response {
-            get {
-                if (Items.FirstOrDefault(x => x is MpAvTransactionMessageViewModelBase) is MpAvTransactionMessageViewModelBase tmvm &&
-                    tmvm.TransactionMessageType == MpTransactionMessageType.Response) {
-                    return tmvm;
-                }
-                return null;
-            }
-        }
+        public MpAvTransactionMessageViewModelBase Request =>
+            Messages
+                .FirstOrDefault(x => x.TransactionMessageType == MpTransactionMessageType.Request);
+        public MpAvTransactionMessageViewModelBase Response =>
+            Messages
+                .FirstOrDefault(x => x.TransactionMessageType == MpTransactionMessageType.Response);
 
         public MpAvDataObjectViewModel DataObjectViewModel { get; private set; }
 
@@ -133,6 +126,9 @@ namespace MonkeyPaste.Avalonia {
                 return this;
             }
         }
+
+
+        public MpAvTransactionSourceViewModelBase SelectedSource { get; set; }
         #endregion
 
         #region Appearance
@@ -141,6 +137,28 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public int FocusNodeTabIdx {
+            get {
+                IEnumerable<MpITreeItemViewModel> test = null;
+                if (FocusNode != null) {
+                    test = FocusNode.SelfAndAllAncestors();
+                }
+                if (FocusNode.SelfAndAllAncestors().OfType<MpAvTransactionSourceViewModelBase>().Any()) {
+                    return 0;
+                }
+                if (FocusNode.SelfAndAllAncestors().OfType<MpAvTransactionMessageViewModelBase>().FirstOrDefault() is MpAvTransactionMessageViewModelBase tmvm) {
+                    if (tmvm.TransactionMessageType == MpTransactionMessageType.Request) {
+                        return 1;
+                    } else {
+                        return 2;
+                    }
+                }
+                if (FocusNode != this) {
+
+                }
+                return 0;
+            }
+        }
         public int TransactionIdx {
             get {
                 if (Parent == null) {
@@ -317,14 +335,14 @@ namespace MonkeyPaste.Avalonia {
             Items.CollectionChanged += Items_CollectionChanged;
         }
 
-
-
         #endregion
 
         #region Public Methods
         public async Task InitializeAsync(MpCopyItemTransaction cit) {
             IsBusy = true;
+            if (HostClipTileViewModel.CopyItemId == 4) {
 
+            }
             Transaction = cit;
 
             var req = await CreateMessageViewModelAsync(RequestMessageType, RequestJson, this, MpTransactionMessageType.Request);
@@ -394,10 +412,9 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
                 case nameof(FocusNode):
-                    if (FocusNode is MpITreeItemViewModel tivm) {
-                        tivm.AllAncestors()
-                            .ForEach(x => x.IsExpanded = true);
-                    }
+
+                    BringNodeIntoViewAsync(FocusNode).FireAndForgetSafeAsync(this);
+
                     break;
                 case nameof(HasModelChanged):
                     if (!HasModelChanged) {
@@ -409,6 +426,10 @@ namespace MonkeyPaste.Avalonia {
                         IsBusy = false;
                         HasModelChanged = false;
                     });
+                    break;
+                case nameof(SelectedSource):
+                    Sources.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
+                    OnPropertyChanged(nameof(FocusNode));
                     break;
             }
         }
@@ -484,30 +505,57 @@ namespace MonkeyPaste.Avalonia {
             await tsvm.InitializeAsync(ts);
             return tsvm;
         }
+
+        private async Task BringNodeIntoViewAsync(MpAvITransactionNodeViewModel tnvm) {
+            if (_isBringingIntoView ||
+                !Parent.IsTransactionPaneOpen ||
+                tnvm == this ||
+                tnvm == null ||
+                !IsSelected) {
+                return;
+            }
+            _isBringingIntoView = true;
+            Control node_control = null;
+            if (HostClipTileViewModel.GetContentView() is Control c &&
+                c.GetVisualAncestor<MpAvClipTileView>() is MpAvClipTileView ctv &&
+                ctv.GetVisualDescendant<MpAvClipTileTransactionPaneView>() is MpAvClipTileTransactionPaneView cttpv) {
+
+
+                if (FocusNode is MpITreeItemViewModel tivm) {
+                    if (IsSelected && FocusNodeTabIdx != SelectedTabIndex) {
+                        SelectedTabIndex = FocusNodeTabIdx;
+                    }
+                }
+                if (tnvm is MpAvAnnotationItemViewModel anvm) {
+                    TreeViewItem ann_tvi =
+                        cttpv.GetVisualDescendants<TreeViewItem>()
+                        .FirstOrDefault(x => x.DataContext == tnvm);
+                    while (ann_tvi == null) {
+                        ann_tvi =
+                            cttpv.GetVisualDescendants<TreeViewItem>()
+                            .FirstOrDefault(x => x.DataContext == tnvm);
+                        await Task.Delay(100);
+                    }
+                    tnvm.AllAncestors()
+                        .ForEach(x => x.IsExpanded = true);
+                    node_control = ann_tvi;
+                    if (anvm.Parent is MpAvAnnotationMessageViewModel amvm) {
+                        amvm.OnPropertyChanged(nameof(amvm.SelectedItem));
+                    }
+                    anvm.OnPropertyChanged(nameof(IsSelected));
+                }
+            }
+            _isBringingIntoView = false;
+            if (node_control == null) {
+                return;
+            }
+            node_control.BringIntoView();
+        }
         #endregion
 
         #region Commands
 
 
-        public ICommand SelectChildCommand => new MpCommand<object>(
-            (args) => {
-                if (args is string argStr) {
-                    if (argStr.IsStringGuid()) {
-                        if (Response is MpAvAnnotationMessageViewModel iamvm) {
-                            // this only comes from editor
-                            var to_select =
-                                iamvm.RootAnnotationViewModel.SelfAndAllDescendants()
-                                .Cast<MpAvAnnotationItemViewModel>().FirstOrDefault(x => x.AnnotationGuid == argStr);
-
-                            iamvm.SelectedItem = to_select;
-                            if (!IsSelected) {
-                                IsSelected = true;
-                            }
-
-                        }
-                    }
-                }
-            });
 
         #endregion
     }

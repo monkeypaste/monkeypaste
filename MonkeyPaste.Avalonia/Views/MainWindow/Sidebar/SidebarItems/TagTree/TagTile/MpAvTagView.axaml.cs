@@ -21,12 +21,25 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
         #endregion
 
+        #region Constructors
         public MpAvTagView() {
             AvaloniaXamlLoader.Load(this);
             this.AttachedToVisualTree += MpAvTagView_AttachedToVisualTree;
             this.AddHandler(PointerPressedEvent, MpAvTagView_PointerPressed, RoutingStrategies.Tunnel);
 
         }
+        #endregion
+        #region Public Methods
+
+        public bool IsPinTrayTagView() {
+            if (_isPinView == null) {
+                _isPinView = this.GetVisualAncestor<MpAvTagTrayView>() != null;
+            }
+            return _isPinView.IsTrue();
+        }
+        #endregion
+
+        #region Private Methods
 
         private void MpAvTagView_PointerPressed(object sender, PointerPressedEventArgs e) {
             if (!e.IsLeftPress(sender as Visual) ||
@@ -344,19 +357,8 @@ namespace MonkeyPaste.Avalonia {
 
             MpAvClipTrayViewModel.Instance.AddNewItemsCommand.Execute(drop_ci);
         }
-
-        #endregion
-
-        #endregion
-
         private ItemsControl _itemsControl;
         private bool? _isPinView;
-        private bool IsPinTrayTagView() {
-            if (_isPinView == null) {
-                _isPinView = this.GetVisualAncestor<MpAvTagTrayView>() != null;
-            }
-            return _isPinView.IsTrue();
-        }
 
         private ItemsControl GetItemsControl() {
             if (_itemsControl == null) {
@@ -368,5 +370,10 @@ namespace MonkeyPaste.Avalonia {
             }
             return _itemsControl;
         }
+        #endregion
+
+        #endregion
+
+        #endregion
     }
 }
