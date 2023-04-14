@@ -599,12 +599,13 @@ namespace MonkeyPaste.Avalonia {
                 MpCopyItem sourceCopyItem = null;
                 MpAvAnalyticItemPresetViewModel targetAnalyzer = null;
                 bool isUserExecutedAnalysis = true;
+                Func<string> lastOutputCallback = null;
 
                 if (args is object[] argParts) {
                     isUserExecutedAnalysis = false;
                     targetAnalyzer = argParts[0] as MpAvAnalyticItemPresetViewModel;
+                    // when analyzer is triggered from action not user selection 
                     if (argParts[1] is string) {
-                        // when analyzer is triggered from action not user selection 
                         suppressWrite = true;
                         sourceCopyItem = await MpCopyItem.CreateAsync(
                                                             data: argParts[1] as string,
@@ -613,6 +614,10 @@ namespace MonkeyPaste.Avalonia {
                         sourceCopyItem = argParts[1] as MpCopyItem;
                     }
 
+                    if (argParts.Length == 3 &&
+                        argParts[2] != null) {
+                        lastOutputCallback = argParts[2] as Func<string>;
+                    }
                 } else {
                     if (args is MpAvAnalyticItemPresetViewModel aipvm) {
                         targetAnalyzer = aipvm;
@@ -631,6 +636,7 @@ namespace MonkeyPaste.Avalonia {
                                                .ToDictionary(k => k.Key, v => v.Value.CurrentValue),
                                            sourceCopyItem,
                                            SelectedItem.Preset,
+                                           lastOutputCallback,
                                            suppressWrite);
                 if (result == null) {
                     IsBusy = false;

@@ -47,7 +47,7 @@
     <Border Classes="filterDataGridContainer">
         <Grid>
             <DataGrid x:Name="ShortcutDatagrid"
-                      IsVisible="{Binding ., Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                      IsVisible="{Binding ., Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                       CanUserSortColumns="True"
                       Items="{Binding}"
                       IsReadOnly="False"

@@ -1,8 +1,10 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Threading;
 using MonkeyPaste.Common.Avalonia;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,6 +23,15 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Resources
 
+        public static string ToPathFromAvResourceString(this string res_str) {
+            // NOTE resource must be in same module (i think)
+            List<string> path_parts = new List<string>() { AppDomain.CurrentDomain.BaseDirectory };
+            path_parts.AddRange(new Uri(res_str).LocalPath.Split(@"/"));
+            return Path.Combine(path_parts.ToArray());
+        }
+
+        #endregion
     }
 }

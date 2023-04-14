@@ -21,6 +21,7 @@ namespace MonkeyPaste {
             Dictionary<object, string> paramValues,
             MpCopyItem sourceCopyItem,
             object sourceHandler,
+            Func<string> lastOutputCallback,
             bool suppressWrite = false) {
 
             // This method:
@@ -42,7 +43,9 @@ namespace MonkeyPaste {
                     trans.Request = await MpPluginRequestBuilder.BuildRequestAsync(
                                         pluginFormat.analyzer.parameters,
                                         paramValues,
-                                        sourceCopyItem);
+                                        sourceCopyItem,
+                                        true,
+                                        lastOutputCallback);
                 }
                 catch (Exception ex) {
                     return await HandleErrorAsync(ex, pluginFormat, trans, sourceCopyItem, sourceHandler, suppressWrite);
@@ -80,7 +83,8 @@ namespace MonkeyPaste {
 
                 // PROCESS RESPONSE
                 try {
-                    trans.ResponseContent = await MpPluginResponseConverter.ConvertAsync(pluginFormat, trans, sourceCopyItem, sourceHandler, suppressWrite);
+                    trans.ResponseContent =
+                        await MpPluginResponseConverter.ConvertAsync(pluginFormat, trans, paramValues, sourceCopyItem, sourceHandler, suppressWrite);
                     return trans;
                 }
                 catch (Exception ex) {
@@ -163,7 +167,7 @@ namespace MonkeyPaste {
                         respType: MpJsonMessageFormatType.Error,
                         resp: ex.Message,
                         ref_urls: new[] {
-                            Mp.Services.SourceRefTools.ConvertToRefUrl(pp, trans.Request.SerializeJsonObjectToBase64())
+                            Mp.Services.SourceRefTools.ConvertToRefUrl(pp)//, trans.Request.SerializeJsonObjectToBase64())
                         },
                         transType: MpTransactionType.Error).FireAndForgetSafeAsync();
 

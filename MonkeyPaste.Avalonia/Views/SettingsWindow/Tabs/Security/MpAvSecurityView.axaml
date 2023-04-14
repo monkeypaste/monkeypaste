@@ -19,6 +19,7 @@
 
     <StackPanel Grid.Column="0"
                 Orientation="Vertical"
+                Spacing="10"
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
                 ScrollViewer.HorizontalScrollBarVisibility="Auto">
 

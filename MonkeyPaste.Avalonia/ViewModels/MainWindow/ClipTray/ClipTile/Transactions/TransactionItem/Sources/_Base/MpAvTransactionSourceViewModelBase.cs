@@ -8,11 +8,20 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public abstract class MpAvTransactionSourceViewModelBase :
+    public class MpAvTransactionSourceViewModel :
         MpViewModelBase<MpAvTransactionItemViewModel>,
         MpAvITransactionNodeViewModel {
 
         #region Interfaces
+
+        #region MpIPlainTextViewModel Implementation
+
+        public string PlainText {
+            get {
+                return "TEST source";
+            }
+        }
+        #endregion
 
         #region MpAvITransactionNodeViewModel Implementation
         public MpAvClipTileViewModel HostClipTileViewModel =>
@@ -95,7 +104,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string DetailUriLabel {
             get {
-                if (this is MpAvAppSourceViewModel) {
+                if (SourceRef is MpApp) {
                     return "Show Folder";
                 }
 
@@ -108,7 +117,7 @@ namespace MonkeyPaste.Avalonia {
         #region State
         public bool IsAnyBusy =>
             IsBusy ||
-            (Items != null && Items.Cast<MpAvTransactionSourceViewModelBase>().Any(x => x.IsAnyBusy));
+            (Items != null && Items.Cast<MpAvTransactionSourceViewModel>().Any(x => x.IsAnyBusy));
         public bool IsHovering { get; set; }
 
         public bool IsSelected {
@@ -188,15 +197,15 @@ namespace MonkeyPaste.Avalonia {
                 return TransactionSource.SourceObjId;
             }
         }
-        public string SourceArg {
-            get {
-                if (TransactionSource == null) {
-                    return string.Empty;
-                }
+        //public string SourceArg {
+        //    get {
+        //        if (TransactionSource == null) {
+        //            return string.Empty;
+        //        }
 
-                return TransactionSource.SourceArgs;
-            }
-        }
+        //        return TransactionSource.SourceArgs;
+        //    }
+        //}
         public int TransactionSourceId {
             get {
                 if (TransactionSource == null) {
@@ -216,7 +225,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvTransactionSourceViewModelBase(MpAvTransactionItemViewModel parent) : base(parent) {
+        public MpAvTransactionSourceViewModel(MpAvTransactionItemViewModel parent) : base(parent) {
             //PropertyChanged += MpAvTransactionSourceViewModelBase_PropertyChanged;
         }
 

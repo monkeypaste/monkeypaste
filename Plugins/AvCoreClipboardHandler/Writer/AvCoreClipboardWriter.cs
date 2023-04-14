@@ -43,7 +43,7 @@ namespace AvCoreClipboardHandler {
                 // add file as a format and flag that it needs to be created
                 // AFTER all runtime formats have been processed so best format is written
 
-                needs_pseudo_file = true;
+                //needs_pseudo_file = true;
             }
 
             foreach (var write_format in writeFormats) {
@@ -184,6 +184,7 @@ namespace AvCoreClipboardHandler {
 
         #region File Pre-Processor
         private static async Task<object> PreProcessFileFormatAsync(IDataObject ido) {
+
             string fn = null;
             if (ido.TryGetData<string>(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT, out string title)) {
                 fn = title;

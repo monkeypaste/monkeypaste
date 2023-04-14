@@ -17,103 +17,103 @@
             <Setter Property="HorizontalContentAlignment"
                     Value="Stretch" />
         </Style>
-      <!--  PROPERTY CONTROLS  -->
+        <!--  PROPERTY CONTROLS  -->
 
-      <Style Selector="ListBox.actionProperty">
-        <Setter Property="BorderThickness"
-                Value="0" />
-        <Setter Property="Background"
-                Value="Transparent" />
-        <Setter Property="HorizontalAlignment"
-                Value="Stretch" />
-        <Setter Property="VerticalAlignment"
-                Value="Stretch" />
-        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility"
-                Value="Disabled" />
-        <Setter Property="ScrollViewer.VerticalScrollBarVisibility"
-                Value="Disabled" />
-      </Style>
+        <Style Selector="ListBox.actionProperty">
+            <Setter Property="BorderThickness"
+                    Value="0" />
+            <Setter Property="Background"
+                    Value="Transparent" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Stretch" />
+            <Setter Property="VerticalAlignment"
+                    Value="Stretch" />
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility"
+                    Value="Disabled" />
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility"
+                    Value="Disabled" />
+        </Style>
 
 
-      <Style Selector="ComboBox.actionProperty">
-        <Setter Property="MinWidth"
-                Value="100" />
-        <Setter Property="MinHeight"
-                Value="20" />
-        <Setter Property="BorderThickness"
-                Value="0" />
-      </Style>
+        <Style Selector="ComboBox.actionProperty">
+            <Setter Property="MinWidth"
+                    Value="100" />
+            <Setter Property="MinHeight"
+                    Value="20" />
+            <Setter Property="BorderThickness"
+                    Value="0" />
+        </Style>
 
-      <Style Selector="ComboBox.actionProperty ComboBoxItem">
-        <Setter Property="HorizontalAlignment"
-                Value="Stretch" />
-        <Setter Property="VerticalAlignment"
-                Value="Center" />
-        <Setter Property="VerticalContentAlignment"
-                Value="Center" />
-        <Setter Property="Padding"
-                Value="3" />
-      </Style>
+        <Style Selector="ComboBox.actionProperty ComboBoxItem">
+            <Setter Property="HorizontalAlignment"
+                    Value="Stretch" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalContentAlignment"
+                    Value="Center" />
+            <Setter Property="Padding"
+                    Value="3" />
+        </Style>
 
-      <Style Selector="ComboBox.actionProperty ComboBoxItem TextBlock">
-        <Setter Property="Margin"
-                Value="5,3" />
-      </Style>
-      <Style Selector="ComboBox.actionProperty ComboBoxItem /template/ TextBlock">
-        <Setter Property="Margin"
-                Value="5,3" />
-      </Style>
+        <Style Selector="ComboBox.actionProperty ComboBoxItem TextBlock">
+            <Setter Property="Margin"
+                    Value="5,3" />
+        </Style>
+        <Style Selector="ComboBox.actionProperty ComboBoxItem /template/ TextBlock">
+            <Setter Property="Margin"
+                    Value="5,3" />
+        </Style>
 
-      <Style Selector=":is(TemplatedControl).actionProperty">
-        <Setter Property="CornerRadius"
-                Value="5" />
-        <Setter Property="Padding"
-                Value="3" />
-        <Setter Property="VerticalAlignment"
-                Value="Center" />
-        <Setter Property="MaxWidth"
-                Value="300" />
-        <Setter Property="HorizontalAlignment"
-                Value="Left" />
-        <Setter Property="Background"
-                Value="Silver" />
-        <Setter Property="BorderThickness"
-                Value="1" />
-        <Setter Property="BorderBrush"
-                Value="Transparent" />
-      </Style>
+        <Style Selector=":is(TemplatedControl).actionProperty">
+            <Setter Property="CornerRadius"
+                    Value="5" />
+            <Setter Property="Padding"
+                    Value="3" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="MaxWidth"
+                    Value="300" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Left" />
+            <Setter Property="Background"
+                    Value="Silver" />
+            <Setter Property="BorderThickness"
+                    Value="1" />
+            <Setter Property="BorderBrush"
+                    Value="Transparent" />
+        </Style>
 
-      <Style Selector=":is(TemplatedControl).actionProperty.invalid">
-        <Setter Property="BorderBrush"
-                Value="{DynamicResource DefaultInvalidBrush}" />
-      </Style>
+        <Style Selector=":is(TemplatedControl).actionProperty.invalid">
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource DefaultInvalidBrush}" />
+        </Style>
 
-      <Style Selector="TextBlock.actionProperty">
-        <Setter Property="VerticalAlignment"
-                Value="Top" />
-        <Setter Property="HorizontalAlignment"
-                Value="Right" />
-        <Setter Property="Background"
-                Value="Transparent" />
-        <Setter Property="Foreground"
-                Value="Black" />
-        <Setter Property="FontWeight"
-                Value="SemiBold" />
-        <Setter Property="Margin"
-                Value="3" />
-        <Setter Property="TextWrapping"
-                Value="WrapWithOverflow" />
-      </Style>
-      <Style Selector="Border.actionProperty local|MpAvSliderParameterView Border">
-        <Setter Property="BorderBrush"
-                Value="Black" />
-        <Setter Property="BorderThickness"
-                Value="1" />
-      </Style>
-      <Style Selector="Border.actionProperty local|MpAvSliderParameterView:pointerover">
-        <Setter Property="BorderBrush"
-                Value="{DynamicResource HoverDefaultBorderBrush}" />
-      </Style>
+        <Style Selector="TextBlock.actionProperty">
+            <Setter Property="VerticalAlignment"
+                    Value="Top" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Right" />
+            <Setter Property="Background"
+                    Value="Transparent" />
+            <Setter Property="Foreground"
+                    Value="Black" />
+            <Setter Property="FontWeight"
+                    Value="SemiBold" />
+            <Setter Property="Margin"
+                    Value="3" />
+            <Setter Property="TextWrapping"
+                    Value="WrapWithOverflow" />
+        </Style>
+        <Style Selector="Border.actionProperty local|MpAvSliderParameterView Border">
+            <Setter Property="BorderBrush"
+                    Value="Black" />
+            <Setter Property="BorderThickness"
+                    Value="1" />
+        </Style>
+        <Style Selector="Border.actionProperty local|MpAvSliderParameterView:pointerover">
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource HoverDefaultBorderBrush}" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Border VerticalAlignment="Stretch"
             HorizontalAlignment="Stretch">
@@ -122,6 +122,7 @@
                                                 BorderBrush="Khaki"
                                                 Background="{Binding ActionBackgroundHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
                                                 Padding="5,0"
+                                                Margin="0,0,0,15"
                                                 HorizontalAlignment="Stretch" />
             <local:MpAvPluginParameterListBoxView HorizontalAlignment="Stretch"
                                                   VerticalAlignment="Stretch" />

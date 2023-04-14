@@ -92,7 +92,7 @@ namespace MonkeyPaste.Common {
             return GetData(format) != null;
         }
 
-        public object GetData(string format) {
+        public virtual object GetData(string format) {
             var pdf = MpPortableDataFormats.GetDataFormat(format);
             if (pdf == null) {
                 return null;

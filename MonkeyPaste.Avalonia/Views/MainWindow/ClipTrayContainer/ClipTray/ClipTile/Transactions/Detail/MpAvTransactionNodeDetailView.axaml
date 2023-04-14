@@ -1,0 +1,72 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:DataType="local:MpAvITransactionNodeViewModel"
+                       x:TypeArguments="local:MpAvITransactionNodeViewModel"
+                       x:CompileBindings="True"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Class="MonkeyPaste.Avalonia.MpAvTransactionNodeDetailView">
+
+    <Grid>
+        <ContentControl Content="{Binding}">
+            <ContentControl.DataTemplates>
+                <local:MpAvTransactionNodeDetailTemplateSelector>
+
+                    <DataTemplate x:Key="AnnotationItemDetailTemplate"
+                                  x:DataType="local:MpAvAnnotationItemViewModel">
+                        <Grid RowDefinitions="Auto,Auto,Auto">
+                            <TextBlock Grid.Row="0"
+                                       Text="{Binding AnnotationType, StringFormat='Type: {0}'}" />
+                            <local:MpAvProgressSpinner Grid.Row="1"
+                                                       Width="30"
+                                                       Height="30"
+                                                       ArcWidth="3"
+                                                       PercentBrush="Lime"
+                                                       IsVisible="{Binding AnnotationScore, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                                       RingBrush="Red"
+                                                       HorizontalAlignment="Left"
+                                                       VerticalAlignment="Center"
+                                                       Percent="{Binding CurScorePercent}" />
+
+                            <!--<TextBlock Grid.Row="1"
+                                               Text="{Binding AnnotationScore, StringFormat='Score: {0}'}" />-->
+                            <TextBlock Grid.Row="2"
+                                       Text="{Binding Body}" />
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate x:Key="TransactionSourceDetailTemplate"
+                                  x:DataType="local:MpAvTransactionSourceViewModel">
+                        <DockPanel>
+                            <Image DockPanel.Dock="Left"
+                                   Width="10"
+                                   Height="10"
+                                   VerticalAlignment="Center"
+                                   Margin="5,0,0,0"
+                                   Source="{Binding Source={StaticResource NewWindowImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                            <local:MpAvMarqueeTextBox IsReadOnly="True"
+                                                      DropShadowBrush="Transparent"
+                                                      ReadOnlyForeground="Black"
+                                                      VerticalAlignment="Center"
+                                                      Margin="5,0"
+                                                      EditOnFocus="False"
+                                                      Text="{Binding DetailUriLabel}"
+                                                      NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
+                                                      NavigateUriCommandParameter="{Binding SourceUri}"
+                                                      NavigateUriRequiredKeyString="" />
+                        </DockPanel>
+                    </DataTemplate>
+                    <DataTemplate x:Key="EmptyDetailTemplate">
+                        <TextBlock Text="No details available" />
+                    </DataTemplate>
+                </local:MpAvTransactionNodeDetailTemplateSelector>
+            </ContentControl.DataTemplates>
+        </ContentControl>
+    </Grid>
+</local:MpAvUserControl>

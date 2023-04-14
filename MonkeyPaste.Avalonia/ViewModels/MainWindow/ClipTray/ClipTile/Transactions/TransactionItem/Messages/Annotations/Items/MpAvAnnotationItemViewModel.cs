@@ -32,6 +32,15 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region MpIPlainTextViewModel Implementation
+
+        public string PlainText {
+            get {
+                return "TEST Annotation";
+            }
+        }
+        #endregion
+
         #region MpAvITransactionNodeViewModel Implementation
         public MpAvClipTileViewModel HostClipTileViewModel =>
             Parent == null || Parent.Parent == null || Parent.Parent.Parent == null ?
@@ -223,7 +232,7 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                 case nameof(IsSelected):
                     if (IsSelected) {
-                        //IsExpanded = true;
+                        IsExpanded = true;
                         Dispatcher.UIThread.Post(async () => {
                             // animate score from last selected percent
                             CurScorePercent = _LastSelectedItem == null ? 0 : _LastSelectedItem.CurScorePercent;
@@ -235,6 +244,11 @@ namespace MonkeyPaste.Avalonia {
                             }
                             CurScorePercent = ScorePercent;
                         });
+                    }
+                    break;
+                case nameof(IsExpanded):
+                    if (IsExpanded && ParentTreeItem != null && !ParentTreeItem.IsExpanded) {
+                        ParentTreeItem.IsExpanded = true;
                     }
                     break;
             }

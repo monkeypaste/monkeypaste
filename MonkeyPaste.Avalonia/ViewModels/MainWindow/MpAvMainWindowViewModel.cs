@@ -1026,6 +1026,17 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        private void AnalyzeWindowState() {
+            // this fixes:
+            // 1. mw is locked so show/hide won't execute but is NOT visible
+            //    so only way to show is activate from task bar
+
+            if (IsMainWindowOpen && !IsMainWindowVisible) {
+                // CAse 1
+                // MpConsole.WriteLine($"Fixing mw state, reporting open but not visible. Setting to not open");
+                // IsMainWindowOpen = false;
+            }
+        }
         #endregion
 
         #region Commands        
@@ -1048,6 +1059,7 @@ namespace MonkeyPaste.Avalonia {
                  FinishMainWindowShow();
              },
             () => {
+                AnalyzeWindowState();
                 bool canShow = !IsMainWindowLoading &&
                         //!IsAnyDialogOpen &&
                         !IsMainWindowOpen &&
@@ -1099,6 +1111,7 @@ namespace MonkeyPaste.Avalonia {
                     return false;
                 }
 
+                AnalyzeWindowState();
                 bool isInputFocused =
                     FocusManager.Instance.Current != null &&
                     FocusManager.Instance.Current is Control c &&
@@ -1169,6 +1182,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ToggleShowMainWindowCommand => new MpCommand(
              () => {
 
+                 AnalyzeWindowState();
                  bool will_open = !IsMainWindowOpen;
                  if (will_open) {
                      ShowMainWindowCommand.Execute(null);

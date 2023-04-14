@@ -21,6 +21,10 @@
             <Setter Property="MaxHeight"
                     Value="{Binding Bounds.Height, ElementName=TriggerSidebarOuterContainer}" />
         </Style>
+        <Style Selector="Label.h1">
+            <Setter Property="Margin"
+                    Value="0,15,0,0" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Border x:Name="TriggerSidebarOuterContainer"
             HorizontalAlignment="Stretch"
@@ -61,6 +65,7 @@
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Top"
                                    Classes="h1"
+                                   Margin="0"
                                    Content="Triggers" />
                             <Border Grid.Row="1"
                                     Grid.Column="0"

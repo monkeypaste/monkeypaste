@@ -5,6 +5,8 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
+using Avalonia.Platform.Storage;
 
 #if WINDOWS
 using MonkeyPaste.Common.Wpf;
@@ -22,6 +24,14 @@ namespace MonkeyPaste.Common.Avalonia {
         public MpAvDataObject(string format, object data) : base(format, data) { }
         public MpAvDataObject(Dictionary<string, object> items, bool caseSensitive = false) : base(items, caseSensitive) { }
 
+        //public override object GetData(string format) {
+        //    object base_result = base.GetData(format);
+        //    if (format == MpPortableDataFormats.AvFileNames &&
+        //        base_result is IEnumerable<IStorageItem> sil) {
+        //        return sil.Select(x => x.Path);
+        //    }
+        //    return base_result;
+        //}
         public override void SetData(string format, object data) {
             // NOTE this wrapper just ensures formats are saved properly 
             // mapping is done after obj created so nothing is overwritten if it was populated
@@ -38,10 +48,11 @@ namespace MonkeyPaste.Common.Avalonia {
                 // will cause error for sometypes
                 return;
             }
-            if (format == MpPortableDataFormats.AvFileNames &&
-                data is string portablePathStr) {
-                // convert portable single line-separated string to enumerable of strings for avalonia
-                data = portablePathStr.SplitNoEmpty(Environment.NewLine);
+            if (format == MpPortableDataFormats.AvFileNames) {
+                if (data is string portablePathStr) {
+                    // convert portable single line-separated string to enumerable of strings for avalonia
+                    data = portablePathStr.SplitNoEmpty(Environment.NewLine);
+                }
             } else if ((format == MpPortableDataFormats.AvHtml_bytes || format == MpPortableDataFormats.AvRtf_bytes) && data is string portableDecodedFormattedTextStr) {
                 // avalona like rtf and html to be stored as bytes
                 data = portableDecodedFormattedTextStr.ToBytesFromString();
@@ -53,7 +64,7 @@ namespace MonkeyPaste.Common.Avalonia {
             base.SetData(format, data);
         }
 
-        public void MapAllPseudoFormats() {
+        public async Task MapAllPseudoFormatsAsync() {
             if (ContainsData(MpPortableDataFormats.AvHtml_bytes) &&
                 !ContainsData(MpPortableDataFormats.CefHtml) &&
                 GetData(MpPortableDataFormats.AvHtml_bytes) is byte[] html_bytes) {
@@ -121,7 +132,11 @@ namespace MonkeyPaste.Common.Avalonia {
                 }
             }
 
-
+            //if (TryGetData(MpPortableDataFormats.AvFileNames, out object fn_obj) &&
+            //    fn_obj is IEnumerable<string> fnl) {
+            //    var fn_sil = await Task.WhenAll(fnl.Select(x => x.ToFileOrFolderStorageItemAsync()));
+            //    SetData(MpPortableDataFormats.AvFileNames, fn_sil);
+            //}
 
             // TODO should add unicode, oem, etc. here for greater compatibility
         }

@@ -41,6 +41,11 @@
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
+    <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Transactions\TransactionItem\Sources\Analyzer\**" />
+    <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Transactions\TransactionItem\Sources\App\**" />
+    <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Transactions\TransactionItem\Sources\CopyItem\**" />
+    <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Transactions\TransactionItem\Sources\Url\**" />
+    <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Transactions\TransactionItem\Sources\UserDevice\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\Plugins\_Base\**" />
     <AvaloniaXaml Remove="ViewModels\SettingsWindow\Preferences\**" />
     <AvaloniaXaml Remove="ViewModels\SettingsWindow\Sound\Groups\**" />
@@ -67,6 +72,11 @@
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
+    <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Transactions\TransactionItem\Sources\Analyzer\**" />
+    <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Transactions\TransactionItem\Sources\App\**" />
+    <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Transactions\TransactionItem\Sources\CopyItem\**" />
+    <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Transactions\TransactionItem\Sources\Url\**" />
+    <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Transactions\TransactionItem\Sources\UserDevice\**" />
     <Compile Remove="ViewModels\MainWindow\Plugins\_Base\**" />
     <Compile Remove="ViewModels\SettingsWindow\Preferences\**" />
     <Compile Remove="ViewModels\SettingsWindow\Sound\Groups\**" />
@@ -93,6 +103,11 @@
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
+    <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Transactions\TransactionItem\Sources\Analyzer\**" />
+    <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Transactions\TransactionItem\Sources\App\**" />
+    <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Transactions\TransactionItem\Sources\CopyItem\**" />
+    <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Transactions\TransactionItem\Sources\Url\**" />
+    <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Transactions\TransactionItem\Sources\UserDevice\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\Plugins\_Base\**" />
     <EmbeddedResource Remove="ViewModels\SettingsWindow\Preferences\**" />
     <EmbeddedResource Remove="ViewModels\SettingsWindow\Sound\Groups\**" />
@@ -120,6 +135,11 @@
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
+    <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Transactions\TransactionItem\Sources\Analyzer\**" />
+    <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Transactions\TransactionItem\Sources\App\**" />
+    <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Transactions\TransactionItem\Sources\CopyItem\**" />
+    <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Transactions\TransactionItem\Sources\Url\**" />
+    <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Transactions\TransactionItem\Sources\UserDevice\**" />
     <None Remove="ViewModels\MainWindow\Plugins\_Base\**" />
     <None Remove="ViewModels\SettingsWindow\Preferences\**" />
     <None Remove="ViewModels\SettingsWindow\Sound\Groups\**" />
@@ -145,6 +165,11 @@
     <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
+    <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Transactions\TransactionItem\Sources\Analyzer\**" />
+    <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Transactions\TransactionItem\Sources\App\**" />
+    <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Transactions\TransactionItem\Sources\CopyItem\**" />
+    <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Transactions\TransactionItem\Sources\Url\**" />
+    <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Transactions\TransactionItem\Sources\UserDevice\**" />
     <Page Remove="ViewModels\MainWindow\Plugins\_Base\**" />
     <Page Remove="ViewModels\SettingsWindow\Preferences\**" />
     <Page Remove="ViewModels\SettingsWindow\Sound\Groups\**" />
@@ -1141,7 +1166,6 @@
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\Base\" />
     <Folder Include="Utils\Input\Mouse\" />
     <Folder Include="ViewModels\MainWindow\SearchBox\Filter\Items\" />
-    <Folder Include="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Transactions\Items\" />
     <Folder Include="Views\MainWindow\ClipTrayContainer\PinTray\" />
   </ItemGroup>
   
@@ -1159,8 +1183,17 @@
     <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\ContentWebViewContainer\MpAvContentWebViewContainer.axaml.cs">
       <DependentUpon>MpAvContentWebViewContainer.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Transactions\Detail\MpAvTransactionNodeDetailView.axaml.cs">
+      <DependentUpon>MpAvTransactionNodeDetailView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Transactions\Items\MpAvTransactionItemView.axaml.cs">
+      <DependentUpon>MpAvTransactionItemView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Transactions\MpAvClipTileTransactionPaneView.axaml.cs">
       <DependentUpon>MpAvClipTileTransactionPaneView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Transactions\Sources\MpAvTransactionSourcesView.axaml.cs">
+      <DependentUpon>MpAvTransactionSourcesView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\MainWindow\ClipTrayContainer\ClipTray\MpAvClipTrayContainerView.axaml.cs">
       <DependentUpon>MpAvClipTrayContainerView.axaml</DependentUpon>

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -25,6 +26,20 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+        #region MpIPlainTextViewModel Implementation
+
+        public string PlainText {
+            get {
+                var sb = new StringBuilder();
+                sb.AppendLine("TEST transaction");
+                Items.OfType<MpIPlainTextViewModel>()
+                    .ForEach(x => sb.AppendLine(x.PlainText));
+                return sb.ToString();
+            }
+        }
+
+        #endregion
 
         #region MpAvITransactionNodeViewModel Implementation
         public MpAvClipTileViewModel HostClipTileViewModel =>
@@ -96,8 +111,8 @@ namespace MonkeyPaste.Avalonia {
 
         public ObservableCollection<MpAvITransactionNodeViewModel> Items { get; private set; } = new ObservableCollection<MpAvITransactionNodeViewModel>();
 
-        public IEnumerable<MpAvTransactionSourceViewModelBase> Sources =>
-            Items.OfType<MpAvTransactionSourceViewModelBase>().ToList();
+        public IEnumerable<MpAvTransactionSourceViewModel> Sources =>
+            Items.OfType<MpAvTransactionSourceViewModel>().ToList();
         public IEnumerable<MpAvTransactionMessageViewModelBase> Messages =>
 
             Items.OfType<MpAvTransactionMessageViewModelBase>();
@@ -128,7 +143,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public MpAvTransactionSourceViewModelBase SelectedSource { get; set; }
+        public MpAvTransactionSourceViewModel SelectedSource { get; set; }
         #endregion
 
         #region Appearance
@@ -137,28 +152,22 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        public int FocusNodeTabIdx {
+        public bool IsPlainTextView {
             get {
-                IEnumerable<MpITreeItemViewModel> test = null;
-                if (FocusNode != null) {
-                    test = FocusNode.SelfAndAllAncestors();
+                if (Parent == null) {
+                    return false;
                 }
-                if (FocusNode.SelfAndAllAncestors().OfType<MpAvTransactionSourceViewModelBase>().Any()) {
-                    return 0;
+                return Parent.IsPlainTextView;
+            }
+            set {
+                if (IsPlainTextView != value &&
+                    Parent != null) {
+                    Parent.IsPlainTextView = value;
+                    OnPropertyChanged(nameof(IsPlainTextView));
                 }
-                if (FocusNode.SelfAndAllAncestors().OfType<MpAvTransactionMessageViewModelBase>().FirstOrDefault() is MpAvTransactionMessageViewModelBase tmvm) {
-                    if (tmvm.TransactionMessageType == MpTransactionMessageType.Request) {
-                        return 1;
-                    } else {
-                        return 2;
-                    }
-                }
-                if (FocusNode != this) {
-
-                }
-                return 0;
             }
         }
+
         public int TransactionIdx {
             get {
                 if (Parent == null) {
@@ -481,27 +490,8 @@ namespace MonkeyPaste.Avalonia {
             return cttimvmb;
         }
 
-        public async Task<MpAvTransactionSourceViewModelBase> CreateSourceViewModelAsync(MpTransactionSource ts) {
-            MpAvTransactionSourceViewModelBase tsvm = null;
-            switch (ts.CopyItemSourceType) {
-                case MpTransactionSourceType.AnalyzerPreset:
-                    tsvm = new MpAvAnalyzerSourceViewModel(this);
-                    break;
-                case MpTransactionSourceType.App:
-                    tsvm = new MpAvAppSourceViewModel(this);
-                    break;
-                case MpTransactionSourceType.Url:
-                    tsvm = new MpAvUrlSourceViewModel(this);
-                    break;
-                case MpTransactionSourceType.CopyItem:
-                    tsvm = new MpAvCopyItemSourceViewModel(this);
-                    break;
-                case MpTransactionSourceType.UserDevice:
-                    tsvm = new MpAvUserDeviceSourceViewModel(this);
-                    break;
-                default:
-                    throw new Exception("Source Type must be defined");
-            }
+        public async Task<MpAvTransactionSourceViewModel> CreateSourceViewModelAsync(MpTransactionSource ts) {
+            MpAvTransactionSourceViewModel tsvm = new MpAvTransactionSourceViewModel(this);
             await tsvm.InitializeAsync(ts);
             return tsvm;
         }
@@ -520,30 +510,39 @@ namespace MonkeyPaste.Avalonia {
                 c.GetVisualAncestor<MpAvClipTileView>() is MpAvClipTileView ctv &&
                 ctv.GetVisualDescendant<MpAvClipTileTransactionPaneView>() is MpAvClipTileTransactionPaneView cttpv) {
 
+                int node_tab_idx = GetNodeTabIdx(tnvm);
+                if (IsSelected && node_tab_idx != SelectedTabIndex) {
+                    SelectedTabIndex = node_tab_idx;
+                }
+                await Task.Delay(200);
 
-                if (FocusNode is MpITreeItemViewModel tivm) {
-                    if (IsSelected && FocusNodeTabIdx != SelectedTabIndex) {
-                        SelectedTabIndex = FocusNodeTabIdx;
-                    }
-                }
-                if (tnvm is MpAvAnnotationItemViewModel anvm) {
-                    TreeViewItem ann_tvi =
-                        cttpv.GetVisualDescendants<TreeViewItem>()
-                        .FirstOrDefault(x => x.DataContext == tnvm);
-                    while (ann_tvi == null) {
-                        ann_tvi =
-                            cttpv.GetVisualDescendants<TreeViewItem>()
-                            .FirstOrDefault(x => x.DataContext == tnvm);
-                        await Task.Delay(100);
-                    }
-                    tnvm.AllAncestors()
-                        .ForEach(x => x.IsExpanded = true);
-                    node_control = ann_tvi;
-                    if (anvm.Parent is MpAvAnnotationMessageViewModel amvm) {
-                        amvm.OnPropertyChanged(nameof(amvm.SelectedItem));
-                    }
-                    anvm.OnPropertyChanged(nameof(IsSelected));
-                }
+                var to_bring_into_view =
+                    cttpv
+                    .GetVisualDescendants<Control>()
+                    .Where(x => (x is ListBoxItem || x is TreeViewItem) && x.DataContext == tnvm);
+
+                to_bring_into_view.ForEach(x => x.BringIntoView());
+
+
+
+                //if (tnvm is MpAvAnnotationItemViewModel anvm) {
+                //    TreeViewItem ann_tvi =
+                //        cttpv.GetVisualDescendants<TreeViewItem>()
+                //        .FirstOrDefault(x => x.DataContext == tnvm);
+                //    while (ann_tvi == null) {
+                //        ann_tvi =
+                //            cttpv.GetVisualDescendants<TreeViewItem>()
+                //            .FirstOrDefault(x => x.DataContext == tnvm);
+                //        await Task.Delay(100);
+                //    }
+                //    tnvm.AllAncestors()
+                //        .ForEach(x => x.IsExpanded = true);
+                //    node_control = ann_tvi;
+                //    if (anvm.Parent is MpAvAnnotationMessageViewModel amvm) {
+                //        amvm.OnPropertyChanged(nameof(amvm.SelectedItem));
+                //    }
+                //    anvm.OnPropertyChanged(nameof(IsSelected));
+                //}
             }
             _isBringingIntoView = false;
             if (node_control == null) {
@@ -551,11 +550,44 @@ namespace MonkeyPaste.Avalonia {
             }
             node_control.BringIntoView();
         }
+
+        private int GetNodeTabIdx(MpAvITransactionNodeViewModel tnvm) {
+            IEnumerable<MpITreeItemViewModel> test = null;
+            if (tnvm != null) {
+                test = tnvm.SelfAndAllAncestors();
+            }
+            if (tnvm.SelfAndAllAncestors().OfType<MpAvTransactionSourceViewModel>().Any()) {
+                return 0;
+            }
+            if (tnvm.SelfAndAllAncestors().OfType<MpAvTransactionMessageViewModelBase>().FirstOrDefault() is MpAvTransactionMessageViewModelBase tmvm) {
+                if (tmvm.TransactionMessageType == MpTransactionMessageType.Request) {
+                    return 1;
+                } else {
+                    return 2;
+                }
+            }
+            if (tnvm != this) {
+
+            }
+            return 0;
+        }
         #endregion
 
         #region Commands
 
 
+        public ICommand TogglePlainTextCommand => new MpCommand<object>(
+            (args) => {
+                IsPlainTextView = !IsPlainTextView;
+
+                if (args is Control c &&
+                    c.GetVisualAncestor<MpAvClipTileTransactionPaneView>() is MpAvClipTileTransactionPaneView tpv &&
+                    tpv.GetVisualDescendants<ContentControl>() is IEnumerable<ContentControl> ccl &&
+                    tpv.Content is Grid rootGrid) {
+                    rootGrid.DataContext = null;
+                    rootGrid.DataContext = this;
+                }
+            });
 
         #endregion
     }

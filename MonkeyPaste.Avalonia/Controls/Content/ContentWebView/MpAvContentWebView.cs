@@ -277,6 +277,9 @@ namespace MonkeyPaste.Avalonia {
                 MpDebug.Break();
                 return new MpAvDataObject();
             }
+            bool use_placeholders =
+                MpAvExternalDropWindowViewModel.Instance.IsDropWidgetEnabled;
+
             var ctvm = BindingContext;
             // clear screenshot
             _contentScreenShotBase64_ntf = null;
@@ -298,7 +301,8 @@ namespace MonkeyPaste.Avalonia {
 
             bool ignore_ss = true;
             if (ctvm.CopyItemType != MpCopyItemType.Image &&
-                contentDataReq.formats.Contains(MpPortableDataFormats.AvPNG)) {
+                contentDataReq.formats.Contains(MpPortableDataFormats.AvPNG) &&
+                use_placeholders) {
                 ignore_ss = false;
             }
             if (ignore_ss) {
@@ -330,18 +334,17 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 // NOTE setting dummy file so OLE system sees format on clipboard, actual
                 // data is overwritten in core clipboard handler
-                avdo.SetData(MpPortableDataFormats.AvFileNames, new[] { MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT });
-
-                //if (!ignore_pseudo_file) {
-                //    // js doesn't set file stuff for non-files
-                //    string ctvm_fp = await ctvm.CopyItemData.ToFileAsync(
-                //                forceNamePrefix: ctvm.CopyItemTitle,
-                //                forceExt: ctvm.CopyItemType == MpCopyItemType.Image ? "png" : "txt",
-                //                isTemporary: true);
-                //    avdo.SetData(
-                //        MpPortableDataFormats.AvFileNames,
-                //        new List<string>() { ctvm_fp });
-                //}
+                if (use_placeholders) {
+                    avdo.SetData(MpPortableDataFormats.AvFileNames, new[] { MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT });
+                } else {
+                    string ctvm_fp = await ctvm.CopyItemData.ToFileAsync(
+                                forceNamePrefix: ctvm.CopyItemTitle,
+                                forceExt: ctvm.CopyItemType == MpCopyItemType.Image ? "png" : "txt",
+                                isTemporary: true);
+                    avdo.SetData(
+                        MpPortableDataFormats.AvFileNames,
+                        new[] { ctvm_fp });
+                }
             }
 
             bool is_full_content = ctvm.CopyItemType != MpCopyItemType.Text || contentDataResp.isAllContent;
@@ -380,7 +383,7 @@ namespace MonkeyPaste.Avalonia {
                 });
             }
 
-            avdo.MapAllPseudoFormats();
+            await avdo.MapAllPseudoFormatsAsync();
             // remove all empty formats (workaround for cefnet bug w/ empty asciiUrl
             avdo.DataFormatLookup.Where(x => x.Value == null)
                 .ForEach(x => avdo.DataFormatLookup.Remove(x.Key));

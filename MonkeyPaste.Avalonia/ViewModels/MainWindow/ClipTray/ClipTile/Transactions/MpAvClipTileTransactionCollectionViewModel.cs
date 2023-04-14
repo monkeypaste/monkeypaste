@@ -22,6 +22,7 @@ namespace MonkeyPaste.Avalonia {
         MpILabelTextViewModel,
         MpISortableViewModel,
         MpIHasIconSourceObjViewModel,
+        MpIPlainTextViewModel,
         MpIMenuItemViewModel,
         MpIAsyncCollectionObject {
         string Body { get; }
@@ -118,8 +119,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-        public bool DoShake { get; set; }
         public bool IsPlainTextView { get; set; } = false;
+        public bool DoShake { get; set; }
         public bool IsSortDescending { get; set; } = true;
         public bool IsTransactionPaneOpen { get; set; } = false;
         public bool IsAnyBusy => IsBusy || Transactions.Any(x => x.IsBusy);
@@ -251,6 +252,9 @@ namespace MonkeyPaste.Avalonia {
                         }
                         DoShake = false;
                     });
+                    break;
+                case nameof(IsPlainTextView):
+                    Transactions.ForEach(x => x.OnPropertyChanged(nameof(x.IsPlainTextView)));
                     break;
             }
         }
@@ -423,18 +427,6 @@ namespace MonkeyPaste.Avalonia {
                 RemoveTransactionCommand.Execute(MostRecentTransaction);
             });
 
-        public ICommand TogglePlainTextCommand => new MpCommand<object>(
-            (args) => {
-                IsPlainTextView = !IsPlainTextView;
-
-                if (args is Control c &&
-                    c.GetVisualAncestor<MpAvClipTileTransactionPaneView>() is MpAvClipTileTransactionPaneView tpv &&
-                    tpv.GetVisualDescendants<ContentControl>() is IEnumerable<ContentControl> ccl &&
-                    tpv.Content is Grid rootGrid) {
-                    rootGrid.DataContext = null;
-                    rootGrid.DataContext = this;
-                }
-            });
 
 
         public ICommand SelectChildCommand => new MpCommand<object>(
@@ -463,6 +455,14 @@ namespace MonkeyPaste.Avalonia {
             }) {
 
         };
+
+        public ICommand SelectionChangedCommand => new MpCommand<object>(
+            (args) => {
+                var control = args as Control;
+                if (control == null) {
+                    return;
+                }
+            });
         #endregion
     }
 }

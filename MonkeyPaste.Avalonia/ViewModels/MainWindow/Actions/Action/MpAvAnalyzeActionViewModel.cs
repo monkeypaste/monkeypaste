@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls.Shapes;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -115,11 +116,13 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            var actionInput = GetInput(arg);
+            var actionInput = GetInputWithCallback(arg, string.Empty, out var lastOutputCallback);
 
-            var aipvm = MpAvAnalyticItemCollectionViewModel.Instance.AllPresets.FirstOrDefault(x => x.AnalyticItemPresetId == AnalyticItemPresetId);
+            var aipvm =
+                MpAvAnalyticItemCollectionViewModel.Instance
+                .AllPresets.FirstOrDefault(x => x.AnalyticItemPresetId == AnalyticItemPresetId);
 
-            object[] args = new object[] { aipvm, actionInput.CopyItem };
+            object[] args = new object[] { aipvm, actionInput.CopyItem, lastOutputCallback };
             if (aipvm != null &&
                aipvm.Parent != null &&
                aipvm.Parent.ExecuteAnalysisCommand.CanExecute(args)) {

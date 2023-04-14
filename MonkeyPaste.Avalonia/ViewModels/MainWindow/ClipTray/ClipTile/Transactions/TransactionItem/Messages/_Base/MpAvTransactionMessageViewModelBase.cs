@@ -17,6 +17,15 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
+        #region MpIPlainTextViewModel Implementation
+
+        public string PlainText {
+            get {
+                return "TEST message";
+            }
+        }
+        #endregion
+
         #region MpAvITransactionNodeViewModel Implementation
         public MpAvClipTileViewModel HostClipTileViewModel =>
             Parent == null || Parent.Parent == null ?
@@ -77,7 +86,7 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region View Models
-        public ObservableCollection<MpAvTransactionSourceViewModelBase> Sources { get; set; } = new ObservableCollection<MpAvTransactionSourceViewModelBase>();
+        public ObservableCollection<MpAvTransactionSourceViewModel> Sources { get; set; } = new ObservableCollection<MpAvTransactionSourceViewModel>();
 
 
         #endregion

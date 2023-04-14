@@ -189,6 +189,16 @@
                                 </Border>
                             </Grid>
                         </DataTemplate>
+                        <!--  Alert Diamond  -->
+
+                        <DataTemplate x:Key="AlertDesignerTemplate">
+                            <Grid>
+                                <Polygon Points="0,25 25,0 50,25 25,50" />
+                                <Border x:Name="DesignerIconContainer">
+                                    <Image />
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
 
                         <!--  Analyze Box  -->
 

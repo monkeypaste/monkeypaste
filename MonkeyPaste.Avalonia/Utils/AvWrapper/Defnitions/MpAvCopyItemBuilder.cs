@@ -331,7 +331,7 @@ namespace MonkeyPaste.Avalonia {
                 return mpdo;
             }
             var actual_formats = await Application.Current.Clipboard.GetFormatsSafeAsync();
-            actual_formats.ForEach(x => MpConsole.WriteLine("Actual format: " + x));
+            MpConsole.WriteLine($"Normalizing actual dataobject formats:  {string.Join(",", actual_formats.Select(x => x))}");
 
             // foreach(var af in actual_formats) {
             //     MpConsole.WriteLine("Actual available format: " + af);
@@ -378,8 +378,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
             }
-
-            mpdo.DataFormatLookup.ForEach(x => MpConsole.WriteLine("Creating copyItem w/ available format; " + x.Key.Name));
+            MpConsole.WriteLine($"DataObject format normalization complete. Available dataobject formats: {string.Join(",", mpdo.DataFormatLookup.Select(x => x.Key.Name))}");
             return mpdo;
         }
 

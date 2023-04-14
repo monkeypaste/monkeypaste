@@ -37,7 +37,7 @@ namespace MonkeyPaste {
         [Column("fk_SourceObjId")]
         public int SourceObjId { get; set; }
 
-        public string SourceArgs { get; set; }
+        //public string SourceArgs { get; set; }
 
         public DateTime TransactionDateTime { get; set; }
         #endregion
@@ -69,7 +69,7 @@ namespace MonkeyPaste {
         public static async Task<MpTransactionSource> CreateAsync(
             int transactionId = 0,
             int sourceObjId = 0,
-            string sourceArgs = "",
+            //string sourceArgs = "",
             MpTransactionSourceType sourceType = MpTransactionSourceType.None,
             DateTime? createdDateTime = null,
             bool suppressWrite = false) {
@@ -107,7 +107,7 @@ namespace MonkeyPaste {
                 CopyItemSourceGuid = System.Guid.NewGuid(),
                 TransactionId = transactionId,
                 SourceObjId = sourceObjId,
-                SourceArgs = sourceArgs,
+                //SourceArgs = sourceArgs,
                 CopyItemSourceType = sourceType,
                 TransactionDateTime = createdDateTime.Value
             };

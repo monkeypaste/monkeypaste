@@ -49,7 +49,8 @@ namespace MonkeyPaste {
         FileWriter,
         AddFromClipboard,
         KeySimulator,
-        Delay
+        Delay,
+        Alert
     }
 
     public class MpAction : MpDbModelBase, MpIClonableDbModel<MpAction> {

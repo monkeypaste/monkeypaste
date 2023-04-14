@@ -66,7 +66,8 @@ namespace MonkeyPaste.Avalonia {
         public IEnumerable<MpAvSettingsFrameViewModel> AccountItems =>
             Items
             .Where(x => x.TabType == MpSettingsTabType.Account)
-            .OrderBy(x => x.SortOrderIdx);
+            .OrderBy(x => x.SortOrderIdx)
+            .ToList();
 
         public MpAvSettingsFrameViewModel AccountFrame { get; set; }
 
@@ -76,7 +77,8 @@ namespace MonkeyPaste.Avalonia {
         public IEnumerable<MpAvSettingsFrameViewModel> PreferenceItems =>
             Items
             .Where(x => x.TabType == MpSettingsTabType.Preferences)
-            .OrderBy(x => x.SortOrderIdx);
+            .OrderBy(x => x.SortOrderIdx)
+            .ToList();
 
         public MpAvSettingsFrameViewModel LookAndFeelFrame { get; set; }
         public MpAvSettingsFrameViewModel InternationalFrame { get; set; }
@@ -735,8 +737,8 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     }
                     Dispatcher.UIThread.Post(async () => {
-                        await MpAvSoundPlayerViewModel.Instance.UpdateVolumeCommand.ExecuteAsync();
-                        MpAvSoundPlayerViewModel.Instance.PlaySoundCommand.Execute(MpSoundNotificationType.Copy);
+                        await MpAvSoundPlayerViewModel.Instance.UpdateVolumeCommand.ExecuteAsync(null);
+                        MpAvSoundPlayerViewModel.Instance.PlaySoundNotificationCommand.Execute(MpSoundNotificationType.Copy);
                     });
 
                     break;

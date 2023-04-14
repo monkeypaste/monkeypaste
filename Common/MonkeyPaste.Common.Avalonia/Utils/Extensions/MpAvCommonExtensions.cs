@@ -761,6 +761,7 @@ namespace MonkeyPaste.Common.Avalonia {
             }
             return str.ToLower().StartsWith("avares://");
         }
+
         #endregion
 
 

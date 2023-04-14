@@ -3,40 +3,16 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace MonkeyPaste.Common.Plugin {
-    [Flags]
-    public enum MpAnnotationType : long {
-        None = 0,
-    }
-    public class MpAnnotationJsonConverter : JsonConverter {
-        public override bool CanConvert(Type objectType) {
-            return (objectType == typeof(MpAnnotationNodeFormat));
-        }
-
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) {
-            JObject jo = JObject.Load(reader);
-            if (jo.ContainsKey("left")) {
-                // return jo.ToObject<MpImageAnnotationNodeFormat>(serializer);
-                return JsonConvert.DeserializeObject<MpImageAnnotationNodeFormat>(jo.ToString());
-            }
-            return JsonConvert.DeserializeObject<MpAnnotationNodeFormat>(jo.ToString());
-        }
-
-        public override bool CanWrite {
-            get { return false; }
-        }
-
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) {
-            throw new NotImplementedException();
-        }
-    }
     public class MpAnnotationNodeFormat :
         MpOmitNullJsonObject,
         MpILabelText,
         MpIIconResource,
         MpIClampedValue,
-        MpIAnnotationNode {
+        MpIAnnotationNode,
+        MpIPlainTextCompatible {
         #region Statics
 
         public static MpAnnotationNodeFormat Parse(string json) {
@@ -103,6 +79,42 @@ namespace MonkeyPaste.Common.Plugin {
         [JsonIgnore]
         public bool IsExpanded { get; set; }
 
+        #endregion
+
+        #region MpIPlainTextCompatible Implementation
+
+        public string GetPlainText(int scope = 0) {
+            string indent = string.Empty;
+            for (int i = 0; i < scope; i++) {
+                indent += "     ";
+            }
+            var sb = new StringBuilder();
+            if (scope > 0) {
+                sb.AppendLine();
+            }
+            if (!string.IsNullOrEmpty(type)) {
+                sb.AppendLine($"{indent}Type: {type}");
+            }
+            if (!string.IsNullOrEmpty(label)) {
+                sb.AppendLine($"{indent}Label: {label}");
+            }
+            if (!string.IsNullOrEmpty(body)) {
+                sb.AppendLine($"{indent}Body: {body}");
+            }
+            if (!string.IsNullOrEmpty(footer)) {
+                sb.AppendLine($"{indent}Footer: {footer}");
+            }
+            if (score > 0) {
+                // presume that if scored and stored decimal value will always
+                // be more than 0 if even very small
+                sb.AppendLine($"{indent}Score: {score}");
+            }
+            if (children != null && children.Count > 0) {
+                sb.Append(children.Select(x => x.GetPlainText(scope + 1)));
+            }
+
+            return sb.ToString();
+        }
         #endregion
 
         #endregion

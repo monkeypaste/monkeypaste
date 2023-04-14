@@ -76,6 +76,8 @@ namespace MonkeyPaste.Avalonia {
                         return "KeyboardImage";
                     case MpActionType.Delay:
                         return "AlarmClockImage";
+                    case MpActionType.Alert:
+                        return "SpeakImage";
                 }
             }
             // whats params?
@@ -105,6 +107,8 @@ namespace MonkeyPaste.Avalonia {
                     return MpSystemColors.plum3;
                 case MpActionType.Delay:
                     return MpSystemColors.gray53;
+                case MpActionType.Alert:
+                    return MpSystemColors.royalblue2;
                 default:
                     throw new Exception($"Unknow action type: '{actionType}'");
             }
@@ -907,6 +911,9 @@ namespace MonkeyPaste.Avalonia {
                 case MpActionType.Delay:
                     avm = new MpAvDelayActionViewModel(Parent);
                     break;
+                case MpActionType.Alert:
+                    avm = new MpAvAlertActionViewModel(Parent);
+                    break;
                 default:
                     MpDebug.Break($"Unhandled action type '{a.ActionType}'");
                     return null;
@@ -1036,6 +1043,7 @@ namespace MonkeyPaste.Avalonia {
                 if (this is MpAvTriggerActionViewModelBase) {
                     return new MpAvTriggerInput();
                 }
+                return null;
             }
             if (arg is MpCopyItem ci) {
                 // NOTE this should only happen for triggers
@@ -1046,6 +1054,32 @@ namespace MonkeyPaste.Avalonia {
                 return ao;
             }
             throw new Exception("Unknown action input: " + arg.ToString());
+        }
+
+        protected virtual MpAvActionOutput GetInputWithCallback(object arg, string filter, out Func<string> callback) {
+            MpAvActionOutput input = GetInput(arg);
+            callback = () => {
+                if (input is MpAvActionOutput ao) {
+                    if (ao.OutputData is MpPluginResponseFormatBase prfb) {
+                        try {
+                            return MpJsonPathProperty.Query(prfb, filter);
+                        }
+                        catch (Exception ex) {
+                            MpConsole.WriteLine(@"Error parsing/querying json response:");
+                            MpConsole.WriteLine(ao.OutputData.ToString().ToPrettyPrintJson());
+                            MpConsole.WriteLine(@"For JSONPath: ");
+                            MpConsole.WriteLine(filter);
+                            MpConsole.WriteTraceLine(ex);
+
+                            ValidationText = $"Error performing action '{RootTriggerActionViewModel.Label}/{Label}': {ex}";
+                            ShowValidationNotification();
+                        }
+                    }
+                    return ao.OutputData.ToStringOrDefault();
+                }
+                return string.Empty;
+            };
+            return input;
         }
 
         protected virtual async Task ValidateActionAsync() {

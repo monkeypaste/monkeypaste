@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvCopyItemSourceViewModel : MpAvTransactionSourceViewModelBase {
+    public class MpAvCopyItemSourceViewModel : MpAvTransactionSourceViewModel {
 
         #region Interfaces
         #endregion

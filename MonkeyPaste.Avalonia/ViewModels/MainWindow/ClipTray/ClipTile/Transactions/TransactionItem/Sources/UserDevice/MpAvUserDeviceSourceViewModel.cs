@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvUserDeviceSourceViewModel : MpAvTransactionSourceViewModelBase {
+    public class MpAvUserDeviceSourceViewModel : MpAvTransactionSourceViewModel {
 
         #region Interfaces
         #endregion

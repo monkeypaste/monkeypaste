@@ -184,7 +184,10 @@ namespace MonkeyPaste.Avalonia {
         public IEnumerable<MpAvClipboardFormatPresetViewModel> EnabledWriters => EnabledFormats.Where(x => x.IsWriter);
 
         public IEnumerable<MpAvClipboardFormatPresetViewModel> SortedAvailableEnabledWriters =>
-            AllAvailableWriterPresets.OrderBy(x => x.ClipboardFormat.sortOrderIdx);
+            AllAvailableWriterPresets
+            .OrderBy(x => x.ClipboardFormat.sortOrderIdx)
+            .ToList();
+
         public IEnumerable<MpAvClipboardFormatPresetViewModel> AllAvailableWriterPresets {
             get {
                 var aawpl = new List<MpAvClipboardFormatPresetViewModel>();
@@ -420,7 +423,7 @@ namespace MonkeyPaste.Avalonia {
                     MpConsole.WriteLine("Invalid cb reader response: " + reader_response);
                 }
             }
-            mpdo.MapAllPseudoFormats();
+            await mpdo.MapAllPseudoFormatsAsync();
             if (source_process != null) {
                 var avm = MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(source_process);
                 if (avm != null) {

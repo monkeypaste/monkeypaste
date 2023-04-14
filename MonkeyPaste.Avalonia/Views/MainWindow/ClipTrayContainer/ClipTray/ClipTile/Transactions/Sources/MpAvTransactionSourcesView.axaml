@@ -1,0 +1,48 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:DataType="local:MpAvTransactionItemViewModel"
+                       x:TypeArguments="local:MpAvTransactionItemViewModel"
+                       x:CompileBindings="True"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Class="MonkeyPaste.Avalonia.MpAvTransactionSourcesView">
+    <ListBox x:Name="SourcesListBox"
+             Grid.Row="2"
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Top"
+             SelectionMode="Single"
+             SelectedItem="{Binding SelectedSource, Mode=TwoWay}"
+             Items="{Binding Sources}">
+        <ListBox.Styles>
+            <Style Selector="ListBoxItem">
+                <Setter Property="HorizontalContentAlignment"
+                        Value="Stretch" />
+                <Setter Property="VerticalContentAlignment"
+                        Value="Top" />
+                <Setter Property="BorderThickness"
+                        Value="1" />
+                <Setter Property="BorderBrush"
+                        Value="DimGray" />
+            </Style>
+        </ListBox.Styles>
+        <ListBox.ItemTemplate>
+            <DataTemplate x:DataType="local:MpAvTransactionSourceViewModel">
+                <DockPanel>
+                    <Image Source="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
+                           Classes="square"
+                           Height="20" />
+                    <TextBlock MinHeight="15"
+                               Margin="5,0,0,0"
+                               TextWrapping="Wrap"
+                               Text="{Binding LabelText}" />
+                </DockPanel>
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+    </ListBox>
+</local:MpAvUserControl>

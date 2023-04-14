@@ -6,7 +6,6 @@ namespace MonkeyPaste {
         #region Properties
 
         public override bool CanPin => true;
-        public override int MaxShowTimeMs => DEFAULT_NOTIFICATION_SHOWTIME_MS;
 
         #endregion
 

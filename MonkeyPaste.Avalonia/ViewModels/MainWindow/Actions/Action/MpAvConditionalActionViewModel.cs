@@ -293,9 +293,9 @@ namespace MonkeyPaste.Avalonia {
             if (!ValidateStartAction(arg)) {
                 return;
             }
-            MpAvActionOutput ao = GetInput(arg);
+            MpAvActionOutput ao = GetInputWithCallback(arg, CompareFilterText, out var lastOutputCallback);
 
-            string compareStr = await GetCompareStr(ao);
+            string compareStr = await GetCompareStr(ao, lastOutputCallback);
             if (compareStr == null) {
                 return;
             }
@@ -358,33 +358,39 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private async Task<string> GetCompareStr(MpAvActionOutput ao) {
+        private async Task<string> GetCompareStr(MpAvActionOutput ao, Func<string> callback) {
             if (ao == null) {
                 return null;
             }
-            if (ComparePropertyPathType == MpContentQueryPropertyPathType.LastOutput) {
-                if (ao.OutputData is MpPluginResponseFormatBase prf && HasInputFilter) {
-                    try {
-                        return MpJsonPathProperty.Query(prf, CompareFilterText);
-                    }
-                    catch (Exception ex) {
-                        MpConsole.WriteLine(@"Error parsing/querying json response:");
-                        MpConsole.WriteLine(ao.OutputData.ToString().ToPrettyPrintJson());
-                        MpConsole.WriteLine(@"For JSONPath: ");
-                        MpConsole.WriteLine(CompareData);
-                        MpConsole.WriteTraceLine(ex);
+            //if (ComparePropertyPathType == MpContentQueryPropertyPathType.LastOutput) {
+            //    if (ao.OutputData is MpPluginResponseFormatBase prf && HasInputFilter) {
+            //        try {
+            //            return MpJsonPathProperty.Query(prf, CompareFilterText);
+            //        }
+            //        catch (Exception ex) {
+            //            MpConsole.WriteLine(@"Error parsing/querying json response:");
+            //            MpConsole.WriteLine(ao.OutputData.ToString().ToPrettyPrintJson());
+            //            MpConsole.WriteLine(@"For JSONPath: ");
+            //            MpConsole.WriteLine(CompareData);
+            //            MpConsole.WriteTraceLine(ex);
 
-                        ValidationText = $"Error performing action '{RootTriggerActionViewModel.Label}/{Label}': {ex}";
-                        ShowValidationNotification();
-                    }
-                } else if (ao.OutputData != null) {
-                    return ao.OutputData.ToString();
-                }
-            } else {
-                var copyItemPropObj = await MpPluginParameterValueEvaluator.QueryPropertyAsync(ao.CopyItem, ComparePropertyPathType);
-                if (copyItemPropObj != null) {
-                    return copyItemPropObj.ToString();
-                }
+            //            ValidationText = $"Error performing action '{RootTriggerActionViewModel.Label}/{Label}': {ex}";
+            //            ShowValidationNotification();
+            //        }
+            //    } else if (ao.OutputData != null) {
+            //        return ao.OutputData.ToString();
+            //    }
+            //} else {
+            //    var copyItemPropObj = await MpPluginParameterValueEvaluator.QueryPropertyAsync(ao.CopyItem, ComparePropertyPathType, callback);
+            //    if (copyItemPropObj != null) {
+            //        return copyItemPropObj.ToString();
+            //    }
+            //}
+            var copyItemPropObj =
+                await MpPluginParameterValueEvaluator.QueryPropertyAsync(
+                    ao.CopyItem, ComparePropertyPathType, callback);
+            if (copyItemPropObj != null) {
+                return copyItemPropObj.ToString();
             }
             return null;
         }

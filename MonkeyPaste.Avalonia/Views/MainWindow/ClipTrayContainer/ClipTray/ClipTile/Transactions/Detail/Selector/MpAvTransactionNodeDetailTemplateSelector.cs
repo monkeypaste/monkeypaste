@@ -26,7 +26,7 @@ namespace MonkeyPaste.Avalonia {
             string key = "EmptyDetailTemplate";
             if (param is MpAvAnnotationItemViewModel iaivm) {
                 key = "AnnotationItemDetailTemplate";
-            } else if (param is MpAvTransactionSourceViewModelBase tsvm) {
+            } else if (param is MpAvTransactionSourceViewModel tsvm) {
                 key = "TransactionSourceDetailTemplate";
             }
 

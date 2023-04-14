@@ -164,10 +164,16 @@ namespace MonkeyPaste.Common.Avalonia {
                     return false;
                 }
             }
+            if (ido.Get(format) is IEnumerable<IStorageItem> sil) {
+                was_checked = true;
+                if (!sil.Any()) {
+                    return false;
+                }
+            }
 
             if (!was_checked) {
                 object test = ido.Get(format);
-                MpDebug.Break($"Unchecked format, for type '{test.GetType()}'");
+                //MpDebug.Break($"Unchecked format, for type '{test.GetType()}'");
             }
 
             return true;
@@ -248,6 +254,11 @@ namespace MonkeyPaste.Common.Avalonia {
                         if (dataObj is string dataStr) {
                             // string -> string list
                             typed_data = dataStr.SplitNoEmpty(Environment.NewLine).AsEnumerable<string>() as T;
+                        } else if (dataObj is IEnumerable<Uri> uril) {
+                            //
+                            typed_data = uril.Select(x => x.LocalPath) as T;
+                        } else {
+
                         }
                     }
                     if (typed_data == null) {

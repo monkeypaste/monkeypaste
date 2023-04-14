@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvUrlSourceViewModel : MpAvTransactionSourceViewModelBase {
+    public class MpAvUrlSourceViewModel : MpAvTransactionSourceViewModel {
 
         #region Interfaces
         #endregion

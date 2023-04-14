@@ -10,16 +10,18 @@ namespace MonkeyPaste {
         public static async Task<MpCopyItem> ConvertAsync(
             MpPluginFormat pluginFormat,
             MpAnalyzerTransaction trans,
+            Dictionary<object, string> paramValues,
             MpCopyItem sourceCopyItem,
             object sourceHandler,
             bool suppressWrite) {
-            MpCopyItem target_ci = await ProcessDataObjectAsync(pluginFormat, trans, sourceCopyItem, sourceHandler, suppressWrite);
+            MpCopyItem target_ci = await ProcessDataObjectAsync(pluginFormat, trans, paramValues, sourceCopyItem, sourceHandler, suppressWrite);
             return target_ci;
         }
 
         private static async Task<MpCopyItem> ProcessDataObjectAsync(
             MpPluginFormat pluginFormat,
             MpAnalyzerTransaction trans,
+            Dictionary<object, string> paramValues,
             MpCopyItem sourceCopyItem,
             object sourceHandler,
             bool suppressWrite = false) {
@@ -47,7 +49,7 @@ namespace MonkeyPaste {
 
             var plugin_source_ref = sourceHandler as MpISourceRef;
             string plugin_param_req_ref_url = Mp.Services.SourceRefTools.ConvertToRefUrl(
-                plugin_source_ref, trans.Request.SerializeJsonObjectToBase64());
+                plugin_source_ref);//, trans.Request.SerializeJsonObjectToBase64());
 
 
             // add reference to plugin
@@ -85,10 +87,18 @@ namespace MonkeyPaste {
 
             // NOTE for existing content, plugins should by convention always return a dataobject
             // NOTE 2 after transaction tile picks up db event, reloads, finds transaction and applies deltas (at least thats the plan)
+
+            var unevaluated_req = await MpPluginRequestBuilder.BuildRequestAsync(
+                                        pluginFormat.analyzer.parameters,
+                                        paramValues,
+                                        sourceCopyItem,
+                                        false,
+                                        null);
+
             await Mp.Services.TransactionBuilder.ReportTransactionAsync(
                         copyItemId: sourceCopyItem.Id,
                         reqType: MpJsonMessageFormatType.ParameterRequest,
-                        req: trans.Request.SerializeJsonObject(),
+                        req: unevaluated_req.SerializeJsonObject(),
                         respType: MpJsonMessageFormatType.DataObject,
                         resp: mpdo.SerializeData(),
                         ref_urls: ref_urls,

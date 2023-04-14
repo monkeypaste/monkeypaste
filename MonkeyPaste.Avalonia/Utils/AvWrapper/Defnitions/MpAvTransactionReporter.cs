@@ -13,17 +13,17 @@ namespace MonkeyPaste.Avalonia {
             string req,
             MpJsonMessageFormatType respType,
             string resp,
-            IEnumerable<string> ref_url_arg_tuples,
+            IEnumerable<string> source_ref_uris,
             MpTransactionType transactionType) {
 
             if (copyItemId <= 0) {
                 throw new Exception("CopyItemId required to create transaction");
             }
-            if (ref_url_arg_tuples == null || ref_url_arg_tuples.Count() == 0) {
+            if (source_ref_uris == null || source_ref_uris.Count() == 0) {
                 throw new Exception("Must provide transaction references");
             }
-            req = null;
             if (transactionType != MpTransactionType.Analyzed) {
+                req = null;
                 resp = null;
             }
             var cit = await MpCopyItemTransaction.CreateAsync(
@@ -34,21 +34,23 @@ namespace MonkeyPaste.Avalonia {
                             respMsgJsonStr: resp,
                             transactionType: transactionType);
 
-            List<Tuple<MpISourceRef, string>> source_ref_arg_tuples = new List<Tuple<MpISourceRef, string>>();
-            foreach (var url_arg_tuple in ref_url_arg_tuples) {
-                MpISourceRef sr = await Mp.Services.SourceRefTools.FetchOrCreateSourceAsync(url_arg_tuple);
-                // check provided url to see if query arg is already embedded
-                string url_query_param = Mp.Services.SourceRefTools.ParseRefArgs(url_arg_tuple);
-                source_ref_arg_tuples.Add(new Tuple<MpISourceRef, string>(sr, url_query_param));
-            }
+            //List<Tuple<MpISourceRef, string>> source_ref_arg_tuples = new List<Tuple<MpISourceRef, string>>();
+            //foreach (var url_arg_tuple in source_refs) {
+            //    MpISourceRef sr = await Mp.Services.SourceRefTools.FetchOrCreateSourceAsync(url_arg_tuple);
+            //    // check provided url to see if query arg is already embedded
+            //    string url_query_param = Mp.Services.SourceRefTools.ParseRefArgs(url_arg_tuple);
+            //    source_ref_arg_tuples.Add(new Tuple<MpISourceRef, string>(sr, url_query_param));
+            //}
 
-            if (source_ref_arg_tuples.Count() != ref_url_arg_tuples.Count()) {
-                throw new Exception($"Error, not all source urls could be stored.");
-            }
+            //if (source_ref_arg_tuples.Count() != source_refs.Count()) {
+            //    throw new Exception($"Error, not all source urls could be stored.");
+            //}
 
+            var source_refs = await Task.WhenAll(
+                source_ref_uris.Select(x => Mp.Services.SourceRefTools.FetchOrCreateSourceAsync(x)));
             await Mp.Services.SourceRefTools.AddTransactionSourcesAsync(
                 cit.Id,
-                source_ref_arg_tuples);
+                source_refs);
 
             return cit;
         }

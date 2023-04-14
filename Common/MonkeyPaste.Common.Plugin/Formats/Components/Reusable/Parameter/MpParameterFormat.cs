@@ -110,8 +110,8 @@ namespace MonkeyPaste.Common.Plugin {
         public string patternInfo { get; set; } = string.Empty;
 
         //Slider
-        public double minimum { get; set; } = double.MinValue;
-        public double maximum { get; set; } = double.MaxValue;
+        public double minimum { get; set; } = 0;
+        public double maximum { get; set; } = 1;
         public int precision { get; set; } = 2;
 
         public List<MpPluginParameterValueFormat> values { get; set; } = new List<MpPluginParameterValueFormat>();

@@ -100,7 +100,7 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task<List<MpTransactionSource>> AddTransactionSourcesAsync(
             int copyItemTransactionId,
-            IEnumerable<Tuple<MpISourceRef, string>> transactionSources) {
+            IEnumerable<MpISourceRef> transactionSources) {
             if (transactionSources == null) {
                 return null;
             }
@@ -109,9 +109,10 @@ namespace MonkeyPaste.Avalonia {
 
                 var cis = await MpTransactionSource.CreateAsync(
                     transactionId: copyItemTransactionId,
-                    sourceObjId: source_ref.Item1.SourceObjId,
-                    sourceType: source_ref.Item1.SourceType,
-                    sourceArgs: source_ref.Item2);
+                    sourceObjId: source_ref.SourceObjId,
+                    sourceType: source_ref.SourceType
+                    //sourceArgs: source_ref.Item2
+                    );
                 sources.Add(cis);
             }
             return sources;
@@ -213,9 +214,8 @@ namespace MonkeyPaste.Avalonia {
             return false;
         }
 
-        public string ConvertToRefUrl(MpISourceRef sr, string base64Args = null) {
-            string queryParam = base64Args == null ? string.Empty : $"&args={base64Args}";
-            return $"{INTERNAL_SOURCE_DOMAIN}?type={sr.SourceType.ToString()}&id={sr.SourceObjId}{queryParam}";
+        public string ConvertToRefUrl(MpISourceRef sr) {
+            return $"{INTERNAL_SOURCE_DOMAIN}?type={sr.SourceType.ToString()}&id={sr.SourceObjId}";
         }
 
         public string ParseRefArgs(string ref_url) {

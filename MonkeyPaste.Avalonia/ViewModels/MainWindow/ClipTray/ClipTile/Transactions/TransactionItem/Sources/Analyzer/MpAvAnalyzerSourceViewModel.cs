@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvAnalyzerSourceViewModel : MpAvTransactionSourceViewModelBase {
+    public class MpAvAnalyzerSourceViewModel : MpAvTransactionSourceViewModel {
 
         #region Interfaces
         #endregion
@@ -22,7 +22,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Model
 
-        public MpPluginRequestFormatBase ParameterReqFormat { get; private set; }
+        //public MpPluginRequestFormatBase ParameterReqFormat { get; private set; }
 
         #endregion
 
@@ -39,11 +39,11 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = true;
             await base.InitializeAsync(ts);
 
-            if (PresetViewModel == null) {
-                ParameterReqFormat = null;
-            } else {
-                ParameterReqFormat = MpPluginRequestFormatBase.Parse(SourceArg);
-            }
+            //if (PresetViewModel == null) {
+            //    ParameterReqFormat = null;
+            //} else {
+            //    ParameterReqFormat = MpPluginRequestFormatBase.Parse(SourceArg);
+            //}
 
             OnPropertyChanged(nameof(Children));
             OnPropertyChanged(nameof(PresetViewModel));

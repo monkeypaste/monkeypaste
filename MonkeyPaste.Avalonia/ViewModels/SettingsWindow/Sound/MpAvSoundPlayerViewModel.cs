@@ -19,6 +19,7 @@ namespace MonkeyPaste.Avalonia {
         Spacey,
         Jungle
     }
+
     public enum MpSoundNotificationType {
         None = 0,
         Copy,
@@ -99,7 +100,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (_player == null) {
                 _player = new Player();
-                await UpdateVolumeCommand.ExecuteAsync();
+                await UpdateVolumeCommand.ExecuteAsync(null);
             }
             SelectedSoundGroup = (MpSoundGroupType)MpPrefViewModel.Instance.NotificationSoundGroupIdx;
 
@@ -128,10 +129,10 @@ namespace MonkeyPaste.Avalonia {
                 if (string.IsNullOrEmpty(resource_val)) {
                     continue;
                 }
-                string test = Assembly.GetAssembly(typeof(Player)).Location;
-                List<string> path_parts = new List<string>() { AppDomain.CurrentDomain.BaseDirectory };
-                path_parts.AddRange(new Uri(resource_val).LocalPath.Split(@"/"));
-                string sound_path = Path.Combine(path_parts.ToArray());
+                //List<string> path_parts = new List<string>() { AppDomain.CurrentDomain.BaseDirectory };
+                //path_parts.AddRange(new Uri(resource_val).LocalPath.Split(@"/"));
+                //string sound_path = Path.Combine(path_parts.ToArray());
+                string sound_path = resource_val.ToPathFromAvResourceString();
                 if (sound_path.Length > MAX_PATH && OperatingSystem.IsWindows()) {
                     MpNotificationBuilder.ShowMessageAsync(
                         title: $"Error",
@@ -164,34 +165,34 @@ namespace MonkeyPaste.Avalonia {
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.ContentAdded:
-                    PlaySoundCommand.Execute(MpSoundNotificationType.Copy);
+                    PlaySoundNotificationCommand.Execute(MpSoundNotificationType.Copy);
                     break;
                 case MpMessageType.ContentPasted:
-                    PlaySoundCommand.Execute(MpSoundNotificationType.Paste);
+                    PlaySoundNotificationCommand.Execute(MpSoundNotificationType.Paste);
                     break;
                 case MpMessageType.AppError:
-                    PlaySoundCommand.Execute(MpSoundNotificationType.Error);
+                    PlaySoundNotificationCommand.Execute(MpSoundNotificationType.Error);
                     break;
                 case MpMessageType.AutoCopyEnabled:
-                    PlaySoundCommand.Execute(MpSoundNotificationType.AutoCopyOn);
+                    PlaySoundNotificationCommand.Execute(MpSoundNotificationType.AutoCopyOn);
                     break;
                 case MpMessageType.AutoCopyDisabled:
-                    PlaySoundCommand.Execute(MpSoundNotificationType.AutoCopyOff);
+                    PlaySoundNotificationCommand.Execute(MpSoundNotificationType.AutoCopyOff);
                     break;
                 case MpMessageType.RightClickPasteEnabled:
-                    PlaySoundCommand.Execute(MpSoundNotificationType.MousePasteOn);
+                    PlaySoundNotificationCommand.Execute(MpSoundNotificationType.MousePasteOn);
                     break;
                 case MpMessageType.RightClickPasteDisabled:
-                    PlaySoundCommand.Execute(MpSoundNotificationType.MousePasteOff);
+                    PlaySoundNotificationCommand.Execute(MpSoundNotificationType.MousePasteOff);
                     break;
                 case MpMessageType.AppendModeActivated:
-                    PlaySoundCommand.Execute(MpSoundNotificationType.AppendOn);
+                    PlaySoundNotificationCommand.Execute(MpSoundNotificationType.AppendOn);
                     break;
                 case MpMessageType.AppendModeDeactivated:
-                    PlaySoundCommand.Execute(MpSoundNotificationType.AppendOff);
+                    PlaySoundNotificationCommand.Execute(MpSoundNotificationType.AppendOff);
                     break;
                 case MpMessageType.MainWindowLoadComplete:
-                    PlaySoundCommand.Execute(MpSoundNotificationType.Loaded);
+                    PlaySoundNotificationCommand.Execute(MpSoundNotificationType.Loaded);
                     break;
 
             }
@@ -201,15 +202,41 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public MpIAsyncCommand UpdateVolumeCommand => new MpAsyncCommand(
-            async () => {
+        public MpIAsyncCommand<object> UpdateVolumeCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                double new_norm_volue =
+                    args == null ?
+                        MpPrefViewModel.Instance.NotificationSoundVolume :
+                        (double)args;
 
-                byte volume = (byte)((double)byte.MaxValue * MpPrefViewModel.Instance.NotificationSoundVolume);
+                byte volume = (byte)((double)byte.MaxValue * new_norm_volue);
                 await _player.SetVolume(volume);
 
-            }, () => IsOsSupported);
+            }, (args) => IsOsSupported);
 
-        public ICommand PlaySoundCommand => new MpAsyncCommand<object>(
+        public ICommand PlayCustomSoundCommand => new MpAsyncCommand<object>(
+            async (args) => {
+
+                if (args is object[] argParts) {
+                    string sound_path = argParts[0] as string;
+                    double norm_sound_vol = (double)argParts[1];
+                    while (_player.Playing) {
+                        MpConsole.WriteLine($"Sound already playing, waiting to play '{sound_path}'...");
+                        await Task.Delay(100);
+                    }
+
+                    // sound played from action ntf
+                    await UpdateVolumeCommand.ExecuteAsync(norm_sound_vol);
+
+                    await _player.Play(sound_path);
+
+                    while (_player.Playing) {
+                        await Task.Delay(100);
+                    }
+                    await UpdateVolumeCommand.ExecuteAsync(null);
+                }
+            });
+        public ICommand PlaySoundNotificationCommand => new MpAsyncCommand<object>(
             async (args) => {
 
                 MpSoundNotificationType snt = (MpSoundNotificationType)args;
@@ -222,6 +249,7 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(100);
                 }
                 await _player.Play(_soundPathLookup[snt]);
+
 
             }, (args) => {
                 return

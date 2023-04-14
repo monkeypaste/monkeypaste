@@ -1,0 +1,103 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:DataType="local:MpAvTransactionItemViewModel"
+                       x:TypeArguments="local:MpAvTransactionItemViewModel"
+                       x:CompileBindings="True"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Class="MonkeyPaste.Avalonia.MpAvTransactionItemView">
+    <Grid x:DataType="local:MpAvTransactionMessageViewModelBase">
+        <ContentControl Content="{Binding}">
+            <ContentControl.DataTemplates>
+                <local:MpAvTransactionMessageBodyTemplateSelector>
+                    <!--  PLAIN TEXT TEMPLATE  -->
+                    <DataTemplate x:Key="PlainTextMessageTemplate"
+                                  x:DataType="local:MpIPlainTextViewModel">
+                        <TextBlock MinHeight="15"
+                                   TextWrapping="Wrap"
+                                   Text="{Binding PlainText}" />
+                    </DataTemplate>
+
+                    <!--  ANALYZE TOOLBOX  -->
+
+                    <DataTemplate x:Key="ParameterRequestMessageTemplate"
+                                  x:DataType="local:MpAvParameterRequestMessageViewModel">
+                        <Border IsVisible="{Binding PresetViewModel, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
+                            <Grid x:Name="TransAnalyzerReqContainer"
+                                  RowDefinitions="Auto,*">
+                                <StackPanel Orientation="Horizontal"
+                                            Spacing="10">
+                                    <!--  EXECUTE ANALYSIS BUTTON  -->
+
+                                    <Button Classes="defaultButton iconTextButton"
+                                            Command="{Binding PresetViewModel.ExecutePresetAnalysisOnSelectedContentCommand}">
+                                        <DockPanel>
+                                            <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource ExecuteImage}}" />
+                                            <TextBlock Text="Analyze" />
+                                        </DockPanel>
+                                    </Button>
+
+                                    <!--  RESET PARAM BUTTON  -->
+                                    <Button Classes="defaultButton outline outlineOver"
+                                            Command="{Binding PresetViewModel.ResetOrDeleteThisPresetCommand}"
+                                            CommandParameter="{Binding ParameterReqFormat}">
+                                        <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource ResetImage}}" />
+
+                                    </Button>
+                                </StackPanel>
+                                <local:MpAvPluginParameterListBoxView Grid.Row="1"
+                                                                      DataContext="{Binding PresetViewModel}"
+                                                                      HorizontalAlignment="Stretch"
+                                                                      VerticalAlignment="Stretch" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+
+                    <!--  ANNOTATION TREE  -->
+
+                    <DataTemplate x:Key="AnnotationMessageTemplate"
+                                  x:DataType="local:MpAvAnnotationMessageViewModel">
+                        <TreeView Grid.Row="0"
+                                  Items="{Binding RootItems}"
+                                  AutoScrollToSelectedItem="True"
+                                  SelectionMode="Single"
+                                  SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch">
+                            <TreeView.Resources>
+                                <SolidColorBrush x:Key="SelectableItemDefaultBgBrush">Transparent</SolidColorBrush>
+                                <SolidColorBrush x:Key="SelectableItemPointerOverBgBrush">Transparent</SolidColorBrush>
+                                <SolidColorBrush x:Key="SelectableItemSelectedBgBrush">Transparent</SolidColorBrush>
+                            </TreeView.Resources>
+                            <TreeView.ItemTemplate>
+                                <TreeDataTemplate x:DataType="local:MpAvITransactionNodeViewModel"
+                                                  ItemsSource="{Binding Children}">
+                                    <DockPanel>
+                                        <Image DockPanel.Dock="Left"
+                                               VerticalAlignment="Center"
+                                               Width="15"
+                                               Height="15"
+                                               Source="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}}" />
+                                        <TextBlock Foreground="Black"
+                                                   Margin="5,0,0,0"
+                                                   VerticalAlignment="Center"
+                                                   HorizontalAlignment="Left"
+                                                   TextAlignment="Left"
+                                                   Text="{Binding LabelText}" />
+                                    </DockPanel>
+
+                                </TreeDataTemplate>
+                            </TreeView.ItemTemplate>
+                        </TreeView>
+                    </DataTemplate>
+                </local:MpAvTransactionMessageBodyTemplateSelector>
+            </ContentControl.DataTemplates>
+        </ContentControl>
+    </Grid>
+</local:MpAvUserControl>

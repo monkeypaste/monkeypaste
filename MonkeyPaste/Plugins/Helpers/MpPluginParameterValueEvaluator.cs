@@ -10,6 +10,9 @@ namespace MonkeyPaste {
         #endregion
 
         #region Constants
+        public const string TOKEN_OPEN = "{";
+        public const string TOKEN_CLOSE = "}";
+        public const string TOKEN_INNER_BACKUP = "@";
         #endregion
 
         #region Statics
@@ -62,13 +65,13 @@ namespace MonkeyPaste {
             MpParameterControlType controlType,
             MpParameterValueUnitType valueType,
             string curVal,
-            MpCopyItem ci) {
+            MpCopyItem ci, Func<string> lastOutputCallback = null) {
             switch (valueType) {
                 case MpParameterValueUnitType.PlainTextContentQuery:
-                    curVal = await GetParameterQueryResultAsync(controlType, curVal, ci, false);
+                    curVal = await GetParameterQueryResultAsync(controlType, curVal, ci, false, lastOutputCallback);
                     break;
                 case MpParameterValueUnitType.RawDataContentQuery:
-                    curVal = await GetParameterQueryResultAsync(controlType, curVal, ci, true);
+                    curVal = await GetParameterQueryResultAsync(controlType, curVal, ci, true, lastOutputCallback);
                     break;
                 case MpParameterValueUnitType.Base64Text:
                     curVal = curVal.ToBytesFromBase64String().ToBase64String();
@@ -85,14 +88,16 @@ namespace MonkeyPaste {
             }
             return curVal;
         }
-        public static async Task<object> QueryPropertyAsync(MpCopyItem ci, MpContentQueryPropertyPathType queryPathType) {
+        public static async Task<object> QueryPropertyAsync(
+            MpCopyItem ci, MpContentQueryPropertyPathType queryPathType, Func<string> lastOutputCallback = null) {
             if (ci == null) {
                 return null;
             }
             switch (queryPathType) {
                 case MpContentQueryPropertyPathType.None:
-                case MpContentQueryPropertyPathType.LastOutput:
                     return null;
+                case MpContentQueryPropertyPathType.LastOutput:
+                    return lastOutputCallback?.Invoke();
                 case MpContentQueryPropertyPathType.ItemData:
                 case MpContentQueryPropertyPathType.ItemType:
                 case MpContentQueryPropertyPathType.Title:
@@ -110,20 +115,32 @@ namespace MonkeyPaste {
 
             }
         }
+
+        public static string GetQueryToken(MpContentQueryPropertyPathType cqppt) {
+            return $"{TOKEN_OPEN}{cqppt}{TOKEN_CLOSE}";
+        }
+        public static string GetQueryBackupToken(MpContentQueryPropertyPathType cqppt) {
+            return $"{TOKEN_OPEN}{TOKEN_INNER_BACKUP}{cqppt}{TOKEN_INNER_BACKUP}{TOKEN_CLOSE}";
+        }
         #endregion
 
         #region Protected Methods
         #endregion
 
         #region Private Methods
-        private static async Task<string> GetParameterQueryResultAsync(MpParameterControlType controlType, string curVal, MpCopyItem ci, bool asRawData) {
+        private static async Task<string> GetParameterQueryResultAsync(
+            MpParameterControlType controlType,
+            string curVal,
+            MpCopyItem ci,
+            bool asRawData,
+            Func<string> lastOutputCallback = null) {
             if (MpParameterFormat.IsControlCsvValue(controlType)) {
                 // for csv values, split decode actual text to get query result then return re-encoded csv
                 var csvProps = MpParameterFormat.GetControlCsvProps(controlType);
                 var decoded_vals = curVal.ToListFromCsv(csvProps);
                 var decoded_val_results = new List<string>();
                 foreach (var decoded_val in decoded_vals) {
-                    string decoded_val_result = await GetParameterQueryResultAsync(MpParameterControlType.TextBox, decoded_val, ci, asRawData);
+                    string decoded_val_result = await GetParameterQueryResultAsync(MpParameterControlType.TextBox, decoded_val, ci, asRawData, lastOutputCallback);
                     decoded_val_results.Add(decoded_val_result);
                 }
                 return decoded_val_results.ToCsv(csvProps);
@@ -132,20 +149,19 @@ namespace MonkeyPaste {
             for (int i = 1; i < Enum.GetNames(typeof(MpContentQueryPropertyPathType)).Length; i++) {
                 // example content query: '{Title} is a story about {ItemData}'
                 MpContentQueryPropertyPathType ppt = (MpContentQueryPropertyPathType)i;
-                if (ppt == MpContentQueryPropertyPathType.LastOutput) {
+                if (ppt == MpContentQueryPropertyPathType.LastOutput &&
+                    lastOutputCallback == null) {
                     continue;
                 }
-
-                string pptPathEnumName = ppt.ToString();
-                string pptToken = "{" + pptPathEnumName + "}";
+                string pptToken = GetQueryToken(ppt);
 
                 if (curVal.Contains(pptToken)) {
-                    string contentValue = await QueryPropertyAsync(ci, ppt) as string;
+                    string contentValue = await QueryPropertyAsync(ci, ppt, lastOutputCallback) as string;
 
                     if (!asRawData) {
-                        contentValue = await GetParameterRequestValueAsync(controlType, MpParameterValueUnitType.PlainText, contentValue, ci);
+                        contentValue = await GetParameterRequestValueAsync(controlType, MpParameterValueUnitType.PlainText, contentValue, ci, lastOutputCallback);
                     }
-                    string pptTokenBackup = "{@" + ppt.ToString() + "@}";
+                    string pptTokenBackup = GetQueryBackupToken(ppt);
                     if (curVal.Contains(pptTokenBackup)) {
                         //this content query token has conflicts so use the backup
                         // example content query needing backup: '{Title} is {Title} but {@Title@} is content'

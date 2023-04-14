@@ -1014,10 +1014,16 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
         public async Task InitializeAsync(MpCopyItem ci, int queryOffset = -1, bool isRestoringSelection = false) {
+            IsBusy = true;
+            bool is_reload =
+                (CopyItemId == 0 && ci == null) ||
+                (ci != null && CopyItemId == ci.Id);
+
             _curItemRandomHexColor = string.Empty;
             _contentView = null;
-
-            IsBusy = true;
+            if (!is_reload) {
+                IsPopOutVisible = false;
+            }
 
             if (ci != null &&
                 MpAvPersistentClipTilePropertiesHelper.TryGetByPersistentWidth_ById(ci.Id, queryOffset, out double uniqueWidth)) {
