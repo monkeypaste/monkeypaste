@@ -94,7 +94,7 @@ namespace MonkeyPaste.Avalonia {
                 PlatformItems.AddRange(
                    new List<MpLoaderItemViewModel>() {
                         new MpLoaderItemViewModel(this,typeof(MpAvPlainHtmlConverter)),
-                        //new MpBootstrappedItemViewModel(this,typeof(MpAvAppendNotificationWindow)),
+                        new MpLoaderItemViewModel(this,typeof(MpAppendNotificationViewModel)),
                         new MpLoaderItemViewModel(this,typeof(MpAvMainView)),
                         new MpLoaderItemViewModel(this,typeof(MpAvMainWindowViewModel))
                    });

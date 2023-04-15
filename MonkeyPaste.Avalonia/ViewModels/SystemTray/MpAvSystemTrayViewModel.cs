@@ -106,10 +106,10 @@ namespace MonkeyPaste.Avalonia {
                             Header = "Show Converter DevTools",
                             Command = MpAvPlainHtmlConverter.Instance.ShowConverterDevTools,
                         },
-                        new MpMenuItemViewModel() {
-                            Header = "Show Notifier DevTools",
-                            Command = MpAvClipTrayViewModel.Instance.ShowAppendDevToolsCommand
-                        },
+                        //new MpMenuItemViewModel() {
+                        //    Header = "Show Notifier DevTools",
+                        //    Command = MpAvClipTrayViewModel.Instance.ShowAppendDevToolsCommand
+                        //},
 #endif
                         new MpMenuItemViewModel() {IsSeparator = true},
                         new MpMenuItemViewModel() {

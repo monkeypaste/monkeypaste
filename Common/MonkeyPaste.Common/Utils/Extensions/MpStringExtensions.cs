@@ -257,6 +257,12 @@ namespace MonkeyPaste.Common {
             }
             return str.Split(new string[] { separator }, StringSplitOptions.RemoveEmptyEntries);
         }
+        public static string[] SplitWithEmpty(this string str, string separator) {
+            if (str == null) {
+                return new string[] { };
+            }
+            return str.Split(new string[] { separator }, StringSplitOptions.None);
+        }
 
         public static string[] SplitByLineBreak(this string str) {
             if (str == null) {

@@ -17,12 +17,7 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
 
         private MpAvNotificationPositioner _positioner;
-        //private MpAvTopmostSelector _topmostSelector;
-
         private ObservableCollection<Window> _windows = new ObservableCollection<Window>();
-
-        //private Window _wvMessageWindow;
-
         #endregion
 
         #region Statics
@@ -61,8 +56,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
-
         #region Properties
 
 
@@ -93,7 +86,6 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
         public void Init() {
             _positioner = new MpAvNotificationPositioner();
-            //_topmostSelector = new MpAvTopmostSelector();
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }
 
@@ -118,9 +110,9 @@ namespace MonkeyPaste.Avalonia {
                             DataContext = nvmb
                         };
                         break;
-                    case MpNotificationLayoutType.Append:
-                        nw = MpAvAppendNotificationWindow.Instance;
-                        break;
+                    //case MpNotificationLayoutType.Append:
+                    //    nw = MpAvAppendNotificationWindow.Instance;
+                    //    break;
                     default:
                         nw = new MpAvMessageNotificationWindow() {
                             DataContext = nvmb
@@ -158,10 +150,10 @@ namespace MonkeyPaste.Avalonia {
                      Mp.Services.StartupState != null &&
                      Mp.Services.StartupState.IsPlatformLoaded;
             if (is_platform_loaded) {
-                if (nw == MpAvAppendNotificationWindow.Instance &&
-                MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
-                    return;
-                }
+                //if (nw == MpAvAppendNotificationWindow.Instance &&
+                //MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
+                //    return;
+                //}
                 MpAvMainWindowViewModel.Instance.IsAnyNotificationActivating = true;
             }
 
@@ -197,9 +189,11 @@ namespace MonkeyPaste.Avalonia {
         private void FinishClose(Window w) {
             if (w is MpAvLoaderNotificationWindow) {
                 // ignore so bootstrapper can swap main window
-            } else if (w == MpAvAppendNotificationWindow.Instance) {
-                w.Hide();
-            } else {
+            }
+            //else if (w == MpAvAppendNotificationWindow.Instance) {
+            //    w.Hide();
+            //} 
+            else {
                 try {
                     w.Close();
                 }
@@ -213,10 +207,10 @@ namespace MonkeyPaste.Avalonia {
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.MainWindowOpening:
-                    if (MpAvAppendNotificationWindow.Instance != null &&
-                        MpAvAppendNotificationWindow.Instance.IsVisible) {
-                        HideNotification(MpAppendNotificationViewModel.Instance);
-                    }
+                    //if (MpAvAppendNotificationWindow.Instance != null &&
+                    //    MpAvAppendNotificationWindow.Instance.IsVisible) {
+                    //    HideNotification(MpAppendNotificationViewModel.Instance);
+                    //}
                     break;
 
             }
@@ -225,11 +219,11 @@ namespace MonkeyPaste.Avalonia {
         #region Window Events
 
         private void Nw_PointerReleased(object sender, global::Avalonia.Input.PointerReleasedEventArgs e) {
-            if (sender == MpAvAppendNotificationWindow.Instance ||
-                sender is Window w && w.DataContext is MpNotificationViewModelBase nvmb &&
-                nvmb.IsOverOptionsButton) {
-                return;
-            }
+            //if (sender == MpAvAppendNotificationWindow.Instance ||
+            //    sender is Window w && w.DataContext is MpNotificationViewModelBase nvmb &&
+            //    nvmb.IsOverOptionsButton) {
+            //    return;
+            //}
 
             if (MpAvMainView.Instance == null || !MpAvMainView.Instance.IsInitialized) {
                 return;

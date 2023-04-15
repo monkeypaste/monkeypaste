@@ -79,9 +79,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private bool TestDcMismatchByHover() {
-            if (this.GetVisualAncestor<MpAvAppendNotificationWindow>() != null) {
-                return true;
-            }
+            //if (this.GetVisualAncestor<MpAvAppendNotificationWindow>() != null) {
+            //    return true;
+            //}
             return this.IsPointerOver == BindingContext.IsHovering;
         }
         private void Fix() {

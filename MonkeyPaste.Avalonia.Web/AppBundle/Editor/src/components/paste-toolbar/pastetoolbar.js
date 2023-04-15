@@ -7,13 +7,26 @@
 function initPasteToolbar() {
     enableResize(getPasteToolbarContainerElement());
 
+    initPasteButton();
+    initPasteTemplateToolbarItems();
+}
+
+function initPasteButton() {
     addClickOrKeyClickEventListener(getPasteButtonElement(), onPasteButtonClickOrKeyDown);
 
     let paste_icon_elm = getPasteButtonElement().firstChild;
-    paste_icon_elm.replaceWith(createSvgElement('paste','svg-icon paste-toolbar-icon'));
-    initPasteTemplateToolbarItems();
+    paste_icon_elm.replaceWith(createSvgElement('paste', 'svg-icon paste-toolbar-icon'));
 
     initPastePopup();
+}
+
+function loadPasteButton() {
+
+    if (isPastePopupAvailable()) {
+        getPasteButtonAndModeContainerElement().classList.add('pasteButtonSpit');
+    } else {
+        getPasteButtonAndModeContainerElement().classList.remove('pasteButtonSpit');
+    }
 }
 // #endregion Life Cycle
 
@@ -21,6 +34,10 @@ function initPasteToolbar() {
 
 function getPasteToolbarContainerElement() {
     return document.getElementById('pasteToolbar');
+}
+
+function getPasteButtonAndModeContainerElement() {
+    return document.getElementById('pasteButtonAndModeContainer');
 }
 
 function getPasteButtonElement() {
@@ -54,6 +71,10 @@ function setPasteToolbarDefaultFocus() {
 
 // #region State
 
+function isPastePopupAvailable() {
+    let result = ContentItemType != 'Image';
+    return result;
+}
 
 function isShowingPasteToolbar() {
     return !getPasteToolbarContainerElement().classList.contains('hidden');

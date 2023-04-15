@@ -139,6 +139,7 @@ namespace MonkeyPaste.Common.Avalonia {
             //}
 
             // TODO should add unicode, oem, etc. here for greater compatibility
+            await Task.Delay(1);
         }
 
 

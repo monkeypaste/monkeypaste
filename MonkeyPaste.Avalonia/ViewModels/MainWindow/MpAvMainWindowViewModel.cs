@@ -505,7 +505,8 @@ namespace MonkeyPaste.Avalonia {
         private MpIPlatformScreenInfo _mainWindowScreen;
         public MpIPlatformScreenInfo MainWindowScreen {
             get {
-
+                // TODO mouse & active show behavior isn't implemented since it can't be tested yet
+                // TODO 2 this code should be cleaned up (buggy from platform startup stuff)
                 if (Mp.Services == null ||
                     Mp.Services.ScreenInfoCollection == null ||
                     Mp.Services.ScreenInfoCollection.Screens == null ||

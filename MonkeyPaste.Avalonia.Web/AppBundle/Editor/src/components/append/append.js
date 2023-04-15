@@ -46,12 +46,11 @@ function getAppendDocRange() {
 // #region State
 
 function isAppendNotifier() {
-	return window.location.search.toLowerCase().endsWith(APPEND_NOTIFIER_PARAMS.toLowerCase());
+	//return window.location.search.toLowerCase().endsWith(APPEND_NOTIFIER_PARAMS.toLowerCase());
+	let result = getEditorElement().classList.contains('append');
+	return result;
 }
 
-function isAppendee() {
-	return isAnyAppendEnabled() && !isAppendNotifier();
-}
 
 function isAnyAppendEnabled() {
 	return IsAppendMode || IsAppendLineMode;

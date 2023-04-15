@@ -11,23 +11,34 @@ namespace MonkeyPaste {
     public static class MpContentQuery {
         private static MpIQueryInfo _cur_qi;
 
-        public static async Task<int> QueryForTotalCountAsync(MpIQueryInfo head_qi, IEnumerable<int> idsToOmit) {
-            object result = await PeformQueryAsync_internal(head_qi, -1, -1, idsToOmit);
+        public static async Task<int> QueryForTotalCountAsync(
+            MpIQueryInfo head_qi,
+            IEnumerable<int> idsToOmit) {
+            object result = await PeformQueryAsync_internal(head_qi, -1, -1, idsToOmit, true);
             return (int)result;
         }
 
-        public static async Task<List<MpCopyItem>> FetchItemsAsync(MpIQueryInfo head_qi, int offset, int limit, IEnumerable<int> idsToOmit) {
-            object result = await PeformQueryAsync_internal(head_qi, offset, limit, idsToOmit);
+        public static async Task<List<MpCopyItem>> FetchItemsAsync(
+            MpIQueryInfo head_qi,
+            int offset,
+            int limit,
+            IEnumerable<int> idsToOmit) {
+            object result = await PeformQueryAsync_internal(head_qi, offset, limit, idsToOmit, false);
             return result as List<MpCopyItem>;
         }
 
-
-
-        private static async Task<object> PeformQueryAsync_internal(MpIQueryInfo head_qi, int offset, int limit, IEnumerable<int> ci_idsToOmit) {
+        private static async Task<object> PeformQueryAsync_internal(
+            MpIQueryInfo head_qi,
+            int offset,
+            int limit,
+            IEnumerable<int> ci_idsToOmit,
+            bool isCountQuery) {
+            if (!isCountQuery && (offset < 0 || limit <= 0)) {
+                MpDebug.Break($"Warning, bad fetch request. Offset '{offset}' Limit '{limit}'");
+            }
             // Item1 = Param Query
             // Item2 = INTERSECT|UNION|EXCEPT
             // Item3 = Params
-
             List<Tuple<string, string, List<object>>> sub_queries = new List<Tuple<string, string, List<object>>>();
             int idx = 0;
             for (MpIQueryInfo qi = head_qi; qi != null; qi = qi.Next) {
@@ -41,7 +52,7 @@ namespace MonkeyPaste {
                     qi_tag_ids = Mp.Services.TagQueryTools.GetSelfAndAllDescendantsTagIds(qi.TagId);
                 }
 
-                sub_queries.Add(GetContentQuery(qi, qi_tag_ids, ci_idsToOmit, idx++));
+                sub_queries.Add(GetContentQuery(qi, qi_tag_ids, ci_idsToOmit, idx++, isCountQuery));
             }
             _cur_qi = null;
 
@@ -57,17 +68,21 @@ namespace MonkeyPaste {
             string orderBy_clause = $"ORDER BY {head_qi.GetSortField()} {head_qi.GetSortDirection()}";
             sb.AppendLine(orderBy_clause);
 
-            if (offset < 0) {
+            if (isCountQuery) {
                 // total count query
                 string count_query = $"SELECT COUNT(RootId) FROM({sb})";
-                int total_count = await MpDb.QueryScalarAsync<int>(count_query, sub_queries.SelectMany(x => x.Item3).ToArray());
+                var count_args = sub_queries.SelectMany(x => x.Item3).ToArray();
+                int total_count = await MpDb.QueryScalarAsync<int>(count_query, count_args);
+
+                MpConsole.WriteLine($"Count Query: ");
+                MpConsole.WriteLine(MpDb.GetParameterizedQueryString(count_query, count_args));
                 return total_count;
             }
 
             string inner_query = $"SELECT RootId,{head_qi.GetSortField()} FROM ({sb}) {orderBy_clause}";
-            string fetch_query = $"SELECT * FROM MpCopyItem WHERE pk_MpCopyItemId IN (SELECT RootId FROM ({inner_query})) {orderBy_clause} LIMIT {limit} OFFSET {offset}";
+            string fetch_query = $"SELECT * FROM MpCopyItem WHERE pk_MpCopyItemId IN (SELECT DISTINCT RootId FROM ({inner_query})) {orderBy_clause} LIMIT {limit} OFFSET {offset}";
             var args = sub_queries.SelectMany(x => x.Item3).ToArray();
-            MpConsole.WriteLine($"Current DataModel Query: ");
+            MpConsole.WriteLine($"Fetch Query: ");
             MpConsole.WriteLine(MpDb.GetParameterizedQueryString(fetch_query, args));
             var result = await MpDb.QueryAsync<MpCopyItem>(fetch_query, args);
 
@@ -77,13 +92,18 @@ namespace MonkeyPaste {
             return result;
         }
 
-        private static Tuple<string, string, List<object>> GetContentQuery(MpIQueryInfo qi, IEnumerable<int> tagIds, IEnumerable<int> ci_idsToOmit, int idx) {
+        private static Tuple<string, string, List<object>> GetContentQuery(
+            MpIQueryInfo qi,
+            IEnumerable<int> tagIds,
+            IEnumerable<int> ci_idsToOmit,
+            int idx,
+            bool isCountQuery) {
 
             // Item1 = INTERSECT|UNION|EXCEPT
             // Item2 = Param Query
             // Item3 = Params
 
-            string qi_root_id_query_str = ConvertQueryToSql(qi, tagIds, ci_idsToOmit, out var args);
+            string qi_root_id_query_str = ConvertQueryToSql(qi, tagIds, ci_idsToOmit, idx, isCountQuery, out var args);
 
             string join =
                 qi.JoinType == MpLogicalQueryType.Or ?
@@ -100,7 +120,13 @@ namespace MonkeyPaste {
         }
 
 
-        private static string ConvertQueryToSql(MpIQueryInfo qi, IEnumerable<int> tagIds, IEnumerable<int> ci_idsToOmit, out object[] args) {
+        private static string ConvertQueryToSql(
+            MpIQueryInfo qi,
+            IEnumerable<int> tagIds,
+            IEnumerable<int> ci_idsToOmit,
+            int idx,
+            bool isCountQuery,
+            out object[] args) {
             MpContentQueryBitFlags qf = qi.QueryFlags;
             List<string> types = new List<string>();
             List<string> filters = new List<string>();
@@ -165,6 +191,9 @@ namespace MonkeyPaste {
             // SELECT GEN
 
             string selectClause = $"RootId,{qi.GetSortField()}";
+            if (isCountQuery && idx == 0) {
+                selectClause = "DISTINCT " + selectClause;
+            }
             string query = @$"SELECT {selectClause} FROM MpContentQueryView WHERE {whereClause}";
             args = argList.ToArray();
             return query;

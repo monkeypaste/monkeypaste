@@ -96,6 +96,12 @@ function showPasteButtonExpander() {
     getPasteButtonPopupExpanderLabelElement().innerHTML = getPastePopupExpanderButtonInnerHtml();
     let cm = [];
     for (var i = 0; i < PastePopupMenuOptions.length; i++) {
+        if (i == ManualOptIdx && !isAppendManualModeAvailable()) {
+            continue;
+        }
+        if (i == AppendOptIdx && !isAppendInsertModeAvailable()) {
+            continue;
+        }
         let ppmio = PastePopupMenuOptions[i];
         if (ppmio.separator === undefined) {
             ppmio.icon = getPastePopupSvgKeyAtOptIndex(i);
@@ -145,6 +151,7 @@ function onPasteButtonExpanderClickOrKeyDown(e) {
 }
 
 function onPastePopupMenuOptionClick(optIdx) {
+    log('clicked append mode idx: ' + optIdx);
     if (optIdx == AppendLineOptIdx) {
         if (IsAppendLineMode) {
             disableAppendMode();

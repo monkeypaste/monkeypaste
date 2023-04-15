@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -86,9 +87,28 @@ namespace MonkeyPaste {
             if (args == null || args.Length == 0) {
                 return query;
             }
-            //return _connection.CreateCommand(query, args).ToString();
-            string query_str = query + Environment.NewLine + (args == null ? string.Empty : string.Join(Environment.NewLine, args));
-            return query_str;
+            query = query.Replace(Environment.NewLine, " ");
+            var argList = new Stack(args);
+            var sb = new StringBuilder();
+            for (int i = 0; i < query.Length; i++) {
+                if (query[i] == '?') {
+                    if (argList.Count == 0) {
+                        MpDebug.Break("Param count mismatch");
+                    }
+                    object arg = argList.Pop();
+                    string arg_str = arg.ToString();
+                    if (arg is string || arg is char) {
+                        arg_str = $"'{arg_str}'";
+                    }
+                    sb.Append(arg_str);
+                } else {
+                    sb.Append(query[i]);
+                }
+            }
+            if (argList.Count > 0) {
+                MpDebug.Break("Param count mismatch");
+            }
+            return sb.ToString();
         }
 
         #region Queries

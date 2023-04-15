@@ -44,6 +44,7 @@ function loadContent(
 		// when content is reloaded, any selection will be lost so save to restore
 		sel_to_restore = getDocSelection();
 	} else {
+		loadPasteButton();
 		disableAppendMode();
 		resetSelection();
 		resetColorPaletteState();

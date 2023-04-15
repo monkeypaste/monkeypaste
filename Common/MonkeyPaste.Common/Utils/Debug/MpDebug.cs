@@ -7,9 +7,10 @@ namespace MonkeyPaste.Common {
         public static void Break(object args = null) {
             if (Debugger.IsAttached) {
                 Debugger.Break();
-            } else {
-                throw new Exception(args?.ToString());
             }
+            //else {
+            //    throw new Exception(args?.ToString());
+            //}
         }
 
         public static void BreakAllThreads(object args = null) {

@@ -55,6 +55,7 @@
     <AvaloniaXaml Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
     <AvaloniaXaml Remove="Views\MainWindow\ResizeHandle\**" />
     <AvaloniaXaml Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
+    <AvaloniaXaml Remove="Views\Reusable\Notifications\Toast\Append\**" />
     <AvaloniaXaml Remove="Views\Reusable\ShortcutWindow\ShortcutPanel\AssignableShortcut\**" />
     <Compile Remove="Assets\Images\MpRichTextBox\**" />
     <Compile Remove="Assets\Images\resize_backup\**" />
@@ -86,6 +87,7 @@
     <Compile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
     <Compile Remove="Views\MainWindow\ResizeHandle\**" />
     <Compile Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
+    <Compile Remove="Views\Reusable\Notifications\Toast\Append\**" />
     <Compile Remove="Views\Reusable\ShortcutWindow\ShortcutPanel\AssignableShortcut\**" />
     <EmbeddedResource Remove="Assets\Images\MpRichTextBox\**" />
     <EmbeddedResource Remove="Assets\Images\resize_backup\**" />
@@ -117,6 +119,7 @@
     <EmbeddedResource Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
     <EmbeddedResource Remove="Views\MainWindow\ResizeHandle\**" />
     <EmbeddedResource Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
+    <EmbeddedResource Remove="Views\Reusable\Notifications\Toast\Append\**" />
     <EmbeddedResource Remove="Views\Reusable\ShortcutWindow\ShortcutPanel\AssignableShortcut\**" />
     <JavaSourceJar Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <None Remove="Assets\Images\MpRichTextBox\**" />
@@ -149,6 +152,7 @@
     <None Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
     <None Remove="Views\MainWindow\ResizeHandle\**" />
     <None Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
+    <None Remove="Views\Reusable\Notifications\Toast\Append\**" />
     <None Remove="Views\Reusable\ShortcutWindow\ShortcutPanel\AssignableShortcut\**" />
     <Page Remove="Assets\Images\MpRichTextBox\**" />
     <Page Remove="Assets\Images\resize_backup\**" />
@@ -178,6 +182,7 @@
     <Page Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\CornerButtons\Detail\**" />
     <Page Remove="Views\MainWindow\ResizeHandle\**" />
     <Page Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\Items\**" />
+    <Page Remove="Views\Reusable\Notifications\Toast\Append\**" />
     <Page Remove="Views\Reusable\ShortcutWindow\ShortcutPanel\AssignableShortcut\**" />
     <ProguardConfiguration Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <TransformFile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
@@ -1272,9 +1277,6 @@
     </Compile>
     <Compile Update="Views\Reusable\ContextMenu\DefaultMenuItem\MpAvDefaultMenuItemView.axaml.cs">
       <DependentUpon>MpAvDefaultMenuItemView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Reusable\Notifications\Toast\Append\MpAvAppendNotificationWindow.axaml.cs">
-      <DependentUpon>MpAvAppendNotificationWindow.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Reusable\Notifications\Toast\Loader\MpAvLoaderNotificationWindow.axaml.cs">
       <DependentUpon>MpAvLoaderNotificationWindow.axaml</DependentUpon>

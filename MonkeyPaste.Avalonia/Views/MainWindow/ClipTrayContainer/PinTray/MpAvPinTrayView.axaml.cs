@@ -153,7 +153,7 @@ namespace MonkeyPaste.Avalonia {
                 await dup_ci.WriteToDatabaseAsync();
 
 
-                drop_ctvm = await BindingContext.CreateClipTileViewModel(dup_ci, -1);
+                drop_ctvm = await BindingContext.CreateClipTileViewModelAsync(dup_ci, -1);
             }
             BindingContext.PinTileCommand.Execute(new object[] { drop_ctvm, drop_idx });
             MpConsole.WriteLine($"Tile '{drop_ctvm}' dropped onto pintray idx: {drop_idx}");
@@ -171,7 +171,7 @@ namespace MonkeyPaste.Avalonia {
                 force_ext_sources: from_ext,
                 transType: MpTransactionType.Created);
 
-            var drop_ctvm = await BindingContext.CreateClipTileViewModel(avdo_ci, -1);
+            var drop_ctvm = await BindingContext.CreateClipTileViewModelAsync(avdo_ci, -1);
             BindingContext.PinTileCommand.Execute(new object[] { drop_ctvm, drop_idx });
 
             MpConsole.WriteLine($"PARTIAL Tile '{drop_ctvm}' dropped onto pintray idx: {drop_idx}");

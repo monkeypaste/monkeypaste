@@ -979,9 +979,9 @@ namespace MonkeyPaste.Avalonia {
 
         public virtual string ContentUrl {
             get {
-                if (this.GetVisualRoot() is MpAvAppendNotificationWindow) {
-                    return $"{MpAvClipTrayViewModel.EditorUri}?{APPEND_NOTIFIER_URL_PARAMS}";
-                }
+                //if (this.GetVisualRoot() is MpAvAppendNotificationWindow) {
+                //    return $"{MpAvClipTrayViewModel.EditorUri}?{APPEND_NOTIFIER_URL_PARAMS}";
+                //}
 
                 return MpAvClipTrayViewModel.EditorUri;
             }
@@ -1462,7 +1462,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
         #endregion
 
         #region Append
@@ -1543,7 +1542,7 @@ namespace MonkeyPaste.Avalonia {
 
         }
 
-        private void ProcessAppendStateChangedMessage(MpQuillAppendStateChangedMessage appendChangedMsg, string source) {
+        public void ProcessAppendStateChangedMessage(MpQuillAppendStateChangedMessage appendChangedMsg, string source) {
             Dispatcher.UIThread.Post(async () => {
                 var ctrvm = MpAvClipTrayViewModel.Instance;
                 var cur_append_tile = ctrvm.AppendClipTileViewModel;
@@ -1571,7 +1570,7 @@ namespace MonkeyPaste.Avalonia {
                 while (ctrvm.IsAddingClipboardItem) {
                     await Task.Delay(100);
                 }
-                RelayMsg($"appendStateChanged_ext('{appendChangedMsg.SerializeJsonObjectToBase64()}')").FireAndForgetSafeAsync();
+                SendMessage($"appendStateChanged_ext('{appendChangedMsg.SerializeJsonObjectToBase64()}')");
             });
         }
 
@@ -1582,10 +1581,10 @@ namespace MonkeyPaste.Avalonia {
                 // relay to tray tile
                 dest_wv = LocateTrayTileWebView(BindingContext.CopyItemId);
 
-            } else if (BindingContext.IsAppendTrayItem) {
-                // relay to notifier
-                dest_wv = LocateModalWebView();
-            }
+            } //else if (BindingContext.IsAppendTrayItem) {
+              // relay to notifier
+              //    dest_wv = LocateModalWebView();
+              //}
             if (dest_wv == null) {
                 return;
             }

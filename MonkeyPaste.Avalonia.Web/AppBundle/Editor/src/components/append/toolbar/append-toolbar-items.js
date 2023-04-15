@@ -34,6 +34,15 @@ function isPasteAppendToolbarLabelContainerVisible() {
 	return !getPasteAppendToolbarLabelContainerElement().classList.contains('hidden');
 }
 
+function isAppendManualModeAvailable() {
+	let result = ContentItemType == 'Text';
+	return result;
+}
+
+function isAppendInsertModeAvailable() {
+	let result = ContentItemType == 'Text';
+	return result;
+}
 // #endregion State
 
 // #region Actions

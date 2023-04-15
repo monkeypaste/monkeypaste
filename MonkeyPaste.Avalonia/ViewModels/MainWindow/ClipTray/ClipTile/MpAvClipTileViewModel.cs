@@ -18,6 +18,11 @@ namespace MonkeyPaste.Avalonia {
     public interface MpIDisposableObject {
         void Dispose();
     }
+    public enum MpAppendModeType {
+        None,
+        Insert,
+        Line
+    }
     public class MpAvClipTileViewModel : MpViewModelBase<MpAvClipTrayViewModel>,
         MpISelectableViewModel,
         MpISelectorItemViewModel,
@@ -386,7 +391,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-
         public string ShortcutTooltipText =>
             string.IsNullOrEmpty(KeyString) ? $"Assign Global Paste Shortcut for '{CopyItemTitle}'" : KeyString;
 
@@ -395,7 +399,6 @@ namespace MonkeyPaste.Avalonia {
             //MpAvThemeViewModel.Instance.IsDesktop &&
             !IsPopOutVisible;
 
-        public bool IsPopOutVisible { get; set; }
         public MpIEmbedHost EmbedHost =>
             GetContentView() as MpIEmbedHost;
 
@@ -422,24 +425,19 @@ namespace MonkeyPaste.Avalonia {
         public bool IsHoveringOverSourceIcon { get; set; } = false;
         public bool IsOverDetail { get; set; } = false;
 
-        #region Append
-        public bool IsAppendTrayItem {
-            get {
-                if (Parent == null || Parent.ModalClipTileViewModel == null) {
-                    return false;
-                }
-                return Parent.ModalClipTileViewModel.CopyItemId == CopyItemId && !IsAppendNotifier;
-            }
-        }
+        public bool IsPopOutVisible { get; set; }
 
-        public bool IsAppendNotifier {
-            get {
-                if (Parent == null) {
-                    return false;
-                }
-                return Parent.ModalClipTileViewModel == this;
-            }
-        }
+        #region Append
+        //public bool IsAppendTrayItem {
+        //    get {
+        //        if (Parent == null || Parent.ModalClipTileViewModel == null) {
+        //            return false;
+        //        }
+        //        return Parent.ModalClipTileViewModel.CopyItemId == CopyItemId && !IsAppendNotifier;
+        //    }
+        //}
+
+        public bool IsAppendNotifier { get; set; }
 
         //public bool HasAppendModel => IsAppendNotifier || IsAppendClipTile;
 
@@ -1046,17 +1044,8 @@ namespace MonkeyPaste.Avalonia {
             FileItemCollectionViewModel.InitializeAsync(ci).FireAndForgetSafeAsync(this);
 
             CopyItem = ci;
-            //QueryOffsetIdx = queryOffset < 0 && ci != null ? QueryOffsetIdx : queryOffset;
-
             CycleDetailCommand.Execute(0);
             await TransactionCollectionViewModel.InitializeAsync(CopyItemId);
-
-            //var cial = await MpDataModelProvider.GetCopyItemAnnotationsAsync(CopyItemId);
-            //if(cial == null || cial.Count == 0) {
-            //    AnnotationsJsonStr = string.Empty;
-            //} else {
-            //    AnnotationsJsonStr = JsonConvert.SerializeObject(cial.Select(x => x.AnnotationJsonStr).ToList());
-            //}
 
             if (isRestoringSelection) {
                 Parent.RestoreSelectionState(this);
@@ -1156,8 +1145,8 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(QueryOffsetIdx));
         }
 
-        public void OpenPopOutWindow() {
-            var pow = new MpAvWindow() {
+        public async void OpenPopOutWindow(MpAppendModeType appendType) {
+            MpAvWindow pow = new MpAvWindow() {
                 Width = 500,
                 Height = 500,
                 DataContext = this,
@@ -1168,6 +1157,13 @@ namespace MonkeyPaste.Avalonia {
                 Topmost = true,
                 Padding = new Thickness(10)
             };
+            if (appendType != MpAppendModeType.None) {
+                pow.WindowStartupLocation = WindowStartupLocation.Manual;
+                pow.Position = MpAvNotificationPositioner.GetSystemTrayWindowPosition(new Size(pow.Width, pow.Height));
+                pow.Classes.Add("fadeIn");
+
+                IsAppendNotifier = true;
+            }
 
             pow.Bind(
                 Window.TitleProperty,
@@ -1215,6 +1211,23 @@ namespace MonkeyPaste.Avalonia {
             pow.Closed += close_handler;
 
             pow.ShowChild();
+
+            if (IsAppendNotifier) {
+                Dispatcher.UIThread.Post(async () => {
+
+                    await Task.Delay(300);
+                    while (IsAnyBusy) {
+                        await Task.Delay(100);
+                    }
+                    if (GetContentView() is MpAvContentWebView wv) {
+                        var append_msg = new MpQuillAppendStateChangedMessage() {
+                            isAppendLineMode = appendType == MpAppendModeType.Line,
+                            isAppendMode = appendType == MpAppendModeType.Insert
+                        };
+                        wv.ProcessAppendStateChangedMessage(append_msg, "command");
+                    }
+                });
+            }
 
             OnPropertyChanged(nameof(IsPopOutVisible));
             OnPropertyChanged(nameof(IsResizerEnabled));
@@ -1968,6 +1981,8 @@ namespace MonkeyPaste.Avalonia {
         public ICommand PopInTileCommand => new MpCommand(() => {
             int ciid = CopyItemId;
             TransactionCollectionViewModel.CloseTransactionPaneCommand.Execute(null);
+            IsAppendNotifier = false;
+
             if (Parent != null) {
                 _contentView = null;
                 MpAvPersistentClipTilePropertiesHelper.RemovePersistentSize_ById(ciid, QueryOffsetIdx);

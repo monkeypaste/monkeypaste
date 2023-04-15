@@ -16,6 +16,24 @@ namespace MonkeyPaste.Avalonia {
 
         #region Statics
 
+        public static PixelPoint GetSystemTrayWindowPosition(Size s, double pad = 10) {
+            // NOTE this should account for mw show behavior (i think) show 'system tray' is BR of active monitor
+            // TODO test when other window behaviors are implemented
+            var primaryScreen = MpAvMainWindowViewModel.Instance.MainWindowScreen;
+            if (primaryScreen == null) {
+                // happens before loader attached
+                return new PixelPoint();
+            }
+
+            double x = primaryScreen.WorkArea.Right - s.Width - pad;
+            double y = primaryScreen.WorkArea.Bottom - s.Height + pad;
+            x *= primaryScreen.Scaling;
+            y *= primaryScreen.Scaling;
+
+            // when y is less than 0 i think it screws up measuring mw dimensions so its a baby
+            y = Math.Max(0, y);
+            return new PixelPoint((int)x, (int)y);
+        }
         #endregion
 
         #region Properties
@@ -94,7 +112,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void PositionWindowToAnchor(Window w, object anchor) {
-
             w.Position = FindAnchorPoint(w, null);
         }
 
@@ -136,36 +153,18 @@ namespace MonkeyPaste.Avalonia {
 
         private void PositionWindowToSystemTray(Window w) {
             // TODO this should somehow know where system tray is on device, it just assumes its bottom right (windows)
-            var s = GetWindowSize(w);
-
-            var primaryScreen = new MpAvDesktopScreenInfo(w.Screens.All.FirstOrDefault(x => x.IsPrimary));
-            //new MpAvScreenInfoCollection().Screens.FirstOrDefault(x => x.IsPrimary);
+            var primaryScreen = MpAvMainWindowViewModel.Instance.MainWindowScreen;
             if (primaryScreen == null) {
                 // happens before loader attached
                 return;
             }
+            var s = GetWindowSize(w);
+
             double pad = 10;
-
-            double x = primaryScreen.WorkArea.Right - s.Width - pad;
-            double offsetY = _windows.Where(x => _windows.IndexOf(x) < _windows.IndexOf(w)).Sum(x => x.Bounds.Height + pad);
-            offsetY += s.Height + pad;
-            double y = primaryScreen.WorkArea.Bottom - offsetY;
-
-            //if(OperatingSystem.IsWindows()) 
-            {
-                x *= primaryScreen.Scaling;
-                y *= primaryScreen.Scaling;
-            }
-
-            // when y is less than 0 i think it screws up measuring mw dimensions so its a baby
-            y = Math.Max(0, y);
-
-            if (Math.Abs(w.Position.X - x) > 10 && w.DataContext is MpNotificationViewModelBase nvmb && nvmb.NotificationType == MpNotificationType.InvalidAction) {
-                // Debugger.Break();
-            }
-            w.Position = new PixelPoint((int)x, (int)y);
-            //ClampWindowToScreen(primaryScreen,w, pad);
-            //MpConsole.WriteLine($"Notification Idx {_windows.IndexOf(this)} density {primaryScreen.PixelDensity} x {this.Position.X} y {this.Position.Y}  width {s.Width} height {s.Height}");
+            var w_pos = GetSystemTrayWindowPosition(s.ToAvSize(), pad);
+            double offsetY = _windows.Where(x => _windows.IndexOf(x) < _windows.IndexOf(w)).Sum(x => (x.Bounds.Height + pad) * primaryScreen.Scaling);
+            w_pos -= new PixelPoint(0, (int)offsetY);
+            w.Position = w_pos;
         }
 
         private MpSize GetWindowSize(Window w) {

@@ -12,6 +12,10 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvContentWebViewContainer">
+    <!--
+        AppendData="{Binding AppendData, Mode=TwoWay, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+        AppendModeState="{Binding AppendModeStateFlags, Mode=TwoWay, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+    -->
     <local:MpAvContentWebView x:Name="ContentWebView"
                               Focusable="{Binding IsSubSelectionEnabled}"
                               local:MpAvReceivesEventsExtension.IsEnabled="{Binding IsMobile, Source={x:Static local:MpAvThemeViewModel.Instance}}"
@@ -22,8 +26,6 @@
                               IsContentReadOnly="{Binding IsContentReadOnly, Mode=TwoWay}"
                               IsContentSubSelectable="{Binding IsSubSelectionEnabled, Mode=TwoWay}"
                               IsContentFindAndReplaceVisible="{Binding IsFindAndReplaceVisible, Mode=TwoWay}"
-                              AppendData="{Binding AppendData, Mode=TwoWay, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
-                              AppendModeState="{Binding AppendModeStateFlags, Mode=TwoWay, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                               HorizontalAlignment="Stretch"
                               VerticalAlignment="Stretch">
         <!--<local:MpAvContentWebView.Focusable>

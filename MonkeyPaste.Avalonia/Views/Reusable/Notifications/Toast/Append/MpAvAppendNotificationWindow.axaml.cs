@@ -26,7 +26,7 @@ namespace MonkeyPaste.Avalonia {
                 NotificationType = MpNotificationType.AppendChanged,
                 MaxShowTimeMs = -1,
                 //BodyFormat = MpTextContentFormat.RichHtml,
-                Body = MpAvClipTrayViewModel.Instance.ModalClipTileViewModel,
+                //Body = MpAvClipTrayViewModel.Instance.ModalClipTileViewModel,
                 IconSourceObj = "AppImage"
             };
 

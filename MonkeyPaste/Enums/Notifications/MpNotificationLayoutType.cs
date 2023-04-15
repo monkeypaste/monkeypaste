@@ -2,7 +2,7 @@
     public enum MpNotificationLayoutType {
         //Default = 0,
         Message,
-        Append,
+        // Append,
         Loader,
         Warning, //confirm
         UserAction, //retry/ignore/quit

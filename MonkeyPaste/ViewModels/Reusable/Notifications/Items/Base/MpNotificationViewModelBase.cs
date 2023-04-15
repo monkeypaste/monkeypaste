@@ -45,8 +45,8 @@ namespace MonkeyPaste {
                 case MpNotificationType.DbError:
                 case MpNotificationType.PluginResponseError:
                     return MpNotificationLayoutType.Error;
-                case MpNotificationType.AppendChanged:
-                    return MpNotificationLayoutType.Append;
+                //case MpNotificationType.AppendChanged:
+                //    return MpNotificationLayoutType.Append;
                 default:
                     return MpNotificationLayoutType.Message;
             }
