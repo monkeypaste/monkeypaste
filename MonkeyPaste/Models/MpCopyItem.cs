@@ -177,9 +177,8 @@ namespace MonkeyPaste {
             string title = "",
             int dataObjectId = 0,
             bool suppressWrite = false) {
-            MpCopyItem dupCheck = null;
             if (MpPrefViewModel.Instance.IsDuplicateCheckEnabled && !suppressWrite) {
-                dupCheck = await MpDataModelProvider.GetCopyItemByDataAsync(data);
+                var dupCheck = await MpDataModelProvider.GetCopyItemByDataAsync(data);
                 if (dupCheck != null) {
                     dupCheck.WasDupOnCreate = true;
                     return dupCheck;
@@ -288,7 +287,7 @@ namespace MonkeyPaste {
             var citl = await MpDataModelProvider.GetCopyItemTagsForCopyItemAsync(Id);
             delete_tasks.AddRange(citl.Select(x => x.DeleteFromDatabaseAsync()));
 
-            var cisl = await MpDataModelProvider.GetCopyItemSources(Id);
+            var cisl = await MpDataModelProvider.GetCopyItemSourcesAsync(Id);
             delete_tasks.AddRange(cisl.Select(x => x.DeleteFromDatabaseAsync()));
 
             var doil = await MpDataModelProvider.GetDataObjectItemsByDataObjectId(DataObjectId);

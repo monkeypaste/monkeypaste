@@ -105,7 +105,7 @@ namespace MonkeyPaste.Avalonia {
                                 req: mpdo.SerializeData(),
                                 respType: MpJsonMessageFormatType.None,
                                 resp: null,
-                                ref_urls: new[] { drop_app_url },
+                                ref_uris: new[] { drop_app_url },
                                 transType: MpTransactionType.Dragged).FireAndForgetSafeAsync(ctvm);
                 }
             }

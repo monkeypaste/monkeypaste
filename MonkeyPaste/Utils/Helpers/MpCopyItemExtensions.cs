@@ -3,7 +3,7 @@ using System;
 
 namespace MonkeyPaste {
     public static class MpCopyItemExtensions {
-        public static MpPortableDataObject ToPortableDataObject(this MpCopyItem ci, bool includeRef = false, bool includeTitle = false) {
+        public static MpPortableDataObject ToPortableDataObject(this MpCopyItem ci, bool includeSelfRef = false, bool includeTitle = false) {
             if (ci == null) {
                 return new MpPortableDataObject();
             }
@@ -19,7 +19,7 @@ namespace MonkeyPaste {
                     pdo.SetData(MpPortableDataFormats.AvFileNames, ci.ItemData.SplitNoEmpty(Environment.NewLine));
                     break;
             }
-            if (includeRef) {
+            if (includeSelfRef) {
                 pdo.SetData(MpPortableDataFormats.CefAsciiUrl, Mp.Services.SourceRefTools.ToUrlAsciiBytes(ci));
             }
             if (includeTitle) {

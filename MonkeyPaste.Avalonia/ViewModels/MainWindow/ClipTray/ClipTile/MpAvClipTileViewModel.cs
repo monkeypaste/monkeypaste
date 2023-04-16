@@ -437,7 +437,14 @@ namespace MonkeyPaste.Avalonia {
         //    }
         //}
 
+        #region State
         public bool IsAppendNotifier { get; set; }
+        #endregion
+
+        #region Appearance
+
+
+        #endregion
 
         //public bool HasAppendModel => IsAppendNotifier || IsAppendClipTile;
 
@@ -1145,7 +1152,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(QueryOffsetIdx));
         }
 
-        public async void OpenPopOutWindow(MpAppendModeType appendType) {
+        public void OpenPopOutWindow() {
             MpAvWindow pow = new MpAvWindow() {
                 Width = 500,
                 Height = 500,
@@ -1157,13 +1164,6 @@ namespace MonkeyPaste.Avalonia {
                 Topmost = true,
                 Padding = new Thickness(10)
             };
-            if (appendType != MpAppendModeType.None) {
-                pow.WindowStartupLocation = WindowStartupLocation.Manual;
-                pow.Position = MpAvNotificationPositioner.GetSystemTrayWindowPosition(new Size(pow.Width, pow.Height));
-                pow.Classes.Add("fadeIn");
-
-                IsAppendNotifier = true;
-            }
 
             pow.Bind(
                 Window.TitleProperty,
@@ -1185,10 +1185,7 @@ namespace MonkeyPaste.Avalonia {
                 });
 
             if (pow.Content is Control c) {
-                if (c is MpIContentView cv) {
-                    _contentView = cv;
-                }
-
+                // BUG hover doesn't work binding to window
                 c.Bind(
                     MpAvIsHoveringExtension.IsHoveringProperty,
                     new Binding() {
@@ -1212,27 +1209,131 @@ namespace MonkeyPaste.Avalonia {
 
             pow.ShowChild();
 
-            if (IsAppendNotifier) {
-                Dispatcher.UIThread.Post(async () => {
+            OnPropertyChanged(nameof(IsPopOutVisible));
+            OnPropertyChanged(nameof(IsResizerEnabled));
+        }
 
-                    await Task.Delay(300);
-                    while (IsAnyBusy) {
-                        await Task.Delay(100);
-                    }
-                    if (GetContentView() is MpAvContentWebView wv) {
-                        var append_msg = new MpQuillAppendStateChangedMessage() {
-                            isAppendLineMode = appendType == MpAppendModeType.Line,
-                            isAppendMode = appendType == MpAppendModeType.Insert
-                        };
-                        wv.ProcessAppendStateChangedMessage(append_msg, "command");
-                    }
+        public void OpenAppendWindow(MpAppendModeType appendType) {
+            Size ws = new Size(250, 250);
+            MpAvWindow pow = new MpAvWindow() {
+                Width = ws.Width,
+                Height = ws.Height,
+                DataContext = this,
+                ShowInTaskbar = true,
+                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppendImage", typeof(WindowIcon), null, null) as WindowIcon,
+                WindowStartupLocation = WindowStartupLocation.Manual,
+                Position = MpAvNotificationPositioner.GetSystemTrayWindowPosition(ws),
+                Content = new MpAvClipTileView(),
+                Topmost = true,
+                Padding = new Thickness(10)
+                //Classes = Classes.Parse("fadeIn fadeOut")
+            };
+
+            pow.Bind(
+                Window.TitleProperty,
+                new Binding() {
+                    Source = this,
+                    Path = CopyItemTitle,
+                    Converter = MpAvStringToWindowTitleConverter.Instance
                 });
+
+            pow.Bind(
+                Window.BackgroundProperty,
+                new Binding() {
+                    Source = this,
+                    Path = nameof(CopyItemHexColor),
+                    Mode = BindingMode.OneWay,
+                    Converter = MpAvStringHexToBrushConverter.Instance,
+                    TargetNullValue = MpSystemColors.darkviolet,
+                    FallbackValue = MpSystemColors.darkviolet
+                });
+
+            if (pow.Content is Control c) {
+                // BUG hover doesn't work binding to window
+                c.Bind(
+                    MpAvIsHoveringExtension.IsHoveringProperty,
+                    new Binding() {
+                        Source = this,
+                        Path = nameof(IsHovering),
+                        Mode = BindingMode.TwoWay
+                    });
+                MpAvIsHoveringExtension.SetIsEnabled(c, true);
             }
+
+            var vis_change_disp =
+                pow.GetObservable(Window.IsVisibleProperty)
+                .Subscribe(value => OnAppendWindowIsVisibleChanged(pow));
+
+            EventHandler activate_handler = (s, e) => {
+                IsSelected = true;
+            };
+            EventHandler close_handler = null;
+            close_handler = (s, e) => {
+                pow.Activated -= activate_handler;
+                pow.Closed -= close_handler;
+            };
+            pow.Activated += activate_handler;
+            pow.Closed += close_handler;
+
+
+            IsAppendNotifier = true;
+            pow.ShowChild();
+
+            Dispatcher.UIThread.Post(async () => {
+
+                await Task.Delay(300);
+                while (IsAnyBusy) {
+                    await Task.Delay(100);
+                }
+                if (GetContentView() is MpAvContentWebView wv) {
+                    var append_msg = new MpQuillAppendStateChangedMessage() {
+                        isAppendLineMode = appendType == MpAppendModeType.Line,
+                        isAppendMode = appendType == MpAppendModeType.Insert
+                    };
+                    wv.ProcessAppendStateChangedMessage(append_msg, "command");
+                }
+            });
 
             OnPropertyChanged(nameof(IsPopOutVisible));
             OnPropertyChanged(nameof(IsResizerEnabled));
         }
 
+        private void OnAppendWindowIsVisibleChanged(MpAvWindow pow) {
+            if (!pow.IsVisible) {
+                //pow.Classes.Remove("IsClosing");
+                return;
+            }
+
+            Dispatcher.UIThread.Post(async () => {
+                // hide append window after delay if no activity
+                TimeSpan hide_delay = TimeSpan.FromSeconds(3);
+                DateTime first_activity = DateTime.Now;
+                DateTime last_activity = first_activity;
+                while (true) {
+                    if (pow == null ||
+                        !pow.IsVisible) {
+                        return;
+                    }
+                    if (pow.IsActive ||
+                        pow.IsPointerOver) {
+                        last_activity = DateTime.Now;
+                    }
+                    if (DateTime.Now - last_activity > hide_delay) {
+                        //if(last_activity == first_activity) {
+                        //    // when no interaction occurs fade out
+                        //    pow
+                        //} else {
+                        //    // immediatly hide if 
+                        //    pow.Hide();
+                        //}
+                        //pow.Classes.Add("IsClosing");
+                        pow.Hide();
+                        return;
+                    }
+                    await Task.Delay(100);
+                }
+            });
+        }
         private MpIContentView _contentView;
         public MpIContentView GetContentView() {
             if (_contentView != null) {

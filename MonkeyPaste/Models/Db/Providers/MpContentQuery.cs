@@ -33,7 +33,7 @@ namespace MonkeyPaste {
             int limit,
             IEnumerable<int> ci_idsToOmit,
             bool isCountQuery) {
-            if (!isCountQuery && (offset < 0 || limit <= 0)) {
+            if (!isCountQuery && (offset < 0 || limit < 0)) {
                 MpDebug.Break($"Warning, bad fetch request. Offset '{offset}' Limit '{limit}'");
             }
             // Item1 = Param Query

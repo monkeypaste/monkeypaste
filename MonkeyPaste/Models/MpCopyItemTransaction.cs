@@ -17,6 +17,7 @@ namespace MonkeyPaste {
         Cut,
         Edited,
         Analyzed,
+        Appended,
         Error,
         System
     }

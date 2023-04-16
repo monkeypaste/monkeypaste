@@ -103,7 +103,7 @@ namespace MonkeyPaste.Avalonia {
             if (inputFormatType == "rtf") {
                 // create 'dirty' quill html w/ internal converter and treat as plain for quill to parse
                 htmlDataStr = htmlDataStr.ToRichHtmlText(MpPortableDataFormats.WinRtf);
-                inputFormatType = "html";
+                inputFormatType = "rtf2html";
             } else if (inputFormatType == "csv") {
                 htmlDataStr = htmlDataStr.CsvStrToRichHtmlTable(csvProps);
                 inputFormatType = "html";

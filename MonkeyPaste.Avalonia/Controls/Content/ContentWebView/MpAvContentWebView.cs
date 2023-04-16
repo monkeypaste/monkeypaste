@@ -1239,6 +1239,21 @@ namespace MonkeyPaste.Avalonia {
             }
             BindingContext.HasTemplates = contentChanged_ntf.hasTemplates;
 
+            if (BindingContext.IsAppendNotifier) {
+                // sync append item to current clipboard
+                var append_mpdo = BindingContext.CopyItem.ToPortableDataObject();
+                Mp.Services.DataObjectHelperAsync
+                    .SetPlatformClipboardAsync(append_mpdo, true)
+                    .FireAndForgetSafeAsync(BindingContext);
+
+                MpConsole.WriteLine($"Clipboard updated with append data. Plain Text: ");
+                if (append_mpdo.TryGetData(MpPortableDataFormats.Text, out string pt)) {
+                    MpConsole.WriteLine(pt);
+                } else {
+                    MpConsole.WriteLine("NO PLAIN TEXT AVAILABLE");
+                }
+            }
+
             IsEditorLoaded = true;
         }
 
@@ -1270,7 +1285,7 @@ namespace MonkeyPaste.Avalonia {
                 req: req_mpdo.SerializeData(),
                 respType: MpJsonMessageFormatType.Delta,
                 resp: resp_json,
-                ref_urls: refs,
+                ref_uris: refs,
                 transType: transType);
         }
 

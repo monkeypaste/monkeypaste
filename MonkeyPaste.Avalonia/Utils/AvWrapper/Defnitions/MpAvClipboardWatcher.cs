@@ -11,9 +11,8 @@ namespace MonkeyPaste.Avalonia {
         MpIPlatformDataObjectRegistrar {
         #region Private Variables
 
-        private bool _isInitialStart = false;
+        //private bool _isInitialStart = false;
         private MpPortableDataObject _lastCbo;
-
         private DispatcherTimer _timer;
 
 
@@ -45,7 +44,6 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
         public MpPortableDataObject LastClipboardDataObject =>
             _lastCbo;
-        //public bool IgnoreClipboardChanges { get; set; }
         #endregion
 
         #region Events
@@ -104,15 +102,15 @@ namespace MonkeyPaste.Avalonia {
             Dispatcher.UIThread.Post(async () => { await CheckClipboardHelper(); });
         }
         private async Task CheckClipboardHelper() {
-            if (_lastCbo == null) {
-                if (_isInitialStart) {
-                    _isInitialStart = false;
-                } else {
-                    // this ensures start/stop ignores last change
-                    _lastCbo = await ConvertManagedFormats();
-                    return;
-                }
-            }
+            //if (_lastCbo == null) {
+            //    if (_isInitialStart) {
+            //        _isInitialStart = false;
+            //    } else {
+            //        // this ensures start/stop ignores last change
+            //        _lastCbo = await ConvertManagedFormats();
+            //        return;
+            //    }
+            //}
 
             var cbo = await ConvertManagedFormats();
 

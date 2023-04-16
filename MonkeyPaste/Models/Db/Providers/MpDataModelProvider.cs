@@ -217,7 +217,7 @@ namespace MonkeyPaste {
             return result[0];
         }
 
-        public static async Task<List<MpTransactionSource>> GetCopyItemSources(int ciid) {
+        public static async Task<List<MpTransactionSource>> GetCopyItemSourcesAsync(int ciid) {
             string query = $"select * from MpTransactionSource where fk_MpCopyItemTransactionId in (select pk_MpCopyItemTransactionId from MpCopyItemTransaction where fk_MpCopyItemId=?)";
             var result = await MpDb.QueryAsync<MpTransactionSource>(query, ciid);
             return result;
@@ -368,7 +368,7 @@ namespace MonkeyPaste {
 
         #region MpISourceRef
 
-        public static async Task<MpISourceRef> GetSourceRefBySourceypeAndSourceIdAsync(
+        public static async Task<MpISourceRef> GetSourceRefBySourceTypeAndSourceIdAsync(
             MpTransactionSourceType sourceType, int sourceId) {
             MpISourceRef source_ref;
             switch (sourceType) {
@@ -396,7 +396,7 @@ namespace MonkeyPaste {
             var cit_sources = await GetCopyItemTransactionSourcesAsync(citid);
             List<MpISourceRef> result = new List<MpISourceRef>();
             foreach (var cit_source in cit_sources) {
-                var source_ref = await GetSourceRefBySourceypeAndSourceIdAsync(cit_source.CopyItemSourceType, cit_source.SourceObjId);
+                var source_ref = await GetSourceRefBySourceTypeAndSourceIdAsync(cit_source.CopyItemSourceType, cit_source.SourceObjId);
                 result.Add(source_ref);
             }
             return result;

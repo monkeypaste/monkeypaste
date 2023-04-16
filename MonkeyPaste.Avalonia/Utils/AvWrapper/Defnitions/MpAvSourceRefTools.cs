@@ -42,7 +42,7 @@ namespace MonkeyPaste.Avalonia {
                 return url;
             }
 
-            var result = await MpDataModelProvider.GetSourceRefBySourceypeAndSourceIdAsync(ref_tuple.Item1, ref_tuple.Item2);
+            var result = await MpDataModelProvider.GetSourceRefBySourceTypeAndSourceIdAsync(ref_tuple.Item1, ref_tuple.Item2);
             return result;
         }
 

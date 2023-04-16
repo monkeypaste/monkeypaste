@@ -247,8 +247,19 @@ namespace MonkeyPaste.Avalonia {
                 while (_player.Playing) {
                     MpConsole.WriteLine($"Sound already playing, waiting to play '{snt}'...");
                     await Task.Delay(100);
+                    if (!_player.Playing) {
+                        // give it a sec or this exception happens intermittently (windows):
+                        // Error executing MCI command 'Close All'. Error code: 288. Message: The specified device is now being closed.  Wait a few seconds, and then try again.
+                        await Task.Delay(2000);
+                    }
                 }
-                await _player.Play(_soundPathLookup[snt]);
+                try {
+
+                    await _player.Play(_soundPathLookup[snt]);
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Exception playing sound '{snt}': ", ex);
+                }
 
 
             }, (args) => {

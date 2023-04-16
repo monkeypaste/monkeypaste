@@ -90,7 +90,7 @@ namespace MonkeyPaste {
 
             MpNotificationDialogResultType result = MpNotificationDialogResultType.None;
             if (notificationType == MpNotificationType.AppendChanged) {
-                result = await MpAppendNotificationViewModel.Instance.ShowNotificationAsync();
+                //result = await MpAppendNotificationViewModel.Instance.ShowNotificationAsync();
                 return result;
             }
 

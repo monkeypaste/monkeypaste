@@ -101,7 +101,7 @@ namespace MonkeyPaste {
                         req: unevaluated_req.SerializeJsonObject(),
                         respType: MpJsonMessageFormatType.DataObject,
                         resp: mpdo.SerializeData(),
-                        ref_urls: ref_urls,
+                        ref_uris: ref_urls,
                         transType: MpTransactionType.Analyzed);
 
             return null;

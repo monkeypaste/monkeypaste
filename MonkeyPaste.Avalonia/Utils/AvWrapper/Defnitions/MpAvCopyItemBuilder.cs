@@ -87,7 +87,7 @@ namespace MonkeyPaste.Avalonia {
                             req: mpdo.SerializeData(),
                             respType: MpJsonMessageFormatType.Delta,
                             resp: itemDelta,
-                            ref_urls: ref_urls,
+                            ref_uris: ref_urls,
                             transType: transType);
 
             return ci;

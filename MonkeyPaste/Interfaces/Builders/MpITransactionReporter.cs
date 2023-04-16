@@ -6,12 +6,12 @@ namespace MonkeyPaste {
     public interface MpITransactionReporter {
         Task<MpCopyItemTransaction> ReportTransactionAsync(
             int copyItemId,
-            MpJsonMessageFormatType reqType,
-            string req,
-            MpJsonMessageFormatType respType,
-            string resp,
-            IEnumerable<string> ref_urls,
-            MpTransactionType transType);
+            MpJsonMessageFormatType reqType = MpJsonMessageFormatType.None,
+            string req = "",
+            MpJsonMessageFormatType respType = MpJsonMessageFormatType.None,
+            string resp = "",
+            IEnumerable<string> ref_uris = null,
+            MpTransactionType transType = MpTransactionType.None);
 
     }
 }

@@ -563,16 +563,6 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task InitializeAsync() {
-            //if (MpAvWindowManager.MainWindow != null) {
-            //    MpAvWindowManager.MainWindow.DataContext = this;
-            //} else {
-            //    MpAvMainView.Instance.DataContext = this;
-            //}
-
-            string test_path = @"C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia\Assets\Images\add.png";
-            var sf = await App.Current.GetMainWindow().StorageProvider.TryGetFileFromPathAsync(new Uri(test_path.ToFileSystemUriFromPath(), UriKind.Absolute));
-            var test_ido = new MpAvDataObject(MpPortableDataFormats.AvFileNames, new[] { sf });
-            await Application.Current.Clipboard.SetDataObjectAsync(test_ido);
 
             MainWindowOrientationType = (MpMainWindowOrientationType)Enum.Parse(typeof(MpMainWindowOrientationType), MpPrefViewModel.Instance.MainWindowOrientation, false);
             MainWindowShowBehaviorType = (MpMainWindowShowBehaviorType)Enum.Parse(typeof(MpMainWindowShowBehaviorType), MpPrefViewModel.Instance.MainWindowShowBehaviorType, false);

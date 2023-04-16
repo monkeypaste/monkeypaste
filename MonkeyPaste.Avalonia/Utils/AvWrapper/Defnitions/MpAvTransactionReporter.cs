@@ -9,12 +9,12 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task<MpCopyItemTransaction> ReportTransactionAsync(
             int copyItemId,
-            MpJsonMessageFormatType reqType,
-            string req,
-            MpJsonMessageFormatType respType,
-            string resp,
-            IEnumerable<string> source_ref_uris,
-            MpTransactionType transactionType) {
+            MpJsonMessageFormatType reqType = MpJsonMessageFormatType.None,
+            string req = "",
+            MpJsonMessageFormatType respType = MpJsonMessageFormatType.None,
+            string resp = "",
+            IEnumerable<string> source_ref_uris = null,
+            MpTransactionType transactionType = MpTransactionType.None) {
 
             if (copyItemId <= 0) {
                 throw new Exception("CopyItemId required to create transaction");

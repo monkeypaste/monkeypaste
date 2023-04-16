@@ -5,6 +5,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using Org.BouncyCastle.Utilities.Collections;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -33,7 +34,6 @@ namespace MonkeyPaste.Avalonia {
         MpIProgressIndicatorViewModel {
         #region Private Variables
 
-        private List<MpCopyItem> _newModels = new List<MpCopyItem>();
         private int _anchor_query_idx { get; set; } = -1;
         private bool _isMainWindowOrientationChanging = false;
 
@@ -1139,7 +1139,6 @@ namespace MonkeyPaste.Avalonia {
         #region State
 
         #region Append
-        public List<MpCopyItem> PendingNewModels => _newModels;
         public MpClipboardModeFlags ClipboardModeFlags {
             get {
                 MpClipboardModeFlags cmf = MpClipboardModeFlags.None;
@@ -1163,8 +1162,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public string AppendData { get; private set; } = null;
-
         private MpAppendModeFlags _appendModeFlags = MpAppendModeFlags.None;
         public MpAppendModeFlags AppendModeStateFlags {
             get => _appendModeFlags;
@@ -1183,6 +1180,8 @@ namespace MonkeyPaste.Avalonia {
         public bool IsAnyAppendMode =>
             IsAppendMode || IsAppendLineMode;
         #endregion
+
+        public ObservableCollection<MpCopyItem> PendingNewModels { get; } = new ObservableCollection<MpCopyItem>();
 
         public bool IsEmptyQueryTextVisible {
             get {
@@ -1729,9 +1728,12 @@ namespace MonkeyPaste.Avalonia {
 
 
         public void ClipboardChanged(object sender, MpPortableDataObject mpdo) {
-            bool is_change_ignored = MpAvMainWindowViewModel.Instance.IsMainWindowLoading ||
-                                        IsAppPaused ||
-                                        (MpPrefViewModel.Instance.IgnoreInternalClipboardChanges && Mp.Services.ProcessWatcher.IsThisAppActive);
+            bool is_startup_ido = MpAvMainWindowViewModel.Instance.IsMainWindowInitiallyOpening;
+            bool is_change_ignored =
+                !is_startup_ido &&
+                (IsAppPaused ||
+                 (MpPrefViewModel.Instance.IgnoreInternalClipboardChanges && Mp.Services.ProcessWatcher.IsThisAppActive));
+
             if (is_change_ignored) {
                 MpConsole.WriteLine("Clipboard Change Ignored by tray");
                 MpConsole.WriteLine($"IsMainWindowLoading: {MpAvMainWindowViewModel.Instance.IsMainWindowLoading}");
@@ -1741,6 +1743,13 @@ namespace MonkeyPaste.Avalonia {
             }
 
             Dispatcher.UIThread.Post(async () => {
+                while (MpAvMainWindowViewModel.Instance.IsMainWindowInitiallyOpening ||
+                        MpAvPlainHtmlConverter.Instance.IsBusy) {
+                    await Task.Delay(100);
+                }
+                if (is_startup_ido) {
+                    await Task.Delay(3000);
+                }
                 await AddItemFromDataObjectAsync(mpdo);
             });
         }
@@ -1824,7 +1833,7 @@ namespace MonkeyPaste.Avalonia {
                 req: mpdo.SerializeData(),
                 respType: MpJsonMessageFormatType.None,
                 resp: null,
-                ref_urls: new[] { pasted_app_url },
+                ref_uris: new[] { pasted_app_url },
                 transType: MpTransactionType.Pasted).FireAndForgetSafeAsync(this);
         }
 
@@ -1856,7 +1865,8 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpCopyItem ci) {
-                if (ci.Id == AppendClipTileViewModel.CopyItemId &&
+                if (AppendClipTileViewModel != null &&
+                    ci.Id == AppendClipTileViewModel.CopyItemId &&
                     IsAnyAppendMode) {
 
                     DeactivateAppendModeAsync().FireAndForgetSafeAsync();
@@ -2533,14 +2543,15 @@ namespace MonkeyPaste.Avalonia {
                 await ci.WriteToDatabaseAsync();
             }
 
-            //if (ModalClipTileViewModel.IsPlaceholder) {
-            //    _newModels.Add(ci);
-            //}
+            if (AppendClipTileViewModel == null) {
+                PendingNewModels.Add(ci);
+            }
+
             bool wasAppended = false;
             if (IsAnyAppendMode) {
                 wasAppended = await UpdateAppendModeAsync(ci);
             } else {
-                _newModels.Add(ci);
+                PendingNewModels.Add(ci);
             }
 
             MpCopyItem arg_ci = ci;
@@ -2756,9 +2767,10 @@ namespace MonkeyPaste.Avalonia {
                  } else if (ctvm_to_pin.QueryOffsetIdx >= 0) {
                      Mp.Services.Query.PageTools.RemoveItemId(ctvm_to_pin.CopyItemId);
                  }
-                 if (pinType == MpPinType.Window ||
-                     pinType == MpPinType.Append) {
-                     ctvm_to_pin.OpenPopOutWindow(appendType);
+                 if (pinType == MpPinType.Window) {
+                     ctvm_to_pin.OpenPopOutWindow();
+                 } else if (pinType == MpPinType.Append) {
+                     ctvm_to_pin.OpenAppendWindow(appendType);
                  }
 
                  if (ctvm_to_pin.IsPinned) {
@@ -2901,7 +2913,7 @@ namespace MonkeyPaste.Avalonia {
                     deepClone: true);
 
                 await clonedCopyItem.WriteToDatabaseAsync();
-                _newModels.Add(clonedCopyItem);
+                PendingNewModels.Add(clonedCopyItem);
 
                 AddNewItemsCommand.Execute(true);
 
@@ -2917,13 +2929,13 @@ namespace MonkeyPaste.Avalonia {
                 if (MpAvMainWindowViewModel.Instance.IsMainWindowLocked && SelectedItem != null) {
                     selectedId = SelectedItem.CopyItemId;
                 }
-                for (int i = 0; i < _newModels.Count; i++) {
-                    var ci = _newModels[i];
+                for (int i = 0; i < PendingNewModels.Count; i++) {
+                    var ci = PendingNewModels[i];
                     MpAvClipTileViewModel nctvm = await CreateOrRetrieveClipTileViewModelAsync(ci);
                     ToggleTileIsPinnedCommand.Execute(nctvm);
                 }
 
-                _newModels.Clear();
+                PendingNewModels.Clear();
                 while (IsAnyBusy) {
                     await Task.Delay(100);
                 }
@@ -2938,14 +2950,14 @@ namespace MonkeyPaste.Avalonia {
             },
             (tagDropCopyItemOnlyArg) => {
                 if (tagDropCopyItemOnlyArg is MpCopyItem tag_drop_ci) {
-                    if (_newModels.Any(x => x.Id == tag_drop_ci.Id)) {
+                    if (PendingNewModels.Any(x => x.Id == tag_drop_ci.Id)) {
                         // should only happen once from drop in tag view
                         Debugger.Break();
                     } else {
-                        _newModels.Add(tag_drop_ci);
+                        PendingNewModels.Add(tag_drop_ci);
                     }
                 }
-                if (_newModels.Count == 0) {
+                if (PendingNewModels.Count == 0) {
                     return false;
                 }
                 //if(!string.IsNullOrEmpty(MpAvSearchBoxViewModel.Instance.LastSearchText)) {
@@ -3597,7 +3609,7 @@ namespace MonkeyPaste.Avalonia {
             }
             return AppendClipTileViewModel.CopyItemType == ci.ItemType;
         }
-        private async Task AssignAppendClipTileAsync() {
+        private async Task AssignAppendClipTileAsync(MpAppendModeType appendType) {
             // use cases
             // 1. app is hidden and user hits hot key or enables in system tray
             //  1.1 no new clipboard items have been created 
@@ -3611,29 +3623,34 @@ namespace MonkeyPaste.Avalonia {
             //      -wait till appendable item is created to assign
             //  2.3 selected item is appendable
             //      -assign selected item
-
             Dispatcher.UIThread.VerifyAccess();
             if (AppendClipTileViewModel != null) {
                 return;
             }
             MpAvClipTileViewModel append_ctvm = null;
             if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
-                if (SelectedItem != null && IsCopyItemAppendable(SelectedItem.CopyItem)) {
+                if (SelectedItem != null) {
                     append_ctvm = SelectedItem;
                 }
             } else if (PendingNewModels.Count > 0) {
                 var most_recent_ci = PendingNewModels[PendingNewModels.Count - 1];
-                if (IsCopyItemAppendable(most_recent_ci)) {
-                    PendingNewModels.RemoveAt(0);
-                    append_ctvm = await CreateOrRetrieveClipTileViewModelAsync(most_recent_ci);
-                }
+                PendingNewModels.RemoveAt(0);
+                append_ctvm = await CreateOrRetrieveClipTileViewModelAsync(most_recent_ci);
+            } else if (SelectedItem != null) {
+                append_ctvm = SelectedItem;
             } else {
                 // activate w/o item and wait (show AppMode change msg)
+            }
+
+            if (append_ctvm != null &&
+                !IsCopyItemAppendable(append_ctvm.CopyItem)) {
+                // invalidate and wait
+                append_ctvm = null;
             }
             if (append_ctvm == null) {
                 return;
             }
-            PinTileCommand.Execute(new object[] { append_ctvm, MpPinType.Append });
+            PinTileCommand.Execute(new object[] { append_ctvm, MpPinType.Append, appendType });
         }
 
         private void UpdateAppendModeStateFlags(MpAppendModeFlags flags, string source) {
@@ -3642,6 +3659,16 @@ namespace MonkeyPaste.Avalonia {
             IsAppendManualMode = flags.HasFlag(MpAppendModeFlags.Manual);
             _appendModeFlags = flags;
             OnPropertyChanged(nameof(AppendModeStateFlags));
+
+            if (AppendClipTileViewModel != null &&
+                AppendClipTileViewModel.GetContentView() is MpAvContentWebView wv) {
+                var append_msg = new MpQuillAppendStateChangedMessage() {
+                    isAppendLineMode = IsAppendLineMode,
+                    isAppendMode = IsAppendMode,
+                    isAppendManualMode = IsAppendManualMode
+                };
+                wv.ProcessAppendStateChangedMessage(append_msg, source);
+            }
         }
 
         private async Task ActivateAppendModeAsync(bool isAppendLine, bool isManualMode) {
@@ -3653,7 +3680,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (AppendClipTileViewModel == null) {
                 // append mode was just toggled ON (param was null)
-                await AssignAppendClipTileAsync();
+                await AssignAppendClipTileAsync(isAppendLine ? MpAppendModeType.Line : MpAppendModeType.Insert);
             }
             bool was_append_already_enabled = IsAnyAppendMode && AppendClipTileViewModel != null;
 
@@ -3668,7 +3695,7 @@ namespace MonkeyPaste.Avalonia {
             }
             UpdateAppendModeStateFlags(amf, "command");
 
-            MpAppendNotificationViewModel.Instance.OnPropertyChanged(nameof(MpAppendNotificationViewModel.Instance.Title));
+            //MpAppendNotificationViewModel.Instance.OnPropertyChanged(nameof(MpAppendNotificationViewModel.Instance.Title));
 
             if (was_append_already_enabled) {
                 // don't trigger if already activated, the AppendDataChanged() timesout because IsContentLoaded doesn't goto false
@@ -3678,10 +3705,10 @@ namespace MonkeyPaste.Avalonia {
             if (AppendClipTileViewModel == null) {
                 // no item assigned yet so just show enable message
                 MpNotificationBuilder.ShowMessageAsync(
-                       title: $"MODE CHANGED",
-                       body: $"Append{(IsAppendLineMode ? "-Line" : "")} Mode Activated",
+                       body: "Copy text or file(s) to apply.",
+                       title: $"Append{(IsAppendLineMode ? "-Line" : "")} Activated",
                        msgType: MpNotificationType.AppModeChange,
-                       iconSourceObj: "NoEntryImage").FireAndForgetSafeAsync();
+                       iconSourceObj: "QuestionMarkImage").FireAndForgetSafeAsync();
             } else {
                 MpNotificationBuilder.ShowNotificationAsync(MpNotificationType.AppendChanged).FireAndForgetSafeAsync();
             }
@@ -3693,7 +3720,10 @@ namespace MonkeyPaste.Avalonia {
             bool wasAppendLineMode = IsAppendLineMode;
 
             UpdateAppendModeStateFlags(MpAppendModeFlags.None, "command");
-            AppendClipTileViewModel.PopInTileCommand.Execute(null);
+            if (AppendClipTileViewModel != null) {
+
+                AppendClipTileViewModel.PopInTileCommand.Execute(null);
+            }
 
             await MpNotificationBuilder.ShowMessageAsync(
                        title: $"MODE CHANGED",
@@ -3710,7 +3740,7 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             }
             if (AppendClipTileViewModel == null) {
-                await AssignAppendClipTileAsync();
+                await AssignAppendClipTileAsync(IsAppendLineMode ? MpAppendModeType.Line : MpAppendModeType.Insert);
                 if (AppendClipTileViewModel == null) {
                     return false;
                 }
@@ -3720,47 +3750,44 @@ namespace MonkeyPaste.Avalonia {
             }
 
             string append_data = aci.ItemData;
-
             if (AppendClipTileViewModel.CopyItemType == MpCopyItemType.FileList) {
                 append_data = await MpAvFileItemCollectionViewModel.CreateFileListEditorFragment(aci);
             }
-            if (isNew &&
-                MpPrefViewModel.Instance.IgnoreAppendedItems &&
-                AppendClipTileViewModel.CopyItemId != aci.Id) {
-                aci.DeleteFromDatabaseAsync().FireAndForgetSafeAsync();
-            }
-            //Task.Run(async () => {
-            //    // no need to wait for source updates
-            //    if (AppendNotifierViewModel.CopyItemId == aci.Id) {
-            //        // ignore self ref source info
-            //        return;
-            //    }
-            //    // clone items sources into append item
-            //    var aci_sources = await MpDataModelProvider.GetCopyItemSources(aci.Id);
-            //    foreach (var aci_source in aci_sources) {
-            //        await MpTransactionSource.CreateAsync(
-            //               copyItemId: AppendNotifierViewModel.CopyItemId,
-            //               sourceObjId: aci_source.SourceObjId,
-            //               sourceType: aci_source.CopyItemSourceType);
-            //    }
-            //    if (aci.WasDupOnCreate) {
-            //        // also ref if exisiting item
-            //        await MpTransactionSource.CreateAsync(
-            //                copyItemId: AppendNotifierViewModel.CopyItemId,
-            //                sourceObjId: aci.Id,
-            //                sourceType: MpCopyItemSourceType.CopyItem);
-            //    } else {
-            //        // delete redundant new item
-            //        await aci.DeleteFromDatabaseAsync();
-            //    }
-            //}).FireAndForgetSafeAsync();
 
-            //while(AppendNotifierViewModel.AppendData != null) {
-            //    // probably won't happen but clipboard could change quickly so wait here
-            //    // i guess for last item to process
-            //    await Task.Delay(100);
-            //}
-            SetAppendDataCommand.Execute(append_data);
+            if (AppendClipTileViewModel.CopyItemId != aci.Id) {
+                Task.Run(async () => {
+                    // no need to wait for source updates
+                    // get appended items transactions which should be only 1 since new and add a paste transaction to append item with its create sources
+                    var aci_citl = await MpDataModelProvider.GetCopyItemTransactionsByCopyItemIdAsync(aci.Id);
+
+                    var aci_create_cit = aci_citl.FirstOrDefault(x => x.TransactionType == MpTransactionType.Created);
+                    if (aci_create_cit == null) {
+                        MpDebug.Break($"append error, no create transaction found for appened item");
+                    } else {
+                        var aci_create_sources = await MpDataModelProvider.GetSourceRefsByCopyItemTransactionIdAsync(aci_create_cit.Id);
+
+                        if (!isNew || !MpPrefViewModel.Instance.IgnoreAppendedItems) {
+                            // if item is not new or will persist include ref to it
+                            // NOTE item ref is added to END to keep primary source at front
+                            aci_create_sources.Add(aci);
+                        }
+                        //// NOTE ignoring msg data here since its only used for analyze transactions for now
+                        await Mp.Services.TransactionBuilder.ReportTransactionAsync(
+                            copyItemId: AppendClipTileViewModel.CopyItemId,
+                            reqType: MpJsonMessageFormatType.DataObject,
+                            respType: MpJsonMessageFormatType.Delta,
+                            ref_uris: aci_create_sources.Select(x => x.ToSourceUri()),
+                            transType: MpTransactionType.Appended);
+                    }
+
+                    if (isNew &&
+                        MpPrefViewModel.Instance.IgnoreAppendedItems) {
+                        aci.DeleteFromDatabaseAsync().FireAndForgetSafeAsync();
+                    }
+                }).FireAndForgetSafeAsync(this);
+            }
+
+            AppendDataCommand.Execute(append_data);
             return true;
         }
         public ICommand ToggleAppendModeCommand => new MpCommand(
@@ -3794,13 +3821,21 @@ namespace MonkeyPaste.Avalonia {
                 ActivateAppendModeAsync(append_state, new_manual_state).FireAndForgetSafeAsync();
             });
 
-        public ICommand SetAppendDataCommand => new MpCommand<object>(
-            (dataArg) => {
-                var append_data_str = dataArg as string;
-                if (string.IsNullOrEmpty(append_data_str)) {
-                    return;
+        public ICommand AppendDataCommand => new MpCommand<object>(
+            (args) => {
+                AppendClipTileViewModel.IsPopOutVisible = true;
+                if (AppendClipTileViewModel.GetContentView() is MpAvContentWebView wv) {
+                    var append_msg = new MpQuillAppendStateChangedMessage() {
+                        appendData = args as string
+                    };
+                    wv.ProcessAppendStateChangedMessage(append_msg, "command");
                 }
-                AppendData = append_data_str;
+
+            }, (args) => {
+                if (AppendClipTileViewModel == null || !IsAnyAppendMode) {
+                    return false;
+                }
+                return args is string argStr && !string.IsNullOrEmpty(argStr);
             });
 
         //public ICommand ShowAppendDevToolsCommand => new MpCommand(

@@ -239,7 +239,7 @@ namespace MonkeyPaste.Avalonia {
 
             TransactionSource = ts;
 
-            SourceRef = await MpDataModelProvider.GetSourceRefBySourceypeAndSourceIdAsync(SourceType, SourceObjId);
+            SourceRef = await MpDataModelProvider.GetSourceRefBySourceTypeAndSourceIdAsync(SourceType, SourceObjId);
 
             IsBusy = wasBusy;
         }
