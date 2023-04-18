@@ -265,12 +265,17 @@ namespace MonkeyPaste.Avalonia {
             PinTrayListBox = this.FindControl<ListBox>("PinTrayListBox");
             PinTrayListBox.AttachedToVisualTree += PinTrayListBox_AttachedToVisualTree;
             PinTrayListBox.GotFocus += PinTrayListBox_GotFocus;
+            this.EffectiveViewportChanged += MpAvPinTrayView_EffectiveViewportChanged;
             this.DataContextChanged += MpAvPinTrayView_DataContextChanged;
             if (DataContext != null) {
                 MpAvPinTrayView_DataContextChanged(null, null);
             }
 
 
+        }
+
+        private void MpAvPinTrayView_EffectiveViewportChanged(object sender, EffectiveViewportChangedEventArgs e) {
+            this.FindControl<Control>("PinTrayEmptyContainer")?.InvalidateAll();
         }
 
         private void MpAvPinTrayView_DataContextChanged(object sender, EventArgs e) {

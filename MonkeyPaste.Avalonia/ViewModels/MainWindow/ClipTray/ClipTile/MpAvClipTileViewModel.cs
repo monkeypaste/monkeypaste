@@ -29,6 +29,7 @@ namespace MonkeyPaste.Avalonia {
         MpIChildWindowViewModel,
         MpIDisposableObject,
         MpAvIShortcutCommandViewModel,
+        MpIWantsTopmostWindowViewModel,
         MpIScrollIntoView,
         MpIUserColorViewModel,
         MpIHoverableViewModel,
@@ -152,11 +153,12 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        //#region MpIContextMenuViewModel Implementation
+        #region MpIWantsTopmostWindowViewModel Implementation
 
-        //public MpMenuItemViewModel ContextMenuViewModel => IsSelected ? Parent.ContextMenuViewModel : null;
+        public bool WantsTopmost =>
+            IsAppendNotifier;
 
-        //#endregion
+        #endregion
 
         #region MpIScrollIntoView Implementation
 
@@ -1221,7 +1223,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void OpenAppendWindow(MpAppendModeType appendType) {
-            Size ws = new Size(250, 250);
+            Size ws = new Size(300, 250);
             MpAvWindow pow = new MpAvWindow() {
                 Width = ws.Width,
                 Height = ws.Height,
@@ -1303,11 +1305,7 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(100);
                 }
                 if (GetContentView() is MpAvContentWebView wv) {
-                    var append_msg = new MpQuillAppendStateChangedMessage() {
-                        isAppendLineMode = appendType == MpAppendModeType.Line,
-                        isAppendMode = appendType == MpAppendModeType.Insert
-                    };
-                    wv.ProcessAppendStateChangedMessage(append_msg, "command");
+                    wv.ProcessAppendStateChangedMessage(Parent.GetAppendStateMessage(null), "command");
                 }
             });
 

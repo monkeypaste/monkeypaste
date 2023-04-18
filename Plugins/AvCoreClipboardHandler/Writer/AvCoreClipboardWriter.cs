@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Input;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -43,7 +44,7 @@ namespace AvCoreClipboardHandler {
                 // add file as a format and flag that it needs to be created
                 // AFTER all runtime formats have been processed so best format is written
 
-                //needs_pseudo_file = true;
+                needs_pseudo_file = true;
             }
 
             foreach (var write_format in writeFormats) {
@@ -79,21 +80,31 @@ namespace AvCoreClipboardHandler {
 
 
             if (request.writeToClipboard) {
-                //await Util.WaitForClipboard();
-                var empty_formats = write_output.GetAllDataFormats().Where(x => !write_output.ContainsData(x));
-                if (empty_formats.Any() && write_output is MpAvDataObject avdo) {
+                if (write_output is MpAvDataObject avdo) {
+                    var empty_formats = write_output.GetAllDataFormats().Where(x => !write_output.ContainsData(x));
                     // NOTE need to make sure empty formats are removed or clipboard will bark
                     empty_formats.ForEach(x => avdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(x)));
                     var test = avdo.GetAllDataFormats().Where(x => !avdo.ContainsData(x));
                     if (test.Any()) {
 
                     }
-                    await Application.Current.Clipboard.SetDataObjectSafeAsync(avdo);
-                } else {
-                    await Application.Current.Clipboard.SetDataObjectSafeAsync(write_output);
-                }
+                    //
+                    if (avdo.TryGetData(MpPortableDataFormats.AvFileNames, out object fpl_obj)) {
+                        IEnumerable<string> fpl = null;
+                        if (fpl_obj is IEnumerable<string>) {
+                            fpl = fpl_obj as IEnumerable<string>;
+                        } else if (fpl_obj is string fpl_str) {
+                            fpl = fpl_str.SplitNoEmpty(Environment.NewLine);
+                        } else {
 
-                //Util.CloseClipboard();
+                        }
+                        if (fpl != null) {
+                            var av_fpl = await fpl.ToAvFilesObjectAsync();
+                            avdo.SetData(MpPortableDataFormats.AvFileNames, av_fpl);
+                        }
+                    }
+                }
+                await Application.Current.Clipboard.SetDataObjectSafeAsync(write_output);
             }
 
             return new MpClipboardWriterResponse() {

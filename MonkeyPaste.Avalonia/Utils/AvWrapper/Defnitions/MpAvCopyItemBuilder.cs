@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using Avalonia.Platform.Storage;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
@@ -131,6 +132,8 @@ namespace MonkeyPaste.Avalonia {
                     fl_str = fileStr;
                 } else if (mpdo.GetData(MpPortableDataFormats.AvFileNames) is IEnumerable<string> paths) {
                     fl_str = string.Join(Environment.NewLine, paths);
+                } else if (mpdo.GetData(MpPortableDataFormats.AvFileNames) is IEnumerable<IStorageItem> sil) {
+                    fl_str = string.Join(Environment.NewLine, sil.Select(x => x.Path));
                 } else {
                     var fl_data = mpdo.GetData(MpPortableDataFormats.AvFileNames);
                     // what type is it? string[]?

@@ -64,7 +64,7 @@
                 </ListBox.ItemTemplate>
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel HorizontalAlignment="Stretch" 
+                        <WrapPanel HorizontalAlignment="Stretch"
                                    VerticalAlignment="Stretch" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
@@ -94,7 +94,6 @@
             <Button x:Name="UnpinAllButton"
                     Classes="defaultButton"
                     IsEnabled="{Binding !IsPinTrayBusy}"
-                    IsVisible="{Binding InternalPinnedItems, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
                     Width="25"
@@ -105,24 +104,25 @@
                     BorderBrush="DimGray"
                     Background="Silver"
                     Command="{Binding UnpinAllCommand}">
+                <Button.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                        <Binding Path="InternalPinnedItems"
+                                 Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
+                        <Binding Path="IsPinTrayBusy" />
+                        <Binding Path="IsAddingClipboardItem" />
+                    </MultiBinding>
+                </Button.IsVisible>
                 <Grid>
                     <Image IsVisible="{Binding !IsPinTrayBusy}"
                            Margin="5,2"
                            Source="{Binding ., Source={StaticResource ClearGridImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                    <!--  IsBusy Overlay  -->
-                    <!--<Border HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        Cursor="Wait"
-                        IsVisible="{Binding $parent.IsEnabled}">-->
+
                     <local:MpAvBusySpinnerView HorizontalAlignment="Stretch"
                                                VerticalAlignment="Stretch"
                                                Cursor="Wait"
                                                IsVisible="{Binding IsPinTrayBusy}" />
-                    <!--</Border>-->
                 </Grid>
-
             </Button>
-
         </Grid>
     </Border>
 </local:MpAvUserControl>

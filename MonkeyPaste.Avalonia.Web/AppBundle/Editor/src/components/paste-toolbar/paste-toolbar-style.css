@@ -13,38 +13,37 @@
     display: inline-flex;
     align-items: center;
 }
+    #pasteButtonAndModeContainer button:hover, #pasteButton:hover {
+        border-width: 1px;
+        border-color: var(--hovercolor);
+        color: var(--hovercolor);
+    }
 
 #pasteButton {
-    margin: 1px 10px 0 10px;
+    margin: 0 10px 0 10px;
     border-radius: 5px;
-    border-width: 1px;
+    border-width: 1px !important;
     display: inline-flex;
-}
-
-    #pasteButton:hover {
-        border-width: 1px 1px 1px 1px;
-    }
+}    
 
     #pasteButton span {
         font-size: 12px;
+        margin: 0 5px;
     }
 
 #pasteButtonAndModeContainer.pasteButtonSpit #pasteButton {
     border-radius: 5px 0 0 5px;
-    border-width: 1px 0 1px 1px;
-    margin-right: 0px;
+    margin-right: 0px !important;
+    border-width: 1px 0 1px 1px !important;
 }
 
 #pasteButtonPopupExpander {
     display: inherit;
     font-size: 14px;
     margin: 0 10px 0 0;
+    border-width: 1px 0.5px 1px 1px !important;
     border-radius: 0 5px 5px 0;
-    border-width: 1px 1px 1px 0;
 }
-    #pasteButtonPopupExpander:hover {
-        border-width: 1px 1px 1px 1px;
-    }
 
 #pasteButtonAndModeContainer:not(.pasteButtonSpit) #pasteButtonPopupExpander {
     display: none;

@@ -272,7 +272,10 @@ namespace MonkeyPaste.Avalonia {
             SendMessage($"updateModifierKeysFromHost_ext('{modKeyMsg.SerializeJsonObjectToBase64()}')");
         }
 
-        public async Task<MpAvDataObject> GetDataObjectAsync(string[] formats = null, bool use_placeholders = true, bool ignore_selection = false) {
+        public async Task<MpAvDataObject> GetDataObjectAsync(
+            string[] formats = null,
+            bool use_placeholders = true,
+            bool ignore_selection = false) {
             if (BindingContext == null) {
                 MpDebug.Break();
                 return new MpAvDataObject();
@@ -292,22 +295,28 @@ namespace MonkeyPaste.Avalonia {
 
             // NOTE when file is on clipboard pasting into tile removes all other formats besides file
             // and pseudo files are only needed for dnd comptaibility so its gewd
-            //bool ignore_pseudo_file = false;
             if (formats == null) {
                 // NOTE important that ALL data formats are on clipboard for drag source obj to process 
                 contentDataReq.formats = MpPortableDataFormats.RegisteredFormats.ToList();
-
             } else {
                 contentDataReq.formats = formats.ToList();
             }
 
+            bool provided_formats = formats != null;
+            bool ignore_pseudo_file = false;
             bool ignore_ss = true;
+
             if (ctvm.CopyItemType != MpCopyItemType.Image &&
-                contentDataReq.formats.Contains(MpPortableDataFormats.AvPNG) &&
-                use_placeholders) {
+                contentDataReq.formats.Contains(MpPortableDataFormats.AvPNG) /*&& use_placeholders*/) {
                 ignore_ss = false;
             }
-            if (ignore_ss) {
+            if (ctvm.CopyItemType != MpCopyItemType.FileList &&
+                provided_formats &&
+                !formats.Contains(MpPortableDataFormats.AvFileNames)) {
+                ignore_pseudo_file = true;
+            }
+
+            if (ignore_ss && !provided_formats) {
                 contentDataReq.formats.Remove(MpPortableDataFormats.AvPNG);
                 contentDataReq.formats.Remove(MpPortableDataFormats.WinBitmap);
                 contentDataReq.formats.Remove(MpPortableDataFormats.WinDib);
@@ -331,9 +340,12 @@ namespace MonkeyPaste.Avalonia {
             foreach (var di in contentDataResp.dataItems) {
                 avdo.SetData(di.format, di.data);
             }
+
             if (ctvm.CopyItemType == MpCopyItemType.FileList) {
-                avdo.SetData(MpPortableDataFormats.AvFileNames, ctvm.CopyItemData.SplitNoEmpty(MpCopyItem.FileItemSplitter));
-            } else {
+                if (contentDataReq.formats.Contains(MpPortableDataFormats.AvFileNames)) {
+                    avdo.SetData(MpPortableDataFormats.AvFileNames, ctvm.CopyItemData.SplitNoEmpty(MpCopyItem.FileItemSplitter));
+                }
+            } else if (!ignore_pseudo_file) {
                 // NOTE setting dummy file so OLE system sees format on clipboard, actual
                 // data is overwritten in core clipboard handler
                 if (use_placeholders) {
@@ -359,7 +371,7 @@ namespace MonkeyPaste.Avalonia {
                 avdo.SetData(MpPortableDataFormats.AvPNG, bmp.ToByteArray());
                 avdo.SetData(MpPortableDataFormats.Text, bmp.ToAsciiImage());
                 // TODO add colorized ascii maybe as html and rtf!!
-            } else {// if (!ignore_ss) {
+            } else if (!ignore_ss) {
                 if (use_placeholders) {
                     avdo.SetData(MpPortableDataFormats.AvPNG, MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT.ToBytesFromString());
 
@@ -842,9 +854,6 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
         public MpAvContentWebView() : base() {
-            this.GetObservable(MpAvContentWebView.AppendDataProperty).Subscribe(value => OnAppendDataChanged());
-            this.GetObservable(MpAvContentWebView.AppendModeStateProperty).Subscribe(value => OnAppendModeStateChanged("command"));
-
             this.GetObservable(MpAvContentWebView.IsEditorInitializedProperty).Subscribe(value => OnIsEditorInitializedChanged());
 
             this.GetObservable(MpAvContentWebView.ContentIdProperty).Subscribe(value => OnContentIdChanged());
@@ -1250,12 +1259,11 @@ namespace MonkeyPaste.Avalonia {
             BindingContext.HasTemplates = contentChanged_ntf.hasTemplates;
 
             if (BindingContext.IsAppendNotifier) {
+                MpConsole.WriteLine("content changed on append");
                 // sync append item to current clipboard
-                var append_mpdo = await GetDataObjectAsync(new[] { MpPortableDataFormats.Text }, false, true); // BindingContext.CopyItem.ToPortableDataObject();
-                Mp.Services.DataObjectHelperAsync
-                    .SetPlatformClipboardAsync(append_mpdo, true)
-                    .FireAndForgetSafeAsync(BindingContext);
-
+                var append_mpdo = await GetDataObjectAsync(null, false, true);
+                await Mp.Services.DataObjectHelperAsync
+                    .SetPlatformClipboardAsync(append_mpdo, true);
                 MpConsole.WriteLine($"Clipboard updated with append data. Plain Text: ");
                 if (append_mpdo.TryGetData(MpPortableDataFormats.Text, out string pt)) {
                     MpConsole.WriteLine(pt);
@@ -1501,82 +1509,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Append
 
-        #region AppendModeState Property
-
-        private MpAppendModeFlags _appendModeState;
-        public MpAppendModeFlags AppendModeState {
-            get { return _appendModeState; }
-            set { SetAndRaise(AppendModeStateProperty, ref _appendModeState, value); }
-        }
-
-        public static DirectProperty<MpAvContentWebView, MpAppendModeFlags> AppendModeStateProperty =
-            AvaloniaProperty.RegisterDirect<MpAvContentWebView, MpAppendModeFlags>(
-                nameof(AppendModeState),
-                x => x.AppendModeState,
-                (x, o) => x.AppendModeState = o,
-                MpAppendModeFlags.None,
-                BindingMode.TwoWay);
-
-        #endregion
-
-        #region AppendData Property
-
-        private string _appendData;
-        public string AppendData {
-            get { return _appendData; }
-            set { SetAndRaise(AppendDataProperty, ref _appendData, value); }
-        }
-
-        public static DirectProperty<MpAvContentWebView, string> AppendDataProperty =
-            AvaloniaProperty.RegisterDirect<MpAvContentWebView, string>(
-                nameof(AppendData),
-                x => x.AppendData,
-                (x, o) => x.AppendData = o,
-                null,
-                BindingMode.TwoWay);
-
-
-        #endregion
-
-        private void OnAppendModeStateChanged(string source) {
-            if (BindingContext == null ||
-                !BindingContext.IsAppendNotifier) {
-                return;
-            }
-
-            // only called when mode changed in tray so the processState() ignores it (source is not 'editor')
-            // except relaying it to tray tile (if present)
-            var ctrvm = MpAvClipTrayViewModel.Instance;
-            MpConsole.WriteLine($"AppendModeState changed. AppendModeState: {AppendModeState}");
-            var reqMsg = new MpQuillAppendStateChangedMessage() {
-                isAppendLineMode = AppendModeState.HasFlag(MpAppendModeFlags.AppendLine),
-                isAppendMode = AppendModeState.HasFlag(MpAppendModeFlags.Append),
-                isAppendManualMode = AppendModeState.HasFlag(MpAppendModeFlags.Manual),
-            };
-            ProcessAppendStateChangedMessage(reqMsg, source);
-        }
-
-        private void OnAppendDataChanged() {
-            if (BindingContext == null ||
-                string.IsNullOrEmpty(AppendData) ||
-                !BindingContext.IsAppendNotifier) {
-                return;
-            }
-
-            MpConsole.WriteLine($"AppendData changed. AppendData: {AppendData}");
-            var req = new MpQuillAppendStateChangedMessage() {
-
-                isAppendLineMode = AppendModeState.HasFlag(MpAppendModeFlags.AppendLine),
-                isAppendMode = AppendModeState.HasFlag(MpAppendModeFlags.Append),
-                isAppendManualMode = AppendModeState.HasFlag(MpAppendModeFlags.Manual),
-                appendData = AppendData
-            };
-            SendMessage($"appendDataToNotifier_ext('{req.SerializeJsonObjectToBase64()}')");
-
-            AppendData = null;
-
-        }
-
         public void ProcessAppendStateChangedMessage(MpQuillAppendStateChangedMessage appendChangedMsg, string source) {
             Dispatcher.UIThread.Post(async () => {
                 var ctrvm = MpAvClipTrayViewModel.Instance;
@@ -1586,9 +1518,11 @@ namespace MonkeyPaste.Avalonia {
                     // no matter source if mode has a true and doesn't match tray update tray
                     // only disable once message from notifier has no true modes 
                     // only show ntf if it was an appendData msg, the rest delegated to tray
-                    if (appendChangedMsg.isAppendLineMode && !ctrvm.IsAppendLineMode) {
+                    if (appendChangedMsg.isAppendPaused != ctrvm.IsAppendPaused) {
+                        ctrvm.ToggleIsAppPausedCommand.Execute(null);
+                    } else if (appendChangedMsg.isAppendLineMode && !ctrvm.IsAppendLineMode) {
                         ctrvm.ToggleAppendLineModeCommand.Execute(null);
-                    } else if (appendChangedMsg.isAppendMode && !ctrvm.IsAppendMode) {
+                    } else if (appendChangedMsg.isAppendMode && !ctrvm.IsAppendInsertMode) {
                         ctrvm.ToggleAppendModeCommand.Execute(null);
                     } else if (BindingContext.IsAppendNotifier &&
                         (!appendChangedMsg.isAppendLineMode && !appendChangedMsg.isAppendMode && ctrvm.IsAnyAppendMode)) {
@@ -1607,23 +1541,6 @@ namespace MonkeyPaste.Avalonia {
                 }
                 SendMessage($"appendStateChanged_ext('{appendChangedMsg.SerializeJsonObjectToBase64()}')");
             });
-        }
-
-        private async Task RelayMsg(string msg) {
-            await Task.Delay(1);
-            MpAvContentWebView dest_wv = null;
-            if (BindingContext.IsAppendNotifier) {
-                // relay to tray tile
-                dest_wv = LocateTrayTileWebView(BindingContext.CopyItemId);
-
-            } //else if (BindingContext.IsAppendTrayItem) {
-              // relay to notifier
-              //    dest_wv = LocateModalWebView();
-              //}
-            if (dest_wv == null) {
-                return;
-            }
-            dest_wv.SendMessage(msg);
         }
         #endregion
 

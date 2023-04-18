@@ -57,7 +57,7 @@ namespace MonkeyPaste.Avalonia {
                 MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(processInfo);
             //MpAvAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppPath.ToLower() == processInfo.ProcessPath.ToLower() && x.PasteShortcutViewModel != null);
 
-            if (custom_paste_app_vm != null) {
+            if (custom_paste_app_vm != null && custom_paste_app_vm.PasteShortcutViewModel.HasPasteShortcut) {
                 pasteCmd = custom_paste_app_vm.PasteShortcutViewModel.PasteCmdKeyString;
             }
 

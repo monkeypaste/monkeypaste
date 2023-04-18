@@ -213,6 +213,7 @@ namespace MonkeyPaste {
         public bool isAppendLineMode { get; set; }
         public bool isAppendMode { get; set; }
         public bool isAppendManualMode { get; set; }
+        public bool isAppendPaused { get; set; }
 
         public int appendDocIdx { get; set; }
         public int appendDocLength { get; set; }

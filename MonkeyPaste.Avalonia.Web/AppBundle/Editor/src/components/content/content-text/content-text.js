@@ -607,7 +607,13 @@ function getLineHeightAtDocIdx(docIdx) {
 }
 
 function getElementLineHeight(elm) {
-	let attrb_val = window.getComputedStyle(getEditorElement()).getPropertyValue('line-height');
+	if (isNullOrUndefined(elm)) {
+		elm = getEditorElement();
+	}
+	if (elm.nodeType == 3) {
+		elm = elm.parentNode;
+	}
+	let attrb_val = getElementComputedStyleProp(elm,'line-height');
 	let float_val = parseFloat(attrb_val);
 	return float_val;
 }
@@ -824,6 +830,8 @@ function appendTextContentData(data) {
 	dt.setData('text/html', data);
 
 	performDataTransferOnContent(dt, getAppendDocRange(), null, 'api', 'Appended');
+	scrollToAppendIdx();
+
 	onContentChanged_ntf();
 }
 

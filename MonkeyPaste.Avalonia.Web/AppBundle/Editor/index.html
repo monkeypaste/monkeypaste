@@ -510,12 +510,14 @@
         <div id="pasteButtonAndModeContainer"
              class="right-align">
 
+            <!-- APPEND MANUAL LABEL -->
+            <span id="pasteAppendIsManualToolbarLabel" class="hidden">MANUAL</span>
             <!-- APPEND STATE CONTAINER -->
             <div id="pasteAppendToolbarLabelContainer">
-                <!-- APPEND MANUAL LABEL -->
-                <span id="pasteAppendIsManualToolbarLabel">MANUAL</span>
                 <!-- APPEND MODE LABEL -->
                 <span id="pasteAppendToolbarLabel"></span>
+                <!-- APPEND PAUSED BUTTON -->
+                <button id="pasteAppendPauseAppendButton"><i></i></button>
             </div>
 
             <!-- PASTE BUTTON -->
@@ -523,8 +525,7 @@
                     tabindex="6">
                 <i></i><span>PASTE</span>
             </button>
-            <div class="toolbar-separator"></div>
-
+            <!--<div class="toolbar-separator"></div>-->
             <!-- PASTE BUTTON POPUP -->
             <button id="pasteButtonPopupExpander"
                     tabindex="7">

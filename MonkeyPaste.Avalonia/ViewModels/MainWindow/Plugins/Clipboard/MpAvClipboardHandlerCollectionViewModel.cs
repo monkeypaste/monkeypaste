@@ -380,7 +380,10 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private async Task<MpAvDataObject> ReadClipboardOrDropObjectAsync(IDataObject forced_ido = null, MpPortableProcessInfo source_process = null, bool ignorePlugins = false) {
+        private async Task<MpAvDataObject> ReadClipboardOrDropObjectAsync(
+            IDataObject forced_ido = null,
+            MpPortableProcessInfo source_process = null,
+            bool ignorePlugins = false) {
             // NOTE forcedDataObject is used to read drag/drop, when null clipboard is read
             await WaitForBusyAsync();
 
@@ -438,7 +441,9 @@ namespace MonkeyPaste.Avalonia {
         private async Task<object> WriteClipboardOrDropObjectAsync(IDataObject ido, bool writeToClipboard, bool ignoreClipboardChange) {
             await WaitForBusyAsync();
 
-            if (ignoreClipboardChange) {
+            bool was_cb_monitoring = Mp.Services.ClipboardMonitor.IsMonitoring;
+            if (ignoreClipboardChange &&
+                was_cb_monitoring) {
                 Mp.Services.ClipboardMonitor.StopMonitor();
             }
             // pre-pass data object and remove disabled formats
@@ -493,10 +498,11 @@ namespace MonkeyPaste.Avalonia {
             //MpConsole.WriteLine("Data written to " + (writeToClipboard ? "CLIPBOARD" : "DATAOBJECT") + ":");
             //dobj.GetAllDataFormats().ForEach(x => MpConsole.WriteLine("Format: " + x));
 
-            if (ignoreClipboardChange) {
-                Mp.Services.ClipboardMonitor.StartMonitor();
-            }
             IsBusy = false;
+            if (ignoreClipboardChange &&
+                was_cb_monitoring) {
+                Mp.Services.ClipboardMonitor.StartMonitor(true);
+            }
             return dobj;
         }
 

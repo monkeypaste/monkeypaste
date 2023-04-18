@@ -130,17 +130,6 @@ function drawDropPreview(ctx, color = 'red', thickness = 1.0, line_style = [5, 5
     }
 }
 
-function drawAppendNotifierPreview(ctx, color = 'red', thickness = 1.0, line_style = [5, 5]) {
-    if (IsAppendManualMode) {
-        color = 'lime';
-    }
-    let block_state = IsAppendLineMode ? 'post' : 'inline';
-    let render_lines = getPreviewLines(getAppendDocRange().index, block_state, false);
-    for (var i = 0; i < render_lines.length; i++) {
-        let line = render_lines[i];
-        drawLine(ctx, line, color, thickness, line_style)
-    }
-}
 
 function drawFancyTextSelection(ctx) {
     let sel_rects = getRangeRects(getDocSelection());
@@ -224,12 +213,21 @@ function drawCaret(ctx, sel, caret_width = 1.0, caret_opacity = 1) {
 
     let caret_line = getCaretLine(sel.index);
     caret_line.ignoreLineStyle = true;
-    //let caret_rect = getCharacterRect(sel.index, true, false);
-    //let caret_line = { x1: caret_rect.left, y1: caret_rect.top, x2: caret_rect.left, y2: caret_rect.bottom };
-
     let caret_color = CaretBlinkOffColor == null ? getCaretColor() : CaretBlinkOffColor;
-    //drawRect(ctx, caret_rect, caret_color, caret_color, 0, caret_opacity);
     drawLine(ctx, caret_line, caret_color, caret_width);
+}
+
+function drawAppendNotifierPreview(ctx, color = 'red', thickness = 1.0, line_style = [5, 5]) {
+    if (IsAppendManualMode) {
+        color = 'lime';
+    }
+    let block_state = IsAppendLineMode ? 'post' : 'inline';
+    let render_lines = getPreviewLines(getAppendDocRange().index, block_state, false);
+    let append_color = CaretBlinkOffColor == null ? color : CaretBlinkOffColor;
+    for (var i = 0; i < render_lines.length; i++) {
+        let line = render_lines[i];
+        drawLine(ctx, line, append_color, thickness, line_style)
+    }
 }
 
 

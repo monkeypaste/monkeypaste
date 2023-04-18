@@ -24,17 +24,22 @@ namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvCommonExtensions {
         #region Storage
 
+        public static async Task<List<IStorageItem>> ToAvFilesObjectAsync(this IEnumerable<string> fpl) {
+            var files = await Task.WhenAll(fpl.Select(x => x.ToFileOrFolderStorageItemAsync()));
+            return files.ToList();
+        }
         public static async Task<IStorageItem> ToFileOrFolderStorageItemAsync(this string path) {
             if (!path.IsFileOrDirectory()) {
                 return null;
             }
             IStorageItem si = null;
-            if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime cl &&
-                cl.MainWindow is Window w) {
+            var mw = Application.Current.GetMainWindow();
+            var storageProvider = TopLevel.GetTopLevel(mw)!.StorageProvider;
+            if (storageProvider != null) {
                 if (path.IsFile()) {
-                    si = await w.StorageProvider.TryGetFileFromPathAsync(path);
+                    si = await storageProvider.TryGetFileFromPathAsync(path);
                 } else {
-                    si = await w.StorageProvider.TryGetFolderFromPathAsync(path);
+                    si = await storageProvider.TryGetFolderFromPathAsync(path);
                 }
             }
             return si;

@@ -219,7 +219,9 @@ function performDataTransferOnContent(
     var dt_range = dest_doc_range;
     dt_range.length += dt_length_diff;
     setDocSelection(dt_range.index, dt_range.length);
-    scrollDocRangeIntoView(dt_range);    
+
+
+    // REPORT TRANSFER
 
     if (source_urls.length > 0) {
         dt.setData(URI_LIST_FORMAT, source_urls.join('\r\n'));
@@ -230,12 +232,22 @@ function performDataTransferOnContent(
         host_dt_obj,
         transferLabel);
 
+
+    // SCROLL TO DEST
+
+    updateQuill();
+    scrollDocRangeIntoView(dt_range);
+
+
+    // RESET STATE
+
     // clear delta tracker to mark end of transaction
     clearLastDelta()
 
     if (wasTextChangeSuppressed) {
         SuppressTextChangedNtf = false;
     }
+
 }
 
 

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Common {
     public static class MpFileIo {
 
-        static ReaderWriterLock locker = new ReaderWriterLock();
+        public static ReaderWriterLock locker = new ReaderWriterLock();
         public static async Task<string> ToFileAsync(
             this string fileData,
             string forceDir = "",

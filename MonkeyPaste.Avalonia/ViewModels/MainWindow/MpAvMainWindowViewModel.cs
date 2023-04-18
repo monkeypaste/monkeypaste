@@ -580,7 +580,7 @@ namespace MonkeyPaste.Avalonia {
 
             IsMainWindowLoading = false;
 
-            Mp.Services.ClipboardMonitor.StartMonitor();
+            Mp.Services.ClipboardMonitor.StartMonitor(false);
 
             SetupMainWindowSize();
             SetMainWindowRect(MainWindowClosedScreenRect);

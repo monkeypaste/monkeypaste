@@ -5,6 +5,9 @@ var IsAppendLineMode = false;
 var AppendIdx = -1;
 
 var IsAppendManualMode = false;
+
+var IsAppendPaused = false;
+
 // #endregion Globals
 
 // #region Life Cycle
@@ -15,6 +18,7 @@ function initAppend() {
 	}
 
 	document.addEventListener('selectionchange', onAppendDocumentSelectionChange, true);
+	disablePauseAppend();
 }
 
 // #endregion Life Cycle
@@ -39,11 +43,10 @@ function getAppendDocRange() {
 // #endregion Getters
 
 // #region Setters
-
-
 // #endregion Setters
 
 // #region State
+
 
 function isAppendNotifier() {
 	//return window.location.search.toLowerCase().endsWith(APPEND_NOTIFIER_PARAMS.toLowerCase());
@@ -99,6 +102,7 @@ function disableAppendMode(fromHost = false) {
 	IsAppendMode = false;
 	// NOTE dont allow manual to notify here (regardless of source) to avoid double messages
 	disableAppendManualMode(false);
+	disablePauseAppend(false);
 
 	getEditorElement().classList.remove('append');
 	updatePasteAppendToolbarLabel();
@@ -146,6 +150,28 @@ function disableAppendManualMode(fromHost = false) {
 		onAppendStateChanged_ntf();
 	}
 }
+
+function enablePauseAppend(fromHost = false) {
+	const did_pause_append_change = !IsAppendPaused;
+	IsAppendPaused = true;
+	getPasteAppendPauseAppendButtonElement().innerHTML = getSvgHtml('play', null,false);
+
+	if (!fromHost && did_pause_append_change) {
+		onAppendStateChanged_ntf();
+	}
+}
+
+function disablePauseAppend(fromHost = false) {
+	const did_pause_append_change = IsAppendPaused;
+	IsAppendPaused = false;
+	getPasteAppendPauseAppendButtonElement().innerHTML = getSvgHtml('pause', null, false);
+
+	if (!fromHost && did_pause_append_change) {
+		onAppendStateChanged_ntf();
+		// trigger content change to refresh clipboard to append buffer
+		onContentChanged_ntf();
+	}
+}
 // #endregion State
 
 // #region Actions
@@ -154,6 +180,7 @@ function updateAppendModeState(
 	isAppendLine,
 	isAppend,
 	isAppendManual,
+	isAppendStatePaused,
 	appendDocIdx,
 	appendDocLength,
 	appendData,
@@ -162,11 +189,14 @@ function updateAppendModeState(
 
 	let is_enabling = !isAnyAppendEnabled() && (isAppendLine || isAppend);
 	let is_disabling = isAnyAppendEnabled() && !isAppendLine && !isAppend;
+	let is_resuming = IsAppendPaused && !isAppendStatePaused;
+	let is_pausing = !IsAppendPaused && isAppendStatePaused;
 
 	let is_updating_state =
 		IsAppendLineMode != isAppendLine ||
 		IsAppendMode != isAppend ||
-		IsAppendManualMode != isAppendManual;
+		IsAppendManualMode != isAppendManual ||
+		IsAppendPaused != isAppendStatePaused;
 
 	let is_appending_data = !isNullOrEmpty(appendData);
 
@@ -183,9 +213,17 @@ function updateAppendModeState(
 	log('cur append range: ', getAppendDocRange());
 	log('new append range: ', new_append_range);
 	log('is_appending_data: ' + is_appending_data);
+	log('is_resuming: ' + is_resuming);
+	log('is_pausing: ' + is_pausing);
 	log('append_data: ' + appendData);
 	log(' ');
 
+	if (is_pausing) {
+		enablePauseAppend(fromHost);
+	}
+	if (is_resuming) {
+		disablePauseAppend(fromHost);
+	}
 	if (is_append_range_changed) {
 		setDocSelection(new_append_range);
 	}
@@ -203,9 +241,9 @@ function updateAppendModeState(
 }
 
 function scrollToAppendIdx() {
-	//scrollDocRangeIntoView({ index: getAppendIdx(), length: 0 }, 0 , 15);
-	if (IsAppendManualMode) {
-		return;
+	//
+	if (IsAppendManualMode || IsAppendMode) {
+		scrollDocRangeIntoView(getAppendDocRange());
 	}
 	scrollToEnd();
 }

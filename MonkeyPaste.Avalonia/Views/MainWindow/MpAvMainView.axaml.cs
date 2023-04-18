@@ -6,6 +6,7 @@ using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
+using Avalonia.Threading;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -156,7 +157,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
-
         #region Orientation Updates
         public void UpdateContentLayout() {
             var mwvm = MpAvMainWindowViewModel.Instance;

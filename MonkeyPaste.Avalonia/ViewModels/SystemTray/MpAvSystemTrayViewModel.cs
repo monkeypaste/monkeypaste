@@ -58,7 +58,7 @@ namespace MonkeyPaste.Avalonia {
                                 new MpMenuItemViewModel() {
                                     Header = "Append",
                                     IsCheckedSrcObj = MpAvClipTrayViewModel.Instance,
-                                    IsCheckedPropPath = nameof(MpAvClipTrayViewModel.Instance.IsAppendMode),
+                                    IsCheckedPropPath = nameof(MpAvClipTrayViewModel.Instance.IsAppendInsertMode),
                                     ToggleType = "Radio",
                                     CommandSrcObj = MpAvClipTrayViewModel.Instance,
                                     CommandPath = nameof(MpAvClipTrayViewModel.Instance.ToggleAppendModeCommand),

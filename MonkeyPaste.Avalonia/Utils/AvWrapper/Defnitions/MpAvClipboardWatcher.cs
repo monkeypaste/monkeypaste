@@ -42,6 +42,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
+        public bool IsMonitoring =>
+            _timer != null && _timer.IsEnabled;
+
         public MpPortableDataObject LastClipboardDataObject =>
             _lastCbo;
         #endregion
@@ -59,11 +62,10 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public int RegisterFormat(string format) {
-            //return (int)WinApi.RegisterClipboardFormatA(format);
             return MpRandom.Rand.Next();
         }
 
-        public void StartMonitor() {
+        public void StartMonitor(bool ignoreCurrentState) {
             if (_timer == null) {
                 _timer = new DispatcherTimer(DispatcherPriority.Background) {
                     Interval = TimeSpan.FromMilliseconds(300)
@@ -71,6 +73,16 @@ namespace MonkeyPaste.Avalonia {
                 _timer.Tick += _timer_Tick;
             }
             if (_timer.IsEnabled) {
+                MpConsole.WriteLine("Ignoring clipboard monitor start, already started");
+                return;
+            }
+
+            if (ignoreCurrentState) {
+                Dispatcher.UIThread.Post(async () => {
+                    _lastCbo = await ConvertManagedFormats();
+                    _timer.Start();
+                    MpConsole.WriteLine("Clipboard watcher started. Current state ignored.");
+                });
                 return;
             }
 
@@ -102,20 +114,10 @@ namespace MonkeyPaste.Avalonia {
             Dispatcher.UIThread.Post(async () => { await CheckClipboardHelper(); });
         }
         private async Task CheckClipboardHelper() {
-            //if (_lastCbo == null) {
-            //    if (_isInitialStart) {
-            //        _isInitialStart = false;
-            //    } else {
-            //        // this ensures start/stop ignores last change
-            //        _lastCbo = await ConvertManagedFormats();
-            //        return;
-            //    }
-            //}
-
             var cbo = await ConvertManagedFormats();
 
             if (MpPortableDataObject.IsDataNotEqual(_lastCbo, cbo)) {
-                MpConsole.WriteLine("Cb changed");
+                MpConsole.WriteLine("Clipboard changed");
                 _lastCbo = cbo;
                 var process_cbo = await Mp.Services.DataObjectHelperAsync.GetPlatformClipboardDataObjectAsync(false) as MpPortableDataObject;
                 OnClipboardChanged?.Invoke(typeof(MpAvClipboardWatcher).ToString(), process_cbo);

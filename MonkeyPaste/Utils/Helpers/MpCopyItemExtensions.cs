@@ -1,9 +1,14 @@
 ﻿using MonkeyPaste.Common;
 using System;
+using System.Linq;
 
 namespace MonkeyPaste {
     public static class MpCopyItemExtensions {
-        public static MpPortableDataObject ToPortableDataObject(this MpCopyItem ci, bool includeSelfRef = false, bool includeTitle = false) {
+        public static MpPortableDataObject ToPortableDataObject(
+            this MpCopyItem ci,
+            string[] formats = null,
+            bool includeSelfRef = false,
+            bool includeTitle = false) {
             if (ci == null) {
                 return new MpPortableDataObject();
             }
@@ -11,6 +16,11 @@ namespace MonkeyPaste {
             switch (ci.ItemType) {
                 case MpCopyItemType.Text:
                     pdo.SetData(MpPortableDataFormats.CefHtml, ci.ItemData);
+                    if (formats != null) {
+                        if (formats.Any(x => x == MpPortableDataFormats.Text)) {
+                            pdo.SetData(MpPortableDataFormats.Text, ci.ItemData.ToPlainText("html"));
+                        }
+                    }
                     break;
                 case MpCopyItemType.Image:
                     pdo.SetData(MpPortableDataFormats.AvPNG, ci.ItemData.ToBytesFromBase64String());

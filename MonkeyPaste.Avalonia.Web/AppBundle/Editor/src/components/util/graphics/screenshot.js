@@ -58,9 +58,9 @@ async function getDocRangeAsImageAsync(sel) {
         h2c_options.height = total_rect.height;
     }
 
-    editor_elm.style.width = 'auto';
-    editor_elm.style.height = 'auto';
-    editor_elm.style.overflow = 'visible';
+    //editor_elm.style.width = 'auto';
+    //editor_elm.style.height = 'auto';
+    //editor_elm.style.overflow = 'visible';
 
     html2canvas(editor_elm, h2c_options)
         .then(imgCanvas => {

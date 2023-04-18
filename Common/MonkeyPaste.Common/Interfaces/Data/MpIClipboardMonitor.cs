@@ -6,7 +6,8 @@ namespace MonkeyPaste.Common {
         event EventHandler<MpPortableDataObject> OnClipboardChanged;
         MpPortableDataObject LastClipboardDataObject { get; }
 
-        void StartMonitor();
+        bool IsMonitoring { get; }
+        void StartMonitor(bool ignoreCurrentState);
         void StopMonitor();
     }
 }

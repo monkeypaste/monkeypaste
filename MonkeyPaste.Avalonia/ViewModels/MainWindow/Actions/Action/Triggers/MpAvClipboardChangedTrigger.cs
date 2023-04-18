@@ -46,7 +46,7 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void EnableTrigger() {
             Mp.Services.ClipboardMonitor.RegisterActionComponent(this);
-            Mp.Services.ClipboardMonitor.StartMonitor();
+            Mp.Services.ClipboardMonitor.StartMonitor(false);
         }
 
         protected override void DisableTrigger() {

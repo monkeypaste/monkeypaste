@@ -182,27 +182,6 @@ function enableWindowResizeUpdate_ext() {
 	onWindowResize();
 }
 
-function appendDataToNotifier_ext(reqMsgBase64Str) {
-	// input 'MpQuillAppendStateChangedMessage'
-	if (!isAppendNotifier()) {
-		log('append error. only notifier should get data upate');
-		debugger;
-		return;
-	}
-	let req = toJsonObjFromBase64Str(reqMsgBase64Str);
-
-	updateAppendModeState(
-		req.isAppendLineMode,
-		req.isAppendMode,
-		req.isAppendManualMode,
-		req.appendDocIdx,
-		req.appendDocLength,
-		req.appendData,
-		false); // sync notifier w/ host state and append data
-
-	onAppendStateChanged_ntf(req.appendData);
-	onContentChanged_ntf();
-}
 
 function appendStateChanged_ext(reqMsgBase64Str) {
 	// input 'MpQuillAppendStateChangedMessage'
@@ -213,6 +192,7 @@ function appendStateChanged_ext(reqMsgBase64Str) {
 		req.isAppendLineMode,
 		req.isAppendMode,
 		req.isAppendManualMode,
+		req.isAppendPaused,
 		req.appendDocIdx,
 		req.appendDocLength,
 		req.appendData,

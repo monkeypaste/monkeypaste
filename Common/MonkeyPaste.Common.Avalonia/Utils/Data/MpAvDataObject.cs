@@ -7,6 +7,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 #if WINDOWS
 using MonkeyPaste.Common.Wpf;
@@ -52,6 +54,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 if (data is string portablePathStr) {
                     // convert portable single line-separated string to enumerable of strings for avalonia
                     data = portablePathStr.SplitNoEmpty(Environment.NewLine);
+
                 }
             } else if ((format == MpPortableDataFormats.AvHtml_bytes || format == MpPortableDataFormats.AvRtf_bytes) && data is string portableDecodedFormattedTextStr) {
                 // avalona like rtf and html to be stored as bytes
@@ -132,12 +135,21 @@ namespace MonkeyPaste.Common.Avalonia {
                 }
             }
 
-            //if (TryGetData(MpPortableDataFormats.AvFileNames, out object fn_obj) &&
-            //    fn_obj is IEnumerable<string> fnl) {
-            //    var fn_sil = await Task.WhenAll(fnl.Select(x => x.ToFileOrFolderStorageItemAsync()));
-            //    SetData(MpPortableDataFormats.AvFileNames, fn_sil);
-            //}
+            if (TryGetData(MpPortableDataFormats.AvFileNames, out object fn_obj)) {
+                IEnumerable<string> fpl = null;
+                if (fn_obj is IEnumerable<string>) {
+                    fpl = fn_obj as IEnumerable<string>;
+                } else if (fn_obj is string fpl_str) {
+                    fpl = fpl_str.SplitNoEmpty(Environment.NewLine);
+                } else {
 
+                }
+                if (fpl != null) {
+
+                    var av_fpl = await fpl.ToAvFilesObjectAsync();
+                    SetData(MpPortableDataFormats.AvFileNames, av_fpl);
+                }
+            }
             // TODO should add unicode, oem, etc. here for greater compatibility
             await Task.Delay(1);
         }

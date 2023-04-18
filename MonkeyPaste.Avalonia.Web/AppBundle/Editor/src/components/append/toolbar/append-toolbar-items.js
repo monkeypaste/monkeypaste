@@ -6,6 +6,8 @@
 
 function initPasteAppendToolbarItems() {
 	hidePasteAppendToolbarLabelContainer();
+
+	addClickOrKeyClickEventListener(getPasteAppendPauseAppendButtonElement(), onPauseAppendButtonClickOrKey);
 }
 
 // #endregion Life Cycle
@@ -21,6 +23,9 @@ function getPasteAppendIsManualToolbarLabelElement() {
 }
 function getPasteAppendToolbarLabelElement() {
 	return document.getElementById('pasteAppendToolbarLabel');
+}
+function getPasteAppendPauseAppendButtonElement() {
+	return document.getElementById('pasteAppendPauseAppendButton');
 }
 // #endregion Getters
 
@@ -88,4 +93,11 @@ function updatePasteAppendToolbarLabel() {
 
 // #region Event Handlers
 
+function onPauseAppendButtonClickOrKey(e) {
+	if (IsAppendPaused) {
+		disablePauseAppend();
+	} else {
+		enablePauseAppend();
+	}
+}
 // #endregion Event Handlers

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MonkeyPaste.Common.Avalonia": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

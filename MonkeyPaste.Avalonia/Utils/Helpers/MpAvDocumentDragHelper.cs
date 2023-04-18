@@ -71,7 +71,7 @@ namespace MonkeyPaste.Avalonia {
                 });
             } else {
                 // wait for source data
-                SourceDataObject = await dragSource.GetDataObjectAsync(req_formats);
+                SourceDataObject = await dragSource.GetDataObjectAsync(req_formats, false);
 
                 if (SourceDataObject == null) {
                     // is none selected?
@@ -123,7 +123,7 @@ namespace MonkeyPaste.Avalonia {
                     Mp.Services.TransactionBuilder.ReportTransactionAsync(
                                 copyItemId: ctvm.CopyItemId,
                                 reqType: MpJsonMessageFormatType.DataObject,
-                                req: mpdo.SerializeData(),
+                                req: null,//mpdo.SerializeData(),
                                 respType: MpJsonMessageFormatType.None,
                                 resp: null,
                                 ref_uris: new[] { drop_app_url },
@@ -146,20 +146,17 @@ namespace MonkeyPaste.Avalonia {
             var temp = await Mp.Services.DataObjectHelperAsync.ProcessDragDropDataObjectAsync(source_clone);
             if (temp is IDataObject temp_ido) {
                 temp_ido.CopyTo(DragDataObject);
+                await (DragDataObject as MpAvDataObject).MapAllPseudoFormatsAsync();
                 MpConsole.WriteLine("DragDataObject updated");
 
-                var phl = DragDataObject.GetPlaceholderFormats();
-                MpConsole.WriteLine($"Placeholder formats: {string.Join(",", phl)}");
-                if (DragDataObject.TryGetData(MpPortableDataFormats.AvFileNames, out IEnumerable<string> fnl)) {
-                    MpConsole.WriteLine($"dnd obj updated. target fns:");
-                    fnl.ForEach(x => MpConsole.WriteLine(x));
-                }
+                //var phl = DragDataObject.GetPlaceholderFormats();
+                //MpConsole.WriteLine($"Placeholder formats: {string.Join(",", phl)}");
+                //if (DragDataObject.TryGetData(MpPortableDataFormats.AvFileNames, out IEnumerable<string> fnl)) {
+                //    MpConsole.WriteLine($"dnd obj updated. target fns:");
+                //    fnl.ForEach(x => MpConsole.WriteLine(x));
+                //}
 
             }
-            // seems excessive...but ultimately all ole pref's come
-            // from plugins so pass everthing through cb plugin system just like writing to clipboard
-            //await Mp.Services.DataObjectHelperAsync
-            //    .UpdateDragDropDataObjectAsync(SourceDataObject, DragDataObject);
         }
         #endregion
 

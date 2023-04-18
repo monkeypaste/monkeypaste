@@ -1148,7 +1148,7 @@ namespace MonkeyPaste.Avalonia {
                 if (IsAppendLineMode) {
                     cmf |= MpClipboardModeFlags.AppendBlock;
                 }
-                if (IsAppendMode) {
+                if (IsAppendInsertMode) {
                     cmf |= MpClipboardModeFlags.AppendInline;
                 }
                 if (IsRightClickPasteMode) {
@@ -1171,14 +1171,17 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public bool IsAppendMode { get; set; }
+        public bool IsAppendInsertMode { get; set; }
 
         public bool IsAppendLineMode { get; set; }
 
         public bool IsAppendManualMode { get; set; }
 
         public bool IsAnyAppendMode =>
-            IsAppendMode || IsAppendLineMode;
+            IsAppendInsertMode || IsAppendLineMode;
+
+        public bool IsAppendPaused { get; set; }
+
         #endregion
 
         public ObservableCollection<MpCopyItem> PendingNewModels { get; } = new ObservableCollection<MpCopyItem>();
@@ -2555,6 +2558,9 @@ namespace MonkeyPaste.Avalonia {
             bool wasAppended = false;
             if (IsAnyAppendMode) {
                 wasAppended = await UpdateAppendModeAsync(ci);
+                if (!wasAppended && PendingNewModels.All(x => x.Id != ci.Id)) {
+                    PendingNewModels.Add(ci);
+                }
             } else if (PendingNewModels.All(x => x.Id != ci.Id)) {
                 PendingNewModels.Add(ci);
             }
@@ -3614,6 +3620,15 @@ namespace MonkeyPaste.Avalonia {
 
 
         #region Append
+        public MpQuillAppendStateChangedMessage GetAppendStateMessage(string data) {
+            return new MpQuillAppendStateChangedMessage() {
+                isAppendLineMode = IsAppendLineMode,
+                isAppendMode = IsAppendInsertMode,
+                isAppendManualMode = IsAppendManualMode,
+                isAppendPaused = IsAppendPaused,
+                appendData = data
+            };
+        }
         private bool IsCopyItemAppendable(MpCopyItem ci) {
             if (ci == null || ci.Id < 1 || ci.ItemType == MpCopyItemType.Image) {
                 return false;
@@ -3669,19 +3684,15 @@ namespace MonkeyPaste.Avalonia {
 
         private void UpdateAppendModeStateFlags(MpAppendModeFlags flags, string source) {
             IsAppendLineMode = flags.HasFlag(MpAppendModeFlags.AppendLine);
-            IsAppendMode = flags.HasFlag(MpAppendModeFlags.Append);
+            IsAppendInsertMode = flags.HasFlag(MpAppendModeFlags.AppendInsert);
             IsAppendManualMode = flags.HasFlag(MpAppendModeFlags.Manual);
+            IsAppendPaused = flags.HasFlag(MpAppendModeFlags.Paused);
             _appendModeFlags = flags;
             OnPropertyChanged(nameof(AppendModeStateFlags));
 
             if (AppendClipTileViewModel != null &&
                 AppendClipTileViewModel.GetContentView() is MpAvContentWebView wv) {
-                var append_msg = new MpQuillAppendStateChangedMessage() {
-                    isAppendLineMode = IsAppendLineMode,
-                    isAppendMode = IsAppendMode,
-                    isAppendManualMode = IsAppendManualMode
-                };
-                wv.ProcessAppendStateChangedMessage(append_msg, source);
+                wv.ProcessAppendStateChangedMessage(GetAppendStateMessage(null), source);
             }
         }
 
@@ -3702,7 +3713,7 @@ namespace MonkeyPaste.Avalonia {
             if (isAppendLine) {
                 amf |= MpAppendModeFlags.AppendLine;
             } else {
-                amf |= MpAppendModeFlags.Append;
+                amf |= MpAppendModeFlags.AppendInsert;
             }
             if (isManualMode) {
                 amf |= MpAppendModeFlags.Manual;
@@ -3724,7 +3735,7 @@ namespace MonkeyPaste.Avalonia {
                        msgType: MpNotificationType.AppModeChange,
                        iconSourceObj: "QuestionMarkImage").FireAndForgetSafeAsync();
             } else {
-                MpNotificationBuilder.ShowNotificationAsync(MpNotificationType.AppendChanged).FireAndForgetSafeAsync();
+                // MpNotificationBuilder.ShowNotificationAsync(MpNotificationType.AppendChanged).FireAndForgetSafeAsync();
             }
         }
         public async Task DeactivateAppendModeAsync() {
@@ -3748,6 +3759,11 @@ namespace MonkeyPaste.Avalonia {
 
         private async Task<bool> UpdateAppendModeAsync(MpCopyItem aci, bool isNew = true) {
             Dispatcher.UIThread.VerifyAccess();
+            if (IsAppendPaused) {
+                // treat as new item
+                MpConsole.WriteLine($"Append paused, ignoring and marking new item as not appended");
+                return false;
+            }
             // NOTE only called in AdddItemFromClipboard when IsAnyAppendMode == true
 
             if (!IsAnyAppendMode) {
@@ -3806,13 +3822,13 @@ namespace MonkeyPaste.Avalonia {
         }
         public ICommand ToggleAppendModeCommand => new MpCommand(
             () => {
-                if (IsAppendMode) {
+                if (IsAppendInsertMode) {
                     DeactivateAppendModeAsync().FireAndForgetSafeAsync();
                 } else {
                     ActivateAppendModeAsync(false, IsAppendManualMode).FireAndForgetSafeAsync();
                 }
 
-                MpMessenger.SendGlobal(IsAppendMode ? MpMessageType.AppendModeActivated : MpMessageType.AppendModeDeactivated);
+                MpMessenger.SendGlobal(IsAppendInsertMode ? MpMessageType.AppendModeActivated : MpMessageType.AppendModeDeactivated);
             });
 
         public ICommand ToggleAppendLineModeCommand => new MpCommand(
@@ -3822,6 +3838,20 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     ActivateAppendModeAsync(true, IsAppendManualMode).FireAndForgetSafeAsync();
                 }
+            });
+
+        public ICommand ToggleAppendPausedCommand => new MpCommand(
+            () => {
+                if (!IsAnyAppendMode) {
+                    return;
+                }
+                var toggled_flags = AppendModeStateFlags;
+                if (toggled_flags.HasFlag(MpAppendModeFlags.Paused)) {
+                    toggled_flags ^= MpAppendModeFlags.Paused;
+                } else {
+                    toggled_flags |= MpAppendModeFlags.Paused;
+                }
+                UpdateAppendModeStateFlags(toggled_flags, "command");
             });
         public ICommand ToggleAppendManualModeCommand => new MpCommand(
             () => {
@@ -3839,13 +3869,7 @@ namespace MonkeyPaste.Avalonia {
             (args) => {
                 AppendClipTileViewModel.IsPopOutVisible = true;
                 if (AppendClipTileViewModel.GetContentView() is MpAvContentWebView wv) {
-                    var append_msg = new MpQuillAppendStateChangedMessage() {
-                        appendData = args as string,
-                        isAppendLineMode = IsAppendLineMode,
-                        isAppendMode = IsAppendMode,
-                        isAppendManualMode = IsAppendManualMode
-                    };
-                    wv.ProcessAppendStateChangedMessage(append_msg, "command");
+                    wv.ProcessAppendStateChangedMessage(GetAppendStateMessage(args as string), "command");
                 }
 
             }, (args) => {

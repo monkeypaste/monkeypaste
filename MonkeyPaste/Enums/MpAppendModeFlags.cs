@@ -5,7 +5,8 @@ namespace MonkeyPaste {
     public enum MpAppendModeFlags {
         None = 0,
         AppendLine = 1,
-        Append = 2,
-        Manual = 4
+        AppendInsert = 2,
+        Manual = 4,
+        Paused = 8
     }
 }

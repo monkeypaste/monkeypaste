@@ -227,6 +227,9 @@ namespace MonkeyPaste.Common.Avalonia {
                         } else if (dataObj is IEnumerable<Uri> uril) {
                             //
                             typed_data = uril.Select(x => x.LocalPath) as T;
+                        } else if (dataObj is IEnumerable<IStorageItem> sil) {
+                            //
+                            typed_data = sil.Select(x => x.Path) as T;
                         } else {
 
                         }

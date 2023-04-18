@@ -257,6 +257,7 @@ function onAppendStateChanged_ntf(appendDataStr = null) {
 		isAppendLineMode: IsAppendLineMode,
 		isAppendMode: IsAppendMode,
 		isAppendManualMode: IsAppendManualMode,
+		isAppendPaused: IsAppendPaused,
 		appendDocIdx: getAppendDocRange().index,
 		appendDocLength: getAppendDocRange().length,
 		appendData: appendDataStr
