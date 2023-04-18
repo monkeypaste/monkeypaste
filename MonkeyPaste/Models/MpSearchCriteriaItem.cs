@@ -160,7 +160,7 @@ namespace MonkeyPaste {
             if (sortOrderIdx < 0 && queryType == MpQueryType.Advanced) {
                 // NOTE simple is always at the top and should have -1 sort since its 
                 // not managed in adv collection
-                sortOrderIdx = await MpDataModelProvider.GetCriteriaItemCountByTagId(tagId);
+                sortOrderIdx = await MpDataModelProvider.GetCriteriaItemCountByTagIdAsync(tagId);
             }
             var sci = new MpSearchCriteriaItem() {
                 SearchCriteriaItemGuid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid() : System.Guid.Parse(guid),

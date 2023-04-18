@@ -773,7 +773,7 @@ function isPointInRange(p, range) {
 // #region Actions
 
 function convertTextContentToFormats(isForOle, formats) {
-	let sel = getDocSelection(isForOle);
+	let sel = isForOle ? getDocSelection(isForOle) : { index: 0, length: getDocLength() };
 	let items = [];
 	for (var i = 0; i < formats.length; i++) {
 		let lwc_format = formats[i].toLowerCase();
@@ -823,8 +823,8 @@ function appendTextContentData(data) {
 	// NOTE since data is result of ci builder it will always be html
 	dt.setData('text/html', data);
 
-	// TODO append needs to be refactored (i think) to rely on dataTransferComplete_ntf
-	performDataTransferOnContent(dt, getAppendDocRange(),null, 'api', 'Pasted');
+	performDataTransferOnContent(dt, getAppendDocRange(), null, 'api', 'Appended');
+	onContentChanged_ntf();
 }
 
 // #endregion Actions

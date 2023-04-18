@@ -195,7 +195,7 @@ namespace MonkeyPaste.Avalonia {
 
             Items.Clear();
             if (QueryTagId > 0) {
-                var cil = await MpDataModelProvider.GetCriteriaItemsByTagId(QueryTagId);
+                var cil = await MpDataModelProvider.GetCriteriaItemsByTagIdAsync(QueryTagId);
 
                 var simple_cil = cil.Where(x => x.QueryType == MpQueryType.Simple);
                 await MpAvQueryViewModel.Instance.RestoreAdvSearchValuesAsync(simple_cil.FirstOrDefault());

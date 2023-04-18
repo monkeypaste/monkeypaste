@@ -5,6 +5,7 @@ using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
@@ -115,5 +116,17 @@ namespace MonkeyPaste {
         }
 
         public MpDataObject() { }
+
+        public override async Task DeleteFromDatabaseAsync() {
+            var delete_tasks = new List<Task>();
+
+            var doil = await MpDataModelProvider.GetDataObjectItemsByDataObjectIdAsync(Id);
+            if (doil != null) {
+
+                delete_tasks.AddRange(doil.Select(x => x.DeleteFromDatabaseAsync()));
+            }
+            delete_tasks.Add(base.DeleteFromDatabaseAsync());
+            await Task.WhenAll(delete_tasks);
+        }
     }
 }

@@ -8,10 +8,11 @@ var IsConverterLoaded = false;
 
 function initPlainHtmlConverter() {
 	quill = initQuill();
+
 	getEditorContainerElement().firstChild.setAttribute('id', 'quill-editor');
 
 	getEditorElement().classList.add('ql-editor-converter');
-	//initConverterMatchers();
+	initConverterMatchers();
 
 	IsConverterLoaded = true;
 	IsLoaded = true;
@@ -25,7 +26,7 @@ function initConverterMatchers() {
 		if (node.tagName == 'TABLE') {
 			debugger;
 		}
-		return new Delta().insert(node.data);
+		return delta;
 	});
 }
 // #endregion Life Cycle
@@ -41,7 +42,7 @@ function initConverterMatchers() {
 // #region State
 
 function isPlainHtmlConverter() {
-	return window.location.search.toLowerCase().endsWith(HTML_CONVERTER_PARAMS.toLowerCase());
+	return window.location.search.toLowerCase().includes(HTML_CONVERTER_PARAMS.toLowerCase());
 }
 // #endregion State
 
@@ -69,15 +70,13 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 		updateQuill();
 		qhtml = getHtml();
 	} else if (formatType == 'rtf2html') {
-		const raw_delta = convertHtmlToDelta(dataStr);
-		setContents(raw_delta);
+		formatted_delta = convertHtmlToDelta(dataStr, true);
+		setContents(formatted_delta);
+		qhtml = getHtml(false);
+		//qhtml = forceHtmlBgOpacity(qhtml, bgOpacity);
 
-		updateQuill();
-		qhtml = getHtml();
-		qhtml = forceHtmlBgOpacity(qhtml, bgOpacity);
-
-		formatted_delta = convertHtmlToDelta(qhtml);
-		setRootHtml(qhtml);
+		//formatted_delta = convertHtmlToDelta(qhtml, true);
+		//setRootHtml(qhtml);
 	} else if (formatType == 'html') {
 		//iconBase64 = locateFaviconBase64(dataStr);
 
@@ -85,7 +84,6 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 		//qhtml = fixHtmlBug1(qhtml);
 		//qhtml = removeUnicode(qhtml);
 		//qhtml = fixUnicode(qhtml);
-
 
 		insertHtml(0, dataStr, 'user', false);
 		formatted_delta = forceDeltaBgOpacity(getDelta(), bgOpacity);
@@ -97,7 +95,7 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 		// delta-to-html doesn't convert tables 
 		qhtml = getHtml2();
 	}	
-
+	setRootHtml(qhtml);
 	log('');
 	log('RichHtml: ');
 	log(qhtml);

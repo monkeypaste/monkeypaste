@@ -4,6 +4,9 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System;
+using Avalonia.Platform.Storage;
+using System.Collections.Generic;
+using System.Linq;
 
 #if WINDOWS
 
@@ -57,6 +60,10 @@ namespace MonkeyPaste.Common.Avalonia {
                 var retry_result = await cb.GetDataSafeAsync(format, ++retryCount);
                 return retry_result;
             }
+            catch (AccessViolationException avex) {
+                MpConsole.WriteTraceLine($"Error reading cb format: '{format}'.", avex);
+                return null;
+            }
         }
 
         public static async Task SetDataObjectSafeAsync(this IClipboard cb, IDataObject ido, int retryCount = 0) {
@@ -75,6 +82,45 @@ namespace MonkeyPaste.Common.Avalonia {
             }
         }
 
+        public static bool IsValidClipboardData(object data) {
+            // NOTE when setting clipboard data needs to meet this checks or 
+            // will get AccesViolationException (windows)
+
+            if (data == null) {
+                return false;
+            }
+            bool was_checked = false;
+            if (data is string idoStr) {
+                was_checked = true;
+                if (string.IsNullOrEmpty(idoStr)) {
+                    return false;
+                }
+            }
+            if (data is IEnumerable<string> idoStrs) {
+                was_checked = true;
+                if (!idoStrs.Any()) {
+                    return false;
+                }
+            }
+            if (data is byte[] idoBytes) {
+                was_checked = true;
+                if (idoBytes.Length == 0) {
+                    return false;
+                }
+            }
+            if (data is IEnumerable<IStorageItem> sil) {
+                was_checked = true;
+                if (!sil.Any()) {
+                    return false;
+                }
+            }
+
+            if (!was_checked) {
+                object test = data;
+                //MpDebug.Break($"Unchecked format, for type '{test.GetType()}'");
+            }
+            return true;
+        }
         private static async Task WaitForClipboardAsync() {
             await Task.Delay(0);
 #if WINDOWS

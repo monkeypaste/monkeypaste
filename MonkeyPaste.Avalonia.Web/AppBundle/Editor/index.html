@@ -15,7 +15,7 @@
         var UseQuill2 = true;
         var UseBetterTable = true;
 
-        if (window.location.search.toLowerCase().endsWith(HTML_CONVERTER_PARAMS.toLowerCase())) {
+        if (window.location.search.toLowerCase().includes(HTML_CONVERTER_PARAMS.toLowerCase())) {
             // this is the case for converter which uses 1.3.6
             // because it doesn't have that whitespace exclusion bug between spans
             // it doesn't need the quill tables because it converts plain html which doesn't rely on better table
@@ -25,7 +25,7 @@
 
 
         //
-        if (window.location.search.toLowerCase().endsWith(AUTO_TEST.toLowerCase())) {
+        if (window.location.search.toLowerCase().includes(AUTO_TEST.toLowerCase())) {
             document.write('<script src="src/components/tester/editor_tester.js"><\/script>');
             window.addEventListener('load', function () {
                 init_test();

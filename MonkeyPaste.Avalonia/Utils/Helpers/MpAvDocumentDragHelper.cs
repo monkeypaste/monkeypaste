@@ -44,12 +44,32 @@ namespace MonkeyPaste.Avalonia {
             var req_formats = MpPortableDataFormats.RegisteredFormats.ToArray();
             // initialize target with all possible formats set to null
             DragDataObject = new MpAvDataObject(req_formats.ToDictionary(x => x, x => MpAvPlatformDataObjectExtensions.GetFormatPlaceholderData(x)));
-            // notify drag is starting so drop widget is visible immediatly 
-            // so state info can be shown w/o interfering w/ drag cursor
-            MpMessenger.SendGlobal(MpMessageType.ItemDragBegin);
 
-            Dispatcher.UIThread.Post(async () => {
+            // NOTE disabling immediate dnd start cause quick drops will be placeholders.
+            // Peformance seems ok w/ async but leaving option here for later testing
+            bool use_immediate_mode = false;
+            if (use_immediate_mode) {
+                // notify drag is starting so drop widget is visible immediatly 
+                // so state info can be shown w/o interfering w/ drag cursor
+                MpMessenger.SendGlobal(MpMessageType.ItemDragBegin);
 
+                Dispatcher.UIThread.Post(async () => {
+
+                    // wait for source data
+                    SourceDataObject = await dragSource.GetDataObjectAsync(req_formats);
+
+                    if (SourceDataObject == null) {
+                        // is none selected?
+                        Debugger.Break();
+                        FinishDrag(null);
+                        return;
+                    }
+
+                    SourceDataObject.CopyTo(DragDataObject);
+                    ApplyClipboardPresetOrSourceUpdateToDragDataAsync().FireAndForgetSafeAsync();
+
+                });
+            } else {
                 // wait for source data
                 SourceDataObject = await dragSource.GetDataObjectAsync(req_formats);
 
@@ -61,9 +81,10 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 SourceDataObject.CopyTo(DragDataObject);
-                ApplyClipboardPresetOrSourceUpdateToDragDataAsync().FireAndForgetSafeAsync();
+                await ApplyClipboardPresetOrSourceUpdateToDragDataAsync();
+                MpMessenger.SendGlobal(MpMessageType.ItemDragBegin);
+            }
 
-            });
             // signal drag start in sub-ui task
             var result = await DragDrop.DoDragDrop(pointerEventArgs, DragDataObject, allowedEffects);
 

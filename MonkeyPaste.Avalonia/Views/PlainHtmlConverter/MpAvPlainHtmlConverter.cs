@@ -81,16 +81,18 @@ namespace MonkeyPaste.Avalonia {
                 mv.RootGrid.Children.Add(ConverterWebView);
             }
 
-            MpConsole.WriteLine("Waiting for Html converter to initialize...");
-            //while (!ConverterWebView.IsEditorInitialized) {
-            //    await Task.Delay(100);
-            //}
-            MpConsole.WriteLine("Html converter initialized");
-
 
             IsBusy = false;
         }
         public async Task<MpAvHtmlClipboardData> ParseAsync(string inputStr, string inputFormatType, MpCsvFormatProperties csvProps = null) {
+            if (!ConverterWebView.IsEditorInitialized) {
+                MpConsole.WriteLine("Cannot parse html. Waiting for Html converter to initialize...");
+                while (!ConverterWebView.IsEditorInitialized) {
+                    MpConsole.WriteLine("waiting...");
+                    await Task.Delay(100);
+                }
+                MpConsole.WriteLine("Html converter initialized");
+            }
             string htmlDataStr = inputStr;
             if (htmlDataStr == null) {
                 return null;

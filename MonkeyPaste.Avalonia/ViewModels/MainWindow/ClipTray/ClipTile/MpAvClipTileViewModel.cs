@@ -506,6 +506,12 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public bool CanDisableSubSelection {
+            get {
+                return !IsAppendNotifier;
+            }
+        }
+
         public bool IsSubSelectionEnabled { get; set; } = false;
 
 
@@ -1207,6 +1213,7 @@ namespace MonkeyPaste.Avalonia {
             pow.Activated += activate_handler;
             pow.Closed += close_handler;
 
+            _contentView = null;
             pow.ShowChild();
 
             OnPropertyChanged(nameof(IsPopOutVisible));
@@ -1225,7 +1232,7 @@ namespace MonkeyPaste.Avalonia {
                 Position = MpAvNotificationPositioner.GetSystemTrayWindowPosition(ws),
                 Content = new MpAvClipTileView(),
                 Topmost = true,
-                Padding = new Thickness(10)
+                Padding = new Thickness(10),
                 //Classes = Classes.Parse("fadeIn fadeOut")
             };
 
@@ -1233,7 +1240,7 @@ namespace MonkeyPaste.Avalonia {
                 Window.TitleProperty,
                 new Binding() {
                     Source = this,
-                    Path = CopyItemTitle,
+                    Path = nameof(CopyItemTitle),
                     Converter = MpAvStringToWindowTitleConverter.Instance
                 });
 
@@ -1267,16 +1274,26 @@ namespace MonkeyPaste.Avalonia {
             EventHandler activate_handler = (s, e) => {
                 IsSelected = true;
             };
+            EventHandler<WindowClosingEventArgs> closing_handler = (s, e) => {
+                if (Parent == null ||
+                    !Parent.IsAnyAppendMode) {
+                    // prevent close
+                    return;
+                }
+                e.Cancel = true;
+            };
             EventHandler close_handler = null;
             close_handler = (s, e) => {
                 pow.Activated -= activate_handler;
                 pow.Closed -= close_handler;
+                pow.Closing -= closing_handler;
             };
             pow.Activated += activate_handler;
             pow.Closed += close_handler;
-
+            pow.Closing += closing_handler;
 
             IsAppendNotifier = true;
+            _contentView = null;
             pow.ShowChild();
 
             Dispatcher.UIThread.Post(async () => {
@@ -1327,7 +1344,7 @@ namespace MonkeyPaste.Avalonia {
                         //    pow.Hide();
                         //}
                         //pow.Classes.Add("IsClosing");
-                        pow.Hide();
+                        //pow.Hide();
                         return;
                     }
                     await Task.Delay(100);
@@ -1666,7 +1683,7 @@ namespace MonkeyPaste.Avalonia {
                     } else {
                         if (IsContentReadOnly) {
                             if (IsSubSelectionEnabled) {
-                                IsSubSelectionEnabled = false;
+                                DisableSubSelectionCommand.Execute(null);
                             }
                         }
                     }
@@ -2026,7 +2043,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand CopyToClipboardCommand => new MpAsyncCommand(
             async () => {
-                IsBusy = true;
+                //IsBusy = true;
                 var ds = GetContentView() as MpAvIDragSource;
                 if (ds == null) {
                     Debugger.Break();
@@ -2042,8 +2059,8 @@ namespace MonkeyPaste.Avalonia {
                 await Mp.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(mpdo, true);
 
                 // wait extra for cb watcher to know about data
-                await Task.Delay(300);
-                IsBusy = false;
+                //await Task.Delay(300);
+                //IsBusy = false;
             });
 
         public ICommand CycleDetailCommand => new MpCommand<object>(
@@ -2106,6 +2123,15 @@ namespace MonkeyPaste.Avalonia {
             }, (args) => {
                 return !IsPopOutVisible && Parent != null;
             }, new[] { this });
+
+        public ICommand DisableSubSelectionCommand => new MpCommand(
+            () => {
+                // rejected for append tile
+                IsSubSelectionEnabled = false;
+            },
+            () => {
+                return CanDisableSubSelection;
+            });
 
         public ICommand ToggleIsContentReadOnlyCommand => new MpCommand(
             () => {

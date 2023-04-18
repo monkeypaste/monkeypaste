@@ -39,7 +39,7 @@ function getDelta(rangeObj) {
 
 // #region Actions
 
-function convertDeltaToHtml(delta) {
+function convertDeltaToHtml(delta, encodeHtmlEntities) {
 	/*
 	 * {
 				'small': 'font-size: 0.75em',
@@ -78,52 +78,13 @@ function convertDeltaToHtml(delta) {
 		}
 	}
 
-	function onCustomTagAttributes(op) {
-		if (op) {
-			//if (op.type == 'template') {
-			//	let temp_span = document.createElement('span');
-			//	return applyTemplateToDomNode(temp_span, getTemplateDefByGuid(op.template.templateGuid)).outerHTML;
-			//}
-			if (op.attributes !== undefined) {
-				let classes = [];
-				if (op.attributes.size !== undefined) {
-					// FONT SIZE (NOT UNIQUE)
-					let font_size_class = `ql-size-${op.attributes.size.split('px')[0]}`;
-					classes.push(font_size_class);
-				}
-
-				if (op.attributes.list !== undefined) {
-					// LIST TYPE
-					let li_type = op.attributes.list;
-					let li_val = '';
-
-					if (op.insert.type === 'text') {
-						li_val = op.insert.value;
-
-						// TODO add font classes here if any (wrap in span)
-					}
-					return `<li data-list="${li_type}">${li_val}</li>`;
-				} else if (TableDeltaAttrbs.some(x => op.attributes[x] !== undefined)) {
-					// TABLES
-
-					if (op.attributes['table-col'] !== undefined) {
-
-					}
-				} else if (!isNullOrUndefined(op.insert) && op.insert.type == 'text') {
-					if (classes.length > 0) {
-						let formatted_result = `<span class="${classes.join(' ')}">${op.insert.value}</span>`;
-						return formatted_result;
-					}
-				}
-			}
-						
-		}
-	}
+	
 	let cfg = {
 		//inlineStyles: true,
 		//allowBackgroundClasses: true,
+
 		customTagAttributes: onCustomTagAttributes,
-		encodeHtml: true
+		encodeHtml: encodeHtmlEntities
 	};
 	let qdc = new window.QuillDeltaToHtmlConverter(delta.ops, cfg);
 	qdc.renderCustomWith(function (customOp, contextOp) {
@@ -136,7 +97,7 @@ function convertDeltaToHtml(delta) {
 	return htmlStr;
 }
 
-function convertHtmlToDelta(htmlStr) {
+function convertHtmlToDelta(htmlStr, isRtf2Html = false) {
 	// create temp dom of htmlStr and escape special chars in text nodes	
 	let html_doc = DomParser.parseFromString(htmlStr, 'text/html');
 	let text_elms = getAllTextElementsInElement(html_doc.body);
@@ -145,13 +106,18 @@ function convertHtmlToDelta(htmlStr) {
 		text_elm.nodeValue = encodeHtmlSpecialEntities(text_elm.nodeValue);
 	}
 	htmlStr = html_doc.body.innerHTML;
+	const whitespace_sub = '[BOOYABOOYA]';
+	//if (isRtf2Html) {
+		htmlStr = htmlStr.replaceAll('&nbsp;', whitespace_sub);
+	//}	
 
-	let htmlObj = htmlStr;
-	if (UseQuill2) {
-		// NOTE quill2 expects {html,text} not just html
-		htmlObj = { html: htmlStr };
-	}
+	let htmlObj = { html: htmlStr };
 	var delta = quill.clipboard.convert(htmlObj);
+
+	//if (isRtf2Html) {
+		delta = fixHtmlToDeltaWhitespaceSpecialEntities(delta, whitespace_sub);
+	//}
+
 	if (isPlainHtmlConverter()) {
 		return delta;
 	}
@@ -213,14 +179,33 @@ function insertDelta(range, deltaOrDeltaJsonStr, source = 'api') {
 function fixHtmlToDeltaTemplateInserts(delta) {
 	// loading/saving templates have same prob where inserts
 	// only set attributes with blank insert, needs attributes as insert.,
-	if (delta && delta.ops !== undefined) {
-		for (var i = 0; i < delta.ops.length; i++) {
-			if (delta.ops[i].attributes === undefined ||
-				delta.ops[i].attributes.templateGuid === undefined) {
-				continue;
-			}
-			delta.ops[i].insert = { 'template': delta.ops[i].attributes };
+	if (isNullOrUndefined(delta)) {
+		return delta;
+	}
+	for (var i = 0; i < delta.ops.length; i++) {
+		if (delta.ops[i].attributes === undefined ||
+			delta.ops[i].attributes.templateGuid === undefined) {
+			continue;
 		}
+		delta.ops[i].insert = { 'template': delta.ops[i].attributes };
+	}
+	return delta;
+}
+
+function fixHtmlToDeltaWhitespaceSpecialEntities(delta,whitespaceSubStr) {
+	// upgrading to quill 2 for converter broke whitespae conversion again
+	// before html is converted to delta but AFTER special html entities are encoded
+	// &nbsp; is subbed w/ a random string but both clipboard.convert and pastedangerously 
+	// still remove 
+	if (isNullOrUndefined(delta)) {
+		return delta;
+	}
+	for (var i = 0; i < delta.ops.length; i++) {
+		if (isNullOrUndefined(delta.ops[i].insert) ||
+			!isString(delta.ops[i].insert)) {
+			continue;
+		}
+		delta.ops[i].insert = delta.ops[i].insert.replaceAll(whitespaceSubStr, ' ');
 	}
 	return delta;
 }
@@ -278,5 +263,52 @@ function applyDelta(delta, source = 'api') {
 // #endregion Actions
 
 // #region Event Handlers
+function onCustomTagAttributes(op) {
+	if (op) {
+		//if (op.type == 'template') {
+		//	let temp_span = document.createElement('span');
+		//	return applyTemplateToDomNode(temp_span, getTemplateDefByGuid(op.template.templateGuid)).outerHTML;
+		//}
+		if (op.attributes !== undefined) {
+			var classes = [];
+			if (op.attributes.size !== undefined) {
+				// FONT SIZE (NOT UNIQUE)
+				let font_size_class = `ql-size-${op.attributes.size.split('px')[0]}`;
+				log('class added: ' + font_size_class);
+				//classes.push(font_size_class);
+			}
 
+			if (op.attributes.list !== undefined) {
+				// LIST TYPE
+				let li_type = op.attributes.list;
+				let li_val = '';
+
+				if (op.insert.type === 'text') {
+					li_val = op.insert.value;
+
+					// TODO add font classes here if any (wrap in span)
+				}
+				//return `<li data-list="${li_type}">${li_val}</li>`;
+
+				return { 'data-list': li_type };
+			} else if (TableDeltaAttrbs.some(x => op.attributes[x] !== undefined)) {
+				// TABLES
+
+				if (op.attributes['table-col'] !== undefined) {
+
+				}
+			} else if (!isNullOrUndefined(op.insert) && op.insert.type == 'text') {
+				if (classes.length > 0) {
+					//var formatted_result = `<span class="${classes.join(' ')}">${op.insert.value}</span>`;
+					//log(formatted_result);
+					//return formatted_result;
+					return { 'class': classes.join(' ') };
+				}
+			}
+		}
+		// unhandled op
+		//debugger;
+
+	}
+}
 // #endregion Event Handlers

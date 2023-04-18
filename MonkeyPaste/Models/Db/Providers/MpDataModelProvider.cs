@@ -256,6 +256,15 @@ namespace MonkeyPaste {
             }
             return result[0];
         }
+
+        public static async Task<MpCopyItem> GetCopyItemByDataObjectIdAsync(int doid) {
+            string query = "select * from MpCopyItem where fk_MpDataObjectId=?";
+            var result = await MpDb.QueryAsync<MpCopyItem>(query, doid);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
+        }
         public static async Task<int> GetTotalCopyItemCountAsync() {
             string query = "select count(pk_MpCopyItemId) from MpCopyItem";
             var result = await MpDb.QueryScalarAsync<int>(query);
@@ -714,15 +723,21 @@ namespace MonkeyPaste {
             return result > 0;
         }
 
-        public static async Task<List<MpDataObjectItem>> GetDataObjectItemsByDataObjectId(int dobjid) {
+        public static async Task<List<MpDataObjectItem>> GetDataObjectItemsByDataObjectIdAsync(int dobjid) {
             string query = "select * from MpDataObjectItem where fk_MpDataObjectId=?";
             var result = await MpDb.QueryAsync<MpDataObjectItem>(query, dobjid);
             return result;
         }
 
-        public static async Task<List<MpDataObjectItem>> GetDataObjectItemsForFormatByDataObjectId(int dobjid, string format) {
+        public static async Task<List<MpDataObjectItem>> GetDataObjectItemsForFormatByDataObjectIdAsync(int dobjid, string format) {
             string query = "select * from MpDataObjectItem where fk_MpDataObjectId=? and ItemFormat=?";
             var result = await MpDb.QueryAsync<MpDataObjectItem>(query, dobjid, format);
+            return result;
+        }
+
+        public static async Task<List<MpDataObjectItem>> GetDataObjectItemsForFormatByDataAsync(string format, string data) {
+            string query = "select * from MpDataObjectItem where ItemFormat=? and ItemData=?";
+            var result = await MpDb.QueryAsync<MpDataObjectItem>(query, format, data);
             return result;
         }
 
@@ -730,13 +745,13 @@ namespace MonkeyPaste {
 
         #region MpSearchCriteriaItem
 
-        public static async Task<List<MpSearchCriteriaItem>> GetCriteriaItemsByTagId(int tid) {
+        public static async Task<List<MpSearchCriteriaItem>> GetCriteriaItemsByTagIdAsync(int tid) {
             string query = "select * from MpSearchCriteriaItem where fk_MpTagId=?";
             var result = await MpDb.QueryAsync<MpSearchCriteriaItem>(query, tid);
             return result;
         }
 
-        public static async Task<int> GetCriteriaItemCountByTagId(int tid) {
+        public static async Task<int> GetCriteriaItemCountByTagIdAsync(int tid) {
             string query = "select COUNT(pk_MpSearchCriteriaItemId) from MpSearchCriteriaItem where fk_MpTagId=?";
             var result = await MpDb.QueryScalarAsync<int>(query, tid);
             return result;

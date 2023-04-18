@@ -272,20 +272,22 @@ namespace MonkeyPaste.Avalonia {
             SendMessage($"updateModifierKeysFromHost_ext('{modKeyMsg.SerializeJsonObjectToBase64()}')");
         }
 
-        public async Task<MpAvDataObject> GetDataObjectAsync(string[] formats = null) {
+        public async Task<MpAvDataObject> GetDataObjectAsync(string[] formats = null, bool use_placeholders = true, bool ignore_selection = false) {
             if (BindingContext == null) {
                 MpDebug.Break();
                 return new MpAvDataObject();
             }
-            bool use_placeholders =
-                MpAvExternalDropWindowViewModel.Instance.IsDropWidgetEnabled;
+            if (use_placeholders && !MpAvExternalDropWindowViewModel.Instance.IsDropWidgetEnabled) {
+                use_placeholders = false;
+            }
 
             var ctvm = BindingContext;
             // clear screenshot
             _contentScreenShotBase64_ntf = null;
 
             var contentDataReq = new MpQuillContentDataObjectRequestMessage() {
-                forOle = true
+                // 'forOle' not the best name 
+                forOle = !ignore_selection
             };
 
             // NOTE when file is on clipboard pasting into tile removes all other formats besides file
@@ -357,30 +359,16 @@ namespace MonkeyPaste.Avalonia {
                 avdo.SetData(MpPortableDataFormats.AvPNG, bmp.ToByteArray());
                 avdo.SetData(MpPortableDataFormats.Text, bmp.ToAsciiImage());
                 // TODO add colorized ascii maybe as html and rtf!!
-            } else if (!ignore_ss) {
-                avdo.SetData(MpPortableDataFormats.AvPNG, MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT.ToBytesFromString());
+            } else {// if (!ignore_ss) {
+                if (use_placeholders) {
+                    avdo.SetData(MpPortableDataFormats.AvPNG, MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT.ToBytesFromString());
 
-                Dispatcher.UIThread.Post(async () => {
-                    bool timed_out = false;
-                    int ss_timeout = 15_000;
-                    var ss_sw = Stopwatch.StartNew();
-                    // screen shot is async and js notifies w/ base64 property here
-                    while (_contentScreenShotBase64_ntf == null) {
-                        await Task.Delay(100);
-                        if (ss_sw.ElapsedMilliseconds >= ss_timeout) {
-                            MpConsole.WriteLine("screen shot timed out :(");
-                            timed_out = true;
-                            break;
-                        }
-                    }
-                    if (!timed_out) {
-                        if (_contentScreenShotBase64_ntf.ToBytesFromBase64String() is byte[] ss_bytes) {
-
-                            MpConsole.WriteLine("screen shot set. byte count: " + ss_bytes.Length);
-                            avdo.Set(MpPortableDataFormats.AvPNG, ss_bytes);
-                        }
-                    }
-                });
+                    Dispatcher.UIThread.Post(async () => {
+                        await SetScreenShotAsync(avdo);
+                    });
+                } else {
+                    await SetScreenShotAsync(avdo);
+                }
             }
 
             await avdo.MapAllPseudoFormatsAsync();
@@ -388,6 +376,28 @@ namespace MonkeyPaste.Avalonia {
             avdo.DataFormatLookup.Where(x => x.Value == null)
                 .ForEach(x => avdo.DataFormatLookup.Remove(x.Key));
             return avdo;
+        }
+
+        private async Task SetScreenShotAsync(MpAvDataObject avdo) {
+            bool timed_out = false;
+            int ss_timeout = 15_000;
+            var ss_sw = Stopwatch.StartNew();
+            // screen shot is async and js notifies w/ base64 property here
+            while (_contentScreenShotBase64_ntf == null) {
+                await Task.Delay(100);
+                if (ss_sw.ElapsedMilliseconds >= ss_timeout) {
+                    MpConsole.WriteLine("screen shot timed out :(");
+                    timed_out = true;
+                    break;
+                }
+            }
+            if (!timed_out) {
+                if (_contentScreenShotBase64_ntf.ToBytesFromBase64String() is byte[] ss_bytes) {
+
+                    MpConsole.WriteLine("screen shot set. byte count: " + ss_bytes.Length);
+                    avdo.Set(MpPortableDataFormats.AvPNG, ss_bytes);
+                }
+            }
         }
         public bool IsCurrentDropTarget => BindingContext == null ? false : BindingContext.IsDropOverTile;
 
@@ -1173,7 +1183,7 @@ namespace MonkeyPaste.Avalonia {
             SendMessage($"loadContent_ext('{msgStr}')");
         }
 
-        private void ProcessContentChangedMessage(MpQuillEditorContentChangedMessage contentChanged_ntf) {
+        private async void ProcessContentChangedMessage(MpQuillEditorContentChangedMessage contentChanged_ntf) {
             if (BindingContext == null ||
                 (BindingContext.IsPlaceholder &&
                 !BindingContext.IsPinned)) {
@@ -1233,7 +1243,7 @@ namespace MonkeyPaste.Avalonia {
             if (contentChanged_ntf.itemData != null) {
                 if (contentChanged_ntf.itemData.IsEmptyRichHtmlString()) {
                     // data's getting reset again
-                    MpDebug.Break();
+                    MpDebug.Break("data reset caught in content changed");
                 }
                 BindingContext.CopyItemData = contentChanged_ntf.itemData;
             }
@@ -1241,7 +1251,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (BindingContext.IsAppendNotifier) {
                 // sync append item to current clipboard
-                var append_mpdo = BindingContext.CopyItem.ToPortableDataObject();
+                var append_mpdo = await GetDataObjectAsync(new[] { MpPortableDataFormats.Text }, false, true); // BindingContext.CopyItem.ToPortableDataObject();
                 Mp.Services.DataObjectHelperAsync
                     .SetPlatformClipboardAsync(append_mpdo, true)
                     .FireAndForgetSafeAsync(BindingContext);
@@ -1253,13 +1263,24 @@ namespace MonkeyPaste.Avalonia {
                     MpConsole.WriteLine("NO PLAIN TEXT AVAILABLE");
                 }
             }
-
             IsEditorLoaded = true;
         }
 
         private async Task ProcessDataTransferCompleteResponse(MpQuillDataTransferCompletedNotification dataTransferCompleted_ntf) {
             var dtobj = MpJsonConverter.DeserializeBase64Object<MpQuillHostDataItemsMessage>(dataTransferCompleted_ntf.sourceDataItemsJsonStr);
+            MpTransactionType transType = dataTransferCompleted_ntf.transferLabel.ToEnum<MpTransactionType>();
             MpPortableDataObject req_mpdo = dtobj.ToAvDataObject();
+            if (transType == MpTransactionType.Appended) {
+                // NOTE append sources are added before notifying editor since the source of the event
+                // is clipboard change not drop or paste events which come from editor so
+                // more accurate sources can be obtained checking in build workflow..
+
+                if (!BindingContext.IsAppendNotifier) {
+                    MpDebug.Break("Append state mismatch");
+                }
+
+                return;
+            }
 
             string resp_json = null;
             if (!string.IsNullOrEmpty(dataTransferCompleted_ntf.changeDeltaJsonStr)) {
@@ -1271,7 +1292,6 @@ namespace MonkeyPaste.Avalonia {
                 var other_refs = await Mp.Services.SourceRefTools.GatherSourceRefsAsync(req_mpdo);
                 refs = other_refs.Select(x => Mp.Services.SourceRefTools.ConvertToRefUrl(x));
             }
-            MpTransactionType transType = dataTransferCompleted_ntf.transferLabel.ToEnum<MpTransactionType>();
 
             if (transType == MpTransactionType.None) {
                 // what's the label?

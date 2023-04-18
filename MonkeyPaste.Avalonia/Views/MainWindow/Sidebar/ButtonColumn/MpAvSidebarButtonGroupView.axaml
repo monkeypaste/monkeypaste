@@ -208,6 +208,10 @@
                     <Panel Background="Transparent"
                            Width="100"
                            Height="150">
+                        <!--<Panel.RenderTransform>
+                            <TranslateTransform X="20" />
+                        </Panel.RenderTransform>-->
+
                         <local:MpAvAppModeFlyoutView Background="Transparent"
                                                      HorizontalAlignment="Stretch"
                                                      VerticalAlignment="Stretch" />

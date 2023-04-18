@@ -83,15 +83,17 @@ function getRootHtml() {
 	return quill.root.innerHTML;
 }
 
-function getHtml(range) {
+function getHtml(range, encodeHtmlEntities = true) {
 	if (ContentItemType != 'Text') {
 		return getRootHtml();
 	}
-	range = !range ? { index: 0, length: getDocLength() } : range;
+	range = isNullOrUndefined(range) ? { index: 0, length: getDocLength() } : range;
 	let delta = getDelta(range);
 
-	delta = encodeHtmlEntitiesInDeltaInserts(delta);
-	let htmlStr = convertDeltaToHtml(delta);
+	if (encodeHtmlEntities) {
+		delta = encodeHtmlEntitiesInDeltaInserts(delta);
+	}
+	let htmlStr = convertDeltaToHtml(delta, false);
 	return htmlStr;
 }
 

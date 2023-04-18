@@ -130,6 +130,7 @@ namespace MonkeyPaste.Common.Avalonia {
             }
         }
 
+
         public static bool ContainsData(this IDataObject ido, string format) {
             // NOTE used for live dnd dataObject state
             // since IDataObject doesn't allow for format removal
@@ -144,39 +145,8 @@ namespace MonkeyPaste.Common.Avalonia {
                 return false;
             }
 
-
-            bool was_checked = false;
-            if (ido.Get(format) is string idoStr) {
-                was_checked = true;
-                if (string.IsNullOrEmpty(idoStr)) {
-                    return false;
-                }
-            }
-            if (ido.Get(format) is IEnumerable<string> idoStrs) {
-                was_checked = true;
-                if (!idoStrs.Any()) {
-                    return false;
-                }
-            }
-            if (ido.Get(format) is byte[] idoBytes) {
-                was_checked = true;
-                if (idoBytes.Length == 0) {
-                    return false;
-                }
-            }
-            if (ido.Get(format) is IEnumerable<IStorageItem> sil) {
-                was_checked = true;
-                if (!sil.Any()) {
-                    return false;
-                }
-            }
-
-            if (!was_checked) {
-                object test = ido.Get(format);
-                //MpDebug.Break($"Unchecked format, for type '{test.GetType()}'");
-            }
-
-            return true;
+            object data = ido.Get(format);
+            return MpAvClipboardExtensions.IsValidClipboardData(data);
         }
 
         public static void CopyTo(this IDataObject source_ido, IDataObject target_ido) {

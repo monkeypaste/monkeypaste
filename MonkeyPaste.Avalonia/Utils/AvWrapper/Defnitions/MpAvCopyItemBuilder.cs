@@ -64,6 +64,16 @@ namespace MonkeyPaste.Avalonia {
                 itemType: itemType,
                 suppressWrite: suppressWrite);
 
+
+            if (ci.WasDupOnCreate) {
+                // remove new data object
+                await dobj.DeleteFromDatabaseAsync();
+                MpConsole.WriteLine($"Duplicate (current) data object w/ id '{dobj.Id}' deleted. Using org instance w/ id '{ci.DataObjectId}'");
+                if (transType == MpTransactionType.Created) {
+                    // try to prevent multiple 'create' transactions, 'Recreate' will imply dup ref
+                    transType = MpTransactionType.Recreated;
+                }
+            }
             List<string> ref_urls = refs.Select(x => Mp.Services.SourceRefTools.ConvertToRefUrl(x)).ToList();
             if (mpdo.TryGetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, out IEnumerable<string> urls)) {
                 var urlList = urls.ToList();

@@ -18,6 +18,7 @@ namespace MonkeyPaste {
         Edited,
         Analyzed,
         Appended,
+        Recreated,
         Error,
         System
     }

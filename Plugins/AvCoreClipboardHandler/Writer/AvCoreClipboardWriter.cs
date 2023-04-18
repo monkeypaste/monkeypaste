@@ -80,7 +80,19 @@ namespace AvCoreClipboardHandler {
 
             if (request.writeToClipboard) {
                 //await Util.WaitForClipboard();
-                await Application.Current.Clipboard.SetDataObjectSafeAsync(write_output);
+                var empty_formats = write_output.GetAllDataFormats().Where(x => !write_output.ContainsData(x));
+                if (empty_formats.Any() && write_output is MpAvDataObject avdo) {
+                    // NOTE need to make sure empty formats are removed or clipboard will bark
+                    empty_formats.ForEach(x => avdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(x)));
+                    var test = avdo.GetAllDataFormats().Where(x => !avdo.ContainsData(x));
+                    if (test.Any()) {
+
+                    }
+                    await Application.Current.Clipboard.SetDataObjectSafeAsync(avdo);
+                } else {
+                    await Application.Current.Clipboard.SetDataObjectSafeAsync(write_output);
+                }
+
                 //Util.CloseClipboard();
             }
 

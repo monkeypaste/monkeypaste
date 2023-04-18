@@ -64,7 +64,7 @@ namespace MonkeyPaste.Avalonia {
 
             // BUG will need to check source here... pretty much most places using env.newLine to parse right i think
             //  or substitute for 'portableNewLine' where necessary
-            var ci_dobil = await MpDataModelProvider.GetDataObjectItemsForFormatByDataObjectId(ci.DataObjectId, MpPortableDataFormats.AvFileNames);
+            var ci_dobil = await MpDataModelProvider.GetDataObjectItemsForFormatByDataObjectIdAsync(ci.DataObjectId, MpPortableDataFormats.AvFileNames);
             var fivml = await Task.WhenAll(ci_dobil.Select(x => CreateFileItemViewModel(x)));
             Items.Clear();
             fivml.ForEach(x => Items.Add(x));

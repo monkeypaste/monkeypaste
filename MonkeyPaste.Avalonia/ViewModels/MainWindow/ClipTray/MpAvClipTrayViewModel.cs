@@ -1863,7 +1863,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+        protected override async void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpCopyItem ci) {
                 if (AppendClipTileViewModel != null &&
                     ci.Id == AppendClipTileViewModel.CopyItemId &&
@@ -1906,8 +1906,12 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
 
-                CheckLoadMore();
-                RefreshQueryTrayLayout();
+                //CheckLoadMore();
+                //RefreshQueryTrayLayout();
+                while (!QueryCommand.CanExecute(string.Empty)) {
+                    await Task.Delay(100);
+                }
+                QueryCommand.Execute(string.Empty);
 
                 OnPropertyChanged(nameof(IsQueryEmpty));
             } else if (e is MpCopyItemTag cit) {
@@ -2543,14 +2547,15 @@ namespace MonkeyPaste.Avalonia {
                 await ci.WriteToDatabaseAsync();
             }
 
-            if (AppendClipTileViewModel == null) {
+            if (AppendClipTileViewModel == null &&
+                PendingNewModels.All(x => x.Id != ci.Id)) {
                 PendingNewModels.Add(ci);
             }
 
             bool wasAppended = false;
             if (IsAnyAppendMode) {
                 wasAppended = await UpdateAppendModeAsync(ci);
-            } else {
+            } else if (PendingNewModels.All(x => x.Id != ci.Id)) {
                 PendingNewModels.Add(ci);
             }
 
@@ -2757,16 +2762,18 @@ namespace MonkeyPaste.Avalonia {
                      return;
                  }
 
-                 if (Items.Contains(ctvm_to_pin)) {
+                 if (Items.Where(x => x.CopyItemId == ctvm_to_pin.CopyItemId) is IEnumerable<MpAvClipTileViewModel> query_items &&
+                     query_items.Any()) {
                      // create temp tile w/ model ref
                      var temp_ctvm = await CreateClipTileViewModelAsync(ctvm_to_pin.CopyItem);
                      // unload query tile
-                     ctvm_to_pin.TriggerUnloadedNotification(true);
+                     query_items.ForEach(x => x.TriggerUnloadedNotification(true));
                      // use temp tile to pin
                      ctvm_to_pin = temp_ctvm;
                  } else if (ctvm_to_pin.QueryOffsetIdx >= 0) {
-                     Mp.Services.Query.PageTools.RemoveItemId(ctvm_to_pin.CopyItemId);
+                     //Mp.Services.Query.PageTools.RemoveItemId(ctvm_to_pin.CopyItemId);
                  }
+                 Mp.Services.Query.PageTools.RemoveItemId(ctvm_to_pin.CopyItemId);
                  if (pinType == MpPinType.Window) {
                      ctvm_to_pin.OpenPopOutWindow();
                  } else if (pinType == MpPinType.Append) {
@@ -2776,6 +2783,13 @@ namespace MonkeyPaste.Avalonia {
                  if (ctvm_to_pin.IsPinned) {
                      // for drop from pin tray or new duplicate was in pin tray
                      int cur_pin_idx = PinnedItems.IndexOf(ctvm_to_pin);
+                     if (cur_pin_idx < 0) {
+                         cur_pin_idx = PinnedItems.IndexOf(PinnedItems.FirstOrDefault(x => x.CopyItemId == ctvm_to_pin.CopyItemId));
+                         if (cur_pin_idx < 0) {
+                             MpDebug.Break("something wrong pinning item...adding instead. check for duplicate content");
+                             PinnedItems.Add(ctvm_to_pin);
+                         }
+                     }
                      PinnedItems.Move(cur_pin_idx, pin_idx);
                  } else if (pin_idx == PinnedItems.Count) {
                      // new item or user pinned query item
@@ -3755,7 +3769,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (AppendClipTileViewModel.CopyItemId != aci.Id) {
-                Task.Run(async () => {
+                Dispatcher.UIThread.Post(async () => {
                     // no need to wait for source updates
                     // get appended items transactions which should be only 1 since new and add a paste transaction to append item with its create sources
                     var aci_citl = await MpDataModelProvider.GetCopyItemTransactionsByCopyItemIdAsync(aci.Id);
@@ -3784,7 +3798,7 @@ namespace MonkeyPaste.Avalonia {
                         MpPrefViewModel.Instance.IgnoreAppendedItems) {
                         aci.DeleteFromDatabaseAsync().FireAndForgetSafeAsync();
                     }
-                }).FireAndForgetSafeAsync(this);
+                });
             }
 
             AppendDataCommand.Execute(append_data);
@@ -3826,7 +3840,10 @@ namespace MonkeyPaste.Avalonia {
                 AppendClipTileViewModel.IsPopOutVisible = true;
                 if (AppendClipTileViewModel.GetContentView() is MpAvContentWebView wv) {
                     var append_msg = new MpQuillAppendStateChangedMessage() {
-                        appendData = args as string
+                        appendData = args as string,
+                        isAppendLineMode = IsAppendLineMode,
+                        isAppendMode = IsAppendMode,
+                        isAppendManualMode = IsAppendManualMode
                     };
                     wv.ProcessAppendStateChangedMessage(append_msg, "command");
                 }

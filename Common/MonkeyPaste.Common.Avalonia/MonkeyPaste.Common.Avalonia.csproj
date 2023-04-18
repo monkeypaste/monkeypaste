@@ -84,7 +84,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controls\Adorner\" />
-    <Folder Include="Utils\Helpers\" />
   </ItemGroup>
   <PropertyGroup>
      <!-- 

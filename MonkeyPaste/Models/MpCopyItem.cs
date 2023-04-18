@@ -178,8 +178,23 @@ namespace MonkeyPaste {
             int dataObjectId = 0,
             bool suppressWrite = false) {
             if (MpPrefViewModel.Instance.IsDuplicateCheckEnabled && !suppressWrite) {
-                var dupCheck = await MpDataModelProvider.GetCopyItemByDataAsync(data);
+                MpCopyItem dupCheck = null;
+                if (itemType == MpCopyItemType.Text && dataObjectId > 0) {
+                    // TODO should not need to do this
+                    // but from bugs converting html and special entity encoding use plain text for dup check
+                    var to_create_text_doil = await MpDataModelProvider.GetDataObjectItemsForFormatByDataObjectIdAsync(dataObjectId, MpPortableDataFormats.Text);
+                    if (to_create_text_doil.FirstOrDefault() is MpDataObjectItem to_create_text_doi) {
+                        var matches = await MpDataModelProvider.GetDataObjectItemsForFormatByDataAsync(MpPortableDataFormats.Text, to_create_text_doi.ItemData);
+                        if (matches.FirstOrDefault() is MpDataObjectItem dup_text_doi) {
+                            dupCheck = await MpDataModelProvider.GetCopyItemByDataObjectIdAsync(dup_text_doi.DataObjectId);
+                        }
+                    }
+                } else {
+
+                    dupCheck = await MpDataModelProvider.GetCopyItemByDataAsync(data);
+                }
                 if (dupCheck != null) {
+                    MpConsole.WriteLine($"Duplicate item detected, returning original id:'{dupCheck.Id}'");
                     dupCheck.WasDupOnCreate = true;
                     return dupCheck;
                 }
@@ -241,7 +256,7 @@ namespace MonkeyPaste {
                 return;
             }
 
-            var doil = await MpDataModelProvider.GetDataObjectItemsForFormatByDataObjectId(DataObjectId, MpPortableDataFormats.Text);
+            var doil = await MpDataModelProvider.GetDataObjectItemsForFormatByDataObjectIdAsync(DataObjectId, MpPortableDataFormats.Text);
             if (doil.Count == 0) {
                 doil.Add(new MpDataObjectItem() {
                     DataObjectId = DataObjectId,
@@ -290,11 +305,7 @@ namespace MonkeyPaste {
             var cisl = await MpDataModelProvider.GetCopyItemSourcesAsync(Id);
             delete_tasks.AddRange(cisl.Select(x => x.DeleteFromDatabaseAsync()));
 
-            var doil = await MpDataModelProvider.GetDataObjectItemsByDataObjectId(DataObjectId);
-            delete_tasks.AddRange(doil.Select(x => x.DeleteFromDatabaseAsync()));
 
-            var dobj = await MpDataModelProvider.GetItemAsync<MpDataObject>(DataObjectId);
-            delete_tasks.Add(dobj.DeleteFromDatabaseAsync());
 
             var do_model = await MpDataModelProvider.GetItemAsync<MpDataObject>(DataObjectId);
             if (do_model != null) {

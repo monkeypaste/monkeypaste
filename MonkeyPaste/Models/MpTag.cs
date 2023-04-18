@@ -68,7 +68,7 @@ namespace MonkeyPaste {
             if (TagType == MpTagType.Query) {
                 // clone query tag criteria
 
-                var scil = await MpDataModelProvider.GetCriteriaItemsByTagId(Id);
+                var scil = await MpDataModelProvider.GetCriteriaItemsByTagIdAsync(Id);
                 var cloned_scil = await Task.WhenAll(scil.Select(x => x.CloneDbModelAsync(
                     deepClone: deepClone,
                     suppressWrite: suppressWrite)));
@@ -368,7 +368,7 @@ namespace MonkeyPaste {
                 deleteTasks.AddRange(citl.Select(x => x.DeleteFromDatabaseAsync()));
             }
 
-            var scil = await MpDataModelProvider.GetCriteriaItemsByTagId(Id);
+            var scil = await MpDataModelProvider.GetCriteriaItemsByTagIdAsync(Id);
             if (scil != null && scil.Count > 0) {
                 deleteTasks.AddRange(scil.Select(x => x.DeleteFromDatabaseAsync()));
             }

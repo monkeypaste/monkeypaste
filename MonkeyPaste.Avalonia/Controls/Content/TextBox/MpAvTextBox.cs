@@ -50,7 +50,7 @@ namespace MonkeyPaste.Avalonia {
             throw new NotImplementedException();
         }
 
-        public Task<MpAvDataObject> GetDataObjectAsync(string[] formats = null) {
+        public Task<MpAvDataObject> GetDataObjectAsync(string[] formats = null, bool use_placeholders = true, bool ignore_selection = false) {
             throw new NotImplementedException();
         }
 
