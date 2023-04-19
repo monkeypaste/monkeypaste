@@ -2,9 +2,10 @@
     public enum MpWindowType {
         None = 0,
         Main,
+        Append,
         Settings,
-        Toast,
         PopOut,
+        Toast,
         Modal
     }
 }

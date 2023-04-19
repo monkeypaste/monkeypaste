@@ -16,7 +16,7 @@ namespace MonkeyPaste.Avalonia {
             });
 
 
-        public async Task<string> ShowCustomColorMenuAsync(string selectedColor, string title = null, MpIUserColorViewModel ucvm = null) {
+        public async Task<string> ShowCustomColorMenuAsync(string selectedColor, string title = null, MpIUserColorViewModel ucvm = null, object owner = null) {
 
             var cw = new MpAvWindow() {
                 DataContext = ucvm,
@@ -31,7 +31,7 @@ namespace MonkeyPaste.Avalonia {
                 Content = new MpAvColorPickerView(selectedColor)
             };
 
-            var result = await cw.ShowChildDialogWithResultAsync(MpAvWindowManager.MainWindow);
+            var result = await cw.ShowChildDialogWithResultAsync(owner as Window);
             Mp.Services.ContextMenuCloser.CloseMenu();
 
             if (result is string newColor) {

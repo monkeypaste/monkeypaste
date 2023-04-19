@@ -1168,8 +1168,7 @@ namespace MonkeyPaste.Avalonia {
             var loadContentMsg = new MpQuillLoadContentRequestMessage() {
                 contentHandle = BindingContext.PublicHandle,
                 contentType = BindingContext.CopyItemType.ToString(),
-                itemData = BindingContext.EditorFormattedItemData,
-                //annotationsJsonStr = BindingContext.AnnotationsJsonStr
+                itemData = BindingContext.EditorFormattedItemData
             };
 
             var searches =
@@ -1186,6 +1185,12 @@ namespace MonkeyPaste.Avalonia {
                 new MpQuillContentSearchesFragment() {
                     searches = searches.ToList()
                 }.SerializeJsonObjectToBase64() : null;
+
+            loadContentMsg.appendStateFragment =
+                BindingContext.IsAppendNotifier ?
+                    MpAvClipTrayViewModel.Instance
+                    .GetAppendStateMessage(null)
+                    .SerializeJsonObjectToBase64() : null;
 
             string msgStr = loadContentMsg.SerializeJsonObjectToBase64();
 
@@ -1222,33 +1227,6 @@ namespace MonkeyPaste.Avalonia {
                 BindingContext.CopyItemSize2 = contentChanged_ntf.itemSize2;
             }
 
-            //bool hasSizeChanged = false;
-            //switch (BindingContext.CopyItemType) {
-            //    case MpCopyItemType.Text:
-
-            //        break;
-            //}
-            //if (contentChanged_ntf.itemSize1 > 0 &&
-            //    BindingContext.CharCount != contentChanged_ntf.itemSize1) {
-            //    hasSizeChanged = true;
-            //    BindingContext.CharCount = contentChanged_ntf.itemSize1;
-            //}
-            //if (contentChanged_ntf.itemSize2 > 0 &&
-            //    BindingContext.LineCount != contentChanged_ntf.itemSize2) {
-            //    hasSizeChanged = true;
-            //    BindingContext.LineCount = contentChanged_ntf.itemSize2;
-            //}
-            //if (hasSizeChanged) {
-            //    BindingContext.CopyItemSize = new MpSize(BindingContext.CharCount, BindingContext.LineCount);
-            //}
-
-            //if (contentChanged_ntf.editorHeight > 0 &&
-            //    contentChanged_ntf.editorHeight > 0) {
-            //    var new_size = new MpSize(contentChanged_ntf.editorWidth, contentChanged_ntf.editorHeight);
-            //    if (!new_size.IsValueEqual(BindingContext.UnconstrainedContentDimensions)) {
-            //        BindingContext.UnconstrainedContentDimensions = new_size;
-            //    }
-            //}
             if (contentChanged_ntf.itemData != null) {
                 if (contentChanged_ntf.itemData.IsEmptyRichHtmlString()) {
                     // data's getting reset again
@@ -1523,11 +1501,11 @@ namespace MonkeyPaste.Avalonia {
                     } else if (appendChangedMsg.isAppendLineMode && !ctrvm.IsAppendLineMode) {
                         ctrvm.ToggleAppendLineModeCommand.Execute(null);
                     } else if (appendChangedMsg.isAppendMode && !ctrvm.IsAppendInsertMode) {
-                        ctrvm.ToggleAppendModeCommand.Execute(null);
+                        ctrvm.ToggleAppendInsertModeCommand.Execute(null);
                     } else if (BindingContext.IsAppendNotifier &&
                         (!appendChangedMsg.isAppendLineMode && !appendChangedMsg.isAppendMode && ctrvm.IsAnyAppendMode)) {
                         // only let notifier deactivate
-                        await ctrvm.DeactivateAppendModeAsync();
+                        ctrvm.DeactivateAppendModeCommand.Execute(null);
                     } else if (BindingContext.IsAppendNotifier &&
                                 !string.IsNullOrEmpty(appendChangedMsg.appendData)) {
                         MpNotificationBuilder.ShowNotificationAsync(MpNotificationType.AppendChanged).FireAndForgetSafeAsync();

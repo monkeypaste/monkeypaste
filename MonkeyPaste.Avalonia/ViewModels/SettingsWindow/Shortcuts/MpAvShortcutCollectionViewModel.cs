@@ -383,7 +383,7 @@ namespace MonkeyPaste.Avalonia {
                             shortcutCommand = MpAvSystemTrayViewModel.Instance.ExitApplicationCommand;
                             break;
                         case MpShortcutType.ToggleAppendMode:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.ToggleAppendModeCommand;
+                            shortcutCommand = MpAvClipTrayViewModel.Instance.ToggleAppendInsertModeCommand;
                             break;
                         case MpShortcutType.ToggleAppendLineMode:
                             shortcutCommand = MpAvClipTrayViewModel.Instance.ToggleAppendLineModeCommand;

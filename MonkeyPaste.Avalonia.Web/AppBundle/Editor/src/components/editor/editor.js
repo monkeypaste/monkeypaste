@@ -360,6 +360,9 @@ function onEditorBlur(e) {
 }
 
 function onEditorSelChanged(range, oldRange, source) {
+	if (IsAppendPreMode && source == 'user' && range) {
+		FixedAppendIdx = range.index;
+	}
 	if (!isDragging()) {
 		return;
 	}

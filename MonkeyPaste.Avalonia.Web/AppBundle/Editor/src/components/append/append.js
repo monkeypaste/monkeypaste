@@ -1,12 +1,13 @@
 // #region Globals
 
-var IsAppendMode = false;
+var IsAppendInsertMode = false;
 var IsAppendLineMode = false;
-var AppendIdx = -1;
 
 var IsAppendManualMode = false;
-
+var IsAppendPreMode = false;
 var IsAppendPaused = false;
+
+var FixedAppendIdx = -1;
 
 // #endregion Globals
 
@@ -26,19 +27,44 @@ function initAppend() {
 // #region Getters
 
 function getAppendDocRange() {
-	if (IsAppendManualMode) {
-		return cleanDocRange(getDocSelection());
-	}
 
-	let append_idx = getDocLength();
-	if (IsAppendMode) {
-		append_idx = Math.max(0, append_idx - 1);
+	if (IsAppendManualMode) {
+		if (IsAppendPreMode) {
+			if (IsAppendInsertMode) {
+				return { index: FixedAppendIdx, length: 0, mode:'inline' };
+			} else {
+				// NOTE need to make block range in terms of the leading block unless its the first
+				// for dt to handle blocks since pre is just for before first block
+				let line_start_idx = getLineStartDocIdx(FixedAppendIdx);
+				//line_start_idx = Math.max(0, line_start_idx - 1);
+				return { index: FixedAppendIdx, length: 0, mode: line_start_idx == 0 ?'pre': 'post' };
+			}
+		} else {
+			let sel = cleanDocRange(getDocSelection());
+			if (IsAppendInsertMode) {
+				sel.mode = 'inline';
+				return sel;
+			} else {
+				//let line_end_idx = getLineEndDocIdx(FixedAppendIdx);
+				//line_end_idx = Math.max(0, line_start_idx - 1);
+				return { index: getLineEndDocIdx(sel.index + sel.length), length: 0, mode:'post' };
+			}
+		}		
+	} else {
+		if (IsAppendPreMode) {
+			if (IsAppendInsertMode) {
+				return { index: 0, length: 0, mode: 'inline' };
+			} else {
+				return { index: 0, length: 0, mode: 'pre' };
+			}
+		} else {
+			if (IsAppendInsertMode) {
+				return { index: Math.max(0, getDocLength() - 1), length: 1, mode: 'inline' };
+			} else {
+				return { index: getDocLength(), length: 1, mode: 'post' };
+			}
+		}
 	}
-	return {
-		index: append_idx,
-		length: 1,
-		mode: IsAppendLineMode ? 'block':'inline'
-	};
 }
 // #endregion Getters
 
@@ -56,7 +82,7 @@ function isAppendNotifier() {
 
 
 function isAnyAppendEnabled() {
-	return IsAppendMode || IsAppendLineMode;
+	return IsAppendInsertMode || IsAppendLineMode;
 }
 
 function enableAppendMode(isAppendLine, isAppendManual, fromHost = false) {
@@ -66,11 +92,12 @@ function enableAppendMode(isAppendLine, isAppendManual, fromHost = false) {
 
 	if (isAppendLine) {
 		IsAppendLineMode = true;
-		IsAppendMode = false;
+		IsAppendInsertMode = false;
 	} else {
 		IsAppendLineMode = false;
-		IsAppendMode = true;
+		IsAppendInsertMode = true;
 	}
+	IsAppendPreMode = false;
 
 	// handle all msgs here not in manual 
 	if (isAppendManual) {
@@ -99,7 +126,7 @@ function disableAppendMode(fromHost = false) {
 	let did_manual_mode_change = IsAppendManualMode;
 
 	IsAppendLineMode = false;
-	IsAppendMode = false;
+	IsAppendInsertMode = false;
 	// NOTE dont allow manual to notify here (regardless of source) to avoid double messages
 	disableAppendManualMode(false);
 	disablePauseAppend(false);
@@ -172,6 +199,26 @@ function disablePauseAppend(fromHost = false) {
 		onContentChanged_ntf();
 	}
 }
+
+function enablePreAppend(fromHost = false) {
+	const did_pre_append_change = !IsAppendPreMode;
+	IsAppendPreMode = true;
+	FixedAppendIdx = getDocSelection().index;
+
+	if (!fromHost && did_pre_append_change) {
+		onAppendStateChanged_ntf();
+	}
+}
+
+function disablePreAppend(fromHost = false) {
+	const did_pre_append_change = IsAppendPreMode;
+	IsAppendPreMode = false;
+	FixedAppendIdx = -1;
+
+	if (!fromHost && did_pre_append_change) {
+		onAppendStateChanged_ntf();
+	}
+}
 // #endregion State
 
 // #region Actions
@@ -181,6 +228,7 @@ function updateAppendModeState(
 	isAppend,
 	isAppendManual,
 	isAppendStatePaused,
+	isAppendPre,
 	appendDocIdx,
 	appendDocLength,
 	appendData,
@@ -191,12 +239,14 @@ function updateAppendModeState(
 	let is_disabling = isAnyAppendEnabled() && !isAppendLine && !isAppend;
 	let is_resuming = IsAppendPaused && !isAppendStatePaused;
 	let is_pausing = !IsAppendPaused && isAppendStatePaused;
+	let is_pre_changing = IsAppendPreMode != isAppendPre;
 
 	let is_updating_state =
 		IsAppendLineMode != isAppendLine ||
-		IsAppendMode != isAppend ||
+		IsAppendInsertMode != isAppend ||
 		IsAppendManualMode != isAppendManual ||
-		IsAppendPaused != isAppendStatePaused;
+		IsAppendPaused != isAppendStatePaused ||
+		IsAppendPreMode != isAppendPre;
 
 	let is_appending_data = !isNullOrEmpty(appendData);
 
@@ -218,6 +268,13 @@ function updateAppendModeState(
 	log('append_data: ' + appendData);
 	log(' ');
 
+	if (is_pre_changing) {
+		if (isAppendPre) {
+			enablePreAppend(fromHost);
+		} else {
+			disablePreAppend(fromHost);
+		}
+	}
 	if (is_pausing) {
 		enablePauseAppend(fromHost);
 	}
@@ -242,7 +299,7 @@ function updateAppendModeState(
 
 function scrollToAppendIdx() {
 	//
-	if (IsAppendManualMode || IsAppendMode) {
+	if (IsAppendManualMode || IsAppendInsertMode) {
 		scrollDocRangeIntoView(getAppendDocRange());
 	}
 	scrollToEnd();

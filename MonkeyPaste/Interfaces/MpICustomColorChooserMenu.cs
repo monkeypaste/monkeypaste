@@ -5,6 +5,6 @@ namespace MonkeyPaste {
 
     public interface MpICustomColorChooserMenuAsync {
         ICommand SelectCustomColorCommand { get; }
-        Task<string> ShowCustomColorMenuAsync(string selectedColor, string title = null, MpIUserColorViewModel ucvm = null);
+        Task<string> ShowCustomColorMenuAsync(string selectedColor, string title = null, MpIUserColorViewModel ucvm = null, object owner = null);
     }
 }

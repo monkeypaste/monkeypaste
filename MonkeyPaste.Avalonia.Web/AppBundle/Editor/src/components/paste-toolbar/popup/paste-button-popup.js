@@ -2,12 +2,23 @@
 
 const PastePopupMenuOptions = [
     {
-        label: 'Append',
+        label: 'Block',
         icon: 'append-outline'
     },
     {
-        label: 'Insert',
+        label: 'Inline',
         icon: 'insert-outline'
+    },
+    {
+        separator: true
+    },
+    {
+        label: 'Before',
+        icon: 'arrow-left'
+    },
+    {
+        label: 'After',
+        icon: 'arrow-right'
     },
     {
         separator: true
@@ -20,7 +31,9 @@ const PastePopupMenuOptions = [
 
 const AppendLineOptIdx = 0;
 const AppendOptIdx = 1;
-const ManualOptIdx = 3;
+const AppendPreIdx = 3;
+const AppendPostIdx = 4;
+const ManualOptIdx = 6;
 // #endregion Globals
 
 // #region Life Cycle
@@ -43,31 +56,8 @@ function getPasteButtonPopupExpanderLabelElement() {
     return document.getElementById('pasteButtonPopupExpanderLabel');
 }
 
-function getAppendLineSvgKey() {
-    return IsAppendLineMode ? 'append-solid' : 'append-outline';
-}
-function getAppendSvgKey() {
-    return IsAppendMode ? 'insert-solid' : 'insert-outline';
-}
-function getAppendIsManualSvgKey() {
-    return IsAppendMode ? 'text-insert-caret-solid' : 'text-insert-caret-outline';
-}
-
 function getPastePopupExpanderButtonInnerHtml() {
     return isPastePopupExpanded() ? "&#9650;" : "&#9660;";
-}
-
-function getPastePopupSvgKeyAtOptIndex(idx) {
-    if (idx == AppendLineOptIdx) {
-        return getAppendLineSvgKey();
-    }
-    if (idx == AppendOptIdx) {
-        return getAppendSvgKey();
-    }
-    if (idx == ManualOptIdx) {
-        return getAppendIsManualSvgKey();
-    }
-    return '';
 }
 
 // #endregion Getters
@@ -104,10 +94,31 @@ function showPasteButtonExpander() {
         }
         let ppmio = PastePopupMenuOptions[i];
         if (ppmio.separator === undefined) {
-            ppmio.icon = getPastePopupSvgKeyAtOptIndex(i);
+            //ppmio.icon = getPastePopupSvgKeyAtOptIndex(i);
             ppmio.action = function (option, contextMenuIndex, optionIndex) {
                 onPastePopupMenuOptionClick(optionIndex);
             };
+            let checked = false;
+            if (IsAppendLineMode && i == AppendLineOptIdx) {
+                checked = true;
+            }
+            if (IsAppendInsertMode && i == AppendOptIdx) {
+                checked = true;
+            }
+            if (IsAppendManualMode && i == ManualOptIdx) {
+                checked = true;
+            }
+            if (IsAppendPreMode && i == AppendPreIdx) {
+                checked = true;
+            }
+            if (!IsAppendPreMode && i == AppendPostIdx) {
+                checked = true;
+            }
+            if (checked) {
+                ppmio.itemBgColor = 'darkturquoise';
+            } else {
+                delete ppmio.itemBgColor;
+            }
         }
         if (!isAnyAppendEnabled() && i > AppendOptIdx) {
             continue;
@@ -159,7 +170,7 @@ function onPastePopupMenuOptionClick(optIdx) {
             enableAppendMode(true);
         }
     } else if (optIdx == AppendOptIdx){
-        if (IsAppendMode) {
+        if (IsAppendInsertMode) {
             disableAppendMode();
         } else {
             enableAppendMode(false);
@@ -170,6 +181,14 @@ function onPastePopupMenuOptionClick(optIdx) {
         } else {
             enableAppendManualMode();
         }
+    } else if (optIdx == AppendPreIdx) {
+        if (!IsAppendPreMode) {
+            enablePreAppend(false);
+        }
+    } else if (optIdx == AppendPostIdx) {
+        if (IsAppendPreMode) {
+            disablePreAppend(false);
+        } 
     }
     hidePasteButtonExpander();
 }

@@ -7,6 +7,7 @@ namespace MonkeyPaste {
         AppendLine = 1,
         AppendInsert = 2,
         Manual = 4,
-        Paused = 8
+        Paused = 8,
+        Pre = 16
     }
 }

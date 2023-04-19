@@ -29,9 +29,11 @@ namespace MonkeyPaste {
         // fragment 'MpQuillContentSearchesFragment'
         public string searchesFragment { get; set; }
 
-        public bool isAppendLineMode { get; set; }
-        public bool isAppendMode { get; set; }
+        // fragment 'MpQuillAppendStateChangedMessage'
+        public string appendStateFragment { get; set; }
 
+        // TODO remove or isolate case for loading w/ annotations immediatly,
+        // currently used in editor tester though
         public string annotationsJsonStr { get; set; }
     }
 
@@ -102,7 +104,10 @@ namespace MonkeyPaste {
     }
 
     public class MpQuillUpdateContentRequestMessage : MpJsonObject {
+        // fragment 'MpQuillDelta'
         public string deltaFragmentStr { get; set; }
+
+        // fragment 'MpAnnotationNodeFormat'
         public string annotationFragmentStr { get; set; }
     }
 
@@ -214,6 +219,7 @@ namespace MonkeyPaste {
         public bool isAppendMode { get; set; }
         public bool isAppendManualMode { get; set; }
         public bool isAppendPaused { get; set; }
+        public bool isAppendPreMode { get; set; }
 
         public int appendDocIdx { get; set; }
         public int appendDocLength { get; set; }

@@ -825,11 +825,25 @@ function convertTextContentToFormats(isForOle, formats) {
 
 
 function appendTextContentData(data) {
+	data = data == null ? '' : data;
+	const append_range = getAppendDocRange();
+	if (IsAppendPreMode) {
+		//if (IsAppendLineMode) {
+		//	if (append_range.index > 0 &&
+		//		!isDocIdxBlockEnd(append_range.index)) {
+		//		data = '<br>' + data;
+		//	}
+		//	data = data + '<br>';
+		//	if (isDocIdxBlockStart(append_range.index) ||
+		//		isDocIdxBlockEnd(append_range.index)) {
+		//		data = data + '<br>';
+		//	}
+		//}
+	}
 	let dt = new DataTransfer();
 	// NOTE since data is result of ci builder it will always be html
-	dt.setData('text/html', data);
-
-	performDataTransferOnContent(dt, getAppendDocRange(), null, 'api', 'Appended');
+	dt.setData('text/html', data);	
+	performDataTransferOnContent(dt, append_range, null, 'api', 'Appended');
 	scrollToAppendIdx();
 
 	onContentChanged_ntf();

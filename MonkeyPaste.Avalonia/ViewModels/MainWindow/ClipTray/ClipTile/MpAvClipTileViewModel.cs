@@ -27,6 +27,7 @@ namespace MonkeyPaste.Avalonia {
         MpISelectableViewModel,
         MpISelectorItemViewModel,
         MpIChildWindowViewModel,
+        MpIWindowHandlesClosingViewModel,
         MpIDisposableObject,
         MpAvIShortcutCommandViewModel,
         MpIWantsTopmostWindowViewModel,
@@ -71,12 +72,26 @@ namespace MonkeyPaste.Avalonia {
         #region MpIChildWindowViewModel Implementation
 
         public MpWindowType WindowType =>
-            MpWindowType.PopOut;
+            IsAppendNotifier ? MpWindowType.Append : MpWindowType.PopOut;
 
         bool MpIChildWindowViewModel.IsOpen {
             get => IsPopOutVisible;
             set => IsPopOutVisible = value;
         }
+        #endregion
+
+        #region MpIWantsTopmostWindowViewModel Implementation
+
+        public bool WantsTopmost =>
+            true;
+
+        #endregion
+
+        #region MpIWindowHandlesClosingViewModel Implementation
+
+        public bool IsCloseHandled =>
+            IsAppendNotifier && !WasCloseAppendWindowConfirmed;
+
         #endregion
 
         #region MpIContextMenuViewModel Implementation
@@ -153,12 +168,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpIWantsTopmostWindowViewModel Implementation
-
-        public bool WantsTopmost =>
-            IsAppendNotifier;
-
-        #endregion
 
         #region MpIScrollIntoView Implementation
 
@@ -441,6 +450,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
         public bool IsAppendNotifier { get; set; }
+
+        public bool WasCloseAppendWindowConfirmed { get; set; }
         #endregion
 
         #region Appearance
@@ -1170,7 +1181,7 @@ namespace MonkeyPaste.Avalonia {
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 Content = new MpAvClipTileView(),
                 Topmost = true,
-                Padding = new Thickness(10)
+                Padding = new Thickness(10),
             };
 
             pow.Bind(
@@ -1223,6 +1234,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void OpenAppendWindow(MpAppendModeType appendType) {
+            if (IsPopOutVisible) {
+                IsPopOutVisible = false;
+            }
+
+            #region CREATE
+
             Size ws = new Size(300, 250);
             MpAvWindow pow = new MpAvWindow() {
                 Width = ws.Width,
@@ -1269,20 +1286,89 @@ namespace MonkeyPaste.Avalonia {
                 MpAvIsHoveringExtension.SetIsEnabled(c, true);
             }
 
+            #endregion
+
+            #region ISVISIBLE
+
+            void OnAppendWindowIsVisibleChanged() {
+                if (!pow.IsVisible) {
+                    //pow.Classes.Remove("IsClosing");
+                    return;
+                }
+
+                Dispatcher.UIThread.Post(async () => {
+                    // hide append window after delay if no activity
+                    TimeSpan hide_delay = TimeSpan.FromSeconds(3);
+                    DateTime first_activity = DateTime.Now;
+                    DateTime last_activity = first_activity;
+                    while (true) {
+                        if (pow == null ||
+                            !pow.IsVisible) {
+                            return;
+                        }
+                        if (pow.IsActive ||
+                            pow.IsPointerOver) {
+                            last_activity = DateTime.Now;
+                        }
+                        if (DateTime.Now - last_activity > hide_delay) {
+                            //if(last_activity == first_activity) {
+                            //    // when no interaction occurs fade out
+                            //    pow
+                            //} else {
+                            //    // immediatly hide if 
+                            //    pow.Hide();
+                            //}
+                            //pow.Classes.Add("IsClosing");
+                            //pow.Hide();
+                            return;
+                        }
+                        await Task.Delay(100);
+                    }
+                });
+            }
+
             var vis_change_disp =
                 pow.GetObservable(Window.IsVisibleProperty)
-                .Subscribe(value => OnAppendWindowIsVisibleChanged(pow));
+                .Subscribe(value => OnAppendWindowIsVisibleChanged());
+
+            #endregion
+
+            #region SELECTION
 
             EventHandler activate_handler = (s, e) => {
                 IsSelected = true;
             };
+
+            #endregion
+
+            #region CLOSE
+
             EventHandler<WindowClosingEventArgs> closing_handler = (s, e) => {
+                MpConsole.WriteLine($"append closing called. reason '{e.CloseReason}' programmatic '{e.IsProgrammatic}'");
                 if (Parent == null ||
-                    !Parent.IsAnyAppendMode) {
-                    // prevent close
+                    !Parent.IsAnyAppendMode ||
+                    !IsAppendNotifier ||
+                    WasCloseAppendWindowConfirmed) {
+                    // allow close
                     return;
                 }
+                // reject close and show confirm ntf
                 e.Cancel = true;
+                pow.IsEnabled = false;
+                Dispatcher.UIThread.Post(async () => {
+
+                    var result = await
+                        Mp.Services.NativeMessageBox.ShowOkCancelMessageBoxAsync(
+                            title: "Confirm",
+                            message: "Are you sure you want to finish appending?",
+                            iconResourceObj: "QuestionMarkImage",
+                            owner: pow);
+                    if (result) {
+                        WasCloseAppendWindowConfirmed = true;
+                        Parent.DeactivateAppendModeCommand.Execute(null);
+                    }
+                    pow.IsEnabled = true;
+                });
             };
             EventHandler close_handler = null;
             close_handler = (s, e) => {
@@ -1290,65 +1376,44 @@ namespace MonkeyPaste.Avalonia {
                 pow.Closed -= close_handler;
                 pow.Closing -= closing_handler;
             };
+
+            #endregion
+
+            #region EVENTS
+
             pow.Activated += activate_handler;
             pow.Closed += close_handler;
             pow.Closing += closing_handler;
+
+            #endregion
+
+            #region SHOW
 
             IsAppendNotifier = true;
             _contentView = null;
             pow.ShowChild();
 
-            Dispatcher.UIThread.Post(async () => {
+            #endregion
 
-                await Task.Delay(300);
-                while (IsAnyBusy) {
-                    await Task.Delay(100);
-                }
-                if (GetContentView() is MpAvContentWebView wv) {
-                    wv.ProcessAppendStateChangedMessage(Parent.GetAppendStateMessage(null), "command");
-                }
-            });
+            #region NOTIFY
+
+            //Dispatcher.UIThread.Post(async () => {
+
+            //    await Task.Delay(300);
+            //    while (IsAnyBusy) {
+            //        await Task.Delay(100);
+            //    }
+            //    if (GetContentView() is MpAvContentWebView wv) {
+            //        wv.ProcessAppendStateChangedMessage(Parent.GetAppendStateMessage(null), "command");
+            //    }
+            //});
 
             OnPropertyChanged(nameof(IsPopOutVisible));
             OnPropertyChanged(nameof(IsResizerEnabled));
+
+            #endregion
         }
 
-        private void OnAppendWindowIsVisibleChanged(MpAvWindow pow) {
-            if (!pow.IsVisible) {
-                //pow.Classes.Remove("IsClosing");
-                return;
-            }
-
-            Dispatcher.UIThread.Post(async () => {
-                // hide append window after delay if no activity
-                TimeSpan hide_delay = TimeSpan.FromSeconds(3);
-                DateTime first_activity = DateTime.Now;
-                DateTime last_activity = first_activity;
-                while (true) {
-                    if (pow == null ||
-                        !pow.IsVisible) {
-                        return;
-                    }
-                    if (pow.IsActive ||
-                        pow.IsPointerOver) {
-                        last_activity = DateTime.Now;
-                    }
-                    if (DateTime.Now - last_activity > hide_delay) {
-                        //if(last_activity == first_activity) {
-                        //    // when no interaction occurs fade out
-                        //    pow
-                        //} else {
-                        //    // immediatly hide if 
-                        //    pow.Hide();
-                        //}
-                        //pow.Classes.Add("IsClosing");
-                        //pow.Hide();
-                        return;
-                    }
-                    await Task.Delay(100);
-                }
-            });
-        }
         private MpIContentView _contentView;
         public MpIContentView GetContentView() {
             if (_contentView != null) {
@@ -2097,7 +2162,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand PopInTileCommand => new MpCommand(() => {
             int ciid = CopyItemId;
             TransactionCollectionViewModel.CloseTransactionPaneCommand.Execute(null);
-            IsAppendNotifier = false;
+            IsPopOutVisible = false;
 
             if (Parent != null) {
                 _contentView = null;

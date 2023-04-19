@@ -290,6 +290,15 @@ namespace MonkeyPaste {
                 }
             }
         }
+
+        public object Owner {
+            get {
+                if (NotificationFormat == null) {
+                    return null;
+                }
+                return NotificationFormat.Owner;
+            }
+        }
         public object AnchorTarget {
             get {
                 if (NotificationFormat == null ||

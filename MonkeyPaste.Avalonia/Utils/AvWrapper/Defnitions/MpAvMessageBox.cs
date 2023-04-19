@@ -4,21 +4,23 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvMessageBox : MpINativeMessageBox {
-        public async Task ShowOkMessageBoxAsync(string title, string message, object anchor = null, object iconResourceObj = null) {
+        public async Task ShowOkMessageBoxAsync(string title, string message, object anchor = null, object iconResourceObj = null, object owner = null) {
             await MpNotificationBuilder.ShowNotificationAsync(
                                     notificationType: MpNotificationType.ModalOkMessageBox,
                                     title: title,
                                     body: message,
                                     iconSourceObj: iconResourceObj,
-                                    anchor: anchor);
+                                    anchor: anchor,
+                                    owner: owner);
         }
-        public async Task<bool> ShowOkCancelMessageBoxAsync(string title, string message, object anchor = null, object iconResourceObj = null) {
+        public async Task<bool> ShowOkCancelMessageBoxAsync(string title, string message, object anchor = null, object iconResourceObj = null, object owner = null) {
             var result = await MpNotificationBuilder.ShowNotificationAsync(
                                     notificationType: MpNotificationType.ModalOkCancelMessageBox,
                                     title: title,
                                     body: message,
                                     iconSourceObj: iconResourceObj,
-                                    anchor: anchor);
+                                    anchor: anchor,
+                                    owner: owner);
 
             if (result == MpNotificationDialogResultType.Ok) {
                 return true;
@@ -30,24 +32,26 @@ namespace MonkeyPaste.Avalonia {
             }
             return false;
         }
-        public async Task<bool> ShowYesNoMessageBoxAsync(string title, string message, object anchor = null, object iconResourceObj = null) {
+        public async Task<bool> ShowYesNoMessageBoxAsync(string title, string message, object anchor = null, object iconResourceObj = null, object owner = null) {
             var result = await MpNotificationBuilder.ShowNotificationAsync(
                                     notificationType: MpNotificationType.ModalYesNoMessageBox,
                                     title: title,
                                     body: message,
                                     iconSourceObj: iconResourceObj,
-                                    anchor: anchor);
+                                    anchor: anchor,
+                                    owner: owner);
 
             return result == MpNotificationDialogResultType.Yes;
         }
 
-        public async Task<bool?> ShowYesNoCancelMessageBoxAsync(string title, string message, object anchor = null, object iconResourceObj = null) {
+        public async Task<bool?> ShowYesNoCancelMessageBoxAsync(string title, string message, object anchor = null, object iconResourceObj = null, object owner = null) {
             var result = await MpNotificationBuilder.ShowNotificationAsync(
                                     notificationType: MpNotificationType.ModalYesNoCancelMessageBox,
                                     title: title,
                                     body: message,
                                     iconSourceObj: iconResourceObj,
-                                    anchor: anchor);
+                                    anchor: anchor,
+                                    owner: owner);
 
             if (result == MpNotificationDialogResultType.Yes) {
                 return true;
@@ -63,14 +67,15 @@ namespace MonkeyPaste.Avalonia {
             return null;
         }
 
-        public async Task<string> ShowTextBoxMessageBoxAsync(string title, string message, string currentText = null, string placeholderText = null, object anchor = null, object iconResourceObj = null) {
+        public async Task<string> ShowTextBoxMessageBoxAsync(string title, string message, string currentText = null, string placeholderText = null, object anchor = null, object iconResourceObj = null, object owner = null) {
             var result = await MpNotificationBuilder.ShowInputResultNotificationAsync(
                                     title: title,
                                     body: message,
                                     currentInput: currentText,
                                     placeholderText: placeholderText,
                                     iconResourceObj: iconResourceObj,
-                                    anchor: anchor);
+                                    anchor: anchor,
+                                    owner: owner);
             return result;
         }
     }

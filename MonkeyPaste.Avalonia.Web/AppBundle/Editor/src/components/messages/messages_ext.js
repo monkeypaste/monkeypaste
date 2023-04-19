@@ -33,9 +33,11 @@ function loadContent_ext(loadContentMsgStr_base64) {
 		req.contentType,
 		req.itemData,
 		searches,
-		req.isAppendLineMode,
-		req.isAppendMode,
 		req.annotationsJsonStr);
+
+	if (!isNullOrEmpty(req.appendStateFragment)) {
+		appendStateChanged_ext(req.appendStateFragment);
+	}
 }
 
 function contentChanged_ext(contentChangedMsgStr_base64) {
@@ -193,6 +195,7 @@ function appendStateChanged_ext(reqMsgBase64Str) {
 		req.isAppendMode,
 		req.isAppendManualMode,
 		req.isAppendPaused,
+		req.isApprendPreMode,
 		req.appendDocIdx,
 		req.appendDocLength,
 		req.appendData,

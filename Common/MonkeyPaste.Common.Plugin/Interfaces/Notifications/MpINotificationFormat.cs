@@ -16,5 +16,6 @@ namespace MonkeyPaste.Common.Plugin {
         string Title { get; set; }
 
         object AnchorTarget { get; set; }
+        object Owner { get; set; }
     }
 }

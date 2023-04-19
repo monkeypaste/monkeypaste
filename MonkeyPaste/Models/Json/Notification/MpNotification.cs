@@ -24,6 +24,7 @@ namespace MonkeyPaste {
         public object IconSourceObj { get; set; }
 
         public object AnchorTarget { get; set; }
+        public object Owner { get; set; }
         public Func<object, object> RetryAction { get; set; }
         public object RetryActionObj { get; set; }
 
@@ -61,6 +62,7 @@ namespace MonkeyPaste {
             FixCommand = pluginNotfication.FixCommand;
             FixCommandArgs = pluginNotfication.FixCommandArgs;
             OtherArgs = pluginNotfication.OtherArgs;
+            Owner = pluginNotfication.Owner;
         }
         #endregion
 

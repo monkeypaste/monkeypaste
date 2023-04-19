@@ -143,6 +143,12 @@ namespace MonkeyPaste.Avalonia {
                 Mp.Services.ScreenInfoCollection = new MpAvDesktopScreenInfoCollection(nw);
             }
 
+            if (nvmb.Owner is Window w &&
+                nvmb.AnchorTarget == null) {
+                // let anchor to precedence over owner for positioning
+                nw.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            }
+
             if (!_windows.Contains(nw)) {
                 _windows.Add(nw);
             }
@@ -150,39 +156,14 @@ namespace MonkeyPaste.Avalonia {
                      Mp.Services.StartupState != null &&
                      Mp.Services.StartupState.IsPlatformLoaded;
             if (is_platform_loaded) {
-                //if (nw == MpAvAppendNotificationWindow.Instance &&
-                //MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
-                //    return;
-                //}
+                // flag ntf activating to prevent mw hide 
                 MpAvMainWindowViewModel.Instance.IsAnyNotificationActivating = true;
             }
 
-            if (nvmb.IsModal) {
-                //bool wasLocked = MpAvMainWindowViewModel.Instance.IsMainWindowLocked;
-                //if (!wasLocked) {
-                //    MpAvMainWindowViewModel.Instance.ToggleMainWindowLockCommand.Execute(null);
-                //}
-                //if (MpAvWindowManager.ActiveWindow is Window w) {
-                //    if (nw is MpAvWindow cw) {
-                //        cw.ShowChildDialogAsync(w).FireAndForgetSafeAsync();
-                //    } else {
-
-                //        nw.Show(w);
-                //    }
-                //} else {
-                //    nw.Show();
-                //}
-                nw.Show();
-                //if (!wasLocked) {
-                //    MpAvMainWindowViewModel.Instance.ToggleMainWindowLockCommand.Execute(null);
-                //}
+            if (nvmb.Owner is Window ow) {
+                nw.Show(ow);
             } else {
                 nw.Show();
-            }
-
-
-            if (!nw.IsVisible) {
-                Debugger.Break();
             }
         }
 

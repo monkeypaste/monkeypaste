@@ -166,8 +166,8 @@ window.superCm = (function (msie) {
 				return;
 			}
 
+			// TAK - START
 			if (icon) {
-				// TAK - START
 				
 				var iconElm = optIconTemplate.clone();
 				
@@ -194,12 +194,15 @@ window.superCm = (function (msie) {
 				} else {
 					iconElm.html(getSvgHtml(opt.icon));
 				}
+
+				if (opt.itemBgColor !== undefined) {
+					cmOptElement.css('background-color', opt.itemBgColor);
+				} else {
+					//cmOptElement.css('background-color', 'unset');
+				}
 				cmOptElement.append(iconElm);
 				// TAK - END
 
-				//cmOptElement.append(
-				//    optIconTemplate.clone().addClass(opt.icon)
-				//);
 			}
 
 			if (label) {

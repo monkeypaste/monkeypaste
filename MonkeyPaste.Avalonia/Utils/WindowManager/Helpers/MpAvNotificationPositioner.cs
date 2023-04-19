@@ -78,7 +78,6 @@ namespace MonkeyPaste.Avalonia {
 
         private void _ntfWindows_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             UpdateWindowPositions();
-            //MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = _windows.Count > 0;
         }
 
         private void W_EffectiveViewportChanged(object sender, global::Avalonia.Layout.EffectiveViewportChangedEventArgs e) {
@@ -112,6 +111,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void PositionWindowToAnchor(Window w, object anchor) {
+            if (w.WindowStartupLocation == WindowStartupLocation.CenterOwner) {
+                // ignore positioning
+                return;
+            }
             w.Position = FindAnchorPoint(w, null);
         }
 

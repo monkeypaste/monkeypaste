@@ -200,12 +200,6 @@ namespace MonkeyPaste {
                 }
             }
 
-
-            if (MpPrefViewModel.Instance.UniqueContentItemIdx == 0 && !suppressWrite) {
-                MpPrefViewModel.Instance.UniqueContentItemIdx = await MpDataModelProvider.GetTotalCopyItemCountAsync();
-            }
-
-
             var newCopyItem = new MpCopyItem() {
                 CopyItemGuid = System.Guid.NewGuid(),
                 CopyDateTime = DateTime.Now,

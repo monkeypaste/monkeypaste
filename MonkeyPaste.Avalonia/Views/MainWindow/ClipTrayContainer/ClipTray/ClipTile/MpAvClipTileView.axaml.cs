@@ -47,7 +47,8 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                 case nameof(BindingContext.IsHovering):
                     if (!TestDcMismatchByHover()) {
-                        if (BindingContext.IsPopOutVisible) {
+                        if (BindingContext.IsPopOutVisible ||
+                            BindingContext.WasCloseAppendWindowConfirmed) {
                             break;
                         }
                         // dc mismatch

@@ -80,7 +80,8 @@ namespace MonkeyPaste {
             object anchor = null,
             ICommand fixCommand = null,
             object fixCommandArgs = null,
-            MpIProgressLoaderViewModel loader = null) {
+            MpIProgressLoaderViewModel loader = null,
+            object owner = null) {
             if (body == null) {
                 body = string.Empty;
             }
@@ -105,7 +106,8 @@ namespace MonkeyPaste {
                 FixCommandArgs = fixCommandArgs,
                 RetryAction = retryAction,
                 RetryActionObj = retryActionObj,
-                OtherArgs = loader
+                OtherArgs = loader,
+                Owner = owner
             };
 
 
@@ -123,7 +125,8 @@ namespace MonkeyPaste {
             string currentInput = null,
             string placeholderText = null,
             object anchor = null,
-            object iconResourceObj = null) {
+            object iconResourceObj = null,
+            object owner = null) {
             MpNotificationFormat nf = new MpNotificationFormat() {
                 Title = title,
                 Body = body,
@@ -131,7 +134,8 @@ namespace MonkeyPaste {
                 Detail = placeholderText,
                 AnchorTarget = anchor,
                 NotificationType = MpNotificationType.ModalTextBoxOkCancelMessageBox,
-                IconSourceObj = iconResourceObj
+                IconSourceObj = iconResourceObj,
+                Owner = owner
             };
             var nvm = await CreateNotifcationViewModelAsync(nf);
             if (nvm is MpUserActionNotificationViewModel uanvm) {
@@ -146,8 +150,6 @@ namespace MonkeyPaste {
                 // convert plugin notification to core nf
                 nf = new MpNotificationFormat(pnf);
             }
-
-
             var nvm = await CreateNotifcationViewModelAsync(nf);
 
             MpNotificationDialogResultType result = await nvm.ShowNotificationAsync();

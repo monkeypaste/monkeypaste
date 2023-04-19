@@ -20,8 +20,6 @@ function loadContent(
 	contentType,
 	contentData,
 	searches,
-	isAppendLineMode,
-	isAppendMode,
 	annotationsJsonStr) {
 	let is_reload = contentHandle == ContentHandle;
 	let was_sub_sel_enabled = null;

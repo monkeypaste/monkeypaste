@@ -221,7 +221,7 @@ function drawAppendNotifierPreview(ctx, color = 'red', thickness = 1.0, line_sty
     if (IsAppendManualMode) {
         color = 'lime';
     }
-    let block_state = IsAppendLineMode ? 'post' : 'inline';
+    let block_state = IsAppendLineMode ? IsAppendPreMode ? 'pre' : 'post' : 'inline';
     let render_lines = getPreviewLines(getAppendDocRange().index, block_state, false);
     let append_color = CaretBlinkOffColor == null ? color : CaretBlinkOffColor;
     for (var i = 0; i < render_lines.length; i++) {

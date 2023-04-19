@@ -175,6 +175,12 @@ namespace MonkeyPaste.Avalonia {
 
         private static void Nw_Closing(object sender, WindowClosingEventArgs e) {
             if (sender is Window w) {
+                if (w.DataContext is MpIWindowHandlesClosingViewModel whcvm &&
+                    whcvm.IsCloseHandled) {
+                    // without this check closing evt is called twice in impl 
+                    // handler from extra w.Close below
+                    return;
+                }
 
                 if (w != MainWindow) {
                     if (!MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked) {
@@ -276,7 +282,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 var priority_ordered_topmost_wl = AllWindows
-                    .Where(x => x.WantsTopmost)
+                    .Where(x => x.WantsTopmost && x.Owner == null)
                     .OrderByDescending(x => (int)(x.DataContext as MpIWindowViewModel).WindowType);
 
                 priority_ordered_topmost_wl
