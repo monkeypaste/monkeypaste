@@ -28,16 +28,19 @@ function loadContent_ext(loadContentMsgStr_base64) {
 		searches = searchesObj.searches;
 	}
 
+	let append_state = null;
+	if (!isNullOrEmpty(req.appendStateFragment)) {
+		append_state = toJsonObjFromBase64Str(req.appendStateFragment);
+	}
+
 	loadContent(
 		req.contentHandle,
 		req.contentType,
 		req.itemData,
 		searches,
+		append_state,
 		req.annotationsJsonStr);
 
-	if (!isNullOrEmpty(req.appendStateFragment)) {
-		appendStateChanged_ext(req.appendStateFragment);
-	}
 }
 
 function contentChanged_ext(contentChangedMsgStr_base64) {
@@ -190,16 +193,7 @@ function appendStateChanged_ext(reqMsgBase64Str) {
 	let req = toJsonObjFromBase64Str(reqMsgBase64Str);
 	log('appendStateChanged_ext: ', req);
 
-	updateAppendModeState(
-		req.isAppendLineMode,
-		req.isAppendMode,
-		req.isAppendManualMode,
-		req.isAppendPaused,
-		req.isApprendPreMode,
-		req.appendDocIdx,
-		req.appendDocLength,
-		req.appendData,
-		true);	
+	updateAppendModeState(req, true);	
 }
 
 function annotationSelected_ext(reqMsgBase64Str) {

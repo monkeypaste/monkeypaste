@@ -73,7 +73,7 @@ namespace MonkeyPaste.Common {
             }
             return false;
         }
-        public bool TryGetData<T>(string format, out T data) where T : class {
+        public virtual bool TryGetData<T>(string format, out T data) where T : class {
             if (TryGetData(format, out object dataObj)) {
                 if (dataObj is T) {
                     data = dataObj as T;

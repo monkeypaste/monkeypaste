@@ -116,6 +116,79 @@ function getBetterTableElementRect(table_elm) {
     return cleanRect(tbody_elm.getBoundingClientRect());
 }
 
+function getTableCellAtDocIdx(doc_idx) {
+    const table_elm = getTableElementAtDocIdx(doc_idx);
+    if (table_elm == null) {
+        // probably should avoid having this occur
+        return null;
+    }
+    const cell_elm = getTableCellElementAtDocIdx(doc_idx);
+    if (cell_elm == null) {
+        return null;
+    }
+    let row_idx = Array.from(table_elm.rows).indexOf(cell_elm.parentNode);
+    let col_idx = 0;
+    let prev_sib = cell_elm.previousSibling;
+    while (prev_sib != null) {
+        col_idx++;
+        prev_sib = prev_sib.previousSibling;
+    }
+    return [row_idx, col_idx];
+}
+
+function getTableElementAtDocIdx(doc_idx) {
+    let cur_elm = getElementAtDocIdx(doc_idx, false, false);
+    if (!cur_elm) {
+        return null;
+    }
+    cur_elm = cur_elm.parentNode;
+    while (true) {
+        if (cur_elm == getEditorElement() ||
+            cur_elm == null) {
+            return null;
+        }
+        if (cur_elm.tagName == 'TABLE') {
+            return cur_elm;
+        }
+        cur_elm = cur_elm.parentNode;
+    }
+    return null;
+}
+
+function getTableCellElementAtDocIdx(doc_idx) {
+    if (!isDocIdxInTable(doc_idx)) {
+        // probably should avoid having this occur
+        //debugger;
+        return null;
+    }
+    let max_len = getDocLength();
+    let cur_elm = getElementAtDocIdx(doc_idx, false, false);
+    let adj_doc_idx = doc_idx;
+    if (cur_elm == null) {
+        return null;
+    }
+    while (true) {
+        if (!isClassInElementPath(cur_elm, FILE_LIST_ICON_COLUMN_NAME) &&
+            !isClassInElementPath(cur_elm, FILE_LIST_PATH_COLUMN_NAME)) {
+            // out of column group
+            break;
+        }
+        // iterate past colgroups in file list to td content
+        adj_doc_idx++;
+        if (adj_doc_idx == max_len) {
+            return null;
+        }
+        cur_elm = getElementAtDocIdx(adj_doc_idx, false, false);
+        if (!isClassInElementPath(cur_elm, TABLE_WRAPPER_CLASS_NAME)) {
+            return null;
+        }
+    }
+    while (cur_elm.tagName != 'TD') {
+        cur_elm = cur_elm.parentNode;
+    }
+    return cur_elm;
+}
+
 // #endregion Getters
 
 // #region Setters
@@ -136,7 +209,7 @@ function isContentATable() {
 }
 
 function isDocIdxInTable(docIdx) {
-    let doc_idx_elm = getElementAtDocIdx(docIdx);
+    let doc_idx_elm = getElementAtDocIdx(docIdx,false,false);
     if (!doc_idx_elm) {
         return false;
     }

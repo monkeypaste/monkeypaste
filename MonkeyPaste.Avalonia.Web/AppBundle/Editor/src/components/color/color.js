@@ -104,13 +104,16 @@ function isBright(hex_or_color_name_or_rgb_or_rgba, brightThreshold = 150) {
 // #region Actions
 
 function parseRgba(rgb_Or_rgba_Or_colorName_Or_hex_Str) {
+    const fallback_rgba = { r: 0, g: 0, b: 0, a: 0 };
     if (isNullOrUndefined(rgb_Or_rgba_Or_colorName_Or_hex_Str)) {
-        return { r: 0, g: 0, b: 0, a: 0 };
+        return fallback_rgba;
     }
     let rgba = null;
-    if (typeof rgb_Or_rgba_Or_colorName_Or_hex_Str === 'string' ||
-        rgb_Or_rgba_Or_colorName_Or_hex_Str instanceof String) {
+    if (isString(rgb_Or_rgba_Or_colorName_Or_hex_Str)) {
         // is string
+        if (isNullOrWhiteSpace(rgb_Or_rgba_Or_colorName_Or_hex_Str)) {
+            return fallback_rgba;
+        }
         if (rgb_Or_rgba_Or_colorName_Or_hex_Str.startsWith('var(')) {
             // css variable 
             // (occurs in plain html conversion)

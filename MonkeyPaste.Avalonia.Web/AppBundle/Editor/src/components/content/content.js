@@ -20,7 +20,10 @@ function loadContent(
 	contentType,
 	contentData,
 	searches,
+	append_state,
 	annotationsJsonStr) {
+	// NOTE only called fromHost (or tester which calls _ext)
+
 	let is_reload = contentHandle == ContentHandle;
 	let was_sub_sel_enabled = null;
 	let was_editable = null;
@@ -53,13 +56,14 @@ function loadContent(
 		resetAnnotations();
 	}
 
-
 	if (!IsFindReplaceInactive) {
 		log('activated findreplace detected during load, deactivating...');
 	}
 	IsFindReplaceInactive = true;
 
 	loadContentData(contentData);
+
+	updateAppendModeState(append_state, true);
 
 	updateQuill();
 	if (ContentItemType != 'Text') {
@@ -277,7 +281,7 @@ function canDisableSubSelection() {
 }
 
 function canDisableReadOnly() {
-	return ContentItemType == 'Text' && !isAppendNotifier();
+	return ContentItemType == 'Text';
 }
 // #endregion State
 

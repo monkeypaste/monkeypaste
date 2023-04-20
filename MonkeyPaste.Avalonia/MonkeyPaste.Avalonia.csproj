@@ -368,6 +368,7 @@
     <None Remove="Assets\Images\rename.png" />
     <None Remove="Assets\Images\replace.png" />
     <None Remove="Assets\Images\reset.png" />
+    <None Remove="Assets\Images\resize_backup2\doubleSidedArrow.png" />
     <None Remove="Assets\Images\rightclick.png" />
     <None Remove="Assets\Images\robotclaw.png" />
     <None Remove="Assets\Images\RoundedTexture.png" />
@@ -508,6 +509,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\plaintext.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\resize_backup2\doubleSidedArrow.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\staryellow.png">

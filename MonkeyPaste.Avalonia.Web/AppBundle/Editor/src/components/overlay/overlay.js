@@ -40,8 +40,24 @@ function getPreviewLines(drop_idx, block_state) {
         return [];
     }
 
-    let block_line_offset = 0;// 3.0;
     let editor_rect = getEditorContainerRect(false);
+    if (ContentItemType == 'FileList') {
+        // use tr elements here
+        const cell_elm = getTableCellElementAtDocIdx(drop_idx);
+        if (cell_elm) {
+            const row_rect = cleanRect(cell_elm.parentNode.getBoundingClientRect());
+            let row_y = 0;
+            if (block_state == 'pre') {
+                row_y = row_rect.top;
+            } else {
+                row_y = row_rect.bottom;
+            }
+            return [{ x1: 0, y1: row_y, x2: editor_rect.width, y2: row_y }];
+        }
+
+    }
+
+    let block_line_offset = 0;// 3.0;
     //let editor_rect = getWindowRect();
 
     let line_start_idx = getLineStartDocIdx(drop_idx);

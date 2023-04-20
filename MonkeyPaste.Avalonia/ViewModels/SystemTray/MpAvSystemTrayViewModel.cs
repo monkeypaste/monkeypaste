@@ -62,7 +62,7 @@ namespace MonkeyPaste.Avalonia {
                                     ToggleType = "Radio",
                                     CommandSrcObj = MpAvClipTrayViewModel.Instance,
                                     CommandPath = nameof(MpAvClipTrayViewModel.Instance.ToggleAppendInsertModeCommand),
-                                    ShortcutArgs = new object[] { MpShortcutType.ToggleAppendMode },
+                                    ShortcutArgs = new object[] { MpShortcutType.ToggleAppendInsertMode },
                                 },
                                 new MpMenuItemViewModel() {
                                     Header = "Append Line",

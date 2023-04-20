@@ -95,9 +95,9 @@ namespace MonkeyPaste.Avalonia {
             await Mp.Services.TransactionBuilder.ReportTransactionAsync(
                             copyItemId: ci.Id,
                             reqType: MpJsonMessageFormatType.DataObject,
-                            req: mpdo.SerializeData(),
+                            //req: mpdo.SerializeData(),
                             respType: MpJsonMessageFormatType.Delta,
-                            resp: itemDelta,
+                            //resp: itemDelta,
                             ref_uris: ref_urls,
                             transType: transType);
 

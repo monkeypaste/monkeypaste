@@ -1,5 +1,8 @@
 // #region Globals
+const FILE_LIST_ICON_COLUMN_NAME = 'file-list-icon-col';
+const FILE_LIST_PATH_COLUMN_NAME = 'file-list-path-col';
 var FileListItems = [];
+
 // #endregion Globals
 
 // #region Life Cycle
@@ -20,7 +23,10 @@ function loadFileListContent(itemDataStr) {
 		FileListItems.push(flif);
 	}
 	createFileList();
+
 	loadLinkHandlers();
+
+	
 }
 
 // #endregion Life Cycle
@@ -59,6 +65,47 @@ function getFileListContentData() {
 	return paths_str;
 }
 
+function getFileListItemDocRange(fliIdx) {
+	const doc_len = getDocLength();
+	let fli_doc_range = null;
+	for (var i = 0; i < doc_len; i++) {
+		const idx_rc = getTableCellAtDocIdx(i);
+		if (idx_rc == null) {
+			continue;
+		}
+		if (idx_rc[0] == fliIdx) {
+			if (fli_doc_range == null) {
+				fli_doc_range = { index: i, length: 0 };
+			} else {
+				fli_doc_range.length = i - fli_doc_range.index;
+			}
+		} else if (idx_rc[0] > fliIdx) {
+			break;
+		}
+	}
+	return fli_doc_range;
+}
+
+function getSelectedFileItemIdxs() {
+	const sel_fli_elms = getSelectedFileListRowElements();
+	const fli_elms = getFileListRowElements();
+	let idxs = [];
+	for (var i = 0; i < fli_elms.length; i++) {
+		if (sel_fli_elms.includes(fli_elms[i])) {
+			idxs.push(i);
+		}
+	}
+	return idxs;
+}
+
+function getSelectedFileListRowElements() {
+	return getFileListRowElements().filter(x => x.classList.contains('selected'));
+}
+
+function getFileListRowElements() {
+	return Array.from(document.getElementsByClassName('file-list-row'));
+}
+
 function getTotalFileSize() {
 	return '';
 }
@@ -88,6 +135,12 @@ function getPathUri(path) {
 
 // #region State
 
+function isMultiFileSelectEnabled() {
+	if (isAnyAppendEnabled()) {
+		return false;
+	}
+	return isSubSelectionEnabled();
+}
 // #endregion State
 
 // #region Actions
@@ -118,6 +171,7 @@ function createFileList() {
 		'<tbody>' + file_list_tbody_inner_html + '</tbody></table></div>';
 
 	setRootHtml(file_list_table_html);
+	addFileEventHandlers();
 }
 
 function formatFilePathDisplayValue(fp) {
@@ -173,19 +227,85 @@ function convertFileListContentToFormats(isForOle, formats) {
 	}
 	return items;
 }
+
+function addFileEventHandlers() {
+	const fli_row_elms = getFileListRowElements();
+	for (var i = 0; i < fli_row_elms.length; i++) {
+		const fli_row_elm = fli_row_elms[i];
+		fli_row_elm.addEventListener('click', onFileListItemRowClick);
+	}
+}
+
 function appendFileListContentData(data) {
 	// input 'MpQuillFileListDataFragment'
-	let fldfObj = toJsonObjFromBase64Str(data);
-	for (var i = 0; i < fldfObj.fileItems.length; i++) {
-		// input 'MpQuillFileListItemDataFragmentMessage'
-		let flif = fldfObj.fileItems[i];
-		FileListItems.push(flif);
+	const append_doc_range = getAppendDocRange();
+	const append_cell = getTableCellAtDocIdx(append_doc_range.index);
+	let insert_idx = -1;
+	if (append_doc_range.mode == 'pre') {
+		if (IsAppendManualMode) {
+			insert_idx = append_cell[0];
+		} else {
+			insert_idx = Math.max(0, append_cell[0] - 1);
+		}
+	} else {
+		insert_idx = append_cell[0] + 1;
 	}
-	createFileList();
-	loadLinkHandlers();
+	const cur_sel_idxs = getSelectedFileItemIdxs();
+	let updated_sel_idxs = [];
+	let append_items = toJsonObjFromBase64Str(data).fileItems;
+	let updated_items = [];
+	for (var i = 0; i < FileListItems.length; i++) {
+		if (i == insert_idx) {
+			for (var j = 0; j < append_items.length; j++) {
+				if (!IsAppendPreMode) {
+					updated_sel_idxs.push(i + j);
+				}
+				updated_items.push(append_items[j]);
+			}
+		}
+		if (IsAppendPreMode && cur_sel_idxs.includes(i)) {
+			updated_sel_idxs.push(updated_items.length);
+		}
+		updated_items.push(FileListItems[i]);
+	}
+	if (insert_idx == FileListItems.length) {
+		for (var j = 0; j < append_items.length; j++) {
+			if (!IsAppendPreMode) {
+				updated_sel_idxs.push(updated_items.length);
+			}
+			updated_items.push(append_items[j]);
+		}
+	}
+
+	loadFileListContent(toBase64FromJsonObj({ fileItems: updated_items }));
+	updated_sel_idxs.forEach(x => getFileListRowElements()[x].classList.add('selected'));
+
+	scrollToAppendIdx();
+	onContentChanged_ntf();
 }
+
 // #endregion Actions
 
 // #region Event Handlers
+
+function onFileListItemRowClick(e) {
+	if (!isSubSelectionEnabled()) {
+		return;
+	}
+	if (isMultiFileSelectEnabled()) {
+		e.currentTarget.classList.toggle('selected');
+		return;
+	}
+
+	const fli_elms = getFileListRowElements();
+	for (var i = 0; i < fli_elms.length; i++) {
+		const fli_elm = fli_elms[i];
+		if (fli_elm == e.currentTarget) {
+			fli_elm.classList.add('selected');
+		} else {
+			fli_elm.classList.remove('selected');
+		}
+	}
+}
 
 // #endregion Event Handlers

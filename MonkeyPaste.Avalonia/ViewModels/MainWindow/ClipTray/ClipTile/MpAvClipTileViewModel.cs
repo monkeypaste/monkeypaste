@@ -435,8 +435,9 @@ namespace MonkeyPaste.Avalonia {
         public bool IsHovering { get; set; }
         public bool IsHoveringOverSourceIcon { get; set; } = false;
         public bool IsOverDetail { get; set; } = false;
-
         public bool IsPopOutVisible { get; set; }
+
+        public WindowState PopOutWindowState { get; set; }
 
         #region Append
         //public bool IsAppendTrayItem {
@@ -1185,6 +1186,14 @@ namespace MonkeyPaste.Avalonia {
             };
 
             pow.Bind(
+                Window.WindowStateProperty,
+                new Binding() {
+                    Source = this,
+                    Path = nameof(PopOutWindowState),
+                    Mode = BindingMode.TwoWay
+                });
+
+            pow.Bind(
                 Window.TitleProperty,
                 new Binding() {
                     Source = this,
@@ -1254,6 +1263,14 @@ namespace MonkeyPaste.Avalonia {
                 Padding = new Thickness(10),
                 //Classes = Classes.Parse("fadeIn fadeOut")
             };
+
+            pow.Bind(
+                Window.WindowStateProperty,
+                new Binding() {
+                    Source = this,
+                    Path = nameof(PopOutWindowState),
+                    Mode = BindingMode.TwoWay
+                });
 
             pow.Bind(
                 Window.TitleProperty,

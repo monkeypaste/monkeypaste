@@ -216,7 +216,7 @@ namespace MonkeyPaste {
 
     public class MpQuillAppendStateChangedMessage : MpJsonObject {
         public bool isAppendLineMode { get; set; }
-        public bool isAppendMode { get; set; }
+        public bool isAppendInsertMode { get; set; }
         public bool isAppendManualMode { get; set; }
         public bool isAppendPaused { get; set; }
         public bool isAppendPreMode { get; set; }

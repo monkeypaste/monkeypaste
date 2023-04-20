@@ -382,11 +382,20 @@ namespace MonkeyPaste.Avalonia {
                         case MpShortcutType.ExitApplication:
                             shortcutCommand = MpAvSystemTrayViewModel.Instance.ExitApplicationCommand;
                             break;
-                        case MpShortcutType.ToggleAppendMode:
+                        case MpShortcutType.ToggleAppendInsertMode:
                             shortcutCommand = MpAvClipTrayViewModel.Instance.ToggleAppendInsertModeCommand;
                             break;
                         case MpShortcutType.ToggleAppendLineMode:
                             shortcutCommand = MpAvClipTrayViewModel.Instance.ToggleAppendLineModeCommand;
+                            break;
+                        case MpShortcutType.ToggleAppendPreMode:
+                            shortcutCommand = MpAvClipTrayViewModel.Instance.ToggleAppendPreModeCommand;
+                            break;
+                        case MpShortcutType.ToggleAppendManualMode:
+                            shortcutCommand = MpAvClipTrayViewModel.Instance.ToggleAppendManualModeCommand;
+                            break;
+                        case MpShortcutType.ToggleAppendPaused:
+                            shortcutCommand = MpAvClipTrayViewModel.Instance.ToggleAppendPausedCommand;
                             break;
                         case MpShortcutType.ToggleAutoCopyMode:
                             shortcutCommand = MpAvClipTrayViewModel.Instance.ToggleAutoCopyModeCommand;

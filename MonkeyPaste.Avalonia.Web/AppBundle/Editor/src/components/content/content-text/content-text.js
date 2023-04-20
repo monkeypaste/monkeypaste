@@ -87,14 +87,6 @@ function getContentRange() {
 }
 
 function getLineStartDocIdx(docIdx) {
-	//let lineStartDocIdx = 0;
-	//let pt = getText();
-	//for (var i = 0; i < docIdx; i++) {
-	//    if (pt[i] == '\n') {
-	//        lineStartDocIdx = Math.min(i + 1, pt.length);
-	//    }
-	//}
-	//return lineStartDocIdx;
 	docIdx = docIdx < 0 ? 0 : docIdx >= getDocLength() ? getDocLength() - 1 : docIdx;
 	while (!isDocIdxLineStart(docIdx)) {
 		docIdx--;
@@ -103,14 +95,6 @@ function getLineStartDocIdx(docIdx) {
 }
 
 function getLineEndDocIdx(docIdx) {
-	//let pt = getText();
-	//let lineEndDocIdx = pt.length - 1;
-	//for (var i = pt.length - 1; i >= docIdx; i--) {
-	//    if (pt[i] == '\n') {
-	//        lineEndDocIdx = i;
-	//    }
-	//}
-	//return lineEndDocIdx;
 	docIdx = docIdx < 0 ? 0 : docIdx >= getDocLength() ? getDocLength() - 1 : docIdx;
 	while (!isDocIdxLineEnd(docIdx)) {
 		docIdx++;
@@ -463,7 +447,13 @@ function getBlotAtDocIdx(docIdx) {
 	return null;
 }
 
-function getElementAtDocIdx(docIdx, ignoreTextNode = false) {
+function getElementAtDocIdx(docIdx, ignoreTextNode = false, ignoreColGroup = true) {
+	if (!isNullOrUndefined(ignoreColGroup) &&
+		ignoreColGroup &&
+		isDocIdxInTable(docIdx)) {
+		 //ignore colgroup elements
+		return getTableCellElementAtDocIdx(docIdx);
+	}
 	let doc_idx_blot = getBlotAtDocIdx(docIdx);
 	if (!doc_idx_blot) {
 		return getEditorElement();
@@ -827,19 +817,6 @@ function convertTextContentToFormats(isForOle, formats) {
 function appendTextContentData(data) {
 	data = data == null ? '' : data;
 	const append_range = getAppendDocRange();
-	if (IsAppendPreMode) {
-		//if (IsAppendLineMode) {
-		//	if (append_range.index > 0 &&
-		//		!isDocIdxBlockEnd(append_range.index)) {
-		//		data = '<br>' + data;
-		//	}
-		//	data = data + '<br>';
-		//	if (isDocIdxBlockStart(append_range.index) ||
-		//		isDocIdxBlockEnd(append_range.index)) {
-		//		data = data + '<br>';
-		//	}
-		//}
-	}
 	let dt = new DataTransfer();
 	// NOTE since data is result of ci builder it will always be html
 	dt.setData('text/html', data);	

@@ -312,7 +312,7 @@ function isNullOrEmpty(str) {
 }
 
 function isNullOrWhiteSpace(str) {
-    return isNullOrEmpty(str) || (typeof str.every === 'function' && str.every(x => x == ' '));
+    return isNullOrEmpty(str) || str.trim().length == 0;
 }
 
 function isChildOfElement(elm, parent, include_self = true) {

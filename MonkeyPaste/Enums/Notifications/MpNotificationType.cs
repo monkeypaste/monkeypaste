@@ -33,10 +33,6 @@
         ModalOkMessageBox,
         ModalTextBoxOkCancelMessageBox,
 
-        // Append Tile
-
-        AppendChanged,
-
         // Plugin Wrapper 
         PluginResponseMessage,
         PluginResponseError,

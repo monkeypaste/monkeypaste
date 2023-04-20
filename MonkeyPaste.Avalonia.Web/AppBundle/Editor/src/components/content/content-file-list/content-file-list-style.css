@@ -15,7 +15,6 @@
 }
 
 .file-list-path {
-    cursor: pointer;
     font-size: 14px;
     white-space: nowrap;
     overflow: hidden;
@@ -24,14 +23,26 @@
     /*max-width: 100px;*/
 }
 
+
 .file-list-row {
     background-color: transparent;
 }
-table.file-list-table tbody > tr:hover {
-    /*background-color: rgb(189, 188, 188,var(--editableopacity));*/
-    background-color: silver !important;
-    /*cursor: pointer;*/
+#editor.sub-select .file-list-row {
+    cursor: pointer !important;
 }
+    #editor.sub-select .file-list-row.selected {
+        background-color: darkturquoise !important;
+    }
+    #editor.sub-select .file-list-row:hover.selected {
+        background-color: turquoise !important;
+    }
+    
+    #editor.sub-select .file-list-row:not(.selected):hover {
+        background-color: lightgoldenrodyellow !important;
+    }
+    #editor.sub-select .file-list-row:hover {
+        border: 1.5px solid var(--hovercolor) !important;
+    }
 
 .file-list-cell {
     /*pointer-events: none;*/

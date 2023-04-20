@@ -66,6 +66,14 @@ namespace MonkeyPaste.Common.Avalonia {
             }
             base.SetData(format, data);
         }
+        public override bool TryGetData<T>(string format, out T data) {
+            if (typeof(T) == typeof(IEnumerable<string>) &&
+                TryGetData(format, out IEnumerable<IStorageItem> sil)) {
+                data = sil.Select(x => x.Path.LocalPath) as T;
+                return true;
+            }
+            return base.TryGetData(format, out data);
+        }
 
         public async Task MapAllPseudoFormatsAsync() {
             if (ContainsData(MpPortableDataFormats.AvHtml_bytes) &&

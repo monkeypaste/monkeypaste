@@ -27,7 +27,16 @@ function initAppend() {
 // #region Getters
 
 function getAppendDocRange() {
-
+	if (ContentItemType == 'FileList') {
+		const sel_rows = getSelectedFileItemIdxs();
+		const sel_idx = sel_rows.length > 0 && IsAppendManualMode ? sel_rows[0] : IsAppendPreMode ? 0 : getFileListRowElements().length - 1;
+		let sel_doc_range = getFileListItemDocRange(sel_idx);
+		if (!sel_doc_range) {
+			return { index: 0, length: 0, mode: 'pre' };
+		}
+		sel_doc_range.mode = (sel_doc_range.index == 0 || IsAppendManualMode) && IsAppendPreMode ? 'pre' : 'post';
+		return sel_doc_range;
+	}
 	if (IsAppendManualMode) {
 		if (IsAppendPreMode) {
 			if (IsAppendInsertMode) {
@@ -36,7 +45,6 @@ function getAppendDocRange() {
 				// NOTE need to make block range in terms of the leading block unless its the first
 				// for dt to handle blocks since pre is just for before first block
 				let line_start_idx = getLineStartDocIdx(FixedAppendIdx);
-				//line_start_idx = Math.max(0, line_start_idx - 1);
 				return { index: FixedAppendIdx, length: 0, mode: line_start_idx == 0 ?'pre': 'post' };
 			}
 		} else {
@@ -45,8 +53,6 @@ function getAppendDocRange() {
 				sel.mode = 'inline';
 				return sel;
 			} else {
-				//let line_end_idx = getLineEndDocIdx(FixedAppendIdx);
-				//line_end_idx = Math.max(0, line_start_idx - 1);
 				return { index: getLineEndDocIdx(sel.index + sel.length), length: 0, mode:'post' };
 			}
 		}		
@@ -223,35 +229,32 @@ function disablePreAppend(fromHost = false) {
 
 // #region Actions
 
-function updateAppendModeState(
-	isAppendLine,
-	isAppend,
-	isAppendManual,
-	isAppendStatePaused,
-	isAppendPre,
-	appendDocIdx,
-	appendDocLength,
-	appendData,
-	fromHost) {
-	let new_append_range = cleanDocRange({ index: appendDocIdx, length: appendDocLength });
+function updateAppendModeState(req, fromHost) {
+	if (req == null) {
+		if (isAnyAppendEnabled()) {
+			disableAppendMode(fromHost);
+		}
+		return;
+	}
+	let new_append_range = cleanDocRange({ index: req.appendDocIdx, length: req.appendDocLength });
 
-	let is_enabling = !isAnyAppendEnabled() && (isAppendLine || isAppend);
-	let is_disabling = isAnyAppendEnabled() && !isAppendLine && !isAppend;
-	let is_resuming = IsAppendPaused && !isAppendStatePaused;
-	let is_pausing = !IsAppendPaused && isAppendStatePaused;
-	let is_pre_changing = IsAppendPreMode != isAppendPre;
+	let is_enabling = !isAnyAppendEnabled() && (req.isAppendLineMode || req.isAppendInsertMode);
+	let is_disabling = isAnyAppendEnabled() && !req.isAppendLineMode && !req.isAppendInsertMode;
+	let is_resuming = IsAppendPaused && !req.isAppendPaused;
+	let is_pausing = !IsAppendPaused && req.isAppendPaused;
+	let is_pre_changing = IsAppendPreMode != req.isAppendPreMode;
 
 	let is_updating_state =
-		IsAppendLineMode != isAppendLine ||
-		IsAppendInsertMode != isAppend ||
-		IsAppendManualMode != isAppendManual ||
-		IsAppendPaused != isAppendStatePaused ||
-		IsAppendPreMode != isAppendPre;
+		IsAppendLineMode != req.isAppendLineMode ||
+		IsAppendInsertMode != req.isAppendInsertMode ||
+		IsAppendManualMode != req.isAppendManualMode ||
+		IsAppendPaused != req.isAppendPaused ||
+		IsAppendPreMode != req.isAppendPreMode;
 
-	let is_appending_data = !isNullOrEmpty(appendData);
+	let is_appending_data = !isNullOrEmpty(req.appendData);
 
 	let is_append_range_changed =
-		isAppendManual &&
+		req.isAppendManualMode &&
 		didSelectionChange(getAppendDocRange(), new_append_range);
 
 	log(' ');
@@ -265,11 +268,19 @@ function updateAppendModeState(
 	log('is_appending_data: ' + is_appending_data);
 	log('is_resuming: ' + is_resuming);
 	log('is_pausing: ' + is_pausing);
-	log('append_data: ' + appendData);
+	log('append_data: ' + req.appendData);
 	log(' ');
 
+	
+
+	if (is_enabling || is_updating_state) {
+		enableAppendMode(req.isAppendLineMode, req.isAppendManualMode, fromHost);
+	}
+	if (is_disabling) {
+		disableAppendMode(fromHost);
+	}
 	if (is_pre_changing) {
-		if (isAppendPre) {
+		if (req.isAppendPreMode) {
 			enablePreAppend(fromHost);
 		} else {
 			disablePreAppend(fromHost);
@@ -284,16 +295,8 @@ function updateAppendModeState(
 	if (is_append_range_changed) {
 		setDocSelection(new_append_range);
 	}
-
-	if (is_enabling || is_updating_state) {
-		enableAppendMode(isAppendLine, isAppendManual, fromHost);
-	}
-	if (is_disabling) {
-		disableAppendMode(fromHost);
-	}
-
 	if (is_appending_data) {
-		appendContentData(appendData);
+		appendContentData(req.appendData);
 	}
 }
 

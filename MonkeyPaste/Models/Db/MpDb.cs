@@ -914,10 +914,12 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
                 
                  new string[] {"5dff238e-770e-4665-93f5-419e48326f01","Caps Lock", MpShortcutType.ToggleMainWindow.ToString(), MpRoutingType.Bubble.ToString()},
                  new string[] {"97e29b06-0ec4-4c55-a393-8442d7695038","Control+F1", MpShortcutType.ToggleListenToClipboard.ToString(), MpRoutingType.Bubble.ToString()},
-                 new string[] {"777367e6-c161-4e93-93e0-9bf12221f7ff","Control+F2", MpShortcutType.ToggleAppendLineMode.ToString(), MpRoutingType.Bubble.ToString()},
-                 new string[] {"a41aeed8-d4f3-47de-86c5-f9ca296fb103","Control+F3", MpShortcutType.ToggleAppendMode.ToString(), MpRoutingType.Bubble.ToString()},
-                 new string[] {"892bf7d7-ba8e-4db1-b2ca-62b41ff6614c","Control+F4", MpShortcutType.ToggleAutoCopyMode.ToString(), MpRoutingType.Bubble.ToString()},
-                 new string[] {"a12c4211-ab1f-4b97-98ff-fbeb514e9a1c","Control+F5", MpShortcutType.ToggleRightClickPasteMode.ToString(), MpRoutingType.Bubble.ToString()},
+                 new string[] {"892bf7d7-ba8e-4db1-b2ca-62b41ff6614c", "Control+F2", MpShortcutType.ToggleAutoCopyMode.ToString(), MpRoutingType.Bubble.ToString()},
+                 new string[] {"a12c4211-ab1f-4b97-98ff-fbeb514e9a1c", "Control+F3", MpShortcutType.ToggleRightClickPasteMode.ToString(), MpRoutingType.Bubble.ToString()},
+                 new string[] {"777367e6-c161-4e93-93e0-9bf12221f7ff", "Control+F4", MpShortcutType.ToggleAppendLineMode.ToString(), MpRoutingType.Bubble.ToString()},
+                 new string[] {"a41aeed8-d4f3-47de-86c5-f9ca296fb103", "Control+F5", MpShortcutType.ToggleAppendInsertMode.ToString(), MpRoutingType.Bubble.ToString()},
+                 new string[] {"9fa72a1b-2286-4907-bf70-37686aad009a", "Control+F6", MpShortcutType.ToggleAppendPreMode.ToString(), MpRoutingType.Bubble.ToString()},
+                 new string[] {"9fa72a1b-2286-4907-bf70-37686aad009a", "Control+F7", MpShortcutType.ToggleAppendPaused.ToString(), MpRoutingType.Bubble.ToString()},
 
                  // APPLICATION
                  new string[] {"94e81589-fe2f-4e80-8940-ed066f0d9c27",ps.PasteKeys, MpShortcutType.PasteHere.ToString(), MpRoutingType.Internal.ToString(),"True"},
@@ -949,9 +951,10 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
                  new string[] {"cb1ac03b-a20f-4911-bf4f-bc1a858590e3","Control+L", MpShortcutType.ToggleMainWindowLocked.ToString(), MpRoutingType.Internal.ToString()},
                  new string[] {"d73204f5-fbed-4d87-9dca-6dfa8d8cba82","Control+K", MpShortcutType.ToggleFilterMenuVisible.ToString(), MpRoutingType.Internal.ToString()},
                  new string[] {"49f44a89-e381-4d6a-bf8c-1090eb443f17","Control+Q", MpShortcutType.ExitApplication.ToString(), MpRoutingType.Internal.ToString()},
-                 new string[] { "31e0a078-e80b-4d31-b236-2a585d6352cf", "Control+,", MpShortcutType.ShowSettings.ToString(), MpRoutingType.Internal.ToString()},
-                 new string[] { "5143ed80-a50a-41b9-9979-5e00c084560d", "Control+P", MpShortcutType.TogglePinned.ToString(), MpRoutingType.Internal.ToString()},
-                 new string[] { "755a4d0e-d26a-42cf-89a3-6c5710bd2e4c", "Control+O", MpShortcutType.OpenContentInWindow.ToString(), MpRoutingType.Internal.ToString()},
+                 new string[] {"31e0a078-e80b-4d31-b236-2a585d6352cf", "Control+,", MpShortcutType.ShowSettings.ToString(), MpRoutingType.Internal.ToString()},
+                 new string[] {"5143ed80-a50a-41b9-9979-5e00c084560d", "Control+P", MpShortcutType.TogglePinned.ToString(), MpRoutingType.Internal.ToString()},
+                 new string[] {"755a4d0e-d26a-42cf-89a3-6c5710bd2e4c", "Control+O", MpShortcutType.OpenContentInWindow.ToString(), MpRoutingType.Internal.ToString()},
+                 new string[] {"728bfb06-1d96-441c-b710-efee383138be", "Control+G", MpShortcutType.ToggleAppendManualMode.ToString(), MpRoutingType.Internal.ToString()},
             };
 
             foreach (var defaultShortcut in defaultShortcutDefinitions) {

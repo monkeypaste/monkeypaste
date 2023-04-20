@@ -121,7 +121,7 @@ namespace MonkeyPaste.Avalonia {
             switch (st) {
                 // APPLICATION
                 case MpShortcutType.ToggleMainWindow:
-                case MpShortcutType.ToggleAppendMode:
+                case MpShortcutType.ToggleAppendInsertMode:
                 case MpShortcutType.ToggleAppendLineMode:
                 case MpShortcutType.ToggleAutoCopyMode:
                 case MpShortcutType.ToggleRightClickPasteMode:

@@ -89,12 +89,6 @@ namespace MonkeyPaste {
                 title = notificationType.EnumToLabel();
             }
 
-            MpNotificationDialogResultType result = MpNotificationDialogResultType.None;
-            if (notificationType == MpNotificationType.AppendChanged) {
-                //result = await MpAppendNotificationViewModel.Instance.ShowNotificationAsync();
-                return result;
-            }
-
             MpNotificationFormat nf = new MpNotificationFormat() {
                 Title = title,
                 Body = body,
@@ -115,7 +109,7 @@ namespace MonkeyPaste {
             MpConsole.WriteLine($"\tmsg: '{body}'");
             MpConsole.WriteLine($"\ttype: '{notificationType.ToString()}'");
 
-            result = await ShowNotificationAsync(nf);
+            MpNotificationDialogResultType result = await ShowNotificationAsync(nf);
             return result;
         }
 

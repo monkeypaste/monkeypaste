@@ -63,11 +63,16 @@ namespace MonkeyPaste {
                     // html, rtf or png
 
                     itemDataStr = bytes.ToBase64String();
-                } else if (kvp.Value is IEnumerable<string> valueParts) {
+                } else if (kvp.Value is IEnumerable<object> valObjs) {
                     // file list
 
                     if (kvp.Key.Name != MpPortableDataFormats.AvFileNames) {
                         // this table is only used for searching so no other enumerable types are currently needed
+                        continue;
+                    }
+
+                    IEnumerable<string> valueParts = null;
+                    if (!pdo.TryGetData(MpPortableDataFormats.AvFileNames, out valueParts)) {
                         continue;
                     }
                     // store file/path icon with path
@@ -102,6 +107,13 @@ namespace MonkeyPaste {
                     if (kvp.Key.Name == MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT) {
                         // don't need to worry about storing this (value type is list)
                         continue;
+                    }
+                    if (kvp.Key.Name == MpPortableDataFormats.AvFileNames) {
+
+                    }
+                    if (kvp.Value is IEnumerable<object> ol) {
+                        var test = ol.Select(x => x.ToString());
+
                     }
                     // what type is it?
                     Debugger.Break();

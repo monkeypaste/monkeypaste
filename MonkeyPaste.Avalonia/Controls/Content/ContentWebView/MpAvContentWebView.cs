@@ -1493,22 +1493,22 @@ namespace MonkeyPaste.Avalonia {
                 var cur_append_tile = ctrvm.AppendClipTileViewModel;
 
                 if (source == "editor") {
-                    // no matter source if mode has a true and doesn't match tray update tray
-                    // only disable once message from notifier has no true modes 
-                    // only show ntf if it was an appendData msg, the rest delegated to tray
+                    //NOTE state changes should only come in one at a time
+                    // but line vs insert changes are only compared for is true since
+                    // they are interdependant to avoid double ntf
                     if (appendChangedMsg.isAppendPaused != ctrvm.IsAppendPaused) {
                         ctrvm.ToggleIsAppPausedCommand.Execute(null);
+                    } else if (appendChangedMsg.isAppendManualMode != ctrvm.IsAppendManualMode) {
+                        ctrvm.ToggleAppendManualModeCommand.Execute(null);
+                    } else if (appendChangedMsg.isAppendPreMode != ctrvm.IsAppendPreMode) {
+                        ctrvm.ToggleAppendPreModeCommand.Execute(null);
                     } else if (appendChangedMsg.isAppendLineMode && !ctrvm.IsAppendLineMode) {
                         ctrvm.ToggleAppendLineModeCommand.Execute(null);
-                    } else if (appendChangedMsg.isAppendMode && !ctrvm.IsAppendInsertMode) {
+                    } else if (appendChangedMsg.isAppendInsertMode && !ctrvm.IsAppendInsertMode) {
                         ctrvm.ToggleAppendInsertModeCommand.Execute(null);
                     } else if (BindingContext.IsAppendNotifier &&
-                        (!appendChangedMsg.isAppendLineMode && !appendChangedMsg.isAppendMode && ctrvm.IsAnyAppendMode)) {
-                        // only let notifier deactivate
+                        (!appendChangedMsg.isAppendLineMode && !appendChangedMsg.isAppendInsertMode && ctrvm.IsAnyAppendMode)) {
                         ctrvm.DeactivateAppendModeCommand.Execute(null);
-                    } else if (BindingContext.IsAppendNotifier &&
-                                !string.IsNullOrEmpty(appendChangedMsg.appendData)) {
-                        MpNotificationBuilder.ShowNotificationAsync(MpNotificationType.AppendChanged).FireAndForgetSafeAsync();
                     }
                 }
                 while (ctrvm.IsAnyBusy) {

@@ -3,11 +3,13 @@
         None = 0,
         // GLOBALS
         ToggleMainWindow,
-        ToggleAppendMode,
-        ToggleAppendLineMode,
         ToggleAutoCopyMode,
         ToggleRightClickPasteMode,
         ToggleListenToClipboard,
+        ToggleAppendInsertMode,
+        ToggleAppendLineMode,
+        ToggleAppendPreMode,
+        ToggleAppendPaused,
 
         // APPLICATION
         HideMainWindow,
@@ -42,6 +44,7 @@
         ShowSettings,
         TogglePinned,
         OpenContentInWindow,
+        ToggleAppendManualMode,
         // CUT-OFF 
         MAX_APP_SHORTCUT,
         //remaining are data (not context) driven using commandId
