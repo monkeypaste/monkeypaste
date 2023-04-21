@@ -18,23 +18,22 @@ namespace MonkeyPaste {
         [Column("MpShortcutGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
-        //[Column("fk_MpCommandId")]
         public string CommandParameter { get; set; } = null;
 
-        //public string ShortcutLabel { get; set; } = string.Empty;
         public string KeyString { get; set; } = string.Empty;
         public string DefaultKeyString { get; set; } = string.Empty;
 
-        //[Column("RoutingType")]
         public string RouteTypeName { get; set; }
 
-        //[Column("e_ShortcutTypeId")]
         public string ShortcutTypeName { get; set; }
 
         public int RoutingDelayMs { get; set; } = 100;
 
         [Column("b_IsReadOnly")]
         public int IsReadOnlyVal { get; set; } = 0;
+
+        [Column("b_IsInternalOnly")]
+        public int IsInternalOnlyVal { get; set; } = 0;
 
         #endregion
 
@@ -57,15 +56,11 @@ namespace MonkeyPaste {
             }
         }
 
-        //[Ignore]
-        //public int ShortcutId {
-        //    get {
-        //        return Id;
-        //    }
-        //    set {
-        //        Id = value;
-        //    }
-        //}
+        [Ignore]
+        public bool IsInternalOnly {
+            get => IsInternalOnlyVal == 1;
+            set => IsInternalOnlyVal = value ? 1 : 0;
+        }
 
         [Ignore]
         public bool IsReadOnly {
@@ -106,7 +101,8 @@ namespace MonkeyPaste {
             MpShortcutType shortcutType = MpShortcutType.None,
             string commandParameter = null,
             string guid = "",
-            bool isReadOnly = false) {
+            bool isReadOnly = false,
+            bool isInternalOnly = false) {
             if (shortcutType == MpShortcutType.None) {
                 throw new Exception("Needs type");
             }
@@ -120,13 +116,10 @@ namespace MonkeyPaste {
 
             var dupShortcut = await MpDataModelProvider.GetShortcutAsync(shortcutType.ToString(), commandParameter);
             if (dupShortcut != null) {
-                //MpConsole.WriteLine($"Shortcut '{dupShortcut.ShortcutLabel}' already exists.");
-                //MpConsole.WriteLine($"Updating name from '{dupShortcut.ShortcutLabel}' to '{shortcutLabel}'");
                 MpConsole.WriteLine($"Updating keyString from '{dupShortcut.KeyString}' to '{keyString}'");
                 MpConsole.WriteLine($"Updating routing type from '{dupShortcut.RoutingType}' to '{routeType}'");
 
                 dupShortcut = await MpDataModelProvider.GetItemAsync<MpShortcut>(dupShortcut.Id);
-                //dupShortcut.ShortcutLabel = shortcutLabel;
                 dupShortcut.KeyString = keyString;
                 dupShortcut.RoutingType = routeType;
 
@@ -141,7 +134,8 @@ namespace MonkeyPaste {
                 RoutingType = routeType,
                 ShortcutType = shortcutType,
                 CommandParameter = commandParameter,
-                IsReadOnly = isReadOnly
+                IsReadOnly = isReadOnly,
+                IsInternalOnly = isInternalOnly
             };
 
             await newShortcut.WriteToDatabaseAsync();

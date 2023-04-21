@@ -27,6 +27,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIContentViewLocator ContentViewLocator { get; set; }
         public MpIGlobalInputListener GlobalInputListener { get; set; }
+        public MpIShortcutGestureLocator ShortcutGestureLocator { get; set; }
 
         #endregion
 

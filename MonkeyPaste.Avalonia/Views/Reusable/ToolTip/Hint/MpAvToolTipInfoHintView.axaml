@@ -10,11 +10,17 @@
              x:Class="MonkeyPaste.Avalonia.MpAvToolTipInfoHintView"
              Background="Transparent">
     <UserControl.Styles>
-        <Style Selector="ToolTip">
-            <!--<Setter Property="BorderThickness"
-                    Value="0" />
-            <Setter Property="Background"
-                    Value="Transparent" />-->
+        <Style Selector="Grid.info Ellipse">
+            <Setter Property="Fill"
+                    Value="Blue" />
+        </Style>
+        <Style Selector="Grid.warning Ellipse">
+            <Setter Property="Fill"
+                    Value="Goldenrod" />
+        </Style>
+        <Style Selector="Grid.error Ellipse">
+            <Setter Property="Fill"
+                    Value="Red" />
         </Style>
     </UserControl.Styles>
     <ToolTip.Tip>
@@ -23,6 +29,9 @@
     </ToolTip.Tip>
     <Grid x:Name="HintContainerGrid"
           Cursor="Help"
+          Classes.info="{Binding IsInfo, ElementName=InfoHintView}"
+          Classes.warning="{Binding IsWarning, ElementName=InfoHintView}"
+          Classes.error="{Binding IsError, ElementName=InfoHintView}"
           Width="15"
           Height="15">
         <Ellipse HorizontalAlignment="Stretch"
@@ -30,14 +39,12 @@
                  StrokeThickness="1"
                  Stroke="White"
                  Fill="Blue" />
-        <TextBlock Classes="hint"
-                   Foreground="White"
+        <TextBlock Foreground="White"
                    FontSize="10"
                    FontWeight="SemiBold"
                    TextAlignment="Center"
                    HorizontalAlignment="Center"
-                   VerticalAlignment="Center">
-            i
-        </TextBlock>
+                   VerticalAlignment="Center"
+                   Text="{Binding HintText, ElementName=InfoHintView}" />
     </Grid>
 </UserControl>

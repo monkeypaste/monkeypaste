@@ -27,13 +27,5 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         };
-
-        public static MpAvAssignShortcutViewModel AssignShortcutViewModel { get; } = new MpAvAssignShortcutViewModel() {
-            ShortcutDisplayName = "This is a test title",
-            KeyString = "Control+T|Control+L",
-            WarningString = "THis is shortcut warning 1",
-            WarningString2 = "THis is shortcut warning 2",
-            IconResourceObj = "KeyboardImage"
-        };
     }
 }

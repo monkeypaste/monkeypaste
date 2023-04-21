@@ -17,7 +17,7 @@ namespace MonkeyPaste.Avalonia {
         MpAvTreeSelectorViewModelBase<MpAvTagTrayViewModel, MpAvTagTileViewModel>,
         MpIHoverableViewModel,
         MpIConditionalSelectableViewModel,
-        MpAvIShortcutCommandViewModel,
+        MpIShortcutCommandViewModel,
         MpIUserColorViewModel,
         MpIActionComponent,
         MpIContextMenuViewModel,
@@ -112,7 +112,7 @@ namespace MonkeyPaste.Avalonia {
                     IsChecked = IsLinkedToSelectedClipTile,
                     IconHexStr = TagHexColor,
                     IconShape = MenuIconShape,
-                    ShortcutArgs = new object[] { MpShortcutType.SelectTag, TagId },
+                    ShortcutArgs = new object[] { MpShortcutType.SelectTag, this },
                     SubItems = Items.Select(x => x.ContentMenuItemViewModel).ToList()
                 };
                 //return GetTagMenu(ToggleLinkToSelectedClipTileCommand, IsLinkedToSelectedClipTile, new object[] { MpShortcutType.SelectTag, TagId });
@@ -137,7 +137,7 @@ namespace MonkeyPaste.Avalonia {
                             IconResourceKey = Mp.Services.PlatformResource.GetResource("HotkeyImage") as string,
                             Command = MpAvShortcutCollectionViewModel.Instance.ShowAssignShortcutDialogCommand,
                             CommandParameter = this,
-                            ShortcutArgs = new object[] { MpShortcutType.SelectTag, TagId },
+                            ShortcutArgs = new object[] { MpShortcutType.SelectTag, this },
                         },
                         new MpMenuItemViewModel() {
                             IsVisible = CanPin,
@@ -196,7 +196,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpAvIShortcutCommandViewModel Implementation
+        #region MpIShortcutCommandViewModel Implementation
 
         public MpShortcutType ShortcutType =>
             MpShortcutType.SelectTag;
@@ -205,7 +205,7 @@ namespace MonkeyPaste.Avalonia {
 
         public object ShortcutCommandParameter =>
             TagId;
-        ICommand MpAvIShortcutCommandViewModel.ShortcutCommand =>
+        ICommand MpIShortcutCommandViewModel.ShortcutCommand =>
             Parent == null ? null : Parent.SelectTagCommand;
 
         #endregion

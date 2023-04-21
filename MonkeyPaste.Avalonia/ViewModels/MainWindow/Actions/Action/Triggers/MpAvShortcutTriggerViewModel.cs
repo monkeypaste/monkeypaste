@@ -9,7 +9,7 @@ namespace MonkeyPaste.Avalonia {
 
     public class MpAvShortcutTriggerViewModel :
         MpAvTriggerActionViewModelBase,
-        //MpAvIShortcutCommandViewModel,
+        //MpIShortcutCommandViewModel,
         //MpAvIKeyGestureViewModel,
         MpIApplicationCommandCollectionViewModel {
 
@@ -27,7 +27,7 @@ namespace MonkeyPaste.Avalonia {
         //    new ObservableCollection<MpAvShortcutKeyGroupViewModel>(KeyString.ToKeyItems());
         //#endregion
 
-        //#region MpAvIShortcutCommandViewModel Implementation
+        //#region MpIShortcutCommandViewModel Implementation
         //public MpShortcutType ShortcutType =>
         //    MpShortcutType.InvokeTrigger;
 
@@ -36,7 +36,7 @@ namespace MonkeyPaste.Avalonia {
 
         //public object ShortcutCommandParameter =>
         //    ActionId;
-        //ICommand MpAvIShortcutCommandViewModel.ShortcutCommand =>
+        //ICommand MpIShortcutCommandViewModel.ShortcutCommand =>
         //    InvokeThisActionCommand;
         //#endregion
 

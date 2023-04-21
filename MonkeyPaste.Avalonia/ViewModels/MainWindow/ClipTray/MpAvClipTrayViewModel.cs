@@ -197,7 +197,7 @@ namespace MonkeyPaste.Avalonia {
                             Header = @"Delete",
                             AltNavIdx = 0,
                             IconResourceKey = "DeleteImage",
-                            Command = DeleteSelectedClipsCommand,
+                            Command = DeleteSelectedClipCommand,
                             ShortcutArgs = new object[] { MpShortcutType.DeleteSelectedItems },
                         },
                         new MpMenuItemViewModel() {
@@ -964,17 +964,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public List<MpCopyItem> SelectedModels {
-            get {
-                if (SelectedItem == null) {
-                    return new List<MpCopyItem>();
-                }
-                return new List<MpCopyItem>() {
-                    SelectedItem.CopyItem
-                };
-            }
-        }
-
         public IEnumerable<MpAvClipTileViewModel> VisibleItems =>
             Items.Where(x => x.IsAnyQueryCornerVisible && !x.IsPlaceholder);
         //Items
@@ -1340,8 +1329,16 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsAnyTilePinned => PinnedItems.Count > 0;
 
-        public bool IsAnyTileListBoxItemFocused =>
-            AllItems.Any(x => x.IsListBoxItemFocused);
+        public bool IsAnyTileHaveFocusWithin {
+            get {
+                // NOTE for performance not selecting ctvm.IsFocusWithin
+                if (FocusManager.Instance.Current is Control c) {
+                    return
+                        c.GetVisualAncestor<MpAvClipTileView>() != null;
+                }
+                return false;
+            }
+        }
 
         #endregion
 
@@ -1812,7 +1809,7 @@ namespace MonkeyPaste.Avalonia {
             Mp.Services.TransactionBuilder.ReportTransactionAsync(
                 copyItemId: sctvm.CopyItemId,
                 reqType: MpJsonMessageFormatType.DataObject,
-                req: mpdo.SerializeData(),
+                req: null,//mpdo.SerializeData(),
                 respType: MpJsonMessageFormatType.None,
                 resp: null,
                 ref_uris: new[] { pasted_app_url },
@@ -2445,7 +2442,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 if (canNavigate) {
                     var cf = FocusManager.Instance.Current;
-                    if (!IsAnyTileListBoxItemFocused && (cf != null && cf != App.MainView as IInputElement && cf is not MpAvContentWebView)) {
+                    if (!IsAnyTileHaveFocusWithin && (cf != null && cf != App.MainView as IInputElement && cf is not MpAvContentWebView)) {
 
                         canNavigate = false;
                     }
@@ -3291,11 +3288,11 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 bool canCopy =
                     SelectedItem != null &&
-                    MpAvMainWindowViewModel.Instance.IsMainWindowActive;
+                    SelectedItem.IsHostWindowActive;
                 MpConsole.WriteLine("CopySelectedClipsCommand CanExecute: " + canCopy);
                 if (!canCopy) {
                     MpConsole.WriteLine("SelectedItem: " + (SelectedItem == null ? "IS NULL" : "NOT NULL"));
-                    MpConsole.WriteLine("IsMainWindowActive: " + MpAvMainWindowViewModel.Instance.IsMainWindowActive);
+                    MpConsole.WriteLine("IsHostWindowActive: " + SelectedItem.IsHostWindowActive);
                 }
                 return canCopy;
             });
@@ -3326,14 +3323,22 @@ namespace MonkeyPaste.Avalonia {
                 PasteClipTileAsync(SelectedItem).FireAndForgetSafeAsync();
             },
             (args) => {
-                return //MpAvMainWindowViewModel.Instance.IsAnyDialogOpen == false &&
+                bool can_paste =
                     SelectedItem != null &&
-                    MpAvMainWindowViewModel.Instance.IsMainWindowActive &&
-                    !MpAvMainWindowViewModel.Instance.IsAnyMainWindowTextBoxFocused &&
-                    !MpAvMainWindowViewModel.Instance.IsAnyDropDownOpen &&
-                    !IsAnyEditingClipTile &&
-                    !IsAnyEditingClipTitle &&
+                    SelectedItem.IsHostWindowActive &&
+                    //!MpAvMainWindowViewModel.Instance.IsAnyMainWindowTextBoxFocused &&
+                    //!MpAvMainWindowViewModel.Instance.IsAnyDropDownOpen &&
+                    //!IsAnyEditingClipTile &&
+                    //!IsAnyEditingClipTitle &&
                     !MpPrefViewModel.Instance.IsTrialExpired;
+
+                MpConsole.WriteLine("CopySelectedClipsCommand CanExecute: " + can_paste);
+                if (!can_paste) {
+                    MpConsole.WriteLine("SelectedItem: " + (SelectedItem == null ? "IS NULL" : "NOT NULL"));
+                    MpConsole.WriteLine("IsHostWindowActive: " + SelectedItem.IsHostWindowActive);
+                }
+                return can_paste;
+
             });
         public ICommand PasteSelectedClipTileFromContextMenuCommand => new MpCommand<object>(
             (args) => {
@@ -3417,26 +3422,43 @@ namespace MonkeyPaste.Avalonia {
             });
 
 
-        public ICommand DeleteSelectedClipsCommand => new MpAsyncCommand(
+        public ICommand DeleteSelectedClipCommand => new MpAsyncCommand(
             async () => {
                 while (IsBusy) { await Task.Delay(100); }
 
                 IsBusy = true;
-
-                //await MpDataModelProvider.RemoveQueryItem(PrimaryItem.PrimaryItem.CopyItemId);
-
-
-                await Task.WhenAll(SelectedModels.Select(x => x.DeleteFromDatabaseAsync()));
+                await SelectedItem.CopyItem.DeleteFromDatabaseAsync();
 
                 //db delete event is handled in clip tile
                 IsBusy = false;
             },
             () => {
-                return //MpAvMainWindowViewModel.Instance.IsAnyDialogOpen == false &&
-                        MpAvMainWindowViewModel.Instance.IsMainWindowActive &&
-                        SelectedModels.Count > 0 &&
-                        !IsAnyEditingClipTile &&
-                        !IsAnyEditingClipTitle;
+                bool can_delete =
+                        SelectedItem != null;
+                MpConsole.WriteLine("DeleteSelectedClipCommand CanExecute: " + can_delete);
+                if (!can_delete) {
+                    MpConsole.WriteLine("SelectedItem: " + (SelectedItem == null ? "IS NULL" : "NOT NULL"));
+                }
+                return can_delete;
+            });
+
+        public ICommand DeleteSelectedClipFromShortcutCommand => new MpCommand(
+             () => {
+                 DeleteSelectedClipCommand.Execute(null);
+             },
+            () => {
+                bool can_delete =
+                        DeleteSelectedClipCommand.CanExecute(null) &&
+                        SelectedItem.IsHostWindowActive &&
+                        SelectedItem.IsTitleReadOnly &&
+                        SelectedItem.IsContentReadOnly &&
+                        SelectedItem.IsFocusWithin;
+                MpConsole.WriteLine("CopySelectedClipsCommand CanExecute: " + can_delete);
+                if (!can_delete) {
+                    MpConsole.WriteLine("SelectedItem: " + (SelectedItem == null ? "IS NULL" : "NOT NULL"));
+                    MpConsole.WriteLine("IsHostWindowActive: " + SelectedItem.IsHostWindowActive);
+                }
+                return can_delete;
             });
 
         public ICommand ToggleLinkTagToSelectedItemCommand => new MpAsyncCommand<MpAvTagTileViewModel>(

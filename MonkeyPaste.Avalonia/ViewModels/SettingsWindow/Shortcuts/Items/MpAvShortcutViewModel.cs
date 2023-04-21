@@ -16,7 +16,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvShortcutViewModel : MpViewModelBase<MpAvShortcutCollectionViewModel>,
         //MpIActionComponent,
         MpIFilterMatch,
-        MpAvIShortcutCommandViewModel,
+        MpIShortcutCommandViewModel,
         MpAvIKeyGestureViewModel,
         MpISelectableViewModel {
 
@@ -35,7 +35,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpAvIShortcutCommandViewModel Implementation
+        #region MpIShortcutCommandViewModel Implementation
 
         // NOTE since shortcut represents application commands and has a unique shortcut type
         // its parameter is always null
@@ -66,15 +66,8 @@ namespace MonkeyPaste.Avalonia {
         public ObservableCollection<string> RoutingTypes {
             get {
                 if (_routingTypes == null) {
-                    _routingTypes = new ObservableCollection<string>();
-                    if (IsGlobalShortcut) {
-                        //_routingTypes.Add("Direct");
-                        _routingTypes.Add("Bubble");
-                        _routingTypes.Add("Tunnel");
-                        _routingTypes.Add("Override");
-                    } else {
-                        _routingTypes.Add("Internal");
-                    }
+                    _routingTypes = new ObservableCollection<string>(
+                        typeof(MpRoutingType).EnumToLabels(hideFirst: true));
                 }
                 return _routingTypes;
             }
@@ -95,8 +88,12 @@ namespace MonkeyPaste.Avalonia {
 
         public IDisposable KeysObservable { get; set; }
 
-        public bool IsGlobalShortcut =>
-            ShortcutType.IsGlobal();
+        public bool CanBeGlobalShortcut =>
+            ShortcutType.CanBeGlobal();
+
+        public bool IsGlobal =>
+            RoutingType != MpRoutingType.Internal &&
+            RoutingType != MpRoutingType.None;
 
         public bool CanDelete =>
             IsCustom;
@@ -112,20 +109,6 @@ namespace MonkeyPaste.Avalonia {
 
 
         public string ShortcutDisplayName { get; private set; }
-        public MpShortcutType ShortcutType {
-            get {
-                if (Shortcut == null) {
-                    return MpShortcutType.None;
-                }
-                return Shortcut.ShortcutType;
-            }
-            set {
-                if (Shortcut.ShortcutType != value) {
-                    Shortcut.ShortcutType = value;
-                    OnPropertyChanged(nameof(ShortcutType));
-                }
-            }
-        }
 
         public string ShortcutTypeName {
             get {
@@ -149,15 +132,13 @@ namespace MonkeyPaste.Avalonia {
                     return 0;
                 }
                 return RoutingTypes.IndexOf(RoutingType.ToString());
-                //return (int)RoutingType - (int)MpRoutingType.Internal - 1;
             }
             set {
-                if (RoutingType == MpRoutingType.Internal) {
+                if (!CanBeGlobalShortcut) {
                     return;
                 }
                 if (SelectedRoutingTypeIdx != value) {
                     value = Math.Max(0, value);
-                    //RoutingType = (MpRoutingType)(value + (int)MpRoutingType.Internal + 1);
                     RoutingType = RoutingTypes[value].ToString().ToEnum<MpRoutingType>();
                     OnPropertyChanged(nameof(SelectedRoutingTypeIdx));
                 }
@@ -170,6 +151,20 @@ namespace MonkeyPaste.Avalonia {
 
         #region Model
 
+        public MpShortcutType ShortcutType {
+            get {
+                if (Shortcut == null) {
+                    return MpShortcutType.None;
+                }
+                return Shortcut.ShortcutType;
+            }
+            set {
+                if (Shortcut.ShortcutType != value) {
+                    Shortcut.ShortcutType = value;
+                    OnPropertyChanged(nameof(ShortcutType));
+                }
+            }
+        }
         public string DefaultKeyString {
             get {
                 if (Shortcut == null) {
@@ -302,6 +297,9 @@ namespace MonkeyPaste.Avalonia {
         public bool IsModelReadOnly =>
             Shortcut == null || Shortcut.IsReadOnly;
 
+        public bool IsInternalOnly =>
+            Shortcut == null || Shortcut.IsReadOnly;
+
         private MpShortcut _shortcut = null;
         public MpShortcut Shortcut {
             get {
@@ -348,7 +346,7 @@ namespace MonkeyPaste.Avalonia {
 
             await SetShortcutNameAsync();
 
-            OnPropertyChanged(nameof(IsGlobalShortcut));
+            OnPropertyChanged(nameof(CanBeGlobalShortcut));
             OnPropertyChanged(nameof(KeyItems));
             OnPropertyChanged(nameof(IsEmpty));
         }
@@ -488,7 +486,7 @@ namespace MonkeyPaste.Avalonia {
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyBusy));
                     break;
                 case nameof(ShortcutType):
-                    OnPropertyChanged(nameof(IsGlobalShortcut));
+                    OnPropertyChanged(nameof(CanBeGlobalShortcut));
                     break;
             }
         }
@@ -539,43 +537,18 @@ namespace MonkeyPaste.Avalonia {
                 }
             },
             () => {
-                var mwvm = MpAvMainWindowViewModel.Instance;
-                var ctrvm = MpAvClipTrayViewModel.Instance;
-                var ttrvm = MpAvTagTrayViewModel.Instance;
-                var sbvm = MpAvSearchBoxViewModel.Instance;
-                var acvm = MpAvTriggerCollectionViewModel.Instance;
-
                 bool canPerformShortcut = true;
+                if (!IsGlobal &&
+                    !MpAvMainWindowViewModel.Instance.IsAnyAppWindowActive) {
 
-                //if(IsGlobalShortcut && !mwvm.IsMainWindowActive) {
-                //    // should be fine and up to commands when its gloabl and app isn't active
-                //} else {
-                //    // when mw is active treat global shortcuts like any other
-                //    if(mwvm.IsMainWindowActive) {
-                //        if (mwvm.IsAnyDialogOpen ||
-                //            mwvm.IsAnyItemDragging ||
-                //            mwvm.IsAnyMainWindowTextBoxFocused ||
-                //            !mwvm.IsMainWindowActive) {
-                //            canPerformShortcut = false;
-                //        }
-                //    } else {
-                //        canPerformShortcut = false;
-                //    }
-                //}
-
-                if (!IsGlobalShortcut) {
-                    if (!mwvm.IsMainWindowActive) {
-                        canPerformShortcut = false;
-                    }
+                    canPerformShortcut = false;
                 }
 
                 MpConsole.WriteLine($"CanPerformShortcut '{ShortcutType}': {canPerformShortcut.ToString().ToUpper()}", true);
 
                 if (!canPerformShortcut) {
-                    MpConsole.WriteLine($"IsGlobalShortcut: " + IsGlobalShortcut);
-                    MpConsole.WriteLine($"IsMainWindowActive: " + mwvm.IsMainWindowActive);
-                    MpConsole.WriteLine($"IsAnyItemDragging: " + mwvm.IsAnyItemDragging);
-                    MpConsole.WriteLine($"IsAnyTextBoxFocused: " + mwvm.IsAnyMainWindowTextBoxFocused, false, true);
+                    MpConsole.WriteLine($"IsGlobal: " + IsGlobal);
+                    MpConsole.WriteLine($"IsAnyAppWindowActive: " + MpAvMainWindowViewModel.Instance.IsAnyAppWindowActive);
                 }
                 return canPerformShortcut;
             });
@@ -590,13 +563,6 @@ namespace MonkeyPaste.Avalonia {
             },
             () => {
                 return Parent != null && IsCustom ? CanDelete : CanReset;
-            });
-
-        public ICommand ReassignShortcutCommand => new MpCommand(
-            () => {
-                if (IsCustom) {
-
-                }
             });
 
         #endregion

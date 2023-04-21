@@ -16,7 +16,7 @@ namespace MonkeyPaste.Avalonia {
         MpIActionComponent,
         MpIUserIconViewModel,
         MpIContentTypeDependant,
-        MpAvIShortcutCommandViewModel,
+        MpIShortcutCommandViewModel,
         MpIPopupMenuPicker,
         MpIParameterHostViewModel,
         MpAvIParameterCollectionViewModel {
@@ -171,7 +171,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
 
-        #region MpAvIShortcutCommandViewModel Implementation
+        #region MpIShortcutCommandViewModel Implementation
 
         public MpShortcutType ShortcutType =>
             MpShortcutType.AnalyzeCopyItemWithPreset;
@@ -180,7 +180,7 @@ namespace MonkeyPaste.Avalonia {
 
         public object ShortcutCommandParameter =>
             AnalyticItemPresetId;
-        ICommand MpAvIShortcutCommandViewModel.ShortcutCommand =>
+        ICommand MpIShortcutCommandViewModel.ShortcutCommand =>
             Parent == null ? null : Parent.ExecuteAnalysisCommand;
 
         #endregion
@@ -208,9 +208,7 @@ namespace MonkeyPaste.Avalonia {
                     IconId = IconId,
                     //ShortcutType = MpShortcutType.AnalyzeCopyItemWithPreset,
                     //ShortcutObjId = AnalyticItemPresetId,
-                    ShortcutArgs = new object[] {
-                        MpShortcutType.AnalyzeCopyItemWithPreset,
-                        AnalyticItemPresetId}
+                    ShortcutArgs = new object[] { MpShortcutType.AnalyzeCopyItemWithPreset, this }
                 };
             }
         }

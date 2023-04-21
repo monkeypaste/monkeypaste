@@ -912,14 +912,14 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
 
                 // GLOBAL
                 
-                 new string[] {"5dff238e-770e-4665-93f5-419e48326f01","Caps Lock", MpShortcutType.ToggleMainWindow.ToString(), MpRoutingType.Bubble.ToString()},
-                 new string[] {"97e29b06-0ec4-4c55-a393-8442d7695038","Control+F1", MpShortcutType.ToggleListenToClipboard.ToString(), MpRoutingType.Bubble.ToString()},
-                 new string[] {"892bf7d7-ba8e-4db1-b2ca-62b41ff6614c", "Control+F2", MpShortcutType.ToggleAutoCopyMode.ToString(), MpRoutingType.Bubble.ToString()},
-                 new string[] {"a12c4211-ab1f-4b97-98ff-fbeb514e9a1c", "Control+F3", MpShortcutType.ToggleRightClickPasteMode.ToString(), MpRoutingType.Bubble.ToString()},
-                 new string[] {"777367e6-c161-4e93-93e0-9bf12221f7ff", "Control+F4", MpShortcutType.ToggleAppendLineMode.ToString(), MpRoutingType.Bubble.ToString()},
-                 new string[] {"a41aeed8-d4f3-47de-86c5-f9ca296fb103", "Control+F5", MpShortcutType.ToggleAppendInsertMode.ToString(), MpRoutingType.Bubble.ToString()},
-                 new string[] {"9fa72a1b-2286-4907-bf70-37686aad009a", "Control+F6", MpShortcutType.ToggleAppendPreMode.ToString(), MpRoutingType.Bubble.ToString()},
-                 new string[] {"9fa72a1b-2286-4907-bf70-37686aad009a", "Control+F7", MpShortcutType.ToggleAppendPaused.ToString(), MpRoutingType.Bubble.ToString()},
+                 new string[] {"5dff238e-770e-4665-93f5-419e48326f01","Caps Lock", MpShortcutType.ToggleMainWindow.ToString(), MpRoutingType.Internal.ToString(),"False","False"},
+                 new string[] {"97e29b06-0ec4-4c55-a393-8442d7695038","Control+F1", MpShortcutType.ToggleListenToClipboard.ToString(), MpRoutingType.Internal.ToString(),"False","False"},
+                 new string[] {"892bf7d7-ba8e-4db1-b2ca-62b41ff6614c", "Control+F2", MpShortcutType.ToggleAutoCopyMode.ToString(), MpRoutingType.Internal.ToString(),"False","False"},
+                 new string[] {"a12c4211-ab1f-4b97-98ff-fbeb514e9a1c", "Control+F3", MpShortcutType.ToggleRightClickPasteMode.ToString(), MpRoutingType.Internal.ToString(),"False","False"},
+                 new string[] {"777367e6-c161-4e93-93e0-9bf12221f7ff", "Control+F4", MpShortcutType.ToggleAppendLineMode.ToString(), MpRoutingType.Internal.ToString(),"False","False"},
+                 new string[] {"a41aeed8-d4f3-47de-86c5-f9ca296fb103", "Control+F5", MpShortcutType.ToggleAppendInsertMode.ToString(), MpRoutingType.Internal.ToString(),"False","False"},
+                 new string[] {"9fa72a1b-2286-4907-bf70-37686aad009a", "Control+F6", MpShortcutType.ToggleAppendPreMode.ToString(), MpRoutingType.Internal.ToString(),"False","False"},
+                 new string[] {"9fa72a1b-2286-4907-bf70-37686aad009a", "Control+F7", MpShortcutType.ToggleAppendPaused.ToString(), MpRoutingType.Internal.ToString(),"False","False"},
 
                  // APPLICATION
                  new string[] {"94e81589-fe2f-4e80-8940-ed066f0d9c27",ps.PasteKeys, MpShortcutType.PasteHere.ToString(), MpRoutingType.Internal.ToString(),"True"},
@@ -963,7 +963,8 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
                     keyString: defaultShortcut[1],
                     shortcutType: defaultShortcut[2].ToEnum<MpShortcutType>(),
                     routeType: defaultShortcut[3].ToEnum<MpRoutingType>(),
-                    isReadOnly: defaultShortcut.Length >= 5 ? bool.Parse(defaultShortcut[4]) : false);
+                    isReadOnly: defaultShortcut.Length >= 5 ? bool.Parse(defaultShortcut[4]) : false,
+                    isInternalOnly: defaultShortcut.Length >= 6 ? bool.Parse(defaultShortcut[5]) : true);
             }
         }
 

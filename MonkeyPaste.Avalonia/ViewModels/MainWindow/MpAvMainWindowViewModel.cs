@@ -466,6 +466,9 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsMainWindowActive { get; set; }
 
+        public bool IsAnyAppWindowActive =>
+            MpAvWindowManager.ActiveWindow != null;
+
         public bool IsFilterMenuVisible { get; set; } = true;
 
         public bool IsHorizontalOrientation =>
@@ -710,6 +713,10 @@ namespace MonkeyPaste.Avalonia {
         }
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
+                case MpMessageType.AppWindowActivated:
+                case MpMessageType.AppWindowDeactivated:
+                    OnPropertyChanged(nameof(IsAnyAppWindowActive));
+                    break;
                 case MpMessageType.MainWindowActivated:
                     ShowMainWindowCommand.Execute(null);
                     break;
@@ -800,8 +807,9 @@ namespace MonkeyPaste.Avalonia {
             IsMainWindowLoading = false;
             IsMainWindowOpen = true;
             IsMainWindowOpening = false;
-            if (!IsMainWindowActive &&
-                !MpAvWindowManager.AllWindows.Any(x => x.DataContext != this && x.IsActive)) {
+            if (!IsMainWindowActive //&&
+                                    //!MpAvWindowManager.AllWindows.Any(x => x.DataContext != this && x.IsActive)
+                ) {
                 // when mw is shown and not active it doesn't hide or receive input until activated
                 MpAvWindowManager.MainWindow.Activate();
             }

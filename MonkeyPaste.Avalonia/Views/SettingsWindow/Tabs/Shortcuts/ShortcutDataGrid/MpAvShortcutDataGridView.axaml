@@ -10,8 +10,7 @@
              xmlns:pcl="using:MonkeyPaste"
              x:Class="MonkeyPaste.Avalonia.MpAvShortcutDataGridView">
     <UserControl.Resources>
-        <sys:String x:Key="GestureInfoHtml">Gesture info here</sys:String>
-        <sys:String x:Key="RoutingInfoHtml">&lt;ul&gt;	&lt;li&gt;&lt;b&gt;Internal&lt;/b&gt; In app shortcuts, are not globally enabled&lt;/li&gt;	&lt;li&gt;&lt;b&gt;Direct&lt;/b&gt; Gesture will &lt;b&gt;&lt;i&gt;override&lt;/i&gt;&lt;/b&gt; the input, ie. it will &lt;b style=&quot;foreground: #FF0000&quot;&gt;not&lt;/b&gt; be received by active application. &lt;/li&gt;	&lt;li&gt;&lt;b&gt;Bubble&lt;/b&gt; Gesture will execute &lt;b&gt;&lt;i&gt;after&lt;/i&gt;&lt;/b&gt; active application &lt;/li&gt;	&lt;li&gt;&lt;b&gt;Tunnel&lt;/b&gt; Gesture will execute &lt;b&gt;&lt;i&gt;before&lt;/i&gt;&lt;/b&gt; active application &lt;/li&gt;&lt;/ul&gt;</sys:String>
+
     </UserControl.Resources>
     <UserControl.Styles>
         <!--  RESET/DELETE BUTTON  -->
@@ -53,19 +52,13 @@
                       IsReadOnly="False"
                       AutoGenerateColumns="False">
                 <DataGrid.Columns>
-                    <!--  APP/GLOBAL LABEL  -->
-                    <DataGridTextColumn Header="Type"
-                                        Width="100"
-                                        CanUserSort="True"
-                                        SortMemberPath="ShortcutTypeName"
-                                        IsVisible="False"
-                                        Binding="{Binding ShortcutTypeName}" />
 
                     <!--  SHORTCUT TYPE LABEL  -->
 
                     <DataGridTemplateColumn Header="Action"
-                                            CanUserResize="True"
-                                            Width="200">
+                                            CanUserSort="True"
+                                            SortMemberPath="ShortcutDisplayName"
+                                            Width="0.5*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid Classes="marqueeContainer">
@@ -79,7 +72,7 @@
                     </DataGridTemplateColumn>
 
                     <!--  ROUTING TYPE  -->
-                    <DataGridTemplateColumn Width="100"
+                    <DataGridTemplateColumn Width="125"
                                             CanUserSort="True"
                                             SortMemberPath="RoutingType">
                         <DataGridTemplateColumn.HeaderTemplate>
@@ -95,22 +88,23 @@
                             <DataTemplate>
                                 <Grid HorizontalAlignment="Center">
                                     <ComboBox HorizontalAlignment="Center"
-                                              IsVisible="{Binding IsGlobalShortcut}"
+                                              IsVisible="{Binding CanBeGlobalShortcut}"
                                               SelectedIndex="{Binding SelectedRoutingTypeIdx}"
+                                              Foreground="Black"
                                               Items="{Binding RoutingTypes}" />
                                     <TextBlock Text="Internal"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center"
                                                FontWeight="SemiBold"
-                                               IsVisible="{Binding !IsGlobalShortcut}" />
+                                               IsVisible="{Binding !CanBeGlobalShortcut}" />
                                 </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <!--  GESTURE VIEW  -->
 
-                    <DataGridTemplateColumn Width="*"
-                                            CanUserResize="True"
+                    <DataGridTemplateColumn Width="0.5*"
+                                            CanUserSort="True"
                                             SortMemberPath="KeyString">
                         <DataGridTemplateColumn.HeaderTemplate>
                             <DataTemplate>
@@ -138,8 +132,8 @@
 
                     <!--  RESET/DELETE BUTTON  -->
                     <DataGridTemplateColumn Width="50"
-                                            CanUserSort="False"
-                                            CanUserResize="False">
+                                            CanUserSort="True"
+                                            SortMemberPath="CanDelete">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button x:Name="ResetOrDeleteButton"

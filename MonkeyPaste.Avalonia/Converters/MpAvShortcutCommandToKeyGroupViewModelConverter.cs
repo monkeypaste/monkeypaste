@@ -8,7 +8,7 @@ namespace MonkeyPaste.Avalonia {
         public static readonly MpAvShortcutCommandToKeyGroupViewModelConverter Instance = new();
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
-            if (value is MpAvIShortcutCommandViewModel scvm &&
+            if (value is MpIShortcutCommandViewModel scvm &&
                 MpAvShortcutCollectionViewModel.Instance.GetViewModelCommandShortcutId(scvm) is int sid &&
                 MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.ShortcutId == sid) is MpAvShortcutViewModel svm) {
                 return svm.KeyString.ToKeyItems();

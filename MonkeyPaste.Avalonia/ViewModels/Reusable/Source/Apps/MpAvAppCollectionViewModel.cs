@@ -444,7 +444,7 @@ namespace MonkeyPaste.Avalonia {
                                 Header = "Add App",
                                 Command = AddAppWithAssignPasteShortcutCommand
                             }
-                        })
+                        }).ToList()
                 };
                 var ddb = args as DropDownButton;
                 Flyout.SetAttachedFlyout(ddb, appFlyout);

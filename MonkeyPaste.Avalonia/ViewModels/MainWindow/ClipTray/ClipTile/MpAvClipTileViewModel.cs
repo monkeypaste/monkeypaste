@@ -5,6 +5,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,6 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using FocusManager = Avalonia.Input.FocusManager;
 
 namespace MonkeyPaste.Avalonia {
     public interface MpIDisposableObject {
@@ -29,7 +31,7 @@ namespace MonkeyPaste.Avalonia {
         MpIChildWindowViewModel,
         MpIWindowHandlesClosingViewModel,
         MpIDisposableObject,
-        MpAvIShortcutCommandViewModel,
+        MpIShortcutCommandViewModel,
         MpIWantsTopmostWindowViewModel,
         MpIScrollIntoView,
         MpIUserColorViewModel,
@@ -146,7 +148,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpAvIShortcutCommandViewModel Implementation
+        #region MpIShortcutCommandViewModel Implementation
 
         public MpShortcutType ShortcutType =>
             MpShortcutType.PasteCopyItem;
@@ -155,7 +157,7 @@ namespace MonkeyPaste.Avalonia {
 
         public object ShortcutCommandParameter =>
             CopyItemId;
-        ICommand MpAvIShortcutCommandViewModel.ShortcutCommand =>
+        ICommand MpIShortcutCommandViewModel.ShortcutCommand =>
             Parent == null ? null : Parent.PasteCopyItemByIdCommand;
 
         #endregion
@@ -437,6 +439,16 @@ namespace MonkeyPaste.Avalonia {
         public bool IsOverDetail { get; set; } = false;
         public bool IsPopOutVisible { get; set; }
 
+        public bool IsHostWindowActive {
+            get {
+                if (GetContentView() is Control c &&
+                    c.GetVisualAncestor<Window>() is Window w) {
+                    return w.IsActive;
+                }
+                return false;
+            }
+        }
+
         public WindowState PopOutWindowState { get; set; }
 
         #region Append
@@ -612,9 +624,16 @@ namespace MonkeyPaste.Avalonia {
         public bool IsListBoxItemFocused { get; set; } = false;
         public bool IsTitleFocused { get; set; } = false;
 
-        public bool IsAnyFocused =>
-            IsListBoxItemFocused ||
-            IsTitleFocused;
+        public bool IsFocusWithin {
+            get {
+                if (FocusManager.Instance.Current is Control c) {
+                    return
+                        c.GetVisualAncestors<Control>()
+                        .Any(x => x.DataContext == this);
+                }
+                return false;
+            }
+        }
 
         public bool IsPasting { get; set; } = false;
 
@@ -1731,6 +1750,7 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsHovering):
                     // refresh busy
                     OnPropertyChanged(nameof(IsAnyBusy));
+                    OnPropertyChanged(nameof(KeyString));
                     Parent.OnPropertyChanged(nameof(Parent.CanScroll));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyHovering));
                     OnPropertyChanged(nameof(IsCornerButtonsVisible));

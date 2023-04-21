@@ -312,8 +312,16 @@ namespace MonkeyPaste {
                 if (!Mp.Services.PlatformInfo.IsDesktop) {
                     return null;
                 }
-                if (MpShortcutRef.Create(ShortcutArgs) is MpShortcutRef sr) {
-                    return MpDataModelProvider.GetShortcutKeystring(sr.ShortcutType.ToString(), sr.CommandParameter);
+                //if (MpShortcutRef.Create(ShortcutArgs) is MpShortcutRef sr) {
+                //    return MpDataModelProvider.GetShortcutKeystring(sr.ShortcutType.ToString(), sr.CommandParameter);
+                //}
+                if (ShortcutArgs is object[] scArgParts &&
+                    scArgParts[0] is MpShortcutType sct) {
+                    if (scArgParts.Length > 1 &&
+                        scArgParts[1] is MpIShortcutCommandViewModel scvm) {
+                        return Mp.Services.ShortcutGestureLocator.LocateByCommand(scvm);
+                    }
+                    return Mp.Services.ShortcutGestureLocator.LocateByType(sct);
                 }
                 return null;
             }

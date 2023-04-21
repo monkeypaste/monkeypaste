@@ -33,7 +33,7 @@ namespace MonkeyPaste.Avalonia {
             return keyItems;
         }
 
-        public static bool IsShortcutCommand(this MpShortcut sc, MpAvIShortcutCommandViewModel scvm) {
+        public static bool IsShortcutCommand(this MpShortcut sc, MpIShortcutCommandViewModel scvm) {
             if (sc == null || scvm == null) {
                 return false;
             }
@@ -59,7 +59,7 @@ namespace MonkeyPaste.Avalonia {
                 catch {
                     id = 0;
                 }
-            } else if (arg is MpAvIShortcutCommandViewModel scvm) {
+            } else if (arg is MpIShortcutCommandViewModel scvm) {
                 if (scvm.ShortcutCommandParameter is int paramInt) {
                     id = paramInt;
                 } else if (scvm.ShortcutCommandParameter is string strParam) {
@@ -117,7 +117,7 @@ namespace MonkeyPaste.Avalonia {
             return string.Format(template, title_arg);
         }
 
-        public static bool IsGlobal(this MpShortcutType st) {
+        public static bool CanBeGlobal(this MpShortcutType st) {
             switch (st) {
                 // APPLICATION
                 case MpShortcutType.ToggleMainWindow:

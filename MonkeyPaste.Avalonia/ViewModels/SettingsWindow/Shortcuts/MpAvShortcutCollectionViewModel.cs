@@ -10,6 +10,7 @@ using SharpHook;
 using SharpHook.Native;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
@@ -24,6 +25,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvShortcutCollectionViewModel :
         MpAvSelectorViewModelBase<object, MpAvShortcutViewModel>,
         MpIGlobalInputListener,
+        MpIShortcutGestureLocator,
         MpIDndUserCancelNotifier {
 
         #region Statics
@@ -58,6 +60,21 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
+        #region  Implementation
+
+        string MpIShortcutGestureLocator.LocateByType(MpShortcutType sct) {
+            if (Items.FirstOrDefault(x => x.ShortcutType == sct) is MpAvShortcutViewModel scvm) {
+                return scvm.KeyString;
+            }
+            return null;
+        }
+
+        string MpIShortcutGestureLocator.LocateByCommand(MpIShortcutCommandViewModel scvm) =>
+
+            GetViewModelCommandShortcutKeyString(scvm);
+        #endregion
+
+
         #region MpIGlobalInputListener
         public void StartInputListener() {
             if (IS_PSEUDO_GLOBAL_INPUT_ENABLED) {
@@ -87,18 +104,20 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region View Models
-        public IEnumerable<MpAvShortcutViewModel> FilteredItems =>
-            Items
-            .Where(x => (x as MpIFilterMatch).IsMatch(MpAvSettingsViewModel.Instance.FilterText));
+        public ObservableCollection<MpAvShortcutViewModel> FilteredItems =>
+            new ObservableCollection<MpAvShortcutViewModel>(
+                Items
+                    .Where(x => (x as MpIFilterMatch)
+                    .IsMatch(MpAvSettingsViewModel.Instance.FilterText)));
 
-        public IEnumerable<MpAvShortcutViewModel> CustomShortcuts =>
-            FilteredItems.Where(x => x.IsCustom);
+        //public IEnumerable<MpAvShortcutViewModel> CustomShortcuts =>
+        //    FilteredItems.Where(x => x.IsCustom);
 
-        public IEnumerable<MpAvShortcutViewModel> InternalApplicationShortcuts =>
-            FilteredItems.Where(x => !x.IsCustom && !x.IsGlobalShortcut);
+        //public IEnumerable<MpAvShortcutViewModel> InternalApplicationShortcuts =>
+        //    FilteredItems.Where(x => !x.IsCustom && !x.CanBeGlobalShortcut);
 
-        public IEnumerable<MpAvShortcutViewModel> GlobalApplicationShortcuts =>
-            FilteredItems.Where(x => !x.IsCustom && x.IsGlobalShortcut);
+        //public IEnumerable<MpAvShortcutViewModel> GlobalApplicationShortcuts =>
+        //    FilteredItems.Where(x => !x.IsCustom && x.CanBeGlobalShortcut);
 
         #endregion
 
@@ -197,6 +216,8 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
         public MpAvShortcutCollectionViewModel() : base(null) {
             Mp.Services.GlobalInputListener = this;
+            Mp.Services.ShortcutGestureLocator = this;
+
             if (!Mp.Services.PlatformInfo.IsDesktop) {
                 IS_GLOBAL_MOUSE_INPUT_ENABLED = false;
                 IS_GLOBAL_KEYBOARD_INPUT_ENABLED = false;
@@ -209,8 +230,8 @@ namespace MonkeyPaste.Avalonia {
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             OnPropertyChanged(nameof(Items));
             OnPropertyChanged(nameof(FilteredItems));
-            OnPropertyChanged(nameof(InternalApplicationShortcuts));
-            OnPropertyChanged(nameof(CustomShortcuts));
+            //OnPropertyChanged(nameof(InternalApplicationShortcuts));
+            //OnPropertyChanged(nameof(CustomShortcuts));
         }
 
         #endregion
@@ -232,7 +253,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         public async Task<string> CreateOrUpdateViewModelShortcutAsync(
-            MpAvIShortcutCommandViewModel iscvm,
+            MpIShortcutCommandViewModel iscvm,
             object iconResourceObj = null) {
 
             string keys = null;
@@ -246,16 +267,20 @@ namespace MonkeyPaste.Avalonia {
             }
             string title = await iscvm.ShortcutType.GetShortcutTitleAsync(iscvm);
 
-            string shortcutKeyString = await MpAvAssignShortcutViewModel.ShowAssignShortcutDialog(
+            var result_tuple = await MpAvAssignShortcutViewModel.ShowAssignShortcutDialog(
                 title,
                 keys,
                 scvm == null ? 0 : scvm.ShortcutId,
                 shortcutType == MpShortcutType.None ?
                     MpShortcutAssignmentType.None :
-                    shortcutType.IsGlobal() ?
-                        MpShortcutAssignmentType.GlobalCommand :
+                    shortcutType.CanBeGlobal() ?
+                        MpShortcutAssignmentType.CanBeGlobalCommand :
                         MpShortcutAssignmentType.InternalCommand,
                 iconResourceObj);
+
+            string shortcutKeyString = result_tuple == null ? null : result_tuple.Item1;
+            MpRoutingType result_routing_type = result_tuple == null ? MpRoutingType.None : result_tuple.Item2;
+
             if (shortcutType == MpShortcutType.None) {
                 // presume this is just a key recorer request
                 return shortcutKeyString;
@@ -269,6 +294,7 @@ namespace MonkeyPaste.Avalonia {
 
                 //if it does clear, save and unregister
                 if (scvm != null) {
+                    scvm.RoutingType = result_routing_type;
                     scvm.ClearShortcutKeyString();
                     await scvm.Shortcut.WriteToDatabaseAsync();
                     scvm.Unregister();
@@ -282,7 +308,7 @@ namespace MonkeyPaste.Avalonia {
             } else if (scvm == null) {
                 //if new shortcut
                 MpRoutingType routingType = shortcutType ==
-                    MpShortcutType.PasteCopyItem ? MpRoutingType.Bubble : MpRoutingType.Internal;
+                    MpShortcutType.PasteCopyItem ? MpRoutingType.Bubble : result_routing_type; //MpRoutingType.Internal;
                 //copyitem direct, tag internal, analyzer internal
                 var sc = await MpShortcut.CreateAsync(
                     keyString: shortcutKeyString,
@@ -294,27 +320,27 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 //if shorcut updated
                 scvm.KeyString = shortcutKeyString;
-
+                scvm.RoutingType = result_routing_type;
                 await scvm.InitializeAsync(scvm.Shortcut, scvm.ShortcutCommand);
             }
 
             return shortcutKeyString;
         }
 
-        public int GetViewModelCommandShortcutId(MpAvIShortcutCommandViewModel scvm) {
+        public int GetViewModelCommandShortcutId(MpIShortcutCommandViewModel scvm) {
             if (GetViewModelCommandShortcut(scvm) is MpAvShortcutViewModel svm) {
                 return svm.ShortcutId;
             }
             return 0;
         }
-        public string GetViewModelCommandShortcutKeyString(MpAvIShortcutCommandViewModel scvm) {
+        public string GetViewModelCommandShortcutKeyString(MpIShortcutCommandViewModel scvm) {
             if (GetViewModelCommandShortcut(scvm) is MpAvShortcutViewModel svm) {
                 return svm.KeyString;
             }
             return string.Empty;
         }
 
-        public MpAvShortcutViewModel GetViewModelCommandShortcut(MpAvIShortcutCommandViewModel scvm) {
+        public MpAvShortcutViewModel GetViewModelCommandShortcut(MpIShortcutCommandViewModel scvm) {
             if (scvm is MpAvShortcutViewModel svm) {
                 return svm;
             }
@@ -411,7 +437,7 @@ namespace MonkeyPaste.Avalonia {
                             shortcutCommand = MpAvClipTrayViewModel.Instance.PasteCurrentClipboardIntoSelectedTileCommand;
                             break;
                         case MpShortcutType.DeleteSelectedItems:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.DeleteSelectedClipsCommand;
+                            shortcutCommand = MpAvClipTrayViewModel.Instance.DeleteSelectedClipFromShortcutCommand;
                             break;
                         case MpShortcutType.SelectNextColumnItem:
                             shortcutCommand = MpAvClipTrayViewModel.Instance.SelectNextColumnItemCommand;
@@ -512,8 +538,8 @@ namespace MonkeyPaste.Avalonia {
             switch (msg) {
                 case MpMessageType.SettingsFilterTextChanged:
                     OnPropertyChanged(nameof(FilteredItems));
-                    OnPropertyChanged(nameof(CustomShortcuts));
-                    OnPropertyChanged(nameof(InternalApplicationShortcuts));
+                    //OnPropertyChanged(nameof(CustomShortcuts));
+                    //OnPropertyChanged(nameof(InternalApplicationShortcuts));
                     break;
                 case MpMessageType.MainWindowLoadComplete: {
                         StartInputListener();
@@ -614,9 +640,8 @@ namespace MonkeyPaste.Avalonia {
 
         private int _downCount = 0;
         private void HandleGestureRouting_Down(string keyLiteral, object down_e) {
-            _downCount++;
             _keyboardGestureHelper.AddKeyDown(keyLiteral);
-            ValidateGesture();
+            //ValidateGesture();
 
             if (down_e is KeyboardHookEventArgs sharp_down) {
                 string curGestureStr = _keyboardGestureHelper.GetCurrentGesture().ToLower();
@@ -647,10 +672,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void HandleGestureRouting_Up(string keyLiteral, object up_e) {
-            _downCount--;
             string curGestureStr = _keyboardGestureHelper.GetCurrentGesture().ToLower();
-            _keyboardGestureHelper.ClearCurrentGesture();
-            ValidateGesture();
+            _keyboardGestureHelper.RemoveKeyDown(keyLiteral);
+            //_keyboardGestureHelper.ClearCurrentGesture();
 
             var exactMatch =
                 Items
@@ -662,6 +686,7 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 PerformMatchedShortcutAsync(exactMatch).FireAndForgetSafeAsync(this);
             }
+            ValidateGesture();
         }
 
         private void ValidateGesture() {
@@ -670,12 +695,15 @@ namespace MonkeyPaste.Avalonia {
                 // should never be below zero
                 //Debugger.Break();
             }
-            string cur_gesture = _keyboardGestureHelper.GetCurrentGesture();
-            if (_downCount == 0 && !string.IsNullOrWhiteSpace(cur_gesture)) {
+            if (_downCount == 0) {
                 // gesture should be cleared
                 //Debugger.Break();
-                _keyboardGestureHelper.ClearCurrentGesture();
-                MpConsole.WriteLine($"KeyDown Count 0, gesture cleared: '{cur_gesture}'");
+                string cur_gesture = _keyboardGestureHelper.GetCurrentGesture();
+                if (!string.IsNullOrEmpty(cur_gesture)) {
+
+                    _keyboardGestureHelper.ClearCurrentGesture();
+                    MpConsole.WriteLine($"KeyDown Count 0, gesture cleared: '{cur_gesture}'");
+                }
             }
         }
 
@@ -806,6 +834,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Keyboard EventHandlers
         private void Hook_KeyPressed(object sender, KeyboardHookEventArgs e) {
+            _downCount++;
             //string keyStr = MpGlobalKeyConverter.GetKeyLiteral(e.Data.KeyCode);
             string keyStr = Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { e.Data.KeyCode } });
             HandleKeyDown(keyStr, e);
@@ -813,6 +842,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         private void Hook_KeyReleased(object sender, KeyboardHookEventArgs e) {
+            _downCount--;
             string keyStr = Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { e.Data.KeyCode } });
             HandleKeyUp(keyStr, e);
         }
@@ -1054,7 +1084,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ShowAssignShortcutDialogCommand => new MpAsyncCommand<object>(
             async (args) => {
-                if (args is MpAvIShortcutCommandViewModel scvm) {
+                if (args is MpIShortcutCommandViewModel scvm) {
                     string result = await CreateOrUpdateViewModelShortcutAsync(scvm);
                     if (args is MpAvShortcutRecorderParameterViewModel scpvm &&
                         scpvm.Parent is MpAvKeySimulatorActionViewModel ksavm) {

@@ -32,20 +32,6 @@
             <TextBlock Text="Reset All Shortcuts" />
         </Button>
 
-        <!--  USER-DEFINED SHORTCUTS  -->
-
-        <Expander>
-            <Expander.Header>
-                <StackPanel>
-                    <Label Classes="h1"
-                           Content="User-Defined" />
-                </StackPanel>
-            </Expander.Header>
-            <Expander.Content>
-                <local:MpAvShortcutDataGridView DataContext="{Binding CustomShortcuts}" />
-            </Expander.Content>
-        </Expander>
-
         <!--  APPLICATION SHORTCUTS  -->
 
         <Expander>
@@ -56,30 +42,7 @@
                 </StackPanel>
             </Expander.Header>
             <Expander.Content>
-                <StackPanel Spacing="10">
-                    <Expander>
-                        <Expander.Header>
-                            <StackPanel>
-                                <Label Classes="h1"
-                                       Content="Internal" />
-                            </StackPanel>
-                        </Expander.Header>
-                        <Expander.Content>
-                            <local:MpAvShortcutDataGridView DataContext="{Binding InternalApplicationShortcuts}" />
-                        </Expander.Content>
-                    </Expander>
-                    <Expander>
-                        <Expander.Header>
-                            <StackPanel>
-                                <Label Classes="h1"
-                                       Content="Global" />
-                            </StackPanel>
-                        </Expander.Header>
-                        <Expander.Content>
-                            <local:MpAvShortcutDataGridView DataContext="{Binding GlobalApplicationShortcuts}" />
-                        </Expander.Content>
-                    </Expander>
-                </StackPanel>
+                <local:MpAvShortcutDataGridView DataContext="{Binding FilteredItems}" />
             </Expander.Content>
         </Expander>
 
@@ -131,7 +94,7 @@
                                                             CanUserSort="True"
                                                             SortMemberPath="AppName"
                                                             CanUserResize="True"
-                                                            Width="150">
+                                                            Width="0.5*">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Grid Classes="marqueeContainer">
@@ -147,7 +110,7 @@
 
 
                                     <!--  PASTE GESTURE VIEW  -->
-                                    <DataGridTemplateColumn Width="*">
+                                    <DataGridTemplateColumn Width="0.5*">
                                         <DataGridTemplateColumn.HeaderTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal"

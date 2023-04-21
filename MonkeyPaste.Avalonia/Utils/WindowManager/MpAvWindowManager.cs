@@ -136,6 +136,8 @@ namespace MonkeyPaste.Avalonia {
         }
         private static void Nw_Activated(object sender, EventArgs e) {
             if (sender is Window w) {
+                MpMessenger.SendGlobal(MpMessageType.AppWindowActivated);
+
                 if (w.DataContext is MpIActiveWindowViewModel awvm) {
                     awvm.IsActive = true;
                 }
@@ -148,6 +150,8 @@ namespace MonkeyPaste.Avalonia {
         }
         private static void Nw_Deactivated(object sender, EventArgs e) {
             if (sender is Window w) {
+                MpMessenger.SendGlobal(MpMessageType.AppWindowDeactivated);
+
                 if (w.DataContext is MpIActiveWindowViewModel awvm) {
                     awvm.IsActive = false;
                 }

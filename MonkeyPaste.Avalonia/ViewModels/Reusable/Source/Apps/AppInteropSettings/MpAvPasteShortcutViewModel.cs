@@ -117,19 +117,19 @@ namespace MonkeyPaste.Avalonia {
             if (Parent == null) {
                 return false;
             }
-            string shortcutKeyString = await MpAvAssignShortcutViewModel.ShowAssignShortcutDialog(
+            var result_tuple = await MpAvAssignShortcutViewModel.ShowAssignShortcutDialog(
                     $"Record paste shortcut for '{Parent.AppName}'",
                     PasteCmdKeyString,
                     0,
                     MpShortcutAssignmentType.AppPaste, Parent.IconId,
                     MpAvWindowManager.AllWindows.FirstOrDefault(x => x.DataContext == MpAvSettingsViewModel.Instance));
 
-            if (shortcutKeyString == null) {
+            if (result_tuple == null || result_tuple.Item1 == null) {
                 // canceled
                 return false;
             }
 
-            PasteCmdKeyString = shortcutKeyString;
+            PasteCmdKeyString = result_tuple.Item1;
             while (IsBusy) {
                 await Task.Delay(100);
             }

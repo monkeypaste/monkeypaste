@@ -1,10 +1,15 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using MonkeyPaste.Common;
 using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia {
-
+    public enum MpHintType {
+        Info,
+        Warning,
+        Error
+    }
     [DoNotNotify]
     public partial class MpAvToolTipInfoHintView : UserControl {
         #region Private Variables
@@ -29,6 +34,61 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
+        #region Properties
+
+        #region Appearance
+
+        public string HintText {
+            get {
+                if (IsInfo) {
+                    return "i";
+                }
+                if (IsWarning) {
+                    return "!";
+                }
+                if (IsError) {
+                    return "x";
+                }
+                return "?";
+            }
+        }
+
+        #endregion
+
+        #region State
+
+        public bool IsInfo =>
+            HintType.ToEnum<MpHintType>() == MpHintType.Info;
+        public bool IsWarning =>
+            HintType.ToEnum<MpHintType>() == MpHintType.Warning;
+
+        public bool IsError =>
+            HintType.ToEnum<MpHintType>() == MpHintType.Error;
+        #endregion
+
+        #region Direct Properties
+        #region HintType Direct Avalonia Property
+
+        private string _HintType = MpHintType.Info.ToString();
+
+        public static readonly DirectProperty<MpAvToolTipInfoHintView, string> HintTypeProperty =
+            AvaloniaProperty.RegisterDirect<MpAvToolTipInfoHintView, string>
+            (
+                nameof(HintType),
+                o => o.HintType,
+                (o, v) => o.HintType = v,
+                MpHintType.Info.ToString()
+            );
+
+        public string HintType {
+            get => _HintType;
+            set {
+                SetAndRaise(HintTypeProperty, ref _HintType, value);
+            }
+        }
+
+        #endregion
+
         #region ToolTipText Direct Avalonia Property
 
         private string _ToolTipText = default;
@@ -49,6 +109,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #endregion
+
         #region ToolTipHtml Property
 
         private string _ToolTipHtml = string.Empty;
@@ -70,11 +131,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #endregion 
+        #endregion
+
+        #endregion
         public MpAvToolTipInfoHintView() {
-            InitializeComponent();
-        }
-        private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);
         }
+
     }
 }

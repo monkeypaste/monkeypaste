@@ -16,7 +16,7 @@ namespace MonkeyPaste.Avalonia {
     public enum MpShortcutAssignmentType {
         None,
         InternalCommand,
-        GlobalCommand,
+        CanBeGlobalCommand,
         AppPaste
     }
 
@@ -37,15 +37,17 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
-        public static async Task<string> ShowAssignShortcutDialog(
+        public static async Task<Tuple<string, MpRoutingType>> ShowAssignShortcutDialog(
             string shortcutName,
             string keys,
             int curShortcutId,
             MpShortcutAssignmentType assignmentType = MpShortcutAssignmentType.InternalCommand,
             object iconResourceObj = null,
             Window owner = null) {
+            var scavm = new MpAvAssignShortcutViewModel();
+            await scavm.InitializeAsync(shortcutName, keys, curShortcutId, assignmentType, iconResourceObj);
             var ascw = new MpAvWindow() {
-                DataContext = new MpAvAssignShortcutViewModel(shortcutName, keys, curShortcutId, assignmentType, iconResourceObj),
+                DataContext = scavm,
                 MinHeight = 300,
                 MinWidth = 400,
                 SizeToContent = SizeToContent.WidthAndHeight,
@@ -68,7 +70,11 @@ namespace MonkeyPaste.Avalonia {
                 w.Focus();
             }
             if (result is bool assignResult && assignResult && ascw.DataContext is MpAvAssignShortcutViewModel ascwvm) {
-                return ascwvm.KeyString;
+                MpRoutingType routing_type = MpRoutingType.None;
+                if (ascwvm.AssignmentType != MpShortcutAssignmentType.AppPaste) {
+                    routing_type = ascwvm.RoutingTypes[ascwvm.SelectedRoutingTypeIdx].ToEnum<MpRoutingType>();
+                }
+                return new Tuple<string, MpRoutingType>(ascwvm.KeyString, routing_type);
             }
             return null;
         }
@@ -100,13 +106,28 @@ namespace MonkeyPaste.Avalonia {
             KeyString.ToKeyItems();
 
         public MpAvShortcutViewModel DuplicatedShortcutViewModel { get; set; }
+
+        private ObservableCollection<string> _routingTypes = null;
+        public ObservableCollection<string> RoutingTypes {
+            get {
+                if (_routingTypes == null) {
+                    _routingTypes = new ObservableCollection<string>(
+                        typeof(MpRoutingType).EnumToLabels(hideFirst: true));
+                }
+                return _routingTypes;
+            }
+        }
         #endregion
 
         #region State
 
         public bool IsGlobal =>
-            AssignmentType == MpShortcutAssignmentType.GlobalCommand;
+            RoutingTypes[SelectedRoutingTypeIdx] != "Internal" &&
+            RoutingTypes[SelectedRoutingTypeIdx] != "None" &&
+            CanBeGlobal;
+        public bool CanBeGlobal { get; set; }
 
+        public int SelectedRoutingTypeIdx { get; set; } = 0;
         public MpShortcutAssignmentType AssignmentType { get; set; }
         public bool IsEmpty =>
             string.IsNullOrEmpty(KeyString);
@@ -145,29 +166,44 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constructors
-        public MpAvAssignShortcutViewModel() : this(string.Empty, string.Empty, 0, MpShortcutAssignmentType.InternalCommand, null) { }
 
-        private MpAvAssignShortcutViewModel(
+        private MpAvAssignShortcutViewModel() : base(null) {
+            PropertyChanged += MpAssignShortcutModalWindowViewModel_PropertyChanged;
+        }
+        #endregion
+
+        #region Public Methods
+
+        public async Task InitializeAsync(
             string shortcutName,
             string keyString,
             int curShortcutId,
             MpShortcutAssignmentType assignmentType,
-            object iconResourceObj) : base(null) {
-            PropertyChanged += MpAssignShortcutModalWindowViewModel_PropertyChanged;
+            object iconResourceObj) {
+            IsBusy = true;
 
+            await Task.Delay(1);
             _curShortcutId = curShortcutId;
             _gestureHelper = new MpKeyGestureHelper();
             KeyString = keyString;
             ShortcutDisplayName = shortcutName;
             IconResourceObj = iconResourceObj;
             AssignmentType = assignmentType;
+
+            if (AssignmentType == MpShortcutAssignmentType.CanBeGlobalCommand &&
+                MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.ShortcutId == curShortcutId) is MpAvShortcutViewModel svm) {
+                CanBeGlobal = svm.CanBeGlobalShortcut;
+                SelectedRoutingTypeIdx = svm.SelectedRoutingTypeIdx;
+            } else {
+                CanBeGlobal = false;
+                SelectedRoutingTypeIdx = 0;
+            }
+            OnPropertyChanged(nameof(IsGlobal));
             OnPropertyChanged(nameof(KeyString));
             OnPropertyChanged(nameof(KeyItems));
+
+            IsBusy = false;
         }
-        #endregion
-
-        #region Public Methods
-
         #endregion
 
         #region Private Methods        
@@ -179,6 +215,9 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(KeyGroups));
                     OnPropertyChanged(nameof(IsEmpty));
                     Validate();
+                    break;
+                case nameof(SelectedRoutingTypeIdx):
+                    OnPropertyChanged(nameof(IsGlobal));
                     break;
                 case nameof(KeyItems):
                     OnPropertyChanged(nameof(KeyGroups));
@@ -203,6 +242,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             switch (AssignmentType) {
+                case MpShortcutAssignmentType.CanBeGlobalCommand:
                 case MpShortcutAssignmentType.InternalCommand:
                     return ValidateCommandShortcut();
                 case MpShortcutAssignmentType.AppPaste:
@@ -231,7 +271,8 @@ namespace MonkeyPaste.Avalonia {
                     // NOTE don't return here to continue checking for dups
                 }
             }
-            if (!string.IsNullOrEmpty(assign_keystr)) {
+            if (!string.IsNullOrEmpty(assign_keystr) &&
+                IsGlobal) {
                 bool has_mods = MpInputConstants.MOD_LITERALS.Any(x => assign_keystr.Contains(x.ToLower()));
                 if (!has_mods) {
                     WarningString2 = "Warning! Confirm at your own risk, this shortcut has no modifier keys and may interfere with standard input.";

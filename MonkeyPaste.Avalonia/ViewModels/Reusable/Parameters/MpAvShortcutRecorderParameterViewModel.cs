@@ -9,7 +9,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvShortcutRecorderParameterViewModel :
         MpAvParameterViewModelBase,
         MpAvIKeyGestureViewModel,
-        MpAvIShortcutCommandViewModel {
+        MpIShortcutCommandViewModel {
         #region Private Variables
         #endregion
 
@@ -19,7 +19,7 @@ namespace MonkeyPaste.Avalonia {
             new ObservableCollection<MpAvShortcutKeyGroupViewModel>(KeyString.ToKeyItems());
 
         #endregion
-        #region MpAvIShortcutCommandViewModel Implementation
+        #region MpIShortcutCommandViewModel Implementation
 
         public MpShortcutType ShortcutType { get; set; }
 

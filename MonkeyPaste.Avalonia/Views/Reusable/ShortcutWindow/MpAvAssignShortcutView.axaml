@@ -90,60 +90,81 @@
 
         </Style>
     </local:MpAvUserControl.Styles>
-    <Grid RowDefinitions="Auto,*,Auto,Auto,50">
-        <Border Grid.Row="0">
-            <StackPanel>
-                <Grid ColumnDefinitions="Auto,*"
-                      RowDefinitions="*,Auto">
-                    <Border Grid.Column="0"
-                                          IsVisible="{Binding IconResourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                                          CornerRadius="10"
-                                          Margin="3"
-                                          BorderThickness="3"
-                                          BorderBrush="White">
-                        <Image Source="{Binding IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                    </Border>
-                    <TextBlock Grid.Column="1"
-                               HorizontalAlignment="Stretch"
-                               VerticalAlignment="Center"
-                               TextAlignment="Center"
-                               TextDecorations="Underline"
-                               FontStyle="Normal"
-                               Foreground="Black"
-                               FontWeight="Bold"
-                               Margin="15,15,15,5"
-                               FontSize="24"
-                               TextWrapping="WrapWithOverflow"
-                               Text="{Binding ShortcutDisplayName}" />
-                </Grid>
-                <StackPanel IsVisible="{Binding IsGlobal}"
-                            Orientation="Horizontal"
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Grid.ColumnSpan="2"
-                            HorizontalAlignment="Center">
-                    <local:MpAvToolTipInfoHintView ToolTipText="This is a global shortcut! That means it will attempt to execute whenever it is performed. Try to make it unique enough to not conflict with shortcuts from other applications." />
-                    <TextBlock FontSize="16"
-                               Margin="5,0,0,0"
-                               FontWeight="SemiBold"
-                               Text="Global" />
+    <Grid RowDefinitions="Auto,Auto,Auto,*,Auto,Auto,50">
+        <!--  HEADER ROW  -->
+        <DockPanel Grid.Row="0"
+                   HorizontalAlignment="Center">
+            <!--  HEADER ICON  -->
+            <Border DockPanel.Dock="Left"
+                    IsVisible="{Binding IconResourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                    CornerRadius="10"
+                    Margin="3"
+                    BorderThickness="3"
+                    BorderBrush="White">
+                <Image Height="20"
+                       Width="20"
+                       Source="{Binding IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+            </Border>
+            <!--  HEADER TITLE  -->
+            <TextBlock HorizontalAlignment="Stretch"
+                       VerticalAlignment="Center"
+                       TextAlignment="Center"
+                       TextDecorations="Underline"
+                       FontStyle="Normal"
+                       Foreground="Black"
+                       FontWeight="Bold"
+                       Margin="15"
+                       FontSize="24"
+                       TextWrapping="WrapWithOverflow"
+                       Text="{Binding ShortcutDisplayName}" />
+        </DockPanel>
 
-                </StackPanel>
+        <!--  ROUTING SELECTOR  -->
+        <DockPanel Grid.Row="1"
+                   HorizontalAlignment="Center"
+                   IsVisible="{Binding CanBeGlobal}">
+            <!--  ROUTING LABEL/HINT  -->
+            <StackPanel Orientation="Horizontal"
+                        Spacing="5">
+                <TextBlock Text="Routing"
+                           VerticalAlignment="Center" />
+                <local:MpAvToolTipInfoHintView ToolTipHtml="{StaticResource RoutingInfoHtml}" />
             </StackPanel>
-        </Border>
-        <Border Grid.Row="1"
+            <!--  ROUTING COMBOBOX  -->
+            <ComboBox x:Name="RoutingSelectorComboBox"
+                      Foreground="Black"
+                      Margin="10,0"
+                      Items="{Binding RoutingTypes}"
+                      SelectedIndex="{Binding SelectedRoutingTypeIdx, Mode=TwoWay}" />
+        </DockPanel>
+
+        <!--  GLOBAL HINT SUB-ROW  -->
+        <DockPanel Grid.Row="2"
+                   IsVisible="{Binding IsGlobal}"
+                   HorizontalAlignment="Center">
+            <local:MpAvToolTipInfoHintView HintType="Warning"
+                                           ToolTipText="This is a global shortcut! That means it will attempt to execute whenever it is performed. Try to make it unique enough to not conflict with shortcuts from other applications." />
+            <TextBlock FontSize="16"
+                       Margin="10,0"
+                       FontWeight="SemiBold"
+                       Text="Global" />
+
+        </DockPanel>
+
+        <!--  GESTURE VIEW  -->
+        <Border Grid.Row="3"
                 CornerRadius="10"
                 BorderThickness="0"
                 HorizontalAlignment="Center"
                 Padding="10"
                 IsVisible="{Binding !IsEmpty}"
-                Margin="20,10"
+                Margin="20,5"
                 MinHeight="65">
             <local:MpAvShortcutView IsHitTestVisible="False" />
         </Border>
 
-
-        <Border Grid.Row="2"
+        <!--  WARNING 1 (CONFLICT)  -->
+        <Border Grid.Row="4"
                 Classes="msg warning"
                 IsVisible="{Binding WarningString, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
             <DockPanel>
@@ -151,7 +172,9 @@
                 <TextBlock Text="{Binding WarningString}" />
             </DockPanel>
         </Border>
-        <Border Grid.Row="3"
+
+        <!--  WARNING 2 (BROAD GLOBAL)  -->
+        <Border Grid.Row="5"
                 Classes="msg warning"
                 IsVisible="{Binding WarningString2, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
             <DockPanel>
@@ -159,7 +182,10 @@
                 <TextBlock Text="{Binding WarningString2}" />
             </DockPanel>
         </Border>
-        <StackPanel Grid.Row="4"
+
+        <!--  DIALOG BUTTONS  -->
+
+        <StackPanel Grid.Row="6"
                     Orientation="Horizontal"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Bottom">
@@ -192,4 +218,5 @@
                     CommandParameter="{Binding $self}" />
         </StackPanel>
     </Grid>
+    <!--</StackPanel>-->
 </local:MpAvUserControl>
