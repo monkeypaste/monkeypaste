@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Threading;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
@@ -56,6 +57,7 @@ namespace MonkeyPaste.Avalonia {
         public DateTime LastSelectedDateTime { get; set; }
 
         #endregion
+
         #endregion
 
         #region Properties
@@ -124,16 +126,6 @@ namespace MonkeyPaste.Avalonia {
 
         public double DoubleValue {
             get {
-                //if (string.IsNullOrWhiteSpace(CurrentValue) || CurrentValue.ToCharArray().Any(x => !char.IsNumber(x))) {
-                //    return 0;
-                //}
-                //try {
-                //    return Convert.ToDouble(CurrentValue);
-                //}
-                //catch (Exception ex) {
-                //    MpConsole.WriteTraceLine("Cannot convert " + CurrentValue + " to double ", ex);
-                //    return 0;
-                //}
                 return CurrentValue.ParseOrConvertToDouble(0);
             }
             set {
@@ -148,16 +140,6 @@ namespace MonkeyPaste.Avalonia {
         public int IntValue {
             get {
                 return CurrentValue.ParseOrConvertToInt(0);
-                //if (string.IsNullOrWhiteSpace(CurrentValue) || CurrentValue.ToCharArray().Any(x => !char.IsNumber(x))) {
-                //    return 0;
-                //}
-                //try {
-                //    return Convert.ToInt32(DoubleValue);
-                //}
-                //catch (Exception ex) {
-                //    MpConsole.WriteTraceLine("Cannot convert " + CurrentValue + " to int ", ex);
-                //    return 0;
-                //}
             }
             set {
                 if (IntValue != value) {
@@ -170,13 +152,6 @@ namespace MonkeyPaste.Avalonia {
 
         public bool BoolValue {
             get {
-                //if (string.IsNullOrWhiteSpace(CurrentValue)) {
-                //    return false;
-                //}
-                ////if (CurrentValue.ToLower() != "false" && CurrentValue.ToLower() != "true") {
-                ////    throw new Exception("Cannot convert value " + CurrentValue + " to boolean");
-                ////}
-                //return CurrentValue.ToLower() == "true" || CurrentValue.ToLower() == "1";
                 return CurrentValue.ParseOrConvertToBool(false);
             }
             set {
@@ -346,7 +321,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-
         public int ParameterValueId {
             get {
                 if (PresetValueModel == null) {
@@ -367,10 +341,24 @@ namespace MonkeyPaste.Avalonia {
                 if (ParameterFormat == null) {
                     return null;
                 }
-                //if(string.IsNullOrEmpty(ParameterFormat.paramName)) {
-                //    ParameterFormat.paramName = 
-                //}
                 return ParameterFormat.paramId;
+            }
+        }
+
+        public bool IsPersistent {
+            get {
+                if (ParameterFormat == null) {
+                    return false;
+                }
+                return ParameterFormat.isPersistent;
+            }
+        }
+        public bool IsExecuteParameter {
+            get {
+                if (ParameterFormat == null) {
+                    return false;
+                }
+                return ParameterFormat.isExecuteParameter;
             }
         }
 
@@ -388,11 +376,6 @@ namespace MonkeyPaste.Avalonia {
                 return ParameterFormat.label;
             }
         }
-
-        public bool IsMultiValue =>
-            ParameterFormat == null ?
-                false :
-                ParameterFormat.IsMultiValue;
 
         public MpParameterControlType ControlType {
             get {
@@ -466,6 +449,7 @@ namespace MonkeyPaste.Avalonia {
             SetLastValue(CurrentValue);
 
             OnPropertyChanged(nameof(CurrentValue));
+            OnPropertyChanged(nameof(IsExecuteParameter));
 
             await Task.Delay(1);
 
@@ -473,7 +457,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public bool Validate() {
+            bool was_valid = IsValid;
             OnValidate?.Invoke(this, new EventArgs());
+            if (was_valid != IsValid &&
+                Parent is MpAvAnalyticItemPresetViewModel aipvm) {
+                aipvm.Parent.UpdateCanExecute();
+            }
             return IsValid;
         }
         #endregion
@@ -495,6 +484,7 @@ namespace MonkeyPaste.Avalonia {
 
                         socvm.OnPropertyChanged(nameof(socvm.CanSaveOrCancel));
                     }
+                    Validate();
                     break;
                 case nameof(ValidationMessage):
                     if (!string.IsNullOrEmpty(ValidationMessage)) {
@@ -519,11 +509,28 @@ namespace MonkeyPaste.Avalonia {
             CurrentValue = _lastValue;
         }
 
+        #region Db Event Handlers
+
+        protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
+            if (e is MpParameterValue pv &&
+                pv.Id == ParameterValueId &&
+                pv.Value != CurrentValue) {
+                if (!IsPersistent) {
+                    // is this a problem?
+                    MpDebug.Break("parameter update value mis-match");
+                } else {
+                    // this param is persistent but not the instance that was updated
+                    Dispatcher.UIThread.Post(async () => {
+                        await InitializeAsync(pv);
+                    });
+                }
+            }
+        }
+        #endregion
+
         #endregion
 
         #region Private Methods
-
-
 
         protected virtual void MpAnalyticItemParameterValueViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             bool is_core_loaded = Mp.Services != null &&
@@ -557,8 +564,16 @@ namespace MonkeyPaste.Avalonia {
                 }
                 Task.Run(async () => {
                     //IsBusy = true;
-                    await PresetValueModel.WriteToDatabaseAsync();
-                    //IsBusy = false;
+                    if (IsPersistent && Parent is MpIParameterHostViewModel phvm) {
+                        // update all references to persistent param with this new value 
+                        var all_param_refs =
+                            await MpDataModelProvider.GetAllParameterValueInstancesForPluginAsync(ParamId.ToString(), phvm.PluginGuid);
+
+                        all_param_refs.ForEach(x => x.Value = CurrentValue);
+                        await Task.WhenAll(all_param_refs.Select(x => x.WriteToDatabaseAsync()));
+                    } else {
+                        await PresetValueModel.WriteToDatabaseAsync();
+                    }
                     return;
                 });
             },

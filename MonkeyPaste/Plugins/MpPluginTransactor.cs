@@ -15,7 +15,7 @@ namespace MonkeyPaste {
 
         #region Public Methods
 
-        public static async Task<MpPluginTransactionBase> PerformTransaction(
+        public static async Task<MpPluginTransactionBase> PerformTransactionAsync(
             MpPluginFormat pluginFormat,
             MpIPluginComponentBase pluginComponent,
             Dictionary<object, string> paramValues,

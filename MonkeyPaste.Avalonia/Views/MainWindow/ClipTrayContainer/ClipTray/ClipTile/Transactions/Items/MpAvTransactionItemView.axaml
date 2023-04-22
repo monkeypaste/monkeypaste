@@ -51,7 +51,7 @@
 
                                     </Button>
                                 </StackPanel>
-                                <local:MpAvPluginParameterListBoxView Grid.Row="1"
+                                <local:MpAvParameterCollectionView Grid.Row="1"
                                                                       DataContext="{Binding PresetViewModel}"
                                                                       HorizontalAlignment="Stretch"
                                                                       VerticalAlignment="Stretch" />

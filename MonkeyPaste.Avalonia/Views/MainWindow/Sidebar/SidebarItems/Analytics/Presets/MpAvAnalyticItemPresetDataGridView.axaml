@@ -63,6 +63,8 @@
 
     </local:MpAvUserControl.Styles>
     <Border x:Name="AnalyticItemPluginContainerBorder"
+            local:MpAvIsHoveringExtension.IsEnabled="True"
+            local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
             BorderThickness="0"
             VerticalAlignment="Stretch"
             HorizontalAlignment="Stretch">
@@ -237,31 +239,30 @@
                                         IsEnabled="{Binding !Parent.IsBusy}"
                                         local:MpAvPointerCommandExtension.IsEnabled="True"
                                         local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ExecutePresetAnalysisOnSelectedContentCommand}">
-                                    <Grid DataContext="{Binding Parent}"
-                                          x:DataType="local:MpAvAnalyticItemViewModel">
+                                    <Grid>
                                         <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource NoEntryImage}}">
                                             <Image.IsVisible>
                                                 <MultiBinding Converter="{x:Static BoolConverters.And}">
-                                                    <Binding Path="!CanAnalyzerExecute" />
-                                                    <Binding Path="!IsBusy" />
+                                                    <Binding Path="!Parent.CanAnalyzerExecute" />
+                                                    <Binding Path="!Parent.IsBusy" />
                                                 </MultiBinding>
                                             </Image.IsVisible>
                                             <ToolTip.Tip>
-                                                <local:MpAvToolTipView ToolTipText="{Binding CannotExecuteTooltip}" />
+                                                <local:MpAvToolTipView ToolTipText="{Binding Parent.CannotExecuteTooltip}" />
                                             </ToolTip.Tip>
                                         </Image>
                                         <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource ExecuteImage}}">
                                             <Image.IsVisible>
                                                 <MultiBinding Converter="{x:Static BoolConverters.And}">
-                                                    <Binding Path="CanAnalyzerExecute" />
-                                                    <Binding Path="!IsBusy" />
+                                                    <Binding Path="Parent.CanAnalyzerExecute" />
+                                                    <Binding Path="!Parent.IsBusy" />
                                                 </MultiBinding>
                                             </Image.IsVisible>
                                             <ToolTip.Tip>
                                                 <local:MpAvToolTipView ToolTipText="Analyze" />
                                             </ToolTip.Tip>
                                         </Image>
-                                        <local:MpAvBusySpinnerView IsVisible="{Binding IsBusy}"
+                                        <local:MpAvBusySpinnerView IsVisible="{Binding Parent.IsBusy}"
                                                                    HorizontalAlignment="Stretch"
                                                                    VerticalAlignment="Stretch" />
                                     </Grid>

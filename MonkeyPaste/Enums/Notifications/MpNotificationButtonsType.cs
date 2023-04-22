@@ -5,6 +5,7 @@
         YesNoCancel,
         Ok,
         OkCancel,
+        SubmitCancel,
         TextBoxOkCancel,
         IgnoreRetryFix,
         IgnoreRetryShutdown,

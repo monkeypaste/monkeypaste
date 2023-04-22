@@ -107,7 +107,7 @@
                             </TransitioningContentControl.PageTransition>
                             <TransitioningContentControl.ContentTemplate>
                                 <DataTemplate DataType="local:MpAvClipboardFormatPresetViewModel">
-                                    <local:MpAvPluginParameterListBoxView HorizontalAlignment="Stretch"
+                                    <local:MpAvParameterCollectionView HorizontalAlignment="Stretch"
                                                                           VerticalAlignment="Stretch" />
                                 </DataTemplate>
                             </TransitioningContentControl.ContentTemplate>

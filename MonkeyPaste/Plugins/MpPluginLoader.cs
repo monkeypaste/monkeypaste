@@ -232,6 +232,55 @@ namespace MonkeyPaste {
             if (string.IsNullOrWhiteSpace(plugin.iconUri)) {
                 throw new MpUserNotifiedException($"Plugin icon error, at path '{manifestPath}' with title '{plugin.title}' must have an 'iconUri' property which is a relative file path or valid url to an image");
             }
+            bool are_all_components_valid = plugin.componentFormats.All(x => ValidatePluginComponent(x, manifestPath));
+            return are_all_components_valid;
+        }
+
+        private static bool ValidatePluginComponent(MpParameterHostBaseFormat cbf, string plugin_label) {
+            if (cbf == null) {
+
+                // undefined, ignore
+                return true;
+            }
+            bool has_params = cbf.parameters != null && cbf.parameters.Count > 0;
+            bool has_presets = cbf.presets != null && cbf.presets.Count > 0;
+            if (!has_params && !has_presets) {
+                return true;
+            }
+            if (has_presets && !has_params) {
+                throw new MpUserNotifiedException($"Plugin '{plugin_label}' cannot have presets without at least 1 parameter provided");
+            }
+
+            var missing_paramids = cbf.parameters.Where(x => string.IsNullOrEmpty(x.paramId));
+            if (missing_paramids.Any()) {
+                string missing_param_labels = string.Join(",", missing_paramids.Select(x => string.IsNullOrEmpty(x.label) ? $"Unlabeled param #{cbf.parameters.IndexOf(x)}" : x.label));
+                string missing_param_ids_msg = $"Plugin parameter ids (paramId) must be defined. Plugin '{plugin_label}' has the following parameters with missing paramId's: {missing_param_labels}";
+                throw new MpUserNotifiedException(missing_param_ids_msg);
+            }
+
+            var dup_paramid_groups = cbf.parameters.GroupBy(x => x.paramId).Where(x => x.Count() > 1);
+            foreach (var dup_paramid_group in dup_paramid_groups) {
+                string dup_param_labels = string.Join(",", dup_paramid_group.Select(x => string.IsNullOrEmpty(x.label) ? $"Unlabeled param #{cbf.parameters.IndexOf(x)}" : x.label));
+                string dup_param_ids_msg = $"Plugin parameter ids (paramId) must be unique. Plugin '{plugin_label}' has duplicate paramId values of '{dup_paramid_group.Key}' for parameters: {dup_param_labels}";
+                throw new MpUserNotifiedException(dup_param_ids_msg);
+            }
+
+            if (!has_presets) {
+                return true;
+            }
+            foreach (var preset in cbf.presets) {
+                var preset_param_vals_with_no_param_match =
+                    preset.values.Where(x => cbf.parameters.All(y => y.paramId != x.paramId));
+                foreach (var preset_param_val_with_no_param_match in preset_param_vals_with_no_param_match) {
+                    throw new MpUserNotifiedException($"Cannot find parameter with paramId '{preset_param_val_with_no_param_match.paramId}' referenced by Preset '{preset.label}' for Plugin '{plugin_label}'. Parameter may have changed or was removed, update preset value or remove it.");
+                }
+                var preset_vals_for_persistent_params =
+                    preset.values.Where(x => cbf.parameters.FirstOrDefault(y => x.paramId == y.paramId).isPersistent);
+                foreach (var preset_val_for_persistent_params in preset_vals_for_persistent_params) {
+                    throw new MpUserNotifiedException($"Cannot set persistent parameters in Presets. Param value w/ id '{preset_val_for_persistent_params.paramId}' in Preset '{preset.label}' for Plugin '{plugin_label}' needs to be removed or value can be specified in the parameter definition section.");
+                }
+            }
+
             return true;
         }
         private static string ToFileExt(this MpPluginIoTypeFormat ioType) {
@@ -253,9 +302,13 @@ namespace MonkeyPaste {
             return string.Empty;
         }
         private static bool ValidateLoadedPlugins() {
-            var invalidGuida = Plugins.GroupBy(x => x.Value.guid).Where(x => x.Count() > 1).Select(x => x.Key);
+            var invalidGuida =
+                Plugins
+                .GroupBy(x => x.Value.guid)
+                .Where(x => x.Count() > 1)
+                .Select(x => x.Key);
 
-            if (invalidGuida.Count() > 0) {
+            if (invalidGuida.Any()) {
                 var sb = new StringBuilder();
                 foreach (var ig in invalidGuida) {
                     var toRemove = Plugins.Where(x => x.Value.guid == ig);

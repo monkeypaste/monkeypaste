@@ -615,6 +615,12 @@ namespace MonkeyPaste {
             return result;
         }
 
+        public static async Task<List<MpParameterValue>> GetAllParameterValueInstancesForPluginAsync(string paramId, string pluginGuid) {
+            string query = $"select * from MpParameterValue where e_MpParameterHostType='Preset' and ParamId=? and fk_ParameterHostId in (select pk_MpPluginPresetId from MpPluginPreset where PluginGuid=?)";
+            var result = await MpDb.QueryAsync<MpParameterValue>(query, paramId, pluginGuid);
+            return result;
+        }
+
 
         public static async Task<MpParameterValue> GetParameterValueAsync(MpParameterHostType hostType, int paramHostId, string paramId) {
             string query = $"select * from MpParameterValue where e_MpParameterHostType=? and fk_ParameterHostId=? and ParamId=?";
@@ -693,7 +699,7 @@ namespace MonkeyPaste {
         #region MpContentToken
 
         public static async Task<MpContentToken> GetTokenAsync(int copyItemId, int actionId, string matchData) {
-            string query = string.Format(@"select * from MpContentToken where fk_MpCopyItemId=? and fk_MpActionId=? and MatchData=?");
+            string query = "select * from MpContentToken where fk_MpCopyItemId=? and fk_MpActionId=? and MatchData=?";
             var result = await MpDb.QueryAsync<MpContentToken>(query, copyItemId, actionId, matchData);
             if (result == null || result.Count == 0) {
                 return null;

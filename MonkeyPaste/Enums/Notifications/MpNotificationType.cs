@@ -23,6 +23,7 @@
         InvalidRequest,
         InvalidResponse,
         FileIoError,
+        ExecuteParametersRequest,
 
         // User Action (Modal) 
 

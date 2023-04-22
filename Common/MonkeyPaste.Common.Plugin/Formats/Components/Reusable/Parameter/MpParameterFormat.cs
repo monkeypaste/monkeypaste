@@ -29,6 +29,7 @@ namespace MonkeyPaste.Common.Plugin {
         Decimal,
         PlainText,
         RichText,
+        //CredentialText,
         Html,
         Image,
         Base64Text,
@@ -98,6 +99,8 @@ namespace MonkeyPaste.Common.Plugin {
         public MpParameterControlType controlType { get; set; } = MpParameterControlType.None;
         public MpParameterValueUnitType unitType { get; set; } = MpParameterValueUnitType.PlainText;
 
+        public bool isExecuteParameter { get; set; }
+        public bool isPersistent { get; set; }
         public bool isValueDeferred { get; set; }
         public bool isVisible { get; set; } = true;
         public bool isReadOnly { get; set; } = false;

@@ -11,7 +11,7 @@
                        mc:Ignorable="d"
                        d:DesignWidth="800"
                        d:DesignHeight="450"
-                       x:Class="MonkeyPaste.Avalonia.MpAvPluginParameterListBoxView">
+                       x:Class="MonkeyPaste.Avalonia.MpAvParameterCollectionView">
     <local:MpAvUserControl.Resources>
         <sys:TimeSpan x:Key="FadeTimeSpan">
             0:0:0.2
@@ -80,11 +80,11 @@
         </Style>
 
         <!--  PARAM LISTBOXITEM  -->
-        <Style Selector="ListBox#PluginParameterListBox > ListBoxItem"
+        <!--<Style Selector="ListBox#PluginParameterListBox > ListBoxItem"
                x:DataType="local:MpAvParameterViewModelBase">
             <Setter Property="IsVisible"
-                    Value="{Binding ., Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}" />
-        </Style>
+                    Value="{Binding !IsExecuteParameter}" />
+        </Style>-->
         <Style Selector="ListBox#PluginParameterListBox ListBoxItem">
             <Setter Property="Margin"
                     Value="0,2.5" />
@@ -94,13 +94,6 @@
                     Value="Stretch" />
             <Setter Property="BorderBrush"
                     Value="Silver" />
-        </Style>
-        <!--<Style Selector="ListBox#PluginParameterListBox ListBoxItem:pointerover">
-            <Setter Property="BorderBrush"
-                    Value="Yellow" />
-        </Style>-->
-
-        <Style Selector="ListBox#PluginParameterListBox ListBoxItem">
             <Setter Property="BorderThickness"
                     Value="0,0,0,1" />
         </Style>

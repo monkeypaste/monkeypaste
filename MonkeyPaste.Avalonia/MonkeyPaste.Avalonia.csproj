@@ -1261,8 +1261,8 @@
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\Items\MpAvPluginParameterItemView.axaml.cs">
       <DependentUpon>MpAvPluginParameterItemView.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\MpAvPluginParameterListBoxView.axaml.cs">
-      <DependentUpon>MpAvPluginParameterListBoxView.axaml</DependentUpon>
+    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\MpAvParameterCollectionView.axaml.cs">
+      <DependentUpon>MpAvParameterCollectionView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Reusable\Buttons\PopupSelector\MpAvPopupMenuSelector.axaml.cs">
       <DependentUpon>MpAvPopupMenuSelector.axaml</DependentUpon>

@@ -14,7 +14,7 @@ namespace MonkeyPaste {
         #region State
 
         public override bool ShowOptionsButton =>
-            false;//ButtonsType != MpNotificationButtonsType.TextBoxOkCancel;
+            false;
 
         public bool IsFixing { get; set; } = false;
 
@@ -22,7 +22,7 @@ namespace MonkeyPaste {
 
         public bool ShowIgnoreButton { get; set; }
         public bool ShowFixButton => CanFix && !IsFixing;
-
+        public bool ShowSubmitButton { get; set; }
         public bool ShowRetryButton => IsFixing;
 
         public bool ShowShutdownButton => ShowIgnoreButton && !CanFix;
@@ -40,6 +40,7 @@ namespace MonkeyPaste {
 
         public bool IsInputValid => string.IsNullOrEmpty(ValidationText);
 
+        public bool CanSubmit { get; set; } = true;
         #endregion
 
         #region Model
@@ -113,6 +114,10 @@ namespace MonkeyPaste {
                 case MpNotificationButtonsType.YesNoCancel:
                     ShowYesButton = true;
                     ShowNoButton = true;
+                    ShowCancelButton = true;
+                    break;
+                case MpNotificationButtonsType.SubmitCancel:
+                    ShowSubmitButton = true;
                     ShowCancelButton = true;
                     break;
                 case MpNotificationButtonsType.Ok:
@@ -264,6 +269,14 @@ namespace MonkeyPaste {
                     return;
                 }
                 DialogResult = MpNotificationDialogResultType.Ok;
+            });
+
+        public ICommand SubmitCommand => new MpCommand(
+            () => {
+                DialogResult = MpNotificationDialogResultType.Submitted;
+            },
+            () => {
+                return CanSubmit;
             });
 
         #endregion

@@ -51,6 +51,28 @@
             "value": "{ItemData}"
           }
         ]
+      },
+      {
+        "label": "Test1",
+        "description": "This is a persistent value in the parameter list that is updated in all presets",
+        "controlType": "TextBox",
+        "unitType": "PlainText",
+        "isExecuteParameter": false,
+        "isPersistent": true,
+        "isRequired": true,
+        "isVisible": true,
+        "paramId": 3
+      },
+      {
+        "label": "Test2",
+        "description": "This is a persistent value, requested at execution if not stored already which only happens if it is remembered",
+        "controlType": "TextBox",
+        "unitType": "PlainText",
+        "isExecuteParameter": true,
+        "isPersistent": true,
+        "isRequired": true,
+        "isVisible": true,
+        "paramId": 4
       }
     ],
     "presets": [

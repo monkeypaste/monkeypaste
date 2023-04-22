@@ -45,14 +45,8 @@ namespace MonkeyPaste.Avalonia {
                     db_presets.ForEach(x => x.IsEnabled = true);
 
                     await Task.WhenAll(db_presets.Select(x => x.WriteToDatabaseAsync()));
-
-                    //MessageBox.Show("All CoreClipboard formats have been set to enabled");
                 }
             }
-
-
-
-            //presets.ForEach(x => x.ComponentFormat = AnalyzerPluginFormat);
             return db_presets.OrderBy(x => x.SortOrderIdx);
         }
 
@@ -76,7 +70,6 @@ namespace MonkeyPaste.Avalonia {
                         db_presets.Add(presetModel);
                     }
                 }
-
             }
 
             var last_successful_loaded_parameters =

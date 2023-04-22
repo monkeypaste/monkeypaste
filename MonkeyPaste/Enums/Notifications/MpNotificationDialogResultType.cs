@@ -4,6 +4,7 @@
         Yes,
         No,
         Ok,
+        Submitted,
         Cancel,
         Ignore,
         Retry,

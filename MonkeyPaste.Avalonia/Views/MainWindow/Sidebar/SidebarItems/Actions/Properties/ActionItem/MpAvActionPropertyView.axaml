@@ -124,7 +124,7 @@
                                                 Padding="5,0"
                                                 Margin="0,0,0,15"
                                                 HorizontalAlignment="Stretch" />
-            <local:MpAvPluginParameterListBoxView HorizontalAlignment="Stretch"
+            <local:MpAvParameterCollectionView HorizontalAlignment="Stretch"
                                                   VerticalAlignment="Stretch" />
         </StackPanel>
     </Border>

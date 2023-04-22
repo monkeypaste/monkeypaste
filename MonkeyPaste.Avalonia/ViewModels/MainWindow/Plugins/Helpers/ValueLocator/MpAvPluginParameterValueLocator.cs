@@ -18,7 +18,7 @@ namespace MonkeyPaste.Avalonia {
             // get all preset values from db
             var param_db_values = await MpDataModelProvider.GetAllParameterHostValuesAsync(hostType, paramHostId);
 
-            // loop through plugin formats parameters and add or replace (if found in db) to the preset values
+            // loop through plugin formats parameters and add or replace (if found in db) the preset values
             foreach (MpParameterFormat paramFormat in pluginHost.ComponentFormat.parameters) {
                 if (paramFormat.isValueDeferred) {
                     // make deferred value request
@@ -36,7 +36,6 @@ namespace MonkeyPaste.Avalonia {
                     } else {
                         paramFormat.values = resp.Values;
                     }
-
                 }
                 if (!param_db_values.Any(x => paramFormat.paramId.Equals(x.ParamId))) {
                     // if no value is found in db for a parameter defined in manifest...
@@ -52,9 +51,17 @@ namespace MonkeyPaste.Avalonia {
                             var host_format_preset_val = host_format_preset.values.FirstOrDefault(x => x.paramId.Equals(paramFormat.paramId));
                             if (host_format_preset_val != null) {
                                 // this parameter has a preset value in manifest
-
                                 paramVal = host_format_preset_val.value.ToListFromCsv(paramFormat.CsvProps).ToCsv(paramFormat.CsvProps);
                             }
+                        }
+                    }
+                    if (paramFormat.isPersistent) {
+                        // for persistent param's set value using any other preset if found
+                        MpDebug.Assert(string.IsNullOrEmpty(paramVal), "Preset w/ persistent param validation failed (should be caught in plugin loader)");
+
+                        var existing_persist_pvl = await MpDataModelProvider.GetAllParameterValueInstancesForPluginAsync(pluginHost.PluginGuid, paramFormat.paramId);
+                        if (existing_persist_pvl.Any()) {
+                            paramVal = existing_persist_pvl.FirstOrDefault().Value;
                         }
                     }
 
@@ -76,9 +83,7 @@ namespace MonkeyPaste.Avalonia {
                         hostType: hostType,
                         hostId: paramHostId,
                         paramId: paramFormat.paramId,
-                        value: paramVal
-                        //format: paramFormat
-                        );
+                        value: paramVal);
 
                     param_db_values.Add(newPresetVal);
                 }

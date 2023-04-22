@@ -126,7 +126,7 @@ namespace MonkeyPaste.Avalonia {
         #region MpAvIParameterCollectionViewModel Implementation
 
         IEnumerable<MpAvParameterViewModelBase> MpAvIParameterCollectionViewModel.Items =>
-            VisibleItems.ToList();
+            VisibleItems.Where(x => !x.IsExecuteParameter).ToList();
 
         MpAvParameterViewModelBase
             MpAvIParameterCollectionViewModel.SelectedItem {
@@ -157,7 +157,7 @@ namespace MonkeyPaste.Avalonia {
         private bool _canSaveOrCancel = false;
         public bool CanSaveOrCancel {
             get {
-                bool result = Items.Any(x => x.HasModelChanged);
+                bool result = FormItems.Any(x => x.HasModelChanged);
                 if (result != _canSaveOrCancel) {
                     _canSaveOrCancel = result;
                     OnPropertyChanged(nameof(CanSaveOrCancel));
@@ -169,7 +169,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #endregion
-
 
         #region MpIShortcutCommandViewModel Implementation
 
@@ -216,6 +215,13 @@ namespace MonkeyPaste.Avalonia {
         public IEnumerable<MpAvParameterViewModelBase> VisibleItems =>
             Items.Where(x => x.IsVisible);
 
+        public IEnumerable<MpAvParameterViewModelBase> FormItems =>
+            Items.Where(x => !x.IsExecuteParameter);
+        public IEnumerable<MpAvParameterViewModelBase> ExecuteItems =>
+            Items.Where(x => x.IsExecuteParameter);
+        public IEnumerable<MpAvParameterViewModelBase> EmptyExecuteItems =>
+            ExecuteItems.Where(x => string.IsNullOrEmpty(x.CurrentValue));
+
         #endregion
 
         #region Appearance
@@ -224,7 +230,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-
+        public bool IsExecuting { get; set; }
         public string ShortcutTooltipText =>
             string.IsNullOrEmpty(KeyString) ?
                 $"Assign shortcut to '{Label}'" :
@@ -421,7 +427,6 @@ namespace MonkeyPaste.Avalonia {
             Items.CollectionChanged += Items_CollectionChanged;
         }
 
-
         #endregion
 
         #region Public Methods
@@ -434,7 +439,6 @@ namespace MonkeyPaste.Avalonia {
             Preset = aip;
 
             // get all preset values from db
-            //var presetValues = await PrepareParameterValueModelsAsync();
             IEnumerable<MpParameterValue> presetValues = new List<MpParameterValue>();
 
             try {
@@ -497,7 +501,8 @@ namespace MonkeyPaste.Avalonia {
         protected virtual void ParameterViewModel_OnValidate(object sender, EventArgs e) {
             var aipvm = sender as MpAvParameterViewModelBase;
             if (aipvm.IsRequired && string.IsNullOrWhiteSpace(aipvm.CurrentValue)) {
-                aipvm.ValidationMessage = $"{aipvm.Label} is required";
+                if ((IsExecuting && aipvm.IsExecuteParameter) || !aipvm.IsExecuteParameter)
+                    aipvm.ValidationMessage = $"{aipvm.Label} is required";
             } else {
                 aipvm.ValidationMessage = string.Empty;
             }
@@ -550,7 +555,10 @@ namespace MonkeyPaste.Avalonia {
                             .Cast<MpAvEnumerableParameterViewModelBase>()
                            .SelectMany(x => x.Items)
                            .ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
-
+                        if (this is MpAvIParameterCollectionViewModel pcvm) {
+                            // intermittently params not updating on selection change, just stays empty
+                            pcvm.OnPropertyChanged(nameof(pcvm.Items));
+                        }
                     } else {
                         IsLabelReadOnly = true;
                     }

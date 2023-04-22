@@ -34,6 +34,7 @@ namespace MonkeyPaste {
                 case MpNotificationType.FileIoError:
                 case MpNotificationType.InvalidClipboardFormatHandler:
                 case MpNotificationType.PluginResponseWarningWithOption:
+                case MpNotificationType.ExecuteParametersRequest:
                     return MpNotificationLayoutType.UserAction;
                 case MpNotificationType.AnalyzerTimeout:
                 case MpNotificationType.InvalidRequest:
@@ -62,6 +63,8 @@ namespace MonkeyPaste {
                 case MpNotificationType.ModalOkCancelMessageBox:
                 case MpNotificationType.ModalContentFormatDegradation:
                     return MpNotificationButtonsType.OkCancel;
+                case MpNotificationType.ExecuteParametersRequest:
+                    return MpNotificationButtonsType.SubmitCancel;
                 case MpNotificationType.ModalOkMessageBox:
                     return MpNotificationButtonsType.Ok;
                 default:
@@ -162,6 +165,7 @@ namespace MonkeyPaste {
 
 
         #endregion
+
         #region Properties
         #region Appearance
         public object IconSourceObj {

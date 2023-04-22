@@ -53,6 +53,33 @@ namespace MonkeyPaste.Common.Plugin {
         [JsonIgnore]
         public MpPluginFormat backupCheckPluginFormat { get; set; }
 
+        [JsonIgnore]
+        public IEnumerable<MpParameterHostBaseFormat> componentFormats {
+            get {
+                if (headless != null) {
+                    yield return headless;
+                }
+                if (analyzer != null) {
+                    yield return analyzer;
+                }
+                if (contactFetcher != null) {
+                    yield return contactFetcher;
+                }
+                if (clipboardHandler != null) {
+                    if (clipboardHandler.readers != null) {
+                        foreach (var cr in clipboardHandler.readers) {
+                            yield return cr;
+                        }
+                    }
+                    if (clipboardHandler.writers != null) {
+                        foreach (var cw in clipboardHandler.writers) {
+                            yield return cw;
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
     public class MpPluginIoTypeFormat : MpJsonObject {
