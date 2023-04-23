@@ -219,8 +219,6 @@ namespace MonkeyPaste.Avalonia {
             Items.Where(x => !x.IsExecuteParameter);
         public IEnumerable<MpAvParameterViewModelBase> ExecuteItems =>
             Items.Where(x => x.IsExecuteParameter);
-        public IEnumerable<MpAvParameterViewModelBase> EmptyExecuteItems =>
-            ExecuteItems.Where(x => string.IsNullOrEmpty(x.CurrentValue));
 
         #endregion
 

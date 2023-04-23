@@ -38,8 +38,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Model
 
-        public override string CurrentValue =>
-            Items.Select(x => x.Value).ToList().ToCsv(CsvProperties);
+        //public override string CurrentValue =>
+        //    Items.Select(x => x.Value).ToList().ToCsv(CsvProperties);
         #endregion
         #endregion
 
@@ -120,13 +120,13 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        protected override string GetCurrentValue() {
 
+            return Items == null ? null : Items.Select(x => x.Value).ToList().ToCsv(CsvProperties);
+        }
         #endregion
 
         #region Private Methods
-        private void SelectedItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            //OnPropertyChanged(nameof(SelectedItem));
-        }
         #endregion
 
         #region Commands

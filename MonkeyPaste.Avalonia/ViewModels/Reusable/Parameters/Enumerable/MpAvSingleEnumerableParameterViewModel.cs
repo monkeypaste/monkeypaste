@@ -40,9 +40,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
         #region Model
 
-        public override string CurrentValue {
-            get => SelectedItem == null ? null : SelectedItem.Value;
-        }
+        //public override string CurrentValue {
+        //    get => SelectedItem == null ? null : SelectedItem.Value;
+        //}
         #endregion
         #endregion
 
@@ -92,6 +92,10 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(CurrentValue));
             OnPropertyChanged(nameof(SelectedValue));
             OnPropertyChanged(nameof(SelectedItemIdx));
+        }
+
+        protected override string GetCurrentValue() {
+            return SelectedItem == null ? null : SelectedItem.Value;
         }
         #endregion
 

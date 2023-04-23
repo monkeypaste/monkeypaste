@@ -108,15 +108,17 @@
 
     </local:MpAvUserControl.Styles>
     <Grid x:Name="TransactionContainerGrid"
-          RowDefinitions="30,*,Auto"
           Margin="1"
           HorizontalAlignment="Stretch">
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
+            <RowDefinition MinHeight="50" />
             <RowDefinition Height="*"
                            MinHeight="50" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"
+                           MaxHeight="40" />
         </Grid.RowDefinitions>
+        <!--  BACK BUTTON PANEL  -->
         <DockPanel Grid.Row="0"
                    LastChildFill="True"
                    HorizontalAlignment="Stretch"
@@ -260,7 +262,7 @@
         </Border>
 
         <GridSplitter x:Name="TransactionTreeBodySplitter"
-                      Grid.Row="2"
+                      Grid.Row="3"
                       IsVisible="{Binding SelectedTransaction, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                       Classes.desktop="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                       HorizontalAlignment="Stretch"

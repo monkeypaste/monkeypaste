@@ -87,6 +87,7 @@ namespace MonkeyPaste.Avalonia {
         protected virtual void SelectionChanged(object sender, SelectionModelSelectionChangedEventArgs e) {
             Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
             OnPropertyChanged(nameof(Selection));
+            CurrentValue = GetCurrentValue();
         }
 
         //protected override void SetLastValue(object value) {
@@ -129,6 +130,8 @@ namespace MonkeyPaste.Avalonia {
             }
             Selection.EndBatchUpdate();
         }
+
+        protected abstract string GetCurrentValue();
         #endregion
 
         #region Private Methods

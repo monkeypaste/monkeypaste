@@ -1,0 +1,46 @@
+{
+  "title": "Google Contacts Fetcher",
+  "description": "Once authorized, will gatcher your contacts for template automation.",
+  "version": "1.0",
+  "credits": "Somebody",
+  "guid": "0eae9826-b6fe-4b88-80b6-85a4ea35911f",
+  "iconUri": "contact_icon.png",
+  "ioType": {
+    "isDll": true
+  },
+  "contactFetcher": {
+    "source": "Google",
+    "parameters": [
+      {
+        "label": "Fields",
+        "description": "Fields to gather",
+        "controlType": "MultiSelectList",
+        "unitType": "PlainText",
+        "isRequired": true,
+        "paramId": 1,
+        "values": [
+          {
+            "label": "Address",
+            "value": "addresses",
+            "isDefault": true
+          },
+          {
+            "label": "Email Address",
+            "value": "emailAddresses",
+            "isDefault": true
+          },
+          {
+            "label": "Phone Number",
+            "value": "phoneNumbers",
+            "isDefault": true
+          },
+          {
+            "label": "Name",
+            "value": "names",
+            "isDefault": true
+          }
+        ]
+      }
+    ]
+  }
+}

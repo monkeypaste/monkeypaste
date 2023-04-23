@@ -128,11 +128,9 @@ namespace MonkeyPaste.Avalonia {
                 return Parent.SelectedSource == this;
             }
             set {
-                if (IsSelected != value) {
-                    if (value && Parent != null) {
-                        Parent.SelectedSource = this;
-                        OnPropertyChanged(nameof(IsSelected));
-                    }
+                if (value && Parent != null && IsSelected != value) {
+                    Parent.SelectedSource = this;
+                    OnPropertyChanged(nameof(IsSelected));
                 }
             }
         }

@@ -29,6 +29,9 @@
                     Classes="defaultButton outline outlineOver outline outlineOver"
                     IsEnabled="{Binding !IsQuerying, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                     Command="{Binding RefreshSearchCommand}">
+                <ToolTip.Tip>
+                    <local:MpAvToolTipView ToolTipText="Refresh" />
+                </ToolTip.Tip>
                 <Grid>
                     <Image IsVisible="{Binding $parent.IsEnabled}"
                            Source="{Binding ., Source={StaticResource ResetImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />

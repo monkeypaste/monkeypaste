@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>mp-core-plugin-google-contact-fetcher</PackageId>
+    <Title>Monkey Paste Google Contact Fetcher</Title>
+    <Authors>Thomas Kefauver</Authors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="contacts_icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
+    <ProjectReference Include="..\..\Common\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Google.Apis">
+      <HintPath>Google.Apis.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Auth">
+      <HintPath>Google.Apis.Auth.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Auth.PlatformServices">
+      <HintPath>Google.Apis.Auth.PlatformServices.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Core">
+      <HintPath>Google.Apis.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.PeopleService.v1">
+      <HintPath>Google.Apis.PeopleService.v1.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="contacts_icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <ItemGroup>
+      <BuildFiles Include="$(TargetDir)\*.*" />
+      <ProjectFiles Include="$(ProjectDir)\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(BuildFiles)" DestinationFolder="$(PluginTargetDir)\$(ProjectName)\" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" ContinueOnError="true" />
+    <Copy SourceFiles="@(ProjectFiles)" DestinationFolder="$(PluginTargetDir)\$(ProjectName)\" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" ContinueOnError="true" />
+  </Target>
+
+</Project>

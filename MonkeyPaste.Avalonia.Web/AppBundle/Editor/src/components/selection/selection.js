@@ -3,6 +3,7 @@
 const DefaultSelectionBgColor = 'lightblue';
 const DefaultSelectionFgColor = 'black';
 const DefaultCaretColor = 'black';
+const AppendCaretColor = 'red';
 
 //var SuppressNextSelChangedHostNotification = false;
 
@@ -305,7 +306,12 @@ function updateSelectionColors() {
 				caret_color = 'transparent';
 			}
 		} else {
-			caret_color = 'red';
+			if (!isAnyAppendEnabled()) {
+				// only make caret red when not appending
+				caret_color = 'red';
+
+			}
+			
 		}
 	} else {
 		// in no select hide cursor

@@ -100,7 +100,20 @@ namespace MonkeyPaste.Avalonia {
         public virtual bool IsAnyBusy => IsBusy || (Sources != null && Sources.Cast<MpAvTransactionMessageViewModelBase>().Any(x => x.IsAnyBusy));
         public bool IsHovering { get; set; }
 
-        public bool IsSelected { get; set; }
+        public bool IsSelected {
+            get {
+                if (Parent == null) {
+                    return false;
+                }
+                return Parent.SelectedTabIndex == this.GetNodeTabIdx();
+            }
+            set {
+                if (value && IsSelected != value && Parent != null) {
+                    Parent.SelectedTabIndex = this.GetNodeTabIdx();
+                    OnPropertyChanged(nameof(IsSelected));
+                }
+            }
+        }
         public DateTime LastSelectedDateTime { get; set; }
 
         public MpTransactionMessageType TransactionMessageType { get; set; }

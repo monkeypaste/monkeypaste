@@ -93,6 +93,7 @@
                            TextWrapping="WrapWithOverflow"
                            FontSize="16"
                            MaxHeight="250"
+                           ScrollViewer.VerticalScrollBarVisibility="Auto"
                            FontWeight="SemiBold"
                            Background="Transparent"
                            Focusable="True"

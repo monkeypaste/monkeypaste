@@ -38,7 +38,6 @@ namespace MonkeyPaste {
         MpIDragProcessWatcher DragProcessWatcher { get; set; }
         MpIDropProcessWatcher DropProcessWatcher { get; set; }
         MpIContextMenuCloser ContextMenuCloser { get; set; }
-        MpIMainThreadMarshal MainThreadMarshal { get; set; }
         MpIPlatformDataObjectHelperAsync DataObjectHelperAsync { get; set; }
 
 

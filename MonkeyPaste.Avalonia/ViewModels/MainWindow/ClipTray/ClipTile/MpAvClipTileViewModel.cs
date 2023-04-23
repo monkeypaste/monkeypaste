@@ -1268,7 +1268,7 @@ namespace MonkeyPaste.Avalonia {
 
             #region CREATE
 
-            Size ws = new Size(300, 250);
+            Size ws = new Size(350, 250);
             MpAvWindow pow = new MpAvWindow() {
                 Width = ws.Width,
                 Height = ws.Height,

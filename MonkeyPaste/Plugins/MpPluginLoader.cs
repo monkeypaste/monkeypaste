@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using static SQLite.SQLite3;
 
 namespace MonkeyPaste {
     public static class MpPluginLoader {
@@ -154,7 +155,10 @@ namespace MonkeyPaste {
 
                 if (!needsFixing) {
                     try {
-                        plugin.Component = GetPluginComponent(manifestPath, plugin);
+                        object component = GetPluginComponent(manifestPath, plugin);
+                        if (ValidatePluginComponent(plugin, component, manifestPath)) {
+                            plugin.Component = component;
+                        }
                         plugin.RootDirectory = Path.GetDirectoryName(manifestPath);
                     }
                     catch (Exception ex) {
@@ -232,11 +236,19 @@ namespace MonkeyPaste {
             if (string.IsNullOrWhiteSpace(plugin.iconUri)) {
                 throw new MpUserNotifiedException($"Plugin icon error, at path '{manifestPath}' with title '{plugin.title}' must have an 'iconUri' property which is a relative file path or valid url to an image");
             }
-            bool are_all_components_valid = plugin.componentFormats.All(x => ValidatePluginComponent(x, manifestPath));
+            bool are_all_components_valid = plugin.componentFormats.All(x => ValidatePluginComponentManifest(x, manifestPath));
             return are_all_components_valid;
         }
 
-        private static bool ValidatePluginComponent(MpParameterHostBaseFormat cbf, string plugin_label) {
+        private static bool ValidatePluginComponent(MpPluginFormat plugin, object component, string manifestPath) {
+            if (component is MpIAnalyzeAsyncComponent || component is MpIAnalyzeComponent) {
+                if (plugin.analyzer == null) {
+                    throw new MpUserNotifiedException($"Plugin error '{manifestPath}' must define 'analyzer' definition for '{component.GetType()}' which implements analyzer interface.");
+                }
+            }
+            return true;
+        }
+        private static bool ValidatePluginComponentManifest(MpParameterHostBaseFormat cbf, string plugin_label) {
             if (cbf == null) {
 
                 // undefined, ignore
@@ -349,23 +361,30 @@ namespace MonkeyPaste {
             if (pluginAssembly == null) {
                 return null;
             }
-            int typeCount = 0;
+            IEnumerable<Type> avail_types = null;
             try {
-                typeCount = pluginAssembly.GetTypes().Length;
+                avail_types = pluginAssembly.GetTypes();
             }
             catch (ReflectionTypeLoadException rtle) {
-                throw new MpUserNotifiedException("Error loading " + pluginName + " ", rtle);
-            }
-            for (int i = 0; i < typeCount; i++) {
-                var curType = pluginAssembly.GetTypes()[i];
-                if (curType.GetInterface("MonkeyPaste.Common.Plugin." + nameof(MpIPluginComponentBase)) != null) {
-                    var pluginObj = Activator.CreateInstance(curType);
-                    if (pluginObj != null) {
-                        return pluginObj;
-                    }
+                try {
+                    avail_types = pluginAssembly.ExportedTypes;
                 }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine("Exported types exception: ", ex);
+                }
+                if (avail_types == null) {
+
+                    throw new MpUserNotifiedException("Error loading " + pluginName + " ", rtle);
+                }
+
             }
-            return null;
+
+            var plugin_component_type = avail_types.FirstOrDefault(x => x.GetInterface("MonkeyPaste.Common.Plugin." + nameof(MpIPluginComponentBase)) != null);
+            if (plugin_component_type == null) {
+                return null;
+            }
+            var pluginObj = Activator.CreateInstance(plugin_component_type);
+            return pluginObj;
         }
 
         public static MpPluginFormat GetLastLoadedBackupPluginFormat(MpPluginFormat plugin) {

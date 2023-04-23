@@ -8,5 +8,6 @@
         MpIPlatformInfo PlatformInfo { get; set; }
         MpINativeMessageBox NativeMessageBox { get; set; }
 
+        MpIMainThreadMarshal MainThreadMarshal { get; set; }
     }
 }

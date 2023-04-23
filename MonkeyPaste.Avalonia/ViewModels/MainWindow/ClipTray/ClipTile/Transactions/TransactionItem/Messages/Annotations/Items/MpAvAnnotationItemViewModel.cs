@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvAnnotationItemViewModel :
-        MpViewModelBase<MpAvTransactionMessageViewModelBase>,
+        MpViewModelBase<MpAvAnnotationMessageViewModel>,
         MpAvITransactionNodeViewModel,
         MpIClampedValue {
 
@@ -57,8 +57,8 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             }
             set {
-                if (value && IsSelected != value && Parent != null && Parent.Parent != null) {
-                    Parent.Parent.Parent.SelectChildCommand.Execute(AnnotationGuid);
+                if (value && IsSelected != value && Parent != null) {
+                    Parent.SelectedItem = this;
                     OnPropertyChanged(nameof(IsSelected));
                 }
             }
@@ -181,7 +181,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constructors
-        public MpAvAnnotationItemViewModel(MpAvTransactionMessageViewModelBase parent) : base(parent) {
+        public MpAvAnnotationItemViewModel(MpAvAnnotationMessageViewModel parent) : base(parent) {
             PropertyChanged += MpAvAnnotationItemViewModel_PropertyChanged;
             Items.CollectionChanged += Items_CollectionChanged;
         }
@@ -244,6 +244,12 @@ namespace MonkeyPaste.Avalonia {
                             }
                             CurScorePercent = ScorePercent;
                         });
+                        if (!HostClipTileViewModel.IsSubSelectionEnabled &&
+                            HostClipTileViewModel.TransactionCollectionViewModel.IsTransactionPaneOpen) {
+                            // this is to ensure annotations are drawn in editor but 
+                            // pretty sure editor enables subselection when annotations are selected
+                            HostClipTileViewModel.EnableSubSelectionCommand.Execute(null);
+                        }
                     }
                     break;
                 case nameof(IsExpanded):

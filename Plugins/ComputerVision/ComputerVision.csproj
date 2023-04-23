@@ -16,7 +16,6 @@
     <ProjectReference Include="..\..\Common\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
   </ItemGroup>
 
-  <!--<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(BuildOs)' == 'WINDOWS'">-->
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <ItemGroup>
       <BuildFiles Include="$(TargetDir)\*.*" />
@@ -24,6 +23,5 @@
     </ItemGroup>
     <Copy SourceFiles="@(BuildFiles)" DestinationFolder="$(PluginTargetDir)\$(ProjectName)\"  OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" ContinueOnError="true" />
     <Copy SourceFiles="@(ProjectFiles)" DestinationFolder="$(PluginTargetDir)\$(ProjectName)\" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" ContinueOnError="true"  />
-
   </Target>
 </Project>

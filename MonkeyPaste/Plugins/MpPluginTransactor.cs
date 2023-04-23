@@ -70,6 +70,7 @@ namespace MonkeyPaste {
                         trans.Response = analyzeComponent.Analyze(trans.Request as MpAnalyzerPluginRequestFormat);
                     }
                     trans.ResponseTime = DateTime.Now;
+
                 }
                 catch (Exception ex) {
                     return await HandleErrorAsync(ex, pluginFormat, trans, sourceCopyItem, sourceHandler, suppressWrite);
@@ -99,7 +100,7 @@ namespace MonkeyPaste {
         public static async Task<T> ValidatePluginResponseAsync<T>(
             MpPluginRequestFormatBase request,
             MpPluginResponseFormatBase response,
-            Func<Task<T>> retryFunc) where T : MpPluginResponseFormatBase {
+            Func<Task<T>> retryFunc = null) where T : MpPluginResponseFormatBase {
             if (response == null) {
                 //MpConsole.WriteTraceLine($"Clipboard Reader Plugin error, no response from {handler.ToString()}, (ignoring its assigned formats) ");
                 MpConsole.WriteTraceLine($"Clipboard Reader Plugin error, empty response ");

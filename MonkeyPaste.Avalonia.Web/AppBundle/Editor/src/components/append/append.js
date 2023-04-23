@@ -91,10 +91,8 @@ function isAnyAppendEnabled() {
 	return IsAppendInsertMode || IsAppendLineMode;
 }
 
-function enableAppendMode(isAppendLine, isAppendManual, fromHost = false) {
-	isAppendManual = isAppendManual == null ? IsAppendManualMode : isAppendManual;
+function enableAppendMode(isAppendLine, fromHost = false) {
 	let did_append_mode_change = IsAppendLineMode != isAppendLine;
-	let did_manual_mode_change = IsAppendManualMode != isAppendManual;
 
 	if (isAppendLine) {
 		IsAppendLineMode = true;
@@ -103,23 +101,17 @@ function enableAppendMode(isAppendLine, isAppendManual, fromHost = false) {
 		IsAppendLineMode = false;
 		IsAppendInsertMode = true;
 	}
-	IsAppendPreMode = false;
-
-	// handle all msgs here not in manual 
-	if (isAppendManual) {
-		enableAppendManualMode(false);
-	} else {
-		disableAppendManualMode(false);
-	}
 
 	getEditorElement().classList.add('append');
-	enableSubSelection();
+	if (!isSubSelectionEnabled()) {
+		enableSubSelection();
+	}	
 
 	updatePasteAppendToolbarLabel();
 
 	scrollToAppendIdx();
 
-	if (!fromHost && (did_append_mode_change || did_manual_mode_change)) {
+	if (!fromHost && did_append_mode_change) {
 		onAppendStateChanged_ntf();
 	}
 
@@ -243,13 +235,7 @@ function updateAppendModeState(req, fromHost) {
 	let is_resuming = IsAppendPaused && !req.isAppendPaused;
 	let is_pausing = !IsAppendPaused && req.isAppendPaused;
 	let is_pre_changing = IsAppendPreMode != req.isAppendPreMode;
-
-	let is_updating_state =
-		IsAppendLineMode != req.isAppendLineMode ||
-		IsAppendInsertMode != req.isAppendInsertMode ||
-		IsAppendManualMode != req.isAppendManualMode ||
-		IsAppendPaused != req.isAppendPaused ||
-		IsAppendPreMode != req.isAppendPreMode;
+	let is_manual_changing = IsAppendManualMode != req.isAppendManualMode;
 
 	let is_appending_data = !isNullOrEmpty(req.appendData);
 
@@ -261,7 +247,6 @@ function updateAppendModeState(req, fromHost) {
 	log(`updateAppendFromHost changes:`);
 	log('is_enabling: ' + is_enabling);
 	log('is_disabling: ' + is_disabling);
-	log('is_updating_state: ' + is_updating_state);
 	log('is_append_range_changed: ' + is_append_range_changed);
 	log('cur append range: ', getAppendDocRange());
 	log('new append range: ', new_append_range);
@@ -273,12 +258,21 @@ function updateAppendModeState(req, fromHost) {
 
 	
 
-	if (is_enabling || is_updating_state) {
+	if (is_enabling) {
 		enableAppendMode(req.isAppendLineMode, req.isAppendManualMode, fromHost);
 	}
 	if (is_disabling) {
 		disableAppendMode(fromHost);
 	}
+
+	if (is_manual_changing) {
+		if (req.isAppendManualMode) {
+			enableAppendManualMode(fromHost);
+		} else {
+			disableAppendManualMode(fromHost);
+		}
+	}
+
 	if (is_pre_changing) {
 		if (req.isAppendPreMode) {
 			enablePreAppend(fromHost);

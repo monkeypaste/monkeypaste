@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <Folder Include="Utils\Json\Converter\" />
+    <Folder Include="Utils\Command\" />
   </ItemGroup>
 
 </Project>

@@ -164,6 +164,7 @@ namespace MonkeyPaste.Avalonia {
                             Header = @"Cut",
                             IconResourceKey = "ScissorsImage",
                             Command = CutSelectionFromContextMenuCommand,
+                            IsVisible = false,
                             CommandParameter = true,
                             ShortcutArgs = new object[] { MpShortcutType.CutSelection },
                         },
@@ -178,6 +179,7 @@ namespace MonkeyPaste.Avalonia {
                             AltNavIdx = 6,
                             IconResourceKey = "PasteImage",
                             Command = PasteHereFromContextMenuCommand,
+                            IsVisible = false,
                             ShortcutArgs = new object[] { MpShortcutType.PasteHere },
                         },
                         new MpMenuItemViewModel() {
@@ -747,35 +749,50 @@ namespace MonkeyPaste.Avalonia {
             _defaultQueryItemHeight;
 
         private void UpdateDefaultItemSize() {
-            //double query_item_length = QueryTrayFixedDimensionLength * ZoomFactor;
+            if (LayoutType == MpClipTrayLayoutType.Grid) {
+                return;
+            }
+            double query_item_length = QueryTrayFixedDimensionLength * ZoomFactor;
 
-            //double scrollBarSize_x = ScrollBarFixedAxisSize + (IsQueryHorizontalScrollBarVisible ? 30 : 0);
-            //_defaultQueryItemWidth = Math.Clamp(query_item_length - HorizontalScrollBarHeight, 0, MaxTileWidth);
+            double scrollBarSize_x = IsQueryHorizontalScrollBarVisible ? ScrollBarFixedAxisSize : 0;
+            _defaultQueryItemWidth = Math.Clamp(query_item_length - scrollBarSize_x, 0, MaxTileWidth);
 
-            //double scrollBarSize_y = ScrollBarFixedAxisSize + (IsQueryVerticalScrollBarVisible ? 30 : 0);
-            //_defaultQueryItemHeight = Math.Clamp(query_item_length - scrollBarSize_y, 0, MaxTileHeight);
+            double scrollBarSize_y = IsQueryVerticalScrollBarVisible ? ScrollBarFixedAxisSize : 0;
+            _defaultQueryItemHeight = Math.Clamp(query_item_length - scrollBarSize_y, 0, MaxTileHeight);
 
-            //double query_item_length = QueryTrayFixedDimensionLength * ZoomFactor;
-            //double pin_item_length = PinTrayFixedDimensionLength * ZoomFactor;
-            //if (ListOrientation == Orientation.Horizontal) {
-            //    _defaultQueryItemWidth = query_item_length - QueryTrayVerticalScrollBarWidth;
-            //    _defaultQueryItemHeight = QueryTrayFixedDimensionLength - QueryTrayHorizontalScrollBarHeight;
+            double pin_item_length = PinTrayFixedDimensionLength * ZoomFactor;
+            if (ListOrientation == Orientation.Horizontal) {
+                _defaultQueryItemWidth = query_item_length - QueryTrayVerticalScrollBarWidth;
+                _defaultQueryItemHeight = QueryTrayFixedDimensionLength - QueryTrayHorizontalScrollBarHeight;
 
-            //    _defaultPinItemWidth = pin_item_length;
-            //    _defaultPinItemHeight = PinTrayFixedDimensionLength;
-            //} else {
-            //    _defaultQueryItemWidth = QueryTrayFixedDimensionLength - QueryTrayVerticalScrollBarWidth;
-            //    _defaultQueryItemHeight = query_item_length - QueryTrayHorizontalScrollBarHeight;
+                _defaultPinItemWidth = pin_item_length;
+                _defaultPinItemHeight = PinTrayFixedDimensionLength;
+            } else {
+                _defaultQueryItemWidth = QueryTrayFixedDimensionLength - QueryTrayVerticalScrollBarWidth;
+                _defaultQueryItemHeight = query_item_length - QueryTrayHorizontalScrollBarHeight;
 
-            //    _defaultPinItemWidth = PinTrayFixedDimensionLength;
-            //    _defaultPinItemHeight = pin_item_length;
-            //}
-            double s = DEFAULT_ITEM_SIZE * ZoomFactor;
-            _defaultQueryItemWidth = _defaultQueryItemHeight = _defaultPinItemWidth = _defaultPinItemHeight = s;
+                _defaultPinItemWidth = PinTrayFixedDimensionLength;
+                _defaultPinItemHeight = pin_item_length;
+            }
+            //double s = DEFAULT_ITEM_SIZE * ZoomFactor;
+            //_defaultQueryItemWidth = _defaultQueryItemHeight = _defaultPinItemWidth = _defaultPinItemHeight = s;
+            if (LayoutType == MpClipTrayLayoutType.Stack) {
+                double default_ar = QueryTrayFixedDimensionLength / DEFAULT_ITEM_SIZE;
+                if (default_ar >= 2.0d) {
+                    // when variable dim is twice length of fixed transition to grid...
+                    IsGridLayout = true;
+                    _defaultQueryItemWidth = _defaultQueryItemHeight = _defaultPinItemWidth = _defaultPinItemHeight = DEFAULT_ITEM_SIZE;
+                }
+            }
+
             OnPropertyChanged(nameof(DefaultQueryItemWidth));
             OnPropertyChanged(nameof(DefaultQueryItemHeight));
             OnPropertyChanged(nameof(DefaultPinItemWidth));
             OnPropertyChanged(nameof(DefaultPinItemHeight));
+
+
+
+
         }
 
         private double _defaultPinItemWidth;
@@ -3281,7 +3298,7 @@ namespace MonkeyPaste.Avalonia {
                  SelectedItem.ChangeColorCommand.Execute(hexStr.ToString());
              });
 
-        public ICommand CopySelectedClipsCommand => new MpCommand(
+        public ICommand CopySelectedClipFromShortcutCommand => new MpCommand(
             () => {
                 SelectedItem.CopyToClipboardCommand.Execute(null);
             },
@@ -3311,7 +3328,7 @@ namespace MonkeyPaste.Avalonia {
                 CutOrCopySelectionAsync(false).FireAndForgetSafeAsync(this);
             },
             (args) => {
-                return SelectedItem != null && SelectedItem.IsSubSelectionEnabled;
+                return SelectedItem != null;
             });
 
         public ICommand PasteSelectedClipTileFromShortcutCommand => new MpCommand<object>(

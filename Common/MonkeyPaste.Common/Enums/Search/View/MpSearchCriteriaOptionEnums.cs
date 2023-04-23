@@ -130,7 +130,7 @@ namespace MonkeyPaste.Common {
     public enum MpColorOptionType {
         None = 0,
         Hex,
-        RGBA
+        ARGB
     }
 
     public static class MpSearchCriteriaOptionExtensions {

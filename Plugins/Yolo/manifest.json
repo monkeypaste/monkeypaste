@@ -53,7 +53,7 @@
         ]
       },
       {
-        "label": "Test1",
+        "label": "Persistent Form Test",
         "description": "This is a persistent value in the parameter list that is updated in all presets",
         "controlType": "TextBox",
         "unitType": "PlainText",
@@ -64,13 +64,23 @@
         "paramId": 3
       },
       {
-        "label": "Test2",
+        "label": "Persistent Execute Test",
         "description": "This is a persistent value, requested at execution if not stored already which only happens if it is remembered",
         "controlType": "TextBox",
         "unitType": "PlainText",
         "isExecuteParameter": true,
         "isPersistent": true,
         "isRequired": true,
+        "isVisible": true,
+      },
+      {
+        "label": "Optional Execute Test",
+        "description": "This is a persistent value, requested at execution if not stored already which only happens if it is remembered",
+        "controlType": "TextBox",
+        "unitType": "PlainText",
+        "isExecuteParameter": true,
+        "isPersistent": false,
+        "isRequired": false,
         "isVisible": true,
         "paramId": 4
       }

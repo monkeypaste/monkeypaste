@@ -476,7 +476,7 @@ namespace MonkeyPaste.Avalonia {
                             shortcutCommand = MpAvClipTrayViewModel.Instance.ToggleIsAppPausedCommand;
                             break;
                         case MpShortcutType.CopySelection:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.CopySelectedClipsCommand;
+                            shortcutCommand = MpAvClipTrayViewModel.Instance.CopySelectedClipFromShortcutCommand;
                             break;
                         case MpShortcutType.ScrollToHome:
                             shortcutCommand = MpAvClipTrayViewModel.Instance.ScrollToHomeCommand;

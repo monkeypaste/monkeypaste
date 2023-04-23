@@ -255,7 +255,7 @@ function onAppendStateChanged_ntf(appendDataStr = null) {
 	}
 	let msg = {
 		isAppendLineMode: IsAppendLineMode,
-		isAppendMode: IsAppendInsertMode,
+		isAppendInsertMode: IsAppendInsertMode,
 		isAppendManualMode: IsAppendManualMode,
 		isAppendPaused: IsAppendPaused,
 		isAppendPreMode: IsAppendPreMode,

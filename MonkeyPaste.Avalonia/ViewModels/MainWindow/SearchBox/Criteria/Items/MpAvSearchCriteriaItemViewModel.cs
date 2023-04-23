@@ -305,7 +305,7 @@ namespace MonkeyPaste.Avalonia {
                         ovm.UnitType = MpSearchCriteriaUnitFlags.Hex;
                         ovm.FilterValue = MpContentQueryBitFlags.Hex;
                         break;
-                    case MpColorOptionType.RGBA:
+                    case MpColorOptionType.ARGB:
                         ovm.UnitType = MpSearchCriteriaUnitFlags.Rgba;
                         ovm.FilterValue = MpContentQueryBitFlags.Rgba;
                         break;

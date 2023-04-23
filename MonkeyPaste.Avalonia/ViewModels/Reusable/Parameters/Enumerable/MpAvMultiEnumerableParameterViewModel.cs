@@ -37,11 +37,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
         #region Model
 
-        public override string CurrentValue {
-            get => SelectedItems == null ?
-                null :
-                SelectedItems.Select(x => x.Value).ToList().ToCsv(CsvProperties);
-        }
         #endregion
         #endregion
 
@@ -96,7 +91,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Protected Methods
-
+        protected override string GetCurrentValue() {
+            return SelectedItems == null ? null : SelectedItems.Select(x => x.Value).ToList().ToCsv(CsvProperties);
+        }
         #endregion
 
         #region Private Methods

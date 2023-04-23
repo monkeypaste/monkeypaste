@@ -340,6 +340,20 @@ namespace MonkeyPaste.Avalonia {
 
         public virtual MpMenuItemViewModel PopupMenuViewModel {
             get {
+                IEnumerable<MpMenuItemViewModel> move_items =
+                    RootTriggerActionViewModel == this ? new MpMenuItemViewModel[] { } :
+                    RootTriggerActionViewModel.SelfAndAllDescendants
+                                .Where(x =>
+                                        !SelfAndAllDescendants.Contains(x) &&
+                                        x != ParentActionViewModel)
+                                .Select(x =>
+                                    new MpMenuItemViewModel() {
+                                        Header = x.Label,
+                                        IconSourceObj = x.IconResourceObj,
+                                        Command = ChangeParentCommand,
+                                        CommandParameter = x.ActionId
+                                    });
+
                 return new MpMenuItemViewModel() {
                     ParentObj = this,
                     SubItems = new List<MpMenuItemViewModel>() {
@@ -360,24 +374,13 @@ namespace MonkeyPaste.Avalonia {
                         },
                         new MpMenuItemViewModel() {
                             IsSeparator = true,
-                            IsVisible = RootTriggerActionViewModel != this,
+                            IsVisible = move_items.Any(),
                         },
                         new MpMenuItemViewModel() {
                             Header = "Move",
                             IconResourceKey = "ChainImage",
-                            IsVisible = RootTriggerActionViewModel != this,
-                            SubItems =
-                                RootTriggerActionViewModel.SelfAndAllDescendants
-                                .Where(x=>
-                                        !SelfAndAllDescendants.Contains(x) &&
-                                        x != ParentActionViewModel)
-                                .Select(x =>
-                                    new MpMenuItemViewModel() {
-                                        Header = x.Label,
-                                        IconSourceObj = x.IconResourceObj,
-                                        Command = ChangeParentCommand,
-                                        CommandParameter = x.ActionId
-                                    }).ToList()
+                            IsVisible = move_items.Any(),
+                            SubItems = move_items.ToList()
                         },
                         new MpMenuItemViewModel() {
                             IsSeparator = true

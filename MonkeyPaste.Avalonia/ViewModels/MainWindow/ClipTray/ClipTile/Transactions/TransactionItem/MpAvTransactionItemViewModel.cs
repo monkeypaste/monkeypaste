@@ -510,7 +510,7 @@ namespace MonkeyPaste.Avalonia {
                 c.GetVisualAncestor<MpAvClipTileView>() is MpAvClipTileView ctv &&
                 ctv.GetVisualDescendant<MpAvClipTileTransactionPaneView>() is MpAvClipTileTransactionPaneView cttpv) {
 
-                int node_tab_idx = GetNodeTabIdx(tnvm);
+                int node_tab_idx = tnvm.GetNodeTabIdx();
                 if (IsSelected && node_tab_idx != SelectedTabIndex) {
                     SelectedTabIndex = node_tab_idx;
                 }
@@ -551,26 +551,6 @@ namespace MonkeyPaste.Avalonia {
             node_control.BringIntoView();
         }
 
-        private int GetNodeTabIdx(MpAvITransactionNodeViewModel tnvm) {
-            IEnumerable<MpITreeItemViewModel> test = null;
-            if (tnvm != null) {
-                test = tnvm.SelfAndAllAncestors();
-            }
-            if (tnvm.SelfAndAllAncestors().OfType<MpAvTransactionSourceViewModel>().Any()) {
-                return 0;
-            }
-            if (tnvm.SelfAndAllAncestors().OfType<MpAvTransactionMessageViewModelBase>().FirstOrDefault() is MpAvTransactionMessageViewModelBase tmvm) {
-                if (tmvm.TransactionMessageType == MpTransactionMessageType.Request) {
-                    return 1;
-                } else {
-                    return 2;
-                }
-            }
-            if (tnvm != this) {
-
-            }
-            return 0;
-        }
         #endregion
 
         #region Commands

@@ -601,10 +601,11 @@ namespace MonkeyPaste.Avalonia {
 
                 SelectedItem.IsExecuting = true;
                 if (SelectedItem.ExecuteItems.Any()) {
-                    // always show empty params even if not required or missing req'd
+                    // always show if has non-required params or missing req'd
                     bool needs_to_show =
-                        SelectedItem.EmptyExecuteItems.Any(x => x.IsVisible) ||
+                        SelectedItem.ExecuteItems.Any(x => x.IsVisible && !x.IsRequired) ||
                         !CanExecuteAnalysis(args);
+
                     while (needs_to_show) {
                         // show execute params
                         var exec_ntf_result = await MpNotificationBuilder.ShowNotificationAsync(
@@ -643,29 +644,38 @@ namespace MonkeyPaste.Avalonia {
                     IsBusy = false;
                     return;
                 }
-                if (!string.IsNullOrEmpty(result.TransactionErrorMessage)) {
-                    if (!string.IsNullOrEmpty(result.Response.retryMessage)) {
-                        MpConsole.WriteTraceLine("Retrying " + result.Response.retryMessage);
-                        ExecuteAnalysisCommand.Execute(args);
-                        return;
-                    } else if (!string.IsNullOrEmpty(result.Response.errorMessage)) {
-                        CurrentExecuteArgs = null;
-                        SelectedItem.IsExecuting = false;
-                        OnAnalysisCompleted?.Invoke(SelectedItem, null);
-                        IsBusy = false;
-                        return;
-                    } else {
-                        throw new Exception("Unhandled transaction response: " + result.TransactionErrorMessage);
-                    }
-                }
+
+                Func<Task<MpAnalyzerPluginResponseFormat>> retryAnalyzerFunc = async () => {
+                    ExecuteAnalysisCommand.Execute(args);
+                    return null;
+                };
+
+                result.Response = await MpPluginTransactor.ValidatePluginResponseAsync(
+                    result.Request,
+                    result.Response,
+                    retryAnalyzerFunc);
+
+                // handle errors
+                //if (!string.IsNullOrEmpty(result.TransactionErrorMessage)) {
+                //    if (!string.IsNullOrEmpty(result.Response.retryMessage)) {
+                //        MpConsole.WriteTraceLine("Retrying " + result.Response.retryMessage);
+                //        ExecuteAnalysisCommand.Execute(args);
+                //        return;
+                //    } else if (!string.IsNullOrEmpty(result.Response.errorMessage)) {
+                //        CurrentExecuteArgs = null;
+                //        SelectedItem.IsExecuting = false;
+                //        OnAnalysisCompleted?.Invoke(SelectedItem, null);
+                //        IsBusy = false;
+                //        return;
+                //    } else {
+                //        throw new Exception("Unhandled transaction response: " + result.TransactionErrorMessage);
+                //    }
+                //}
 
                 if (result is MpAnalyzerTransaction) {
                     LastTransaction = result as MpAnalyzerTransaction;
                     OnAnalysisCompleted?.Invoke(SelectedItem, LastTransaction.ResponseContent);
 
-                    if (isUserExecutedAnalysis) {
-
-                    }
                 }
 
                 CurrentExecuteArgs = null;

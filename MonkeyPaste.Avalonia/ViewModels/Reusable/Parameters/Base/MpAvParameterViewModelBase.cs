@@ -517,7 +517,7 @@ namespace MonkeyPaste.Avalonia {
                 pv.Value != CurrentValue) {
                 if (!IsPersistent) {
                     // is this a problem?
-                    MpDebug.Break("parameter update value mis-match");
+                    // MpDebug.Break("parameter update value mis-match");
                 } else {
                     // this param is persistent but not the instance that was updated
                     Dispatcher.UIThread.Post(async () => {

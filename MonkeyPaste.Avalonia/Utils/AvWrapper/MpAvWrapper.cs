@@ -31,6 +31,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        public MpIMainThreadMarshal MainThreadMarshal { get; set; }
         public MpIColorQueryTools ColorQueryTools { get; set; }
 
         public MpIKeyConverterHub KeyConverter { get; set; }
@@ -57,7 +58,6 @@ namespace MonkeyPaste.Avalonia {
         public MpIKeyboardInteractionService KeyboardInteractionService { get; set; }
         public MpIPlatformResource PlatformResource { get; set; }
         public MpIContextMenuCloser ContextMenuCloser { get; set; }
-        public MpIMainThreadMarshal MainThreadMarshal { get; set; }
         public MpIStringTools StringTools { get; set; }
         public MpIPlatformInfo PlatformInfo { get; set; }
         public MpIPlatformDataObjectHelperAsync DataObjectHelperAsync { get; set; }
