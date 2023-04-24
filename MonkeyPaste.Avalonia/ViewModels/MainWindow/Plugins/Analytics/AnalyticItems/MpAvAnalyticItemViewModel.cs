@@ -794,6 +794,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ResetPresetCommand => new MpAsyncCommand<object>(
             async (presetVmArg) => {
+                MpConsole.WriteLine("Resetting...");
                 IsBusy = true;
 
                 MpAvAnalyticItemPresetViewModel aipvm = null;
@@ -815,6 +816,35 @@ namespace MonkeyPaste.Avalonia {
                         return;
                     }
                 }
+                if (aipvm == null) {
+                    IsBusy = false;
+                    return;
+                }
+
+                Dictionary<string, string> shared_params_to_clear_or_restore = new Dictionary<string, string>();
+                foreach (var sp in aipvm.Items.Where(x => x.IsSharedValue)) {
+                    shared_params_to_clear_or_restore.Add(sp.ParamId.ToString(), sp.CurrentValue);
+                }
+
+                if (shared_params_to_clear_or_restore.Any()) {
+                    // ntf w/ yes/no/cancel to reset shared values
+                    var result = await Mp.Services.NativeMessageBox.ShowYesNoCancelMessageBoxAsync(
+                        title: "Confirm",
+                        message: $"'{aipvm.Label}' contains shared values. Would you like to reset those as well?",
+                        iconResourceObj: "QuestionMarkImage",
+                        owner: MpAvWindowManager.MainWindow);
+                    if (result.IsNull()) {
+                        // cancel
+                        IsBusy = false;
+                        return;
+                    }
+                    if (result.IsTrue()) {
+                        // clear shared values
+                        foreach (var kvp in shared_params_to_clear_or_restore) {
+                            shared_params_to_clear_or_restore[kvp.Key] = string.Empty;
+                        }
+                    }
+                }
                 // recreate default preset record (name, icon, etc.)
                 var defaultPresetModel = await MpAvPluginPresetLocator.CreateOrResetManifestPresetModelAsync(
                     this, aipvm.PresetGuid, Items.IndexOf(aipvm));
@@ -824,6 +854,15 @@ namespace MonkeyPaste.Avalonia {
 
                 await aipvm.InitializeAsync(defaultPresetModel);
 
+                if (shared_params_to_clear_or_restore.Any()) {
+                    // update shared values and trigger db write for other instance updates
+                    foreach (var shared_param_to_restore in shared_params_to_clear_or_restore) {
+                        var cur_param = aipvm.Items.FirstOrDefault(x => x.ParamId.ToString() == shared_param_to_restore.Key);
+                        MpDebug.Assert(cur_param != null, $"Can't find shared param '{shared_param_to_restore.Key}'");
+                        cur_param.CurrentValue = shared_param_to_restore.Value;
+                        cur_param.SaveCurrentValueCommand.Execute(null);
+                    }
+                }
                 Items.ForEach(x => x.IsSelected = x.AnalyticItemPresetId == aipvm.AnalyticItemPresetId);
                 OnPropertyChanged(nameof(SelectedItem));
 

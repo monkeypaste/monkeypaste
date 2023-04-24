@@ -82,10 +82,13 @@
 
             <!--  JOIN CRITERIA ITEM HEADER  -->
 
-            <StackPanel DockPanel.Dock="Top"
-                        Orientation="Horizontal"
-                        HorizontalAlignment="Left"
-                        IsVisible="{Binding IsJoinPanelVisible}">
+            <DockPanel DockPanel.Dock="Top"
+                       HorizontalAlignment="Left"
+                       IsVisible="{Binding IsJoinPanelVisible}">
+                <TextBlock DockPanel.Dock="Right"
+                           Text="of the following are true"
+                           Margin="15,0,0,0"
+                           VerticalAlignment="Center" />
                 <ComboBox Classes="criteriaComboBox joinComboBox"
                           Items="{Binding JoinTypeLabels}"
                           SelectedIndex="{Binding SelectedJoinTypeIdx, Mode=TwoWay}">
@@ -96,10 +99,7 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                <TextBlock Text="of the following are true"
-                           Margin="15,0,0,0"
-                           VerticalAlignment="Center" />
-            </StackPanel>
+            </DockPanel>
 
             <Grid x:Name="CriteriaRowButtonsContainer"
                   DockPanel.Dock="Right"

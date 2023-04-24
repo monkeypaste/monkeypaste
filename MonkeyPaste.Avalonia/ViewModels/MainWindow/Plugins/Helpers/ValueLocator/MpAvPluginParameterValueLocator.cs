@@ -55,7 +55,7 @@ namespace MonkeyPaste.Avalonia {
                             }
                         }
                     }
-                    if (paramFormat.isPersistent) {
+                    if (paramFormat.isSharedValue) {
                         // for persistent param's set value using any other preset if found
                         MpDebug.Assert(string.IsNullOrEmpty(paramVal), "Preset w/ persistent param validation failed (should be caught in plugin loader)");
 

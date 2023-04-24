@@ -12,6 +12,12 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvPluginParameterItemView">
+    <local:MpAvUserControl.Resources>
+        <SolidColorBrush x:Key="TextControlBackground" Color="White" />
+        <SolidColorBrush x:Key="CheckBoxBorderBrushUnchecked" Color="White" />
+        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUnchecked" Color="White" />
+        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUncheckedPointerOver" Color="Yellow" />
+    </local:MpAvUserControl.Resources>
     <Border x:Name="OuterParameterItemBorder"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
@@ -19,7 +25,11 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100" />
                 <ColumnDefinition MinWidth="150" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
+
+            <!--  LABEL & HINT  -->
+
             <DockPanel Grid.Column="0"
                        LastChildFill="False"
                        HorizontalAlignment="Stretch"
@@ -52,7 +62,7 @@
             <!--  PARAMETER  -->
 
             <ContentControl x:Name="ParameterContentControl"
-                            Grid.Column="2"
+                            Grid.Column="1"
                             Margin="1"
                             HorizontalAlignment="Stretch"
                             HorizontalContentAlignment="Stretch"
@@ -153,6 +163,17 @@
                     </local:MpAvPluginParameterTemplateSelector>
                 </ContentControl.DataTemplates>
             </ContentControl>
+
+            <!--  REMEMBER  -->
+            <CheckBox x:Name="RemeberParamCheckbox"
+                      Grid.Column="2"
+                      IsChecked="{Binding IsRememberChecked, Mode=TwoWay}"
+                      IsVisible="{Binding IsConfirmRemember}">
+                <ToolTip.Tip>
+                    <local:MpAvToolTipView ToolTipText="Remember?" />
+                </ToolTip.Tip>
+            </CheckBox>
+
 
             <!--  VALDIATION  -->
 

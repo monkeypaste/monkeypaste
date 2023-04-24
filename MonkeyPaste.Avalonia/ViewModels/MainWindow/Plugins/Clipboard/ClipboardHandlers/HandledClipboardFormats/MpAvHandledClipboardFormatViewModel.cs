@@ -52,8 +52,15 @@ namespace MonkeyPaste.Avalonia {
         MpParameterHostBaseFormat MpIParameterHostViewModel.ComponentFormat => ClipboardPluginFormat;
 
         MpParameterHostBaseFormat MpIParameterHostViewModel.BackupComponentFormat =>
-            PluginFormat == null || PluginFormat.backupCheckPluginFormat == null || PluginFormat.backupCheckPluginFormat.analyzer == null ?
-                null : PluginFormat.backupCheckPluginFormat.analyzer;
+            PluginFormat == null ||
+            PluginFormat.backupCheckPluginFormat == null ||
+            PluginFormat.backupCheckPluginFormat.clipboardHandler == null ||
+            (IsReader && PluginFormat.backupCheckPluginFormat.clipboardHandler.readers == null) ||
+            (IsWriter && PluginFormat.backupCheckPluginFormat.clipboardHandler.writers == null) ?
+                null :
+                IsReader ?
+                    PluginFormat.backupCheckPluginFormat.clipboardHandler.readers.FirstOrDefault(x => x.handlerGuid == ClipboardHandlerGuid) :
+                    PluginFormat.backupCheckPluginFormat.clipboardHandler.writers.FirstOrDefault(x => x.handlerGuid == ClipboardHandlerGuid);
         public MpIPluginComponentBase PluginComponent => ClipboardPluginComponent;
 
         public string ClipboardHandlerGuid { get; private set; }

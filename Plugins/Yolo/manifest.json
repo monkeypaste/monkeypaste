@@ -10,6 +10,7 @@
   },
   "dependencies": [
     {
+      "type": "os",
       "name": "Windows",
       "minVersion": "1903"
     }
@@ -58,7 +59,7 @@
         "controlType": "TextBox",
         "unitType": "PlainText",
         "isExecuteParameter": false,
-        "isPersistent": true,
+        "isSharedValue": true,
         "isRequired": true,
         "isVisible": true,
         "paramId": 3
@@ -69,9 +70,9 @@
         "controlType": "TextBox",
         "unitType": "PlainText",
         "isExecuteParameter": true,
-        "isPersistent": true,
+        "isSharedValue": true,
         "isRequired": true,
-        "isVisible": true,
+        "isVisible": true
       },
       {
         "label": "Optional Execute Test",
@@ -79,10 +80,22 @@
         "controlType": "TextBox",
         "unitType": "PlainText",
         "isExecuteParameter": true,
-        "isPersistent": false,
+        "isSharedValue": false,
         "isRequired": false,
         "isVisible": true,
         "paramId": 4
+      },
+      {
+        "label": "Remember Form Test",
+        "description": "This value is only saved if checked otherwise is default or blank if none proided",
+        "controlType": "TextBox",
+        "unitType": "PlainText",
+        "isExecuteParameter": false,
+        "isSharedValue": false,
+        "confirmToRemember": true,
+        "isRequired": false,
+        "isVisible": true,
+        "paramId": 5
       }
     ],
     "presets": [

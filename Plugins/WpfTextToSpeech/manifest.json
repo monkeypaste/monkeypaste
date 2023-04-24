@@ -7,41 +7,13 @@
   "url": "https://www.monkeypaste.com",
   "iconUri": "icon.png",
   "ioType": {
-    "isNuget": true
+    "isDll": true
   },
   "dependencies": [
     {
+      "type": "os",
       "name": "Windows",
       "minVersion": "1903"
     }
-  ],
-  "analyzer": {
-    "inputType": {
-      "text": true
-    },
-    "parameters": [
-      {
-        "label": "Text to say",
-        "description": "Will speak text with selected voice",
-        "controlType": "TextBox",
-        "unitType": "PlainTextContentQuery",
-        "isVisible": false,
-        "paramId": 1,
-        "values": [
-          {
-            "value": "{ItemData}"
-          }
-        ]
-      },
-      {
-        "label": "Voice",
-        "description": "One of the available voices in windows",
-        "controlType": "ComboBox",
-        "unitType": "PlainText",
-        "isVisible": true,
-        "paramId": 2,
-        "isValueDeferred": true
-      }
-    ]
-  }
+  ]
 }

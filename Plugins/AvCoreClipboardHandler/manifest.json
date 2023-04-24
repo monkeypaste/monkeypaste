@@ -638,6 +638,7 @@
         "clipboardName": "x-special/gnome-copied-files",
         "dependencies": [
           {
+            "type": "os",
             "name": "Linux",
             "minVersion": "0"
           }

@@ -100,11 +100,12 @@ namespace MonkeyPaste.Common.Plugin {
         public MpParameterValueUnitType unitType { get; set; } = MpParameterValueUnitType.PlainText;
 
         public bool isExecuteParameter { get; set; }
-        public bool isPersistent { get; set; }
+        public bool isSharedValue { get; set; }
         public bool isValueDeferred { get; set; }
         public bool isVisible { get; set; } = true;
         public bool isReadOnly { get; set; } = false;
         public bool isRequired { get; set; } = false;
+        public bool confirmToRemember { get; set; } = false;
 
         //TextBox
         public int maxLength { get; set; } = int.MaxValue;

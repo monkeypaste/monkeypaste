@@ -643,6 +643,7 @@ namespace MonkeyPaste.Avalonia {
                 if (args == null) {
                     // called from sidebar preset grid
                     Parent.ResetOrDeletePresetCommand.Execute(this);
+                    return;
                 }
                 Parent.ResetOrDeletePresetCommand.Execute(new object[] { this, args });
             });

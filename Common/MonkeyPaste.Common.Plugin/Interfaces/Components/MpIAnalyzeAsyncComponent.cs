@@ -9,4 +9,7 @@ namespace MonkeyPaste.Common.Plugin {
         MpAnalyzerPluginResponseFormat Analyze(MpAnalyzerPluginRequestFormat req);
     }
 
+    public interface MpISupportHeadlessAnalyzerComponentFormat {
+        MpAnalyzerPluginFormat GetFormat();
+    }
 }

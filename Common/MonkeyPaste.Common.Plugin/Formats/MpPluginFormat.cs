@@ -27,13 +27,10 @@ namespace MonkeyPaste.Common.Plugin {
 
         public string tags { get; set; }
 
-        public List<MpPluginDependency> dependencies { get; set; }
 
         public string guid { get; set; } = string.Empty;
         public string url { get; set; } = string.Empty;
         public string iconUri { get; set; } = string.Empty;
-
-        public DateTime manifestLastModifiedDateTime { get; set; }
 
         public MpPluginIoTypeFormat ioType { get; set; } = new MpPluginIoTypeFormat();
 
@@ -43,8 +40,12 @@ namespace MonkeyPaste.Common.Plugin {
         public MpClipboardHandlerFormats clipboardHandler { get; set; }
 
         public MpContactFetcherFormat contactFetcher { get; set; }
+        public List<MpPluginDependency> dependencies { get; set; }
 
+        [JsonIgnore]
         public string RootDirectory { get; set; }
+        [JsonIgnore]
+        public DateTime manifestLastModifiedDateTime { get; set; }
 
         [JsonIgnore]
         public object Component { get; set; } = null;
@@ -88,8 +89,8 @@ namespace MonkeyPaste.Common.Plugin {
         public bool isCli { get; set; } = false;
         public bool isHttp { get; set; } = false;
     }
-
     public class MpPluginDependency {
+        public MpPluginDependencyType type { get; set; }
         public string name { get; set; }
         public string minVersion { get; set; }
     }

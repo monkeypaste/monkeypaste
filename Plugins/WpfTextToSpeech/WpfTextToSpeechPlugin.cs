@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 namespace WpfTextToSpeech {
     public class WpfTextToSpeechPlugin :
         MpIAnalyzeComponent,
+        MpISupportHeadlessAnalyzerComponentFormat,
         MpISupportDeferredValue {
         private const int TEXT_PARAM_ID = 1;
         private const int VOICE_PARAM_ID = 2;
@@ -62,6 +63,38 @@ namespace WpfTextToSpeech {
             };
 
             return resp;
+        }
+
+        public MpAnalyzerPluginFormat GetFormat() {
+            return new MpAnalyzerPluginFormat() {
+                inputType = new MpPluginInputFormat() {
+                    text = true
+                },
+                parameters = new List<MpParameterFormat>() {
+                    new MpParameterFormat() {
+                        label = "Text to say",
+                        description = "Will speak text with selected voice",
+                        controlType = MpParameterControlType.TextBox,
+                        unitType = MpParameterValueUnitType.PlainTextContentQuery,
+                        isVisible = false,
+                        paramId = "1",
+                        values = new List<MpPluginParameterValueFormat>() {
+                            new MpPluginParameterValueFormat() {
+                                value = "{ItemData}"
+                            }
+                        }
+                    },
+                    new MpParameterFormat() {
+                        label = "Voice",
+                        description = "One of the available voices in windows",
+                        controlType = MpParameterControlType.ComboBox,
+                        unitType = MpParameterValueUnitType.PlainText,
+                        isVisible = true,
+                        paramId = "2",
+                        isValueDeferred = true
+                    }
+                }
+            };
         }
     }
 }

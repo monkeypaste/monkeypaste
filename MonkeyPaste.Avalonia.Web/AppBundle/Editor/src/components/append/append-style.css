@@ -29,4 +29,5 @@
 #pasteAppendIsManualToolbarLabel {
     color: var(--editortoolbarbgcolor);
     margin-right: 10px;
+    user-select: none;
 }

@@ -90,35 +90,10 @@ namespace MonkeyPaste.Avalonia {
             CurrentValue = GetCurrentValue();
         }
 
-        //protected override void SetLastValue(object value) {
-        //    if (value is string val_str) {
-        //        // for single selectables
-        //        var epvvm = new MpAvEnumerableParameterValueViewModel() {
-        //            Value = val_str
-        //        };
-        //        SetLastValue(new[] { epvvm });
-        //    } else if (value is IEnumerable<MpAvEnumerableParameterValueViewModel> val_vml) {
-        //        _lastSelectedValues = val_vml.ToList();
-        //    } else {
-        //        _lastSelectedValues = new List<MpAvEnumerableParameterValueViewModel>();
-        //    }
-        //}
-
         protected override void RestoreLastValue() {
-            //if (_lastSelectedValues is IEnumerable<MpAvEnumerableParameterValueViewModel> val_vml) {
-            //    Selection.BeginBatchUpdate();
-            //    foreach (var (pvvm, idx) in Items.WithIndex()) {
-            //        if (val_vml.Contains(pvvm)) {
-            //            Selection.Select(idx);
-            //        } else {
-            //            Selection.Deselect(idx);
-            //        }
-            //    }
-            //    val_vml.ForEach((x, idx) => Selection.Select(idx));
-            //    Selection.EndBatchUpdate();
-            //} else {
-            //    Selection.Clear();
-            //}
+            if (!CanSetModelValue()) {
+                return;
+            }
             var lvl = _lastValue.ToListFromCsv(CsvProperties);
             Selection.BeginBatchUpdate();
             foreach (var (pvvm, idx) in Items.WithIndex()) {
