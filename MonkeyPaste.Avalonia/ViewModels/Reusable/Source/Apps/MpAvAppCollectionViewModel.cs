@@ -15,9 +15,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public interface MpIFilterMatch {
-        bool IsMatch(string filter);
-    }
 
     public class MpAvAppCollectionViewModel :
         MpViewModelBase<MpAvAppViewModel> {

@@ -1,0 +1,361 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:av="clr-namespace:TheArtOfDev.HtmlRenderer.Avalonia;assembly=Avalonia.HtmlRenderer"
+                       xmlns:pcl="using:MonkeyPaste"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       x:TypeArguments="local:MpAvPluginBrowserViewModel"
+                       x:DataType="local:MpAvPluginBrowserViewModel"
+                       x:CompileBindings="True"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Class="MonkeyPaste.Avalonia.MpAvPluginBrowserView">
+    <local:MpAvUserControl.Styles>
+        <Style Selector="ListBox#PluginSelectorListBox ListBoxItem">
+            <Setter Property="Padding"
+                    Value="5" />
+            <Setter Property="BorderThickness"
+                    Value="1" />
+            <Setter Property="BorderBrush"
+                    Value="Black" />
+        </Style>
+        <Style Selector="TextBlock.detailLabel">
+            <Setter Property="FontWeight"
+                    Value="SemiBold" />
+            <Setter Property="TextWrapping"
+                    Value="NoWrap" />
+        </Style>
+        <Style Selector="TextBlock.detailInfo">
+            <Setter Property="TextWrapping"
+                    Value="Wrap" />
+        </Style>
+
+        <Style Selector="local|MpAvMarqueeTextBox.detailInfo">
+            <Setter Property="IsReadOnly"
+                    Value="True" />
+            <Setter Property="EditOnFocus"
+                    Value="False" />
+            <Setter Property="DropShadowBrush"
+                    Value="Transparent" />
+        </Style>
+    </local:MpAvUserControl.Styles>
+    <Grid x:Name="PluginRootContainer"
+          RowDefinitions="Auto,Auto,*"
+          ColumnDefinitions="*,Auto"
+          Margin="10">
+
+        <!--  TABS  -->
+
+        <TabStrip Grid.Row="0"
+                  Grid.ColumnSpan="2"
+                  Items="{Binding Tabs}"
+                  SelectedIndex="{Binding SelectedTabIdx, Mode=TwoWay}"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Top" />
+
+        <!--  FILTER  -->
+        <DockPanel x:Name="PluginFilterOuterContainer"
+                   Grid.Row="1"
+                   Grid.ColumnSpan="2"
+                   LastChildFill="False">
+            <StackPanel x:Name="PluginFilterBoxContainer"
+                        DockPanel.Dock="Left"
+                        Orientation="Horizontal"
+                        Margin="5"
+                        Spacing="10">
+                <!--  FILTER BOX  -->
+
+                <AutoCompleteBox x:Name="FilterPluginBox"
+                                 DragDrop.AllowDrop="True"
+                                 VerticalAlignment="Stretch"
+                                 HorizontalAlignment="Stretch"
+                                 Padding="5,3,0,0"
+                                 local:MpAvTextControlDropExtension.IsEnabled="True"
+                                 local:MpAvDelayedTextChangedExtension.IsEnabled="True"
+                                 local:MpAvDelayedTextChangedExtension.DelayMs="500"
+                                 local:MpAvDelayedTextChangedExtension.Text="{Binding FilterText, Mode=TwoWay}"
+                                 Width="150"
+                                 Height="30"
+                                 Watermark="Search..."
+                                 FontSize="14"
+                                 IsTextCompletionEnabled="False"
+                                 MinimumPrefixLength="0"
+                                 MinimumPopulateDelay="0.25"
+                                 Items="{Binding RecentPluginSearches}">
+                    <AutoCompleteBox.Resources>
+                        <SolidColorBrush x:Key="TextControlBorderBrush">Black</SolidColorBrush>
+                        <SolidColorBrush x:Key="TextControlBorderBrushFocused">Black</SolidColorBrush>
+                    </AutoCompleteBox.Resources>
+                </AutoCompleteBox>
+
+                <!--  REFRESH BUTTON  -->
+                <Button x:Name="RefreshFilterButton"
+                        VerticalAlignment="Stretch"
+                        HorizontalAlignment="Center"
+                        Classes="defaultButton noBg noHoverBg outline outlineOver square"
+                        IsEnabled="{Binding !IsBusy}"
+                        Command="{Binding PerformFilterCommand}">
+                    <ToolTip.Tip>
+                        <local:MpAvToolTipView ToolTipText="Refresh" />
+                    </ToolTip.Tip>
+                    <Grid>
+                        <Image IsVisible="{Binding $parent.IsEnabled}"
+                               Source="{Binding ., Source={StaticResource ResetImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                        <local:MpAvBusySpinnerView IsVisible="{Binding !$parent.IsEnabled}"
+                                                   HorizontalAlignment="Stretch"
+                                                   VerticalAlignment="Stretch" />
+                    </Grid>
+                </Button>
+            </StackPanel>
+
+            <!--  BROWSER CONFIG BUTTON  -->
+            <Button x:Name="OpenSettingsButton"
+                    DockPanel.Dock="Right"
+                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Center"
+                    Classes="defaultButton noBg noHoverBg outline outlineOver square"
+                    Command="{Binding ShowSettingsWindowCommand, Source={x:Static local:MpAvSettingsViewModel.Instance}}"
+                    CommandParameter="2">
+                <ToolTip.Tip>
+                    <local:MpAvToolTipView ToolTipText="Settings" />
+                </ToolTip.Tip>
+                <Image Source="{Binding ., Source={StaticResource CogImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+
+            </Button>
+        </DockPanel>
+
+        <!--  PLUGIN LIST  -->
+        <ListBox x:Name="PluginSelectorListBox"
+                 Grid.Row="2"
+                 Grid.Column="0"
+                 IsVisible="{Binding !IsFiltering}"
+                 Items="{Binding Items}"
+                 SelectionMode="Single,AlwaysSelected"
+                 Selection="{Binding Selection}">
+            <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="local:MpAvPluginItemViewModel">
+                    <Grid x:Name="PluginBrowserItemContainer"
+                          RowDefinitions="30,60"
+                          ColumnDefinitions="50,*">
+                        <!--  PLUGIN ICON  -->
+                        <Image x:Name="PluginIcon"
+                               Grid.Row="0"
+                               Grid.RowSpan="2"
+                               Grid.Column="0"
+                               Margin="5"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Source="{Binding IconBase64, Converter={x:Static local:MpAvStringBase64ToBitmapConverter.Instance}}" />
+
+                        <!--  PLUGIN TITLE  -->
+                        <TextBlock x:Name="PluginTitleBlock"
+                                   Grid.Row="0"
+                                   Grid.Column="1"
+                                   FontSize="18"
+                                   FontWeight="SemiBold"
+                                   TextWrapping="NoWrap"
+                                   Text="{Binding PluginTitle}" />
+
+                        <!--  PLUGIN DESCRIPTION  -->
+                        <TextBlock x:Name="PluginDescriptionBlock"
+                                   Grid.Row="1"
+                                   Grid.Column="1"
+                                   FontSize="12"
+                                   TextWrapping="WrapWithOverflow"
+                                   Text="{Binding PluginDescription}" />
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <local:MpAvBusySpinnerView x:Name="SelectorBusyContainer"
+                                   Grid.Row="2"
+                                   Grid.Column="0"
+                                   Width="70"
+                                   Height="70"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   IsVisible="{Binding IsFiltering}" />
+        <!--  SELECTED PLUGIN VIEW  -->
+        <Grid Grid.Row="2"
+              Grid.Column="1"
+              DataContext="{Binding SelectedItem}"
+              x:DataType="local:MpAvPluginItemViewModel"
+              IsVisible="{Binding !IsBusy}"
+              Margin="10,3"
+              RowDefinitions="50,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+              ColumnDefinitions="70,*">
+            <!--  SELECTED HEADER  -->
+            <DockPanel Grid.Row="0"
+                       Grid.ColumnSpan="2"
+                       LastChildFill="False">
+                <StackPanel DockPanel.Dock="Left"
+                            Orientation="Horizontal"
+                            Spacing="5">
+                    <!--  PLUGIN ICON  -->
+                    <Image x:Name="SelectedPluginIcon"
+                           Classes="square"
+                           Source="{Binding IconBase64, Converter={x:Static local:MpAvStringBase64ToBitmapConverter.Instance}}" />
+
+                    <!--  PLUGIN TITLE  -->
+                    <TextBlock x:Name="SelectedPluginTitleBlock"
+                               Grid.Row="0"
+                               Grid.Column="1"
+                               FontSize="20"
+                               FontWeight="SemiBold"
+                               TextWrapping="NoWrap"
+                               Text="{Binding PluginTitle}" />
+                </StackPanel>
+            </DockPanel>
+
+            <!--  TOGGLE INSTALL BUTTON  -->
+            <Button x:Name="ToggleInstallSelectedPluginButton"
+                    Grid.Row="1"
+                    Classes="defaultButton textOnlyButton"
+                    Content="{Binding ToggleInstallText}"
+                    Command="{Binding ToggleIsPluginInstalledCommand}" />
+
+            <!--  UPDATE BUTTON  -->
+            <Button x:Name="UpdateSelectedPluginButton"
+                    Grid.Row="2"
+                    Classes="defaultButton textOnlyButton"
+                    Content="Update"
+                    IsVisible="{Binding IsInstalled}"
+                    Command="{Binding UpdatePluginCommand}" />
+
+            <!--  DESCRIPTION  -->
+            <TextBlock Grid.Row="3"
+                       Text="Description"
+                       Classes="detailLabel" />
+            <TextBlock Grid.Row="4"
+                       Grid.ColumnSpan="2"
+                       Text="{Binding PluginDescription}"
+                       Classes="detailInfo" />
+
+            <!--  VERSION  -->
+            <TextBlock Grid.Row="5"
+                       Grid.Column="0"
+                       Classes="detailLabel"
+                       Text="Version:" />
+            <TextBlock Grid.Row="5"
+                       Grid.Column="1"
+                       Classes="detailInfo"
+                       Text="{Binding PluginVersion}" />
+
+            <!--  CREDITS  -->
+            <TextBlock Grid.Row="6"
+                       Grid.Column="0"
+                       Classes="detailLabel"
+                       Text="Credits:" />
+            <TextBlock Grid.Row="6"
+                       Grid.Column="1"
+                       Classes="detailInfo"
+                       Text="{Binding PluginCredits}" />
+
+            <!--  LICENSE URL  -->
+            <TextBlock Grid.Row="7"
+                       Grid.Column="0"
+                       Classes="detailLabel"
+                       Text="License:" />
+            <local:MpAvMarqueeTextBox Grid.Row="7"
+                                      Grid.Column="1"
+                                      Classes="detailInfo"
+                                      Text="*License Link*"
+                                      NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
+                                      NavigateUriCommandParameter="{Binding PluginLicenseUrl}" />
+
+            <!--  PUBLISHED  -->
+            <TextBlock Grid.Row="8"
+                       Grid.Column="0"
+                       Classes="detailLabel"
+                       Text="Published:" />
+            <TextBlock Grid.Row="8"
+                       Grid.Column="1"
+                       Classes="detailInfo"
+                       Text="{Binding PluginPublishedDateTime, Converter={x:Static local:MpAvDateTimeToStringConverter.Instance}}" />
+
+            <!--  PROJECT URL  -->
+            <TextBlock Grid.Row="9"
+                       Grid.Column="0"
+                       Classes="detailLabel"
+                       Text="Project URL:" />
+            <local:MpAvMarqueeTextBox Grid.Row="9"
+                                      Grid.Column="1"
+                                      Classes="detailInfo"
+                                      Text="{Binding PluginProjectUrl}"
+                                      NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
+                                      NavigateUriCommandParameter="{Binding PluginProjectUrl}" />
+
+            <!--  ABUSE URL  -->
+            <TextBlock Grid.Row="10"
+                       Grid.Column="0"
+                       Classes="detailLabel"
+                       Text="Report Abuse:" />
+            <local:MpAvMarqueeTextBox Grid.Row="10"
+                                      Grid.Column="1"
+                                      Classes="detailInfo"
+                                      Text="{Binding PluginAbuseUrl}"
+                                      NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
+                                      NavigateUriCommandParameter="{Binding PluginAbuseUrl}" />
+
+            <!--  TAGS  -->
+            <TextBlock Grid.Row="11"
+                       Grid.Column="0"
+                       Classes="detailLabel"
+                       Text="Tags:" />
+            <TextBlock Grid.Row="11"
+                       Grid.Column="1"
+                       Classes="detailInfo"
+                       Text="{Binding PluginTags}" />
+
+            <!--  DEPENDENCIES  -->
+
+            <TreeView Grid.Row="12"
+                      Grid.ColumnSpan="2">
+                <TreeView.ItemTemplate>
+                    <TreeDataTemplate x:DataType="local:MpAvPluginDependencyViewModel"
+                                      ItemsSource="{Binding Items}">
+                        <TextBlock Text="{Binding LabelText}" />
+                    </TreeDataTemplate>
+                </TreeView.ItemTemplate>
+                <TreeViewItem DataContext="{Binding RootDependencyViewModel}"
+                              FontWeight="SemiBold" />
+            </TreeView>
+
+            <!--  README VIEW  -->
+            <TextBlock Grid.Row="13"
+                       Grid.Column="0"
+                       Classes="detailLabel"
+                       IsVisible="{Binding ReadMeMarkDownText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                       Text="Read Me:" />
+            <av:HtmlPanel Grid.Row="14"
+                          Grid.ColumnSpan="2"
+                          IsVisible="{Binding ReadMeMarkDownText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                          Text="{Binding ReadMeMarkDownText, Converter={x:Static local:MpAvStringMarkDownToHtmlConverter.Instance}}" />
+
+        </Grid>
+
+
+        <local:MpAvBusySpinnerView x:Name="DetailBusyContainer"
+                                   Grid.Row="2"
+                                   Grid.Column="1"
+                                   Width="70"
+                                   Height="70"
+                                   DataContext="{Binding SelectedItem}"
+                                   x:DataType="local:MpAvPluginItemViewModel"
+                                   IsVisible="{Binding IsBusy}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+        <!--  LIST/DETAIL SPLITTER  -->
+        <GridSplitter x:Name="ListDetailSplitter"
+                      Grid.Row="2"
+                      Grid.Column="1"
+                      HorizontalAlignment="Left"
+                      Classes="vertical" />
+
+    </Grid>
+</local:MpAvUserControl>
+

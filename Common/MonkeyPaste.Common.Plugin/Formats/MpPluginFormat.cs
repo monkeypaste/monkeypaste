@@ -13,26 +13,8 @@ namespace MonkeyPaste.Common.Plugin {
         Composite
     }
 
-    public class MpPluginFormat : MpJsonObject {
-        public string title { get; set; } = string.Empty;
-        public string description { get; set; } = string.Empty;
-        public string version { get; set; } = string.Empty;
-        public string credits { get; set; } = string.Empty;
-        public string licenseUrl { get; set; } = string.Empty;
-        public string readmeUrl { get; set; } = string.Empty;
-        public DateTime datePublished { get; set; }
+    public class MpPluginFormat : MpManifestFormat {
 
-        public string projectUrl { get; set; }
-        public string reportAbuseUrl { get; set; }
-
-        public string tags { get; set; }
-
-
-        public string guid { get; set; } = string.Empty;
-        public string url { get; set; } = string.Empty;
-        public string iconUri { get; set; } = string.Empty;
-
-        public MpPluginIoTypeFormat ioType { get; set; } = new MpPluginIoTypeFormat();
 
         public MpHeadlessPluginFormat headless { get; set; } = null;
         public MpAnalyzerPluginFormat analyzer { get; set; } = null;
@@ -40,7 +22,6 @@ namespace MonkeyPaste.Common.Plugin {
         public MpClipboardHandlerFormats clipboardHandler { get; set; }
 
         public MpContactFetcherFormat contactFetcher { get; set; }
-        public List<MpPluginDependency> dependencies { get; set; }
 
         [JsonIgnore]
         public string RootDirectory { get; set; }
@@ -92,7 +73,7 @@ namespace MonkeyPaste.Common.Plugin {
     public class MpPluginDependency {
         public MpPluginDependencyType type { get; set; }
         public string name { get; set; }
-        public string minVersion { get; set; }
+        public string version { get; set; }
     }
 
 

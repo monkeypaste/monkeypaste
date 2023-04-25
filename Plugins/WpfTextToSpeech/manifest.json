@@ -13,7 +13,7 @@
     {
       "type": "os",
       "name": "Windows",
-      "minVersion": "1903"
+      "version": "1903"
     }
   ]
 }

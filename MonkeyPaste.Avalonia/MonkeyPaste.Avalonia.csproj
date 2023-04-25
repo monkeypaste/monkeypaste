@@ -1249,6 +1249,9 @@
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Analytics\Presets\MpAvAnalyticItemPresetDataGridView.axaml.cs">
       <DependentUpon>MpAvAnalyticItemPresetDataGridView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Browser\MpAvPluginBrowserView.axaml.cs">
+      <DependentUpon>MpAvPluginBrowserView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\Items\Button\MpAvButtonParameterView.axaml.cs">
       <DependentUpon>MpAvButtonParameterView.axaml</DependentUpon>
     </Compile>
@@ -1395,6 +1398,7 @@
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-preview6" />
     <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.0-preview6" />
     <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.0-preview6" />
+    <PackageReference Include="Markdig" Version="0.31.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
     <PackageReference Include="System.Management" Version="7.0.0" />
     <PackageReference Include="NetCoreAudio" Version="1.7.0" />

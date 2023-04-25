@@ -252,7 +252,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        //public async Task InitializeAsync(MpPluginFormat plugin, int handlerIdx, bool isReader) {
         public async Task InitializeAsync(MpClipboardHandlerFormat handlerFormat) {
             IsValid = ValidateClipboardHandlerFormat(handlerFormat);
             if (!IsValid) {

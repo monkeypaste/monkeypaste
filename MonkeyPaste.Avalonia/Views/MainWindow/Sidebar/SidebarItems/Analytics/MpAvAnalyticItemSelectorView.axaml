@@ -33,24 +33,39 @@
                         <Border Classes="iconLabelComboBox"
                                 Grid.Row="2"
                                 Grid.Column="0">
-                            <ComboBox SelectedIndex="{Binding SelectedItemIdx, Mode=TwoWay}"
-                                      Items="{Binding Items}">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <Border Classes="outerComboBoxItemBorder">
-                                            <DockPanel>
-                                                <Image Source="{Binding PluginIconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                            <DockPanel>
+                                <!--  SHOW BROWSER BUTTON  -->
+                                <Button x:Name="ShowPluginBrowserButton"
+                                        DockPanel.Dock="Right"
+                                        VerticalAlignment="Stretch"
+                                        HorizontalAlignment="Center"
+                                        Classes="defaultButton noBg noHoverBg outline outlineOver square"
+                                        Command="{Binding ShowPluginBrowserCommand, Source={x:Static local:MpAvPluginBrowserViewModel.Instance}}">
+                                    <ToolTip.Tip>
+                                        <local:MpAvToolTipView ToolTipText="Settings" />
+                                    </ToolTip.Tip>
+                                    <Image Source="{Binding ., Source={StaticResource PlusImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
 
-                                                <Border Classes="comboBoxItemBusyBorder"
-                                                        IsVisible="{Binding IsBusy}">
-                                                    <local:MpAvBusySpinnerView />
-                                                </Border>
-                                                <TextBlock Text="{Binding Title}" />
-                                            </DockPanel>
-                                        </Border>
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
+                                </Button>
+                                <ComboBox SelectedIndex="{Binding SelectedItemIdx, Mode=TwoWay}"
+                                          Items="{Binding Items}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Classes="outerComboBoxItemBorder">
+                                                <DockPanel>
+                                                    <Image Source="{Binding PluginIconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+
+                                                    <Border Classes="comboBoxItemBusyBorder"
+                                                            IsVisible="{Binding IsBusy}">
+                                                        <local:MpAvBusySpinnerView />
+                                                    </Border>
+                                                    <TextBlock Text="{Binding Title}" />
+                                                </DockPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </DockPanel>
                         </Border>
                         <Label Classes="h1"
                                Content="Presets" />
@@ -83,7 +98,7 @@
                             <TransitioningContentControl.ContentTemplate>
                                 <DataTemplate DataType="local:MpAvIParameterCollectionViewModel">
                                     <local:MpAvParameterCollectionView HorizontalAlignment="Stretch"
-                                                                          VerticalAlignment="Stretch" />
+                                                                       VerticalAlignment="Stretch" />
                                 </DataTemplate>
                             </TransitioningContentControl.ContentTemplate>
                         </TransitioningContentControl>

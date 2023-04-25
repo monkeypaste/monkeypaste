@@ -645,7 +645,7 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
 
-                Func<Task<MpAnalyzerPluginResponseFormat>> retryAnalyzerFunc = async () => {
+                Func<Task<MpAnalyzerPluginResponseFormat>> retryAnalyzerFunc = () => {
                     ExecuteAnalysisCommand.Execute(args);
                     return null;
                 };

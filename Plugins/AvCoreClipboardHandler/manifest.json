@@ -640,7 +640,7 @@
           {
             "type": "os",
             "name": "Linux",
-            "minVersion": "0"
+            "version": "0"
           }
         ],
         "parameters": [

@@ -5,6 +5,7 @@ using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
@@ -32,17 +33,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        private ObservableCollection<string> _recentSearchTexts;
-        public ObservableCollection<string> RecentSearchTexts {
-            get {
-                if (_recentSearchTexts == null &&
-                    MpPrefViewModel.Instance != null) {
-                    var rstl = MpPrefViewModel.Instance.RecentSearchTexts.ToListFromCsv(MpCsvFormatProperties.DefaultBase64Value);
-                    _recentSearchTexts = new ObservableCollection<string>(rstl);
-                }
-                return _recentSearchTexts;
-            }
-        }
+        public IList<string> RecentSearchTexts { get; private set; }
 
         private MpAvSearchFilterCollectionViewModel _searchFilterCollectionViewModel;
         public MpAvSearchFilterCollectionViewModel SearchFilterCollectionViewModel =>
@@ -187,12 +178,15 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public async Task InitAsync() {
-            await Task.Delay(1);
+        public async Task InitializeAsync() {
+            IsBusy = true;
+            await AddOrUpdateRecentSearchTextsAsync(null);
 
             SearchFilterCollectionViewModel.Init();
             MpMessenger.RegisterGlobal(ReceiveGlobalMessage);
             OnPropertyChanged(nameof(RecentSearchTexts));
+
+            IsBusy = false;
         }
 
         public void NotifyHasMultipleMatches() {
@@ -286,23 +280,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task AddOrUpdateRecentSearchTextsAsync(string st) {
-            if (string.IsNullOrEmpty(st)) {
-                return;
-            }
-            while (MpPrefViewModel.Instance.IsSaving) {
+            while (MpPrefViewModel.Instance == null) {
                 await Task.Delay(100);
             }
-            int recentFindIdx = RecentSearchTexts.IndexOf(st);
-            if (recentFindIdx < 0) {
-                RecentSearchTexts.Insert(0, st);
-            } else {
-                RecentSearchTexts.Move(recentFindIdx, 0);
-            }
-            int to_remove = RecentSearchTexts.Count - MpPrefViewModel.Instance.MaxRecentTextsCount;
-            while (to_remove > 0) {
-                RecentSearchTexts.RemoveAt(RecentSearchTexts.Count - 1);
-            }
-            MpPrefViewModel.Instance.RecentSearchTexts = RecentSearchTexts.ToCsv(MpCsvFormatProperties.DefaultBase64Value);
+            RecentSearchTexts = await MpPrefViewModel.Instance.AddOrUpdateAutoCompleteTextAsync(nameof(MpPrefViewModel.Instance.RecentSearchTexts), st);
         }
 
         private async Task WaitForUnexpandAsync() {

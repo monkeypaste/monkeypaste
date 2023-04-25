@@ -466,6 +466,8 @@ namespace MonkeyPaste {
         public string RecentReplaceTexts { get; set; } = string.Empty;
 
         public string RecentSearchTexts { get; set; } = string.Empty;
+
+        public string RecentPluginSearchTexts { get; set; } = string.Empty;
         #endregion
 
         #region Ignored Ntf
@@ -601,6 +603,27 @@ namespace MonkeyPaste {
 
             IsSaving = false;
         }
+
+        public async Task<IList<string>> AddOrUpdateAutoCompleteTextAsync(string ac_property_name, string new_text) {
+            MpDebug.Assert(this.HasProperty(ac_property_name), $"Update auto-complete error, cannot find pref property '{ac_property_name}'");
+            List<string> ac_items = (this.GetPropertyValue(ac_property_name) as string).ToListFromCsv(MpCsvFormatProperties.DefaultBase64Value);
+            if (string.IsNullOrEmpty(new_text)) {
+                return ac_items;
+            }
+            while (IsSaving) {
+                await Task.Delay(100);
+            }
+            int st_idx = ac_items.IndexOf(new_text);
+            if (st_idx < 0) {
+                ac_items.Insert(0, new_text);
+            } else {
+                ac_items.Move(st_idx, 0);
+            }
+            ac_items = ac_items.Take(MaxRecentTextsCount).ToList();
+            this.SetPropertyValue(ac_property_name, ac_items.ToCsv(MpCsvFormatProperties.DefaultBase64Value));
+            return ac_items;
+        }
+
         #endregion
 
         #region Private Methods
@@ -708,6 +731,11 @@ namespace MonkeyPaste {
             }
 
         }
+
+        #endregion
+
+        #region Commands
+
 
         #endregion
     }
