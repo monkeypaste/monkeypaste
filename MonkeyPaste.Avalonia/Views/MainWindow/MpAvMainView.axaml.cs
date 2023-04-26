@@ -58,7 +58,7 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     if (!MpPrefViewModel.Instance.ShowInTaskSwitcher) {
                         if (OperatingSystem.IsWindows()) {
-                            MpAvToolWindow_Win32.InitToolWindow(MpAvWindowManager.MainWindow.PlatformImpl.Handle.Handle);
+                            MpAvToolWindow_Win32.InitToolWindow(MpAvWindowManager.MainWindow.TryGetPlatformHandle().Handle);
                         } else {
                             // TODO or error, not sure if mac/linux supports
                         }

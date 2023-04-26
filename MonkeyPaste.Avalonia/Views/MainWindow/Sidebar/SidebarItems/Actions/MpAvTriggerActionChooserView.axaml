@@ -83,7 +83,7 @@
                                 <ComboBox x:Name="TriggerComboBox"
                                           Width="275"
                                           SelectedIndex="{Binding SelectedTriggerIdx, Mode=TwoWay}"
-                                          Items="{Binding Triggers}">
+                                          ItemsSource="{Binding Triggers}">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
                                             <Border Classes="outerComboBoxItemBorder"

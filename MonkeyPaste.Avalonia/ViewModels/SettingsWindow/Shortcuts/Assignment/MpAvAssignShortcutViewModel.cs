@@ -56,9 +56,10 @@ namespace MonkeyPaste.Avalonia {
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("KeyboardImage", typeof(WindowIcon), null, null) as WindowIcon,
                 Title = "Assign Shortcut".ToWindowTitleText(),
-                Classes = new Classes("assignWindow", "fadeIn"),
                 Content = new MpAvAssignShortcutView()
             };
+            ascw.Classes.Add("assignWindow");
+            ascw.Classes.Add("fadeIn");
             MpMessenger.SendGlobal(MpMessageType.ShortcutAssignmentStarted);
 
             var result = await ascw.ShowChildDialogWithResultAsync(owner);

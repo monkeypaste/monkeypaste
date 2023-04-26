@@ -300,8 +300,8 @@ namespace MonkeyPaste.Common.Avalonia {
 
         public static IntPtr GetMainWindowHandle(this Application? app) {
             if (app.GetMainWindow() is Window w &&
-                w.PlatformImpl != null && w.PlatformImpl.Handle != null) {
-                return w.PlatformImpl.Handle.Handle;
+                w.TryGetPlatformHandle() is IPlatformHandle ph) {
+                return ph.Handle;
             }
             return IntPtr.Zero;
         }

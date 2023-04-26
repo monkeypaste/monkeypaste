@@ -14,6 +14,7 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvPluginBrowserView">
     <local:MpAvUserControl.Styles>
+        <!--  SELECTOR LISTBOX ITEM  -->
         <Style Selector="ListBox#PluginSelectorListBox ListBoxItem">
             <Setter Property="Padding"
                     Value="5" />
@@ -21,16 +22,22 @@
                     Value="1" />
             <Setter Property="BorderBrush"
                     Value="Black" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Stretch" />
         </Style>
         <Style Selector="TextBlock.detailLabel">
             <Setter Property="FontWeight"
                     Value="SemiBold" />
             <Setter Property="TextWrapping"
                     Value="NoWrap" />
+            <Setter Property="Width"
+                    Value="100" />
         </Style>
         <Style Selector="TextBlock.detailInfo">
             <Setter Property="TextWrapping"
                     Value="Wrap" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Left" />
         </Style>
 
         <Style Selector="local|MpAvMarqueeTextBox.detailInfo">
@@ -38,20 +45,30 @@
                     Value="True" />
             <Setter Property="EditOnFocus"
                     Value="False" />
-            <Setter Property="DropShadowBrush"
-                    Value="Transparent" />
+            <Setter Property="DropShadowOffset"
+                    Value="0,0" />
+            <Setter Property="ReadOnlyForeground"
+                    Value="Black" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Left" />
+        </Style>
+
+        <!--  SELECTED ITEM DETAIL  -->
+        <Style Selector="Grid#SelectedPluginContainer > :is(Control)">
+            <Setter Property="Margin"
+                    Value="0,10,0,0" />
         </Style>
     </local:MpAvUserControl.Styles>
     <Grid x:Name="PluginRootContainer"
           RowDefinitions="Auto,Auto,*"
-          ColumnDefinitions="*,Auto"
+          ColumnDefinitions="*,Auto,*"
           Margin="10">
 
         <!--  TABS  -->
 
         <TabStrip Grid.Row="0"
-                  Grid.ColumnSpan="2"
-                  Items="{Binding Tabs}"
+                  Grid.ColumnSpan="3"
+                  ItemsSource="{Binding Tabs}"
                   SelectedIndex="{Binding SelectedTabIdx, Mode=TwoWay}"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Top" />
@@ -59,7 +76,7 @@
         <!--  FILTER  -->
         <DockPanel x:Name="PluginFilterOuterContainer"
                    Grid.Row="1"
-                   Grid.ColumnSpan="2"
+                   Grid.ColumnSpan="3"
                    LastChildFill="False">
             <StackPanel x:Name="PluginFilterBoxContainer"
                         DockPanel.Dock="Left"
@@ -84,7 +101,7 @@
                                  IsTextCompletionEnabled="False"
                                  MinimumPrefixLength="0"
                                  MinimumPopulateDelay="0.25"
-                                 Items="{Binding RecentPluginSearches}">
+                                 ItemsSource="{Binding RecentPluginSearches}">
                     <AutoCompleteBox.Resources>
                         <SolidColorBrush x:Key="TextControlBorderBrush">Black</SolidColorBrush>
                         <SolidColorBrush x:Key="TextControlBorderBrushFocused">Black</SolidColorBrush>
@@ -131,8 +148,8 @@
         <ListBox x:Name="PluginSelectorListBox"
                  Grid.Row="2"
                  Grid.Column="0"
-                 IsVisible="{Binding !IsFiltering}"
-                 Items="{Binding Items}"
+                 IsVisible="{Binding !IsBusy}"
+                 ItemsSource="{Binding Items}"
                  SelectionMode="Single,AlwaysSelected"
                  Selection="{Binding Selection}">
             <ListBox.ItemTemplate>
@@ -174,17 +191,19 @@
         <local:MpAvBusySpinnerView x:Name="SelectorBusyContainer"
                                    Grid.Row="2"
                                    Grid.Column="0"
-                                   Width="70"
-                                   Height="70"
+                                   Width="30"
+                                   Height="30"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"
-                                   IsVisible="{Binding IsFiltering}" />
+                                   IsVisible="{Binding IsBusy}" />
+
         <!--  SELECTED PLUGIN VIEW  -->
-        <Grid Grid.Row="2"
-              Grid.Column="1"
+        <Grid x:Name="SelectedPluginContainer"
+              Grid.Row="2"
+              Grid.Column="2"
               DataContext="{Binding SelectedItem}"
               x:DataType="local:MpAvPluginItemViewModel"
-              IsVisible="{Binding !IsBusy}"
+              IsVisible="{Binding !IsVisible, ElementName=DetailBusyContainer}"
               Margin="10,3"
               RowDefinitions="50,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
               ColumnDefinitions="70,*">
@@ -341,19 +360,17 @@
 
         <local:MpAvBusySpinnerView x:Name="DetailBusyContainer"
                                    Grid.Row="2"
-                                   Grid.Column="1"
-                                   Width="70"
-                                   Height="70"
-                                   DataContext="{Binding SelectedItem}"
-                                   x:DataType="local:MpAvPluginItemViewModel"
-                                   IsVisible="{Binding IsBusy}"
+                                   Grid.Column="2"
+                                   Width="30"
+                                   Height="30"
+                                   IsVisible="{Binding IsSelectedBusy}"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center" />
         <!--  LIST/DETAIL SPLITTER  -->
         <GridSplitter x:Name="ListDetailSplitter"
                       Grid.Row="2"
                       Grid.Column="1"
-                      HorizontalAlignment="Left"
+                      HorizontalAlignment="Stretch"
                       Classes="vertical" />
 
     </Grid>

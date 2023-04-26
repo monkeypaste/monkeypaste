@@ -44,7 +44,7 @@
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch"
                      SelectedItem="{Binding SelectedPinTrayItem, Mode=TwoWay}"
-                     Items="{Binding InternalPinnedItems}">
+                     ItemsSource="{Binding InternalPinnedItems}">
                 <ListBox.Resources>
                     <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">Transparent</SolidColorBrush>
                     <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">Transparent</SolidColorBrush>

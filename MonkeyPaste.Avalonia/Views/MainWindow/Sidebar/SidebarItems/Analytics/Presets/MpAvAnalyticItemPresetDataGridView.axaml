@@ -73,7 +73,7 @@
                       Grid.Row="0"
                       IsReadOnly="False"
                       Focusable="True"
-                      Items="{Binding Items}"
+                      ItemsSource="{Binding Items}"
                       SelectedItem="{Binding SelectedItem}"
                       SelectionMode="Single"
                       HeadersVisibility="None"

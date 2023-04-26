@@ -26,8 +26,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
-
-
         #region MpISelectableViewModel Implementation
         public bool IsSelected {
             get {
@@ -68,6 +66,13 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
+        public bool IsAnyBusy =>
+            IsBusy ||
+            RootDependencyViewModel
+            .SelfAndAllDescendants()
+            .Cast<MpIAsyncObject>()
+            .Any(x => x.IsBusy);
 
         public bool IsInstalled =>
             MpPluginLoader.Plugins.Any(x => x.Key == PluginGuid);
@@ -220,7 +225,6 @@ namespace MonkeyPaste.Avalonia {
 
             await CreateRootDependencyViewModelAsync();
 
-
             IsBusy = false;
         }
 
@@ -239,6 +243,12 @@ namespace MonkeyPaste.Avalonia {
                     }
                     LoadReadMeAsync().FireAndForgetSafeAsync(this);
                     break;
+                case nameof(IsAnyBusy):
+                    if (Parent == null) {
+                        break;
+                    }
+                    Parent.OnPropertyChanged(nameof(Parent.IsAnyBusy));
+                    break;
             }
         }
 
@@ -251,6 +261,7 @@ namespace MonkeyPaste.Avalonia {
                 // no readme
                 return;
             }
+            bool was_busy = IsBusy;
             IsBusy = true;
 
             // temp test delay
@@ -258,7 +269,8 @@ namespace MonkeyPaste.Avalonia {
 
             var read_me_bytes = await MpFileIo.ReadBytesFromUriAsync(PluginReadMeUri, PluginRootDirectory);
             ReadMeMarkDownText = read_me_bytes.ToDecodedString();
-            IsBusy = false;
+
+            IsBusy = was_busy;
         }
         private async Task CreateRootDependencyViewModelAsync() {
             RootDependencyViewModel = new MpAvPluginDependencyViewModel(this) {

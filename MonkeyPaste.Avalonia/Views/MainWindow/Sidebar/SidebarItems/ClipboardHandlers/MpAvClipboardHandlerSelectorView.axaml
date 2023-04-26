@@ -34,7 +34,7 @@
                                 Grid.Row="2"
                                 Grid.Column="0">
                             <ComboBox SelectedIndex="{Binding SelectedItemIdx, Mode=TwoWay}"
-                                      Items="{Binding Items}">
+                                      ItemsSource="{Binding Items}">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <Border Classes="outerComboBoxItemBorder">
@@ -64,7 +64,7 @@
 
                                 <Border Classes="iconLabelComboBox">
                                     <ComboBox SelectedIndex="{Binding SelectedTitleSortedItemIdx, Mode=TwoWay}"
-                                              Items="{Binding TitleSortedItems}">
+                                              ItemsSource="{Binding TitleSortedItems}">
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate>
                                                 <Border Classes="outerComboBoxItemBorder">

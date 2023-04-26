@@ -415,7 +415,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ShowAppSelectorFlyoutCommand => new MpCommand<object>(
             (args) => {
                 var appFlyout = new MenuFlyout() {
-                    Items =
+                    ItemsSource =
                         Items
                         .Where(x => !CustomPasteItems.Contains(x) && !string.IsNullOrWhiteSpace(x.AppName))
                         .OrderBy(x => x.AppName)

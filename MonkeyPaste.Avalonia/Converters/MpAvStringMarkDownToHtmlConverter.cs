@@ -8,6 +8,7 @@ namespace MonkeyPaste.Avalonia {
         public static readonly MpAvStringMarkDownToHtmlConverter Instance = new();
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
+            // from https://github.com/xoofx/markdig
             if (value is string md_str) {
                 string md_html = Markdown.ToHtml(md_str);
                 return md_html;

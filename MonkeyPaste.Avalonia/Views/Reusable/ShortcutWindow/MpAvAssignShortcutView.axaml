@@ -134,7 +134,7 @@
             <ComboBox x:Name="RoutingSelectorComboBox"
                       Foreground="Black"
                       Margin="10,0"
-                      Items="{Binding RoutingTypes}"
+                      ItemsSource="{Binding RoutingTypes}"
                       SelectedIndex="{Binding SelectedRoutingTypeIdx, Mode=TwoWay}" />
         </DockPanel>
 

@@ -67,7 +67,7 @@ namespace MonkeyPaste.Avalonia {
                 ConverterWebView.AttachedToVisualTree += (s, e) => {
                     if (OperatingSystem.IsWindows()) {
                         // hide converter window from windows alt-tab menu
-                        MpAvToolWindow_Win32.InitToolWindow(quillWindow.PlatformImpl.Handle.Handle);
+                        MpAvToolWindow_Win32.InitToolWindow(quillWindow.TryGetPlatformHandle().Handle);
                     }
                     quillWindow.Hide();
                     quillWindow.WindowState = WindowState.Minimized;

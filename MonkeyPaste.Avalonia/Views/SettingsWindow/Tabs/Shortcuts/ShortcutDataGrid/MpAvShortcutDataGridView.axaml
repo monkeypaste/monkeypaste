@@ -48,7 +48,7 @@
             <DataGrid x:Name="ShortcutDatagrid"
                       IsVisible="{Binding ., Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                       CanUserSortColumns="True"
-                      Items="{Binding}"
+                      ItemsSource="{Binding}"
                       IsReadOnly="False"
                       AutoGenerateColumns="False">
                 <DataGrid.Columns>
@@ -91,7 +91,7 @@
                                               IsVisible="{Binding CanBeGlobalShortcut}"
                                               SelectedIndex="{Binding SelectedRoutingTypeIdx}"
                                               Foreground="Black"
-                                              Items="{Binding RoutingTypes}" />
+                                              ItemsSource="{Binding RoutingTypes}" />
                                     <TextBlock Text="Internal"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center"

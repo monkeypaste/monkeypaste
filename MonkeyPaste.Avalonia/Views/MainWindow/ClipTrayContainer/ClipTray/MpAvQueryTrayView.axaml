@@ -142,7 +142,7 @@
                          local:MpAvPagingListBoxExtension.LayoutType="{Binding LayoutType}"
                          Width="{Binding QueryTrayTotalWidth}"
                          Height="{Binding QueryTrayTotalHeight}"
-                         Items="{Binding Items}">
+                         ItemsSource="{Binding Items}">
                     <ListBox.Resources>
                         <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">Transparent</SolidColorBrush>
                         <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">Transparent</SolidColorBrush>

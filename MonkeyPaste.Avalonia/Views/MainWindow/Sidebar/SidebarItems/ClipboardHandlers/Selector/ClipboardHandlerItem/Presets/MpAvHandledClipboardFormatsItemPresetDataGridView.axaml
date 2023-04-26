@@ -75,7 +75,7 @@
                           MinWidth="300"
                           IsVisible="{Binding ., Converter={x:Static ObjectConverters.IsNotNull}}"
                           Focusable="True"
-                          Items="{Binding Items}"
+                          ItemsSource="{Binding Items}"
                           SelectedItem="{Binding SelectedItem}"
                           SelectionMode="Single"
                           HeadersVisibility="None"

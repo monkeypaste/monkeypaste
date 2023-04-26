@@ -45,7 +45,7 @@
                 <DataTemplate x:Key="EnumerableOptionTemplate"
                               DataType="local:MpAvSearchCriteriaOptionViewModel">
                     <ComboBox IsDropDownOpen="{Binding IsDropDownOpen}"
-                              Items="{Binding Items}"
+                              ItemsSource="{Binding Items}"
                               Classes="criteriaComboBox"
                               SelectedIndex="{Binding SelectedItemIdx, Mode=TwoWay}">
                         <ComboBox.ItemTemplate>

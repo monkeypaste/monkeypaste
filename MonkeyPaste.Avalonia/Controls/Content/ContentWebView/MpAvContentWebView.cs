@@ -897,7 +897,7 @@ namespace MonkeyPaste.Avalonia {
             if (MpAvWindowManager.MainWindow == null) {
                 return;
             }
-            IPlatformHandle platformHandle = MpAvWindowManager.MainWindow.PlatformImpl.Handle;
+            IPlatformHandle platformHandle = MpAvWindowManager.MainWindow.TryGetPlatformHandle();
             if (platformHandle is IMacOSTopLevelPlatformHandle macOSHandle) {
                 e.WindowInfo.SetAsWindowless(macOSHandle.GetNSWindowRetained());
             } else {

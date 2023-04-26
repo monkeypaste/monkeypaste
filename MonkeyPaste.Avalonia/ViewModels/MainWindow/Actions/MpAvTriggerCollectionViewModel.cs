@@ -768,7 +768,6 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 if (Mp.Services.PlatformInfo.IsDesktop) {
                     var dw = new MpAvWindow() {
-                        Classes = new Classes("fadeIn"),
                         Width = 500,
                         Height = 500,
                         ShowInTaskbar = true,
@@ -782,7 +781,7 @@ namespace MonkeyPaste.Avalonia {
                         DataContext = this,
                         Padding = new Thickness(10)
                     };
-
+                    dw.Classes.Add("fadeIn");
                     dw.Bind(
                         Window.TitleProperty,
                         new Binding() {

@@ -19,7 +19,7 @@
                      Classes="paramValueListBox"
                      Background="Transparent"
                      HorizontalAlignment="Stretch"
-                     Items="{Binding Items}"
+                     ItemsSource="{Binding Items}"
                      Selection="{Binding Selection}"
                      SelectionMode="Single"
                      Margin="10,0"

@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using MonkeyPaste.Common;
@@ -22,7 +23,7 @@ namespace AvCoreClipboardHandler {
             if (request.forcedClipboardDataObject == null) {
                 // clipboard read
                 //await Util.WaitForClipboard();
-                availableFormats = await Application.Current.Clipboard.GetFormatsSafeAsync();
+                availableFormats = await AvCoreClipboardHandler.ClipboardRef.GetFormatsSafeAsync();
                 //Util.CloseClipboard();
             } else if (request.forcedClipboardDataObject is IDataObject) {
                 avdo = request.forcedClipboardDataObject as IDataObject;
@@ -89,7 +90,7 @@ namespace AvCoreClipboardHandler {
 
             if (avdo == null) {
                 //await Util.WaitForClipboard();
-                format_data = await Application.Current.Clipboard.GetDataSafeAsync(format);
+                format_data = await AvCoreClipboardHandler.ClipboardRef.GetDataSafeAsync(format);
                 if (OperatingSystem.IsWindows() &&
                     format == MpPortableDataFormats.AvHtml_bytes && format_data is byte[] htmlBytes) {
                     var detected_encoding = htmlBytes.DetectTextEncoding(out string detected_text);

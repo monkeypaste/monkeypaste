@@ -91,7 +91,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
         #region State
 
-        public bool IsInitialized { get; private set; }
         public MpPluginBrowserTabType SelectedTabType =>
             (MpPluginBrowserTabType)SelectedTabIdx;
 
@@ -99,33 +98,34 @@ namespace MonkeyPaste.Avalonia {
 
         public string FilterText { get; set; }
 
-        public bool IsFiltering { get; set; }
-        public bool IsSelecting { get; set; }
+        //public bool IsFiltering { get; set; }
+        //public bool IsSelecting { get; set; }
+        public WindowState WindowState { get; set; }
+        public bool IsAnyBusy =>
+            IsBusy || Items.Any(x => x.IsBusy);
+
+        public bool IsSelectedBusy =>
+            SelectedItem != null && SelectedItem.IsAnyBusy;
         #endregion
 
         #endregion
 
         #region Constructors
-        public MpAvPluginBrowserViewModel() {
+        private MpAvPluginBrowserViewModel() {
+            MpConsole.WriteLine("plug browser ctor");
             PropertyChanged += MpAvPluginBrowserViewModel_PropertyChanged;
+            Items.CollectionChanged += Items_CollectionChanged;
 
             Selection = new SelectionModel<MpAvPluginItemViewModel>(Items);
             Selection.SelectionChanged += Selection_SelectionChanged;
-        }
 
+            SelectedTabIdx = (int)MpPluginBrowserTabType.Installed;
+            AddOrUpdateRecentFilterTextsAsync(null).FireAndForgetSafeAsync(this);
+        }
 
         #endregion
 
         #region Public Methods
-        public async Task InitializeAsync() {
-            IsBusy = true;
-
-            await AddOrUpdateRecentFilterTextsAsync(null);
-            // select installed by default
-            SelectTabCommand.Execute(null);
-            IsBusy = false;
-            IsInitialized = true;
-        }
         #endregion
 
         #region Protected Methods
@@ -139,14 +139,21 @@ namespace MonkeyPaste.Avalonia {
                     PerformFilterCommand.Execute(null);
                     break;
                 case nameof(SelectedTabIdx):
-                    SelectTabCommand.Execute(SelectedTabType);
+                    PerformFilterCommand.Execute(null);
                     break;
                 case nameof(SelectedItem):
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
+                    OnPropertyChanged(nameof(IsSelectedBusy));
+                    break;
+                case nameof(IsAnyBusy):
+                    OnPropertyChanged(nameof(IsSelectedBusy));
                     break;
             }
         }
 
+        private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            OnPropertyChanged(nameof(Items));
+        }
         private void Selection_SelectionChanged(object sender, SelectionModelSelectionChangedEventArgs<MpAvPluginItemViewModel> e) {
             Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
             OnPropertyChanged(nameof(Selection));
@@ -165,6 +172,12 @@ namespace MonkeyPaste.Avalonia {
             RecentPluginSearches = await MpPrefViewModel.Instance.AddOrUpdateAutoCompleteTextAsync(nameof(MpPrefViewModel.Instance.RecentPluginSearchTexts), st);
         }
         private void OpenPluginBrowserWindow() {
+            if (IsOpen) {
+                if (WindowState == WindowState.Minimized) {
+                    WindowState = WindowState.Normal;
+                }
+                return;
+            }
             MpAvWindow pbw = new MpAvWindow() {
                 Width = 800,
                 Height = 500,
@@ -173,8 +186,7 @@ namespace MonkeyPaste.Avalonia {
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("JigsawImage", typeof(WindowIcon), null, null) as WindowIcon,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 Content = new MpAvPluginBrowserView(),
-                Topmost = true,
-                Title = "Plugin Browser"
+                Topmost = true
             };
 
             pbw.Bind(
@@ -183,6 +195,14 @@ namespace MonkeyPaste.Avalonia {
                     Source = this,
                     Path = nameof(WindowTitle),
                     Converter = MpAvStringToWindowTitleConverter.Instance
+                });
+
+            pbw.Bind(
+                Window.WindowStateProperty,
+                new Binding() {
+                    Source = this,
+                    Path = nameof(WindowState),
+                    Mode = BindingMode.TwoWay
                 });
             pbw.ShowChild();
 
@@ -194,17 +214,14 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ShowPluginBrowserCommand => new MpAsyncCommand(
             async () => {
-                if (!IsInitialized) {
-                    await InitializeAsync();
-                }
                 OpenPluginBrowserWindow();
-            }, () => {
-                return !IsOpen;
             });
 
         public MpIAsyncCommand PerformFilterCommand => new MpAsyncCommand(
             async () => {
-                IsFiltering = true;
+                bool was_busy = IsBusy;
+                IsBusy = true;
+
                 AddOrUpdateRecentFilterTextsAsync(FilterText).FireAndForgetSafeAsync(this);
                 Items.Clear();
 
@@ -218,7 +235,7 @@ namespace MonkeyPaste.Avalonia {
                         break;
                 }
                 if (manifests_to_filter == null) {
-                    IsFiltering = false;
+                    IsBusy = was_busy;
                     return;
                 }
 
@@ -228,23 +245,11 @@ namespace MonkeyPaste.Avalonia {
                         .Where(x => (x as MpIFilterMatch).IsMatch(FilterText))
                         .Select(x => CreatePluginItemViewModelAsync(x)));
                 Items.AddRange(filtered_vml);
-                OnPropertyChanged(nameof(Items));
-                while (Items.Any(x => x.IsBusy)) {
+                while (Items.Any(x => x.IsAnyBusy)) {
                     await Task.Delay(100);
                 }
 
-
-                IsFiltering = false;
-            });
-
-        public MpIAsyncCommand<object> SelectTabCommand => new MpAsyncCommand<object>(
-            async (args) => {
-                MpPluginBrowserTabType to_select_tab = MpPluginBrowserTabType.Installed;
-                if (args is MpPluginBrowserTabType pbtt) {
-                    to_select_tab = pbtt;
-                }
-                SelectedTabIdx = (int)to_select_tab;
-                PerformFilterCommand.Execute(null);
+                IsBusy = was_busy;
             });
         #endregion
     }

@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
+using Avalonia.Media.Fonts;
 using Avalonia.Platform;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
@@ -210,8 +211,9 @@ namespace MonkeyPaste.Avalonia {
                                 label = "UI Font Family",
                                 description = "Requires restart :(",
                                 values =
-                                    //FontManager.Current.GetInstalledFontFamilyNames(true)
-                                    (AvaloniaLocator.Current.GetRequiredService<IFontManagerImpl>()).GetInstalledFontFamilyNames(true)
+                                    FontManager.Current.SystemFonts
+                                    .Select(x=>x.Name)
+                                    //(AvaloniaLocator.Current.GetRequiredService<IFontManagerImpl>()).GetInstalledFontFamilyNames()
                                     .Where(x=>!string.IsNullOrEmpty(x))
                                     .OrderBy(x=>x)
                                     .Select(x=>new MpPluginParameterValueFormat() {
@@ -225,8 +227,10 @@ namespace MonkeyPaste.Avalonia {
                                 unitType = MpParameterValueUnitType.PlainText,
                                 label = "Content Font Family",
                                 values =
+                                    FontManager.Current.SystemFonts
+                                    .Select(x=>x.Name)
                                     //FontManager.Current.GetInstalledFontFamilyNames(true)
-                                    (AvaloniaLocator.Current.GetRequiredService<IFontManagerImpl>()).GetInstalledFontFamilyNames(true)
+                                    //(AvaloniaLocator.Current.GetRequiredService<IFontManagerImpl>()).GetInstalledFontFamilyNames(true)
                                     .Where(x=>!string.IsNullOrEmpty(x))
                                     .OrderBy(x=>x)
                                     .Select(x=>new MpPluginParameterValueFormat() {
@@ -882,7 +886,6 @@ namespace MonkeyPaste.Avalonia {
                 }
                 if (Mp.Services.PlatformInfo.IsDesktop) {
                     var sw = new MpAvWindow() {
-                        Classes = new Classes("fadeIn"),
                         ShowInTaskbar = true,
                         Width = 800,
                         Height = 500,
@@ -894,6 +897,7 @@ namespace MonkeyPaste.Avalonia {
                         DataContext = this,
                         Content = new MpAvSettingsView()
                     };
+                    sw.Classes.Add("fadeIn");
                     sw.Opened += Sw_Opened;
                     sw.ShowChild();
 

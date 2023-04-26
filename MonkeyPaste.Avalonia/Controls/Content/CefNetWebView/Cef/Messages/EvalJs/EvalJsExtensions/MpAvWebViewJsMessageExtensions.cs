@@ -92,7 +92,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     wv.ExecuteJavascript(script);
                     return;
-                }).TimeoutAfter(
+                }).GetTask().TimeoutAfter(
                     TimeSpan.FromSeconds(5),
                     () => {
                         MpConsole.WriteLine("frame must be initialized. initialization timed out");

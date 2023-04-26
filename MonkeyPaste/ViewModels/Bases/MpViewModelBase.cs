@@ -34,7 +34,6 @@ namespace MonkeyPaste {
         #region Private Variables
 
         private List<MpUndoableProperty> _undoables;
-
         #endregion
 
         #region Properties

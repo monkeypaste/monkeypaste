@@ -90,7 +90,7 @@
                            Margin="15,0,0,0"
                            VerticalAlignment="Center" />
                 <ComboBox Classes="criteriaComboBox joinComboBox"
-                          Items="{Binding JoinTypeLabels}"
+                          ItemsSource="{Binding JoinTypeLabels}"
                           SelectedIndex="{Binding SelectedJoinTypeIdx, Mode=TwoWay}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
@@ -142,7 +142,7 @@
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
                      BorderThickness="0"
-                     Items="{Binding Items}">
+                     ItemsSource="{Binding Items}">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel Orientation="Horizontal" />

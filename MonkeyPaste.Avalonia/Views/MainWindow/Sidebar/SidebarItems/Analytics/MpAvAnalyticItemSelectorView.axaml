@@ -37,8 +37,10 @@
                                 <!--  SHOW BROWSER BUTTON  -->
                                 <Button x:Name="ShowPluginBrowserButton"
                                         DockPanel.Dock="Right"
-                                        VerticalAlignment="Stretch"
+                                        VerticalAlignment="Center"
                                         HorizontalAlignment="Center"
+                                        Width="30"
+                                        Height="30"
                                         Classes="defaultButton noBg noHoverBg outline outlineOver square"
                                         Command="{Binding ShowPluginBrowserCommand, Source={x:Static local:MpAvPluginBrowserViewModel.Instance}}">
                                     <ToolTip.Tip>
@@ -48,7 +50,8 @@
 
                                 </Button>
                                 <ComboBox SelectedIndex="{Binding SelectedItemIdx, Mode=TwoWay}"
-                                          Items="{Binding Items}">
+                                          Margin="0,0,5,0"
+                                          ItemsSource="{Binding Items}">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
                                             <Border Classes="outerComboBoxItemBorder">

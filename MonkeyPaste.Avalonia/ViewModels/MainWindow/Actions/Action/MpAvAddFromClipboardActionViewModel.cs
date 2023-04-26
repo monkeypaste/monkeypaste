@@ -62,7 +62,7 @@ namespace MonkeyPaste.Avalonia {
             object ido_obj = await Dispatcher.UIThread.InvokeAsync(async () => {
                 object result = await Mp.Services.DataObjectHelperAsync.GetPlatformClipboardDataObjectAsync(false);
                 return result;
-            });
+            }).Result;
 
 
 
@@ -111,7 +111,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     var result = await Mp.Services.CopyItemBuilder.BuildAsync(mpdo, transType: MpTransactionType.Created);
                     return result;
-                });
+                }).Result;
             }
 
             await base.PerformActionAsync(

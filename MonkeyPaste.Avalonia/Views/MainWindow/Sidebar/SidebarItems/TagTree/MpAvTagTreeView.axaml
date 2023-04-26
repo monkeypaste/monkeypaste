@@ -78,7 +78,7 @@
                   Margin="5,10,20,0"
                   Padding="0,0,0,150"
                   AutoScrollToSelectedItem="True"
-                  Items="{Binding RootItems}"
+                  ItemsSource="{Binding RootItems}"
                   BorderThickness="0"
                   Background="Transparent"
                   SelectedItem="{Binding SelectedItem, Mode=TwoWay}"

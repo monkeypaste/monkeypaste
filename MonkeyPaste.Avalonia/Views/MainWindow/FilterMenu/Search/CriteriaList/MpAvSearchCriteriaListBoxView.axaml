@@ -257,7 +257,7 @@
                  Background="{DynamicResource SearchCriteriaRowBgBrush1}"
                  BorderThickness="0"
                  BorderBrush="Black"
-                 Items="{Binding SortedItems}"
+                 ItemsSource="{Binding SortedItems}"
                  SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                  SelectionMode="Single"
                  HorizontalAlignment="Stretch"

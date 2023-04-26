@@ -49,7 +49,7 @@
                     </Button>
                     <DataGrid Grid.Row="1"
                               x:Name="ExcludedAppDatagrid"
-                              Items="{Binding FilteredItems}"
+                              ItemsSource="{Binding FilteredItems}"
                               SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                               Focusable="True"
                               IsReadOnly="False">
@@ -144,7 +144,7 @@
                 </Button>
                 <DataGrid Grid.Row="1"
                           x:Name="ExcludedUrlDatagrid"
-                          Items="{Binding FilteredItems}"
+                          ItemsSource="{Binding FilteredItems}"
                           SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
                     <DataGrid.Columns>
                         <DataGridTemplateColumn Width="30">

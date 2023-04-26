@@ -147,7 +147,7 @@
                                          BorderThickness="0"
                                          Background="Transparent"
                                          IsVisible="{Binding Items, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                                         Items="{Binding Items}"
+                                         ItemsSource="{Binding Items}"
                                          SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
                                     <ListBox.ItemsPanel>
                                         <ItemsPanelTemplate>

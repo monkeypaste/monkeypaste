@@ -68,7 +68,7 @@
                  SelectedItem="{Binding SelectedPinnedItem, Mode=TwoWay}"
                  ScrollViewer.VerticalScrollBarVisibility="Hidden"
                  ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                 Items="{Binding PinnedItems}">
+                 ItemsSource="{Binding PinnedItems}">
             <ListBox.Resources>
                 <Thickness x:Key="ListBoxItemPadding">
                     0,0,0,0

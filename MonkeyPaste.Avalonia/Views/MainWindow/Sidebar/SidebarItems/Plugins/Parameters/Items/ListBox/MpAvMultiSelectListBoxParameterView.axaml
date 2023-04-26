@@ -19,7 +19,7 @@
                  Background="Transparent"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Stretch"
-                 Items="{Binding Items}"
+                 ItemsSource="{Binding Items}"
                  Selection="{Binding Selection}"
                  SelectionMode="Multiple,Toggle"
                  Margin="0"

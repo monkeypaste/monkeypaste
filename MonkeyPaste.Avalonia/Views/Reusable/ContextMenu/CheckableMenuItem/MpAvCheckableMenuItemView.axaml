@@ -32,7 +32,7 @@
             </Setter>
             <Setter Property="Header"
                     Value="{Binding Header}" />
-            <Setter Property="Items"
+            <Setter Property="ItemsSource"
                     Value="{Binding SubItems}" />
             <Setter Property="Command"
                     Value="{Binding Command}" />

@@ -17,7 +17,7 @@
              VerticalAlignment="Stretch"
              Background="Transparent"
              BorderThickness="0"
-             Items="{Binding SubItems}"
+             ItemsSource="{Binding SubItems}"
              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
              SelectionMode="Single">
         <ListBox.Resources>

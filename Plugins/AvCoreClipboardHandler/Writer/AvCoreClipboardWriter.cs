@@ -104,7 +104,7 @@ namespace AvCoreClipboardHandler {
                         }
                     }
                 }
-                await Application.Current.Clipboard.SetDataObjectSafeAsync(write_output);
+                await AvCoreClipboardHandler.ClipboardRef.SetDataObjectSafeAsync(write_output);
             }
 
             return new MpClipboardWriterResponse() {

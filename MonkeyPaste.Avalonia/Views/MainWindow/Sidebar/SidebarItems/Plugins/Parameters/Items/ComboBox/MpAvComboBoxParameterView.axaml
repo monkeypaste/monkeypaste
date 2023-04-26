@@ -27,7 +27,7 @@
         <ToolTip.Tip>
             <local:MpAvToolTipView ToolTipText="{Binding ParameterTooltipText}" />
         </ToolTip.Tip>
-        <ComboBox Items="{Binding Items}"
+        <ComboBox ItemsSource="{Binding Items}"
                   SelectedIndex="{Binding SelectedItemIdx, Mode=TwoWay}"
                   IsDropDownOpen="{Binding IsParameterDropDownOpen}"
                   HorizontalAlignment="Stretch"

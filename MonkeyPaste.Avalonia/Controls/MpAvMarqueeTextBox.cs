@@ -60,7 +60,7 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region IStyleable Implementation
-        Type IStyleable.StyleKey => typeof(TextBox);
+        Type IStyleable.StyleKey => typeof(MpAvMarqueeTextBox);
         #endregion
 
         #region MpIOverrideRender Implementation
@@ -83,20 +83,15 @@ namespace MonkeyPaste.Avalonia {
 
         #region ReadOnlyForeground AvaloniaProperty
 
-        private static IBrush _readOnlyForeground = Brushes.White;
         public IBrush ReadOnlyForeground {
-            get => _readOnlyForeground;
-            set => SetAndRaise(ReadOnlyForegroundProperty, ref _readOnlyForeground, value);
+            get { return GetValue(ReadOnlyForegroundProperty); }
+            set { SetValue(ReadOnlyForegroundProperty, value); }
         }
 
-        public static readonly DirectProperty<MpAvMarqueeTextBox, IBrush> ReadOnlyForegroundProperty =
-            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, IBrush>
-            (
-                nameof(ReadOnlyForeground),
-                o => o.ReadOnlyForeground,
-                (o, v) => o.ReadOnlyForeground = v,
-                Brushes.White
-            );
+        public static readonly StyledProperty<IBrush> ReadOnlyForegroundProperty =
+            AvaloniaProperty.Register<MpAvMarqueeTextBox, IBrush>(
+                name: nameof(ReadOnlyForeground),
+                defaultValue: Brushes.White);
 
         #endregion
 
@@ -158,38 +153,35 @@ namespace MonkeyPaste.Avalonia {
 
         #region DropShadowOffset AvaloniaProperty
 
-        private Point _dropShadowOffset = new Point(1, 1);
         public Point DropShadowOffset {
-            get => _dropShadowOffset;
-            set => SetAndRaise(DropShadowOffsetProperty, ref _dropShadowOffset, value);
+            get { return GetValue(DropShadowOffsetProperty); }
+            set { SetValue(DropShadowOffsetProperty, value); }
         }
 
-        public static readonly DirectProperty<MpAvMarqueeTextBox, Point> DropShadowOffsetProperty =
-            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, Point>
-            (
-                nameof(DropShadowOffset),
-                o => o.DropShadowOffset,
-                (o, v) => o.DropShadowOffset = v,
-                new Point(1, 1)
-            );
+        public static readonly StyledProperty<Point> DropShadowOffsetProperty =
+            AvaloniaProperty.Register<MpAvMarqueeTextBox, Point>(
+                name: nameof(DropShadowOffset),
+                defaultValue: new Point(1, 1));
+
         #endregion
 
         #region DropShadowBrush AvaloniaProperty
 
-        private IBrush _dropShadowBrush = Brushes.Black;
+        //private IBrush _dropShadowBrush = Brushes.Black;
+        //public IBrush DropShadowBrush {
+        //    get => _dropShadowBrush;
+        //    set => SetAndRaise(DropShadowBrushProperty, ref _dropShadowBrush, value);
+        //}
         public IBrush DropShadowBrush {
-            get => _dropShadowBrush;
-            set => SetAndRaise(DropShadowBrushProperty, ref _dropShadowBrush, value);
+            get { return GetValue(DropShadowBrushProperty); }
+            set { SetValue(DropShadowBrushProperty, value); }
         }
 
-        public static readonly DirectProperty<MpAvMarqueeTextBox, IBrush> DropShadowBrushProperty =
-            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, IBrush>
-            (
-                nameof(DropShadowBrush),
-                o => o.DropShadowBrush,
-                (o, v) => o.DropShadowBrush = v,
-                Brushes.Black
-            );
+        public static readonly StyledProperty<IBrush> DropShadowBrushProperty =
+            AvaloniaProperty.Register<MpAvMarqueeTextBox, IBrush>(
+                name: nameof(DropShadowBrush),
+                defaultValue: Brushes.Black);
+
         #endregion
 
         #region TailPadding AvaloniaProperty
@@ -248,20 +240,15 @@ namespace MonkeyPaste.Avalonia {
 
         #region EditOnFocus AvaloniaProperty
 
-        private bool _editOnFocus = true;
         public bool EditOnFocus {
-            get => _editOnFocus;
-            set => SetAndRaise(EditOnFocusProperty, ref _editOnFocus, value);
+            get { return GetValue(EditOnFocusProperty); }
+            set { SetValue(EditOnFocusProperty, value); }
         }
 
-        public static readonly DirectProperty<MpAvMarqueeTextBox, bool> EditOnFocusProperty =
-            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, bool>
-            (
-                nameof(EditOnFocus),
-                o => o.EditOnFocus,
-                (o, v) => o.EditOnFocus = v,
-                true
-            );
+        public static readonly StyledProperty<bool> EditOnFocusProperty =
+            AvaloniaProperty.Register<MpAvMarqueeTextBox, bool>(
+                name: nameof(EditOnFocus),
+                defaultValue: true);
 
         #endregion
 
@@ -423,37 +410,28 @@ namespace MonkeyPaste.Avalonia {
 
         #region NavigateUriCommand AvaloniaProperty
 
-        private ICommand _navigateUriCommand = null;
         public ICommand NavigateUriCommand {
-            get => _navigateUriCommand;
-            set => SetAndRaise(NavigateUriCommandProperty, ref _navigateUriCommand, value);
+            get { return GetValue(NavigateUriCommandProperty); }
+            set { SetValue(NavigateUriCommandProperty, value); }
         }
 
-        public static readonly DirectProperty<MpAvMarqueeTextBox, ICommand> NavigateUriCommandProperty =
-            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, ICommand>
-            (
-                nameof(NavigateUriCommand),
-                o => o.NavigateUriCommand,
-                (o, v) => o.NavigateUriCommand = v,
-                null
-            );
+        public static readonly StyledProperty<ICommand> NavigateUriCommandProperty =
+            AvaloniaProperty.Register<MpAvMarqueeTextBox, ICommand>(
+                name: nameof(NavigateUriCommand),
+                defaultValue: null);
+
         #endregion
 
         #region NavigateUriCommandParameter AvaloniaProperty
-        private object _navigateUriCommandParameter = null;
         public object NavigateUriCommandParameter {
-            get => _navigateUriCommandParameter;
-            set => SetAndRaise(NavigateUriCommandParameterProperty, ref _navigateUriCommandParameter, value);
+            get { return GetValue(NavigateUriCommandParameterProperty); }
+            set { SetValue(NavigateUriCommandParameterProperty, value); }
         }
 
-        public static readonly DirectProperty<MpAvMarqueeTextBox, object> NavigateUriCommandParameterProperty =
-            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, object>
-            (
-                nameof(NavigateUriCommandParameter),
-                o => o.NavigateUriCommandParameter,
-                (o, v) => o.NavigateUriCommandParameter = v,
-                null
-            );
+        public static readonly StyledProperty<object> NavigateUriCommandParameterProperty =
+            AvaloniaProperty.Register<MpAvMarqueeTextBox, object>(
+                name: nameof(NavigateUriCommandParameter),
+                defaultValue: null);
         #endregion
 
         #region NavigateUriRequiredKeyString AvaloniaProperty

@@ -608,10 +608,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         private async Task PerformMatchedShortcutAsync(MpAvShortcutViewModel svm) {
-            bool can_perform = await Dispatcher.UIThread.InvokeAsync<bool>(() => {
-                return svm.PerformShortcutCommand.CanExecute(null);
+            bool can_perform = false;
+            await Dispatcher.UIThread.InvokeAsync(() => {
+                can_perform = svm.PerformShortcutCommand.CanExecute(null);
             });
-
             MpConsole.WriteLine($"Shorcut Gesture '{svm.KeyString}' matched for shortcut '{svm.ShortcutType}' {(can_perform ? "CAN" : "CANNOT")} execute");
             if (!can_perform) {
                 ClearKeyboardBufferAsync().FireAndForgetSafeAsync(this);

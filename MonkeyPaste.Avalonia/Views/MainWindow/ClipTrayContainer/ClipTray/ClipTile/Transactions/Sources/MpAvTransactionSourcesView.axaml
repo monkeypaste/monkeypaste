@@ -18,7 +18,7 @@
              VerticalAlignment="Top"
              SelectionMode="Single"
              SelectedItem="{Binding SelectedSource, Mode=TwoWay}"
-             Items="{Binding Sources}">
+             ItemsSource="{Binding Sources}">
         <ListBox.Styles>
             <Style Selector="ListBoxItem">
                 <Setter Property="HorizontalContentAlignment"

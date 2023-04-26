@@ -64,7 +64,7 @@
                     <DataTemplate x:Key="AnnotationMessageTemplate"
                                   x:DataType="local:MpAvAnnotationMessageViewModel">
                         <TreeView Grid.Row="0"
-                                  Items="{Binding RootItems}"
+                                  ItemsSource="{Binding RootItems}"
                                   AutoScrollToSelectedItem="True"
                                   SelectionMode="Single"
                                   SelectedItem="{Binding SelectedItem, Mode=TwoWay}"

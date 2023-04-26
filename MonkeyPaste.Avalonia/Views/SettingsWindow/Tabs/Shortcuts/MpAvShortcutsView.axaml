@@ -72,7 +72,7 @@
                                       IsVisible="{Binding CustomPasteItems, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                       CanUserSortColumns="True"
                                       Focusable="True"
-                                      Items="{Binding CustomPasteItems}"
+                                      ItemsSource="{Binding CustomPasteItems}"
                                       IsReadOnly="False"
                                       AutoGenerateColumns="False">
                                 <DataGrid.Columns>

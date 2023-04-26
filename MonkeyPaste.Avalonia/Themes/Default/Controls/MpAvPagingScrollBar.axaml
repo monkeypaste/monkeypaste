@@ -148,7 +148,6 @@
                                                           Theme="{StaticResource FluentScrollBarPageButton}"
                                                           Focusable="False" />
                                         </Track.IncreaseButton>
-
                                         <!--  RenderTransform="{DynamicResource HorizontalSmallScrollThumbScaleTransform}"  -->
                                         <Thumb Theme="{StaticResource FluentScrollBarThumb}"
                                                Height="{DynamicResource ScrollBarSize}"

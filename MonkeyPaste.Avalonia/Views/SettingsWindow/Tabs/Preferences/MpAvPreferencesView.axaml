@@ -14,7 +14,7 @@
                        x:CompileBindings="True"
                        DataContext="{x:Static local:MpAvSettingsViewModel.Instance}"
                        x:Class="MonkeyPaste.Avalonia.MpAvPreferencesView">
-    <ItemsControl Items="{Binding PreferenceItems}"
+    <ItemsControl ItemsSource="{Binding PreferenceItems}"
                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                   ScrollViewer.VerticalScrollBarVisibility="Auto">
         <ItemsControl.ItemTemplate>

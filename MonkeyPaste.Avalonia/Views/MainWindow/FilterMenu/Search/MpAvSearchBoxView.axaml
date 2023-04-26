@@ -362,7 +362,7 @@
                                      IsTextCompletionEnabled="False"
                                      MinimumPrefixLength="0"
                                      MinimumPopulateDelay="0.25"
-                                     Items="{Binding RecentSearchTexts}"
+                                     ItemsSource="{Binding RecentSearchTexts}"
                                      BorderThickness="0"
                                      Padding="0"
                                      Margin="5,0,0,0">

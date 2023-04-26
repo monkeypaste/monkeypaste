@@ -160,7 +160,7 @@
 
         <ListBox x:Name="TransactionListBox"
                  Grid.Row="1"
-                 Items="{Binding SortedTransactions}"
+                 ItemsSource="{Binding SortedTransactions}"
                  SelectionMode="Single"
                  SelectedItem="{Binding SelectedTransaction, Mode=TwoWay}"
                  HorizontalAlignment="Stretch"

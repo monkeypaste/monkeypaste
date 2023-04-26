@@ -8,7 +8,7 @@ namespace MonkeyPaste.Common {
         TResult RunOnMainThread<TResult>(Func<TResult> action, MpDispatcherPriority priority = MpDispatcherPriority.Normal);
 
         Task RunOnMainThreadAsync(Action action, MpDispatcherPriority priority = MpDispatcherPriority.Normal);
-        Task<TResult> RunOnMainThreadAsync<TResult>(Func<TResult> action, MpDispatcherPriority priority = MpDispatcherPriority.Normal);
+        //Task<TResult> RunOnMainThreadAsync<TResult>(Func<TResult> action, MpDispatcherPriority priority = MpDispatcherPriority.Normal);
     }
 
 

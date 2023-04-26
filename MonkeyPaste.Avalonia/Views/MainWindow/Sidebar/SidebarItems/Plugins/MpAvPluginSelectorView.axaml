@@ -12,7 +12,7 @@
     <Border Classes="iconLabelComboBox">
         <ComboBox IsEnabled="{Binding Items, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                   SelectedIndex="{Binding Selection.SelectedIndex, Mode=TwoWay}"
-                  Items="{Binding Items}">
+                  ItemsSource="{Binding Items}">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <local:MpAvPluginSelectorItemView  />

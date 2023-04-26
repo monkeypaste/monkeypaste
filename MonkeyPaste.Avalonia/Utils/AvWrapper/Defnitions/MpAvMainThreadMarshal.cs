@@ -23,9 +23,9 @@ namespace MonkeyPaste.Avalonia {
             await Dispatcher.UIThread.InvokeAsync(action, ConvertPriority(priority));
         }
 
-        public async Task<TResult> RunOnMainThreadAsync<TResult>(Func<TResult> action, MpDispatcherPriority priority = MpDispatcherPriority.Normal) {
-            return await Dispatcher.UIThread.InvokeAsync<TResult>(action, ConvertPriority(priority));
-        }
+        //public async Task<TResult> RunOnMainThreadAsync<TResult>(Func<TResult> action, MpDispatcherPriority priority = MpDispatcherPriority.Normal) {
+        //    return await Dispatcher.UIThread.InvokeAsync<TResult>(action, ConvertPriority(priority));
+        //}
 
         public DispatcherPriority ConvertPriority(MpDispatcherPriority dp) {
             if (dp == MpDispatcherPriority.Normal) {

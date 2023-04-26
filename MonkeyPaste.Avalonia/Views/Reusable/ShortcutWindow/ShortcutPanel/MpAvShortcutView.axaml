@@ -70,7 +70,7 @@
                       Background="Transparent"
                       BorderThickness="0"
                       HorizontalAlignment="Center"
-                      Items="{Binding KeyGroups}"
+                      ItemsSource="{Binding KeyGroups}"
                       ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                       ScrollViewer.VerticalScrollBarVisibility="Hidden">
             <ItemsControl.IsVisible>

@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -343,7 +344,7 @@ namespace MonkeyPaste.Avalonia {
             if (OperatingSystem.IsAndroid()) {
                 return mpdo;
             }
-            var actual_formats = await Application.Current.Clipboard.GetFormatsSafeAsync();
+            var actual_formats = await TopLevel.GetTopLevel(Application.Current.GetMainWindow()).Clipboard.GetFormatsSafeAsync();
             MpConsole.WriteLine($"Normalizing actual dataobject formats:  {string.Join(",", actual_formats.Select(x => x))}");
 
             // foreach(var af in actual_formats) {

@@ -122,7 +122,7 @@
                   HorizontalContentAlignment="Left"
                   VerticalContentAlignment="Center"
                   SelectedIndex="{Binding SelectedSortTypeIdx, Source={x:Static local:MpAvClipTileSortFieldViewModel.Instance}, Mode=TwoWay}"
-                  Items="{Binding SortLabels, Source={x:Static local:MpAvClipTileSortFieldViewModel.Instance}}" />
+                  ItemsSource="{Binding SortLabels, Source={x:Static local:MpAvClipTileSortFieldViewModel.Instance}}" />
 
     </StackPanel>
 </local:MpAvUserControl>

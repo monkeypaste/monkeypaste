@@ -71,7 +71,7 @@ namespace MonkeyPaste.Avalonia {
             }
             pdg.ApplyTemplate();
             double nh = pdg.ColumnHeaderHeight;
-            foreach (var item in pdg.Items) {
+            foreach (var item in pdg.ItemsSource) {
                 nh += pdg.RowHeight;
             }
             pdg.Height = nh;

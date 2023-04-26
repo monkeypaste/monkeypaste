@@ -146,7 +146,7 @@
                          VerticalAlignment="Stretch"
                          Classes="actionDesigner"
                          SelectedItem="{Binding FocusAction, Mode=TwoWay}"
-                         Items="{Binding Items}">
+                         ItemsSource="{Binding Items}">
                     <ListBox.Resources>
                         <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">Transparent</SolidColorBrush>
                         <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">Transparent</SolidColorBrush>

@@ -39,7 +39,7 @@ namespace MonkeyPaste.Avalonia {
         #region MpIMainView Implementation
 
         public nint Handle =>
-            PlatformImpl.Handle.Handle;
+            TryGetPlatformHandle().Handle;
 
         public void SetPosition(MpPoint p, double scale) {
             Position = p.ToAvPixelPoint(scale);
