@@ -13,7 +13,13 @@ namespace MonkeyPaste.Common {
             var mpdo = new MpPortableDataObject();
             var req_lookup = MpJsonConverter.DeserializeObject<Dictionary<string, object>>(json);
             foreach (var kvp in req_lookup) {
-                mpdo.SetData(kvp.Key, kvp.Value);
+                try {
+                    mpdo.SetData(kvp.Key, kvp.Value);
+                }
+                catch (MpUnregisteredDataFormatException udfe) {
+                    // ignore
+                    continue;
+                }
             }
             return mpdo;
         }

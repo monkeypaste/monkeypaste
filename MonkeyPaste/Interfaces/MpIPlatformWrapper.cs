@@ -2,6 +2,9 @@
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
+    public interface MpICliTools {
+
+    }
     public interface MpIPlatformWrapper : MpICommonTools {
         Task InitializeAsync();
 

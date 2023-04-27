@@ -68,6 +68,7 @@ namespace MonkeyPaste.Common.Plugin {
         public bool isNuget { get; set; } = false;
         public bool isDll { get; set; } = false;
         public bool isCli { get; set; } = false;
+        public bool isPy { get; set; } = false;
         public bool isHttp { get; set; } = false;
     }
     public class MpPluginDependency {

@@ -256,6 +256,13 @@ namespace MonkeyPaste {
                 component_assembly = Assembly.GetAssembly(typeof(MpCommandLinePlugin));
                 return new MpCommandLinePlugin() { Endpoint = pluginPath };
             }
+            if (plugin.ioType.isPy) {
+                component_assembly = Assembly.GetAssembly(typeof(MpPyAnalyzerPlugin));
+                if (!pluginPath.IsFile()) {
+                    throw new MpUserNotifiedException($"Cannot find '{Path.GetFileName(pluginPath)}' in '{pluginDir}' defined by '{manifestPath}'. Python plugin must provide a .py file matching its directory name.");
+                }
+                return new MpPyAnalyzerPlugin(pluginPath);
+            }
 
             throw new MpUserNotifiedException(@"Unknown or undefined plugin type: " + JsonConvert.SerializeObject(plugin.ioType));
         }
@@ -377,6 +384,9 @@ namespace MonkeyPaste {
             }
             if (ioType.isDll) {
                 return "dll";
+            }
+            if (ioType.isPy) {
+                return "py";
             }
             if (ioType.isCli) {
 

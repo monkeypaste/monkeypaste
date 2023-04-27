@@ -1,0 +1,29 @@
+﻿{
+  "title": "Python Test",
+  "description": "Just says test",
+  "version": "1.0",
+  "credits": "Somebody cool",
+  "guid": "ad50131f-585e-41d9-b76f-9b11b7d92bb1",
+  "iconUri": "icon.png",
+  "ioType": {
+    "isPy": true
+  },
+  "analyzer": {
+    "inputType": {
+      "text": true
+    },
+    "outputType": {
+      "text": true
+    },
+    "parameters": [
+      {
+        "label": "Text Test Param",
+        "controlType": "TextBox",
+        "unitType": "PlainTextContentQuery",
+        "description": "Prefixed to your request to openai.",
+        "paramId": 1,
+        "isRequired": true
+      }
+    ]
+  }
+}

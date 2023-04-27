@@ -190,6 +190,7 @@ namespace MonkeyPaste {
         public string CoreAnnotatorGuid => "ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31";
         public string CoreAnnotatorDefaultPresetGuid => "a9fa2fbf-025d-4ced-a23b-234085b5ac5f";
 
+        public string CoreCliGuid => "e7e25c85-1c8f-4e79-be8f-2ebfcb5bb94e";
         #region Drag & Drop
         public string CompositeItemDragDropFormatName {
             get {

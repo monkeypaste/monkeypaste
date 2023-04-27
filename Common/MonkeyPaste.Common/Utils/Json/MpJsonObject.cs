@@ -17,7 +17,7 @@ namespace MonkeyPaste.Common {
             return new T();
         }
 
-        public static T DeserializeBase64Object<T>(object obj, Encoding enc = null) where T : new() {
+        public static T DeserializeBase64Object<T>(object obj, Encoding enc = null, JsonSerializerSettings settings = null) where T : new() {
             if (obj is string objBase64Str && !string.IsNullOrWhiteSpace(objBase64Str)) {
                 try {
 
@@ -27,7 +27,7 @@ namespace MonkeyPaste.Common {
 
                     // NOTE ignoring encoding since string is base 64
                     string objStr = objBase64Str.ToStringFromBase64(enc);
-                    return JsonConvert.DeserializeObject<T>(objStr);
+                    return JsonConvert.DeserializeObject<T>(objStr, settings);
                 }
                 catch (Exception ex) {
                     MpConsole.WriteTraceLine("Error deserializing base64 str: " + objBase64Str, ex);

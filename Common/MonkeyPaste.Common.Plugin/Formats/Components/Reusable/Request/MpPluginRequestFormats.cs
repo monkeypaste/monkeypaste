@@ -26,13 +26,5 @@ namespace MonkeyPaste.Common.Plugin {
         }
 
         public List<MpParameterRequestItemFormat> items { get; set; }
-
-        [JsonIgnore]
-        public Dictionary<object, string> ParamLookup =>
-            items == null ?
-                new Dictionary<object, string>() :
-                items.ToDictionary(
-                    x => (object)x.paramId,
-                    x => x.value);
     }
 }
