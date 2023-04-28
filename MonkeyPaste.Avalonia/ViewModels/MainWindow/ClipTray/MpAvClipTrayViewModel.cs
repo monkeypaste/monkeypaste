@@ -1725,10 +1725,15 @@ namespace MonkeyPaste.Avalonia {
 
         public void ClipboardChanged(object sender, MpPortableDataObject mpdo) {
             bool is_startup_ido = MpAvMainWindowViewModel.Instance.IsMainWindowInitiallyOpening;
+
             bool is_change_ignored =
                 !is_startup_ido &&
                 (IsAppPaused ||
                  (MpPrefViewModel.Instance.IgnoreInternalClipboardChanges && Mp.Services.ProcessWatcher.IsThisAppActive));
+            if (is_startup_ido && !is_change_ignored && !MpPrefViewModel.Instance.AddClipboardOnStartup) {
+                // ignore startup item
+                is_change_ignored = true;
+            }
 
             if (is_change_ignored) {
                 MpConsole.WriteLine("Clipboard Change Ignored by tray");
@@ -1744,7 +1749,10 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(100);
                 }
                 if (is_startup_ido) {
-                    await Task.Delay(3000);
+                    await Task.Delay(500);
+                    while (IsAnyBusy) {
+                        await Task.Delay(100);
+                    }
                 }
                 await AddItemFromDataObjectAsync(mpdo);
             });
@@ -2936,30 +2944,39 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand AddNewItemsCommand => new MpAsyncCommand<object>(
             async (tagDropCopyItemOnlyArg) => {
-                IsPinTrayBusy = true;
 
-                int selectedId = -1;
-                if (MpAvMainWindowViewModel.Instance.IsMainWindowLocked && SelectedItem != null) {
-                    selectedId = SelectedItem.CopyItemId;
+                DispatcherPriority dp = DispatcherPriority.Normal;
+                if (MpAvMainWindowViewModel.Instance.IsMainWindowLocked &&
+                    !MpAvMainWindowViewModel.Instance.IsMainWindowActive) {
+                    // this case can cause system lag so lower priority
+                    dp = DispatcherPriority.ApplicationIdle;
                 }
-                for (int i = 0; i < PendingNewModels.Count; i++) {
-                    var ci = PendingNewModels[i];
-                    MpAvClipTileViewModel nctvm = await CreateOrRetrieveClipTileViewModelAsync(ci);
-                    ToggleTileIsPinnedCommand.Execute(nctvm);
-                }
+                await Dispatcher.UIThread.InvokeAsync(async () => {
+                    IsPinTrayBusy = true;
 
-                PendingNewModels.Clear();
-                while (IsAnyBusy) {
-                    await Task.Delay(100);
-                }
-                if (selectedId >= 0) {
-                    var selectedVm = AllItems.FirstOrDefault(x => x.CopyItemId == selectedId);
-                    if (selectedVm != null) {
-                        selectedVm.IsSelected = true;
+                    int selectedId = -1;
+                    if (MpAvMainWindowViewModel.Instance.IsMainWindowLocked && SelectedItem != null) {
+                        selectedId = SelectedItem.CopyItemId;
                     }
-                }
-                IsPinTrayBusy = false;
-                //using tray scroll changed so tile drop behaviors update their drop rects
+                    for (int i = 0; i < PendingNewModels.Count; i++) {
+                        var ci = PendingNewModels[i];
+                        MpAvClipTileViewModel nctvm = await CreateOrRetrieveClipTileViewModelAsync(ci);
+                        ToggleTileIsPinnedCommand.Execute(nctvm);
+                    }
+
+                    PendingNewModels.Clear();
+                    while (IsAnyBusy) {
+                        await Task.Delay(100);
+                    }
+                    if (selectedId >= 0) {
+                        var selectedVm = AllItems.FirstOrDefault(x => x.CopyItemId == selectedId);
+                        if (selectedVm != null) {
+                            selectedVm.IsSelected = true;
+                        }
+                    }
+                    IsPinTrayBusy = false;
+                    //using tray scroll changed so tile drop behaviors update their drop rects
+                }, dp);
             },
             (tagDropCopyItemOnlyArg) => {
                 if (tagDropCopyItemOnlyArg is MpCopyItem tag_drop_ci) {

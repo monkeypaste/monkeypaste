@@ -659,7 +659,7 @@ namespace MonkeyPaste.Avalonia {
                             x.IncludesKeyLiteral(keyLiteral));
 
                     if (startsWith_matches.Any()) {
-                        _suppressedKeys.Add(keyLiteral);
+                        //_suppressedKeys.Add(keyLiteral);
                     }
                 } else if (exactMatch.RoutingType == MpRoutingType.Override) {
                     // NOTE SupressEvent will block key up from occuring so 
@@ -833,10 +833,12 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Keyboard EventHandlers
+        private List<string> _downs = new List<string>();
         private void Hook_KeyPressed(object sender, KeyboardHookEventArgs e) {
             _downCount++;
-            //string keyStr = MpGlobalKeyConverter.GetKeyLiteral(e.Data.KeyCode);
             string keyStr = Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { e.Data.KeyCode } });
+            MpConsole.WriteLine($"DOWN '{keyStr}' DCOUNT: {_downCount}");
+            _downs.Add(keyStr);
             HandleKeyDown(keyStr, e);
         }
 
@@ -844,6 +846,8 @@ namespace MonkeyPaste.Avalonia {
         private void Hook_KeyReleased(object sender, KeyboardHookEventArgs e) {
             _downCount--;
             string keyStr = Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { e.Data.KeyCode } });
+            MpConsole.WriteLine($"UP '{keyStr}' DCOUNT: {_downCount}");
+            _downs.Remove(keyStr);
             HandleKeyUp(keyStr, e);
         }
 

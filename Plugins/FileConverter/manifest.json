@@ -4,11 +4,9 @@
   "version": "1.0",
   "credits": "Somebody",
   "guid": "04c4d099-530e-432d-b107-3b0696b980cf",
-  "url": "https://www.monkeypaste.com",
+  "projectUrl": "https://www.monkeypaste.com",
   "iconUri": "icon.png",
-  "ioType": {
-    "isDll": true
-  },
+  "bundleType": "Dll",
   "analyzer": {
     "inputType": {
       "file": true

@@ -105,7 +105,10 @@ namespace MonkeyPaste.Avalonia {
                     _keyGroups = new ObservableCollection<MpAvShortcutKeyGroupViewModel>();
                 }
                 _keyGroups.Clear();
-                _keyGroups.AddRange(aps.PasteCmdKeyString.ToKeyItems());
+                var kivml = aps.PasteCmdKeyString.ToKeyItems();
+                foreach (var kivm in kivml) {
+                    _keyGroups.Add(kivm);
+                }
             }
             OnPropertyChanged(nameof(KeyGroups));
 

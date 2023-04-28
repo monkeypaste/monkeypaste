@@ -15,10 +15,12 @@ using System.Web;
 //using Xamarin.Forms;
 
 namespace MonkeyPaste {
-    public class MpPyAnalyzerPlugin : MpCommandLinePlugin {
+    public class MpPythonAnalyzerPlugin : MpCommandLinePlugin {
 
-        public MpPyAnalyzerPlugin(string targetPath) : base(targetPath) {
-            Endpoint = Path.Combine(SCRIPTS_ROOT_DIR, "python", "pyrunner.bat");
+        public MpPythonAnalyzerPlugin(string bundlePath) : base(bundlePath) {
+            // TODO this should be resolved at runtime using pycheck.py which should
+            // return python.exe path or empty which will invalidte/filter python plugins
+            CommandPath = @"C:\Users\tkefauver\AppData\Local\Programs\Python\Python310\python.exe";
         }
 
     }

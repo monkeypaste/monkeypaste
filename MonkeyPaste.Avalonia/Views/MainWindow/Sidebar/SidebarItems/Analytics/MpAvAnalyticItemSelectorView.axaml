@@ -46,7 +46,7 @@
                                     <ToolTip.Tip>
                                         <local:MpAvToolTipView ToolTipText="Settings" />
                                     </ToolTip.Tip>
-                                    <Image Source="{Binding ., Source={StaticResource PlusImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                                    <Image Source="{Binding ., Source={StaticResource JigsawImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
 
                                 </Button>
                                 <ComboBox SelectedIndex="{Binding SelectedItemIdx, Mode=TwoWay}"

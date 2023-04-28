@@ -568,11 +568,9 @@ namespace MonkeyPaste.Avalonia {
 
                 MpCopyItem sourceCopyItem = null;
                 MpAvAnalyticItemPresetViewModel targetAnalyzer = null;
-                bool isUserExecutedAnalysis = true;
                 Func<string> lastOutputCallback = null;
 
                 if (args is object[] argParts) {
-                    isUserExecutedAnalysis = false;
                     targetAnalyzer = argParts[0] as MpAvAnalyticItemPresetViewModel;
                     // when analyzer is triggered from action not user selection 
                     if (argParts[1] is string) {
@@ -739,8 +737,6 @@ namespace MonkeyPaste.Avalonia {
 
             return string.IsNullOrEmpty(CannotExecuteTooltip);
         }
-
-
         public ICommand SelectPresetCommand => new MpCommand<MpAvAnalyticItemPresetViewModel>(
              (selectedPresetVm) => {
                  //if(!IsLoaded) {

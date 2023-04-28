@@ -191,6 +191,7 @@ namespace MonkeyPaste {
         public string CoreAnnotatorDefaultPresetGuid => "a9fa2fbf-025d-4ced-a23b-234085b5ac5f";
 
         public string CoreCliGuid => "e7e25c85-1c8f-4e79-be8f-2ebfcb5bb94e";
+
         #region Drag & Drop
         public string CompositeItemDragDropFormatName {
             get {
@@ -421,6 +422,8 @@ namespace MonkeyPaste {
         public bool IgnoreInternalClipboardChanges { get; set; } = true;
         public bool IgnoreWhiteSpaceCopyItems { get; set; } = true;
         public bool ResetClipboardAfterMonkeyPaste { get; set; }
+
+        public bool AddClipboardOnStartup { get; set; } = true;
 
         #endregion
 

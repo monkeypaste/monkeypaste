@@ -5,9 +5,7 @@
   "credits": "Somebody",
   "guid": "f0988931-c39a-4ea4-b39a-32346c23094b",
   "iconUri": "icon.png",
-  "ioType": {
-    "isDll": true
-  },
+  "bundleType": "Dll",
   "dependencies": [
     {
       "type": "os",

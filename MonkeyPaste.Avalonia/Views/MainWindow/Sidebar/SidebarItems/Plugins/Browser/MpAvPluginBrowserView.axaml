@@ -32,12 +32,18 @@
                     Value="NoWrap" />
             <Setter Property="Width"
                     Value="100" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Left" />
+            <Setter Property="Margin"
+                    Value="0,10,0,0" />
         </Style>
         <Style Selector="TextBlock.detailInfo">
             <Setter Property="TextWrapping"
                     Value="Wrap" />
             <Setter Property="HorizontalAlignment"
                     Value="Left" />
+            <Setter Property="VerticalAlignment"
+                    Value="Bottom" />
         </Style>
 
         <Style Selector="local|MpAvMarqueeTextBox.detailInfo">
@@ -54,14 +60,19 @@
         </Style>
 
         <!--  SELECTED ITEM DETAIL  -->
-        <Style Selector="Grid#SelectedPluginContainer > :is(Control)">
-            <Setter Property="Margin"
-                    Value="0,10,0,0" />
+        <Style Selector="Button.manageButton">
+            <Setter Property="Width"
+                    Value="80" />
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Center" />
+            <Setter Property="Foreground"
+                    Value="Black" />
+
         </Style>
     </local:MpAvUserControl.Styles>
     <Grid x:Name="PluginRootContainer"
           RowDefinitions="Auto,Auto,*"
-          ColumnDefinitions="*,Auto,*"
+          ColumnDefinitions="0.5*,5,0.5*"
           Margin="10">
 
         <!--  TABS  -->
@@ -146,12 +157,16 @@
 
         <!--  PLUGIN LIST  -->
         <ListBox x:Name="PluginSelectorListBox"
+                 Margin="5"
+                 BorderThickness="1"
+                 BorderBrush="Black"
                  Grid.Row="2"
                  Grid.Column="0"
-                 IsVisible="{Binding !IsBusy}"
+                 SelectionMode="Single"
+                 AutoScrollToSelectedItem="True"
+                 IsVisible="{Binding !IsVisible, ElementName=SelectorBusyContainer}"
                  ItemsSource="{Binding Items}"
-                 SelectionMode="Single,AlwaysSelected"
-                 Selection="{Binding Selection}">
+                 SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
             <ListBox.ItemTemplate>
                 <DataTemplate x:DataType="local:MpAvPluginItemViewModel">
                     <Grid x:Name="PluginBrowserItemContainer"
@@ -188,6 +203,8 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
+        <!--  BROWSE BUSY OVERLAY  -->
+
         <local:MpAvBusySpinnerView x:Name="SelectorBusyContainer"
                                    Grid.Row="2"
                                    Grid.Column="0"
@@ -198,24 +215,32 @@
                                    IsVisible="{Binding IsBusy}" />
 
         <!--  SELECTED PLUGIN VIEW  -->
-        <Grid x:Name="SelectedPluginContainer"
-              Grid.Row="2"
-              Grid.Column="2"
-              DataContext="{Binding SelectedItem}"
-              x:DataType="local:MpAvPluginItemViewModel"
-              IsVisible="{Binding !IsVisible, ElementName=DetailBusyContainer}"
-              Margin="10,3"
-              RowDefinitions="50,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
-              ColumnDefinitions="70,*">
-            <!--  SELECTED HEADER  -->
-            <DockPanel Grid.Row="0"
-                       Grid.ColumnSpan="2"
-                       LastChildFill="False">
-                <StackPanel DockPanel.Dock="Left"
-                            Orientation="Horizontal"
-                            Spacing="5">
+
+        <Border x:Name="SelectedPluginOuterContainer"
+                Grid.Row="2"
+                Grid.Column="2"
+                Margin="10,3">
+            <Border.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="!IsVisible"
+                             ElementName="DetailBusyContainer" />
+                    <Binding Path="SelectedItem"
+                             Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
+                </MultiBinding>
+            </Border.IsVisible>
+            <Grid x:Name="SelectedPluginContainer"
+                  DataContext="{Binding SelectedItem}"
+                  x:DataType="local:MpAvPluginItemViewModel"
+                  RowDefinitions="50,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+                  ColumnDefinitions="70,*">
+
+                <!--  SELECTED HEADER  -->
+                <DockPanel Grid.Row="0"
+                           Grid.ColumnSpan="2"
+                           Margin="0,0,0,15">
                     <!--  PLUGIN ICON  -->
                     <Image x:Name="SelectedPluginIcon"
+                           DockPanel.Dock="Left"
                            Classes="square"
                            Source="{Binding IconBase64, Converter={x:Static local:MpAvStringBase64ToBitmapConverter.Instance}}" />
 
@@ -223,141 +248,144 @@
                     <TextBlock x:Name="SelectedPluginTitleBlock"
                                Grid.Row="0"
                                Grid.Column="1"
-                               FontSize="20"
+                               FontSize="24"
+                               Margin="5,0,0,0"
                                FontWeight="SemiBold"
                                TextWrapping="NoWrap"
                                Text="{Binding PluginTitle}" />
-                </StackPanel>
-            </DockPanel>
+                </DockPanel>
 
-            <!--  TOGGLE INSTALL BUTTON  -->
-            <Button x:Name="ToggleInstallSelectedPluginButton"
-                    Grid.Row="1"
-                    Classes="defaultButton textOnlyButton"
-                    Content="{Binding ToggleInstallText}"
-                    Command="{Binding ToggleIsPluginInstalledCommand}" />
+                <!--  TOGGLE INSTALL BUTTON  -->
+                <Button x:Name="ToggleInstallSelectedPluginButton"
+                        Grid.Row="1"
+                        Classes="defaultButton textOnlyButton manageButton"
+                        Content="{Binding ToggleInstallText}"
+                        Command="{Binding ToggleIsPluginInstalledCommand}" />
 
-            <!--  UPDATE BUTTON  -->
-            <Button x:Name="UpdateSelectedPluginButton"
-                    Grid.Row="2"
-                    Classes="defaultButton textOnlyButton"
-                    Content="Update"
-                    IsVisible="{Binding IsInstalled}"
-                    Command="{Binding UpdatePluginCommand}" />
+                <!--  UPDATE BUTTON  -->
+                <Button x:Name="UpdateSelectedPluginButton"
+                        Grid.Row="2"
+                        Margin="0,10,0,0"
+                        Classes="defaultButton textOnlyButton manageButton"
+                        Content="Update"
+                        IsVisible="{Binding IsInstalled}"
+                        Command="{Binding UpdatePluginCommand}" />
 
-            <!--  DESCRIPTION  -->
-            <TextBlock Grid.Row="3"
-                       Text="Description"
-                       Classes="detailLabel" />
-            <TextBlock Grid.Row="4"
-                       Grid.ColumnSpan="2"
-                       Text="{Binding PluginDescription}"
-                       Classes="detailInfo" />
+                <!--  DESCRIPTION  -->
+                <TextBlock Grid.Row="3"
+                           Text="Description"
+                           Classes="detailLabel" />
+                <TextBlock Grid.Row="4"
+                           Grid.ColumnSpan="2"
+                           Text="{Binding PluginDescription}"
+                           Classes="detailInfo" />
 
-            <!--  VERSION  -->
-            <TextBlock Grid.Row="5"
-                       Grid.Column="0"
-                       Classes="detailLabel"
-                       Text="Version:" />
-            <TextBlock Grid.Row="5"
-                       Grid.Column="1"
-                       Classes="detailInfo"
-                       Text="{Binding PluginVersion}" />
+                <!--  VERSION  -->
+                <TextBlock Grid.Row="5"
+                           Grid.Column="0"
+                           Classes="detailLabel"
+                           Text="Version:" />
+                <TextBlock Grid.Row="5"
+                           Grid.Column="1"
+                           Classes="detailInfo"
+                           Text="{Binding PluginVersion}" />
 
-            <!--  CREDITS  -->
-            <TextBlock Grid.Row="6"
-                       Grid.Column="0"
-                       Classes="detailLabel"
-                       Text="Credits:" />
-            <TextBlock Grid.Row="6"
-                       Grid.Column="1"
-                       Classes="detailInfo"
-                       Text="{Binding PluginCredits}" />
+                <!--  CREDITS  -->
+                <TextBlock Grid.Row="6"
+                           Grid.Column="0"
+                           Classes="detailLabel"
+                           Text="Credits:" />
+                <TextBlock Grid.Row="6"
+                           Grid.Column="1"
+                           Classes="detailInfo"
+                           Text="{Binding PluginCredits}" />
 
-            <!--  LICENSE URL  -->
-            <TextBlock Grid.Row="7"
-                       Grid.Column="0"
-                       Classes="detailLabel"
-                       Text="License:" />
-            <local:MpAvMarqueeTextBox Grid.Row="7"
-                                      Grid.Column="1"
-                                      Classes="detailInfo"
-                                      Text="*License Link*"
-                                      NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
-                                      NavigateUriCommandParameter="{Binding PluginLicenseUrl}" />
+                <!--  LICENSE URL  -->
+                <TextBlock Grid.Row="7"
+                           Grid.Column="0"
+                           Classes="detailLabel"
+                           Text="License:" />
+                <local:MpAvMarqueeTextBox Grid.Row="7"
+                                          Grid.Column="1"
+                                          Classes="detailInfo"
+                                          Text="*License Link*"
+                                          NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
+                                          NavigateUriCommandParameter="{Binding PluginLicenseUrl}" />
 
-            <!--  PUBLISHED  -->
-            <TextBlock Grid.Row="8"
-                       Grid.Column="0"
-                       Classes="detailLabel"
-                       Text="Published:" />
-            <TextBlock Grid.Row="8"
-                       Grid.Column="1"
-                       Classes="detailInfo"
-                       Text="{Binding PluginPublishedDateTime, Converter={x:Static local:MpAvDateTimeToStringConverter.Instance}}" />
+                <!--  PUBLISHED  -->
+                <TextBlock Grid.Row="8"
+                           Grid.Column="0"
+                           Classes="detailLabel"
+                           Text="Published:" />
+                <TextBlock Grid.Row="8"
+                           Grid.Column="1"
+                           Classes="detailInfo"
+                           Text="{Binding PluginPublishedDateTime, Converter={x:Static local:MpAvDateTimeToStringConverter.Instance}}" />
 
-            <!--  PROJECT URL  -->
-            <TextBlock Grid.Row="9"
-                       Grid.Column="0"
-                       Classes="detailLabel"
-                       Text="Project URL:" />
-            <local:MpAvMarqueeTextBox Grid.Row="9"
-                                      Grid.Column="1"
-                                      Classes="detailInfo"
-                                      Text="{Binding PluginProjectUrl}"
-                                      NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
-                                      NavigateUriCommandParameter="{Binding PluginProjectUrl}" />
+                <!--  PROJECT URL  -->
+                <TextBlock Grid.Row="9"
+                           Grid.Column="0"
+                           Classes="detailLabel"
+                           Text="Project URL:" />
+                <local:MpAvMarqueeTextBox Grid.Row="9"
+                                          Grid.Column="1"
+                                          Classes="detailInfo"
+                                          Text="{Binding PluginProjectUrl}"
+                                          NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
+                                          NavigateUriCommandParameter="{Binding PluginProjectUrl}" />
 
-            <!--  ABUSE URL  -->
-            <TextBlock Grid.Row="10"
-                       Grid.Column="0"
-                       Classes="detailLabel"
-                       Text="Report Abuse:" />
-            <local:MpAvMarqueeTextBox Grid.Row="10"
-                                      Grid.Column="1"
-                                      Classes="detailInfo"
-                                      Text="{Binding PluginAbuseUrl}"
-                                      NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
-                                      NavigateUriCommandParameter="{Binding PluginAbuseUrl}" />
+                <!--  ABUSE URL  -->
+                <TextBlock Grid.Row="10"
+                           Grid.Column="0"
+                           Classes="detailLabel"
+                           Text="Report Abuse:" />
+                <local:MpAvMarqueeTextBox Grid.Row="10"
+                                          Grid.Column="1"
+                                          Classes="detailInfo"
+                                          Text="{Binding PluginAbuseUrl}"
+                                          NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
+                                          NavigateUriCommandParameter="{Binding PluginAbuseUrl}" />
 
-            <!--  TAGS  -->
-            <TextBlock Grid.Row="11"
-                       Grid.Column="0"
-                       Classes="detailLabel"
-                       Text="Tags:" />
-            <TextBlock Grid.Row="11"
-                       Grid.Column="1"
-                       Classes="detailInfo"
-                       Text="{Binding PluginTags}" />
+                <!--  TAGS  -->
+                <TextBlock Grid.Row="11"
+                           Grid.Column="0"
+                           Classes="detailLabel"
+                           Text="Tags:" />
+                <TextBlock Grid.Row="11"
+                           Grid.Column="1"
+                           Classes="detailInfo"
+                           Text="{Binding PluginTags}" />
 
-            <!--  DEPENDENCIES  -->
+                <!--  DEPENDENCIES  -->
 
-            <TreeView Grid.Row="12"
-                      Grid.ColumnSpan="2">
-                <TreeView.ItemTemplate>
-                    <TreeDataTemplate x:DataType="local:MpAvPluginDependencyViewModel"
-                                      ItemsSource="{Binding Items}">
-                        <TextBlock Text="{Binding LabelText}" />
-                    </TreeDataTemplate>
-                </TreeView.ItemTemplate>
-                <TreeViewItem DataContext="{Binding RootDependencyViewModel}"
-                              FontWeight="SemiBold" />
-            </TreeView>
+                <TreeView Grid.Row="12"
+                          Grid.ColumnSpan="2">
+                    <TreeView.ItemTemplate>
+                        <TreeDataTemplate x:DataType="local:MpAvPluginDependencyViewModel"
+                                          ItemsSource="{Binding Items}">
+                            <TextBlock Text="{Binding LabelText}" />
+                        </TreeDataTemplate>
+                    </TreeView.ItemTemplate>
+                    <TreeViewItem DataContext="{Binding RootDependencyViewModel}"
+                                  FontWeight="SemiBold" />
+                </TreeView>
 
-            <!--  README VIEW  -->
-            <TextBlock Grid.Row="13"
-                       Grid.Column="0"
-                       Classes="detailLabel"
-                       IsVisible="{Binding ReadMeMarkDownText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                       Text="Read Me:" />
-            <av:HtmlPanel Grid.Row="14"
-                          Grid.ColumnSpan="2"
-                          IsVisible="{Binding ReadMeMarkDownText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                          Text="{Binding ReadMeMarkDownText, Converter={x:Static local:MpAvStringMarkDownToHtmlConverter.Instance}}" />
+                <!--  README VIEW  -->
+                <TextBlock Grid.Row="13"
+                           Grid.Column="0"
+                           Classes="detailLabel"
+                           IsVisible="{Binding ReadMeMarkDownText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                           Text="Read Me:" />
+                <av:HtmlPanel Grid.Row="14"
+                              Grid.ColumnSpan="2"
+                              IsVisible="{Binding ReadMeMarkDownText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                              Text="{Binding ReadMeMarkDownText, Converter={x:Static local:MpAvStringMarkDownToHtmlConverter.Instance}}" />
 
-        </Grid>
+            </Grid>
 
+        </Border>
 
+        <!--  SELECTED BUSY SPINNER  -->
         <local:MpAvBusySpinnerView x:Name="DetailBusyContainer"
                                    Grid.Row="2"
                                    Grid.Column="2"
@@ -366,6 +394,9 @@
                                    IsVisible="{Binding IsSelectedBusy}"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center" />
+
+        <!--  NO SELECTION OVERLAY  -->
+
         <!--  LIST/DETAIL SPLITTER  -->
         <GridSplitter x:Name="ListDetailSplitter"
                       Grid.Row="2"

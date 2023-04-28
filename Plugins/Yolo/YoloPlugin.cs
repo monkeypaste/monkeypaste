@@ -1,17 +1,17 @@
-﻿using MonkeyPaste.Common.Plugin;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Reflection;
-using System.Threading.Tasks;
 //using Yolov5Net.Scorer;
 //using Yolov5Net.Scorer.Models;
 using System.Linq;
-using MonkeyPaste.Common;
+using System.Reflection;
 using System.Runtime.InteropServices.ComTypes;
-using Yolov5Net.Scorer.Models;
+using System.Threading.Tasks;
 using Yolov5Net.Scorer;
+using Yolov5Net.Scorer.Models;
 
 namespace Yolo {
     public class YoloPlugin : MpIAnalyzeComponent {
@@ -56,12 +56,12 @@ namespace Yolo {
             double confidence = req.GetRequestParamDoubleValue(1);
             string imgBase64 = req.GetRequestParamStringValue(2);
 
-            if(string.IsNullOrEmpty(imgBase64)) {
+            if (string.IsNullOrEmpty(imgBase64)) {
                 return null;
             }
             try {
                 var bytes = Convert.FromBase64String(imgBase64);
-                using ( var ms = new MemoryStream(bytes)) {
+                using (var ms = new MemoryStream(bytes)) {
                     var img = Image.FromStream(ms);
 
                     var rootNode = new MpAnnotationNodeFormat() {
@@ -104,15 +104,16 @@ namespace Yolo {
                         string ann_json = rootNode.SerializeJsonObject();
 
                         var resp = new MpAnalyzerPluginResponseFormat() {
-                            dataObject = new MpPortableDataObject(
-                                MpPortableDataFormats.INTERNAL_CONTENT_ANNOTATION_FORMAT,
-                                ann_json)
+                            dataObject = new Dictionary<string, object> {
+                                { MpPortableDataFormats.INTERNAL_CONTENT_ANNOTATION_FORMAT, ann_json }
+                            }
                         };
 
                         return resp;
                     }
                 }
-            } catch(Exception ex) {
+            }
+            catch (Exception ex) {
                 return new MpAnalyzerPluginResponseFormat() {
                     errorMessage = ex.Message
                 };

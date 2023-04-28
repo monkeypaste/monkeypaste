@@ -5,9 +5,7 @@
   "credits": "Somebody cool",
   "guid": "ad50131f-585e-41d9-b76f-9b11b7d92bb1",
   "iconUri": "icon.png",
-  "ioType": {
-    "isPy": true
-  },
+  "bundleType": "Python",
   "analyzer": {
     "inputType": {
       "text": true

@@ -1,4 +1,4 @@
-﻿namespace MonkeyPaste.Common {
+﻿namespace MonkeyPaste {
     public enum MpClipboardFormatType {
         None = 0,
         Text,

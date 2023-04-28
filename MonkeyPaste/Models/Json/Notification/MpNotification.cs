@@ -45,7 +45,7 @@ namespace MonkeyPaste {
             if (pluginNotfication == null) {
                 return;
             }
-            NotificationType = pluginNotfication.NotificationTypeStr.ToEnum<MpNotificationType>();
+            NotificationType = pluginNotfication.NotificationType.ToString().ToEnum<MpNotificationType>();
 
             if (pluginNotfication.NotificationType == MpPluginNotificationType.PluginResponseWarningWithOption) {
                 MaxShowTimeMs = -1;

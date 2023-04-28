@@ -567,6 +567,19 @@ namespace MonkeyPaste.Avalonia {
                                 }
                             },
                             new MpParameterFormat() {
+                                paramId = nameof(MpPrefViewModel.Instance.AddClipboardOnStartup),
+                                controlType = MpParameterControlType.CheckBox,
+                                unitType = MpParameterValueUnitType.Bool,
+                                label = "Add Startup Clipboard",
+                                description = "On startup the source of the clipboard will be unknown and depending on your security settings the content may come from an excluded website or application.",
+                                values = new List<MpPluginParameterValueFormat>() {
+                                    new MpPluginParameterValueFormat() {
+                                        isDefault = true,
+                                        value = MpPrefViewModel.Instance.AddClipboardOnStartup.ToString()
+                                    }
+                                }
+                            },
+                            new MpParameterFormat() {
                                 paramId = nameof(MpPrefViewModel.Instance.IgnoreAppendedItems),
                                 controlType = MpParameterControlType.CheckBox,
                                 unitType = MpParameterValueUnitType.Bool,

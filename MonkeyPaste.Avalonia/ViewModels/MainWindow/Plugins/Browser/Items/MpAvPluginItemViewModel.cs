@@ -1,7 +1,10 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Controls;
+using Avalonia.Controls.Shapes;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
+using System.IO.Compression;
 using System.Linq;
 using System.Security.Policy;
 using System.Text;
@@ -11,7 +14,7 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     public class MpAvPluginItemViewModel :
         MpViewModelBase<MpAvPluginBrowserViewModel>,
-        MpISelectableViewModel,
+        //MpISelectableViewModel,
         MpIHoverableViewModel {
         #region Private Variables
         #endregion
@@ -34,12 +37,12 @@ namespace MonkeyPaste.Avalonia {
                 }
                 return Parent.SelectedItem == this;
             }
-            set {
-                if (value && Parent != null && IsSelected != value) {
-                    Parent.Selection.SelectedItem = this;
-                    OnPropertyChanged(nameof(IsSelected));
-                }
-            }
+            //set {
+            //    if (value && Parent != null && IsSelected != value) {
+            //        Parent.SelectedItem = this;
+            //        OnPropertyChanged(nameof(IsSelected));
+            //    }
+            //}
         }
         public DateTime LastSelectedDateTime { get; set; }
         #endregion
@@ -74,8 +77,19 @@ namespace MonkeyPaste.Avalonia {
             .Cast<MpIAsyncObject>()
             .Any(x => x.IsBusy);
 
+        public MpPluginFormat LoadedPluginRef =>
+            MpPluginLoader.Plugins.Any(x => x.Value.guid == PluginGuid) ?
+                MpPluginLoader.Plugins.FirstOrDefault(x => x.Value.guid == PluginGuid).Value :
+                null;
         public bool IsInstalled =>
-            MpPluginLoader.Plugins.Any(x => x.Key == PluginGuid);
+            LoadedPluginRef != null;
+
+        public bool CanUpdate =>
+            IsInstalled &&
+            PluginVersion != LoadedPluginRef.version &&
+            new[] { PluginVersion, LoadedPluginRef.version }
+                .Order()
+                .FirstOrDefault() == PluginVersion;
 
         #endregion
 
@@ -112,6 +126,15 @@ namespace MonkeyPaste.Avalonia {
                     return string.Empty;
                 }
                 return PluginFormat.description;
+            }
+        }
+
+        public string PackageUrl {
+            get {
+                if (PluginFormat == null) {
+                    return string.Empty;
+                }
+                return PluginFormat.packageUrl;
             }
         }
 
@@ -306,15 +329,38 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
-        public ICommand InstallPluginCommand => new MpCommand(
-            () => {
+        public ICommand InstallPluginCommand => new MpAsyncCommand(
+            async () => {
+                await MpAvAnalyticItemCollectionViewModel.Instance
+                    .InstallAnalyzerCommand.ExecuteAsync(PackageUrl);
 
+                OnPropertyChanged(nameof(LoadedPluginRef));
+                OnPropertyChanged(nameof(IsInstalled));
+                Parent.PerformFilterCommand.Execute(null);
             }, () => {
                 return !IsInstalled;
             });
 
-        public ICommand UninstallPluginCommand => new MpCommand(
-            () => {
+        public ICommand UninstallPluginCommand => new MpAsyncCommand(
+            async () => {
+                var confirm = await Mp.Services.NativeMessageBox.ShowOkCancelMessageBoxAsync(
+                    title: "Confirm",
+                    message: $"Are you sure you want to remove '{PluginTitle}' and all its presets and shortcuts?",
+                    owner: MpAvWindowManager.AllWindows.FirstOrDefault(x => x.DataContext == Parent),
+                    iconResourceObj: "QuestionMarkImage");
+                if (!confirm) {
+                    // cancel
+                    return;
+                }
+
+                MpAvAnalyticItemCollectionViewModel.Instance
+                    .UninstallAnalyzerCommand.Execute(PluginGuid);
+
+                while (MpAvAnalyticItemCollectionViewModel.Instance.IsBusy) {
+                    await Task.Delay(100);
+                }
+                // refresh list to remove this plugin
+                Parent.PerformFilterCommand.Execute(null);
 
             }, () => {
                 return IsInstalled;
@@ -324,7 +370,7 @@ namespace MonkeyPaste.Avalonia {
             () => {
 
             }, () => {
-                return IsInstalled;
+                return CanUpdate;
             });
 
         public ICommand ToggleIsPluginInstalledCommand => new MpCommand(

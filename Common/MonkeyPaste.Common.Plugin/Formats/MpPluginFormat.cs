@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 
 namespace MonkeyPaste.Common.Plugin {
-    public enum MpPluginComponentType {
+    public enum MpPluginType {
         None = 0,
         Clipboard,
         Input,
@@ -12,10 +12,7 @@ namespace MonkeyPaste.Common.Plugin {
         Gui,
         Composite
     }
-
     public class MpPluginFormat : MpManifestFormat {
-
-
         public MpHeadlessPluginFormat headless { get; set; } = null;
         public MpAnalyzerPluginFormat analyzer { get; set; } = null;
 
@@ -62,19 +59,6 @@ namespace MonkeyPaste.Common.Plugin {
             }
         }
 
-    }
-
-    public class MpPluginIoTypeFormat : MpJsonObject {
-        public bool isNuget { get; set; } = false;
-        public bool isDll { get; set; } = false;
-        public bool isCli { get; set; } = false;
-        public bool isPy { get; set; } = false;
-        public bool isHttp { get; set; } = false;
-    }
-    public class MpPluginDependency {
-        public MpPluginDependencyType type { get; set; }
-        public string name { get; set; }
-        public string version { get; set; }
     }
 
 

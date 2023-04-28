@@ -5,9 +5,7 @@
   "credits": "Somebody",
   "guid": "c80163e4-66b6-4845-ba11-de182b9f8a62",
   "iconUri": "logo.png",
-  "ioType": {
-    "isHttp": true
-  },
+  "bundleType": "Http",
   "analyzer": {
     "inputType": {
       "text": true
@@ -33,7 +31,7 @@
             "type": "guid"
           }
         ],
-        "url": {
+        "projectUrl": {
           "raw": "https://api.cognitive.microsofttranslator.com/translate?api-version=3.0",
           "protocol": "https",
           "host": [
@@ -70,26 +68,8 @@
         }
       },
       "response": {
-        "newContentItem": {
-          "name": "TranslatedContent",
-          "label": {
-            "value": "Azure Translation"
-          },
-          "content": {
-            "pathExpression": "$.['translations'][0].text"
-          },
-          "annotations": [
-            {
-              "name": "detectedLanguage",
-              "label": {
-                "value": "Detected Language: {0}",
-                "pathExpression": "$.['detectedLanguage'].language"
-              },
-              "score": {
-                "pathExpression": "$.['detectedLanguage'].score"
-              }
-            }
-          ]
+        "dataObject": {
+          "Text": "$.['translations'][0].text"
         }
       }
     },

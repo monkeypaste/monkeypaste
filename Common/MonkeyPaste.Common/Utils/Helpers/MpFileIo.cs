@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -428,6 +429,11 @@ namespace MonkeyPaste.Common {
             }
             var bytes = await uri.ReadUriBytesAsync();
             return bytes;
+        }
+
+        public static async Task<string> ReadTextFromUriAsync(string uri, string baseDir = "", int timeoutMs = 5000, Encoding en = null) {
+            var bytes = await ReadBytesFromUriAsync(uri, baseDir, timeoutMs);
+            return bytes.ToDecodedString(en);
         }
 
         public static byte[] ReadBytesFromFile(string filePath) {

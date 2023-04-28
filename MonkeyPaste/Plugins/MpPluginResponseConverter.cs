@@ -37,11 +37,11 @@ namespace MonkeyPaste {
                 trans == null ||
                 trans.Response == null ||
                 trans.Response.dataObject == null ||
-                trans.Response.dataObject.DataFormatLookup.Count == 0) {
+                trans.Response.dataObject.Count == 0) {
                 return null;
             }
 
-            var mpdo = trans.Response.dataObject;
+            var mpdo = new MpPortableDataObject(trans.Response.dataObject);
             var outputType = pluginFormat.analyzer.outputType;
             List<string> ref_urls = new List<string>();
 

@@ -1,4 +1,5 @@
-﻿using Avalonia.Media;
+﻿using Avalonia.Controls.Shapes;
+using Avalonia.Media;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
@@ -203,7 +204,7 @@ namespace MonkeyPaste.Avalonia {
 
             var pail = MpPluginLoader.Plugins.Where(x => x.Value.Component is MpIAnalyzeAsyncComponent || x.Value.Component is MpIAnalyzeComponent);
             foreach (var pai in pail) {
-                var paivm = await CreateAnalyticItemViewModel(pai.Value);
+                var paivm = await CreateAnalyticItemViewModelAsync(pai.Value);
                 Items.Add(paivm);
             }
 
@@ -252,7 +253,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private async Task<MpAvAnalyticItemViewModel> CreateAnalyticItemViewModel(MpPluginFormat plugin) {
+        private async Task<MpAvAnalyticItemViewModel> CreateAnalyticItemViewModelAsync(MpPluginFormat plugin) {
             MpAvAnalyticItemViewModel aivm = new MpAvAnalyticItemViewModel(this);
 
             await aivm.InitializeAsync(plugin);
@@ -312,6 +313,69 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
                 core_aipvm.Parent.ExecuteAnalysisCommand.Execute(new object[] { core_aipvm, ctvm.CopyItem });
+            });
+
+        public MpIAsyncCommand<object> InstallAnalyzerCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                string package_url = args as string;
+                var plugin_format = await MpPluginLoader.InstallPluginAsync(package_url);
+                if (plugin_format == null) {
+                    return;
+                }
+                var aivm = await CreateAnalyticItemViewModelAsync(plugin_format);
+                Items.Add(aivm);
+            });
+        public ICommand UninstallAnalyzerCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                IsBusy = true;
+
+                string plugin_guid = args as string;
+
+                var aivm = Items.FirstOrDefault(x => x.PluginGuid == plugin_guid);
+
+                MpDebug.Assert(aivm != null, $"Error uninstalling plugin guid '{plugin_guid}' can't find analyer");
+
+                // NOTE assume confirm handled in calling command (plugin browser)
+
+                while (aivm.IsBusy) {
+                    // wait if executing
+                    await Task.Delay(100);
+                }
+
+                var running_triggers_with_this_analyzer =
+                    MpAvTriggerCollectionViewModel.Instance
+                        .Items
+                        .OfType<MpAvAnalyzeActionViewModel>()
+                        .Where(x =>
+                            aivm.Items.Any(y => y.AnalyticItemPresetId == x.AnalyticItemPresetId) &&
+                            x.RootTriggerActionViewModel.SelfAndAllDescendants.Any(y => y.IsPerformingAction));
+
+                if (running_triggers_with_this_analyzer.Any()) {
+                    while (running_triggers_with_this_analyzer.Any()) {
+                        // wait for any action change w/ this analyzer to complete
+                        await Task.Delay(100);
+                        running_triggers_with_this_analyzer =
+                            MpAvTriggerCollectionViewModel.Instance
+                                .Items
+                                .OfType<MpAvAnalyzeActionViewModel>()
+                                .Where(x =>
+                                    aivm.Items.Any(y => y.AnalyticItemPresetId == x.AnalyticItemPresetId) &&
+                                    x.RootTriggerActionViewModel.SelfAndAllDescendants.Any(y => y.IsPerformingAction));
+                    }
+                }
+
+                // remove from db
+                await Task.WhenAll(aivm.Items.Select(x => x.Preset.DeleteFromDatabaseAsync()));
+
+                // remove from plugin dir
+                MpPluginLoader.DeletePlugin(aivm.PluginGuid);
+
+
+                // remove from collection
+                Items.Remove(aivm);
+                OnPropertyChanged(nameof(Items));
+
+                IsBusy = false;
             });
         #endregion
     }

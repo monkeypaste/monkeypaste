@@ -151,7 +151,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Plugins\Components\Cli\" />
     <Folder Include="Utils\Helpers\Graphics\Animation\" />
   </ItemGroup>
 

@@ -9,10 +9,11 @@ namespace MonkeyPaste.Common.Plugin {
 
         public List<MpPluginUserNotificationFormat> userNotifications { get; set; } = new List<MpPluginUserNotificationFormat>();
 
-        public MpPluginResponseNewContentFormat newContentItem { get; set; }
-        public List<MpPluginResponseAnnotationFormat> annotations { get; set; } = new List<MpPluginResponseAnnotationFormat>();
+        //public MpPluginResponseNewContentFormat newContentItem { get; set; }
+        //public List<MpPluginResponseAnnotationFormat> annotations { get; set; } = new List<MpPluginResponseAnnotationFormat>();
 
-        public MpPortableDataObject dataObject { get; set; }
+        //public MpPortableDataObject dataObject { get; set; }
+        public Dictionary<string, object> dataObject { get; set; }
     }
 
 }

@@ -14,6 +14,6 @@
   
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition="'$(BuildOs)' == 'WINDOWS'">
     <Exec Command="$(ProjectDir)scripts\windows\kill_mpav_processes.bat $(MainProjectName)" />
-    <Exec Command="$(ProjectDir)scripts\windows\move_declarative_plugins_to_bin.bat $(PluginSourceDir) $(PluginTargetDir)" />
+    <Exec Command="$(ProjectDir)scripts\windows\move_declarative_plugins_to_bin.bat $(DeclarativePluginBaseDir) $(PluginTargetDir)" />
   </Target>
 </Project>

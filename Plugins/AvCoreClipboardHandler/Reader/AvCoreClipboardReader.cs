@@ -75,7 +75,7 @@ namespace AvCoreClipboardHandler {
             }
 
             return new MpClipboardReaderResponse() {
-                dataObject = read_output,
+                dataObject = read_output.DataFormatLookup.ToDictionary(x => x.Key.Name, x => x.Value),
                 userNotifications = nfl,
                 errorMessage = string.Join(Environment.NewLine, exl)
             };

@@ -298,6 +298,9 @@ namespace MonkeyPaste.Avalonia {
                 if (success) {
                     if (tivm.IsOneTimeAppliableTransaction) {
                         tivm.AppliedDateTime = DateTime.Now;
+
+                        // for now, assume this is only text annotator and doesn't need auto-selecting
+                        return;
                     }
 
                     object to_select_tnvm_or_root_ann_guid = null;

@@ -66,29 +66,6 @@ namespace MonkeyPaste {
             }
         }
 
-        private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args) {
-            string assembly_name = args.Name.SplitNoEmpty(",").FirstOrDefault();
-            if (string.IsNullOrEmpty(assembly_name)) {
-                return null;
-            }
-            //assembly_name += ".dll";
-            foreach (var plugin in Plugins) {
-                string plugin_dir = Path.GetDirectoryName(plugin.Key);
-                string assembly_test_Path = Path.Combine(plugin_dir, assembly_name + ".dll");
-                if (assembly_test_Path.IsFile()) {
-                    try {
-
-                        var ass = Assembly.LoadFrom(assembly_test_Path);
-                        return ass;
-                    }
-                    catch (Exception) {
-                        var ass2 = Assembly.Load(assembly_name);
-                        return ass2;
-                    }
-                }
-            }
-            return null;
-        }
 
         public static async Task<MpPluginFormat> ReloadPluginAsync(string manifestPath) {
             if (!Plugins.ContainsKey(manifestPath)) {
@@ -125,10 +102,95 @@ namespace MonkeyPaste {
             return true;
         }
 
+        public static bool DeletePlugin(string guid, bool delete_cache = true) {
+            if (Plugins.All(x => x.Value.guid != guid)) {
+                // not found
+                return false;
+            }
+            var plugin_kvp = MpPluginLoader.Plugins.FirstOrDefault(x => x.Value.guid == guid);
+            string manifest_path = plugin_kvp.Key;
+
+            bool success = true;
+            if (manifest_path.IsFile()) {
+                // delete plugin folder
+                string dir_to_remove = Path.GetDirectoryName(manifest_path);
+                if (!MpFileIo.DeleteDirectory(dir_to_remove)) {
+                    success = false;
+                    MpConsole.WriteLine($"Error deleting plugin folder '{dir_to_remove}'");
+                }
+            }
+            if (delete_cache) {
+                string cache_path = Path.Combine(PluginManifestBackupFolderPath, GetCachedPluginFileName(plugin_kvp.Value));
+                if (cache_path.IsFile()) {
+                    if (!MpFileIo.DeleteFile(cache_path)) {
+                        success = false;
+                        MpConsole.WriteLine($"Error deleting plugin cache file '{cache_path}'");
+                    }
+                }
+            }
+            // remove from loader
+            if (!Plugins.Remove(manifest_path)) {
+                MpConsole.WriteLine($"Loaded plugin '{manifest_path}' not found");
+            }
+            return success;
+        }
+
+        public static async Task<MpPluginFormat> InstallPluginAsync(string PackageUrl) {
+            try {
+                // download package (should always be a zip file of the plugin root folder)
+                var package_bytes = await MpFileIo.ReadBytesFromUriAsync(PackageUrl);
+
+                // write to temp
+                string temp_package_zip = MpFileIo.WriteByteArrayToFile(System.IO.Path.GetTempFileName(), package_bytes, true);
+
+                // extract to ../Plugins
+                ZipFile.ExtractToDirectory(temp_package_zip, PluginRootFolderPath);
+
+                // compared loaded manifests with now changed dir manifests to locate installed
+                var manifests_diff = Plugins.Keys.Difference(FindManifestPaths(PluginRootFolderPath));
+                MpDebug.Assert(manifests_diff.Any(), $"no new manifest found from packageUrl '{PackageUrl}'");
+                MpDebug.Assert(manifests_diff.Count() == 1, $"new manifest count mismatch! should be 1 but is {manifests_diff.Count()}");
+
+                var result = await LoadPluginAsync(manifests_diff.FirstOrDefault());
+
+                return result;
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error installing plugin from uri '{PackageUrl}'. ", ex);
+                MpNotificationBuilder.ShowNotificationAsync(
+                    notificationType: MpNotificationType.FileIoError,
+                    body: ex.Message).FireAndForgetSafeAsync();
+
+                return null;
+            }
+        }
         #endregion
 
         #region Private Methods
 
+        private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args) {
+            string assembly_name = args.Name.SplitNoEmpty(",").FirstOrDefault();
+            if (string.IsNullOrEmpty(assembly_name)) {
+                return null;
+            }
+            //assembly_name += ".dll";
+            foreach (var plugin in Plugins) {
+                string plugin_dir = Path.GetDirectoryName(plugin.Key);
+                string assembly_test_Path = Path.Combine(plugin_dir, assembly_name + ".dll");
+                if (assembly_test_Path.IsFile()) {
+                    try {
+
+                        var ass = Assembly.LoadFrom(assembly_test_Path);
+                        return ass;
+                    }
+                    catch (Exception) {
+                        var ass2 = Assembly.Load(assembly_name);
+                        return ass2;
+                    }
+                }
+            }
+            return null;
+        }
         private static IEnumerable<string> FindManifestPaths(string root) {
             try {
                 return Directory.EnumerateFiles(root, "manifest.json", SearchOption.AllDirectories);
@@ -225,82 +287,29 @@ namespace MonkeyPaste {
             return plugin;
         }
 
+        #region Compnent
 
         private static object GetPluginComponent(string manifestPath, MpPluginFormat plugin, out Assembly component_assembly) {
             plugin.manifestLastModifiedDateTime = File.GetLastWriteTime(manifestPath);
+            string bundle_path = GetBundlePath(manifestPath, plugin);
 
-            if (plugin.ioType.isHttp) {
-                component_assembly = Assembly.GetAssembly(typeof(MpHttpAnalyzerPlugin));
-                return new MpHttpAnalyzerPlugin(plugin.analyzer.http);
-            }
-
-            string pluginDir = Path.GetDirectoryName(manifestPath);
-            string pluginName = Path.GetFileName(pluginDir);
-            string pluginPathName = pluginName;
-            string pluginExt = plugin.ioType.ToFileExt();
-            if (plugin.ioType.isNuget) {
-                pluginPathName += "." + plugin.version;
-            }
-            string pluginPath = Path.Combine(pluginDir, $"{pluginPathName}.{plugin.ioType.ToFileExt()}");
-
-            if (!File.Exists(pluginPath)) {
-                throw new MpUserNotifiedException($"Error, Plugin '{pluginName}' is flagged as {pluginExt} type in '{manifestPath}' but does not have a matching '{pluginName}.{pluginExt}' in its folder.");
-            }
-            if (plugin.ioType.isNuget) {
-                return GetNugetComponent(pluginPath, pluginName, out component_assembly);
-            }
-            if (plugin.ioType.isDll) {
-                return GetDllComponent(pluginPath, pluginName, out component_assembly);
-            }
-            if (plugin.ioType.isCli) {
-                component_assembly = Assembly.GetAssembly(typeof(MpCommandLinePlugin));
-                return new MpCommandLinePlugin() { Endpoint = pluginPath };
-            }
-            if (plugin.ioType.isPy) {
-                component_assembly = Assembly.GetAssembly(typeof(MpPyAnalyzerPlugin));
-                if (!pluginPath.IsFile()) {
-                    throw new MpUserNotifiedException($"Cannot find '{Path.GetFileName(pluginPath)}' in '{pluginDir}' defined by '{manifestPath}'. Python plugin must provide a .py file matching its directory name.");
-                }
-                return new MpPyAnalyzerPlugin(pluginPath);
-            }
-
-            throw new MpUserNotifiedException(@"Unknown or undefined plugin type: " + JsonConvert.SerializeObject(plugin.ioType));
-        }
-
-        private static void LoadAnyHeadlessComponentFormats(MpPluginFormat plugin, Assembly pluginAssembly) {
-            if (pluginAssembly == null || plugin == null) {
-                return;
-            }
-            string headless_analyzer_interface_name = "MonkeyPaste.Common.Plugin." + nameof(MpISupportHeadlessAnalyzerComponentFormat);
-            try {
-                object analyzer_obj = GetInterfaceFromAssembly(pluginAssembly, headless_analyzer_interface_name);
-                if (analyzer_obj is MpISupportHeadlessAnalyzerComponentFormat apf) {
-                    plugin.analyzer = apf.GetFormat();
-                }
-            }
-            catch (Exception ex) {
-                throw new MpUserNotifiedException("Error loading " + plugin.title + " ", ex);
+            switch (plugin.bundleType) {
+                case MpPluginBundleType.None:
+                    throw new MpUserNotifiedException($"Error, Plugin '{plugin.title}' defined in '{manifestPath}' must specify a bundle type.");
+                case MpPluginBundleType.Dll:
+                    return GetDllComponent(bundle_path, plugin.title, out component_assembly);
+                case MpPluginBundleType.Nuget:
+                    return GetNugetComponent(bundle_path, plugin.title, out component_assembly);
+                case MpPluginBundleType.Python:
+                    component_assembly = Assembly.GetAssembly(typeof(MpPythonAnalyzerPlugin));
+                    return new MpPythonAnalyzerPlugin(bundle_path);
+                case MpPluginBundleType.Http:
+                    component_assembly = Assembly.GetAssembly(typeof(MpHttpAnalyzerPlugin));
+                    return new MpHttpAnalyzerPlugin(plugin.analyzer.http);
+                default:
+                    throw new MpUserNotifiedException($"Unhandled plugin bundle type for '{plugin.title}' defined at '{manifestPath}' with type '{plugin.bundleType}'");
             }
         }
-
-        private static bool ValidatePluginManifest(MpPluginFormat plugin, string manifestPath) {
-            if (plugin == null) {
-                throw new MpUserNotifiedException($"Plugin parsing error, at path '{manifestPath}' null, likely error parsing json. Ignoring plugin");
-            }
-
-            if (string.IsNullOrWhiteSpace(plugin.title)) {
-                throw new MpUserNotifiedException($"Plugin title error, at path '{manifestPath}' must have 'title' property. Ignoring plugin");
-            }
-            if (!MpRegEx.RegExLookup[MpRegExType.Guid].IsMatch(plugin.guid)) {
-                throw new MpUserNotifiedException($"Plugin guid error, at path '{manifestPath}' with Title '{plugin.title}' must have a 'guid' property, RFC 4122 compliant 128-bit GUID (UUID). Ignoring plugin");
-            }
-            if (string.IsNullOrWhiteSpace(plugin.iconUri)) {
-                throw new MpUserNotifiedException($"Plugin icon error, at path '{manifestPath}' with title '{plugin.title}' must have an 'iconUri' property which is a relative file path or valid url to an image");
-            }
-            bool are_all_components_valid = plugin.componentFormats.All(x => ValidatePluginComponentManifest(x, manifestPath));
-            return are_all_components_valid;
-        }
-
         private static bool ValidatePluginComponent(MpPluginFormat plugin, object component, string manifestPath) {
             if (component is MpIAnalyzeAsyncComponent || component is MpIAnalyzeComponent) {
                 if (plugin.analyzer == null) {
@@ -357,51 +366,36 @@ namespace MonkeyPaste {
 
             return true;
         }
-        private static bool ValidateLoadedPlugins() {
-            var invalidGuida =
-                Plugins
-                .GroupBy(x => x.Value.guid)
-                .Where(x => x.Count() > 1)
-                .Select(x => x.Key);
 
-            if (invalidGuida.Any()) {
-                var sb = new StringBuilder();
-                foreach (var ig in invalidGuida) {
-                    var toRemove = Plugins.Where(x => x.Value.guid == ig);
-                    toRemove.Select(x => sb.AppendLine($"Duplicate guids detected for plugin at path '{x.Key}' with guid '{x.Value.guid}'. Plugin will be ignored"));
-                    foreach (var tr in toRemove) {
-                        Plugins.Remove(tr.Key);
-                    }
-                }
-                throw new MpUserNotifiedException(sb.ToString());
+        private static string GetBundlePath(string manifestPath, MpPluginFormat plugin) {
+            string bundle_ext = GetBundleExt(plugin.bundleType, plugin.version);
+            string bundle_dir = Path.GetDirectoryName(manifestPath);
+            string bundle_file_name = Path.GetFileName(bundle_dir);
+            string bundle_path = Path.Combine(bundle_dir, $"{bundle_file_name}.{bundle_ext}");
+
+            if (plugin.bundleType != MpPluginBundleType.Http && !bundle_path.IsFile()) {
+                throw new MpUserNotifiedException($"Error, Plugin '{plugin.title}' is flagged as {bundle_ext} type in '{manifestPath}' but does not have a matching '{plugin.title}.{bundle_ext}' in its folder.");
             }
-            return true;
+            return bundle_path;
         }
-
-        private static string ToFileExt(this MpPluginIoTypeFormat ioType) {
-            if (ioType.isNuget) {
-                return "nupkg";
+        private static string GetBundleExt(MpPluginBundleType bt, string version) {
+            switch (bt) {
+                case MpPluginBundleType.Nuget:
+                    return $".{version}.nupkg";
+                case MpPluginBundleType.Dll:
+                    return "dll";
+                case MpPluginBundleType.Python:
+                    return "py";
+                case MpPluginBundleType.Javascript:
+                    return "js";
+                default:
+                    return string.Empty;
             }
-            if (ioType.isDll) {
-                return "dll";
-            }
-            if (ioType.isPy) {
-                return "py";
-            }
-            if (ioType.isCli) {
-
-                switch (Mp.Services.PlatformInfo.OsType) {
-                    case MpUserDeviceType.Windows:
-                        return "exe";
-                    default:
-                        throw new NotSupportedException("needs to be implemented");
-                }
-            }
-            return string.Empty;
         }
         private static object GetDllComponent(string dllPath, string pluginName, out Assembly component_assembly) {
             try {
-                component_assembly = Assembly.LoadFrom(dllPath);
+                //component_assembly = Assembly.LoadFrom(dllPath);
+                component_assembly = Assembly.Load(File.ReadAllBytes(dllPath));
             }
             catch (Exception rtle) {
                 throw new MpUserNotifiedException($"Plugin Compilation error '{pluginName}':" + Environment.NewLine + rtle);
@@ -432,6 +426,65 @@ namespace MonkeyPaste {
             }
             return comp_obj;
         }
+        #endregion
+
+
+        private static void LoadAnyHeadlessComponentFormats(MpPluginFormat plugin, Assembly pluginAssembly) {
+            if (pluginAssembly == null || plugin == null) {
+                return;
+            }
+            string headless_analyzer_interface_name = "MonkeyPaste.Common.Plugin." + nameof(MpISupportHeadlessAnalyzerComponentFormat);
+            try {
+                object analyzer_obj = GetInterfaceFromAssembly(pluginAssembly, headless_analyzer_interface_name);
+                if (analyzer_obj is MpISupportHeadlessAnalyzerComponentFormat apf) {
+                    plugin.analyzer = apf.GetFormat();
+                }
+            }
+            catch (Exception ex) {
+                throw new MpUserNotifiedException("Error loading " + plugin.title + " ", ex);
+            }
+        }
+
+        private static bool ValidatePluginManifest(MpPluginFormat plugin, string manifestPath) {
+            if (plugin == null) {
+                throw new MpUserNotifiedException($"Plugin parsing error, at path '{manifestPath}' null, likely error parsing json. Ignoring plugin");
+            }
+
+            if (string.IsNullOrWhiteSpace(plugin.title)) {
+                throw new MpUserNotifiedException($"Plugin title error, at path '{manifestPath}' must have 'title' property. Ignoring plugin");
+            }
+            if (!MpRegEx.RegExLookup[MpRegExType.Guid].IsMatch(plugin.guid)) {
+                throw new MpUserNotifiedException($"Plugin guid error, at path '{manifestPath}' with Title '{plugin.title}' must have a 'guid' property, RFC 4122 compliant 128-bit GUID (UUID). Ignoring plugin");
+            }
+            if (string.IsNullOrWhiteSpace(plugin.iconUri)) {
+                throw new MpUserNotifiedException($"Plugin icon error, at path '{manifestPath}' with title '{plugin.title}' must have an 'iconUri' property which is a relative file path or valid url to an image");
+            }
+            bool are_all_components_valid = plugin.componentFormats.All(x => ValidatePluginComponentManifest(x, manifestPath));
+            return are_all_components_valid;
+        }
+
+        private static bool ValidateLoadedPlugins() {
+            var invalidGuida =
+                Plugins
+                .GroupBy(x => x.Value.guid)
+                .Where(x => x.Count() > 1)
+                .Select(x => x.Key);
+
+            if (invalidGuida.Any()) {
+                var sb = new StringBuilder();
+                foreach (var ig in invalidGuida) {
+                    var toRemove = Plugins.Where(x => x.Value.guid == ig);
+                    toRemove.Select(x => sb.AppendLine($"Duplicate guids detected for plugin at path '{x.Key}' with guid '{x.Value.guid}'. Plugin will be ignored"));
+                    foreach (var tr in toRemove) {
+                        Plugins.Remove(tr.Key);
+                    }
+                }
+                throw new MpUserNotifiedException(sb.ToString());
+            }
+            return true;
+        }
+
+
 
         private static object GetInterfaceFromAssembly(Assembly pluginAssembly, string interfaceName) {
             if (pluginAssembly == null) {
@@ -456,11 +509,18 @@ namespace MonkeyPaste {
             return interface_obj;
         }
 
+        private static string GetCachedPluginFileName(MpPluginFormat plugin) {
+            if (plugin == null || plugin.guid == null) {
+                return string.Empty;
+            }
+            return $"{plugin.guid}.json";
+        }
+
         public static MpPluginFormat GetLastLoadedBackupPluginFormat(MpPluginFormat plugin) {
             if (!PluginManifestBackupFolderPath.IsDirectory()) {
                 return null;
             }
-            string backup_manifest_fn = $"{plugin.guid}.json";
+            string backup_manifest_fn = GetCachedPluginFileName(plugin);
             string backup_manifest_path = Path.Combine(PluginManifestBackupFolderPath, backup_manifest_fn);
             if (!backup_manifest_path.IsFile()) {
                 return null;
@@ -499,6 +559,7 @@ namespace MonkeyPaste {
 
             return MpJsonConverter.DeserializeObject<MpPluginFormat>(plugin_json_str);
         }
+
         #endregion
     }
 }

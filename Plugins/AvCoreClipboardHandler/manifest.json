@@ -4,11 +4,9 @@
   "version": "1.0",
   "credits": "Somebody",
   "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
-  "url": "https://www.monkeypaste.com",
+  "projectUrl": "https://www.monkeypaste.com",
   "iconUri": "text.png",
-  "ioType": {
-    "isDll": true
-  },
+  "bundleType": "Dll",
   "clipboardHandler": {
     "readers": [
       {

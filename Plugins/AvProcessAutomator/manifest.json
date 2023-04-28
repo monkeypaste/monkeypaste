@@ -5,9 +5,7 @@
   "credits": "Somebody",
   "guid": "e7e25c85-1c8f-4e79-be8f-2ebfcb5bb94e",
   "iconUri": "icon.png",
-  "ioType": {
-    "isDll": true
-  },
+  "bundleType": "Dll",
   "analyzer": {
     "inputType": {
       "text": true,
@@ -20,7 +18,7 @@
       "file": true
     },
     "parameters": [
-      { 
+      {
         "label": "Process Path",
         "description": "The process can be a standard application or batch script",
         "controlType": "FileChooser",

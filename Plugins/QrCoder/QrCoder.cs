@@ -3,6 +3,7 @@ using MonkeyPaste.Common.Plugin;
 using SkiaSharp;
 using SkiaSharp.QrCode.Image;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,9 +21,12 @@ namespace QrCoder {
                 string outputQrCodeBase64 = Convert.ToBase64String(imageBytes);
 
                 var resp = new MpAnalyzerPluginResponseFormat() {
-                    dataObject = new MpPortableDataObject(MpPortableDataFormats.AvPNG, imageBytes)
+                    //dataObject = new MpPortableDataObject(MpPortableDataFormats.AvPNG, imageBytes)
+                    dataObject = new Dictionary<string, object> {
+                        {MpPortableDataFormats.AvPNG, imageBytes },
+                        { MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT, $"{req.GetRequestParamStringValue(2)} - Qr Code" }
+                    }
                 };
-                resp.dataObject.SetData(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT, $"{req.GetRequestParamStringValue(2)} - Qr Code");
                 return resp;
             }
         }

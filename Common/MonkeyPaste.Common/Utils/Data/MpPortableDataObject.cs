@@ -18,6 +18,7 @@ namespace MonkeyPaste.Common {
                 }
                 catch (MpUnregisteredDataFormatException udfe) {
                     // ignore
+                    MpConsole.WriteTraceLine($"Ignoring data object format '{kvp.Key}' parsed in json: ", udfe);
                     continue;
                 }
             }

@@ -1,6 +1,7 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
+using System.Collections.Generic;
 
 namespace FileConverter {
     public class FileConverter : MpIAnalyzeComponent {
@@ -27,7 +28,7 @@ namespace FileConverter {
             }
 
             return new MpAnalyzerPluginResponseFormat() {
-                dataObject = new MpPortableDataObject(target_format, target_data)
+                dataObject = new Dictionary<string, object> { { target_format, target_data } }
             };
         }
     }

@@ -421,7 +421,7 @@ namespace MonkeyPaste.Avalonia {
 
 
                 if (reader_response != null) {
-                    reader_response.dataObject.DataFormatLookup.ForEach(x => mpdo.DataFormatLookup.AddOrReplace(x.Key, x.Value));
+                    reader_response.dataObject.ForEach(x => mpdo.Set(x.Key, x.Value));
                 } else {
                     MpConsole.WriteLine("Invalid cb reader response: " + reader_response);
                 }

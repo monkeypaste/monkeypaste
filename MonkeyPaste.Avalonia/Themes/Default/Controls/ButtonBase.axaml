@@ -35,6 +35,14 @@
         <Setter Property="Padding"
                 Value="5,3" />
     </Style>
+
+    <Style Selector=":is(Button).defaultButton">
+        <Setter Property="FontWeight"
+                Value="SemiBold" />
+        <Setter Property="Foreground"
+                Value="Black" />
+    </Style>
+
     <Style Selector=":is(Button).defaultButton /template/ ContentPresenter">
         <Setter Property="Background"
                 Value="Beige" />

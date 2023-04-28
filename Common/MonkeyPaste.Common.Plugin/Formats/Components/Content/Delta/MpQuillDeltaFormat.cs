@@ -52,7 +52,6 @@ namespace MonkeyPaste.Common.Plugin {
     }
 
     public class DeltaRange : MpOmitNullJsonObject, MpITextRange {
-
         public int index { get; set; }
         public int length { get; set; }
 

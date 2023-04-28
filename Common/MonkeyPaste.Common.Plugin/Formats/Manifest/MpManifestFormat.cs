@@ -51,16 +51,16 @@ namespace MonkeyPaste.Common.Plugin {
         public string readmeUrl { get; set; } = string.Empty;
 
         public string projectUrl { get; set; }
+        public string packageUrl { get; set; } = string.Empty;
         public string reportAbuseUrl { get; set; }
 
         public string tags { get; set; }
 
 
         public string guid { get; set; } = string.Empty;
-        public string url { get; set; } = string.Empty;
         public string iconUri { get; set; } = string.Empty;
 
-        public MpPluginIoTypeFormat ioType { get; set; } = new MpPluginIoTypeFormat();
+        public MpPluginBundleType bundleType { get; set; }
         public List<MpPluginDependency> dependencies { get; set; }
         [JsonIgnore]
         public DateTime? datePublished { get; set; }
