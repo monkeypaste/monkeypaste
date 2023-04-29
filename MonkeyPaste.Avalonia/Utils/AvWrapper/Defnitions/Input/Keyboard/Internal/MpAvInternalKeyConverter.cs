@@ -6,6 +6,24 @@ using System.Text;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvInternalKeyConverter : MpIKeyConverter<Key> {
+        public int GetKeyPriority(Key key) {
+            switch (key) {
+                case Key.LeftCtrl:
+                case Key.RightCtrl:
+                    return 0;
+                case Key.LeftAlt:
+                case Key.RightAlt:
+                    return 1;
+                //case Key.Left:
+                //case Key.VcRightMeta:
+                //    return 2;
+                case Key.LeftShift:
+                case Key.RightShift:
+                    return 3;
+                default:
+                    return 4;
+            }
+        }
         public Key ConvertStringToKey(string keyStr) {
             if (keyStr.IsNullOrEmpty()) {
                 return Key.None;

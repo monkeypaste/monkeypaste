@@ -2,6 +2,7 @@
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using SharpHook.Native;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -67,7 +68,7 @@ namespace MonkeyPaste.Avalonia {
             get {
                 if (_routingTypes == null) {
                     _routingTypes = new ObservableCollection<string>(
-                        typeof(MpRoutingType).EnumToLabels(hideFirst: true));
+                        typeof(MpRoutingType).EnumToLabels());
                 }
                 return _routingTypes;
             }
@@ -131,20 +132,30 @@ namespace MonkeyPaste.Avalonia {
                 if (Shortcut == null) {
                     return 0;
                 }
-                return RoutingTypes.IndexOf(RoutingType.ToString());
+                return (int)RoutingType;// RoutingTypes.IndexOf(RoutingType.ToString());
             }
             set {
+                if (value < 0) {
+                    int test = RoutingTypes.IndexOf(RoutingType.ToString());
+                    MpConsole.WriteLine($"Ignoring negative combo box idx!! Set Value: {value} ItemsIdx: {test} RoutingType: '{RoutingType.ToString()}'");
+                    return;
+
+                }
                 if (!CanBeGlobalShortcut) {
                     return;
                 }
                 if (SelectedRoutingTypeIdx != value) {
                     value = Math.Max(0, value);
-                    RoutingType = RoutingTypes[value].ToString().ToEnum<MpRoutingType>();
+                    //RoutingType = RoutingTypes[value].ToString().ToEnum<MpRoutingType>();
+                    RoutingType = (MpRoutingType)value;//RoutingTypes[value].ToString().ToEnum<MpRoutingType>();
                     OnPropertyChanged(nameof(SelectedRoutingTypeIdx));
                 }
             }
         }
 
+        public IReadOnlyList<IReadOnlyList<Key>> KeyList { get; private set; }
+
+        public IReadOnlyList<IReadOnlyList<KeyCode>> GlobalKeyList { get; private set; }
         public bool IsEmpty => KeyItems.Count() == 0;
 
         #endregion
@@ -159,7 +170,7 @@ namespace MonkeyPaste.Avalonia {
                 return Shortcut.ShortcutType;
             }
             set {
-                if (Shortcut.ShortcutType != value) {
+                if (ShortcutType != value) {
                     Shortcut.ShortcutType = value;
                     OnPropertyChanged(nameof(ShortcutType));
                 }
@@ -173,7 +184,7 @@ namespace MonkeyPaste.Avalonia {
                 return Shortcut.DefaultKeyString;
             }
             set {
-                if (Shortcut != null && Shortcut.DefaultKeyString != value) {
+                if (DefaultKeyString != value) {
                     Shortcut.DefaultKeyString = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(DefaultKeyString));
@@ -212,7 +223,7 @@ namespace MonkeyPaste.Avalonia {
                 return Shortcut.Id;
             }
             set {
-                if (Shortcut != null && Shortcut.Id != value) {
+                if (ShortcutId != value) {
                     Shortcut.Id = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(ShortcutId));
@@ -220,42 +231,20 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private List<List<Key>> _keyList;
-        public List<List<Key>> KeyList {
-            get {
-                if (_keyList == null) {
-                    _keyList = new List<List<Key>>();
-                    if (Shortcut == null) {
-                        return _keyList;
-                    }
-                    Mp.Services.KeyConverter
-                        .ConvertStringToKeySequence<Key>(KeyString)
-                        .ForEach(x => _keyList.Add(x.ToList()));
-                }
-
-                return _keyList;
-            }
-        }
 
         public string KeyString {
             get {
                 if (Shortcut == null) {
                     return string.Empty;
                 }
-                if (Shortcut.KeyString == null) {
-                    // avoid null errors for input matching
-                    return string.Empty;
-                }
                 return Shortcut.KeyString;
             }
             set {
-                if (Shortcut.KeyString != value) {
+                if (KeyString != value) {
                     Shortcut.KeyString = value;
                     // flag keylist to reset
-                    _keyList = null;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(KeyString));
-                    OnPropertyChanged(nameof(KeyList));
                 }
             }
         }
@@ -269,7 +258,7 @@ namespace MonkeyPaste.Avalonia {
                 return Shortcut.RoutingType;
             }
             set {
-                if (Shortcut != null && Shortcut.RoutingType != value) {
+                if (RoutingType != value) {
                     Shortcut.RoutingType = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(RoutingType));
@@ -287,40 +276,36 @@ namespace MonkeyPaste.Avalonia {
                 return Shortcut.RoutingDelayMs;
             }
             set {
-                if (Shortcut.RoutingDelayMs != value) {
+                if (RoutingDelayMs != value) {
                     Shortcut.RoutingDelayMs = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(RoutingDelayMs));
                 }
             }
         }
-        public bool IsModelReadOnly =>
-            Shortcut == null || Shortcut.IsReadOnly;
 
-        public bool IsInternalOnly =>
-            Shortcut == null || Shortcut.IsReadOnly;
-
-        private MpShortcut _shortcut = null;
-        public MpShortcut Shortcut {
-            get {
-                return _shortcut;
-            }
-            set {
-                if (_shortcut != value) {
-                    _shortcut = value;
-                    OnPropertyChanged(nameof(Shortcut));
-                    OnPropertyChanged(nameof(RoutingType));
-                    OnPropertyChanged(nameof(KeyString));
-                    OnPropertyChanged(nameof(KeyList));
-                    OnPropertyChanged(nameof(ShortcutDisplayName));
-                    OnPropertyChanged(nameof(ShortcutId));
-                    OnPropertyChanged(nameof(CommandParameter));
-                    OnPropertyChanged(nameof(ShortcutType));
-                    OnPropertyChanged(nameof(DefaultKeyString));
-                    OnPropertyChanged(nameof(SelectedRoutingTypeIdx));
-                }
-            }
-        }
+        //private MpShortcut _shortcut = null;
+        //public MpShortcut Shortcut {
+        //    get {
+        //        return _shortcut;
+        //    }
+        //    set {
+        //        if (_shortcut != value) {
+        //            _shortcut = value;
+        //            OnPropertyChanged(nameof(Shortcut));
+        //            OnPropertyChanged(nameof(RoutingType));
+        //            OnPropertyChanged(nameof(KeyString));
+        //            OnPropertyChanged(nameof(KeyList));
+        //            OnPropertyChanged(nameof(ShortcutDisplayName));
+        //            OnPropertyChanged(nameof(ShortcutId));
+        //            OnPropertyChanged(nameof(CommandParameter));
+        //            OnPropertyChanged(nameof(ShortcutType));
+        //            OnPropertyChanged(nameof(DefaultKeyString));
+        //            OnPropertyChanged(nameof(SelectedRoutingTypeIdx));
+        //        }
+        //    }
+        //}
+        public MpShortcut Shortcut { get; set; } = new MpShortcut();
         #endregion
 
         #endregion
@@ -349,6 +334,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(CanBeGlobalShortcut));
             OnPropertyChanged(nameof(KeyItems));
             OnPropertyChanged(nameof(IsEmpty));
+            OnPropertyChanged(nameof(KeyString));
         }
 
         //public void RegisterActionComponent(MpIInvokableAction mvm) {
@@ -407,6 +393,7 @@ namespace MonkeyPaste.Avalonia {
             Dispatcher.UIThread.CheckAccess();
             ShortcutDisplayName = await ShortcutType.GetShortcutTitleAsync(CommandParameter);
         }
+
         #endregion
 
         #region Protected Methods
@@ -477,6 +464,9 @@ namespace MonkeyPaste.Avalonia {
                     //        ttvm.ShortcutKeyString = Shortcut.KeyString;
                     //    }
                     //}
+
+                    KeyList = Mp.Services.KeyConverter.ConvertStringToKeySequence<Key>(KeyString);
+                    GlobalKeyList = Mp.Services.KeyConverter.ConvertStringToKeySequence<KeyCode>(KeyString);
                     OnPropertyChanged(nameof(KeyItems));
                     OnPropertyChanged(nameof(KeyGroups));
                     OnPropertyChanged(nameof(IsEmpty));

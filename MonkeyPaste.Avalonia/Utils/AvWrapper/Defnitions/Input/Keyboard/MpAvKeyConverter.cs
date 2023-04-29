@@ -3,39 +3,53 @@ using MonkeyPaste.Common;
 using SharpHook.Native;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvKeyConverter : MpIKeyConverterHub {
-
+        #region Private Variables
         private MpIKeyConverter<KeyCode> _globalConverter = new MpGlobalKeyConverter();
         private MpIKeyConverter<Key> _internalConverter = new MpAvInternalKeyConverter();
+        #endregion
 
+        #region Constants
+        #endregion
+
+        #region Statics
+        #endregion
+
+        #region Interfaces
+        #endregion
+
+        #region Properties
+        #endregion
+
+        #region Constructors
+        #endregion
+
+        #region Public Methods
         public string ConvertKeySequenceToString<T>(IEnumerable<IEnumerable<T>> keyList) {
-            var outStr = string.Empty;
-            foreach (var kl in keyList) {
-                if (!string.IsNullOrEmpty(outStr)) {
-                    outStr += MpInputConstants.SEQUENCE_SEPARATOR;
+            var ordered_key_list =
+                keyList
+                .Where(x => x.Any())
+                .Select(x => x.OrderBy(y => GetPriority(y)));
+
+            var sb = new StringBuilder();
+            foreach (var (combo, comboIdx) in ordered_key_list.WithIndex()) {
+                if (comboIdx > 0) {
+                    sb.Append(MpInputConstants.SEQUENCE_SEPARATOR);
                 }
-                foreach (var k in kl) {
-                    if (k is KeyCode keyCode) {
-                        outStr += _globalConverter.GetKeyLiteral(keyCode) + MpInputConstants.COMBO_SEPARATOR;
-                    } else if (k is Key key) {
-                        outStr += _internalConverter.GetKeyLiteral(key) + MpInputConstants.COMBO_SEPARATOR;
-                    } else {
-                        throw new NotImplementedException($"Unknown key type '{typeof(T)}'");
+                foreach (var (k, kIdx) in combo.OrderBy(x => GetPriority(x)).WithIndex()) {
+                    sb.Append(GetLiteral(k));
+                    if (kIdx < combo.Count() - 1) {
+                        sb.Append(MpInputConstants.COMBO_SEPARATOR);
                     }
                 }
-                outStr = outStr.Remove(outStr.Length - MpInputConstants.COMBO_SEPARATOR.Length, MpInputConstants.COMBO_SEPARATOR.Length);
             }
-            if (!string.IsNullOrEmpty(outStr)) {
-                if (outStr.EndsWith(MpInputConstants.SEQUENCE_SEPARATOR)) {
-                    outStr = outStr.Remove(outStr.Length - MpInputConstants.SEQUENCE_SEPARATOR.Length, MpInputConstants.SEQUENCE_SEPARATOR.Length);
-                }
-            }
-            return outStr;
+            return sb.ToString();
         }
-        public IEnumerable<IEnumerable<T>> ConvertStringToKeySequence<T>(string keyStr) where T : Enum {
+        public IReadOnlyList<IReadOnlyList<T>> ConvertStringToKeySequence<T>(string keyStr) where T : Enum {
             var keyList = new List<List<T>>();
             if (string.IsNullOrEmpty(keyStr)) {
                 return keyList;
@@ -62,7 +76,7 @@ namespace MonkeyPaste.Avalonia {
             return keyList;
         }
 
-        public IEnumerable<IEnumerable<string>> ConvertStringToKeyLiteralSequence(string keyStr) {
+        public IReadOnlyList<IReadOnlyList<string>> ConvertStringToKeyLiteralSequence(string keyStr) {
             // NOTE arbitrarily using avalonia keys as intermediary here
 
             var kseq = ConvertStringToKeySequence<Key>(keyStr);
@@ -76,93 +90,38 @@ namespace MonkeyPaste.Avalonia {
             }
             return lseq;
         }
+        #endregion
 
-        //public static string ConvertKeyStringToSendKeysString(string keyString) {
-        //    // NOTE keyString should NOT be a sequence
-        //    //if(keyString.Contains(",")) {
-        //    //    throw new Exception($"keyString '{keyString}' is a sequence and SendKeys only handles one gesture, if seq necessary call multiple times w/ delay in between");
-        //    //}
+        #region Protected Methods
+        #endregion
 
-        //    var sb = new StringBuilder();
-        //    string[] keySequences = keyString.Split(new string[] { MpKeyGestureHelper2.SEQUENCE_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
-        //    for (int i = 0; i < keySequences.Length; i++) {
-        //        string seq = keySequences[i].Trim();
-        //        //string outStr = string.Empty;
-        //        var keys = seq.Split(new string[] { MpKeyGestureHelper2.COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
-        //        foreach (var key in keys) {
-        //            switch (key) {
-        //                case "Ctrl":
-        //                    //outStr += "^";
-        //                    sb.Append("^");
-        //                    break;
-        //                case "Shift":
-        //                    //outStr += "+";
-        //                    sb.Append("+");
-        //                    break;
-        //                case "Alt":
-        //                    //outStr += "%";
-        //                    sb.Append("%");
-        //                    break;
-        //                case "Space":
-        //                    //outStr += " ";
-        //                    sb.Append(" ");
-        //                    break;
-        //                case "Escape":
-        //                    sb.Append("{ESC}");
-        //                    break;
-        //                case "Back":
-        //                    sb.Append("{BACKSPACE}");
-        //                    break;
-        //                case "PageUp":
-        //                    sb.Append("{PGUP}");
-        //                    break;
-        //                case "PageDown":
-        //                case "Next":
-        //                    sb.Append("{PGDOWN}");
-        //                    break;
-        //                case "Capital":
-        //                    sb.Append("{CAPSLOCK}");
-        //                    break;
-        //                case "Return":
-        //                    sb.Append("{ENTER}");
-        //                    break;
-        //                case "Home":
-        //                case "End":
-        //                case "Del":
-        //                case "Delete":
-        //                case "Enter":
-        //                case "Tab":
-        //                case "Left":
-        //                case "Right":
-        //                case "Up":
-        //                case "Down":
-        //                    sb.Append("{" + key.ToUpper() + "}");
-        //                    //outStr += "{" + key.ToUpper() + "}";
-        //                    break;
-        //                default:
-        //                    if (key.ToUpper().StartsWith(@"F") && key.Length > 1) {
-        //                        string fVal = key.Substring(1, key.Length - 1);
-        //                        try {
-        //                            int val = Convert.ToInt32(fVal);
-        //                            //outStr += "{F" + val + "}";
-        //                            sb.Append("{F" + val + "}");
-        //                        }
-        //                        catch (Exception ex) {
-        //                            MpConsole.WriteLine(@"ShortcutViewModel.SendKeys exception creating key: " + key + " with exception: " + ex);
-        //                            //outStr += key.ToUpper();
-        //                            sb.Append(key.ToUpper());
-        //                            break;
-        //                        }
-        //                    } else {
-        //                        //outStr += key.ToUpper();
-        //                        sb.Append(key.ToUpper());
-        //                    }
-        //                    break;
-        //            }
-        //        }
-        //    }
-        //    return sb.ToString();
-        //}
+        #region Private Methods
+
+        private int GetPriority<T>(T key) {
+            if (key is KeyCode kc) {
+                return _globalConverter.GetKeyPriority(kc);
+            }
+            if (key is Key k) {
+                return _internalConverter.GetKeyPriority(k);
+            }
+            throw new NotImplementedException($"Unknown key type '{typeof(T)}'");
+        }
+
+        private string GetLiteral<T>(T key) {
+            if (key is KeyCode kc) {
+                return _globalConverter.GetKeyLiteral(kc);
+            }
+            if (key is Key k) {
+                return _internalConverter.GetKeyLiteral(k);
+            }
+            throw new NotImplementedException($"Unknown key type '{typeof(T)}'");
+        }
+        #endregion
+
+        #region Commands
+        #endregion
+
+
 
     }
 }

@@ -20,6 +20,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvSettingsViewModel :
         MpViewModelBase,
         MpIChildWindowViewModel,
+        MpIWantsTopmostWindowViewModel,
         MpIActiveWindowViewModel {
         #region Private Variables
 
@@ -42,7 +43,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
-        #region MpIWindowViewModel Implementation
+        #region MpIWindowViewModel Implementatiosn
         public MpWindowType WindowType =>
             MpWindowType.Main;
 
@@ -50,6 +51,11 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region MpIWantsTopmostWindowViewModel Implementation 
+        public bool WantsTopmost =>
+            true;
+
+        #endregion
         #region MpIActiveWindowViewModel Implementation
         public bool IsActive { get; set; }
 

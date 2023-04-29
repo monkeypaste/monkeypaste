@@ -4,6 +4,7 @@ using SharpHook;
 using SharpHook.Native;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 //using Avalonia.Win32;
 using System.Threading.Tasks;
 
@@ -26,21 +27,36 @@ namespace MonkeyPaste.Avalonia {
         public bool IsSimulating { get; private set; }
 
         public async Task<bool> SimulateKeyStrokeSequenceAsync(string keystr, int holdDelay = 0, int releaseDelay = 0) {
-            IsSimulating = true;
             var seq = Mp.Services.KeyConverter.ConvertStringToKeySequence<KeyCode>(keystr);
-            foreach (var combo in seq) {
-                foreach (var key in combo) {
+            bool success = await SimulateKeyStrokeSequenceAsync(seq, holdDelay, releaseDelay);
+            return success;
+        }
+
+        public async Task<bool> SimulateKeyStrokeSequenceAsync<T>(IEnumerable<IEnumerable<T>> gesture, int holdDelay = 0, int releaseDelay = 0) {
+            if (typeof(T) != typeof(KeyCode)) {
+                throw new NotSupportedException("Must be sharphook keycode");
+            }
+            if (gesture == null ||
+                !gesture.Any() ||
+                !gesture.First().Any()) {
+                // avoid setting simulate if nothing happens
+                //MpConsole.WriteLine("No gesture to simulate");
+                return true;
+            }
+            IsSimulating = true;
+            foreach (var combo in gesture) {
+                foreach (var key in combo.Cast<KeyCode>()) {
                     UioHookResult result = _eventSimulator.SimulateKeyPress(key);
                     if (result != UioHookResult.Success) {
-                        MpDebug.Break($"Error pressing key: '{key}' in seq: '{keystr}' error: '{result}'");
+                        MpDebug.Break($"Error pressing key: '{key}' in seq: '{Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { key } })}' error: '{result}'");
                         //return false;
                     }
                 }
                 await Task.Delay(holdDelay);
-                foreach (var key in combo) {
+                foreach (var key in combo.Cast<KeyCode>()) {
                     UioHookResult result = _eventSimulator.SimulateKeyRelease(key);
                     if (result != UioHookResult.Success) {
-                        MpDebug.Break($"Error releasing key: '{key}' in seq: '{keystr}' error: '{result}'");
+                        MpDebug.Break($"Error releasing key: '{key}' in seq: '{Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { key } })}' error: '{result}'");
                         //return false;
                     }
                 }
@@ -48,8 +64,9 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(releaseDelay);
             }
             IsSimulating = false;
-            MpConsole.WriteLine($"Key Gesture '{keystr}' successfully simulated");
+            MpConsole.WriteLine($"Key Gesture '{Mp.Services.KeyConverter.ConvertKeySequenceToString(gesture)}' successfully simulated");
             return true;
+
         }
         #endregion
         #endregion

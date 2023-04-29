@@ -34,7 +34,7 @@
 
         <!--  APPLICATION SHORTCUTS  -->
 
-        <Expander>
+        <Expander IsExpanded="True">
             <Expander.Header>
                 <StackPanel>
                     <Label Classes="h1"

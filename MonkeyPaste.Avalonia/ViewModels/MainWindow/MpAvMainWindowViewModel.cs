@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
+using Avalonia.Input.GestureRecognizers;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
@@ -813,7 +814,10 @@ namespace MonkeyPaste.Avalonia {
                 MpAvWindowManager.MainWindow.Activate();
             }
 
-
+            //var sgrl =
+            //    MpAvWindowManager
+            //    .AllWindows
+            //    .SelectMany(x => x.GetVisualDescendants<ScrollGestureRecognizer>())
             MpConsole.WriteLine("SHOW WINDOW DONE");
         }
 
@@ -1188,7 +1192,9 @@ namespace MonkeyPaste.Avalonia {
                  } else {
                      HideMainWindowCommand.Execute(null);
                  }
-             }, () => !IsMainWindowLoading);
+             }, () => {
+                 return !IsMainWindowLoading;
+             });
 
         public ICommand CycleOrientationCommand => new MpAsyncCommand<object>(
             async (dirStrOrEnumArg) => {

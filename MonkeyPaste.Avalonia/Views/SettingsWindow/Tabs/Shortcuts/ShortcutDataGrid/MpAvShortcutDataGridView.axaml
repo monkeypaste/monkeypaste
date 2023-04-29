@@ -46,6 +46,7 @@
     <Border Classes="filterDataGridContainer">
         <Grid>
             <DataGrid x:Name="ShortcutDatagrid"
+                      local:MpAvDataGridRefreshExtension.IsEnabled="True"
                       IsVisible="{Binding ., Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                       CanUserSortColumns="True"
                       ItemsSource="{Binding}"
@@ -86,18 +87,34 @@
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Grid HorizontalAlignment="Center">
+                                <!--<Grid HorizontalAlignment="Center">
                                     <ComboBox HorizontalAlignment="Center"
                                               IsVisible="{Binding CanBeGlobalShortcut}"
                                               SelectedIndex="{Binding SelectedRoutingTypeIdx}"
                                               Foreground="Black"
-                                              ItemsSource="{Binding RoutingTypes}" />
-                                    <TextBlock Text="Internal"
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"
-                                               FontWeight="SemiBold"
-                                               IsVisible="{Binding !CanBeGlobalShortcut}" />
-                                </Grid>
+                                              ItemsSource="{Binding RoutingTypes}">
+                                        <ComboBox.Styles>
+                                            <Style Selector="ComboBoxItem:nth-child(1)">
+                                                <Setter Property="IsVisible"
+                                                        Value="False" />
+                                            </Style>
+                                        </ComboBox.Styles>
+                                -->
+                                <!--<ComboBoxItem IsVisible="False">
+                                            None
+                                        </ComboBoxItem>
+                                        <ComboBoxItem>Internal</ComboBoxItem>
+                                        <ComboBoxItem>Bubble</ComboBoxItem>
+                                        <ComboBoxItem>Tunnel</ComboBoxItem>
+                                        <ComboBoxItem>Override</ComboBoxItem>-->
+                                <!--
+                                    </ComboBox>-->
+
+                                <TextBlock Text="{Binding RoutingType}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           FontWeight="SemiBold" />
+                                <!--</Grid>-->
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

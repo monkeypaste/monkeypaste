@@ -28,7 +28,7 @@
         </Style>-->
 
         <Style Selector="RadioButton.sidebarRadio">
-            <Setter Property="local:MpAvPointerCommandExtension.IsEnabled"
+          <Setter Property="local:MpAvPointerCommandExtension.IsEnabled"
                     Value="True" />
             <Setter Property="local:MpAvPointerCommandExtension.DragEnterCommand"
                     Value="{Binding SidebarButtonDragEnterCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}" />

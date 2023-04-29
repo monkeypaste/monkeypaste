@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia"
         xmlns:pcl="using:MonkeyPaste"
         mc:Ignorable="d"
@@ -68,20 +69,20 @@
                         Classes="labelUnderline"
                         Height="1" />
 
-                <Border x:Name="ProgressBarContainer"
-                        CornerRadius="5"
-                        Grid.Row="1"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        Height="30"
-                        Width="220"
-                        ClipToBounds="True"
-                        BorderThickness="1"
-                        BorderBrush="White"
-                        Background="Transparent"
-                        Margin="0"
-                        Padding="0">
-                    <ProgressBar ShowProgressText="True"
+                <local:MpAvClipBorder x:Name="ProgressBarContainer"
+                                      CornerRadius="5"
+                                      Grid.Row="1"
+                                      HorizontalAlignment="Left"
+                                      VerticalAlignment="Center"
+                                      Height="30"
+                                      Width="220"
+                                      ClipToBounds="True"
+                                      BorderThickness="1"
+                                      BorderBrush="White"
+                                      Background="Transparent"
+                                      Margin="0"
+                                      Padding="0">
+                    <!--<ProgressBar ShowProgressText="True"
                                  Foreground="White"
                                  Background="Transparent"
                                  Orientation="Horizontal"
@@ -89,8 +90,33 @@
                                  VerticalAlignment="Stretch"
                                  Value="{Binding PercentLoaded}"
                                  Minimum="0"
-                                 Maximum="1" />
-                </Border>
+                                 Maximum="1" />-->
+                    <Rectangle x:Name="ProgressRectangle"
+                               Fill="Lime"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Stretch"
+                               MaxWidth="{Binding $parent.Bounds.Width}"
+                               MinWidth="0">
+                        <Rectangle.Width>
+                            <MultiBinding Converter="{x:Static local:MpAvMultiSliderValueToLengthConverter.Instance}">
+                                <Binding>
+                                    <Binding.Source>
+                                        <sys:Double>0</sys:Double>
+                                    </Binding.Source>
+                                </Binding>
+                                <Binding>
+                                    <Binding.Source>
+                                        <sys:Double>1</sys:Double>
+                                    </Binding.Source>
+                                </Binding>
+                                <Binding Path="PercentLoaded" />
+                                <Binding ElementName="ProgressRectangle"
+                                         Path="MaxWidth" />
+                            </MultiBinding>
+                        </Rectangle.Width>
+                    </Rectangle>
+
+                </local:MpAvClipBorder>
                 <TextBlock x:Name="ProgressInfoBlock"
                            Grid.Row="2"
                            Margin="0,0,7,7"

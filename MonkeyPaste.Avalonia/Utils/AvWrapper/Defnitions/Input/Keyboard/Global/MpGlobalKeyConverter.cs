@@ -6,6 +6,24 @@ using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
     public class MpGlobalKeyConverter : MpIKeyConverter<KeyCode> {
+        public int GetKeyPriority(KeyCode key) {
+            switch (key) {
+                case KeyCode.VcLeftControl:
+                case KeyCode.VcRightControl:
+                    return 0;
+                case KeyCode.VcLeftAlt:
+                case KeyCode.VcRightAlt:
+                    return 1;
+                case KeyCode.VcLeftMeta:
+                case KeyCode.VcRightMeta:
+                    return 2;
+                case KeyCode.VcLeftShift:
+                case KeyCode.VcRightShift:
+                    return 3;
+                default:
+                    return 4;
+            }
+        }
         public KeyCode ConvertStringToKey(string keyStr) {
             string lks = keyStr.ToLower();
             if (lks == MpInputConstants.AV_CONTROL_KEY_LITERAL.ToLower() ||

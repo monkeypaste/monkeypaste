@@ -133,7 +133,7 @@
             <!--  ROUTING COMBOBOX  -->
             <ComboBox x:Name="RoutingSelectorComboBox"
                       Foreground="Black"
-                      Margin="10,0"
+                      Margin="10,5"
                       ItemsSource="{Binding RoutingTypes}"
                       SelectedIndex="{Binding SelectedRoutingTypeIdx, Mode=TwoWay}" />
         </DockPanel>
@@ -145,7 +145,7 @@
             <local:MpAvToolTipInfoHintView HintType="Warning"
                                            ToolTipText="This is a global shortcut! That means it will attempt to execute whenever it is performed. Try to make it unique enough to not conflict with shortcuts from other applications." />
             <TextBlock FontSize="16"
-                       Margin="10,0"
+                       Margin="10,5"
                        FontWeight="SemiBold"
                        Text="Global" />
 

@@ -233,7 +233,6 @@ namespace MonkeyPaste.Avalonia {
                 //bool was_busy = IsBusy;
                 IsBusy = true;
 
-                await AddOrUpdateRecentFilterTextsAsync(FilterText);
 
                 Items.Clear();
                 SelectedItem = null;
@@ -286,6 +285,9 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 IsBusy = false;
+
+
+                await AddOrUpdateRecentFilterTextsAsync(FilterText);
             }, () => {
                 return IsOpen;
             });

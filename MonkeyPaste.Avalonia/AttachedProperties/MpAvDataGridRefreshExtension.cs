@@ -6,6 +6,7 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
@@ -62,8 +63,17 @@ namespace MonkeyPaste.Avalonia {
                 _enabledGrids
                 .FirstOrDefault(x => x.DataContext == dataContext);
             if (pdg == null) {
-                //MpConsole.WriteLine($"DataGrid not found for '{dataContext}' cannot refresh");
-                return;
+                // work around for shortcut grid since shortcutview's datacontext is the collection itself 
+                // so check parent
+                pdg = _enabledGrids
+                    .FirstOrDefault(x => x.DataContext is IEnumerable<MpViewModelBase> dcl && dcl.Any() && dcl.FirstOrDefault().ParentObj == dataContext);
+                if (pdg == null) {
+
+                    return;
+                } else {
+
+                }
+
             }
             // BUG can't get dataGrid to resize w/ row changes so hardsetting height (RowHeight=40)
             if (pdg == null) {
@@ -75,6 +85,7 @@ namespace MonkeyPaste.Avalonia {
                 nh += pdg.RowHeight;
             }
             pdg.Height = nh;
+
             //pdg.InvalidateMeasure();
             var sv = pdg.GetVisualDescendant<ScrollViewer>();
             if (sv == null) {
@@ -83,6 +94,7 @@ namespace MonkeyPaste.Avalonia {
             }
             sv.ScrollByPointDelta(new MpPoint(0, 5));
             sv.ScrollByPointDelta(new MpPoint(0, -5));
+
         }
 
         #endregion

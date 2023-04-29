@@ -193,6 +193,17 @@ namespace MonkeyPaste.Common.Avalonia {
 
         #region Control
 
+        public static void RefreshTopLevel(this Control control) {
+            if (TopLevel.GetTopLevel(control) is TopLevel tl) {
+                // HACK i think this a preview7 bug but items collections don't update
+                // right but triggering a window resize fixes it so increasing then decreasing slightly
+                //double tickle_dist = 1.003;
+                //tl.Width += tickle_dist;
+                //tl.Width -= tickle_dist;
+                tl?.InvalidateAll();
+            }
+        }
+
         public static void AnimateSize(this Control control, MpSize new_size, Func<bool> onComplete = null) {
             double zeta, omega, fps;
 
