@@ -24,65 +24,70 @@
         TransparencyLevelHint="Transparent"
         Background="Transparent"
         Title="">
-    <Border HorizontalAlignment="Stretch"
+    <Border x:Name="OuterBorder" HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             BorderThickness="7"
             BorderBrush="{Binding BorderHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
             Background="{Binding BackgroundHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
             local:MpAvIsHoveringExtension.IsEnabled="True"
             local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
-        <Grid x:Name="NotificationWindowContainerGrid">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.35*" />
-                <ColumnDefinition Width="0.75*" />
-            </Grid.ColumnDefinitions>
-            <Image Grid.Row="0"
-                   Grid.Column="0"
-                   Width="72"
-                   Height="72"
-                   IsVisible="{Binding IconSourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                   Source="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
-                   Stretch="Fill"
-                   HorizontalAlignment="Left"
-                   VerticalAlignment="Top"
-                   Margin="10,5,0,0" />
-            <Grid Grid.Column="1"
-                  x:DataType="pcl:MpIProgressLoaderViewModel"
-                  DataContext="{Binding ProgressLoader}"
+      <Grid x:Name="NotificationWindowContainerGrid">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="0.35*" />
+          <ColumnDefinition Width="0.75*" />
+        </Grid.ColumnDefinitions>
+        <Image Grid.Row="0"
+               Grid.Column="0"
+               Classes.shakeOnce="{Binding IsPointerOver, ElementName=OuterBorder}"
+               Width="72"
+               Height="72"
+               IsVisible="{Binding IconSourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+               Source="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
+               Stretch="Fill"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Top"
+               Margin="10,5,0,0">
+          <Image.RenderTransform>
+            <RotateTransform />
+          </Image.RenderTransform>
+        </Image>
+        <Grid Grid.Column="1"
+              x:DataType="pcl:MpIProgressLoaderViewModel"
+              DataContext="{Binding ProgressLoader}"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch"
+              RowDefinitions="0.2*,0.3*,0.1*">
+          <TextBlock Grid.Row="0"
+                     Margin="10,10,0,1"
+                     FontSize="20"
+                     VerticalAlignment="Bottom"
+                     HorizontalAlignment="Left"
+                     Foreground="White"
+                     FontWeight="SemiBold"
+                     Text="{Binding Title}" />
+          <Border Grid.Row="0"
                   HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch"
-                  RowDefinitions="0.2*,0.3*,0.1*">
-                <TextBlock Grid.Row="0"
-                           Margin="10,10,0,1"
-                           FontSize="20"
-                           VerticalAlignment="Bottom"
-                           HorizontalAlignment="Left"
-                           Foreground="White"
-                           FontWeight="SemiBold"
-                           Text="{Binding Title}" />
-                <Border Grid.Row="0"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Bottom"
-                        BorderThickness="0"
-                        IsVisible="False"
-                        Margin="5,0,5,0"
-                        Classes="labelUnderline"
-                        Height="1" />
+                  VerticalAlignment="Bottom"
+                  BorderThickness="0"
+                  IsVisible="False"
+                  Margin="5,0,5,0"
+                  Classes="labelUnderline"
+                  Height="1" />
 
-                <local:MpAvClipBorder x:Name="ProgressBarContainer"
-                                      CornerRadius="5"
-                                      Grid.Row="1"
-                                      HorizontalAlignment="Left"
-                                      VerticalAlignment="Center"
-                                      Height="30"
-                                      Width="220"
-                                      ClipToBounds="True"
-                                      BorderThickness="1"
-                                      BorderBrush="White"
-                                      Background="Transparent"
-                                      Margin="0"
-                                      Padding="0">
-                    <!--<ProgressBar ShowProgressText="True"
+          <local:MpAvClipBorder x:Name="ProgressBarContainer"
+                                CornerRadius="5"
+                                Grid.Row="1"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Height="30"
+                                Width="220"
+                                ClipToBounds="True"
+                                BorderThickness="1"
+                                BorderBrush="White"
+                                Background="Transparent"
+                                Margin="0"
+                                Padding="0">
+            <!--<ProgressBar ShowProgressText="True"
                                  Foreground="White"
                                  Background="Transparent"
                                  Orientation="Horizontal"
@@ -91,47 +96,47 @@
                                  Value="{Binding PercentLoaded}"
                                  Minimum="0"
                                  Maximum="1" />-->
-                    <Rectangle x:Name="ProgressRectangle"
-                               Fill="Lime"
-                               HorizontalAlignment="Left"
-                               VerticalAlignment="Stretch"
-                               MaxWidth="{Binding $parent.Bounds.Width}"
-                               MinWidth="0">
-                        <Rectangle.Width>
-                            <MultiBinding Converter="{x:Static local:MpAvMultiSliderValueToLengthConverter.Instance}">
-                                <Binding>
-                                    <Binding.Source>
-                                        <sys:Double>0</sys:Double>
-                                    </Binding.Source>
-                                </Binding>
-                                <Binding>
-                                    <Binding.Source>
-                                        <sys:Double>1</sys:Double>
-                                    </Binding.Source>
-                                </Binding>
-                                <Binding Path="PercentLoaded" />
-                                <Binding ElementName="ProgressRectangle"
-                                         Path="MaxWidth" />
-                            </MultiBinding>
-                        </Rectangle.Width>
-                    </Rectangle>
+            <Rectangle x:Name="ProgressRectangle"
+                       Fill="Lime"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Stretch"
+                       MaxWidth="{Binding $parent.Bounds.Width}"
+                       MinWidth="0">
+              <Rectangle.Width>
+                <MultiBinding Converter="{x:Static local:MpAvMultiSliderValueToLengthConverter.Instance}">
+                  <Binding>
+                    <Binding.Source>
+                      <sys:Double>0</sys:Double>
+                    </Binding.Source>
+                  </Binding>
+                  <Binding>
+                    <Binding.Source>
+                      <sys:Double>1</sys:Double>
+                    </Binding.Source>
+                  </Binding>
+                  <Binding Path="PercentLoaded" />
+                  <Binding ElementName="ProgressRectangle"
+                           Path="MaxWidth" />
+                </MultiBinding>
+              </Rectangle.Width>
+            </Rectangle>
 
-                </local:MpAvClipBorder>
-                <TextBlock x:Name="ProgressInfoBlock"
-                           Grid.Row="2"
-                           Margin="0,0,7,7"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Right"
-                           FontSize="10"
-                           Foreground="Cyan"
-                           Text="{Binding Body}" />
-            </Grid>
-
-            <local:MpAvOptionsButton Grid.Column="1"
-                                     local:MpAvIsHoveringExtension.IsEnabled="True"
-                                     local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverOptionsButton, Mode=TwoWay}"
-                                     local:MpAvMenuExtension.IsEnabled="True"
-                                     local:MpAvMenuExtension.PlacementMode="Left" />
+          </local:MpAvClipBorder>
+          <TextBlock x:Name="ProgressInfoBlock"
+                     Grid.Row="2"
+                     Margin="0,0,7,7"
+                     VerticalAlignment="Center"
+                     HorizontalAlignment="Right"
+                     FontSize="10"
+                     Foreground="Cyan"
+                     Text="{Binding Body}" />
         </Grid>
+
+        <local:MpAvOptionsButton Grid.Column="1"
+                                 local:MpAvIsHoveringExtension.IsEnabled="True"
+                                 local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverOptionsButton, Mode=TwoWay}"
+                                 local:MpAvMenuExtension.IsEnabled="True"
+                                 local:MpAvMenuExtension.PlacementMode="Left" />
+      </Grid>
     </Border>
-</Window>
+  </Window>

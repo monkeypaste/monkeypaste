@@ -3,11 +3,14 @@ using Avalonia.Media.Imaging;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvStringHexToBitmapTintConverter : IValueConverter {
+        private static Dictionary<object, Dictionary<string, Bitmap>> _tintCache = new Dictionary<object, Dictionary<string, Bitmap>>();
+
         private static bool IS_DYNAMIC_TINT_ENABLED = true;
 
         public static readonly MpAvStringHexToBitmapTintConverter Instance = new();
@@ -58,8 +61,22 @@ namespace MonkeyPaste.Avalonia {
                     Debugger.Break();
                 }
             }
-            var bmp = MpAvIconSourceObjToBitmapConverter.Instance.Convert(imgResourceObj, null, null, null) as Bitmap;
-            bmp = bmp.Tint(hex);
+
+            Bitmap bmp = null;
+            if (_tintCache.TryGetValue(imgResourceObj, out var tintLookup)) {
+                tintLookup.TryGetValue(hex, out bmp);
+            }
+            if (bmp == null) {
+                bmp = MpAvIconSourceObjToBitmapConverter.Instance.Convert(imgResourceObj, null, null, null) as Bitmap;
+                bmp = bmp.Tint(hex);
+                if (bmp != null) {
+                    if (!_tintCache.ContainsKey(imgResourceObj)) {
+                        _tintCache.Add(imgResourceObj, new Dictionary<string, Bitmap>());
+                    }
+                    _tintCache[imgResourceObj].Add(hex, bmp);
+                }
+            }
+
             return bmp;
         }
 

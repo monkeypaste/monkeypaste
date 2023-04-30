@@ -45,7 +45,7 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
         #region MpIWindowViewModel Implementatiosn
         public MpWindowType WindowType =>
-            MpWindowType.Main;
+            MpWindowType.Settings;
 
         public bool IsOpen { get; set; }
 
@@ -656,6 +656,21 @@ namespace MonkeyPaste.Avalonia {
                     headless = new MpHeadlessPluginFormat() {
                         parameters = new List<MpParameterFormat>() {
                             new MpParameterFormat() {
+                                paramId = nameof(MpPrefViewModel.Instance.GlobalShortcutDelay),
+                                description = "To allow global overriding keyboard shortcuts the input system must be sure you are issuing one of your shortcuts. ",
+                                controlType = MpParameterControlType.Slider,
+                                unitType = MpParameterValueUnitType.Integer,
+                                minimum = 0,
+                                maximum = 3000,
+                                label = "Shortcut Delay Cut-off",
+                                values =new List<MpPluginParameterValueFormat>() {
+                                    new MpPluginParameterValueFormat() {
+                                        isDefault = true,
+                                        value = MpPrefViewModel.Instance.GlobalShortcutDelay.ToString()
+                                    },
+                                }
+                            },
+                            new MpParameterFormat() {
                                 paramId = nameof(MpPrefViewModel.Instance.ShowExternalDropWidget),
                                 description = "The drop widget is a floating menu showing while drag and dropping out of Monkey Paste that allows on-demand format conversion onto your drop target by hovering on or off of currently available formats. <b>Be aware conversion may not be an acceptable format for the target application so do not select 'YES' and remember the settings!</b>",
                                 controlType = MpParameterControlType.CheckBox,
@@ -767,6 +782,9 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(MpPrefViewModel.Instance.MaxStagedClipCount):
                     MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.InternalPinnedItems));
+                    break;
+                case nameof(MpPrefViewModel.Instance.GlobalShortcutDelay):
+                    MpAvShortcutCollectionViewModel.Instance.OnPropertyChanged(nameof(MpAvShortcutCollectionViewModel.Instance.GlobalShortcutDelay));
                     break;
             }
             if (_reinitContentParams.Any(x => x.ToLower() == e.PropertyName.ToLower())) {

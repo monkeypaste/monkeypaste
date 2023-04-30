@@ -1,9 +1,12 @@
 ﻿using MonkeyPaste.Common;
+using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    internal class MpAvApplicationCommandManager : MpIApplicationCommandManager {
+    public class MpAvApplicationCommandManager : MpIApplicationCommandManager {
+
         public ICommand PerformApplicationCommand => new MpCommand<object>(
             (args) => {
                 string appUri = null;

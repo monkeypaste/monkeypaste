@@ -23,18 +23,13 @@ namespace MonkeyPaste.Avalonia {
                 object base_bmp_resource_obj = values.Where(x => x is string || x is int).FirstOrDefault(x => !x.Equals(bg_hex_obj));
                 bg_hex_str = bg_hex_str == null ? MpSystemColors.Black : bg_hex_str;
 
-                bmp = MpAvIconSourceObjToBitmapConverter.Instance.Convert(base_bmp_resource_obj, null, null, null) as Bitmap;
-                if (bmp == null) {
-                    return null;
-                }
+
+                string tint_hex = null;
                 if (bg_hex_str.IsHexStringTransparent()) {
-                    // leave img unchanged if bg is transparent
-                    return bmp;
-                }
-                if (bg_hex_str.IsHexStringBright()) {
-                    bmp = bmp.Tint(MpSystemColors.Black);
+                    bmp = MpAvIconSourceObjToBitmapConverter.Instance.Convert(base_bmp_resource_obj, null, null, null) as Bitmap;
                 } else {
-                    bmp = bmp.Tint(MpSystemColors.White);
+                    tint_hex = bg_hex_str.IsHexStringBright() ? MpSystemColors.Black : MpSystemColors.White;
+                    bmp = MpAvStringHexToBitmapTintConverter.Instance.Convert(base_bmp_resource_obj, null, tint_hex, null) as Bitmap;
                 }
             }
             return bmp;

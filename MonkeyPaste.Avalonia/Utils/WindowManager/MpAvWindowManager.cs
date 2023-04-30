@@ -286,7 +286,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 var priority_ordered_topmost_wl = AllWindows
-                    .Where(x => x.WantsTopmost && x.Owner == null)
+                    .Where(x => x.WantsTopmost)// && x.Owner == null)
                     .OrderByDescending(x => (int)(x.DataContext as MpIWindowViewModel).WindowType);
 
                 priority_ordered_topmost_wl

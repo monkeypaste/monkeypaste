@@ -96,6 +96,10 @@ namespace MonkeyPaste.Avalonia {
             RoutingType != MpRoutingType.Internal &&
             RoutingType != MpRoutingType.None;
 
+        public bool SuppressesKeys =>
+            IsGlobal &&
+            RoutingType != MpRoutingType.Passive;
+
         public bool CanDelete =>
             IsCustom;
 
@@ -393,6 +397,7 @@ namespace MonkeyPaste.Avalonia {
             Dispatcher.UIThread.CheckAccess();
             ShortcutDisplayName = await ShortcutType.GetShortcutTitleAsync(CommandParameter);
         }
+
 
         #endregion
 

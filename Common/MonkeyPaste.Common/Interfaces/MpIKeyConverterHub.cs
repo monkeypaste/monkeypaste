@@ -6,5 +6,6 @@ namespace MonkeyPaste.Common {
         string ConvertKeySequenceToString<T>(IEnumerable<IEnumerable<T>> keyList);
         IReadOnlyList<IReadOnlyList<string>> ConvertStringToKeyLiteralSequence(string keyStr);
         IReadOnlyList<IReadOnlyList<T>> ConvertStringToKeySequence<T>(string keyStr) where T : Enum;
+
     }
 }

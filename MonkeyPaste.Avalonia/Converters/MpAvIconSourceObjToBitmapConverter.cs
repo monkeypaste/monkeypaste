@@ -49,10 +49,12 @@ namespace MonkeyPaste.Avalonia {
                     if (valParts.Length > 1) {
                         color_img_key = valParts.FirstOrDefault(x => x.Contains("Image"));
                     }
-                    var blank_bmp = MpAvStringResourceConverter.Instance.Convert(
-                        Mp.Services.PlatformResource.GetResource(color_img_key), null, null, null) as Bitmap;
-                    blank_bmp = blank_bmp.Tint(valStr);
-                    return blank_bmp;
+                    //var blank_bmp = MpAvStringResourceConverter.Instance.Convert(
+                    //    Mp.Services.PlatformResource.GetResource(color_img_key), null, null, null) as Bitmap;
+                    //blank_bmp = blank_bmp.Tint(valStr);
+                    var colored_blank_bmp = MpAvStringHexToBitmapTintConverter.Instance.Convert(
+                        Mp.Services.PlatformResource.GetResource(color_img_key), null, hex_color, null) as Bitmap;
+                    return colored_blank_bmp;
                 }
 
                 if (valParts.Length > 1) {

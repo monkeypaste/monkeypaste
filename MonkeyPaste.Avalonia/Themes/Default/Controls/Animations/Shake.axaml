@@ -30,4 +30,33 @@
         <!--<Setter Property="RotateTransform.Angle"
                 Value="0" />-->
     </Style>
+
+    <Style Selector=":is(Button).shakeOnce, Image.shakeOnce, :is(Button).shake">
+        <Style.Animations>
+            <Animation Duration="0:0:0.5"
+                       FillMode="None"
+                       IterationCount="1">
+                <KeyFrame Cue="0%">
+                    <Setter Property="RotateTransform.Angle"
+                            Value="0" />
+                </KeyFrame>
+                <KeyFrame Cue="33%">
+                    <Setter Property="RotateTransform.Angle"
+                            Value="15" />
+                </KeyFrame>
+                <KeyFrame Cue="66%">
+                    <Setter Property="RotateTransform.Angle"
+                            Value="-15" />
+                </KeyFrame>
+                <KeyFrame Cue="100%">
+                    <Setter Property="RotateTransform.Angle"
+                            Value="0" />
+                </KeyFrame>
+            </Animation>
+        </Style.Animations>
+    </Style>
+    <Style Selector=":is(Button).shakeOnce, Image.shakeOnce">
+        <!--<Setter Property="RotateTransform.Angle"
+                Value="0" />-->
+    </Style>
 </Styles>

@@ -44,8 +44,6 @@ namespace MonkeyPaste.Avalonia {
 
         private List<string> _suppressedKeys = new List<string>();
 
-        private const int _MAX_WAIT_TO_EXECUTE_SHORTCUT_MS = 500;
-
         private SimpleGlobalHook _hook;
 
         private CancellationTokenSource _simInputCts;
@@ -111,6 +109,199 @@ namespace MonkeyPaste.Avalonia {
                     .Where(x => (x as MpIFilterMatch)
                     .IsMatch(MpAvSettingsViewModel.Instance.FilterText)));
 
+        public IEnumerable<MpAvShortcutViewModel> AvailableItems =>
+            MpAvMainWindowViewModel.Instance.IsAnyAppWindowActive ?
+                Items :
+                Items.Where(x => x.IsGlobal);
+
+        private Dictionary<MpShortcutType, ICommand> _appCommandLookup;
+        public Dictionary<MpShortcutType, ICommand> AppCommandLookup {
+            get {
+                if (_appCommandLookup == null) {
+                    _appCommandLookup = new Dictionary<MpShortcutType, ICommand>() {
+                        {
+                            MpShortcutType.ToggleMainWindow,
+                            MpAvMainWindowViewModel.Instance.ToggleShowMainWindowCommand
+                        },
+                        {
+                            MpShortcutType.HideMainWindow,
+                            MpAvMainWindowViewModel.Instance.DecreaseFocusCommand
+                        },
+                        {
+                            MpShortcutType.ShowSettings,
+                            MpAvSettingsViewModel.Instance.ShowSettingsWindowCommand
+                        },
+                        {
+                            MpShortcutType.ExitApplication,
+                            MpAvSystemTrayViewModel.Instance.ExitApplicationCommand
+                        },
+                        {
+                            MpShortcutType.ToggleAppendInsertMode,
+                            MpAvClipTrayViewModel.Instance.ToggleAppendInsertModeCommand
+                        },
+                        {
+                            MpShortcutType.ToggleAppendLineMode,
+                            MpAvClipTrayViewModel.Instance.ToggleAppendLineModeCommand
+                        },
+                        {
+                            MpShortcutType.ToggleAppendPreMode,
+                            MpAvClipTrayViewModel.Instance.ToggleAppendPreModeCommand
+                        },
+                        {
+                            MpShortcutType.ToggleAppendManualMode,
+                            MpAvClipTrayViewModel.Instance.ToggleAppendManualModeCommand
+                        },
+                        {
+                            MpShortcutType.ToggleAppendPaused,
+                            MpAvClipTrayViewModel.Instance.ToggleAppendPausedCommand
+                        },
+                        {
+                            MpShortcutType.ToggleAutoCopyMode,
+                            MpAvClipTrayViewModel.Instance.ToggleAutoCopyModeCommand
+                        },
+                        {
+                            MpShortcutType.ToggleRightClickPasteMode, 
+                            //right click paste mode
+                            MpAvClipTrayViewModel.Instance.ToggleRightClickPasteCommand
+                        },
+                        {
+                            MpShortcutType.PasteSelectedItems,
+                            MpAvClipTrayViewModel.Instance.PasteSelectedClipTileFromShortcutCommand
+                        },
+                        {
+                            MpShortcutType.PasteHere,
+                            MpAvClipTrayViewModel.Instance.PasteCurrentClipboardIntoSelectedTileCommand
+                        },
+                        {
+                            MpShortcutType.DeleteSelectedItems,
+                            MpAvClipTrayViewModel.Instance.DeleteSelectedClipFromShortcutCommand
+                        },
+                        {
+                            MpShortcutType.SelectNextColumnItem,
+                            MpAvClipTrayViewModel.Instance.SelectNextColumnItemCommand
+                        },
+                        {
+                            MpShortcutType.SelectPreviousColumnItem,
+                            MpAvClipTrayViewModel.Instance.SelectPreviousColumnItemCommand
+                        },
+                        {
+                            MpShortcutType.SelectNextRowItem,
+                            MpAvClipTrayViewModel.Instance.SelectNextRowItemCommand
+                        },
+                        {
+                            MpShortcutType.SelectPreviousRowItem,
+                            MpAvClipTrayViewModel.Instance.SelectPreviousRowItemCommand
+                        },
+                        {
+                            MpShortcutType.AssignShortcut,
+                            MpAvClipTrayViewModel.Instance.AssignShortcutToSelectedItemCommand
+                        },
+                        {
+                            MpShortcutType.ChangeColor,
+                            MpAvClipTrayViewModel.Instance.ChangeSelectedClipsColorCommand
+                        },
+                        {
+                            MpShortcutType.Undo,
+                            MpAvUndoManagerViewModel.Instance.UndoCommand
+                        },
+                        {
+                            MpShortcutType.Redo,
+                            MpAvUndoManagerViewModel.Instance.RedoCommand
+                        },
+                        {
+                            MpShortcutType.EditContent,
+                            MpAvClipTrayViewModel.Instance.EditSelectedContentCommand
+                        },
+                        {
+                            MpShortcutType.EditTitle,
+                            MpAvClipTrayViewModel.Instance.EditSelectedTitleCommand
+                        },
+                        {
+                            MpShortcutType.Duplicate,
+                            MpAvClipTrayViewModel.Instance.DuplicateSelectedClipsCommand
+                        },
+                        {
+                            MpShortcutType.ToggleListenToClipboard,
+                            MpAvClipTrayViewModel.Instance.ToggleIsAppPausedCommand
+                        },
+                        {
+                            MpShortcutType.CopySelection,
+                            MpAvClipTrayViewModel.Instance.CopySelectedClipFromShortcutCommand
+                        },
+                        {
+                            MpShortcutType.ScrollToHome,
+                            MpAvClipTrayViewModel.Instance.ScrollToHomeCommand
+                        },
+                        {
+                            MpShortcutType.ScrollToEnd,
+                            MpAvClipTrayViewModel.Instance.ScrollToEndCommand
+                        },
+                        {
+                            MpShortcutType.WindowSizeUp,
+                            MpAvMainWindowViewModel.Instance.WindowSizeUpCommand
+                        },
+                        {
+                            MpShortcutType.WindowSizeDown,
+                            MpAvMainWindowViewModel.Instance.WindowSizeDownCommand
+                        },
+                        {
+                            MpShortcutType.WindowSizeLeft,
+                            MpAvMainWindowViewModel.Instance.WindowSizeLeftCommand
+                        },
+                        {
+                            MpShortcutType.WindowSizeRight,
+                            MpAvMainWindowViewModel.Instance.WindowSizeRightCommand
+                        },
+                        {
+                            MpShortcutType.PreviousPage,
+                            MpAvClipTrayViewModel.Instance.ScrollToPreviousPageCommand
+                        },
+                        {
+                            MpShortcutType.NextPage,
+                            MpAvClipTrayViewModel.Instance.ScrollToNextPageCommand
+                        },
+                        {
+                            MpShortcutType.FindAndReplaceSelectedItem,
+                            MpAvClipTrayViewModel.Instance.EnableFindAndReplaceForSelectedItem
+                        },
+                        {
+                            MpShortcutType.ToggleMainWindowLocked,
+                            MpAvMainWindowViewModel.Instance.ToggleMainWindowLockCommand
+                        },
+                        {
+                            MpShortcutType.ToggleFilterMenuVisible,
+                            MpAvMainWindowViewModel.Instance.ToggleFilterMenuVisibleCommand
+                        },
+                        {
+                            MpShortcutType.TogglePinned,
+                            MpAvClipTrayViewModel.Instance.ToggleSelectedTileIsPinnedCommand
+                        },
+                        {
+                            MpShortcutType.OpenContentInWindow,
+                            MpAvClipTrayViewModel.Instance.OpenSelectedTileInWindowCommand
+                        },
+                        {
+                            MpShortcutType.PasteCopyItem,
+                            MpAvClipTrayViewModel.Instance.PasteCopyItemByIdCommand
+                        },
+                        {
+                            MpShortcutType.SelectTag,
+                            MpAvTagTrayViewModel.Instance.SelectTagCommand
+                        },
+                        {
+                            MpShortcutType.AnalyzeCopyItemWithPreset,
+                            MpAvClipTrayViewModel.Instance.AnalyzeSelectedItemCommand
+                        },
+                        {
+                            MpShortcutType.InvokeTrigger,
+                            MpAvTriggerCollectionViewModel.Instance.InvokeActionCommand
+                        }
+                    };
+                }
+                return _appCommandLookup;
+            }
+        }
+
         //public IEnumerable<MpAvShortcutViewModel> CustomShortcuts =>
         //    FilteredItems.Where(x => x.IsCustom);
 
@@ -124,6 +315,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+
+        public int GlobalShortcutDelay =>
+            MpPrefViewModel.Instance.GlobalShortcutDelay;
         public bool IsAnyBusy =>
             IsBusy || Items.Any(x => x.IsBusy);
         public MpKeyModifierFlags GlobalKeyModifierFlags {
@@ -228,12 +422,6 @@ namespace MonkeyPaste.Avalonia {
             Items.CollectionChanged += Items_CollectionChanged;
         }
 
-        private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            OnPropertyChanged(nameof(Items));
-            OnPropertyChanged(nameof(FilteredItems));
-            //OnPropertyChanged(nameof(InternalApplicationShortcuts));
-            //OnPropertyChanged(nameof(CustomShortcuts));
-        }
 
         #endregion
 
@@ -396,141 +584,7 @@ namespace MonkeyPaste.Avalonia {
                 //IsCustomRoutingEnabled = scl.All(x => x.RoutingType == MpRoutingType.Internal || x.RoutingType == MpRoutingType.Direct);
 
                 foreach (var sc in scl) {
-                    ICommand shortcutCommand = null;
-                    switch (sc.ShortcutType) {
-                        case MpShortcutType.ToggleMainWindow:
-                            shortcutCommand = MpAvMainWindowViewModel.Instance.ToggleShowMainWindowCommand;
-                            break;
-                        case MpShortcutType.HideMainWindow:
-                            shortcutCommand = MpAvMainWindowViewModel.Instance.DecreaseFocusCommand;
-                            break;
-                        case MpShortcutType.ShowSettings:
-                            shortcutCommand = MpAvSettingsViewModel.Instance.ShowSettingsWindowCommand;
-                            break;
-                        case MpShortcutType.ExitApplication:
-                            shortcutCommand = MpAvSystemTrayViewModel.Instance.ExitApplicationCommand;
-                            break;
-                        case MpShortcutType.ToggleAppendInsertMode:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.ToggleAppendInsertModeCommand;
-                            break;
-                        case MpShortcutType.ToggleAppendLineMode:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.ToggleAppendLineModeCommand;
-                            break;
-                        case MpShortcutType.ToggleAppendPreMode:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.ToggleAppendPreModeCommand;
-                            break;
-                        case MpShortcutType.ToggleAppendManualMode:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.ToggleAppendManualModeCommand;
-                            break;
-                        case MpShortcutType.ToggleAppendPaused:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.ToggleAppendPausedCommand;
-                            break;
-                        case MpShortcutType.ToggleAutoCopyMode:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.ToggleAutoCopyModeCommand;
-                            break;
-                        case MpShortcutType.ToggleRightClickPasteMode:
-                            //right click paste mode
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.ToggleRightClickPasteCommand;
-                            break;
-                        case MpShortcutType.PasteSelectedItems:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.PasteSelectedClipTileFromShortcutCommand;
-                            break;
-                        case MpShortcutType.PasteHere:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.PasteCurrentClipboardIntoSelectedTileCommand;
-                            break;
-                        case MpShortcutType.DeleteSelectedItems:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.DeleteSelectedClipFromShortcutCommand;
-                            break;
-                        case MpShortcutType.SelectNextColumnItem:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.SelectNextColumnItemCommand;
-                            break;
-                        case MpShortcutType.SelectPreviousColumnItem:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.SelectPreviousColumnItemCommand;
-                            break;
-                        case MpShortcutType.SelectNextRowItem:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.SelectNextRowItemCommand;
-                            break;
-                        case MpShortcutType.SelectPreviousRowItem:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.SelectPreviousRowItemCommand;
-                            break;
-                        case MpShortcutType.AssignShortcut:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.AssignShortcutToSelectedItemCommand;
-                            break;
-                        case MpShortcutType.ChangeColor:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.ChangeSelectedClipsColorCommand;
-                            break;
-                        case MpShortcutType.Undo:
-                            shortcutCommand = MpAvUndoManagerViewModel.Instance.UndoCommand;
-                            break;
-                        case MpShortcutType.Redo:
-                            shortcutCommand = MpAvUndoManagerViewModel.Instance.RedoCommand;
-                            break;
-                        case MpShortcutType.EditContent:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.EditSelectedContentCommand;
-                            break;
-                        case MpShortcutType.EditTitle:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.EditSelectedTitleCommand;
-                            break;
-                        case MpShortcutType.Duplicate:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.DuplicateSelectedClipsCommand;
-                            break;
-                        case MpShortcutType.ToggleListenToClipboard:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.ToggleIsAppPausedCommand;
-                            break;
-                        case MpShortcutType.CopySelection:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.CopySelectedClipFromShortcutCommand;
-                            break;
-                        case MpShortcutType.ScrollToHome:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.ScrollToHomeCommand;
-                            break;
-                        case MpShortcutType.ScrollToEnd:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.ScrollToEndCommand;
-                            break;
-                        case MpShortcutType.WindowSizeUp:
-                            shortcutCommand = MpAvMainWindowViewModel.Instance.WindowSizeUpCommand;
-                            break;
-                        case MpShortcutType.WindowSizeDown:
-                            shortcutCommand = MpAvMainWindowViewModel.Instance.WindowSizeDownCommand;
-                            break;
-                        case MpShortcutType.WindowSizeLeft:
-                            shortcutCommand = MpAvMainWindowViewModel.Instance.WindowSizeLeftCommand;
-                            break;
-                        case MpShortcutType.WindowSizeRight:
-                            shortcutCommand = MpAvMainWindowViewModel.Instance.WindowSizeRightCommand;
-                            break;
-                        case MpShortcutType.PreviousPage:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.ScrollToPreviousPageCommand;
-                            break;
-                        case MpShortcutType.NextPage:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.ScrollToNextPageCommand;
-                            break;
-                        case MpShortcutType.FindAndReplaceSelectedItem:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.EnableFindAndReplaceForSelectedItem;
-                            break;
-                        case MpShortcutType.ToggleMainWindowLocked:
-                            shortcutCommand = MpAvMainWindowViewModel.Instance.ToggleMainWindowLockCommand;
-                            break;
-                        case MpShortcutType.ToggleFilterMenuVisible:
-                            shortcutCommand = MpAvMainWindowViewModel.Instance.ToggleFilterMenuVisibleCommand;
-                            break;
-                        case MpShortcutType.TogglePinned:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.ToggleSelectedTileIsPinnedCommand;
-                            break;
-                        case MpShortcutType.OpenContentInWindow:
-                            shortcutCommand = MpAvClipTrayViewModel.Instance.OpenSelectedTileInWindowCommand;
-                            break;
-                        default:
-                            if (sc.ShortcutType == MpShortcutType.PasteCopyItem) {
-                                shortcutCommand = MpAvClipTrayViewModel.Instance.PasteCopyItemByIdCommand;
-                            } else if (sc.ShortcutType == MpShortcutType.SelectTag) {
-                                shortcutCommand = MpAvTagTrayViewModel.Instance.SelectTagCommand;
-                            } else if (sc.ShortcutType == MpShortcutType.AnalyzeCopyItemWithPreset) {
-                                shortcutCommand = MpAvClipTrayViewModel.Instance.AnalyzeSelectedItemCommand;
-                            } else if (sc.ShortcutType == MpShortcutType.InvokeTrigger) {
-                                shortcutCommand = MpAvTriggerCollectionViewModel.Instance.InvokeActionCommand;
-                            }
-                            break;
-                    }
+                    AppCommandLookup.TryGetValue(sc.ShortcutType, out ICommand shortcutCommand);
                     var scvm = await CreateShortcutViewModel(sc, shortcutCommand);
                     Items.Add(scvm);
                 }
@@ -564,9 +618,21 @@ namespace MonkeyPaste.Avalonia {
                         Task.WhenAll(Items.Where(x => x.IsCustom).Select(x => x.SetShortcutNameAsync())).FireAndForgetSafeAsync(this);
                     });
                     break;
+                case MpMessageType.AppWindowActivated:
+                case MpMessageType.AppWindowDeactivated:
+                    if (!string.IsNullOrEmpty(_gesture.PeekGestureString)) {
+                        MpConsole.WriteLine($"App window activation changed w/ peek gesture '{_gesture.PeekGestureString}' does it need to be cleared?");
+                    }
+                    break;
             }
         }
 
+        private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            OnPropertyChanged(nameof(Items));
+            OnPropertyChanged(nameof(FilteredItems));
+            //OnPropertyChanged(nameof(InternalApplicationShortcuts));
+            //OnPropertyChanged(nameof(CustomShortcuts));
+        }
         private async Task<MpAvShortcutViewModel> CreateShortcutViewModel(MpShortcut sc, ICommand comamnd) {
             MpAvShortcutViewModel nscvm = new MpAvShortcutViewModel(this);
             await nscvm.InitializeAsync(sc, comamnd);
@@ -608,155 +674,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #endregion
-
-
-        #region Gesture Handling
-
-        private async Task<bool> PerformMatchedShortcutAsync(MpAvShortcutViewModel svm) {
-            if (svm == null) {
-                return false;
-            }
-            await Task.Delay(1);
-
-            bool can_perform = Dispatcher.UIThread.Invoke(() => {
-                return svm.PerformShortcutCommand.CanExecute(null);
-            });
-            MpConsole.WriteLine($"Shorcut Gesture '{svm.KeyString}' matched for shortcut '{svm.ShortcutType}' {(can_perform ? "CAN" : "CANNOT")} execute");
-            if (!can_perform) {
-                return false;
-            }
-
-            //if (//svm.RoutingType == MpRoutingType.Internal ||
-            //    svm.RoutingType == MpRoutingType.Bubble) {
-            //    await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(svm.KeyString);
-            //}
-            Dispatcher.UIThread.Post(() => svm.PerformShortcutCommand.Execute(null));
-            //if (svm.RoutingType == MpRoutingType.Tunnel) {
-            //    await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(svm.KeyString);
-            //}
-            return true;
-        }
-
-        private async Task ClearKeyboardBufferAsync() {
-            //when shortcut can't execute pass gesture and clear buffer
-            foreach (var sup_key_str in _suppressedKeys) {
-                await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(sup_key_str);
-            }
-            _suppressedKeys.Clear();
-        }
-
-
-        private MpKeyGestureHelper2<KeyCode> _gesture = new MpKeyGestureHelper2<KeyCode>("Cur");
-        private MpKeyGestureHelper2<KeyCode> _suppress = new MpKeyGestureHelper2<KeyCode>("Supp");
-        private string _last_up_gesture_str;
-        private int _wait_count = 0;
-
-        private void HandleGestureRouting_Down(string keyLiteral, object down_e) {
-            var sharp_down = down_e as KeyboardHookEventArgs;
-            if (sharp_down == null) {
-                return;
-            }
-            KeyCode kc = sharp_down.Data.KeyCode;
-            _gesture.Down(kc);
-
-            bool suppress =
-                Items
-                .Where(x => x.RoutingType == MpRoutingType.Override)
-                .Any(x => x.KeyString.StartsWith(_gesture.GestureString, StringComparison.OrdinalIgnoreCase));
-
-            if (suppress) {
-                _suppress.Down(kc);
-                sharp_down.SuppressEvent = true;
-            }
-
-        }
-
-        private void HandleGestureRouting_Up(string keyLiteral, object up_e) {
-            var sharp_up = up_e as KeyboardHookEventArgs;
-            if (sharp_up == null) {
-                return;
-            }
-            KeyCode kc = sharp_up.Data.KeyCode;
-            _last_up_gesture_str = _gesture.GestureString;
-
-            MpConsole.WriteLine("Gesture: " + _last_up_gesture_str);
-            _gesture.Up(kc);
-
-
-            //var exact_match =
-            //    Items
-            //    .FirstOrDefault(x => x.KeyString == _last_up_gesture_str);
-
-
-            //if (_gesture.DownCount == 0) {
-            //    ResetGesture(false);
-            //}
-            //PerformMatchedShortcutAsync(exact_match).FireAndForgetSafeAsync(this);
-            //return;
-
-            var possible_matches =
-                Items
-                .Where(x => x.KeyString.StartsWith(_last_up_gesture_str));
-
-            if (possible_matches.Any()) {
-                _ = Task.Run(async () => {
-                    _wait_count++;
-                    while (true) {
-                        string wait_gesture = _last_up_gesture_str;//.Clone().ToString();
-                        // wait to see if new input
-                        await Task.Delay(_MAX_WAIT_TO_EXECUTE_SHORTCUT_MS);
-                        if (wait_gesture == _last_up_gesture_str) {
-                            // no new input
-                            var exact_match =
-                                possible_matches
-                                    .FirstOrDefault(x => x.KeyString == _last_up_gesture_str);
-                            if (exact_match == null) {
-                                // if (_gesture.DownCount == 0) {
-                                ResetGesture(true);
-                                //    return;
-                                //} else {
-                                //    continue;
-                                //}
-                            } else {
-                                bool success = await PerformMatchedShortcutAsync(exact_match);
-                                if (success) {
-                                    _suppress.Reset();
-                                } else {
-                                    Mp.Services.KeyStrokeSimulator
-                                        .SimulateKeyStrokeSequenceAsync(_suppress.GestureString).FireAndForgetSafeAsync(this);
-                                    _suppress.Reset();
-                                }
-                            }
-                            return;
-                        } else {
-                            var new_matches =
-                                Items
-                                .Where(x => x.KeyString.StartsWith(_last_up_gesture_str));
-                            if (new_matches.Any()) {
-                                continue;
-                            }
-                            ResetGesture(true);
-                            return;
-                        }
-                    }
-                });
-
-            } else {
-                ResetGesture(true);
-            }
-        }
-
-        private void ResetGesture(bool simulate) {
-            _last_up_gesture_str = string.Empty;
-            _gesture.Reset();
-            if (simulate) {
-                Mp.Services.KeyStrokeSimulator
-                    .SimulateKeyStrokeSequenceAsync(_suppress.GestureString).FireAndForgetSafeAsync(this);
-            }
-            _suppress.Reset();
-        }
-        #endregion
-
 
         #region Global Input
 
@@ -1091,9 +1008,271 @@ namespace MonkeyPaste.Avalonia {
             if (!IsShortcutsEnabled) {
                 return;
             }
-            HandleGestureRouting_Up(keyStr, up_e);
+            HandleGestureRouting_Up(keyStr, up_e).FireAndForgetSafeAsync(this);
         }
 
+
+        #region Gesture Handling
+
+        private async Task<bool> PerformMatchedShortcutAsync(MpAvShortcutViewModel svm) {
+            if (svm == null) {
+                return false;
+            }
+            await Task.Delay(1);
+
+            bool can_perform = Dispatcher.UIThread.Invoke(() => {
+                return svm.PerformShortcutCommand.CanExecute(null);
+            });
+            MpConsole.WriteLine($"Shorcut Gesture '{svm.KeyString}' matched for shortcut '{svm.ShortcutType}' {(can_perform ? "CAN" : "CANNOT")} execute");
+            if (!can_perform) {
+                return false;
+            }
+
+            //if (//svm.RoutingType == MpRoutingType.Internal ||
+            //    svm.RoutingType == MpRoutingType.Bubble) {
+            //    await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(svm.KeyString);
+            //}
+            Dispatcher.UIThread.Post(() => svm.PerformShortcutCommand.Execute(null));
+            //if (svm.RoutingType == MpRoutingType.Tunnel) {
+            //    await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(svm.KeyString);
+            //}
+            return true;
+        }
+
+        private async Task ClearKeyboardBufferAsync() {
+            //when shortcut can't execute pass gesture and clear buffer
+            foreach (var sup_key_str in _suppressedKeys) {
+                await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(sup_key_str);
+            }
+            _suppressedKeys.Clear();
+        }
+
+
+        private MpKeyGestureHelper2<KeyCode> _gesture = new MpKeyGestureHelper2<KeyCode>("Cur");
+        private List<List<KeyCode>> _sim = new List<List<KeyCode>>();
+        private IEnumerable<MpAvShortcutViewModel> _matches;
+        //private MpKeyGestureHelper2<KeyCode> _suppress = new MpKeyGestureHelper2<KeyCode>("Supp");
+        //private string _last_up_gesture_str;
+        //private int _wait_count = 0;
+
+        private void HandleGestureRouting_Down(string keyLiteral, object down_e) {
+            var sharp_down = down_e as KeyboardHookEventArgs;
+            if (sharp_down == null) {
+                return;
+            }
+            KeyCode kc = sharp_down.Data.KeyCode;
+            if (_sim.Any() && _sim.First().Any(x => x.IsSameKey(kc, true))) {
+                // ignore sim down, remove in up
+                MpConsole.WriteLine($"Sim Key '{keyLiteral}' down ignored");
+                return;
+            }
+
+            bool new_down = _gesture.Down(kc);
+            string down_gesture = _gesture.PeekGestureString;
+            var peek_gesture = _gesture.PeekGesture;
+
+            _matches =
+                AvailableItems
+                .Where(x => x.GlobalKeyList.StartsWith(peek_gesture, true));
+
+            if (_matches.Any()) {
+                _gesture.HasMatches = true;
+            } else {
+                if (_gesture.HasMatches) {
+                    MpConsole.WriteLine($"Gesture '{_gesture.GestureString}' invalidated by '{keyLiteral}'. Simulating: {(_gesture.IsSuppressed)}");
+                    if (_gesture.IsSuppressed) {
+                        // when already suppressing, suppress invalidating key too
+                        sharp_down.SuppressEvent = true;
+                    }
+                    _gesture.HasMatches = false;
+                }
+                return;
+            }
+
+            _gesture.IsSuppressed = _matches.Any(x => x.SuppressesKeys);
+
+            if (_gesture.IsSuppressed) {
+                //_suppress.Down(kc);
+                sharp_down.SuppressEvent = true;
+            }
+
+            if (new_down) {
+                MpConsole.WriteLine($"DOWN GESTURE: '{down_gesture}' DOWN COUNT: {_gesture.DownCount}");
+            }
+        }
+
+        private async Task HandleGestureRouting_Up(string keyLiteral, object up_e) {
+            var sharp_up = up_e as KeyboardHookEventArgs;
+            if (sharp_up == null) {
+                return;
+            }
+            KeyCode kc = sharp_up.Data.KeyCode;
+            if (_sim.Any() && _sim.First().Any(x => x.IsSameKey(kc, true))) {
+                // remove sim and ignore
+                _sim.First().Remove(kc.GetUnifiedKey());
+                MpConsole.WriteLine($"Sim Key '{keyLiteral}' removed. Up ignored");
+                return;
+            }
+
+            _gesture.Up(kc);
+            string cur_gesture_str = _gesture.GestureString;
+            var cur_gesture = _gesture.Gesture;//.CloneGesture();
+
+            bool delay_reached = true;
+            int wait_count = _gesture.DownCount;
+            var sw = Stopwatch.StartNew();
+            while (sw.ElapsedMilliseconds <= GlobalShortcutDelay) {
+                if (_gesture.DownCount != wait_count) {
+                    delay_reached = false;
+                    break;
+                }
+                await Task.Delay(20);
+            }
+            if (!_gesture.HasMatches) {
+                if (_gesture.IsSuppressed &&
+                    _sim.Count == 0) {
+                    SimGestureAsync(cur_gesture_str).FireAndForgetSafeAsync(this); ;
+                }
+                if (_gesture.HasGesture()) {
+                    _gesture.Reset();
+                }
+                return;
+            }
+            if (!delay_reached) {
+                return;
+            }
+
+            // no new downs, execute exact if found
+            var exact_match =
+                _matches
+                    .FirstOrDefault(x => x.GlobalKeyList.IsMatch(cur_gesture, true));
+
+            bool perform_gesture = exact_match != null;
+            if (perform_gesture) {
+                perform_gesture = Dispatcher.UIThread.Invoke(() => {
+                    return exact_match.PerformShortcutCommand.CanExecute(null);
+                });
+            }
+            if (!perform_gesture) {
+                if (_gesture.IsSuppressed &&
+                    _sim.Count == 0) {
+                    SimGestureAsync(cur_gesture_str).FireAndForgetSafeAsync(this);
+                }
+                if (_gesture.HasGesture()) {
+                    _gesture.Reset();
+                }
+                return;
+            }
+
+            _gesture.Reset();
+            if (exact_match.RoutingType == MpRoutingType.Bubble) {
+                await SimGestureAsync(exact_match.KeyString);
+            }
+            Dispatcher.UIThread.Invoke(() => {
+                exact_match.PerformShortcutCommand.Execute(null);
+            });
+            if (exact_match.RoutingType == MpRoutingType.Tunnel) {
+                await SimGestureAsync(exact_match.KeyString);
+            }
+        }
+
+        private async Task SimGestureAsync(string simGesture) {
+            MpDebug.Assert(_sim.Count == 0, $"Sim gesture should only be set once. Attempting to again...");
+
+            // NOTE need to seperate what goes to simulator or simulator gets collection modified as input is simulated
+            var output_gesture =
+                Mp.Services.KeyConverter
+                .ConvertStringToKeySequence<KeyCode>(simGesture);
+            _sim = output_gesture.CloneGesture();
+
+            await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(output_gesture);
+        }
+
+        //private void HandleGestureRouting_Up_old(string keyLiteral, object up_e) {
+        //    var sharp_up = up_e as KeyboardHookEventArgs;
+        //    if (sharp_up == null) {
+        //        return;
+        //    }
+        //    KeyCode kc = sharp_up.Data.KeyCode;
+        //    _last_up_gesture_str = _gesture.GestureString;
+
+        //    MpConsole.WriteLine("Gesture: " + _last_up_gesture_str);
+        //    _gesture.Up(kc);
+
+
+        //    //var exact_match =
+        //    //    Items
+        //    //    .FirstOrDefault(x => x.KeyString == _last_up_gesture_str);
+
+
+        //    //if (_gesture.DownCount == 0) {
+        //    //    ResetGesture(false);
+        //    //}
+        //    //PerformMatchedShortcutAsync(exact_match).FireAndForgetSafeAsync(this);
+        //    //return;
+
+        //    var possible_matches =
+        //        Items
+        //        .Where(x => x.KeyString.StartsWith(_last_up_gesture_str));
+
+        //    if (possible_matches.Any()) {
+        //        _ = Task.Run(async () => {
+        //            _wait_count++;
+        //            while (true) {
+        //                string wait_gesture = _last_up_gesture_str;//.Clone().ToString();
+        //                // wait to see if new input
+        //                await Task.Delay(_MAX_WAIT_TO_EXECUTE_SHORTCUT_MS);
+        //                if (wait_gesture == _last_up_gesture_str) {
+        //                    // no new input
+        //                    var exact_match =
+        //                        possible_matches
+        //                            .FirstOrDefault(x => x.KeyString == _last_up_gesture_str);
+        //                    if (exact_match == null) {
+        //                        // if (_gesture.DownCount == 0) {
+        //                        ResetGesture(true);
+        //                        //    return;
+        //                        //} else {
+        //                        //    continue;
+        //                        //}
+        //                    } else {
+        //                        bool success = await PerformMatchedShortcutAsync(exact_match);
+        //                        if (success) {
+        //                            _suppress.Reset();
+        //                        } else {
+        //                            Mp.Services.KeyStrokeSimulator
+        //                                .SimulateKeyStrokeSequenceAsync(_suppress.GestureString).FireAndForgetSafeAsync(this);
+        //                            _suppress.Reset();
+        //                        }
+        //                    }
+        //                    return;
+        //                } else {
+        //                    var new_matches =
+        //                        Items
+        //                        .Where(x => x.KeyString.StartsWith(_last_up_gesture_str));
+        //                    if (new_matches.Any()) {
+        //                        continue;
+        //                    }
+        //                    ResetGesture(true);
+        //                    return;
+        //                }
+        //            }
+        //        });
+
+        //    } else {
+        //        ResetGesture(true);
+        //    }
+        //}
+
+        //private void ResetGesture(bool simulate) {
+        //    _last_up_gesture_str = string.Empty;
+        //    _gesture.Reset();
+        //    if (simulate) {
+        //        Mp.Services.KeyStrokeSimulator
+        //            .SimulateKeyStrokeSequenceAsync(_suppress.GestureString).FireAndForgetSafeAsync(this);
+        //    }
+        //    _suppress.Reset();
+        //}
+        #endregion
 
         #endregion
 

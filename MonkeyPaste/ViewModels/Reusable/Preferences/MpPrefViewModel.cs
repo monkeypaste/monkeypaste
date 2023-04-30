@@ -442,6 +442,7 @@ namespace MonkeyPaste {
         #region Shortcuts
         public bool ShowExternalDropWidget { get; set; } = true;
 
+        public int GlobalShortcutDelay { get; set; } = 250;
         public bool ShowMainWindowOnDragToScreenTop { get; set; } = true;
         public bool DoShowMainWindowWithMouseEdgeAndScrollDelta { get; set; } = true;
         public string MainWindowShowBehaviorType { get; set; } = MpMainWindowShowBehaviorType.Primary.ToString();

@@ -1,4 +1,5 @@
-﻿using DynamicData;
+﻿using Avalonia.Controls;
+using DynamicData;
 using MonkeyPaste.Common;
 using SharpHook.Native;
 using System;
@@ -9,7 +10,10 @@ namespace MonkeyPaste.Avalonia {
     public class MpKeyGestureHelper2<T> {
         #region Private Variables
         private string _name;
+
+        private List<T> _downs = new List<T>();
         private List<List<T>> _gesture = new List<List<T>>();
+
         #endregion
 
         #region Constants
@@ -26,12 +30,20 @@ namespace MonkeyPaste.Avalonia {
         public IReadOnlyList<IReadOnlyList<T>> Gesture =>
             _gesture;
 
-        List<T> Downs =>
-            _gesture.LastOrDefault<List<T>>();
-        public string GestureString =>
-            Mp.Services.KeyConverter.ConvertKeySequenceToString(_gesture);
+        public IReadOnlyList<IReadOnlyList<T>> PeekGesture =>
+            _gesture.Union(new[] { _downs }.ToList()).ToList();
+        public string GestureString //{ get; private set; } = string.Empty; 
+        => Mp.Services.KeyConverter.ConvertKeySequenceToString(_gesture);
 
-        public int DownCount { get; private set; }
+        public string PeekGestureString //{ get; private set; } = string.Empty;
+        => Mp.Services.KeyConverter.ConvertKeySequenceToString(PeekGesture);
+
+        public int DownCount =>
+            _downs.Count;
+
+        public bool HasMatches { get; set; }
+        public bool IsSuppressed { get; set; }
+
         #endregion
 
         #region Constructors
@@ -42,34 +54,30 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
-        public void Down(T key) {
-            if (Downs == null) {
-                _gesture.Add(new List<T>());
+        public bool Down(T key) {
+            if (_downs.Contains(key)) {
+                return false;
             }
-
-            if (!Downs.Contains(key)) {
-                DownCount++;
-                // holding key fires down repeatedly
-                //MpConsole.WriteLine($"[{_name}] DOWN '{Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { key } })}' DCOUNT: {DownCount}");
-
-                Downs.Add(key);
-            }
-
+            _downs.Add(key);
+            return true;
         }
         public void Up(T key) {
-            int to_remove = Downs == null ? 0 : Downs.Where(x => x.Equals(key)).Count();
-            DownCount -= to_remove;
-            //MpConsole.WriteLine($"[{_name}] UP '{Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { key } })}' DCOUNT: {DownCount}");
-            if (Downs == null) {
-                _gesture.Add(new List<T>());
-            } else {
-                _gesture.Add(new List<T>(Downs.Where(x => !x.Equals(key))));
+            if (!_gesture.Any() ||
+                !_gesture.Last().Contains(key)) {
+                //prevents remaining releases from gesturing
+                _gesture.Add(_downs.ToList());
             }
+            _downs.Remove(key);
         }
 
+        public bool HasGesture() {
+            return _gesture.Any() || _downs.Any();
+        }
         public void Reset() {
             _gesture.Clear();
-            DownCount = 0;
+            _downs.Clear();
+            HasMatches = false;
+            IsSuppressed = false;
         }
         #endregion
 

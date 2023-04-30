@@ -26,13 +26,15 @@ namespace MonkeyPaste.Avalonia {
         #region MpIKeyStrokeSimulator Implementation
         public bool IsSimulating { get; private set; }
 
-        public async Task<bool> SimulateKeyStrokeSequenceAsync(string keystr, int holdDelay = 0, int releaseDelay = 0) {
+        public async Task<bool> SimulateKeyStrokeSequenceAsync(string keystr, int holdDelay = 5, int releaseDelay = 5) {
             var seq = Mp.Services.KeyConverter.ConvertStringToKeySequence<KeyCode>(keystr);
             bool success = await SimulateKeyStrokeSequenceAsync(seq, holdDelay, releaseDelay);
             return success;
         }
 
-        public async Task<bool> SimulateKeyStrokeSequenceAsync<T>(IEnumerable<IEnumerable<T>> gesture, int holdDelay = 0, int releaseDelay = 0) {
+        public async Task<bool> SimulateKeyStrokeSequenceAsync<T>(IReadOnlyList<IReadOnlyList<T>> gesture, int holdDelay = 5, int releaseDelay = 5) {
+            MpDebug.Assert(!IsSimulating, "Only 1 at a time");
+
             if (typeof(T) != typeof(KeyCode)) {
                 throw new NotSupportedException("Must be sharphook keycode");
             }
@@ -44,20 +46,22 @@ namespace MonkeyPaste.Avalonia {
                 return true;
             }
             IsSimulating = true;
+
             foreach (var combo in gesture) {
-                foreach (var key in combo.Cast<KeyCode>()) {
-                    UioHookResult result = _eventSimulator.SimulateKeyPress(key);
-                    if (result != UioHookResult.Success) {
-                        MpDebug.Break($"Error pressing key: '{key}' in seq: '{Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { key } })}' error: '{result}'");
-                        //return false;
+                // DOWN (forward order)
+                for (int i = 0; i < combo.Count; i++) {
+                    if (combo[i] is KeyCode kc) {
+                        SimulateKey(kc, true);
+                    } else {
+
                     }
                 }
                 await Task.Delay(holdDelay);
-                foreach (var key in combo.Cast<KeyCode>()) {
-                    UioHookResult result = _eventSimulator.SimulateKeyRelease(key);
-                    if (result != UioHookResult.Success) {
-                        MpDebug.Break($"Error releasing key: '{key}' in seq: '{Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { key } })}' error: '{result}'");
-                        //return false;
+
+                // UP (reverse order)
+                for (int i = combo.Count - 1; i >= 0; i--) {
+                    if (combo[i] is KeyCode kc) {
+                        SimulateKey(kc, false);
                     }
                 }
 
@@ -87,6 +91,18 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
+        private void SimulateKey(KeyCode key, bool isDown) {
+            MpConsole.WriteLine($"SIM {(isDown ? "DOWN" : "UP")}: {key}");
+            UioHookResult result =
+                isDown ?
+                _eventSimulator.SimulateKeyPress(key) :
+                _eventSimulator.SimulateKeyRelease(key);
+
+            if (result != UioHookResult.Success) {
+                MpDebug.Break($"Error {(isDown ? "pressing" : "releasing")} key: '{key}' in seq: '{Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { key } })}' error: '{result}'");
+                //return false;
+            }
+        }
         #endregion
 
         #region Commands
