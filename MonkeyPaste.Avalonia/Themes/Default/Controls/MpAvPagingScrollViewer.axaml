@@ -5,6 +5,8 @@
     <Styles.Resources>
         <ControlTheme x:Key="{x:Type local:MpAvPagingScrollViewer}"
                       TargetType="local:MpAvPagingScrollViewer">
+            <Setter Property="IsScrollInertiaEnabled"
+                    Value="False" />
             <Setter Property="Background"
                     Value="Transparent" />
             <Setter Property="Template">
@@ -23,6 +25,7 @@
                                                 VerticalSnapPointsAlignment="{TemplateBinding VerticalSnapPointsAlignment}"
                                                 Padding="{TemplateBinding Padding}">
                             <ScrollContentPresenter.GestureRecognizers>
+                                <!--  IsScrollInertiaEnabled="{Binding IsScrollInertiaEnabled, RelativeSource={RelativeSource TemplatedParent}}"  -->
                                 <ScrollGestureRecognizer CanHorizontallyScroll="{Binding CanHorizontallyScroll, ElementName=PART_ContentPresenter}"
                                                          CanVerticallyScroll="{Binding CanVerticallyScroll, ElementName=PART_ContentPresenter}"
                                                          IsScrollInertiaEnabled="{Binding IsScrollInertiaEnabled, RelativeSource={RelativeSource TemplatedParent}}" />

@@ -396,7 +396,9 @@ namespace MonkeyPaste.Common.Wpf {
         }
 
         private static TextElement ApplyHrefFormatting(TextElement te, string hv) {
-            (te as Hyperlink).NavigateUri = new Uri(hv);
+            if (Uri.TryCreate(hv, UriKind.RelativeOrAbsolute, out var hv_uri)) {
+                (te as Hyperlink).NavigateUri = hv_uri;
+            }
             return te;
         }
 
@@ -405,8 +407,10 @@ namespace MonkeyPaste.Common.Wpf {
             if (Uri.IsWellFormedUriString(sv, UriKind.Absolute)) {
                 if (sv.StartsWith("data:image/png;base64,")) {
                     bmpSrc = sv.Replace("data:image/png;base64,", string.Empty).ToBitmapSource();
+                } else if (Uri.TryCreate(sv, UriKind.RelativeOrAbsolute, out var sv_uri)) {
+                    bmpSrc = new BitmapImage(sv_uri);
                 } else {
-                    bmpSrc = (BitmapSource)new BitmapImage(new Uri(sv));
+                    bmpSrc = new BitmapImage();
                 }
 
             } else if (sv.Contains(",")) {

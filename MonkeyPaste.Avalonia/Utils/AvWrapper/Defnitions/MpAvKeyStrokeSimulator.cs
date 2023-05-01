@@ -13,6 +13,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Variable
         private EventSimulator _eventSimulator;
+        private int _waitCount = 0;
         #endregion
 
         #region Constants
@@ -26,14 +27,14 @@ namespace MonkeyPaste.Avalonia {
         #region MpIKeyStrokeSimulator Implementation
         public bool IsSimulating { get; private set; }
 
-        public async Task<bool> SimulateKeyStrokeSequenceAsync(string keystr, int holdDelay = 5, int releaseDelay = 5) {
+        public async Task<bool> SimulateKeyStrokeSequenceAsync(string keystr, int holdDelay = 0, int releaseDelay = 0) {
             var seq = Mp.Services.KeyConverter.ConvertStringToKeySequence<KeyCode>(keystr);
-            bool success = await SimulateKeyStrokeSequenceAsync(seq, holdDelay, releaseDelay);
+            bool success = await SimulateKeyStrokeSequenceAsync(seq, null, null, holdDelay, releaseDelay);
             return success;
         }
 
-        public async Task<bool> SimulateKeyStrokeSequenceAsync<T>(IReadOnlyList<IReadOnlyList<T>> gesture, int holdDelay = 5, int releaseDelay = 5) {
-            MpDebug.Assert(!IsSimulating, "Only 1 at a time");
+        public async Task<bool> SimulateKeyStrokeSequenceAsync<T>(IReadOnlyList<IReadOnlyList<T>> gesture, IEnumerable<T> physical_downs = null, IEnumerable<T> sup_downs = null, int holdDelay = 0, int releaseDelay = 0) {
+            //MpDebug.Assert(!IsSimulating, "Only 1 at a time");
 
             if (typeof(T) != typeof(KeyCode)) {
                 throw new NotSupportedException("Must be sharphook keycode");
@@ -45,12 +46,34 @@ namespace MonkeyPaste.Avalonia {
                 //MpConsole.WriteLine("No gesture to simulate");
                 return true;
             }
+            if (IsSimulating) {
+                int this_sim_id = ++_waitCount;
+                MpConsole.WriteLine($"Sim gesture '{Mp.Services.KeyConverter.ConvertKeySequenceToString(gesture)}' waiting at queue: {this_sim_id}...");
+                while (_waitCount >= this_sim_id) {
+                    if (IsSimulating) {
+                        await Task.Delay(100);
+                    }
+                    if (_waitCount > this_sim_id) {
+                        // not next
+                        await Task.Delay(100);
+                        continue;
+                    }
+                    IsSimulating = true;
+                    _waitCount--;
+                    MpConsole.WriteLine($"Sim gesture '{Mp.Services.KeyConverter.ConvertKeySequenceToString(gesture)}' waiting DONE");
+                }
+            }
             IsSimulating = true;
 
             foreach (var combo in gesture) {
                 // DOWN (forward order)
                 for (int i = 0; i < combo.Count; i++) {
                     if (combo[i] is KeyCode kc) {
+                        if (physical_downs != null &&
+                            physical_downs.Cast<KeyCode>().Contains(kc) &&
+                            (sup_downs == null || (sup_downs != null && !sup_downs.Cast<KeyCode>().Contains(kc)))) {
+                            continue;
+                        }
                         SimulateKey(kc, true);
                     } else {
 
@@ -61,6 +84,13 @@ namespace MonkeyPaste.Avalonia {
                 // UP (reverse order)
                 for (int i = combo.Count - 1; i >= 0; i--) {
                     if (combo[i] is KeyCode kc) {
+                        if (physical_downs != null &&
+                            physical_downs.Cast<KeyCode>().Contains(kc)) {
+                            continue;
+                        }
+                        if (sup_downs != null && sup_downs.Cast<KeyCode>().Contains(kc)) {
+                            continue;
+                        }
                         SimulateKey(kc, false);
                     }
                 }
@@ -68,7 +98,7 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(releaseDelay);
             }
             IsSimulating = false;
-            MpConsole.WriteLine($"Key Gesture '{Mp.Services.KeyConverter.ConvertKeySequenceToString(gesture)}' successfully simulated");
+            MpConsole.WriteLine($"Key Gesture '{Mp.Services.KeyConverter.ConvertKeySequenceToString(gesture)}' successfully simulated. Ignored '{Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { physical_downs })}' keys. Only pressed '{Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { sup_downs })}' keys");
             return true;
 
         }
@@ -92,7 +122,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
         private void SimulateKey(KeyCode key, bool isDown) {
-            MpConsole.WriteLine($"SIM {(isDown ? "DOWN" : "UP")}: {key}");
+            //MpConsole.WriteLine($"SIM {(isDown ? "DOWN" : "UP")}: {key}");
             UioHookResult result =
                 isDown ?
                 _eventSimulator.SimulateKeyPress(key) :

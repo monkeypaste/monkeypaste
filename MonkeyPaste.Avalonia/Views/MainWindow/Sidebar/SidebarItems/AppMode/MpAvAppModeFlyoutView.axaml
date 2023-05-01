@@ -8,14 +8,6 @@
              d:DesignWidth="800"
              d:DesignHeight="450"
              x:Class="MonkeyPaste.Avalonia.MpAvAppModeFlyoutView">
-    <!--
-        1. Append
-        1.1 AppendMode
-        1.2 AppendLineMode
-        2. Mouse
-        2.1 AutoCopy
-        2.2 RightClickPaste
-    -->
     <UserControl.Resources>
         <sys:Double x:Key="ButtonSize">50</sys:Double>
     </UserControl.Resources>
@@ -78,80 +70,14 @@
         </Style>
     </UserControl.Styles>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="{Binding Source={StaticResource ButtonSize}, Converter={x:Static local:MpAvDoubleToGridLengthConverter.Instance}}" />
-            <RowDefinition Height="{Binding Source={StaticResource ButtonSize}, Converter={x:Static local:MpAvDoubleToGridLengthConverter.Instance}}" />
-            <RowDefinition Height="{Binding Source={StaticResource ButtonSize}, Converter={x:Static local:MpAvDoubleToGridLengthConverter.Instance}}" />
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="{Binding Source={StaticResource ButtonSize}, Converter={x:Static local:MpAvDoubleToGridLengthConverter.Instance}}" />
             <ColumnDefinition Width="{Binding Source={StaticResource ButtonSize}, Converter={x:Static local:MpAvDoubleToGridLengthConverter.Instance}}" />
         </Grid.ColumnDefinitions>
-        <!--  1  -->
-        <ToggleButton x:Name="AppendBaseRadioButton"
-                      Grid.Row="2"
-                      Grid.Column="0"
-                      IsChecked="False"
-                      Classes="modeRadio baseGroup">
-            <ToolTip.Tip>
-                <local:MpAvToolTipView ToolTipText="Appenders" />
-            </ToolTip.Tip>
-            <Image Source="{Binding Source={StaticResource AppendImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-        </ToggleButton>
 
-        <!--  1.1  -->
-        <ToggleButton x:Name="AppendModeRadioButton"
-                      Grid.Row="1"
-                      Grid.Column="0"
-                      Classes="modeRadio baseGroup"
-                      IsVisible="{Binding #AppendBaseRadioButton.IsChecked}"
-                      IsChecked="{Binding IsAppendMode, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=OneWay}"
-                      Command="{Binding ToggleAppendManualModeCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
-            <ToolTip.Tip>
-                <local:MpAvToolTipView ToolTipText="Append Manual Mode - [add detail here]" />
-            </ToolTip.Tip>
-            <Image Source="{Binding Source={StaticResource AppendRunImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-        </ToggleButton>
-
-
-        <!--  1.2  -->
-
-        <ToggleButton x:Name="AppendLineModeRadioButton"
-                      Grid.Row="0"
-                      Grid.Column="0"
-                      Classes="modeRadio"
-                      IsVisible="{Binding #AppendBaseRadioButton.IsChecked}"
-                      IsChecked="{Binding IsAppendLineMode, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=OneWay}"
-                      Command="{Binding ToggleAppendLineModeCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
-            <ToolTip.Tip>
-                <local:MpAvToolTipView ToolTipText="Append Line Mode - [add detail here]" />
-            </ToolTip.Tip>
-            <Image Source="{Binding Source={StaticResource AppendLineImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-        </ToggleButton>
-
-        <!--  2  -->
-
-        <ToggleButton x:Name="MouseBaseRadioButton"
-                      Grid.Row="2"
-                      Grid.Column="1"
-                      IsChecked="False"
-                      Classes="modeRadio baseGroup">
-            <ToolTip.Tip>
-                <local:MpAvToolTipView ToolTipText="Mouse" />
-            </ToolTip.Tip>
-            <Grid>
-                <Image Source="{Binding Source={StaticResource NoneClickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                <Image IsVisible="{Binding IsAutoCopyMode, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
-                       Source="{Binding Source={StaticResource LeftClickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                <Image IsVisible="{Binding IsRightClickPasteMode, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
-                       Source="{Binding Source={StaticResource RightClickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-            </Grid>
-        </ToggleButton>
-
-        <!--  2.1  -->
+        <!--  AUTO COPY -->
         <ToggleButton x:Name="AutoCopyRadioButton"
-                      Grid.Row="0"
-                      Grid.Column="1"
+                      Grid.Column="0"
                       Classes="modeRadio"
                       IsVisible="{Binding #MouseBaseRadioButton.IsChecked}"
                       IsChecked="{Binding IsAutoCopyMode, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=OneWay}"
@@ -162,11 +88,9 @@
             <Image Source="{Binding Source={StaticResource LeftClickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </ToggleButton>
 
-
-        <!--  2.2  -->
+        <!--  RIGHT CLICK PASTE -->
 
         <ToggleButton x:Name="RightClickPasteModeRadioButton"
-                      Grid.Row="1"
                       Grid.Column="1"
                       Classes="modeRadio"
                       IsVisible="{Binding #MouseBaseRadioButton.IsChecked}"

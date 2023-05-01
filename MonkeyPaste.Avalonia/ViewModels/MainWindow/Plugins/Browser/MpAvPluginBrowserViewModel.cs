@@ -14,8 +14,8 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public enum MpPluginBrowserTabType {
-        Installed,
         Browse,
+        Installed,
         Updates
     }
 

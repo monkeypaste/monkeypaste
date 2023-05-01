@@ -893,7 +893,7 @@ namespace MonkeyPaste.Avalonia {
             });
         public ICommand SelectTabCommand => new MpCommand<object>(
             (args) => {
-                int tab_idx = 0;
+                int tab_idx = (int)MpSettingsTabType.Preferences;
                 if (args is int intArg) {
                     tab_idx = intArg;
                 } else if (args is string strArg) {

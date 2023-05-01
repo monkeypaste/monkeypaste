@@ -14,16 +14,16 @@
                        x:CompileBindings="True"
                        IsVisible="{Binding IsVisible}"
                        x:Class="MonkeyPaste.Avalonia.MpAvSettingsFrameView">
-    <Border BorderThickness="1"
-            CornerRadius="10"
-            BorderBrush="White"
-            Padding="5">
+    <Border Padding="5">
         <StackPanel>
             <Label Classes="h1"
                    Content="{Binding LabelText}" />
             <Border Classes="labelUnderline" />
-            <local:MpAvParameterCollectionView HorizontalAlignment="Stretch"
-                                                  VerticalAlignment="Stretch" />
+            <local:MpAvParameterCollectionView BorderThickness="1"
+                                               CornerRadius="10"
+                                               BorderBrush="White"
+                                               HorizontalAlignment="Stretch"
+                                               VerticalAlignment="Stretch" />
         </StackPanel>
     </Border>
 </local:MpAvUserControl>

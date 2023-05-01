@@ -86,13 +86,10 @@ namespace MonkeyPaste.Common {
             return obj == null ? null : obj.ToString();
         }
         public static string ToFileSystemUriFromPath(this string path) {
-            try {
-                return new Uri(path, UriKind.Absolute).AbsoluteUri;
+            if (Uri.TryCreate(path, UriKind.Absolute, out Uri fp_uri)) {
+                return fp_uri.AbsoluteUri;
             }
-            catch (Exception ex) {
-                MpConsole.WriteTraceLine($"Error converting path '{path}' to uri.", ex);
-                return string.Empty;
-            }
+            return string.Empty;
         }
         public static string ToPlainText(this string text, string sourceFormat = "") {
             sourceFormat = sourceFormat.ToLower();

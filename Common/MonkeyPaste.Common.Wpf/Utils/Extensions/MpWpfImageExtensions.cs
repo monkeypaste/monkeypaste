@@ -76,7 +76,10 @@ namespace MonkeyPaste.Common.Wpf {
         //}
 
         public static BitmapSource ReadImageFromFile(string filePath) {
-            return new BitmapImage(new Uri(filePath));
+            if (Uri.TryCreate(filePath, UriKind.RelativeOrAbsolute, out var fp_uri)) {
+                return new BitmapImage(fp_uri);
+            }
+            return null;
         }
 
         public static BitmapSource Scale(this BitmapSource bmpSrc, Size newScale) {
@@ -388,8 +391,10 @@ namespace MonkeyPaste.Common.Wpf {
             if (imageSource == null) {
                 return null;
             }
+            if (!Uri.TryCreate(imageSource.ToString(), UriKind.RelativeOrAbsolute, out Uri uri)) {
+                return null;
+            }
 
-            Uri uri = new Uri(imageSource.ToString());
             StreamResourceInfo streamInfo = Application.GetResourceStream(uri);
 
             if (streamInfo == null) {

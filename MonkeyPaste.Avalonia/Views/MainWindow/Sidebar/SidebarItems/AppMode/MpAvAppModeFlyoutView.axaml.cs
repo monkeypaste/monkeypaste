@@ -12,13 +12,13 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvAppModeFlyoutView : UserControl {
         public MpAvAppModeFlyoutView() {
             AvaloniaXamlLoader.Load(this);
-            this.AttachedToVisualTree += MpAvAppModeFlyoutView_AttachedToVisualTree;
+            //this.AttachedToVisualTree += MpAvAppModeFlyoutView_AttachedToVisualTree;
 
-            var abrb = this.FindControl<Control>("AppendBaseRadioButton");
-            var mmbb = this.FindControl<Control>("MouseBaseRadioButton");
+            //var abrb = this.FindControl<Control>("AppendBaseRadioButton");
+            //var mmbb = this.FindControl<Control>("MouseBaseRadioButton");
 
-            abrb.PointerReleased += Abrb_PointerReleased;
-            mmbb.PointerReleased += Abrb_PointerReleased;
+            //abrb.PointerReleased += Abrb_PointerReleased;
+            //mmbb.PointerReleased += Abrb_PointerReleased;
         }
 
         private void Abrb_PointerReleased(object sender, global::Avalonia.Input.PointerReleasedEventArgs e) {

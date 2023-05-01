@@ -1115,8 +1115,6 @@ namespace MonkeyPaste.Avalonia {
             }
 
             _gesture.Up(kc);
-            string cur_gesture_str = _gesture.GestureString;
-            var cur_gesture = _gesture.Gesture;//.CloneGesture();
 
             bool delay_reached = true;
             int wait_count = _gesture.DownCount;
@@ -1131,7 +1129,7 @@ namespace MonkeyPaste.Avalonia {
             if (!_gesture.HasMatches) {
                 if (_gesture.IsSuppressed &&
                     _sim.Count == 0) {
-                    SimGestureAsync(cur_gesture_str).FireAndForgetSafeAsync(this); ;
+                    SimGestureAsync(_gesture.GestureString).FireAndForgetSafeAsync(this); ;
                 }
                 if (_gesture.HasGesture()) {
                     _gesture.Reset();
@@ -1145,7 +1143,7 @@ namespace MonkeyPaste.Avalonia {
             // no new downs, execute exact if found
             var exact_match =
                 _matches
-                    .FirstOrDefault(x => x.GlobalKeyList.IsMatch(cur_gesture, true));
+                    .FirstOrDefault(x => x.GlobalKeyList.IsMatch(_gesture.Gesture, true));
 
             bool perform_gesture = exact_match != null;
             if (perform_gesture) {
@@ -1156,7 +1154,7 @@ namespace MonkeyPaste.Avalonia {
             if (!perform_gesture) {
                 if (_gesture.IsSuppressed &&
                     _sim.Count == 0) {
-                    SimGestureAsync(cur_gesture_str).FireAndForgetSafeAsync(this);
+                    SimGestureAsync(_gesture.GestureString).FireAndForgetSafeAsync(this);
                 }
                 if (_gesture.HasGesture()) {
                     _gesture.Reset();

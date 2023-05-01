@@ -1,0 +1,20 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="using:MonkeyPaste.Avalonia">
+    <Styles.Resources>
+        <TransformOperations x:Key="SwitchlessRadioButtonTransformOps">
+            translateX(-15px)
+        </TransformOperations>
+    </Styles.Resources>
+
+    <Style Selector="RadioButton.switchless /template/ Border#RootBorder > Grid > Grid">
+        <Setter Property="IsVisible"
+                Value="False" />
+    </Style>
+
+    <!--<Style Selector="RadioButton.switchless">
+        <Setter Property="RenderTransform"
+                Value="{StaticResource SwitchlessRadioButtonTransformOps}" />
+    </Style>-->
+</Styles>

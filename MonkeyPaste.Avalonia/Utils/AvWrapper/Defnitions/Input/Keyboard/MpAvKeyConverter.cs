@@ -32,7 +32,7 @@ namespace MonkeyPaste.Avalonia {
         public string ConvertKeySequenceToString<T>(IEnumerable<IEnumerable<T>> keyList) {
             var ordered_key_list =
                 keyList
-                .Where(x => x.Any())
+                .Where(x => x != null && x.Any())
                 .Select(x => x.OrderBy(y => GetPriority(y)));
 
             var sb = new StringBuilder();

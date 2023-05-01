@@ -13,22 +13,18 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvSidebarButtonGroupView">
+    <local:MpAvUserControl.Resources>
+        <TransformOperations x:Key="SwitchlessRadioButtonTransformOps">translateX(-15px)</TransformOperations>
+    </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
 
-        <Style Selector="RadioButton.sidebarRadio /template/ Border#RootBorder > Grid > Grid">
+        <!--<Style Selector="RadioButton.sidebarRadio /template/ Border#RootBorder > Grid > Grid">
             <Setter Property="IsVisible"
                     Value="False" />
-        </Style>
-        <!--<Style Selector="RadioButton.sidebarRadio">
-            <Setter Property="RenderTransform">
-                <Setter.Value>
-                    <TranslateTransform X="-15" />
-                </Setter.Value>
-            </Setter>
         </Style>-->
 
         <Style Selector="RadioButton.sidebarRadio">
-          <Setter Property="local:MpAvPointerCommandExtension.IsEnabled"
+            <Setter Property="local:MpAvPointerCommandExtension.IsEnabled"
                     Value="True" />
             <Setter Property="local:MpAvPointerCommandExtension.DragEnterCommand"
                     Value="{Binding SidebarButtonDragEnterCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}" />
@@ -65,7 +61,7 @@
                     Value="{Binding $self.Bounds.Height}" />
         </Style>
 
-        <Style Selector="RadioButton.sidebarRadio PathIcon">
+        <Style Selector="RadioButton.sidebarRadio PathIcon, RadioButton.sidebarRadio Image">
             <Setter Property="HorizontalAlignment"
                     Value="Center" />
             <Setter Property="VerticalAlignment"
@@ -75,13 +71,23 @@
             <Setter Property="Height"
                     Value="24" />
         </Style>
+        <Style Selector="RadioButton.sidebarRadio Image">
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="Width"
+                    Value="30" />
+            <Setter Property="Height"
+                    Value="30" />
+        </Style>
         <Style Selector="RadioButton.sidebarRadio:pointerover /template/ ContentPresenter">
             <Setter Property="Background"
                     Value="Transparent" />
         </Style>
         <Style Selector="RadioButton.sidebarRadio PathIcon">
             <Setter Property="Foreground"
-                    Value="DimGray" />
+                    Value="{DynamicResource DefaultButtonBrush}" />
         </Style>
         <Style Selector="RadioButton.sidebarRadio:pointerover PathIcon">
             <Setter Property="Foreground"
@@ -95,6 +101,20 @@
             <Setter Property="Foreground"
                     Value="{DynamicResource HoverSelectedBorderBrush}" />
         </Style>
+
+        <Style Selector="RadioButton#AppModeToggleButton:unchecked">
+            <Setter Property="local:MpAvImageTintExtension.Tint"
+                    Value="{DynamicResource DefaultButtonBrush}" />
+        </Style>
+        <Style Selector="RadioButton#AppModeToggleButton:pointerover">
+            <Setter Property="local:MpAvImageTintExtension.Tint"
+                    Value="{DynamicResource HoverDefaultBorderBrush}" />
+        </Style>
+
+        <Style Selector="RadioButton#AppModeToggleButton:checked">
+            <Setter Property="local:MpAvImageTintExtension.Tint"
+                    Value="{DynamicResource HoverSelectedBorderBrush}" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Grid x:Name="SidebarButtonGroupContainerGrid"
           Classes.horizontal="{Binding !IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
@@ -106,17 +126,11 @@
         <RadioButton x:Name="TagTreeToggleButton"
                      Grid.Row="0"
                      GroupName="SidebarButtonGroup"
-                     Classes="sidebarRadio"
+                     Classes="sidebarRadio switchless"
+                     RenderTransform="{DynamicResource SwitchlessRadioButtonTransformOps}"
                      Command="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
                      CommandParameter="0"
                      IsChecked="{Binding SelectedItemIdx, Mode=OneWay, ConverterParameter=0, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvIntToBoolConverter.Instance}}">
-
-            <RadioButton.RenderTransform>
-                <TransformGroup>
-                    <RotateTransform />
-                    <TranslateTransform X="-15" />
-                </TransformGroup>
-            </RadioButton.RenderTransform>
             <ToolTip.Tip>
                 <local:MpAvToolTipView ToolTipText="Collection Tree" />
             </ToolTip.Tip>
@@ -125,17 +139,12 @@
         <RadioButton x:Name="ClipboardHandlerToggleButton"
                      Grid.Row="1"
                      GroupName="SidebarButtonGroup"
-                     Classes="sidebarRadio"
+                     Classes="sidebarRadio switchless"
+                     RenderTransform="{DynamicResource SwitchlessRadioButtonTransformOps}"
                      Command="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
                      CommandParameter="1"
                      IsChecked="{Binding SelectedItemIdx, Mode=OneWay, ConverterParameter=1, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvIntToBoolConverter.Instance}}">
 
-            <RadioButton.RenderTransform>
-                <TransformGroup>
-                    <RotateTransform />
-                    <TranslateTransform X="-15" />
-                </TransformGroup>
-            </RadioButton.RenderTransform>
             <ToolTip.Tip>
                 <local:MpAvToolTipView ToolTipText="Clipboard Handlers" />
             </ToolTip.Tip>
@@ -144,17 +153,12 @@
         <RadioButton x:Name="AnalyzerToggleButton"
                      Grid.Row="2"
                      GroupName="SidebarButtonGroup"
-                     Classes="sidebarRadio"
+                     Classes="sidebarRadio switchless"
+                     RenderTransform="{DynamicResource SwitchlessRadioButtonTransformOps}"
                      Command="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
                      CommandParameter="2"
                      IsChecked="{Binding SelectedItemIdx, Mode=OneWay, ConverterParameter=2, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvIntToBoolConverter.Instance}}">
 
-            <RadioButton.RenderTransform>
-                <TransformGroup>
-                    <RotateTransform />
-                    <TranslateTransform X="-15" />
-                </TransformGroup>
-            </RadioButton.RenderTransform>
             <ToolTip.Tip>
                 <local:MpAvToolTipView ToolTipText="Analyze" />
             </ToolTip.Tip>
@@ -163,17 +167,12 @@
         <RadioButton x:Name="ActionsToggleButton"
                      Grid.Row="3"
                      GroupName="SidebarButtonGroup"
-                     Classes="sidebarRadio"
+                     Classes="sidebarRadio switchless"
+                     RenderTransform="{DynamicResource SwitchlessRadioButtonTransformOps}"
                      Command="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
                      CommandParameter="3"
                      IsChecked="{Binding SelectedItemIdx, Mode=OneWay, ConverterParameter=3, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvIntToBoolConverter.Instance}}">
 
-            <RadioButton.RenderTransform>
-                <TransformGroup>
-                    <RotateTransform />
-                    <TranslateTransform X="-15" />
-                </TransformGroup>
-            </RadioButton.RenderTransform>
             <ToolTip.Tip>
                 <local:MpAvToolTipView ToolTipText="Actions" />
             </ToolTip.Tip>
@@ -181,17 +180,13 @@
         </RadioButton>
         <RadioButton x:Name="AppModeToggleButton"
                      Grid.Row="4"
+                     local:MpAvImageTintExtension.IsEnabled="True"
                      GroupName="SidebarButtonGroup"
-                     Classes="sidebarRadio"
+                     Classes="sidebarRadio switchless"
+                     RenderTransform="{DynamicResource SwitchlessRadioButtonTransformOps}"
                      Command="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
                      CommandParameter="4"
                      IsEnabled="{Binding !IsAppPaused}">
-            <RadioButton.RenderTransform>
-                <TransformGroup>
-                    <RotateTransform />
-                    <TranslateTransform X="-15" />
-                </TransformGroup>
-            </RadioButton.RenderTransform>
             <RadioButton.Resources>
                 <SolidColorBrush x:Key="FlyoutPresenterBackground">Transparent</SolidColorBrush>
                 <SolidColorBrush x:Key="FlyoutBorderThemeBrush">Transparent</SolidColorBrush>
@@ -205,29 +200,26 @@
             </ToolTip.Tip>
             <RadioButton.Flyout>
                 <Flyout Placement="RightEdgeAlignedBottom">
-                    <Panel Background="Transparent"
-                           Width="100"
-                           Height="150">
-                        <!--<Panel.RenderTransform>
-                            <TranslateTransform X="20" />
-                        </Panel.RenderTransform>-->
+                    <Panel Width="110"
+                           Height="50"
+                           RenderTransform="translateX(10px)">
 
-                        <local:MpAvAppModeFlyoutView Background="Transparent"
-                                                     HorizontalAlignment="Stretch"
+                        <local:MpAvAppModeFlyoutView HorizontalAlignment="Stretch"
                                                      VerticalAlignment="Stretch" />
                     </Panel>
 
                 </Flyout>
             </RadioButton.Flyout>
-            <!--<Grid>
+            <Grid>
+                <Image Source="{Binding Source={StaticResource NoneClickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                 <Image IsVisible="{Binding IsAutoCopyMode, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                        Source="{Binding Source={StaticResource LeftClickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                 <Image IsVisible="{Binding IsRightClickPasteMode, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                        Source="{Binding Source={StaticResource RightClickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
 
-                <PathIcon Data="{StaticResource MouseSvg}" />
-            </Grid>-->
-            <PathIcon Data="{StaticResource MouseSvg}" />
+                <!--<PathIcon Data="{StaticResource MouseSvg}" />-->
+            </Grid>
+            <!--<PathIcon Data="{StaticResource MouseSvg}" />-->
         </RadioButton>
     </Grid>
 </local:MpAvUserControl>

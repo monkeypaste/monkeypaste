@@ -773,11 +773,7 @@ namespace MonkeyPaste.Avalonia {
         private void SetTextBoxIsVisible(bool isTextBoxVisible) {
             Dispatcher.UIThread.Post(() => {
                 foreach (var c in VisualChildren) {
-                    c.IsVisible = isTextBoxVisible;
-                    //if (c is Control vc) {
-                    //    vc.IsHitTestVisible = false;
-                    //}
-
+                    //c.IsVisible = isTextBoxVisible;
                 }
                 if (isTextBoxVisible) {
                     SetValue(BackgroundProperty, EditableBackground);

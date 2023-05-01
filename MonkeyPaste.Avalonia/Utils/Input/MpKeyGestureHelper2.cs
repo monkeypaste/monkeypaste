@@ -30,6 +30,9 @@ namespace MonkeyPaste.Avalonia {
         public IReadOnlyList<IReadOnlyList<T>> Gesture =>
             _gesture;
 
+        public IReadOnlyList<T> Downs =>
+            _downs;
+
         public IReadOnlyList<IReadOnlyList<T>> PeekGesture =>
             _gesture.Union(new[] { _downs }.ToList()).ToList();
         public string GestureString //{ get; private set; } = string.Empty; 
@@ -37,6 +40,9 @@ namespace MonkeyPaste.Avalonia {
 
         public string PeekGestureString //{ get; private set; } = string.Empty;
         => Mp.Services.KeyConverter.ConvertKeySequenceToString(PeekGesture);
+
+        public string DownString //{ get; private set; } = string.Empty;
+        => Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { _downs });
 
         public int DownCount =>
             _downs.Count;
@@ -75,9 +81,14 @@ namespace MonkeyPaste.Avalonia {
         }
         public void Reset() {
             _gesture.Clear();
-            _downs.Clear();
+            //_downs.Clear();
             HasMatches = false;
             IsSuppressed = false;
+        }
+
+        public void Clear() {
+            Reset();
+            _downs.Clear();
         }
         #endregion
 

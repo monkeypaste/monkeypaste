@@ -46,7 +46,7 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static MpColor ToPortableColor(this IBrush brush) {
-            if (brush is SolidColorBrush scb) {
+            if (brush is ISolidColorBrush scb) {
                 return scb.Color.ToPortableColor();
             }
             // what is it?

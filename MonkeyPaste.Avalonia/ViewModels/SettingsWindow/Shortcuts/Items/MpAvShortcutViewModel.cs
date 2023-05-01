@@ -96,9 +96,9 @@ namespace MonkeyPaste.Avalonia {
             RoutingType != MpRoutingType.Internal &&
             RoutingType != MpRoutingType.None;
 
-        public bool SuppressesKeys =>
-            IsGlobal &&
-            RoutingType != MpRoutingType.Passive;
+        public bool SuppressesKeys => false;
+        //IsGlobal &&
+        //RoutingType != MpRoutingType.Passive;
 
         public bool CanDelete =>
             IsCustom;

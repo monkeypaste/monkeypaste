@@ -210,6 +210,8 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvShortcut.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvTagTile.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvTooltip.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\RadioButton.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\ScrollViewer.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TemplatedControl.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TextBlock.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TextBox.axaml" />
@@ -1122,6 +1124,7 @@
     <AvaloniaResource Include="Themes\Default\Controls\Animations\Defaults.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Animations\Shake.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Dnd\Dnd.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\RadioButton.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ListBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvPagingScrollViewer.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Border.axaml" />
@@ -1139,6 +1142,7 @@
     <AvaloniaResource Include="Themes\Default\Controls\Button.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvPagingScrollBar.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Label.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\ScrollViewer.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\TextBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ToolTip.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\TextBlock.axaml">
