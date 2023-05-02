@@ -19,7 +19,7 @@ namespace MonkeyPaste.Common {
 
         #region Constructors
 
-        public MpKeyGestureHelper() : this(3) { }
+        public MpKeyGestureHelper() : this(1) { }
         public MpKeyGestureHelper(int maxCombos) {
             _MAX_COMBOS = maxCombos;
         }

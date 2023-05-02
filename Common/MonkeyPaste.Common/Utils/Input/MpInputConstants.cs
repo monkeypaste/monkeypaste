@@ -24,7 +24,8 @@ namespace MonkeyPaste.Common {
             new string[] {
                 CONTROL_KEY_LITERAL,
                 META_KEY_LITERAL,
-                ALT_KEY_LITERAL
+                ALT_KEY_LITERAL,
+                SHIFT_KEY_LITERAL
             };
     }
 }

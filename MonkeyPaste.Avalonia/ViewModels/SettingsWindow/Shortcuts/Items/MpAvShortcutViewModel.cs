@@ -96,9 +96,9 @@ namespace MonkeyPaste.Avalonia {
             RoutingType != MpRoutingType.Internal &&
             RoutingType != MpRoutingType.None;
 
-        public bool SuppressesKeys => false;
-        //IsGlobal &&
-        //RoutingType != MpRoutingType.Passive;
+        public bool SuppressesKeys => //false;
+            IsGlobal &&
+            RoutingType != MpRoutingType.Passive;
 
         public bool CanDelete =>
             IsCustom;
@@ -111,7 +111,6 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsNew =>
             ShortcutId == 0;
-
 
         public string ShortcutDisplayName { get; private set; }
 

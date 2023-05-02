@@ -14,9 +14,12 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variable
         private EventSimulator _eventSimulator;
         private int _waitCount = 0;
+
         #endregion
 
         #region Constants
+        private const int _HOLD_DELAY_MS = 0;
+        private const int _RELEASE_DELAY_MS = 0;
         #endregion
 
         #region Statics
@@ -27,78 +30,56 @@ namespace MonkeyPaste.Avalonia {
         #region MpIKeyStrokeSimulator Implementation
         public bool IsSimulating { get; private set; }
 
-        public async Task<bool> SimulateKeyStrokeSequenceAsync(string keystr, int holdDelay = 0, int releaseDelay = 0) {
+        public async Task<bool> SimulateKeyStrokeSequenceAsync(string keystr) {
             var seq = Mp.Services.KeyConverter.ConvertStringToKeySequence<KeyCode>(keystr);
-            bool success = await SimulateKeyStrokeSequenceAsync(seq, null, null, holdDelay, releaseDelay);
+            bool success = await SimulateKeyStrokeSequenceAsync(seq);
             return success;
         }
 
-        public async Task<bool> SimulateKeyStrokeSequenceAsync<T>(IReadOnlyList<IReadOnlyList<T>> gesture, IEnumerable<T> physical_downs = null, IEnumerable<T> sup_downs = null, int holdDelay = 0, int releaseDelay = 0) {
-            //MpDebug.Assert(!IsSimulating, "Only 1 at a time");
-
+        public async Task<bool> SimulateKeyStrokeSequenceAsync<T>(IReadOnlyList<IReadOnlyList<T>> gesture) {
             if (typeof(T) != typeof(KeyCode)) {
                 throw new NotSupportedException("Must be sharphook keycode");
             }
-            if (gesture == null ||
-                !gesture.Any() ||
-                !gesture.First().Any()) {
-                // avoid setting simulate if nothing happens
-                //MpConsole.WriteLine("No gesture to simulate");
+            if (gesture == null) {
                 return true;
             }
-            if (IsSimulating) {
-                int this_sim_id = ++_waitCount;
-                MpConsole.WriteLine($"Sim gesture '{Mp.Services.KeyConverter.ConvertKeySequenceToString(gesture)}' waiting at queue: {this_sim_id}...");
-                while (_waitCount >= this_sim_id) {
-                    if (IsSimulating) {
-                        await Task.Delay(100);
-                    }
-                    if (_waitCount > this_sim_id) {
-                        // not next
-                        await Task.Delay(100);
-                        continue;
-                    }
-                    IsSimulating = true;
-                    _waitCount--;
-                    MpConsole.WriteLine($"Sim gesture '{Mp.Services.KeyConverter.ConvertKeySequenceToString(gesture)}' waiting DONE");
-                }
+            // NOTE retain combo order and key priority order
+            // NOTE2 remove keys that are physically down,
+            // the simulate up will interfere w/ the keyboard state
+
+            var filtered_gesture =
+                gesture
+                    .Where(x => x != null && x.Any())
+                    .OrderBy(x => gesture.IndexOf(x))
+                    .Select(x => x
+                        .Where(y => !Mp.Services.KeyDownHelper.IsDown(y))
+                        .Cast<KeyCode>()
+                        .OrderBy(z => z.GesturePriority())
+                        .ToList())
+                    .ToList();
+
+            if (filtered_gesture == null ||
+                !filtered_gesture.Any() ||
+                !filtered_gesture.First().Any()) {
+                return true;
             }
-            IsSimulating = true;
+            var ignored_keys =
+                filtered_gesture
+                    .SelectMany(x => x)
+                    .Where(x => Mp.Services.KeyDownHelper.IsDown(x))
+                    .Distinct();
 
-            foreach (var combo in gesture) {
-                // DOWN (forward order)
-                for (int i = 0; i < combo.Count; i++) {
-                    if (combo[i] is KeyCode kc) {
-                        if (physical_downs != null &&
-                            physical_downs.Cast<KeyCode>().Contains(kc) &&
-                            (sup_downs == null || (sup_downs != null && !sup_downs.Cast<KeyCode>().Contains(kc)))) {
-                            continue;
-                        }
-                        SimulateKey(kc, true);
-                    } else {
+            string gesture_label = Mp.Services.KeyConverter.ConvertKeySequenceToString(gesture);
+            await WaitAndStartSimulateAsync(gesture_label);
 
-                    }
-                }
-                await Task.Delay(holdDelay);
-
-                // UP (reverse order)
-                for (int i = combo.Count - 1; i >= 0; i--) {
-                    if (combo[i] is KeyCode kc) {
-                        if (physical_downs != null &&
-                            physical_downs.Cast<KeyCode>().Contains(kc)) {
-                            continue;
-                        }
-                        if (sup_downs != null && sup_downs.Cast<KeyCode>().Contains(kc)) {
-                            continue;
-                        }
-                        SimulateKey(kc, false);
-                    }
-                }
-
-                await Task.Delay(releaseDelay);
+            foreach (var combo in filtered_gesture) {
+                combo.ForEach(y => SimulateKey(y, true));
+                await Task.Delay(_HOLD_DELAY_MS);
+                combo.ForEach(y => SimulateKey(y, false));
+                await Task.Delay(_RELEASE_DELAY_MS);
             }
             IsSimulating = false;
-            MpConsole.WriteLine($"Key Gesture '{Mp.Services.KeyConverter.ConvertKeySequenceToString(gesture)}' successfully simulated. Ignored '{Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { physical_downs })}' keys. Only pressed '{Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { sup_downs })}' keys");
+            MpConsole.WriteLine($"Key Gesture '{gesture_label}' successfully simulated. Ignored '{Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { ignored_keys })}' keys.");
             return true;
 
         }
@@ -133,6 +114,29 @@ namespace MonkeyPaste.Avalonia {
                 //return false;
             }
         }
+
+        private async Task WaitAndStartSimulateAsync(string gesture_label) {
+            if (IsSimulating) {
+                int this_sim_id = ++_waitCount;
+                MpConsole.WriteLine($"Sim gesture '{gesture_label}' waiting at queue: {this_sim_id}...");
+                while (_waitCount >= this_sim_id) {
+                    if (IsSimulating) {
+                        await Task.Delay(100);
+                    }
+                    if (_waitCount > this_sim_id) {
+                        // not next
+                        await Task.Delay(100);
+                        continue;
+                    }
+                    IsSimulating = true;
+                    _waitCount--;
+                    MpConsole.WriteLine($"Sim gesture '{gesture_label}' waiting DONE");
+                }
+            }
+            IsSimulating = true;
+        }
+
+
         #endregion
 
         #region Commands

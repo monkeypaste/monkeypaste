@@ -1,13 +1,12 @@
 ﻿using MonkeyPaste.Common;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public interface MpICliTools {
-
-    }
     public interface MpIPlatformWrapper : MpICommonTools {
         Task InitializeAsync();
 
+        MpIDownKeyHelper KeyDownHelper { get; set; }
         MpIShortcutGestureLocator ShortcutGestureLocator { get; set; }
         MpIColorQueryTools ColorQueryTools { get; set; }
         MpIKeyConverterHub KeyConverter { get; set; }

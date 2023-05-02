@@ -5,6 +5,7 @@ using Avalonia.Threading;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using SharpHook.Native;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -123,8 +124,8 @@ namespace MonkeyPaste.Avalonia {
         #region State
 
         public bool IsGlobal =>
-            RoutingTypes[SelectedRoutingTypeIdx] != "Internal" &&
-            RoutingTypes[SelectedRoutingTypeIdx] != "None" &&
+            RoutingTypes[SelectedRoutingTypeIdx] != MpRoutingType.Internal.ToString() &&
+            RoutingTypes[SelectedRoutingTypeIdx] != MpRoutingType.None.ToString() &&
             CanBeGlobal;
         public bool CanBeGlobal { get; set; }
 
@@ -132,11 +133,10 @@ namespace MonkeyPaste.Avalonia {
         public MpShortcutAssignmentType AssignmentType { get; set; }
         public bool IsEmpty =>
             string.IsNullOrEmpty(KeyString);
-
-        public bool IsSequence =>
-            KeyString != null && KeyString.Contains(MpInputConstants.SEQUENCE_SEPARATOR);
         public string WarningString { get; set; }
         public string WarningString2 { get; set; }
+
+        public bool IsValid { get; set; } = false;
         #endregion
 
         #region Appearance
@@ -202,6 +202,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(IsGlobal));
             OnPropertyChanged(nameof(KeyString));
             OnPropertyChanged(nameof(KeyItems));
+            IsValid = Validate();
 
             IsBusy = false;
         }
@@ -215,7 +216,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(KeyItems));
                     OnPropertyChanged(nameof(KeyGroups));
                     OnPropertyChanged(nameof(IsEmpty));
-                    Validate();
+                    IsValid = Validate();
                     break;
                 case nameof(SelectedRoutingTypeIdx):
                     OnPropertyChanged(nameof(IsGlobal));
@@ -255,32 +256,24 @@ namespace MonkeyPaste.Avalonia {
         private bool ValidateCommandShortcut() {
             //iterate over ALL shortcuts
             string assign_keystr = KeyString.ToLower();
-            foreach (var scvm in MpAvShortcutCollectionViewModel.Instance.Items) {
-                if (scvm.ShortcutId == _curShortcutId ||
-                    scvm.KeyList.Count == 0) {
-                    //ignore same, empty or shortcut w/ different key counts
-                    continue;
-                }
-                string cur_keystr = scvm.KeyString.ToLower();
-
-                if (cur_keystr == assign_keystr) {
-                    DuplicatedShortcutViewModel = scvm;
-                    WarningString = "This combination conflicts with '" + scvm.ShortcutDisplayName + "' which will be cleared if saved";
-                    return false;
-                } else if (IsSequence && assign_keystr.StartsWith(cur_keystr)) {
-                    WarningString = "This sequence starts with '" + scvm.ShortcutDisplayName + "' which will still occur when executing this sequence";
-                    // NOTE don't return here to continue checking for dups
-                }
+            DuplicatedShortcutViewModel =
+                MpAvShortcutCollectionViewModel.Instance.Items
+                .FirstOrDefault(x =>
+                    x.ShortcutId != _curShortcutId && x.KeyList.Count > 0 && assign_keystr == x.KeyString);
+            if (DuplicatedShortcutViewModel != null) {
+                WarningString = $"This combination conflicts with '{DuplicatedShortcutViewModel.ShortcutDisplayName}' which will be cleared if saved";
             }
-            if (!string.IsNullOrEmpty(assign_keystr) &&
-                IsGlobal) {
-                bool has_mods = MpInputConstants.MOD_LITERALS.Any(x => assign_keystr.Contains(x.ToLower()));
-                if (!has_mods) {
-                    WarningString2 = "Warning! Confirm at your own risk, this shortcut has no modifier keys and may interfere with standard input.";
-                }
 
+            var gesture = Mp.Services.KeyConverter.ConvertStringToKeySequence<KeyCode>(assign_keystr).FirstOrDefault();
+            if (!gesture.Any()) {
+                return true;
             }
-            return true;
+
+            int input_count = gesture.Where(x => !x.IsModKey()).Count();
+            if (input_count != 1) {
+                WarningString2 = $"Shortcut must contain ONE and only ONE input key. (Any key that is not {string.Join(",", MpInputConstants.MOD_LITERALS)})";
+            }
+            return string.IsNullOrEmpty(WarningString2);
         }
 
         private bool ValidateAppPasteShortcut() {
@@ -335,6 +328,8 @@ namespace MonkeyPaste.Avalonia {
                     w.DialogResult = true;
                     w.Close();
                 }
+            }, (args) => {
+                return IsValid;
             });
 
         public ICommand CancelCommand => new MpAsyncCommand<object>(
@@ -356,7 +351,7 @@ namespace MonkeyPaste.Avalonia {
                 _gestureHelper.ClearCurrentGesture();
                 KeyString = String.Empty;
                 OnPropertyChanged(nameof(KeyItems));
-                Validate();
+                IsValid = Validate();
                 OnPropertyChanged(nameof(KeyString));
             });
         public ICommand AddKeyDownCommand => new MpCommand<string>(

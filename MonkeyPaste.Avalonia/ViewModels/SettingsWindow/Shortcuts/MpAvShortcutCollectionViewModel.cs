@@ -26,6 +26,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvShortcutCollectionViewModel :
         MpAvSelectorViewModelBase<object, MpAvShortcutViewModel>,
         MpIGlobalInputListener,
+        MpIDownKeyHelper,
         MpIShortcutGestureLocator,
         MpIDndUserCancelNotifier {
 
@@ -40,12 +41,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Variables
 
-        private MpKeyGestureHelper _keyboardGestureHelper;
-
-        private List<string> _suppressedKeys = new List<string>();
-
         private SimpleGlobalHook _hook;
-
         private CancellationTokenSource _simInputCts;
 
         #endregion
@@ -59,7 +55,18 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
-        #region  Implementation
+        #region MpIDownKeyHelper Implementation
+
+        bool MpIDownKeyHelper.IsDown(object key) {
+            if (key is KeyCode kc) {
+                return _downs.Contains(kc.GetUnifiedKey());
+            }
+            return false;
+        }
+
+        #endregion
+
+        #region MpIShortcutGestureLocator Implementation
 
         string MpIShortcutGestureLocator.LocateByType(MpShortcutType sct) {
             if (Items.FirstOrDefault(x => x.ShortcutType == sct) is MpAvShortcutViewModel scvm) {
@@ -620,9 +627,9 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case MpMessageType.AppWindowActivated:
                 case MpMessageType.AppWindowDeactivated:
-                    if (!string.IsNullOrEmpty(_gesture.PeekGestureString)) {
-                        MpConsole.WriteLine($"App window activation changed w/ peek gesture '{_gesture.PeekGestureString}' does it need to be cleared?");
-                    }
+                    //if (!string.IsNullOrEmpty(_gesture.PeekGestureString)) {
+                    //    MpConsole.WriteLine($"App window activation changed w/ peek gesture '{_gesture.PeekGestureString}' does it need to be cleared?");
+                    //}
                     break;
             }
         }
@@ -1014,262 +1021,59 @@ namespace MonkeyPaste.Avalonia {
 
         #region Gesture Handling
 
-        private async Task<bool> PerformMatchedShortcutAsync(MpAvShortcutViewModel svm) {
-            if (svm == null) {
-                return false;
-            }
-            await Task.Delay(1);
-
-            bool can_perform = Dispatcher.UIThread.Invoke(() => {
-                return svm.PerformShortcutCommand.CanExecute(null);
-            });
-            MpConsole.WriteLine($"Shorcut Gesture '{svm.KeyString}' matched for shortcut '{svm.ShortcutType}' {(can_perform ? "CAN" : "CANNOT")} execute");
-            if (!can_perform) {
-                return false;
-            }
-
-            //if (//svm.RoutingType == MpRoutingType.Internal ||
-            //    svm.RoutingType == MpRoutingType.Bubble) {
-            //    await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(svm.KeyString);
-            //}
-            Dispatcher.UIThread.Post(() => svm.PerformShortcutCommand.Execute(null));
-            //if (svm.RoutingType == MpRoutingType.Tunnel) {
-            //    await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(svm.KeyString);
-            //}
-            return true;
-        }
-
-        private async Task ClearKeyboardBufferAsync() {
-            //when shortcut can't execute pass gesture and clear buffer
-            foreach (var sup_key_str in _suppressedKeys) {
-                await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(sup_key_str);
-            }
-            _suppressedKeys.Clear();
-        }
-
-
-        private MpKeyGestureHelper2<KeyCode> _gesture = new MpKeyGestureHelper2<KeyCode>("Cur");
-        private List<List<KeyCode>> _sim = new List<List<KeyCode>>();
-        private IEnumerable<MpAvShortcutViewModel> _matches;
-        //private MpKeyGestureHelper2<KeyCode> _suppress = new MpKeyGestureHelper2<KeyCode>("Supp");
-        //private string _last_up_gesture_str;
-        //private int _wait_count = 0;
+        private MpKeyGestureHelper _keyboardGestureHelper;
+        private List<KeyCode> _downs = new List<KeyCode>();
+        private MpAvShortcutViewModel _exact_match;
 
         private void HandleGestureRouting_Down(string keyLiteral, object down_e) {
             var sharp_down = down_e as KeyboardHookEventArgs;
-            if (sharp_down == null) {
-                return;
-            }
             KeyCode kc = sharp_down.Data.KeyCode;
-            if (_sim.Any() && _sim.First().Any(x => x.IsSameKey(kc, true))) {
-                // ignore sim down, remove in up
-                MpConsole.WriteLine($"Sim Key '{keyLiteral}' down ignored");
+            if (_downs.Contains(kc.GetUnifiedKey())) {
+                // ignore repeats
                 return;
-            }
-
-            bool new_down = _gesture.Down(kc);
-            string down_gesture = _gesture.PeekGestureString;
-            var peek_gesture = _gesture.PeekGesture;
-
-            _matches =
-                AvailableItems
-                .Where(x => x.GlobalKeyList.StartsWith(peek_gesture, true));
-
-            if (_matches.Any()) {
-                _gesture.HasMatches = true;
             } else {
-                if (_gesture.HasMatches) {
-                    MpConsole.WriteLine($"Gesture '{_gesture.GestureString}' invalidated by '{keyLiteral}'. Simulating: {(_gesture.IsSuppressed)}");
-                    if (_gesture.IsSuppressed) {
-                        // when already suppressing, suppress invalidating key too
-                        sharp_down.SuppressEvent = true;
-                    }
-                    _gesture.HasMatches = false;
-                }
+                _downs.Add(kc.GetUnifiedKey());
+            }
+
+            _keyboardGestureHelper.AddKeyDown(keyLiteral);
+            string down_gesture = _keyboardGestureHelper.GetCurrentGesture();
+            _exact_match =
+                AvailableItems
+                .FirstOrDefault(x => x.KeyString == down_gesture);
+
+            if (_exact_match == null) {
                 return;
             }
-
-            _gesture.IsSuppressed = _matches.Any(x => x.SuppressesKeys);
-
-            if (_gesture.IsSuppressed) {
-                //_suppress.Down(kc);
-                sharp_down.SuppressEvent = true;
-            }
-
-            if (new_down) {
-                MpConsole.WriteLine($"DOWN GESTURE: '{down_gesture}' DOWN COUNT: {_gesture.DownCount}");
-            }
+            // only suppress input key
+            sharp_down.SuppressEvent = _exact_match.SuppressesKeys && !kc.IsModKey();
+            MpConsole.WriteLine($"Recognized GESTURE: '{down_gesture}' SHORTCUT: {_exact_match.ShortcutType}");
         }
 
         private async Task HandleGestureRouting_Up(string keyLiteral, object up_e) {
             var sharp_up = up_e as KeyboardHookEventArgs;
-            if (sharp_up == null) {
-                return;
-            }
             KeyCode kc = sharp_up.Data.KeyCode;
-            if (_sim.Any() && _sim.First().Any(x => x.IsSameKey(kc, true))) {
-                // remove sim and ignore
-                _sim.First().Remove(kc.GetUnifiedKey());
-                MpConsole.WriteLine($"Sim Key '{keyLiteral}' removed. Up ignored");
+            _downs.Remove(kc);
+            _keyboardGestureHelper.ClearCurrentGesture();
+            if (_exact_match == null) {
+                return;
+            }
+            if (kc.IsModKey()) {
+                // only invoke if up is input key
+                _exact_match = null;
                 return;
             }
 
-            _gesture.Up(kc);
-
-            bool delay_reached = true;
-            int wait_count = _gesture.DownCount;
-            var sw = Stopwatch.StartNew();
-            while (sw.ElapsedMilliseconds <= GlobalShortcutDelay) {
-                if (_gesture.DownCount != wait_count) {
-                    delay_reached = false;
-                    break;
-                }
-                await Task.Delay(20);
-            }
-            if (!_gesture.HasMatches) {
-                if (_gesture.IsSuppressed &&
-                    _sim.Count == 0) {
-                    SimGestureAsync(_gesture.GestureString).FireAndForgetSafeAsync(this); ;
-                }
-                if (_gesture.HasGesture()) {
-                    _gesture.Reset();
-                }
-                return;
-            }
-            if (!delay_reached) {
-                return;
-            }
-
-            // no new downs, execute exact if found
-            var exact_match =
-                _matches
-                    .FirstOrDefault(x => x.GlobalKeyList.IsMatch(_gesture.Gesture, true));
-
-            bool perform_gesture = exact_match != null;
-            if (perform_gesture) {
-                perform_gesture = Dispatcher.UIThread.Invoke(() => {
-                    return exact_match.PerformShortcutCommand.CanExecute(null);
-                });
-            }
-            if (!perform_gesture) {
-                if (_gesture.IsSuppressed &&
-                    _sim.Count == 0) {
-                    SimGestureAsync(_gesture.GestureString).FireAndForgetSafeAsync(this);
-                }
-                if (_gesture.HasGesture()) {
-                    _gesture.Reset();
-                }
-                return;
-            }
-
-            _gesture.Reset();
-            if (exact_match.RoutingType == MpRoutingType.Bubble) {
-                await SimGestureAsync(exact_match.KeyString);
+            if (_exact_match.RoutingType == MpRoutingType.Bubble) {
+                await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(new[] { new[] { kc }.ToList() }.ToList());
             }
             Dispatcher.UIThread.Invoke(() => {
-                exact_match.PerformShortcutCommand.Execute(null);
+                _exact_match.PerformShortcutCommand.Execute(null);
             });
-            if (exact_match.RoutingType == MpRoutingType.Tunnel) {
-                await SimGestureAsync(exact_match.KeyString);
+            if (_exact_match.RoutingType == MpRoutingType.Tunnel) {
+                await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(new[] { new[] { kc }.ToList() }.ToList());
             }
         }
 
-        private async Task SimGestureAsync(string simGesture) {
-            MpDebug.Assert(_sim.Count == 0, $"Sim gesture should only be set once. Attempting to again...");
-
-            // NOTE need to seperate what goes to simulator or simulator gets collection modified as input is simulated
-            var output_gesture =
-                Mp.Services.KeyConverter
-                .ConvertStringToKeySequence<KeyCode>(simGesture);
-            _sim = output_gesture.CloneGesture();
-
-            await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(output_gesture);
-        }
-
-        //private void HandleGestureRouting_Up_old(string keyLiteral, object up_e) {
-        //    var sharp_up = up_e as KeyboardHookEventArgs;
-        //    if (sharp_up == null) {
-        //        return;
-        //    }
-        //    KeyCode kc = sharp_up.Data.KeyCode;
-        //    _last_up_gesture_str = _gesture.GestureString;
-
-        //    MpConsole.WriteLine("Gesture: " + _last_up_gesture_str);
-        //    _gesture.Up(kc);
-
-
-        //    //var exact_match =
-        //    //    Items
-        //    //    .FirstOrDefault(x => x.KeyString == _last_up_gesture_str);
-
-
-        //    //if (_gesture.DownCount == 0) {
-        //    //    ResetGesture(false);
-        //    //}
-        //    //PerformMatchedShortcutAsync(exact_match).FireAndForgetSafeAsync(this);
-        //    //return;
-
-        //    var possible_matches =
-        //        Items
-        //        .Where(x => x.KeyString.StartsWith(_last_up_gesture_str));
-
-        //    if (possible_matches.Any()) {
-        //        _ = Task.Run(async () => {
-        //            _wait_count++;
-        //            while (true) {
-        //                string wait_gesture = _last_up_gesture_str;//.Clone().ToString();
-        //                // wait to see if new input
-        //                await Task.Delay(_MAX_WAIT_TO_EXECUTE_SHORTCUT_MS);
-        //                if (wait_gesture == _last_up_gesture_str) {
-        //                    // no new input
-        //                    var exact_match =
-        //                        possible_matches
-        //                            .FirstOrDefault(x => x.KeyString == _last_up_gesture_str);
-        //                    if (exact_match == null) {
-        //                        // if (_gesture.DownCount == 0) {
-        //                        ResetGesture(true);
-        //                        //    return;
-        //                        //} else {
-        //                        //    continue;
-        //                        //}
-        //                    } else {
-        //                        bool success = await PerformMatchedShortcutAsync(exact_match);
-        //                        if (success) {
-        //                            _suppress.Reset();
-        //                        } else {
-        //                            Mp.Services.KeyStrokeSimulator
-        //                                .SimulateKeyStrokeSequenceAsync(_suppress.GestureString).FireAndForgetSafeAsync(this);
-        //                            _suppress.Reset();
-        //                        }
-        //                    }
-        //                    return;
-        //                } else {
-        //                    var new_matches =
-        //                        Items
-        //                        .Where(x => x.KeyString.StartsWith(_last_up_gesture_str));
-        //                    if (new_matches.Any()) {
-        //                        continue;
-        //                    }
-        //                    ResetGesture(true);
-        //                    return;
-        //                }
-        //            }
-        //        });
-
-        //    } else {
-        //        ResetGesture(true);
-        //    }
-        //}
-
-        //private void ResetGesture(bool simulate) {
-        //    _last_up_gesture_str = string.Empty;
-        //    _gesture.Reset();
-        //    if (simulate) {
-        //        Mp.Services.KeyStrokeSimulator
-        //            .SimulateKeyStrokeSequenceAsync(_suppress.GestureString).FireAndForgetSafeAsync(this);
-        //    }
-        //    _suppress.Reset();
-        //}
         #endregion
 
         #endregion

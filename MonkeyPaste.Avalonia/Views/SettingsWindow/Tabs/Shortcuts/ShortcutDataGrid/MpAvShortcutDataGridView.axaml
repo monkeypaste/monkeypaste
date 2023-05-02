@@ -87,34 +87,22 @@
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <!--<Grid HorizontalAlignment="Center">
-                                    <ComboBox HorizontalAlignment="Center"
-                                              IsVisible="{Binding CanBeGlobalShortcut}"
-                                              SelectedIndex="{Binding SelectedRoutingTypeIdx}"
-                                              Foreground="Black"
-                                              ItemsSource="{Binding RoutingTypes}">
-                                        <ComboBox.Styles>
-                                            <Style Selector="ComboBoxItem:nth-child(1)">
-                                                <Setter Property="IsVisible"
-                                                        Value="False" />
-                                            </Style>
-                                        </ComboBox.Styles>
-                                -->
-                                <!--<ComboBoxItem IsVisible="False">
-                                            None
-                                        </ComboBoxItem>
-                                        <ComboBoxItem>Internal</ComboBoxItem>
-                                        <ComboBoxItem>Bubble</ComboBoxItem>
-                                        <ComboBoxItem>Tunnel</ComboBoxItem>
-                                        <ComboBoxItem>Override</ComboBoxItem>-->
-                                <!--
-                                    </ComboBox>-->
-
-                                <TextBlock Text="{Binding RoutingType}"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"
-                                           FontWeight="SemiBold" />
-                                <!--</Grid>-->
+                                <Grid Classes="marqueeContainer"
+                                      HorizontalAlignment="Center">
+                                    <local:MpAvMarqueeTextBox EditOnFocus="False"
+                                                              DropShadowBrush="Transparent"
+                                                              ReadOnlyForeground="Blue"
+                                                              HorizontalAlignment="Center"
+                                                              TextAlignment="Center"
+                                                              FontWeight="SemiBold"
+                                                              MinWidth="80"
+                                                              HoverBrush="Red"
+                                                              NavigateUriCommand="{Binding ShowAssignShortcutDialogCommand, Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}"
+                                                              NavigateUriCommandParameter="{Binding}"
+                                                              NavigateUriRequiredKeyString=""
+                                                              SelectViewModelOnFocus="False"
+                                                              Text="{Binding RoutingType}" />
+                                </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
