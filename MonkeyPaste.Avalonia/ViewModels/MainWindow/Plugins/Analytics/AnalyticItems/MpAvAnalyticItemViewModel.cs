@@ -626,6 +626,15 @@ namespace MonkeyPaste.Avalonia {
                         }
                     }
                 }
+                MpAvClipTileViewModel source_ctvm = null;
+                if (sourceCopyItem != null) {
+                    source_ctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.CopyItemId == sourceCopyItem.Id);
+                    if (source_ctvm != null) {
+                        source_ctvm.IsBusy = true;
+                    }
+                }
+
+
 
                 MpPluginTransactionBase result = await MpPluginTransactor.PerformTransactionAsync(
                                            PluginFormat,
@@ -653,27 +662,17 @@ namespace MonkeyPaste.Avalonia {
                     result.Response,
                     retryAnalyzerFunc);
 
-                // handle errors
-                //if (!string.IsNullOrEmpty(result.TransactionErrorMessage)) {
-                //    if (!string.IsNullOrEmpty(result.Response.retryMessage)) {
-                //        MpConsole.WriteTraceLine("Retrying " + result.Response.retryMessage);
-                //        ExecuteAnalysisCommand.Execute(args);
-                //        return;
-                //    } else if (!string.IsNullOrEmpty(result.Response.errorMessage)) {
-                //        CurrentExecuteArgs = null;
-                //        SelectedItem.IsExecuting = false;
-                //        OnAnalysisCompleted?.Invoke(SelectedItem, null);
-                //        IsBusy = false;
-                //        return;
-                //    } else {
-                //        throw new Exception("Unhandled transaction response: " + result.TransactionErrorMessage);
-                //    }
-                //}
-
                 if (result is MpAnalyzerTransaction) {
                     LastTransaction = result as MpAnalyzerTransaction;
                     OnAnalysisCompleted?.Invoke(SelectedItem, LastTransaction.ResponseContent);
-
+                }
+                if (source_ctvm != null) {
+                    source_ctvm.IsBusy = false;
+                }
+                if (LastTransaction.ResponseContent is MpCopyItem rci) {
+                    rci.WasDupOnCreate = rci.Id == sourceCopyItem.Id;
+                    MpAvClipTrayViewModel.Instance
+                        .AddUpdateOrAppendCopyItemAsync(rci).FireAndForgetSafeAsync(this);
                 }
 
                 CurrentExecuteArgs = null;

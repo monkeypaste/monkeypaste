@@ -2,6 +2,7 @@
 using Avalonia.Controls.Shapes;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
+using Org.BouncyCastle.Crypto.Engines;
 using System;
 using System.Collections.Generic;
 using System.IO.Compression;
@@ -30,20 +31,9 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpISelectableViewModel Implementation
-        public bool IsSelected {
-            get {
-                if (Parent == null) {
-                    return false;
-                }
-                return Parent.SelectedItem == this;
-            }
-            //set {
-            //    if (value && Parent != null && IsSelected != value) {
-            //        Parent.SelectedItem = this;
-            //        OnPropertyChanged(nameof(IsSelected));
-            //    }
-            //}
-        }
+        public bool IsSelected =>
+
+            Parent == null ? false : Parent.SelectedItem == this;
         public DateTime LastSelectedDateTime { get; set; }
         #endregion
 
@@ -84,12 +74,17 @@ namespace MonkeyPaste.Avalonia {
         public bool IsInstalled =>
             LoadedPluginRef != null;
 
-        public bool CanUpdate =>
-            IsInstalled &&
-            PluginVersion != LoadedPluginRef.version &&
-            new[] { PluginVersion, LoadedPluginRef.version }
-                .Order()
-                .FirstOrDefault() == PluginVersion;
+        public bool CanUpdate {
+            get {
+                if (!IsInstalled ||
+                    PluginVersion == LoadedPluginRef.version) {
+                    return false;
+                }
+                var temp = new[] { PluginVersion, LoadedPluginRef.version }.OrderDescending();
+                return temp.FirstOrDefault() == PluginVersion;
+            }
+        }
+
 
         #endregion
 
@@ -293,6 +288,7 @@ namespace MonkeyPaste.Avalonia {
             var read_me_bytes = await MpFileIo.ReadBytesFromUriAsync(PluginReadMeUri, PluginRootDirectory);
             ReadMeMarkDownText = read_me_bytes.ToDecodedString();
 
+            OnPropertyChanged(nameof(ToggleInstallText));
             IsBusy = was_busy;
         }
         private async Task CreateRootDependencyViewModelAsync() {
@@ -331,12 +327,15 @@ namespace MonkeyPaste.Avalonia {
         #region Commands
         public ICommand InstallPluginCommand => new MpAsyncCommand(
             async () => {
+                IsBusy = true;
+
                 await MpAvAnalyticItemCollectionViewModel.Instance
                     .InstallAnalyzerCommand.ExecuteAsync(PackageUrl);
 
+                IsBusy = false;
                 OnPropertyChanged(nameof(LoadedPluginRef));
                 OnPropertyChanged(nameof(IsInstalled));
-                Parent.PerformFilterCommand.Execute(null);
+
             }, () => {
                 return !IsInstalled;
             });
@@ -353,22 +352,28 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
 
-                MpAvAnalyticItemCollectionViewModel.Instance
-                    .UninstallAnalyzerCommand.Execute(PluginGuid);
+                IsBusy = true;
+                await MpAvAnalyticItemCollectionViewModel.Instance
+                    .UninstallAnalyzerCommand.ExecuteAsync(PluginGuid);
 
-                while (MpAvAnalyticItemCollectionViewModel.Instance.IsBusy) {
-                    await Task.Delay(100);
-                }
                 // refresh list to remove this plugin
                 Parent.PerformFilterCommand.Execute(null);
 
+                IsBusy = false;
             }, () => {
                 return IsInstalled;
             });
 
-        public ICommand UpdatePluginCommand => new MpCommand(
-            () => {
+        public ICommand UpdatePluginCommand => new MpAsyncCommand(
+            async () => {
+                IsBusy = true;
 
+                await MpAvAnalyticItemCollectionViewModel.Instance
+                        .UpdatePluginCommand.ExecuteAsync(new object[] { PluginGuid, PackageUrl });
+
+
+                IsBusy = false;
+                OnPropertyChanged(nameof(CanUpdate));
             }, () => {
                 return CanUpdate;
             });

@@ -2535,7 +2535,7 @@ namespace MonkeyPaste.Avalonia {
             IsAddingClipboardItem = false;
         }
 
-        private async Task AddUpdateOrAppendCopyItemAsync(MpCopyItem ci, int force_pin_idx = 0) {
+        public async Task AddUpdateOrAppendCopyItemAsync(MpCopyItem ci, int force_pin_idx = 0) {
             if (ci == null) {
                 MpConsole.WriteLine("Could not build copyitem, cannot add");
                 OnCopyItemAdd?.Invoke(this, null);
@@ -3583,21 +3583,10 @@ namespace MonkeyPaste.Avalonia {
                     MpAvAnalyticItemCollectionViewModel.Instance
                     .Items.FirstOrDefault(x => x.PluginGuid == preset.PluginGuid);
                 int selected_ciid = SelectedItem.CopyItemId;
-
-                EventHandler<MpCopyItem> analysisCompleteHandler = null;
-                analysisCompleteHandler = (s, e) => {
-                    analyticItemVm.OnAnalysisCompleted -= analysisCompleteHandler;
-                    AllItems.FirstOrDefault(x => x.CopyItemId == selected_ciid).IsBusy = false;
-
-                    AddUpdateOrAppendCopyItemAsync(e).FireAndForgetSafeAsync();
-                };
-
                 var presetVm = analyticItemVm.Items.FirstOrDefault(x => x.Preset.Id == preset.Id);
 
                 analyticItemVm.SelectPresetCommand.Execute(presetVm);
                 if (analyticItemVm.ExecuteAnalysisCommand.CanExecute(null)) {
-                    AllItems.FirstOrDefault(x => x.CopyItemId == selected_ciid).IsBusy = true;
-                    analyticItemVm.OnAnalysisCompleted += analysisCompleteHandler;
                     analyticItemVm.ExecuteAnalysisCommand.Execute(null);
                 }
             });

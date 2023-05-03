@@ -150,7 +150,7 @@
                             <TextBlock x:Name="TagCountTextBlock"
                                        Background="Transparent"
                                        VerticalAlignment="Stretch"
-                                       HorizontalAlignment="Stretch"
+                                       HorizontalAlignment="Center"
                                        TextAlignment="Center"
                                        Text="{Binding TagClipCount, Converter={x:Static local:MpAvNullableToStringConverter.Instance}}"
                                        Foreground="{Binding $parent[Border].BorderBrush}">

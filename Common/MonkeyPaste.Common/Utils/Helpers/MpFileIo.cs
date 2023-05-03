@@ -427,7 +427,7 @@ namespace MonkeyPaste.Common {
                 MpConsole.WriteTraceLine(@"Cannot read bytes, bad url: " + uri + " baseDir: " + baseDir);
                 return null;
             }
-            var bytes = await uri.ReadUriBytesAsync();
+            var bytes = await uri.ReadUriBytesAsync(timeoutMs);
             return bytes;
         }
 

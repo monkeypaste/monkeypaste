@@ -24,6 +24,8 @@
                     Value="Black" />
             <Setter Property="HorizontalAlignment"
                     Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Stretch" />
         </Style>
         <Style Selector="TextBlock.detailLabel">
             <Setter Property="FontWeight"
@@ -72,12 +74,13 @@
     </local:MpAvUserControl.Styles>
     <Grid x:Name="PluginRootContainer"
           RowDefinitions="Auto,Auto,*"
-          ColumnDefinitions="0.5*,5,0.5*"
+          ColumnDefinitions="0.5*,1,0.5*"
           Margin="10">
 
         <!--  TABS  -->
 
-        <TabStrip Grid.Row="0"
+        <TabStrip x:Name="PluginTabStrip"
+                  Grid.Row="0"
                   Grid.ColumnSpan="3"
                   ItemsSource="{Binding Tabs}"
                   SelectedIndex="{Binding SelectedTabIdx, Mode=TwoWay}"
@@ -157,19 +160,17 @@
 
         <!--  PLUGIN LIST  -->
         <ListBox x:Name="PluginSelectorListBox"
-                 Margin="5"
+                 Margin="5,5,0,5"
                  BorderThickness="1"
                  BorderBrush="Black"
                  Grid.Row="2"
                  Grid.Column="0"
-                 SelectionMode="Single"
-                 AutoScrollToSelectedItem="True"
-                 IsVisible="{Binding !IsVisible, ElementName=SelectorBusyContainer}"
                  ItemsSource="{Binding Items}"
-                 SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+                 Selection="{Binding Selection}">
             <ListBox.ItemTemplate>
                 <DataTemplate x:DataType="local:MpAvPluginItemViewModel">
                     <Grid x:Name="PluginBrowserItemContainer"
+                          HorizontalAlignment="Stretch"
                           RowDefinitions="30,60"
                           ColumnDefinitions="50,*">
                         <!--  PLUGIN ICON  -->
@@ -201,6 +202,11 @@
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
         </ListBox>
 
         <!--  BROWSE BUSY OVERLAY  -->
@@ -213,12 +219,34 @@
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"
                                    IsVisible="{Binding IsBusy}" />
+        <!--  EMPTY LIST OVERLAY  -->
+        <TextBlock x:Name="EmptPluginListTextBlock"
+                   Grid.Row="2"
+                   Grid.Column="0"
+                   IsVisible="{Binding IsBusy}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   TextAlignment="Center"
+                   TextWrapping="Wrap"
+                   FontSize="24"
+                   Text="No Results Available"
+                   Classes="disabled">
+            <TextBlock.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="!IsBusy" />
+                    <Binding Path="Items"
+                             Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}"
+                             ConverterParameter="flip" />
+                </MultiBinding>
+            </TextBlock.IsVisible>
+        </TextBlock>
 
         <!--  SELECTED PLUGIN VIEW  -->
 
         <Border x:Name="SelectedPluginOuterContainer"
                 Grid.Row="2"
                 Grid.Column="2"
+                IsVisible="{Binding SelectedItem, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                 Margin="10,3">
             <Border.IsVisible>
                 <MultiBinding Converter="{x:Static BoolConverters.And}">
@@ -259,17 +287,37 @@
                 <Button x:Name="ToggleInstallSelectedPluginButton"
                         Grid.Row="1"
                         Classes="defaultButton textOnlyButton manageButton"
-                        Content="{Binding ToggleInstallText}"
-                        Command="{Binding ToggleIsPluginInstalledCommand}" />
+                        Command="{Binding ToggleIsPluginInstalledCommand}">
+                    <Grid>
+
+                        <TextBlock IsVisible="{Binding !IsBusy}"
+                                   Text="{Binding ToggleInstallText}" />
+                        <local:MpAvBusySpinnerView Width="15"
+                                                   Height="15"
+                                                   IsVisible="{Binding IsBusy}"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center" />
+                    </Grid>
+                </Button>
 
                 <!--  UPDATE BUTTON  -->
                 <Button x:Name="UpdateSelectedPluginButton"
                         Grid.Row="2"
                         Margin="0,10,0,0"
                         Classes="defaultButton textOnlyButton manageButton"
-                        Content="Update"
                         IsVisible="{Binding IsInstalled}"
-                        Command="{Binding UpdatePluginCommand}" />
+                        Command="{Binding UpdatePluginCommand}">
+                    <Grid>
+
+                        <TextBlock IsVisible="{Binding !IsBusy}"
+                                   Text="Update" />
+                        <local:MpAvBusySpinnerView Width="15"
+                                                   Height="15"
+                                                   IsVisible="{Binding IsBusy}"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center" />
+                    </Grid>
+                </Button>
 
                 <!--  DESCRIPTION  -->
                 <TextBlock Grid.Row="3"
@@ -359,7 +407,8 @@
                 <!--  DEPENDENCIES  -->
 
                 <TreeView Grid.Row="12"
-                          Grid.ColumnSpan="2">
+                          Grid.ColumnSpan="2"
+                          IsVisible="{Binding RootDependencyViewModel, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
                     <TreeView.ItemTemplate>
                         <TreeDataTemplate x:DataType="local:MpAvPluginDependencyViewModel"
                                           ItemsSource="{Binding Items}">
@@ -401,6 +450,8 @@
         <GridSplitter x:Name="ListDetailSplitter"
                       Grid.Row="2"
                       Grid.Column="1"
+                      Width="1"
+                      Background="Transparent"
                       HorizontalAlignment="Stretch"
                       Classes="vertical" />
 

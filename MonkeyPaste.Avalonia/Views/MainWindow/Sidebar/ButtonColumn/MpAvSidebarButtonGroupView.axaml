@@ -102,7 +102,7 @@
                     Value="{DynamicResource HoverSelectedBorderBrush}" />
         </Style>
 
-        <Style Selector="RadioButton#AppModeToggleButton:unchecked">
+        <Style Selector="RadioButton#AppModeToggleButton, RadioButton#AppModeToggleButton:unchecked">
             <Setter Property="local:MpAvImageTintExtension.Tint"
                     Value="{DynamicResource DefaultButtonBrush}" />
         </Style>

@@ -102,12 +102,39 @@ namespace MonkeyPaste {
             return true;
         }
 
+        public static string CreatePluginBackup(string guid, out string original_dir) {
+            original_dir = null;
+            if (Plugins.All(x => x.Value.guid != guid)) {
+                // not found
+                return null;
+            }
+            var plugin_kvp = Plugins.FirstOrDefault(x => x.Value.guid == guid);
+            original_dir = plugin_kvp.Key;
+
+            string backup_path = null;
+            if (original_dir.IsFile()) {
+                // delete plugin folder
+                string dir_to_backup = Path.GetDirectoryName(original_dir);
+                backup_path = Path.Combine(Path.GetTempPath(), Path.GetFileName(dir_to_backup));
+
+                try {
+                    MpFileIo.CopyDirectory(dir_to_backup, backup_path, true, true);
+                }
+                catch (Exception ex) {
+                    MpNotificationBuilder.ShowNotificationAsync(
+                        notificationType: MpNotificationType.FileIoError,
+                        body: $"Error backing up {dir_to_backup} to '{backup_path}. Details: '{ex.Message}'").FireAndForgetSafeAsync();
+                    backup_path = null;
+                }
+            }
+            return backup_path;
+        }
         public static bool DeletePlugin(string guid, bool delete_cache = true) {
             if (Plugins.All(x => x.Value.guid != guid)) {
                 // not found
                 return false;
             }
-            var plugin_kvp = MpPluginLoader.Plugins.FirstOrDefault(x => x.Value.guid == guid);
+            var plugin_kvp = Plugins.FirstOrDefault(x => x.Value.guid == guid);
             string manifest_path = plugin_kvp.Key;
 
             bool success = true;
@@ -135,28 +162,59 @@ namespace MonkeyPaste {
             return success;
         }
 
-        public static async Task<MpPluginFormat> InstallPluginAsync(string PackageUrl) {
+        public static async Task<MpPluginFormat> InstallPluginAsync(string packageUrl) {
             try {
                 // download package (should always be a zip file of the plugin root folder)
-                var package_bytes = await MpFileIo.ReadBytesFromUriAsync(PackageUrl);
+                var package_bytes = await MpFileIo.ReadBytesFromUriAsync(packageUrl, string.Empty, 30_000);
 
-                // write to temp
-                string temp_package_zip = MpFileIo.WriteByteArrayToFile(System.IO.Path.GetTempFileName(), package_bytes, true);
+                // write zip to temp
+                string temp_package_zip = MpFileIo.WriteByteArrayToFile(Path.GetTempFileName(), package_bytes, true);
 
+                // 
+                string temp_package_dir = Path.GetRandomFileName();
+                string pluginName = null;
                 // extract to ../Plugins
-                ZipFile.ExtractToDirectory(temp_package_zip, PluginRootFolderPath);
+                try {
+                    // extract zip to temp folder and get inner folder name
+                    ZipFile.ExtractToDirectory(temp_package_zip, temp_package_dir);
+                    if (temp_package_dir.IsDirectory() && Directory.GetDirectories(temp_package_dir) is string[] tpfl &&
+                        tpfl.Length > 0) {
+                        pluginName = Path.GetFileName(tpfl[0]);
+                        string dest_dir = Path.Combine(PluginRootFolderPath, pluginName);
+                        if (dest_dir.IsDirectory()) {
+                            // just in case remove existing dir if found
+                            MpFileIo.DeleteDirectory(dest_dir);
+                        }
+                        // copy unzipped plugin from temp to plugin folder
+                        MpFileIo.CopyDirectory(tpfl[0], dest_dir, true);
+                    } else {
+                        throw new Exception($"Error extracting plugin from '{temp_package_dir}'");
+                    }
 
-                // compared loaded manifests with now changed dir manifests to locate installed
-                var manifests_diff = Plugins.Keys.Difference(FindManifestPaths(PluginRootFolderPath));
-                MpDebug.Assert(manifests_diff.Any(), $"no new manifest found from packageUrl '{PackageUrl}'");
-                MpDebug.Assert(manifests_diff.Count() == 1, $"new manifest count mismatch! should be 1 but is {manifests_diff.Count()}");
+                }
+                catch (Exception ex) {
+                    MpNotificationBuilder.ShowNotificationAsync(
+                        notificationType: MpNotificationType.FileIoError,
+                        body: $"Error installing plugin: {ex.Message}").FireAndForgetSafeAsync();
+                    return null;
+                }
 
-                var result = await LoadPluginAsync(manifests_diff.FirstOrDefault());
+                string manifest_path = Path.Combine(PluginRootFolderPath, pluginName, "manifest.json");
+                if (!manifest_path.IsFile()) {
+                    MpNotificationBuilder.ShowNotificationAsync(
+                        notificationType: MpNotificationType.FileIoError,
+                        body: $"Error installing plugin '{pluginName}' corrupt or improper directory structure. Manifest should exist at '{manifest_path}' but was not found.").FireAndForgetSafeAsync();
+                    return null;
+                }
+                var result = await LoadPluginAsync(manifest_path);
+                if (result != null) {
+                    Plugins.AddOrReplace(manifest_path, result);
+                }
 
                 return result;
             }
             catch (Exception ex) {
-                MpConsole.WriteTraceLine($"Error installing plugin from uri '{PackageUrl}'. ", ex);
+                MpConsole.WriteTraceLine($"Error installing plugin from uri '{packageUrl}'. ", ex);
                 MpNotificationBuilder.ShowNotificationAsync(
                     notificationType: MpNotificationType.FileIoError,
                     body: ex.Message).FireAndForgetSafeAsync();

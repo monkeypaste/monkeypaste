@@ -57,6 +57,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIDownKeyHelper Implementation
 
+        int MpIDownKeyHelper.DownCount =>
+            _downs.Count;
+
         bool MpIDownKeyHelper.IsDown(object key) {
             if (key is KeyCode kc) {
                 return _downs.Contains(kc.GetUnifiedKey());
@@ -1023,16 +1026,22 @@ namespace MonkeyPaste.Avalonia {
 
         private MpKeyGestureHelper _keyboardGestureHelper;
         private List<KeyCode> _downs = new List<KeyCode>();
+        private List<Tuple<KeyCode, DateTime>> _downTest = new List<Tuple<KeyCode, DateTime>>();
         private MpAvShortcutViewModel _exact_match;
 
         private void HandleGestureRouting_Down(string keyLiteral, object down_e) {
             var sharp_down = down_e as KeyboardHookEventArgs;
             KeyCode kc = sharp_down.Data.KeyCode;
+
             if (_downs.Contains(kc.GetUnifiedKey())) {
                 // ignore repeats
                 return;
             } else {
                 _downs.Add(kc.GetUnifiedKey());
+                _downTest.Add(new Tuple<KeyCode, DateTime>(kc, DateTime.Now));
+            }
+            if (_downTest.Any(x => DateTime.Now - x.Item2 > TimeSpan.FromSeconds(10))) {
+                // downs mismatch
             }
 
             _keyboardGestureHelper.AddKeyDown(keyLiteral);
@@ -1053,6 +1062,10 @@ namespace MonkeyPaste.Avalonia {
             var sharp_up = up_e as KeyboardHookEventArgs;
             KeyCode kc = sharp_up.Data.KeyCode;
             _downs.Remove(kc);
+            if (_downTest.FirstOrDefault(x => x.Item1 == kc) is Tuple<KeyCode, DateTime> dt) {
+                _downTest.Remove(dt);
+            }
+
             _keyboardGestureHelper.ClearCurrentGesture();
             if (_exact_match == null) {
                 return;

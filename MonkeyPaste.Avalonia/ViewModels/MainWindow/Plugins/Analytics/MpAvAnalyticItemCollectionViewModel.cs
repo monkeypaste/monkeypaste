@@ -5,6 +5,7 @@ using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -22,6 +23,7 @@ namespace MonkeyPaste.Avalonia {
         private string _processAutomationGuid = "e7e25c85-1c8f-4e79-be8f-2ebfcb5bb94e";
         private string _httpAutomationGuid = "084abd2e-801d-4637-9054-b42f1b159c32";
 
+        private MpAvPluginBrowserViewModel _pluginBrowser;
         #endregion
 
         #region Interfaces
@@ -110,10 +112,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public MpAvAnalyticItemViewModel ProcessAutomationViewModel => Items.FirstOrDefault(x => x.PluginGuid == _processAutomationGuid);
-
-        public MpAvAnalyticItemViewModel HttpAutomationViewModel => Items.FirstOrDefault(x => x.PluginGuid == _httpAutomationGuid);
-
         public MpMenuItemViewModel ContextMenuItemViewModel {
             get {
                 MpCopyItemType contentType = MpAvClipTrayViewModel.Instance.SelectedItem == null ?
@@ -122,7 +120,9 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public IEnumerable<MpAvAnalyticItemPresetViewModel> AllPresets => Items.OrderBy(x => x.Title).SelectMany(x => x.Items);
+        public IList<MpAvAnalyticItemViewModel> SortedItems =>
+            Items.OrderBy(x => x.Title).ToList();
+        public IEnumerable<MpAvAnalyticItemPresetViewModel> AllPresets => SortedItems.SelectMany(x => x.Items);
 
         public MpAvAnalyticItemPresetViewModel SelectedPresetViewModel {
             get {
@@ -154,10 +154,10 @@ namespace MonkeyPaste.Avalonia {
         #region State
 
         public int SelectedItemIdx {
-            get => Items.IndexOf(SelectedItem);
+            get => SortedItems.IndexOf(SelectedItem);
             set {
                 if (SelectedItemIdx != value) {
-                    SelectedItem = value < 0 || value >= Items.Count ? null : Items[value];
+                    SelectedItem = value < 0 || value >= SortedItems.Count ? null : SortedItems[value];
                     OnPropertyChanged(nameof(SelectedItemIdx));
                 }
             }
@@ -187,6 +187,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvAnalyticItemCollectionViewModel() : base(null) {
             PropertyChanged += MpAnalyticItemCollectionViewModel_PropertyChanged;
+            Items.CollectionChanged += Items_CollectionChanged;
         }
 
 
@@ -253,28 +254,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private async Task<MpAvAnalyticItemViewModel> CreateAnalyticItemViewModelAsync(MpPluginFormat plugin) {
-            MpAvAnalyticItemViewModel aivm = new MpAvAnalyticItemViewModel(this);
-
-            await aivm.InitializeAsync(plugin);
-            return aivm;
-        }
-
-
         private void MpAnalyticItemCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsHovering):
                 case nameof(IsAnySelected):
                     break;
-                //case nameof(IsSidebarVisible):                    
-                //    if (IsSidebarVisible) {
-                //        MpAvTagTrayViewModel.Instance.IsSidebarVisible = false;
-                //        MpAvTriggerCollectionViewModel.Instance.IsSidebarVisible = false;
-                //        MpAvClipboardHandlerCollectionViewModel.Instance.IsSidebarVisible = false;
-                //    }
-                //    OnPropertyChanged(nameof(SelectedItem));
-                //    MpAvMainWindowViewModel.Instance.OnPropertyChanged(nameof(MpAvMainWindowViewModel.Instance.SelectedSidebarItemViewModel));
-                //    break;
                 case nameof(Items):
                     OnPropertyChanged(nameof(Children));
                     break;
@@ -294,6 +278,17 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            OnPropertyChanged(nameof(Items));
+            OnPropertyChanged(nameof(SortedItems));
+        }
+
+        private async Task<MpAvAnalyticItemViewModel> CreateAnalyticItemViewModelAsync(MpPluginFormat plugin) {
+            MpAvAnalyticItemViewModel aivm = new MpAvAnalyticItemViewModel(this);
+
+            await aivm.InitializeAsync(plugin);
+            return aivm;
+        }
 
         #endregion
 
@@ -315,9 +310,16 @@ namespace MonkeyPaste.Avalonia {
                 core_aipvm.Parent.ExecuteAnalysisCommand.Execute(new object[] { core_aipvm, ctvm.CopyItem });
             });
 
+        public ICommand ShowPluginBrowserCommand => new MpCommand(
+            () => {
+                if (_pluginBrowser == null) {
+                    _pluginBrowser = new MpAvPluginBrowserViewModel();
+                }
+                _pluginBrowser.OpenPluginBrowserWindow();
+            });
         public MpIAsyncCommand<object> InstallAnalyzerCommand => new MpAsyncCommand<object>(
             async (args) => {
-                string package_url = args as string;
+                string package_url = args as object as string;
                 var plugin_format = await MpPluginLoader.InstallPluginAsync(package_url);
                 if (plugin_format == null) {
                     return;
@@ -325,7 +327,7 @@ namespace MonkeyPaste.Avalonia {
                 var aivm = await CreateAnalyticItemViewModelAsync(plugin_format);
                 Items.Add(aivm);
             });
-        public ICommand UninstallAnalyzerCommand => new MpAsyncCommand<object>(
+        public MpIAsyncCommand<object> UninstallAnalyzerCommand => new MpAsyncCommand<object>(
             async (args) => {
                 IsBusy = true;
 
@@ -377,6 +379,71 @@ namespace MonkeyPaste.Avalonia {
 
                 IsBusy = false;
             });
+
+        public MpIAsyncCommand<object> UpdatePluginCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                IsBusy = true;
+                string plugin_guid = (args as object[])[0] as string;
+                var aivm = Items.FirstOrDefault(x => x.PluginGuid == plugin_guid);
+                MpDebug.Assert(aivm != null, $"Error upgrading plugin guid '{plugin_guid}' can't find analyer");
+
+                // backup original plugin dir
+                string backup_dir = MpPluginLoader.CreatePluginBackup(plugin_guid, out string org_dir);
+
+                if (backup_dir == null) {
+                    // somthing went wrong backing up
+                    IsBusy = false;
+                    return;
+                }
+
+                bool success = true;
+                // remove from plugin dir (retain cache)
+                if (!MpPluginLoader.DeletePlugin(plugin_guid, false)) {
+                    success = false;
+                }
+
+                if (success) {
+                    try {
+                        // 
+                        string package_url = (args as object[])[1] as string;
+                        var updated_pf = await MpPluginLoader.InstallPluginAsync(package_url);
+                        await aivm.InitializeAsync(updated_pf);
+                    }
+                    catch (Exception ex) {
+                        // if something goes wrong 
+                        MpConsole.WriteTraceLine($"Error updating plugin. ", ex);
+                        success = false;
+                    }
+                }
+
+                if (!success) {
+                    bool revert_success = false;
+                    // attempt to put backup back in plugin folder
+                    if (backup_dir.IsDirectory() &&
+                        Directory.GetFiles(backup_dir) is string[] bfl && bfl.Length > 0) {
+                        if (org_dir.IsDirectory()) {
+                            // delete orginal, maybe corrupt
+                            MpFileIo.DeleteDirectory(org_dir);
+                        }
+                        if (!org_dir.IsDirectory()) {
+                            // only continue if dir was deleted
+
+                            string backup_plugin_dir = bfl[0];
+                            MpFileIo.CopyDirectory(backup_plugin_dir, MpPluginLoader.PluginRootFolderPath, true);
+                            revert_success = org_dir.IsDirectory();
+                        }
+                    }
+                    if (!revert_success) {
+                        MpNotificationBuilder.ShowNotificationAsync(
+                            notificationType: MpNotificationType.FileIoError,
+                            body: $"Unknown error occured.").FireAndForgetSafeAsync();
+                    }
+                }
+                MpFileIo.DeleteDirectory(backup_dir);
+
+                IsBusy = false;
+            });
+
         #endregion
     }
 }

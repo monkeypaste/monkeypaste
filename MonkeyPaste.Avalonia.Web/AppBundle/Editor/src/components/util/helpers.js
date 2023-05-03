@@ -483,25 +483,14 @@ function encodeHtmlSpecialEntities(str) {
         return '';
     }
     for (var i = 0; i < HtmlEntitiesLookup.length; i++) {
+        if (i == 0) {
+            // special case for & to avoid double encoding
+            str = str.replaceAll(/&(?!(#[0-9]{2,4}|[A-z]{2,6});)/g, HtmlEntitiesLookup[i][1]);
+            continue;
+        }
         str = str.replaceAll(HtmlEntitiesLookup[i][0], HtmlEntitiesLookup[i][1]);
     }
     return str;
-    //let out_str = '';
-    //for (var i = 0; i < str.length; i++) {
-    //    let kvp = Object.entries(HtmlEntitiesLookup).find(([k, v]) => str.substr(i).startsWith(k));
-    //    if (kvp != null) {
-    //        let already_encoded_kvp = Object.entries(HtmlEntitiesLookup).find(([k, v]) => str.substr(i).startsWith(v));
-    //        if (already_encoded_kvp != null) {
-    //            out_str += already_encoded_kvp[1];
-    //            i += already_encoded_kvp[1].length - 1;
-    //            continue;
-    //        }
-    //        out_str += kvp[1];
-    //    } else {
-    //        out_str += str.charAt(i);
-    //    }
-    //}
-    //return out_str;
 }
 
 function decodeHtmlSpecialEntities(str) {
@@ -512,17 +501,6 @@ function decodeHtmlSpecialEntities(str) {
         str = str.replaceAll(HtmlEntitiesLookup[i][1], HtmlEntitiesLookup[i][0]);
     }
     return str;
-    //let out_str = '';
-    //for (var i = 0; i < str.length; i++) {
-    //    let kvp = Object.entries(HtmlEntitiesLookup).find(([k, v]) => str.substr(i).startsWith(v));
-    //    if (kvp == null) {
-    //        out_str += str.charAt(i);
-    //    } else {
-    //        out_str += kvp[0];
-    //        i += kvp[1].length - 1;
-    //    }
-    //}
-    //return out_str;
 }
 
 function getAllTextElementsInElement(elm) {

@@ -42,7 +42,7 @@
                                         Width="30"
                                         Height="30"
                                         Classes="defaultButton noBg noHoverBg outline outlineOver square"
-                                        Command="{Binding ShowPluginBrowserCommand, Source={x:Static local:MpAvPluginBrowserViewModel.Instance}}">
+                                        Command="{Binding ShowPluginBrowserCommand}">
                                     <ToolTip.Tip>
                                         <local:MpAvToolTipView ToolTipText="Settings" />
                                     </ToolTip.Tip>
@@ -51,7 +51,7 @@
                                 </Button>
                                 <ComboBox SelectedIndex="{Binding SelectedItemIdx, Mode=TwoWay}"
                                           Margin="0,0,5,0"
-                                          ItemsSource="{Binding Items}">
+                                          ItemsSource="{Binding SortedItems}">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
                                             <Border Classes="outerComboBoxItemBorder">

@@ -23,15 +23,6 @@
                 Margin="0,20,0,0"
                 Spacing="10">
 
-        <!--  RESET ALL SHORTCUTS  -->
-
-        <Button Classes="defaultButton textOnlyButton severe"
-                Command="{Binding ResetAllShortcuts}"
-                HorizontalAlignment="Right"
-                Margin="0,0,20,0">
-            <TextBlock Text="Reset All Shortcuts" />
-        </Button>
-
         <!--  APPLICATION SHORTCUTS  -->
 
         <Expander IsExpanded="True">
@@ -46,6 +37,16 @@
             </Expander.Content>
         </Expander>
 
+
+        <!--  RESET ALL SHORTCUTS  -->
+
+        <Button Classes="defaultButton textOnlyButton severe"
+                Command="{Binding ResetAllShortcuts}"
+                HorizontalAlignment="Right"
+                Margin="0,0,20,0">
+            <TextBlock Text="Reset All Shortcuts" />
+        </Button>
+      
         <!--  PASTE INTEROP SHORTCUTS  -->
 
         <Expander DataContext="{x:Static local:MpAvAppCollectionViewModel.Instance}"

@@ -28,7 +28,6 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpIKeyStrokeSimulator Implementation
-        public bool IsSimulating { get; private set; }
 
         public async Task<bool> SimulateKeyStrokeSequenceAsync(string keystr) {
             var seq = Mp.Services.KeyConverter.ConvertStringToKeySequence<KeyCode>(keystr);
@@ -52,7 +51,6 @@ namespace MonkeyPaste.Avalonia {
                     .Where(x => x != null && x.Any())
                     .OrderBy(x => gesture.IndexOf(x))
                     .Select(x => x
-                        .Where(y => !Mp.Services.KeyDownHelper.IsDown(y))
                         .Cast<KeyCode>()
                         .OrderBy(z => z.GesturePriority())
                         .ToList())
@@ -63,12 +61,6 @@ namespace MonkeyPaste.Avalonia {
                 !filtered_gesture.First().Any()) {
                 return true;
             }
-            var ignored_keys =
-                filtered_gesture
-                    .SelectMany(x => x)
-                    .Where(x => Mp.Services.KeyDownHelper.IsDown(x))
-                    .Distinct();
-
             string gesture_label = Mp.Services.KeyConverter.ConvertKeySequenceToString(gesture);
             await WaitAndStartSimulateAsync(gesture_label);
 
@@ -78,8 +70,7 @@ namespace MonkeyPaste.Avalonia {
                 combo.ForEach(y => SimulateKey(y, false));
                 await Task.Delay(_RELEASE_DELAY_MS);
             }
-            IsSimulating = false;
-            MpConsole.WriteLine($"Key Gesture '{gesture_label}' successfully simulated. Ignored '{Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { ignored_keys })}' keys.");
+            MpConsole.WriteLine($"Key Gesture '{gesture_label}' successfully simulated. ");
             return true;
 
         }
@@ -87,6 +78,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
+
         #endregion
 
         #region Constructors
@@ -116,24 +108,22 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task WaitAndStartSimulateAsync(string gesture_label) {
-            if (IsSimulating) {
+            if (Mp.Services.KeyDownHelper.DownCount > 0) {
                 int this_sim_id = ++_waitCount;
                 MpConsole.WriteLine($"Sim gesture '{gesture_label}' waiting at queue: {this_sim_id}...");
                 while (_waitCount >= this_sim_id) {
-                    if (IsSimulating) {
+                    if (Mp.Services.KeyDownHelper.DownCount > 0) {
                         await Task.Delay(100);
                     }
                     if (_waitCount > this_sim_id) {
-                        // not next
-                        await Task.Delay(100);
+                        // not next (wait extra 100 for next to start)
+                        await Task.Delay(200);
                         continue;
                     }
-                    IsSimulating = true;
                     _waitCount--;
                     MpConsole.WriteLine($"Sim gesture '{gesture_label}' waiting DONE");
                 }
             }
-            IsSimulating = true;
         }
 
 

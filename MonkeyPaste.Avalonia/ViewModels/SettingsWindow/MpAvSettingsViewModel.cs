@@ -1020,7 +1020,6 @@ namespace MonkeyPaste.Avalonia {
     }
 
     public enum MpSettingsTabType {
-        None = 0,
         Account,
         Preferences,
         Interop,

@@ -69,7 +69,8 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 		insertText(0, encoded_pt, 'silent');
 		updateQuill();
 		qhtml = getHtml();
-	} else if (formatType == 'rtf2html') {
+	}
+	else if (formatType == 'rtf2html') {
 		formatted_delta = convertHtmlToDelta(dataStr, true);
 		setContents(formatted_delta);
 		qhtml = getHtml(false);
@@ -77,7 +78,8 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 
 		//formatted_delta = convertHtmlToDelta(qhtml, true);
 		//setRootHtml(qhtml);
-	} else if (formatType == 'html') {
+	}
+	else if (formatType == 'html') {
 		//iconBase64 = locateFaviconBase64(dataStr);
 
 		// NOTE this maybe only necessary on windows

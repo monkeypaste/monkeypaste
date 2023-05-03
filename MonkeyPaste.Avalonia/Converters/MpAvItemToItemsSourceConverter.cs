@@ -1,6 +1,7 @@
 ﻿using Avalonia.Data.Converters;
 using System;
 using System.Globalization;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvItemToItemsSourceConverter : IValueConverter {
@@ -10,7 +11,7 @@ namespace MonkeyPaste.Avalonia {
             if (value == null)
                 return null;
 
-            return new object[] { value };
+            return new object[] { value }.ToList();
         }
 
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) {

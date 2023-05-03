@@ -21,7 +21,7 @@
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
         <!--  TABS  -->
-        <Style Selector="ToggleButton.tab">
+        <Style Selector="RadioButton.tab">
             <Setter Property="HorizontalAlignment"
                     Value="Stretch" />
             <Setter Property="VerticalAlignment"
@@ -35,7 +35,7 @@
             <Setter Property="BorderBrush"
                     Value="DimGray" />
         </Style>
-        <Style Selector="ToggleButton.tab:unchecked:pointerover /template/ ContentPresenter">
+        <Style Selector="RadioButton.tab:unchecked:pointerover /template/ ContentPresenter">
             <Setter Property="Background">
                 <Setter.Value>
                     <LinearGradientBrush StartPoint="0%,0%"
@@ -54,7 +54,7 @@
             <Setter Property="Foreground"
                     Value="Black" />
         </Style>
-        <Style Selector="ToggleButton.tab:unchecked /template/ ContentPresenter">
+        <Style Selector="RadioButton.tab:unchecked /template/ ContentPresenter">
             <Setter Property="Background">
                 <Setter.Value>
                     <LinearGradientBrush StartPoint="0%,0%"
@@ -71,7 +71,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style Selector="ToggleButton.tab Image">
+        <Style Selector="RadioButton.tab Image">
             <Setter Property="MinWidth"
                     Value="30" />
             <Setter Property="MinHeight"
@@ -85,7 +85,7 @@
             <Setter Property="Margin"
                     Value="0,10,0,0" />
         </Style>
-        <Style Selector="ToggleButton.tab Label">
+        <Style Selector="RadioButton.tab Label">
             <Setter Property="DockPanel.Dock"
                     Value="Bottom" />
             <Setter Property="HorizontalAlignment"
@@ -302,60 +302,65 @@
               ColumnDefinitions="*,*,*,*,*"
               RowDefinitions="Auto,30">
             <!--  Account Tab Button  -->
-            <ToggleButton Grid.Column="0"
-                          Classes="tab outline outlineOver"
-                          IsChecked="{Binding IsTabSelected[0], Mode=OneWay}"
-                          Command="{Binding SelectTabCommand}"
-                          CommandParameter="0">
+            <RadioButton Grid.Column="0"
+                         Theme="{StaticResource SwitchlessRadioButton}"
+                         Classes="tab outline outlineOver"
+                         IsChecked="{Binding IsTabSelected[0], Mode=OneWay}"
+                         Command="{Binding SelectTabCommand}"
+                         CommandParameter="0">
                 <DockPanel>
                     <Label Content="Account" />
                     <Image Source="{Binding Source={StaticResource UserImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                 </DockPanel>
-            </ToggleButton>
+            </RadioButton>
             <!--  Prefs Tab Button  -->
-            <ToggleButton Grid.Column="1"
-                          Classes="tab outline outlineOver"
-                          IsChecked="{Binding IsTabSelected[1], Mode=OneWay}"
-                          Command="{Binding SelectTabCommand}"
-                          CommandParameter="1">
+            <RadioButton Grid.Column="1"
+                         Theme="{StaticResource SwitchlessRadioButton}"
+                         Classes="tab outline outlineOver"
+                         IsChecked="{Binding IsTabSelected[1], Mode=OneWay}"
+                         Command="{Binding SelectTabCommand}"
+                         CommandParameter="1">
                 <DockPanel>
                     <Label Content="Preferences" />
                     <Image Source="{Binding Source={StaticResource SlidersImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                 </DockPanel>
-            </ToggleButton>
+            </RadioButton>
             <!--  Security Tab Button  -->
-            <ToggleButton Grid.Column="2"
-                          Classes="tab outline outlineOver"
-                          IsChecked="{Binding IsTabSelected[2], Mode=OneWay}"
-                          Command="{Binding SelectTabCommand}"
-                          CommandParameter="2">
+            <RadioButton Grid.Column="2"
+                         Theme="{StaticResource SwitchlessRadioButton}"
+                         Classes="tab outline outlineOver"
+                         IsChecked="{Binding IsTabSelected[2], Mode=OneWay}"
+                         Command="{Binding SelectTabCommand}"
+                         CommandParameter="2">
                 <DockPanel>
                     <Label Content="Security" />
                     <Image Source="{Binding Source={StaticResource ShieldImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                 </DockPanel>
-            </ToggleButton>
+            </RadioButton>
             <!--  Shortcuts tab button  -->
-            <ToggleButton Grid.Column="3"
-                          Classes="tab outline outlineOver"
-                          IsChecked="{Binding IsTabSelected[3], Mode=OneWay}"
-                          Command="{Binding SelectTabCommand}"
-                          CommandParameter="3">
+            <RadioButton Grid.Column="3"
+                         Theme="{StaticResource SwitchlessRadioButton}"
+                         Classes="tab outline outlineOver"
+                         IsChecked="{Binding IsTabSelected[3], Mode=OneWay}"
+                         Command="{Binding SelectTabCommand}"
+                         CommandParameter="3">
                 <DockPanel>
                     <Label Content="Shortcuts" />
                     <Image Source="{Binding Source={StaticResource HotkeyImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                 </DockPanel>
-            </ToggleButton>
+            </RadioButton>
             <!--  Help tab Button  -->
-            <ToggleButton Grid.Column="4"
-                          Classes="tab outline outlineOver"
-                          IsChecked="{Binding IsTabSelected[5], Mode=OneWay}"
-                          Command="{Binding SelectTabCommand}"
-                          CommandParameter="5">
+            <RadioButton Grid.Column="4"
+                         Theme="{StaticResource SwitchlessRadioButton}"
+                         Classes="tab outline outlineOver"
+                         IsChecked="{Binding IsTabSelected[5], Mode=OneWay}"
+                         Command="{Binding SelectTabCommand}"
+                         CommandParameter="5">
                 <DockPanel>
                     <Label Content="Help" />
                     <Image Source="{Binding Source={StaticResource QuestionMarkImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                 </DockPanel>
-            </ToggleButton>
+            </RadioButton>
 
             <!--  FILTER TEXTBOX  -->
             <Border Grid.Row="1"
