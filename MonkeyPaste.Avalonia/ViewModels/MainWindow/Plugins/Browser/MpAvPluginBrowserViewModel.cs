@@ -186,17 +186,13 @@ namespace MonkeyPaste.Avalonia {
             }
             return ledger.manifests;
         }
-        public void OpenPluginBrowserWindow() {
+        public void OpenPluginBrowserWindow(string selectedGuid) {
             if (IsOpen) {
                 if (WindowState == WindowState.Minimized) {
                     WindowState = WindowState.Normal;
                 }
                 return;
             }
-            //PerformFilterCommand.Execute(null);
-            //while (IsBusy) {
-            //    await Task.Delay(100);
-            //}
 
             MpAvWindow pbw = new MpAvWindow() {
                 Width = 800,
@@ -228,6 +224,17 @@ namespace MonkeyPaste.Avalonia {
                     Path = nameof(WindowState),
                     Mode = BindingMode.TwoWay
                 });
+
+            if (!string.IsNullOrEmpty(selectedGuid)) {
+                pbw.Opened += async (s, e) => {
+                    while (IsBusy) {
+                        await Task.Delay(100);
+                    }
+                    if (Items.FirstOrDefault(x => x.PluginGuid == selectedGuid) is MpAvPluginItemViewModel pivm) {
+                        Selection.SelectedItem = pivm;
+                    }
+                };
+            }
             pbw.ShowChild();
             OnPropertyChanged(nameof(IsOpen));
         }

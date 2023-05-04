@@ -2,9 +2,10 @@
   "title": "Azure Language Translator",
   "description": "Translation of written text from specified or auto-detected language",
   "version": "1.0",
-  "credits": "Somebody",
+  "credits": "Thomas Kefauver",
   "guid": "c80163e4-66b6-4845-ba11-de182b9f8a62",
   "iconUri": "logo.png",
+  "tags": "Language Translator,Accessibility,Text,Microsoft,Azure",
   "bundleType": "Http",
   "analyzer": {
     "inputType": {
@@ -20,18 +21,22 @@
         "header": [
           {
             "key": "Ocp-Apim-Subscription-Key",
-            "value": "b455280a2c66456e926b66a1e6656ce3"
+            "valuePath": {
+              "pathExpression":  "@4"
+            } 
           },
           {
             "key": "Ocp-Apim-Subscription-Region",
-            "value": "westus"
+            "valuePath": {
+              "pathExpression": "@5"
+            }
           },
           {
             "key": "X-ClientTraceId",
             "type": "guid"
           }
         ],
-        "projectUrl": {
+        "url": {
           "raw": "https://api.cognitive.microsofttranslator.com/translate?api-version=3.0",
           "protocol": "https",
           "host": [
@@ -950,6 +955,28 @@
             "value": "{ItemData}"
           }
         ]
+      },
+      {
+        "label": "Subscription Key",
+        "description": "Your Azure Cognitive Services API Key. Sign up for free at https://azure.microsoft.com/en-us/free/",
+        "controlType": "TextBox",
+        "unitType": "PlainText",
+        "isRequired": true,
+        "isVisible": true,
+        "paramId": 4,
+        "isExecuteParameter": true,
+        "isSharedValue": true
+      },
+      {
+        "label": "Region",
+        "description": "The region associated with your Azure Cognitive Services account",
+        "controlType": "TextBox",
+        "unitType": "PlainText",
+        "isRequired": false,
+        "isVisible": true,
+        "paramId": 5,
+        "isExecuteParameter": true,
+        "isSharedValue": true
       }
     ]
   }

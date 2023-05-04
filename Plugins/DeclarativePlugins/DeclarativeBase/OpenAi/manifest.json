@@ -5,6 +5,7 @@
   "credits": "OpenAi",
   "guid": "0f6d1b4a-7aa5-41c5-b34f-85941b9a500d",
   "iconUri": "logo.png",
+  "tags": "AI,Aritifical Intelligence,Generative AI,OpenAI,Text,Prompt",
   "bundleType": "Http",
   "analyzer": {
     "inputType": {
@@ -26,7 +27,7 @@
             }
           }
         ],
-        "projectUrl": {
+        "url": {
           "raw": "https://api.openai.com/v1/engines/davinci/completions",
           "protocol": "https",
           "host": [

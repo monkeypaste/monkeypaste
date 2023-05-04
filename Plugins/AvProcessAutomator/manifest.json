@@ -2,7 +2,7 @@
   "title": "Process Automation",
   "description": "Runs a local application w/ configurable command-line arguments that can be static or by content properties.",
   "version": "1.0",
-  "credits": "Somebody",
+  "credits": "Thomas Kefauver",
   "guid": "e7e25c85-1c8f-4e79-be8f-2ebfcb5bb94e",
   "iconUri": "icon.png",
   "bundleType": "Dll",

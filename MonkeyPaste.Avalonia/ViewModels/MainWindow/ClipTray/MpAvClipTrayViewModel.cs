@@ -776,7 +776,8 @@ namespace MonkeyPaste.Avalonia {
             }
             //double s = DEFAULT_ITEM_SIZE * ZoomFactor;
             //_defaultQueryItemWidth = _defaultQueryItemHeight = _defaultPinItemWidth = _defaultPinItemHeight = s;
-            if (LayoutType == MpClipTrayLayoutType.Stack) {
+            if (LayoutType == MpClipTrayLayoutType.Stack &&
+                !MpAvMainWindowViewModel.Instance.IsMainWindowOrientationChanging) {
                 double default_ar = QueryTrayFixedDimensionLength / DEFAULT_ITEM_SIZE;
                 if (default_ar >= 2.0d) {
                     // when variable dim is twice length of fixed transition to grid...
@@ -1427,7 +1428,7 @@ namespace MonkeyPaste.Avalonia {
         public void ValidateQueryTray() {
             var dups = Items.Where(x => x.QueryOffsetIdx >= 0 && Items.Any(y => y != x && x.QueryOffsetIdx == y.QueryOffsetIdx));
             if (dups.Count() > 0) {
-                Debugger.Break();
+                //Debugger.Break();
                 dups
                     .OrderByDescending(x => x.TileCreatedDateTime)
                     .Skip(1)
@@ -3619,27 +3620,14 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand SelectClipTileCommand => new MpCommand<object>(
             (args) => {
-                //Dispatcher.UIThread.Post(() => {
                 MpAvClipTileViewModel ctvm = null;
                 if (args is MpAvClipTileViewModel) {
                     ctvm = args as MpAvClipTileViewModel;
                 } else if (args is int ciid) {
                     ctvm = AllItems.FirstOrDefault(x => x.CopyItemId == ciid);
                 }
-                //if (ctvm != null) {
-                //    if (ctvm.IsSelected) {
-                //        return;
-                //    }
-                //    ctvm.IsSelected = true;
-                //}
 
                 SelectedItem = ctvm;
-                //if (ctvm == null) {
-                //    SelectedItem = null;
-                //} else {
-                //    ctvm.IsSelected = true;
-                //}
-                //});
             });
 
 

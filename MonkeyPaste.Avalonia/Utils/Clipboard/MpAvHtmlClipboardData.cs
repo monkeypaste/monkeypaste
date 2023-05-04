@@ -114,7 +114,8 @@ namespace MonkeyPaste.Avalonia {
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(htmlStr);
             var img_nodes = htmlDoc.DocumentNode.SelectNodes("//img");
-            if (img_nodes.FirstOrDefault() is HtmlNode img_node) {
+            if (img_nodes != null &&
+                img_nodes.FirstOrDefault() is HtmlNode img_node) {
                 return img_node.GetAttributeValue("src", null);
             }
             return null;

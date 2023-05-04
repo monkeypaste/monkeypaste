@@ -2,10 +2,11 @@
   "title": "File Converter",
   "description": "Allows files to be translated into images or text content types",
   "version": "1.0",
-  "credits": "Somebody",
+  "credits": "Thomas Kefauver",
   "guid": "04c4d099-530e-432d-b107-3b0696b980cf",
   "projectUrl": "https://www.monkeypaste.com",
   "iconUri": "icon.png",
+  "tags": "Core,Text,Image,File,Converter,File to text,File to image",
   "bundleType": "Dll",
   "analyzer": {
     "inputType": {

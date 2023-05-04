@@ -5,6 +5,7 @@ using MonkeyPaste.Common.Plugin;
 using Org.BouncyCastle.Crypto.Engines;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO.Compression;
 using System.Linq;
 using System.Security.Policy;
@@ -46,7 +47,22 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region View Models
-        public MpAvPluginDependencyViewModel RootDependencyViewModel { get; private set; }
+        public MpAvPluginDependencyViewModel RootDependencyViewModel =>
+            RootDependencyCollection.FirstOrDefault();
+
+        private ObservableCollection<MpAvPluginDependencyViewModel> _rootDependencyCollection;
+        public ObservableCollection<MpAvPluginDependencyViewModel> RootDependencyCollection {
+            get {
+                if (_rootDependencyCollection == null) {
+                    _rootDependencyCollection = new ObservableCollection<MpAvPluginDependencyViewModel>() {
+                        new MpAvPluginDependencyViewModel(this) {
+                            LabelText = "Dependencies:"
+                        }
+                    };
+                }
+                return _rootDependencyCollection;
+            }
+        }
         #endregion
 
         #region Appearance
@@ -227,6 +243,7 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
         public async Task InitializeAsync(MpManifestFormat pf) {
             IsBusy = true;
+            await Task.Delay(1);
             PluginFormat = pf;
 
             if (string.IsNullOrEmpty(PluginIconUri)) {
@@ -241,8 +258,7 @@ namespace MonkeyPaste.Avalonia {
             }
             OnPropertyChanged(nameof(IsInstalled));
 
-            await CreateRootDependencyViewModelAsync();
-
+            CreateRootDependencyViewModelAsync().FireAndForgetSafeAsync(this);
             IsBusy = false;
         }
 
@@ -260,6 +276,7 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     }
                     LoadReadMeAsync().FireAndForgetSafeAsync(this);
+                    OnPropertyChanged(nameof(RootDependencyCollection));
                     break;
                 case nameof(IsAnyBusy):
                     if (Parent == null) {
@@ -287,17 +304,16 @@ namespace MonkeyPaste.Avalonia {
 
             var read_me_bytes = await MpFileIo.ReadBytesFromUriAsync(PluginReadMeUri, PluginRootDirectory);
             ReadMeMarkDownText = read_me_bytes.ToDecodedString();
-
-            OnPropertyChanged(nameof(ToggleInstallText));
             IsBusy = was_busy;
         }
         private async Task CreateRootDependencyViewModelAsync() {
-            RootDependencyViewModel = new MpAvPluginDependencyViewModel(this) {
-                LabelText = "Dependencies"
-            };
+            RootDependencyViewModel.Items.Clear();
             if (PluginFormat == null ||
                 PluginFormat.dependencies == null ||
                 PluginFormat.dependencies.Count == 0) {
+                RootDependencyViewModel.Items.Add(new MpAvPluginDependencyViewModel(this) {
+                    LabelText = "None"
+                });
                 return;
             }
 
@@ -311,15 +327,21 @@ namespace MonkeyPaste.Avalonia {
                     continue;
                 }
                 var pdt_vm = new MpAvPluginDependencyViewModel(this) {
-                    LabelText = pdt.EnumToLabel()
+                    LabelText = pdt.EnumToLabel(),
+                    ParentTreeItem = RootDependencyViewModel
                 };
                 foreach (var pdt_dep in pdt_deps) {
-                    var pdt_dep_vm = new MpAvPluginDependencyViewModel(this);
+                    var pdt_dep_vm = new MpAvPluginDependencyViewModel(this) {
+                        ParentTreeItem = pdt_vm
+                    };
                     await pdt_dep_vm.InitializeAsync(pdt_dep);
                     pdt_vm.Items.Add(pdt_dep_vm);
                 }
                 RootDependencyViewModel.Items.Add(pdt_vm);
             }
+
+            OnPropertyChanged(nameof(RootDependencyViewModel));
+            OnPropertyChanged(nameof(RootDependencyCollection));
         }
 
         #endregion

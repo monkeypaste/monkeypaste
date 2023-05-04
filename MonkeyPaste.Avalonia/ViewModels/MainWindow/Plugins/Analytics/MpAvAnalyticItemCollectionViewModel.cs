@@ -315,7 +315,7 @@ namespace MonkeyPaste.Avalonia {
                 if (_pluginBrowser == null) {
                     _pluginBrowser = new MpAvPluginBrowserViewModel();
                 }
-                _pluginBrowser.OpenPluginBrowserWindow();
+                _pluginBrowser.OpenPluginBrowserWindow(SelectedItem == null ? null : SelectedItem.PluginGuid);
             });
         public MpIAsyncCommand<object> InstallAnalyzerCommand => new MpAsyncCommand<object>(
             async (args) => {

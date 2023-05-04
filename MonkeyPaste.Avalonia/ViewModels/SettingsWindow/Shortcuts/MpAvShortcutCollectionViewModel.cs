@@ -1040,7 +1040,7 @@ namespace MonkeyPaste.Avalonia {
                 _downs.Add(kc.GetUnifiedKey());
                 _downTest.Add(new Tuple<KeyCode, DateTime>(kc, DateTime.Now));
             }
-            if (_downTest.Any(x => DateTime.Now - x.Item2 > TimeSpan.FromSeconds(10))) {
+            if (_downTest.Any(x => DateTime.Now - x.Item2 > TimeSpan.FromSeconds(30))) {
                 // downs mismatch
             }
 

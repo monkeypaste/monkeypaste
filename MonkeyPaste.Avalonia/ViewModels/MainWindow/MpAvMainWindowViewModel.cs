@@ -360,6 +360,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsMainWindowOrientationChanging { get; set; } = false;
         public double MainWindowTransformAngle {
             get {
 #if DESKTOP
@@ -1219,6 +1220,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 MpMessenger.SendGlobal(MpMessageType.MainWindowOrientationChangeBegin);
+                IsMainWindowOrientationChanging = true;
 
                 MainWindowOrientationType = (MpMainWindowOrientationType)nextOr;
                 OnPropertyChanged(nameof(MainWindowTransformAngle));
@@ -1236,6 +1238,7 @@ namespace MonkeyPaste.Avalonia {
 
                 await Task.Delay(300);
                 MpMessenger.SendGlobal(MpMessageType.MainWindowOrientationChangeEnd);
+                IsMainWindowOrientationChanging = false;
             });
 
         public ICommand ToggleMainWindowLockCommand => new MpCommand(
