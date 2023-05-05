@@ -28,7 +28,16 @@ namespace MonkeyPaste.Avalonia {
             }
 
             var gs = this.FindControl<GridSplitter>("ClipTraySplitter");
-            //gs.AddHandler(GridSplitter.PointerPressedEvent, Gs_PointerPressed, RoutingStrategies.Tunnel);
+            gs.AddHandler(Control.PointerPressedEvent, Gs_PointerPressed, RoutingStrategies.Tunnel);
+            gs.AddHandler(Control.PointerReleasedEvent, Gs_PointerReleased, RoutingStrategies.Tunnel);
+        }
+
+        private void Gs_PointerReleased(object sender, global::Avalonia.Input.PointerReleasedEventArgs e) {
+            MpMessenger.SendGlobal(MpMessageType.PinTrayResizeEnd);
+        }
+
+        private void Gs_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
+            MpMessenger.SendGlobal(MpMessageType.PinTrayResizeBegin);
         }
 
         public void UpdatePinTrayVarDimension(GridLength gl) {

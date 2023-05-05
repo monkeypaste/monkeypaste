@@ -24,7 +24,7 @@ function initConverterMatchers() {
 	let Delta = Quill.imports.delta;
 	quill.clipboard.addMatcher(Node.ELEMENT_NODE, function (node, delta) {
 		if (node.tagName == 'TABLE') {
-			debugger;
+			//debugger;
 		}
 		return delta;
 	});
@@ -90,14 +90,21 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 		insertHtml(0, dataStr, 'user', false);
 		formatted_delta = forceDeltaBgOpacity(getDelta(), bgOpacity);
 		setContents(formatted_delta);
-		qhtml = getHtml();
-	}
+		if (isTableInDocument()) {
+			// delta-to-html doesn't convert tables 
+			qhtml = getHtml2();
+			// better table throws exception setting html so don't test table
 
-	if (isTableInDocument()) {
-		// delta-to-html doesn't convert tables 
-		qhtml = getHtml2();
-	}	
-	setRootHtml(qhtml);
+		} else {
+			qhtml = getHtml();
+			if (!isRunningOnHost()) {
+				// just for testing html conversion
+				setRootHtml(qhtml);
+			}
+			
+		}
+	}
+	
 	log('');
 	log('RichHtml: ');
 	log(qhtml);

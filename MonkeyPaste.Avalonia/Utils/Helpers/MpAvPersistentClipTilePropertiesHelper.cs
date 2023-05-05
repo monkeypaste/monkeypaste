@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Common;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -178,7 +179,7 @@ namespace MonkeyPaste.Avalonia {
             return false;
         }
 
-        public static bool TryGetByPersistentWidth_ById(int ciid, int idx, out double uniqueSize) {
+        public static bool TryGetPersistentWidth_ById(int ciid, int idx, out double uniqueSize) {
             uniqueSize = 0;
             if (GetProps(ciid, false, idx) is MpAvPersistentClipTileProperties pp &&
                 pp.UniqueWidth.HasValue) {

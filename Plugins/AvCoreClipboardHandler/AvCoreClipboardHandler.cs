@@ -35,8 +35,8 @@ namespace AvCoreClipboardHandler {
             if (Dispatcher.UIThread.CheckAccess()) {
                 resp = await AvCoreClipboardReader.ProcessReadRequestAsync(request);
             } else {
-                await Dispatcher.UIThread.InvokeAsync(async () => {
-                    resp = await ReadClipboardDataAsync(request);
+                resp = await Dispatcher.UIThread.InvokeAsync<MpClipboardReaderResponse>(async () => {
+                    return await ReadClipboardDataAsync(request);
                 });
             }
 
@@ -62,8 +62,8 @@ namespace AvCoreClipboardHandler {
             if (Dispatcher.UIThread.CheckAccess()) {
                 resp = await AvCoreClipboardWriter.PerformWriteRequestAsync(request);
             } else {
-                await Dispatcher.UIThread.InvokeAsync(async () => {
-                    resp = await WriteClipboardDataAsync(request);
+                resp = await Dispatcher.UIThread.InvokeAsync<MpClipboardWriterResponse>(async () => {
+                    return await WriteClipboardDataAsync(request);
                 });
             }
 

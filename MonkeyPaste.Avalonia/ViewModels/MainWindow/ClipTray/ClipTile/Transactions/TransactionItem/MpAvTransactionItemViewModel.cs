@@ -323,6 +323,15 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public int TransactionDeviceId {
+            get {
+                if (Transaction == null) {
+                    return 0;
+                }
+                return Transaction.TransactionUserDeviceId;
+            }
+        }
+
         public int TransactionId {
             get {
                 if (Transaction == null) {

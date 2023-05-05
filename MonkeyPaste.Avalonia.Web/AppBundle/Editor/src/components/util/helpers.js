@@ -328,6 +328,31 @@ function isChildOfElement(elm, parent, include_self = true) {
     }
     return false;
 }
+function isChildOfTagName(elm, tagName, include_self = true) {
+    if (!elm || isNullOrWhiteSpace(tagName)) {
+        return false;
+    }
+    let search_elm = include_self ? elm : elm.parentNode;
+    while (true) {
+        if (search_elm == null) {
+            return false;
+        }
+        if (search_elm.tagName === undefined) {
+            if (search_elm.parentNode == null) {
+                return false;
+            }
+            search_elm = search_elm.parentNode;
+        }
+        if (search_elm == null || search_elm.tagName === undefined) {
+            debugger;
+        }
+        if (search_elm.tagName.toLowerCase() == tagName.toLowerCase()) {
+            return true;
+        }
+        search_elm = search_elm.parentNode;
+    }
+    return false;
+}
 
 function isClassInElementPath(elm, classOrClasses, compareOp = 'OR') {
     if (!elm || !classOrClasses) {

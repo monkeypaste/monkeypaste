@@ -70,6 +70,9 @@ namespace MonkeyPaste {
 
         PinTrayEmptyOrHasTile,
 
+        PinTrayResizeBegin,
+        PinTrayResizeEnd,
+
         TrayZoomFactorChangeBegin,
         TrayZoomFactorChanged,
         TrayZoomFactorChangeEnd,

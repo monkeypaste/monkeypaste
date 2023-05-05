@@ -167,9 +167,16 @@ function getTableCellElementAtDocIdx(doc_idx) {
     if (cur_elm == null) {
         return null;
     }
+    if (cur_elm.tagName === undefined) {
+        cur_elm = cur_elm.parentNode;
+    }
     while (true) {
-        if (!isClassInElementPath(cur_elm, FILE_LIST_ICON_COLUMN_NAME) &&
-            !isClassInElementPath(cur_elm, FILE_LIST_PATH_COLUMN_NAME)) {
+        //if (!isClassInElementPath(cur_elm, FILE_LIST_ICON_COLUMN_NAME) &&
+        //    !isClassInElementPath(cur_elm, FILE_LIST_PATH_COLUMN_NAME)) {
+        //    // out of column group
+        //    break;
+        //}
+        if (!isChildOfTagName(cur_elm, 'col')) {
             // out of column group
             break;
         }
@@ -292,12 +299,12 @@ function rejectTableMouseEvent(e) {
         }
     }
     
-    if (is_click_in_cell &&
-        !isClassInElementPath(e.target,'file-list-path') &&
-        !IsBetterTableInteractionEnabled) {
-        // disable any table clicks for file list
-        return true;
-    }
+    //if (is_click_in_cell &&
+    //    !isClassInElementPath(e.target, 'file-list-path') &&
+    //    !IsBetterTableInteractionEnabled) {
+    //    // disable any table clicks for file list
+    //    return true;
+    //}
     return false;
 }
 

@@ -37,7 +37,7 @@
     <AvaloniaXaml Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
     <AvaloniaXaml Remove="Controls\Content\TextElement\**" />
     <AvaloniaXaml Remove="Interfaces\Content\**" />
-    <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\**" />
+    <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\Items\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
@@ -69,7 +69,7 @@
     <Compile Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
     <Compile Remove="Controls\Content\TextElement\**" />
     <Compile Remove="Interfaces\Content\**" />
-    <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\**" />
+    <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\Items\**" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
@@ -101,7 +101,7 @@
     <EmbeddedResource Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
     <EmbeddedResource Remove="Controls\Content\TextElement\**" />
     <EmbeddedResource Remove="Interfaces\Content\**" />
-    <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\**" />
+    <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\Items\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
@@ -134,7 +134,7 @@
     <None Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
     <None Remove="Controls\Content\TextElement\**" />
     <None Remove="Interfaces\Content\**" />
-    <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\**" />
+    <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\Items\**" />
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
@@ -165,7 +165,7 @@
     <Page Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
     <Page Remove="Controls\Content\TextElement\**" />
     <Page Remove="Interfaces\Content\**" />
-    <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\**" />
+    <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\Items\**" />
     <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
     <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Templates\**" />
@@ -474,6 +474,7 @@
     <Compile Remove="Utils\Input\MpAvKeyGestureHelper_old.cs" />
     <Compile Remove="Utils\WindowManager\Helpers\MpAvTopmostSelector.cs" />
     <Compile Remove="ViewModels\MainWindow\Actions\Action\Triggers\MpAvTimerTriggerViewModel.cs" />
+    <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\MpAvClipTileDetailCollectionViewModel.cs" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\MpAvClipTrayCollectionViewModel.cs" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\MpAvCopyItemCollectionViewModel.cs" />
     <Compile Remove="ViewModels\Reusable\Source\MpAvSourceCollectionViewModel.cs" />

@@ -10,11 +10,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public TResult RunOnMainThread<TResult>(Func<TResult> action, MpDispatcherPriority priority = MpDispatcherPriority.Normal) {
-            TResult result = default;
-            Dispatcher.UIThread.Post(
-                () => {
-                    result = action.Invoke();
-                }, ConvertPriority(priority));
+            TResult result = Dispatcher.UIThread.Invoke(
+                action.Invoke, ConvertPriority(priority));
+
 
             return result;
         }

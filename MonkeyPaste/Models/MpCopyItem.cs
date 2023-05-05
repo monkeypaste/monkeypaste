@@ -37,10 +37,6 @@ namespace MonkeyPaste {
         [Indexed]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
-
-        //[Column("fk_MpSourceId")]
-        public int SourceId { get; set; }
-
         public string Title { get; set; } = string.Empty;
 
         [Column("e_MpCopyItemType")]
@@ -212,6 +208,10 @@ namespace MonkeyPaste {
             };
             if (!suppressWrite) {
                 await newCopyItem.WriteToDatabaseAsync();
+                if (newCopyItem.Id == 0) {
+                    // didn't write, must be empty data
+                    return null;
+                }
             }
             return newCopyItem;
         }

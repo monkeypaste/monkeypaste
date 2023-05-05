@@ -120,6 +120,15 @@ namespace MonkeyPaste.Avalonia {
 
         #region Model
 
+        public int SourceUserDeviceId {
+            get {
+                if (CreateTransaction == null) {
+                    return 0;
+                }
+                return CreateTransaction.TransactionDeviceId;
+            }
+        }
+
         public int CopyItemId {
             get {
                 if (Parent == null) {

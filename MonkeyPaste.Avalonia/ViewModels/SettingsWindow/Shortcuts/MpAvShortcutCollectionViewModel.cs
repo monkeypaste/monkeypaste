@@ -422,6 +422,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvShortcutCollectionViewModel() : base(null) {
             Mp.Services.GlobalInputListener = this;
             Mp.Services.ShortcutGestureLocator = this;
+            Mp.Services.KeyDownHelper = this;
 
             if (!Mp.Services.PlatformInfo.IsDesktop) {
                 IS_GLOBAL_MOUSE_INPUT_ENABLED = false;

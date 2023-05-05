@@ -34,7 +34,13 @@ function loadTextContent(itemDataStr) {
 // #region Getters
 
 function getTextContentData() {
-	let qhtml = getHtml();
+	let qhtml = '';
+	if (isContentATable()) {
+		// NOTE delta-to-html will loose tables. This probably means this will loose templates
+		qhtml = getHtml2();
+	} else {
+		qhtml = getHtml();
+	}
 	return qhtml;
 }
 

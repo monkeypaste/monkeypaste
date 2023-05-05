@@ -47,8 +47,6 @@ namespace MonkeyPaste.Avalonia {
             Items.CollectionChanged += Items_CollectionChanged;
         }
 
-
-
         #endregion
 
         #region Public Methods

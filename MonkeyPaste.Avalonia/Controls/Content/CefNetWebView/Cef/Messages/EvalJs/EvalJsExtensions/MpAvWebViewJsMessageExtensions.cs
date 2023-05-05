@@ -138,8 +138,8 @@ namespace MonkeyPaste.Avalonia {
 
             string resp = null;
             if (!Dispatcher.UIThread.CheckAccess()) {
-                await Dispatcher.UIThread.InvokeAsync(async () => {
-                    resp = await wv.EvaluateJavascriptAsync(script);
+                resp = await Dispatcher.UIThread.InvokeAsync<string>(async () => {
+                    return await wv.EvaluateJavascriptAsync(script);
                 });
                 return resp;
             }

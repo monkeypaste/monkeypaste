@@ -434,9 +434,9 @@ namespace MonkeyPaste.Avalonia {
         }
         private int SelectedDetailIdx { get; set; } = 0;
 
+        public bool IsOverDetailGrid { get; set; }
         public bool IsHovering { get; set; }
         public bool IsHoveringOverSourceIcon { get; set; } = false;
-        public bool IsOverDetail { get; set; } = false;
         public bool IsPopOutVisible { get; set; }
 
         public bool IsHostWindowActive {
@@ -897,7 +897,7 @@ namespace MonkeyPaste.Avalonia {
             }
             set {
                 if (CopyItemSize2 != value) {
-                    CopyItem.ItemSize1 = value;
+                    CopyItem.ItemSize2 = value;
                     OnPropertyChanged(nameof(CopyItemSize2));
                 }
             }
@@ -1026,7 +1026,6 @@ namespace MonkeyPaste.Avalonia {
 
         public MpCopyItem CopyItem { get; set; }
 
-
         #endregion
 
         #endregion
@@ -1063,14 +1062,14 @@ namespace MonkeyPaste.Avalonia {
                 (CopyItemId == 0 && ci == null) ||
                 (ci != null && CopyItemId == ci.Id);
 
-            _curItemRandomHexColor = string.Empty;
             _contentView = null;
             if (!is_reload) {
+                _curItemRandomHexColor = string.Empty;
                 IsPopOutVisible = false;
             }
 
             if (ci != null &&
-                MpAvPersistentClipTilePropertiesHelper.TryGetByPersistentWidth_ById(ci.Id, queryOffset, out double uniqueWidth)) {
+                MpAvPersistentClipTilePropertiesHelper.TryGetPersistentWidth_ById(ci.Id, queryOffset, out double uniqueWidth)) {
                 if (Math.Abs(uniqueWidth - MinWidth) < 1) {
                     // i think this is a bug when tile goes from placeholder to active it thinks it has
                     // a unique size
@@ -1152,7 +1151,7 @@ namespace MonkeyPaste.Avalonia {
                     hexColors = ivm.PrimaryIconColorList.ToList();
                 }
             } else if (hasUserDefinedColor) {
-                hexColors = Enumerable.Repeat(CopyItemHexColor, layerCount).ToList();
+                hexColors = Enumerable.Repeat(CopyItem.ItemColor, layerCount).ToList();
             } else {
                 var tagColors = await MpDataModelProvider.GetTagColorsForCopyItemAsync(CopyItemId);
                 tagColors.ForEach(x => hexColors.Insert(0, x));
@@ -1178,6 +1177,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void TriggerUnloadedNotification(bool removeQueryItem) {
+            MpAvPersistentClipTilePropertiesHelper.RemoveProps(CopyItemId);
             if (removeQueryItem) {
                 bool in_page = Mp.Services.Query.PageTools.RemoveItemId(CopyItemId);
                 if (in_page) {
@@ -1756,15 +1756,22 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(IsCornerButtonsVisible));
                     break;
                 case nameof(IsCornerButtonsVisible):
-                    if (IsCornerButtonsVisible) {
-                        AutoCycleDetailsAsync().FireAndForgetSafeAsync(this);
-                        Dispatcher.UIThread.Post(async () => {
-                            while (IsCornerButtonsVisible) {
-                                OnPropertyChanged(nameof(CopyItemTitle));
-                                await Task.Delay(AUTO_CYCLE_DETAIL_DELAY_MS);
-                            }
-                        });
+                    //if (IsCornerButtonsVisible) {
+                    //    AutoCycleDetailsAsync().FireAndForgetSafeAsync(this);
+                    //    Dispatcher.UIThread.Post(async () => {
+                    //        while (IsCornerButtonsVisible) {
+                    //            OnPropertyChanged(nameof(CopyItemTitle));
+                    //            await Task.Delay(AUTO_CYCLE_DETAIL_DELAY_MS);
+                    //        }
+                    //    });
+                    //}
+                    break;
+                case nameof(IsOverDetailGrid):
+                    if (!IsOverDetailGrid) {
+                        break;
                     }
+
+                    CycleDetailCommand.Execute(null);
                     break;
                 case nameof(IsBusy):
                     OnPropertyChanged(nameof(IsAnyBusy));

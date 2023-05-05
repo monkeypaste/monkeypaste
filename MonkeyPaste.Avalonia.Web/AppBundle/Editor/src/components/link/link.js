@@ -1,6 +1,6 @@
 // #region Globals
 
-const RequiredNavigateUriModKeys = [
+var RequiredNavigateUriModKeys = [
     //'Control'
 ];
 
@@ -107,6 +107,12 @@ function initLinkMatcher() {
 }
 
 function loadLinkHandlers() {
+    if (ContentItemType == 'FileList') {
+        RequiredNavigateUriModKeys = ['Alt'];
+    } else {
+        RequiredNavigateUriModKeys = [];
+    }
+
     let a_elms = Array.from(getEditorElement().querySelectorAll('a'));
     for (var i = 0; i < a_elms.length; i++) {
         let link_elm = a_elms[i];
@@ -336,7 +342,8 @@ function onLinkPointerEnter(e) {
     if (a_elm.classList.contains('link-type-hexcolor')) {
         link_action_text = `edit '<em>${a_elm.innerHTML}</em>'`;
     } else {
-        link_action_text = `goto '<em>${a_elm.getAttribute('href')}</em>'`;
+        //link_action_text = `goto '<em>${a_elm.getAttribute('href')}</em>'`;
+        link_action_text = 'follow...';
     }
     showOverlayTooltip(a_elm, `Click${mod_key_text} to ${link_action_text}`);
 }

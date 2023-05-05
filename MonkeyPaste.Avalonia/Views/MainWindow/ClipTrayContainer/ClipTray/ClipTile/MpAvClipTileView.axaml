@@ -127,9 +127,11 @@
                   Grid.Row="2"
                   Classes.subselect="{Binding IsSubSelectionEnabled}"
                   IsVisible="{Binding IsCornerButtonsVisible}"
+                  local:MpAvIsHoveringExtension.IsEnabled="True"
+                  local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverDetailGrid, Mode=TwoWay}"
                   HorizontalAlignment="Center"
                   VerticalAlignment="Bottom">
-                <TransitioningContentControl x:Name="DetailTransitioningContentControl"
+                <!--<TransitioningContentControl x:Name="DetailTransitioningContentControl"
                                              HorizontalAlignment="Center"
                                              Content="{Binding DetailText}">
                     <TransitioningContentControl.PageTransition>
@@ -151,7 +153,15 @@
                                        Text="{Binding}" />
                         </DataTemplate>
                     </TransitioningContentControl.ContentTemplate>
-                </TransitioningContentControl>
+                </TransitioningContentControl>-->
+                <TextBlock HorizontalAlignment="Center"
+                           VerticalAlignment="Bottom"
+                           Background="Transparent"
+                           MinHeight="10"
+                           MinWidth="50"
+                           FontSize="10"
+                           TextAlignment="Center"
+                           Text="{Binding DetailText}" />
             </Grid>
 
             <!--  CORNER BUTTONS  -->
