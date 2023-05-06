@@ -40,6 +40,21 @@ function loadContent(
 	ContentHandle = contentHandle;
 	ContentItemType = contentType;
 
+	// set editor content classes
+	if (ContentItemType == 'Text') {
+		getEditorElement().classList.add('text-content');
+		getEditorElement().classList.remove('image-content');
+		getEditorElement().classList.remove('file-list-content');
+	} else if (ContentItemType == 'Image') {
+		getEditorElement().classList.remove('text-content');
+		getEditorElement().classList.add('image-content');
+		getEditorElement().classList.remove('file-list-content');
+	} else if (ContentItemType == 'FileList') {
+		getEditorElement().classList.remove('text-content');
+		getEditorElement().classList.remove('image-content');
+		getEditorElement().classList.add('file-list-content');
+	}
+
 	let sel_to_restore = null;
 	if (is_reload) {
 		// when content is reloaded, any selection will be lost so save to restore
@@ -132,7 +147,8 @@ function getContentAsMessage() {
 		itemData: getContentData(),
 		itemSize1: parseInt_safe(getContentWidthByType()),
 		itemSize2: parseInt_safe(getContentHeightByType()),
-		hasTemplates: hasTemplates()
+		hasTemplates: hasTemplates(),
+		hasEditableTable: hasEditableTable()
 	};
 }
 
@@ -331,6 +347,7 @@ function loadContentData(contentData) {
 function updateContentSizeAndPosition() {
 	if (ContentItemType == 'Image') {
 		updateImageContentSizeAndPosition();
+		return;
 	}
 }
 

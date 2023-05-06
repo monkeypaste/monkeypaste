@@ -11,11 +11,17 @@
     float: left;
 }
 
+
+.common-toolbar {
+    transition: var(--toolbartransitionms) cubic-bezier(.47,1.64,.41,.8);
+    transition-property: bottom;
+}
+
 .common-toolbar {
     display: flex;
     flex-wrap: nowrap;
     min-height: 40px;
-    bottom: 0;
+    bottom: -40px;
     width: 100%;
     box-sizing: border-box;
     align-items: center;

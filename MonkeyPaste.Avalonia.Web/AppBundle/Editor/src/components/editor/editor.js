@@ -327,6 +327,7 @@ function disableSubSelection(fromHost = false) {
 	enableDragOverlay();
 	hideAnnotations();
 	hidePasteToolbar();
+	clearTableSelectionStates();
 
 	updateAllElements();
 	drawOverlay();
@@ -363,6 +364,8 @@ function onEditorSelChanged(range, oldRange, source) {
 	if (IsAppendPreMode && source == 'user' && range) {
 		FixedAppendIdx = range.index;
 	}
+	// showing ops menu takes focus
+
 	if (!isDragging()) {
 		return;
 	}

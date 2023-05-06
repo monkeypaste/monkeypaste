@@ -336,21 +336,24 @@ function onLinkPointerEnter(e) {
     let a_elm = e.currentTarget;
     let mod_key_text = '';
     if (RequiredNavigateUriModKeys.length > 0) {
-        mod_key_text = `[+ ${RequiredNavigateUriModKeys.join(' ')}]`;
+        mod_key_text = `[+ <strong>${RequiredNavigateUriModKeys.join(' ')}</strong>]`;
     }
     let link_action_text = '';
     if (a_elm.classList.contains('link-type-hexcolor')) {
         link_action_text = `edit '<em>${a_elm.innerHTML}</em>'`;
     } else {
-        //link_action_text = `goto '<em>${a_elm.getAttribute('href')}</em>'`;
-        link_action_text = 'follow...';
+        link_action_text = `goto '<em>${a_elm.getAttribute('href')}</em>'`;
+        //link_action_text = 'follow...';
     }
-    showOverlayTooltip(a_elm, `Click${mod_key_text} to ${link_action_text}`);
+    //showTooltipOverlay(a_elm, `Click${mod_key_text} to ${link_action_text}`);
+    showTooltipToolbar(`Click${mod_key_text} to ${link_action_text}`);
 }
 
 function onLinkPointerLeave(e) {
-    hideOverlayTooltip();
+    //hideTooltipOverlay();
+    hideTooltipToolbar();
 }
+
 function onLinkPopupClose(e) {
     loadLinkHandlers();
 }

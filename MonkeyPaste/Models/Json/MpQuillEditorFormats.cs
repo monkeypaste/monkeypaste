@@ -96,6 +96,7 @@ namespace MonkeyPaste {
         public int itemSize2 { get; set; } = -1;
 
         public bool hasTemplates { get; set; }
+        public bool hasEditableTable { get; set; }
 
         public string dataTransferCompletedRespFragment { get; set; }
     }

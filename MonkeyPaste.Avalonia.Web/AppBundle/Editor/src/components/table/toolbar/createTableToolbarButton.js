@@ -168,8 +168,16 @@ function isCreateTableContextMenuVisible() {
 function updateCreateTableToolbarButtonIsEnabled() {
     if (isCreateTableValid()) {
         getCreateTableToolbarButtonElement().classList.remove('disabled');
+        if (getCreateTableToolbarButtonElement().firstChild &&
+            getCreateTableToolbarButtonElement().firstChild.nodeType !== 3) {
+            getCreateTableToolbarButtonElement().firstChild.classList.remove('disabled');
+        }
     } else {
         getCreateTableToolbarButtonElement().classList.add('disabled');
+        if (getCreateTableToolbarButtonElement().firstChild &&
+            getCreateTableToolbarButtonElement().firstChild.nodeType !== 3) {
+            getCreateTableToolbarButtonElement().firstChild.classList.add('disabled');
+        }
 	}
 }
 

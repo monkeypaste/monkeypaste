@@ -1,5 +1,6 @@
 ﻿// #region Globals
 
+const IS_OVERLAY_CARET_ENABLED = false;
 var IsHighlightingVisible = false;
 
 var HighlightRects = [];
@@ -15,7 +16,7 @@ var CaretBlinkTimerInterval = null;
 // #region Life Cycle
 
 function initOverlay() {
-    if (CaretBlinkTimerInterval == null) {
+    if (CaretBlinkTimerInterval == null && IS_OVERLAY_CARET_ENABLED) {
         CaretBlinkTimerInterval = setInterval(onCaretBlinkTick, CaretBlinkTickMs, getOverlayElement());
     }
 }
@@ -269,10 +270,13 @@ function drawAnnotation(ctx, ann) {
 
 function drawTest() {
     updateOverlayBounds();
+    drawTestRect();
+}
 
-    let test_rect = getEditorContainerRect();
-    test_rect = inflateRect(test_rect, 30, 30, -30, -30);
-    drawRect(getOverlayContext(), test_rect, 'black', 'black', 0, 1);
+function drawTestRect(test_rect) {
+    test_rect = isNullOrUndefined(test_rect) ? getEditorContainerRect() : test_rect;
+    clearOverlay(getOverlayContext());
+    drawRect(getOverlayContext(), test_rect, 'black', 'black', 0, 0.5);
 }
 
 function clearOverlay(ctx) {

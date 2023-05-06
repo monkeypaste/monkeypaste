@@ -1,5 +1,5 @@
 // #region Globals
-
+const MIN_TOOLBAR_HEIGHT = 40;
 // #endregion Globals
 
 // #region Life Cycle
@@ -86,6 +86,8 @@ function isShowingPasteToolbar() {
 
 function showPasteToolbar(isPasting = false) {
     var ptt_elm = getPasteToolbarContainerElement();
+    const animate_tb = !isShowingPasteToolbar() || parseInt(ptt_elm.style.bottom) < 0; 
+
     ptt_elm.classList.remove('hidden');
 
     let can_show_templates = hasTemplates() && (!isReadOnly() || isPasting);
@@ -99,6 +101,16 @@ function showPasteToolbar(isPasting = false) {
     }
 
     setPasteToolbarDefaultFocus();
+
+    if (animate_tb) {
+        // only reset position if actually hidden
+        ptt_elm.style.bottom = `${-MIN_TOOLBAR_HEIGHT}px`;
+        delay(getToolbarTransitionMs())
+            .then(() => {
+                getPasteToolbarContainerElement().classList.remove('hidden');
+                getPasteToolbarContainerElement().style.bottom = '0px';
+            });
+    }
 }
 
 function hidePasteToolbar() {
@@ -106,12 +118,17 @@ function hidePasteToolbar() {
         // should always have pastey for appender
         return;
     }
-    var ptt = getPasteToolbarContainerElement();
-    ptt.classList.add('hidden');
+    var ptt_elm = getPasteToolbarContainerElement();
+    ptt_elm.style.bottom = `${-ptt_elm.getBoundingClientRect().height}px`;
 
-    hidePasteTemplateToolbarItems();
+    delay(getToolbarTransitionMs())
+        .then(() => {
+            getPasteToolbarContainerElement().classList.add('hidden');
+            hidePasteTemplateToolbarItems();
+            updateAllElements();
+        });
 
-    updateAllElements();
+    
 }
 
 // #endregion Actions

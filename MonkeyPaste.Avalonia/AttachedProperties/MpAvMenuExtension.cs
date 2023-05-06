@@ -368,7 +368,8 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (mivm == null || mivm.SubItems == null) {
-                e.Handled = GetSuppressDefaultRightClick(control) && e.IsRightPress(control);
+                e.Handled = GetSuppressDefaultRightClick(control) &&
+                    e.IsRightPress(control);
                 return;
             }
 

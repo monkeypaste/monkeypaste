@@ -10,6 +10,12 @@
     fill: var(--editortoolbarbuttoncolor) !important;
 }
 
+.disabled .ql-stroke, .disabled .ql-path {
+    stroke: white !important;
+    fill: white !important;
+}
+
+
 .template-type-icon .ql-fill, .paste-toolbar-icon .ql-fill {
     fill: white !important;
 }

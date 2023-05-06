@@ -24,6 +24,7 @@
     <None Remove="AppBundle\Editor\src\components\template\blots\2.0\templatePadAttribute.js" />
     <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\font\font-toolbar-items-style.css" />
     <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\main\editor_tester.js" />
+    <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\table\ops\tableops.js" />
     <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\tooltip\tooltip-style.css" />
     <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\tooltip\tooltip.js" />
     <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\util\graphics\screenshot.js" />

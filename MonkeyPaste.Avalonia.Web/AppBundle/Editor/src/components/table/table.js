@@ -1,9 +1,14 @@
 ﻿// #region Globals
 
 const TABLE_WRAPPER_CLASS_NAME = 'quill-better-table-wrapper';
+const TABLE_COL_TOOLS_CLASS_NAME = 'qlbt-col-tool';
+const TABLE_OPS_MENU_CLASS_NAME = 'qlbt-operation-menu';
 
-var IsBetterTableOpsMenuEnabled = false;
-var IsBetterTableInteractionEnabled = true;
+const ALLOW_TABLE_OPS_MENU = true;
+const IS_TABLE_OPS_TOOLBAR_ENABLED = true;
+
+var IsTableOpsMenuEnabled = true;
+var IsTableInteractionEnabled = true;
 
 var DefaultCsvProps = {
     ColSeparator: ',',
@@ -17,6 +22,7 @@ var DefaultCsvProps = {
 
 function initTable() {
     initTableToolbarButton();
+    initTableOps()
     DefaultCsvProps.RowSeparator = envNewLine();
 
     //let editor_elm = getEditorElement();
@@ -30,7 +36,8 @@ function initTable() {
 
 // #region Getters
 
-function getBetterTableContextMenuElement() {
+
+function getTableContextMenuElement() {
     let ops_menu_elms = document.getElementsByClassName('qlbt-operation-menu');
     if (ops_menu_elms == null || ops_menu_elms.length == 0) {
         return null;
@@ -38,17 +45,47 @@ function getBetterTableContextMenuElement() {
     return ops_menu_elms[0];
 }
 
-function getBetterTableSelectionLineElements() {
+function getTableSelectionLineElements() {
     return Array.from(document.getElementsByClassName('qlbt-selection-line'));
 }
 
-function getTableCsv(format, csvProps, encodeTemplates = false) {
+function getTableColumnEditorContainerElement() {
+    const tcec_elms = Array.from(document.getElementsByClassName(TABLE_COL_TOOLS_CLASS_NAME));
+    if (tcec_elms.length == 0) {
+        return null;
+    }
+    return tcec_elms[0];
+}
 
-    let table = document.getElementsByClassName('quill-better-table')[0];
-    if (!table) {
+function getTableElementRect(table_elm) {
+    // normally returns block width w/o using inner tbody element
+    if (!table_elm) {
+        return cleanRect();
+    }
+
+    let tbody_elm = table_elm.querySelector('tbody');
+    if (!tbody_elm) {
+        return cleanRect();
+    }
+
+    return cleanRect(tbody_elm.getBoundingClientRect());
+}
+
+function getTablesCsv(format, csvProps, encodeTemplates = false) {
+    // NOTE there should only be 1 table typically but keeping all table stuff scaled for N
+    // get list of all tables csv
+    let table_csvl = getTableElements().map(x => getTableCsv(x, format, csvProps, encodeTemplates));
+
+    // merge csv's w/ row sep
+    csvProps = !csvProps ? DefaultCsvProps : csvProps;
+    return table_csvl.join(csvProps.RowSeparator);
+}
+
+function getTableCsv(table_elm, format, csvProps, encodeTemplates = false) {
+    if (!table_elm) {
         return '';
     }
-    let rows = table.querySelectorAll('tr');
+    let rows = table_elm.querySelectorAll('tr');
     if (!rows || rows.length == 0) {
         return '';
     }
@@ -88,7 +125,7 @@ function getTableCsv(format, csvProps, encodeTemplates = false) {
     return csv_output;
 }
 
-function getBetterTableElements() {
+function getTableElements() {
     return Array.from(document.getElementsByClassName(TABLE_WRAPPER_CLASS_NAME));
 }
 
@@ -104,16 +141,6 @@ function getTableObject(range) {
         return null;
     }
     return btm.getTable(range);
-}
-
-function getBetterTableElementRect(table_elm) {
-    // normally returns block width w/o using inner tbody element
-    if (!table_elm) {
-        return cleanRect();
-    }
-    let tbody_elm = table_elm.firstChild.firstChild.nextSibling;
-
-    return cleanRect(tbody_elm.getBoundingClientRect());
 }
 
 function getTableCellAtDocIdx(doc_idx) {
@@ -171,11 +198,6 @@ function getTableCellElementAtDocIdx(doc_idx) {
         cur_elm = cur_elm.parentNode;
     }
     while (true) {
-        //if (!isClassInElementPath(cur_elm, FILE_LIST_ICON_COLUMN_NAME) &&
-        //    !isClassInElementPath(cur_elm, FILE_LIST_PATH_COLUMN_NAME)) {
-        //    // out of column group
-        //    break;
-        //}
         if (!isChildOfTagName(cur_elm, 'col')) {
             // out of column group
             break;
@@ -190,8 +212,16 @@ function getTableCellElementAtDocIdx(doc_idx) {
             return null;
         }
     }
+
+    if (cur_elm == null) {
+        return null;
+    }
     while (cur_elm.tagName != 'TD') {
         cur_elm = cur_elm.parentNode;
+
+        if (cur_elm == null) {
+            return null;
+        }
     }
     return cur_elm;
 }
@@ -205,7 +235,7 @@ function getTableCellElementAtDocIdx(doc_idx) {
 // #region State
 
 function isTableInDocument() {
-    return getBetterTableElements().length > 0;
+    return getTableElements().length > 0;
 }
 
 function isContentATable() {
@@ -224,17 +254,17 @@ function isDocIdxInTable(docIdx) {
 }
 
 function isAnyTableSelectionElementsVisible() {
-    return getBetterTableSelectionLineElements().length > 0;
+    return getTableSelectionLineElements().length > 0;
 }
 
 function isScreenPointInAnyTable(client_mp) {
     if (!isTableInDocument()) {
         return false;
     }
-    let table_elms = getBetterTableElements();
+    let table_elms = getTableElements();
     for (var i = 0; i < table_elms.length; i++) {
         let table_elm = table_elms[i];
-        let table_elm_rect = getBetterTableElementRect(table_elm);
+        let table_elm_rect = getTableElementRect(table_elm);
         if (isPointInRect(table_elm_rect, client_mp)) {
             return true;
         }
@@ -243,7 +273,7 @@ function isScreenPointInAnyTable(client_mp) {
 }
 
 function isContextMenuEventGoingToShowTableMenu(e) {
-    if (!isTableInDocument() || !IsBetterTableOpsMenuEnabled) {
+    if (!isTableInDocument() || !IsTableOpsMenuEnabled) {
         return false;
     }
     if (e.button == 2 && isAnyTableSelectionElementsVisible()) {
@@ -252,16 +282,39 @@ function isContextMenuEventGoingToShowTableMenu(e) {
     return false;
 }
 
-function isBetterTableContextMenuVisible() {
-    return getBetterTableContextMenuElement() != null &&
-        !getBetterTableContextMenuElement().classList.contains('hidden');
+function isTableContextMenuVisible() {
+    return getTableContextMenuElement() != null &&
+        !getTableContextMenuElement().classList.contains('hidden');
+}
+
+function hasEditableTable() {
+    if (ContentItemType != 'Text' ||
+        getTableElements().length == 0) {
+        return false;
+    } 
+    return true;
 }
 // #endregion State
 
 // #region Actions
 
+function clearTableSelectionStates() {
+    const table_mod = getBetterTableModule();
+    if (!table_mod) {
+        return;
+    }
+    if (!isNullOrUndefined(table_mod.tableSelection)) {
+        table_mod.tableSelection.clearSelectionHandler();
+    }
+    if (!isNullOrUndefined(table_mod.columnTool) &&
+        !isNullOrUndefined(table_mod.columnTool.domNode)) {
+        getBetterTableModule().columnTool.domNode.remove();
+    }
+    
+}
+
 function hideTableScrollbars() {
-    let table_elms = getBetterTableElements();
+    let table_elms = getTableElements();
     for (var i = 0; i < table_elms.length; i++) {
         let table_elm = table_elms[i];
         hideElementScrollbars(table_elm);
@@ -269,7 +322,7 @@ function hideTableScrollbars() {
 }
 
 function showTableScrollbars() {
-    let table_elms = getBetterTableElements();
+    let table_elms = getTableElements();
     for (var i = 0; i < table_elms.length; i++) {
         let table_elm = table_elms[i];
         showElementScrollbars(table_elm);
@@ -285,7 +338,7 @@ function rejectTableMouseEvent(e) {
     let is_cell_focus = isAnyTableSelectionElementsVisible();
 
     if (e.button == 2) {
-        if (IsBetterTableOpsMenuEnabled) {
+        if (IsTableOpsMenuEnabled) {
             if (!is_click_in_cell && is_cell_focus) {
                 // BUG prevent better table bug where cell element is null (quill-better-table.js:2942 )
                 // mentioned here https://github.com/soccerloway/quill-better-table/issues/77#issue-999274656
@@ -301,7 +354,7 @@ function rejectTableMouseEvent(e) {
     
     //if (is_click_in_cell &&
     //    !isClassInElementPath(e.target, 'file-list-path') &&
-    //    !IsBetterTableInteractionEnabled) {
+    //    !IsTableInteractionEnabled) {
     //    // disable any table clicks for file list
     //    return true;
     //}
@@ -309,23 +362,24 @@ function rejectTableMouseEvent(e) {
 }
 
 function disableTableContextMenu() {
-    IsBetterTableOpsMenuEnabled = false;
+    IsTableOpsMenuEnabled = false;
 }
 
 function enableTableContextMenu() {
-    //IsBetterTableOpsMenuEnabled = true;
+    if (ALLOW_TABLE_OPS_MENU) {
+        IsTableOpsMenuEnabled = true;
+    }
 }
 
 function disableTableInteraction() {
-    IsBetterTableInteractionEnabled = false;
+    IsTableInteractionEnabled = false;
 }
 
 function enableTableInteraction() {
-    IsBetterTableInteractionEnabled = true;
+    IsTableInteractionEnabled = true;
 }
 
 // #endregion Actions
 
 // #region Event Handlers
-
 // #endregion Event Handlers

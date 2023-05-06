@@ -33,6 +33,7 @@ body {
     --tooltipbgcolor: khaki;
     --tooltipbordercolor: darkkhaki;
     --tooltipfgcolor: black;
+    --toolbartransitionms: 400ms;
     margin: 0px;
     padding: 0px;
     font-family: var(--defaultFontFamily);

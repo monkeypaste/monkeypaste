@@ -107,7 +107,8 @@
     <!--<script defer src="node_modules/quill-delta-to-html/dist/browser/QuillDeltaToHtmlConverter.bundle.js"></script>-->
 
     <script defer src="lib/Quill/quill.min.js"></script>
-    <script defer src="lib/Quill-Better-Table/quill-better-table.min.js"></script>
+    <!--<script defer src="lib/Quill-Better-Table/quill-better-table.min.js"></script>-->
+    <script defer src="lib/Quill-Better-Table/quill-better-table/dist/quill-better-table.js"></script>
     <script defer src="lib/Quill-Delta-to-Html/QuillDeltaToHtmlConverter.bundle.js"></script>
     <script defer src="lib/jquery/jquery.min.js"></script>
     <script defer src="lib/DateFormatter/jquery.dateFormat.js"></script>
@@ -238,6 +239,7 @@
     <script defer src="src/components/datatransfer/htmlfragment.js"></script>
 
     <script defer src="src/components/table/table.js"></script>
+    <script defer src="src/components/table/ops/tableops.js"></script>
     <script defer src="src/components/table/toolbar/createTableToolbarButton.js"></script>
 
     <script defer src="src/components/link/link.js"></script>
@@ -464,6 +466,20 @@
         </button>
     </div>
 
+    <!-- TOOLTIP TOOLBAR -->
+    <div id="tooltipToolbar"
+         class="common-toolbar bottom-align tooltip-overlay hidden">
+        TOOLTIPZ ZONE
+    </div>
+    
+    <!-- TABLEOPS TOOLBAR -->
+    <div id="tableOpsToolbar"
+         class="common-toolbar bottom-align hidden">
+        <button id="tableOpsNavLeft" class="opsNav"><span>Left</span></button>
+        <div id="tableOpsOuterContainer"></div>
+        <button id="tableOpsNavRight" class="opsNav"><span>Right</span></button>
+    </div>
+
     <!-- PASTE TOOLBAR -->
     <div id="pasteToolbar"
          class="common-toolbar bottom-align hidden">
@@ -533,6 +549,7 @@
             </button>
         </div>
     </div>
+
 
     <!-- POP UPS -->
 

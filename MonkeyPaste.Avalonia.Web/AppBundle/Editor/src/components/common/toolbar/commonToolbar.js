@@ -1,5 +1,7 @@
 ﻿// #region Globals
 
+
+
 // #endregion Globals
 
 // #region Life Cycle
@@ -18,6 +20,10 @@ function getTemplateToolbarsHeight() {
     let total_h = getEditTemplateToolbarHeight();
     total_h += getPasteToolbarHeight();
     return total_h;
+}
+
+function getToolbarTransitionMs() {
+    return parseInt(getElementComputedStyleProp(document.body, '--toolbartransitionms').split('ms')[0]);
 }
 
 // #endregion Getters

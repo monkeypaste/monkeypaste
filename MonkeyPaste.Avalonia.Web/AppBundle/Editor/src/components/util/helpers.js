@@ -278,6 +278,18 @@ function getElementsFromAndUntilHelper(curElm, untilElm, elms) {
     }
 }
 
+function getAncestorElements(elm, include_self = true) {
+    let elms = [];
+    if (!elm) {
+        return elms;
+    }
+    let cur_elm = include_self ? elm : elm.parentNode;
+    while (cur_elm != null) {
+        elms.push(cur_elm);
+        cur_elm = cur_elm.parentNode;
+    }
+    return elms;
+}
 //#endregion
 
 //function log(msg) {
@@ -319,14 +331,10 @@ function isChildOfElement(elm, parent, include_self = true) {
     if (!elm || !parent) {
         return false;
     }
-    let search_elm = include_self ? elm : elm.parentNode;
-    while (search_elm != null) {
-        if (search_elm == parent) {
-            return true;
-        }
-        search_elm = search_elm.parentNode;
+    if (include_self && elm == parent) {
+        return true;
     }
-    return false;
+    return parent.contains(elm);
 }
 function isChildOfTagName(elm, tagName, include_self = true) {
     if (!elm || isNullOrWhiteSpace(tagName)) {
@@ -545,6 +553,10 @@ function getAllTextElementsInElement(elm) {
 const delay = time => new Promise(res => setTimeout(res, time));
 
 function getElementComputedStyleProp(elm, propName) {
+    if (isNullOrUndefined(elm) ||
+        isNullOrWhiteSpace(propName)) {
+        return null;
+    }
     let elmStyles = window.getComputedStyle(elm);
     return elmStyles.getPropertyValue(propName).trim();
 }

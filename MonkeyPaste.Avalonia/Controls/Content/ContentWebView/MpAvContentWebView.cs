@@ -1235,6 +1235,7 @@ namespace MonkeyPaste.Avalonia {
                 BindingContext.CopyItemData = contentChanged_ntf.itemData;
             }
             BindingContext.HasTemplates = contentChanged_ntf.hasTemplates;
+            BindingContext.HasEditableTable = contentChanged_ntf.hasEditableTable;
 
             if (BindingContext.IsAppendNotifier) {
                 MpConsole.WriteLine("content changed on append");

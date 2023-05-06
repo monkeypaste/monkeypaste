@@ -54,7 +54,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constants
         public const int AUTO_CYCLE_DETAIL_DELAY_MS = 5000;
-
+        public const string TABLE_WRAPPER_CLASS_NAME = "quill-better-table-wrapper";
         #endregion
 
         #region Statics
@@ -483,6 +483,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         public bool HasTemplates { get; set; } = false;
+        public bool HasEditableTable { get; set; }
         public bool IsFindAndReplaceVisible { get; set; } = false;
         public string TemplateRichHtml { get; set; }
 

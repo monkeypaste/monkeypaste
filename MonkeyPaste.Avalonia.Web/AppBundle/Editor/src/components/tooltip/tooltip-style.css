@@ -81,3 +81,10 @@
     .tooltip:hover .tooltiptext {
         visibility: visible;
     }
+
+#tooltipToolbar {
+    text-align: left;
+}
+    #tooltipToolbar span {
+        margin-left: 10px;
+    }

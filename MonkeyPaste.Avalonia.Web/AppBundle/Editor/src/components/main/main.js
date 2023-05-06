@@ -219,11 +219,14 @@ function updateAllSelectionDependantElements() {
 	updateCreateTableToolbarButtonIsEnabled();
 	updateCreateTemplateToolbarButtonToSelection();
 	updateFontColorToolbarItemsToSelection();
+	updateTableOpsToolbarToSelection();
+
 }
 
 function updateAllSizeAndPositions() {
 	updateContentSizeAndPosition();
 	updateTemplateToolbarSizesAndPositions();
+	updateTooltipToolbarSizesAndPositions();
 	updateEditorSizesAndPositions();
 	updateFindReplaceToolbarSizesAndPositions();
 	updateAnnotationSizesAndPositions();

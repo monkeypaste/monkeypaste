@@ -378,18 +378,20 @@ function convertDocRangeToDomRange(doc_range) {
 		clean_range = document.createRange();
 		clean_range.setStart(start_elm, start_offset);
 	} catch (ex) {
-		log('exception converting doc2dom range. range: idx: ' + doc_range.index + ' len: ' + doc_range.length + ' exception: ');
-		log(ex);
-		debugger;
-		//debugger;
-		if (doc_range.index == 0) {
+		doc_range.index--;
+		if (doc_range.index < 0) {
 			// how do we deal with this case?
+			let editor_range = document.createRange();
+			editor_range.setStart(getEditorElement(), 0);
+			editor_range.setEnd(getEditorElement(), 0);
+			return editor_range;
+
 			debugger;
+			log('exception converting doc2dom range. range: idx: ' + doc_range.index + ' len: ' + doc_range.length + ' exception: ');
+			log(ex);
 			return;
-		} else {
-			doc_range.index--;
-			return convertDocRangeToDomRange(doc_range);
-		}
+		} 
+		return convertDocRangeToDomRange(doc_range);
 	}
 
 	if (!clean_range) {
