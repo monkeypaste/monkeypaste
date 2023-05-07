@@ -1193,6 +1193,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void OpenPopOutWindow() {
+            int orig_ciid = CopyItemId;
             MpAvWindow pow = new MpAvWindow() {
                 Width = 500,
                 Height = 500,
@@ -1245,7 +1246,16 @@ namespace MonkeyPaste.Avalonia {
             }
 
             EventHandler activate_handler = (s, e) => {
-                IsSelected = true;
+                Parent.SelectClipTileCommand.Execute(orig_ciid); ;
+            };
+            EventHandler open_handler = null;
+            open_handler = (s, e) => {
+                if (GetContentView() is MpAvContentWebView wv &&
+                    !IsContentReadOnly) {
+                    OnPropertyChanged(nameof(IsTitleVisible));
+                    wv.PerformLoadContentRequestAsync().FireAndForgetSafeAsync(this);
+                }
+                pow.Opened -= open_handler;
             };
             EventHandler close_handler = null;
             close_handler = (s, e) => {
@@ -1254,6 +1264,7 @@ namespace MonkeyPaste.Avalonia {
             };
             pow.Activated += activate_handler;
             pow.Closed += close_handler;
+            pow.Opened += open_handler;
 
             _contentView = null;
             pow.ShowChild();

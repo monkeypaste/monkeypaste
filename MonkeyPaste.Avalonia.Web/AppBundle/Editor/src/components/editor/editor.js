@@ -22,8 +22,8 @@ function initEditor() {
 	}
 
 	quill = initQuill();
-	getEditorContainerElement().firstChild.setAttribute('id', 'quill-editor');
 
+	initClipboard();
 	initEditorToolbar();
 	initEditTemplateToolbar();
 	initPasteToolbar();
@@ -221,6 +221,7 @@ function createLink() {
 
 
 function enableReadOnly(fromHost = false) {
+	getEditorElement().style.caretColor = 'transparent';
 	if (isReadOnly()) {
 		log('enableReadOnly ignored, already read-only. fromHost: ' + fromHost);
 		return;
@@ -228,6 +229,7 @@ function enableReadOnly(fromHost = false) {
 
 	hideAllToolbars();
 	disableSubSelection();
+
 
 	getEditorContainerElement().classList.remove('editable');
 	getEditorContainerElement().classList.remove('sub-select');
@@ -250,6 +252,7 @@ function disableReadOnly(fromHost = false) {
 		log('disableReadOnly ignored, not text item. fromHost: ' + fromHost);
 		return;
 	}
+	getEditorElement().style.caretColor = 'black';
 	if (!isReadOnly()) {
 		log('disableReadOnly ignored, already editable. fromHost: ' + fromHost);
 		return;

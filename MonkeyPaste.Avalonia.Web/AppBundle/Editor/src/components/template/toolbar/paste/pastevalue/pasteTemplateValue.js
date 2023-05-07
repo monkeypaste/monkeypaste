@@ -7,7 +7,7 @@ function initPasteTemplateValue() {
 
     getPasteValueTextAreaElement().addEventListener('input', onTemplatePasteValueChanged);
     getPasteValueTextAreaElement().addEventListener('focus', onTemplatePasteValueFocus);
-    initBouncyTextArea(getPasteValueTextAreaElement());
+    //initBouncyTextArea(getPasteValueTextAreaElement());
 }
 
 // #endregion Life Cycle

@@ -1168,7 +1168,8 @@ namespace MonkeyPaste.Avalonia {
             var loadContentMsg = new MpQuillLoadContentRequestMessage() {
                 contentHandle = BindingContext.PublicHandle,
                 contentType = BindingContext.CopyItemType.ToString(),
-                itemData = BindingContext.EditorFormattedItemData
+                itemData = BindingContext.EditorFormattedItemData,
+                isReadOnly = BindingContext.IsContentReadOnly
             };
 
             var searches =
@@ -1198,6 +1199,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async void ProcessContentChangedMessage(MpQuillEditorContentChangedMessage contentChanged_ntf) {
+            if (!IsEditorInitialized) {
+                // BUG load stalls on reload while editing waiting for initialzing...
+                IsEditorInitialized = true;
+            }
+
             if (BindingContext == null ||
                 (BindingContext.IsPlaceholder &&
                 !BindingContext.IsPinned)) {

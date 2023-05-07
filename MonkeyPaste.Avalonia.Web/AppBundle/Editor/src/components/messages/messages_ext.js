@@ -34,6 +34,7 @@ function loadContent_ext(loadContentMsgStr_base64) {
 	}
 
 	loadContent(
+		req.isReadOnly,
 		req.contentHandle,
 		req.contentType,
 		req.itemData,

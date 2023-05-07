@@ -6,41 +6,9 @@ var CheckableListItemAttributor;
 // #region Life Cycle
 
 function initCheckableList() {
-	initCheckableListMatcher();
-
 	getEditorElement().addEventListener('mousedown', onEditorClickForCheckableListItem, true);	
 }
 
-function initCheckableListMatcher() {
-	// NOTE! quill renders all li's with data-list attr (bullet|ordered|checked|unchecked)
-	// delta-html converter clears ordered and bullet li's attrs and encloses in ol|ul respectively
-	// delta-html converter substitutes li's w/ data-list attr (checked|unchecked) w/ data-checked attr (true|false)
-
-	if (Quill === undefined) {
-		/// host load error case
-		debugger;
-	}
-	let Delta = Quill.imports.delta;
-
-	quill.clipboard.addMatcher('li', function (node, delta) {
-		if (node.hasAttribute('data-checked')) {
-			let is_checked = parseBool(node.getAttribute('data-checked'));
-			if (delta && delta.ops !== undefined && delta.ops.length > 0) {
-				for (var i = 0; i < delta.ops.length; i++) {
-					if (delta.ops[i].insert === undefined) {
-						continue;
-					}
-					if (delta.ops[i].attributes === undefined) {
-						delta.ops[i].attributes = {};
-					}
-					delta.ops[i].attributes.list = is_checked ? 'checked':'unchecked';
-
-				}
-			}
-		}
-		return delta;
-	});
-}
 // #endregion Life Cycle
 
 // #region Getters

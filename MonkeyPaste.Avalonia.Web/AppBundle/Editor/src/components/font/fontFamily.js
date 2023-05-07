@@ -47,7 +47,6 @@ function initFontFamilyPicker() {
     for (var i = 0; i < ff_picker_items.length; i++) {
         addClickOrKeyClickEventListener(ff_picker_items[i], onFontPickerItemClick);
     }
-    initFontFamilyMatcher();
 }
 
 
@@ -77,34 +76,6 @@ function initFontFamilyStyles() {
     return fontNames;
 }
 
-function initFontFamilyMatcher() {
-    if (Quill === undefined) {
-        /// host load error case
-        debugger;
-    }
-    let Delta = Quill.imports.delta;
-
-    quill.clipboard.addMatcher(Node.ELEMENT_NODE, function (node, delta) {
-        let ff_class = Array.from(node.classList).find(x => x.startsWith('ql-font-'));
-        if (!ff_class) {
-            return delta;
-        }
-        let ff_val = ff_class.replace('ql-font-', '');
-        if (delta && delta.ops !== undefined && delta.ops.length > 0) {
-            for (var i = 0; i < delta.ops.length; i++) {
-                if (delta.ops[i].insert === undefined) {
-                    continue;
-                }
-                if (delta.ops[i].attributes === undefined) {
-                    delta.ops[i].attributes = {};
-                }
-                delta.ops[i].attributes.font = ff_val;
-
-            }
-        }
-        return delta;
-    });
-}
 // #endregion Life Cycle
 
 // #region Getters

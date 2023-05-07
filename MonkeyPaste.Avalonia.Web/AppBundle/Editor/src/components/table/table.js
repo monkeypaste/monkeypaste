@@ -4,10 +4,10 @@ const TABLE_WRAPPER_CLASS_NAME = 'quill-better-table-wrapper';
 const TABLE_COL_TOOLS_CLASS_NAME = 'qlbt-col-tool';
 const TABLE_OPS_MENU_CLASS_NAME = 'qlbt-operation-menu';
 
-const ALLOW_TABLE_OPS_MENU = true;
-const IS_TABLE_OPS_TOOLBAR_ENABLED = true;
+const ALLOW_TABLE_OPS_MENU = false;
+const IS_TABLE_OPS_TOOLBAR_ENABLED = false;
 
-var IsTableOpsMenuEnabled = true;
+var IsTableOpsMenuEnabled = false;
 var IsTableInteractionEnabled = true;
 
 var DefaultCsvProps = {
@@ -339,7 +339,7 @@ function rejectTableMouseEvent(e) {
 
     if (e.button == 2) {
         if (IsTableOpsMenuEnabled) {
-            if (!is_click_in_cell && is_cell_focus) {
+            if (!is_click_in_cell && is_cell_focus && quill.hasFocus()) {
                 // BUG prevent better table bug where cell element is null (quill-better-table.js:2942 )
                 // mentioned here https://github.com/soccerloway/quill-better-table/issues/77#issue-999274656
                 return true;

@@ -27,7 +27,7 @@
     height: auto;
     padding: 2px 10px;
     /*caret-color: var(--caretcolor);*/
-    caret-color: transparent !important;
+    /*caret-color: transparent !important;*/
 }
 
 .ql-editor-converter {

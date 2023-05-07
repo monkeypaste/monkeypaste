@@ -695,6 +695,7 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsMainWindowActive):
                     MpMessenger.SendGlobal(IsMainWindowActive ? MpMessageType.MainWindowActivated : MpMessageType.MainWindowDeactivated);
                     break;
+                case nameof(IsMainWindowOpen):
                     MpMessenger.SendGlobal(IsMainWindowOpen ? MpMessageType.MainWindowOpened : MpMessageType.MainWindowClosed);
                     break;
                 case nameof(IsMainWindowOpening):

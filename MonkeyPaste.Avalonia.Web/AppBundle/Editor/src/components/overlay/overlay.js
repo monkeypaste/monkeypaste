@@ -218,6 +218,10 @@ function drawTextSelection(ctx) {
 }
 
 function drawCaret(ctx, sel, caret_width = 1.0, caret_opacity = 1) {
+    if (!isReadOnly()) {// && !hasTemplates()) {
+        // editor caret wont show up w/ templates in editor OR any textarea...
+        return;
+    }
     sel = !sel || sel == null ? updateSelectionColors() : sel;
 
     if (!sel || sel == null || sel.length > 0) {

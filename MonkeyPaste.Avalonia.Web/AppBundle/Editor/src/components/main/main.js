@@ -39,9 +39,6 @@ function initMain(initObj) {
 		log('Main Initialized.(Converter)');
 		return;
 	}
-
-	initClipboard();
-
 	initWindow();
 
 	initInput();

@@ -46,6 +46,8 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 	quill_instance.getModule("toolbar").container.addEventListener("mousedown", (e) => {
 		e.preventDefault();
 	});
+
+	getEditorContainerElement().firstChild.setAttribute('id', 'quill-editor');
 	return quill_instance;
 }
 
@@ -158,7 +160,8 @@ function setTextInRange(range, text, source = 'api', decodeTemplates = false) {
 }
 
 function setRootHtml(html) {
-	quill.root.innerHTML = html;	
+	quill.root.innerHTML = html;
+	quill.update();
 }
 
 function setRootText(text) {

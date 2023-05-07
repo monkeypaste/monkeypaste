@@ -8,11 +8,9 @@ var IsConverterLoaded = false;
 
 function initPlainHtmlConverter() {
 	quill = initQuill();
-
-	getEditorContainerElement().firstChild.setAttribute('id', 'quill-editor');
+	initClipboard();
 
 	getEditorElement().classList.add('ql-editor-converter');
-	initConverterMatchers();
 
 	IsConverterLoaded = true;
 	IsLoaded = true;
@@ -20,15 +18,6 @@ function initPlainHtmlConverter() {
 	onInitComplete_ntf();
 }
 
-function initConverterMatchers() {
-	let Delta = Quill.imports.delta;
-	quill.clipboard.addMatcher(Node.ELEMENT_NODE, function (node, delta) {
-		if (node.tagName == 'TABLE') {
-			//debugger;
-		}
-		return delta;
-	});
-}
 // #endregion Life Cycle
 
 // #region Getters
@@ -52,7 +41,7 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 		log('convertPlainHtml error! converter not initialized, returning null');
 		return null;
 	}
-
+	const DO_VALIDATE = true;
 
 	log("Converting This Plain Html:");
 	log(dataStr);
@@ -63,47 +52,91 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 	let qhtml = '';
 	let formatted_delta = '';
 	let iconBase64 = '';
+	let base_line_text = '';
 
 	if (formatType == 'text') {
-		let encoded_pt = encodeHtmlSpecialEntities(dataStr);
+		base_line_text = dataStr;
+		let encoded_pt = encodeHtmlSpecialEntitiesFromPlainText(dataStr);
 		insertText(0, encoded_pt, 'silent');
-		updateQuill();
-		qhtml = getHtml();
+	} else {
+		if (DO_VALIDATE) {
+			base_line_text = DomParser.parseFromString(dataStr, 'text/html').body.innerText;
+		}
+		
+		let htmlStr = fixPlainHtmlColorContrast(dataStr, bgOpacity);
+		//htmlStr = swapPreForDivTags(htmlStr);
+		//htmlStr = encodeHtmlSpecialEntitiesFromHtmlDoc(htmlStr);
+		insertHtml(0,htmlStr,'silent');
 	}
-	else if (formatType == 'rtf2html') {
-		formatted_delta = convertHtmlToDelta(dataStr, true);
-		setContents(formatted_delta);
-		qhtml = getHtml(false);
-		//qhtml = forceHtmlBgOpacity(qhtml, bgOpacity);
+	updateQuill();
+	if (isTableInDocument()) {
+		// delta-to-html doesn't convert tables
+		qhtml = getHtml2();
+		// better table throws exception setting html so don't test table
 
-		//formatted_delta = convertHtmlToDelta(qhtml, true);
-		//setRootHtml(qhtml);
-	}
-	else if (formatType == 'html') {
-		//iconBase64 = locateFaviconBase64(dataStr);
-
-		// NOTE this maybe only necessary on windows
-		//qhtml = fixHtmlBug1(qhtml);
-		//qhtml = removeUnicode(qhtml);
-		//qhtml = fixUnicode(qhtml);
-
-		insertHtml(0, dataStr, 'user', false);
-		formatted_delta = forceDeltaBgOpacity(getDelta(), bgOpacity);
-		setContents(formatted_delta);
-		if (isTableInDocument()) {
-			// delta-to-html doesn't convert tables 
-			qhtml = getHtml2();
-			// better table throws exception setting html so don't test table
-
-		} else {
-			qhtml = getHtml();
-			if (!isRunningOnHost()) {
-				// just for testing html conversion
-				setRootHtml(qhtml);
-			}
-			
+	} else {
+		qhtml = getHtml2();
+		if (!isRunningOnHost()) {
+			// just for testing html conversion
+			//setRootHtml(qhtml);
+			//setRootHtml('');
+			//insertHtml(0, qhtml, 'user');
 		}
 	}
+	if (DO_VALIDATE) {
+		const converted_text = trimQuillTrailingLineEndFromText(DomParser.parseFromString(qhtml, 'text/html').body.innerText);
+		const diff = getStringDifference(base_line_text, converted_text);
+		if (converted_text.length == base_line_text.length) {
+			log('conversion validate: PASSED');
+		} else {
+			log('conversion validate: FAILED');
+			log('first diff: ' + diff);
+			log('base length: ' + base_line_text.length);
+			log('converted length: ' + converted_text.length);
+			log('base text:')
+			log(base_line_text);
+			log('converted text:');
+			log(converted_text);
+			onException_ntf('conversion error');
+		}
+	}
+	formatted_delta = convertHtmlToDelta(qhtml);
+	//else if (formatType == 'rtf2html') {
+	//	formatted_delta = convertHtmlToDelta(dataStr);
+	//	setContents(formatted_delta);
+	//	qhtml = getHtml(false);
+	//	//qhtml = forceHtmlBgOpacity(qhtml, bgOpacity);
+
+	//	//formatted_delta = convertHtmlToDelta(qhtml);
+	//	//setRootHtml(qhtml);
+	//}
+	//else if (formatType == 'html') {
+	//	//iconBase64 = locateFaviconBase64(dataStr);
+
+	//	// NOTE this maybe only necessary on windows
+	//	//qhtml = fixHtmlBug1(qhtml);
+	//	//qhtml = removeUnicode(qhtml);
+	//	//qhtml = fixUnicode(qhtml);
+
+	//	setRootHtml(dataStr);
+	//	//dataStr = encodeHtmlSpecialEntitiesFromHtmlDoc(dataStr);
+	//	//insertHtml(0, dataStr, 'user', false);
+	//	formatted_delta = forceDeltaBgOpacity(getDelta(), bgOpacity);
+	//	setContents(formatted_delta);
+	//	if (isTableInDocument()) {
+	//		// delta-to-html doesn't convert tables 
+	//		qhtml = getHtml2();
+	//		// better table throws exception setting html so don't test table
+
+	//	} else {
+	//		qhtml = getHtml();
+	//		if (!isRunningOnHost()) {
+	//			// just for testing html conversion
+	//			setRootHtml(qhtml);
+	//		}
+			
+	//	}
+	//}
 	
 	log('');
 	log('RichHtml: ');
@@ -154,6 +187,7 @@ function locateFaviconBase64(htmlStr) {
 	}
 
 }
+
 function loadImageAsPNG(url, height, width) {
 	return new Promise((resolve, reject) => {
 		let sourceImage = new Image();
@@ -176,18 +210,60 @@ function loadImageAsPNG(url, height, width) {
 	});
 }
 
-function forceHtmlBgOpacity(htmlStr, opacity) {
+function swapPreForDivTags(htmlStr) {
+	let html_doc = DomParser.parseFromString(htmlStr, 'text/html');
+	let elms = html_doc.querySelectorAll('pre');
+	for (var i = 0; i < elms.length; i++) {
+		let node = elms[i];
+		let div_elm = html_doc.createElement('p');
+		div_elm.classList = node.classList;
+		div_elm.style = node.style;
+		div_elm.innerHTML = node.innerHTML;
+		let parent_elm = node.parentElement;
+		parent_elm.replaceChild(div_elm, node);
+	}
+	return html_doc.body.innerHTML;
+}
+
+function fixPlainHtmlColorContrast(htmlStr, opacity) {
+	const bg_color = findElementBackgroundColor(getEditorElement());
+	const is_bg_bright = isBright(bg_color);
+	const fallback_fg = is_bg_bright ? cleanColor('black') : cleanColor('white');
+
 	let html_doc = DomParser.parseFromString(htmlStr, 'text/html');
 	let elms = html_doc.querySelectorAll(InlineTags.join(", ") + ',' + BlockTags.join(','));
 	for (var i = 0; i < elms.length; i++) {
-		if (elms[i].style.backgroundColor === undefined || elms[i].style.backgroundColor == '') {
-			continue;
+		try {
+			if (!isNullOrUndefined(elms[i].style.backgroundColor)) {
+				let bg_rgba = cleanColor(elms[i].style.backgroundColor);
+				bg_rgba.a = opacity;
+				let newBg = rgbaToCssColor(bg_rgba);
+				elms[i].style.backgroundColor = newBg;
+			}
+			if (!isNullOrUndefined(elms[i].style.color)) {
+				let fg_rgba = elms[i].style.color.startsWith('var') ? fallback_fg : cleanColor(elms[i].style.color);
+				const is_fg_bright = isBright(fg_rgba);
+				if (is_bg_bright != is_fg_bright) {
+					// contrast is ok, ignore
+					continue;
+				}
+				if (isRgbFuzzyBlackOrWhite(fg_rgba)) {
+					// if fg isn't a particular color just adjust to bg
+					fg_rgba = cleanColor(is_bg_bright ? 'black' : 'white');
+				} else {
+					// for unique color 
+					const amount = is_fg_bright ? -50 : 50;
+					fg_rgba = shiftRgbaLightness(fg_rgba, amount);
+				}
+				fg_rgba.a = 1;
+				let newFg = rgbaToCssColor(fg_rgba);
+				elms[i].style.color = newFg;
+
+			}
+		} catch (ex) {
+			log(ex);
+			debugger;
 		}
-		let rgba = cleanColor(elms[i].style.backgroundColor);
-		rgba.a = opacity;
-		let newBg = rgbaToCssColor(rgba);
-		elms[i].style.backgroundColor = newBg;
-		continue;
 	}
 	return html_doc.body.innerHTML;
 }

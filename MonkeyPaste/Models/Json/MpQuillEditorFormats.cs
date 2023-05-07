@@ -21,6 +21,7 @@ namespace MonkeyPaste {
     }
 
     public class MpQuillLoadContentRequestMessage : MpJsonObject {
+        public bool isReadOnly { get; set; }
         public string contentHandle { get; set; }
         public string contentType { get; set; }
 

@@ -16,6 +16,7 @@ const AllDocumentTags = [...InlineTags, ...BlockTags];
 // #region Life Cycle
 
 function loadContent(
+	isContentReadOnly,
 	contentHandle,
 	contentType,
 	contentData,
@@ -65,8 +66,12 @@ function loadContent(
 		resetSelection();
 		resetColorPaletteState();
 
-		enableReadOnly();
-		disableSubSelection();	
+		if (isContentReadOnly) {
+			enableReadOnly();
+			disableSubSelection();
+		} else {
+			disableReadOnly(true);
+		}
 		resetContent();
 		resetAnnotations();
 	}

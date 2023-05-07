@@ -28,6 +28,223 @@ const PLACEHOLDER_DATAOBJECT_TEXT = '3acaaed7-862d-47f5-8614-3259d40fce4d';
 
 function initClipboard() {
     startClipboardHandler();
+    initAllMatchers();
+}
+
+function initAllMatchers() {
+    initWhitespaceMatcher();
+
+    if (isPlainHtmlConverter()) {
+        initConverterMatchers();
+        return;
+    }
+    
+    initLinkMatcher();
+    initFontFamilyMatcher();
+    initFontSizeMatcher();
+    initCheckableListMatcher();
+    initTemplateMatcher();
+}
+
+
+function initTemplateMatcher() {
+    if (Quill === undefined) {
+        /// host load error case
+        debugger;
+    }
+    let Delta = Quill.imports.delta;
+
+    quill.clipboard.addMatcher('span', function (node, delta) {
+        if (node.hasAttribute('templateguid')) {
+            delta.ops[0].attributes = delta.ops[0].insert.template;
+            //delete delta.ops[0].insert.template;
+            //delta.ops[0].insert = '';
+        }
+        return delta;
+    });
+}
+
+function initWhitespaceMatcher() {
+    if (Quill === undefined) {
+        /// host load error case
+        debugger;
+    }
+    let Delta = Quill.imports.delta;
+
+    quill.clipboard.addMatcher(Node.TEXT_NODE, function (node, delta) {
+        // this fixes whitespace issues 
+        if(node.data.match(/[^\n\S]|\t/)) {
+            return new Delta().insert(node.data);
+        }
+        return delta;
+    });    
+}
+
+function initCheckableListMatcher() {
+    // NOTE! quill renders all li's with data-list attr (bullet|ordered|checked|unchecked)
+    // delta-html converter clears ordered and bullet li's attrs and encloses in ol|ul respectively
+    // delta-html converter substitutes li's w/ data-list attr (checked|unchecked) w/ data-checked attr (true|false)
+
+    if (Quill === undefined) {
+        /// host load error case
+        debugger;
+    }
+    let Delta = Quill.imports.delta;
+
+    quill.clipboard.addMatcher('li', function (node, delta) {
+        if (node.hasAttribute('data-checked')) {
+            let is_checked = parseBool(node.getAttribute('data-checked'));
+            if (delta && delta.ops !== undefined && delta.ops.length > 0) {
+                for (var i = 0; i < delta.ops.length; i++) {
+                    if (delta.ops[i].insert === undefined) {
+                        continue;
+                    }
+                    if (delta.ops[i].attributes === undefined) {
+                        delta.ops[i].attributes = {};
+                    }
+                    delta.ops[i].attributes.list = is_checked ? 'checked' : 'unchecked';
+
+                }
+            }
+        }
+        return delta;
+    });
+}
+function initFontSizeMatcher() {
+    if (Quill === undefined) {
+        /// host load error case
+        debugger;
+    }
+    let Delta = Quill.imports.delta;
+
+    quill.clipboard.addMatcher(Node.ELEMENT_NODE, function (node, delta) {
+        let fs_class = Array.from(node.classList).find(x => x.startsWith('ql-size'));
+        if (!fs_class) {
+            return delta;
+        }
+        let size_val = fs_class.replace('ql-size-', '');
+        if (delta && delta.ops !== undefined && delta.ops.length > 0) {
+            for (var i = 0; i < delta.ops.length; i++) {
+                if (delta.ops[i].insert === undefined) {
+                    continue;
+                }
+                if (delta.ops[i].attributes === undefined) {
+                    delta.ops[i].attributes = {};
+                }
+                delta.ops[i].attributes.size = size_val;
+
+            }
+        }
+        return delta;
+    });
+}
+
+function initConverterMatchers() {
+    let Delta = Quill.imports.delta;
+    quill.clipboard.addMatcher(Node.ELEMENT_NODE, function (node, delta) {
+        if (node.tagName == 'TABLE') {
+            //debugger;
+        }
+        return delta;
+    });
+}
+
+function initFontFamilyMatcher() {
+    if (Quill === undefined) {
+        /// host load error case
+        debugger;
+    }
+    let Delta = Quill.imports.delta;
+
+    quill.clipboard.addMatcher(Node.ELEMENT_NODE, function (node, delta) {
+        let ff_class = Array.from(node.classList).find(x => x.startsWith('ql-font-'));
+        if (!ff_class) {
+            return delta;
+        }
+        let ff_val = ff_class.replace('ql-font-', '');
+        if (delta && delta.ops !== undefined && delta.ops.length > 0) {
+            for (var i = 0; i < delta.ops.length; i++) {
+                if (delta.ops[i].insert === undefined) {
+                    continue;
+                }
+                if (delta.ops[i].attributes === undefined) {
+                    delta.ops[i].attributes = {};
+                }
+                delta.ops[i].attributes.font = ff_val;
+
+            }
+        }
+        return delta;
+    });
+}
+
+function initLinkMatcher() {
+    // NOTE! quill renders all li's with data-list attr (bullet|ordered|checked|unchecked)
+    // delta-html converter clears ordered and bullet li's attrs and encloses in ol|ul respectively
+    // delta-html converter substitutes li's w/ data-list attr (checked|unchecked) w/ data-checked attr (true|false)
+
+    if (Quill === undefined) {
+        /// host load error case
+        debugger;
+    }
+    let Delta = Quill.imports.delta;
+
+    quill.clipboard.addMatcher('a', function (node, delta) {
+        if (node.hasAttribute('style')) {
+            let bg = getElementComputedStyleProp(node, 'background-color');
+            if (bg) {
+                bg = cleanHexColor(bg, 1, true);
+            }
+            let fg = getElementComputedStyleProp(node, 'color');
+            if (fg) {
+                fg = cleanHexColor(fg, 1, true);
+            }
+
+            log('link text: ' + node.innerText + ' bg: ' + bg + ' fg: ' + fg);
+            if (delta && delta.ops !== undefined && delta.ops.length > 0) {
+                for (var i = 0; i < delta.ops.length; i++) {
+                    if (delta.ops[i].insert === undefined) {
+                        continue;
+                    }
+                    if (delta.ops[i].attributes === undefined) {
+                        delta.ops[i].attributes = {};
+                    }
+                    if (bg) {
+                        delta.ops[i].attributes.color = bg;
+                    }
+
+                    if (fg) {
+                        delta.ops[i].attributes.color = fg;
+                    }
+
+                }
+            }
+        }
+        let link_type = Array.from(node.classList).find(x => LinkTypes.includes(x));
+        if (link_type) {
+            log('link class type: ' + link_type);
+
+            if (delta && delta.ops !== undefined && delta.ops.length > 0) {
+                for (var i = 0; i < delta.ops.length; i++) {
+                    if (delta.ops[i].insert === undefined) {
+                        continue;
+                    }
+                    if (delta.ops[i].attributes === undefined) {
+                        delta.ops[i].attributes = {};
+                    }
+                    delta.ops[i].attributes.linkType = link_type;
+                    if (link_type == 'hexcolor') {
+                        delta.ops[i].attributes.background = node.innerText;
+                        delta.ops[i].attributes.color = isBright(node.innerText) ? 'black' : 'white';
+                    }
+                }
+            }
+            LinkTypeAttrb.add(node, link_type);
+        } else {
+            log('no type class for link, classes: ' + node.getAttribute('class'));
+        }
+        return delta;
+    });
 }
 
 // #endregion Life Cycle

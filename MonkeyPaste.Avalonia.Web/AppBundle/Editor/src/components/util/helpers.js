@@ -504,6 +504,21 @@ const HtmlEntitiesLookup = [
     [`<`, `&lt;`]
 ];
 
+function getStringDifference(a, b) {
+    var i = 0;
+    var j = 0;
+    var result = "";
+
+    while (j < b.length) {
+        if (a[i] != b[j] || i == a.length)
+            result += b[j];
+        else
+            i++;
+        j++;
+    }
+    return result;
+}
+
 function isStringContainSpecialHtmlEntities(str) {
     if (isNullOrEmpty(str)) {
         return false;
@@ -511,7 +526,20 @@ function isStringContainSpecialHtmlEntities(str) {
     //return Object.entries(HtmlEntitiesLookup).find(([k, v]) => str.includes(k)) != null;
     return HtmlEntitiesLookup.find(x => str.includes(x[0])) != null;
 }
-function encodeHtmlSpecialEntities(str) {
+
+function encodeHtmlSpecialEntitiesFromHtmlDoc(htmlStr) {
+    // create temp dom of htmlStr and escape special chars in text nodes	
+    let html_doc = DomParser.parseFromString(htmlStr, 'text/html');
+    let text_elms = getAllTextElementsInElement(html_doc.body);
+    for (var i = 0; i < text_elms.length; i++) {
+        let text_elm = text_elms[i];
+        text_elm.nodeValue = encodeHtmlSpecialEntitiesFromPlainText(text_elm.nodeValue);
+    }
+    htmlStr = html_doc.body.innerHTML;
+    return htmlStr;
+}
+
+function encodeHtmlSpecialEntitiesFromPlainText(str) {
     if (!isString(str) || isNullOrEmpty(str)) {
         return '';
     }
@@ -600,6 +628,12 @@ function numToPaddedStr(num, padStr, padCount) {
         numStr = padStr + numStr;
     }
     return numStr;
+}
+
+function wrapNumber(num, min, max) {
+    // from https://stackoverflow.com/a/28313586/105028
+    const result = min + (num - min) % (max - min);
+    return result;
 }
 
 function get2dIdx(idx, cols) {

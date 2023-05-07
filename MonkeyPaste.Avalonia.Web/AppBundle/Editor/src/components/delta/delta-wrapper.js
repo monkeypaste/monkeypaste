@@ -97,26 +97,15 @@ function convertDeltaToHtml(delta, encodeHtmlEntities) {
 	return htmlStr;
 }
 
-function convertHtmlToDelta(htmlStr, isRtf2Html = false) {
-	// create temp dom of htmlStr and escape special chars in text nodes	
-	let html_doc = DomParser.parseFromString(htmlStr, 'text/html');
-	let text_elms = getAllTextElementsInElement(html_doc.body);
-	for (var i = 0; i < text_elms.length; i++) {
-		let text_elm = text_elms[i];
-		text_elm.nodeValue = encodeHtmlSpecialEntities(text_elm.nodeValue);
-	}
-	htmlStr = html_doc.body.innerHTML;
+function convertHtmlToDelta(htmlStr) {
+	htmlStr = encodeHtmlSpecialEntitiesFromHtmlDoc(htmlStr);
 	const whitespace_sub = '[BOOYABOOYA]';
-	//if (isRtf2Html) {
-		htmlStr = htmlStr.replaceAll('&nbsp;', whitespace_sub);
-	//}	
+	htmlStr = htmlStr.replaceAll('&nbsp;', whitespace_sub);
 
 	let htmlObj = { html: htmlStr };
 	var delta = quill.clipboard.convert(htmlObj);
 
-	//if (isRtf2Html) {
-		delta = fixHtmlToDeltaWhitespaceSpecialEntities(delta, whitespace_sub);
-	//}
+	delta = fixHtmlToDeltaWhitespaceSpecialEntities(delta, whitespace_sub);
 
 	if (isPlainHtmlConverter()) {
 		return delta;
@@ -216,7 +205,7 @@ function encodeHtmlEntitiesInDeltaInserts(delta) {
 			if (delta.ops[i].insert === undefined) {
 				continue;
 			}
-			delta.ops[i].insert = encodeHtmlSpecialEntities(delta.ops[i].insert);
+			delta.ops[i].insert = encodeHtmlSpecialEntitiesFromPlainText(delta.ops[i].insert);
 		}
 	}
 	return delta;
