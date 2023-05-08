@@ -83,6 +83,11 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 			//insertHtml(0, qhtml, 'user');
 		}
 	}
+	if (qhtml == '') {
+		// fallback and use delta2html, i think its a problem when there's only 1 block and content was plain text
+		qhtml = getHtml();
+	}
+
 	if (DO_VALIDATE) {
 		const converted_text = trimQuillTrailingLineEndFromText(DomParser.parseFromString(qhtml, 'text/html').body.innerText);
 		const diff = getStringDifference(base_line_text, converted_text);

@@ -4,10 +4,10 @@ const TABLE_WRAPPER_CLASS_NAME = 'quill-better-table-wrapper';
 const TABLE_COL_TOOLS_CLASS_NAME = 'qlbt-col-tool';
 const TABLE_OPS_MENU_CLASS_NAME = 'qlbt-operation-menu';
 
-const ALLOW_TABLE_OPS_MENU = false;
+const ALLOW_TABLE_OPS_MENU = true;
 const IS_TABLE_OPS_TOOLBAR_ENABLED = false;
 
-var IsTableOpsMenuEnabled = false;
+var IsTableOpsMenuEnabled = true;
 var IsTableInteractionEnabled = true;
 
 var DefaultCsvProps = {
@@ -36,9 +36,8 @@ function initTable() {
 
 // #region Getters
 
-
 function getTableContextMenuElement() {
-    let ops_menu_elms = document.getElementsByClassName('qlbt-operation-menu');
+    let ops_menu_elms = document.getElementsByClassName(TABLE_OPS_MENU_CLASS_NAME);
     if (ops_menu_elms == null || ops_menu_elms.length == 0) {
         return null;
     }
@@ -71,17 +70,17 @@ function getTableElementRect(table_elm) {
     return cleanRect(tbody_elm.getBoundingClientRect());
 }
 
-function getTablesCsv(format, csvProps, encodeTemplates = false) {
+function getTablesCsv(format, csvProps, isForOle = false) {
     // NOTE there should only be 1 table typically but keeping all table stuff scaled for N
     // get list of all tables csv
-    let table_csvl = getTableElements().map(x => getTableCsv(x, format, csvProps, encodeTemplates));
+    let table_csvl = getTableElements().map(x => getTableCsv(x, format, csvProps, isForOle));
 
     // merge csv's w/ row sep
     csvProps = !csvProps ? DefaultCsvProps : csvProps;
     return table_csvl.join(csvProps.RowSeparator);
 }
 
-function getTableCsv(table_elm, format, csvProps, encodeTemplates = false) {
+function getTableCsv(table_elm, format, csvProps, isForOle = false) {
     if (!table_elm) {
         return '';
     }
@@ -96,27 +95,50 @@ function getTableCsv(table_elm, format, csvProps, encodeTemplates = false) {
         quill.enable(true);
         updateQuill();
     }
+    let cells_to_convert = null;
+    if (!isNullOrUndefined(getBetterTableModule().tableSelection.selectedTds) &&
+        getBetterTableModule().tableSelection.selectedTds.length > 0) {
+        // treat cell selection like text selection, when no cell is selected convert all
+        cells_to_convert =
+            getBetterTableModule()
+                .tableSelection
+                .selectedTds
+                .map(x => {
+                    return {
+                        r: x.rowOffset(),
+                        c: x.cellOffset()
+                    };
+                });
+    } 
     let csv_output = '';
 
-    for (var i = 0; i < rows.length; i++) {
-        let row = rows[i];
+    for (var r = 0; r < rows.length; r++) {
+        let row = rows[r];
         let cells = row.querySelectorAll('td');
         let row_str = '';
-        for (var j = 0; j < cells.length; j++) {
-            if (j > 0) {
+        for (var c = 0; c < cells.length; c++) {
+            if (cells_to_convert &&
+                cells_to_convert.filter(x => x.r == r && x.c == c).length == 0) {
+                // ignored cell
+                continue;
+            }
+            if (row_str != '') {
                 row_str += csvProps.ColSeparator;
             }
-            let cell = cells[j];
+            let cell = cells[c];
             if (format == 'HTML Format') {
                 row_str += cell.innerHTML;
             } else if (format == 'Text') {
                 let cell_range = getElementDocRange(cell);
 
-                let cell_text = getText(cell_range, encodeTemplates).trim(); // remove new line ending
+                let cell_text = getText(cell_range, isForOle).trim(); // remove new line ending
                 row_str += cell_text;
             }
         }
-        row_str += csvProps.RowSeparator;
+        if (row_str != '') {
+            row_str += csvProps.RowSeparator;
+        }
+        
         csv_output += row_str;
     }
     if (!was_enabled) {
@@ -282,6 +304,9 @@ function isContextMenuEventGoingToShowTableMenu(e) {
     return false;
 }
 
+function canContextMenuEventShowTableOpsMenu() {
+    return isAnyTableSelectionElementsVisible();
+}
 function isTableContextMenuVisible() {
     return getTableContextMenuElement() != null &&
         !getTableContextMenuElement().classList.contains('hidden');
@@ -303,6 +328,7 @@ function clearTableSelectionStates() {
     if (!table_mod) {
         return;
     }
+    log('clearing table selection states...');
     if (!isNullOrUndefined(table_mod.tableSelection)) {
         table_mod.tableSelection.clearSelectionHandler();
     }
@@ -329,26 +355,45 @@ function showTableScrollbars() {
 	}
 }
 
+function handleTableMouseEventAndCheckReject(e, etype) {
+    if (etype == 'click') {
+
+        return;
+    }
+    if (etype == 'down') {
+
+        return;
+    }
+    if (etype == 'up') {
+
+        return;
+    }
+    log('unknown tablemouse event type: ' + etype);
+}
+
+
 function rejectTableMouseEvent(e) {
-    if (!isTableInDocument()) {
+    // returns TRUE to prevent showing ops menu but only if it would be shown otherwise
+
+    if (!isTableInDocument() ||
+        isNullOrUndefined(e.button) ||
+        e.button != 2) {
         return false;
     }
 
     let is_click_in_cell = isScreenPointInAnyTable(getClientMousePos(e)); //isClassInElementPath(e.target, TABLE_WRAPPER_CLASS_NAME);
     let is_cell_focus = isAnyTableSelectionElementsVisible();
 
-    if (e.button == 2) {
-        if (IsTableOpsMenuEnabled) {
-            if (!is_click_in_cell && is_cell_focus && quill.hasFocus()) {
-                // BUG prevent better table bug where cell element is null (quill-better-table.js:2942 )
-                // mentioned here https://github.com/soccerloway/quill-better-table/issues/77#issue-999274656
-                return true;
-            }
-        } else {
-            if (is_click_in_cell) {
-                // prevent show table context menu
-                return true;
-            }
+    if (IsTableOpsMenuEnabled) {
+        if (!is_click_in_cell && is_cell_focus && quill.hasFocus()) {
+            // BUG prevent better table bug where cell element is null (quill-better-table.js:2942 )
+            // mentioned here https://github.com/soccerloway/quill-better-table/issues/77#issue-999274656
+            return true;
+        }
+    } else {
+        if (is_click_in_cell) {
+            // prevent show table context menu
+            return true;
         }
     }
     
@@ -359,6 +404,25 @@ function rejectTableMouseEvent(e) {
     //    return true;
     //}
     return false;
+}
+
+function updateTableOpsMenuSizeAndPosition() {
+    delay(500)
+        .then(() => {
+            // wait for ops menu to show up
+
+            let menu_elm = getTableContextMenuElement();
+            if (!menu_elm) {
+                return;
+            }
+            const window_rect = getWindowRect();
+            const menu_rect = cleanRect(menu_elm.getBoundingClientRect());
+            let mh = menu_rect.height;
+            if (menu_rect.bottom > window_rect.bottom) {
+                mh = window_rect.bottom - menu_rect.top;
+            }
+            menu_elm.style.height = `${mh}px`;
+        });
 }
 
 function disableTableContextMenu() {

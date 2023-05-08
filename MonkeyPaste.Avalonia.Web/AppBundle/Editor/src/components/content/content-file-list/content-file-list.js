@@ -54,12 +54,16 @@ function getDecodedFileListContentText(encoded_text) {
 	return encoded_text;
 }
 
-function getFileListContentData() {
+function getFileListContentData(isForOle) {
 	let paths_str = '';
+	const sel_idxs = isForOle && getSelectedFileItemIdxs().length > 0 ? getSelectedFileItemIdxs() : null;
 	for (var i = 0; i < FileListItems.length; i++) {
+		if (sel_idxs && !sel_idxs.includes(i)) {
+			continue;
+		}
 		paths_str += FileListItems[i].filePath;
 		if (i < FileListItems.length - 1) {
-			paths_str += envNewLine();
+			paths_str += DefaultCsvProps.RowSeparator;
 		}
 	}
 	return paths_str;
@@ -195,26 +199,31 @@ function convertFileListContentToFormats(isForOle, formats) {
 		let lwc_format = formats[i].toLowerCase();
 		let data = null;
 		if (isHtmlFormat(lwc_format)) {
+			// BUG this ignores selected items cause its confusing and won't really be needed
 			data = getHtml();
 			if (lwc_format == 'html format') {
 				// NOTE web html doesn't use fragment format
 				data = createHtmlClipboardFragment(data);
 			}
 		} else if (isPlainTextFormat(lwc_format)) {
-			data = getFileListContentData();
+			data = getFileListContentData(isForOle);
 		} else if (isImageFormat(lwc_format)) {
+			// BUG this ignores selected items cause its confusing and won't really be needed
+
 			// trigger async screenshot notification where host needs 
 			// to null and wait for value to avoid async issues
-			getDocRangeAsImageAsync(sel)
+			getDocRangeAsImageAsync(getContentRange())
 				.then((result) => {
 					onCreateContentScreenShot_ntf(result);
 				});
 			data = PLACEHOLDER_DATAOBJECT_TEXT;
 		} else if (isCsvFormat(lwc_format)) {
-			data = getFileListContentData().split(envNewLine()).join(',');
+			data = getFileListContentData(isForOle).split(DefaultCsvProps.RowSeparator).join(',');
 		} else if (lwc_format == 'filenames' ||
 					lwc_format == 'filedrop') {
-			// handled in host
+			// need to provide if partial selection and text is not included
+			// only send idx's to avoid converting uri's in host
+			data = getFileListContentData(isForOle);
 		}
 		if (!data || data == '') {
 			continue;

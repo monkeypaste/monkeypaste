@@ -64,6 +64,7 @@ namespace MonkeyPaste.Avalonia {
         notifyScrollChanged,
         notifyAppendStateChanged,
         notifyInternalContextMenuIsVisibleChanged,
+        notifyInternalContextMenuCanBeShownChanged,
         notifyLastTransactionUndone,
         notifyAnnotationSelected,
         notifyShowDebugger,
@@ -343,7 +344,15 @@ namespace MonkeyPaste.Avalonia {
 
             if (ctvm.CopyItemType == MpCopyItemType.FileList) {
                 if (contentDataReq.formats.Contains(MpPortableDataFormats.AvFileNames)) {
-                    avdo.SetData(MpPortableDataFormats.AvFileNames, ctvm.CopyItemData.SplitNoEmpty(MpCopyItem.FileItemSplitter));
+                    if (avdo.TryGetData(MpPortableDataFormats.AvFileNames, out string fp_str) &&
+                        !string.IsNullOrWhiteSpace(fp_str)) {
+                        // file data is csv using DefaultCsvProps seperated by rows which should be envNewLine
+
+                        avdo.SetData(MpPortableDataFormats.AvFileNames, fp_str.SplitNoEmpty(MpCopyItem.FileItemSplitter));
+                    } else {
+
+                        avdo.SetData(MpPortableDataFormats.AvFileNames, ctvm.CopyItemData.SplitNoEmpty(MpCopyItem.FileItemSplitter));
+                    }
                 }
             } else if (!ignore_pseudo_file) {
                 // NOTE setting dummy file so OLE system sees format on clipboard, actual
@@ -746,6 +755,12 @@ namespace MonkeyPaste.Avalonia {
                         ctvm.CanShowContextMenu = !ctxMenuChangedMsg.isInternalContextMenuVisible;
                     }
                     break;
+                case MpAvEditorBindingFunctionType.notifyInternalContextMenuCanBeShownChanged:
+                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillInternalContextMenuCanBeShownChangedNotification>(msgJsonBase64Str);
+                    if (ntf is MpQuillInternalContextMenuCanBeShownChangedNotification ctxMenuCanShowChangedMsg) {
+                        ctvm.CanShowContextMenu = !ctxMenuCanShowChangedMsg.canInternalContextMenuBeShown;
+                    }
+                    break;
                 #endregion
 
                 #region OTHER
@@ -865,6 +880,10 @@ namespace MonkeyPaste.Avalonia {
 
             this.PointerPressed += MpAvCefNetWebView_PointerPressed;
             this.AttachedToLogicalTree += MpAvCefNetWebView_AttachedToLogicalTree;
+
+#if DESKTOP
+            this.CreateWindow += MpAvCefNetWebView_CreateWindow;
+#endif
         }
 
 
@@ -894,14 +913,14 @@ namespace MonkeyPaste.Avalonia {
 
 #if DESKTOP
         private void MpAvCefNetWebView_CreateWindow(object sender, CreateWindowEventArgs e) {
-            if (MpAvWindowManager.MainWindow == null) {
-                return;
-            }
-            IPlatformHandle platformHandle = MpAvWindowManager.MainWindow.TryGetPlatformHandle();
-            if (platformHandle is IMacOSTopLevelPlatformHandle macOSHandle) {
-                e.WindowInfo.SetAsWindowless(macOSHandle.GetNSWindowRetained());
-            } else {
-                e.WindowInfo.SetAsWindowless(platformHandle.Handle);
+            if (TopLevel.GetTopLevel(this) is Window w &&
+                w.TryGetPlatformHandle() is IPlatformHandle platformHandle) {
+
+                if (platformHandle is IMacOSTopLevelPlatformHandle macOSHandle) {
+                    e.WindowInfo.SetAsWindowless(macOSHandle.GetNSWindowRetained());
+                } else {
+                    e.WindowInfo.SetAsWindowless(platformHandle.Handle);
+                }
             }
 
             e.Client = this.Client;
@@ -1323,17 +1342,22 @@ namespace MonkeyPaste.Avalonia {
 
         private void OnIsContentSelectedChanged() {
             if (BindingContext == null ||
-                !IsEditorLoaded ||
-                MpAvFocusManager.Instance.IsInputControlFocused) {
+                !IsEditorLoaded //||
+                                // MpAvFocusManager.Instance.IsInputControlFocused
+                ) {
                 return;
             }
             var msg = new MpQuillIsHostFocusedChangedMessage() {
                 isHostFocused = IsContentSelected
             };
-            if (IsContentSelected) {
+            if (IsContentSelected &&
+                BindingContext.IsSubSelectionEnabled) {
                 this.Focus();
+                SendMessage($"hostIsFocusedChanged_ext('{msg.SerializeJsonObjectToBase64()}')");
+                bool success = FocusManager.Instance.Current.IsKeyboardFocusWithin;
+                MpConsole.WriteLine($"Webview focus on tile select: {(success ? "SUCCESS" : "FAILED")}");
+                var test = this.GetFocusedFrame();
             }
-            SendMessage($"hostIsFocusedChanged_ext('{msg.SerializeJsonObjectToBase64()}')");
         }
 
         #endregion

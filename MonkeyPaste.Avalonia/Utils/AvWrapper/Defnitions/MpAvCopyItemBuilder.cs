@@ -65,7 +65,11 @@ namespace MonkeyPaste.Avalonia {
                 data: itemData,
                 itemType: itemType,
                 suppressWrite: suppressWrite);
-
+            if (ci == null) {
+                // probably null data, clean up pre-create
+                await dobj.DeleteFromDatabaseAsync();
+                return null;
+            }
 
             if (ci.WasDupOnCreate) {
                 // remove new data object

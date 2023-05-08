@@ -23,11 +23,11 @@ function setInputFocusable(isInputFocused) {
 	}
 	IsHostFocused = isInputFocused;
 	if (isInputFocused && !document.hasFocus()) {
-		window.focus();
-		log('document focus attempted: ' + (document.hasFocus() ? "SUCCESS" : "FAILED"));
+		forceWindowFocus();
 	}
 	if (!IsHostFocused) {
 		hideAllPopups();
+
 	}
 }
 
@@ -50,6 +50,32 @@ function isWindowFocused() {
 // #endregion State
 
 // #region Actions
+
+function forceWindowFocus() {
+	window.focus();
+	log('document focus attempted: ' + (document.hasFocus() ? "SUCCESS" : "FAILED"));
+	if (!document.hasFocus()) {
+		window.blur();
+		window.focus();
+
+		log('document focus (after window focus toggle): ' + (document.hasFocus() ? "SUCCESS" : "FAILED"));
+		if (!document.hasFocus()) {
+			let test = document.activeElement;
+			console.table(test);
+			if (!document.hasFocus()) {
+				window.open('', EDITOR_WINDOW_NAME).focus();
+				log('document focus (after window.open): ' + (document.hasFocus() ? "SUCCESS" : "FAILED"));
+			}
+		}
+	}
+}
+
+function ensureWindowFocus() {
+	if (document.hasFocus()) {
+		return;
+	}
+	forceWindowFocus();
+}
 
 // #endregion Actions
 

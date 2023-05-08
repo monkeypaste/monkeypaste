@@ -60,7 +60,7 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region IStyleable Implementation
-        Type IStyleable.StyleKey => typeof(MpAvMarqueeTextBox);
+        Type IStyleable.StyleKey => typeof(TextBox);
         #endregion
 
         #region MpIOverrideRender Implementation
@@ -773,7 +773,7 @@ namespace MonkeyPaste.Avalonia {
         private void SetTextBoxIsVisible(bool isTextBoxVisible) {
             Dispatcher.UIThread.Post(() => {
                 foreach (var c in VisualChildren) {
-                    //c.IsVisible = isTextBoxVisible;
+                    c.IsVisible = isTextBoxVisible;
                 }
                 if (isTextBoxVisible) {
                     SetValue(BackgroundProperty, EditableBackground);

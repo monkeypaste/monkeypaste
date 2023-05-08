@@ -4,7 +4,7 @@ var WindowMouseDownLoc = null;
 var WindowMouseLoc = null;
 
 var WasSupressRightMouseDownSentToHost = false;
-
+var WasInternalContextMenuAbleToShow = false;
 // #endregion Globals
 
 // #region Life Cycle
@@ -96,7 +96,7 @@ function updateWindowMouseState(e) {
 // #region Event Handlers
 
 function onWindowClick(e) {
-	if (rejectTableMouseEvent(e)) {
+	if (rejectTableMouseEvent(e,'click')) {
 		return false;
 	} 
 
@@ -145,10 +145,18 @@ function onWindowContextMenu(e) {
 		e.preventDefault();
 		e.stopPropagation();
 		return false;
-	} 
+	} else {
+		// only relevant for table ops menu display
+		// to clamp height to window height to show its scrollbars
+		updateTableOpsMenuSizeAndPosition();
+	}
 }
 
 function onWindowMouseDown(e) {
+	if (isSubSelectionEnabled()) {
+		ensureWindowFocus();
+	}
+
 	if (WasSupressRightMouseDownSentToHost) {
 		// sanity check to cleanup any uncaptured mouse ups during a down supress
 		// (like if right click down on cell then up outside of editor window)
@@ -159,11 +167,12 @@ function onWindowMouseDown(e) {
 	if (rejectTableMouseEvent(e)) {
 		e.preventDefault();
 		e.stopPropagation();
+		log('mouse down rejected by table logic')
 		return false;
 	}
 	if (isContextMenuEventGoingToShowTableMenu(e)) {
 		// notify host to not show 
-		onInternalContextMenuIsVisibleChanged_ntf(true);
+		//onInternalContextMenuIsVisibleChanged_ntf(true);
 		WasSupressRightMouseDownSentToHost = true;
 	}
 
@@ -176,8 +185,7 @@ function onWindowMouseMove(e) {
 	updateWindowMouseState(e);
 	if (hasAnnotations()) {
 		onAnnotationWindowPointerMove(e);
-	}
-	
+	}	
 }
 
 function onWindowMouseUp(e) {
@@ -190,9 +198,18 @@ function onWindowMouseUp(e) {
 	if (rejectTableMouseEvent(e)) {
 		e.preventDefault();
 		e.stopPropagation();
+		log('mouse up rejected by table logic')
 		return false;
 	}
-	//WindowMouseDownLoc = null;
+
+	if (canContextMenuEventShowTableOpsMenu()) {
+		onInternalContextMenuIsVisibleChanged_ntf(true);
+		WasInternalContextMenuAbleToShow = true;
+	} else if (WasInternalContextMenuAbleToShow) {
+		onInternalContextMenuIsVisibleChanged_ntf(false);
+		WasInternalContextMenuAbleToShow = false;
+	}
+
 	updateWindowMouseState(e);
 	SelectionOnMouseDown = null;
 	DragDomRange = null;

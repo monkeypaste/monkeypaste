@@ -481,7 +481,6 @@ namespace MonkeyPaste.Avalonia {
 
         public bool CanShowContextMenu { get; set; } = true;
 
-
         public bool HasTemplates { get; set; } = false;
         public bool HasEditableTable { get; set; }
         public bool IsFindAndReplaceVisible { get; set; } = false;

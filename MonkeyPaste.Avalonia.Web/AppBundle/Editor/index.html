@@ -127,6 +127,7 @@
         //loadLifeCycleHandlers();
         document.addEventListener('DOMContentLoaded', (e) => {
             //init_test();
+            window.name = EDITOR_WINDOW_NAME;
             onDomLoaded_ntf();
         });
 
@@ -254,7 +255,7 @@
 
     <script defer src="src/components/input/keyboard.js"></script>
     <script defer src="src/components/input/mouse.js"></script>
-    <script defer src="src/components/input/input.js"></script>
+    <script defer src="src/components/input/focus.js"></script>
 
     <script defer src="src/components/quill-wrapper/quill-wrapper.js"></script>
     <script defer src="src/components/quill-wrapper/toolbar/quill-toolbar.js"></script>
@@ -474,7 +475,7 @@
     
     <!-- TABLEOPS TOOLBAR -->
     <div id="tableOpsToolbar"
-         class="common-toolbar bottom-align paste-toolbar hidden">
+         class="common-toolbar bottom-align hidden">
         <button id="tableOpsNavLeft" class="opsNav"><span>Left</span></button>
         <div id="tableOpsOuterContainer"></div>
         <button id="tableOpsNavRight" class="opsNav"><span>Right</span></button>
@@ -482,7 +483,7 @@
 
     <!-- PASTE TOOLBAR -->
     <div id="pasteToolbar"
-         class="common-toolbar bottom-align hidden">
+         class="common-toolbar bottom-align paste-toolbar hidden">
         <div class="resizer resizer-t"></div>
         <!-- SELECTOR -->
         <div id="pasteTemplateToolbarMenuSelectorDiv"

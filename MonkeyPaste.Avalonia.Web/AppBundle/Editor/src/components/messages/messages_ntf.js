@@ -232,6 +232,15 @@ function onInternalContextMenuIsVisibleChanged_ntf(isVisible) {
 	sendMessage('notifyInternalContextMenuIsVisibleChanged', msgStr);
 }
 
+function onInternalContextMenuCanBeShownChanged_ntf(canBeShown) {
+	// output 'MpQuillInternalContextMenuCanBeShownChangedNotification'
+	let msg = {
+		canInternalContextMenuBeShown: canBeShown
+	};
+	let msgStr = toBase64FromJsonObj(msg);
+	sendMessage('notifyInternalContextMenuCanBeShownChanged', msgStr);
+}
+
 function onShowDebugger_ntf(debugReason, breakAfterSend) {
 	// output 'MpQuillShowDebuggerNotification'
 	let msg = {

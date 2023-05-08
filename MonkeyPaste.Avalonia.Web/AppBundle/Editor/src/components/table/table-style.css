@@ -1,23 +1,54 @@
 ﻿/* Override table menu width so colors wrap correctly*/
 .qlbt-operation-menu {
     width: 300px !important;
+    height: auto;
+    overflow: auto !important;
     /* position: absolute; */
     /* left: 0px; */
     /* top: 0px; */
     /* min-height: 150px; */
     /* width: 200px; */
 }
+.qlbt-col-tool {
+    top: 2px;
+}
 
+
+
+.qlbt-operation-menu .qlbt-operation-color-picker {
+    margin: 7px -10px !important;
+    overflow: visible;
+}
+
+.qlbt-operation-menu .qlbt-operation-color-picker .qlbt-operation-color-picker-item {
+    width: 12px !important;
+    height: 12px !important;
+}
+
+.qlbt-col-tool:hover .qlbt-col-tool-cell {
+    border-color: var(--selbgcolor) !important;
+}
+
+#editor.editable div.ql-editor.text-content:has(.quill-better-table-wrapper) {
+    margin-top: 20px !important;
+}
+
+.quill-better-table {
+    width: auto !important;
+}
+
+
+/* ops toolbar (unused) */
 #tableOpsToolbar {
     overflow: hidden;
     display: inline-flex;
     flex-wrap: nowrap;
 }
 
-#tableOpsToolbar .opsNav{
-    font-size: 16px;
-    padding:10px;
-}
+    #tableOpsToolbar .opsNav {
+        font-size: 16px;
+        padding: 10px;
+    }
 
     #tableOpsToolbar .qlbt-operation-menu .qlbt-operation-color-picker,
     #tableOpsToolbar .qlbt-operation-menu .qlbt-operation-menu-subtitle {
@@ -32,33 +63,20 @@
         min-height: unset !important;
         width: unset !important;
     }
-    #tableOpsToolbar .qlbt-operation-menu .qlbt-operation-menu-item {
-        display: inline-flex;
-        align-items: center;
-        padding: 5px 14px;
-        background-color: #fff;
-        cursor: pointer;
-        color: #595959;
-        overflow: hidden;
-        text-overflow: clip;
-    }
-    #tableOpsToolbar .qlbt-operation-menu .qlbt-operation-menu-text {
-        overflow: visible;
-        text-align: left;
-        min-width: 150px;
-    }
 
+        #tableOpsToolbar .qlbt-operation-menu .qlbt-operation-menu-item {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 14px;
+            background-color: #fff;
+            cursor: pointer;
+            color: #595959;
+            overflow: hidden;
+            text-overflow: clip;
+        }
 
-
-.qlbt-operation-menu .qlbt-operation-color-picker .qlbt-operation-color-picker-item {
-    width: 12px !important;
-    height: 12px !important;
-}
-
-.qlbt-col-tool:hover .qlbt-col-tool-cell {
-    border-color: var(--selbgcolor) !important;
-}
-
-#editor.editable div.ql-editor.text-content:has(.quill-better-table-wrapper) {
-    margin-top: 20px !important;
-}
+        #tableOpsToolbar .qlbt-operation-menu .qlbt-operation-menu-text {
+            overflow: visible;
+            text-align: left;
+            min-width: 150px;
+        }

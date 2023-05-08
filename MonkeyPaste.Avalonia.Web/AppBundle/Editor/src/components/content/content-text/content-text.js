@@ -753,7 +753,7 @@ function convertTextContentToFormats(isForOle, formats) {
 			}
 		} else if (isPlainTextFormat(lwc_format)) {
 			if (isContentATable()) {
-				data = getTableCsv('Text', null, isForOle);
+				data = getTablesCsv('Text', null, isForOle);
 			} else {
 				data = getText(sel, isForOle);
 			}

@@ -1,5 +1,7 @@
 // #region Globals
 
+const EDITOR_WINDOW_NAME = 'MpEditorWindow';
+
 var IsWindowResizeUpdateEnabled = true;
 
 // #endregion Globals
@@ -58,13 +60,6 @@ function getWindowRect() {
 // #endregion Actions
 
 // #region Event Handlers
-function onWindowFocus(e) {
-
-}
-
-function onWindowBlur(e) {
-
-}
 
 function onWindowScroll(e) {
 	updateAllElements();
