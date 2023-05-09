@@ -10,10 +10,14 @@
     /* width: 200px; */
 }
 .qlbt-col-tool {
-    top: 2px;
+    top: 2px !important;
+    overflow: visible !important;
 }
 
-
+#editor:not(.editable) > .qlbt-col-tool,
+#editor:not(.sub-select) > .qlbt-selection-line {
+    display: none !important;
+}
 
 .qlbt-operation-menu .qlbt-operation-color-picker {
     margin: 7px -10px !important;
@@ -29,8 +33,12 @@
     border-color: var(--selbgcolor) !important;
 }
 
-#editor.editable div.ql-editor.text-content:has(.quill-better-table-wrapper) {
+#editor.editable.text-content div.ql-editor:has(.quill-better-table-wrapper) {
     margin-top: 20px !important;
+}
+
+#editor:not(.editable) > div.qlbt-selection-line {
+    /*display: none !important;*/
 }
 
 .quill-better-table {

@@ -77,7 +77,7 @@ namespace MonkeyPaste.Avalonia {
             return primaryIconColorList;
         }
 
-        public abstract string GetApplicationIconBase64(string appPath, MpIconSize iconSize = MpIconSize.MediumIcon32);
+        public abstract string GetPathIconBase64(string appPath, MpIconSize iconSize = MpIconSize.MediumIcon32);
 
 
 

@@ -36,6 +36,26 @@ function initTable() {
 
 // #region Getters
 
+function getTableSelectionRect() {
+    let sel_rect = null;
+    limitSelLines();
+    const sel_elms = Array.from(document.getElementsByClassName('qlbt-selection-line'));
+    if (sel_elms.length == 0) {
+        return cleanRect();
+    }
+    for (var i = 0; i < sel_elms.length; i++) {
+        let cur_rect = cleanRect(screenToEditorRect(cleanRect(sel_elms[i].getBoundingClientRect())));
+        if (sel_rect == null) {
+            sel_rect = cur_rect;
+        } else {
+            sel_rect = rectUnion(sel_rect, cur_rect);
+        }
+    }
+    sel_rect.x1 = sel_rect.right;
+    sel_rect.y1 = sel_rect.bottom;
+    return sel_rect;
+}
+
 function getTableContextMenuElement() {
     let ops_menu_elms = document.getElementsByClassName(TABLE_OPS_MENU_CLASS_NAME);
     if (ops_menu_elms == null || ops_menu_elms.length == 0) {
@@ -88,19 +108,24 @@ function getTableCsv(table_elm, format, csvProps, isForOle = false) {
     if (!rows || rows.length == 0) {
         return '';
     }
-    format = !format ? 'HTML Format' : format;
+    format = !format ? 'text' : format.toLowerCase();
     csvProps = !csvProps ? DefaultCsvProps : csvProps;
     let was_enabled = quill.isEnabled();
     if (!was_enabled) {
         quill.enable(true);
         updateQuill();
     }
+    let btm = getBetterTableModule();
+    if (isNullOrUndefined(btm.tableSelection)) {
+        btm = getBetterTableModule(true);
+    }
     let cells_to_convert = null;
-    if (!isNullOrUndefined(getBetterTableModule().tableSelection.selectedTds) &&
-        getBetterTableModule().tableSelection.selectedTds.length > 0) {
+    if (!isNullOrUndefined(btm.tableSelection) &&
+        !isNullOrUndefined(btm.tableSelection.selectedTds) &&
+        btm.tableSelection.selectedTds.length > 0) {
         // treat cell selection like text selection, when no cell is selected convert all
         cells_to_convert =
-            getBetterTableModule()
+            btm
                 .tableSelection
                 .selectedTds
                 .map(x => {
@@ -126,9 +151,9 @@ function getTableCsv(table_elm, format, csvProps, isForOle = false) {
                 row_str += csvProps.ColSeparator;
             }
             let cell = cells[c];
-            if (format == 'HTML Format') {
+            if (isHtmlFormat(format)) {
                 row_str += cell.innerHTML;
-            } else if (format == 'Text') {
+            } else if (isPlainTextFormat(format) || isCsvFormat(format)) {
                 let cell_range = getElementDocRange(cell);
 
                 let cell_text = getText(cell_range, isForOle).trim(); // remove new line ending
@@ -151,9 +176,23 @@ function getTableElements() {
     return Array.from(document.getElementsByClassName(TABLE_WRAPPER_CLASS_NAME));
 }
 
-function getBetterTableModule() {    
-    let betterTableModule = quill.getModule('better-table');
-    return betterTableModule;
+function getBetterTableModule(forceInit = false) {    
+    let btm = quill.getModule('better-table');
+    if (btm &&
+        forceInit &&
+        getTableElements().length > 0 &&
+        isSubSelectionEnabled() &&
+        (isNullOrUndefined(btm.tableSelection) || 
+            isNullOrUndefined(btm.columnTool) ||
+            isNullOrUndefined(btm.getTable()))) {
+        // force init through by quickly show/hiding ops
+        let sel_cell_elm = getTableCellElementAtDocIdx(getDocSelection().index);
+        if (sel_cell_elm) {
+            let ops_elm = getBetterTableModule().getOpsMenu(sel_cell_elm);
+            ops_elm.tableOperationMenu.domNode.remove();            
+        }        
+    }
+    return btm;
 }
 
 function getTableObject(range) {
@@ -305,7 +344,7 @@ function isContextMenuEventGoingToShowTableMenu(e) {
 }
 
 function canContextMenuEventShowTableOpsMenu() {
-    return isAnyTableSelectionElementsVisible();
+    return !isReadOnly() && isAnyTableSelectionElementsVisible();
 }
 function isTableContextMenuVisible() {
     return getTableContextMenuElement() != null &&
@@ -328,7 +367,7 @@ function clearTableSelectionStates() {
     if (!table_mod) {
         return;
     }
-    log('clearing table selection states...');
+    //log('clearing table selection states...');
     if (!isNullOrUndefined(table_mod.tableSelection)) {
         table_mod.tableSelection.clearSelectionHandler();
     }
@@ -337,6 +376,25 @@ function clearTableSelectionStates() {
         getBetterTableModule().columnTool.domNode.remove();
     }
     
+}
+
+function updateTablesSizesAndPositions() {
+    if (!hasEditableTable()) {
+        return;
+    }
+    const table_mod = getBetterTableModule(true);
+    if (!table_mod) {
+        return;
+    }
+    //log('clearing table selection states...');
+    if (!isNullOrUndefined(table_mod.tableSelection)) {
+        table_mod.tableSelection.refreshHelpLinesPosition();
+    }
+    limitColTool();
+    if (!isNullOrUndefined(table_mod.columnTool)) {
+        table_mod.columnTool.updateToolCells();
+    }
+    limitSelLines();
 }
 
 function hideTableScrollbars() {
@@ -353,22 +411,6 @@ function showTableScrollbars() {
         let table_elm = table_elms[i];
         showElementScrollbars(table_elm);
 	}
-}
-
-function handleTableMouseEventAndCheckReject(e, etype) {
-    if (etype == 'click') {
-
-        return;
-    }
-    if (etype == 'down') {
-
-        return;
-    }
-    if (etype == 'up') {
-
-        return;
-    }
-    log('unknown tablemouse event type: ' + etype);
 }
 
 
@@ -389,6 +431,8 @@ function rejectTableMouseEvent(e) {
             // BUG prevent better table bug where cell element is null (quill-better-table.js:2942 )
             // mentioned here https://github.com/soccerloway/quill-better-table/issues/77#issue-999274656
             return true;
+        } else {
+            return !canContextMenuEventShowTableOpsMenu();
         }
     } else {
         if (is_click_in_cell) {
@@ -441,6 +485,22 @@ function disableTableInteraction() {
 
 function enableTableInteraction() {
     IsTableInteractionEnabled = true;
+}
+
+function limitColTool() {
+    if (Array.from(document.getElementsByClassName('qlbt-col-tool')).length > 1) {
+        // fix when 2nd col tools comes, just remove 2nd
+        Array.from(document.getElementsByClassName('qlbt-col-tool'))[0].remove();
+    }
+}
+
+function limitSelLines() {
+    let sel_elms = Array.from(document.getElementsByClassName('qlbt-selection-line'));
+    if (sel_elms.length > 4) {
+        for (var i = 0; i < 4; i++) {
+            sel_elms[i].remove();
+		}
+    }
 }
 
 // #endregion Actions

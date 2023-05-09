@@ -216,8 +216,7 @@ function updateAllSelectionDependantElements() {
 	updateCreateTableToolbarButtonIsEnabled();
 	updateCreateTemplateToolbarButtonToSelection();
 	updateFontColorToolbarItemsToSelection();
-	updateTableOpsToolbarToSelection();
-
+	updateTablesSizesAndPositions();
 }
 
 function updateAllSizeAndPositions() {
@@ -228,6 +227,7 @@ function updateAllSizeAndPositions() {
 	updateFindReplaceToolbarSizesAndPositions();
 	updateAnnotationSizesAndPositions();
 	updateScrollBarSizeAndPositions();
+	updateTablesSizesAndPositions();
 
 	if (EnvName == "android") {
 		//var viewportBottom = window.scrollY + window.innerHeight;

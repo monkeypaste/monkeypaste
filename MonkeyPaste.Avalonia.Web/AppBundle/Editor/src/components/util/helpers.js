@@ -290,6 +290,32 @@ function getAncestorElements(elm, include_self = true) {
     }
     return elms;
 }
+
+function getAncestorByTagName(elm, tagName, include_self = true) {
+    if (!elm || isNullOrWhiteSpace(tagName)) {
+        return elm;
+    }
+    let search_elm = include_self ? elm : elm.parentNode;
+    while (true) {
+        if (search_elm == null) {
+            return false;
+        }
+        if (search_elm.tagName === undefined) {
+            if (search_elm.parentNode == null) {
+                return null;
+            }
+            search_elm = search_elm.parentNode;
+        }
+        if (search_elm == null || search_elm.tagName === undefined) {
+            debugger;
+        }
+        if (search_elm.tagName.toLowerCase() == tagName.toLowerCase()) {
+            return search_elm;
+        }
+        search_elm = search_elm.parentNode;
+    }
+    return null;
+}
 //#endregion
 
 //function log(msg) {
@@ -337,29 +363,8 @@ function isChildOfElement(elm, parent, include_self = true) {
     return parent.contains(elm);
 }
 function isChildOfTagName(elm, tagName, include_self = true) {
-    if (!elm || isNullOrWhiteSpace(tagName)) {
-        return false;
-    }
-    let search_elm = include_self ? elm : elm.parentNode;
-    while (true) {
-        if (search_elm == null) {
-            return false;
-        }
-        if (search_elm.tagName === undefined) {
-            if (search_elm.parentNode == null) {
-                return false;
-            }
-            search_elm = search_elm.parentNode;
-        }
-        if (search_elm == null || search_elm.tagName === undefined) {
-            debugger;
-        }
-        if (search_elm.tagName.toLowerCase() == tagName.toLowerCase()) {
-            return true;
-        }
-        search_elm = search_elm.parentNode;
-    }
-    return false;
+    let result = getAncestorByTagName(elm, tagName, include_self);
+    return result != null;
 }
 
 function isClassInElementPath(elm, classOrClasses, compareOp = 'OR') {

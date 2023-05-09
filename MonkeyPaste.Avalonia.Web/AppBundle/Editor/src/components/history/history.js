@@ -25,6 +25,28 @@ function initHistory() {
 
 // #region Actions
 
+function historyUndo() {
+	const was_enabled = quill.isEnabled();
+	if (!was_enabled) {
+		quill.enable(true);
+	}
+	quill.history.undo();
+	if (!was_enabled) {
+		quill.enable(false);
+	}
+}
+
+function historyRedo() {
+	const was_enabled = quill.isEnabled();
+	if (!was_enabled) {
+		quill.enable(true);
+	}
+	quill.history.redo();
+	if (!was_enabled) {
+		quill.enable(false);
+	}
+}
+
 function addHistoryItem(delta) {
 	if (LastTextChangedDelta == null) {
 		LastTextChangedDelta = delta;

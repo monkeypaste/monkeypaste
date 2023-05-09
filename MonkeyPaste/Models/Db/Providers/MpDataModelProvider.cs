@@ -373,6 +373,16 @@ namespace MonkeyPaste {
             return result;
         }
 
+        public static async Task<int> GetCopyItemSourceDeviceIdAsync(int ciid) {
+            string query = $"select fk_MpUserDeviceId from MpCopyItemTransaction where fk_MpCopyItemId=? and TransactionLabel=?";
+            var result = await MpDb.QueryScalarsAsync<int>(query, ciid, MpTransactionType.Created.ToString());
+            MpDebug.Assert(result.Count == 1, $"CopyItem w/ id {ciid} has zero or multiple create transactions, should only have 1");
+            if (result.Any()) {
+                return result[0];
+            }
+            return 0;
+        }
+
         #endregion
 
         #region MpISourceRef

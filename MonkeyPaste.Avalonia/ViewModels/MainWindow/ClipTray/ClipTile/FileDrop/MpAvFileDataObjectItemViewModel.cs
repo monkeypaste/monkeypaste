@@ -75,25 +75,25 @@ namespace MonkeyPaste.Avalonia {
         public string IconBase64 {
             get {
                 if (_iconBase64 == null) {
-                    if (PathIconId == 0) {
-                        // fallback to question mark
-                        return MpBase64Images.QuestionMark;
-                    }
                     if (!Path.IsFileOrDirectory()) {
                         if (Parent != null &&
                             Parent.Parent != null &&
                             Parent.Parent.TransactionCollectionViewModel != null) {
                             if (Parent.Parent.TransactionCollectionViewModel.SourceUserDeviceId == MpDefaultDataModelTools.ThisUserDeviceId) {
                                 // this path is FROM this device but gone so show error icon
-                                return MpBase64Images.Error;
+                                return MpBase64Images.MissingFile;
                             } else {
                                 // this path is from a DIFFERENT device
                                 // TODO maybe this should have a unique visual identifier to show 
                                 // this isn't from device. For now though just pull cached file icon...
                             }
                         } else {
-
+                            // create transaction not ready
                         }
+                    }
+                    if (PathIconId == 0) {
+                        // fallback to question mark
+                        return MpBase64Images.QuestionMark;
                     }
                     var ivm = MpAvIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == PathIconId);
                     if (ivm == null) {

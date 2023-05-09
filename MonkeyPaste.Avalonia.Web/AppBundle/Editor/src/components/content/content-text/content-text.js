@@ -746,14 +746,19 @@ function convertTextContentToFormats(isForOle, formats) {
 		let lwc_format = formats[i].toLowerCase();
 		let data = null;
 		if (isHtmlFormat(lwc_format)) {
-			data = getHtml(sel);
-			if (lwc_format == 'html format') {
-				// NOTE web html doesn't use fragment format
-				data = createHtmlClipboardFragment(data);
+			if (isContentATable()) {
+				data = getTablesCsv(lwc_format, null, isForOle);
+			} else {
+				data = getHtml(sel);
+				if (lwc_format == 'html format') {
+					// NOTE web html doesn't use fragment format
+					data = createHtmlClipboardFragment(data);
+				}
 			}
+			
 		} else if (isPlainTextFormat(lwc_format)) {
 			if (isContentATable()) {
-				data = getTablesCsv('Text', null, isForOle);
+				data = getTablesCsv(lwc_format, null, isForOle);
 			} else {
 				data = getText(sel, isForOle);
 			}
@@ -762,7 +767,7 @@ function convertTextContentToFormats(isForOle, formats) {
 			}
 		} else if (isCsvFormat(lwc_format) && isContentATable()) {
 			// TODO figure out handling table selectinn logic and check here 
-			data = getTableCsv('Text', null, isForOle);
+			data = getTablesCsv(lwc_format, null, isForOle);
 		} else if (isImageFormat(lwc_format)) {
 			// trigger async screenshot notification where host needs 
 			// to null and wait for value to avoid async issues

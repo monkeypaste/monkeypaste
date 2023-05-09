@@ -11,7 +11,8 @@ const LinkTypes = [
     'phonenumber',
     'currency',
     'hexcolor',
-    'streetaddress'
+    'streetaddress',
+    'delete-item'
 ];
 
 var LinkTypeAttrb = null;
@@ -194,6 +195,12 @@ function onLinkClick(e) {
     if (link_elm.getAttribute('href') == 'about:blank') {
         link_elm.setAttribute('href', 'javascript:;');
     }
+
+    if (link_type == 'delete-item') {
+        // only occurs for file item remove
+        excludeRowByAnchorElement(link_elm);
+        return false;
+    }
     let link_doc_range = getElementDocRange(link_elm);
 
     onNavigateUriRequested_ntf(e.currentTarget.href, link_type, link_doc_range.index, e.currentTarget.innerText, down_mod_keys);
@@ -273,9 +280,11 @@ function onLinkPointerEnter(e) {
     let link_action_text = '';
     if (a_elm.classList.contains('link-type-hexcolor')) {
         link_action_text = `edit '<em>${a_elm.innerHTML}</em>'`;
+    } else if (a_elm.classList.contains('file-list-remove')) {
+        let fli_text = a_elm.parentElement.parentElement.previousSibling.innerText;
+        link_action_text = `exclude '<em>${fli_text}</em>'`;
     } else {
         link_action_text = `goto '<em>${a_elm.getAttribute('href')}</em>'`;
-        //link_action_text = 'follow...';
     }
     //showTooltipOverlay(a_elm, `Click${mod_key_text} to ${link_action_text}`);
     showTooltipToolbar(`Click${mod_key_text} to ${link_action_text}`);

@@ -1,17 +1,29 @@
 ﻿.file-list-table {
-    width: 95%;
     overflow: hidden;
 }
 
 .file-list-icon-col {
     width: 35px;
 }
+
 .file-list-path-col {
     width: 100%;
 }
+.file-list-remove-col {
+    width: 0px;
+}
+
 .file-list-icon {
     max-width: 25px;
     max-height: 25px;
+}
+
+.link-type-delete-item {
+    color: red !important;
+    text-decoration: none !important;
+    font-size: 16px;
+    text-align: center;
+    font-weight: bold;
 }
 
 .file-list-path {
@@ -24,24 +36,45 @@
 }
 
 
-.file-list-row {
-    background-color: transparent;
-}
-#editor.sub-select .file-list-row {
-    cursor: pointer !important;
-}
-    #editor.sub-select .file-list-row.selected {
+    #editor.file-list-content tr {
+        background-color: transparent;
+    }
+
+    #editor.file-list-content.sub-select .file-list-row {
+        cursor: pointer !important;
+    }
+    #editor.file-list-content.sub-select .file-list-row.selected {
         background-color: darkturquoise !important;
     }
-    #editor.sub-select .file-list-row:hover.selected {
+    #editor.file-list-content.sub-select .file-list-row:hover.selected {
         background-color: turquoise !important;
     }
-    
-    #editor.sub-select .file-list-row:not(.selected):hover {
+
+    #editor.file-list-content.sub-select .file-list-row:not(.selected):hover {
         background-color: lightgoldenrodyellow !important;
     }
-    #editor.sub-select .file-list-row:hover {
+    #editor.file-list-content.sub-select .file-list-row:hover {
         border: 1.5px solid var(--hovercolor) !important;
+    }
+
+    #editor.file-list-content > div.qlbt-selection-line {
+        display: none !important;
+    }
+    
+    #editor.file-list-content > div.qlbt-col-tool {
+        display: none !important;
+    }
+
+    #editor.file-list-content table.quill-better-table {
+        width: 100% !important;
+    }
+
+    #editor.file-list-content.sub-select table:has(tr:nth-child(2)) .file-list-remove-col {
+        width: 35px;
+    }
+
+    #editor.file-list-content.sub-select td.file-list-cell:hover:has(a.link-type-delete-item) {
+        background-color: pink;
     }
 
 .file-list-cell {

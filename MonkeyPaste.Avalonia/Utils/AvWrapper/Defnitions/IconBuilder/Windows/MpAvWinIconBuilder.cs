@@ -7,7 +7,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvWinIconBuilder : MpAvIconBuildBase {
         #region Public Methods
 
-        public override string GetApplicationIconBase64(string appPath, MpIconSize iconSize = MpIconSize.MediumIcon32) {
+        public override string GetPathIconBase64(string appPath, MpIconSize iconSize = MpIconSize.MediumIcon32) {
             if (string.IsNullOrEmpty(appPath)) {
                 return null;
             }

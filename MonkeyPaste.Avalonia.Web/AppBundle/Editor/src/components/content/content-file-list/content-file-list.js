@@ -1,6 +1,6 @@
 // #region Globals
-const FILE_LIST_ICON_COLUMN_NAME = 'file-list-icon-col';
-const FILE_LIST_PATH_COLUMN_NAME = 'file-list-path-col';
+
+var FileListClassAttrb = null;
 var FileListItems = [];
 
 // #endregion Globals
@@ -11,6 +11,11 @@ function loadFileListContent(itemDataStr) {
 	// item data is MpQuillFileListDataFragment
 
 	// itemData must remain file-paths separated by new-line
+
+	if (FileListClassAttrb == null) {
+		initFileListClassAttrb();
+	}
+
 	hideAllToolbars();
 	disableTableContextMenu();
 	disableTableInteraction();
@@ -24,11 +29,19 @@ function loadFileListContent(itemDataStr) {
 	}
 	createFileList();
 
-	loadLinkHandlers();
-
-	
+	loadLinkHandlers();	
 }
 
+function initFileListClassAttrb() {
+	const Parchment = Quill.imports.parchment;
+	let suppressWarning = true;
+	let config = {
+		scope: Parchment.Scope.ANY,
+	};
+	FileListClassAttrb = new Parchment.ClassAttributor('fileList', 'file-list', config);
+
+	Quill.register(FileListClassAttrb, suppressWarning);
+}
 // #endregion Life Cycle
 
 // #region Getters
@@ -107,7 +120,7 @@ function getSelectedFileListRowElements() {
 }
 
 function getFileListRowElements() {
-	return Array.from(document.getElementsByClassName('file-list-row'));
+	return Array.from(document.querySelectorAll('tr'));
 }
 
 function getTotalFileSize() {
@@ -157,21 +170,29 @@ function createFileList() {
 		let fp_icon = FileListItems[i].fileIconBase64;
 		let file_item_tr_outer_html =
 			'<tr class="file-list-row" data-row="' + row_id + '">' +
+			// ICON COLUMN
 			'<td class="file-list-cell" data-row="' + row_id + '" rowspan="1" colspan="1">' +
 			'<p class="qlbt-cell-line" data-row="' + row_id + '" data-cell="' + getTableItemIdentifier('cell') + '" data-rowspan="1" data-colspan="1">' +
 			'<img class="file-list-icon" src="data:image/png;base64,' + fp_icon + '">' +
 			'</p></td>' +
+			// PATH COLUMN
 			'<td class="file-list-cell" data-row="' + row_id + '" rowspan="1" colspan="1">' +
 			'<p class="qlbt-cell-line ql-align-right" data-row="' + row_id + '" data-cell="' + getTableItemIdentifier('cell') + '" data-rowspan="1" data-colspan="1">' +
 			`<a class="link-type-fileorfolder file-list-path ql-font-consolas ql-align-right" href="${getPathUri(fp)}">${formatFilePathDisplayValue(fp)}</a>` +
-			'</p></td>';
+			'</p></td>' +
+			// REMOVE COLUMN
+			'<td class="file-list-cell" data-row="' + row_id + '" rowspan="1" colspan="1">' +
+			'<p class="qlbt-cell-line ql-align-center" data-row="' + row_id + '" data-cell="' + getTableItemIdentifier('cell') + '" data-rowspan="1" data-colspan="1">' +
+			'<a class="link-type-delete-item file-list-remove ql-align-center">x</span>' +
+			'</p></td>' +
+			'</tr>';
 		file_list_tbody_inner_html += file_item_tr_outer_html;
 
 	}
 	let file_list_table_html =
 		'<div id="fileListTableDiv" class="quill-better-table-wrapper">' +
 		'<table class="quill-better-table file-list-table">' +
-		'<colgroup><col class="file-list-icon-col"><col class="file-list-path-col"></colgroup>' +
+		'<colgroup><col class="file-list-icon-col"><col class="file-list-path-col"><col class="file-list-remove-col"></colgroup>' +
 		'<tbody>' + file_list_tbody_inner_html + '</tbody></table></div>';
 
 	setRootHtml(file_list_table_html);
@@ -293,6 +314,36 @@ function appendFileListContentData(data) {
 	onContentChanged_ntf();
 }
 
+function excludeRowByAnchorElement(a_elm) {
+	if (!a_elm) {
+		return;
+	}
+	let row_elm = getAncestorByTagName(a_elm, 'tr');
+	if (!row_elm) {
+		return;
+	}
+	
+	let row_idx = getFileListRowElements().indexOf(row_elm);
+	if (row_idx < 0) {
+		return;
+	}
+	// NOTE remove item before content change so host receives updated list
+	FileListItems.splice(row_idx, 1);
+
+	quill.enable(true);
+
+	let btm = getBetterTableModule(true);
+	let tableBlot = quillFindBlot(getTableElements()[0].firstChild);
+	const row_boundary = btm.tableSelection.boundary;
+	tableBlot.deleteRow(row_boundary, getEditorContainerElement());
+	updateQuill();
+
+	quill.enable(false);
+
+	//createFileList();
+
+	//onContentChanged_ntf();
+}
 // #endregion Actions
 
 // #region Event Handlers

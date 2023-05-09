@@ -98,7 +98,7 @@ namespace MonkeyPaste.Avalonia {
                             return null;
                         }
                     }
-                    string appIconBase64 = Mp.Services.IconBuilder.GetApplicationIconBase64(valStr);
+                    string appIconBase64 = Mp.Services.IconBuilder.GetPathIconBase64(valStr);
                     return new MpAvStringBase64ToBitmapConverter().Convert(appIconBase64, null, null, CultureInfo.CurrentCulture);
                 }
             }

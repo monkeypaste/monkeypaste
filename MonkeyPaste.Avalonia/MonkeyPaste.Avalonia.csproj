@@ -347,6 +347,7 @@
     <None Remove="Assets\Images\merge.png" />
     <None Remove="Assets\Images\minus.png" />
     <None Remove="Assets\Images\minus2.png" />
+    <None Remove="Assets\Images\missingfile.png" />
     <None Remove="Assets\Images\monkey.png" />
     <None Remove="Assets\Images\newwindow.png" />
     <None Remove="Assets\Images\noentry.png" />
@@ -506,6 +507,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\graph.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\missingfile.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\object.png">

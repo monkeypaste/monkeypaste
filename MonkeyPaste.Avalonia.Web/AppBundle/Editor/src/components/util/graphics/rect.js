@@ -97,9 +97,15 @@ function editorToScreenRect(er) {
     return sr;
 }
 
-function screenToEditorRect(sp) {
+function screenToEditorRect(sr) {
     let editor_rect = getEditorContainerRect();
-    return { x: sp.x - editor_rect.left, y: sp.y - editor_rect.top };
+    let er = {};
+    er.left = sr.left - editor_rect.left;
+    er.top = sr.top - editor_rect.top;
+    er.right = er.left + sr.width;
+    er.bottom = er.top + sr.height;
+    er = cleanRect(er);
+    return er;
 }
 
 function rectUnion(rect_a, rect_b) {

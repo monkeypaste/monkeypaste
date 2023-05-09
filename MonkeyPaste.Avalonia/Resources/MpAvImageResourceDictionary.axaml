@@ -1,6 +1,7 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="MissingFileImage">avares://MonkeyPaste.Avalonia/Assets/Images/missingfile.png</sys:String>
     <sys:String x:Key="DoubleSidedArrowSolidImage">avares://MonkeyPaste.Avalonia/Assets/Images/doubleSidedArrow.png</sys:String>
     <sys:String x:Key="PlainTextImage">avares://MonkeyPaste.Avalonia/Assets/Images/plaintext.png</sys:String>
     <sys:String x:Key="ObjectImage">avares://MonkeyPaste.Avalonia/Assets/Images/object.png</sys:String>

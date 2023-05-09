@@ -43,17 +43,17 @@ function loadContent(
 
 	// set editor content classes
 	if (ContentItemType == 'Text') {
-		getEditorElement().classList.add('text-content');
-		getEditorElement().classList.remove('image-content');
-		getEditorElement().classList.remove('file-list-content');
+		getEditorContainerElement().classList.add('text-content');
+		getEditorContainerElement().classList.remove('image-content');
+		getEditorContainerElement().classList.remove('file-list-content');
 	} else if (ContentItemType == 'Image') {
-		getEditorElement().classList.remove('text-content');
-		getEditorElement().classList.add('image-content');
-		getEditorElement().classList.remove('file-list-content');
+		getEditorContainerElement().classList.remove('text-content');
+		getEditorContainerElement().classList.add('image-content');
+		getEditorContainerElement().classList.remove('file-list-content');
 	} else if (ContentItemType == 'FileList') {
-		getEditorElement().classList.remove('text-content');
-		getEditorElement().classList.remove('image-content');
-		getEditorElement().classList.add('file-list-content');
+		getEditorContainerElement().classList.remove('text-content');
+		getEditorContainerElement().classList.remove('image-content');
+		getEditorContainerElement().classList.add('file-list-content');
 	}
 
 	let sel_to_restore = null;
@@ -61,6 +61,7 @@ function loadContent(
 		// when content is reloaded, any selection will be lost so save to restore
 		sel_to_restore = getDocSelection();
 	} else {
+		clearTableSelectionStates();
 		loadPasteButton();
 		disableAppendMode();
 		resetSelection();
