@@ -1410,7 +1410,7 @@
     <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.0-preview7" />
     <PackageReference Include="Markdig" Version="0.31.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
-    <PackageReference Include="System.Management" Version="7.0.0" />
+    <PackageReference Include="System.Management" Version="7.0.1" />
     <PackageReference Include="NetCoreAudio" Version="1.7.0" />
     <PackageReference Include="System.Speech" Version="7.0.0" />
   </ItemGroup>

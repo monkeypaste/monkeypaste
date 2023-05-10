@@ -5,6 +5,9 @@ const MIN_TOOLBAR_HEIGHT = 40;
 // #region Life Cycle
 
 function initPasteToolbar() {
+    // workaround to keep resizer and not override css so initial show doesn't double bounce
+    //getPasteToolbarContainerElement().style.bottom = `${-MIN_TOOLBAR_HEIGHT}px`;
+
     enableResize(getPasteToolbarContainerElement());
 
     initPasteButton();
@@ -119,7 +122,7 @@ function hidePasteToolbar() {
         return;
     }
     var ptt_elm = getPasteToolbarContainerElement();
-    ptt_elm.style.bottom = `${-ptt_elm.getBoundingClientRect().height}px`;
+    ptt_elm.style.bottom = `${-MIN_TOOLBAR_HEIGHT}px`;
 
     delay(getToolbarTransitionMs())
         .then(() => {

@@ -191,10 +191,15 @@ namespace MonkeyPaste.Avalonia {
             IconResourceObj = iconResourceObj;
             AssignmentType = assignmentType;
 
-            if (AssignmentType == MpShortcutAssignmentType.CanBeGlobalCommand &&
-                MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.ShortcutId == curShortcutId) is MpAvShortcutViewModel svm) {
-                CanBeGlobal = svm.CanBeGlobalShortcut;
-                SelectedRoutingTypeIdx = svm.SelectedRoutingTypeIdx;
+            if (AssignmentType == MpShortcutAssignmentType.CanBeGlobalCommand) {
+                CanBeGlobal = true;
+                if (MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.ShortcutId == curShortcutId) is MpAvShortcutViewModel svm) {
+                    SelectedRoutingTypeIdx = svm.SelectedRoutingTypeIdx;
+                } else {
+                    // default globals to passive routing
+                    SelectedRoutingTypeIdx = RoutingTypes.IndexOf(MpRoutingType.Passive.ToString());
+                }
+
             } else {
                 CanBeGlobal = false;
                 SelectedRoutingTypeIdx = 0;
@@ -321,7 +326,6 @@ namespace MonkeyPaste.Avalonia {
                 if (DuplicatedShortcutViewModel != null) {
                     DuplicatedShortcutViewModel.KeyString = string.Empty;
                     await DuplicatedShortcutViewModel.Shortcut.WriteToDatabaseAsync();
-                    DuplicatedShortcutViewModel.Unregister();
                 }
                 if (args is Control c &&
                     c.GetVisualRoot() is MpAvWindow w) {
@@ -337,7 +341,6 @@ namespace MonkeyPaste.Avalonia {
                 if (DuplicatedShortcutViewModel != null) {
                     DuplicatedShortcutViewModel.KeyString = string.Empty;
                     await DuplicatedShortcutViewModel.Shortcut.WriteToDatabaseAsync();
-                    DuplicatedShortcutViewModel.Unregister();
                 }
                 if (args is Control c &&
                     c.GetVisualRoot() is MpAvWindow w) {

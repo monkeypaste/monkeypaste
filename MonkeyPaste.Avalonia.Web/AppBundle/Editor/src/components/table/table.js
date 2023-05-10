@@ -134,6 +134,10 @@ function getTableCsv(table_elm, format, csvProps, isForOle = false) {
                         c: x.cellOffset()
                     };
                 });
+        if (cells_to_convert.length == table_elm.querySelectorAll('td').length) {
+            // all selected, treat as default
+            cells_to_convert = null;
+        }
     } 
     let csv_output = '';
 

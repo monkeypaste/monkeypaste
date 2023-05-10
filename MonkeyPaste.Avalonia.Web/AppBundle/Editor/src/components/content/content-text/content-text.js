@@ -747,7 +747,8 @@ function convertTextContentToFormats(isForOle, formats) {
 		let data = null;
 		if (isHtmlFormat(lwc_format)) {
 			if (isContentATable()) {
-				data = getTablesCsv(lwc_format, null, isForOle);
+				// make sure to get whole table when no sub-selection
+				data = isForOle && (isAllSelected() || isNoneSelected()) ? quill.root.innerHTML : getHtml2(sel);
 			} else {
 				data = getHtml(sel);
 				if (lwc_format == 'html format') {
@@ -766,7 +767,6 @@ function convertTextContentToFormats(isForOle, formats) {
 				data = trimQuillTrailingLineEndFromText(data);
 			}
 		} else if (isCsvFormat(lwc_format) && isContentATable()) {
-			// TODO figure out handling table selectinn logic and check here 
 			data = getTablesCsv(lwc_format, null, isForOle);
 		} else if (isImageFormat(lwc_format)) {
 			// trigger async screenshot notification where host needs 

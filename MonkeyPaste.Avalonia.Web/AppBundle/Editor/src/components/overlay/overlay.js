@@ -1,6 +1,6 @@
 ﻿// #region Globals
 
-const IS_OVERLAY_CARET_ENABLED = false;
+const IS_OVERLAY_CARET_ENABLED = true;
 var IsHighlightingVisible = false;
 
 var HighlightRects = [];
@@ -16,8 +16,8 @@ var CaretBlinkTimerInterval = null;
 // #region Life Cycle
 
 function initOverlay() {
-    if (CaretBlinkTimerInterval == null && IS_OVERLAY_CARET_ENABLED) {
-        CaretBlinkTimerInterval = setInterval(onCaretBlinkTick, CaretBlinkTickMs, getOverlayElement());
+    if (IS_OVERLAY_CARET_ENABLED) {
+        startOverlayCaretTimer();
     }
 }
 // #endregion Life Cycle
@@ -120,6 +120,20 @@ function getPreviewLines(drop_idx, block_state) {
 // #endregion State
 
 // #region Actions
+
+function startOverlayCaretTimer() {
+    if (CaretBlinkTimerInterval) {
+        return;
+    }
+    CaretBlinkTimerInterval = setInterval(onCaretBlinkTick, CaretBlinkTickMs, getOverlayElement());
+}
+function stopOverlayCaretTimer() {
+    if (!CaretBlinkTimerInterval) {
+        return;
+    }
+    clearInterval(CaretBlinkTimerInterval);
+    CaretBlinkTimerInterval = null;
+}
 
 function updateOverlayBounds() {
     let editorRect = getEditorContainerRect();

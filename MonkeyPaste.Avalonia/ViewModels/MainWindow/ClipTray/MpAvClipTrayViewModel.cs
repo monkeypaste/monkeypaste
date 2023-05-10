@@ -3005,12 +3005,12 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             });
 
-        private bool _canQuery = true;
+        //private bool _canQuery = true;
         public MpIAsyncCommand<object> QueryCommand => new MpAsyncCommand<object>(
             async (offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg) => {
                 MpConsole.WriteLine($"Query called. Arg: '{offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg}'");
                 Dispatcher.UIThread.VerifyAccess();
-                _canQuery = false;
+                //_canQuery = false;
                 //Dispatcher.UIThread.Post(async () => {
                 var sw = new Stopwatch();
                 sw.Start();
@@ -3268,11 +3268,11 @@ namespace MonkeyPaste.Avalonia {
                     ValidateQueryTray();
                 });
                 #endregion
-                _canQuery = true;
+                //_canQuery = true;
                 //});
             },
             (offsetIdx_Or_ScrollOffset_Arg) => {
-                return !IsAnyBusy && !IsQuerying && !IsRequerying && _canQuery;
+                return !IsAnyBusy && !IsQuerying && !IsRequerying;// && _canQuery;
             });
 
         private List<int> GetLoadItemIdxs(bool? isLoadMoreTail, int count) {

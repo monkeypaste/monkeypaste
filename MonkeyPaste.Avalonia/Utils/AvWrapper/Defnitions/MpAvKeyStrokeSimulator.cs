@@ -46,6 +46,7 @@ namespace MonkeyPaste.Avalonia {
             // NOTE2 remove keys that are physically down,
             // the simulate up will interfere w/ the keyboard state
 
+
             var filtered_gesture =
                 gesture
                     .Where(x => x != null && x.Any())
@@ -62,7 +63,8 @@ namespace MonkeyPaste.Avalonia {
                 return true;
             }
             string gesture_label = Mp.Services.KeyConverter.ConvertKeySequenceToString(gesture);
-            await WaitAndStartSimulateAsync(gesture_label);
+            //await WaitAndStartSimulateAsync(gesture_label);
+            var to_restore = ClearDownState();
 
             foreach (var combo in filtered_gesture) {
                 combo.ForEach(y => SimulateKey(y, true));
@@ -70,6 +72,8 @@ namespace MonkeyPaste.Avalonia {
                 combo.ForEach(y => SimulateKey(y, false));
                 await Task.Delay(_RELEASE_DELAY_MS);
             }
+
+            RestoreDownState(to_restore);
             MpConsole.WriteLine($"Key Gesture '{gesture_label}' successfully simulated. ");
             return true;
 
@@ -107,6 +111,15 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private IEnumerable<KeyCode> ClearDownState() {
+            List<KeyCode> downs = Mp.Services.KeyDownHelper.Downs.Cast<KeyCode>().ToList();
+            downs.ForEach(x => SimulateKey(x, false));
+            return downs;
+        }
+
+        private void RestoreDownState(IEnumerable<KeyCode> downs) {
+            downs.ForEach(x => SimulateKey(x, true));
+        }
         private async Task WaitAndStartSimulateAsync(string gesture_label) {
             if (Mp.Services.KeyDownHelper.DownCount > 0) {
                 int this_sim_id = ++_waitCount;

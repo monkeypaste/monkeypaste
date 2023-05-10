@@ -12,13 +12,21 @@ namespace MonkeyPaste.Common {
     public static class MpFileIo {
 
         public static ReaderWriterLock locker = new ReaderWriterLock();
+
         public static async Task<string> ToFileAsync(
             this string fileData,
+            string forcePath = "",
             string forceDir = "",
             string forceNamePrefix = "",
             string forceExt = "",
             bool overwrite = false,
             bool isTemporary = true) {
+            if (!string.IsNullOrEmpty(forcePath)) {
+                // parse full path and override parts
+                forceDir = Path.GetDirectoryName(forcePath);
+                forceNamePrefix = Path.GetFileNameWithoutExtension(forcePath);
+                forceExt = Path.GetExtension(forcePath);
+            }
             // NOTE overwrite msgbox only shows up if not temporary
             // NOTE2 csv is too annoying to discern (probably all are) need to check before and force/convert
             forceExt = string.IsNullOrEmpty(forceExt) ? forceExt : forceExt.Replace(".", string.Empty);
@@ -70,7 +78,7 @@ namespace MonkeyPaste.Common {
                 }
 
                 if (!string.IsNullOrEmpty(forceDir)) {
-                    if (!Directory.Exists(forceDir)) {
+                    if (!forceDir.IsDirectory()) {
                         throw new Exception("Directory not found: " + forceDir);
                     }
                     string tfd = Path.GetDirectoryName(tfp);
@@ -314,14 +322,17 @@ namespace MonkeyPaste.Common {
             return false;
         }
 
-        public static string GetUniqueFileOrDirectoryName(string dir, string fileOrDirectoryName, string instanceSeparator = "_") {
-            //only support Image and RichText fileTypes
+        public static string GetUniqueFileOrDirectoryName(
+            string dir,
+            string fileOrDirectoryName,
+            string instanceSeparator = "_") {
+
             string fp = string.IsNullOrEmpty(dir) ? Path.GetTempPath() : dir;
             string fn = string.IsNullOrEmpty(fileOrDirectoryName) ? Path.GetRandomFileName() : fileOrDirectoryName;
             if (string.IsNullOrEmpty(fn)) {
                 fn = Path.GetRandomFileName();
             }
-            if (!Directory.Exists(dir)) {
+            if (!dir.IsDirectory()) {
                 MpConsole.WriteLine($"Directory '{dir}' does not exist, creating..");
                 dir = dir.RemoveSpecialCharacters();
                 Directory.CreateDirectory(dir);
@@ -338,7 +349,7 @@ namespace MonkeyPaste.Common {
 
             string newFullPath = Path.Combine(dir, fn + fe);
 
-            while (File.Exists(newFullPath) || Directory.Exists(newFullPath)) {
+            while (newFullPath.IsFileOrDirectory()) {
                 newFullPath = Path.Combine(dir, fn + instanceSeparator + count + fe);
                 count++;
             }

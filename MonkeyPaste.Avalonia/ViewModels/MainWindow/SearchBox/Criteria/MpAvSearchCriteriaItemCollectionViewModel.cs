@@ -138,6 +138,15 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Appearance
+
+        public string CurrentTagName =>
+            CurrentQueryTagViewModel == null ? string.Empty : CurrentQueryTagViewModel.TagName;
+
+        public string CurrentTagHexColor =>
+            CurrentQueryTagViewModel == null ? string.Empty : CurrentQueryTagViewModel.TagHexColor;
+        #endregion
+
         #region Layout
 
         public double CriteriaDropLineHeight =>
@@ -555,8 +564,8 @@ namespace MonkeyPaste.Avalonia {
                     _criteriaWindow.Bind(
                         Window.TitleProperty,
                         new Binding() {
-                            Source = CurrentQueryTagViewModel,
-                            Path = nameof(MpAvTagTileViewModel.TagName),
+                            Source = this,
+                            Path = nameof(CurrentTagName),
                             StringFormat = "Search Criteria '{0}'",
                             TargetNullValue = "Search Criteria 'Untitled'",
                             FallbackValue = "Search Criteria 'Untitled'",
@@ -566,8 +575,8 @@ namespace MonkeyPaste.Avalonia {
                     _criteriaWindow.Bind(
                         Window.BackgroundProperty,
                         new Binding() {
-                            Source = CurrentQueryTagViewModel,
-                            Path = nameof(MpAvTagTileViewModel.TagHexColor),
+                            Source = this,
+                            Path = nameof(CurrentTagHexColor),
                             Mode = BindingMode.OneWay,
                             Converter = MpAvStringHexToBrushConverter.Instance,
                             TargetNullValue = MpSystemColors.darkviolet,

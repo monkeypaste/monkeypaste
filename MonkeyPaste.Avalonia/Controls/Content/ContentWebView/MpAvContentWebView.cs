@@ -360,19 +360,28 @@ namespace MonkeyPaste.Avalonia {
                 if (use_placeholders) {
                     avdo.SetData(MpPortableDataFormats.AvFileNames, new[] { MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT });
                 } else {
-                    string ctvm_fp = await ctvm.CopyItemData.ToFileAsync(
-                                forceNamePrefix: ctvm.CopyItemTitle,
-                                forceExt: ctvm.CopyItemType == MpCopyItemType.Image ? "png" : "txt",
-                                isTemporary: true);
+                    //string ctvm_fp = await ctvm.CopyItemData.ToFileAsync(
+                    //            forceNamePrefix: ctvm.CopyItemTitle,
+                    //            forceExt: ctvm.CopyItemType == MpCopyItemType.Image ? "png" : "txt",
+                    //            isTemporary: true);
+                    //avdo.SetData(
+                    //    MpPortableDataFormats.AvFileNames,
+                    //    new[] { ctvm_fp });
+
+                    // NOTE presumes Text is txt and Image is png
+                    // get unique pseudo-file path for whole or partial content
+                    bool is_fragment = ctvm.CopyItemType == MpCopyItemType.Text && !contentDataResp.isAllContent ? true : false;
+                    string ctvm_fp = ctvm.CopyItem.GetDefaultFilePaths(isFragment: is_fragment).FirstOrDefault();
+                    string ctvm_data = is_fragment ? avdo.GetData(MpPortableDataFormats.Text) as string : ctvm.CopyItemData;
                     avdo.SetData(
                         MpPortableDataFormats.AvFileNames,
                         new[] { ctvm_fp });
+                    ctvm_data.ToFileAsync(forcePath: ctvm_fp).FireAndForgetSafeAsync();
                 }
             }
 
             bool is_full_content = ctvm.CopyItemType != MpCopyItemType.Text || contentDataResp.isAllContent;
             avdo.AddContentReferences(ctvm.CopyItem, is_full_content);
-
 
             if (ctvm.CopyItemType == MpCopyItemType.Image &&
                     ctvm.CopyItemData.ToAvBitmap() is Bitmap bmp) {

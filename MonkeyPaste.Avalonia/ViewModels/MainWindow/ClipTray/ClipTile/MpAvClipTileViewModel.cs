@@ -45,6 +45,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Variables
 
+        private MpAvWindow pow;
         private List<string> _tempFileList = new List<string>();
         private IntPtr _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
         //private MpPasteToAppPathViewModel _selectedPasteToAppPathViewModel = null;
@@ -826,29 +827,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public MpPortableDataFormat DataFormat {
-            get {
-                if (CopyItem == null) {
-                    return null;
-                }
-                if (!MpPortableDataFormats.RegisteredFormats.All(x => x != CopyItem.DataFormat)) {
-                    MpPortableDataFormats.RegisterDataFormat(CopyItem.DataFormat);
-                }
-                return MpPortableDataFormats.GetDataFormat(CopyItem.DataFormat);
-            }
-            set {
-                if (CopyItem != null && CopyItem.DataFormat != value.Name) {
-                    CopyItem.DataFormat = value.Name;
-
-                    if (!MpPortableDataFormats.RegisteredFormats.All(x => x != CopyItem.DataFormat)) {
-                        MpPortableDataFormats.RegisterDataFormat(CopyItem.DataFormat);
-                    }
-                    HasModelChanged = true;
-                    OnPropertyChanged(nameof(DataFormat));
-                }
-            }
-        }
-
         //public MpSize CopyItemSize {
         //    get {
         //        if (CopyItem == null) {
@@ -1275,12 +1253,16 @@ namespace MonkeyPaste.Avalonia {
         public void OpenAppendWindow(MpAppendModeType appendType) {
             if (IsPopOutVisible) {
                 IsPopOutVisible = false;
+                if (this is MpIChildWindowViewModel cwvm) {
+                    cwvm.OnPropertyChanged(nameof(cwvm.IsOpen));
+                }
+
             }
 
             #region CREATE
 
             Size ws = new Size(350, 250);
-            MpAvWindow pow = new MpAvWindow() {
+            pow = new MpAvWindow() {
                 Width = ws.Width,
                 Height = ws.Height,
                 DataContext = this,

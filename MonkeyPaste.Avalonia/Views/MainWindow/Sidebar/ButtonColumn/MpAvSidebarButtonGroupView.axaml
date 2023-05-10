@@ -102,7 +102,7 @@
                     Value="{DynamicResource HoverSelectedBorderBrush}" />
         </Style>
 
-        <Style Selector="RadioButton#AppModeToggleButton, RadioButton#AppModeToggleButton:unchecked">
+        <Style Selector="RadioButton#AppModeToggleButton">
             <Setter Property="local:MpAvImageTintExtension.Tint"
                     Value="{DynamicResource DefaultButtonBrush}" />
         </Style>
@@ -111,7 +111,7 @@
                     Value="{DynamicResource HoverDefaultBorderBrush}" />
         </Style>
 
-        <Style Selector="RadioButton#AppModeToggleButton:checked">
+        <Style Selector="RadioButton#AppModeToggleButton.mouseMode">
             <Setter Property="local:MpAvImageTintExtension.Tint"
                     Value="{DynamicResource HoverSelectedBorderBrush}" />
         </Style>
@@ -179,6 +179,7 @@
             <PathIcon Data="{StaticResource BoltSvg}" />
         </RadioButton>
         <RadioButton x:Name="AppModeToggleButton"
+                     Classes.mouseMode="{Binding IsAnyMouseModeEnabled, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                      Grid.Row="4"
                      local:MpAvImageTintExtension.IsEnabled="True"
                      GroupName="SidebarButtonGroup"
@@ -187,6 +188,14 @@
                      Command="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
                      CommandParameter="4"
                      IsEnabled="{Binding !IsAppPaused}">
+            <!--<RadioButton.IsChecked>
+                <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                    <Binding Path="IsRightClickPasteMode"
+                             Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
+                    <Binding Path="IsAutoCopyMode"
+                             Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
+                </MultiBinding>
+            </RadioButton.IsChecked>-->
             <RadioButton.Resources>
                 <SolidColorBrush x:Key="FlyoutPresenterBackground">Transparent</SolidColorBrush>
                 <SolidColorBrush x:Key="FlyoutBorderThemeBrush">Transparent</SolidColorBrush>

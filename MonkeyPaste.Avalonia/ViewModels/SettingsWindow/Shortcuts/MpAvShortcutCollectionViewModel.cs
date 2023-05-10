@@ -57,6 +57,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIDownKeyHelper Implementation
 
+        IReadOnlyList<object> MpIDownKeyHelper.Downs =>
+            _downs.Cast<object>().ToList();
+
         int MpIDownKeyHelper.DownCount =>
             _downs.Count;
 
@@ -494,25 +497,26 @@ namespace MonkeyPaste.Avalonia {
 
                 //if it does clear, save and unregister
                 if (scvm != null) {
-                    scvm.RoutingType = result_routing_type;
-                    scvm.ClearShortcutKeyString();
-                    await scvm.Shortcut.WriteToDatabaseAsync();
-                    scvm.Unregister();
 
                     if (scvm.IsCustom) {
+                        // clearing custom implies delete
                         Items.Remove(scvm);
+                        await scvm.Shortcut.DeleteFromDatabaseAsync();
+                    } else {
+                        scvm.RoutingType = result_routing_type;
+                        scvm.ClearShortcutKeyString();
+                        await scvm.Shortcut.WriteToDatabaseAsync();
                     }
                 } else {
                     //nothing to do since no shortcut created
                 }
             } else if (scvm == null) {
                 //if new shortcut
-                MpRoutingType routingType = shortcutType ==
-                    MpShortcutType.PasteCopyItem ? MpRoutingType.Bubble : result_routing_type; //MpRoutingType.Internal;
+
                 //copyitem direct, tag internal, analyzer internal
                 var sc = await MpShortcut.CreateAsync(
                     keyString: shortcutKeyString,
-                    routeType: routingType,
+                    routeType: result_routing_type,
                     shortcutType: shortcutType,
                     commandParameter: commandParameter);
                 scvm = await CreateShortcutViewModel(sc, command);
@@ -1076,14 +1080,16 @@ namespace MonkeyPaste.Avalonia {
                 _exact_match = null;
                 return;
             }
+            // store local ref to match in case its reset during sim
+            MpAvShortcutViewModel match_to_execute = _exact_match;
 
-            if (_exact_match.RoutingType == MpRoutingType.Bubble) {
+            if (match_to_execute.RoutingType == MpRoutingType.Bubble) {
                 await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(new[] { new[] { kc }.ToList() }.ToList());
             }
             Dispatcher.UIThread.Invoke(() => {
-                _exact_match.PerformShortcutCommand.Execute(null);
+                match_to_execute.PerformShortcutCommand.Execute(null);
             });
-            if (_exact_match.RoutingType == MpRoutingType.Tunnel) {
+            if (match_to_execute.RoutingType == MpRoutingType.Tunnel) {
                 await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(new[] { new[] { kc }.ToList() }.ToList());
             }
         }

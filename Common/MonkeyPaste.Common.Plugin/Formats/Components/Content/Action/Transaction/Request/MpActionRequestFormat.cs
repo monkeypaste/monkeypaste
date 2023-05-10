@@ -1,5 +1,5 @@
 ﻿namespace MonkeyPaste.Common.Plugin {
-    public class MpActionRequestFormat : MpPluginRequestFormatBase {
+    public class MpActionRequestFormat : MpPluginParameterRequestFormat {
     }
 
 }

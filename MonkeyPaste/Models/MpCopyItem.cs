@@ -60,9 +60,6 @@ namespace MonkeyPaste {
         [Column("HexColor")]
         public string ItemColor { get; set; } = string.Empty;
 
-        [Column("DataFormat")]
-        public string DataFormat { get; set; } = string.Empty;
-
         public string ItemMetaData { get; set; }
 
         // Text: 1/2 = chars/lines
@@ -168,7 +165,6 @@ namespace MonkeyPaste {
         #region Static Methods
         public static async Task<MpCopyItem> CreateAsync(
             string data = "",
-            string dataFormat = MpPortableDataFormats.Text,
             MpCopyItemType itemType = MpCopyItemType.Text,
             string title = "",
             int dataObjectId = 0,
@@ -202,7 +198,6 @@ namespace MonkeyPaste {
                 Title = title,
                 ItemData = data,
                 ItemType = itemType,
-                DataFormat = dataFormat,
                 CopyCount = 1,
                 DataObjectId = dataObjectId
             };

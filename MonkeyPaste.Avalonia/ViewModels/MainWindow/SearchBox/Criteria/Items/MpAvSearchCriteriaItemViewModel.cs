@@ -129,7 +129,9 @@ namespace MonkeyPaste.Avalonia {
             SelectedOptionPath.FirstOrDefault(x => x.IsValueOption);
 
         public IEnumerable<MpAvSearchCriteriaOptionViewModel> ValueOptionViewModels =>
-            SelectedOptionPath.Where(x => x.IsValueOption);
+            SelectedOptionPath
+            .Where(x => x.IsValueOption)
+            .ToList();
 
         private ObservableCollection<MpAvSearchCriteriaOptionViewModel> _items;
         public ObservableCollection<MpAvSearchCriteriaOptionViewModel> Items {

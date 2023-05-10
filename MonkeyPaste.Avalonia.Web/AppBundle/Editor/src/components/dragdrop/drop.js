@@ -228,7 +228,8 @@ function onDragOver(e) {
         }
     }
     if (e.target.id == 'dragOverlay') {
-        debugger;
+        //debugger;
+        log('warning! drop target is dragOverlay element. pretty sure it shouldnt be...');
     }
     // DEBOUNCE (my own type but word comes from https://css-tricks.com/debouncing-throttling-explained-examples/)
     let can_proceed = canDebounceDragOverProceed();

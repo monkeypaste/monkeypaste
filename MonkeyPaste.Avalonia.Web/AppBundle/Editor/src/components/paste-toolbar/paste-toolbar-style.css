@@ -1,5 +1,6 @@
 ﻿#pasteToolbar {
     background-color: var(--pastetemplatebgcolor);
+    bottom: -40px;
 }
 
     #pasteToolbar button {

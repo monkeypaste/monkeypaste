@@ -42,21 +42,6 @@
               DragDrop.AllowDrop="False"
               VerticalAlignment="Stretch"
               RowDefinitions="40,15">
-            <Grid.Styles>
-                <Style Selector="TextBlock"
-                       x:DataType="local:MpAvClipboardFormatPresetViewModel">
-                    <Setter Property="TextAlignment"
-                            Value="Center" />
-                    <Setter Property="FontSize"
-                            Value="12" />
-                    <Setter Property="Height"
-                            Value="15" />
-                    <Setter Property="HorizontalAlignment"
-                            Value="Stretch" />
-                    <Setter Property="Background"
-                            Value="Transparent" />
-                </Style>
-            </Grid.Styles>
             <Grid Grid.Row="0"
                   Width="30"
                   Height="30"
@@ -72,6 +57,11 @@
             <TextBlock Grid.Row="1"
                        DragDrop.AllowDrop="False"
                        Foreground="{Binding $parent[Border].BorderBrush}"
+                       TextAlignment="Center"
+                       HorizontalAlignment="Stretch"
+                       VerticalAlignment="Stretch"
+                       Background="Transparent"
+                       FontSize="12"
                        Text="{Binding Parent.Title}" />
         </Grid>
     </Border>

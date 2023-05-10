@@ -24,7 +24,7 @@ namespace MonkeyPaste.Common.Plugin {
         public int sortOrderIdx { get; set; }
     }
 
-    public class MpClipboardReaderRequest : MpPluginRequestFormatBase {
+    public class MpClipboardReaderRequest : MpPluginParameterRequestFormat {
         public List<string> readFormats { get; set; }
 
         public bool ignoreParams { get; set; }
@@ -32,7 +32,7 @@ namespace MonkeyPaste.Common.Plugin {
         public object forcedClipboardDataObject { get; set; } // (optional) this is used to convert drag/drop data 
     }
 
-    public class MpClipboardWriterRequest : MpPluginRequestFormatBase {
+    public class MpClipboardWriterRequest : MpPluginParameterRequestFormat {
         public object data { get; set; }
         public List<string> writeFormats { get; set; }
         public bool writeToClipboard { get; set; } = true; // (optional) this is used when creating drag/drop data object

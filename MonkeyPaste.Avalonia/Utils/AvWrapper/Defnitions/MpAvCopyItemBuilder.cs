@@ -55,13 +55,11 @@ namespace MonkeyPaste.Avalonia {
             string itemData = data_tuple.Item2;
             string itemDelta = data_tuple.Item3;
             string default_title = GetDefaultItemTitle(itemType, mpdo);
-            string data_format = GetPreferredContentType(itemType);
 
 
             var ci = await MpCopyItem.CreateAsync(
                 dataObjectId: dobj.Id,
                 title: default_title,
-                dataFormat: data_format,
                 data: itemData,
                 itemType: itemType,
                 suppressWrite: suppressWrite);
@@ -316,18 +314,6 @@ namespace MonkeyPaste.Avalonia {
                 delta = deltaObj.SerializeJsonObject();
             }
             return new Tuple<MpCopyItemType, string, string>(itemType, itemData, delta);
-        }
-
-        private string GetPreferredContentType(MpCopyItemType itemType) {
-            switch (itemType) {
-                case MpCopyItemType.Text:
-                    return MpPortableDataFormats.AvHtml_bytes;
-                case MpCopyItemType.Image:
-                    return MpPortableDataFormats.AvPNG;
-                case MpCopyItemType.FileList:
-                    return MpPortableDataFormats.AvFileNames;
-            }
-            return MpPortableDataFormats.Text.ToString();
         }
 
         private string GetDefaultItemTitle(MpCopyItemType itemType, MpPortableDataObject mpdo) {

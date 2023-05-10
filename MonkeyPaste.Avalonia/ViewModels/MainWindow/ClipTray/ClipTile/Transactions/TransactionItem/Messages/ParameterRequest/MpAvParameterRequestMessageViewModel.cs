@@ -25,7 +25,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Model
 
-        public MpPluginRequestFormatBase ParameterReqFormat { get; private set; }
+        public MpPluginParameterRequestFormat ParameterReqFormat { get; private set; }
 
         #endregion
 
@@ -43,7 +43,7 @@ namespace MonkeyPaste.Avalonia {
 
             Json = jsonOrParsedFragment is string ? jsonOrParsedFragment.ToString() : string.Empty;
             if (!string.IsNullOrEmpty(Json)) {
-                ParameterReqFormat = MpPluginRequestFormatBase.Parse(Json);
+                ParameterReqFormat = MpPluginParameterRequestFormat.Parse(Json);
             }
 
             var tsl = await MpDataModelProvider.GetCopyItemTransactionSourcesAsync(TransactionId);

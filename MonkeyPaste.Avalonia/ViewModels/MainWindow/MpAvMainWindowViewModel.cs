@@ -360,6 +360,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public WindowState WindowState { get; set; } = WindowState.Normal;
         public bool IsMainWindowOrientationChanging { get; set; } = false;
         public double MainWindowTransformAngle {
             get {
@@ -573,6 +574,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(MainWindowScreen));
             OnPropertyChanged(nameof(IsDesktop));
 
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalMousePressed += Instance_OnGlobalMousePressed;
             MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseReleased += Instance_OnGlobalMouseReleased;
             MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseMove += Instance_OnGlobalMouseMove;
             MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseClicked += Instance_OnGlobalMouseClicked;
@@ -709,6 +711,13 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(MainWindowShowBehaviorType):
                     MpPrefViewModel.Instance.MainWindowShowBehaviorType = MainWindowShowBehaviorType.ToString();
+                    break;
+                case nameof(WindowState):
+                    if (WindowState == WindowState.Minimized &&
+                        IsMainWindowLocked) {
+                        // can happen from Win+D so unlock to reflect state
+                        IsMainWindowLocked = false;
+                    }
                     break;
             }
         }
@@ -979,6 +988,25 @@ namespace MonkeyPaste.Avalonia {
 
         }
 
+        private void Instance_OnGlobalMousePressed(object sender, bool isLeftButton) {
+            Dispatcher.UIThread.Post(() => {
+                if (MpAvMainView.Instance == null) {
+                    return;
+                }
+                if (!IsMainWindowOpen) {
+                    if (MpAvClipTrayViewModel.Instance.IsRightClickPasteMode) {
+                        if (!isLeftButton && !App.MainView.IsActive) {
+                            // TODO this is hacky because mouse gestures are not formally handled
+                            // also app collection should be queried for custom paste cmd instead of this
+                            Mp.Services.KeyStrokeSimulator
+                            .SimulateKeyStrokeSequenceAsync(Mp.Services.PlatformShorcuts.PasteKeys)
+                            .FireAndForgetSafeAsync();
+                        }
+                    }
+                }
+            });
+        }
+
         private void Instance_OnGlobalMouseReleased(object sender, bool isLeftButton) {
             Dispatcher.UIThread.Post(() => {
                 if (MpAvMainView.Instance == null) {
@@ -987,15 +1015,9 @@ namespace MonkeyPaste.Avalonia {
                 if (!IsMainWindowOpen) {
                     if (MpAvClipTrayViewModel.Instance.IsAutoCopyMode) {
                         if (isLeftButton && !App.MainView.IsActive) {
-                            //SimulateKeyStrokeSequence("control+c");
-                            MpConsole.WriteLine("Auto copy is ON");
-                        }
-                    }
-                    if (MpAvClipTrayViewModel.Instance.IsRightClickPasteMode) {
-                        if (!isLeftButton && !App.MainView.IsActive) {
-                            // TODO this is hacky because mouse gestures are not formally handled
-                            // also app collection should be queried for custom paste cmd instead of this
-                            Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync("control+v").FireAndForgetSafeAsync();
+                            Mp.Services.KeyStrokeSimulator
+                            .SimulateKeyStrokeSequenceAsync(Mp.Services.PlatformShorcuts.CopyKeys)
+                            .FireAndForgetSafeAsync();
                         }
                     }
                 } else if (!IsMainWindowClosing &&

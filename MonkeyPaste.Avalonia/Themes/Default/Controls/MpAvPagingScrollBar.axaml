@@ -50,7 +50,8 @@
                                                   Height="{DynamicResource ScrollBarButtonArrowIconFontSize}" />
                                     </RepeatButton>
 
-                                    <Track Grid.Row="1"
+                                    <Track x:Name="PART_Track"
+                                           Grid.Row="1"
                                            Minimum="{TemplateBinding Minimum}"
                                            Maximum="{TemplateBinding Maximum}"
                                            Value="{TemplateBinding Value,
@@ -129,7 +130,8 @@
                                                   Height="{DynamicResource ScrollBarButtonArrowIconFontSize}" />
                                     </RepeatButton>
 
-                                    <Track Grid.Column="1"
+                                    <Track x:Name="PART_Track"
+                                           Grid.Column="1"
                                            Minimum="{TemplateBinding Minimum}"
                                            Maximum="{TemplateBinding Maximum}"
                                            Value="{TemplateBinding Value,

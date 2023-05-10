@@ -11,6 +11,8 @@ using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -838,47 +840,46 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static bool BindScrollViewerAndTracks(ListBox lb) {
-            if (GetScrollViewer(lb) is ScrollViewer sv &&
+            if (GetScrollViewer(lb) is MpAvPagingScrollViewer sv &&
+                sv.Tracks is IReadOnlyList<Track> tracks &&
+                tracks.Count == 2 &&
                 sv.DataContext is MpIPagingScrollViewerViewModel psvvm) {
                 sv.Tag = lb;
-                if (sv.TryGetVisualDescendants<Track>(out var tracks) && tracks.Count() == 2) {
-                    sv.AddHandler(
+                sv.AddHandler(
                        ScrollViewer.PointerPressedEvent,
                        ScrollViewerPointerPressedHandler,
                        RoutingStrategies.Tunnel);
-                    sv.AddHandler(
-                        ScrollViewer.PointerMovedEvent,
-                        ScrollViewerPointerMovedHandler,
-                        RoutingStrategies.Tunnel);
-                    sv.AddHandler(
-                        ScrollViewer.PointerReleasedEvent,
-                        ScrollViewerPointerReleasedHandler,
-                        RoutingStrategies.Tunnel);
+                sv.AddHandler(
+                    ScrollViewer.PointerMovedEvent,
+                    ScrollViewerPointerMovedHandler,
+                    RoutingStrategies.Tunnel);
+                sv.AddHandler(
+                    ScrollViewer.PointerReleasedEvent,
+                    ScrollViewerPointerReleasedHandler,
+                    RoutingStrategies.Tunnel);
 
-                    foreach (var track in tracks) {
-                        track.Tag = lb;
-                        track.IgnoreThumbDrag = true;
-                        //track.IsThumbDragHandled = true;
+                foreach (var track in tracks) {
+                    track.Tag = lb;
+                    track.IgnoreThumbDrag = true;
+                    //track.IsThumbDragHandled = true;
 
-                        track.Bind(
-                                Track.MaximumProperty,
-                                new Binding() {
-                                    Source = lb.DataContext,
-                                    Path = track.Orientation == Orientation.Horizontal ?
-                                            nameof(psvvm.MaxScrollOffsetX) :
-                                            nameof(psvvm.MaxScrollOffsetY)
-                                });
+                    track.Bind(
+                            Track.MaximumProperty,
+                            new Binding() {
+                                Source = lb.DataContext,
+                                Path = track.Orientation == Orientation.Horizontal ?
+                                        nameof(psvvm.MaxScrollOffsetX) :
+                                        nameof(psvvm.MaxScrollOffsetY)
+                            });
 
-                        track.Minimum = 0;
+                    track.Minimum = 0;
 
-                        if (track.Thumb is Thumb thumb) {
-                            thumb.Tag = lb;
-                            thumb.RenderTransform = new TranslateTransform();
-                        }
+                    if (track.Thumb is Thumb thumb) {
+                        thumb.Tag = lb;
+                        thumb.RenderTransform = new TranslateTransform();
                     }
-                    return true;
-
                 }
+                return true;
             }
             return false;
         }

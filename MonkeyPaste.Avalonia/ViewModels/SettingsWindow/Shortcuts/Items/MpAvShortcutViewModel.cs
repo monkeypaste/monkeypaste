@@ -87,8 +87,6 @@ namespace MonkeyPaste.Avalonia {
         }
         public ICommand ShortcutCommand { get; set; }
 
-        public IDisposable KeysObservable { get; set; }
-
         public bool CanBeGlobalShortcut =>
             ShortcutType.CanBeGlobal();
 
@@ -340,51 +338,9 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(KeyString));
         }
 
-        //public void RegisterActionComponent(MpIInvokableAction mvm) {
-        //    //by design this only can occur for shortcuts with a selected item as its context
-
-        //    OnShortcutExecuted += mvm.OnActionInvoked;
-        //    MpConsole.WriteLine($"ClipTray Registered {mvm.Label} matcher");
-        //}
-
-        //public void UnregisterActionComponent(MpIInvokableAction mvm) {
-        //    OnShortcutExecuted -= mvm.OnActionInvoked;
-        //    MpConsole.WriteLine($"Matcher {mvm.Label} Unregistered from OnShortcutExecuted");
-        //}
-
-        public void Unregister() {
-            if (KeysObservable != null) {
-                KeysObservable.Dispose();
-                MpConsole.WriteLine("Unregistering shortcut " + Shortcut.ToString() + " was successful");
-            } else {
-                //either not previously registered or a sequence that won't be unregistered until app shutdown
-            }
-        }
-
-        public bool IncludesKeyLiteral(string keyliteral) {
-            var keys = Mp.Services.KeyConverter.ConvertStringToKeySequence<Key>(keyliteral);
-            if (keys.FirstOrDefault() is IEnumerable<Key> combo &&
-                combo.FirstOrDefault() is Key key) {
-                return KeyList.Any(x => x.Any(y => y == key));
-            }
-            return false;
-        }
-
-        public void PassKeysToForegroundWindow() {
-            //MpHelpers.PassKeysListToWindow(MpProcessHelper.MpProcessManager.LastHandle,KeyList);
-        }
-
-        public bool IsSequence() {
-            return KeyString.Contains(",");
-        }
-
 
         public void ClearShortcutKeyString() {
             KeyString = string.Empty;
-        }
-
-        public object Clone() {
-            return new MpAvShortcutViewModel(Parent);
         }
 
         public override string ToString() {

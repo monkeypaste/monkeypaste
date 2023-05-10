@@ -466,10 +466,10 @@ namespace MonkeyPaste.Common.Wpf {
 
         private static TextElement ApplyStyleFormatting(TextElement te, string sv) {
             if (sv.StartsWith("color")) {
-                var itemColorBrush = ParseRgb(sv);
+                var itemColorBrush = ParseRgb(sv, Brushes.Black);
                 te.Foreground = itemColorBrush;
             } else if (sv.StartsWith("background-color")) {
-                var itemColorBrush = ParseRgb(sv);
+                var itemColorBrush = ParseRgb(sv, Brushes.White);
                 te.Background = itemColorBrush;
             } else if (sv.StartsWith("font-size")) {
                 te.FontSize = GetFontSize(sv, te);
@@ -513,8 +513,8 @@ namespace MonkeyPaste.Common.Wpf {
             return te;
         }
 
-        public static Brush ParseRgb(string text) {
-            Brush defaultBrush = Brushes.Transparent;
+        public static Brush ParseRgb(string text, Brush defaultBrush = null) {
+            defaultBrush = defaultBrush == null ? Brushes.Transparent : defaultBrush;
 
             var color = new Color();
             if (text.Contains("var")) {

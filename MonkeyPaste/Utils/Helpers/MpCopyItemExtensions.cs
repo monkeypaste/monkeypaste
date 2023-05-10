@@ -1,6 +1,9 @@
 ﻿using MonkeyPaste.Common;
 using System;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public static class MpCopyItemExtensions {
@@ -37,5 +40,23 @@ namespace MonkeyPaste {
             }
             return pdo;
         }
+
+        public static string[] GetDefaultFilePaths(this MpCopyItem ci, string dir = "", string ext = "", bool isFragment = false) {
+            switch (ci.ItemType) {
+                case MpCopyItemType.Text:
+                    ext = string.IsNullOrEmpty(ext) ? "txt" : ext;
+                    break;
+                case MpCopyItemType.Image:
+                    ext = string.IsNullOrEmpty(ext) ? "png" : ext;
+                    break;
+
+                default:
+                case MpCopyItemType.FileList:
+                    return ci.ItemData.SplitNoEmpty(MpCopyItem.FileItemSplitter);
+            }
+            dir = string.IsNullOrEmpty(dir) ? Path.GetTempPath() : dir;
+            return new[] { MpFileIo.GetUniqueFileOrDirectoryName(dir, $"{ci.Title}{(isFragment ? "-Fragment" : string.Empty)}.{ext}") };
+        }
+
     }
 }

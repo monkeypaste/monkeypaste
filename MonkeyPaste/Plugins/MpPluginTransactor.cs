@@ -98,7 +98,7 @@ namespace MonkeyPaste {
         }
 
         public static async Task<T> ValidatePluginResponseAsync<T>(
-            MpPluginRequestFormatBase request,
+            MpPluginParameterRequestFormat request,
             MpPluginResponseFormatBase response,
             Func<Task<T>> retryFunc = null) where T : MpPluginResponseFormatBase {
             if (response == null) {
@@ -123,7 +123,7 @@ namespace MonkeyPaste {
         #region Private Methods
 
         private static async Task<MpPluginResponseFormatBase> HandlePluginNotifcationsAsync<T>(
-            MpPluginRequestFormatBase request,
+            MpPluginParameterRequestFormat request,
             MpPluginResponseFormatBase response,
             Func<Task<T>> retryFunc,
             int cur_idx = 0) where T : MpPluginResponseFormatBase {

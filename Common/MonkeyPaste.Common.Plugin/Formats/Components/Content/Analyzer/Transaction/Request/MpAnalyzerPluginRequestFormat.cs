@@ -1,5 +1,5 @@
 ﻿namespace MonkeyPaste.Common.Plugin {
-    public class MpAnalyzerPluginRequestFormat : MpPluginRequestFormatBase {
+    public class MpAnalyzerPluginRequestFormat : MpPluginParameterRequestFormat {
 
         //public MpPortableDataObject data { get; set; }
     }
