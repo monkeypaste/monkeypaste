@@ -26,14 +26,28 @@ const PastePopupMenuOptions = [
     {
         label: 'Manual',
         icon: 'text-insert-caret-outline'
+    },
+    {
+        separator: true
+    },
+    {
+        label: 'Done',
+        icon: 'sign-out'
+    },
+    {
+        label: 'Stack Mode',
+        icon: 'append-outline'
     }
 ];
 
+
 const AppendLineOptIdx = 0;
-const AppendOptIdx = 1;
+const AppendInsertOptIdx = 1;
 const AppendPreIdx = 3;
 const AppendPostIdx = 4;
 const ManualOptIdx = 6;
+const DoneOptIdx = 8;
+const StartOptIdx = 9;
 
 const MinFileListOptIdx = AppendPreIdx;
 // #endregion Globals
@@ -66,16 +80,62 @@ function getPastePopupExpanderButtonInnerHtml() {
 
 // #region Setters
 
+function setOptKeys(opt, idx) {
+    let keys = null;
+    if (idx == AppendLineOptIdx) {
+        keys = ShortcutKeysLookup['ToggleAppendLineMode'];
+    } else if (idx == AppendInsertOptIdx) {
+        keys = ShortcutKeysLookup['ToggleAppendInsertMode'];
+    } else if (idx == AppendPreIdx) {
+        keys = ShortcutKeysLookup['ToggleAppendPreMode'];
+    } else if (idx == AppendLineOptIdx) {
+        keys = ShortcutKeysLookup['ToggleAppendLineMode'];
+    }
+    if (!keys || keys === undefined) {
+        return opt;
+    }
+    opt.keys = keys;
+    return opt;
+}
+
 // #endregion Setters
 
 // #region State
 
 function isPopupOptIdxIgnored(opt_idx) {
+    if (opt_idx == StartOptIdx) {
+        if (isAnyAppendEnabled()) {
+            return true;
+        }
+        return false;
+    }
+
+    if (IsAppendLineMode && opt_idx == AppendLineOptIdx) {
+        return true;
+    }
+    if (IsAppendInsertMode && opt_idx == AppendInsertOptIdx) {
+        return true;
+    }
+    if (IsAppendPreMode && opt_idx == AppendPreIdx) {
+        return true;
+    }
+    if (!IsAppendPreMode && opt_idx == AppendPostIdx) {
+        return true;
+    }
+    if (!isAnyAppendEnabled()) {
+        return true;
+    }
     if (ContentItemType == 'Text') {
         return false;
     }
-    if (!isAnyAppendEnabled() && opt_idx == AppendLineOptIdx) {
+    if (!isAnyAppendEnabled() &&
+         opt_idx == AppendLineOptIdx) {
         // show enable
+        return false;
+    }
+    if (isAnyAppendEnabled() &&
+        opt_idx == DoneOptIdx) {
+        // always show done if enabled
         return false;
     }
     return opt_idx < MinFileListOptIdx;
@@ -103,6 +163,7 @@ function showPasteButtonExpander() {
         }
         let ppmio = PastePopupMenuOptions[i];
         if (ppmio.separator === undefined) {
+            ppmio = setOptKeys(ppmio, i);
             ppmio.action = function (option, contextMenuIndex, optionIndex) {
                 onPastePopupMenuOptionClick(PastePopupMenuOptions.indexOf(option));
             };
@@ -110,7 +171,7 @@ function showPasteButtonExpander() {
             if (IsAppendLineMode && i == AppendLineOptIdx) {
                 checked = true;
             }
-            if (IsAppendInsertMode && i == AppendOptIdx) {
+            if (IsAppendInsertMode && i == AppendInsertOptIdx) {
                 checked = true;
             }
             if (IsAppendManualMode && i == ManualOptIdx) {
@@ -128,13 +189,13 @@ function showPasteButtonExpander() {
                 delete ppmio.itemBgColor;
             }
         }
-        if (!isAnyAppendEnabled()) {
-            if (i >= AppendOptIdx) {
-                continue;
-            } else {
-                ppmio.label = 'Accumulate Mode';
-            }
-        }
+        //if (!isAnyAppendEnabled()) {
+        //    if (i >= AppendInsertOptIdx) {
+        //        continue;
+        //    } else {
+        //        ppmio.label = 'Stack Mode';
+        //    }
+        //}
         cm.push(ppmio);
     }
     superCm.destroyMenu();
@@ -178,13 +239,13 @@ function onPastePopupMenuOptionClick(optIdx) {
     log('clicked append mode idx: ' + optIdx);
     if (optIdx == AppendLineOptIdx) {
         if (IsAppendLineMode) {
-            disableAppendMode();
+            //disableAppendMode(false);
         } else {
             enableAppendMode(true);
         }
-    } else if (optIdx == AppendOptIdx){
+    } else if (optIdx == AppendInsertOptIdx) {
         if (IsAppendInsertMode) {
-            disableAppendMode(false);
+            //disableAppendMode(false);
         } else {
             enableAppendMode(false);
         }
@@ -205,7 +266,11 @@ function onPastePopupMenuOptionClick(optIdx) {
             disablePreAppend(false);
         } else if (ContentItemType == 'FileList') {
             disableAppendMode(false);
-        } 
+        }
+    } else if (optIdx == DoneOptIdx) {
+        disableAppendMode(false);
+    } else if (optIdx == StartOptIdx) {
+        enableAppendMode(true);
     }
     hidePasteButtonExpander();
 }

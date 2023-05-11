@@ -134,5 +134,17 @@ namespace MonkeyPaste.Avalonia {
                     return false;
             }
         }
+
+        public static bool IsEditorShortcut(this MpShortcutType st) {
+            switch (st) {
+                case MpShortcutType.ToggleAppendInsertMode:
+                case MpShortcutType.ToggleAppendLineMode:
+                case MpShortcutType.ToggleAppendPreMode:
+                case MpShortcutType.ToggleAppendPaused:
+                    return true;
+                default:
+                    return false;
+            }
+        }
     }
 }

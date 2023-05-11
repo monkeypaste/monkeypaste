@@ -17,7 +17,7 @@ function initAppend() {
 	if (!isAppendNotifier()) {
 		return;
 	}
-
+	getDisableAppendModeButtonElement().innerHTML = getSvgHtml('stop', null, false);
 	document.addEventListener('selectionchange', onAppendDocumentSelectionChange, true);
 	disablePauseAppend();
 }

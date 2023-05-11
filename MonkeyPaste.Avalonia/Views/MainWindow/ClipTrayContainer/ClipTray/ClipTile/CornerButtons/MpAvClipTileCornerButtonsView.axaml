@@ -96,7 +96,7 @@
         <Button x:Name="OpenWindowButton"
                 Classes="noBg noHoverBg"
                 local:MpAvPointerCommandExtension.LeftPressCommand="{Binding PinToPopoutWindowCommand}"
-                IsVisible="{Binding !IsPopOutVisible}"
+                IsVisible="{Binding !IsPopOutOpen}"
                 CommandParameter="{Binding}"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top">

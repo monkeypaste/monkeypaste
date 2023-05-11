@@ -1,12 +1,28 @@
 // #region Globals
 
+const TOOLTIP_HOVER_ATTRB_NAME = "hover-tooltip";
+
 // #endregion Globals
 
 // #region Life Cycle
 
+function initTooltip() {
+	const htt_elms = getTooltipHoverElements();
+	for (var i = 0; i < htt_elms.length; i++) {
+		const htt_elm = htt_elms[i];
+		htt_elm.addEventListener('pointerenter', (e) => {
+			showTooltipOverlay(e.currentTarget);
+		});
+		htt_elm.addEventListener('pointerleave', (e) => {
+			hideTooltipOverlay();
+		});
+	}
+}
+
 // #endregion Life Cycle
 
 // #region Getters
+
 function getTooltipOverlayElement() {
 	return document.getElementById('tooltipOverlay');
 }
@@ -14,6 +30,11 @@ function getTooltipOverlayElement() {
 function getTooltipToolbarElement() {
 	return document.getElementById('tooltipToolbar');
 }
+
+function getTooltipHoverElements() {
+	return Array.from(document.querySelectorAll(`[${TOOLTIP_HOVER_ATTRB_NAME}]`));
+}
+
 // #endregion Getters
 
 // #region Setters
@@ -30,9 +51,22 @@ function isShowingTooltipToolbar() {
 
 // #region Actions
 
-function showTooltipOverlay(targetElm, innerHtmlStr) {
+function showTooltipOverlay(targetElm, tooltipText) {
+	if (isNullOrUndefined(tooltipText) &&
+		targetElm &&
+		typeof targetElm.hasAttribute === 'function' &&
+		targetElm.hasAttribute(TOOLTIP_HOVER_ATTRB_NAME)) {
+		// only use attrb value if exists and not provided in param
+		tooltipText = targetElm.getAttribute(TOOLTIP_HOVER_ATTRB_NAME);
+	}
+	if (isNullOrEmpty(tooltipText)) {
+		// don't show empty tooltip
+		return;
+	}
+	tooltipText = decodeStringWithShortcut(tooltipText);
+
 	let tt_elm = getTooltipOverlayElement();
-	tt_elm.innerHTML = `<span class="tooltiptext">${innerHtmlStr}</span>`;
+	tt_elm.innerHTML = `<span class="tooltiptext">${tooltipText}</span>`;
 	let target_rect = targetElm.getBoundingClientRect();
 	tt_elm.classList.remove('hidden');
 	let tt_rect = tt_elm.getBoundingClientRect();

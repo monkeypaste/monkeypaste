@@ -32,6 +32,7 @@ function initEditor() {
 
 	initScroll();
 	initTemplates();
+	initTooltip();
 	initOverlay();
 	//initHistory();
 	//initExtContentSourceBlot();

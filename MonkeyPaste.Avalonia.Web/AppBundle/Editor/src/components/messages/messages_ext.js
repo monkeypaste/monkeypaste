@@ -233,6 +233,11 @@ function dragEventFromHost_ext(dragEnterMsgBase64Str) {
 		onDrop(req);
 	}	
 }
+
+function updateShortcuts_ext(shortcutsMsgBase64Str) {
+	// input 'MpQuillEditorShortcutKeystringMessage'
+	initShortcuts(shortcutsMsgBase64Str);
+}
 //function setSelection_ext(selMsgBase64Str) {
 //	// input 'MpQuillSelectionChangedMessage'
 //	let req = toJsonObjFromBase64Str(selMsgBase64Str);

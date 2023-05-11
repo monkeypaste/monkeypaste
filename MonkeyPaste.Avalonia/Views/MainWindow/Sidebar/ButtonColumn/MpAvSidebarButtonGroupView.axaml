@@ -17,12 +17,7 @@
         <TransformOperations x:Key="SwitchlessRadioButtonTransformOps">translateX(-15px)</TransformOperations>
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
-
-        <!--<Style Selector="RadioButton.sidebarRadio /template/ Border#RootBorder > Grid > Grid">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>-->
-
+        <!--  SIDEBAR RADIO BUTTONS  -->
         <Style Selector="RadioButton.sidebarRadio">
             <Setter Property="local:MpAvPointerCommandExtension.IsEnabled"
                     Value="True" />
@@ -188,17 +183,9 @@
                      Command="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
                      CommandParameter="4"
                      IsEnabled="{Binding !IsAppPaused}">
-            <!--<RadioButton.IsChecked>
-                <MultiBinding Converter="{x:Static BoolConverters.Or}">
-                    <Binding Path="IsRightClickPasteMode"
-                             Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
-                    <Binding Path="IsAutoCopyMode"
-                             Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
-                </MultiBinding>
-            </RadioButton.IsChecked>-->
             <RadioButton.Resources>
-                <SolidColorBrush x:Key="FlyoutPresenterBackground">Transparent</SolidColorBrush>
-                <SolidColorBrush x:Key="FlyoutBorderThemeBrush">Transparent</SolidColorBrush>
+                <!--<SolidColorBrush x:Key="FlyoutPresenterBackground">Transparent</SolidColorBrush>
+                <SolidColorBrush x:Key="FlyoutBorderThemeBrush">Transparent</SolidColorBrush>-->
                 <Thickness x:Key="FlyoutContentThemePadding">0,0,0,0</Thickness>
                 <Thickness x:Key="FlyoutBorderThemePadding">0,0,0,0</Thickness>
                 <sys:Double x:Key="FlyoutThemeMinWidth">0</sys:Double>
@@ -208,15 +195,12 @@
                 <local:MpAvToolTipView ToolTipText="Clipboard Modes" />
             </ToolTip.Tip>
             <RadioButton.Flyout>
-                <Flyout Placement="RightEdgeAlignedBottom">
-                    <Panel Width="110"
-                           Height="50"
-                           RenderTransform="translateX(10px)">
-
+                <Flyout Opening="Fo_Opening"
+                        Placement="AnchorAndGravity">
+                    <Panel>
                         <local:MpAvAppModeFlyoutView HorizontalAlignment="Stretch"
                                                      VerticalAlignment="Stretch" />
                     </Panel>
-
                 </Flyout>
             </RadioButton.Flyout>
             <Grid>
@@ -225,10 +209,7 @@
                        Source="{Binding Source={StaticResource LeftClickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                 <Image IsVisible="{Binding IsRightClickPasteMode, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                        Source="{Binding Source={StaticResource RightClickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-
-                <!--<PathIcon Data="{StaticResource MouseSvg}" />-->
             </Grid>
-            <!--<PathIcon Data="{StaticResource MouseSvg}" />-->
         </RadioButton>
     </Grid>
 </local:MpAvUserControl>

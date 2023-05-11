@@ -89,6 +89,19 @@ namespace MonkeyPaste.Avalonia {
                MpAvFilterMenuViewModel.Instance.DefaultFilterMenuFixedSize :
                ButtonGroupFixedDimensionLength + SelectedItemHeight;
 
+        public int MouseModeHorizontalOffset =>
+            MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
+                20 : 0;
+
+        public int MouseModeVerticalOffset =>
+            MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
+                -5 : -100;
+
+        public PlacementMode MouseModeFlyoutPlacement =>
+            MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
+                PlacementMode.Right :
+                PlacementMode.Top;
+
         #endregion
 
         #endregion
@@ -220,6 +233,9 @@ namespace MonkeyPaste.Avalonia {
                 }
                 button.Command?.Execute(param);
             });
+
+
+
         #endregion
     }
 }

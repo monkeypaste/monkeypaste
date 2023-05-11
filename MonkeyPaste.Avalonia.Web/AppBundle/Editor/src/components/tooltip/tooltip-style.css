@@ -88,3 +88,7 @@
     #tooltipToolbar span {
         margin-left: 10px;
     }
+
+em.option-keys {
+    padding-inline-start: 15px;
+}

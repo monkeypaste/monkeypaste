@@ -867,7 +867,7 @@ namespace MonkeyPaste.Avalonia {
 
         public IEnumerable<MpAvClipTileViewModel> InternalPinnedItems =>
             PinnedItems
-            .Where(x => !x.IsPopOutVisible && !x.IsAppendNotifier)
+            .Where(x => !x.IsPopOutOpen && !x.IsAppendNotifier)
             .Take(MpPrefViewModel.Instance.MaxStagedClipCount)
             .ToList();
 
@@ -2779,10 +2779,8 @@ namespace MonkeyPaste.Avalonia {
                      //Mp.Services.Query.PageTools.RemoveItemId(ctvm_to_pin.CopyItemId);
                  }
                  Mp.Services.Query.PageTools.RemoveItemId(ctvm_to_pin.CopyItemId);
-                 if (pinType == MpPinType.Window) {
-                     ctvm_to_pin.OpenPopOutWindow();
-                 } else if (pinType == MpPinType.Append) {
-                     ctvm_to_pin.OpenAppendWindow(appendType);
+                 if (pinType == MpPinType.Window || pinType == MpPinType.Append) {
+                     ctvm_to_pin.OpenPopOutWindow(pinType == MpPinType.Window ? MpAppendModeType.None : appendType);
                  }
 
                  if (ctvm_to_pin.IsPinned) {
@@ -2914,7 +2912,7 @@ namespace MonkeyPaste.Avalonia {
             int pin_count = PinnedItems.Count;
             while (pin_count > 0) {
                 var to_unpin_ctvm = PinnedItems[--pin_count];
-                if (to_unpin_ctvm.IsPopOutVisible ||
+                if (to_unpin_ctvm.IsPopOutOpen ||
                     to_unpin_ctvm.IsAppendNotifier) {
                     continue;
                 }
@@ -2926,7 +2924,7 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 SelectedItem.PinToPopoutWindowCommand.Execute(null);
             }, () => {
-                return SelectedItem != null && !SelectedItem.IsPopOutVisible;
+                return SelectedItem != null && !SelectedItem.IsPopOutOpen;
             });
         public ICommand DuplicateSelectedClipsCommand => new MpAsyncCommand(
             async () => {
@@ -3954,7 +3952,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand AppendDataCommand => new MpCommand<object>(
             (args) => {
-                AppendClipTileViewModel.IsPopOutVisible = true;
+                AppendClipTileViewModel.IsPopOutOpen = true;
                 if (AppendClipTileViewModel.GetContentView() is MpAvContentWebView wv) {
                     wv.ProcessAppendStateChangedMessage(GetAppendStateMessage(args as string), "command");
                 }

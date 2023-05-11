@@ -30,50 +30,56 @@ var MaxUndoLimit = -1;
 // #region Life Cycle
 
 function initMain(initObj) {
-	EnvName = !initObj.envName ? WindowsEnv : initObj.envName;
-	initDefaults(initObj.defaults);
-	//initExceptionHandler();
+	try {
+		EnvName = !initObj.envName ? WindowsEnv : initObj.envName;
+		initDefaults(initObj.defaults);
+		//initExceptionHandler();
 
-	if (isPlainHtmlConverter()) {
-		initPlainHtmlConverter();
-		log('Main Initialized.(Converter)');
-		return;
+		if (isPlainHtmlConverter()) {
+			initPlainHtmlConverter();
+			log('Main Initialized.(Converter)');
+			return;
+		}
+		initWindow();
+
+		initInput();
+
+		initDrop();
+		initDrag();
+
+		initEditor();
+
+		IsLoaded = true;
+		if (isAppendNotifier()) {
+			log('Main Initialized.(Appender)');
+			enableSubSelection();
+		} else {
+			log('Main Initialized.(Content)');
+		}	
+	} catch (ex) {
+		onException_ntf('init error',ex);
 	}
-	initWindow();
-
-	initInput();
-
-	initDrop();
-	initDrag();
-
-	initEditor();
-
-	IsLoaded = true;
-	if (isAppendNotifier()) {
-		log('Main Initialized.(Appender)');
-		enableSubSelection();
-	} else {
-		log('Main Initialized.(Content)');
-	}	
 
 	onInitComplete_ntf();
 }
 
-function initDefaults(initObj) {
-	if(isNullOrUndefined(initObj)) {
+function initDefaults(defaultsObj) {
+	// input 'MpQuillDefaultsRequestMessage'
+
+	if(isNullOrUndefined(defaultsObj)) {
 		return;
 	}
-	if (!isNullOrUndefined(initObj.maxUndo)) {
-		MaxUndoLimit = parseInt(initObj.maxUndo);
+	if (!isNullOrUndefined(defaultsObj.maxUndo)) {
+		MaxUndoLimit = parseInt(defaultsObj.maxUndo);
 	}
 	
-	if (!isNullOrUndefined(initObj.bgOpacity)) {
-		setElementComputedStyleProp(document.body, '--editableopacity', parseFloat(initObj.bgOpacity));
+	if (!isNullOrUndefined(defaultsObj.bgOpacity)) {
+		setElementComputedStyleProp(document.body, '--editableopacity', parseFloat(defaultsObj.bgOpacity));
 	}
 
 	const bg_opacity = parseFloat(getElementComputedStyleProp(document.body, '--editableopacity'));
-	if(!isNullOrUndefined(initObj.currentTheme)) {
-		EditorTheme = initObj.currentTheme;
+	if(!isNullOrUndefined(defaultsObj.currentTheme)) {
+		EditorTheme = defaultsObj.currentTheme;
 
 		let no_sel_bg = 'transparent';
 		let sub_sel_bg = `rgba(189,188,188,${bg_opacity})`;
@@ -89,7 +95,7 @@ function initDefaults(initObj) {
 		let paste_toolbar_button_color = 'dodgerblue';
 		let edit_template_bg_color = 'palegreen';
 
-		if(initObj.currentTheme.toLowerCase() == 'dark') {
+		if(defaultsObj.currentTheme.toLowerCase() == 'dark') {
 			no_sel_bg = `rgba(0,0,0,${bg_opacity})`;
 			sub_sel_bg = `rgba(67,67,67,${bg_opacity})`;
 			edit_bg = `rgba(0,0,0,${bg_opacity})`;
@@ -120,24 +126,26 @@ function initDefaults(initObj) {
 		setElementComputedStyleProp(document.body, '--edittemplatebgcolor', cleanHexColor(edit_template_bg_color,null,false));
 
 	}
-	if(!isNullOrUndefined(initObj.defaultFontFamily)) {
-		setElementComputedStyleProp(document.body,'--defaultFontFamily',initObj.defaultFontFamily);
+	if(!isNullOrUndefined(defaultsObj.defaultFontFamily)) {
+		setElementComputedStyleProp(document.body,'--defaultFontFamily',defaultsObj.defaultFontFamily);
 
 		log('font family set to: ' + getElementComputedStyleProp(document.body, '--defaultFontFamily'));
 	}
-	if (!isNullOrUndefined(initObj.defaultFontSize)) {
-		DefaultFontSize = Math.max(8, parseInt(initObj.defaultFontSize)) + 'px';
+	if (!isNullOrUndefined(defaultsObj.defaultFontSize)) {
+		DefaultFontSize = Math.max(8, parseInt(defaultsObj.defaultFontSize)) + 'px';
 		setElementComputedStyleProp(document.body, '--defaultFontSize', DefaultFontSize);
 		log('font size set to: '+getElementComputedStyleProp(document.body,'--defaultFontSize'));
 	}
-	if (!isNullOrUndefined(initObj.isSpellCheckEnabled)) {
-		IsSpellCheckEnabled = parseBool(initObj.isSpellCheckEnabled);
+	if (!isNullOrUndefined(defaultsObj.isSpellCheckEnabled)) {
+		IsSpellCheckEnabled = parseBool(defaultsObj.isSpellCheckEnabled);
 		getSpellCheckableElements().forEach(x=>{
 			if(x) {
 				x.setAttribute("spellcheck",IsSpellCheckEnabled);
 			}
 		});
 	}
+
+	initShortcuts(defaultsObj.shortcutFragmentStr);
 }
 // #endregion Life Cycle
 

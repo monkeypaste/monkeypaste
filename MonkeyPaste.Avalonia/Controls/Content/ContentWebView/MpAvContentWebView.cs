@@ -943,7 +943,8 @@ namespace MonkeyPaste.Avalonia {
                 isSpellCheckEnabled = MpPrefViewModel.Instance.IsSpellCheckEnabled,
                 currentTheme = MpPrefViewModel.Instance.CurrentThemeName,
                 bgOpacity = MpPrefViewModel.Instance.GlobalBgOpacity,
-                maxUndo = MpPrefViewModel.Instance.MaxUndoLimit
+                maxUndo = MpPrefViewModel.Instance.MaxUndoLimit,
+                shortcutFragmentStr = MpAvShortcutCollectionViewModel.Instance.EditorShortcutsMsgBase64
             };
         }
 
@@ -1239,10 +1240,7 @@ namespace MonkeyPaste.Avalonia {
             }
             bool is_reload = BindingContext.PublicHandle == _lastLoadedContentHandle;
             _lastLoadedContentHandle = BindingContext.PublicHandle;
-
-            if (!IsEditorLoaded) {
-                //MpDebug.Break();
-            }
+            IsEditorLoaded = true;
 
             if (contentChanged_ntf == null) {
                 // shouldn't be null
@@ -1284,7 +1282,7 @@ namespace MonkeyPaste.Avalonia {
                     MpConsole.WriteLine("NO PLAIN TEXT AVAILABLE");
                 }
             }
-            IsEditorLoaded = true;
+            //IsEditorLoaded = true;
         }
 
         private async Task ProcessDataTransferCompleteResponse(MpQuillDataTransferCompletedNotification dataTransferCompleted_ntf) {
@@ -1421,7 +1419,7 @@ namespace MonkeyPaste.Avalonia {
                 if (IsContentReadOnly) {
                     MpAvMainWindowViewModel.Instance.IsAnyMainWindowTextBoxFocused = false;
 
-                    if (!BindingContext.IsPopOutVisible) {
+                    if (!BindingContext.IsPopOutOpen) {
                         MpAvResizeExtension.ResizeAnimated(this, BindingContext.ReadOnlyWidth, BindingContext.ReadOnlyHeight);
                     }
 

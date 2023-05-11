@@ -27,6 +27,7 @@ function getPasteAppendToolbarLabelElement() {
 function getPasteAppendPauseAppendButtonElement() {
 	return document.getElementById('pasteAppendPauseAppendButton');
 }
+
 // #endregion Getters
 
 // #region Setters
@@ -91,5 +92,9 @@ function onPauseAppendButtonClickOrKey(e) {
 	} else {
 		enablePauseAppend();
 	}
+}
+
+function onDisableAppendModeClickOrKey(e) {
+
 }
 // #endregion Event Handlers

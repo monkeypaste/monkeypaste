@@ -167,6 +167,24 @@ button {
 }
 
 /* override superCm so they aren't so tall */
+.context-menu-separator {
+    padding: 0 !important;
+}
+
 .context-menu-option {
     padding: 1px 30px 1px 15px !important;
+    display: flex;
+    align-items: center;
+}
+
+.context-menu-option:has(.option-keys) {
+    padding-right: 15px !important;
+}
+.context-menu-option:has(.option-keys) .option-text {
+    min-width: 100px;
+}
+.option-keys {
+    font-style: italic;
+    font-size: 10px;
+    color: silver;
 }

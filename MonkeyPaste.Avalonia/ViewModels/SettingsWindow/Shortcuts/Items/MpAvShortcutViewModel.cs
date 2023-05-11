@@ -77,6 +77,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+        public bool IsEditorShortcut =>
+            ShortcutType.IsEditorShortcut();
+
         public bool IsCustom {
             get {
                 if (Shortcut == null) {

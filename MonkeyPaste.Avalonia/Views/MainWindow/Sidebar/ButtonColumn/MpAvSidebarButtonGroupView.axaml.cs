@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common.Avalonia;
@@ -13,23 +14,26 @@ namespace MonkeyPaste.Avalonia {
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
 
             var amb = this.FindControl<Control>("AppModeToggleButton");
-            //amb.PointerReleased += Amb_PointerReleased;
-
-            if (FlyoutBase.GetAttachedFlyout(amb) is Flyout fo) {
-
-                fo.Closing += Fb_Closing;
-            }
+            //amb.AddHandler(PointerPressedEvent, Amb_PointerPressed, RoutingStrategies.Tunnel);
         }
-        private void Fb_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
-            if (MpAvSidebarItemCollectionViewModel.Instance.SelectedItemIdx == 4) {
-                // mode changes trigger ntf windows that deactivate mw and close flyout
-                // force flyout to be closed by toggling sidebar button
-                e.Cancel = true;
-            }
-        }
-        private void Amb_PointerReleased(object sender, global::Avalonia.Input.PointerReleasedEventArgs e) {
+
+        private void Amb_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
             if (sender is Control c) {
-                FlyoutBase.ShowAttachedFlyout(c);
+                if (Flyout.GetAttachedFlyout(c) is Flyout fo) {
+                    fo.Opening += Fo_Opening;
+
+                }
+            }
+        }
+
+        private void Fo_Opening(object sender, System.EventArgs e) {
+            var fo = sender as Flyout;
+            if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+                fo.HorizontalOffset = 100;
+                fo.VerticalOffset = 5;
+            } else {
+                fo.HorizontalOffset = 0;
+                fo.VerticalOffset = -100;
             }
         }
 

@@ -328,6 +328,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        // NOTE this needs to be updated when shortcuts changed
+        // to avoid re-serializing it for every tile
+        private string _editorShortcutsMsgBase64;
+        public string EditorShortcutsMsgBase64 =>
+            _editorShortcutsMsgBase64;
 
         public int GlobalShortcutDelay =>
             MpPrefViewModel.Instance.GlobalShortcutDelay;
@@ -454,7 +459,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-
         public async Task<string> CreateOrUpdateViewModelShortcutAsync(
             MpIShortcutCommandViewModel iscvm,
             object iconResourceObj = null) {
@@ -561,11 +565,27 @@ namespace MonkeyPaste.Avalonia {
             return null;
         }
 
+
         #endregion
 
         #region Protected Methods
 
         #region Db Overrides
+
+        protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
+            if (e is MpShortcut sc && sc.ShortcutType.IsEditorShortcut()) {
+                UpdateEditorShortcutsMessageStr();
+                Dispatcher.UIThread.Post(() => {
+                    MpAvClipTrayViewModel.Instance
+                        .AllItems
+                        .Where(x => !x.IsPlaceholder)
+                        .Select(x => x.GetContentView())
+                        .Cast<MpAvContentWebView>()
+                        .Where(x => x != null)
+                        .ForEach(x => x.SendMessage($"updateShortcuts_ext('{EditorShortcutsMsgBase64}')"));
+                });
+            }
+        }
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             MpAvShortcutViewModel scvmToRemove = null;
@@ -603,6 +623,9 @@ namespace MonkeyPaste.Avalonia {
                     var scvm = await CreateShortcutViewModel(sc, shortcutCommand);
                     Items.Add(scvm);
                 }
+
+
+                UpdateEditorShortcutsMessageStr();
             });
         }
         private void ReceivedGlobalMessage(MpMessageType msg) {
@@ -652,6 +675,19 @@ namespace MonkeyPaste.Avalonia {
             MpAvShortcutViewModel nscvm = new MpAvShortcutViewModel(this);
             await nscvm.InitializeAsync(sc, comamnd);
             return nscvm;
+        }
+
+        private void UpdateEditorShortcutsMessageStr() {
+            _editorShortcutsMsgBase64 =
+                new MpQuillEditorShortcutKeystringMessage() {
+                    shortcuts =
+                            Items
+                            .Where(x => x.IsEditorShortcut)
+                            .Select(x => new MpQuillEditorShortcutKeystringItemFragment() {
+                                shortcutType = x.ShortcutType.ToString(),
+                                keys = x.KeyString
+                            }).ToList()
+                }.SerializeJsonObjectToBase64();
         }
 
         #region Paste Tracking (unused)

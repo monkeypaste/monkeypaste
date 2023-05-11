@@ -47,7 +47,7 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                 case nameof(BindingContext.IsHovering):
                     if (!TestDcMismatchByHover()) {
-                        if (BindingContext.IsPopOutVisible ||
+                        if (BindingContext.IsPopOutOpen ||
                             BindingContext.WasCloseAppendWindowConfirmed) {
                             break;
                         }
@@ -59,7 +59,7 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(BindingContext.IsHeaderAndFooterVisible):
                 case nameof(BindingContext.IsTitleVisible):
                 case nameof(BindingContext.IsDetailVisible):
-                    if (BindingContext.IsPopOutVisible) {
+                    if (BindingContext.IsPopOutOpen) {
                         //return;
                     }
                     var tg = this.FindControl<Grid>("TileGrid");

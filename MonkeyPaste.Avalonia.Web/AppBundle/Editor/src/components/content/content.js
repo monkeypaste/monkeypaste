@@ -28,87 +28,97 @@ function loadContent(
 	let is_reload = contentHandle == ContentHandle;
 	let was_sub_sel_enabled = null;
 	let was_editable = null;
-	if (is_reload) {
-		was_sub_sel_enabled = isSubSelectionEnabled();
-		was_editable = !isReadOnly();
-	} else {
-		// when actually a new item and not reload
-		quill.history.clear();
-	}
 
-	quill.enable(true);
-
-	ContentHandle = contentHandle;
-	ContentItemType = contentType;
-
-	// set editor content classes
-	if (ContentItemType == 'Text') {
-		getEditorContainerElement().classList.add('text-content');
-		getEditorContainerElement().classList.remove('image-content');
-		getEditorContainerElement().classList.remove('file-list-content');
-	} else if (ContentItemType == 'Image') {
-		getEditorContainerElement().classList.remove('text-content');
-		getEditorContainerElement().classList.add('image-content');
-		getEditorContainerElement().classList.remove('file-list-content');
-	} else if (ContentItemType == 'FileList') {
-		getEditorContainerElement().classList.remove('text-content');
-		getEditorContainerElement().classList.remove('image-content');
-		getEditorContainerElement().classList.add('file-list-content');
-	}
-
-	let sel_to_restore = null;
-	if (is_reload) {
-		// when content is reloaded, any selection will be lost so save to restore
-		sel_to_restore = getDocSelection();
-	} else {
-		clearTableSelectionStates();
-		loadPasteButton();
-		disableAppendMode();
-		resetSelection();
-		resetColorPaletteState();
-
-		if (isContentReadOnly) {
-			enableReadOnly();
-			disableSubSelection();
+	try {
+		if (is_reload) {
+			was_sub_sel_enabled = isSubSelectionEnabled();
+			was_editable = !isReadOnly();
 		} else {
-			disableReadOnly(true);
+			// when actually a new item and not reload
+			quill.history.clear();
 		}
-		resetContent();
-		resetAnnotations();
+
+		quill.enable(true);
+
+		ContentHandle = contentHandle;
+		ContentItemType = contentType;
+
+		// set editor content classes
+		if (ContentItemType == 'Text') {
+			getEditorContainerElement().classList.add('text-content');
+			getEditorContainerElement().classList.remove('image-content');
+			getEditorContainerElement().classList.remove('file-list-content');
+		} else if (ContentItemType == 'Image') {
+			getEditorContainerElement().classList.remove('text-content');
+			getEditorContainerElement().classList.add('image-content');
+			getEditorContainerElement().classList.remove('file-list-content');
+		} else if (ContentItemType == 'FileList') {
+			getEditorContainerElement().classList.remove('text-content');
+			getEditorContainerElement().classList.remove('image-content');
+			getEditorContainerElement().classList.add('file-list-content');
+		}
+
+		let sel_to_restore = null;
+		if (is_reload) {
+			// when content is reloaded, any selection will be lost so save to restore
+			sel_to_restore = getDocSelection();
+		} else {
+			clearTableSelectionStates();
+			loadPasteButton();
+			disableAppendMode();
+			resetSelection();
+			resetColorPaletteState();
+
+			if (isContentReadOnly) {
+				enableReadOnly();
+				disableSubSelection();
+			} else {
+				disableReadOnly(true);
+			}
+			resetContent();
+			resetAnnotations();
+		}
+
+		if (!IsFindReplaceInactive) {
+			log('activated findreplace detected during load, deactivating...');
+		}
+		IsFindReplaceInactive = true;
+
+		loadContentData(contentData);
+
+		updateAppendModeState(append_state, true);
+
+		updateQuill();
+		if (ContentItemType != 'Text') {
+			quill.enable(false);
+		}
+
+		if (ContentItemType == 'Image') {
+			// NOTE pass annotations so load after image dimensions are known
+			populateContentImageDataSize(annotationsJsonStr);
+		} else {
+			loadAnnotations(annotationsJsonStr);
+		}
+
+		loadFindReplace(searches);
+
+		if (sel_to_restore != null) {
+			sel_to_restore = cleanDocRange(sel_to_restore);
+			setDocSelection(sel_to_restore)
+		}
+
+		updateAllElements();
+		updateQuill();
+	} catch (ex) {
+		onException_ntf('error loading item', ex);
 	}
 
-	if (!IsFindReplaceInactive) {
-		log('activated findreplace detected during load, deactivating...');
+	try {
+		onContentLoaded_ntf(getContentAsMessage());
+	} catch (ex) {
+		onException_ntf('error creating load item resp, sending empty', ex);
+		onContentLoaded_ntf('');
 	}
-	IsFindReplaceInactive = true;
-
-	loadContentData(contentData);
-
-	updateAppendModeState(append_state, true);
-
-	updateQuill();
-	if (ContentItemType != 'Text') {
-		quill.enable(false);
-	}
-
-	if (ContentItemType == 'Image') {
-		// NOTE pass annotations so load after image dimensions are known
-		populateContentImageDataSize(annotationsJsonStr);
-	} else {
-		loadAnnotations(annotationsJsonStr);
-	}
-	
-	loadFindReplace(searches);
-
-	if (sel_to_restore != null) {
-		sel_to_restore = cleanDocRange(sel_to_restore);
-		setDocSelection(sel_to_restore)
-	}
-
-	updateAllElements();
-	updateQuill();
-	onContentLoaded_ntf(getContentAsMessage());
-
 
 	//retain focus state on reload
 	if (was_sub_sel_enabled != null && was_sub_sel_enabled) {

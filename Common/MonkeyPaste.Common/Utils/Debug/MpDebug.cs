@@ -4,23 +4,25 @@ using System.Threading;
 
 namespace MonkeyPaste.Common {
     public static class MpDebug {
-        public static void Break(object args = null) {
+        public static void Break(object args = null, bool silent = false) {
             if (Debugger.IsAttached) {
                 if (args != null) {
                     MpConsole.WriteLine(args.ToString());
                 }
-
+                if (silent) {
+                    return;
+                }
                 Debugger.Break();
             }
             //else {
             //    throw new Exception(args?.ToString());
             //}
         }
-        public static void Assert(bool test, string msg) {
+        public static void Assert(bool test, string msg, bool silent = false) {
             if (test) {
                 return;
             }
-            Break(msg);
+            Break(msg, silent);
         }
 
         public static void BreakAllThreads(object args = null) {

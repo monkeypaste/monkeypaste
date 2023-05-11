@@ -31,6 +31,7 @@ window.superCm = (function (msie) {
 
 	var optIconTemplate = $("<i>").addClass("option-icon");
 	var optTextTemplate = $("<span>").addClass("option-text");
+	var optKeysTemplate = $("<span>").addClass("option-keys");
 	var optSeparatorTemplate = $("<hr>").addClass("option-separator");
 
 	var cms = [];
@@ -141,6 +142,8 @@ window.superCm = (function (msie) {
 
 			var separator = opt.separator !== undefined;
 			var icon = opt.icon !== undefined && opt.icon;
+			var keys = opt.keys === undefined ? null : opt.keys == null ? '' : opt.keys;
+			//var keys = 'Control+Shift+F3';
 
 			var label = opt.label !== undefined && opt.label;
 			var disabled = opt.disabled !== undefined && opt.disabled;
@@ -201,15 +204,25 @@ window.superCm = (function (msie) {
 					//cmOptElement.css('background-color', 'unset');
 				}
 				cmOptElement.append(iconElm);
-				// TAK - END
-
 			}
+			// TAK - END
 
 			if (label) {
 				cmOptElement.append(
-					optTextTemplate.clone().css("vertical-align", "top").html(opt.label)
+					optTextTemplate.clone().css("vertical-align", "center").html(opt.label)
 				);
 			}
+
+			// TAK START
+
+			if (keys) {
+				cmOptElement.append(
+					optKeysTemplate.clone().css("vertical-align", "center").html(keys)
+				);
+			}
+
+			// TAK END
+			
 
 			if (disabled) {
 				if (!cmOptElement.hasClass("context-menu-disabled")) {

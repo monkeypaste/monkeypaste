@@ -15,7 +15,6 @@
         <Style Selector="ToggleButton">
             <Setter Property="BorderThickness"
                     Value="1" />
-
             <Setter Property="Background"
                     Value="Silver" />
             <Setter Property="Margin"
@@ -52,7 +51,7 @@
             <Setter Property="Background"
                     Value="Silver" />
         </Style>
-      <Style Selector="ToggleButton:pointerover">
+        <Style Selector="ToggleButton:pointerover">
             <Setter Property="Background"
                     Value="Silver" />
         </Style>
@@ -75,29 +74,66 @@
             <ColumnDefinition Width="{Binding Source={StaticResource ButtonSize}, Converter={x:Static local:MpAvDoubleToGridLengthConverter.Instance}}" />
         </Grid.ColumnDefinitions>
 
-        <!--  AUTO COPY -->
+        <!--  AUTO COPY  -->
         <ToggleButton x:Name="AutoCopyRadioButton"
                       Grid.Column="0"
                       Classes="modeRadio"
-                      IsVisible="{Binding #MouseBaseRadioButton.IsChecked}"
                       IsChecked="{Binding IsAutoCopyMode, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=OneWay}"
                       Command="{Binding ToggleAutoCopyModeCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
             <ToolTip.Tip>
-                <local:MpAvToolTipView ToolTipText="Auto Copy - [add detail here]" />
+                <local:MpAvToolTipView>
+                    <local:MpAvToolTipView.ToolTipText>
+                        <MultiBinding Converter="{x:Static local:MpAvMultiStringAppendConverter.Instance}">
+                            <Binding>
+                                <Binding.Source>
+                                    <sys:String>Auto Copy - [</sys:String>
+                                </Binding.Source>
+                            </Binding>
+                            <Binding Path=""
+                                     Converter="{x:Static local:MpAvShortcutTypeToKeyStringConverter.Instance}"
+                                     ConverterParameter="ToggleAutoCopyMode" />
+                            <Binding>
+                                <Binding.Source>
+                                    <sys:String>]</sys:String>
+                                </Binding.Source>
+                            </Binding>
+
+                        </MultiBinding>
+                    </local:MpAvToolTipView.ToolTipText>
+                </local:MpAvToolTipView>
             </ToolTip.Tip>
             <Image Source="{Binding Source={StaticResource LeftClickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </ToggleButton>
 
-        <!--  RIGHT CLICK PASTE -->
+        <!--  RIGHT CLICK PASTE  -->
 
         <ToggleButton x:Name="RightClickPasteModeRadioButton"
                       Grid.Column="1"
                       Classes="modeRadio"
-                      IsVisible="{Binding #MouseBaseRadioButton.IsChecked}"
                       IsChecked="{Binding IsRightClickPasteMode, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=OneWay}"
                       Command="{Binding ToggleRightClickPasteCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
             <ToolTip.Tip>
-                <local:MpAvToolTipView ToolTipText="Right Click Paste =  [add detail here]" />
+                <!--<local:MpAvToolTipView ToolTipText="Right Click Paste =  [add detail here]" />-->
+                <local:MpAvToolTipView>
+                    <local:MpAvToolTipView.ToolTipText>
+                        <MultiBinding Converter="{x:Static local:MpAvMultiStringAppendConverter.Instance}">
+                            <Binding>
+                                <Binding.Source>
+                                    <sys:String>Right Click Paste = [</sys:String>
+                                </Binding.Source>
+                            </Binding>
+                            <Binding Path=""
+                                     Converter="{x:Static local:MpAvShortcutTypeToKeyStringConverter.Instance}"
+                                     ConverterParameter="ToggleRightClickPasteMode" />
+                            <Binding>
+                                <Binding.Source>
+                                    <sys:String>]</sys:String>
+                                </Binding.Source>
+                            </Binding>
+
+                        </MultiBinding>
+                    </local:MpAvToolTipView.ToolTipText>
+                </local:MpAvToolTipView>
             </ToolTip.Tip>
             <Image Source="{Binding Source={StaticResource RightClickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </ToggleButton>

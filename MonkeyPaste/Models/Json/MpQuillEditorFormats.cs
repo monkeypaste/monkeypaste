@@ -8,8 +8,12 @@ namespace MonkeyPaste {
 
         public string envName { get; set; } // will be wpf,android, etc.
         public MpQuillDefaultsRequestMessage defaults { get; set; }
+
+        // fragment 'MpQuillAppendStateChangedMessage'
+        public string appendStateFragment { get; set; }
     }
     public class MpQuillDefaultsRequestMessage : MpJsonObject {
+        // fragment 'MpQuillEditorShortcutKeystringMessage'
 
         public string defaultFontFamily { get; set; }
         public string defaultFontSize { get; set; }
@@ -18,6 +22,7 @@ namespace MonkeyPaste {
         public double bgOpacity { get; set; }
 
         public int maxUndo { get; set; }
+        public string shortcutFragmentStr { get; set; }
     }
 
     public class MpQuillLoadContentRequestMessage : MpJsonObject {
@@ -290,5 +295,14 @@ namespace MonkeyPaste {
         public bool fromHost { get; set; } = true;
         public bool wasCancel { get; set; } = false;
         //public MpQuillDataTransferMessageFragment dataTransfer { get; set; }
+    }
+
+    public class MpQuillEditorShortcutKeystringMessage : MpJsonObject {
+        public List<MpQuillEditorShortcutKeystringItemFragment> shortcuts { get; set; }
+    }
+
+    public class MpQuillEditorShortcutKeystringItemFragment : MpJsonObject {
+        public string shortcutType { get; set; }
+        public string keys { get; set; }
     }
 }
