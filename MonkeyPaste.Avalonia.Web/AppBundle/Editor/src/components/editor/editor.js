@@ -348,7 +348,6 @@ function disableSubSelection(fromHost = false) {
 
 function onEditorFocus(e) {
 	log('editor got focus');
-	BlurredSelectionRects = null;
 	hideAllPopups();
 	getEditorElement().classList.add('focused');
 	drawOverlay();
@@ -359,7 +358,6 @@ function onEditorBlur(e) {
 	//if (isTemplateFocused()) {
 	//	return;
 	//}
-	//BlurredSelectionRects = getRangeRects(getDocSelection());
 	getEditorElement().classList.remove('focused');
 	drawOverlay();
 }

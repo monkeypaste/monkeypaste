@@ -5,10 +5,6 @@ const DefaultSelectionFgColor = 'black';
 const DefaultCaretColor = 'black';
 const AppendCaretColor = 'red';
 
-//var SuppressNextSelChangedHostNotification = false;
-
-var BlurredSelectionRects = null;
-
 var SelectionHistory = [];
 
 var LastSelRange = null;
@@ -331,8 +327,6 @@ function resetSelection() {
 	LastSelRange = null;
 	CurSelRange = null;
 	SelectionOnMouseDown = null;
-	BlurredSelectionRects = null;
-	//DragSelectionRange = null;
 	clearDomSelectionRanges();
 	setDocSelection({ index: 0, length: 0 });
 }
@@ -441,22 +435,10 @@ function cleanDocRange(doc_range) {
 
 function onDocumentSelectionChange(e) {
 	let new_range = getDocSelection();
-	//new_range = coerceCleanSelection(new_range, CurSelRange);
-	if (DragDomRange) {
-		// drag selection collapses so prevent here, don't know why...
-		setDomSelection(DragDomRange);
-		return;
-	}
 	if (didSelectionChange(new_range, CurSelRange)) {		
 		LastSelRange = CurSelRange;
 		CurSelRange = new_range;
 		updateAllElements();
-
-		//if (SuppressNextSelChangedHostNotification) {
-		//	SuppressNextSelChangedHostNotification = false;
-		//} else {
-		//	onSelectionChanged_ntf(CurSelRange);
-		//}
 	}
 }
 // #endregion Event Handlers

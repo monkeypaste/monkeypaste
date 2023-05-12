@@ -172,6 +172,9 @@ namespace MonkeyPaste {
                 });
             } else {
                 HideNotification();
+                while (IsClosing) {
+                    await Task.Delay(100);
+                }
             }
 
             //if (DialogResult == MpNotificationDialogResultType.Retry) {

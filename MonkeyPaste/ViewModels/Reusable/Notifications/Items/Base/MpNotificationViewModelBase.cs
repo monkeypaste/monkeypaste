@@ -126,7 +126,7 @@ namespace MonkeyPaste {
         MpWindowType MpIWindowViewModel.WindowType =>
             IsModal ? MpWindowType.Modal : MpWindowType.Toast;
 
-        bool MpIChildWindowViewModel.IsOpen {
+        bool MpIChildWindowViewModel.IsChildWindowOpen {
             get => IsVisible;
             set => IsVisible = value;
         }

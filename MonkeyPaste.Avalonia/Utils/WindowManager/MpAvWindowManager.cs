@@ -120,10 +120,10 @@ namespace MonkeyPaste.Avalonia {
 
         private static void ChildWindowViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             if (sender is MpIChildWindowViewModel cwvm) {
-                if (e.PropertyName == nameof(cwvm.IsOpen)) {
+                if (e.PropertyName == nameof(cwvm.IsChildWindowOpen)) {
                     var cw = AllWindows.FirstOrDefault(x => x.DataContext == sender);
                     if (cw != null) {
-                        if (cwvm.IsOpen) {
+                        if (cwvm.IsChildWindowOpen) {
                             if (!cw.IsActive) {
                                 cw.Show();
                             }
@@ -168,7 +168,7 @@ namespace MonkeyPaste.Avalonia {
                 MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
 
                 if (w.DataContext is MpIChildWindowViewModel cwvm) {
-                    cwvm.IsOpen = true;
+                    cwvm.IsChildWindowOpen = true;
                 }
                 UpdateTopmost();
                 //w.Activate();
@@ -221,7 +221,7 @@ namespace MonkeyPaste.Avalonia {
         private static void Nw_Closed(object sender, System.EventArgs e) {
             if (sender is Window w) {
                 if (w.DataContext is MpIChildWindowViewModel cwvm) {
-                    cwvm.IsOpen = false;
+                    cwvm.IsChildWindowOpen = false;
                 }
                 StartChildLifecycleChangeDelay(w);
             }
@@ -285,8 +285,9 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
 
+                // NOTE only update unowned windows because modal ntf
                 var priority_ordered_topmost_wl = AllWindows
-                    .Where(x => x.WantsTopmost)// && x.Owner == null)
+                    .Where(x => x.Owner == null && x.WantsTopmost)
                     .OrderByDescending(x => (int)(x.DataContext as MpIWindowViewModel).WindowType);
 
                 priority_ordered_topmost_wl
@@ -318,6 +319,67 @@ namespace MonkeyPaste.Avalonia {
                 MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
             });
         }
+
+
+        #region Helper Extensions
+
+        private static bool IsSelfOrDescendantWindowWantTopmost(this MpAvWindow w) {
+            if (w == null) {
+                return false;
+            }
+            if (w.WantsTopmost) {
+                return true;
+            }
+            return
+                AllWindows
+                .Where(x => x.Owner == w)
+                .Any(x => x.IsSelfOrDescendantWindowWantTopmost());
+        }
+
+        public static void SetTopmostForSelfAndAllDescendants(this MpAvWindow w, bool is_topmost) {
+            if (w == null) {
+                return;
+            }
+            if (is_topmost) {
+                if (w.WantsTopmost) {
+                    w.Topmost = true;
+                }
+            } else {
+                w.GetDescendantWindows(true).ForEach(x => x.Topmost = false);
+            }
+
+        }
+
+        private static int GetWindowOwnerDepth(this Window w) {
+            int depth = 0;
+            if (w == null) {
+                return depth;
+            }
+            while (true) {
+                w = w.Owner as Window;
+                if (w == null) {
+                    break;
+                }
+                depth++;
+            }
+            return depth;
+        }
+
+        private static IEnumerable<MpAvWindow> GetDescendantWindows(this MpAvWindow w, bool include_self = true) {
+            List<MpAvWindow> wl = new List<MpAvWindow>();
+            if (w == null) {
+                return wl;
+            }
+            if (include_self) {
+                wl.Add(w);
+            }
+
+            foreach (var cw in AllWindows.Where(x => x.Owner == w)) {
+                wl.AddRange(cw.GetDescendantWindows(true));
+            }
+            return wl.Distinct();
+        }
+        #endregion
 
         #endregion
 

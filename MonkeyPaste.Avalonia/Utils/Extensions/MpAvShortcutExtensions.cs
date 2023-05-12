@@ -141,6 +141,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpShortcutType.ToggleAppendLineMode:
                 case MpShortcutType.ToggleAppendPreMode:
                 case MpShortcutType.ToggleAppendPaused:
+                case MpShortcutType.ToggleAppendManualMode:
                     return true;
                 default:
                     return false;

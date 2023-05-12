@@ -96,7 +96,7 @@ function updateWindowMouseState(e) {
 // #region Event Handlers
 
 function onWindowClick(e) {
-	if (rejectTableMouseEvent(e,'click')) {
+	if (rejectTableContextMenu(e,'click')) {
 		return false;
 	} 
 
@@ -141,7 +141,7 @@ function onWindowDoubleClick(e) {
 }
 
 function onWindowContextMenu(e) {
-	if (rejectTableMouseEvent(e)) {
+	if (rejectTableContextMenu(e)) {
 		e.preventDefault();
 		e.stopPropagation();
 		return false;
@@ -164,7 +164,7 @@ function onWindowMouseDown(e) {
 		onInternalContextMenuIsVisibleChanged_ntf(false);
 	}
 
-	if (rejectTableMouseEvent(e)) {
+	if (rejectTableContextMenu(e)) {
 		e.preventDefault();
 		e.stopPropagation();
 		log('mouse down rejected by table logic')
@@ -179,6 +179,10 @@ function onWindowMouseDown(e) {
 	//WindowMouseDownLoc = { x: e.clientX, y: e.clientY };
 	updateWindowMouseState(e);
 	SelectionOnMouseDown = getDocSelection();
+	if (e.buttons !== 2 && hasEditableTable()) {
+		// deal w/ table drag selection to supppress table select if on already selected cell
+		return updateTableDragState(e);
+	}
 }
 
 function onWindowMouseMove(e) {
@@ -195,7 +199,7 @@ function onWindowMouseUp(e) {
 				onInternalContextMenuIsVisibleChanged_ntf(false);
 			});		
 	}
-	if (rejectTableMouseEvent(e)) {
+	if (rejectTableContextMenu(e)) {
 		e.preventDefault();
 		e.stopPropagation();
 		log('mouse up rejected by table logic')
@@ -212,6 +216,6 @@ function onWindowMouseUp(e) {
 
 	updateWindowMouseState(e);
 	SelectionOnMouseDown = null;
-	DragDomRange = null;
+	updateTableDragState(null);
 }
 // #endregion Event Handlers

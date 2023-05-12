@@ -92,7 +92,7 @@ namespace MonkeyPaste.Avalonia {
         MpWindowType MpIWindowViewModel.WindowType =>
             MpWindowType.Modal;
 
-        public bool IsOpen { get; set; }
+        public bool IsChildWindowOpen { get; set; }
 
         public bool IsActive { get; set; }
 
@@ -229,8 +229,8 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(KeyItems):
                     OnPropertyChanged(nameof(KeyGroups));
                     break;
-                case nameof(IsOpen):
-                    if (IsOpen) {
+                case nameof(IsChildWindowOpen):
+                    if (IsChildWindowOpen) {
                         StartKeyListener();
                     } else {
                         StopKeyListener();

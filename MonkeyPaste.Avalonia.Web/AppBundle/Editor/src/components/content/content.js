@@ -65,16 +65,9 @@ function loadContent(
 		} else {
 			clearTableSelectionStates();
 			loadPasteButton();
-			disableAppendMode();
 			resetSelection();
 			resetColorPaletteState();
 
-			if (isContentReadOnly) {
-				enableReadOnly();
-				disableSubSelection();
-			} else {
-				disableReadOnly(true);
-			}
 			resetContent();
 			resetAnnotations();
 		}
@@ -86,9 +79,23 @@ function loadContent(
 
 		loadContentData(contentData);
 
-		updateAppendModeState(append_state, true);
-
 		updateQuill();
+		if (!is_reload) {
+			// need to wait for content before enabling append 
+			// or it won't scroll to end (only relevant for !pre state)
+			updateAppendModeState(append_state, true);
+			if (!isAnyAppendEnabled()) {
+				// let append trigger edit/selection stuff, only set for non-append
+
+				if (isContentReadOnly) {
+					enableReadOnly(true);
+					disableSubSelection(true);
+				} else {
+					disableReadOnly(true);
+				}
+			}
+		}
+		
 		if (ContentItemType != 'Text') {
 			quill.enable(false);
 		}

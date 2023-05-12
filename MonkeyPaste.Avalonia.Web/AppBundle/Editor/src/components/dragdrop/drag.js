@@ -3,7 +3,6 @@
 const MIN_DRAG_DIST = 10;
 
 var WasNoSelectBeforeDragStart = false;
-var DragDomRange = null;
 var CurDragTargetElm = null;
 var DragItemElms = [];
 
@@ -81,15 +80,15 @@ function onDragStart(e) {
 
     let sel = getDocSelection();
 
-    if (!sel || sel.length == 0 && ContentItemType == 'Text') {
+    if (ContentItemType == 'Text' &&
+        (getTableSelectedCells().length == 0 || IsTableDragSelecting) &&
+        (!sel || sel.length == 0)) {
         log('drag start rejected by selection state. selectable but w/o range');
         WasNoSelectBeforeDragStart = false;
         e.preventDefault();
         e.stopPropagation();
         return false;
     }
-    //DragDomRange = convertDocRangeToDomRange(sel);
-    //BlurredSelectionRects = getRangeRects(sel);
 
     CurDragTargetElm = e.target;
 
@@ -113,8 +112,6 @@ function onDragEnd(e) {
     IsShiftDown = false;
     IsCtrlDown = false;
     IsAltDown = false;
-    DragDomRange = null;
-    BlurredSelectionRects = null;
     
     if (WasNoSelectBeforeDragStart) {
         resetSelection();

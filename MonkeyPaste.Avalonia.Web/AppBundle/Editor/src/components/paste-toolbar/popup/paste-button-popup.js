@@ -90,6 +90,14 @@ function setOptKeys(opt, idx) {
         keys = ShortcutKeysLookup['ToggleAppendPreMode'];
     } else if (idx == AppendLineOptIdx) {
         keys = ShortcutKeysLookup['ToggleAppendLineMode'];
+    } else if (idx == ManualOptIdx) {
+        keys = ShortcutKeysLookup['ToggleAppendManualMode'];
+    } else if (idx == DoneOptIdx) {
+        if (IsAppendLineMode) {
+            keys = ShortcutKeysLookup['ToggleAppendLineMode'];
+        } else if (IsAppendInsertMode) {
+            keys = ShortcutKeysLookup['ToggleAppendInsertMode'];
+        }
     }
     if (!keys || keys === undefined) {
         return opt;

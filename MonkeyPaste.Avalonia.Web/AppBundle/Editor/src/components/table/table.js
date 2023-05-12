@@ -15,7 +15,7 @@ var DefaultCsvProps = {
     RowSeparator: '\n'
 };
 
-
+var IsTableDragSelecting = false;
 // #endregion Globals
 
 // #region Life Cycle
@@ -54,6 +54,34 @@ function getTableSelectionRect() {
     sel_rect.x1 = sel_rect.right;
     sel_rect.y1 = sel_rect.bottom;
     return sel_rect;
+}
+
+function getTableSelectedCellElements() {
+    if (getTableElements().length == 0) {
+        return [];
+    }
+    const table_mod = getBetterTableModule(true);
+    if (isNullOrUndefined(table_mod.tableSelection)) {
+        return [];
+    }
+    return table_mod.tableSelection.selectedTds.map((x) => {
+        return x.domNode;
+    });
+}
+function getTableSelectedCells() {
+    if (getTableElements().length == 0) {
+        return [];
+    }
+    const table_mod = getBetterTableModule(true);
+    if (isNullOrUndefined(table_mod.tableSelection)) {
+        return [];
+    }
+    return table_mod.tableSelection.selectedTds.map((x) => {
+        return {
+            row: x.rowOffset(),
+            col: x.cellOffset()
+        }
+    });
 }
 
 function getTableContextMenuElement() {
@@ -366,6 +394,44 @@ function hasEditableTable() {
 
 // #region Actions
 
+function updateTableDragState(e) {
+    // used to know if pointer down is already on a selected cell, in which case will allow for a drag event
+    if (WindowMouseDownLoc == null || !hasEditableTable()) {
+        IsTableDragSelecting = false;
+        return true;
+    }
+    if (IsTableDragSelecting != false) {
+        // only null during confirmed cell drag
+        return true;
+    }
+
+    let cell_elm_under_pointer = null;
+    const sel_cell_elms = getTableSelectedCellElements();
+    for (var i = 0; i < sel_cell_elms.length; i++) {
+        let cell_rect = cleanRect(sel_cell_elms[i].getBoundingClientRect());
+        if (isPointInRect(cell_rect, WindowMouseDownLoc)) {
+            cell_elm_under_pointer = sel_cell_elms[i];
+            break;
+        }
+    }
+    if (cell_elm_under_pointer == null) {
+        // clean mouse down, reject dragStart, perform drag select
+        IsTableDragSelecting = true;
+    } else {
+        // down over selection, allow drag
+        IsTableDragSelecting = null;
+    }
+    log('Table Drag Selecting: ' + (IsTableDragSelecting == true ? "YUP" : "NOPE"));
+    if (IsTableDragSelecting == null) {
+        if (e) {
+            //e.preventDefault();
+            //e.stopPropagation();
+        }
+        
+        return false;
+    }
+    return true;
+}
 function clearTableSelectionStates() {
     const table_mod = getBetterTableModule();
     if (!table_mod) {
@@ -418,7 +484,7 @@ function showTableScrollbars() {
 }
 
 
-function rejectTableMouseEvent(e) {
+function rejectTableContextMenu(e) {
     // returns TRUE to prevent showing ops menu but only if it would be shown otherwise
 
     if (!isTableInDocument() ||

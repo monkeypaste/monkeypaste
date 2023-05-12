@@ -54,8 +54,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constants
+
         public const int AUTO_CYCLE_DETAIL_DELAY_MS = 5000;
         public const string TABLE_WRAPPER_CLASS_NAME = "quill-better-table-wrapper";
+
         #endregion
 
         #region Statics
@@ -77,10 +79,7 @@ namespace MonkeyPaste.Avalonia {
         public MpWindowType WindowType =>
             IsAppendNotifier ? MpWindowType.Append : MpWindowType.PopOut;
 
-        bool MpIChildWindowViewModel.IsOpen {
-            get => IsPopOutOpen;
-            set => IsPopOutOpen = value;
-        }
+        public bool IsChildWindowOpen { get; set; }
         #endregion
 
         #region MpIWantsTopmostWindowViewModel Implementation
@@ -411,7 +410,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsResizerEnabled =>
             //MpAvThemeViewModel.Instance.IsDesktop &&
-            !IsPopOutOpen;
+            !IsChildWindowOpen;
 
         public MpIEmbedHost EmbedHost =>
             GetContentView() as MpIEmbedHost;
@@ -438,7 +437,6 @@ namespace MonkeyPaste.Avalonia {
         public bool IsOverDetailGrid { get; set; }
         public bool IsHovering { get; set; }
         public bool IsHoveringOverSourceIcon { get; set; } = false;
-        public bool IsPopOutOpen { get; set; }
 
         public bool IsHostWindowActive {
             get {
@@ -576,7 +574,7 @@ namespace MonkeyPaste.Avalonia {
                 //    return true;
                 //}
                 if (!IsPlaceholder && !IsEditorLoaded) {
-                    if (!IsPopOutOpen) {
+                    if (!IsChildWindowOpen) {
 
                     }
                     return true;
@@ -1043,7 +1041,7 @@ namespace MonkeyPaste.Avalonia {
             _contentView = null;
             if (!is_reload) {
                 _curItemRandomHexColor = string.Empty;
-                IsPopOutOpen = false;
+                IsChildWindowOpen = false;
             }
 
             if (ci != null &&
@@ -1173,12 +1171,9 @@ namespace MonkeyPaste.Avalonia {
             int orig_ciid = CopyItemId;
 
             var pow = new MpAvWindow() {
-                //Width = ws.Width,
-                //Height = ws.Height,
                 DataContext = this,
                 ShowInTaskbar = true,
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", null, null, null) as WindowIcon,
-                //WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 Content = new MpAvClipTileView(),
                 Topmost = true,
                 Padding = new Thickness(10),
@@ -1248,15 +1243,15 @@ namespace MonkeyPaste.Avalonia {
             EventHandler<WindowClosingEventArgs> closing_handler = (s, e) => {
                 MpConsole.WriteLine($"append closing called. reason '{e.CloseReason}' programmatic '{e.IsProgrammatic}'");
                 if (Parent == null ||
-                    !Parent.IsAnyAppendMode ||
                     !IsAppendNotifier ||
                     WasCloseAppendWindowConfirmed) {
-                    // allow close
+                    IsBusy = false;
                     return;
                 }
                 // reject close and show confirm ntf
+                IsBusy = true;
                 e.Cancel = true;
-                pow.IsEnabled = false;
+                pow.IsHitTestVisible = false;
                 Dispatcher.UIThread.Post(async () => {
 
                     var result = await
@@ -1266,10 +1261,14 @@ namespace MonkeyPaste.Avalonia {
                             iconResourceObj: "QuestionMarkImage",
                             owner: pow);
                     if (result) {
+                        // allow close
                         WasCloseAppendWindowConfirmed = true;
-                        Parent.DeactivateAppendModeCommand.Execute(null);
+                        await Parent.DeactivateAppendModeCommand.ExecuteAsync();
+                        IsChildWindowOpen = false;
+                        return;
                     }
-                    pow.IsEnabled = true;
+                    pow.IsHitTestVisible = true;
+                    IsBusy = false;
                 });
             };
             EventHandler close_handler = null;
@@ -1289,7 +1288,8 @@ namespace MonkeyPaste.Avalonia {
             return pow;
         }
         public void OpenPopOutWindow(MpAppendModeType amt) {
-            if (!IsPopOutOpen) {
+            IsAppendNotifier = amt != MpAppendModeType.None;
+            if (!IsChildWindowOpen) {
                 var pow = CreatePopoutWindow();
                 var ws = amt == MpAppendModeType.None ? new Size(500, 500) : new Size(350, 250);
                 pow.Width = ws.Width;
@@ -1298,14 +1298,22 @@ namespace MonkeyPaste.Avalonia {
                     pow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                 } else {
                     pow.WindowStartupLocation = WindowStartupLocation.Manual;
-                    pow.Position = MpAvNotificationPositioner.GetSystemTrayWindowPosition(ws);
+                    pow.Position = MpAvNotificationPositioner.GetSystemTrayWindowPosition(pow);
                 }
                 pow.ShowChild();
             }
 
-            IsAppendNotifier = amt != MpAppendModeType.None;
-            OnPropertyChanged(nameof(IsPopOutOpen));
+            OnPropertyChanged(nameof(IsChildWindowOpen));
             OnPropertyChanged(nameof(IsResizerEnabled));
+            OnPropertyChanged(nameof(IsTitleVisible));
+            OnPropertyChanged(nameof(WantsTopmost));
+
+            if (this is MpIWantsTopmostWindowViewModel wtwvm) {
+                wtwvm.OnPropertyChanged(nameof(wtwvm.WantsTopmost));
+            }
+            if (this is MpIChildWindowViewModel cwvm) {
+                cwvm.OnPropertyChanged(nameof(cwvm.IsChildWindowOpen));
+            }
         }
 
         private MpIContentView _contentView;
@@ -1873,12 +1881,12 @@ namespace MonkeyPaste.Avalonia {
                     //Parent.UpdateTileRectCommand.Execute(this);
                     //OnPropertyChanged(nameof(TrayX));
                     break;
-                case nameof(IsPopOutOpen):
+                case nameof(IsChildWindowOpen):
                     if (Parent == null) {
                         break;
                     }
                     Parent.OnPropertyChanged(nameof(Parent.InternalPinnedItems));
-                    if (!IsPopOutOpen) {
+                    if (!IsChildWindowOpen) {
                         PopInTileCommand.Execute(null);
                     }
                     break;
@@ -2064,7 +2072,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand PopInTileCommand => new MpCommand(() => {
             int ciid = CopyItemId;
             TransactionCollectionViewModel.CloseTransactionPaneCommand.Execute(null);
-            IsPopOutOpen = false;
+            IsChildWindowOpen = false;
 
             if (Parent != null) {
                 _contentView = null;
@@ -2086,7 +2094,7 @@ namespace MonkeyPaste.Avalonia {
 
                 }
             }, (args) => {
-                return !IsPopOutOpen && Parent != null;
+                return !IsChildWindowOpen && Parent != null;
             }, new[] { this });
 
         public ICommand DisableSubSelectionCommand => new MpCommand(

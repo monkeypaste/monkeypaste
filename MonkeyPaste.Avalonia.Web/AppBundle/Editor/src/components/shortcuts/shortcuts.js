@@ -7,6 +7,7 @@ const SHORTCUT_TYPES = [
     'ToggleAppendLineMode',
     'ToggleAppendPreMode',
     'ToggleAppendPaused',
+    'ToggleAppendManualMode'
 ];
 
 var ShortcutKeysLookup = {};

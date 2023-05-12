@@ -40,7 +40,7 @@ namespace MonkeyPaste.Avalonia {
         #region MpIWindowViewModel Implementation
         public MpWindowType WindowType =>
             MpWindowType.PopOut;
-        bool MpIChildWindowViewModel.IsOpen {
+        bool MpIChildWindowViewModel.IsChildWindowOpen {
             get => IsCriteriaWindowOpen;
             set => IsCriteriaWindowOpen = value;
         }
@@ -301,8 +301,8 @@ namespace MonkeyPaste.Avalonia {
                     } else if (IsExpanded && this is MpIChildWindowViewModel cwvm) {
                         // when close button on search expander is clicked IsExpanded=true
                         // so this is only called when closed from the window x button
-                        cwvm.IsOpen = false;
-                        cwvm.OnPropertyChanged(nameof(cwvm.IsOpen));
+                        cwvm.IsChildWindowOpen = false;
+                        cwvm.OnPropertyChanged(nameof(cwvm.IsChildWindowOpen));
                     }
 
 

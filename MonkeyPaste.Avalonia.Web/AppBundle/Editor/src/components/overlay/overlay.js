@@ -186,7 +186,6 @@ function drawTextSelection(ctx) {
     }
     if (!isDragging() &&
         !isDropping() &&
-        !BlurredSelectionRects &&
         !CurFindReplaceDocRangesRects &&
         !isAppendNotifier()) {
         //return;
@@ -218,15 +217,7 @@ function drawTextSelection(ctx) {
             //adj_rect.bottom -= scroll_y;
             drawRect(ctx, adj_rect);//, cur_bg_color, sel_fg_color, 0.5, 125 / 255);
         }
-    } else if (BlurredSelectionRects) {
-        let scroll_y = getEditorContainerElement().scrollTop;
-
-        BlurredSelectionRects.forEach((sel_rect) => {
-            sel_rect.top -= scroll_y;
-            sel_rect.bottom -= scroll_y;
-            drawRect(ctx, sel_rect, sel_bg_color, sel_fg_color, 0.5, 125 / 255);
-        });
-    }
+    } 
 
     drawCaret(ctx, sel);
 }

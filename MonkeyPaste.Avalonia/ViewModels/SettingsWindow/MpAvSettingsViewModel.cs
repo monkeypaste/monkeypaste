@@ -47,7 +47,7 @@ namespace MonkeyPaste.Avalonia {
         public MpWindowType WindowType =>
             MpWindowType.Settings;
 
-        public bool IsOpen { get; set; }
+        public bool IsChildWindowOpen { get; set; }
 
         #endregion
 
@@ -835,8 +835,8 @@ namespace MonkeyPaste.Avalonia {
                     }
 
                     break;
-                case nameof(IsOpen):
-                    MpConsole.WriteLine($"Settings window: {(IsOpen ? "OPEN" : "CLOSED")}");
+                case nameof(IsChildWindowOpen):
+                    MpConsole.WriteLine($"Settings window: {(IsChildWindowOpen ? "OPEN" : "CLOSED")}");
                     break;
 
                 case nameof(IsActive):
@@ -884,12 +884,12 @@ namespace MonkeyPaste.Avalonia {
             });
         public ICommand SaveSettingsCommand => new MpCommand(
             () => {
-                IsOpen = false;
+                IsChildWindowOpen = false;
             });
 
         public ICommand CancelSettingsCommand => new MpCommand(
             () => {
-                IsOpen = false;
+                IsChildWindowOpen = false;
             });
         public ICommand SelectTabCommand => new MpCommand<object>(
             (args) => {
@@ -908,8 +908,8 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ToggleShowSettingsWindowCommand => new MpCommand<object>(
             (args) => {
-                if (IsOpen) {
-                    IsOpen = false;
+                if (IsChildWindowOpen) {
+                    IsChildWindowOpen = false;
                     return;
                 }
                 ShowSettingsWindowCommand.Execute(null);
@@ -917,7 +917,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ShowSettingsWindowCommand => new MpCommand<object>(
             (args) => {
                 SelectTabCommand.Execute(args);
-                if (IsOpen) {
+                if (IsChildWindowOpen) {
                     IsActive = true;
                     return;
                 }

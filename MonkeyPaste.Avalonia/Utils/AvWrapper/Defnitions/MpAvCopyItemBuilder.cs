@@ -15,6 +15,28 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
         #endregion
 
+        #region Statics
+        private static int _UniqueItemCount = -1;
+        public static int UniqueItemCount {
+            get {
+                if (_UniqueItemCount < 0) {
+                    _UniqueItemCount = MpPrefViewModel.Instance.UniqueContentItemIdx;
+                }
+                return _UniqueItemCount;
+            }
+            set {
+                if (UniqueItemCount != value) {
+                    _UniqueItemCount = value;
+                    Task.Run(() => {
+                        // update pref in bg thread since duplicates are popping up
+                        MpPrefViewModel.Instance.UniqueContentItemIdx = _UniqueItemCount;
+                    });
+                }
+            }
+        }
+        #endregion
+
+
 
         #region Properties
         #endregion
@@ -323,7 +345,8 @@ namespace MonkeyPaste.Avalonia {
                 default_title = mpdo.GetData(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT) as string;
             }
             if (string.IsNullOrEmpty(default_title)) {
-                default_title = $"{itemType} {(MpPrefViewModel.Instance.UniqueContentItemIdx + 1)}";
+                UniqueItemCount = UniqueItemCount + 1;
+                default_title = $"{itemType} {(UniqueItemCount)}";
             }
             return default_title;
         }

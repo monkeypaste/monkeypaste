@@ -176,17 +176,6 @@ function updateScrollBarSizeAndPositions() {
 
 function onEditorContainerScroll(e) {
     updateFindReplaceRangeRects();
-    //if (isShowingFindReplaceToolbar()) {
-        
-    //} //else if (BlurredSelectionRects) {
-    //       // TODO update these guys
-    //}
-
-    //if (SuppressNextEditorScrollChangedNotification) {
-    //    SuppressNextEditorScrollChangedNotification = false;
-    //} else {
-    //    onScrollChanged_ntf(getEditorScroll());
-    //}
     drawOverlay();
 }
 // #endregion Event Handlers

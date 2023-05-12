@@ -782,11 +782,12 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
                 case MpAvEditorBindingFunctionType.notifyException:
-                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillExceptionMessage>(msgJsonBase64Str);
-                    if (ntf is MpQuillExceptionMessage exceptionMsgObj) {
-                        MpConsole.WriteLine($"[{ctvm}] {exceptionMsgObj}");
-                        //MpDebug.Break();
-                    }
+                    MpDebug.Break($"{ctvm} editor exception");
+                    //ntf = MpJsonConverter.DeserializeBase64Object<MpQuillExceptionMessage>(msgJsonBase64Str);
+                    //if (ntf is MpQuillExceptionMessage exceptionMsgObj) {
+                    //    MpConsole.WriteLine($"[{ctvm}] {exceptionMsgObj}");
+
+                    //}
                     break;
 
                 #endregion
@@ -1222,6 +1223,10 @@ namespace MonkeyPaste.Avalonia {
                     .GetAppendStateMessage(null)
                     .SerializeJsonObjectToBase64() : null;
 
+            if (BindingContext.IsAppendNotifier) {
+
+            }
+
             string msgStr = loadContentMsg.SerializeJsonObjectToBase64();
 
             SendMessage($"loadContent_ext('{msgStr}')");
@@ -1361,9 +1366,6 @@ namespace MonkeyPaste.Avalonia {
                 BindingContext.IsSubSelectionEnabled) {
                 this.Focus();
                 SendMessage($"hostIsFocusedChanged_ext('{msg.SerializeJsonObjectToBase64()}')");
-                bool success = FocusManager.Instance.Current.IsKeyboardFocusWithin;
-                MpConsole.WriteLine($"Webview focus on tile select: {(success ? "SUCCESS" : "FAILED")}");
-                var test = this.GetFocusedFrame();
             }
         }
 
@@ -1419,7 +1421,7 @@ namespace MonkeyPaste.Avalonia {
                 if (IsContentReadOnly) {
                     MpAvMainWindowViewModel.Instance.IsAnyMainWindowTextBoxFocused = false;
 
-                    if (!BindingContext.IsPopOutOpen) {
+                    if (!BindingContext.IsChildWindowOpen) {
                         MpAvResizeExtension.ResizeAnimated(this, BindingContext.ReadOnlyWidth, BindingContext.ReadOnlyHeight);
                     }
 
@@ -1526,37 +1528,55 @@ namespace MonkeyPaste.Avalonia {
         #region Append
 
         public void ProcessAppendStateChangedMessage(MpQuillAppendStateChangedMessage appendChangedMsg, string source) {
-            Dispatcher.UIThread.Post(async () => {
-                var ctrvm = MpAvClipTrayViewModel.Instance;
-                var cur_append_tile = ctrvm.AppendClipTileViewModel;
+            if (!Dispatcher.UIThread.CheckAccess()) {
+                Dispatcher.UIThread.Post(() => ProcessAppendStateChangedMessage(appendChangedMsg, source));
+                return;
+            }
+            var ctrvm = MpAvClipTrayViewModel.Instance;
+            var cur_append_tile = ctrvm.AppendClipTileViewModel;
 
-                if (source == "editor") {
-                    //NOTE state changes should only come in one at a time
-                    // but line vs insert changes are only compared for is true since
-                    // they are interdependant to avoid double ntf
-                    if (appendChangedMsg.isAppendPaused != ctrvm.IsAppendPaused) {
-                        ctrvm.ToggleIsAppPausedCommand.Execute(null);
-                    } else if (appendChangedMsg.isAppendManualMode != ctrvm.IsAppendManualMode) {
-                        ctrvm.ToggleAppendManualModeCommand.Execute(null);
-                    } else if (appendChangedMsg.isAppendPreMode != ctrvm.IsAppendPreMode) {
-                        ctrvm.ToggleAppendPreModeCommand.Execute(null);
-                    } else if (appendChangedMsg.isAppendLineMode && !ctrvm.IsAppendLineMode) {
-                        ctrvm.ToggleAppendLineModeCommand.Execute(null);
-                    } else if (appendChangedMsg.isAppendInsertMode && !ctrvm.IsAppendInsertMode) {
-                        ctrvm.ToggleAppendInsertModeCommand.Execute(null);
-                    } else if (BindingContext.IsAppendNotifier &&
-                        (!appendChangedMsg.isAppendLineMode && !appendChangedMsg.isAppendInsertMode && ctrvm.IsAnyAppendMode)) {
-                        ctrvm.DeactivateAppendModeCommand.Execute(null);
-                    }
+            if (source == "editor") {
+                if (cur_append_tile != null &&
+                    cur_append_tile.CopyItemId != BindingContext.CopyItemId &&
+                    (appendChangedMsg.isAppendInsertMode || appendChangedMsg.isAppendLineMode)) {
+                    // new tile attempting to activate
+                    Dispatcher.UIThread.Post(async () => {
+                        int deactivated_ciid = ctrvm.AppendClipTileViewModel.CopyItemId;
+                        // go through current tile deactivation and recall this to process
+                        await ctrvm.DeactivateAppendModeCommand.ExecuteAsync();
+                        ProcessAppendStateChangedMessage(appendChangedMsg, source);
+
+                    });
+                    return;
                 }
-                while (ctrvm.IsAnyBusy) {
-                    await Task.Delay(100);
+                //NOTE state changes should only come in one at a time
+                // but line vs insert changes are only compared for is true since
+                // they are interdependant to avoid double ntf
+
+                if (appendChangedMsg.isAppendPaused != ctrvm.IsAppendPaused) {
+                    ctrvm.ToggleAppendPausedCommand.Execute(null);
+                } else if (appendChangedMsg.isAppendManualMode != ctrvm.IsAppendManualMode) {
+                    ctrvm.ToggleAppendManualModeCommand.Execute(null);
+                } else if (appendChangedMsg.isAppendPreMode != ctrvm.IsAppendPreMode) {
+                    ctrvm.ToggleAppendPreModeCommand.Execute(null);
+                } else if (appendChangedMsg.isAppendLineMode && !ctrvm.IsAppendLineMode) {
+                    ctrvm.ToggleAppendLineModeCommand.Execute(null);
+                } else if (appendChangedMsg.isAppendInsertMode && !ctrvm.IsAppendInsertMode) {
+                    ctrvm.ToggleAppendInsertModeCommand.Execute(null);
+                } else if (BindingContext.IsAppendNotifier &&
+                    (!appendChangedMsg.isAppendLineMode && !appendChangedMsg.isAppendInsertMode && ctrvm.IsAnyAppendMode)) {
+                    ctrvm.DeactivateAppendModeCommand.Execute(null);
                 }
-                while (ctrvm.IsAddingClipboardItem) {
-                    await Task.Delay(100);
-                }
+            } else {
                 SendMessage($"appendStateChanged_ext('{appendChangedMsg.SerializeJsonObjectToBase64()}')");
-            });
+            }
+            //while (ctrvm.IsAnyBusy) {
+            //    await Task.Delay(100);
+            //}
+            //while (ctrvm.IsAddingClipboardItem) {
+            //    await Task.Delay(100);
+            //}
+            //SendMessage($"appendStateChanged_ext('{appendChangedMsg.SerializeJsonObjectToBase64()}')");
         }
         #endregion
 

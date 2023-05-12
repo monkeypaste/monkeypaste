@@ -189,10 +189,6 @@ function onDragEnter(e) {
     startAutoScroll();
 
     // store state before drop starts so the right state is restored 
-    if (DragDomRange) {
-        // update blur ranges due to drop class margins
-        //BlurredSelectionRects = getRangeRects(convertDomRangeToDocRange(DragDomRange));
-    }
     if (!isDragging()) {
         if (isSubSelectionEnabled()) {
             WasNoSelectBeforeDragStart = false;

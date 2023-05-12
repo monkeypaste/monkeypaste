@@ -36,7 +36,7 @@ namespace MonkeyPaste.Avalonia {
         #region MpIChildWindowViewModel Implementation
         MpWindowType MpIWindowViewModel.WindowType =>
             MpWindowType.PopOut;
-        bool MpIChildWindowViewModel.IsOpen {
+        bool MpIChildWindowViewModel.IsChildWindowOpen {
             get => IsDesignerWindowOpen;
             set => IsDesignerWindowOpen = value;
         }

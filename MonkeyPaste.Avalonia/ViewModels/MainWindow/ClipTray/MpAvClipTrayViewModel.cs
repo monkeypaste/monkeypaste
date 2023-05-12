@@ -867,7 +867,7 @@ namespace MonkeyPaste.Avalonia {
 
         public IEnumerable<MpAvClipTileViewModel> InternalPinnedItems =>
             PinnedItems
-            .Where(x => !x.IsPopOutOpen && !x.IsAppendNotifier)
+            .Where(x => !x.IsChildWindowOpen && !x.IsAppendNotifier)
             .Take(MpPrefViewModel.Instance.MaxStagedClipCount)
             .ToList();
 
@@ -2779,9 +2779,6 @@ namespace MonkeyPaste.Avalonia {
                      //Mp.Services.Query.PageTools.RemoveItemId(ctvm_to_pin.CopyItemId);
                  }
                  Mp.Services.Query.PageTools.RemoveItemId(ctvm_to_pin.CopyItemId);
-                 if (pinType == MpPinType.Window || pinType == MpPinType.Append) {
-                     ctvm_to_pin.OpenPopOutWindow(pinType == MpPinType.Window ? MpAppendModeType.None : appendType);
-                 }
 
                  if (ctvm_to_pin.IsPinned) {
                      // for drop from pin tray or new duplicate was in pin tray
@@ -2800,6 +2797,10 @@ namespace MonkeyPaste.Avalonia {
                  } else {
                      // for drop from external or query tray
                      PinnedItems.Insert(pin_idx, ctvm_to_pin);
+                 }
+
+                 if (pinType == MpPinType.Window || pinType == MpPinType.Append) {
+                     ctvm_to_pin.OpenPopOutWindow(pinType == MpPinType.Window ? MpAppendModeType.None : appendType);
                  }
 
                  OnPropertyChanged(nameof(IsAnyTilePinned));
@@ -2912,7 +2913,7 @@ namespace MonkeyPaste.Avalonia {
             int pin_count = PinnedItems.Count;
             while (pin_count > 0) {
                 var to_unpin_ctvm = PinnedItems[--pin_count];
-                if (to_unpin_ctvm.IsPopOutOpen ||
+                if (to_unpin_ctvm.IsChildWindowOpen ||
                     to_unpin_ctvm.IsAppendNotifier) {
                     continue;
                 }
@@ -2924,7 +2925,7 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 SelectedItem.PinToPopoutWindowCommand.Execute(null);
             }, () => {
-                return SelectedItem != null && !SelectedItem.IsPopOutOpen;
+                return SelectedItem != null && !SelectedItem.IsChildWindowOpen;
             });
         public ICommand DuplicateSelectedClipsCommand => new MpAsyncCommand(
             async () => {
@@ -3694,7 +3695,7 @@ namespace MonkeyPaste.Avalonia {
             await PinTileCommand.ExecuteAsync(new object[] { append_ctvm, MpPinType.Append, appendType });
         }
 
-        private void UpdateAppendModeStateFlags(MpAppendModeFlags flags, string source) {
+        private void UpdateAppendModeStateFlags(MpAppendModeFlags flags, string source, bool silent = false) {
             IsAppendLineMode = flags.HasFlag(MpAppendModeFlags.AppendLine);
             IsAppendInsertMode = flags.HasFlag(MpAppendModeFlags.AppendInsert);
             IsAppendManualMode = flags.HasFlag(MpAppendModeFlags.Manual);
@@ -3704,6 +3705,13 @@ namespace MonkeyPaste.Avalonia {
             var last_flags = _appendModeFlags;
             _appendModeFlags = flags;
             OnPropertyChanged(nameof(AppendModeStateFlags));
+
+            if (silent) {
+                // is silent is so append stateis set BEFORE popout window is created 
+                // because it will attach append msg but no state is set so silent avoids relaying message
+                // to let loadContent handle it
+                return;
+            }
 
             if (AppendClipTileViewModel == null ||
                 AppendClipTileViewModel.PopOutWindowState == WindowState.Minimized) {
@@ -3760,41 +3768,52 @@ namespace MonkeyPaste.Avalonia {
                 // if new item is being added, its important to wait for it
                 await Task.Delay(100);
             }
-
-            if (AppendClipTileViewModel == null) {
-                // append mode was just toggled ON (param was null)
-                await AssignAppendClipTileAsync(isAppendLine ? MpAppendModeType.Line : MpAppendModeType.Insert);
-            }
-            bool was_append_already_enabled = IsAnyAppendMode && AppendClipTileViewModel != null;
-
-            MpAppendModeFlags amf = MpAppendModeFlags.None;
+            MpAppendModeFlags amf = _appendModeFlags;
             if (isAppendLine) {
+                if (amf.HasFlag(MpAppendModeFlags.AppendInsert)) {
+                    amf ^= MpAppendModeFlags.AppendInsert;
+                }
+
                 amf |= MpAppendModeFlags.AppendLine;
             } else {
+                if (amf.HasFlag(MpAppendModeFlags.AppendLine)) {
+                    amf ^= MpAppendModeFlags.AppendLine;
+                }
                 amf |= MpAppendModeFlags.AppendInsert;
             }
             if (isManualMode) {
                 amf |= MpAppendModeFlags.Manual;
             }
-            UpdateAppendModeStateFlags(amf, "command");
+            bool was_append_already_enabled = IsAnyAppendMode;
+            // NOTE update is silent here
+            UpdateAppendModeStateFlags(amf, "command", true);
+
+            if (AppendClipTileViewModel == null) {
+                // append mode was just toggled ON (param was null)
+                await AssignAppendClipTileAsync(isAppendLine ? MpAppendModeType.Line : MpAppendModeType.Insert);
+            }
+
+            UpdateAppendModeStateFlags(amf, "command", false);
 
             if (was_append_already_enabled) {
-                // don't trigger if already activated, the AppendDataChanged() timesout because IsContentLoaded doesn't goto false
                 return;
             }
 
             MpMessenger.SendGlobal(MpMessageType.AppendModeActivated);
-            if (AppendClipTileViewModel == null) {
-                // no item assigned yet so just show enable message
-                string type_str = IsAppendLineMode ? "Block" : "Inline";
-                string manual_str = IsAppendManualMode ? "(Manual) " : string.Empty;
-                string icon_key = IsAppendLineMode ? "AppendLineImage" : "AppendImage";
-                MpNotificationBuilder.ShowMessageAsync(
-                       title: $"Append {type_str} {manual_str}Mode Activated",
-                       body: "Copy text or file(s) to apply.",
-                       msgType: MpNotificationType.AppModeChange,
-                       iconSourceObj: icon_key).FireAndForgetSafeAsync();
+            if (AppendClipTileViewModel != null) {
+                // append popout itself is the notification
+                return;
             }
+
+            // no item assigned yet so just show enable message
+            string type_str = IsAppendLineMode ? "Block" : "Inline";
+            string manual_str = IsAppendManualMode ? "(Manual) " : string.Empty;
+            string icon_key = IsAppendLineMode ? "AppendLineImage" : "AppendImage";
+            MpNotificationBuilder.ShowMessageAsync(
+                   title: $"Append {type_str} {manual_str}Mode Activated",
+                   body: "Copy text or file(s) to apply.",
+                   msgType: MpNotificationType.AppModeChange,
+                   iconSourceObj: icon_key).FireAndForgetSafeAsync();
         }
         private void DeactivateAppendMode() {
             Dispatcher.UIThread.VerifyAccess();
@@ -3812,10 +3831,6 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 var deactivate_append_ctvm = AppendClipTileViewModel;
                 deactivate_append_ctvm.IsAppendNotifier = false;
-                if (deactivate_append_ctvm.WasCloseAppendWindowConfirmed) {
-                    // only close window if closed from title button
-                    deactivate_append_ctvm.PopInTileCommand.Execute(null);
-                }
             }
         }
         private async Task<bool> UpdateAppendModeAsync(MpCopyItem aci, bool isNew = true) {
@@ -3952,7 +3967,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand AppendDataCommand => new MpCommand<object>(
             (args) => {
-                AppendClipTileViewModel.IsPopOutOpen = true;
+                AppendClipTileViewModel.IsChildWindowOpen = true;
                 if (AppendClipTileViewModel.GetContentView() is MpAvContentWebView wv) {
                     wv.ProcessAppendStateChangedMessage(GetAppendStateMessage(args as string), "command");
                 }

@@ -55,7 +55,7 @@ namespace MonkeyPaste.Avalonia {
         public MpWindowType WindowType =>
             MpWindowType.Modal;
 
-        public bool IsOpen { get; set; }
+        public bool IsChildWindowOpen { get; set; }
         #endregion
 
         #endregion
@@ -135,8 +135,8 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvExternalDropWindowViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                case nameof(IsOpen):
-                    if (IsOpen) {
+                case nameof(IsChildWindowOpen):
+                    if (IsChildWindowOpen) {
                         break;
                     }
                     if (_dropWidgetWindow != null) {
@@ -393,7 +393,7 @@ namespace MonkeyPaste.Avalonia {
             _wasHiddenOrCanceled = false;
             _lastGlobalMousePoint = null;
 
-            IsOpen = false;
+            IsChildWindowOpen = false;
             _dropWidgetWindow = null;
             _dropCompleteWindow = null;
 
@@ -424,7 +424,7 @@ namespace MonkeyPaste.Avalonia {
             async (drop_gmp_arg) => {
                 StopDropTargetListener();
 
-                IsOpen = false;
+                IsChildWindowOpen = false;
 
                 bool show_finish_menu = DidPresetsChange(DropAppViewModel);
                 if (!show_finish_menu) {
@@ -486,7 +486,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 _wasHiddenOrCanceled = true;
                 MpConsole.WriteLine("Drop canceled");
-                IsOpen = false;
+                IsChildWindowOpen = false;
             });
         #endregion
     }

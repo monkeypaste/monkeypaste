@@ -46,7 +46,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
         #region MpIChildWindowViewModel Implementation
 
-        public bool IsOpen { get; set; }
+        public bool IsChildWindowOpen { get; set; }
         public MpWindowType WindowType =>
             MpWindowType.PopOut;
 
@@ -147,8 +147,8 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsAnyBusy):
                     OnPropertyChanged(nameof(IsSelectedBusy));
                     break;
-                case nameof(IsOpen):
-                    if (!IsOpen) {
+                case nameof(IsChildWindowOpen):
+                    if (!IsChildWindowOpen) {
                         break;
                     }
 
@@ -187,7 +187,7 @@ namespace MonkeyPaste.Avalonia {
             return ledger.manifests;
         }
         public void OpenPluginBrowserWindow(string selectedGuid) {
-            if (IsOpen) {
+            if (IsChildWindowOpen) {
                 if (WindowState == WindowState.Minimized) {
                     WindowState = WindowState.Normal;
                 }
@@ -236,7 +236,7 @@ namespace MonkeyPaste.Avalonia {
                 };
             }
             pbw.ShowChild();
-            OnPropertyChanged(nameof(IsOpen));
+            OnPropertyChanged(nameof(IsChildWindowOpen));
         }
         #endregion
 

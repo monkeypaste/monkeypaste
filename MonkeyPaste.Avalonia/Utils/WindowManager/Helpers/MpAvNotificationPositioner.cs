@@ -16,7 +16,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Statics
 
-        public static PixelPoint GetSystemTrayWindowPosition(Size s, double pad = 10) {
+        public static PixelPoint GetSystemTrayWindowPosition(Window w, double pad = 10) {
+            Size s = GetWindowSize(w);
             // NOTE this should account for mw show behavior (i think) show 'system tray' is BR of active monitor
             // TODO test when other window behaviors are implemented
             var primaryScreen = MpAvMainWindowViewModel.Instance.MainWindowScreen;
@@ -26,7 +27,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             double x = primaryScreen.WorkArea.Right - s.Width - pad;
-            double y = primaryScreen.WorkArea.Bottom - s.Height + pad;
+            double y = primaryScreen.WorkArea.Bottom - s.Height - pad;
             x *= primaryScreen.Scaling;
             y *= primaryScreen.Scaling;
 
@@ -161,38 +162,30 @@ namespace MonkeyPaste.Avalonia {
                 // happens before loader attached
                 return;
             }
-            var s = GetWindowSize(w);
+            //var s = GetWindowSize(w);
 
             double pad = 10;
-            var w_pos = GetSystemTrayWindowPosition(s.ToAvSize(), pad);
-            double offsetY = _windows.Where(x => _windows.IndexOf(x) < _windows.IndexOf(w)).Sum(x => (x.Bounds.Height + pad) * primaryScreen.Scaling);
+            var w_pos = GetSystemTrayWindowPosition(w, pad);
+            double offsetY = _windows.Where(x => _windows.IndexOf(x) < _windows.IndexOf(w)).Sum(x => (GetWindowSize(x).Height - pad) * primaryScreen.Scaling);
             w_pos -= new PixelPoint(0, (int)offsetY);
             w.Position = w_pos;
         }
 
-        private MpSize GetWindowSize(Window w) {
+        private static Size GetWindowSize(Window w) {
+            if (w.Width > 0 && w.Height > 0) {
+                double th = GetWindowTitleHeight(w);
+                return new Size(w.Width, w.Height + th);
+            }
             double width = w.Bounds.Width.IsNumber() && w.Bounds.Width != 0 ? w.Bounds.Width : 350;
             double height = w.Bounds.Height.IsNumber() && w.Bounds.Height != 0 ? w.Bounds.Height : 150;
-            return new MpSize(width, height);
+            return new Size(width, height + GetWindowTitleHeight(w));
         }
 
-        private void ClampWindowToScreen(MpIPlatformScreenInfo si, Window w, double pad) {
-            double l = (double)w.Bounds.Position.X;
-            double t = (double)w.Bounds.Position.Y;
-            double r = w.Bounds.Width + l;
-            double b = w.Bounds.Height + t;
-
-            if (r > si.WorkArea.Right - pad) {
-                l = si.WorkArea.Right - pad - w.Bounds.Width;
+        private static double GetWindowTitleHeight(Window w) {
+            if (w == null) {
+                return 0;
             }
-            if (b > si.WorkArea.Bottom - pad) {
-                t = si.WorkArea.Bottom - pad - w.Bounds.Height;
-            }
-            r = w.Bounds.Width + l;
-            b = w.Bounds.Height + t;
-            w.Position = new PixelPoint((int)l, (int)t);
-            w.Width = r - l;
-            w.Height = b - t;
+            return w.FrameSize.HasValue ? w.FrameSize.Value.Height - w.ClientSize.Height : 0;
         }
 
         #endregion
