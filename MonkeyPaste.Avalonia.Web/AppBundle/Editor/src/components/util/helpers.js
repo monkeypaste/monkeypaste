@@ -708,4 +708,22 @@ function convertRomanNumeralToInt(str1) {
     return num;
 }
 
+function getElementClosestToPoint(p, elmQuery, forceContains = true) {
+    const elms = document.querySelectorAll(elmQuery);
+    let min_dist = Number.MAX_SAFE_INTEGER;
+    let min_elm = null;
+    for (var i = 0; i < elms.length; i++) {
+        const cur_rect = cleanRect(elms[i].getBoundingClientRect());
+        const cur_dist = dist(p, { x: cur_rect.left, y: cur_rect.top });
+        if (cur_dist < min_dist) {
+            min_dist = cur_dist;
+            min_elm = elms[i];
+        }
+        if (isPointInRect(cur_rect, p)) {
+            return elms[i];
+        }
+    }
+    return min_elm;
+}
+
 

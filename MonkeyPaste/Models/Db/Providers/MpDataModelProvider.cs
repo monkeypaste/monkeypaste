@@ -248,6 +248,12 @@ namespace MonkeyPaste {
             return result.OrderBy(x => ciida.IndexOf(x.Id)).ToList();
         }
 
+        public static async Task<List<MpCopyItem>> GetCopyItemsByDataObjectIdListAsync(List<int> dobidl) {
+            string query = $"select * from MpCopyItem where pk_MpCopyItemId in (select distinct pk_MpCopyItemId from MpCopyItem where fk_MpDataObjectId in ({string.Join(",", dobidl.Select(x => "?"))}))";
+            var result = await MpDb.QueryAsync<MpCopyItem>(query, dobidl.Cast<object>().ToArray());
+            return result.ToList();
+        }
+
         public static async Task<MpCopyItem> GetCopyItemByDataAsync(string text) {
             string query = "select * from MpCopyItem where ItemData=?";
             var result = await MpDb.QueryAsync<MpCopyItem>(query, text);

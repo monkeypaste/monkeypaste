@@ -4,6 +4,7 @@ using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
+using CefNet;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using Org.BouncyCastle.Utilities.Collections;
@@ -903,7 +904,6 @@ namespace MonkeyPaste.Avalonia {
                 return SelectedItem.CopyItemId;
             }
         }
-
         public override MpAvClipTileViewModel SelectedItem {
             get {
                 //if (MpAvAppendNotificationWindow.Instance != null &&
@@ -980,21 +980,6 @@ namespace MonkeyPaste.Avalonia {
         //.OrderBy(x => x.TrayX)
         //.ThenBy(x => x.TrayY);
 
-        public Orientation DefaultScrollOrientation {
-            get {
-                if (ListOrientation == Orientation.Horizontal) {
-                    if (IsGridLayout) {
-                        return Orientation.Vertical;
-                    }
-                    return Orientation.Horizontal;
-                }
-                if (IsGridLayout) {
-                    return Orientation.Horizontal;
-                }
-                return Orientation.Vertical;
-            }
-        }
-
         #endregion
 
         #region Layout
@@ -1014,6 +999,20 @@ namespace MonkeyPaste.Avalonia {
         #region Bound Dimensions
         #endregion
 
+        public Orientation DefaultScrollOrientation {
+            get {
+                if (ListOrientation == Orientation.Horizontal) {
+                    if (IsGridLayout) {
+                        return Orientation.Vertical;
+                    }
+                    return Orientation.Horizontal;
+                }
+                if (IsGridLayout) {
+                    return Orientation.Horizontal;
+                }
+                return Orientation.Vertical;
+            }
+        }
         public double DefaultPinTrayWidth =>
             DefaultQueryItemWidth * 1.4;
 
@@ -1136,6 +1135,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
 
         #region Append
 
@@ -1848,17 +1848,56 @@ namespace MonkeyPaste.Avalonia {
         #region Db Events
 
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
-            //if (e is MpCopyItem ci) {
-            //_allTiles.Add(CreateClipTileViewModel(ci));
-            // }
+            if (e is MpShortcut sc &&
+                AllActiveItems.FirstOrDefault(x => sc.IsShortcutCommand(x)) is MpAvClipTileViewModel sc_ctvm) {
+                sc_ctvm.OnPropertyChanged(nameof(sc_ctvm.KeyString));
+                return;
+            }
+
+            if (e is MpCopyItemAnnotation cia &&
+                AllActiveItems.FirstOrDefault(x => cia.CopyItemId == x.CopyItemId) is MpAvClipTileViewModel cia_ctvm) {
+                Dispatcher.UIThread.Post(async () => {
+                    await cia_ctvm.InitializeAsync(cia_ctvm.CopyItem);
+                    //wait for model to propagate then trigger view to reload
+                    if (cia_ctvm.GetContentView() is MpIContentView cv) {
+                        cv.LoadContentAsync().FireAndForgetSafeAsync();
+                        //wv.PerformLoadContentRequestAsync().FireAndForgetSafeAsync();
+                    }
+                });
+                return;
+            }
         }
 
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
-            if (e is MpCopyItem ci) {
+            if (e is MpShortcut sc &&
+                AllActiveItems.FirstOrDefault(x => sc.IsShortcutCommand(x)) is MpAvClipTileViewModel sc_ctvm) {
+                sc_ctvm.OnPropertyChanged(nameof(sc_ctvm.KeyString));
+                return;
+            }
+            if (e is MpCopyItem ci &&
+                AllActiveItems.FirstOrDefault(x => x.CopyItemId == ci.Id) is MpAvClipTileViewModel ci_ctvm) {
+                if (HasModelChanged) {
+                    // this means the model has been updated from the view model so ignore
+                } else {
+                    Dispatcher.UIThread.Post(async () => {
+                        await ci_ctvm.InitializeAsync(ci);
+                        //wait for model to propagate then trigger view to reload
+                        if (ci_ctvm.GetContentView() is MpIContentView cv) {
+                            cv.LoadContentAsync().FireAndForgetSafeAsync();
+                        }
+                    });
+                }
+                return;
             }
         }
 
         protected override async void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+            if (e is MpShortcut sc &&
+                AllActiveItems.FirstOrDefault(x => sc.IsShortcutCommand(x)) is MpAvClipTileViewModel sc_ctvm) {
+                sc_ctvm.OnPropertyChanged(nameof(sc_ctvm.KeyString));
+                return;
+            }
+
             if (e is MpCopyItem ci) {
                 if (AppendClipTileViewModel != null &&
                     ci.Id == AppendClipTileViewModel.CopyItemId &&

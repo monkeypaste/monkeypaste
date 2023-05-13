@@ -542,7 +542,7 @@ namespace MonkeyPaste.Avalonia {
                                 label = "Ignore New Duplicates",
                                 values = new List<MpPluginParameterValueFormat>() {
                                     new MpPluginParameterValueFormat() {
-                                        isDefault = MpPrefViewModel.Instance.ShowInTaskSwitcher.ToString() == MpThemeType.Light.ToString(),
+                                        isDefault = MpPrefViewModel.Instance.IsDuplicateCheckEnabled.ToString() == MpThemeType.Light.ToString(),
                                         value = MpPrefViewModel.Instance.IsDuplicateCheckEnabled.ToString()
                                     },
                                 }
@@ -785,6 +785,9 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(MpPrefViewModel.Instance.GlobalShortcutDelay):
                     MpAvShortcutCollectionViewModel.Instance.OnPropertyChanged(nameof(MpAvShortcutCollectionViewModel.Instance.GlobalShortcutDelay));
+                    break;
+                case nameof(MpPrefViewModel.Instance.TrackExternalPasteHistory):
+                    MpAvShortcutCollectionViewModel.Instance.InitExternalPasteTracking();
                     break;
             }
             if (_reinitContentParams.Any(x => x.ToLower() == e.PropertyName.ToLower())) {

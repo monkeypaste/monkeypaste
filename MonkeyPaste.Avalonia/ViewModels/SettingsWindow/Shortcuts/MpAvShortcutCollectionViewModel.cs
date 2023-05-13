@@ -423,6 +423,11 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Clipboard Events
+
+        public event EventHandler OnGlobalPasteShortcutPerformed;
+
+        #endregion
 
         #endregion
 
@@ -454,9 +459,7 @@ namespace MonkeyPaste.Avalonia {
 
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
 
-            if (MpPrefViewModel.Instance.TrackExternalPasteHistory) {
-                EnableExternalPasteTracking();
-            }
+            InitExternalPasteTracking();
         }
 
         public async Task<string> CreateOrUpdateViewModelShortcutAsync(
@@ -690,40 +693,113 @@ namespace MonkeyPaste.Avalonia {
                 }.SerializeJsonObjectToBase64();
         }
 
-        #region Paste Tracking (unused)
-        private void EnableExternalPasteTracking() {
-            Mp.Services.ProcessWatcher.OnAppActivated += ProcessWatcher_OnAppActivated;
+        #region Paste Tracking
+        private string _activePasteKeystring = null;
+        private MpPortableProcessInfo _activeProcessInfo = null;
+        public void InitExternalPasteTracking() {
+            if (MpPrefViewModel.Instance.TrackExternalPasteHistory) {
+                EnableExternalPasteTracking();
+            } else {
+                DisableExternalPasteTracking();
+            }
         }
+        private void EnableExternalPasteTracking() {
+            _activePasteKeystring = Mp.Services.PlatformShorcuts.PasteKeys;
+            Mp.Services.ProcessWatcher.OnAppActivated += ProcessWatcher_OnAppActivated;
+            OnGlobalPasteShortcutPerformed += MpAvShortcutCollectionViewModel_OnGlobalPasteShortcutPerformed;
+        }
+
+
         private void DisableExternalPasteTracking() {
+            _activePasteKeystring = null;
             Mp.Services.ProcessWatcher.OnAppActivated -= ProcessWatcher_OnAppActivated;
+            OnGlobalPasteShortcutPerformed -= MpAvShortcutCollectionViewModel_OnGlobalPasteShortcutPerformed;
         }
 
         private void ProcessWatcher_OnAppActivated(object sender, MpPortableProcessInfo e) {
-
-            //GlobalHook.OnCombination(new Dictionary<Combination, Action> {
-            //{
-            //    Combination.FromString("Control+V"), () => {
-            //        try {
-            //            string cbText = Clipboard.GetText();
-            //            if(!string.IsNullOrEmpty(cbText)) {
-            //                Application.Current.Dispatcher.BeginInvoke((Action)(()=>{
-            //                    foreach(var ctvm in MpAvClipTrayViewModel.Instance.Items) {
-            //                        foreach(var rtbvm in ctvm.Items) {
-            //                            if(rtbvm.CopyItem.ItemData.ToPlainText() == cbText) {
-            //                                rtbvm.CopyItem.PasteCount++;
-            //                            }
-            //                        }
-            //                    }
-            //                }),System.Windows.Threading.DispatcherPriority.Background);
-            //            }
-            //        } catch(Exception ex) {
-            //            MpConsole.WriteLine("Global Keyboard Paste watch exception getting text: "+ex);
-            //        }
-            //    }
-            //}
-            //});
+            _activeProcessInfo = e;
+            if (MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(e) is MpAvAppViewModel avm &&
+                avm.PasteShortcutViewModel != null &&
+                avm.PasteShortcutViewModel.HasPasteShortcut) {
+                _activePasteKeystring = avm.PasteShortcutViewModel.PasteCmdKeyString;
+            } else {
+                _activePasteKeystring = Mp.Services.PlatformShorcuts.PasteKeys;
+            }
         }
 
+        private void MpAvShortcutCollectionViewModel_OnGlobalPasteShortcutPerformed(object sender, EventArgs e) {
+            // called from global key up when paste key string was performed...
+
+            Task.Run(async () => {
+                try {
+                    // grab current cb text
+                    string cbText = await TopLevel.GetTopLevel(MpAvMainView.Instance).Clipboard.GetTextAsync();
+                    if (!string.IsNullOrEmpty(cbText)) {
+                        // find matching data object items w/ current text
+
+                        var match_doil = await MpDataModelProvider.GetDataObjectItemsForFormatByDataAsync(MpPortableDataFormats.Text, cbText);
+                        var dobj_idl =
+                            match_doil
+                                .Select(x => x.DataObjectId)
+                                .Distinct();
+                        if (!dobj_idl.Any()) {
+                            return;
+                        }
+
+                        // get ALL copyitems for dataobjects (maybe multiple if duplicates are not ignored)
+                        var match_cil = await MpDataModelProvider.GetCopyItemsByDataObjectIdListAsync(dobj_idl.ToList());
+                        if (!match_cil.Any()) {
+                            return;
+                        }
+
+                        // NOTE pasteCount is used for relevanceScore cause active app recog and/or ignores may
+                        // make trans history wishy washy also still tentatively using transactions so just as a backup i guess
+                        //var active_ctvml =
+                        //MpAvClipTrayViewModel.Instance.AllActiveItems
+                        //.Where(x => match_cil.Any(y => y.Id == x.CopyItemId));
+
+                        //// for performance pass model update to vm not model
+                        //active_ctvml.ForEach(x => x.PasteCount = x.PasteCount + 1);
+
+                        // only update inactive models
+                        match_cil.ForEach(x => MpConsole.WriteLine($"Old paste count: {x.PasteCount}"));
+                        match_cil
+                        //.Where(x => active_ctvml.All(y => y.CopyItemId != x.Id))
+                        .ForEach(x => x.PasteCount = x.PasteCount + 1);
+                        Task.WhenAll(match_cil.Select(x => x.WriteToDatabaseAsync())).FireAndForgetSafeAsync(this);
+                        match_cil.ForEach(x => MpConsole.WriteLine($"New paste count: {x.PasteCount}"));
+                        if (_activeProcessInfo != null) {
+                            string pasted_app_url = null;
+                            var avm = MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(_activeProcessInfo);
+                            if (avm == null) {
+                                // we're f'd
+                                Debugger.Break();
+                            } else {
+                                pasted_app_url = Mp.Services.SourceRefTools.ConvertToRefUrl(avm.App);
+                            }
+                            if (string.IsNullOrEmpty(pasted_app_url)) {
+                                // f'd
+                                Debugger.Break();
+                                return;
+                            }
+
+                            Task.WhenAll(match_cil.Select(x =>
+                                Mp.Services.TransactionBuilder.ReportTransactionAsync(
+                                    copyItemId: x.Id,
+                                    reqType: MpJsonMessageFormatType.DataObject,
+                                    req: null,//mpdo.SerializeData(),
+                                    respType: MpJsonMessageFormatType.None,
+                                    resp: null,
+                                    ref_uris: new[] { pasted_app_url },
+                                    transType: MpTransactionType.Pasted))).FireAndForgetSafeAsync(this);
+                        }
+                    }
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteLine("Global Keyboard Paste watch exception getting text: " + ex);
+                }
+            });
+        }
         #endregion
 
         #region Global Input
@@ -1107,7 +1183,13 @@ namespace MonkeyPaste.Avalonia {
                 _downTest.Remove(dt);
             }
 
-            _keyboardGestureHelper.ClearCurrentGesture();
+            if (_activePasteKeystring != null &&
+                !kc.IsModKey() &&
+                _keyboardGestureHelper.GetCurrentGesture() == _activePasteKeystring &&
+                !MpAvClipTrayViewModel.Instance.IsPasting) {
+                OnGlobalPasteShortcutPerformed?.Invoke(this, null);
+            }
+            _keyboardGestureHelper.RemoveKeyDown(keyLiteral);
             if (_exact_match == null) {
                 return;
             }

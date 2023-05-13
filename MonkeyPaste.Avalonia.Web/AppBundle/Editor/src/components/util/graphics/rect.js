@@ -226,6 +226,21 @@ function cleanRect(rect) {
     }
     return cr;
 }
+
+function toBtRect(rect) {
+    rect.x = rect.left;
+    rect.y = rect.top;
+    rect.x1 = rect.right;
+    rect.y1 = rect.bottom;
+    return rect;
+}
+function fromBtRect(rect) {
+    rect.left = rect.x;
+    rect.top = rect.y;
+    rect.right = rect.x1;
+    rect.bottom = rect.y1;
+    return rect;
+}
 // #region Event Handlers
 
 // #endregion Event Handlers

@@ -1549,50 +1549,6 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
 
         #region DB Overrides
-
-        protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
-            if (e is MpShortcut sc && sc.IsShortcutCommand(this)) {
-                OnPropertyChanged(nameof(KeyString));
-            } else if (e is MpCopyItemAnnotation cia && cia.CopyItemId == CopyItemId) {
-                Dispatcher.UIThread.Post(async () => {
-                    await InitializeAsync(CopyItem);
-                    //wait for model to propagate then trigger view to reload
-                    if (GetContentView() is MpIContentView cv) {
-                        cv.LoadContentAsync().FireAndForgetSafeAsync();
-                        //wv.PerformLoadContentRequestAsync().FireAndForgetSafeAsync();
-                    }
-                });
-            }
-        }
-
-        protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
-            if (e is MpShortcut sc && sc.IsShortcutCommand(this)) {
-                OnPropertyChanged(nameof(KeyString));
-            } else if (e is MpCopyItem ci && ci.Id == CopyItemId) {
-                if (HasModelChanged) {
-                    // this means the model has been updated from the view model so ignore
-                } else {
-                    Dispatcher.UIThread.Post(async () => {
-                        await InitializeAsync(ci);
-                        //wait for model to propagate then trigger view to reload
-                        if (GetContentView() is MpIContentView cv) {
-                            cv.LoadContentAsync().FireAndForgetSafeAsync();
-                            //wv.PerformLoadContentRequestAsync().FireAndForgetSafeAsync();
-                        }
-                    });
-                }
-            }
-        }
-
-        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            if (e is MpShortcut sc && sc.IsShortcutCommand(this)) {
-                OnPropertyChanged(nameof(KeyString));
-            } else if (e is MpCopyItem ci && CopyItemId == ci.Id) {
-
-            }
-        }
-
-
         #endregion
 
         #endregion
@@ -1889,6 +1845,12 @@ namespace MonkeyPaste.Avalonia {
                     if (!IsChildWindowOpen) {
                         PopInTileCommand.Execute(null);
                     }
+                    break;
+                case nameof(CopyItemSize1):
+                case nameof(CopyItemSize2):
+                case nameof(CopyCount):
+                case nameof(PasteCount):
+                    OnPropertyChanged(nameof(DetailText));
                     break;
             }
         }

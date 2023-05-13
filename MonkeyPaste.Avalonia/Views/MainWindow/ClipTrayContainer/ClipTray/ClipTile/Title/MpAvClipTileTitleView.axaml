@@ -226,7 +226,7 @@
                     x:DataType="local:MpAvClipTileTransactionCollectionViewModel"
                     DataContext="{Binding TransactionCollectionViewModel}"
                     Classes="noBg noHoverBg"
-                    Classes.shake="{Binding DoShake}"
+                    Classes.shakeOnce="{Binding DoShake}"
                     Width="{Binding Bounds.Height, ElementName=TitleContainerGrid}"
                     Command="{Binding ToggleTransactionPaneOpenCommand}"
                     ClipToBounds="False"

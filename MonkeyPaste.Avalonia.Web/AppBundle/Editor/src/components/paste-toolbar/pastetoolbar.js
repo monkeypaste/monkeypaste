@@ -1,5 +1,5 @@
 // #region Globals
-const MIN_TOOLBAR_HEIGHT = 40;
+const MIN_TOOLBAR_HEIGHT = 45;
 // #endregion Globals
 
 // #region Life Cycle
