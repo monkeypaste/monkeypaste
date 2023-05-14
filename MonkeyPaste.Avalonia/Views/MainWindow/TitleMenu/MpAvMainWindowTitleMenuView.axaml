@@ -156,6 +156,7 @@
 
             <ToggleButton x:Name="LockToggleButton"
                           Command="{Binding ToggleMainWindowLockCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
+                          CommandParameter="{Binding $self}"
                           Classes="noBg noHoverBg">
                 <ToolTip.Tip>
                     <local:MpAvToolTipView ToolTipText="Lock" />

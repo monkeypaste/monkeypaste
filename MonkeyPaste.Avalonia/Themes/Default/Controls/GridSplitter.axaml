@@ -43,6 +43,14 @@
                 Value="Columns" />
     </Style>
 
+    <Style Selector="GridSplitter.horizontal.level1">
+        <Setter Property="Height"
+                Value="2.5" />
+    </Style>
+    <Style Selector="GridSplitter.vertical.level1">
+        <Setter Property="Width"
+                Value="2.5" />
+    </Style>
     <Style Selector="GridSplitter.sidebarSplitter">
         <Setter Property="Background"
                 Value="{DynamicResource SidebarGridSplitterBrush}" />

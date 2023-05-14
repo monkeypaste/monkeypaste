@@ -42,7 +42,7 @@
 }
 
 #editor:not(.file-list-content) table.quill-better-table {
-    table-layout: auto !important;
+    table-layout: fixed !important;
 }
 
 .quill-better-table {

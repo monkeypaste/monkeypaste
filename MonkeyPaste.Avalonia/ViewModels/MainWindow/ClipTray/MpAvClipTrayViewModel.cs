@@ -509,18 +509,13 @@ namespace MonkeyPaste.Avalonia {
                     // this implies mouse is/was not over a sub-selectable tile and is scrolling so ignore item scroll if already moving
                     return true;
                 }
-                // TODO? giving item scroll priority maybe better by checking if content exceeds visible boundaries here
-                bool isItemScrollPriority = Items.Any(x => x.IsSubSelectionEnabled && x.IsHovering);
-                if (isItemScrollPriority) {
-                    // when tray is not scrolling (is still) and mouse is over sub-selectable item keep tray scroll frozen
-                    return false;
-                }
-
-                if (SelectedItem == null) {
+                if (HoverItem == null) {
                     return true;
                 }
-                if (SelectedItem.IsVerticalScrollbarVisibile &&
-                    SelectedItem.IsHovering) {
+                // TODO? giving item scroll priority maybe better by checking if content exceeds visible boundaries here
+                if (HoverItem.IsVerticalScrollbarVisibile ||
+                    HoverItem.TransactionCollectionViewModel.IsTransactionPaneOpen) {
+                    // when tray is not scrolling (is still) and mouse is over sub-selectable item keep tray scroll frozen
                     return false;
                 }
                 return true;
@@ -896,6 +891,9 @@ namespace MonkeyPaste.Avalonia {
         public MpAvClipTileViewModel TailItem =>
             SortOrderedItems.ElementAtOrDefault(SortOrderedItems.Count() - 1);
 
+        public MpAvClipTileViewModel HoverItem =>
+            AllActiveItems.FirstOrDefault(x => x.IsHovering);
+
         public int PersistantSelectedItemId {
             get {
                 if (SelectedItem == null) {
@@ -904,6 +902,7 @@ namespace MonkeyPaste.Avalonia {
                 return SelectedItem.CopyItemId;
             }
         }
+
         public override MpAvClipTileViewModel SelectedItem {
             get {
                 //if (MpAvAppendNotificationWindow.Instance != null &&
@@ -1861,7 +1860,6 @@ namespace MonkeyPaste.Avalonia {
                     //wait for model to propagate then trigger view to reload
                     if (cia_ctvm.GetContentView() is MpIContentView cv) {
                         cv.LoadContentAsync().FireAndForgetSafeAsync();
-                        //wv.PerformLoadContentRequestAsync().FireAndForgetSafeAsync();
                     }
                 });
                 return;
@@ -1876,7 +1874,7 @@ namespace MonkeyPaste.Avalonia {
             }
             if (e is MpCopyItem ci &&
                 AllActiveItems.FirstOrDefault(x => x.CopyItemId == ci.Id) is MpAvClipTileViewModel ci_ctvm) {
-                if (HasModelChanged) {
+                if (ci_ctvm.HasModelChanged) {
                     // this means the model has been updated from the view model so ignore
                 } else {
                     Dispatcher.UIThread.Post(async () => {

@@ -17,7 +17,7 @@
         <ContentControl Content="{Binding}">
             <ContentControl.DataTemplates>
                 <local:MpAvTransactionNodeDetailTemplateSelector>
-
+                    <!--  SCORE LABEL  -->
                     <DataTemplate x:Key="AnnotationItemDetailTemplate"
                                   x:DataType="local:MpAvAnnotationItemViewModel">
                         <Grid RowDefinitions="Auto,Auto,Auto">
@@ -41,6 +41,8 @@
                         </Grid>
                     </DataTemplate>
 
+                    <!--  NAVIGATE TO SOURCE LINK  -->
+
                     <DataTemplate x:Key="TransactionSourceDetailTemplate"
                                   x:DataType="local:MpAvTransactionSourceViewModel">
                         <DockPanel>
@@ -62,6 +64,8 @@
                                                       NavigateUriRequiredKeyString="" />
                         </DockPanel>
                     </DataTemplate>
+
+                    <!--  EMPTY LABEL  -->
                     <DataTemplate x:Key="EmptyDetailTemplate">
                         <TextBlock Text="No details available" />
                     </DataTemplate>

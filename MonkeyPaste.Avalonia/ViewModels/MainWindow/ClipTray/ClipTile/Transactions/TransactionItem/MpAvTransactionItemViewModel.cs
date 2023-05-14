@@ -3,6 +3,8 @@ using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -29,15 +31,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIPlainTextViewModel Implementation
 
-        public string PlainText {
-            get {
-                var sb = new StringBuilder();
-                sb.AppendLine("TEST transaction");
-                Items.OfType<MpIPlainTextViewModel>()
-                    .ForEach(x => sb.AppendLine(x.PlainText));
-                return sb.ToString();
-            }
-        }
+        public string PlainText { get; private set; }
 
         #endregion
 
@@ -74,27 +68,28 @@ namespace MonkeyPaste.Avalonia {
                 return new MpMenuItemViewModel() {
                     IconSourceObj = IconSourceObj,
                     Header = TransactionLabel,
-                    //SubItems = new List<MpMenuItemViewModel>() {
-                    //    new MpMenuItemViewModel() {
-                    //                Header = $"Filter by '{TransactionLabel}'",
-                    //                AltNavIdx = 0,
-                    //                IconResourceKey = "FilterImage",
-                    //                Command = EnableFilterByAppCommand
-                    //            },
-                    //    new MpMenuItemViewModel() {
-                    //                Header = $"Exclude '{TransactionLabel}'",
-                    //                AltNavIdx = 0,
-                    //                IconResourceKey = "NoEntryImage",
-                    //                Command = ExcludeSourceCommand
-                    //            },
-                    //    new MpMenuItemViewModel() {IsSeparator = true},
-                    //    new MpMenuItemViewModel() {
-                    //        Header = $"Goto '{SourceUri}'",
-                    //        AltNavIdx = 5,
-                    //        IconResourceKey = "Execute",
-                    //        Command = GotoSourceCommand
-                    //    }
-                    //}
+                    Tooltip = MpAvDateTimeToStringConverter.Instance.Convert(TransactionDateTime, null, MpAvDateTimeToStringConverter.LITERAL_DATE_TIME_FORMAT, null),
+                    SubItems = new List<MpMenuItemViewModel>() {
+                        new MpMenuItemViewModel() {
+                                    Header = $"Filter by '{TransactionLabel}'",
+                                    AltNavIdx = 0,
+                                    IconResourceKey = "FilterImage",
+                                    //Command = EnableFilterByAppCommand
+                                },
+                        new MpMenuItemViewModel() {
+                                    Header = $"Exclude '{TransactionLabel}'",
+                                    AltNavIdx = 0,
+                                    IconResourceKey = "NoEntryImage",
+                                    //Command = ExcludeSourceCommand
+                                },
+                        new MpMenuItemViewModel() {IsSeparator = true},
+                        new MpMenuItemViewModel() {
+                            //Header = $"Goto '{SourceUri}'",
+                            AltNavIdx = 5,
+                            IconResourceKey = "Execute",
+                            //Command = GotoSourceCommand
+                        }
+                    }
                 };
             }
         }
@@ -560,24 +555,36 @@ namespace MonkeyPaste.Avalonia {
             node_control.BringIntoView();
         }
 
+        private async Task<string> GetTransactionAsPlainTextAsync() {
+            await Task.Delay(1);
+            object jtrans = new {
+                transaction = Transaction,
+                sources = Sources.Select(x => x.SourceRef).ToList()
+            };
+            string output = JsonConvert.SerializeObject(jtrans);
+            return output;
+        }
+
         #endregion
 
         #region Commands
 
 
-        public ICommand TogglePlainTextCommand => new MpCommand<object>(
-            (args) => {
+        public ICommand TogglePlainTextCommand => new MpAsyncCommand<object>(
+            async (args) => {
                 IsPlainTextView = !IsPlainTextView;
 
                 if (args is Control c &&
                     c.GetVisualAncestor<MpAvClipTileTransactionPaneView>() is MpAvClipTileTransactionPaneView tpv &&
-                    tpv.GetVisualDescendants<ContentControl>() is IEnumerable<ContentControl> ccl &&
-                    tpv.Content is Grid rootGrid) {
-                    rootGrid.DataContext = null;
-                    rootGrid.DataContext = this;
+                    tpv.FindControl<Control>("SelectedTransactionContainer") is Control stc) {
+                    PlainText = await GetTransactionAsPlainTextAsync();
+
+                    stc.DataContext = null;
+                    stc.DataContext = this;
                 }
             });
 
         #endregion
     }
+
 }

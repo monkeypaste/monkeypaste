@@ -92,6 +92,8 @@ namespace MonkeyPaste {
             set => TransactionLabel = value.ToString();
         }
 
+
+
         #endregion
 
 

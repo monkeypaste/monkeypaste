@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Input.GestureRecognizers;
 using Avalonia.Threading;
@@ -1264,9 +1265,12 @@ namespace MonkeyPaste.Avalonia {
                 IsMainWindowOrientationChanging = false;
             });
 
-        public ICommand ToggleMainWindowLockCommand => new MpCommand(
-            () => {
+        public ICommand ToggleMainWindowLockCommand => new MpCommand<object>(
+            (args) => {
                 IsMainWindowLocked = !IsMainWindowLocked;
+                if (args is ToggleButton tb) {
+                    tb.IsChecked = IsMainWindowLocked;
+                }
             });
 
         public ICommand ToggleFilterMenuVisibleCommand => new MpCommand(

@@ -13,6 +13,12 @@ namespace MonkeyPaste {
         ExtraLargeIcon = 0x4
     }
     public class MpIcon : MpDbModelBase, MpISyncableDbObject, MpIClonableDbModel<MpIcon> {
+        #region Constants
+
+        public const double DEFAULT_ICON_BORDER_SCALE = 1.25;
+
+        #endregion
+
         #region Columns
         [PrimaryKey, AutoIncrement]
         [Column("pk_MpIconId")]
@@ -187,7 +193,7 @@ namespace MonkeyPaste {
                 HexColor4 = MpColorHelpers.GetRandomHexColor();
                 HexColor5 = MpColorHelpers.GetRandomHexColor();
             } else {
-                var borderImage64Str = iconBuilder.CreateBorder(img.ImageBase64, 1.25, @"#FFFFFFFF");
+                var borderImage64Str = iconBuilder.CreateBorder(img.ImageBase64, DEFAULT_ICON_BORDER_SCALE, @"#FFFFFFFF");
                 if (IconBorderImageId == 0) {
                     var bimg = await MpDbImage.Create(borderImage64Str);
                     IconBorderImageId = bimg.Id;

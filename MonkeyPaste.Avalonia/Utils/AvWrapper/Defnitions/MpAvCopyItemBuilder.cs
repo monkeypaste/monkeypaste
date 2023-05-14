@@ -78,7 +78,6 @@ namespace MonkeyPaste.Avalonia {
             string itemDelta = data_tuple.Item3;
             string default_title = GetDefaultItemTitle(itemType, mpdo);
 
-
             var ci = await MpCopyItem.CreateAsync(
                 dataObjectId: dobj.Id,
                 title: default_title,
@@ -311,6 +310,14 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
             }
+
+            if (itemType == MpCopyItemType.Text && !string.IsNullOrEmpty(itemData) &&
+                string.IsNullOrWhiteSpace(MpRichHtmlToPlainTextConverter.Convert(itemData)) &&
+                MpPrefViewModel.Instance.IgnoreWhiteSpaceCopyItems) {
+                // if text is just whitespace and those ignored flag to ignore item
+                return null;
+            }
+
             if (string.IsNullOrEmpty(delta)) {
                 MpQuillDelta deltaObj = new MpQuillDelta() {
                     ops = new List<Op>()

@@ -111,10 +111,12 @@ namespace MonkeyPaste.Avalonia {
         public bool IsSortDescending { get; set; } = true;
         public bool IsTransactionPaneOpen { get; set; } = false;
         public bool IsTransactionPaneAnimating { get; set; }
-        public bool IsAnyBusy => IsBusy || Transactions.Any(x => x.IsBusy);
+        public bool IsAnyBusy =>
+            IsBusy || Transactions.Any(x => x.IsBusy);
 
         public bool IsAnyAnalysisTransaction =>
             Transactions.Any(x => x.IsAnalysisTransaction);
+
 
         #endregion
 
@@ -343,6 +345,18 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
+
+        public ICommand ShowTransactionContextMenuCommand => new MpCommand<object>(
+            (args) => {
+                var control = args as Control;
+                if (control == null) {
+                    return;
+                }
+                if (!Parent.IsSelected) {
+                    Parent.Parent.SelectClipTileCommand.Execute(Parent);
+                }
+                MpAvMenuExtension.ShowMenu(control, ContextMenuViewModel);
+            });
 
         public ICommand FilterByPrimarySourceCommand => new MpCommand(
             () => {

@@ -11,6 +11,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constants
 
         public const string CONTENT_TYPE_PARAM_ID = "SelectedContentType";
+        public const string IGNORE_DUP_CONTENT_PARAM_ID = "IgnoreDupContent";
 
         #endregion
 
@@ -47,6 +48,20 @@ namespace MonkeyPaste.Avalonia {
                                         label = "Files",
                                         value = MpCopyItemType.FileList.ToString()
                                     },
+                                }
+                            },
+                            new MpParameterFormat() {
+                                label = "Ignore Duplicate",
+                                controlType = MpParameterControlType.CheckBox,
+                                unitType = MpParameterValueUnitType.Bool,
+                                isRequired = false,
+                                paramId = IGNORE_DUP_CONTENT_PARAM_ID,
+                                description = "Only execute this trigger if clipboard is new and not been already copied and processed. This is independant of any preferene setting of whether new content is ignored or not.",
+                                values = new List<MpPluginParameterValueFormat>() {
+                                    new MpPluginParameterValueFormat() {
+                                        isDefault = true,
+                                        value = true.ToString()
+                                    }
                                 }
                             }
                         }
@@ -94,6 +109,23 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public bool IgnoreDupContent {
+            get {
+                if (ArgLookup.TryGetValue(IGNORE_DUP_CONTENT_PARAM_ID, out var param_vm) &&
+                     param_vm.CurrentValue.ParseOrConvertToBool(true) is bool boolVal) {
+                    return boolVal;
+                }
+                return true;
+            }
+            set {
+                if (IgnoreDupContent != value) {
+                    ArgLookup[IGNORE_DUP_CONTENT_PARAM_ID].CurrentValue = value.ToString();
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(IgnoreDupContent));
+                }
+            }
+        }
+
         #endregion
 
         #endregion
@@ -123,8 +155,13 @@ namespace MonkeyPaste.Avalonia {
                 // NOTE Default is treated as all types
                 return true;
             }
-            if (arg is MpCopyItem ci && ci.ItemType != AddedContentType) {
-                return false;
+            if (arg is MpCopyItem ci) {
+                if (ci.ItemType != AddedContentType) {
+                    return false;
+                }
+                if (ci.WasDupOnCreate && IgnoreDupContent) {
+                    return false;
+                }
             }
             return true;
         }

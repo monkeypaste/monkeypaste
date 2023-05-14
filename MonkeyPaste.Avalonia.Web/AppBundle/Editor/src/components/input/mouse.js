@@ -74,7 +74,8 @@ function updateWindowMouseState(e) {
 		return;
 	}
 	WindowMouseLoc = getClientMousePos(e);
-	if (e.buttons === 1) {
+	if ((!isNullOrUndefined(e.button) && e.button === 0) ||
+		e.buttons === 1) {
 		if (WindowMouseDownLoc == null) {
 			WindowMouseDownLoc = WindowMouseLoc;
 			if (isDragging()) {

@@ -116,6 +116,7 @@ function resetDrop(fromHost, wasLeave, wasCancel) {
     IsCtrlDown = false;
     IsAltDown = false
     IsShiftDown = false;
+    IsTableDragSelecting = false;
 
     for (var i = 0; i < DropItemElms.length; i++) {
         DropItemElms[i].classList.remove('drop');

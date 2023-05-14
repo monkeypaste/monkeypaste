@@ -396,6 +396,11 @@ function hasEditableTable() {
 
 function updateTableDragState(e) {
     // used to know if pointer down is already on a selected cell, in which case will allow for a drag event
+    if (e == null) {
+        // mouse up
+        IsTableDragSelecting = false;
+        return;
+    }
     if (WindowMouseDownLoc == null || !hasEditableTable()) {
         IsTableDragSelecting = false;
         return true;
@@ -406,7 +411,7 @@ function updateTableDragState(e) {
     }
 
     let cell_elm_under_pointer = null;
-    const sel_cell_elms = getTableSelectedCellElements();
+    let sel_cell_elms = getTableSelectedCellElements();
     for (var i = 0; i < sel_cell_elms.length; i++) {
         let cell_rect = cleanRect(sel_cell_elms[i].getBoundingClientRect());
         if (isPointInRect(cell_rect, WindowMouseDownLoc)) {

@@ -699,9 +699,6 @@ namespace MonkeyPaste.Avalonia {
         private bool _isDetailVisible = true;
         public bool IsDetailVisible {
             get {
-                if (IsAppendNotifier) {
-                    return false;
-                }
                 return _isDetailVisible;
             }
             set {

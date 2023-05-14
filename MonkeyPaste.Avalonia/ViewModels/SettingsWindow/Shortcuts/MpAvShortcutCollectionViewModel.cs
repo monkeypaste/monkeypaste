@@ -754,20 +754,10 @@ namespace MonkeyPaste.Avalonia {
 
                         // NOTE pasteCount is used for relevanceScore cause active app recog and/or ignores may
                         // make trans history wishy washy also still tentatively using transactions so just as a backup i guess
-                        //var active_ctvml =
-                        //MpAvClipTrayViewModel.Instance.AllActiveItems
-                        //.Where(x => match_cil.Any(y => y.Id == x.CopyItemId));
-
-                        //// for performance pass model update to vm not model
-                        //active_ctvml.ForEach(x => x.PasteCount = x.PasteCount + 1);
-
-                        // only update inactive models
-                        match_cil.ForEach(x => MpConsole.WriteLine($"Old paste count: {x.PasteCount}"));
                         match_cil
-                        //.Where(x => active_ctvml.All(y => y.CopyItemId != x.Id))
                         .ForEach(x => x.PasteCount = x.PasteCount + 1);
                         Task.WhenAll(match_cil.Select(x => x.WriteToDatabaseAsync())).FireAndForgetSafeAsync(this);
-                        match_cil.ForEach(x => MpConsole.WriteLine($"New paste count: {x.PasteCount}"));
+                        match_cil.ForEach(x => MpConsole.WriteLine($"New paste count: {x.PasteCount} for '{x}'"));
                         if (_activeProcessInfo != null) {
                             string pasted_app_url = null;
                             var avm = MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(_activeProcessInfo);

@@ -59,4 +59,8 @@
     <Folder Include="Util\Extensions\" />
     <Folder Include="Util\Helpers\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include="AppBundle\Editor\lib\Quill-Better-Table\quill-better-table\dist\quill-better-table.js" />
+  </ItemGroup>
 </Project>

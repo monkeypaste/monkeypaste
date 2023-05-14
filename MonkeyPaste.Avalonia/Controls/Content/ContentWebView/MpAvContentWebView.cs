@@ -522,8 +522,8 @@ namespace MonkeyPaste.Avalonia {
                 case MpAvEditorBindingFunctionType.notifyScrollBarVisibilityChanged:
                     ntf = MpJsonConverter.DeserializeBase64Object<MpQuillScrollBarVisibilityChangedNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillScrollBarVisibilityChangedNotification scrollbarVisibleMsg) {
-                        //BindingContext.IsHorizontalScrollbarVisibile = scrollbarVisibleMsg.isScrollBarXVisible;
-                        //BindingContext.IsVerticalScrollbarVisibile = scrollbarVisibleMsg.isScrollBarYVisible;
+                        BindingContext.IsHorizontalScrollbarVisibile = scrollbarVisibleMsg.isScrollBarXVisible;
+                        BindingContext.IsVerticalScrollbarVisibile = scrollbarVisibleMsg.isScrollBarYVisible;
                     }
                     break;
                 #endregion
