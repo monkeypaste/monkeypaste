@@ -765,7 +765,7 @@ namespace MonkeyPaste.Avalonia {
                                 // we're f'd
                                 Debugger.Break();
                             } else {
-                                pasted_app_url = Mp.Services.SourceRefTools.ConvertToRefUrl(avm.App);
+                                pasted_app_url = Mp.Services.SourceRefTools.ConvertToInternalUrl(avm.App);
                             }
                             if (string.IsNullOrEmpty(pasted_app_url)) {
                                 // f'd

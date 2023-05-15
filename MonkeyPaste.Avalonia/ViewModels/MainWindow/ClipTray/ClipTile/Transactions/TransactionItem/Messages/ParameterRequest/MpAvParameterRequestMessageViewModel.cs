@@ -5,7 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvParameterRequestMessageViewModel : MpAvTransactionMessageViewModelBase, MpAvITransactionNodeViewModel {
+    public class MpAvParameterRequestMessageViewModel :
+        MpAvTransactionMessageViewModelBase,
+        MpAvITransactionNodeViewModel {
 
         #region Interfaces
         #endregion
@@ -17,6 +19,35 @@ namespace MonkeyPaste.Avalonia {
         #region View Models
 
         public MpAvAnalyticItemPresetViewModel PresetViewModel { get; private set; }
+
+        public override MpMenuItemViewModel ContextMenuItemViewModel {
+            get {
+                if (PresetViewModel == null) {
+                    return null;
+                }
+                return new MpMenuItemViewModel() {
+                    Header = PresetViewModel.Label,
+                    IconSourceObj = PresetViewModel.IconId,
+                    SubItems = new List<MpMenuItemViewModel>() {
+                        new MpMenuItemViewModel() {
+                            Header = "Select",
+                            IconSourceObj = "SlidersImage",
+                            Command = PresetViewModel.Parent.SelectPresetCommand,
+                            CommandParameter = new object[] { PresetViewModel, HostClipTileViewModel.CopyItem }
+                        },
+                        new MpMenuItemViewModel() {
+                            Header = "View",
+                            IconSourceObj = "GraphImage",
+                            IsVisible = Parent.Response is MpAvAnnotationMessageViewModel amvm && amvm.RootAnnotationViewModel != null,
+                            Command = HostClipTileViewModel.TransactionCollectionViewModel.SelectChildCommand,
+                            CommandParameter =
+                                Parent.Response is MpAvAnnotationMessageViewModel amvm2 && amvm2.RootAnnotationViewModel != null ?
+                                amvm2.RootAnnotationViewModel : null
+                        },
+                    }
+                };
+            }
+        }
         #endregion
 
         #region State

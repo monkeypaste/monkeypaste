@@ -31,13 +31,23 @@ namespace MonkeyPaste.Avalonia {
 
         public MpMenuItemViewModel ContextMenuViewModel {
             get {
-                //if (SelectedItem == null) {
-                //    return new MpMenuItemViewModel();
-                //}
                 return new MpMenuItemViewModel() {
-                    Header = "Transactions",
-                    IconResourceKey = "EggImage",
-                    SubItems = SortedMessages.Select(x => x.ContextMenuItemViewModel).ToList()
+                    Header = "References",
+                    IconResourceKey = "HighlighterImage",
+                    SubItems =
+                        SortedTransactions
+                        .SelectMany(x => x.Sources)
+                        .Where(x => x.SourceRef != null)
+                        .DistinctBy(x => new { x.SourceType, x.SourceObjId })
+                        .Where(x => !(x.SourceType == MpTransactionSourceType.App && x.SourceObjId == MpDefaultDataModelTools.ThisAppId))
+                        .Select(x => x.ContextMenuItemViewModel)
+                        .Union(
+                            Transactions
+                            .SelectMany(x => x.Messages)
+                            .OfType<MpAvParameterRequestMessageViewModel>()
+                            .Select(x => x.ContextMenuItemViewModel))
+                        .Where(x => x != null)
+                        .ToList()
                 };
             }
         }
@@ -56,6 +66,12 @@ namespace MonkeyPaste.Avalonia {
             IsSortDescending ?
                 Transactions.OrderByDescending(x => x.TransactionDateTime).ToList() :
                 Transactions.OrderBy(x => x.TransactionDateTime).ToList();
+
+        public IEnumerable<MpAvTransactionItemViewModel> VisibleTransactions =>
+            SortedTransactions
+            .Where(x => x.Response is MpAvAnnotationMessageViewModel amvm && amvm.RootAnnotationViewModel != null)
+            .ToList();
+
         public MpAvTransactionItemViewModel SelectedTransaction { get; set; }
 
         public MpAvTransactionItemViewModel MostRecentTransaction =>
@@ -63,6 +79,9 @@ namespace MonkeyPaste.Avalonia {
 
         public IEnumerable<MpAvTransactionMessageViewModelBase> Messages =>
             Transactions.SelectMany(x => x.Messages).ToList();
+
+        public IEnumerable<MpAvTransactionSourceViewModel> AllSources =>
+            Transactions.SelectMany(x => x.Sources);
 
         public IEnumerable<MpAvTransactionMessageViewModelBase> SortedMessages =>
             Messages
@@ -328,6 +347,7 @@ namespace MonkeyPaste.Avalonia {
         private void Transactions_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             OnPropertyChanged(nameof(Transactions));
             OnPropertyChanged(nameof(SortedTransactions));
+            OnPropertyChanged(nameof(VisibleTransactions));
             OnPropertyChanged(nameof(IsAnyAnalysisTransaction));
         }
         private void SetTransactionViewGridLength(GridLength gl) {
@@ -358,10 +378,6 @@ namespace MonkeyPaste.Avalonia {
                 MpAvMenuExtension.ShowMenu(control, ContextMenuViewModel);
             });
 
-        public ICommand FilterByPrimarySourceCommand => new MpCommand(
-            () => {
-
-            });
         public MpIAsyncCommand<object> OpenTransactionPaneCommand => new MpAsyncCommand<object>(
             async (args) => {
                 Dispatcher.UIThread.VerifyAccess();
@@ -391,7 +407,7 @@ namespace MonkeyPaste.Avalonia {
                 // only wait for executeAsync calls
                 return;
             }, (args) => {
-                return Parent != null && !IsTransactionPaneOpen;
+                return Parent != null && !IsTransactionPaneOpen && VisibleTransactions.Any();
             });
 
         public MpIAsyncCommand CloseTransactionPaneCommand => new MpAsyncCommand(

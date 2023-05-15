@@ -99,7 +99,7 @@ namespace MonkeyPaste.Avalonia {
                     transType = MpTransactionType.Recreated;
                 }
             }
-            List<string> ref_urls = refs.Select(x => Mp.Services.SourceRefTools.ConvertToRefUrl(x)).ToList();
+            List<string> ref_urls = refs.Select(x => Mp.Services.SourceRefTools.ConvertToInternalUrl(x)).ToList();
             if (mpdo.TryGetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, out IEnumerable<string> urls)) {
                 var urlList = urls.ToList();
                 for (int i = 0; i < ref_urls.Count; i++) {

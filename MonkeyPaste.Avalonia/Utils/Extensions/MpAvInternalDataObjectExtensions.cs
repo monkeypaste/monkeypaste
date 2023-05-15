@@ -118,7 +118,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             // always add copyItem uri
-            ido.AddOrCreateUri(Mp.Services.SourceRefTools.ConvertToRefUrl(ci));
+            ido.AddOrCreateUri(Mp.Services.SourceRefTools.ConvertToInternalUrl(ci));
 
             if (!isFullContentReference) {
                 ido.Set(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT, ci.PublicHandle);
@@ -158,7 +158,7 @@ namespace MonkeyPaste.Avalonia {
                 if (drag_ctvm != null) {
                     // tile sub-selection drop
 
-                    mpdo.SetData(MpPortableDataFormats.LinuxUriList, new string[] { Mp.Services.SourceRefTools.ConvertToRefUrl(drag_ctvm.CopyItem) });
+                    mpdo.SetData(MpPortableDataFormats.LinuxUriList, new string[] { Mp.Services.SourceRefTools.ConvertToInternalUrl(drag_ctvm.CopyItem) });
                 }
             }
 

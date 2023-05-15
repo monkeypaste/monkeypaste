@@ -559,6 +559,62 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
+        public virtual bool CanExecuteAnalysis(object args) {
+            CurrentExecuteArgs = args;
+            if (IsBusy && (SelectedItem == null || !SelectedItem.IsExecuting)) {
+                return false;
+            }
+            CannotExecuteTooltip = string.Empty;
+
+            MpAvAnalyticItemPresetViewModel spvm = null;
+            MpCopyItem sci = null;
+            string sstr = null;
+            if (args == null) {
+                // analyzer request from MpAvClipTrayViewModel.Instance.AnalyzeSelectedItemCommand
+
+                spvm = SelectedItem;
+                if (MpAvClipTrayViewModel.Instance.SelectedItem != null) {
+                    sci = MpAvClipTrayViewModel.Instance.SelectedItem.CopyItem;
+                }
+            } else if (args is MpAvAnalyticItemPresetViewModel) {
+                // analyzer request from MpAnalyticItemPresetDataGridView
+
+                if (MpAvClipTrayViewModel.Instance.SelectedItem == null) {
+                    return false;
+                }
+                spvm = args as MpAvAnalyticItemPresetViewModel;
+                sci = MpAvClipTrayViewModel.Instance.SelectedItem.CopyItem;
+            } else if (args is object[] argParts) {
+                // analyzer request from MpAnalyzerActionViewModel
+
+                spvm = argParts[0] as MpAvAnalyticItemPresetViewModel;
+                sci = argParts[1] as MpCopyItem;
+                if (sci == null) {
+                    sstr = argParts[1] as string;
+                }
+            }
+
+            if ((sci == null && sstr == null) || spvm == null) {
+                return false;
+            }
+            bool isOkType = true;
+            if (sci != null) {
+                isOkType = IsContentTypeValid(sci.ItemType);
+            } else {
+                isOkType = IsContentTypeValid(MpCopyItemType.Text);
+            }
+
+            var sb = new StringBuilder();
+            if (!isOkType) {
+                sb.AppendLine($"{SelectedItem.FullName} only accepts input of type(s): {InputFormatFlags}");
+            }
+            spvm.FormItems.ForEach(x => x.Validate());
+            spvm.FormItems.Where(x => !x.IsValid).ForEach(x => sb.AppendLine(x.ValidationMessage));
+
+            CannotExecuteTooltip = sb.ToString().Trim();
+
+            return string.IsNullOrEmpty(CannotExecuteTooltip);
+        }
 
         public ICommand ExecuteAnalysisCommand => new MpAsyncCommand<object>(
             async (args) => {
@@ -634,8 +690,6 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
 
-
-
                 MpPluginTransactionBase result = await MpPluginTransactor.PerformTransactionAsync(
                                            PluginFormat,
                                            PluginComponent,
@@ -680,71 +734,30 @@ namespace MonkeyPaste.Avalonia {
                 IsBusy = false;
             }, (args) => CanExecuteAnalysis(args));
 
-        public virtual bool CanExecuteAnalysis(object args) {
-            CurrentExecuteArgs = args;
-            if (IsBusy && (SelectedItem == null || !SelectedItem.IsExecuting)) {
-                return false;
-            }
-            CannotExecuteTooltip = string.Empty;
 
-            MpAvAnalyticItemPresetViewModel spvm = null;
-            MpCopyItem sci = null;
-            string sstr = null;
-            if (args == null) {
-                // analyzer request from MpAvClipTrayViewModel.Instance.AnalyzeSelectedItemCommand
+        public ICommand SelectPresetCommand => new MpCommand<object>(
+             (args) => {
+                 MpAvAnalyticItemPresetViewModel preset_to_select = null;
+                 if (args is MpAvAnalyticItemPresetViewModel) {
+                     preset_to_select = args as MpAvAnalyticItemPresetViewModel;
+                 } else if (args is object[] argParts) {
+                     // select from tile transaction context menu
 
-                spvm = SelectedItem;
-                if (MpAvClipTrayViewModel.Instance.SelectedItem != null) {
-                    sci = MpAvClipTrayViewModel.Instance.SelectedItem.CopyItem;
-                }
-            } else if (args is MpAvAnalyticItemPresetViewModel) {
-                // analyzer request from MpAnalyticItemPresetDataGridView
-
-                if (MpAvClipTrayViewModel.Instance.SelectedItem == null) {
-                    return false;
-                }
-                spvm = args as MpAvAnalyticItemPresetViewModel;
-                sci = MpAvClipTrayViewModel.Instance.SelectedItem.CopyItem;
-            } else if (args is object[] argParts) {
-                // analyzer request from MpAnalyzerActionViewModel
-
-                spvm = argParts[0] as MpAvAnalyticItemPresetViewModel;
-                sci = argParts[1] as MpCopyItem;
-                if (sci == null) {
-                    sstr = argParts[1] as string;
-                }
-            }
-
-            if ((sci == null && sstr == null) || spvm == null) {
-                return false;
-            }
-            bool isOkType = true;
-            if (sci != null) {
-                isOkType = IsContentTypeValid(sci.ItemType);
-            } else {
-                isOkType = IsContentTypeValid(MpCopyItemType.Text);
-            }
-
-            var sb = new StringBuilder();
-            if (!isOkType) {
-                sb.AppendLine($"{SelectedItem.FullName} only accepts input of type(s): {InputFormatFlags}");
-            }
-            spvm.FormItems.ForEach(x => x.Validate());
-            spvm.FormItems.Where(x => !x.IsValid).ForEach(x => sb.AppendLine(x.ValidationMessage));
-
-            CannotExecuteTooltip = sb.ToString().Trim();
-
-            return string.IsNullOrEmpty(CannotExecuteTooltip);
-        }
-        public ICommand SelectPresetCommand => new MpCommand<MpAvAnalyticItemPresetViewModel>(
-             (selectedPresetVm) => {
-                 //if(!IsLoaded) {
-                 //    await LoadChildren();
-                 //}
-                 if (!IsSelected) {
-                     Parent.SelectedItem = this;
+                     preset_to_select = argParts[0] as MpAvAnalyticItemPresetViewModel;
+                     if (argParts[1] is MpPluginParameterRequestFormat prf) {
+                         // apply provided parameter configuration to preset
+                         foreach (var ppri in prf.items) {
+                             if (preset_to_select.Items.FirstOrDefault(x => x.ParamId.ToString() == ppri.paramId.ToString()) is MpAvParameterViewModelBase pvm) {
+                                 pvm.CurrentValue = ppri.value;
+                             }
+                         }
+                     }
                  }
-                 SelectedItem = selectedPresetVm;
+                 SelectedItem = preset_to_select;
+                 if (!IsSelected && preset_to_select != null) {
+                     Parent.SelectedItem = this;
+                     MpAvSidebarItemCollectionViewModel.Instance.SelectSidebarItemCommand.Execute(Parent);
+                 }
              });
 
         public ICommand ManageAnalyticItemCommand => new MpCommand(
@@ -755,9 +768,6 @@ namespace MonkeyPaste.Avalonia {
                  if (SelectedItem == null && Items.Count > 0) {
                      SelectedItem = Items.Aggregate((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
                  }
-                 //if(!Parent.IsSidebarVisible) {
-                 //    Parent.IsSidebarVisible = true;
-                 //}
                  MpAvSidebarItemCollectionViewModel.Instance.SelectSidebarItemCommand.Execute(Parent);
                  OnPropertyChanged(nameof(SelectedItem));
 
@@ -949,7 +959,6 @@ namespace MonkeyPaste.Avalonia {
 
                     IsBusy = false;
                 });
-
 
         #endregion
     }

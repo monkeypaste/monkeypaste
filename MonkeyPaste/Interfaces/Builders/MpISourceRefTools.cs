@@ -11,9 +11,12 @@ namespace MonkeyPaste {
         string ParseRefArgs(string ref_url);
         Task<IEnumerable<MpISourceRef>> GatherSourceRefsAsync(object mpOrAvDataObj, bool forceExtSources = false);
         bool IsAnySourceRejected(IEnumerable<MpISourceRef> refs);
-        string ConvertToRefUrl(MpISourceRef sr);
+        string ConvertToInternalUrl(MpISourceRef sr);
+        string ConvertToAbsolutePath(MpISourceRef sr);
         byte[] ToUrlAsciiBytes(MpISourceRef sr);
 
         Tuple<MpTransactionSourceType, int> ParseUriForSourceRef(string uri);
+        bool IsExternalSource(MpISourceRef sr);
+        bool IsSourceRejected(MpISourceRef sr);
     }
 }

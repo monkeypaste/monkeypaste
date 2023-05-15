@@ -168,7 +168,7 @@ namespace MonkeyPaste {
                         respType: MpJsonMessageFormatType.Error,
                         resp: ex.Message,
                         ref_uris: new[] {
-                            Mp.Services.SourceRefTools.ConvertToRefUrl(pp)//, trans.Request.SerializeJsonObjectToBase64())
+                            Mp.Services.SourceRefTools.ConvertToInternalUrl(pp)//, trans.Request.SerializeJsonObjectToBase64())
                         },
                         transType: MpTransactionType.Error).FireAndForgetSafeAsync();
 

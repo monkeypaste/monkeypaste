@@ -163,7 +163,7 @@
                  Grid.Row="1"
                  BorderBrush="Black"
                  BorderThickness="1"
-                 ItemsSource="{Binding SortedTransactions}"
+                 ItemsSource="{Binding VisibleTransactions}"
                  SelectionMode="Single,AlwaysSelected"
                  SelectedItem="{Binding SelectedTransaction, Mode=TwoWay}"
                  HorizontalAlignment="Stretch"
@@ -229,8 +229,7 @@
                   DataContext="{Binding SelectedTransaction}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto"
-                                   MaxHeight="40" />
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <!--  PLAIN TEXT VIEW  -->
                 <TextBox Grid.Row="0"
@@ -291,7 +290,7 @@
                 <!--  SELECTED/DETAIL SPLITTER  -->
                 <GridSplitter x:Name="TransactionDetailSplitter"
                               Grid.Row="1"
-                              Height="2.5"
+                              Height="1"
                               Background="Black"
                               Classes.desktop="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                               HorizontalAlignment="Stretch"

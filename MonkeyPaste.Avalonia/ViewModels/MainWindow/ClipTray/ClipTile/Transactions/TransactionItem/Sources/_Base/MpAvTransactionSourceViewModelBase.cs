@@ -55,34 +55,48 @@ namespace MonkeyPaste.Avalonia {
         public MpMenuItemViewModel ContextMenuItemViewModel {
             get {
                 if (TransactionSource == null) {
-                    return new MpMenuItemViewModel();
+                    return null;
                 }
-                return new MpMenuItemViewModel() {
+                var mivm = new MpMenuItemViewModel() {
                     IconSourceObj = IconSourceObj,
                     Header = SourceLabel,
                     SubItems = new List<MpMenuItemViewModel>() {
                         new MpMenuItemViewModel() {
-                                    Header = $"Filter by '{SourceLabel}'",
-                                    AltNavIdx = 0,
-                                    IconResourceKey = "FilterImage",
-                                    Command = EnableFilterByAppCommand
-                                },
-                        new MpMenuItemViewModel() {
-                                    Header = $"Exclude '{SourceLabel}'",
-                                    AltNavIdx = 0,
-                                    IconResourceKey = "NoEntryImage",
-                                    Command = ExcludeSourceCommand
-                                },
-                        new MpMenuItemViewModel() {IsSeparator = true},
-                        new MpMenuItemViewModel() {
-                            Header = $"Goto '{SourceUri}'",
+                            Header = $"Browse to '{SourceLabel}'",
+                            IconResourceKey = IsExternalSource ? SourceUri.StartsWith("http") ? "WebImage":"FolderImage" : "NewWindowImage",
                             AltNavIdx = 5,
-                            IconResourceKey = "Execute",
-                            Command = MpAvUriNavigator.Instance.NavigateToUriCommand,
-                            CommandParameter = SourceUri
+                            Command = MpAvUriNavigator.Instance.NavigateToSourceRefCommand,
+                            CommandParameter = SourceRef
                         }
                     }
                 };
+                if (IsExternalSource) {
+                    mivm.SubItems.AddRange(new List<MpMenuItemViewModel>() {
+                        //new MpMenuItemViewModel() {
+                        //            Header = $"Filter by '{SourceLabel}'",
+                        //            AltNavIdx = 0,
+                        //            IconResourceKey = "FilterImage",
+                        //            Command = EnableFilterByAppCommand
+                        //        },
+                        //new MpMenuItemViewModel() {
+                        //            Header = SourceRef is MpUrl ? $"Filter by '{(SourceRef as MpUrl).UrlDomainPath}'":string.Empty,
+                        //            IsVisible = SourceRef is MpUrl,
+                        //            AltNavIdx = 0,
+                        //            IconResourceKey = "FilterImage",
+                        //            Command = EnableFilterByAppCommand,
+                        //            CommandParameter = "DOMAIN"
+                        //        },
+                        new MpMenuItemViewModel() {IsSeparator = true},
+                        new MpMenuItemViewModel() {
+                                    Header = $"{(IsSourceRejected ? "Un-reject":"Reject")} '{SourceLabel}'",
+                                    AltNavIdx = 0,
+                                    IconResourceKey = IsSourceRejected ? "AddImage" : "NoEntryImage",
+                                    Command = ExcludeSourceCommand
+                                },
+
+                    });
+                }
+                return mivm;
             }
         }
 
@@ -134,7 +148,14 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
+
         public DateTime LastSelectedDateTime { get; set; }
+
+        public bool IsSourceRejected =>
+            Mp.Services.SourceRefTools.IsSourceRejected(SourceRef);
+
+        public bool IsExternalSource =>
+            Mp.Services.SourceRefTools.IsExternalSource(SourceRef);
 
         #endregion
 
@@ -157,7 +178,7 @@ namespace MonkeyPaste.Avalonia {
                     return uris.Uri;
                 } else if (SourceRef != null) {
                     // for copyitem's use localhost handle
-                    return Mp.Services.SourceRefTools.ConvertToRefUrl(SourceRef);
+                    return Mp.Services.SourceRefTools.ConvertToInternalUrl(SourceRef);
                 }
                 return string.Empty;
             }
@@ -273,24 +294,25 @@ namespace MonkeyPaste.Avalonia {
                 //MpClipTrayViewModel.Instance.FilterByAppIcon = ctvm.CopyItem.Source.PrimarySource.SourceIcon.IconImage.ImageBase64.ToBitmapSource();
                 //IsFilteringByApp = true;
             });
-        public ICommand ExcludeSourceCommand => new MpCommand(
-             () => {
-                 //var avm = MpAvAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppId == SelectedItem.AppViewModel.AppId);
-                 //if (avm == null) {
-                 //    return;
-                 //}
-                 //await avm.RejectApp();
+        public ICommand ExcludeSourceCommand => new MpCommand<object>(
+             (args) => {
+                 if (SourceRef is MpApp app &&
+                    MpAvAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppId == app.Id) is MpAvAppViewModel avm) {
+                     MpAvAppCollectionViewModel.Instance.ToggleIsRejectedCommand.Execute(avm);
+                     return;
+                 }
+                 if (SourceRef is MpUrl url &&
+                    MpAvUrlCollectionViewModel.Instance.Items.FirstOrDefault(x => x.UrlId == url.Id) is MpAvUrlViewModel uvm) {
+                     if (args != null) {
+                         // domain reject
+                         uvm.ToggleIsDomainRejectedCommand.Execute(null);
+                     } else {
+                         uvm.ToggleIsRejectedCommand.Execute(null);
+                     }
+                     return;
+                 }
              });
 
-        public ICommand ExcludeSubSelectedItemUrlDomainCommand => new MpCommand(
-            () => {
-                //var uvm = MpAvUrlCollectionViewModel.Instance.Items.FirstOrDefault(x => x.UrlId == SelectedItem.UrlViewModel.UrlId);
-                //if (uvm == null) {
-                //    MpConsole.WriteTraceLine("Error cannot find url id: " + SelectedItem.UrlViewModel.UrlId);
-                //    return;
-                //}
-                //await uvm.RejectUrlOrDomain(true);
-            });
 
         #endregion
     }

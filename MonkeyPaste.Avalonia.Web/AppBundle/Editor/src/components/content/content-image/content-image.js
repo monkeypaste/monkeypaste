@@ -28,7 +28,7 @@ function loadImageContent(itemDataStr) {
 	//let img_html = `<p class="ql-align-center"><img src="data:image/png;base64,${itemDataStr}"></p>`;
 	//setRootHtml(img_html);
 	setRootHtml('');
-	getEditorElement().appendChild(p);
+	getEditorElement().replaceChild(p, getEditorElement().firstChild);
 
 	ContentClassAttrb.add(getEditorElement().firstChild.firstChild, 'image');
 	updateImageContentSizeAndPosition();

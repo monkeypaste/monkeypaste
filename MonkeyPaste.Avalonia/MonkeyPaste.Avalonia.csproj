@@ -353,6 +353,7 @@
     <None Remove="Assets\Images\noentry.png" />
     <None Remove="Assets\Images\noneclick.png" />
     <None Remove="Assets\Images\object.png" />
+    <None Remove="Assets\Images\open.png" />
     <None Remove="Assets\Images\paste.png" />
     <None Remove="Assets\Images\pause.png" />
     <None Remove="Assets\Images\pin.png" />
@@ -513,6 +514,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\object.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\open.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\plaintext.png">

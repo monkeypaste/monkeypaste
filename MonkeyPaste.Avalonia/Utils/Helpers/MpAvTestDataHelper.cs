@@ -20,7 +20,7 @@ namespace MonkeyPaste.Avalonia {
             };
 
             var thisApp = await MpDataModelProvider.GetItemAsync<MpApp>(MpDefaultDataModelTools.ThisAppId);
-            var thisAppRef = Mp.Services.SourceRefTools.ConvertToRefUrl(thisApp);
+            var thisAppRef = Mp.Services.SourceRefTools.ConvertToInternalUrl(thisApp);
 
             var hci_idl = new List<int>();
             foreach (var hcd in helpContentDefinitions) {

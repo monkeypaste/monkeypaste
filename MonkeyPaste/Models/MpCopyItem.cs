@@ -94,7 +94,7 @@ namespace MonkeyPaste {
         }
 
         [Ignore]
-        public string ItemRefUrl => Mp.Services.SourceRefTools.ConvertToRefUrl(this);
+        public string ItemRefUrl => Mp.Services.SourceRefTools.ConvertToInternalUrl(this);
 
         #endregion
 
@@ -116,7 +116,7 @@ namespace MonkeyPaste {
 
 
         public object IconResourceObj => IconId;
-        public string Uri => Mp.Services.SourceRefTools.ConvertToRefUrl(this);
+        public string Uri => Mp.Services.SourceRefTools.ConvertToInternalUrl(this);
         #endregion
 
         #region  Implementation

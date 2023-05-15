@@ -1,6 +1,8 @@
 ﻿using MonkeyPaste.Common;
 using System;
 using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
@@ -44,7 +46,6 @@ namespace MonkeyPaste.Avalonia {
                 NavigateToPath(uri.LocalPath);
                 return;
             }
-
 
             if (OperatingSystem.IsWindows()) {
                 Process.Start("explorer.exe", uri.AbsoluteUri);
@@ -103,6 +104,50 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
                 NavigateToUri(uri);
+            });
+
+        public ICommand NavigateToSourceRefCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                MpISourceRef sr = args as MpISourceRef;
+                if (sr == null) {
+                    return;
+                }
+                if (Mp.Services.SourceRefTools.IsExternalSource(sr)) {
+                    NavigateToUriCommand.Execute(Mp.Services.SourceRefTools.ConvertToAbsolutePath(sr));
+                    return;
+                }
+                if (sr is MpCopyItem ci) {
+                    MpAvClipTileViewModel nav_to_ctvm =
+                        MpAvClipTrayViewModel.Instance
+                        .AllActiveItems
+                        .FirstOrDefault(x => x.CopyItemId == ci.Id);
+                    if (nav_to_ctvm == null) {
+                        nav_to_ctvm = await MpAvClipTrayViewModel.Instance.CreateClipTileViewModelAsync(ci);
+                    }
+
+                    if (nav_to_ctvm == null) {
+                        return;
+                    }
+                    if (nav_to_ctvm.IsChildWindowOpen &&
+                    MpAvWindowManager.AllWindows.FirstOrDefault(x => x.DataContext == nav_to_ctvm) is MpAvWindow w) {
+                        w.Activate();
+                    } else {
+
+                        MpAvClipTrayViewModel.Instance.PinTileCommand.Execute(new object[] { nav_to_ctvm, MpPinType.Window });
+                    }
+                    return;
+                }
+                if (sr is MpPluginPreset pp) {
+                    var nav_to_aipvm =
+                        MpAvAnalyticItemCollectionViewModel.Instance
+                        .AllPresets
+                        .FirstOrDefault(x => x.AnalyticItemPresetId == pp.Id);
+                    if (nav_to_aipvm == null) {
+                        return;
+                    }
+                    nav_to_aipvm.Parent.SelectPresetCommand.Execute(nav_to_aipvm);
+                    return;
+                }
             });
         #endregion
 

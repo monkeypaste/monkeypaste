@@ -45,10 +45,10 @@ namespace MonkeyPaste {
             var outputType = pluginFormat.analyzer.outputType;
             List<string> ref_urls = new List<string>();
 
-            string source_url_ref = Mp.Services.SourceRefTools.ConvertToRefUrl(sourceCopyItem);
+            string source_url_ref = Mp.Services.SourceRefTools.ConvertToInternalUrl(sourceCopyItem);
 
             var plugin_source_ref = sourceHandler as MpISourceRef;
-            string plugin_param_req_ref_url = Mp.Services.SourceRefTools.ConvertToRefUrl(
+            string plugin_param_req_ref_url = Mp.Services.SourceRefTools.ConvertToInternalUrl(
                 plugin_source_ref);//, trans.Request.SerializeJsonObjectToBase64());
 
 

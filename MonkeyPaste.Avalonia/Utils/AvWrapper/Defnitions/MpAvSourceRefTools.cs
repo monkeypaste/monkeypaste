@@ -12,6 +12,24 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvSourceRefTools : MpISourceRefTools {
         public const string INTERNAL_SOURCE_DOMAIN = "https://localhost";
 
+        public bool IsExternalSource(MpISourceRef sr) {
+            if (sr is MpApp app) {
+                return app.Id != MpDefaultDataModelTools.ThisAppId;
+            }
+            if (sr is MpUrl url) {
+                return !url.UrlPath.StartsWith(MpAvSourceRefTools.INTERNAL_SOURCE_DOMAIN);
+            }
+            return false;
+        }
+        public bool IsSourceRejected(MpISourceRef sr) {
+            if (sr is MpApp app) {
+                return app.IsAppRejected;
+            }
+            if (sr is MpUrl url) {
+                return url.IsDomainRejected || url.IsUrlRejected;
+            }
+            return false;
+        }
         public async Task<MpISourceRef> FetchOrCreateSourceAsync(string sourceUrl) {
             if (Uri.IsWellFormedUriString(sourceUrl, UriKind.Absolute)) {
                 if (Uri.TryCreate(sourceUrl, UriKind.Absolute, out Uri uri) && uri.IsFile) {
@@ -214,10 +232,18 @@ namespace MonkeyPaste.Avalonia {
             return false;
         }
 
-        public string ConvertToRefUrl(MpISourceRef sr) {
+        public string ConvertToInternalUrl(MpISourceRef sr) {
             return $"{INTERNAL_SOURCE_DOMAIN}?type={sr.SourceType.ToString()}&id={sr.SourceObjId}";
         }
-
+        public string ConvertToAbsolutePath(MpISourceRef sr) {
+            if (sr is MpApp app) {
+                return app.AppPath;
+            }
+            if (sr is MpUrl url) {
+                return url.UrlPath;
+            }
+            return ConvertToInternalUrl(sr);
+        }
         public string ParseRefArgs(string ref_url) {
             if (string.IsNullOrEmpty(ref_url)) {
                 return null;
@@ -232,7 +258,7 @@ namespace MonkeyPaste.Avalonia {
         }
         public byte[] ToUrlAsciiBytes(MpISourceRef sr) {
             // for clipboard storage as CefAsciiBytes format
-            return ConvertToRefUrl(sr).ToBytesFromString(Encoding.ASCII);
+            return ConvertToInternalUrl(sr).ToBytesFromString(Encoding.ASCII);
         }
 
 

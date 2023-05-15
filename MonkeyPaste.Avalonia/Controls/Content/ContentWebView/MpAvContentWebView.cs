@@ -1314,7 +1314,7 @@ namespace MonkeyPaste.Avalonia {
             IEnumerable<string> refs = null;
             if (req_mpdo != null) {
                 var other_refs = await Mp.Services.SourceRefTools.GatherSourceRefsAsync(req_mpdo);
-                refs = other_refs.Select(x => Mp.Services.SourceRefTools.ConvertToRefUrl(x));
+                refs = other_refs.Select(x => Mp.Services.SourceRefTools.ConvertToInternalUrl(x));
             }
 
             if (transType == MpTransactionType.None) {

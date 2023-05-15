@@ -142,9 +142,9 @@ namespace MonkeyPaste.Avalonia {
                 //if(SelectedItem.IsTableSelected) {
                 //    return SelectedItem.TableViewModel.ContextMenuViewModel;
                 //}
-                if (SelectedItem.IsHoveringOverSourceIcon) {
-                    return SelectedItem.TransactionCollectionViewModel.ContextMenuViewModel;
-                }
+                //if (SelectedItem.IsHoveringOverSourceIcon) {
+                //    return SelectedItem.TransactionCollectionViewModel.ContextMenuViewModel;
+                //}
                 if (MpAvTagTrayViewModel.Instance.IsAnyBusy) {
                     Debugger.Break();
                 }
@@ -290,7 +290,9 @@ namespace MonkeyPaste.Avalonia {
                                 }
                             }
                         },
-                        //SelectedItem.TransactionCollectionViewModel.ContextMenuViewModel,
+                        new MpMenuItemViewModel() {IsSeparator = true},
+                        SelectedItem.TransactionCollectionViewModel.ContextMenuViewModel,
+                        new MpMenuItemViewModel() {IsSeparator = true},
                         MpAvAnalyticItemCollectionViewModel.Instance.GetContentContextMenuItem(SelectedItem.CopyItemType),
                         new MpMenuItemViewModel() {IsSeparator = true},
                         MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(SelectedItem),
@@ -1813,7 +1815,7 @@ namespace MonkeyPaste.Avalonia {
                 // we're f'd
                 Debugger.Break();
             } else {
-                pasted_app_url = Mp.Services.SourceRefTools.ConvertToRefUrl(avm.App);
+                pasted_app_url = Mp.Services.SourceRefTools.ConvertToInternalUrl(avm.App);
             }
             if (string.IsNullOrEmpty(pasted_app_url)) {
                 // f'd
@@ -2781,12 +2783,17 @@ namespace MonkeyPaste.Avalonia {
                      // pinning new or query tray tile from overlay button
                      ctvm_to_pin = args as MpAvClipTileViewModel;
                  } else if (args is object[] argParts) {
-                     // dnd pin tray drop 
+                     // dnd pin tray drop or pop out
                      ctvm_to_pin = argParts[0] as MpAvClipTileViewModel;
                      if (argParts[1] is int) {
                          pin_idx = (int)argParts[1];
                      } else {
                          pinType = (MpPinType)argParts[1];
+                         int cur_pin_idx = PinnedItems.IndexOf(ctvm_to_pin);
+                         if (cur_pin_idx >= 0) {
+                             // for pop out of already existing items retain current idx
+                             pin_idx = cur_pin_idx;
+                         }
                      }
                      if (pinType == MpPinType.Append) {
                          if (argParts.Length <= 2) {
@@ -2837,7 +2844,10 @@ namespace MonkeyPaste.Avalonia {
                  }
 
                  if (pinType == MpPinType.Window || pinType == MpPinType.Append) {
-                     ctvm_to_pin.OpenPopOutWindow(pinType == MpPinType.Window ? MpAppendModeType.None : appendType);
+                     ctvm_to_pin.OpenPopOutWindow(
+                         pinType == MpPinType.Window ?
+                            MpAppendModeType.None :
+                            appendType);
                  }
 
                  OnPropertyChanged(nameof(IsAnyTilePinned));

@@ -228,7 +228,7 @@
                     Classes="noBg noHoverBg"
                     Classes.shakeOnce="{Binding DoShake}"
                     Width="{Binding Bounds.Height, ElementName=TitleContainerGrid}"
-                    Command="{Binding ToggleTransactionPaneOpenCommand}"
+                    Command="{Binding OpenTransactionPaneCommand}"
                     ClipToBounds="False"
                     BorderThickness="0"
                     HorizontalAlignment="Stretch"
