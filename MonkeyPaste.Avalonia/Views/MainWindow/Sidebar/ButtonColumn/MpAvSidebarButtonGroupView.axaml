@@ -97,7 +97,7 @@
                     Value="{DynamicResource HoverSelectedBorderBrush}" />
         </Style>
 
-        <Style Selector="RadioButton#AppModeToggleButton">
+        <Style Selector="RadioButton#AppModeToggleButton, RadioButton#AppModeToggleButton:unchecked, RadioButton#AppModeToggleButton:not(.mouseMode)">
             <Setter Property="local:MpAvImageTintExtension.Tint"
                     Value="{DynamicResource DefaultButtonBrush}" />
         </Style>
@@ -195,8 +195,9 @@
                 <local:MpAvToolTipView ToolTipText="Clipboard Modes" />
             </ToolTip.Tip>
             <RadioButton.Flyout>
-                <Flyout Opening="Fo_Opening"
-                        Placement="AnchorAndGravity">
+                <Flyout Placement="{Binding MouseModeFlyoutPlacement, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
+                        HorizontalOffset="{Binding MouseModeHorizontalOffset, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
+                        VerticalOffset="{Binding MouseModeVerticalOffset, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}">
                     <Panel>
                         <local:MpAvAppModeFlyoutView HorizontalAlignment="Stretch"
                                                      VerticalAlignment="Stretch" />

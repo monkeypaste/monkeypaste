@@ -44,42 +44,42 @@ namespace MonkeyPaste.Avalonia {
 
         private void BindingContext_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             // BUG workaround for not being able to bind to row definition w/o getting binding null warning
-            switch (e.PropertyName) {
-                case nameof(BindingContext.IsHovering):
-                    if (!TestDcMismatchByHover()) {
-                        if (BindingContext.IsChildWindowOpen ||
-                            BindingContext.WasCloseAppendWindowConfirmed) {
-                            break;
-                        }
-                        // dc mismatch
-                        Debugger.Break();
-                        Fix();
-                    }
-                    break;
-                case nameof(BindingContext.IsHeaderAndFooterVisible):
-                case nameof(BindingContext.IsTitleVisible):
-                case nameof(BindingContext.IsDetailVisible):
-                    if (BindingContext.IsChildWindowOpen) {
-                        //return;
-                    }
-                    var tg = this.FindControl<Grid>("TileGrid");
-                    if (tg == null) {
-                        return;
-                    }
-                    string rd = "0.25*,*,20";
-                    if (BindingContext.IsTitleVisible && BindingContext.IsDetailVisible) {
+            //switch (e.PropertyName) {
+            //    case nameof(BindingContext.IsHovering):
+            //        if (!TestDcMismatchByHover()) {
+            //            if (BindingContext.IsChildWindowOpen ||
+            //                BindingContext.WasCloseAppendWindowConfirmed) {
+            //                break;
+            //            }
+            //            // dc mismatch
+            //            Debugger.Break();
+            //            Fix();
+            //        }
+            //        break;
+            //    case nameof(BindingContext.IsHeaderAndFooterVisible):
+            //    case nameof(BindingContext.IsTitleVisible):
+            //    case nameof(BindingContext.IsDetailVisible):
+            //        if (BindingContext.IsChildWindowOpen) {
+            //            //return;
+            //        }
+            //        var tg = this.FindControl<Grid>("TileGrid");
+            //        if (tg == null) {
+            //            return;
+            //        }
+            //        string rd = "0.25*,*,20";
+            //        if (BindingContext.IsTitleVisible && BindingContext.IsDetailVisible) {
 
-                    } else if (BindingContext.IsTitleVisible) {
-                        rd = "0.25*,*,0";
-                    } else if (BindingContext.IsDetailVisible) {
-                        rd = "0,*,20";
-                    } else {
-                        rd = "0,*,0";
-                    }
-                    tg.RowDefinitions = new RowDefinitions(rd);
-                    tg.RowDefinitions[0].MaxHeight = 40.0d;
-                    break;
-            }
+            //        } else if (BindingContext.IsTitleVisible) {
+            //            rd = "0.25*,*,0";
+            //        } else if (BindingContext.IsDetailVisible) {
+            //            rd = "0,*,20";
+            //        } else {
+            //            rd = "0,*,0";
+            //        }
+            //        tg.RowDefinitions = new RowDefinitions(rd);
+            //        tg.RowDefinitions[0].MaxHeight = 40.0d;
+            //        break;
+            //}
         }
 
         private bool TestDcMismatchByHover() {

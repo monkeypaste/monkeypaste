@@ -1,16 +1,18 @@
 ﻿using MonkeyPaste.Common.Plugin;
 using System;
 using System.Threading.Tasks;
-using Xamarin.Essentials;
+//using Xamarin.Essentials;
 
 namespace CoreShare {
     public class CoreShare : MpIAnalyzeAsyncComponent, MpIRequirePlatformInitialization {
         public async Task<MpAnalyzerPluginResponseFormat> AnalyzeAsync(MpAnalyzerPluginRequestFormat req) {
-            string data_to_share = req.GetRequestParamStringValue(1);
-            await Share.RequestAsync(new ShareTextRequest {
-                Text = data_to_share,
-                Title = "Share Text"
-            });
+            //string data_to_share = req.GetRequestParamStringValue(1);
+            //await Share.RequestAsync(new ShareTextRequest {
+            //    Text = data_to_share,
+            //    Title = "Share Text"
+            //});
+
+            await Task.Delay(5_000);
             return new MpAnalyzerPluginResponseFormat();
         }
 

@@ -48,14 +48,6 @@
 
     </local:MpAvUserControl.Styles>
     <!--  OUTER BORDER  -->
-    <!--
-        local:MpAvMenuExtension.IsEnabled="True"
-        local:MpAvMenuExtension.CanShowMenu="{Binding CanShowContextMenu, Mode=OneWay}"
-        local:MpAvMenuExtension.SuppressDefaultRightClick="True"
-        local:MpAvMenuExtension.SelectOnRightClick="True"
-    -->
-    <!--
-    -->
     <local:MpAvClipBorder x:Name="ClipTileContainerBorder"
                           ClipToBounds="True"
                           HorizontalAlignment="Stretch"
@@ -85,10 +77,11 @@
               VerticalAlignment="Stretch"
               ColumnDefinitions="*,Auto">
             <Grid.RowDefinitions>
-                <RowDefinition Height="0.25*"
+                <RowDefinition Height="Auto"
                                MaxHeight="40" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="25" />
+                <RowDefinition Height="Auto"
+                               MaxHeight="25"/>
             </Grid.RowDefinitions>
 
             <!--  Title  -->
@@ -97,7 +90,7 @@
                                          Grid.Row="0"
                                          MaxHeight="40"
                                          HorizontalAlignment="Stretch"
-                                         VerticalAlignment="Top"
+                                         VerticalAlignment="Stretch"
                                          IsVisible="{Binding IsTitleVisible}" />
 
             <!--  Content  -->
@@ -125,6 +118,7 @@
             <!--  Detail  -->
             <Grid x:Name="DetailContainerGrid"
                   Grid.Row="2"
+                  Height="25"
                   Classes.subselect="{Binding IsSubSelectionEnabled}"
                   IsVisible="{Binding IsCornerButtonsVisible}"
                   local:MpAvIsHoveringExtension.IsEnabled="True"

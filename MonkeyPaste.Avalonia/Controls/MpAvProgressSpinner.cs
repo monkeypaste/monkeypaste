@@ -73,6 +73,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+
         #region ZeroAngle AvaloniaProperty
         private double _ZeroAngle = 0;
         public double ZeroAngle {
@@ -129,6 +130,23 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region LabelBrush AvaloniaProperty
+        private IBrush _LabelBrush = Brushes.Black;
+        public IBrush LabelBrush {
+            get => _LabelBrush;
+            set => SetAndRaise(LabelBrushProperty, ref _LabelBrush, value);
+        }
+
+        public static readonly DirectProperty<MpAvProgressSpinner, IBrush> LabelBrushProperty =
+            AvaloniaProperty.RegisterDirect<MpAvProgressSpinner, IBrush>
+            (
+                nameof(LabelBrush),
+                o => o.LabelBrush,
+                (o, v) => o.LabelBrush = v,
+                Brushes.Black
+            );
+
+        #endregion
         #endregion
 
         #region Constructors
@@ -188,7 +206,7 @@ namespace MonkeyPaste.Avalonia {
             double fs = Math.Max(7, d / (double)percent_label.Length);
             var ft = percent_label.ToFormattedText(
                     fontSize: fs,
-                    foreground: Brushes.Black,
+                    foreground: LabelBrush,
                     textAlignment: TextAlignment.Center);
             var tl = c.ToPortablePoint() - (new MpPoint(ft.Width, ft.Height) * 0.5);
             context.DrawText(

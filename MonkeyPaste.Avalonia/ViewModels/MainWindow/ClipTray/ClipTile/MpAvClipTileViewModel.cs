@@ -40,8 +40,7 @@ namespace MonkeyPaste.Avalonia {
         MpITextContentViewModel,
         MpIAppendTitleViewModel,
         MpIContextMenuViewModel,
-        MpITooltipInfoViewModel,
-        MpISizeViewModel {
+        MpITooltipInfoViewModel {
 
         #region Private Variables
 
@@ -133,13 +132,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpISizeViewModel Implementation
-
-        double MpISizeViewModel.Width => TileContentWidth;
-        double MpISizeViewModel.Height => TileContentHeight;
-
-        #endregion
-
         #region MpIUserColorViewModel Implementation
         public string UserHexColor {
             get => CopyItemHexColor;
@@ -169,7 +161,6 @@ namespace MonkeyPaste.Avalonia {
         public MpISelectorViewModel Selector => Parent;
 
         #endregion
-
 
         #region MpIScrollIntoView Implementation
 
@@ -281,9 +272,6 @@ namespace MonkeyPaste.Avalonia {
         //    }
         //}
 
-        public double TileTitleHeight => IsTitleVisible ? 100 : 0;
-        public double TileDetailHeight =>
-            IsCornerButtonsVisible ? 20 : 0;
 
         private double _tileEditToolbarHeight = 40;// MpMeasurements.Instance.ClipTileEditToolbarDefaultHeight;
         public double TileEditToolbarHeight {
@@ -300,42 +288,6 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-
-        public double TileContentWidth =>
-            BoundWidth -
-            TransactionCollectionViewModel.BoundWidth;
-
-        public double TileContentHeight =>
-            BoundHeight -
-            TileTitleHeight -
-            TileDetailHeight;
-
-
-        //public MpSize ContentSize =>
-        //    IsContentReadOnly ? ReadOnlyContentSize : UnconstrainedContentDimensions;
-        //public double ContentWidth => ContentSize.Width;
-
-        //public MpSize ReadOnlyContentSize =>
-        //    new MpSize(TileContentWidth, TileContentHeight);
-
-
-        //public MpSize EditableContentSize {
-        //    get {
-        //        if (Parent == null || CopyItem == null) {
-        //            return new MpSize();
-        //        }
-        //        //get contents actual size
-        //        var ds = UnconstrainedContentDimensions;//CopyItemData.ToFlowDocument().GetDocumentSize();
-
-        //        //if item's content is larger than expanded width make sure it gets that width (will show scroll bars)
-        //        double w = Math.Max(ds.Width, MinWidth);// MpMeasurements.Instance.ClipTileContentMinMaxWidth);
-
-        //        //let height in expanded mode match content's height
-        //        double h = ds.Height;
-
-        //        return new MpSize(w, h);
-        //    }
-        //}
 
         public MpRect ObservedBounds { get; set; }
         public double MinWidth =>
@@ -400,10 +352,19 @@ namespace MonkeyPaste.Avalonia {
                 return Parent.DefaultQueryItemHeight;
             }
         }
-
         #endregion
 
         #region State
+
+        public bool IsExpanded {
+            get {
+                if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+                    return true;
+                }
+                return IsSelected;
+            }
+        }
+
         public string ShortcutTooltipText =>
             string.IsNullOrEmpty(KeyString) ? $"Assign Global Paste Shortcut for '{CopyItemTitle}'" : KeyString;
 
@@ -1629,9 +1590,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(IsPlaceholder));
                     break;
                 case nameof(IsTitleVisible):
-                    OnPropertyChanged(nameof(TileTitleHeight));
                     OnPropertyChanged(nameof(BoundHeight));
-                    OnPropertyChanged(nameof(TileContentHeight));
                     break;
                 case nameof(IsSubSelectionEnabled):
                     Parent.OnPropertyChanged(nameof(Parent.CanScroll));

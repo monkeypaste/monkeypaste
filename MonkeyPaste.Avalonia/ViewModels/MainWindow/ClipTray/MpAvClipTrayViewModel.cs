@@ -2217,6 +2217,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.MainWindowOrientationChangeEnd:
                     _isMainWindowOrientationChanging = false;
                     OnPropertyChanged(nameof(ListOrientation));
+                    AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.IsExpanded)));
                     RefreshQueryTrayLayout();
                     LockScrollToAnchor();
                     break;

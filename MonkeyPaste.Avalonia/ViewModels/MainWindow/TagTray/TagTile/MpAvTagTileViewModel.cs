@@ -22,7 +22,8 @@ namespace MonkeyPaste.Avalonia {
         MpIActionComponent,
         MpIContextMenuViewModel,
         MpIPopupMenuViewModel,
-        MpIPopupMenuPicker {
+        MpIPopupMenuPicker,
+        MpIProgressIndicatorViewModel {
 
         #region Private Variables
         private object _notifierLock = new object();
@@ -99,6 +100,11 @@ namespace MonkeyPaste.Avalonia {
             set => TagHexColor = value;
         }
 
+        #endregion
+
+        #region MpIProgressIndicatorViewModel Implementation
+        public double PercentLoaded =>
+            TotalAnalysisCount == 0 ? 1 : (double)CompletedAnalysisCount / (double)TotalAnalysisCount;
         #endregion
 
         #region MpIContextMenuItemViewModel Implementation
@@ -337,6 +343,9 @@ namespace MonkeyPaste.Avalonia {
 
         public MpShape MenuIconShape =>
             IsLinkTag ? null : IsQueryTag ? QUERY_SHAPE : IsGroupTag ? GROUP_SHAPE : null;
+
+        public int CompletedAnalysisCount { get; set; }
+        public int TotalAnalysisCount { get; set; }
 
         #endregion
 
@@ -832,6 +841,13 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     }
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyDragging));
+                    break;
+                case nameof(CompletedAnalysisCount):
+                case nameof(TotalAnalysisCount):
+                    if (TotalAnalysisCount > 0) {
+                        MpConsole.WriteLine($"Current percent set to: {PercentLoaded}");
+                    }
+                    Dispatcher.UIThread.Post(() => { OnPropertyChanged(nameof(PercentLoaded)); });
                     break;
             }
         }

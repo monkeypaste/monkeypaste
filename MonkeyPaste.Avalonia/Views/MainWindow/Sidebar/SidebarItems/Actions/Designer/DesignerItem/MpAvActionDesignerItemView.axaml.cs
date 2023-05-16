@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System.Collections.Generic;
@@ -70,34 +71,83 @@ namespace MonkeyPaste.Avalonia {
                 ResetDrop();
                 return;
             }
-
+            MpAvTagTileViewModel drag_ttvm = null;
             List<MpCopyItem> drop_cil = new List<MpCopyItem>();
             if (e.Data.TryGetSourceRefIdBySourceType(MpTransactionSourceType.CopyItem, out int ciid) &&
                 MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.CopyItemId == ciid) is MpAvClipTileViewModel drop_ctvm) {
+                // tile drop
                 drop_cil.Add(drop_ctvm.CopyItem);
             } else if (e.Data.TryGetDragTagViewModel(out MpAvTagTileViewModel ttvm)) {
+                // tag drop
                 drop_cil = await MpDataModelProvider.GetAllCopyItemsForTagAndAllDescendantsAsync(ttvm.TagId);
+                ttvm.TotalAnalysisCount = drop_cil.Count;
+                drag_ttvm = ttvm;
             } else {
+                // external drop
                 var ext_ci = await e.Data.ToCopyItemAsync();
                 if (ext_ci != null) {
                     drop_cil.Add(ext_ci);
                 }
             }
-
+            drop_cil = drop_cil.DistinctBy(x => x.Id).ToList();
             if (!drop_cil.Any()) {
                 e.DragEffects = DragDropEffects.None;
                 ResetDrop();
                 return;
             }
 
-            foreach (var ci in drop_cil) {
-                BindingContext.InvokeThisActionCommand.Execute(ci);
-                while (BindingContext.IsSelfOrAnyDescendantPerformingAction) {
-                    await Task.Delay(100);
-                }
-            }
 
             ResetDrop();
+            Dispatcher.UIThread.Post(async () => {
+                bool invoke_sequential = false;
+                // Run drop w/ background priority since it may be long running
+                if (invoke_sequential) {
+                    foreach (var ci in drop_cil) {
+                        BindingContext.InvokeThisActionCommand.Execute(ci);
+                        // slight delay for state change
+                        await Task.Delay(20);
+                        //while (BindingContext.IsSelfOrAnyDescendantPerformingAction) {
+                        while (BindingContext.IsSelfOrDescendentProcessingItemById(ci.Id)) {
+                            await Task.Delay(100);
+                        }
+                        if (drag_ttvm != null) {
+                            drag_ttvm.CompletedAnalysisCount++;
+                        }
+                    }
+                } else {
+                    // invoke in parallel
+                    drop_cil.ForEach(x => BindingContext.InvokeThisActionCommand.Execute(x));
+
+                    if (drag_ttvm != null) {
+                        // create list of all ciid's for tag to be processed (to avoid using remaininCount == 0 as terminator)
+                        var remaining_item_ids = drop_cil.Select(x => x.Id).ToList();
+                        while (true) {
+                            if (remaining_item_ids.Count == 0) {
+                                break;
+                            }
+                            var to_remove = new List<int>();
+                            for (int i = 0; i < remaining_item_ids.Count; i++) {
+                                if (BindingContext.IsSelfOrDescendentProcessingItemById(remaining_item_ids[i])) {
+                                    continue;
+                                }
+                                to_remove.Add(remaining_item_ids[i]);
+                            }
+                            drag_ttvm.CompletedAnalysisCount += to_remove.Count;
+                            MpDebug.Assert(drag_ttvm.CompletedAnalysisCount >= 0, $"Analyze count mismatch for tag '{drag_ttvm}' droppe onto action '{BindingContext}'");
+                            to_remove.ForEach(x => remaining_item_ids.Remove(x));
+                            await Task.Delay(500);
+                        }
+                    }
+                }
+                if (drag_ttvm != null) {
+                    // reset progress
+                    drag_ttvm.TotalAnalysisCount = 0;
+                    drag_ttvm.CompletedAnalysisCount = 0;
+
+                    drag_ttvm.OnPropertyChanged(nameof(drag_ttvm.TotalAnalysisCount));
+                }
+
+            }, DispatcherPriority.Background);
         }
 
         #endregion

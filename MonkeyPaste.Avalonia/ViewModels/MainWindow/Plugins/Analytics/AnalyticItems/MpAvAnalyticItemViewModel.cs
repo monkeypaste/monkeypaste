@@ -561,9 +561,9 @@ namespace MonkeyPaste.Avalonia {
         #region Commands
         public virtual bool CanExecuteAnalysis(object args) {
             CurrentExecuteArgs = args;
-            if (IsBusy && (SelectedItem == null || !SelectedItem.IsExecuting)) {
-                return false;
-            }
+            //if (IsBusy && (SelectedItem == null || !SelectedItem.IsExecuting)) {
+            //    return false;
+            //}
             CannotExecuteTooltip = string.Empty;
 
             MpAvAnalyticItemPresetViewModel spvm = null;
@@ -616,10 +616,10 @@ namespace MonkeyPaste.Avalonia {
             return string.IsNullOrEmpty(CannotExecuteTooltip);
         }
 
-        public ICommand ExecuteAnalysisCommand => new MpAsyncCommand<object>(
+        public MpIAsyncCommand<object> ExecuteAnalysisCommand => new MpAsyncCommand<object>(
             async (args) => {
 
-                IsBusy = true;
+                //IsBusy = true;
                 bool suppressWrite = false;
 
                 MpCopyItem sourceCopyItem = null;
@@ -672,7 +672,7 @@ namespace MonkeyPaste.Avalonia {
                             // halt analysis
                             CurrentExecuteArgs = null;
                             SelectedItem.IsExecuting = false;
-                            IsBusy = false;
+                            //IsBusy = false;
                             return;
                         }
 
@@ -702,7 +702,7 @@ namespace MonkeyPaste.Avalonia {
                 if (result == null) {
                     CurrentExecuteArgs = null;
                     SelectedItem.IsExecuting = false;
-                    IsBusy = false;
+                    //IsBusy = false;
                     return;
                 }
 
@@ -731,7 +731,7 @@ namespace MonkeyPaste.Avalonia {
 
                 CurrentExecuteArgs = null;
                 SelectedItem.IsExecuting = false;
-                IsBusy = false;
+                //IsBusy = false;
             }, (args) => CanExecuteAnalysis(args));
 
 

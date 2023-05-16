@@ -161,6 +161,9 @@
                                                  ConverterParameter="allowzero" />
                                         <Binding Path="!IsVisible"
                                                  ElementName="TagCountBusySpinner" />
+
+                                        <Binding Path="!IsVisible"
+                                                 ElementName="TagCountProgressSpinner" />
                                     </MultiBinding>
 
                                 </TextBlock.IsVisible>
@@ -179,6 +182,8 @@
                                                  ElementName="TagCountTextBlock" />
                                         <Binding Path="!IsVisible"
                                                  ElementName="TagCountBusySpinner" />
+                                        <Binding Path="!IsVisible"
+                                                 ElementName="TagCountProgressSpinner" />
                                     </MultiBinding>
                                 </Image.IsVisible>
                             </Image>
@@ -191,9 +196,20 @@
                                         <Binding Path="IsSelected" />
                                         <Binding Path="IsBusy"
                                                  Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
+                                        <Binding Path="!IsVisible"
+                                                 ElementName="TagCountProgressSpinner" />
                                     </MultiBinding>
                                 </local:MpAvBusySpinnerView.IsVisible>
                             </local:MpAvBusySpinnerView>
+                            <local:MpAvProgressSpinner x:Name="TagCountProgressSpinner"
+                                                       HorizontalAlignment="Stretch"
+                                                       VerticalAlignment="Stretch"
+                                                       ArcWidth="1"
+                                                       PercentBrush="Lime"
+                                                       RingBrush="Red"
+                                                       LabelBrush="Transparent"
+                                                       IsVisible="{Binding TotalAnalysisCount, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                                       Percent="{Binding PercentLoaded}" />
                         </Grid>
                     </Border>
                     <!--  Tag Name TextBox/ Marquee  -->
@@ -249,14 +265,17 @@
                 VerticalAlignment="Top"
                 HorizontalAlignment="Left"
                 IsVisible="{Binding BadgeCount, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
-            <TextBlock Foreground="White"
-                       FontSize="10"
-                       MinWidth="15"
-                       Height="15"
-                       TextAlignment="Center"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Text="{Binding BadgeCount}" />
+            <Grid>
+                <!--  NOTE Text won't horizontally align unless in grid  -->
+                <TextBlock Foreground="White"
+                           FontSize="10"
+                           MinWidth="15"
+                           Height="15"
+                           TextAlignment="Center"
+                           HorizontalAlignment="Stretch"
+                           VerticalAlignment="Stretch"
+                           Text="{Binding BadgeCount}" />
+            </Grid>
         </Border>
     </Grid>
 </local:MpAvUserControl>

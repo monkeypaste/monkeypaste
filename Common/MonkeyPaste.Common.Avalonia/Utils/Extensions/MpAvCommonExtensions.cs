@@ -167,7 +167,7 @@ namespace MonkeyPaste.Common.Avalonia {
         }
         public static IEnumerable<T> GetVisualDescendants<T>(this Visual control, bool includeSelf = true) where T : Visual {
             IEnumerable<T> result;
-            result = control.GetVisualDescendants().Where(x => x is T).Cast<T>();
+            result = control.GetVisualDescendants().OfType<T>();
             if (includeSelf && control is T ct) {
                 result.Append(ct);
             }

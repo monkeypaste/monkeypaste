@@ -65,7 +65,8 @@
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel HorizontalAlignment="Stretch"
-                                   VerticalAlignment="Stretch" />
+                                   VerticalAlignment="Stretch"
+                                   Margin="0,0,40,0" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
             </ListBox>
@@ -98,7 +99,7 @@
                     VerticalAlignment="Top"
                     Width="25"
                     Height="25"
-                    Margin="0,5,10,0"
+                    Margin="0,5,20,0"
                     CornerRadius="10"
                     BorderThickness="1"
                     BorderBrush="DimGray"

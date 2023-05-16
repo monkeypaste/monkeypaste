@@ -28,7 +28,7 @@
                                 <!--  IsScrollInertiaEnabled="{Binding IsScrollInertiaEnabled, RelativeSource={RelativeSource TemplatedParent}}"  -->
                                 <ScrollGestureRecognizer CanHorizontallyScroll="{Binding CanHorizontallyScroll, ElementName=PART_ContentPresenter}"
                                                          CanVerticallyScroll="{Binding CanVerticallyScroll, ElementName=PART_ContentPresenter}"
-                                                         IsScrollInertiaEnabled="True" />
+                                                         IsScrollInertiaEnabled="False" />
                             </ScrollContentPresenter.GestureRecognizers>
                         </ScrollContentPresenter>
                         <local:MpAvPagingScrollBar Name="PART_HorizontalScrollBar"

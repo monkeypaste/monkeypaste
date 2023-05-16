@@ -489,6 +489,10 @@ namespace MonkeyPaste.Avalonia {
                         ItemsSource = mivm.SubItems == null ? null : mivm.SubItems.Where(x => x != null && x.IsVisible).Select(x => CreateMenuItem(x))
                     };
 
+                    if (mivm.Tooltip != null) {
+                        ToolTip.SetTip(mi, new MpAvToolTipView() { ToolTipText = mivm.Tooltip.ToString() });
+                    }
+
                     mi.PointerEntered += MenuItem_PointerEnter;
                     mi.DetachedFromVisualTree += MenuItem_DetachedFromVisualTree;
                     if (mi.Command != null && mivm.IsEnabled) {
@@ -528,9 +532,13 @@ namespace MonkeyPaste.Avalonia {
             }
             var iconImg = new Image() {
                 HorizontalAlignment = HorizontalAlignment.Stretch,
-                VerticalAlignment = VerticalAlignment.Stretch,
-                Source = MpAvIconSourceObjToBitmapConverter.Instance.Convert(mivm.IconSourceObj, null, null, null) as Bitmap,
+                VerticalAlignment = VerticalAlignment.Stretch
             };
+            if (string.IsNullOrEmpty(mivm.IconTintHexStr)) {
+                iconImg.Source = MpAvIconSourceObjToBitmapConverter.Instance.Convert(mivm.IconSourceObj, null, null, null) as Bitmap;
+            } else {
+                iconImg.Source = MpAvStringHexToBitmapTintConverter.Instance.Convert(mivm.IconSourceObj, null, mivm.IconTintHexStr, null) as Bitmap;
+            }
             var iconBorder = GetIconBorder(mivm);
             if (mivm.IsChecked.IsFalse()) {
                 iconBorder.BorderBrush = Brushes.Transparent;

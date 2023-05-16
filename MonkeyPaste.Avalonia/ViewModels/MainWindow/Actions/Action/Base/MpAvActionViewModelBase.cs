@@ -34,6 +34,7 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
 
         private bool _isShowingValidationMsg = false;
+        private List<int> _currentInputItemIds = new List<int>();
         #endregion
 
         #region Statics
@@ -368,6 +369,7 @@ namespace MonkeyPaste.Avalonia {
                                     new MpMenuItemViewModel() {
                                         Header = x.EnumToLabel(),
                                         IconResourceKey = GetDefaultActionIconResourceKey(x),
+                                        IconTintHexStr = MpAvActionViewModelBase.GetActionHexColor(x),
                                         Command = AddChildActionCommand,
                                         CommandParameter = x
                                     }).ToList()
@@ -969,15 +971,27 @@ namespace MonkeyPaste.Avalonia {
             }
 
 
+            // trigger children so current item added BEFORE removing from here
+            // to avoid a gap for blocking threads (tag drop progress spinner)
+
+            NotifyActionComplete(arg);
+
+            await Task.Delay(5);
             if (arg is MpAvActionOutput ao) {
                 MpConsole.WriteLine("");
                 MpConsole.WriteLine($"Action({ActionId}) '{Label}' Completed Successfully");
                 MpConsole.WriteLine(ao.ActionDescription);
                 MpConsole.WriteLine("");
-            }
-            await Task.Delay(1);
 
-            NotifyActionComplete(arg);
+                if (ao.CopyItem != null) {
+                    if (_currentInputItemIds.Remove(ao.CopyItem.Id)) {
+                        MpConsole.WriteLine($"Action '{Label}' processing ciid {ao.CopyItem.Id} COMPLETED");
+                    } else {
+                        MpConsole.WriteLine($"Action '{Label}' processed ciid {ao.CopyItem.Id} NOT FOUND");
+                    }
+
+                }
+            }
         }
 
         protected virtual void NotifyActionComplete(object outputArg) {
@@ -994,6 +1008,13 @@ namespace MonkeyPaste.Avalonia {
         public async Task UpdateSortOrderAsync() {
             Children.ForEach(x => x.SortOrderIdx = Children.IndexOf(x));
             await Task.WhenAll(Children.Select(x => x.Action.WriteToDatabaseAsync()));
+        }
+
+        public bool IsSelfOrDescendentProcessingItemById(int ciid) {
+            if (_currentInputItemIds.Contains(ciid)) {
+                return true;
+            }
+            return Children.Any(x => x.IsSelfOrDescendentProcessingItemById(ciid));
         }
 
         public override string ToString() {
@@ -1112,6 +1133,15 @@ namespace MonkeyPaste.Avalonia {
                 can_start = false;
             }
             IsPerformingAction = can_start;
+
+            if (can_start &&
+                GetInput(arg) is MpAvActionOutput ao &&
+                ao.CopyItem != null &&
+                !_currentInputItemIds.Contains(ao.CopyItem.Id)) {
+                MpConsole.WriteLine($"Action '{Label}' processing ciid {ao.CopyItem.Id} STARTED");
+                _currentInputItemIds.Add(ao.CopyItem.Id);
+            }
+
             return IsPerformingAction;
         }
 
@@ -1402,7 +1432,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand InvokeThisActionCommand => new MpAsyncCommand<object>(
             async (args) => {
-                await Task.Delay(300);
+                //await Task.Delay(300);
                 MpCopyItem ci = null;
                 if (args is MpCopyItem arg_ci) {
                     ci = arg_ci;

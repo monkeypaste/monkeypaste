@@ -68,11 +68,7 @@
                     Value="Stretch" />
         </Style>
     </UserControl.Styles>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="{Binding Source={StaticResource ButtonSize}, Converter={x:Static local:MpAvDoubleToGridLengthConverter.Instance}}" />
-            <ColumnDefinition Width="{Binding Source={StaticResource ButtonSize}, Converter={x:Static local:MpAvDoubleToGridLengthConverter.Instance}}" />
-        </Grid.ColumnDefinitions>
+    <StackPanel Orientation="{Binding MainWindowLayoutOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}">
 
         <!--  AUTO COPY  -->
         <ToggleButton x:Name="AutoCopyRadioButton"
@@ -137,5 +133,6 @@
             </ToolTip.Tip>
             <Image Source="{Binding Source={StaticResource RightClickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </ToggleButton>
-    </Grid>
+        <!--</Grid>-->
+    </StackPanel>
 </UserControl>

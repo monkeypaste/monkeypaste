@@ -91,11 +91,11 @@ namespace MonkeyPaste.Avalonia {
 
         public int MouseModeHorizontalOffset =>
             MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
-                20 : 0;
+                20 : 10;
 
         public int MouseModeVerticalOffset =>
             MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
-                -5 : -100;
+                0 : 10;
 
         public PlacementMode MouseModeFlyoutPlacement =>
             MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ?
@@ -177,6 +177,11 @@ namespace MonkeyPaste.Avalonia {
             switch (msg) {
                 case MpMessageType.MainWindowLoadComplete:
                     Init();
+                    break;
+                case MpMessageType.MainWindowOrientationChangeEnd:
+                    OnPropertyChanged(nameof(MouseModeFlyoutPlacement));
+                    OnPropertyChanged(nameof(MouseModeHorizontalOffset));
+                    OnPropertyChanged(nameof(MouseModeVerticalOffset));
                     break;
             }
         }

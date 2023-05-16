@@ -4,6 +4,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Input.GestureRecognizers;
+using Avalonia.Layout;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
@@ -491,6 +492,9 @@ namespace MonkeyPaste.Avalonia {
         public bool IsBottomOrientation =>
             MainWindowOrientationType == MpMainWindowOrientationType.Bottom;
 
+        public Orientation MainWindowLayoutOrientation =>
+            IsHorizontalOrientation ? Orientation.Horizontal : Orientation.Vertical;
+
         public MpMainWindowOrientationType MainWindowOrientationType { get; private set; }
         public MpMainWindowShowBehaviorType MainWindowShowBehaviorType { get; private set; }
         public int MainWindowMonitorIdx {
@@ -709,6 +713,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(MainWindowOrientationType):
                     MpPrefViewModel.Instance.MainWindowOrientation = MainWindowOrientationType.ToString();
+                    OnPropertyChanged(nameof(MainWindowLayoutOrientation));
                     break;
                 case nameof(MainWindowShowBehaviorType):
                     MpPrefViewModel.Instance.MainWindowShowBehaviorType = MainWindowShowBehaviorType.ToString();

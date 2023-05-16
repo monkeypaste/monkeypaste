@@ -122,24 +122,31 @@ namespace MonkeyPaste.Avalonia {
                 MpAvAnalyticItemCollectionViewModel.Instance
                 .AllPresets.FirstOrDefault(x => x.AnalyticItemPresetId == AnalyticItemPresetId);
 
+            MpAvAnalyzeOutput output = new MpAvAnalyzeOutput() {
+                Previous = arg as MpAvActionOutput,
+                CopyItem = actionInput.CopyItem
+            };
             object[] args = new object[] { aipvm, actionInput.CopyItem, lastOutputCallback };
             if (aipvm != null &&
                aipvm.Parent != null &&
                aipvm.Parent.ExecuteAnalysisCommand.CanExecute(args)) {
-                aipvm.Parent.ExecuteAnalysisCommand.Execute(args);
+                await aipvm.Parent.ExecuteAnalysisCommand.ExecuteAsync(args);
 
-                while (aipvm.Parent.IsBusy) {
-                    await Task.Delay(100);
-                }
+                //while (aipvm.Parent.IsBusy) {
+                //    await Task.Delay(100);
+                //}
 
-                if (aipvm.Parent.LastTransaction != null && aipvm.Parent.LastTransaction.Response != null) {
-                    await base.PerformActionAsync(
-                        new MpAvAnalyzeOutput() {
-                            Previous = arg as MpAvActionOutput,
-                            CopyItem = actionInput.CopyItem,
-                            TransactionResult = aipvm.Parent.LastTransaction.Response
-                        });
-                    return;
+                if (aipvm.Parent.LastTransaction != null) {
+                    if (output.CopyItem != null && aipvm.Parent.LastTransaction.ResponseContent != null &&
+                        output.CopyItem.Id != aipvm.Parent.LastTransaction.ResponseContent.Id) {
+                        // analyzer created NEW content
+                        // TODO how should new content be handled?
+                    } else if (aipvm.Parent.LastTransaction.ResponseContent != null) {
+                        // use (possibly) updated item from analysis result
+                        output.CopyItem = aipvm.Parent.LastTransaction.ResponseContent;
+                    }
+
+                    output.TransactionResult = aipvm.Parent.LastTransaction.Response;
                 } else {
                     MpConsole.WriteLine("");
                     MpConsole.WriteLine($"Analyzer '{aipvm.FullName}' returned null to Action({ActionId}) '{FullName}', so {RootTriggerActionViewModel.Label} will stop.");
@@ -150,7 +157,7 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine($"Action({ActionId}) '{FullName}' Failed to execute, analyzer w/ presetId({AnalyticItemPresetId}) not found");
                 MpConsole.WriteLine("");
             }
-
+            await base.PerformActionAsync(output);
         }
 
         #endregion

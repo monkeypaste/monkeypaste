@@ -41,8 +41,8 @@
         </Style>
 
         <Style Selector="TreeView#TagTreeView TreeView#TagTreeViewTreeViewItem /template/ Border#SelectionBorder:pointerover">
-            <Setter Property="Background"
-                    Value="Transparent" />
+            <!--<Setter Property="Background"
+                    Value="Transparent" />-->
         </Style>
         <Style Selector="TreeView#TagTreeView TreeViewItem /template/ Border#SelectionBorder">
             <Setter Property="Background"

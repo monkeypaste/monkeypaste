@@ -394,6 +394,8 @@ namespace MonkeyPaste {
             }
         }
 
+        public string IconTintHexStr { get; set; }
+
         private string _iconBorderHexColor;
         public string IconBorderHexColor {
             get {

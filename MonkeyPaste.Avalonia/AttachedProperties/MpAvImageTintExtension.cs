@@ -75,6 +75,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (control.GetLogicalDescendants().OfType<Image>() is IEnumerable<Image> imgl) {
                 imgl.ForEach(x => x.GetObservable(Image.SourceProperty).Subscribe(value => UpdateTint(control)));
+                UpdateTint(control);
             }
         }
 
@@ -92,7 +93,7 @@ namespace MonkeyPaste.Avalonia {
 
         private static void UpdateTint(object element) {
             if (element is Control c &&
-                c.GetVisualDescendants<Image>() is IEnumerable<Image> imgl &&
+                c.GetLogicalDescendants().OfType<Image>() is IEnumerable<Image> imgl &&
                 imgl.Any() &&
                 GetTint(c) is object tintObj) {
                 int c_hash = c.GetHashCode();
