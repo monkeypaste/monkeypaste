@@ -86,12 +86,23 @@ namespace MonkeyPaste.Avalonia {
             return "QuestiongMarkImage";
         }
 
-        public static string GetActionHexColor(MpActionType actionType) {
+        public static string GetActionHexColor(MpActionType actionType, MpTriggerType tt = MpTriggerType.None) {
             switch (actionType) {
                 case MpActionType.None:
                     return MpSystemColors.Transparent;
                 case MpActionType.Trigger:
-                    return MpSystemColors.maroon;
+                    switch (tt) {
+                        case MpTriggerType.Shortcut:
+                            return MpSystemColors.dodgerblue2;
+                        case MpTriggerType.ContentAdded:
+                            return MpSystemColors.forestgreen;
+                        case MpTriggerType.ContentTagged:
+                            return MpSystemColors.bisque3;
+                        case MpTriggerType.FileSystemChange:
+                            return MpSystemColors.coral3;
+                        default:
+                            return MpSystemColors.maroon;
+                    }
                 case MpActionType.Analyze:
                     return MpSystemColors.magenta;
                 case MpActionType.Classify:
@@ -465,7 +476,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Appearance
-        public string ActionBackgroundHexColor =>
+        public virtual string ActionBackgroundHexColor =>
             GetActionHexColor(ActionType);
 
         public string IconBackgroundHexColor {

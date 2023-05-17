@@ -19,6 +19,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using Org.BouncyCastle.Utilities;
+using Avalonia.Layout;
 #if DESKTOP
 
 using CefNet;
@@ -223,15 +224,21 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpAvIResizableControl Implementation
         private Control _resizerControl;
-        Control MpAvIResizableControl.ResizerControl {
+        public Control ResizerControl {
             get {
                 if (_resizerControl == null) {
                     var ctv = this.GetVisualAncestor<MpAvClipTileView>();
                     if (ctv != null) {
-                        _resizerControl = ctv.FindControl<Control>("ClipTileResizeBorder");
+                        string resizer_name =
+                            MpAvMainWindowViewModel.Instance.IsVerticalOrientation ?
+                                "ClipTileHeightResizeBorder" : "ClipTileWidthResizeBorder";
+                        _resizerControl = ctv.FindControl<Control>(resizer_name);
                     }
                 }
                 return _resizerControl;
+            }
+            set {
+                _resizerControl = value;
             }
         }
         #endregion
@@ -1362,10 +1369,11 @@ namespace MonkeyPaste.Avalonia {
             var msg = new MpQuillIsHostFocusedChangedMessage() {
                 isHostFocused = IsContentSelected
             };
-            if (IsContentSelected &&
-                BindingContext.IsSubSelectionEnabled) {
-                this.Focus();
-                SendMessage($"hostIsFocusedChanged_ext('{msg.SerializeJsonObjectToBase64()}')");
+            if (IsContentSelected) {
+                if (BindingContext.IsSubSelectionEnabled) {
+                    this.Focus();
+                    SendMessage($"hostIsFocusedChanged_ext('{msg.SerializeJsonObjectToBase64()}')");
+                }
             }
         }
 

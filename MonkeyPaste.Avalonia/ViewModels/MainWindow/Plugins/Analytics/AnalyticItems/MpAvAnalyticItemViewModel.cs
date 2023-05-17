@@ -754,7 +754,7 @@ namespace MonkeyPaste.Avalonia {
                      }
                  }
                  SelectedItem = preset_to_select;
-                 if (!IsSelected && preset_to_select != null) {
+                 if (preset_to_select != null) {
                      Parent.SelectedItem = this;
                      MpAvSidebarItemCollectionViewModel.Instance.SelectSidebarItemCommand.Execute(Parent);
                  }

@@ -285,12 +285,13 @@ namespace MonkeyPaste {
             if (!needsFixing) {
                 try {
                     plugin = JsonConvert.DeserializeObject<MpPluginFormat>(manifestStr);
+                    plugin.RootDirectory = Path.GetDirectoryName(manifestPath);
 
                     if (!ValidatePluginDependencies(plugin)) {
                         return null;
                     }
 
-                    bool isValid = ValidatePluginManifest(plugin, manifestPath);
+                    bool isValid = await ValidatePluginManifestAsync(plugin, manifestPath);
                 }
                 catch (Exception ex) {
                     var invalid_or_malformed_json_result = await MpNotificationBuilder.ShowNotificationAsync(
@@ -313,7 +314,6 @@ namespace MonkeyPaste {
                         if (ValidatePluginComponent(plugin, component, manifestPath)) {
                             plugin.Component = component;
                         }
-                        plugin.RootDirectory = Path.GetDirectoryName(manifestPath);
                     }
                     catch (Exception ex) {
                         var ivalid_plugin_component_result = await MpNotificationBuilder.ShowNotificationAsync(
@@ -503,7 +503,7 @@ namespace MonkeyPaste {
             }
         }
 
-        private static bool ValidatePluginManifest(MpPluginFormat plugin, string manifestPath) {
+        private static async Task<bool> ValidatePluginManifestAsync(MpPluginFormat plugin, string manifestPath) {
             if (plugin == null) {
                 throw new MpUserNotifiedException($"Plugin parsing error, at path '{manifestPath}' null, likely error parsing json. Ignoring plugin");
             }
@@ -514,8 +514,10 @@ namespace MonkeyPaste {
             if (!MpRegEx.RegExLookup[MpRegExType.Guid].IsMatch(plugin.guid)) {
                 throw new MpUserNotifiedException($"Plugin guid error, at path '{manifestPath}' with Title '{plugin.title}' must have a 'guid' property, RFC 4122 compliant 128-bit GUID (UUID). Ignoring plugin");
             }
-            if (string.IsNullOrWhiteSpace(plugin.iconUri)) {
-                throw new MpUserNotifiedException($"Plugin icon error, at path '{manifestPath}' with title '{plugin.title}' must have an 'iconUri' property which is a relative file path or valid url to an image");
+
+            bool is_icon_valid = await MpFileIo.IsAccessibleUriAsync(plugin.iconUri, plugin.RootDirectory);
+            if (!is_icon_valid) {
+                throw new MpUserNotifiedException($"Plugin icon error, at path '{manifestPath}' with iconUri '{plugin.iconUri}' must have an 'iconUri' property which is a relative file path or valid url to an image");
             }
             bool are_all_components_valid = plugin.componentFormats.All(x => ValidatePluginComponentManifest(x, manifestPath));
             return are_all_components_valid;

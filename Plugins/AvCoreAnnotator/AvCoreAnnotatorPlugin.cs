@@ -40,8 +40,6 @@ namespace AvCoreAnnotator {
 
             if (delta.ops.Count > 0) {
                 // content was annotated, return it as dataobjectitem
-                //resp.dataObject = new MpPortableDataObject(
-                //    MpPortableDataFormats.INTERNAL_CONTENT_DELTA_FORMAT, delta.SerializeJsonObject());
                 resp.dataObject = new Dictionary<string, object>() {
                     { MpPortableDataFormats.INTERNAL_CONTENT_DELTA_FORMAT, delta.SerializeJsonObject() }
                 };

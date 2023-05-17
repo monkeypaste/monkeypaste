@@ -194,34 +194,41 @@ namespace MonkeyPaste.Common {
             }
             return size;
         }
-        public static string GetAbsolutePath(string path) {
-            return GetAbsolutePath(null, path);
-        }
 
         public static string GetAbsolutePath(string basePath, string path) {
             if (path == null) {
                 return null;
             }
-            if (basePath == null) {
-                basePath = Path.GetFullPath("."); // quick way of getting current working directory
-            } else {
-                basePath = GetAbsolutePath(null, basePath); // to be REALLY sure ;)
+            try {
+                if (basePath == null) {
+                    basePath = Path.GetFullPath("."); // quick way of getting current working directory
+                } else {
+                    basePath = GetAbsolutePath(null, basePath); // to be REALLY sure ;)
+                }
+
+                if (Path.Combine(basePath, path).IsFileOrDirectory()) {
+                    return Path.Combine(basePath, path);
+                }
+                string finalPath;
+                // specific for windows paths starting on \ - they need the drive added to them.
+                // I constructed this piece like this for possible Mono support.
+                if (!Path.IsPathRooted(path) || "\\".Equals(Path.GetPathRoot(path))) {
+                    if (path.StartsWith(Path.DirectorySeparatorChar.ToString())) {
+                        finalPath = Path.Combine(Path.GetPathRoot(basePath), path.TrimStart(Path.DirectorySeparatorChar));
+                    } else {
+                        finalPath = Path.Combine(basePath, path);
+                    }
+                } else {
+                    finalPath = path;
+                }
+                // resolves any internal "..\" to get the true full path.
+                return Path.GetFullPath(finalPath);
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error finding absolute path. BasePath: '{basePath}' Path: '{path}'", ex);
+                return string.Empty;
             }
 
-            string finalPath;
-            // specific for windows paths starting on \ - they need the drive added to them.
-            // I constructed this piece like this for possible Mono support.
-            if (!Path.IsPathRooted(path) || "\\".Equals(Path.GetPathRoot(path))) {
-                if (path.StartsWith(Path.DirectorySeparatorChar.ToString())) {
-                    finalPath = Path.Combine(Path.GetPathRoot(basePath), path.TrimStart(Path.DirectorySeparatorChar));
-                } else {
-                    finalPath = Path.Combine(basePath, path);
-                }
-            } else {
-                finalPath = path;
-            }
-            // resolves any internal "..\" to get the true full path.
-            return Path.GetFullPath(finalPath);
         }
 
         public static double ConvertBytesToMegabytes(long bytes, int precision = 2) {
@@ -422,14 +429,29 @@ namespace MonkeyPaste.Common {
             }
         }
 
+        public static async Task<bool> IsAccessibleUriAsync(string uri, string baseDir = "", int timeoutMs = 5000) {
+            if (string.IsNullOrWhiteSpace(uri)) {
+                return false;
+            }
+            if (!Uri.IsWellFormedUriString(uri, UriKind.Absolute)) {
+                if (uri.IsFileOrDirectory()) {
+                    return true;
+                }
+                if (GetAbsolutePath(baseDir, uri).IsFileOrDirectory()) {
+                    return true;
+                }
+                return false;
+            }
+            var bytes = await uri.ReadUriBytesAsync(timeoutMs);
+            return bytes != null && bytes.Length > 0;
+        }
+
         public static async Task<byte[]> ReadBytesFromUriAsync(string uri, string baseDir = "", int timeoutMs = 5000) {
+
             if (!Uri.IsWellFormedUriString(uri, UriKind.Absolute)) {
                 string fileSystemPath = uri;
                 if (!fileSystemPath.IsFileOrDirectory()) {
-                    fileSystemPath = Path.Combine(baseDir, uri);
-                    if (!fileSystemPath.IsFileOrDirectory()) {
-                        fileSystemPath = GetAbsolutePath(baseDir, uri);
-                    }
+                    fileSystemPath = GetAbsolutePath(baseDir, uri);
                 }
                 if (fileSystemPath.IsFileOrDirectory()) {
                     return ReadBytesFromFile(fileSystemPath);

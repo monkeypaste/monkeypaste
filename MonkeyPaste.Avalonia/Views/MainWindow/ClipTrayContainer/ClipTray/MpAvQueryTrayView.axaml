@@ -154,7 +154,8 @@
                     </ListBox.Resources>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <local:MpAvClipTileView local:MpAvIsHoveringExtension.IsEnabled="True"
+                            <local:MpAvClipTileView UseLayoutRounding="True"
+                                                    local:MpAvIsHoveringExtension.IsEnabled="True"
                                                     local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
                                                     local:MpAvBoundsObserverExtension.IsEnabled="True"
                                                     local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedBounds, Mode=TwoWay}" />

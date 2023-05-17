@@ -13,12 +13,20 @@
     <local:MpAvUserControl.Styles>
 
         <Style Selector=":is(Button)">
-            <Setter Property="Margin"
-                    Value="5,2" />
+            <!--<Setter Property="Margin"
+                    Value="5,2" />-->
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Center" />
             <Setter Property="Padding"
-                    Value="5,2" />
+                    Value="5" />
             <Setter Property="FontSize"
                     Value="12" />
+            <Setter Property="FontWeight"
+                    Value="Medium" />
+            <Setter Property="Width"
+                    Value="75" />
         </Style>
         <Style Selector="Border.splitter">
             <Setter Property="Width"
@@ -29,6 +37,27 @@
                     Value="Silver" />
             <Setter Property="Margin"
                     Value="1,0" />
+        </Style>
+
+        <!--  ENABLE  -->
+        <Style Selector=":is(Button)#EnableTriggerToggleButton:checked /template/ ContentPresenter">
+            <Setter Property="Background"
+                    Value="Lime" />
+            <Setter Property="Content"
+                    Value="ON" />
+        </Style>
+        <Style Selector=":is(Button)#EnableTriggerToggleButton:unchecked /template/ ContentPresenter">
+            <Setter Property="Background"
+                    Value="Crimson" />
+            <Setter Property="Content"
+                    Value="OFF" />
+        </Style>
+
+        <Style Selector=":is(Button)#EnableTriggerToggleButton[IsEnabled=false] /template/ ContentPresenter">
+            <Setter Property="Background"
+                    Value="Yellow" />
+            <Setter Property="Content"
+                    Value="OOPSY" />
         </Style>
 
         <!--  DUPLICATE  -->
@@ -80,15 +109,17 @@
         </Style>
 
     </local:MpAvUserControl.Styles>
-    <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,Auto"
+    <Grid ColumnDefinitions="85,Auto,85,Auto,85"
           x:DataType="local:MpAvTriggerActionViewModelBase"
           DataContext="{Binding SelectedTrigger}"
           HorizontalAlignment="Center"
           VerticalAlignment="Stretch">
 
         <!--  ENABLED TOGGLE  -->
-        <ToggleSwitch Grid.Column="0"
-                      Foreground="White"
+        <ToggleButton x:Name="EnableTriggerToggleButton"
+                      Grid.Column="0"
+                      Classes="defaultButton"
+                      Foreground="Black"
                       IsThreeState="True"
                       IsChecked="{Binding IsTriggerEnabled, Mode=OneWay}"
                       Command="{Binding ToggleTriggerEnabledCommand}"
@@ -101,7 +132,7 @@
 
         <Button x:Name="DuplicateTriggerButton"
                 Grid.Column="2"
-                Classes="outline outlineOver"
+                Classes="defaultButton outline outlineOver"
                 Command="{Binding DuplicateTriggerCommand}"
                 Content="DUPLICATE" />
 
@@ -112,7 +143,7 @@
 
         <Button x:Name="DeleteTriggerButton"
                 Grid.Column="4"
-                Classes="outline outlineOver"
+                Classes="defaultButton outline outlineOver"
                 Command="{Binding DeleteThisTriggerCommand}"
                 CommandParameter="{Binding $self}"
                 Content="DELETE" />

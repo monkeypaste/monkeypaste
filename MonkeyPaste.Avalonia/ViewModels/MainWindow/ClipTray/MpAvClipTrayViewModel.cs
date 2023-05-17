@@ -49,6 +49,8 @@ namespace MonkeyPaste.Avalonia {
         public const double MIN_SIZE_ZOOM_FACTOR_COEFF = (double)1 / (double)7;
         public const double EDITOR_TOOLBAR_MIN_WIDTH = 830.0d;
         public const double DEFAULT_ITEM_SIZE = 260;
+        public const double UNEXPANDED_HEIGHT_RATIO = 0.33d;
+        public const double DEFAULT_UNEXPANDED_HEIGHT = DEFAULT_ITEM_SIZE * UNEXPANDED_HEIGHT_RATIO;
 
         #endregion
 
@@ -378,8 +380,10 @@ namespace MonkeyPaste.Avalonia {
         public Orientation ListOrientation =>
             MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ? Orientation.Horizontal : Orientation.Vertical;
 
-        public bool IsQueryHorizontalScrollBarVisible => true;// QueryTrayTotalTileWidth > ObservedQueryTrayScreenWidth;
-        public bool IsQueryVerticalScrollBarVisible => true;// QueryTrayTotalTileHeight > ObservedQueryTrayScreenHeight;
+        public bool IsQueryHorizontalScrollBarVisible =>
+            QueryTrayTotalTileWidth > ObservedQueryTrayScreenWidth;
+        public bool IsQueryVerticalScrollBarVisible =>
+            QueryTrayTotalTileHeight > ObservedQueryTrayScreenHeight;
 
         public double LastScrollOffsetX { get; set; } = 0;
         public double LastScrollOffsetY { get; set; } = 0;
@@ -601,6 +605,8 @@ namespace MonkeyPaste.Avalonia {
             var total_size = MpSize.Empty;
             int gridFixedCount = -1;
 
+            int selected_offset_idx = SelectedItem == null ? -1 : SelectedItem.QueryOffsetIdx;
+
             MpRect last_rect = null;// prevOffsetRect;
 
             if (isFindTotalSize) {
@@ -611,8 +617,11 @@ namespace MonkeyPaste.Avalonia {
 
             for (int i = startIdx; i <= queryOffsetIdx; i++) {
                 MpSize tile_size = new MpSize(DefaultQueryItemWidth, DefaultQueryItemHeight);
-                if (MpAvPersistentClipTilePropertiesHelper.TryGetUniqueWidth_ByOffsetIdx(i, out double uniqueSize)) {
-                    tile_size.Width = uniqueSize;
+                if (MpAvPersistentClipTilePropertiesHelper.TryGetUniqueWidth_ByOffsetIdx(i, out double uw)) {
+                    tile_size.Width = uw;
+                }
+                if (MpAvPersistentClipTilePropertiesHelper.TryGetUniqueHeight_ByOffsetIdx(i, out double uh)) {
+                    tile_size.Height = uh;
                 }
 
                 MpPoint tile_offset;
@@ -746,28 +755,23 @@ namespace MonkeyPaste.Avalonia {
             _defaultQueryItemHeight;
 
         private void UpdateDefaultItemSize() {
-            double query_item_length = QueryTrayFixedDimensionLength * ZoomFactor;
-
-            double scrollBarSize_x = IsQueryHorizontalScrollBarVisible ? ScrollBarFixedAxisSize : 0;
-            _defaultQueryItemWidth = Math.Clamp(query_item_length - scrollBarSize_x, 0, MaxTileWidth);
-
-            double scrollBarSize_y = IsQueryVerticalScrollBarVisible ? ScrollBarFixedAxisSize : 0;
-            _defaultQueryItemHeight = Math.Clamp(query_item_length - scrollBarSize_y, 0, MaxTileHeight);
+            double square_length = QueryTrayFixedDimensionLength * ZoomFactor;
 
             double pin_item_length = PinTrayFixedDimensionLength * ZoomFactor;
             if (ListOrientation == Orientation.Horizontal) {
-                _defaultQueryItemWidth = query_item_length - QueryTrayVerticalScrollBarWidth;
+                _defaultQueryItemWidth = square_length - QueryTrayVerticalScrollBarWidth;
                 _defaultQueryItemHeight = QueryTrayFixedDimensionLength - QueryTrayHorizontalScrollBarHeight;
 
                 _defaultPinItemWidth = pin_item_length;
                 _defaultPinItemHeight = PinTrayFixedDimensionLength;
             } else {
                 _defaultQueryItemWidth = QueryTrayFixedDimensionLength - QueryTrayVerticalScrollBarWidth;
-                _defaultQueryItemHeight = query_item_length - QueryTrayHorizontalScrollBarHeight;
+                _defaultQueryItemHeight = square_length - QueryTrayHorizontalScrollBarHeight;
 
                 _defaultPinItemWidth = PinTrayFixedDimensionLength;
                 _defaultPinItemHeight = pin_item_length;
             }
+
             if (LayoutType == MpClipTrayLayoutType.Grid ||
                 (LayoutType == MpClipTrayLayoutType.Stack && !MpAvMainWindowViewModel.Instance.IsMainWindowOrientationChanging)) {
                 double default_ar = QueryTrayFixedDimensionLength / DEFAULT_ITEM_SIZE;
@@ -777,6 +781,9 @@ namespace MonkeyPaste.Avalonia {
                     IsGridLayout = true;
                     _defaultQueryItemWidth = _defaultQueryItemHeight = _defaultPinItemWidth = _defaultPinItemHeight = DEFAULT_ITEM_SIZE;
                 }
+            }
+            if (ListOrientation == Orientation.Vertical) {
+                _defaultQueryItemHeight = DEFAULT_UNEXPANDED_HEIGHT;
             }
 
             OnPropertyChanged(nameof(DefaultQueryItemWidth));
@@ -2218,6 +2225,12 @@ namespace MonkeyPaste.Avalonia {
                     _isMainWindowOrientationChanging = false;
                     OnPropertyChanged(nameof(ListOrientation));
                     AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.IsExpanded)));
+                    AllActiveItems
+                        .Where(x => x.GetContentView() != null)
+                        .Select(x => x.GetContentView())
+                        .OfType<MpAvContentWebView>()
+                        .ForEach(x => x.ResizerControl = null);
+
                     RefreshQueryTrayLayout();
                     LockScrollToAnchor();
                     break;
@@ -2812,16 +2825,16 @@ namespace MonkeyPaste.Avalonia {
                      return;
                  }
 
+                 int ctvm_to_pin_query_idx = -1;
                  if (Items.Where(x => x.CopyItemId == ctvm_to_pin.CopyItemId) is IEnumerable<MpAvClipTileViewModel> query_items &&
                      query_items.Any()) {
+                     ctvm_to_pin_query_idx = ctvm_to_pin.QueryOffsetIdx;
                      // create temp tile w/ model ref
                      var temp_ctvm = await CreateClipTileViewModelAsync(ctvm_to_pin.CopyItem);
                      // unload query tile
                      query_items.ForEach(x => x.TriggerUnloadedNotification(true));
                      // use temp tile to pin
                      ctvm_to_pin = temp_ctvm;
-                 } else if (ctvm_to_pin.QueryOffsetIdx >= 0) {
-                     //Mp.Services.Query.PageTools.RemoveItemId(ctvm_to_pin.CopyItemId);
                  }
                  Mp.Services.Query.PageTools.RemoveItemId(ctvm_to_pin.CopyItemId);
 
@@ -2855,11 +2868,13 @@ namespace MonkeyPaste.Avalonia {
                  ctvm_to_pin.OnPropertyChanged(nameof(ctvm_to_pin.IsPinned));
                  ctvm_to_pin.OnPropertyChanged(nameof(ctvm_to_pin.IsPlaceholder));
 
-                 await Task.Delay(100);
-                 while (IsAnyBusy) {
+                 if (ctvm_to_pin_query_idx >= 0) {
+                     QueryCommand.Execute(string.Empty);
                      await Task.Delay(100);
+                     while (IsQuerying) {
+                         await Task.Delay(100);
+                     }
                  }
-                 RefreshQueryTrayLayout();
                  await Task.Delay(200);
                  //SelectedItem = ctvm_to_pin;
                  ctvm_to_pin.IsSelected = true;

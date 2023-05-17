@@ -1148,6 +1148,7 @@ namespace MonkeyPaste.Avalonia {
                     FocusManager.Instance.Current is Control c &&
                     (
                         c.GetVisualAncestor<ContextMenu>() != null ||
+                        c.GetVisualAncestor<MenuItem>() != null ||
                         c.GetVisualAncestor<ComboBoxItem>() != null ||
                         (c.GetVisualAncestor<Window>() is Window w && w != MpAvWindowManager.MainWindow) ||
                         (c.GetVisualAncestor<TextBox>() is TextBox tb && !tb.IsReadOnly)
@@ -1335,17 +1336,19 @@ namespace MonkeyPaste.Avalonia {
                  return IsVerticalOrientation;
              });
 
-        public ICommand WindowSizeToDefaultCommand => new MpCommand(
-            () => {
-                //var rc = MpAvMainView.Instance.GetResizerControl();
-                //if (rc == null) {
-                //    return;
-                //}
+        public ICommand WindowSizeToDefaultCommand => new MpAsyncCommand(
+            async () => {
                 IsResizing = true;
+                IsMainWindowSilentLocked = true;
 
                 MpAvResizeExtension.ResetToDefault(MpAvMainView.Instance);
 
                 IsResizing = false;
+
+                // NOTE adding signif delay to ignore off window click during resize
+                // since event is triggered on double DOWN and OS (windows) still treats up as task change
+                await Task.Delay(1000);
+                IsMainWindowSilentLocked = false;
             });
 
         #endregion

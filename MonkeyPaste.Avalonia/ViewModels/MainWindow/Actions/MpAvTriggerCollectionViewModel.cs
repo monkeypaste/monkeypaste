@@ -56,6 +56,7 @@ namespace MonkeyPaste.Avalonia {
                                     new MpMenuItemViewModel() {
                                         Header = x.EnumToLabel(),
                                         IconResourceKey = MpAvActionViewModelBase.GetDefaultActionIconResourceKey(x),
+                                        IconTintHexStr = MpAvActionViewModelBase.GetActionHexColor(MpActionType.Trigger, x),
                                         Command = AddTriggerCommand,
                                         CommandParameter = x
                                     }).ToList()

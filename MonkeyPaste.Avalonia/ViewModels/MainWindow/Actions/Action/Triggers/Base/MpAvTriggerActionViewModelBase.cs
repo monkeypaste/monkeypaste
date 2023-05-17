@@ -121,6 +121,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Appearance
+        public override string ActionBackgroundHexColor =>
+            GetActionHexColor(ActionType, TriggerType);
         public string EnabledHexColor => MpSystemColors.limegreen; //(MpPlatform.Services.PlatformResource.GetResource("EnabledHighlightBrush") as SolidColorBrush).Color.ToPortableColor().ToHex();
         public string DisabledHexColor => MpSystemColors.Red; //(MpPlatform.Services.PlatformResource.GetResource("DisabledHighlightBrush") as SolidColorBrush).Color.ToPortableColor().ToHex();
 

@@ -222,6 +222,13 @@ namespace MonkeyPaste {
                 await WriteToDatabaseAsync();
             }
         }
+
+        public override async Task WriteToDatabaseAsync() {
+            if (Id == 0 && IconImageId == 1 && IconBorderImageId == 2) {
+                // redundant icon writing
+            }
+            await base.WriteToDatabaseAsync();
+        }
         public override async Task DeleteFromDatabaseAsync() {
             if (Id < 1) {
                 return;

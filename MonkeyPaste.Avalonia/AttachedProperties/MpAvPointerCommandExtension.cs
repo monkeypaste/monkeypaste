@@ -413,10 +413,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void Control_PointerPressed(object sender, PointerPressedEventArgs e) {
-            var control = sender as Control;
-            if (control == null) {
-                return;
-            }
+            var control = ResolveEventControl(sender, e);
             ICommand cmd = null;
             object param = null;
             if (e.IsLeftPress(control)) {
@@ -513,7 +510,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void Control_PointerReleased(object sender, PointerReleasedEventArgs e) {
-            if (sender is Control control &&
+
+            var control = ResolveEventControl(sender, e);
+            if (control != null &&
                 GetLeftReleaseCommand(control) is ICommand cmd) {
                 cmd.Execute(GetLeftReleaseCommandParameter(control));
                 e.Handled = GetIsEventHandled(control);
@@ -522,6 +521,20 @@ namespace MonkeyPaste.Avalonia {
         private static void Control_Holding(object sender, HoldingRoutedEventArgs e) {
             // handled manually in press
             e.Handled = true;
+        }
+
+        private static Control ResolveEventControl(object sender, PointerEventArgs e) {
+            var control = sender as Control;
+            if (control == null && e.Source == null) {
+                return null;
+            }
+            if (sender != e.Source &&
+                e.Source is Control c &&
+                GetIsEnabled(c)) {
+                // give source precedence (likely a child element)
+                control = c;
+            }
+            return control;
         }
 
         #region Dnd

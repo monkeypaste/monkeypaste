@@ -271,7 +271,8 @@ namespace MonkeyPaste.Avalonia {
         //        }
         //    }
         //}
-
+        public double MaxTitleHeight =>
+            IsExpanded ? 40 : 20;
 
         private double _tileEditToolbarHeight = 40;// MpMeasurements.Instance.ClipTileEditToolbarDefaultHeight;
         public double TileEditToolbarHeight {
@@ -311,7 +312,6 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-        public double MaxTitleHeight => 40;
 
         public double TrayX { get; set; }// => TrayLocation.X;
         public double TrayY { get; set; }// => TrayLocation.Y;
@@ -358,10 +358,12 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsExpanded {
             get {
-                if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                    return true;
-                }
-                return IsSelected;
+                //if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ||
+                //    IsPinned) {
+                //    return true;
+                //}
+                //return IsSelected;
+                return MpAvMainWindowViewModel.Instance.IsHorizontalOrientation;
             }
         }
 
@@ -600,7 +602,12 @@ namespace MonkeyPaste.Avalonia {
         public bool IsCustomWidth =>
             Parent == null ?
             false :
-            MpAvPersistentClipTilePropertiesHelper.IsTileHaveUniqueSize(CopyItemId, QueryOffsetIdx);
+            MpAvPersistentClipTilePropertiesHelper.IsTileHaveUniqueWidth(CopyItemId, QueryOffsetIdx);
+
+        public bool IsCustomHeight =>
+            Parent == null ?
+            false :
+            MpAvPersistentClipTilePropertiesHelper.IsTileHaveUniqueHeight(CopyItemId, QueryOffsetIdx);
         public bool IsPlaceholder => CopyItem == null;
 
         #region Drag & Drop
@@ -1002,22 +1009,32 @@ namespace MonkeyPaste.Avalonia {
                 IsChildWindowOpen = false;
             }
 
-            if (ci != null &&
-                MpAvPersistentClipTilePropertiesHelper.TryGetPersistentWidth_ById(ci.Id, queryOffset, out double uniqueWidth)) {
-                if (Math.Abs(uniqueWidth - MinWidth) < 1) {
-                    // i think this is a bug when tile goes from placeholder to active it thinks it has
-                    // a unique size
-                    MpAvPersistentClipTilePropertiesHelper.RemovePersistentSize_ById(ci.Id, queryOffset);
-
-                }
-                BoundWidth = uniqueWidth;
-                BoundHeight = MinHeight;
-            } else if (ci != null && ci.Id > 0) {
-                BoundWidth = MinWidth;
-                BoundHeight = MinHeight;
-            } else {
+            if (ci == null || ci.Id <= 0) {
                 BoundWidth = 0;
                 BoundHeight = 0;
+            } else {
+                double w = MinWidth;
+                double h = MinHeight;
+                if (MpAvPersistentClipTilePropertiesHelper.TryGetUniqueWidth_ById(ci.Id, queryOffset, out double uw)) {
+                    if (Math.Abs(uw - w) < 1) {
+                        // i think this is a bug when tile goes from placeholder to active it thinks it has
+                        // a unique size
+                        MpAvPersistentClipTilePropertiesHelper.RemoveUniqueWidth_ById(ci.Id, queryOffset);
+                    } else {
+                        w = uw;
+                    }
+                }
+                if (MpAvPersistentClipTilePropertiesHelper.TryGetUniqueHeight_ById(ci.Id, queryOffset, out double uh)) {
+                    if (Math.Abs(uh - h) < 1) {
+                        // i think this is a bug when tile goes from placeholder to active it thinks it has
+                        // a unique size
+                        MpAvPersistentClipTilePropertiesHelper.RemoveUniqueHeight_ById(ci.Id, queryOffset);
+                    } else {
+                        h = uh;
+                    }
+                }
+                BoundWidth = w;
+                BoundHeight = h;
             }
             // NOTE FileItems are init'd before ciid is set so Items are busy when WebView is loading content
             FileItemCollectionViewModel.InitializeAsync(ci).FireAndForgetSafeAsync(this);
@@ -1029,6 +1046,8 @@ namespace MonkeyPaste.Avalonia {
             if (isRestoringSelection) {
                 Parent.RestoreSelectionState(this);
             }
+
+
 
             OnPropertyChanged(nameof(IconResourceObj));
             OnPropertyChanged(nameof(IsPlaceholder));
@@ -1734,7 +1753,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
                 case nameof(MinHeight):
-                    BoundHeight = MinHeight;
+                    BoundHeight = IsCustomHeight ? BoundHeight : MinHeight;
                     TransactionCollectionViewModel.OnPropertyChanged(nameof(TransactionCollectionViewModel.DefaultTransactionPanelHeight));
                     break;
                 case nameof(MinWidth):
@@ -1750,13 +1769,17 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(BoundWidth):
                 case nameof(BoundHeight):
-                    //    OnPropertyChanged(nameof(BoundSize));
-                    //    break;
-                    //case nameof(BoundSize):
                     if (IsResizing) {
-                        //this occurs when mainwindow is resized and user gives tile unique width
-                        MpAvPersistentClipTilePropertiesHelper.AddOrReplacePersistentSize_ById(CopyItemId, BoundWidth, QueryOffsetIdx);
+                        //this occurs when mainwindow is resized or user gives tile unique width
+                        if (e1.PropertyName == nameof(BoundWidth)) {
+
+                            MpAvPersistentClipTilePropertiesHelper.AddOrReplaceUniqueWidth_ById(CopyItemId, BoundWidth, QueryOffsetIdx);
+                        } else {
+
+                            MpAvPersistentClipTilePropertiesHelper.AddOrReplaceUniqueHeight_ById(CopyItemId, BoundHeight, QueryOffsetIdx);
+                        }
                     }
+
                     if (Next == null) {
                         break;
                     }
@@ -1807,6 +1830,12 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(CopyCount):
                 case nameof(PasteCount):
                     OnPropertyChanged(nameof(DetailText));
+                    break;
+                case nameof(IsExpanded):
+                    if (Parent != null && Parent.ListOrientation == Orientation.Horizontal) {
+                        break;
+                    }
+
                     break;
             }
         }
@@ -1868,7 +1897,7 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 IsResizing = true;
 
-                MpAvPersistentClipTilePropertiesHelper.RemovePersistentSize_ById(CopyItemId, QueryOffsetIdx);
+                MpAvPersistentClipTilePropertiesHelper.RemoveUniqueSize_ById(CopyItemId, QueryOffsetIdx);
                 //BoundSize = Parent.DefaultQueryItemSize;
                 BoundWidth = MinWidth;
 
@@ -1994,7 +2023,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (Parent != null) {
                 _contentView = null;
-                MpAvPersistentClipTilePropertiesHelper.RemovePersistentSize_ById(ciid, QueryOffsetIdx);
+                MpAvPersistentClipTilePropertiesHelper.RemoveUniqueSize_ById(ciid, QueryOffsetIdx);
                 Parent.PinnedItems.Remove(this);
                 Parent.PinTileCommand.Execute(this);
             }

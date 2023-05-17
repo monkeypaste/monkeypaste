@@ -83,7 +83,7 @@
                       local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ToggleTileIsPinnedCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                       local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding}"
                       IsChecked="{Binding IsPinned}"
-                      IsVisible="{Binding IsContentReadOnly}"
+                      IsVisible="{Binding !IsChildWindowOpen}"
                       HorizontalAlignment="Left"
                       VerticalAlignment="Top">
             <PathIcon HorizontalAlignment="Left"

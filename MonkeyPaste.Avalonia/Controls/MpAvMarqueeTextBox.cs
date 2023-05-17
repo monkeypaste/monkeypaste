@@ -555,6 +555,7 @@ namespace MonkeyPaste.Avalonia {
             this.GetObservable(MpAvMarqueeTextBox.ActiveHighlightIdxProperty).Subscribe(value => Init());
             this.GetObservable(MpAvMarqueeTextBox.ActiveHighlightBrushProperty).Subscribe(value => Init());
             this.GetObservable(MpAvMarqueeTextBox.InactiveHighlightBrushProperty).Subscribe(value => Init());
+            this.GetObservable(MpAvMarqueeTextBox.FontSizeProperty).Subscribe(value => Init());
 
             this.AddHandler(MpAvMarqueeTextBox.KeyDownEvent, HandleKeyDown, RoutingStrategies.Tunnel);
             this.AddHandler(MpAvMarqueeTextBox.KeyUpEvent, HandleKeyUp, RoutingStrategies.Tunnel);

@@ -158,16 +158,34 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Unique Size
-        public static void AddOrReplacePersistentSize_ById(int ciid, double uniqueSize, int idx) {
-            GetProps(ciid, true, idx).UniqueWidth = uniqueSize;
+        public static void AddOrReplaceUniqueWidth_ById(int ciid, double uniqueWidth, int idx) {
+            GetProps(ciid, true, idx).UniqueWidth = uniqueWidth;
+        }
+        public static void AddOrReplaceUniqueHeight_ById(int ciid, double uniqueHeight, int idx) {
+            GetProps(ciid, true, idx).UniqueHeight = uniqueHeight;
         }
 
-        public static void RemovePersistentSize_ById(int ciid, int idx) {
+        public static void RemoveUniqueSize_ById(int ciid, int idx) {
+            if (GetProps(ciid, false, idx) is MpAvPersistentClipTileProperties pp) {
+                pp.UniqueWidth = null;
+                pp.UniqueHeight = null;
+                CleanupProps();
+            }
+        }
+
+        public static void RemoveUniqueWidth_ById(int ciid, int idx) {
             if (GetProps(ciid, false, idx) is MpAvPersistentClipTileProperties pp) {
                 pp.UniqueWidth = null;
                 CleanupProps();
             }
         }
+        public static void RemoveUniqueHeight_ById(int ciid, int idx) {
+            if (GetProps(ciid, false, idx) is MpAvPersistentClipTileProperties pp) {
+                pp.UniqueHeight = null;
+                CleanupProps();
+            }
+        }
+
         public static bool TryGetUniqueWidth_ByOffsetIdx(int idx, out double uwidth) {
             if (_props.FirstOrDefault(x => x.Value.QueryOffsetIdx == idx) is KeyValuePair<int, MpAvPersistentClipTileProperties> kvp &&
                 kvp.Value is MpAvPersistentClipTileProperties pctp &&
@@ -179,23 +197,54 @@ namespace MonkeyPaste.Avalonia {
             return false;
         }
 
-        public static bool TryGetPersistentWidth_ById(int ciid, int idx, out double uniqueSize) {
-            uniqueSize = 0;
+        public static bool TryGetUniqueHeight_ByOffsetIdx(int idx, out double uheight) {
+            if (_props.FirstOrDefault(x => x.Value.QueryOffsetIdx == idx) is KeyValuePair<int, MpAvPersistentClipTileProperties> kvp &&
+                kvp.Value is MpAvPersistentClipTileProperties pctp &&
+                pctp.UniqueHeight.HasValue) {
+                uheight = pctp.UniqueHeight.Value;
+                return true;
+            }
+            uheight = 0;
+            return false;
+        }
+
+        public static bool TryGetUniqueWidth_ById(int ciid, int idx, out double uniqueWidth) {
+            uniqueWidth = 0;
             if (GetProps(ciid, false, idx) is MpAvPersistentClipTileProperties pp &&
                 pp.UniqueWidth.HasValue) {
-                uniqueSize = pp.UniqueWidth.Value;
+                uniqueWidth = pp.UniqueWidth.Value;
                 return true;
             }
             return false;
         }
 
-        public static bool IsTileHaveUniqueSize(int ciid, int idx) {
-            return GetProps(ciid, false, idx) is MpAvPersistentClipTileProperties pp && pp.UniqueWidth.HasValue;
+        public static bool TryGetUniqueHeight_ById(int ciid, int idx, out double uniqueHeight) {
+            uniqueHeight = 0;
+            if (GetProps(ciid, false, idx) is MpAvPersistentClipTileProperties pp &&
+                pp.UniqueHeight.HasValue) {
+                uniqueHeight = pp.UniqueHeight.Value;
+                return true;
+            }
+            return false;
+        }
+
+        public static bool IsTileHaveUniqueWidth(int ciid, int idx) {
+            return
+                GetProps(ciid, false, idx) is MpAvPersistentClipTileProperties pp &&
+                pp.UniqueWidth.HasValue;
+        }
+        public static bool IsTileHaveUniqueHeight(int ciid, int idx) {
+            return
+                GetProps(ciid, false, idx) is MpAvPersistentClipTileProperties pp &&
+                pp.UniqueHeight.HasValue;
         }
         public static void ClearPersistentWidths() {
-            //_persistentUniqueTileSizeLookup_ByIdx.Clear();
-            //_persistentUniqueTileSizeLookup_ById.Clear();
             _props.ForEach(x => x.Value.UniqueWidth = null);
+            CleanupProps();
+        }
+
+        public static void ClearPersistentHeights() {
+            _props.ForEach(x => x.Value.UniqueHeight = null);
             CleanupProps();
         }
         #endregion

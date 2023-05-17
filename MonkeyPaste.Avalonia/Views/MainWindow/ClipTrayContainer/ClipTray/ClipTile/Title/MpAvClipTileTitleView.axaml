@@ -63,7 +63,8 @@
     </local:MpAvUserControl.Styles>
     <Grid x:Name="TitleContainerGrid"
           ColumnDefinitions="0.7*,0.3*">
-        <!--  Swirl  -->
+        <!--  SWIRL  -->
+
         <Viewbox HorizontalAlignment="Left"
                  VerticalAlignment="Top"
                  IsVisible="{Binding IsTitleLayersVisible, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
@@ -72,7 +73,8 @@
                  Stretch="Fill">
             <Canvas x:Name="SwirlCanvas"
                     Width="260"
-                    Height="55">
+                    Height="55"
+                    IsVisible="{Binding IsExpanded}">
                 <Ellipse x:Name="layer2"
                          StrokeThickness="0"
                          Fill="{Binding TitleLayerHexColors[2], Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
@@ -149,7 +151,8 @@
             </Canvas>
 
         </Viewbox>
-        <!--  Title Text Box  -->
+
+        <!--  TITLE  -->
 
         <local:MpAvMarqueeTextBox x:Name="TileTitleTextBox"
                                   Grid.Column="0"
@@ -162,6 +165,8 @@
                                   Padding="0"
                                   ClipToBounds="True"
                                   MinWidth="50"
+                                  local:MpAvClampedFontSizeExtension.IsEnabled="True"
+                                  local:MpAvClampedFontSizeExtension.MinFontSize="18"
                                   ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                   ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                                   local:MpAvIsFocusedExtension.IsEnabled="{Binding IsMarqueeEnabled, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
@@ -207,7 +212,8 @@
             </local:MpAvMarqueeTextBox.FontSize>
         </local:MpAvMarqueeTextBox>
 
-        <!--  Source Icon  -->
+        <!--  ICON  -->
+
         <StackPanel x:Name="SourceIconContainerPanel"
                     Grid.Column="1"
                     Orientation="Horizontal"
@@ -225,9 +231,8 @@
             <Button x:Name="ClipTileAppIconImageButton"
                     x:DataType="local:MpAvClipTileTransactionCollectionViewModel"
                     DataContext="{Binding TransactionCollectionViewModel}"
-                    Classes="noBg noHoverBg"
+                    Classes="noBg noHoverBg square"
                     Classes.shakeOnce="{Binding DoShake}"
-                    Width="{Binding Bounds.Height, ElementName=TitleContainerGrid}"
                     Command="{Binding OpenTransactionPaneCommand}"
                     ClipToBounds="False"
                     BorderThickness="0"
@@ -244,7 +249,9 @@
                     <RotateTransform />
                 </Button.RenderTransform>
 
-                <Grid>
+                <Grid Classes="square"
+                      MinWidth="20"
+                      ClipToBounds="False">
                     <Image x:Name="HasAnalysisBorderImage"
                            IsHitTestVisible="False"
                            IsVisible="{Binding IsAnyAnalysisTransaction}"
@@ -264,6 +271,7 @@
                            IsHitTestVisible="False"
                            Source="{Binding CreateTransaction.IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, ConverterParameter=border}"
                            Stretch="UniformToFill"
+                           ClipToBounds="False"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch">
                         <Image.RenderTransform>

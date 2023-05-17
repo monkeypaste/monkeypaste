@@ -20,10 +20,15 @@
         <local:MpHighlightSelectorBehavior />
     </Interaction.Behaviors>
     <local:MpAvUserControl.Styles>
+        <!--  BUSY CURSOR  -->
+
         <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.IsAnyBusy">
             <Setter Property="Cursor"
                     Value="Wait" />
         </Style>
+
+        <!--  DETAIL COLOR  -->
+
         <Style Selector="Grid#DetailContainerGrid TextBlock">
             <Setter Property="Foreground"
                     Value="Black" />
@@ -31,19 +36,6 @@
         <Style Selector="Grid#DetailContainerGrid.subselect TextBlock">
             <Setter Property="Foreground"
                     Value="AntiqueWhite" />
-        </Style>
-
-        <Style Selector="Border#ClipTileResizeBorder:not(.resizeEnabled)">
-            <Setter Property="Cursor"
-                    Value="Arrow" />
-            <Setter Property="local:MpAvResizeExtension.IsEnabled"
-                    Value="False" />
-        </Style>
-        <Style Selector="Border#ClipTileResizeBorder.resizeEnabled">
-            <Setter Property="Cursor"
-                    Value="SizeWestEast" />
-            <Setter Property="local:MpAvResizeExtension.IsEnabled"
-                    Value="True" />
         </Style>
 
     </local:MpAvUserControl.Styles>
@@ -81,14 +73,14 @@
                                MaxHeight="40" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto"
-                               MaxHeight="25"/>
+                               MaxHeight="25" />
             </Grid.RowDefinitions>
 
             <!--  Title  -->
 
             <local:MpAvClipTileTitleView x:Name="TileTitleView"
                                          Grid.Row="0"
-                                         MaxHeight="40"
+                                         Height="{Binding MaxTitleHeight, FallbackValue=40, TargetNullValue=40}"
                                          HorizontalAlignment="Stretch"
                                          VerticalAlignment="Stretch"
                                          IsVisible="{Binding IsTitleVisible}" />
@@ -111,8 +103,20 @@
 
                 <local:MpAvBusySpinnerView HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
-                                           Width="70"
-                                           Height="70" />
+                                           Classes="square">
+                    <local:MpAvBusySpinnerView.Height>
+                        <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
+                                      ConverterParameter="/">
+                            <Binding Path="Bounds.Height"
+                                     ElementName="ClipTileContainerBorder" />
+                            <Binding>
+                                <Binding.Source>
+                                    <sys:Double>4</sys:Double>
+                                </Binding.Source>
+                            </Binding>
+                        </MultiBinding>
+                    </local:MpAvBusySpinnerView.Height>
+                </local:MpAvBusySpinnerView>
             </Border>
 
             <!--  Detail  -->
@@ -179,13 +183,14 @@
                                                    IsVisible="{Binding IsTransactionPaneOpen}"
                                                    HorizontalAlignment="Stretch"
                                                    VerticalAlignment="Stretch" />
-            <!--  RESIZER  -->
+            <!--  WIDTH RESIZER  -->
 
-            <Border x:Name="ClipTileResizeBorder"
-                    Classes.resizeEnabled="{Binding IsResizerEnabled}"
+            <Border x:Name="ClipTileWidthResizeBorder"
                     Grid.Row="0"
                     Grid.RowSpan="3"
                     Grid.ColumnSpan="2"
+                    Cursor="SizeWestEast"
+                    local:MpAvResizeExtension.IsEnabled="{Binding IsResizerEnabled}"
                     local:MpAvResizeExtension.MinHeight="{Binding MinHeight}"
                     local:MpAvResizeExtension.MaxHeight="{Binding MaxHeight}"
                     local:MpAvResizeExtension.MinWidth="{Binding MinWidth}"
@@ -209,6 +214,42 @@
                     Background="Transparent">
                 <Border.RenderTransform>
                     <TranslateTransform X="5" />
+                </Border.RenderTransform>
+            </Border>
+
+            <!--  HEIGHT RESIZER  -->
+
+            <Border x:Name="ClipTileHeightResizeBorder"
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Cursor="SizeNorthSouth"
+                    IsHitTestVisible="{Binding IsResizerEnabled}"
+                    local:MpAvResizeExtension.IsEnabled="{Binding IsResizerEnabled}"
+                    local:MpAvResizeExtension.MinHeight="{Binding MinHeight}"
+                    local:MpAvResizeExtension.MaxHeight="{Binding MaxHeight}"
+                    local:MpAvResizeExtension.MinWidth="{Binding MinWidth}"
+                    local:MpAvResizeExtension.MaxWidth="{Binding MaxWidth}"
+                    local:MpAvResizeExtension.BoundWidth="{Binding BoundWidth, Mode=TwoWay}"
+                    local:MpAvResizeExtension.BoundHeight="{Binding BoundHeight, Mode=TwoWay}"
+                    local:MpAvResizeExtension.DefaultWidth="{Binding MinWidth}"
+                    local:MpAvResizeExtension.DefaultHeight="{Binding MinHeight}"
+                    local:MpAvResizeExtension.IsResizable="{Binding IsResizable}"
+                    local:MpAvResizeExtension.CanResize="{Binding CanResize, Mode=TwoWay}"
+                    local:MpAvResizeExtension.IsResizing="{Binding IsResizing, Mode=TwoWay}"
+                    local:MpAvResizeExtension.XFactor="0"
+                    local:MpAvResizeExtension.YFactor="-1"
+                    local:MpAvResizeExtension.GlobalResizeMessage="None"
+                    local:MpAvPointerCommandExtension.IsEnabled="True"
+                    local:MpAvPointerCommandExtension.DoubleLeftPressCommand="{Binding ResetTileSizeToDefaultCommand}"
+                    local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
+                    local:MpAvIsHoveringExtension.IsEnabled="True"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Bottom"
+                    Height="10"
+                    Background="Transparent">
+                <Border.RenderTransform>
+                    <TranslateTransform Y="5" />
                 </Border.RenderTransform>
             </Border>
 

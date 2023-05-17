@@ -122,15 +122,15 @@
                     <local:MpAvUserActionBodyTemplateSelector>
                         <DataTemplate x:Key="TextBodyTemplate"
                                       x:DataType="pcl:MpUserActionNotificationViewModel">
-                            <TextBlock FontSize="14"
-                                       HorizontalAlignment="Left"
-                                       VerticalAlignment="Top"
-                                       TextWrapping="Wrap"
-                                       FontWeight="SemiBold"
-                                       Background="Transparent"
-                                       Focusable="True"
-                                       Foreground="{Binding NotificationTextForegroundColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
-                                       Text="{Binding Body}" />
+                            <SelectableTextBlock FontSize="14"
+                                                 HorizontalAlignment="Left"
+                                                 VerticalAlignment="Top"
+                                                 TextWrapping="Wrap"
+                                                 FontWeight="SemiBold"
+                                                 Background="Transparent"
+                                                 Focusable="True"
+                                                 Foreground="{Binding NotificationTextForegroundColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
+                                                 Text="{Binding Body}" />
                         </DataTemplate>
                         <DataTemplate x:Key="ParameterCollectionTemplate"
                                       x:DataType="pcl:MpUserActionNotificationViewModel">
