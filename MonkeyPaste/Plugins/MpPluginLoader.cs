@@ -291,7 +291,7 @@ namespace MonkeyPaste {
                         return null;
                     }
 
-                    bool isValid = await ValidatePluginManifestAsync(plugin, manifestPath);
+                    bool isValid = ValidatePluginManifest(plugin, manifestPath);
                 }
                 catch (Exception ex) {
                     var invalid_or_malformed_json_result = await MpNotificationBuilder.ShowNotificationAsync(
@@ -503,7 +503,7 @@ namespace MonkeyPaste {
             }
         }
 
-        private static async Task<bool> ValidatePluginManifestAsync(MpPluginFormat plugin, string manifestPath) {
+        private static bool ValidatePluginManifest(MpPluginFormat plugin, string manifestPath) {
             if (plugin == null) {
                 throw new MpUserNotifiedException($"Plugin parsing error, at path '{manifestPath}' null, likely error parsing json. Ignoring plugin");
             }
@@ -515,10 +515,10 @@ namespace MonkeyPaste {
                 throw new MpUserNotifiedException($"Plugin guid error, at path '{manifestPath}' with Title '{plugin.title}' must have a 'guid' property, RFC 4122 compliant 128-bit GUID (UUID). Ignoring plugin");
             }
 
-            bool is_icon_valid = await MpFileIo.IsAccessibleUriAsync(plugin.iconUri, plugin.RootDirectory);
-            if (!is_icon_valid) {
-                throw new MpUserNotifiedException($"Plugin icon error, at path '{manifestPath}' with iconUri '{plugin.iconUri}' must have an 'iconUri' property which is a relative file path or valid url to an image");
-            }
+            //bool is_icon_valid = await MpFileIo.IsAccessibleUriAsync(plugin.iconUri, plugin.RootDirectory);
+            //if (!is_icon_valid) {
+            //    throw new MpUserNotifiedException($"Plugin icon error, at path '{manifestPath}' with iconUri '{plugin.iconUri}' must have an 'iconUri' property which is a relative file path or valid url to an image");
+            //}
             bool are_all_components_valid = plugin.componentFormats.All(x => ValidatePluginComponentManifest(x, manifestPath));
             return are_all_components_valid;
         }

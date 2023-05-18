@@ -165,6 +165,8 @@ namespace MonkeyPaste {
                 return 10000;
             }
         }
+
+        public int DefaultPluginIconId { get; set; } = 0;
         #endregion
 
         #region Resources

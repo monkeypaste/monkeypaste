@@ -203,7 +203,6 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\Border.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvClipTile.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMarqueeTextBox.axaml" />
-    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvNotificationWindow.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPagingScrollBar.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPagingScrollViewer.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvParameterItem.axaml" />
@@ -216,8 +215,10 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\TextBlock.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TextBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ToolTip.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\Window.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\_DefaultControls.axaml" />
     <AvaloniaXaml Remove="Themes\Default\DefaultLight.axaml" />
+    <AvaloniaXaml Remove="Views\MainWindow\Sidebar\MpAvSidebarContainerView.axaml" />
     <AvaloniaXaml Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\MpAvActionPropertyListBoxView.axaml" />
     <AvaloniaXaml Remove="Views\MainWindow\Sidebar\SidebarItems\AppMode\MpAvAppModeFlyoutView2.axaml" />
     <AvaloniaXaml Remove="Views\MainWindow\Sidebar\SidebarItems\ClipboardHandlers\Selector\MpAvClipboardHandlerItemSelectorView.axaml" />
@@ -229,6 +230,7 @@
     <None Remove="Assets\Cursors\hand_open.png" />
     <None Remove="Assets\Icons\cog.ico" />
     <None Remove="Assets\Icons\monkey.ico" />
+    <None Remove="Assets\Icons\monkey_old.ico" />
     <None Remove="Assets\Icons\test_icon.ico" />
     <None Remove="Assets\Images\Add.png" />
     <None Remove="Assets\Images\add1.png" />
@@ -482,6 +484,7 @@
     <Compile Remove="ViewModels\Reusable\Source\MpAvSourceCollectionViewModel.cs" />
     <Compile Remove="ViewModels\Reusable\Source\MpAvSourceViewModel.cs" />
     <Compile Remove="ViewModels\SettingsWindow\Sound\MpStandardBalloonViewModel.cs" />
+    <Compile Remove="Views\MainWindow\Sidebar\MpAvSidebarContainerView.axaml.cs" />
     <Compile Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\MpAvActionPropertyListBoxView.axaml.cs" />
     <Compile Remove="Views\MainWindow\Sidebar\SidebarItems\AppMode\MpAvAppModeFlyoutView2.axaml.cs" />
     <Compile Remove="Views\MainWindow\Sidebar\SidebarItems\ClipboardHandlers\Selector\MpAvClipboardHandlerItemSelectorView.axaml.cs" />
@@ -1147,7 +1150,7 @@
     <AvaloniaResource Include="Themes\Default\Controls\ComboBoxItem.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvMarqueeTextBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvTooltip.axaml" />
-    <AvaloniaResource Include="Themes\Default\Controls\MpAvNotificationWindow.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\Window.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Button.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvPagingScrollBar.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Label.axaml" />
@@ -1238,9 +1241,6 @@
     </Compile>
     <Compile Update="Views\MainWindow\Sidebar\ButtonColumn\MpAvSidebarButtonGroupView.axaml.cs">
       <DependentUpon>MpAvSidebarButtonGroupView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\MainWindow\Sidebar\MpAvSidebarContainerView.axaml.cs">
-      <DependentUpon>MpAvSidebarContainerView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\ActionItem\MpAvActionPropertyView.axaml.cs">
       <DependentUpon>MpAvActionPropertyView.axaml</DependentUpon>

@@ -84,7 +84,26 @@ namespace MonkeyPaste.Avalonia {
 
             IsBusy = false;
         }
-        public async Task<MpAvHtmlClipboardData> ParseAsync(string inputStr, string inputFormatType, MpCsvFormatProperties csvProps = null) {
+        public async Task<MpAvHtmlClipboardData> ParseAsync(
+            string inputStr,
+            string inputFormatType,
+            MpCsvFormatProperties csvProps = null) {
+            string htmlDataStr = inputStr;
+            if (htmlDataStr == null) {
+                return null;
+            }
+            if (!MpPrefViewModel.Instance.IsRichHtmlContentEnabled) {
+                var result = MpAvHtmlClipboardData.Parse(htmlDataStr.ToString());
+                return result;
+            }
+
+            if (ConverterWebView == null) {
+                MpConsole.WriteLine("Cannot parse html. Waiting for Html converter to load...");
+                while (ConverterWebView == null) {
+                    // should only occur when creating test data from db init
+                    await Task.Delay(100);
+                }
+            }
             if (!ConverterWebView.IsEditorInitialized) {
                 MpConsole.WriteLine("Cannot parse html. Waiting for Html converter to initialize...");
                 while (!ConverterWebView.IsEditorInitialized) {
@@ -92,15 +111,6 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(100);
                 }
                 MpConsole.WriteLine("Html converter initialized");
-            }
-            string htmlDataStr = inputStr;
-            if (htmlDataStr == null) {
-                return null;
-            }
-            if (!MpPrefViewModel.Instance.IsRichHtmlContentEnabled ||
-                ConverterWebView == null) {
-                var result = MpAvHtmlClipboardData.Parse(htmlDataStr.ToString());
-                return result;
             }
             if (inputFormatType == "rtf") {
                 // create 'dirty' quill html w/ internal converter and treat as plain for quill to parse

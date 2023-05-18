@@ -488,6 +488,18 @@ namespace MonkeyPaste.Avalonia {
             }
             return IsValid;
         }
+
+        public virtual string GetValidationMessage(bool isExecuting) {
+            // NOTE isExecuting is true when analyzer executing or trigger is enabling
+            if (IsRequired && string.IsNullOrWhiteSpace(CurrentValue)) {
+                if ((isExecuting && IsExecuteParameter) || !IsExecuteParameter) {
+                    return $"{Label} is required";
+                }
+            }
+
+            // TODO add pattern check here
+            return string.Empty;
+        }
         #endregion
 
         #region Protected Methods

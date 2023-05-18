@@ -5,6 +5,23 @@ namespace MonkeyPaste {
     public class MpMessageNotificationViewModel : MpNotificationViewModelBase {
         #region Properties
 
+        public double MessageWindowFixedWidth =>
+            350;
+
+        #region State
+
+        public bool IsOpenAnimated =>
+            OpenStartX.HasValue;
+
+        #endregion
+
+        #region Layout
+
+        public int? OpenStartX { get; set; }
+        public int? OpenEndX { get; set; }
+
+        #endregion
+
         public override bool CanPin => true;
 
         #endregion

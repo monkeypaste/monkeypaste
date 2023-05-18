@@ -64,7 +64,7 @@
                    VerticalAlignment="Center"
                    FontWeight="SemiBold"
                    FontStyle="Oblique"
-                   Foreground="DimGray"
+                   Foreground="White"
                    Text="{Binding EmptyText, ElementName=ShortcutView}" />
         <ItemsControl x:Name="ShortcutListBox"
                       Background="Transparent"

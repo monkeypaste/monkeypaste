@@ -309,7 +309,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void OnItemRemoved() {
-            if (BindingContext == null || BindingContext.HasUserAlteredPinTrayWidthSinceWindowShow) {
+            var ctrcv = this.GetVisualAncestor<MpAvClipTrayContainerView>();
+            if (BindingContext == null ||
+                BindingContext.HasUserAlteredPinTrayWidthSinceWindowShow ||
+                ctrcv == null) {
                 // ignore collection changed if user in workflow
                 //MpConsole.WriteLine($"PinTray dematerialized {BindingContext.Items.Count} items was ignored. HasUserAlteredPinTrayWidthSinceWindowShow: {BindingContext.HasUserAlteredPinTrayWidthSinceWindowShow} ");
                 return;
@@ -322,14 +325,15 @@ namespace MonkeyPaste.Avalonia {
                     new_length = BindingContext.PinnedItems.Max(x => x.TrayRect.Bottom);
                 }
             }
-            this.GetVisualAncestor<MpAvClipTrayContainerView>()
-                .UpdatePinTrayVarDimension(new GridLength(new_length, GridUnitType.Auto));
+            ctrcv.UpdatePinTrayVarDimension(new GridLength(new_length, GridUnitType.Auto));
         }
 
         private void OnItemAdded() {
+            var ctrcv = this.GetVisualAncestor<MpAvClipTrayContainerView>();
             if (BindingContext == null ||
                 BindingContext.HasUserAlteredPinTrayWidthSinceWindowShow ||
-                BindingContext.Items.Count == 0) {
+                BindingContext.Items.Count == 0 ||
+                ctrcv == null) {
                 // ignore collection changed if user in workflow
                 //MpConsole.WriteLine($"PinTray materialized {e.Containers.Count} items was ignored. HasUserAlteredPinTrayWidthSinceWindowShow: {BindingContext.HasUserAlteredPinTrayWidthSinceWindowShow} ");
                 return;
@@ -347,16 +351,15 @@ namespace MonkeyPaste.Avalonia {
                     .Cast<MpAvClipTileViewModel>()
                     .Sum(x => x.BoundHeight);
 
-            var gs = this.GetVisualAncestor<MpAvClipTrayContainerView>().FindControl<GridSplitter>("ClipTraySplitter");
-            var gs_grid = this.GetVisualAncestor<MpAvClipTrayContainerView>().FindControl<Grid>("ClipTrayContainerGrid");
+            var gs = ctrcv.FindControl<GridSplitter>("ClipTraySplitter");
+            var gs_grid = ctrcv.FindControl<Grid>("ClipTrayContainerGrid");
             double new_length = 0;
             if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
                 new_length = Math.Min(BindingContext.MaxPinTrayScreenWidth + gs.Bounds.Width, Math.Max(this.Bounds.Width + gs.Bounds.Width, added_size.Width + 40.0d));
             } else {
                 new_length = Math.Min(BindingContext.MaxPinTrayScreenHeight + gs.Bounds.Height, Math.Max(this.Bounds.Height + gs.Bounds.Height, added_size.Height));
             }
-            this.GetVisualAncestor<MpAvClipTrayContainerView>()
-                .UpdatePinTrayVarDimension(new GridLength(new_length, GridUnitType.Auto));
+            ctrcv.UpdatePinTrayVarDimension(new GridLength(new_length, GridUnitType.Auto));
         }
 
         private void PinTrayListBox_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {

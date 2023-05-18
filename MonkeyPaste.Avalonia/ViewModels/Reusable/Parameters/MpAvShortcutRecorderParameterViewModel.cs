@@ -19,6 +19,7 @@ namespace MonkeyPaste.Avalonia {
             new ObservableCollection<MpAvShortcutKeyGroupViewModel>(KeyString.ToKeyItems());
 
         #endregion
+
         #region MpIShortcutCommandViewModel Implementation
 
         public MpShortcutType ShortcutType { get; set; }
@@ -40,6 +41,7 @@ namespace MonkeyPaste.Avalonia {
                         CurrentValue = _keyStr;
                     }
                     OnPropertyChanged(nameof(KeyString));
+                    OnPropertyChanged(nameof(KeyGroups));
                 }
             }
         }
@@ -65,7 +67,9 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvShortcutRecorderParameterViewModel() : base(null) { }
 
-        public MpAvShortcutRecorderParameterViewModel(MpViewModelBase parent) : base(parent) { }
+        public MpAvShortcutRecorderParameterViewModel(MpViewModelBase parent) : base(parent) {
+            PropertyChanged += MpAvShortcutRecorderParameterViewModel_PropertyChanged;
+        }
 
 
         #endregion
@@ -79,10 +83,28 @@ namespace MonkeyPaste.Avalonia {
             if (Parent is MpAvKeySimulatorActionViewModel) {
                 KeyString = CurrentValue;
             }
+            if (Parent is MpAvShortcutTriggerViewModel sctvm) {
+                var sc = await MpDataModelProvider.GetItemAsync<MpShortcut>(sctvm.ShortcutId);
+                KeyString = sc == null ? string.Empty : sc.KeyString;
+            }
 
+            OnPropertyChanged(nameof(KeyGroups));
             IsBusy = false;
         }
 
+
+        #endregion
+
+        #region Private Methods
+
+
+        private void MpAvShortcutRecorderParameterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(KeyString):
+                    OnPropertyChanged(nameof(KeyGroups));
+                    break;
+            }
+        }
 
         #endregion
     }

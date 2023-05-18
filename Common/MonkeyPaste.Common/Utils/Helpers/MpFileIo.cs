@@ -491,6 +491,20 @@ namespace MonkeyPaste.Common {
             }
         }
 
+        public static bool IsFileInUse(string path) {
+            if (!path.IsFile()) {
+                return false;
+            }
+            try {
+                using (FileStream fs = File.Open(path, FileMode.Open)) {
+                }
+            }
+            catch (Exception ex) {
+                return true;
+            }
+            return false;
+        }
+
         public static bool DeleteFile(string filePath) {
             if (filePath.IsFile()) {
                 try {

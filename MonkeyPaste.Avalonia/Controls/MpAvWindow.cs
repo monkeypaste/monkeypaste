@@ -32,6 +32,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
+        #region State
         public object DialogResult { get; set; }
 
         public MpWindowType WindowType {
@@ -51,6 +52,10 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             }
         }
+
+
+        #endregion
+
 
         #endregion
 

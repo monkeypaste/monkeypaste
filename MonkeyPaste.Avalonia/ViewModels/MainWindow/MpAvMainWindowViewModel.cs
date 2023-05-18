@@ -808,6 +808,7 @@ namespace MonkeyPaste.Avalonia {
                 w.WindowState = WindowState.Normal;
             }
             App.MainView.Show();
+            IsMainWindowVisible = true;
 
             if (!AnimateShowWindow) {
                 SetMainWindowRect(MainWindowOpenedScreenRect);
@@ -855,6 +856,7 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 App.MainView.Hide();
             }
+            IsMainWindowVisible = false;
             MpConsole.WriteLine("CLOSE WINDOW DONE");
         }
         private async Task AnimateMainWindowAsync(MpRect endRect) {
@@ -1057,15 +1059,31 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        private void AnalyzeWindowState() {
+        private void AnalyzeWindowState(string source) {
+            return;
             // this fixes:
             // 1. mw is locked so show/hide won't execute but is NOT visible
             //    so only way to show is activate from task bar
 
             if (IsMainWindowOpen && !IsMainWindowVisible) {
                 // CAse 1
-                // MpConsole.WriteLine($"Fixing mw state, reporting open but not visible. Setting to not open");
-                // IsMainWindowOpen = false;
+
+                if (IsMainWindowLocked) {
+                    //if(source == "show") {
+                    MpConsole.WriteLine($"Fixing mw state, locked but not visible");
+                    MpAvWindowManager.MainWindow.Activate();
+                    //}                    
+                } else {
+                    if (source == "show") {
+
+                        MpConsole.WriteLine($"Fixing mw state, to allow show");
+                        IsMainWindowOpen = false;
+                    } else {
+                        MpConsole.WriteLine($"Fixing mw state, open but not visible, finishing hide...");
+                        FinishMainWindowHide();
+                    }
+
+                }
             }
         }
         #endregion
@@ -1090,7 +1108,7 @@ namespace MonkeyPaste.Avalonia {
                  FinishMainWindowShow();
              },
             () => {
-                AnalyzeWindowState();
+                AnalyzeWindowState("show");
                 bool canShow = !IsMainWindowLoading &&
                         //!IsAnyDialogOpen &&
                         !IsMainWindowOpen &&
@@ -1142,7 +1160,7 @@ namespace MonkeyPaste.Avalonia {
                     return false;
                 }
 
-                AnalyzeWindowState();
+                AnalyzeWindowState("hide");
                 bool isInputFocused =
                     FocusManager.Instance.Current != null &&
                     FocusManager.Instance.Current is Control c &&
@@ -1214,8 +1232,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ToggleShowMainWindowCommand => new MpCommand(
              () => {
-
-                 AnalyzeWindowState();
+                 AnalyzeWindowState("toggle");
                  bool will_open = !IsMainWindowOpen;
                  if (will_open) {
                      ShowMainWindowCommand.Execute(null);

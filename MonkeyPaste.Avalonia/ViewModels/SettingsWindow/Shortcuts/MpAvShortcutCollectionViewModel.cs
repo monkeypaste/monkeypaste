@@ -600,6 +600,8 @@ namespace MonkeyPaste.Avalonia {
                 scvmToRemove = Items.FirstOrDefault(x => x.CommandParameter == t.Id.ToString() && x.ShortcutType == MpShortcutType.SelectTag);
             } else if (e is MpPluginPreset aip) {
                 scvmToRemove = Items.FirstOrDefault(x => x.CommandParameter == aip.Id.ToString() && x.ShortcutType == MpShortcutType.AnalyzeCopyItemWithPreset);
+            } else if (e is MpAction a) {
+                scvmToRemove = Items.FirstOrDefault(x => x.CommandParameter == a.Id.ToString() && x.ShortcutType == MpShortcutType.InvokeTrigger);
             }
             if (scvmToRemove != null) {
                 Dispatcher.UIThread.Post(() => {

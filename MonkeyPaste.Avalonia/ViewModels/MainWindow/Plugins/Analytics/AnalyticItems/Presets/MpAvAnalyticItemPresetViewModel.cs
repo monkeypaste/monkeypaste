@@ -498,12 +498,14 @@ namespace MonkeyPaste.Avalonia {
 
         protected virtual void ParameterViewModel_OnValidate(object sender, EventArgs e) {
             var aipvm = sender as MpAvParameterViewModelBase;
-            if (aipvm.IsRequired && string.IsNullOrWhiteSpace(aipvm.CurrentValue)) {
-                if ((IsExecuting && aipvm.IsExecuteParameter) || !aipvm.IsExecuteParameter)
-                    aipvm.ValidationMessage = $"{aipvm.Label} is required";
-            } else {
-                aipvm.ValidationMessage = string.Empty;
-            }
+            //if (aipvm.IsRequired && string.IsNullOrWhiteSpace(aipvm.CurrentValue)) {
+            //    if ((IsExecuting && aipvm.IsExecuteParameter) || !aipvm.IsExecuteParameter) { 
+            //        aipvm.ValidationMessage = $"{aipvm.Label} is required";
+            //    }
+            //} else {
+            //    aipvm.ValidationMessage = string.Empty;
+            //}
+            aipvm.ValidationMessage = aipvm.GetValidationMessage(IsExecuting);
             Parent.Validate();
         }
 

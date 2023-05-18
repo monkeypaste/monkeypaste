@@ -9,7 +9,8 @@ namespace MonkeyPaste.Avalonia {
     public static class MpAvPluginPresetLocator {
         public static async Task<IEnumerable<MpPluginPreset>> LocatePresetsAsync(
             MpIParameterHostViewModel presetHost,
-            bool enableOnReset = false) {
+            bool enableOnReset = false,
+            bool showMessages = true) {
 
             var db_presets = await MpDataModelProvider.GetPluginPresetsByPluginGuidAsync(presetHost.PluginGuid);
 
@@ -24,12 +25,16 @@ namespace MonkeyPaste.Avalonia {
                 }
                 var ivm = MpAvIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == presetHost.IconId);
 
-                MpNotificationBuilder.ShowMessageAsync(
+                if (showMessages) {
+                    // hide clipboard since its like 30 msgs
+                    MpNotificationBuilder.ShowMessageAsync(
                     msgType: MpNotificationType.PluginUpdated,
-                    title: $"Analyzer '{presetHost.PluginFormat.title}' {(isNew ? "Added" : "Updated")}",
+                    title: $"Plugin Updated",
                     iconSourceObj: ivm.IconBase64,
-                    body: $"{(isNew ? "Creating Default Presets" : "Resetting presets to default")}")
+                    body: $"{(isNew ? "Creating default presets" : "Resetting presets to default")} for '{presetHost.PluginFormat.title}'")
                     .FireAndForgetSafeAsync();
+                }
+
 
 
                 db_presets = await CreateOrUpdatePresetsAsync(presetHost, db_presets);

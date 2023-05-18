@@ -179,9 +179,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpAvIParameterCollectionViewModel Implementation
 
-        IEnumerable<MpAvParameterViewModelBase> MpAvIParameterCollectionViewModel.Items =>
+        public IEnumerable<MpAvParameterViewModelBase> Items =>
             ActionArgs.ToList();
-        MpAvParameterViewModelBase MpAvIParameterCollectionViewModel.SelectedItem { get; set; }
+        public MpAvParameterViewModelBase SelectedItem { get; set; }
 
         #region MpISaveOrCancelableViewModel Implementation
 
@@ -507,6 +507,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsValidating { get; set; }
         public virtual bool AllowNullArg =>
             false;
 
@@ -846,6 +847,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvActionViewModelBase(MpAvTriggerCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpAvActionViewModelBase_PropertyChanged;
+            ActionArgs.CollectionChanged += ActionArgs_CollectionChanged;
         }
 
         #endregion
@@ -867,9 +869,9 @@ namespace MonkeyPaste.Avalonia {
                         await CreateActionParameterViewModel(param_format);
                     ActionArgs.Add(param_vm);
                 }
-                ActionArgs.CollectionChanged += ActionArgs_CollectionChanged;
                 OnPropertyChanged(nameof(ActionArgs));
             }
+            ActionArgs.ForEach(x => x.OnValidate += ActionArg_OnValidate);
 
             if (Parent.Items.All(x => x.ActionId != ActionId)) {
                 // only add if new
@@ -896,6 +898,12 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
+        private void ActionArg_OnValidate(object sender, EventArgs e) {
+            // trigger on enable
+            var aipvm = sender as MpAvParameterViewModelBase;
+
+            ValidationText = aipvm.GetValidationMessage(true);
+        }
 
         public async Task<MpAvActionViewModelBase> CreateActionViewModel(MpAction a) {
             a = a == null ? new MpAction() : a;
@@ -948,21 +956,6 @@ namespace MonkeyPaste.Avalonia {
 
             return naipvm;
         }
-
-
-        //public async Task<MpEmptyActionViewModel> CreateEmptyActionViewModel() {
-        //    MpEmptyActionViewModel eavm = new MpEmptyActionViewModel(Parent);
-        //    eavm.ParentActionViewModel = this;
-
-        //    var emptyAction = await MpAction.Create(
-        //        location: DefaultEmptyActionLocation.ToMpPoint(),
-        //        suppressWrite: true);
-
-        //    await eavm.InitializeAsync(emptyAction);
-
-        //    return eavm;
-        //}
-
         public void OnActionInvoked(object sender, object args) {
             //if (!IsEnabled.HasValue) {
             //    //if action has errors halt 
@@ -1069,9 +1062,6 @@ namespace MonkeyPaste.Avalonia {
             });
         }
 
-        protected void FinishPerformingAction(object arg) {
-            OnActionComplete?.Invoke(this, arg);
-        }
 
         protected virtual MpAvActionOutput GetInput(object arg) {
             if (arg == null && AllowNullArg) {
@@ -1118,20 +1108,33 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected virtual async Task ValidateActionAsync() {
+            if (IsValidating || _isShowingValidationMsg) {
+                return;
+            }
+            IsValidating = true;
             // clear validation
             ValidationText = string.Empty;
             foreach (var param in ActionArgs) {
-                if (!param.Validate()) {
+                bool result = param.Validate();
+
+                if (!string.IsNullOrEmpty(ValidationText)) {
+                    // wait for OnValidate to complete..
+                    //await Task.Delay(20);
                     // when any parameter is invalid halt any further validation
                     // and by convention inheritor will halt as well
-                    ValidationText = param.ValidationMessage;
+                    //ValidationText = param.ValidationMessage;
                     ShowValidationNotification();
+                    IsValidating = false;
                     return;
                 }
             }
             //validate children
             await Task.WhenAll(Children.Select(x => x.ValidateActionAsync()));
             // let inheritors perform validation...
+            while (Children.Any(x => x.IsValidating)) {
+                await Task.Delay(100);
+            }
+            IsValidating = false;
         }
 
 
@@ -1213,6 +1216,7 @@ namespace MonkeyPaste.Avalonia {
                     //if (this is MpAvIParameterCollectionViewModel ppcvm) {
                     //    ppcvm.OnPropertyChanged(nameof(ppcvm.Items));
                     //}
+                    OnPropertyChanged(nameof(Items));
                     break;
                 case nameof(HasArgsChanged):
                     if (HasArgsChanged) {
@@ -1267,9 +1271,10 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
                 case nameof(ActionArgs):
-                    if (this is MpAvIParameterCollectionViewModel ppcvm) {
-                        ppcvm.OnPropertyChanged(nameof(ppcvm.Items));
-                    }
+                    //if (this is MpAvIParameterCollectionViewModel ppcvm) {
+                    //    ppcvm.OnPropertyChanged(nameof(ppcvm.Items));
+                    //}
+                    OnPropertyChanged(nameof(Items));
                     break;
                 case nameof(IconResourceObj):
                     OnPropertyChanged(nameof(IconBackgroundHexColor));
@@ -1278,9 +1283,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void ActionArgs_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            if (this is MpAvIParameterCollectionViewModel ppcvm) {
-                ppcvm.OnPropertyChanged(nameof(ppcvm.Items));
-            }
+            //if (this is MpAvIParameterCollectionViewModel ppcvm) {
+            //    ppcvm.OnPropertyChanged(nameof(ppcvm.Items));
+            //}
+            OnPropertyChanged(nameof(Items));
         }
         private void ActionParam_OnValidate(object sender, EventArgs e) {
             Dispatcher.UIThread.Post(() => {

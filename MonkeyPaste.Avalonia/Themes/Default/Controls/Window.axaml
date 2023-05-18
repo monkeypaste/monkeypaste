@@ -1,8 +1,9 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        xmlns:local="using:MonkeyPaste.Avalonia">
-    <!--  NOTIFICATION WINDOW  -->
+        xmlns:local="using:MonkeyPaste.Avalonia"
+        xmlns:pcl="using:MonkeyPaste">
+    <!--  USER ACTION BUTTONS  -->
     <Style Selector="Window.notificationWindow Button:not(.optionsButton)">
         <Setter Property="HorizontalAlignment"
                 Value="Center" />
@@ -41,10 +42,6 @@
         <!--<Setter Property="BorderBrush"
                 Value="Silver" />-->
     </Style>
-    <Style Selector="Window.notificationWindow > Border">
-        <Setter Property="CornerRadius"
-                Value="5" />
-    </Style>
     <Style Selector="Window.userActionNotificationWindow Button:not(.optionsButton):pointerover">
         <Setter Property="BorderBrush"
                 Value="{DynamicResource HoverDefaultBorderBrush}" />
@@ -55,6 +52,38 @@
         <Setter Property="BorderBrush"
                 Value="Lime" />
     </Style>
+
+    <!--  NTF OUTER BORDER  -->
+
+    <Style Selector="Window.notificationWindow > Border">
+        <Setter Property="CornerRadius"
+                Value="5" />
+    </Style>
+
+    <!--  NTF FADE IN/OUT  -->
+
+    <Style Selector="Window.fadeIn[IsVisible=false] > :is(Control)">
+        <!--  NOTE this is to avoid flicker on show so its initially transparent  -->
+        <Setter Property="Opacity"
+                Value="0" />
+    </Style>
+    <Style Selector="Window.msg[IsVisible=true]"
+           x:DataType="pcl:MpMessageNotificationViewModel">
+        <Style.Animations>
+            <Animation Duration="0:0:0.4"
+                       FillMode="Forward">
+                <KeyFrame Cue="0%">
+                    <Setter Property="TranslateTransform.X"
+                            Value="360" />
+                </KeyFrame>
+                <KeyFrame Cue="100%">
+                    <Setter Property="TranslateTransform.X"
+                            Value="0" />
+                </KeyFrame>
+            </Animation>
+        </Style.Animations>
+    </Style>
+
     <Style Selector="Window.fadeIn[IsVisible=true] > :is(Control)">
         <Style.Animations>
             <Animation Duration="0:0:0.4"

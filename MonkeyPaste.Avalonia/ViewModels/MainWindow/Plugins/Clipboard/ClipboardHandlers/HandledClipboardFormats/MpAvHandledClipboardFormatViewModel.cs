@@ -273,7 +273,10 @@ namespace MonkeyPaste.Avalonia {
             }
 
             HandledFormatIconId = await MpAvPluginIconLocator.LocatePluginIconIdAsync(this, ClipboardPluginFormat.iconUri);
-            var presets = await MpAvPluginPresetLocator.LocatePresetsAsync(this, IsCoreHandler);
+            var presets = await MpAvPluginPresetLocator.LocatePresetsAsync(
+                this,
+                enableOnReset: IsCoreHandler,
+                showMessages: false);
 
 
             Items.Clear();

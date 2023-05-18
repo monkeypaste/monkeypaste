@@ -45,7 +45,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         public MpISidebarItemViewModel SelectedItem { get; private set; }
-        public MpISidebarItemViewModel LastSelectedItem { get; private set; }
+        public MpISidebarItemViewModel LastSelectedItem { get; set; }
 
         #endregion
 

@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
@@ -207,11 +208,13 @@ namespace MonkeyPaste.Avalonia {
                 if (MpAvMainWindowViewModel.Instance.IsVerticalOrientation) {
                     return MpAvMainWindowViewModel.Instance.MainWindowWidth;
                 }
-                double w = _defaultSelectorColumnVarDimLength;
-                //if (SelectedTrigger != null) {
-                //w += _defaultParameterColumnVarDimLength;
-                //}
-                return w;
+                //double w = _defaultSelectorColumnVarDimLength;
+                ////if (SelectedTrigger != null) {
+                ////w += _defaultParameterColumnVarDimLength;
+                ////}
+                //return w;
+
+                return MpAvMainWindowViewModel.Instance.MainWindowWidth * 0.5;
             }
         }
         public double DefaultSidebarHeight {
@@ -472,6 +475,10 @@ namespace MonkeyPaste.Avalonia {
                         // ntf popout window bindings of changes
                         FocusAction.OnPropertyChanged(nameof(FocusAction.ActionBackgroundHexColor));
                         FocusAction.OnPropertyChanged(nameof(FocusAction.Label));
+                        if (FocusAction is MpAvIParameterCollectionViewModel pcvm) {
+                            pcvm.OnPropertyChanged(nameof(pcvm.Items));
+                            pcvm.Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsVisible)));
+                        }
                     }
                     break;
                 case nameof(SelectedTrigger):
@@ -486,6 +493,31 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(IsGridVisible));
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsActionDesignerVisible)));
                     OnPropertyChanged(nameof(Items));
+
+                    if (SelectedTrigger == null &&
+                        MpAvSidebarItemCollectionViewModel.Instance.LastSelectedItem == this) {
+                        //MpAvSidebarItemCollectionViewModel.Instance.LastSelectedItem = null;
+                        //MpAvSidebarItemCollectionViewModel.Instance.SelectSidebarItemCommand.Execute(null);
+                        //MpAvSidebarItemCollectionViewModel.Instance.SelectSidebarItemCommand.Execute(this);
+                        //MpAvSidebarItemCollectionViewModel.Instance.LastSelectedItem = this;
+                        //MpAvMainView.Instance.UpdateContentLayout();
+
+                        //MpAvSidebarItemCollectionViewModel.Instance.OnPropertyChanged(nameof(MpAvSidebarItemCollectionViewModel.Instance.LastSelectedItem));
+
+                        //var cc = MpAvMainView.Instance.Find<ContentControl>("SelectedSidebarContentControl");
+                        //var blah = cc.GetVisualDescendant<MpAvParameterCollectionView>();
+                        //cc.ApplyTemplate();
+                        //if (cc != null) {
+                        //    var test = cc.DataContext == this;
+
+                        //    Dispatcher.UIThread.Post(async () => {
+                        //        await Task.Delay(300);
+                        //        cc.Content = null;
+                        //        cc.Content = this;
+                        //    });
+                        //}
+
+                    }
                     break;
             }
         }
@@ -586,7 +618,7 @@ namespace MonkeyPaste.Avalonia {
                  MpTriggerType tt = args == null ? MpTriggerType.None : (MpTriggerType)args;
 
                  MpAction na = await MpAction.CreateAsync(
-                         label: GetUniqueTriggerName(tt.ToString()),
+                         label: GetUniqueTriggerName($"{tt} Trigger"),
                          actionType: MpActionType.Trigger,
                          sortOrderIdx: Items.Count,
                          arg2: "False",
@@ -672,7 +704,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 if (child_to_delete_avm.ParentActionId == 0) {
                     await UpdateSortOrderAsync();
-                    SelectedTrigger = null;
+                    SelectedTrigger = null;// Triggers.FirstOrDefault();
                     //OnPropertyChanged(nameof(Triggers));
                 } else {
                     await child_to_delete_avm.ParentActionViewModel.UpdateSortOrderAsync();

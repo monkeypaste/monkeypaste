@@ -165,10 +165,32 @@ namespace MonkeyPaste.Avalonia {
             //var s = GetWindowSize(w);
 
             double pad = 10;
-            var w_pos = GetSystemTrayWindowPosition(w, pad);
-            double offsetY = _windows.Where(x => _windows.IndexOf(x) < _windows.IndexOf(w)).Sum(x => (GetWindowSize(x).Height - pad) * primaryScreen.Scaling);
-            w_pos -= new PixelPoint(0, (int)offsetY);
-            w.Position = w_pos;
+
+            var anchor_pos = GetSystemTrayWindowPosition(w, pad);
+            int w_x = anchor_pos.X;
+            int w_y = anchor_pos.Y;
+
+            int offsetY = (int)
+                _windows
+                    .Where(x => _windows.IndexOf(x) < _windows.IndexOf(w))
+                    .Sum(x => (GetWindowSize(x).Height + pad) * primaryScreen.Scaling);
+            w_y -= offsetY;
+
+            //if (w.DataContext is MpMessageNotificationViewModel mnw) {
+            //    // for messages allow y stacking but carry x animation through
+            //    if (mnw.OpenStartX == null) {
+            //        // set msg keyframes
+            //        mnw.OpenStartX = w.Screens.Primary.Bounds.Right + (w.Screens.Primary.Bounds.Right - w_x);
+            //        mnw.OpenEndX = w_x;
+            //        w_x = mnw.OpenStartX.Value;
+            //        // trigger window anim
+            //        mnw.OnPropertyChanged(nameof(mnw.IsOpenAnimated));
+            //    } else {
+            //        // carry animated x through
+            //        w_x = w.Position.X;
+            //    }
+            //}
+            w.Position = new PixelPoint(w_x, w_y);
         }
 
         private static Size GetWindowSize(Window w) {
@@ -178,6 +200,9 @@ namespace MonkeyPaste.Avalonia {
             }
             double width = w.Bounds.Width.IsNumber() && w.Bounds.Width != 0 ? w.Bounds.Width : 350;
             double height = w.Bounds.Height.IsNumber() && w.Bounds.Height != 0 ? w.Bounds.Height : 150;
+            if (w.DataContext is MpMessageNotificationViewModel mnvm) {
+                width = mnvm.MessageWindowFixedWidth;
+            }
             return new Size(width, height + GetWindowTitleHeight(w));
         }
 

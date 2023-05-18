@@ -106,6 +106,7 @@ namespace MonkeyPaste.Avalonia {
                 //Debugger.Break();
 
                 // delete db, plugin cache, pref and pref.backup
+                MpDebug.Assert(!MpFileIo.IsFileInUse(DbInfo.DbPath), "Db is open! Close it to reset");
                 MpFileIo.DeleteFile(DbInfo.DbPath);
                 MpFileIo.DeleteFile(DbInfo.DbPath + "-shm");
                 MpFileIo.DeleteFile(DbInfo.DbPath + "-wal");

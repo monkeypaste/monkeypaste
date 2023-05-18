@@ -15,8 +15,7 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public class MpAvNotificationWindowManager : MpINotificationManager {
         #region Private Variables
-
-        private MpAvNotificationPositioner _positioner;
+        private List<MpAvMessageNotificationWindow> _pendingMessages = new List<MpAvMessageNotificationWindow>();
         private ObservableCollection<Window> _windows = new ObservableCollection<Window>();
         #endregion
 
@@ -85,7 +84,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
         public void Init() {
-            _positioner = new MpAvNotificationPositioner();
+            _ = new MpAvNotificationPositioner();
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }
 
@@ -159,7 +158,6 @@ namespace MonkeyPaste.Avalonia {
                 // flag ntf activating to prevent mw hide 
                 MpAvMainWindowViewModel.Instance.IsAnyNotificationActivating = true;
             }
-
             if (nvmb.Owner is Window ow) {
                 nw.Show(ow);
             } else {
@@ -230,7 +228,9 @@ namespace MonkeyPaste.Avalonia {
                 MpAvMainWindowViewModel.Instance.IsAnyNotificationActivating = false;
                 return;
             }
-            if (!w.IsVisible && w.DataContext is MpNotificationViewModelBase nvmb && nvmb.IsClosing) {
+            if (!w.IsVisible &&
+                w.DataContext is MpNotificationViewModelBase nvmb &&
+                nvmb.IsClosing) {
                 FinishClose(w);
             }
         }

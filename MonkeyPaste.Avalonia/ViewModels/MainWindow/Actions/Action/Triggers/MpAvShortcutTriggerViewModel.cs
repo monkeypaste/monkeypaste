@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common.Plugin;
+﻿using Avalonia.Threading;
+using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -135,14 +136,29 @@ namespace MonkeyPaste.Avalonia {
 
         #region Protected Methods
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
-            //if(e is MpShortcut s && s.Id == ShortcutId) {
-            //    if (ArgLookup[CURRENT_SHORTCUT_PARAM_ID] is MpAvShortcutRecorderParameterViewModel scrpvm) {
-            //        scrpvm.OnPropertyChanged(nameof())
-            //    }
-            //}
+            if (e is MpShortcut s &&
+                ShortcutId == 0 && s.ShortcutType == MpShortcutType.InvokeTrigger && s.CommandParameter == ActionId.ToString()) {
+                ShortcutId = s.Id;
+                if (ArgLookup[CURRENT_SHORTCUT_PARAM_ID] is MpAvShortcutRecorderParameterViewModel scrpvm) {
+                    Dispatcher.UIThread.Post(async () => {
+                        await scrpvm.InitializeAsync(scrpvm.PresetValueModel);
+                    });
+                }
+            }
+        }
+        protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
+            if (e is MpShortcut s && s.Id == ShortcutId) {
+                if (ArgLookup[CURRENT_SHORTCUT_PARAM_ID] is MpAvShortcutRecorderParameterViewModel scrpvm) {
+                    Dispatcher.UIThread.Post(async () => {
+                        await scrpvm.InitializeAsync(scrpvm.PresetValueModel);
+                    });
+                }
+            }
         }
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpShortcut s && s.Id == ShortcutId) {
+                // should only be able to occur from settings menu? maybe shouldn't allow
+                ShortcutId = 0;
                 Task.Run(ValidateActionAsync);
             }
         }
