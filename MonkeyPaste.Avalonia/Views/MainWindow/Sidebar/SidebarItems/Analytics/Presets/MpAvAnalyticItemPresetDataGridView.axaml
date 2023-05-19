@@ -95,6 +95,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate DataType="local:MpAvAnalyticItemPresetViewModel">
                                 <Button x:Name="PresetIcon"
+                                        IsHitTestVisible="{Binding !IsGeneratedDefaultPreset}"
                                         Classes="defaultButton noBg noHoverBg outlineOver square"
                                         local:MpAvPointerCommandExtension.IsEnabled="True"
                                         local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ChangeIconCommand, Source={x:Static local:MpAvIconCollectionViewModel.Instance}}"

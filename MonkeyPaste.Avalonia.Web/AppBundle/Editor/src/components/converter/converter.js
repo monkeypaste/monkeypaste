@@ -63,7 +63,7 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 			base_line_text = DomParser.parseFromString(dataStr, 'text/html').body.innerText;
 		}
 		
-		let htmlStr = fixPlainHtmlColorContrast(dataStr, bgOpacity);
+		let htmlStr = dataStr;// fixPlainHtmlColorContrast(dataStr, bgOpacity);
 		//htmlStr = swapPreForDivTags(htmlStr);
 		//htmlStr = encodeHtmlSpecialEntitiesFromHtmlDoc(htmlStr);
 		insertHtml(0,htmlStr,'silent');

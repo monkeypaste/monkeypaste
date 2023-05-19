@@ -759,14 +759,14 @@ namespace MonkeyPaste.Avalonia {
 
             double pin_item_length = PinTrayFixedDimensionLength * ZoomFactor;
             if (ListOrientation == Orientation.Horizontal) {
-                _defaultQueryItemWidth = square_length - QueryTrayVerticalScrollBarWidth;
-                _defaultQueryItemHeight = QueryTrayFixedDimensionLength - QueryTrayHorizontalScrollBarHeight;
+                _defaultQueryItemWidth = square_length;// - QueryTrayVerticalScrollBarWidth;
+                _defaultQueryItemHeight = square_length;//QueryTrayFixedDimensionLength - QueryTrayHorizontalScrollBarHeight;
 
                 _defaultPinItemWidth = pin_item_length;
                 _defaultPinItemHeight = PinTrayFixedDimensionLength;
             } else {
-                _defaultQueryItemWidth = QueryTrayFixedDimensionLength - QueryTrayVerticalScrollBarWidth;
-                _defaultQueryItemHeight = square_length - QueryTrayHorizontalScrollBarHeight;
+                _defaultQueryItemWidth = square_length;//QueryTrayFixedDimensionLength - QueryTrayVerticalScrollBarWidth;
+                _defaultQueryItemHeight = square_length;//square_length - QueryTrayHorizontalScrollBarHeight;
 
                 _defaultPinItemWidth = PinTrayFixedDimensionLength;
                 _defaultPinItemHeight = pin_item_length;

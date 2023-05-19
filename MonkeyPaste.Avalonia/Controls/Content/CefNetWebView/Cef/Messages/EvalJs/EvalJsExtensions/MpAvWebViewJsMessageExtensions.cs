@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
     public static class MpAvWebViewJsMessageExtensions {
         #region Private Variables
-        private static ConcurrentDictionary<WebView, ConcurrentDictionary<string, string>> _webViewEvalJsLookup = new ConcurrentDictionary<WebView, ConcurrentDictionary<string, string>>();
+        private static readonly ConcurrentDictionary<WebView, ConcurrentDictionary<string, string>> _webViewEvalJsLookup = new();
 
         #endregion
 
@@ -57,7 +57,7 @@ namespace MonkeyPaste.Avalonia {
                     return null;
                 }
                 if (is_valid) {
-                    _evalResultLookup.TryRemove(evalKey, out string rmStr);
+                    _ = _evalResultLookup.TryRemove(evalKey, out _);
                     return resp;
                 }
                 _evalResultLookup[evalKey] = null;
@@ -92,7 +92,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     wv.ExecuteJavascript(script);
                     return;
-                }).GetTask().TimeoutAfter(
+                }).TimeoutAfter(
                     TimeSpan.FromSeconds(5),
                     () => {
                         MpConsole.WriteLine("frame must be initialized. initialization timed out");
@@ -144,7 +144,7 @@ namespace MonkeyPaste.Avalonia {
                 return resp;
             }
 
-            CefProcessMessage cefMsg = new CefProcessMessage("EvaluateScript");
+            CefProcessMessage cefMsg = new("EvaluateScript");
             evalKey = string.IsNullOrEmpty(evalKey) ? System.Guid.NewGuid().ToString() : evalKey;
             cefMsg.ArgumentList.SetString(0, evalKey);
             cefMsg.ArgumentList.SetString(1, script);
@@ -179,8 +179,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void Wv_DetachedFromVisualTree(object sender, global::Avalonia.VisualTreeAttachmentEventArgs e) {
-            var wv = sender as WebView;
-            if (wv == null) {
+            if (sender is not WebView wv) {
                 return;
             }
             RemoveWebView(wv);

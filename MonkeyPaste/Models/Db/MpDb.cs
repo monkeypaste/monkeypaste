@@ -72,10 +72,6 @@ namespace MonkeyPaste {
                 await MpDefaultDataModelTools.CreateAsync(MpPrefViewModel.Instance.ThisDeviceGuid);
                 await CreateViewsAsync();
                 await InitDefaultDataAsync();
-
-#if DEBUG
-                CreateTestDataAsync().FireAndForgetSafeAsync();
-#endif
             } else {
                 await MpDefaultDataModelTools.InitializeAsync();
             }
@@ -719,7 +715,12 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
         private static async Task InitDefaultDataAsync() {
             await InitDefaultTagsAsync();
             await InitDefaultShortcutsAsync();
+#if DEBUG
+            if (MpPrefViewModel.Instance.IsInitialLoad) {
 
+                await CreateTestContentAsync();
+            }
+#endif
             MpConsole.WriteLine(@"Created all default tables");
         }
 
@@ -889,16 +890,6 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
             #endregion
         }
 
-        private static async Task CreateTestDataAsync() {
-            for (int i = 0; i < 3; i++) {
-                var mpdo = new MpPortableDataObject(MpPortableDataFormats.Text, $"This is test {i}.");
-                await Mp.Services.CopyItemBuilder.BuildAsync(
-                    pdo: mpdo,
-                    transType: MpTransactionType.Created,
-                    force_ext_sources: false);
-            }
-
-        }
         public static async Task ResetShortcutsAsync() {
             var sl = await MpDataModelProvider.GetItemsAsync<MpShortcut>();
             await Task.WhenAll(sl.Select(x => x.DeleteFromDatabaseAsync()));
@@ -906,6 +897,29 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
             await InitDefaultShortcutsAsync();
         }
 
+        private static async Task CreateTestContentAsync() {
+            var this_app = await MpDataModelProvider.GetItemAsync<MpApp>(MpDefaultDataModelTools.ThisAppId);
+            string this_app_url = Mp.Services.SourceRefTools.ConvertToInternalUrl(this_app);
+            for (int i = 0; i < 300; i++) {
+                string data = $"This is test {i + 1}.";
+                var mpdo = new MpPortableDataObject(MpPortableDataFormats.Text, data);
+                var dobj = await MpDataObject.CreateAsync(pdo: mpdo);
+                var ci = await MpCopyItem.CreateAsync(
+                    data: data,
+                    itemType: MpCopyItemType.Text,
+                    title: $"Test {i + 1}",
+                    dataObjectId: dobj.Id);
+
+                await Mp.Services.TransactionBuilder.ReportTransactionAsync(
+                    copyItemId: ci.Id,
+                    reqType: MpJsonMessageFormatType.DataObject,
+                    respType: MpJsonMessageFormatType.Delta,
+                    transType: MpTransactionType.Created,
+                    ref_uris: new[] { this_app_url });
+
+            }
+
+        }
         private static async Task InitDefaultShortcutsAsync() {
             var ps = Mp.Services.PlatformShorcuts;
             List<string[]> defaultShortcutDefinitions = new List<string[]>() {

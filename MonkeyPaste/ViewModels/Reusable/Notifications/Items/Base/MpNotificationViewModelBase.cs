@@ -378,9 +378,7 @@ namespace MonkeyPaste {
             IsBusy = true;
             await Task.Delay(1);
 
-            if (nf.IconSourceObj == null) {
-                nf.IconSourceObj = MpBase64Images.AppIcon;
-            }
+            nf.IconSourceObj ??= MpBase64Images.AppIcon;
             NotificationFormat = nf;
 
             IsBusy = wasBusy;
@@ -392,7 +390,7 @@ namespace MonkeyPaste {
                     .Select(x => Convert.ToInt32(x)).Any(x => x == (int)NotificationType);
 
             if (isDoNotShowType) {
-                MpConsole.WriteTraceLine($"Notification: {NotificationType.ToString()} marked as hidden");
+                MpConsole.WriteTraceLine($"Notification: {NotificationType} marked as hidden");
                 return MpNotificationDialogResultType.DoNotShow;
             }
             await Task.Delay(1);

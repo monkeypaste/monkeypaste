@@ -134,7 +134,11 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvAppViewModel GetAppByProcessInfo(MpPortableProcessInfo ppi) {
             // NOTE this assumes ppi is a running process and device is on this system
-            return Items.FirstOrDefault(x => x.AppPath.ToLower() == ppi.ProcessPath.ToLower() && x.UserDeviceId == MpDefaultDataModelTools.ThisUserDeviceId);
+            return
+                Items
+                .FirstOrDefault(x =>
+                x.AppPath.ToLower() == ppi.ProcessPath.ToLower() &&
+                x.UserDeviceId == MpDefaultDataModelTools.ThisUserDeviceId);
         }
 
         public async Task<MpAvAppViewModel> GetOrCreateAppViewModelByProcessInfo(MpPortableProcessInfo ppi) {
@@ -240,6 +244,9 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(Items));
             OnPropertyChanged(nameof(FilteredItems));
             OnPropertyChanged(nameof(CustomPasteItems));
+
+
+            ValidateAppViewModels();
         }
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
@@ -249,12 +256,23 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private void ValidateAppViewModels() {
-            var dups = Items.Where(x => Items.Any(y => y != x && x.IsValueEqual(y)));
-            if (dups.Any()) {
-                // dup app view models, check db to see if dup app model
-                Debugger.Break();
+            int count = Items.Count;
+            List<MpAvAppViewModel> dups = null;
+            for (int i = 0; i < count; i++) {
+                for (int j = 0; j < count; j++) {
+                    if (i == j || Items.Count <= i || Items.Count <= j) {
+                        continue;
+                    }
+                    if (Items[i].IsValueEqual(Items[j])) {
+                        if (dups == null) {
+                            dups = new List<MpAvAppViewModel>();
+                        }
+                        dups.Add(Items[i]);
+                        dups.Add(Items[j]);
+                    }
+                }
             }
-
+            MpDebug.Assert(dups == null, "Dup apps found");
         }
 
         private async Task InitLastAppViewModel() {
@@ -310,29 +328,20 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
             Dispatcher.UIThread.Post(async () => {
-                var avm = Items.FirstOrDefault(x => x.AppPath.ToLower() == e.ProcessPath.ToLower());
+                var avm = GetAppByProcessInfo(e); //Items.FirstOrDefault(x => x.AppPath.ToLower() == e.ProcessPath.ToLower());
 
                 if (avm == null) {
                     // unknown app activated add like in registration
                     var new_app = await Mp.Services.AppBuilder.CreateAsync(e);
-                    // wait for db add to pick up model
-                    await Task.Delay(100);
-                    while (IsBusy) {
-                        // wait for vm to be added to items
+                    var sw = Stopwatch.StartNew();
+                    while (true) {
+                        avm = GetAppByProcessInfo(e);
+                        if (avm != null) {
+                            break;
+                        }
                         await Task.Delay(100);
+                        MpDebug.Assert(sw.ElapsedMilliseconds < 10_000, $"Activating app error for process '{e}'");
                     }
-
-                    // BUG may need to add .ToList() on items here, hopefully fixed w/ dbAdd waiting
-                    avm = Items.FirstOrDefault(x => x.AppId == new_app.Id);
-                    if (avm == null) {
-                        // somethings wrong check console for db add msgs
-                        // this happen on initial startup sometimes, not sure why
-                        // the db add callback is getting hit but add here and validate
-                        Items.Add(avm);
-                        OnPropertyChanged(nameof(Items));
-
-                    }
-                    ValidateAppViewModels();
                 }
                 LastActiveAppViewModel = avm;
             });

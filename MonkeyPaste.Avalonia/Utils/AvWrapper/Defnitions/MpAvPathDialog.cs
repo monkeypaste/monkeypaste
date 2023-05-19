@@ -19,19 +19,16 @@ namespace MonkeyPaste.Avalonia {
             return result;
         }
 
-        private async Task<string> ShowFileOrFolderDialogAsync(bool isFolder, string title, string initDir, object filtersObj, bool resolveShortcutPath = false) {
-            title = title == null ? $"Select {(isFolder ? "Folder" : "File")}" : title;
-            IReadOnlyList<FilePickerFileType> filters = filtersObj as IReadOnlyList<FilePickerFileType>;
-            if (filters == null) {
-                filters = new[] { FilePickerFileTypes.All };
-            }
-
+        private static async Task<string> ShowFileOrFolderDialogAsync(bool isFolder, string title, string initDir, object filtersObj, bool resolveShortcutPath = false) {
+            title ??= $"Select {(isFolder ? "Folder" : "File")}";
+            IReadOnlyList<FilePickerFileType> filters = filtersObj as IReadOnlyList<FilePickerFileType> ?? (new[] { FilePickerFileTypes.All });
             var storage_provider = GetStorageProvider();
             if (storage_provider == null) {
                 return null;
             }
+            MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
             IStorageFolder start_location = await GetInitFolderAsync(initDir);
-            IReadOnlyList<IStorageItem> result = null;
+            IReadOnlyList<IStorageItem> result;
             if (isFolder) {
                 result = await
                     storage_provider.OpenFolderPickerAsync(
@@ -50,6 +47,7 @@ namespace MonkeyPaste.Avalonia {
                            SuggestedStartLocation = start_location
                        });
             }
+            MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
 
             if (result.FirstOrDefault() is IStorageItem si) {
                 string path = si.Path.LocalPath;
@@ -61,7 +59,7 @@ namespace MonkeyPaste.Avalonia {
             }
             return null;
         }
-        private async Task<IStorageFolder?> GetInitFolderAsync(string initDir) {
+        private static async Task<IStorageFolder?> GetInitFolderAsync(string initDir) {
             if (string.IsNullOrEmpty(initDir)) {
                 initDir = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             } else if (initDir.IsFile()) {
@@ -74,7 +72,7 @@ namespace MonkeyPaste.Avalonia {
             return start_location;
         }
 
-        private IStorageProvider GetStorageProvider() {
+        private static IStorageProvider GetStorageProvider() {
             return App.Current.GetMainWindow().StorageProvider;
         }
     }

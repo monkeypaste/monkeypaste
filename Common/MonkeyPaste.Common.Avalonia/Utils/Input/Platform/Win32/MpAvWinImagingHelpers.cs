@@ -12,7 +12,7 @@ namespace MonkeyPaste.Common.Avalonia {
             if (img == null || !OperatingSystem.IsWindows()) {
                 return null;
             }
-            using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(img)) {
+            using (System.Drawing.Bitmap bmp = new(img)) {
                 return bmp.ToAvBitmap();
             }
         }
