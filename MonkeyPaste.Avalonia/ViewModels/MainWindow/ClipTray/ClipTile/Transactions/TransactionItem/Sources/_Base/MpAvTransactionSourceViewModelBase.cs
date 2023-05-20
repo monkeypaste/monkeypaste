@@ -60,6 +60,7 @@ namespace MonkeyPaste.Avalonia {
                 var mivm = new MpMenuItemViewModel() {
                     IconSourceObj = IconSourceObj,
                     Header = SourceLabel,
+                    Tooltip = MpAvDateTimeToStringConverter.Instance.Convert(SourcedDateTimeUtc, null, MpAvDateTimeToStringConverter.LITERAL_DATE_TIME_FORMAT, null),
                     SubItems = new List<MpMenuItemViewModel>() {
                         new MpMenuItemViewModel() {
                             Header = $"Browse to '{SourceLabel}'",

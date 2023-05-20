@@ -490,7 +490,9 @@ namespace MonkeyPaste.Avalonia {
                     };
 
                     if (mivm.Tooltip != null) {
-                        ToolTip.SetTip(mi, new MpAvToolTipView() { ToolTipText = mivm.Tooltip.ToString() });
+                        // TODO tooltip screws up pointer enter or something, it works but doesn't highlight so its 
+                        // some hit test in the tooltip tree thats enabled is my guess
+                        //ToolTip.SetTip(mi, new MpAvToolTipView() { ToolTipText = mivm.Tooltip.ToString() });
                     }
 
                     mi.PointerEntered += MenuItem_PointerEnter;

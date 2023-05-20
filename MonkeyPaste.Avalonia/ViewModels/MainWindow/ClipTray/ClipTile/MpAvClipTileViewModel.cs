@@ -56,6 +56,7 @@ namespace MonkeyPaste.Avalonia {
 
         public const int AUTO_CYCLE_DETAIL_DELAY_MS = 5000;
         public const string TABLE_WRAPPER_CLASS_NAME = "quill-better-table-wrapper";
+        public const double EDITOR_TOOLBAR_MIN_WIDTH = 830.0d;
 
         #endregion
 
@@ -260,17 +261,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Layout
 
-
-        //private MpSize _unconstrainedContentSize = MpSize.Empty;
-        //public MpSize UnconstrainedContentDimensions {
-        //    get => _unconstrainedContentSize;
-        //    set {
-        //        if (UnconstrainedContentDimensions != value) {
-        //            _unconstrainedContentSize = value;
-        //            OnPropertyChanged(nameof(UnconstrainedContentDimensions));
-        //        }
-        //    }
-        //}
+        public double ActualContentHeight { get; set; }
         public double MaxTitleHeight =>
             IsExpanded ? 40 : 20;
 
@@ -298,7 +289,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         public double MaxWidth =>
-            double.PositiveInfinity;
+             double.PositiveInfinity;
         public double MaxHeight =>
             double.PositiveInfinity;
 
@@ -339,8 +330,16 @@ namespace MonkeyPaste.Avalonia {
                 if (Parent == null) {
                     return 0;
                 }
-                double w = Parent.DefaultEditableItemWidth;
-                return w;
+                if (IsPinned) {
+                    if (IsChildWindowOpen) {
+                        return BoundWidth;
+                    }
+                    return Math.Min(EDITOR_TOOLBAR_MIN_WIDTH, Parent.ObservedPinTrayScreenWidth);
+                }
+                if (Parent.LayoutType == MpClipTrayLayoutType.Grid) {
+                    return BoundWidth;
+                }
+                return Math.Min(EDITOR_TOOLBAR_MIN_WIDTH, Parent.ObservedQueryTrayScreenWidth);
             }
         }
 
@@ -349,7 +348,14 @@ namespace MonkeyPaste.Avalonia {
                 if (Parent == null) {
                     return 0;
                 }
-                return Parent.DefaultQueryItemHeight;
+                if (IsExpanded) {
+                    return BoundHeight;
+                }
+                if (IsPinned) {
+                    return Math.Max(Parent.PinTrayFixedDimensionLength, BoundHeight);
+                }
+
+                return Math.Max(Parent.QueryTrayFixedDimensionLength, BoundHeight);
             }
         }
         #endregion
@@ -363,6 +369,9 @@ namespace MonkeyPaste.Avalonia {
                 //    return true;
                 //}
                 //return IsSelected;
+                if (IsChildWindowOpen) {
+                    return true;
+                }
                 return MpAvMainWindowViewModel.Instance.IsHorizontalOrientation;
             }
         }
@@ -790,30 +799,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        //public MpSize CopyItemSize {
-        //    get {
-        //        if (CopyItem == null) {
-        //            return MpSize.Empty;
-        //        }
-        //        return new MpSize(
-        //            CopyItem.ItemSize1,
-        //            CopyItem.ItemSize2);
-        //    }
-        //    set {
-        //        if (CopyItem != null &&
-        //           CopyItemSize != value) {
-        //            MpSize sizeVal = value ?? MpSize.Empty;
-        //            if (CopyItemSize.Width == sizeVal.Width &&
-        //                CopyItemSize.Height == sizeVal.Height) {
-        //                return;
-        //            }
-        //            CopyItem.ItemSize1 = (int)sizeVal.Width;
-        //            CopyItem.ItemSize2 = (int)sizeVal.Height;
-        //            HasModelChanged = true;
-        //            OnPropertyChanged(nameof(CopyItemSize));
-        //        }
-        //    }
-        //}
         public int CopyItemSize1 {
             get {
                 if (CopyItem == null) {

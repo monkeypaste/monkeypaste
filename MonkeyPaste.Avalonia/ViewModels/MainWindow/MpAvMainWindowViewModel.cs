@@ -1175,15 +1175,15 @@ namespace MonkeyPaste.Avalonia {
                 bool isModalOpen =
                     MpAvWindowManager.AllWindows.Any(x => x.IsActive && (x.DataContext is MpIWindowViewModel && (x.DataContext as MpIWindowViewModel).WindowType == MpWindowType.Modal));
                 bool canHide = !IsMainWindowLocked &&
-                          !IsAnyDropDownOpen &&
-                          !IsMainWindowInitiallyOpening &&
-                            //!IsAnyDialogOpen &&
-                            !isModalOpen &&
-                            !isInputFocused &&
-                          !IsAnyItemDragging &&
-                          !IsAnyNotificationActivating &&
-                          !MpAvShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown && // reject drag cancel event
-                          !IsResizing;
+                                  !IsAnyDropDownOpen &&
+                                  !IsMainWindowInitiallyOpening &&
+                                    //!IsAnyDialogOpen &&
+                                    !isModalOpen &&
+                                    !isInputFocused &&
+                                  !IsAnyItemDragging &&
+                                  !IsAnyNotificationActivating &&
+                                  !MpAvShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown && // reject drag cancel event
+                                  !IsResizing;
 
                 if (!canHide) {
                     //MpConsole.WriteLine("");

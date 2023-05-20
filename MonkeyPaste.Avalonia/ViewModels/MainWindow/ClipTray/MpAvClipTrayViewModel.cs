@@ -47,7 +47,6 @@ namespace MonkeyPaste.Avalonia {
         public const int DISABLE_READ_ONLY_DELAY_MS = 500;
         public const double MAX_TILE_SIZE_CONTAINER_PAD = 50;
         public const double MIN_SIZE_ZOOM_FACTOR_COEFF = (double)1 / (double)7;
-        public const double EDITOR_TOOLBAR_MIN_WIDTH = 830.0d;
         public const double DEFAULT_ITEM_SIZE = 260;
         public const double UNEXPANDED_HEIGHT_RATIO = 0.33d;
         public const double DEFAULT_UNEXPANDED_HEIGHT = DEFAULT_ITEM_SIZE * UNEXPANDED_HEIGHT_RATIO;
@@ -519,7 +518,7 @@ namespace MonkeyPaste.Avalonia {
                     return true;
                 }
                 // TODO? giving item scroll priority maybe better by checking if content exceeds visible boundaries here
-                if (HoverItem.IsVerticalScrollbarVisibile ||
+                if ((HoverItem.IsVerticalScrollbarVisibile && HoverItem.IsSubSelectionEnabled) ||
                     HoverItem.TransactionCollectionViewModel.IsTransactionPaneOpen) {
                     // when tray is not scrolling (is still) and mouse is over sub-selectable item keep tray scroll frozen
                     return false;
@@ -768,7 +767,7 @@ namespace MonkeyPaste.Avalonia {
                 _defaultQueryItemWidth = square_length;//QueryTrayFixedDimensionLength - QueryTrayVerticalScrollBarWidth;
                 _defaultQueryItemHeight = square_length;//square_length - QueryTrayHorizontalScrollBarHeight;
 
-                _defaultPinItemWidth = PinTrayFixedDimensionLength;
+                _defaultPinItemWidth = pin_item_length;
                 _defaultPinItemHeight = pin_item_length;
             }
 
@@ -784,6 +783,7 @@ namespace MonkeyPaste.Avalonia {
             }
             if (ListOrientation == Orientation.Vertical) {
                 _defaultQueryItemHeight = DEFAULT_UNEXPANDED_HEIGHT;
+                _defaultPinItemHeight = DEFAULT_UNEXPANDED_HEIGHT;
             }
 
             OnPropertyChanged(nameof(DefaultQueryItemWidth));
@@ -799,9 +799,6 @@ namespace MonkeyPaste.Avalonia {
         private double _defaultPinItemHeight;
         public double DefaultPinItemHeight =>
             _defaultPinItemHeight;
-
-        public double DefaultEditableItemWidth =>
-            EDITOR_TOOLBAR_MIN_WIDTH;
 
         public double ScrollBarFixedAxisSize =>
             30;
@@ -2225,6 +2222,7 @@ namespace MonkeyPaste.Avalonia {
                     _isMainWindowOrientationChanging = false;
                     OnPropertyChanged(nameof(ListOrientation));
                     AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.IsExpanded)));
+                    AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.MaxTitleHeight)));
                     AllActiveItems
                         .Where(x => x.GetContentView() != null)
                         .Select(x => x.GetContentView())

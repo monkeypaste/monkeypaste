@@ -169,6 +169,12 @@ namespace MonkeyPaste.Common {
         }
         public static string ToViewFieldName(this MpContentQueryBitFlags f) {
             switch (f) {
+                case MpContentQueryBitFlags.FileName:
+                    return "FILE_NAME_FILTER(ItemData)";
+                case MpContentQueryBitFlags.FileExt:
+                    return "FILE_EXT_FILTER(ItemData)";
+
+                case MpContentQueryBitFlags.FilePath:
                 case MpContentQueryBitFlags.Content:
                     return "ItemData";
                 case MpContentQueryBitFlags.Url:
@@ -227,7 +233,33 @@ namespace MonkeyPaste.Common {
             return "LIKE";
         }
 
+        public static MpContentQueryBitFlags GetStringMatchType(this MpContentQueryBitFlags qf) {
+            // NOTE should only contain 1 of the string match types
+            if (qf.HasFlag(MpContentQueryBitFlags.Matches)) {
+                return MpContentQueryBitFlags.Matches;
+            }
+            if (qf.HasFlag(MpContentQueryBitFlags.Contains)) {
+                return MpContentQueryBitFlags.Contains;
+            }
+            if (qf.HasFlag(MpContentQueryBitFlags.BeginsWith)) {
+                return MpContentQueryBitFlags.BeginsWith;
+            }
+            if (qf.HasFlag(MpContentQueryBitFlags.EndsWith)) {
+                return MpContentQueryBitFlags.EndsWith;
+            }
+            if (qf.HasFlag(MpContentQueryBitFlags.Regex)) {
+                return MpContentQueryBitFlags.Regex;
+            }
+            return MpContentQueryBitFlags.None;
+        }
+
         public static string GetStringMatchValue(this MpContentQueryBitFlags f, string matchOp, string matchVal) {
+            //if(f.HasFlag(MpContentQueryBitFlags.FileName)) {
+            //    matchVal = $"FILE_NAME_FILTER({matchVal})";
+            //} else if (f.HasFlag(MpContentQueryBitFlags.FileExt)) {
+            //    matchVal = $"FILE_EXT_FILTER({matchVal})";
+            //}
+
             if (matchOp == "REGEXP") {
                 if (f.HasFlag(MpContentQueryBitFlags.WholeWord)) {
                     //string flags = "m";

@@ -324,7 +324,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsRootGroupTag =>
             TagId == MpTag.RootGroupTagId;
         public bool IsLinkTag =>
-            !IsQueryTag && !IsGroupTag;
+            !IsQueryTag && !IsGroupTag && !IsHelpTag;
         public bool IsQueryTag =>
             TagType == MpTagType.Query;
         public bool IsGroupTag =>

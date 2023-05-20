@@ -32,8 +32,8 @@ namespace MonkeyPaste.Avalonia {
         public MpMenuItemViewModel ContextMenuViewModel {
             get {
                 return new MpMenuItemViewModel() {
-                    Header = "References",
-                    IconResourceKey = "HighlighterImage",
+                    Header = "Sources",
+                    IconResourceKey = "EggImage",
                     SubItems =
                         SortedTransactions
                         .SelectMany(x => x.Sources)

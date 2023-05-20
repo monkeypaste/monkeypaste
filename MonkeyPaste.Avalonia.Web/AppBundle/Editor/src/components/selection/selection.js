@@ -352,28 +352,32 @@ function convertDomRangeToDocRange(dom_range) {
 }
 
 function convertDocRangeToDomRange(doc_range) {
+	// NOTE creating local range here because it alters doc_range (occurs in file type find replace navigate)
+	doc_range = isNullOrUndefined(doc_range) ? { index: 0, length: 0 } : doc_range;
+	let copy_doc_range = { index: doc_range.index, length: doc_range.length };
+
 	let clean_range = null;
 	let start_elm = null;
 	let end_elm = null;
 	let start_offset = 0;
 	let end_offset = 0;
 	try {
-		doc_range = cleanDocRange(doc_range);
+		copy_doc_range = cleanDocRange(copy_doc_range);
 
-		start_elm = getElementAtDocIdx(doc_range.index);
-		end_elm = getElementAtDocIdx(doc_range.index + doc_range.length);
+		start_elm = getElementAtDocIdx(copy_doc_range.index);
+		end_elm = getElementAtDocIdx(copy_doc_range.index + copy_doc_range.length);
 
 		start_elm_doc_idx = getElementDocIdx(start_elm);
 		end_elm_doc_idx = getElementDocIdx(end_elm);
 
-		start_offset = Math.max(0,doc_range.index - start_elm_doc_idx);
-		end_offset = Math.max(0,(doc_range.index + doc_range.length) - end_elm_doc_idx);
+		start_offset = Math.max(0,copy_doc_range.index - start_elm_doc_idx);
+		end_offset = Math.max(0,(copy_doc_range.index + copy_doc_range.length) - end_elm_doc_idx);
 
 		clean_range = document.createRange();
 		clean_range.setStart(start_elm, start_offset);
 	} catch (ex) {
-		doc_range.index--;
-		if (doc_range.index < 0) {
+		copy_doc_range.index--;
+		if (copy_doc_range.index < 0) {
 			// how do we deal with this case?
 			let editor_range = document.createRange();
 			editor_range.setStart(getEditorElement(), 0);
@@ -381,27 +385,27 @@ function convertDocRangeToDomRange(doc_range) {
 			return editor_range;
 
 			debugger;
-			log('exception converting doc2dom range. range: idx: ' + doc_range.index + ' len: ' + doc_range.length + ' exception: ');
+			log('exception converting doc2dom range. range: idx: ' + copy_doc_range.index + ' len: ' + copy_doc_range.length + ' exception: ');
 			log(ex);
 			return;
 		} 
-		return convertDocRangeToDomRange(doc_range);
+		return convertDocRangeToDomRange(copy_doc_range);
 	}
 
 	if (!clean_range) {
-		log('dom range null error in doc2dom range. range: idx: ' + doc_range.index + ' len: ' + doc_range.length + ' exception: ');		
+		log('dom range null error in doc2dom range. range: idx: ' + copy_doc_range.index + ' len: ' + copy_doc_range.length + ' exception: ');		
 		return null;
 	}
 
 	try {
 		clean_range.setEnd(end_elm, end_offset);
 	} catch (ex) {
-		if (doc_range.length == 0) {
+		if (copy_doc_range.length == 0) {
 			debugger;
 			return;
 		} else {
-			doc_range.length--;
-			return convertDocRangeToDomRange(doc_range);
+			copy_doc_range.length--;
+			return convertDocRangeToDomRange(copy_doc_range);
 		}
 		debugger;
 	}

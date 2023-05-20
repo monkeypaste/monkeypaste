@@ -48,6 +48,15 @@ namespace MonkeyPaste {
                     // when adv search is active simp query's tagId is QueryTagId 
                     // to keep RefreshQuery giving accurate results but needs to use AllTag
                     qi_tag_ids = new[] { MpTag.AllTagId };
+                } else if (qi.QueryFlags.HasFlag(MpContentQueryBitFlags.Tag)) {
+                    // match value will be tag guid to remain device agnostic
+                    int tag_id = await MpDataModelProvider.GetItemIdByGuidAsync<MpTag>(qi.MatchValue);
+                    if (tag_id == 0) {
+                        // none provided yet so pass active tag through
+                        qi_tag_ids = Mp.Services.TagQueryTools.GetSelfAndAllDescendantsTagIds(qi.TagId);
+                    } else {
+                        qi_tag_ids = new[] { tag_id };
+                    }
                 } else {
                     qi_tag_ids = Mp.Services.TagQueryTools.GetSelfAndAllDescendantsTagIds(qi.TagId);
                 }
@@ -168,6 +177,7 @@ namespace MonkeyPaste {
 
             string whereClause = string.Empty;
             if (!tagIds.Contains(MpTag.AllTagId)) {
+
                 whereClause = AddWhereCondition(
                     whereClause,
                     @$"RootId IN 
@@ -313,7 +323,7 @@ namespace MonkeyPaste {
             mv += "," + mv_parts[1];
 
             if (qf.HasFlag(MpContentQueryBitFlags.ItemColor)) {
-                ops.Add(new Tuple<string, List<object>>($"HEXMATCH(?,ItemColor) = 0", new object[] { mv }.ToList()));
+                ops.Add(new Tuple<string, List<object>>($"HEXMATCH(?,ItemColor) = 1", new object[] { mv }.ToList()));
             } else {
                 ops.Add(new Tuple<string, List<object>>($"PIXELCOUNT(?,ItemImageData) > 0", new object[] { mv }.ToList()));
             }

@@ -41,6 +41,18 @@ namespace MonkeyPaste {
 
         #endregion
 
+        #region Guid Query
+
+        public static async Task<int> GetItemIdByGuidAsync<T>(string guid) where T : new() {
+            string table_name = typeof(T).ToString().Replace("MonkeyPaste.", string.Empty);
+            string pk_name = $"pk_{table_name}Id";
+            string guid_name = $"{table_name}Guid";
+            string query = $"select {pk_name} from {table_name} where {guid_name}=?";
+            var result = await MpDb.QueryScalarAsync<int>(query, guid);
+            return result;
+        }
+        #endregion
+
         #region Id Query
 
         public static async Task<T> GetItemAsync<T>(int id) where T : new() {

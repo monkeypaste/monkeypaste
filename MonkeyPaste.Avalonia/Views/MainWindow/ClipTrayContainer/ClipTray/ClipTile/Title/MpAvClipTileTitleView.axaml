@@ -68,13 +68,13 @@
         <Viewbox HorizontalAlignment="Left"
                  VerticalAlignment="Top"
                  IsVisible="{Binding IsTitleLayersVisible, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                 
                  Width="{Binding Bounds.Width, ElementName=TitleContainerGrid}"
                  Height="{Binding Bounds.Height, ElementName=TitleContainerGrid}"
                  Stretch="Fill">
             <Canvas x:Name="SwirlCanvas"
                     Width="260"
-                    Height="55"
-                    IsVisible="{Binding IsExpanded}">
+                    Height="55">
                 <Ellipse x:Name="layer2"
                          StrokeThickness="0"
                          Fill="{Binding TitleLayerHexColors[2], Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
@@ -231,7 +231,7 @@
             <Button x:Name="ClipTileAppIconImageButton"
                     x:DataType="local:MpAvClipTileTransactionCollectionViewModel"
                     DataContext="{Binding TransactionCollectionViewModel}"
-                    Classes="noBg noHoverBg square"
+                    Classes="noBg noHoverBg"
                     Classes.shakeOnce="{Binding DoShake}"
                     Command="{Binding OpenTransactionPaneCommand}"
                     ClipToBounds="False"
@@ -249,9 +249,7 @@
                     <RotateTransform />
                 </Button.RenderTransform>
 
-                <Grid Classes="square"
-                      MinWidth="20"
-                      ClipToBounds="False">
+                <Grid>
                     <Image x:Name="HasAnalysisBorderImage"
                            IsHitTestVisible="False"
                            IsVisible="{Binding IsAnyAnalysisTransaction}"

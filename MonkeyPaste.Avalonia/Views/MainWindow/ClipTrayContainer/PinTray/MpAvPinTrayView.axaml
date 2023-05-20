@@ -15,7 +15,12 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvPinTrayView">
     <local:MpAvUserControl.Styles>
-
+        <Style Selector="ListBox#PinTrayListBox > ListBoxItem">
+            <Setter Property="HorizontalAlignment"
+                    Value="Left" />
+            <Setter Property="VerticalAlignment"
+                    Value="Top" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Border x:Name="PinTrayContainerBorder"
             HorizontalAlignment="Stretch"

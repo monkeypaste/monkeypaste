@@ -165,6 +165,7 @@ function getContentHandle() {
 function getContentAsMessage() {
 	updateQuill();
 	return {
+		contentHeight: getContentHeight(),
 		editorWidth: getEditorWidth(),
 		editorHeight: getEditorHeight(),
 		itemData: getContentData(),

@@ -1216,7 +1216,8 @@ namespace MonkeyPaste.Avalonia {
                     searchText = x.MatchValue,
                     isCaseSensitive = x.QueryFlags.HasFlag(MpContentQueryBitFlags.CaseSensitive),
                     isWholeWordMatch = x.QueryFlags.HasFlag(MpContentQueryBitFlags.WholeWord),
-                    useRegEx = x.QueryFlags.HasFlag(MpContentQueryBitFlags.Regex)
+                    useRegEx = x.QueryFlags.HasFlag(MpContentQueryBitFlags.Regex),
+                    matchType = x.QueryFlags.GetStringMatchType().ToString()
                 });
             loadContentMsg.searchesFragment =
                 searches.Any() ?
@@ -1280,6 +1281,7 @@ namespace MonkeyPaste.Avalonia {
             }
             BindingContext.HasTemplates = contentChanged_ntf.hasTemplates;
             BindingContext.HasEditableTable = contentChanged_ntf.hasEditableTable;
+            BindingContext.ActualContentHeight = contentChanged_ntf.contentHeight;
 
             if (BindingContext.IsAppendNotifier) {
                 MpConsole.WriteLine("content changed on append");
@@ -1397,11 +1399,11 @@ namespace MonkeyPaste.Avalonia {
             if (BindingContext == null || !IsEditorLoaded) {
                 return;
             }
-            if (IsContentResizing) {
-                SendMessage($"disableWindowResizeUpdate_ext()");
-            } else {
-                SendMessage($"enableWindowResizeUpdate_ext()"); ;
-            }
+            //if (IsContentResizing) {
+            //    SendMessage($"disableWindowResizeUpdate_ext()");
+            //} else {
+            //    SendMessage($"enableWindowResizeUpdate_ext()"); ;
+            //}
         }
         #endregion
 

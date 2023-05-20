@@ -18,7 +18,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvSearchCriteriaItemView() {
             AvaloniaXamlLoader.Load(this);
             var db = this.FindControl<Control>("CriteriaDragButton");
-            db.PointerPressed += Db_PointerPressed;
+            db.AddHandler(PointerPressedEvent, Db_PointerPressed, RoutingStrategies.Tunnel);
         }
 
         private async void Db_PointerPressed(object sender, PointerPressedEventArgs e) {
@@ -26,12 +26,20 @@ namespace MonkeyPaste.Avalonia {
             if (dragButton == null) {
                 return;
             }
+            MpAvSearchCriteriaItemViewModel dc = BindingContext;
             BindingContext.IsDragging = true;
+            MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
 
             var mpdo = new MpAvDataObject(MpPortableDataFormats.INTERNAL_SEARCH_CRITERIA_ITEM_FORMAT, BindingContext);
             var result = await DragDrop.DoDragDrop(e, mpdo, DragDropEffects.Move | DragDropEffects.Copy);
 
-            BindingContext.IsDragging = false;
+            if (BindingContext == null) {
+                // is null after drop as of preview 8
+                dc.IsDragging = false;
+            } else {
+                BindingContext.IsDragging = false;
+            }
+            MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
             MpConsole.WriteLine($"SearchCriteria Drop Result: '{result}'");
         }
     }

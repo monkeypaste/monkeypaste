@@ -55,6 +55,8 @@ namespace MonkeyPaste {
         public bool isReplace { get; set; }
         public string replaceText { get; set; }
 
+        public string matchType { get; set; }
+
     }
 
     public class MpQuillContentDataObjectRequestMessage : MpJsonObject {
@@ -96,6 +98,7 @@ namespace MonkeyPaste {
     public class MpQuillEditorContentChangedMessage : MpJsonObject {
         public string itemData { get; set; }
 
+        public double contentHeight { get; set; } // NOTE ignoring width, it'll roughly be editorWidth unless wrapping is disabled like in dnd
         public double editorWidth { get; set; }
         public double editorHeight { get; set; }
         public int itemSize1 { get; set; } = -1;

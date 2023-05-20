@@ -60,39 +60,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIMenuItemViewModel Implementation
 
-        public MpMenuItemViewModel ContextMenuItemViewModel {
-            get {
-                if (Transaction == null) {
-                    return new MpMenuItemViewModel();
-                }
-                return new MpMenuItemViewModel() {
-                    IconSourceObj = IconSourceObj,
-                    Header = TransactionLabel,
-                    Tooltip = MpAvDateTimeToStringConverter.Instance.Convert(TransactionDateTime, null, MpAvDateTimeToStringConverter.LITERAL_DATE_TIME_FORMAT, null),
-                    SubItems = new List<MpMenuItemViewModel>() {
-                        new MpMenuItemViewModel() {
-                                    Header = $"Filter by '{TransactionLabel}'",
-                                    AltNavIdx = 0,
-                                    IconResourceKey = "FilterImage",
-                                    //Command = EnableFilterByAppCommand
-                                },
-                        new MpMenuItemViewModel() {
-                                    Header = $"Exclude '{TransactionLabel}'",
-                                    AltNavIdx = 0,
-                                    IconResourceKey = "NoEntryImage",
-                                    //Command = ExcludeSourceCommand
-                                },
-                        new MpMenuItemViewModel() {IsSeparator = true},
-                        new MpMenuItemViewModel() {
-                            //Header = $"Goto '{SourceUri}'",
-                            AltNavIdx = 5,
-                            IconResourceKey = "Execute",
-                            //Command = GotoSourceCommand
-                        }
-                    }
-                };
-            }
-        }
+        public MpMenuItemViewModel ContextMenuItemViewModel =>
+            null;
 
         #endregion
 

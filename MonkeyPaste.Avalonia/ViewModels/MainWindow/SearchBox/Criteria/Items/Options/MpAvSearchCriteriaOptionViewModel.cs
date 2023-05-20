@@ -200,6 +200,7 @@ namespace MonkeyPaste.Avalonia {
         #region Model
 
         #region Multi Values 
+        public MpCsvFormatProperties CsvFormatProperties { get; set; }
 
         private string[] _values;
         public string[] Values {
@@ -266,7 +267,8 @@ namespace MonkeyPaste.Avalonia {
                     if (Values.All(x => string.IsNullOrEmpty(x))) {
                         return string.Empty;
                     }
-                    return Values.ToCsv(MpCsvFormatProperties.DefaultBase64Value);
+                    // NOTE changed this from base64 to per opt type, not sure why was base64 but will default to plain now
+                    return Values.ToCsv(CsvFormatProperties);
                     //return $"({Value1},{Value2},{Value3},{Value4})";
                 }
                 return _value;
@@ -469,9 +471,14 @@ namespace MonkeyPaste.Avalonia {
                     selected_color = MpColorHelpers.ParseHexFromString(
                         $"({string.Join(",", Values)})");
                 }
+                Window owner = TopLevel.GetTopLevel(MpAvMainView.Instance) as Window;
+                if (HostCriteriaItem.Parent.IsCriteriaWindowOpen) {
+                    owner = MpAvWindowManager.AllWindows.FirstOrDefault(x => x.DataContext == HostCriteriaItem.Parent);
+                }
                 var result = await Mp.Services.CustomColorChooserMenuAsync.ShowCustomColorMenuAsync(
                     selectedColor: selected_color,
-                    "Pick Match color");
+                    "Pick Match color",
+                    owner: owner);
 
                 if (string.IsNullOrEmpty(result)) {
                     // cancel

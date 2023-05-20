@@ -28,10 +28,18 @@
         </Style>
 
         <!--  OPTION LISTBOXITEM  -->
-        <Style Selector="ListBoxItem">
+        <Style Selector="ListBox.optionsList > ListBoxItem">
             <!--  NOTE important cause outerlistbox selector pulls these items for some reason  -->
             <Setter Property="BorderThickness"
                     Value="0" />
+        </Style>
+
+        <Style Selector="ListBox.optionsList > ListBoxItem:not(:selected):not(:nth-child(1)):not(:nth-last-child(1))">
+            <!--  NOTE -->
+            <!--<Setter Property="IsHitTestVisible"
+                    Value="False" />
+            <Setter Property="IsVisible"
+                    Value="False" />-->
         </Style>
 
         <!--  INDENT  -->
@@ -142,6 +150,7 @@
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
                      BorderThickness="0"
+                     SelectionMode="Single"
                      ItemsSource="{Binding Items}">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>

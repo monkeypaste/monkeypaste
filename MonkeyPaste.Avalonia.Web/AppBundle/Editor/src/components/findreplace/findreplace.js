@@ -363,11 +363,12 @@ function processSearch(searchObj) {
 	}
 
 	let dirty_ranges_with_match_text = queryText(
-		getText(),
+		trimQuillTrailingLineEndFromText(getText()),
 		searchObj.searchText,
 		searchObj.isCaseSensitive,
 		searchObj.isWholeWordMatch,
-		searchObj.useRegEx);
+		searchObj.useRegEx,
+		searchObj.matchType);
 
 	if (CurFindReplaceDocRanges == null) {
 		CurFindReplaceDocRanges = [];

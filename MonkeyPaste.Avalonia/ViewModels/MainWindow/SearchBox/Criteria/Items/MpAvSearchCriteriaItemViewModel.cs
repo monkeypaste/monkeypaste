@@ -132,27 +132,53 @@ namespace MonkeyPaste.Avalonia {
             SelectedOptionPath
             .Where(x => x.IsValueOption)
             .ToList();
-
-        private ObservableCollection<MpAvSearchCriteriaOptionViewModel> _items;
+        private ObservableCollection<MpAvSearchCriteriaOptionViewModel> _items = new ObservableCollection<MpAvSearchCriteriaOptionViewModel>();
         public ObservableCollection<MpAvSearchCriteriaOptionViewModel> Items {
             get {
-                if (_items == null) {
-                    _items = new ObservableCollection<MpAvSearchCriteriaOptionViewModel>();
-                }
-                _items.Clear();
+                var sel_items = new List<MpAvSearchCriteriaOptionViewModel>();
                 var node = RootOptionViewModel;
                 while (node != null) {
-                    _items.Add(node);
+                    sel_items.Add(node);
                     int selIdx = node.Items.IndexOf(node.SelectedItem);
                     if ((selIdx <= 0 && !node.IsRootMultiValueOption) || !node.HasChildren) {
                         break;
                     }
                     node = node.SelectedItem;
                 }
-
+                int count = Math.Max(_items.Count, sel_items.Count);
+                for (int i = 0; i < count; i++) {
+                    if (_items.Count <= i) {
+                        if (i < sel_items.Count) {
+                            _items.Add(sel_items[i]);
+                        } else {
+                            continue;
+                        }
+                    } else if (sel_items.Count <= i) {
+                        _items.RemoveAt(i);
+                    } else if (_items[i] == sel_items[i]) {
+                        continue;
+                    } else {
+                        _items[i] = sel_items[i];
+                    }
+                }
                 return _items;
             }
         }
+        //public IEnumerable<MpAvSearchCriteriaOptionViewModel> Items {
+        //    get {
+        //        var node = RootOptionViewModel;
+        //        while (node != null) {
+        //            yield return node;
+        //            int selIdx = node.Items.IndexOf(node.SelectedItem);
+        //            if ((selIdx <= 0 && !node.IsRootMultiValueOption) || !node.HasChildren) {
+        //                break;
+        //            }
+        //            node = node.SelectedItem;
+        //        }
+
+        //        yield break;
+        //    }
+        //}
 
         private ObservableCollection<string> _joinTypeLabels;
         public ObservableCollection<string> JoinTypeLabels {
@@ -389,6 +415,8 @@ namespace MonkeyPaste.Avalonia {
                     ovm.UnitType = MpSearchCriteriaUnitFlags.EnumerableValue;
                     if (MpFileExtensionsHelper.ExtLookup.TryGetValue((MpFileOptionType)i, out var exts)) {
                         ovm.Values = exts.ToArray();
+                        ovm.FilterValue |= MpContentQueryBitFlags.Regex;
+                        ovm.CsvFormatProperties = new MpCsvFormatProperties() { EocSeparator = "|" };
                     }
                 }
                 iovml.Add(ovm);
@@ -551,7 +579,7 @@ namespace MonkeyPaste.Avalonia {
             var ttvml =
                 MpAvTagTrayViewModel.Instance
                 .Items
-                .Where(x => x.TagId != Parent.QueryTagId)
+                .Where(x => x.TagId != Parent.QueryTagId && x.IsLinkTag && !x.IsAllTag)
                 .OrderBy(x => x.TagName).ToList();
 
             ttvml.Insert(0, null);
@@ -958,8 +986,9 @@ namespace MonkeyPaste.Avalonia {
             JoinType != MpSearchCriteriaItem.DEFAULT_QUERY_JOIN_TYPE;
 
         public bool IsInputVisible =>
-            !Items[Items.Count - 1].HasChildren &&
-            !Items[Items.Count - 1].UnitType.HasFlag(MpSearchCriteriaUnitFlags.EnumerableValue);
+            Items.Any() &&
+            !Items.Last().HasChildren &&
+            !Items.Last().UnitType.HasFlag(MpSearchCriteriaUnitFlags.EnumerableValue);
 
         public bool IsSelected {
             get {
@@ -1178,6 +1207,7 @@ namespace MonkeyPaste.Avalonia {
 
             }
 
+            //RefreshOptionItems();
             OnPropertyChanged(nameof(Items));
             OnPropertyChanged(nameof(SelectedJoinTypeIdx));
             _lastSavedCriteria = SearchCriteriaItem;
@@ -1203,6 +1233,22 @@ namespace MonkeyPaste.Avalonia {
                 SetModelToCurrent();
                 Mp.Services.Query.NotifyQueryChanged(true);
             }
+        }
+
+        public void RefreshOptionItems() {
+            // HACK getting collection modified ex when using auto property so doing this instead
+            //var sel_items = new List<MpAvSearchCriteriaOptionViewModel>();
+            //var node = RootOptionViewModel;
+            //while (node != null) {
+            //    sel_items.Add(node);
+            //    int selIdx = node.Items.IndexOf(node.SelectedItem);
+            //    if ((selIdx <= 0 && !node.IsRootMultiValueOption) || !node.HasChildren) {
+            //        break;
+            //    }
+            //    node = node.SelectedItem;
+            //}
+            //Items = new ObservableCollection<MpAvSearchCriteriaOptionViewModel>(sel_items);
+            //OnPropertyChanged(nameof(Items));
         }
 
         #endregion
