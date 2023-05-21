@@ -49,6 +49,7 @@
         <Grid ColumnDefinitions="*">
             <TextBox x:Name="ContentQueryTextBox"
                      Grid.Column="0"
+                     MaxWidth="{Binding $parent[ListBox].Bounds.Width}"
                      Padding="3"
                      BorderThickness="0"
                      VerticalAlignment="Stretch"
@@ -58,6 +59,7 @@
                      Text="{Binding ContentQuery, Mode=TwoWay}" />
             <Button x:Name="PopupButton"
                     Grid.Column="0"
+                    IsVisible="{Binding IsFieldButtonVisible}"
                     HorizontalAlignment="Right"
                     Margin="0,0,22,0"
                     local:MpAvMenuExtension.IsEnabled="True">

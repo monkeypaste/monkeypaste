@@ -543,8 +543,8 @@ namespace MonkeyPaste.Avalonia {
                 if (Mp.Services.PlatformInfo.IsDesktop) {
                     Items.ForEach(x => x.LogPropertyChangedEvents = true);
                     var _criteriaWindow = new MpAvWindow() {
-                        SizeToContent = SizeToContent.Width,
-                        MinWidth = 1100,
+                        SizeToContent = SizeToContent.Manual,
+                        Width = 1100,
                         Height = 300,
                         DataContext = this,
                         ShowInTaskbar = true,

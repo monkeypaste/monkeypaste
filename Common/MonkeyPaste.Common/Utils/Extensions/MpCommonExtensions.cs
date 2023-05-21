@@ -16,6 +16,13 @@ namespace MonkeyPaste.Common {
 
         #region Collections
 
+        public static void AddRangeOrDefault<T>(this IList<T> list, IEnumerable<T> range) {
+            if (range == null) {
+                return;
+            }
+            list.AddRange(range);
+        }
+
         public static void RemoveNullsInPlace(this object[] fpArr) {
             if (fpArr == null) {
                 return;

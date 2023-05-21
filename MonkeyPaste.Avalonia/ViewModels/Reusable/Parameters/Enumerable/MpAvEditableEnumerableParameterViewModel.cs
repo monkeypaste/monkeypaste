@@ -57,42 +57,45 @@ namespace MonkeyPaste.Avalonia {
             await base.InitializeAsync(aipv);
             Items.Clear();
 
-            List<string> selectedValues = new List<string>();
+            if (Parent is MpAvSettingsFrameViewModel) {
+
+            }
+
+            List<string> current_values = DefaultValues;
 
             if (!string.IsNullOrEmpty(PresetValueModel.Value)) {
-                selectedValues = PresetValueModel.Value.ToListFromCsv(CsvProperties);
-            } else {
-                selectedValues = DefaultValues;
+                // when not initial load use stored values
+                current_values = PresetValueModel.Value.ToListFromCsv(CsvProperties);
             }
-            Selection.BeginBatchUpdate();
-            foreach (var paramVal in ParameterFormat.values) {
-                bool is_selected = selectedValues.Contains(paramVal.value);
-                var naipvvm = await CreateAnalyticItemParameterValueViewModel(Items.Count, paramVal.label, paramVal.value);
+
+            foreach (var paramVal in current_values) {
+                //bool is_selected = current_values.Contains(paramVal.value);
+                var naipvvm = await CreateAnalyticItemParameterValueViewModel(Items.Count, string.Empty, paramVal);
                 Items.Add(naipvvm);
-                while (naipvvm.IsBusy) { await Task.Delay(100); }
-                if (is_selected) {
-                    // in case of multiple entries, remove first
-                    selectedValues.RemoveAt(selectedValues.IndexOf(paramVal.value));
-                    //Selection.Select(Items.Count - 1);
-                }
+                //while (naipvvm.IsBusy) { await Task.Delay(100); }
+                //if (is_selected) {
+                //    // in case of multiple entries, remove first
+                //    current_values.RemoveAt(current_values.IndexOf(paramVal.value));
+                //    //Selection.Select(Items.Count - 1);
+                //}
             }
 
             // NOTE this secondary add is very editable lists where values wouldn't be found in parameter format..
             // reverse selected values to retain order (valueIdx increment maybe unnecessary, don't remember why its necessary but this retains order)
-            selectedValues.Reverse();
-            foreach (var selectValueStr in selectedValues) {
-                // for new values add them to front of Items
-                Items.ForEach(x => x.ValueIdx++);
-                //for new values from preset add and select
-                var nsaipvvm = await CreateAnalyticItemParameterValueViewModel(0, selectValueStr, selectValueStr);
-                Items.Insert(0, nsaipvvm);
-                while (nsaipvvm.IsBusy) { await Task.Delay(100); }
-                //Selection.Select(0);
-            }
+            //current_values.Reverse();
+            //foreach (var selectValueStr in current_values) {
+            //    // for new values add them to front of Items
+            //    Items.ForEach(x => x.ValueIdx++);
+            //    //for new values from preset add and select
+            //    var nsaipvvm = await CreateAnalyticItemParameterValueViewModel(0, selectValueStr, selectValueStr);
+            //    Items.Insert(0, nsaipvvm);
+            //    while (nsaipvvm.IsBusy) { await Task.Delay(100); }
+            //    //Selection.Select(0);
+            //}
             if (Selection.Count == 0 && Items.Count > 0) {
                 Selection.Select(0);
             }
-            Selection.EndBatchUpdate();
+
 
             OnPropertyChanged(nameof(CurrentValue));
             SetLastValue(CurrentValue);
@@ -108,9 +111,6 @@ namespace MonkeyPaste.Avalonia {
             base.MpAnalyticItemParameterViewModel_PropertyChanged(sender, e);
 
             switch (e.PropertyName) {
-                case nameof(CurrentValue):
-                    //SelectValueCommand.Execute(CurrentValue);
-                    break;
                 case nameof(HasModelChanged):
                 case nameof(Items):
                     if (Parent is MpISaveOrCancelableViewModel socvm) {
@@ -120,6 +120,14 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        protected override void MpAnalyticItemParameterValueViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e) {
+            base.MpAnalyticItemParameterValueViewModel_PropertyChanged(sender, e);
+            switch (e.PropertyName) {
+                case nameof(MpAvEnumerableParameterValueViewModel.Value):
+                    CurrentValue = GetCurrentValue();
+                    break;
+            }
+        }
         protected override string GetCurrentValue() {
 
             return Items == null ? null : Items.Select(x => x.Value).ToList().ToCsv(CsvProperties);

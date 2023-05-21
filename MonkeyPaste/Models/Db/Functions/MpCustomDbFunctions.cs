@@ -3,24 +3,20 @@ using SQLitePCL;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
 namespace MonkeyPaste {
     public static class MpCustomDbFunctions {
-        public const string REGEX_MATCH = "REGEXP";
-        public const string PIXEL_COUNT = "PIXELCOUNT";
-        public const string HEX_MATCH = "HEXMATCH";
-        public const string FILE_EXT_FILTER = "FILE_EXT_FILTER";
-        public const string FILE_NAME_FILTER = "FILE_NAME_FILTER";
 
         public static void AddCustomFunctions(sqlite3 handle) {
-            raw.sqlite3_create_function(handle, REGEX_MATCH, 2, null, MatchRegex);
-            raw.sqlite3_create_function(handle, PIXEL_COUNT, 2, null, PixelColorCount);
-            raw.sqlite3_create_function(handle, HEX_MATCH, 2, null, HexColorMatch);
+            raw.sqlite3_create_function(handle, "REGEXP", 2, null, MatchRegex);
+            raw.sqlite3_create_function(handle, "PIXEL_COUNT", 2, null, PixelColorCount);
+            raw.sqlite3_create_function(handle, "HEX_MATCH", 2, null, HexColorMatch);
 
-            raw.sqlite3_create_function(handle, FILE_NAME_FILTER, 1, null, FilterFileName);
-            raw.sqlite3_create_function(handle, FILE_EXT_FILTER, 1, null, FilterFileExt);
+            raw.sqlite3_create_function(handle, "FILE_NAME_FILTER", 1, null, FilterFileName);
+            raw.sqlite3_create_function(handle, "FILE_EXT_FILTER", 1, null, FilterFileExt);
         }
 
         private static void FilterFileName(sqlite3_context ctx, object user_data, sqlite3_value[] args) {
@@ -50,9 +46,9 @@ namespace MonkeyPaste {
 
             string pattern = raw.sqlite3_value_text(args[0]).utf8_to_string();
             var pattern_parts = pattern.SplitNoEmpty(".");
-            if (pattern_parts.Length > 1) {
+            if (pattern_parts.Any()) {
                 // remove double quotes in case its an escaped windows path
-                filter_val = pattern_parts[1].Replace("\"", string.Empty);
+                filter_val = pattern_parts.Last().Replace("\"", string.Empty);
             }
             raw.sqlite3_result_text(ctx, filter_val);
         }

@@ -59,10 +59,16 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-
-            // BUG will need to check source here... pretty much most places using env.newLine to parse right i think
-            //  or substitute for 'portableNewLine' where necessary
             var ci_dobil = await MpDataModelProvider.GetDataObjectItemsForFormatByDataObjectIdAsync(ci.DataObjectId, MpPortableDataFormats.AvFileNames);
+            if (ci.ItemData.SplitNoEmpty(MpCopyItem.FileItemSplitter) is string[] fpl) {
+                // NOTE presuming text format returned from editor on content change is the current order of file items
+                // sort paths by text order
+#if DEBUG
+                MpDebug.Assert(fpl.Length == ci_dobil.Count, $"FileList count mismatch content {fpl.Length} item paths {ci_dobil.Count} for item '{ci.Title}'");
+                MpDebug.Assert(fpl.Length == ci_dobil.Count, $"FileList count mismatch content {fpl.Length} item paths {ci_dobil.Count} for item '{ci.Title}'");
+#endif       
+                ci_dobil = ci_dobil.OrderBy(x => fpl.IndexOf(x.ItemData)).ToList();
+            }
             var fivml = await Task.WhenAll(ci_dobil.Select(x => CreateFileItemViewModel(x)));
             Items.Clear();
             fivml.ForEach(x => Items.Add(x));

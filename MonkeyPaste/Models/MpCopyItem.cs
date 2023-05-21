@@ -226,38 +226,76 @@ namespace MonkeyPaste {
         }
 
         public async Task UpdateDataObject() {
-            string searchable_text = null;
             switch (ItemType) {
-                case MpCopyItemType.FileList:
-                    // TODO could use parsing analytics here to get content/meta information
-                    searchable_text = ItemData;
-                    break;
                 case MpCopyItemType.Image:
                     // TODO could use computer vision analytics here to get content/meta information
 
-                    break;
-                case MpCopyItemType.Text:
-                    searchable_text = ItemData.ToPlainText("html");
-                    break;
-            }
-            if (string.IsNullOrWhiteSpace(searchable_text)) {
-                // ignore empty
-                return;
-            }
+                    return;
+                case MpCopyItemType.FileList:
+                    // account for file item remove, dnd drop and append into file item
+                    // Current Files is ItemData split by new line
+                    var fpl = ItemData.SplitNoEmpty(MpCopyItem.FileItemSplitter);
 
-            var doil = await MpDataModelProvider.GetDataObjectItemsForFormatByDataObjectIdAsync(DataObjectId, MpPortableDataFormats.Text);
-            if (doil.Count == 0) {
-                doil.Add(new MpDataObjectItem() {
-                    DataObjectId = DataObjectId,
-                    ItemFormat = MpPortableDataFormats.Text
-                });
+                    // get current file list entries
+                    var doi_fpl = await MpDataModelProvider.GetDataObjectItemsForFormatByDataObjectIdAsync(DataObjectId, MpPortableDataFormats.AvFileNames);
+                    var to_remove = doi_fpl.Where(x => !fpl.Contains(x.ItemData));
+                    var to_add = fpl.Where(x => doi_fpl.All(y => y.ItemData != x));
+
+                    if (to_remove.Any()) {
+                        await Task.WhenAll(to_remove.Select(x => x.DeleteFromDatabaseAsync()));
+                        to_remove.ForEach(x => MpConsole.WriteLine($"FileItem '{x.ItemData}' REMOVED from Copy Item '{Title}'"));
+                    }
+                    if (to_add.Any()) {
+                        // added file entries w/o icons
+                        var added_doil = await Task.WhenAll<MpDataObjectItem>(
+                            to_add.Select(x =>
+                                MpDataObjectItem.CreateAsync(
+                                    dataObjectId: DataObjectId,
+                                    itemFormat: MpPortableDataFormats.AvFileNames,
+                                    itemData: x)));
+
+                        foreach (var added_doi in added_doil) {
+                            if (added_doi.ItemData.IsFileOrDirectory()) {
+                                // use file system icon if available
+                                string fp_icon_base64_str = Mp.Services.IconBuilder.GetPathIconBase64(added_doi.ItemData);
+                                var fp_icon = await Mp.Services.IconBuilder.CreateAsync(fp_icon_base64_str);
+                                added_doi.ItemDataIconId = fp_icon.Id;
+                            } else {
+                                var doi_matches = await MpDataModelProvider.GetDataObjectItemsForFormatByDataAsync(MpPortableDataFormats.AvFileNames, added_doi.ItemData);
+                                if (doi_matches.Any()) {
+                                    // if item was imported use icon from imported doi
+                                    added_doi.ItemDataIconId = doi_matches.FirstOrDefault().ItemDataIconId;
+                                } else {
+                                    // missing file
+                                    var fp_icon = await Mp.Services.IconBuilder.CreateAsync(MpBase64Images.MissingFile);
+                                    added_doi.ItemDataIconId = fp_icon.Id;
+                                }
+                            }
+                            MpDebug.Assert(added_doi.ItemDataIconId != 0, "FileItem Icon create error");
+                        }
+                        // update added items w/ there icons
+                        await Task.WhenAll(added_doil.Select(x => x.WriteToDatabaseAsync()));
+
+                        to_add.ForEach(x => MpConsole.WriteLine($"FileItem '{x}' ADDED to Copy Item '{Title}'"));
+                    }
+                    return;
+                case MpCopyItemType.Text:
+                    string searchable_text = ItemData.ToPlainText("html");
+                    var doil = await MpDataModelProvider.GetDataObjectItemsForFormatByDataObjectIdAsync(DataObjectId, MpPortableDataFormats.Text);
+                    if (doil.Count == 0) {
+                        doil.Add(new MpDataObjectItem() {
+                            DataObjectId = DataObjectId,
+                            ItemFormat = MpPortableDataFormats.Text
+                        });
+                    }
+                    if (doil.Count > 1) {
+                        // (currently) there should only be 1 entry
+                        Debugger.Break();
+                    }
+                    doil[0].ItemData = searchable_text;
+                    await doil[0].WriteToDatabaseAsync();
+                    return;
             }
-            if (doil.Count > 1) {
-                // (currently) there should only be 1 entry
-                Debugger.Break();
-            }
-            doil[0].ItemData = searchable_text;
-            await doil[0].WriteToDatabaseAsync();
         }
 
         public override async Task WriteToDatabaseAsync() {

@@ -225,12 +225,15 @@ namespace MonkeyPaste.Avalonia {
         public int[] TitleLayerZIndexes { get; private set; } = Enumerable.Range(1, 3).ToArray();
         public string[] TitleLayerHexColors { get; private set; } = Enumerable.Repeat(MpSystemColors.Transparent, 4).ToArray();
 
+        public string DetailTooltipText { get; set; }
         public string DetailText {
             get {
+                DetailTooltipText = string.Empty;
                 string detailText = string.Empty;
                 switch ((MpCopyItemDetailType)SelectedDetailIdx) {
                     //created
                     case MpCopyItemDetailType.DateTimeCreated:
+                        DetailTooltipText = MpAvDateTimeToStringConverter.Instance.Convert(CopyItemCreatedDateTime, null, MpAvDateTimeToStringConverter.LITERAL_DATE_TIME_FORMAT, null) as string;
                         detailText = "Copied " + CopyItemCreatedDateTime.ToReadableTimeSpan();
                         break;
                     case MpCopyItemDetailType.DataSize:

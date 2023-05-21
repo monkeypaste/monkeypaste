@@ -636,6 +636,29 @@ namespace MonkeyPaste.Avalonia {
                                         value = MpPrefViewModel.Instance.ResetClipboardAfterMonkeyPaste.ToString()
                                     }
                                 }
+                            },
+                            new MpParameterFormat() {
+                                // TODO this should probably be in a seperate frame but just testing editable list now
+                                paramId = nameof(MpPrefViewModel.Instance.UserDefinedFileExtensionsCsv),
+                                controlType = MpParameterControlType.EditableList,
+                                unitType = MpParameterValueUnitType.DelimitedPlainText,
+                                label = "User-Defined Search Extensions",
+                                description = "Used in advanced file search for non preset file kinds",
+                                values =
+                                new List<MpPluginParameterValueFormat>() {
+                                    new MpPluginParameterValueFormat() {
+                                        isDefault = true,
+                                        value = MpPrefViewModel.Instance.UserDefinedFileExtensionsCsv
+                                    }
+                                }
+                                    //MpPrefViewModel.Instance.UserDefinedFileExtensionsCsv
+                                    //.ToListFromCsv(MpCsvFormatProperties.DefaultBase64Value)
+                                    //.Select(x=>
+                                    //    new MpPluginParameterValueFormat() {
+                                    //        isDefault = true,
+                                    //        value = x
+                                    //    })
+                                    //.ToList()
                             }
                         }
                     }

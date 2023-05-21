@@ -173,7 +173,6 @@ namespace MonkeyPaste.Common {
                     return "FILE_NAME_FILTER(ItemData)";
                 case MpContentQueryBitFlags.FileExt:
                     return "FILE_EXT_FILTER(ItemData)";
-
                 case MpContentQueryBitFlags.FilePath:
                 case MpContentQueryBitFlags.Content:
                     return "ItemData";
@@ -190,11 +189,13 @@ namespace MonkeyPaste.Common {
                 case MpContentQueryBitFlags.ImageType:
                 case MpContentQueryBitFlags.FileType:
                     return "e_MpCopyItemType";
+                case MpContentQueryBitFlags.DeviceName:
+                    return "DeviceGuid";
                 default:
                     return f.ToString();
             }
         }
-        public static IEnumerable<string> GetStringMatchFieldName(this MpContentQueryBitFlags f) {
+        public static IEnumerable<string> GetStringMatchFieldNames(this MpContentQueryBitFlags f) {
             foreach (string flag_name in typeof(MpContentQueryBitFlags).GetEnumNames()) {
                 MpContentQueryBitFlags cur_flag = flag_name.ToEnum<MpContentQueryBitFlags>();
                 if (!cur_flag.IsStringMatchFilterFlag()) {
@@ -254,12 +255,6 @@ namespace MonkeyPaste.Common {
         }
 
         public static string GetStringMatchValue(this MpContentQueryBitFlags f, string matchOp, string matchVal) {
-            //if(f.HasFlag(MpContentQueryBitFlags.FileName)) {
-            //    matchVal = $"FILE_NAME_FILTER({matchVal})";
-            //} else if (f.HasFlag(MpContentQueryBitFlags.FileExt)) {
-            //    matchVal = $"FILE_EXT_FILTER({matchVal})";
-            //}
-
             if (matchOp == "REGEXP") {
                 if (f.HasFlag(MpContentQueryBitFlags.WholeWord)) {
                     //string flags = "m";

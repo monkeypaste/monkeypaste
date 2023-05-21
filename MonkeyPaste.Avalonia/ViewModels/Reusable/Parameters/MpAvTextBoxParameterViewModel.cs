@@ -53,6 +53,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIContentQueryTextBoxViewModel Implementation
 
+        bool MpIContentQueryTextBoxViewModel.IsFieldButtonVisible =>
+            UnitType == MpParameterValueUnitType.PlainTextContentQuery ||
+            UnitType == MpParameterValueUnitType.RawDataContentQuery ||
+            UnitType == MpParameterValueUnitType.DelimitedPlainTextContentQuery;
         string MpIContentQueryTextBoxViewModel.ContentQuery {
             get => CurrentValue;
             set => CurrentValue = value;

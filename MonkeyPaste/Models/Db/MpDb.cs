@@ -570,6 +570,12 @@ SELECT
 	case 
 		when MpTransactionSource.e_MpTransactionSourceType == 'App' 
 			then 
+				(select MpUserDeviceGuid from MpUserDevice where pk_MpUserDeviceId in (select fk_MpUserDeviceId from MpApp where pk_MpAppId == MpTransactionSource.fk_SourceObjId limit 1))
+		else NULL
+	end as DeviceGuid,
+	case 
+		when MpTransactionSource.e_MpTransactionSourceType == 'App' 
+			then 
 				(select MachineName from MpUserDevice where pk_MpUserDeviceId in (select fk_MpUserDeviceId from MpApp where pk_MpAppId == MpTransactionSource.fk_SourceObjId limit 1))
 		else NULL
 	end as DeviceName,
@@ -581,17 +587,20 @@ SELECT
 	end as DeviceType,
 	e_MpCopyItemType,
 	ItemMetaData,
-	Title,
+	Title,		
 	case 
-		when MpCopyItem.e_MpCopyItemType == 'Text' or MpCopyItem.e_MpCopyItemType == 'FileList'
+		when MpCopyItem.e_MpCopyItemType == 'Text' and MpDataObjectItem.ItemFormat = 'Text'
 			then 
-				(select ItemData from MpDataObjectItem where fk_MpDataObjectId = MpCopyItem.fk_MpDataObjectId limit 1)		
+				MpDataObjectItem.ItemData
+		when MpCopyItem.e_MpCopyItemType == 'FileList' and MpDataObjectItem.ItemFormat = 'Files'
+			then 
+				MpDataObjectItem.ItemData	
 		else NULL
-	end as ItemData,
-	CASE
+	end as ItemData,	
+	case
 		when MpCopyItem.e_MpCopyItemType == 'Image'
 			then 
-				ItemData
+				MpCopyItem.ItemData
 		else NULL
 	end as ItemImageData,
 	CopyDateTime,
@@ -600,7 +609,8 @@ SELECT
 	HexColor as ItemColor,
 	CopyCount + PasteCount as UsageScore
 FROM
-	MpCopyItem 
+	MpCopyItem
+LEFT JOIN MpDataObjectItem ON MpDataObjectItem.fk_MpDataObjectId = MpCopyItem.fk_MpDataObjectId
 LEFT JOIN MpCopyItemTransaction ON MpCopyItemTransaction.fk_MpCopyItemId = MpCopyItem.pk_MpCopyItemId
 LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId = MpCopyItemTransaction.pk_MpCopyItemTransactionId");
 

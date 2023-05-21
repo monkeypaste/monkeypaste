@@ -19,6 +19,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIContentQueryTextBoxViewModel Implementation
 
+        public bool IsFieldButtonVisible =>
+            Parent == null ?
+                false :
+                Parent.UnitType == MpParameterValueUnitType.PlainTextContentQuery ||
+                Parent.UnitType == MpParameterValueUnitType.RawDataContentQuery ||
+                Parent.UnitType == MpParameterValueUnitType.DelimitedPlainTextContentQuery;
+
         public bool IsActionParameter { get; set; } = false;
 
         public string ContentQuery {

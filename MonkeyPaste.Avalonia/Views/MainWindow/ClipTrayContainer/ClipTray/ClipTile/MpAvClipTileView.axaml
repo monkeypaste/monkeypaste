@@ -38,6 +38,22 @@
                     Value="AntiqueWhite" />
         </Style>
 
+        <Style Selector="TextBlock#DetailTextBlock.hastip"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView ToolTipText="{Binding DetailTooltipText}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--<Style Selector="TextBlock#DetailTextBlock"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="ToolTip.Tip"
+                    Value="{x:Null}" />
+        </Style>-->
     </local:MpAvUserControl.Styles>
     <!--  OUTER BORDER  -->
     <local:MpAvClipBorder x:Name="ClipTileContainerBorder"
@@ -152,14 +168,17 @@
                         </DataTemplate>
                     </TransitioningContentControl.ContentTemplate>
                 </TransitioningContentControl>-->
-                <TextBlock HorizontalAlignment="Center"
+                <TextBlock x:Name="DetailTextBlock"
+                           HorizontalAlignment="Center"
                            VerticalAlignment="Bottom"
                            Background="Transparent"
                            MinHeight="10"
                            MinWidth="50"
                            FontSize="10"
                            TextAlignment="Center"
-                           Text="{Binding DetailText}" />
+                           Classes.hastip="{Binding DetailTooltipText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                           Text="{Binding DetailText}">
+                </TextBlock>
             </Grid>
 
             <!--  CORNER BUTTONS  -->

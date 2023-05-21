@@ -37,6 +37,7 @@ namespace MonkeyPaste.Common.Plugin {
         PlainTextContentQuery,
         RawDataContentQuery,
         DelimitedPlainText,
+        DelimitedPlainTextContentQuery,
         CollectionComponentId,
         ActionComponentId,
         AnalyzerComponentId,

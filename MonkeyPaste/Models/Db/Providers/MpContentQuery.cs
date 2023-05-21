@@ -260,7 +260,7 @@ namespace MonkeyPaste {
             this MpContentQueryBitFlags qf,
             string mv) {
             var ops = new List<Tuple<string, List<object>>>();
-            if (qf.GetStringMatchFieldName() is IEnumerable<string> strFieldNames) {
+            if (qf.GetStringMatchFieldNames() is IEnumerable<string> strFieldNames) {
                 // string matching
                 foreach (string strFieldName in strFieldNames) {
                     string strOp = qf.GetStringMatchOp();
@@ -403,7 +403,9 @@ namespace MonkeyPaste {
         private static IEnumerable<Tuple<string, List<object>>> GetBeforeOrAfterDateTimeMatchOps(
             this MpContentQueryBitFlags qf, string mv) {
             var ops = new List<Tuple<string, List<object>>>();
-
+            if (qf.HasFlag(MpContentQueryBitFlags.Exactly)) {
+                return ops;
+            }
             if (!qf.HasFlag(MpContentQueryBitFlags.After) &&
                 !qf.HasFlag(MpContentQueryBitFlags.Before)) {
                 return ops;

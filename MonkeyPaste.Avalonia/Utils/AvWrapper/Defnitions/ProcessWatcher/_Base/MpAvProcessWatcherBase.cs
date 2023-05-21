@@ -224,7 +224,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public virtual string GetProcessTitle(IntPtr handle) {
-            return GetProcessApplicationName(handle);
+            return string.Empty;
         }
 
         public virtual string GetProcessPath(IntPtr handle) {

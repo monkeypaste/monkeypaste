@@ -636,13 +636,13 @@ namespace MonkeyPaste.Avalonia {
                 ovm.Label = labels[i];
                 switch ((MpAppOptionType)i) {
                     case MpAppOptionType.ProcessPath:
-                        ovm.UnitType = MpSearchCriteriaUnitFlags.Text;
+                        ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
                         ovm.FilterValue = MpContentQueryBitFlags.AppPath;
                         ovm.ItemsOptionType = typeof(MpTextOptionType);
                         ovm.Items = GetTextOptionViewModel(ovm);
                         break;
                     case MpAppOptionType.ApplicationName:
-                        ovm.UnitType = MpSearchCriteriaUnitFlags.Text;
+                        ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
                         ovm.FilterValue = MpContentQueryBitFlags.AppName;
                         ovm.ItemsOptionType = typeof(MpTextOptionType);
                         ovm.Items = GetTextOptionViewModel(ovm);
@@ -664,19 +664,19 @@ namespace MonkeyPaste.Avalonia {
                 ovm.Label = labels[i];
                 switch ((MpWebsiteOptionType)i) {
                     case MpWebsiteOptionType.Domain:
-                        ovm.UnitType = MpSearchCriteriaUnitFlags.Text;
+                        ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
                         ovm.FilterValue = MpContentQueryBitFlags.UrlDomain;
                         ovm.ItemsOptionType = typeof(MpTextOptionType);
                         ovm.Items = GetTextOptionViewModel(ovm);
                         break;
                     case MpWebsiteOptionType.Url:
-                        ovm.UnitType = MpSearchCriteriaUnitFlags.Text;
+                        ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
                         ovm.FilterValue = MpContentQueryBitFlags.Url;
                         ovm.ItemsOptionType = typeof(MpTextOptionType);
                         ovm.Items = GetTextOptionViewModel(ovm);
                         break;
                     case MpWebsiteOptionType.Title:
-                        ovm.UnitType = MpSearchCriteriaUnitFlags.Text;
+                        ovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
                         ovm.FilterValue = MpContentQueryBitFlags.UrlTitle;
                         ovm.ItemsOptionType = typeof(MpTextOptionType);
                         ovm.Items = GetTextOptionViewModel(ovm);

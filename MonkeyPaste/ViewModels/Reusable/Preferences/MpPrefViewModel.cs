@@ -63,8 +63,8 @@ namespace MonkeyPaste {
         #region Interfaces
 
         #region MpIUserProvidedFileExts Implementation
-        string MpIUserProvidedFileExts.UserDefineExtPsv =>
-            UserDefinedFileExtensionsPsv;
+        string MpIUserProvidedFileExts.UserDefineExtCsv =>
+            UserDefinedFileExtensionsCsv;
 
         #endregion
 
@@ -429,7 +429,7 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public string UserDefinedFileExtensionsPsv { get; set; } = string.Empty;
+        public string UserDefinedFileExtensionsCsv { get; set; } = string.Empty;
 
 
         #endregion
