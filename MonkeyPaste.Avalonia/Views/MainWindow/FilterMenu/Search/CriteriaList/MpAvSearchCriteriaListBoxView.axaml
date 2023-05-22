@@ -27,6 +27,12 @@
         <sys:Double x:Key="CriteriaOptionMinWidth">150</sys:Double>
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
+        <!--  READONLY CRITERIA LBI  -->
+        <Style Selector="ListBox.criteriaList:not(.alterable) > ListBoxItem">
+            <Setter Property="IsEnabled"
+                    Value="False" />
+        </Style>
+
         <!--  CRITIERA LISTBOX ITEM & HEADER  -->
         <Style Selector="ListBoxItem">
             <Setter Property="HorizontalContentAlignment"
@@ -254,6 +260,7 @@
                  Classes="criteriaList"
                  Classes.windowed="{Binding IsCriteriaWindowOpen}"
                  Classes.drag="{Binding IsAnyDragging}"
+                 Classes.alterable="{Binding CanAlter}"
                  Background="{DynamicResource SearchCriteriaRowBgBrush1}"
                  BorderThickness="0"
                  BorderBrush="Black"

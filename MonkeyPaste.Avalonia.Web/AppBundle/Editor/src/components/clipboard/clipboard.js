@@ -38,7 +38,7 @@ function initAllMatchers() {
         initConverterMatchers();
         return;
     }
-    
+    initSpecialCharacterMatcher();
     initLinkMatcher();
     initFontFamilyMatcher();
     initFontSizeMatcher();
@@ -64,6 +64,22 @@ function initTemplateMatcher() {
     });
 }
 
+function initSpecialCharacterMatcher() {
+    if (Quill === undefined) {
+        /// host load error case
+        debugger;
+    }
+    let Delta = Quill.imports.delta;
+
+    quill.clipboard.addMatcher(Node.TEXT_NODE, function (node, delta) {
+        if (node.parentNode.tagName != 'CODE') {
+            return delta;
+        }
+        // this fixes whitespace issues
+
+        return new Delta().insert(decodeHtmlSpecialEntities(node.data));
+    });    
+}
 function initWhitespaceMatcher() {
     if (Quill === undefined) {
         /// host load error case
@@ -250,6 +266,12 @@ function initLinkMatcher() {
 // #endregion Life Cycle
 
 // #region Getters
+function getClipboardEnabledElements() {
+    return [
+        getEditorElement(),
+        ...document.querySelectorAll('textarea')
+    ];
+}
 // #endregion Getters
 
 // #region Setters
@@ -317,15 +339,19 @@ function isInternalClipTileFormat(lwc_format) {
 // #region Actions
 
 function startClipboardHandler() {
-    window.addEventListener('paste', onPaste, true);
-    window.addEventListener('cut', onCut, true);
-    window.addEventListener('copy', onCopy, true);
+    getClipboardEnabledElements().forEach(x => {
+        x.addEventListener('paste', onPaste, true);
+        x.addEventListener('cut', onCut, true);
+        x.addEventListener('copy', onCopy, true);
+    });
 }
 
 function stopClipboardHandler() {
-    window.removeEventListener('paste', onPaste);
-    window.removeEventListener('cut', onCut);
-    window.removeEventListener('copy', onCopy);
+    getClipboardEnabledElements().forEach(x => {
+        x.removeEventListener('paste', onPaste);
+        x.removeEventListener('cut', onCut);
+        x.removeEventListener('copy', onCopy);
+    });
 }
 
 // #endregion Actions

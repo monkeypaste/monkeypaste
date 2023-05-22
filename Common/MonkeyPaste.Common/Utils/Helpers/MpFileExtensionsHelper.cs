@@ -2,6 +2,29 @@
 using System.Linq;
 
 namespace MonkeyPaste.Common {
+    // HACK this enum's out of place (search criteria option enums) but 
+    // is tied to KnowFileOrFolderExt in RegEx which is visible to plugins so here she be
+    public enum MpFileOptionType {
+        None = 0,
+        Audio, //
+        Compressed,
+        DiscAndMedia,
+        DataAndDatabase,
+        Document, //
+        Email,
+        Executable,
+        Font,
+        Image, //
+        Internet,
+        Presentation,
+        Programming,
+        Spreadsheet, //
+        System,
+        Video, //
+        UserDefined,
+        Custom //
+    }
+
     public static class MpFileExtensionsHelper {
         // NOTE dynamic parts will require restart to take affect atm
 

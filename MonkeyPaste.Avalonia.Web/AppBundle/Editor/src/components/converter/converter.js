@@ -66,7 +66,7 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 		let htmlStr = dataStr;// fixPlainHtmlColorContrast(dataStr, bgOpacity);
 		//htmlStr = swapPreForDivTags(htmlStr);
 		//htmlStr = encodeHtmlSpecialEntitiesFromHtmlDoc(htmlStr);
-		insertHtml(0,htmlStr,'silent');
+		insertHtml(0,htmlStr,'user');
 	}
 	updateQuill();
 	if (isTableInDocument()) {

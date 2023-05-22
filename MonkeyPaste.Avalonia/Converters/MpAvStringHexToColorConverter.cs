@@ -11,6 +11,10 @@ namespace MonkeyPaste.Avalonia {
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
             var b = MpAvStringHexToBrushConverter.Instance.Convert(value, targetType, parameter, culture) as SolidColorBrush;
             if (b != null) {
+                if (parameter is string paramStr && double.Parse(paramStr) is double paramVal) {
+                    var result = b.AdjustOpacity(paramVal).GetColor();
+                    return result;
+                }
                 return b.Color;
             }
             return null;

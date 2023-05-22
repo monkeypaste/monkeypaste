@@ -46,28 +46,4 @@ namespace MonkeyPaste.Avalonia {
             throw new NotSupportedException();
         }
     }
-    public class MpAvStringHexToContrastBrushConverter : IValueConverter {
-        public static readonly MpAvStringHexToContrastBrushConverter Instance = new();
-
-        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
-            bool has_value = value != null && !string.IsNullOrWhiteSpace(value.ToString());
-            IBrush fallback = MpSystemColors.Transparent.ToAvBrush();
-            if (!has_value &&
-                    parameter is string fparamStr &&
-                !string.IsNullOrEmpty(fparamStr)) {
-                return Convert(fparamStr, null, null, null) as IBrush;
-            }
-            if (value is string valStr) {
-                valStr = MpColorHelpers.ParseHexFromString(valStr);
-                if (valStr.IsStringHexColor()) {
-                    return valStr.ToContrastForegoundColor().ToAvBrush();
-                }
-            }
-            return fallback;
-        }
-
-        public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) {
-            throw new NotSupportedException();
-        }
-    }
 }

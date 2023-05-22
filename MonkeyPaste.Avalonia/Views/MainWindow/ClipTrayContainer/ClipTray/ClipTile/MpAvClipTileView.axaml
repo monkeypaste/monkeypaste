@@ -29,31 +29,19 @@
 
         <!--  DETAIL COLOR  -->
 
-        <Style Selector="Grid#DetailContainerGrid TextBlock">
-            <Setter Property="Foreground"
-                    Value="Black" />
+        <Style Selector="Grid#DetailContainerGrid[IsVisible=false]">
+            <Setter Property="RenderTransform"
+                    Value="translateY(20px)" />
+            <Setter Property="Opacity"
+                    Value="0" />
         </Style>
-        <Style Selector="Grid#DetailContainerGrid.subselect TextBlock">
-            <Setter Property="Foreground"
-                    Value="AntiqueWhite" />
-        </Style>
-
-        <Style Selector="TextBlock#DetailTextBlock.hastip"
-               x:DataType="local:MpAvClipTileViewModel">
-            <Setter Property="ToolTip.Tip">
-                <Setter.Value>
-                    <Template>
-                        <local:MpAvToolTipView ToolTipText="{Binding DetailTooltipText}" />
-                    </Template>
-                </Setter.Value>
-            </Setter>
+        <Style Selector="Grid#DetailContainerGrid[IsVisible=true]">
+            <Setter Property="RenderTransform"
+                    Value="translateY(0px)" />
+            <Setter Property="Opacity"
+                    Value="1" />
         </Style>
 
-        <!--<Style Selector="TextBlock#DetailTextBlock"
-               x:DataType="local:MpAvClipTileViewModel">
-            <Setter Property="ToolTip.Tip"
-                    Value="{x:Null}" />
-        </Style>-->
     </local:MpAvUserControl.Styles>
     <!--  OUTER BORDER  -->
     <local:MpAvClipBorder x:Name="ClipTileContainerBorder"
@@ -89,7 +77,7 @@
                                MaxHeight="40" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto"
-                               MaxHeight="25" />
+                               MaxHeight="20" />
             </Grid.RowDefinitions>
 
             <!--  Title  -->
@@ -138,13 +126,28 @@
             <!--  Detail  -->
             <Grid x:Name="DetailContainerGrid"
                   Grid.Row="2"
-                  Height="25"
+                  Height="15"
                   Classes.subselect="{Binding IsSubSelectionEnabled}"
                   IsVisible="{Binding IsCornerButtonsVisible}"
                   local:MpAvIsHoveringExtension.IsEnabled="True"
                   local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverDetailGrid, Mode=TwoWay}"
-                  HorizontalAlignment="Center"
+                  HorizontalAlignment="Stretch"
                   VerticalAlignment="Bottom">
+                <Grid.Transitions>
+                    <Transitions>
+                        <DoubleTransition Property="Opacity"
+                                          Duration="0:0:0.1" />
+                        <TransformOperationsTransition Property="RenderTransform"
+                                                       Easing="BounceEaseOut"
+                                                       Duration="0:0:0.1" />
+                    </Transitions>
+                </Grid.Transitions>
+                <Grid.Background>
+                    <SolidColorBrush Color="{Binding DetailHexColor, Converter={x:Static local:MpAvStringHexToColorConverter.Instance}, ConverterParameter=1}" />
+                </Grid.Background>
+                <ToolTip.Tip>
+                    <local:MpAvToolTipView ToolTipText="{Binding DetailTooltipText}" />
+                </ToolTip.Tip>
                 <!--<TransitioningContentControl x:Name="DetailTransitioningContentControl"
                                              HorizontalAlignment="Center"
                                              Content="{Binding DetailText}">
@@ -175,8 +178,9 @@
                            MinHeight="10"
                            MinWidth="50"
                            FontSize="10"
+                           Margin="0,0,0,1"
                            TextAlignment="Center"
-                           Classes.hastip="{Binding DetailTooltipText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                           Foreground="{Binding DetailHexColor, Converter={x:Static local:MpAvStringHexToContrastBrushConverter.Instance}, ConverterParameter=true}"
                            Text="{Binding DetailText}">
                 </TextBlock>
             </Grid>

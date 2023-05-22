@@ -472,15 +472,16 @@ namespace MonkeyPaste.Common.Wpf {
             }
             span_node.AddClass($"ql-font-{GetHtmlFont(s)}");
             var style_parts = new List<string>();
-            var sb_style = new StringBuilder();
             if (s.FontSize.IsNumber()) {
                 style_parts.Add(GetFontSize(s));
             }
             if (s.Foreground is SolidColorBrush fg_scb) {
                 style_parts.Add($"color: {GetHtmlColor(fg_scb.Color)}");
+                span_node.AddClass("font-color-override-on");
             }
             if (s.Background is SolidColorBrush bg_scb) {
                 style_parts.Add($"background-color: {GetHtmlColor(bg_scb.Color)}");
+                span_node.AddClass("font-bg-color-override-on");
             }
             span_node.SetAttributeValue("style", string.Join(" ", style_parts));
             return span_node;

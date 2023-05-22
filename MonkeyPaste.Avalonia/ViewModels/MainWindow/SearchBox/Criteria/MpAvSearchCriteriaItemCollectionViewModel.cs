@@ -136,6 +136,10 @@ namespace MonkeyPaste.Avalonia {
             HasAnyCriteriaModelChanged ||
             HasSearchChanged;
 
+        public bool CanAlter =>
+            CurrentQueryTagViewModel == null ||
+            !CurrentQueryTagViewModel.IsTagReadOnly;
+
         #endregion
 
         #region Appearance
@@ -294,6 +298,8 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(QueryTagId):
                     OnPropertyChanged(nameof(CurrentQueryTagViewModel));
+                    OnPropertyChanged(nameof(CanSave));
+                    OnPropertyChanged(nameof(CanAlter));
                     break;
                 case nameof(IsCriteriaWindowOpen):
                     if (IsCriteriaWindowOpen) {

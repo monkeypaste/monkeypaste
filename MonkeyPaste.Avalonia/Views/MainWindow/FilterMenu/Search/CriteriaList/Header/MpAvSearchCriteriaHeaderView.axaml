@@ -45,12 +45,13 @@
                     Classes="defaultButton textOnlyButton outline outlineOver"
                     IsVisible="{Binding IsSavedQuery}"
                     Command="{Binding DuplicateQueryCommand}">
-                <TextBlock Text="New..." />
+                <TextBlock Text="Duplicate" />
             </Button>
 
             <!--  SAVE BUTTON  -->
             <Button x:Name="SaveAdvSearchButton"
                     Classes="defaultButton textOnlyButton outline outlineOver"
+                    IsEnabled="{Binding CanAlter}"
                     IsVisible="{Binding CanSave}"
                     Command="{Binding SaveQueryCommand}">
                 <TextBlock Text="Save" />

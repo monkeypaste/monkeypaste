@@ -1300,6 +1300,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task ProcessDataTransferCompleteResponse(MpQuillDataTransferCompletedNotification dataTransferCompleted_ntf) {
+            if (BindingContext.IsPlaceholder) {
+                // occurs for edit
+                return;
+            }
             var dtobj = MpJsonConverter.DeserializeBase64Object<MpQuillHostDataItemsMessage>(dataTransferCompleted_ntf.sourceDataItemsJsonStr);
             MpTransactionType transType = dataTransferCompleted_ntf.transferLabel.ToEnum<MpTransactionType>();
             MpPortableDataObject req_mpdo = dtobj.ToAvDataObject();

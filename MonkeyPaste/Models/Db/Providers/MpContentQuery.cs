@@ -334,18 +334,14 @@ namespace MonkeyPaste {
         #endregion
 
         #region Date Match
+
         private static IEnumerable<Tuple<string, List<object>>> GetDateTimeMatchOps(
             this MpContentQueryBitFlags qf, string mv) {
             var ops = new List<Tuple<string, List<object>>>();
-            ops.AddRange(qf.GetExactlyDateTimeMatchOps(mv));
-            ops.AddRange(qf.GetBeforeOrAfterDateTimeMatchOps(mv));
-            return ops;
-        }
-
-        private static IEnumerable<Tuple<string, List<object>>> GetExactlyDateTimeMatchOps(
-            this MpContentQueryBitFlags qf, string mv) {
-            var ops = new List<Tuple<string, List<object>>>();
-            if (!qf.HasFlag(MpContentQueryBitFlags.Exactly)) {
+            if (!qf.HasFlag(MpContentQueryBitFlags.Before) &&
+                !qf.HasFlag(MpContentQueryBitFlags.After) &&
+                !qf.HasFlag(MpContentQueryBitFlags.Exactly) &&
+                !qf.HasFlag(MpContentQueryBitFlags.WithinLast)) {
                 return ops;
             }
             // <Field> <op> <mv>
@@ -353,103 +349,64 @@ namespace MonkeyPaste {
             string tickOp2 = qf.HasFlag(MpContentQueryBitFlags.Before) ? ">" : "<";
             string match_ticks1 = null;
             string match_ticks2 = null;
-            try {
-                //exactly
-                // <comp_field> <op1> <ticks1> AND <comp_field> <op2> <ticks2>
-                // example (Before)
-                // 
-                // CreatedDateTime < ticks(05/20/2019) AND CreatedDateTime 
 
-                var dt = DateTime.Parse(mv);
-                var start_dt = dt.Date;
-                var end_dt = start_dt + TimeSpan.FromDays(0.999999);
-                match_ticks1 = start_dt.Ticks.ToString();
-                match_ticks2 = end_dt.Ticks.ToString();
+            try {
+                if (qf.HasFlag(MpContentQueryBitFlags.Exactly)) {
+                    //exactly
+                    // <comp_field> <op1> <ticks1> AND <comp_field> <op2> <ticks2>
+                    // example (Before)
+                    // 
+                    // CreatedDateTime < ticks(05/20/2019) AND CreatedDateTime 
+
+                    var dt = DateTime.Parse(mv);
+                    var start_dt = dt.Date;
+                    match_ticks1 = start_dt.Ticks.ToString();
+                    if (!qf.HasFlag(MpContentQueryBitFlags.Before) && !qf.HasFlag(MpContentQueryBitFlags.After)) {
+                        // exactly on date (between beginning and end of that day)
+                        var end_dt = start_dt + TimeSpan.FromDays(0.999999);
+                        match_ticks2 = end_dt.Ticks.ToString();
+                    }
+                } else if (qf.HasFlag(MpContentQueryBitFlags.Before) ||
+                         qf.HasFlag(MpContentQueryBitFlags.After)) {
+
+                    // all day units
+                    double days = double.Parse(mv);
+                    var match_dt = DateTime.Today - TimeSpan.FromDays(days);
+                    match_ticks1 = match_dt.Ticks.ToString();
+                } else {
+                    // within last (hours or days)
+                    tickOp1 = ">";
+                    match_ticks1 = qf.GetWithinLastTicks(mv);
+                }
             }
             catch {
                 tickOp1 = null;
             }
-            if (!string.IsNullOrEmpty(match_ticks1)) {
-                string comp_field = null;
-                if (qf.HasFlag(MpContentQueryBitFlags.Created)) {
-                    comp_field = MpContentQueryBitFlags.Created.ToViewFieldName();
-                } else if (qf.HasFlag(MpContentQueryBitFlags.Modified)) {
-                    comp_field = MpContentQueryBitFlags.Modified.ToViewFieldName();
-                    // filter out TransactionLabel = 'Created'
-                    string strFilter = $"{"TransactionLabel".CaseFormat()} != ?";
-                    object strParam = MpTransactionType.Created.ToString();
-                    ops.Add(new Tuple<string, List<object>>(strFilter, new[] { strParam }.ToList()));
-                } else if (qf.HasFlag(MpContentQueryBitFlags.Pasted)) {
-                    comp_field = MpContentQueryBitFlags.Pasted.ToViewFieldName();
-                }
+
+            if (!string.IsNullOrEmpty(match_ticks1) &&
+                qf.GetTransactionType() is string trans_type &&
+                !string.IsNullOrEmpty(trans_type)) {
+                // filter only specified TransactionLabel 
+                ops.Add(new Tuple<string, List<object>>("TransactionLabel == ?", new[] { (object)trans_type }.ToList()));
+
+                string tick_comp_field = nameof(MpCopyItemTransaction.TransactionDateTime);
 
                 // <Field> <op> '<mv>'
-                if (!string.IsNullOrEmpty(comp_field)) {
+                if (!string.IsNullOrEmpty(tick_comp_field)) {
                     if (!string.IsNullOrEmpty(match_ticks2)) {
                         //exactly 1 < comp_field < 2
 
-                        string strFilter2 = $"{comp_field} {tickOp2} ?";
+                        string strFilter2 = $"{tick_comp_field} {tickOp2} ?";
                         object strParam2 = match_ticks2;
                         ops.Add(new Tuple<string, List<object>>(strFilter2, new[] { strParam2 }.ToList()));
                     }
-                    string strFilter = $"{comp_field} {tickOp1} ?";
+                    string strFilter = $"{tick_comp_field} {tickOp1} ?";
                     object strParam = match_ticks1;
                     ops.Add(new Tuple<string, List<object>>(strFilter, new[] { strParam }.ToList()));
                 }
             }
             return ops;
         }
-
-        private static IEnumerable<Tuple<string, List<object>>> GetBeforeOrAfterDateTimeMatchOps(
-            this MpContentQueryBitFlags qf, string mv) {
-            var ops = new List<Tuple<string, List<object>>>();
-            if (qf.HasFlag(MpContentQueryBitFlags.Exactly)) {
-                return ops;
-            }
-            if (!qf.HasFlag(MpContentQueryBitFlags.After) &&
-                !qf.HasFlag(MpContentQueryBitFlags.Before)) {
-                return ops;
-            }
-            // <Field> <op> <mv>
-            string tickOp = qf.HasFlag(MpContentQueryBitFlags.Before) ? "<" : ">";
-            string match_ticks = null;
-            // all day units
-            try {
-                //double today_offset = (DateTime.Now - DateTime.Today).TotalDays;
-                //double days = double.Parse(mv);
-                //double total_day_offset = days + today_offset;
-                //var dt = DateTime.Now - TimeSpan.FromDays(total_day_offset);
-                //match_ticks = dt.Ticks.ToString();
-                double days = double.Parse(mv);
-                var match_dt = DateTime.Today - TimeSpan.FromDays(days);
-                match_ticks = match_dt.Ticks.ToString();
-            }
-            catch {
-                tickOp = null;
-            }
-            if (!string.IsNullOrEmpty(match_ticks)) {
-                string comp_field = null;
-                if (qf.HasFlag(MpContentQueryBitFlags.Created)) {
-                    comp_field = MpContentQueryBitFlags.Created.ToViewFieldName();
-                } else if (qf.HasFlag(MpContentQueryBitFlags.Modified)) {
-                    comp_field = MpContentQueryBitFlags.Modified.ToViewFieldName();
-                    // filter out TransactionLabel = 'Created'
-                    string strFilter = $"{"TransactionLabel".CaseFormat()} != ?";
-                    object strParam = MpTransactionType.Created.ToString();
-                    ops.Add(new Tuple<string, List<object>>(strFilter, new[] { strParam }.ToList()));
-                } else if (qf.HasFlag(MpContentQueryBitFlags.Pasted)) {
-                    comp_field = MpContentQueryBitFlags.Pasted.ToViewFieldName();
-                }
-
-                if (!string.IsNullOrEmpty(comp_field)) {
-                    string strFilter = $"{comp_field} {tickOp} ?";
-                    object strParam = match_ticks;
-                    ops.Add(new Tuple<string, List<object>>(strFilter, new[] { strParam }.ToList()));
-                }
-            }
-            return ops;
-        }
-
 
         #endregion
 

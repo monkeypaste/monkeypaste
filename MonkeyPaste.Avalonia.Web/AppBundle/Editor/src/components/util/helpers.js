@@ -574,7 +574,11 @@ function encodeHtmlSpecialEntitiesFromPlainText(str) {
 }
 
 function decodeHtmlSpecialEntities(str) {
-    if (!isString(str) || isNullOrEmpty(str)) {
+    if (!isString(str)) {
+        // NOTE important return input if not strig for clipboard matcher
+        return str;
+    }
+    if (isNullOrEmpty(str)) {
         return '';
     }
     for (var i = 0; i < HtmlEntitiesLookup.length; i++) {

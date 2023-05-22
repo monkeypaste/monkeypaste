@@ -26,6 +26,13 @@ namespace MonkeyPaste {
         public const int FavoritesTagId = 2;
         public const int RootGroupTagId = 3;
         public const int HelpTagId = 4;
+        public const int RecentTagId = 5;
+        public const int FormatGroupTagId = 6;
+        public const int TextFormatTagId = 7;
+        public const int ImageFormatTagId = 8;
+        public const int FileFormatTagId = 9;
+
+        public const int MAX_READ_ONLY_TAG_ID = 9;
 
         public const MpContentSortType DEFAULT_QUERY_TAG_SORT_TYPE = MpContentSortType.CopyDateTime;
         public const bool DEFAULT_QUERY_TAG_IS_SORT_DESCENDING = true;
@@ -350,6 +357,7 @@ namespace MonkeyPaste {
             }
             await base.WriteToDatabaseAsync();
         }
+
         public override async Task DeleteFromDatabaseAsync() {
             if (!CanDelete) {
                 // this should be caught in view model

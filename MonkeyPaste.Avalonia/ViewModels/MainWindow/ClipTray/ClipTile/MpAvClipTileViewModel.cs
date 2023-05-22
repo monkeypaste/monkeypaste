@@ -225,6 +225,8 @@ namespace MonkeyPaste.Avalonia {
         public int[] TitleLayerZIndexes { get; private set; } = Enumerable.Range(1, 3).ToArray();
         public string[] TitleLayerHexColors { get; private set; } = Enumerable.Repeat(MpSystemColors.Transparent, 4).ToArray();
 
+        public string DetailHexColor =>
+            TitleLayerHexColors.Any() ? TitleLayerHexColors[0] : MpSystemColors.White;
         public string DetailTooltipText { get; set; }
         public string DetailText {
             get {
@@ -1113,7 +1115,7 @@ namespace MonkeyPaste.Avalonia {
 
             TitleLayerHexColors = hexColors.Select((x, i) => x.AdjustAlpha((double)MpRandom.Rand.Next(40, 120) / 255)).ToArray();
             TitleLayerZIndexes = new List<int> { 1, 2, 3 }.Randomize().ToArray();
-
+            OnPropertyChanged(nameof(DetailHexColor));
             //IsBusy = wasBusy;
         }
 
@@ -1541,6 +1543,7 @@ namespace MonkeyPaste.Avalonia {
                     Parent.OnPropertyChanged(nameof(Parent.CanScroll));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyHovering));
                     OnPropertyChanged(nameof(IsCornerButtonsVisible));
+                    OnPropertyChanged(nameof(DetailHexColor));
                     break;
                 case nameof(IsCornerButtonsVisible):
                     //if (IsCornerButtonsVisible) {

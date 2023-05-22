@@ -688,8 +688,8 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
                     string.Join(
                         ",",
                         new[] {
-                            (int)MpRootOptionType.DateOrTime, //5
-                            (int)MpDateTimeTypeOptionType.Created, //1
+                            (int)MpRootOptionType.History, //5
+                            (int)MpHistoryTypeOptionType.Created, //1
                             (int)MpDateTimeOptionType.After, //3 
                             (int)MpDateAfterUnitType.Yesterday} //1
                         .Select(x => x.ToString())),

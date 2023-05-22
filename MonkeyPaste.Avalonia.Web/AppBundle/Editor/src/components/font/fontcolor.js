@@ -1,5 +1,12 @@
 ﻿// #region Globals
 
+var FontColorOverrideAttrb = null;
+var FontBgColorOverrideAttrb = null;
+//var FontColorOverrideBgAttrb = null;
+//var FontColorValueBgAttrb = null;
+
+//var FontColorOverrideFgAttrb = null;
+//var FontColorValueFgAttrb = null;
 // #endregion Globals
 
 // #region Life Cycle
@@ -10,6 +17,31 @@ function initFontColorToolbarItems() {
 
 	getFontBackgroundToolbarButton().innerHTML = getSvgHtml('fontbg', null, false);
 	addClickOrKeyClickEventListener(getFontBackgroundToolbarButton(), onFontColorOrBgToolbarButtonClick);
+
+	initFontColorClassAttributes();
+}
+
+function initFontColorClassAttributes() {
+	const Parchment = Quill.imports.parchment;
+	let suppressWarning = true;
+	let config = {
+		scope: Parchment.Scope.INLINE,
+	};
+	FontColorOverrideAttrb = new Parchment.ClassAttributor('fontColorOverride', 'font-color-override', config);
+	FontBgColorOverrideAttrb = new Parchment.ClassAttributor('fontBgColorOverride', 'font-bg-color-override', config);
+
+	//FontColorOverrideBgAttrb = new Parchment.ClassAttributor('fontColorOverrideBg', 'font-color-override-bg', config);
+	//FontColorValueBgAttrb = new Parchment.ClassAttributor('fontColorValueBg', 'font-color-value-bg', config);
+
+	//FontColorOverrideFgAttrb = new Parchment.ClassAttributor('fontColorOverrideFg', 'font-color-override-fg', config);
+	//FontColorValueFgAttrb = new Parchment.ClassAttributor('fontColorValueFg', 'font-color-value-fg', config);
+
+	Quill.register(FontColorOverrideAttrb, suppressWarning);
+	Quill.register(FontBgColorOverrideAttrb, suppressWarning);
+	//Quill.register(FontColorOverrideBgAttrb, suppressWarning);
+	//Quill.register(FontColorValueBgAttrb, suppressWarning);
+	//Quill.register(FontColorOverrideFgAttrb, suppressWarning);
+	//Quill.register(FontColorValueFgAttrb, suppressWarning);
 }
 // #endregion Life Cycle
 
@@ -128,11 +160,11 @@ function onFontColorOrBgColorPaletteItemClick(chex) {
 	let bg_chex = null;
 	let fg_chex = null
 	if (ColorPaletteAnchorElement == getFontBackgroundToolbarButton()) {
-		formatDocRange(sel, { background: chex });
+		formatDocRange(sel, { background: chex, 'font-bg-color-override':'on' });
 		bg_chex = chex;
 		fg_chex = getFontHexColorAtDocIdx(font_sel_doc_idx);
 	} else {
-		formatDocRange(sel, { color: chex });
+		formatDocRange(sel, { color: chex, 'font-color-override': 'on' });
 		bg_chex = getFontHexBgColorAtDocIdx(font_sel_doc_idx);
 		fg_chex = chex;
 	}

@@ -183,12 +183,21 @@ namespace MonkeyPaste {
 
         public MpSearchCriteriaItem() : base() { }
 
-        public override Task WriteToDatabaseAsync() {
+        public override async Task WriteToDatabaseAsync() {
             if (string.IsNullOrEmpty(Guid)) {
                 // handle save for pending query
                 Guid = System.Guid.NewGuid().ToString();
             }
-            return base.WriteToDatabaseAsync();
+            MpDebug.Assert(QueryTagId > 0, $"Unlinked search criteria writing");
+            if (QueryTagId == 0) {
+
+            }
+            if (QueryTagId <= MpTag.MAX_READ_ONLY_TAG_ID) {
+                // prevent altering recent, and format type query criterias
+                MpConsole.WriteLine($"Ignored writing read-only search criteria for tag id: {QueryTagId}");
+                return;
+            }
+            await base.WriteToDatabaseAsync();
         }
         public override async Task DeleteFromDatabaseAsync() {
             List<Task> deleteTasks = new List<Task>();

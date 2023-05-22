@@ -1,12 +1,15 @@
 
-#editor span, a, em, strong, u, s, sub, sup, img, p, ol, ul, li, div, table, colgroup, col, tbody, tr, td, iframe, blockquote, pre {
-    background-color: transparent;
-    color: var(--defcontentfgcolor);
+#editor :is(span, a, em, strong, u, s, sub, sup, img, p, ol, ul, li, div, table, colgroup, col, tbody, tr, td, iframe, blockquote, pre, code):not(.font-color-override-on):not(.ql-code-block) {
+    color: var(--defcontentfgcolor) !important;
 }
 
-div.ql-code-block-container, div.ql-code-block {
-    background-color: inherit !important;
+#editor :is(span, a, em, strong, u, s, sub, sup, img, p, ol, ul, li, div, table, colgroup, col, tbody, tr, td, iframe, blockquote, pre, code):not(.font-bg-color-override-on):not(.ql-code-block) {
+    background-color: transparent !important;
 }
+
+/*div.ql-code-block-container, div.ql-code-block {
+    background-color: inherit !important;
+}*/
 
 
 #editor {

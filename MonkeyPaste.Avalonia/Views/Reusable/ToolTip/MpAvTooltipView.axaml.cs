@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.VisualTree;
@@ -110,12 +111,18 @@ namespace MonkeyPaste.Avalonia {
 
         private void OnVisibleChanged() {
             _lastMousePos = null;
+            if (!IsVisible) {
+                return;
+            }
+            Init();
             if (MpAvWindowManager.MainWindow != null &&
                 !MpAvWindowManager.MainWindow.IsVisible) {
                 // workaround for bug where tooltips don't hide when mw hides
-                if (GetPopupRoot() is PopupRoot pur) {
-                    pur.Hide();
-                }
+                IsVisible = false;
+            }
+            if (!IsVisible && GetPopupRoot() is PopupRoot pur) {
+                pur.Hide();
+                pur.IsVisible = false;
             }
         }
 
@@ -125,10 +132,14 @@ namespace MonkeyPaste.Avalonia {
                 host_control.PointerMoved += Host_control_PointerMoved;
             }
             if (GetPopupRoot() is PopupRoot pur) {
-                pur.GetVisualDescendants<Control>().ForEach(x => x.IsHitTestVisible = false);
-                pur.GetVisualDescendants<Control>().ForEach(x => x.Focusable = false);
                 pur.TransparencyLevelHint = WindowTransparencyLevel.Transparent;
                 pur.Background = Brushes.Transparent;
+                foreach (var elm in pur.GetSelfAndLogicalDescendants()) {
+                    if (elm is Control c) {
+                        c.IsHitTestVisible = false;
+                        c.Focusable = false;
+                    }
+                }
             }
         }
         private void MpAvTooltipView_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
@@ -162,13 +173,17 @@ namespace MonkeyPaste.Avalonia {
         #region Helpers
 
         private PopupRoot GetPopupRoot() {
-            var tooltip = this.FindAncestorOfType<ToolTip>();
-            if (tooltip == null) {
-                return null;
-            }
-            var tooltip_root = tooltip.GetVisualAncestor<PopupRoot>();
-            if (tooltip_root != null) {
-                return tooltip_root;
+            //var tooltip = this.FindAncestorOfType<ToolTip>();
+            //if (tooltip == null) {
+            //    return null;
+            //}
+            //var tooltip_root = tooltip.GetVisualAncestor<PopupRoot>();
+            //if (tooltip_root != null) {
+            //    return tooltip_root;
+            //}
+            //return null;
+            if (TopLevel.GetTopLevel(this) is PopupRoot pur) {
+                return pur;
             }
             return null;
         }

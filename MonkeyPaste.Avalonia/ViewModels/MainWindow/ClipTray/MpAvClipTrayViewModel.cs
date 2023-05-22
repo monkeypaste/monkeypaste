@@ -754,15 +754,14 @@ namespace MonkeyPaste.Avalonia {
             _defaultQueryItemHeight;
 
         private void UpdateDefaultItemSize() {
-            double square_length = QueryTrayFixedDimensionLength * ZoomFactor;
-
-            double pin_item_length = PinTrayFixedDimensionLength * ZoomFactor;
+            double square_length = (QueryTrayFixedDimensionLength * ZoomFactor) - ScrollBarFixedAxisSize;
+            double pin_item_length = (PinTrayFixedDimensionLength * ZoomFactor) - ScrollBarFixedAxisSize;
             if (ListOrientation == Orientation.Horizontal) {
                 _defaultQueryItemWidth = square_length;// - QueryTrayVerticalScrollBarWidth;
                 _defaultQueryItemHeight = square_length;//QueryTrayFixedDimensionLength - QueryTrayHorizontalScrollBarHeight;
 
                 _defaultPinItemWidth = pin_item_length;
-                _defaultPinItemHeight = PinTrayFixedDimensionLength;
+                _defaultPinItemHeight = pin_item_length;
             } else {
                 _defaultQueryItemWidth = square_length;//QueryTrayFixedDimensionLength - QueryTrayVerticalScrollBarWidth;
                 _defaultQueryItemHeight = square_length;//square_length - QueryTrayHorizontalScrollBarHeight;
@@ -773,7 +772,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (LayoutType == MpClipTrayLayoutType.Grid ||
                 (LayoutType == MpClipTrayLayoutType.Stack && !MpAvMainWindowViewModel.Instance.IsMainWindowOrientationChanging)) {
-                double default_ar = QueryTrayFixedDimensionLength / DEFAULT_ITEM_SIZE;
+                double default_ar = _defaultQueryItemWidth / DEFAULT_ITEM_SIZE;
                 if (LayoutType == MpClipTrayLayoutType.Grid ||
                     default_ar >= 2.0d) {
                     // when variable dim is twice length of fixed transition to grid...
@@ -801,7 +800,7 @@ namespace MonkeyPaste.Avalonia {
             _defaultPinItemHeight;
 
         public double ScrollBarFixedAxisSize =>
-            30;
+            16;
 
         public double QueryTrayHorizontalScrollBarHeight =>
             IsQueryHorizontalScrollBarVisible ? ScrollBarFixedAxisSize : 0;

@@ -270,7 +270,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool CanAddChild {
             get {
-                if (IsHelpTag || IsQueryTag) {
+                if (IsHelpTag || IsQueryTag || IsFormatGroupTag) {
                     return false;
                 }
                 return true;
@@ -303,7 +303,7 @@ namespace MonkeyPaste.Avalonia {
             TreeSortIdx == ParentTreeItem.Items.Count - 1;
 
         public bool IsTagReadOnly =>
-            IsAllTag || IsHelpTag || IsRootGroupTag;
+            TagId <= MpTag.MAX_READ_ONLY_TAG_ID;
 
         public bool IsContentDragOverTag { get; set; }
         public bool IsContentDragOverTagValid { get; set; }
@@ -317,12 +317,14 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsAllTag =>
             TagId == MpTag.AllTagId;
-        public bool IsFavoriteTag =>
-            TagId == MpTag.FavoritesTagId;
+
         public bool IsHelpTag =>
             TagId == MpTag.HelpTagId;
         public bool IsRootGroupTag =>
             TagId == MpTag.RootGroupTagId;
+        public bool IsFormatGroupTag =>
+            TagId == MpTag.FormatGroupTagId;
+
         public bool IsLinkTag =>
             !IsQueryTag && !IsGroupTag && !IsHelpTag;
         public bool IsQueryTag =>
@@ -1208,6 +1210,14 @@ namespace MonkeyPaste.Avalonia {
         public ICommand DeleteChildTagCommand => new MpAsyncCommand<object>(
             async (args) => {
                 var child_ttvm_to_remove = args as MpAvTagTileViewModel;
+                if (child_ttvm_to_remove.IsModelPinned) {
+                    // NOTE I think this is a listbox collection problem but
+                    // deleting pinned tile doesn't remove pinned lbi so unpinning first
+                    // and letting it save before deleting
+                    Parent.ToggleTileIsPinnedCommand.Execute(child_ttvm_to_remove);
+                    await Task.Delay(20);
+                    while (child_ttvm_to_remove.IsBusy) { await Task.Delay(100); }
+                }
                 var deleteTasks =
                     child_ttvm_to_remove.SelfAndAllDescendants
                     .Cast<MpAvTagTileViewModel>()
@@ -1356,6 +1366,10 @@ namespace MonkeyPaste.Avalonia {
                     }
                     var cloned_tag = await Tag.CloneDbModelAsync();
                     cloned_tag.ParentTagId = temp_parent_vm.TagId;
+                    // append 'Copy' to title
+                    cloned_tag.TagName += " Copy";
+                    // clear pin idx
+                    cloned_tag.PinSortIdx = -1;
                     // reset clones treeIdx to tail 
                     cloned_tag.TreeSortIdx = temp_parent_vm.Items.Count;
                     var cloned_tag_vm = await temp_parent_vm.CreateChildTagTileViewModel(cloned_tag);
