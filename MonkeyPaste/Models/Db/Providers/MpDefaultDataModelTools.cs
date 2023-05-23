@@ -78,7 +78,7 @@ namespace MonkeyPaste {
             }
 
             await MpDb.CreateTableAsync<MpCopyItem>();
-            int total_count = await MpDataModelProvider.GetTotalCopyItemCountAsync();
+            int total_count = await MpDataModelProvider.GetTotalCopyItemCountAsync(null);
 
             await MpDb.CloseConnectionAsync();
             return new Tuple<string, int>(ThisUserDeviceGuid, total_count);

@@ -25,6 +25,7 @@ namespace MonkeyPaste.Avalonia {
         Insert,
         Line
     }
+
     public class MpAvClipTileViewModel : MpViewModelBase<MpAvClipTrayViewModel>,
         MpISelectableViewModel,
         MpISelectorItemViewModel,
@@ -367,6 +368,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsTrashed =>
+            MpAvTagTrayViewModel.Instance != null &&
+            MpAvTagTrayViewModel.Instance.TrashedCopyItemIds.Contains(CopyItemId);
         public bool IsExpanded {
             get {
                 //if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ||
@@ -603,6 +607,16 @@ namespace MonkeyPaste.Avalonia {
         public bool IsFocusWithin {
             get {
                 if (FocusManager.Instance.Current is Control c) {
+                    //return
+                    //   c.GetVisualAncestors<Control>()
+                    //   .Any(x =>
+                    //       x.DataContext is MpAvClipTileViewModel &&
+                    //       (x.DataContext as MpAvClipTileViewModel).CopyItemId == CopyItemId);
+
+                    if (c.DataContext is MpAvClipTileViewModel ctvm && ctvm.CopyItemId == CopyItemId) {
+                        // HACK not getting equality from delete by shortcut for item in trash
+                        return true;
+                    }
                     return
                         c.GetVisualAncestors<Control>()
                         .Any(x => x.DataContext == this);
@@ -635,7 +649,8 @@ namespace MonkeyPaste.Avalonia {
         public bool IsPinned => Parent != null &&
                                 Parent.PinnedItems.Any(x => x.CopyItemId == CopyItemId);
 
-        public bool IsResizable => !IsAppendNotifier;
+        public bool IsResizable =>
+            !IsAppendNotifier && !IsTrashed;
         public bool CanResize { get; set; } = false;
 
         public bool IsResizing { get; set; } = false;
@@ -649,6 +664,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsTitleVisible {
             get {
                 if (IsAppendNotifier ||
+                    IsTrashed ||
                     !IsContentReadOnly ||
                     (TransactionCollectionViewModel != null && TransactionCollectionViewModel.IsTransactionPaneOpen)) {
                     return false;
@@ -666,6 +682,9 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsCornerButtonsVisible {
             get {
+                if (IsTrashed) {
+                    return false;
+                }
                 if (Mp.Services.PlatformInfo.IsDesktop) {
                     if (IsHovering && !IsAppendNotifier && !Parent.IsAnyDropOverTrays) {
                         return true;
@@ -1037,8 +1056,6 @@ namespace MonkeyPaste.Avalonia {
                 Parent.RestoreSelectionState(this);
             }
 
-
-
             OnPropertyChanged(nameof(IconResourceObj));
             OnPropertyChanged(nameof(IsPlaceholder));
             OnPropertyChanged(nameof(TrayX));
@@ -1065,7 +1082,7 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
-        public async Task InitTitleLayers() {
+        public async Task InitTitleLayersAsync() {
             if (IsPlaceholder) {
                 return;
             }
@@ -1725,10 +1742,10 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
                 case nameof(CopyItemHexColor):
-                    InitTitleLayers().FireAndForgetSafeAsync(this);
+                    InitTitleLayersAsync().FireAndForgetSafeAsync(this);
                     break;
                 case nameof(IconResourceObj):
-                    InitTitleLayers().FireAndForgetSafeAsync(this);
+                    InitTitleLayersAsync().FireAndForgetSafeAsync(this);
                     break;
                 case nameof(CopyItemData):
                     OnPropertyChanged(nameof(EditorFormattedItemData));
@@ -2051,6 +2068,7 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 return CanEdit;
             });
+
 
         #endregion
     }

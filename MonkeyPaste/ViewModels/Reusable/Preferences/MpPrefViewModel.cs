@@ -14,6 +14,13 @@ using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace MonkeyPaste {
+    public enum MpTrashCleanupModeType {
+        Never,
+        Daily,
+        Weekly,
+        Monthly
+    }
+
     public class MpPrefViewModel :
         MpViewModelBase,
         MpICustomCsvFormat,
@@ -133,6 +140,11 @@ namespace MonkeyPaste {
 
         public bool EncryptDb { get; set; } = true;
 
+        public DateTime NextTrashEmptyDateTime { get; set; } = DateTime.MaxValue;
+
+        [JsonIgnore]
+        public MpTrashCleanupModeType TrashCleanupModeType =>
+            TrashCleanupModeTypeStr.ToEnum<MpTrashCleanupModeType>();
 
         #region Sync
         public string SyncCertFolderPath => Path.Combine(LocalStoragePath, "SyncCerts");
@@ -405,6 +417,9 @@ namespace MonkeyPaste {
         public int MaxStagedClipCount { get; set; } = 25;
 
         public bool TrackExternalPasteHistory { get; set; } = false; // will show warning about storage or something
+
+        public string TrashCleanupModeTypeStr { get; set; } = MpTrashCleanupModeType.Never.ToString();
+
         #endregion
 
         #region System

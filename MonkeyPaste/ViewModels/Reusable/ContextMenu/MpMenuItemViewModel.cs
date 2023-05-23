@@ -227,6 +227,8 @@ namespace MonkeyPaste {
         public bool IsCustomColorButton { get; set; }
 
         public int SortOrderIdx { get; set; }
+
+        public bool HasLeadingSeperator { get; set; }
         #endregion
 
         #region Appearance
@@ -472,7 +474,7 @@ namespace MonkeyPaste {
         #endregion
 
         #region Public Methods
-        public static MpMenuItemViewModel GetColorPalleteMenuItemViewModel(MpIUserColorViewModel ucvm) {
+        public static MpMenuItemViewModel GetColorPalleteMenuItemViewModel(MpIUserColorViewModel ucvm, bool has_leading_sep = false) {
             bool isAnySelected = false;
             var colors = new List<MpMenuItemViewModel>();
             string selectedHexStr = ucvm.UserHexColor == null ? string.Empty : ucvm.UserHexColor;
@@ -517,6 +519,7 @@ namespace MonkeyPaste {
 
             return new MpMenuItemViewModel() {
                 IsColorPallete = true,
+                HasLeadingSeperator = has_leading_sep,
                 SubItems = colors.OrderBy(x => x.SortOrderIdx).ToList()
             };
         }

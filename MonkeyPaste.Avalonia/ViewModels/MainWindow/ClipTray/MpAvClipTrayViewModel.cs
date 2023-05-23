@@ -115,7 +115,13 @@ namespace MonkeyPaste.Avalonia {
         #region MpIContentQueryTools Implementation
 
         IEnumerable<int> MpIContentQueryPage.GetOmittedContentIds() =>
-            PinnedItems.Select(x => x.CopyItemId);
+            PinnedItems
+            .Select(x => x.CopyItemId)
+            .Union(
+                MpAvTagTrayViewModel.Instance.TrashTagViewModel.IsSelected ?
+                    new int[] { } :
+                    MpAvTagTrayViewModel.Instance.TrashedCopyItemIds);
+
         int MpIContentQueryPage.Offset =>
             HeadQueryIdx;
 
@@ -140,16 +146,24 @@ namespace MonkeyPaste.Avalonia {
                 if (SelectedItem == null) {
                     return new MpMenuItemViewModel();
                 }
-                //if(SelectedItem.IsTableSelected) {
-                //    return SelectedItem.TableViewModel.ContextMenuViewModel;
-                //}
-                //if (SelectedItem.IsHoveringOverSourceIcon) {
-                //    return SelectedItem.TransactionCollectionViewModel.ContextMenuViewModel;
-                //}
-                if (MpAvTagTrayViewModel.Instance.IsAnyBusy) {
-                    Debugger.Break();
+                if (SelectedItem.IsTrashed) {
+                    return new MpMenuItemViewModel() {
+                        SubItems = new List<MpMenuItemViewModel>() {
+                            new MpMenuItemViewModel() {
+                                Header = @"Restore",
+                                IconResourceKey = "ResetImage",
+                                Command = RestoreSelectedClipCommand,
+                            },
+                            new MpMenuItemViewModel() {
+                                HasLeadingSeperator = true,
+                                Header = @"Permanently Delete",
+                                IconResourceKey = "TrashCanImage",
+                                Command = DeleteSelectedClipCommand
+                            },
+                        }
+                    };
                 }
-                var tagItems = MpAvTagTrayViewModel.Instance.AllTagViewModel.ContentMenuItemViewModel.SubItems;
+
                 return new MpMenuItemViewModel() {
                     SubItems = new List<MpMenuItemViewModel>() {
                         new MpMenuItemViewModel() {
@@ -200,8 +214,8 @@ namespace MonkeyPaste.Avalonia {
                         new MpMenuItemViewModel() {
                             Header = @"Delete",
                             AltNavIdx = 0,
-                            IconResourceKey = "DeleteImage",
-                            Command = DeleteSelectedClipCommand,
+                            IconResourceKey = "TrashCanImage",
+                            Command = TrashSelectedClipCommand,
                             ShortcutArgs = new object[] { MpShortcutType.DeleteSelectedItems },
                         },
                         new MpMenuItemViewModel() {
@@ -302,7 +316,11 @@ namespace MonkeyPaste.Avalonia {
                             Header = @"Collections",
                             AltNavIdx = 0,
                             IconResourceKey = "PinToCollectionImage",
-                            SubItems = tagItems
+                            SubItems =
+                                MpAvTagTrayViewModel.Instance
+                                    .RootLinkableItems
+                                    .Select(x=>x.ContentMenuItemViewModel)
+                                    .ToList()
                         }
                     },
                 };
@@ -2596,6 +2614,11 @@ namespace MonkeyPaste.Avalonia {
                 // reseting CopyDateTime will move item to top of recent list
                 ci.CopyDateTime = DateTime.Now;
                 await ci.WriteToDatabaseAsync();
+
+                if (MpAvTagTrayViewModel.Instance.TrashedCopyItemIds.Contains(ci.Id)) {
+                    MpAvTagTrayViewModel.Instance.TrashTagViewModel.UnlinkCopyItemCommand.Execute(ci.Id);
+                    MpConsole.WriteLine($"Duplicate item '{ci.Title}' unlinked from trash");
+                }
             }
 
             if (AppendClipTileViewModel == null &&
@@ -3518,6 +3541,55 @@ namespace MonkeyPaste.Avalonia {
             });
 
 
+
+        public ICommand RestoreSelectedClipCommand => new MpAsyncCommand(
+            async () => {
+                // add link to trash tag which caches ciid
+                await MpAvTagTrayViewModel.Instance.TrashTagViewModel
+                .UnlinkCopyItemCommand.ExecuteAsync(SelectedItem.CopyItemId);
+
+                MpAvTagTrayViewModel.Instance.UpdateAllClipCountsAsync().FireAndForgetSafeAsync(this);
+                // trigger in place requery to restore trashed item
+                QueryCommand.Execute(string.Empty);
+
+            },
+            () => {
+                bool can_restore = SelectedItem != null && SelectedItem.IsTrashed;
+                if (!can_restore) {
+                    MpConsole.WriteLine("RestoreSelectedClipCommand CanExecute: " + can_restore);
+                    MpConsole.WriteLine("SelectedItem: " + (SelectedItem == null ? "IS NULL" : "NOT NULL"));
+                    MpConsole.WriteLine($"SelectedItem: Trashed: {SelectedItem.IsTrashed}");
+                }
+                return can_restore;
+            });
+
+        public ICommand TrashSelectedClipCommand => new MpAsyncCommand(
+            async () => {
+                // add link to trash tag which caches ciid
+                await MpAvTagTrayViewModel.Instance.TrashTagViewModel
+                .LinkCopyItemCommand.ExecuteAsync(SelectedItem.CopyItemId);
+
+                MpAvTagTrayViewModel.Instance.UpdateAllClipCountsAsync().FireAndForgetSafeAsync(this);
+                if (SelectedItem.IsPinned) {
+                    UnpinTileCommand.Execute(SelectedItem);
+                    return;
+                }
+                // trigger in place requery to remove trashed item
+                QueryCommand.Execute(string.Empty);
+
+            },
+            () => {
+                bool can_trash = SelectedItem != null && !SelectedItem.IsTrashed;
+                if (!can_trash) {
+                    MpConsole.WriteLine("TrashSelectedClipCommand CanExecute: " + can_trash);
+                    MpConsole.WriteLine("SelectedItem: " + (SelectedItem == null ? "IS NULL" : "NOT NULL"));
+                    if (SelectedItem != null) {
+                        MpConsole.WriteLine($"SelectedItem: Trashed: {SelectedItem.IsTrashed}");
+                    }
+                }
+                return can_trash;
+            });
+
         public ICommand DeleteSelectedClipCommand => new MpAsyncCommand(
             async () => {
                 while (IsBusy) { await Task.Delay(100); }
@@ -3529,7 +3601,9 @@ namespace MonkeyPaste.Avalonia {
                 IsBusy = false;
             },
             () => {
-                bool can_delete = SelectedItem != null;
+                bool can_delete =
+                    SelectedItem != null &&
+                    SelectedItem.IsTrashed;
                 if (!can_delete) {
                     MpConsole.WriteLine("DeleteSelectedClipCommand CanExecute: " + can_delete);
                     MpConsole.WriteLine("SelectedItem: " + (SelectedItem == null ? "IS NULL" : "NOT NULL"));
@@ -3537,21 +3611,29 @@ namespace MonkeyPaste.Avalonia {
                 return can_delete;
             });
 
-        public ICommand DeleteSelectedClipFromShortcutCommand => new MpCommand(
+        public ICommand TrashOrDeleteSelectedClipFromShortcutCommand => new MpCommand(
              () => {
-                 DeleteSelectedClipCommand.Execute(null);
+                 // NOTE 
+                 if (DeleteSelectedClipCommand.CanExecute(null)) {
+                     DeleteSelectedClipCommand.Execute(null);
+                 } else {
+                     TrashSelectedClipCommand.Execute(null);
+                 }
              },
             () => {
                 bool can_delete =
-                        DeleteSelectedClipCommand.CanExecute(null) &&
-                        SelectedItem.IsHostWindowActive &&
-                        SelectedItem.IsTitleReadOnly &&
-                        SelectedItem.IsContentReadOnly &&
-                        SelectedItem.IsFocusWithin;
+                    SelectedItem != null &&
+                    SelectedItem.IsHostWindowActive &&
+                    SelectedItem.IsTitleReadOnly &&
+                    SelectedItem.IsContentReadOnly &&
+                    SelectedItem.IsFocusWithin;
                 if (!can_delete) {
                     MpConsole.WriteLine("CopySelectedClipsCommand CanExecute: " + can_delete);
                     MpConsole.WriteLine("SelectedItem: " + (SelectedItem == null ? "IS NULL" : "NOT NULL"));
-                    MpConsole.WriteLine("IsHostWindowActive: " + SelectedItem.IsHostWindowActive);
+
+                    if (SelectedItem != null) {
+                        MpConsole.WriteLine("IsHostWindowActive: " + SelectedItem.IsHostWindowActive);
+                    }
                 }
                 return can_delete;
             });
@@ -3572,7 +3654,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
 
-                await ctvm.InitTitleLayers();
+                await ctvm.InitTitleLayersAsync();
 
                 // trigger selection changed message to notify tag and parents of association change
 

@@ -187,7 +187,7 @@ namespace MonkeyPaste.Avalonia {
                         },
                         {
                             MpShortcutType.DeleteSelectedItems,
-                            MpAvClipTrayViewModel.Instance.DeleteSelectedClipFromShortcutCommand
+                            MpAvClipTrayViewModel.Instance.TrashOrDeleteSelectedClipFromShortcutCommand
                         },
                         {
                             MpShortcutType.SelectNextColumnItem,

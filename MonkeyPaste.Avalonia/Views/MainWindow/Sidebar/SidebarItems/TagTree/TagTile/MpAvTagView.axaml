@@ -92,6 +92,28 @@
             </Setter>
         </Style>
 
+        <Style Selector="Image.istrash"
+               x:DataType="local:MpAvTagTileViewModel">
+            <Setter Property="Source">
+                <Setter.Value>
+                    <MultiBinding Converter="{x:Static local:MpAvMultiObjToContrastTintedBitmapConverter.Instance}">
+                        <Binding Path="TagHexColor" />
+                        <Binding Source="{StaticResource TrashCanImage}" />
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--<Style Selector="Grid#TagViewContainerGrid:pointerover TextBlock.istrash, Border#TagNameBorder.isselected TextBlock.istrash">
+            <Setter Property="IsVisible"
+                    Value="True" />
+        </Style>
+
+        <Style Selector="TextBlock.istrash">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>-->
+
     </local:MpAvUserControl.Styles>
     <Grid x:Name="TagViewContainerGrid"
           local:MpAvIsHoveringExtension.IsEnabled="True"
@@ -172,6 +194,7 @@
                                    Classes="square"
                                    Classes.isgroup="{Binding IsGroupTag}"
                                    Classes.isquery="{Binding IsQueryTag}"
+                                   Classes.istrash="{Binding IsTrashTag}"
                                    HorizontalAlignment="Stretch"
                                    VerticalAlignment="Stretch"
                                    Stretch="UniformToFill"
@@ -264,7 +287,7 @@
                 BorderBrush="White"
                 VerticalAlignment="Top"
                 HorizontalAlignment="Left"
-                IsVisible="{Binding BadgeCount, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
+                IsVisible="{Binding CopyItemIdsNeedingView, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
             <Grid>
                 <!--  NOTE Text won't horizontally align unless in grid  -->
                 <TextBlock Foreground="White"

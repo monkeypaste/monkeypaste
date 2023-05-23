@@ -13,8 +13,6 @@ namespace MonkeyPaste {
         MpISyncableDbObject,
         MpIClonableDbModel<MpCopyItem>,
         MpISourceRef,
-        MpIIconResource,
-        MpIDbIconId,
         MpILabelText {
         #region Statics
 
@@ -115,7 +113,8 @@ namespace MonkeyPaste {
         MpTransactionSourceType MpISourceRef.SourceType => MpTransactionSourceType.CopyItem;
 
 
-        public object IconResourceObj => IconId;
+        public object IconResourceObj =>
+            IconId;
         public string Uri => Mp.Services.SourceRefTools.ConvertToInternalUrl(this);
         #endregion
 

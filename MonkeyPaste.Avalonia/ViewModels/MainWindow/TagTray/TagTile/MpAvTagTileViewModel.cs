@@ -153,14 +153,29 @@ namespace MonkeyPaste.Avalonia {
                             Command = Parent.ToggleTileIsPinnedCommand,
                             CommandParameter = this
                         },
-                        new MpMenuItemViewModel() { IsSeparator = true},
-                        MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(this),
+
                         new MpMenuItemViewModel() {
-                            IsSeparator = true,
-                            IsVisible = !IsTagReadOnly
+                            IsVisible = IsTrashTag,
+                            Header = "Permanently Delete All",
+                            IconResourceKey = Mp.Services.PlatformResource.GetResource("DeleteImage") as string,
+                            Command = Parent.EmptyTrashCommand
                         },
                         new MpMenuItemViewModel() {
+                            IsVisible = IsTrashTag,
+                            HasLeadingSeperator = true,
+                            Header = "Restore All",
+                            IconResourceKey = Mp.Services.PlatformResource.GetResource("ResetImage") as string,
+                            Command = Parent.RestoreAllTrashCommand
+                        },
+                        //new MpMenuItemViewModel() { IsSeparator = true},
+                        MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(this,true),
+                        //new MpMenuItemViewModel() {
+                        //    IsSeparator = true,
+                        //    IsVisible = !IsTagReadOnly
+                        //},
+                        new MpMenuItemViewModel() {
                             IsVisible = !IsTagReadOnly,
+                            HasLeadingSeperator = true,
                             Header = "Delete",
                             IconResourceKey = Mp.Services.PlatformResource.GetResource("DeleteImage") as string,
                             Command = DeleteThisTagCommand
@@ -262,32 +277,29 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public bool IsAnyBusy => IsBusy || Children.Any(x => x.IsAnyBusy);
+        public bool IsAnyBusy =>
+            IsBusy || Children.Any(x => x.IsAnyBusy);
 
         public ObservableCollection<int> CopyItemIdsNeedingView { get; set; } = new ObservableCollection<int>();
         public int BadgeCount =>
             CopyItemIdsNeedingView.Count;
 
-        public bool CanAddChild {
-            get {
-                if (IsHelpTag || IsQueryTag || IsFormatGroupTag) {
-                    return false;
-                }
-                return true;
-            }
-        }
+        public bool CanAddChild =>
+            !IsQueryTag && !IsFormatGroupTag && !IsAllTag;
 
         public bool CanSelect =>
             IsTagNameReadOnly;
 
         public bool CanPin =>
-            true;//!IsGroupTag;
+            !IsGroupTag && !IsRootLevelTag;
 
         public bool CanTreeMove =>
-            !IsRootGroupTag && !IsAllTag && !IsHelpTag;
+            !IsTagReadOnly;
 
         public bool CanHotkey =>
-            !IsGroupTag && Mp.Services.PlatformInfo.IsDesktop;
+            !IsGroupTag &&
+            !IsTrashTag &&
+            Mp.Services.PlatformInfo.IsDesktop;
 
         public bool CanLinkContent =>
             IsLinkTag;
@@ -315,20 +327,27 @@ namespace MonkeyPaste.Avalonia {
         public bool IsTagDragLeafChildDrop { get; set; }
         public bool IsPinTagDragging { get; set; }
 
+        public bool IsCollectionsTag =>
+            TagId == MpTag.CollectionsTagId;
         public bool IsAllTag =>
             TagId == MpTag.AllTagId;
+        public bool IsFavoritesTag =>
+            TagId == MpTag.FavoritesTagId;
+        public bool IsTrashTag =>
+            TagId == MpTag.TrashTagId;
 
-        public bool IsHelpTag =>
-            TagId == MpTag.HelpTagId;
-        public bool IsRootGroupTag =>
-            TagId == MpTag.RootGroupTagId;
+        public bool IsFiltersTag =>
+            TagId == MpTag.FiltersTagId;
         public bool IsFormatGroupTag =>
-            TagId == MpTag.FormatGroupTagId;
+            TagId == MpTag.FormatsTagId;
 
         public bool IsLinkTag =>
-            !IsQueryTag && !IsGroupTag && !IsHelpTag;
+            !IsQueryTag && !IsGroupTag;
         public bool IsQueryTag =>
             TagType == MpTagType.Query;
+
+        public bool IsRootLevelTag =>
+            ParentTagId == 0;
         public bool IsGroupTag =>
             TagType == MpTagType.Group;
         public bool IsNotGroupTag =>
@@ -338,10 +357,22 @@ namespace MonkeyPaste.Avalonia {
         public bool IsTagNameTextBoxFocused { get; set; } = false;
         public bool? IsLinkedToSelectedClipTile { get; set; } = false;
 
-        public int? TagClipCount { get; set; }
-
-        //public string TagClipCountText =>
-        //    TagClipCount == null ? null : TagClipCount.Value.ToString();
+        private int? _tagClipCount;
+        public int? TagClipCount {
+            get {
+                if (!IsTrashTag || IsSelected || IsHovering) {
+                    // only show trash count when selected or hovering
+                    return _tagClipCount;
+                }
+                return null;
+            }
+            set {
+                if (_tagClipCount != value) {
+                    _tagClipCount = value;
+                    OnPropertyChanged(nameof(TagClipCount));
+                }
+            }
+        }
 
         public MpShape MenuIconShape =>
             IsLinkTag ? null : IsQueryTag ? QUERY_SHAPE : IsGroupTag ? GROUP_SHAPE : null;
@@ -358,7 +389,10 @@ namespace MonkeyPaste.Avalonia {
                 if (MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
                     return MpSystemColors.White;
                 }
-                if (!IsSelected && IsLinkedToSelectedClipTile.IsTrueOrNull() && !IsAllTag) {
+                if (!IsSelected &&
+                    IsLinkedToSelectedClipTile.IsTrueOrNull() &&
+                    !IsAllTag &&
+                    !IsCollectionsTag) {
                     return MpSystemColors.Yellow;
                 }
                 //if (IsSelected) {
@@ -645,7 +679,45 @@ namespace MonkeyPaste.Avalonia {
                 IsLinkedToSelectedClipTile = false;
             }
         }
+        public async Task UpdateClipCountAsync() {
+            if (IsGroupTag) {
+                return;
+            }
 
+            await Dispatcher.UIThread.InvokeAsync(async () => {
+                if (IsAllTag) {
+                    if (TagClipCount == null) {
+                        // startup case
+                        TagClipCount = await MpDataModelProvider.GetTotalCopyItemCountAsync(Parent.TrashedCopyItemIds);
+                    } else {
+                        // ignored, all updated handled in db callbacks
+                    }
+                } else {
+                    if (IsLinkTag) {
+                        // NOTE omit trashed ids on all tags EXCEPT trashed which has empty omits
+                        var omitted_ciids = IsTrashTag ? null : Parent.TrashedCopyItemIds;
+                        TagClipCount = await MpDataModelProvider.GetTotalCopyItemCountForTagAndAllDescendantsAsync(TagId, omitted_ciids);
+
+                    } else {
+                        // query tag
+                        if (IsActiveTag) {
+                            if (!MpAvSearchCriteriaItemCollectionViewModel.Instance.IsAdvSearchActive) {
+                                // keeping this here for debugging,
+                                // when this eval's update is called again when active though
+                                //Debugger.Break();
+                                TagClipCount = null;
+                            } else {
+                                TagClipCount =
+                                    Mp.Services.Query.TotalAvailableItemsInQuery;
+                                //MpAvSearchCriteriaItemCollectionViewModel.Instance.TotalAvailableItemsInQuery;
+                            }
+                        } else {
+                            TagClipCount = null;
+                        }
+                    }
+                }
+            });
+        }
         public override void DisposeViewModel() {
             base.DisposeViewModel();
             MpDb.SyncAdd -= MpDbObject_SyncAdd;
@@ -785,7 +857,7 @@ namespace MonkeyPaste.Avalonia {
                         while (HasModelChanged) {
                             await Task.Delay(100);
                         }
-                        await Task.WhenAll(MpAvClipTrayViewModel.Instance.Items.Select(x => x.InitTitleLayers()));
+                        await Task.WhenAll(MpAvClipTrayViewModel.Instance.Items.Select(x => x.InitTitleLayersAsync()));
                     });
                     break;
                 //case nameof(TagTileTrayWidth):
@@ -861,6 +933,7 @@ namespace MonkeyPaste.Avalonia {
                     .Cast<MpAvTagTileViewModel>()
                     .ForEach(x => x.OnPropertyChanged(nameof(x.BadgeCount)));
             }
+            OnPropertyChanged(nameof(CopyItemIdsNeedingView));
         }
 
 
@@ -902,70 +975,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private async Task UpdateClipCountAsync() {
-            if (IsGroupTag) {
-                return;
-            }
-
-            await Dispatcher.UIThread.InvokeAsync(async () => {
-                if (IsAllTag) {
-                    if (TagClipCount == null) {
-                        // startup case
-                        TagClipCount = await MpDataModelProvider.GetTotalCopyItemCountAsync();
-                    } else {
-                        // ignored, all updated handled in db callbacks
-                    }
-                } else {
-                    if (IsLinkTag) {
-                        TagClipCount = await MpDataModelProvider.GetTotalCopyItemCountForTagAndAllDescendantsAsync(TagId);
-
-                    } else {
-                        // query tag
-                        if (IsActiveTag) {
-                            if (!MpAvSearchCriteriaItemCollectionViewModel.Instance.IsAdvSearchActive) {
-                                // keeping this here for debugging,
-                                // when this eval's update is called again when active though
-                                //Debugger.Break();
-                                TagClipCount = null;
-                            } else {
-                                TagClipCount =
-                                    Mp.Services.Query.TotalAvailableItemsInQuery;
-                                //MpAvSearchCriteriaItemCollectionViewModel.Instance.TotalAvailableItemsInQuery;
-                            }
-                        } else {
-                            TagClipCount = null;
-                        }
-                    }
-                }
-                //OnPropertyChanged(nameof(TagClipCountText));
-            });
-        }
-
-        private void UpdateBadge() {
-            Dispatcher.UIThread.VerifyAccess();
-
-            var idsSeen = new List<int>();
-            foreach (int ciid in CopyItemIdsNeedingView) {
-                var civm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.CopyItemId == ciid);
-                if (civm != null) {
-                    if (civm.IsPinned) {
-                        // only mark item as seen if viewed in its query tray
-                        continue;
-                    }
-                    if (civm.IsAnyQueryCornerVisible && IsSelected) {
-                        idsSeen.Add(ciid);
-                    }
-                }
-
-            }
-            foreach (var idToRemove in idsSeen) {
-                if (!CopyItemIdsNeedingView.Remove(idToRemove)) {
-                    // how?
-                    Debugger.Break();
-                }
-            }
-        }
-
         private async Task NotifyTriggersAsync(int ciid, bool isLink) {
             IsBusy = true;
 
@@ -995,6 +1004,9 @@ namespace MonkeyPaste.Avalonia {
                 if (!cit.WasDupOnCreate) {
                     CopyItemIdsNeedingView.Add(ciid);
                 }
+                if (IsTrashTag && !Parent.TrashedCopyItemIds.Contains(ciid)) {
+                    Parent.TrashedCopyItemIds.Add(ciid);
+                }
 
             } else {
                 var cit = await MpDataModelProvider.GetCopyItemTagForTagAsync(ciid, TagId);
@@ -1004,6 +1016,10 @@ namespace MonkeyPaste.Avalonia {
                     await cit.DeleteFromDatabaseAsync();
                 }
                 CopyItemIdsNeedingView.Remove(ciid);
+
+                if (IsTrashTag && Parent.TrashedCopyItemIds.Contains(ciid)) {
+                    Parent.TrashedCopyItemIds.Remove(ciid);
+                }
             }
 
             Dispatcher.UIThread.VerifyAccess();
@@ -1024,6 +1040,30 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
+        private void UpdateBadge() {
+            Dispatcher.UIThread.VerifyAccess();
+
+            var idsSeen = new List<int>();
+            foreach (int ciid in CopyItemIdsNeedingView) {
+                var civm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.CopyItemId == ciid);
+                if (civm != null) {
+                    if (civm.IsPinned) {
+                        // only mark item as seen if viewed in its query tray
+                        continue;
+                    }
+                    if (civm.IsAnyQueryCornerVisible && IsSelected) {
+                        idsSeen.Add(ciid);
+                    }
+                }
+
+            }
+            foreach (var idToRemove in idsSeen) {
+                if (!CopyItemIdsNeedingView.Remove(idToRemove)) {
+                    // how?
+                    Debugger.Break();
+                }
+            }
+        }
 
         #region Sync Event Handlers
         private void MpDbObject_SyncDelete(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
@@ -1238,7 +1278,7 @@ namespace MonkeyPaste.Avalonia {
             }, () => !IsTagReadOnly);
 
 
-        public ICommand LinkCopyItemCommand => new MpAsyncCommand<object>(
+        public MpIAsyncCommand<object> LinkCopyItemCommand => new MpAsyncCommand<object>(
             async (ciidArg) => {
                 await Dispatcher.UIThread.InvokeAsync(async () => {
                     await LinkOrUnlinkCopyItemAsync((int)ciidArg, true);
@@ -1261,7 +1301,7 @@ namespace MonkeyPaste.Avalonia {
                 return true;
             });
 
-        public ICommand UnlinkCopyItemCommand => new MpAsyncCommand<object>(
+        public MpIAsyncCommand<object> UnlinkCopyItemCommand => new MpAsyncCommand<object>(
             async (ciidArg) => {
                 await Dispatcher.UIThread.InvokeAsync(async () => {
                     await LinkOrUnlinkCopyItemAsync((int)ciidArg, false);

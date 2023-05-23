@@ -93,6 +93,7 @@
             <local:MpAvClipTileContentView x:Name="ClipTileContentView"
                                            Grid.Row="1"
                                            Grid.RowSpan="2"
+                                           IsEnabled="{Binding !IsTrashed}"
                                            HorizontalAlignment="Stretch"
                                            VerticalAlignment="Stretch" />
 
@@ -127,6 +128,7 @@
             <Grid x:Name="DetailContainerGrid"
                   Grid.Row="2"
                   Height="15"
+                  Background="{Binding BorderBrush, ElementName=ClipTileContainerBorder}"
                   Classes.subselect="{Binding IsSubSelectionEnabled}"
                   IsVisible="{Binding IsCornerButtonsVisible}"
                   local:MpAvIsHoveringExtension.IsEnabled="True"
@@ -142,9 +144,20 @@
                                                        Duration="0:0:0.1" />
                     </Transitions>
                 </Grid.Transitions>
-                <Grid.Background>
-                    <SolidColorBrush Color="{Binding DetailHexColor, Converter={x:Static local:MpAvStringHexToColorConverter.Instance}, ConverterParameter=1}" />
-                </Grid.Background>
+                <!--<Grid.Background>-->
+                <!--<SolidColorBrush Color="{Binding DetailHexColor, Converter={x:Static local:MpAvStringHexToColorConverter.Instance}, ConverterParameter=1}" />-->
+                <!--<LinearGradientBrush StartPoint="0%,0%"
+                                         EndPoint="0%,100%">
+                        <LinearGradientBrush.GradientStops>
+                            <GradientStop Color="Transparent"
+                                          Offset="0" />
+                          <GradientStop Color="Transparent"
+                                          Offset="0.3" />
+                            <GradientStop Color="{Binding DetailHexColor, Converter={x:Static local:MpAvStringHexToColorConverter.Instance}, ConverterParameter=1}"
+                                          Offset="1" />
+                        </LinearGradientBrush.GradientStops>
+                    </LinearGradientBrush>-->
+                <!--</Grid.Background>-->
                 <ToolTip.Tip>
                     <local:MpAvToolTipView ToolTipText="{Binding DetailTooltipText}" />
                 </ToolTip.Tip>
@@ -171,6 +184,9 @@
                         </DataTemplate>
                     </TransitioningContentControl.ContentTemplate>
                 </TransitioningContentControl>-->
+                <!--
+                    Foreground="{Binding DetailHexColor, Converter={x:Static local:MpAvStringHexToContrastBrushConverter.Instance}, ConverterParameter=true}"
+                -->
                 <TextBlock x:Name="DetailTextBlock"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Bottom"
@@ -180,7 +196,7 @@
                            FontSize="10"
                            Margin="0,0,0,1"
                            TextAlignment="Center"
-                           Foreground="{Binding DetailHexColor, Converter={x:Static local:MpAvStringHexToContrastBrushConverter.Instance}, ConverterParameter=true}"
+                           Foreground="Black"
                            Text="{Binding DetailText}">
                 </TextBlock>
             </Grid>

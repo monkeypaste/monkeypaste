@@ -633,10 +633,12 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
             bool synced = true;
 
             var default_tags = new object[] {
-                new object[] { "df388ecd-f717-4905-a35c-a8491da9c0e3", "Collections", MpSystemColors.blue1, 0,-1, tracked,synced, 0, MpTagType.Link},
-                new object[] { "54b61353-b031-4029-9bda-07f7ca55c123", "Favorites", MpSystemColors.yellow1, 0,-1,tracked,synced, MpTag.AllTagId, MpTagType.Link},
+                // guid,name,color,treeIdx,pinIdx,track,sync,parentId,type
+                new object[] { "df388ecd-f717-4905-a35c-a8491da9c0e3", "Collections", MpSystemColors.lemonchiffon2, 0,-1, tracked,synced, 0, MpTagType.Group},
+                new object[] { "287140cc-2f9a-4bc6-a88d-c5b836f1a340", "All", MpSystemColors.blue1, 0,-1, tracked,synced, MpTag.CollectionsTagId, MpTagType.Link},
+                new object[] { "54b61353-b031-4029-9bda-07f7ca55c123", "Favorites", MpSystemColors.yellow1, 1,-1,tracked,synced, MpTag.CollectionsTagId, MpTagType.Link},
                 new object[] { "e62b8e5d-52a6-46f1-ac51-8f446916dd85", "Filters", MpSystemColors.forestgreen, 1,-1,tracked,synced, 0, MpTagType.Group},
-                new object[] { "a0567976-dba6-48fc-9a7d-cbd306a4eaf3", "Help", MpSystemColors.orange1, 2,-1,tracked,synced, 0, MpTagType.Link},
+                new object[] { "70db0f5c-a717-4bca-af2f-a7581aecc24d", "Trash", MpSystemColors.lightsalmon1, 2,-1,tracked,synced, 0, MpTagType.Link},
             };
             for (int i = 0; i < default_tags.Length; i++) {
                 var t = (object[])default_tags[i];
@@ -651,10 +653,6 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
                     parentTagId: (int)t[7],
                     tagType: (MpTagType)t[8]);
             }
-            await InitDefaultQueryTagsAsync();
-        }
-
-        private static async Task InitDefaultQueryTagsAsync() {
             // NOTE seperate from tags so it can be reset
 
             #region Recent
@@ -662,8 +660,9 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
             var recent_tag = await MpTag.CreateAsync(
                     tagName: "Recent",
                     hexColor: MpSystemColors.pink,
-                    parentTagId: MpTag.RootGroupTagId,
+                    parentTagId: MpTag.FiltersTagId,
                     sortType: MpContentSortType.CopyDateTime,
+                    pinSortIdx: 0,
                     isSortDescending: true,
                     tagType: MpTagType.Query);
 
@@ -701,17 +700,15 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
 
             var item_type_group_tag = await MpTag.CreateAsync(
                     tagName: "Formats",
-                    hexColor: MpColorHelpers.GetRandomHexColor(),
-                    parentTagId: MpTag.RootGroupTagId,
+                    hexColor: MpSystemColors.peachpuff4,
+                    parentTagId: MpTag.FiltersTagId,
                     tagType: MpTagType.Group);
-
-
 
             #region Text
 
             var text_type_tag = await MpTag.CreateAsync(
                     tagName: "Text",
-                    hexColor: MpColorHelpers.GetRandomHexColor(),
+                    hexColor: MpSystemColors.darkgoldenrod3,
                     parentTagId: item_type_group_tag.Id,
                     sortType: MpContentSortType.CopyDateTime,
                     isSortDescending: true,
@@ -739,7 +736,7 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
 
             var image_type_tag = await MpTag.CreateAsync(
                     tagName: "Image",
-                    hexColor: MpColorHelpers.GetRandomHexColor(),
+                    hexColor: MpSystemColors.sienna2,
                     parentTagId: item_type_group_tag.Id,
                     sortType: MpContentSortType.CopyDateTime,
                     isSortDescending: true,
@@ -767,7 +764,7 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
 
             var file_type_tag = await MpTag.CreateAsync(
                     tagName: "Files",
-                    hexColor: MpColorHelpers.GetRandomHexColor(),
+                    hexColor: MpSystemColors.mediumorchid3,
                     parentTagId: item_type_group_tag.Id,
                     sortType: MpContentSortType.CopyDateTime,
                     isSortDescending: true,
@@ -805,7 +802,7 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
             var this_app = await MpDataModelProvider.GetItemAsync<MpApp>(MpDefaultDataModelTools.ThisAppId);
             string this_app_url = Mp.Services.SourceRefTools.ConvertToInternalUrl(this_app);
             for (int i = 0; i < 300; i++) {
-                string data = $"This is test {i + 1}.";
+                string data = $"<p>This is test {i + 1}.</p>";
                 var mpdo = new MpPortableDataObject(MpPortableDataFormats.Text, data);
                 var dobj = await MpDataObject.CreateAsync(pdo: mpdo);
                 var ci = await MpCopyItem.CreateAsync(

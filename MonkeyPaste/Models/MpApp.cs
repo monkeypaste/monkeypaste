@@ -11,8 +11,6 @@ namespace MonkeyPaste {
         MpDbModelBase,
         MpISyncableDbObject,
         MpISourceRef,
-        MpIIconResource,
-        MpIDbIconId,
         MpILabelText,
         MpIUriSource {
         #region Columns

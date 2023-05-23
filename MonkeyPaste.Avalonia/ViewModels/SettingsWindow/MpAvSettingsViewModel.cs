@@ -461,6 +461,19 @@ namespace MonkeyPaste.Avalonia {
                                         value = MpPrefViewModel.Instance.TrackExternalPasteHistory.ToString()
                                     }
                                 }
+                            },
+                            new MpParameterFormat() {
+                                paramId = nameof(MpPrefViewModel.Instance.TrashCleanupModeTypeStr),
+                                description = $"<warning/>Automatic trash cleanup will occur on startup at the set interval. It is not required but definitely don't let it get too large! Overall performance and CPU usage will have an impact if it becomes large ie. over 100 items lets say...",
+                                controlType = MpParameterControlType.ComboBox,
+                                unitType = MpParameterValueUnitType.PlainText,
+                                label = "Trash Emptying",
+                                values =
+                                    Enum.GetNames(typeof(MpTrashCleanupModeType))
+                                    .Select(x=> new MpPluginParameterValueFormat() {
+                                        isDefault = MpPrefViewModel.Instance.TrashCleanupModeTypeStr.ToLower() == x.ToString().ToLower(),
+                                        value = x
+                                    }).ToList()
                             }
                         }
                     }
@@ -740,7 +753,7 @@ namespace MonkeyPaste.Avalonia {
                                 values =
                                     Enum.GetNames(typeof(MpMainWindowShowBehaviorType))
                                     .Select(x=> new MpPluginParameterValueFormat() {
-                                        isDefault = MpPrefViewModel.Instance.MainWindowShowBehaviorType.ToLower() == x,
+                                        isDefault = MpPrefViewModel.Instance.MainWindowShowBehaviorType.ToLower() == x.ToLower(),
                                         value = x
                                     }).ToList()
                             }
@@ -811,6 +824,9 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(MpPrefViewModel.Instance.TrackExternalPasteHistory):
                     MpAvShortcutCollectionViewModel.Instance.InitExternalPasteTracking();
+                    break;
+                case nameof(MpPrefViewModel.Instance.TrashCleanupModeTypeStr):
+                    MpAvTagTrayViewModel.Instance.SetNextTrashCleanupDate();
                     break;
             }
             if (_reinitContentParams.Any(x => x.ToLower() == e.PropertyName.ToLower())) {

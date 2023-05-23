@@ -79,7 +79,8 @@ namespace MonkeyPaste.Avalonia {
                 drop_cil.Add(drop_ctvm.CopyItem);
             } else if (e.Data.TryGetDragTagViewModel(out MpAvTagTileViewModel ttvm)) {
                 // tag drop
-                drop_cil = await MpDataModelProvider.GetAllCopyItemsForTagAndAllDescendantsAsync(ttvm.TagId);
+                var omitted_ciids = ttvm.IsTrashTag ? null : ttvm.Parent.TrashedCopyItemIds;
+                drop_cil = await MpDataModelProvider.GetAllCopyItemsForTagAndAllDescendantsAsync(ttvm.TagId, omitted_ciids);
                 ttvm.TotalAnalysisCount = drop_cil.Count;
                 drag_ttvm = ttvm;
             } else {

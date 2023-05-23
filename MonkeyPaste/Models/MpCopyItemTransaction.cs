@@ -38,6 +38,7 @@ namespace MonkeyPaste {
         [Indexed]
         public int CopyItemId { get; set; }
 
+        [Indexed]
         public string TransactionLabel { get; set; }
 
 
@@ -95,7 +96,6 @@ namespace MonkeyPaste {
 
 
         #endregion
-
 
         public static async Task<MpCopyItemTransaction> CreateAsync(
             int copyItemId = 0,

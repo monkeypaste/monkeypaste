@@ -14,6 +14,7 @@ namespace MonkeyPaste {
         Query,
         Group
     }
+
     public class MpTag :
         MpDbModelBase,
         MpIIconResource,
@@ -22,17 +23,18 @@ namespace MonkeyPaste {
 
         #region Constants
 
-        public const int AllTagId = 1;
-        public const int FavoritesTagId = 2;
-        public const int RootGroupTagId = 3;
-        public const int HelpTagId = 4;
-        public const int RecentTagId = 5;
-        public const int FormatGroupTagId = 6;
-        public const int TextFormatTagId = 7;
-        public const int ImageFormatTagId = 8;
-        public const int FileFormatTagId = 9;
+        public const int CollectionsTagId = 1;
+        public const int AllTagId = 2;
+        public const int FavoritesTagId = 3;
+        public const int FiltersTagId = 4;
+        public const int TrashTagId = 5;
+        public const int RecentTagId = 6;
+        public const int FormatsTagId = 7;
+        public const int TextFormatTagId = 8;
+        public const int ImageFormatTagId = 9;
+        public const int FileFormatTagId = 10;
 
-        public const int MAX_READ_ONLY_TAG_ID = 9;
+        public const int MAX_READ_ONLY_TAG_ID = 10;
 
         public const MpContentSortType DEFAULT_QUERY_TAG_SORT_TYPE = MpContentSortType.CopyDateTime;
         public const bool DEFAULT_QUERY_TAG_IS_SORT_DESCENDING = true;
@@ -291,7 +293,7 @@ namespace MonkeyPaste {
         [Ignore]
         public bool CanDelete {
             get {
-                if (Id == AllTagId || Id == HelpTagId || Id == RootGroupTagId) {
+                if (Id == AllTagId || Id == FiltersTagId) {
                     return false;
                 }
                 return true;

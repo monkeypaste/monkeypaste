@@ -149,7 +149,7 @@ namespace MonkeyPaste.Avalonia {
             MpQueryType.Simple;
         public bool IsDescending { get; set; } = true;
         public MpContentSortType SortType { get; set; } = MpContentSortType.CopyDateTime;
-        public int TagId { get; set; } = MpTag.HelpTagId;
+        public int TagId { get; set; } = MpAvTagTrayViewModel.DEFAULT_SELECTED_TAG_ID;
         public string MatchValue { get; set; } = string.Empty;
 
         public MpContentQueryBitFlags QueryFlags { get; set; } = MpContentQueryBitFlags.Content | MpContentQueryBitFlags.TextType | MpContentQueryBitFlags.ImageType | MpContentQueryBitFlags.FileType;

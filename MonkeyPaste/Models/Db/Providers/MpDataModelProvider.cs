@@ -283,8 +283,12 @@ namespace MonkeyPaste {
             }
             return result[0];
         }
-        public static async Task<int> GetTotalCopyItemCountAsync() {
-            string query = "select count(pk_MpCopyItemId) from MpCopyItem";
+        public static async Task<int> GetTotalCopyItemCountAsync(IEnumerable<int> ciids_to_omit) {
+            string exclude_trash_clause = string.Empty;
+            if (ciids_to_omit != null && ciids_to_omit.Any()) {
+                exclude_trash_clause = $" WHERE pk_MpCopyItemId NOT IN ({string.Join(",", ciids_to_omit)})";
+            }
+            string query = $"select count(pk_MpCopyItemId) from MpCopyItem{exclude_trash_clause}";
             var result = await MpDb.QueryScalarAsync<int>(query);
             return result;
         }
@@ -454,11 +458,14 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public static async Task<int> GetTotalCopyItemCountForTagAndAllDescendantsAsync(int tid) {
+        public static async Task<int> GetTotalCopyItemCountForTagAndAllDescendantsAsync(int tid, IEnumerable<int> ciids_to_omit) {
             if (tid == MpTag.AllTagId) {
-                return await GetTotalCopyItemCountAsync();
+                return await GetTotalCopyItemCountAsync(ciids_to_omit);
             }
-
+            string excluded_ciid_clause = string.Empty;
+            if (ciids_to_omit != null && ciids_to_omit.Any()) {
+                excluded_ciid_clause = string.Join(",", ciids_to_omit);
+            }
             string query = string.Format(
                 @"WITH RECURSIVE
                       tag_descendant(n) AS (
@@ -467,31 +474,41 @@ namespace MonkeyPaste {
                         SELECT MpTag.pk_MpTagId FROM MpTag, tag_descendant
                          WHERE fk_ParentTagId=tag_descendant.n
                       )
-                    SELECT COUNT(DISTINCT fk_MpCopyItemId) FROM MpCopyItemTag WHERE fk_MpTagId IN
+                    SELECT COUNT(DISTINCT fk_MpCopyItemId) FROM MpCopyItemTag WHERE fk_MpCopyItemId NOT IN ({1}) AND fk_MpTagId IN
                     (SELECT {0} UNION ALL SELECT MpTag.pk_MpTagId FROM MpTag
-                     WHERE fk_ParentTagId IN tag_descendant AND fk_ParentTagId > 0);", tid);
-            var result = await MpDb.QueryScalarAsync<int>(query, tid);
+                     WHERE fk_ParentTagId IN tag_descendant AND fk_ParentTagId > 0);", tid, excluded_ciid_clause);
+            var result = await MpDb.QueryScalarAsync<int>(query);
             return result;
         }
 
-        public static async Task<List<MpCopyItem>> GetAllCopyItemsForTagAndAllDescendantsAsync(int tid) {
+        public static async Task<List<MpCopyItem>> GetAllCopyItemsForTagAndAllDescendantsAsync(int tid, IEnumerable<int> ciids_to_omit) {
             if (tid == MpTag.AllTagId) {
-                return await GetItemsAsync<MpCopyItem>();
+                var all_result = await GetItemsAsync<MpCopyItem>();
+                if (ciids_to_omit != null && ciids_to_omit.Any()) {
+                    all_result = all_result.Where(x => !ciids_to_omit.Contains(x.Id)).ToList();
+                }
+                return all_result;
             }
 
+            string excluded_ciid_clause = string.Empty;
+            if (ciids_to_omit != null && ciids_to_omit.Any()) {
+                excluded_ciid_clause = string.Join(",", ciids_to_omit);
+            }
+
+            // NOTE sqlite parameterized CTE is too confusing and this has no unsantized inputs so ignoring
             string query = string.Format(
-                @"SELECT * FROM MpCopyItem WHERE pk_MpCopyItemId IN(
-                    WITH RECURSIVE
-                      tag_descendant(n) AS (
-                        VALUES({0})
-                        UNION 
-                        SELECT MpTag.pk_MpTagId FROM MpTag, tag_descendant
-                         WHERE fk_ParentTagId=tag_descendant.n
-                      )
-                    SELECT DISTINCT fk_MpCopyItemId FROM MpCopyItemTag WHERE fk_MpTagId IN
-                    (SELECT {0} UNION ALL SELECT MpTag.pk_MpTagId FROM MpTag
-                     WHERE fk_ParentTagId IN tag_descendant AND fk_ParentTagId > 0))", tid);
-            var result = await MpDb.QueryAsync<MpCopyItem>(query, tid);
+@"SELECT * FROM MpCopyItem WHERE pk_MpCopyItemId IN(
+WITH RECURSIVE
+  tag_descendant(n) AS (
+	VALUES({0})
+	UNION 
+	SELECT MpTag.pk_MpTagId FROM MpTag, tag_descendant
+	 WHERE fk_ParentTagId=tag_descendant.n
+  )
+SELECT DISTINCT fk_MpCopyItemId FROM MpCopyItemTag WHERE fk_MpCopyItemId NOT IN ({1}) AND fk_MpTagId IN
+(SELECT {0} UNION ALL SELECT MpTag.pk_MpTagId FROM MpTag
+ WHERE fk_ParentTagId IN tag_descendant AND fk_ParentTagId > 0))", tid, excluded_ciid_clause);
+            var result = await MpDb.QueryAsync<MpCopyItem>(query);
             return result;
         }
 
@@ -557,15 +574,15 @@ namespace MonkeyPaste {
 
         #region MpTag
 
-        public static async Task<List<MpTag>> GetChildTagsAsync(int tagId) {
+        public static async Task<List<MpTag>> GetChildTagsAsync(int parentTagId) {
             string query = "select * from MpTag where fk_ParentTagId=?";
-            var result = await MpDb.QueryAsync<MpTag>(query, tagId);
+            var result = await MpDb.QueryAsync<MpTag>(query, parentTagId);
             return result;
         }
 
-        public static async Task<int> GetChildTagCountAsync(int tagId) {
+        public static async Task<int> GetChildTagCountAsync(int parentTagId) {
             string query = "select count(pk_MpTagId) from MpTag where fk_ParentTagId=?";
-            var result = await MpDb.QueryScalarAsync<int>(query, tagId);
+            var result = await MpDb.QueryScalarAsync<int>(query, parentTagId);
             return result;
         }
 

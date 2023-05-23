@@ -106,6 +106,9 @@ namespace MonkeyPaste.Avalonia {
             // called in DropExtension DragOver 
 
             //MpConsole.WriteLine("IsDropValid DropIdx: " + drop_idx);
+            if (avdo.ContainsTagItem()) {
+                return false;
+            }
             if (drop_idx < 0) {
                 return false;
             }
@@ -221,7 +224,7 @@ namespace MonkeyPaste.Avalonia {
             // get child to adjust height
             var ctv = ref_lbi.GetVisualDescendant<MpAvClipTileView>();
             // NOTE get inner child because of border thickness
-            var lbi_child = ctv.FindControl<Border>("ClipTileContainerBorder").Child;
+            var lbi_child = ctv.FindControl<MpAvClipBorder>("ClipTileContainerBorder").Content as Control;
             var lbi_child_tl = lbi_child.TranslatePoint(new Point(0, 0), ptr_lb_wp);
             drop_line.P1.Y = lbi_child_tl.Value.Y;
 
@@ -260,7 +263,7 @@ namespace MonkeyPaste.Avalonia {
             }
             Instance = this;
 
-            InitializeComponent();
+            AvaloniaXamlLoader.Load(this);
 
             PinTrayListBox = this.FindControl<ListBox>("PinTrayListBox");
             PinTrayListBox.AttachedToVisualTree += PinTrayListBox_AttachedToVisualTree;
@@ -391,10 +394,6 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
             }
-        }
-
-        private void InitializeComponent() {
-            AvaloniaXamlLoader.Load(this);
         }
     }
 }

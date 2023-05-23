@@ -4,6 +4,7 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,7 +17,8 @@ namespace MonkeyPaste.Avalonia {
         MpIHoverableViewModel,
         MpISelectableViewModel,
         MpISidebarItemViewModel,
-        MpITagQueryTools {
+        MpITagQueryTools,
+        MpIPopupMenuPicker {
         #region Private Variables
 
 
@@ -30,7 +32,27 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Constants
+
+        public const int DEFAULT_SELECTED_TAG_ID = MpTag.RecentTagId;
+
+        #endregion
+
         #region Interfaces
+
+        #region MpIPopupMenuPicker Implementation
+
+        public MpMenuItemViewModel GetMenu(ICommand cmd, object cmdArg, IEnumerable<int> selectedTagIds, bool recursive) {
+            // used for component parameter picker
+            return new MpMenuItemViewModel() {
+                SubItems =
+                    RootLinkableItems
+                        .Select(x => x.GetMenu(cmd, cmdArg, selectedTagIds, recursive)).ToList()
+            };
+        }
+
+        #endregion
+
         #region MpIHasDragOverProperty Implementation
 
         bool MpIHasDragOverProperty.IsDragOver {
@@ -112,6 +134,8 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region View Models
+
+
         public override MpAvTagTileViewModel SelectedItem {
             get {
                 return Items.FirstOrDefault(x => x.TagId == SelectedItemId);
@@ -126,11 +150,18 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public MpAvTagTileViewModel DefaultItem =>
+            Items.FirstOrDefault(x => x.TagId == DEFAULT_SELECTED_TAG_ID);
         public MpAvTagTileViewModel LastSelectedActiveItem =>
             Items
             .Where(x => x.IsNotGroupTag)
             .OrderByDescending(x => x.LastSelectedDateTime)
             .FirstOrDefault();
+
+        public IEnumerable<MpAvTagTileViewModel> RootLinkableItems =>
+            Items
+            .Where(x => !x.IsAllTag && x.ParentTagId == MpTag.CollectionsTagId)
+            .ToList();
 
         public IEnumerable<MpAvTagTileViewModel> PinnedItems =>
             Items
@@ -150,13 +181,10 @@ namespace MonkeyPaste.Avalonia {
             Items
             .Where(x => x.ParentTagId == 0)
             .ToList();
-
-        public MpAvTagTileViewModel AllTagViewModel { get; set; }
-        public MpAvTagTileViewModel RootGroupTagViewModel { get; set; }
-        public MpAvTagTileViewModel HelpTagViewModel { get; set; }
-
-        public IList<MpMenuItemViewModel> ContentMenuItemViewModels =>
-            AllTagViewModel.ContextMenuViewModel.SubItems;
+        public MpAvTagTileViewModel FiltersTagViewModel =>
+            Items.FirstOrDefault(x => x.TagId == MpTag.FiltersTagId);
+        public MpAvTagTileViewModel TrashTagViewModel =>
+            Items.FirstOrDefault(x => x.TagId == MpTag.TrashTagId);
 
         #endregion
 
@@ -190,6 +218,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsBusy) || PinnedItems.Any(x => x.IsBusy);
 
+        public List<int> TrashedCopyItemIds { get; set; } = new List<int>();
         #endregion
 
         #region Layout        
@@ -239,16 +268,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region Business Logic
-
-        public int DefaultTagId {
-            get {
-                return MpTag.AllTagId;
-            }
-        }
-
-        #endregion
-
         #endregion
 
         #region Events
@@ -276,28 +295,20 @@ namespace MonkeyPaste.Avalonia {
             MpDb.SyncUpdate += MpDbObject_SyncUpdate;
             MpDb.SyncDelete += MpDbObject_SyncDelete;
 
-            MpTag allTag = await MpDataModelProvider.GetItemAsync<MpTag>(MpTag.AllTagId);
+            Items.Clear();
+            var root_tags = await MpDataModelProvider.GetChildTagsAsync(0);
+            foreach (var root_tag in root_tags) {
+                _ = await CreateTagTileViewModelAsync(root_tag);
+            }
 
-            AllTagViewModel = new MpAvTagTileViewModel(this);
-            await AllTagViewModel.InitializeAsync(allTag);
-
-            MpTag helpTag = await MpDataModelProvider.GetItemAsync<MpTag>(MpTag.HelpTagId);
-
-            HelpTagViewModel = new MpAvTagTileViewModel(this);
-            await HelpTagViewModel.InitializeAsync(helpTag);
-
-            MpTag rootGroupTag = await MpDataModelProvider.GetItemAsync<MpTag>(MpTag.RootGroupTagId);
-
-            RootGroupTagViewModel = new MpAvTagTileViewModel(this);
-            await RootGroupTagViewModel.InitializeAsync(rootGroupTag);
-
-            while (AllTagViewModel.IsBusy || HelpTagViewModel.IsBusy || RootGroupTagViewModel.IsBusy) {
+            while (RootItems.Any(x => x.IsBusy)) {
                 await Task.Delay(100);
             }
 
+            TrashedCopyItemIds = await MpDataModelProvider.GetCopyItemIdsForTagAsync(MpTag.TrashTagId);
+
             Items.CollectionChanged += TagTileViewModels_CollectionChanged;
 
-            AllTagViewModel.IsExpanded = true;
             OnPropertyChanged(nameof(Items));
             OnPropertyChanged(nameof(PinnedItems));
             OnPropertyChanged(nameof(RootItems));
@@ -324,17 +335,32 @@ namespace MonkeyPaste.Avalonia {
             //PinnedItems.ForEach(x => x.IsSelected = false);
         }
 
-        public void ResetTagSelection() {
-            if (SelectedItem == null) {
-                return;
-            }
-            if (SelectedItem.TagId != DefaultTagId) {
-                ClearTagSelection();
-                Items.Where(x => x.TagId == DefaultTagId).FirstOrDefault().IsSelected = true;
-            }
+        public async Task UpdateAllClipCountsAsync() {
+            // NOTE1 only used for trash link/unlinking
+            // NOTE2 only call from outermost command to avoid successively calling if its a mass restore/delete
+            // NOTE3 including all link tags AND active if its a query tag so that updates too
+            await Task.WhenAll(
+                Items
+                .Where(x => x.IsLinkTag || LastActiveId == x.TagId)
+                .Select(x => x.UpdateClipCountAsync()));
         }
 
-
+        public void SetNextTrashCleanupDate() {
+            switch (MpPrefViewModel.Instance.TrashCleanupModeType) {
+                case MpTrashCleanupModeType.Daily:
+                    MpPrefViewModel.Instance.NextTrashEmptyDateTime = DateTime.Now + TimeSpan.FromDays(1);
+                    break;
+                case MpTrashCleanupModeType.Weekly:
+                    MpPrefViewModel.Instance.NextTrashEmptyDateTime = DateTime.Now + TimeSpan.FromDays(7);
+                    break;
+                case MpTrashCleanupModeType.Monthly:
+                    MpPrefViewModel.Instance.NextTrashEmptyDateTime = DateTime.Now + TimeSpan.FromDays(30);
+                    break;
+                case MpTrashCleanupModeType.Never:
+                    MpPrefViewModel.Instance.NextTrashEmptyDateTime = DateTime.MaxValue;
+                    break;
+            }
+        }
         #endregion
 
         #region Protected Methods
@@ -363,7 +389,7 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(SelectedItem):
                     if (SelectedItem == null) {
                         Debugger.Break();
-                        SelectedItem = AllTagViewModel;
+                        SelectedItem = Items.FirstOrDefault(x => x.TagId == DEFAULT_SELECTED_TAG_ID);
                     }
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsActiveTag)));
                     break;
@@ -394,6 +420,15 @@ namespace MonkeyPaste.Avalonia {
                     SelectedItem.SortType = MpAvClipTileSortFieldViewModel.Instance.SelectedSortType;
                     SelectedItem.IsSortDescending = MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending;
                     break;
+                case MpMessageType.MainWindowLoadComplete:
+                    if (DateTime.Now >= MpPrefViewModel.Instance.NextTrashEmptyDateTime) {
+                        Dispatcher.UIThread.Post(async () => {
+                            await Task.Delay(3_000);
+                            EmptyTrashCommand.Execute(null);
+                            SetNextTrashCleanupDate();
+                        });
+                    }
+                    break;
             }
         }
 
@@ -411,6 +446,13 @@ namespace MonkeyPaste.Avalonia {
             // Notify clip tray context menu changed if was selected w/ right click
             MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.ContextMenuViewModel));
         }
+
+        private async Task<MpAvTagTileViewModel> CreateTagTileViewModelAsync(MpTag tag) {
+            var ttvm = new MpAvTagTileViewModel(this);
+            await ttvm.InitializeAsync(tag);
+            return ttvm;
+        }
+
         #region Model Sync Events
         private void MpDbObject_SyncDelete(object sender, MonkeyPaste.MpDbSyncEventArgs e) {
             Dispatcher.UIThread.Post(() => {
@@ -452,6 +494,82 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
+
+        public ICommand RestoreAllTrashCommand => new MpAsyncCommand(
+            async () => {
+                var confirm_result = await Mp.Services.NativeMessageBox.ShowOkCancelMessageBoxAsync(
+                    title: "Confirm",
+                    message: $"Are you sure you want to restore all {TrashedCopyItemIds.Count} item(s)?",
+                    owner: MpAvWindowManager.MainWindow,
+                    iconResourceObj: "WarningImage");
+
+                if (!confirm_result) {
+                    // canceled restore all
+                    return;
+                }
+
+
+                var to_delete_citl = await MpDataModelProvider.GetCopyItemTagsForTagAsync(MpTag.TrashTagId);
+                await Task.WhenAll(to_delete_citl.Select(x => x.DeleteFromDatabaseAsync()));
+
+                while (IsAnyBusy) {
+                    await Task.Delay(100);
+                }
+                UpdateAllClipCountsAsync().FireAndForgetSafeAsync();
+                if (LastActiveId == MpTag.TrashTagId) {
+                    while (!MpAvClipTrayViewModel.Instance.QueryCommand.CanExecute(string.Empty)) {
+                        await Task.Delay(100);
+                    }
+
+                    MpAvClipTrayViewModel.Instance.QueryCommand.Execute(string.Empty);
+                }
+            },
+            () => {
+                bool can_restore = TrashedCopyItemIds.Any();
+                if (!can_restore) {
+                    MpConsole.WriteLine("EmptyTrashCommand CanExecute: " + can_restore);
+                    MpConsole.WriteLine($"TrashedCopyItemId Count: {TrashedCopyItemIds.Count}");
+                }
+                return can_restore;
+            });
+
+        public ICommand EmptyTrashCommand => new MpAsyncCommand(
+            async () => {
+                var confirm_result = await Mp.Services.NativeMessageBox.ShowOkCancelMessageBoxAsync(
+                    title: "Confirm",
+                    message: $"Are you sure you want to permanently delete all {TrashedCopyItemIds.Count} item(s)?",
+                    owner: MpAvWindowManager.MainWindow,
+                    iconResourceObj: "WarningImage");
+
+                if (!confirm_result) {
+                    // canceled empty trash
+                    return;
+                }
+
+                var to_delete_cil = await MpDataModelProvider.GetCopyItemsByIdListAsync(TrashedCopyItemIds);
+                await Task.WhenAll(to_delete_cil.Select(x => x.DeleteFromDatabaseAsync()));
+
+                while (IsAnyBusy) {
+                    await Task.Delay(100);
+                }
+                UpdateAllClipCountsAsync().FireAndForgetSafeAsync();
+
+                if (LastActiveId == MpTag.TrashTagId) {
+                    while (!MpAvClipTrayViewModel.Instance.QueryCommand.CanExecute(string.Empty)) {
+                        await Task.Delay(100);
+                    }
+
+                    MpAvClipTrayViewModel.Instance.QueryCommand.Execute(string.Empty);
+                }
+            },
+            () => {
+                bool can_empty = TrashedCopyItemIds.Any();
+                if (!can_empty) {
+                    MpConsole.WriteLine("EmptyTrashCommand CanExecute: " + can_empty);
+                    MpConsole.WriteLine($"TrashedCopyItemId Count: {TrashedCopyItemIds.Count}");
+                }
+                return can_empty;
+            });
 
         public MpIAsyncCommand<object> SelectTagAndBringIntoTreeViewCommand => new MpAsyncCommand<object>(
             async (args) => {
@@ -528,7 +646,7 @@ namespace MonkeyPaste.Avalonia {
 
                 int tagId;
                 if (args == null) {
-                    tagId = DefaultTagId;
+                    tagId = DEFAULT_SELECTED_TAG_ID;
                 } else if (args is MpAvTagTileViewModel ttvm) {
                     tagId = ttvm.TagId;
                 } else if (args is int) {

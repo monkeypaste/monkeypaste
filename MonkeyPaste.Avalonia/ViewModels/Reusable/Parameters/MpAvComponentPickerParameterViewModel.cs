@@ -121,7 +121,7 @@ namespace MonkeyPaste.Avalonia {
         public MpIPopupMenuPicker ComponentPicker =>
             ComponentType switch {
                 MpSelectableComponentType.Collection =>
-                    MpAvTagTrayViewModel.Instance.AllTagViewModel,
+                    MpAvTagTrayViewModel.Instance,
                 MpSelectableComponentType.Action =>
                     (Parent as MpAvActionViewModelBase).RootTriggerActionViewModel,
                 MpSelectableComponentType.Analyzer =>

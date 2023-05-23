@@ -9,8 +9,6 @@ namespace MonkeyPaste {
     public class MpUrl :
         MpDbModelBase,
         MpISourceRef,
-        MpIDbIconId,
-        MpIIconResource,
         MpILabelText,
         MpIUriSource {
         #region Columns

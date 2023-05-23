@@ -26,6 +26,8 @@ namespace MonkeyPaste.Avalonia {
             if (dragButton == null) {
                 return;
             }
+
+            // HACK since preview8 drag source datacontext becomes null after dnd so storing to finsih up
             MpAvSearchCriteriaItemViewModel dc = BindingContext;
             BindingContext.IsDragging = true;
             MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
@@ -34,7 +36,6 @@ namespace MonkeyPaste.Avalonia {
             var result = await DragDrop.DoDragDrop(e, mpdo, DragDropEffects.Move | DragDropEffects.Copy);
 
             if (BindingContext == null) {
-                // is null after drop as of preview 8
                 dc.IsDragging = false;
             } else {
                 BindingContext.IsDragging = false;

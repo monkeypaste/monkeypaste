@@ -688,10 +688,12 @@ namespace MonkeyPaste.Avalonia {
             PopupAnchor anchor = PopupAnchor.None) {
             _cmInstance.Close();
 
-
+            mivm = AddLeadingSeperators(mivm);
             if (mivm.SubItems == null || mivm.SubItems.Count == 0) {
                 _cmInstance.ItemsSource = new[] { mivm };
             } else {
+                // add leading seperators where necessary
+
                 _cmInstance.ItemsSource = mivm.SubItems.Where(x => x != null && x.IsVisible).Select(x => CreateMenuItem(x));
             }
 
@@ -753,6 +755,29 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
             return control.DataContext;
+        }
+
+        private static MpMenuItemViewModel AddLeadingSeperators(MpMenuItemViewModel mivm) {
+            if (mivm.SubItems == null || mivm.SubItems.Count == 0) {
+                return mivm;
+            }
+            // select direct child wanting leading sep where there is items before it and actual previous isn't seperator
+            var leading_sep_items =
+                mivm.SubItems
+                .Where((x, idx1) =>
+                    x.IsVisible &&
+                    x.HasLeadingSeperator &&
+                    mivm.SubItems
+                    .Where((y, idx2) => idx2 < idx1 && y.IsVisible)
+                    .OrderByDescending(y => mivm.SubItems.IndexOf(y))
+                    .FirstOrDefault() is MpMenuItemViewModel actual_prev_mivm &&
+                    !actual_prev_mivm.IsSeparator)
+                .ToList();
+
+            foreach (var lsi in leading_sep_items) {
+                mivm.SubItems.Insert(mivm.SubItems.IndexOf(lsi), new MpMenuItemViewModel() { IsSeparator = true });
+            }
+            return mivm;
         }
 
         #endregion

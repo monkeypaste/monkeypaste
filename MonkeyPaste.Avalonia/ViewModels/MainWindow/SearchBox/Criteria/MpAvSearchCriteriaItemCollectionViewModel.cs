@@ -485,18 +485,18 @@ namespace MonkeyPaste.Avalonia {
             async () => {
                 var ttrvm = MpAvTagTrayViewModel.Instance;
                 await ttrvm.SelectTagAndBringIntoTreeViewCommand.ExecuteAsync(
-                    MpTag.RootGroupTagId);
+                    MpTag.FiltersTagId);
 
                 int new_query_tag_id = await ConvertPendingToQueryTagAsync();
 
                 // clear pending flag 
                 QueryTagId = new_query_tag_id;
 
-                await ttrvm.RootGroupTagViewModel.AddNewChildTagCommand.ExecuteAsync(new_query_tag_id);
+                await ttrvm.FiltersTagViewModel.AddNewChildTagCommand.ExecuteAsync(new_query_tag_id);
                 // wait for tag to be added
 
                 await Task.Delay(300);
-                if (ttrvm.RootGroupTagViewModel.Items.FirstOrDefault(x => x.TagId == new_query_tag_id) is MpAvTagTileViewModel new_query_ttvm) {
+                if (ttrvm.FiltersTagViewModel.Items.FirstOrDefault(x => x.TagId == new_query_tag_id) is MpAvTagTileViewModel new_query_ttvm) {
                     // trigger rename
                     new_query_ttvm.RenameTagCommand.Execute(null);
                 }
