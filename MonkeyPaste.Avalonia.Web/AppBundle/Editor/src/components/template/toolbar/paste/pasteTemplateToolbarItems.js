@@ -6,6 +6,7 @@ const EmptyPasteValText = '???';
 
 var IsTemplatePasteValueTextAreaFocused = false;
 
+
 // #endregion Globals
 
 // #region Life Cycle
@@ -75,6 +76,10 @@ function getPasteEditFocusTemplateButtonElement() {
     return document.getElementById('pasteEditFocusTemplateButton');
 }
 
+function getPasteTemplateHintContainerElement() {
+    return document.getElementById('templatePasteValueHintOuterContainer');
+}
+
 
 function getTemplatePasteValue(t) {
     if (!t) {
@@ -88,21 +93,23 @@ function getTemplatePasteValue(t) {
 	} else if (ttype == 'static') {
         pv = t.templateData;
     } else if (ttype == 'datetime') {
-        pv = jQuery.format.date(new Date(), t.templateData);
+        pv = t.templateText;
     } else if (ttype == 'contact') {
-        if (isNullOrWhiteSpace(t.templateData)) {
-            // error, data must be contact field on hide edit template
-            //debugger;
-            //return null;
-            pv = 'Full Name';
-        }
+        //if (isNullOrWhiteSpace(t.templateData)) {
+        //    // error, data must be contact field on hide edit template
+        //    //debugger;
+        //    //return null;
+        //    pv = 'Full Name';
+        //}
 
-        if (SelectedContactGuid == null) {
-            // TODO should be selected fro drop down in paste toolbar
-            //pv = null;
-        }
+        //if (SelectedContactGuid == null) {
+        //    // TODO should be selected fro drop down in paste toolbar
+        //    //pv = null;
+        //}
 
-        pv = getContactFieldValue(SelectedContactGuid, t.templateData);
+        //pv = getContactFieldValue(SelectedContactGuid, t.templateData);
+
+        pv = t.templateText;
     }
 
     if (pv == null) {
@@ -120,19 +127,28 @@ function getPasteTemplateDefs() {
 
 // #region Setters
 
-function setTemplatePasteValue(tguid, val) {
-    var telms = getTemplateElements(tguid);
+
+function setTemplateData(tguid, newTemplateData) {
+    let telms = getTemplateElements(tguid);
     for (var i = 0; i < telms.length; i++) {
-        var telm = telms[i];
-        //let t = getTemplateFromDomNode(telm);
-        //let paste_val = getTemplatePasteValue(t);
-        //let cur_val = val;
-        //if (isNullOrEmpty(paste_val)) {
-        //    cur_val = t.templateName;
-        //} else {
-        //    cur_val = paste_val;
+        let telm = telms[i];
+        telm.setAttribute('templateData', newTemplateData);
+        //if (isShowingPasteToolbar()) {
+        //    let t = getTemplateFromDomNode(telm);
+        //    let t_text = getTemplatePasteValue(t);
+        //    telm.setAttribute('templateText', t_text);
+        //    setTemplateElementText(telm, t_text);
+        //    //telm.innerText = t_text;
         //}
-        //setTemplateElementText(telm, val);
+    }
+}
+
+function setTemplatePasteValue(tguid, val) {
+    let t = getTemplateDefByGuid(tguid);
+    let telms = getTemplateElements(tguid);
+    for (var i = 0; i < telms.length; i++) {
+        let telm = telms[i];
+
         telm.setAttribute('templateText', val);
     }
     //updateTemplatesAfterTextChanged();
@@ -323,14 +339,39 @@ function updatePasteTemplateToolbarToFocus(ftguid, paste_sel) {
     // UPDATE SELECTOR 
     createTemplateSelector(ftguid, paste_sel);
 
-    // UPDATE TEXTAREA
+    // CHECK FOR READY
+    let template_in_focus = updatePasteElementInteractivity();
+    if (!template_in_focus) {
+        ft = null;
+    }
+    // UPDATE DYNAMIC/STATIC
     updatePasteValueTextAreaToFocus(ft);
 
-    // CHECK FOR READY
-    updatePasteElementInteractivity();
+    // UPDATE CONTACTS
+    updateContactFieldSelectorToFocus(ft);
+
+    // UPDATE DATETIME
+    updateDateTimeFieldSelectorToFocus(ft);
+
+    // UPDATE HINT
+    updatePasteValueHint(ft);
 }
 
+function updatePasteValueHint(ft) {
+    if (!ft) {
+        getPasteTemplateHintContainerElement().classList.add('invisible');
+        return;
+    }
+    getPasteTemplateHintContainerElement().classList.remove('invisible');
 
+    let match_class = ft ? `template-${ft.templateType.toLowerCase()}` : 'none';
+    let tt_def_matches = document.getElementById('tooltipDefs').getElementsByClassName(match_class);
+    if (tt_def_matches.length == 1) {
+        getPasteTemplateHintContainerElement().setAttribute(TOOLTIP_HOVER_ATTRB_NAME, tt_def_matches[0].outerHTML.trim());
+    } else {
+        getPasteTemplateHintContainerElement().setAttribute(TOOLTIP_HOVER_ATTRB_NAME, "");
+    }
+}
 function updatePasteTemplateValues() {
     let tl = getTemplateDefs();
     for (var i = 0; i < tl.length; i++) {
@@ -350,6 +391,9 @@ function updatePasteElementInteractivity() {
         paste_t_defs.filter(x => isTemplateAnInputType(x) && !isNullOrEmpty(getTemplatePasteValue(x))).length > 0;
 
     let can_edit = paste_t_defs.length > 0;
+
+    const is_selector_have_opts = isPasteTemplateHaveOptions();
+
 
     //let can_paste = paste_t_defs.filter(x => !isTemplateReadyToPaste(x)).length == 0;
     let can_paste = true;
@@ -374,6 +418,12 @@ function updatePasteElementInteractivity() {
         getPasteFocusTemplateContainerElement().classList.add(inactive_template_button_classes);
     }
 
+    if (is_selector_have_opts) {
+        getPasteTemplateSelectorArrowElement().classList.remove('hidden');
+    } else {
+        getPasteTemplateSelectorArrowElement().classList.add('hidden');
+    }
+
     if (can_clear) {
         getPasteClearTextButtonElement().classList.remove(inactive_template_button_classes);
     } else {
@@ -382,10 +432,11 @@ function updatePasteElementInteractivity() {
 
     if (can_edit) {
         getPasteEditFocusTemplateButtonElement().classList.remove(inactive_template_button_classes);
-        getPasteValueTextAreaElement().classList.remove(inactive_template_button_classes);
+        //getPasteValueTextAreaElement().classList.remove(inactive_template_button_classes);
     } else {
         getPasteEditFocusTemplateButtonElement().classList.add(inactive_template_button_classes);
-        getPasteValueTextAreaElement().classList.add(inactive_template_button_classes);
+        //getPasteValueTextAreaElement().classList.add(inactive_template_button_classes);
+        //getPasteTemplateHintContainerElement().classList.add(inactive_template_button_classes);
 	}
 
     if (can_paste) {
@@ -394,7 +445,7 @@ function updatePasteElementInteractivity() {
         getPasteButtonElement().classList.add('disabled');
 	}
 
-    return can_paste;
+    return can_edit;
 }
 
 

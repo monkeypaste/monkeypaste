@@ -102,8 +102,7 @@ function onWindowClick(e) {
 	} 
 
 	let ignore_classes = [
-		"edit-template-toolbar",
-		"paste-toolbar",
+		"common-toolbar",
 		"context-menu-option",
 		"ql-toolbar"
 	];

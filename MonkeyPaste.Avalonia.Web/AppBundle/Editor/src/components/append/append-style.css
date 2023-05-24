@@ -5,7 +5,7 @@
 #pasteAppendToolbarLabelContainer {
     background-color: var(--editableeditorbgcolor_opaque);
     display: inline-flex;
-    border-radius: 5px;
+    border-radius: var(--commonborderradius);
     border-width: 1px;
     border-color: white;
     text-align: center;

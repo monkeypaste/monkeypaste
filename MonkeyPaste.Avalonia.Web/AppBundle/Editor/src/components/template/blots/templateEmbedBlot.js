@@ -141,7 +141,7 @@ function applyTemplateToDomNode(node, value) {
 
     let ttype = value.templateType.toLowerCase();
     if (ttype == 'datetime' && isNullOrWhiteSpace(value.templateData)) {
-        value.templateData = 'MM/dd/yyy HH:mm:ss';
+        //value.templateData = TemplateDateTimeFormatOptionLabels[0];
     }
     if (ttype == 'static' && value.templateData == null) {
         value.templateData = '';
@@ -199,9 +199,9 @@ function applyTemplateToDomNode(node, value) {
 
     // EVENTS
 
-    node.addEventListener('click', onTemplateClick, true);
-    span_elm.addEventListener('click', onTemplateClick, true);
-    delete_elm.addEventListener('click', onTemplateDeleteButtonClick);
+    node.addEventListener('pointerup', onTemplateClick);
+    span_elm.addEventListener('pointerup', onTemplateClick);
+    delete_elm.addEventListener('pointerup', onTemplateDeleteButtonClick);
 
     return node;
 }

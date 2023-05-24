@@ -8,7 +8,7 @@ function initPasteToolbar() {
     // workaround to keep resizer and not override css so initial show doesn't double bounce
     //getPasteToolbarContainerElement().style.bottom = `${-MIN_TOOLBAR_HEIGHT}px`;
 
-    enableResize(getPasteToolbarContainerElement());
+    //enableResize(getPasteToolbarContainerElement());
 
     initPasteButton();
     initPasteTemplateToolbarItems();

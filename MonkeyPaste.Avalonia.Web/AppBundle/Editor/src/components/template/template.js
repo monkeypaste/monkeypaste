@@ -365,7 +365,8 @@ function getTemplateEmbedStr(t, sToken = ENCODED_TEMPLATE_OPEN_TOKEN, eToken = E
     return result;
 }
 
-function getLowestAnonTemplateName(anonPrefix = 'Template #') {
+function getLowestAnonTemplateName(anonPrefix) {
+    anonPrefix += ' #';
     let utdl = getTemplateDefs();
     let maxNum = 0;
     for (var i = 0; i < utdl.length; i++) {
@@ -518,6 +519,20 @@ function isAnyTemplateRequireInput() {
     return false;
 }
 
+function isTemplateDataDriven(t) {
+    // NOTE this implies template is dependant on its templateData attribute
+    // (basically non-dynamic atm)
+    if (!t) {
+        return false;
+    }
+    let ttype = t.templateType.toLowerCase();
+    if (ttype == 'contact' ||
+        ttype == 'datetime' ||
+        ttype == 'static') {
+        return true;
+    }
+    return false;
+}
 function isTemplateAnInputType(t) {
     if (!t) {
         return false;
@@ -529,6 +544,12 @@ function isTemplateAnInputType(t) {
     return false;
 }
 
+function isTemplateHaveTextInput(t) {
+    if (t && t.templateType.toLowerCase() != 'contact') {
+        return true;
+    }
+    return false;
+}
 function isSelAtFocusTemplateInsert() {
     //let sel = getDocSelection();
     //if (sel.length > 0) {

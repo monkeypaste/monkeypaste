@@ -3,7 +3,7 @@
     display: block;
     background-color: whitesmoke;
     border: 0.5px solid dimgray;
-    border-radius: 5px;
+    border-radius: var(--commonborderradius);
     transition: 0.5s;
 }
 

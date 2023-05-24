@@ -27,6 +27,10 @@
     <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\main\editor_tester.js" />
     <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\shortcuts\shortcuts.js" />
     <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\table\ops\tableops.js" />
+    <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\template\toolbar\paste\paste-toolbar-template-items-style.css" />
+    <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\template\toolbar\paste\types\contacts\templateContact.js" />
+    <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\template\toolbar\paste\types\datetime\templateDateTime.js" />
+    <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\template\toolbar\paste\types\dynamicAndStatic\templateDynamicAndStatic.js" />
     <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\tooltip\tooltip-style.css" />
     <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\tooltip\tooltip.js" />
     <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\util\graphics\screenshot.js" />

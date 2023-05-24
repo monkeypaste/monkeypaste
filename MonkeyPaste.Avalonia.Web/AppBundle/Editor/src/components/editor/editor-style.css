@@ -1,10 +1,14 @@
 
-#editor :is(span, a, em, strong, u, s, sub, sup, img, p, ol, ul, li, div, table, colgroup, col, tbody, tr, td, iframe, blockquote, pre, code):not(.font-color-override-on):not(.ql-code-block) {
+#editor :is(span, a, em, strong, u, s, sub, sup, img, p, ol, ul, li, div, table, colgroup, col, tbody, tr, td, iframe, blockquote, pre, code):not(.font-color-override-on):not(.ql-code-block):not(.template-label):not(.template-blot) {
     color: var(--defcontentfgcolor) !important;
 }
 
-#editor :is(span, a, em, strong, u, s, sub, sup, img, p, ol, ul, li, div, table, colgroup, col, tbody, tr, td, iframe, blockquote, pre, code):not(.font-bg-color-override-on):not(.ql-code-block) {
+#editor :is(span, a, em, strong, u, s, sub, sup, img, p, ol, ul, li, div, table, colgroup, col, tbody, tr, td, iframe, blockquote, pre, code):not(.font-bg-color-override-on):not(.ql-code-block):not(.template-label):not(.template-blot) {
     background-color: transparent !important;
+}
+
+#editor p:has(span.template-blot), #editor li:has(span.template-blot) {
+    line-height: 2em;
 }
 
 /*div.ql-code-block-container, div.ql-code-block {

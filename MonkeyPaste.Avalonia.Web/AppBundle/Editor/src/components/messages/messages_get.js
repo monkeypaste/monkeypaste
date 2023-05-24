@@ -49,16 +49,16 @@ async function getDragDataTransferObjectAsync_get(unprocessed_dt) {
     processed_drag_dt = convertHostDataItemsToDataTransfer(processed_hdo);
     return processed_drag_dt;
 }
-
-function getContacts_get(filterField) {
-    // TODO should return contacts with available field from binding property
-    if (IsTesting) {
-        if (AvailableContacts.length == 0) {
-            initContactTestData();
-        }
-        return AvailableContacts();
+async function getContactsFromFetcherAsync_get() {
+    // output 'MpIContact[]'
+    let all_contacts = [];
+    if (isRunningOnHost()) {
+        all_contacts = await processGetRequestAsync('getContactsFromFetcher', JSON.stringify(req));
+    } else {
+        await delay(1000);
+        all_contacts = getContactTestData();
     }
-    return [];
+    return all_contacts;
 }
 
 function getContactFieldList_get() {
@@ -97,6 +97,7 @@ function getContactFieldValue_get(contact_guid, field) {
     // so host should get this data
     return null;
 }
+
 // #endregion Getters
 
 // #region Setters

@@ -106,7 +106,7 @@ function createTemplateFromDropDown(templateObjOrId, newTemplateType) {
 
         let newTemplateName = '';
         if (range.length == 0) {
-            newTemplateName = getLowestAnonTemplateName();
+            newTemplateName = getLowestAnonTemplateName(toTitleCase(newTemplateType));
         } else {
             newTemplateName = getText(range).trim();
         }

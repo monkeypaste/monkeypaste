@@ -18,8 +18,11 @@ function showPasteTemplateSelectorOptions() {
     if (isPasteTemplateHaveOptions()) {
         getPasteTemplateSelectorOptionsElement().classList.remove('hidden');
         updatePasteTemplateOptionsBounds();
-    }
-    getPasteTemplateSelectorArrowElement().classList.add('active');
+
+        getPasteTemplateSelectorArrowElement().classList.add('active');
+        getPasteTemplateSelectorArrowElement().classList.remove('hidden');
+        
+    } 
 }
 
 function hidePasteTemplateSelectorOptions() {

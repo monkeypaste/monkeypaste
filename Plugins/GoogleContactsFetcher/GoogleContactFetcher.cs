@@ -17,7 +17,7 @@ using System.Windows.Input;
 
 namespace GoogleContactsFetcher {
     public class GoogleContactFetcher :
-        //MpIContactFetcherComponentAsync,
+        MpIContactFetcherComponentAsync,
         MpISupportDeferredParameterCommand,
         MpIAnalyzeAsyncComponent,
         INotifyPropertyChanged {

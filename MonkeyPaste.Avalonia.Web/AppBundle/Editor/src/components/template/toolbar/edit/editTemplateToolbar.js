@@ -1,6 +1,5 @@
 ﻿
 var IsTemplateNameTextAreaFocused = false;
-var IsTemplateDetailTextAreaFocused = false;
 
 var TemplateBeforeEdit = null;
 
@@ -10,17 +9,12 @@ function initEditTemplateToolbar() {
     enableResize(getEditTemplateToolbarContainerElement());
 
     addClickOrKeyClickEventListener(getEditTemplateColorBoxElement(), onTemplateColorBoxContainerClick);
-
     addClickOrKeyClickEventListener(getDeleteTemplateButtonElement(), onDeleteTemplateButtonClick);
 
     getEditTemplateNameTextAreaElement().addEventListener('focus', onTemplateNameTextAreaGotFocus);
     getEditTemplateNameTextAreaElement().addEventListener('blur', onTemplateNameTextAreaLostFocus);
     getEditTemplateNameTextAreaElement().addEventListener('input', onTemplateNameChanged);
-    initBouncyTextArea(getEditTemplateNameTextAreaElement());
-
-    getEditTemplateDetailTextAreaElement().addEventListener('focus', onTemplateDetailTextAreaGotFocus);
-    getEditTemplateDetailTextAreaElement().addEventListener('blur', onTemplateDetailTextAreaLostFocus);
-    getEditTemplateDetailTextAreaElement().addEventListener('input', onTemplateDetailChanged);       
+    initBouncyTextArea(getEditTemplateNameTextAreaElement());     
 }
 
 function showEditTemplateToolbar(isNew = false) {
@@ -86,10 +80,6 @@ function getEditTemplateNameTextAreaElement() {
     return document.getElementById('templateNameTextArea');
 }
 
-function getEditTemplateDetailTextAreaElement() {
-    return document.getElementById('templateDetailTextArea');
-}
-
 function getDeleteTemplateButtonElement() {
     return document.getElementById('editTemplateDeleteButton');
 }
@@ -107,21 +97,6 @@ function setTemplateName(tguid, name) {
             setTemplateElementText(telm, name);
         }
     }
-}
-
-function setTemplateDetailData(tguid, detailData) {
-    let telms = getTemplateElements(tguid);
-    for (var i = 0; i < telms.length; i++) {
-        let telm = telms[i];
-        telm.setAttribute('templateData', detailData);
-        if (isShowingPasteToolbar()) {
-            let t = getTemplateFromDomNode(telm);
-            let t_text = getTemplatePasteValue(t);
-            telm.setAttribute('templateText', t_text);
-            setTemplateElementText(telm, t_text);
-            //telm.innerText = t_text;
-		}
-	}
 }
 
 function setEditToolbarColorButtonColor(chex) {
@@ -163,22 +138,11 @@ function hideTemplateColorPaletteMenu() {
 }
 
 function createEditTemplateToolbarForTemplate(t) {
-    log('Editing Template: ' + t.templateGuid + " selected type: " + t.templateType);
-    let ttype = t.templateType.toLowerCase();
-    if (ttype == 'dynamic') {
-        getEditTemplateToolbarContainerElement().classList.remove('template-with-detail-layout');
-
-        getEditTemplateDetailTextAreaElement().classList.add('hidden');
-    } else {
-        getEditTemplateToolbarContainerElement().classList.add('template-with-detail-layout');
-
-        getEditTemplateDetailTextAreaElement().classList.remove('hidden');
-        getEditTemplateDetailTextAreaElement().value = t.templateData;
-        getEditTemplateDetailTextAreaElement().addEventListener('input', onTemplateDetailChanged);
+    if (!t) {
+        return;
     }
-
+    log('Editing Template: ' + t.templateGuid + " selected type: " + t.templateType);
     getEditTemplateColorBoxElement().style.backgroundColor = t.templateColor;
-
     getEditTemplateNameTextAreaElement().value = t.templateName;
 }
 
@@ -206,7 +170,6 @@ function isShowingEditTemplateToolbar() {
 }
 
 function resetEditTemplateToolbar() {
-    IsTemplateDetailTextAreaFocused = false;
     IsTemplateNameTextAreaFocused = false;
     TemplateBeforeEdit = null;
 
@@ -241,10 +204,6 @@ function deleteFocusTemplate() {
     //log('Template \'' + ftguid + '\' \'' + td.templateName + '\' was DELETED');
 }
 
-function isEditTemplateTextAreaFocused() {
-    return IsTemplateNameTextAreaFocused || IsTemplateDetailTextAreaFocused;
-}
-
 //#endregion
 
 //#region Event Handlers
@@ -259,25 +218,22 @@ function onTemplateNameChanged(e) {
     setTemplateName(TemplateBeforeEdit.templateGuid, newTemplateName);
 }
 
-function onTemplateDetailChanged(e) {
-    let newDetailData = getEditTemplateDetailTextAreaElement().value;
-    setTemplateDetailData(TemplateBeforeEdit.templateGuid, newDetailData);
-}
 
 function onTemplateNameTextAreaGotFocus() {
     IsTemplateNameTextAreaFocused = true;
+    getEditTemplateNameTextAreaElement().addEventListener('keydown', onTemplateNameTextAreaKeyDown, true);
 }
 
 function onTemplateNameTextAreaLostFocus() {
     IsTemplateNameTextAreaFocused = false;
+    getEditTemplateNameTextAreaElement().removeEventListener('keydown', onTemplateNameTextAreaKeyDown);
 }
 
-function onTemplateDetailTextAreaGotFocus() {
-    IsTemplateDetailTextAreaFocused = true;
-}
-
-function onTemplateDetailTextAreaLostFocus() {
-    IsTemplateDetailTextAreaFocused = false;
+function onTemplateNameTextAreaKeyDown(e) {
+    if (e.key == 'Enter' || e.key == 'Escape') {
+        e.preventDefault();
+        hideEditTemplateToolbar();
+    }
 }
 
 function onDeleteTemplateButtonClick(e) {

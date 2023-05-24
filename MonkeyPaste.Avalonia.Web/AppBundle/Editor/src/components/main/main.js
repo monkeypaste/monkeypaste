@@ -155,7 +155,6 @@ function getSpellCheckableElements() {
 	return [
 		document.getElementById('findInput'),
 		document.getElementById('templateNameTextArea'),
-		document.getElementById('templateDetailTextArea'),
 		document.getElementById('templatePasteValueTextArea'),
 		getEditorElement(),
 		...

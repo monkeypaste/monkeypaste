@@ -11,6 +11,7 @@ namespace MonkeyPaste {
         #region Private Variables
 
         #endregion
+
         #region Statics
 
         private static MpMasterTemplateModelCollectionViewModel _instance;
@@ -87,7 +88,11 @@ namespace MonkeyPaste {
         public async Task<IEnumerable<MpContact>> GetContactsAsync() {
             var contacts = new List<MpIContact>();
 
-            var fetchers = MpPluginLoader.Plugins.Where(x => x.Value.Component is MpIContactFetcherComponentBase).Select(x => x.Value.Component).Distinct();
+            var fetchers =
+                MpPluginLoader.Plugins
+                .Where(x => x.Value.Component is MpIContactFetcherComponentBase)
+                .Select(x => x.Value.Component).Distinct();
+
             foreach (var fetcher in fetchers) {
                 if (fetcher is MpIContactFetcherComponent cfc) {
                     contacts.AddRange(cfc.FetchContacts(null));

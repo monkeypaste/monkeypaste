@@ -1,12 +1,12 @@
 ﻿#pasteTemplateToolbarMenuSelectorDiv {
     width: 15%;
-    height: 80%;
+    height: 30px;
     align-items: center;
     margin: 5px 5px 5px 10px;
-    padding: 3px;
+    padding: 2px 20px 2px 2px;
     background-color: var(--editableeditorbgcolor_opaque);
     border: 1px solid var(--editableeditorbgcolor_opaque);
-    border-radius: 3px;
+    border-radius: var(--commonborderradius);
     /*transition: 0.4s;*/
 }
 
@@ -26,7 +26,7 @@
 #pasteTemplateToolbarMenuSelectorArrowDiv {
     /*style the arrow inside the select element:*/
     content: "";
-    transform: translate(0,3px);
+    transform: translate(5px,3px);
     width: 0;
     height: 0;
     border: 6px solid transparent;
@@ -35,7 +35,7 @@
 
     #pasteTemplateToolbarMenuSelectorArrowDiv.active {
         border-color: transparent transparent var(--defcontentfgcolor) transparent;
-        transform: translate(0,-3px) scaleY(1);
+        transform: translate(5px,-3px) scaleY(1);
     }
 
 #pasteOptionsDiv {
@@ -46,7 +46,7 @@
     background-color: var(--editableeditorbgcolor_opaque);
     border: 1px solid var(--defcontentfgcolor);
     transform: translate(0px,-10px);
-    border-radius: 3px;
+    border-radius: var(--commonborderradius);
 }
 
     #pasteOptionsDiv > div:hover {
@@ -67,7 +67,7 @@
 }
 
 .paste-template-option-icon {
-    border-radius: 3px;
+    border-radius: var(--commonborderradius);
     border: 0px solid black;
     width: fit-content;
     height: inherit;
@@ -78,9 +78,16 @@
 .paste-template-option-icon svg {
     width: 15px;
     height: 15px;
+    margin-left: 3px;
 }
 
 .paste-template-option-label {
-    margin: 5px 5px 5px 10px;
+    white-space: nowrap;
+    overflow-x: hidden;
+    padding: 7px 5px; 
 }
 
+#templatePasteValueTextArea {
+    width: 45%;
+    box-sizing: border-box;
+}

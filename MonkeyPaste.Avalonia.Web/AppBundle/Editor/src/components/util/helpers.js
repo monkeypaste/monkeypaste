@@ -744,4 +744,52 @@ function getElementClosestToPoint(p, elmQuery, forceContains = true) {
     return min_elm;
 }
 
+function isCapitalCaseChar(char) {
+    if (!char) {
+        return false;
+    }
+    if (char >= 'A' && char <= 'Z') {
+        return true;
+    }
+    return false;
+}
 
+function isLowerCaseChar(char) {
+    if (!char) {
+        return false;
+    }
+    if (char >= 'a' && char <= 'z') {
+        return true;
+    }
+    return false;
+}
+
+
+function toLabelCase(str, noneText = '', spaceStr = ' ') {
+    if (!isString(str) || isNullOrEmpty(str)) {
+        return '';
+    }
+    let label = '';
+	for (var i = 0; i < str.length; i++) {
+        if (i > 0 &&
+            (isLowerCaseChar(str[i - 1]) && isCapitalCaseChar(str[i]) ||
+            isCapitalCaseChar(str[i - 1]) && isCapitalCaseChar(str[i]))) {
+            label += spaceStr;
+        }
+        label += str[i];
+    }
+    if (label.toLowerCase() == "none") {
+        return noneText;
+    }
+    return label;
+
+}
+
+function toTitleCase(str) {
+    return str.replace(
+        /\w\S*/g,
+        function (txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        }
+    );
+}

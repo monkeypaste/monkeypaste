@@ -36,6 +36,7 @@ namespace MonkeyPaste.Avalonia {
         getAllNonInputTemplatesFromDb,
         getClipboardDataTransferObject,
         getDragDataTransferObject,
+        getContactsFromFetcher,
 
         // one-way *_ntf notifications
         notifyDocSelectionChanged,
@@ -823,6 +824,11 @@ namespace MonkeyPaste.Avalonia {
                     var tl = await MpDataModelProvider.GetTextTemplatesByType(templateReq.templateTypes.Select(x => x.ToEnum<MpTextTemplateType>()));
 
                     getResp.responseFragmentJsonStr = MpJsonConverter.SerializeObject(tl);
+                    break;
+
+                case MpAvEditorBindingFunctionType.getContactsFromFetcher:
+                    var cl = await MpMasterTemplateModelCollectionViewModel.Instance.GetContactsAsync();
+                    getResp.responseFragmentJsonStr = MpJsonConverter.SerializeObject(cl);
                     break;
                 case MpAvEditorBindingFunctionType.getClipboardDataTransferObject:
                     var cb_dtObjReq = MpJsonConverter.DeserializeObject<MpQuillEditorClipboardDataObjectRequestNotification>(getReq.reqMsgFragmentJsonStr);

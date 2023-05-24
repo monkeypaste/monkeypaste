@@ -71,7 +71,7 @@
 
     <link href="src/components/template/template-style.css" rel="stylesheet" />
     <link href="src/components/template/toolbar/edit/edit-template-toolbar-style.css" rel="stylesheet" />
-    <link href="src/components/template/toolbar/paste/paste-template-toolbar-items-style.css" rel="stylesheet" />
+    <link href="src/components/template/toolbar/paste/paste-toolbar-template-items-style.css" rel="stylesheet" />
     <link href="src/components/template/toolbar/paste/selector/paste-toolbar-template-selector-style.css" rel="stylesheet" />
 
     <link href="src/components/content/content-style.css" rel="stylesheet" />
@@ -198,9 +198,10 @@
     <script defer src="src/components/template/toolbar/edit/editTemplateToolbar.js"></script>
     <script defer src="src/components/template/toolbar/paste/pasteTemplateToolbarItems.js"></script>
     <script defer src="src/components/template/toolbar/paste/selector/pasteTemplateFocusSelector.js"></script>
-    <script defer src="src/components/template/toolbar/paste/pastevalue/pasteTemplateValue.js"></script>
 
-    <script defer src="src/components/template/types/contacts/contacts.js"></script>
+    <script defer src="src/components/template/toolbar/paste/types/contacts/templateContact.js"></script>
+    <script defer src="src/components/template/toolbar/paste/types/datetime/templateDateTime.js"></script>
+    <script defer src="src/components/template/toolbar/paste/types/dynamicAndStatic/templateDynamicAndStatic.js"></script>
 
     <script defer src="src/components/color/colorpalette.js"></script>
     <script defer src="src/components/color/colordata.js"></script>
@@ -425,45 +426,17 @@
 
     <!-- EDIT TEMPLATE TOOLBAR -->
     <div id="editTemplateToolbar"
-         class="common-toolbar edit-template-toolbar bottom-align hidden">
+         class="common-toolbar bottom-align hidden">
         <div class="resizer resizer-t"></div>
         <div id="templateColorBox"></div>
-        <textarea id="templateNameTextArea"
-                  rows="1"
-                  cols="20"
-                  spellcheck="false"
-                  placeholder="Template Name"></textarea>
-        <textarea id="templateDetailTextArea"
-                  rows="1"
-                  cols="20"
-                  spellcheck="false"
-                  placeholder="Enter Details"></textarea>
-        <div class="tooltip-hint-container tooltip">
-            <!--<span class="tooltiptext">Tooltip text</span>-->
-            <div class="tooltip-block-container tooltiptext">
-                <p>yy = short year</p>
-                <p>yyyy = long year</p>
-                <p>M = month (1-12)</p>
-                <p>MM = month (01-12)</p>
-                <p>MMM = month abbreviation (Jan, Feb ... Dec)</p>
-                <p>MMMM = long month (January, February ... December)</p>
-                <p>d = day (1 - 31)</p>
-                <p>dd = day (01 - 31)</p>
-                <p>ddd = day of the week in words (Monday, Tuesday ... Sunday)</p>
-                <p>E = short day of the week in words (Mon, Tue ... Sun)</p>
-                <p>D - Ordinal day (1st, 2nd, 3rd, 21st, 22nd, 23rd, 31st, 4th...)</p>
-                <p>h = hour in am/pm (0-12)</p>
-                <p>hh = hour in am/pm (00-12)</p>
-                <p>H = hour in day (0-23)</p>
-                <p>HH = hour in day (00-23)</p>
-                <p>mm = minute</p>
-                <p>ss = second</p>
-                <p>SSS = milliseconds</p>
-                <p>a = AM/PM marker</p>
-                <p>p = a.m./p.m. marker</p>
-            </div>
+        <div class="input-wrapper">
+            <label for="templateName">Name</label>
+            <textarea id="templateNameTextArea"
+                      name="templateName"
+                      rows="1"
+                      cols="20"
+                      spellcheck="false"></textarea>
         </div>
-
         <button id="editTemplateDeleteButton" class="right-align" type="button">
             <span>DELETE</span>
         </button>
@@ -493,7 +466,16 @@
             <div id="selectedPasteTemplateOptionDiv"></div>
             <div id="pasteTemplateToolbarMenuSelectorArrowDiv"></div>
         </div>
-        <!-- PASTE VALUE TEXT AREA-->
+
+        <!-- CONTACT TEMPLATE -->
+
+        <div id="pasteTemplateToolbarContactFieldSelectorContainer" class="hidden"></div>
+
+        <!-- DATETIME TEMPLATE -->
+
+        <div id="pasteTemplateToolbarDateTimeFormatSelectorContainer" class="hidden"></div>
+
+        <!-- DYNAMIC/STATIC TEMPLATE -->
         <textarea id="templatePasteValueTextArea"
                   class="paste-template-item"
                   rows="1"
@@ -501,6 +483,9 @@
                   tabindex="1"
                   spellcheck="false"
                   placeholder="Enter paste text..."></textarea>
+
+        <!-- PASTE VALUE HINT INFO -->
+        <div id="templatePasteValueHintOuterContainer" class="tooltip-hint-container" hover-tooltip=""></div>
         <!-- CLEAR BUTTON -->
         <button id="clearAllTemplateTextButton"
                 class="paste-template-item"
@@ -567,5 +552,44 @@
     <div id="annotationTooltip" class="no-hit-test"></div>
     <div id="dragOverlay" draggable="true"></div>
     <div id="tooltipOverlay" class="tooltip-overlay tooltiptext hidden no-hit-test"></div>
+    <div id="tooltipDefs" class="hidden no-hit-test">
+        <!-- DYNAMIC HINT -->
+        <div class="template-dynamic tooltiptext">
+            <p>All occurances of this template will be set to the value you provide here</p>
+        </div>
+
+        <!-- CONTACT HINT 1 -->
+        <div class="template-contact tooltiptext">
+            <p>Using available contacts (requires a fetcher plugin) this field will be used for all instances of this template across this document or in any it will be referenced in later. So for example if select email address here then the email field of the contact you select will be used for all instances in this document.</p>
+        </div>
+
+        <!-- STATIC -->
+        <div class="template-static tooltiptext">
+            <p>Static templates are shared across the whole application. So the value you have here will always be used when pasting.</p>
+        </div>
+        <!-- DATE TIME HINT -->
+        <div class="template-datetime tooltiptext">
+            <p>yy = short year</p>
+            <p>yyyy = long year</p>
+            <p>M = month (1-12)</p>
+            <p>MM = month (01-12)</p>
+            <p>MMM = month abbreviation (Jan, Feb ... Dec)</p>
+            <p>MMMM = long month (January, February ... December)</p>
+            <p>d = day (1 - 31)</p>
+            <p>dd = day (01 - 31)</p>
+            <p>ddd = day of the week in words (Monday, Tuesday ... Sunday)</p>
+            <p>E = short day of the week in words (Mon, Tue ... Sun)</p>
+            <p>D - Ordinal day (1st, 2nd, 3rd, 21st, 22nd, 23rd, 31st, 4th...)</p>
+            <p>h = hour in am/pm (0-12)</p>
+            <p>hh = hour in am/pm (00-12)</p>
+            <p>H = hour in day (0-23)</p>
+            <p>HH = hour in day (00-23)</p>
+            <p>mm = minute</p>
+            <p>ss = second</p>
+            <p>SSS = milliseconds</p>
+            <p>a = AM/PM marker</p>
+            <p>p = a.m./p.m. marker</p>
+        </div>
+    </div>
 </body>
 </html>

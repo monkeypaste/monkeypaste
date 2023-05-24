@@ -21,8 +21,8 @@
         display: block;
     }
 
-.tooltip-block-container {
-    display: block !important;
+.tooltip-block-container:not(.invisible) {
+    display: block;
     position: absolute !important;
     font-size: 10px;
     width: 400px;
@@ -45,7 +45,7 @@
     min-width: 120px;
     height: auto;
     border: 1px solid var(--tooltipbordercolor);
-    border-radius: 6px;
+    border-radius: var(--commonborderradius);
     background-color: var(--tooltipbgcolor);
     color: var(--tooltipfgcolor);
     text-align: center;
@@ -64,7 +64,7 @@
         min-width: 120px;
         height: auto;
         border: 1px solid var(--tooltipbordercolor);
-        border-radius: 6px;
+        border-radius: var(--commonborderradius);
         background-color: var(--tooltipbgcolor);
         color: var(--tooltipfgcolor);
         text-align: center;

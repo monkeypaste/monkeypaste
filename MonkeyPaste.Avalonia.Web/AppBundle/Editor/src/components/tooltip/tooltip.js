@@ -52,12 +52,17 @@ function isShowingTooltipToolbar() {
 // #region Actions
 
 function showTooltipOverlay(targetElm, tooltipText) {
+	let is_html = false;
 	if (isNullOrUndefined(tooltipText) &&
 		targetElm &&
 		typeof targetElm.hasAttribute === 'function' &&
 		targetElm.hasAttribute(TOOLTIP_HOVER_ATTRB_NAME)) {
 		// only use attrb value if exists and not provided in param
 		tooltipText = targetElm.getAttribute(TOOLTIP_HOVER_ATTRB_NAME);
+		if (isNullOrEmpty(tooltipText)) {
+			tooltipText = targetElm.innerHTML;
+			is_html = true;
+		}
 	}
 	if (isNullOrEmpty(tooltipText)) {
 		// don't show empty tooltip
@@ -66,7 +71,11 @@ function showTooltipOverlay(targetElm, tooltipText) {
 	tooltipText = decodeStringWithShortcut(tooltipText);
 
 	let tt_elm = getTooltipOverlayElement();
-	tt_elm.innerHTML = `<span class="tooltiptext">${tooltipText}</span>`;
+	if (is_html) {
+		tt_elm.innerHTML = tooltipText;
+	} else {
+		tt_elm.innerHTML = `<span class="tooltiptext">${tooltipText}</span>`;
+	}
 	let target_rect = targetElm.getBoundingClientRect();
 	tt_elm.classList.remove('hidden');
 	let tt_rect = tt_elm.getBoundingClientRect();
