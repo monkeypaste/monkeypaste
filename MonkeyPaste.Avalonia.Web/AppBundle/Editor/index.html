@@ -72,7 +72,6 @@
     <link href="src/components/template/template-style.css" rel="stylesheet" />
     <link href="src/components/template/toolbar/edit/edit-template-toolbar-style.css" rel="stylesheet" />
     <link href="src/components/template/toolbar/paste/paste-toolbar-template-items-style.css" rel="stylesheet" />
-    <link href="src/components/template/toolbar/paste/selector/paste-toolbar-template-selector-style.css" rel="stylesheet" />
 
     <link href="src/components/content/content-style.css" rel="stylesheet" />
     <link href="src/components/content/content-file-list/content-file-list-style.css" rel="stylesheet" />
@@ -120,6 +119,7 @@
 
 
     <!-- INTERNAL API BEGIN -->
+    <script defer src="src/components/globals/globals.js"></script>
     <script defer src="src/components/messages/messages_ntf.js"></script>
     <script defer src="src/components/util/debug.js"></script>
 
@@ -199,9 +199,10 @@
     <script defer src="src/components/template/toolbar/paste/pasteTemplateToolbarItems.js"></script>
     <script defer src="src/components/template/toolbar/paste/selector/pasteTemplateFocusSelector.js"></script>
 
-    <script defer src="src/components/template/toolbar/paste/types/contacts/templateContact.js"></script>
-    <script defer src="src/components/template/toolbar/paste/types/datetime/templateDateTime.js"></script>
-    <script defer src="src/components/template/toolbar/paste/types/dynamicAndStatic/templateDynamicAndStatic.js"></script>
+    <script defer src="src/components/template/toolbar/paste/value/pasteTemplateValue.js"></script>
+    <script defer src="src/components/template/toolbar/paste/value/types/contacts/templateContact.js"></script>
+    <script defer src="src/components/template/toolbar/paste/value/types/datetime/templateDateTime.js"></script>
+    <script defer src="src/components/template/toolbar/paste/value/types/dynamicAndStatic/templateDynamicAndStatic.js"></script>
 
     <script defer src="src/components/color/colorpalette.js"></script>
     <script defer src="src/components/color/colordata.js"></script>
@@ -459,7 +460,7 @@
     <!-- PASTE TOOLBAR -->
     <div id="pasteToolbar"
          class="common-toolbar bottom-align paste-toolbar hidden">
-        <div class="resizer resizer-t"></div>
+        <!--<div class="resizer resizer-t"></div>-->
         <!-- SELECTOR -->
         <div id="pasteTemplateToolbarMenuSelectorDiv"
              class="paste-template-item">
@@ -469,23 +470,24 @@
 
         <!-- CONTACT TEMPLATE -->
 
-        <div id="pasteTemplateToolbarContactFieldSelectorContainer" class="hidden"></div>
+        <div id="pasteTemplateToolbarContactFieldSelectorContainer" class="paste-template-item hidden"></div>
 
         <!-- DATETIME TEMPLATE -->
 
-        <div id="pasteTemplateToolbarDateTimeFormatSelectorContainer" class="hidden"></div>
+        <div id="pasteTemplateToolbarDateTimeFormatSelectorContainer" class="paste-template-item hidden"></div>
 
         <!-- DYNAMIC/STATIC TEMPLATE -->
-        <textarea id="templatePasteValueTextArea"
-                  class="paste-template-item"
-                  rows="1"
-                  cols="20"
-                  tabindex="1"
-                  spellcheck="false"
-                  placeholder="Enter paste text..."></textarea>
+        <div id="pasteTemplateToolbarDasContainer" class="paste-template-item hidden">
+            <textarea id="templatePasteValueTextArea"
+                      rows="1"
+                      cols="20"
+                      tabindex="1"
+                      spellcheck="false"
+                      placeholder="Enter paste text..."></textarea>
+        </div>
 
         <!-- PASTE VALUE HINT INFO -->
-        <div id="templatePasteValueHintOuterContainer" class="tooltip-hint-container" hover-tooltip=""></div>
+        <div id="templatePasteValueHintOuterContainer" class="paste-template-item tooltip-hint-container" hover-tooltip=""></div>
         <!-- CLEAR BUTTON -->
         <button id="clearAllTemplateTextButton"
                 class="paste-template-item"

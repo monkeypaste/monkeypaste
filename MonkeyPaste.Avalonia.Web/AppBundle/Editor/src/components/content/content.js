@@ -1,15 +1,14 @@
 // #region Globals
-const CONTENT_CLASS_PREFIX = 'content';
-var ContentClassAttrb = null;
+//const globals.CONTENT_CLASS_PREFIX = 'content';
+//var globals.ContentClassAttrb = null;
 
-var ContentHandle = null;
-var ContentItemType = 'Text';
+//var globals.ContentHandle = null;
+//var globals.ContentItemType = 'Text';
 
-var ContentScreenshotBase64Str = null;
 
-const InlineTags = ['span', 'a', 'em', 'strong', 'u', 's', 'sub', 'sup', 'img'];
-const BlockTags = ['p', 'ol', 'ul', 'li', 'div', 'table', 'colgroup', 'col', 'tbody', 'tr', 'td', 'iframe', 'blockquote', 'pre']
-const AllDocumentTags = [...InlineTags, ...BlockTags];
+//const globals.InlineTags = ['span', 'a', 'em', 'strong', 'u', 's', 'sub', 'sup', 'img'];
+//const globals.BlockTags = ['p', 'ol', 'ul', 'li', 'div', 'table', 'colgroup', 'col', 'tbody', 'tr', 'td', 'iframe', 'blockquote', 'pre']
+//const globals.AllDocumentTags = [...globals.InlineTags, ...globals.BlockTags];
 
 // #endregion Globals
 
@@ -17,6 +16,7 @@ const AllDocumentTags = [...InlineTags, ...BlockTags];
 
 function loadContent(
 	isContentReadOnly,
+	isContentSubSelectionEnabled,
 	contentHandle,
 	contentType,
 	contentData,
@@ -25,7 +25,7 @@ function loadContent(
 	annotationsJsonStr) {
 	// NOTE only called fromHost (or tester which calls _ext)
 
-	let is_reload = contentHandle == ContentHandle;
+	let is_reload = contentHandle == globals.ContentHandle;
 	let was_sub_sel_enabled = null;
 	let was_editable = null;
 
@@ -40,23 +40,11 @@ function loadContent(
 
 		quill.enable(true);
 
-		ContentHandle = contentHandle;
-		ContentItemType = contentType;
+		globals.ContentHandle = contentHandle;
+		globals.ContentItemType = contentType;
 
 		// set editor content classes
-		if (ContentItemType == 'Text') {
-			getEditorContainerElement().classList.add('text-content');
-			getEditorContainerElement().classList.remove('image-content');
-			getEditorContainerElement().classList.remove('file-list-content');
-		} else if (ContentItemType == 'Image') {
-			getEditorContainerElement().classList.remove('text-content');
-			getEditorContainerElement().classList.add('image-content');
-			getEditorContainerElement().classList.remove('file-list-content');
-		} else if (ContentItemType == 'FileList') {
-			getEditorContainerElement().classList.remove('text-content');
-			getEditorContainerElement().classList.remove('image-content');
-			getEditorContainerElement().classList.add('file-list-content');
-		}
+		initContentClassStyle();
 
 		let sel_to_restore = null;
 		if (is_reload) {
@@ -81,26 +69,26 @@ function loadContent(
 
 		updateQuill();
 		if (!is_reload) {
-			// need to wait for content before enabling append 
+			// need to wait for content before enabling append
 			// or it won't scroll to end (only relevant for !pre state)
 			updateAppendModeState(append_state, true);
-			if (!isAnyAppendEnabled()) {
-				// let append trigger edit/selection stuff, only set for non-append
-
-				if (isContentReadOnly) {
-					enableReadOnly(true);
-					disableSubSelection(true);
-				} else {
-					disableReadOnly(true);
-				}
+			if (isContentSubSelectionEnabled) {
+				enableSubSelection(true);
+			} else {
+				disableSubSelection(true);
+			}
+			if (isContentReadOnly) {
+				enableReadOnly(true);
+			} else {
+				disableReadOnly(true);
 			}
 		}
 		
-		if (ContentItemType != 'Text') {
+		if (globals.ContentItemType != 'Text') {
 			quill.enable(false);
 		}
 
-		if (ContentItemType == 'Image') {
+		if (globals.ContentItemType == 'Image') {
 			// NOTE pass annotations so load after image dimensions are known
 			populateContentImageDataSize(annotationsJsonStr);
 		} else {
@@ -143,13 +131,37 @@ function loadContent(
 	}
 }
 
+function initContentClassStyle() {
+	if (globals.ContentItemType == 'Text') {
+		getEditorContainerElement().classList.add('text-content');
+		getEditorContainerElement().classList.remove('image-content');
+		getEditorContainerElement().classList.remove('file-list-content');
+		return;
+	}
+	if (globals.ContentItemType == 'Image') {
+		getEditorContainerElement().classList.remove('text-content');
+		getEditorContainerElement().classList.add('image-content');
+		getEditorContainerElement().classList.remove('file-list-content');
+		return;
+	}
+	if (globals.ContentItemType == 'FileList') {
+		getEditorContainerElement().classList.remove('text-content');
+		getEditorContainerElement().classList.remove('image-content');
+		getEditorContainerElement().classList.add('file-list-content');
+		return;
+	} 
+
+	getEditorContainerElement().classList.remove('text-content');
+	getEditorContainerElement().classList.remove('image-content');
+	getEditorContainerElement().classList.remove('file-list-content');
+}
 function initContentClassAttributes() {
 	const Parchment = Quill.imports.parchment;
 	let suppressWarning = true;
 	let config = {
 		scope: Parchment.Scope.ANY,
 	};
-	ContentClassAttrb = new Parchment.ClassAttributor('contentType',CONTENT_CLASS_PREFIX, config);
+	globals.ContentClassAttrb = new Parchment.ClassAttributor('contentType',globals.CONTENT_CLASS_PREFIX, config);
 
 	Quill.register(LinkTypeAttrb, suppressWarning);
 
@@ -159,7 +171,7 @@ function initContentClassAttributes() {
 // #region Getters
 
 function getContentHandle() {
-	return ContentHandle;
+	return globals.ContentHandle;
 }
 
 function getContentAsMessage() {
@@ -177,51 +189,51 @@ function getContentAsMessage() {
 }
 
 function getContentData() {
-	if (ContentItemType == 'Text') {
+	if (globals.ContentItemType == 'Text') {
 		return getTextContentData();
 	}
-	if (ContentItemType == 'Image') {
+	if (globals.ContentItemType == 'Image') {
 		return getImageContentData();
 	}
-	if (ContentItemType == 'FileList') {
+	if (globals.ContentItemType == 'FileList') {
 		return getFileListContentData();
 	}
 	return '';
 }
 
 function getEncodedContentText(range) {
-	if (ContentItemType == 'Text') {
+	if (globals.ContentItemType == 'Text') {
 		return getEncodedTextContentText(range);
 	}
-	if (ContentItemType == 'Image') {
+	if (globals.ContentItemType == 'Image') {
 		return getEncodedImageContentText(range);
 	}
-	if (ContentItemType == 'FileList') {
+	if (globals.ContentItemType == 'FileList') {
 		return getEncodedFileListContentText(range);
 	}
 	return '';
 }
 
 function getDecodedContentText(encodedText) {
-	if (ContentItemType == 'Text') {
+	if (globals.ContentItemType == 'Text') {
 		return getDecodedTextContentText(encodedText);
 	}
-	if (ContentItemType == 'Image') {
+	if (globals.ContentItemType == 'Image') {
 		return getDecodedImageContentText(encodedText);
 	}
-	if (ContentItemType == 'FileList') {
+	if (globals.ContentItemType == 'FileList') {
 		return getDecodedFileListContentText(encodedText);
 	}
 	return '';
 }
 
 function getContentBg(htmlStr, contrast_opacity = 0.5) {
-	if (ContentItemType != 'Text') {
+	if (globals.ContentItemType != 'Text') {
 		return cleanColor();
 	}
 
-	let html_doc = DomParser.parseFromString(htmlStr, 'text/html');
-	let elms = html_doc.querySelectorAll(InlineTags.join(", ") + ',' + BlockTags.join(','));
+	let html_doc = globals.DomParser.parseFromString(htmlStr, 'text/html');
+	let elms = html_doc.querySelectorAll(globals.InlineTags.join(", ") + ',' + globals.BlockTags.join(','));
 
 	let bright_fg_count = 0;
 	let dark_fg_count = 0;
@@ -261,25 +273,25 @@ function getContentHeight() {
 
 
 function getContentWidthByType() {
-	if (ContentItemType == 'Text') {
+	if (globals.ContentItemType == 'Text') {
 		return getTextContentCharCount();
 	}
-	if (ContentItemType == 'FileList') {
+	if (globals.ContentItemType == 'FileList') {
 		return getTotalFileSize();
 	}
-	if (ContentItemType == 'Image') {
+	if (globals.ContentItemType == 'Image') {
 		return getImageContentWidth();
 	}
 }
 
 function getContentHeightByType() {
-	if (ContentItemType == 'Text') {
+	if (globals.ContentItemType == 'Text') {
 		return getTextContenLineCount();
 	}
-	if (ContentItemType == 'FileList') {
+	if (globals.ContentItemType == 'FileList') {
 		return getFileCount();
 	}
-	if (ContentItemType == 'Image') {
+	if (globals.ContentItemType == 'Image') {
 		return getImageContentHeight();
 	}
 }
@@ -303,7 +315,7 @@ function isContentEmpty() {
 }
 
 function canEnableSubSelection() {
-	//return ContentItemType != 'Image';
+	//return globals.ContentItemType != 'Image';
 	return true;
 }
 
@@ -321,7 +333,7 @@ function canDisableSubSelection() {
 }
 
 function canDisableReadOnly() {
-	return ContentItemType == 'Text';
+	return globals.ContentItemType == 'Text';
 }
 // #endregion State
 
@@ -330,11 +342,11 @@ function canDisableReadOnly() {
 function convertContentToFormats(isForOle, formats) {
 	updateQuill();
 	let items = null;
-	if (ContentItemType == 'Text') {
+	if (globals.ContentItemType == 'Text') {
 		items = convertTextContentToFormats(isForOle, formats);
-	} else if (ContentItemType == 'FileList') {
+	} else if (globals.ContentItemType == 'FileList') {
 		items = convertFileListContentToFormats(isForOle, formats);
-	} else if (ContentItemType == 'Image') {
+	} else if (globals.ContentItemType == 'Image') {
 		items = convertImageContentToFormats(isForOle, formats);
 	}
 	return items;
@@ -344,32 +356,32 @@ function appendContentData(data) {
 	if (isNullOrEmpty(data)) {
 		return;
 	}
-	if (ContentItemType == 'Text') {
+	if (globals.ContentItemType == 'Text') {
 		appendTextContentData(data);
-	} else if (ContentItemType == 'FileList') {
+	} else if (globals.ContentItemType == 'FileList') {
 		appendFileListContentData(data);
-	} else if (ContentItemType == 'Image') {
+	} else if (globals.ContentItemType == 'Image') {
 		appendImageContentData(data);
 	}
 }
 
 function loadContentData(contentData) {
-	// enusre IsLoaded is false so msg'ing doesn't get clogged up
-	IsLoaded = false;
+	// enusre globals.IsLoaded is false so msg'ing doesn't get clogged up
+	globals.IsLoaded = false;
 
-	if (ContentItemType == 'Image') {
+	if (globals.ContentItemType == 'Image') {
 		loadImageContent(contentData);
-	} else if (ContentItemType == 'FileList') {
+	} else if (globals.ContentItemType == 'FileList') {
 		loadFileListContent(contentData);
-	} else if (ContentItemType == 'Text') {
+	} else if (globals.ContentItemType == 'Text') {
 		loadTextContent(contentData);
 	}
 
-	IsLoaded = true;
+	globals.IsLoaded = true;
 }
 
 function updateContentSizeAndPosition() {
-	if (ContentItemType == 'Image') {
+	if (globals.ContentItemType == 'Image') {
 		updateImageContentSizeAndPosition();
 		return;
 	}

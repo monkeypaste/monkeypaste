@@ -155,7 +155,8 @@ function createTemplateSelectorItem(t, sel, ftguid, onClick) {
     // CONTAINER
     item_elm.appendChild(icon_elm);
     item_elm.appendChild(label_elm);
-    if (is_disabled) {
+    if (is_disabled && globals.IS_SMART_TEMPLATE_NAV_ENABLED) {
+        // NOTE only show 'disabled' if using the smart (ignore static nav is enabled)
         item_elm.classList.add('disabled');
     }
     if (is_unavailable) {

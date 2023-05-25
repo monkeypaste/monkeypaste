@@ -85,37 +85,10 @@ function getTemplatePasteValue(t) {
     if (!t) {
         return '';
     }
-    let pv = '';
-    let ttype = t.templateType.toLowerCase();
-
-    if (ttype == 'dynamic') {
-        pv = t.templateText;
-	} else if (ttype == 'static') {
-        pv = t.templateData;
-    } else if (ttype == 'datetime') {
-        pv = t.templateText;
-    } else if (ttype == 'contact') {
-        //if (isNullOrWhiteSpace(t.templateData)) {
-        //    // error, data must be contact field on hide edit template
-        //    //debugger;
-        //    //return null;
-        //    pv = 'Full Name';
-        //}
-
-        //if (SelectedContactGuid == null) {
-        //    // TODO should be selected fro drop down in paste toolbar
-        //    //pv = null;
-        //}
-
-        //pv = getContactFieldValue(SelectedContactGuid, t.templateData);
-
-        pv = t.templateText;
+    if (isTemplateStatic(t)) {
+        return t.templateData;
     }
-
-    if (pv == null) {
-        return '';
-    }
-    return pv;
+    return t.templateText;
 }
 
 function getPasteTemplateDefs() {
@@ -133,13 +106,14 @@ function setTemplateData(tguid, newTemplateData) {
     for (var i = 0; i < telms.length; i++) {
         let telm = telms[i];
         telm.setAttribute('templateData', newTemplateData);
-        //if (isShowingPasteToolbar()) {
-        //    let t = getTemplateFromDomNode(telm);
-        //    let t_text = getTemplatePasteValue(t);
-        //    telm.setAttribute('templateText', t_text);
-        //    setTemplateElementText(telm, t_text);
-        //    //telm.innerText = t_text;
-        //}
+    }
+}
+
+function setTemplateState(tguid, newTemplateState) {
+    let telms = getTemplateElements(tguid);
+    for (var i = 0; i < telms.length; i++) {
+        let telm = telms[i];
+        telm.setAttribute('templateState', newTemplateState);
     }
 }
 
@@ -210,8 +184,12 @@ function findPasteFocusTemplate(sel) {
 function gotoNextTemplate(force_tguid = null) {
     let ftguid = force_tguid ? force_tguid : getFocusTemplateGuid();
     let sel_tl = getPasteTemplateDefs();
-    // ignore non-input if input is in selection
-    let ignoreNonInputTemplates = sel_tl.filter(x => isTemplateAnInputType(x)).length > 0;
+
+    let ignoreNonInputTemplates = globals.IS_SMART_TEMPLATE_NAV_ENABLED;
+    if (ignoreNonInputTemplates) {
+        // ignore non-input if input is in selection
+        ignoreNonInputTemplates = sel_tl.filter(x => isTemplateAnInputType(x)).length > 0;
+    }
     let curIdx = 0;
     for (var i = 0; i < sel_tl.length; i++) {
         if (sel_tl[i].templateGuid == ftguid) {
@@ -238,7 +216,11 @@ function gotoPrevTemplate(force_tguid = null) {
     let sel_tl = getPasteTemplateDefs();
 
     // ignore non-input if input is in selection
-    let ignoreNonInputTemplates = sel_tl.filter(x => isTemplateAnInputType(x)).length > 0;
+    let ignoreNonInputTemplates = globals.IS_SMART_TEMPLATE_NAV_ENABLED;
+    if (ignoreNonInputTemplates) {
+        // ignore non-input if input is in selection
+        ignoreNonInputTemplates = sel_tl.filter(x => isTemplateAnInputType(x)).length > 0;
+    }
     let curIdx = 0;
     for (var i = 0; i < sel_tl.length; i++) {
         if (sel_tl[i].templateGuid == ftguid) {
@@ -271,6 +253,7 @@ function updatePasteToolbarSizesAndPositions() {
 }
 
 function updatePasteValueTextAreaSize() {
+    return;
     // sanity padding to avoid single line y scroll bar
 
     getPasteValueTextAreaElement().style.height = '0px';

@@ -18,7 +18,7 @@ function onReadOnlyChanged_ntf(isReadOnly) {
 	// output (true) MpQuillEditorContentChangedMessage
 	// output (false) MpQuillDisableReadOnlyResponseMessage
 
-	if (!IsLoaded) {
+	if (!globals.IsLoaded) {
 		return;
 	}
 	if (isReadOnly) {

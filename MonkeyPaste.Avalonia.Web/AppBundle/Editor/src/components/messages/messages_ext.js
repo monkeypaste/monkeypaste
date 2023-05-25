@@ -35,6 +35,7 @@ function loadContent_ext(loadContentMsgStr_base64) {
 
 	loadContent(
 		req.isReadOnly,
+		req.isSubSelectionEnabled,
 		req.contentHandle,
 		req.contentType,
 		req.itemData,
@@ -86,17 +87,17 @@ function updateContents_ext(updateContentsReqStr_base64) {
 	loadAnnotations(req.annotationFragmentStr, false);
 }
 
-function disableReadOnly_ext(disableReadOnlyReqStrOrObj) {
-	// input MpQuillDisableReadOnlyRequestMessage
+function disableReadOnly_ext() {
+	// input NONE
 
 	//let disableReadOnlyMsg = toJsonObjFromBase64Str(disableReadOnlyReqStrOrObj);
-	//availableTemplates = disableReadOnlyMsg.allAvailableTextTemplates;
+	//globals.availableTemplates = disableReadOnlyMsg.allAvailableTextTemplates;
 	disableReadOnly(true);
 	clearLastDelta();
 
 	// output MpQuillDisableReadOnlyResponseMessage
 
-	let respObj = { editorWidth: DefaultEditorWidth };
+	let respObj = { editorWidth: globals.DefaultEditorWidth };
 	let resp = toBase64FromJsonObj(respObj);
 
 	return resp; 
@@ -237,6 +238,17 @@ function dragEventFromHost_ext(dragEnterMsgBase64Str) {
 function updateShortcuts_ext(shortcutsMsgBase64Str) {
 	// input 'MpQuillEditorShortcutKeystringMessage'
 	initShortcuts(shortcutsMsgBase64Str);
+}
+
+function sharedTemplateChanged_ext(changedTemplateTypeMsgBase64Str) {
+	// input 'MpQuillSharedTemplateDataChangedMessage'
+	let req = toJsonObjFromBase64Str(changedTemplateTypeMsgBase64Str);
+
+	if (!hasSharedTemplates()) {
+		return;
+	}
+	updateLocalTemplatesFromDb();
+
 }
 //function setSelection_ext(selMsgBase64Str) {
 //	// input 'MpQuillSelectionChangedMessage'

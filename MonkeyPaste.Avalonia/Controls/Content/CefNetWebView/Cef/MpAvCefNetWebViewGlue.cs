@@ -5,6 +5,7 @@ using Avalonia.Threading;
 using CefNet;
 using CefNet.Avalonia;
 using CefNet.Internal;
+using System.Windows.Controls;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvCefNetWebViewGlue : AvaloniaWebViewGlue {
@@ -67,6 +68,7 @@ namespace MonkeyPaste.Avalonia {
         protected override void UpdateDragCursor(CefBrowser browser, CefDragOperationsMask operation) {
             base.UpdateDragCursor(browser, operation);
         }
+
         protected override void OnBeforeContextMenu(CefBrowser browser, CefFrame frame, CefContextMenuParams menuParams, CefMenuModel model) {
             // ensure default cefnet context menu is empty
             model.Clear();

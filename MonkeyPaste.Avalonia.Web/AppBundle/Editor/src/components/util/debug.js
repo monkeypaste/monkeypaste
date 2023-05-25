@@ -9,7 +9,7 @@ Object.defineProperty(this, "log", {
         for (var i = 0; i < args.length; i++) {
             if (i == 0 && args[i] == 'table') {
                 const table_data = args.length == 1 ? null : args[i + 1]; 
-                return IsDebug ? console.table.bind(window.console, table_data)
+                return globals.IsDebug ? console.table.bind(window.console, table_data)
                     : function () { };
             }
             if (typeof args[i] === 'string' || args[i] instanceof String) {
@@ -20,7 +20,7 @@ Object.defineProperty(this, "log", {
         }
         log_str = '[' + dateTimeStr.trim() + '] [DEBUG]  ' + log_str;
 
-        return IsDebug ? console.log.bind(window.console, log_str) 
+        return globals.IsDebug ? console.log.bind(window.console, log_str) 
             : function () { };
     }
 });
@@ -29,7 +29,7 @@ function initDebug() {
 }
 
 function logtable(table_obj) {
-    if (!IsDebug) {
+    if (!globals.IsDebug) {
         return;
     }
     console.table(table_obj);

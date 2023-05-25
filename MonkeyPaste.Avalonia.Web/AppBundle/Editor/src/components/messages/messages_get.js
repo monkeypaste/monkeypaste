@@ -8,7 +8,7 @@ var PendingGetResponses = [];
 
 // #region Getters
 
-async function getAllNonInputTemplatesFromDbAsync_get() {
+async function getAllSharedTemplatesFromDbAsync_get() {
     // output 'MpQuillNonInputTemplateRequestMessage'
     let all_non_input_templates = [];
     if (isRunningOnHost()) {
@@ -19,7 +19,7 @@ async function getAllNonInputTemplatesFromDbAsync_get() {
                 'DateTime'
             ]
         };
-        all_non_input_templates = await processGetRequestAsync('getAllNonInputTemplatesFromDb', JSON.stringify(req));
+        all_non_input_templates = await processGetRequestAsync('getAllSharedTemplatesFromDb', JSON.stringify(req));
     } else {
 
         await delay(1000);
@@ -63,7 +63,7 @@ async function getContactsFromFetcherAsync_get() {
 
 function getContactFieldList_get() {
     // TODO pull these in w/ actual contact stuff
-    if (IsTesting) {
+    if (globals.IsTesting) {
         let contact_fields = [
             "First Name",
             "Last Name",
@@ -78,22 +78,22 @@ function getContactFieldList_get() {
 }
 
 function getContactFieldValue_get(contact_guid, field) {
-    if (IsTesting) {
-        if (!AvailableContacts ||
-            AvailableContacts.length == 0 ||
+    if (globals.IsTesting) {
+        if (!globals.AvailableContacts ||
+            globals.AvailableContacts.length == 0 ||
             isNullOrWhiteSpace(contact_guid) ||
             isNullOrWhiteSpace(field)) {
             return null;
         }
-        for (var i = 0; i < AvailableContacts.length; i++) {
-            let contact = AvailableContacts[i];
+        for (var i = 0; i < globals.AvailableContacts.length; i++) {
+            let contact = globals.AvailableContacts[i];
             if (contact.guid == contact_guid) {
                 return contact[field];
             }
         }
         return null;
     }
-    // AvailableContacts shouldn't have any data besides label and guid
+    // globals.AvailableContacts shouldn't have any data besides label and guid
     // so host should get this data
     return null;
 }

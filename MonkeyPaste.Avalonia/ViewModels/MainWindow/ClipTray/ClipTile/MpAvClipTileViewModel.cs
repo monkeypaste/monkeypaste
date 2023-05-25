@@ -57,7 +57,10 @@ namespace MonkeyPaste.Avalonia {
 
         public const int AUTO_CYCLE_DETAIL_DELAY_MS = 5000;
         public const string TABLE_WRAPPER_CLASS_NAME = "quill-better-table-wrapper";
+
         public const double EDITOR_TOOLBAR_MIN_WIDTH = 830.0d;
+        public const double PASTE_APPEND_TOOLBAR_MIN_WIDTH = 290.0d;
+        public const double PASTE_TEMPLATE_TOOLBAR_MIN_WIDTH = 850.0d;
 
         #endregion
 
@@ -288,8 +291,27 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public MpRect ObservedBounds { get; set; }
-        public double MinWidth =>
-            Parent == null ? 0 : IsPinned ? Parent.DefaultPinItemWidth : Parent.DefaultQueryItemWidth;
+        //public double MinWidth =>
+        //    IsPinned ? Parent.DefaultPinItemWidth : Parent.DefaultQueryItemWidth;
+        public double MinWidth {
+            get {
+                if (Parent == null) {
+                    return 0;
+                }
+                if (!IsSubSelectionEnabled || !IsChildWindowOpen) {
+                    return IsPinned ? Parent.DefaultPinItemWidth : Parent.DefaultQueryItemWidth;
+                }
+                if (IsContentReadOnly) {
+                    if (HasTemplates) {
+                        return PASTE_TEMPLATE_TOOLBAR_MIN_WIDTH;
+                    }
+                    if (IsAppendNotifier) {
+                        return PASTE_APPEND_TOOLBAR_MIN_WIDTH;
+                    }
+                }
+                return EDITOR_TOOLBAR_MIN_WIDTH;
+            }
+        }
         public double MinHeight =>
             Parent == null ? 0 : IsPinned ? Parent.DefaultPinItemHeight : Parent.DefaultQueryItemHeight;
 
@@ -1167,12 +1189,19 @@ namespace MonkeyPaste.Avalonia {
             #region Window Bindings
 
             pow.Bind(
-            Window.WindowStateProperty,
-            new Binding() {
-                Source = this,
-                Path = nameof(PopOutWindowState),
-                Mode = BindingMode.TwoWay
-            });
+                Window.WindowStateProperty,
+                new Binding() {
+                    Source = this,
+                    Path = nameof(PopOutWindowState),
+                    Mode = BindingMode.TwoWay
+                });
+
+            pow.Bind(
+                Window.MinWidthProperty,
+                new Binding() {
+                    Source = this,
+                    Path = nameof(MinWidth)
+                });
 
             pow.Bind(
                 Window.TitleProperty,

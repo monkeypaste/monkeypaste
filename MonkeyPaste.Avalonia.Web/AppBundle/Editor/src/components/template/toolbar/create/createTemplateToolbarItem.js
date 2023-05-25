@@ -1,36 +1,5 @@
 ﻿// #region Globals
 
-var TemplateTypesMenuOptions = [
-    {
-        label: 'Dynamic',
-        icon: 'text'
-    },
-    {
-        label: 'Static',
-        icon: 'snowflake'
-    },
-    /* {
-         label: 'Content',
-         icon: 'fa-solid fa-clipboard'
-     },
-     {
-         label: 'Analyzer',
-         icon: 'fa-solid fa-scale-balanced'
-     },
-     {
-         label: 'Action',
-         icon: 'fa-solid fa-bolt-lightning'
-     },*/
-    {
-        label: 'Contact',
-        icon: 'contact'
-    },
-    {
-        label: 'DateTime',
-        icon: 'datetime'
-    }
-];
-
 // #endregion Globals
 
 // #region Life Cycle
@@ -94,7 +63,7 @@ function createTemplateFromDropDown(templateObjOrId, newTemplateType) {
         let sel_html_format = '';
         let sel_head_html_str = getHtml({ index: range.index, length: 1 });
         if (sel_head_html_str != null && sel_head_html_str.length > 0) {
-            let sel_head_html_doc = DomParser.parseFromString(sel_head_html_str, 'text/html');
+            let sel_head_html_doc = globals.DomParser.parseFromString(sel_head_html_str, 'text/html');
             let sel_head_p_elms = sel_head_html_doc.getElementsByTagName('p');
             if (sel_head_p_elms != null && sel_head_p_elms.length > 0) {
                 let sel_head_p_elm = sel_head_p_elms[0];
@@ -161,7 +130,7 @@ function showTemplateToolbarContextMenu() {
         }
     ];
     superCm.createMenu(spinner_mil, { pageX: x, pageY: y });
-    getAllNonInputTemplatesFromDbAsync_get()
+    getAllSharedTemplatesFromDbAsync_get()
         .then((result) => {
             result = result ? result : [];
 
@@ -173,8 +142,8 @@ function showTemplateToolbarContextMenu() {
 
             let cm = [];
 
-            for (var i = 0; i < TemplateTypesMenuOptions.length; i++) {
-                let tmi = TemplateTypesMenuOptions[i];
+            for (var i = 0; i < globals.TemplateTypesMenuOptions.length; i++) {
+                let tmi = globals.TemplateTypesMenuOptions[i];
 
                 let allTemplateDefsForType = allTemplateDefs.filter(x => x.templateType.toLowerCase() == tmi.label.toLowerCase());
 
@@ -214,6 +183,7 @@ function hideCreateTemplateToolbarContextMenu() {
         superCm.destroyMenu();
     }
 }
+
 // #endregion Actions
 
 // #region Event Handlers

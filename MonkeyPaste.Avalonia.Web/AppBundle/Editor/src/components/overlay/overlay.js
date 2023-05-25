@@ -42,7 +42,7 @@ function getPreviewLines(drop_idx, block_state) {
     }
 
     let editor_rect = getEditorContainerRect(false);
-    if (ContentItemType == 'FileList') {
+    if (globals.ContentItemType == 'FileList') {
         // use tr elements here
         const cell_elm = getTableCellElementAtDocIdx(drop_idx);
         if (cell_elm) {
@@ -327,7 +327,8 @@ function onCaretBlinkTick() {
     } else {
         CaretBlinkOffColor = 'transparent'
     }
-    if (WindowMouseDownLoc != null) {
+    if (WindowMouseDownLoc != null &&
+        !isAnyAppendEnabled()) {
         // don't blink if sel changing
         return;
     }

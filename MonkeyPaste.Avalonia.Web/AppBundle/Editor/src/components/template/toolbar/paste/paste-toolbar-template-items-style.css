@@ -1,20 +1,123 @@
 ﻿
+/* TEMPLATE SELECTOR START */
+#pasteTemplateToolbarMenuSelectorDiv {
+    width: 15%;
+    height: 30px;
+    align-items: center;
+    margin: 5px 5px 5px 10px;
+    padding: 2px 20px 2px 2px;
+    background-color: var(--editableeditorbgcolor_opaque);
+    border: 1px solid var(--editableeditorbgcolor_opaque);
+    border-radius: var(--commonborderradius);
+    /*transition: 0.4s;*/
+}
+
+    #pasteTemplateToolbarMenuSelectorDiv.disabled {
+        /*user-select: none;*/
+    }
+
+    #pasteTemplateToolbarMenuSelectorDiv:hover {
+        border: 1.25px solid yellow;
+        cursor: pointer;
+    }
+
+#selectedPasteTemplateOptionDiv {
+    width: 100%;
+}
+
+#pasteTemplateToolbarMenuSelectorArrowDiv {
+    /*style the arrow inside the select element:*/
+    content: "";
+    transform: translate(5px,3px);
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-color: var(--defcontentfgcolor) transparent transparent transparent;
+}
+
+    #pasteTemplateToolbarMenuSelectorArrowDiv.active {
+        border-color: transparent transparent var(--defcontentfgcolor) transparent;
+        transform: translate(5px,-3px) scaleY(1);
+    }
+
+#pasteOptionsDiv {
+    position: absolute;
+    min-width: 150px;
+    display: block;
+    overflow: auto;
+    background-color: var(--editableeditorbgcolor_opaque);
+    border: 1px solid var(--defcontentfgcolor);
+    transform: translate(0px,-10px);
+    border-radius: var(--commonborderradius);
+}
+
+    #pasteOptionsDiv > div:hover {
+        background-color: var(--opthovercolor) !important;
+        width: 100%;
+    }
+
+    #pasteOptionsDiv > div.selected-paste-option {
+        background-color: var(--optselectcolor) !important;
+        width: 100%;
+    }
+
+.paste-template-option-div {
+    display: inline-flex;
+    align-items: center;
+    background-color: transparent !important;
+    cursor: pointer !important
+}
+
+.paste-template-option-icon {
+    border-radius: var(--commonborderradius);
+    border: 0px solid black;
+    width: fit-content;
+    height: inherit;
+    max-width: 30px;
+    margin: 5px;
+    padding: 3px;
+}
+.paste-template-option-icon svg {
+    width: 15px;
+    height: 15px;
+    margin-left: 3px;
+}
+
+.paste-template-option-label {
+    white-space: nowrap;
+    overflow-x: hidden;
+    padding: 7px 5px; 
+}
+
+/* TEMPLATE SELECTOR END */
+
+
 div.template-datetime {
     line-height: 0.3em;
 }
 
 #pasteTemplateToolbarDateTimeFormatSelectorContainer select, 
 #pasteTemplateToolbarDateTimeFormatSelectorContainer input,
-#pasteTemplateToolbarContactFieldSelectorContainer select {
-    padding: 5px;
+#pasteTemplateToolbarContactFieldSelectorContainer select 
+#pasteTemplateToolbarDasContainer textarea {
     font-size: 16px;
+    padding: 6px;
     margin-left: 5px;
     margin-right:5px;
+    margin-top: 12px;
+    margin-bottom: 12px;
     border-radius: var(--commonborderradius);
 }
 
 #templatePasteValueTextArea {
+    box-sizing: border-box;
     margin: 12px;
     padding: 6px;
     border-width: 1px;
+    /* min-width is to show full placeholder*/
+    min-width: 180px;
+}
+
+#templatePasteValueHintOuterContainer {
+    margin-right: 20px;
 }

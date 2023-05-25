@@ -75,7 +75,7 @@ function setPasteToolbarDefaultFocus() {
 // #region State
 
 function isPastePopupAvailable() {
-    let result = ContentItemType != 'Image';
+    let result = globals.ContentItemType != 'Image';
     return result;
 }
 

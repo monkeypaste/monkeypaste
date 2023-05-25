@@ -25,7 +25,7 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 		history: {
 			delay: 1000,
 			userOnly: false,
-			maxStack: MaxUndoLimit < 0 ? Number.MAX_SAFE_INTEGER : MaxUndoLimit
+			maxStack: globals.MaxUndoLimit < 0 ? Number.MAX_SAFE_INTEGER : globals.MaxUndoLimit
 		},
 		syntax: true,
 		modules: {
@@ -41,7 +41,7 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 
 	let quill_instance = new Quill(editorId, quillOptions);
 
-	quill_instance.root.setAttribute("spellcheck", IsSpellCheckEnabled);
+	quill_instance.root.setAttribute("spellcheck", globals.IsSpellCheckEnabled);
 
 	quill_instance.getModule("toolbar").container.addEventListener("mousedown", (e) => {
 		e.preventDefault();
@@ -64,7 +64,7 @@ function getText(range, for_ole = false) {
 	//updateQuill();
 	range = range == null ? { index: 0, length: getDocLength() } : range;
 	let text = '';
-	if (IsLoaded && for_ole) {
+	if (globals.IsLoaded && for_ole) {
 		let encoded_text = getEncodedContentText(range);
 		text = getDecodedContentText(encoded_text);
 	} else {
@@ -86,7 +86,7 @@ function getRootHtml() {
 }
 
 function getHtml(range, encodeHtmlEntities = true) {
-	if (ContentItemType != 'Text') {
+	if (globals.ContentItemType != 'Text') {
 		return getRootHtml();
 	}
 	range = isNullOrUndefined(range) ? { index: 0, length: getDocLength() } : range;

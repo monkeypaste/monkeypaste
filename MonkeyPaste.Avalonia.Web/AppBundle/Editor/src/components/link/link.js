@@ -40,7 +40,7 @@ function initLinkClassAttributes() {
 
 
 function loadLinkHandlers() {
-    if (ContentItemType == 'FileList') {
+    if (globals.ContentItemType == 'FileList') {
         RequiredNavigateUriModKeys = ['Alt'];
     } else {
         RequiredNavigateUriModKeys = [];

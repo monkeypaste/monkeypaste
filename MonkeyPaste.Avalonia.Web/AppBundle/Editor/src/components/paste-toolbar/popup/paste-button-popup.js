@@ -133,7 +133,7 @@ function isPopupOptIdxIgnored(opt_idx) {
     if (!isAnyAppendEnabled()) {
         return true;
     }
-    if (ContentItemType == 'Text') {
+    if (globals.ContentItemType == 'Text') {
         return false;
     }
     if (!isAnyAppendEnabled() &&
@@ -266,13 +266,13 @@ function onPastePopupMenuOptionClick(optIdx) {
     } else if (optIdx == AppendPreIdx) {
         if (!IsAppendPreMode) {
             enablePreAppend(false);
-        } else if (ContentItemType == 'FileList') {
+        } else if (globals.ContentItemType == 'FileList') {
             disableAppendMode(false);
         }
     } else if (optIdx == AppendPostIdx) {
         if (IsAppendPreMode) {
             disablePreAppend(false);
-        } else if (ContentItemType == 'FileList') {
+        } else if (globals.ContentItemType == 'FileList') {
             disableAppendMode(false);
         }
     } else if (optIdx == DoneOptIdx) {

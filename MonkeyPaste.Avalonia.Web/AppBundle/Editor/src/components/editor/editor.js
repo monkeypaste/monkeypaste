@@ -1,14 +1,14 @@
 // #region Globals
 
-var DefaultEditorWidth = 1200;
+//var globals.DefaultEditorWidth = 1200;
 
-var IgnoreNextSelectionChange = false;
-var SuppressTextChangedNtf = false;
+//var globals.IgnoreNextSelectionChange = false;
+//var globals.SuppressTextChangedNtf = false;
 
-var IsSubSelectionEnabled = false;
-var IsReadOnly = false;
+//var IsSubSelectionEnabled = false;
+//var IsReadOnly = false;
 
-var EditorTheme = 'light';
+//var globals.EditorTheme = 'light';
 
 
 // #endregion Globals
@@ -16,7 +16,7 @@ var EditorTheme = 'light';
 // #region Life Cycle
 
 function initEditor() {
-	if (IsLoaded) {
+	if (globals.IsLoaded) {
 		log('editor already initialized, ignoring init');
 		return;
 	}
@@ -102,7 +102,7 @@ function isShowingEditorToolbar() {
 }
 
 function isAllSelected() {
-	if (ContentItemType != 'Text') {
+	if (globals.ContentItemType != 'Text') {
 		return true;
 	}
 	// NOTE doc length is never 0 and there's always an extra unselectable \n character at end so minus 1 for length to check here
@@ -113,7 +113,7 @@ function isAllSelected() {
 }
 
 function isNoneSelected() {
-	if (ContentItemType != 'Text') {
+	if (globals.ContentItemType != 'Text') {
 		return false;
 	}
 	let sel = getDocSelection();
@@ -378,18 +378,18 @@ function onEditorTextChanged(delta, oldDelta, source) {
 	
 	updateAllElements();
 
-	if (!IsLoaded) {
+	if (!globals.IsLoaded) {
 		return;
 	}
 	addHistoryItem(delta);
 
-	if (!IsTemplatePaddingAfterTextChange) {
+	if (!globals.IsTemplatePaddingAfterTextChange) {
 		updateTemplatesAfterTextChanged();
 	}
 
 	loadLinkHandlers();
 
-	if (!SuppressTextChangedNtf) {
+	if (!globals.SuppressTextChangedNtf) {
 		onContentChanged_ntf();
 	}
 	

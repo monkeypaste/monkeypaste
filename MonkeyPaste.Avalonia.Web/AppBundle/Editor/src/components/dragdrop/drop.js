@@ -175,7 +175,7 @@ function onDragEnter(e) {
         // NOTE called on every element drag enters, only need once
         return false;
     }
-    if (ContentItemType != 'Text') {
+    if (globals.ContentItemType != 'Text') {
         return false; 
     }
 

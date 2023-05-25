@@ -157,6 +157,13 @@ button {
         transform: rotate(360deg);
     }
 }
+input:placeholder-shown, 
+textarea:placeholder-shown {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: inherit;
+}
 
 .contrast-bg {
     color: inherit !important;
@@ -194,3 +201,4 @@ button {
     font-size: 10px;
     color: silver;
 }
+

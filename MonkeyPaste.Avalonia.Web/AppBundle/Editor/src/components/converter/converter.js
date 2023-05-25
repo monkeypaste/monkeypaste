@@ -13,7 +13,7 @@ function initPlainHtmlConverter() {
 	getEditorElement().classList.add('ql-editor-converter');
 
 	IsConverterLoaded = true;
-	IsLoaded = true;
+	globals.IsLoaded = true;
 
 	onInitComplete_ntf();
 }
@@ -60,7 +60,7 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 		insertText(0, encoded_pt, 'silent');
 	} else {
 		if (DO_VALIDATE) {
-			base_line_text = DomParser.parseFromString(dataStr, 'text/html').body.innerText;
+			base_line_text = globals.DomParser.parseFromString(dataStr, 'text/html').body.innerText;
 		}
 		
 		let htmlStr = dataStr;// fixPlainHtmlColorContrast(dataStr, bgOpacity);
@@ -89,7 +89,7 @@ function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
 	}
 
 	if (DO_VALIDATE) {
-		const converted_text = trimQuillTrailingLineEndFromText(DomParser.parseFromString(qhtml, 'text/html').body.innerText);
+		const converted_text = trimQuillTrailingLineEndFromText(globals.DomParser.parseFromString(qhtml, 'text/html').body.innerText);
 		const diff = getStringDifference(base_line_text, converted_text);
 		if (converted_text.length == base_line_text.length) {
 			log('conversion validate: PASSED');
@@ -160,7 +160,7 @@ function locateFaviconBase64(htmlStr) {
 	const SVG_PREFIX = 'data:image/svg+xml,';
 
 
-	let html_doc = DomParser.parseFromString(htmlStr, 'text/html');
+	let html_doc = globals.DomParser.parseFromString(htmlStr, 'text/html');
 	let favicon_links = Array.from(html_doc.head.querySelectorAll('link[rel="icon"],link[rel="shortcut icon"]'));
 	let results = [];
 	for (var i = 0; i < favicon_links.length; i++) {
@@ -216,7 +216,7 @@ function loadImageAsPNG(url, height, width) {
 }
 
 function swapPreForDivTags(htmlStr) {
-	let html_doc = DomParser.parseFromString(htmlStr, 'text/html');
+	let html_doc = globals.DomParser.parseFromString(htmlStr, 'text/html');
 	let elms = html_doc.querySelectorAll('pre');
 	for (var i = 0; i < elms.length; i++) {
 		let node = elms[i];
@@ -235,8 +235,8 @@ function fixPlainHtmlColorContrast(htmlStr, opacity) {
 	const is_bg_bright = isBright(bg_color);
 	const fallback_fg = is_bg_bright ? cleanColor('black') : cleanColor('white');
 
-	let html_doc = DomParser.parseFromString(htmlStr, 'text/html');
-	let elms = html_doc.querySelectorAll(InlineTags.join(", ") + ',' + BlockTags.join(','));
+	let html_doc = globals.DomParser.parseFromString(htmlStr, 'text/html');
+	let elms = html_doc.querySelectorAll(globals.InlineTags.join(", ") + ',' + globals.BlockTags.join(','));
 	for (var i = 0; i < elms.length; i++) {
 		try {
 			if (!isNullOrUndefined(elms[i].style.backgroundColor)) {

@@ -27,6 +27,7 @@ namespace MonkeyPaste {
 
     public class MpQuillLoadContentRequestMessage : MpJsonObject {
         public bool isReadOnly { get; set; }
+        public bool isSubSelectionEnabled { get; set; }
         public string contentHandle { get; set; }
         public string contentType { get; set; }
 
@@ -80,11 +81,6 @@ namespace MonkeyPaste {
         public int curIdxOffset { get; set; }
         public bool isAbsoluteOffset { get; set; }
     }
-    public class MpQuillDisableReadOnlyRequestMessage : MpJsonObject {
-        // NOTE props ignored in Avalonia only for wpf...
-        public List<MpTextTemplate> allAvailableTextTemplates { get; set; }
-        public double editorHeight { get; set; }
-    }
 
     public class MpQuillDisableReadOnlyResponseMessage : MpJsonObject {
         public double editorWidth { get; set; }
@@ -124,9 +120,6 @@ namespace MonkeyPaste {
     public class MpQuillLastTransactionUndoneNotification : MpJsonObject {
     }
 
-    public class MpQuillTemplateAddOrUpdateNotification : MpJsonObject {
-        public string addedOrUpdatedTextTemplateBase64JsonStr { get; set; }
-    }
 
     public class MpQuillConvertPlainHtmlToQuillHtmlRequestMessage : MpJsonObject {
         public string data { get; set; }
@@ -187,8 +180,15 @@ namespace MonkeyPaste {
         public string customColorResult { get; set; }
     }
 
+    public class MpQuillTemplateAddOrUpdateNotification : MpJsonObject {
+        public string addedOrUpdatedTextTemplateBase64JsonStr { get; set; }
+    }
     public class MpQuillTemplateDbQueryRequestMessage : MpJsonObject {
         public List<string> templateTypes { get; set; }
+    }
+
+    public class MpQuillSharedTemplateDataChangedMessage : MpJsonObject {
+        public string changedTemplateType { get; set; }
     }
 
     public class MpQuillGetRequestNotification : MpJsonObject {

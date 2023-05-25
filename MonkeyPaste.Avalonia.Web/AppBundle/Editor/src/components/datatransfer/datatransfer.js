@@ -129,10 +129,10 @@ function performDataTransferOnContent(
         return;
     }
 
-    let wasTextChangeSuppressed = SuppressTextChangedNtf;
-    if (!SuppressTextChangedNtf) {
+    let wasTextChangeSuppressed = globals.SuppressTextChangedNtf;
+    if (!globals.SuppressTextChangedNtf) {
         // NOTE don't unflag textchange ntf if currently set (should be wrapped somewhere) only flag if needed
-        SuppressTextChangedNtf = true;
+        globals.SuppressTextChangedNtf = true;
     }
 
     // REFRESH DELTA LOG
@@ -245,7 +245,7 @@ function performDataTransferOnContent(
     clearLastDelta()
 
     if (wasTextChangeSuppressed) {
-        SuppressTextChangedNtf = false;
+        globals.SuppressTextChangedNtf = false;
     }
 
 }

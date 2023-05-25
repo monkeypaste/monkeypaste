@@ -97,7 +97,7 @@ function updateTableOpsToolbarToSelection() {
     }
     const sel = getDocSelection();
     if (!sel ||
-        ContentItemType != 'Text' ||
+        globals.ContentItemType != 'Text' ||
         isReadOnly()) {
         hideTableOpsToolbar();
         return;

@@ -1,7 +1,11 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Interactivity;
+using Avalonia.Layout;
 using Avalonia.Threading;
+using CefNet.Avalonia;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -9,7 +13,8 @@ using Application = Avalonia.Application;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvSystemTrayViewModel :
-        MpViewModelBase {
+        MpViewModelBase,
+        MpIChildWindowViewModel {
 
         #region Private Variables
         #endregion
@@ -18,6 +23,19 @@ namespace MonkeyPaste.Avalonia {
 
         private static MpAvSystemTrayViewModel _instance;
         public static MpAvSystemTrayViewModel Instance => _instance ?? (_instance = new MpAvSystemTrayViewModel());
+
+        #endregion
+
+        #region Interfaces
+
+        #region MpIChildWindowViewModel Implementation
+
+        public MpWindowType WindowType =>
+            MpWindowType.PopOut;
+
+        public bool IsChildWindowOpen { get; set; }
+
+        #endregion
 
         #endregion
 
@@ -106,6 +124,10 @@ namespace MonkeyPaste.Avalonia {
                             Header = "Show Converter DevTools",
                             Command = MpAvPlainHtmlConverter.Instance.ShowConverterDevTools,
                         },
+                        new MpMenuItemViewModel() {
+                            Header = "Open Cef Uri",
+                            Command = NavigateToCefNetUriCommand,
+                        },
                         //new MpMenuItemViewModel() {
                         //    Header = "Show Notifier DevTools",
                         //    Command = MpAvClipTrayViewModel.Instance.ShowAppendDevToolsCommand
@@ -161,6 +183,47 @@ namespace MonkeyPaste.Avalonia {
                     }
                 });
             });
+
+        public ICommand NavigateToCefNetUriCommand => new MpAsyncCommand(
+            async () => {
+                var result = await Mp.Services.NativeMessageBox.ShowTextBoxMessageBoxAsync(
+                    title: "Browse To",
+                    message: "Enter url:",
+                    currentText: "chrome://about",
+                    iconResourceObj: "WebImage");
+
+                if (string.IsNullOrEmpty(result)) {
+                    return;
+                }
+
+                var w = new MpAvWindow() {
+                    Width = 500,
+                    Height = 500,
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                    Title = result.ToWindowTitleText(),
+                    Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", null, null, null) as WindowIcon,
+                    Content = new WebView() {
+                        InitialUrl = result,
+                        HorizontalAlignment = HorizontalAlignment.Stretch,
+                        VerticalAlignment = VerticalAlignment.Stretch
+                    },
+                };
+
+                void W_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
+                    if (!e.IsRightPress(w)) {
+                        return;
+                    }
+                    e.Handled = true;
+                    if (w.Content is WebView wv) {
+                        wv.GoBack();
+                    }
+                }
+
+                w.AddHandler(Window.PointerPressedEvent, W_PointerPressed, RoutingStrategies.Tunnel);
+
+                w.ShowChild();
+            });
+
         #endregion
     }
 }

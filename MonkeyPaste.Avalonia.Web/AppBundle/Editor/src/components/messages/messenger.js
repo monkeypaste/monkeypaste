@@ -36,9 +36,9 @@ function isRunningInIframe() {
 
 function isDesktop() {
 	return
-		EnvName == WindowsEnv ||
-		EnvName == LinuxEnv ||
-		EnvName == MacEnv;
+		globals.EnvName == globals.WindowsEnv ||
+		globals.EnvName == globals.LinuxEnv ||
+		globals.EnvName == globals.MacEnv;
 }
 
 // #endregion State

@@ -17,9 +17,13 @@
 
     .tooltip-hint-container::before {
         content: "i";
-        transform: translate(6px, -2px);
+        transform: translate(7px, 1px);
         display: block;
     }
+
+body.no-host .tooltip-hint-container::before {
+        transform: translate(6px, -2px);
+}
 
 .tooltip-block-container:not(.invisible) {
     display: block;

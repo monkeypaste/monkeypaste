@@ -80,7 +80,7 @@ function onDragStart(e) {
 
     let sel = getDocSelection();
 
-    if (ContentItemType == 'Text' &&
+    if (globals.ContentItemType == 'Text' &&
         (getTableSelectedCells().length == 0 || IsTableDragSelecting) &&
         (!sel || sel.length == 0)) {
         log('drag start rejected by selection state. selectable but w/o range');
@@ -95,11 +95,11 @@ function onDragStart(e) {
     log('drag start. sel: ',sel);
     e.stopPropagation();
 
-    if (ContentItemType == 'Text') {
+    if (globals.ContentItemType == 'Text') {
         e.dataTransfer.effectAllowed = 'copyMove';
-    } else if (ContentItemType == 'FileList') {
+    } else if (globals.ContentItemType == 'FileList') {
         e.dataTransfer.effectAllowed = 'copy';
-    } else if (ContentItemType == 'Image') {
+    } else if (globals.ContentItemType == 'Image') {
         e.dataTransfer.effectAllowed = 'copy';
     }
     return true;

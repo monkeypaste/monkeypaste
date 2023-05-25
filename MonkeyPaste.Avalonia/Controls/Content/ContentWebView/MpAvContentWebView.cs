@@ -33,7 +33,7 @@ namespace MonkeyPaste.Avalonia {
     public enum MpAvEditorBindingFunctionType {
         // two-way *_get async requests
         getDragData,
-        getAllNonInputTemplatesFromDb,
+        getAllSharedTemplatesFromDb,
         getClipboardDataTransferObject,
         getDragDataTransferObject,
         getContactsFromFetcher,
@@ -804,7 +804,7 @@ namespace MonkeyPaste.Avalonia {
 
                 case MpAvEditorBindingFunctionType.getDragDataTransferObject:
                 case MpAvEditorBindingFunctionType.getClipboardDataTransferObject:
-                case MpAvEditorBindingFunctionType.getAllNonInputTemplatesFromDb:
+                case MpAvEditorBindingFunctionType.getAllSharedTemplatesFromDb:
                     HandleBindingGetRequest(notificationType, msgJsonBase64Str).FireAndForgetSafeAsync(ctvm);
                     break;
 
@@ -819,7 +819,7 @@ namespace MonkeyPaste.Avalonia {
             var getReq = MpJsonConverter.DeserializeBase64Object<MpQuillGetRequestNotification>(msgJsonBase64);
             var getResp = new MpQuillGetResponseNotification() { requestGuid = getReq.requestGuid };
             switch (getReqType) {
-                case MpAvEditorBindingFunctionType.getAllNonInputTemplatesFromDb:
+                case MpAvEditorBindingFunctionType.getAllSharedTemplatesFromDb:
                     var templateReq = MpJsonConverter.DeserializeObject<MpQuillTemplateDbQueryRequestMessage>(getReq.reqMsgFragmentJsonStr);
                     var tl = await MpDataModelProvider.GetTextTemplatesByType(templateReq.templateTypes.Select(x => x.ToEnum<MpTextTemplateType>()));
 
@@ -1212,7 +1212,8 @@ namespace MonkeyPaste.Avalonia {
                 contentHandle = BindingContext.PublicHandle,
                 contentType = BindingContext.CopyItemType.ToString(),
                 itemData = BindingContext.EditorFormattedItemData,
-                isReadOnly = BindingContext.IsContentReadOnly
+                isReadOnly = BindingContext.IsContentReadOnly,
+                isSubSelectionEnabled = BindingContext.IsSubSelectionEnabled
             };
 
             var searches =

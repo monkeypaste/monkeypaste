@@ -27,7 +27,7 @@ function initAppend() {
 // #region Getters
 
 function getAppendDocRange() {
-	if (ContentItemType == 'FileList') {
+	if (globals.ContentItemType == 'FileList') {
 		const sel_rows = getSelectedFileItemIdxs();
 		const sel_idx = sel_rows.length > 0 && IsAppendManualMode ? sel_rows[0] : IsAppendPreMode ? 0 : getFileListRowElements().length - 1;
 		let sel_doc_range = getFileListItemDocRange(sel_idx);

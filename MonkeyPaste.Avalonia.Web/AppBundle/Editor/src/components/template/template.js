@@ -1,20 +1,16 @@
 // #region Globals
 
-const TEMPLATE_VALID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890#-_ ";
-const MIN_TEMPLATE_DRAG_DIST = 5;
+//const MIN_TEMPLATE_DRAG_DIST = 5;
 
-var availableTemplates = null;
+//var globals.availableTemplates = null;
 
-const ENCODED_TEMPLATE_OPEN_TOKEN = "{t{";
-const ENCODED_TEMPLATE_CLOSE_TOKEN = "}t}";
-const ENCODED_TEMPLATE_REGEXP = new RegExp(ENCODED_TEMPLATE_OPEN_TOKEN + ".*?" + ENCODED_TEMPLATE_CLOSE_TOKEN, "");
+//const globals.ENCODED_TEMPLATE_OPEN_TOKEN = "{t{";
+//const globals.ENCODED_TEMPLATE_CLOSE_TOKEN = "}t}";
+//const globals.ENCODED_TEMPLATE_REGEXP = new RegExp(globals.ENCODED_TEMPLATE_OPEN_TOKEN + ".*?" + globals.ENCODED_TEMPLATE_CLOSE_TOKEN, "");
 
-var IsMovingTemplate = false;
+//var globals.IsMovingTemplate = false;
 
-var IsTemplatePaddingAfterTextChange = false;
-
-var IsAnyTemplateBgTemporary = false;
-var DragAnchorDocIdxWhenTemplateWithinSelection = -1;
+//var globals.IsTemplatePaddingAfterTextChange = false;
 
 // #endregion Globals
 
@@ -175,18 +171,18 @@ function getFocusTemplateElements() {
 }
 
 async function getAvailableTemplateDefinitions() {
-    if (availableTemplates == null || availableTemplates.length == 0) {
-        availableTemplates = await getAllNonInputTemplatesFromDbAsync_get();
+    if (globals.availableTemplates == null || globals.availableTemplates.length == 0) {
+        globals.availableTemplates = await getAllSharedTemplatesFromDbAsync_get();
 
-        if (availableTemplates == null || availableTemplates.length == 0) {
+        if (globals.availableTemplates == null || globals.availableTemplates.length == 0) {
             return getTemplateDefs();
         }
     }
 
     let utdl = getTemplateDefs();
     let allMergedTemplates = [];
-    for (var i = 0; i < availableTemplates.length; i++) {
-        let atd = availableTemplates[i];
+    for (var i = 0; i < globals.availableTemplates.length; i++) {
+        let atd = globals.availableTemplates[i];
         let isUsed = false;
         //loop through all templates from master collection
         for (var j = 0; j < utdl.length; j++) {
@@ -256,7 +252,7 @@ function getTemplateAsPlainText(t) {
 }
 
 function getEncodedTemplateStr(t) {
-    let encoded_template_str = `${ENCODED_TEMPLATE_OPEN_TOKEN}${t.templateGuid}${ENCODED_TEMPLATE_CLOSE_TOKEN}`;
+    let encoded_template_str = `${globals.ENCODED_TEMPLATE_OPEN_TOKEN}${t.templateGuid}${globals.ENCODED_TEMPLATE_CLOSE_TOKEN}`;
     return encoded_template_str;
 }
 
@@ -265,14 +261,14 @@ function getDecodedTemplateText(encoded_text) {
         return encoded_text;
     }
     let decoded_text = encoded_text;
-    var result = ENCODED_TEMPLATE_REGEXP.exec(decoded_text);
+    var result = globals.ENCODED_TEMPLATE_REGEXP.exec(decoded_text);
     while (result) {
         let encoded_template_text = decoded_text.substr(result.index, result[0].length);
-        let tguid = encoded_template_text.replace(ENCODED_TEMPLATE_OPEN_TOKEN, '').replace(ENCODED_TEMPLATE_CLOSE_TOKEN, '');
+        let tguid = encoded_template_text.replace(globals.ENCODED_TEMPLATE_OPEN_TOKEN, '').replace(globals.ENCODED_TEMPLATE_CLOSE_TOKEN, '');
         let t = getTemplateDefByGuid(tguid);
         let tpv = getTemplatePasteValue(t);
         decoded_text = decoded_text.replaceAll(encoded_template_text, tpv);
-        result = ENCODED_TEMPLATE_REGEXP.exec(decoded_text);
+        result = globals.ENCODED_TEMPLATE_REGEXP.exec(decoded_text);
     }
     return decoded_text;
 }
@@ -360,7 +356,7 @@ function getTemplateAtDocIdx(docIdx) {
     }
     return getTemplateFromDomNode(telm);
 }
-function getTemplateEmbedStr(t, sToken = ENCODED_TEMPLATE_OPEN_TOKEN, eToken = ENCODED_TEMPLATE_CLOSE_TOKEN) {
+function getTemplateEmbedStr(t, sToken = globals.ENCODED_TEMPLATE_OPEN_TOKEN, eToken = globals.ENCODED_TEMPLATE_CLOSE_TOKEN) {
     var result = sToken + t.domNode.getAttribute('templateGuid') + eToken;
     return result;
 }
@@ -380,9 +376,9 @@ function getLowestAnonTemplateName(anonPrefix) {
 }
 
 function getTemplateTypeSvgKey(ttype) {
-    for (var i = 0; i < TemplateTypesMenuOptions.length; i++) {
-        if (TemplateTypesMenuOptions[i].label.toLowerCase() == ttype.toLowerCase()) {
-            return TemplateTypesMenuOptions[i].icon;
+    for (var i = 0; i < globals.TemplateTypesMenuOptions.length; i++) {
+        if (globals.TemplateTypesMenuOptions[i].label.toLowerCase() == ttype.toLowerCase()) {
+            return globals.TemplateTypesMenuOptions[i].icon;
 		}
     }
     return 'empty';
@@ -439,6 +435,12 @@ function setTemplateElementText(telm, text) {
 
 // #region State
 
+function hasSharedTemplates() {
+    if (!hasTemplates()) {
+        return false;
+    }
+    return getTemplateDefs().filter(x => isTemplateSharedValue(x)).length > 0
+}
 function hasTemplates() {
     let telml = getTemplateElements();
     return telml.length > 0;
@@ -455,6 +457,42 @@ function isTemplateElementFocused(telm) {
     return telm.classList.contains('focused');
 }
 
+// #region Type Checks
+
+function isTemplateDynamic(t) {
+    if (t && t.templateType.toLowerCase() == 'dynamic') {
+        return true;
+    }
+    return false;
+}
+function isTemplateStatic(t) {
+    if (t && t.templateType.toLowerCase() == 'static') {
+        return true;
+    }
+    return false;
+}
+
+function isTemplateDateTime(t) {
+    if (t && t.templateType.toLowerCase() == 'datetime') {
+        return true;
+    }
+    return false;
+}
+function isTemplateContact(t) {
+    if (t && t.templateType.toLowerCase() == 'contact') {
+        return true;
+    }
+    return false;
+}
+// #endregion Type Checks
+
+function isTemplateSharedValue(t) {
+    let result =
+        isTemplateContact(t) ||
+        isTemplateDateTime(t) ||
+        isTemplateStatic(t);
+    return result;
+}
 
 function validateTemplate(t) {
     if (!t) {
@@ -599,8 +637,8 @@ function isPlainTextStrContainTemplate(ptStr) {
         return false;
     }
     return
-    ptStr.toLowerCase().indexOf(ENCODED_TEMPLATE_OPEN_TOKEN) >= 0 &&
-        ptStr.toLowerCase().indexOf(ENCODED_TEMPLATE_CLOSE_TOKEN) >= 0;
+    ptStr.toLowerCase().indexOf(globals.ENCODED_TEMPLATE_OPEN_TOKEN) >= 0 &&
+        ptStr.toLowerCase().indexOf(globals.ENCODED_TEMPLATE_CLOSE_TOKEN) >= 0;
 }
 
 function isDocIdxAtTemplateInsert(doc_idx, telm) {
@@ -726,12 +764,12 @@ function decodeInsertedTemplates(insertIdx, plainText, source = 'silent') {
     // parse inserted text for [tguid,tiguid] and replace w/ template blot and mark for update
     for (var i = 0; i < plainText.length; i++) {
         let cur_pt = substringByLength(plainText, i);
-        if (cur_pt.startsWith(ENCODED_TEMPLATE_OPEN_TOKEN)) {
-            let t_end_idx = cur_pt.indexOf(ENCODED_TEMPLATE_CLOSE_TOKEN);
-            let encoded_template_str = substringByLength(cur_pt, ENCODED_TEMPLATE_OPEN_TOKEN.length, t_end_idx);
+        if (cur_pt.startsWith(globals.ENCODED_TEMPLATE_OPEN_TOKEN)) {
+            let t_end_idx = cur_pt.indexOf(globals.ENCODED_TEMPLATE_CLOSE_TOKEN);
+            let encoded_template_str = substringByLength(cur_pt, globals.ENCODED_TEMPLATE_OPEN_TOKEN.length, t_end_idx);
             let template_def = getTemplateDefByGuid(encoded_template_str.split(',')[0]);
             insertTemplate({ index: insertIdx, length: 0 }, template_def, false, source);
-            i += t_end_idx + ENCODED_TEMPLATE_CLOSE_TOKEN.length - 1;
+            i += t_end_idx + globals.ENCODED_TEMPLATE_CLOSE_TOKEN.length - 1;
         } else {
             insertText(insertIdx, cur_pt[0], source, false);
         }
@@ -743,10 +781,10 @@ function decodeInsertedTemplates(insertIdx, plainText, source = 'silent') {
 }
 
 function updateTemplatesAfterTextChanged() {
-    if (IsTemplatePaddingAfterTextChange) {
+    if (globals.IsTemplatePaddingAfterTextChange) {
         debugger;
 	}
-    IsTemplatePaddingAfterTextChange = true;
+    globals.IsTemplatePaddingAfterTextChange = true;
 
     let all_template_elms = getTemplateElements(null,null);
 
@@ -780,7 +818,7 @@ function updateTemplatesAfterTextChanged() {
 
         //debabyTemplateElement(telm);
     }
-    IsTemplatePaddingAfterTextChange = false;
+    globals.IsTemplatePaddingAfterTextChange = false;
 }
 
 function updateTemplatesAfterSelectionChange() {
@@ -796,7 +834,7 @@ function updateTemplatesAfterSelectionChange() {
         // - move caret -1
     // then clear at insert class from all templates
     // and if updated extent is at template idx (must be done here since its silent) 
-    if (!IsLoaded || isDragging()) {
+    if (!globals.IsLoaded || isDragging()) {
         return;
     }
     if (isShowingPasteToolbar()) {
@@ -873,6 +911,39 @@ function focusTemplate(ftguid) {
         }
     }
    
+}
+
+
+function updateLocalTemplatesFromDb() {
+
+    getAllSharedTemplatesFromDbAsync_get()
+        .then((result) => {
+            result = result ? result : [];
+
+            let all_shared_defs = result;
+            let all_local_defs = getTemplateDefs();
+            let db_defs_to_update = all_shared_defs.filter(x => all_local_defs.every(y => y.templateGuid != x.templateGuid));
+
+            globals.SuppressTextChangedNtf = true;
+
+            for (var i = 0; i < db_defs_to_update.length; i++) {
+                let db_def = db_defs_to_update[i];
+                let local_def = getTemplateDefByGuid(db_def.guid);
+                if (!local_def) {
+                    // filter error
+                    debugger;
+                    continue;
+                }
+                setTemplateBgColor(local_def.templateGuid, db_def.templateColor);
+                setTemplateData(local_def.templateGuid, db_def.templateData);
+			}
+
+            globals.SuppressTextChangedNtf = false;
+
+            if (db_defs_to_update.length > 0) {
+                onContentChanged_ntf();
+            }
+        });
 }
 // #endregion Actions
 

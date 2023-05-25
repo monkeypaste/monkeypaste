@@ -361,7 +361,7 @@ function stopClipboardHandler() {
 function onCut(e) {
     onSetClipboardRequested_ntf();
     let sel = getDocSelection();
-    if (ContentItemType == 'Text') {
+    if (globals.ContentItemType == 'Text') {
         setTextInRange(sel, '');
     } else {
         // sub-selection ignored for other types

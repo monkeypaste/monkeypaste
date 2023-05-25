@@ -1,0 +1,156 @@
+﻿// #region Globals
+
+const CUSTOM_TEMPLATE_LABEL_VAL = 'Custom';
+
+const TemplateDateTimeFormatOptionLabels = [
+    'yyyy-MM-dd',
+    'MM-dd-yyyy',
+    'dd MMMM yyyy',
+    'E, MMM d, yy',
+    'HH:mm:ss',
+    'h:mm a',
+    'MM/dd/yyyy HH:mm:ss',
+    'E, dd MMM yyyy HH:mm:ss',
+    CUSTOM_TEMPLATE_LABEL_VAL
+];
+// #endregion Globals
+
+// #region Life Cycle
+
+// #endregion Life Cycle
+
+// #region Getters
+
+function getFormattedDateTime(dt, format) {
+    // from 'https://github.com/phstc/jquery-dateFormat'
+    dt = isNullOrUndefined(dt) ? new Date() : dt;
+    return jQuery.format.date(dt, format);
+}
+
+function getDateTimeTemplateOuterContainerElement() {
+    return document.getElementById('pasteTemplateToolbarDateTimeFormatSelectorContainer');
+}
+
+function getDateTimeTemplateCustomInputElement() {
+    return document.getElementById('datetimeCustomInput');
+}
+
+function getDateTimeTemplateFormatSelectorElement() {
+    return document.getElementById('datetimeSelector');
+}
+
+// #endregion Getters
+
+// #region Setters
+
+// #endregion Setters
+
+// #region State
+
+// #endregion State
+
+// #region Actions
+
+function createDateTimeFormatSelector(ft) {
+    const dt_sel_outer_elm = getDateTimeTemplateOuterContainerElement();
+    dt_sel_outer_elm.innerHTML = '';
+
+    let datetime_sel_elm = document.createElement('select');
+    datetime_sel_elm.id = "datetimeSelector";
+    const cur_dt = new Date();
+    for (var i = 0; i < TemplateDateTimeFormatOptionLabels.length; i++) {
+        let datetime_format = TemplateDateTimeFormatOptionLabels[i];
+        let datetime_opt_elm = document.createElement('option');
+        datetime_opt_elm.value = datetime_format;
+        if (datetime_format == CUSTOM_TEMPLATE_LABEL_VAL) {
+            datetime_opt_elm.innerText = CUSTOM_TEMPLATE_LABEL_VAL;
+        } else {
+            datetime_opt_elm.innerText = getFormattedDateTime(cur_dt, datetime_format);
+        }        
+        datetime_sel_elm.appendChild(datetime_opt_elm);
+    }
+
+    dt_sel_outer_elm.appendChild(datetime_sel_elm);
+    datetime_sel_elm.addEventListener('change', onDateTimeSelFormatChanged);
+    if (ft && ft.templateType.toLowerCase() == 'datetime') {
+        // set dt format selection
+        if (TemplateDateTimeFormatOptionLabels.includes(ft.templateData)) {
+            // template has preset dt
+            datetime_sel_elm.value = ft.templateData;
+        } else {
+            // template has custom format
+            datetime_sel_elm.value = CUSTOM_TEMPLATE_LABEL_VAL;
+            // add custom input
+            dt_sel_outer_elm.appendChild(createCustomDateTimeFormatInputField(ft.templateData));
+        } 
+    }
+}
+
+function createCustomDateTimeFormatInputField(cur_val) {
+    let datetime_input_elm = document.createElement('input');
+    datetime_input_elm.id = "datetimeCustomInput";
+    datetime_input_elm.value = getFormattedDateTime(null, cur_val);
+    datetime_input_elm.addEventListener('keydown', onTemplateDateTimeCustomInputKeyDown, true);
+    datetime_input_elm.addEventListener('blur', onTemplateDateTimeCustomInputBlur, true);
+    return datetime_input_elm;
+}
+
+function updateDateTimeFieldSelectorToFocus(ft) {
+    if (!ft || ft.templateType.toLowerCase() != 'datetime') {
+        getDateTimeTemplateOuterContainerElement().classList.add('hidden');
+        return;
+    }
+    getDateTimeTemplateOuterContainerElement().classList.remove('hidden');
+    createDateTimeFormatSelector(ft);
+    updateDateTimeTemplateToOptionChange();
+}
+
+function updateDateTimeTemplateToOptionChange() {
+    // NOTE always refresh all data regardless if its field or contact that changes
+
+    let ft = getFocusTemplate();
+    if (!ft || ft.templateType.toLowerCase() != 'datetime') {
+        return;
+    }
+
+    // SET TEMPLATE DATA
+    let field_sel_elm = getDateTimeTemplateFormatSelectorElement();
+    if (!field_sel_elm) {
+        return;
+    }
+    let custom_format_elm = getDateTimeTemplateCustomInputElement();
+    if (field_sel_elm.value == CUSTOM_TEMPLATE_LABEL_VAL) {
+        if (custom_format_elm == null) {
+            custom_format_elm = createCustomDateTimeFormatInputField(ft.templateData);
+            getDateTimeTemplateOuterContainerElement().appendChild(custom_format_elm);
+        }
+        ft.templateData = custom_format_elm.value;
+    } else {
+        if (custom_format_elm != null) {
+            getDateTimeTemplateOuterContainerElement().removeChild(custom_format_elm);
+        }
+        ft.templateData = field_sel_elm.value;
+    }
+    setTemplateData(ft.templateGuid, ft.templateData);
+    let new_ft_pv = getFormattedDateTime(null, ft.templateData);
+    setTemplatePasteValue(ft.templateGuid, new_ft_pv);
+}
+// #endregion Actions
+
+// #region Event Handlers
+
+function onDateTimeSelFormatChanged(e) {
+    if (getDateTimeTemplateFormatSelectorElement().value == CUSTOM_TEMPLATE_LABEL_VAL) {
+        setTemplateData(getFocusTemplateGuid(), '');
+    }
+    updateDateTimeTemplateToOptionChange();
+}
+function onTemplateDateTimeCustomInputBlur(e) {
+    updateDateTimeTemplateToOptionChange();
+}
+function onTemplateDateTimeCustomInputKeyDown(e) {
+    if (e.key == 'Enter') {
+        e.preventDefault();
+    }
+}
+// #endregion Event Handlers

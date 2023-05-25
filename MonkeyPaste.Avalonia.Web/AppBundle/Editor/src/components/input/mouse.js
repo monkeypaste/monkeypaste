@@ -111,7 +111,7 @@ function onWindowClick(e) {
 	}
 	if (!isClassInElementPath(e.target, TemplateEmbedClass)) {
 		// unfocus templates 
-		if (TemplateBeforeEdit) {
+		if (globals.TemplateBeforeEdit) {
 			if (isShowingColorPaletteMenu()) {
 				hideColorPaletteMenu();
 			} else if (isShowingCreateTemplateToolbarMenu()) {

@@ -175,7 +175,7 @@ function envNewLine() {
     // Linux = LF
     // MAC < 0SX = CR
     // MAC >= OSX = LF
-    if (EnvName == WindowsEnv) {
+    if (globals.EnvName == globals.WindowsEnv) {
         return '\r\n';
     }
     return '\n';
@@ -303,6 +303,14 @@ function getAncestorElements(elm, include_self = true) {
         cur_elm = cur_elm.parentNode;
     }
     return elms;
+}
+function getAncestorByClassName(elm, className, include_self = true) {
+    const an_elms = getAncestorElements(elm, include_self);
+    const matches = an_elms.filter(x => x.classList !== undefined && x.classList.contains(className));
+    if (matches.length == 0) {
+        return null;
+    }
+    return matches[0];
 }
 
 function getAncestorByTagName(elm, tagName, include_self = true) {
@@ -548,7 +556,7 @@ function isStringContainSpecialHtmlEntities(str) {
 
 function encodeHtmlSpecialEntitiesFromHtmlDoc(htmlStr) {
     // create temp dom of htmlStr and escape special chars in text nodes	
-    let html_doc = DomParser.parseFromString(htmlStr, 'text/html');
+    let html_doc = globals.DomParser.parseFromString(htmlStr, 'text/html');
     let text_elms = getAllTextElementsInElement(html_doc.body);
     for (var i = 0; i < text_elms.length; i++) {
         let text_elm = text_elms[i];

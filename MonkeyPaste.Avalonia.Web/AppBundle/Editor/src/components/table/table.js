@@ -332,7 +332,7 @@ function isTableInDocument() {
 }
 
 function isContentATable() {
-    if (ContentItemType != 'Text') {
+    if (globals.ContentItemType != 'Text') {
         return false;
     }
     return Array.from(document.getElementsByClassName(TABLE_WRAPPER_CLASS_NAME)).length == 1;
@@ -384,7 +384,7 @@ function isTableContextMenuVisible() {
 }
 
 function hasEditableTable() {
-    if (ContentItemType != 'Text' ||
+    if (globals.ContentItemType != 'Text' ||
         getTableElements().length == 0) {
         return false;
     } 

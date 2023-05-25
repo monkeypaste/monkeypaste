@@ -3,6 +3,10 @@
     border-color: var(--editortoolbarsepbgcolor);
 }
 
+#editorToolbar svg:hover {
+    filter: drop-shadow(1px 1px 0px #4444dd);
+}
+
 .toolbar-separator {
     width: 1px;
     height: 25px;

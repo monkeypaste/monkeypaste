@@ -1,29 +1,29 @@
 
 // #region Globals
 
-var IsLoaded = false;
+//var globals.IsLoaded = false;
 //var quill;
-//var availableTemplates = null;
+//var globals.availableTemplates = null;
 
-const DomParser = new DOMParser();
-const DomSerializer = new XMLSerializer();
+//const globals.DomParser = new DOMParser();
+//const globals.globals.DomSerializer = new XMLSerializer();
 
-var IsDebug = true;
+//var globals.IsDebug = true;
 
-var IsTesting = false;
+//var globals.IsTesting = false;
 
-var IsSpellCheckEnabled = false;
+//var globals.IsSpellCheckEnabled = false;
 
-const WindowsEnv = 'Windows';
-const IosEnv = 'Ios';
-const AndroidEnv = 'Android';
-const MacEnv = 'Mac';
-const LinuxEnv = 'Linux';
-const WebEnv = 'Web';
-const UknownEnv = 'Unknown';
+//const globals.WindowsEnv = 'Windows';
+//const globals.IosEnv = 'Ios';
+//const globals.AndroidEnv = 'Android';
+//const globals.MacEnv = 'Mac';
+//const globals.LinuxEnv = 'Linux';
+//const globals.WebEnv = 'Web';
+//const globals.UknownEnv = 'Unknown';
 
-var EnvName = "";
-var MaxUndoLimit = -1;
+//var globals.EnvName = "";
+//var globals.MaxUndoLimit = -1;
 
 // #endregion Globals
 
@@ -31,7 +31,8 @@ var MaxUndoLimit = -1;
 
 function initMain(initObj) {
 	try {
-		EnvName = !initObj.envName ? WindowsEnv : initObj.envName;
+		globals.EnvName = !initObj.envName ? globals.WindowsEnv : initObj.envName;
+		initGlobals();
 		initDefaults(initObj.defaults);
 		//initExceptionHandler();
 
@@ -40,6 +41,10 @@ function initMain(initObj) {
 			log('Main Initialized.(Converter)');
 			return;
 		}
+		if (!isRunningOnHost()) {
+			document.body.classList.add('no-host');
+		}
+
 		initWindow();
 
 		initInput();
@@ -49,7 +54,7 @@ function initMain(initObj) {
 
 		initEditor();
 
-		IsLoaded = true;
+		globals.IsLoaded = true;
 		if (isAppendNotifier()) {
 			log('Main Initialized.(Appender)');
 			enableSubSelection();
@@ -70,7 +75,7 @@ function initDefaults(defaultsObj) {
 		return;
 	}
 	if (!isNullOrUndefined(defaultsObj.maxUndo)) {
-		MaxUndoLimit = parseInt(defaultsObj.maxUndo);
+		globals.MaxUndoLimit = parseInt(defaultsObj.maxUndo);
 	}
 	
 	if (!isNullOrUndefined(defaultsObj.bgOpacity)) {
@@ -79,7 +84,7 @@ function initDefaults(defaultsObj) {
 
 	const bg_opacity = parseFloat(getElementComputedStyleProp(document.body, '--editableopacity'));
 	if(!isNullOrUndefined(defaultsObj.currentTheme)) {
-		EditorTheme = defaultsObj.currentTheme;
+		globals.EditorTheme = defaultsObj.currentTheme;
 
 		let no_sel_bg = 'transparent';
 		let sub_sel_bg = `rgba(189,188,188,${bg_opacity})`;
@@ -137,10 +142,10 @@ function initDefaults(defaultsObj) {
 		log('font size set to: '+getElementComputedStyleProp(document.body,'--defaultFontSize'));
 	}
 	if (!isNullOrUndefined(defaultsObj.isSpellCheckEnabled)) {
-		IsSpellCheckEnabled = parseBool(defaultsObj.isSpellCheckEnabled);
+		globals.IsSpellCheckEnabled = parseBool(defaultsObj.isSpellCheckEnabled);
 		getSpellCheckableElements().forEach(x=>{
 			if(x) {
-				x.setAttribute("spellcheck",IsSpellCheckEnabled);
+				x.setAttribute("spellcheck",globals.IsSpellCheckEnabled);
 			}
 		});
 	}
@@ -236,7 +241,7 @@ function updateAllSizeAndPositions() {
 	updateScrollBarSizeAndPositions();
 	updateTablesSizesAndPositions();
 
-	if (EnvName == "android") {
+	if (globals.EnvName == "android") {
 		//var viewportBottom = window.scrollY + window.innerHeight;
 		//let tbh = $(".ql-toolbar").outerHeight();
 		//if (y <= 0) {
@@ -252,7 +257,7 @@ function updateAllSizeAndPositions() {
 }
 
 function updateAllElements() {
-	if (!IsLoaded) {
+	if (!globals.IsLoaded) {
 		return;
 	}
 	updateAllSizeAndPositions();

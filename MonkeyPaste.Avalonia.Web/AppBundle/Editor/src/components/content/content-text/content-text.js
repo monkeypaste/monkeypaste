@@ -479,7 +479,7 @@ function getBlockElementAtDocIdx(docIdx) {
 		if (cur_blot.domNode && cur_blot.domNode.tagName) {
 			// is false for text nodes
 			let cur_tag_name = cur_blot.domNode.tagName.toLowerCase();
-			if (BlockTags.includes(cur_tag_name)) {
+			if (globals.BlockTags.includes(cur_tag_name)) {
 				return cur_blot.domNode;
 			}
 		}
@@ -491,17 +491,17 @@ function getBlockElementAtDocIdx(docIdx) {
 function getHtmlFromDocRange(docRange) {
 	let old_sel = getDocSelection();
 
-	IgnoreNextSelectionChange = true;
+	globals.IgnoreNextSelectionChange = true;
 
 	setDocSelection(docRange.index, docRange.length, 'silent');
 	let rangeHtml = getSelectedHtml();
 
-	IgnoreNextSelectionChange = true;
+	globals.IgnoreNextSelectionChange = true;
 	setDocSelection(old_sel.index, old_sel.length, 'silent');
 
-	if (IgnoreNextSelectionChange) {
+	if (globals.IgnoreNextSelectionChange) {
 		log('Hey! setSelection by silent doesnt trigger sel change event');
-		IgnoreNextSelectionChange = false;
+		globals.IgnoreNextSelectionChange = false;
 	}
 	return rangeHtml;
 }
@@ -639,7 +639,7 @@ function isBlockElement(elm) {
 		return false;
 	}
 	let tn = elm.tagName.toLowerCase();
-	return BlockTags.includes(tn);
+	return globals.BlockTags.includes(tn);
 }
 
 function isInlineElement(elm) {
@@ -647,7 +647,7 @@ function isInlineElement(elm) {
 		return false;
 	}
 	let tn = elm.tagName.toLowerCase();
-	return InlineTags.includes(tn);
+	return globals.InlineTags.includes(tn);
 }
 
 function isDocIdxBlockStart(docIdx) {

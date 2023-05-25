@@ -129,6 +129,7 @@ function getTemplateFromDomNode(domNode) {
         templateData: domNode.getAttribute('templateData'),
         templateDeltaFormat: domNode.getAttribute('templateDeltaFormat'),
         templateHtmlFormat: domNode.getAttribute('templateHtmlFormat'),
+        templateState: domNode.getAttribute('templateState'),
         wasVisited: parseBool(domNode.getAttribute('wasVisited')),
     }
 }
@@ -163,12 +164,13 @@ function applyTemplateToDomNode(node, value) {
     node.setAttribute('templateText', value.templateText);
     node.setAttribute('templateDeltaFormat', value.templateDeltaFormat);
     node.setAttribute('templateHtmlFormat', value.templateHtmlFormat);
+    node.setAttribute('templateState', value.templateState);
 
     // STATE
     node.setAttribute('wasVisited', value.wasVisited);
 
     // DOM
-    node.setAttribute("spellcheck", IsSpellCheckEnabled);
+    node.setAttribute("spellcheck", globals.IsSpellCheckEnabled);
     node.setAttribute('draggable', false);
     node.setAttribute('contenteditable', false);
 
@@ -189,7 +191,7 @@ function applyTemplateToDomNode(node, value) {
     //span_elm.classList.add('flicker');
     span_elm.innerHTML = value.templateHtmlFormat;
     span_elm.innerText = getTemplateDisplayValue(value);
-    span_elm.style.color = getContrastHexColor(value.templateColor);
+    //span_elm.style.color = getContrastHexColor(value.templateColor);
     node.appendChild(span_elm);
 
     // DELETE BUTTON
@@ -225,13 +227,19 @@ function onTemplateClick(e) {
         onTemplateDeleteButtonClick(e);
         return;
     }
-    let t = getTemplateFromDomNode(e.currentTarget);
-    if (!t) {
-        t = getTemplateFromDomNode(e.currentTarget.parentNode);
-        if (!t) {
-            return;
-        }
-    }
 
+    let template_elm = getAncestorByClassName(e.currentTarget, 'template-blot');
+    if (!template_elm) {
+        return;
+    }
+    let template_doc_range = getElementDocRange(template_elm);
+    if (!template_doc_range) {
+        return;
+    }
+    setDocSelection(template_doc_range.index, 0, 'user');
+    let t = getTemplateFromDomNode(template_elm);
+    if (!t) {
+        return;
+    }
     focusTemplate(t.templateGuid);
 }

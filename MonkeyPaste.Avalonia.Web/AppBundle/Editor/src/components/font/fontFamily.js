@@ -81,7 +81,7 @@ function initFontFamilyStyles() {
 // #region Getters
 
 function getFontFamilyToolbarSelector() {
-    let elm_idx = IsLoaded ? 1 : 0;
+    let elm_idx = globals.IsLoaded ? 1 : 0;
     return document.getElementsByClassName('ql-font')[elm_idx];
 }
 
@@ -138,9 +138,9 @@ function getFontFamilyDataValueFontFamily(ff_dv) {
 }
 
 function getFontsByEnv() {
-    EnvName = EnvName == null ? WindowsEnv : EnvName;
+    globals.EnvName = globals.EnvName == null ? globals.WindowsEnv : globals.EnvName;
     let result = null;
-    if (EnvName == MacEnv) {
+    if (globals.EnvName == globals.MacEnv) {
         result = macFonts;
     } else {
         result = winFonts;

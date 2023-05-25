@@ -1,7 +1,5 @@
 ﻿
-var IsTemplateNameTextAreaFocused = false;
-
-var TemplateBeforeEdit = null;
+//var globals.TemplateBeforeEdit = null;
 
 // #region Life Cycle
 
@@ -23,12 +21,12 @@ function showEditTemplateToolbar(isNew = false) {
 
     let t = getTemplateDefByGuid(getFocusTemplateGuid());
     if (t) {
-        if (isNew) {
-            // keep comprarer empty besides guid to ensure host is notified of add
-            TemplateBeforeEdit = { templateGuid: t.templateGuid };
-        } else {
-            TemplateBeforeEdit = t;
-        }
+        //if (isNew) {
+        //    // keep comprarer empty besides guid to ensure host is notified of add
+        //    globals.TemplateBeforeEdit = { templateGuid: t.templateGuid };
+        //} else {
+        //    globals.TemplateBeforeEdit = t;
+        //}
         createEditTemplateToolbarForTemplate(t);
     } else {
         log('no focus template found');
@@ -38,26 +36,23 @@ function showEditTemplateToolbar(isNew = false) {
 }
 
 function hideEditTemplateToolbar(wasEscCancel = false, wasDelete = false) {
-    if (!isShowingEditTemplateToolbar()) {
-        TemplateBeforeEdit = null;
-        return;
+    if (isShowingEditTemplateToolbar()) {
+        hideColorPaletteMenu();
+        clearAllTemplateEditClasses();
+        getEditTemplateToolbarContainerElement().classList.add('hidden');
     }
-    hideColorPaletteMenu();
 
-    clearAllTemplateEditClasses();
-    if (TemplateBeforeEdit != null && !wasDelete) {
+    if (!wasDelete && isTemplateSharedValue(globals.TemplateBeforeEdit)) {
         // get new or updated def
-        let updated_t = getTemplateDefByGuid(TemplateBeforeEdit.templateGuid);
-        if (isTemplateDefChanged(TemplateBeforeEdit, updated_t) && !wasEscCancel) {
+        let updated_t = getTemplateDefByGuid(globals.TemplateBeforeEdit.templateGuid);
+        if (isTemplateDefChanged(globals.TemplateBeforeEdit, updated_t) && !wasEscCancel) {
             // t new or updated
             onAddOrUpdateTemplate_ntf(updated_t);
         }
-        // reset comprarer template
-        TemplateBeforeEdit = null;
     }
 
-    var ett = getEditTemplateToolbarContainerElement();
-    ett.classList.add('hidden');
+    // reset comprarer template
+    globals.TemplateBeforeEdit = null;
 }
 
 // #endregion Life Cycle
@@ -83,6 +78,7 @@ function getEditTemplateNameTextAreaElement() {
 function getDeleteTemplateButtonElement() {
     return document.getElementById('editTemplateDeleteButton');
 }
+
 // #endregion Getters
 
 // #region Setters
@@ -138,7 +134,8 @@ function hideTemplateColorPaletteMenu() {
 }
 
 function createEditTemplateToolbarForTemplate(t) {
-    if (!t) {
+    globals.TemplateBeforeEdit = t;
+    if (!globals.TemplateBeforeEdit) {
         return;
     }
     log('Editing Template: ' + t.templateGuid + " selected type: " + t.templateType);
@@ -170,8 +167,7 @@ function isShowingEditTemplateToolbar() {
 }
 
 function resetEditTemplateToolbar() {
-    IsTemplateNameTextAreaFocused = false;
-    TemplateBeforeEdit = null;
+    globals.TemplateBeforeEdit = null;
 
     hideEditTemplateToolbar();
 }
@@ -215,17 +211,18 @@ function onTemplateColorBoxContainerClick(e) {
 
 function onTemplateNameChanged(e) {
     let newTemplateName = getEditTemplateNameTextAreaElement().value;
-    setTemplateName(TemplateBeforeEdit.templateGuid, newTemplateName);
+    setTemplateName(globals.TemplateBeforeEdit.templateGuid, newTemplateName);
 }
 
 
 function onTemplateNameTextAreaGotFocus() {
-    IsTemplateNameTextAreaFocused = true;
+    // NOTE noticable performance lag when editing template names so only ntf when complete
+    globals.SuppressTextChangedNtf = true;
     getEditTemplateNameTextAreaElement().addEventListener('keydown', onTemplateNameTextAreaKeyDown, true);
 }
 
 function onTemplateNameTextAreaLostFocus() {
-    IsTemplateNameTextAreaFocused = false;
+    globals.SuppressTextChangedNtf = false;
     getEditTemplateNameTextAreaElement().removeEventListener('keydown', onTemplateNameTextAreaKeyDown);
 }
 
@@ -241,7 +238,7 @@ function onDeleteTemplateButtonClick(e) {
 }
 
 function onColorPaletteItemClick(chex) {
-    let tguid = TemplateBeforeEdit.templateGuid;
+    let tguid = globals.TemplateBeforeEdit.templateGuid;
     let t = getTemplateDefByGuid(tguid);
 
     setTemplateBgColor(tguid, chex, false);

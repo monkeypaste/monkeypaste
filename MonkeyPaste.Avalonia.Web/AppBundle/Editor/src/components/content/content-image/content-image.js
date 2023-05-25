@@ -30,7 +30,7 @@ function loadImageContent(itemDataStr) {
 	setRootHtml('');
 	getEditorElement().replaceChild(p, getEditorElement().firstChild);
 
-	ContentClassAttrb.add(getEditorElement().firstChild.firstChild, 'image');
+	globals.ContentClassAttrb.add(getEditorElement().firstChild.firstChild, 'image');
 	updateImageContentSizeAndPosition();
 
 }
@@ -83,7 +83,7 @@ function populateContentImageDataSize(annotationsJsonStr, is_reload) {
 }
 
 function getImageContentData() {
-	if (ContentItemType != 'Image') {
+	if (globals.ContentItemType != 'Image') {
 		return null;
 	}
 	let img_elm = document.getElementsByClassName('content-image')[0]
