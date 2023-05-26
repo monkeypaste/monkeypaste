@@ -56,7 +56,12 @@ function getSelectedPasteOptionDiv() {
 }
 
 function getSelectedOptionTemplateGuid() {
-    return getSelectedPasteOptionDiv().getAttribute('templateGuid');
+    const opt_elm = getSelectedPasteOptionDiv();
+    if (!opt_elm) {
+        return null;
+    }
+
+    return opt_elm.getAttribute('templateGuid');
 }
 
 // #endregion Getters

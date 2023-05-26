@@ -2,6 +2,7 @@
 /* TEMPLATE SELECTOR START */
 #pasteTemplateToolbarMenuSelectorDiv {
     width: 15%;
+    max-width: 175px;
     height: 30px;
     align-items: center;
     margin: 5px 5px 5px 10px;
@@ -92,14 +93,9 @@
 /* TEMPLATE SELECTOR END */
 
 
-div.template-datetime {
-    line-height: 0.3em;
-}
-
 #pasteTemplateToolbarDateTimeFormatSelectorContainer select, 
 #pasteTemplateToolbarDateTimeFormatSelectorContainer input,
-#pasteTemplateToolbarContactFieldSelectorContainer select 
-#pasteTemplateToolbarDasContainer textarea {
+#pasteTemplateToolbarContactFieldSelectorContainer select {
     font-size: 16px;
     padding: 6px;
     margin-left: 5px;

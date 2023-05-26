@@ -244,11 +244,34 @@ function sharedTemplateChanged_ext(changedTemplateTypeMsgBase64Str) {
 	// input 'MpQuillSharedTemplateDataChangedMessage'
 	let req = toJsonObjFromBase64Str(changedTemplateTypeMsgBase64Str);
 
-	if (!hasSharedTemplates()) {
+	if (!isNullOrEmpty(req.deletedTemplateGuid)) {
+		// change is delete
+		let t_to_delete = getTemplateDefs().find(x => x.templateGuid == req.deletedTemplateGuid);
+		if (!t_to_delete) {
+			// no ref here ignore
+			log('shared template ' + req.deletedTemplateGuid + ' NOT FOUND (for delete)');
+			return;
+		}
+		removeTemplatesByGuid(req.deletedTemplateGuid);
+		log('shared template ' + req.deletedTemplateGuid + ' REMOVED by host');
 		return;
 	}
-	updateLocalTemplatesFromDb();
 
+	let changed_t = toJsonObjFromBase64Str(req.changedTemplateFragmentStr);
+
+	// check if content contains changed template
+	let t_to_update = getTemplateDefs().find(x => x.templateGuid == changed_t.templateGuid);
+	if (!t_to_update) {
+		// nothing to update
+		log('shared template ' + req.deletedTemplateGuid + ' NOT FOUND (for update)');
+		return;
+	}
+	// NOTE retain local template state but use all other updated data
+	changed_t.templateState = t_to_update.templateState;
+
+	// update all local instances of template and re-evaluate paste value
+	setAllTemplateData(t_to_update.templateGuid, changed_t);
+	log('shared template ' + req.deletedTemplateGuid + ' UPDATED by host');
 }
 //function setSelection_ext(selMsgBase64Str) {
 //	// input 'MpQuillSelectionChangedMessage'

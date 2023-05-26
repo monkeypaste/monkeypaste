@@ -17,7 +17,11 @@ namespace MonkeyPaste {
         DateTime
     }
 
-    public class MpTextTemplate : MpDbModelBase, MpIClonableDbModel<MpTextTemplate>, MpIJsonObject, MpIJsonBase64Object {
+    public class MpTextTemplate :
+        MpDbModelBase,
+        MpIClonableDbModel<MpTextTemplate>,
+        MpIJsonObject,
+        MpIJsonBase64Object {
         #region Constants
         public const string TextTemplateOpenToken = @"{t{";
         public const string TextTemplateCloseToken = @"}t}";

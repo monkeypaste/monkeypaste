@@ -188,7 +188,9 @@ namespace MonkeyPaste {
     }
 
     public class MpQuillSharedTemplateDataChangedMessage : MpJsonObject {
-        public string changedTemplateType { get; set; }
+        // fragment 'MpTextTemplate'
+        public string changedTemplateFragmentStr { get; set; }
+        public string deletedTemplateGuid { get; set; }
     }
 
     public class MpQuillGetRequestNotification : MpJsonObject {

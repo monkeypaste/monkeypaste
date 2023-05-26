@@ -6,6 +6,7 @@
 function initPasteTemplateValue() {
     getPasteValueTextAreaElement().addEventListener('input', onTemplatePasteValueChanged);
     getPasteValueTextAreaElement().addEventListener('focus', onTemplatePasteValueFocus);
+    getPasteValueTextAreaElement().addEventListener('focus', onTemplatePasteValueBlur);
     //initBouncyTextArea(getPasteValueTextAreaElement());
 }
 
@@ -88,6 +89,17 @@ function onTemplatePasteValueFocus(e) {
         }
         focusTemplate(stguid);
     }
-
 }
+function onTemplatePasteValueBlur(e) {
+    let stguid = getSelectedOptionTemplateGuid();
+    let ftguid = getFocusTemplateGuid();
+    if (stguid != ftguid) {
+        if (!stguid) {
+            debugger;
+            return;
+        }
+        focusTemplate(stguid);
+    }
+}
+
 // #endregion Event Handlers

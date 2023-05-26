@@ -100,7 +100,9 @@ input[type=button] {
         color: blue;
     }
 
-    .input-wrapper textarea {
+    .input-wrapper textarea,
+    .input-wrapper select,
+    .input-wrapper input {
         outline: none;
         border: none;
         display: block;

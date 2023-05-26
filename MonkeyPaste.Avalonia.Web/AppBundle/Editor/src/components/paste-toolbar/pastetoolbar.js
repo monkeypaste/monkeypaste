@@ -54,22 +54,6 @@ function getPasteToolbarHeight() {
 
 // #region Setters
 
-function setPasteToolbarDefaultFocus() {
-    // focus template text area, paste button then editor when all nothing enabled
-
-    let pvta_elm = getPasteValueTextAreaElement();
-    let pb_elm = getPasteButtonElement();
-
-    if (isElementDisabled(pvta_elm)) {
-        if (isElementDisabled(pb_elm)) {
-            getEditorElement().focus();
-        } else {
-            pb_elm.focus({ focusVisible: true });
-        }
-    } else {
-        getPasteValueTextAreaElement().focus({ focusVisible: true });
-    }
-}
 // #endregion Setters
 
 // #region State
@@ -103,7 +87,7 @@ function showPasteToolbar(isPasting = false) {
         hidePasteTemplateToolbarItems();
     }
 
-    setPasteToolbarDefaultFocus();
+    focusTemplatePasteValueElement();
 
     if (animate_tb) {
         // only reset position if actually hidden

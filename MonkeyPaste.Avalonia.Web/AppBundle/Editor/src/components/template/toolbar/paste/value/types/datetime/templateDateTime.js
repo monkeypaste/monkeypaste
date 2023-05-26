@@ -17,6 +17,13 @@ const TemplateDateTimeFormatOptionLabels = [
 
 // #region Life Cycle
 
+function initDateTimeTemplate() {
+    getDateTimeTemplateFormatSelectorElement().addEventListener('change', onDateTimeSelFormatChanged);
+
+    getDateTimeTemplateCustomInputElement().addEventListener('keydown', onTemplateDateTimeCustomInputKeyDown, true);
+    getDateTimeTemplateCustomInputElement().addEventListener('blur', onTemplateDateTimeCustomInputBlur, true);
+}
+
 // #endregion Life Cycle
 
 // #region Getters
@@ -47,16 +54,19 @@ function getDateTimeTemplateFormatSelectorElement() {
 
 // #region State
 
+function isTemplateDateTimeCustom(t) {
+    if (!isTemplateDateTime(t)) {
+        return false;
+    }
+    return TemplateDateTimeFormatOptionLabels.includes(t.templateData) == false;
+}
 // #endregion State
 
 // #region Actions
 
-function createDateTimeFormatSelector(ft) {
-    const dt_sel_outer_elm = getDateTimeTemplateOuterContainerElement();
-    dt_sel_outer_elm.innerHTML = '';
-
-    let datetime_sel_elm = document.createElement('select');
-    datetime_sel_elm.id = "datetimeSelector";
+function createDateTimeFormatSelectorOpts(ft) {
+    let datetime_sel_elm = getDateTimeTemplateFormatSelectorElement();
+    datetime_sel_elm.innerHTML = '';
     const cur_dt = new Date();
     for (var i = 0; i < TemplateDateTimeFormatOptionLabels.length; i++) {
         let datetime_format = TemplateDateTimeFormatOptionLabels[i];
@@ -70,30 +80,25 @@ function createDateTimeFormatSelector(ft) {
         datetime_sel_elm.appendChild(datetime_opt_elm);
     }
 
-    dt_sel_outer_elm.appendChild(datetime_sel_elm);
-    datetime_sel_elm.addEventListener('change', onDateTimeSelFormatChanged);
+
+    let datetime_input_elm = getDateTimeTemplateCustomInputElement();
+    datetime_input_elm.classList.add('hidden');
     if (ft && ft.templateType.toLowerCase() == 'datetime') {
         // set dt format selection
-        if (TemplateDateTimeFormatOptionLabels.includes(ft.templateData)) {
-            // template has preset dt
-            datetime_sel_elm.value = ft.templateData;
-        } else {
+        if (isTemplateDateTimeCustom(ft)) {
             // template has custom format
             datetime_sel_elm.value = CUSTOM_TEMPLATE_LABEL_VAL;
-            // add custom input
-            dt_sel_outer_elm.appendChild(createCustomDateTimeFormatInputField(ft.templateData));
+
+            // show custom input
+            datetime_input_elm.value = getFormattedDateTime(null, ft.templateData);
+            datetime_input_elm.classList.remove('hidden');
+        } else {
+            // template has preset dt
+            datetime_sel_elm.value = ft.templateData;
         } 
     }
 }
 
-function createCustomDateTimeFormatInputField(cur_val) {
-    let datetime_input_elm = document.createElement('input');
-    datetime_input_elm.id = "datetimeCustomInput";
-    datetime_input_elm.value = getFormattedDateTime(null, cur_val);
-    datetime_input_elm.addEventListener('keydown', onTemplateDateTimeCustomInputKeyDown, true);
-    datetime_input_elm.addEventListener('blur', onTemplateDateTimeCustomInputBlur, true);
-    return datetime_input_elm;
-}
 
 function updateDateTimeFieldSelectorToFocus(ft) {
     if (!ft || ft.templateType.toLowerCase() != 'datetime') {
@@ -101,7 +106,7 @@ function updateDateTimeFieldSelectorToFocus(ft) {
         return;
     }
     getDateTimeTemplateOuterContainerElement().classList.remove('hidden');
-    createDateTimeFormatSelector(ft);
+    createDateTimeFormatSelectorOpts(ft);
     updateDateTimeTemplateToOptionChange();
 }
 
@@ -120,15 +125,12 @@ function updateDateTimeTemplateToOptionChange() {
     }
     let custom_format_elm = getDateTimeTemplateCustomInputElement();
     if (field_sel_elm.value == CUSTOM_TEMPLATE_LABEL_VAL) {
-        if (custom_format_elm == null) {
-            custom_format_elm = createCustomDateTimeFormatInputField(ft.templateData);
-            getDateTimeTemplateOuterContainerElement().appendChild(custom_format_elm);
-        }
+        custom_format_elm.value = getFormattedDateTime(null, ft.templateData);
+        custom_format_elm.classList.remove('hidden');
+
         ft.templateData = custom_format_elm.value;
     } else {
-        if (custom_format_elm != null) {
-            getDateTimeTemplateOuterContainerElement().removeChild(custom_format_elm);
-        }
+        custom_format_elm.classList.add('hidden');
         ft.templateData = field_sel_elm.value;
     }
     setTemplateData(ft.templateGuid, ft.templateData);

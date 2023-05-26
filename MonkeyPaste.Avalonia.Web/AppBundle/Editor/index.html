@@ -428,24 +428,24 @@
     <!-- EDIT TEMPLATE TOOLBAR -->
     <div id="editTemplateToolbar"
          class="common-toolbar bottom-align hidden">
-        <div class="resizer resizer-t"></div>
-        <div id="templateColorBox"></div>
+        <div id="templateColorBox" class="template-data-element" tabindex="0"></div>
         <div class="input-wrapper">
-            <label for="templateName">Name</label>
+            <label for="templateNameTextArea">Name</label>
             <textarea id="templateNameTextArea"
-                      name="templateName"
+                      tabindex="1"
                       rows="1"
                       cols="20"
+                      class="template-data-element"
                       spellcheck="false"></textarea>
         </div>
-        <button id="editTemplateDeleteButton" class="right-align" type="button">
+        <button id="editTemplateDeleteButton" class="right-align" type="button" tabindex="2">
             <span>DELETE</span>
         </button>
     </div>
 
     <!-- TOOLTIP TOOLBAR -->
     <div id="tooltipToolbar"
-         class="common-toolbar bottom-align tooltip-overlay hidden">
+         class="common-toolbar bottom-align tooltip-overlay hidden compact-line-height">
         TOOLTIPZ ZONE
     </div>
     
@@ -470,11 +470,17 @@
 
         <!-- CONTACT TEMPLATE -->
 
-        <div id="pasteTemplateToolbarContactFieldSelectorContainer" class="paste-template-item hidden"></div>
+        <div id="pasteTemplateToolbarContactFieldSelectorContainer" class="paste-template-item hidden">
+            <select id="contactFieldSelector" class="template-data-element"></select>
+            <select id="contactSelector" class="template-data-element"></select>
+        </div>
 
         <!-- DATETIME TEMPLATE -->
 
-        <div id="pasteTemplateToolbarDateTimeFormatSelectorContainer" class="paste-template-item hidden"></div>
+        <div id="pasteTemplateToolbarDateTimeFormatSelectorContainer" class="paste-template-item hidden">
+            <select id="datetimeSelector" class="template-data-element"></select>
+            <input id="datetimeCustomInput" class="template-data-element" />
+        </div>
 
         <!-- DYNAMIC/STATIC TEMPLATE -->
         <div id="pasteTemplateToolbarDasContainer" class="paste-template-item hidden">
@@ -482,12 +488,14 @@
                       rows="1"
                       cols="20"
                       tabindex="1"
-                      spellcheck="false"
+                      spellcheck="false" 
+                      class="template-data-element"
                       placeholder="Enter paste text..."></textarea>
         </div>
 
         <!-- PASTE VALUE HINT INFO -->
-        <div id="templatePasteValueHintOuterContainer" class="paste-template-item tooltip-hint-container" hover-tooltip=""></div>
+        <div id="templatePasteValueHintOuterContainer" class="paste-template-item tooltip-hint-container invisible" toolbar-tooltip=""></div>
+
         <!-- CLEAR BUTTON -->
         <button id="clearAllTemplateTextButton"
                 class="paste-template-item"
@@ -562,15 +570,24 @@
 
         <!-- CONTACT HINT 1 -->
         <div class="template-contact tooltiptext">
-            <p>Using available contacts (requires a fetcher plugin) this field will be used for all instances of this template across this document or in any it will be referenced in later. So for example if select email address here then the email field of the contact you select will be used for all instances in this document.</p>
+            <p>Using available contacts (requires a fetcher plugin) this field will be used for all instances of this template across this document or in any it will be referenced in later.</p>
+            <p> So for example if select email address here then the email field of the contact you select will be used for all instances in this document.</p>
         </div>
 
         <!-- STATIC -->
         <div class="template-static tooltiptext">
-            <p>Static templates are shared across the whole application. So the value you have here will always be used when pasting.</p>
+            <p>Static templates are shared across the whole application. </p>
+            <p>So the value you have here will always be used when pasting.</p>
         </div>
+
         <!-- DATE TIME HINT -->
         <div class="template-datetime tooltiptext">
+            <p>The current date and/or time will be substituted for DateTime templates from moment they evaluated ie. pasted.</p>
+            <p>The specified format is shared so changes here will update system-wide.</p>
+        </div>
+            
+        <!-- DATE TIME CUSTOM HINT -->
+        <div class="template-datetime-custom tooltiptext left-text-align">
             <p>yy = short year</p>
             <p>yyyy = long year</p>
             <p>M = month (1-12)</p>

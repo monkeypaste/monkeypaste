@@ -51,6 +51,12 @@ namespace MonkeyPaste {
             var result = await MpDb.QueryScalarAsync<int>(query, guid);
             return result;
         }
+
+        public static async Task<T> GetItemAsync<T>(string guid) where T : new() {
+            int item_id = await GetItemIdByGuidAsync<T>(guid);
+            var result = await GetItemAsync<T>(item_id);
+            return result;
+        }
         #endregion
 
         #region Id Query
@@ -360,9 +366,8 @@ namespace MonkeyPaste {
             return result[0];
         }
         public static async Task<List<MpCopyItem>> GetCopyItemsByTextTemplateGuid(string tguid) {
-            string whereStr = $"where CopyItemData LIKE '%templateguid=''{tguid}''%'";
-            string query = $"select * from MpCopyItem {whereStr}";
-            var result = await MpDb.QueryAsync<MpCopyItem>(query);
+            string query = $"select * from MpCopyItem where ItemData LIKE '%templateguid=?%'";
+            var result = await MpDb.QueryAsync<MpCopyItem>(query, tguid);
             return result;
         }
         #endregion

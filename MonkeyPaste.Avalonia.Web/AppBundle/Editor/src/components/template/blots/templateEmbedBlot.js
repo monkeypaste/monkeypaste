@@ -209,6 +209,10 @@ function applyTemplateToDomNode(node, value) {
 }
 
 function onTemplateDeleteButtonClick(e) {
+    if (!isNullOrUndefined(e.button) && e.button == 2) {
+        // ignore right click
+        return;
+    }
     let telm = e.target.parentNode;
     if (telm) {
         removeTemplateElement(telm);
@@ -217,6 +221,10 @@ function onTemplateDeleteButtonClick(e) {
 
 function onTemplateClick(e) {
     log('template clicked');
+    if (!isNullOrUndefined(e.button) && e.button == 2) {
+        // ignore right click
+        return;
+    }
 
 
     if (!isSubSelectionEnabled()) {

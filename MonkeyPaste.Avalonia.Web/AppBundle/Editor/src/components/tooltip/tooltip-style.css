@@ -25,6 +25,7 @@ body.no-host .tooltip-hint-container::before {
         transform: translate(6px, -2px);
 }
 
+
 .tooltip-block-container:not(.invisible) {
     display: block;
     position: absolute !important;

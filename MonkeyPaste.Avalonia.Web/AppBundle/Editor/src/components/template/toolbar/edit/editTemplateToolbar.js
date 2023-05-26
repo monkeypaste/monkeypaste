@@ -1,11 +1,7 @@
 ﻿
-//var globals.TemplateBeforeEdit = null;
-
 // #region Life Cycle
 
 function initEditTemplateToolbar() {
-    enableResize(getEditTemplateToolbarContainerElement());
-
     addClickOrKeyClickEventListener(getEditTemplateColorBoxElement(), onTemplateColorBoxContainerClick);
     addClickOrKeyClickEventListener(getDeleteTemplateButtonElement(), onDeleteTemplateButtonClick);
 
@@ -16,23 +12,20 @@ function initEditTemplateToolbar() {
 }
 
 function showEditTemplateToolbar(isNew = false) {
+    const needs_update = isShowingEditTemplateToolbar() == false;
     let ett = getEditTemplateToolbarContainerElement();
     ett.classList.remove('hidden');
+    getPasteEditFocusTemplateButtonElement().classList.add('checked');
 
-    let t = getTemplateDefByGuid(getFocusTemplateGuid());
+    let t = getTemplateDefByGuid(getFocusTemplateGuid(true));
     if (t) {
-        //if (isNew) {
-        //    // keep comprarer empty besides guid to ensure host is notified of add
-        //    globals.TemplateBeforeEdit = { templateGuid: t.templateGuid };
-        //} else {
-        //    globals.TemplateBeforeEdit = t;
-        //}
         createEditTemplateToolbarForTemplate(t);
     } else {
         log('no focus template found');
     }
-
-    updateAllElements();
+    if (needs_update) {
+        updateAllElements();
+    }
 }
 
 function hideEditTemplateToolbar(wasEscCancel = false, wasDelete = false) {
@@ -40,19 +33,8 @@ function hideEditTemplateToolbar(wasEscCancel = false, wasDelete = false) {
         hideColorPaletteMenu();
         clearAllTemplateEditClasses();
         getEditTemplateToolbarContainerElement().classList.add('hidden');
+        getPasteEditFocusTemplateButtonElement().classList.remove('checked');
     }
-
-    if (!wasDelete && isTemplateSharedValue(globals.TemplateBeforeEdit)) {
-        // get new or updated def
-        let updated_t = getTemplateDefByGuid(globals.TemplateBeforeEdit.templateGuid);
-        if (isTemplateDefChanged(globals.TemplateBeforeEdit, updated_t) && !wasEscCancel) {
-            // t new or updated
-            onAddOrUpdateTemplate_ntf(updated_t);
-        }
-    }
-
-    // reset comprarer template
-    globals.TemplateBeforeEdit = null;
 }
 
 // #endregion Life Cycle
@@ -83,17 +65,6 @@ function getDeleteTemplateButtonElement() {
 
 // #region Setters
 
-function setTemplateName(tguid, name) {
-    var telms = getTemplateElements(tguid);
-    for (var i = 0; i < telms.length; i++) {
-        var telm = telms[i];
-        if (telm.getAttribute('templateGuid') == tguid) {
-            telm.setAttribute('templateName', name);
-            //changeInnerText(telm, telm.innerText, name);
-            setTemplateElementText(telm, name);
-        }
-    }
-}
 
 function setEditToolbarColorButtonColor(chex) {
     getEditTemplateColorBoxElement().style.backgroundColor = chex;
@@ -106,7 +77,7 @@ function showTemplateColorPaletteMenu() {
     hideColorPaletteMenu();
 
     let color_box_elm = getEditTemplateColorBoxElement();
-    let ft = getFocusTemplate();
+    let ft = getFocusTemplate(true);
     if (!ft) {
         debugger;
     }
@@ -134,8 +105,7 @@ function hideTemplateColorPaletteMenu() {
 }
 
 function createEditTemplateToolbarForTemplate(t) {
-    globals.TemplateBeforeEdit = t;
-    if (!globals.TemplateBeforeEdit) {
+    if (!t) {
         return;
     }
     log('Editing Template: ' + t.templateGuid + " selected type: " + t.templateType);
@@ -164,12 +134,6 @@ function updateEditTemplateToolbarSizesAndPositions() {
 
 function isShowingEditTemplateToolbar() {
     return !getEditTemplateToolbarContainerElement().classList.contains('hidden');
-}
-
-function resetEditTemplateToolbar() {
-    globals.TemplateBeforeEdit = null;
-
-    hideEditTemplateToolbar();
 }
 
 // #endregion State
@@ -211,7 +175,7 @@ function onTemplateColorBoxContainerClick(e) {
 
 function onTemplateNameChanged(e) {
     let newTemplateName = getEditTemplateNameTextAreaElement().value;
-    setTemplateName(globals.TemplateBeforeEdit.templateGuid, newTemplateName);
+    setTemplateName(getFocusTemplateGuid(), newTemplateName);
 }
 
 
@@ -238,10 +202,7 @@ function onDeleteTemplateButtonClick(e) {
 }
 
 function onColorPaletteItemClick(chex) {
-    let tguid = globals.TemplateBeforeEdit.templateGuid;
-    let t = getTemplateDefByGuid(tguid);
-
-    setTemplateBgColor(tguid, chex, false);
+    setTemplateBgColor(getFocusTemplateGuid(true), chex, false);
     
     hideAllTemplateContextMenus();
 }

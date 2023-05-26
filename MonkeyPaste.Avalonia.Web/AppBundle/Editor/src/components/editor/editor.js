@@ -149,6 +149,10 @@ function isSubSelectionEnabled() {
 	return getEditorContainerElement().classList.contains('sub-select');
 }
 
+function isEditorFocused() {
+	return isChildOfElement(document.activeElement, getEditorElement());
+}
+
 // #endregion State
 
 // #region Actions
@@ -389,7 +393,19 @@ function onEditorTextChanged(delta, oldDelta, source) {
 
 	loadLinkHandlers();
 
-	if (!globals.SuppressTextChangedNtf) {
+	let suppress_text_change_ntf = globals.SuppressTextChangedNtf;
+
+	if (globals.IsLoaded &&
+		!suppress_text_change_ntf &&		
+		isDeltaContainTemplate(delta) &&
+		isAnyTemplateToolbarElementFocused()) {
+		// NOTE template data changes need to be suppressed until they lost focus
+		suppress_text_change_ntf = true;
+	}
+
+	if (suppress_text_change_ntf) {
+		log('text change ntf suppressed');
+	} else {
 		onContentChanged_ntf();
 	}
 	

@@ -20,9 +20,9 @@ function initPasteTemplateToolbarItems() {
 
     initPasteToolbarIcons();
 
-    initPasteTemplateValue();
-
     initPasteTemplateFocusSelector();
+
+    initTemplateValueTypes();
 }
 
 function initPasteToolbarIcons() {
@@ -35,6 +35,7 @@ function initPasteToolbarIcons() {
     let edit_icon_elm = getPasteEditFocusTemplateButtonElement().firstChild;
     edit_icon_elm.replaceWith(createSvgElement('edit-template', 'svg-icon paste-toolbar-icon'));
 }
+
 
 function showPasteTemplateToolbarItems() {
     let ptil = Array.from(document.getElementsByClassName('paste-template-item'));
@@ -85,6 +86,10 @@ function getTemplatePasteValue(t) {
     if (!t) {
         return '';
     }
+    if (isTemplateDateTime(t)) {
+        // always return most current date time
+        return getFormattedDateTime(null, t.templateData);
+    }
     if (isTemplateStatic(t)) {
         return t.templateData;
     }
@@ -99,35 +104,6 @@ function getPasteTemplateDefs() {
 // #endregion Getters
 
 // #region Setters
-
-
-function setTemplateData(tguid, newTemplateData) {
-    let telms = getTemplateElements(tguid);
-    for (var i = 0; i < telms.length; i++) {
-        let telm = telms[i];
-        telm.setAttribute('templateData', newTemplateData);
-    }
-}
-
-function setTemplateState(tguid, newTemplateState) {
-    let telms = getTemplateElements(tguid);
-    for (var i = 0; i < telms.length; i++) {
-        let telm = telms[i];
-        telm.setAttribute('templateState', newTemplateState);
-    }
-}
-
-function setTemplatePasteValue(tguid, val) {
-    let t = getTemplateDefByGuid(tguid);
-    let telms = getTemplateElements(tguid);
-    for (var i = 0; i < telms.length; i++) {
-        let telm = telms[i];
-
-        telm.setAttribute('templateText', val);
-    }
-    //updateTemplatesAfterTextChanged();
-}
-
 // #endregion Setters
 
 // #region State
@@ -327,6 +303,16 @@ function updatePasteTemplateToolbarToFocus(ftguid, paste_sel) {
     if (!template_in_focus) {
         ft = null;
     }
+    if (isShowingEditTemplateToolbar()) {
+        if (ft) {
+            // update edit to show cur focus
+            showEditTemplateToolbar();
+        } else {
+            // hide edit due to selection
+            hideEditTemplateToolbar();
+        }
+    }
+
     // UPDATE DYNAMIC/STATIC
     updatePasteValueTextAreaToFocus(ft);
 
@@ -347,12 +333,17 @@ function updatePasteValueHint(ft) {
     }
     getPasteTemplateHintContainerElement().classList.remove('invisible');
 
-    let match_class = ft ? `template-${ft.templateType.toLowerCase()}` : 'none';
+    let ft_class_suffix = ft.templateType.toLowerCase();
+    if (isTemplateDateTimeCustom(ft)) {
+        ft_class_suffix += '-custom';
+    }
+
+    let match_class = ft ? `template-${ft_class_suffix}` : 'none';
     let tt_def_matches = document.getElementById('tooltipDefs').getElementsByClassName(match_class);
     if (tt_def_matches.length == 1) {
-        getPasteTemplateHintContainerElement().setAttribute(TOOLTIP_HOVER_ATTRB_NAME, tt_def_matches[0].outerHTML.trim());
+        getPasteTemplateHintContainerElement().setAttribute(TOOLTIP_TOOLBAR_ATTRB_NAME, tt_def_matches[0].outerHTML.trim());
     } else {
-        getPasteTemplateHintContainerElement().setAttribute(TOOLTIP_HOVER_ATTRB_NAME, "");
+        getPasteTemplateHintContainerElement().setAttribute(TOOLTIP_TOOLBAR_ATTRB_NAME, "");
     }
 }
 function updatePasteTemplateValues() {

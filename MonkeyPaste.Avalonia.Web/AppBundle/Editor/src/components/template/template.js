@@ -149,20 +149,27 @@ function getFocusTemplateElement() {
     return null;
 }
 
-function getFocusTemplate() {
-    let ftguid = getFocusTemplateGuid();
+function getFocusTemplate(fallbackToTemplateSelector = false) {
+    let ftguid = getFocusTemplateGuid(fallbackToTemplateSelector);
     if (!ftguid) {
         return null;
     }
     return getTemplateDefByGuid(ftguid);
 }
 
-function getFocusTemplateGuid() {
+function getFocusTemplateGuid(fallbackToTemplateSelector = false) {
     let ft = getFocusTemplateElement();
     if (ft == null) {
+        if (fallbackToTemplateSelector) {
+            return getSelectedOptionTemplateGuid();
+        }
         return null;
     }
-    return ft.getAttribute('templateGuid');
+    let ft_guid = ft.getAttribute('templateGuid');
+    if (!ft_guid && fallbackToTemplateSelector) {
+        ft_guid = getSelectedOptionTemplateGuid();
+    }
+    return ft_guid;
 }
 
 function getFocusTemplateElements() {
@@ -414,22 +421,71 @@ function getTemplatePadAdjustedRange(sel) {
 
 // #region Setters
 
-function setTemplateBgColor(tguid, color_name_or_hex) {
-    let tel = getTemplateElements(tguid);
-    for (var i = 0; i < tel.length; i++) {
-        tel[i].style.backgroundColor = color_name_or_hex;
-        tel[i].firstChild.nextSibling.style.color = getContrastHexColor(color_name_or_hex);
-        //setSvgElmColor(tel[i].firstChild, tel[i].style.color);
-
-        tel[i].setAttribute('templateColor', color_name_or_hex);
-    }
-    setEditToolbarColorButtonColor(color_name_or_hex);
-    createTemplateSelector(tguid, getDocSelection(true));
-}
 
 function setTemplateElementText(telm, text) {
-
     getTemplateElementTextSpan(telm).innerText = text;
+}
+function setTemplateElementColor(telm, tcolor) {
+    telm.style.backgroundColor = tcolor;
+    telm.firstChild.nextSibling.style.color = getContrastHexColor(tcolor);
+}
+
+function setTemplateProperty_internal(tguid, tproperty, tpropertyValue) {
+    let did_property_change = null;
+    var telms = getTemplateElements(tguid);
+    for (var i = 0; i < telms.length; i++) {
+        var telm = telms[i];
+        if (telm.getAttribute('templateGuid') == tguid) {
+            if (did_property_change == null) {
+                did_property_change = telm.getAttribute(tproperty) == tpropertyValue;
+            }
+            telm.setAttribute(tproperty, tpropertyValue);
+            if (tproperty == 'templateName') {
+                setTemplateElementText(telm, tpropertyValue);
+            } else if (tproperty == 'templateColor') {
+                setTemplateElementColor(telm, tpropertyValue)
+            }            
+        }
+    }
+    if (tproperty == 'templateColor') {
+        setEditToolbarColorButtonColor(tpropertyValue);
+        createTemplateSelector(tguid, getDocSelection(true));
+    }
+
+    if (did_property_change == null) {
+        did_property_change = false;
+    }
+    return did_property_change;
+}
+
+function setTemplateBgColor(tguid, color_name_or_hex) {
+    return setTemplateProperty_internal(tguid, 'templateColor', color_name_or_hex);
+}
+
+
+function setTemplateName(tguid, tname) {
+    return setTemplateProperty_internal(tguid, 'templateName', tname);
+}
+function setTemplateData(tguid, tdata) {
+    return setTemplateProperty_internal(tguid, 'templateData', tdata);
+}
+
+function setTemplateState(tguid, tstate) {
+    return setTemplateProperty_internal(tguid, 'templateState', tstate);
+}
+
+function setTemplatePasteValue(tguid, ttext) {
+    return setTemplateProperty_internal(tguid, 'templateText', ttext);
+}
+
+function setAllTemplateData(tguid, t) {
+    if (!t) {
+        return;
+    }
+    setTemplateBgColor(tguid, t.templateColor);
+    setTemplateName(tguid, t.templateName);
+    setTemplateData(tguid, t.templateData);
+    setTemplatePasteValue(tguid, evalTemplateValue(t));
 }
 // #endregion Setters
 
@@ -455,6 +511,23 @@ function isTemplateElementFocused(telm) {
         return false;
     }
     return telm.classList.contains('focused');
+}
+
+function isDeltaContainTemplate(delta) {
+    if (isNullOrUndefined(delta) ||
+        isNullOrUndefined(delta.ops) ||
+        !Array.isArray(delta.ops)) {
+        return false;
+    }
+    for (var i = 0; i < delta.ops.length; i++) {
+        let op = delta.ops[i];
+        if (isNullOrUndefined(op.attributes) ||
+            isNullOrUndefined(op.attributes.templateGuid)) {
+            continue;
+        }
+        return true;
+    }
+    return false;
 }
 
 // #region Type Checks
@@ -651,7 +724,8 @@ function isDocIdxAtTemplateInsert(doc_idx, telm) {
 
 function loadTemplates() {
     updateQuill();
-    resetEditTemplateToolbar();
+    resetTemplates();
+
     let telml = getTemplateElements();
     for (var i = 0; i < telml.length; i++) {
         let t_elm = telml[i];
@@ -718,6 +792,9 @@ function resetTemplates() {
     for (var i = 0; i < telms.length; i++) {
         resetTemplateElement(telms[i]);
     }
+
+    hideEditTemplateToolbar();
+    globals.TemplateBeforEdit = null;
 }
 
 function finishTemplatePaste() {

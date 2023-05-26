@@ -665,36 +665,18 @@ namespace MonkeyPaste.Avalonia {
                     ntf = MpJsonConverter.DeserializeBase64Object<MpQuillTemplateAddOrUpdateNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillTemplateAddOrUpdateNotification addOrUpdateTemplateMsg) {
                         var t = MpJsonConverter.DeserializeBase64Object<MpTextTemplate>(addOrUpdateTemplateMsg.addedOrUpdatedTextTemplateBase64JsonStr);
-                        if (t.IsInputTypeTemplate()) {
-                            // ignore, no point persisting input templates since they're only relevant during a paste 
-                            MpConsole.WriteLine($"Ignoring addOrUpdate INPUT template: '{t}'");
-                            return;
-                        }
-                        Task.Run(async () => {
-                            int tid = await MpDataModelProvider.GetTextTemplateIdByGuidAsync(t.Guid);
-                            t.Id = tid;
-                            await t.WriteToDatabaseAsync();
-                            MpConsole.WriteLine($"Template '{t}': {(tid == 0 ? "Added" : "Updated")}");
-                        }).FireAndForgetSafeAsync(ctvm);
+                        MpAvTemplateModelHelper.Instance
+                            .AddOrUpdateTemplateAsync(BindingContext.CopyItemId, t)
+                            .FireAndForgetSafeAsync();
                     }
 
                     break;
                 case MpAvEditorBindingFunctionType.notifyUserDeletedTemplate:
                     ntf = MpJsonConverter.DeserializeBase64Object<MpQuillUserDeletedTemplateNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillUserDeletedTemplateNotification deleteTemplateMsg) {
-                        Task.Run(async () => {
-                            var t = await MpDataModelProvider.GetTextTemplateByGuidAsync(deleteTemplateMsg.userDeletedTemplateGuid);
-                            if (t == null) {
-                                MpConsole.WriteLine($"Template not found to delete. Guid '{deleteTemplateMsg.userDeletedTemplateGuid}' Tile: '{ctvm}'");
-                                return;
-                            }
-                            if (t.IsInputTypeTemplate()) {
-                                // shouldn't exist
-                                MpDebug.Break();
-                            }
-                            await t.DeleteFromDatabaseAsync();
-                            MpConsole.WriteLine($"Template '{t}': DELETED");
-                        }).FireAndForgetSafeAsync(ctvm);
+                        MpAvTemplateModelHelper.Instance
+                            .DeleteTemplateAsync(BindingContext.CopyItemId, deleteTemplateMsg.userDeletedTemplateGuid)
+                            .FireAndForgetSafeAsync();
                     }
                     break;
 
@@ -827,7 +809,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
 
                 case MpAvEditorBindingFunctionType.getContactsFromFetcher:
-                    var cl = await MpMasterTemplateModelCollectionViewModel.Instance.GetContactsAsync();
+                    var cl = await MpAvTemplateModelHelper.Instance.GetContactsAsync();
                     getResp.responseFragmentJsonStr = MpJsonConverter.SerializeObject(cl);
                     break;
                 case MpAvEditorBindingFunctionType.getClipboardDataTransferObject:

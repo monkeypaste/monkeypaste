@@ -49,6 +49,10 @@
     color: var(--hovercolor) !important;
 }
 
+#editor.no-select .delete-template-button {
+    display: none;
+}
+
 /*#editor:not(.no-select) .template-blot-at-insert > span {
     color: var(--insertselectcolor) !important;
 }*/

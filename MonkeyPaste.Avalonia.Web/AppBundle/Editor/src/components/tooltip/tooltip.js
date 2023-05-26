@@ -1,20 +1,33 @@
 // #region Globals
 
 const TOOLTIP_HOVER_ATTRB_NAME = "hover-tooltip";
+const TOOLTIP_TOOLBAR_ATTRB_NAME = "toolbar-tooltip";
 
 // #endregion Globals
 
 // #region Life Cycle
 
 function initTooltip() {
-	const htt_elms = getTooltipHoverElements();
-	for (var i = 0; i < htt_elms.length; i++) {
-		const htt_elm = htt_elms[i];
+
+	const hover_tt_elms = getTooltipHoverElements();
+	for (var i = 0; i < hover_tt_elms.length; i++) {
+		const htt_elm = hover_tt_elms[i];
 		htt_elm.addEventListener('pointerenter', (e) => {
 			showTooltipOverlay(e.currentTarget);
 		});
 		htt_elm.addEventListener('pointerleave', (e) => {
 			hideTooltipOverlay();
+		});
+	}
+
+	const toolbar_tt_elms = getTooltipToolbarlements();
+	for (var i = 0; i < toolbar_tt_elms.length; i++) {
+		const ttt_elm = toolbar_tt_elms[i];
+		ttt_elm.addEventListener('pointerenter', (e) => {
+			showTooltipToolbar(e.currentTarget.getAttribute(TOOLTIP_TOOLBAR_ATTRB_NAME));
+		});
+		ttt_elm.addEventListener('pointerleave', (e) => {
+			hideTooltipToolbar();
 		});
 	}
 }
@@ -33,6 +46,9 @@ function getTooltipToolbarElement() {
 
 function getTooltipHoverElements() {
 	return Array.from(document.querySelectorAll(`[${TOOLTIP_HOVER_ATTRB_NAME}]`));
+}
+function getTooltipToolbarlements() {
+	return Array.from(document.querySelectorAll(`[${TOOLTIP_TOOLBAR_ATTRB_NAME}]`));
 }
 
 // #endregion Getters

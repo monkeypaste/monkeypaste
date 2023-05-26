@@ -1,14 +1,11 @@
 ﻿// #region Globals
-
-//var globals.AvailableContacts = [];
-
-
-//const CONTACT_TEMPLATE_DATA_SEP_TOKEN = '!&^';
-
-
 // #endregion Globals
 
 // #region Life Cycle
+function initTemplateContact() {
+    getContactFieldSelectorElement().addEventListener('change', onContactFieldChanged);
+    getContactSelectorElement().addEventListener('change', onSelectedContactFieldChanged);
+}
 
 // #endregion Life Cycle
 
@@ -131,13 +128,16 @@ function getContactFieldSelectorElement() {
 
 // #region Actions
 
-function createContactFieldSelector(ft) {
+function createAllContactSelectOpts(ft) {
+    createContactFieldSelectorOpts(ft);
+    createContactSelectorOpts(ft);
+}
 
-    let contacts_outer_container_elm = getContactOuterContainerElement();
-    contacts_outer_container_elm.innerHTML = '';
+function createContactFieldSelectorOpts(ft) {
+    let contact_field_sel_elm = getContactFieldSelectorElement();
+    contact_field_sel_elm.innerHTML = '';
 
     const fields = getAllContactFields();
-    let contact_field_sel_elm = document.createElement('select');
     contact_field_sel_elm.id = "contactFieldSelector";
     for (var i = 0; i < fields.length; i++) {
         let field_opt_elm = document.createElement('option');
@@ -146,20 +146,12 @@ function createContactFieldSelector(ft) {
         contact_field_sel_elm.appendChild(field_opt_elm);
     }
 
-    contacts_outer_container_elm.appendChild(contact_field_sel_elm);
-    contact_field_sel_elm.addEventListener('change', onContactFieldChanged);
-
-    let contact_sel_elm = createContactSelector();
-    contacts_outer_container_elm.appendChild(contact_sel_elm);
-    contact_sel_elm.addEventListener('change', onSelectedContactFieldChanged);
-
     contact_field_sel_elm.value = getContactTemplateSelField(ft);
-    contact_sel_elm.value = getContactTemplateLastSelGuid(ft);
 }
 
-function createContactSelector() {
-    let contact_sel_elm = document.createElement('select');
-    contact_sel_elm.id = "contactSelector";
+function createContactSelectorOpts(ft) {
+    let contact_sel_elm = getContactSelectorElement();
+    contact_sel_elm.innerHTML = '';
     for (var i = 0; i < globals.AvailableContacts.length + 1; i++) {
         let contact_opt_elm = document.createElement('option');
         if (i == 0) {
@@ -173,7 +165,7 @@ function createContactSelector() {
         contact_opt_elm.innerText = getContactLabel(contact);    
         contact_sel_elm.appendChild(contact_opt_elm);
     }
-    return contact_sel_elm;
+    contact_sel_elm.value = getContactTemplateLastSelGuid(ft);
 }
 function updateContactFieldSelectorToFocus(ft) {
     if (!ft || ft.templateType.toLowerCase() != 'contact') {
@@ -191,13 +183,12 @@ function updateContactFieldSelectorToFocus(ft) {
                 } else {
                     globals.AvailableContacts = [];
                 }
-
-                createContactFieldSelector(ft);
+                createAllContactSelectOpts(ft);
                 updateContactTemplateToOptionChange();
             });
         return;
     }
-    createContactFieldSelector(ft);
+    createAllContactSelectOpts(ft)
     updateContactTemplateToOptionChange();
 }
 
@@ -223,11 +214,15 @@ function updateContactTemplateToOptionChange() {
         return;
     }
     let new_ft_pv = '';
-    let sel_contact_opt_elm = Array.from(contact_sel_elm.children).find(x => x.value == contact_sel_elm.value);
+    let sel_contact_opt_elm =
+        Array.from(contact_sel_elm.children)
+            .find(x => x.value == contact_sel_elm.value);
 
     let contact_guid = '';
     if (sel_contact_opt_elm) {
-        let sel_contact = globals.AvailableContacts.find(x => x.guid == sel_contact_opt_elm.getAttribute('contactGuid'));
+        let sel_contact =
+            globals.AvailableContacts
+                .find(x => x.guid == sel_contact_opt_elm.getAttribute('contactGuid'));
         if (sel_contact) {
             contact_guid = sel_contact.guid;
             new_ft_pv = sel_contact[field_val];

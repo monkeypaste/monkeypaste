@@ -29,6 +29,7 @@ body {
     --defaultFontSize: 12px;
     --pastetemplatebgcolor: teal;
     --pastetoolbarbuttoncolor: dodgerblue;
+    --pastetoolbarbuttoncolor_checked: blue;
     --edittemplatebgcolor: palegreen;
     --tooltipbgcolor: khaki;
     --tooltipbordercolor: darkkhaki;
@@ -200,5 +201,13 @@ textarea:placeholder-shown {
     font-style: italic;
     font-size: 10px;
     color: silver;
+}
+
+.left-text-align {
+    text-align: left;
+}
+
+.compact-line-height {
+    line-height: 0.3em;
 }
 
