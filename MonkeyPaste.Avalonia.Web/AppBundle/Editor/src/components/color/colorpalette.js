@@ -1,11 +1,5 @@
 // #region Globals
-var ColorPaletteAnchorElement = null;
-var ColorPaletteAnchorResultCallback = null;
 
-const COLOR_PALETTE_ROW_COUNT = 5;
-const COLOR_PALETTE_COL_COUNT = 14;
-
-var IsCustomColorPaletteOpen = false;
 
 // #endregion Globals
 
@@ -42,10 +36,10 @@ function showColorPaletteMenu(
 
     let anchor_elm_rect = cleanRect();
     if (anchor_elm) {
-        ColorPaletteAnchorElement = anchor_elm;
+        globals.ColorPaletteAnchorElement = anchor_elm;
         anchor_elm_rect = cleanRect(anchor_elm.getBoundingClientRect());
     } else {
-        ColorPaletteAnchorElement = {};
+        globals.ColorPaletteAnchorElement = {};
     }
 
     anchor_sides = anchor_sides ? anchor_sides : 'top|left';
@@ -80,11 +74,11 @@ function showColorPaletteMenu(
 function hideColorPaletteMenu() {
     getColorPaletteContainerElement().classList.add('hidden');
     window.removeEventListener('click', onWindowClickWithColorPaletteOpen);
-    if (IsCustomColorPaletteOpen) {
+    if (globals.IsCustomColorPaletteOpen) {
         // preserve anchor element when custom is open, palette gets closed on outside click
         return;
     }
-    ColorPaletteAnchorElement = null;
+    globals.ColorPaletteAnchorElement = null;
 }
 // #endregion Life Cycle
 
@@ -95,8 +89,8 @@ function getColorPaletteContainerElement() {
 }
 
 function getColorPaletteHtml(sel_color) {
-    let rc = COLOR_PALETTE_ROW_COUNT;
-    let cc = COLOR_PALETTE_COL_COUNT;
+    let rc = globals.COLOR_PALETTE_ROW_COUNT;
+    let cc = globals.COLOR_PALETTE_COL_COUNT;
     let idx = 0;
     let paletteHtml = '<table>';
     let wasSelColorFound = false;
@@ -107,12 +101,12 @@ function getColorPaletteHtml(sel_color) {
     for (var r = 0; r < rc; r++) {
         paletteHtml += '<tr>';
         for (var c = 0; c < cc; c++) {
-            let c = ContentColors[idx];
+            let c = globals.ContentColors[idx];
             let is_selected = false;
             let item_class = 'color-palette-item';
             if (sel_color) {
                 if (c.toLowerCase() == palette_sel_color.toLowerCase() ||
-                    (idx == ContentColors.length - 1 && !wasSelColorFound)) {
+                    (idx == globals.ContentColors.length - 1 && !wasSelColorFound)) {
                     // when this is the selected palette item and its not
                     // the custom palette item
                     item_class += ' color-palette-item-selected';
@@ -122,7 +116,7 @@ function getColorPaletteHtml(sel_color) {
             }
             let item_style = '';
             let item_inner_html = '';
-            if (idx == ContentColors.length - 1) {
+            if (idx == globals.ContentColors.length - 1) {
                 // custom br pallete item
                 item_inner_html = `<span>+</span>`;
                 c = sel_color;
@@ -157,9 +151,9 @@ function isShowingColorPaletteMenu() {
 }
 
 function resetColorPaletteState() {
-    IsCustomColorPaletteOpen = false;
-    ColorPaletteAnchorResultCallback = null;
-    ColorPaletteAnchorElement = null;
+    globals.IsCustomColorPaletteOpen = false;
+    globals.ColorPaletteAnchorResultCallback = null;
+    globals.ColorPaletteAnchorElement = null;
 }
 
 // #endregion State
@@ -168,7 +162,7 @@ function resetColorPaletteState() {
 
 function processCustomColorResult(dotnetHexResult) {
     const css_hex = dotnetHexToCssHex(dotnetHexResult);
-    ColorPaletteAnchorResultCallback(css_hex);
+    globals.ColorPaletteAnchorResultCallback(css_hex);
     resetColorPaletteState();
 }
 
@@ -182,9 +176,9 @@ function onCustomColorPaletteItemClick(e, orgCallbackHandler) {
     if (e.originalColorStr === undefined) {
         debugger;
     }
-    IsCustomColorPaletteOpen = true;
+    globals.IsCustomColorPaletteOpen = true;
     // NOTE storing org callback here so custom selection is handled fluidly w/ original request
-    ColorPaletteAnchorResultCallback = orgCallbackHandler;
+    globals.ColorPaletteAnchorResultCallback = orgCallbackHandler;
     const dotnet_hex = cssHexToDotNetHex(e.originalColorStr);
     onShowCustomColorPicker_ntf(dotnet_hex);
 }

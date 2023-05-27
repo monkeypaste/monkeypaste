@@ -66,7 +66,8 @@
     display: inline-flex;
     align-items: center;
     background-color: transparent !important;
-    cursor: pointer !important
+    cursor: pointer !important;
+    width: 100%;
 }
 
 .paste-template-option-icon {
@@ -87,7 +88,9 @@
 .paste-template-option-label {
     white-space: nowrap;
     overflow-x: hidden;
-    padding: 7px 5px; 
+    padding: 7px 5px;
+    text-overflow: ellipsis;
+    color: var(--editortoolbarbuttoncolor);
 }
 
 /* TEMPLATE SELECTOR END */
@@ -105,6 +108,7 @@
     border-radius: var(--commonborderradius);
 }
 
+
 #templatePasteValueTextArea {
     box-sizing: border-box;
     margin: 12px;
@@ -112,6 +116,8 @@
     border-width: 1px;
     /* min-width is to show full placeholder*/
     min-width: 180px;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 #templatePasteValueHintOuterContainer {

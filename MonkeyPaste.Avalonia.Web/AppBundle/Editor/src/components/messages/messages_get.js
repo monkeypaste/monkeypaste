@@ -1,7 +1,3 @@
-// #region Globals
-var PendingGetResponses = [];
-// #endregion Globals
-
 // #region Life Cycle
 
 // #endregion Life Cycle
@@ -9,7 +5,7 @@ var PendingGetResponses = [];
 // #region Getters
 
 async function getAllSharedTemplatesFromDbAsync_get() {
-    // output 'MpQuillNonInputTemplateRequestMessage'
+    // output 'MpQuillTemplateDbQueryRequestMessage'
     let all_non_input_templates = [];
     if (isRunningOnHost()) {
         let req = {
@@ -25,6 +21,19 @@ async function getAllSharedTemplatesFromDbAsync_get() {
         await delay(1000);
     }
     return all_non_input_templates;
+}
+
+async function getMessageBoxResultAsync_get(_title,_msg,_dialogType,_iconResourceObj) {
+    // output 'MpQuillShowDialogRequestMessage'
+    // input 'MpQuillShowDialogResponseMessage'
+    let req = {
+        title: _title,
+        msg: _msg,
+        dialogType: _dialogType,
+        iconResourceObj: _iconResourceObj
+    };
+    let diag_resp_obj = await processGetRequestAsync('getMessageBoxResult', JSON.stringify(req));
+    return diag_resp_obj.dialogResponse;
 }
 
 async function getClipboardDataTransferObjectAsync_get() {
@@ -53,7 +62,7 @@ async function getContactsFromFetcherAsync_get() {
     // output 'MpIContact[]'
     let all_contacts = [];
     if (isRunningOnHost()) {
-        all_contacts = await processGetRequestAsync('getContactsFromFetcher', JSON.stringify(req));
+        all_contacts = await processGetRequestAsync('getContactsFromFetcher', '');
     } else {
         await delay(1000);
         all_contacts = getContactTestData();
@@ -108,7 +117,7 @@ function getContactFieldValue_get(contact_guid, field) {
 
 function receiveGetResponse(reqGuid) {
     // check if any response has matching request guid
-    let respMsg = PendingGetResponses.find(x => x.requestGuid == reqGuid);
+    let respMsg = globals.PendingGetResponses.find(x => x.requestGuid == reqGuid);
     if (!respMsg || respMsg.length == 0) {
         return null;
     }
@@ -119,7 +128,7 @@ function receiveGetResponse(reqGuid) {
         respMsg = respMsg[0];
     }
     // remove request from pending
-    PendingGetResponses = PendingGetResponses.filter(x => x.requestGuid != reqGuid);
+    globals.PendingGetResponses = globals.PendingGetResponses.filter(x => x.requestGuid != reqGuid);
 
     // return respMsg and unblock processGet
     let resp = JSON.parse(respMsg.responseFragmentJsonStr);

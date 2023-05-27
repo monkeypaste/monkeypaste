@@ -1,14 +1,3 @@
-// #region Globals
-
-const TableDeltaAttrbs = [
-	'table-col',
-	'table-cell-line',
-	'row',
-	'rowspan',
-	'colspan'
-];
-
-// #endregion Globals
 
 // #region Life Cycle
 
@@ -18,12 +7,12 @@ const TableDeltaAttrbs = [
 
 function getDelta(rangeObj) {
 	// NOTE if quill is not enabled it return empty contents
-	let wasEnabled = quill.isEnabled();
-	quill.enable(true);
+	let wasEnabled = globals.quill.isEnabled();
+	globals.quill.enable(true);
 	rangeObj = rangeObj == null ? { index: 0, length: getDocLength() } : rangeObj;
 
-	let delta = quill.getContents(rangeObj.index, rangeObj.length);
-	quill.enable(wasEnabled);
+	let delta = globals.quill.getContents(rangeObj.index, rangeObj.length);
+	globals.quill.enable(wasEnabled);
 
 	return delta;
 }
@@ -51,7 +40,7 @@ function convertDeltaToHtml(delta, encodeHtmlEntities) {
 		//	'serif': 'font-family: Georgia, Times New Roman, serif',
 		//	'monospace': 'font-family: Monaco, Courier New, monospace'
 		//},
-		//size: DefaultFontSizes.map((x) => { return {`ql-size-${x.split('px')[0]}`: `font-size: ${x}` }}),
+		//size: globals.DefaultFontSizes.map((x) => { return {`ql-size-${x.split('px')[0]}`: `font-size: ${x}` }}),
 			//indent: (value, op) => {
 			//	var indentSize = parseInt(value, 10) * 3;
 			//	var side = op.attributes['direction'] === 'rtl' ? 'right' : 'left';
@@ -103,7 +92,7 @@ function convertHtmlToDelta(htmlStr) {
 	htmlStr = htmlStr.replaceAll('&nbsp;', whitespace_sub);
 
 	let htmlObj = { html: htmlStr };
-	var delta = quill.clipboard.convert(htmlObj);
+	var delta = globals.quill.clipboard.convert(htmlObj);
 
 	delta = fixHtmlToDeltaWhitespaceSpecialEntities(delta, whitespace_sub);
 
@@ -162,7 +151,7 @@ function insertDelta(range, deltaOrDeltaJsonStr, source = 'api') {
 	//	{ delete: range.length },
 	//	...deltaObj.ops
 	//]);
-	return quill.updateContents(update_delta, source);
+	return globals.quill.updateContents(update_delta, source);
 }
 
 function fixHtmlToDeltaTemplateInserts(delta) {
@@ -238,13 +227,13 @@ function applyDelta(delta, source = 'api') {
 	let other_ops = delta.filter((op) => !format_ops.includes(op));
 
 	if (other_ops.length > 0) {
-		quill.updateContents(other_ops, source);
+		globals.quill.updateContents(other_ops, source);
 		updateQuill();
 	}
 
 	for (var i = 0; i < format_ops.length; i++) {
 		const fop = format_ops[i];
-		quill.formatText(fop.format.index, fop.format.length, fop.attributes, source);
+		globals.quill.formatText(fop.format.index, fop.format.length, fop.attributes, source);
 	}
 
 	updateQuill();
@@ -280,7 +269,7 @@ function onCustomTagAttributes(op) {
 				//return `<li data-list="${li_type}">${li_val}</li>`;
 
 				return { 'data-list': li_type };
-			} else if (TableDeltaAttrbs.some(x => op.attributes[x] !== undefined)) {
+			} else if (globals.TableDeltaAttrbs.some(x => op.attributes[x] !== undefined)) {
 				// TABLES
 
 				if (op.attributes['table-col'] !== undefined) {

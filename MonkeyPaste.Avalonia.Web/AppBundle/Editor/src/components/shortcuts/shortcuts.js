@@ -1,23 +1,7 @@
-﻿// #region Globals
-
-const SHORTCUT_STR_TOKEN = '$$';
-
-const SHORTCUT_TYPES = [
-    'ToggleAppendInsertMode',
-    'ToggleAppendLineMode',
-    'ToggleAppendPreMode',
-    'ToggleAppendPaused',
-    'ToggleAppendManualMode'
-];
-
-var ShortcutKeysLookup = {};
-
-// #endregion Globals
-
-// #region Life Cycle
+﻿// #region Life Cycle
 function initShortcuts(shortcutBase64MsgStr) {
     // input ''
-    ShortcutKeysLookup = {};
+    globals.ShortcutKeysLookup = {};
     let shortcut_items = null;
 
     if (!isNullOrUndefined(shortcutBase64MsgStr)) {
@@ -26,8 +10,8 @@ function initShortcuts(shortcutBase64MsgStr) {
             shortcut_items = shortcut_msg.shortcuts;
         }
     }
-    for (var i = 0; i < SHORTCUT_TYPES.length; i++) {
-        let st = SHORTCUT_TYPES[i];
+    for (var i = 0; i < globals.SHORTCUT_TYPES.length; i++) {
+        let st = globals.SHORTCUT_TYPES[i];
 
         let keys = '';
         if (shortcut_items && Array.isArray(shortcut_items)) {
@@ -36,7 +20,7 @@ function initShortcuts(shortcutBase64MsgStr) {
                 keys = `<em class="option-keys">${shortcut_item.keys}</em>`;
             }
         }
-        ShortcutKeysLookup[st] = keys;
+        globals.ShortcutKeysLookup[st] = keys;
     }   
 
 }
@@ -62,14 +46,14 @@ function decodeStringWithShortcut(str) {
         return str;
     }
     let out_str = '';
-    let str_parts = str.split(SHORTCUT_STR_TOKEN);
+    let str_parts = str.split(globals.SHORTCUT_STR_TOKEN);
     for (var i = 0; i < str_parts.length; i++) {
         let str_part = str_parts[i];
         if (i % 2 == 0) {
             out_str += str_part;            
         } else {
-            if (ShortcutKeysLookup[str_part] !== undefined) {
-                out_str += ShortcutKeysLookup[str_part]
+            if (globals.ShortcutKeysLookup[str_part] !== undefined) {
+                out_str += globals.ShortcutKeysLookup[str_part]
             }
         }
     }

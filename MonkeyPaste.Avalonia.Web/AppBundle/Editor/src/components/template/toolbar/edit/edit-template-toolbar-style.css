@@ -35,7 +35,8 @@
 #editTemplateDeleteButton {
     background-color: salmon;
     color: var(--editableeditorbgcolor_opaque);
-    font-weight: bold;
+    font-weight: bolder;
+    height: 30px;
 }
 
     #editTemplateDeleteButton:hover {

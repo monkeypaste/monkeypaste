@@ -1,11 +1,3 @@
-// #region Globals
-
-const CONTENT_IMAGE_CLASS = 'content-image';
-
-var ContentImageWidth = -1;
-var ContentImageHeight = -1;
-
-// #endregion Globals
 
 // #region Life Cycle
 function loadImageContent(itemDataStr) {
@@ -14,8 +6,8 @@ function loadImageContent(itemDataStr) {
 	enableReadOnly();
 	disableSubSelection();
 
-	ContentImageWidth = -1;
-	ContentImageHeight = -1;
+	globals.ContentImageWidth = -1;
+	globals.ContentImageHeight = -1;
 
 	let img = document.createElement('img');
 	img.classList.add('content-image');
@@ -47,37 +39,37 @@ function getContentImageElement() {
 }
 
 function getImageContentWidth() {
-	if (ContentImageWidth < 0) {
+	if (globals.ContentImageWidth < 0) {
 		log('WARNING! image size not populated, using fallback width...');
 		return getContentWidth();
 	}
-	return ContentImageWidth;
+	return globals.ContentImageWidth;
 }
 function getImageContentHeight() {
-	if (ContentImageHeight < 0) {
+	if (globals.ContentImageHeight < 0) {
 		log('WARNING! image size not populated, using fallback height...');
 		return getContentHeight();
 	}
-	return ContentImageHeight;
+	return globals.ContentImageHeight;
 }
 
 function populateContentImageDataSize(annotationsJsonStr, is_reload) {
-	if (ContentImageWidth >= 0 &&
-		ContentImageHeight >= 0) {
+	if (globals.ContentImageWidth >= 0 &&
+		globals.ContentImageHeight >= 0) {
 		log('image size already populated, ignoring request');
 		return;
 	}
 
-	ContentImageWidth = 0;
-	ContentImageHeight = 0;
+	globals.ContentImageWidth = 0;
+	globals.ContentImageHeight = 0;
 
 	let tmp = document.createElement('img');
 	tmp.onload = function (e) {
-		ContentImageWidth = tmp.width;
-		ContentImageHeight = tmp.height;
+		globals.ContentImageWidth = tmp.width;
+		globals.ContentImageHeight = tmp.height;
 
 		loadAnnotations(annotationsJsonStr);
-		log('img size w: ' + ContentImageWidth + ' h: ' + ContentImageHeight);
+		log('img size w: ' + globals.ContentImageWidth + ' h: ' + globals.ContentImageHeight);
 	}
 	tmp.setAttribute('src', 'data:image/png;base64,' + getContentData());
 }
@@ -107,8 +99,8 @@ function getDecodedImageContentText(encoded_text) {
 // #region State
 
 function resetContentImage() {
-	ContentImageWidth = -1;
-	ContentImageHeight = -1;
+	globals.ContentImageWidth = -1;
+	globals.ContentImageHeight = -1;
 }
 
 // #endregion State

@@ -32,11 +32,11 @@ namespace MonkeyPaste.Avalonia {
 
     public enum MpAvEditorBindingFunctionType {
         // two-way *_get async requests
-        getDragData,
         getAllSharedTemplatesFromDb,
         getClipboardDataTransferObject,
         getDragDataTransferObject,
         getContactsFromFetcher,
+        getMessageBoxResult,
 
         // one-way *_ntf notifications
         notifyDocSelectionChanged,
@@ -666,7 +666,7 @@ namespace MonkeyPaste.Avalonia {
                     if (ntf is MpQuillTemplateAddOrUpdateNotification addOrUpdateTemplateMsg) {
                         var t = MpJsonConverter.DeserializeBase64Object<MpTextTemplate>(addOrUpdateTemplateMsg.addedOrUpdatedTextTemplateBase64JsonStr);
                         MpAvTemplateModelHelper.Instance
-                            .AddOrUpdateTemplateAsync(BindingContext.CopyItemId, t)
+                            .AddUpdateOrDeleteTemplateAsync(BindingContext.CopyItemId, t, false)
                             .FireAndForgetSafeAsync();
                     }
 
@@ -675,7 +675,7 @@ namespace MonkeyPaste.Avalonia {
                     ntf = MpJsonConverter.DeserializeBase64Object<MpQuillUserDeletedTemplateNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillUserDeletedTemplateNotification deleteTemplateMsg) {
                         MpAvTemplateModelHelper.Instance
-                            .DeleteTemplateAsync(BindingContext.CopyItemId, deleteTemplateMsg.userDeletedTemplateGuid)
+                            .AddUpdateOrDeleteTemplateAsync(BindingContext.CopyItemId, new MpTextTemplate() { Guid = deleteTemplateMsg.userDeletedTemplateGuid }, true)
                             .FireAndForgetSafeAsync();
                     }
                     break;
@@ -787,6 +787,8 @@ namespace MonkeyPaste.Avalonia {
                 case MpAvEditorBindingFunctionType.getDragDataTransferObject:
                 case MpAvEditorBindingFunctionType.getClipboardDataTransferObject:
                 case MpAvEditorBindingFunctionType.getAllSharedTemplatesFromDb:
+                case MpAvEditorBindingFunctionType.getContactsFromFetcher:
+                case MpAvEditorBindingFunctionType.getMessageBoxResult:
                     HandleBindingGetRequest(notificationType, msgJsonBase64Str).FireAndForgetSafeAsync(ctvm);
                     break;
 
@@ -811,6 +813,28 @@ namespace MonkeyPaste.Avalonia {
                 case MpAvEditorBindingFunctionType.getContactsFromFetcher:
                     var cl = await MpAvTemplateModelHelper.Instance.GetContactsAsync();
                     getResp.responseFragmentJsonStr = MpJsonConverter.SerializeObject(cl);
+                    break;
+
+                case MpAvEditorBindingFunctionType.getMessageBoxResult:
+                    var msgBoxReq = MpJsonConverter.DeserializeObject<MpQuillShowDialogRequestMessage>(getReq.reqMsgFragmentJsonStr);
+
+                    object result = null;
+
+                    switch (msgBoxReq.dialogType) {
+                        case "okcancel":
+
+                            result = await Mp.Services.NativeMessageBox.ShowOkCancelMessageBoxAsync(
+                                title: msgBoxReq.title,
+                                message: msgBoxReq.msg,
+                                iconResourceObj: msgBoxReq.iconResourceObj,
+                                owner: TopLevel.GetTopLevel(this));
+                            break;
+                    }
+
+                    var msgBoxResp = new MpQuillShowDialogResponseMessage() {
+                        dialogResponse = result.ToStringOrDefault()
+                    };
+                    getResp.responseFragmentJsonStr = MpJsonConverter.SerializeObject(msgBoxResp);
                     break;
                 case MpAvEditorBindingFunctionType.getClipboardDataTransferObject:
                     var cb_dtObjReq = MpJsonConverter.DeserializeObject<MpQuillEditorClipboardDataObjectRequestNotification>(getReq.reqMsgFragmentJsonStr);

@@ -1,13 +1,6 @@
 // #region Globals
 
-var IsAppendInsertMode = false;
-var IsAppendLineMode = false;
 
-var IsAppendManualMode = false;
-var IsAppendPreMode = false;
-var IsAppendPaused = false;
-
-var FixedAppendIdx = -1;
 
 // #endregion Globals
 
@@ -29,27 +22,27 @@ function initAppend() {
 function getAppendDocRange() {
 	if (globals.ContentItemType == 'FileList') {
 		const sel_rows = getSelectedFileItemIdxs();
-		const sel_idx = sel_rows.length > 0 && IsAppendManualMode ? sel_rows[0] : IsAppendPreMode ? 0 : getFileListRowElements().length - 1;
+		const sel_idx = sel_rows.length > 0 && globals.IsAppendManualMode ? sel_rows[0] : globals.IsAppendPreMode ? 0 : getFileListRowElements().length - 1;
 		let sel_doc_range = getFileListItemDocRange(sel_idx);
 		if (!sel_doc_range) {
 			return { index: 0, length: 0, mode: 'pre' };
 		}
-		sel_doc_range.mode = (sel_doc_range.index == 0 || IsAppendManualMode) && IsAppendPreMode ? 'pre' : 'post';
+		sel_doc_range.mode = (sel_doc_range.index == 0 || globals.IsAppendManualMode) && globals.IsAppendPreMode ? 'pre' : 'post';
 		return sel_doc_range;
 	}
-	if (IsAppendManualMode) {
-		if (IsAppendPreMode) {
-			if (IsAppendInsertMode) {
-				return { index: FixedAppendIdx, length: 0, mode:'inline' };
+	if (globals.IsAppendManualMode) {
+		if (globals.IsAppendPreMode) {
+			if (globals.IsAppendInsertMode) {
+				return { index: globals.FixedAppendIdx, length: 0, mode:'inline' };
 			} else {
 				// NOTE need to make block range in terms of the leading block unless its the first
 				// for dt to handle blocks since pre is just for before first block
-				let line_start_idx = getLineStartDocIdx(FixedAppendIdx);
-				return { index: FixedAppendIdx, length: 0, mode: line_start_idx == 0 ?'pre': 'post' };
+				let line_start_idx = getLineStartDocIdx(globals.FixedAppendIdx);
+				return { index: globals.FixedAppendIdx, length: 0, mode: line_start_idx == 0 ?'pre': 'post' };
 			}
 		} else {
 			let sel = cleanDocRange(getDocSelection());
-			if (IsAppendInsertMode) {
+			if (globals.IsAppendInsertMode) {
 				sel.mode = 'inline';
 				return sel;
 			} else {
@@ -57,14 +50,14 @@ function getAppendDocRange() {
 			}
 		}		
 	} else {
-		if (IsAppendPreMode) {
-			if (IsAppendInsertMode) {
+		if (globals.IsAppendPreMode) {
+			if (globals.IsAppendInsertMode) {
 				return { index: 0, length: 0, mode: 'inline' };
 			} else {
 				return { index: 0, length: 0, mode: 'pre' };
 			}
 		} else {
-			if (IsAppendInsertMode) {
+			if (globals.IsAppendInsertMode) {
 				return { index: Math.max(0, getDocLength() - 1), length: 1, mode: 'inline' };
 			} else {
 				return { index: getDocLength(), length: 1, mode: 'post' };
@@ -88,18 +81,18 @@ function isAppendNotifier() {
 
 
 function isAnyAppendEnabled() {
-	return IsAppendInsertMode || IsAppendLineMode;
+	return globals.IsAppendInsertMode || globals.IsAppendLineMode;
 }
 
 function enableAppendMode(isAppendLine, fromHost = false) {
-	let did_append_mode_change = IsAppendLineMode != isAppendLine;
+	let did_append_mode_change = globals.IsAppendLineMode != isAppendLine;
 
 	if (isAppendLine) {
-		IsAppendLineMode = true;
-		IsAppendInsertMode = false;
+		globals.IsAppendLineMode = true;
+		globals.IsAppendInsertMode = false;
 	} else {
-		IsAppendLineMode = false;
-		IsAppendInsertMode = true;
+		globals.IsAppendLineMode = false;
+		globals.IsAppendInsertMode = true;
 	}
 
 	getEditorElement().classList.add('append');
@@ -121,10 +114,10 @@ function enableAppendMode(isAppendLine, fromHost = false) {
 
 function disableAppendMode(fromHost = false) {
 	let did_append_mode_change = isAnyAppendEnabled();
-	let did_manual_mode_change = IsAppendManualMode;
+	let did_manual_mode_change = globals.IsAppendManualMode;
 
-	IsAppendLineMode = false;
-	IsAppendInsertMode = false;
+	globals.IsAppendLineMode = false;
+	globals.IsAppendInsertMode = false;
 	// NOTE dont allow manual to notify here (regardless of source) to avoid double messages
 	disableAppendManualMode(false);
 	disablePauseAppend(false);
@@ -144,9 +137,9 @@ function disableAppendMode(fromHost = false) {
 }
 
 function enableAppendManualMode(fromHost = false) {
-	let did_manual_mode_change = !IsAppendManualMode;
+	let did_manual_mode_change = !globals.IsAppendManualMode;
 
-	IsAppendManualMode = true;
+	globals.IsAppendManualMode = true;
 	updatePasteAppendToolbarLabel();
 	scrollToAppendIdx();
 
@@ -158,8 +151,8 @@ function enableAppendManualMode(fromHost = false) {
 }
 
 function disableAppendManualMode(fromHost = false) {
-	let did_manual_mode_change = IsAppendManualMode;
-	IsAppendManualMode = false;
+	let did_manual_mode_change = globals.IsAppendManualMode;
+	globals.IsAppendManualMode = false;
 
 	updatePasteAppendToolbarLabel();
 
@@ -177,8 +170,8 @@ function disableAppendManualMode(fromHost = false) {
 }
 
 function enablePauseAppend(fromHost = false) {
-	const did_pause_append_change = !IsAppendPaused;
-	IsAppendPaused = true;
+	const did_pause_append_change = !globals.IsAppendPaused;
+	globals.IsAppendPaused = true;
 	getPasteAppendPauseAppendButtonElement().innerHTML = getSvgHtml('play', null,false);
 
 	if (!fromHost && did_pause_append_change) {
@@ -187,8 +180,8 @@ function enablePauseAppend(fromHost = false) {
 }
 
 function disablePauseAppend(fromHost = false) {
-	const did_pause_append_change = IsAppendPaused;
-	IsAppendPaused = false;
+	const did_pause_append_change = globals.IsAppendPaused;
+	globals.IsAppendPaused = false;
 	getPasteAppendPauseAppendButtonElement().innerHTML = getSvgHtml('pause', null, false);
 
 	if (!fromHost && did_pause_append_change) {
@@ -199,9 +192,9 @@ function disablePauseAppend(fromHost = false) {
 }
 
 function enablePreAppend(fromHost = false) {
-	const did_pre_append_change = !IsAppendPreMode;
-	IsAppendPreMode = true;
-	FixedAppendIdx = getDocSelection().index;
+	const did_pre_append_change = !globals.IsAppendPreMode;
+	globals.IsAppendPreMode = true;
+	globals.FixedAppendIdx = getDocSelection().index;
 
 	if (!fromHost && did_pre_append_change) {
 		onAppendStateChanged_ntf();
@@ -209,9 +202,9 @@ function enablePreAppend(fromHost = false) {
 }
 
 function disablePreAppend(fromHost = false) {
-	const did_pre_append_change = IsAppendPreMode;
-	IsAppendPreMode = false;
-	FixedAppendIdx = -1;
+	const did_pre_append_change = globals.IsAppendPreMode;
+	globals.IsAppendPreMode = false;
+	globals.FixedAppendIdx = -1;
 
 	if (!fromHost && did_pre_append_change) {
 		onAppendStateChanged_ntf();
@@ -232,10 +225,10 @@ function updateAppendModeState(req, fromHost) {
 
 	let is_enabling = !isAnyAppendEnabled() && (req.isAppendLineMode || req.isAppendInsertMode);
 	let is_disabling = isAnyAppendEnabled() && !req.isAppendLineMode && !req.isAppendInsertMode;
-	let is_resuming = IsAppendPaused && !req.isAppendPaused;
-	let is_pausing = !IsAppendPaused && req.isAppendPaused;
-	let is_pre_changing = IsAppendPreMode != req.isAppendPreMode;
-	let is_manual_changing = IsAppendManualMode != req.isAppendManualMode;
+	let is_resuming = globals.IsAppendPaused && !req.isAppendPaused;
+	let is_pausing = !globals.IsAppendPaused && req.isAppendPaused;
+	let is_pre_changing = globals.IsAppendPreMode != req.isAppendPreMode;
+	let is_manual_changing = globals.IsAppendManualMode != req.isAppendManualMode;
 
 	let is_appending_data = !isNullOrEmpty(req.appendData);
 
@@ -296,7 +289,7 @@ function updateAppendModeState(req, fromHost) {
 
 function scrollToAppendIdx() {
 	//
-	if (IsAppendManualMode || IsAppendInsertMode) {
+	if (globals.IsAppendManualMode || globals.IsAppendInsertMode) {
 		scrollDocRangeIntoView(getAppendDocRange());
 	}
 	scrollToEnd();

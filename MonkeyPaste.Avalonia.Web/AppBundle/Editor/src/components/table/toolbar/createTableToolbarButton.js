@@ -1,16 +1,10 @@
-﻿// #region Globals
-
-const MAX_TABLE_ROWS = 7;
-const MAX_TABLE_COLS = 7;
-
-// #endregion Globals
-
+﻿
 // #region Life Cycle
 
 function initTableToolbarButton() {
-    if (!UseBetterTable) {
-        return;
-    }
+    //if (!UseBetterTable) {
+    //    return;
+    //}
 
     let createTableButton_elm = getCreateTableToolbarButtonElement();
     addClickOrKeyClickEventListener(createTableButton_elm, onCreateTableToolbarButtonClick);
@@ -78,8 +72,8 @@ function getCreateTableToolbarOptionsElement() {
 function getCreateTableOptionDataValues() {
     var tableOptions = [];
 
-    for (let r = 1; r <= MAX_TABLE_ROWS; r++) {
-        for (let c = 1; c <= MAX_TABLE_COLS; c++) {
+    for (let r = 1; r <= globals.MAX_TABLE_ROWS; r++) {
+        for (let c = 1; c <= globals.MAX_TABLE_COLS; c++) {
             tableOptions.push('newtable_' + r + '_' + c);
         }
     }
@@ -99,8 +93,8 @@ function getCreateTableDimensionsFromElement(elm) {
 
 function getSelectedCreateTableDimensions() {
     let included_dims = { rows: 0, cols: 0 };
-    for (let r = 1; r <= MAX_TABLE_ROWS; r++) {
-        for (let c = 1; c <= MAX_TABLE_COLS; c++) {
+    for (let r = 1; r <= globals.MAX_TABLE_ROWS; r++) {
+        for (let c = 1; c <= globals.MAX_TABLE_COLS; c++) {
             let dataVal = `newtable_${r}_${c}`;
             let opt_elm = Array.from(getCreateTableToolbarOptionsElement().children).find(x => x.getAttribute('data-value') == dataVal);
 
@@ -123,8 +117,8 @@ function getSelectedCreateTableDimensions() {
 // #region Setters
 
 function setCreateTableSelection(row_count, col_count) {
-    for (let r = 1; r <= MAX_TABLE_ROWS; r++) {
-        for (let c = 1; c <= MAX_TABLE_COLS; c++) {
+    for (let r = 1; r <= globals.MAX_TABLE_ROWS; r++) {
+        for (let c = 1; c <= globals.MAX_TABLE_COLS; c++) {
             let dataVal = `newtable_${r}_${c}`;
             let opt_elm = Array.from(getCreateTableToolbarOptionsElement().children).find(x => x.getAttribute('data-value') == dataVal);
 
@@ -182,7 +176,7 @@ function updateCreateTableToolbarButtonIsEnabled() {
 }
 
 function createTableAtDocSelection(rows, cols) {
-    let better_table_mod = quill.getModule('better-table');
+    let better_table_mod = globals.quill.getModule('better-table');
     better_table_mod.insertTable(rows,cols);
 }
 // #endregion Actions

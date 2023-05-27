@@ -1,12 +1,4 @@
-﻿// #region Globals
-
-var SuppressNextEditorScrollChangedNotification = false;
-
-var LastScrollBarXIsVisible = false;
-var LastScrollBarYIsVisible = false;
-
-// #endregion Globals
-
+﻿
 // #region Life Cycle
 
 function initScroll() {
@@ -160,13 +152,13 @@ function scrollToEnd() {
 function updateScrollBarSizeAndPositions() {
     const cur_x = isScrollBarXVisible();
     const cur_y = isScrollBarYVisible();
-    if (cur_x != LastScrollBarXIsVisible ||
-        cur_y != LastScrollBarYIsVisible) {
+    if (cur_x != globals.LastScrollBarXIsVisible ||
+        cur_y != globals.LastScrollBarYIsVisible) {
         onScrollBarVisibilityChanged_ntf(cur_x, cur_y);
 
     }
-    LastScrollBarXIsVisible = cur_x;
-    LastScrollBarYIsVisible = cur_y;
+    globals.LastScrollBarXIsVisible = cur_x;
+    globals.LastScrollBarYIsVisible = cur_y;
 }
 
 // #endregion Actions

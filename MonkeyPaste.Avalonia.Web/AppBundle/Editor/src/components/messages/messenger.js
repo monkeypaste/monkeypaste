@@ -1,9 +1,3 @@
-// #region Globals
-
-const DOT_NET_MSG_METHOD_NAME = "ReceiveMessage";
-
-// #endregion Globals
-
 // #region Life Cycle
 
 // #endregion Life Cycle

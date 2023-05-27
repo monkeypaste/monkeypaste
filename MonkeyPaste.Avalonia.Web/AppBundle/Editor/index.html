@@ -12,16 +12,16 @@
         const APPEND_NOTIFIER_PARAMS = "append_notifier=true";
         const AUTO_TEST = "auto_test";
 
-        var UseQuill2 = true;
-        var UseBetterTable = true;
+        //var UseQuill2 = true;
+        //var UseBetterTable = true;
 
-        if (window.location.search.toLowerCase().includes(HTML_CONVERTER_PARAMS.toLowerCase())) {
-            // this is the case for converter which uses 1.3.6
-            // because it doesn't have that whitespace exclusion bug between spans
-            // it doesn't need the quill tables because it converts plain html which doesn't rely on better table
-            UseBetterTable = true;
-            UseQuill2 = true;
-        }
+        //if (window.location.search.toLowerCase().includes(HTML_CONVERTER_PARAMS.toLowerCase())) {
+        //    // this is the case for converter which uses 1.3.6
+        //    // because it doesn't have that whitespace exclusion bug between spans
+        //    // it doesn't need the quill tables because it converts plain html which doesn't rely on better table
+        //    UseBetterTable = true;
+        //    UseQuill2 = true;
+        //}
 
 
         //
@@ -127,7 +127,7 @@
         //loadLifeCycleHandlers();
         document.addEventListener('DOMContentLoaded', (e) => {
             //init_test();
-            window.name = EDITOR_WINDOW_NAME;
+            window.name = globals.EDITOR_WINDOW_NAME;
             onDomLoaded_ntf();
         });
 
@@ -425,6 +425,12 @@
     <!-- EDITOR CONTAINER -->
     <div id='editor' draggable="false" class="no-select"></div>
 
+    <!-- TOOLTIP TOOLBAR -->
+    <div id="tooltipToolbar"
+         class="common-toolbar bottom-align tooltip-overlay hidden compact-line-height">
+        TOOLTIPZ ZONE
+    </div>
+
     <!-- EDIT TEMPLATE TOOLBAR -->
     <div id="editTemplateToolbar"
          class="common-toolbar bottom-align hidden">
@@ -439,16 +445,12 @@
                       spellcheck="false"></textarea>
         </div>
         <button id="editTemplateDeleteButton" class="right-align" type="button" tabindex="2">
-            <span>DELETE</span>
+            <i class="svg-key-delete"></i>
+            <span>Delete All</span>
         </button>
     </div>
 
-    <!-- TOOLTIP TOOLBAR -->
-    <div id="tooltipToolbar"
-         class="common-toolbar bottom-align tooltip-overlay hidden compact-line-height">
-        TOOLTIPZ ZONE
-    </div>
-    
+
     <!-- TABLEOPS TOOLBAR -->
     <div id="tableOpsToolbar"
          class="common-toolbar bottom-align hidden">
@@ -460,7 +462,14 @@
     <!-- PASTE TOOLBAR -->
     <div id="pasteToolbar"
          class="common-toolbar bottom-align paste-toolbar hidden">
-        <!--<div class="resizer resizer-t"></div>-->
+
+        <!-- SAVE SHARED TEMPLATE BUTTON -->
+        <button id="pasteSaveFocusTemplateButton"
+                class="hidden"
+                tabindex="5">
+            <i></i>
+        </button>
+
         <!-- SELECTOR -->
         <div id="pasteTemplateToolbarMenuSelectorDiv"
              class="paste-template-item">
@@ -488,7 +497,7 @@
                       rows="1"
                       cols="20"
                       tabindex="1"
-                      spellcheck="false" 
+                      spellcheck="false"
                       class="template-data-element"
                       placeholder="Enter paste text..."></textarea>
         </div>
@@ -498,27 +507,31 @@
 
         <!-- CLEAR BUTTON -->
         <button id="clearAllTemplateTextButton"
-                class="paste-template-item"
+                class="paste-template-item svg-key-delete"
+                svg-classes="svg-icon paste-toolbar-icon"
+                hover-tooltip="Clear All"
                 tabindex="2">
-            <i></i><span>CLEAR ALL</span>
         </button>
         <!-- PREV BUTTON -->
         <button id="previousTemplateButton"
-                class="paste-template-item"
+                class="paste-template-item svg-key-arrow-left"
+                svg-classes="svg-icon paste-toolbar-icon"
+                hover-tooltip="Previous Template"
                 tabindex="3">
-            <i></i>
         </button>
         <!-- NEXT BUTTON -->
         <button id="nextTemplateButton"
-                class="paste-template-item"
+                class="paste-template-item svg-key-arrow-right"
+                svg-classes="svg-icon paste-toolbar-icon"
+                hover-tooltip="Next Template"
                 tabindex="4">
-            <i></i>
         </button>
         <!-- EDIT BUTTON -->
         <button id="pasteEditFocusTemplateButton"
-                class="paste-template-item"
+                class="paste-template-item svg-key-edit-template"
+                svg-classes="svg-icon paste-toolbar-icon"
+                hover-tooltip="Edit Details"
                 tabindex="5">
-            <i></i><span>Edit</span>
         </button>
         <!-- PASTE BUTTON/MODE CONTAINER -->
         <div id="pasteButtonAndModeContainer"
@@ -537,7 +550,7 @@
             <!-- PASTE BUTTON -->
             <button id="pasteButton"
                     tabindex="6">
-                <i></i><span>PASTE</span>
+                <i></i><span>Paste</span>
             </button>
             <!--<div class="toolbar-separator"></div>-->
             <!-- PASTE BUTTON POPUP -->
@@ -585,7 +598,7 @@
             <p>The current date and/or time will be substituted for DateTime templates from moment they evaluated ie. pasted.</p>
             <p>The specified format is shared so changes here will update system-wide.</p>
         </div>
-            
+
         <!-- DATE TIME CUSTOM HINT -->
         <div class="template-datetime-custom tooltiptext left-text-align">
             <p>yy = short year</p>

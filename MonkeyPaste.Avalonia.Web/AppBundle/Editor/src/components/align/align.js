@@ -1,22 +1,5 @@
 // #region Globals
-const AlignOptionItems = [
-    {
-        icon: 'align-left'
-    },
-    {
-        icon: 'align-center'
-    },
-    {
-        icon: 'align-right'
-    },
-    {
-        icon: 'align-justify'
-    }
-];
-const AlignLeftOptIdx = 0;
-const AlignCenterOptIdx = 1;
-const AlignRightOptIdx = 2;
-const AlignJustifyOptIdx = 3;
+
 // #endregion Globals
 
 // #region Life Cycle
@@ -52,8 +35,8 @@ function showEditorAlignMenu() {
 
     getAlignEditorToolbarItemElement().classList.add('expanded');
     let cm = [];
-    for (var i = 0; i < AlignOptionItems.length; i++) {
-        let aomi = AlignOptionItems[i];
+    for (var i = 0; i < globals.AlignOptionItems.length; i++) {
+        let aomi = globals.AlignOptionItems[i];
         aomi.action = function (option, contextMenuIndex, optionIndex) {
             onAlignToolbarItemClick(optionIndex);
         };
@@ -78,21 +61,21 @@ function hideEditorAlignMenu() {
 
 function onAlignToolbarItemClick(idx) {
     let align_val = null;
-    if (idx == AlignLeftOptIdx) {
+    if (idx == globals.AlignLeftOptIdx) {
         // stupid quill ignores 'left' have to use false
         align_val = false;
-    } else if (idx == AlignCenterOptIdx) {
+    } else if (idx == globals.AlignCenterOptIdx) {
         align_val = 'center';
-    } else if (idx == AlignRightOptIdx) {
+    } else if (idx == globals.AlignRightOptIdx) {
         align_val = 'right';
-    } else if (idx == AlignJustifyOptIdx) {
+    } else if (idx == globals.AlignJustifyOptIdx) {
         align_val = 'justify';
     }
     if (align_val == null) {
         log('align click error, unknown idx: ' + idx);
         return;
     }
-    quill.focus();
+    globals.quill.focus();
     formatSelection('align', align_val, 'silent');
 }
 

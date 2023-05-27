@@ -1,13 +1,3 @@
-// #region Globals
-
-const LOCAL_HOST_URL = 'https://localhost';
-const URL_DATA_FORMAT = "uniformresourcelocator";
-const URI_LIST_FORMAT = 'text/uri-list';
-const HTML_FORMAT = 'text/html'
-const HTML_FRAGMENT_FORMAT = 'html format'
-const TEXT_FORMAT = 'text/plain'
-
-// #endregion Globals
 
 // #region Life Cycle
 
@@ -72,8 +62,8 @@ function prepareDeltaLogForDataTransfer() {
         let dti_msg = {
             dataItems: [
                 {
-                    format: URI_LIST_FORMAT,
-                    data: JSON.stringify([`${LOCAL_HOST_URL}/?type=UserDevice&id=-1`])
+                    format: globals.URI_LIST_FORMAT,
+                    data: JSON.stringify([`${globals.LOCAL_HOST_URL}/?type=UserDevice&id=-1`])
                 }
             ]
         };
@@ -141,8 +131,8 @@ function performDataTransferOnContent(
 
     // COLLECT URI SOURCES  (IF AVAILABLE)    
     let source_urls = [];
-    if (dt.types.includes(URI_LIST_FORMAT)) {
-        let uri_data = dt.getData(URI_LIST_FORMAT);
+    if (dt.types.includes(globals.URI_LIST_FORMAT)) {
+        let uri_data = dt.getData(globals.URI_LIST_FORMAT);
         if (typeof uri_data === 'string' || uri_data instanceof String) {
             source_urls = splitByNewLine(uri_data);
         } else {
@@ -171,9 +161,9 @@ function performDataTransferOnContent(
 
     // CHECK FOR INTERNAL URL SOURCE (internally deprecated but needed on linux (maybe mac too))
 
-    if (dt.types.includes(URL_DATA_FORMAT)) {
+    if (dt.types.includes(globals.URL_DATA_FORMAT)) {
         // TODO (on linux at least) check for moz uri here for source url
-        let url_base64 = dt.getData(URL_DATA_FORMAT);
+        let url_base64 = dt.getData(globals.URL_DATA_FORMAT);
         let nx_source_url = b64_to_utf8(url_base64);
         if (!isNullOrEmpty(nx_source_url)) {
             source_urls.push(nx_source_url);
@@ -224,7 +214,7 @@ function performDataTransferOnContent(
     // REPORT TRANSFER
 
     if (source_urls.length > 0) {
-        dt.setData(URI_LIST_FORMAT, source_urls.join('\r\n'));
+        dt.setData(globals.URI_LIST_FORMAT, source_urls.join('\r\n'));
     }
     let host_dt_obj = convertDataTransferToHostDataItems(dt);
     onDataTransferCompleted_ntf(

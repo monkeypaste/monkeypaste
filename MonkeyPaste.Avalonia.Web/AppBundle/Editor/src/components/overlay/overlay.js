@@ -1,22 +1,7 @@
-﻿// #region Globals
-
-const IS_OVERLAY_CARET_ENABLED = true;
-var IsHighlightingVisible = false;
-
-var HighlightRects = [];
-var SelectedHighlightRectIdx = -1;
-
-var CaretBlinkTickMs = 500;
-var IsCaretBlinkOn = false;
-var CaretBlinkOffColor = null;
-var CaretBlinkTimerInterval = null;
-
-// #endregion Globals
-
-// #region Life Cycle
+﻿// #region Life Cycle
 
 function initOverlay() {
-    if (IS_OVERLAY_CARET_ENABLED) {
+    if (globals.IS_OVERLAY_CARET_ENABLED) {
         startOverlayCaretTimer();
     }
 }
@@ -122,17 +107,17 @@ function getPreviewLines(drop_idx, block_state) {
 // #region Actions
 
 function startOverlayCaretTimer() {
-    if (CaretBlinkTimerInterval) {
+    if (globals.CaretBlinkTimerInterval) {
         return;
     }
-    CaretBlinkTimerInterval = setInterval(onCaretBlinkTick, CaretBlinkTickMs, getOverlayElement());
+    globals.CaretBlinkTimerInterval = setInterval(onCaretBlinkTick, globals.CaretBlinkTickMs, getOverlayElement());
 }
 function stopOverlayCaretTimer() {
-    if (!CaretBlinkTimerInterval) {
+    if (!globals.CaretBlinkTimerInterval) {
         return;
     }
-    clearInterval(CaretBlinkTimerInterval);
-    CaretBlinkTimerInterval = null;
+    clearInterval(globals.CaretBlinkTimerInterval);
+    globals.CaretBlinkTimerInterval = null;
 }
 
 function updateOverlayBounds() {
@@ -152,8 +137,8 @@ function drawDropPreview(ctx, color = 'red', thickness = 1.0, line_style = [5, 5
     if (isDragCopy()) {
         color = 'lime';
     }
-    let drop_block_state = getDropBlockState(DropIdx, WindowMouseLoc, IsShiftDown);
-    let render_lines = getPreviewLines(DropIdx, drop_block_state);
+    let drop_block_state = getDropBlockState(globals.DropIdx, globals.WindowMouseLoc, globals.IsShiftDown);
+    let render_lines = getPreviewLines(globals.DropIdx, drop_block_state);
 
     for (var i = 0; i < render_lines.length; i++) {
         let line = render_lines[i];
@@ -186,7 +171,7 @@ function drawTextSelection(ctx) {
     }
     if (!isDragging() &&
         !isDropping() &&
-        !CurFindReplaceDocRangesRects &&
+        !globals.CurFindReplaceDocRangesRects &&
         !isAppendNotifier()) {
         //return;
     }
@@ -197,13 +182,13 @@ function drawTextSelection(ctx) {
     let sel_fg_color = getTextSelectionFgColor();
 
 
-    if (CurFindReplaceDocRangesRects) {
+    if (globals.CurFindReplaceDocRangesRects) {
         let scroll_y = getEditorContainerElement().scrollTop;
         let scroll_x = getEditorContainerElement().scrollLeft;
 
-        let active_rect_range_kvp = CurFindReplaceDocRangeRectIdxLookup[CurFindReplaceDocRangeIdx];
-        for (var i = 0; i < CurFindReplaceDocRangesRects.length; i++) {
-            let cur_rect = CurFindReplaceDocRangesRects[i];
+        let active_rect_range_kvp = globals.CurFindReplaceDocRangeRectIdxLookup[globals.CurFindReplaceDocRangeIdx];
+        for (var i = 0; i < globals.CurFindReplaceDocRangesRects.length; i++) {
+            let cur_rect = globals.CurFindReplaceDocRangesRects[i];
             let adj_rect = cleanRect(cur_rect);
             let is_active = false;
             if (i >= active_rect_range_kvp[0] &&
@@ -232,25 +217,25 @@ function drawCaret(ctx, sel, caret_width = 1.0, caret_opacity = 1) {
     if (!sel || sel == null || sel.length > 0) {
         return;
     }
-    if (isDropping() || !quill.hasFocus()) {
+    if (isDropping() || !globals.quill.hasFocus()) {
         // drawn w/ drop preview lines so ignore
         return;
     }
 
     let caret_line = getCaretLine(sel.index);
     caret_line.ignoreLineStyle = true;
-    let caret_color = CaretBlinkOffColor == null ? getCaretColor() : CaretBlinkOffColor;
+    let caret_color = globals.CaretBlinkOffColor == null ? getCaretColor() : globals.CaretBlinkOffColor;
     drawLine(ctx, caret_line, caret_color, caret_width);
 }
 
 function drawAppendNotifierPreview(ctx, color = 'red', thickness = 1.0, line_style = [5, 5]) {
-    if (IsAppendManualMode) {
+    if (globals.IsAppendManualMode) {
         color = 'lime';
     }
-    let block_state = IsAppendLineMode ? IsAppendPreMode ? 'pre' : 'post' : 'inline';
+    let block_state = globals.IsAppendLineMode ? globals.IsAppendPreMode ? 'pre' : 'post' : 'inline';
     let render_lines = getPreviewLines(getAppendDocRange().index, block_state, false);
     // NOTE drawing on flip of caret blink
-    let append_color = CaretBlinkOffColor != null ? color : 'transparent';
+    let append_color = globals.CaretBlinkOffColor != null ? color : 'transparent';
     for (var i = 0; i < render_lines.length; i++) {
         let line = render_lines[i];
         drawLine(ctx, line, append_color, thickness, line_style)
@@ -322,12 +307,12 @@ function onCaretBlinkTick() {
     if (!isSubSelectionEnabled()) {
         return;
     }
-    if (CaretBlinkOffColor) {
-        CaretBlinkOffColor = null;
+    if (globals.CaretBlinkOffColor) {
+        globals.CaretBlinkOffColor = null;
     } else {
-        CaretBlinkOffColor = 'transparent'
+        globals.CaretBlinkOffColor = 'transparent'
     }
-    if (WindowMouseDownLoc != null &&
+    if (globals.WindowMouseDownLoc != null &&
         !isAnyAppendEnabled()) {
         // don't blink if sel changing
         return;

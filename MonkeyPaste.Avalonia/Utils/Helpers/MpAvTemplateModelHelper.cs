@@ -29,15 +29,18 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public async Task AddOrUpdateTemplateAsync(int notifier_ciid, MpTextTemplate tt) {
+        public async Task AddUpdateOrDeleteTemplateAsync(int notifier_ciid, MpTextTemplate tt, bool isDelete) {
+            MpConsole.WriteLine($"Shared template '{tt.TemplateName}' update started from tile id {notifier_ciid}");
             // get db ref to template
             tt.Id = await MpDataModelProvider.GetItemIdByGuidAsync<MpTextTemplate>(tt.Guid);
 
-            bool is_new = tt.Id == 0;
+            bool is_new = tt.Id == 0 && !isDelete;
+            string label = isDelete ? "deleted" : is_new ? "add" : "updated";
             await tt.WriteToDatabaseAsync();
 
             if (is_new) {
                 // no other items could share this template yet since its new so be done
+                MpConsole.WriteLine($"Shared template '{tt.TemplateName}' is new. No other tiles to notify");
                 return;
             }
 
@@ -50,90 +53,106 @@ namespace MonkeyPaste.Avalonia {
             if (active_template_ctvms.Any()) {
                 // ntf OTHER active shared templates of changed guid
                 var shared_template_changed_msg = new MpQuillSharedTemplateDataChangedMessage() {
-                    changedTemplateFragmentStr = tt.SerializeJsonObjectToBase64()
+                    changedTemplateFragmentStr = isDelete ? null : tt.SerializeJsonObjectToBase64(),
+                    deletedTemplateGuid = isDelete ? tt.Guid : null
                 };
                 active_template_ctvms
                     .Select(x => x.GetContentView() as MpAvContentWebView)
                     .Where(x => x != null)
                     .ForEach(x =>
                         x.SendMessage($"sharedTemplateChanged_ext('{shared_template_changed_msg.SerializeJsonObjectToBase64()}')"));
+
+                active_template_ctvms
+                    .ForEach(x => MpConsole.WriteLine($"Active Template Tile '{x}' was notified of {label} template '{tt.TemplateName}'"));
             }
 
-            // remaining is a background activity and needs notifier to current in db so wait 5 seconds since
-            // knowing when complete maybe wrong
-            await Task.Delay(5_000);
+            _ = Task.Run(async () => {
+                // remaining is a background activity and needs notifier to current in db so wait 5 seconds since
+                // knowing when complete maybe wrong
+                await Task.Delay(5_000);
 
-            // scan whole db for items w/ tt
-            var cil_with_tt = await MpDataModelProvider.GetCopyItemsByTextTemplateGuid(tt.Guid);
-            // exclude all active items
-            var cil_to_manually_update = cil_with_tt.Where(x => !active_template_ctvms.Any(y => y.CopyItemId == x.Id) && x.Id != notifier_ciid);
-            if (!cil_to_manually_update.Any()) {
-                // no others to update so done
-                return;
-            }
-
-            // get current ci (should be updated after template change ntf)
-            var notifier_ci = await MpDataModelProvider.GetItemAsync<MpCopyItem>(notifier_ciid);
-
-            var html_doc = new HtmlDocument();
-            html_doc.LoadHtml(notifier_ci.ItemData);
-            var tt_node = html_doc.DocumentNode.SelectSingleNode($"//span[@templateguid = '{tt.Guid}']");
-            MpDebug.Assert(tt_node != null, $"xpath error finding template '{tt.Guid}' in ciid {notifier_ciid}");
-
-            foreach (var other_ci_with_tt in cil_to_manually_update) {
-                var cur_html_doc = new HtmlDocument();
-                cur_html_doc.LoadHtml(other_ci_with_tt.ItemData);
-                var cur_tt_nodes = html_doc.DocumentNode.SelectNodes($"//span[@templateguid = '{tt.Guid}']");
-                for (int i = 0; i < cur_tt_nodes.Count; i++) {
-                    //string org_state = cur_tt_node.GetAttributeValue("templateState", tt_node.GetAttributeValue("templateState",string.Empty));
-                    //cur_tt_node.ParentNode.Repl
+                // scan whole db for items w/ tt
+                var cil_with_tt = await MpDataModelProvider.GetCopyItemsByTextTemplateGuid(tt.Guid);
+                // exclude all active items
+                var cil_to_manually_update = cil_with_tt.Where(x => !active_template_ctvms.Any(y => y.CopyItemId == x.Id) && x.Id != notifier_ciid);
+                if (!cil_to_manually_update.Any()) {
+                    // no others to update so done
+                    return;
                 }
-            }
+
+                // get current ci (should be updated after template change ntf)
+                var notifier_ci = await MpDataModelProvider.GetItemAsync<MpCopyItem>(notifier_ciid);
+
+                var html_doc = new HtmlDocument();
+                html_doc.LoadHtml(notifier_ci.ItemData);
+                HtmlNode tt_node = null;
+                if (!isDelete) {
+                    tt_node = html_doc.DocumentNode.SelectSingleNode($"//span[@templateguid = '{tt.Guid}']");
+                    MpDebug.Assert(tt_node != null, $"xpath error finding template '{tt.Guid}' in ciid {notifier_ciid}");
+                }
+
+                foreach (var other_ci_with_tt in cil_to_manually_update) {
+                    var cur_html_doc = new HtmlDocument();
+                    cur_html_doc.LoadHtml(other_ci_with_tt.ItemData);
+                    var cur_tt_nodes = html_doc.DocumentNode.SelectNodes($"//span[@templateguid = '{tt.Guid}']").ToList();
+                    //for (int i = 0; i < cur_tt_nodes.Count; i++) {
+                    foreach (var cur_tt_node in cur_tt_nodes) {
+                        if (isDelete) {
+                            cur_tt_node.Remove();
+                            continue;
+                        }
+                        cur_tt_node.SetAttributeValue("templateBgColor", tt_node.GetAttributeValue("templateBgColor", string.Empty));
+                        cur_tt_node.SetAttributeValue("templateName", tt_node.GetAttributeValue("templateName", string.Empty));
+                        cur_tt_node.SetAttributeValue("templateData", tt_node.GetAttributeValue("templateData", string.Empty));
+                    }
+                    string oldData = other_ci_with_tt.ItemData;
+                    other_ci_with_tt.ItemData = cur_html_doc.DocumentNode.InnerHtml;
+                    MpConsole.WriteLine($"Template Tile '{other_ci_with_tt}' content {label}", true);
+                    MpConsole.WriteLine("Old data: ");
+                    MpConsole.WriteLine(oldData);
+                    MpConsole.WriteLine("New Data:");
+                    MpConsole.WriteLine(other_ci_with_tt.ItemData, false, true);
+                }
+                await Task.WhenAll(cil_to_manually_update.Select(x => x.WriteToDatabaseAsync()));
+            });
         }
 
-        public async Task DeleteTemplateAsync(int notifier_ciid, string tguid) {
-            var t_to_delete = await MpDataModelProvider.GetItemAsync<MpTextTemplate>(tguid);
-            if (t_to_delete == null) {
-                return;
+        public bool HasHtmlTemplate(string text) {
+            if (text == null) {
+                return false;
             }
-            await t_to_delete.DeleteFromDatabaseAsync();
-
-            // get all OTHER active items w/ templates 
-            var active_template_ctvms =
-                MpAvClipTrayViewModel.Instance
-                .AllActiveItems
-                .Where(x => x.HasTemplates && x.CopyItemId != notifier_ciid);
-
-            if (active_template_ctvms.Any()) {
-                // ntf OTHER active shared templates of deleted guid
-                var shared_template_changed_msg = new MpQuillSharedTemplateDataChangedMessage() {
-                    deletedTemplateGuid = tguid
-                };
-                active_template_ctvms
-                    .Select(x => x.GetContentView() as MpAvContentWebView)
-                    .Where(x => x != null)
-                    .ForEach(x =>
-                        x.SendMessage($"sharedTemplateChanged_ext('{shared_template_changed_msg.SerializeJsonObjectToBase64()}')"));
-            }
+            return text.Contains("<span class=\"template-blot");
         }
 
-        public async Task<IEnumerable<MpContact>> GetContactsAsync() {
+        public async Task<IEnumerable<MpIContact>> GetContactsAsync() {
             var contacts = new List<MpIContact>();
 
             var fetchers =
                 MpPluginLoader.Plugins
                 .Where(x => x.Value.Component is MpIContactFetcherComponentBase)
-                .Select(x => x.Value.Component).Distinct();
+                .Select(x => x);
+            //.Select(x => x.Value.Component).Distinct();
 
-            foreach (var fetcher in fetchers) {
+            foreach (var fetcher_kvp in fetchers) {
+                string guid = fetcher_kvp.Key;
+                var fetcher = fetcher_kvp.Value.Component;
+                //MpPluginRequestFormatBase req = null;
+                //if(MpAvAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.PluginGuid == guid) is MpAvAnalyticItemViewModel aivm) {
+                //    if(aivm.Items.FirstOrDefault(x=>x.IsGeneratedDefaultPreset) is MpAvAnalyticItemPresetViewModel aipvm) {
+                //        aipvm.Ex
+                //        aivm.ExecuteAnalysisCommand
+                //    }
+                //}
+                string fetcher_dir = fetcher_kvp.Value.RootDirectory;
                 if (fetcher is MpIContactFetcherComponent cfc) {
-                    contacts.AddRange(cfc.FetchContacts(null));
+                    contacts.AddRange(cfc.FetchContacts(fetcher_dir));
                 } else if (fetcher is MpIContactFetcherComponentAsync cfac) {
-                    var results = await cfac.FetchContactsAsync(null);
+                    var results = await cfac.FetchContactsAsync(fetcher_dir);
                     contacts.AddRange(results);
                 }
             }
-            return contacts.Select(x => new MpContact(x));
+            return contacts;
+            //return contacts.Select(x => new MpContact(x));
         }
 
         public string GetTemplateTypeIconResourceStr(MpTextTemplateType templateType) {

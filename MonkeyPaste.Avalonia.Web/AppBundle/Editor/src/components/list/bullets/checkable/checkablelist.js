@@ -1,8 +1,4 @@
-﻿// #region Globals
-
-var CheckableListItemAttributor;
-// #endregion Globals
-
+﻿
 // #region Life Cycle
 
 function initCheckableList() {
@@ -83,6 +79,6 @@ function onCheckableListToolbarButtonClick(e) {
 	//}
 
 	//formatDocRange(sel, 'ordered-list-item');
-	CheckableListItemAttributor
+	globals.CheckableListItemAttributor
 }
 // #endregion Event Handlers

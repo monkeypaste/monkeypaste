@@ -1,11 +1,4 @@
-﻿// #region Globals
-
-const ENCODED_LIST_ITEM_OPEN_TOKEN = "{li{";
-const ENCODED_LIST_ITEM_CLOSE_TOKEN = "}li}";
-const ENCODED_LIST_ITEM_REGEXP = new RegExp(ENCODED_LIST_ITEM_OPEN_TOKEN + ".*?" + ENCODED_LIST_ITEM_CLOSE_TOKEN, "");
-
-// #endregion Globals
-
+﻿
 // #region Life Cycle
 
 function initLists() {
@@ -188,7 +181,7 @@ function getEncodedListItemStr(li_elm) {
 	if (!li_elm) {
 		return '';
 	}
-	let encoded_li_str = `${ENCODED_LIST_ITEM_OPEN_TOKEN}${getListItemElementBulletText(li_elm)}[${getListItemIndentLevel(li_elm)}]${ENCODED_LIST_ITEM_CLOSE_TOKEN}`;
+	let encoded_li_str = `${globals.ENCODED_LIST_ITEM_OPEN_TOKEN}${getListItemElementBulletText(li_elm)}[${getListItemIndentLevel(li_elm)}]${globals.ENCODED_LIST_ITEM_CLOSE_TOKEN}`;
 	return encoded_li_str;
 }
 
@@ -198,14 +191,14 @@ function getDecodedListItemText(encoded_text) {
 		return encoded_text;
 	}
 	let decoded_text = encoded_text;
-	var result = ENCODED_LIST_ITEM_REGEXP.exec(decoded_text);
+	var result = globals.ENCODED_LIST_ITEM_REGEXP.exec(decoded_text);
 	while (result) {
 		let encoded_li_text = decoded_text.substr(result.index, result[0].length);
-		let li_text = encoded_li_text.replace(ENCODED_LIST_ITEM_OPEN_TOKEN, '').replace(ENCODED_LIST_ITEM_CLOSE_TOKEN, '');
+		let li_text = encoded_li_text.replace(globals.ENCODED_LIST_ITEM_OPEN_TOKEN, '').replace(globals.ENCODED_LIST_ITEM_CLOSE_TOKEN, '');
 		let indent_lvl = parseInt(li_text.split('[')[1].split(']')[0])
 		li_text = '\t'.repeat(indent_lvl) + li_text.split('[')[0];
 		decoded_text = decoded_text.replaceAll(encoded_li_text, li_text);
-		result = ENCODED_LIST_ITEM_REGEXP.exec(decoded_text);
+		result = globals.ENCODED_LIST_ITEM_REGEXP.exec(decoded_text);
 	}
 	return decoded_text;
 }

@@ -366,8 +366,9 @@ namespace MonkeyPaste {
             return result[0];
         }
         public static async Task<List<MpCopyItem>> GetCopyItemsByTextTemplateGuid(string tguid) {
-            string query = $"select * from MpCopyItem where ItemData LIKE '%templateguid=?%'";
-            var result = await MpDb.QueryAsync<MpCopyItem>(query, tguid);
+            string like_match = $"%templateguid=\"{tguid}\"%";
+            string query = $"select * from MpCopyItem where ItemData LIKE ?";
+            var result = await MpDb.QueryAsync<MpCopyItem>(query, like_match);
             return result;
         }
         #endregion

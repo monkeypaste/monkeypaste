@@ -1,23 +1,4 @@
-// #region Globals
 
-var RequiredNavigateUriModKeys = [
-    //'Control'
-];
-
-const LinkTypes = [
-    'fileorfolder',
-    'uri',
-    'email',
-    'phonenumber',
-    'currency',
-    'hexcolor',
-    'streetaddress',
-    'delete-item'
-];
-
-var LinkTypeAttrb = null;
-
-// #endregion Globals
 
 // #region Life Cycle
 function initLinks() {
@@ -32,18 +13,18 @@ function initLinkClassAttributes() {
     let config = {
         scope: Parchment.Scope.INLINE,
     };
-    LinkTypeAttrb = new Parchment.ClassAttributor('linkType', 'link-type', config);
+    globals.LinkTypeAttrb = new Parchment.ClassAttributor('linkType', 'link-type', config);
 
-    Quill.register(LinkTypeAttrb, suppressWarning);
+    Quill.register(globals.LinkTypeAttrb, suppressWarning);
 }
 
 
 
 function loadLinkHandlers() {
     if (globals.ContentItemType == 'FileList') {
-        RequiredNavigateUriModKeys = ['Alt'];
+        globals.RequiredNavigateUriModKeys = ['Alt'];
     } else {
-        RequiredNavigateUriModKeys = [];
+        globals.RequiredNavigateUriModKeys = [];
     }
 
     let a_elms = Array.from(getEditorElement().querySelectorAll('a'));
@@ -122,7 +103,7 @@ function showLinkPopupForSelection() {
         link_input_val = sel_elm.getAttribute('href');
     }
 
-    quill.theme.tooltip.edit('link', '');
+    globals.quill.theme.tooltip.edit('link', '');
     positionTooltipToDocRange(sel);
     getEditorElement().addEventListener('focus', onLinkPopupClose);
 
@@ -178,7 +159,7 @@ function onLinkClick(e) {
     e.preventDefault();
     e.stopPropagation();
 
-    let can_nav = RequiredNavigateUriModKeys.every(x => down_mod_keys.includes(x));
+    let can_nav = globals.RequiredNavigateUriModKeys.every(x => down_mod_keys.includes(x));
     if (!can_nav) {
         return;
     }
@@ -261,7 +242,7 @@ function onLinkPopupSaveClick(e) {
         if (sel.length == 0) {
             insertText(sel.index, link_href, link_format);
         } else {
-            quill.formatText(sel.index, sel.length, link_format);
+            globals.quill.formatText(sel.index, sel.length, link_format);
         }        
     }
     hideLinkPopup();
@@ -269,13 +250,13 @@ function onLinkPopupSaveClick(e) {
 
 function onLinkPointerEnter(e) {
     if (!isSubSelectionEnabled() ||
-        WindowMouseDownLoc != null) {
+        globals.WindowMouseDownLoc != null) {
         return;
     }
     let a_elm = e.currentTarget;
     let mod_key_text = '';
-    if (RequiredNavigateUriModKeys.length > 0) {
-        mod_key_text = `[+ <strong>${RequiredNavigateUriModKeys.join(' ')}</strong>]`;
+    if (globals.RequiredNavigateUriModKeys.length > 0) {
+        mod_key_text = `[+ <strong>${globals.RequiredNavigateUriModKeys.join(' ')}</strong>]`;
     }
     let link_action_text = '';
     if (a_elm.classList.contains('link-type-hexcolor')) {

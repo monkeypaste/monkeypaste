@@ -26,8 +26,8 @@ function enableReadOnly_ext_ntf() {
 		let dti_msg = {
 			dataItems: [
 				{
-					format: URI_LIST_FORMAT,
-					data: JSON.stringify([`${LOCAL_HOST_URL}/?type=UserDevice&id=-1`])
+					format: globals.URI_LIST_FORMAT,
+					data: JSON.stringify([`${globals.LOCAL_HOST_URL}/?type=UserDevice&id=-1`])
 				}
 			]
 		};

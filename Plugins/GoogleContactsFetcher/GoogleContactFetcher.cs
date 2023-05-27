@@ -21,19 +21,42 @@ namespace GoogleContactsFetcher {
         MpISupportDeferredParameterCommand,
         MpIAnalyzeAsyncComponent,
         INotifyPropertyChanged {
-        private string ClientSecretsPath =>
-            @"C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia.Desktop\bin\Debug\net7.0-windows\Plugins\GoogleContactsFetcher\client_secrets_desktop.json";
-        //Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), @"client_secrets_desktop.json");
+
+        private string _clientSecretsPath = null;
+        //string ClientSecretsPath {
+        //    get {
+        //        if (_clientSecretsPath == null) {
+        //            //@"C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia.Desktop\bin\Debug\net7.0-windows\Plugins\GoogleContactsFetcher\client_secrets_desktop.json";
+        //            _clientSecretsPath = Path.Combine(Path.GetDirectoryName(Assembly.GetCallingAssembly().Location), @"client_secrets_desktop.json");
+        //        }
+        //        MpConsole.WriteLine("contacts secret path: " + _clientSecretsPath);
+        //        return _clientSecretsPath;
+        //    }
+        //}
+
+        //
 
         //     addresses,ageRanges,biographies,birthdays,calendarUrls,clientData
         //    ,coverPhotos,emailAddresses,events,externalIds,genders,imClients *
         //     interests,locales,locations,memberships,metadata,miscKeywords,names
         //    ,nicknames,occupations,organizations,phoneNumbers,photos,relations
         //    ,sipAddresses,skills,urls,userDefined
-        private string _personFields = "addresses,names,emailAddresses";
-        //"addresses,ageRanges,biographies,birthdays,calendarUrls,clientData,coverPhotos,emailAddresses,events,externalIds,genders,imClients,interests,locales,locations,memberships,metadata,miscKeywords,names,,nicknames,occupations,organizations,phoneNumbers,photos,relations,,sipAddresses,skills,urls,userDefined";
+        private string _personFields = "metadata,addresses,names,emailAddresses";
+        //"addresses,ageRanges,biographies,birthdays,calendarUrls,clientData,coverPhotos,emailAddresses,events,externalIds,genders,
+        //imClients,interests,locales,locations,memberships,metadata,miscKeywords,names,,nicknames,occupations,organizations,phoneNumbers,
+        //photos,relations,,sipAddresses,skills,urls,userDefined";
 
         public async Task<IEnumerable<MpIContact>> FetchContactsAsync(object args) {
+            if (_clientSecretsPath == null &&
+                args is string manifestDir) {
+                try {
+                    _clientSecretsPath = Path.Combine(manifestDir, @"client_secrets_desktop.json");
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Error finding google secrets at path '{manifestDir}'");
+                    return new MpIContact[] { };
+                }
+            }
             var result = await FetchContactsAsync_internal(_personFields);
             return result;
         }
@@ -61,15 +84,15 @@ namespace GoogleContactsFetcher {
 
         private async Task<IEnumerable<MpIContact>> FetchContactsAsync_internal(object personFields) {
             List<MpIContact> fallback = new List<MpIContact>();
-            if (!File.Exists(ClientSecretsPath)) {
+            if (!File.Exists(_clientSecretsPath)) {
                 Debugger.Break();
-                MpConsole.WriteTraceLine($"Google Cred file does not exists at path: '{ClientSecretsPath}'");
+                MpConsole.WriteTraceLine($"Google Cred file does not exists at path: '{_clientSecretsPath}'");
                 return fallback;
             }
 
             try {
                 UserCredential credential = null;
-                using (var stream = new FileStream(ClientSecretsPath, FileMode.Open, FileAccess.Read)) {
+                using (var stream = new FileStream(_clientSecretsPath, FileMode.Open, FileAccess.Read)) {
                     credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
                         GoogleClientSecrets.FromStream(stream).Secrets,
                         new[] { PeopleServiceService.ScopeConstants.ContactsReadonly },

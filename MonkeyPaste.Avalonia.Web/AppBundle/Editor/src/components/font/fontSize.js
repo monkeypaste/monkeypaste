@@ -1,11 +1,4 @@
-﻿// #region Globals
-const DefaultFontSizes = ['8px', '9px', '10px', '12px', '14px', '16px', '20px', '24px', '32px', '42px', '54px', '68px', '84px', '98px'];
-var DefaultFontSize = '12px'
-var IsFontSizePickerOpen = false;
-var StoredEditorSel = null;
-
-// #endregion Globals
-
+﻿
 // #region Life Cycle
 
 function initFontSizes() {
@@ -19,10 +12,10 @@ function registerFontSizes() {
         debugger;
     }
     var size = Quill.import('attributors/style/size');
-    size.whitelist = DefaultFontSizes;
+    size.whitelist = globals.DefaultFontSizes;
     Quill.register(size, true);
 
-    return DefaultFontSizes;
+    return globals.DefaultFontSizes;
 }
 // #endregion Life Cycle
 
@@ -49,15 +42,15 @@ function getFontPickerOptionsContainerElement() {
 // #region Actions
 
 function updateFontSizePickerToSelection(forcedSize = null, sel = null) {
-    if (IsFontSizePickerOpen) {
+    if (globals.IsFontSizePickerOpen) {
         return;
     }
 
     sel = sel ? sel : getDocSelection();
     let curFontSize = forcedSize;
     if (curFontSize == null) {
-        let curFormat = quill.getFormat(sel);
-        curFontSize = curFormat != null && curFormat.hasOwnProperty('size') && curFormat.size.length > 0 ? parseInt(curFormat.size) + 'px' : DefaultFontSize;
+        let curFormat = globals.quill.getFormat(sel);
+        curFontSize = curFormat != null && curFormat.hasOwnProperty('size') && curFormat.size.length > 0 ? parseInt(curFormat.size) + 'px' : globals.DefaultFontSize;
     }
     let fontSizeFound = false;
 

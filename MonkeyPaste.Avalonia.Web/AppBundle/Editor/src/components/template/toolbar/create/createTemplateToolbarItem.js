@@ -45,18 +45,18 @@ function isCreateTemplateValid() {
 
 // #region Actions
 
-function createTemplateFromDropDown(templateObjOrId, newTemplateType) {
-    var templateObj;
+function createTemplateFromDropDown(templateObjOrId, newTemplateType, allDefs) {
+    let templateObj;
     if (templateObjOrId != null && typeof templateObjOrId === 'string') {
         templateObj = getTemplateDefByGuid(templateObjOrId);
     } else {
         templateObj = templateObjOrId;
     }
 
-    var range = quill.getSelection(true);
+    let range = globals.quill.getSelection(true);
 
-    var isNew = templateObj == null;
-    var newTemplateObj = templateObj;
+    let isNew = templateObj == null;
+    let newTemplateObj = templateObj;
 
     if (isNew) {
         //grab the selection head's html to set formatting of template div
@@ -75,7 +75,7 @@ function createTemplateFromDropDown(templateObjOrId, newTemplateType) {
 
         let newTemplateName = '';
         if (range.length == 0) {
-            newTemplateName = getLowestAnonTemplateName(toTitleCase(newTemplateType));
+            newTemplateName = getLowestAnonTemplateName(newTemplateType, allDefs);
         } else {
             newTemplateName = getText(range).trim();
         }
@@ -83,7 +83,7 @@ function createTemplateFromDropDown(templateObjOrId, newTemplateType) {
             //this occurs when selection.length == 0
             sel_html_format = '';// newTemplateName;
         }
-        let formatInfo = quill.getFormat(range.index, 1);
+        let formatInfo = globals.quill.getFormat(range.index, 1);
         newTemplateObj = {
             templateGuid: generateGuid(),
             templateColor: getRandomPaletteColor(),
@@ -93,6 +93,8 @@ function createTemplateFromDropDown(templateObjOrId, newTemplateType) {
             templateDeltaFormat: JSON.stringify(formatInfo),
             templateHtmlFormat: sel_html_format
         };
+
+        onAddOrUpdateTemplate_ntf(newTemplateObj);
     }
 
     hideCreateTemplateToolbarContextMenu();
@@ -167,7 +169,7 @@ function showTemplateToolbarContextMenu() {
                         iconFgColor: 'lime',
                         label: 'New...',
                         action: function (option, contextMenuIndex, optionIndex) {
-                            createTemplateFromDropDown(null, tmi.label.toLowerCase());
+                            createTemplateFromDropDown(null, tmi.label.toLowerCase(), allTemplateDefs);
                         },
                     }
                 )

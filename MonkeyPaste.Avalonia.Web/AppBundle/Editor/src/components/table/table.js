@@ -1,29 +1,9 @@
-﻿// #region Globals
-
-const TABLE_WRAPPER_CLASS_NAME = 'quill-better-table-wrapper';
-const TABLE_COL_TOOLS_CLASS_NAME = 'qlbt-col-tool';
-const TABLE_OPS_MENU_CLASS_NAME = 'qlbt-operation-menu';
-
-const ALLOW_TABLE_OPS_MENU = true;
-const IS_TABLE_OPS_TOOLBAR_ENABLED = false;
-
-var IsTableOpsMenuEnabled = true;
-var IsTableInteractionEnabled = true;
-
-var DefaultCsvProps = {
-    ColSeparator: ',',
-    RowSeparator: '\n'
-};
-
-var IsTableDragSelecting = false;
-// #endregion Globals
-
-// #region Life Cycle
+﻿// #region Life Cycle
 
 function initTable() {
     initTableToolbarButton();
     initTableOps()
-    DefaultCsvProps.RowSeparator = envNewLine();
+    globals.DefaultCsvProps.RowSeparator = envNewLine();
 
     //let editor_elm = getEditorElement();
     //if (editor_elm == null) {
@@ -85,7 +65,7 @@ function getTableSelectedCells() {
 }
 
 function getTableContextMenuElement() {
-    let ops_menu_elms = document.getElementsByClassName(TABLE_OPS_MENU_CLASS_NAME);
+    let ops_menu_elms = document.getElementsByClassName(globals.TABLE_OPS_MENU_CLASS_NAME);
     if (ops_menu_elms == null || ops_menu_elms.length == 0) {
         return null;
     }
@@ -97,7 +77,7 @@ function getTableSelectionLineElements() {
 }
 
 function getTableColumnEditorContainerElement() {
-    const tcec_elms = Array.from(document.getElementsByClassName(TABLE_COL_TOOLS_CLASS_NAME));
+    const tcec_elms = Array.from(document.getElementsByClassName(globals.TABLE_COL_TOOLS_CLASS_NAME));
     if (tcec_elms.length == 0) {
         return null;
     }
@@ -124,7 +104,7 @@ function getTablesCsv(format, csvProps, isForOle = false) {
     let table_csvl = getTableElements().map(x => getTableCsv(x, format, csvProps, isForOle));
 
     // merge csv's w/ row sep
-    csvProps = !csvProps ? DefaultCsvProps : csvProps;
+    csvProps = !csvProps ? globals.DefaultCsvProps : csvProps;
     return table_csvl.join(csvProps.RowSeparator);
 }
 
@@ -137,10 +117,10 @@ function getTableCsv(table_elm, format, csvProps, isForOle = false) {
         return '';
     }
     format = !format ? 'text' : format.toLowerCase();
-    csvProps = !csvProps ? DefaultCsvProps : csvProps;
-    let was_enabled = quill.isEnabled();
+    csvProps = !csvProps ? globals.DefaultCsvProps : csvProps;
+    let was_enabled = globals.quill.isEnabled();
     if (!was_enabled) {
-        quill.enable(true);
+        globals.quill.enable(true);
         updateQuill();
     }
     let btm = getBetterTableModule();
@@ -199,17 +179,17 @@ function getTableCsv(table_elm, format, csvProps, isForOle = false) {
         csv_output += row_str;
     }
     if (!was_enabled) {
-        quill.enable(false);
+        globals.quill.enable(false);
     }
     return csv_output;
 }
 
 function getTableElements() {
-    return Array.from(document.getElementsByClassName(TABLE_WRAPPER_CLASS_NAME));
+    return Array.from(document.getElementsByClassName(globals.TABLE_WRAPPER_CLASS_NAME));
 }
 
 function getBetterTableModule(forceInit = false) {    
-    let btm = quill.getModule('better-table');
+    let btm = globals.quill.getModule('better-table');
     if (btm &&
         forceInit &&
         getTableElements().length > 0 &&
@@ -301,7 +281,7 @@ function getTableCellElementAtDocIdx(doc_idx) {
             return null;
         }
         cur_elm = getElementAtDocIdx(adj_doc_idx, false, false);
-        if (!isClassInElementPath(cur_elm, TABLE_WRAPPER_CLASS_NAME)) {
+        if (!isClassInElementPath(cur_elm, globals.TABLE_WRAPPER_CLASS_NAME)) {
             return null;
         }
     }
@@ -335,7 +315,8 @@ function isContentATable() {
     if (globals.ContentItemType != 'Text') {
         return false;
     }
-    return Array.from(document.getElementsByClassName(TABLE_WRAPPER_CLASS_NAME)).length == 1;
+    return Array.from(getEditorElement().getElementsByClassName(globals.TABLE_WRAPPER_CLASS_NAME)).length == 1 &&
+        getEditorElement().children.length == 1;
 }
 
 function isDocIdxInTable(docIdx) {
@@ -343,7 +324,7 @@ function isDocIdxInTable(docIdx) {
     if (!doc_idx_elm) {
         return false;
     }
-    return isClassInElementPath(doc_idx_elm, TABLE_WRAPPER_CLASS_NAME);
+    return isClassInElementPath(doc_idx_elm, globals.TABLE_WRAPPER_CLASS_NAME);
 }
 
 function isAnyTableSelectionElementsVisible() {
@@ -366,7 +347,7 @@ function isScreenPointInAnyTable(client_mp) {
 }
 
 function isContextMenuEventGoingToShowTableMenu(e) {
-    if (!isTableInDocument() || !IsTableOpsMenuEnabled) {
+    if (!isTableInDocument() || !globals.IsTableOpsMenuEnabled) {
         return false;
     }
     if (e.button == 2 && isAnyTableSelectionElementsVisible()) {
@@ -398,14 +379,14 @@ function updateTableDragState(e) {
     // used to know if pointer down is already on a selected cell, in which case will allow for a drag event
     if (e == null) {
         // mouse up
-        IsTableDragSelecting = false;
+        globals.IsTableDragSelecting = false;
         return;
     }
-    if (WindowMouseDownLoc == null || !hasEditableTable()) {
-        IsTableDragSelecting = false;
+    if (globals.WindowMouseDownLoc == null || !hasEditableTable()) {
+        globals.IsTableDragSelecting = false;
         return true;
     }
-    if (IsTableDragSelecting != false) {
+    if (globals.IsTableDragSelecting != false) {
         // only null during confirmed cell drag
         return true;
     }
@@ -414,20 +395,20 @@ function updateTableDragState(e) {
     let sel_cell_elms = getTableSelectedCellElements();
     for (var i = 0; i < sel_cell_elms.length; i++) {
         let cell_rect = cleanRect(sel_cell_elms[i].getBoundingClientRect());
-        if (isPointInRect(cell_rect, WindowMouseDownLoc)) {
+        if (isPointInRect(cell_rect, globals.WindowMouseDownLoc)) {
             cell_elm_under_pointer = sel_cell_elms[i];
             break;
         }
     }
     if (cell_elm_under_pointer == null) {
         // clean mouse down, reject dragStart, perform drag select
-        IsTableDragSelecting = true;
+        globals.IsTableDragSelecting = true;
     } else {
         // down over selection, allow drag
-        IsTableDragSelecting = null;
+        globals.IsTableDragSelecting = null;
     }
-    log('Table Drag Selecting: ' + (IsTableDragSelecting == true ? "YUP" : "NOPE"));
-    if (IsTableDragSelecting == null) {
+    log('Table Drag Selecting: ' + (globals.IsTableDragSelecting == true ? "YUP" : "NOPE"));
+    if (globals.IsTableDragSelecting == null) {
         if (e) {
             //e.preventDefault();
             //e.stopPropagation();
@@ -498,11 +479,11 @@ function rejectTableContextMenu(e) {
         return false;
     }
 
-    let is_click_in_cell = isScreenPointInAnyTable(getClientMousePos(e)); //isClassInElementPath(e.target, TABLE_WRAPPER_CLASS_NAME);
+    let is_click_in_cell = isScreenPointInAnyTable(getClientMousePos(e)); //isClassInElementPath(e.target, globals.TABLE_WRAPPER_CLASS_NAME);
     let is_cell_focus = isAnyTableSelectionElementsVisible();
 
-    if (IsTableOpsMenuEnabled) {
-        if (!is_click_in_cell && is_cell_focus && quill.hasFocus()) {
+    if (globals.IsTableOpsMenuEnabled) {
+        if (!is_click_in_cell && is_cell_focus && globals.quill.hasFocus()) {
             // BUG prevent better table bug where cell element is null (quill-better-table.js:2942 )
             // mentioned here https://github.com/soccerloway/quill-better-table/issues/77#issue-999274656
             return true;
@@ -518,7 +499,7 @@ function rejectTableContextMenu(e) {
     
     //if (is_click_in_cell &&
     //    !isClassInElementPath(e.target, 'file-list-path') &&
-    //    !IsTableInteractionEnabled) {
+    //    !globals.IsTableInteractionEnabled) {
     //    // disable any table clicks for file list
     //    return true;
     //}
@@ -545,21 +526,21 @@ function updateTableOpsMenuSizeAndPosition() {
 }
 
 function disableTableContextMenu() {
-    IsTableOpsMenuEnabled = false;
+    globals.IsTableOpsMenuEnabled = false;
 }
 
 function enableTableContextMenu() {
-    if (ALLOW_TABLE_OPS_MENU) {
-        IsTableOpsMenuEnabled = true;
+    if (globals.ALLOW_TABLE_OPS_MENU) {
+        globals.IsTableOpsMenuEnabled = true;
     }
 }
 
 function disableTableInteraction() {
-    IsTableInteractionEnabled = false;
+    globals.IsTableInteractionEnabled = false;
 }
 
 function enableTableInteraction() {
-    IsTableInteractionEnabled = true;
+    globals.IsTableInteractionEnabled = true;
 }
 
 function limitColTool() {

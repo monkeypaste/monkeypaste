@@ -3408,7 +3408,7 @@ namespace MonkeyPaste.Avalonia {
                 bool canCopy =
                     SelectedItem != null &&
                     SelectedItem.IsHostWindowActive;
-                MpConsole.WriteLine("CopySelectedClipsCommand CanExecute: " + canCopy);
+                MpConsole.WriteLine("CopySelectedClipFromShortcutCommand CanExecute: " + canCopy);
                 if (!canCopy) {
                     MpConsole.WriteLine("SelectedItem: " + (SelectedItem == null ? "IS NULL" : "NOT NULL"));
                     MpConsole.WriteLine("IsHostWindowActive: " + SelectedItem.IsHostWindowActive);
@@ -3451,7 +3451,7 @@ namespace MonkeyPaste.Avalonia {
                     //!IsAnyEditingClipTitle &&
                     !MpPrefViewModel.Instance.IsTrialExpired;
 
-                MpConsole.WriteLine("CopySelectedClipsCommand CanExecute: " + can_paste);
+                MpConsole.WriteLine("PasteSelectedClipTileFromShortcutCommand CanExecute: " + can_paste);
                 if (!can_paste) {
                     MpConsole.WriteLine("SelectedItem: " + (SelectedItem == null ? "IS NULL" : "NOT NULL"));
                     MpConsole.WriteLine("IsHostWindowActive: " + SelectedItem.IsHostWindowActive);
@@ -3532,7 +3532,20 @@ namespace MonkeyPaste.Avalonia {
                         Debugger.Break();
                         return;
                     }
+
                     ctvm = await CreateClipTileViewModelAsync(ci);
+                    if (ctvm.CopyItemType == MpCopyItemType.Text &&
+                        MpAvTemplateModelHelper.Instance.HasHtmlTemplate(ctvm.CopyItemData)) {
+                        // NOTE this matcher may have false positives but not miss item's with templates
+
+                        // TODO it maybe better to just paste the contents and not get new values
+                        // TODO2 would probably be better to show this in a system tray window like append but not sure if 
+                        // this even a good idea yet
+                        PinTileCommand.Execute(new object[] { ctvm, MpPinType.Window });
+
+                        // don't actually paste templates from hot key needs to happen from toolbar button
+                        return;
+                    }
                 }
                 PasteClipTileAsync(ctvm).FireAndForgetSafeAsync(this);
             },
@@ -3626,9 +3639,10 @@ namespace MonkeyPaste.Avalonia {
                     SelectedItem.IsHostWindowActive &&
                     SelectedItem.IsTitleReadOnly &&
                     SelectedItem.IsContentReadOnly &&
+                    !SelectedItem.IsSubSelectionEnabled &&
                     SelectedItem.IsFocusWithin;
                 if (!can_delete) {
-                    MpConsole.WriteLine("CopySelectedClipsCommand CanExecute: " + can_delete);
+                    MpConsole.WriteLine("TrashOrDeleteSelectedClipFromShortcutCommand CanExecute: " + can_delete);
                     MpConsole.WriteLine("SelectedItem: " + (SelectedItem == null ? "IS NULL" : "NOT NULL"));
 
                     if (SelectedItem != null) {

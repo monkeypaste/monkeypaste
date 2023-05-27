@@ -1,8 +1,6 @@
 // #region Globals
 
-var RootAnnotations = [];
-var SelectedAnnotationGuid = null;
-var HoverAnnotationGuid = null;
+
 
 // #endregion Globals
 
@@ -32,15 +30,15 @@ function loadAnnotations(annotationsObjOrJsonStr) {
 		if (cur_root_ann) {
 			log('warning! loading existing ann ' + annotation_obj.guid + ' orig will be replaced.');
 			// annotation already exists, replate item
-			let cur_root_ann_idx = RootAnnotations.indexOf(cur_root_ann);
-			if (cur_root_ann_idx < 0 || cur_root_ann_idx >= RootAnnotations.length) {
+			let cur_root_ann_idx = globals.RootAnnotations.indexOf(cur_root_ann);
+			if (cur_root_ann_idx < 0 || cur_root_ann_idx >= globals.RootAnnotations.length) {
 				//prob w/ index of...
 				debugger;
 				continue;
 			}
-			RootAnnotations[cur_root_ann_idx] = annotation_obj;
+			globals.RootAnnotations[cur_root_ann_idx] = annotation_obj;
 		} else {
-			RootAnnotations.push(annotation_obj);
+			globals.RootAnnotations.push(annotation_obj);
 		}
 		
 	}
@@ -68,7 +66,7 @@ function getAnnotationRect(ann, actual_size) {
 
 	let ann_rect = cleanRect(ann);
 	// scale to editor
-	actual_size = actual_size == null ? { width: ContentImageWidth, height: ContentImageHeight } : actual_size;
+	actual_size = actual_size == null ? { width: globals.ContentImageWidth, height: globals.ContentImageHeight } : actual_size;
 
 	let xr = getContentWidth() / actual_size.width;
 	let yr = getContentHeight() / actual_size.height;
@@ -109,8 +107,8 @@ function getAnnotationRectStyle(ann) {
 	let _fillOpacity = 0.25;
 	let _strokeWidth = 2;
 
-	let is_hover_or_desc = isSelfOrDescendantAnnotationByGuid(ann, HoverAnnotationGuid);
-	let is_sel_or_desc = isSelfOrDescendantAnnotationByGuid(ann, SelectedAnnotationGuid);
+	let is_hover_or_desc = isSelfOrDescendantAnnotationByGuid(ann, globals.HoverAnnotationGuid);
+	let is_sel_or_desc = isSelfOrDescendantAnnotationByGuid(ann, globals.SelectedAnnotationGuid);
 	if (is_hover_or_desc) {
 		if (is_sel_or_desc) {
 			_stroke = 'lime';
@@ -132,14 +130,14 @@ function getAnnotationRectStyle(ann) {
 }
 
 function getSelectedAnnotation() {
-	if (isNullOrWhiteSpace(SelectedAnnotationGuid)) {
+	if (isNullOrWhiteSpace(globals.SelectedAnnotationGuid)) {
 		return null;
 	}
-	return findAnnotationByGuid(SelectedAnnotationGuid);
+	return findAnnotationByGuid(globals.SelectedAnnotationGuid);
 }
 
 function getVisibleAnnotations() {
-	if (!hasAnnotations() || SelectedAnnotationGuid == null) {
+	if (!hasAnnotations() || globals.SelectedAnnotationGuid == null) {
 		return [];
 	}
 	let sel_ann = getSelectedAnnotation();
@@ -156,8 +154,8 @@ function getAllAnnotations() {
 		return [];
 	}
 	let result = [];
-	for (var i = 0; i < RootAnnotations.length; i++) {
-		let cur_result = getAnnotationAndAllDescendants(RootAnnotations[i]);
+	for (var i = 0; i < globals.RootAnnotations.length; i++) {
+		let cur_result = getAnnotationAndAllDescendants(globals.RootAnnotations[i]);
 		result.push(...cur_result);
 	}
 	return result;
@@ -215,12 +213,12 @@ function getAnnotationDescendants(cur_ann) {
 // #region State
 
 function hasAnnotations() {
-	return RootAnnotations && RootAnnotations.length > 0;
+	return globals.RootAnnotations && globals.RootAnnotations.length > 0;
 }
 
 function resetAnnotations() {
-	SelectedAnnotationGuid = null;
-	RootAnnotations = [];
+	globals.SelectedAnnotationGuid = null;
+	globals.RootAnnotations = [];
 	resetForcedCursor();
 
 	removeAllChildren(getAnnotationRoiContainerElement());
@@ -313,8 +311,8 @@ function findAnnotationByGuid(ann_guid, cur_ann) {
 	}
 	if (isNullOrUndefined(cur_ann)) {
 		//root level
-		for (var i = 0; i < RootAnnotations.length; i++) {
-			let result = findAnnotationByGuid(ann_guid, RootAnnotations[i]);
+		for (var i = 0; i < globals.RootAnnotations.length; i++) {
+			let result = findAnnotationByGuid(ann_guid, globals.RootAnnotations[i]);
 			if (result) {
 				return result;
 			}
@@ -364,10 +362,10 @@ function selectAnnotation(ann_or_annGuid, fromHost = false) {
 	}
 	log('selected annotation: ' + ann_guid + ' fromHost: ' + fromHost);
 
-	SelectedAnnotationGuid = ann_guid;
+	globals.SelectedAnnotationGuid = ann_guid;
 	drawOverlay();
 	if (!fromHost) {
-		onAnnotationSelected_ntf(SelectedAnnotationGuid);
+		onAnnotationSelected_ntf(globals.SelectedAnnotationGuid);
 	}
 }
 
@@ -379,7 +377,7 @@ function hoverAnnotation(ann_or_annGuid, fromHost = false) {
 		ann_guid = ann_or_annGuid.guid;
 	}
 	//log('hover annotation: ' + ann_guid + ' fromHost: ' + fromHost);
-	HoverAnnotationGuid = ann_guid;
+	globals.HoverAnnotationGuid = ann_guid;
 	drawOverlay();
 	if (fromHost) {
 		return;
@@ -399,8 +397,8 @@ function showAnnotations(fromHost = false) {
 	if (!hasAnnotations()) {
 		return;
 	}
-	if (isNullOrUndefined(SelectedAnnotationGuid)) {
-		selectAnnotation(RootAnnotations[0].guid, fromHost);
+	if (isNullOrUndefined(globals.SelectedAnnotationGuid)) {
+		selectAnnotation(globals.RootAnnotations[0].guid, fromHost);
 	}
 	drawOverlay();
 }
@@ -423,7 +421,7 @@ function onAnnotationWindowPointerClick(e) {
 	if (!hasAnnotations()) {
 		return;
 	}
-	let hit_ann = findAnnotationUnderWindowPoint(WindowMouseLoc);
+	let hit_ann = findAnnotationUnderWindowPoint(globals.WindowMouseLoc);
 	if (isNullOrUndefined(hit_ann)) {
 		return;
 	}
@@ -431,7 +429,7 @@ function onAnnotationWindowPointerClick(e) {
 }
 
 function onAnnotationWindowPointerMove(e) {
-	let hover_ann = findAnnotationUnderWindowPoint(WindowMouseLoc);
+	let hover_ann = findAnnotationUnderWindowPoint(globals.WindowMouseLoc);
 	hoverAnnotation(hover_ann);
 
 	let forced_cursor = hover_ann ? 'pointer' : 'default';

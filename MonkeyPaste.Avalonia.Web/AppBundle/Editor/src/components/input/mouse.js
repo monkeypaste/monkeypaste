@@ -1,13 +1,4 @@
-﻿// #region Globals
-
-var WindowMouseDownLoc = null;
-var WindowMouseLoc = null;
-
-var WasSupressRightMouseDownSentToHost = false;
-var WasInternalContextMenuAbleToShow = false;
-// #endregion Globals
-
-// #region Life Cycle
+﻿// #region Life Cycle
 
 function initMouse() {
 	let capture = true;
@@ -73,11 +64,11 @@ function updateWindowMouseState(e) {
 	if (!e || e.buttons === undefined) {
 		return;
 	}
-	WindowMouseLoc = getClientMousePos(e);
+	globals.WindowMouseLoc = getClientMousePos(e);
 	if ((!isNullOrUndefined(e.button) && e.button === 0) ||
 		e.buttons === 1) {
-		if (WindowMouseDownLoc == null) {
-			WindowMouseDownLoc = WindowMouseLoc;
+		if (globals.WindowMouseDownLoc == null) {
+			globals.WindowMouseDownLoc = globals.WindowMouseLoc;
 			if (isDragging()) {
 				// drag end was not triggered, so reset here
 				// i think this only happen when resuming from breakpoint in dnd
@@ -88,7 +79,7 @@ function updateWindowMouseState(e) {
 		}
 	} else if (e.dataTransfer === undefined) {
 		// 
-		WindowMouseDownLoc = null;
+		globals.WindowMouseDownLoc = null;
 	}
 }
 
@@ -109,7 +100,7 @@ function onWindowClick(e) {
 	if (isClassInElementPath(e.target, ignore_classes)) {
 		return;
 	}
-	if (!isClassInElementPath(e.target, TemplateEmbedClass)) {
+	if (!isClassInElementPath(e.target, globals.TemplateEmbedClass)) {
 		// unfocus templates 
 		if (globals.TemplateBeforeEdit) {
 			if (isShowingColorPaletteMenu()) {
@@ -157,10 +148,10 @@ function onWindowMouseDown(e) {
 		ensureWindowFocus();
 	}
 
-	if (WasSupressRightMouseDownSentToHost) {
+	if (globals.WasSupressRightMouseDownSentToHost) {
 		// sanity check to cleanup any uncaptured mouse ups during a down supress
 		// (like if right click down on cell then up outside of editor window)
-		WasSupressRightMouseDownSentToHost = false;
+		globals.WasSupressRightMouseDownSentToHost = false;
 		onInternalContextMenuIsVisibleChanged_ntf(false);
 	}
 
@@ -173,12 +164,12 @@ function onWindowMouseDown(e) {
 	if (isContextMenuEventGoingToShowTableMenu(e)) {
 		// notify host to not show 
 		//onInternalContextMenuIsVisibleChanged_ntf(true);
-		WasSupressRightMouseDownSentToHost = true;
+		globals.WasSupressRightMouseDownSentToHost = true;
 	}
 
-	//WindowMouseDownLoc = { x: e.clientX, y: e.clientY };
+	//globals.WindowMouseDownLoc = { x: e.clientX, y: e.clientY };
 	updateWindowMouseState(e);
-	SelectionOnMouseDown = getDocSelection();
+	globals.SelectionOnMouseDown = getDocSelection();
 	if (e.buttons !== 2 && hasEditableTable()) {
 		// deal w/ table drag selection to supppress table select if on already selected cell
 		return updateTableDragState(e);
@@ -193,7 +184,7 @@ function onWindowMouseMove(e) {
 }
 
 function onWindowMouseUp(e) {
-	if (WasSupressRightMouseDownSentToHost) {
+	if (globals.WasSupressRightMouseDownSentToHost) {
 		delay(300)
 			.then(() => {
 				onInternalContextMenuIsVisibleChanged_ntf(false);
@@ -208,14 +199,14 @@ function onWindowMouseUp(e) {
 
 	if (canContextMenuEventShowTableOpsMenu()) {
 		onInternalContextMenuIsVisibleChanged_ntf(true);
-		WasInternalContextMenuAbleToShow = true;
-	} else if (WasInternalContextMenuAbleToShow) {
+		globals.WasInternalContextMenuAbleToShow = true;
+	} else if (globals.WasInternalContextMenuAbleToShow) {
 		onInternalContextMenuIsVisibleChanged_ntf(false);
-		WasInternalContextMenuAbleToShow = false;
+		globals.WasInternalContextMenuAbleToShow = false;
 	}
 
 	updateWindowMouseState(e);
-	SelectionOnMouseDown = null;
+	globals.SelectionOnMouseDown = null;
 	updateTableDragState(null);
 }
 // #endregion Event Handlers

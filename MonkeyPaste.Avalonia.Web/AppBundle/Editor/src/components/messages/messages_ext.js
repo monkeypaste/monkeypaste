@@ -145,10 +145,10 @@ function activateFindReplace_ext(msgBase64Str) {
 	log('findrepalce activated');
 	if (msg) {
 		// NOTE to not overcomplicate state change, incrementally nav to msg offset
-		const diff = msg.curIdxOffset - CurFindReplaceDocRangeIdx;
+		const diff = msg.curIdxOffset - globals.CurFindReplaceDocRangeIdx;
 		const dir = diff == 0 ? 0 : diff > 0 ? 1: -1;
 		if (dir != 0) {
-			while (CurFindReplaceDocRangeIdx != msg.curIdxOffset) {
+			while (globals.CurFindReplaceDocRangeIdx != msg.curIdxOffset) {
 				navigateFindReplaceResults(dir);
 			}
 		}
@@ -177,15 +177,15 @@ function provideCustomColorPickerResult_ext(msgBase64Str) {
 function getRequestResponse_ext(getRespBase64Str) {
 	// input 'MpQuillGetResponseNotification'
 	let msg = toJsonObjFromBase64Str(getRespBase64Str);
-	PendingGetResponses.push(msg);
+	globals.PendingGetResponses.push(msg);
 }
 
 function disableWindowResizeUpdate_ext() {
-	IsWindowResizeUpdateEnabled = false;
+	globals.IsWindowResizeUpdateEnabled = false;
 }
 
 function enableWindowResizeUpdate_ext() {
-	IsWindowResizeUpdateEnabled = true;
+	globals.IsWindowResizeUpdateEnabled = true;
 	onWindowResize();
 }
 
@@ -276,8 +276,8 @@ function sharedTemplateChanged_ext(changedTemplateTypeMsgBase64Str) {
 //function setSelection_ext(selMsgBase64Str) {
 //	// input 'MpQuillSelectionChangedMessage'
 //	let req = toJsonObjFromBase64Str(selMsgBase64Str);
-//	log('recvd setSelection msg from host.did change: ' + (didSelectionChange(CurSelRange, req)) + ' value: ' + req);
-//	if (didSelectionChange(CurSelRange, req)) {
+//	log('recvd setSelection msg from host.did change: ' + (didSelectionChange(globals.CurSelRange, req)) + ' value: ' + req);
+//	if (didSelectionChange(globals.CurSelRange, req)) {
 //		SuppressNextSelChangedHostNotification = true;
 //		setDocSelection(req);
 //	}
@@ -286,7 +286,7 @@ function sharedTemplateChanged_ext(changedTemplateTypeMsgBase64Str) {
 //	// input 'MpQuillScrollChangedMessage'
 //	let req = toJsonObjFromBase64Str(scrollMsgBase64Str);
 //	if (didEditorScrollChange(getEditorScroll(), req)) {
-//		SuppressNextEditorScrollChangedNotification = true;
+//		globals.SuppressNextEditorScrollChangedNotification = true;
 //		setEditorScroll(req);
 //	}
 //}

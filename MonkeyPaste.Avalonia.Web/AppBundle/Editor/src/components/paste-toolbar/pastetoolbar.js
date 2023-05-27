@@ -1,12 +1,11 @@
 // #region Globals
-const MIN_TOOLBAR_HEIGHT = 45;
 // #endregion Globals
 
 // #region Life Cycle
 
 function initPasteToolbar() {
     // workaround to keep resizer and not override css so initial show doesn't double bounce
-    //getPasteToolbarContainerElement().style.bottom = `${-MIN_TOOLBAR_HEIGHT}px`;
+    //getPasteToolbarContainerElement().style.bottom = `${-globals.MIN_TOOLBAR_HEIGHT}px`;
 
     //enableResize(getPasteToolbarContainerElement());
 
@@ -91,7 +90,7 @@ function showPasteToolbar(isPasting = false) {
 
     if (animate_tb) {
         // only reset position if actually hidden
-        ptt_elm.style.bottom = `${-MIN_TOOLBAR_HEIGHT}px`;
+        ptt_elm.style.bottom = `${-globals.MIN_TOOLBAR_HEIGHT}px`;
         delay(getToolbarTransitionMs())
             .then(() => {
                 getPasteToolbarContainerElement().classList.remove('hidden');
@@ -106,7 +105,7 @@ function hidePasteToolbar() {
         return;
     }
     var ptt_elm = getPasteToolbarContainerElement();
-    ptt_elm.style.bottom = `${-MIN_TOOLBAR_HEIGHT}px`;
+    ptt_elm.style.bottom = `${-globals.MIN_TOOLBAR_HEIGHT}px`;
 
     delay(getToolbarTransitionMs())
         .then(() => {

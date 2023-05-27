@@ -1,56 +1,3 @@
-// #region Globals
-
-const PastePopupMenuOptions = [
-    {
-        label: 'Block',
-        icon: 'append-outline'
-    },
-    {
-        label: 'Inline',
-        icon: 'insert-outline'
-    },
-    {
-        separator: true
-    },
-    {
-        label: 'Before',
-        icon: 'arrow-left'
-    },
-    {
-        label: 'After',
-        icon: 'arrow-right'
-    },
-    {
-        separator: true
-    },
-    {
-        label: 'Manual',
-        icon: 'text-insert-caret-outline'
-    },
-    {
-        separator: true
-    },
-    {
-        label: 'Done',
-        icon: 'sign-out'
-    },
-    {
-        label: 'Stack Mode',
-        icon: 'append-outline'
-    }
-];
-
-
-const AppendLineOptIdx = 0;
-const AppendInsertOptIdx = 1;
-const AppendPreIdx = 3;
-const AppendPostIdx = 4;
-const ManualOptIdx = 6;
-const DoneOptIdx = 8;
-const StartOptIdx = 9;
-
-const MinFileListOptIdx = AppendPreIdx;
-// #endregion Globals
 
 // #region Life Cycle
 
@@ -82,21 +29,21 @@ function getPastePopupExpanderButtonInnerHtml() {
 
 function setOptKeys(opt, idx) {
     let keys = null;
-    if (idx == AppendLineOptIdx) {
-        keys = ShortcutKeysLookup['ToggleAppendLineMode'];
-    } else if (idx == AppendInsertOptIdx) {
-        keys = ShortcutKeysLookup['ToggleAppendInsertMode'];
-    } else if (idx == AppendPreIdx) {
-        keys = ShortcutKeysLookup['ToggleAppendPreMode'];
-    } else if (idx == AppendLineOptIdx) {
-        keys = ShortcutKeysLookup['ToggleAppendLineMode'];
-    } else if (idx == ManualOptIdx) {
-        keys = ShortcutKeysLookup['ToggleAppendManualMode'];
-    } else if (idx == DoneOptIdx) {
-        if (IsAppendLineMode) {
-            keys = ShortcutKeysLookup['ToggleAppendLineMode'];
-        } else if (IsAppendInsertMode) {
-            keys = ShortcutKeysLookup['ToggleAppendInsertMode'];
+    if (idx == globals.AppendLineOptIdx) {
+        keys = globals.ShortcutKeysLookup['ToggleAppendLineMode'];
+    } else if (idx == globals.AppendInsertOptIdx) {
+        keys = globals.ShortcutKeysLookup['ToggleAppendInsertMode'];
+    } else if (idx == globals.AppendPreIdx) {
+        keys = globals.ShortcutKeysLookup['ToggleAppendPreMode'];
+    } else if (idx == globals.AppendLineOptIdx) {
+        keys = globals.ShortcutKeysLookup['ToggleAppendLineMode'];
+    } else if (idx == globals.ManualOptIdx) {
+        keys = globals.ShortcutKeysLookup['ToggleAppendManualMode'];
+    } else if (idx == globals.DoneOptIdx) {
+        if (globals.IsAppendLineMode) {
+            keys = globals.ShortcutKeysLookup['ToggleAppendLineMode'];
+        } else if (globals.IsAppendInsertMode) {
+            keys = globals.ShortcutKeysLookup['ToggleAppendInsertMode'];
         }
     }
     if (!keys || keys === undefined) {
@@ -111,23 +58,23 @@ function setOptKeys(opt, idx) {
 // #region State
 
 function isPopupOptIdxIgnored(opt_idx) {
-    if (opt_idx == StartOptIdx) {
+    if (opt_idx == globals.StartOptIdx) {
         if (isAnyAppendEnabled()) {
             return true;
         }
         return false;
     }
 
-    if (IsAppendLineMode && opt_idx == AppendLineOptIdx) {
+    if (globals.IsAppendLineMode && opt_idx == globals.AppendLineOptIdx) {
         return true;
     }
-    if (IsAppendInsertMode && opt_idx == AppendInsertOptIdx) {
+    if (globals.IsAppendInsertMode && opt_idx == globals.AppendInsertOptIdx) {
         return true;
     }
-    if (IsAppendPreMode && opt_idx == AppendPreIdx) {
+    if (globals.IsAppendPreMode && opt_idx == globals.AppendPreIdx) {
         return true;
     }
-    if (!IsAppendPreMode && opt_idx == AppendPostIdx) {
+    if (!globals.IsAppendPreMode && opt_idx == globals.AppendPostIdx) {
         return true;
     }
     if (!isAnyAppendEnabled()) {
@@ -137,16 +84,16 @@ function isPopupOptIdxIgnored(opt_idx) {
         return false;
     }
     if (!isAnyAppendEnabled() &&
-         opt_idx == AppendLineOptIdx) {
+         opt_idx == globals.AppendLineOptIdx) {
         // show enable
         return false;
     }
     if (isAnyAppendEnabled() &&
-        opt_idx == DoneOptIdx) {
+        opt_idx == globals.DoneOptIdx) {
         // always show done if enabled
         return false;
     }
-    return opt_idx < MinFileListOptIdx;
+    return opt_idx < globals.MinFileListOptIdx;
 }
 
 function isPastePopupExpanded() {
@@ -165,30 +112,30 @@ function showPasteButtonExpander() {
 
     getPasteButtonPopupExpanderLabelElement().innerHTML = getPastePopupExpanderButtonInnerHtml();
     let cm = [];
-    for (var i = 0; i < PastePopupMenuOptions.length; i++) {
+    for (var i = 0; i < globals.PastePopupMenuOptions.length; i++) {
         if (isPopupOptIdxIgnored(i)) {
             continue;
         }
-        let ppmio = PastePopupMenuOptions[i];
+        let ppmio = globals.PastePopupMenuOptions[i];
         if (ppmio.separator === undefined) {
             ppmio = setOptKeys(ppmio, i);
             ppmio.action = function (option, contextMenuIndex, optionIndex) {
-                onPastePopupMenuOptionClick(PastePopupMenuOptions.indexOf(option));
+                onPastePopupMenuOptionClick(globals.PastePopupMenuOptions.indexOf(option));
             };
             let checked = false;
-            if (IsAppendLineMode && i == AppendLineOptIdx) {
+            if (globals.IsAppendLineMode && i == globals.AppendLineOptIdx) {
                 checked = true;
             }
-            if (IsAppendInsertMode && i == AppendInsertOptIdx) {
+            if (globals.IsAppendInsertMode && i == globals.AppendInsertOptIdx) {
                 checked = true;
             }
-            if (IsAppendManualMode && i == ManualOptIdx) {
+            if (globals.IsAppendManualMode && i == globals.ManualOptIdx) {
                 checked = true;
             }
-            if (IsAppendPreMode && i == AppendPreIdx) {
+            if (globals.IsAppendPreMode && i == globals.AppendPreIdx) {
                 checked = true;
             }
-            if (!IsAppendPreMode && i == AppendPostIdx) {
+            if (!globals.IsAppendPreMode && i == globals.AppendPostIdx) {
                 checked = true;
             }
             if (checked) {
@@ -198,7 +145,7 @@ function showPasteButtonExpander() {
             }
         }
         //if (!isAnyAppendEnabled()) {
-        //    if (i >= AppendInsertOptIdx) {
+        //    if (i >= globals.AppendInsertOptIdx) {
         //        continue;
         //    } else {
         //        ppmio.label = 'Stack Mode';
@@ -245,39 +192,39 @@ function onPasteButtonExpanderClickOrKeyDown(e) {
 
 function onPastePopupMenuOptionClick(optIdx) {
     log('clicked append mode idx: ' + optIdx);
-    if (optIdx == AppendLineOptIdx) {
-        if (IsAppendLineMode) {
+    if (optIdx == globals.AppendLineOptIdx) {
+        if (globals.IsAppendLineMode) {
             //disableAppendMode(false);
         } else {
             enableAppendMode(true);
         }
-    } else if (optIdx == AppendInsertOptIdx) {
-        if (IsAppendInsertMode) {
+    } else if (optIdx == globals.AppendInsertOptIdx) {
+        if (globals.IsAppendInsertMode) {
             //disableAppendMode(false);
         } else {
             enableAppendMode(false);
         }
-    } else if (optIdx == ManualOptIdx) {
-        if (IsAppendManualMode) {
+    } else if (optIdx == globals.ManualOptIdx) {
+        if (globals.IsAppendManualMode) {
             disableAppendManualMode(false);
         } else {
             enableAppendManualMode(false);
         }
-    } else if (optIdx == AppendPreIdx) {
-        if (!IsAppendPreMode) {
+    } else if (optIdx == globals.AppendPreIdx) {
+        if (!globals.IsAppendPreMode) {
             enablePreAppend(false);
         } else if (globals.ContentItemType == 'FileList') {
             disableAppendMode(false);
         }
-    } else if (optIdx == AppendPostIdx) {
-        if (IsAppendPreMode) {
+    } else if (optIdx == globals.AppendPostIdx) {
+        if (globals.IsAppendPreMode) {
             disablePreAppend(false);
         } else if (globals.ContentItemType == 'FileList') {
             disableAppendMode(false);
         }
-    } else if (optIdx == DoneOptIdx) {
+    } else if (optIdx == globals.DoneOptIdx) {
         disableAppendMode(false);
-    } else if (optIdx == StartOptIdx) {
+    } else if (optIdx == globals.StartOptIdx) {
         enableAppendMode(true);
     }
     hidePasteButtonExpander();

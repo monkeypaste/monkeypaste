@@ -12,9 +12,12 @@ namespace GoogleContactsFetcher {
 
         public object Source => _person;
 
+        public string guid =>
+            _person == null ?
+            string.Empty : _person.ResourceName;
         public string FirstName {
             get {
-                if(_person.Names == null || _person.Names.Count == 0) {
+                if (_person.Names == null || _person.Names.Count == 0) {
                     return string.Empty;
                 }
                 return _person.Names[0].GivenName;

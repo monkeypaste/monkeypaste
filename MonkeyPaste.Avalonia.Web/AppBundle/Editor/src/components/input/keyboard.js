@@ -1,34 +1,5 @@
-﻿const KEY_COMBO_SEPARATOR = '+';
-const KEY_SEQUENCE_SEPARATOR = ',';
+﻿
 
-var DecreaseFocusLevelKey = 'Escape'
-var IncreaseFocusLevelKey = ' ';
-
-var PermittedNoSelectKeys = [
-	IncreaseFocusLevelKey
-];
-
-var NavigationKeys = [
-	"ArrowLeft",
-	"ArrowUp",
-	"ArrowRight",
-	"ArrowDown",
-	//"Shift",
-	//"Alt",
-	//"Control",
-	//"Meta",
-	"Home",
-	"End",
-	"PageUp",
-	"PageDown",
-	//DecreaseFocusLevelKey,
-	//IncreaseFocusLevelKey
-];
-
-var IsMetaDown = false; //duplicate (mac)
-var IsCtrlDown = false; //duplicate
-var IsShiftDown = false; //split 
-var IsAltDown = false; // w/ formatting (as html)? ONLY formating? dunno
 
 function initKeyboard() {
 	window.addEventListener('keydown', handleWindowKeyDown, true);
@@ -43,16 +14,16 @@ function handleWindowKeyDown(e) {
 	updateModKeys(e);
 
 	if (isSubSelectionEnabled()) {
-		if (!quill.hasFocus()) {
+		if (!globals.quill.hasFocus()) {
 			suppresKeyDown = false;
 		}
 		if (isReadOnly()) {
 			//sub-select/droppable mode
-			if (e.key == IncreaseFocusLevelKey) {
+			if (e.key == globals.IncreaseFocusLevelKey) {
 				disableReadOnly();
-			} else if (e.key == DecreaseFocusLevelKey) {
+			} else if (e.key == globals.DecreaseFocusLevelKey) {
 				disableSubSelection();
-			} else if (NavigationKeys.includes(e.key)) {
+			} else if (globals.NavigationKeys.includes(e.key)) {
 				// allow for navigation input
 				suppresKeyDown = false;
 			} 
@@ -62,7 +33,7 @@ function handleWindowKeyDown(e) {
 		}
 	} else {
 		// no edit mode
-		if (e.key == IncreaseFocusLevelKey) {
+		if (e.key == globals.IncreaseFocusLevelKey) {
 			enableSubSelection();
 		}
 	}
@@ -70,7 +41,7 @@ function handleWindowKeyDown(e) {
 	if (suppresKeyDown) {
 		// allow shortcuts during any state
 		// check for shortcut or special navigation input
-		let is_non_input_key_down = IsMetaDown || IsCtrlDown || IsAltDown;
+		let is_non_input_key_down = globals.IsMetaDown || globals.IsCtrlDown || globals.IsAltDown;
 		if (is_non_input_key_down) {
 			suppresKeyDown = false;
 		}
@@ -87,7 +58,7 @@ function handleWindowKeyUp(e) {
 	}
 	updateModKeys(e);
 
-	if (e.code == DecreaseFocusLevelKey) {
+	if (e.code == globals.DecreaseFocusLevelKey) {
 		if (isDragging() || isDropping()) {// || WasDragCanceled) {
 			return;
 		}
@@ -113,7 +84,7 @@ function handleWindowKeyUp(e) {
 				e.preventDefault();
 				return;
 			}
-			if (quill.hasFocus()) {
+			if (globals.quill.hasFocus()) {
 				setDocSelection(sel.index, 0);
 			}
 			
@@ -129,18 +100,18 @@ function updateModKeys(e) {
 	//}
 
 	let isModChanged =
-		IsMetaDown != e.metaKey ||
-		IsCtrlDown != e.ctrlKey ||
-		IsAltDown != e.altKey ||
-		IsShiftDown != e.shiftKey;
+		globals.IsMetaDown != e.metaKey ||
+		globals.IsCtrlDown != e.ctrlKey ||
+		globals.IsAltDown != e.altKey ||
+		globals.IsShiftDown != e.shiftKey;
 
-	IsMetaDown = e.metaKey;
-	IsCtrlDown = e.ctrlKey;
-	IsAltDown = e.altKey;
-	IsShiftDown = e.shiftKey;
+	globals.IsMetaDown = e.metaKey;
+	globals.IsCtrlDown = e.ctrlKey;
+	globals.IsAltDown = e.altKey;
+	globals.IsShiftDown = e.shiftKey;
 
 	if (isModChanged) {
-		log('mod changed: Ctrl: ' + (IsCtrlDown ? "YES" : "NO"));
+		log('mod changed: Ctrl: ' + (globals.IsCtrlDown ? "YES" : "NO"));
 		drawOverlay();
 	}
 }

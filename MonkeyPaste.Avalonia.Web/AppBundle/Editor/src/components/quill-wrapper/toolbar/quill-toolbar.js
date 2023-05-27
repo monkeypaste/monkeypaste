@@ -11,7 +11,7 @@ function initEditorToolbarQuillOptions(quillOptions, toolbarId) {
 		toolbar: toolbarId
 	};
 
-	if (UseBetterTable) {
+	//if (UseBetterTable) {
 		if (quillBetterTable === undefined || Quill === undefined) {
 			/// host load error case
 			debugger;
@@ -32,7 +32,7 @@ function initEditorToolbarQuillOptions(quillOptions, toolbarId) {
 					}
 				},
 				color: {
-					colors: ContentColors,//["green", "red", "yellow", "blue", "white"],
+					colors: globals.ContentColors,//["green", "red", "yellow", "blue", "white"],
 					text: "Background Color:"
 				}
 			}
@@ -40,9 +40,9 @@ function initEditorToolbarQuillOptions(quillOptions, toolbarId) {
 		quillOptions.modules.keyboard = {
 			bindings: quillBetterTable.keyboardBindings
 		};
-	} else if (UseQuill2) {
-		quillOptions.modules.table = true;
-	}
+	//} else if (UseQuill2) {
+	//	quillOptions.modules.table = true;
+	//}
 
 	return quillOptions;
 }

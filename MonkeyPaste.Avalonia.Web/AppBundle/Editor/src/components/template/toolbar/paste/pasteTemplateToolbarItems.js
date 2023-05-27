@@ -18,22 +18,9 @@ function initPasteTemplateToolbarItems() {
     addClickOrKeyClickEventListener(getPasteClearTextButtonElement(), onPasteTemplateClearAllValuesClickOrKeyDown);
     addClickOrKeyClickEventListener(getPasteEditFocusTemplateButtonElement(), onPasteEditFocusTemplateClickOrKeyDown);
 
-    initPasteToolbarIcons();
-
     initPasteTemplateFocusSelector();
 
     initTemplateValueTypes();
-}
-
-function initPasteToolbarIcons() {
-    getPasteGotoPrevButtonElement().innerHTML = getSvgHtml('arrow-left', 'svg-icon paste-toolbar-icon');
-    getPasteGotoNextButtonElement().innerHTML = getSvgHtml('arrow-right', 'svg-icon paste-toolbar-icon');
-
-    let clear_icon_elm = getPasteClearTextButtonElement().firstChild;
-    clear_icon_elm.replaceWith(createSvgElement('delete', 'svg-icon paste-toolbar-icon'));
-
-    let edit_icon_elm = getPasteEditFocusTemplateButtonElement().firstChild;
-    edit_icon_elm.replaceWith(createSvgElement('edit-template', 'svg-icon paste-toolbar-icon'));
 }
 
 
@@ -264,7 +251,7 @@ function updatePasteTemplateToolbarToSelection(force_ftguid) {
         // either from template click or editor selection
         updatePasteTemplateValues();
 
-        ftguid = getFocusTemplateGuid();
+        ftguid = getFocusTemplateGuid(true);
         if (!ftguid) {
             let sel = getDocSelection();
             ftguid = findPasteFocusTemplate(sel);
@@ -341,9 +328,9 @@ function updatePasteValueHint(ft) {
     let match_class = ft ? `template-${ft_class_suffix}` : 'none';
     let tt_def_matches = document.getElementById('tooltipDefs').getElementsByClassName(match_class);
     if (tt_def_matches.length == 1) {
-        getPasteTemplateHintContainerElement().setAttribute(TOOLTIP_TOOLBAR_ATTRB_NAME, tt_def_matches[0].outerHTML.trim());
+        getPasteTemplateHintContainerElement().setAttribute(globals.TOOLTIP_TOOLBAR_ATTRB_NAME, tt_def_matches[0].outerHTML.trim());
     } else {
-        getPasteTemplateHintContainerElement().setAttribute(TOOLTIP_TOOLBAR_ATTRB_NAME, "");
+        getPasteTemplateHintContainerElement().setAttribute(globals.TOOLTIP_TOOLBAR_ATTRB_NAME, "");
     }
 }
 function updatePasteTemplateValues() {

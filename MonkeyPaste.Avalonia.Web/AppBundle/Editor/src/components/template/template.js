@@ -1,23 +1,8 @@
-// #region Globals
-
-//const MIN_TEMPLATE_DRAG_DIST = 5;
-
-//var globals.availableTemplates = null;
-
-//const globals.ENCODED_TEMPLATE_OPEN_TOKEN = "{t{";
-//const globals.ENCODED_TEMPLATE_CLOSE_TOKEN = "}t}";
-//const globals.ENCODED_TEMPLATE_REGEXP = new RegExp(globals.ENCODED_TEMPLATE_OPEN_TOKEN + ".*?" + globals.ENCODED_TEMPLATE_CLOSE_TOKEN, "");
-
-//var globals.IsMovingTemplate = false;
-
-//var globals.IsTemplatePaddingAfterTextChange = false;
-
-// #endregion Globals
 
 // #region Life Cycle
 
 function initTemplates() {
-    quill.on("text-change", onEditorTextChangedPadTemplates);
+    globals.quill.on("text-change", onEditorTextChangedPadTemplates);
     initTemplateBlot();
 }
 
@@ -26,7 +11,7 @@ function initTemplates() {
 // #region Getters
 
 function getTemplateElements(tguid, sortBy = 'docIdx', isDescending = false) {
-    var all_telms = Array.from(document.getElementsByClassName(TemplateEmbedClass));
+    var all_telms = Array.from(document.getElementsByClassName(globals.TemplateEmbedClass));
     
     var target_telms = [];
     for (var i = 0; i < all_telms.length; i++) {    
@@ -259,6 +244,9 @@ function getTemplateAsPlainText(t) {
 }
 
 function getEncodedTemplateStr(t) {
+    if (!t) {
+        return '';
+    }
     let encoded_template_str = `${globals.ENCODED_TEMPLATE_OPEN_TOKEN}${t.templateGuid}${globals.ENCODED_TEMPLATE_CLOSE_TOKEN}`;
     return encoded_template_str;
 }
@@ -296,7 +284,7 @@ function getTemplateDisplayValue(t) {
 }
 
 function getTemplatePlainTextForDocRange(range) {
-    let text = quill.getText(range.index, range.length);
+    let text = globals.quill.getText(range.index, range.length);
     let out_text = '';
     for (var i = 0; i < range.length; i++) {
         let doc_idx = range.index + i;
@@ -346,7 +334,7 @@ function getAllTemplateDocIdxs(tguid = null) {
 //}
 
 //function getTemplateAtDocIdx(docIdx) {
-//    let result = quill.getLeaf(docIdx + 1);
+//    let result = globals.quill.getLeaf(docIdx + 1);
 //    if (!result || result.length < 2) {
 //        return null;
 //    }
@@ -368,12 +356,11 @@ function getTemplateEmbedStr(t, sToken = globals.ENCODED_TEMPLATE_OPEN_TOKEN, eT
     return result;
 }
 
-function getLowestAnonTemplateName(anonPrefix) {
-    anonPrefix += ' #';
-    let utdl = getTemplateDefs();
+function getLowestAnonTemplateName(newTemplateType, allDefs) {
+    let anonPrefix = `${toTitleCase(newTemplateType)} #`;
     let maxNum = 0;
-    for (var i = 0; i < utdl.length; i++) {
-        let t = utdl[i];
+    for (var i = 0; i < allDefs.length; i++) {
+        let t = allDefs[i];
         if (t.templateName.startsWith(anonPrefix)) {
             var anonNum = parseInt(t.templateName.substring(anonPrefix.length));
             maxNum = Math.max(maxNum, anonNum);
@@ -667,7 +654,7 @@ function isSelAtFocusTemplateInsert() {
     //    return false;
     //}
     //return isTemplateAtDocIdx(sel.index);
-    return document.getElementsByClassName(Template_AT_INSERT_Class).length > 0;
+    return document.getElementsByClassName(globals.Template_AT_INSERT_Class).length > 0;
 }
 
 function isTemplateAtDocIdxPrePadded(t_docIdx) {
@@ -929,9 +916,9 @@ function updateTemplatesAfterSelectionChange() {
     for (var i = 0; i < all_t_doc_idxs.length; i++) {
         let t_doc_idx = all_t_doc_idxs[i];
         if (t_doc_idx >= sel_range.index && t_doc_idx <= sel_range.index + sel_range.length) {
-            getElementAtDocIdx(t_doc_idx).classList.add(Template_AT_INSERT_Class);
+            getElementAtDocIdx(t_doc_idx).classList.add(globals.Template_AT_INSERT_Class);
         } else {
-            getElementAtDocIdx(t_doc_idx).classList.remove(Template_AT_INSERT_Class);
+            getElementAtDocIdx(t_doc_idx).classList.remove(globals.Template_AT_INSERT_Class);
         }
     }
     drawOverlay();
@@ -939,8 +926,8 @@ function updateTemplatesAfterSelectionChange() {
 
 
 function insertTemplate(range, t, fromDropDown, source = 'api') {
-    quill.deleteText(range.index, range.length, source);
-    quill.insertEmbed(range.index, "template", t, source);
+    globals.quill.deleteText(range.index, range.length, source);
+    globals.quill.insertEmbed(range.index, "template", t, source);
 
     // NOTE update must be called because text change hasn't picked up template yet (when none exist yet)
     updateTemplatesAfterTextChanged();

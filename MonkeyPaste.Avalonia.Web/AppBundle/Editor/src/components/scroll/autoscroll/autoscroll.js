@@ -1,18 +1,3 @@
-// #region Globals
-
-var AutoScrolledOffset = null;
-
-var AutoScrollVelX = 0;
-var AutoScrollVelY = 0;
-
-var AutoScrollAccumlator = 5;
-var AutoScrollBaseVelocity = 25;
-
-const MIN_AUTO_SCROLL_DIST = 30;
-
-var AutoScrollInterval = null;
-
-// #endregion Globals
 
 // #region Life Cycle
 
@@ -29,10 +14,10 @@ var AutoScrollInterval = null;
 // #region State
 
 function isAutoScrolling() {
-    if (!AutoScrollInterval || (AutoScrollVelX == 0 && AutoScrollVelX == 0)) {
+    if (!globals.AutoScrollInterval || (globals.AutoScrollVelX == 0 && globals.AutoScrollVelX == 0)) {
         return false;
     }
-    return AutoScrollVelX != 0 || AutoScrollVelY != 0;
+    return globals.AutoScrollVelX != 0 || globals.AutoScrollVelY != 0;
 }
 
 // #endregion State
@@ -40,7 +25,7 @@ function isAutoScrolling() {
 // #region Actions
 
 function startAutoScroll() {
-    //AutoScrolledOffset
+    //globals.AutoScrolledOffset
     // drop class makes .ql-editor huge so no wrapping this finds actual max width and sets so won't overscroll...
     let actual_content_width = 0;
     //let max_y = 0;
@@ -67,18 +52,18 @@ function startAutoScroll() {
 
     scrollDocRangeIntoView(getDocSelection());
 
-    AutoScrollInterval = setInterval(onAutoScrollTick, 300, editor_elm);
+    globals.AutoScrollInterval = setInterval(onAutoScrollTick, 300, editor_elm);
 }
 
 function stopAutoScroll(isLeave) {
-    if (AutoScrollInterval == null) {
+    if (globals.AutoScrollInterval == null) {
         return;
     }
     getEditorElement().style.width = '';
-    clearInterval(AutoScrollInterval);
-    AutoScrollInterval = null;
-    AutoScrollVelX = 0;
-    AutoScrollVelY = 0;
+    clearInterval(globals.AutoScrollInterval);
+    globals.AutoScrollInterval = null;
+    globals.AutoScrollVelX = 0;
+    globals.AutoScrollVelY = 0;
 
     if (isLeave && !isDragging()) {
         scrollToHome();
@@ -89,13 +74,13 @@ function stopAutoScroll(isLeave) {
 // #region Event Handlers
 
 function onAutoScrollTick(e) {
-    if (WindowMouseLoc == null) {
+    if (globals.WindowMouseLoc == null) {
         log('auto-scroll reject, mp is null');
         return;
     }
     let window_rect = getWindowRect();
-    if (!isPointInRect(window_rect, WindowMouseLoc)) {
-        log('auto-scroll rejected mp ' + WindowMouseLoc.x + ',' + WindowMouseLoc.y + ' is outside ')
+    if (!isPointInRect(window_rect, globals.WindowMouseLoc)) {
+        log('auto-scroll rejected mp ' + globals.WindowMouseLoc.x + ',' + globals.WindowMouseLoc.y + ' is outside ')
         return;
     }
     //debugger;
@@ -104,14 +89,14 @@ function onAutoScrollTick(e) {
     let orig_scroll_x = scroll_elm.scrollLeft;
     let orig_scroll_y = scroll_elm.scrollTop;
 
-    if (Math.abs(window_rect.right - WindowMouseLoc.x) <= MIN_AUTO_SCROLL_DIST) {
-        scroll_elm.scrollLeft += AutoScrollVelX;
-    } else if (Math.abs(window_rect.left - WindowMouseLoc.x) <= MIN_AUTO_SCROLL_DIST) {
-        scroll_elm.scrollLeft -= AutoScrollVelX;
+    if (Math.abs(window_rect.right - globals.WindowMouseLoc.x) <= globals.MIN_AUTO_SCROLL_DIST) {
+        scroll_elm.scrollLeft += globals.AutoScrollVelX;
+    } else if (Math.abs(window_rect.left - globals.WindowMouseLoc.x) <= globals.MIN_AUTO_SCROLL_DIST) {
+        scroll_elm.scrollLeft -= globals.AutoScrollVelX;
     }
 
     if (orig_scroll_x != scroll_elm.scrollLeft) {
-        AutoScrollVelX += AutoScrollAccumlator;
+        globals.AutoScrollVelX += globals.AutoScrollAccumlator;
     }
 }
 

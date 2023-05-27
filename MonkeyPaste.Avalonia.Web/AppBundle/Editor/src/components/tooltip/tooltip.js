@@ -1,10 +1,3 @@
-// #region Globals
-
-const TOOLTIP_HOVER_ATTRB_NAME = "hover-tooltip";
-const TOOLTIP_TOOLBAR_ATTRB_NAME = "toolbar-tooltip";
-
-// #endregion Globals
-
 // #region Life Cycle
 
 function initTooltip() {
@@ -24,7 +17,7 @@ function initTooltip() {
 	for (var i = 0; i < toolbar_tt_elms.length; i++) {
 		const ttt_elm = toolbar_tt_elms[i];
 		ttt_elm.addEventListener('pointerenter', (e) => {
-			showTooltipToolbar(e.currentTarget.getAttribute(TOOLTIP_TOOLBAR_ATTRB_NAME));
+			showTooltipToolbar(e.currentTarget.getAttribute(globals.TOOLTIP_TOOLBAR_ATTRB_NAME));
 		});
 		ttt_elm.addEventListener('pointerleave', (e) => {
 			hideTooltipToolbar();
@@ -45,10 +38,10 @@ function getTooltipToolbarElement() {
 }
 
 function getTooltipHoverElements() {
-	return Array.from(document.querySelectorAll(`[${TOOLTIP_HOVER_ATTRB_NAME}]`));
+	return Array.from(document.querySelectorAll(`[${globals.TOOLTIP_HOVER_ATTRB_NAME}]`));
 }
 function getTooltipToolbarlements() {
-	return Array.from(document.querySelectorAll(`[${TOOLTIP_TOOLBAR_ATTRB_NAME}]`));
+	return Array.from(document.querySelectorAll(`[${globals.TOOLTIP_TOOLBAR_ATTRB_NAME}]`));
 }
 
 // #endregion Getters
@@ -72,9 +65,9 @@ function showTooltipOverlay(targetElm, tooltipText) {
 	if (isNullOrUndefined(tooltipText) &&
 		targetElm &&
 		typeof targetElm.hasAttribute === 'function' &&
-		targetElm.hasAttribute(TOOLTIP_HOVER_ATTRB_NAME)) {
+		targetElm.hasAttribute(globals.TOOLTIP_HOVER_ATTRB_NAME)) {
 		// only use attrb value if exists and not provided in param
-		tooltipText = targetElm.getAttribute(TOOLTIP_HOVER_ATTRB_NAME);
+		tooltipText = targetElm.getAttribute(globals.TOOLTIP_HOVER_ATTRB_NAME);
 		if (isNullOrEmpty(tooltipText)) {
 			tooltipText = targetElm.innerHTML;
 			is_html = true;
@@ -106,11 +99,23 @@ function hideTooltipOverlay() {
 }
 
 
-function showTooltipToolbar(innerHtmlStr) {
+function showTooltipToolbar(htmlStr, showTimeMs = 0) {
 	let tt_elm = getTooltipToolbarElement();
-	tt_elm.innerHTML = `<span class="tooltiptext">${innerHtmlStr}</span>`;
+	tt_elm.innerHTML = htmlStr;
+	if (tt_elm.firstChild.nodeType === 3 ||
+		!tt_elm.firstChild.classList.contains('tooltiptext')) {
+		// presume any html passed will be setup for tooltip
+		tt_elm.innerHTML = `<span class="tooltiptext">${htmlStr}</span>`;
+	}
 	tt_elm.classList.remove('hidden');
 	updateTooltipToolbarSizesAndPositions();
+
+	if (showTimeMs > 0) {
+		delay(showTimeMs)
+			.then(() => {
+				hideTooltipToolbar();
+			});
+	}
 }
 
 function hideTooltipToolbar() {

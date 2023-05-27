@@ -18,6 +18,10 @@
          background-color: var(--pastetoolbarbuttoncolor_checked);
     }
 
+    #pasteToolbar.template-edit-pending {
+        background-color: cyan;
+    }
+
 #pasteButtonAndModeContainer {
     display: inline-flex;
     align-items: center;
@@ -35,10 +39,6 @@
     display: inline-flex;
 }    
 
-    #pasteButton span {
-        font-size: 12px;
-        margin: 0 5px;
-    }
 
 #pasteButtonAndModeContainer.pasteButtonSpit #pasteButton {
     border-radius: var(--commonborderradius) 0 0 var(--commonborderradius);
@@ -49,11 +49,14 @@
 #pasteButtonPopupExpander {
     display: inherit;
     font-size: 14px;
+    width: 16px;
     margin: 0 10px 0 0;
     border-width: 1px 0.5px 1px 1px !important;
     border-radius: 0 var(--commonborderradius) var(--commonborderradius) 0;
 }
-
+    #pasteButtonPopupExpander span {
+        transform: translate(-8px, 0px);
+    }
 #pasteButtonAndModeContainer:not(.pasteButtonSpit) #pasteButtonPopupExpander {
     display: none;
 }

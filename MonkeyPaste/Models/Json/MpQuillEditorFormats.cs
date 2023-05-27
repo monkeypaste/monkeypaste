@@ -187,6 +187,16 @@ namespace MonkeyPaste {
         public List<string> templateTypes { get; set; }
     }
 
+    public class MpQuillShowDialogRequestMessage : MpJsonObject {
+        public string title { get; set; }
+        public string msg { get; set; }
+        public string dialogType { get; set; }
+        public string iconResourceObj { get; set; }
+    }
+    public class MpQuillShowDialogResponseMessage : MpJsonObject {
+        public string dialogResponse { get; set; }
+    }
+
     public class MpQuillSharedTemplateDataChangedMessage : MpJsonObject {
         // fragment 'MpTextTemplate'
         public string changedTemplateFragmentStr { get; set; }

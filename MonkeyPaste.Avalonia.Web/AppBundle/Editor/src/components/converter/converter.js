@@ -1,18 +1,13 @@
-﻿// #region Globals
-
-var IsConverterLoaded = false;
-
-// #endregion Globals
-
+﻿
 // #region Life Cycle
 
 function initPlainHtmlConverter() {
-	quill = initQuill();
+	globals.quill = initQuill();
 	initClipboard();
 
 	getEditorElement().classList.add('ql-editor-converter');
 
-	IsConverterLoaded = true;
+	globals.IsConverterLoaded = true;
 	globals.IsLoaded = true;
 
 	onInitComplete_ntf();
@@ -37,7 +32,7 @@ function isPlainHtmlConverter() {
 
 // #region Actions
 function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
-	if (!IsConverterLoaded) {
+	if (!globals.IsConverterLoaded) {
 		log('convertPlainHtml error! converter not initialized, returning null');
 		return null;
 	}

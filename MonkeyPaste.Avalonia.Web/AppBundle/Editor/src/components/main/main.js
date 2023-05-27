@@ -1,32 +1,3 @@
-
-// #region Globals
-
-//var globals.IsLoaded = false;
-//var quill;
-//var globals.availableTemplates = null;
-
-//const globals.DomParser = new DOMParser();
-//const globals.globals.DomSerializer = new XMLSerializer();
-
-//var globals.IsDebug = true;
-
-//var globals.IsTesting = false;
-
-//var globals.IsSpellCheckEnabled = false;
-
-//const globals.WindowsEnv = 'Windows';
-//const globals.IosEnv = 'Ios';
-//const globals.AndroidEnv = 'Android';
-//const globals.MacEnv = 'Mac';
-//const globals.LinuxEnv = 'Linux';
-//const globals.WebEnv = 'Web';
-//const globals.UknownEnv = 'Unknown';
-
-//var globals.EnvName = "";
-//var globals.MaxUndoLimit = -1;
-
-// #endregion Globals
-
 // #region Life Cycle
 
 function initMain(initObj) {
@@ -137,8 +108,8 @@ function initDefaults(defaultsObj) {
 		log('font family set to: ' + getElementComputedStyleProp(document.body, '--defaultFontFamily'));
 	}
 	if (!isNullOrUndefined(defaultsObj.defaultFontSize)) {
-		DefaultFontSize = Math.max(8, parseInt(defaultsObj.defaultFontSize)) + 'px';
-		setElementComputedStyleProp(document.body, '--defaultFontSize', DefaultFontSize);
+		globals.DefaultFontSize = Math.max(8, parseInt(defaultsObj.defaultFontSize)) + 'px';
+		setElementComputedStyleProp(document.body, '--defaultFontSize', globals.DefaultFontSize);
 		log('font size set to: '+getElementComputedStyleProp(document.body,'--defaultFontSize'));
 	}
 	if (!isNullOrUndefined(defaultsObj.isSpellCheckEnabled)) {

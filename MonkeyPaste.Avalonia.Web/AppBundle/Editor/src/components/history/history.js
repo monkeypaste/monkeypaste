@@ -26,24 +26,24 @@ function initHistory() {
 // #region Actions
 
 function historyUndo() {
-	const was_enabled = quill.isEnabled();
+	const was_enabled = globals.quill.isEnabled();
 	if (!was_enabled) {
-		quill.enable(true);
+		globals.quill.enable(true);
 	}
-	quill.history.undo();
+	globals.quill.history.undo();
 	if (!was_enabled) {
-		quill.enable(false);
+		globals.quill.enable(false);
 	}
 }
 
 function historyRedo() {
-	const was_enabled = quill.isEnabled();
+	const was_enabled = globals.quill.isEnabled();
 	if (!was_enabled) {
-		quill.enable(true);
+		globals.quill.enable(true);
 	}
-	quill.history.redo();
+	globals.quill.history.redo();
 	if (!was_enabled) {
-		quill.enable(false);
+		globals.quill.enable(false);
 	}
 }
 

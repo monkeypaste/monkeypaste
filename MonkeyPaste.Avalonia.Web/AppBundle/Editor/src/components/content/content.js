@@ -35,10 +35,10 @@ function loadContent(
 			was_editable = !isReadOnly();
 		} else {
 			// when actually a new item and not reload
-			quill.history.clear();
+			globals.quill.history.clear();
 		}
 
-		quill.enable(true);
+		globals.quill.enable(true);
 
 		globals.ContentHandle = contentHandle;
 		globals.ContentItemType = contentType;
@@ -60,10 +60,10 @@ function loadContent(
 			resetAnnotations();
 		}
 
-		if (!IsFindReplaceInactive) {
+		if (!globals.IsFindReplaceInactive) {
 			log('activated findreplace detected during load, deactivating...');
 		}
-		IsFindReplaceInactive = true;
+		globals.IsFindReplaceInactive = true;
 
 		loadContentData(contentData);
 
@@ -85,7 +85,7 @@ function loadContent(
 		}
 		
 		if (globals.ContentItemType != 'Text') {
-			quill.enable(false);
+			globals.quill.enable(false);
 		}
 
 		if (globals.ContentItemType == 'Image') {
@@ -163,7 +163,7 @@ function initContentClassAttributes() {
 	};
 	globals.ContentClassAttrb = new Parchment.ClassAttributor('contentType',globals.CONTENT_CLASS_PREFIX, config);
 
-	Quill.register(LinkTypeAttrb, suppressWarning);
+	Quill.register(globals.LinkTypeAttrb, suppressWarning);
 
 }
 // #endregion Life Cycle
@@ -260,13 +260,13 @@ function getContentBg(htmlStr, contrast_opacity = 0.5) {
 }
 
 function getContentWidth() {
-	var bounds = quill.getBounds(0, getDocLength());
+	var bounds = globals.quill.getBounds(0, getDocLength());
 	bounds = cleanRect(bounds);
 	return parseFloat(bounds.width);
 }
 
 function getContentHeight() {
-	var bounds = quill.getBounds(0, getDocLength());
+	var bounds = globals.quill.getBounds(0, getDocLength());
 	bounds = cleanRect(bounds);
 	return parseFloat(bounds.height);
 }

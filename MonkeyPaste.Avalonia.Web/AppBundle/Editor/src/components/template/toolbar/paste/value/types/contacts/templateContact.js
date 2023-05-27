@@ -32,6 +32,9 @@ function getContactTestData() {
     for (var i = 0; i < dummy_contacts.length; i++) {
         dummy_contacts[i]['FullName'] = dummy_contacts[i].label;
         dummy_contacts[i]['FirstName'] = dummy_contacts[i].label.split(' ')[0];
+        if (i == 0) {
+            continue;
+        }
         dummy_contacts[i]['LastName'] = dummy_contacts[i].label.split(' ')[1];
     }
     return dummy_contacts;
@@ -103,6 +106,10 @@ function getContactTemplateLastSelGuid(ct) {
     return ct.templateState;
 }
 
+function getContactTemplateSelContact(ct) {
+    const contact_guid = getContactTemplateLastSelGuid(ct);
+    return globals.AvailableContacts.find(x => x.guid == contact_guid);
+}
 
 function getContactOuterContainerElement() {
     return document.getElementById('pasteTemplateToolbarContactFieldSelectorContainer');
@@ -124,6 +131,33 @@ function getContactFieldSelectorElement() {
 
 // #region State
 
+function isContactTemplateHaveContact(ct) {
+    if (!ct || isNullOrEmpty(ct.templateState) || ct.templateState == 'undefined') {
+        return false;
+    }
+    return true;
+}
+function isContactTemplateHaveField(ct) {
+    if (!ct || isNullOrEmpty(ct.templateData) || ct.templateData == 'undefined') {
+        return false;
+    }
+    return true;
+}
+function isContactTemplateContactHaveField(ct, field) {
+    const contact = getContactTemplateSelContact(ct);
+    if (!contact) {
+        return false;
+    }
+    return isNullOrUndefined(contact[field]) == false;
+}
+
+function isContactHaveField(contact_guid, field) {
+    const contact = globals.AvailableContacts.find(x => x.guid == contact_guid);
+    if (!contact) {
+        return false;
+    }
+    return isNullOrUndefined(contact[field]) == false;
+}
 // #endregion State
 
 // #region Actions
@@ -141,6 +175,12 @@ function createContactFieldSelectorOpts(ft) {
     contact_field_sel_elm.id = "contactFieldSelector";
     for (var i = 0; i < fields.length; i++) {
         let field_opt_elm = document.createElement('option');
+        if (isContactTemplateHaveContact(ft) && !isContactTemplateContactHaveField(ft, fields[i])) {
+            //field_opt_elm.classList.add('disabled');
+            continue;
+        } else {
+            //field_opt_elm.classList.remove('disabled');
+        }
         field_opt_elm.value = fields[i];
         field_opt_elm.innerText = toLabelCase(fields[i]);
         contact_field_sel_elm.appendChild(field_opt_elm);
@@ -150,6 +190,7 @@ function createContactFieldSelectorOpts(ft) {
 }
 
 function createContactSelectorOpts(ft) {
+    const sel_contact_field_val = getContactFieldSelectorElement().value;
     let contact_sel_elm = getContactSelectorElement();
     contact_sel_elm.innerHTML = '';
     for (var i = 0; i < globals.AvailableContacts.length + 1; i++) {
@@ -159,7 +200,13 @@ function createContactSelectorOpts(ft) {
             contact_sel_elm.appendChild(contact_opt_elm);
             continue;
         }
-        let contact = globals.AvailableContacts[i-1];
+        let contact = globals.AvailableContacts[i - 1];
+        if (isContactTemplateHaveField(ft) && !isContactHaveField(contact.guid, sel_contact_field_val)) {
+            continue;
+            //contact_opt_elm.classList.add('disabled');
+        } else {
+            //contact_opt_elm.classList.remove('disabled');
+        }
         contact_opt_elm.setAttribute('contactGuid', contact.guid);
         contact_opt_elm.value = contact.guid;
         contact_opt_elm.innerText = getContactLabel(contact);    

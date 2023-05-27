@@ -68,7 +68,7 @@ function updatePasteAppendToolbarLabel() {
 	showPasteAppendToolbarLabelContainer();
 	let append_label_text = 'INSERT';
 	let append_label_class = 'insert-mode-label';
-	if (IsAppendLineMode) {
+	if (globals.IsAppendLineMode) {
 		append_label_text = 'APPEND';
 		append_label_class = 'append-mode-label';
 	}
@@ -76,7 +76,7 @@ function updatePasteAppendToolbarLabel() {
 	clearElementClasses(getPasteAppendToolbarLabelElement());
 	getPasteAppendToolbarLabelElement().classList.add(append_label_class);
 
-	if (IsAppendManualMode) {
+	if (globals.IsAppendManualMode) {
 		showPasteAppendIsManualToolbarLabel();
 	} else {
 		hidePasteAppendIsManualToolbarLabel();
@@ -88,7 +88,7 @@ function updatePasteAppendToolbarLabel() {
 // #region Event Handlers
 
 function onPauseAppendButtonClickOrKey(e) {
-	if (IsAppendPaused) {
+	if (globals.IsAppendPaused) {
 		disablePauseAppend();
 	} else {
 		enablePauseAppend();

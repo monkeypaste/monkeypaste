@@ -1,11 +1,4 @@
-﻿// #region Globals
-
-var DefaultFontFamily = 'Arial';
-var IsFontFamilyPickerOpen = false;
-
-// #endregion Globals
-
-// #region Life Cycle
+﻿// #region Life Cycle
 function initFontFamilySelector(active_ff_dv) {
     // NOTE must be called before quill init or:
     // 1. fonts won't initialize right
@@ -30,15 +23,16 @@ function initFontFamilySelector(active_ff_dv) {
             opt_elm.setAttribute('value', ff);
         }
         opt_elm.innerText = ff;
-        fontSelector_elm.appendChild(opt_elm);        
+        fontSelector_elm.appendChild(opt_elm);
     }
 
     addClickOrKeyClickEventListener(document.getElementsByClassName('ql-font')[0], onFontFamilyToolbarButtonClick);
+
 }
 
 function initFontFamilyPicker() {
     // needs to be called after quill init
-    if (!quill) {
+    if (!globals.quill) {
         debugger;
         return;
     }
@@ -86,7 +80,7 @@ function getFontFamilyToolbarSelector() {
 }
 
 function getFontFamilyToolbarPicker() {
-    if (!quill) {
+    if (!globals.quill) {
         return null;
     }
     // NOTE if called before init will return select and not span
@@ -124,6 +118,9 @@ function getFontFamilyDataValueFontFamily(ff_dv) {
         debugger;
 	}
     let ffa = getFontsByEnv();
+    if (!ffa) {
+        return ff_dv;
+    }
     for (var i = 0; i < ffa.length; i++) {
         let cur_ff_dv = getFontFamilyDataValue(ffa[i]);
         if (cur_ff_dv == ff_dv) {
@@ -141,9 +138,9 @@ function getFontsByEnv() {
     globals.EnvName = globals.EnvName == null ? globals.WindowsEnv : globals.EnvName;
     let result = null;
     if (globals.EnvName == globals.MacEnv) {
-        result = macFonts;
+        result = globals.macFonts;
     } else {
-        result = winFonts;
+        result = globals.winFonts;
     }
 
     return result.sort();
@@ -178,7 +175,8 @@ function setDocRangeFontFamily(range, ff_dv) {
 // #region Actions
 
 function updateFontFamilyPickerToSelection(force_ff_dv = null, sel = null) {
-    if (IsFontFamilyPickerOpen) {
+    if (globals.IsFontFamilyPickerOpen ||
+        !isSubSelectionEnabled()) {
         return;
     }
     sel = sel ? sel : getDocSelection();
@@ -198,8 +196,8 @@ function updateFontFamilyPickerToSelection(force_ff_dv = null, sel = null) {
 }
 
 function findRangeFontFamilyDataValue(range) {
-    let curFormat = quill.getFormat(range);
-    let curFontFamily = curFormat != null && curFormat.hasOwnProperty('font') ? curFormat.font : null;// DefaultFontFamily;
+    let curFormat = globals.quill.getFormat(range);
+    let curFontFamily = curFormat != null && curFormat.hasOwnProperty('font') ? curFormat.font : null;// globals.DefaultFontFamily;
     if (curFontFamily) {
         return getFontFamilyDataValue(curFontFamily);
     }

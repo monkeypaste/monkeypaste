@@ -41,6 +41,11 @@
             "label": "Name",
             "value": "names",
             "isDefault": true
+          },
+          {
+            "label": "Birthdays",
+            "value": "birthdays",
+            "isDefault": false
           }
         ]
       }

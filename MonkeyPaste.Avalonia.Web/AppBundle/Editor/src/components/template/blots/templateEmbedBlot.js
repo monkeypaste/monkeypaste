@@ -1,36 +1,15 @@
-var TemplateEmbedClass = 'template-blot';;
 
-var Template_AT_INSERT_Class = 'template-blot-at-insert'; 
-
-var TemplateEmbedHtmlAttributes = [
-    'background-color',
-    'wasVisited',
-    'docIdx'
-    //'color'
-
-    //'templateGuid',
-    //'templateInstanceGuid',
-    //'isFocus',
-    //'templateName',
-    //'templateColor',
-    //'templateText',
-    //'templateType',
-    //'templateData',
-    //'templateDeltaFormat',
-    //'templateHtmlFormat',
-    //'wasVisited'
-];
 
 function initTemplateBlot() {
     if (Quill === undefined) {
         /// host load error case
         debugger;
     }
-    if (UseQuill2) {
+    //if (UseQuill2) {
         initTemplateEmbedBlot_quill2();
-    } else {
-        initTemplateEmbedBlot_quill1();
-    }
+    //} else {
+    //    initTemplateEmbedBlot_quill1();
+    //}
     
 }
 
@@ -39,7 +18,7 @@ function initTemplateEmbedBlot_quill2() {
     class TemplateEmbedBlot extends Parchment.EmbedBlot {
         static blotName = 'template';
         static tagName = 'SPAN';
-        static className = TemplateEmbedClass;
+        static className = globals.TemplateEmbedClass;
 
         static create(value) {
             const node = super.create(value);
@@ -81,7 +60,7 @@ function initTemplateEmbedBlot_quill1() {
     class TemplateEmbedBlot extends Parchment.Embed {
         static blotName = 'template';
         static tagName = 'SPAN';
-        static className = TemplateEmbedClass;
+        static className = globals.TemplateEmbedClass;
 
         static create(value) {
             const node = super.create(value);
@@ -142,7 +121,7 @@ function applyTemplateToDomNode(node, value) {
 
     let ttype = value.templateType.toLowerCase();
     if (ttype == 'datetime' && isNullOrWhiteSpace(value.templateData)) {
-        //value.templateData = TemplateDateTimeFormatOptionLabels[0];
+        //value.templateData = globals.TemplateDateTimeFormatOptionLabels[0];
     }
     if (ttype == 'static' && value.templateData == null) {
         value.templateData = '';
@@ -175,7 +154,7 @@ function applyTemplateToDomNode(node, value) {
     node.setAttribute('contenteditable', false);
 
     // STYLE
-    node.classList.add(TemplateEmbedClass);
+    node.classList.add(globals.TemplateEmbedClass);
     node.style.backgroundColor = value.templateColor;
 
     node.replaceChildren();

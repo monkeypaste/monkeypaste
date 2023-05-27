@@ -19,9 +19,6 @@
 .common-toolbar {
     transition: var(--toolbartransitionms) cubic-bezier(.47,1.64,.41,.8);
     transition-property: bottom;
-}
-
-.common-toolbar {
     display: flex;
     flex-wrap: nowrap;
     min-height: 40px;
@@ -40,6 +37,10 @@
     .common-toolbar > button {
         display: inline-flex;
     }
+
+    .common-toolbar button {
+    }
+
 
 
 input[type=button] {

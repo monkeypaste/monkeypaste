@@ -1,29 +1,10 @@
-﻿// #region Globals
-
-//var IsDropping = false;
-var DropIdx = -1;
-
-//var IsSplitDrop = false;
-//var IsPreBlockDrop = false;
-//var IsPostBlockDrop = false;
-
-
-const AllowedEffects = ['copy', 'copyLink', 'copyMove', 'link', 'linkMove', 'move', 'all'];
-
-const AllowedDropTypes = ['text/plain', 'text/html', 'application/json', 'files'];
-
-var CurDropTargetElm = null;
-
-var DropItemElms = [];
-
-// #endregion Globals
-
+﻿
 // #region Life Cycle
 function initDrop() {
-    DropItemElms = [getEditorContainerElement(), getDragOverlayElement()];
+    globals.DropItemElms = [getEditorContainerElement(), getDragOverlayElement()];
 
-    for (var i = 0; i < DropItemElms.length; i++) {
-        let item = DropItemElms[i];
+    for (var i = 0; i < globals.DropItemElms.length; i++) {
+        let item = globals.DropItemElms[i];
         item.addEventListener('dragenter', onDragEnter, true);
         item.addEventListener('dragover', onDragOver, true);
         item.addEventListener('dragleave', onDragLeave, true);
@@ -73,19 +54,19 @@ function getDropBlockState(doc_idx, mp, isShiftDown) {
 // #region State
 
 function isDragCopy() {
-    return IsCtrlDown;
+    return globals.IsCtrlDown;
 }
 
 function isDragCut() {
-    return !IsCtrlDown;
+    return !globals.IsCtrlDown;
 }
 
 function isDropHtml() {
-    return IsAltDown;
+    return globals.IsAltDown;
 }
 
 function isDropping() {
-    return CurDropTargetElm != null;
+    return globals.CurDropTargetElm != null;
 }
 
 
@@ -95,7 +76,7 @@ function isDropping() {
 // #region Actions
 
 function rejectDrop(e) {
-    DropIdx = -1;
+    globals.DropIdx = -1;
     if (!isNullOrUndefined(e.dataTransfer)) {
         e.dataTransfer.dropEffect = 'none';
     }
@@ -111,19 +92,19 @@ function resetDrop(fromHost, wasLeave, wasCancel) {
     resetDebounceDragOver();
     stopAutoScroll(wasLeave);
 
-    CurDropTargetElm = null;
+    globals.CurDropTargetElm = null;
 
-    IsCtrlDown = false;
-    IsAltDown = false
-    IsShiftDown = false;
-    IsTableDragSelecting = false;
+    globals.IsCtrlDown = false;
+    globals.IsAltDown = false
+    globals.IsShiftDown = false;
+    globals.IsTableDragSelecting = false;
 
-    for (var i = 0; i < DropItemElms.length; i++) {
-        DropItemElms[i].classList.remove('drop');
+    for (var i = 0; i < globals.DropItemElms.length; i++) {
+        globals.DropItemElms[i].classList.remove('drop');
     }
 
-    DropIdx = -1;
-    if (wasLeave && !isDragging() && WasNoSelectBeforeDragStart) {
+    globals.DropIdx = -1;
+    if (wasLeave && !isDragging() && globals.WasNoSelectBeforeDragStart) {
         disableSubSelection();
     } else {
         if (wasLeave && isDragging()) {
@@ -143,7 +124,7 @@ function processEffectAllowed(e) {
     } else if (!isNullOrUndefined(e.effectAllowed_override)) {
         effect_str = e.effectAllowed_override;
     }
-    if (!AllowedEffects.includes(effect_str)) {
+    if (!globals.AllowedEffects.includes(effect_str)) {
         effect_str = 'none'
     }
     if (isDragCopy() || effect_str == 'copy') {
@@ -179,22 +160,22 @@ function onDragEnter(e) {
         return false; 
     }
 
-    CurDropTargetElm = e.target;
+    globals.CurDropTargetElm = e.target;
     resetDebounceDragOver();
 
     onDragEnter_ntf();
     log('drag enter');
-    for (var i = 0; i < DropItemElms.length; i++) {
-        DropItemElms[i].classList.add('drop');
+    for (var i = 0; i < globals.DropItemElms.length; i++) {
+        globals.DropItemElms[i].classList.add('drop');
     }
     startAutoScroll();
 
     // store state before drop starts so the right state is restored 
     if (!isDragging()) {
         if (isSubSelectionEnabled()) {
-            WasNoSelectBeforeDragStart = false;
+            globals.WasNoSelectBeforeDragStart = false;
         } else {
-            WasNoSelectBeforeDragStart = true;
+            globals.WasNoSelectBeforeDragStart = true;
             enableSubSelection();
         }
     }
@@ -239,7 +220,7 @@ function onDragOver(e) {
     let is_valid = false;
     for (var i = 0; i < e.dataTransfer.types.length; i++) {
         let dt_type = e.dataTransfer.types[i];
-        if (AllowedDropTypes.includes(dt_type)) {
+        if (globals.AllowedDropTypes.includes(dt_type)) {
             is_valid = true;
             break;
         }
@@ -264,15 +245,15 @@ function onDragOver(e) {
 
     // DROP IDX
 
-    DropIdx = getDocIdxFromPoint(WindowMouseLoc);
+    globals.DropIdx = getDocIdxFromPoint(globals.WindowMouseLoc);
 
     // VALIDATE SELF DROP
     if (isDragging()) {
         let sel = getDocSelection();
-        let is_drop_over_drag_sel = isDocIdxInRange(DropIdx, sel);
-        let is_drop_over_template = getAllTemplateDocIdxs().includes(DropIdx);
+        let is_drop_over_drag_sel = isDocIdxInRange(globals.DropIdx, sel);
+        let is_drop_over_template = getAllTemplateDocIdxs().includes(globals.DropIdx);
         if (!is_drop_over_drag_sel && !is_drop_over_template) {
-            is_drop_over_drag_sel = isPointInRange(WindowMouseLoc, sel);
+            is_drop_over_drag_sel = isPointInRange(globals.WindowMouseLoc, sel);
         }
         if (is_drop_over_drag_sel ||
             is_drop_over_template) {
@@ -291,10 +272,10 @@ function onDragLeave(e) {
     updateWindowMouseState(e);
 
     let editor_rect = getEditorContainerRect();
-    if (isPointInRect(editor_rect, WindowMouseLoc)) {
+    if (isPointInRect(editor_rect, globals.WindowMouseLoc)) {
         return;
 
-        //if (!DropItemElms.includes(e.target)) {
+        //if (!globals.DropItemElms.includes(e.target)) {
         //    // drag leave of block/inline element, ignore
         //    return;
         //}
@@ -321,18 +302,18 @@ function onDrop(e) {
     }
 
     // get drag dist before down loc is cleared
-    log('drop attempting. mp ' + pointStr(WindowMouseLoc) + ' mdp ' + pointStr(WindowMouseDownLoc));
+    log('drop attempting. mp ' + pointStr(globals.WindowMouseLoc) + ' mdp ' + pointStr(globals.WindowMouseDownLoc));
 
     let drag_dist =
-        isDragging() && isPoint(WindowMouseLoc) && isPoint(WindowMouseDownLoc) ?
-            dist(WindowMouseLoc, WindowMouseDownLoc) : null;
+        isDragging() && isPoint(globals.WindowMouseLoc) && isPoint(globals.WindowMouseDownLoc) ?
+            dist(globals.WindowMouseLoc, globals.WindowMouseDownLoc) : null;
 
     updateWindowMouseState(e);    
 
     // VALIDATE
 
-    if (DropIdx < 0) {
-        log('Drop rejected, dropIdx ' + DropIdx);
+    if (globals.DropIdx < 0) {
+        log('Drop rejected, dropIdx ' + globals.DropIdx);
         resetDrop(e.fromHost, false, true);
         return false;
     }
@@ -350,14 +331,14 @@ function onDrop(e) {
         return rejectDrop(e);
     }
 
-    if (isDragging() && isDocIdxInRange(DropIdx, getDocSelection())) {
+    if (isDragging() && isDocIdxInRange(globals.DropIdx, getDocSelection())) {
         log('onDrop called but drop within drag range, ignoring and returning false');
         resetDrop(e.fromHost, false, true);
         return rejectDrop(e);
     }
 
-    if (isDragging() && (!drag_dist || drag_dist < MIN_DRAG_DIST)) {
-        log('Drop rejected, dist was ' + drag_dist + ' minimum is ' + MIN_DRAG_DIST);
+    if (isDragging() && (!drag_dist || drag_dist < globals.MIN_DRAG_DIST)) {
+        log('Drop rejected, dist was ' + drag_dist + ' minimum is ' + globals.MIN_DRAG_DIST);
         resetDrop(e.fromHost, false, true);
         return rejectDrop(e);
     }
@@ -375,9 +356,9 @@ function onDrop(e) {
         source_range = getDocSelection();
     }
     var drop_range = {
-        index: DropIdx,
+        index: globals.DropIdx,
         length: 0,
-        mode: getDropBlockState(DropIdx, WindowMouseLoc, IsShiftDown)
+        mode: getDropBlockState(globals.DropIdx, globals.WindowMouseLoc, globals.IsShiftDown)
     };
 
     logDataTransfer(e.dataTransfer, 'Drop DataTransfer (unprocessed):');

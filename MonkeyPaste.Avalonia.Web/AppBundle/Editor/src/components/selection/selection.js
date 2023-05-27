@@ -1,21 +1,5 @@
 ﻿// #region Globals
 
-const DefaultSelectionBgColor = 'lightblue';
-const DefaultSelectionFgColor = 'black';
-const DefaultCaretColor = 'black';
-const AppendCaretColor = 'red';
-
-var SelectionHistory = [];
-
-var LastSelRange = null;
-var CurSelRange = { index: 0, length: 0 };
-
-var SelectionOnMouseDown = null;
-
-var WasTextChanged = false;
-
-var SelTimerInterval = null;
-
 // #endregion Globals
 
 // #region Life Cycle
@@ -68,12 +52,12 @@ function getDomFocusRange(forceToEditor = true) {
 		}
 
 		if (needs_fallback) {
-			if (!CurSelRange) {
-				//log('CurSelRange was null, resetting to home');
-				CurSelRange = { index: 0, length: 0 };
+			if (!globals.CurSelRange) {
+				//log('globals.CurSelRange was null, resetting to home');
+				globals.CurSelRange = { index: 0, length: 0 };
 			}
-			//log('Selection focus falling back to last: ' + JSON.stringify(CurSelRange));
-			dom_focus_range = convertDocRangeToDomRange(CurSelRange);
+			//log('Selection focus falling back to last: ' + JSON.stringify(globals.CurSelRange));
+			dom_focus_range = convertDocRangeToDomRange(globals.CurSelRange);
 		}
 	}
 	if (!dom_focus_range) {
@@ -155,7 +139,7 @@ function setDocSelection(doc_idx, len, source = 'user') {
 	//	quill.setSelection(doc_idx, len, source);
 	//}
 	setDomSelectionFromDocRange({ index: doc_idx, length: len });
-	CurSelRange = { index: doc_idx, length: len };
+	globals.CurSelRange = { index: doc_idx, length: len };
 	
 		
 }
@@ -246,18 +230,18 @@ function isNavJump() {
 	if (!sel_range || sel_range.length > 0) {
 		return false;
 	}
-	if (!didSelectionChange(sel_range, LastSelRange)) {
+	if (!didSelectionChange(sel_range, globals.LastSelRange)) {
 		return false;
 	}
-	if (!LastSelRange) {
+	if (!globals.LastSelRange) {
 		return true;
 	}
-	return Math.abs(sel_range.index = LastSelRange.index) > 1;
+	return Math.abs(sel_range.index = globals.LastSelRange.index) > 1;
 }
 
 function isNavRight() {
 	let sel_range = getDocSelection();
-	let last_sel_range = LastSelRange;
+	let last_sel_range = globals.LastSelRange;
 
 	last_sel_range = last_sel_range ? last_sel_range : sel_range;
 
@@ -274,14 +258,14 @@ function isNavRight() {
 
 function updateSelectionColors() {
 	let sel = getDocSelection();
-	let sel_bg_color = DefaultSelectionBgColor;
-	let sel_fg_color = DefaultSelectionFgColor;
-	let caret_color = DefaultCaretColor;
+	let sel_bg_color = globals.DefaultSelectionBgColor;
+	let sel_fg_color = globals.DefaultSelectionFgColor;
+	let caret_color = globals.DefaultCaretColor;
 
 	if (isDropping() || isDragging()) {
 		if (isDragging()) {
 			// ignoring invalidity if external drop
-			let is_drop_valid = DropIdx >= 0 || !isDropping();
+			let is_drop_valid = globals.DropIdx >= 0 || !isDropping();
 			if (is_drop_valid) {
 				if (isDragCopy()) {
 					sel_bg_color = 'lime';
@@ -324,9 +308,9 @@ function updateSelectionColors() {
 }
 
 function resetSelection() {
-	LastSelRange = null;
-	CurSelRange = null;
-	SelectionOnMouseDown = null;
+	globals.LastSelRange = null;
+	globals.CurSelRange = null;
+	globals.SelectionOnMouseDown = null;
 	clearDomSelectionRanges();
 	setDocSelection({ index: 0, length: 0 });
 }
@@ -439,9 +423,9 @@ function cleanDocRange(doc_range) {
 
 function onDocumentSelectionChange(e) {
 	let new_range = getDocSelection();
-	if (didSelectionChange(new_range, CurSelRange)) {		
-		LastSelRange = CurSelRange;
-		CurSelRange = new_range;
+	if (didSelectionChange(new_range, globals.CurSelRange)) {		
+		globals.LastSelRange = globals.CurSelRange;
+		globals.CurSelRange = new_range;
 		updateAllElements();
 	}
 }

@@ -1,17 +1,3 @@
-// #region Globals
-
-//var globals.DefaultEditorWidth = 1200;
-
-//var globals.IgnoreNextSelectionChange = false;
-//var globals.SuppressTextChangedNtf = false;
-
-//var IsSubSelectionEnabled = false;
-//var IsReadOnly = false;
-
-//var globals.EditorTheme = 'light';
-
-
-// #endregion Globals
 
 // #region Life Cycle
 
@@ -21,9 +7,10 @@ function initEditor() {
 		return;
 	}
 
-	quill = initQuill();
+	globals.quill = initQuill();
 
 	initClipboard();
+	initSvgElements();
 	initEditorToolbar();
 	initEditTemplateToolbar();
 	initPasteToolbar();
@@ -31,17 +18,25 @@ function initEditor() {
 	initContentClassAttributes();
 
 	initScroll();
-	initTemplates();
 	initTooltip();
+	initTemplates();
 	initOverlay();
 	//initHistory();
 	//initExtContentSourceBlot();
 
-	quill.on("selection-change", onEditorSelChanged);
-	quill.on("text-change", onEditorTextChanged);
+	globals.quill.on("selection-change", onEditorSelChanged);
+	globals.quill.on("text-change", onEditorTextChanged);
 
 	getEditorElement().addEventListener('focus', onEditorFocus);
 	getEditorElement().addEventListener('blur', onEditorBlur);
+}
+
+function initEditorToolbars() {
+	if (globals.IsToolbarsLoaded) {
+		return;
+	}
+
+	globals.IsToolbarsLoaded = true;
 }
 // #endregion Life Cycle
 
@@ -211,10 +206,10 @@ function enableTextWrapping() {
 }
 
 function createLink() {
-	var range = quill.getSelection(true);
+	var range = globals.quill.getSelection(true);
 	if (range) {
 		var text = getText(range);
-		quill.deleteText(range.index, range.length);
+		globals.quill.deleteText(range.index, range.length);
 		var ts =
 			'<a class="square_btn" href="https://www.google.com">' + text + "</a>";
 		insertHtml(range.index, ts);
@@ -367,8 +362,8 @@ function onEditorBlur(e) {
 }
 
 function onEditorSelChanged(range, oldRange, source) {
-	if (IsAppendPreMode && source == 'user' && range) {
-		FixedAppendIdx = range.index;
+	if (globals.IsAppendPreMode && source == 'user' && range) {
+		globals.FixedAppendIdx = range.index;
 	}
 	// showing ops menu takes focus
 

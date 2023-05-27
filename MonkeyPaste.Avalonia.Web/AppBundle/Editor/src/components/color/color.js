@@ -35,12 +35,12 @@ function getRandomColor() {
 }
 
 function getRandomPaletteColor() {
-    let color_idx = Math.floor(Math.random() * ContentColors.length - 1);
-    while (get2dIdx(color_idx, COLOR_PALETTE_COL_COUNT)[1] == COLOR_PALETTE_COL_COUNT - 1) {
+    let color_idx = Math.floor(Math.random() * globals.ContentColors.length - 1);
+    while (get2dIdx(color_idx, globals.COLOR_PALETTE_COL_COUNT)[1] == globals.COLOR_PALETTE_COL_COUNT - 1) {
         // ignore last column
-        color_idx = Math.floor(Math.random() * ContentColors.length - 1);
+        color_idx = Math.floor(Math.random() * globals.ContentColors.length - 1);
     }
-    return ContentColors[color_idx];
+    return globals.ContentColors[color_idx];
 }
 
 function getColorObjType(color) {
@@ -441,8 +441,8 @@ function rgbaToCssColor(rgba) {
 }
 
 function colorNameToHex(color) {
-    if (typeof CssColorLookup[color.toLowerCase()] != 'undefined')
-        return CssColorLookup[color.toLowerCase()];
+    if (typeof globals.CssColorLookup[color.toLowerCase()] != 'undefined')
+        return globals.CssColorLookup[color.toLowerCase()];
 
     return false;
 }

@@ -1,27 +1,5 @@
 // #region Globals
 
-const CEF_CB_DATA_FORMATS = [
-    'text/plain',
-    'text/uri-list',
-    'text/csv',
-    'text/css',
-    'text/html', //4
-    'application/xhtml+xml',
-    'image/png', //6
-    'image/jpg',
-    'image/jpeg',
-    'image/gif',
-    'image/svg+xml',
-    'application/xml',
-    'text/xml',
-    'application/javascript',
-    'application/json',
-    'application/octet-stream',
-];
-
-const PLACEHOLDER_DATAOBJECT_TEXT = '3acaaed7-862d-47f5-8614-3259d40fce4d';
-
-
 // #endregion Globals
 
 // #region Life Cycle
@@ -54,7 +32,7 @@ function initTemplateMatcher() {
     }
     let Delta = Quill.imports.delta;
 
-    quill.clipboard.addMatcher('span', function (node, delta) {
+    globals.quill.clipboard.addMatcher('span', function (node, delta) {
         if (node.hasAttribute('templateguid')) {
             delta.ops[0].attributes = delta.ops[0].insert.template;
             //delete delta.ops[0].insert.template;
@@ -71,7 +49,7 @@ function initSpecialCharacterMatcher() {
     }
     let Delta = Quill.imports.delta;
 
-    quill.clipboard.addMatcher(Node.TEXT_NODE, function (node, delta) {
+    globals.quill.clipboard.addMatcher(Node.TEXT_NODE, function (node, delta) {
         if (node.parentNode.tagName != 'CODE') {
             return delta;
         }
@@ -87,7 +65,7 @@ function initWhitespaceMatcher() {
     }
     let Delta = Quill.imports.delta;
 
-    quill.clipboard.addMatcher(Node.TEXT_NODE, function (node, delta) {
+    globals.quill.clipboard.addMatcher(Node.TEXT_NODE, function (node, delta) {
         // this fixes whitespace issues 
         if(node.data.match(/[^\n\S]|\t/)) {
             return new Delta().insert(node.data);
@@ -107,7 +85,7 @@ function initCheckableListMatcher() {
     }
     let Delta = Quill.imports.delta;
 
-    quill.clipboard.addMatcher('li', function (node, delta) {
+    globals.quill.clipboard.addMatcher('li', function (node, delta) {
         if (node.hasAttribute('data-checked')) {
             let is_checked = parseBool(node.getAttribute('data-checked'));
             if (delta && delta.ops !== undefined && delta.ops.length > 0) {
@@ -133,7 +111,7 @@ function initFontSizeMatcher() {
     }
     let Delta = Quill.imports.delta;
 
-    quill.clipboard.addMatcher(Node.ELEMENT_NODE, function (node, delta) {
+    globals.quill.clipboard.addMatcher(Node.ELEMENT_NODE, function (node, delta) {
         let fs_class = Array.from(node.classList).find(x => x.startsWith('ql-size'));
         if (!fs_class) {
             return delta;
@@ -157,7 +135,7 @@ function initFontSizeMatcher() {
 
 function initConverterMatchers() {
     let Delta = Quill.imports.delta;
-    quill.clipboard.addMatcher(Node.ELEMENT_NODE, function (node, delta) {
+    globals.quill.clipboard.addMatcher(Node.ELEMENT_NODE, function (node, delta) {
         if (node.tagName == 'TABLE') {
             //debugger;
         }
@@ -172,7 +150,7 @@ function initFontFamilyMatcher() {
     }
     let Delta = Quill.imports.delta;
 
-    quill.clipboard.addMatcher(Node.ELEMENT_NODE, function (node, delta) {
+    globals.quill.clipboard.addMatcher(Node.ELEMENT_NODE, function (node, delta) {
         let ff_class = Array.from(node.classList).find(x => x.startsWith('ql-font-'));
         if (!ff_class) {
             return delta;
@@ -205,7 +183,7 @@ function initLinkMatcher() {
     }
     let Delta = Quill.imports.delta;
 
-    quill.clipboard.addMatcher('a', function (node, delta) {
+    globals.quill.clipboard.addMatcher('a', function (node, delta) {
         if (node.hasAttribute('style')) {
             let bg = getElementComputedStyleProp(node, 'background-color');
             if (bg) {
@@ -236,7 +214,7 @@ function initLinkMatcher() {
                 }
             }
         }
-        let link_type = Array.from(node.classList).find(x => LinkTypes.includes(x));
+        let link_type = Array.from(node.classList).find(x => globals.LinkTypes.includes(x));
         if (link_type) {
             log('link class type: ' + link_type);
 
@@ -255,7 +233,7 @@ function initLinkMatcher() {
                     }
                 }
             }
-            LinkTypeAttrb.add(node, link_type);
+            globals.LinkTypeAttrb.add(node, link_type);
         } else {
             log('no type class for link, classes: ' + node.getAttribute('class'));
         }

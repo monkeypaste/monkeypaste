@@ -1,6 +1,5 @@
 ﻿// #region Globals
 
-var IsHostFocused = null;
 // #endregion Globals
 
 // #region Life Cycle
@@ -18,14 +17,14 @@ function initInput() {
 // #region Setters
 
 function setInputFocusable(isInputFocused) {
-	if (isInputFocused != IsHostFocused) {
-		log('host selection changed. IsHostFocused: ' + isInputFocused);
+	if (isInputFocused != globals.IsHostFocused) {
+		log('host selection changed. globals.IsHostFocused: ' + isInputFocused);
 	}
-	IsHostFocused = isInputFocused;
+	globals.IsHostFocused = isInputFocused;
 	if (isInputFocused && !document.hasFocus()) {
 		forceWindowFocus();
 	}
-	if (!IsHostFocused) {
+	if (!globals.IsHostFocused) {
 		hideAllPopups();
 
 	}
@@ -40,10 +39,10 @@ function isWindowFocused() {
 		return true;
 	}
 	if (document.hasFocus()) {
-		if (IsHostFocused == null) {
+		if (globals.IsHostFocused == null) {
 			return true;
 		}
-		return IsHostFocused;
+		return globals.IsHostFocused;
 	}
 	return false;
 }
@@ -63,7 +62,7 @@ function forceWindowFocus() {
 			let test = document.activeElement;
 			console.table(test);
 			if (!document.hasFocus()) {
-				window.open('', EDITOR_WINDOW_NAME).focus();
+				window.open('', globals.EDITOR_WINDOW_NAME).focus();
 				log('document focus (after window.open): ' + (document.hasFocus() ? "SUCCESS" : "FAILED"));
 			}
 		}

@@ -1,8 +1,3 @@
-// #region Globals
-
-const EditorPlaceHolderText = 'Empty Content...';
-var quill;
-// #endregion Globals
 
 // #region Life Cycle
 
@@ -17,7 +12,7 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 
 	let quillOptions = {
 		//debug: true,
-		placeholder: EditorPlaceHolderText,
+		placeholder: globals.EditorPlaceHolderText,
 		//allowReadOnlyEdits: true,
 		theme: "snow",
 		formula: true,
@@ -68,21 +63,21 @@ function getText(range, for_ole = false) {
 		let encoded_text = getEncodedContentText(range);
 		text = getDecodedContentText(encoded_text);
 	} else {
-		text = quill.getText(range.index, range.length);
+		text = globals.quill.getText(range.index, range.length);
 	}
 
 	return text;
 }
 
 function getAllText() {
-	if (!quill) {
+	if (!globals.quill) {
 		return '';
 	}
-	return quill.getText();
+	return globals.quill.getText();
 }
 
 function getRootHtml() {
-	return quill.root.innerHTML;
+	return globals.quill.root.innerHTML;
 }
 
 function getHtml(range, encodeHtmlEntities = true) {
@@ -106,7 +101,7 @@ function getSelectedHtml() {
 }
 
 function getHtml2(sel) {
-	sel = !sel ? { index: 0, length: getDocLength() } : sel;
+	sel = cleanDocRange(sel);
 	let dom_range = convertDocRangeToDomRange(sel);
 	if (dom_range) {
 		let div = document.createElement('div');
@@ -145,37 +140,37 @@ function getSelectedHtml3() {
 }
 
 function getFormatAtDocIdx(docIdx) {
-	return quill.getFormat(docIdx, 0);
+	return globals.quill.getFormat(docIdx, 0);
 }
 function getFormatForDocRange(docRange) {
-	return quill.getFormat(docRange);
+	return globals.quill.getFormat(docRange);
 }
 // #endregion Getters
 
 // #region Setters
 
 function setTextInRange(range, text, source = 'api', decodeTemplates = false) {
-	quill.deleteText(range.index, range.length, source);
+	globals.quill.deleteText(range.index, range.length, source);
 	insertText(range.index, text, source, decodeTemplates);
 }
 
 function setRootHtml(html) {
-	quill.root.innerHTML = html;
-	quill.update();
+	globals.quill.root.innerHTML = html;
+	globals.quill.update();
 }
 
 function setRootText(text) {
 	setRootHtml('');
-	quill.root.innerText = text;
+	globals.quill.root.innerText = text;
 }
 
 function setHtmlInRange(range, htmlStr, source = 'api', decodeTemplates = false) {
-	quill.deleteText(range.index, range.length, source);
+	globals.quill.deleteText(range.index, range.length, source);
 	insertHtml(range.index, htmlStr, source, decodeTemplates);
 }
 
 function setContents(delta, source = 'api') {
-	quill.setContents(delta,source);
+	globals.quill.setContents(delta,source);
 }
 
 // #endregion Setters
@@ -201,19 +196,19 @@ function quillFindBlotOffset(elm, bubble = false) {
 	if (!blot) {
 		return 0;
 	}
-	if (quill == null) {
+	if (globals.quill == null) {
 		// load error
 		debugger;
 	}
-	return blot.offset(quill.scroll);
+	return blot.offset(globals.quill.scroll);
 }
 
 function formatDocRange(range, format, source = 'api') {
-	quill.formatText(range.index, range.length, format, source);
+	globals.quill.formatText(range.index, range.length, format, source);
 }
 
 function formatSelection(format, value, source = 'api') {
-	quill.format(format, value, source);
+	globals.quill.format(format, value, source);
 }
 
 function insertText(docIdx, text, source = 'api', decodeTemplates = false) {
@@ -221,18 +216,18 @@ function insertText(docIdx, text, source = 'api', decodeTemplates = false) {
 		decodeInsertedTemplates(docIdx, text, source);
 		return;
 	}
-	quill.insertText(docIdx, text, source);
+	globals.quill.insertText(docIdx, text, source);
 }
 
 function deleteText(range, source = 'api') {
 	if (!range || range.length == 0) {
 		return;
 	}
-	quill.deleteText(range.index, range.length, source);
+	globals.quill.deleteText(range.index, range.length, source);
 }
 
 function insertHtml(docIdx, htmlStr, source = 'api', decodeTemplates = true) {
-	quill.clipboard.dangerouslyPasteHTML(docIdx, htmlStr, source);
+	globals.quill.clipboard.dangerouslyPasteHTML(docIdx, htmlStr, source);
 	if (decodeTemplates) {
 		// default is true unlike text, since blot's need to be bound to events not sure if thats always right
 		loadTemplates();
@@ -263,10 +258,10 @@ function trimQuillTrailingLineEndFromText(textStr) {
 }
 
 function updateQuill() {
-	if (!quill) {
+	if (!globals.quill) {
 		return;
 	}
-	quill.update();
+	globals.quill.update();
 }
 // #endregion Actions
 

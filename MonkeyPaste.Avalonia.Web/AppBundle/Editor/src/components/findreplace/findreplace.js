@@ -1,28 +1,4 @@
-// #region Globals
 
-var CurFindReplaceDocRanges = null;
-var CurFindReplaceDocRangeIdx = -1;
-
-var CurFindReplaceDocRangeRectIdxLookup = null;
-
-var CurFindReplaceDocRangesRects = null;
-
-const DefaultFindReplaceInputState = {
-	searchText: '',
-	replaceText: '',
-	isReplace: false,
-	isCaseSensitive: false,
-	isWholeWordMatch: false,
-	useRegEx: false
-};
-
-var LastFindReplaceInputState = null;
-
-var IsFindReplaceInactive = true;
-
-var Searches = null;
-
-// #endregion Globals
 
 // #region Life Cycle
 
@@ -54,14 +30,14 @@ function initFindReplaceIcons() {
 }
 
 function loadFindReplace(searches) {
-	Searches = searches;
+	globals.Searches = searches;
 
 	if (searches == null) {
 		if (isShowingFindReplaceToolbar()) {
 			resetFindReplaceToolbar();
 			hideFindReplaceToolbar();
 		}
-		if (CurFindReplaceDocRanges) {
+		if (globals.CurFindReplaceDocRanges) {
 			hideAllScrollbars();
 			resetFindReplaceResults();
 		}
@@ -69,7 +45,7 @@ function loadFindReplace(searches) {
 		showAllScrollbars();
 		//setFindReplaceInputState(searches);
 		populateFindReplaceResults();
-		onQuerySearchRangesChanged_ntf(CurFindReplaceDocRanges.length);
+		onQuerySearchRangesChanged_ntf(globals.CurFindReplaceDocRanges.length);
 	}
 }
 
@@ -189,7 +165,7 @@ function setFindReplaceInputState(inputState) {
 // #region State
 
 function isGlobalSearchState() {
-	return Searches != null;
+	return globals.Searches != null;
 }
 
 function isShowingFindReplaceToolbar() {
@@ -208,7 +184,7 @@ function isFindReplaceActive() {
 	if (!isShowingFindReplaceToolbar()) {
 		return false;
 	}
-	if (quill.hasFocus()) {
+	if (globals.quill.hasFocus()) {
 		return false;
 	}
 	// do other toolbar focuses matter here?
@@ -219,28 +195,28 @@ function isFindReplaceStateChanged() {
 	if (isGlobalSearchState()) {
 		return false;
 	}
-	if (LastFindReplaceInputState == null ||
-		LastFindReplaceInputState.searchText === undefined) {
+	if (globals.LastFindReplaceInputState == null ||
+		globals.LastFindReplaceInputState.searchText === undefined) {
 		return true;
 	}
 
 	let cur_state = getFindReplaceInputState();
-	if (cur_state.searchText != LastFindReplaceInputState.searchText) {
+	if (cur_state.searchText != globals.LastFindReplaceInputState.searchText) {
 		return true;
 	}
-	if (cur_state.replaceText != LastFindReplaceInputState.replaceText) {
+	if (cur_state.replaceText != globals.LastFindReplaceInputState.replaceText) {
 		return true;
 	}
-	if (cur_state.isReplace != LastFindReplaceInputState.isReplace) {
+	if (cur_state.isReplace != globals.LastFindReplaceInputState.isReplace) {
 		return true;
 	}
-	if (cur_state.isCaseSensitive != LastFindReplaceInputState.isCaseSensitive) {
+	if (cur_state.isCaseSensitive != globals.LastFindReplaceInputState.isCaseSensitive) {
 		return true;
 	}
-	if (cur_state.isWholeWordMatch != LastFindReplaceInputState.isWholeWordMatch) {
+	if (cur_state.isWholeWordMatch != globals.LastFindReplaceInputState.isWholeWordMatch) {
 		return true;
 	}
-	if (cur_state.useRegEx != LastFindReplaceInputState.useRegEx) {
+	if (cur_state.useRegEx != globals.LastFindReplaceInputState.useRegEx) {
 		return true;
 	}
 	return false;
@@ -255,8 +231,8 @@ function showFindReplaceToolbar(fromHost = false) {
 
 	getFindReplaceToolbarElement().classList.remove('hidden');
 
-	let inputState = LastFindReplaceInputState ? LastFindReplaceInputState : DefaultFindReplaceInputState;
-	LastFindReplaceInputState = null;
+	let inputState = globals.LastFindReplaceInputState ? globals.LastFindReplaceInputState : globals.DefaultFindReplaceInputState;
+	globals.LastFindReplaceInputState = null;
 
 	if (isNullOrEmpty(inputState.searchText)) {
 		let sel = getDocSelection();
@@ -305,15 +281,15 @@ function updateFindReplaceToolbarSizesAndPositions() {
 function resetFindReplaceResults() {
 	CurFindReplaceSearchText = null;
 
-	CurFindReplaceDocRanges = null;
-	CurFindReplaceDocRangeIdx = -1;
+	globals.CurFindReplaceDocRanges = null;
+	globals.CurFindReplaceDocRangeIdx = -1;
 
-	CurFindReplaceDocRangesRects = null;
-	CurFindReplaceDocRangeRectIdxLookup = null;
+	globals.CurFindReplaceDocRangesRects = null;
+	globals.CurFindReplaceDocRangeRectIdxLookup = null;
 }
 
 function resetFindReplaceInput() {
-	setFindReplaceInputState(DefaultFindReplaceInputState);
+	setFindReplaceInputState(globals.DefaultFindReplaceInputState);
 }
 
 function resetFindReplaceToolbar() {
@@ -370,12 +346,12 @@ function processSearch(searchObj) {
 		searchObj.useRegEx,
 		searchObj.matchType);
 
-	if (CurFindReplaceDocRanges == null) {
-		CurFindReplaceDocRanges = [];
+	if (globals.CurFindReplaceDocRanges == null) {
+		globals.CurFindReplaceDocRanges = [];
 	}
 	const clean_ranges = adjustQueryRangesForEmptyContent(dirty_ranges_with_match_text);
 
-	CurFindReplaceDocRanges.push(...clean_ranges);
+	globals.CurFindReplaceDocRanges.push(...clean_ranges);
 }
 
 function populateFindReplaceResults() {
@@ -385,8 +361,8 @@ function populateFindReplaceResults() {
 	// FIND
 
 	if (isGlobalSearchState()) {
-		for (var i = 0; i < Searches.length; i++) {
-			processSearch(Searches[i]);
+		for (var i = 0; i < globals.Searches.length; i++) {
+			processSearch(globals.Searches[i]);
 		}
 	} else {
 		const input_search_obj = getFindReplaceInputState();
@@ -395,10 +371,10 @@ function populateFindReplaceResults() {
 
 	// FILTER
 
-	CurFindReplaceDocRanges = distinct(CurFindReplaceDocRanges);
+	globals.CurFindReplaceDocRanges = distinct(globals.CurFindReplaceDocRanges);
 
 	// SORT
-	CurFindReplaceDocRanges.sort((a, b) => {
+	globals.CurFindReplaceDocRanges.sort((a, b) => {
 		// sort by docIdx then by range length
 		let result = a.index - b.index;
 		if (result == 0) {
@@ -407,16 +383,16 @@ function populateFindReplaceResults() {
 		return result;
 	})
 
-	if (CurFindReplaceDocRanges.length == 0) {
+	if (globals.CurFindReplaceDocRanges.length == 0) {
 		resetFindReplaceResults();
 	} else {
-		CurFindReplaceDocRangeIdx = 0;
+		globals.CurFindReplaceDocRangeIdx = 0;
 	}
 
-	if (!Array.isArray(CurFindReplaceDocRanges)) {
+	if (!Array.isArray(globals.CurFindReplaceDocRanges)) {
 		// this seems to happen on a query search where content
 		// isn't what has the match
-		CurFindReplaceDocRanges = [];
+		globals.CurFindReplaceDocRanges = [];
 	}
 	updateFindReplaceRangeRects();
 	
@@ -424,7 +400,7 @@ function populateFindReplaceResults() {
 }
 
 function replaceFindResultIdx(replace_idx) {
-	let replace_range = CurFindReplaceDocRanges[replace_idx];
+	let replace_range = globals.CurFindReplaceDocRanges[replace_idx];
 	let replace_text = getReplaceInputElement().value;
 	replace_text = !replace_text ? '' : replace_text;
 
@@ -432,40 +408,40 @@ function replaceFindResultIdx(replace_idx) {
 
 	populateFindReplaceResults();
 
-	if (replace_idx < CurFindReplaceDocRanges.length) {
+	if (replace_idx < globals.CurFindReplaceDocRanges.length) {
 		// when there is remaining replacable result before eod set current to it 
-		CurFindReplaceDocRangeIdx = replace_idx;
+		globals.CurFindReplaceDocRangeIdx = replace_idx;
 		drawOverlay();
 	}
 }
 
 function updateFindReplaceRangeRects() {
-	//setDocSelectionRanges(CurFindReplaceDocRanges);
+	//setDocSelectionRanges(globals.CurFindReplaceDocRanges);
 
-	if (CurFindReplaceDocRanges == null) {
+	if (globals.CurFindReplaceDocRanges == null) {
 		drawOverlay();
 		return;
 	}
-	CurFindReplaceDocRangesRects = [];
-	CurFindReplaceDocRangeRectIdxLookup = [];
-	for (var i = 0; i < CurFindReplaceDocRanges.length; i++) {
-		let cur_range_rects = getRangeRects(CurFindReplaceDocRanges[i], true, false);
+	globals.CurFindReplaceDocRangesRects = [];
+	globals.CurFindReplaceDocRangeRectIdxLookup = [];
+	for (var i = 0; i < globals.CurFindReplaceDocRanges.length; i++) {
+		let cur_range_rects = getRangeRects(globals.CurFindReplaceDocRanges[i], true, false);
 
 		let rect_lookup = [
-			CurFindReplaceDocRangesRects.length,
-			CurFindReplaceDocRangesRects.length + cur_range_rects.length - 1
+			globals.CurFindReplaceDocRangesRects.length,
+			globals.CurFindReplaceDocRangesRects.length + cur_range_rects.length - 1
 		];
-		CurFindReplaceDocRangeRectIdxLookup.push(rect_lookup);
+		globals.CurFindReplaceDocRangeRectIdxLookup.push(rect_lookup);
 		for (var j = 0; j < cur_range_rects.length; j++) {
 			let cur_range_rect = cleanRect(cur_range_rects[j]);
-			CurFindReplaceDocRangesRects.push(cur_range_rect);
+			globals.CurFindReplaceDocRangesRects.push(cur_range_rect);
 		}
 	}
 	drawOverlay();
 }
 
 function applyRangeRectStyle(isActive, range_rect) {
-	range_rect.fill = isActive && !IsFindReplaceInactive ?
+	range_rect.fill = isActive && !globals.IsFindReplaceInactive ?
 		getActiveMatchRangeBgColor() : getInactiveMatchRangeBgColor();
 	range_rect.fillOpacity = getMatchRangeBgOpacity();
 	range_rect.strokeWidth = 0;
@@ -474,25 +450,25 @@ function applyRangeRectStyle(isActive, range_rect) {
 }
 
 function navigateFindReplaceResults(dir) {
-	let needsPopulate = CurFindReplaceDocRanges == null || isFindReplaceStateChanged();
+	let needsPopulate = globals.CurFindReplaceDocRanges == null || isFindReplaceStateChanged();
 	if (needsPopulate) {
-		LastFindReplaceInputState = getFindReplaceInputState();
+		globals.LastFindReplaceInputState = getFindReplaceInputState();
 		populateFindReplaceResults();
-		if (CurFindReplaceDocRanges == null) {
+		if (globals.CurFindReplaceDocRanges == null) {
 			// TODO show validate here
 			return;
 		}
 	}
-	CurFindReplaceDocRangeIdx += dir;
-	if (CurFindReplaceDocRangeIdx >= CurFindReplaceDocRanges.length) {
-		CurFindReplaceDocRangeIdx = 0;
+	globals.CurFindReplaceDocRangeIdx += dir;
+	if (globals.CurFindReplaceDocRangeIdx >= globals.CurFindReplaceDocRanges.length) {
+		globals.CurFindReplaceDocRangeIdx = 0;
 	}
 
-	if (CurFindReplaceDocRangeIdx < 0) {
-		CurFindReplaceDocRangeIdx = CurFindReplaceDocRanges.length - 1;
+	if (globals.CurFindReplaceDocRangeIdx < 0) {
+		globals.CurFindReplaceDocRangeIdx = globals.CurFindReplaceDocRanges.length - 1;
 	}
 
-	let cur_doc_range = CurFindReplaceDocRanges[CurFindReplaceDocRangeIdx];
+	let cur_doc_range = globals.CurFindReplaceDocRanges[globals.CurFindReplaceDocRangeIdx];
 	let cur_dom_range = convertDocRangeToDomRange(cur_doc_range);
 	if (cur_dom_range && cur_dom_range.startContainer) {
 		if (cur_dom_range.startContainer.nodeType === 3) {
@@ -504,18 +480,18 @@ function navigateFindReplaceResults(dir) {
 	//let cur_doc_range_scroll_offset = getDocRangeScrollOffset(cur_doc_range);
 	//scrollEditorTop(cur_doc_range_scroll_offset.top);
 
-	//let active_y = CurFindReplaceDocRangesRects[CurFindReplaceDocRangeRectIdxLookup[CurFindReplaceDocRangeIdx][0]].top;
+	//let active_y = globals.CurFindReplaceDocRangesRects[globals.CurFindReplaceDocRangeRectIdxLookup[globals.CurFindReplaceDocRangeIdx][0]].top;
 	//scrollEditorTop(active_y);
 
 	//drawOverlay();
 }
 
 function deactivateFindReplace() {
-	IsFindReplaceInactive = true;
+	globals.IsFindReplaceInactive = true;
 	drawOverlay();
 }
 function activateFindReplace() {
-	IsFindReplaceInactive = false;
+	globals.IsFindReplaceInactive = false;
 	drawOverlay();
 }
 
@@ -554,10 +530,10 @@ function onFindReplacePreviousButtonClick(e) {
 	navigateFindReplaceResults(-1);
 }
 function onFindReplaceReplaceButtonClick(e) {
-	replaceFindResultIdx(CurFindReplaceDocRangeIdx);
+	replaceFindResultIdx(globals.CurFindReplaceDocRangeIdx);
 }
 function onFindReplaceReplaceAllButtonClick(e) {
-	let replace_count = CurFindReplaceDocRanges.length;
+	let replace_count = globals.CurFindReplaceDocRanges.length;
 	while (replace_count > 0) {
 		replaceFindResultIdx(0);
 		replace_count--;

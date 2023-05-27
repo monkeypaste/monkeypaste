@@ -6,7 +6,7 @@
 // #region Life Cycle
 
 function initTableOps() {
-    if (!IS_TABLE_OPS_TOOLBAR_ENABLED) {
+    if (!globals.IS_TABLE_OPS_TOOLBAR_ENABLED) {
         return;
     }
     addClickOrKeyClickEventListener(getTableOpsNavLeftButton(), onTableNavLeftClickOrKey);
@@ -92,7 +92,7 @@ function hideTableOpsToolbar() {
 }
 
 function updateTableOpsToolbarToSelection() {
-    if (!IS_TABLE_OPS_TOOLBAR_ENABLED) {
+    if (!globals.IS_TABLE_OPS_TOOLBAR_ENABLED) {
         return;
     }
     const sel = getDocSelection();

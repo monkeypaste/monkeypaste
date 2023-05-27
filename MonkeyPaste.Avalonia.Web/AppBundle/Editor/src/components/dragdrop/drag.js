@@ -1,19 +1,9 @@
-﻿// #region Globals
-
-const MIN_DRAG_DIST = 10;
-
-var WasNoSelectBeforeDragStart = false;
-var CurDragTargetElm = null;
-var DragItemElms = [];
-
-// #endregion Globals
-
-// #region Life Cycle
+﻿// #region Life Cycle
 
 function initDrag() {
-    DragItemElms = [getEditorContainerElement(), getDragOverlayElement()];
-    for (var i = 0; i < DragItemElms.length; i++) {
-        let item = DragItemElms[i];
+    globals.DragItemElms = [getEditorContainerElement(), getDragOverlayElement()];
+    for (var i = 0; i < globals.DragItemElms.length; i++) {
+        let item = globals.DragItemElms[i];
         item.addEventListener('dragstart', onDragStart, true);
         item.addEventListener('dragend', onDragEnd);
     }
@@ -35,7 +25,7 @@ function getDragOverlayElement() {
 // #region State
 
 function isDragging() {
-    return CurDragTargetElm != null;
+    return globals.CurDragTargetElm != null;
 }
 
 // #endregion State
@@ -71,26 +61,26 @@ function onDragStart(e) {
     }
     
     if (!isSubSelectionEnabled()) {
-        WasNoSelectBeforeDragStart = true;
+        globals.WasNoSelectBeforeDragStart = true;
         //enableSubSelection();
         selectAll();
     } else {
-        WasNoSelectBeforeDragStart = false;
+        globals.WasNoSelectBeforeDragStart = false;
     }
 
     let sel = getDocSelection();
 
     if (globals.ContentItemType == 'Text' &&
-        (getTableSelectedCells().length == 0 || IsTableDragSelecting) &&
+        (getTableSelectedCells().length == 0 || globals.IsTableDragSelecting) &&
         (!sel || sel.length == 0)) {
         log('drag start rejected by selection state. selectable but w/o range');
-        WasNoSelectBeforeDragStart = false;
+        globals.WasNoSelectBeforeDragStart = false;
         e.preventDefault();
         e.stopPropagation();
         return false;
     }
 
-    CurDragTargetElm = e.target;
+    globals.CurDragTargetElm = e.target;
 
     log('drag start. sel: ',sel);
     e.stopPropagation();
@@ -108,15 +98,15 @@ function onDragStart(e) {
 function onDragEnd(e) {
     log('drag end');
     updateWindowMouseState(e);
-    CurDragTargetElm = null;
-    IsShiftDown = false;
-    IsCtrlDown = false;
-    IsAltDown = false;
+    globals.CurDragTargetElm = null;
+    globals.IsShiftDown = false;
+    globals.IsCtrlDown = false;
+    globals.IsAltDown = false;
     
-    if (WasNoSelectBeforeDragStart) {
+    if (globals.WasNoSelectBeforeDragStart) {
         resetSelection();
         disableSubSelection();
-        WasNoSelectBeforeDragStart = false;
+        globals.WasNoSelectBeforeDragStart = false;
     }
     drawOverlay();
 }

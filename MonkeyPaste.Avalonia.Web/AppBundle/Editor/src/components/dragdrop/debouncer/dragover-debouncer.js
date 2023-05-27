@@ -1,11 +1,4 @@
-﻿// #region Globals
-
-var LastDebouncedMouseLoc = null;
-var LastDragOverDateTime = null;
-
-// #endregion Globals
-
-// #region Life Cycle
+﻿// #region Life Cycle
 
 // #endregion Life Cycle
 
@@ -24,39 +17,39 @@ var LastDragOverDateTime = null;
 // #region Actions
 
 function resetDebounceDragOver() {
-	LastDebouncedMouseLoc = null;
-	LastDragOverDateTime = null;
+	globals.LastDebouncedMouseLoc = null;
+	globals.LastDragOverDateTime = null;
 }
 
 function canDebounceDragOverProceed() {
 	// DEBOUNCE (my own type but word comes from https://css-tricks.com/debouncing-throttling-explained-examples/)
 
 	let cur_date_time = Date.now();
-	if (LastDragOverDateTime == null) {
-		LastDragOverDateTime = cur_date_time;
+	if (globals.LastDragOverDateTime == null) {
+		globals.LastDragOverDateTime = cur_date_time;
 	}
 
-	if (LastDebouncedMouseLoc == null) {
-		LastDebouncedMouseLoc = WindowMouseLoc;
+	if (globals.LastDebouncedMouseLoc == null) {
+		globals.LastDebouncedMouseLoc = globals.WindowMouseLoc;
 		// this is the first call, let it go
 		return true;
 	}
 
 	// get dist since last proceed
-	let m_delta_dist = dist(LastDebouncedMouseLoc, WindowMouseLoc);
+	let m_delta_dist = dist(globals.LastDebouncedMouseLoc, globals.WindowMouseLoc);
 
 	// get time (ms) since last proceed
-	let m_dt = LastDragOverDateTime - cur_date_time;
+	let m_dt = globals.LastDragOverDateTime - cur_date_time;
 	// get velocity since last call
 	let m_v = m_delta_dist / m_dt;
 
 	let can_proceed = m_delta_dist != 0 || m_v != 0;
 	if (can_proceed) {
 		// update dist checker
-		LastDebouncedMouseLoc = WindowMouseLoc;
+		globals.LastDebouncedMouseLoc = globals.WindowMouseLoc;
 	}
 	// update velocity checker
-	LastDragOverDateTime = cur_date_time;
+	globals.LastDragOverDateTime = cur_date_time;
 
 	return can_proceed;
 }

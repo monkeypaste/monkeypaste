@@ -5,7 +5,7 @@
 // #region Life Cycle
 
 function loadTextContent(itemDataStr) {
-	quill.enable(true);
+	globals.quill.enable(true);
 	//setRootHtml(itemDataStr)
 	//log('loading text content: ' + itemDataStr);
 
@@ -27,6 +27,11 @@ function loadTextContent(itemDataStr) {
 	loadLinkHandlers();
 	enableTableContextMenu();
 	enableTableInteraction();
+	if (isContentATable()) {
+		getEditorContainerElement().classList.add('table-only');
+	} else {
+		getEditorContainerElement().classList.remove('table-only');
+	}
 }
 
 // #endregion Life Cycle
@@ -144,15 +149,15 @@ function getLineDocRange(lineIdx) {
 }
 
 function getLineCount() {
-	return quill.getLines().length;
+	return globals.quill.getLines().length;
 }
 
 function getDocLength(omitTrailingLineEnd = false) {
-	if (!quill) {
+	if (!globals.quill) {
 		return 0;
 	}
 
-	let len = quill.getLength();
+	let len = globals.quill.getLength();
 	if (omitTrailingLineEnd) {
 		let pt = getAllText();
 		if (!isNullOrEmpty(pt)) {
@@ -179,7 +184,7 @@ function getCharacterRect(docIdx, isWindowOrigin = true, inflateToLineRect = tru
 	//	}
 	//}
 	let len = inflateEmptyRange ? 1:0
-	let docIdx_rect = quill.getBounds(docIdx, len);
+	let docIdx_rect = globals.quill.getBounds(docIdx, len);
 
 	if (isWindowOrigin) {
 		docIdx_rect = editorToScreenRect(docIdx_rect);
@@ -295,7 +300,7 @@ function getLineIdxAndRectFromPoint(p) {
 function getBlockIdxFromPoint(p) {
 	let p_elm = document.elementFromPoint(p.x, p.y);
 	let blot = quillFindBlot(p_elm);
-	let block_idx = blot.offset(quill.scroll);
+	let block_idx = blot.offset(globals.quill.scroll);
 	if (!isNaN(parseInt(block_idx))) {
 		debugger;
 		const p_range = document.caretRangeFromPoint(p.x, p.y);
@@ -325,7 +330,7 @@ function getElementDocIdx(elm) {
 	if (elm_blot == null) {
 		return 0;
 	}
-	return elm_blot.offset(quill.scroll);
+	return elm_blot.offset(globals.quill.scroll);
 }
 
 function getDocIdxFromPoint(p, fallbackIdx) {
@@ -355,7 +360,7 @@ function getDocIdxFromPoint(p, fallbackIdx) {
 	if (!isNaN(parseInt(text_node_idx)) && text_node_idx >= 0) {
 		let text_blot = quillFindBlot(textNode);
 		if (text_blot && typeof text_blot.offset === 'function') {
-			//doc_idx = Quill.find(textNode).offset(quill.scroll) + text_node_idx;
+			//doc_idx = Quill.find(textNode).offset(globals.quill.scroll) + text_node_idx;
 			doc_idx = quillFindBlotOffset(textNode) + text_node_idx;
 		} else {
 			let parent_node = textNode.parentNode;
@@ -381,7 +386,7 @@ function getDocIdxFromPoint(p, fallbackIdx) {
 			let parent_blot = quillFindBlot(textNode.parentElement);
 			if (parent_blot && typeof parent_blot.offset === 'function') {
 				// get doc idx of block
-				parent_idx = parent_blot.offset(quill.scroll);
+				parent_idx = parent_blot.offset(globals.quill.scroll);
 				let prev_sib_node = textNode.previousSibling;
 				if (prev_sib_node != null) {
 					let prev_sib_total_offset = 0;
@@ -421,7 +426,7 @@ function getDocIdxFromPoint(p, fallbackIdx) {
 					if (p_elm) {
 						let blot = quillFindBlot(p_elm);
 						if (blot && typeof blot.offset === 'function') {
-							let block_idx = blot.offset(quill.scroll);
+							let block_idx = blot.offset(globals.quill.scroll);
 							if (!isNaN(parseInt(block_idx))) {
 								doc_idx = block_idx;
 							} else {
@@ -443,10 +448,10 @@ function getDocIdxFromPoint(p, fallbackIdx) {
 }
 
 function getBlotAtDocIdx(docIdx) {
-	if (!quill) {
+	if (!globals.quill) {
 		return null;
 	}
-	let leaf = quill.getLeaf(docIdx);
+	let leaf = globals.quill.getLeaf(docIdx);
 	if (leaf && leaf.length > 0) {
 		return leaf[0];
 	}
@@ -512,7 +517,7 @@ function getElementDocRange(elm) {
 	if (!elm_blot) {
 		return null;
 	}
-	let cur_elm_doc_idx = quill.getIndex(elm_blot);
+	let cur_elm_doc_idx = globals.quill.getIndex(elm_blot);
 	let elm_length = 0;
 
 	// BUG quill returns bad offset for links, need to expand left/right to find real stuff
@@ -691,8 +696,8 @@ function isDocIdxLineStart(docIdx) {
 	if (docIdx >= getDocLength()) {
 		return false;
 	}
-	let idxLine = quill.getLine(docIdx);
-	let prevIdxLine = quill.getLine(docIdx - 1);
+	let idxLine = globals.quill.getLine(docIdx);
+	let prevIdxLine = globals.quill.getLine(docIdx - 1);
 	return idxLine[0] != prevIdxLine[0];
 }
 
@@ -706,8 +711,8 @@ function isDocIdxLineEnd(docIdx) {
 	if (docIdx < 0) {
 		return false;
 	}
-	let idxLine = quill.getLine(docIdx);
-	let nextIdxLine = quill.getLine(docIdx + 1);
+	let idxLine = globals.quill.getLine(docIdx);
+	let nextIdxLine = globals.quill.getLine(docIdx + 1);
 	return idxLine[0] != nextIdxLine[0];
 }
 
@@ -748,7 +753,7 @@ function convertTextContentToFormats(isForOle, formats) {
 		if (isHtmlFormat(lwc_format)) {
 			if (isContentATable()) {
 				// make sure to get whole table when no sub-selection
-				data = isForOle && (isAllSelected() || isNoneSelected()) ? quill.root.innerHTML : getHtml2(sel);
+				data = isForOle && (isAllSelected() || isNoneSelected()) ? globals.quill.root.innerHTML : getHtml2(sel);
 			} else {
 				data = getHtml(sel);
 				if (lwc_format == 'html format') {
@@ -775,7 +780,7 @@ function convertTextContentToFormats(isForOle, formats) {
 				.then((result) => {
 					onCreateContentScreenShot_ntf(result);
 				});
-			data = PLACEHOLDER_DATAOBJECT_TEXT;
+			data = globals.PLACEHOLDER_DATAOBJECT_TEXT;
 		} 
 		if (!data || data == '') {
 			continue;

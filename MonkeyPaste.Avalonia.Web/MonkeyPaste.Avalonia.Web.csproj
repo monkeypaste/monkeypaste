@@ -17,10 +17,15 @@
   <ItemGroup>
     <WasmExtraFilesToDeploy Include="AppBundle\**" />
     <AvaloniaXaml Remove="AppBundle\Editor\lib\**" />
+    <AvaloniaXaml Remove="AppBundle\Editor\src\components\experiments\**" />
     <Compile Remove="AppBundle\Editor\lib\**" />
+    <Compile Remove="AppBundle\Editor\src\components\experiments\**" />
     <EmbeddedResource Remove="AppBundle\Editor\lib\**" />
+    <EmbeddedResource Remove="AppBundle\Editor\src\components\experiments\**" />
     <None Remove="AppBundle\Editor\lib\**" />
+    <None Remove="AppBundle\Editor\src\components\experiments\**" />
     <WasmExtraFilesToDeploy Remove="AppBundle\Editor\lib\**" />
+    <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\experiments\**" />
     <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\font\font-toolbar-items-style.css" />
     <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\globals\globals.js" />
     <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\input\focus.js" />

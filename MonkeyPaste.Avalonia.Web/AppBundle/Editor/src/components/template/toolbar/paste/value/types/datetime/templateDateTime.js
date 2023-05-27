@@ -1,20 +1,4 @@
-﻿// #region Globals
-
-const CUSTOM_TEMPLATE_LABEL_VAL = 'Custom';
-
-const TemplateDateTimeFormatOptionLabels = [
-    'yyyy-MM-dd',
-    'MM-dd-yyyy',
-    'dd MMMM yyyy',
-    'E, MMM d, yy',
-    'HH:mm:ss',
-    'h:mm a',
-    'MM/dd/yyyy HH:mm:ss',
-    'E, dd MMM yyyy HH:mm:ss',
-    CUSTOM_TEMPLATE_LABEL_VAL
-];
-// #endregion Globals
-
+﻿
 // #region Life Cycle
 
 function initDateTimeTemplate() {
@@ -58,7 +42,7 @@ function isTemplateDateTimeCustom(t) {
     if (!isTemplateDateTime(t)) {
         return false;
     }
-    return TemplateDateTimeFormatOptionLabels.includes(t.templateData) == false;
+    return globals.TemplateDateTimeFormatOptionLabels.includes(t.templateData) == false;
 }
 // #endregion State
 
@@ -68,12 +52,12 @@ function createDateTimeFormatSelectorOpts(ft) {
     let datetime_sel_elm = getDateTimeTemplateFormatSelectorElement();
     datetime_sel_elm.innerHTML = '';
     const cur_dt = new Date();
-    for (var i = 0; i < TemplateDateTimeFormatOptionLabels.length; i++) {
-        let datetime_format = TemplateDateTimeFormatOptionLabels[i];
+    for (var i = 0; i < globals.TemplateDateTimeFormatOptionLabels.length; i++) {
+        let datetime_format = globals.TemplateDateTimeFormatOptionLabels[i];
         let datetime_opt_elm = document.createElement('option');
         datetime_opt_elm.value = datetime_format;
-        if (datetime_format == CUSTOM_TEMPLATE_LABEL_VAL) {
-            datetime_opt_elm.innerText = CUSTOM_TEMPLATE_LABEL_VAL;
+        if (datetime_format == globals.CUSTOM_TEMPLATE_LABEL_VAL) {
+            datetime_opt_elm.innerText = globals.CUSTOM_TEMPLATE_LABEL_VAL;
         } else {
             datetime_opt_elm.innerText = getFormattedDateTime(cur_dt, datetime_format);
         }        
@@ -87,7 +71,7 @@ function createDateTimeFormatSelectorOpts(ft) {
         // set dt format selection
         if (isTemplateDateTimeCustom(ft)) {
             // template has custom format
-            datetime_sel_elm.value = CUSTOM_TEMPLATE_LABEL_VAL;
+            datetime_sel_elm.value = globals.CUSTOM_TEMPLATE_LABEL_VAL;
 
             // show custom input
             datetime_input_elm.value = getFormattedDateTime(null, ft.templateData);
@@ -124,7 +108,7 @@ function updateDateTimeTemplateToOptionChange() {
         return;
     }
     let custom_format_elm = getDateTimeTemplateCustomInputElement();
-    if (field_sel_elm.value == CUSTOM_TEMPLATE_LABEL_VAL) {
+    if (field_sel_elm.value == globals.CUSTOM_TEMPLATE_LABEL_VAL) {
         custom_format_elm.value = getFormattedDateTime(null, ft.templateData);
         custom_format_elm.classList.remove('hidden');
 
@@ -142,7 +126,7 @@ function updateDateTimeTemplateToOptionChange() {
 // #region Event Handlers
 
 function onDateTimeSelFormatChanged(e) {
-    if (getDateTimeTemplateFormatSelectorElement().value == CUSTOM_TEMPLATE_LABEL_VAL) {
+    if (getDateTimeTemplateFormatSelectorElement().value == globals.CUSTOM_TEMPLATE_LABEL_VAL) {
         setTemplateData(getFocusTemplateGuid(), '');
     }
     updateDateTimeTemplateToOptionChange();

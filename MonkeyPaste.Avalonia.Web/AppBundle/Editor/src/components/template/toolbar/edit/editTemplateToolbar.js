@@ -96,7 +96,7 @@ function showTemplateColorPaletteMenu() {
 }
 
 function hideTemplateColorPaletteMenu() {
-    if (ColorPaletteAnchorElement != getEditTemplateColorBoxElement()) {
+    if (globals.ColorPaletteAnchorElement != getEditTemplateColorBoxElement()) {
         // only hide if color palette is for template
         return;
     }
@@ -143,25 +143,39 @@ function isShowingEditTemplateToolbar() {
 //#region Model Changes
 
 function deleteFocusTemplate() {
-    let ftguid = getFocusTemplateGuid();
+    let ftguid = getFocusTemplateGuid(true);
     if (!ftguid) {
-        debugger;
-    }
-
-    let ft = getTemplateDefByGuid(ftguid);
-    let result = window.confirm('Are you sure you want to delete ALL usages of \'' + ft.templateName + '\'? This cannot be undone.')
-
-    if (!result) {
         return;
     }
 
-    removeTemplatesByGuid(ftguid);
+    let ft = getTemplateDefByGuid(ftguid);
+    if (!ft) {
+        return;
+    }
+    if (!isRunningInHost()) {
+        removeTemplatesByGuid(ftguid);
+        hideEditTemplateToolbar(false, true);
+        return;
+    }
 
-    // NOTE may need to force (notify) content write to db here so MasterTemplateCollection doesn't pick this item up
-    onUserDeletedTemplate_ntf(ftguid);
+    getMessageBoxResultAsync_get(
+        'confirm', 'Are you sure you want to delete ALL usages of \'' + ft.templateName + '\'? This cannot be undone.',
+        'okcancel',
+        'WarningImage')
+        .then(result => {
+            if (isNullOrUndefined(result) || result == false || result == 'false') {
+                log('delete canceled');
+                return;
+            }
 
-    hideEditTemplateToolbar(false, true);
+            removeTemplatesByGuid(ftguid);
+
+            // NOTE may need to force (notify) content write to db here so MasterTemplateCollection doesn't pick this item up
+            onUserDeletedTemplate_ntf(ftguid);
+
+            hideEditTemplateToolbar(false, true);
     //log('Template \'' + ftguid + '\' \'' + td.templateName + '\' was DELETED');
+        });
 }
 
 //#endregion

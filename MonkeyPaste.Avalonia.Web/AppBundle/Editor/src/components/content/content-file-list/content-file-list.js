@@ -1,8 +1,5 @@
 // #region Globals
 
-var FileListClassAttrb = null;
-var FileListItems = [];
-
 // #endregion Globals
 
 // #region Life Cycle
@@ -12,7 +9,7 @@ function loadFileListContent(itemDataStr) {
 
 	// itemData must remain file-paths separated by new-line
 
-	if (FileListClassAttrb == null) {
+	if (globals.FileListClassAttrb == null) {
 		initFileListClassAttrb();
 	}
 
@@ -21,11 +18,11 @@ function loadFileListContent(itemDataStr) {
 	disableTableInteraction();
 	enableReadOnly();
 	disableSubSelection();
-	FileListItems = [];
+	globals.FileListItems = [];
 	let fldfObj = toJsonObjFromBase64Str(itemDataStr);
 	for (var i = 0; i < fldfObj.fileItems.length; i++) {
 		let flif = fldfObj.fileItems[i];
-		FileListItems.push(flif);
+		globals.FileListItems.push(flif);
 	}
 	createFileList();
 
@@ -38,9 +35,9 @@ function initFileListClassAttrb() {
 	let config = {
 		scope: Parchment.Scope.ANY,
 	};
-	FileListClassAttrb = new Parchment.ClassAttributor('fileList', 'file-list', config);
+	globals.FileListClassAttrb = new Parchment.ClassAttributor('fileList', 'file-list', config);
 
-	Quill.register(FileListClassAttrb, suppressWarning);
+	Quill.register(globals.FileListClassAttrb, suppressWarning);
 }
 // #endregion Life Cycle
 
@@ -70,13 +67,13 @@ function getDecodedFileListContentText(encoded_text) {
 function getFileListContentData(isForOle) {
 	let paths_str = '';
 	const sel_idxs = isForOle && getSelectedFileItemIdxs().length > 0 ? getSelectedFileItemIdxs() : null;
-	for (var i = 0; i < FileListItems.length; i++) {
+	for (var i = 0; i < globals.FileListItems.length; i++) {
 		if (sel_idxs && !sel_idxs.includes(i)) {
 			continue;
 		}
-		paths_str += FileListItems[i].filePath;
-		if (i < FileListItems.length - 1) {
-			paths_str += DefaultCsvProps.RowSeparator;
+		paths_str += globals.FileListItems[i].filePath;
+		if (i < globals.FileListItems.length - 1) {
+			paths_str += globals.DefaultCsvProps.RowSeparator;
 		}
 	}
 	return paths_str;
@@ -128,7 +125,7 @@ function getTotalFileSize() {
 }
 
 function getFileCount() {
-	return FileListItems ? FileListItems.length : 0;
+	return globals.FileListItems ? globals.FileListItems.length : 0;
 }
 
 function getPathUri(path) {
@@ -164,10 +161,10 @@ function isMultiFileSelectEnabled() {
 
 function createFileList() {
 	let file_list_tbody_inner_html = '';
-	for (var i = 0; i < FileListItems.length; i++) {
+	for (var i = 0; i < globals.FileListItems.length; i++) {
 		let row_id = getTableItemIdentifier('row');
-		let fp = FileListItems[i].filePath;
-		let fp_icon = FileListItems[i].fileIconBase64;
+		let fp = globals.FileListItems[i].filePath;
+		let fp_icon = globals.FileListItems[i].fileIconBase64;
 		let file_item_tr_outer_html =
 			'<tr class="file-list-row" data-row="' + row_id + '">' +
 			// ICON COLUMN
@@ -237,9 +234,9 @@ function convertFileListContentToFormats(isForOle, formats) {
 				.then((result) => {
 					onCreateContentScreenShot_ntf(result);
 				});
-			data = PLACEHOLDER_DATAOBJECT_TEXT;
+			data = globals.PLACEHOLDER_DATAOBJECT_TEXT;
 		} else if (isCsvFormat(lwc_format)) {
-			data = getFileListContentData(isForOle).split(DefaultCsvProps.RowSeparator).join(',');
+			data = getFileListContentData(isForOle).split(globals.DefaultCsvProps.RowSeparator).join(',');
 		} else if (lwc_format == 'filenames' ||
 					lwc_format == 'filedrop') {
 			// need to provide if partial selection and text is not included
@@ -272,7 +269,7 @@ function appendFileListContentData(data) {
 	const append_cell = getTableCellAtDocIdx(append_doc_range.index);
 	let insert_idx = -1;
 	if (append_doc_range.mode == 'pre') {
-		if (IsAppendManualMode) {
+		if (globals.IsAppendManualMode) {
 			insert_idx = append_cell[0];
 		} else {
 			insert_idx = Math.max(0, append_cell[0] - 1);
@@ -284,23 +281,23 @@ function appendFileListContentData(data) {
 	let updated_sel_idxs = [];
 	let append_items = toJsonObjFromBase64Str(data).fileItems;
 	let updated_items = [];
-	for (var i = 0; i < FileListItems.length; i++) {
+	for (var i = 0; i < globals.FileListItems.length; i++) {
 		if (i == insert_idx) {
 			for (var j = 0; j < append_items.length; j++) {
-				if (!IsAppendPreMode) {
+				if (!globals.IsAppendPreMode) {
 					updated_sel_idxs.push(i + j);
 				}
 				updated_items.push(append_items[j]);
 			}
 		}
-		if (IsAppendPreMode && cur_sel_idxs.includes(i)) {
+		if (globals.IsAppendPreMode && cur_sel_idxs.includes(i)) {
 			updated_sel_idxs.push(updated_items.length);
 		}
-		updated_items.push(FileListItems[i]);
+		updated_items.push(globals.FileListItems[i]);
 	}
-	if (insert_idx == FileListItems.length) {
+	if (insert_idx == globals.FileListItems.length) {
 		for (var j = 0; j < append_items.length; j++) {
-			if (!IsAppendPreMode) {
+			if (!globals.IsAppendPreMode) {
 				updated_sel_idxs.push(updated_items.length);
 			}
 			updated_items.push(append_items[j]);
@@ -328,9 +325,9 @@ function excludeRowByAnchorElement(a_elm) {
 		return;
 	}
 	// NOTE remove item before content change so host receives updated list
-	FileListItems.splice(row_idx, 1);
+	globals.FileListItems.splice(row_idx, 1);
 
-	quill.enable(true);
+	globals.quill.enable(true);
 
 	let btm = getBetterTableModule(true);
 	let tableBlot = quillFindBlot(getTableElements()[0].firstChild);
@@ -338,7 +335,7 @@ function excludeRowByAnchorElement(a_elm) {
 	tableBlot.deleteRow(row_boundary, getEditorContainerElement());
 	updateQuill();
 
-	quill.enable(false);
+	globals.quill.enable(false);
 
 	//createFileList();
 

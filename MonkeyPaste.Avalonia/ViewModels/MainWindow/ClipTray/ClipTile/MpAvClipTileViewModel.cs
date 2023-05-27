@@ -1332,7 +1332,11 @@ namespace MonkeyPaste.Avalonia {
         private MpIContentView _contentView;
         public MpIContentView GetContentView() {
             if (_contentView != null) {
-                return _contentView;
+                if (_contentView is Control c &&
+                    c.DataContext == this) {
+                    return _contentView;
+                }
+                _contentView = null;
             }
             if (Mp.Services.ContentViewLocator == null) {
                 // may need to reorganize load or block in a task to get this guy

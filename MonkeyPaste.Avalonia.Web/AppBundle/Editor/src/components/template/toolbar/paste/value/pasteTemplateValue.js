@@ -5,6 +5,7 @@
 // #region Life Cycle
 
 function initTemplateValueTypes() {
+	addClickOrKeyClickEventListener(getTemplateSaveButtonElement(), onTemplateSaveClickOrKey);
 	initTemplateContact();
 	initPasteTemplateValue();
 	initDateTimeTemplate();
@@ -23,6 +24,10 @@ function initPasteTemplateDataChangedHandlers() {
 // #endregion Life Cycle
 
 // #region Getters
+
+function getTemplateSaveButtonElement() {
+	return document.getElementById('pasteSaveFocusTemplateButton');
+}
 function getTemplateDataElements() {
 	return Array.from(document.getElementsByClassName('template-data-element'));
 }
@@ -30,6 +35,19 @@ function getTemplateDataElements() {
 // #endregion Getters
 
 // #region Setters
+
+function setEditTemplate(et) {
+	if (globals.TemplateBeforeEdit) {
+		if (et) {
+			if (globals.TemplateBeforeEdit.templateGuid != et.templateGuid) {
+				//showTooltipToolbar(`Error! Edit Template '${globals.TemplateBeforeEdit.templateName}' changed to '${et.templateName}'!!! '${globals.TemplateBeforeEdit.templateName}' should have been finalized :()`, 3000);
+			}
+		}
+	} else if (et) {
+		//showTooltipToolbar(`Edit Template set to '${et.templateName}'`, 3000);
+	}
+	globals.TemplateBeforeEdit = et;	
+}
 // #endregion Setters
 
 // #region State
@@ -88,9 +106,12 @@ function finalizeTemplateBeforeEdit() {
 		onAddOrUpdateTemplate_ntf(cur_et);
 		// trigger content change  make db content current
 		onContentChanged_ntf();
-	}
 
-	globals.TemplateBeforeEdit = null;
+		//showTooltipToolbar(`Edit Template '${cur_et.templateName}' CHANGED. Data sent host ntf`, 3000);
+	} else {
+		//showTooltipToolbar(`Edit Template '${globals.TemplateBeforeEdit.templateName}' IGNORED. no data to ntf`, 3000);
+	}
+	setEditTemplate(null);
 }
 
 function evalTemplateValue(t) {
@@ -129,14 +150,14 @@ function onTemplateDataElementFocus(e) {
 	if (ft && globals.TemplateBeforeEdit && ft.templateGuid != globals.TemplateBeforeEdit.templateGuid) {
 		// new edit template from previous
 		finalizeTemplateBeforeEdit();
-		globals.TemplateBeforeEdit = ft;
+		setEditTemplate(ft);
 		return;
 	}
 	if (!ft) {
 		// finalize edit (if there was any)
 		finalizeTemplateBeforeEdit();
 	}
-	globals.TemplateBeforeEdit = ft;
+	setEditTemplate(ft);
 
 }
 function onTemplateDataElementBlur(e) {
@@ -157,6 +178,10 @@ function onTemplateDataElementBlur(e) {
 	// check NEXT focus, when NOT tde wait for other handlers to process changes
 	// so finalize has current values in template def
 	document.body.addEventListener('focus', onNextFocus, true);
+}
+
+function onTemplateSaveClickOrKey(e) {
+
 }
 
 // #endregion Event Handlers

@@ -1,8 +1,6 @@
 // #region Globals
 
-const EDITOR_WINDOW_NAME = 'MpEditorWindow';
 
-var IsWindowResizeUpdateEnabled = true;
 
 // #endregion Globals
 
@@ -16,8 +14,8 @@ function initWindow() {
 // #region Getters
 
 function getEditorSelection_safe() {
-	let cmp = WindowMouseLoc;
-	let dmp = WindowMouseDownLoc;
+	let cmp = globals.WindowMouseLoc;
+	let dmp = globals.WindowMouseDownLoc;
 	if (!dmp) {
 		dmp = cmp;
 	}
@@ -66,7 +64,7 @@ function onWindowScroll(e) {
 }
 
 function onWindowResize(e) {
-	if (!IsWindowResizeUpdateEnabled) {
+	if (!globals.IsWindowResizeUpdateEnabled) {
 		return;
 	}
 	updateAllElements();
