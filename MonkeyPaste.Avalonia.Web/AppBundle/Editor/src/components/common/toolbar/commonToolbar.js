@@ -104,16 +104,16 @@ function clearAllTemplateEditClasses() {
 
 async function bounceElement(elm) {
     await delay(100);
-    //elm.style.transform = 'scale(1.3)';
-    scaleElement(elm, 'bigger');
+    elm.style.transform = 'scale(1.3)';
+    //scaleElement(elm, 'bigger');
     await delay(300);
-    //elm.style.transform = 'scale(1.0)';
-    scaleElement(elm, 'default');
+    elm.style.transform = 'scale(1.0)';
+    //scaleElement(elm, 'default');
 }
 
 // unused
 async function jiggleFocusTemplates(resetOnComplete = false) {
-    return;
+    //return;
     //let f_cit = getFocusTemplateElement();
     let tguid = getFocusTemplateGuid();
     if (!tguid) {

@@ -5,10 +5,10 @@ namespace MonkeyPaste.Common.Plugin {
     public interface MpIContactFetcherComponentBase : MpIPluginComponentBase { }
 
     public interface MpIContactFetcherComponent : MpIContactFetcherComponentBase {
-        IEnumerable<MpIContact> FetchContacts(object args);
+        IEnumerable<MpIContact> Fetch(object args);
     }
 
     public interface MpIContactFetcherComponentAsync : MpIContactFetcherComponentBase {
-        Task<IEnumerable<MpIContact>> FetchContactsAsync(object args);
+        Task<IEnumerable<MpIContact>> FetchAsync(object args);
     }
 }

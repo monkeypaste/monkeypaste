@@ -46,7 +46,7 @@ namespace GoogleContactsFetcher {
         //imClients,interests,locales,locations,memberships,metadata,miscKeywords,names,,nicknames,occupations,organizations,phoneNumbers,
         //photos,relations,,sipAddresses,skills,urls,userDefined";
 
-        public async Task<IEnumerable<MpIContact>> FetchContactsAsync(object args) {
+        public async Task<IEnumerable<MpIContact>> FetchAsync(object args) {
             if (_clientSecretsPath == null &&
                 args is string manifestDir) {
                 try {

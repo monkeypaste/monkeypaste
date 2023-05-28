@@ -1038,8 +1038,6 @@ namespace MonkeyPaste.Avalonia {
         public double DefaultPinTrayWidth =>
             DefaultQueryItemWidth * 1.4;
 
-        public double DesiredPinTrayWidth { get; set; }
-        public double DesiredPinTrayHeight { get; set; }
 
         public double MinPinTrayScreenWidth =>
             IsPinTrayVisible ? MinClipOrPinTrayScreenWidth : 0;

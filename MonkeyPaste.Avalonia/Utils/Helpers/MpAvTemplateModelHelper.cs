@@ -129,7 +129,7 @@ namespace MonkeyPaste.Avalonia {
 
             var fetchers =
                 MpPluginLoader.Plugins
-                .Where(x => x.Value.Component is MpIContactFetcherComponentBase)
+                .Where(x => x.Value.Component is MpIAnalyzeComponent)
                 .Select(x => x);
             //.Select(x => x.Value.Component).Distinct();
 
@@ -145,9 +145,9 @@ namespace MonkeyPaste.Avalonia {
                 //}
                 string fetcher_dir = fetcher_kvp.Value.RootDirectory;
                 if (fetcher is MpIContactFetcherComponent cfc) {
-                    contacts.AddRange(cfc.FetchContacts(fetcher_dir));
+                    contacts.AddRange(cfc.Fetch(fetcher_dir));
                 } else if (fetcher is MpIContactFetcherComponentAsync cfac) {
-                    var results = await cfac.FetchContactsAsync(fetcher_dir);
+                    var results = await cfac.FetchAsync(fetcher_dir);
                     contacts.AddRange(results);
                 }
             }

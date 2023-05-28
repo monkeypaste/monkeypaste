@@ -20,7 +20,6 @@
 
         <SolidColorBrush x:Key="HitTestableTransparent" Color="Black" Opacity="0.01" />
 
-        <SolidColorBrush x:Key="SemiTransparentTestBrush1" Color="Yellow" Opacity="0.5" />
         <SolidColorBrush x:Key="EnabledHighlightBrush">Lime</SolidColorBrush>
         <SolidColorBrush x:Key="DisabledHighlightBrush">Red</SolidColorBrush>
 

@@ -20,6 +20,7 @@
     <Compile Remove="Converters\**" />
     <Compile Remove="Models\Db\ContentQuery\**" />
     <Compile Remove="Models\Db\SQLite\**" />
+    <Compile Remove="Models\Json\Contact\**" />
     <Compile Remove="Models\PreferenceModels\**" />
     <Compile Remove="Repositories\**" />
     <Compile Remove="Resources\Data\Analytics\**" />
@@ -34,6 +35,7 @@
     <EmbeddedResource Remove="Converters\**" />
     <EmbeddedResource Remove="Models\Db\ContentQuery\**" />
     <EmbeddedResource Remove="Models\Db\SQLite\**" />
+    <EmbeddedResource Remove="Models\Json\Contact\**" />
     <EmbeddedResource Remove="Models\PreferenceModels\**" />
     <EmbeddedResource Remove="Repositories\**" />
     <EmbeddedResource Remove="Resources\Data\Analytics\**" />
@@ -48,6 +50,7 @@
     <None Remove="Converters\**" />
     <None Remove="Models\Db\ContentQuery\**" />
     <None Remove="Models\Db\SQLite\**" />
+    <None Remove="Models\Json\Contact\**" />
     <None Remove="Models\PreferenceModels\**" />
     <None Remove="Repositories\**" />
     <None Remove="Resources\Data\Analytics\**" />
@@ -97,8 +100,6 @@
 
   <ItemGroup>
     <Compile Include="Converters\MpXamStringToSyncObjectTypeConverter.cs" />
-    <Compile Include="ViewModels\Reusable\Contacts\MpContactCollectionViewModel.cs" />
-    <Compile Include="ViewModels\Reusable\Contacts\MpContactViewModel.cs" />
     <Compile Include="ViewModels\Reusable\ContextMenu\MpColorPalettePopupMenuViewModel.cs" />
     <Compile Include="ViewModels\Reusable\ContextMenu\MpMenuItemViewModel.cs" />
     <Compile Include="ViewModels\Reusable\Culture\MpCurrentCultureViewModel.cs" />

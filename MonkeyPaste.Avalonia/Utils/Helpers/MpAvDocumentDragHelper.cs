@@ -45,7 +45,7 @@ namespace MonkeyPaste.Avalonia {
             // initialize target with all possible formats set to null
             DragDataObject = new MpAvDataObject(req_formats.ToDictionary(x => x, x => MpAvPlatformDataObjectExtensions.GetFormatPlaceholderData(x)));
 
-            // NOTE disabling immediate dnd start cause quick drops will be placeholders.
+            // NOTE enabling immediate dnd start cause quick drops to be placeholders (from screen shot)
             // Peformance seems ok w/ async but leaving option here for later testing
             bool use_immediate_mode = true;
             if (use_immediate_mode) {

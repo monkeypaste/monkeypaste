@@ -92,5 +92,6 @@ namespace MonkeyPaste.Common {
             c.B = (byte)(hi_lo_sum - (int)c.B);
             return c.ToHex();
         }
+
     }
 }

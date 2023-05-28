@@ -219,3 +219,6 @@ i {
     margin: unset;
 }
 
+.strike-through {
+    text-decoration: line-through;
+}

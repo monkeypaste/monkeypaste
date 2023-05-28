@@ -358,6 +358,9 @@ namespace MonkeyPaste.Avalonia {
                 if (Parent == null) {
                     return 0;
                 }
+                if (HasTemplates) {
+                    return PASTE_TEMPLATE_TOOLBAR_MIN_WIDTH;
+                }
                 if (IsPinned) {
                     if (IsChildWindowOpen) {
                         return BoundWidth;

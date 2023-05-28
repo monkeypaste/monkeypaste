@@ -72,12 +72,12 @@ namespace MonkeyPaste {
         public async Task<IEnumerable<MpContact>> GetContacts() {
             var contacts = new List<MpIContact>();
 
-            var fetchers = MpPluginLoader.Plugins.Where(x => x.Value.Component is MpIContactFetcherComponentBase).Select(x => x.Value.Component).Distinct();
+            var fetchers = MpPluginLoader.Plugins.Where(x => x.Value.Component is MpIFetcherComponent).Select(x => x.Value.Component).Distinct();
             foreach (var fetcher in fetchers) {
-                if (fetcher is MpIContactFetcherComponent cfc) {
-                    contacts.AddRange(cfc.FetchContacts(null));
-                } else if (fetcher is MpIContactFetcherComponentAsync cfac) {
-                    var results = await cfac.FetchContactsAsync(null);
+                if (fetcher is MpIFetcherComponent cfc) {
+                    contacts.AddRange(cfc.Fetch(null));
+                } else if (fetcher is MpIPluginComponentBaseAsync cfac) {
+                    var results = await cfac.FetchAsync(null);
                     contacts.AddRange(results);
                 }
             }

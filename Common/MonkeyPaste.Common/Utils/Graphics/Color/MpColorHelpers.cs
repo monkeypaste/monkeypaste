@@ -1,10 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
 
 namespace MonkeyPaste.Common {
-
+    public enum MpColorComplimentType {
+        None = 0,
+        Complimentary,
+        SplitComplimentary,
+        Triadic,
+        Tetradic,
+        Analagous,
+        Monochromatic
+    }
     public static class MpColorHelpers {
         public static string RgbaToHex(byte r, byte g, byte b, byte a = 255) {
             byte[] argb = new byte[] { a, r, g, b };
@@ -155,6 +164,54 @@ namespace MonkeyPaste.Common {
             hue = color.GetHue();
             saturation = (max == 0) ? 0 : 1d - (1d * min / max);
             value = max / 255d;
+        }
+
+        public static string[] GetPalette(this string hex, MpColorComplimentType compType) {
+            // test: #b511db
+
+            // triadic            
+            // h1_tr = (h + 120) % 360
+            // h2_tr = (h + 240) % 360
+
+            // tetradic
+            // h1_te = (h + 90) % 360
+            // h2_te = (h + 180) % 360
+            // h3_te = (h + 270) % 360
+
+            // 0: main bg color (theme color) 
+            // 1: title color h1_tr (accent1bg)
+            // 2: selected list h2_tr
+            // 3: list item hover h3_te
+            // 3: selected hover h2_te (V=100) (accent3)
+            // 4: selected nohover h1_te (V=100) (accent2)
+            // 5: hover h1_tr (V=100) (accent1)
+            // 6: pin tray bg h1_te(S -60) (theme compliment)
+            // 7: pin tray shadow bg h1_te(S -60, V - 45) (theme compliment dark)
+
+            // 8: light grays => h(S=5) (gray accent2)
+            // 9: dim grays => h(S=5,V-30) (gray accent1)
+            // 10: grays => h(S=10, V-10) (gray accent3)
+            // 11: bright grays => h(S=5, V-10) (gray accent4)
+
+            // 12: theme black h(S=5, V=15)
+            // 13: theme white h(S=5, V=95)
+
+            // 14: can resize h1_te (H-30) (accent4)
+            // 14: is resize h1_te (H-30, S=50,V=100) (accent4 bg)
+
+
+
+            List<string> palette = new List<string>() { hex };
+            //ColorToHsv(new MpColor(hex), out double h, out double s, out double v);
+            switch (compType) {
+                // from https://colorpicker.me/#11dbb5
+                case MpColorComplimentType.Triadic:
+                    // 289: 49, 169
+                    palette.Add(hex.ShiftHexColorHue(-240));
+                    palette.Add(hex.ShiftHexColorHue(-120));
+                    break;
+            }
+            return palette.ToArray();
         }
 
         public static MpColor ColorFromHsv(double hue, double saturation, double value) {

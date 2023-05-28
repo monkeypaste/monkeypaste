@@ -13,10 +13,6 @@
     /*transition: 0.4s;*/
 }
 
-    #pasteTemplateToolbarMenuSelectorDiv.disabled {
-        /*user-select: none;*/
-    }
-
     #pasteTemplateToolbarMenuSelectorDiv:hover {
         border: 1.25px solid yellow;
         cursor: pointer;

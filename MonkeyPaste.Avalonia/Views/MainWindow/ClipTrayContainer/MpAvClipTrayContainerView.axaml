@@ -26,7 +26,7 @@
         </Style>
         <Style Selector="local|MpAvPinTrayView.dragover Border#PinTrayContainerBorder">
             <Setter Property="Background"
-                    Value="{DynamicResource PinTrayDragOverBgColor}" />
+                    Value="{DynamicResource PinTrayDragOverBgBrush}" />
         </Style>
 
         <!--  TRAY CURSOR  -->

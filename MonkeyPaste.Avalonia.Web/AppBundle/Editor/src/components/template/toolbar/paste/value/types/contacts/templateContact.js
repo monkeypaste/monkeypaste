@@ -176,10 +176,9 @@ function createContactFieldSelectorOpts(ft) {
     for (var i = 0; i < fields.length; i++) {
         let field_opt_elm = document.createElement('option');
         if (isContactTemplateHaveContact(ft) && !isContactTemplateContactHaveField(ft, fields[i])) {
-            //field_opt_elm.classList.add('disabled');
-            continue;
+            field_opt_elm.classList.add('strike-through');
         } else {
-            //field_opt_elm.classList.remove('disabled');
+            field_opt_elm.classList.remove('strike-through');
         }
         field_opt_elm.value = fields[i];
         field_opt_elm.innerText = toLabelCase(fields[i]);
@@ -202,10 +201,9 @@ function createContactSelectorOpts(ft) {
         }
         let contact = globals.AvailableContacts[i - 1];
         if (isContactTemplateHaveField(ft) && !isContactHaveField(contact.guid, sel_contact_field_val)) {
-            continue;
-            //contact_opt_elm.classList.add('disabled');
+            contact_opt_elm.classList.add('strike-through');
         } else {
-            //contact_opt_elm.classList.remove('disabled');
+            contact_opt_elm.classList.remove('strike-through');
         }
         contact_opt_elm.setAttribute('contactGuid', contact.guid);
         contact_opt_elm.value = contact.guid;

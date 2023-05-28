@@ -831,11 +831,11 @@ const globals = {
 		 {
 			 label: 'Action',
 			 icon: 'fa-solid fa-bolt-lightning'
-		 },*/
+		 },
 		{
 			label: 'Contact',
 			icon: 'contact'
-		},
+		},*/
 		{
 			label: 'DateTime',
 			icon: 'datetime'
