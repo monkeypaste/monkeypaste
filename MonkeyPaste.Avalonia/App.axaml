@@ -20,7 +20,7 @@
     </Application.Resources>
     <Application.Styles>
         <!--<FluentTheme />-->
-        <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/DefaultLight.axaml" />
+        <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Default.axaml" />
 
     </Application.Styles>
 

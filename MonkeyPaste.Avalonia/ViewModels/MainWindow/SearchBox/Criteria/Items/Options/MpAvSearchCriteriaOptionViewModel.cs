@@ -477,7 +477,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 var result = await Mp.Services.CustomColorChooserMenuAsync.ShowCustomColorMenuAsync(
                     selectedColor: selected_color,
-                    "Pick Match color",
+                    title: "Pick Match color",
                     owner: owner);
 
                 if (string.IsNullOrEmpty(result)) {

@@ -1,6 +1,6 @@
 ﻿namespace MonkeyPaste {
     public enum MpThemeType {
-        // not used yet
+        Default = 0,
         Light,
         Dark
     }

@@ -23,5 +23,15 @@ namespace MonkeyPaste.Common {
         public static long Clamp(long val, long min, long max) {
             return Math.Max(min, Math.Min(max, val));
         }
+
+        public static double Wrap(this double val, double min, double max) {
+            if (val < min) {
+                return max - (min - val);
+            }
+            if (val > max) {
+                return min + (val - max);
+            }
+            return val;
+        }
     }
 }

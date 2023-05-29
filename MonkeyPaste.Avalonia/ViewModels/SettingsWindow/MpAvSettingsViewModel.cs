@@ -1,6 +1,8 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
+using Avalonia.LogicalTree;
 using Avalonia.Media;
 using Avalonia.Media.Fonts;
 using Avalonia.Platform;
@@ -8,6 +10,7 @@ using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
+using MonoMac.ObjCRuntime;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -29,7 +32,8 @@ namespace MonkeyPaste.Avalonia {
             nameof(MpPrefViewModel.Instance.DefaultEditableFontFamily),
             nameof(MpPrefViewModel.Instance.DefaultFontSize),
             nameof(MpPrefViewModel.Instance.IsSpellCheckEnabled),
-            nameof(MpPrefViewModel.Instance.CurrentThemeName),
+            nameof(MpPrefViewModel.Instance.ThemeTypeName),
+            nameof(MpPrefViewModel.Instance.ThemeColor),
             nameof(MpPrefViewModel.Instance.GlobalBgOpacity),
         };
         #endregion
@@ -195,19 +199,35 @@ namespace MonkeyPaste.Avalonia {
                     headless = new MpHeadlessPluginFormat() {
                         parameters = new List<MpParameterFormat>() {
                             new MpParameterFormat() {
-                                paramId = nameof(MpPrefViewModel.Instance.CurrentThemeName),
+                                paramId = nameof(MpPrefViewModel.Instance.ThemeTypeName),
                                 controlType = MpParameterControlType.ComboBox,
                                 unitType = MpParameterValueUnitType.PlainText,
-                                label = "Theme",
+                                label = "Theme Style",
                                 values = new List<MpPluginParameterValueFormat>() {
                                     new MpPluginParameterValueFormat() {
-                                        isDefault = MpPrefViewModel.Instance.CurrentThemeName.ToLower() == MpThemeType.Light.ToString().ToLower(),
+                                        isDefault = MpPrefViewModel.Instance.ThemeType == MpThemeType.Default,
+                                        value = MpThemeType.Default.ToString()
+                                    },
+                                    new MpPluginParameterValueFormat() {
+                                        isDefault = MpPrefViewModel.Instance.ThemeType == MpThemeType.Light,
                                         value = MpThemeType.Light.ToString()
                                     },
                                     new MpPluginParameterValueFormat() {
-                                        isDefault = MpPrefViewModel.Instance.CurrentThemeName.ToLower() == MpThemeType.Dark.ToString().ToLower(),
+                                        isDefault = MpPrefViewModel.Instance.ThemeType == MpThemeType.Dark,
                                         value = MpThemeType.Dark.ToString()
                                     },
+                                }
+                            },
+                            new MpParameterFormat() {
+                                paramId = MpButtonCommandPrefType.ThemeHexColor.ToString(),
+                                controlType = MpParameterControlType.Button,
+                                label = "Theme Color",
+                                values = new List<MpPluginParameterValueFormat>() {
+                                    new MpPluginParameterValueFormat() {
+                                        isDefault = true,
+                                        label = "Select",
+                                        value = MpButtonCommandPrefType.ThemeHexColor.ToString()
+                                    }
                                 }
                             },
                             new MpParameterFormat() {
@@ -829,6 +849,10 @@ namespace MonkeyPaste.Avalonia {
                     MpAvTagTrayViewModel.Instance.SetNextTrashCleanupDate();
                     break;
             }
+            if (MpAvThemeViewModel.Instance.IsThemePref(e.PropertyName)) {
+                MpAvThemeViewModel.Instance.SyncThemePrefs();
+            }
+
             if (_reinitContentParams.Any(x => x.ToLower() == e.PropertyName.ToLower())) {
                 Task.WhenAll(MpAvClipTrayViewModel.Instance.AllActiveItems
                     .Where(x => x.GetContentView() != null)
@@ -889,33 +913,76 @@ namespace MonkeyPaste.Avalonia {
 
         private void Sw_Opened(object sender, EventArgs e) {
             var sw = sender as Window;
-            SetParamClasses<ComboBox>(sw, nameof(MpPrefViewModel.Instance.DefaultReadOnlyFontFamily), "fontChooser");
-            SetParamClasses<ComboBox>(sw, nameof(MpPrefViewModel.Instance.DefaultEditableFontFamily), "fontChooser");
-
+            SetupFontFamilyComboBoxes();
         }
 
-        private void SetParamClasses<T>(Window w, string paramId, string classes) where T : Visual {
-            if (w == null) {
-                return;
-            }
+        private void SetupFontFamilyComboBoxes() {
             Dispatcher.UIThread.Post(async () => {
-                var ff_vm = LookAndFeelFrame.Items.FirstOrDefault(x => x.ParamId.ToString().ToLower() == paramId.ToLower());
-                if (ff_vm != null) {
-                    T ff_cb = w.GetVisualDescendants<T>().FirstOrDefault(x => x.DataContext == ff_vm);
-                    while (ff_cb == null) {
-                        await Task.Delay(100);
-                        ff_cb = w.GetVisualDescendants<T>().FirstOrDefault(x => x.DataContext == ff_vm);
-                        if (!w.IsInitialized) {
-                            // pref tab never selected and closed so stop it
-                            return;
-                        }
-                    }
-                    ff_cb.Classes.Add("fontChooser");
+                ComboBox ro_cb = await GetParameterControlByParamIdAsync<ComboBox>(nameof(MpPrefViewModel.Instance.DefaultReadOnlyFontFamily));
+                SetupFontFamilyComboBox(ro_cb);
 
-                }
+                ComboBox e_cb = await GetParameterControlByParamIdAsync<ComboBox>(nameof(MpPrefViewModel.Instance.DefaultEditableFontFamily));
+                SetupFontFamilyComboBox(e_cb);
             });
         }
 
+        private void SetupFontFamilyComboBox(ComboBox cb) {
+            if (cb == null) {
+                return;
+            }
+            var cbpvm = cb.DataContext as MpAvEnumerableParameterViewModelBase;
+            if (cbpvm == null) {
+                return;
+            }
+            cb.FontFamily = MpAvStringToFontFamilyConverter.Instance.Convert(cbpvm.CurrentValue, null, null, null) as FontFamily;
+
+
+            cb.DropDownOpened += Cb_DropDownOpened;
+
+            if (MpAvWindowManager.LocateWindow(this) is Window w) {
+                EventHandler w_closed_handler = null;
+                w_closed_handler = (s, e) => {
+                    cb.DropDownOpened -= Cb_DropDownOpened;
+                    w.Closed -= w_closed_handler;
+                };
+                w.Closed += w_closed_handler;
+            }
+        }
+
+        private void Cb_DropDownOpened(object sender, EventArgs e) {
+            var cb = sender as ComboBox;
+            if (cb == null) {
+                return;
+            }
+            var cbil = cb.GetLogicalDescendants().OfType<ComboBoxItem>();
+            foreach (var cbi in cbil) {
+                if (cbi.DataContext is MpAvEnumerableParameterValueViewModel epvvm) {
+                    cbi.FontFamily = MpAvStringToFontFamilyConverter.Instance.Convert(epvvm.Value, null, null, null) as FontFamily;
+                }
+            }
+
+        }
+
+        private async Task<T> GetParameterControlByParamIdAsync<T>(string paramId) where T : Visual {
+            Window w = MpAvWindowManager.LocateWindow(this);
+            if (w == null) {
+                return default;
+            }
+            var param_vm = LookAndFeelFrame.Items.FirstOrDefault(x => x.ParamId.ToString().ToLower() == paramId.ToLower());
+            if (param_vm != null) {
+                T param_control_of_t = w.GetSelfAndLogicalDescendants().OfType<T>().FirstOrDefault(x => x.DataContext == param_vm);
+                while (param_control_of_t == null) {
+                    await Task.Delay(100);
+                    param_control_of_t = w.GetSelfAndLogicalDescendants().OfType<T>().FirstOrDefault(x => x.DataContext == param_vm);
+                    if (!w.IsInitialized) {
+                        // pref tab never selected and closed so stop it
+                        return default;
+                    }
+                }
+                return param_control_of_t;
+            }
+            return default;
+        }
         #endregion
 
         #region Commands
@@ -1045,7 +1112,31 @@ namespace MonkeyPaste.Avalonia {
 
                             break;
                         }
+                    case MpButtonCommandPrefType.ThemeHexColor: {
+                            var result = await
+                                Mp.Services.CustomColorChooserMenuAsync.ShowCustomColorMenuAsync(
+                                    title: "Theme Color",
+                                    owner: MpAvWindowManager.LocateWindow(this),
+                                    selectedColor: MpPrefViewModel.Instance.ThemeColor
+                                //fixedPalette: new[] {
+                                //    MpSystemColors.Red,
+                                //    MpSystemColors.orange1,
+                                //    MpSystemColors.Yellow,
+                                //    MpSystemColors.green1,
+                                //    MpSystemColors.blue1,
+                                //    MpSystemColors.cyan1,
+                                //    MpSystemColors.magenta,
+                                //    MpSystemColors.purple
+                                //}
+                                );
+                            if (string.IsNullOrEmpty(result)) {
+                                // color chooser canceled
+                                break;
+                            }
 
+                            MpPrefViewModel.Instance.ThemeColor = result;
+                            break;
+                        }
                 }
             });
         #endregion
@@ -1059,6 +1150,7 @@ namespace MonkeyPaste.Avalonia {
         AccountSignIn,
         AccountClick,
         AccountSignOut,
+        ThemeHexColor
     }
 
     public enum MpSettingsTabType {

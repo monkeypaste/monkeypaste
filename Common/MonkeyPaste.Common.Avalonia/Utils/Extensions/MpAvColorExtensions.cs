@@ -5,6 +5,10 @@ using System.Diagnostics;
 
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvColorExtensions {
+        public static string ToHex(this Color c, bool removeAlpha = false) {
+            return c.ToPortableColor().ToHex(removeAlpha);
+        }
+
         public static Color GetColor(this IBrush b) {
             if (b is IImmutableSolidColorBrush iscb) {
                 return iscb.Color;

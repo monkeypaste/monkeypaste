@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace MonkeyPaste.Common {
     public static class MpColorExtensions {
@@ -49,13 +50,16 @@ namespace MonkeyPaste.Common {
         public static string ShiftHexColorHue(this string hex, double hue_delta) {
             // hue from 0 - 360
             MpColorHelpers.ColorToHsv(hex.ToPortableColor(), out double h, out double s, out double v);
-            double new_hue = h + hue_delta;
-            if (new_hue > 360) {
-                // wrap hue
-                new_hue = new_hue - 360;
-            }
+
+            //double new_hue = h + hue_delta;
+            //if (new_hue > 360) {
+            //    // wrap hue
+            //    new_hue = new_hue - 360;
+            //}
+            double new_hue = (h + hue_delta).Wrap(0, 360);
             return MpColorHelpers.ColorFromHsv(new_hue, s, v).ToHex();
         }
+
         public static string ToContrastForegoundColor(this string hex) {
             return hex.IsHexStringBright() ? MpSystemColors.Black : MpSystemColors.White;
         }
@@ -93,5 +97,12 @@ namespace MonkeyPaste.Common {
             return c.ToHex();
         }
 
+        public static double[] NormalizeChannels(this MpColor c) {
+            List<double> ncl = new List<double>();
+            for (int i = 0; i < c.Channels.Length; i++) {
+                ncl.Add((double)((double)c.Channels[i] / (double)255));
+            }
+            return ncl.ToArray();
+        }
     }
 }

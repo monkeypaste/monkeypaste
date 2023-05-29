@@ -15,9 +15,6 @@ namespace MonkeyPaste.Avalonia {
                 value = Mp.Services.PlatformResource.GetResource(dre.ResourceKey.ToString()) as string;
             }
             if (value is string valueStr && !string.IsNullOrEmpty(valueStr)) {
-                if (valueStr != "Segoe UI") {
-
-                }
                 try {
                     return new FontFamily(valueStr);
                 }

@@ -187,8 +187,7 @@
     <ProguardConfiguration Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <TransformFile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <AndroidAsset Remove="Assets\Images\burlap.png" />
-    <AvaloniaXaml Remove="Themes\Default\Accents\Base.axaml" />
-    <AvaloniaXaml Remove="Themes\Default\Accents\BaseLight.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Accents\Accents.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Animations\Defaults.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Animations\Shake.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Button.axaml" />
@@ -217,7 +216,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\ToolTip.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Window.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\_DefaultControls.axaml" />
-    <AvaloniaXaml Remove="Themes\Default\DefaultLight.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Default.axaml" />
     <AvaloniaXaml Remove="Views\MainWindow\Sidebar\MpAvSidebarContainerView.axaml" />
     <AvaloniaXaml Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\MpAvActionPropertyListBoxView.axaml" />
     <AvaloniaXaml Remove="Views\MainWindow\Sidebar\SidebarItems\AppMode\MpAvAppModeFlyoutView2.axaml" />
@@ -1127,10 +1126,7 @@
     <AvaloniaResource Include="Assets\svg\text-insert-caret.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Themes\Default\Accents\BaseLight.axaml">
-      
-    </AvaloniaResource>
-    <AvaloniaResource Include="Themes\Default\Accents\Base.axaml">
+    <AvaloniaResource Include="Themes\Default\Accents\Accents.axaml">
       
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Default\Controls\Animations\Defaults.axaml" />
@@ -1169,7 +1165,7 @@
     <AvaloniaResource Include="Themes\Default\Controls\MpAvClipTile.axaml">
       
     </AvaloniaResource>
-    <AvaloniaResource Include="Themes\Default\DefaultLight.axaml">
+    <AvaloniaResource Include="Themes\Default\Default.axaml">
     </AvaloniaResource>
   </ItemGroup>
   <ItemGroup>

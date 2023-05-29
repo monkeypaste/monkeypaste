@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace MonkeyPaste.Common {
     public enum MpColorComplimentType {
@@ -157,7 +158,10 @@ namespace MonkeyPaste.Common {
         }
 
         #region HSV
-        public static void ColorToHsv(MpColor color, out double hue, out double saturation, out double value) {
+        // H [0..360]
+        // S [0..1]
+        // V [0..1]
+        public static void ColorToHsv(this MpColor color, out double hue, out double saturation, out double value) {
             int max = Math.Max(color.R, Math.Max(color.G, color.B));
             int min = Math.Min(color.R, Math.Min(color.G, color.B));
 
@@ -166,58 +170,15 @@ namespace MonkeyPaste.Common {
             value = max / 255d;
         }
 
-        public static string[] GetPalette(this string hex, MpColorComplimentType compType) {
-            // test: #b511db
-
-            // triadic            
-            // h1_tr = (h + 120) % 360
-            // h2_tr = (h + 240) % 360
-
-            // tetradic
-            // h1_te = (h + 90) % 360
-            // h2_te = (h + 180) % 360
-            // h3_te = (h + 270) % 360
-
-            // 0: main bg color (theme color) 
-            // 1: title color h1_tr (accent1bg)
-            // 2: selected list h2_tr
-            // 3: list item hover h3_te
-            // 3: selected hover h2_te (V=100) (accent3)
-            // 4: selected nohover h1_te (V=100) (accent2)
-            // 5: hover h1_tr (V=100) (accent1)
-            // 6: pin tray bg h1_te(S -60) (theme compliment)
-            // 7: pin tray shadow bg h1_te(S -60, V - 45) (theme compliment dark)
-
-            // 8: light grays => h(S=5) (gray accent2)
-            // 9: dim grays => h(S=5,V-30) (gray accent1)
-            // 10: grays => h(S=10, V-10) (gray accent3)
-            // 11: bright grays => h(S=5, V-10) (gray accent4)
-
-            // 12: theme black h(S=5, V=15)
-            // 13: theme white h(S=5, V=95)
-
-            // 14: can resize h1_te (H-30) (accent4)
-            // 14: is resize h1_te (H-30, S=50,V=100) (accent4 bg)
-
-
-
-            List<string> palette = new List<string>() { hex };
-            //ColorToHsv(new MpColor(hex), out double h, out double s, out double v);
-            switch (compType) {
-                // from https://colorpicker.me/#11dbb5
-                case MpColorComplimentType.Triadic:
-                    // 289: 49, 169
-                    palette.Add(hex.ShiftHexColorHue(-240));
-                    palette.Add(hex.ShiftHexColorHue(-120));
-                    break;
-            }
-            return palette.ToArray();
+        public static double GetHue(this MpColor c) {
+            Color col = Color.FromArgb(c.A, c.R, c.G, c.B);
+            return (double)col.GetHue();
         }
-
         public static MpColor ColorFromHsv(double hue, double saturation, double value) {
             var c = DrawingColorFromHSV(hue, saturation, value);
             return new MpColor(c.R, c.G, c.B);
         }
+
         private static Color DrawingColorFromHSV(double hue, double saturation, double value) {
             int hi = Convert.ToInt32(Math.Floor(hue / 60)) % 6;
             double f = hue / 60 - Math.Floor(hue / 60);
@@ -241,6 +202,94 @@ namespace MonkeyPaste.Common {
             else
                 return Color.FromArgb(255, v, p, q);
         }
+        #endregion
+
+        #region HSL
+        public static void ColorToHsl(this MpColor color, out double h, out double s, out double l) {
+            // from https://www.programmingalgorithms.com/algorithm/rgb-to-hsl/
+
+            var norm_channels = color.NormalizeChannels();
+            int r_idx = norm_channels.Length == 3 ? 0 : 1;
+            double r = norm_channels[r_idx];
+            double g = norm_channels[r_idx + 1];
+            double b = norm_channels[r_idx + 2];
+
+            double max = Math.Max(r, Math.Max(g, b));
+            double min = Math.Min(r, Math.Min(g, b));
+
+            double delta = max - min;
+
+            l = (max + min) / 2;
+
+            if (delta == 0) {
+                h = 0;
+                s = 0.0d;
+            } else {
+                s = (l <= 0.5) ? (delta / (max + min)) : (delta / (2 - max - min));
+
+                double hue;
+
+                if (r == max) {
+                    hue = ((g - b) / 6) / delta;
+                } else if (g == max) {
+                    hue = (1.0f / 3) + ((b - r) / 6) / delta;
+                } else {
+                    hue = (2.0f / 3) + ((r - g) / 6) / delta;
+                }
+
+                if (hue < 0) {
+                    hue += 1;
+                }
+                if (hue > 1) {
+                    hue -= 1;
+                }
+                h = (hue * 360);
+            }
+            // sample output:
+            // H: 296
+            //S: 1
+            //L: 0.17058824f
+        }
+
+        public static MpColor ColorFromHsl(double h, double s, double l) {
+            byte r, g, b;
+
+            if (s == 0) {
+                r = g = b = (byte)(l * 255);
+            } else {
+                double v1, v2;
+                double hue = h / 360;
+
+                v2 = (l < 0.5) ? (l * (1 + s)) : ((l + s) - (l * s));
+                v1 = 2 * l - v2;
+
+                r = (byte)(255 * HueToRGB(v1, v2, hue + (1.0f / 3)));
+                g = (byte)(255 * HueToRGB(v1, v2, hue));
+                b = (byte)(255 * HueToRGB(v1, v2, hue - (1.0f / 3)));
+            }
+
+            return new MpColor(r, g, b);
+        }
+
+        private static double HueToRGB(double v1, double v2, double vH) {
+            if (vH < 0) {
+                vH += 1;
+            }
+            if (vH > 1) {
+                vH -= 1;
+            }
+            if ((6 * vH) < 1) {
+                return (v1 + (v2 - v1) * 6 * vH);
+            }
+            if ((2 * vH) < 1) {
+                return v2;
+            }
+            if ((3 * vH) < 2) {
+                return (v1 + (v2 - v1) * ((2.0f / 3) - vH) * 6);
+            }
+            return v1;
+        }
+
         #endregion
     }
 }

@@ -694,9 +694,9 @@ namespace MonkeyPaste.Avalonia {
                                 showCustomColorPickerMsg.pickerTitle = $"Pick a color, any color for '{ctvm.CopyItemTitle}'";
                             }
                             string pickerResult = await Mp.Services.CustomColorChooserMenuAsync.ShowCustomColorMenuAsync(
-                                showCustomColorPickerMsg.currentHexColor,
-                                showCustomColorPickerMsg.pickerTitle,
-                                null);
+                                selectedColor: showCustomColorPickerMsg.currentHexColor,
+                                title: showCustomColorPickerMsg.pickerTitle,
+                                owner: null);
 
                             var resp = new MpQuillCustomColorResultMessage() {
                                 customColorResult = pickerResult
@@ -961,10 +961,11 @@ namespace MonkeyPaste.Avalonia {
                 defaultFontFamily = MpPrefViewModel.Instance.DefaultEditableFontFamily,
                 defaultFontSize = MpPrefViewModel.Instance.DefaultFontSize.ToString() + "px",
                 isSpellCheckEnabled = MpPrefViewModel.Instance.IsSpellCheckEnabled,
-                currentTheme = MpPrefViewModel.Instance.CurrentThemeName,
+                currentTheme = MpPrefViewModel.Instance.ThemeTypeName,
                 bgOpacity = MpPrefViewModel.Instance.GlobalBgOpacity,
                 maxUndo = MpPrefViewModel.Instance.MaxUndoLimit,
-                shortcutFragmentStr = MpAvShortcutCollectionViewModel.Instance.EditorShortcutsMsgBase64
+                shortcutFragmentStr = MpAvShortcutCollectionViewModel.Instance.EditorShortcutsMsgBase64,
+                themePaletteFragmentStr = MpAvThemeViewModel.Instance.GetEditorThemeLookup()
             };
         }
 

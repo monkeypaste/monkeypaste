@@ -17,6 +17,6 @@
                 VerticalAlignment="Center"
                 Command="{Binding ClickCommand}"
                 CommandParameter="{Binding CurrentValue}"
-                Content="{Binding Label}" />
+                Content="{Binding Title}" />
     </Border>
 </local:MpAvUserControl>

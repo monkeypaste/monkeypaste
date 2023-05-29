@@ -7,6 +7,7 @@ using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -30,9 +31,6 @@ namespace MonkeyPaste.Avalonia {
             if (selHexColor.IsStringHexColor()) {
                 selHexColor = new MpColor(selHexColor).ToHex(true);
             }
-            // NOTE hiding alpha when no selected or selected isn't 4 channel
-            //cp.IsAlphaEnabled = selHexColor == null ? false : selHexColor.Length == 9;
-            //cp.IsAlphaVisible = cp.IsAlphaVisible;
             cp.IsAlphaEnabled = false;
             cp.IsAlphaVisible = false;
             cp.Color = string.IsNullOrEmpty(selHexColor) ?
@@ -41,6 +39,23 @@ namespace MonkeyPaste.Avalonia {
                 selHexColor.ToAvColor();
         }
 
+        public MpAvColorPickerView(string selHexColor, string[] palette) : this(selHexColor) {
+            if (palette == null || palette.Length == 0) {
+                return;
+            }
+            var cp = this.FindControl<ColorView>("Picker");
+            cp.PaletteColors = palette.Select(x => x.ToAvColor());
+
+            //cp.IsAccentColorsVisible = false;
+            //cp.IsColorComponentsVisible = false;
+            //cp.IsColorModelVisible = false;
+            //cp.IsColorSpectrumSliderVisible = false;
+            //cp.IsColorSpectrumVisible = false;
+            //cp.IsComponentSliderVisible = false;
+            //cp.IsComponentTextInputVisible = false;
+            //cp.IsHexInputVisible = false;
+            //cp.IsColorPaletteVisible = true;
+        }
         private void Okbtn_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
             if (this.GetVisualRoot() is MpAvWindow w) {
                 var cp = this.FindControl<ColorView>("Picker");

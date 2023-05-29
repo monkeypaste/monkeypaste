@@ -55,10 +55,6 @@ namespace MonkeyPaste.Common {
             return Channels.ToHex();
         }
 
-        public double GetHue() {
-            Color c = Color.FromArgb(A, R, G, B);
-            return (double)c.GetHue();
-        }
 
         public override string ToString() {
             return ToHex();

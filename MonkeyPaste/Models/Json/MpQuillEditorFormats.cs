@@ -13,7 +13,6 @@ namespace MonkeyPaste {
         public string appendStateFragment { get; set; }
     }
     public class MpQuillDefaultsRequestMessage : MpJsonObject {
-        // fragment 'MpQuillEditorShortcutKeystringMessage'
 
         public string defaultFontFamily { get; set; }
         public string defaultFontSize { get; set; }
@@ -22,7 +21,21 @@ namespace MonkeyPaste {
         public double bgOpacity { get; set; }
 
         public int maxUndo { get; set; }
+
+        // fragment 'MpQuillEditorShortcutKeystringMessage'
         public string shortcutFragmentStr { get; set; }
+
+        // fragment 'MpQuillThemeCssPropertyLookupFragment'
+        public string themePaletteFragmentStr { get; set; }
+    }
+
+    public class MpQuillThemeCssPropertyLookupFragment {
+        public List<MpQuillThemeCssPropertyItem> properties { get; set; }
+    }
+
+    public class MpQuillThemeCssPropertyItem {
+        public string cssPropertyName { get; set; }
+        public string cssPropertyValue { get; set; }
     }
 
     public class MpQuillLoadContentRequestMessage : MpJsonObject {

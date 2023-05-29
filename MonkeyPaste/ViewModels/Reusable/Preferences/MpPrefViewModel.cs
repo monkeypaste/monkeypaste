@@ -179,6 +179,11 @@ namespace MonkeyPaste {
         }
 
         public int DefaultPluginIconId { get; set; } = 0;
+
+        [JsonIgnore]
+        public MpThemeType ThemeType =>
+            ThemeTypeName.ToEnum<MpThemeType>();
+
         #endregion
 
         #region Resources
@@ -383,7 +388,8 @@ namespace MonkeyPaste {
 
         #region Look & Feel
 
-        public string CurrentThemeName { get; set; } = MpThemeType.Light.ToString();
+        public string ThemeTypeName { get; set; } = MpThemeType.Light.ToString();
+        public string ThemeColor { get; set; } = MpSystemColors.purple;
         public int NotificationSoundGroupIdx { get; set; } = 1; // not shown
         public double NotificationSoundVolume { get; set; } = 0;
         public bool ShowInTaskbar { get; set; } = true;
