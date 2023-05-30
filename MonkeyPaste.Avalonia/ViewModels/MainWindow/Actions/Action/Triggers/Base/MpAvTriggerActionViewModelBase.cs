@@ -333,7 +333,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand DeleteThisTriggerCommand => new MpAsyncCommand<object>(
             async (args) => {
                 bool confirmed =
-                    await Mp.Services.NativeMessageBox.ShowOkCancelMessageBoxAsync(
+                    await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
                         title: $"Confirm",
                         message: $"Are you sure you want to delete '{Label}' and all associated actions?",
                         iconResourceObj: "WarningImage",

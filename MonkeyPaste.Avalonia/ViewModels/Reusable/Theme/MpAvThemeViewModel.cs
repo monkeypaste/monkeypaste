@@ -1,4 +1,6 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Layout;
 using Avalonia.Media;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -9,70 +11,6 @@ using System.Linq;
 using System.Reflection;
 
 namespace MonkeyPaste.Avalonia {
-    public enum MpThemeResourceKey {
-        #region OPACITY
-
-        GlobalBgOpacity_desktop,
-        GlobalBgOpacity_browser,
-        GlobalBgOpacity_mobile,
-        GlobalBgOpacity,
-
-        #endregion
-
-        #region COLOR PALETTE
-        PreThemeIdx,
-
-        ThemeColor,
-
-        ThemeBlack,
-        ThemeWhite,
-
-        ThemeInteractiveColor,
-        ThemeInteractiveBgColor,
-
-        ThemeNoAccentColor,
-        ThemeAccent1Color,
-        ThemeAccent1BgColor,
-        ThemeAccent2Color,
-        ThemeAccent2BgColor,
-        ThemeAccent3Color,
-        ThemeAccent3BgColor,
-        ThemeAccent4Color,
-        ThemeAccent4BgColor,
-        ThemeAccent5Color,
-        ThemeAccent5BgColor,
-
-        ThemeCompliment1Color,
-        ThemeCompliment1DarkColor,
-        ThemeCompliment2Color,
-        ThemeCompliment2DarkColor,
-        ThemeCompliment3Color,
-        ThemeCompliment3DarkColor,
-
-        ThemeGrayAccent1,
-        ThemeGrayAccent2,
-        ThemeGrayAccent3,
-        ThemeGrayAccent4,
-
-        PostThemeIdx,
-        #endregion
-
-        #region FONTS
-
-        DefaultEditableFontFamily,
-        DefaultReadOnlyFontFamily,
-        ContentControlThemeFontFamily,
-
-        #endregion
-
-        #region LAYOUT
-
-        DefaultGridSplitterFixedDimensionLength_desktop,
-        DefaultGridSplitterFixedDimensionLength_browser,
-        DefaultGridSplitterFixedDimensionLength_mobile,
-        DefaultGridSplitterFixedDimensionLength
-        #endregion
-    }
 
     enum EditorCssPropType {
         noselectbgcolor = 0,
@@ -90,8 +28,12 @@ namespace MonkeyPaste.Avalonia {
         edittemplatebgcolor,
     };
 
-    public class MpAvThemeViewModel : MpViewModelBase {
+    public class MpAvThemeViewModel :
+        MpViewModelBase,
+        MpIChildWindowViewModel {
+
         #region Private Variable
+
         private string[] _themePrefPropNames = new string[] {
                 nameof(MpPrefViewModel.Instance.DefaultReadOnlyFontFamily),
                 nameof(MpPrefViewModel.Instance.DefaultEditableFontFamily),
@@ -115,6 +57,17 @@ namespace MonkeyPaste.Avalonia {
         public void Init() {
             // empty
         }
+        #endregion
+
+        #region Interfaces
+
+        #region MpIChildWindowViewModel Implementation
+
+        public bool IsChildWindowOpen { get; set; }
+        public MpWindowType WindowType =>
+            MpWindowType.Modal;
+
+        #endregion
         #endregion
 
         #region Properties
@@ -221,10 +174,16 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
-        public void SyncThemePrefs() {
+        public void SyncThemePrefs(bool showWait = false) {
             _themePrefPropNames.ForEach(x => SyncThemePref(x));
 
+            if (showWait) {
+                ShowWaitWindow();
+            }
             CreatePalette();
+            if (showWait) {
+                IsChildWindowOpen = false;
+            }
         }
 
         public bool IsThemePref(string prefName) {
@@ -263,9 +222,40 @@ namespace MonkeyPaste.Avalonia {
         private T GetThemeValue<T>(MpThemeResourceKey trk) {
             return (T)Mp.Services.PlatformResource.GetResource(trk.ToString());
         }
+
         private void SetThemeValue(MpThemeResourceKey trk, object value) {
             Mp.Services.PlatformResource.SetResource(trk.ToString(), value);
 
+        }
+        private void ShowWaitWindow() {
+            var w = new MpAvWindow() {
+                Width = 350,
+                Height = 300,
+                SystemDecorations = SystemDecorations.None,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                DataContext = this,
+                Content = new StackPanel() {
+                    Orientation = Orientation.Vertical
+                }
+            };
+            if (w.Content is StackPanel sp) {
+                sp.Children.Add(new TextBlock() {
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Height = 125,
+                    TextAlignment = TextAlignment.Center,
+                    Margin = new Thickness(0, 0, 0, 15),
+                    Text = "Please Wait..."
+                });
+                sp.Children.Add(new MpAvBusySpinnerView() {
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Width = 70,
+                    Height = 70
+                });
+            }
+
+            w.ShowChild(MpAvWindowManager.LocateWindow(MpAvSettingsViewModel.Instance));
         }
 
         private void CreatePalette() {
@@ -282,7 +272,7 @@ namespace MonkeyPaste.Avalonia {
 
             // 0: main bg color (theme color) 
             // 1: title color h1_tr (accent1bg)
-            // 2: selected list h2_tr (accent5bg)
+            // 2: selected list h2_tr (S (accent5bg)
             // 3: list item hover h3_te (accent5)
             // 4: selected hover h2_te (V=100) (accent3)
             // 5: selected nohover h1_te (V=100) (accent2)
@@ -309,6 +299,9 @@ namespace MonkeyPaste.Avalonia {
 
             // 21: interactiveFg
             // 22: interactiveBg
+
+            // 23: tooltip fg h1_tr (comp5)
+            // 24: tooltip bg h1_tr(S=50,V=100) (comp5bg)
 
 
             string hex = ThemeColor;
@@ -350,33 +343,33 @@ namespace MonkeyPaste.Avalonia {
             // 6
             palette.Add(MpColorHelpers.ColorFromHsv(h1_tr, s, 1d).ToHex(true));
             // 7
-            palette.Add(MpColorHelpers.ColorFromHsv(h1_te, Math.Max(0, s - (60d / 100)), v).ToHex(true));
+            palette.Add(MpColorHelpers.ColorFromHsv(h1_te, Math.Max(0, s - 0.6d), v).ToHex(true));
             // 8
-            palette.Add(MpColorHelpers.ColorFromHsv(h1_te, Math.Max(0, s - (60d / 100)), Math.Max(0, v - (45d / 100d))).ToHex(true));
+            palette.Add(MpColorHelpers.ColorFromHsv(h1_te, Math.Max(0, s - 0.6d), Math.Max(0, v - 0.45d)).ToHex(true));
             // 9
-            palette.Add(MpColorHelpers.ColorFromHsv(h, 5d / 100, v).ToHex(true));
+            palette.Add(MpColorHelpers.ColorFromHsv(h, 0.05d, v).ToHex(true));
             // 10
-            palette.Add(MpColorHelpers.ColorFromHsv(h, 5d / 100, Math.Max(0, v - (30d / 100d))).ToHex(true));
+            palette.Add(MpColorHelpers.ColorFromHsv(h, 0.05d, Math.Max(0, v - 0.3d)).ToHex(true));
             // 11
-            palette.Add(MpColorHelpers.ColorFromHsv(h, 10d / 100, Math.Max(0, v - (10d / 100d))).ToHex(true));
+            palette.Add(MpColorHelpers.ColorFromHsv(h, 0.1d, Math.Max(0, v - 0.1d)).ToHex(true));
             // 12
-            palette.Add(MpColorHelpers.ColorFromHsv(h, 5d / 100, Math.Max(0, v - (10d / 100d))).ToHex(true));
+            palette.Add(MpColorHelpers.ColorFromHsv(h, 0.05d, Math.Max(0, v - 0.1d)).ToHex(true));
             // 13
-            palette.Add(MpColorHelpers.ColorFromHsv(h, 5d / 100, 15d / 100d).ToHex(true));
+            palette.Add(MpColorHelpers.ColorFromHsv(h, 0.05d, 0.15d).ToHex(true));
             // 14
-            palette.Add(MpColorHelpers.ColorFromHsv(h, 5d / 100, 95d / 100d).ToHex(true));
+            palette.Add(MpColorHelpers.ColorFromHsv(h, 0.05d, 0.95d).ToHex(true));
             // 15
             palette.Add(MpColorHelpers.ColorFromHsv((h1_te - 30d).Wrap(0, 360), s, v).ToHex(true));
             // 16
-            palette.Add(MpColorHelpers.ColorFromHsv((h1_te - 30d).Wrap(0, 360), 50d / 100d, 1d).ToHex(true));
+            palette.Add(MpColorHelpers.ColorFromHsv((h1_te - 30d).Wrap(0, 360), 0.5d, 1d).ToHex(true));
             // 17
             palette.Add(MpColorHelpers.ColorFromHsv((h - 15d).Wrap(0, 360), s, v).ToHex(true));
             // 18
             palette.Add(MpColorHelpers.ColorFromHsv((h - 15d).Wrap(0, 360), s, 1d).ToHex(true));
             // 19
-            palette.Add(MpColorHelpers.ColorFromHsv(h, 30d / 100d, 90d / 100d).ToHex(true));
+            palette.Add(MpColorHelpers.ColorFromHsv(h, 0.3d, 0.9d).ToHex(true));
             // 20
-            palette.Add(MpColorHelpers.ColorFromHsv(h, 5d / 100d, 90d / 100d).ToHex(true));
+            palette.Add(MpColorHelpers.ColorFromHsv(h, 0.05d, 0.9d).ToHex(true));
 
             if (MpPrefViewModel.Instance.ThemeType == MpThemeType.Dark) {
                 // 21 (fg)
@@ -389,6 +382,12 @@ namespace MonkeyPaste.Avalonia {
                 // 22 (bg)
                 palette.Add(palette[14]);
             }
+
+            // 23
+            palette.Add(MpColorHelpers.ColorFromHsv(h1_tr, s, v).ToHex(true));
+            // 24
+            palette.Add(MpColorHelpers.ColorFromHsv(h1_tr, 0.5d, 1.0d).ToHex(true));
+
 
             ThemeColor = palette[0];
             var colors = palette.Select(x => x.ToAvColor()).ToArray();
@@ -420,7 +419,11 @@ namespace MonkeyPaste.Avalonia {
 
             SetThemeValue(MpThemeResourceKey.ThemeInteractiveColor, colors[21]);
             SetThemeValue(MpThemeResourceKey.ThemeInteractiveBgColor, colors[22]);
+
+            SetThemeValue(MpThemeResourceKey.ThemeCompliment4Color, colors[23]);
+            SetThemeValue(MpThemeResourceKey.ThemeCompliment4DarkColor, colors[24]);
         }
+
         #endregion
 
         #region Commands

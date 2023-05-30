@@ -9,9 +9,9 @@
     <!--  DEFAULT  -->
     <Style Selector="local|MpAvToolTipView Border">
         <Setter Property="BorderBrush"
-                Value="DarkKhaki" />
+                Value="{DynamicResource ThemeCompliment4DarkColor}" />
         <Setter Property="Background"
-                Value="Khaki" />
+                Value="{DynamicResource ThemeCompliment4Color}" />
         <Setter Property="CornerRadius"
                 Value="10" />
         <Setter Property="BorderThickness"
@@ -21,7 +21,7 @@
     </Style>
     <Style Selector="local|MpAvToolTipView TextBlock">
         <Setter Property="Foreground"
-                Value="Black" />
+                Value="{Binding $parent[Border].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
         <Setter Property="TextDecorations"
                 Value="{x:Null}" />
     </Style>
@@ -30,31 +30,9 @@
 
     <Style Selector="local|MpAvToolTipView.error Border">
         <Setter Property="BorderBrush"
-                Value="Yellow" />
+                Value="{DynamicResource ThemeAccent2BgColor}" />
         <Setter Property="Background"
-                Value="Crimson" />
+                Value="{DynamicResource ThemeAccent2Color}" />
     </Style>
 
-    <Style Selector="local|MpAvToolTipView.error TextBlock">
-        <Setter Property="Foreground"
-                Value="White" />
-        <Setter Property="TextDecorations"
-                Value="{x:Null}" />
-    </Style>
-
-    <!--  LINK  -->
-    <Style Selector="local|MpAvToolTipView TextBlock.IsLink">
-        <Setter Property="Foreground"
-                Value="Blue" />
-        <Setter Property="TextDecorations"
-                Value="Underline" />
-    </Style>
-    <Style Selector="local|MpAvToolTipView Border:pointerover TextBlock.IsLink">
-        <Setter Property="Foreground"
-                Value="Red" />
-        <Setter Property="TextDecorations"
-                Value="Underline" />
-        <Setter Property="Cursor"
-                Value="Hand" />
-    </Style>
 </Styles>

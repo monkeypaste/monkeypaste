@@ -367,7 +367,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 avm.IsNew = true;
             } else {
-                await Mp.Services.NativeMessageBox.ShowOkMessageBoxAsync(
+                await Mp.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
                         title: "Duplicate",
                         message: $"App at path '{appPath}' already exists",
                         iconResourceObj: "WarningImage");
@@ -463,7 +463,7 @@ namespace MonkeyPaste.Avalonia {
                 if (avm == null) {
                     return;
                 }
-                var result = await Mp.Services.NativeMessageBox.ShowYesNoMessageBoxAsync(
+                var result = await Mp.Services.PlatformMessageBox.ShowYesNoMessageBoxAsync(
                     title: $"Confirm",
                     message: $"Are you sure want to remove the paste shortcut for '{avm.AppName}'",
                     iconResourceObj: avm.IconId);

@@ -11,6 +11,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace MonkeyPaste {
@@ -38,6 +39,22 @@ namespace MonkeyPaste {
 
         [JsonIgnore]
         private static MpIPlatformInfo _osInfo;
+
+        [JsonIgnore]
+        private string[] _OmittedResetPropertyNames = new string[] {
+            nameof(ThisDeviceGuid),
+            nameof(DefaultPluginIconId),
+            nameof(UserEmail),
+            nameof(DbPassword),
+            nameof(LastStartupDateTime),
+            nameof(UniqueContentItemIdx),
+            nameof(SslPrivateKey),
+            nameof(SslPublicKey),
+            nameof(SslCertExpirationDateTime),
+            nameof(SyncPort),
+            nameof(IsTrialExpired),
+            nameof(IsInitialLoad),
+        };
         #endregion
 
         #region Constants
@@ -70,12 +87,13 @@ namespace MonkeyPaste {
         #region Interfaces
 
         #region MpIUserProvidedFileExts Implementation
-        string MpIUserProvidedFileExts.UserDefineExtCsv =>
-            UserDefinedFileExtensionsCsv;
+
+        public string UserDefinedFileExtensionsCsv { get; set; } = string.Empty;
 
         #endregion
 
         #region MpICustomCsvFormat Implementation
+        [JsonIgnore]
         MpCsvFormatProperties MpICustomCsvFormat.CsvFormat =>
             MpCsvFormatProperties.DefaultBase64Value;
 
@@ -128,16 +146,19 @@ namespace MonkeyPaste {
         #endregion
 
         #region Encyption
+        [JsonIgnore]
         public string SslAlgorithm { get; set; } = "SHA256WITHRSA";
+        [JsonIgnore]
         public string SslCASubject { get; set; } = "CN=MPCA";
+        [JsonIgnore]
         public string SslCertSubject { get; set; } = "CN=127.0.01";
         #endregion
-
+        [JsonIgnore]
         public string LocalStoragePath =>
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
         #region Db        
-
+        [JsonIgnore]
         public bool EncryptDb { get; set; } = true;
 
         public DateTime NextTrashEmptyDateTime { get; set; } = DateTime.MaxValue;
@@ -147,18 +168,19 @@ namespace MonkeyPaste {
             TrashCleanupModeTypeStr.ToEnum<MpTrashCleanupModeType>();
 
         #region Sync
+        [JsonIgnore]
         public string SyncCertFolderPath => Path.Combine(LocalStoragePath, "SyncCerts");
-
+        [JsonIgnore]
         public string SyncCaPath => Path.Combine(SyncCertFolderPath, @"MPCA.cert");
-
+        [JsonIgnore]
         public string SyncCertPath => Path.Combine(SyncCertFolderPath, @"MPSC.cert");
-
+        [JsonIgnore]
         public string SyncServerProtocol => @"https://";
-
+        [JsonIgnore]
         public string SyncServerHostNameOrIp => "monkeypaste.com";
-
+        [JsonIgnore]
         public int SyncServerPort { get; set; } = 44376;
-
+        [JsonIgnore]
         public string SyncServerEndpoint => $"{SyncServerProtocol}{SyncServerHostNameOrIp}:{SyncServerPort}";
 
         #endregion
@@ -166,17 +188,6 @@ namespace MonkeyPaste {
         #endregion
 
         #region Appearance
-        public double LogWindowHeightRatio {
-            get {
-                return 0.35;
-            }
-        }
-
-        public double MainWindowStartHeight {
-            get {
-                return 10000;
-            }
-        }
 
         public int DefaultPluginIconId { get; set; } = 0;
 
@@ -186,89 +197,21 @@ namespace MonkeyPaste {
 
         #endregion
 
-        #region Resources
-
-        public string AbsoluteResourcesPath {
-            get {
-                return @"pack://application:,,,/Resources";
-            }
-        }
-
-        public int MaxFilePathCharCount {
-            get {
-                return 260;
-            }
-        }
-
-        #endregion
-
         #region Ole
 
         // This is used to discern core cb handler so it is automatically enabled on first startup (not the typical workflow)
+
+        [JsonIgnore]
         public string CoreClipboardHandlerGuid => "cf2ec03f-9edd-45e9-a605-2a2df71e03bd";
-        public string CoreAnnotatorGuid => "ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31";
+
+
+        [JsonIgnore]
         public string CoreAnnotatorDefaultPresetGuid => "a9fa2fbf-025d-4ced-a23b-234085b5ac5f";
 
-        public string CoreCliGuid => "e7e25c85-1c8f-4e79-be8f-2ebfcb5bb94e";
-
-        #region Drag & Drop
-        public string CompositeItemDragDropFormatName {
-            get {
-                return "CompositeItemDragDropFormat";
-            }
-        }
-
-        public string ClipTileDragDropFormatName {
-            get {
-                return "MpClipDragDropFormat";
-            }
-        }
         #endregion
 
-        #endregion
-
-        #region Sound
-
-        public string NotificationCopySound1Path {
-            get {
-                return @"Sounds/Ting.wav";
-            }
-        }
-
-
-        public bool NotificationDoPasteSound { get; set; } = true;
-
-        public bool NotificationDoCopySound { get; set; } = true;
-
-        public bool NotificationDoLoadedSound { get; set; } = true;
-        public string NotificationCopySoundCustomPath { get; set; }
-        public bool NotificationDoModeChangeSound { get; set; } = true;
-        public string NotificationLoadedPath { get; set; } = @"Sounds/MonkeySound1.wav";
-        public string NotificationAppendModeOnSoundPath { get; set; } = @"Sounds/blip2.wav";
-
-        public string NotificationAppendModeOffSoundPath { get; set; } = @"Sounds/blip2.wav";
-
-        #endregion
 
         #region Experience
-        public int ShowMainWindowAnimationMilliseconds {
-            get {
-                return 500;
-            }
-        }
-
-        public int HideMainWindowAnimationMilliseconds {
-            get {
-                return 250;
-            }
-        }
-
-        public int SearchBoxTypingDelayInMilliseconds {
-            get {
-                return 500;
-            }
-        }
-
 
         public int ShowMainWindowMouseHitZoneHeight {
             get {
@@ -450,13 +393,9 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public string UserDefinedFileExtensionsCsv { get; set; } = string.Empty;
-
-
         #endregion
 
         #region Security
-        public string IgnoredProcessNames { get; set; } = string.Empty;
         public bool IsSettingsEncrypted { get; set; } = false; // requires restart and only used to trigger convert on exit (may not be necessary to restart)
 
         public string DbPassword { get; set; } = MpPasswordGenerator.GetRandomPassword();
@@ -475,7 +414,7 @@ namespace MonkeyPaste {
         #region Runtime/Dependant Properties
 
         #region Language
-
+        [JsonIgnore]
         public string FlowDirectionName {
             get {
                 if (CultureInfo.GetCultureInfo(UserLanguageCode) is CultureInfo ci &&
@@ -489,9 +428,6 @@ namespace MonkeyPaste {
         #endregion
 
         #region Auto-Complete
-        public string RecentFindTexts { get; set; } = string.Empty;
-
-        public string RecentReplaceTexts { get; set; } = string.Empty;
 
         public string RecentSearchTexts { get; set; } = string.Empty;
 
@@ -565,7 +501,6 @@ namespace MonkeyPaste {
         public bool SearchByProcessName { get; set; }
         public bool SearchByTextType { get; set; } = true;
         public bool SearchBySourceUrl { get; set; } = true;
-        public bool SearchByTag { get; set; }
         public bool SearchByTitle { get; set; } = true;
 
         public bool SearchByAnnotation { get; set; }
@@ -632,6 +567,7 @@ namespace MonkeyPaste {
             IsSaving = false;
         }
 
+
         public async Task<IList<string>> AddOrUpdateAutoCompleteTextAsync(string ac_property_name, string new_text) {
             MpDebug.Assert(this.HasProperty(ac_property_name), $"Update auto-complete error, cannot find pref property '{ac_property_name}'");
             List<string> ac_items = (this.GetPropertyValue(ac_property_name) as string).ToListFromCsv(MpCsvFormatProperties.DefaultBase64Value);
@@ -661,6 +597,16 @@ namespace MonkeyPaste {
                 return;
             }
             Save();
+        }
+
+        private bool IsPropertyResetOmitted(string propName) {
+            if (_OmittedResetPropertyNames.Contains(propName)) {
+                return true;
+            }
+            if (this.GetType().GetProperty(propName) is PropertyInfo pi) {
+                return pi.GetCustomAttribute(typeof(JsonIgnoreAttribute)) != null;
+            }
+            return false;
         }
 
         private static string GetPrefPassword() {
@@ -763,6 +709,21 @@ namespace MonkeyPaste {
         #endregion
 
         #region Commands
+
+        public ICommand RestoreDefaultsCommand => new MpCommand(
+            () => {
+                // create dummy pref with default values
+                // then set each non-omitted pref individually so the change flows through its intended channels
+                MpPrefViewModel def_pref = new();
+                var propNames = this.GetType().GetProperties().Select(x => x.Name);
+                foreach (var pn in propNames) {
+                    if (IsPropertyResetOmitted(pn)) {
+                        continue;
+                    }
+                    this.SetPropertyValue(pn, def_pref.GetPropertyValue(pn));
+                }
+            });
+
 
 
         #endregion

@@ -1,5 +1,5 @@
 ﻿namespace MonkeyPaste.Common {
     public interface MpIUserProvidedFileExts {
-        string UserDefineExtCsv { get; }
+        string UserDefinedFileExtensionsCsv { get; }
     }
 }

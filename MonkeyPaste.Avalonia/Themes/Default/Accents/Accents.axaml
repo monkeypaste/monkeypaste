@@ -53,6 +53,9 @@
 
         <Color x:Key="ThemeCompliment3Color">Lavender</Color>
         <Color x:Key="ThemeCompliment3DarkColor">LavenderBlush</Color>
+      
+        <Color x:Key="ThemeCompliment4Color">Khaki</Color>
+        <Color x:Key="ThemeCompliment4DarkColor">DarkKhaki</Color>
 
         <Color x:Key="ThemeGrayAccent1">DimGray</Color>
         <Color x:Key="ThemeGrayAccent2">LightGray</Color>
@@ -195,7 +198,7 @@
 
 
         <!--  SETTINGS WINDOW  -->
-        <SolidColorBrush x:Key="SettingsViewBgBrush" Color="{DynamicResource ThemeColor}" />
+        <SolidColorBrush x:Key="SettingsWindowBgBrush" Color="{DynamicResource ThemeColor}" />
 
     </Style.Resources>
 </Style>

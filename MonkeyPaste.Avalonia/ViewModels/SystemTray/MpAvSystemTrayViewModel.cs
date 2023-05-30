@@ -186,7 +186,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand NavigateToCefNetUriCommand => new MpAsyncCommand(
             async () => {
-                var result = await Mp.Services.NativeMessageBox.ShowTextBoxMessageBoxAsync(
+                var result = await Mp.Services.PlatformMessageBox.ShowTextBoxMessageBoxAsync(
                     title: "Browse To",
                     message: "Enter url:",
                     currentText: "chrome://about",

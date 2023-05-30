@@ -1249,7 +1249,7 @@ namespace MonkeyPaste.Avalonia {
             }, (args) => args is MpAvShortcutViewModel svm && !string.IsNullOrEmpty(svm.DefaultKeyString));
 
         public ICommand ResetAllShortcuts => new MpAsyncCommand(async () => {
-            bool result = await Mp.Services.NativeMessageBox.ShowOkCancelMessageBoxAsync(
+            bool result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
                 title: "Confirm",
                 message: "Are you sure you want to reset all shortcuts? All custom shortcuts will be removed.",
                 iconResourceObj: "WarningImage");

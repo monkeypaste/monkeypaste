@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common {
-    public interface MpINativeMessageBox {
+    public interface MpIPlatformMessageBox {
         Task ShowOkMessageBoxAsync(string title, string message, object anchor = null, object iconResourceObj = null, object owner = null);
         Task<bool> ShowOkCancelMessageBoxAsync(string title, string message, object anchor = null, object iconResourceObj = null, object owner = null);
 

@@ -14,11 +14,6 @@
                        x:CompileBindings="True"
                        DataContext="{x:Static local:MpAvSettingsViewModel.Instance}"
                        x:Class="MonkeyPaste.Avalonia.MpAvSettingsView">
-    <local:MpAvUserControl.Resources>
-        <SolidColorBrush x:Key="ExpanderContentBackground" Color="Lavender" />
-        <SolidColorBrush x:Key="ExpanderHeaderBackground" Color="BlueViolet" />
-        <SolidColorBrush x:Key="ExpanderHeaderBackgroundPointerOver" Color="DarkViolet" />
-    </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
         <!--  TABS  -->
         <Style Selector="RadioButton.tab">
@@ -33,7 +28,7 @@
             <Setter Property="BorderThickness"
                     Value="1" />
             <Setter Property="BorderBrush"
-                    Value="DimGray" />
+                    Value="{DynamicResource ThemeGrayAccent1}" />
         </Style>
         <Style Selector="RadioButton.tab:unchecked:pointerover /template/ ContentPresenter">
             <Setter Property="Background">
@@ -41,18 +36,18 @@
                     <LinearGradientBrush StartPoint="0%,0%"
                                          EndPoint="0%,100%">
                         <LinearGradientBrush.GradientStops>
-                            <GradientStop Color="Gainsboro"
+                            <GradientStop Color="{DynamicResource ThemeGrayAccent3}"
                                           Offset="0" />
-                            <GradientStop Color="Yellow"
+                            <GradientStop Color="{DynamicResource ThemeAccent1Color}"
                                           Offset="0.7" />
-                            <GradientStop Color="Gainsboro"
+                            <GradientStop Color="{DynamicResource ThemeGrayAccent3}"
                                           Offset="1" />
                         </LinearGradientBrush.GradientStops>
                     </LinearGradientBrush>
                 </Setter.Value>
             </Setter>
             <Setter Property="Foreground"
-                    Value="Black" />
+                    Value="{DynamicResource ThemeInteractiveColor}" />
         </Style>
         <Style Selector="RadioButton.tab:unchecked /template/ ContentPresenter">
             <Setter Property="Background">
@@ -60,11 +55,11 @@
                     <LinearGradientBrush StartPoint="0%,0%"
                                          EndPoint="0%,100%">
                         <LinearGradientBrush.GradientStops>
-                            <GradientStop Color="Gainsboro"
+                            <GradientStop Color="{DynamicResource ThemeGrayAccent3}"
                                           Offset="0" />
-                            <GradientStop Color="LightSlateGray"
+                            <GradientStop Color="{DynamicResource ThemeAccent5Color}"
                                           Offset="0.7" />
-                            <GradientStop Color="Gainsboro"
+                            <GradientStop Color="{DynamicResource ThemeGrayAccent3}"
                                           Offset="1" />
                         </LinearGradientBrush.GradientStops>
                     </LinearGradientBrush>
@@ -163,7 +158,7 @@
             <Setter Property="FontSize"
                     Value="20" />
             <Setter Property="Foreground"
-                    Value="White" />
+                    Value="{DynamicResource ThemeInteractiveBgColor}" />
             <Setter Property="Margin"
                     Value="0" />
         </Style>
@@ -173,11 +168,11 @@
             <Setter Property="CornerRadius"
                     Value="10" />
             <Setter Property="BorderBrush"
-                    Value="Black" />
+                    Value="{DynamicResource ThemeInteractiveColor}" />
             <Setter Property="BorderThickness"
                     Value="1" />
             <Setter Property="Background"
-                    Value="Blue" />
+                    Value="{DynamicResource ThemeAccent5Color}" />
             <Setter Property="Padding"
                     Value="15" />
         </Style>
@@ -292,7 +287,7 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <DockPanel LastChildFill="True"
-               Background="Purple">
+               Background="{DynamicResource SettingsWindowBgBrush}">
 
         <!--  TABS PANEL  -->
 
@@ -375,7 +370,7 @@
                          MinWidth="150"
                          Background="White"
                          CornerRadius="10"
-                         BorderBrush="Silver"
+                         BorderBrush="{DynamicResource ThemeGrayAccent4}"
                          BorderThickness="1"
                          Margin="0"
                          Padding="10,0,0,0"

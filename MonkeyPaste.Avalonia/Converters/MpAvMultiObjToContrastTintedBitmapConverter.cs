@@ -28,7 +28,7 @@ namespace MonkeyPaste.Avalonia {
                 if (bg_hex_str.IsHexStringTransparent()) {
                     bmp = MpAvIconSourceObjToBitmapConverter.Instance.Convert(base_bmp_resource_obj, null, null, null) as Bitmap;
                 } else {
-                    tint_hex = bg_hex_str.IsHexStringBright() ? MpSystemColors.Black : MpSystemColors.White;
+                    tint_hex = bg_hex_str.ToContrastForegoundColor();
                     bmp = MpAvStringHexToBitmapTintConverter.Instance.Convert(base_bmp_resource_obj, null, tint_hex, null) as Bitmap;
                 }
             }

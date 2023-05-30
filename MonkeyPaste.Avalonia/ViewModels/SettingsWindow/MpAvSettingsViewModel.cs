@@ -850,7 +850,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
             if (MpAvThemeViewModel.Instance.IsThemePref(e.PropertyName)) {
-                MpAvThemeViewModel.Instance.SyncThemePrefs();
+                MpAvThemeViewModel.Instance.SyncThemePrefs(true);
             }
 
             if (_reinitContentParams.Any(x => x.ToLower() == e.PropertyName.ToLower())) {
@@ -987,9 +987,20 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public ICommand ResetSettingsCommand => new MpCommand(
-            () => {
+        public ICommand ResetSettingsCommand => new MpAsyncCommand(
+            async () => {
+                var result = await Mp.Services.PlatformMessageBox
+                .ShowOkCancelMessageBoxAsync(
+                    title: "Confirm",
+                    message: "Are you sure you want to reset all preferences? This action cannot be undone.",
+                    iconResourceObj: "WarningImage",
+                    owner: MpAvWindowManager.LocateWindow(this));
 
+                if (!result) {
+                    // canceled reset all, ignore
+                    return;
+                }
+                MpPrefViewModel.Instance.RestoreDefaultsCommand.Execute(null);
             });
         public ICommand SaveSettingsCommand => new MpCommand(
             () => {
@@ -1066,7 +1077,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 switch (cmdType) {
                     case MpButtonCommandPrefType.ResetNtf: {
-                            var result = await Mp.Services.NativeMessageBox.ShowOkCancelMessageBoxAsync(
+                            var result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
                             title: "Confirm",
                             message: "Are you sure you want to reset all notifications?",
                             iconResourceObj: "QuestionMarkImage");
@@ -1078,7 +1089,7 @@ namespace MonkeyPaste.Avalonia {
                         }
 
                     case MpButtonCommandPrefType.ResetPluginCache: {
-                            var result = await Mp.Services.NativeMessageBox.ShowOkCancelMessageBoxAsync(
+                            var result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
                             title: "Confirm",
                             message: "Are you sure you want to reset all plugins to defaults?",
                             iconResourceObj: "QuestionMarkImage");

@@ -4,6 +4,7 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Globalization;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvColorToContrastColorConverter : IValueConverter {
@@ -22,14 +23,21 @@ namespace MonkeyPaste.Avalonia {
 
             }
             if (hexStr.IsStringHexColor()) {
-                bool flip = parameter is string str && str == "flip";
-
-                if (MpColorHelpers.IsBright(hexStr)) {
-                    return flip ? Colors.White : Colors.Black;
+                bool flip = false;
+                bool is_fg = true;
+                if (parameter is string paramStr &&
+                    !string.IsNullOrEmpty(paramStr) &&
+                    paramStr.SplitNoEmpty("|") is string[] paramParts) {
+                    flip = paramParts.Any(x => x == "flip");
+                    is_fg = !paramParts.Any(x => x == "bg");
                 }
-                return flip ? Colors.Black : Colors.White;
+                if (is_fg) {
+                    return hexStr.ToContrastForegoundColor(flip).ToAvColor();
+                }
+                return hexStr.ToComplementHexColor().ToAvColor();
+
             }
-            return Colors.Black;
+            return Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeBlack.ToString()).ToAvColor();
         }
 
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) {

@@ -19,11 +19,11 @@
     </Style>
     <Style Selector="Label.h1:not(.dark)">
         <Setter Property="Foreground"
-                Value="White" />
+                Value="{DynamicResource ThemeInteractiveBgColor}" />
     </Style>
     <Style Selector="Label.h1.dark">
         <Setter Property="Foreground"
-                Value="Black" />
+                Value="{DynamicResource ThemeInteractiveColor}" />
     </Style>
     <Style Selector="Label.h2">
         <Setter Property="FontSize"

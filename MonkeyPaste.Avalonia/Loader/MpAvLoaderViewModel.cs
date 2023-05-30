@@ -27,6 +27,8 @@ namespace MonkeyPaste.Avalonia {
                 }
                 MpPrefViewModel.Instance.LastStartupDateTime = MpPrefViewModel.Instance.StartupDateTime;
                 MpPrefViewModel.Instance.StartupDateTime = startup_datetime;
+
+                MpAvThemeViewModel.Instance.SyncThemePrefs();
             }
         }
 

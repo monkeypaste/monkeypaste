@@ -129,7 +129,7 @@ namespace MonkeyPaste.Common {
         }
         public static void OpenFileBrowser(string path, string browserFileName = null) {
             if (!path.IsFileOrDirectory()) {
-                MpCommonTools.Services.NativeMessageBox.ShowOkCancelMessageBoxAsync($"Error", $"{path} not found");
+                MpCommonTools.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync($"Error", $"{path} not found");
                 path = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
             }
 
@@ -255,7 +255,7 @@ namespace MonkeyPaste.Common {
         public static async Task<string> CopyFileOrDirectoryAsync(string sourcePath, string targetPath, bool recursive = true, bool isTemporary = false, bool forceOverwrite = false) {
             bool overwrite = forceOverwrite;
             if (!overwrite && targetPath.IsFileOrDirectory()) {
-                var result = await MpCommonTools.Services.NativeMessageBox.ShowYesNoCancelMessageBoxAsync("Overwrite?", $"Destination '{targetPath}' already exists, would you like to overwrite it?");
+                var result = await MpCommonTools.Services.PlatformMessageBox.ShowYesNoCancelMessageBoxAsync("Overwrite?", $"Destination '{targetPath}' already exists, would you like to overwrite it?");
                 if (result.HasValue) {
                     if (result.Value) {
                         overwrite = true;

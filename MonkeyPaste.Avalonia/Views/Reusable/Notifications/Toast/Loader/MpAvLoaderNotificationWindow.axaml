@@ -32,9 +32,9 @@
                 <GradientStop Offset="0"
                               Color="Transparent" />
                 <GradientStop Offset="0.3"
-                              Color="White" />
+                              Color="{DynamicResource ThemeInteractiveBgColor}" />
                 <GradientStop Offset="0.6"
-                              Color="White" />
+                              Color="{DynamicResource ThemeInteractiveBgColor}" />
                 <GradientStop Offset="1"
                               Color="Transparent" />
             </LinearGradientBrush.GradientStops>
@@ -125,7 +125,7 @@
                            FontSize="20"
                            VerticalAlignment="Bottom"
                            HorizontalAlignment="Left"
-                           Foreground="White"
+                           Foreground="{DynamicResource ThemeInteractiveBgColor}"
                            FontWeight="SemiBold"
                            Text="{Binding Title}" />
                 <Border Grid.Row="0"
@@ -182,7 +182,7 @@
                                 BorderBrush="Transparent"
                                 Width="{Binding $parent.Bounds.Width}"
                                 Height="{Binding $parent.Bounds.Height}"
-                                Background="Lime" />
+                                Background="{DynamicResource ThemeAccent3Color}" />
                         <Rectangle x:Name="ProgressShine1"
                                    Fill="{StaticResource ShineBrush}"
                                    Width="30"
@@ -201,7 +201,7 @@
                            VerticalAlignment="Center"
                            HorizontalAlignment="Right"
                            FontSize="10"
-                           Foreground="Cyan"
+                           Foreground="{DynamicResource ThemeAccent5BgColor}"
                            Text="{Binding Body}" />
             </Grid>
 

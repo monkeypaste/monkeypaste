@@ -823,7 +823,7 @@ namespace MonkeyPaste.Avalonia {
                     switch (msgBoxReq.dialogType) {
                         case "okcancel":
 
-                            result = await Mp.Services.NativeMessageBox.ShowOkCancelMessageBoxAsync(
+                            result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
                                 title: msgBoxReq.title,
                                 message: msgBoxReq.msg,
                                 iconResourceObj: msgBoxReq.iconResourceObj,

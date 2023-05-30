@@ -112,19 +112,6 @@ namespace MonkeyPaste.Common {
             return false;
         }
 
-        public static string HexColorToContrastingFgHexColor(
-            this string hexStr,
-            string darkHexColor = null,
-            string lightHexColor = null,
-            int brighThreshold = 150) {
-            if (string.IsNullOrEmpty(hexStr)) {
-                return darkHexColor ?? MpSystemColors.Black;
-            }
-            if (hexStr.IsHexStringBright(brighThreshold)) {
-                return darkHexColor ?? MpSystemColors.Black;
-            }
-            return lightHexColor ?? MpSystemColors.White;
-        }
 
         public static string ChangeBrushBrightness(string hexStr, double correctionFactor) {
             if (correctionFactor == 0.0f) {

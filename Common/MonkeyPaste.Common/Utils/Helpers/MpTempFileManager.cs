@@ -51,7 +51,7 @@ namespace MonkeyPaste.Common {
 
         public static async Task ShutdownAsync() {
             string msg = "Warning! Do you want to delete these? " + Environment.NewLine + string.Join(Environment.NewLine, _tempFileList);
-            var result = await MpCommonTools.Services.NativeMessageBox.ShowOkCancelMessageBoxAsync("Temp File Manager", msg);
+            var result = await MpCommonTools.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync("Temp File Manager", msg);
             if (!result) {
                 return;
             }

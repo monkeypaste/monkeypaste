@@ -174,7 +174,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (to_delete_cil != null && to_delete_cil.Any()) {
-                var result = await Mp.Services.NativeMessageBox.ShowYesNoCancelMessageBoxAsync(
+                var result = await Mp.Services.PlatformMessageBox.ShowYesNoCancelMessageBoxAsync(
                     title: $"Remove associated clips?",
                     message: $"Would you also like to remove all clips from '{(isDomain ? UrlDomainPath : UrlPath)}'",
                     iconResourceObj: IconId);

@@ -62,7 +62,7 @@ namespace MonkeyPaste.Avalonia {
         public MpIStringTools StringTools { get; set; }
         public MpIPlatformInfo PlatformInfo { get; set; }
         public MpIPlatformDataObjectHelperAsync DataObjectHelperAsync { get; set; }
-        public MpINativeMessageBox NativeMessageBox { get; set; }
+        public MpIPlatformMessageBox PlatformMessageBox { get; set; }
 
         public MpIClipboardMonitor ClipboardMonitor { get; set; }
 
@@ -120,6 +120,7 @@ namespace MonkeyPaste.Avalonia {
 
             await MpPrefViewModel.InitAsync(prefPath, DbInfo, PlatformInfo);
 
+
             ColorQueryTools = new MpAvColorQueryTools();
             NativePathDialog = new MpAvPathDialog();
             UserProvidedFileExts = MpPrefViewModel.Instance;
@@ -147,7 +148,7 @@ namespace MonkeyPaste.Avalonia {
             ContextMenuCloser = new MpAvContextMenuCloser();
             MainThreadMarshal = new MpAvMainThreadMarshal();
             StringTools = new MpAvStringTools();
-            NativeMessageBox = new MpAvMessageBox();
+            PlatformMessageBox = new MpAvMessageBox();
             DataObjectHelperAsync = MpAvClipboardHandlerCollectionViewModel.Instance;
             ExternalPasteHandler = MpAvExternalPasteHandler.Instance;
             CopyItemBuilder = new MpAvCopyItemBuilder();

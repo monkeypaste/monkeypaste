@@ -21,14 +21,6 @@ namespace MonkeyPaste.Common {
         public static string Transparent => "#00FFFFFF"; //transparent
         public static string Black => "#FF000000";
 
-        public static string DefaultControlBackground1 => "#FFF0F0F0";
-        public static string DefaultControlBackground2 => "#FFE5E5E5";
-        public static string LoadingSpinnerBackground => gray24;
-
-        public static string IsSelectedBorderColor => Red;
-        public static string IsHoveringSelectedBorderColor => limegreen;
-        public static string IsHoveringBorderColor => Yellow;
-        public static string IsInactiveBorderColor => Transparent;
 
         public static List<string> ContentColors => new List<string>() {
             // NOTE is 5x14 

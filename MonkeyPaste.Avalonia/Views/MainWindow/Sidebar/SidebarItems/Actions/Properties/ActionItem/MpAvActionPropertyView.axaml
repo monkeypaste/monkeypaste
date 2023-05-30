@@ -76,7 +76,7 @@
             <Setter Property="HorizontalAlignment"
                     Value="Left" />
             <Setter Property="Background"
-                    Value="Silver" />
+                    Value="{DynamicResource ThemeGrayAccent4}" />
             <Setter Property="BorderThickness"
                     Value="1" />
             <Setter Property="BorderBrush"
@@ -96,7 +96,7 @@
             <Setter Property="Background"
                     Value="Transparent" />
             <Setter Property="Foreground"
-                    Value="Black" />
+                    Value="{DynamicResource ThemeInteractiveColor}" />
             <Setter Property="FontWeight"
                     Value="SemiBold" />
             <Setter Property="Margin"
@@ -106,7 +106,7 @@
         </Style>
         <Style Selector="Border.actionProperty local|MpAvSliderParameterView Border">
             <Setter Property="BorderBrush"
-                    Value="Black" />
+                    Value="{DynamicResource ThemeInteractiveColor}" />
             <Setter Property="BorderThickness"
                     Value="1" />
         </Style>
@@ -119,13 +119,13 @@
             HorizontalAlignment="Stretch">
         <StackPanel Orientation="Vertical">
             <local:MpAvActionPropertyHeaderView CornerRadius="10"
-                                                BorderBrush="Khaki"
+                                                BorderBrush="{Binding $self.Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}, ConverterParameter=bg}"
                                                 Background="{Binding ActionBackgroundHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
                                                 Padding="5,0"
                                                 Margin="0,0,0,15"
                                                 HorizontalAlignment="Stretch" />
             <local:MpAvParameterCollectionView HorizontalAlignment="Stretch"
-                                                  VerticalAlignment="Stretch" />
+                                               VerticalAlignment="Stretch" />
         </StackPanel>
     </Border>
 </local:MpAvUserControl>

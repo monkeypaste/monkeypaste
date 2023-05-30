@@ -163,7 +163,6 @@ namespace MonkeyPaste {
         public bool IsPopupMenuOpen { get; set; }
         #endregion
 
-
         #endregion
 
         #region Properties
@@ -180,16 +179,16 @@ namespace MonkeyPaste {
             get {
                 if (LayoutType == MpNotificationLayoutType.Warning ||
                     LayoutType == MpNotificationLayoutType.UserAction) {
-                    return MpSystemColors.Yellow;
+                    return Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent1Color.ToString());
                 }
                 if (LayoutType == MpNotificationLayoutType.ErrorAndShutdown ||
                     LayoutType == MpNotificationLayoutType.ErrorWithOption) {
-                    return MpSystemColors.Red;
+                    return Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent2Color.ToString());
                 }
                 if (LayoutType != MpNotificationLayoutType.Message) {
-                    return MpSystemColors.royalblue;
+                    return Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent5Color.ToString());
                 }
-                return MpSystemColors.White;
+                return Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeInteractiveBgColor.ToString());
             }
         }
 
@@ -197,13 +196,13 @@ namespace MonkeyPaste {
         public string BorderHexColor {
             get {
                 if (_borderHexColor == null) {
-                    if (IsErrorNotification) {
-                        return MpSystemColors.red1;
-                    }
                     if (IsWarningNotification) {
-                        return MpSystemColors.yellow1;
+                        return Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent1Color.ToString());
                     }
-                    return MpSystemColors.oldlace;
+                    if (IsErrorNotification) {
+                        return Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent2Color.ToString());
+                    }
+                    return Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeInteractiveBgColor.ToString());
                 }
                 return _borderHexColor;
             }
@@ -215,7 +214,8 @@ namespace MonkeyPaste {
             }
         }
 
-        public string BackgroundHexColor { get; set; } = MpSystemColors.mediumpurple;
+        public string BackgroundHexColor =>
+            Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeColor.ToString());
 
         #endregion
 

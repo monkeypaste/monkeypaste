@@ -556,7 +556,7 @@ namespace MonkeyPaste.Avalonia {
                 Height = mivm.CheckResourceKey == "CheckSvg" ? 15 : 7,
                 //Margin = mivm.CheckResourceKey == "CheckSvg" ? new Thickness(10) : new Thickness(15),
                 Data = Mp.Services.PlatformResource.GetResource(mivm.CheckResourceKey) as StreamGeometry,
-                Foreground = mivm.IconHexStr.HexColorToContrastingFgHexColor().ToAvBrush()
+                Foreground = mivm.IconHexStr.ToContrastForegoundColor().ToAvBrush()
             };
             var iconBorder = GetIconBorder(mivm);
             iconBorder.Child = pi;

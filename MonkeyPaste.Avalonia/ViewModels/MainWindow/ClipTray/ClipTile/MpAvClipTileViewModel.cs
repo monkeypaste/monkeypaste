@@ -1271,7 +1271,7 @@ namespace MonkeyPaste.Avalonia {
                 Dispatcher.UIThread.Post(async () => {
 
                     var result = await
-                        Mp.Services.NativeMessageBox.ShowOkCancelMessageBoxAsync(
+                        Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
                             title: "Confirm",
                             message: "Are you sure you want to finish appending?",
                             iconResourceObj: "QuestionMarkImage",

@@ -147,12 +147,12 @@ namespace MonkeyPaste.Avalonia {
                 string urlPath = null;
 
                 while (urlPath == null) {
-                    urlPath = await Mp.Services.NativeMessageBox.ShowTextBoxMessageBoxAsync(
+                    urlPath = await Mp.Services.PlatformMessageBox.ShowTextBoxMessageBoxAsync(
                         title: "Add url",
                         message: "Enter full url:",
                         iconResourceObj: "WebImage");
                     if (!Uri.IsWellFormedUriString(urlPath, UriKind.Absolute)) {
-                        var invalid_result = await Mp.Services.NativeMessageBox.ShowOkCancelMessageBoxAsync(
+                        var invalid_result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
                             title: "Error",
                             message: "Url must be in valid format");
                         urlPath = null;

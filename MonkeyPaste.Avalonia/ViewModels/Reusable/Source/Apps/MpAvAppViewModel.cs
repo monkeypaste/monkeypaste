@@ -208,7 +208,7 @@ namespace MonkeyPaste.Avalonia {
             var clipsFromApp = await MpDataModelProvider.GetCopyItemsBySourceTypeAndIdAsync(MpTransactionSourceType.App, AppId);
 
             if (clipsFromApp != null && clipsFromApp.Count > 0) {
-                var result = await Mp.Services.NativeMessageBox.ShowYesNoCancelMessageBoxAsync(
+                var result = await Mp.Services.PlatformMessageBox.ShowYesNoCancelMessageBoxAsync(
                     title: $"Remove associated clips?",
                     message: $"Would you also like to remove all clips from '{AppName}'",
                     iconResourceObj: IconId);

@@ -46,7 +46,7 @@
             <Setter Property="HorizontalAlignment"
                     Value="Stretch" />
             <Setter Property="BorderBrush"
-                    Value="Silver" />
+                    Value="{DynamicResource ThemeGrayAccent4}" />
         </Style>
 
         <Style Selector="ListBox#ExecuteParameterListBox ListBoxItem">
@@ -94,7 +94,7 @@
                            HorizontalAlignment="Stretch"
                            TextAlignment="Left"
                            FontSize="24"
-                           Foreground="White"
+                           Foreground="{DynamicResource ThemeInteractiveBgColor}"
                            FontWeight="SemiBold"
                            TextWrapping="WrapWithOverflow"
                            Text="{Binding Title}" />
@@ -175,8 +175,8 @@
                     Grid.Column="1"
                     IsVisible="{Binding ShowTextBox}"
                     BorderThickness="2"
-                    BorderBrush="White"
-                    Background="White"
+                    BorderBrush="{DynamicResource ThemeInteractiveBgColor}"
+                    Background="{DynamicResource ThemeInteractiveBgColor}"
                     Margin="5,0,10,10"
                     CornerRadius="7"
                     Padding="3"

@@ -57,7 +57,7 @@ namespace MonkeyPaste.Common {
                         return result;
                     }
                     // NOTE custom extensions is NOT base64 encoded cause it shouldn't have weird
-                    result.Add(MpFileOptionType.UserDefined, MpCommonTools.Services.UserProvidedFileExts.UserDefineExtCsv.ToListFromCsv(MpCsvFormatProperties.DefaultBase64Value));
+                    result.Add(MpFileOptionType.UserDefined, MpCommonTools.Services.UserProvidedFileExts.UserDefinedFileExtensionsCsv.ToListFromCsv(MpCsvFormatProperties.DefaultBase64Value));
                     _extLookup = result;
                 }
                 return _extLookup;

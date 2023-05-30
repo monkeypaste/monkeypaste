@@ -5,6 +5,8 @@
     <Style Selector="ComboBoxItem /template/ ContentPresenter">
         <Setter Property="Background"
                 Value="{DynamicResource SelectableItemDefaultBgBrush}" />
+        <Setter Property="Foreground"
+                Value="{DynamicResource ThemeInteractiveColor}" />
     </Style>
 
     <Style Selector="ComboBoxItem:pointerover /template/ ContentPresenter">

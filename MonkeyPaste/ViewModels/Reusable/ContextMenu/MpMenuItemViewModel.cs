@@ -386,7 +386,7 @@ namespace MonkeyPaste {
                 if (IsEnabled) {
                     return _iconHexStr;
                 }
-                return MpSystemColors.gray;
+                return Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeGrayAccent3.ToString());
             }
             set {
                 if (_iconHexStr != value) {
@@ -402,18 +402,18 @@ namespace MonkeyPaste {
         public string IconBorderHexColor {
             get {
                 if (!IsEnabled) {
-                    return MpSystemColors.dimgray;
+                    return Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeGrayAccent1.ToString());
                 }
                 if (!string.IsNullOrEmpty(_iconBorderHexColor)) {
                     return _iconBorderHexColor;
                 }
                 //if (IsChecked.HasValue && IsChecked.Value) {
                 if (IsChecked.IsTrueOrNull()) {
-                    return MpSystemColors.IsSelectedBorderColor;
+                    return Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent2Color.ToString());
                 } else if (IsHovering) {
-                    return MpSystemColors.IsHoveringBorderColor;
+                    return Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent1Color.ToString());
                 }
-                return MpSystemColors.DarkGray;
+                return Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeGrayAccent1.ToString());
             }
             set {
                 if (IconBorderHexColor != value) {

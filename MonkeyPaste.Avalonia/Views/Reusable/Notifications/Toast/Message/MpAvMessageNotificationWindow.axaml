@@ -67,7 +67,7 @@
                     VerticalAlignment="Bottom"
                     BorderThickness="0"
                     Margin="0,0,5,0"
-                    Background="White"
+                    Background="{DynamicResource ThemeInteractiveBgColor}"
                     Height="1" />
 
 
@@ -99,7 +99,7 @@
                            FontWeight="SemiBold"
                            Background="Transparent"
                            Focusable="True"
-                           Foreground="White"
+                           Foreground="{DynamicResource ThemeInteractiveBgColor}"
                            Text="{Binding Body}" />
             </Border>
         </Grid>

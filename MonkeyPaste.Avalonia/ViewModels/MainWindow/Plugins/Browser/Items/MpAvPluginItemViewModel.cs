@@ -364,7 +364,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand UninstallPluginCommand => new MpAsyncCommand(
             async () => {
-                var confirm = await Mp.Services.NativeMessageBox.ShowOkCancelMessageBoxAsync(
+                var confirm = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
                     title: "Confirm",
                     message: $"Are you sure you want to remove '{PluginTitle}' and all its presets and shortcuts?",
                     owner: MpAvWindowManager.AllWindows.FirstOrDefault(x => x.DataContext == Parent),

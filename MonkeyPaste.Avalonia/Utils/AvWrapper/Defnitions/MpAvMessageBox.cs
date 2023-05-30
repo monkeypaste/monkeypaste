@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvMessageBox : MpINativeMessageBox {
+    public class MpAvMessageBox : MpIPlatformMessageBox {
         public async Task ShowOkMessageBoxAsync(string title, string message, object anchor = null, object iconResourceObj = null, object owner = null) {
             await MpNotificationBuilder.ShowNotificationAsync(
                                     notificationType: MpNotificationType.ModalOkMessageBox,
