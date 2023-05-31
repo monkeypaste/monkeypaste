@@ -40,6 +40,9 @@
         ThemeCompliment3DarkColor,
         ThemeCompliment4Color,
         ThemeCompliment4DarkColor,
+        ThemeCompliment5Color,
+        ThemeCompliment5DarkColor,
+        ThemeCompliment5LighterColor,
 
         ThemeGrayAccent1,
         ThemeGrayAccent2,

@@ -912,8 +912,15 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void Sw_Opened(object sender, EventArgs e) {
-            var sw = sender as Window;
             SetupFontFamilyComboBoxes();
+        }
+
+        private void SetThemeButtonColor() {
+            Dispatcher.UIThread.Post(async () => {
+                var tb = await GetParameterControlByParamIdAsync<Button>(MpButtonCommandPrefType.ThemeHexColor.ToString());
+                //tb.Background = MpPrefViewModel.Instance.ThemeColor.ToAvBrush();
+                //tb.Classes.Add("customColor");
+            });
         }
 
         private void SetupFontFamilyComboBoxes() {
@@ -925,6 +932,7 @@ namespace MonkeyPaste.Avalonia {
                 SetupFontFamilyComboBox(e_cb);
             });
         }
+
 
         private void SetupFontFamilyComboBox(ComboBox cb) {
             if (cb == null) {
@@ -1146,6 +1154,7 @@ namespace MonkeyPaste.Avalonia {
                             }
 
                             MpPrefViewModel.Instance.ThemeColor = result;
+                            SetThemeButtonColor();
                             break;
                         }
                 }

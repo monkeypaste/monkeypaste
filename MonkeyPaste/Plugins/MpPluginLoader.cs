@@ -309,7 +309,7 @@ namespace MonkeyPaste {
                     try {
 
                         object component = GetPluginComponent(manifestPath, plugin, out Assembly component_assembly);
-                        LoadAnyHeadlessComponentFormats(plugin, component_assembly);
+                        LoadAnyHeadlessComponentFormats(plugin, component_assembly, plugin.title);
 
                         if (ValidatePluginComponent(plugin, component, manifestPath)) {
                             plugin.Component = component;
@@ -477,9 +477,12 @@ namespace MonkeyPaste {
             object comp_obj = null;
             string comp_interface_name = "MonkeyPaste.Common.Plugin." + nameof(MpIPluginComponentBase);
             try {
-                comp_obj = GetInterfaceFromAssembly(pluginAssembly, comp_interface_name);
+                comp_obj = GetInterfaceFromAssembly(pluginAssembly, comp_interface_name, pluginName);
             }
             catch (Exception ex) {
+                if (ex is MpUserNotifiedException) {
+                    throw ex;
+                }
                 throw new MpUserNotifiedException("Error loading " + pluginName + " ", ex);
             }
             return comp_obj;
@@ -487,18 +490,21 @@ namespace MonkeyPaste {
         #endregion
 
 
-        private static void LoadAnyHeadlessComponentFormats(MpPluginFormat plugin, Assembly pluginAssembly) {
+        private static void LoadAnyHeadlessComponentFormats(MpPluginFormat plugin, Assembly pluginAssembly, string pluginName) {
             if (pluginAssembly == null || plugin == null) {
                 return;
             }
             string headless_analyzer_interface_name = "MonkeyPaste.Common.Plugin." + nameof(MpISupportHeadlessAnalyzerComponentFormat);
             try {
-                object analyzer_obj = GetInterfaceFromAssembly(pluginAssembly, headless_analyzer_interface_name);
+                object analyzer_obj = GetInterfaceFromAssembly(pluginAssembly, headless_analyzer_interface_name, pluginName);
                 if (analyzer_obj is MpISupportHeadlessAnalyzerComponentFormat apf) {
                     plugin.analyzer = apf.GetFormat();
                 }
             }
             catch (Exception ex) {
+                if (ex is MpUserNotifiedException) {
+                    throw ex;
+                }
                 throw new MpUserNotifiedException("Error loading " + plugin.title + " ", ex);
             }
         }
@@ -546,7 +552,7 @@ namespace MonkeyPaste {
 
 
 
-        private static object GetInterfaceFromAssembly(Assembly pluginAssembly, string interfaceName) {
+        private static object GetInterfaceFromAssembly(Assembly pluginAssembly, string interfaceName, string pluginName) {
             if (pluginAssembly == null) {
                 return null;
             }
@@ -556,6 +562,7 @@ namespace MonkeyPaste {
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine("Exported types exception: ", ex);
+                throw new MpUserNotifiedException($"Plugin dependency error for plugin '{pluginName}': {Environment.NewLine}{ex.Message}");
             }
             if (avail_types == null) {
                 return null;
@@ -565,8 +572,15 @@ namespace MonkeyPaste {
             if (interface_type == null) {
                 return null;
             }
-            var interface_obj = Activator.CreateInstance(interface_type);
-            return interface_obj;
+            try {
+                var interface_obj = Activator.CreateInstance(interface_type);
+                return interface_obj;
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine("Exported types exception: ", ex);
+                throw new MpUserNotifiedException($"Plugin activation error for plugin '{pluginName}': {Environment.NewLine}{ex.Message}");
+            }
+            return null;
         }
 
         private static string GetCachedPluginFileName(MpPluginFormat plugin) {

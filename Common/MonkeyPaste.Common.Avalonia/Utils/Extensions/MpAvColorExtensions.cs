@@ -49,6 +49,10 @@ namespace MonkeyPaste.Common.Avalonia {
             return new MpColor(color.A, color.R, color.G, color.B);
         }
 
+        public static IBrush ToSolidColorBrush(this Color color) {
+            return new SolidColorBrush(color);
+        }
+
         public static MpColor ToPortableColor(this IBrush brush) {
             if (brush is ISolidColorBrush scb) {
                 return scb.Color.ToPortableColor();

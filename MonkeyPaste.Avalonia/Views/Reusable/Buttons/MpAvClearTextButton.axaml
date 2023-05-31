@@ -30,8 +30,7 @@
               VerticalAlignment="Stretch">
             <Image x:Name="X_OverImage">
                 <Image.Resources>
-                    <SolidColorBrush x:Key="Brush0"
-                                     Color="#FF000000" />
+                    <SolidColorBrush x:Key="Brush0" Color="{DynamicResource ThemeInteractiveColor}" />
                 </Image.Resources>
                 <DrawingImage>
                     <DrawingGroup>
@@ -51,8 +50,7 @@
             </Image>
             <Image x:Name="X_NotOverImage">
                 <Image.Resources>
-                    <SolidColorBrush x:Key="Brush0"
-                                     Color="#FF000000" />
+                    <SolidColorBrush x:Key="Brush0" Color="{DynamicResource ThemeInteractiveColor}" />
                 </Image.Resources>
                 <DrawingImage>
                     <DrawingGroup>

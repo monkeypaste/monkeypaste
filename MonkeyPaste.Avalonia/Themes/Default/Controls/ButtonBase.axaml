@@ -13,11 +13,11 @@
         <Setter Property="BorderThickness"
                 Value="1" />
         <Setter Property="BorderBrush"
-                Value="DimGray" />
+                Value="{DynamicResource ThemeGrayAccent1}" />
         <Setter Property="Padding"
                 Value="5,3" />
         <Setter Property="Background"
-                Value="Beige" />
+                Value="{DynamicResource ThemeCompliment5Color}" />
     </Style>
 
     <Style Selector="DropDownButton.defaultButton /template/ Border#RootBorder">
@@ -31,7 +31,7 @@
         <Setter Property="BorderThickness"
                 Value="1" />
         <Setter Property="BorderBrush"
-                Value="DimGray" />
+                Value="{DynamicResource ThemeGrayAccent1}" />
         <Setter Property="Padding"
                 Value="5,3" />
     </Style>
@@ -39,21 +39,32 @@
     <Style Selector=":is(Button).defaultButton">
         <Setter Property="FontWeight"
                 Value="SemiBold" />
+    </Style>
+
+    <Style Selector=":is(Button).defaultButton">
         <Setter Property="Foreground"
-                Value="Black" />
+                Value="{Binding $self.Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
     </Style>
 
     <Style Selector=":is(Button).defaultButton /template/ ContentPresenter">
-        <Setter Property="Background"
-                Value="Beige" />
         <Setter Property="Foreground"
-                Value="Black" />
+                Value="{Binding $self.Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
     </Style>
+
+    <Style Selector=":is(Button).defaultButton:not(.customColor) /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="{DynamicResource ThemeCompliment5Color}" />
+    </Style>
+
+    <!--<Style Selector=":is(Button).defaultButton.customColor /template/ ContentPresenter">
+    <Setter Property="Background"
+            Value="{Binding $parent[Button}.Background}" />
+  </Style>-->
 
 
     <Style Selector=":is(Button).defaultButton:disabled /template/ ContentPresenter">
         <Setter Property="Background"
-                Value="Silver" />
+                Value="{DynamicResource ThemeGrayAccent4}" />
         <Setter Property="Cursor"
                 Value="Arrow" />
     </Style>
@@ -64,42 +75,43 @@
     </Style>
     <Style Selector="DropDownButton:pointerover.defaultButton">
         <Setter Property="BorderBrush"
-                Value="Yellow" />
+                Value="{DynamicResource ThemeAccent1Color}" />
         <Setter Property="Background"
-                Value="Silver" />
+                Value="{DynamicResource ThemeGrayAccent4}" />
     </Style>
     <Style Selector="DropDownButton:pointerover.defaultButton /template/ Border#RootBorder">
         <Setter Property="BorderBrush"
-                Value="Yellow" />
+                Value="{DynamicResource ThemeAccent1Color}" />
         <Setter Property="Background"
-                Value="Silver" />
+                Value="{DynamicResource ThemeGrayAccent4}" />
     </Style>
 
     <Style Selector="DropDownButton:pointerover /template/ ContentPresenter">
         <Setter Property="Background"
-                Value="Silver" />
+                Value="{DynamicResource ThemeGrayAccent4}" />
     </Style>
 
     <Style Selector=":is(Button):pointerover.defaultButton:not(DropDownButton) /template/ ContentPresenter">
         <Setter Property="BorderBrush"
-                Value="Yellow" />
+                Value="{DynamicResource ThemeAccent1Color}" />
     </Style>
 
-    <Style Selector=":is(Button):pointerover.defaultButton:not(.severe) /template/ ContentPresenter">
+    <Style Selector=":is(Button):pointerover.defaultButton:not(.customColor):not(.severe) /template/ ContentPresenter">
         <Setter Property="Background"
-                Value="Silver" />
+                Value="{DynamicResource ThemeCompliment5LighterColor}" />
 
     </Style>
-    <Style Selector=":is(Button):pointerover.defaultButton.severe /template/ ContentPresenter">
+    <Style Selector=":is(Button):pressed.defaultButton:not(.customColor):not(.severe) /template/ ContentPresenter">
         <Setter Property="Background"
-                Value="Salmon" />
+                Value="{DynamicResource ThemeCompliment5DarkerColor}" />
 
     </Style>
+
     <Style Selector=":is(Button).outline /template/ ContentPresenter">
         <Setter Property="BorderThickness"
                 Value="1" />
         <Setter Property="BorderBrush"
-                Value="Silver" />
+                Value="{DynamicResource ThemeGrayAccent4}" />
     </Style>
     <Style Selector=":is(Button).outlineOver /template/ ContentPresenter">
         <Setter Property="BorderThickness"
@@ -109,11 +121,11 @@
     </Style>
     <Style Selector=":is(Button):pointerover.outline /template/ ContentPresenter, :is(Button):pointerover.outlineOver /template/ ContentPresenter">
         <Setter Property="BorderBrush"
-                Value="Yellow" />
+                Value="{DynamicResource ThemeAccent1Color}" />
     </Style>
     <Style Selector=":is(Button).defaultButton TextBlock">
         <Setter Property="Foreground"
-                Value="Black" />
+                Value="{Binding $parent[Button].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
         <Setter Property="TextAlignment"
                 Value="Center" />
         <Setter Property="VerticalAlignment"

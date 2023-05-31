@@ -24,20 +24,32 @@ namespace MonkeyPaste.Avalonia {
             }
             if (hexStr.IsStringHexColor()) {
                 bool flip = false;
-                bool is_fg = true;
+                string contrast_type = "fg";
                 if (parameter is string paramStr &&
                     !string.IsNullOrEmpty(paramStr) &&
                     paramStr.SplitNoEmpty("|") is string[] paramParts) {
                     flip = paramParts.Any(x => x == "flip");
-                    is_fg = !paramParts.Any(x => x == "bg");
+                    if (paramParts.FirstOrDefault(x => x != "flip") is string paramContrastType &&
+                        !string.IsNullOrEmpty(paramContrastType)) {
+                        contrast_type = paramContrastType;
+                    }
                 }
-                if (is_fg) {
-                    return hexStr.ToContrastForegoundColor(flip).ToAvColor();
+                switch (contrast_type) {
+                    case "compliment":
+                        return hexStr.ToComplementHexColor().ToAvColor();
+                    case "lighter":
+                        return MpColorHelpers.GetLighterHexColor(hexStr).ToAvColor();
+                    case "darker":
+                        return MpColorHelpers.GetDarkerHexColor(hexStr).ToAvColor();
+                    case "fg":
+                    default:
+                        return hexStr.ToContrastForegoundColor(flip).ToAvColor();
                 }
-                return hexStr.ToComplementHexColor().ToAvColor();
 
             }
-            return Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeBlack.ToString()).ToAvColor();
+            return null;
+            //MpDebug.Break($"Unhandled color '{hexStr}'");
+            //return Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeBlack.ToString()).ToAvColor();
         }
 
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) {

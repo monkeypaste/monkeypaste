@@ -133,7 +133,7 @@
             <Setter Property="FontStyle"
                     Value="Italic" />
             <Setter Property="Foreground"
-                    Value="Silver" />
+                    Value="{DynamicResource ThemeGrayAccent4}" />
             <Setter Property="FontSize"
                     Value="16" />
         </Style>
@@ -178,7 +178,7 @@
         </Style>
         <Style Selector="DataGrid">
             <Setter Property="Background"
-                    Value="Khaki" />
+                    Value="{DynamicResource ThemeCompliment4Color}" />
             <Setter Property="GridLinesVisibility"
                     Value="All" />
             <Setter Property="ScrollViewer.VerticalScrollBarVisibility"
@@ -204,11 +204,11 @@
         <!--  DATAGRID ROW BG  -->
         <Style Selector="DataGridRow:nth-child(odd)">
             <Setter Property="Background"
-                    Value="Khaki" />
+                    Value="{DynamicResource ThemeCompliment4Color}" />
         </Style>
         <Style Selector="DataGridRow:nth-child(even)">
             <Setter Property="Background"
-                    Value="PapayaWhip" />
+                    Value="{DynamicResource ThemeCompliment4DarkColor}" />
         </Style>
         <!--  DATAGRID MARQUEE TEXTBOX  -->
         <Style Selector="DataGrid Grid.marqueeContainer">
@@ -221,8 +221,8 @@
         </Style>
 
         <Style Selector="DataGrid Grid.marqueeContainer local|MpAvMarqueeTextBox">
-            <Setter Property="ReadOnlyForeground"
-                    Value="Orange" />
+            <!--<Setter Property="ReadOnlyForeground"
+                    Value="Orange" />-->
         </Style>
         <Style Selector="DataGrid :is(TextBox)">
             <Setter Property="MinHeight"
@@ -368,7 +368,6 @@
                          HorizontalAlignment="Right"
                          VerticalContentAlignment="Center"
                          MinWidth="150"
-                         Background="White"
                          CornerRadius="10"
                          BorderBrush="{DynamicResource ThemeGrayAccent4}"
                          BorderThickness="1"
@@ -388,9 +387,8 @@
             <Button x:Name="ResetButton"
                     Classes="defaultButton textOnlyButton footer"
                     DockPanel.Dock="Left"
-                    Command="{Binding ResetSettingsCommand}">
-                <TextBlock Text="Reset All" />
-            </Button>
+                    Content="Reset All"
+                    Command="{Binding ResetSettingsCommand}" />
         </DockPanel>
 
         <!--  Content  -->

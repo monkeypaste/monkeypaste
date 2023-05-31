@@ -95,17 +95,17 @@
         <!--  PLAIN TEXT TOGGLE  -->
         <Style Selector="ToggleButton#PlainTextToggleButton Image, ToggleButton#PlainTextToggleButton:unchecked Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource PlainTextImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=black}" />
+                    Value="{Binding Source={StaticResource PlainTextImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
         </Style>
 
         <Style Selector="ToggleButton#PlainTextToggleButton:pointerover Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource PlainTextImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=yellow}" />
+                    Value="{Binding Source={StaticResource PlainTextImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themeaccent1fg}" />
         </Style>
 
         <Style Selector="ToggleButton#PlainTextToggleButton:checked Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource PlainTextImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=blue}" />
+                    Value="{Binding Source={StaticResource PlainTextImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themeaccent5bg}" />
         </Style>
 
     </local:MpAvUserControl.Styles>

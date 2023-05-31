@@ -44,18 +44,17 @@
             <Button x:Name="DuplicateAdvSearchButton"
                     Classes="defaultButton textOnlyButton outline outlineOver"
                     IsVisible="{Binding IsSavedQuery}"
-                    Command="{Binding DuplicateQueryCommand}">
-                <TextBlock Text="Duplicate" />
-            </Button>
+                    Content="Duplicate"
+                    Command="{Binding DuplicateQueryCommand}" />
 
             <!--  SAVE BUTTON  -->
+
             <Button x:Name="SaveAdvSearchButton"
                     Classes="defaultButton textOnlyButton outline outlineOver"
                     IsEnabled="{Binding CanAlter}"
                     IsVisible="{Binding CanSave}"
-                    Command="{Binding SaveQueryCommand}">
-                <TextBlock Text="Save" />
-            </Button>
+                    Content="Save"
+                    Command="{Binding SaveQueryCommand}" />
 
             <!--  ADVANCED SEARCH TOGGLE BUTTON  -->
 

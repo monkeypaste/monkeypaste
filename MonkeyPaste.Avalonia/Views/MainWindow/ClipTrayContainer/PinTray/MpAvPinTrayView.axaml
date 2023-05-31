@@ -29,6 +29,7 @@
               VerticalAlignment="Stretch">
             <Border HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
+                    IsVisible="False"
                     IsHitTestVisible="False"
                     Opacity="0.2">
                 <Border.Background>

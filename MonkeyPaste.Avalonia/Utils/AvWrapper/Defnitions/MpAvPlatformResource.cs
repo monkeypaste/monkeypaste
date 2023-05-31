@@ -34,6 +34,11 @@ namespace MonkeyPaste.Avalonia {
                     return (T)((object)color.ToPortableColor().ToHex());
                 }
             }
+            if (typeof(T) == typeof(IBrush)) {
+                if (valObj is Color color) {
+                    return (T)((object)new SolidColorBrush(color));
+                }
+            }
             MpDebug.Break($"Unimplemented resource converting from '{valObj.GetType}' to '{typeof(T)}'");
             return default;
         }

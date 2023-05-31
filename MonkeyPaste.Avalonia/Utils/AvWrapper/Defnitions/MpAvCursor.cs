@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvCursor : MpICursor, MpIBootstrappedItem {
+    public class MpAvCursor : MpICursor {
         #region Private Variables
 
         private static Dictionary<MpCursorType, string> _cursorLookupData =

@@ -65,22 +65,22 @@
 
         <Style Selector="Button#SortDirectionButton:not(.descending) Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource AscImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=white}" />
+                    Value="{Binding Source={StaticResource AscImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
 
 
         </Style>
         <Style Selector="Button#SortDirectionButton.descending Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource DescImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=white}" />
+                    Value="{Binding Source={StaticResource DescImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
 
         </Style>
         <Style Selector="Button#SortDirectionButton:pointerover:not(.descending) Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource AscImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=yellow}" />
+                    Value="{Binding Source={StaticResource AscImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themeaccent1fg}" />
         </Style>
         <Style Selector="Button#SortDirectionButton:pointerover.descending Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource DescImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=yellow}" />
+                    Value="{Binding Source={StaticResource DescImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themeaccent1fg}" />
         </Style>
     </local:MpAvUserControl.Styles>
     <StackPanel Orientation="Horizontal"
@@ -113,12 +113,9 @@
 
         <ComboBox Grid.Column="1"
                   CornerRadius="10"
-                  BorderBrush="Black"
                   Margin="2,5"
                   FontSize="16"
                   BorderThickness="1"
-                  Foreground="Black"
-                  Background="White"
                   HorizontalContentAlignment="Left"
                   VerticalContentAlignment="Center"
                   SelectedIndex="{Binding SelectedSortTypeIdx, Source={x:Static local:MpAvClipTileSortFieldViewModel.Instance}, Mode=TwoWay}"

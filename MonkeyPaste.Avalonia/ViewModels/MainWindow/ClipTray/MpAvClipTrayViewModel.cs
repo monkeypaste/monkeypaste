@@ -27,7 +27,6 @@ namespace MonkeyPaste.Avalonia {
     }
     public class MpAvClipTrayViewModel :
         MpAvSelectorViewModelBase<object, MpAvClipTileViewModel>,
-        MpIBootstrappedItem,
         MpIPagingScrollViewerViewModel,
         MpIActionComponent,
         MpIBoundSizeViewModel,
@@ -133,11 +132,6 @@ namespace MonkeyPaste.Avalonia {
             .OrderBy(x => x.QueryOffsetIdx)
             .Select(x => x.CopyItemId);
 
-        #endregion
-
-        #region MpIBoostrappedItem Implementation
-
-        string MpIBootstrappedItem.Label => "Content Tray";
         #endregion
 
         #region MpIContextMenuItemViewModel Implementation

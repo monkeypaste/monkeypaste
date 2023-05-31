@@ -113,7 +113,7 @@ namespace MonkeyPaste.Common {
         }
 
 
-        public static string ChangeBrushBrightness(string hexStr, double correctionFactor) {
+        public static string ChangeBrushBrightness(string hexStr, double correctionFactor, bool removeAlpha = true) {
             if (correctionFactor == 0.0f) {
                 return hexStr;
             }
@@ -133,7 +133,7 @@ namespace MonkeyPaste.Common {
                 blue = (255 - blue) * correctionFactor + blue;
             }
 
-            return new MpColor(c.A, (byte)red, (byte)green, (byte)blue).ToHex();
+            return new MpColor(removeAlpha ? (byte)255 : c.A, (byte)red, (byte)green, (byte)blue).ToHex();
         }
 
         public static string GetDarkerHexColor(string hexStr, double factor = -0.5) {

@@ -24,35 +24,28 @@
         <Setter Property="Background"
                 Value="Silver" />
         <Setter Property="BorderBrush"
-                Value="DimGray" />
+                Value="{DynamicResource ThemeGrayAccent1}" />
         <Setter Property="Foreground"
-                Value="White" />
+                Value="{DynamicResource ThemeInteractiveBgColor}" />
         <Setter Property="FontWeight"
                 Value="SemiBold" />
         <Setter Property="MinWidth"
                 Value="50" />
         <Setter Property="MaxWidth"
                 Value="100" />
-
     </Style>
 
     <Style Selector="Window.notificationWindow Button:not(.optionsButton):pointerover /template/ ContentPresenter">
         <Setter Property="Background"
-                Value="DimGray" />
-        <!--<Setter Property="BorderBrush"
-                Value="Silver" />-->
+                Value="{DynamicResource ThemeGrayAccent1}" />
     </Style>
     <Style Selector="Window.userActionNotificationWindow Button:not(.optionsButton):pointerover">
         <Setter Property="BorderBrush"
                 Value="{DynamicResource HoverDefaultBorderBrush}" />
         <Setter Property="Background"
-                Value="Silver" />
+                Value="{DynamicResource ThemeGrayAccent4}" />
     </Style>
-    <Style Selector="Window.userActionNotificationWindow Button:pressed">
-        <Setter Property="BorderBrush"
-                Value="Lime" />
-    </Style>
-
+  
     <!--  NTF OUTER BORDER  -->
 
     <Style Selector="Window.notificationWindow > Border">

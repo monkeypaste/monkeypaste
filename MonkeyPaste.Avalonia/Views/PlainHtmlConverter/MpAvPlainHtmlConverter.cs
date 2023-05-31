@@ -11,7 +11,6 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvPlainHtmlConverter :
-        MpIBootstrappedItem,
         MpIAsyncObject {
         #region Private Variables
 
@@ -23,9 +22,8 @@ namespace MonkeyPaste.Avalonia {
         public static MpAvPlainHtmlConverter Instance => _instance ?? (_instance = new MpAvPlainHtmlConverter());
         #endregion
 
-        #region MpIAsyncBootstrappedItem Implementation
+        #region MpIAsyncObject Implementation
 
-        public string Label => "Web Converter";
         public bool IsBusy { get; private set; } = false;
         #endregion
 

@@ -33,7 +33,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Variables
 
-        private IBrush _defNavUriBrush = Brushes.Maroon;
         private FormattedText _ft;
         private MpSize _ftSize;
         private MpSize _bmpSize;
@@ -91,7 +90,7 @@ namespace MonkeyPaste.Avalonia {
         public static readonly StyledProperty<IBrush> ReadOnlyForegroundProperty =
             AvaloniaProperty.Register<MpAvMarqueeTextBox, IBrush>(
                 name: nameof(ReadOnlyForeground),
-                defaultValue: Brushes.White);
+                defaultValue: Brushes.White); //Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveBgColor.ToString()));
 
         #endregion
 
@@ -115,7 +114,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region EditableForeground AvaloniaProperty
 
-        private IBrush _editableForeground = Brushes.Black;
+        private IBrush _editableForeground = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveColor.ToString());
         public IBrush EditableForeground {
             get => _editableForeground;
             set => SetAndRaise(EditableForegroundProperty, ref _editableForeground, value);
@@ -127,14 +126,14 @@ namespace MonkeyPaste.Avalonia {
                 nameof(EditableForeground),
                 o => o.EditableForeground,
                 (o, v) => o.EditableForeground = v,
-                Brushes.Black
+                Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveColor.ToString())
             );
 
         #endregion
 
         #region EditableBackground AvaloniaProperty
 
-        private IBrush _editableBackground = Brushes.White;
+        private IBrush _editableBackground = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveBgColor.ToString());
         public IBrush EditableBackground {
             get => _editableBackground;
             set => SetAndRaise(EditableBackgroundProperty, ref _editableBackground, value);
@@ -146,9 +145,96 @@ namespace MonkeyPaste.Avalonia {
                 nameof(EditableBackground),
                 o => o.EditableBackground,
                 (o, v) => o.EditableBackground = v,
-                Brushes.White
+                Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveBgColor.ToString())
             );
 
+        #endregion
+
+        #region DropShadowBrush AvaloniaProperty
+
+        public IBrush DropShadowBrush {
+            get { return GetValue(DropShadowBrushProperty); }
+            set { SetValue(DropShadowBrushProperty, value); }
+        }
+
+        public static readonly StyledProperty<IBrush> DropShadowBrushProperty =
+            AvaloniaProperty.Register<MpAvMarqueeTextBox, IBrush>(
+                name: nameof(DropShadowBrush),
+                defaultValue: Brushes.Black); //Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveColor.ToString()));
+
+        #endregion
+
+        #region HoverBrush AvaloniaProperty
+
+        private IBrush _hoverBrush = null;
+        public IBrush HoverBrush {
+            get => _hoverBrush;
+            set => SetAndRaise(HoverBrushProperty, ref _hoverBrush, value);
+        }
+
+        public static readonly DirectProperty<MpAvMarqueeTextBox, IBrush> HoverBrushProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, IBrush>
+            (
+                nameof(HoverBrush),
+                o => o.HoverBrush,
+                (o, v) => o.HoverBrush = v,
+                null
+            );
+        #endregion
+
+        #region NavigatedBrush AvaloniaProperty
+
+        private IBrush _NavigatedBrush =
+            Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeCompliment4DarkColor.ToString());
+        public IBrush NavigatedBrush {
+            get => _NavigatedBrush;
+            set => SetAndRaise(NavigatedBrushProperty, ref _NavigatedBrush, value);
+        }
+
+        public static readonly DirectProperty<MpAvMarqueeTextBox, IBrush> NavigatedBrushProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, IBrush>
+            (
+                nameof(NavigatedBrush),
+                o => o.NavigatedBrush,
+                (o, v) => o.NavigatedBrush = v,
+                Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeCompliment4DarkColor.ToString())
+            );
+        #endregion
+
+        #region ActiveHighlightBrush AvaloniaProperty
+
+        private IBrush _activeHighlightBrush =
+            Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeAccent3Color.ToString());
+        public IBrush ActiveHighlightBrush {
+            get => _activeHighlightBrush;
+            set => SetAndRaise(ActiveHighlightBrushProperty, ref _activeHighlightBrush, value);
+        }
+
+        public static readonly DirectProperty<MpAvMarqueeTextBox, IBrush> ActiveHighlightBrushProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, IBrush>
+            (
+                nameof(ActiveHighlightBrush),
+                o => o.ActiveHighlightBrush,
+                (o, v) => o.ActiveHighlightBrush = v,
+                Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeAccent3Color.ToString())
+            );
+        #endregion
+
+        #region InactiveHighlightBrush AvaloniaProperty
+        private IBrush _inactiveHighlightBrush = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeAccent1BgColor.ToString());
+        public IBrush InactiveHighlightBrush {
+            get => _inactiveHighlightBrush;
+            set => SetAndRaise(InactiveHighlightBrushProperty, ref _inactiveHighlightBrush, value);
+        }
+
+        public static readonly DirectProperty<MpAvMarqueeTextBox, IBrush> InactiveHighlightBrushProperty =
+            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, IBrush>
+            (
+                nameof(InactiveHighlightBrush),
+                o => o.InactiveHighlightBrush,
+                (o, v) => o.InactiveHighlightBrush = v,
+                Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeAccent1BgColor.ToString())
+            );
         #endregion
 
         #region DropShadowOffset AvaloniaProperty
@@ -163,26 +249,7 @@ namespace MonkeyPaste.Avalonia {
                 name: nameof(DropShadowOffset),
                 defaultValue: new Point(1, 1));
 
-        #endregion
-
-        #region DropShadowBrush AvaloniaProperty
-
-        //private IBrush _dropShadowBrush = Brushes.Black;
-        //public IBrush DropShadowBrush {
-        //    get => _dropShadowBrush;
-        //    set => SetAndRaise(DropShadowBrushProperty, ref _dropShadowBrush, value);
-        //}
-        public IBrush DropShadowBrush {
-            get { return GetValue(DropShadowBrushProperty); }
-            set { SetValue(DropShadowBrushProperty, value); }
-        }
-
-        public static readonly StyledProperty<IBrush> DropShadowBrushProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, IBrush>(
-                name: nameof(DropShadowBrush),
-                defaultValue: Brushes.Black);
-
-        #endregion
+        #endregion        
 
         #region TailPadding AvaloniaProperty
 
@@ -391,23 +458,6 @@ namespace MonkeyPaste.Avalonia {
             );
         #endregion
 
-        #region HoverBrush AvaloniaProperty
-        private IBrush _hoverBrush = null;
-        public IBrush HoverBrush {
-            get => _hoverBrush;
-            set => SetAndRaise(HoverBrushProperty, ref _hoverBrush, value);
-        }
-
-        public static readonly DirectProperty<MpAvMarqueeTextBox, IBrush> HoverBrushProperty =
-            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, IBrush>
-            (
-                nameof(HoverBrush),
-                o => o.HoverBrush,
-                (o, v) => o.HoverBrush = v,
-                null
-            );
-        #endregion
-
         #region NavigateUriCommand AvaloniaProperty
 
         public ICommand NavigateUriCommand {
@@ -486,41 +536,7 @@ namespace MonkeyPaste.Avalonia {
                 (o, v) => o.ActiveHighlightIdx = v,
                 null
             );
-        #endregion
-
-        #region ActiveHighlightBrush AvaloniaProperty
-        private IBrush _activeHighlightBrush = Brushes.Lime;
-        public IBrush ActiveHighlightBrush {
-            get => _activeHighlightBrush;
-            set => SetAndRaise(ActiveHighlightBrushProperty, ref _activeHighlightBrush, value);
-        }
-
-        public static readonly DirectProperty<MpAvMarqueeTextBox, IBrush> ActiveHighlightBrushProperty =
-            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, IBrush>
-            (
-                nameof(ActiveHighlightBrush),
-                o => o.ActiveHighlightBrush,
-                (o, v) => o.ActiveHighlightBrush = v,
-                Brushes.Lime
-            );
-        #endregion
-
-        #region InactiveHighlightBrush AvaloniaProperty
-        private IBrush _inactiveHighlightBrush = Brushes.Gold;
-        public IBrush InactiveHighlightBrush {
-            get => _inactiveHighlightBrush;
-            set => SetAndRaise(InactiveHighlightBrushProperty, ref _inactiveHighlightBrush, value);
-        }
-
-        public static readonly DirectProperty<MpAvMarqueeTextBox, IBrush> InactiveHighlightBrushProperty =
-            AvaloniaProperty.RegisterDirect<MpAvMarqueeTextBox, IBrush>
-            (
-                nameof(InactiveHighlightBrush),
-                o => o.InactiveHighlightBrush,
-                (o, v) => o.InactiveHighlightBrush = v,
-                Brushes.Gold
-            );
-        #endregion
+        #endregion        
 
         #endregion
 
@@ -799,7 +815,7 @@ namespace MonkeyPaste.Avalonia {
                 if (HoverBrush != null) {
                     fg = HoverBrush;
                 } else if (NavigateUriCommand != null) {
-                    fg = _defNavUriBrush;
+                    fg = NavigatedBrush;
                 }
             }
 

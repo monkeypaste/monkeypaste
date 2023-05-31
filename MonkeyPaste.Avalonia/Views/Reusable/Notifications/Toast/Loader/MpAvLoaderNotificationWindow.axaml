@@ -32,9 +32,9 @@
                 <GradientStop Offset="0"
                               Color="Transparent" />
                 <GradientStop Offset="0.3"
-                              Color="{DynamicResource ThemeInteractiveBgColor}" />
+                              Color="White" />
                 <GradientStop Offset="0.6"
-                              Color="{DynamicResource ThemeInteractiveBgColor}" />
+                              Color="White" />
                 <GradientStop Offset="1"
                               Color="Transparent" />
             </LinearGradientBrush.GradientStops>
@@ -51,7 +51,7 @@
                         <Setter Property="Canvas.Left"
                                 Value="-50" />
                     </KeyFrame>
-                  
+
                     <KeyFrame Cue="40%">
                         <Setter Property="Canvas.Left"
                                 Value="-50" />
@@ -73,7 +73,7 @@
                         <Setter Property="Canvas.Left"
                                 Value="-50" />
                     </KeyFrame>
-                  <KeyFrame Cue="40%">
+                    <KeyFrame Cue="40%">
                         <Setter Property="Canvas.Left"
                                 Value="-50" />
                     </KeyFrame>
@@ -146,7 +146,7 @@
                         Width="220"
                         ClipToBounds="True"
                         BorderThickness="1"
-                        BorderBrush="White"
+                        BorderBrush="{DynamicResource ThemeInteractiveBgColor}"
                         Background="Transparent"
                         Margin="0"
                         Padding="0">
@@ -201,7 +201,7 @@
                            VerticalAlignment="Center"
                            HorizontalAlignment="Right"
                            FontSize="10"
-                           Foreground="{DynamicResource ThemeAccent5BgColor}"
+                           Foreground="{DynamicResource ThemeInteractiveColor}"
                            Text="{Binding Body}" />
             </Grid>
 

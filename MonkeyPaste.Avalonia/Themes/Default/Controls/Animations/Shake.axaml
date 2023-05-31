@@ -13,11 +13,11 @@
                 </KeyFrame>
                 <KeyFrame Cue="33%">
                     <Setter Property="RotateTransform.Angle"
-                            Value="30" />
+                            Value="7.5" />
                 </KeyFrame>
                 <KeyFrame Cue="66%">
                     <Setter Property="RotateTransform.Angle"
-                            Value="-30" />
+                            Value="-7.5" />
                 </KeyFrame>
                 <KeyFrame Cue="100%">
                     <Setter Property="RotateTransform.Angle"
@@ -38,11 +38,11 @@
                 </KeyFrame>
                 <KeyFrame Cue="33%">
                     <Setter Property="RotateTransform.Angle"
-                            Value="15" />
+                            Value="7.5" />
                 </KeyFrame>
                 <KeyFrame Cue="66%">
                     <Setter Property="RotateTransform.Angle"
-                            Value="-15" />
+                            Value="-7.5" />
                 </KeyFrame>
                 <KeyFrame Cue="100%">
                     <Setter Property="RotateTransform.Angle"
@@ -63,11 +63,11 @@
                 </KeyFrame>
                 <KeyFrame Cue="33%">
                     <Setter Property="RotateTransform.Angle"
-                            Value="15" />
+                            Value="7.5" />
                 </KeyFrame>
                 <KeyFrame Cue="66%">
                     <Setter Property="RotateTransform.Angle"
-                            Value="-15" />
+                            Value="-7.5" />
                 </KeyFrame>
                 <KeyFrame Cue="100%">
                     <Setter Property="RotateTransform.Angle"

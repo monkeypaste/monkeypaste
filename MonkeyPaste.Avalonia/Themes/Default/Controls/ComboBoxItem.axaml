@@ -9,6 +9,16 @@
                 Value="{DynamicResource ThemeInteractiveColor}" />
     </Style>
 
+    <Style Selector="ComboBoxItem /template/ TextBlock">
+        <Setter Property="Foreground"
+                Value="{DynamicResource ThemeInteractiveColor}" />
+    </Style>
+
+    <Style Selector="ComboBoxItem /template/ Label">
+        <Setter Property="Foreground"
+                Value="{DynamicResource ThemeInteractiveColor}" />
+    </Style>
+
     <Style Selector="ComboBoxItem:pointerover /template/ ContentPresenter">
         <Setter Property="Background"
                 Value="{DynamicResource SelectableItemPointerOverBgBrush}" />

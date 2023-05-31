@@ -79,11 +79,11 @@
 
         <Style Selector="Border#SearchTextBoxBorder.unexpanded Button#SearchDropDownButton:pointerover PathIcon">
             <Setter Property="Foreground"
-                    Value="Gainsboro" />
+                    Value="{DynamicResource ThemeGrayAccent3}" />
         </Style>
         <Style Selector="Border#SearchTextBoxBorder.expanded Button#SearchDropDownButton:pointerover PathIcon">
             <Setter Property="Foreground"
-                    Value="Yellow" />
+                    Value="{DynamicResource ThemeAccent1Color}" />
         </Style>
 
         <Style Selector="Border#SearchTextBoxBorder.expanded Button#SearchDropDownButton PathIcon">
@@ -94,7 +94,7 @@
                 </Transitions>
             </Setter>
             <Setter Property="Foreground"
-                    Value="Black" />
+                    Value="{DynamicResource ThemeInteractiveColor}" />
         </Style>
         <Style Selector="Border#SearchTextBoxBorder.unexpanded Button#SearchDropDownButton PathIcon">
             <Setter Property="Transitions">
@@ -104,7 +104,7 @@
                 </Transitions>
             </Setter>
             <Setter Property="Foreground"
-                    Value="White" />
+                    Value="{DynamicResource ThemeInteractiveBgColor}" />
         </Style>
 
         <!--  SEARCH BOX BORDER  -->
@@ -134,9 +134,9 @@
                         <Setter Property="Width"
                                 Value="{StaticResource SearchTextBoxBorder_width_opened}" />
                         <Setter Property="Background"
-                                Value="White" />
+                                Value="{DynamicResource ThemeInteractiveBgBrush}" />
                         <Setter Property="BorderBrush"
-                                Value="White" />
+                                Value="{DynamicResource ThemeInteractiveBgBrush}" />
                     </KeyFrame>
                 </Animation>
             </Style.Animations>
@@ -150,9 +150,9 @@
                         <Setter Property="Width"
                                 Value="{StaticResource SearchTextBoxBorder_width_opened}" />
                         <Setter Property="Background"
-                                Value="White" />
+                                Value="{DynamicResource ThemeInteractiveBgBrush}" />
                         <Setter Property="BorderBrush"
-                                Value="White" />
+                                Value="{DynamicResource ThemeInteractiveBgBrush}" />
                     </KeyFrame>
                     <KeyFrame Cue="100%">
                         <Setter Property="Width"
@@ -168,7 +168,7 @@
 
         <Style Selector="Border#SearchTextBoxBorder.expanded:not(.valid)">
             <Setter Property="BorderBrush"
-                    Value="Red" />
+                    Value="{DynamicResource ThemeAccent2Color}" />
         </Style>
 
         <!--  AUTOCOMPLETE BOX  -->
@@ -185,35 +185,35 @@
         <!--  NAV BUTTONS  -->
         <Style Selector="Button.navButton PathIcon">
             <Setter Property="Foreground"
-                    Value="Black" />
+                    Value="{DynamicResource ThemeInteractiveColor}" />
         </Style>
         <Style Selector="Button.navButton:pointerover PathIcon">
             <Setter Property="Foreground"
-                    Value="DimGray" />
+                    Value="{DynamicResource ThemeGrayAccent1}" />
         </Style>
 
         <!--  CONVERT SIMPLE/ TOGGLE EXPAND ADV BUTTON  -->
         <!--  UNCHECKED  -->
         <Style Selector="ToggleButton#ConvertToAdvancedSearchToggleButton:unchecked:not(.saved):not(.popout) Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource PlusSolidImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=white}" />
+                    Value="{Binding Source={StaticResource PlusSolidImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
         </Style>
 
         <Style Selector="ToggleButton#ConvertToAdvancedSearchToggleButton:unchecked.popout Image">
             <Setter Property="Margin"
                     Value="3" />
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource CloseWindowImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=white}" />
+                    Value="{Binding Source={StaticResource CloseWindowImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
         </Style>
         <Style Selector="ToggleButton#ConvertToAdvancedSearchToggleButton:unchecked:not(.popout).saved Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource EdgeArrowDownImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=white}" />
+                    Value="{Binding Source={StaticResource EdgeArrowDownImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
         </Style>
 
         <!--  CHECKED  -->
         <Style Selector="ToggleButton#ConvertToAdvancedSearchToggleButton:checked Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource EdgeArrowUpImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=white}" />
+                    Value="{Binding Source={StaticResource EdgeArrowUpImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
         </Style>
 
     </local:MpAvUserControl.Styles>

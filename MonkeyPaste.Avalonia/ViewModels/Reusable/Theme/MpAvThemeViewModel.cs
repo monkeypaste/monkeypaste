@@ -92,16 +92,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public string ThemeColor {
-            get => GetThemeValue<Color>(MpThemeResourceKey.ThemeColor).ToPortableColor().ToHex();
-            set {
-                if (ThemeColor != value) {
-                    SetThemeValue(MpThemeResourceKey.ThemeColor, value.ToAvColor());
-                    OnPropertyChanged(nameof(ThemeColor));
-                }
-            }
-        }
-
         public double DefaultGridSplitterFixedDimensionLength {
             get => GetThemeValue<double>(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength);
             set {
@@ -300,21 +290,29 @@ namespace MonkeyPaste.Avalonia {
             // 21: interactiveFg
             // 22: interactiveBg
 
-            // 23: tooltip fg h1_tr (comp5)
-            // 24: tooltip bg h1_tr(S=50,V=100) (comp5bg)
+            // 23: tooltip fg h1_tr (comp4)
+            // 24: tooltip bg h1_tr(S=50,V=100) (comp4bg)
 
+            // 25: default button bg h(h-240, S=15, V=95) (comp5)
+            // 26: default button bg h(h-240, S=15, V=65) (comp5bg)
 
-            string hex = ThemeColor;
+            string hex = MpPrefViewModel.Instance.ThemeColor;
+            // prepass selected color to get decent chroma
+            // V >= 50, S >= 50
+            hex.ToPortableColor().ColorToHsv(out double preh, out double pres, out double prev);
+            pres = Math.Max(0.5d, pres);
+            prev = Math.Max(0.5d, prev);
+            hex = MpColorHelpers.ColorFromHsv(preh, pres, prev).ToHex(true);
+
             if (MpPrefViewModel.Instance.ThemeType != MpThemeType.Default) {
                 hex.ToPortableColor().ColorToHsl(out double th, out double ts, out double tl);
                 if (MpPrefViewModel.Instance.ThemeType == MpThemeType.Dark) {
-                    tl = Math.Max(5d / 100d, tl - (15d / 100d));
+                    tl = Math.Max(25d / 100d, tl - (15d / 100d));
                 } else {
                     tl = Math.Min(95d / 100d, tl + (15d / 100d));
                 }
                 hex = MpColorHelpers.ColorFromHsl(th, ts, tl).ToHex(true);
             }
-
             hex.ToPortableColor().ColorToHsv(out double h, out double s, out double v);
 
             // triadic    
@@ -355,9 +353,9 @@ namespace MonkeyPaste.Avalonia {
             // 12
             palette.Add(MpColorHelpers.ColorFromHsv(h, 0.05d, Math.Max(0, v - 0.1d)).ToHex(true));
             // 13
-            palette.Add(MpColorHelpers.ColorFromHsv(h, 0.05d, 0.15d).ToHex(true));
+            palette.Add(MpColorHelpers.ColorFromHsv(h, 0.1d, 0.25d).ToHex(true));
             // 14
-            palette.Add(MpColorHelpers.ColorFromHsv(h, 0.05d, 0.95d).ToHex(true));
+            palette.Add(MpColorHelpers.ColorFromHsv(h, 0.1d, 0.95d).ToHex(true));
             // 15
             palette.Add(MpColorHelpers.ColorFromHsv((h1_te - 30d).Wrap(0, 360), s, v).ToHex(true));
             // 16
@@ -387,10 +385,16 @@ namespace MonkeyPaste.Avalonia {
             palette.Add(MpColorHelpers.ColorFromHsv(h1_tr, s, v).ToHex(true));
             // 24
             palette.Add(MpColorHelpers.ColorFromHsv(h1_tr, 0.5d, 1.0d).ToHex(true));
+            // 25
+            palette.Add(MpColorHelpers.ColorFromHsv((h - 240.0d).Wrap(0, 360), 0.15d, 0.95d).ToHex(true));
+            // 26
+            palette.Add(MpColorHelpers.ColorFromHsv((h - 240.0d).Wrap(0, 360), 0.15d, 0.65d).ToHex(true));
+            // 27
+            palette.Add(MpColorHelpers.ColorFromHsv((h - 240.0d).Wrap(0, 360), 0.05d, 0.95d).ToHex(true));
 
 
-            ThemeColor = palette[0];
             var colors = palette.Select(x => x.ToAvColor()).ToArray();
+            SetThemeValue(MpThemeResourceKey.ThemeColor, colors[0]);
             SetThemeValue(MpThemeResourceKey.ThemeAccent1BgColor, colors[1]);
             SetThemeValue(MpThemeResourceKey.ThemeAccent5BgColor, colors[2]);
             SetThemeValue(MpThemeResourceKey.ThemeAccent5Color, colors[3]);
@@ -422,6 +426,27 @@ namespace MonkeyPaste.Avalonia {
 
             SetThemeValue(MpThemeResourceKey.ThemeCompliment4Color, colors[23]);
             SetThemeValue(MpThemeResourceKey.ThemeCompliment4DarkColor, colors[24]);
+
+            SetThemeValue(MpThemeResourceKey.ThemeCompliment5Color, colors[25]);
+            SetThemeValue(MpThemeResourceKey.ThemeCompliment5DarkColor, colors[26]);
+            SetThemeValue(MpThemeResourceKey.ThemeCompliment5LighterColor, colors[27]);
+
+            //Mp.Services.PlatformResource.SetResource("ComboBoxForeground", colors[21].ToSolidColorBrush());
+            //Mp.Services.PlatformResource.SetResource("ComboBoxBackground", colors[22].ToSolidColorBrush());
+            //Mp.Services.PlatformResource.SetResource("ComboBoxBorderBrush", colors[22].ToSolidColorBrush());
+
+            //Mp.Services.PlatformResource.SetResource("ComboBoxItemForeground", colors[21].ToSolidColorBrush());
+            //Mp.Services.PlatformResource.SetResource("ComboBoxItemBackground", colors[22].ToSolidColorBrush());
+
+            //Mp.Services.PlatformResource.SetResource("TextControlForeground", colors[21].ToSolidColorBrush());
+            //Mp.Services.PlatformResource.SetResource("TextControlBackground", colors[22].ToSolidColorBrush());
+            //Mp.Services.PlatformResource.SetResource("TextControlBorderBrush", colors[22].ToSolidColorBrush());
+            //Mp.Services.PlatformResource.SetResource("TextControlForegroundFocused", colors[21].ToSolidColorBrush());
+            //Mp.Services.PlatformResource.SetResource("TextControlBackgroundFocused", colors[22].ToSolidColorBrush());
+            //Mp.Services.PlatformResource.SetResource("TextControlBorderBrushFocused", colors[22].ToSolidColorBrush());
+
+            //Mp.Services.PlatformResource.SetResource("ButtonForeground", colors[21].ToSolidColorBrush());
+            //Mp.Services.PlatformResource.SetResource("SystemControlPageTextBaseMediumBrush", colors[21].ToSolidColorBrush());
         }
 
         #endregion

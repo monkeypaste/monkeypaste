@@ -37,7 +37,7 @@
 
         <Style Selector="Button#OpenWindowButton:pointerover Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource NewWindowImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=white}" />
+                    Value="{Binding Source={StaticResource NewWindowImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themebg}" />
         </Style>
 
         <Style Selector=":is(Button):pointerover PathIcon">
